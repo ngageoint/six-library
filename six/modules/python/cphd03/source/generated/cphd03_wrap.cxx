@@ -3109,52 +3109,51 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_six__XMLControlCreator swig_types[99]
 #define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[100]
 #define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[101]
-#define SWIGTYPE_p_six__sicd__ComplexCollectionInformation swig_types[102]
-#define SWIGTYPE_p_six__sicd__ComplexData swig_types[103]
-#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[104]
-#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[105]
-#define SWIGTYPE_p_six__sicd__GeoInfo swig_types[106]
-#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[107]
-#define SWIGTYPE_p_six__sicd__NoiseMesh swig_types[108]
-#define SWIGTYPE_p_six__sicd__ScalarMesh swig_types[109]
-#define SWIGTYPE_p_size_t swig_types[110]
-#define SWIGTYPE_p_size_type swig_types[111]
-#define SWIGTYPE_p_ssize_t swig_types[112]
-#define SWIGTYPE_p_std__allocatorT_cphd03__ArraySize_t swig_types[113]
-#define SWIGTYPE_p_std__allocatorT_cphd03__ChannelParameters_t swig_types[114]
-#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[115]
-#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[116]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__Antenna_t swig_types[117]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__DwellTimeParameters_t swig_types[118]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__FxParameters_t swig_types[119]
-#define SWIGTYPE_p_std__auto_ptrT_cphd03__TOAParameters_t swig_types[120]
-#define SWIGTYPE_p_std__invalid_argument swig_types[121]
-#define SWIGTYPE_p_std__ostream swig_types[122]
-#define SWIGTYPE_p_std__shared_ptrT_io__SeekableInputStream_t swig_types[123]
-#define SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t swig_types[124]
-#define SWIGTYPE_p_std__shared_ptrT_logging__Logger_t swig_types[125]
-#define SWIGTYPE_p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t swig_types[126]
-#define SWIGTYPE_p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t swig_types[127]
-#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[128]
-#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[129]
-#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[130]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[131]
-#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[132]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[133]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[134]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[135]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[136]
-#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[137]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[138]
-#define SWIGTYPE_p_uint16_t swig_types[139]
-#define SWIGTYPE_p_uint32_t swig_types[140]
-#define SWIGTYPE_p_uint64_t swig_types[141]
-#define SWIGTYPE_p_uint8_t swig_types[142]
-#define SWIGTYPE_p_unsigned_char swig_types[143]
-#define SWIGTYPE_p_value_type swig_types[144]
-#define SWIGTYPE_p_void swig_types[145]
-static swig_type_info *swig_types[147];
-static swig_module_info swig_module = {swig_types, 146, 0, 0, 0, 0};
+#define SWIGTYPE_p_six__sicd__ComplexData swig_types[102]
+#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[103]
+#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[104]
+#define SWIGTYPE_p_six__sicd__GeoInfo swig_types[105]
+#define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[106]
+#define SWIGTYPE_p_six__sicd__NoiseMesh swig_types[107]
+#define SWIGTYPE_p_six__sicd__ScalarMesh swig_types[108]
+#define SWIGTYPE_p_size_t swig_types[109]
+#define SWIGTYPE_p_size_type swig_types[110]
+#define SWIGTYPE_p_ssize_t swig_types[111]
+#define SWIGTYPE_p_std__allocatorT_cphd03__ArraySize_t swig_types[112]
+#define SWIGTYPE_p_std__allocatorT_cphd03__ChannelParameters_t swig_types[113]
+#define SWIGTYPE_p_std__allocatorT_math__linear__VectorNT_3_double_t_t swig_types[114]
+#define SWIGTYPE_p_std__allocatorT_six__sicd__AntennaParameters_t swig_types[115]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__Antenna_t swig_types[116]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__DwellTimeParameters_t swig_types[117]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__FxParameters_t swig_types[118]
+#define SWIGTYPE_p_std__auto_ptrT_cphd03__TOAParameters_t swig_types[119]
+#define SWIGTYPE_p_std__invalid_argument swig_types[120]
+#define SWIGTYPE_p_std__ostream swig_types[121]
+#define SWIGTYPE_p_std__shared_ptrT_io__SeekableInputStream_t swig_types[122]
+#define SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t swig_types[123]
+#define SWIGTYPE_p_std__shared_ptrT_logging__Logger_t swig_types[124]
+#define SWIGTYPE_p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t swig_types[125]
+#define SWIGTYPE_p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t swig_types[126]
+#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[127]
+#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t swig_types[128]
+#define SWIGTYPE_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t swig_types[129]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[130]
+#define SWIGTYPE_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t swig_types[131]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[132]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[133]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[134]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[135]
+#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[136]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[137]
+#define SWIGTYPE_p_uint16_t swig_types[138]
+#define SWIGTYPE_p_uint32_t swig_types[139]
+#define SWIGTYPE_p_uint64_t swig_types[140]
+#define SWIGTYPE_p_uint8_t swig_types[141]
+#define SWIGTYPE_p_unsigned_char swig_types[142]
+#define SWIGTYPE_p_value_type swig_types[143]
+#define SWIGTYPE_p_void swig_types[144]
+static swig_type_info *swig_types[146];
+static swig_module_info swig_module = {swig_types, 145, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -59181,9 +59180,6 @@ static PyMethodDef SwigMethods[] = {
 static void *_p_cphd03__MetadataTo_p_cphd__MetadataBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((cphd::MetadataBase *)  ((cphd03::Metadata *) x));
 }
-static void *_p_six__sicd__ComplexCollectionInformationTo_p_six__CollectionInformation(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((six::CollectionInformation *)  ((six::sicd::ComplexCollectionInformation *) x));
-}
 static void *_p_io__FileInputStreamOSTo_p_io__SeekableInputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::SeekableInputStream *)  ((io::FileInputStreamOS *) x));
 }
@@ -59284,7 +59280,6 @@ static swig_type_info _swigt__p_scene__ProjectionPolynomialFitter = {"_p_scene__
 static swig_type_info _swigt__p_six__BooleanType = {"_p_six__BooleanType", "six::BooleanType *|cphd::BooleanType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__CollectType = {"_p_six__CollectType", "six::CollectType *|cphd::CollectType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__CollectionInformation = {"_p_six__CollectionInformation", "six::CollectionInformation *|cphd::CollectionInformation *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_six__sicd__ComplexCollectionInformation = {"_p_six__sicd__ComplexCollectionInformation", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_six__CornersT_scene__LatLonAlt_t = {"_p_six__CornersT_scene__LatLonAlt_t", "six::Corners< scene::LatLonAlt > *|six::LatLonAltCorners *|cphd::LatLonAltCorners *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__CornersT_scene__LatLon_t = {"_p_six__CornersT_scene__LatLon_t", "six::LatLonCorners *|cphd::LatLonCorners *|six::Corners< scene::LatLon > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__Data = {"_p_six__Data", "six::Data *", 0, 0, (void*)0, 0};
@@ -59443,7 +59438,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__XMLControlCreator,
   &_swigt__p_six__sicd__AntennaParameters,
   &_swigt__p_six__sicd__AreaDirectionParameters,
-  &_swigt__p_six__sicd__ComplexCollectionInformation,
   &_swigt__p_six__sicd__ComplexData,
   &_swigt__p_six__sicd__ElectricalBoresight,
   &_swigt__p_six__sicd__GainAndPhasePolys,
@@ -59579,8 +59573,7 @@ static swig_cast_info _swigc__p_scene__PlaneProjectionModel[] = {  {&_swigt__p_s
 static swig_cast_info _swigc__p_scene__ProjectionPolynomialFitter[] = {  {&_swigt__p_scene__ProjectionPolynomialFitter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__BooleanType[] = {  {&_swigt__p_six__BooleanType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__CollectType[] = {  {&_swigt__p_six__CollectType, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_six__sicd__ComplexCollectionInformation[] = {{&_swigt__p_six__sicd__ComplexCollectionInformation, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_six__CollectionInformation[] = {  {&_swigt__p_six__CollectionInformation, 0, 0, 0},  {&_swigt__p_six__sicd__ComplexCollectionInformation, _p_six__sicd__ComplexCollectionInformationTo_p_six__CollectionInformation, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__CollectionInformation[] = {  {&_swigt__p_six__CollectionInformation, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__CornersT_scene__LatLonAlt_t[] = {  {&_swigt__p_six__CornersT_scene__LatLonAlt_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__CornersT_scene__LatLon_t[] = {  {&_swigt__p_six__CornersT_scene__LatLon_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__Data[] = {  {&_swigt__p_six__Data, 0, 0, 0},  {&_swigt__p_six__sicd__ComplexData, _p_six__sicd__ComplexDataTo_p_six__Data, 0, 0},{0, 0, 0, 0}};
@@ -59739,7 +59732,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__XMLControlCreator,
   _swigc__p_six__sicd__AntennaParameters,
   _swigc__p_six__sicd__AreaDirectionParameters,
-  _swigc__p_six__sicd__ComplexCollectionInformation,
   _swigc__p_six__sicd__ComplexData,
   _swigc__p_six__sicd__ElectricalBoresight,
   _swigc__p_six__sicd__GainAndPhasePolys,

@@ -3048,133 +3048,136 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[38]
 #define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[39]
 #define SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t swig_types[40]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t swig_types[41]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t swig_types[42]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t swig_types[43]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t swig_types[44]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t swig_types[45]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t swig_types[46]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t swig_types[47]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t swig_types[48]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t swig_types[49]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t swig_types[50]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t swig_types[51]
-#define SWIGTYPE_p_mt__SingletonT_six__XMLControlRegistry_true_t swig_types[52]
-#define SWIGTYPE_p_nitf_DateTime swig_types[53]
-#define SWIGTYPE_p_nitf__DateTime swig_types[54]
-#define SWIGTYPE_p_nitf__FileSecurity swig_types[55]
-#define SWIGTYPE_p_off_t swig_types[56]
-#define SWIGTYPE_p_p_PyObject swig_types[57]
-#define SWIGTYPE_p_pid_t swig_types[58]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[59]
-#define SWIGTYPE_p_scene__Errors swig_types[60]
-#define SWIGTYPE_p_scene__FrameType swig_types[61]
-#define SWIGTYPE_p_scene__LatLon swig_types[62]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[63]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[64]
-#define SWIGTYPE_p_six__AmplitudeTable swig_types[65]
-#define SWIGTYPE_p_six__AppliedType swig_types[66]
-#define SWIGTYPE_p_six__AutofocusType swig_types[67]
-#define SWIGTYPE_p_six__BooleanType swig_types[68]
-#define SWIGTYPE_p_six__ByteSwapping swig_types[69]
-#define SWIGTYPE_p_six__Classification swig_types[70]
-#define SWIGTYPE_p_six__CollectType swig_types[71]
-#define SWIGTYPE_p_six__ComplexImageGridType swig_types[72]
-#define SWIGTYPE_p_six__ComplexImagePlaneType swig_types[73]
-#define SWIGTYPE_p_six__Components swig_types[74]
-#define SWIGTYPE_p_six__CompositeSCP swig_types[75]
-#define SWIGTYPE_p_six__Constants swig_types[76]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[77]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[78]
-#define SWIGTYPE_p_six__CorrCoefs swig_types[79]
-#define SWIGTYPE_p_six__DESValidationException swig_types[80]
-#define SWIGTYPE_p_six__Data swig_types[81]
-#define SWIGTYPE_p_six__DataType swig_types[82]
-#define SWIGTYPE_p_six__DecimationMethod swig_types[83]
-#define SWIGTYPE_p_six__DecorrType swig_types[84]
-#define SWIGTYPE_p_six__DemodType swig_types[85]
-#define SWIGTYPE_p_six__DisplayType swig_types[86]
-#define SWIGTYPE_p_six__DualPolarizationType swig_types[87]
-#define SWIGTYPE_p_six__EarthModelType swig_types[88]
-#define SWIGTYPE_p_six__ErrorStatistics swig_types[89]
-#define SWIGTYPE_p_six__FFTSign swig_types[90]
-#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[91]
-#define SWIGTYPE_p_six__ImageFormationType swig_types[92]
-#define SWIGTYPE_p_six__Init swig_types[93]
-#define SWIGTYPE_p_six__IonoError swig_types[94]
-#define SWIGTYPE_p_six__LUT swig_types[95]
-#define SWIGTYPE_p_six__MagnificationMethod swig_types[96]
-#define SWIGTYPE_p_six__MatchCollect swig_types[97]
-#define SWIGTYPE_p_six__MatchInformation swig_types[98]
-#define SWIGTYPE_p_six__MatchType swig_types[99]
-#define SWIGTYPE_p_six__MissingRequiredException swig_types[100]
-#define SWIGTYPE_p_six__NoiseLevel swig_types[101]
-#define SWIGTYPE_p_six__Options swig_types[102]
-#define SWIGTYPE_p_six__OrientationType swig_types[103]
-#define SWIGTYPE_p_six__Parameter swig_types[104]
-#define SWIGTYPE_p_six__ParameterCollection swig_types[105]
-#define SWIGTYPE_p_six__PixelType swig_types[106]
-#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[107]
-#define SWIGTYPE_p_six__PolarizationType swig_types[108]
-#define SWIGTYPE_p_six__PosVelError swig_types[109]
-#define SWIGTYPE_p_six__ProjectionType swig_types[110]
-#define SWIGTYPE_p_six__RMAlgoType swig_types[111]
-#define SWIGTYPE_p_six__RadarModeType swig_types[112]
-#define SWIGTYPE_p_six__RadarSensor swig_types[113]
-#define SWIGTYPE_p_six__Radiometric swig_types[114]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[115]
-#define SWIGTYPE_p_six__RegionType swig_types[116]
-#define SWIGTYPE_p_six__RowColEnum swig_types[117]
-#define SWIGTYPE_p_six__SCP swig_types[118]
-#define SWIGTYPE_p_six__SCPType swig_types[119]
-#define SWIGTYPE_p_six__SideOfTrackType swig_types[120]
-#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[121]
-#define SWIGTYPE_p_six__TropoError swig_types[122]
-#define SWIGTYPE_p_six__UninitializedValueException swig_types[123]
-#define SWIGTYPE_p_six__XMLControl swig_types[124]
-#define SWIGTYPE_p_six__XMLControlCreator swig_types[125]
-#define SWIGTYPE_p_six__XMLControlRegistry swig_types[126]
-#define SWIGTYPE_p_six__XYZEnum swig_types[127]
-#define SWIGTYPE_p_size_t swig_types[128]
-#define SWIGTYPE_p_size_type swig_types[129]
-#define SWIGTYPE_p_ssize_t swig_types[130]
-#define SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t swig_types[131]
-#define SWIGTYPE_p_std__allocatorT_six__MatchCollect_t swig_types[132]
-#define SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t swig_types[133]
-#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[134]
-#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[135]
-#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[136]
-#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[137]
-#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[138]
-#define SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t swig_types[139]
-#define SWIGTYPE_p_std__auto_ptrT_six__MatchType_t swig_types[140]
-#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[141]
-#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[142]
-#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[143]
-#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[144]
-#define SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t swig_types[145]
-#define SWIGTYPE_p_std__invalid_argument swig_types[146]
-#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[147]
-#define SWIGTYPE_p_std__ostream swig_types[148]
-#define SWIGTYPE_p_std__string swig_types[149]
-#define SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t swig_types[150]
-#define SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t swig_types[151]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[152]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[153]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[154]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[155]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[156]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[157]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[158]
-#define SWIGTYPE_p_uint16_t swig_types[159]
-#define SWIGTYPE_p_uint32_t swig_types[160]
-#define SWIGTYPE_p_uint64_t swig_types[161]
-#define SWIGTYPE_p_uint8_t swig_types[162]
-#define SWIGTYPE_p_unsigned_char swig_types[163]
-#define SWIGTYPE_p_value_type swig_types[164]
-#define SWIGTYPE_p_xml__lite__Document swig_types[165]
-static swig_type_info *swig_types[167];
-static swig_module_info swig_module = {swig_types, 166, 0, 0, 0, 0};
+#define SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t swig_types[41]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t swig_types[42]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t swig_types[43]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t swig_types[44]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t swig_types[45]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t swig_types[46]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t swig_types[47]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t swig_types[48]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t swig_types[49]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t swig_types[50]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t swig_types[51]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t swig_types[52]
+#define SWIGTYPE_p_mt__SingletonT_six__XMLControlRegistry_true_t swig_types[53]
+#define SWIGTYPE_p_nitf_DateTime swig_types[54]
+#define SWIGTYPE_p_nitf__DateTime swig_types[55]
+#define SWIGTYPE_p_nitf__FileSecurity swig_types[56]
+#define SWIGTYPE_p_off_t swig_types[57]
+#define SWIGTYPE_p_p_PyObject swig_types[58]
+#define SWIGTYPE_p_pid_t swig_types[59]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[60]
+#define SWIGTYPE_p_scene__Errors swig_types[61]
+#define SWIGTYPE_p_scene__FrameType swig_types[62]
+#define SWIGTYPE_p_scene__LatLon swig_types[63]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[64]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[65]
+#define SWIGTYPE_p_six__AmplitudeTable swig_types[66]
+#define SWIGTYPE_p_six__AppliedType swig_types[67]
+#define SWIGTYPE_p_six__AutofocusType swig_types[68]
+#define SWIGTYPE_p_six__BooleanType swig_types[69]
+#define SWIGTYPE_p_six__ByteSwapping swig_types[70]
+#define SWIGTYPE_p_six__Classification swig_types[71]
+#define SWIGTYPE_p_six__CollectType swig_types[72]
+#define SWIGTYPE_p_six__CollectionInformation swig_types[73]
+#define SWIGTYPE_p_six__ComplexImageGridType swig_types[74]
+#define SWIGTYPE_p_six__ComplexImagePlaneType swig_types[75]
+#define SWIGTYPE_p_six__Components swig_types[76]
+#define SWIGTYPE_p_six__CompositeSCP swig_types[77]
+#define SWIGTYPE_p_six__Constants swig_types[78]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[79]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[80]
+#define SWIGTYPE_p_six__CorrCoefs swig_types[81]
+#define SWIGTYPE_p_six__DESValidationException swig_types[82]
+#define SWIGTYPE_p_six__Data swig_types[83]
+#define SWIGTYPE_p_six__DataType swig_types[84]
+#define SWIGTYPE_p_six__DecimationMethod swig_types[85]
+#define SWIGTYPE_p_six__DecorrType swig_types[86]
+#define SWIGTYPE_p_six__DemodType swig_types[87]
+#define SWIGTYPE_p_six__DisplayType swig_types[88]
+#define SWIGTYPE_p_six__DualPolarizationType swig_types[89]
+#define SWIGTYPE_p_six__EarthModelType swig_types[90]
+#define SWIGTYPE_p_six__ErrorStatistics swig_types[91]
+#define SWIGTYPE_p_six__FFTSign swig_types[92]
+#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[93]
+#define SWIGTYPE_p_six__ImageFormationType swig_types[94]
+#define SWIGTYPE_p_six__Init swig_types[95]
+#define SWIGTYPE_p_six__IonoError swig_types[96]
+#define SWIGTYPE_p_six__LUT swig_types[97]
+#define SWIGTYPE_p_six__MagnificationMethod swig_types[98]
+#define SWIGTYPE_p_six__MatchCollect swig_types[99]
+#define SWIGTYPE_p_six__MatchInformation swig_types[100]
+#define SWIGTYPE_p_six__MatchType swig_types[101]
+#define SWIGTYPE_p_six__MissingRequiredException swig_types[102]
+#define SWIGTYPE_p_six__NoiseLevel swig_types[103]
+#define SWIGTYPE_p_six__Options swig_types[104]
+#define SWIGTYPE_p_six__OrientationType swig_types[105]
+#define SWIGTYPE_p_six__Parameter swig_types[106]
+#define SWIGTYPE_p_six__ParameterCollection swig_types[107]
+#define SWIGTYPE_p_six__PixelType swig_types[108]
+#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[109]
+#define SWIGTYPE_p_six__PolarizationType swig_types[110]
+#define SWIGTYPE_p_six__PosVelError swig_types[111]
+#define SWIGTYPE_p_six__ProjectionType swig_types[112]
+#define SWIGTYPE_p_six__RMAlgoType swig_types[113]
+#define SWIGTYPE_p_six__RadarModeType swig_types[114]
+#define SWIGTYPE_p_six__RadarSensor swig_types[115]
+#define SWIGTYPE_p_six__Radiometric swig_types[116]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[117]
+#define SWIGTYPE_p_six__RegionType swig_types[118]
+#define SWIGTYPE_p_six__RowColEnum swig_types[119]
+#define SWIGTYPE_p_six__SCP swig_types[120]
+#define SWIGTYPE_p_six__SCPType swig_types[121]
+#define SWIGTYPE_p_six__SideOfTrackType swig_types[122]
+#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[123]
+#define SWIGTYPE_p_six__TropoError swig_types[124]
+#define SWIGTYPE_p_six__UninitializedValueException swig_types[125]
+#define SWIGTYPE_p_six__XMLControl swig_types[126]
+#define SWIGTYPE_p_six__XMLControlCreator swig_types[127]
+#define SWIGTYPE_p_six__XMLControlRegistry swig_types[128]
+#define SWIGTYPE_p_six__XYZEnum swig_types[129]
+#define SWIGTYPE_p_size_t swig_types[130]
+#define SWIGTYPE_p_size_type swig_types[131]
+#define SWIGTYPE_p_ssize_t swig_types[132]
+#define SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t swig_types[133]
+#define SWIGTYPE_p_std__allocatorT_six__MatchCollect_t swig_types[134]
+#define SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t swig_types[135]
+#define SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t swig_types[136]
+#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[137]
+#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[138]
+#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[139]
+#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[140]
+#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[141]
+#define SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t swig_types[142]
+#define SWIGTYPE_p_std__auto_ptrT_six__MatchType_t swig_types[143]
+#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[144]
+#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[145]
+#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[146]
+#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[147]
+#define SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t swig_types[148]
+#define SWIGTYPE_p_std__invalid_argument swig_types[149]
+#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[150]
+#define SWIGTYPE_p_std__ostream swig_types[151]
+#define SWIGTYPE_p_std__string swig_types[152]
+#define SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t swig_types[153]
+#define SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t swig_types[154]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[155]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[156]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[157]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[158]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[159]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[160]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[161]
+#define SWIGTYPE_p_uint16_t swig_types[162]
+#define SWIGTYPE_p_uint32_t swig_types[163]
+#define SWIGTYPE_p_uint64_t swig_types[164]
+#define SWIGTYPE_p_uint8_t swig_types[165]
+#define SWIGTYPE_p_unsigned_char swig_types[166]
+#define SWIGTYPE_p_value_type swig_types[167]
+#define SWIGTYPE_p_xml__lite__Document swig_types[168]
+static swig_type_info *swig_types[170];
+static swig_module_info swig_module = {swig_types, 169, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -5372,6 +5375,12 @@ SWIGINTERN void mem_ScopedCloneablePtr_Sl_six_AmplitudeTable_Sg____setitem__(mem
 mem::ScopedCloneablePtr< six::AmplitudeTable > makeScopedCloneableAmplitudeTable()
 {
     return mem::ScopedCloneablePtr< six::AmplitudeTable >(new six::AmplitudeTable ());
+} 
+
+
+mem::ScopedCloneablePtr< six::CollectionInformation > makeScopedCloneableCollectionInformation()
+{
+    return mem::ScopedCloneablePtr< six::CollectionInformation >(new six::CollectionInformation ());
 } 
 
 
@@ -47538,6 +47547,1449 @@ SWIGINTERN PyObject *ParameterCollection_swigregister(PyObject *SWIGUNUSEDPARM(s
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_CollectionInformation_collectorName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_collectorName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_collectorName_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_collectorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_collectorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->collectorName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_collectorName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_collectorName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_collectorName_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->collectorName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_illuminatorName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_illuminatorName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_illuminatorName_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_illuminatorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_illuminatorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->illuminatorName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_illuminatorName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_illuminatorName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_illuminatorName_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->illuminatorName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_coreName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_coreName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_coreName_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_coreName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_coreName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->coreName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_coreName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_coreName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_coreName_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->coreName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_collectType_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  six::CollectType *arg2 = (six::CollectType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_collectType_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_collectType_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__CollectType, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_collectType_set" "', argument " "2"" of type '" "six::CollectType *""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectType * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->collectType = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_collectType_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_collectType_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_collectType_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectType *)& ((arg1)->collectType);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_radarMode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  six::RadarModeType *arg2 = (six::RadarModeType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_radarMode_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_radarMode_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__RadarModeType, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_radarMode_set" "', argument " "2"" of type '" "six::RadarModeType *""'"); 
+  }
+  arg2 = reinterpret_cast< six::RadarModeType * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->radarMode = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_radarMode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::RadarModeType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_radarMode_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_radarMode_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (six::RadarModeType *)& ((arg1)->radarMode);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarModeType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_radarModeID_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_radarModeID_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_radarModeID_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_radarModeID_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_radarModeID_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->radarModeID = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_radarModeID_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_radarModeID_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_radarModeID_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->radarModeID);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_releaseInfo_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_releaseInfo_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_releaseInfo_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_releaseInfo_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_releaseInfo_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->releaseInfo = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_releaseInfo_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_releaseInfo_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_releaseInfo_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->releaseInfo);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_countryCodes_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = (std::vector< std::string,std::allocator< std::string > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_countryCodes_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_countryCodes_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_countryCodes_set" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->countryCodes = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_countryCodes_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_countryCodes_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_countryCodes_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< std::string,std::allocator< std::string > > *)& ((arg1)->countryCodes);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_parameters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  six::ParameterCollection *arg2 = (six::ParameterCollection *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_parameters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_parameters_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_parameters_set" "', argument " "2"" of type '" "six::ParameterCollection *""'"); 
+  }
+  arg2 = reinterpret_cast< six::ParameterCollection * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->parameters = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_parameters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::ParameterCollection *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_parameters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_parameters_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (six::ParameterCollection *)& ((arg1)->parameters);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_CollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_CollectionInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::CollectionInformation *)new six::CollectionInformation();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_CollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_CollectionInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_CollectionInformation" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_clone" "', argument " "1"" of type '" "six::CollectionInformation const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectionInformation *)((six::CollectionInformation const *)arg1)->clone();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  six::CollectionInformation *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation___eq__" "', argument " "1"" of type '" "six::CollectionInformation const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__CollectionInformation,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation___eq__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation___eq__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectionInformation * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::CollectionInformation const *)arg1)->operator ==((six::CollectionInformation const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  six::CollectionInformation *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation___ne__" "', argument " "1"" of type '" "six::CollectionInformation const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__CollectionInformation,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation___ne__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation___ne__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectionInformation * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::CollectionInformation const *)arg1)->operator !=((six::CollectionInformation const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_getClassificationLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_getClassificationLevel",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_getClassificationLevel" "', argument " "1"" of type '" "six::CollectionInformation const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = ((six::CollectionInformation const *)arg1)->getClassificationLevel();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_setClassificationLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_setClassificationLevel",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_setClassificationLevel" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_setClassificationLevel" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_setClassificationLevel" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      (arg1)->setClassificationLevel((std::string const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *CollectionInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_six__CollectionInformation, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_delete_Classification(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Classification *arg1 = (six::Classification *) 0 ;
@@ -81832,6 +83284,2055 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_new_StdAutoCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< six::CollectionInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCollectionInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::auto_ptr< six::CollectionInformation > *)new std::auto_ptr< six::CollectionInformation >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_StdAutoCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< six::CollectionInformation > *arg1 = (std::auto_ptr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoCollectionInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCollectionInformation" "', argument " "1"" of type '" "std::auto_ptr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::auto_ptr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *StdAutoCollectionInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableCollectionInformation__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCloneableCollectionInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCloneableCollectionInformation" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCloneablePtr< six::CollectionInformation > *)new mem::ScopedCloneablePtr< six::CollectionInformation >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableCollectionInformation__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ScopedCloneableCollectionInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = (mem::ScopedCloneablePtr< six::CollectionInformation > *)new mem::ScopedCloneablePtr< six::CollectionInformation >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableCollectionInformation__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCloneableCollectionInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCloneableCollectionInformation" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ScopedCloneableCollectionInformation" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const &""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCloneablePtr< six::CollectionInformation > *)new mem::ScopedCloneablePtr< six::CollectionInformation >((mem::ScopedCloneablePtr< six::CollectionInformation > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableCollectionInformation(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[2] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ScopedCloneableCollectionInformation__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_six__CollectionInformation, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCloneableCollectionInformation__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCloneableCollectionInformation__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ScopedCloneableCollectionInformation'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCloneablePtr< six::CollectionInformation >::ScopedCloneablePtr(six::CollectionInformation *)\n"
+    "    mem::ScopedCloneablePtr< six::CollectionInformation >::ScopedCloneablePtr()\n"
+    "    mem::ScopedCloneablePtr< six::CollectionInformation >::ScopedCloneablePtr(mem::ScopedCloneablePtr< six::CollectionInformation > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectionInformation *)((mem::ScopedCloneablePtr< six::CollectionInformation > const *)arg1)->get();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___ref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation___ref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation___ref__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectionInformation *) &((mem::ScopedCloneablePtr< six::CollectionInformation > const *)arg1)->operator *();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___deref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation___deref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation___deref__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectionInformation *)((mem::ScopedCloneablePtr< six::CollectionInformation > const *)arg1)->operator ->();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_reset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::CollectionInformation *arg2 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_reset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_reset" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_reset" "', argument " "2"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectionInformation * >(argp2);
+  {
+    try
+    {
+      (arg1)->reset(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_reset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_reset" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      (arg1)->reset();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_reset(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCloneableCollectionInformation_reset__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_six__CollectionInformation, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ScopedCloneableCollectionInformation_reset__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ScopedCloneableCollectionInformation_reset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCloneablePtr< six::CollectionInformation >::reset(six::CollectionInformation *)\n"
+    "    mem::ScopedCloneablePtr< six::CollectionInformation >::reset()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ScopedCloneableCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ScopedCloneableCollectionInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ScopedCloneableCollectionInformation" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectorName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_collectorName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_collectorName_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_collectorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_collectorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (*arg1)->collectorName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectorName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_collectorName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_collectorName_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((*arg1)->collectorName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_illuminatorName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_illuminatorName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_illuminatorName_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_illuminatorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_illuminatorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (*arg1)->illuminatorName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_illuminatorName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_illuminatorName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_illuminatorName_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((*arg1)->illuminatorName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_coreName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_coreName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_coreName_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_coreName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_coreName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (*arg1)->coreName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_coreName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_coreName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_coreName_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((*arg1)->coreName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectType_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::CollectType *arg2 = (six::CollectType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_collectType_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_collectType_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__CollectType, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_collectType_set" "', argument " "2"" of type '" "six::CollectType *""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectType * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->collectType = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectType_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_collectType_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_collectType_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectType *)& ((*arg1)->collectType);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarMode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::RadarModeType *arg2 = (six::RadarModeType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_radarMode_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_radarMode_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__RadarModeType, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_radarMode_set" "', argument " "2"" of type '" "six::RadarModeType *""'"); 
+  }
+  arg2 = reinterpret_cast< six::RadarModeType * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->radarMode = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarMode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::RadarModeType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_radarMode_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_radarMode_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::RadarModeType *)& ((*arg1)->radarMode);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarModeType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarModeID_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_radarModeID_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_radarModeID_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_radarModeID_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_radarModeID_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (*arg1)->radarModeID = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarModeID_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_radarModeID_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_radarModeID_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((*arg1)->radarModeID);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_releaseInfo_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_releaseInfo_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_releaseInfo_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_releaseInfo_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_releaseInfo_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (*arg1)->releaseInfo = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_releaseInfo_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_releaseInfo_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_releaseInfo_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((*arg1)->releaseInfo);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_countryCodes_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = (std::vector< std::string,std::allocator< std::string > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_countryCodes_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_countryCodes_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_countryCodes_set" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->countryCodes = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_countryCodes_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_countryCodes_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_countryCodes_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< std::string,std::allocator< std::string > > *)& ((*arg1)->countryCodes);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_parameters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::ParameterCollection *arg2 = (six::ParameterCollection *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_parameters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_parameters_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_parameters_set" "', argument " "2"" of type '" "six::ParameterCollection *""'"); 
+  }
+  arg2 = reinterpret_cast< six::ParameterCollection * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->parameters = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_parameters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::ParameterCollection *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_parameters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_parameters_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::ParameterCollection *)& ((*arg1)->parameters);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_clone" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectionInformation *)(*arg1)->clone();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::CollectionInformation *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation___eq__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__CollectionInformation,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation___eq__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation___eq__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectionInformation * >(argp2);
+  {
+    try
+    {
+      result = (bool)(*arg1)->operator ==((six::CollectionInformation const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::CollectionInformation *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation___ne__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__CollectionInformation,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation___ne__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation___ne__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectionInformation * >(argp2);
+  {
+    try
+    {
+      result = (bool)(*arg1)->operator !=((six::CollectionInformation const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_getClassificationLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_getClassificationLevel",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_getClassificationLevel" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (*arg1)->getClassificationLevel();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_setClassificationLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_setClassificationLevel",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_setClassificationLevel" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_setClassificationLevel" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_setClassificationLevel" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      (*arg1)->setClassificationLevel((std::string const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ScopedCloneableCollectionInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_makeScopedCloneableCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":makeScopedCloneableCollectionInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = makeScopedCloneableCollectionInformation();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new mem::ScopedCloneablePtr< six::CollectionInformation >(static_cast< const mem::ScopedCloneablePtr< six::CollectionInformation >& >(result))), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_StdAutoMatchType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::auto_ptr< six::MatchType > *result = 0 ;
@@ -90770,6 +94271,32 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_ParameterCollection", _wrap_new_ParameterCollection, METH_VARARGS, (char *)"new_ParameterCollection() -> ParameterCollection"},
 	 { (char *)"delete_ParameterCollection", _wrap_delete_ParameterCollection, METH_VARARGS, (char *)"delete_ParameterCollection(ParameterCollection self)"},
 	 { (char *)"ParameterCollection_swigregister", ParameterCollection_swigregister, METH_VARARGS, NULL},
+	 { (char *)"CollectionInformation_collectorName_set", _wrap_CollectionInformation_collectorName_set, METH_VARARGS, (char *)"CollectionInformation_collectorName_set(CollectionInformation self, std::string const & collectorName)"},
+	 { (char *)"CollectionInformation_collectorName_get", _wrap_CollectionInformation_collectorName_get, METH_VARARGS, (char *)"CollectionInformation_collectorName_get(CollectionInformation self) -> std::string const &"},
+	 { (char *)"CollectionInformation_illuminatorName_set", _wrap_CollectionInformation_illuminatorName_set, METH_VARARGS, (char *)"CollectionInformation_illuminatorName_set(CollectionInformation self, std::string const & illuminatorName)"},
+	 { (char *)"CollectionInformation_illuminatorName_get", _wrap_CollectionInformation_illuminatorName_get, METH_VARARGS, (char *)"CollectionInformation_illuminatorName_get(CollectionInformation self) -> std::string const &"},
+	 { (char *)"CollectionInformation_coreName_set", _wrap_CollectionInformation_coreName_set, METH_VARARGS, (char *)"CollectionInformation_coreName_set(CollectionInformation self, std::string const & coreName)"},
+	 { (char *)"CollectionInformation_coreName_get", _wrap_CollectionInformation_coreName_get, METH_VARARGS, (char *)"CollectionInformation_coreName_get(CollectionInformation self) -> std::string const &"},
+	 { (char *)"CollectionInformation_collectType_set", _wrap_CollectionInformation_collectType_set, METH_VARARGS, (char *)"CollectionInformation_collectType_set(CollectionInformation self, CollectType collectType)"},
+	 { (char *)"CollectionInformation_collectType_get", _wrap_CollectionInformation_collectType_get, METH_VARARGS, (char *)"CollectionInformation_collectType_get(CollectionInformation self) -> CollectType"},
+	 { (char *)"CollectionInformation_radarMode_set", _wrap_CollectionInformation_radarMode_set, METH_VARARGS, (char *)"CollectionInformation_radarMode_set(CollectionInformation self, RadarModeType radarMode)"},
+	 { (char *)"CollectionInformation_radarMode_get", _wrap_CollectionInformation_radarMode_get, METH_VARARGS, (char *)"CollectionInformation_radarMode_get(CollectionInformation self) -> RadarModeType"},
+	 { (char *)"CollectionInformation_radarModeID_set", _wrap_CollectionInformation_radarModeID_set, METH_VARARGS, (char *)"CollectionInformation_radarModeID_set(CollectionInformation self, std::string const & radarModeID)"},
+	 { (char *)"CollectionInformation_radarModeID_get", _wrap_CollectionInformation_radarModeID_get, METH_VARARGS, (char *)"CollectionInformation_radarModeID_get(CollectionInformation self) -> std::string const &"},
+	 { (char *)"CollectionInformation_releaseInfo_set", _wrap_CollectionInformation_releaseInfo_set, METH_VARARGS, (char *)"CollectionInformation_releaseInfo_set(CollectionInformation self, std::string const & releaseInfo)"},
+	 { (char *)"CollectionInformation_releaseInfo_get", _wrap_CollectionInformation_releaseInfo_get, METH_VARARGS, (char *)"CollectionInformation_releaseInfo_get(CollectionInformation self) -> std::string const &"},
+	 { (char *)"CollectionInformation_countryCodes_set", _wrap_CollectionInformation_countryCodes_set, METH_VARARGS, (char *)"CollectionInformation_countryCodes_set(CollectionInformation self, VectorString countryCodes)"},
+	 { (char *)"CollectionInformation_countryCodes_get", _wrap_CollectionInformation_countryCodes_get, METH_VARARGS, (char *)"CollectionInformation_countryCodes_get(CollectionInformation self) -> VectorString"},
+	 { (char *)"CollectionInformation_parameters_set", _wrap_CollectionInformation_parameters_set, METH_VARARGS, (char *)"CollectionInformation_parameters_set(CollectionInformation self, ParameterCollection parameters)"},
+	 { (char *)"CollectionInformation_parameters_get", _wrap_CollectionInformation_parameters_get, METH_VARARGS, (char *)"CollectionInformation_parameters_get(CollectionInformation self) -> ParameterCollection"},
+	 { (char *)"new_CollectionInformation", _wrap_new_CollectionInformation, METH_VARARGS, (char *)"new_CollectionInformation() -> CollectionInformation"},
+	 { (char *)"delete_CollectionInformation", _wrap_delete_CollectionInformation, METH_VARARGS, (char *)"delete_CollectionInformation(CollectionInformation self)"},
+	 { (char *)"CollectionInformation_clone", _wrap_CollectionInformation_clone, METH_VARARGS, (char *)"CollectionInformation_clone(CollectionInformation self) -> CollectionInformation"},
+	 { (char *)"CollectionInformation___eq__", _wrap_CollectionInformation___eq__, METH_VARARGS, (char *)"CollectionInformation___eq__(CollectionInformation self, CollectionInformation other) -> bool"},
+	 { (char *)"CollectionInformation___ne__", _wrap_CollectionInformation___ne__, METH_VARARGS, (char *)"CollectionInformation___ne__(CollectionInformation self, CollectionInformation other) -> bool"},
+	 { (char *)"CollectionInformation_getClassificationLevel", _wrap_CollectionInformation_getClassificationLevel, METH_VARARGS, (char *)"CollectionInformation_getClassificationLevel(CollectionInformation self) -> std::string"},
+	 { (char *)"CollectionInformation_setClassificationLevel", _wrap_CollectionInformation_setClassificationLevel, METH_VARARGS, (char *)"CollectionInformation_setClassificationLevel(CollectionInformation self, std::string const & classification)"},
+	 { (char *)"CollectionInformation_swigregister", CollectionInformation_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_Classification", _wrap_delete_Classification, METH_VARARGS, (char *)"delete_Classification(Classification self)"},
 	 { (char *)"Classification_getLevel", _wrap_Classification_getLevel, METH_VARARGS, (char *)"Classification_getLevel(Classification self) -> std::string"},
 	 { (char *)"Classification_isUnclassified", _wrap_Classification_isUnclassified, METH_VARARGS, (char *)"Classification_isUnclassified(Classification self) -> bool"},
@@ -91458,6 +94985,47 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"ScopedCloneableAmplitudeTable_swigregister", ScopedCloneableAmplitudeTable_swigregister, METH_VARARGS, NULL},
 	 { (char *)"makeScopedCloneableAmplitudeTable", _wrap_makeScopedCloneableAmplitudeTable, METH_VARARGS, (char *)"makeScopedCloneableAmplitudeTable() -> ScopedCloneableAmplitudeTable"},
+	 { (char *)"new_StdAutoCollectionInformation", _wrap_new_StdAutoCollectionInformation, METH_VARARGS, (char *)"new_StdAutoCollectionInformation() -> StdAutoCollectionInformation"},
+	 { (char *)"delete_StdAutoCollectionInformation", _wrap_delete_StdAutoCollectionInformation, METH_VARARGS, (char *)"delete_StdAutoCollectionInformation(StdAutoCollectionInformation self)"},
+	 { (char *)"StdAutoCollectionInformation_swigregister", StdAutoCollectionInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_ScopedCloneableCollectionInformation", _wrap_new_ScopedCloneableCollectionInformation, METH_VARARGS, (char *)"\n"
+		"ScopedCloneableCollectionInformation(CollectionInformation ptr=None)\n"
+		"ScopedCloneableCollectionInformation()\n"
+		"new_ScopedCloneableCollectionInformation(ScopedCloneableCollectionInformation rhs) -> ScopedCloneableCollectionInformation\n"
+		""},
+	 { (char *)"ScopedCloneableCollectionInformation_get", _wrap_ScopedCloneableCollectionInformation_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_get(ScopedCloneableCollectionInformation self) -> CollectionInformation"},
+	 { (char *)"ScopedCloneableCollectionInformation___ref__", _wrap_ScopedCloneableCollectionInformation___ref__, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation___ref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"},
+	 { (char *)"ScopedCloneableCollectionInformation___deref__", _wrap_ScopedCloneableCollectionInformation___deref__, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation___deref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"},
+	 { (char *)"ScopedCloneableCollectionInformation_reset", _wrap_ScopedCloneableCollectionInformation_reset, METH_VARARGS, (char *)"\n"
+		"reset(CollectionInformation ptr=None)\n"
+		"ScopedCloneableCollectionInformation_reset(ScopedCloneableCollectionInformation self)\n"
+		""},
+	 { (char *)"delete_ScopedCloneableCollectionInformation", _wrap_delete_ScopedCloneableCollectionInformation, METH_VARARGS, (char *)"delete_ScopedCloneableCollectionInformation(ScopedCloneableCollectionInformation self)"},
+	 { (char *)"ScopedCloneableCollectionInformation_collectorName_set", _wrap_ScopedCloneableCollectionInformation_collectorName_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_collectorName_set(ScopedCloneableCollectionInformation self, std::string const & collectorName)"},
+	 { (char *)"ScopedCloneableCollectionInformation_collectorName_get", _wrap_ScopedCloneableCollectionInformation_collectorName_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_collectorName_get(ScopedCloneableCollectionInformation self) -> std::string const &"},
+	 { (char *)"ScopedCloneableCollectionInformation_illuminatorName_set", _wrap_ScopedCloneableCollectionInformation_illuminatorName_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_illuminatorName_set(ScopedCloneableCollectionInformation self, std::string const & illuminatorName)"},
+	 { (char *)"ScopedCloneableCollectionInformation_illuminatorName_get", _wrap_ScopedCloneableCollectionInformation_illuminatorName_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_illuminatorName_get(ScopedCloneableCollectionInformation self) -> std::string const &"},
+	 { (char *)"ScopedCloneableCollectionInformation_coreName_set", _wrap_ScopedCloneableCollectionInformation_coreName_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_coreName_set(ScopedCloneableCollectionInformation self, std::string const & coreName)"},
+	 { (char *)"ScopedCloneableCollectionInformation_coreName_get", _wrap_ScopedCloneableCollectionInformation_coreName_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_coreName_get(ScopedCloneableCollectionInformation self) -> std::string const &"},
+	 { (char *)"ScopedCloneableCollectionInformation_collectType_set", _wrap_ScopedCloneableCollectionInformation_collectType_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_collectType_set(ScopedCloneableCollectionInformation self, CollectType collectType)"},
+	 { (char *)"ScopedCloneableCollectionInformation_collectType_get", _wrap_ScopedCloneableCollectionInformation_collectType_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_collectType_get(ScopedCloneableCollectionInformation self) -> CollectType"},
+	 { (char *)"ScopedCloneableCollectionInformation_radarMode_set", _wrap_ScopedCloneableCollectionInformation_radarMode_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_radarMode_set(ScopedCloneableCollectionInformation self, RadarModeType radarMode)"},
+	 { (char *)"ScopedCloneableCollectionInformation_radarMode_get", _wrap_ScopedCloneableCollectionInformation_radarMode_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_radarMode_get(ScopedCloneableCollectionInformation self) -> RadarModeType"},
+	 { (char *)"ScopedCloneableCollectionInformation_radarModeID_set", _wrap_ScopedCloneableCollectionInformation_radarModeID_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_radarModeID_set(ScopedCloneableCollectionInformation self, std::string const & radarModeID)"},
+	 { (char *)"ScopedCloneableCollectionInformation_radarModeID_get", _wrap_ScopedCloneableCollectionInformation_radarModeID_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_radarModeID_get(ScopedCloneableCollectionInformation self) -> std::string const &"},
+	 { (char *)"ScopedCloneableCollectionInformation_releaseInfo_set", _wrap_ScopedCloneableCollectionInformation_releaseInfo_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_releaseInfo_set(ScopedCloneableCollectionInformation self, std::string const & releaseInfo)"},
+	 { (char *)"ScopedCloneableCollectionInformation_releaseInfo_get", _wrap_ScopedCloneableCollectionInformation_releaseInfo_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_releaseInfo_get(ScopedCloneableCollectionInformation self) -> std::string const &"},
+	 { (char *)"ScopedCloneableCollectionInformation_countryCodes_set", _wrap_ScopedCloneableCollectionInformation_countryCodes_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_countryCodes_set(ScopedCloneableCollectionInformation self, VectorString countryCodes)"},
+	 { (char *)"ScopedCloneableCollectionInformation_countryCodes_get", _wrap_ScopedCloneableCollectionInformation_countryCodes_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_countryCodes_get(ScopedCloneableCollectionInformation self) -> VectorString"},
+	 { (char *)"ScopedCloneableCollectionInformation_parameters_set", _wrap_ScopedCloneableCollectionInformation_parameters_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_parameters_set(ScopedCloneableCollectionInformation self, ParameterCollection parameters)"},
+	 { (char *)"ScopedCloneableCollectionInformation_parameters_get", _wrap_ScopedCloneableCollectionInformation_parameters_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_parameters_get(ScopedCloneableCollectionInformation self) -> ParameterCollection"},
+	 { (char *)"ScopedCloneableCollectionInformation_clone", _wrap_ScopedCloneableCollectionInformation_clone, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_clone(ScopedCloneableCollectionInformation self) -> CollectionInformation"},
+	 { (char *)"ScopedCloneableCollectionInformation___eq__", _wrap_ScopedCloneableCollectionInformation___eq__, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation___eq__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"},
+	 { (char *)"ScopedCloneableCollectionInformation___ne__", _wrap_ScopedCloneableCollectionInformation___ne__, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation___ne__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"},
+	 { (char *)"ScopedCloneableCollectionInformation_getClassificationLevel", _wrap_ScopedCloneableCollectionInformation_getClassificationLevel, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_getClassificationLevel(ScopedCloneableCollectionInformation self) -> std::string"},
+	 { (char *)"ScopedCloneableCollectionInformation_setClassificationLevel", _wrap_ScopedCloneableCollectionInformation_setClassificationLevel, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_setClassificationLevel(ScopedCloneableCollectionInformation self, std::string const & classification)"},
+	 { (char *)"ScopedCloneableCollectionInformation_swigregister", ScopedCloneableCollectionInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"makeScopedCloneableCollectionInformation", _wrap_makeScopedCloneableCollectionInformation, METH_VARARGS, (char *)"makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"},
 	 { (char *)"new_StdAutoMatchType", _wrap_new_StdAutoMatchType, METH_VARARGS, (char *)"new_StdAutoMatchType() -> StdAutoMatchType"},
 	 { (char *)"delete_StdAutoMatchType", _wrap_delete_StdAutoMatchType, METH_VARARGS, (char *)"delete_StdAutoMatchType(StdAutoMatchType self)"},
 	 { (char *)"StdAutoMatchType_swigregister", StdAutoMatchType_swigregister, METH_VARARGS, NULL},
@@ -91771,6 +95339,7 @@ static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__On
 static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "six::PolyXYZ *|math::poly::OneD< math::linear::VectorN< 3,double > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "six::Poly2D *|math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t = {"_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t", "mem::ScopedCloneablePtr< six::AmplitudeTable > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__ScopedCloneablePtrT_six__CollectionInformation_t = {"_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t", "mem::ScopedCloneablePtr< six::CollectionInformation > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__Components_t = {"_p_mem__ScopedCopyablePtrT_six__Components_t", "mem::ScopedCopyablePtr< six::Components > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t = {"_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t", "mem::ScopedCopyablePtr< six::CompositeSCP > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t = {"_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t", "mem::ScopedCopyablePtr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
@@ -91802,6 +95371,7 @@ static swig_type_info _swigt__p_six__BooleanType = {"_p_six__BooleanType", "six:
 static swig_type_info _swigt__p_six__ByteSwapping = {"_p_six__ByteSwapping", "six::ByteSwapping *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__Classification = {"_p_six__Classification", "six::Classification *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__CollectType = {"_p_six__CollectType", "six::CollectType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__CollectionInformation = {"_p_six__CollectionInformation", "six::CollectionInformation *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ComplexImageGridType = {"_p_six__ComplexImageGridType", "six::ComplexImageGridType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ComplexImagePlaneType = {"_p_six__ComplexImagePlaneType", "six::ComplexImagePlaneType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__Components = {"_p_six__Components", "six::Components *", 0, 0, (void*)0, 0};
@@ -91864,6 +95434,7 @@ static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t
 static swig_type_info _swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t = {"_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t", "std::allocator< mem::ScopedCopyablePtr< six::MatchType > > *|std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_six__MatchCollect_t = {"_p_std__allocatorT_six__MatchCollect_t", "std::vector< six::MatchCollect >::allocator_type *|std::allocator< six::MatchCollect > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__AmplitudeTable_t = {"_p_std__auto_ptrT_six__AmplitudeTable_t", "std::auto_ptr< six::AmplitudeTable > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__CollectionInformation_t = {"_p_std__auto_ptrT_six__CollectionInformation_t", "std::auto_ptr< six::CollectionInformation > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__Components_t = {"_p_std__auto_ptrT_six__Components_t", "std::auto_ptr< six::Components > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__CompositeSCP_t = {"_p_std__auto_ptrT_six__CompositeSCP_t", "std::auto_ptr< six::CompositeSCP > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__CorrCoefs_t = {"_p_std__auto_ptrT_six__CorrCoefs_t", "std::auto_ptr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
@@ -91939,6 +95510,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   &_swigt__p_math__poly__TwoDT_double_t,
   &_swigt__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t,
+  &_swigt__p_mem__ScopedCloneablePtrT_six__CollectionInformation_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__Components_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t,
@@ -91970,6 +95542,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__ByteSwapping,
   &_swigt__p_six__Classification,
   &_swigt__p_six__CollectType,
+  &_swigt__p_six__CollectionInformation,
   &_swigt__p_six__ComplexImageGridType,
   &_swigt__p_six__ComplexImagePlaneType,
   &_swigt__p_six__Components,
@@ -92032,6 +95605,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t,
   &_swigt__p_std__allocatorT_six__MatchCollect_t,
   &_swigt__p_std__auto_ptrT_six__AmplitudeTable_t,
+  &_swigt__p_std__auto_ptrT_six__CollectionInformation_t,
   &_swigt__p_std__auto_ptrT_six__Components_t,
   &_swigt__p_std__auto_ptrT_six__CompositeSCP_t,
   &_swigt__p_std__auto_ptrT_six__CorrCoefs_t,
@@ -92107,6 +95681,7 @@ static swig_cast_info _swigc__p_math__poly__OneDT_double_t[] = {  {&_swigt__p_ma
 static swig_cast_info _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t[] = {  {&_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__TwoDT_double_t[] = {  {&_swigt__p_math__poly__TwoDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t[] = {  {&_swigt__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_mem__ScopedCloneablePtrT_six__CollectionInformation_t[] = {  {&_swigt__p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__Components_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__Components_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -92138,6 +95713,7 @@ static swig_cast_info _swigc__p_six__BooleanType[] = {  {&_swigt__p_six__Boolean
 static swig_cast_info _swigc__p_six__ByteSwapping[] = {  {&_swigt__p_six__ByteSwapping, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__Classification[] = {  {&_swigt__p_six__Classification, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__CollectType[] = {  {&_swigt__p_six__CollectType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__CollectionInformation[] = {  {&_swigt__p_six__CollectionInformation, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ComplexImageGridType[] = {  {&_swigt__p_six__ComplexImageGridType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ComplexImagePlaneType[] = {  {&_swigt__p_six__ComplexImagePlaneType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__Components[] = {  {&_swigt__p_six__Components, 0, 0, 0},{0, 0, 0, 0}};
@@ -92200,6 +95776,7 @@ static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t[] = {  {&_swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_six__MatchCollect_t[] = {  {&_swigt__p_std__allocatorT_six__MatchCollect_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__AmplitudeTable_t[] = {  {&_swigt__p_std__auto_ptrT_six__AmplitudeTable_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__auto_ptrT_six__CollectionInformation_t[] = {  {&_swigt__p_std__auto_ptrT_six__CollectionInformation_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__Components_t[] = {  {&_swigt__p_std__auto_ptrT_six__Components_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__CompositeSCP_t[] = {  {&_swigt__p_std__auto_ptrT_six__CompositeSCP_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__CorrCoefs_t[] = {  {&_swigt__p_std__auto_ptrT_six__CorrCoefs_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -92275,6 +95852,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   _swigc__p_math__poly__TwoDT_double_t,
   _swigc__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t,
+  _swigc__p_mem__ScopedCloneablePtrT_six__CollectionInformation_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__Components_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t,
@@ -92306,6 +95884,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__ByteSwapping,
   _swigc__p_six__Classification,
   _swigc__p_six__CollectType,
+  _swigc__p_six__CollectionInformation,
   _swigc__p_six__ComplexImageGridType,
   _swigc__p_six__ComplexImagePlaneType,
   _swigc__p_six__Components,
@@ -92368,6 +95947,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t,
   _swigc__p_std__allocatorT_six__MatchCollect_t,
   _swigc__p_std__auto_ptrT_six__AmplitudeTable_t,
+  _swigc__p_std__auto_ptrT_six__CollectionInformation_t,
   _swigc__p_std__auto_ptrT_six__Components_t,
   _swigc__p_std__auto_ptrT_six__CompositeSCP_t,
   _swigc__p_std__auto_ptrT_six__CorrCoefs_t,
