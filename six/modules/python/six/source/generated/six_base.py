@@ -3427,6 +3427,88 @@ class ParameterCollection(_object):
 ParameterCollection_swigregister = _six_base.ParameterCollection_swigregister
 ParameterCollection_swigregister(ParameterCollection)
 
+class CollectionInformation(_object):
+    """Proxy of C++ six::CollectionInformation class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionInformation, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["collectorName"] = _six_base.CollectionInformation_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_base.CollectionInformation_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_base.CollectionInformation_collectorName_get, _six_base.CollectionInformation_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_base.CollectionInformation_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_base.CollectionInformation_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_base.CollectionInformation_illuminatorName_get, _six_base.CollectionInformation_illuminatorName_set)
+    __swig_setmethods__["coreName"] = _six_base.CollectionInformation_coreName_set
+    __swig_getmethods__["coreName"] = _six_base.CollectionInformation_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_base.CollectionInformation_coreName_get, _six_base.CollectionInformation_coreName_set)
+    __swig_setmethods__["collectType"] = _six_base.CollectionInformation_collectType_set
+    __swig_getmethods__["collectType"] = _six_base.CollectionInformation_collectType_get
+    if _newclass:
+        collectType = _swig_property(_six_base.CollectionInformation_collectType_get, _six_base.CollectionInformation_collectType_set)
+    __swig_setmethods__["radarMode"] = _six_base.CollectionInformation_radarMode_set
+    __swig_getmethods__["radarMode"] = _six_base.CollectionInformation_radarMode_get
+    if _newclass:
+        radarMode = _swig_property(_six_base.CollectionInformation_radarMode_get, _six_base.CollectionInformation_radarMode_set)
+    __swig_setmethods__["radarModeID"] = _six_base.CollectionInformation_radarModeID_set
+    __swig_getmethods__["radarModeID"] = _six_base.CollectionInformation_radarModeID_get
+    if _newclass:
+        radarModeID = _swig_property(_six_base.CollectionInformation_radarModeID_get, _six_base.CollectionInformation_radarModeID_set)
+    __swig_setmethods__["releaseInfo"] = _six_base.CollectionInformation_releaseInfo_set
+    __swig_getmethods__["releaseInfo"] = _six_base.CollectionInformation_releaseInfo_get
+    if _newclass:
+        releaseInfo = _swig_property(_six_base.CollectionInformation_releaseInfo_get, _six_base.CollectionInformation_releaseInfo_set)
+    __swig_setmethods__["countryCodes"] = _six_base.CollectionInformation_countryCodes_set
+    __swig_getmethods__["countryCodes"] = _six_base.CollectionInformation_countryCodes_get
+    if _newclass:
+        countryCodes = _swig_property(_six_base.CollectionInformation_countryCodes_get, _six_base.CollectionInformation_countryCodes_set)
+    __swig_setmethods__["parameters"] = _six_base.CollectionInformation_parameters_set
+    __swig_getmethods__["parameters"] = _six_base.CollectionInformation_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_base.CollectionInformation_parameters_get, _six_base.CollectionInformation_parameters_set)
+
+    def __init__(self):
+        """__init__(six::CollectionInformation self) -> CollectionInformation"""
+        this = _six_base.new_CollectionInformation()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_CollectionInformation
+    __del__ = lambda self: None
+
+    def clone(self):
+        """clone(CollectionInformation self) -> CollectionInformation"""
+        return _six_base.CollectionInformation_clone(self)
+
+
+    def __eq__(self, other):
+        """__eq__(CollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.CollectionInformation___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(CollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.CollectionInformation___ne__(self, other)
+
+
+    def getClassificationLevel(self):
+        """getClassificationLevel(CollectionInformation self) -> std::string"""
+        return _six_base.CollectionInformation_getClassificationLevel(self)
+
+
+    def setClassificationLevel(self, classification):
+        """setClassificationLevel(CollectionInformation self, std::string const & classification)"""
+        return _six_base.CollectionInformation_setClassificationLevel(self, classification)
+
+CollectionInformation_swigregister = _six_base.CollectionInformation_swigregister
+CollectionInformation_swigregister(CollectionInformation)
+
 class Classification(_object):
     """Proxy of C++ six::Classification class."""
 
@@ -5874,6 +5956,140 @@ ScopedCloneableAmplitudeTable_swigregister(ScopedCloneableAmplitudeTable)
 def makeScopedCloneableAmplitudeTable():
     """makeScopedCloneableAmplitudeTable() -> ScopedCloneableAmplitudeTable"""
     return _six_base.makeScopedCloneableAmplitudeTable()
+class StdAutoCollectionInformation(_object):
+    """Proxy of C++ std::auto_ptr<(six::CollectionInformation)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCollectionInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoCollectionInformation, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::CollectionInformation)> self) -> StdAutoCollectionInformation"""
+        this = _six_base.new_StdAutoCollectionInformation()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoCollectionInformation
+    __del__ = lambda self: None
+StdAutoCollectionInformation_swigregister = _six_base.StdAutoCollectionInformation_swigregister
+StdAutoCollectionInformation_swigregister(StdAutoCollectionInformation)
+
+class ScopedCloneableCollectionInformation(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::CollectionInformation)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableCollectionInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableCollectionInformation, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCloneablePtr<(six::CollectionInformation)> self, CollectionInformation ptr=None) -> ScopedCloneableCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::CollectionInformation)> self) -> ScopedCloneableCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::CollectionInformation)> self, ScopedCloneableCollectionInformation rhs) -> ScopedCloneableCollectionInformation
+        """
+        this = _six_base.new_ScopedCloneableCollectionInformation(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def get(self):
+        """get(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation_get(self)
+
+
+    def __ref__(self):
+        """__ref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation___ref__(self)
+
+
+    def __deref__(self):
+        """__deref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation___deref__(self)
+
+
+    def reset(self, ptr=None):
+        """
+        reset(ScopedCloneableCollectionInformation self, CollectionInformation ptr=None)
+        reset(ScopedCloneableCollectionInformation self)
+        """
+        return _six_base.ScopedCloneableCollectionInformation_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCloneableCollectionInformation
+    __del__ = lambda self: None
+    __swig_setmethods__["collectorName"] = _six_base.ScopedCloneableCollectionInformation_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_base.ScopedCloneableCollectionInformation_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_base.ScopedCloneableCollectionInformation_collectorName_get, _six_base.ScopedCloneableCollectionInformation_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_base.ScopedCloneableCollectionInformation_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_base.ScopedCloneableCollectionInformation_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_base.ScopedCloneableCollectionInformation_illuminatorName_get, _six_base.ScopedCloneableCollectionInformation_illuminatorName_set)
+    __swig_setmethods__["coreName"] = _six_base.ScopedCloneableCollectionInformation_coreName_set
+    __swig_getmethods__["coreName"] = _six_base.ScopedCloneableCollectionInformation_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_base.ScopedCloneableCollectionInformation_coreName_get, _six_base.ScopedCloneableCollectionInformation_coreName_set)
+    __swig_setmethods__["collectType"] = _six_base.ScopedCloneableCollectionInformation_collectType_set
+    __swig_getmethods__["collectType"] = _six_base.ScopedCloneableCollectionInformation_collectType_get
+    if _newclass:
+        collectType = _swig_property(_six_base.ScopedCloneableCollectionInformation_collectType_get, _six_base.ScopedCloneableCollectionInformation_collectType_set)
+    __swig_setmethods__["radarMode"] = _six_base.ScopedCloneableCollectionInformation_radarMode_set
+    __swig_getmethods__["radarMode"] = _six_base.ScopedCloneableCollectionInformation_radarMode_get
+    if _newclass:
+        radarMode = _swig_property(_six_base.ScopedCloneableCollectionInformation_radarMode_get, _six_base.ScopedCloneableCollectionInformation_radarMode_set)
+    __swig_setmethods__["radarModeID"] = _six_base.ScopedCloneableCollectionInformation_radarModeID_set
+    __swig_getmethods__["radarModeID"] = _six_base.ScopedCloneableCollectionInformation_radarModeID_get
+    if _newclass:
+        radarModeID = _swig_property(_six_base.ScopedCloneableCollectionInformation_radarModeID_get, _six_base.ScopedCloneableCollectionInformation_radarModeID_set)
+    __swig_setmethods__["releaseInfo"] = _six_base.ScopedCloneableCollectionInformation_releaseInfo_set
+    __swig_getmethods__["releaseInfo"] = _six_base.ScopedCloneableCollectionInformation_releaseInfo_get
+    if _newclass:
+        releaseInfo = _swig_property(_six_base.ScopedCloneableCollectionInformation_releaseInfo_get, _six_base.ScopedCloneableCollectionInformation_releaseInfo_set)
+    __swig_setmethods__["countryCodes"] = _six_base.ScopedCloneableCollectionInformation_countryCodes_set
+    __swig_getmethods__["countryCodes"] = _six_base.ScopedCloneableCollectionInformation_countryCodes_get
+    if _newclass:
+        countryCodes = _swig_property(_six_base.ScopedCloneableCollectionInformation_countryCodes_get, _six_base.ScopedCloneableCollectionInformation_countryCodes_set)
+    __swig_setmethods__["parameters"] = _six_base.ScopedCloneableCollectionInformation_parameters_set
+    __swig_getmethods__["parameters"] = _six_base.ScopedCloneableCollectionInformation_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_base.ScopedCloneableCollectionInformation_parameters_get, _six_base.ScopedCloneableCollectionInformation_parameters_set)
+
+    def clone(self):
+        """clone(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation_clone(self)
+
+
+    def __eq__(self, other):
+        """__eq__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.ScopedCloneableCollectionInformation___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.ScopedCloneableCollectionInformation___ne__(self, other)
+
+
+    def getClassificationLevel(self):
+        """getClassificationLevel(ScopedCloneableCollectionInformation self) -> std::string"""
+        return _six_base.ScopedCloneableCollectionInformation_getClassificationLevel(self)
+
+
+    def setClassificationLevel(self, classification):
+        """setClassificationLevel(ScopedCloneableCollectionInformation self, std::string const & classification)"""
+        return _six_base.ScopedCloneableCollectionInformation_setClassificationLevel(self, classification)
+
+ScopedCloneableCollectionInformation_swigregister = _six_base.ScopedCloneableCollectionInformation_swigregister
+ScopedCloneableCollectionInformation_swigregister(ScopedCloneableCollectionInformation)
+
+
+def makeScopedCloneableCollectionInformation():
+    """makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"""
+    return _six_base.makeScopedCloneableCollectionInformation()
 class StdAutoMatchType(_object):
     """Proxy of C++ std::auto_ptr<(six::MatchType)> class."""
 

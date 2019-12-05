@@ -25,9 +25,9 @@
 #include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
 
+#include "six/CollectionInformation.h"
 #include "six/Types.h"
 #include "six/Init.h"
-#include "six/sicd/ComplexCollectionInformation.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Position.h"
 #include "six/sicd/SCPCOA.h"
