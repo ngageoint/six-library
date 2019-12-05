@@ -30,7 +30,7 @@
 
 namespace cphd
 {
-const char FileHeader::DEFAULT_VERSION[] = "1.0.0";
+const char FileHeader::DEFAULT_VERSION[] = "1.0.1";
 
 FileHeader::FileHeader() :
     mVersion(DEFAULT_VERSION),
