@@ -30,6 +30,7 @@
 #include "cphd/CPHDReader.h"
 #include "cphd/CPHDWriter.h"
 #include "cphd/CPHDXMLControl.h"
+#include "cphd/CPHDXMLParser.h"
 #include "cphd/Data.h"
 #include "cphd/Dwell.h"
 #include "cphd/Enums.h"

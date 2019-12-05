@@ -25,18 +25,10 @@
 
 #include <memory>
 
-#include <mem/SharedPtr.h>
 #include <logging/Logger.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Document.h>
-#include <six/XMLParser.h>
-#include <six/SICommonXMLParser10x.h>
-#include <cphd/SceneCoordinates.h>
-#include <cphd/Data.h>
-#include <cphd/Global.h>
-#include <cphd/Metadata.h>
-#include <cphd/PVP.h>
-#include <cphd/ReferenceGeometry.h>
+#include <cphd/CPHDXMLParser.h>
 #include <cphd/Types.h>
 
 namespace cphd
@@ -45,24 +37,31 @@ namespace cphd
  *  \class CPHDXMLControl
  *
  *  \brief This class converts a Metadata object into a CPHD XML
- *  Document Object Model (DOM).
+ *  Document Object Model (DOM) and vice-versa.
  */
-class CPHDXMLControl : public six::XMLParser
+class CPHDXMLControl
 {
 public:
     /*!
      *  \func CPHDXMLControl
-     *
      *  \brief Default constructor
-     */
-    CPHDXMLControl();
-
-    /*!
-     *  \func CPHDXMLControl
      *
-     *  \brief Constructor with custom log option
+     *  \param log provide logger object
+     *  \param ownLog flag indicates if logging will be taken care of by user
      */
-    CPHDXMLControl(logging::Logger* log, bool ownLog);
+    CPHDXMLControl(logging::Logger* log = NULL, bool ownLog = false);
+
+    //! Destructor
+    virtual ~CPHDXMLControl();
+
+    /*
+     *  \func setLogger
+     *  \brief Handles setting logger based on log provided and ownLog flag
+     *
+     *  \param log provide logger object
+     *  \param ownLog flag indicates if logging will be taken care of by user
+     */
+    void setLogger(logging::Logger* log, bool ownLog = false);
 
     /*!
      *  \func toXMLString
@@ -71,7 +70,7 @@ public:
      *  Calls toXML
      *  \return XML String
      */
-    std::string toXMLString(
+    virtual std::string toXMLString(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             bool prettyPrint = false);
@@ -85,7 +84,7 @@ public:
      *  \param schemaPaths Vector of XML Schema for validation
      *  \return pointer to xml Document object
      */
-    std::unique_ptr<xml::lite::Document> toXML(
+    virtual std::unique_ptr<xml::lite::Document> toXML(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -99,7 +98,7 @@ public:
      *
      *  \return pointer to metadata object
      */
-    std::unique_ptr<Metadata> fromXML(
+    virtual std::unique_ptr<Metadata> fromXML(
             const std::string& xmlString,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -113,92 +112,46 @@ public:
      *
      *  \return pointer to metadata object
      */
-    std::unique_ptr<Metadata> fromXML(
+    virtual std::unique_ptr<Metadata> fromXML(
             const xml::lite::Document* doc,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
-private:
-    typedef xml::lite::Element*  XMLElem;
+protected:
+    logging::Logger *mLog;
+    bool mOwnLog;
 
 private:
-    static const char CPHD10_URI[];
+    /*!
+     *  This function takes in a Metadata object and converts
+     *  it to a new-allocated XML DOM.
+     *
+     *  \param data A Metadata object
+     *  \return An XML DOM
+     */
+    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Metadata& metadata);
 
-    //! Returns the default URI
-    std::string getDefaultURI() const;
+    /*!
+     *  Function takes a DOM Document* node and creates a new-allocated
+     *  ComplexData* populated by the DOM.
+     *
+     *  \param doc An XML document pointer
+     *  \return A Metadata object
+     */
+    virtual std::unique_ptr<Metadata> fromXMLImpl(const xml::lite::Document* doc);
 
-    //! Returns the URI to use with SI Common types
-    std::string getSICommonURI() const;
+    /*
+     *  \Function creates a new parser to parse XML or document
+     *
+     *  \param version A string specifying CPHD version
+     */
+    std::unique_ptr<CPHDXMLParser>
+    getParser(const std::string& version) const;
 
-    //! Write to XML object
-    XMLElem toXML(const CollectionInformation& obj, XMLElem parent);
-    XMLElem toXML(const Global& obj, XMLElem parent);
-    XMLElem toXML(const SceneCoordinates& obj, XMLElem parent);
-    XMLElem toXML(const Data& obj, XMLElem parent);
-    XMLElem toXML(const Channel& obj, XMLElem parent);
-    XMLElem toXML(const Pvp& obj, XMLElem parent);
-    XMLElem toXML(const SupportArray& obj, XMLElem parent);
-    XMLElem toXML(const Dwell& obj, XMLElem parent);
-    XMLElem toXML(const ReferenceGeometry& obj, XMLElem parent);
-    XMLElem toXML(const Antenna& obj, XMLElem parent);
-    XMLElem toXML(const TxRcv& obj, XMLElem parent);
-    XMLElem toXML(const ErrorParameters& obj, XMLElem parent);
-    XMLElem toXML(const ProductInfo& obj, XMLElem parent);
-    XMLElem toXML(const GeoInfo& obj, XMLElem parent);
-    XMLElem toXML(const MatchInformation& obj, XMLElem parent);
+    /*
+     * Get Version from URI
+     */
+    std::string getVersionFromURI(const xml::lite::Document* doc);
 
-    //! Read from XML object
-    void fromXML(const XMLElem collectionIDXML, CollectionInformation& collectionID);
-    void fromXML(const XMLElem globalXML, Global& global);
-    void fromXML(const XMLElem sceneCoordsXML, SceneCoordinates& scene);
-    void fromXML(const XMLElem dataXML, Data& data);
-    void fromXML(const XMLElem channelXML, Channel& channel);
-    void fromXML(const XMLElem pvpXML, Pvp& pvp);
-    void fromXML(const XMLElem DwellXML, Dwell& dwell);
-    void fromXML(const XMLElem refGeoXML, ReferenceGeometry& refGeo);
-    void fromXML(const XMLElem supportArrayXML, SupportArray& supportArray);
-    void fromXML(const XMLElem antennaXML, Antenna& antenna);
-    void fromXML(const XMLElem txRcvXML, TxRcv& txRcv);
-    void fromXML(const XMLElem errParamXML, ErrorParameters& errParam);
-    void fromXML(const XMLElem productInfoXML, ProductInfo& productInfo);
-    void fromXML(const XMLElem geoInfoXML, GeoInfo& geoInfo);
-    void fromXML(const XMLElem matchInfoXML, MatchInformation& matchInfo);
-
-
-    //! Create helper functions
-    XMLElem createLatLonFootprint(const std::string& name,
-                                  const std::string& cornerName,
-                                  const cphd::LatLonCorners& corners,
-                                  XMLElem parent) const;
-    XMLElem createPVPType(const std::string& name,
-                          const PVPType& p,
-                          XMLElem parent) const;
-    XMLElem createAPVPType(const std::string& name,
-                           const APVPType& p,
-                           XMLElem parent) const;
-
-    XMLElem createErrorParamPlatform(const std::string& name,
-                                     const ErrorParameters::Bistatic::Platform p,
-                                     XMLElem parent) const;
-
-    //! Parse helper functions
-    void parseAreaType(const XMLElem areaXML, AreaType& area) const;
-    void parseLineSample(const XMLElem lsXML, LineSample& ls) const;
-    void parseIAExtent(const XMLElem extentXML, ImageAreaXExtent& extent) const;
-    void parseIAExtent(const XMLElem extentXML, ImageAreaYExtent& extent) const;
-    void parseChannelParameters(const XMLElem paramXML,
-                                ChannelParameter& param) const;
-    void parsePVPType(Pvp& p, const XMLElem paramXML, PVPType& param) const;
-    void parsePVPType(Pvp& p, const XMLElem paramXML) const;
-    void parsePlatformParams(const XMLElem platXML, Bistatic::PlatformParams& plat) const;
-    void parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) const;
-    void parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError& posVelErr) const;
-    void parsePlatform(const XMLElem platXML,  ErrorParameters::Bistatic::Platform& plat) const;
-    void parseSupportArrayParameter(const XMLElem paramXML, SupportArrayParameter& param,
-                                    bool additionalFlag) const;
-    void parseTxRcvParameter(const XMLElem paramXML, ParameterType& param) const;
-
-private:
-    six::SICommonXMLParser10x mCommon;
 };
 }
 
