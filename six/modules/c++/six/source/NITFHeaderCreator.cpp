@@ -97,7 +97,7 @@ const char NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK[] = "NumRowsPerBlock";
 const char NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK[] = "NumColsPerBlock";
 const size_t NITFHeaderCreator::DEFAULT_BUFFER_SIZE = 8 * 1024 * 1024;
 
-NITFHeaderCreator::NITFHeaderCreator() : 
+NITFHeaderCreator::NITFHeaderCreator() :
     mRecord(NITF_VER_21),
     mXMLRegistry(NULL),
     mLog(NULL),
@@ -108,7 +108,7 @@ NITFHeaderCreator::NITFHeaderCreator() :
     loadXmlDataContentHandler();
 }
 
-NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) : 
+NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
     mRecord(NITF_VER_21),
     mXMLRegistry(NULL),
     mLog(NULL),
@@ -119,7 +119,7 @@ NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
 }
 
 NITFHeaderCreator::NITFHeaderCreator(const six::Options& options,
-                                     mem::SharedPtr<Container> container) : 
+                                     mem::SharedPtr<Container> container) :
     mRecord(NITF_VER_21),
     mXMLRegistry(NULL),
     mLog(NULL),
@@ -907,6 +907,13 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
         }
 
         setDESecurity(data.getClassification(), subheader);
+    }
+
+    for (auto desSource : container->getDESSources())
+    {
+        std::shared_ptr<nitf::SegmentWriter> desWriter(
+                new nitf::SegmentWriter(desSource));
+        mSegmentWriters.push_back(desWriter);
     }
 
     updateFileHeaderSecurity();

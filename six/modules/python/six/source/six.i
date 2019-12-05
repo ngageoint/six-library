@@ -83,6 +83,7 @@ using namespace six;
 %include "six/Init.h"
 %include "six/Parameter.h"
 %include "six/ParameterCollection.h"
+%include "six/CollectionInformation.h"
 %include "six/Classification.h"
 %include "six/ErrorStatistics.h"
 %include "six/MatchInformation.h"
@@ -188,6 +189,7 @@ SCOPED_COPYABLE(six, IonoError)
 SCOPED_COPYABLE(six, CompositeSCP)
 SCOPED_COPYABLE(six, Components)
 SCOPED_CLONEABLE(six, AmplitudeTable)
+SCOPED_CLONEABLE(six, CollectionInformation)
 
 SCOPED_COPYABLE(six, MatchType)
 

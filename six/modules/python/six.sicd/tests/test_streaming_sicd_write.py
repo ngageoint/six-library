@@ -39,7 +39,7 @@ from coda.math_poly import *
 from coda.math_linear import *
 
 def initCollectionInfo(cmplx):
-    collectionInfo = makeScopedCloneableComplexCollectionInformation()
+    collectionInfo = makeScopedCloneableCollectionInformation()
     collectionInfo.collectorName = 'Some collector'
     collectionInfo.illuminatorName = 'Some illuminator'
     collectionInfo.coreName = 'Some corename'
