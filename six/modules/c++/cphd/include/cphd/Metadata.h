@@ -140,6 +140,7 @@ struct Metadata : MetadataBase
     }
 
 private:
+    //! Stores file URI
     std::string mUri;
 };
 

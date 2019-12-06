@@ -54,7 +54,7 @@ public:
      *  \func CPHDXMLParser
      *  \brief Constructor
      *
-     *  \param version CPHD file version string
+     *  \param uri CPHD file uri string
      *  \param addClassAttributes flag indicates whether to add as attribute
      *  \param log provide logger object
      *  \param ownLog flag indicates if logging will be taken care of by user
