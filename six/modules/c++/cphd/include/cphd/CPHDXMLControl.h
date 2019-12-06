@@ -47,9 +47,9 @@ public:
      *  \brief Default constructor
      *
      *  \param log provide logger object
-     *  \param ownLog flag indicates if logging will be taken care of by user
+     *  \param ownLog flag indicates if log should be deleted
      */
-    CPHDXMLControl(logging::Logger* log = NULL, bool ownLog = false);
+    CPHDXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
 
     //! Destructor
     virtual ~CPHDXMLControl();
@@ -59,7 +59,7 @@ public:
      *  \brief Handles setting logger based on log provided and ownLog flag
      *
      *  \param log provide logger object
-     *  \param ownLog flag indicates if logging will be taken care of by user
+     *  \param ownLog flag indicates if log should be deleted
      */
     void setLogger(logging::Logger* log, bool ownLog = false);
 
@@ -142,16 +142,10 @@ private:
     /*
      *  \Function creates a new parser to parse XML or document
      *
-     *  \param version A string specifying CPHD version
+     *  \param uri A string specifying CPHD uri
      */
     std::unique_ptr<CPHDXMLParser>
-    getParser(const std::string& version) const;
-
-    /*
-     * Get Version from URI
-     */
-    std::string getVersionFromURI(const xml::lite::Document* doc);
-
+    getParser(const std::string& uri) const;
 };
 }
 

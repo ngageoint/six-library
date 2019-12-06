@@ -57,11 +57,11 @@ public:
      *  \param uri CPHD file uri string
      *  \param addClassAttributes flag indicates whether to add as attribute
      *  \param log provide logger object
-     *  \param ownLog flag indicates if logging will be taken care of by user
+     *  \param ownLog flag indicates if log should be deleted
      */
     CPHDXMLParser(const std::string& uri,
                   bool addClassAttributes,
-                  logging::Logger* log = NULL,
+                  logging::Logger* log = nullptr,
                   bool ownLog = false);
 
     /*!

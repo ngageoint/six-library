@@ -131,22 +131,10 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document*
 }
 
 std::unique_ptr<CPHDXMLParser>
-CPHDXMLControl::getParser(const std::string& version) const
+CPHDXMLControl::getParser(const std::string& uri) const
 {
     std::unique_ptr<CPHDXMLParser> parser;
-    parser.reset(new CPHDXMLParser(version, false, mLog));
+    parser.reset(new CPHDXMLParser(uri, false, mLog));
     return parser;
-}
-
-std::string CPHDXMLControl::getVersionFromURI(const xml::lite::Document* doc)
-{
-    const std::string uri = doc->getRootElement()->getUri();
-    if (!(str::startsWith(uri, "urn:CPHD:")))
-    {
-        throw except::Exception(Ctxt(
-                "Unable to transform XML DES: Invalid XML namespace URI: " +
-                uri));
-    }
-    return uri.substr(9); // remove "urn:SIxx:" from beginning
 }
 }
