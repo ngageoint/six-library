@@ -89,15 +89,6 @@ public:
     std::unique_ptr<Metadata> fromXML(
             const xml::lite::Document* doc);
 
-protected:
-    static
-    std::string versionToURI(const std::string& version)
-    {
-        return ("urn:CPHD:" + version);
-    }
-
-
-
 private:
     typedef xml::lite::Element*  XMLElem;
 
