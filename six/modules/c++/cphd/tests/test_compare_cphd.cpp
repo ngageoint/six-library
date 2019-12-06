@@ -24,6 +24,7 @@
 #include <fstream>
 #include <memory>
 #include <logging/NullLogger.h>
+#include <cli/Value.h>
 #include <cli/ArgumentParser.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
@@ -154,7 +155,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
     return dataMatches;
 }
 
-bool checkCPHD(std::string pathname1, std::string pathname2, size_t numThreads, std::vector<std::string>& schemaPathname)
+bool checkCPHD(const std::string& pathname1, const std::string& pathname2, size_t numThreads, const std::vector<std::string>& schemaPathname)
 {
     cphd::CPHDReader reader1(pathname1, numThreads, schemaPathname);
     cphd::CPHDReader reader2(pathname2, numThreads, schemaPathname);
@@ -235,20 +236,20 @@ int main(int argc, char** argv)
         parser.addArgument("file2", "Second pathname", cli::STORE, "file2",
                            "CPHD", 1, 1);
         parser.addArgument("schema", "Schema pathname", cli::STORE, "schema",
-                           "XSD", 1, 1);
+                           "XSD", 1, 10);
         const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string pathname1(options->get<std::string>("file1"));
         const std::string pathname2(options->get<std::string>("file2"));
-        const std::string schemaPathname(options->get<std::string>("schema"));
         const size_t numThreads(options->get<size_t>("threads"));
+        const cli::Value* value = options->getValue("schema");
 
-        std::vector<std::string> schemas;
-        if (!schemaPathname.empty())
+        std::vector<std::string> schemaPathnames;
+        for (size_t ii = 0; ii < value->size(); ++ii)
         {
-            schemas.push_back(schemaPathname);
+            schemaPathnames.push_back(value->get<std::string>(ii));
         }
 
-        const bool isMatch = checkCPHD(pathname1, pathname2, numThreads, schemas);
+        const bool isMatch = checkCPHD(pathname1, pathname2, numThreads, schemaPathnames);
         if (!isMatch)
         {
             std::cerr << "CPHD Files do not match \n";
