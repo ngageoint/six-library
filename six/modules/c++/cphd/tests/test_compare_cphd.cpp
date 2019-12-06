@@ -249,7 +249,12 @@ int main(int argc, char** argv)
         }
 
         const bool isMatch = checkCPHD(pathname1, pathname2, numThreads, schemas);
-        isMatch == true ? std::cout << "CPHD Files match \n" : std::cerr << "CPHD Files do not match \n";
+        if (!isMatch)
+        {
+            std::cerr << "CPHD Files do not match \n";
+            return 1;
+        }
+        std::cout << "CPHD Files match \n";
         return 0;
     }
     catch (const except::Exception& ex)
