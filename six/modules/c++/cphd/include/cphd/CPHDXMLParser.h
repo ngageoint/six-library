@@ -59,7 +59,7 @@ public:
      *  \param log provide logger object
      *  \param ownLog flag indicates if logging will be taken care of by user
      */
-    CPHDXMLParser(const std::string& version,
+    CPHDXMLParser(const std::string& uri,
                   bool addClassAttributes,
                   logging::Logger* log = NULL,
                   bool ownLog = false);

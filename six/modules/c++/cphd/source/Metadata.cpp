@@ -48,14 +48,14 @@ bool Metadata::isCompressed() const
     return data.isCompressed();
 }
 
-std::string Metadata::getVersion() const
+std::string Metadata::getUri() const
 {
-    return mVersion;
+    return mUri;
 }
 
-void Metadata::setVersion(const std::string& version)
+void Metadata::setUri(const std::string& uri)
 {
-    mVersion = version;
+    mUri = uri;
 }
 
 bool Metadata::operator==(const Metadata& other) const

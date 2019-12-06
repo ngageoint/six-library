@@ -57,8 +57,7 @@ namespace cphd
 struct Metadata : MetadataBase
 {
     //! Default constructor
-    Metadata():
-        mVersion("1.0.1")
+    Metadata()
     {
     }
 
@@ -72,8 +71,8 @@ struct Metadata : MetadataBase
     size_t getCompressedSignalSize(size_t channel) const override;
     bool isCompressed() const override;
 
-    std::string getVersion() const;
-    void setVersion(const std::string& version);
+    std::string getUri() const;
+    void setUri(const std::string& version);
 
     //!  CollectionInfo block.  Contains the general collection information
     //!  CPHD can use the SICD Collection Information block directly
@@ -141,7 +140,7 @@ struct Metadata : MetadataBase
     }
 
 private:
-    std::string mVersion;
+    std::string mUri;
 };
 
 //! Ostream operator

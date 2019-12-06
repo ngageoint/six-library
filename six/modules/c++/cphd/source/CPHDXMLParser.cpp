@@ -43,11 +43,11 @@ namespace cphd
 {
 
 CPHDXMLParser::CPHDXMLParser(
-        const std::string& version,
+        const std::string& uri,
         bool addClassAttributes,
         logging::Logger* log,
         bool ownLog) :
-    six::XMLParser(versionToURI(version), addClassAttributes, log, ownLog),
+    six::XMLParser(uri, addClassAttributes, log, ownLog),
     mCommon(getDefaultURI(), addClassAttributes, getDefaultURI(), log)
 {
 }

@@ -99,7 +99,7 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& metadata)
 {
-    return getParser(metadata.getVersion())->toXML(metadata);
+    return getParser(metadata.getUri())->toXML(metadata);
 }
 
 /* FROM XML */
@@ -121,13 +121,13 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc
         six::XMLControl::validate(doc, schemaPaths, mLog);
     }
     std::unique_ptr<Metadata> metadata = fromXMLImpl(doc);
-    metadata->setVersion(getVersionFromURI(doc));
+    metadata->setUri(doc->getRootElement()->getUri());
     return metadata;
 }
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
-    return getParser(getVersionFromURI(doc))->fromXML(doc);
+    return getParser(doc->getRootElement()->getUri())->fromXML(doc);
 }
 
 std::unique_ptr<CPHDXMLParser>
