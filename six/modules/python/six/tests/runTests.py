@@ -70,31 +70,33 @@ def runCPHDTests(cphdDir):
     # Directory of CPHD1.0 schemas
     cphdSchemaDir = os.path.join(utils.findSixHome(), 'six',
                                  'modules', 'c++', 'cphd', 'conf', 'schema')
-    cphdSchemas = []
-    for schema in os.listdir(cphdSchemaDir):
-        cphdSchemas.append(os.path.join(cphdSchemaDir, schema))
 
+    # Init executable path
     os.environ['PATH'] = (os.environ['PATH'] + os.pathsep +
                           os.path.join(utils.installPath(), 'tests', 'cphd'))
-    writeCphd = utils.executableName('test_round_trip')
-    cphdPathname = os.path.join(cphdDir, os.listdir(cphdDir)[0])
 
-    # Generate CPHD1.0 output file
-    success = subprocess.call([writeCphd,
-                               cphdPathname, 'output.cphd', cphdSchemas[0]],
-                              stdout=subprocess.PIPE)
+    result = True
+    # Run cphd test for each CPHD version
+    for file in os.listdir(cphdDir):
+        cphdPathname = os.path.join(cphdDir, file)
 
-    print('Running test_round_trip')
+        # Generate CPHD1.0 output file
+        writeCphd = utils.executableName('test_round_trip')
+        success = subprocess.call([writeCphd,
+                                   cphdPathname, 'output.cphd', cphdSchemaDir],
+                                  stdout=subprocess.PIPE)
 
-    if success != 0:
-        if os.path.exists('output.cphd'):
-            os.remove('output.cphd')
-        print('Error running test_round_trip')
-        return False
+        print('Running test_round_trip')
 
-    # Check if CPHD1.0 input and output files match
-    cphdRunner = CppTestRunner(os.path.join(utils.installPath(), 'tests', 'cphd'))
-    result = cphdRunner.run('test_compare_cphd', cphdPathname, 'output.cphd', cphdSchemas[0])
+        if success != 0:
+            if os.path.exists('output.cphd'):
+                os.remove('output.cphd')
+            print('Error running test_round_trip')
+            return False
+
+        # Check if CPHD1.0 input and output files match
+        cphdRunner = CppTestRunner(os.path.join(utils.installPath(), 'tests', 'cphd'))
+        result = result and cphdRunner.run('test_compare_cphd', cphdPathname, 'output.cphd', cphdSchemaDir)
 
     # Remove output file after done
     if os.path.exists('output.cphd'):
