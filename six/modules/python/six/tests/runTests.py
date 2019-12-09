@@ -75,13 +75,7 @@ def runCPHDTests(cphdDir):
     os.environ['PATH'] = (os.environ['PATH'] + os.pathsep +
                           os.path.join(utils.installPath(), 'tests', 'cphd'))
 
-    # Find cphd schemas
-    cphdSchemas = []
     result = True
-    for schema in os.listdir(cphdSchemaDir):
-        cphdSchemas.append(os.path.join(cphdSchemaDir, schema))
-    print(cphdSchemas)
-
     # Run cphd test for each CPHD version
     for file in os.listdir(cphdDir):
         cphdPathname = os.path.join(cphdDir, file)
@@ -89,7 +83,7 @@ def runCPHDTests(cphdDir):
         # Generate CPHD1.0 output file
         writeCphd = utils.executableName('test_round_trip')
         success = subprocess.call([writeCphd,
-                                   cphdPathname, 'output.cphd'] + cphdSchemas,
+                                   cphdPathname, 'output.cphd', cphdSchemaDir],
                                   stdout=subprocess.PIPE)
 
         print('Running test_round_trip')
@@ -102,7 +96,7 @@ def runCPHDTests(cphdDir):
 
         # Check if CPHD1.0 input and output files match
         cphdRunner = CppTestRunner(os.path.join(utils.installPath(), 'tests', 'cphd'))
-        result = result and cphdRunner.run('test_compare_cphd', cphdPathname, 'output.cphd', *cphdSchemas)
+        result = result and cphdRunner.run('test_compare_cphd', cphdPathname, 'output.cphd', cphdSchemaDir)
 
     # Remove output file after done
     if os.path.exists('output.cphd'):
