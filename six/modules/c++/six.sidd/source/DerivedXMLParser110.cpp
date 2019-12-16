@@ -561,7 +561,8 @@ void DerivedXMLParser110::parseRRDSFromXML(const XMLElem rrdsElem,
     parseEnum(getFirstAndOnly(rrdsElem, "DownsamplingMethod"), rrds.downsamplingMethod);
 
     bool hasMoreFields = true;
-    if (rrds.downsamplingMethod.toString() == "DECIMATE" || rrds.downsamplingMethod.toString() == "MAX_PIXEL")
+    if (rrds.downsamplingMethod == DownsamplingMethod::DECIMATE ||
+            rrds.downsamplingMethod == DownsamplingMethod::MAX_PIXEL);
     {
         hasMoreFields = false;
     }
