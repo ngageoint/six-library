@@ -130,7 +130,16 @@ void prepareInputAndOutputArray(PyObject* pyInObject,
  * \return a numpy array with specified dimension and type
  */
 PyObject* toNumpyArray(size_t numRows, size_t numColumns, int typenum,
-        void* data);
+        const void* data);
+
+/*
+ * Get the number of elements in a numpy array.
+ * \param pyArrayObject Numpy array to count
+ * \return Number of elements in pyArrayObject
+ * \throws if pyArrayObject is not a PyArrayObject
+ */
+size_t getNumElements(PyObject* pyArrayObject);
+
 
 /*!
  * Copy a vector of data buffers into a 2D Numpy array

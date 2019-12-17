@@ -25,6 +25,7 @@
 #include <mem/BufferView.h>
 #include <sys/Conf.h>
 #include <cstdlib>
+#include <algorithm>
 #include <vector>
 #include <set>
 #include "TestCase.h"
@@ -187,59 +188,59 @@ TEST_CASE(testReleaseInteriorBuffers)
     mem::BufferView<unsigned char> bufViewE = scratch.getBufferView<sys::ubyte>("e");
     mem::BufferView<unsigned char> bufViewF = scratch.getBufferView<sys::ubyte>("f");
 
-    for (size_t i = 0; i < bufViewA.size; ++i) 
+    for (size_t i = 0; i < bufViewA.size; ++i)
     {
         bufViewA.data[i] = 'a';
     }
-    for (size_t i = 0; i < bufViewB.size; ++i) 
+    for (size_t i = 0; i < bufViewB.size; ++i)
     {
         bufViewB.data[i] = 'b';
     }
-    for (size_t i = 0; i < bufViewC.size; ++i) 
+    for (size_t i = 0; i < bufViewC.size; ++i)
     {
         bufViewC.data[i] = 'c';
     }
-    for (size_t i = 0; i < bufViewB.size; ++i) 
+    for (size_t i = 0; i < bufViewB.size; ++i)
     {
         TEST_ASSERT_EQ(bufViewB.data[i], 'b');
     }
-    for (size_t i = 0; i < bufViewD.size; ++i) 
+    for (size_t i = 0; i < bufViewD.size; ++i)
     {
         bufViewD.data[i] = 'd';
     }
-    for (size_t i = 0; i < bufViewA.size; ++i) 
+    for (size_t i = 0; i < bufViewA.size; ++i)
     {
         TEST_ASSERT_EQ(bufViewA.data[i], 'a');
     }
-    for (size_t i = 0; i < bufViewC.size; ++i) 
+    for (size_t i = 0; i < bufViewC.size; ++i)
     {
         TEST_ASSERT_EQ(bufViewC.data[i], 'c');
     }
-    for (size_t i = 0; i < bufViewD.size; ++i) 
+    for (size_t i = 0; i < bufViewD.size; ++i)
     {
         TEST_ASSERT_EQ(bufViewD.data[i], 'd');
     }
-    for (size_t i = 0; i < bufViewE.size; ++i) 
+    for (size_t i = 0; i < bufViewE.size; ++i)
     {
         bufViewE.data[i] = 'e';
     }
-    for (size_t i = 0; i < bufViewF.size; ++i) 
+    for (size_t i = 0; i < bufViewF.size; ++i)
     {
         bufViewF.data[i] = 'f';
     }
-    for (size_t i = 0; i < bufViewC.size; ++i) 
+    for (size_t i = 0; i < bufViewC.size; ++i)
     {
         TEST_ASSERT_EQ(bufViewC.data[i], 'c');
     }
-    for (size_t i = 0; i < bufViewD.size; ++i) 
+    for (size_t i = 0; i < bufViewD.size; ++i)
     {
         TEST_ASSERT_EQ(bufViewD.data[i], 'd');
     }
-    for (size_t i = 0; i < bufViewE.size; ++i) 
+    for (size_t i = 0; i < bufViewE.size; ++i)
     {
         TEST_ASSERT_EQ(bufViewE.data[i], 'e');
     }
-    for (size_t i = 0; i < bufViewF.size; ++i) 
+    for (size_t i = 0; i < bufViewF.size; ++i)
     {
         TEST_ASSERT_EQ(bufViewF.data[i], 'f');
     }
@@ -437,7 +438,8 @@ TEST_CASE(testGenerateBuffersForRelease)
 {
     srand((unsigned)time(0));
 
-    for (unsigned int run = 0; run < 50; ++run) {
+    for (unsigned int run = 0; run < 50; ++run)
+    {
         mem::ScratchMemory scratch;
         std::vector<Operation> operations;
         std::vector<unsigned char> notReleased;
@@ -481,7 +483,8 @@ TEST_CASE(testGenerateBuffersForRelease)
             Operation currentOp = operations.at(jj);
             std::string key = std::string(1, currentOp.name);
 
-            if (currentOp.op == "put")
+            if (currentOp.op == "put" &&
+                    std::find(notReleased.begin(), notReleased.end(), currentOp.name) != notReleased.end())
             {
                 mem::BufferView<unsigned char> bufView = scratch.getBufferView<sys::ubyte>(key);
                 for (size_t i = 0; i < bufView.size; ++i)

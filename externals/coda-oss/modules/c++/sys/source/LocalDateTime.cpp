@@ -47,7 +47,7 @@ void LocalDateTime::toMillis()
     t.tm_year = mYear - 1900;
     t.tm_mon = mMonth - 1;
     t.tm_mday = mDayOfMonth;
-    t.tm_wday = mDayOfWeek + 1;
+    t.tm_wday = mDayOfWeek - 1;
     t.tm_yday = mDayOfYear - 1;
     t.tm_hour = mHour;
     t.tm_min = mMinute;

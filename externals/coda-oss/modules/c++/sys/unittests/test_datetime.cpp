@@ -47,7 +47,7 @@ TEST_CASE(testDefaultConstructor)
     TEST_ASSERT(l1.getDayOfYear() >= 1 && l1.getDayOfYear() <= 366);
     TEST_ASSERT(l1.getHour() >= 0 && l1.getHour() <= 23);
     TEST_ASSERT(l1.getMinute() >= 0 && l1.getMinute() <= 59);
-    TEST_ASSERT(l1.getSecond() >= 0 && l1.getSecond() <= 59);
+    TEST_ASSERT(l1.getSecond() >= 0 && l1.getSecond() < 60);
 
     TEST_ASSERT(u1.getMonth() >= 1 && u1.getMonth() <= 12);
     TEST_ASSERT(u1.getDayOfMonth() >= 1 && u1.getDayOfMonth() <= 31);
@@ -55,7 +55,7 @@ TEST_CASE(testDefaultConstructor)
     TEST_ASSERT(u1.getDayOfYear() >= 1 && u1.getDayOfYear() <= 366);
     TEST_ASSERT(u1.getHour() >= 0 && u1.getHour() <= 23);
     TEST_ASSERT(u1.getMinute() >= 0 && u1.getMinute() <= 59);
-    TEST_ASSERT(u1.getSecond() >= 0 && u1.getSecond() <= 59);
+    TEST_ASSERT(u1.getSecond() >= 0 && u1.getSecond() < 60);
 
     TEST_ASSERT(l2.getMonth() >= 1 && l2.getMonth() <= 12);
     TEST_ASSERT(l2.getDayOfMonth() >= 1 && l2.getDayOfMonth() <= 31);
@@ -63,7 +63,7 @@ TEST_CASE(testDefaultConstructor)
     TEST_ASSERT(l2.getDayOfYear() >= 1 && l2.getDayOfYear() <= 366);
     TEST_ASSERT(l2.getHour() >= 0 && l2.getHour() <= 23);
     TEST_ASSERT(l2.getMinute() >= 0 && l2.getMinute() <= 59);
-    TEST_ASSERT(l2.getSecond() >= 0 && l2.getSecond() <= 59);
+    TEST_ASSERT(l2.getSecond() >= 0 && l2.getSecond() < 60);
 
     TEST_ASSERT(u2.getMonth() >= 1 && u2.getMonth() <= 12);
     TEST_ASSERT(u2.getDayOfMonth() >= 1 && u2.getDayOfMonth() <= 31);
@@ -71,7 +71,7 @@ TEST_CASE(testDefaultConstructor)
     TEST_ASSERT(u2.getDayOfYear() >= 1 && u2.getDayOfYear() <= 366);
     TEST_ASSERT(u2.getHour() >= 0 && u2.getHour() <= 23);
     TEST_ASSERT(u2.getMinute() >= 0 && u2.getMinute() <= 59);
-    TEST_ASSERT(u2.getSecond() >= 0 && u2.getSecond() <= 59);
+    TEST_ASSERT(u2.getSecond() >= 0 && u2.getSecond() < 60);
 
     TEST_ASSERT(l1 == l1);
     TEST_ASSERT(l1 != l2);
