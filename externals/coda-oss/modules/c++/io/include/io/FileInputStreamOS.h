@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of io-c++ 
+ * This file is part of io-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * io-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -35,7 +35,7 @@
  *  \file FileInputStreamOS.h
  *  \brief The InputStream representation of a file using the OS handle
  *  The file contains the representation of an input stream
- *  from a file.  It mimics the Java io package API, with added 
+ *  from a file.  It mimics the Java io package API, with added
  *  streaming capabilities
  */
 
@@ -79,15 +79,20 @@ public:
     }
 
     virtual ~FileInputStreamOS()
-    {}
+    {
+        if ( isOpen() )
+        {
+            close();
+        }
+    }
 
     /*!
      * Returns the number of bytes that can be read
      * without blocking by the next caller of a method for this input
-     * 
+     *
      * \throw except::IOException
      * \return number of bytes which are readable
-     * 
+     *
      */
     virtual sys::Off_T available();
 
@@ -157,12 +162,12 @@ public:
 protected:
     /*!
      * Read up to len bytes of data from input stream into an array
-     * 
+     *
      * \param buffer Buffer to read into
      * \param len The length to read
      * \throw except::IOException
      * \return  The number of bytes read
-     * 
+     *
      */
     virtual sys::SSize_T readImpl(void* buffer, size_t len);
 };

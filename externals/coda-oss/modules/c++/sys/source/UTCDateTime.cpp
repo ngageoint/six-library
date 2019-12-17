@@ -123,7 +123,12 @@ void UTCDateTime::toMillis()
     mDayOfYear = numDaysThisYear + 1;
 
     /* January 1, 1970 was a Thursday (5) */
-    mDayOfWeek = (numDaysSinceEpoch + 5) % 7;
+    mDayOfWeek = ((numDaysSinceEpoch + 5) % 7);
+
+    if (mDayOfWeek == 0)
+    {
+        mDayOfWeek = 7;
+    }
 }
 
 void UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const

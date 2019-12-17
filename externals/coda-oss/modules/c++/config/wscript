@@ -73,6 +73,30 @@ def configure(conf):
                        msg='Checking for C++11 support',
                        define_name='__CODA_CPP11',
                        mandatory=True)
+        attribute_noinline_str = '''
+            int __attribute__((noinline)) fn() { return 0; }
+            int main()
+            {
+                return fn();
+            }
+            '''
+        conf.check_cxx(fragment=attribute_noinline_str,
+                       msg='Checking for __attribute__(noinline)',
+                       define_name='HAVE_ATTRIBUTE_NOINLINE',
+                       mandatory=False)
+
+        attribute_aligned_str = '''
+            int main()
+            {
+                int var __attribute__((aligned (32)));
+                return var;
+            }
+            '''
+        conf.check_cxx(fragment=attribute_aligned_str,
+                       msg='Checking for __attribute__(aligned (x))',
+                       define_name='HAVE_ATTRIBUTE_ALIGNED',
+                       mandatory=False)
+
         conf.define('CODA_EXPORT', conf.env['declspec_decoration'], quote=False)
 
     writeConfig(conf, sys_callback, 'coda_oss',
