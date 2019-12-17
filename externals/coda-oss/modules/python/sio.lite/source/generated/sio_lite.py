@@ -130,107 +130,107 @@ class FileHeader(_object):
     __swig_destroy__ = _sio_lite.delete_FileHeader
     __del__ = lambda self: None
 
-    def getLength(self):
+    def getLength(self) -> "long":
         """getLength(FileHeader self) -> long"""
         return _sio_lite.FileHeader_getLength(self)
 
 
-    def getNumLines(self):
+    def getNumLines(self) -> "int":
         """getNumLines(FileHeader self) -> int"""
         return _sio_lite.FileHeader_getNumLines(self)
 
 
-    def setNumLines(self, numLines):
+    def setNumLines(self, numLines: 'int') -> "void":
         """setNumLines(FileHeader self, int numLines)"""
         return _sio_lite.FileHeader_setNumLines(self, numLines)
 
 
-    def getNumElements(self):
+    def getNumElements(self) -> "int":
         """getNumElements(FileHeader self) -> int"""
         return _sio_lite.FileHeader_getNumElements(self)
 
 
-    def setNumElements(self, numElements):
+    def setNumElements(self, numElements: 'int') -> "void":
         """setNumElements(FileHeader self, int numElements)"""
         return _sio_lite.FileHeader_setNumElements(self, numElements)
 
 
-    def getElementSize(self):
+    def getElementSize(self) -> "int":
         """getElementSize(FileHeader self) -> int"""
         return _sio_lite.FileHeader_getElementSize(self)
 
 
-    def setElementSize(self, size):
+    def setElementSize(self, size: 'int') -> "void":
         """setElementSize(FileHeader self, int size)"""
         return _sio_lite.FileHeader_setElementSize(self, size)
 
 
-    def getElementType(self):
+    def getElementType(self) -> "int":
         """getElementType(FileHeader self) -> int"""
         return _sio_lite.FileHeader_getElementType(self)
 
 
-    def setElementType(self, type):
+    def setElementType(self, type: 'int') -> "void":
         """setElementType(FileHeader self, int type)"""
         return _sio_lite.FileHeader_setElementType(self, type)
 
 
-    def getElementTypeAsString(self):
+    def getElementTypeAsString(self) -> "std::string":
         """getElementTypeAsString(FileHeader self) -> std::string"""
         return _sio_lite.FileHeader_getElementTypeAsString(self)
 
 
-    def getVersion(self):
+    def getVersion(self) -> "int":
         """getVersion(FileHeader self) -> int"""
         return _sio_lite.FileHeader_getVersion(self)
 
 
-    def setVersion(self, newVersion):
+    def setVersion(self, newVersion: 'int') -> "void":
         """setVersion(FileHeader self, int newVersion)"""
         return _sio_lite.FileHeader_setVersion(self, newVersion)
 
 
-    def idsAreNullTerminated(self):
+    def idsAreNullTerminated(self) -> "bool":
         """idsAreNullTerminated(FileHeader self) -> bool"""
         return _sio_lite.FileHeader_idsAreNullTerminated(self)
 
 
-    def setNullTerminationFlag(self, flag):
+    def setNullTerminationFlag(self, flag: 'bool') -> "void":
         """setNullTerminationFlag(FileHeader self, bool flag)"""
         return _sio_lite.FileHeader_setNullTerminationFlag(self, flag)
 
 
-    def isDifferentByteOrdering(self):
+    def isDifferentByteOrdering(self) -> "bool":
         """isDifferentByteOrdering(FileHeader self) -> bool"""
         return _sio_lite.FileHeader_isDifferentByteOrdering(self)
 
 
-    def setIsDifferentByteOrdering(self, isDifferent):
+    def setIsDifferentByteOrdering(self, isDifferent: 'bool') -> "void":
         """setIsDifferentByteOrdering(FileHeader self, bool isDifferent)"""
         return _sio_lite.FileHeader_setIsDifferentByteOrdering(self, isDifferent)
 
 
-    def userDataFieldExists(self, key):
+    def userDataFieldExists(self, key: 'std::string const &') -> "bool":
         """userDataFieldExists(FileHeader self, std::string const & key) -> bool"""
         return _sio_lite.FileHeader_userDataFieldExists(self, key)
 
 
-    def getAllUserDataFields(self, keys):
+    def getAllUserDataFields(self, keys: 'std::vector< std::string > &') -> "void":
         """getAllUserDataFields(FileHeader self, std::vector< std::string > & keys)"""
         return _sio_lite.FileHeader_getAllUserDataFields(self, keys)
 
 
-    def getNumUserDataFields(self):
+    def getNumUserDataFields(self) -> "size_t":
         """getNumUserDataFields(FileHeader self) -> size_t"""
         return _sio_lite.FileHeader_getNumUserDataFields(self)
 
 
-    def getUserData(self, key):
+    def getUserData(self, key: 'std::string const &') -> "std::vector< sys::byte > &":
         """getUserData(FileHeader self, std::string const & key) -> std::vector< sys::byte > &"""
         return _sio_lite.FileHeader_getUserData(self, key)
 
 
-    def getUserDataSection(self, *args):
+    def getUserDataSection(self, *args) -> "sio::lite::UserDataDictionary &":
         """
         getUserDataSection(FileHeader self) -> sio::lite::UserDataDictionary const
         getUserDataSection(FileHeader self) -> sio::lite::UserDataDictionary &
@@ -238,7 +238,7 @@ class FileHeader(_object):
         return _sio_lite.FileHeader_getUserDataSection(self, *args)
 
 
-    def addUserData(self, *args):
+    def addUserData(self, *args) -> "void":
         """
         addUserData(FileHeader self, std::string const & field, std::string const & data)
         addUserData(FileHeader self, std::string const & field, std::vector< sys::byte > const & data)
@@ -247,7 +247,7 @@ class FileHeader(_object):
         return _sio_lite.FileHeader_addUserData(self, *args)
 
 
-    def to(self, numBands, os):
+    def to(self, numBands: 'size_t', os: 'OutputStream') -> "void":
         """to(FileHeader self, size_t numBands, OutputStream os)"""
         return _sio_lite.FileHeader_to(self, numBands, os)
 
@@ -278,7 +278,7 @@ class FileWriter(_object):
     __swig_destroy__ = _sio_lite.delete_FileWriter
     __del__ = lambda self: None
 
-    def write(self, *args):
+    def write(self, *args) -> "void":
         """
         write(FileWriter self, FileHeader header, std::vector< io::InputStream * > bandStreams)
         write(FileWriter self, int numLines, int numElements, int elementSize, int elementType, std::vector< io::InputStream * > bandStreams)
@@ -321,7 +321,7 @@ class StreamReader(coda.coda_io.InputStream):
         except __builtin__.Exception:
             self.this = this
 
-    def setInputStream(self, arg2, adopt=False):
+    def setInputStream(self, arg2: 'InputStream', adopt: 'bool'=False) -> "void":
         """
         setInputStream(StreamReader self, InputStream arg2, bool adopt=False)
         setInputStream(StreamReader self, InputStream arg2)
@@ -329,12 +329,12 @@ class StreamReader(coda.coda_io.InputStream):
         return _sio_lite.StreamReader_setInputStream(self, arg2, adopt)
 
 
-    def getInputStream(self):
+    def getInputStream(self) -> "io::InputStream *":
         """getInputStream(StreamReader self) -> InputStream"""
         return _sio_lite.StreamReader_getInputStream(self)
 
 
-    def getHeader(self, *args):
+    def getHeader(self, *args) -> "sio::lite::FileHeader const *":
         """
         getHeader(StreamReader self) -> FileHeader
         getHeader(StreamReader self) -> FileHeader
@@ -342,17 +342,17 @@ class StreamReader(coda.coda_io.InputStream):
         return _sio_lite.StreamReader_getHeader(self, *args)
 
 
-    def readHeader(self):
+    def readHeader(self) -> "sio::lite::FileHeader *":
         """readHeader(StreamReader self) -> FileHeader"""
         return _sio_lite.StreamReader_readHeader(self)
 
 
-    def available(self):
+    def available(self) -> "sys::Off_T":
         """available(StreamReader self) -> sys::Off_T"""
         return _sio_lite.StreamReader_available(self)
 
 
-    def read(self, data, size):
+    def read(self, data: 'long long', size: 'long long') -> "sys::SSize_T":
         """read(StreamReader self, long long data, long long size) -> sys::SSize_T"""
         return _sio_lite.StreamReader_read(self, data, size)
 
@@ -387,17 +387,17 @@ class FileReader(StreamReader, coda.coda_io.Seekable):
         except __builtin__.Exception:
             self.this = this
 
-    def seek(self, offset, whence):
+    def seek(self, offset: 'sys::Off_T', whence: 'io::Seekable::Whence') -> "sys::Off_T":
         """seek(FileReader self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"""
         return _sio_lite.FileReader_seek(self, offset, whence)
 
 
-    def tell(self):
+    def tell(self) -> "sys::Off_T":
         """tell(FileReader self) -> sys::Off_T"""
         return _sio_lite.FileReader_tell(self)
 
 
-    def killStream(self):
+    def killStream(self) -> "void":
         """killStream(FileReader self)"""
         return _sio_lite.FileReader_killStream(self)
 
