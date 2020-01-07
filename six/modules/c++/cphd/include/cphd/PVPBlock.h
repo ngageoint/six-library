@@ -104,7 +104,7 @@ struct PVPBlock
      *  The data metadata will also be updated with the number of pvp bytes required
      *  if provided number of bytes is not sufficient
     */
-    PVPBlock(const Pvp& pvp, Data& data);
+    PVPBlock(const Pvp& pvp, const Data& data);
 
     /*!
      *  \func PVPBlock

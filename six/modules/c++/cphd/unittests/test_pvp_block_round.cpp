@@ -184,11 +184,10 @@ TEST_CASE(testPVPBlockOptional)
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
+    meta.pvp.specifyOptionalParameters(false, true, true);
     cphd::setPVPXML(meta.pvp);
-    meta.pvp.fxN1.reset(new cphd::PVPType());
-    meta.pvp.setData(1, 27, "F8", *(meta.pvp.fxN1));
-    meta.pvp.fxN2.reset(new cphd::PVPType());
-    meta.pvp.setData(1, 28, "F8", *(meta.pvp.fxN2));
+    meta.pvp.setOffset(27, (meta.pvp.fxN1));
+    meta.pvp.setOffset(28, (meta.pvp.fxN2));
     meta.data.numBytesPVP += 2*8;
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     std::vector<std::string> addedParams;
@@ -207,8 +206,8 @@ TEST_CASE(testPVPBlockAdditional)
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
     cphd::setPVPXML(meta.pvp);
-    meta.pvp.setData(1, 27, "F8", "param1");
-    meta.pvp.setData(1, 28, "F8", "param2");
+    meta.pvp.setParameters(1, 27, "F8", "param1");
+    meta.pvp.setParameters(1, 28, "F8", "param2");
     meta.data.numBytesPVP += 2*8;
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     std::vector<std::string> addedParams;

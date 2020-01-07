@@ -54,23 +54,23 @@ Vector3 getRandomVector3()
 void setPVPXML(Pvp& pvp)
 {
     // Size, Offset, Format
-    pvp.setData(1, 1, "F8", pvp.txTime);
-    pvp.setData(3, 2, "X=F8;Y=F8;Z=F8;", pvp.txPos);
-    pvp.setData(3, 5, "X=F8;Y=F8;Z=F8;", pvp.txVel);
-    pvp.setData(1, 0, "F8", pvp.rcvTime);
-    pvp.setData(3, 11, "X=F8;Y=F8;Z=F8;", pvp.rcvPos);
-    pvp.setData(3, 8, "X=F8;Y=F8;Z=F8;", pvp.rcvVel);
-    pvp.setData(3, 14, "X=F8;Y=F8;Z=F8;", pvp.srpPos);
-    pvp.setData(1, 26, "F8", pvp.aFDOP);
-    pvp.setData(1, 25, "F8", pvp.aFRR1);
-    pvp.setData(1, 17, "F8", pvp.aFRR2);
-    pvp.setData(1, 18, "F8", pvp.fx1);
-    pvp.setData(1, 19, "F8", pvp.fx2);
-    pvp.setData(1, 20, "F8", pvp.toa1);
-    pvp.setData(1, 21, "F8", pvp.toa2);
-    pvp.setData(1, 22, "F8", pvp.tdTropoSRP);
-    pvp.setData(1, 23, "F8", pvp.sc0);
-    pvp.setData(1, 24, "F8", pvp.scss);
+    pvp.setOffset(1, pvp.txTime);
+    pvp.setOffset(2, pvp.txPos);
+    pvp.setOffset(5, pvp.txVel);
+    pvp.setOffset(0, pvp.rcvTime);
+    pvp.setOffset(11, pvp.rcvPos);
+    pvp.setOffset(8, pvp.rcvVel);
+    pvp.setOffset(14, pvp.srpPos);
+    pvp.setOffset(26, pvp.aFDOP);
+    pvp.setOffset(25, pvp.aFRR1);
+    pvp.setOffset(17, pvp.aFRR2);
+    pvp.setOffset(18, pvp.fx1);
+    pvp.setOffset(19, pvp.fx2);
+    pvp.setOffset(20, pvp.toa1);
+    pvp.setOffset(21, pvp.toa2);
+    pvp.setOffset(22, pvp.tdTropoSRP);
+    pvp.setOffset(23, pvp.sc0);
+    pvp.setOffset(24, pvp.scss);
 }
 
 void setVectorParameters(size_t channel,

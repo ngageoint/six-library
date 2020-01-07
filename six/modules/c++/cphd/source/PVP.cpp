@@ -31,9 +31,9 @@ namespace cphd
 const size_t PVPType::WORD_BYTE_SIZE = 8;
 
 PVPType::PVPType() :
-    mSize(0),
+    mSize(1),
     mOffset(six::Init::undefined<size_t>()),
-    mFormat(six::Init::undefined<std::string>())
+    mFormat("F8")
 {
 }
 
@@ -42,8 +42,25 @@ APVPType::APVPType() :
 {
 }
 
-Pvp::Pvp()
+Pvp::Pvp(bool hasAmpSF, bool hasFxN1, bool hasFxN2,
+         bool hasToaE1, bool hasToaE2, bool hasTDIonoSRP,
+         bool hasSignal)
 {
+    initialize();
+    specifyOptionalParameters(hasAmpSF, hasFxN1, hasFxN2,
+                              hasToaE1, hasToaE2, hasTDIonoSRP,
+                              hasSignal);
+}
+
+void Pvp::initialize()
+{
+    // Rest of the parameters are already initialized
+    // in PVPType constructor
+    setDefaultValues(3,"X=F8;Y=F8;Z=F8;", txPos);
+    setDefaultValues(3,"X=F8;Y=F8;Z=F8;", txVel);
+    setDefaultValues(3,"X=F8;Y=F8;Z=F8;", rcvPos);
+    setDefaultValues(3,"X=F8;Y=F8;Z=F8;", rcvVel);
+    setDefaultValues(3,"X=F8;Y=F8;Z=F8;", srpPos);
 }
 
 void Pvp::validate(size_t size, size_t offset)
@@ -71,23 +88,36 @@ void Pvp::validate(size_t size, size_t offset)
     }
 }
 
-void Pvp::setData(size_t size, size_t offset, const std::string& format, PVPType& param)
+void Pvp::specifyOptionalParameters(bool hasAmpSF, bool hasFxN1, bool hasFxN2,
+                       bool hasToaE1, bool hasToaE2, bool hasTDIonoSRP,
+                       bool hasSignal)
 {
-    validate(size, offset);
-    validateFormat(format);
-    param.setData(size, offset, format);
+    mAmpSF = hasAmpSF;
+    mFxN1 = hasFxN1;
+    mFxN2 = hasFxN2;
+    mToaE1 = hasToaE1;
+    mToaE2 = hasToaE2;
+    mTDIonoSRP = hasTDIonoSRP;
+    mSignal = hasSignal;
+}
+
+
+void Pvp::setOffset(size_t offset, PVPType& param)
+{
+    validate(param.getSize(), offset);
+    validateFormat(param.getFormat());
+    param.setOffset(offset);
 }
 
 // Assumes addedPVP is already correct size
-void Pvp::setData(size_t size, size_t offset, const std::string& format, const std::string& name)
+void Pvp::setParameters(size_t size, size_t offset, const std::string& format, const std::string& name)
 {
     validate(size, offset);
     validateFormat(format);
     if (addedPVP.count(name) == 0)
     {
         addedPVP[name] = APVPType();
-        addedPVP.find(name)->second.setData(size, offset, format);
-        addedPVP.find(name)->second.setName(name);
+        addedPVP.find(name)->second.setData(size, offset, format, name);
         return;
     }
     throw except::Exception(Ctxt(
@@ -104,6 +134,12 @@ size_t Pvp::getAdditionalParamsSize() const
     return res;
 }
 
+void Pvp::setDefaultValues(size_t size, const std::string& format, PVPType& param)
+{
+    param.setSize(size);
+    param.setFormat(format);
+}
+
 // Returns num blocks (not bytes)
 size_t Pvp::getReqSetSize() const
 {
@@ -112,33 +148,33 @@ size_t Pvp::getReqSetSize() const
             aFDOP.getSize() + aFRR1.getSize() + aFRR2.getSize() + fx1.getSize() +
             fx2.getSize() + toa1.getSize() + toa2.getSize() + tdTropoSRP.getSize() +
             sc0.getSize() + scss.getSize();
-    if(ampSF.get())
+    if(hasAmpSF())
     {
-        res += ampSF->getSize();
+        res += ampSF.getSize();
     }
-    if(fxN1.get())
+    if(hasFxN1())
     {
-        res += fxN1->getSize();
+        res += fxN1.getSize();
     }
-    if(fxN2.get())
+    if(hasFxN2())
     {
-        res += fxN2->getSize();
+        res += fxN2.getSize();
     }
-    if(toaE1.get())
+    if(hasToaE1())
     {
-        res += toaE1->getSize();
+        res += toaE1.getSize();
     }
-    if(toaE2.get())
+    if(hasToaE2())
     {
-        res += toaE2->getSize();
+        res += toaE2.getSize();
     }
-    if(tdIonoSRP.get())
+    if(hasTDIonoSRP())
     {
-        res += tdIonoSRP->getSize();
+        res += tdIonoSRP.getSize();
     }
-    if(signal.get())
+    if(hasSignal())
     {
-        res += signal->getSize();
+        res += signal.getSize();
     }
     for (auto it = addedPVP.begin(); it != addedPVP.end(); ++it)
     {
@@ -183,35 +219,34 @@ std::ostream& operator<< (std::ostream& os, const Pvp& p)
         << "  SC0           : \n" << p.sc0 << "\n"
         << "  SCSS          : \n" << p.scss << "\n";
 
-    if (p.ampSF.get())
+    if(p.hasAmpSF())
     {
-        os << "  AmpSF         : \n" << *p.ampSF << "\n";
+        os << "  AmpSF         : \n" << p.ampSF << "\n";
     }
-    if (p.fxN1.get())
+    if(p.hasFxN1())
     {
-        os << "  FxN1          : \n" << *p.fxN1 << "\n";
+        os << "  FxN1          : \n" << p.fxN1 << "\n";
     }
-    if (p.fxN2.get())
+    if(p.hasFxN2())
     {
-        os << "  FxN2          : \n" << *p.fxN2 << "\n";
+        os << "  FxN2          : \n" << p.fxN2 << "\n";
     }
-    if (p.toaE1.get())
+    if(p.hasToaE1())
     {
-        os << "  TOAE1         : \n" << *p.toaE1 << "\n";
+        os << "  TOAE1         : \n" << p.toaE1 << "\n";
     }
-    if (p.toaE2.get())
+    if(p.hasToaE2())
     {
-        os << "  TOAE2         : \n" << *p.toaE2 << "\n";
+        os << "  TOAE2         : \n" << p.toaE2 << "\n";
     }
-    if (p.tdIonoSRP.get())
+    if(p.hasTDIonoSRP())
     {
-        os << "  TdIonoSRP     : \n" << *p.tdIonoSRP << "\n";
+        os << "  TdIonoSRP     : \n" << p.tdIonoSRP << "\n";
     }
-    if (p.signal.get())
+    if(p.hasSignal())
     {
-        os << "  SIGNAL        : \n" << *p.signal << "\n";
+        os << "  SIGNAL        : \n" << p.signal << "\n";
     }
-
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
         os << "  Additional Parameter : " << it->second << "\n";

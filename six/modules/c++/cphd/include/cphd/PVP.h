@@ -67,20 +67,17 @@ struct PVPType
         return !((*this) == other);
     }
 
-    /*!
-     *  \func setData
-     *
-     *  \brief set PVPType data
-     *
-     *  \param size Size of the expected parameter
-     *  \param offset Offset of the expected parameter
-     *  \param format Format of the expected parameter
-     *   See spec table 10.2 page 120 for allowed binary formats
-     */
-    void setData(size_t size, size_t offset, const std::string& format)
+    //! Setter Functions
+    void setOffset(size_t offset)
+    {
+        mOffset = offset;
+    }
+    void setSize(size_t size)
     {
         mSize = size;
-        mOffset = offset;
+    }
+    void setFormat(const std::string& format)
+    {
         mFormat = format;
     }
 
@@ -89,13 +86,11 @@ struct PVPType
     {
         return mSize;
     }
-
     //! Get size in bytes
     size_t getByteSize() const
     {
         return mSize * WORD_BYTE_SIZE;
     }
-
     //! Get offset
     size_t getOffset() const
     {
@@ -149,15 +144,22 @@ struct APVPType : PVPType
         return !((*this) == other);
     }
 
-    /*
-     *  \func setName
+    /*!
+     *  \func setData
      *
-     *  \brief Set the name of the additional parameter
+     *  \brief set PVPType data
      *
-     *  \param name A unique name for the parameter
+     *  \param size Size of the expected parameter
+     *  \param offset Offset of the expected parameter
+     *  \param format Format of the expected parameter
+     *  \param name Unique name of the expected parameter
+     *   See spec table 10.2 page 120 for allowed binary formats
      */
-    void setName(const std::string& name)
+    void setData(size_t size, size_t offset, const std::string& format, const std::string& name)
     {
+        mSize = size;
+        mOffset = offset;
+        mFormat = format;
         mName = name;
     }
 
@@ -243,7 +245,7 @@ struct Pvp
      *  vector. For signal vector v, each sample value is multiplied by
      *  Amp_SF(v) to yield the proper sample values for the vector.
      */
-    mem::ScopedCopyablePtr<PVPType> ampSF;
+    PVPType ampSF;
 
     /*!
      *  The DOPPLER shift micro parameter. Parameter accounts for the
@@ -292,7 +294,7 @@ struct Pvp
      *  For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
      *  When included in a product, fx_N1 & fx_N2 are both included.
     */
-    mem::ScopedCopyablePtr<PVPType> fxN1;
+    PVPType fxN1;
 
     /*!
      *  (Optional) The FX domain frequency limits for out-of-band noise signal for
@@ -301,7 +303,7 @@ struct Pvp
      *  For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
      *  When included in a product, fx_N1 & fx_N2 are both included.
     */
-    mem::ScopedCopyablePtr<PVPType> fxN2;
+    PVPType fxN2;
 
     /*!
      *  The  change in toa limits for the full resolution echoes retained in the
@@ -322,12 +324,12 @@ struct Pvp
     /*!
      *  (Optional) The TOA limits for all echoes retained in the signal vector (sec).
      */
-    mem::ScopedCopyablePtr<PVPType> toaE1;
+    PVPType toaE1;
 
     /*!
      *  (Optional) The TOA limits for all echoes retained in the signal vector (sec).
      */
-    mem::ScopedCopyablePtr<PVPType> toaE2;
+    PVPType toaE2;
 
     /*!
      *  Two-way time delay due to the troposphere (sec) that was added
@@ -339,7 +341,7 @@ struct Pvp
      *  (Optional) Two-way time delay due to the ionosphere (sec) that was added
      *  when computing the propagation time for the SRP
      */
-    mem::ScopedCopyablePtr<PVPType> tdIonoSRP;
+    PVPType tdIonoSRP;
 
     /*!
      *  FX DOMAIN & TOA DOMAIN: The domain signal vector coordinate value for
@@ -357,15 +359,28 @@ struct Pvp
      *  (Optional) Integer parameter that may be included to indicate the signal
      *  content for some vectors is known or is likely to be distorted.
      */
-    mem::ScopedCopyablePtr<PVPType> signal;
+    PVPType signal;
 
     /*
      *  (Optional) User defined PV parameters
      */
     std::unordered_map<std::string,APVPType> addedPVP;
 
-    //! Default Constructor
-    Pvp();
+    /*
+     *  \func Custom Constructor
+     *  \brief Constructor with optional parameters specified
+     *
+     *  \param hasAmpSF flag indicates if optional param AmpSF exists
+     *  \param hasFxN1 flag indicates if optional param FxN1 exists
+     *  \param hasFxN2 flag indicates if optional param FxN2 exists
+     *  \param hasToaE1 flag indicates if optional param ToaE1 exists
+     *  \param hasToaE2 flag indicates if optional param ToaE2 exists
+     *  \param hasTDIonoSRP flag indicates if optional param TDIonoSRP exists
+     *  \param hasSignal flag indicates if optional param signal exists
+     */
+    Pvp(bool hasAmpSF = false, bool hasFxN1 = false, bool hasFxN2 = false,
+        bool hasToaE1 = false, bool hasToaE2 = false, bool hasTDIonoSRP = false,
+        bool hasSignal = false);
 
     //! Equality operators
     bool operator==(const Pvp& other) const
@@ -382,7 +397,11 @@ struct Pvp
                 ampSF == other.ampSF && fxN1 == other. fxN1 &&
                 fxN2 == other.fxN2 && toaE1 == other.toaE1 &&
                 toaE2 == other.toaE2 && tdIonoSRP == other.tdIonoSRP &&
-                signal == other.signal && addedPVP == other.addedPVP;
+                signal == other.signal && addedPVP == other.addedPVP &&
+                hasAmpSF() == other.hasAmpSF() && hasFxN1() == other.hasFxN1() &&
+                hasFxN2() == other.hasFxN2() && hasToaE1() == other.hasToaE2() &&
+                hasToaE2() == other.hasToaE2() && hasTDIonoSRP() == other.hasTDIonoSRP() &&
+                hasSignal() == other.hasSignal();
     }
     bool operator!=(const Pvp& other) const
     {
@@ -396,22 +415,36 @@ struct Pvp
     size_t getAdditionalParamsSize() const;
 
     /*
-     *  \func setData
+     *  \func specifyOptionalParameters
+     *  \brief Marks optional parameters flags
      *
-     *  \brief Validate and set the metadata of the specified parameter
+     *  \param hasAmpSF flag indicates if optional param AmpSF exists
+     *  \param hasFxN1 flag indicates if optional param FxN1 exists
+     *  \param hasFxN2 flag indicates if optional param FxN2 exists
+     *  \param hasToaE1 flag indicates if optional param ToaE1 exists
+     *  \param hasToaE2 flag indicates if optional param ToaE2 exists
+     *  \param hasTDIonoSRP flag indicates if optional param TDIonoSRP exists
+     *  \param hasSignal flag indicates if optional param signal exists
+     */
+    void specifyOptionalParameters(bool hasAmpSF = false, bool hasFxN1 = false, bool hasFxN2 = false,
+                           bool hasToaE1 = false, bool hasToaE2 = false, bool hasTDIonoSRP = false,
+                           bool hasSignal = false);
+
+    /*
+     *  \func setOffset
      *
-     *  \param size The size of the parameter to be expected for the param
+     *  \brief Validate and set the offset of parameters
+     *
      *  \param offset The offset of the parameter to be expected for the param
-     *  \param format The string format of the parameter to be expected for the param
      *  \param[out] param The PVPType parameter that should be set
      *
      *  \throws except::Exception If param offset or size overlaps another parameter, or
      *   if format is invalid
      */
-    void setData(size_t size, size_t offset, const std::string& format, PVPType& param);
+    void setOffset(size_t offset, PVPType& param);
 
     /*
-     *  \func setData
+     *  \func setParameters
      *
      *  \brief Validate and set the metadata of an additional parameter identified by name
      *
@@ -423,7 +456,40 @@ struct Pvp
      *  \throws except::Exception If param offset or size overlaps another parameter,
      *   if format is invalid or if name is not unique
      */
-    void setData(size_t size, size_t offset, const std::string& format, const std::string& name);
+    void setParameters(size_t size, size_t offset, const std::string& format, const std::string& name);
+
+    /*
+     * Getters for optional parameter flags
+     */
+    bool hasAmpSF() const
+    {
+        return mAmpSF;
+    }
+    bool hasFxN1() const
+    {
+        return mFxN1;
+    }
+    bool hasFxN2() const
+    {
+        return mFxN2;
+    }
+    bool hasToaE1() const
+    {
+        return mToaE1;
+    }
+    bool hasToaE2() const
+    {
+        return mToaE2;
+    }
+    bool hasTDIonoSRP() const
+    {
+        return mTDIonoSRP;
+    }
+    bool hasSignal() const
+    {
+        return mSignal;
+    }
+
 
 private:
     /*
@@ -435,6 +501,27 @@ private:
      *  Marks filled bytes
      */
     std::vector<bool> mParamLocations;
+
+    /*
+     * Set default size and format for each parameter
+     */
+    void setDefaultValues(size_t size, const std::string& format, PVPType& param);
+
+    /*
+     *  Optional parameter flags
+     */
+    bool mAmpSF;
+    bool mFxN1;
+    bool mFxN2;
+    bool mToaE1;
+    bool mToaE2;
+    bool mTDIonoSRP;
+    bool mSignal;
+
+    /*
+     * Initializes default size and format for parameters
+     */
+    void initialize();
 };
 
 //! Ostream operators
