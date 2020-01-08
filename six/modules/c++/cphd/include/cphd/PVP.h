@@ -414,7 +414,7 @@ struct Pvp
     /*
      *  \func append
      *
-     *  \brief Validate and append the offset of parameters to next available block
+     *  \brief Validate and append parameter to the next available block
      *
      *  \param[out] param The PVPType parameter that should be set
      *
@@ -441,8 +441,7 @@ struct Pvp
     /*
      *  \func setCustomParameter
      *
-     *  \brief Validate and append the metadata of an additional parameter identified by name
-     *  to the next available block
+     *  \brief Validate and append additional parameter to the next available block
      *
      *  \param size The size of the parameter to be expected for the param
      *  \param format The string format of the parameter to be expected for the param
