@@ -454,7 +454,7 @@ XMLElem CPHDXMLParser::toXML(const Pvp& pvp, XMLElem parent)
     createPVPType("RcvPos", pvp.rcvPos, pvpXML);
     createPVPType("RcvVel", pvp.rcvVel, pvpXML);
     createPVPType("SRPPos", pvp.srpPos, pvpXML);
-    if (pvp.hasAmpSF())
+    if (!six::Init::isUndefined<size_t>(pvp.ampSF.getOffset()))
     {
         createPVPType("AmpSF", pvp.ampSF, pvpXML);
     }
@@ -463,32 +463,32 @@ XMLElem CPHDXMLParser::toXML(const Pvp& pvp, XMLElem parent)
     createPVPType("aFRR2", pvp.aFRR2, pvpXML);
     createPVPType("FX1", pvp.fx1, pvpXML);
     createPVPType("FX2", pvp.fx2, pvpXML);
-    if (pvp.hasFxN1())
+    if (!six::Init::isUndefined<size_t>(pvp.fxN1.getOffset()))
     {
         createPVPType("FXN1", pvp.fxN1, pvpXML);
     }
-    if (pvp.hasFxN2())
+    if (!six::Init::isUndefined<size_t>(pvp.fxN2.getOffset()))
     {
         createPVPType("FXN2", pvp.fxN2, pvpXML);
     }
     createPVPType("TOA1", pvp.toa1, pvpXML);
     createPVPType("TOA2", pvp.toa2, pvpXML);
-    if (pvp.hasToaE1())
+    if (!six::Init::isUndefined<size_t>(pvp.toaE1.getOffset()))
     {
         createPVPType("TOAE1", pvp.toaE1, pvpXML);
     }
-    if (pvp.hasToaE2())
+    if (!six::Init::isUndefined<size_t>(pvp.toaE2.getOffset()))
     {
         createPVPType("TOAE2", pvp.toaE2, pvpXML);
     }
     createPVPType("TDTropoSRP", pvp.tdTropoSRP, pvpXML);
-    if (pvp.hasTDIonoSRP())
+    if (!six::Init::isUndefined<size_t>(pvp.tdIonoSRP.getOffset()))
     {
         createPVPType("TDIonoSRP", pvp.tdIonoSRP, pvpXML);
     }
     createPVPType("SC0", pvp.sc0, pvpXML);
     createPVPType("SCSS", pvp.scss, pvpXML);
-    if (pvp.hasSignal())
+    if (!six::Init::isUndefined<size_t>(pvp.signal.getOffset()))
     {
         createPVPType("SIGNAL", pvp.signal, pvpXML);
     }
@@ -1386,42 +1386,42 @@ void CPHDXMLParser::fromXML(const XMLElem pvpXML, Pvp& pvp)
     parsePVPType(pvp, getFirstAndOnly(pvpXML, "SCSS"), pvp.scss);
 
     const XMLElem AmpSFXML = getOptional(pvpXML, "AmpSF");
-    const XMLElem FXN1XML = getOptional(pvpXML, "FXN1");
-    const XMLElem FXN2XML = getOptional(pvpXML, "FXN2");
-    const XMLElem TOAE1XML = getOptional(pvpXML, "TOAE1");
-    const XMLElem TOAE2XML = getOptional(pvpXML, "TOAE2");
-    const XMLElem TDIonoSRPXML = getOptional(pvpXML, "TDIonoSRP");
-    const XMLElem SIGNALXML = getOptional(pvpXML, "SIGNAL");
-    pvp.specifyOptionalParameters(AmpSFXML, FXN1XML, FXN2XML,
-            TOAE1XML, TOAE2XML, TDIonoSRPXML, SIGNALXML);
     if (AmpSFXML)
     {
         parsePVPType(pvp, AmpSFXML, pvp.ampSF);
     }
+
+    const XMLElem FXN1XML = getOptional(pvpXML, "FXN1");
     if (FXN1XML)
     {
         parsePVPType(pvp, FXN1XML, pvp.fxN1);
     }
+
+    const XMLElem FXN2XML = getOptional(pvpXML, "FXN2");
     if (FXN2XML)
     {
         parsePVPType(pvp, FXN2XML, pvp.fxN2);
     }
 
+    const XMLElem TOAE1XML = getOptional(pvpXML, "TOAE1");
     if (TOAE1XML)
     {
         parsePVPType(pvp, TOAE1XML, pvp.toaE1);
     }
 
+    const XMLElem TOAE2XML = getOptional(pvpXML, "TOAE2");
     if (TOAE2XML)
     {
         parsePVPType(pvp, TOAE2XML, pvp.toaE2);
     }
 
+    const XMLElem TDIonoSRPXML = getOptional(pvpXML, "TDIonoSRP");
     if (TDIonoSRPXML)
     {
         parsePVPType(pvp, TDIonoSRPXML, pvp.tdIonoSRP);
     }
 
+    const XMLElem SIGNALXML = getOptional(pvpXML, "SIGNAL");
     if (SIGNALXML)
     {
         parsePVPType(pvp, SIGNALXML, pvp.signal);

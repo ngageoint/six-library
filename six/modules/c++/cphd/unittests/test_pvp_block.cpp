@@ -126,7 +126,7 @@ TEST_CASE(testPvpRequired)
 
 TEST_CASE(testPvpOptional)
 {
-    cphd::Pvp pvp(true, true, true);
+    cphd::Pvp pvp;
     cphd::setPVPXML(pvp);
     pvp.setOffset(28, pvp.ampSF);
     pvp.setOffset(27, pvp.fxN1);
@@ -169,7 +169,7 @@ TEST_CASE(testPvpOptional)
 
 TEST_CASE(testPvpThrow)
 {
-    cphd::Pvp pvp(true, true, false, true);
+    cphd::Pvp pvp;
     cphd::setPVPXML(pvp);
     pvp.setOffset(29, pvp.ampSF);
     pvp.setOffset(28, pvp.fxN1);
@@ -238,7 +238,7 @@ TEST_CASE(testPvpThrow)
 
 TEST_CASE(testPvpEquality)
 {
-    cphd::Pvp pvp1(true, true, true);
+    cphd::Pvp pvp1;
     cphd::setPVPXML(pvp1);
     pvp1.setOffset(28, pvp1.ampSF);
     pvp1.setOffset(27, pvp1.fxN1);
@@ -249,7 +249,7 @@ TEST_CASE(testPvpEquality)
                              std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                              pvp1);
 
-    cphd::Pvp pvp2(true, true, true);
+    cphd::Pvp pvp2;
     cphd::setPVPXML(pvp2);
     pvp2.setOffset(28, pvp2.ampSF);
     pvp2.setOffset(27, pvp2.fxN1);

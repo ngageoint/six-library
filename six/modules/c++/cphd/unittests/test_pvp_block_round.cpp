@@ -184,10 +184,9 @@ TEST_CASE(testPVPBlockOptional)
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
-    meta.pvp.specifyOptionalParameters(false, true, true);
     cphd::setPVPXML(meta.pvp);
-    meta.pvp.setOffset(27, (meta.pvp.fxN1));
-    meta.pvp.setOffset(28, (meta.pvp.fxN2));
+    meta.pvp.setOffset(27, meta.pvp.fxN1);
+    meta.pvp.setOffset(28, meta.pvp.fxN2);
     meta.data.numBytesPVP += 2*8;
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     std::vector<std::string> addedParams;

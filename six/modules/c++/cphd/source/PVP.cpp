@@ -32,9 +32,9 @@ const size_t PVPType::WORD_BYTE_SIZE = 8;
 
 PVPType::PVPType() :
     // Overwrite these default values if required
-    mSize(1),
+    mSize(0),
     mOffset(six::Init::undefined<size_t>()),
-    mFormat("F8")
+    mFormat(six::Init::undefined<std::string>())
 {
 }
 
@@ -43,25 +43,39 @@ APVPType::APVPType() :
 {
 }
 
-Pvp::Pvp(bool hasAmpSF, bool hasFxN1, bool hasFxN2,
-         bool hasToaE1, bool hasToaE2, bool hasTDIonoSRP,
-         bool hasSignal)
+Pvp::Pvp()
 {
     initialize();
-    specifyOptionalParameters(hasAmpSF, hasFxN1, hasFxN2,
-                              hasToaE1, hasToaE2, hasTDIonoSRP,
-                              hasSignal);
 }
 
 void Pvp::initialize()
 {
-    // Rest of the parameters are already initialized
-    // in PVPType constructor
+    // Default size and formats for each PVP
+    // listed in Table 11-6 CPHD1.0 Spec
+    setDefaultValues(1,"F8", txTime);
     setDefaultValues(3,"X=F8;Y=F8;Z=F8;", txPos);
     setDefaultValues(3,"X=F8;Y=F8;Z=F8;", txVel);
+    setDefaultValues(1,"F8", rcvTime);
     setDefaultValues(3,"X=F8;Y=F8;Z=F8;", rcvPos);
     setDefaultValues(3,"X=F8;Y=F8;Z=F8;", rcvVel);
     setDefaultValues(3,"X=F8;Y=F8;Z=F8;", srpPos);
+    setDefaultValues(1,"F8", ampSF);
+    setDefaultValues(1,"F8", aFDOP);
+    setDefaultValues(1,"F8", aFRR1);
+    setDefaultValues(1,"F8", aFRR2);
+    setDefaultValues(1,"F8", fx1);
+    setDefaultValues(1,"F8", fx2);
+    setDefaultValues(1,"F8", fxN1);
+    setDefaultValues(1,"F8", fxN2);
+    setDefaultValues(1,"F8", toa1);
+    setDefaultValues(1,"F8", toa2);
+    setDefaultValues(1,"F8", toaE1);
+    setDefaultValues(1,"F8", toaE2);
+    setDefaultValues(1,"F8", tdTropoSRP);
+    setDefaultValues(1,"F8", tdIonoSRP);
+    setDefaultValues(1,"F8", sc0);
+    setDefaultValues(1,"F8", scss);
+    setDefaultValues(1,"F8", signal);
 }
 
 void Pvp::validate(size_t size, size_t offset)
@@ -88,20 +102,6 @@ void Pvp::validate(size_t size, size_t offset)
         mParamLocations.at(offset + ii) = true;
     }
 }
-
-void Pvp::specifyOptionalParameters(bool hasAmpSF, bool hasFxN1, bool hasFxN2,
-                       bool hasToaE1, bool hasToaE2, bool hasTDIonoSRP,
-                       bool hasSignal)
-{
-    mAmpSF = hasAmpSF;
-    mFxN1 = hasFxN1;
-    mFxN2 = hasFxN2;
-    mToaE1 = hasToaE1;
-    mToaE2 = hasToaE2;
-    mTDIonoSRP = hasTDIonoSRP;
-    mSignal = hasSignal;
-}
-
 
 void Pvp::setOffset(size_t offset, PVPType& param)
 {
@@ -149,31 +149,31 @@ size_t Pvp::getReqSetSize() const
             aFDOP.getSize() + aFRR1.getSize() + aFRR2.getSize() + fx1.getSize() +
             fx2.getSize() + toa1.getSize() + toa2.getSize() + tdTropoSRP.getSize() +
             sc0.getSize() + scss.getSize();
-    if(hasAmpSF())
+    if(!six::Init::isUndefined<size_t>(ampSF.getOffset()))
     {
         res += ampSF.getSize();
     }
-    if(hasFxN1())
+    if(!six::Init::isUndefined<size_t>(fxN1.getOffset()))
     {
         res += fxN1.getSize();
     }
-    if(hasFxN2())
+    if(!six::Init::isUndefined<size_t>(fxN2.getOffset()))
     {
         res += fxN2.getSize();
     }
-    if(hasToaE1())
+    if(!six::Init::isUndefined<size_t>(toaE1.getOffset()))
     {
         res += toaE1.getSize();
     }
-    if(hasToaE2())
+    if(!six::Init::isUndefined<size_t>(toaE2.getOffset()))
     {
         res += toaE2.getSize();
     }
-    if(hasTDIonoSRP())
+    if(!six::Init::isUndefined<size_t>(tdIonoSRP.getOffset()))
     {
         res += tdIonoSRP.getSize();
     }
-    if(hasSignal())
+    if(!six::Init::isUndefined<size_t>(signal.getOffset()))
     {
         res += signal.getSize();
     }
@@ -220,31 +220,31 @@ std::ostream& operator<< (std::ostream& os, const Pvp& p)
         << "  SC0           : \n" << p.sc0 << "\n"
         << "  SCSS          : \n" << p.scss << "\n";
 
-    if(p.hasAmpSF())
+    if(!six::Init::isUndefined<size_t>(p.ampSF.getOffset()))
     {
         os << "  AmpSF         : \n" << p.ampSF << "\n";
     }
-    if(p.hasFxN1())
+    if(!six::Init::isUndefined<size_t>(p.fxN1.getOffset()))
     {
         os << "  FxN1          : \n" << p.fxN1 << "\n";
     }
-    if(p.hasFxN2())
+    if(!six::Init::isUndefined<size_t>(p.fxN2.getOffset()))
     {
         os << "  FxN2          : \n" << p.fxN2 << "\n";
     }
-    if(p.hasToaE1())
+    if(!six::Init::isUndefined<size_t>(p.toaE1.getOffset()))
     {
         os << "  TOAE1         : \n" << p.toaE1 << "\n";
     }
-    if(p.hasToaE2())
+    if(!six::Init::isUndefined<size_t>(p.toaE2.getOffset()))
     {
         os << "  TOAE2         : \n" << p.toaE2 << "\n";
     }
-    if(p.hasTDIonoSRP())
+    if(!six::Init::isUndefined<size_t>(p.tdIonoSRP.getOffset()))
     {
         os << "  TdIonoSRP     : \n" << p.tdIonoSRP << "\n";
     }
-    if(p.hasSignal())
+    if(!six::Init::isUndefined<size_t>(p.signal.getOffset()))
     {
         os << "  SIGNAL        : \n" << p.signal << "\n";
     }

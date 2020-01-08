@@ -367,20 +367,13 @@ struct Pvp
     std::unordered_map<std::string,APVPType> addedPVP;
 
     /*
-     *  \func Custom Constructor
-     *  \brief Constructor with optional parameters specified
+     *  \func Constructor
+     *  \brief Initialize default values for each parameter
      *
-     *  \param hasAmpSF flag indicates if optional param AmpSF exists
-     *  \param hasFxN1 flag indicates if optional param FxN1 exists
-     *  \param hasFxN2 flag indicates if optional param FxN2 exists
-     *  \param hasToaE1 flag indicates if optional param ToaE1 exists
-     *  \param hasToaE2 flag indicates if optional param ToaE2 exists
-     *  \param hasTDIonoSRP flag indicates if optional param TDIonoSRP exists
-     *  \param hasSignal flag indicates if optional param signal exists
+     *  Initializes default values for PVPs and sets optional
+     *  parameter flags to false
      */
-    Pvp(bool hasAmpSF = false, bool hasFxN1 = false, bool hasFxN2 = false,
-        bool hasToaE1 = false, bool hasToaE2 = false, bool hasTDIonoSRP = false,
-        bool hasSignal = false);
+    Pvp();
 
     //! Equality operators
     bool operator==(const Pvp& other) const
@@ -397,11 +390,7 @@ struct Pvp
                 ampSF == other.ampSF && fxN1 == other. fxN1 &&
                 fxN2 == other.fxN2 && toaE1 == other.toaE1 &&
                 toaE2 == other.toaE2 && tdIonoSRP == other.tdIonoSRP &&
-                signal == other.signal && addedPVP == other.addedPVP &&
-                hasAmpSF() == other.hasAmpSF() && hasFxN1() == other.hasFxN1() &&
-                hasFxN2() == other.hasFxN2() && hasToaE1() == other.hasToaE2() &&
-                hasToaE2() == other.hasToaE2() && hasTDIonoSRP() == other.hasTDIonoSRP() &&
-                hasSignal() == other.hasSignal();
+                signal == other.signal && addedPVP == other.addedPVP;
     }
     bool operator!=(const Pvp& other) const
     {
@@ -413,22 +402,6 @@ struct Pvp
 
     //! Get size of pvp set in blocks
     size_t getAdditionalParamsSize() const;
-
-    /*
-     *  \func specifyOptionalParameters
-     *  \brief Marks optional parameters flags
-     *
-     *  \param hasAmpSF flag indicates if optional param AmpSF exists
-     *  \param hasFxN1 flag indicates if optional param FxN1 exists
-     *  \param hasFxN2 flag indicates if optional param FxN2 exists
-     *  \param hasToaE1 flag indicates if optional param ToaE1 exists
-     *  \param hasToaE2 flag indicates if optional param ToaE2 exists
-     *  \param hasTDIonoSRP flag indicates if optional param TDIonoSRP exists
-     *  \param hasSignal flag indicates if optional param signal exists
-     */
-    void specifyOptionalParameters(bool hasAmpSF = false, bool hasFxN1 = false, bool hasFxN2 = false,
-                           bool hasToaE1 = false, bool hasToaE2 = false, bool hasTDIonoSRP = false,
-                           bool hasSignal = false);
 
     /*
      *  \func setOffset
@@ -458,39 +431,6 @@ struct Pvp
      */
     void setParameter(size_t size, size_t offset, const std::string& format, const std::string& name);
 
-    /*
-     * Getters for optional parameter flags
-     */
-    bool hasAmpSF() const
-    {
-        return mAmpSF;
-    }
-    bool hasFxN1() const
-    {
-        return mFxN1;
-    }
-    bool hasFxN2() const
-    {
-        return mFxN2;
-    }
-    bool hasToaE1() const
-    {
-        return mToaE1;
-    }
-    bool hasToaE2() const
-    {
-        return mToaE2;
-    }
-    bool hasTDIonoSRP() const
-    {
-        return mTDIonoSRP;
-    }
-    bool hasSignal() const
-    {
-        return mSignal;
-    }
-
-
 private:
     /*
      *  Validate parameter size and offset when setting parameter
@@ -506,17 +446,6 @@ private:
      * Set default size and format for each parameter
      */
     void setDefaultValues(size_t size, const std::string& format, PVPType& param);
-
-    /*
-     *  Optional parameter flags
-     */
-    bool mAmpSF;
-    bool mFxN1;
-    bool mFxN2;
-    bool mToaE1;
-    bool mToaE2;
-    bool mTDIonoSRP;
-    bool mSignal;
 
     /*
      * Initializes default size and format for parameters

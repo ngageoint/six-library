@@ -95,7 +95,7 @@ PVPBlock::PVPSet::PVPSet() :
 {
 }
 
-void PVPBlock::PVPSet::write(const Pvp& p, const sys::byte* input)
+void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::byte* input)
 {
     ::setData(input + p.txTime.getByteOffset(), txTime);
     ::setData(input + p.txPos.getByteOffset(), txPos);
@@ -115,37 +115,37 @@ void PVPBlock::PVPSet::write(const Pvp& p, const sys::byte* input)
     ::setData(input + p.sc0.getByteOffset(), sc0);
     ::setData(input + p.scss.getByteOffset(), scss);
 
-    if (p.hasAmpSF())
+    if (pvpBlock.hasAmpSF())
     {
         ampSF.reset(new double());
         ::setData(input + p.ampSF.getByteOffset(), *ampSF);
     }
-    if (p.hasFxN1())
+    if (pvpBlock.hasFxN1())
     {
         fxN1.reset(new double());
         ::setData(input + p.fxN1.getByteOffset(), *fxN1);
     }
-    if (p.hasFxN2())
+    if (pvpBlock.hasFxN2())
     {
         fxN2.reset(new double());
         ::setData(input + p.fxN2.getByteOffset(), *fxN2);
     }
-    if (p.hasToaE1())
+    if (pvpBlock.hasToaE1())
     {
         toaE1.reset(new double());
         ::setData(input + p.toaE1.getByteOffset(), *toaE1);
     }
-    if (p.hasToaE2())
+    if (pvpBlock.hasToaE2())
     {
         toaE2.reset(new double());
         ::setData(input + p.toaE2.getByteOffset(), *toaE2);
     }
-    if (p.hasTDIonoSRP())
+    if (pvpBlock.hasTDIonoSRP())
     {
         tdIonoSRP.reset(new double());
         ::setData(input + p.tdIonoSRP.getByteOffset(), *tdIonoSRP);
     }
-    if (p.hasSignal())
+    if (pvpBlock.hasSignal())
     {
         signal.reset(new double());
         ::setData(input + p.signal.getByteOffset(), *signal);
@@ -288,7 +288,14 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest) const
 /*
  * Initialize PVP Array with a data object
  */
-PVPBlock::PVPBlock(const Pvp& p, const Data& d)
+PVPBlock::PVPBlock(const Pvp& p, const Data& d) :
+    mAmpSFEnabled(!six::Init::isUndefined<size_t>(p.ampSF.getOffset())),
+    mFxN1Enabled(!six::Init::isUndefined<size_t>(p.fxN1.getOffset())),
+    mFxN2Enabled(!six::Init::isUndefined<size_t>(p.fxN2.getOffset())),
+    mToaE1Enabled(!six::Init::isUndefined<size_t>(p.toaE1.getOffset())),
+    mToaE2Enabled(!six::Init::isUndefined<size_t>(p.toaE2.getOffset())),
+    mTDIonoSRPEnabled(!six::Init::isUndefined<size_t>(p.tdIonoSRP.getOffset())),
+    mSignalEnabled(!six::Init::isUndefined<size_t>(p.signal.getOffset()))
 {
     mPvp = p;
     mNumBytesPerVector = d.getNumBytesPVPSet();
@@ -315,7 +322,14 @@ PVPBlock::PVPBlock(size_t numChannels,
                    const std::vector<size_t>& numVectors,
                    const Pvp& p) :
     mNumBytesPerVector(0),
-    mPvp(p)
+    mPvp(p),
+    mAmpSFEnabled(!six::Init::isUndefined<size_t>(p.ampSF.getOffset())),
+    mFxN1Enabled(!six::Init::isUndefined<size_t>(p.fxN1.getOffset())),
+    mFxN2Enabled(!six::Init::isUndefined<size_t>(p.fxN2.getOffset())),
+    mToaE1Enabled(!six::Init::isUndefined<size_t>(p.toaE1.getOffset())),
+    mToaE2Enabled(!six::Init::isUndefined<size_t>(p.toaE2.getOffset())),
+    mTDIonoSRPEnabled(!six::Init::isUndefined<size_t>(p.tdIonoSRP.getOffset())),
+    mSignalEnabled(!six::Init::isUndefined<size_t>(p.signal.getOffset()))
 {
     mData.resize(numChannels);
     if(numChannels != numVectors.size())
@@ -445,7 +459,7 @@ sys::Off_T PVPBlock::load(io::SeekableInputStream& inStream,
             sys::byte* ptr = buf;
             for (size_t jj = 0; jj < mData[ii].size(); ++jj, ptr += numBytesPerVector)
             {
-                mData[ii][jj].write(mPvp, ptr);
+                mData[ii][jj].write(*this, mPvp, ptr);
             }
         }
     }
@@ -725,7 +739,7 @@ void PVPBlock::setSCSS(double value, size_t channel, size_t vector)
 void PVPBlock::setAmpSF(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mPvp.hasAmpSF())
+    if (hasAmpSF())
     {
         mData[channel][vector].ampSF.reset(new double(value));
         return;
@@ -737,7 +751,7 @@ void PVPBlock::setAmpSF(double value, size_t channel, size_t vector)
 void PVPBlock::setFxN1(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mPvp.hasFxN1())
+    if (hasFxN1())
     {
         mData[channel][vector].fxN1.reset(new double(value));
         return;
@@ -749,7 +763,7 @@ void PVPBlock::setFxN1(double value, size_t channel, size_t vector)
 void PVPBlock::setFxN2(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mPvp.hasFxN2())
+    if (hasFxN2())
     {
         mData[channel][vector].fxN2.reset(new double(value));
         return;
@@ -761,7 +775,7 @@ void PVPBlock::setFxN2(double value, size_t channel, size_t vector)
 void PVPBlock::setTOAE1(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mPvp.hasToaE1())
+    if (hasToaE1())
     {
         mData[channel][vector].toaE1.reset(new double(value));
         return;
@@ -773,7 +787,7 @@ void PVPBlock::setTOAE1(double value, size_t channel, size_t vector)
 void PVPBlock::setTOAE2(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mPvp.hasToaE2())
+    if (hasToaE2())
     {
         mData[channel][vector].toaE2.reset(new double(value));
         return;
@@ -785,7 +799,7 @@ void PVPBlock::setTOAE2(double value, size_t channel, size_t vector)
 void PVPBlock::setTdIonoSRP(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mPvp.hasTDIonoSRP())
+    if (hasTDIonoSRP())
     {
         mData[channel][vector].tdIonoSRP.reset(new double(value));
         return;
@@ -797,7 +811,7 @@ void PVPBlock::setTdIonoSRP(double value, size_t channel, size_t vector)
 void PVPBlock::setSignal(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
-    if (mPvp.hasSignal())
+    if (hasSignal())
     {
         mData[channel][vector].signal.reset(new double(value));
         return;
