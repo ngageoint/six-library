@@ -349,7 +349,7 @@ protected:
          *
          *  \brief Writes binary data input into PVP Set
          *
-         *  \param pvpBlock A pvpBlock struct to access optiona parameter flags
+         *  \param pvpBlock A pvpBlock struct to access optional parameter flags
          *  \param pvp A filled out pvp sturcture. This will be used for
          *  information on where to allocate memory and set each
          *  parameter in a PVP set.

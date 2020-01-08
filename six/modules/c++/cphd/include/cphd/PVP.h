@@ -370,8 +370,6 @@ struct Pvp
      *  \func Constructor
      *  \brief Initialize default values for each parameter
      *
-     *  Initializes default values for PVPs and sets optional
-     *  parameter flags to false
      */
     Pvp();
 
