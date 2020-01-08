@@ -45,12 +45,12 @@ TEST_CASE(testSimpleEqualityOperatorTrue)
 TEST_CASE(testAddedParamsEqualityOperatorTrue)
 {
     cphd::Pvp pvp1;
-    pvp1.setParameters(1, 0, "F8", "AddedParam1");
-    pvp1.setParameters(1, 1, "F8", "AddedParam2");
+    pvp1.setParameter(1, 0, "F8", "AddedParam1");
+    pvp1.setParameter(1, 1, "F8", "AddedParam2");
 
     cphd::Pvp pvp2;
-    pvp2.setParameters(1, 0, "F8", "AddedParam1");
-    pvp2.setParameters(1, 1, "F8", "AddedParam2");
+    pvp2.setParameter(1, 0, "F8", "AddedParam1");
+    pvp2.setParameter(1, 1, "F8", "AddedParam2");
 
     TEST_ASSERT_TRUE((pvp1 == pvp2));
 }
@@ -71,15 +71,15 @@ TEST_CASE(testSimpleEqualityOperatorFalse)
 TEST_CASE(testAddedParamsEqualityOperatorFalse)
 {
     cphd::Pvp pvp1;
-    pvp1.setParameters(1, 0, "F8", "AddedParam1");
-    pvp1.setParameters(1, 1, "F8", "AddedParam2");
+    pvp1.setParameter(1, 0, "F8", "AddedParam1");
+    pvp1.setParameter(1, 1, "F8", "AddedParam2");
 
     cphd::Pvp pvp2;
-    pvp2.setParameters(1, 0, "F8", "AddedParam1");
+    pvp2.setParameter(1, 0, "F8", "AddedParam1");
 
     cphd::Pvp pvp3;
-    pvp3.setParameters(1, 0, "F8", "AddedParam1");
-    pvp3.setParameters(1, 1, "F8", "AddedParam3");
+    pvp3.setParameter(1, 0, "F8", "AddedParam1");
+    pvp3.setParameter(1, 1, "F8", "AddedParam3");
 
     TEST_ASSERT_TRUE((pvp1 != pvp2));
     TEST_ASSERT_TRUE((pvp1 != pvp3));

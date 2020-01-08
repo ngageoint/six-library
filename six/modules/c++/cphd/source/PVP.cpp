@@ -31,6 +31,7 @@ namespace cphd
 const size_t PVPType::WORD_BYTE_SIZE = 8;
 
 PVPType::PVPType() :
+    // Overwrite these default values if required
     mSize(1),
     mOffset(six::Init::undefined<size_t>()),
     mFormat("F8")
@@ -110,7 +111,7 @@ void Pvp::setOffset(size_t offset, PVPType& param)
 }
 
 // Assumes addedPVP is already correct size
-void Pvp::setParameters(size_t size, size_t offset, const std::string& format, const std::string& name)
+void Pvp::setParameter(size_t size, size_t offset, const std::string& format, const std::string& name)
 {
     validate(size, offset);
     validateFormat(format);

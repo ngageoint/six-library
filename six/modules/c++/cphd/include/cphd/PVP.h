@@ -444,7 +444,7 @@ struct Pvp
     void setOffset(size_t offset, PVPType& param);
 
     /*
-     *  \func setParameters
+     *  \func setParameter
      *
      *  \brief Validate and set the metadata of an additional parameter identified by name
      *
@@ -456,7 +456,7 @@ struct Pvp
      *  \throws except::Exception If param offset or size overlaps another parameter,
      *   if format is invalid or if name is not unique
      */
-    void setParameters(size_t size, size_t offset, const std::string& format, const std::string& name);
+    void setParameter(size_t size, size_t offset, const std::string& format, const std::string& name);
 
     /*
      * Getters for optional parameter flags
