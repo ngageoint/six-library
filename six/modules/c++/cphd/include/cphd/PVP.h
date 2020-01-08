@@ -398,9 +398,6 @@ struct Pvp
     //! Get size of pvp set in blocks
     size_t getReqSetSize() const;
 
-    //! Get size of pvp set in blocks
-    size_t getAdditionalParamsSize() const;
-
     /*
      *  \func setOffset
      *
@@ -415,6 +412,18 @@ struct Pvp
     void setOffset(size_t offset, PVPType& param);
 
     /*
+     *  \func append
+     *
+     *  \brief Validate and append the offset of parameters to next available block
+     *
+     *  \param[out] param The PVPType parameter that should be set
+     *
+     *  \throws except::Exception If param offset or size overlaps another parameter, or
+     *   if format is invalid
+     */
+    void append(PVPType& param);
+
+    /*
      *  \func setParameter
      *
      *  \brief Validate and set the metadata of an additional parameter identified by name
@@ -427,7 +436,22 @@ struct Pvp
      *  \throws except::Exception If param offset or size overlaps another parameter,
      *   if format is invalid or if name is not unique
      */
-    void setParameter(size_t size, size_t offset, const std::string& format, const std::string& name);
+    void setCustomParameter(size_t size, size_t offset, const std::string& format, const std::string& name);
+
+    /*
+     *  \func setCustomParameter
+     *
+     *  \brief Validate and append the metadata of an additional parameter identified by name
+     *  to the next available block
+     *
+     *  \param size The size of the parameter to be expected for the param
+     *  \param format The string format of the parameter to be expected for the param
+     *  \param name The unique identifier of the additional parameter that should be set
+     *
+     *  \throws except::Exception If param offset or size overlaps another parameter,
+     *   if format is invalid or if name is not unique
+     */
+    void appendCustomParameter(size_t size, const std::string& format, const std::string& name);
 
 private:
     /*

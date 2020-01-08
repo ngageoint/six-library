@@ -2210,7 +2210,7 @@ void CPHDXMLParser::parsePVPType(Pvp& pvp, const XMLElem paramXML) const
     parseUInt(getFirstAndOnly(paramXML, "Size"), size);
     parseUInt(getFirstAndOnly(paramXML, "Offset"), offset);
     parseString(getFirstAndOnly(paramXML, "Format"), format);
-    pvp.setParameter(size, offset, format, name);
+    pvp.setCustomParameter(size, offset, format, name);
 }
 
 void CPHDXMLParser::parsePlatformParams(const XMLElem platXML, Bistatic::PlatformParams& plat) const

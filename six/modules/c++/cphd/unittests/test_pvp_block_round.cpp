@@ -205,8 +205,8 @@ TEST_CASE(testPVPBlockAdditional)
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
     cphd::setPVPXML(meta.pvp);
-    meta.pvp.setParameter(1, 27, "F8", "param1");
-    meta.pvp.setParameter(1, 28, "F8", "param2");
+    meta.pvp.setCustomParameter(1, 27, "F8", "param1");
+    meta.pvp.setCustomParameter(1, 28, "F8", "param2");
     meta.data.numBytesPVP += 2*8;
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     std::vector<std::string> addedParams;

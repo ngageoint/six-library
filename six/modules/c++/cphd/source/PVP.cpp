@@ -110,8 +110,14 @@ void Pvp::setOffset(size_t offset, PVPType& param)
     param.setOffset(offset);
 }
 
+void Pvp::append(PVPType& param)
+{
+    size_t currentOffset = mParamLocations.size();
+    setOffset(currentOffset, param);
+}
+
 // Assumes addedPVP is already correct size
-void Pvp::setParameter(size_t size, size_t offset, const std::string& format, const std::string& name)
+void Pvp::setCustomParameter(size_t size, size_t offset, const std::string& format, const std::string& name)
 {
     validate(size, offset);
     validateFormat(format);
@@ -125,14 +131,10 @@ void Pvp::setParameter(size_t size, size_t offset, const std::string& format, co
             "Additional parameter name is not unique"));
 }
 
-size_t Pvp::getAdditionalParamsSize() const
+void Pvp::appendCustomParameter(size_t size, const std::string& format, const std::string& name)
 {
-    size_t res = 0;
-    for (auto it = addedPVP.begin(); it != addedPVP.end(); ++it)
-    {
-        res += it->second.getSize();
-    }
-    return res;
+    size_t currentOffset = mParamLocations.size();
+    setCustomParameter(size, currentOffset, format, name);
 }
 
 void Pvp::setDefaultValues(size_t size, const std::string& format, PVPType& param)
