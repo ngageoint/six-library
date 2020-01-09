@@ -44,6 +44,37 @@ APVPType::APVPType() :
 
 Pvp::Pvp()
 {
+    initialize();
+}
+
+void Pvp::initialize()
+{
+    // Default size and formats for each PVP
+    // listed in Table 11-6 CPHD1.0 Spec
+    setDefaultValues(1,"F8", txTime);
+    setDefaultValues(3,"X=F8;Y=F8;Z=F8;", txPos);
+    setDefaultValues(3,"X=F8;Y=F8;Z=F8;", txVel);
+    setDefaultValues(1,"F8", rcvTime);
+    setDefaultValues(3,"X=F8;Y=F8;Z=F8;", rcvPos);
+    setDefaultValues(3,"X=F8;Y=F8;Z=F8;", rcvVel);
+    setDefaultValues(3,"X=F8;Y=F8;Z=F8;", srpPos);
+    setDefaultValues(1,"F8", ampSF);
+    setDefaultValues(1,"F8", aFDOP);
+    setDefaultValues(1,"F8", aFRR1);
+    setDefaultValues(1,"F8", aFRR2);
+    setDefaultValues(1,"F8", fx1);
+    setDefaultValues(1,"F8", fx2);
+    setDefaultValues(1,"F8", fxN1);
+    setDefaultValues(1,"F8", fxN2);
+    setDefaultValues(1,"F8", toa1);
+    setDefaultValues(1,"F8", toa2);
+    setDefaultValues(1,"F8", toaE1);
+    setDefaultValues(1,"F8", toaE2);
+    setDefaultValues(1,"F8", tdTropoSRP);
+    setDefaultValues(1,"F8", tdIonoSRP);
+    setDefaultValues(1,"F8", sc0);
+    setDefaultValues(1,"F8", scss);
+    setDefaultValues(1,"F8", signal);
 }
 
 void Pvp::validate(size_t size, size_t offset)
@@ -71,37 +102,44 @@ void Pvp::validate(size_t size, size_t offset)
     }
 }
 
-void Pvp::setData(size_t size, size_t offset, const std::string& format, PVPType& param)
+void Pvp::setOffset(size_t offset, PVPType& param)
 {
-    validate(size, offset);
-    validateFormat(format);
-    param.setData(size, offset, format);
+    validate(param.getSize(), offset);
+    validateFormat(param.getFormat());
+    param.setOffset(offset);
+}
+
+void Pvp::append(PVPType& param)
+{
+    size_t currentOffset = mParamLocations.size();
+    setOffset(currentOffset, param);
 }
 
 // Assumes addedPVP is already correct size
-void Pvp::setData(size_t size, size_t offset, const std::string& format, const std::string& name)
+void Pvp::setCustomParameter(size_t size, size_t offset, const std::string& format, const std::string& name)
 {
     validate(size, offset);
     validateFormat(format);
     if (addedPVP.count(name) == 0)
     {
         addedPVP[name] = APVPType();
-        addedPVP.find(name)->second.setData(size, offset, format);
-        addedPVP.find(name)->second.setName(name);
+        addedPVP.find(name)->second.setData(size, offset, format, name);
         return;
     }
     throw except::Exception(Ctxt(
             "Additional parameter name is not unique"));
 }
 
-size_t Pvp::getAdditionalParamsSize() const
+void Pvp::appendCustomParameter(size_t size, const std::string& format, const std::string& name)
 {
-    size_t res = 0;
-    for (auto it = addedPVP.begin(); it != addedPVP.end(); ++it)
-    {
-        res += it->second.getSize();
-    }
-    return res;
+    size_t currentOffset = mParamLocations.size();
+    setCustomParameter(size, currentOffset, format, name);
+}
+
+void Pvp::setDefaultValues(size_t size, const std::string& format, PVPType& param)
+{
+    param.setSize(size);
+    param.setFormat(format);
 }
 
 // Returns num blocks (not bytes)
@@ -112,33 +150,33 @@ size_t Pvp::getReqSetSize() const
             aFDOP.getSize() + aFRR1.getSize() + aFRR2.getSize() + fx1.getSize() +
             fx2.getSize() + toa1.getSize() + toa2.getSize() + tdTropoSRP.getSize() +
             sc0.getSize() + scss.getSize();
-    if(ampSF.get())
+    if(!six::Init::isUndefined<size_t>(ampSF.getOffset()))
     {
-        res += ampSF->getSize();
+        res += ampSF.getSize();
     }
-    if(fxN1.get())
+    if(!six::Init::isUndefined<size_t>(fxN1.getOffset()))
     {
-        res += fxN1->getSize();
+        res += fxN1.getSize();
     }
-    if(fxN2.get())
+    if(!six::Init::isUndefined<size_t>(fxN2.getOffset()))
     {
-        res += fxN2->getSize();
+        res += fxN2.getSize();
     }
-    if(toaE1.get())
+    if(!six::Init::isUndefined<size_t>(toaE1.getOffset()))
     {
-        res += toaE1->getSize();
+        res += toaE1.getSize();
     }
-    if(toaE2.get())
+    if(!six::Init::isUndefined<size_t>(toaE2.getOffset()))
     {
-        res += toaE2->getSize();
+        res += toaE2.getSize();
     }
-    if(tdIonoSRP.get())
+    if(!six::Init::isUndefined<size_t>(tdIonoSRP.getOffset()))
     {
-        res += tdIonoSRP->getSize();
+        res += tdIonoSRP.getSize();
     }
-    if(signal.get())
+    if(!six::Init::isUndefined<size_t>(signal.getOffset()))
     {
-        res += signal->getSize();
+        res += signal.getSize();
     }
     for (auto it = addedPVP.begin(); it != addedPVP.end(); ++it)
     {
@@ -183,35 +221,34 @@ std::ostream& operator<< (std::ostream& os, const Pvp& p)
         << "  SC0           : \n" << p.sc0 << "\n"
         << "  SCSS          : \n" << p.scss << "\n";
 
-    if (p.ampSF.get())
+    if(!six::Init::isUndefined<size_t>(p.ampSF.getOffset()))
     {
-        os << "  AmpSF         : \n" << *p.ampSF << "\n";
+        os << "  AmpSF         : \n" << p.ampSF << "\n";
     }
-    if (p.fxN1.get())
+    if(!six::Init::isUndefined<size_t>(p.fxN1.getOffset()))
     {
-        os << "  FxN1          : \n" << *p.fxN1 << "\n";
+        os << "  FxN1          : \n" << p.fxN1 << "\n";
     }
-    if (p.fxN2.get())
+    if(!six::Init::isUndefined<size_t>(p.fxN2.getOffset()))
     {
-        os << "  FxN2          : \n" << *p.fxN2 << "\n";
+        os << "  FxN2          : \n" << p.fxN2 << "\n";
     }
-    if (p.toaE1.get())
+    if(!six::Init::isUndefined<size_t>(p.toaE1.getOffset()))
     {
-        os << "  TOAE1         : \n" << *p.toaE1 << "\n";
+        os << "  TOAE1         : \n" << p.toaE1 << "\n";
     }
-    if (p.toaE2.get())
+    if(!six::Init::isUndefined<size_t>(p.toaE2.getOffset()))
     {
-        os << "  TOAE2         : \n" << *p.toaE2 << "\n";
+        os << "  TOAE2         : \n" << p.toaE2 << "\n";
     }
-    if (p.tdIonoSRP.get())
+    if(!six::Init::isUndefined<size_t>(p.tdIonoSRP.getOffset()))
     {
-        os << "  TdIonoSRP     : \n" << *p.tdIonoSRP << "\n";
+        os << "  TdIonoSRP     : \n" << p.tdIonoSRP << "\n";
     }
-    if (p.signal.get())
+    if(!six::Init::isUndefined<size_t>(p.signal.getOffset()))
     {
-        os << "  SIGNAL        : \n" << *p.signal << "\n";
+        os << "  SIGNAL        : \n" << p.signal << "\n";
     }
-
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
         os << "  Additional Parameter : " << it->second << "\n";

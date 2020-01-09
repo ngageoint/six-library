@@ -67,20 +67,17 @@ struct PVPType
         return !((*this) == other);
     }
 
-    /*!
-     *  \func setData
-     *
-     *  \brief set PVPType data
-     *
-     *  \param size Size of the expected parameter
-     *  \param offset Offset of the expected parameter
-     *  \param format Format of the expected parameter
-     *   See spec table 10.2 page 120 for allowed binary formats
-     */
-    void setData(size_t size, size_t offset, const std::string& format)
+    //! Setter Functions
+    void setOffset(size_t offset)
+    {
+        mOffset = offset;
+    }
+    void setSize(size_t size)
     {
         mSize = size;
-        mOffset = offset;
+    }
+    void setFormat(const std::string& format)
+    {
         mFormat = format;
     }
 
@@ -89,13 +86,11 @@ struct PVPType
     {
         return mSize;
     }
-
     //! Get size in bytes
     size_t getByteSize() const
     {
         return mSize * WORD_BYTE_SIZE;
     }
-
     //! Get offset
     size_t getOffset() const
     {
@@ -149,15 +144,22 @@ struct APVPType : PVPType
         return !((*this) == other);
     }
 
-    /*
-     *  \func setName
+    /*!
+     *  \func setData
      *
-     *  \brief Set the name of the additional parameter
+     *  \brief set PVPType data
      *
-     *  \param name A unique name for the parameter
+     *  \param size Size of the expected parameter
+     *  \param offset Offset of the expected parameter
+     *  \param format Format of the expected parameter
+     *  \param name Unique name of the expected parameter
+     *   See spec table 10.2 page 120 for allowed binary formats
      */
-    void setName(const std::string& name)
+    void setData(size_t size, size_t offset, const std::string& format, const std::string& name)
     {
+        mSize = size;
+        mOffset = offset;
+        mFormat = format;
         mName = name;
     }
 
@@ -243,7 +245,7 @@ struct Pvp
      *  vector. For signal vector v, each sample value is multiplied by
      *  Amp_SF(v) to yield the proper sample values for the vector.
      */
-    mem::ScopedCopyablePtr<PVPType> ampSF;
+    PVPType ampSF;
 
     /*!
      *  The DOPPLER shift micro parameter. Parameter accounts for the
@@ -292,7 +294,7 @@ struct Pvp
      *  For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
      *  When included in a product, fx_N1 & fx_N2 are both included.
     */
-    mem::ScopedCopyablePtr<PVPType> fxN1;
+    PVPType fxN1;
 
     /*!
      *  (Optional) The FX domain frequency limits for out-of-band noise signal for
@@ -301,7 +303,7 @@ struct Pvp
      *  For any vector: fx_N1 < fx_1 & fx_2 < fx_N2
      *  When included in a product, fx_N1 & fx_N2 are both included.
     */
-    mem::ScopedCopyablePtr<PVPType> fxN2;
+    PVPType fxN2;
 
     /*!
      *  The  change in toa limits for the full resolution echoes retained in the
@@ -322,12 +324,12 @@ struct Pvp
     /*!
      *  (Optional) The TOA limits for all echoes retained in the signal vector (sec).
      */
-    mem::ScopedCopyablePtr<PVPType> toaE1;
+    PVPType toaE1;
 
     /*!
      *  (Optional) The TOA limits for all echoes retained in the signal vector (sec).
      */
-    mem::ScopedCopyablePtr<PVPType> toaE2;
+    PVPType toaE2;
 
     /*!
      *  Two-way time delay due to the troposphere (sec) that was added
@@ -339,7 +341,7 @@ struct Pvp
      *  (Optional) Two-way time delay due to the ionosphere (sec) that was added
      *  when computing the propagation time for the SRP
      */
-    mem::ScopedCopyablePtr<PVPType> tdIonoSRP;
+    PVPType tdIonoSRP;
 
     /*!
      *  FX DOMAIN & TOA DOMAIN: The domain signal vector coordinate value for
@@ -357,14 +359,18 @@ struct Pvp
      *  (Optional) Integer parameter that may be included to indicate the signal
      *  content for some vectors is known or is likely to be distorted.
      */
-    mem::ScopedCopyablePtr<PVPType> signal;
+    PVPType signal;
 
     /*
      *  (Optional) User defined PV parameters
      */
     std::unordered_map<std::string,APVPType> addedPVP;
 
-    //! Default Constructor
+    /*
+     *  \func Constructor
+     *  \brief Initialize default values for each parameter
+     *
+     */
     Pvp();
 
     //! Equality operators
@@ -392,26 +398,33 @@ struct Pvp
     //! Get size of pvp set in blocks
     size_t getReqSetSize() const;
 
-    //! Get size of pvp set in blocks
-    size_t getAdditionalParamsSize() const;
-
     /*
-     *  \func setData
+     *  \func setOffset
      *
-     *  \brief Validate and set the metadata of the specified parameter
+     *  \brief Validate and set the offset of parameters
      *
-     *  \param size The size of the parameter to be expected for the param
      *  \param offset The offset of the parameter to be expected for the param
-     *  \param format The string format of the parameter to be expected for the param
      *  \param[out] param The PVPType parameter that should be set
      *
      *  \throws except::Exception If param offset or size overlaps another parameter, or
      *   if format is invalid
      */
-    void setData(size_t size, size_t offset, const std::string& format, PVPType& param);
+    void setOffset(size_t offset, PVPType& param);
 
     /*
-     *  \func setData
+     *  \func append
+     *
+     *  \brief Validate and append parameter to the next available block
+     *
+     *  \param[out] param The PVPType parameter that should be set
+     *
+     *  \throws except::Exception If param offset or size overlaps another parameter, or
+     *   if format is invalid
+     */
+    void append(PVPType& param);
+
+    /*
+     *  \func setParameter
      *
      *  \brief Validate and set the metadata of an additional parameter identified by name
      *
@@ -423,7 +436,21 @@ struct Pvp
      *  \throws except::Exception If param offset or size overlaps another parameter,
      *   if format is invalid or if name is not unique
      */
-    void setData(size_t size, size_t offset, const std::string& format, const std::string& name);
+    void setCustomParameter(size_t size, size_t offset, const std::string& format, const std::string& name);
+
+    /*
+     *  \func setCustomParameter
+     *
+     *  \brief Validate and append additional parameter to the next available block
+     *
+     *  \param size The size of the parameter to be expected for the param
+     *  \param format The string format of the parameter to be expected for the param
+     *  \param name The unique identifier of the additional parameter that should be set
+     *
+     *  \throws except::Exception If param offset or size overlaps another parameter,
+     *   if format is invalid or if name is not unique
+     */
+    void appendCustomParameter(size_t size, const std::string& format, const std::string& name);
 
 private:
     /*
@@ -435,6 +462,16 @@ private:
      *  Marks filled bytes
      */
     std::vector<bool> mParamLocations;
+
+    /*
+     * Set default size and format for each parameter
+     */
+    void setDefaultValues(size_t size, const std::string& format, PVPType& param);
+
+    /*
+     * Initializes default size and format for parameters
+     */
+    void initialize();
 };
 
 //! Ostream operators

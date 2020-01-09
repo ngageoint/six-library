@@ -104,7 +104,7 @@ struct PVPBlock
      *  The data metadata will also be updated with the number of pvp bytes required
      *  if provided number of bytes is not sufficient
     */
-    PVPBlock(const Pvp& pvp, Data& data);
+    PVPBlock(const Pvp& pvp, const Data& data);
 
     /*!
      *  \func PVPBlock
@@ -262,6 +262,36 @@ struct PVPBlock
      */
     size_t getPVPsize(size_t channel) const;
 
+    //! Get optional parameter flags
+    bool hasAmpSF() const
+    {
+        return mAmpSFEnabled;
+    }
+    bool hasFxN1() const
+    {
+        return mFxN1Enabled;
+    }
+    bool hasFxN2() const
+    {
+        return mFxN2Enabled;
+    }
+    bool hasToaE1() const
+    {
+        return mToaE1Enabled;
+    }
+    bool hasToaE2() const
+    {
+        return mToaE2Enabled;
+    }
+    bool hasTDIonoSRP() const
+    {
+        return mTDIonoSRPEnabled;
+    }
+    bool hasSignal() const
+    {
+        return mSignalEnabled;
+    }
+
     /*
      *  \func load
      *
@@ -319,13 +349,14 @@ protected:
          *
          *  \brief Writes binary data input into PVP Set
          *
+         *  \param pvpBlock A pvpBlock struct to access optional parameter flags
          *  \param pvp A filled out pvp sturcture. This will be used for
          *  information on where to allocate memory and set each
          *  parameter in a PVP set.
          *  \param input A pointer to an array of bytes that contains the
          *  parameter data to write into the pvp set
          */
-        void write(const Pvp& pvp, const sys::byte* input);
+        void write(const PVPBlock& pvpBlock, const Pvp& pvp, const sys::byte* input);
 
         /*
          *  \func read
@@ -402,6 +433,18 @@ private:
     size_t mNumBytesPerVector;
     //! PVP block metadata
     Pvp mPvp;
+
+    /*
+     *  Optional parameter flags
+     */
+    bool mAmpSFEnabled;
+    bool mFxN1Enabled;
+    bool mFxN2Enabled;
+    bool mToaE1Enabled;
+    bool mToaE2Enabled;
+    bool mTDIonoSRPEnabled;
+    bool mSignalEnabled;
+
     //! Ostream operator
     friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);
 };

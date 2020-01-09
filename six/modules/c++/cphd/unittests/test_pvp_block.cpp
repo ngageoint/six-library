@@ -128,15 +128,12 @@ TEST_CASE(testPvpOptional)
 {
     cphd::Pvp pvp;
     cphd::setPVPXML(pvp);
-    pvp.ampSF.reset(new cphd::PVPType());
-    pvp.setData(1, 28, "F8", *pvp.ampSF);
-    pvp.fxN1.reset(new cphd::PVPType());
-    pvp.setData(1, 27, "F8", *pvp.fxN1);
-    pvp.fxN2.reset(new cphd::PVPType());
-    pvp.setData(1, 29, "F8", *pvp.fxN2);
-    pvp.setData(1, 30, "F8", "Param1");
-    pvp.setData(1, 31, "S10", "Param2");
-    pvp.setData(1, 32, "CI16", "Param3");
+    pvp.setOffset(28, pvp.ampSF);
+    pvp.setOffset(27, pvp.fxN1);
+    pvp.setOffset(29, pvp.fxN2);
+    pvp.setCustomParameter(1, 30, "F8", "Param1");
+    pvp.setCustomParameter(1, 31, "S10", "Param2");
+    pvp.setCustomParameter(1, 32, "CI16", "Param3");
     cphd::PVPBlock pvpBlock(NUM_CHANNELS,
                             std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                             pvp);
@@ -174,20 +171,16 @@ TEST_CASE(testPvpThrow)
 {
     cphd::Pvp pvp;
     cphd::setPVPXML(pvp);
-    pvp.ampSF.reset(new cphd::PVPType());
-    pvp.setData(1, 29, "F8", *pvp.ampSF);
-    pvp.fxN1.reset(new cphd::PVPType());
-    pvp.setData(1, 28, "F8", *pvp.fxN1);
-    pvp.toaE1.reset(new cphd::PVPType());
-    TEST_EXCEPTION(pvp.setData(1, 15, "F8", *pvp.toaE1)); // Overwrite block
-    TEST_EXCEPTION(pvp.setData(3, 27, "F8", *pvp.toaE1)); // Overwrite block
-    pvp.setData(1, 27, "F8", *pvp.toaE1);
+    pvp.setOffset(29, pvp.ampSF);
+    pvp.setOffset(28, pvp.fxN1);
+    TEST_EXCEPTION(pvp.setOffset(15, pvp.toaE1)); // Overwrite block
+    pvp.setOffset(27, pvp.toaE1);
 
-    pvp.setData(1, 30, "F8", "Param1");
-    pvp.setData(1, 31, "F8", "Param2");
-    TEST_EXCEPTION(pvp.setData(1, 30, "F8", "Param1")); //Rewriting to existing memory block
-    TEST_EXCEPTION(pvp.setData(1, 30, "X=F8;YF8;", "Param1")); //
-    TEST_EXCEPTION(pvp.setData(1, 30, "X=F8;Y=F8;Z=", "Param1"));
+    pvp.setCustomParameter(1, 30, "F8", "Param1");
+    pvp.setCustomParameter(1, 31, "F8", "Param2");
+    TEST_EXCEPTION(pvp.setCustomParameter(1, 30, "F8", "Param1")); //Rewriting to existing memory block
+    TEST_EXCEPTION(pvp.setCustomParameter(1, 30, "X=F8;YF8;", "Param1")); //
+    TEST_EXCEPTION(pvp.setCustomParameter(1, 30, "X=F8;Y=F8;Z=", "Param1"));
 
     cphd::PVPBlock pvpBlock(NUM_CHANNELS,
                             std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
@@ -225,7 +218,7 @@ TEST_CASE(testPvpThrow)
 
     cphd::Pvp pvp2;
     cphd::setPVPXML(pvp2);
-    pvp2.setData(1, 27, "F8", "Param1");
+    pvp2.setCustomParameter(1, 27, "F8", "Param1");
     cphd::PVPBlock pvpBlock2(NUM_CHANNELS,
                              std::vector<size_t>(NUM_CHANNELS,NUM_VECTORS),
                              pvp2);
@@ -241,53 +234,28 @@ TEST_CASE(testPvpThrow)
             pvpBlock2.getAddedPVP<double>(channel, vector, "Param1");
         }
     }
-
-    cphd::Pvp pvp3;
-    cphd::setPVPXML(pvp3);
-    pvp3.setData(1, 27, "F8", "Param1");
-    cphd::PVPBlock pvpBlock3(NUM_CHANNELS,
-                             std::vector<size_t>(NUM_CHANNELS,NUM_VECTORS),
-                             pvp3);
-
-        for (size_t channel = 0; channel < NUM_CHANNELS; ++channel)
-    {
-        for (size_t vector = 0; vector < NUM_VECTORS; ++vector)
-        {
-            cphd::setVectorParameters(channel, vector, pvpBlock3);
-
-            const double addedParam1 = cphd::getRandom();
-            pvpBlock3.setAddedPVP(addedParam1, channel, vector, "Param1");
-            pvpBlock3.getAddedPVP<double>(channel, vector, "Param1");
-        }
-    }
 }
 
 TEST_CASE(testPvpEquality)
 {
     cphd::Pvp pvp1;
     cphd::setPVPXML(pvp1);
-    pvp1.ampSF.reset(new cphd::PVPType());
-    pvp1.setData(1, 28, "F8", *pvp1.ampSF);
-    pvp1.fxN1.reset(new cphd::PVPType());
-    pvp1.setData(1, 27, "F8", *pvp1.fxN1);
-    pvp1.fxN2.reset(new cphd::PVPType());
-    pvp1.setData(1, 29, "F8", *pvp1.fxN2);
-    pvp1.setData(1, 30, "F8", "Param1");
-    pvp1.setData(1, 31, "CI8", "Param2");
+    pvp1.setOffset(28, pvp1.ampSF);
+    pvp1.setOffset(27, pvp1.fxN1);
+    pvp1.setOffset(29, pvp1.fxN2);
+    pvp1.setCustomParameter(1, 30, "F8", "Param1");
+    pvp1.setCustomParameter(1, 31, "CI8", "Param2");
     cphd::PVPBlock pvpBlock1(NUM_CHANNELS,
                              std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                              pvp1);
 
     cphd::Pvp pvp2;
     cphd::setPVPXML(pvp2);
-    pvp2.ampSF.reset(new cphd::PVPType());
-    pvp2.setData(1, 28, "F8", *pvp2.ampSF);
-    pvp2.fxN1.reset(new cphd::PVPType());
-    pvp2.setData(1, 27, "F8", *pvp2.fxN1);
-    pvp2.fxN2.reset(new cphd::PVPType());
-    pvp2.setData(1, 29, "F8", *pvp2.fxN2);
-    pvp2.setData(1, 30, "F8", "Param1");
-    pvp2.setData(1, 31, "CI8", "Param2");
+    pvp2.setOffset(28, pvp2.ampSF);
+    pvp2.setOffset(27, pvp2.fxN1);
+    pvp2.setOffset(29, pvp2.fxN2);
+    pvp2.setCustomParameter(1, 30, "F8", "Param1");
+    pvp2.setCustomParameter(1, 31, "CI8", "Param2");
     cphd::PVPBlock pvpBlock2(NUM_CHANNELS,
                              std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                              pvp2);
