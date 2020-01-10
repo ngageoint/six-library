@@ -134,26 +134,21 @@ def run(sourceDir):
 
     utils.setPaths()
 
-    if platform.system() != 'SunOS':
+    if makeRegressionFiles.run() == False:
+        print('Error generating regression files')
+        return False
 
-        if makeRegressionFiles.run() == False:
-            print('Error generating regression files')
-            return False
+    if runPythonScripts.run() == False:
+        print('Error running a python script')
+        return False
 
-        if runPythonScripts.run() == False:
-            print('Error running a python script')
-            return False
+    if checkNITFs.run() == False:
+        print('test in checkNITFS.py failed')
+        return False
 
-        if checkNITFs.run() == False:
-            print('test in checkNITFS.py failed')
-            return False
-
-        if runMiscTests.run() == False:
-            # These tests should report their own errors
-            return False
-    else:
-        print('Warning: skipping the bulk of the test suite, '
-              'since Python modules are by default disabled on Solaris')
+    if runMiscTests.run() == False:
+        # These tests should report their own errors
+        return False
 
     sicdTestDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
     siddTestDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')

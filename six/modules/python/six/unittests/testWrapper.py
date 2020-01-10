@@ -5,6 +5,7 @@ import numpy
 from coda.math_poly import Poly1D, Poly2D
 from pysix.wrapper import wrap, unwrap
 from pysix.six_sicd import *
+from pysix.six_base import *
 
 class TestWrapping(unittest.TestCase):
 
