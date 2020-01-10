@@ -3,6 +3,7 @@ import numpy
 import types
 from coda.math_poly import Poly1D, Poly2D
 from pysix.six_sicd import *
+from pysix.six_base import *
 
 def getMemberVariables(obj):
     members = []
@@ -34,8 +35,7 @@ def isVector(value):
             'Vector3' not in type(value).__name__)
 
 def isLikeAPrimitive(value):
-    return isinstance(value, (types.IntType, types.FloatType, types.StringType,
-            types.NoneType, types.BooleanType, types.TupleType, types.LongType))
+    return isinstance(value, (int, float, str, type(None), bool, tuple))
 
 def wrapVector(vector):
     wrappedVector = []
