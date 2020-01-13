@@ -109,12 +109,12 @@ class SwigPyIterator(_object):
     __swig_destroy__ = _cphd.delete_SwigPyIterator
     __del__ = lambda self: None
 
-    def value(self):
+    def value(self) -> "PyObject *":
         """value(SwigPyIterator self) -> PyObject *"""
         return _cphd.SwigPyIterator_value(self)
 
 
-    def incr(self, n=1):
+    def incr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
         """
         incr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         incr(SwigPyIterator self) -> SwigPyIterator
@@ -122,7 +122,7 @@ class SwigPyIterator(_object):
         return _cphd.SwigPyIterator_incr(self, n)
 
 
-    def decr(self, n=1):
+    def decr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
         """
         decr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         decr(SwigPyIterator self) -> SwigPyIterator
@@ -130,67 +130,67 @@ class SwigPyIterator(_object):
         return _cphd.SwigPyIterator_decr(self, n)
 
 
-    def distance(self, x):
+    def distance(self, x: 'SwigPyIterator') -> "ptrdiff_t":
         """distance(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t"""
         return _cphd.SwigPyIterator_distance(self, x)
 
 
-    def equal(self, x):
+    def equal(self, x: 'SwigPyIterator') -> "bool":
         """equal(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _cphd.SwigPyIterator_equal(self, x)
 
 
-    def copy(self):
+    def copy(self) -> "swig::SwigPyIterator *":
         """copy(SwigPyIterator self) -> SwigPyIterator"""
         return _cphd.SwigPyIterator_copy(self)
 
 
-    def next(self):
+    def next(self) -> "PyObject *":
         """next(SwigPyIterator self) -> PyObject *"""
         return _cphd.SwigPyIterator_next(self)
 
 
-    def __next__(self):
+    def __next__(self) -> "PyObject *":
         """__next__(SwigPyIterator self) -> PyObject *"""
         return _cphd.SwigPyIterator___next__(self)
 
 
-    def previous(self):
+    def previous(self) -> "PyObject *":
         """previous(SwigPyIterator self) -> PyObject *"""
         return _cphd.SwigPyIterator_previous(self)
 
 
-    def advance(self, n):
+    def advance(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
         """advance(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _cphd.SwigPyIterator_advance(self, n)
 
 
-    def __eq__(self, x):
+    def __eq__(self, x: 'SwigPyIterator') -> "bool":
         """__eq__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _cphd.SwigPyIterator___eq__(self, x)
 
 
-    def __ne__(self, x):
+    def __ne__(self, x: 'SwigPyIterator') -> "bool":
         """__ne__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _cphd.SwigPyIterator___ne__(self, x)
 
 
-    def __iadd__(self, n):
+    def __iadd__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
         """__iadd__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _cphd.SwigPyIterator___iadd__(self, n)
 
 
-    def __isub__(self, n):
+    def __isub__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
         """__isub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _cphd.SwigPyIterator___isub__(self, n)
 
 
-    def __add__(self, n):
+    def __add__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
         """__add__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _cphd.SwigPyIterator___add__(self, n)
 
 
-    def __sub__(self, *args):
+    def __sub__(self, *args) -> "ptrdiff_t":
         """
         __sub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator
         __sub__(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t
@@ -237,12 +237,12 @@ class SampleType(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(SampleType self) -> std::string"""
         return _cphd.SampleType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(SampleType self, SampleType o) -> bool
         __eq__(SampleType self, int const & o) -> bool
@@ -250,7 +250,7 @@ class SampleType(_object):
         return _cphd.SampleType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(SampleType self, SampleType o) -> bool
         __ne__(SampleType self, int const & o) -> bool
@@ -258,22 +258,22 @@ class SampleType(_object):
         return _cphd.SampleType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'SampleType') -> "bool":
         """__lt__(SampleType self, SampleType o) -> bool"""
         return _cphd.SampleType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'SampleType') -> "bool":
         """__gt__(SampleType self, SampleType o) -> bool"""
         return _cphd.SampleType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'SampleType') -> "bool":
         """__le__(SampleType self, SampleType o) -> bool"""
         return _cphd.SampleType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'SampleType') -> "bool":
         """__ge__(SampleType self, SampleType o) -> bool"""
         return _cphd.SampleType___ge__(self, o)
 
@@ -312,12 +312,12 @@ class DomainType(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(DomainType self) -> std::string"""
         return _cphd.DomainType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(DomainType self, DomainType o) -> bool
         __eq__(DomainType self, int const & o) -> bool
@@ -325,7 +325,7 @@ class DomainType(_object):
         return _cphd.DomainType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(DomainType self, DomainType o) -> bool
         __ne__(DomainType self, int const & o) -> bool
@@ -333,22 +333,22 @@ class DomainType(_object):
         return _cphd.DomainType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'DomainType') -> "bool":
         """__lt__(DomainType self, DomainType o) -> bool"""
         return _cphd.DomainType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'DomainType') -> "bool":
         """__gt__(DomainType self, DomainType o) -> bool"""
         return _cphd.DomainType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'DomainType') -> "bool":
         """__le__(DomainType self, DomainType o) -> bool"""
         return _cphd.DomainType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'DomainType') -> "bool":
         """__ge__(DomainType self, DomainType o) -> bool"""
         return _cphd.DomainType___ge__(self, o)
 
@@ -385,12 +385,12 @@ class PhaseSGN(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(PhaseSGN self) -> std::string"""
         return _cphd.PhaseSGN_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(PhaseSGN self, PhaseSGN o) -> bool
         __eq__(PhaseSGN self, int const & o) -> bool
@@ -398,7 +398,7 @@ class PhaseSGN(_object):
         return _cphd.PhaseSGN___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(PhaseSGN self, PhaseSGN o) -> bool
         __ne__(PhaseSGN self, int const & o) -> bool
@@ -406,22 +406,22 @@ class PhaseSGN(_object):
         return _cphd.PhaseSGN___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'PhaseSGN') -> "bool":
         """__lt__(PhaseSGN self, PhaseSGN o) -> bool"""
         return _cphd.PhaseSGN___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'PhaseSGN') -> "bool":
         """__gt__(PhaseSGN self, PhaseSGN o) -> bool"""
         return _cphd.PhaseSGN___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'PhaseSGN') -> "bool":
         """__le__(PhaseSGN self, PhaseSGN o) -> bool"""
         return _cphd.PhaseSGN___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'PhaseSGN') -> "bool":
         """__ge__(PhaseSGN self, PhaseSGN o) -> bool"""
         return _cphd.PhaseSGN___ge__(self, o)
 
@@ -460,12 +460,12 @@ class SRPType(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(SRPType self) -> std::string"""
         return _cphd.SRPType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(SRPType self, SRPType o) -> bool
         __eq__(SRPType self, int const & o) -> bool
@@ -473,7 +473,7 @@ class SRPType(_object):
         return _cphd.SRPType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(SRPType self, SRPType o) -> bool
         __ne__(SRPType self, int const & o) -> bool
@@ -481,22 +481,22 @@ class SRPType(_object):
         return _cphd.SRPType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'SRPType') -> "bool":
         """__lt__(SRPType self, SRPType o) -> bool"""
         return _cphd.SRPType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'SRPType') -> "bool":
         """__gt__(SRPType self, SRPType o) -> bool"""
         return _cphd.SRPType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'SRPType') -> "bool":
         """__le__(SRPType self, SRPType o) -> bool"""
         return _cphd.SRPType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'SRPType') -> "bool":
         """__ge__(SRPType self, SRPType o) -> bool"""
         return _cphd.SRPType___ge__(self, o)
 
@@ -526,34 +526,34 @@ class FileHeader(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def isCPHD(inStream):
+    def isCPHD(inStream: 'SeekableInputStream') -> "bool":
         """isCPHD(SeekableInputStream inStream) -> bool"""
         return _cphd.FileHeader_isCPHD(inStream)
 
     isCPHD = staticmethod(isCPHD)
 
-    def readVersion(inStream):
+    def readVersion(inStream: 'SeekableInputStream') -> "std::string":
         """readVersion(SeekableInputStream inStream) -> std::string"""
         return _cphd.FileHeader_readVersion(inStream)
 
     readVersion = staticmethod(readVersion)
 
-    def read(self, inStream):
+    def read(self, inStream: 'SeekableInputStream') -> "void":
         """read(FileHeader self, SeekableInputStream inStream)"""
         return _cphd.FileHeader_read(self, inStream)
 
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(FileHeader self) -> std::string"""
         return _cphd.FileHeader_toString(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(FileHeader self) -> size_t"""
         return _cphd.FileHeader_size(self)
 
 
-    def set(self, *args):
+    def set(self, *args) -> "size_t":
         """
         set(FileHeader self) -> size_t
         set(FileHeader self, sys::Off_T xmlSize, sys::Off_T vbmSize, sys::Off_T cphdSize) -> size_t
@@ -561,92 +561,92 @@ class FileHeader(_object):
         return _cphd.FileHeader_set(self, *args)
 
 
-    def setXMLsize(self, size):
+    def setXMLsize(self, size: 'sys::Off_T') -> "void":
         """setXMLsize(FileHeader self, sys::Off_T size)"""
         return _cphd.FileHeader_setXMLsize(self, size)
 
 
-    def setVBMsize(self, size):
+    def setVBMsize(self, size: 'sys::Off_T') -> "void":
         """setVBMsize(FileHeader self, sys::Off_T size)"""
         return _cphd.FileHeader_setVBMsize(self, size)
 
 
-    def setCPHDsize(self, size):
+    def setCPHDsize(self, size: 'sys::Off_T') -> "void":
         """setCPHDsize(FileHeader self, sys::Off_T size)"""
         return _cphd.FileHeader_setCPHDsize(self, size)
 
 
-    def setXMLoffset(self, offset):
+    def setXMLoffset(self, offset: 'sys::Off_T') -> "void":
         """setXMLoffset(FileHeader self, sys::Off_T offset)"""
         return _cphd.FileHeader_setXMLoffset(self, offset)
 
 
-    def setVBMoffset(self, offset):
+    def setVBMoffset(self, offset: 'sys::Off_T') -> "void":
         """setVBMoffset(FileHeader self, sys::Off_T offset)"""
         return _cphd.FileHeader_setVBMoffset(self, offset)
 
 
-    def setCPHDoffset(self, offset):
+    def setCPHDoffset(self, offset: 'sys::Off_T') -> "void":
         """setCPHDoffset(FileHeader self, sys::Off_T offset)"""
         return _cphd.FileHeader_setCPHDoffset(self, offset)
 
 
-    def getXMLsize(self):
+    def getXMLsize(self) -> "sys::Off_T":
         """getXMLsize(FileHeader self) -> sys::Off_T"""
         return _cphd.FileHeader_getXMLsize(self)
 
 
-    def getVBMsize(self):
+    def getVBMsize(self) -> "sys::Off_T":
         """getVBMsize(FileHeader self) -> sys::Off_T"""
         return _cphd.FileHeader_getVBMsize(self)
 
 
-    def getCPHDsize(self):
+    def getCPHDsize(self) -> "sys::Off_T":
         """getCPHDsize(FileHeader self) -> sys::Off_T"""
         return _cphd.FileHeader_getCPHDsize(self)
 
 
-    def getXMLoffset(self):
+    def getXMLoffset(self) -> "sys::Off_T":
         """getXMLoffset(FileHeader self) -> sys::Off_T"""
         return _cphd.FileHeader_getXMLoffset(self)
 
 
-    def getVBMoffset(self):
+    def getVBMoffset(self) -> "sys::Off_T":
         """getVBMoffset(FileHeader self) -> sys::Off_T"""
         return _cphd.FileHeader_getVBMoffset(self)
 
 
-    def getCPHDoffset(self):
+    def getCPHDoffset(self) -> "sys::Off_T":
         """getCPHDoffset(FileHeader self) -> sys::Off_T"""
         return _cphd.FileHeader_getCPHDoffset(self)
 
 
-    def getPadBytes(self):
+    def getPadBytes(self) -> "sys::Off_T":
         """getPadBytes(FileHeader self) -> sys::Off_T"""
         return _cphd.FileHeader_getPadBytes(self)
 
 
-    def setClassification(self, str):
+    def setClassification(self, str: 'std::string const &') -> "void":
         """setClassification(FileHeader self, std::string const & str)"""
         return _cphd.FileHeader_setClassification(self, str)
 
 
-    def setReleaseInfo(self, str):
+    def setReleaseInfo(self, str: 'std::string const &') -> "void":
         """setReleaseInfo(FileHeader self, std::string const & str)"""
         return _cphd.FileHeader_setReleaseInfo(self, str)
 
 
-    def getClassification(self):
+    def getClassification(self) -> "std::string":
         """getClassification(FileHeader self) -> std::string"""
         return _cphd.FileHeader_getClassification(self)
 
 
-    def getReleaseInfo(self):
+    def getReleaseInfo(self) -> "std::string":
         """getReleaseInfo(FileHeader self) -> std::string"""
         return _cphd.FileHeader_getReleaseInfo(self)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(FileHeader self) -> std::string"""
         return _cphd.FileHeader___str__(self)
 
@@ -661,11 +661,11 @@ FileHeader.LINE_TERMINATOR = _cphd.cvar.FileHeader_LINE_TERMINATOR
 FileHeader.SECTION_TERMINATOR = _cphd.cvar.FileHeader_SECTION_TERMINATOR
 FileHeader.MAX_HEADER_SIZE = _cphd.cvar.FileHeader_MAX_HEADER_SIZE
 
-def FileHeader_isCPHD(inStream):
+def FileHeader_isCPHD(inStream: 'SeekableInputStream') -> "bool":
     """FileHeader_isCPHD(SeekableInputStream inStream) -> bool"""
     return _cphd.FileHeader_isCPHD(inStream)
 
-def FileHeader_readVersion(inStream):
+def FileHeader_readVersion(inStream: 'SeekableInputStream') -> "std::string":
     """FileHeader_readVersion(SeekableInputStream inStream) -> std::string"""
     return _cphd.FileHeader_readVersion(inStream)
 
@@ -686,12 +686,12 @@ class DwellTimeParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'DwellTimeParameters') -> "bool":
         """__eq__(DwellTimeParameters self, DwellTimeParameters other) -> bool"""
         return _cphd.DwellTimeParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'DwellTimeParameters') -> "bool":
         """__ne__(DwellTimeParameters self, DwellTimeParameters other) -> bool"""
         return _cphd.DwellTimeParameters___ne__(self, other)
 
@@ -725,12 +725,12 @@ class AreaPlane(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'AreaPlane') -> "bool":
         """__eq__(AreaPlane self, AreaPlane other) -> bool"""
         return _cphd.AreaPlane___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'AreaPlane') -> "bool":
         """__ne__(AreaPlane self, AreaPlane other) -> bool"""
         return _cphd.AreaPlane___ne__(self, other)
 
@@ -772,12 +772,12 @@ class ImageArea(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'ImageArea') -> "bool":
         """__eq__(ImageArea self, ImageArea other) -> bool"""
         return _cphd.ImageArea___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'ImageArea') -> "bool":
         """__ne__(ImageArea self, ImageArea other) -> bool"""
         return _cphd.ImageArea___ne__(self, other)
 
@@ -811,12 +811,12 @@ class Global(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'Global') -> "bool":
         """__eq__(Global self, Global other) -> bool"""
         return _cphd.Global___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'Global') -> "bool":
         """__ne__(Global self, Global other) -> bool"""
         return _cphd.Global___ne__(self, other)
 
@@ -874,12 +874,12 @@ class ChannelParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'ChannelParameters') -> "bool":
         """__eq__(ChannelParameters self, ChannelParameters other) -> bool"""
         return _cphd.ChannelParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'ChannelParameters') -> "bool":
         """__ne__(ChannelParameters self, ChannelParameters other) -> bool"""
         return _cphd.ChannelParameters___ne__(self, other)
 
@@ -939,12 +939,12 @@ class Channel(_object):
     __swig_destroy__ = _cphd.delete_Channel
     __del__ = lambda self: None
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'Channel') -> "bool":
         """__eq__(Channel self, Channel other) -> bool"""
         return _cphd.Channel___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'Channel') -> "bool":
         """__ne__(Channel self, Channel other) -> bool"""
         return _cphd.Channel___ne__(self, other)
 
@@ -972,12 +972,12 @@ class SRP(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'SRP') -> "bool":
         """__eq__(SRP self, SRP other) -> bool"""
         return _cphd.SRP___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'SRP') -> "bool":
         """__ne__(SRP self, SRP other) -> bool"""
         return _cphd.SRP___ne__(self, other)
 
@@ -1023,12 +1023,12 @@ class CphdAntenna(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'CphdAntenna') -> "bool":
         """__eq__(CphdAntenna self, CphdAntenna other) -> bool"""
         return _cphd.CphdAntenna___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'CphdAntenna') -> "bool":
         """__ne__(CphdAntenna self, CphdAntenna other) -> bool"""
         return _cphd.CphdAntenna___ne__(self, other)
 
@@ -1078,12 +1078,12 @@ class FxParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'FxParameters') -> "bool":
         """__eq__(FxParameters self, FxParameters other) -> bool"""
         return _cphd.FxParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'FxParameters') -> "bool":
         """__ne__(FxParameters self, FxParameters other) -> bool"""
         return _cphd.FxParameters___ne__(self, other)
 
@@ -1125,12 +1125,12 @@ class TOAParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'TOAParameters') -> "bool":
         """__eq__(TOAParameters self, TOAParameters other) -> bool"""
         return _cphd.TOAParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'TOAParameters') -> "bool":
         """__ne__(TOAParameters self, TOAParameters other) -> bool"""
         return _cphd.TOAParameters___ne__(self, other)
 
@@ -1164,87 +1164,87 @@ class VectorParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def txTimeOffset(self):
+    def txTimeOffset(self) -> "sys::Off_T":
         """txTimeOffset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_txTimeOffset(self)
 
 
-    def txPosOffset(self):
+    def txPosOffset(self) -> "sys::Off_T":
         """txPosOffset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_txPosOffset(self)
 
 
-    def rcvTimeOffset(self):
+    def rcvTimeOffset(self) -> "sys::Off_T":
         """rcvTimeOffset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_rcvTimeOffset(self)
 
 
-    def rcvPosOffset(self):
+    def rcvPosOffset(self) -> "sys::Off_T":
         """rcvPosOffset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_rcvPosOffset(self)
 
 
-    def srpTimeOffset(self):
+    def srpTimeOffset(self) -> "sys::Off_T":
         """srpTimeOffset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_srpTimeOffset(self)
 
 
-    def srpPosOffset(self):
+    def srpPosOffset(self) -> "sys::Off_T":
         """srpPosOffset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_srpPosOffset(self)
 
 
-    def tropoSRPOffset(self):
+    def tropoSRPOffset(self) -> "sys::Off_T":
         """tropoSRPOffset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_tropoSRPOffset(self)
 
 
-    def ampSFOffset(self):
+    def ampSFOffset(self) -> "sys::Off_T":
         """ampSFOffset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_ampSFOffset(self)
 
 
-    def Fx0Offset(self):
+    def Fx0Offset(self) -> "sys::Off_T":
         """Fx0Offset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_Fx0Offset(self)
 
 
-    def FxSSOffset(self):
+    def FxSSOffset(self) -> "sys::Off_T":
         """FxSSOffset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_FxSSOffset(self)
 
 
-    def Fx1Offset(self):
+    def Fx1Offset(self) -> "sys::Off_T":
         """Fx1Offset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_Fx1Offset(self)
 
 
-    def Fx2Offset(self):
+    def Fx2Offset(self) -> "sys::Off_T":
         """Fx2Offset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_Fx2Offset(self)
 
 
-    def deltaTOA0Offset(self):
+    def deltaTOA0Offset(self) -> "sys::Off_T":
         """deltaTOA0Offset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_deltaTOA0Offset(self)
 
 
-    def toaSSOffset(self):
+    def toaSSOffset(self) -> "sys::Off_T":
         """toaSSOffset(VectorParameters self) -> sys::Off_T"""
         return _cphd.VectorParameters_toaSSOffset(self)
 
 
-    def clearAmpSF(self):
+    def clearAmpSF(self) -> "void":
         """clearAmpSF(VectorParameters self)"""
         return _cphd.VectorParameters_clearAmpSF(self)
 
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'VectorParameters') -> "bool":
         """__eq__(VectorParameters self, VectorParameters other) -> bool"""
         return _cphd.VectorParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'VectorParameters') -> "bool":
         """__ne__(VectorParameters self, VectorParameters other) -> bool"""
         return _cphd.VectorParameters___ne__(self, other)
 
@@ -1310,52 +1310,52 @@ class Metadata(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def setSampleType(self, sampleType):
+    def setSampleType(self, sampleType: 'SampleType') -> "void":
         """setSampleType(Metadata self, SampleType sampleType)"""
         return _cphd.Metadata_setSampleType(self, sampleType)
 
 
-    def getSampleType(self):
+    def getSampleType(self) -> "cphd::SampleType":
         """getSampleType(Metadata self) -> SampleType"""
         return _cphd.Metadata_getSampleType(self)
 
 
-    def getNumChannels(self):
+    def getNumChannels(self) -> "size_t":
         """getNumChannels(Metadata self) -> size_t"""
         return _cphd.Metadata_getNumChannels(self)
 
 
-    def getNumVectors(self, channel):
+    def getNumVectors(self, channel: 'size_t') -> "size_t":
         """getNumVectors(Metadata self, size_t channel) -> size_t"""
         return _cphd.Metadata_getNumVectors(self, channel)
 
 
-    def getNumSamples(self, channel):
+    def getNumSamples(self, channel: 'size_t') -> "size_t":
         """getNumSamples(Metadata self, size_t channel) -> size_t"""
         return _cphd.Metadata_getNumSamples(self, channel)
 
 
-    def getNumBytesPerSample(self):
+    def getNumBytesPerSample(self) -> "size_t":
         """getNumBytesPerSample(Metadata self) -> size_t"""
         return _cphd.Metadata_getNumBytesPerSample(self)
 
 
-    def isFX(self):
+    def isFX(self) -> "bool":
         """isFX(Metadata self) -> bool"""
         return _cphd.Metadata_isFX(self)
 
 
-    def isTOA(self):
+    def isTOA(self) -> "bool":
         """isTOA(Metadata self) -> bool"""
         return _cphd.Metadata_isTOA(self)
 
 
-    def getDomainTypeString(self):
+    def getDomainTypeString(self) -> "std::string":
         """getDomainTypeString(Metadata self) -> std::string"""
         return _cphd.Metadata_getDomainTypeString(self)
 
 
-    def getDomainType(self):
+    def getDomainType(self) -> "cphd::DomainType":
         """getDomainType(Metadata self) -> DomainType"""
         return _cphd.Metadata_getDomainType(self)
 
@@ -1388,17 +1388,17 @@ class Metadata(_object):
     if _newclass:
         vectorParameters = _swig_property(_cphd.Metadata_vectorParameters_get, _cphd.Metadata_vectorParameters_set)
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'Metadata') -> "bool":
         """__eq__(Metadata self, Metadata other) -> bool"""
         return _cphd.Metadata___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'Metadata') -> "bool":
         """__ne__(Metadata self, Metadata other) -> bool"""
         return _cphd.Metadata___ne__(self, other)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Metadata self) -> std::string"""
         return _cphd.Metadata___str__(self)
 
@@ -1416,7 +1416,7 @@ class ArraySize(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, ArraySize, name)
     __repr__ = _swig_repr
 
-    def __init__(self, v=0, s=0):
+    def __init__(self, v: 'size_t'=0, s: 'size_t'=0):
         """
         __init__(cphd::ArraySize self, size_t v=0, size_t s=0) -> ArraySize
         __init__(cphd::ArraySize self, size_t v=0) -> ArraySize
@@ -1428,12 +1428,12 @@ class ArraySize(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'ArraySize') -> "bool":
         """__eq__(ArraySize self, ArraySize other) -> bool"""
         return _cphd.ArraySize___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'ArraySize') -> "bool":
         """__ne__(ArraySize self, ArraySize other) -> bool"""
         return _cphd.ArraySize___ne__(self, other)
 
@@ -1467,42 +1467,42 @@ class Data(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getNumChannels(self):
+    def getNumChannels(self) -> "size_t":
         """getNumChannels(Data self) -> size_t"""
         return _cphd.Data_getNumChannels(self)
 
 
-    def getNumVectors(self, channel):
+    def getNumVectors(self, channel: 'size_t') -> "size_t":
         """getNumVectors(Data self, size_t channel) -> size_t"""
         return _cphd.Data_getNumVectors(self, channel)
 
 
-    def getNumSamples(self, channel):
+    def getNumSamples(self, channel: 'size_t') -> "size_t":
         """getNumSamples(Data self, size_t channel) -> size_t"""
         return _cphd.Data_getNumSamples(self, channel)
 
 
-    def getNumBytesPerSample(self):
+    def getNumBytesPerSample(self) -> "size_t":
         """getNumBytesPerSample(Data self) -> size_t"""
         return _cphd.Data_getNumBytesPerSample(self)
 
 
-    def getNumBytesVBP(self):
+    def getNumBytesVBP(self) -> "size_t":
         """getNumBytesVBP(Data self) -> size_t"""
         return _cphd.Data_getNumBytesVBP(self)
 
 
-    def setNumBytesVBP(self, n):
+    def setNumBytesVBP(self, n: 'size_t') -> "void":
         """setNumBytesVBP(Data self, size_t n)"""
         return _cphd.Data_setNumBytesVBP(self, n)
 
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'Data') -> "bool":
         """__eq__(Data self, Data other) -> bool"""
         return _cphd.Data___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'Data') -> "bool":
         """__ne__(Data self, Data other) -> bool"""
         return _cphd.Data___ne__(self, other)
 
@@ -1528,7 +1528,7 @@ Data_swigregister = _cphd.Data_swigregister
 Data_swigregister(Data)
 
 
-def __lshift__(*args):
+def __lshift__(*args) -> "std::ostream &":
     """
     __lshift__(std::ostream & os, DwellTimeParameters d) -> std::ostream
     __lshift__(std::ostream & os, AreaPlane d) -> std::ostream
@@ -1568,207 +1568,207 @@ class VBM(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getTxTime(self, channel, vector):
+    def getTxTime(self, channel: 'size_t', vector: 'size_t') -> "double":
         """getTxTime(VBM self, size_t channel, size_t vector) -> double"""
         return _cphd.VBM_getTxTime(self, channel, vector)
 
 
-    def getTxPos(self, channel, vector):
+    def getTxPos(self, channel: 'size_t', vector: 'size_t') -> "cphd::Vector3":
         """getTxPos(VBM self, size_t channel, size_t vector) -> Vector3"""
         return _cphd.VBM_getTxPos(self, channel, vector)
 
 
-    def getRcvTime(self, channel, vector):
+    def getRcvTime(self, channel: 'size_t', vector: 'size_t') -> "double":
         """getRcvTime(VBM self, size_t channel, size_t vector) -> double"""
         return _cphd.VBM_getRcvTime(self, channel, vector)
 
 
-    def getRcvPos(self, channel, vector):
+    def getRcvPos(self, channel: 'size_t', vector: 'size_t') -> "cphd::Vector3":
         """getRcvPos(VBM self, size_t channel, size_t vector) -> Vector3"""
         return _cphd.VBM_getRcvPos(self, channel, vector)
 
 
-    def getSRPTime(self, channel, vector):
+    def getSRPTime(self, channel: 'size_t', vector: 'size_t') -> "double":
         """getSRPTime(VBM self, size_t channel, size_t vector) -> double"""
         return _cphd.VBM_getSRPTime(self, channel, vector)
 
 
-    def getSRPPos(self, channel, vector):
+    def getSRPPos(self, channel: 'size_t', vector: 'size_t') -> "cphd::Vector3":
         """getSRPPos(VBM self, size_t channel, size_t vector) -> Vector3"""
         return _cphd.VBM_getSRPPos(self, channel, vector)
 
 
-    def getTropoSRP(self, channel, vector):
+    def getTropoSRP(self, channel: 'size_t', vector: 'size_t') -> "double":
         """getTropoSRP(VBM self, size_t channel, size_t vector) -> double"""
         return _cphd.VBM_getTropoSRP(self, channel, vector)
 
 
-    def getAmpSF(self, channel, vector):
+    def getAmpSF(self, channel: 'size_t', vector: 'size_t') -> "double":
         """getAmpSF(VBM self, size_t channel, size_t vector) -> double"""
         return _cphd.VBM_getAmpSF(self, channel, vector)
 
 
-    def getFx0(self, channel, vector):
+    def getFx0(self, channel: 'size_t', vector: 'size_t') -> "double":
         """getFx0(VBM self, size_t channel, size_t vector) -> double"""
         return _cphd.VBM_getFx0(self, channel, vector)
 
 
-    def getFxSS(self, channel, vector):
+    def getFxSS(self, channel: 'size_t', vector: 'size_t') -> "double":
         """getFxSS(VBM self, size_t channel, size_t vector) -> double"""
         return _cphd.VBM_getFxSS(self, channel, vector)
 
 
-    def getFx1(self, channel, vector):
+    def getFx1(self, channel: 'size_t', vector: 'size_t') -> "double":
         """getFx1(VBM self, size_t channel, size_t vector) -> double"""
         return _cphd.VBM_getFx1(self, channel, vector)
 
 
-    def getFx2(self, channel, vector):
+    def getFx2(self, channel: 'size_t', vector: 'size_t') -> "double":
         """getFx2(VBM self, size_t channel, size_t vector) -> double"""
         return _cphd.VBM_getFx2(self, channel, vector)
 
 
-    def getDeltaTOA0(self, channel, vector):
+    def getDeltaTOA0(self, channel: 'size_t', vector: 'size_t') -> "double":
         """getDeltaTOA0(VBM self, size_t channel, size_t vector) -> double"""
         return _cphd.VBM_getDeltaTOA0(self, channel, vector)
 
 
-    def getTOASS(self, channel, vector):
+    def getTOASS(self, channel: 'size_t', vector: 'size_t') -> "double":
         """getTOASS(VBM self, size_t channel, size_t vector) -> double"""
         return _cphd.VBM_getTOASS(self, channel, vector)
 
 
-    def setTxTime(self, value, channel, vector):
+    def setTxTime(self, value: 'double', channel: 'size_t', vector: 'size_t') -> "void":
         """setTxTime(VBM self, double value, size_t channel, size_t vector)"""
         return _cphd.VBM_setTxTime(self, value, channel, vector)
 
 
-    def setTxPos(self, value, channel, vector):
+    def setTxPos(self, value: 'Vector3', channel: 'size_t', vector: 'size_t') -> "void":
         """setTxPos(VBM self, Vector3 value, size_t channel, size_t vector)"""
         return _cphd.VBM_setTxPos(self, value, channel, vector)
 
 
-    def setRcvTime(self, value, channel, vector):
+    def setRcvTime(self, value: 'double', channel: 'size_t', vector: 'size_t') -> "void":
         """setRcvTime(VBM self, double value, size_t channel, size_t vector)"""
         return _cphd.VBM_setRcvTime(self, value, channel, vector)
 
 
-    def setRcvPos(self, value, channel, vector):
+    def setRcvPos(self, value: 'Vector3', channel: 'size_t', vector: 'size_t') -> "void":
         """setRcvPos(VBM self, Vector3 value, size_t channel, size_t vector)"""
         return _cphd.VBM_setRcvPos(self, value, channel, vector)
 
 
-    def setSRPTime(self, value, channel, vector):
+    def setSRPTime(self, value: 'double', channel: 'size_t', vector: 'size_t') -> "void":
         """setSRPTime(VBM self, double value, size_t channel, size_t vector)"""
         return _cphd.VBM_setSRPTime(self, value, channel, vector)
 
 
-    def setSRPPos(self, value, channel, vector):
+    def setSRPPos(self, value: 'Vector3', channel: 'size_t', vector: 'size_t') -> "void":
         """setSRPPos(VBM self, Vector3 value, size_t channel, size_t vector)"""
         return _cphd.VBM_setSRPPos(self, value, channel, vector)
 
 
-    def setTropoSRP(self, value, channel, vector):
+    def setTropoSRP(self, value: 'double', channel: 'size_t', vector: 'size_t') -> "void":
         """setTropoSRP(VBM self, double value, size_t channel, size_t vector)"""
         return _cphd.VBM_setTropoSRP(self, value, channel, vector)
 
 
-    def setAmpSF(self, value, channel, vector):
+    def setAmpSF(self, value: 'double', channel: 'size_t', vector: 'size_t') -> "void":
         """setAmpSF(VBM self, double value, size_t channel, size_t vector)"""
         return _cphd.VBM_setAmpSF(self, value, channel, vector)
 
 
-    def setFx0(self, value, channel, vector):
+    def setFx0(self, value: 'double', channel: 'size_t', vector: 'size_t') -> "void":
         """setFx0(VBM self, double value, size_t channel, size_t vector)"""
         return _cphd.VBM_setFx0(self, value, channel, vector)
 
 
-    def setFxSS(self, value, channel, vector):
+    def setFxSS(self, value: 'double', channel: 'size_t', vector: 'size_t') -> "void":
         """setFxSS(VBM self, double value, size_t channel, size_t vector)"""
         return _cphd.VBM_setFxSS(self, value, channel, vector)
 
 
-    def setFx1(self, value, channel, vector):
+    def setFx1(self, value: 'double', channel: 'size_t', vector: 'size_t') -> "void":
         """setFx1(VBM self, double value, size_t channel, size_t vector)"""
         return _cphd.VBM_setFx1(self, value, channel, vector)
 
 
-    def setFx2(self, value, channel, vector):
+    def setFx2(self, value: 'double', channel: 'size_t', vector: 'size_t') -> "void":
         """setFx2(VBM self, double value, size_t channel, size_t vector)"""
         return _cphd.VBM_setFx2(self, value, channel, vector)
 
 
-    def setDeltaTOA0(self, value, channel, vector):
+    def setDeltaTOA0(self, value: 'double', channel: 'size_t', vector: 'size_t') -> "void":
         """setDeltaTOA0(VBM self, double value, size_t channel, size_t vector)"""
         return _cphd.VBM_setDeltaTOA0(self, value, channel, vector)
 
 
-    def setTOASS(self, value, channel, vector):
+    def setTOASS(self, value: 'double', channel: 'size_t', vector: 'size_t') -> "void":
         """setTOASS(VBM self, double value, size_t channel, size_t vector)"""
         return _cphd.VBM_setTOASS(self, value, channel, vector)
 
 
-    def getNumBytesVBP(self):
+    def getNumBytesVBP(self) -> "size_t":
         """getNumBytesVBP(VBM self) -> size_t"""
         return _cphd.VBM_getNumBytesVBP(self)
 
 
-    def getNumChannels(self):
+    def getNumChannels(self) -> "size_t":
         """getNumChannels(VBM self) -> size_t"""
         return _cphd.VBM_getNumChannels(self)
 
 
-    def clearAmpSF(self):
+    def clearAmpSF(self) -> "void":
         """clearAmpSF(VBM self)"""
         return _cphd.VBM_clearAmpSF(self)
 
 
-    def haveSRPTime(self):
+    def haveSRPTime(self) -> "bool":
         """haveSRPTime(VBM self) -> bool"""
         return _cphd.VBM_haveSRPTime(self)
 
 
-    def haveTropoSRP(self):
+    def haveTropoSRP(self) -> "bool":
         """haveTropoSRP(VBM self) -> bool"""
         return _cphd.VBM_haveTropoSRP(self)
 
 
-    def haveAmpSF(self):
+    def haveAmpSF(self) -> "bool":
         """haveAmpSF(VBM self) -> bool"""
         return _cphd.VBM_haveAmpSF(self)
 
 
-    def updateVectorParameters(self, vp):
+    def updateVectorParameters(self, vp: 'VectorParameters') -> "void":
         """updateVectorParameters(VBM self, VectorParameters vp)"""
         return _cphd.VBM_updateVectorParameters(self, vp)
 
 
-    def load(self, inStream, startVBM, sizeVBM, numThreads):
+    def load(self, inStream: 'SeekableInputStream', startVBM: 'sys::Off_T', sizeVBM: 'sys::Off_T', numThreads: 'size_t') -> "sys::Off_T":
         """load(VBM self, SeekableInputStream inStream, sys::Off_T startVBM, sys::Off_T sizeVBM, size_t numThreads) -> sys::Off_T"""
         return _cphd.VBM_load(self, inStream, startVBM, sizeVBM, numThreads)
 
 
-    def getVBMsize(self, channel):
+    def getVBMsize(self, channel: 'size_t') -> "size_t":
         """getVBMsize(VBM self, size_t channel) -> size_t"""
         return _cphd.VBM_getVBMsize(self, channel)
 
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'VBM') -> "bool":
         """__eq__(VBM self, VBM other) -> bool"""
         return _cphd.VBM___eq__(self, other)
 
 
-    def __ne__(self, vbm):
+    def __ne__(self, vbm: 'VBM') -> "bool":
         """__ne__(VBM self, VBM vbm) -> bool"""
         return _cphd.VBM___ne__(self, vbm)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(VBM self) -> std::string"""
         return _cphd.VBM___str__(self)
 
 
-    def getVBMdata(self, *args):
+    def getVBMdata(self, *args) -> "void":
         """
         getVBMdata(VBM self, size_t channel, std::vector< sys::ubyte,std::allocator< sys::ubyte > > & data)
         getVBMdata(VBM self, size_t channel, void * data)
@@ -1802,17 +1802,17 @@ class CPHDXMLControl(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def toXMLString(self, metadata):
+    def toXMLString(self, metadata: 'Metadata') -> "std::string":
         """toXMLString(CPHDXMLControl self, Metadata metadata) -> std::string"""
         return _cphd.CPHDXMLControl_toXMLString(self, metadata)
 
 
-    def getXMLsize(self, metadata):
+    def getXMLsize(self, metadata: 'Metadata') -> "size_t":
         """getXMLsize(CPHDXMLControl self, Metadata metadata) -> size_t"""
         return _cphd.CPHDXMLControl_getXMLsize(self, metadata)
 
 
-    def fromXMLString(self, xmlString):
+    def fromXMLString(self, xmlString: 'std::string const &') -> "cphd::Metadata":
         """fromXMLString(CPHDXMLControl self, std::string const & xmlString) -> Metadata"""
         return _cphd.CPHDXMLControl_fromXMLString(self, xmlString)
 
@@ -1841,12 +1841,12 @@ class Wideband(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getFileOffset(self, channel, vector, sample):
+    def getFileOffset(self, channel: 'size_t', vector: 'size_t', sample: 'size_t') -> "sys::Off_T":
         """getFileOffset(Wideband self, size_t channel, size_t vector, size_t sample) -> sys::Off_T"""
         return _cphd.Wideband_getFileOffset(self, channel, vector, sample)
 
 
-    def read(self, *args):
+    def read(self, *args) -> "void":
         """
         read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::BufferView< sys::ubyte > const & data)
         read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::ScopedArray< sys::ubyte > & data)
@@ -1856,17 +1856,17 @@ class Wideband(_object):
         return _cphd.Wideband_read(self, *args)
 
 
-    def getBufferDims(self, channel, firstVector, lastVector, firstSample, lastSample):
+    def getBufferDims(self, channel: 'size_t', firstVector: 'size_t', lastVector: 'size_t', firstSample: 'size_t', lastSample: 'size_t') -> "types::RowCol< size_t >":
         """getBufferDims(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample) -> RowColSizeT"""
         return _cphd.Wideband_getBufferDims(self, channel, firstVector, lastVector, firstSample, lastSample)
 
 
-    def getSampleType(self):
+    def getSampleType(self) -> "cphd::SampleType":
         """getSampleType(Wideband self) -> SampleType"""
         return _cphd.Wideband_getSampleType(self)
 
 
-    def readImpl(self, channel, firstVector, lastVector, firstSample, lastSample, numThreads, dims, data):
+    def readImpl(self, channel: 'size_t', firstVector: 'size_t', lastVector: 'size_t', firstSample: 'size_t', lastSample: 'size_t', numThreads: 'size_t', dims: 'RowColSizeT', data: 'long long') -> "void":
         """readImpl(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, RowColSizeT dims, long long data)"""
         return _cphd.Wideband_readImpl(self, channel, firstVector, lastVector, firstSample, lastSample, numThreads, dims, data)
 
@@ -1898,67 +1898,67 @@ class CPHDReader(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getNumChannels(self):
+    def getNumChannels(self) -> "size_t":
         """getNumChannels(CPHDReader self) -> size_t"""
         return _cphd.CPHDReader_getNumChannels(self)
 
 
-    def getNumVectors(self, channel):
+    def getNumVectors(self, channel: 'size_t') -> "size_t":
         """getNumVectors(CPHDReader self, size_t channel) -> size_t"""
         return _cphd.CPHDReader_getNumVectors(self, channel)
 
 
-    def getNumSamples(self, channel):
+    def getNumSamples(self, channel: 'size_t') -> "size_t":
         """getNumSamples(CPHDReader self, size_t channel) -> size_t"""
         return _cphd.CPHDReader_getNumSamples(self, channel)
 
 
-    def getNumBytesPerSample(self):
+    def getNumBytesPerSample(self) -> "size_t":
         """getNumBytesPerSample(CPHDReader self) -> size_t"""
         return _cphd.CPHDReader_getNumBytesPerSample(self)
 
 
-    def getFileOffset(self, channel, vector, sample):
+    def getFileOffset(self, channel: 'size_t', vector: 'size_t', sample: 'size_t') -> "sys::Off_T":
         """getFileOffset(CPHDReader self, size_t channel, size_t vector, size_t sample) -> sys::Off_T"""
         return _cphd.CPHDReader_getFileOffset(self, channel, vector, sample)
 
 
-    def isFX(self):
+    def isFX(self) -> "bool":
         """isFX(CPHDReader self) -> bool"""
         return _cphd.CPHDReader_isFX(self)
 
 
-    def isTOA(self):
+    def isTOA(self) -> "bool":
         """isTOA(CPHDReader self) -> bool"""
         return _cphd.CPHDReader_isTOA(self)
 
 
-    def getDomainTypeString(self):
+    def getDomainTypeString(self) -> "std::string":
         """getDomainTypeString(CPHDReader self) -> std::string"""
         return _cphd.CPHDReader_getDomainTypeString(self)
 
 
-    def getDomainType(self):
+    def getDomainType(self) -> "cphd::DomainType":
         """getDomainType(CPHDReader self) -> DomainType"""
         return _cphd.CPHDReader_getDomainType(self)
 
 
-    def getFileHeader(self):
+    def getFileHeader(self) -> "cphd::FileHeader const &":
         """getFileHeader(CPHDReader self) -> FileHeader"""
         return _cphd.CPHDReader_getFileHeader(self)
 
 
-    def getMetadata(self):
+    def getMetadata(self) -> "cphd::Metadata const &":
         """getMetadata(CPHDReader self) -> Metadata"""
         return _cphd.CPHDReader_getMetadata(self)
 
 
-    def getVBM(self):
+    def getVBM(self) -> "cphd::VBM const &":
         """getVBM(CPHDReader self) -> VBM"""
         return _cphd.CPHDReader_getVBM(self)
 
 
-    def getWideband(self):
+    def getWideband(self) -> "cphd::Wideband &":
         """getWideband(CPHDReader self) -> Wideband"""
         return _cphd.CPHDReader_getWideband(self)
 
@@ -1976,7 +1976,7 @@ class CPHDWriter(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, CPHDWriter, name)
     __repr__ = _swig_repr
 
-    def __init__(self, metadata, numThreads=0, scratchSpaceSize=4):
+    def __init__(self, metadata: 'Metadata', numThreads: 'size_t'=0, scratchSpaceSize: 'size_t'=4):
         """
         __init__(cphd::CPHDWriter self, Metadata metadata, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
         __init__(cphd::CPHDWriter self, Metadata metadata, size_t numThreads=0) -> CPHDWriter
@@ -1988,7 +1988,7 @@ class CPHDWriter(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def writeMetadata(self, *args):
+    def writeMetadata(self, *args) -> "void":
         """
         writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm, std::string const & classification, std::string const & releaseInfo)
         writeMetadata(CPHDWriter self, std::string const & pathname, VBM vbm, std::string const & classification)
@@ -2000,7 +2000,7 @@ class CPHDWriter(_object):
         return _cphd.CPHDWriter_writeMetadata(self, *args)
 
 
-    def write(self, *args):
+    def write(self, *args) -> "void":
         """
         write(CPHDWriter self, std::string const & pathname, std::string const & classification, std::string const & releaseInfo)
         write(CPHDWriter self, std::string const & pathname, std::string const & classification)
@@ -2012,12 +2012,12 @@ class CPHDWriter(_object):
         return _cphd.CPHDWriter_write(self, *args)
 
 
-    def close(self):
+    def close(self) -> "void":
         """close(CPHDWriter self)"""
         return _cphd.CPHDWriter_close(self)
 
 
-    def addImageImpl(self, image, dims, vbm):
+    def addImageImpl(self, image: 'long long', dims: 'RowColSizeT', vbm: 'long long') -> "void":
         """addImageImpl(CPHDWriter self, long long image, RowColSizeT dims, long long vbm)"""
         return _cphd.CPHDWriter_addImageImpl(self, image, dims, vbm)
 
@@ -2105,34 +2105,34 @@ class VectorArraySize(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorArraySize, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorArraySize self) -> SwigPyIterator"""
         return _cphd.VectorArraySize_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorArraySize self) -> bool"""
         return _cphd.VectorArraySize___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorArraySize self) -> bool"""
         return _cphd.VectorArraySize___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< cphd::ArraySize >::size_type":
         """__len__(VectorArraySize self) -> std::vector< cphd::ArraySize >::size_type"""
         return _cphd.VectorArraySize___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< cphd::ArraySize >::difference_type', j: 'std::vector< cphd::ArraySize >::difference_type') -> "std::vector< cphd::ArraySize,std::allocator< cphd::ArraySize > > *":
         """__getslice__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i, std::vector< cphd::ArraySize >::difference_type j) -> VectorArraySize"""
         return _cphd.VectorArraySize___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i, std::vector< cphd::ArraySize >::difference_type j)
         __setslice__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i, std::vector< cphd::ArraySize >::difference_type j, VectorArraySize v)
@@ -2140,12 +2140,12 @@ class VectorArraySize(_object):
         return _cphd.VectorArraySize___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< cphd::ArraySize >::difference_type', j: 'std::vector< cphd::ArraySize >::difference_type') -> "void":
         """__delslice__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i, std::vector< cphd::ArraySize >::difference_type j)"""
         return _cphd.VectorArraySize___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i)
         __delitem__(VectorArraySize self, PySliceObject * slice)
@@ -2153,7 +2153,7 @@ class VectorArraySize(_object):
         return _cphd.VectorArraySize___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< cphd::ArraySize >::value_type const &":
         """
         __getitem__(VectorArraySize self, PySliceObject * slice) -> VectorArraySize
         __getitem__(VectorArraySize self, std::vector< cphd::ArraySize >::difference_type i) -> ArraySize
@@ -2161,7 +2161,7 @@ class VectorArraySize(_object):
         return _cphd.VectorArraySize___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorArraySize self, PySliceObject * slice, VectorArraySize v)
         __setitem__(VectorArraySize self, PySliceObject * slice)
@@ -2170,67 +2170,67 @@ class VectorArraySize(_object):
         return _cphd.VectorArraySize___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< cphd::ArraySize >::value_type":
         """pop(VectorArraySize self) -> ArraySize"""
         return _cphd.VectorArraySize_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'ArraySize') -> "void":
         """append(VectorArraySize self, ArraySize x)"""
         return _cphd.VectorArraySize_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorArraySize self) -> bool"""
         return _cphd.VectorArraySize_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< cphd::ArraySize >::size_type":
         """size(VectorArraySize self) -> std::vector< cphd::ArraySize >::size_type"""
         return _cphd.VectorArraySize_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorArraySize') -> "void":
         """swap(VectorArraySize self, VectorArraySize v)"""
         return _cphd.VectorArraySize_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< cphd::ArraySize >::iterator":
         """begin(VectorArraySize self) -> std::vector< cphd::ArraySize >::iterator"""
         return _cphd.VectorArraySize_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< cphd::ArraySize >::iterator":
         """end(VectorArraySize self) -> std::vector< cphd::ArraySize >::iterator"""
         return _cphd.VectorArraySize_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< cphd::ArraySize >::reverse_iterator":
         """rbegin(VectorArraySize self) -> std::vector< cphd::ArraySize >::reverse_iterator"""
         return _cphd.VectorArraySize_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< cphd::ArraySize >::reverse_iterator":
         """rend(VectorArraySize self) -> std::vector< cphd::ArraySize >::reverse_iterator"""
         return _cphd.VectorArraySize_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorArraySize self)"""
         return _cphd.VectorArraySize_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< cphd::ArraySize >::allocator_type":
         """get_allocator(VectorArraySize self) -> std::vector< cphd::ArraySize >::allocator_type"""
         return _cphd.VectorArraySize_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorArraySize self)"""
         return _cphd.VectorArraySize_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< cphd::ArraySize >::iterator":
         """
         erase(VectorArraySize self, std::vector< cphd::ArraySize >::iterator pos) -> std::vector< cphd::ArraySize >::iterator
         erase(VectorArraySize self, std::vector< cphd::ArraySize >::iterator first, std::vector< cphd::ArraySize >::iterator last) -> std::vector< cphd::ArraySize >::iterator
@@ -2251,27 +2251,27 @@ class VectorArraySize(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'ArraySize') -> "void":
         """push_back(VectorArraySize self, ArraySize x)"""
         return _cphd.VectorArraySize_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< cphd::ArraySize >::value_type const &":
         """front(VectorArraySize self) -> ArraySize"""
         return _cphd.VectorArraySize_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< cphd::ArraySize >::value_type const &":
         """back(VectorArraySize self) -> ArraySize"""
         return _cphd.VectorArraySize_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< cphd::ArraySize >::size_type', x: 'ArraySize') -> "void":
         """assign(VectorArraySize self, std::vector< cphd::ArraySize >::size_type n, ArraySize x)"""
         return _cphd.VectorArraySize_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorArraySize self, std::vector< cphd::ArraySize >::size_type new_size)
         resize(VectorArraySize self, std::vector< cphd::ArraySize >::size_type new_size, ArraySize x)
@@ -2279,7 +2279,7 @@ class VectorArraySize(_object):
         return _cphd.VectorArraySize_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorArraySize self, std::vector< cphd::ArraySize >::iterator pos, ArraySize x) -> std::vector< cphd::ArraySize >::iterator
         insert(VectorArraySize self, std::vector< cphd::ArraySize >::iterator pos, std::vector< cphd::ArraySize >::size_type n, ArraySize x)
@@ -2287,12 +2287,12 @@ class VectorArraySize(_object):
         return _cphd.VectorArraySize_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< cphd::ArraySize >::size_type') -> "void":
         """reserve(VectorArraySize self, std::vector< cphd::ArraySize >::size_type n)"""
         return _cphd.VectorArraySize_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< cphd::ArraySize >::size_type":
         """capacity(VectorArraySize self) -> std::vector< cphd::ArraySize >::size_type"""
         return _cphd.VectorArraySize_capacity(self)
 
@@ -2321,34 +2321,34 @@ class VectorVector3(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorVector3, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorVector3 self) -> SwigPyIterator"""
         return _cphd.VectorVector3_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorVector3 self) -> bool"""
         return _cphd.VectorVector3___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorVector3 self) -> bool"""
         return _cphd.VectorVector3___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< math::linear::VectorN< 3,double > >::size_type":
         """__len__(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"""
         return _cphd.VectorVector3___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< math::linear::VectorN< 3,double > >::difference_type', j: 'std::vector< math::linear::VectorN< 3,double > >::difference_type') -> "std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *":
         """__getslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j) -> Vector3Coefficients"""
         return _cphd.VectorVector3___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j)
         __setslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j, Vector3Coefficients v)
@@ -2356,12 +2356,12 @@ class VectorVector3(_object):
         return _cphd.VectorVector3___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< math::linear::VectorN< 3,double > >::difference_type', j: 'std::vector< math::linear::VectorN< 3,double > >::difference_type') -> "void":
         """__delslice__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i, std::vector< math::linear::VectorN< 3,double > >::difference_type j)"""
         return _cphd.VectorVector3___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i)
         __delitem__(VectorVector3 self, PySliceObject * slice)
@@ -2369,7 +2369,7 @@ class VectorVector3(_object):
         return _cphd.VectorVector3___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< math::linear::VectorN< 3,double > >::value_type const &":
         """
         __getitem__(VectorVector3 self, PySliceObject * slice) -> Vector3Coefficients
         __getitem__(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::difference_type i) -> Vector3
@@ -2377,7 +2377,7 @@ class VectorVector3(_object):
         return _cphd.VectorVector3___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorVector3 self, PySliceObject * slice, Vector3Coefficients v)
         __setitem__(VectorVector3 self, PySliceObject * slice)
@@ -2386,67 +2386,67 @@ class VectorVector3(_object):
         return _cphd.VectorVector3___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< math::linear::VectorN< 3,double > >::value_type":
         """pop(VectorVector3 self) -> Vector3"""
         return _cphd.VectorVector3_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'Vector3') -> "void":
         """append(VectorVector3 self, Vector3 x)"""
         return _cphd.VectorVector3_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorVector3 self) -> bool"""
         return _cphd.VectorVector3_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< math::linear::VectorN< 3,double > >::size_type":
         """size(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"""
         return _cphd.VectorVector3_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'Vector3Coefficients') -> "void":
         """swap(VectorVector3 self, Vector3Coefficients v)"""
         return _cphd.VectorVector3_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< math::linear::VectorN< 3,double > >::iterator":
         """begin(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::iterator"""
         return _cphd.VectorVector3_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< math::linear::VectorN< 3,double > >::iterator":
         """end(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::iterator"""
         return _cphd.VectorVector3_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< math::linear::VectorN< 3,double > >::reverse_iterator":
         """rbegin(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::reverse_iterator"""
         return _cphd.VectorVector3_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< math::linear::VectorN< 3,double > >::reverse_iterator":
         """rend(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::reverse_iterator"""
         return _cphd.VectorVector3_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorVector3 self)"""
         return _cphd.VectorVector3_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< math::linear::VectorN< 3,double > >::allocator_type":
         """get_allocator(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::allocator_type"""
         return _cphd.VectorVector3_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorVector3 self)"""
         return _cphd.VectorVector3_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< math::linear::VectorN< 3,double > >::iterator":
         """
         erase(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::iterator pos) -> std::vector< math::linear::VectorN< 3,double > >::iterator
         erase(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::iterator first, std::vector< math::linear::VectorN< 3,double > >::iterator last) -> std::vector< math::linear::VectorN< 3,double > >::iterator
@@ -2467,27 +2467,27 @@ class VectorVector3(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'Vector3') -> "void":
         """push_back(VectorVector3 self, Vector3 x)"""
         return _cphd.VectorVector3_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< math::linear::VectorN< 3,double > >::value_type const &":
         """front(VectorVector3 self) -> Vector3"""
         return _cphd.VectorVector3_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< math::linear::VectorN< 3,double > >::value_type const &":
         """back(VectorVector3 self) -> Vector3"""
         return _cphd.VectorVector3_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< math::linear::VectorN< 3,double > >::size_type', x: 'Vector3') -> "void":
         """assign(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::size_type n, Vector3 x)"""
         return _cphd.VectorVector3_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::size_type new_size)
         resize(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::size_type new_size, Vector3 x)
@@ -2495,7 +2495,7 @@ class VectorVector3(_object):
         return _cphd.VectorVector3_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::iterator pos, Vector3 x) -> std::vector< math::linear::VectorN< 3,double > >::iterator
         insert(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::iterator pos, std::vector< math::linear::VectorN< 3,double > >::size_type n, Vector3 x)
@@ -2503,12 +2503,12 @@ class VectorVector3(_object):
         return _cphd.VectorVector3_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< math::linear::VectorN< 3,double > >::size_type') -> "void":
         """reserve(VectorVector3 self, std::vector< math::linear::VectorN< 3,double > >::size_type n)"""
         return _cphd.VectorVector3_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< math::linear::VectorN< 3,double > >::size_type":
         """capacity(VectorVector3 self) -> std::vector< math::linear::VectorN< 3,double > >::size_type"""
         return _cphd.VectorVector3_capacity(self)
 
@@ -2537,34 +2537,34 @@ class VectorChannelParameters(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorChannelParameters, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorChannelParameters self) -> SwigPyIterator"""
         return _cphd.VectorChannelParameters_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorChannelParameters self) -> bool"""
         return _cphd.VectorChannelParameters___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorChannelParameters self) -> bool"""
         return _cphd.VectorChannelParameters___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< cphd::ChannelParameters >::size_type":
         """__len__(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::size_type"""
         return _cphd.VectorChannelParameters___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< cphd::ChannelParameters >::difference_type', j: 'std::vector< cphd::ChannelParameters >::difference_type') -> "std::vector< cphd::ChannelParameters,std::allocator< cphd::ChannelParameters > > *":
         """__getslice__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j) -> VectorChannelParameters"""
         return _cphd.VectorChannelParameters___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j)
         __setslice__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j, VectorChannelParameters v)
@@ -2572,12 +2572,12 @@ class VectorChannelParameters(_object):
         return _cphd.VectorChannelParameters___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< cphd::ChannelParameters >::difference_type', j: 'std::vector< cphd::ChannelParameters >::difference_type') -> "void":
         """__delslice__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i, std::vector< cphd::ChannelParameters >::difference_type j)"""
         return _cphd.VectorChannelParameters___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i)
         __delitem__(VectorChannelParameters self, PySliceObject * slice)
@@ -2585,7 +2585,7 @@ class VectorChannelParameters(_object):
         return _cphd.VectorChannelParameters___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< cphd::ChannelParameters >::value_type const &":
         """
         __getitem__(VectorChannelParameters self, PySliceObject * slice) -> VectorChannelParameters
         __getitem__(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::difference_type i) -> ChannelParameters
@@ -2593,7 +2593,7 @@ class VectorChannelParameters(_object):
         return _cphd.VectorChannelParameters___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorChannelParameters self, PySliceObject * slice, VectorChannelParameters v)
         __setitem__(VectorChannelParameters self, PySliceObject * slice)
@@ -2602,67 +2602,67 @@ class VectorChannelParameters(_object):
         return _cphd.VectorChannelParameters___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< cphd::ChannelParameters >::value_type":
         """pop(VectorChannelParameters self) -> ChannelParameters"""
         return _cphd.VectorChannelParameters_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'ChannelParameters') -> "void":
         """append(VectorChannelParameters self, ChannelParameters x)"""
         return _cphd.VectorChannelParameters_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorChannelParameters self) -> bool"""
         return _cphd.VectorChannelParameters_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< cphd::ChannelParameters >::size_type":
         """size(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::size_type"""
         return _cphd.VectorChannelParameters_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorChannelParameters') -> "void":
         """swap(VectorChannelParameters self, VectorChannelParameters v)"""
         return _cphd.VectorChannelParameters_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< cphd::ChannelParameters >::iterator":
         """begin(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::iterator"""
         return _cphd.VectorChannelParameters_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< cphd::ChannelParameters >::iterator":
         """end(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::iterator"""
         return _cphd.VectorChannelParameters_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< cphd::ChannelParameters >::reverse_iterator":
         """rbegin(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::reverse_iterator"""
         return _cphd.VectorChannelParameters_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< cphd::ChannelParameters >::reverse_iterator":
         """rend(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::reverse_iterator"""
         return _cphd.VectorChannelParameters_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorChannelParameters self)"""
         return _cphd.VectorChannelParameters_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< cphd::ChannelParameters >::allocator_type":
         """get_allocator(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::allocator_type"""
         return _cphd.VectorChannelParameters_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorChannelParameters self)"""
         return _cphd.VectorChannelParameters_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< cphd::ChannelParameters >::iterator":
         """
         erase(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::iterator pos) -> std::vector< cphd::ChannelParameters >::iterator
         erase(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::iterator first, std::vector< cphd::ChannelParameters >::iterator last) -> std::vector< cphd::ChannelParameters >::iterator
@@ -2683,27 +2683,27 @@ class VectorChannelParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'ChannelParameters') -> "void":
         """push_back(VectorChannelParameters self, ChannelParameters x)"""
         return _cphd.VectorChannelParameters_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< cphd::ChannelParameters >::value_type const &":
         """front(VectorChannelParameters self) -> ChannelParameters"""
         return _cphd.VectorChannelParameters_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< cphd::ChannelParameters >::value_type const &":
         """back(VectorChannelParameters self) -> ChannelParameters"""
         return _cphd.VectorChannelParameters_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< cphd::ChannelParameters >::size_type', x: 'ChannelParameters') -> "void":
         """assign(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::size_type n, ChannelParameters x)"""
         return _cphd.VectorChannelParameters_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::size_type new_size)
         resize(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::size_type new_size, ChannelParameters x)
@@ -2711,7 +2711,7 @@ class VectorChannelParameters(_object):
         return _cphd.VectorChannelParameters_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::iterator pos, ChannelParameters x) -> std::vector< cphd::ChannelParameters >::iterator
         insert(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::iterator pos, std::vector< cphd::ChannelParameters >::size_type n, ChannelParameters x)
@@ -2719,12 +2719,12 @@ class VectorChannelParameters(_object):
         return _cphd.VectorChannelParameters_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< cphd::ChannelParameters >::size_type') -> "void":
         """reserve(VectorChannelParameters self, std::vector< cphd::ChannelParameters >::size_type n)"""
         return _cphd.VectorChannelParameters_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< cphd::ChannelParameters >::size_type":
         """capacity(VectorChannelParameters self) -> std::vector< cphd::ChannelParameters >::size_type"""
         return _cphd.VectorChannelParameters_capacity(self)
 
@@ -2753,34 +2753,34 @@ class VectorAntennaParameters(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorAntennaParameters, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorAntennaParameters self) -> SwigPyIterator"""
         return _cphd.VectorAntennaParameters_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorAntennaParameters self) -> bool"""
         return _cphd.VectorAntennaParameters___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorAntennaParameters self) -> bool"""
         return _cphd.VectorAntennaParameters___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< six::sicd::AntennaParameters >::size_type":
         """__len__(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::size_type"""
         return _cphd.VectorAntennaParameters___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< six::sicd::AntennaParameters >::difference_type', j: 'std::vector< six::sicd::AntennaParameters >::difference_type') -> "std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *":
         """__getslice__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j) -> VectorAntennaParameters"""
         return _cphd.VectorAntennaParameters___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j)
         __setslice__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j, VectorAntennaParameters v)
@@ -2788,12 +2788,12 @@ class VectorAntennaParameters(_object):
         return _cphd.VectorAntennaParameters___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< six::sicd::AntennaParameters >::difference_type', j: 'std::vector< six::sicd::AntennaParameters >::difference_type') -> "void":
         """__delslice__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i, std::vector< six::sicd::AntennaParameters >::difference_type j)"""
         return _cphd.VectorAntennaParameters___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i)
         __delitem__(VectorAntennaParameters self, PySliceObject * slice)
@@ -2801,7 +2801,7 @@ class VectorAntennaParameters(_object):
         return _cphd.VectorAntennaParameters___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< six::sicd::AntennaParameters >::value_type const &":
         """
         __getitem__(VectorAntennaParameters self, PySliceObject * slice) -> VectorAntennaParameters
         __getitem__(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::difference_type i) -> AntennaParameters
@@ -2809,7 +2809,7 @@ class VectorAntennaParameters(_object):
         return _cphd.VectorAntennaParameters___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorAntennaParameters self, PySliceObject * slice, VectorAntennaParameters v)
         __setitem__(VectorAntennaParameters self, PySliceObject * slice)
@@ -2818,67 +2818,67 @@ class VectorAntennaParameters(_object):
         return _cphd.VectorAntennaParameters___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< six::sicd::AntennaParameters >::value_type":
         """pop(VectorAntennaParameters self) -> AntennaParameters"""
         return _cphd.VectorAntennaParameters_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'AntennaParameters') -> "void":
         """append(VectorAntennaParameters self, AntennaParameters x)"""
         return _cphd.VectorAntennaParameters_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorAntennaParameters self) -> bool"""
         return _cphd.VectorAntennaParameters_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< six::sicd::AntennaParameters >::size_type":
         """size(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::size_type"""
         return _cphd.VectorAntennaParameters_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorAntennaParameters') -> "void":
         """swap(VectorAntennaParameters self, VectorAntennaParameters v)"""
         return _cphd.VectorAntennaParameters_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< six::sicd::AntennaParameters >::iterator":
         """begin(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::iterator"""
         return _cphd.VectorAntennaParameters_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< six::sicd::AntennaParameters >::iterator":
         """end(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::iterator"""
         return _cphd.VectorAntennaParameters_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< six::sicd::AntennaParameters >::reverse_iterator":
         """rbegin(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::reverse_iterator"""
         return _cphd.VectorAntennaParameters_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< six::sicd::AntennaParameters >::reverse_iterator":
         """rend(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::reverse_iterator"""
         return _cphd.VectorAntennaParameters_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorAntennaParameters self)"""
         return _cphd.VectorAntennaParameters_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< six::sicd::AntennaParameters >::allocator_type":
         """get_allocator(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::allocator_type"""
         return _cphd.VectorAntennaParameters_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorAntennaParameters self)"""
         return _cphd.VectorAntennaParameters_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< six::sicd::AntennaParameters >::iterator":
         """
         erase(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::iterator pos) -> std::vector< six::sicd::AntennaParameters >::iterator
         erase(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::iterator first, std::vector< six::sicd::AntennaParameters >::iterator last) -> std::vector< six::sicd::AntennaParameters >::iterator
@@ -2899,27 +2899,27 @@ class VectorAntennaParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'AntennaParameters') -> "void":
         """push_back(VectorAntennaParameters self, AntennaParameters x)"""
         return _cphd.VectorAntennaParameters_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< six::sicd::AntennaParameters >::value_type const &":
         """front(VectorAntennaParameters self) -> AntennaParameters"""
         return _cphd.VectorAntennaParameters_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< six::sicd::AntennaParameters >::value_type const &":
         """back(VectorAntennaParameters self) -> AntennaParameters"""
         return _cphd.VectorAntennaParameters_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< six::sicd::AntennaParameters >::size_type', x: 'AntennaParameters') -> "void":
         """assign(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::size_type n, AntennaParameters x)"""
         return _cphd.VectorAntennaParameters_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::size_type new_size)
         resize(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::size_type new_size, AntennaParameters x)
@@ -2927,7 +2927,7 @@ class VectorAntennaParameters(_object):
         return _cphd.VectorAntennaParameters_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::iterator pos, AntennaParameters x) -> std::vector< six::sicd::AntennaParameters >::iterator
         insert(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::iterator pos, std::vector< six::sicd::AntennaParameters >::size_type n, AntennaParameters x)
@@ -2935,12 +2935,12 @@ class VectorAntennaParameters(_object):
         return _cphd.VectorAntennaParameters_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< six::sicd::AntennaParameters >::size_type') -> "void":
         """reserve(VectorAntennaParameters self, std::vector< six::sicd::AntennaParameters >::size_type n)"""
         return _cphd.VectorAntennaParameters_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< six::sicd::AntennaParameters >::size_type":
         """capacity(VectorAntennaParameters self) -> std::vector< six::sicd::AntennaParameters >::size_type"""
         return _cphd.VectorAntennaParameters_capacity(self)
 
@@ -3008,22 +3008,22 @@ class ScopedCopyableDwellTimeParameters(_object):
 
 
 
-    def get(self):
+    def get(self) -> "cphd::DwellTimeParameters *":
         """get(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"""
         return _cphd.ScopedCopyableDwellTimeParameters_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "cphd::DwellTimeParameters &":
         """__ref__(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"""
         return _cphd.ScopedCopyableDwellTimeParameters___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "cphd::DwellTimeParameters *":
         """__deref__(ScopedCopyableDwellTimeParameters self) -> DwellTimeParameters"""
         return _cphd.ScopedCopyableDwellTimeParameters___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'DwellTimeParameters'=None) -> "void":
         """
         reset(ScopedCopyableDwellTimeParameters self, DwellTimeParameters ptr=None)
         reset(ScopedCopyableDwellTimeParameters self)
@@ -3033,12 +3033,12 @@ class ScopedCopyableDwellTimeParameters(_object):
     __swig_destroy__ = _cphd.delete_ScopedCopyableDwellTimeParameters
     __del__ = lambda self: None
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'DwellTimeParameters') -> "bool":
         """__eq__(ScopedCopyableDwellTimeParameters self, DwellTimeParameters other) -> bool"""
         return _cphd.ScopedCopyableDwellTimeParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'DwellTimeParameters') -> "bool":
         """__ne__(ScopedCopyableDwellTimeParameters self, DwellTimeParameters other) -> bool"""
         return _cphd.ScopedCopyableDwellTimeParameters___ne__(self, other)
 
@@ -3054,7 +3054,7 @@ ScopedCopyableDwellTimeParameters_swigregister = _cphd.ScopedCopyableDwellTimePa
 ScopedCopyableDwellTimeParameters_swigregister(ScopedCopyableDwellTimeParameters)
 
 
-def makeScopedCopyableDwellTimeParameters():
+def makeScopedCopyableDwellTimeParameters() -> "mem::ScopedCopyablePtr< cphd::DwellTimeParameters >":
     """makeScopedCopyableDwellTimeParameters() -> ScopedCopyableDwellTimeParameters"""
     return _cphd.makeScopedCopyableDwellTimeParameters()
 class ScopedCopyableAreaPlane(_object):
@@ -3084,22 +3084,22 @@ class ScopedCopyableAreaPlane(_object):
 
 
 
-    def get(self):
+    def get(self) -> "cphd::AreaPlane *":
         """get(ScopedCopyableAreaPlane self) -> AreaPlane"""
         return _cphd.ScopedCopyableAreaPlane_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "cphd::AreaPlane &":
         """__ref__(ScopedCopyableAreaPlane self) -> AreaPlane"""
         return _cphd.ScopedCopyableAreaPlane___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "cphd::AreaPlane *":
         """__deref__(ScopedCopyableAreaPlane self) -> AreaPlane"""
         return _cphd.ScopedCopyableAreaPlane___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'AreaPlane'=None) -> "void":
         """
         reset(ScopedCopyableAreaPlane self, AreaPlane ptr=None)
         reset(ScopedCopyableAreaPlane self)
@@ -3109,12 +3109,12 @@ class ScopedCopyableAreaPlane(_object):
     __swig_destroy__ = _cphd.delete_ScopedCopyableAreaPlane
     __del__ = lambda self: None
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'AreaPlane') -> "bool":
         """__eq__(ScopedCopyableAreaPlane self, AreaPlane other) -> bool"""
         return _cphd.ScopedCopyableAreaPlane___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'AreaPlane') -> "bool":
         """__ne__(ScopedCopyableAreaPlane self, AreaPlane other) -> bool"""
         return _cphd.ScopedCopyableAreaPlane___ne__(self, other)
 
@@ -3138,7 +3138,7 @@ ScopedCopyableAreaPlane_swigregister = _cphd.ScopedCopyableAreaPlane_swigregiste
 ScopedCopyableAreaPlane_swigregister(ScopedCopyableAreaPlane)
 
 
-def makeScopedCopyableAreaPlane():
+def makeScopedCopyableAreaPlane() -> "mem::ScopedCopyablePtr< cphd::AreaPlane >":
     """makeScopedCopyableAreaPlane() -> ScopedCopyableAreaPlane"""
     return _cphd.makeScopedCopyableAreaPlane()
 class StdAutoFxParameters(_object):
@@ -3189,22 +3189,22 @@ class ScopedCopyableFxParameters(_object):
 
 
 
-    def get(self):
+    def get(self) -> "cphd::FxParameters *":
         """get(ScopedCopyableFxParameters self) -> FxParameters"""
         return _cphd.ScopedCopyableFxParameters_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "cphd::FxParameters &":
         """__ref__(ScopedCopyableFxParameters self) -> FxParameters"""
         return _cphd.ScopedCopyableFxParameters___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "cphd::FxParameters *":
         """__deref__(ScopedCopyableFxParameters self) -> FxParameters"""
         return _cphd.ScopedCopyableFxParameters___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'FxParameters'=None) -> "void":
         """
         reset(ScopedCopyableFxParameters self, FxParameters ptr=None)
         reset(ScopedCopyableFxParameters self)
@@ -3214,12 +3214,12 @@ class ScopedCopyableFxParameters(_object):
     __swig_destroy__ = _cphd.delete_ScopedCopyableFxParameters
     __del__ = lambda self: None
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'FxParameters') -> "bool":
         """__eq__(ScopedCopyableFxParameters self, FxParameters other) -> bool"""
         return _cphd.ScopedCopyableFxParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'FxParameters') -> "bool":
         """__ne__(ScopedCopyableFxParameters self, FxParameters other) -> bool"""
         return _cphd.ScopedCopyableFxParameters___ne__(self, other)
 
@@ -3243,7 +3243,7 @@ ScopedCopyableFxParameters_swigregister = _cphd.ScopedCopyableFxParameters_swigr
 ScopedCopyableFxParameters_swigregister(ScopedCopyableFxParameters)
 
 
-def makeScopedCopyableFxParameters():
+def makeScopedCopyableFxParameters() -> "mem::ScopedCopyablePtr< cphd::FxParameters >":
     """makeScopedCopyableFxParameters() -> ScopedCopyableFxParameters"""
     return _cphd.makeScopedCopyableFxParameters()
 class StdAutoTOAParameters(_object):
@@ -3294,22 +3294,22 @@ class ScopedCopyableTOAParameters(_object):
 
 
 
-    def get(self):
+    def get(self) -> "cphd::TOAParameters *":
         """get(ScopedCopyableTOAParameters self) -> TOAParameters"""
         return _cphd.ScopedCopyableTOAParameters_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "cphd::TOAParameters &":
         """__ref__(ScopedCopyableTOAParameters self) -> TOAParameters"""
         return _cphd.ScopedCopyableTOAParameters___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "cphd::TOAParameters *":
         """__deref__(ScopedCopyableTOAParameters self) -> TOAParameters"""
         return _cphd.ScopedCopyableTOAParameters___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'TOAParameters'=None) -> "void":
         """
         reset(ScopedCopyableTOAParameters self, TOAParameters ptr=None)
         reset(ScopedCopyableTOAParameters self)
@@ -3319,12 +3319,12 @@ class ScopedCopyableTOAParameters(_object):
     __swig_destroy__ = _cphd.delete_ScopedCopyableTOAParameters
     __del__ = lambda self: None
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'TOAParameters') -> "bool":
         """__eq__(ScopedCopyableTOAParameters self, TOAParameters other) -> bool"""
         return _cphd.ScopedCopyableTOAParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'TOAParameters') -> "bool":
         """__ne__(ScopedCopyableTOAParameters self, TOAParameters other) -> bool"""
         return _cphd.ScopedCopyableTOAParameters___ne__(self, other)
 
@@ -3340,7 +3340,7 @@ ScopedCopyableTOAParameters_swigregister = _cphd.ScopedCopyableTOAParameters_swi
 ScopedCopyableTOAParameters_swigregister(ScopedCopyableTOAParameters)
 
 
-def makeScopedCopyableTOAParameters():
+def makeScopedCopyableTOAParameters() -> "mem::ScopedCopyablePtr< cphd::TOAParameters >":
     """makeScopedCopyableTOAParameters() -> ScopedCopyableTOAParameters"""
     return _cphd.makeScopedCopyableTOAParameters()
 class StdAutoCphdAntenna(_object):
@@ -3391,22 +3391,22 @@ class ScopedCopyableCphdAntenna(_object):
 
 
 
-    def get(self):
+    def get(self) -> "cphd::Antenna *":
         """get(ScopedCopyableCphdAntenna self) -> CphdAntenna"""
         return _cphd.ScopedCopyableCphdAntenna_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "cphd::Antenna &":
         """__ref__(ScopedCopyableCphdAntenna self) -> CphdAntenna"""
         return _cphd.ScopedCopyableCphdAntenna___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "cphd::Antenna *":
         """__deref__(ScopedCopyableCphdAntenna self) -> CphdAntenna"""
         return _cphd.ScopedCopyableCphdAntenna___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'CphdAntenna'=None) -> "void":
         """
         reset(ScopedCopyableCphdAntenna self, CphdAntenna ptr=None)
         reset(ScopedCopyableCphdAntenna self)
@@ -3416,12 +3416,12 @@ class ScopedCopyableCphdAntenna(_object):
     __swig_destroy__ = _cphd.delete_ScopedCopyableCphdAntenna
     __del__ = lambda self: None
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'CphdAntenna') -> "bool":
         """__eq__(ScopedCopyableCphdAntenna self, CphdAntenna other) -> bool"""
         return _cphd.ScopedCopyableCphdAntenna___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'CphdAntenna') -> "bool":
         """__ne__(ScopedCopyableCphdAntenna self, CphdAntenna other) -> bool"""
         return _cphd.ScopedCopyableCphdAntenna___ne__(self, other)
 
@@ -3453,7 +3453,7 @@ ScopedCopyableCphdAntenna_swigregister = _cphd.ScopedCopyableCphdAntenna_swigreg
 ScopedCopyableCphdAntenna_swigregister(ScopedCopyableCphdAntenna)
 
 
-def makeScopedCopyableCphdAntenna():
+def makeScopedCopyableCphdAntenna() -> "mem::ScopedCopyablePtr< cphd::Antenna >":
     """makeScopedCopyableCphdAntenna() -> ScopedCopyableCphdAntenna"""
     return _cphd.makeScopedCopyableCphdAntenna()
 # This file is compatible with both classic and new-style classes.

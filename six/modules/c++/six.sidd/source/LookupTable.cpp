@@ -19,9 +19,9 @@ bool LookupTable::Predefined::operator==(
         remapMember == rhs.remapMember);
 }
 
-LookupTable::Custom::Custom(size_t numEntries, size_t numBands)
+LookupTable::Custom::Custom(size_t numEntries, size_t numLuts)
 {
-    for (size_t ii = 0; ii < numBands; ++ii)
+    for (size_t ii = 0; ii < numLuts; ++ii)
     {
         lutValues.push_back(LUT(numEntries, 2));
     }

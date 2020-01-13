@@ -24,6 +24,8 @@
 
 %feature("autodoc", "1");
 
+%include <std_string.i>
+
 %{
 
 #include <complex>

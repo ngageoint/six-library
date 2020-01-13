@@ -109,12 +109,12 @@ class SwigPyIterator(_object):
     __swig_destroy__ = _six_sicd.delete_SwigPyIterator
     __del__ = lambda self: None
 
-    def value(self):
+    def value(self) -> "PyObject *":
         """value(SwigPyIterator self) -> PyObject *"""
         return _six_sicd.SwigPyIterator_value(self)
 
 
-    def incr(self, n=1):
+    def incr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
         """
         incr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         incr(SwigPyIterator self) -> SwigPyIterator
@@ -122,7 +122,7 @@ class SwigPyIterator(_object):
         return _six_sicd.SwigPyIterator_incr(self, n)
 
 
-    def decr(self, n=1):
+    def decr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
         """
         decr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         decr(SwigPyIterator self) -> SwigPyIterator
@@ -130,67 +130,67 @@ class SwigPyIterator(_object):
         return _six_sicd.SwigPyIterator_decr(self, n)
 
 
-    def distance(self, x):
+    def distance(self, x: 'SwigPyIterator') -> "ptrdiff_t":
         """distance(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t"""
         return _six_sicd.SwigPyIterator_distance(self, x)
 
 
-    def equal(self, x):
+    def equal(self, x: 'SwigPyIterator') -> "bool":
         """equal(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _six_sicd.SwigPyIterator_equal(self, x)
 
 
-    def copy(self):
+    def copy(self) -> "swig::SwigPyIterator *":
         """copy(SwigPyIterator self) -> SwigPyIterator"""
         return _six_sicd.SwigPyIterator_copy(self)
 
 
-    def next(self):
+    def next(self) -> "PyObject *":
         """next(SwigPyIterator self) -> PyObject *"""
         return _six_sicd.SwigPyIterator_next(self)
 
 
-    def __next__(self):
+    def __next__(self) -> "PyObject *":
         """__next__(SwigPyIterator self) -> PyObject *"""
         return _six_sicd.SwigPyIterator___next__(self)
 
 
-    def previous(self):
+    def previous(self) -> "PyObject *":
         """previous(SwigPyIterator self) -> PyObject *"""
         return _six_sicd.SwigPyIterator_previous(self)
 
 
-    def advance(self, n):
+    def advance(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
         """advance(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _six_sicd.SwigPyIterator_advance(self, n)
 
 
-    def __eq__(self, x):
+    def __eq__(self, x: 'SwigPyIterator') -> "bool":
         """__eq__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _six_sicd.SwigPyIterator___eq__(self, x)
 
 
-    def __ne__(self, x):
+    def __ne__(self, x: 'SwigPyIterator') -> "bool":
         """__ne__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _six_sicd.SwigPyIterator___ne__(self, x)
 
 
-    def __iadd__(self, n):
+    def __iadd__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
         """__iadd__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _six_sicd.SwigPyIterator___iadd__(self, n)
 
 
-    def __isub__(self, n):
+    def __isub__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
         """__isub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _six_sicd.SwigPyIterator___isub__(self, n)
 
 
-    def __add__(self, n):
+    def __add__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
         """__add__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _six_sicd.SwigPyIterator___add__(self, n)
 
 
-    def __sub__(self, *args):
+    def __sub__(self, *args) -> "ptrdiff_t":
         """
         __sub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator
         __sub__(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t
@@ -203,7 +203,7 @@ SwigPyIterator_swigregister = _six_sicd.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
 
-def cropSICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname):
+def cropSICD(inPathname: 'std::string const &', schemaPaths: 'VectorString', aoiOffset: 'RowColSizeT', aoiDims: 'RowColSizeT', outPathname: 'std::string const &') -> "void":
     """cropSICD(std::string const & inPathname, VectorString schemaPaths, RowColSizeT aoiOffset, RowColSizeT aoiDims, std::string const & outPathname)"""
     return _six_sicd.cropSICD(inPathname, schemaPaths, aoiOffset, aoiDims, outPathname)
 class ComponentInfoDestructor(_object):
@@ -217,7 +217,7 @@ class ComponentInfoDestructor(_object):
     __swig_destroy__ = _six_sicd.delete_ComponentInfoDestructor
     __del__ = lambda self: None
 
-    def __call__(self, nativeObject):
+    def __call__(self, nativeObject: 'nitf_ComponentInfo *') -> "void":
         """__call__(ComponentInfoDestructor self, nitf_ComponentInfo * nativeObject)"""
         return _six_sicd.ComponentInfoDestructor___call__(self, nativeObject)
 
@@ -252,19 +252,19 @@ class ComponentInfo(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "nitf::ComponentInfo":
         """clone(ComponentInfo self) -> ComponentInfo"""
         return _six_sicd.ComponentInfo_clone(self)
 
     __swig_destroy__ = _six_sicd.delete_ComponentInfo
     __del__ = lambda self: None
 
-    def getLengthSubheader(self):
+    def getLengthSubheader(self) -> "nitf::Field":
         """getLengthSubheader(ComponentInfo self) -> Field"""
         return _six_sicd.ComponentInfo_getLengthSubheader(self)
 
 
-    def getLengthData(self):
+    def getLengthData(self) -> "nitf::Field":
         """getLengthData(ComponentInfo self) -> Field"""
         return _six_sicd.ComponentInfo_getLengthData(self)
 
@@ -282,7 +282,7 @@ class DESegmentDestructor(_object):
     __swig_destroy__ = _six_sicd.delete_DESegmentDestructor
     __del__ = lambda self: None
 
-    def __call__(self, nativeObject):
+    def __call__(self, nativeObject: 'nitf_DESegment *') -> "void":
         """__call__(DESegmentDestructor self, nitf_DESegment * nativeObject)"""
         return _six_sicd.DESegmentDestructor___call__(self, nativeObject)
 
@@ -319,39 +319,39 @@ class DESegment(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "nitf::DESegment":
         """clone(DESegment self) -> DESegment"""
         return _six_sicd.DESegment_clone(self)
 
     __swig_destroy__ = _six_sicd.delete_DESegment
     __del__ = lambda self: None
 
-    def getSubheader(self):
+    def getSubheader(self) -> "nitf::DESubheader":
         """getSubheader(DESegment self) -> DESubheader"""
         return _six_sicd.DESegment_getSubheader(self)
 
 
-    def setSubheader(self, value):
+    def setSubheader(self, value: 'DESubheader') -> "void":
         """setSubheader(DESegment self, DESubheader value)"""
         return _six_sicd.DESegment_setSubheader(self, value)
 
 
-    def getOffset(self):
+    def getOffset(self) -> "nitf::Uint64":
         """getOffset(DESegment self) -> nitf::Uint64"""
         return _six_sicd.DESegment_getOffset(self)
 
 
-    def setOffset(self, value):
+    def setOffset(self, value: 'nitf::Uint64') -> "void":
         """setOffset(DESegment self, nitf::Uint64 value)"""
         return _six_sicd.DESegment_setOffset(self, value)
 
 
-    def getEnd(self):
+    def getEnd(self) -> "nitf::Uint64":
         """getEnd(DESegment self) -> nitf::Uint64"""
         return _six_sicd.DESegment_getEnd(self)
 
 
-    def setEnd(self, value):
+    def setEnd(self, value: 'nitf::Uint64') -> "void":
         """setEnd(DESegment self, nitf::Uint64 value)"""
         return _six_sicd.DESegment_setEnd(self, value)
 
@@ -369,7 +369,7 @@ class DESubheaderDestructor(_object):
     __swig_destroy__ = _six_sicd.delete_DESubheaderDestructor
     __del__ = lambda self: None
 
-    def __call__(self, nativeObject):
+    def __call__(self, nativeObject: 'nitf_DESubheader *') -> "void":
         """__call__(DESubheaderDestructor self, nitf_DESubheader * nativeObject)"""
         return _six_sicd.DESubheaderDestructor___call__(self, nativeObject)
 
@@ -405,84 +405,84 @@ class DESubheader(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "nitf::DESubheader":
         """clone(DESubheader self) -> DESubheader"""
         return _six_sicd.DESubheader_clone(self)
 
     __swig_destroy__ = _six_sicd.delete_DESubheader
     __del__ = lambda self: None
 
-    def getFilePartType(self):
+    def getFilePartType(self) -> "nitf::Field":
         """getFilePartType(DESubheader self) -> Field"""
         return _six_sicd.DESubheader_getFilePartType(self)
 
 
-    def getTypeID(self):
+    def getTypeID(self) -> "nitf::Field":
         """getTypeID(DESubheader self) -> Field"""
         return _six_sicd.DESubheader_getTypeID(self)
 
 
-    def getVersion(self):
+    def getVersion(self) -> "nitf::Field":
         """getVersion(DESubheader self) -> Field"""
         return _six_sicd.DESubheader_getVersion(self)
 
 
-    def getSecurityClass(self):
+    def getSecurityClass(self) -> "nitf::Field":
         """getSecurityClass(DESubheader self) -> Field"""
         return _six_sicd.DESubheader_getSecurityClass(self)
 
 
-    def getSecurityGroup(self):
+    def getSecurityGroup(self) -> "nitf::FileSecurity":
         """getSecurityGroup(DESubheader self) -> nitf::FileSecurity"""
         return _six_sicd.DESubheader_getSecurityGroup(self)
 
 
-    def setSecurityGroup(self, value):
+    def setSecurityGroup(self, value: 'nitf::FileSecurity') -> "void":
         """setSecurityGroup(DESubheader self, nitf::FileSecurity value)"""
         return _six_sicd.DESubheader_setSecurityGroup(self, value)
 
 
-    def getOverflowedHeaderType(self):
+    def getOverflowedHeaderType(self) -> "nitf::Field":
         """getOverflowedHeaderType(DESubheader self) -> Field"""
         return _six_sicd.DESubheader_getOverflowedHeaderType(self)
 
 
-    def getDataItemOverflowed(self):
+    def getDataItemOverflowed(self) -> "nitf::Field":
         """getDataItemOverflowed(DESubheader self) -> Field"""
         return _six_sicd.DESubheader_getDataItemOverflowed(self)
 
 
-    def getSubheaderFieldsLength(self):
+    def getSubheaderFieldsLength(self) -> "nitf::Field":
         """getSubheaderFieldsLength(DESubheader self) -> Field"""
         return _six_sicd.DESubheader_getSubheaderFieldsLength(self)
 
 
-    def getSubheaderFields(self):
+    def getSubheaderFields(self) -> "nitf::TRE":
         """getSubheaderFields(DESubheader self) -> TRE"""
         return _six_sicd.DESubheader_getSubheaderFields(self)
 
 
-    def setSubheaderFields(self, fields):
+    def setSubheaderFields(self, fields: 'TRE') -> "void":
         """setSubheaderFields(DESubheader self, TRE fields)"""
         return _six_sicd.DESubheader_setSubheaderFields(self, fields)
 
 
-    def getDataLength(self):
+    def getDataLength(self) -> "nitf::Uint32":
         """getDataLength(DESubheader self) -> nitf::Uint32"""
         return _six_sicd.DESubheader_getDataLength(self)
 
 
-    def setDataLength(self, value):
+    def setDataLength(self, value: 'nitf::Uint32') -> "void":
         """setDataLength(DESubheader self, nitf::Uint32 value)"""
         return _six_sicd.DESubheader_setDataLength(self, value)
 
 
-    def getUserDefinedSection(self):
+    def getUserDefinedSection(self) -> "nitf::Extensions":
         """getUserDefinedSection(DESubheader self) -> Extensions"""
         return _six_sicd.DESubheader_getUserDefinedSection(self)
 
 
-    def setUserDefinedSection(self, value):
+    def setUserDefinedSection(self, value: 'Extensions') -> "void":
         """setUserDefinedSection(DESubheader self, Extensions value)"""
         return _six_sicd.DESubheader_setUserDefinedSection(self, value)
 
@@ -512,47 +512,47 @@ class ExtensionsIterator(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getHandle(self):
+    def getHandle(self) -> "nitf_ExtensionsIterator &":
         """getHandle(ExtensionsIterator self) -> nitf_ExtensionsIterator &"""
         return _six_sicd.ExtensionsIterator_getHandle(self)
 
 
-    def setHandle(self, x):
+    def setHandle(self, x: 'nitf_ExtensionsIterator') -> "void":
         """setHandle(ExtensionsIterator self, nitf_ExtensionsIterator x)"""
         return _six_sicd.ExtensionsIterator_setHandle(self, x)
 
 
-    def equals(self, it2):
+    def equals(self, it2: 'ExtensionsIterator') -> "bool":
         """equals(ExtensionsIterator self, ExtensionsIterator it2) -> bool"""
         return _six_sicd.ExtensionsIterator_equals(self, it2)
 
 
-    def __eq__(self, it2):
+    def __eq__(self, it2: 'ExtensionsIterator') -> "bool":
         """__eq__(ExtensionsIterator self, ExtensionsIterator it2) -> bool"""
         return _six_sicd.ExtensionsIterator___eq__(self, it2)
 
 
-    def notEqualTo(self, it2):
+    def notEqualTo(self, it2: 'ExtensionsIterator') -> "bool":
         """notEqualTo(ExtensionsIterator self, ExtensionsIterator it2) -> bool"""
         return _six_sicd.ExtensionsIterator_notEqualTo(self, it2)
 
 
-    def __ne__(self, it2):
+    def __ne__(self, it2: 'ExtensionsIterator') -> "bool":
         """__ne__(ExtensionsIterator self, ExtensionsIterator it2) -> bool"""
         return _six_sicd.ExtensionsIterator___ne__(self, it2)
 
 
-    def increment(self):
+    def increment(self) -> "void":
         """increment(ExtensionsIterator self)"""
         return _six_sicd.ExtensionsIterator_increment(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "nitf::TRE":
         """__ref__(ExtensionsIterator self) -> TRE"""
         return _six_sicd.ExtensionsIterator___ref__(self)
 
 
-    def get(self):
+    def get(self) -> "nitf::TRE":
         """get(ExtensionsIterator self) -> TRE"""
         return _six_sicd.ExtensionsIterator_get(self)
 
@@ -570,7 +570,7 @@ class ExtensionsDestructor(_object):
     __swig_destroy__ = _six_sicd.delete_ExtensionsDestructor
     __del__ = lambda self: None
 
-    def __call__(self, nativeObject):
+    def __call__(self, nativeObject: 'nitf_Extensions *') -> "void":
         """__call__(ExtensionsDestructor self, nitf_Extensions * nativeObject)"""
         return _six_sicd.ExtensionsDestructor___call__(self, nativeObject)
 
@@ -606,59 +606,59 @@ class Extensions(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "nitf::Extensions":
         """clone(Extensions self) -> Extensions"""
         return _six_sicd.Extensions_clone(self)
 
     __swig_destroy__ = _six_sicd.delete_Extensions
     __del__ = lambda self: None
 
-    def appendTRE(self, tre):
+    def appendTRE(self, tre: 'TRE') -> "void":
         """appendTRE(Extensions self, TRE tre)"""
         return _six_sicd.Extensions_appendTRE(self, tre)
 
 
-    def getTREsByName(self, name):
+    def getTREsByName(self, name: 'std::string const &') -> "nitf::List":
         """getTREsByName(Extensions self, std::string const & name) -> nitf::List"""
         return _six_sicd.Extensions_getTREsByName(self, name)
 
 
-    def removeTREsByName(self, name):
+    def removeTREsByName(self, name: 'std::string const &') -> "void":
         """removeTREsByName(Extensions self, std::string const & name)"""
         return _six_sicd.Extensions_removeTREsByName(self, name)
 
 
-    def remove(self, iter):
+    def remove(self, iter: 'ExtensionsIterator') -> "void":
         """remove(Extensions self, ExtensionsIterator iter)"""
         return _six_sicd.Extensions_remove(self, iter)
 
 
-    def getHash(self):
+    def getHash(self) -> "nitf::HashTable":
         """getHash(Extensions self) -> nitf::HashTable"""
         return _six_sicd.Extensions_getHash(self)
 
 
-    def setHash(self, value):
+    def setHash(self, value: 'nitf::HashTable &') -> "void":
         """setHash(Extensions self, nitf::HashTable & value)"""
         return _six_sicd.Extensions_setHash(self, value)
 
 
-    def exists(self, key):
+    def exists(self, key: 'std::string const &') -> "bool":
         """exists(Extensions self, std::string const & key) -> bool"""
         return _six_sicd.Extensions_exists(self, key)
 
 
-    def begin(self):
+    def begin(self) -> "nitf::Extensions::Iterator":
         """begin(Extensions self) -> ExtensionsIterator"""
         return _six_sicd.Extensions_begin(self)
 
 
-    def end(self):
+    def end(self) -> "nitf::Extensions::Iterator":
         """end(Extensions self) -> ExtensionsIterator"""
         return _six_sicd.Extensions_end(self)
 
 
-    def computeLength(self, version):
+    def computeLength(self, version: 'nitf::Version') -> "nitf::Uint64":
         """computeLength(Extensions self, nitf::Version version) -> nitf::Uint64"""
         return _six_sicd.Extensions_computeLength(self, version)
 
@@ -691,7 +691,7 @@ class Field(_object):
     __swig_destroy__ = _six_sicd.delete_Field
     __del__ = lambda self: None
 
-    def set(self, *args):
+    def set(self, *args) -> "void":
         """
         set(Field self, nitf::Uint8 data)
         set(Field self, nitf::Uint16 data)
@@ -711,7 +711,7 @@ class Field(_object):
         return _six_sicd.Field_set(self, *args)
 
 
-    def asDateTime(self, *args):
+    def asDateTime(self, *args) -> "nitf::DateTime":
         """
         asDateTime(Field self, std::string const & format) -> DateTime
         asDateTime(Field self) -> DateTime
@@ -719,37 +719,37 @@ class Field(_object):
         return _six_sicd.Field_asDateTime(self, *args)
 
 
-    def getType(self):
+    def getType(self) -> "nitf::Field::FieldType":
         """getType(Field self) -> nitf::Field::FieldType"""
         return _six_sicd.Field_getType(self)
 
 
-    def setType(self, type):
+    def setType(self, type: 'nitf::Field::FieldType') -> "void":
         """setType(Field self, nitf::Field::FieldType type)"""
         return _six_sicd.Field_setType(self, type)
 
 
-    def getRawData(self):
+    def getRawData(self) -> "char *":
         """getRawData(Field self) -> char *"""
         return _six_sicd.Field_getRawData(self)
 
 
-    def setRawData(self, raw, length):
+    def setRawData(self, raw: 'char *', length: 'size_t') -> "void":
         """setRawData(Field self, char * raw, size_t length)"""
         return _six_sicd.Field_setRawData(self, raw, length)
 
 
-    def getLength(self):
+    def getLength(self) -> "size_t":
         """getLength(Field self) -> size_t"""
         return _six_sicd.Field_getLength(self)
 
 
-    def resize(self, length):
+    def resize(self, length: 'size_t') -> "void":
         """resize(Field self, size_t length)"""
         return _six_sicd.Field_resize(self, length)
 
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(Field self) -> std::string"""
         return _six_sicd.Field_toString(self)
 
@@ -778,7 +778,7 @@ class FileHeaderDestructor(_object):
     __swig_destroy__ = _six_sicd.delete_FileHeaderDestructor
     __del__ = lambda self: None
 
-    def __call__(self, nativeObject):
+    def __call__(self, nativeObject: 'nitf_FileHeader *') -> "void":
         """__call__(FileHeaderDestructor self, nitf_FileHeader * nativeObject)"""
         return _six_sicd.FileHeaderDestructor___call__(self, nativeObject)
 
@@ -814,199 +814,199 @@ class FileHeader(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "nitf::FileHeader":
         """clone(FileHeader self) -> FileHeader"""
         return _six_sicd.FileHeader_clone(self)
 
     __swig_destroy__ = _six_sicd.delete_FileHeader
     __del__ = lambda self: None
 
-    def getFileHeader(self):
+    def getFileHeader(self) -> "nitf::Field":
         """getFileHeader(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getFileHeader(self)
 
 
-    def getFileVersion(self):
+    def getFileVersion(self) -> "nitf::Field":
         """getFileVersion(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getFileVersion(self)
 
 
-    def getComplianceLevel(self):
+    def getComplianceLevel(self) -> "nitf::Field":
         """getComplianceLevel(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getComplianceLevel(self)
 
 
-    def getSystemType(self):
+    def getSystemType(self) -> "nitf::Field":
         """getSystemType(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getSystemType(self)
 
 
-    def getOriginStationID(self):
+    def getOriginStationID(self) -> "nitf::Field":
         """getOriginStationID(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getOriginStationID(self)
 
 
-    def getFileDateTime(self):
+    def getFileDateTime(self) -> "nitf::Field":
         """getFileDateTime(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getFileDateTime(self)
 
 
-    def getFileTitle(self):
+    def getFileTitle(self) -> "nitf::Field":
         """getFileTitle(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getFileTitle(self)
 
 
-    def getClassification(self):
+    def getClassification(self) -> "nitf::Field":
         """getClassification(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getClassification(self)
 
 
-    def getSecurityGroup(self):
+    def getSecurityGroup(self) -> "nitf::FileSecurity":
         """getSecurityGroup(FileHeader self) -> nitf::FileSecurity"""
         return _six_sicd.FileHeader_getSecurityGroup(self)
 
 
-    def setSecurityGroup(self, value):
+    def setSecurityGroup(self, value: 'nitf::FileSecurity') -> "void":
         """setSecurityGroup(FileHeader self, nitf::FileSecurity value)"""
         return _six_sicd.FileHeader_setSecurityGroup(self, value)
 
 
-    def getMessageCopyNum(self):
+    def getMessageCopyNum(self) -> "nitf::Field":
         """getMessageCopyNum(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getMessageCopyNum(self)
 
 
-    def getMessageNumCopies(self):
+    def getMessageNumCopies(self) -> "nitf::Field":
         """getMessageNumCopies(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getMessageNumCopies(self)
 
 
-    def getEncrypted(self):
+    def getEncrypted(self) -> "nitf::Field":
         """getEncrypted(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getEncrypted(self)
 
 
-    def getBackgroundColor(self):
+    def getBackgroundColor(self) -> "nitf::Field":
         """getBackgroundColor(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getBackgroundColor(self)
 
 
-    def getOriginatorName(self):
+    def getOriginatorName(self) -> "nitf::Field":
         """getOriginatorName(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getOriginatorName(self)
 
 
-    def getOriginatorPhone(self):
+    def getOriginatorPhone(self) -> "nitf::Field":
         """getOriginatorPhone(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getOriginatorPhone(self)
 
 
-    def getFileLength(self):
+    def getFileLength(self) -> "nitf::Field":
         """getFileLength(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getFileLength(self)
 
 
-    def getHeaderLength(self):
+    def getHeaderLength(self) -> "nitf::Field":
         """getHeaderLength(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getHeaderLength(self)
 
 
-    def getNumImages(self):
+    def getNumImages(self) -> "nitf::Field":
         """getNumImages(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getNumImages(self)
 
 
-    def getNumGraphics(self):
+    def getNumGraphics(self) -> "nitf::Field":
         """getNumGraphics(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getNumGraphics(self)
 
 
-    def getNumLabels(self):
+    def getNumLabels(self) -> "nitf::Field":
         """getNumLabels(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getNumLabels(self)
 
 
-    def getNumTexts(self):
+    def getNumTexts(self) -> "nitf::Field":
         """getNumTexts(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getNumTexts(self)
 
 
-    def getNumDataExtensions(self):
+    def getNumDataExtensions(self) -> "nitf::Field":
         """getNumDataExtensions(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getNumDataExtensions(self)
 
 
-    def getNumReservedExtensions(self):
+    def getNumReservedExtensions(self) -> "nitf::Field":
         """getNumReservedExtensions(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getNumReservedExtensions(self)
 
 
-    def getImageInfo(self, i):
+    def getImageInfo(self, i: 'int') -> "nitf::ComponentInfo":
         """getImageInfo(FileHeader self, int i) -> ComponentInfo"""
         return _six_sicd.FileHeader_getImageInfo(self, i)
 
 
-    def getGraphicInfo(self, i):
+    def getGraphicInfo(self, i: 'int') -> "nitf::ComponentInfo":
         """getGraphicInfo(FileHeader self, int i) -> ComponentInfo"""
         return _six_sicd.FileHeader_getGraphicInfo(self, i)
 
 
-    def getLabelInfo(self, i):
+    def getLabelInfo(self, i: 'int') -> "nitf::ComponentInfo":
         """getLabelInfo(FileHeader self, int i) -> ComponentInfo"""
         return _six_sicd.FileHeader_getLabelInfo(self, i)
 
 
-    def getTextInfo(self, i):
+    def getTextInfo(self, i: 'int') -> "nitf::ComponentInfo":
         """getTextInfo(FileHeader self, int i) -> ComponentInfo"""
         return _six_sicd.FileHeader_getTextInfo(self, i)
 
 
-    def getDataExtensionInfo(self, i):
+    def getDataExtensionInfo(self, i: 'int') -> "nitf::ComponentInfo":
         """getDataExtensionInfo(FileHeader self, int i) -> ComponentInfo"""
         return _six_sicd.FileHeader_getDataExtensionInfo(self, i)
 
 
-    def getReservedExtensionInfo(self, i):
+    def getReservedExtensionInfo(self, i: 'int') -> "nitf::ComponentInfo":
         """getReservedExtensionInfo(FileHeader self, int i) -> ComponentInfo"""
         return _six_sicd.FileHeader_getReservedExtensionInfo(self, i)
 
 
-    def getUserDefinedHeaderLength(self):
+    def getUserDefinedHeaderLength(self) -> "nitf::Field":
         """getUserDefinedHeaderLength(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getUserDefinedHeaderLength(self)
 
 
-    def getUserDefinedOverflow(self):
+    def getUserDefinedOverflow(self) -> "nitf::Field":
         """getUserDefinedOverflow(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getUserDefinedOverflow(self)
 
 
-    def getExtendedHeaderLength(self):
+    def getExtendedHeaderLength(self) -> "nitf::Field":
         """getExtendedHeaderLength(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getExtendedHeaderLength(self)
 
 
-    def getExtendedHeaderOverflow(self):
+    def getExtendedHeaderOverflow(self) -> "nitf::Field":
         """getExtendedHeaderOverflow(FileHeader self) -> Field"""
         return _six_sicd.FileHeader_getExtendedHeaderOverflow(self)
 
 
-    def getUserDefinedSection(self):
+    def getUserDefinedSection(self) -> "nitf::Extensions":
         """getUserDefinedSection(FileHeader self) -> Extensions"""
         return _six_sicd.FileHeader_getUserDefinedSection(self)
 
 
-    def setUserDefinedSection(self, value):
+    def setUserDefinedSection(self, value: 'Extensions') -> "void":
         """setUserDefinedSection(FileHeader self, Extensions value)"""
         return _six_sicd.FileHeader_setUserDefinedSection(self, value)
 
 
-    def getExtendedSection(self):
+    def getExtendedSection(self) -> "nitf::Extensions":
         """getExtendedSection(FileHeader self) -> Extensions"""
         return _six_sicd.FileHeader_getExtendedSection(self)
 
 
-    def setExtendedSection(self, value):
+    def setExtendedSection(self, value: 'Extensions') -> "void":
         """setExtendedSection(FileHeader self, Extensions value)"""
         return _six_sicd.FileHeader_setExtendedSection(self, value)
 
@@ -1024,7 +1024,7 @@ class ImageSegmentDestructor(_object):
     __swig_destroy__ = _six_sicd.delete_ImageSegmentDestructor
     __del__ = lambda self: None
 
-    def __call__(self, nativeObject):
+    def __call__(self, nativeObject: 'nitf_ImageSegment *') -> "void":
         """__call__(ImageSegmentDestructor self, nitf_ImageSegment * nativeObject)"""
         return _six_sicd.ImageSegmentDestructor___call__(self, nativeObject)
 
@@ -1061,39 +1061,39 @@ class ImageSegment(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "nitf::ImageSegment":
         """clone(ImageSegment self) -> ImageSegment"""
         return _six_sicd.ImageSegment_clone(self)
 
     __swig_destroy__ = _six_sicd.delete_ImageSegment
     __del__ = lambda self: None
 
-    def getSubheader(self):
+    def getSubheader(self) -> "nitf::ImageSubheader":
         """getSubheader(ImageSegment self) -> ImageSubheader"""
         return _six_sicd.ImageSegment_getSubheader(self)
 
 
-    def setSubheader(self, value):
+    def setSubheader(self, value: 'ImageSubheader') -> "void":
         """setSubheader(ImageSegment self, ImageSubheader value)"""
         return _six_sicd.ImageSegment_setSubheader(self, value)
 
 
-    def getImageOffset(self):
+    def getImageOffset(self) -> "nitf::Uint64":
         """getImageOffset(ImageSegment self) -> nitf::Uint64"""
         return _six_sicd.ImageSegment_getImageOffset(self)
 
 
-    def setImageOffset(self, value):
+    def setImageOffset(self, value: 'nitf::Uint64') -> "void":
         """setImageOffset(ImageSegment self, nitf::Uint64 value)"""
         return _six_sicd.ImageSegment_setImageOffset(self, value)
 
 
-    def getImageEnd(self):
+    def getImageEnd(self) -> "nitf::Uint64":
         """getImageEnd(ImageSegment self) -> nitf::Uint64"""
         return _six_sicd.ImageSegment_getImageEnd(self)
 
 
-    def setImageEnd(self, value):
+    def setImageEnd(self, value: 'nitf::Uint64') -> "void":
         """setImageEnd(ImageSegment self, nitf::Uint64 value)"""
         return _six_sicd.ImageSegment_setImageEnd(self, value)
 
@@ -1111,7 +1111,7 @@ class ImageSourceDestructor(_object):
     __swig_destroy__ = _six_sicd.delete_ImageSourceDestructor
     __del__ = lambda self: None
 
-    def __call__(self, nativeObject):
+    def __call__(self, nativeObject: 'nitf_ImageSource *') -> "void":
         """__call__(ImageSourceDestructor self, nitf_ImageSource * nativeObject)"""
         return _six_sicd.ImageSourceDestructor___call__(self, nativeObject)
 
@@ -1149,12 +1149,12 @@ class ImageSource(_object):
     __swig_destroy__ = _six_sicd.delete_ImageSource
     __del__ = lambda self: None
 
-    def addBand(self, bandSource):
+    def addBand(self, bandSource: 'nitf::BandSource') -> "void":
         """addBand(ImageSource self, nitf::BandSource bandSource)"""
         return _six_sicd.ImageSource_addBand(self, bandSource)
 
 
-    def getBand(self, n):
+    def getBand(self, n: 'int') -> "nitf::BandSource":
         """getBand(ImageSource self, int n) -> nitf::BandSource"""
         return _six_sicd.ImageSource_getBand(self, n)
 
@@ -1172,7 +1172,7 @@ class ImageSubheaderDestructor(_object):
     __swig_destroy__ = _six_sicd.delete_ImageSubheaderDestructor
     __del__ = lambda self: None
 
-    def __call__(self, nativeObject):
+    def __call__(self, nativeObject: 'nitf_ImageSubheader *') -> "void":
         """__call__(ImageSubheaderDestructor self, nitf_ImageSubheader * nativeObject)"""
         return _six_sicd.ImageSubheaderDestructor___call__(self, nativeObject)
 
@@ -1208,312 +1208,312 @@ class ImageSubheader(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "nitf::ImageSubheader":
         """clone(ImageSubheader self) -> ImageSubheader"""
         return _six_sicd.ImageSubheader_clone(self)
 
     __swig_destroy__ = _six_sicd.delete_ImageSubheader
     __del__ = lambda self: None
 
-    def setPixelInformation(self, pvtype, nbpp, abpp, justification, irep, icat, bands):
+    def setPixelInformation(self, pvtype: 'std::string', nbpp: 'nitf::Uint32', abpp: 'nitf::Uint32', justification: 'std::string', irep: 'std::string', icat: 'std::string', bands: 'std::vector< nitf::BandInfo,std::allocator< nitf::BandInfo > > &') -> "void":
         """setPixelInformation(ImageSubheader self, std::string pvtype, nitf::Uint32 nbpp, nitf::Uint32 abpp, std::string justification, std::string irep, std::string icat, std::vector< nitf::BandInfo,std::allocator< nitf::BandInfo > > & bands)"""
         return _six_sicd.ImageSubheader_setPixelInformation(self, pvtype, nbpp, abpp, justification, irep, icat, bands)
 
 
-    def setCornersFromLatLons(self, type, corners):
+    def setCornersFromLatLons(self, type: 'nitf::CornersType', corners: 'double [4][2]') -> "void":
         """setCornersFromLatLons(ImageSubheader self, nitf::CornersType type, double [4][2] corners)"""
         return _six_sicd.ImageSubheader_setCornersFromLatLons(self, type, corners)
 
 
-    def getCornersAsLatLons(self, corners):
+    def getCornersAsLatLons(self, corners: 'double [4][2]') -> "void":
         """getCornersAsLatLons(ImageSubheader self, double [4][2] corners)"""
         return _six_sicd.ImageSubheader_getCornersAsLatLons(self, corners)
 
 
-    def getCornersType(self):
+    def getCornersType(self) -> "nitf::CornersType":
         """getCornersType(ImageSubheader self) -> nitf::CornersType"""
         return _six_sicd.ImageSubheader_getCornersType(self)
 
 
-    def setBlocking(self, numRows, numCols, numRowsPerBlock, numColsPerBlock, imode):
+    def setBlocking(self, numRows: 'nitf::Uint32', numCols: 'nitf::Uint32', numRowsPerBlock: 'nitf::Uint32', numColsPerBlock: 'nitf::Uint32', imode: 'std::string const &') -> "void":
         """setBlocking(ImageSubheader self, nitf::Uint32 numRows, nitf::Uint32 numCols, nitf::Uint32 numRowsPerBlock, nitf::Uint32 numColsPerBlock, std::string const & imode)"""
         return _six_sicd.ImageSubheader_setBlocking(self, numRows, numCols, numRowsPerBlock, numColsPerBlock, imode)
 
 
-    def computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow):
+    def computeBlocking(numRows: 'nitf::Uint32', numCols: 'nitf::Uint32', numRowsPerBlock: 'nitf::Uint32 &', numColsPerBlock: 'nitf::Uint32 &', numBlocksPerCol: 'nitf::Uint32 &', numBlocksPerRow: 'nitf::Uint32 &') -> "void":
         """computeBlocking(nitf::Uint32 numRows, nitf::Uint32 numCols, nitf::Uint32 & numRowsPerBlock, nitf::Uint32 & numColsPerBlock, nitf::Uint32 & numBlocksPerCol, nitf::Uint32 & numBlocksPerRow)"""
         return _six_sicd.ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow)
 
     computeBlocking = staticmethod(computeBlocking)
 
-    def setDimensions(self, numRows, numCols):
+    def setDimensions(self, numRows: 'nitf::Uint32', numCols: 'nitf::Uint32') -> "void":
         """setDimensions(ImageSubheader self, nitf::Uint32 numRows, nitf::Uint32 numCols)"""
         return _six_sicd.ImageSubheader_setDimensions(self, numRows, numCols)
 
 
-    def getBandCount(self):
+    def getBandCount(self) -> "nitf::Uint32":
         """getBandCount(ImageSubheader self) -> nitf::Uint32"""
         return _six_sicd.ImageSubheader_getBandCount(self)
 
 
-    def createBands(self, numBands):
+    def createBands(self, numBands: 'nitf::Uint32') -> "void":
         """createBands(ImageSubheader self, nitf::Uint32 numBands)"""
         return _six_sicd.ImageSubheader_createBands(self, numBands)
 
 
-    def insertImageComment(self, comment, index):
+    def insertImageComment(self, comment: 'std::string', index: 'int') -> "int":
         """insertImageComment(ImageSubheader self, std::string comment, int index) -> int"""
         return _six_sicd.ImageSubheader_insertImageComment(self, comment, index)
 
 
-    def removeImageComment(self, index):
+    def removeImageComment(self, index: 'int') -> "void":
         """removeImageComment(ImageSubheader self, int index)"""
         return _six_sicd.ImageSubheader_removeImageComment(self, index)
 
 
-    def getFilePartType(self):
+    def getFilePartType(self) -> "nitf::Field":
         """getFilePartType(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getFilePartType(self)
 
 
-    def getImageId(self):
+    def getImageId(self) -> "nitf::Field":
         """getImageId(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageId(self)
 
 
-    def getImageDateAndTime(self):
+    def getImageDateAndTime(self) -> "nitf::Field":
         """getImageDateAndTime(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageDateAndTime(self)
 
 
-    def getTargetId(self):
+    def getTargetId(self) -> "nitf::Field":
         """getTargetId(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getTargetId(self)
 
 
-    def getImageTitle(self):
+    def getImageTitle(self) -> "nitf::Field":
         """getImageTitle(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageTitle(self)
 
 
-    def getImageSecurityClass(self):
+    def getImageSecurityClass(self) -> "nitf::Field":
         """getImageSecurityClass(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageSecurityClass(self)
 
 
-    def getSecurityGroup(self):
+    def getSecurityGroup(self) -> "nitf::FileSecurity":
         """getSecurityGroup(ImageSubheader self) -> nitf::FileSecurity"""
         return _six_sicd.ImageSubheader_getSecurityGroup(self)
 
 
-    def setSecurityGroup(self, value):
+    def setSecurityGroup(self, value: 'nitf::FileSecurity') -> "void":
         """setSecurityGroup(ImageSubheader self, nitf::FileSecurity value)"""
         return _six_sicd.ImageSubheader_setSecurityGroup(self, value)
 
 
-    def getEncrypted(self):
+    def getEncrypted(self) -> "nitf::Field":
         """getEncrypted(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getEncrypted(self)
 
 
-    def getImageSource(self):
+    def getImageSource(self) -> "nitf::Field":
         """getImageSource(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageSource(self)
 
 
-    def getNumRows(self):
+    def getNumRows(self) -> "nitf::Field":
         """getNumRows(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getNumRows(self)
 
 
-    def getNumCols(self):
+    def getNumCols(self) -> "nitf::Field":
         """getNumCols(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getNumCols(self)
 
 
-    def getPixelValueType(self):
+    def getPixelValueType(self) -> "nitf::Field":
         """getPixelValueType(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getPixelValueType(self)
 
 
-    def getImageRepresentation(self):
+    def getImageRepresentation(self) -> "nitf::Field":
         """getImageRepresentation(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageRepresentation(self)
 
 
-    def getImageCategory(self):
+    def getImageCategory(self) -> "nitf::Field":
         """getImageCategory(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageCategory(self)
 
 
-    def getActualBitsPerPixel(self):
+    def getActualBitsPerPixel(self) -> "nitf::Field":
         """getActualBitsPerPixel(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getActualBitsPerPixel(self)
 
 
-    def getPixelJustification(self):
+    def getPixelJustification(self) -> "nitf::Field":
         """getPixelJustification(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getPixelJustification(self)
 
 
-    def getImageCoordinateSystem(self):
+    def getImageCoordinateSystem(self) -> "nitf::Field":
         """getImageCoordinateSystem(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageCoordinateSystem(self)
 
 
-    def getCornerCoordinates(self):
+    def getCornerCoordinates(self) -> "nitf::Field":
         """getCornerCoordinates(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getCornerCoordinates(self)
 
 
-    def getNumImageComments(self):
+    def getNumImageComments(self) -> "nitf::Field":
         """getNumImageComments(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getNumImageComments(self)
 
 
-    def getImageComments(self):
+    def getImageComments(self) -> "nitf::List":
         """getImageComments(ImageSubheader self) -> nitf::List"""
         return _six_sicd.ImageSubheader_getImageComments(self)
 
 
-    def getImageCompression(self):
+    def getImageCompression(self) -> "nitf::Field":
         """getImageCompression(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageCompression(self)
 
 
-    def getCompressionRate(self):
+    def getCompressionRate(self) -> "nitf::Field":
         """getCompressionRate(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getCompressionRate(self)
 
 
-    def getNumImageBands(self):
+    def getNumImageBands(self) -> "nitf::Field":
         """getNumImageBands(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getNumImageBands(self)
 
 
-    def getNumMultispectralImageBands(self):
+    def getNumMultispectralImageBands(self) -> "nitf::Field":
         """getNumMultispectralImageBands(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getNumMultispectralImageBands(self)
 
 
-    def getBandInfo(self, band):
+    def getBandInfo(self, band: 'nitf::Uint32') -> "nitf::BandInfo":
         """getBandInfo(ImageSubheader self, nitf::Uint32 band) -> nitf::BandInfo"""
         return _six_sicd.ImageSubheader_getBandInfo(self, band)
 
 
-    def getImageSyncCode(self):
+    def getImageSyncCode(self) -> "nitf::Field":
         """getImageSyncCode(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageSyncCode(self)
 
 
-    def getImageMode(self):
+    def getImageMode(self) -> "nitf::Field":
         """getImageMode(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageMode(self)
 
 
-    def getNumBlocksPerRow(self):
+    def getNumBlocksPerRow(self) -> "nitf::Field":
         """getNumBlocksPerRow(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getNumBlocksPerRow(self)
 
 
-    def getNumBlocksPerCol(self):
+    def getNumBlocksPerCol(self) -> "nitf::Field":
         """getNumBlocksPerCol(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getNumBlocksPerCol(self)
 
 
-    def getNumPixelsPerHorizBlock(self):
+    def getNumPixelsPerHorizBlock(self) -> "nitf::Field":
         """getNumPixelsPerHorizBlock(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getNumPixelsPerHorizBlock(self)
 
 
-    def getNumPixelsPerVertBlock(self):
+    def getNumPixelsPerVertBlock(self) -> "nitf::Field":
         """getNumPixelsPerVertBlock(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getNumPixelsPerVertBlock(self)
 
 
-    def getNumBitsPerPixel(self):
+    def getNumBitsPerPixel(self) -> "nitf::Field":
         """getNumBitsPerPixel(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getNumBitsPerPixel(self)
 
 
-    def getImageDisplayLevel(self):
+    def getImageDisplayLevel(self) -> "nitf::Field":
         """getImageDisplayLevel(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageDisplayLevel(self)
 
 
-    def getImageAttachmentLevel(self):
+    def getImageAttachmentLevel(self) -> "nitf::Field":
         """getImageAttachmentLevel(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageAttachmentLevel(self)
 
 
-    def getImageLocation(self):
+    def getImageLocation(self) -> "nitf::Field":
         """getImageLocation(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageLocation(self)
 
 
-    def getImageMagnification(self):
+    def getImageMagnification(self) -> "nitf::Field":
         """getImageMagnification(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getImageMagnification(self)
 
 
-    def getUserDefinedImageDataLength(self):
+    def getUserDefinedImageDataLength(self) -> "nitf::Field":
         """getUserDefinedImageDataLength(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getUserDefinedImageDataLength(self)
 
 
-    def getUserDefinedOverflow(self):
+    def getUserDefinedOverflow(self) -> "nitf::Field":
         """getUserDefinedOverflow(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getUserDefinedOverflow(self)
 
 
-    def getExtendedHeaderLength(self):
+    def getExtendedHeaderLength(self) -> "nitf::Field":
         """getExtendedHeaderLength(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getExtendedHeaderLength(self)
 
 
-    def getExtendedHeaderOverflow(self):
+    def getExtendedHeaderOverflow(self) -> "nitf::Field":
         """getExtendedHeaderOverflow(ImageSubheader self) -> Field"""
         return _six_sicd.ImageSubheader_getExtendedHeaderOverflow(self)
 
 
-    def getUserDefinedSection(self):
+    def getUserDefinedSection(self) -> "nitf::Extensions":
         """getUserDefinedSection(ImageSubheader self) -> Extensions"""
         return _six_sicd.ImageSubheader_getUserDefinedSection(self)
 
 
-    def setUserDefinedSection(self, value):
+    def setUserDefinedSection(self, value: 'Extensions') -> "void":
         """setUserDefinedSection(ImageSubheader self, Extensions value)"""
         return _six_sicd.ImageSubheader_setUserDefinedSection(self, value)
 
 
-    def getExtendedSection(self):
+    def getExtendedSection(self) -> "nitf::Extensions":
         """getExtendedSection(ImageSubheader self) -> Extensions"""
         return _six_sicd.ImageSubheader_getExtendedSection(self)
 
 
-    def setExtendedSection(self, value):
+    def setExtendedSection(self, value: 'Extensions') -> "void":
         """setExtendedSection(ImageSubheader self, Extensions value)"""
         return _six_sicd.ImageSubheader_setExtendedSection(self, value)
 
 
-    def getActualImageDim(dim, numDimsPerBlock):
+    def getActualImageDim(dim: 'size_t', numDimsPerBlock: 'size_t') -> "size_t":
         """getActualImageDim(size_t dim, size_t numDimsPerBlock) -> size_t"""
         return _six_sicd.ImageSubheader_getActualImageDim(dim, numDimsPerBlock)
 
     getActualImageDim = staticmethod(getActualImageDim)
 
-    def getNumBytesOfImageData(self):
+    def getNumBytesOfImageData(self) -> "size_t":
         """getNumBytesOfImageData(ImageSubheader self) -> size_t"""
         return _six_sicd.ImageSubheader_getNumBytesOfImageData(self)
 
 ImageSubheader_swigregister = _six_sicd.ImageSubheader_swigregister
 ImageSubheader_swigregister(ImageSubheader)
 
-def ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow):
+def ImageSubheader_computeBlocking(numRows: 'nitf::Uint32', numCols: 'nitf::Uint32', numRowsPerBlock: 'nitf::Uint32 &', numColsPerBlock: 'nitf::Uint32 &', numBlocksPerCol: 'nitf::Uint32 &', numBlocksPerRow: 'nitf::Uint32 &') -> "void":
     """ImageSubheader_computeBlocking(nitf::Uint32 numRows, nitf::Uint32 numCols, nitf::Uint32 & numRowsPerBlock, nitf::Uint32 & numColsPerBlock, nitf::Uint32 & numBlocksPerCol, nitf::Uint32 & numBlocksPerRow)"""
     return _six_sicd.ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow)
 
-def ImageSubheader_getActualImageDim(dim, numDimsPerBlock):
+def ImageSubheader_getActualImageDim(dim: 'size_t', numDimsPerBlock: 'size_t') -> "size_t":
     """ImageSubheader_getActualImageDim(size_t dim, size_t numDimsPerBlock) -> size_t"""
     return _six_sicd.ImageSubheader_getActualImageDim(dim, numDimsPerBlock)
 
@@ -1565,37 +1565,37 @@ class PlanarCoordinateMesh(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getName(self):
+    def getName(self) -> "std::string":
         """getName(PlanarCoordinateMesh self) -> std::string"""
         return _six_sicd.PlanarCoordinateMesh_getName(self)
 
 
-    def getMeshDims(self):
+    def getMeshDims(self) -> "types::RowCol< size_t >":
         """getMeshDims(PlanarCoordinateMesh self) -> RowColSizeT"""
         return _six_sicd.PlanarCoordinateMesh_getMeshDims(self)
 
 
-    def getX(self):
+    def getX(self) -> "std::vector< double,std::allocator< double > > const &":
         """getX(PlanarCoordinateMesh self) -> std_vector_double"""
         return _six_sicd.PlanarCoordinateMesh_getX(self)
 
 
-    def getY(self):
+    def getY(self) -> "std::vector< double,std::allocator< double > > const &":
         """getY(PlanarCoordinateMesh self) -> std_vector_double"""
         return _six_sicd.PlanarCoordinateMesh_getY(self)
 
 
-    def getFields(self):
+    def getFields(self) -> "std::vector< Mesh::Field,std::allocator< Mesh::Field > >":
         """getFields(PlanarCoordinateMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
         return _six_sicd.PlanarCoordinateMesh_getFields(self)
 
 
-    def serialize(self, values):
+    def serialize(self, values: 'std::vector< sys::byte,std::allocator< sys::byte > > &') -> "void":
         """serialize(PlanarCoordinateMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
         return _six_sicd.PlanarCoordinateMesh_serialize(self, values)
 
 
-    def deserialize(self, values):
+    def deserialize(self, values: 'sys::byte const *&') -> "void":
         """deserialize(PlanarCoordinateMesh self, sys::byte const *& values)"""
         return _six_sicd.PlanarCoordinateMesh_deserialize(self, values)
 
@@ -1628,32 +1628,32 @@ class NoiseMesh(PlanarCoordinateMesh):
         except __builtin__.Exception:
             self.this = this
 
-    def getMainBeamNoise(self):
+    def getMainBeamNoise(self) -> "std::vector< double,std::allocator< double > > const &":
         """getMainBeamNoise(NoiseMesh self) -> std_vector_double"""
         return _six_sicd.NoiseMesh_getMainBeamNoise(self)
 
 
-    def getAzimuthAmbiguityNoise(self):
+    def getAzimuthAmbiguityNoise(self) -> "std::vector< double,std::allocator< double > > const &":
         """getAzimuthAmbiguityNoise(NoiseMesh self) -> std_vector_double"""
         return _six_sicd.NoiseMesh_getAzimuthAmbiguityNoise(self)
 
 
-    def getCombinedNoise(self):
+    def getCombinedNoise(self) -> "std::vector< double,std::allocator< double > > const &":
         """getCombinedNoise(NoiseMesh self) -> std_vector_double"""
         return _six_sicd.NoiseMesh_getCombinedNoise(self)
 
 
-    def getFields(self):
+    def getFields(self) -> "std::vector< Mesh::Field,std::allocator< Mesh::Field > >":
         """getFields(NoiseMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
         return _six_sicd.NoiseMesh_getFields(self)
 
 
-    def serialize(self, values):
+    def serialize(self, values: 'std::vector< sys::byte,std::allocator< sys::byte > > &') -> "void":
         """serialize(NoiseMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
         return _six_sicd.NoiseMesh_serialize(self, values)
 
 
-    def deserialize(self, values):
+    def deserialize(self, values: 'sys::byte const *&') -> "void":
         """deserialize(NoiseMesh self, sys::byte const *& values)"""
         return _six_sicd.NoiseMesh_deserialize(self, values)
 
@@ -1682,7 +1682,7 @@ class RecordDestructor(_object):
     __swig_destroy__ = _six_sicd.delete_RecordDestructor
     __del__ = lambda self: None
 
-    def __call__(self, nativeObject):
+    def __call__(self, nativeObject: 'nitf_Record *') -> "void":
         """__call__(RecordDestructor self, nitf_Record * nativeObject)"""
         return _six_sicd.RecordDestructor___call__(self, nativeObject)
 
@@ -1719,59 +1719,59 @@ class Record(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "nitf::Record":
         """clone(Record self) -> Record"""
         return _six_sicd.Record_clone(self)
 
     __swig_destroy__ = _six_sicd.delete_Record
     __del__ = lambda self: None
 
-    def getVersion(self):
+    def getVersion(self) -> "nitf::Version":
         """getVersion(Record self) -> nitf::Version"""
         return _six_sicd.Record_getVersion(self)
 
 
-    def getHeader(self):
+    def getHeader(self) -> "nitf::FileHeader":
         """getHeader(Record self) -> FileHeader"""
         return _six_sicd.Record_getHeader(self)
 
 
-    def setHeader(self, value):
+    def setHeader(self, value: 'FileHeader') -> "void":
         """setHeader(Record self, FileHeader value)"""
         return _six_sicd.Record_setHeader(self, value)
 
 
-    def getNumImages(self):
+    def getNumImages(self) -> "nitf::Uint32":
         """getNumImages(Record self) -> nitf::Uint32"""
         return _six_sicd.Record_getNumImages(self)
 
 
-    def getNumGraphics(self):
+    def getNumGraphics(self) -> "nitf::Uint32":
         """getNumGraphics(Record self) -> nitf::Uint32"""
         return _six_sicd.Record_getNumGraphics(self)
 
 
-    def getNumLabels(self):
+    def getNumLabels(self) -> "nitf::Uint32":
         """getNumLabels(Record self) -> nitf::Uint32"""
         return _six_sicd.Record_getNumLabels(self)
 
 
-    def getNumTexts(self):
+    def getNumTexts(self) -> "nitf::Uint32":
         """getNumTexts(Record self) -> nitf::Uint32"""
         return _six_sicd.Record_getNumTexts(self)
 
 
-    def getNumDataExtensions(self):
+    def getNumDataExtensions(self) -> "nitf::Uint32":
         """getNumDataExtensions(Record self) -> nitf::Uint32"""
         return _six_sicd.Record_getNumDataExtensions(self)
 
 
-    def getNumReservedExtensions(self):
+    def getNumReservedExtensions(self) -> "nitf::Uint32":
         """getNumReservedExtensions(Record self) -> nitf::Uint32"""
         return _six_sicd.Record_getNumReservedExtensions(self)
 
 
-    def newImageSegment(self, index=-1):
+    def newImageSegment(self, index: 'int'=-1) -> "nitf::ImageSegment":
         """
         newImageSegment(Record self, int index=-1) -> ImageSegment
         newImageSegment(Record self) -> ImageSegment
@@ -1779,7 +1779,7 @@ class Record(_object):
         return _six_sicd.Record_newImageSegment(self, index)
 
 
-    def newGraphicSegment(self, index=-1):
+    def newGraphicSegment(self, index: 'int'=-1) -> "nitf::GraphicSegment":
         """
         newGraphicSegment(Record self, int index=-1) -> nitf::GraphicSegment
         newGraphicSegment(Record self) -> nitf::GraphicSegment
@@ -1787,7 +1787,7 @@ class Record(_object):
         return _six_sicd.Record_newGraphicSegment(self, index)
 
 
-    def newTextSegment(self, index=-1):
+    def newTextSegment(self, index: 'int'=-1) -> "nitf::TextSegment":
         """
         newTextSegment(Record self, int index=-1) -> nitf::TextSegment
         newTextSegment(Record self) -> nitf::TextSegment
@@ -1795,7 +1795,7 @@ class Record(_object):
         return _six_sicd.Record_newTextSegment(self, index)
 
 
-    def newDataExtensionSegment(self, index=-1):
+    def newDataExtensionSegment(self, index: 'int'=-1) -> "nitf::DESegment":
         """
         newDataExtensionSegment(Record self, int index=-1) -> DESegment
         newDataExtensionSegment(Record self) -> DESegment
@@ -1803,37 +1803,37 @@ class Record(_object):
         return _six_sicd.Record_newDataExtensionSegment(self, index)
 
 
-    def removeImageSegment(self, index):
+    def removeImageSegment(self, index: 'nitf::Uint32') -> "void":
         """removeImageSegment(Record self, nitf::Uint32 index)"""
         return _six_sicd.Record_removeImageSegment(self, index)
 
 
-    def removeGraphicSegment(self, index):
+    def removeGraphicSegment(self, index: 'nitf::Uint32') -> "void":
         """removeGraphicSegment(Record self, nitf::Uint32 index)"""
         return _six_sicd.Record_removeGraphicSegment(self, index)
 
 
-    def removeTextSegment(self, index):
+    def removeTextSegment(self, index: 'nitf::Uint32') -> "void":
         """removeTextSegment(Record self, nitf::Uint32 index)"""
         return _six_sicd.Record_removeTextSegment(self, index)
 
 
-    def removeLabelSegment(self, index):
+    def removeLabelSegment(self, index: 'nitf::Uint32') -> "void":
         """removeLabelSegment(Record self, nitf::Uint32 index)"""
         return _six_sicd.Record_removeLabelSegment(self, index)
 
 
-    def removeDataExtensionSegment(self, index):
+    def removeDataExtensionSegment(self, index: 'nitf::Uint32') -> "void":
         """removeDataExtensionSegment(Record self, nitf::Uint32 index)"""
         return _six_sicd.Record_removeDataExtensionSegment(self, index)
 
 
-    def removeReservedExtensionSegment(self, index):
+    def removeReservedExtensionSegment(self, index: 'nitf::Uint32') -> "void":
         """removeReservedExtensionSegment(Record self, nitf::Uint32 index)"""
         return _six_sicd.Record_removeReservedExtensionSegment(self, index)
 
 
-    def moveImageSegment(self, oldIndex, newIndex=-1):
+    def moveImageSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
         """
         moveImageSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
         moveImageSegment(Record self, nitf::Uint32 oldIndex)
@@ -1841,7 +1841,7 @@ class Record(_object):
         return _six_sicd.Record_moveImageSegment(self, oldIndex, newIndex)
 
 
-    def moveTextSegment(self, oldIndex, newIndex=-1):
+    def moveTextSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
         """
         moveTextSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
         moveTextSegment(Record self, nitf::Uint32 oldIndex)
@@ -1849,7 +1849,7 @@ class Record(_object):
         return _six_sicd.Record_moveTextSegment(self, oldIndex, newIndex)
 
 
-    def moveGraphicSegment(self, oldIndex, newIndex=-1):
+    def moveGraphicSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
         """
         moveGraphicSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
         moveGraphicSegment(Record self, nitf::Uint32 oldIndex)
@@ -1857,7 +1857,7 @@ class Record(_object):
         return _six_sicd.Record_moveGraphicSegment(self, oldIndex, newIndex)
 
 
-    def moveLabelSegment(self, oldIndex, newIndex=-1):
+    def moveLabelSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
         """
         moveLabelSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
         moveLabelSegment(Record self, nitf::Uint32 oldIndex)
@@ -1865,7 +1865,7 @@ class Record(_object):
         return _six_sicd.Record_moveLabelSegment(self, oldIndex, newIndex)
 
 
-    def moveDataExtensionSegment(self, oldIndex, newIndex=-1):
+    def moveDataExtensionSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
         """
         moveDataExtensionSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
         moveDataExtensionSegment(Record self, nitf::Uint32 oldIndex)
@@ -1873,7 +1873,7 @@ class Record(_object):
         return _six_sicd.Record_moveDataExtensionSegment(self, oldIndex, newIndex)
 
 
-    def moveReservedExtensionSegment(self, oldIndex, newIndex=-1):
+    def moveReservedExtensionSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
         """
         moveReservedExtensionSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
         moveReservedExtensionSegment(Record self, nitf::Uint32 oldIndex)
@@ -1881,17 +1881,17 @@ class Record(_object):
         return _six_sicd.Record_moveReservedExtensionSegment(self, oldIndex, newIndex)
 
 
-    def setComplexityLevelIfUnset(self):
+    def setComplexityLevelIfUnset(self) -> "void":
         """setComplexityLevelIfUnset(Record self)"""
         return _six_sicd.Record_setComplexityLevelIfUnset(self)
 
 
-    def getImageSegment(self, index):
+    def getImageSegment(self, index: 'size_t') -> "nitf::ImageSegment":
         """getImageSegment(Record self, size_t index) -> ImageSegment"""
         return _six_sicd.Record_getImageSegment(self, index)
 
 
-    def getDataExtension(self, index):
+    def getDataExtension(self, index: 'size_t') -> "nitf::DESegment":
         """getDataExtension(Record self, size_t index) -> DESegment"""
         return _six_sicd.Record_getDataExtension(self, index)
 
@@ -1899,23 +1899,23 @@ Record_swigregister = _six_sicd.Record_swigregister
 Record_swigregister(Record)
 
 
-def asComplexData(data):
+def asComplexData(data: 'Data') -> "six::sicd::ComplexData *":
     """asComplexData(Data data) -> ComplexData"""
     return _six_sicd.asComplexData(data)
 
-def writeNITF(pathname, schemaPaths, data, imageAdr):
+def writeNITF(pathname: 'std::string const &', schemaPaths: 'VectorString', data: 'ComplexData', imageAdr: 'long long') -> "void":
     """writeNITF(std::string const & pathname, VectorString schemaPaths, ComplexData data, long long imageAdr)"""
     return _six_sicd.writeNITF(pathname, schemaPaths, data, imageAdr)
 
-def readNITF(pathname, schemaPaths):
+def readNITF(pathname: 'std::string const &', schemaPaths: 'VectorString') -> "Data *":
     """readNITF(std::string const & pathname, VectorString schemaPaths) -> Data *"""
     return _six_sicd.readNITF(pathname, schemaPaths)
 
-def cropMetaData(complexData, aoiOffset, aoiDims):
+def cropMetaData(complexData: 'ComplexData', aoiOffset: 'RowColSizeT', aoiDims: 'RowColSizeT') -> "std::auto_ptr< six::sicd::ComplexData >":
     """cropMetaData(ComplexData complexData, RowColSizeT aoiOffset, RowColSizeT aoiDims) -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.cropMetaData(complexData, aoiOffset, aoiDims)
 
-def _readRecord(pathname):
+def _readRecord(pathname: 'std::string const &') -> "nitf::Record":
     """_readRecord(std::string const & pathname) -> Record"""
     return _six_sicd._readRecord(pathname)
 
@@ -1969,12 +1969,12 @@ class GeoInfo(_object):
     if _newclass:
         geometryLatLon = _swig_property(_six_sicd.GeoInfo_geometryLatLon_get, _six_sicd.GeoInfo_geometryLatLon_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'GeoInfo') -> "bool":
         """__eq__(GeoInfo self, GeoInfo rhs) -> bool"""
         return _six_sicd.GeoInfo___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'GeoInfo') -> "bool":
         """__ne__(GeoInfo self, GeoInfo rhs) -> bool"""
         return _six_sicd.GeoInfo___ne__(self, rhs)
 
@@ -2003,27 +2003,27 @@ class ProjectionPolynomialFitter(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getOutputPlaneRows(self):
+    def getOutputPlaneRows(self) -> "math::linear::Matrix2D< double > const &":
         """getOutputPlaneRows(ProjectionPolynomialFitter self) -> MatrixDouble"""
         return _six_sicd.ProjectionPolynomialFitter_getOutputPlaneRows(self)
 
 
-    def getOutputPlaneCols(self):
+    def getOutputPlaneCols(self) -> "math::linear::Matrix2D< double > const &":
         """getOutputPlaneCols(ProjectionPolynomialFitter self) -> MatrixDouble"""
         return _six_sicd.ProjectionPolynomialFitter_getOutputPlaneCols(self)
 
 
-    def getSceneCoordinates(self):
+    def getSceneCoordinates(self) -> "math::linear::Matrix2D< types::RowCol< double > > const &":
         """getSceneCoordinates(ProjectionPolynomialFitter self) -> math::linear::Matrix2D< types::RowCol< double > > const &"""
         return _six_sicd.ProjectionPolynomialFitter_getSceneCoordinates(self)
 
 
-    def getTimeCOA(self):
+    def getTimeCOA(self) -> "math::linear::Matrix2D< double > const &":
         """getTimeCOA(ProjectionPolynomialFitter self) -> MatrixDouble"""
         return _six_sicd.ProjectionPolynomialFitter_getTimeCOA(self)
 
 
-    def _fitOutputToSlantImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
+    def _fitOutputToSlantImpl(self, inPixelStart: 'RowColSizeT', inSceneCenter: 'RowColDouble', interimSceneCenter: 'RowColDouble', interimSampleSpacing: 'RowColDouble', polyOrderX: 'size_t', polyOrderY: 'size_t', outputToSlantRow: 'Poly2D', outputToSlantCol: 'Poly2D', meanResidualErrorRow: 'double *'=None, meanResidualErrorCol: 'double *'=None) -> "void":
         """
         _fitOutputToSlantImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
         _fitOutputToSlantImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D outputToSlantRow, Poly2D outputToSlantCol, double * meanResidualErrorRow=None)
@@ -2032,7 +2032,7 @@ class ProjectionPolynomialFitter(_object):
         return _six_sicd.ProjectionPolynomialFitter__fitOutputToSlantImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, outputToSlantRow, outputToSlantCol, meanResidualErrorRow, meanResidualErrorCol)
 
 
-    def _fitSlantToOutputImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, slantToOutputRow, slantToOutputCol, meanResidualErrorRow=None, meanResidualErrorCol=None):
+    def _fitSlantToOutputImpl(self, inPixelStart: 'RowColSizeT', inSceneCenter: 'RowColDouble', interimSceneCenter: 'RowColDouble', interimSampleSpacing: 'RowColDouble', polyOrderX: 'size_t', polyOrderY: 'size_t', slantToOutputRow: 'Poly2D', slantToOutputCol: 'Poly2D', meanResidualErrorRow: 'double *'=None, meanResidualErrorCol: 'double *'=None) -> "void":
         """
         _fitSlantToOutputImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol, double * meanResidualErrorRow=None, double * meanResidualErrorCol=None)
         _fitSlantToOutputImpl(ProjectionPolynomialFitter self, RowColSizeT inPixelStart, RowColDouble inSceneCenter, RowColDouble interimSceneCenter, RowColDouble interimSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D slantToOutputRow, Poly2D slantToOutputCol, double * meanResidualErrorRow=None)
@@ -2041,7 +2041,7 @@ class ProjectionPolynomialFitter(_object):
         return _six_sicd.ProjectionPolynomialFitter__fitSlantToOutputImpl(self, inPixelStart, inSceneCenter, interimSceneCenter, interimSampleSpacing, polyOrderX, polyOrderY, slantToOutputRow, slantToOutputCol, meanResidualErrorRow, meanResidualErrorCol)
 
 
-    def fitTimeCOAPolynomial(self, outSceneCenter, outSampleSpacing, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError=None):
+    def fitTimeCOAPolynomial(self, outSceneCenter: 'RowColDouble', outSampleSpacing: 'RowColDouble', polyOrderX: 'size_t', polyOrderY: 'size_t', timeCOAPoly: 'Poly2D', meanResidualError: 'double *'=None) -> "void":
         """
         fitTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outSceneCenter, RowColDouble outSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly, double * meanResidualError=None)
         fitTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outSceneCenter, RowColDouble outSampleSpacing, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly)
@@ -2049,7 +2049,7 @@ class ProjectionPolynomialFitter(_object):
         return _six_sicd.ProjectionPolynomialFitter_fitTimeCOAPolynomial(self, outSceneCenter, outSampleSpacing, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError)
 
 
-    def fitPixelBasedTimeCOAPolynomial(self, outPixelShift, polyOrderX, polyOrderY, timeCOAPoly, meanResidualError=None):
+    def fitPixelBasedTimeCOAPolynomial(self, outPixelShift: 'RowColDouble', polyOrderX: 'size_t', polyOrderY: 'size_t', timeCOAPoly: 'Poly2D', meanResidualError: 'double *'=None) -> "void":
         """
         fitPixelBasedTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outPixelShift, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly, double * meanResidualError=None)
         fitPixelBasedTimeCOAPolynomial(ProjectionPolynomialFitter self, RowColDouble outPixelShift, size_t polyOrderX, size_t polyOrderY, Poly2D timeCOAPoly)
@@ -2099,17 +2099,17 @@ class ComplexClassification(pysix.six_base.Classification):
     __getattr__ = lambda self, name: _swig_getattr(self, ComplexClassification, name)
     __repr__ = _swig_repr
 
-    def getLevel(self):
+    def getLevel(self) -> "std::string":
         """getLevel(ComplexClassification self) -> std::string"""
         return _six_sicd.ComplexClassification_getLevel(self)
 
 
-    def put(self, os):
+    def put(self, os: 'std::ostream &') -> "std::ostream &":
         """put(ComplexClassification self, std::ostream & os) -> std::ostream &"""
         return _six_sicd.ComplexClassification_put(self, os)
 
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ComplexClassification') -> "bool":
         """__eq__(ComplexClassification self, ComplexClassification rhs) -> bool"""
         return _six_sicd.ComplexClassification___eq__(self, rhs)
 
@@ -2185,17 +2185,17 @@ class CollectionInformation(_object):
     __swig_destroy__ = _six_sicd.delete_CollectionInformation
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::CollectionInformation *":
         """clone(CollectionInformation self) -> CollectionInformation"""
         return _six_sicd.CollectionInformation_clone(self)
 
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'CollectionInformation') -> "bool":
         """__eq__(CollectionInformation self, CollectionInformation other) -> bool"""
         return _six_sicd.CollectionInformation___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'CollectionInformation') -> "bool":
         """__ne__(CollectionInformation self, CollectionInformation other) -> bool"""
         return _six_sicd.CollectionInformation___ne__(self, other)
 
@@ -2227,17 +2227,17 @@ class ImageCreation(_object):
     if _newclass:
         profile = _swig_property(_six_sicd.ImageCreation_profile_get, _six_sicd.ImageCreation_profile_set)
 
-    def clone(self):
+    def clone(self) -> "six::sicd::ImageCreation *":
         """clone(ImageCreation self) -> ImageCreation"""
         return _six_sicd.ImageCreation_clone(self)
 
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ImageCreation') -> "bool":
         """__eq__(ImageCreation self, ImageCreation rhs) -> bool"""
         return _six_sicd.ImageCreation___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'ImageCreation') -> "bool":
         """__ne__(ImageCreation self, ImageCreation rhs) -> bool"""
         return _six_sicd.ImageCreation___ne__(self, rhs)
 
@@ -2307,17 +2307,17 @@ class ImageData(_object):
     if _newclass:
         validData = _swig_property(_six_sicd.ImageData_validData_get, _six_sicd.ImageData_validData_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ImageData') -> "bool":
         """__eq__(ImageData self, ImageData rhs) -> bool"""
         return _six_sicd.ImageData___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'ImageData') -> "bool":
         """__ne__(ImageData self, ImageData rhs) -> bool"""
         return _six_sicd.ImageData___ne__(self, rhs)
 
 
-    def validate(self, geoData, log):
+    def validate(self, geoData: 'GeoData', log: 'logging::Logger &') -> "bool":
         """validate(ImageData self, GeoData geoData, logging::Logger & log) -> bool"""
         return _six_sicd.ImageData_validate(self, geoData, log)
 
@@ -2363,22 +2363,22 @@ class GeoData(_object):
     if _newclass:
         geoInfos = _swig_property(_six_sicd.GeoData_geoInfos_get, _six_sicd.GeoData_geoInfos_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'GeoData') -> "bool":
         """__eq__(GeoData self, GeoData rhs) -> bool"""
         return _six_sicd.GeoData___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'GeoData') -> "bool":
         """__ne__(GeoData self, GeoData rhs) -> bool"""
         return _six_sicd.GeoData___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, imageData, model):
+    def fillDerivedFields(self, imageData: 'ImageData', model: 'ProjectionModel') -> "void":
         """fillDerivedFields(GeoData self, ImageData imageData, ProjectionModel model)"""
         return _six_sicd.GeoData_fillDerivedFields(self, imageData, model)
 
 
-    def validate(self, log):
+    def validate(self, log: 'logging::Logger &') -> "bool":
         """validate(GeoData self, logging::Logger & log) -> bool"""
         return _six_sicd.GeoData_validate(self, log)
 
@@ -2412,12 +2412,12 @@ class WeightType(_object):
     if _newclass:
         parameters = _swig_property(_six_sicd.WeightType_parameters_get, _six_sicd.WeightType_parameters_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'WeightType') -> "bool":
         """__eq__(WeightType self, WeightType rhs) -> bool"""
         return _six_sicd.WeightType___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'WeightType') -> "bool":
         """__ne__(WeightType self, WeightType rhs) -> bool"""
         return _six_sicd.WeightType___ne__(self, rhs)
 
@@ -2443,7 +2443,7 @@ class DirectionParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "six::sicd::DirectionParameters *":
         """clone(DirectionParameters self) -> DirectionParameters"""
         return _six_sicd.DirectionParameters_clone(self)
 
@@ -2492,17 +2492,17 @@ class DirectionParameters(_object):
     if _newclass:
         weights = _swig_property(_six_sicd.DirectionParameters_weights_get, _six_sicd.DirectionParameters_weights_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'DirectionParameters') -> "bool":
         """__eq__(DirectionParameters self, DirectionParameters rhs) -> bool"""
         return _six_sicd.DirectionParameters___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'DirectionParameters') -> "bool":
         """__ne__(DirectionParameters self, DirectionParameters rhs) -> bool"""
         return _six_sicd.DirectionParameters___ne__(self, rhs)
 
 
-    def validate(self, *args):
+    def validate(self, *args) -> "bool":
         """
         validate(DirectionParameters self, ImageData imageData, logging::Logger & log) -> bool
         validate(DirectionParameters self, RgAzComp rgAzComp, logging::Logger & log, double offset=0) -> bool
@@ -2511,7 +2511,7 @@ class DirectionParameters(_object):
         return _six_sicd.DirectionParameters_validate(self, *args)
 
 
-    def fillDerivedFields(self, *args):
+    def fillDerivedFields(self, *args) -> "void":
         """
         fillDerivedFields(DirectionParameters self, ImageData imageData)
         fillDerivedFields(DirectionParameters self, RgAzComp rgAzComp, double offset=0)
@@ -2541,7 +2541,7 @@ class Grid(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "six::sicd::Grid *":
         """clone(Grid self) -> Grid"""
         return _six_sicd.Grid_clone(self)
 
@@ -2566,17 +2566,17 @@ class Grid(_object):
     if _newclass:
         col = _swig_property(_six_sicd.Grid_col_get, _six_sicd.Grid_col_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Grid') -> "bool":
         """__eq__(Grid self, Grid rhs) -> bool"""
         return _six_sicd.Grid___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Grid') -> "bool":
         """__ne__(Grid self, Grid rhs) -> bool"""
         return _six_sicd.Grid___ne__(self, rhs)
 
 
-    def validate(self, *args):
+    def validate(self, *args) -> "bool":
         """
         validate(Grid self, CollectionInformation collectionInformation, ImageData imageData, logging::Logger & log) -> bool
         validate(Grid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
@@ -2586,7 +2586,7 @@ class Grid(_object):
         return _six_sicd.Grid_validate(self, *args)
 
 
-    def fillDerivedFields(self, *args):
+    def fillDerivedFields(self, *args) -> "void":
         """
         fillDerivedFields(Grid self, CollectionInformation collectionInformation, ImageData imageData, SCPCOA scpcoa)
         fillDerivedFields(Grid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly)
@@ -2595,7 +2595,7 @@ class Grid(_object):
         return _six_sicd.Grid_fillDerivedFields(self, *args)
 
 
-    def fillDefaultFields(self, *args):
+    def fillDefaultFields(self, *args) -> "void":
         """
         fillDefaultFields(Grid self, RMA const & rma, double fc)
         fillDefaultFields(Grid self, PFA pfa, double fc)
@@ -2644,12 +2644,12 @@ class TimelineSet(_object):
     if _newclass:
         interPulsePeriodPoly = _swig_property(_six_sicd.TimelineSet_interPulsePeriodPoly_get, _six_sicd.TimelineSet_interPulsePeriodPoly_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'TimelineSet') -> "bool":
         """__eq__(TimelineSet self, TimelineSet rhs) -> bool"""
         return _six_sicd.TimelineSet___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'TimelineSet') -> "bool":
         """__ne__(TimelineSet self, TimelineSet rhs) -> bool"""
         return _six_sicd.TimelineSet___ne__(self, rhs)
 
@@ -2679,12 +2679,12 @@ class InterPulsePeriod(_object):
     if _newclass:
         sets = _swig_property(_six_sicd.InterPulsePeriod_sets_get, _six_sicd.InterPulsePeriod_sets_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'InterPulsePeriod') -> "bool":
         """__eq__(InterPulsePeriod self, InterPulsePeriod rhs) -> bool"""
         return _six_sicd.InterPulsePeriod___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'InterPulsePeriod') -> "bool":
         """__ne__(InterPulsePeriod self, InterPulsePeriod rhs) -> bool"""
         return _six_sicd.InterPulsePeriod___ne__(self, rhs)
 
@@ -2722,12 +2722,12 @@ class Timeline(_object):
     if _newclass:
         interPulsePeriod = _swig_property(_six_sicd.Timeline_interPulsePeriod_get, _six_sicd.Timeline_interPulsePeriod_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Timeline') -> "bool":
         """__eq__(Timeline self, Timeline rhs) -> bool"""
         return _six_sicd.Timeline___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Timeline') -> "bool":
         """__ne__(Timeline self, Timeline rhs) -> bool"""
         return _six_sicd.Timeline___ne__(self, rhs)
 
@@ -2757,12 +2757,12 @@ class RcvAPC(_object):
     if _newclass:
         rcvAPCPolys = _swig_property(_six_sicd.RcvAPC_rcvAPCPolys_get, _six_sicd.RcvAPC_rcvAPCPolys_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RcvAPC') -> "bool":
         """__eq__(RcvAPC self, RcvAPC rhs) -> bool"""
         return _six_sicd.RcvAPC___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RcvAPC') -> "bool":
         """__ne__(RcvAPC self, RcvAPC rhs) -> bool"""
         return _six_sicd.RcvAPC___ne__(self, rhs)
 
@@ -2804,22 +2804,22 @@ class Position(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Position') -> "bool":
         """__eq__(Position self, Position rhs) -> bool"""
         return _six_sicd.Position___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Position') -> "bool":
         """__ne__(Position self, Position rhs) -> bool"""
         return _six_sicd.Position___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, scpcoa):
+    def fillDerivedFields(self, scpcoa: 'SCPCOA') -> "void":
         """fillDerivedFields(Position self, SCPCOA scpcoa)"""
         return _six_sicd.Position_fillDerivedFields(self, scpcoa)
 
 
-    def validate(self, log):
+    def validate(self, log: 'logging::Logger &') -> "bool":
         """validate(Position self, logging::Logger & log) -> bool"""
         return _six_sicd.Position_validate(self, log)
 
@@ -2847,7 +2847,7 @@ class TxStep(_object):
     __swig_destroy__ = _six_sicd.delete_TxStep
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::TxStep *":
         """clone(TxStep self) -> TxStep"""
         return _six_sicd.TxStep_clone(self)
 
@@ -2860,12 +2860,12 @@ class TxStep(_object):
     if _newclass:
         txPolarization = _swig_property(_six_sicd.TxStep_txPolarization_get, _six_sicd.TxStep_txPolarization_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'TxStep') -> "bool":
         """__eq__(TxStep self, TxStep rhs) -> bool"""
         return _six_sicd.TxStep___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'TxStep') -> "bool":
         """__ne__(TxStep self, TxStep rhs) -> bool"""
         return _six_sicd.TxStep___ne__(self, rhs)
 
@@ -2891,7 +2891,7 @@ class WaveformParameters(_object):
     __swig_destroy__ = _six_sicd.delete_WaveformParameters
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::WaveformParameters *":
         """clone(WaveformParameters self) -> WaveformParameters"""
         return _six_sicd.WaveformParameters_clone(self)
 
@@ -2936,22 +2936,22 @@ class WaveformParameters(_object):
     if _newclass:
         rcvFMRate = _swig_property(_six_sicd.WaveformParameters_rcvFMRate_get, _six_sicd.WaveformParameters_rcvFMRate_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'WaveformParameters') -> "bool":
         """__eq__(WaveformParameters self, WaveformParameters rhs) -> bool"""
         return _six_sicd.WaveformParameters___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'WaveformParameters') -> "bool":
         """__ne__(WaveformParameters self, WaveformParameters rhs) -> bool"""
         return _six_sicd.WaveformParameters___ne__(self, rhs)
 
 
-    def fillDerivedFields(self):
+    def fillDerivedFields(self) -> "void":
         """fillDerivedFields(WaveformParameters self)"""
         return _six_sicd.WaveformParameters_fillDerivedFields(self)
 
 
-    def validate(self, refFrequencyIndex, log):
+    def validate(self, refFrequencyIndex: 'int', log: 'logging::Logger &') -> "bool":
         """validate(WaveformParameters self, int refFrequencyIndex, logging::Logger & log) -> bool"""
         return _six_sicd.WaveformParameters_validate(self, refFrequencyIndex, log)
 
@@ -2975,7 +2975,7 @@ class ChannelParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "six::sicd::ChannelParameters *":
         """clone(ChannelParameters self) -> ChannelParameters"""
         return _six_sicd.ChannelParameters_clone(self)
 
@@ -2988,12 +2988,12 @@ class ChannelParameters(_object):
     if _newclass:
         rcvAPCIndex = _swig_property(_six_sicd.ChannelParameters_rcvAPCIndex_get, _six_sicd.ChannelParameters_rcvAPCIndex_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ChannelParameters') -> "bool":
         """__eq__(ChannelParameters self, ChannelParameters rhs) -> bool"""
         return _six_sicd.ChannelParameters___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'ChannelParameters') -> "bool":
         """__ne__(ChannelParameters self, ChannelParameters rhs) -> bool"""
         return _six_sicd.ChannelParameters___ne__(self, rhs)
 
@@ -3019,7 +3019,7 @@ class AreaDirectionParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "six::sicd::AreaDirectionParameters *":
         """clone(AreaDirectionParameters self) -> AreaDirectionParameters"""
         return _six_sicd.AreaDirectionParameters_clone(self)
 
@@ -3040,17 +3040,17 @@ class AreaDirectionParameters(_object):
     if _newclass:
         first = _swig_property(_six_sicd.AreaDirectionParameters_first_get, _six_sicd.AreaDirectionParameters_first_set)
 
-    def getExtentInMeters(self):
+    def getExtentInMeters(self) -> "double":
         """getExtentInMeters(AreaDirectionParameters self) -> double"""
         return _six_sicd.AreaDirectionParameters_getExtentInMeters(self)
 
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'AreaDirectionParameters') -> "bool":
         """__eq__(AreaDirectionParameters self, AreaDirectionParameters other) -> bool"""
         return _six_sicd.AreaDirectionParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'AreaDirectionParameters') -> "bool":
         """__ne__(AreaDirectionParameters self, AreaDirectionParameters other) -> bool"""
         return _six_sicd.AreaDirectionParameters___ne__(self, other)
 
@@ -3078,17 +3078,17 @@ class Segment(_object):
     __swig_destroy__ = _six_sicd.delete_Segment
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::Segment *":
         """clone(Segment self) -> Segment"""
         return _six_sicd.Segment_clone(self)
 
 
-    def getNumLines(self):
+    def getNumLines(self) -> "size_t":
         """getNumLines(Segment self) -> size_t"""
         return _six_sicd.Segment_getNumLines(self)
 
 
-    def getNumSamples(self):
+    def getNumSamples(self) -> "size_t":
         """getNumSamples(Segment self) -> size_t"""
         return _six_sicd.Segment_getNumSamples(self)
 
@@ -3113,17 +3113,17 @@ class Segment(_object):
     if _newclass:
         identifier = _swig_property(_six_sicd.Segment_identifier_get, _six_sicd.Segment_identifier_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Segment') -> "bool":
         """__eq__(Segment self, Segment rhs) -> bool"""
         return _six_sicd.Segment___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Segment') -> "bool":
         """__ne__(Segment self, Segment rhs) -> bool"""
         return _six_sicd.Segment___ne__(self, rhs)
 
 
-    def rotateCCW(self, numColumns):
+    def rotateCCW(self, numColumns: 'size_t') -> "void":
         """rotateCCW(Segment self, size_t numColumns)"""
         return _six_sicd.Segment_rotateCCW(self, numColumns)
 
@@ -3147,12 +3147,12 @@ class AreaPlane(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "six::sicd::AreaPlane *":
         """clone(AreaPlane self) -> AreaPlane"""
         return _six_sicd.AreaPlane_clone(self)
 
 
-    def getAdjustedReferencePoint(self):
+    def getAdjustedReferencePoint(self) -> "types::RowCol< double >":
         """getAdjustedReferencePoint(AreaPlane self) -> RowColDouble"""
         return _six_sicd.AreaPlane_getAdjustedReferencePoint(self)
 
@@ -3177,27 +3177,27 @@ class AreaPlane(_object):
     if _newclass:
         orientation = _swig_property(_six_sicd.AreaPlane_orientation_get, _six_sicd.AreaPlane_orientation_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'AreaPlane') -> "bool":
         """__eq__(AreaPlane self, AreaPlane rhs) -> bool"""
         return _six_sicd.AreaPlane___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'AreaPlane') -> "bool":
         """__ne__(AreaPlane self, AreaPlane rhs) -> bool"""
         return _six_sicd.AreaPlane___ne__(self, rhs)
 
 
-    def getSegment(self, segmentId):
+    def getSegment(self, segmentId: 'std::string const &') -> "six::sicd::Segment const &":
         """getSegment(AreaPlane self, std::string const & segmentId) -> Segment"""
         return _six_sicd.AreaPlane_getSegment(self, segmentId)
 
 
-    def rotateCCW(self):
+    def rotateCCW(self) -> "void":
         """rotateCCW(AreaPlane self)"""
         return _six_sicd.AreaPlane_rotateCCW(self)
 
 
-    def rotateToShadowsDown(self):
+    def rotateToShadowsDown(self) -> "void":
         """rotateToShadowsDown(AreaPlane self)"""
         return _six_sicd.AreaPlane_rotateToShadowsDown(self)
 
@@ -3223,7 +3223,7 @@ class Area(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "six::sicd::Area *":
         """clone(Area self) -> Area"""
         return _six_sicd.Area_clone(self)
 
@@ -3236,12 +3236,12 @@ class Area(_object):
     if _newclass:
         plane = _swig_property(_six_sicd.Area_plane_get, _six_sicd.Area_plane_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Area') -> "bool":
         """__eq__(Area self, Area rhs) -> bool"""
         return _six_sicd.Area___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Area') -> "bool":
         """__ne__(Area self, Area rhs) -> bool"""
         return _six_sicd.Area___ne__(self, rhs)
 
@@ -3267,7 +3267,7 @@ class RadarCollection(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clone(self):
+    def clone(self) -> "six::sicd::RadarCollection *":
         """clone(RadarCollection self) -> RadarCollection"""
         return _six_sicd.RadarCollection_clone(self)
 
@@ -3312,22 +3312,22 @@ class RadarCollection(_object):
     if _newclass:
         parameters = _swig_property(_six_sicd.RadarCollection_parameters_get, _six_sicd.RadarCollection_parameters_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RadarCollection') -> "bool":
         """__eq__(RadarCollection self, RadarCollection rhs) -> bool"""
         return _six_sicd.RadarCollection___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RadarCollection') -> "bool":
         """__ne__(RadarCollection self, RadarCollection rhs) -> bool"""
         return _six_sicd.RadarCollection___ne__(self, rhs)
 
 
-    def fillDerivedFields(self):
+    def fillDerivedFields(self) -> "void":
         """fillDerivedFields(RadarCollection self)"""
         return _six_sicd.RadarCollection_fillDerivedFields(self)
 
 
-    def validate(self, log):
+    def validate(self, log: 'logging::Logger &') -> "bool":
         """validate(RadarCollection self, logging::Logger & log) -> bool"""
         return _six_sicd.RadarCollection_validate(self, log)
 
@@ -3365,12 +3365,12 @@ class RcvChannelProcessed(_object):
     if _newclass:
         channelIndex = _swig_property(_six_sicd.RcvChannelProcessed_channelIndex_get, _six_sicd.RcvChannelProcessed_channelIndex_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RcvChannelProcessed') -> "bool":
         """__eq__(RcvChannelProcessed self, RcvChannelProcessed rhs) -> bool"""
         return _six_sicd.RcvChannelProcessed___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RcvChannelProcessed') -> "bool":
         """__ne__(RcvChannelProcessed self, RcvChannelProcessed rhs) -> bool"""
         return _six_sicd.RcvChannelProcessed___ne__(self, rhs)
 
@@ -3448,12 +3448,12 @@ class Distortion(_object):
     if _newclass:
         phaseErrorF2 = _swig_property(_six_sicd.Distortion_phaseErrorF2_get, _six_sicd.Distortion_phaseErrorF2_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Distortion') -> "bool":
         """__eq__(Distortion self, Distortion rhs) -> bool"""
         return _six_sicd.Distortion___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Distortion') -> "bool":
         """__ne__(Distortion self, Distortion rhs) -> bool"""
         return _six_sicd.Distortion___ne__(self, rhs)
 
@@ -3491,12 +3491,12 @@ class PolarizationCalibration(_object):
     if _newclass:
         distortion = _swig_property(_six_sicd.PolarizationCalibration_distortion_get, _six_sicd.PolarizationCalibration_distortion_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'PolarizationCalibration') -> "bool":
         """__eq__(PolarizationCalibration self, PolarizationCalibration rhs) -> bool"""
         return _six_sicd.PolarizationCalibration___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'PolarizationCalibration') -> "bool":
         """__ne__(PolarizationCalibration self, PolarizationCalibration rhs) -> bool"""
         return _six_sicd.PolarizationCalibration___ne__(self, rhs)
 
@@ -3534,12 +3534,12 @@ class Processing(_object):
     if _newclass:
         parameters = _swig_property(_six_sicd.Processing_parameters_get, _six_sicd.Processing_parameters_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Processing') -> "bool":
         """__eq__(Processing self, Processing rhs) -> bool"""
         return _six_sicd.Processing___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Processing') -> "bool":
         """__ne__(Processing self, Processing rhs) -> bool"""
         return _six_sicd.Processing___ne__(self, rhs)
 
@@ -3621,17 +3621,17 @@ class ImageFormation(_object):
     if _newclass:
         polarizationCalibration = _swig_property(_six_sicd.ImageFormation_polarizationCalibration_get, _six_sicd.ImageFormation_polarizationCalibration_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ImageFormation') -> "bool":
         """__eq__(ImageFormation self, ImageFormation rhs) -> bool"""
         return _six_sicd.ImageFormation___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'ImageFormation') -> "bool":
         """__ne__(ImageFormation self, ImageFormation rhs) -> bool"""
         return _six_sicd.ImageFormation___ne__(self, rhs)
 
 
-    def fillDefaultFields(self, radarCollection):
+    def fillDefaultFields(self, radarCollection: 'RadarCollection') -> "void":
         """fillDefaultFields(ImageFormation self, RadarCollection radarCollection)"""
         return _six_sicd.ImageFormation_fillDefaultFields(self, radarCollection)
 
@@ -3713,42 +3713,42 @@ class SCPCOA(_object):
     if _newclass:
         layoverAngle = _swig_property(_six_sicd.SCPCOA_layoverAngle_get, _six_sicd.SCPCOA_layoverAngle_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'SCPCOA') -> "bool":
         """__eq__(SCPCOA self, SCPCOA rhs) -> bool"""
         return _six_sicd.SCPCOA___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'SCPCOA') -> "bool":
         """__ne__(SCPCOA self, SCPCOA rhs) -> bool"""
         return _six_sicd.SCPCOA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, geoData, grid, position):
+    def fillDerivedFields(self, geoData: 'GeoData', grid: 'Grid', position: 'Position') -> "void":
         """fillDerivedFields(SCPCOA self, GeoData geoData, Grid grid, Position position)"""
         return _six_sicd.SCPCOA_fillDerivedFields(self, geoData, grid, position)
 
 
-    def validate(self, geoData, grid, position, log):
+    def validate(self, geoData: 'GeoData', grid: 'Grid', position: 'Position', log: 'logging::Logger &') -> "bool":
         """validate(SCPCOA self, GeoData geoData, Grid grid, Position position, logging::Logger & log) -> bool"""
         return _six_sicd.SCPCOA_validate(self, geoData, grid, position, log)
 
 
-    def uLOS(self, scp):
+    def uLOS(self, scp: 'Vector3') -> "six::Vector3":
         """uLOS(SCPCOA self, Vector3 scp) -> Vector3"""
         return _six_sicd.SCPCOA_uLOS(self, scp)
 
 
-    def look(self, scp):
+    def look(self, scp: 'Vector3') -> "int":
         """look(SCPCOA self, Vector3 scp) -> int"""
         return _six_sicd.SCPCOA_look(self, scp)
 
 
-    def left(self):
+    def left(self) -> "six::Vector3":
         """left(SCPCOA self) -> Vector3"""
         return _six_sicd.SCPCOA_left(self)
 
 
-    def slantPlaneNormal(self, scp):
+    def slantPlaneNormal(self, scp: 'Vector3') -> "six::Vector3":
         """slantPlaneNormal(SCPCOA self, Vector3 scp) -> Vector3"""
         return _six_sicd.SCPCOA_slantPlaneNormal(self, scp)
 
@@ -3774,12 +3774,12 @@ class ElectricalBoresight(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'ElectricalBoresight') -> "bool":
         """__eq__(ElectricalBoresight self, ElectricalBoresight other) -> bool"""
         return _six_sicd.ElectricalBoresight___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'ElectricalBoresight') -> "bool":
         """__ne__(ElectricalBoresight self, ElectricalBoresight other) -> bool"""
         return _six_sicd.ElectricalBoresight___ne__(self, other)
 
@@ -3813,12 +3813,12 @@ class HalfPowerBeamwidths(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'HalfPowerBeamwidths') -> "bool":
         """__eq__(HalfPowerBeamwidths self, HalfPowerBeamwidths other) -> bool"""
         return _six_sicd.HalfPowerBeamwidths___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'HalfPowerBeamwidths') -> "bool":
         """__ne__(HalfPowerBeamwidths self, HalfPowerBeamwidths other) -> bool"""
         return _six_sicd.HalfPowerBeamwidths___ne__(self, other)
 
@@ -3852,12 +3852,12 @@ class GainAndPhasePolys(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'GainAndPhasePolys') -> "bool":
         """__eq__(GainAndPhasePolys self, GainAndPhasePolys other) -> bool"""
         return _six_sicd.GainAndPhasePolys___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'GainAndPhasePolys') -> "bool":
         """__ne__(GainAndPhasePolys self, GainAndPhasePolys other) -> bool"""
         return _six_sicd.GainAndPhasePolys___ne__(self, other)
 
@@ -3891,12 +3891,12 @@ class AntennaParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'AntennaParameters') -> "bool":
         """__eq__(AntennaParameters self, AntennaParameters other) -> bool"""
         return _six_sicd.AntennaParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'AntennaParameters') -> "bool":
         """__ne__(AntennaParameters self, AntennaParameters other) -> bool"""
         return _six_sicd.AntennaParameters___ne__(self, other)
 
@@ -3946,7 +3946,7 @@ AntennaParameters_swigregister = _six_sicd.AntennaParameters_swigregister
 AntennaParameters_swigregister(AntennaParameters)
 
 
-def __lshift__(*args):
+def __lshift__(*args) -> "std::ostream &":
     """
     __lshift__(std::ostream & os, AreaDirectionParameters d) -> std::ostream
     __lshift__(std::ostream & os, ElectricalBoresight d) -> std::ostream
@@ -3984,12 +3984,12 @@ class Antenna(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Antenna') -> "bool":
         """__eq__(Antenna self, Antenna rhs) -> bool"""
         return _six_sicd.Antenna___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Antenna') -> "bool":
         """__ne__(Antenna self, Antenna rhs) -> bool"""
         return _six_sicd.Antenna___ne__(self, rhs)
 
@@ -4023,12 +4023,12 @@ class SlowTimeDeskew(_object):
     if _newclass:
         slowTimeDeskewPhasePoly = _swig_property(_six_sicd.SlowTimeDeskew_slowTimeDeskewPhasePoly_get, _six_sicd.SlowTimeDeskew_slowTimeDeskewPhasePoly_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'SlowTimeDeskew') -> "bool":
         """__eq__(SlowTimeDeskew self, SlowTimeDeskew rhs) -> bool"""
         return _six_sicd.SlowTimeDeskew___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'SlowTimeDeskew') -> "bool":
         """__ne__(SlowTimeDeskew self, SlowTimeDeskew rhs) -> bool"""
         return _six_sicd.SlowTimeDeskew___ne__(self, rhs)
 
@@ -4094,27 +4094,27 @@ class PFA(_object):
     if _newclass:
         slowTimeDeskew = _swig_property(_six_sicd.PFA_slowTimeDeskew_get, _six_sicd.PFA_slowTimeDeskew_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'PFA') -> "bool":
         """__eq__(PFA self, PFA rhs) -> bool"""
         return _six_sicd.PFA___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'PFA') -> "bool":
         """__ne__(PFA self, PFA rhs) -> bool"""
         return _six_sicd.PFA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, position):
+    def fillDerivedFields(self, position: 'Position') -> "void":
         """fillDerivedFields(PFA self, Position position)"""
         return _six_sicd.PFA_fillDerivedFields(self, position)
 
 
-    def fillDefaultFields(self, geoData, arg3, scpcoa):
+    def fillDefaultFields(self, geoData: 'GeoData', arg3: 'Grid', scpcoa: 'SCPCOA') -> "void":
         """fillDefaultFields(PFA self, GeoData geoData, Grid arg3, SCPCOA scpcoa)"""
         return _six_sicd.PFA_fillDefaultFields(self, geoData, arg3, scpcoa)
 
 
-    def validate(self, scpcoa, log):
+    def validate(self, scpcoa: 'SCPCOA', log: 'logging::Logger &') -> "bool":
         """validate(PFA self, SCPCOA scpcoa, logging::Logger & log) -> bool"""
         return _six_sicd.PFA_validate(self, scpcoa, log)
 
@@ -4180,52 +4180,52 @@ class RMAT(_object):
     if _newclass:
         dopConeAngleRef = _swig_property(_six_sicd.RMAT_dopConeAngleRef_get, _six_sicd.RMAT_dopConeAngleRef_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RMAT') -> "bool":
         """__eq__(RMAT self, RMAT rhs) -> bool"""
         return _six_sicd.RMAT___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RMAT') -> "bool":
         """__ne__(RMAT self, RMAT rhs) -> bool"""
         return _six_sicd.RMAT___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, scp):
+    def fillDerivedFields(self, scp: 'Vector3') -> "void":
         """fillDerivedFields(RMAT self, Vector3 scp)"""
         return _six_sicd.RMAT_fillDerivedFields(self, scp)
 
 
-    def fillDefaultFields(self, scpcoa):
+    def fillDefaultFields(self, scpcoa: 'SCPCOA') -> "void":
         """fillDefaultFields(RMAT self, SCPCOA scpcoa)"""
         return _six_sicd.RMAT_fillDefaultFields(self, scpcoa)
 
 
-    def validate(self, scp, log):
+    def validate(self, scp: 'Vector3', log: 'logging::Logger &') -> "bool":
         """validate(RMAT self, Vector3 scp, logging::Logger & log) -> bool"""
         return _six_sicd.RMAT_validate(self, scp, log)
 
 
-    def look(self, scp):
+    def look(self, scp: 'Vector3') -> "int":
         """look(RMAT self, Vector3 scp) -> int"""
         return _six_sicd.RMAT_look(self, scp)
 
 
-    def uYAT(self, scp):
+    def uYAT(self, scp: 'Vector3') -> "six::Vector3":
         """uYAT(RMAT self, Vector3 scp) -> Vector3"""
         return _six_sicd.RMAT_uYAT(self, scp)
 
 
-    def spn(self, scp):
+    def spn(self, scp: 'Vector3') -> "six::Vector3":
         """spn(RMAT self, Vector3 scp) -> Vector3"""
         return _six_sicd.RMAT_spn(self, scp)
 
 
-    def uXCT(self, scp):
+    def uXCT(self, scp: 'Vector3') -> "six::Vector3":
         """uXCT(RMAT self, Vector3 scp) -> Vector3"""
         return _six_sicd.RMAT_uXCT(self, scp)
 
 
-    def uLOS(self, scp):
+    def uLOS(self, scp: 'Vector3') -> "six::Vector3":
         """uLOS(RMAT self, Vector3 scp) -> Vector3"""
         return _six_sicd.RMAT_uLOS(self, scp)
 
@@ -4263,47 +4263,47 @@ class RMCR(_object):
     if _newclass:
         dopConeAngleRef = _swig_property(_six_sicd.RMCR_dopConeAngleRef_get, _six_sicd.RMCR_dopConeAngleRef_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RMCR') -> "bool":
         """__eq__(RMCR self, RMCR rhs) -> bool"""
         return _six_sicd.RMCR___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RMCR') -> "bool":
         """__ne__(RMCR self, RMCR rhs) -> bool"""
         return _six_sicd.RMCR___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, scp):
+    def fillDerivedFields(self, scp: 'Vector3') -> "void":
         """fillDerivedFields(RMCR self, Vector3 scp)"""
         return _six_sicd.RMCR_fillDerivedFields(self, scp)
 
 
-    def fillDefaultFields(self, scpcoa):
+    def fillDefaultFields(self, scpcoa: 'SCPCOA') -> "void":
         """fillDefaultFields(RMCR self, SCPCOA scpcoa)"""
         return _six_sicd.RMCR_fillDefaultFields(self, scpcoa)
 
 
-    def validate(self, scp, log):
+    def validate(self, scp: 'Vector3', log: 'logging::Logger &') -> "bool":
         """validate(RMCR self, Vector3 scp, logging::Logger & log) -> bool"""
         return _six_sicd.RMCR_validate(self, scp, log)
 
 
-    def uXRG(self, scp):
+    def uXRG(self, scp: 'Vector3') -> "six::Vector3":
         """uXRG(RMCR self, Vector3 scp) -> Vector3"""
         return _six_sicd.RMCR_uXRG(self, scp)
 
 
-    def uYCR(self, scp):
+    def uYCR(self, scp: 'Vector3') -> "six::Vector3":
         """uYCR(RMCR self, Vector3 scp) -> Vector3"""
         return _six_sicd.RMCR_uYCR(self, scp)
 
 
-    def spn(self, scp):
+    def spn(self, scp: 'Vector3') -> "six::Vector3":
         """spn(RMCR self, Vector3 scp) -> Vector3"""
         return _six_sicd.RMCR_spn(self, scp)
 
 
-    def look(self, scp):
+    def look(self, scp: 'Vector3') -> "int":
         """look(RMCR self, Vector3 scp) -> int"""
         return _six_sicd.RMCR_look(self, scp)
 
@@ -4353,62 +4353,62 @@ class INCA(_object):
     if _newclass:
         dopplerCentroidCOA = _swig_property(_six_sicd.INCA_dopplerCentroidCOA_get, _six_sicd.INCA_dopplerCentroidCOA_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'INCA') -> "bool":
         """__eq__(INCA self, INCA rhs) -> bool"""
         return _six_sicd.INCA___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'INCA') -> "bool":
         """__ne__(INCA self, INCA rhs) -> bool"""
         return _six_sicd.INCA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, scp, position):
+    def fillDerivedFields(self, scp: 'Vector3', position: 'Position') -> "void":
         """fillDerivedFields(INCA self, Vector3 scp, Position position)"""
         return _six_sicd.INCA_fillDerivedFields(self, scp, position)
 
 
-    def caPos(self, arpPoly):
+    def caPos(self, arpPoly: 'PolyVector3') -> "six::Vector3":
         """caPos(INCA self, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.INCA_caPos(self, arpPoly)
 
 
-    def caVel(self, arpPoly):
+    def caVel(self, arpPoly: 'PolyVector3') -> "six::Vector3":
         """caVel(INCA self, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.INCA_caVel(self, arpPoly)
 
 
-    def uRG(self, scp, arpPoly):
+    def uRG(self, scp: 'Vector3', arpPoly: 'PolyVector3') -> "six::Vector3":
         """uRG(INCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.INCA_uRG(self, scp, arpPoly)
 
 
-    def uAZ(self, scp, arpPoly):
+    def uAZ(self, scp: 'Vector3', arpPoly: 'PolyVector3') -> "six::Vector3":
         """uAZ(INCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.INCA_uAZ(self, scp, arpPoly)
 
 
-    def spn(self, scp, arpPoly):
+    def spn(self, scp: 'Vector3', arpPoly: 'PolyVector3') -> "six::Vector3":
         """spn(INCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.INCA_spn(self, scp, arpPoly)
 
 
-    def look(self, scp, arpPoly):
+    def look(self, scp: 'Vector3', arpPoly: 'PolyVector3') -> "int":
         """look(INCA self, Vector3 scp, PolyVector3 arpPoly) -> int"""
         return _six_sicd.INCA_look(self, scp, arpPoly)
 
 
-    def left(self, arpPoly):
+    def left(self, arpPoly: 'PolyVector3') -> "six::Vector3":
         """left(INCA self, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.INCA_left(self, arpPoly)
 
 
-    def fillDefaultFields(self, fc):
+    def fillDefaultFields(self, fc: 'double') -> "void":
         """fillDefaultFields(INCA self, double fc)"""
         return _six_sicd.INCA_fillDefaultFields(self, fc)
 
 
-    def validate(self, collectionInformation, scp, arpPoly, fc, log):
+    def validate(self, collectionInformation: 'CollectionInformation', scp: 'Vector3', arpPoly: 'PolyVector3', fc: 'double', log: 'logging::Logger &') -> "bool":
         """validate(INCA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.INCA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
@@ -4450,27 +4450,27 @@ class RMA(_object):
     if _newclass:
         inca = _swig_property(_six_sicd.RMA_inca_get, _six_sicd.RMA_inca_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RMA') -> "bool":
         """__eq__(RMA self, RMA rhs) -> bool"""
         return _six_sicd.RMA___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RMA') -> "bool":
         """__ne__(RMA self, RMA rhs) -> bool"""
         return _six_sicd.RMA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, geoData, position):
+    def fillDerivedFields(self, geoData: 'GeoData', position: 'Position') -> "void":
         """fillDerivedFields(RMA self, GeoData geoData, Position position)"""
         return _six_sicd.RMA_fillDerivedFields(self, geoData, position)
 
 
-    def fillDefaultFields(self, scpcoa, fc):
+    def fillDefaultFields(self, scpcoa: 'SCPCOA', fc: 'double') -> "void":
         """fillDefaultFields(RMA self, SCPCOA scpcoa, double fc)"""
         return _six_sicd.RMA_fillDefaultFields(self, scpcoa, fc)
 
 
-    def validate(self, collectionInformation, scp, arpPoly, fc, log):
+    def validate(self, collectionInformation: 'CollectionInformation', scp: 'Vector3', arpPoly: 'PolyVector3', fc: 'double', log: 'logging::Logger &') -> "bool":
         """validate(RMA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.RMA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
@@ -4504,22 +4504,22 @@ class RgAzComp(_object):
     if _newclass:
         kazPoly = _swig_property(_six_sicd.RgAzComp_kazPoly_get, _six_sicd.RgAzComp_kazPoly_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RgAzComp') -> "bool":
         """__eq__(RgAzComp self, RgAzComp rhs) -> bool"""
         return _six_sicd.RgAzComp___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RgAzComp') -> "bool":
         """__ne__(RgAzComp self, RgAzComp rhs) -> bool"""
         return _six_sicd.RgAzComp___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, geoData, grid, scpcoa, timeline):
+    def fillDerivedFields(self, geoData: 'GeoData', grid: 'Grid', scpcoa: 'SCPCOA', timeline: 'Timeline') -> "void":
         """fillDerivedFields(RgAzComp self, GeoData geoData, Grid grid, SCPCOA scpcoa, Timeline timeline)"""
         return _six_sicd.RgAzComp_fillDerivedFields(self, geoData, grid, scpcoa, timeline)
 
 
-    def validate(self, geoData, grid, scpcoa, timeline, log):
+    def validate(self, geoData: 'GeoData', grid: 'Grid', scpcoa: 'SCPCOA', timeline: 'Timeline', log: 'logging::Logger &') -> "bool":
         """validate(RgAzComp self, GeoData geoData, Grid grid, SCPCOA scpcoa, Timeline timeline, logging::Logger & log) -> bool"""
         return _six_sicd.RgAzComp_validate(self, geoData, grid, scpcoa, timeline, log)
 
@@ -4617,92 +4617,92 @@ class ComplexData(pysix.six_base.Data):
         except __builtin__.Exception:
             self.this = this
 
-    def getDataType(self):
+    def getDataType(self) -> "six::DataType":
         """getDataType(ComplexData self) -> DataType"""
         return _six_sicd.ComplexData_getDataType(self)
 
 
-    def clone(self):
+    def clone(self) -> "six::Data *":
         """clone(ComplexData self) -> Data"""
         return _six_sicd.ComplexData_clone(self)
 
 
-    def getPixelType(self):
+    def getPixelType(self) -> "six::PixelType":
         """getPixelType(ComplexData self) -> PixelType"""
         return _six_sicd.ComplexData_getPixelType(self)
 
 
-    def setPixelType(self, pixelType):
+    def setPixelType(self, pixelType: 'PixelType') -> "void":
         """setPixelType(ComplexData self, PixelType pixelType)"""
         return _six_sicd.ComplexData_setPixelType(self, pixelType)
 
 
-    def getNumRows(self):
+    def getNumRows(self) -> "size_t":
         """getNumRows(ComplexData self) -> size_t"""
         return _six_sicd.ComplexData_getNumRows(self)
 
 
-    def setNumRows(self, numRows):
+    def setNumRows(self, numRows: 'size_t') -> "void":
         """setNumRows(ComplexData self, size_t numRows)"""
         return _six_sicd.ComplexData_setNumRows(self, numRows)
 
 
-    def getNumCols(self):
+    def getNumCols(self) -> "size_t":
         """getNumCols(ComplexData self) -> size_t"""
         return _six_sicd.ComplexData_getNumCols(self)
 
 
-    def setNumCols(self, numCols):
+    def setNumCols(self, numCols: 'size_t') -> "void":
         """setNumCols(ComplexData self, size_t numCols)"""
         return _six_sicd.ComplexData_setNumCols(self, numCols)
 
 
-    def getImageCorners(self):
+    def getImageCorners(self) -> "six::LatLonCorners":
         """getImageCorners(ComplexData self) -> LatLonCorners"""
         return _six_sicd.ComplexData_getImageCorners(self)
 
 
-    def setImageCorners(self, imageCorners):
+    def setImageCorners(self, imageCorners: 'LatLonCorners') -> "void":
         """setImageCorners(ComplexData self, LatLonCorners imageCorners)"""
         return _six_sicd.ComplexData_setImageCorners(self, imageCorners)
 
 
-    def getName(self):
+    def getName(self) -> "std::string":
         """getName(ComplexData self) -> std::string"""
         return _six_sicd.ComplexData_getName(self)
 
 
-    def setName(self, name):
+    def setName(self, name: 'std::string') -> "void":
         """setName(ComplexData self, std::string name)"""
         return _six_sicd.ComplexData_setName(self, name)
 
 
-    def getSource(self):
+    def getSource(self) -> "std::string":
         """getSource(ComplexData self) -> std::string"""
         return _six_sicd.ComplexData_getSource(self)
 
 
-    def setSource(self, name):
+    def setSource(self, name: 'std::string') -> "void":
         """setSource(ComplexData self, std::string name)"""
         return _six_sicd.ComplexData_setSource(self, name)
 
 
-    def getCreationTime(self):
+    def getCreationTime(self) -> "six::DateTime":
         """getCreationTime(ComplexData self) -> DateTime"""
         return _six_sicd.ComplexData_getCreationTime(self)
 
 
-    def setCreationTime(self, creationTime):
+    def setCreationTime(self, creationTime: 'DateTime') -> "void":
         """setCreationTime(ComplexData self, DateTime creationTime)"""
         return _six_sicd.ComplexData_setCreationTime(self, creationTime)
 
 
-    def getCollectionStartDateTime(self):
+    def getCollectionStartDateTime(self) -> "six::DateTime":
         """getCollectionStartDateTime(ComplexData self) -> DateTime"""
         return _six_sicd.ComplexData_getCollectionStartDateTime(self)
 
 
-    def getClassification(self, *args):
+    def getClassification(self, *args) -> "six::Classification &":
         """
         getClassification(ComplexData self) -> Classification
         getClassification(ComplexData self) -> Classification
@@ -4710,27 +4710,27 @@ class ComplexData(pysix.six_base.Data):
         return _six_sicd.ComplexData_getClassification(self, *args)
 
 
-    def getDisplayLUT(self):
+    def getDisplayLUT(self) -> "mem::ScopedCopyablePtr< six::LUT > &":
         """getDisplayLUT(ComplexData self) -> mem::ScopedCopyablePtr< six::LUT > &"""
         return _six_sicd.ComplexData_getDisplayLUT(self)
 
 
-    def getVendorID(self):
+    def getVendorID(self) -> "std::string":
         """getVendorID(ComplexData self) -> std::string"""
         return _six_sicd.ComplexData_getVendorID(self)
 
 
-    def getVersion(self):
+    def getVersion(self) -> "std::string":
         """getVersion(ComplexData self) -> std::string"""
         return _six_sicd.ComplexData_getVersion(self)
 
 
-    def setVersion(self, version):
+    def setVersion(self, version: 'std::string const &') -> "void":
         """setVersion(ComplexData self, std::string const & version)"""
         return _six_sicd.ComplexData_setVersion(self, version)
 
 
-    def getOutputPlaneOffsetAndExtent(self, *args):
+    def getOutputPlaneOffsetAndExtent(self, *args) -> "void":
         """
         getOutputPlaneOffsetAndExtent(ComplexData self, RowColSizeT offset, RowColSizeT extent)
         getOutputPlaneOffsetAndExtent(ComplexData self, AreaPlane areaPlane, RowColSizeT offset, RowColSizeT extent)
@@ -4738,27 +4738,27 @@ class ComplexData(pysix.six_base.Data):
         return _six_sicd.ComplexData_getOutputPlaneOffsetAndExtent(self, *args)
 
 
-    def pixelToImagePoint(self, pixelLoc):
+    def pixelToImagePoint(self, pixelLoc: 'RowColDouble') -> "types::RowCol< double >":
         """pixelToImagePoint(ComplexData self, RowColDouble pixelLoc) -> RowColDouble"""
         return _six_sicd.ComplexData_pixelToImagePoint(self, pixelLoc)
 
 
-    def getImageMode(self):
+    def getImageMode(self) -> "six::ImageMode":
         """getImageMode(ComplexData self) -> six::ImageMode"""
         return _six_sicd.ComplexData_getImageMode(self)
 
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ComplexData') -> "bool":
         """__eq__(ComplexData self, ComplexData rhs) -> bool"""
         return _six_sicd.ComplexData___eq__(self, rhs)
 
 
-    def validate(self, log):
+    def validate(self, log: 'logging::Logger &') -> "bool":
         """validate(ComplexData self, logging::Logger & log) -> bool"""
         return _six_sicd.ComplexData_validate(self, log)
 
 
-    def fillDerivedFields(self, includeDefault=True):
+    def fillDerivedFields(self, includeDefault: 'bool'=True) -> "void":
         """
         fillDerivedFields(ComplexData self, bool includeDefault=True)
         fillDerivedFields(ComplexData self)
@@ -4766,7 +4766,7 @@ class ComplexData(pysix.six_base.Data):
         return _six_sicd.ComplexData_fillDerivedFields(self, includeDefault)
 
 
-    def fillDefaultFields(self):
+    def fillDefaultFields(self) -> "void":
         """fillDefaultFields(ComplexData self)"""
         return _six_sicd.ComplexData_fillDefaultFields(self)
 
@@ -4788,7 +4788,7 @@ class ComplexXMLControl(pysix.six_base.XMLControl):
     __getattr__ = lambda self, name: _swig_getattr(self, ComplexXMLControl, name)
     __repr__ = _swig_repr
 
-    def __init__(self, log=None, ownLog=False):
+    def __init__(self, log: 'logging::Logger *'=None, ownLog: 'bool'=False):
         """
         __init__(six::sicd::ComplexXMLControl self, logging::Logger * log=None, bool ownLog=False) -> ComplexXMLControl
         __init__(six::sicd::ComplexXMLControl self, logging::Logger * log=None) -> ComplexXMLControl
@@ -4813,25 +4813,25 @@ class SixSicdUtilities(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, SixSicdUtilities, name)
     __repr__ = _swig_repr
 
-    def getSceneGeometry(data):
+    def getSceneGeometry(data: 'ComplexData') -> "scene::SceneGeometry *":
         """getSceneGeometry(ComplexData data) -> SceneGeometry"""
         return _six_sicd.SixSicdUtilities_getSceneGeometry(data)
 
     getSceneGeometry = staticmethod(getSceneGeometry)
 
-    def getProjectionModel(data, geom):
+    def getProjectionModel(data: 'ComplexData', geom: 'SceneGeometry') -> "scene::ProjectionModel *":
         """getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
         return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
     getProjectionModel = staticmethod(getProjectionModel)
 
-    def getModelComponents(complexData, geometry, projectionModel, areaPlane):
+    def getModelComponents(complexData: 'ComplexData', geometry: 'std::auto_ptr< scene::SceneGeometry > &', projectionModel: 'std::auto_ptr< scene::ProjectionModel > &', areaPlane: 'AreaPlane') -> "void":
         """getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
         return _six_sicd.SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
 
     getModelComponents = staticmethod(getModelComponents)
 
-    def getPolynomialFitter(*args):
+    def getPolynomialFitter(*args) -> "std::auto_ptr< scene::ProjectionPolynomialFitter >":
         """
         getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
         getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
@@ -4841,13 +4841,13 @@ class SixSicdUtilities(_object):
 
     getPolynomialFitter = staticmethod(getPolynomialFitter)
 
-    def getValidDataPolygon(sicdData, projection, validData):
+    def getValidDataPolygon(sicdData: 'ComplexData', projection: 'ProjectionModel', validData: 'VectorRowColDouble') -> "void":
         """getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
         return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
 
     getValidDataPolygon = staticmethod(getValidDataPolygon)
 
-    def readSicd(*args):
+    def readSicd(*args) -> "void":
         """
         readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
         readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh)
@@ -4856,7 +4856,7 @@ class SixSicdUtilities(_object):
 
     readSicd = staticmethod(readSicd)
 
-    def getComplexData(*args):
+    def getComplexData(*args) -> "std::auto_ptr< six::sicd::ComplexData >":
         """
         getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
         getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
@@ -4865,7 +4865,7 @@ class SixSicdUtilities(_object):
 
     getComplexData = staticmethod(getComplexData)
 
-    def getWidebandData(*args):
+    def getWidebandData(*args) -> "void":
         """
         getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
         getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
@@ -4878,19 +4878,19 @@ class SixSicdUtilities(_object):
 
     getWidebandData = staticmethod(getWidebandData)
 
-    def getGroundPlaneNormal(data):
+    def getGroundPlaneNormal(data: 'ComplexData') -> "six::Vector3":
         """getGroundPlaneNormal(ComplexData data) -> Vector3"""
         return _six_sicd.SixSicdUtilities_getGroundPlaneNormal(data)
 
     getGroundPlaneNormal = staticmethod(getGroundPlaneNormal)
 
-    def nPoly(poly, index):
+    def nPoly(poly: 'PolyVector3', index: 'size_t') -> "six::Poly1D":
         """nPoly(PolyVector3 poly, size_t index) -> Poly1D"""
         return _six_sicd.SixSicdUtilities_nPoly(poly, index)
 
     nPoly = staticmethod(nPoly)
 
-    def isClockwise(vertices, isUpPositive=False):
+    def isClockwise(vertices: 'VectorRowColInt', isUpPositive: 'bool'=False) -> "bool":
         """
         isClockwise(VectorRowColInt vertices, bool isUpPositive=False) -> bool
         isClockwise(VectorRowColInt vertices) -> bool
@@ -4899,25 +4899,25 @@ class SixSicdUtilities(_object):
 
     isClockwise = staticmethod(isClockwise)
 
-    def parseData(xmlStream, schemaPaths, log):
+    def parseData(xmlStream: 'InputStream', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
         """parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
 
     parseData = staticmethod(parseData)
 
-    def parseDataFromFile(pathname, schemaPaths, log):
+    def parseDataFromFile(pathname: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
         """parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
 
     parseDataFromFile = staticmethod(parseDataFromFile)
 
-    def parseDataFromString(xmlStr, schemaPaths, log):
+    def parseDataFromString(xmlStr: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
         """parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
 
     parseDataFromString = staticmethod(parseDataFromString)
 
-    def toXMLString(*args):
+    def toXMLString(*args) -> "std::string":
         """
         toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
         toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
@@ -4927,55 +4927,55 @@ class SixSicdUtilities(_object):
 
     toXMLString = staticmethod(toXMLString)
 
-    def createFakeComplexData():
+    def createFakeComplexData() -> "std::auto_ptr< six::sicd::ComplexData >":
         """createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_createFakeComplexData()
 
     createFakeComplexData = staticmethod(createFakeComplexData)
 
-    def getNoiseMesh(reader):
+    def getNoiseMesh(reader: 'NITFReadControl &') -> "std::auto_ptr< six::sicd::NoiseMesh >":
         """getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
         return _six_sicd.SixSicdUtilities_getNoiseMesh(reader)
 
     getNoiseMesh = staticmethod(getNoiseMesh)
 
-    def getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol):
+    def getProjectionPolys(reader: 'NITFReadControl &', orderX: 'size_t', orderY: 'size_t', complexData: 'std::auto_ptr< six::sicd::ComplexData > &', outputRowColToSlantRow: 'Poly2D', outputRowColToSlantCol: 'Poly2D') -> "void":
         """getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
         return _six_sicd.SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
 
     getProjectionPolys = staticmethod(getProjectionPolys)
 
-    def transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift):
+    def transformXYPolyToRowColPoly(polyXY: 'Poly2D', outSampleSpacing: 'RowColDouble', outCenter: 'RowColDouble', polyScaleFactor: 'double', polyShift: 'double') -> "six::Poly2D":
         """transformXYPolyToRowColPoly(Poly2D polyXY, RowColDouble outSampleSpacing, RowColDouble outCenter, double polyScaleFactor, double polyShift) -> Poly2D"""
         return _six_sicd.SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift)
 
     transformXYPolyToRowColPoly = staticmethod(transformXYPolyToRowColPoly)
 
-    def transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol):
+    def transformXYProjectionPolys(outputXYToSlantX: 'Poly2D', outputXYToSlantY: 'Poly2D', slantSampleSpacing: 'RowColDouble', outputSampleSpacing: 'RowColDouble', slantCenter: 'RowColDouble', outputCenter: 'RowColDouble', outputRowColToSlantRow: 'Poly2D', outputRowColToSlantCol: 'Poly2D') -> "void":
         """transformXYProjectionPolys(Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, RowColDouble slantSampleSpacing, RowColDouble outputSampleSpacing, RowColDouble slantCenter, RowColDouble outputCenter, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
         return _six_sicd.SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol)
 
     transformXYProjectionPolys = staticmethod(transformXYProjectionPolys)
 
-    def fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY):
+    def fitXYProjectionPolys(outputMesh: 'PlanarCoordinateMesh', slantMesh: 'PlanarCoordinateMesh', orderX: 'size_t', orderY: 'size_t', outputXYToSlantX: 'Poly2D', outputXYToSlantY: 'Poly2D', slantXYToOutputX: 'Poly2D', slantXYToOutputY: 'Poly2D') -> "void":
         """fitXYProjectionPolys(PlanarCoordinateMesh outputMesh, PlanarCoordinateMesh slantMesh, size_t orderX, size_t orderY, Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, Poly2D slantXYToOutputX, Poly2D slantXYToOutputY)"""
         return _six_sicd.SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY)
 
     fitXYProjectionPolys = staticmethod(fitXYProjectionPolys)
 
-    def projectPixelsToOutputPlane(complexData, spPixels, opPixels):
+    def projectPixelsToOutputPlane(complexData: 'ComplexData', spPixels: 'VectorRowColDouble', opPixels: 'VectorRowColDouble') -> "void":
         """projectPixelsToOutputPlane(ComplexData complexData, VectorRowColDouble spPixels, VectorRowColDouble opPixels)"""
         return _six_sicd.SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels)
 
     projectPixelsToOutputPlane = staticmethod(projectPixelsToOutputPlane)
 
-    def projectValidDataPolygonToOutputPlane(complexData, opPixels):
+    def projectValidDataPolygonToOutputPlane(complexData: 'ComplexData', opPixels: 'VectorRowColDouble') -> "void":
         """projectValidDataPolygonToOutputPlane(ComplexData complexData, VectorRowColDouble opPixels)"""
         return _six_sicd.SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels)
 
     projectValidDataPolygonToOutputPlane = staticmethod(projectValidDataPolygonToOutputPlane)
 
-    def projectPixelsToSlantPlane(complexData, opPixels, spPixels):
+    def projectPixelsToSlantPlane(complexData: 'ComplexData', opPixels: 'VectorRowColDouble', spPixels: 'VectorRowColDouble') -> "void":
         """projectPixelsToSlantPlane(ComplexData complexData, VectorRowColDouble opPixels, VectorRowColDouble spPixels)"""
         return _six_sicd.SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels)
 
@@ -4993,19 +4993,19 @@ class SixSicdUtilities(_object):
 SixSicdUtilities_swigregister = _six_sicd.SixSicdUtilities_swigregister
 SixSicdUtilities_swigregister(SixSicdUtilities)
 
-def SixSicdUtilities_getSceneGeometry(data):
+def SixSicdUtilities_getSceneGeometry(data: 'ComplexData') -> "scene::SceneGeometry *":
     """SixSicdUtilities_getSceneGeometry(ComplexData data) -> SceneGeometry"""
     return _six_sicd.SixSicdUtilities_getSceneGeometry(data)
 
-def SixSicdUtilities_getProjectionModel(data, geom):
+def SixSicdUtilities_getProjectionModel(data: 'ComplexData', geom: 'SceneGeometry') -> "scene::ProjectionModel *":
     """SixSicdUtilities_getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
-def SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane):
+def SixSicdUtilities_getModelComponents(complexData: 'ComplexData', geometry: 'std::auto_ptr< scene::SceneGeometry > &', projectionModel: 'std::auto_ptr< scene::ProjectionModel > &', areaPlane: 'AreaPlane') -> "void":
     """SixSicdUtilities_getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
     return _six_sicd.SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
 
-def SixSicdUtilities_getPolynomialFitter(*args):
+def SixSicdUtilities_getPolynomialFitter(*args) -> "std::auto_ptr< scene::ProjectionPolynomialFitter >":
     """
     getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
     getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
@@ -5013,25 +5013,25 @@ def SixSicdUtilities_getPolynomialFitter(*args):
     """
     return _six_sicd.SixSicdUtilities_getPolynomialFitter(*args)
 
-def SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData):
+def SixSicdUtilities_getValidDataPolygon(sicdData: 'ComplexData', projection: 'ProjectionModel', validData: 'VectorRowColDouble') -> "void":
     """SixSicdUtilities_getValidDataPolygon(ComplexData sicdData, ProjectionModel projection, VectorRowColDouble validData)"""
     return _six_sicd.SixSicdUtilities_getValidDataPolygon(sicdData, projection, validData)
 
-def SixSicdUtilities_readSicd(*args):
+def SixSicdUtilities_readSicd(*args) -> "void":
     """
     readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
     SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh)
     """
     return _six_sicd.SixSicdUtilities_readSicd(*args)
 
-def SixSicdUtilities_getComplexData(*args):
+def SixSicdUtilities_getComplexData(*args) -> "std::auto_ptr< six::sicd::ComplexData >":
     """
     getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
     SixSicdUtilities_getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
     """
     return _six_sicd.SixSicdUtilities_getComplexData(*args)
 
-def SixSicdUtilities_getWidebandData(*args):
+def SixSicdUtilities_getWidebandData(*args) -> "void":
     """
     getWidebandData(NITFReadControl & reader, ComplexData complexData, std::complex< float > * buffer)
     getWidebandData(NITFReadControl & reader, ComplexData complexData, RowColSizeT offset, RowColSizeT extent, std::complex< float > * buffer)
@@ -5042,34 +5042,34 @@ def SixSicdUtilities_getWidebandData(*args):
     """
     return _six_sicd.SixSicdUtilities_getWidebandData(*args)
 
-def SixSicdUtilities_getGroundPlaneNormal(data):
+def SixSicdUtilities_getGroundPlaneNormal(data: 'ComplexData') -> "six::Vector3":
     """SixSicdUtilities_getGroundPlaneNormal(ComplexData data) -> Vector3"""
     return _six_sicd.SixSicdUtilities_getGroundPlaneNormal(data)
 
-def SixSicdUtilities_nPoly(poly, index):
+def SixSicdUtilities_nPoly(poly: 'PolyVector3', index: 'size_t') -> "six::Poly1D":
     """SixSicdUtilities_nPoly(PolyVector3 poly, size_t index) -> Poly1D"""
     return _six_sicd.SixSicdUtilities_nPoly(poly, index)
 
-def SixSicdUtilities_isClockwise(vertices, isUpPositive=False):
+def SixSicdUtilities_isClockwise(vertices: 'VectorRowColInt', isUpPositive: 'bool'=False) -> "bool":
     """
     isClockwise(VectorRowColInt vertices, bool isUpPositive=False) -> bool
     SixSicdUtilities_isClockwise(VectorRowColInt vertices) -> bool
     """
     return _six_sicd.SixSicdUtilities_isClockwise(vertices, isUpPositive)
 
-def SixSicdUtilities_parseData(xmlStream, schemaPaths, log):
+def SixSicdUtilities_parseData(xmlStream: 'InputStream', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
     """SixSicdUtilities_parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
 
-def SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log):
+def SixSicdUtilities_parseDataFromFile(pathname: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
     """SixSicdUtilities_parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
 
-def SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log):
+def SixSicdUtilities_parseDataFromString(xmlStr: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
     """SixSicdUtilities_parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
 
-def SixSicdUtilities_toXMLString(*args):
+def SixSicdUtilities_toXMLString(*args) -> "std::string":
     """
     toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
     toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
@@ -5077,39 +5077,39 @@ def SixSicdUtilities_toXMLString(*args):
     """
     return _six_sicd.SixSicdUtilities_toXMLString(*args)
 
-def SixSicdUtilities_createFakeComplexData():
+def SixSicdUtilities_createFakeComplexData() -> "std::auto_ptr< six::sicd::ComplexData >":
     """SixSicdUtilities_createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_createFakeComplexData()
 
-def SixSicdUtilities_getNoiseMesh(reader):
+def SixSicdUtilities_getNoiseMesh(reader: 'NITFReadControl &') -> "std::auto_ptr< six::sicd::NoiseMesh >":
     """SixSicdUtilities_getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
     return _six_sicd.SixSicdUtilities_getNoiseMesh(reader)
 
-def SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol):
+def SixSicdUtilities_getProjectionPolys(reader: 'NITFReadControl &', orderX: 'size_t', orderY: 'size_t', complexData: 'std::auto_ptr< six::sicd::ComplexData > &', outputRowColToSlantRow: 'Poly2D', outputRowColToSlantCol: 'Poly2D') -> "void":
     """SixSicdUtilities_getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
     return _six_sicd.SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
 
-def SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift):
+def SixSicdUtilities_transformXYPolyToRowColPoly(polyXY: 'Poly2D', outSampleSpacing: 'RowColDouble', outCenter: 'RowColDouble', polyScaleFactor: 'double', polyShift: 'double') -> "six::Poly2D":
     """SixSicdUtilities_transformXYPolyToRowColPoly(Poly2D polyXY, RowColDouble outSampleSpacing, RowColDouble outCenter, double polyScaleFactor, double polyShift) -> Poly2D"""
     return _six_sicd.SixSicdUtilities_transformXYPolyToRowColPoly(polyXY, outSampleSpacing, outCenter, polyScaleFactor, polyShift)
 
-def SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol):
+def SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX: 'Poly2D', outputXYToSlantY: 'Poly2D', slantSampleSpacing: 'RowColDouble', outputSampleSpacing: 'RowColDouble', slantCenter: 'RowColDouble', outputCenter: 'RowColDouble', outputRowColToSlantRow: 'Poly2D', outputRowColToSlantCol: 'Poly2D') -> "void":
     """SixSicdUtilities_transformXYProjectionPolys(Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, RowColDouble slantSampleSpacing, RowColDouble outputSampleSpacing, RowColDouble slantCenter, RowColDouble outputCenter, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
     return _six_sicd.SixSicdUtilities_transformXYProjectionPolys(outputXYToSlantX, outputXYToSlantY, slantSampleSpacing, outputSampleSpacing, slantCenter, outputCenter, outputRowColToSlantRow, outputRowColToSlantCol)
 
-def SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY):
+def SixSicdUtilities_fitXYProjectionPolys(outputMesh: 'PlanarCoordinateMesh', slantMesh: 'PlanarCoordinateMesh', orderX: 'size_t', orderY: 'size_t', outputXYToSlantX: 'Poly2D', outputXYToSlantY: 'Poly2D', slantXYToOutputX: 'Poly2D', slantXYToOutputY: 'Poly2D') -> "void":
     """SixSicdUtilities_fitXYProjectionPolys(PlanarCoordinateMesh outputMesh, PlanarCoordinateMesh slantMesh, size_t orderX, size_t orderY, Poly2D outputXYToSlantX, Poly2D outputXYToSlantY, Poly2D slantXYToOutputX, Poly2D slantXYToOutputY)"""
     return _six_sicd.SixSicdUtilities_fitXYProjectionPolys(outputMesh, slantMesh, orderX, orderY, outputXYToSlantX, outputXYToSlantY, slantXYToOutputX, slantXYToOutputY)
 
-def SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels):
+def SixSicdUtilities_projectPixelsToOutputPlane(complexData: 'ComplexData', spPixels: 'VectorRowColDouble', opPixels: 'VectorRowColDouble') -> "void":
     """SixSicdUtilities_projectPixelsToOutputPlane(ComplexData complexData, VectorRowColDouble spPixels, VectorRowColDouble opPixels)"""
     return _six_sicd.SixSicdUtilities_projectPixelsToOutputPlane(complexData, spPixels, opPixels)
 
-def SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels):
+def SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData: 'ComplexData', opPixels: 'VectorRowColDouble') -> "void":
     """SixSicdUtilities_projectValidDataPolygonToOutputPlane(ComplexData complexData, VectorRowColDouble opPixels)"""
     return _six_sicd.SixSicdUtilities_projectValidDataPolygonToOutputPlane(complexData, opPixels)
 
-def SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels):
+def SixSicdUtilities_projectPixelsToSlantPlane(complexData: 'ComplexData', opPixels: 'VectorRowColDouble', spPixels: 'VectorRowColDouble') -> "void":
     """SixSicdUtilities_projectPixelsToSlantPlane(ComplexData complexData, VectorRowColDouble opPixels, VectorRowColDouble spPixels)"""
     return _six_sicd.SixSicdUtilities_projectPixelsToSlantPlane(complexData, opPixels, spPixels)
 
@@ -5122,7 +5122,7 @@ class AreaPlaneUtility(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, AreaPlaneUtility, name)
     __repr__ = _swig_repr
 
-    def setAreaPlane(*args):
+    def setAreaPlane(*args) -> "void":
         """
         setAreaPlane(ComplexData data, bool includeSegmentList=True, double sampleDensity)
         setAreaPlane(ComplexData data, bool includeSegmentList=True)
@@ -5132,7 +5132,7 @@ class AreaPlaneUtility(_object):
 
     setAreaPlane = staticmethod(setAreaPlane)
 
-    def deriveAreaPlane(*args):
+    def deriveAreaPlane(*args) -> "void":
         """
         deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True, double sampleDensity)
         deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True)
@@ -5142,7 +5142,7 @@ class AreaPlaneUtility(_object):
 
     deriveAreaPlane = staticmethod(deriveAreaPlane)
 
-    def hasAreaPlane(data):
+    def hasAreaPlane(data: 'ComplexData') -> "bool":
         """hasAreaPlane(ComplexData data) -> bool"""
         return _six_sicd.AreaPlaneUtility_hasAreaPlane(data)
 
@@ -5160,7 +5160,7 @@ class AreaPlaneUtility(_object):
 AreaPlaneUtility_swigregister = _six_sicd.AreaPlaneUtility_swigregister
 AreaPlaneUtility_swigregister(AreaPlaneUtility)
 
-def AreaPlaneUtility_setAreaPlane(*args):
+def AreaPlaneUtility_setAreaPlane(*args) -> "void":
     """
     setAreaPlane(ComplexData data, bool includeSegmentList=True, double sampleDensity)
     setAreaPlane(ComplexData data, bool includeSegmentList=True)
@@ -5168,7 +5168,7 @@ def AreaPlaneUtility_setAreaPlane(*args):
     """
     return _six_sicd.AreaPlaneUtility_setAreaPlane(*args)
 
-def AreaPlaneUtility_deriveAreaPlane(*args):
+def AreaPlaneUtility_deriveAreaPlane(*args) -> "void":
     """
     deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True, double sampleDensity)
     deriveAreaPlane(ComplexData data, AreaPlane areaPlane, bool includeSegmentList=True)
@@ -5176,7 +5176,7 @@ def AreaPlaneUtility_deriveAreaPlane(*args):
     """
     return _six_sicd.AreaPlaneUtility_deriveAreaPlane(*args)
 
-def AreaPlaneUtility_hasAreaPlane(data):
+def AreaPlaneUtility_hasAreaPlane(data: 'ComplexData') -> "bool":
     """AreaPlaneUtility_hasAreaPlane(ComplexData data) -> bool"""
     return _six_sicd.AreaPlaneUtility_hasAreaPlane(data)
 AreaPlaneUtility.DEFAULT_SAMPLE_DENSITY = _six_sicd.cvar.AreaPlaneUtility_DEFAULT_SAMPLE_DENSITY
@@ -5190,7 +5190,7 @@ class GeoLocator(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, GeoLocator, name)
     __repr__ = _swig_repr
 
-    def __init__(self, complexData, shadowsDown=True):
+    def __init__(self, complexData: 'ComplexData', shadowsDown: 'bool'=True):
         """
         __init__(six::sicd::GeoLocator self, ComplexData complexData, bool shadowsDown=True) -> GeoLocator
         __init__(six::sicd::GeoLocator self, ComplexData complexData) -> GeoLocator
@@ -5201,7 +5201,7 @@ class GeoLocator(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def geolocate(self, rowCol):
+    def geolocate(self, rowCol: 'RowColDouble') -> "six::LatLonAlt":
         """geolocate(GeoLocator self, RowColDouble rowCol) -> LatLonAlt"""
         return _six_sicd.GeoLocator_geolocate(self, rowCol)
 
@@ -5252,22 +5252,22 @@ class ScopedCloneableCollectionInformation(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::CollectionInformation *":
         """get(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
         return _six_sicd.ScopedCloneableCollectionInformation_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::CollectionInformation &":
         """__ref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
         return _six_sicd.ScopedCloneableCollectionInformation___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::CollectionInformation *":
         """__deref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
         return _six_sicd.ScopedCloneableCollectionInformation___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'CollectionInformation'=None) -> "void":
         """
         reset(ScopedCloneableCollectionInformation self, CollectionInformation ptr=None)
         reset(ScopedCloneableCollectionInformation self)
@@ -5313,17 +5313,17 @@ class ScopedCloneableCollectionInformation(_object):
     if _newclass:
         parameters = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_parameters_get, _six_sicd.ScopedCloneableCollectionInformation_parameters_set)
 
-    def clone(self):
+    def clone(self) -> "six::sicd::CollectionInformation *":
         """clone(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
         return _six_sicd.ScopedCloneableCollectionInformation_clone(self)
 
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'CollectionInformation') -> "bool":
         """__eq__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
         return _six_sicd.ScopedCloneableCollectionInformation___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'CollectionInformation') -> "bool":
         """__ne__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
         return _six_sicd.ScopedCloneableCollectionInformation___ne__(self, other)
 
@@ -5331,7 +5331,7 @@ ScopedCloneableCollectionInformation_swigregister = _six_sicd.ScopedCloneableCol
 ScopedCloneableCollectionInformation_swigregister(ScopedCloneableCollectionInformation)
 
 
-def makeScopedCloneableCollectionInformation():
+def makeScopedCloneableCollectionInformation() -> "mem::ScopedCloneablePtr< six::sicd::CollectionInformation >":
     """makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"""
     return _six_sicd.makeScopedCloneableCollectionInformation()
 class StdAutoImageCreation(_object):
@@ -5376,22 +5376,22 @@ class ScopedCloneableImageCreation(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::ImageCreation *":
         """get(ScopedCloneableImageCreation self) -> ImageCreation"""
         return _six_sicd.ScopedCloneableImageCreation_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::ImageCreation &":
         """__ref__(ScopedCloneableImageCreation self) -> ImageCreation"""
         return _six_sicd.ScopedCloneableImageCreation___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::ImageCreation *":
         """__deref__(ScopedCloneableImageCreation self) -> ImageCreation"""
         return _six_sicd.ScopedCloneableImageCreation___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'ImageCreation'=None) -> "void":
         """
         reset(ScopedCloneableImageCreation self, ImageCreation ptr=None)
         reset(ScopedCloneableImageCreation self)
@@ -5417,17 +5417,17 @@ class ScopedCloneableImageCreation(_object):
     if _newclass:
         profile = _swig_property(_six_sicd.ScopedCloneableImageCreation_profile_get, _six_sicd.ScopedCloneableImageCreation_profile_set)
 
-    def clone(self):
+    def clone(self) -> "six::sicd::ImageCreation *":
         """clone(ScopedCloneableImageCreation self) -> ImageCreation"""
         return _six_sicd.ScopedCloneableImageCreation_clone(self)
 
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ImageCreation') -> "bool":
         """__eq__(ScopedCloneableImageCreation self, ImageCreation rhs) -> bool"""
         return _six_sicd.ScopedCloneableImageCreation___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'ImageCreation') -> "bool":
         """__ne__(ScopedCloneableImageCreation self, ImageCreation rhs) -> bool"""
         return _six_sicd.ScopedCloneableImageCreation___ne__(self, rhs)
 
@@ -5435,7 +5435,7 @@ ScopedCloneableImageCreation_swigregister = _six_sicd.ScopedCloneableImageCreati
 ScopedCloneableImageCreation_swigregister(ScopedCloneableImageCreation)
 
 
-def makeScopedCloneableImageCreation():
+def makeScopedCloneableImageCreation() -> "mem::ScopedCloneablePtr< six::sicd::ImageCreation >":
     """makeScopedCloneableImageCreation() -> ScopedCloneableImageCreation"""
     return _six_sicd.makeScopedCloneableImageCreation()
 class StdAutoImageData(_object):
@@ -5486,22 +5486,22 @@ class ScopedCopyableImageData(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::ImageData *":
         """get(ScopedCopyableImageData self) -> ImageData"""
         return _six_sicd.ScopedCopyableImageData_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::ImageData &":
         """__ref__(ScopedCopyableImageData self) -> ImageData"""
         return _six_sicd.ScopedCopyableImageData___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::ImageData *":
         """__deref__(ScopedCopyableImageData self) -> ImageData"""
         return _six_sicd.ScopedCopyableImageData___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'ImageData'=None) -> "void":
         """
         reset(ScopedCopyableImageData self, ImageData ptr=None)
         reset(ScopedCopyableImageData self)
@@ -5547,17 +5547,17 @@ class ScopedCopyableImageData(_object):
     if _newclass:
         validData = _swig_property(_six_sicd.ScopedCopyableImageData_validData_get, _six_sicd.ScopedCopyableImageData_validData_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ImageData') -> "bool":
         """__eq__(ScopedCopyableImageData self, ImageData rhs) -> bool"""
         return _six_sicd.ScopedCopyableImageData___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'ImageData') -> "bool":
         """__ne__(ScopedCopyableImageData self, ImageData rhs) -> bool"""
         return _six_sicd.ScopedCopyableImageData___ne__(self, rhs)
 
 
-    def validate(self, geoData, log):
+    def validate(self, geoData: 'GeoData', log: 'logging::Logger &') -> "bool":
         """validate(ScopedCopyableImageData self, GeoData geoData, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableImageData_validate(self, geoData, log)
 
@@ -5565,7 +5565,7 @@ ScopedCopyableImageData_swigregister = _six_sicd.ScopedCopyableImageData_swigreg
 ScopedCopyableImageData_swigregister(ScopedCopyableImageData)
 
 
-def makeScopedCopyableImageData():
+def makeScopedCopyableImageData() -> "mem::ScopedCopyablePtr< six::sicd::ImageData >":
     """makeScopedCopyableImageData() -> ScopedCopyableImageData"""
     return _six_sicd.makeScopedCopyableImageData()
 class StdAutoGeoData(_object):
@@ -5616,22 +5616,22 @@ class ScopedCopyableGeoData(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::GeoData *":
         """get(ScopedCopyableGeoData self) -> GeoData"""
         return _six_sicd.ScopedCopyableGeoData_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::GeoData &":
         """__ref__(ScopedCopyableGeoData self) -> GeoData"""
         return _six_sicd.ScopedCopyableGeoData___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::GeoData *":
         """__deref__(ScopedCopyableGeoData self) -> GeoData"""
         return _six_sicd.ScopedCopyableGeoData___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'GeoData'=None) -> "void":
         """
         reset(ScopedCopyableGeoData self, GeoData ptr=None)
         reset(ScopedCopyableGeoData self)
@@ -5661,22 +5661,22 @@ class ScopedCopyableGeoData(_object):
     if _newclass:
         geoInfos = _swig_property(_six_sicd.ScopedCopyableGeoData_geoInfos_get, _six_sicd.ScopedCopyableGeoData_geoInfos_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'GeoData') -> "bool":
         """__eq__(ScopedCopyableGeoData self, GeoData rhs) -> bool"""
         return _six_sicd.ScopedCopyableGeoData___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'GeoData') -> "bool":
         """__ne__(ScopedCopyableGeoData self, GeoData rhs) -> bool"""
         return _six_sicd.ScopedCopyableGeoData___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, imageData, model):
+    def fillDerivedFields(self, imageData: 'ImageData', model: 'ProjectionModel') -> "void":
         """fillDerivedFields(ScopedCopyableGeoData self, ImageData imageData, ProjectionModel model)"""
         return _six_sicd.ScopedCopyableGeoData_fillDerivedFields(self, imageData, model)
 
 
-    def validate(self, log):
+    def validate(self, log: 'logging::Logger &') -> "bool":
         """validate(ScopedCopyableGeoData self, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableGeoData_validate(self, log)
 
@@ -5684,7 +5684,7 @@ ScopedCopyableGeoData_swigregister = _six_sicd.ScopedCopyableGeoData_swigregiste
 ScopedCopyableGeoData_swigregister(ScopedCopyableGeoData)
 
 
-def makeScopedCopyableGeoData():
+def makeScopedCopyableGeoData() -> "mem::ScopedCopyablePtr< six::sicd::GeoData >":
     """makeScopedCopyableGeoData() -> ScopedCopyableGeoData"""
     return _six_sicd.makeScopedCopyableGeoData()
 class StdAutoGrid(_object):
@@ -5729,22 +5729,22 @@ class ScopedCloneableGrid(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::Grid *":
         """get(ScopedCloneableGrid self) -> Grid"""
         return _six_sicd.ScopedCloneableGrid_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::Grid &":
         """__ref__(ScopedCloneableGrid self) -> Grid"""
         return _six_sicd.ScopedCloneableGrid___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::Grid *":
         """__deref__(ScopedCloneableGrid self) -> Grid"""
         return _six_sicd.ScopedCloneableGrid___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'Grid'=None) -> "void":
         """
         reset(ScopedCloneableGrid self, Grid ptr=None)
         reset(ScopedCloneableGrid self)
@@ -5754,7 +5754,7 @@ class ScopedCloneableGrid(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCloneableGrid
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::Grid *":
         """clone(ScopedCloneableGrid self) -> Grid"""
         return _six_sicd.ScopedCloneableGrid_clone(self)
 
@@ -5779,17 +5779,17 @@ class ScopedCloneableGrid(_object):
     if _newclass:
         col = _swig_property(_six_sicd.ScopedCloneableGrid_col_get, _six_sicd.ScopedCloneableGrid_col_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Grid') -> "bool":
         """__eq__(ScopedCloneableGrid self, Grid rhs) -> bool"""
         return _six_sicd.ScopedCloneableGrid___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Grid') -> "bool":
         """__ne__(ScopedCloneableGrid self, Grid rhs) -> bool"""
         return _six_sicd.ScopedCloneableGrid___ne__(self, rhs)
 
 
-    def validate(self, *args):
+    def validate(self, *args) -> "bool":
         """
         validate(ScopedCloneableGrid self, CollectionInformation collectionInformation, ImageData imageData, logging::Logger & log) -> bool
         validate(ScopedCloneableGrid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool
@@ -5799,7 +5799,7 @@ class ScopedCloneableGrid(_object):
         return _six_sicd.ScopedCloneableGrid_validate(self, *args)
 
 
-    def fillDerivedFields(self, *args):
+    def fillDerivedFields(self, *args) -> "void":
         """
         fillDerivedFields(ScopedCloneableGrid self, CollectionInformation collectionInformation, ImageData imageData, SCPCOA scpcoa)
         fillDerivedFields(ScopedCloneableGrid self, RMA const & rma, Vector3 scp, PolyVector3 arpPoly)
@@ -5808,7 +5808,7 @@ class ScopedCloneableGrid(_object):
         return _six_sicd.ScopedCloneableGrid_fillDerivedFields(self, *args)
 
 
-    def fillDefaultFields(self, *args):
+    def fillDefaultFields(self, *args) -> "void":
         """
         fillDefaultFields(ScopedCloneableGrid self, RMA const & rma, double fc)
         fillDefaultFields(ScopedCloneableGrid self, PFA pfa, double fc)
@@ -5819,7 +5819,7 @@ ScopedCloneableGrid_swigregister = _six_sicd.ScopedCloneableGrid_swigregister
 ScopedCloneableGrid_swigregister(ScopedCloneableGrid)
 
 
-def makeScopedCloneableGrid():
+def makeScopedCloneableGrid() -> "mem::ScopedCloneablePtr< six::sicd::Grid >":
     """makeScopedCloneableGrid() -> ScopedCloneableGrid"""
     return _six_sicd.makeScopedCloneableGrid()
 class StdAutoTimeline(_object):
@@ -5870,22 +5870,22 @@ class ScopedCopyableTimeline(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::Timeline *":
         """get(ScopedCopyableTimeline self) -> Timeline"""
         return _six_sicd.ScopedCopyableTimeline_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::Timeline &":
         """__ref__(ScopedCopyableTimeline self) -> Timeline"""
         return _six_sicd.ScopedCopyableTimeline___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::Timeline *":
         """__deref__(ScopedCopyableTimeline self) -> Timeline"""
         return _six_sicd.ScopedCopyableTimeline___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'Timeline'=None) -> "void":
         """
         reset(ScopedCopyableTimeline self, Timeline ptr=None)
         reset(ScopedCopyableTimeline self)
@@ -5907,12 +5907,12 @@ class ScopedCopyableTimeline(_object):
     if _newclass:
         interPulsePeriod = _swig_property(_six_sicd.ScopedCopyableTimeline_interPulsePeriod_get, _six_sicd.ScopedCopyableTimeline_interPulsePeriod_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Timeline') -> "bool":
         """__eq__(ScopedCopyableTimeline self, Timeline rhs) -> bool"""
         return _six_sicd.ScopedCopyableTimeline___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Timeline') -> "bool":
         """__ne__(ScopedCopyableTimeline self, Timeline rhs) -> bool"""
         return _six_sicd.ScopedCopyableTimeline___ne__(self, rhs)
 
@@ -5920,7 +5920,7 @@ ScopedCopyableTimeline_swigregister = _six_sicd.ScopedCopyableTimeline_swigregis
 ScopedCopyableTimeline_swigregister(ScopedCopyableTimeline)
 
 
-def makeScopedCopyableTimeline():
+def makeScopedCopyableTimeline() -> "mem::ScopedCopyablePtr< six::sicd::Timeline >":
     """makeScopedCopyableTimeline() -> ScopedCopyableTimeline"""
     return _six_sicd.makeScopedCopyableTimeline()
 class StdAutoPosition(_object):
@@ -5971,22 +5971,22 @@ class ScopedCopyablePosition(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::Position *":
         """get(ScopedCopyablePosition self) -> Position"""
         return _six_sicd.ScopedCopyablePosition_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::Position &":
         """__ref__(ScopedCopyablePosition self) -> Position"""
         return _six_sicd.ScopedCopyablePosition___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::Position *":
         """__deref__(ScopedCopyablePosition self) -> Position"""
         return _six_sicd.ScopedCopyablePosition___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'Position'=None) -> "void":
         """
         reset(ScopedCopyablePosition self, Position ptr=None)
         reset(ScopedCopyablePosition self)
@@ -6012,22 +6012,22 @@ class ScopedCopyablePosition(_object):
     if _newclass:
         rcvAPC = _swig_property(_six_sicd.ScopedCopyablePosition_rcvAPC_get, _six_sicd.ScopedCopyablePosition_rcvAPC_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Position') -> "bool":
         """__eq__(ScopedCopyablePosition self, Position rhs) -> bool"""
         return _six_sicd.ScopedCopyablePosition___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Position') -> "bool":
         """__ne__(ScopedCopyablePosition self, Position rhs) -> bool"""
         return _six_sicd.ScopedCopyablePosition___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, scpcoa):
+    def fillDerivedFields(self, scpcoa: 'SCPCOA') -> "void":
         """fillDerivedFields(ScopedCopyablePosition self, SCPCOA scpcoa)"""
         return _six_sicd.ScopedCopyablePosition_fillDerivedFields(self, scpcoa)
 
 
-    def validate(self, log):
+    def validate(self, log: 'logging::Logger &') -> "bool":
         """validate(ScopedCopyablePosition self, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyablePosition_validate(self, log)
 
@@ -6035,7 +6035,7 @@ ScopedCopyablePosition_swigregister = _six_sicd.ScopedCopyablePosition_swigregis
 ScopedCopyablePosition_swigregister(ScopedCopyablePosition)
 
 
-def makeScopedCopyablePosition():
+def makeScopedCopyablePosition() -> "mem::ScopedCopyablePtr< six::sicd::Position >":
     """makeScopedCopyablePosition() -> ScopedCopyablePosition"""
     return _six_sicd.makeScopedCopyablePosition()
 class StdAutoRcvAPC(_object):
@@ -6086,22 +6086,22 @@ class ScopedCopyableRcvAPC(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::RcvAPC *":
         """get(ScopedCopyableRcvAPC self) -> RcvAPC"""
         return _six_sicd.ScopedCopyableRcvAPC_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::RcvAPC &":
         """__ref__(ScopedCopyableRcvAPC self) -> RcvAPC"""
         return _six_sicd.ScopedCopyableRcvAPC___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::RcvAPC *":
         """__deref__(ScopedCopyableRcvAPC self) -> RcvAPC"""
         return _six_sicd.ScopedCopyableRcvAPC___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'RcvAPC'=None) -> "void":
         """
         reset(ScopedCopyableRcvAPC self, RcvAPC ptr=None)
         reset(ScopedCopyableRcvAPC self)
@@ -6115,12 +6115,12 @@ class ScopedCopyableRcvAPC(_object):
     if _newclass:
         rcvAPCPolys = _swig_property(_six_sicd.ScopedCopyableRcvAPC_rcvAPCPolys_get, _six_sicd.ScopedCopyableRcvAPC_rcvAPCPolys_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RcvAPC') -> "bool":
         """__eq__(ScopedCopyableRcvAPC self, RcvAPC rhs) -> bool"""
         return _six_sicd.ScopedCopyableRcvAPC___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RcvAPC') -> "bool":
         """__ne__(ScopedCopyableRcvAPC self, RcvAPC rhs) -> bool"""
         return _six_sicd.ScopedCopyableRcvAPC___ne__(self, rhs)
 
@@ -6128,7 +6128,7 @@ ScopedCopyableRcvAPC_swigregister = _six_sicd.ScopedCopyableRcvAPC_swigregister
 ScopedCopyableRcvAPC_swigregister(ScopedCopyableRcvAPC)
 
 
-def makeScopedCopyableRcvAPC():
+def makeScopedCopyableRcvAPC() -> "mem::ScopedCopyablePtr< six::sicd::RcvAPC >":
     """makeScopedCopyableRcvAPC() -> ScopedCopyableRcvAPC"""
     return _six_sicd.makeScopedCopyableRcvAPC()
 class StdAutoRadarCollection(_object):
@@ -6173,22 +6173,22 @@ class ScopedCloneableRadarCollection(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::RadarCollection *":
         """get(ScopedCloneableRadarCollection self) -> RadarCollection"""
         return _six_sicd.ScopedCloneableRadarCollection_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::RadarCollection &":
         """__ref__(ScopedCloneableRadarCollection self) -> RadarCollection"""
         return _six_sicd.ScopedCloneableRadarCollection___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::RadarCollection *":
         """__deref__(ScopedCloneableRadarCollection self) -> RadarCollection"""
         return _six_sicd.ScopedCloneableRadarCollection___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'RadarCollection'=None) -> "void":
         """
         reset(ScopedCloneableRadarCollection self, RadarCollection ptr=None)
         reset(ScopedCloneableRadarCollection self)
@@ -6198,7 +6198,7 @@ class ScopedCloneableRadarCollection(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCloneableRadarCollection
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::RadarCollection *":
         """clone(ScopedCloneableRadarCollection self) -> RadarCollection"""
         return _six_sicd.ScopedCloneableRadarCollection_clone(self)
 
@@ -6243,22 +6243,22 @@ class ScopedCloneableRadarCollection(_object):
     if _newclass:
         parameters = _swig_property(_six_sicd.ScopedCloneableRadarCollection_parameters_get, _six_sicd.ScopedCloneableRadarCollection_parameters_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RadarCollection') -> "bool":
         """__eq__(ScopedCloneableRadarCollection self, RadarCollection rhs) -> bool"""
         return _six_sicd.ScopedCloneableRadarCollection___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RadarCollection') -> "bool":
         """__ne__(ScopedCloneableRadarCollection self, RadarCollection rhs) -> bool"""
         return _six_sicd.ScopedCloneableRadarCollection___ne__(self, rhs)
 
 
-    def fillDerivedFields(self):
+    def fillDerivedFields(self) -> "void":
         """fillDerivedFields(ScopedCloneableRadarCollection self)"""
         return _six_sicd.ScopedCloneableRadarCollection_fillDerivedFields(self)
 
 
-    def validate(self, log):
+    def validate(self, log: 'logging::Logger &') -> "bool":
         """validate(ScopedCloneableRadarCollection self, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCloneableRadarCollection_validate(self, log)
 
@@ -6266,7 +6266,7 @@ ScopedCloneableRadarCollection_swigregister = _six_sicd.ScopedCloneableRadarColl
 ScopedCloneableRadarCollection_swigregister(ScopedCloneableRadarCollection)
 
 
-def makeScopedCloneableRadarCollection():
+def makeScopedCloneableRadarCollection() -> "mem::ScopedCloneablePtr< six::sicd::RadarCollection >":
     """makeScopedCloneableRadarCollection() -> ScopedCloneableRadarCollection"""
     return _six_sicd.makeScopedCloneableRadarCollection()
 class StdAutoImageFormation(_object):
@@ -6317,22 +6317,22 @@ class ScopedCopyableImageFormation(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::ImageFormation *":
         """get(ScopedCopyableImageFormation self) -> ImageFormation"""
         return _six_sicd.ScopedCopyableImageFormation_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::ImageFormation &":
         """__ref__(ScopedCopyableImageFormation self) -> ImageFormation"""
         return _six_sicd.ScopedCopyableImageFormation___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::ImageFormation *":
         """__deref__(ScopedCopyableImageFormation self) -> ImageFormation"""
         return _six_sicd.ScopedCopyableImageFormation___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'ImageFormation'=None) -> "void":
         """
         reset(ScopedCopyableImageFormation self, ImageFormation ptr=None)
         reset(ScopedCopyableImageFormation self)
@@ -6398,17 +6398,17 @@ class ScopedCopyableImageFormation(_object):
     if _newclass:
         polarizationCalibration = _swig_property(_six_sicd.ScopedCopyableImageFormation_polarizationCalibration_get, _six_sicd.ScopedCopyableImageFormation_polarizationCalibration_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ImageFormation') -> "bool":
         """__eq__(ScopedCopyableImageFormation self, ImageFormation rhs) -> bool"""
         return _six_sicd.ScopedCopyableImageFormation___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'ImageFormation') -> "bool":
         """__ne__(ScopedCopyableImageFormation self, ImageFormation rhs) -> bool"""
         return _six_sicd.ScopedCopyableImageFormation___ne__(self, rhs)
 
 
-    def fillDefaultFields(self, radarCollection):
+    def fillDefaultFields(self, radarCollection: 'RadarCollection') -> "void":
         """fillDefaultFields(ScopedCopyableImageFormation self, RadarCollection radarCollection)"""
         return _six_sicd.ScopedCopyableImageFormation_fillDefaultFields(self, radarCollection)
 
@@ -6416,7 +6416,7 @@ ScopedCopyableImageFormation_swigregister = _six_sicd.ScopedCopyableImageFormati
 ScopedCopyableImageFormation_swigregister(ScopedCopyableImageFormation)
 
 
-def makeScopedCopyableImageFormation():
+def makeScopedCopyableImageFormation() -> "mem::ScopedCopyablePtr< six::sicd::ImageFormation >":
     """makeScopedCopyableImageFormation() -> ScopedCopyableImageFormation"""
     return _six_sicd.makeScopedCopyableImageFormation()
 class StdAutoSCPCOA(_object):
@@ -6467,22 +6467,22 @@ class ScopedCopyableSCPCOA(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::SCPCOA *":
         """get(ScopedCopyableSCPCOA self) -> SCPCOA"""
         return _six_sicd.ScopedCopyableSCPCOA_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::SCPCOA &":
         """__ref__(ScopedCopyableSCPCOA self) -> SCPCOA"""
         return _six_sicd.ScopedCopyableSCPCOA___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::SCPCOA *":
         """__deref__(ScopedCopyableSCPCOA self) -> SCPCOA"""
         return _six_sicd.ScopedCopyableSCPCOA___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'SCPCOA'=None) -> "void":
         """
         reset(ScopedCopyableSCPCOA self, SCPCOA ptr=None)
         reset(ScopedCopyableSCPCOA self)
@@ -6548,42 +6548,42 @@ class ScopedCopyableSCPCOA(_object):
     if _newclass:
         layoverAngle = _swig_property(_six_sicd.ScopedCopyableSCPCOA_layoverAngle_get, _six_sicd.ScopedCopyableSCPCOA_layoverAngle_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'SCPCOA') -> "bool":
         """__eq__(ScopedCopyableSCPCOA self, SCPCOA rhs) -> bool"""
         return _six_sicd.ScopedCopyableSCPCOA___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'SCPCOA') -> "bool":
         """__ne__(ScopedCopyableSCPCOA self, SCPCOA rhs) -> bool"""
         return _six_sicd.ScopedCopyableSCPCOA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, geoData, grid, position):
+    def fillDerivedFields(self, geoData: 'GeoData', grid: 'Grid', position: 'Position') -> "void":
         """fillDerivedFields(ScopedCopyableSCPCOA self, GeoData geoData, Grid grid, Position position)"""
         return _six_sicd.ScopedCopyableSCPCOA_fillDerivedFields(self, geoData, grid, position)
 
 
-    def validate(self, geoData, grid, position, log):
+    def validate(self, geoData: 'GeoData', grid: 'Grid', position: 'Position', log: 'logging::Logger &') -> "bool":
         """validate(ScopedCopyableSCPCOA self, GeoData geoData, Grid grid, Position position, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableSCPCOA_validate(self, geoData, grid, position, log)
 
 
-    def uLOS(self, scp):
+    def uLOS(self, scp: 'Vector3') -> "six::Vector3":
         """uLOS(ScopedCopyableSCPCOA self, Vector3 scp) -> Vector3"""
         return _six_sicd.ScopedCopyableSCPCOA_uLOS(self, scp)
 
 
-    def look(self, scp):
+    def look(self, scp: 'Vector3') -> "int":
         """look(ScopedCopyableSCPCOA self, Vector3 scp) -> int"""
         return _six_sicd.ScopedCopyableSCPCOA_look(self, scp)
 
 
-    def left(self):
+    def left(self) -> "six::Vector3":
         """left(ScopedCopyableSCPCOA self) -> Vector3"""
         return _six_sicd.ScopedCopyableSCPCOA_left(self)
 
 
-    def slantPlaneNormal(self, scp):
+    def slantPlaneNormal(self, scp: 'Vector3') -> "six::Vector3":
         """slantPlaneNormal(ScopedCopyableSCPCOA self, Vector3 scp) -> Vector3"""
         return _six_sicd.ScopedCopyableSCPCOA_slantPlaneNormal(self, scp)
 
@@ -6591,7 +6591,7 @@ ScopedCopyableSCPCOA_swigregister = _six_sicd.ScopedCopyableSCPCOA_swigregister
 ScopedCopyableSCPCOA_swigregister(ScopedCopyableSCPCOA)
 
 
-def makeScopedCopyableSCPCOA():
+def makeScopedCopyableSCPCOA() -> "mem::ScopedCopyablePtr< six::sicd::SCPCOA >":
     """makeScopedCopyableSCPCOA() -> ScopedCopyableSCPCOA"""
     return _six_sicd.makeScopedCopyableSCPCOA()
 class StdAutoAntenna(_object):
@@ -6642,22 +6642,22 @@ class ScopedCopyableAntenna(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::Antenna *":
         """get(ScopedCopyableAntenna self) -> Antenna"""
         return _six_sicd.ScopedCopyableAntenna_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::Antenna &":
         """__ref__(ScopedCopyableAntenna self) -> Antenna"""
         return _six_sicd.ScopedCopyableAntenna___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::Antenna *":
         """__deref__(ScopedCopyableAntenna self) -> Antenna"""
         return _six_sicd.ScopedCopyableAntenna___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'Antenna'=None) -> "void":
         """
         reset(ScopedCopyableAntenna self, Antenna ptr=None)
         reset(ScopedCopyableAntenna self)
@@ -6679,12 +6679,12 @@ class ScopedCopyableAntenna(_object):
     if _newclass:
         twoWay = _swig_property(_six_sicd.ScopedCopyableAntenna_twoWay_get, _six_sicd.ScopedCopyableAntenna_twoWay_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Antenna') -> "bool":
         """__eq__(ScopedCopyableAntenna self, Antenna rhs) -> bool"""
         return _six_sicd.ScopedCopyableAntenna___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Antenna') -> "bool":
         """__ne__(ScopedCopyableAntenna self, Antenna rhs) -> bool"""
         return _six_sicd.ScopedCopyableAntenna___ne__(self, rhs)
 
@@ -6692,7 +6692,7 @@ ScopedCopyableAntenna_swigregister = _six_sicd.ScopedCopyableAntenna_swigregiste
 ScopedCopyableAntenna_swigregister(ScopedCopyableAntenna)
 
 
-def makeScopedCopyableAntenna():
+def makeScopedCopyableAntenna() -> "mem::ScopedCopyablePtr< six::sicd::Antenna >":
     """makeScopedCopyableAntenna() -> ScopedCopyableAntenna"""
     return _six_sicd.makeScopedCopyableAntenna()
 class StdAutoSlowTimeDeskew(_object):
@@ -6743,22 +6743,22 @@ class ScopedCopyableSlowTimeDeskew(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::SlowTimeDeskew *":
         """get(ScopedCopyableSlowTimeDeskew self) -> SlowTimeDeskew"""
         return _six_sicd.ScopedCopyableSlowTimeDeskew_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::SlowTimeDeskew &":
         """__ref__(ScopedCopyableSlowTimeDeskew self) -> SlowTimeDeskew"""
         return _six_sicd.ScopedCopyableSlowTimeDeskew___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::SlowTimeDeskew *":
         """__deref__(ScopedCopyableSlowTimeDeskew self) -> SlowTimeDeskew"""
         return _six_sicd.ScopedCopyableSlowTimeDeskew___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'SlowTimeDeskew'=None) -> "void":
         """
         reset(ScopedCopyableSlowTimeDeskew self, SlowTimeDeskew ptr=None)
         reset(ScopedCopyableSlowTimeDeskew self)
@@ -6776,12 +6776,12 @@ class ScopedCopyableSlowTimeDeskew(_object):
     if _newclass:
         slowTimeDeskewPhasePoly = _swig_property(_six_sicd.ScopedCopyableSlowTimeDeskew_slowTimeDeskewPhasePoly_get, _six_sicd.ScopedCopyableSlowTimeDeskew_slowTimeDeskewPhasePoly_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'SlowTimeDeskew') -> "bool":
         """__eq__(ScopedCopyableSlowTimeDeskew self, SlowTimeDeskew rhs) -> bool"""
         return _six_sicd.ScopedCopyableSlowTimeDeskew___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'SlowTimeDeskew') -> "bool":
         """__ne__(ScopedCopyableSlowTimeDeskew self, SlowTimeDeskew rhs) -> bool"""
         return _six_sicd.ScopedCopyableSlowTimeDeskew___ne__(self, rhs)
 
@@ -6789,7 +6789,7 @@ ScopedCopyableSlowTimeDeskew_swigregister = _six_sicd.ScopedCopyableSlowTimeDesk
 ScopedCopyableSlowTimeDeskew_swigregister(ScopedCopyableSlowTimeDeskew)
 
 
-def makeScopedCopyableSlowTimeDeskew():
+def makeScopedCopyableSlowTimeDeskew() -> "mem::ScopedCopyablePtr< six::sicd::SlowTimeDeskew >":
     """makeScopedCopyableSlowTimeDeskew() -> ScopedCopyableSlowTimeDeskew"""
     return _six_sicd.makeScopedCopyableSlowTimeDeskew()
 class StdAutoPFA(_object):
@@ -6840,22 +6840,22 @@ class ScopedCopyablePFA(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::PFA *":
         """get(ScopedCopyablePFA self) -> PFA"""
         return _six_sicd.ScopedCopyablePFA_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::PFA &":
         """__ref__(ScopedCopyablePFA self) -> PFA"""
         return _six_sicd.ScopedCopyablePFA___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::PFA *":
         """__deref__(ScopedCopyablePFA self) -> PFA"""
         return _six_sicd.ScopedCopyablePFA___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'PFA'=None) -> "void":
         """
         reset(ScopedCopyablePFA self, PFA ptr=None)
         reset(ScopedCopyablePFA self)
@@ -6905,27 +6905,27 @@ class ScopedCopyablePFA(_object):
     if _newclass:
         slowTimeDeskew = _swig_property(_six_sicd.ScopedCopyablePFA_slowTimeDeskew_get, _six_sicd.ScopedCopyablePFA_slowTimeDeskew_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'PFA') -> "bool":
         """__eq__(ScopedCopyablePFA self, PFA rhs) -> bool"""
         return _six_sicd.ScopedCopyablePFA___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'PFA') -> "bool":
         """__ne__(ScopedCopyablePFA self, PFA rhs) -> bool"""
         return _six_sicd.ScopedCopyablePFA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, position):
+    def fillDerivedFields(self, position: 'Position') -> "void":
         """fillDerivedFields(ScopedCopyablePFA self, Position position)"""
         return _six_sicd.ScopedCopyablePFA_fillDerivedFields(self, position)
 
 
-    def fillDefaultFields(self, geoData, arg3, scpcoa):
+    def fillDefaultFields(self, geoData: 'GeoData', arg3: 'Grid', scpcoa: 'SCPCOA') -> "void":
         """fillDefaultFields(ScopedCopyablePFA self, GeoData geoData, Grid arg3, SCPCOA scpcoa)"""
         return _six_sicd.ScopedCopyablePFA_fillDefaultFields(self, geoData, arg3, scpcoa)
 
 
-    def validate(self, scpcoa, log):
+    def validate(self, scpcoa: 'SCPCOA', log: 'logging::Logger &') -> "bool":
         """validate(ScopedCopyablePFA self, SCPCOA scpcoa, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyablePFA_validate(self, scpcoa, log)
 
@@ -6933,7 +6933,7 @@ ScopedCopyablePFA_swigregister = _six_sicd.ScopedCopyablePFA_swigregister
 ScopedCopyablePFA_swigregister(ScopedCopyablePFA)
 
 
-def makeScopedCopyablePFA():
+def makeScopedCopyablePFA() -> "mem::ScopedCopyablePtr< six::sicd::PFA >":
     """makeScopedCopyablePFA() -> ScopedCopyablePFA"""
     return _six_sicd.makeScopedCopyablePFA()
 class StdAutoRMA(_object):
@@ -6984,22 +6984,22 @@ class ScopedCopyableRMA(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::RMA *":
         """get(ScopedCopyableRMA self) -> RMA"""
         return _six_sicd.ScopedCopyableRMA_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::RMA &":
         """__ref__(ScopedCopyableRMA self) -> RMA"""
         return _six_sicd.ScopedCopyableRMA___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::RMA *":
         """__deref__(ScopedCopyableRMA self) -> RMA"""
         return _six_sicd.ScopedCopyableRMA___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'RMA'=None) -> "void":
         """
         reset(ScopedCopyableRMA self, RMA ptr=None)
         reset(ScopedCopyableRMA self)
@@ -7025,27 +7025,27 @@ class ScopedCopyableRMA(_object):
     if _newclass:
         inca = _swig_property(_six_sicd.ScopedCopyableRMA_inca_get, _six_sicd.ScopedCopyableRMA_inca_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RMA') -> "bool":
         """__eq__(ScopedCopyableRMA self, RMA rhs) -> bool"""
         return _six_sicd.ScopedCopyableRMA___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RMA') -> "bool":
         """__ne__(ScopedCopyableRMA self, RMA rhs) -> bool"""
         return _six_sicd.ScopedCopyableRMA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, geoData, position):
+    def fillDerivedFields(self, geoData: 'GeoData', position: 'Position') -> "void":
         """fillDerivedFields(ScopedCopyableRMA self, GeoData geoData, Position position)"""
         return _six_sicd.ScopedCopyableRMA_fillDerivedFields(self, geoData, position)
 
 
-    def fillDefaultFields(self, scpcoa, fc):
+    def fillDefaultFields(self, scpcoa: 'SCPCOA', fc: 'double') -> "void":
         """fillDefaultFields(ScopedCopyableRMA self, SCPCOA scpcoa, double fc)"""
         return _six_sicd.ScopedCopyableRMA_fillDefaultFields(self, scpcoa, fc)
 
 
-    def validate(self, collectionInformation, scp, arpPoly, fc, log):
+    def validate(self, collectionInformation: 'CollectionInformation', scp: 'Vector3', arpPoly: 'PolyVector3', fc: 'double', log: 'logging::Logger &') -> "bool":
         """validate(ScopedCopyableRMA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableRMA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
@@ -7053,7 +7053,7 @@ ScopedCopyableRMA_swigregister = _six_sicd.ScopedCopyableRMA_swigregister
 ScopedCopyableRMA_swigregister(ScopedCopyableRMA)
 
 
-def makeScopedCopyableRMA():
+def makeScopedCopyableRMA() -> "mem::ScopedCopyablePtr< six::sicd::RMA >":
     """makeScopedCopyableRMA() -> ScopedCopyableRMA"""
     return _six_sicd.makeScopedCopyableRMA()
 class StdAutoRgAzComp(_object):
@@ -7104,22 +7104,22 @@ class ScopedCopyableRgAzComp(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::RgAzComp *":
         """get(ScopedCopyableRgAzComp self) -> RgAzComp"""
         return _six_sicd.ScopedCopyableRgAzComp_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::RgAzComp &":
         """__ref__(ScopedCopyableRgAzComp self) -> RgAzComp"""
         return _six_sicd.ScopedCopyableRgAzComp___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::RgAzComp *":
         """__deref__(ScopedCopyableRgAzComp self) -> RgAzComp"""
         return _six_sicd.ScopedCopyableRgAzComp___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'RgAzComp'=None) -> "void":
         """
         reset(ScopedCopyableRgAzComp self, RgAzComp ptr=None)
         reset(ScopedCopyableRgAzComp self)
@@ -7137,22 +7137,22 @@ class ScopedCopyableRgAzComp(_object):
     if _newclass:
         kazPoly = _swig_property(_six_sicd.ScopedCopyableRgAzComp_kazPoly_get, _six_sicd.ScopedCopyableRgAzComp_kazPoly_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RgAzComp') -> "bool":
         """__eq__(ScopedCopyableRgAzComp self, RgAzComp rhs) -> bool"""
         return _six_sicd.ScopedCopyableRgAzComp___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RgAzComp') -> "bool":
         """__ne__(ScopedCopyableRgAzComp self, RgAzComp rhs) -> bool"""
         return _six_sicd.ScopedCopyableRgAzComp___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, geoData, grid, scpcoa, timeline):
+    def fillDerivedFields(self, geoData: 'GeoData', grid: 'Grid', scpcoa: 'SCPCOA', timeline: 'Timeline') -> "void":
         """fillDerivedFields(ScopedCopyableRgAzComp self, GeoData geoData, Grid grid, SCPCOA scpcoa, Timeline timeline)"""
         return _six_sicd.ScopedCopyableRgAzComp_fillDerivedFields(self, geoData, grid, scpcoa, timeline)
 
 
-    def validate(self, geoData, grid, scpcoa, timeline, log):
+    def validate(self, geoData: 'GeoData', grid: 'Grid', scpcoa: 'SCPCOA', timeline: 'Timeline', log: 'logging::Logger &') -> "bool":
         """validate(ScopedCopyableRgAzComp self, GeoData geoData, Grid grid, SCPCOA scpcoa, Timeline timeline, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableRgAzComp_validate(self, geoData, grid, scpcoa, timeline, log)
 
@@ -7160,7 +7160,7 @@ ScopedCopyableRgAzComp_swigregister = _six_sicd.ScopedCopyableRgAzComp_swigregis
 ScopedCopyableRgAzComp_swigregister(ScopedCopyableRgAzComp)
 
 
-def makeScopedCopyableRgAzComp():
+def makeScopedCopyableRgAzComp() -> "mem::ScopedCopyablePtr< six::sicd::RgAzComp >":
     """makeScopedCopyableRgAzComp() -> ScopedCopyableRgAzComp"""
     return _six_sicd.makeScopedCopyableRgAzComp()
 class StdAutoGeoInfo(_object):
@@ -7211,22 +7211,22 @@ class ScopedCopyableGeoInfo(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::GeoInfo *":
         """get(ScopedCopyableGeoInfo self) -> GeoInfo"""
         return _six_sicd.ScopedCopyableGeoInfo_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::GeoInfo &":
         """__ref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
         return _six_sicd.ScopedCopyableGeoInfo___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::GeoInfo *":
         """__deref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
         return _six_sicd.ScopedCopyableGeoInfo___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'GeoInfo'=None) -> "void":
         """
         reset(ScopedCopyableGeoInfo self, GeoInfo ptr=None)
         reset(ScopedCopyableGeoInfo self)
@@ -7252,12 +7252,12 @@ class ScopedCopyableGeoInfo(_object):
     if _newclass:
         geometryLatLon = _swig_property(_six_sicd.ScopedCopyableGeoInfo_geometryLatLon_get, _six_sicd.ScopedCopyableGeoInfo_geometryLatLon_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'GeoInfo') -> "bool":
         """__eq__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
         return _six_sicd.ScopedCopyableGeoInfo___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'GeoInfo') -> "bool":
         """__ne__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
         return _six_sicd.ScopedCopyableGeoInfo___ne__(self, rhs)
 
@@ -7265,7 +7265,7 @@ ScopedCopyableGeoInfo_swigregister = _six_sicd.ScopedCopyableGeoInfo_swigregiste
 ScopedCopyableGeoInfo_swigregister(ScopedCopyableGeoInfo)
 
 
-def makeScopedCopyableGeoInfo():
+def makeScopedCopyableGeoInfo() -> "mem::ScopedCopyablePtr< six::GeoInfo >":
     """makeScopedCopyableGeoInfo() -> ScopedCopyableGeoInfo"""
     return _six_sicd.makeScopedCopyableGeoInfo()
 class VectorScopedCopyableGeoInfo(_object):
@@ -7277,34 +7277,34 @@ class VectorScopedCopyableGeoInfo(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCopyableGeoInfo, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorScopedCopyableGeoInfo self) -> SwigPyIterator"""
         return _six_sicd.VectorScopedCopyableGeoInfo_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorScopedCopyableGeoInfo self) -> bool"""
         return _six_sicd.VectorScopedCopyableGeoInfo___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorScopedCopyableGeoInfo self) -> bool"""
         return _six_sicd.VectorScopedCopyableGeoInfo___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
         """__len__(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
         return _six_sicd.VectorScopedCopyableGeoInfo___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type') -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *":
         """__getslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j) -> VectorScopedCopyableGeoInfo"""
         return _six_sicd.VectorScopedCopyableGeoInfo___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)
         __setslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j, VectorScopedCopyableGeoInfo v)
@@ -7312,12 +7312,12 @@ class VectorScopedCopyableGeoInfo(_object):
         return _six_sicd.VectorScopedCopyableGeoInfo___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type') -> "void":
         """__delslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)"""
         return _six_sicd.VectorScopedCopyableGeoInfo___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i)
         __delitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice)
@@ -7325,7 +7325,7 @@ class VectorScopedCopyableGeoInfo(_object):
         return _six_sicd.VectorScopedCopyableGeoInfo___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
         """
         __getitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice) -> VectorScopedCopyableGeoInfo
         __getitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i) -> ScopedCopyableGeoInfo
@@ -7333,7 +7333,7 @@ class VectorScopedCopyableGeoInfo(_object):
         return _six_sicd.VectorScopedCopyableGeoInfo___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice, VectorScopedCopyableGeoInfo v)
         __setitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice)
@@ -7342,67 +7342,67 @@ class VectorScopedCopyableGeoInfo(_object):
         return _six_sicd.VectorScopedCopyableGeoInfo___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type":
         """pop(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
         return _six_sicd.VectorScopedCopyableGeoInfo_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'ScopedCopyableGeoInfo') -> "void":
         """append(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"""
         return _six_sicd.VectorScopedCopyableGeoInfo_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorScopedCopyableGeoInfo self) -> bool"""
         return _six_sicd.VectorScopedCopyableGeoInfo_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
         """size(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
         return _six_sicd.VectorScopedCopyableGeoInfo_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorScopedCopyableGeoInfo') -> "void":
         """swap(VectorScopedCopyableGeoInfo self, VectorScopedCopyableGeoInfo v)"""
         return _six_sicd.VectorScopedCopyableGeoInfo_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
         """begin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"""
         return _six_sicd.VectorScopedCopyableGeoInfo_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
         """end(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"""
         return _six_sicd.VectorScopedCopyableGeoInfo_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator":
         """rbegin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"""
         return _six_sicd.VectorScopedCopyableGeoInfo_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator":
         """rend(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"""
         return _six_sicd.VectorScopedCopyableGeoInfo_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorScopedCopyableGeoInfo self)"""
         return _six_sicd.VectorScopedCopyableGeoInfo_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type":
         """get_allocator(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type"""
         return _six_sicd.VectorScopedCopyableGeoInfo_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorScopedCopyableGeoInfo self)"""
         return _six_sicd.VectorScopedCopyableGeoInfo_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
         """
         erase(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
         erase(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
@@ -7423,27 +7423,27 @@ class VectorScopedCopyableGeoInfo(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'ScopedCopyableGeoInfo') -> "void":
         """push_back(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"""
         return _six_sicd.VectorScopedCopyableGeoInfo_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
         """front(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
         return _six_sicd.VectorScopedCopyableGeoInfo_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
         """back(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
         return _six_sicd.VectorScopedCopyableGeoInfo_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type', x: 'ScopedCopyableGeoInfo') -> "void":
         """assign(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)"""
         return _six_sicd.VectorScopedCopyableGeoInfo_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size)
         resize(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size, ScopedCopyableGeoInfo x)
@@ -7451,7 +7451,7 @@ class VectorScopedCopyableGeoInfo(_object):
         return _six_sicd.VectorScopedCopyableGeoInfo_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, ScopedCopyableGeoInfo x) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
         insert(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)
@@ -7459,12 +7459,12 @@ class VectorScopedCopyableGeoInfo(_object):
         return _six_sicd.VectorScopedCopyableGeoInfo_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type') -> "void":
         """reserve(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n)"""
         return _six_sicd.VectorScopedCopyableGeoInfo_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
         """capacity(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
         return _six_sicd.VectorScopedCopyableGeoInfo_capacity(self)
 
@@ -7493,34 +7493,34 @@ class VectorLatLon(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorLatLon, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorLatLon self) -> SwigPyIterator"""
         return _six_sicd.VectorLatLon_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorLatLon self) -> bool"""
         return _six_sicd.VectorLatLon___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorLatLon self) -> bool"""
         return _six_sicd.VectorLatLon___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< scene::LatLon >::size_type":
         """__len__(VectorLatLon self) -> std::vector< scene::LatLon >::size_type"""
         return _six_sicd.VectorLatLon___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< scene::LatLon >::difference_type', j: 'std::vector< scene::LatLon >::difference_type') -> "std::vector< scene::LatLon,std::allocator< scene::LatLon > > *":
         """__getslice__(VectorLatLon self, std::vector< scene::LatLon >::difference_type i, std::vector< scene::LatLon >::difference_type j) -> VectorLatLon"""
         return _six_sicd.VectorLatLon___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorLatLon self, std::vector< scene::LatLon >::difference_type i, std::vector< scene::LatLon >::difference_type j)
         __setslice__(VectorLatLon self, std::vector< scene::LatLon >::difference_type i, std::vector< scene::LatLon >::difference_type j, VectorLatLon v)
@@ -7528,12 +7528,12 @@ class VectorLatLon(_object):
         return _six_sicd.VectorLatLon___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< scene::LatLon >::difference_type', j: 'std::vector< scene::LatLon >::difference_type') -> "void":
         """__delslice__(VectorLatLon self, std::vector< scene::LatLon >::difference_type i, std::vector< scene::LatLon >::difference_type j)"""
         return _six_sicd.VectorLatLon___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorLatLon self, std::vector< scene::LatLon >::difference_type i)
         __delitem__(VectorLatLon self, PySliceObject * slice)
@@ -7541,7 +7541,7 @@ class VectorLatLon(_object):
         return _six_sicd.VectorLatLon___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< scene::LatLon >::value_type const &":
         """
         __getitem__(VectorLatLon self, PySliceObject * slice) -> VectorLatLon
         __getitem__(VectorLatLon self, std::vector< scene::LatLon >::difference_type i) -> LatLon
@@ -7549,7 +7549,7 @@ class VectorLatLon(_object):
         return _six_sicd.VectorLatLon___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorLatLon self, PySliceObject * slice, VectorLatLon v)
         __setitem__(VectorLatLon self, PySliceObject * slice)
@@ -7558,67 +7558,67 @@ class VectorLatLon(_object):
         return _six_sicd.VectorLatLon___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< scene::LatLon >::value_type":
         """pop(VectorLatLon self) -> LatLon"""
         return _six_sicd.VectorLatLon_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'LatLon') -> "void":
         """append(VectorLatLon self, LatLon x)"""
         return _six_sicd.VectorLatLon_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorLatLon self) -> bool"""
         return _six_sicd.VectorLatLon_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< scene::LatLon >::size_type":
         """size(VectorLatLon self) -> std::vector< scene::LatLon >::size_type"""
         return _six_sicd.VectorLatLon_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorLatLon') -> "void":
         """swap(VectorLatLon self, VectorLatLon v)"""
         return _six_sicd.VectorLatLon_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< scene::LatLon >::iterator":
         """begin(VectorLatLon self) -> std::vector< scene::LatLon >::iterator"""
         return _six_sicd.VectorLatLon_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< scene::LatLon >::iterator":
         """end(VectorLatLon self) -> std::vector< scene::LatLon >::iterator"""
         return _six_sicd.VectorLatLon_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< scene::LatLon >::reverse_iterator":
         """rbegin(VectorLatLon self) -> std::vector< scene::LatLon >::reverse_iterator"""
         return _six_sicd.VectorLatLon_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< scene::LatLon >::reverse_iterator":
         """rend(VectorLatLon self) -> std::vector< scene::LatLon >::reverse_iterator"""
         return _six_sicd.VectorLatLon_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorLatLon self)"""
         return _six_sicd.VectorLatLon_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< scene::LatLon >::allocator_type":
         """get_allocator(VectorLatLon self) -> std::vector< scene::LatLon >::allocator_type"""
         return _six_sicd.VectorLatLon_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorLatLon self)"""
         return _six_sicd.VectorLatLon_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< scene::LatLon >::iterator":
         """
         erase(VectorLatLon self, std::vector< scene::LatLon >::iterator pos) -> std::vector< scene::LatLon >::iterator
         erase(VectorLatLon self, std::vector< scene::LatLon >::iterator first, std::vector< scene::LatLon >::iterator last) -> std::vector< scene::LatLon >::iterator
@@ -7639,27 +7639,27 @@ class VectorLatLon(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'LatLon') -> "void":
         """push_back(VectorLatLon self, LatLon x)"""
         return _six_sicd.VectorLatLon_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< scene::LatLon >::value_type const &":
         """front(VectorLatLon self) -> LatLon"""
         return _six_sicd.VectorLatLon_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< scene::LatLon >::value_type const &":
         """back(VectorLatLon self) -> LatLon"""
         return _six_sicd.VectorLatLon_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< scene::LatLon >::size_type', x: 'LatLon') -> "void":
         """assign(VectorLatLon self, std::vector< scene::LatLon >::size_type n, LatLon x)"""
         return _six_sicd.VectorLatLon_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorLatLon self, std::vector< scene::LatLon >::size_type new_size)
         resize(VectorLatLon self, std::vector< scene::LatLon >::size_type new_size, LatLon x)
@@ -7667,7 +7667,7 @@ class VectorLatLon(_object):
         return _six_sicd.VectorLatLon_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorLatLon self, std::vector< scene::LatLon >::iterator pos, LatLon x) -> std::vector< scene::LatLon >::iterator
         insert(VectorLatLon self, std::vector< scene::LatLon >::iterator pos, std::vector< scene::LatLon >::size_type n, LatLon x)
@@ -7675,12 +7675,12 @@ class VectorLatLon(_object):
         return _six_sicd.VectorLatLon_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< scene::LatLon >::size_type') -> "void":
         """reserve(VectorLatLon self, std::vector< scene::LatLon >::size_type n)"""
         return _six_sicd.VectorLatLon_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< scene::LatLon >::size_type":
         """capacity(VectorLatLon self) -> std::vector< scene::LatLon >::size_type"""
         return _six_sicd.VectorLatLon_capacity(self)
 
@@ -7748,22 +7748,22 @@ class ScopedCopyableAntennaParameters(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::AntennaParameters *":
         """get(ScopedCopyableAntennaParameters self) -> AntennaParameters"""
         return _six_sicd.ScopedCopyableAntennaParameters_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::AntennaParameters &":
         """__ref__(ScopedCopyableAntennaParameters self) -> AntennaParameters"""
         return _six_sicd.ScopedCopyableAntennaParameters___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::AntennaParameters *":
         """__deref__(ScopedCopyableAntennaParameters self) -> AntennaParameters"""
         return _six_sicd.ScopedCopyableAntennaParameters___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'AntennaParameters'=None) -> "void":
         """
         reset(ScopedCopyableAntennaParameters self, AntennaParameters ptr=None)
         reset(ScopedCopyableAntennaParameters self)
@@ -7773,12 +7773,12 @@ class ScopedCopyableAntennaParameters(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCopyableAntennaParameters
     __del__ = lambda self: None
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'AntennaParameters') -> "bool":
         """__eq__(ScopedCopyableAntennaParameters self, AntennaParameters other) -> bool"""
         return _six_sicd.ScopedCopyableAntennaParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'AntennaParameters') -> "bool":
         """__ne__(ScopedCopyableAntennaParameters self, AntennaParameters other) -> bool"""
         return _six_sicd.ScopedCopyableAntennaParameters___ne__(self, other)
 
@@ -7826,7 +7826,7 @@ ScopedCopyableAntennaParameters_swigregister = _six_sicd.ScopedCopyableAntennaPa
 ScopedCopyableAntennaParameters_swigregister(ScopedCopyableAntennaParameters)
 
 
-def makeScopedCopyableAntennaParameters():
+def makeScopedCopyableAntennaParameters() -> "mem::ScopedCopyablePtr< six::sicd::AntennaParameters >":
     """makeScopedCopyableAntennaParameters() -> ScopedCopyableAntennaParameters"""
     return _six_sicd.makeScopedCopyableAntennaParameters()
 class StdAutoElectricalBoresight(_object):
@@ -7877,22 +7877,22 @@ class ScopedCopyableElectricalBoresight(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::ElectricalBoresight *":
         """get(ScopedCopyableElectricalBoresight self) -> ElectricalBoresight"""
         return _six_sicd.ScopedCopyableElectricalBoresight_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::ElectricalBoresight &":
         """__ref__(ScopedCopyableElectricalBoresight self) -> ElectricalBoresight"""
         return _six_sicd.ScopedCopyableElectricalBoresight___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::ElectricalBoresight *":
         """__deref__(ScopedCopyableElectricalBoresight self) -> ElectricalBoresight"""
         return _six_sicd.ScopedCopyableElectricalBoresight___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'ElectricalBoresight'=None) -> "void":
         """
         reset(ScopedCopyableElectricalBoresight self, ElectricalBoresight ptr=None)
         reset(ScopedCopyableElectricalBoresight self)
@@ -7902,12 +7902,12 @@ class ScopedCopyableElectricalBoresight(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCopyableElectricalBoresight
     __del__ = lambda self: None
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'ElectricalBoresight') -> "bool":
         """__eq__(ScopedCopyableElectricalBoresight self, ElectricalBoresight other) -> bool"""
         return _six_sicd.ScopedCopyableElectricalBoresight___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'ElectricalBoresight') -> "bool":
         """__ne__(ScopedCopyableElectricalBoresight self, ElectricalBoresight other) -> bool"""
         return _six_sicd.ScopedCopyableElectricalBoresight___ne__(self, other)
 
@@ -7923,7 +7923,7 @@ ScopedCopyableElectricalBoresight_swigregister = _six_sicd.ScopedCopyableElectri
 ScopedCopyableElectricalBoresight_swigregister(ScopedCopyableElectricalBoresight)
 
 
-def makeScopedCopyableElectricalBoresight():
+def makeScopedCopyableElectricalBoresight() -> "mem::ScopedCopyablePtr< six::sicd::ElectricalBoresight >":
     """makeScopedCopyableElectricalBoresight() -> ScopedCopyableElectricalBoresight"""
     return _six_sicd.makeScopedCopyableElectricalBoresight()
 class StdAutoHalfPowerBeamwidths(_object):
@@ -7974,22 +7974,22 @@ class ScopedCopyableHalfPowerBeamwidths(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::HalfPowerBeamwidths *":
         """get(ScopedCopyableHalfPowerBeamwidths self) -> HalfPowerBeamwidths"""
         return _six_sicd.ScopedCopyableHalfPowerBeamwidths_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::HalfPowerBeamwidths &":
         """__ref__(ScopedCopyableHalfPowerBeamwidths self) -> HalfPowerBeamwidths"""
         return _six_sicd.ScopedCopyableHalfPowerBeamwidths___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::HalfPowerBeamwidths *":
         """__deref__(ScopedCopyableHalfPowerBeamwidths self) -> HalfPowerBeamwidths"""
         return _six_sicd.ScopedCopyableHalfPowerBeamwidths___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'HalfPowerBeamwidths'=None) -> "void":
         """
         reset(ScopedCopyableHalfPowerBeamwidths self, HalfPowerBeamwidths ptr=None)
         reset(ScopedCopyableHalfPowerBeamwidths self)
@@ -7999,12 +7999,12 @@ class ScopedCopyableHalfPowerBeamwidths(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCopyableHalfPowerBeamwidths
     __del__ = lambda self: None
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'HalfPowerBeamwidths') -> "bool":
         """__eq__(ScopedCopyableHalfPowerBeamwidths self, HalfPowerBeamwidths other) -> bool"""
         return _six_sicd.ScopedCopyableHalfPowerBeamwidths___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'HalfPowerBeamwidths') -> "bool":
         """__ne__(ScopedCopyableHalfPowerBeamwidths self, HalfPowerBeamwidths other) -> bool"""
         return _six_sicd.ScopedCopyableHalfPowerBeamwidths___ne__(self, other)
 
@@ -8020,7 +8020,7 @@ ScopedCopyableHalfPowerBeamwidths_swigregister = _six_sicd.ScopedCopyableHalfPow
 ScopedCopyableHalfPowerBeamwidths_swigregister(ScopedCopyableHalfPowerBeamwidths)
 
 
-def makeScopedCopyableHalfPowerBeamwidths():
+def makeScopedCopyableHalfPowerBeamwidths() -> "mem::ScopedCopyablePtr< six::sicd::HalfPowerBeamwidths >":
     """makeScopedCopyableHalfPowerBeamwidths() -> ScopedCopyableHalfPowerBeamwidths"""
     return _six_sicd.makeScopedCopyableHalfPowerBeamwidths()
 class StdAutoGainAndPhasePolys(_object):
@@ -8071,22 +8071,22 @@ class ScopedCopyableGainAndPhasePolys(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::GainAndPhasePolys *":
         """get(ScopedCopyableGainAndPhasePolys self) -> GainAndPhasePolys"""
         return _six_sicd.ScopedCopyableGainAndPhasePolys_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::GainAndPhasePolys &":
         """__ref__(ScopedCopyableGainAndPhasePolys self) -> GainAndPhasePolys"""
         return _six_sicd.ScopedCopyableGainAndPhasePolys___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::GainAndPhasePolys *":
         """__deref__(ScopedCopyableGainAndPhasePolys self) -> GainAndPhasePolys"""
         return _six_sicd.ScopedCopyableGainAndPhasePolys___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'GainAndPhasePolys'=None) -> "void":
         """
         reset(ScopedCopyableGainAndPhasePolys self, GainAndPhasePolys ptr=None)
         reset(ScopedCopyableGainAndPhasePolys self)
@@ -8096,12 +8096,12 @@ class ScopedCopyableGainAndPhasePolys(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCopyableGainAndPhasePolys
     __del__ = lambda self: None
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'GainAndPhasePolys') -> "bool":
         """__eq__(ScopedCopyableGainAndPhasePolys self, GainAndPhasePolys other) -> bool"""
         return _six_sicd.ScopedCopyableGainAndPhasePolys___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'GainAndPhasePolys') -> "bool":
         """__ne__(ScopedCopyableGainAndPhasePolys self, GainAndPhasePolys other) -> bool"""
         return _six_sicd.ScopedCopyableGainAndPhasePolys___ne__(self, other)
 
@@ -8117,7 +8117,7 @@ ScopedCopyableGainAndPhasePolys_swigregister = _six_sicd.ScopedCopyableGainAndPh
 ScopedCopyableGainAndPhasePolys_swigregister(ScopedCopyableGainAndPhasePolys)
 
 
-def makeScopedCopyableGainAndPhasePolys():
+def makeScopedCopyableGainAndPhasePolys() -> "mem::ScopedCopyablePtr< six::sicd::GainAndPhasePolys >":
     """makeScopedCopyableGainAndPhasePolys() -> ScopedCopyableGainAndPhasePolys"""
     return _six_sicd.makeScopedCopyableGainAndPhasePolys()
 class StdAutoWeightType(_object):
@@ -8168,22 +8168,22 @@ class ScopedCopyableWeightType(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::WeightType *":
         """get(ScopedCopyableWeightType self) -> WeightType"""
         return _six_sicd.ScopedCopyableWeightType_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::WeightType &":
         """__ref__(ScopedCopyableWeightType self) -> WeightType"""
         return _six_sicd.ScopedCopyableWeightType___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::WeightType *":
         """__deref__(ScopedCopyableWeightType self) -> WeightType"""
         return _six_sicd.ScopedCopyableWeightType___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'WeightType'=None) -> "void":
         """
         reset(ScopedCopyableWeightType self, WeightType ptr=None)
         reset(ScopedCopyableWeightType self)
@@ -8201,12 +8201,12 @@ class ScopedCopyableWeightType(_object):
     if _newclass:
         parameters = _swig_property(_six_sicd.ScopedCopyableWeightType_parameters_get, _six_sicd.ScopedCopyableWeightType_parameters_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'WeightType') -> "bool":
         """__eq__(ScopedCopyableWeightType self, WeightType rhs) -> bool"""
         return _six_sicd.ScopedCopyableWeightType___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'WeightType') -> "bool":
         """__ne__(ScopedCopyableWeightType self, WeightType rhs) -> bool"""
         return _six_sicd.ScopedCopyableWeightType___ne__(self, rhs)
 
@@ -8214,7 +8214,7 @@ ScopedCopyableWeightType_swigregister = _six_sicd.ScopedCopyableWeightType_swigr
 ScopedCopyableWeightType_swigregister(ScopedCopyableWeightType)
 
 
-def makeScopedCopyableWeightType():
+def makeScopedCopyableWeightType() -> "mem::ScopedCopyablePtr< six::sicd::WeightType >":
     """makeScopedCopyableWeightType() -> ScopedCopyableWeightType"""
     return _six_sicd.makeScopedCopyableWeightType()
 class VectorPolyXYZ(_object):
@@ -8226,34 +8226,34 @@ class VectorPolyXYZ(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorPolyXYZ, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorPolyXYZ self) -> SwigPyIterator"""
         return _six_sicd.VectorPolyXYZ_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorPolyXYZ self) -> bool"""
         return _six_sicd.VectorPolyXYZ___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorPolyXYZ self) -> bool"""
         return _six_sicd.VectorPolyXYZ___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type":
         """__len__(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type"""
         return _six_sicd.VectorPolyXYZ___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type', j: 'std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type') -> "std::vector< math::poly::OneD< Vector3 >,std::allocator< math::poly::OneD< Vector3 > > > *":
         """__getslice__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type j) -> VectorPolyXYZ"""
         return _six_sicd.VectorPolyXYZ___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type j)
         __setslice__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type j, VectorPolyXYZ v)
@@ -8261,12 +8261,12 @@ class VectorPolyXYZ(_object):
         return _six_sicd.VectorPolyXYZ___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type', j: 'std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type') -> "void":
         """__delslice__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type j)"""
         return _six_sicd.VectorPolyXYZ___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i)
         __delitem__(VectorPolyXYZ self, PySliceObject * slice)
@@ -8274,7 +8274,7 @@ class VectorPolyXYZ(_object):
         return _six_sicd.VectorPolyXYZ___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::value_type const &":
         """
         __getitem__(VectorPolyXYZ self, PySliceObject * slice) -> VectorPolyXYZ
         __getitem__(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::difference_type i) -> PolyVector3
@@ -8282,7 +8282,7 @@ class VectorPolyXYZ(_object):
         return _six_sicd.VectorPolyXYZ___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorPolyXYZ self, PySliceObject * slice, VectorPolyXYZ v)
         __setitem__(VectorPolyXYZ self, PySliceObject * slice)
@@ -8291,67 +8291,67 @@ class VectorPolyXYZ(_object):
         return _six_sicd.VectorPolyXYZ___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::value_type":
         """pop(VectorPolyXYZ self) -> PolyVector3"""
         return _six_sicd.VectorPolyXYZ_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'PolyVector3') -> "void":
         """append(VectorPolyXYZ self, PolyVector3 x)"""
         return _six_sicd.VectorPolyXYZ_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorPolyXYZ self) -> bool"""
         return _six_sicd.VectorPolyXYZ_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type":
         """size(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type"""
         return _six_sicd.VectorPolyXYZ_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorPolyXYZ') -> "void":
         """swap(VectorPolyXYZ self, VectorPolyXYZ v)"""
         return _six_sicd.VectorPolyXYZ_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator":
         """begin(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator"""
         return _six_sicd.VectorPolyXYZ_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator":
         """end(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator"""
         return _six_sicd.VectorPolyXYZ_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::reverse_iterator":
         """rbegin(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::reverse_iterator"""
         return _six_sicd.VectorPolyXYZ_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::reverse_iterator":
         """rend(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::reverse_iterator"""
         return _six_sicd.VectorPolyXYZ_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorPolyXYZ self)"""
         return _six_sicd.VectorPolyXYZ_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::allocator_type":
         """get_allocator(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::allocator_type"""
         return _six_sicd.VectorPolyXYZ_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorPolyXYZ self)"""
         return _six_sicd.VectorPolyXYZ_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator":
         """
         erase(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator pos) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator
         erase(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator first, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator last) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator
@@ -8372,27 +8372,27 @@ class VectorPolyXYZ(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'PolyVector3') -> "void":
         """push_back(VectorPolyXYZ self, PolyVector3 x)"""
         return _six_sicd.VectorPolyXYZ_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::value_type const &":
         """front(VectorPolyXYZ self) -> PolyVector3"""
         return _six_sicd.VectorPolyXYZ_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::value_type const &":
         """back(VectorPolyXYZ self) -> PolyVector3"""
         return _six_sicd.VectorPolyXYZ_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type', x: 'PolyVector3') -> "void":
         """assign(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type n, PolyVector3 x)"""
         return _six_sicd.VectorPolyXYZ_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type new_size)
         resize(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type new_size, PolyVector3 x)
@@ -8400,7 +8400,7 @@ class VectorPolyXYZ(_object):
         return _six_sicd.VectorPolyXYZ_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator pos, PolyVector3 x) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator
         insert(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::iterator pos, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type n, PolyVector3 x)
@@ -8408,12 +8408,12 @@ class VectorPolyXYZ(_object):
         return _six_sicd.VectorPolyXYZ_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type') -> "void":
         """reserve(VectorPolyXYZ self, std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type n)"""
         return _six_sicd.VectorPolyXYZ_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type":
         """capacity(VectorPolyXYZ self) -> std::vector< math::poly::OneD< math::linear::VectorN< 3,double > > >::size_type"""
         return _six_sicd.VectorPolyXYZ_capacity(self)
 
@@ -8475,22 +8475,22 @@ class ScopedCloneableDirectionParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::DirectionParameters *":
         """get(ScopedCloneableDirectionParameters self) -> DirectionParameters"""
         return _six_sicd.ScopedCloneableDirectionParameters_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::DirectionParameters &":
         """__ref__(ScopedCloneableDirectionParameters self) -> DirectionParameters"""
         return _six_sicd.ScopedCloneableDirectionParameters___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::DirectionParameters *":
         """__deref__(ScopedCloneableDirectionParameters self) -> DirectionParameters"""
         return _six_sicd.ScopedCloneableDirectionParameters___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'DirectionParameters'=None) -> "void":
         """
         reset(ScopedCloneableDirectionParameters self, DirectionParameters ptr=None)
         reset(ScopedCloneableDirectionParameters self)
@@ -8500,7 +8500,7 @@ class ScopedCloneableDirectionParameters(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCloneableDirectionParameters
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::DirectionParameters *":
         """clone(ScopedCloneableDirectionParameters self) -> DirectionParameters"""
         return _six_sicd.ScopedCloneableDirectionParameters_clone(self)
 
@@ -8549,17 +8549,17 @@ class ScopedCloneableDirectionParameters(_object):
     if _newclass:
         weights = _swig_property(_six_sicd.ScopedCloneableDirectionParameters_weights_get, _six_sicd.ScopedCloneableDirectionParameters_weights_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'DirectionParameters') -> "bool":
         """__eq__(ScopedCloneableDirectionParameters self, DirectionParameters rhs) -> bool"""
         return _six_sicd.ScopedCloneableDirectionParameters___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'DirectionParameters') -> "bool":
         """__ne__(ScopedCloneableDirectionParameters self, DirectionParameters rhs) -> bool"""
         return _six_sicd.ScopedCloneableDirectionParameters___ne__(self, rhs)
 
 
-    def validate(self, *args):
+    def validate(self, *args) -> "bool":
         """
         validate(ScopedCloneableDirectionParameters self, ImageData imageData, logging::Logger & log) -> bool
         validate(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, logging::Logger & log, double offset=0) -> bool
@@ -8568,7 +8568,7 @@ class ScopedCloneableDirectionParameters(_object):
         return _six_sicd.ScopedCloneableDirectionParameters_validate(self, *args)
 
 
-    def fillDerivedFields(self, *args):
+    def fillDerivedFields(self, *args) -> "void":
         """
         fillDerivedFields(ScopedCloneableDirectionParameters self, ImageData imageData)
         fillDerivedFields(ScopedCloneableDirectionParameters self, RgAzComp rgAzComp, double offset=0)
@@ -8580,7 +8580,7 @@ ScopedCloneableDirectionParameters_swigregister = _six_sicd.ScopedCloneableDirec
 ScopedCloneableDirectionParameters_swigregister(ScopedCloneableDirectionParameters)
 
 
-def makeScopedCloneableDirectionParameters():
+def makeScopedCloneableDirectionParameters() -> "mem::ScopedCloneablePtr< six::sicd::DirectionParameters >":
     """makeScopedCloneableDirectionParameters() -> ScopedCloneableDirectionParameters"""
     return _six_sicd.makeScopedCloneableDirectionParameters()
 class StdAutoAreaPlane(_object):
@@ -8625,22 +8625,22 @@ class ScopedCloneableAreaPlane(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::AreaPlane *":
         """get(ScopedCloneableAreaPlane self) -> AreaPlane"""
         return _six_sicd.ScopedCloneableAreaPlane_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::AreaPlane &":
         """__ref__(ScopedCloneableAreaPlane self) -> AreaPlane"""
         return _six_sicd.ScopedCloneableAreaPlane___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::AreaPlane *":
         """__deref__(ScopedCloneableAreaPlane self) -> AreaPlane"""
         return _six_sicd.ScopedCloneableAreaPlane___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'AreaPlane'=None) -> "void":
         """
         reset(ScopedCloneableAreaPlane self, AreaPlane ptr=None)
         reset(ScopedCloneableAreaPlane self)
@@ -8650,12 +8650,12 @@ class ScopedCloneableAreaPlane(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCloneableAreaPlane
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::AreaPlane *":
         """clone(ScopedCloneableAreaPlane self) -> AreaPlane"""
         return _six_sicd.ScopedCloneableAreaPlane_clone(self)
 
 
-    def getAdjustedReferencePoint(self):
+    def getAdjustedReferencePoint(self) -> "types::RowCol< double >":
         """getAdjustedReferencePoint(ScopedCloneableAreaPlane self) -> RowColDouble"""
         return _six_sicd.ScopedCloneableAreaPlane_getAdjustedReferencePoint(self)
 
@@ -8680,27 +8680,27 @@ class ScopedCloneableAreaPlane(_object):
     if _newclass:
         orientation = _swig_property(_six_sicd.ScopedCloneableAreaPlane_orientation_get, _six_sicd.ScopedCloneableAreaPlane_orientation_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'AreaPlane') -> "bool":
         """__eq__(ScopedCloneableAreaPlane self, AreaPlane rhs) -> bool"""
         return _six_sicd.ScopedCloneableAreaPlane___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'AreaPlane') -> "bool":
         """__ne__(ScopedCloneableAreaPlane self, AreaPlane rhs) -> bool"""
         return _six_sicd.ScopedCloneableAreaPlane___ne__(self, rhs)
 
 
-    def getSegment(self, segmentId):
+    def getSegment(self, segmentId: 'std::string const &') -> "six::sicd::Segment const &":
         """getSegment(ScopedCloneableAreaPlane self, std::string const & segmentId) -> Segment"""
         return _six_sicd.ScopedCloneableAreaPlane_getSegment(self, segmentId)
 
 
-    def rotateCCW(self):
+    def rotateCCW(self) -> "void":
         """rotateCCW(ScopedCloneableAreaPlane self)"""
         return _six_sicd.ScopedCloneableAreaPlane_rotateCCW(self)
 
 
-    def rotateToShadowsDown(self):
+    def rotateToShadowsDown(self) -> "void":
         """rotateToShadowsDown(ScopedCloneableAreaPlane self)"""
         return _six_sicd.ScopedCloneableAreaPlane_rotateToShadowsDown(self)
 
@@ -8708,7 +8708,7 @@ ScopedCloneableAreaPlane_swigregister = _six_sicd.ScopedCloneableAreaPlane_swigr
 ScopedCloneableAreaPlane_swigregister(ScopedCloneableAreaPlane)
 
 
-def makeScopedCloneableAreaPlane():
+def makeScopedCloneableAreaPlane() -> "mem::ScopedCloneablePtr< six::sicd::AreaPlane >":
     """makeScopedCloneableAreaPlane() -> ScopedCloneableAreaPlane"""
     return _six_sicd.makeScopedCloneableAreaPlane()
 class StdAutoAreaDirectionParameters(_object):
@@ -8753,22 +8753,22 @@ class ScopedCloneableAreaDirectionParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::AreaDirectionParameters *":
         """get(ScopedCloneableAreaDirectionParameters self) -> AreaDirectionParameters"""
         return _six_sicd.ScopedCloneableAreaDirectionParameters_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::AreaDirectionParameters &":
         """__ref__(ScopedCloneableAreaDirectionParameters self) -> AreaDirectionParameters"""
         return _six_sicd.ScopedCloneableAreaDirectionParameters___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::AreaDirectionParameters *":
         """__deref__(ScopedCloneableAreaDirectionParameters self) -> AreaDirectionParameters"""
         return _six_sicd.ScopedCloneableAreaDirectionParameters___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'AreaDirectionParameters'=None) -> "void":
         """
         reset(ScopedCloneableAreaDirectionParameters self, AreaDirectionParameters ptr=None)
         reset(ScopedCloneableAreaDirectionParameters self)
@@ -8778,7 +8778,7 @@ class ScopedCloneableAreaDirectionParameters(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCloneableAreaDirectionParameters
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::AreaDirectionParameters *":
         """clone(ScopedCloneableAreaDirectionParameters self) -> AreaDirectionParameters"""
         return _six_sicd.ScopedCloneableAreaDirectionParameters_clone(self)
 
@@ -8799,17 +8799,17 @@ class ScopedCloneableAreaDirectionParameters(_object):
     if _newclass:
         first = _swig_property(_six_sicd.ScopedCloneableAreaDirectionParameters_first_get, _six_sicd.ScopedCloneableAreaDirectionParameters_first_set)
 
-    def getExtentInMeters(self):
+    def getExtentInMeters(self) -> "double":
         """getExtentInMeters(ScopedCloneableAreaDirectionParameters self) -> double"""
         return _six_sicd.ScopedCloneableAreaDirectionParameters_getExtentInMeters(self)
 
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'AreaDirectionParameters') -> "bool":
         """__eq__(ScopedCloneableAreaDirectionParameters self, AreaDirectionParameters other) -> bool"""
         return _six_sicd.ScopedCloneableAreaDirectionParameters___eq__(self, other)
 
 
-    def __ne__(self, other):
+    def __ne__(self, other: 'AreaDirectionParameters') -> "bool":
         """__ne__(ScopedCloneableAreaDirectionParameters self, AreaDirectionParameters other) -> bool"""
         return _six_sicd.ScopedCloneableAreaDirectionParameters___ne__(self, other)
 
@@ -8817,7 +8817,7 @@ ScopedCloneableAreaDirectionParameters_swigregister = _six_sicd.ScopedCloneableA
 ScopedCloneableAreaDirectionParameters_swigregister(ScopedCloneableAreaDirectionParameters)
 
 
-def makeScopedCloneableAreaDirectionParameters():
+def makeScopedCloneableAreaDirectionParameters() -> "mem::ScopedCloneablePtr< six::sicd::AreaDirectionParameters >":
     """makeScopedCloneableAreaDirectionParameters() -> ScopedCloneableAreaDirectionParameters"""
     return _six_sicd.makeScopedCloneableAreaDirectionParameters()
 class StdAutoSegment(_object):
@@ -8862,22 +8862,22 @@ class ScopedCloneableSegment(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::Segment *":
         """get(ScopedCloneableSegment self) -> Segment"""
         return _six_sicd.ScopedCloneableSegment_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::Segment &":
         """__ref__(ScopedCloneableSegment self) -> Segment"""
         return _six_sicd.ScopedCloneableSegment___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::Segment *":
         """__deref__(ScopedCloneableSegment self) -> Segment"""
         return _six_sicd.ScopedCloneableSegment___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'Segment'=None) -> "void":
         """
         reset(ScopedCloneableSegment self, Segment ptr=None)
         reset(ScopedCloneableSegment self)
@@ -8887,17 +8887,17 @@ class ScopedCloneableSegment(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCloneableSegment
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::Segment *":
         """clone(ScopedCloneableSegment self) -> Segment"""
         return _six_sicd.ScopedCloneableSegment_clone(self)
 
 
-    def getNumLines(self):
+    def getNumLines(self) -> "size_t":
         """getNumLines(ScopedCloneableSegment self) -> size_t"""
         return _six_sicd.ScopedCloneableSegment_getNumLines(self)
 
 
-    def getNumSamples(self):
+    def getNumSamples(self) -> "size_t":
         """getNumSamples(ScopedCloneableSegment self) -> size_t"""
         return _six_sicd.ScopedCloneableSegment_getNumSamples(self)
 
@@ -8922,17 +8922,17 @@ class ScopedCloneableSegment(_object):
     if _newclass:
         identifier = _swig_property(_six_sicd.ScopedCloneableSegment_identifier_get, _six_sicd.ScopedCloneableSegment_identifier_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Segment') -> "bool":
         """__eq__(ScopedCloneableSegment self, Segment rhs) -> bool"""
         return _six_sicd.ScopedCloneableSegment___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Segment') -> "bool":
         """__ne__(ScopedCloneableSegment self, Segment rhs) -> bool"""
         return _six_sicd.ScopedCloneableSegment___ne__(self, rhs)
 
 
-    def rotateCCW(self, numColumns):
+    def rotateCCW(self, numColumns: 'size_t') -> "void":
         """rotateCCW(ScopedCloneableSegment self, size_t numColumns)"""
         return _six_sicd.ScopedCloneableSegment_rotateCCW(self, numColumns)
 
@@ -8940,7 +8940,7 @@ ScopedCloneableSegment_swigregister = _six_sicd.ScopedCloneableSegment_swigregis
 ScopedCloneableSegment_swigregister(ScopedCloneableSegment)
 
 
-def makeScopedCloneableSegment():
+def makeScopedCloneableSegment() -> "mem::ScopedCloneablePtr< six::sicd::Segment >":
     """makeScopedCloneableSegment() -> ScopedCloneableSegment"""
     return _six_sicd.makeScopedCloneableSegment()
 class StdAutoTxStep(_object):
@@ -8985,22 +8985,22 @@ class ScopedCloneableTxStep(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::TxStep *":
         """get(ScopedCloneableTxStep self) -> TxStep"""
         return _six_sicd.ScopedCloneableTxStep_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::TxStep &":
         """__ref__(ScopedCloneableTxStep self) -> TxStep"""
         return _six_sicd.ScopedCloneableTxStep___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::TxStep *":
         """__deref__(ScopedCloneableTxStep self) -> TxStep"""
         return _six_sicd.ScopedCloneableTxStep___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'TxStep'=None) -> "void":
         """
         reset(ScopedCloneableTxStep self, TxStep ptr=None)
         reset(ScopedCloneableTxStep self)
@@ -9010,7 +9010,7 @@ class ScopedCloneableTxStep(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCloneableTxStep
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::TxStep *":
         """clone(ScopedCloneableTxStep self) -> TxStep"""
         return _six_sicd.ScopedCloneableTxStep_clone(self)
 
@@ -9023,12 +9023,12 @@ class ScopedCloneableTxStep(_object):
     if _newclass:
         txPolarization = _swig_property(_six_sicd.ScopedCloneableTxStep_txPolarization_get, _six_sicd.ScopedCloneableTxStep_txPolarization_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'TxStep') -> "bool":
         """__eq__(ScopedCloneableTxStep self, TxStep rhs) -> bool"""
         return _six_sicd.ScopedCloneableTxStep___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'TxStep') -> "bool":
         """__ne__(ScopedCloneableTxStep self, TxStep rhs) -> bool"""
         return _six_sicd.ScopedCloneableTxStep___ne__(self, rhs)
 
@@ -9036,7 +9036,7 @@ ScopedCloneableTxStep_swigregister = _six_sicd.ScopedCloneableTxStep_swigregiste
 ScopedCloneableTxStep_swigregister(ScopedCloneableTxStep)
 
 
-def makeScopedCloneableTxStep():
+def makeScopedCloneableTxStep() -> "mem::ScopedCloneablePtr< six::sicd::TxStep >":
     """makeScopedCloneableTxStep() -> ScopedCloneableTxStep"""
     return _six_sicd.makeScopedCloneableTxStep()
 class StdAutoWaveformParameters(_object):
@@ -9081,22 +9081,22 @@ class ScopedCloneableWaveformParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::WaveformParameters *":
         """get(ScopedCloneableWaveformParameters self) -> WaveformParameters"""
         return _six_sicd.ScopedCloneableWaveformParameters_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::WaveformParameters &":
         """__ref__(ScopedCloneableWaveformParameters self) -> WaveformParameters"""
         return _six_sicd.ScopedCloneableWaveformParameters___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::WaveformParameters *":
         """__deref__(ScopedCloneableWaveformParameters self) -> WaveformParameters"""
         return _six_sicd.ScopedCloneableWaveformParameters___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'WaveformParameters'=None) -> "void":
         """
         reset(ScopedCloneableWaveformParameters self, WaveformParameters ptr=None)
         reset(ScopedCloneableWaveformParameters self)
@@ -9106,7 +9106,7 @@ class ScopedCloneableWaveformParameters(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCloneableWaveformParameters
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::WaveformParameters *":
         """clone(ScopedCloneableWaveformParameters self) -> WaveformParameters"""
         return _six_sicd.ScopedCloneableWaveformParameters_clone(self)
 
@@ -9151,22 +9151,22 @@ class ScopedCloneableWaveformParameters(_object):
     if _newclass:
         rcvFMRate = _swig_property(_six_sicd.ScopedCloneableWaveformParameters_rcvFMRate_get, _six_sicd.ScopedCloneableWaveformParameters_rcvFMRate_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'WaveformParameters') -> "bool":
         """__eq__(ScopedCloneableWaveformParameters self, WaveformParameters rhs) -> bool"""
         return _six_sicd.ScopedCloneableWaveformParameters___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'WaveformParameters') -> "bool":
         """__ne__(ScopedCloneableWaveformParameters self, WaveformParameters rhs) -> bool"""
         return _six_sicd.ScopedCloneableWaveformParameters___ne__(self, rhs)
 
 
-    def fillDerivedFields(self):
+    def fillDerivedFields(self) -> "void":
         """fillDerivedFields(ScopedCloneableWaveformParameters self)"""
         return _six_sicd.ScopedCloneableWaveformParameters_fillDerivedFields(self)
 
 
-    def validate(self, refFrequencyIndex, log):
+    def validate(self, refFrequencyIndex: 'int', log: 'logging::Logger &') -> "bool":
         """validate(ScopedCloneableWaveformParameters self, int refFrequencyIndex, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCloneableWaveformParameters_validate(self, refFrequencyIndex, log)
 
@@ -9174,7 +9174,7 @@ ScopedCloneableWaveformParameters_swigregister = _six_sicd.ScopedCloneableWavefo
 ScopedCloneableWaveformParameters_swigregister(ScopedCloneableWaveformParameters)
 
 
-def makeScopedCloneableWaveformParameters():
+def makeScopedCloneableWaveformParameters() -> "mem::ScopedCloneablePtr< six::sicd::WaveformParameters >":
     """makeScopedCloneableWaveformParameters() -> ScopedCloneableWaveformParameters"""
     return _six_sicd.makeScopedCloneableWaveformParameters()
 class StdAutoArea(_object):
@@ -9219,22 +9219,22 @@ class ScopedCloneableArea(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::Area *":
         """get(ScopedCloneableArea self) -> Area"""
         return _six_sicd.ScopedCloneableArea_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::Area &":
         """__ref__(ScopedCloneableArea self) -> Area"""
         return _six_sicd.ScopedCloneableArea___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::Area *":
         """__deref__(ScopedCloneableArea self) -> Area"""
         return _six_sicd.ScopedCloneableArea___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'Area'=None) -> "void":
         """
         reset(ScopedCloneableArea self, Area ptr=None)
         reset(ScopedCloneableArea self)
@@ -9244,7 +9244,7 @@ class ScopedCloneableArea(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCloneableArea
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::Area *":
         """clone(ScopedCloneableArea self) -> Area"""
         return _six_sicd.ScopedCloneableArea_clone(self)
 
@@ -9257,12 +9257,12 @@ class ScopedCloneableArea(_object):
     if _newclass:
         plane = _swig_property(_six_sicd.ScopedCloneableArea_plane_get, _six_sicd.ScopedCloneableArea_plane_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Area') -> "bool":
         """__eq__(ScopedCloneableArea self, Area rhs) -> bool"""
         return _six_sicd.ScopedCloneableArea___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Area') -> "bool":
         """__ne__(ScopedCloneableArea self, Area rhs) -> bool"""
         return _six_sicd.ScopedCloneableArea___ne__(self, rhs)
 
@@ -9270,7 +9270,7 @@ ScopedCloneableArea_swigregister = _six_sicd.ScopedCloneableArea_swigregister
 ScopedCloneableArea_swigregister(ScopedCloneableArea)
 
 
-def makeScopedCloneableArea():
+def makeScopedCloneableArea() -> "mem::ScopedCloneablePtr< six::sicd::Area >":
     """makeScopedCloneableArea() -> ScopedCloneableArea"""
     return _six_sicd.makeScopedCloneableArea()
 class StdAutoChannelParameters(_object):
@@ -9315,22 +9315,22 @@ class ScopedCloneableChannelParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::sicd::ChannelParameters *":
         """get(ScopedCloneableChannelParameters self) -> ChannelParameters"""
         return _six_sicd.ScopedCloneableChannelParameters_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::ChannelParameters &":
         """__ref__(ScopedCloneableChannelParameters self) -> ChannelParameters"""
         return _six_sicd.ScopedCloneableChannelParameters___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::ChannelParameters *":
         """__deref__(ScopedCloneableChannelParameters self) -> ChannelParameters"""
         return _six_sicd.ScopedCloneableChannelParameters___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'ChannelParameters'=None) -> "void":
         """
         reset(ScopedCloneableChannelParameters self, ChannelParameters ptr=None)
         reset(ScopedCloneableChannelParameters self)
@@ -9340,7 +9340,7 @@ class ScopedCloneableChannelParameters(_object):
     __swig_destroy__ = _six_sicd.delete_ScopedCloneableChannelParameters
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::sicd::ChannelParameters *":
         """clone(ScopedCloneableChannelParameters self) -> ChannelParameters"""
         return _six_sicd.ScopedCloneableChannelParameters_clone(self)
 
@@ -9353,12 +9353,12 @@ class ScopedCloneableChannelParameters(_object):
     if _newclass:
         rcvAPCIndex = _swig_property(_six_sicd.ScopedCloneableChannelParameters_rcvAPCIndex_get, _six_sicd.ScopedCloneableChannelParameters_rcvAPCIndex_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ChannelParameters') -> "bool":
         """__eq__(ScopedCloneableChannelParameters self, ChannelParameters rhs) -> bool"""
         return _six_sicd.ScopedCloneableChannelParameters___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'ChannelParameters') -> "bool":
         """__ne__(ScopedCloneableChannelParameters self, ChannelParameters rhs) -> bool"""
         return _six_sicd.ScopedCloneableChannelParameters___ne__(self, rhs)
 
@@ -9366,7 +9366,7 @@ ScopedCloneableChannelParameters_swigregister = _six_sicd.ScopedCloneableChannel
 ScopedCloneableChannelParameters_swigregister(ScopedCloneableChannelParameters)
 
 
-def makeScopedCloneableChannelParameters():
+def makeScopedCloneableChannelParameters() -> "mem::ScopedCloneablePtr< six::sicd::ChannelParameters >":
     """makeScopedCloneableChannelParameters() -> ScopedCloneableChannelParameters"""
     return _six_sicd.makeScopedCloneableChannelParameters()
 class VectorScopedCloneableWaveformParameters(_object):
@@ -9378,34 +9378,34 @@ class VectorScopedCloneableWaveformParameters(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCloneableWaveformParameters, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorScopedCloneableWaveformParameters self) -> SwigPyIterator"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorScopedCloneableWaveformParameters self) -> bool"""
         return _six_sicd.VectorScopedCloneableWaveformParameters___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorScopedCloneableWaveformParameters self) -> bool"""
         return _six_sicd.VectorScopedCloneableWaveformParameters___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type":
         """__len__(VectorScopedCloneableWaveformParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type"""
         return _six_sicd.VectorScopedCloneableWaveformParameters___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type', j: 'std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type') -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters >,std::allocator< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > > > *":
         """__getslice__(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type j) -> VectorScopedCloneableWaveformParameters"""
         return _six_sicd.VectorScopedCloneableWaveformParameters___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type j)
         __setslice__(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type j, VectorScopedCloneableWaveformParameters v)
@@ -9413,12 +9413,12 @@ class VectorScopedCloneableWaveformParameters(_object):
         return _six_sicd.VectorScopedCloneableWaveformParameters___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type', j: 'std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type') -> "void":
         """__delslice__(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type j)"""
         return _six_sicd.VectorScopedCloneableWaveformParameters___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type i)
         __delitem__(VectorScopedCloneableWaveformParameters self, PySliceObject * slice)
@@ -9426,7 +9426,7 @@ class VectorScopedCloneableWaveformParameters(_object):
         return _six_sicd.VectorScopedCloneableWaveformParameters___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::value_type const &":
         """
         __getitem__(VectorScopedCloneableWaveformParameters self, PySliceObject * slice) -> VectorScopedCloneableWaveformParameters
         __getitem__(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::difference_type i) -> ScopedCloneableWaveformParameters
@@ -9434,7 +9434,7 @@ class VectorScopedCloneableWaveformParameters(_object):
         return _six_sicd.VectorScopedCloneableWaveformParameters___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorScopedCloneableWaveformParameters self, PySliceObject * slice, VectorScopedCloneableWaveformParameters v)
         __setitem__(VectorScopedCloneableWaveformParameters self, PySliceObject * slice)
@@ -9443,67 +9443,67 @@ class VectorScopedCloneableWaveformParameters(_object):
         return _six_sicd.VectorScopedCloneableWaveformParameters___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::value_type":
         """pop(VectorScopedCloneableWaveformParameters self) -> ScopedCloneableWaveformParameters"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'ScopedCloneableWaveformParameters') -> "void":
         """append(VectorScopedCloneableWaveformParameters self, ScopedCloneableWaveformParameters x)"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorScopedCloneableWaveformParameters self) -> bool"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type":
         """size(VectorScopedCloneableWaveformParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorScopedCloneableWaveformParameters') -> "void":
         """swap(VectorScopedCloneableWaveformParameters self, VectorScopedCloneableWaveformParameters v)"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator":
         """begin(VectorScopedCloneableWaveformParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator":
         """end(VectorScopedCloneableWaveformParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::reverse_iterator":
         """rbegin(VectorScopedCloneableWaveformParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::reverse_iterator"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::reverse_iterator":
         """rend(VectorScopedCloneableWaveformParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::reverse_iterator"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorScopedCloneableWaveformParameters self)"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::allocator_type":
         """get_allocator(VectorScopedCloneableWaveformParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::allocator_type"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorScopedCloneableWaveformParameters self)"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator":
         """
         erase(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator pos) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator
         erase(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator first, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator last) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator
@@ -9524,27 +9524,27 @@ class VectorScopedCloneableWaveformParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'ScopedCloneableWaveformParameters') -> "void":
         """push_back(VectorScopedCloneableWaveformParameters self, ScopedCloneableWaveformParameters x)"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::value_type const &":
         """front(VectorScopedCloneableWaveformParameters self) -> ScopedCloneableWaveformParameters"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::value_type const &":
         """back(VectorScopedCloneableWaveformParameters self) -> ScopedCloneableWaveformParameters"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type', x: 'ScopedCloneableWaveformParameters') -> "void":
         """assign(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type n, ScopedCloneableWaveformParameters x)"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type new_size)
         resize(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type new_size, ScopedCloneableWaveformParameters x)
@@ -9552,7 +9552,7 @@ class VectorScopedCloneableWaveformParameters(_object):
         return _six_sicd.VectorScopedCloneableWaveformParameters_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator pos, ScopedCloneableWaveformParameters x) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator
         insert(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::iterator pos, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type n, ScopedCloneableWaveformParameters x)
@@ -9560,12 +9560,12 @@ class VectorScopedCloneableWaveformParameters(_object):
         return _six_sicd.VectorScopedCloneableWaveformParameters_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type') -> "void":
         """reserve(VectorScopedCloneableWaveformParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type n)"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type":
         """capacity(VectorScopedCloneableWaveformParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::WaveformParameters > >::size_type"""
         return _six_sicd.VectorScopedCloneableWaveformParameters_capacity(self)
 
@@ -9594,34 +9594,34 @@ class VectorScopedCloneableTxStep(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCloneableTxStep, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorScopedCloneableTxStep self) -> SwigPyIterator"""
         return _six_sicd.VectorScopedCloneableTxStep_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorScopedCloneableTxStep self) -> bool"""
         return _six_sicd.VectorScopedCloneableTxStep___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorScopedCloneableTxStep self) -> bool"""
         return _six_sicd.VectorScopedCloneableTxStep___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type":
         """__len__(VectorScopedCloneableTxStep self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type"""
         return _six_sicd.VectorScopedCloneableTxStep___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type', j: 'std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type') -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep >,std::allocator< mem::ScopedCloneablePtr< six::sicd::TxStep > > > *":
         """__getslice__(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type j) -> VectorScopedCloneableTxStep"""
         return _six_sicd.VectorScopedCloneableTxStep___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type j)
         __setslice__(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type j, VectorScopedCloneableTxStep v)
@@ -9629,12 +9629,12 @@ class VectorScopedCloneableTxStep(_object):
         return _six_sicd.VectorScopedCloneableTxStep___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type', j: 'std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type') -> "void":
         """__delslice__(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type j)"""
         return _six_sicd.VectorScopedCloneableTxStep___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type i)
         __delitem__(VectorScopedCloneableTxStep self, PySliceObject * slice)
@@ -9642,7 +9642,7 @@ class VectorScopedCloneableTxStep(_object):
         return _six_sicd.VectorScopedCloneableTxStep___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::value_type const &":
         """
         __getitem__(VectorScopedCloneableTxStep self, PySliceObject * slice) -> VectorScopedCloneableTxStep
         __getitem__(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::difference_type i) -> ScopedCloneableTxStep
@@ -9650,7 +9650,7 @@ class VectorScopedCloneableTxStep(_object):
         return _six_sicd.VectorScopedCloneableTxStep___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorScopedCloneableTxStep self, PySliceObject * slice, VectorScopedCloneableTxStep v)
         __setitem__(VectorScopedCloneableTxStep self, PySliceObject * slice)
@@ -9659,67 +9659,67 @@ class VectorScopedCloneableTxStep(_object):
         return _six_sicd.VectorScopedCloneableTxStep___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::value_type":
         """pop(VectorScopedCloneableTxStep self) -> ScopedCloneableTxStep"""
         return _six_sicd.VectorScopedCloneableTxStep_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'ScopedCloneableTxStep') -> "void":
         """append(VectorScopedCloneableTxStep self, ScopedCloneableTxStep x)"""
         return _six_sicd.VectorScopedCloneableTxStep_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorScopedCloneableTxStep self) -> bool"""
         return _six_sicd.VectorScopedCloneableTxStep_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type":
         """size(VectorScopedCloneableTxStep self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type"""
         return _six_sicd.VectorScopedCloneableTxStep_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorScopedCloneableTxStep') -> "void":
         """swap(VectorScopedCloneableTxStep self, VectorScopedCloneableTxStep v)"""
         return _six_sicd.VectorScopedCloneableTxStep_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator":
         """begin(VectorScopedCloneableTxStep self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator"""
         return _six_sicd.VectorScopedCloneableTxStep_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator":
         """end(VectorScopedCloneableTxStep self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator"""
         return _six_sicd.VectorScopedCloneableTxStep_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::reverse_iterator":
         """rbegin(VectorScopedCloneableTxStep self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::reverse_iterator"""
         return _six_sicd.VectorScopedCloneableTxStep_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::reverse_iterator":
         """rend(VectorScopedCloneableTxStep self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::reverse_iterator"""
         return _six_sicd.VectorScopedCloneableTxStep_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorScopedCloneableTxStep self)"""
         return _six_sicd.VectorScopedCloneableTxStep_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::allocator_type":
         """get_allocator(VectorScopedCloneableTxStep self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::allocator_type"""
         return _six_sicd.VectorScopedCloneableTxStep_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorScopedCloneableTxStep self)"""
         return _six_sicd.VectorScopedCloneableTxStep_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator":
         """
         erase(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator pos) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator
         erase(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator first, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator last) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator
@@ -9740,27 +9740,27 @@ class VectorScopedCloneableTxStep(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'ScopedCloneableTxStep') -> "void":
         """push_back(VectorScopedCloneableTxStep self, ScopedCloneableTxStep x)"""
         return _six_sicd.VectorScopedCloneableTxStep_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::value_type const &":
         """front(VectorScopedCloneableTxStep self) -> ScopedCloneableTxStep"""
         return _six_sicd.VectorScopedCloneableTxStep_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::value_type const &":
         """back(VectorScopedCloneableTxStep self) -> ScopedCloneableTxStep"""
         return _six_sicd.VectorScopedCloneableTxStep_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type', x: 'ScopedCloneableTxStep') -> "void":
         """assign(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type n, ScopedCloneableTxStep x)"""
         return _six_sicd.VectorScopedCloneableTxStep_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type new_size)
         resize(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type new_size, ScopedCloneableTxStep x)
@@ -9768,7 +9768,7 @@ class VectorScopedCloneableTxStep(_object):
         return _six_sicd.VectorScopedCloneableTxStep_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator pos, ScopedCloneableTxStep x) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator
         insert(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::iterator pos, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type n, ScopedCloneableTxStep x)
@@ -9776,12 +9776,12 @@ class VectorScopedCloneableTxStep(_object):
         return _six_sicd.VectorScopedCloneableTxStep_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type') -> "void":
         """reserve(VectorScopedCloneableTxStep self, std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type n)"""
         return _six_sicd.VectorScopedCloneableTxStep_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type":
         """capacity(VectorScopedCloneableTxStep self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::TxStep > >::size_type"""
         return _six_sicd.VectorScopedCloneableTxStep_capacity(self)
 
@@ -9810,34 +9810,34 @@ class vectorScopedClonableSegment(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, vectorScopedClonableSegment, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(vectorScopedClonableSegment self) -> SwigPyIterator"""
         return _six_sicd.vectorScopedClonableSegment_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(vectorScopedClonableSegment self) -> bool"""
         return _six_sicd.vectorScopedClonableSegment___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(vectorScopedClonableSegment self) -> bool"""
         return _six_sicd.vectorScopedClonableSegment___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type":
         """__len__(vectorScopedClonableSegment self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type"""
         return _six_sicd.vectorScopedClonableSegment___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type', j: 'std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type') -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment >,std::allocator< mem::ScopedCloneablePtr< six::sicd::Segment > > > *":
         """__getslice__(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type j) -> vectorScopedClonableSegment"""
         return _six_sicd.vectorScopedClonableSegment___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type j)
         __setslice__(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type j, vectorScopedClonableSegment v)
@@ -9845,12 +9845,12 @@ class vectorScopedClonableSegment(_object):
         return _six_sicd.vectorScopedClonableSegment___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type', j: 'std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type') -> "void":
         """__delslice__(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type j)"""
         return _six_sicd.vectorScopedClonableSegment___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type i)
         __delitem__(vectorScopedClonableSegment self, PySliceObject * slice)
@@ -9858,7 +9858,7 @@ class vectorScopedClonableSegment(_object):
         return _six_sicd.vectorScopedClonableSegment___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::value_type const &":
         """
         __getitem__(vectorScopedClonableSegment self, PySliceObject * slice) -> vectorScopedClonableSegment
         __getitem__(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::difference_type i) -> ScopedCloneableSegment
@@ -9866,7 +9866,7 @@ class vectorScopedClonableSegment(_object):
         return _six_sicd.vectorScopedClonableSegment___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(vectorScopedClonableSegment self, PySliceObject * slice, vectorScopedClonableSegment v)
         __setitem__(vectorScopedClonableSegment self, PySliceObject * slice)
@@ -9875,67 +9875,67 @@ class vectorScopedClonableSegment(_object):
         return _six_sicd.vectorScopedClonableSegment___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::value_type":
         """pop(vectorScopedClonableSegment self) -> ScopedCloneableSegment"""
         return _six_sicd.vectorScopedClonableSegment_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'ScopedCloneableSegment') -> "void":
         """append(vectorScopedClonableSegment self, ScopedCloneableSegment x)"""
         return _six_sicd.vectorScopedClonableSegment_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(vectorScopedClonableSegment self) -> bool"""
         return _six_sicd.vectorScopedClonableSegment_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type":
         """size(vectorScopedClonableSegment self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type"""
         return _six_sicd.vectorScopedClonableSegment_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'vectorScopedClonableSegment') -> "void":
         """swap(vectorScopedClonableSegment self, vectorScopedClonableSegment v)"""
         return _six_sicd.vectorScopedClonableSegment_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator":
         """begin(vectorScopedClonableSegment self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator"""
         return _six_sicd.vectorScopedClonableSegment_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator":
         """end(vectorScopedClonableSegment self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator"""
         return _six_sicd.vectorScopedClonableSegment_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::reverse_iterator":
         """rbegin(vectorScopedClonableSegment self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::reverse_iterator"""
         return _six_sicd.vectorScopedClonableSegment_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::reverse_iterator":
         """rend(vectorScopedClonableSegment self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::reverse_iterator"""
         return _six_sicd.vectorScopedClonableSegment_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(vectorScopedClonableSegment self)"""
         return _six_sicd.vectorScopedClonableSegment_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::allocator_type":
         """get_allocator(vectorScopedClonableSegment self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::allocator_type"""
         return _six_sicd.vectorScopedClonableSegment_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(vectorScopedClonableSegment self)"""
         return _six_sicd.vectorScopedClonableSegment_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator":
         """
         erase(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator pos) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator
         erase(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator first, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator last) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator
@@ -9956,27 +9956,27 @@ class vectorScopedClonableSegment(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'ScopedCloneableSegment') -> "void":
         """push_back(vectorScopedClonableSegment self, ScopedCloneableSegment x)"""
         return _six_sicd.vectorScopedClonableSegment_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::value_type const &":
         """front(vectorScopedClonableSegment self) -> ScopedCloneableSegment"""
         return _six_sicd.vectorScopedClonableSegment_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::value_type const &":
         """back(vectorScopedClonableSegment self) -> ScopedCloneableSegment"""
         return _six_sicd.vectorScopedClonableSegment_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type', x: 'ScopedCloneableSegment') -> "void":
         """assign(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type n, ScopedCloneableSegment x)"""
         return _six_sicd.vectorScopedClonableSegment_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type new_size)
         resize(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type new_size, ScopedCloneableSegment x)
@@ -9984,7 +9984,7 @@ class vectorScopedClonableSegment(_object):
         return _six_sicd.vectorScopedClonableSegment_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator pos, ScopedCloneableSegment x) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator
         insert(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::iterator pos, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type n, ScopedCloneableSegment x)
@@ -9992,12 +9992,12 @@ class vectorScopedClonableSegment(_object):
         return _six_sicd.vectorScopedClonableSegment_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type') -> "void":
         """reserve(vectorScopedClonableSegment self, std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type n)"""
         return _six_sicd.vectorScopedClonableSegment_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type":
         """capacity(vectorScopedClonableSegment self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::Segment > >::size_type"""
         return _six_sicd.vectorScopedClonableSegment_capacity(self)
 
@@ -10026,34 +10026,34 @@ class VectorScopedCloneableChannelParameters(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCloneableChannelParameters, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorScopedCloneableChannelParameters self) -> SwigPyIterator"""
         return _six_sicd.VectorScopedCloneableChannelParameters_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorScopedCloneableChannelParameters self) -> bool"""
         return _six_sicd.VectorScopedCloneableChannelParameters___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorScopedCloneableChannelParameters self) -> bool"""
         return _six_sicd.VectorScopedCloneableChannelParameters___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type":
         """__len__(VectorScopedCloneableChannelParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type"""
         return _six_sicd.VectorScopedCloneableChannelParameters___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type', j: 'std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type') -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters >,std::allocator< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > > > *":
         """__getslice__(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type j) -> VectorScopedCloneableChannelParameters"""
         return _six_sicd.VectorScopedCloneableChannelParameters___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type j)
         __setslice__(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type j, VectorScopedCloneableChannelParameters v)
@@ -10061,12 +10061,12 @@ class VectorScopedCloneableChannelParameters(_object):
         return _six_sicd.VectorScopedCloneableChannelParameters___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type', j: 'std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type') -> "void":
         """__delslice__(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type i, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type j)"""
         return _six_sicd.VectorScopedCloneableChannelParameters___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type i)
         __delitem__(VectorScopedCloneableChannelParameters self, PySliceObject * slice)
@@ -10074,7 +10074,7 @@ class VectorScopedCloneableChannelParameters(_object):
         return _six_sicd.VectorScopedCloneableChannelParameters___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::value_type const &":
         """
         __getitem__(VectorScopedCloneableChannelParameters self, PySliceObject * slice) -> VectorScopedCloneableChannelParameters
         __getitem__(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::difference_type i) -> ScopedCloneableChannelParameters
@@ -10082,7 +10082,7 @@ class VectorScopedCloneableChannelParameters(_object):
         return _six_sicd.VectorScopedCloneableChannelParameters___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorScopedCloneableChannelParameters self, PySliceObject * slice, VectorScopedCloneableChannelParameters v)
         __setitem__(VectorScopedCloneableChannelParameters self, PySliceObject * slice)
@@ -10091,67 +10091,67 @@ class VectorScopedCloneableChannelParameters(_object):
         return _six_sicd.VectorScopedCloneableChannelParameters___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::value_type":
         """pop(VectorScopedCloneableChannelParameters self) -> ScopedCloneableChannelParameters"""
         return _six_sicd.VectorScopedCloneableChannelParameters_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'ScopedCloneableChannelParameters') -> "void":
         """append(VectorScopedCloneableChannelParameters self, ScopedCloneableChannelParameters x)"""
         return _six_sicd.VectorScopedCloneableChannelParameters_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorScopedCloneableChannelParameters self) -> bool"""
         return _six_sicd.VectorScopedCloneableChannelParameters_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type":
         """size(VectorScopedCloneableChannelParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type"""
         return _six_sicd.VectorScopedCloneableChannelParameters_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorScopedCloneableChannelParameters') -> "void":
         """swap(VectorScopedCloneableChannelParameters self, VectorScopedCloneableChannelParameters v)"""
         return _six_sicd.VectorScopedCloneableChannelParameters_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator":
         """begin(VectorScopedCloneableChannelParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator"""
         return _six_sicd.VectorScopedCloneableChannelParameters_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator":
         """end(VectorScopedCloneableChannelParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator"""
         return _six_sicd.VectorScopedCloneableChannelParameters_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::reverse_iterator":
         """rbegin(VectorScopedCloneableChannelParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::reverse_iterator"""
         return _six_sicd.VectorScopedCloneableChannelParameters_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::reverse_iterator":
         """rend(VectorScopedCloneableChannelParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::reverse_iterator"""
         return _six_sicd.VectorScopedCloneableChannelParameters_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorScopedCloneableChannelParameters self)"""
         return _six_sicd.VectorScopedCloneableChannelParameters_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::allocator_type":
         """get_allocator(VectorScopedCloneableChannelParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::allocator_type"""
         return _six_sicd.VectorScopedCloneableChannelParameters_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorScopedCloneableChannelParameters self)"""
         return _six_sicd.VectorScopedCloneableChannelParameters_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator":
         """
         erase(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator pos) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator
         erase(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator first, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator last) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator
@@ -10172,27 +10172,27 @@ class VectorScopedCloneableChannelParameters(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'ScopedCloneableChannelParameters') -> "void":
         """push_back(VectorScopedCloneableChannelParameters self, ScopedCloneableChannelParameters x)"""
         return _six_sicd.VectorScopedCloneableChannelParameters_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::value_type const &":
         """front(VectorScopedCloneableChannelParameters self) -> ScopedCloneableChannelParameters"""
         return _six_sicd.VectorScopedCloneableChannelParameters_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::value_type const &":
         """back(VectorScopedCloneableChannelParameters self) -> ScopedCloneableChannelParameters"""
         return _six_sicd.VectorScopedCloneableChannelParameters_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type', x: 'ScopedCloneableChannelParameters') -> "void":
         """assign(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type n, ScopedCloneableChannelParameters x)"""
         return _six_sicd.VectorScopedCloneableChannelParameters_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type new_size)
         resize(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type new_size, ScopedCloneableChannelParameters x)
@@ -10200,7 +10200,7 @@ class VectorScopedCloneableChannelParameters(_object):
         return _six_sicd.VectorScopedCloneableChannelParameters_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator pos, ScopedCloneableChannelParameters x) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator
         insert(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::iterator pos, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type n, ScopedCloneableChannelParameters x)
@@ -10208,12 +10208,12 @@ class VectorScopedCloneableChannelParameters(_object):
         return _six_sicd.VectorScopedCloneableChannelParameters_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type') -> "void":
         """reserve(VectorScopedCloneableChannelParameters self, std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type n)"""
         return _six_sicd.VectorScopedCloneableChannelParameters_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type":
         """capacity(VectorScopedCloneableChannelParameters self) -> std::vector< mem::ScopedCloneablePtr< six::sicd::ChannelParameters > >::size_type"""
         return _six_sicd.VectorScopedCloneableChannelParameters_capacity(self)
 
@@ -10242,34 +10242,34 @@ class VectorInt(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorInt, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorInt self) -> SwigPyIterator"""
         return _six_sicd.VectorInt_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorInt self) -> bool"""
         return _six_sicd.VectorInt___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorInt self) -> bool"""
         return _six_sicd.VectorInt___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< int >::size_type":
         """__len__(VectorInt self) -> std::vector< int >::size_type"""
         return _six_sicd.VectorInt___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< int >::difference_type', j: 'std::vector< int >::difference_type') -> "std::vector< int,std::allocator< int > > *":
         """__getslice__(VectorInt self, std::vector< int >::difference_type i, std::vector< int >::difference_type j) -> VectorInt"""
         return _six_sicd.VectorInt___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorInt self, std::vector< int >::difference_type i, std::vector< int >::difference_type j)
         __setslice__(VectorInt self, std::vector< int >::difference_type i, std::vector< int >::difference_type j, VectorInt v)
@@ -10277,12 +10277,12 @@ class VectorInt(_object):
         return _six_sicd.VectorInt___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< int >::difference_type', j: 'std::vector< int >::difference_type') -> "void":
         """__delslice__(VectorInt self, std::vector< int >::difference_type i, std::vector< int >::difference_type j)"""
         return _six_sicd.VectorInt___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorInt self, std::vector< int >::difference_type i)
         __delitem__(VectorInt self, PySliceObject * slice)
@@ -10290,7 +10290,7 @@ class VectorInt(_object):
         return _six_sicd.VectorInt___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< int >::value_type const &":
         """
         __getitem__(VectorInt self, PySliceObject * slice) -> VectorInt
         __getitem__(VectorInt self, std::vector< int >::difference_type i) -> std::vector< int >::value_type const &
@@ -10298,7 +10298,7 @@ class VectorInt(_object):
         return _six_sicd.VectorInt___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorInt self, PySliceObject * slice, VectorInt v)
         __setitem__(VectorInt self, PySliceObject * slice)
@@ -10307,67 +10307,67 @@ class VectorInt(_object):
         return _six_sicd.VectorInt___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< int >::value_type":
         """pop(VectorInt self) -> std::vector< int >::value_type"""
         return _six_sicd.VectorInt_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'std::vector< int >::value_type const &') -> "void":
         """append(VectorInt self, std::vector< int >::value_type const & x)"""
         return _six_sicd.VectorInt_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorInt self) -> bool"""
         return _six_sicd.VectorInt_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< int >::size_type":
         """size(VectorInt self) -> std::vector< int >::size_type"""
         return _six_sicd.VectorInt_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorInt') -> "void":
         """swap(VectorInt self, VectorInt v)"""
         return _six_sicd.VectorInt_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< int >::iterator":
         """begin(VectorInt self) -> std::vector< int >::iterator"""
         return _six_sicd.VectorInt_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< int >::iterator":
         """end(VectorInt self) -> std::vector< int >::iterator"""
         return _six_sicd.VectorInt_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< int >::reverse_iterator":
         """rbegin(VectorInt self) -> std::vector< int >::reverse_iterator"""
         return _six_sicd.VectorInt_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< int >::reverse_iterator":
         """rend(VectorInt self) -> std::vector< int >::reverse_iterator"""
         return _six_sicd.VectorInt_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorInt self)"""
         return _six_sicd.VectorInt_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< int >::allocator_type":
         """get_allocator(VectorInt self) -> std::vector< int >::allocator_type"""
         return _six_sicd.VectorInt_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorInt self)"""
         return _six_sicd.VectorInt_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< int >::iterator":
         """
         erase(VectorInt self, std::vector< int >::iterator pos) -> std::vector< int >::iterator
         erase(VectorInt self, std::vector< int >::iterator first, std::vector< int >::iterator last) -> std::vector< int >::iterator
@@ -10388,27 +10388,27 @@ class VectorInt(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'std::vector< int >::value_type const &') -> "void":
         """push_back(VectorInt self, std::vector< int >::value_type const & x)"""
         return _six_sicd.VectorInt_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< int >::value_type const &":
         """front(VectorInt self) -> std::vector< int >::value_type const &"""
         return _six_sicd.VectorInt_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< int >::value_type const &":
         """back(VectorInt self) -> std::vector< int >::value_type const &"""
         return _six_sicd.VectorInt_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< int >::size_type', x: 'std::vector< int >::value_type const &') -> "void":
         """assign(VectorInt self, std::vector< int >::size_type n, std::vector< int >::value_type const & x)"""
         return _six_sicd.VectorInt_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorInt self, std::vector< int >::size_type new_size)
         resize(VectorInt self, std::vector< int >::size_type new_size, std::vector< int >::value_type const & x)
@@ -10416,7 +10416,7 @@ class VectorInt(_object):
         return _six_sicd.VectorInt_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorInt self, std::vector< int >::iterator pos, std::vector< int >::value_type const & x) -> std::vector< int >::iterator
         insert(VectorInt self, std::vector< int >::iterator pos, std::vector< int >::size_type n, std::vector< int >::value_type const & x)
@@ -10424,12 +10424,12 @@ class VectorInt(_object):
         return _six_sicd.VectorInt_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< int >::size_type') -> "void":
         """reserve(VectorInt self, std::vector< int >::size_type n)"""
         return _six_sicd.VectorInt_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< int >::size_type":
         """capacity(VectorInt self) -> std::vector< int >::size_type"""
         return _six_sicd.VectorInt_capacity(self)
 
@@ -10497,22 +10497,22 @@ class ScopedCopyableRcvChannelProcessed(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::RcvChannelProcessed *":
         """get(ScopedCopyableRcvChannelProcessed self) -> RcvChannelProcessed"""
         return _six_sicd.ScopedCopyableRcvChannelProcessed_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::RcvChannelProcessed &":
         """__ref__(ScopedCopyableRcvChannelProcessed self) -> RcvChannelProcessed"""
         return _six_sicd.ScopedCopyableRcvChannelProcessed___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::RcvChannelProcessed *":
         """__deref__(ScopedCopyableRcvChannelProcessed self) -> RcvChannelProcessed"""
         return _six_sicd.ScopedCopyableRcvChannelProcessed___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'RcvChannelProcessed'=None) -> "void":
         """
         reset(ScopedCopyableRcvChannelProcessed self, RcvChannelProcessed ptr=None)
         reset(ScopedCopyableRcvChannelProcessed self)
@@ -10534,12 +10534,12 @@ class ScopedCopyableRcvChannelProcessed(_object):
     if _newclass:
         channelIndex = _swig_property(_six_sicd.ScopedCopyableRcvChannelProcessed_channelIndex_get, _six_sicd.ScopedCopyableRcvChannelProcessed_channelIndex_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RcvChannelProcessed') -> "bool":
         """__eq__(ScopedCopyableRcvChannelProcessed self, RcvChannelProcessed rhs) -> bool"""
         return _six_sicd.ScopedCopyableRcvChannelProcessed___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RcvChannelProcessed') -> "bool":
         """__ne__(ScopedCopyableRcvChannelProcessed self, RcvChannelProcessed rhs) -> bool"""
         return _six_sicd.ScopedCopyableRcvChannelProcessed___ne__(self, rhs)
 
@@ -10547,7 +10547,7 @@ ScopedCopyableRcvChannelProcessed_swigregister = _six_sicd.ScopedCopyableRcvChan
 ScopedCopyableRcvChannelProcessed_swigregister(ScopedCopyableRcvChannelProcessed)
 
 
-def makeScopedCopyableRcvChannelProcessed():
+def makeScopedCopyableRcvChannelProcessed() -> "mem::ScopedCopyablePtr< six::sicd::RcvChannelProcessed >":
     """makeScopedCopyableRcvChannelProcessed() -> ScopedCopyableRcvChannelProcessed"""
     return _six_sicd.makeScopedCopyableRcvChannelProcessed()
 class VectorProcessing(_object):
@@ -10559,34 +10559,34 @@ class VectorProcessing(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorProcessing, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorProcessing self) -> SwigPyIterator"""
         return _six_sicd.VectorProcessing_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorProcessing self) -> bool"""
         return _six_sicd.VectorProcessing___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorProcessing self) -> bool"""
         return _six_sicd.VectorProcessing___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< six::sicd::Processing >::size_type":
         """__len__(VectorProcessing self) -> std::vector< six::sicd::Processing >::size_type"""
         return _six_sicd.VectorProcessing___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< six::sicd::Processing >::difference_type', j: 'std::vector< six::sicd::Processing >::difference_type') -> "std::vector< six::sicd::Processing,std::allocator< six::sicd::Processing > > *":
         """__getslice__(VectorProcessing self, std::vector< six::sicd::Processing >::difference_type i, std::vector< six::sicd::Processing >::difference_type j) -> VectorProcessing"""
         return _six_sicd.VectorProcessing___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorProcessing self, std::vector< six::sicd::Processing >::difference_type i, std::vector< six::sicd::Processing >::difference_type j)
         __setslice__(VectorProcessing self, std::vector< six::sicd::Processing >::difference_type i, std::vector< six::sicd::Processing >::difference_type j, VectorProcessing v)
@@ -10594,12 +10594,12 @@ class VectorProcessing(_object):
         return _six_sicd.VectorProcessing___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< six::sicd::Processing >::difference_type', j: 'std::vector< six::sicd::Processing >::difference_type') -> "void":
         """__delslice__(VectorProcessing self, std::vector< six::sicd::Processing >::difference_type i, std::vector< six::sicd::Processing >::difference_type j)"""
         return _six_sicd.VectorProcessing___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorProcessing self, std::vector< six::sicd::Processing >::difference_type i)
         __delitem__(VectorProcessing self, PySliceObject * slice)
@@ -10607,7 +10607,7 @@ class VectorProcessing(_object):
         return _six_sicd.VectorProcessing___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< six::sicd::Processing >::value_type const &":
         """
         __getitem__(VectorProcessing self, PySliceObject * slice) -> VectorProcessing
         __getitem__(VectorProcessing self, std::vector< six::sicd::Processing >::difference_type i) -> Processing
@@ -10615,7 +10615,7 @@ class VectorProcessing(_object):
         return _six_sicd.VectorProcessing___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorProcessing self, PySliceObject * slice, VectorProcessing v)
         __setitem__(VectorProcessing self, PySliceObject * slice)
@@ -10624,67 +10624,67 @@ class VectorProcessing(_object):
         return _six_sicd.VectorProcessing___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< six::sicd::Processing >::value_type":
         """pop(VectorProcessing self) -> Processing"""
         return _six_sicd.VectorProcessing_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'Processing') -> "void":
         """append(VectorProcessing self, Processing x)"""
         return _six_sicd.VectorProcessing_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorProcessing self) -> bool"""
         return _six_sicd.VectorProcessing_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< six::sicd::Processing >::size_type":
         """size(VectorProcessing self) -> std::vector< six::sicd::Processing >::size_type"""
         return _six_sicd.VectorProcessing_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorProcessing') -> "void":
         """swap(VectorProcessing self, VectorProcessing v)"""
         return _six_sicd.VectorProcessing_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< six::sicd::Processing >::iterator":
         """begin(VectorProcessing self) -> std::vector< six::sicd::Processing >::iterator"""
         return _six_sicd.VectorProcessing_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< six::sicd::Processing >::iterator":
         """end(VectorProcessing self) -> std::vector< six::sicd::Processing >::iterator"""
         return _six_sicd.VectorProcessing_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< six::sicd::Processing >::reverse_iterator":
         """rbegin(VectorProcessing self) -> std::vector< six::sicd::Processing >::reverse_iterator"""
         return _six_sicd.VectorProcessing_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< six::sicd::Processing >::reverse_iterator":
         """rend(VectorProcessing self) -> std::vector< six::sicd::Processing >::reverse_iterator"""
         return _six_sicd.VectorProcessing_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorProcessing self)"""
         return _six_sicd.VectorProcessing_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< six::sicd::Processing >::allocator_type":
         """get_allocator(VectorProcessing self) -> std::vector< six::sicd::Processing >::allocator_type"""
         return _six_sicd.VectorProcessing_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorProcessing self)"""
         return _six_sicd.VectorProcessing_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< six::sicd::Processing >::iterator":
         """
         erase(VectorProcessing self, std::vector< six::sicd::Processing >::iterator pos) -> std::vector< six::sicd::Processing >::iterator
         erase(VectorProcessing self, std::vector< six::sicd::Processing >::iterator first, std::vector< six::sicd::Processing >::iterator last) -> std::vector< six::sicd::Processing >::iterator
@@ -10705,27 +10705,27 @@ class VectorProcessing(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'Processing') -> "void":
         """push_back(VectorProcessing self, Processing x)"""
         return _six_sicd.VectorProcessing_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< six::sicd::Processing >::value_type const &":
         """front(VectorProcessing self) -> Processing"""
         return _six_sicd.VectorProcessing_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< six::sicd::Processing >::value_type const &":
         """back(VectorProcessing self) -> Processing"""
         return _six_sicd.VectorProcessing_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< six::sicd::Processing >::size_type', x: 'Processing') -> "void":
         """assign(VectorProcessing self, std::vector< six::sicd::Processing >::size_type n, Processing x)"""
         return _six_sicd.VectorProcessing_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorProcessing self, std::vector< six::sicd::Processing >::size_type new_size)
         resize(VectorProcessing self, std::vector< six::sicd::Processing >::size_type new_size, Processing x)
@@ -10733,7 +10733,7 @@ class VectorProcessing(_object):
         return _six_sicd.VectorProcessing_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorProcessing self, std::vector< six::sicd::Processing >::iterator pos, Processing x) -> std::vector< six::sicd::Processing >::iterator
         insert(VectorProcessing self, std::vector< six::sicd::Processing >::iterator pos, std::vector< six::sicd::Processing >::size_type n, Processing x)
@@ -10741,12 +10741,12 @@ class VectorProcessing(_object):
         return _six_sicd.VectorProcessing_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< six::sicd::Processing >::size_type') -> "void":
         """reserve(VectorProcessing self, std::vector< six::sicd::Processing >::size_type n)"""
         return _six_sicd.VectorProcessing_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< six::sicd::Processing >::size_type":
         """capacity(VectorProcessing self) -> std::vector< six::sicd::Processing >::size_type"""
         return _six_sicd.VectorProcessing_capacity(self)
 
@@ -10814,22 +10814,22 @@ class ScopedCopyablePolarizationCalibration(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::PolarizationCalibration *":
         """get(ScopedCopyablePolarizationCalibration self) -> PolarizationCalibration"""
         return _six_sicd.ScopedCopyablePolarizationCalibration_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::PolarizationCalibration &":
         """__ref__(ScopedCopyablePolarizationCalibration self) -> PolarizationCalibration"""
         return _six_sicd.ScopedCopyablePolarizationCalibration___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::PolarizationCalibration *":
         """__deref__(ScopedCopyablePolarizationCalibration self) -> PolarizationCalibration"""
         return _six_sicd.ScopedCopyablePolarizationCalibration___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'PolarizationCalibration'=None) -> "void":
         """
         reset(ScopedCopyablePolarizationCalibration self, PolarizationCalibration ptr=None)
         reset(ScopedCopyablePolarizationCalibration self)
@@ -10851,12 +10851,12 @@ class ScopedCopyablePolarizationCalibration(_object):
     if _newclass:
         distortion = _swig_property(_six_sicd.ScopedCopyablePolarizationCalibration_distortion_get, _six_sicd.ScopedCopyablePolarizationCalibration_distortion_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'PolarizationCalibration') -> "bool":
         """__eq__(ScopedCopyablePolarizationCalibration self, PolarizationCalibration rhs) -> bool"""
         return _six_sicd.ScopedCopyablePolarizationCalibration___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'PolarizationCalibration') -> "bool":
         """__ne__(ScopedCopyablePolarizationCalibration self, PolarizationCalibration rhs) -> bool"""
         return _six_sicd.ScopedCopyablePolarizationCalibration___ne__(self, rhs)
 
@@ -10864,7 +10864,7 @@ ScopedCopyablePolarizationCalibration_swigregister = _six_sicd.ScopedCopyablePol
 ScopedCopyablePolarizationCalibration_swigregister(ScopedCopyablePolarizationCalibration)
 
 
-def makeScopedCopyablePolarizationCalibration():
+def makeScopedCopyablePolarizationCalibration() -> "mem::ScopedCopyablePtr< six::sicd::PolarizationCalibration >":
     """makeScopedCopyablePolarizationCalibration() -> ScopedCopyablePolarizationCalibration"""
     return _six_sicd.makeScopedCopyablePolarizationCalibration()
 class StdAutoDistortion(_object):
@@ -10915,22 +10915,22 @@ class ScopedCopyableDistortion(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::Distortion *":
         """get(ScopedCopyableDistortion self) -> Distortion"""
         return _six_sicd.ScopedCopyableDistortion_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::Distortion &":
         """__ref__(ScopedCopyableDistortion self) -> Distortion"""
         return _six_sicd.ScopedCopyableDistortion___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::Distortion *":
         """__deref__(ScopedCopyableDistortion self) -> Distortion"""
         return _six_sicd.ScopedCopyableDistortion___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'Distortion'=None) -> "void":
         """
         reset(ScopedCopyableDistortion self, Distortion ptr=None)
         reset(ScopedCopyableDistortion self)
@@ -10992,12 +10992,12 @@ class ScopedCopyableDistortion(_object):
     if _newclass:
         phaseErrorF2 = _swig_property(_six_sicd.ScopedCopyableDistortion_phaseErrorF2_get, _six_sicd.ScopedCopyableDistortion_phaseErrorF2_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Distortion') -> "bool":
         """__eq__(ScopedCopyableDistortion self, Distortion rhs) -> bool"""
         return _six_sicd.ScopedCopyableDistortion___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Distortion') -> "bool":
         """__ne__(ScopedCopyableDistortion self, Distortion rhs) -> bool"""
         return _six_sicd.ScopedCopyableDistortion___ne__(self, rhs)
 
@@ -11005,7 +11005,7 @@ ScopedCopyableDistortion_swigregister = _six_sicd.ScopedCopyableDistortion_swigr
 ScopedCopyableDistortion_swigregister(ScopedCopyableDistortion)
 
 
-def makeScopedCopyableDistortion():
+def makeScopedCopyableDistortion() -> "mem::ScopedCopyablePtr< six::sicd::Distortion >":
     """makeScopedCopyableDistortion() -> ScopedCopyableDistortion"""
     return _six_sicd.makeScopedCopyableDistortion()
 class StdAutoRMAT(_object):
@@ -11056,22 +11056,22 @@ class ScopedCopyableRMAT(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::RMAT *":
         """get(ScopedCopyableRMAT self) -> RMAT"""
         return _six_sicd.ScopedCopyableRMAT_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::RMAT &":
         """__ref__(ScopedCopyableRMAT self) -> RMAT"""
         return _six_sicd.ScopedCopyableRMAT___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::RMAT *":
         """__deref__(ScopedCopyableRMAT self) -> RMAT"""
         return _six_sicd.ScopedCopyableRMAT___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'RMAT'=None) -> "void":
         """
         reset(ScopedCopyableRMAT self, RMAT ptr=None)
         reset(ScopedCopyableRMAT self)
@@ -11121,52 +11121,52 @@ class ScopedCopyableRMAT(_object):
     if _newclass:
         dopConeAngleRef = _swig_property(_six_sicd.ScopedCopyableRMAT_dopConeAngleRef_get, _six_sicd.ScopedCopyableRMAT_dopConeAngleRef_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RMAT') -> "bool":
         """__eq__(ScopedCopyableRMAT self, RMAT rhs) -> bool"""
         return _six_sicd.ScopedCopyableRMAT___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RMAT') -> "bool":
         """__ne__(ScopedCopyableRMAT self, RMAT rhs) -> bool"""
         return _six_sicd.ScopedCopyableRMAT___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, scp):
+    def fillDerivedFields(self, scp: 'Vector3') -> "void":
         """fillDerivedFields(ScopedCopyableRMAT self, Vector3 scp)"""
         return _six_sicd.ScopedCopyableRMAT_fillDerivedFields(self, scp)
 
 
-    def fillDefaultFields(self, scpcoa):
+    def fillDefaultFields(self, scpcoa: 'SCPCOA') -> "void":
         """fillDefaultFields(ScopedCopyableRMAT self, SCPCOA scpcoa)"""
         return _six_sicd.ScopedCopyableRMAT_fillDefaultFields(self, scpcoa)
 
 
-    def validate(self, scp, log):
+    def validate(self, scp: 'Vector3', log: 'logging::Logger &') -> "bool":
         """validate(ScopedCopyableRMAT self, Vector3 scp, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableRMAT_validate(self, scp, log)
 
 
-    def look(self, scp):
+    def look(self, scp: 'Vector3') -> "int":
         """look(ScopedCopyableRMAT self, Vector3 scp) -> int"""
         return _six_sicd.ScopedCopyableRMAT_look(self, scp)
 
 
-    def uYAT(self, scp):
+    def uYAT(self, scp: 'Vector3') -> "six::Vector3":
         """uYAT(ScopedCopyableRMAT self, Vector3 scp) -> Vector3"""
         return _six_sicd.ScopedCopyableRMAT_uYAT(self, scp)
 
 
-    def spn(self, scp):
+    def spn(self, scp: 'Vector3') -> "six::Vector3":
         """spn(ScopedCopyableRMAT self, Vector3 scp) -> Vector3"""
         return _six_sicd.ScopedCopyableRMAT_spn(self, scp)
 
 
-    def uXCT(self, scp):
+    def uXCT(self, scp: 'Vector3') -> "six::Vector3":
         """uXCT(ScopedCopyableRMAT self, Vector3 scp) -> Vector3"""
         return _six_sicd.ScopedCopyableRMAT_uXCT(self, scp)
 
 
-    def uLOS(self, scp):
+    def uLOS(self, scp: 'Vector3') -> "six::Vector3":
         """uLOS(ScopedCopyableRMAT self, Vector3 scp) -> Vector3"""
         return _six_sicd.ScopedCopyableRMAT_uLOS(self, scp)
 
@@ -11174,7 +11174,7 @@ ScopedCopyableRMAT_swigregister = _six_sicd.ScopedCopyableRMAT_swigregister
 ScopedCopyableRMAT_swigregister(ScopedCopyableRMAT)
 
 
-def makeScopedCopyableRMAT():
+def makeScopedCopyableRMAT() -> "mem::ScopedCopyablePtr< six::sicd::RMAT >":
     """makeScopedCopyableRMAT() -> ScopedCopyableRMAT"""
     return _six_sicd.makeScopedCopyableRMAT()
 class StdAutoRMCR(_object):
@@ -11225,22 +11225,22 @@ class ScopedCopyableRMCR(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::RMCR *":
         """get(ScopedCopyableRMCR self) -> RMCR"""
         return _six_sicd.ScopedCopyableRMCR_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::RMCR &":
         """__ref__(ScopedCopyableRMCR self) -> RMCR"""
         return _six_sicd.ScopedCopyableRMCR___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::RMCR *":
         """__deref__(ScopedCopyableRMCR self) -> RMCR"""
         return _six_sicd.ScopedCopyableRMCR___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'RMCR'=None) -> "void":
         """
         reset(ScopedCopyableRMCR self, RMCR ptr=None)
         reset(ScopedCopyableRMCR self)
@@ -11262,47 +11262,47 @@ class ScopedCopyableRMCR(_object):
     if _newclass:
         dopConeAngleRef = _swig_property(_six_sicd.ScopedCopyableRMCR_dopConeAngleRef_get, _six_sicd.ScopedCopyableRMCR_dopConeAngleRef_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RMCR') -> "bool":
         """__eq__(ScopedCopyableRMCR self, RMCR rhs) -> bool"""
         return _six_sicd.ScopedCopyableRMCR___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RMCR') -> "bool":
         """__ne__(ScopedCopyableRMCR self, RMCR rhs) -> bool"""
         return _six_sicd.ScopedCopyableRMCR___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, scp):
+    def fillDerivedFields(self, scp: 'Vector3') -> "void":
         """fillDerivedFields(ScopedCopyableRMCR self, Vector3 scp)"""
         return _six_sicd.ScopedCopyableRMCR_fillDerivedFields(self, scp)
 
 
-    def fillDefaultFields(self, scpcoa):
+    def fillDefaultFields(self, scpcoa: 'SCPCOA') -> "void":
         """fillDefaultFields(ScopedCopyableRMCR self, SCPCOA scpcoa)"""
         return _six_sicd.ScopedCopyableRMCR_fillDefaultFields(self, scpcoa)
 
 
-    def validate(self, scp, log):
+    def validate(self, scp: 'Vector3', log: 'logging::Logger &') -> "bool":
         """validate(ScopedCopyableRMCR self, Vector3 scp, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableRMCR_validate(self, scp, log)
 
 
-    def uXRG(self, scp):
+    def uXRG(self, scp: 'Vector3') -> "six::Vector3":
         """uXRG(ScopedCopyableRMCR self, Vector3 scp) -> Vector3"""
         return _six_sicd.ScopedCopyableRMCR_uXRG(self, scp)
 
 
-    def uYCR(self, scp):
+    def uYCR(self, scp: 'Vector3') -> "six::Vector3":
         """uYCR(ScopedCopyableRMCR self, Vector3 scp) -> Vector3"""
         return _six_sicd.ScopedCopyableRMCR_uYCR(self, scp)
 
 
-    def spn(self, scp):
+    def spn(self, scp: 'Vector3') -> "six::Vector3":
         """spn(ScopedCopyableRMCR self, Vector3 scp) -> Vector3"""
         return _six_sicd.ScopedCopyableRMCR_spn(self, scp)
 
 
-    def look(self, scp):
+    def look(self, scp: 'Vector3') -> "int":
         """look(ScopedCopyableRMCR self, Vector3 scp) -> int"""
         return _six_sicd.ScopedCopyableRMCR_look(self, scp)
 
@@ -11310,7 +11310,7 @@ ScopedCopyableRMCR_swigregister = _six_sicd.ScopedCopyableRMCR_swigregister
 ScopedCopyableRMCR_swigregister(ScopedCopyableRMCR)
 
 
-def makeScopedCopyableRMCR():
+def makeScopedCopyableRMCR() -> "mem::ScopedCopyablePtr< six::sicd::RMCR >":
     """makeScopedCopyableRMCR() -> ScopedCopyableRMCR"""
     return _six_sicd.makeScopedCopyableRMCR()
 class StdAutoINCA(_object):
@@ -11361,22 +11361,22 @@ class ScopedCopyableINCA(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::INCA *":
         """get(ScopedCopyableINCA self) -> INCA"""
         return _six_sicd.ScopedCopyableINCA_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::INCA &":
         """__ref__(ScopedCopyableINCA self) -> INCA"""
         return _six_sicd.ScopedCopyableINCA___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::INCA *":
         """__deref__(ScopedCopyableINCA self) -> INCA"""
         return _six_sicd.ScopedCopyableINCA___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'INCA'=None) -> "void":
         """
         reset(ScopedCopyableINCA self, INCA ptr=None)
         reset(ScopedCopyableINCA self)
@@ -11410,62 +11410,62 @@ class ScopedCopyableINCA(_object):
     if _newclass:
         dopplerCentroidCOA = _swig_property(_six_sicd.ScopedCopyableINCA_dopplerCentroidCOA_get, _six_sicd.ScopedCopyableINCA_dopplerCentroidCOA_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'INCA') -> "bool":
         """__eq__(ScopedCopyableINCA self, INCA rhs) -> bool"""
         return _six_sicd.ScopedCopyableINCA___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'INCA') -> "bool":
         """__ne__(ScopedCopyableINCA self, INCA rhs) -> bool"""
         return _six_sicd.ScopedCopyableINCA___ne__(self, rhs)
 
 
-    def fillDerivedFields(self, scp, position):
+    def fillDerivedFields(self, scp: 'Vector3', position: 'Position') -> "void":
         """fillDerivedFields(ScopedCopyableINCA self, Vector3 scp, Position position)"""
         return _six_sicd.ScopedCopyableINCA_fillDerivedFields(self, scp, position)
 
 
-    def caPos(self, arpPoly):
+    def caPos(self, arpPoly: 'PolyVector3') -> "six::Vector3":
         """caPos(ScopedCopyableINCA self, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.ScopedCopyableINCA_caPos(self, arpPoly)
 
 
-    def caVel(self, arpPoly):
+    def caVel(self, arpPoly: 'PolyVector3') -> "six::Vector3":
         """caVel(ScopedCopyableINCA self, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.ScopedCopyableINCA_caVel(self, arpPoly)
 
 
-    def uRG(self, scp, arpPoly):
+    def uRG(self, scp: 'Vector3', arpPoly: 'PolyVector3') -> "six::Vector3":
         """uRG(ScopedCopyableINCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.ScopedCopyableINCA_uRG(self, scp, arpPoly)
 
 
-    def uAZ(self, scp, arpPoly):
+    def uAZ(self, scp: 'Vector3', arpPoly: 'PolyVector3') -> "six::Vector3":
         """uAZ(ScopedCopyableINCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.ScopedCopyableINCA_uAZ(self, scp, arpPoly)
 
 
-    def spn(self, scp, arpPoly):
+    def spn(self, scp: 'Vector3', arpPoly: 'PolyVector3') -> "six::Vector3":
         """spn(ScopedCopyableINCA self, Vector3 scp, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.ScopedCopyableINCA_spn(self, scp, arpPoly)
 
 
-    def look(self, scp, arpPoly):
+    def look(self, scp: 'Vector3', arpPoly: 'PolyVector3') -> "int":
         """look(ScopedCopyableINCA self, Vector3 scp, PolyVector3 arpPoly) -> int"""
         return _six_sicd.ScopedCopyableINCA_look(self, scp, arpPoly)
 
 
-    def left(self, arpPoly):
+    def left(self, arpPoly: 'PolyVector3') -> "six::Vector3":
         """left(ScopedCopyableINCA self, PolyVector3 arpPoly) -> Vector3"""
         return _six_sicd.ScopedCopyableINCA_left(self, arpPoly)
 
 
-    def fillDefaultFields(self, fc):
+    def fillDefaultFields(self, fc: 'double') -> "void":
         """fillDefaultFields(ScopedCopyableINCA self, double fc)"""
         return _six_sicd.ScopedCopyableINCA_fillDefaultFields(self, fc)
 
 
-    def validate(self, collectionInformation, scp, arpPoly, fc, log):
+    def validate(self, collectionInformation: 'CollectionInformation', scp: 'Vector3', arpPoly: 'PolyVector3', fc: 'double', log: 'logging::Logger &') -> "bool":
         """validate(ScopedCopyableINCA self, CollectionInformation collectionInformation, Vector3 scp, PolyVector3 arpPoly, double fc, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableINCA_validate(self, collectionInformation, scp, arpPoly, fc, log)
 
@@ -11473,7 +11473,7 @@ ScopedCopyableINCA_swigregister = _six_sicd.ScopedCopyableINCA_swigregister
 ScopedCopyableINCA_swigregister(ScopedCopyableINCA)
 
 
-def makeScopedCopyableINCA():
+def makeScopedCopyableINCA() -> "mem::ScopedCopyablePtr< six::sicd::INCA >":
     """makeScopedCopyableINCA() -> ScopedCopyableINCA"""
     return _six_sicd.makeScopedCopyableINCA()
 class StdAutoInterPulsePeriod(_object):
@@ -11524,22 +11524,22 @@ class ScopedCopyableInterPulsePeriod(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::sicd::InterPulsePeriod *":
         """get(ScopedCopyableInterPulsePeriod self) -> InterPulsePeriod"""
         return _six_sicd.ScopedCopyableInterPulsePeriod_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::sicd::InterPulsePeriod &":
         """__ref__(ScopedCopyableInterPulsePeriod self) -> InterPulsePeriod"""
         return _six_sicd.ScopedCopyableInterPulsePeriod___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::sicd::InterPulsePeriod *":
         """__deref__(ScopedCopyableInterPulsePeriod self) -> InterPulsePeriod"""
         return _six_sicd.ScopedCopyableInterPulsePeriod___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'InterPulsePeriod'=None) -> "void":
         """
         reset(ScopedCopyableInterPulsePeriod self, InterPulsePeriod ptr=None)
         reset(ScopedCopyableInterPulsePeriod self)
@@ -11553,12 +11553,12 @@ class ScopedCopyableInterPulsePeriod(_object):
     if _newclass:
         sets = _swig_property(_six_sicd.ScopedCopyableInterPulsePeriod_sets_get, _six_sicd.ScopedCopyableInterPulsePeriod_sets_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'InterPulsePeriod') -> "bool":
         """__eq__(ScopedCopyableInterPulsePeriod self, InterPulsePeriod rhs) -> bool"""
         return _six_sicd.ScopedCopyableInterPulsePeriod___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'InterPulsePeriod') -> "bool":
         """__ne__(ScopedCopyableInterPulsePeriod self, InterPulsePeriod rhs) -> bool"""
         return _six_sicd.ScopedCopyableInterPulsePeriod___ne__(self, rhs)
 
@@ -11566,7 +11566,7 @@ ScopedCopyableInterPulsePeriod_swigregister = _six_sicd.ScopedCopyableInterPulse
 ScopedCopyableInterPulsePeriod_swigregister(ScopedCopyableInterPulsePeriod)
 
 
-def makeScopedCopyableInterPulsePeriod():
+def makeScopedCopyableInterPulsePeriod() -> "mem::ScopedCopyablePtr< six::sicd::InterPulsePeriod >":
     """makeScopedCopyableInterPulsePeriod() -> ScopedCopyableInterPulsePeriod"""
     return _six_sicd.makeScopedCopyableInterPulsePeriod()
 class VectorTimelineSet(_object):
@@ -11578,34 +11578,34 @@ class VectorTimelineSet(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorTimelineSet, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorTimelineSet self) -> SwigPyIterator"""
         return _six_sicd.VectorTimelineSet_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorTimelineSet self) -> bool"""
         return _six_sicd.VectorTimelineSet___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorTimelineSet self) -> bool"""
         return _six_sicd.VectorTimelineSet___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< six::sicd::TimelineSet >::size_type":
         """__len__(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::size_type"""
         return _six_sicd.VectorTimelineSet___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< six::sicd::TimelineSet >::difference_type', j: 'std::vector< six::sicd::TimelineSet >::difference_type') -> "std::vector< six::sicd::TimelineSet,std::allocator< six::sicd::TimelineSet > > *":
         """__getslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i, std::vector< six::sicd::TimelineSet >::difference_type j) -> VectorTimelineSet"""
         return _six_sicd.VectorTimelineSet___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i, std::vector< six::sicd::TimelineSet >::difference_type j)
         __setslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i, std::vector< six::sicd::TimelineSet >::difference_type j, VectorTimelineSet v)
@@ -11613,12 +11613,12 @@ class VectorTimelineSet(_object):
         return _six_sicd.VectorTimelineSet___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< six::sicd::TimelineSet >::difference_type', j: 'std::vector< six::sicd::TimelineSet >::difference_type') -> "void":
         """__delslice__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i, std::vector< six::sicd::TimelineSet >::difference_type j)"""
         return _six_sicd.VectorTimelineSet___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i)
         __delitem__(VectorTimelineSet self, PySliceObject * slice)
@@ -11626,7 +11626,7 @@ class VectorTimelineSet(_object):
         return _six_sicd.VectorTimelineSet___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< six::sicd::TimelineSet >::value_type const &":
         """
         __getitem__(VectorTimelineSet self, PySliceObject * slice) -> VectorTimelineSet
         __getitem__(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::difference_type i) -> TimelineSet
@@ -11634,7 +11634,7 @@ class VectorTimelineSet(_object):
         return _six_sicd.VectorTimelineSet___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorTimelineSet self, PySliceObject * slice, VectorTimelineSet v)
         __setitem__(VectorTimelineSet self, PySliceObject * slice)
@@ -11643,67 +11643,67 @@ class VectorTimelineSet(_object):
         return _six_sicd.VectorTimelineSet___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< six::sicd::TimelineSet >::value_type":
         """pop(VectorTimelineSet self) -> TimelineSet"""
         return _six_sicd.VectorTimelineSet_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'TimelineSet') -> "void":
         """append(VectorTimelineSet self, TimelineSet x)"""
         return _six_sicd.VectorTimelineSet_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorTimelineSet self) -> bool"""
         return _six_sicd.VectorTimelineSet_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< six::sicd::TimelineSet >::size_type":
         """size(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::size_type"""
         return _six_sicd.VectorTimelineSet_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorTimelineSet') -> "void":
         """swap(VectorTimelineSet self, VectorTimelineSet v)"""
         return _six_sicd.VectorTimelineSet_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< six::sicd::TimelineSet >::iterator":
         """begin(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::iterator"""
         return _six_sicd.VectorTimelineSet_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< six::sicd::TimelineSet >::iterator":
         """end(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::iterator"""
         return _six_sicd.VectorTimelineSet_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< six::sicd::TimelineSet >::reverse_iterator":
         """rbegin(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::reverse_iterator"""
         return _six_sicd.VectorTimelineSet_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< six::sicd::TimelineSet >::reverse_iterator":
         """rend(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::reverse_iterator"""
         return _six_sicd.VectorTimelineSet_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorTimelineSet self)"""
         return _six_sicd.VectorTimelineSet_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< six::sicd::TimelineSet >::allocator_type":
         """get_allocator(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::allocator_type"""
         return _six_sicd.VectorTimelineSet_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorTimelineSet self)"""
         return _six_sicd.VectorTimelineSet_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< six::sicd::TimelineSet >::iterator":
         """
         erase(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::iterator pos) -> std::vector< six::sicd::TimelineSet >::iterator
         erase(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::iterator first, std::vector< six::sicd::TimelineSet >::iterator last) -> std::vector< six::sicd::TimelineSet >::iterator
@@ -11724,27 +11724,27 @@ class VectorTimelineSet(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'TimelineSet') -> "void":
         """push_back(VectorTimelineSet self, TimelineSet x)"""
         return _six_sicd.VectorTimelineSet_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< six::sicd::TimelineSet >::value_type const &":
         """front(VectorTimelineSet self) -> TimelineSet"""
         return _six_sicd.VectorTimelineSet_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< six::sicd::TimelineSet >::value_type const &":
         """back(VectorTimelineSet self) -> TimelineSet"""
         return _six_sicd.VectorTimelineSet_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< six::sicd::TimelineSet >::size_type', x: 'TimelineSet') -> "void":
         """assign(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::size_type n, TimelineSet x)"""
         return _six_sicd.VectorTimelineSet_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::size_type new_size)
         resize(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::size_type new_size, TimelineSet x)
@@ -11752,7 +11752,7 @@ class VectorTimelineSet(_object):
         return _six_sicd.VectorTimelineSet_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::iterator pos, TimelineSet x) -> std::vector< six::sicd::TimelineSet >::iterator
         insert(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::iterator pos, std::vector< six::sicd::TimelineSet >::size_type n, TimelineSet x)
@@ -11760,12 +11760,12 @@ class VectorTimelineSet(_object):
         return _six_sicd.VectorTimelineSet_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< six::sicd::TimelineSet >::size_type') -> "void":
         """reserve(VectorTimelineSet self, std::vector< six::sicd::TimelineSet >::size_type n)"""
         return _six_sicd.VectorTimelineSet_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< six::sicd::TimelineSet >::size_type":
         """capacity(VectorTimelineSet self) -> std::vector< six::sicd::TimelineSet >::size_type"""
         return _six_sicd.VectorTimelineSet_capacity(self)
 
@@ -11786,11 +11786,11 @@ VectorTimelineSet_swigregister = _six_sicd.VectorTimelineSet_swigregister
 VectorTimelineSet_swigregister(VectorTimelineSet)
 
 
-def getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer):
+def getWidebandData(sicdPathname: 'std::string', schemaPaths: 'VectorString', complexData: 'ComplexData', arrayBuffer: 'long long') -> "void":
     """getWidebandData(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long long arrayBuffer)"""
     return _six_sicd.getWidebandData(sicdPathname, schemaPaths, complexData, arrayBuffer)
 
-def getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer):
+def getWidebandRegion(sicdPathname: 'std::string', schemaPaths: 'VectorString', complexData: 'ComplexData', startRow: 'long long', numRows: 'long long', startCol: 'long long', numCols: 'long long', arrayBuffer: 'long long') -> "void":
     """getWidebandRegion(std::string sicdPathname, VectorString schemaPaths, ComplexData complexData, long long startRow, long long numRows, long long startCol, long long numCols, long long arrayBuffer)"""
     return _six_sicd.getWidebandRegion(sicdPathname, schemaPaths, complexData, startRow, numRows, startCol, numCols, arrayBuffer)
 
@@ -11847,7 +11847,7 @@ class SICDWriteControl(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, SICDWriteControl, name)
     __repr__ = _swig_repr
 
-    def __init__(self, outputPathname, schemaPaths):
+    def __init__(self, outputPathname: 'std::string const &', schemaPaths: 'VectorString'):
         """__init__(six::sicd::SICDWriteControl self, std::string const & outputPathname, VectorString schemaPaths) -> SICDWriteControl"""
         this = _six_sicd.new_SICDWriteControl(outputPathname, schemaPaths)
         try:
@@ -11855,7 +11855,7 @@ class SICDWriteControl(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def initialize(self, *args):
+    def initialize(self, *args) -> "void":
         """
         initialize(SICDWriteControl self)
         initialize(SICDWriteControl self, ComplexData data)
@@ -11863,7 +11863,7 @@ class SICDWriteControl(_object):
         return _six_sicd.SICDWriteControl_initialize(self, *args)
 
 
-    def save(self, *args):
+    def save(self, *args) -> "void":
         """
         save(SICDWriteControl self)
         save(SICDWriteControl self, void * imageData, RowColSizeT offset, RowColSizeT dims, bool restoreData=True)
@@ -11872,17 +11872,17 @@ class SICDWriteControl(_object):
         return _six_sicd.SICDWriteControl_save(self, *args)
 
 
-    def close(self):
+    def close(self) -> "void":
         """close(SICDWriteControl self)"""
         return _six_sicd.SICDWriteControl_close(self)
 
 
-    def write(self, data, offset):
+    def write(self, data: 'PyObject *', offset: 'RowColSizeT') -> "void":
         """write(SICDWriteControl self, PyObject * data, RowColSizeT offset)"""
         return _six_sicd.SICDWriteControl_write(self, data, offset)
 
 
-    def initXMLControlRegistry(self, xmlRegistry):
+    def initXMLControlRegistry(self, xmlRegistry: 'XMLControlRegistry') -> "void":
         """initXMLControlRegistry(SICDWriteControl self, XMLControlRegistry xmlRegistry)"""
         return _six_sicd.SICDWriteControl_initXMLControlRegistry(self, xmlRegistry)
 

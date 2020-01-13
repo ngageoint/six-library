@@ -56,7 +56,7 @@ public:
 
     struct Custom
     {
-        Custom(size_t numEntries, size_t numBands);
+        Custom(size_t numEntries, size_t numLuts);
 
         std::vector<LUT> lutValues;
 
@@ -76,7 +76,7 @@ public:
     // Exactly one of Predefined or Custom
     mem::ScopedCopyablePtr<Predefined> predefined;
     mem::ScopedCopyablePtr<Custom> custom;
-    
+
     bool operator==(const LookupTable& rhs) const;
     bool operator!=(const LookupTable& rhs) const
     {

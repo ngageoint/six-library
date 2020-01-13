@@ -493,9 +493,9 @@ void DerivedXMLParser110::parseLookupTableFromXML(
             const XMLAttributes& attributes = lutInfoElem->getAttributes();
             size_t numBands;
             size_t size;
-            getAttributeIfExists(attributes, "numBands", numBands);
+            getAttributeIfExists(attributes, "numLuts", numBands);
             getAttributeIfExists(attributes, "size", size);
-            lookupTable.custom.reset(new LookupTable::Custom(numBands, numBands));
+            lookupTable.custom.reset(new LookupTable::Custom(size, numBands));
             std::vector<XMLElem> lutElems;
             lutInfoElem->getElementsByTagName("LUTValues", lutElems);
 
@@ -560,29 +560,14 @@ void DerivedXMLParser110::parseRRDSFromXML(const XMLElem rrdsElem,
 {
     parseEnum(getFirstAndOnly(rrdsElem, "DownsamplingMethod"), rrds.downsamplingMethod);
 
-    bool hasMoreFields = true;
-    if (rrds.downsamplingMethod == DownsamplingMethod::DECIMATE ||
-            rrds.downsamplingMethod == DownsamplingMethod::MAX_PIXEL);
-    {
-        hasMoreFields = false;
-    }
     XMLElem antiAliasElem = getOptional(rrdsElem, "AntiAlias");
-    XMLElem interpolationElem = getOptional(rrdsElem, "Interpolation");
-
-    if (hasMoreFields && (antiAliasElem == NULL || interpolationElem == NULL))
-    {
-        throw except::Exception(Ctxt("Both AntiAlias and Interpolation required unless DownsamplingMethod = DECIMATE or MAX_PIXEL"));
-    }
-    if (hasMoreFields == false && (antiAliasElem || interpolationElem))
-    {
-        throw except::Exception(Ctxt("If DownsamplingMethod = DECIMATE or MAX_PIXEL, neither AntiAlias nor Interpolation allowed"));
-    }
-
     if (antiAliasElem)
     {
         rrds.antiAlias.reset(new Filter());
         parseFilterFromXML(antiAliasElem, *rrds.antiAlias);
     }
+
+    XMLElem interpolationElem = getOptional(rrdsElem, "Interpolation");
     if (interpolationElem)
     {
         rrds.interpolation.reset(new Filter());
@@ -1066,14 +1051,14 @@ XMLElem DerivedXMLParser110::convertLookupTableToXML(
 
         XMLElem customElem = newElement("Custom", lookupElem);
         XMLElem lutInfoElem = newElement("LUTInfo", customElem);
-        setAttribute(lutInfoElem, "numBands", str::toString(lutValues.size()));
+        setAttribute(lutInfoElem, "numLuts", str::toString(lutValues.size()));
         setAttribute(lutInfoElem, "size",
-                str::toString(lutValues[0].table.size()));
+                     str::toString(lutValues[0].table.size()));
 
         for (size_t ii = 0; ii < lutValues.size(); ++ii)
         {
             XMLElem lutElem = createLUT("LUTValues", &lutValues[ii], lutInfoElem);
-            setAttribute(lutElem, "Band", str::toString(ii + 1));
+            setAttribute(lutElem, "lut", str::toString(ii + 1));
         }
     }
     if (!ok)
