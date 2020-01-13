@@ -3427,6 +3427,88 @@ class ParameterCollection(_object):
 ParameterCollection_swigregister = _six_base.ParameterCollection_swigregister
 ParameterCollection_swigregister(ParameterCollection)
 
+class CollectionInformation(_object):
+    """Proxy of C++ six::CollectionInformation class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionInformation, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["collectorName"] = _six_base.CollectionInformation_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_base.CollectionInformation_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_base.CollectionInformation_collectorName_get, _six_base.CollectionInformation_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_base.CollectionInformation_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_base.CollectionInformation_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_base.CollectionInformation_illuminatorName_get, _six_base.CollectionInformation_illuminatorName_set)
+    __swig_setmethods__["coreName"] = _six_base.CollectionInformation_coreName_set
+    __swig_getmethods__["coreName"] = _six_base.CollectionInformation_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_base.CollectionInformation_coreName_get, _six_base.CollectionInformation_coreName_set)
+    __swig_setmethods__["collectType"] = _six_base.CollectionInformation_collectType_set
+    __swig_getmethods__["collectType"] = _six_base.CollectionInformation_collectType_get
+    if _newclass:
+        collectType = _swig_property(_six_base.CollectionInformation_collectType_get, _six_base.CollectionInformation_collectType_set)
+    __swig_setmethods__["radarMode"] = _six_base.CollectionInformation_radarMode_set
+    __swig_getmethods__["radarMode"] = _six_base.CollectionInformation_radarMode_get
+    if _newclass:
+        radarMode = _swig_property(_six_base.CollectionInformation_radarMode_get, _six_base.CollectionInformation_radarMode_set)
+    __swig_setmethods__["radarModeID"] = _six_base.CollectionInformation_radarModeID_set
+    __swig_getmethods__["radarModeID"] = _six_base.CollectionInformation_radarModeID_get
+    if _newclass:
+        radarModeID = _swig_property(_six_base.CollectionInformation_radarModeID_get, _six_base.CollectionInformation_radarModeID_set)
+    __swig_setmethods__["releaseInfo"] = _six_base.CollectionInformation_releaseInfo_set
+    __swig_getmethods__["releaseInfo"] = _six_base.CollectionInformation_releaseInfo_get
+    if _newclass:
+        releaseInfo = _swig_property(_six_base.CollectionInformation_releaseInfo_get, _six_base.CollectionInformation_releaseInfo_set)
+    __swig_setmethods__["countryCodes"] = _six_base.CollectionInformation_countryCodes_set
+    __swig_getmethods__["countryCodes"] = _six_base.CollectionInformation_countryCodes_get
+    if _newclass:
+        countryCodes = _swig_property(_six_base.CollectionInformation_countryCodes_get, _six_base.CollectionInformation_countryCodes_set)
+    __swig_setmethods__["parameters"] = _six_base.CollectionInformation_parameters_set
+    __swig_getmethods__["parameters"] = _six_base.CollectionInformation_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_base.CollectionInformation_parameters_get, _six_base.CollectionInformation_parameters_set)
+
+    def __init__(self):
+        """__init__(six::CollectionInformation self) -> CollectionInformation"""
+        this = _six_base.new_CollectionInformation()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_CollectionInformation
+    __del__ = lambda self: None
+
+    def clone(self) -> "six::CollectionInformation *":
+        """clone(CollectionInformation self) -> CollectionInformation"""
+        return _six_base.CollectionInformation_clone(self)
+
+
+    def __eq__(self, other: 'CollectionInformation') -> "bool":
+        """__eq__(CollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.CollectionInformation___eq__(self, other)
+
+
+    def __ne__(self, other: 'CollectionInformation') -> "bool":
+        """__ne__(CollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.CollectionInformation___ne__(self, other)
+
+
+    def getClassificationLevel(self) -> "std::string":
+        """getClassificationLevel(CollectionInformation self) -> std::string"""
+        return _six_base.CollectionInformation_getClassificationLevel(self)
+
+
+    def setClassificationLevel(self, classification: 'std::string const &') -> "void":
+        """setClassificationLevel(CollectionInformation self, std::string const & classification)"""
+        return _six_base.CollectionInformation_setClassificationLevel(self, classification)
+
+CollectionInformation_swigregister = _six_base.CollectionInformation_swigregister
+CollectionInformation_swigregister(CollectionInformation)
+
 class Classification(_object):
     """Proxy of C++ six::Classification class."""
 
@@ -3904,106 +3986,6 @@ class ErrorStatistics(_object):
 ErrorStatistics_swigregister = _six_base.ErrorStatistics_swigregister
 ErrorStatistics_swigregister(ErrorStatistics)
 
-class NoiseLevel(_object):
-    """Proxy of C++ six::NoiseLevel class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, NoiseLevel, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, NoiseLevel, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::NoiseLevel self) -> NoiseLevel"""
-        this = _six_base.new_NoiseLevel()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_setmethods__["noiseType"] = _six_base.NoiseLevel_noiseType_set
-    __swig_getmethods__["noiseType"] = _six_base.NoiseLevel_noiseType_get
-    if _newclass:
-        noiseType = _swig_property(_six_base.NoiseLevel_noiseType_get, _six_base.NoiseLevel_noiseType_set)
-    __swig_setmethods__["noisePoly"] = _six_base.NoiseLevel_noisePoly_set
-    __swig_getmethods__["noisePoly"] = _six_base.NoiseLevel_noisePoly_get
-    if _newclass:
-        noisePoly = _swig_property(_six_base.NoiseLevel_noisePoly_get, _six_base.NoiseLevel_noisePoly_set)
-
-    def __eq__(self, rhs: 'NoiseLevel') -> "bool":
-        """__eq__(NoiseLevel self, NoiseLevel rhs) -> bool"""
-        return _six_base.NoiseLevel___eq__(self, rhs)
-
-
-    def __ne__(self, rhs: 'NoiseLevel') -> "bool":
-        """__ne__(NoiseLevel self, NoiseLevel rhs) -> bool"""
-        return _six_base.NoiseLevel___ne__(self, rhs)
-
-    __swig_destroy__ = _six_base.delete_NoiseLevel
-    __del__ = lambda self: None
-NoiseLevel_swigregister = _six_base.NoiseLevel_swigregister
-NoiseLevel_swigregister(NoiseLevel)
-
-class Radiometric(_object):
-    """Proxy of C++ six::Radiometric class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Radiometric, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, Radiometric, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::Radiometric self) -> Radiometric"""
-        this = _six_base.new_Radiometric()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_setmethods__["noiseLevel"] = _six_base.Radiometric_noiseLevel_set
-    __swig_getmethods__["noiseLevel"] = _six_base.Radiometric_noiseLevel_get
-    if _newclass:
-        noiseLevel = _swig_property(_six_base.Radiometric_noiseLevel_get, _six_base.Radiometric_noiseLevel_set)
-    __swig_setmethods__["rcsSFPoly"] = _six_base.Radiometric_rcsSFPoly_set
-    __swig_getmethods__["rcsSFPoly"] = _six_base.Radiometric_rcsSFPoly_get
-    if _newclass:
-        rcsSFPoly = _swig_property(_six_base.Radiometric_rcsSFPoly_get, _six_base.Radiometric_rcsSFPoly_set)
-    __swig_setmethods__["betaZeroSFPoly"] = _six_base.Radiometric_betaZeroSFPoly_set
-    __swig_getmethods__["betaZeroSFPoly"] = _six_base.Radiometric_betaZeroSFPoly_get
-    if _newclass:
-        betaZeroSFPoly = _swig_property(_six_base.Radiometric_betaZeroSFPoly_get, _six_base.Radiometric_betaZeroSFPoly_set)
-    __swig_setmethods__["sigmaZeroSFPoly"] = _six_base.Radiometric_sigmaZeroSFPoly_set
-    __swig_getmethods__["sigmaZeroSFPoly"] = _six_base.Radiometric_sigmaZeroSFPoly_get
-    if _newclass:
-        sigmaZeroSFPoly = _swig_property(_six_base.Radiometric_sigmaZeroSFPoly_get, _six_base.Radiometric_sigmaZeroSFPoly_set)
-    __swig_setmethods__["sigmaZeroSFIncidenceMap"] = _six_base.Radiometric_sigmaZeroSFIncidenceMap_set
-    __swig_getmethods__["sigmaZeroSFIncidenceMap"] = _six_base.Radiometric_sigmaZeroSFIncidenceMap_get
-    if _newclass:
-        sigmaZeroSFIncidenceMap = _swig_property(_six_base.Radiometric_sigmaZeroSFIncidenceMap_get, _six_base.Radiometric_sigmaZeroSFIncidenceMap_set)
-    __swig_setmethods__["gammaZeroSFPoly"] = _six_base.Radiometric_gammaZeroSFPoly_set
-    __swig_getmethods__["gammaZeroSFPoly"] = _six_base.Radiometric_gammaZeroSFPoly_get
-    if _newclass:
-        gammaZeroSFPoly = _swig_property(_six_base.Radiometric_gammaZeroSFPoly_get, _six_base.Radiometric_gammaZeroSFPoly_set)
-    __swig_setmethods__["gammaZeroSFIncidenceMap"] = _six_base.Radiometric_gammaZeroSFIncidenceMap_set
-    __swig_getmethods__["gammaZeroSFIncidenceMap"] = _six_base.Radiometric_gammaZeroSFIncidenceMap_get
-    if _newclass:
-        gammaZeroSFIncidenceMap = _swig_property(_six_base.Radiometric_gammaZeroSFIncidenceMap_get, _six_base.Radiometric_gammaZeroSFIncidenceMap_set)
-
-    def __eq__(self, rhs: 'Radiometric') -> "bool":
-        """__eq__(Radiometric self, Radiometric rhs) -> bool"""
-        return _six_base.Radiometric___eq__(self, rhs)
-
-
-    def __ne__(self, rhs: 'Radiometric') -> "bool":
-        """__ne__(Radiometric self, Radiometric rhs) -> bool"""
-        return _six_base.Radiometric___ne__(self, rhs)
-
-    __swig_destroy__ = _six_base.delete_Radiometric
-    __del__ = lambda self: None
-Radiometric_swigregister = _six_base.Radiometric_swigregister
-Radiometric_swigregister(Radiometric)
-Radiometric.NL_ABSOLUTE = _six_base.cvar.Radiometric_NL_ABSOLUTE
-Radiometric.NL_RELATIVE = _six_base.cvar.Radiometric_NL_RELATIVE
-
 class MatchCollect(_object):
     """Proxy of C++ six::MatchCollect class."""
 
@@ -4136,6 +4118,106 @@ class MatchInformation(_object):
     __del__ = lambda self: None
 MatchInformation_swigregister = _six_base.MatchInformation_swigregister
 MatchInformation_swigregister(MatchInformation)
+
+class NoiseLevel(_object):
+    """Proxy of C++ six::NoiseLevel class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NoiseLevel, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, NoiseLevel, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::NoiseLevel self) -> NoiseLevel"""
+        this = _six_base.new_NoiseLevel()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_setmethods__["noiseType"] = _six_base.NoiseLevel_noiseType_set
+    __swig_getmethods__["noiseType"] = _six_base.NoiseLevel_noiseType_get
+    if _newclass:
+        noiseType = _swig_property(_six_base.NoiseLevel_noiseType_get, _six_base.NoiseLevel_noiseType_set)
+    __swig_setmethods__["noisePoly"] = _six_base.NoiseLevel_noisePoly_set
+    __swig_getmethods__["noisePoly"] = _six_base.NoiseLevel_noisePoly_get
+    if _newclass:
+        noisePoly = _swig_property(_six_base.NoiseLevel_noisePoly_get, _six_base.NoiseLevel_noisePoly_set)
+
+    def __eq__(self, rhs: 'NoiseLevel') -> "bool":
+        """__eq__(NoiseLevel self, NoiseLevel rhs) -> bool"""
+        return _six_base.NoiseLevel___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'NoiseLevel') -> "bool":
+        """__ne__(NoiseLevel self, NoiseLevel rhs) -> bool"""
+        return _six_base.NoiseLevel___ne__(self, rhs)
+
+    __swig_destroy__ = _six_base.delete_NoiseLevel
+    __del__ = lambda self: None
+NoiseLevel_swigregister = _six_base.NoiseLevel_swigregister
+NoiseLevel_swigregister(NoiseLevel)
+
+class Radiometric(_object):
+    """Proxy of C++ six::Radiometric class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Radiometric, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Radiometric, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::Radiometric self) -> Radiometric"""
+        this = _six_base.new_Radiometric()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_setmethods__["noiseLevel"] = _six_base.Radiometric_noiseLevel_set
+    __swig_getmethods__["noiseLevel"] = _six_base.Radiometric_noiseLevel_get
+    if _newclass:
+        noiseLevel = _swig_property(_six_base.Radiometric_noiseLevel_get, _six_base.Radiometric_noiseLevel_set)
+    __swig_setmethods__["rcsSFPoly"] = _six_base.Radiometric_rcsSFPoly_set
+    __swig_getmethods__["rcsSFPoly"] = _six_base.Radiometric_rcsSFPoly_get
+    if _newclass:
+        rcsSFPoly = _swig_property(_six_base.Radiometric_rcsSFPoly_get, _six_base.Radiometric_rcsSFPoly_set)
+    __swig_setmethods__["betaZeroSFPoly"] = _six_base.Radiometric_betaZeroSFPoly_set
+    __swig_getmethods__["betaZeroSFPoly"] = _six_base.Radiometric_betaZeroSFPoly_get
+    if _newclass:
+        betaZeroSFPoly = _swig_property(_six_base.Radiometric_betaZeroSFPoly_get, _six_base.Radiometric_betaZeroSFPoly_set)
+    __swig_setmethods__["sigmaZeroSFPoly"] = _six_base.Radiometric_sigmaZeroSFPoly_set
+    __swig_getmethods__["sigmaZeroSFPoly"] = _six_base.Radiometric_sigmaZeroSFPoly_get
+    if _newclass:
+        sigmaZeroSFPoly = _swig_property(_six_base.Radiometric_sigmaZeroSFPoly_get, _six_base.Radiometric_sigmaZeroSFPoly_set)
+    __swig_setmethods__["sigmaZeroSFIncidenceMap"] = _six_base.Radiometric_sigmaZeroSFIncidenceMap_set
+    __swig_getmethods__["sigmaZeroSFIncidenceMap"] = _six_base.Radiometric_sigmaZeroSFIncidenceMap_get
+    if _newclass:
+        sigmaZeroSFIncidenceMap = _swig_property(_six_base.Radiometric_sigmaZeroSFIncidenceMap_get, _six_base.Radiometric_sigmaZeroSFIncidenceMap_set)
+    __swig_setmethods__["gammaZeroSFPoly"] = _six_base.Radiometric_gammaZeroSFPoly_set
+    __swig_getmethods__["gammaZeroSFPoly"] = _six_base.Radiometric_gammaZeroSFPoly_get
+    if _newclass:
+        gammaZeroSFPoly = _swig_property(_six_base.Radiometric_gammaZeroSFPoly_get, _six_base.Radiometric_gammaZeroSFPoly_set)
+    __swig_setmethods__["gammaZeroSFIncidenceMap"] = _six_base.Radiometric_gammaZeroSFIncidenceMap_set
+    __swig_getmethods__["gammaZeroSFIncidenceMap"] = _six_base.Radiometric_gammaZeroSFIncidenceMap_get
+    if _newclass:
+        gammaZeroSFIncidenceMap = _swig_property(_six_base.Radiometric_gammaZeroSFIncidenceMap_get, _six_base.Radiometric_gammaZeroSFIncidenceMap_set)
+
+    def __eq__(self, rhs: 'Radiometric') -> "bool":
+        """__eq__(Radiometric self, Radiometric rhs) -> bool"""
+        return _six_base.Radiometric___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'Radiometric') -> "bool":
+        """__ne__(Radiometric self, Radiometric rhs) -> bool"""
+        return _six_base.Radiometric___ne__(self, rhs)
+
+    __swig_destroy__ = _six_base.delete_Radiometric
+    __del__ = lambda self: None
+Radiometric_swigregister = _six_base.Radiometric_swigregister
+Radiometric_swigregister(Radiometric)
+Radiometric.NL_ABSOLUTE = _six_base.cvar.Radiometric_NL_ABSOLUTE
+Radiometric.NL_RELATIVE = _six_base.cvar.Radiometric_NL_RELATIVE
 
 class Data(_object):
     """Proxy of C++ six::Data class."""
@@ -4298,6 +4380,12 @@ class XMLControl(_object):
         return _six_base.XMLControl_setLogger(self, log, ownLog)
 
 
+    def validate(doc: 'xml::lite::Document const *', schemaPaths: 'VectorString', log: 'logging::Logger *') -> "void":
+        """validate(xml::lite::Document const * doc, VectorString schemaPaths, logging::Logger * log)"""
+        return _six_base.XMLControl_validate(doc, schemaPaths, log)
+
+    validate = staticmethod(validate)
+
     def toXML(self, data: 'Data', schemaPaths: 'VectorString') -> "xml::lite::Document *":
         """toXML(XMLControl self, Data data, VectorString schemaPaths) -> xml::lite::Document *"""
         return _six_base.XMLControl_toXML(self, data, schemaPaths)
@@ -4324,6 +4412,10 @@ class XMLControl(_object):
     splitVersion = staticmethod(splitVersion)
 XMLControl_swigregister = _six_base.XMLControl_swigregister
 XMLControl_swigregister(XMLControl)
+
+def XMLControl_validate(doc: 'xml::lite::Document const *', schemaPaths: 'VectorString', log: 'logging::Logger *') -> "void":
+    """XMLControl_validate(xml::lite::Document const * doc, VectorString schemaPaths, logging::Logger * log)"""
+    return _six_base.XMLControl_validate(doc, schemaPaths, log)
 
 def XMLControl_dataTypeToString(dataType: 'DataType', appendXML: 'bool'=True) -> "std::string":
     """
@@ -4510,6 +4602,57 @@ def toValidXMLString(data: 'Data', schemaPaths: 'VectorString', log: 'logging::L
     toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log) -> std::string
     """
     return _six_base.toValidXMLString(data, schemaPaths, log, xmlRegistry)
+class GeoInfo(_object):
+    """Proxy of C++ six::GeoInfo class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, GeoInfo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::GeoInfo self) -> GeoInfo"""
+        this = _six_base.new_GeoInfo()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_GeoInfo
+    __del__ = lambda self: None
+    __swig_setmethods__["name"] = _six_base.GeoInfo_name_set
+    __swig_getmethods__["name"] = _six_base.GeoInfo_name_get
+    if _newclass:
+        name = _swig_property(_six_base.GeoInfo_name_get, _six_base.GeoInfo_name_set)
+    __swig_setmethods__["geoInfos"] = _six_base.GeoInfo_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_base.GeoInfo_geoInfos_get
+    if _newclass:
+        geoInfos = _swig_property(_six_base.GeoInfo_geoInfos_get, _six_base.GeoInfo_geoInfos_set)
+    __swig_setmethods__["desc"] = _six_base.GeoInfo_desc_set
+    __swig_getmethods__["desc"] = _six_base.GeoInfo_desc_get
+    if _newclass:
+        desc = _swig_property(_six_base.GeoInfo_desc_get, _six_base.GeoInfo_desc_set)
+    __swig_setmethods__["geometryLatLon"] = _six_base.GeoInfo_geometryLatLon_set
+    __swig_getmethods__["geometryLatLon"] = _six_base.GeoInfo_geometryLatLon_get
+    if _newclass:
+        geometryLatLon = _swig_property(_six_base.GeoInfo_geometryLatLon_get, _six_base.GeoInfo_geometryLatLon_set)
+
+    def __eq__(self, rhs: 'GeoInfo') -> "bool":
+        """__eq__(GeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.GeoInfo___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'GeoInfo') -> "bool":
+        """__ne__(GeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.GeoInfo___ne__(self, rhs)
+
+GeoInfo_swigregister = _six_base.GeoInfo_swigregister
+GeoInfo_swigregister(GeoInfo)
+
+
+def __lshift__(os: 'std::ostream &', g: 'GeoInfo') -> "std::ostream &":
+    """__lshift__(std::ostream & os, GeoInfo g) -> std::ostream &"""
+    return _six_base.__lshift__(os, g)
 class LatLonCorners(_object):
     """Proxy of C++ six::Corners<(scene::LatLon)> class."""
 
@@ -5069,6 +5212,438 @@ class VectorMatchType(_object):
     __del__ = lambda self: None
 VectorMatchType_swigregister = _six_base.VectorMatchType_swigregister
 VectorMatchType_swigregister(VectorMatchType)
+
+class VectorScopedCopyableMatchType(_object):
+    """Proxy of C++ std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorScopedCopyableMatchType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCopyableMatchType, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(VectorScopedCopyableMatchType self) -> SwigPyIterator"""
+        return _six_base.VectorScopedCopyableMatchType_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(VectorScopedCopyableMatchType self) -> bool"""
+        return _six_base.VectorScopedCopyableMatchType___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(VectorScopedCopyableMatchType self) -> bool"""
+        return _six_base.VectorScopedCopyableMatchType___bool__(self)
+
+
+    def __len__(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
+        """__len__(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
+        return _six_base.VectorScopedCopyableMatchType___len__(self)
+
+
+    def __getslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type') -> "std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *":
+        """__getslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j) -> VectorScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j)
+        __setslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j, VectorScopedCopyableMatchType v)
+        """
+        return _six_base.VectorScopedCopyableMatchType___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type') -> "void":
+        """__delslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j)"""
+        return _six_base.VectorScopedCopyableMatchType___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i)
+        __delitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
+        """
+        return _six_base.VectorScopedCopyableMatchType___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
+        """
+        __getitem__(VectorScopedCopyableMatchType self, PySliceObject * slice) -> VectorScopedCopyableMatchType
+        __getitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i) -> ScopedCopyableMatchType
+        """
+        return _six_base.VectorScopedCopyableMatchType___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice, VectorScopedCopyableMatchType v)
+        __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
+        __setitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, ScopedCopyableMatchType x)
+        """
+        return _six_base.VectorScopedCopyableMatchType___setitem__(self, *args)
+
+
+    def pop(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type":
+        """pop(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType_pop(self)
+
+
+    def append(self, x: 'ScopedCopyableMatchType') -> "void":
+        """append(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
+        return _six_base.VectorScopedCopyableMatchType_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(VectorScopedCopyableMatchType self) -> bool"""
+        return _six_base.VectorScopedCopyableMatchType_empty(self)
+
+
+    def size(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
+        """size(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
+        return _six_base.VectorScopedCopyableMatchType_size(self)
+
+
+    def swap(self, v: 'VectorScopedCopyableMatchType') -> "void":
+        """swap(VectorScopedCopyableMatchType self, VectorScopedCopyableMatchType v)"""
+        return _six_base.VectorScopedCopyableMatchType_swap(self, v)
+
+
+    def begin(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
+        """begin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator"""
+        return _six_base.VectorScopedCopyableMatchType_begin(self)
+
+
+    def end(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
+        """end(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator"""
+        return _six_base.VectorScopedCopyableMatchType_end(self)
+
+
+    def rbegin(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator":
+        """rbegin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableMatchType_rbegin(self)
+
+
+    def rend(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator":
+        """rend(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableMatchType_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(VectorScopedCopyableMatchType self)"""
+        return _six_base.VectorScopedCopyableMatchType_clear(self)
+
+
+    def get_allocator(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type":
+        """get_allocator(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type"""
+        return _six_base.VectorScopedCopyableMatchType_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(VectorScopedCopyableMatchType self)"""
+        return _six_base.VectorScopedCopyableMatchType_pop_back(self)
+
+
+    def erase(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
+        """
+        erase(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
+        erase(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
+        """
+        return _six_base.VectorScopedCopyableMatchType_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self) -> VectorScopedCopyableMatchType
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, VectorScopedCopyableMatchType arg2) -> VectorScopedCopyableMatchType
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type size) -> VectorScopedCopyableMatchType
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type size, ScopedCopyableMatchType value) -> VectorScopedCopyableMatchType
+        """
+        this = _six_base.new_VectorScopedCopyableMatchType(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x: 'ScopedCopyableMatchType') -> "void":
+        """push_back(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
+        return _six_base.VectorScopedCopyableMatchType_push_back(self, x)
+
+
+    def front(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
+        """front(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType_front(self)
+
+
+    def back(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
+        """back(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType_back(self)
+
+
+    def assign(self, n: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type', x: 'ScopedCopyableMatchType') -> "void":
+        """assign(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n, ScopedCopyableMatchType x)"""
+        return _six_base.VectorScopedCopyableMatchType_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type new_size)
+        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type new_size, ScopedCopyableMatchType x)
+        """
+        return _six_base.VectorScopedCopyableMatchType_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos, ScopedCopyableMatchType x) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
+        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n, ScopedCopyableMatchType x)
+        """
+        return _six_base.VectorScopedCopyableMatchType_insert(self, *args)
+
+
+    def reserve(self, n: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type') -> "void":
+        """reserve(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n)"""
+        return _six_base.VectorScopedCopyableMatchType_reserve(self, n)
+
+
+    def capacity(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
+        """capacity(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
+        return _six_base.VectorScopedCopyableMatchType_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
+    __swig_destroy__ = _six_base.delete_VectorScopedCopyableMatchType
+    __del__ = lambda self: None
+VectorScopedCopyableMatchType_swigregister = _six_base.VectorScopedCopyableMatchType_swigregister
+VectorScopedCopyableMatchType_swigregister(VectorScopedCopyableMatchType)
+
+class VectorScopedCopyableGeoInfo(_object):
+    """Proxy of C++ std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorScopedCopyableGeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCopyableGeoInfo, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(VectorScopedCopyableGeoInfo self) -> SwigPyIterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(VectorScopedCopyableGeoInfo self) -> bool"""
+        return _six_base.VectorScopedCopyableGeoInfo___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(VectorScopedCopyableGeoInfo self) -> bool"""
+        return _six_base.VectorScopedCopyableGeoInfo___bool__(self)
+
+
+    def __len__(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
+        """__len__(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
+        return _six_base.VectorScopedCopyableGeoInfo___len__(self)
+
+
+    def __getslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type') -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *":
+        """__getslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j) -> VectorScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)
+        __setslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j, VectorScopedCopyableGeoInfo v)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type') -> "void":
+        """__delslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)"""
+        return _six_base.VectorScopedCopyableGeoInfo___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i)
+        __delitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
+        """
+        __getitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice) -> VectorScopedCopyableGeoInfo
+        __getitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i) -> ScopedCopyableGeoInfo
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice, VectorScopedCopyableGeoInfo v)
+        __setitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice)
+        __setitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, ScopedCopyableGeoInfo x)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___setitem__(self, *args)
+
+
+    def pop(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type":
+        """pop(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo_pop(self)
+
+
+    def append(self, x: 'ScopedCopyableGeoInfo') -> "void":
+        """append(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"""
+        return _six_base.VectorScopedCopyableGeoInfo_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(VectorScopedCopyableGeoInfo self) -> bool"""
+        return _six_base.VectorScopedCopyableGeoInfo_empty(self)
+
+
+    def size(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
+        """size(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
+        return _six_base.VectorScopedCopyableGeoInfo_size(self)
+
+
+    def swap(self, v: 'VectorScopedCopyableGeoInfo') -> "void":
+        """swap(VectorScopedCopyableGeoInfo self, VectorScopedCopyableGeoInfo v)"""
+        return _six_base.VectorScopedCopyableGeoInfo_swap(self, v)
+
+
+    def begin(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
+        """begin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_begin(self)
+
+
+    def end(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
+        """end(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_end(self)
+
+
+    def rbegin(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator":
+        """rbegin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_rbegin(self)
+
+
+    def rend(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator":
+        """rend(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(VectorScopedCopyableGeoInfo self)"""
+        return _six_base.VectorScopedCopyableGeoInfo_clear(self)
+
+
+    def get_allocator(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type":
+        """get_allocator(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type"""
+        return _six_base.VectorScopedCopyableGeoInfo_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(VectorScopedCopyableGeoInfo self)"""
+        return _six_base.VectorScopedCopyableGeoInfo_pop_back(self)
+
+
+    def erase(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
+        """
+        erase(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
+        erase(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
+        """
+        return _six_base.VectorScopedCopyableGeoInfo_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self) -> VectorScopedCopyableGeoInfo
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, VectorScopedCopyableGeoInfo arg2) -> VectorScopedCopyableGeoInfo
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type size) -> VectorScopedCopyableGeoInfo
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type size, ScopedCopyableGeoInfo value) -> VectorScopedCopyableGeoInfo
+        """
+        this = _six_base.new_VectorScopedCopyableGeoInfo(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x: 'ScopedCopyableGeoInfo') -> "void":
+        """push_back(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"""
+        return _six_base.VectorScopedCopyableGeoInfo_push_back(self, x)
+
+
+    def front(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
+        """front(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo_front(self)
+
+
+    def back(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
+        """back(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo_back(self)
+
+
+    def assign(self, n: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type', x: 'ScopedCopyableGeoInfo') -> "void":
+        """assign(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)"""
+        return _six_base.VectorScopedCopyableGeoInfo_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size)
+        resize(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size, ScopedCopyableGeoInfo x)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, ScopedCopyableGeoInfo x) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
+        insert(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo_insert(self, *args)
+
+
+    def reserve(self, n: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type') -> "void":
+        """reserve(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n)"""
+        return _six_base.VectorScopedCopyableGeoInfo_reserve(self, n)
+
+
+    def capacity(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
+        """capacity(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
+        return _six_base.VectorScopedCopyableGeoInfo_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
+    __swig_destroy__ = _six_base.delete_VectorScopedCopyableGeoInfo
+    __del__ = lambda self: None
+VectorScopedCopyableGeoInfo_swigregister = _six_base.VectorScopedCopyableGeoInfo_swigregister
+VectorScopedCopyableGeoInfo_swigregister(VectorScopedCopyableGeoInfo)
 
 class StdAutoRadiometric(_object):
     """Proxy of C++ std::auto_ptr<(six::Radiometric)> class."""
@@ -5673,6 +6248,111 @@ ScopedCopyablePosVelError_swigregister(ScopedCopyablePosVelError)
 def makeScopedCopyablePosVelError() -> "mem::ScopedCopyablePtr< six::PosVelError >":
     """makeScopedCopyablePosVelError() -> ScopedCopyablePosVelError"""
     return _six_base.makeScopedCopyablePosVelError()
+class StdAutoGeoInfo(_object):
+    """Proxy of C++ std::auto_ptr<(six::GeoInfo)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoGeoInfo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::GeoInfo)> self) -> StdAutoGeoInfo"""
+        this = _six_base.new_StdAutoGeoInfo()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoGeoInfo
+    __del__ = lambda self: None
+StdAutoGeoInfo_swigregister = _six_base.StdAutoGeoInfo_swigregister
+StdAutoGeoInfo_swigregister(StdAutoGeoInfo)
+
+class ScopedCopyableGeoInfo(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::GeoInfo)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableGeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableGeoInfo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self, GeoInfo ptr=None) -> ScopedCopyableGeoInfo
+        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self) -> ScopedCopyableGeoInfo
+        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self, ScopedCopyableGeoInfo rhs) -> ScopedCopyableGeoInfo
+        """
+        this = _six_base.new_ScopedCopyableGeoInfo(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableGeoInfo___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
+    def get(self) -> "six::GeoInfo *":
+        """get(ScopedCopyableGeoInfo self) -> GeoInfo"""
+        return _six_base.ScopedCopyableGeoInfo_get(self)
+
+
+    def __ref__(self) -> "six::GeoInfo &":
+        """__ref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
+        return _six_base.ScopedCopyableGeoInfo___ref__(self)
+
+
+    def __deref__(self) -> "six::GeoInfo *":
+        """__deref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
+        return _six_base.ScopedCopyableGeoInfo___deref__(self)
+
+
+    def reset(self, ptr: 'GeoInfo'=None) -> "void":
+        """
+        reset(ScopedCopyableGeoInfo self, GeoInfo ptr=None)
+        reset(ScopedCopyableGeoInfo self)
+        """
+        return _six_base.ScopedCopyableGeoInfo_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableGeoInfo
+    __del__ = lambda self: None
+    __swig_setmethods__["name"] = _six_base.ScopedCopyableGeoInfo_name_set
+    __swig_getmethods__["name"] = _six_base.ScopedCopyableGeoInfo_name_get
+    if _newclass:
+        name = _swig_property(_six_base.ScopedCopyableGeoInfo_name_get, _six_base.ScopedCopyableGeoInfo_name_set)
+    __swig_setmethods__["geoInfos"] = _six_base.ScopedCopyableGeoInfo_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_base.ScopedCopyableGeoInfo_geoInfos_get
+    if _newclass:
+        geoInfos = _swig_property(_six_base.ScopedCopyableGeoInfo_geoInfos_get, _six_base.ScopedCopyableGeoInfo_geoInfos_set)
+    __swig_setmethods__["desc"] = _six_base.ScopedCopyableGeoInfo_desc_set
+    __swig_getmethods__["desc"] = _six_base.ScopedCopyableGeoInfo_desc_get
+    if _newclass:
+        desc = _swig_property(_six_base.ScopedCopyableGeoInfo_desc_get, _six_base.ScopedCopyableGeoInfo_desc_set)
+    __swig_setmethods__["geometryLatLon"] = _six_base.ScopedCopyableGeoInfo_geometryLatLon_set
+    __swig_getmethods__["geometryLatLon"] = _six_base.ScopedCopyableGeoInfo_geometryLatLon_get
+    if _newclass:
+        geometryLatLon = _swig_property(_six_base.ScopedCopyableGeoInfo_geometryLatLon_get, _six_base.ScopedCopyableGeoInfo_geometryLatLon_set)
+
+    def __eq__(self, rhs: 'GeoInfo') -> "bool":
+        """__eq__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.ScopedCopyableGeoInfo___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'GeoInfo') -> "bool":
+        """__ne__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.ScopedCopyableGeoInfo___ne__(self, rhs)
+
+ScopedCopyableGeoInfo_swigregister = _six_base.ScopedCopyableGeoInfo_swigregister
+ScopedCopyableGeoInfo_swigregister(ScopedCopyableGeoInfo)
+
+
+def makeScopedCopyableGeoInfo() -> "mem::ScopedCopyablePtr< six::GeoInfo >":
+    """makeScopedCopyableGeoInfo() -> ScopedCopyableGeoInfo"""
+    return _six_base.makeScopedCopyableGeoInfo()
 class StdAutoRadarSensor(_object):
     """Proxy of C++ std::auto_ptr<(six::RadarSensor)> class."""
 
@@ -6413,6 +7093,140 @@ ScopedCloneableAmplitudeTable_swigregister(ScopedCloneableAmplitudeTable)
 def makeScopedCloneableAmplitudeTable() -> "mem::ScopedCloneablePtr< six::AmplitudeTable >":
     """makeScopedCloneableAmplitudeTable() -> ScopedCloneableAmplitudeTable"""
     return _six_base.makeScopedCloneableAmplitudeTable()
+class StdAutoCollectionInformation(_object):
+    """Proxy of C++ std::auto_ptr<(six::CollectionInformation)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCollectionInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoCollectionInformation, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::CollectionInformation)> self) -> StdAutoCollectionInformation"""
+        this = _six_base.new_StdAutoCollectionInformation()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoCollectionInformation
+    __del__ = lambda self: None
+StdAutoCollectionInformation_swigregister = _six_base.StdAutoCollectionInformation_swigregister
+StdAutoCollectionInformation_swigregister(StdAutoCollectionInformation)
+
+class ScopedCloneableCollectionInformation(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::CollectionInformation)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableCollectionInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableCollectionInformation, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCloneablePtr<(six::CollectionInformation)> self, CollectionInformation ptr=None) -> ScopedCloneableCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::CollectionInformation)> self) -> ScopedCloneableCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::CollectionInformation)> self, ScopedCloneableCollectionInformation rhs) -> ScopedCloneableCollectionInformation
+        """
+        this = _six_base.new_ScopedCloneableCollectionInformation(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def get(self) -> "six::CollectionInformation *":
+        """get(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation_get(self)
+
+
+    def __ref__(self) -> "six::CollectionInformation &":
+        """__ref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation___ref__(self)
+
+
+    def __deref__(self) -> "six::CollectionInformation *":
+        """__deref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation___deref__(self)
+
+
+    def reset(self, ptr: 'CollectionInformation'=None) -> "void":
+        """
+        reset(ScopedCloneableCollectionInformation self, CollectionInformation ptr=None)
+        reset(ScopedCloneableCollectionInformation self)
+        """
+        return _six_base.ScopedCloneableCollectionInformation_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCloneableCollectionInformation
+    __del__ = lambda self: None
+    __swig_setmethods__["collectorName"] = _six_base.ScopedCloneableCollectionInformation_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_base.ScopedCloneableCollectionInformation_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_base.ScopedCloneableCollectionInformation_collectorName_get, _six_base.ScopedCloneableCollectionInformation_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_base.ScopedCloneableCollectionInformation_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_base.ScopedCloneableCollectionInformation_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_base.ScopedCloneableCollectionInformation_illuminatorName_get, _six_base.ScopedCloneableCollectionInformation_illuminatorName_set)
+    __swig_setmethods__["coreName"] = _six_base.ScopedCloneableCollectionInformation_coreName_set
+    __swig_getmethods__["coreName"] = _six_base.ScopedCloneableCollectionInformation_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_base.ScopedCloneableCollectionInformation_coreName_get, _six_base.ScopedCloneableCollectionInformation_coreName_set)
+    __swig_setmethods__["collectType"] = _six_base.ScopedCloneableCollectionInformation_collectType_set
+    __swig_getmethods__["collectType"] = _six_base.ScopedCloneableCollectionInformation_collectType_get
+    if _newclass:
+        collectType = _swig_property(_six_base.ScopedCloneableCollectionInformation_collectType_get, _six_base.ScopedCloneableCollectionInformation_collectType_set)
+    __swig_setmethods__["radarMode"] = _six_base.ScopedCloneableCollectionInformation_radarMode_set
+    __swig_getmethods__["radarMode"] = _six_base.ScopedCloneableCollectionInformation_radarMode_get
+    if _newclass:
+        radarMode = _swig_property(_six_base.ScopedCloneableCollectionInformation_radarMode_get, _six_base.ScopedCloneableCollectionInformation_radarMode_set)
+    __swig_setmethods__["radarModeID"] = _six_base.ScopedCloneableCollectionInformation_radarModeID_set
+    __swig_getmethods__["radarModeID"] = _six_base.ScopedCloneableCollectionInformation_radarModeID_get
+    if _newclass:
+        radarModeID = _swig_property(_six_base.ScopedCloneableCollectionInformation_radarModeID_get, _six_base.ScopedCloneableCollectionInformation_radarModeID_set)
+    __swig_setmethods__["releaseInfo"] = _six_base.ScopedCloneableCollectionInformation_releaseInfo_set
+    __swig_getmethods__["releaseInfo"] = _six_base.ScopedCloneableCollectionInformation_releaseInfo_get
+    if _newclass:
+        releaseInfo = _swig_property(_six_base.ScopedCloneableCollectionInformation_releaseInfo_get, _six_base.ScopedCloneableCollectionInformation_releaseInfo_set)
+    __swig_setmethods__["countryCodes"] = _six_base.ScopedCloneableCollectionInformation_countryCodes_set
+    __swig_getmethods__["countryCodes"] = _six_base.ScopedCloneableCollectionInformation_countryCodes_get
+    if _newclass:
+        countryCodes = _swig_property(_six_base.ScopedCloneableCollectionInformation_countryCodes_get, _six_base.ScopedCloneableCollectionInformation_countryCodes_set)
+    __swig_setmethods__["parameters"] = _six_base.ScopedCloneableCollectionInformation_parameters_set
+    __swig_getmethods__["parameters"] = _six_base.ScopedCloneableCollectionInformation_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_base.ScopedCloneableCollectionInformation_parameters_get, _six_base.ScopedCloneableCollectionInformation_parameters_set)
+
+    def clone(self) -> "six::CollectionInformation *":
+        """clone(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation_clone(self)
+
+
+    def __eq__(self, other: 'CollectionInformation') -> "bool":
+        """__eq__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.ScopedCloneableCollectionInformation___eq__(self, other)
+
+
+    def __ne__(self, other: 'CollectionInformation') -> "bool":
+        """__ne__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.ScopedCloneableCollectionInformation___ne__(self, other)
+
+
+    def getClassificationLevel(self) -> "std::string":
+        """getClassificationLevel(ScopedCloneableCollectionInformation self) -> std::string"""
+        return _six_base.ScopedCloneableCollectionInformation_getClassificationLevel(self)
+
+
+    def setClassificationLevel(self, classification: 'std::string const &') -> "void":
+        """setClassificationLevel(ScopedCloneableCollectionInformation self, std::string const & classification)"""
+        return _six_base.ScopedCloneableCollectionInformation_setClassificationLevel(self, classification)
+
+ScopedCloneableCollectionInformation_swigregister = _six_base.ScopedCloneableCollectionInformation_swigregister
+ScopedCloneableCollectionInformation_swigregister(ScopedCloneableCollectionInformation)
+
+
+def makeScopedCloneableCollectionInformation() -> "mem::ScopedCloneablePtr< six::CollectionInformation >":
+    """makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"""
+    return _six_base.makeScopedCloneableCollectionInformation()
 # This file is compatible with both classic and new-style classes.
 
 

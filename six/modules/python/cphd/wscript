@@ -1,6 +1,0 @@
-distclean = options = configure = lambda p: None
-
-def build(bld):
-  bld.swigModule(name = 'cphd',
-                 use = 'cphd-c++ types-python mem-python six.sicd-python six-python sys-python',
-                 package = 'pysix')

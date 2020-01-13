@@ -7996,6 +7996,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_nitf_Reader_getNITFVersionIO(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_IOInterface *arg1 = (nitf_IOInterface *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Version result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_getNITFVersionIO",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_getNITFVersionIO" "', argument " "1"" of type '" "nitf_IOInterface *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_IOInterface * >(argp1);
+  result = (nitf_Version)nitf_Reader_getNITFVersionIO(arg1);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_nitf_Writer_warningList_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
@@ -17035,14 +17057,19 @@ SWIGINTERN PyObject *_wrap_nitf_ImageWriter_setDirectBlockWrite(PyObject *SWIGUN
   PyObject *resultobj = 0;
   nitf_ImageWriter *arg1 = (nitf_ImageWriter *) 0 ;
   int arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_ImageWriter_setDirectBlockWrite",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_ImageWriter_setDirectBlockWrite",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_ImageWriter_setDirectBlockWrite" "', argument " "1"" of type '" "nitf_ImageWriter *""'"); 
@@ -17053,8 +17080,13 @@ SWIGINTERN PyObject *_wrap_nitf_ImageWriter_setDirectBlockWrite(PyObject *SWIGUN
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_ImageWriter_setDirectBlockWrite" "', argument " "2"" of type '" "int""'");
   } 
   arg2 = static_cast< int >(val2);
-  nitf_ImageWriter_setDirectBlockWrite(arg1,arg2);
-  resultobj = SWIG_Py_Void();
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageWriter_setDirectBlockWrite" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (bool)nitf_ImageWriter_setDirectBlockWrite(arg1,arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
   return NULL;
@@ -32443,6 +32475,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_Reader_newGraphicReader", _wrap_nitf_Reader_newGraphicReader, METH_VARARGS, NULL},
 	 { (char *)"nitf_Reader_newDEReader", _wrap_nitf_Reader_newDEReader, METH_VARARGS, NULL},
 	 { (char *)"nitf_Reader_getNITFVersion", _wrap_nitf_Reader_getNITFVersion, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_getNITFVersionIO", _wrap_nitf_Reader_getNITFVersionIO, METH_VARARGS, NULL},
 	 { (char *)"nitf_Writer_warningList_set", _wrap_nitf_Writer_warningList_set, METH_VARARGS, NULL},
 	 { (char *)"nitf_Writer_warningList_get", _wrap_nitf_Writer_warningList_get, METH_VARARGS, NULL},
 	 { (char *)"nitf_Writer_imageWriters_set", _wrap_nitf_Writer_imageWriters_set, METH_VARARGS, NULL},

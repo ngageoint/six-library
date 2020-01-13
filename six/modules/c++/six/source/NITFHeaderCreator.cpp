@@ -914,6 +914,13 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
         setDESecurity(data.getClassification(), subheader);
     }
 
+    for (auto desSource : container->getDESSources())
+    {
+        std::shared_ptr<nitf::SegmentWriter> desWriter(
+                new nitf::SegmentWriter(desSource));
+        mSegmentWriters.push_back(desWriter);
+    }
+
     updateFileHeaderSecurity();
 }
 

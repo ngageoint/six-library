@@ -26,11 +26,12 @@
 #include <mem/ScopedCopyablePtr.h>
 #include <types/RowCol.h>
 
+#include "six/CollectionInformation.h"
 #include "six/Data.h"
 #include "six/ErrorStatistics.h"
-#include "six/Radiometric.h"
 #include "six/MatchInformation.h"
-#include "six/sicd/CollectionInformation.h"
+#include "six/Radiometric.h"
+#include "six/sicd/ComplexClassification.h"
 #include "six/sicd/ImageCreation.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/GeoData.h"
@@ -273,16 +274,17 @@ public:
      *  differently for SICD than SIDD.  Any profile parameters for
      *  FileSecurity that do not conform to Classification transfer must
      *  be initialized directly.
-     *  Maps to SICD/CollectionInfo/Classification
      */
     virtual const Classification& getClassification() const
     {
-        return collectionInformation->classification;
+        mClassification.level = collectionInformation->getClassificationLevel();
+        return mClassification;
     }
 
     virtual Classification& getClassification()
     {
-        return collectionInformation->classification;
+        mClassification.level = collectionInformation->getClassificationLevel();
+        return mClassification;
     }
 
     // Okay, little bit of a hack for now
@@ -369,6 +371,20 @@ public:
 
 private:
     virtual bool equalTo(const Data& rhs) const;
+
+    /*
+     * Classification contains the classification level (stored in
+     * CollectionInformation) as well as the FileSecurity from the NITF header.
+     * These are grouped together here to be consistent with SIDD, which
+     * duplicates FileSecurity metadata in the XML.
+     *
+     * This field is mutable to allow the const accessor to keep it up
+     * to date with any changes to the classification in CollectionInformation.
+     *
+     * DO NOT SET THE CLASSIFICATION FIELD OF THIS MEMBER DIRECTLY!
+     * Go through CollectionInformation to change classification.
+     */
+    mutable ComplexClassification mClassification;
 
     // This is possibly the center processed frequency
     double computeFc() const;

@@ -44,7 +44,7 @@ def initCollectionInfo(cmplx):
     collectionInfo.collectType = CollectType('MONOSTATIC')
     collectionInfo.radarMode = RadarModeType('SPOTLIGHT')
     collectionInfo.radarModeID = 'Some ID'
-    collectionInfo.classification.level = 'UNCLASSIFIED'
+    collectionInfo.setClassificationLevel('UNCLASSIFIED')
     collectionInfo.countryCodes.push_back('US')
 
     param = Parameter()

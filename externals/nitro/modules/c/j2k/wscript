@@ -1,7 +1,6 @@
 from build import getDriverIncludes
 
 
-USELIB_CHECK = 'J2K'
 options = configure = distclean = lambda x: None
 
 
@@ -30,10 +29,11 @@ def build(bld):
         j2kIncludes = ['include', j2kInclude, env['OPENJPEG_INCLUDE']]
 
         # build the j2k library
-        lib = bld(features='c cstlib',
+        lib = bld(features='c c%s' % env['LIB_TYPE'] or 'stlib',
                   includes=j2kIncludes,
                   target='j2k-c', name='j2k-c',
                   source=j2kSources,
+                  defines='J2K_MODULE_EXPORTS',
                   export_includes=j2kIncludes,
                   env=env.derive(), path=bld.path,
                   use='nitf-c J2K ' + j2kLayer)
@@ -60,5 +60,3 @@ def build(bld):
 
         bld(features='add_targets', target='j2k-tests',
             targets_to_add=j2k_only_tests + j2k_nitf_tests)
-
-

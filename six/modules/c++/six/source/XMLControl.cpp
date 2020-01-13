@@ -23,12 +23,27 @@
 #include <logging/NullLogger.h>
 #include <six/XMLControl.h>
 
-namespace
+namespace six
 {
-//! Validate the xml and log any errors
+
+XMLControl::XMLControl(logging::Logger* log, bool ownLog) :
+    mLog(NULL),
+    mOwnLog(false)
+{
+    setLogger(log, ownLog);
+}
+
+XMLControl::~XMLControl()
+{
+    if (mLog && mOwnLog)
+    {
+        delete mLog;
+    }
+}
+
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
-void validate(const xml::lite::Document* doc,
+void XMLControl::validate(const xml::lite::Document* doc,
               const std::vector<std::string>& schemaPaths,
               logging::Logger* log)
 {
@@ -97,25 +112,6 @@ void validate(const xml::lite::Document* doc,
                 "INVALID XML: Check both the XML being " \
                 "produced and the schemas available"));
         }
-    }
-}
-}
-
-namespace six
-{
-
-XMLControl::XMLControl(logging::Logger* log, bool ownLog) :
-    mLog(NULL),
-    mOwnLog(false)
-{
-    setLogger(log, ownLog);
-}
-
-XMLControl::~XMLControl()
-{
-    if (mLog && mOwnLog)
-    {
-        delete mLog;
     }
 }
 

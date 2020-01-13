@@ -170,6 +170,22 @@ void getDesBuffer(six::NITFReadControl& reader,
     buffer.reset(bufferSize);
     deReader.read(buffer.get(), bufferSize);
 }
+
+template <typename MeshTypeT>
+std::auto_ptr<MeshTypeT> extractMesh(const std::string& meshID,
+                                     size_t desIndex,
+                                     six::NITFReadControl& reader)
+{
+    // Extract the mesh
+    std::auto_ptr<MeshTypeT> mesh(new MeshTypeT(meshID));
+    mem::ScopedAlignedArray<sys::byte> buffer;
+    getDesBuffer(reader, desIndex, buffer);
+
+    const sys::byte* bufferData = buffer.get();
+    mesh->deserialize(bufferData);
+
+    return mesh;
+}
 }
 
 namespace six
@@ -483,7 +499,8 @@ void Utilities::readSicd(const std::string& sicdPathname,
                          std::vector<std::complex<float> >& widebandData,
                          six::Poly2D& outputRowColToSlantRow,
                          six::Poly2D& outputRowColToSlantCol,
-                         std::auto_ptr<NoiseMesh>& noiseMesh)
+                         std::auto_ptr<NoiseMesh>& noiseMesh,
+                         std::auto_ptr<ScalarMesh>& scalarMesh)
 {
     six::XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator(six::DataType::COMPLEX,
@@ -503,6 +520,7 @@ void Utilities::readSicd(const std::string& sicdPathname,
                        outputRowColToSlantRow,
                        outputRowColToSlantCol);
     noiseMesh = getNoiseMesh(reader);
+    scalarMesh = getScalarMesh(reader);
 
     // This tells the reader that it doesn't
     // own an XMLControlRegistry
@@ -924,21 +942,41 @@ std::auto_ptr<NoiseMesh> Utilities::getNoiseMesh(NITFReadControl& reader)
     const std::map<std::string, size_t> nameToDesIndex =
         getAdditionalDesMap(reader);
 
+    std::map<std::string, size_t>::const_iterator it =
+            nameToDesIndex.find(SICDMeshes::NOISE_MESH_ID);
+
     // Slant and output plane mesh IDs must be present in the DES
-    if (nameToDesIndex.find(SICDMeshes::NOISE_MESH_ID) == nameToDesIndex.end())
+    if (it == nameToDesIndex.end())
     {
         throw except::Exception(Ctxt("Noise mesh information not present"));
     }
 
     // Extract the noise mesh
-    std::auto_ptr<NoiseMesh> noiseMesh(new NoiseMesh(SICDMeshes::NOISE_MESH_ID));
-    mem::ScopedAlignedArray<sys::byte> buffer;
-    getDesBuffer(
-        reader, nameToDesIndex.at(SICDMeshes::NOISE_MESH_ID), buffer);
-    const sys::byte* bufferData = buffer.get();
-    noiseMesh->deserialize(bufferData);
+    return extractMesh<NoiseMesh>(
+            SICDMeshes::NOISE_MESH_ID,
+            it->second,
+            reader);
+}
 
-    return noiseMesh;
+std::auto_ptr<ScalarMesh> Utilities::getScalarMesh(NITFReadControl& reader)
+{
+    const std::map<std::string, size_t> nameToDesIndex =
+            getAdditionalDesMap(reader);
+
+    std::map<std::string, size_t>::const_iterator it =
+            nameToDesIndex.find(SICDMeshes::SCALAR_MESH_ID);
+
+    // Scalar mesh is optional - return null if the ID is not present in the DES
+    if (it == nameToDesIndex.end())
+    {
+        return std::auto_ptr<ScalarMesh>();
+    }
+
+    // Extract the scalar mesh
+    return extractMesh<ScalarMesh>(
+            SICDMeshes::SCALAR_MESH_ID,
+            it->second,
+            reader);
 }
 
 void Utilities::getProjectionPolys(NITFReadControl& reader,
@@ -970,22 +1008,19 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
             "AreaPlane information must be populated to use projection mesh"));
     }
 
-    mem::ScopedAlignedArray<sys::byte> buffer;
-    const sys::byte* bufferData;
-
     // Extract the slant plane mesh buffer and deserialize
-    PlanarCoordinateMesh slantMesh(SICDMeshes::SLANT_PLANE_MESH_ID);
-    getDesBuffer(
-        reader, nameToDesIndex.at(SICDMeshes::SLANT_PLANE_MESH_ID), buffer);
-    bufferData = buffer.get();
-    slantMesh.deserialize(bufferData);
+    std::auto_ptr<PlanarCoordinateMesh> slantMesh =
+            extractMesh<PlanarCoordinateMesh>(
+                    SICDMeshes::SLANT_PLANE_MESH_ID,
+                    nameToDesIndex.at(SICDMeshes::SLANT_PLANE_MESH_ID),
+                    reader);
 
     // Extract the output plane mesh buffer and deserialize
-    PlanarCoordinateMesh outputMesh(SICDMeshes::OUTPUT_PLANE_MESH_ID);
-    getDesBuffer(
-        reader, nameToDesIndex.at(SICDMeshes::OUTPUT_PLANE_MESH_ID), buffer);
-    bufferData = buffer.get();
-    outputMesh.deserialize(bufferData);
+    std::auto_ptr<PlanarCoordinateMesh> outputMesh =
+            extractMesh<PlanarCoordinateMesh>(
+                    SICDMeshes::OUTPUT_PLANE_MESH_ID,
+                    nameToDesIndex.at(SICDMeshes::OUTPUT_PLANE_MESH_ID),
+                    reader);
 
     const types::RowCol<double> outputSampleSpacing(
         complexData->radarCollection->area->plane->xDirection->spacing,
@@ -1012,8 +1047,8 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
     six::Poly2D outputXYToSlantY;
     six::Poly2D slantXYToOutputX;               
     six::Poly2D slantXYToOutputY;
-    fitXYProjectionPolys(outputMesh,
-                         slantMesh,
+    fitXYProjectionPolys(*outputMesh,
+                         *slantMesh,
                          orderX,
                          orderY,
                          outputXYToSlantX,                  

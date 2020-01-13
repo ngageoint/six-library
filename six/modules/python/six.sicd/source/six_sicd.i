@@ -213,6 +213,7 @@ nitf::Record _readRecord(const std::string& pathname)
 %auto_ptr(six::sicd::ComplexData);
 %auto_ptr(scene::ProjectionPolynomialFitter);
 %auto_ptr(six::sicd::NoiseMesh);
+%auto_ptr(six::sicd::ScalarMesh);
 
 %typemap(out) nitf::Uint32, nitf::Int32{$result = PyInt_FromLong($1);}
 %typemap(in) nitf::Uint32{$1 = (nitf::Uint32)PyInt_AsLong($input);}
@@ -265,11 +266,10 @@ def schema_path():
 /* prevent name conflicts */
 %rename ("SixSicdUtilities") six::sicd::Utilities;
 
-%include "six/GeoInfo.h"
+%include "six/CollectionInformation.h"
 %import "scene/GridECEFTransform.h"
 %include "scene/ProjectionPolynomialFitter.h"
 %include "six/sicd/ComplexClassification.h"
-%include "six/sicd/CollectionInformation.h"
 %include "six/sicd/ImageCreation.h"
 %include "six/sicd/ImageData.h"
 %include "six/sicd/GeoData.h"
@@ -292,10 +292,9 @@ def schema_path():
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
 
-SCOPED_CLONEABLE(six::sicd, CollectionInformation)
+SCOPED_COPYABLE(six::sicd, GeoData)
 SCOPED_CLONEABLE(six::sicd, ImageCreation)
 SCOPED_COPYABLE(six::sicd, ImageData)
-SCOPED_COPYABLE(six::sicd, GeoData)
 SCOPED_CLONEABLE(six::sicd, Grid)
 SCOPED_COPYABLE(six::sicd, Timeline)
 SCOPED_COPYABLE(six::sicd, Position)
@@ -309,8 +308,6 @@ SCOPED_COPYABLE(six::sicd, PFA)
 SCOPED_COPYABLE(six::sicd, RMA)
 SCOPED_COPYABLE(six::sicd, RgAzComp)
 
-SCOPED_COPYABLE(six, GeoInfo)
-%template(VectorScopedCopyableGeoInfo) std::vector<mem::ScopedCopyablePtr<six::GeoInfo> >;
 %template(VectorLatLon) std::vector<scene::LatLon>;
 
 SCOPED_COPYABLE(six::sicd, AntennaParameters)

@@ -37,10 +37,6 @@ using std::ptrdiff_t;
 
 #include "import/six.h"
 
-/* this isn't imported by the above include */
-#include "six/Radiometric.h"
-#include "six/MatchInformation.h"
-
 #include "import/nitf.hpp"
 #include "Python.h"
 #include "datetime.h"
@@ -60,6 +56,7 @@ using namespace six;
 %ignore mem::ScopedCopyablePtr::operator==;
 %ignore mem::ScopedCloneablePtr::operator!=;
 %ignore mem::ScopedCloneablePtr::operator==;
+%ignore six::GeoInfo::operator<<;
 
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;
@@ -93,15 +90,17 @@ using namespace six;
 %include "six/Init.h"
 %include "six/Parameter.h"
 %include "six/ParameterCollection.h"
+%include "six/CollectionInformation.h"
 %include "six/Classification.h"
 %include "six/ErrorStatistics.h"
-%include "six/Radiometric.h"
 %include "six/MatchInformation.h"
+%include "six/Radiometric.h"
 %include "six/Data.h"
 %include "six/XMLControl.h"
 %include "six/Utilities.h"
 %include "six/Options.h"
 %include "six/XMLControlFactory.h"
+%include "six/GeoInfo.h"
 
 %feature("shadow") six::Parameter::setValue(const std::string &)
 %{
@@ -189,12 +188,15 @@ def setValue(self, *args):
 %template(LatLonAltCorners)   six::Corners<scene::LatLonAlt>;
 %template(VectorMatchCollect) std::vector<six::MatchCollect>;
 %template(VectorMatchType)    std::vector<six::MatchType>;
+%template(VectorScopedCopyableMatchType) std::vector<mem::ScopedCopyablePtr<six::MatchType> >;
+%template(VectorScopedCopyableGeoInfo) std::vector<mem::ScopedCopyablePtr<six::GeoInfo> >;
 
 SCOPED_COPYABLE(six, Radiometric)
 SCOPED_COPYABLE(six, ErrorStatistics)
 SCOPED_COPYABLE(six, Components)
 SCOPED_COPYABLE(six, CorrCoefs)
 SCOPED_COPYABLE(six, PosVelError)
+SCOPED_COPYABLE(six, GeoInfo)
 SCOPED_COPYABLE(six, RadarSensor)
 SCOPED_COPYABLE(six, TropoError)
 SCOPED_COPYABLE(six, IonoError)
@@ -202,6 +204,8 @@ SCOPED_COPYABLE(six, CompositeSCP)
 SCOPED_COPYABLE(six, MatchInformation)
 SCOPED_COPYABLE(six, MatchType)
 SCOPED_CLONEABLE(six, AmplitudeTable)
+SCOPED_CLONEABLE(six, CollectionInformation)
+
 
 %extend mem::ScopedCloneablePtr<six::AmplitudeTable>
 {
@@ -218,6 +222,3 @@ SCOPED_CLONEABLE(six, AmplitudeTable)
         *location = value;
     }
 }
-
-%template(VectorMatchCollect) std::vector<six::MatchCollect>;
-%template(VectorMatchType) std::vector<six::MatchType>;

@@ -23,6 +23,7 @@
 
 #include <str/Convert.h>
 #include <six/Utilities.h>
+#include <six/CollectionInformation.h>
 #include <six/SICommonXMLParser.h>
 #include <six/ParameterCollection.h>
 
@@ -41,6 +42,12 @@ SICommonXMLParser::SICommonXMLParser(const std::string& defaultURI,
     XMLParser(defaultURI, addClassAttributes, log, ownLog),
     mSICommonURI(siCommonURI)
 {
+}
+
+void SICommonXMLParser::parseVector2D(XMLElem vecXML, Vector2& vec) const
+{
+    parseDouble(getFirstAndOnly(vecXML, "X"), vec[0]);
+    parseDouble(getFirstAndOnly(vecXML, "Y"), vec[1]);
 }
 
 void SICommonXMLParser::parseVector3D(XMLElem vecXML, Vector3& vec) const
@@ -63,8 +70,28 @@ void SICommonXMLParser::parseLatLonAlt(XMLElem llaXML, LatLonAlt& lla) const
     lla.setAlt(alt);
 }
 
+XMLElem SICommonXMLParser::createVector2D(
+        const std::string& name,
+        const std::string& uri,
+        Vector2 p,
+        XMLElem parent) const
+{
+    XMLElem e = newElement(name, (uri.empty()) ? getDefaultURI() : uri, parent);
+    createDouble("X", getSICommonURI(), p[0], e);
+    createDouble("Y", getSICommonURI(), p[1], e);
+    return e;
+}
+
+XMLElem SICommonXMLParser::createVector2D(
+        const std::string& name,
+        Vector2 p,
+        XMLElem parent) const
+{
+    return createVector2D(name, "", p, parent);
+}
+
 XMLElem SICommonXMLParser::createVector3D(
-        const std::string& name, 
+        const std::string& name,
         const std::string& uri,
         Vector3 p,
         XMLElem parent) const
@@ -77,7 +104,7 @@ XMLElem SICommonXMLParser::createVector3D(
 }
 
 XMLElem SICommonXMLParser::createVector3D(
-        const std::string& name, 
+        const std::string& name,
         Vector3 p,
         XMLElem parent) const
 {
@@ -91,11 +118,11 @@ XMLElem SICommonXMLParser::createPoly1D(const std::string& name,
     XMLElem poly1DXML = newElement(name, uri, parent);
     setAttribute(poly1DXML, "order1", six::toString(order));
 
-    for (size_t i = 0; i <= order; ++i)
+    for (size_t ii = 0; ii <= order; ++ii)
     {
-        XMLElem coefXML = createDouble("Coef", getSICommonURI(), poly1D[i],
+        XMLElem coefXML = createDouble("Coef", getSICommonURI(), poly1D[ii],
                                        poly1DXML);
-        setAttribute(coefXML, "exponent1", six::toString(i));
+        setAttribute(coefXML, "exponent1", six::toString(ii));
     }
     return poly1DXML;
 }
@@ -168,16 +195,16 @@ XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
     setAttribute(yXML, "order1", six::toString(order));
     setAttribute(zXML, "order1", six::toString(order));
 
-    for (size_t i = 0; i <= order; ++i)
+    for (size_t ii = 0; ii <= order; ++ii)
     {
-        Vector3 v3 = polyXYZ[i];
+        Vector3 v3 = polyXYZ[ii];
         XMLElem xCoefXML = createDouble("Coef", getSICommonURI(), v3[0], xXML);
         XMLElem yCoefXML = createDouble("Coef", getSICommonURI(), v3[1], yXML);
         XMLElem zCoefXML = createDouble("Coef", getSICommonURI(), v3[2], zXML);
 
-        setAttribute(xCoefXML, "exponent1", six::toString(i));
-        setAttribute(yCoefXML, "exponent1", six::toString(i));
-        setAttribute(zCoefXML, "exponent1", six::toString(i));
+        setAttribute(xCoefXML, "exponent1", six::toString(ii));
+        setAttribute(yCoefXML, "exponent1", six::toString(ii));
+        setAttribute(zCoefXML, "exponent1", six::toString(ii));
     }
     return polyXML;
 }
@@ -317,9 +344,9 @@ void SICommonXMLParser::parsePoly1D(XMLElem polyXML, Poly1D& poly1D) const
     polyXML->getElementsByTagName("Coef", coeffsXML);
 
     int exp1;
-    for (size_t i = 0, size = coeffsXML.size(); i < size; ++i)
+    for (size_t ii = 0, size = coeffsXML.size(); ii < size; ++ii)
     {
-        XMLElem element = coeffsXML[i];
+        XMLElem element = coeffsXML[ii];
         exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));
         parseDouble(element, p1D[exp1]);
     }
@@ -336,9 +363,9 @@ void SICommonXMLParser::parsePoly2D(XMLElem polyXML, Poly2D& poly2D) const
     polyXML->getElementsByTagName("Coef", coeffsXML);
 
     int exp1, exp2;
-    for (size_t i = 0, size = coeffsXML.size(); i < size; ++i)
+    for (size_t ii = 0, size = coeffsXML.size(); ii < size; ++ii)
     {
-        XMLElem element = coeffsXML[i];
+        XMLElem element = coeffsXML[ii];
         exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));
         exp2 = str::toType<int>(element->getAttributes().getValue("exponent2"));
         parseDouble(element, p2D[exp1][exp2]);
@@ -354,14 +381,14 @@ XMLElem SICommonXMLParser::createPoly2D(const std::string& name,
     setAttribute(poly2DXML, "order1", six::toString(poly2D.orderX()));
     setAttribute(poly2DXML, "order2", six::toString(poly2D.orderY()));
 
-    for (size_t i = 0; i <= poly2D.orderX(); i++)
+    for (size_t ii = 0; ii <= poly2D.orderX(); ii++)
     {
-        for (size_t j = 0; j <= poly2D.orderY(); j++)
+        for (size_t jj = 0; jj <= poly2D.orderY(); jj++)
         {
             XMLElem coefXML = createDouble("Coef", getSICommonURI(),
-                                           poly2D[i][j], poly2DXML);
-            setAttribute(coefXML, "exponent1", six::toString(i));
-            setAttribute(coefXML, "exponent2", six::toString(j));
+                                           poly2D[ii][jj], poly2DXML);
+            setAttribute(coefXML, "exponent1", six::toString(ii));
+            setAttribute(coefXML, "exponent2", six::toString(jj));
         }
     }
 
@@ -557,12 +584,12 @@ void SICommonXMLParser::addDecorrType(const std::string& name,
     }
 }
 
-void SICommonXMLParser::parseDecorrType(XMLElem decorrXML, 
+void SICommonXMLParser::parseDecorrType(XMLElem decorrXML,
                                         DecorrType& decorrType) const
 {
     parseDouble(getFirstAndOnly(decorrXML, "CorrCoefZero"),
                 decorrType.corrCoefZero);
-    parseDouble(getFirstAndOnly(decorrXML, "DecorrRate"), 
+    parseDouble(getFirstAndOnly(decorrXML, "DecorrRate"),
                 decorrType.decorrRate);
 }
 
@@ -577,7 +604,7 @@ void SICommonXMLParser::parseLatLon(XMLElem parent, LatLon& ll) const
     ll.setLon(lon);
 }
 
-void SICommonXMLParser::parseLatLons(XMLElem pointsXML, 
+void SICommonXMLParser::parseLatLons(XMLElem pointsXML,
                                      const std::string& pointName,
         std::vector<LatLon>& llVec) const
 {
@@ -602,8 +629,8 @@ void SICommonXMLParser::parseLatLons(XMLElem pointsXML,
         //! Verify there were no duplicates
         if (tmpSet.insert(index).second == false)
         {
-            throw except::Exception(Ctxt("Duplicate 'index' found in [" 
-                + pointsXML->getParent()->getLocalName() + "->" 
+            throw except::Exception(Ctxt("Duplicate 'index' found in ["
+                + pointsXML->getParent()->getLocalName() + "->"
                 + pointsXML->getLocalName() + "]"));
         }
     }
@@ -613,15 +640,15 @@ void SICommonXMLParser::parseLatLons(XMLElem pointsXML,
     {
         if (*tmpSet.begin() != 1)
         {
-            throw except::Exception(Ctxt("Index of 0 found in [" 
-                    + pointsXML->getParent()->getLocalName() + "->" 
+            throw except::Exception(Ctxt("Index of 0 found in ["
+                    + pointsXML->getParent()->getLocalName() + "->"
                     + pointsXML->getLocalName() + "]"));
         }
         else if (*tmpSet.rbegin() != (latLonsXML.size()))
         {
             throw except::Exception(Ctxt(
-                    "Invalid out-of-bounds 'index' in [" 
-                    + pointsXML->getParent()->getLocalName() + "->" 
+                    "Invalid out-of-bounds 'index' in ["
+                    + pointsXML->getParent()->getLocalName() + "->"
                     + pointsXML->getLocalName() + "]"));
         }
     }
@@ -635,7 +662,7 @@ void SICommonXMLParser::parseLatLons(XMLElem pointsXML,
     }
 }
 
-void SICommonXMLParser::parseRangeAzimuth(XMLElem parent, 
+void SICommonXMLParser::parseRangeAzimuth(XMLElem parent,
                                           types::RgAz<double>& value) const
 {
     parseDouble(getFirstAndOnly(parent, "Range"), value.rg);
@@ -643,46 +670,46 @@ void SICommonXMLParser::parseRangeAzimuth(XMLElem parent,
 }
 
 void SICommonXMLParser::parseRowColDouble(
-        XMLElem parent, 
+        XMLElem parent,
         const std::string& rowName,
-        const std::string& colName, 
+        const std::string& colName,
         RowColDouble& rc) const
 {
     parseDouble(getFirstAndOnly(parent, rowName), rc.row);
     parseDouble(getFirstAndOnly(parent, colName), rc.col);
 }
 
-void SICommonXMLParser::parseRowColLatLon(XMLElem parent, 
+void SICommonXMLParser::parseRowColLatLon(XMLElem parent,
                                           RowColLatLon& rc) const
 {
     parseLatLon(getFirstAndOnly(parent, "Row"), rc.row);
     parseLatLon(getFirstAndOnly(parent, "Col"), rc.col);
 }
 
-void SICommonXMLParser::parseRowColDouble(XMLElem parent, 
+void SICommonXMLParser::parseRowColDouble(XMLElem parent,
                                           RowColDouble& rc) const
 {
     parseRowColDouble(parent, "Row", "Col", rc);
 }
 
 void SICommonXMLParser::parseRowColInt(
-        XMLElem parent, 
+        XMLElem parent,
         const std::string& rowName,
-        const std::string& colName, 
+        const std::string& colName,
         RowColInt& rc) const
 {
     parseInt(getFirstAndOnly(parent, rowName), rc.row);
     parseInt(getFirstAndOnly(parent, colName), rc.col);
 }
 
-void SICommonXMLParser::parseRowColInt(XMLElem parent, 
+void SICommonXMLParser::parseRowColInt(XMLElem parent,
                                        RowColInt& rc) const
 {
     parseRowColInt(parent, "Row", "Col", rc);
 }
 
 void SICommonXMLParser::parseRowColInts(
-        XMLElem pointsXML, 
+        XMLElem pointsXML,
         const std::string& pointName,
         std::vector<RowColInt>& rcVec) const
 {
@@ -707,8 +734,8 @@ void SICommonXMLParser::parseRowColInts(
         //! Verify there were no duplicates
         if (tmpSet.insert(index).second == false)
         {
-            throw except::Exception(Ctxt("Duplicate 'index' found in [" 
-                + pointsXML->getParent()->getLocalName() + "->" 
+            throw except::Exception(Ctxt("Duplicate 'index' found in ["
+                + pointsXML->getParent()->getLocalName() + "->"
                 + pointsXML->getLocalName() + "]"));
         }
     }
@@ -718,15 +745,15 @@ void SICommonXMLParser::parseRowColInts(
     {
         if (*tmpSet.begin() != 1)
         {
-            throw except::Exception(Ctxt("Index of 0 found in [" 
-                    + pointsXML->getParent()->getLocalName() + "->" 
+            throw except::Exception(Ctxt("Index of 0 found in ["
+                    + pointsXML->getParent()->getLocalName() + "->"
                     + pointsXML->getLocalName() + "]"));
         }
         else if (*tmpSet.rbegin() != (rowColXML.size()))
         {
             throw except::Exception(Ctxt(
-                    "Invalid out-of-bounds 'index' in [" 
-                    + pointsXML->getParent()->getLocalName() + "->" 
+                    "Invalid out-of-bounds 'index' in ["
+                    + pointsXML->getParent()->getLocalName() + "->"
                     + pointsXML->getLocalName() + "]"));
         }
     }
@@ -753,8 +780,8 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
     const Components* const components = errorStatistics->components.get();
     if (components)
     {
-        XMLElem componentsXML = newElement("Components", 
-                                           getSICommonURI(), 
+        XMLElem componentsXML = newElement("Components",
+                                           getSICommonURI(),
                                            errorStatsXML);
 
         const PosVelError* const posVelError = components->posVelError.get();
@@ -764,11 +791,11 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
 
         if (posVelError)
         {
-            XMLElem posVelErrXML = newElement("PosVelErr", 
-                                              getSICommonURI(), 
+            XMLElem posVelErrXML = newElement("PosVelErr",
+                                              getSICommonURI(),
                                               componentsXML);
 
-            createString("Frame", getSICommonURI(), 
+            createString("Frame", getSICommonURI(),
                          six::toString(posVelError->frame), posVelErrXML);
             createDouble("P1", getSICommonURI(), posVelError->p1, posVelErrXML);
             createDouble("P2", getSICommonURI(), posVelError->p2, posVelErrXML);
@@ -780,8 +807,8 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
             const CorrCoefs* const coefs = posVelError->corrCoefs.get();
             if (coefs)
             {
-                XMLElem coefsXML = newElement("CorrCoefs", 
-                                              getSICommonURI(), 
+                XMLElem coefsXML = newElement("CorrCoefs",
+                                              getSICommonURI(),
                                               posVelErrXML);
 
                 createDouble("P1P2", getSICommonURI(), coefs->p1p2, coefsXML);
@@ -801,7 +828,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                 createDouble("V2V3", getSICommonURI(), coefs->v2v3, coefsXML);
             }
 
-            addDecorrType("PositionDecorr", getSICommonURI(), 
+            addDecorrType("PositionDecorr", getSICommonURI(),
                           posVelError->positionDecorr, posVelErrXML);
         }
         if (radarSensor)
@@ -814,21 +841,21 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
 
             if (!Init::isUndefined<double>(radarSensor->clockFreqSF))
             {
-                createDouble("ClockFreqSF", getSICommonURI(), 
+                createDouble("ClockFreqSF", getSICommonURI(),
                              radarSensor->clockFreqSF, radarSensorXML);
             }
             if (!Init::isUndefined<double>(radarSensor->transmitFreqSF))
             {
-                createDouble("TransmitFreqSF", getSICommonURI(), 
+                createDouble("TransmitFreqSF", getSICommonURI(),
                              radarSensor->transmitFreqSF, radarSensorXML);
             }
-            addDecorrType("RangeBiasDecorr", getSICommonURI(), 
+            addDecorrType("RangeBiasDecorr", getSICommonURI(),
                           radarSensor->rangeBiasDecorr, radarSensorXML);
         }
         if (tropoError)
         {
-            XMLElem tropoErrXML = newElement("TropoError", 
-                                             getSICommonURI(), 
+            XMLElem tropoErrXML = newElement("TropoError",
+                                             getSICommonURI(),
                                              componentsXML);
 
             if (!Init::isUndefined<double>(tropoError->tropoRangeVertical))
@@ -842,13 +869,13 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                              tropoError->tropoRangeSlant, tropoErrXML);
             }
 
-            addDecorrType("TropoRangeDecorr", getSICommonURI(), 
+            addDecorrType("TropoRangeDecorr", getSICommonURI(),
                           tropoError->tropoRangeDecorr, tropoErrXML);
         }
         if (ionoError)
         {
-            XMLElem ionoErrXML = newElement("IonoError", 
-                                            getSICommonURI(), 
+            XMLElem ionoErrXML = newElement("IonoError",
+                                            getSICommonURI(),
                                             componentsXML);
 
             if (!Init::isUndefined<double>(ionoError->ionoRangeVertical))
@@ -862,7 +889,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                              ionoError->ionoRangeRateVertical, ionoErrXML);
             }
 
-            createDouble("IonoRgRgRateCC", getSICommonURI(), 
+            createDouble("IonoRgRgRateCC", getSICommonURI(),
                          ionoError->ionoRgRgRateCC, ionoErrXML);
 
             addDecorrType("IonoRangeVertDecorr", getSICommonURI(),
@@ -872,10 +899,10 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
 
     if (!errorStatistics->additionalParameters.empty())
     {
-        XMLElem paramsXML = newElement("AdditionalParms", 
-                                       getSICommonURI(), 
+        XMLElem paramsXML = newElement("AdditionalParms",
+                                       getSICommonURI(),
                                        errorStatsXML);
-        addParameters("Parameter", getSICommonURI(), 
+        addParameters("Parameter", getSICommonURI(),
                       errorStatistics->additionalParameters, paramsXML);
     }
 
@@ -1144,6 +1171,108 @@ void SICommonXMLParser::parseFootprint(XMLElem footprint,
     {
         throw except::Exception(Ctxt("Didn't get all expected corners"));
     }
+}
+
+void SICommonXMLParser::parseCollectionInformationFromXML(
+    const XMLElem collectionInfoXML,
+    CollectionInformation *collInfo) const
+{
+    parseString(getFirstAndOnly(collectionInfoXML, "CollectorName"),
+                collInfo->collectorName);
+
+    XMLElem element = getOptional(collectionInfoXML, "IlluminatorName");
+    if (element)
+    {
+        parseString(element, collInfo->illuminatorName);
+    }
+
+    element = getOptional(collectionInfoXML, "CoreName");
+    if (element)
+    {
+        parseString(element, collInfo->coreName);
+    }
+
+    element = getOptional(collectionInfoXML, "CollectType");
+    if (element)
+    {
+        collInfo->collectType
+                = six::toType<six::CollectType>(element->getCharacterData());
+    }
+
+    XMLElem radarModeXML = getFirstAndOnly(collectionInfoXML, "RadarMode");
+
+    collInfo->radarMode
+            = six::toType<RadarModeType>(getFirstAndOnly(radarModeXML,
+                                         "ModeType")->getCharacterData());
+
+    element = getOptional(radarModeXML, "ModeID");
+    if (element)
+    {
+        parseString(element, collInfo->radarModeID);
+    }
+
+    std::string classification;
+    parseString(getFirstAndOnly(collectionInfoXML, "Classification"),
+                classification);
+    collInfo->setClassificationLevel(classification);
+
+    std::vector < XMLElem > countryCodeXML;
+    collectionInfoXML->getElementsByTagName("CountryCode", countryCodeXML);
+
+    //optional
+    for (std::vector<XMLElem>::const_iterator it = countryCodeXML.begin(); it
+            != countryCodeXML.end(); ++it)
+    {
+        std::string cc;
+        parseString(*it, cc);
+        collInfo->countryCodes.push_back(cc);
+    }
+
+    //optional
+    parseParameters(collectionInfoXML, "Parameter", collInfo->parameters);
+}
+
+XMLElem SICommonXMLParser::convertCollectionInformationToXML(
+    const CollectionInformation *collInfo,
+    XMLElem parent) const
+{
+    XMLElem collInfoXML = newElement("CollectionInfo", parent);
+
+    const std::string si = getSICommonURI();
+
+    createString("CollectorName", si, collInfo->collectorName, collInfoXML);
+    if (!collInfo->illuminatorName.empty())
+    {
+        createString("IlluminatorName", si, collInfo->illuminatorName,
+                     collInfoXML);
+    }
+    createString("CoreName", si, collInfo->coreName, collInfoXML);
+    if (!Init::isUndefined(collInfo->collectType))
+    {
+        createString("CollectType", si,
+                     six::toString<six::CollectType>(collInfo->collectType),
+                     collInfoXML);
+    }
+
+    XMLElem radarModeXML = newElement("RadarMode", si, collInfoXML);
+    createString("ModeType", si, six::toString(collInfo->radarMode),
+                 radarModeXML);
+    if (!collInfo->radarModeID.empty())
+    {
+        createString("ModeID", si, collInfo->radarModeID, radarModeXML);
+    }
+
+    createString("Classification", si, collInfo->getClassificationLevel(),
+                 collInfoXML);
+
+    for (std::vector<std::string>::const_iterator it =
+            collInfo->countryCodes.begin(); it != collInfo->countryCodes.end();
+            ++it)
+    {
+        createString("CountryCode", si, *it, collInfoXML);
+    }
+    addParameters("Parameter", si, collInfo->parameters, collInfoXML);
+    return collInfoXML;
 }
 }
 

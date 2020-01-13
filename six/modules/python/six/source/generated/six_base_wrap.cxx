@@ -3048,136 +3048,146 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[38]
 #define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[39]
 #define SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t swig_types[40]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t swig_types[41]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t swig_types[42]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t swig_types[43]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t swig_types[44]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t swig_types[45]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__LUT_t swig_types[46]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t swig_types[47]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t swig_types[48]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t swig_types[49]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t swig_types[50]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t swig_types[51]
-#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t swig_types[52]
-#define SWIGTYPE_p_mt__SingletonT_six__XMLControlRegistry_true_t swig_types[53]
-#define SWIGTYPE_p_nitf_DateTime swig_types[54]
-#define SWIGTYPE_p_nitf__DateTime swig_types[55]
-#define SWIGTYPE_p_nitf__FileSecurity swig_types[56]
-#define SWIGTYPE_p_nitf__NITFException swig_types[57]
-#define SWIGTYPE_p_off_t swig_types[58]
-#define SWIGTYPE_p_p_PyObject swig_types[59]
-#define SWIGTYPE_p_pid_t swig_types[60]
-#define SWIGTYPE_p_scene__AngleMagnitude swig_types[61]
-#define SWIGTYPE_p_scene__Errors swig_types[62]
-#define SWIGTYPE_p_scene__FrameType swig_types[63]
-#define SWIGTYPE_p_scene__LatLon swig_types[64]
-#define SWIGTYPE_p_scene__LatLonAlt swig_types[65]
-#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[66]
-#define SWIGTYPE_p_six__AmplitudeTable swig_types[67]
-#define SWIGTYPE_p_six__AppliedType swig_types[68]
-#define SWIGTYPE_p_six__AutofocusType swig_types[69]
-#define SWIGTYPE_p_six__BooleanType swig_types[70]
-#define SWIGTYPE_p_six__ByteSwapping swig_types[71]
-#define SWIGTYPE_p_six__Classification swig_types[72]
-#define SWIGTYPE_p_six__CollectType swig_types[73]
-#define SWIGTYPE_p_six__ComplexImageGridType swig_types[74]
-#define SWIGTYPE_p_six__ComplexImagePlaneType swig_types[75]
-#define SWIGTYPE_p_six__Components swig_types[76]
-#define SWIGTYPE_p_six__CompositeSCP swig_types[77]
-#define SWIGTYPE_p_six__Constants swig_types[78]
-#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[79]
-#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[80]
-#define SWIGTYPE_p_six__CorrCoefs swig_types[81]
-#define SWIGTYPE_p_six__DESValidationException swig_types[82]
-#define SWIGTYPE_p_six__Data swig_types[83]
-#define SWIGTYPE_p_six__DataType swig_types[84]
-#define SWIGTYPE_p_six__DecimationMethod swig_types[85]
-#define SWIGTYPE_p_six__DecorrType swig_types[86]
-#define SWIGTYPE_p_six__DemodType swig_types[87]
-#define SWIGTYPE_p_six__DisplayType swig_types[88]
-#define SWIGTYPE_p_six__DualPolarizationType swig_types[89]
-#define SWIGTYPE_p_six__EarthModelType swig_types[90]
-#define SWIGTYPE_p_six__ErrorStatistics swig_types[91]
-#define SWIGTYPE_p_six__FFTSign swig_types[92]
-#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[93]
-#define SWIGTYPE_p_six__ImageFormationType swig_types[94]
-#define SWIGTYPE_p_six__Init swig_types[95]
-#define SWIGTYPE_p_six__IonoError swig_types[96]
-#define SWIGTYPE_p_six__LUT swig_types[97]
-#define SWIGTYPE_p_six__MagnificationMethod swig_types[98]
-#define SWIGTYPE_p_six__MatchCollect swig_types[99]
-#define SWIGTYPE_p_six__MatchInformation swig_types[100]
-#define SWIGTYPE_p_six__MatchType swig_types[101]
-#define SWIGTYPE_p_six__MissingRequiredException swig_types[102]
-#define SWIGTYPE_p_six__NoiseLevel swig_types[103]
-#define SWIGTYPE_p_six__Options swig_types[104]
-#define SWIGTYPE_p_six__OrientationType swig_types[105]
-#define SWIGTYPE_p_six__Parameter swig_types[106]
-#define SWIGTYPE_p_six__ParameterCollection swig_types[107]
-#define SWIGTYPE_p_six__PixelType swig_types[108]
-#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[109]
-#define SWIGTYPE_p_six__PolarizationType swig_types[110]
-#define SWIGTYPE_p_six__PosVelError swig_types[111]
-#define SWIGTYPE_p_six__ProjectionType swig_types[112]
-#define SWIGTYPE_p_six__RMAlgoType swig_types[113]
-#define SWIGTYPE_p_six__RadarModeType swig_types[114]
-#define SWIGTYPE_p_six__RadarSensor swig_types[115]
-#define SWIGTYPE_p_six__Radiometric swig_types[116]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[117]
-#define SWIGTYPE_p_six__RegionType swig_types[118]
-#define SWIGTYPE_p_six__RowColEnum swig_types[119]
-#define SWIGTYPE_p_six__SCP swig_types[120]
-#define SWIGTYPE_p_six__SCPType swig_types[121]
-#define SWIGTYPE_p_six__SideOfTrackType swig_types[122]
-#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[123]
-#define SWIGTYPE_p_six__TropoError swig_types[124]
-#define SWIGTYPE_p_six__UninitializedValueException swig_types[125]
-#define SWIGTYPE_p_six__XMLControl swig_types[126]
-#define SWIGTYPE_p_six__XMLControlCreator swig_types[127]
-#define SWIGTYPE_p_six__XMLControlRegistry swig_types[128]
-#define SWIGTYPE_p_six__XYZEnum swig_types[129]
-#define SWIGTYPE_p_size_t swig_types[130]
-#define SWIGTYPE_p_size_type swig_types[131]
-#define SWIGTYPE_p_ssize_t swig_types[132]
-#define SWIGTYPE_p_std__allocatorT_six__MatchCollect_t swig_types[133]
-#define SWIGTYPE_p_std__allocatorT_six__MatchType_t swig_types[134]
-#define SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t swig_types[135]
-#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[136]
-#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[137]
-#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[138]
-#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[139]
-#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[140]
-#define SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t swig_types[141]
-#define SWIGTYPE_p_std__auto_ptrT_six__MatchType_t swig_types[142]
-#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[143]
-#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[144]
-#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[145]
-#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[146]
-#define SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t swig_types[147]
-#define SWIGTYPE_p_std__invalid_argument swig_types[148]
-#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[149]
-#define SWIGTYPE_p_std__ostream swig_types[150]
-#define SWIGTYPE_p_std__string swig_types[151]
-#define SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t swig_types[152]
-#define SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t swig_types[153]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[154]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[155]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[156]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[157]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[158]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[159]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[160]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[161]
-#define SWIGTYPE_p_uint16_t swig_types[162]
-#define SWIGTYPE_p_uint32_t swig_types[163]
-#define SWIGTYPE_p_uint64_t swig_types[164]
-#define SWIGTYPE_p_uint8_t swig_types[165]
-#define SWIGTYPE_p_unsigned_char swig_types[166]
-#define SWIGTYPE_p_value_type swig_types[167]
-#define SWIGTYPE_p_xml__lite__Document swig_types[168]
-static swig_type_info *swig_types[170];
-static swig_module_info swig_module = {swig_types, 169, 0, 0, 0, 0};
+#define SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t swig_types[41]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t swig_types[42]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t swig_types[43]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t swig_types[44]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t swig_types[45]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t swig_types[46]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t swig_types[47]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__LUT_t swig_types[48]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t swig_types[49]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t swig_types[50]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t swig_types[51]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t swig_types[52]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t swig_types[53]
+#define SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t swig_types[54]
+#define SWIGTYPE_p_mt__SingletonT_six__XMLControlRegistry_true_t swig_types[55]
+#define SWIGTYPE_p_nitf_DateTime swig_types[56]
+#define SWIGTYPE_p_nitf__DateTime swig_types[57]
+#define SWIGTYPE_p_nitf__FileSecurity swig_types[58]
+#define SWIGTYPE_p_off_t swig_types[59]
+#define SWIGTYPE_p_p_PyObject swig_types[60]
+#define SWIGTYPE_p_pid_t swig_types[61]
+#define SWIGTYPE_p_scene__AngleMagnitude swig_types[62]
+#define SWIGTYPE_p_scene__Errors swig_types[63]
+#define SWIGTYPE_p_scene__FrameType swig_types[64]
+#define SWIGTYPE_p_scene__LatLon swig_types[65]
+#define SWIGTYPE_p_scene__LatLonAlt swig_types[66]
+#define SWIGTYPE_p_scene__PlaneProjectionModel swig_types[67]
+#define SWIGTYPE_p_six__AmplitudeTable swig_types[68]
+#define SWIGTYPE_p_six__AppliedType swig_types[69]
+#define SWIGTYPE_p_six__AutofocusType swig_types[70]
+#define SWIGTYPE_p_six__BooleanType swig_types[71]
+#define SWIGTYPE_p_six__ByteSwapping swig_types[72]
+#define SWIGTYPE_p_six__Classification swig_types[73]
+#define SWIGTYPE_p_six__CollectType swig_types[74]
+#define SWIGTYPE_p_six__CollectionInformation swig_types[75]
+#define SWIGTYPE_p_six__ComplexImageGridType swig_types[76]
+#define SWIGTYPE_p_six__ComplexImagePlaneType swig_types[77]
+#define SWIGTYPE_p_six__Components swig_types[78]
+#define SWIGTYPE_p_six__CompositeSCP swig_types[79]
+#define SWIGTYPE_p_six__Constants swig_types[80]
+#define SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t swig_types[81]
+#define SWIGTYPE_p_six__CornersT_scene__LatLon_t swig_types[82]
+#define SWIGTYPE_p_six__CorrCoefs swig_types[83]
+#define SWIGTYPE_p_six__DESValidationException swig_types[84]
+#define SWIGTYPE_p_six__Data swig_types[85]
+#define SWIGTYPE_p_six__DataType swig_types[86]
+#define SWIGTYPE_p_six__DecimationMethod swig_types[87]
+#define SWIGTYPE_p_six__DecorrType swig_types[88]
+#define SWIGTYPE_p_six__DemodType swig_types[89]
+#define SWIGTYPE_p_six__DisplayType swig_types[90]
+#define SWIGTYPE_p_six__DualPolarizationType swig_types[91]
+#define SWIGTYPE_p_six__EarthModelType swig_types[92]
+#define SWIGTYPE_p_six__ErrorStatistics swig_types[93]
+#define SWIGTYPE_p_six__FFTSign swig_types[94]
+#define SWIGTYPE_p_six__GeoInfo swig_types[95]
+#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[96]
+#define SWIGTYPE_p_six__ImageFormationType swig_types[97]
+#define SWIGTYPE_p_six__Init swig_types[98]
+#define SWIGTYPE_p_six__IonoError swig_types[99]
+#define SWIGTYPE_p_six__LUT swig_types[100]
+#define SWIGTYPE_p_six__MagnificationMethod swig_types[101]
+#define SWIGTYPE_p_six__MatchCollect swig_types[102]
+#define SWIGTYPE_p_six__MatchInformation swig_types[103]
+#define SWIGTYPE_p_six__MatchType swig_types[104]
+#define SWIGTYPE_p_six__MissingRequiredException swig_types[105]
+#define SWIGTYPE_p_six__NoiseLevel swig_types[106]
+#define SWIGTYPE_p_six__Options swig_types[107]
+#define SWIGTYPE_p_six__OrientationType swig_types[108]
+#define SWIGTYPE_p_six__Parameter swig_types[109]
+#define SWIGTYPE_p_six__ParameterCollection swig_types[110]
+#define SWIGTYPE_p_six__PixelType swig_types[111]
+#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[112]
+#define SWIGTYPE_p_six__PolarizationType swig_types[113]
+#define SWIGTYPE_p_six__PosVelError swig_types[114]
+#define SWIGTYPE_p_six__ProjectionType swig_types[115]
+#define SWIGTYPE_p_six__RMAlgoType swig_types[116]
+#define SWIGTYPE_p_six__RadarModeType swig_types[117]
+#define SWIGTYPE_p_six__RadarSensor swig_types[118]
+#define SWIGTYPE_p_six__Radiometric swig_types[119]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[120]
+#define SWIGTYPE_p_six__RegionType swig_types[121]
+#define SWIGTYPE_p_six__RowColEnum swig_types[122]
+#define SWIGTYPE_p_six__SCP swig_types[123]
+#define SWIGTYPE_p_six__SCPType swig_types[124]
+#define SWIGTYPE_p_six__SideOfTrackType swig_types[125]
+#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[126]
+#define SWIGTYPE_p_six__TropoError swig_types[127]
+#define SWIGTYPE_p_six__UninitializedValueException swig_types[128]
+#define SWIGTYPE_p_six__XMLControl swig_types[129]
+#define SWIGTYPE_p_six__XMLControlCreator swig_types[130]
+#define SWIGTYPE_p_six__XMLControlRegistry swig_types[131]
+#define SWIGTYPE_p_six__XYZEnum swig_types[132]
+#define SWIGTYPE_p_size_t swig_types[133]
+#define SWIGTYPE_p_size_type swig_types[134]
+#define SWIGTYPE_p_ssize_t swig_types[135]
+#define SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t swig_types[136]
+#define SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t swig_types[137]
+#define SWIGTYPE_p_std__allocatorT_six__MatchCollect_t swig_types[138]
+#define SWIGTYPE_p_std__allocatorT_six__MatchType_t swig_types[139]
+#define SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t swig_types[140]
+#define SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t swig_types[141]
+#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[142]
+#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[143]
+#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[144]
+#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[145]
+#define SWIGTYPE_p_std__auto_ptrT_six__GeoInfo_t swig_types[146]
+#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[147]
+#define SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t swig_types[148]
+#define SWIGTYPE_p_std__auto_ptrT_six__MatchType_t swig_types[149]
+#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[150]
+#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[151]
+#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[152]
+#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[153]
+#define SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t swig_types[154]
+#define SWIGTYPE_p_std__invalid_argument swig_types[155]
+#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[156]
+#define SWIGTYPE_p_std__ostream swig_types[157]
+#define SWIGTYPE_p_std__string swig_types[158]
+#define SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t swig_types[159]
+#define SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t swig_types[160]
+#define SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t swig_types[161]
+#define SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t swig_types[162]
+#define SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t swig_types[163]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[164]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[165]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[166]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[167]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[168]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[169]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[170]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[171]
+#define SWIGTYPE_p_uint16_t swig_types[172]
+#define SWIGTYPE_p_uint32_t swig_types[173]
+#define SWIGTYPE_p_uint64_t swig_types[174]
+#define SWIGTYPE_p_uint8_t swig_types[175]
+#define SWIGTYPE_p_unsigned_char swig_types[176]
+#define SWIGTYPE_p_value_type swig_types[177]
+#define SWIGTYPE_p_xml__lite__Document swig_types[178]
+static swig_type_info *swig_types[180];
+static swig_module_info swig_module = {swig_types, 179, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3797,10 +3807,6 @@ SWIG_AsVal_ptrdiff_t (PyObject * obj, ptrdiff_t *val)
 using std::ptrdiff_t;
 
 #include "import/six.h"
-
-/* this isn't imported by the above include */
-#include "six/Radiometric.h"
-#include "six/MatchInformation.h"
 
 #include "import/nitf.hpp"
 #include "Python.h"
@@ -5528,6 +5534,224 @@ SWIGINTERN std::vector< six::MatchType >::iterator std_vector_Sl_six_MatchType_S
 SWIGINTERN std::vector< six::MatchType >::iterator std_vector_Sl_six_MatchType_Sg__insert__SWIG_0(std::vector< six::MatchType > *self,std::vector< six::MatchType >::iterator pos,std::vector< six::MatchType >::value_type const &x){ return self->insert(pos, x); }
 SWIGINTERN void std_vector_Sl_six_MatchType_Sg__insert__SWIG_1(std::vector< six::MatchType > *self,std::vector< six::MatchType >::iterator pos,std::vector< six::MatchType >::size_type n,std::vector< six::MatchType >::value_type const &x){ self->insert(pos, n, x); }
 
+  namespace swig {
+    template <>  struct traits< mem::ScopedCopyablePtr< six::MatchType > > {
+      typedef pointer_category category;
+      static const char* type_name() { return"mem::ScopedCopyablePtr< six::MatchType >"; }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector< mem::ScopedCopyablePtr< six::MatchType >, std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "mem::ScopedCopyablePtr< six::MatchType >" "," "std::allocator< mem::ScopedCopyablePtr< six::MatchType > >" " >";
+	  }
+	};
+      }
+    
+SWIGINTERN swig::SwigPyIterator *std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__iterator(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN bool std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____nonzero__(std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN bool std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____bool__(std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____len__(std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *self){
+      return self->size();
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____getslice__(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j){
+      return swig::getslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____setslice____SWIG_0(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j){
+      swig::setslice(self, i, j, 1, std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >());
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____setslice____SWIG_1(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j,std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > const &v){
+      swig::setslice(self, i, j, 1, v);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____delslice__(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j){
+      swig::delslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____delitem____SWIG_0(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i){
+      swig::erase(self, swig::getpos(self, i));
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____getitem____SWIG_0(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return NULL;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >::difference_type id = i;
+      std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >::difference_type jd = j;
+      return swig::getslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____setitem____SWIG_0(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,PySliceObject *slice,std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > const &v){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >::difference_type id = i;
+      std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >::difference_type jd = j;
+      swig::setslice(self, id, jd, step, v);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____setitem____SWIG_1(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >::difference_type id = i;
+      std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____delitem____SWIG_1(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >::difference_type id = i;
+      std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____getitem____SWIG_1(std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i){
+      return *(swig::cgetpos(self, i));
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____setitem____SWIG_2(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &x){
+      *(swig::getpos(self,i)) = x;
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__pop(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self){
+      if (self->size() == 0)
+	throw std::out_of_range("pop from empty container");
+      std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >::value_type x = self->back();
+      self->pop_back();
+      return x;
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__append(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &x){
+      self->push_back(x);
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__erase__SWIG_0(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__erase__SWIG_1(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator first,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__insert__SWIG_0(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__insert__SWIG_1(std::vector< mem::ScopedCopyablePtr< six::MatchType > > *self,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &x){ self->insert(pos, n, x); }
+
+  namespace swig {
+    template <>  struct traits< mem::ScopedCopyablePtr< six::GeoInfo > > {
+      typedef pointer_category category;
+      static const char* type_name() { return"mem::ScopedCopyablePtr< six::GeoInfo >"; }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector< mem::ScopedCopyablePtr< six::GeoInfo >, std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "mem::ScopedCopyablePtr< six::GeoInfo >" "," "std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > >" " >";
+	  }
+	};
+      }
+    
+SWIGINTERN swig::SwigPyIterator *std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__iterator(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN bool std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____nonzero__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN bool std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____bool__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____len__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *self){
+      return self->size();
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____getslice__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j){
+      return swig::getslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____setslice____SWIG_0(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j){
+      swig::setslice(self, i, j, 1, std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >());
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____setslice____SWIG_1(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j,std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > const &v){
+      swig::setslice(self, i, j, 1, v);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____delslice__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j){
+      swig::delslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____delitem____SWIG_0(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i){
+      swig::erase(self, swig::getpos(self, i));
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____getitem____SWIG_0(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return NULL;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >::difference_type id = i;
+      std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >::difference_type jd = j;
+      return swig::getslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____setitem____SWIG_0(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,PySliceObject *slice,std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > const &v){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >::difference_type id = i;
+      std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >::difference_type jd = j;
+      swig::setslice(self, id, jd, step, v);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____setitem____SWIG_1(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >::difference_type id = i;
+      std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____delitem____SWIG_1(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >::difference_type id = i;
+      std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____getitem____SWIG_1(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i){
+      return *(swig::cgetpos(self, i));
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____setitem____SWIG_2(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &x){
+      *(swig::getpos(self,i)) = x;
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__pop(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self){
+      if (self->size() == 0)
+	throw std::out_of_range("pop from empty container");
+      std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >::value_type x = self->back();
+      self->pop_back();
+      return x;
+    }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__append(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &x){
+      self->push_back(x);
+    }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__erase__SWIG_0(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__erase__SWIG_1(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator first,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__insert__SWIG_0(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__insert__SWIG_1(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *self,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &x){ self->insert(pos, n, x); }
+
 mem::ScopedCopyablePtr< six::Radiometric > makeScopedCopyableRadiometric()
 {
     return mem::ScopedCopyablePtr< six::Radiometric >(new six::Radiometric ());
@@ -5555,6 +5779,12 @@ mem::ScopedCopyablePtr< six::CorrCoefs > makeScopedCopyableCorrCoefs()
 mem::ScopedCopyablePtr< six::PosVelError > makeScopedCopyablePosVelError()
 {
     return mem::ScopedCopyablePtr< six::PosVelError >(new six::PosVelError ());
+} 
+
+
+mem::ScopedCopyablePtr< six::GeoInfo > makeScopedCopyableGeoInfo()
+{
+    return mem::ScopedCopyablePtr< six::GeoInfo >(new six::GeoInfo ());
 } 
 
 
@@ -5604,6 +5834,12 @@ SWIGINTERN void mem_ScopedCloneablePtr_Sl_six_AmplitudeTable_Sg____setitem__(mem
 mem::ScopedCloneablePtr< six::AmplitudeTable > makeScopedCloneableAmplitudeTable()
 {
     return mem::ScopedCloneablePtr< six::AmplitudeTable >(new six::AmplitudeTable ());
+} 
+
+
+mem::ScopedCloneablePtr< six::CollectionInformation > makeScopedCloneableCollectionInformation()
+{
+    return mem::ScopedCloneablePtr< six::CollectionInformation >(new six::CollectionInformation ());
 } 
 
 #ifdef __cplusplus
@@ -6467,13 +6703,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      try {
-        result = (nitf::DateTime *)new nitf::DateTime();
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      result = (nitf::DateTime *)new nitf::DateTime();
     } 
     catch (const std::exception& e)
     {
@@ -6525,13 +6755,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      try {
-        result = (nitf::DateTime *)new nitf::DateTime(arg1);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      result = (nitf::DateTime *)new nitf::DateTime(arg1);
     } 
     catch (const std::exception& e)
     {
@@ -6583,13 +6807,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_2(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      try {
-        result = (nitf::DateTime *)new nitf::DateTime(arg1);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      result = (nitf::DateTime *)new nitf::DateTime(arg1);
     } 
     catch (const std::exception& e)
     {
@@ -6660,13 +6878,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_3(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      try {
-        result = (nitf::DateTime *)new nitf::DateTime((std::string const &)*arg1,(std::string const &)*arg2);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      result = (nitf::DateTime *)new nitf::DateTime((std::string const &)*arg1,(std::string const &)*arg2);
     } 
     catch (const std::exception& e)
     {
@@ -7917,13 +8129,7 @@ SWIGINTERN PyObject *_wrap_DateTime_format__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      try {
-        ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2,arg3,arg4);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2,arg3,arg4);
     } 
     catch (const std::exception& e)
     {
@@ -8004,13 +8210,7 @@ SWIGINTERN PyObject *_wrap_DateTime_format__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      try {
-        ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2,*arg3);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2,*arg3);
     } 
     catch (const std::exception& e)
     {
@@ -8078,13 +8278,7 @@ SWIGINTERN PyObject *_wrap_DateTime_format__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      try {
-        result = ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2);
-      }
-      catch(nitf::NITFException &_e) {
-        SWIG_Python_Raise(SWIG_NewPointerObj((new nitf::NITFException(static_cast< const nitf::NITFException& >(_e))),SWIGTYPE_p_nitf__NITFException,SWIG_POINTER_OWN), "nitf::NITFException", SWIGTYPE_p_nitf__NITFException); SWIG_fail;
-      }
-      
+      result = ((nitf::DateTime const *)arg1)->format((std::string const &)*arg2);
     } 
     catch (const std::exception& e)
     {
@@ -47588,6 +47782,1449 @@ SWIGINTERN PyObject *ParameterCollection_swigregister(PyObject *SWIGUNUSEDPARM(s
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_CollectionInformation_collectorName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_collectorName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_collectorName_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_collectorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_collectorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->collectorName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_collectorName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_collectorName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_collectorName_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->collectorName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_illuminatorName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_illuminatorName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_illuminatorName_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_illuminatorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_illuminatorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->illuminatorName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_illuminatorName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_illuminatorName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_illuminatorName_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->illuminatorName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_coreName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_coreName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_coreName_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_coreName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_coreName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->coreName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_coreName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_coreName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_coreName_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->coreName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_collectType_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  six::CollectType *arg2 = (six::CollectType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_collectType_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_collectType_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__CollectType, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_collectType_set" "', argument " "2"" of type '" "six::CollectType *""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectType * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->collectType = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_collectType_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_collectType_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_collectType_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectType *)& ((arg1)->collectType);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_radarMode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  six::RadarModeType *arg2 = (six::RadarModeType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_radarMode_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_radarMode_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__RadarModeType, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_radarMode_set" "', argument " "2"" of type '" "six::RadarModeType *""'"); 
+  }
+  arg2 = reinterpret_cast< six::RadarModeType * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->radarMode = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_radarMode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::RadarModeType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_radarMode_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_radarMode_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (six::RadarModeType *)& ((arg1)->radarMode);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarModeType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_radarModeID_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_radarModeID_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_radarModeID_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_radarModeID_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_radarModeID_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->radarModeID = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_radarModeID_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_radarModeID_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_radarModeID_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->radarModeID);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_releaseInfo_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_releaseInfo_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_releaseInfo_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_releaseInfo_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_releaseInfo_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->releaseInfo = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_releaseInfo_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_releaseInfo_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_releaseInfo_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->releaseInfo);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_countryCodes_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = (std::vector< std::string,std::allocator< std::string > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_countryCodes_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_countryCodes_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_countryCodes_set" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->countryCodes = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_countryCodes_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_countryCodes_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_countryCodes_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< std::string,std::allocator< std::string > > *)& ((arg1)->countryCodes);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_parameters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  six::ParameterCollection *arg2 = (six::ParameterCollection *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_parameters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_parameters_set" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_parameters_set" "', argument " "2"" of type '" "six::ParameterCollection *""'"); 
+  }
+  arg2 = reinterpret_cast< six::ParameterCollection * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->parameters = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_parameters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::ParameterCollection *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_parameters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_parameters_get" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (six::ParameterCollection *)& ((arg1)->parameters);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_CollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_CollectionInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::CollectionInformation *)new six::CollectionInformation();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_CollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_CollectionInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_CollectionInformation" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_clone" "', argument " "1"" of type '" "six::CollectionInformation const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectionInformation *)((six::CollectionInformation const *)arg1)->clone();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  six::CollectionInformation *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation___eq__" "', argument " "1"" of type '" "six::CollectionInformation const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__CollectionInformation,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation___eq__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation___eq__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectionInformation * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::CollectionInformation const *)arg1)->operator ==((six::CollectionInformation const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  six::CollectionInformation *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation___ne__" "', argument " "1"" of type '" "six::CollectionInformation const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__CollectionInformation,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation___ne__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation___ne__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectionInformation * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::CollectionInformation const *)arg1)->operator !=((six::CollectionInformation const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_getClassificationLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:CollectionInformation_getClassificationLevel",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_getClassificationLevel" "', argument " "1"" of type '" "six::CollectionInformation const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = ((six::CollectionInformation const *)arg1)->getClassificationLevel();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CollectionInformation_setClassificationLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CollectionInformation_setClassificationLevel",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CollectionInformation_setClassificationLevel" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CollectionInformation_setClassificationLevel" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CollectionInformation_setClassificationLevel" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      (arg1)->setClassificationLevel((std::string const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *CollectionInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_six__CollectionInformation, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_delete_Classification(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Classification *arg1 = (six::Classification *) 0 ;
@@ -55101,1571 +56738,6 @@ SWIGINTERN PyObject *ErrorStatistics_swigregister(PyObject *SWIGUNUSEDPARM(self)
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_new_NoiseLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::NoiseLevel *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_NoiseLevel")) SWIG_fail;
-  {
-    try
-    {
-      result = (six::NoiseLevel *)new six::NoiseLevel();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__NoiseLevel, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_NoiseLevel_noiseType_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
-  std::string *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:NoiseLevel_noiseType_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel_noiseType_set" "', argument " "1"" of type '" "six::NoiseLevel *""'"); 
-  }
-  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NoiseLevel_noiseType_set" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NoiseLevel_noiseType_set" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  {
-    try
-    {
-      if (arg1) (arg1)->noiseType = *arg2;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_NoiseLevel_noiseType_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::string *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:NoiseLevel_noiseType_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel_noiseType_get" "', argument " "1"" of type '" "six::NoiseLevel *""'"); 
-  }
-  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
-  {
-    try
-    {
-      result = (std::string *) & ((arg1)->noiseType);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_NoiseLevel_noisePoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
-  six::Poly2D *arg2 = (six::Poly2D *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:NoiseLevel_noisePoly_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel_noisePoly_set" "', argument " "1"" of type '" "six::NoiseLevel *""'"); 
-  }
-  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NoiseLevel_noisePoly_set" "', argument " "2"" of type '" "six::Poly2D *""'"); 
-  }
-  arg2 = reinterpret_cast< six::Poly2D * >(argp2);
-  {
-    try
-    {
-      if (arg1) (arg1)->noisePoly = *arg2;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_NoiseLevel_noisePoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  six::Poly2D *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:NoiseLevel_noisePoly_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel_noisePoly_get" "', argument " "1"" of type '" "six::NoiseLevel *""'"); 
-  }
-  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
-  {
-    try
-    {
-      result = (six::Poly2D *)& ((arg1)->noisePoly);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_NoiseLevel___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
-  six::NoiseLevel *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:NoiseLevel___eq__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel___eq__" "', argument " "1"" of type '" "six::NoiseLevel const *""'"); 
-  }
-  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__NoiseLevel,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NoiseLevel___eq__" "', argument " "2"" of type '" "six::NoiseLevel const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NoiseLevel___eq__" "', argument " "2"" of type '" "six::NoiseLevel const &""'"); 
-  }
-  arg2 = reinterpret_cast< six::NoiseLevel * >(argp2);
-  {
-    try
-    {
-      result = (bool)((six::NoiseLevel const *)arg1)->operator ==((six::NoiseLevel const &)*arg2);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_NoiseLevel___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
-  six::NoiseLevel *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:NoiseLevel___ne__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel___ne__" "', argument " "1"" of type '" "six::NoiseLevel const *""'"); 
-  }
-  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__NoiseLevel,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NoiseLevel___ne__" "', argument " "2"" of type '" "six::NoiseLevel const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NoiseLevel___ne__" "', argument " "2"" of type '" "six::NoiseLevel const &""'"); 
-  }
-  arg2 = reinterpret_cast< six::NoiseLevel * >(argp2);
-  {
-    try
-    {
-      result = (bool)((six::NoiseLevel const *)arg1)->operator !=((six::NoiseLevel const &)*arg2);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_NoiseLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_NoiseLevel",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_NoiseLevel" "', argument " "1"" of type '" "six::NoiseLevel *""'"); 
-  }
-  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
-  {
-    try
-    {
-      delete arg1;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *NoiseLevel_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_six__NoiseLevel, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
-SWIGINTERN int Swig_var_Radiometric_NL_ABSOLUTE_set(PyObject *) {
-  SWIG_Error(SWIG_AttributeError,"Variable Radiometric_NL_ABSOLUTE is read-only.");
-  return 1;
-}
-
-
-SWIGINTERN PyObject *Swig_var_Radiometric_NL_ABSOLUTE_get(void) {
-  PyObject *pyobj = 0;
-  
-  {
-    try
-    {
-      pyobj = SWIG_FromCharPtr(six::Radiometric::NL_ABSOLUTE);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  return pyobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN int Swig_var_Radiometric_NL_RELATIVE_set(PyObject *) {
-  SWIG_Error(SWIG_AttributeError,"Variable Radiometric_NL_RELATIVE is read-only.");
-  return 1;
-}
-
-
-SWIGINTERN PyObject *Swig_var_Radiometric_NL_RELATIVE_get(void) {
-  PyObject *pyobj = 0;
-  
-  {
-    try
-    {
-      pyobj = SWIG_FromCharPtr(six::Radiometric::NL_RELATIVE);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  return pyobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Radiometric(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_Radiometric")) SWIG_fail;
-  {
-    try
-    {
-      result = (six::Radiometric *)new six::Radiometric();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Radiometric, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_noiseLevel_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  six::NoiseLevel *arg2 = (six::NoiseLevel *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_noiseLevel_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_noiseLevel_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_noiseLevel_set" "', argument " "2"" of type '" "six::NoiseLevel *""'"); 
-  }
-  arg2 = reinterpret_cast< six::NoiseLevel * >(argp2);
-  {
-    try
-    {
-      if (arg1) (arg1)->noiseLevel = *arg2;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_noiseLevel_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  six::NoiseLevel *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_noiseLevel_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_noiseLevel_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  {
-    try
-    {
-      result = (six::NoiseLevel *)& ((arg1)->noiseLevel);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_rcsSFPoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  six::Poly2D *arg2 = (six::Poly2D *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_rcsSFPoly_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_rcsSFPoly_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_rcsSFPoly_set" "', argument " "2"" of type '" "six::Poly2D *""'"); 
-  }
-  arg2 = reinterpret_cast< six::Poly2D * >(argp2);
-  {
-    try
-    {
-      if (arg1) (arg1)->rcsSFPoly = *arg2;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_rcsSFPoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  six::Poly2D *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_rcsSFPoly_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_rcsSFPoly_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  {
-    try
-    {
-      result = (six::Poly2D *)& ((arg1)->rcsSFPoly);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_betaZeroSFPoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  six::Poly2D *arg2 = (six::Poly2D *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_betaZeroSFPoly_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_betaZeroSFPoly_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_betaZeroSFPoly_set" "', argument " "2"" of type '" "six::Poly2D *""'"); 
-  }
-  arg2 = reinterpret_cast< six::Poly2D * >(argp2);
-  {
-    try
-    {
-      if (arg1) (arg1)->betaZeroSFPoly = *arg2;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_betaZeroSFPoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  six::Poly2D *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_betaZeroSFPoly_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_betaZeroSFPoly_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  {
-    try
-    {
-      result = (six::Poly2D *)& ((arg1)->betaZeroSFPoly);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFPoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  six::Poly2D *arg2 = (six::Poly2D *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_sigmaZeroSFPoly_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_sigmaZeroSFPoly_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_sigmaZeroSFPoly_set" "', argument " "2"" of type '" "six::Poly2D *""'"); 
-  }
-  arg2 = reinterpret_cast< six::Poly2D * >(argp2);
-  {
-    try
-    {
-      if (arg1) (arg1)->sigmaZeroSFPoly = *arg2;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFPoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  six::Poly2D *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_sigmaZeroSFPoly_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_sigmaZeroSFPoly_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  {
-    try
-    {
-      result = (six::Poly2D *)& ((arg1)->sigmaZeroSFPoly);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFIncidenceMap_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  six::AppliedType *arg2 = (six::AppliedType *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_sigmaZeroSFIncidenceMap_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_sigmaZeroSFIncidenceMap_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__AppliedType, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_sigmaZeroSFIncidenceMap_set" "', argument " "2"" of type '" "six::AppliedType *""'"); 
-  }
-  arg2 = reinterpret_cast< six::AppliedType * >(argp2);
-  {
-    try
-    {
-      if (arg1) (arg1)->sigmaZeroSFIncidenceMap = *arg2;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFIncidenceMap_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  six::AppliedType *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_sigmaZeroSFIncidenceMap_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_sigmaZeroSFIncidenceMap_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  {
-    try
-    {
-      result = (six::AppliedType *)& ((arg1)->sigmaZeroSFIncidenceMap);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AppliedType, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFPoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  six::Poly2D *arg2 = (six::Poly2D *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_gammaZeroSFPoly_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_gammaZeroSFPoly_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_gammaZeroSFPoly_set" "', argument " "2"" of type '" "six::Poly2D *""'"); 
-  }
-  arg2 = reinterpret_cast< six::Poly2D * >(argp2);
-  {
-    try
-    {
-      if (arg1) (arg1)->gammaZeroSFPoly = *arg2;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFPoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  six::Poly2D *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_gammaZeroSFPoly_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_gammaZeroSFPoly_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  {
-    try
-    {
-      result = (six::Poly2D *)& ((arg1)->gammaZeroSFPoly);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFIncidenceMap_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  six::AppliedType *arg2 = (six::AppliedType *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_gammaZeroSFIncidenceMap_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_gammaZeroSFIncidenceMap_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__AppliedType, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_gammaZeroSFIncidenceMap_set" "', argument " "2"" of type '" "six::AppliedType *""'"); 
-  }
-  arg2 = reinterpret_cast< six::AppliedType * >(argp2);
-  {
-    try
-    {
-      if (arg1) (arg1)->gammaZeroSFIncidenceMap = *arg2;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFIncidenceMap_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  six::AppliedType *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_gammaZeroSFIncidenceMap_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_gammaZeroSFIncidenceMap_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  {
-    try
-    {
-      result = (six::AppliedType *)& ((arg1)->gammaZeroSFIncidenceMap);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AppliedType, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  six::Radiometric *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric___eq__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric___eq__" "', argument " "1"" of type '" "six::Radiometric const *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__Radiometric,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric___eq__" "', argument " "2"" of type '" "six::Radiometric const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Radiometric___eq__" "', argument " "2"" of type '" "six::Radiometric const &""'"); 
-  }
-  arg2 = reinterpret_cast< six::Radiometric * >(argp2);
-  {
-    try
-    {
-      result = (bool)((six::Radiometric const *)arg1)->operator ==((six::Radiometric const &)*arg2);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Radiometric___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  six::Radiometric *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric___ne__",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric___ne__" "', argument " "1"" of type '" "six::Radiometric const *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__Radiometric,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric___ne__" "', argument " "2"" of type '" "six::Radiometric const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Radiometric___ne__" "', argument " "2"" of type '" "six::Radiometric const &""'"); 
-  }
-  arg2 = reinterpret_cast< six::Radiometric * >(argp2);
-  {
-    try
-    {
-      result = (bool)((six::Radiometric const *)arg1)->operator !=((six::Radiometric const &)*arg2);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_Radiometric(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_Radiometric",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Radiometric" "', argument " "1"" of type '" "six::Radiometric *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
-  {
-    try
-    {
-      delete arg1;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *Radiometric_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_six__Radiometric, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
 SWIGINTERN PyObject *_wrap_new_MatchCollect(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::MatchCollect *result = 0 ;
@@ -58501,6 +58573,1571 @@ SWIGINTERN PyObject *MatchInformation_swigregister(PyObject *SWIGUNUSEDPARM(self
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_NoiseLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::NoiseLevel *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_NoiseLevel")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::NoiseLevel *)new six::NoiseLevel();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__NoiseLevel, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NoiseLevel_noiseType_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:NoiseLevel_noiseType_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel_noiseType_set" "', argument " "1"" of type '" "six::NoiseLevel *""'"); 
+  }
+  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NoiseLevel_noiseType_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NoiseLevel_noiseType_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->noiseType = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NoiseLevel_noiseType_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:NoiseLevel_noiseType_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel_noiseType_get" "', argument " "1"" of type '" "six::NoiseLevel *""'"); 
+  }
+  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->noiseType);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NoiseLevel_noisePoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
+  six::Poly2D *arg2 = (six::Poly2D *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:NoiseLevel_noisePoly_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel_noisePoly_set" "', argument " "1"" of type '" "six::NoiseLevel *""'"); 
+  }
+  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NoiseLevel_noisePoly_set" "', argument " "2"" of type '" "six::Poly2D *""'"); 
+  }
+  arg2 = reinterpret_cast< six::Poly2D * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->noisePoly = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NoiseLevel_noisePoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::Poly2D *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:NoiseLevel_noisePoly_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel_noisePoly_get" "', argument " "1"" of type '" "six::NoiseLevel *""'"); 
+  }
+  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
+  {
+    try
+    {
+      result = (six::Poly2D *)& ((arg1)->noisePoly);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NoiseLevel___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
+  six::NoiseLevel *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:NoiseLevel___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel___eq__" "', argument " "1"" of type '" "six::NoiseLevel const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__NoiseLevel,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NoiseLevel___eq__" "', argument " "2"" of type '" "six::NoiseLevel const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NoiseLevel___eq__" "', argument " "2"" of type '" "six::NoiseLevel const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::NoiseLevel * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::NoiseLevel const *)arg1)->operator ==((six::NoiseLevel const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NoiseLevel___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
+  six::NoiseLevel *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:NoiseLevel___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NoiseLevel___ne__" "', argument " "1"" of type '" "six::NoiseLevel const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__NoiseLevel,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NoiseLevel___ne__" "', argument " "2"" of type '" "six::NoiseLevel const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NoiseLevel___ne__" "', argument " "2"" of type '" "six::NoiseLevel const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::NoiseLevel * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::NoiseLevel const *)arg1)->operator !=((six::NoiseLevel const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_NoiseLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::NoiseLevel *arg1 = (six::NoiseLevel *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_NoiseLevel",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__NoiseLevel, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_NoiseLevel" "', argument " "1"" of type '" "six::NoiseLevel *""'"); 
+  }
+  arg1 = reinterpret_cast< six::NoiseLevel * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *NoiseLevel_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_six__NoiseLevel, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN int Swig_var_Radiometric_NL_ABSOLUTE_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable Radiometric_NL_ABSOLUTE is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_Radiometric_NL_ABSOLUTE_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+    try
+    {
+      pyobj = SWIG_FromCharPtr(six::Radiometric::NL_ABSOLUTE);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  return pyobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN int Swig_var_Radiometric_NL_RELATIVE_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable Radiometric_NL_RELATIVE is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_Radiometric_NL_RELATIVE_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+    try
+    {
+      pyobj = SWIG_FromCharPtr(six::Radiometric::NL_RELATIVE);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  return pyobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Radiometric(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_Radiometric")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::Radiometric *)new six::Radiometric();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Radiometric, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_noiseLevel_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  six::NoiseLevel *arg2 = (six::NoiseLevel *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_noiseLevel_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_noiseLevel_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_noiseLevel_set" "', argument " "2"" of type '" "six::NoiseLevel *""'"); 
+  }
+  arg2 = reinterpret_cast< six::NoiseLevel * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->noiseLevel = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_noiseLevel_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::NoiseLevel *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_noiseLevel_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_noiseLevel_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  {
+    try
+    {
+      result = (six::NoiseLevel *)& ((arg1)->noiseLevel);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_rcsSFPoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  six::Poly2D *arg2 = (six::Poly2D *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_rcsSFPoly_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_rcsSFPoly_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_rcsSFPoly_set" "', argument " "2"" of type '" "six::Poly2D *""'"); 
+  }
+  arg2 = reinterpret_cast< six::Poly2D * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->rcsSFPoly = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_rcsSFPoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::Poly2D *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_rcsSFPoly_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_rcsSFPoly_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  {
+    try
+    {
+      result = (six::Poly2D *)& ((arg1)->rcsSFPoly);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_betaZeroSFPoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  six::Poly2D *arg2 = (six::Poly2D *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_betaZeroSFPoly_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_betaZeroSFPoly_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_betaZeroSFPoly_set" "', argument " "2"" of type '" "six::Poly2D *""'"); 
+  }
+  arg2 = reinterpret_cast< six::Poly2D * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->betaZeroSFPoly = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_betaZeroSFPoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::Poly2D *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_betaZeroSFPoly_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_betaZeroSFPoly_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  {
+    try
+    {
+      result = (six::Poly2D *)& ((arg1)->betaZeroSFPoly);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFPoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  six::Poly2D *arg2 = (six::Poly2D *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_sigmaZeroSFPoly_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_sigmaZeroSFPoly_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_sigmaZeroSFPoly_set" "', argument " "2"" of type '" "six::Poly2D *""'"); 
+  }
+  arg2 = reinterpret_cast< six::Poly2D * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->sigmaZeroSFPoly = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFPoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::Poly2D *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_sigmaZeroSFPoly_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_sigmaZeroSFPoly_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  {
+    try
+    {
+      result = (six::Poly2D *)& ((arg1)->sigmaZeroSFPoly);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFIncidenceMap_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  six::AppliedType *arg2 = (six::AppliedType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_sigmaZeroSFIncidenceMap_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_sigmaZeroSFIncidenceMap_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__AppliedType, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_sigmaZeroSFIncidenceMap_set" "', argument " "2"" of type '" "six::AppliedType *""'"); 
+  }
+  arg2 = reinterpret_cast< six::AppliedType * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->sigmaZeroSFIncidenceMap = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFIncidenceMap_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::AppliedType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_sigmaZeroSFIncidenceMap_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_sigmaZeroSFIncidenceMap_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  {
+    try
+    {
+      result = (six::AppliedType *)& ((arg1)->sigmaZeroSFIncidenceMap);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AppliedType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFPoly_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  six::Poly2D *arg2 = (six::Poly2D *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_gammaZeroSFPoly_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_gammaZeroSFPoly_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_gammaZeroSFPoly_set" "', argument " "2"" of type '" "six::Poly2D *""'"); 
+  }
+  arg2 = reinterpret_cast< six::Poly2D * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->gammaZeroSFPoly = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFPoly_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::Poly2D *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_gammaZeroSFPoly_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_gammaZeroSFPoly_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  {
+    try
+    {
+      result = (six::Poly2D *)& ((arg1)->gammaZeroSFPoly);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFIncidenceMap_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  six::AppliedType *arg2 = (six::AppliedType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric_gammaZeroSFIncidenceMap_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_gammaZeroSFIncidenceMap_set" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__AppliedType, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric_gammaZeroSFIncidenceMap_set" "', argument " "2"" of type '" "six::AppliedType *""'"); 
+  }
+  arg2 = reinterpret_cast< six::AppliedType * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->gammaZeroSFIncidenceMap = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFIncidenceMap_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::AppliedType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Radiometric_gammaZeroSFIncidenceMap_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric_gammaZeroSFIncidenceMap_get" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  {
+    try
+    {
+      result = (six::AppliedType *)& ((arg1)->gammaZeroSFIncidenceMap);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AppliedType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  six::Radiometric *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric___eq__" "', argument " "1"" of type '" "six::Radiometric const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__Radiometric,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric___eq__" "', argument " "2"" of type '" "six::Radiometric const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Radiometric___eq__" "', argument " "2"" of type '" "six::Radiometric const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::Radiometric * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::Radiometric const *)arg1)->operator ==((six::Radiometric const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Radiometric___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  six::Radiometric *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Radiometric___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Radiometric___ne__" "', argument " "1"" of type '" "six::Radiometric const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__Radiometric,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Radiometric___ne__" "', argument " "2"" of type '" "six::Radiometric const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Radiometric___ne__" "', argument " "2"" of type '" "six::Radiometric const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::Radiometric * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::Radiometric const *)arg1)->operator !=((six::Radiometric const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_Radiometric(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::Radiometric *arg1 = (six::Radiometric *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_Radiometric",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Radiometric, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Radiometric" "', argument " "1"" of type '" "six::Radiometric *""'"); 
+  }
+  arg1 = reinterpret_cast< six::Radiometric * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *Radiometric_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_six__Radiometric, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_delete_Data(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Data *arg1 = (six::Data *) 0 ;
@@ -60226,6 +61863,82 @@ fail:
     "    six::XMLControl::setLogger(logging::Logger *,bool)\n"
     "    six::XMLControl::setLogger(logging::Logger *)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_XMLControl_validate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
+  logging::Logger *arg3 = (logging::Logger *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:XMLControl_validate",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLControl_validate" "', argument " "1"" of type '" "xml::lite::Document const *""'"); 
+  }
+  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
+  {
+    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
+    res2 = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLControl_validate" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControl_validate" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControl_validate" "', argument " "3"" of type '" "logging::Logger *""'"); 
+  }
+  arg3 = reinterpret_cast< logging::Logger * >(argp3);
+  {
+    try
+    {
+      six::XMLControl::validate((xml::lite::Document const *)arg1,(std::vector< std::string,std::allocator< std::string > > const &)*arg2,arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
 }
 
 
@@ -63694,6 +65407,757 @@ fail:
     "    six::toValidXMLString(six::Data const *,std::vector< std::string,std::allocator< std::string > > const &,logging::Logger *,six::XMLControlRegistry const *)\n"
     "    six::toValidXMLString(six::Data const *,std::vector< std::string,std::allocator< std::string > > const &,logging::Logger *)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_GeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_GeoInfo")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::GeoInfo *)new six::GeoInfo();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__GeoInfo, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_GeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_GeoInfo",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_GeoInfo" "', argument " "1"" of type '" "six::GeoInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoInfo_name_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoInfo_name_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoInfo_name_set" "', argument " "1"" of type '" "six::GeoInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoInfo_name_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GeoInfo_name_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (arg1)->name = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoInfo_name_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GeoInfo_name_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoInfo_name_get" "', argument " "1"" of type '" "six::GeoInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((arg1)->name);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoInfo_geoInfos_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *arg2 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoInfo_geoInfos_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoInfo_geoInfos_set" "', argument " "1"" of type '" "six::GeoInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoInfo_geoInfos_set" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->geoInfos = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoInfo_geoInfos_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GeoInfo_geoInfos_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoInfo_geoInfos_get" "', argument " "1"" of type '" "six::GeoInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *)& ((arg1)->geoInfos);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoInfo_desc_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  six::ParameterCollection *arg2 = (six::ParameterCollection *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoInfo_desc_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoInfo_desc_set" "', argument " "1"" of type '" "six::GeoInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoInfo_desc_set" "', argument " "2"" of type '" "six::ParameterCollection *""'"); 
+  }
+  arg2 = reinterpret_cast< six::ParameterCollection * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->desc = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoInfo_desc_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::ParameterCollection *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GeoInfo_desc_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoInfo_desc_get" "', argument " "1"" of type '" "six::GeoInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  {
+    try
+    {
+      result = (six::ParameterCollection *)& ((arg1)->desc);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoInfo_geometryLatLon_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  std::vector< six::LatLon,std::allocator< six::LatLon > > *arg2 = (std::vector< six::LatLon,std::allocator< six::LatLon > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoInfo_geometryLatLon_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoInfo_geometryLatLon_set" "', argument " "1"" of type '" "six::GeoInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoInfo_geometryLatLon_set" "', argument " "2"" of type '" "std::vector< six::LatLon,std::allocator< six::LatLon > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::LatLon,std::allocator< six::LatLon > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->geometryLatLon = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoInfo_geometryLatLon_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::LatLon,std::allocator< six::LatLon > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GeoInfo_geometryLatLon_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoInfo_geometryLatLon_get" "', argument " "1"" of type '" "six::GeoInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::LatLon,std::allocator< six::LatLon > > *)& ((arg1)->geometryLatLon);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoInfo___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  six::GeoInfo *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoInfo___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoInfo___eq__" "', argument " "1"" of type '" "six::GeoInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__GeoInfo,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoInfo___eq__" "', argument " "2"" of type '" "six::GeoInfo const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GeoInfo___eq__" "', argument " "2"" of type '" "six::GeoInfo const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::GeoInfo * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::GeoInfo const *)arg1)->operator ==((six::GeoInfo const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoInfo___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  six::GeoInfo *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoInfo___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoInfo___ne__" "', argument " "1"" of type '" "six::GeoInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__GeoInfo,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoInfo___ne__" "', argument " "2"" of type '" "six::GeoInfo const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GeoInfo___ne__" "', argument " "2"" of type '" "six::GeoInfo const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::GeoInfo * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::GeoInfo const *)arg1)->operator !=((six::GeoInfo const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *GeoInfo_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_six__GeoInfo, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap___lshift__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::ostream *arg1 = 0 ;
+  six::GeoInfo *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::ostream *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:__lshift__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__ostream,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "__lshift__" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "__lshift__" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  arg1 = reinterpret_cast< std::ostream * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__GeoInfo,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "__lshift__" "', argument " "2"" of type '" "six::GeoInfo const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "__lshift__" "', argument " "2"" of type '" "six::GeoInfo const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::GeoInfo * >(argp2);
+  {
+    try
+    {
+      result = (std::ostream *) &six::operator <<(*arg1,(six::GeoInfo const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__ostream, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -71868,6 +74332,6478 @@ SWIGINTERN PyObject *VectorMatchType_swigregister(PyObject *SWIGUNUSEDPARM(self)
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_iterator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_iterator" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = (swig::SwigPyIterator *)std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__iterator(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___nonzero__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____nonzero__((std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType___bool__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___bool__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____bool__((std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType___len__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___len__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____len__((std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableMatchType___getslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___getslice__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableMatchType___getslice__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorScopedCopyableMatchType___getslice__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        result = (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *)std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____getslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableMatchType___setslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___setslice__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableMatchType___setslice__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorScopedCopyableMatchType___setslice__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____setslice____SWIG_0(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type arg3 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorScopedCopyableMatchType___setslice__",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___setslice__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableMatchType___setslice__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorScopedCopyableMatchType___setslice__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type >(val3);
+  {
+    std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *ptr = (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorScopedCopyableMatchType___setslice__" "', argument " "4"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableMatchType___setslice__" "', argument " "4"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____setslice____SWIG_1(arg1,arg2,arg3,(std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > const &)*arg4);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setslice__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[5] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_VectorScopedCopyableMatchType___setslice____SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = swig::asptr(argv[3], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorScopedCopyableMatchType___setslice____SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableMatchType___setslice__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::__setslice__(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::__setslice__(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type,std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableMatchType___delslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___delslice__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableMatchType___delslice__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorScopedCopyableMatchType___delslice__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____delslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableMatchType___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___delitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableMatchType___delitem__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____delitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___getitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableMatchType___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___getitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType___getitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        result = (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *)std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____getitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableMatchType___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___setitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *ptr = (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorScopedCopyableMatchType___setitem__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableMatchType___setitem__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____setitem____SWIG_0(arg1,arg2,(std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableMatchType___setitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___setitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____setitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___delitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableMatchType___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___delitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType___delitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____delitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___delitem__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableMatchType___delitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableMatchType___delitem____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableMatchType___delitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::__delitem__(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::__delitem__(PySliceObject *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableMatchType___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___getitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableMatchType___getitem__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        result = (std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *) &std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____getitem____SWIG_1((std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *)arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___getitem__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableMatchType___getitem____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableMatchType___getitem____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableMatchType___getitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::__getitem__(PySliceObject *)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::__getitem__(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableMatchType___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType___setitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableMatchType___setitem__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorScopedCopyableMatchType___setitem__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableMatchType___setitem__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type * >(argp3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg____setitem____SWIG_2(arg1,arg2,(mem::ScopedCopyablePtr< six::MatchType > const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setitem__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableMatchType___setitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        int res = swig::asptr(argv[2], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorScopedCopyableMatchType___setitem____SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorScopedCopyableMatchType___setitem____SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableMatchType___setitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::__setitem__(PySliceObject *,std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > const &)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::__setitem__(PySliceObject *)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::__setitem__(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_pop",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_pop" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      try {
+        result = std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__pop(arg1);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type(static_cast< const std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableMatchType_append",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_append" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorScopedCopyableMatchType_append" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableMatchType_append" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type * >(argp2);
+  {
+    try
+    {
+      std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__append(arg1,(mem::ScopedCopyablePtr< six::MatchType > const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableMatchType__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_VectorScopedCopyableMatchType")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *)new std::vector< mem::ScopedCopyablePtr< six::MatchType > >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableMatchType__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorScopedCopyableMatchType",&obj0)) SWIG_fail;
+  {
+    std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *ptr = (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_VectorScopedCopyableMatchType" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorScopedCopyableMatchType" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *)new std::vector< mem::ScopedCopyablePtr< six::MatchType > >((std::vector< mem::ScopedCopyablePtr< six::MatchType > > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_empty",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_empty" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *)arg1)->empty();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_size",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_size" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *)arg1)->size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableMatchType_swap",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_swap" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorScopedCopyableMatchType_swap" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableMatchType_swap" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp2);
+  {
+    try
+    {
+      (arg1)->swap(*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_begin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_begin" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->begin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_end",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_end" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->end();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_rbegin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_rbegin" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rbegin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_rend",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_rend" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rend();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_clear",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_clear" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      (arg1)->clear();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_get_allocator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_get_allocator" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *)arg1)->get_allocator();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type(static_cast< const std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableMatchType__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorScopedCopyableMatchType",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorScopedCopyableMatchType" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type >(val1);
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *)new std::vector< mem::ScopedCopyablePtr< six::MatchType > >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_pop_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_pop_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_pop_back" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      (arg1)->pop_back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableMatchType_resize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_resize" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableMatchType_resize" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->resize(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableMatchType_erase",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_erase" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType_erase" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType_erase" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__erase__SWIG_0(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  swig::SwigPyIterator *iter3 = 0 ;
+  int res3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableMatchType_erase",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_erase" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType_erase" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType_erase" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res3) || !iter3) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType_erase" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *>(iter3);
+    if (iter_t) {
+      arg3 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType_erase" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__erase__SWIG_1(arg1,arg2,arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_erase(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *>(iter) != 0));
+      if (_v) {
+        return _wrap_VectorScopedCopyableMatchType_erase__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *>(iter) != 0));
+      if (_v) {
+        swig::SwigPyIterator *iter = 0;
+        int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *>(iter) != 0));
+        if (_v) {
+          return _wrap_VectorScopedCopyableMatchType_erase__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableMatchType_erase'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::erase(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::erase(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableMatchType__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type arg1 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *arg2 = 0 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_VectorScopedCopyableMatchType",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorScopedCopyableMatchType" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VectorScopedCopyableMatchType" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorScopedCopyableMatchType" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type * >(argp2);
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *)new std::vector< mem::ScopedCopyablePtr< six::MatchType > >(arg1,(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableMatchType(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_VectorScopedCopyableMatchType__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_VectorScopedCopyableMatchType__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_VectorScopedCopyableMatchType__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_VectorScopedCopyableMatchType__SWIG_3(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_VectorScopedCopyableMatchType'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::vector()\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::vector(std::vector< mem::ScopedCopyablePtr< six::MatchType > > const &)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::vector(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::vector(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableMatchType_push_back",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_push_back" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorScopedCopyableMatchType_push_back" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableMatchType_push_back" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type * >(argp2);
+  {
+    try
+    {
+      (arg1)->push_back((std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_front(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_front",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_front" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *) &((std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *)arg1)->front();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_back" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *) &((std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *)arg1)->back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableMatchType_assign",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_assign" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableMatchType_assign" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorScopedCopyableMatchType_assign" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableMatchType_assign" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->assign(arg2,(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableMatchType_resize",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_resize" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableMatchType_resize" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorScopedCopyableMatchType_resize" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableMatchType_resize" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->resize(arg2,(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_resize(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableMatchType_resize__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorScopedCopyableMatchType_resize__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableMatchType_resize'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::resize(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::resize(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableMatchType_insert",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_insert" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType_insert" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType_insert" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorScopedCopyableMatchType_insert" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableMatchType_insert" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type * >(argp3);
+  {
+    try
+    {
+      result = std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__insert__SWIG_0(arg1,arg2,(mem::ScopedCopyablePtr< six::MatchType > const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type arg3 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorScopedCopyableMatchType_insert",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_insert" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType_insert" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableMatchType_insert" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator""'");
+    }
+  }
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorScopedCopyableMatchType_insert" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type""'");
+  } 
+  arg3 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorScopedCopyableMatchType_insert" "', argument " "4"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableMatchType_insert" "', argument " "4"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type * >(argp4);
+  {
+    try
+    {
+      std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_MatchType_Sg__Sg__insert__SWIG_1(arg1,arg2,arg3,(mem::ScopedCopyablePtr< six::MatchType > const &)*arg4);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_insert(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[5] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *>(iter) != 0));
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorScopedCopyableMatchType_insert__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *>(iter) != 0));
+      if (_v) {
+        {
+          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorScopedCopyableMatchType_insert__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableMatchType_insert'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::insert(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::MatchType > >::insert(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type,std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableMatchType_reserve",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_reserve" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableMatchType_reserve" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->reserve(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_capacity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableMatchType_capacity",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableMatchType_capacity" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< mem::ScopedCopyablePtr< six::MatchType > > const *)arg1)->capacity();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_VectorScopedCopyableMatchType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::MatchType > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::MatchType > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_VectorScopedCopyableMatchType",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_VectorScopedCopyableMatchType" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::MatchType > > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *VectorScopedCopyableMatchType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_iterator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_iterator" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = (swig::SwigPyIterator *)std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__iterator(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___nonzero__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____nonzero__((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo___bool__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___bool__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = (bool)std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____bool__((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo___len__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___len__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____len__((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *)arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableGeoInfo___getslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___getslice__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableGeoInfo___getslice__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorScopedCopyableGeoInfo___getslice__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *)std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____getslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableGeoInfo___setslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___setslice__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableGeoInfo___setslice__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorScopedCopyableGeoInfo___setslice__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____setslice____SWIG_0(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type arg3 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorScopedCopyableGeoInfo___setslice__",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___setslice__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableGeoInfo___setslice__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorScopedCopyableGeoInfo___setslice__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type >(val3);
+  {
+    std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *ptr = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorScopedCopyableGeoInfo___setslice__" "', argument " "4"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableGeoInfo___setslice__" "', argument " "4"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____setslice____SWIG_1(arg1,arg2,arg3,(std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > const &)*arg4);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setslice__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[5] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_VectorScopedCopyableGeoInfo___setslice____SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = swig::asptr(argv[3], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorScopedCopyableGeoInfo___setslice____SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableGeoInfo___setslice__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::__setslice__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::__setslice__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type,std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableGeoInfo___delslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___delslice__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableGeoInfo___delslice__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorScopedCopyableGeoInfo___delslice__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type >(val3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____delslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableGeoInfo___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___delitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableGeoInfo___delitem__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____delitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___getitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableGeoInfo___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___getitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo___getitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *)std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____getitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableGeoInfo___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___setitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *ptr = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorScopedCopyableGeoInfo___setitem__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableGeoInfo___setitem__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____setitem____SWIG_0(arg1,arg2,(std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableGeoInfo___setitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___setitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____setitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___delitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableGeoInfo___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___delitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo___delitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____delitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___delitem__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableGeoInfo___delitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableGeoInfo___delitem____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableGeoInfo___delitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::__delitem__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::__delitem__(PySliceObject *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableGeoInfo___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___getitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableGeoInfo___getitem__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type >(val2);
+  {
+    try
+    {
+      try {
+        result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *) &std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____getitem____SWIG_1((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *)arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___getitem__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableGeoInfo___getitem____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableGeoInfo___getitem____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableGeoInfo___getitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::__getitem__(PySliceObject *)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::__getitem__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableGeoInfo___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo___setitem__" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableGeoInfo___setitem__" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorScopedCopyableGeoInfo___setitem__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableGeoInfo___setitem__" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type * >(argp3);
+  {
+    try
+    {
+      try {
+        std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg____setitem____SWIG_2(arg1,arg2,(mem::ScopedCopyablePtr< six::GeoInfo > const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setitem__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableGeoInfo___setitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        int res = swig::asptr(argv[2], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorScopedCopyableGeoInfo___setitem____SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorScopedCopyableGeoInfo___setitem____SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableGeoInfo___setitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::__setitem__(PySliceObject *,std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > const &)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::__setitem__(PySliceObject *)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::__setitem__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_pop",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_pop" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      try {
+        result = std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__pop(arg1);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type(static_cast< const std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableGeoInfo_append",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_append" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorScopedCopyableGeoInfo_append" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableGeoInfo_append" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type * >(argp2);
+  {
+    try
+    {
+      std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__append(arg1,(mem::ScopedCopyablePtr< six::GeoInfo > const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableGeoInfo__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_VectorScopedCopyableGeoInfo")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *)new std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableGeoInfo__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorScopedCopyableGeoInfo",&obj0)) SWIG_fail;
+  {
+    std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *ptr = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_VectorScopedCopyableGeoInfo" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorScopedCopyableGeoInfo" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *)new std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_empty",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_empty" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *)arg1)->empty();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_size",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_size" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *)arg1)->size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableGeoInfo_swap",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_swap" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorScopedCopyableGeoInfo_swap" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableGeoInfo_swap" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp2);
+  {
+    try
+    {
+      (arg1)->swap(*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_begin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_begin" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->begin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_end",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_end" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->end();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_rbegin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_rbegin" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rbegin();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_rend",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_rend" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = (arg1)->rend();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_clear",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_clear" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      (arg1)->clear();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_get_allocator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_get_allocator" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *)arg1)->get_allocator();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type(static_cast< const std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableGeoInfo__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_VectorScopedCopyableGeoInfo",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorScopedCopyableGeoInfo" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type >(val1);
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *)new std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_pop_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_pop_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_pop_back" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      (arg1)->pop_back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableGeoInfo_resize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_resize" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableGeoInfo_resize" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->resize(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableGeoInfo_erase",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_erase" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo_erase" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo_erase" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__erase__SWIG_0(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  swig::SwigPyIterator *iter3 = 0 ;
+  int res3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableGeoInfo_erase",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_erase" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo_erase" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo_erase" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res3) || !iter3) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo_erase" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *>(iter3);
+    if (iter_t) {
+      arg3 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo_erase" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator""'");
+    }
+  }
+  {
+    try
+    {
+      result = std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__erase__SWIG_1(arg1,arg2,arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_erase(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *>(iter) != 0));
+      if (_v) {
+        return _wrap_VectorScopedCopyableGeoInfo_erase__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *>(iter) != 0));
+      if (_v) {
+        swig::SwigPyIterator *iter = 0;
+        int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *>(iter) != 0));
+        if (_v) {
+          return _wrap_VectorScopedCopyableGeoInfo_erase__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableGeoInfo_erase'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::erase(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::erase(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableGeoInfo__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type arg1 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *arg2 = 0 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_VectorScopedCopyableGeoInfo",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorScopedCopyableGeoInfo" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VectorScopedCopyableGeoInfo" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorScopedCopyableGeoInfo" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type * >(argp2);
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *)new std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >(arg1,(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableGeoInfo(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_VectorScopedCopyableGeoInfo__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_VectorScopedCopyableGeoInfo__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_VectorScopedCopyableGeoInfo__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_VectorScopedCopyableGeoInfo__SWIG_3(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_VectorScopedCopyableGeoInfo'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::vector()\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::vector(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const &)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::vector(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::vector(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableGeoInfo_push_back",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_push_back" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorScopedCopyableGeoInfo_push_back" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableGeoInfo_push_back" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type * >(argp2);
+  {
+    try
+    {
+      (arg1)->push_back((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_front(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_front",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_front" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *) &((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *)arg1)->front();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_back" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *) &((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *)arg1)->back();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableGeoInfo_assign",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_assign" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableGeoInfo_assign" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorScopedCopyableGeoInfo_assign" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableGeoInfo_assign" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->assign(arg2,(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableGeoInfo_resize",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_resize" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableGeoInfo_resize" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorScopedCopyableGeoInfo_resize" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableGeoInfo_resize" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type * >(argp3);
+  {
+    try
+    {
+      (arg1)->resize(arg2,(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_resize(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_VectorScopedCopyableGeoInfo_resize__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorScopedCopyableGeoInfo_resize__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableGeoInfo_resize'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::resize(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::resize(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:VectorScopedCopyableGeoInfo_insert",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_insert" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo_insert" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo_insert" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorScopedCopyableGeoInfo_insert" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableGeoInfo_insert" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type * >(argp3);
+  {
+    try
+    {
+      result = std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__insert__SWIG_0(arg1,arg2,(mem::ScopedCopyablePtr< six::GeoInfo > const &)*arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator arg2 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type arg3 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:VectorScopedCopyableGeoInfo_insert",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_insert" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo_insert" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorScopedCopyableGeoInfo_insert" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator""'");
+    }
+  }
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorScopedCopyableGeoInfo_insert" "', argument " "3"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type""'");
+  } 
+  arg3 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorScopedCopyableGeoInfo_insert" "', argument " "4"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorScopedCopyableGeoInfo_insert" "', argument " "4"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type * >(argp4);
+  {
+    try
+    {
+      std_vector_Sl_mem_ScopedCopyablePtr_Sl_six_GeoInfo_Sg__Sg__insert__SWIG_1(arg1,arg2,arg3,(mem::ScopedCopyablePtr< six::GeoInfo > const &)*arg4);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_insert(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[5] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *>(iter) != 0));
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_VectorScopedCopyableGeoInfo_insert__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *>(iter) != 0));
+      if (_v) {
+        {
+          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_VectorScopedCopyableGeoInfo_insert__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VectorScopedCopyableGeoInfo_insert'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::insert(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &)\n"
+    "    std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::insert(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type,std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorScopedCopyableGeoInfo_reserve",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_reserve" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorScopedCopyableGeoInfo_reserve" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type >(val2);
+  {
+    try
+    {
+      (arg1)->reserve(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_capacity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:VectorScopedCopyableGeoInfo_capacity",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorScopedCopyableGeoInfo_capacity" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      result = ((std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > const *)arg1)->capacity();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_VectorScopedCopyableGeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *arg1 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_VectorScopedCopyableGeoInfo",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_VectorScopedCopyableGeoInfo" "', argument " "1"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *VectorScopedCopyableGeoInfo_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -80660,6 +89596,1348 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyablePosVelError(PyObject *SWIGUNUSEDPAR
     }
   }
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::PosVelError >(static_cast< const mem::ScopedCopyablePtr< six::PosVelError >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StdAutoGeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< six::GeoInfo > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_StdAutoGeoInfo")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::auto_ptr< six::GeoInfo > *)new std::auto_ptr< six::GeoInfo >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__GeoInfo_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_StdAutoGeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< six::GeoInfo > *arg1 = (std::auto_ptr< six::GeoInfo > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoGeoInfo",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__GeoInfo_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoGeoInfo" "', argument " "1"" of type '" "std::auto_ptr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::auto_ptr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *StdAutoGeoInfo_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__GeoInfo_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableGeoInfo__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoInfo *arg1 = (six::GeoInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< six::GeoInfo > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableGeoInfo",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableGeoInfo" "', argument " "1"" of type '" "six::GeoInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoInfo * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCopyablePtr< six::GeoInfo > *)new mem::ScopedCopyablePtr< six::GeoInfo >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableGeoInfo__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ScopedCopyableGeoInfo")) SWIG_fail;
+  {
+    try
+    {
+      result = (mem::ScopedCopyablePtr< six::GeoInfo > *)new mem::ScopedCopyablePtr< six::GeoInfo >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableGeoInfo__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCopyablePtr< six::GeoInfo > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCopyableGeoInfo",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCopyableGeoInfo" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ScopedCopyableGeoInfo" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > const &""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCopyablePtr< six::GeoInfo > *)new mem::ScopedCopyablePtr< six::GeoInfo >((mem::ScopedCopyablePtr< six::GeoInfo > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCopyableGeoInfo(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[2] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ScopedCopyableGeoInfo__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_six__GeoInfo, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableGeoInfo__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCopyableGeoInfo__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ScopedCopyableGeoInfo'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< six::GeoInfo >::ScopedCopyablePtr(six::GeoInfo *)\n"
+    "    mem::ScopedCopyablePtr< six::GeoInfo >::ScopedCopyablePtr()\n"
+    "    mem::ScopedCopyablePtr< six::GeoInfo >::ScopedCopyablePtr(mem::ScopedCopyablePtr< six::GeoInfo > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableGeoInfo___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo___nonzero__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mem::ScopedCopyablePtr< six::GeoInfo > const *)arg1)->operator bool();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::GeoInfo *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableGeoInfo_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      result = (six::GeoInfo *)((mem::ScopedCopyablePtr< six::GeoInfo > const *)arg1)->get();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo___ref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::GeoInfo *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableGeoInfo___ref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo___ref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      result = (six::GeoInfo *) &((mem::ScopedCopyablePtr< six::GeoInfo > const *)arg1)->operator *();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo___deref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::GeoInfo *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableGeoInfo___deref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo___deref__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      result = (six::GeoInfo *)((mem::ScopedCopyablePtr< six::GeoInfo > const *)arg1)->operator ->();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_reset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  six::GeoInfo *arg2 = (six::GeoInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableGeoInfo_reset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__GeoInfo, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableGeoInfo_reset" "', argument " "2"" of type '" "six::GeoInfo *""'"); 
+  }
+  arg2 = reinterpret_cast< six::GeoInfo * >(argp2);
+  {
+    try
+    {
+      (arg1)->reset(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_reset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableGeoInfo_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo_reset" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      (arg1)->reset();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_reset(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCopyableGeoInfo_reset__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_six__GeoInfo, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ScopedCopyableGeoInfo_reset__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ScopedCopyableGeoInfo_reset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCopyablePtr< six::GeoInfo >::reset(six::GeoInfo *)\n"
+    "    mem::ScopedCopyablePtr< six::GeoInfo >::reset()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ScopedCopyableGeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ScopedCopyableGeoInfo",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ScopedCopyableGeoInfo" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_name_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableGeoInfo_name_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo_name_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableGeoInfo_name_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableGeoInfo_name_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (*arg1)->name = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_name_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableGeoInfo_name_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo_name_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((*arg1)->name);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_geoInfos_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *arg2 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableGeoInfo_geoInfos_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo_geoInfos_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableGeoInfo_geoInfos_set" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->geoInfos = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_geoInfos_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableGeoInfo_geoInfos_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo_geoInfos_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *)& ((*arg1)->geoInfos);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_desc_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  six::ParameterCollection *arg2 = (six::ParameterCollection *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableGeoInfo_desc_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo_desc_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableGeoInfo_desc_set" "', argument " "2"" of type '" "six::ParameterCollection *""'"); 
+  }
+  arg2 = reinterpret_cast< six::ParameterCollection * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->desc = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_desc_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::ParameterCollection *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableGeoInfo_desc_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo_desc_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      result = (six::ParameterCollection *)& ((*arg1)->desc);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_geometryLatLon_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  std::vector< six::LatLon,std::allocator< six::LatLon > > *arg2 = (std::vector< six::LatLon,std::allocator< six::LatLon > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableGeoInfo_geometryLatLon_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo_geometryLatLon_set" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableGeoInfo_geometryLatLon_set" "', argument " "2"" of type '" "std::vector< six::LatLon,std::allocator< six::LatLon > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::LatLon,std::allocator< six::LatLon > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->geometryLatLon = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_geometryLatLon_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::LatLon,std::allocator< six::LatLon > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCopyableGeoInfo_geometryLatLon_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo_geometryLatLon_get" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::LatLon,std::allocator< six::LatLon > > *)& ((*arg1)->geometryLatLon);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  six::GeoInfo *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableGeoInfo___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo___eq__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__GeoInfo,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableGeoInfo___eq__" "', argument " "2"" of type '" "six::GeoInfo const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableGeoInfo___eq__" "', argument " "2"" of type '" "six::GeoInfo const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::GeoInfo * >(argp2);
+  {
+    try
+    {
+      result = (bool)(*arg1)->operator ==((six::GeoInfo const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > *arg1 = (mem::ScopedCopyablePtr< six::GeoInfo > *) 0 ;
+  six::GeoInfo *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCopyableGeoInfo___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCopyableGeoInfo___ne__" "', argument " "1"" of type '" "mem::ScopedCopyablePtr< six::GeoInfo > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCopyablePtr< six::GeoInfo > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__GeoInfo,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCopyableGeoInfo___ne__" "', argument " "2"" of type '" "six::GeoInfo const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCopyableGeoInfo___ne__" "', argument " "2"" of type '" "six::GeoInfo const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::GeoInfo * >(argp2);
+  {
+    try
+    {
+      result = (bool)(*arg1)->operator !=((six::GeoInfo const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ScopedCopyableGeoInfo_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_makeScopedCopyableGeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCopyablePtr< six::GeoInfo > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":makeScopedCopyableGeoInfo")) SWIG_fail;
+  {
+    try
+    {
+      result = makeScopedCopyableGeoInfo();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::GeoInfo >(static_cast< const mem::ScopedCopyablePtr< six::GeoInfo >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -89970,6 +100248,2055 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_new_StdAutoCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< six::CollectionInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCollectionInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = (std::auto_ptr< six::CollectionInformation > *)new std::auto_ptr< six::CollectionInformation >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_StdAutoCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::auto_ptr< six::CollectionInformation > *arg1 = (std::auto_ptr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoCollectionInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCollectionInformation" "', argument " "1"" of type '" "std::auto_ptr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::auto_ptr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *StdAutoCollectionInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableCollectionInformation__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::CollectionInformation *arg1 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCloneableCollectionInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCloneableCollectionInformation" "', argument " "1"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg1 = reinterpret_cast< six::CollectionInformation * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCloneablePtr< six::CollectionInformation > *)new mem::ScopedCloneablePtr< six::CollectionInformation >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableCollectionInformation__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ScopedCloneableCollectionInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = (mem::ScopedCloneablePtr< six::CollectionInformation > *)new mem::ScopedCloneablePtr< six::CollectionInformation >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableCollectionInformation__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ScopedCloneableCollectionInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ScopedCloneableCollectionInformation" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ScopedCloneableCollectionInformation" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const &""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (mem::ScopedCloneablePtr< six::CollectionInformation > *)new mem::ScopedCloneablePtr< six::CollectionInformation >((mem::ScopedCloneablePtr< six::CollectionInformation > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ScopedCloneableCollectionInformation(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[2] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ScopedCloneableCollectionInformation__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_six__CollectionInformation, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCloneableCollectionInformation__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ScopedCloneableCollectionInformation__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ScopedCloneableCollectionInformation'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCloneablePtr< six::CollectionInformation >::ScopedCloneablePtr(six::CollectionInformation *)\n"
+    "    mem::ScopedCloneablePtr< six::CollectionInformation >::ScopedCloneablePtr()\n"
+    "    mem::ScopedCloneablePtr< six::CollectionInformation >::ScopedCloneablePtr(mem::ScopedCloneablePtr< six::CollectionInformation > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectionInformation *)((mem::ScopedCloneablePtr< six::CollectionInformation > const *)arg1)->get();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___ref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation___ref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation___ref__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectionInformation *) &((mem::ScopedCloneablePtr< six::CollectionInformation > const *)arg1)->operator *();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___deref__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation___deref__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation___deref__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectionInformation *)((mem::ScopedCloneablePtr< six::CollectionInformation > const *)arg1)->operator ->();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_reset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::CollectionInformation *arg2 = (six::CollectionInformation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_reset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_reset" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_reset" "', argument " "2"" of type '" "six::CollectionInformation *""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectionInformation * >(argp2);
+  {
+    try
+    {
+      (arg1)->reset(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_reset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_reset" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      (arg1)->reset();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_reset(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_ScopedCloneableCollectionInformation_reset__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_six__CollectionInformation, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ScopedCloneableCollectionInformation_reset__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ScopedCloneableCollectionInformation_reset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mem::ScopedCloneablePtr< six::CollectionInformation >::reset(six::CollectionInformation *)\n"
+    "    mem::ScopedCloneablePtr< six::CollectionInformation >::reset()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ScopedCloneableCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ScopedCloneableCollectionInformation",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ScopedCloneableCollectionInformation" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectorName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_collectorName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_collectorName_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_collectorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_collectorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (*arg1)->collectorName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectorName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_collectorName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_collectorName_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((*arg1)->collectorName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_illuminatorName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_illuminatorName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_illuminatorName_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_illuminatorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_illuminatorName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (*arg1)->illuminatorName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_illuminatorName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_illuminatorName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_illuminatorName_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((*arg1)->illuminatorName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_coreName_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_coreName_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_coreName_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_coreName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_coreName_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (*arg1)->coreName = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_coreName_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_coreName_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_coreName_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((*arg1)->coreName);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectType_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::CollectType *arg2 = (six::CollectType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_collectType_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_collectType_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__CollectType, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_collectType_set" "', argument " "2"" of type '" "six::CollectType *""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectType * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->collectType = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectType_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_collectType_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_collectType_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectType *)& ((*arg1)->collectType);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarMode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::RadarModeType *arg2 = (six::RadarModeType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_radarMode_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_radarMode_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__RadarModeType, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_radarMode_set" "', argument " "2"" of type '" "six::RadarModeType *""'"); 
+  }
+  arg2 = reinterpret_cast< six::RadarModeType * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->radarMode = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarMode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::RadarModeType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_radarMode_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_radarMode_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::RadarModeType *)& ((*arg1)->radarMode);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarModeType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarModeID_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_radarModeID_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_radarModeID_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_radarModeID_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_radarModeID_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (*arg1)->radarModeID = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarModeID_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_radarModeID_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_radarModeID_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((*arg1)->radarModeID);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_releaseInfo_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_releaseInfo_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_releaseInfo_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_releaseInfo_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_releaseInfo_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      if (arg1) (*arg1)->releaseInfo = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_releaseInfo_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_releaseInfo_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_releaseInfo_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::string *) & ((*arg1)->releaseInfo);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_countryCodes_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = (std::vector< std::string,std::allocator< std::string > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_countryCodes_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_countryCodes_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_countryCodes_set" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->countryCodes = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_countryCodes_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_countryCodes_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_countryCodes_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< std::string,std::allocator< std::string > > *)& ((*arg1)->countryCodes);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_parameters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::ParameterCollection *arg2 = (six::ParameterCollection *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_parameters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_parameters_set" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_parameters_set" "', argument " "2"" of type '" "six::ParameterCollection *""'"); 
+  }
+  arg2 = reinterpret_cast< six::ParameterCollection * >(argp2);
+  {
+    try
+    {
+      if (arg1) (*arg1)->parameters = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_parameters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::ParameterCollection *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_parameters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_parameters_get" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::ParameterCollection *)& ((*arg1)->parameters);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::CollectionInformation *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_clone" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (six::CollectionInformation *)(*arg1)->clone();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::CollectionInformation *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation___eq__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__CollectionInformation,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation___eq__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation___eq__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectionInformation * >(argp2);
+  {
+    try
+    {
+      result = (bool)(*arg1)->operator ==((six::CollectionInformation const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  six::CollectionInformation *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation___ne__" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__CollectionInformation,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation___ne__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation___ne__" "', argument " "2"" of type '" "six::CollectionInformation const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::CollectionInformation * >(argp2);
+  {
+    try
+    {
+      result = (bool)(*arg1)->operator !=((six::CollectionInformation const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_getClassificationLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ScopedCloneableCollectionInformation_getClassificationLevel",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_getClassificationLevel" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > const *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    try
+    {
+      result = (*arg1)->getClassificationLevel();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_setClassificationLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > *arg1 = (mem::ScopedCloneablePtr< six::CollectionInformation > *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ScopedCloneableCollectionInformation_setClassificationLevel",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ScopedCloneableCollectionInformation_setClassificationLevel" "', argument " "1"" of type '" "mem::ScopedCloneablePtr< six::CollectionInformation > *""'"); 
+  }
+  arg1 = reinterpret_cast< mem::ScopedCloneablePtr< six::CollectionInformation > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScopedCloneableCollectionInformation_setClassificationLevel" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ScopedCloneableCollectionInformation_setClassificationLevel" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try
+    {
+      (*arg1)->setClassificationLevel((std::string const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ScopedCloneableCollectionInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_makeScopedCloneableCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mem::ScopedCloneablePtr< six::CollectionInformation > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":makeScopedCloneableCollectionInformation")) SWIG_fail;
+  {
+    try
+    {
+      result = makeScopedCloneableCollectionInformation();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new mem::ScopedCloneablePtr< six::CollectionInformation >(static_cast< const mem::ScopedCloneablePtr< six::CollectionInformation >& >(result))), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"delete_SwigPyIterator", _wrap_delete_SwigPyIterator, METH_VARARGS, (char *)"delete_SwigPyIterator(SwigPyIterator self)"},
@@ -90856,6 +103183,32 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_ParameterCollection", _wrap_new_ParameterCollection, METH_VARARGS, (char *)"new_ParameterCollection() -> ParameterCollection"},
 	 { (char *)"delete_ParameterCollection", _wrap_delete_ParameterCollection, METH_VARARGS, (char *)"delete_ParameterCollection(ParameterCollection self)"},
 	 { (char *)"ParameterCollection_swigregister", ParameterCollection_swigregister, METH_VARARGS, NULL},
+	 { (char *)"CollectionInformation_collectorName_set", _wrap_CollectionInformation_collectorName_set, METH_VARARGS, (char *)"CollectionInformation_collectorName_set(CollectionInformation self, std::string const & collectorName)"},
+	 { (char *)"CollectionInformation_collectorName_get", _wrap_CollectionInformation_collectorName_get, METH_VARARGS, (char *)"CollectionInformation_collectorName_get(CollectionInformation self) -> std::string const &"},
+	 { (char *)"CollectionInformation_illuminatorName_set", _wrap_CollectionInformation_illuminatorName_set, METH_VARARGS, (char *)"CollectionInformation_illuminatorName_set(CollectionInformation self, std::string const & illuminatorName)"},
+	 { (char *)"CollectionInformation_illuminatorName_get", _wrap_CollectionInformation_illuminatorName_get, METH_VARARGS, (char *)"CollectionInformation_illuminatorName_get(CollectionInformation self) -> std::string const &"},
+	 { (char *)"CollectionInformation_coreName_set", _wrap_CollectionInformation_coreName_set, METH_VARARGS, (char *)"CollectionInformation_coreName_set(CollectionInformation self, std::string const & coreName)"},
+	 { (char *)"CollectionInformation_coreName_get", _wrap_CollectionInformation_coreName_get, METH_VARARGS, (char *)"CollectionInformation_coreName_get(CollectionInformation self) -> std::string const &"},
+	 { (char *)"CollectionInformation_collectType_set", _wrap_CollectionInformation_collectType_set, METH_VARARGS, (char *)"CollectionInformation_collectType_set(CollectionInformation self, CollectType collectType)"},
+	 { (char *)"CollectionInformation_collectType_get", _wrap_CollectionInformation_collectType_get, METH_VARARGS, (char *)"CollectionInformation_collectType_get(CollectionInformation self) -> CollectType"},
+	 { (char *)"CollectionInformation_radarMode_set", _wrap_CollectionInformation_radarMode_set, METH_VARARGS, (char *)"CollectionInformation_radarMode_set(CollectionInformation self, RadarModeType radarMode)"},
+	 { (char *)"CollectionInformation_radarMode_get", _wrap_CollectionInformation_radarMode_get, METH_VARARGS, (char *)"CollectionInformation_radarMode_get(CollectionInformation self) -> RadarModeType"},
+	 { (char *)"CollectionInformation_radarModeID_set", _wrap_CollectionInformation_radarModeID_set, METH_VARARGS, (char *)"CollectionInformation_radarModeID_set(CollectionInformation self, std::string const & radarModeID)"},
+	 { (char *)"CollectionInformation_radarModeID_get", _wrap_CollectionInformation_radarModeID_get, METH_VARARGS, (char *)"CollectionInformation_radarModeID_get(CollectionInformation self) -> std::string const &"},
+	 { (char *)"CollectionInformation_releaseInfo_set", _wrap_CollectionInformation_releaseInfo_set, METH_VARARGS, (char *)"CollectionInformation_releaseInfo_set(CollectionInformation self, std::string const & releaseInfo)"},
+	 { (char *)"CollectionInformation_releaseInfo_get", _wrap_CollectionInformation_releaseInfo_get, METH_VARARGS, (char *)"CollectionInformation_releaseInfo_get(CollectionInformation self) -> std::string const &"},
+	 { (char *)"CollectionInformation_countryCodes_set", _wrap_CollectionInformation_countryCodes_set, METH_VARARGS, (char *)"CollectionInformation_countryCodes_set(CollectionInformation self, VectorString countryCodes)"},
+	 { (char *)"CollectionInformation_countryCodes_get", _wrap_CollectionInformation_countryCodes_get, METH_VARARGS, (char *)"CollectionInformation_countryCodes_get(CollectionInformation self) -> VectorString"},
+	 { (char *)"CollectionInformation_parameters_set", _wrap_CollectionInformation_parameters_set, METH_VARARGS, (char *)"CollectionInformation_parameters_set(CollectionInformation self, ParameterCollection parameters)"},
+	 { (char *)"CollectionInformation_parameters_get", _wrap_CollectionInformation_parameters_get, METH_VARARGS, (char *)"CollectionInformation_parameters_get(CollectionInformation self) -> ParameterCollection"},
+	 { (char *)"new_CollectionInformation", _wrap_new_CollectionInformation, METH_VARARGS, (char *)"new_CollectionInformation() -> CollectionInformation"},
+	 { (char *)"delete_CollectionInformation", _wrap_delete_CollectionInformation, METH_VARARGS, (char *)"delete_CollectionInformation(CollectionInformation self)"},
+	 { (char *)"CollectionInformation_clone", _wrap_CollectionInformation_clone, METH_VARARGS, (char *)"CollectionInformation_clone(CollectionInformation self) -> CollectionInformation"},
+	 { (char *)"CollectionInformation___eq__", _wrap_CollectionInformation___eq__, METH_VARARGS, (char *)"CollectionInformation___eq__(CollectionInformation self, CollectionInformation other) -> bool"},
+	 { (char *)"CollectionInformation___ne__", _wrap_CollectionInformation___ne__, METH_VARARGS, (char *)"CollectionInformation___ne__(CollectionInformation self, CollectionInformation other) -> bool"},
+	 { (char *)"CollectionInformation_getClassificationLevel", _wrap_CollectionInformation_getClassificationLevel, METH_VARARGS, (char *)"CollectionInformation_getClassificationLevel(CollectionInformation self) -> std::string"},
+	 { (char *)"CollectionInformation_setClassificationLevel", _wrap_CollectionInformation_setClassificationLevel, METH_VARARGS, (char *)"CollectionInformation_setClassificationLevel(CollectionInformation self, std::string const & classification)"},
+	 { (char *)"CollectionInformation_swigregister", CollectionInformation_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_Classification", _wrap_delete_Classification, METH_VARARGS, (char *)"delete_Classification(Classification self)"},
 	 { (char *)"Classification_getLevel", _wrap_Classification_getLevel, METH_VARARGS, (char *)"Classification_getLevel(Classification self) -> std::string"},
 	 { (char *)"Classification_isUnclassified", _wrap_Classification_isUnclassified, METH_VARARGS, (char *)"Classification_isUnclassified(Classification self) -> bool"},
@@ -90999,34 +103352,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ErrorStatistics___ne__", _wrap_ErrorStatistics___ne__, METH_VARARGS, (char *)"ErrorStatistics___ne__(ErrorStatistics self, ErrorStatistics rhs) -> bool"},
 	 { (char *)"delete_ErrorStatistics", _wrap_delete_ErrorStatistics, METH_VARARGS, (char *)"delete_ErrorStatistics(ErrorStatistics self)"},
 	 { (char *)"ErrorStatistics_swigregister", ErrorStatistics_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_NoiseLevel", _wrap_new_NoiseLevel, METH_VARARGS, (char *)"new_NoiseLevel() -> NoiseLevel"},
-	 { (char *)"NoiseLevel_noiseType_set", _wrap_NoiseLevel_noiseType_set, METH_VARARGS, (char *)"NoiseLevel_noiseType_set(NoiseLevel self, std::string const & noiseType)"},
-	 { (char *)"NoiseLevel_noiseType_get", _wrap_NoiseLevel_noiseType_get, METH_VARARGS, (char *)"NoiseLevel_noiseType_get(NoiseLevel self) -> std::string const &"},
-	 { (char *)"NoiseLevel_noisePoly_set", _wrap_NoiseLevel_noisePoly_set, METH_VARARGS, (char *)"NoiseLevel_noisePoly_set(NoiseLevel self, Poly2D noisePoly)"},
-	 { (char *)"NoiseLevel_noisePoly_get", _wrap_NoiseLevel_noisePoly_get, METH_VARARGS, (char *)"NoiseLevel_noisePoly_get(NoiseLevel self) -> Poly2D"},
-	 { (char *)"NoiseLevel___eq__", _wrap_NoiseLevel___eq__, METH_VARARGS, (char *)"NoiseLevel___eq__(NoiseLevel self, NoiseLevel rhs) -> bool"},
-	 { (char *)"NoiseLevel___ne__", _wrap_NoiseLevel___ne__, METH_VARARGS, (char *)"NoiseLevel___ne__(NoiseLevel self, NoiseLevel rhs) -> bool"},
-	 { (char *)"delete_NoiseLevel", _wrap_delete_NoiseLevel, METH_VARARGS, (char *)"delete_NoiseLevel(NoiseLevel self)"},
-	 { (char *)"NoiseLevel_swigregister", NoiseLevel_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_Radiometric", _wrap_new_Radiometric, METH_VARARGS, (char *)"new_Radiometric() -> Radiometric"},
-	 { (char *)"Radiometric_noiseLevel_set", _wrap_Radiometric_noiseLevel_set, METH_VARARGS, (char *)"Radiometric_noiseLevel_set(Radiometric self, NoiseLevel noiseLevel)"},
-	 { (char *)"Radiometric_noiseLevel_get", _wrap_Radiometric_noiseLevel_get, METH_VARARGS, (char *)"Radiometric_noiseLevel_get(Radiometric self) -> NoiseLevel"},
-	 { (char *)"Radiometric_rcsSFPoly_set", _wrap_Radiometric_rcsSFPoly_set, METH_VARARGS, (char *)"Radiometric_rcsSFPoly_set(Radiometric self, Poly2D rcsSFPoly)"},
-	 { (char *)"Radiometric_rcsSFPoly_get", _wrap_Radiometric_rcsSFPoly_get, METH_VARARGS, (char *)"Radiometric_rcsSFPoly_get(Radiometric self) -> Poly2D"},
-	 { (char *)"Radiometric_betaZeroSFPoly_set", _wrap_Radiometric_betaZeroSFPoly_set, METH_VARARGS, (char *)"Radiometric_betaZeroSFPoly_set(Radiometric self, Poly2D betaZeroSFPoly)"},
-	 { (char *)"Radiometric_betaZeroSFPoly_get", _wrap_Radiometric_betaZeroSFPoly_get, METH_VARARGS, (char *)"Radiometric_betaZeroSFPoly_get(Radiometric self) -> Poly2D"},
-	 { (char *)"Radiometric_sigmaZeroSFPoly_set", _wrap_Radiometric_sigmaZeroSFPoly_set, METH_VARARGS, (char *)"Radiometric_sigmaZeroSFPoly_set(Radiometric self, Poly2D sigmaZeroSFPoly)"},
-	 { (char *)"Radiometric_sigmaZeroSFPoly_get", _wrap_Radiometric_sigmaZeroSFPoly_get, METH_VARARGS, (char *)"Radiometric_sigmaZeroSFPoly_get(Radiometric self) -> Poly2D"},
-	 { (char *)"Radiometric_sigmaZeroSFIncidenceMap_set", _wrap_Radiometric_sigmaZeroSFIncidenceMap_set, METH_VARARGS, (char *)"Radiometric_sigmaZeroSFIncidenceMap_set(Radiometric self, AppliedType sigmaZeroSFIncidenceMap)"},
-	 { (char *)"Radiometric_sigmaZeroSFIncidenceMap_get", _wrap_Radiometric_sigmaZeroSFIncidenceMap_get, METH_VARARGS, (char *)"Radiometric_sigmaZeroSFIncidenceMap_get(Radiometric self) -> AppliedType"},
-	 { (char *)"Radiometric_gammaZeroSFPoly_set", _wrap_Radiometric_gammaZeroSFPoly_set, METH_VARARGS, (char *)"Radiometric_gammaZeroSFPoly_set(Radiometric self, Poly2D gammaZeroSFPoly)"},
-	 { (char *)"Radiometric_gammaZeroSFPoly_get", _wrap_Radiometric_gammaZeroSFPoly_get, METH_VARARGS, (char *)"Radiometric_gammaZeroSFPoly_get(Radiometric self) -> Poly2D"},
-	 { (char *)"Radiometric_gammaZeroSFIncidenceMap_set", _wrap_Radiometric_gammaZeroSFIncidenceMap_set, METH_VARARGS, (char *)"Radiometric_gammaZeroSFIncidenceMap_set(Radiometric self, AppliedType gammaZeroSFIncidenceMap)"},
-	 { (char *)"Radiometric_gammaZeroSFIncidenceMap_get", _wrap_Radiometric_gammaZeroSFIncidenceMap_get, METH_VARARGS, (char *)"Radiometric_gammaZeroSFIncidenceMap_get(Radiometric self) -> AppliedType"},
-	 { (char *)"Radiometric___eq__", _wrap_Radiometric___eq__, METH_VARARGS, (char *)"Radiometric___eq__(Radiometric self, Radiometric rhs) -> bool"},
-	 { (char *)"Radiometric___ne__", _wrap_Radiometric___ne__, METH_VARARGS, (char *)"Radiometric___ne__(Radiometric self, Radiometric rhs) -> bool"},
-	 { (char *)"delete_Radiometric", _wrap_delete_Radiometric, METH_VARARGS, (char *)"delete_Radiometric(Radiometric self)"},
-	 { (char *)"Radiometric_swigregister", Radiometric_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_MatchCollect", _wrap_new_MatchCollect, METH_VARARGS, (char *)"new_MatchCollect() -> MatchCollect"},
 	 { (char *)"MatchCollect_coreName_set", _wrap_MatchCollect_coreName_set, METH_VARARGS, (char *)"MatchCollect_coreName_set(MatchCollect self, std::string const & coreName)"},
 	 { (char *)"MatchCollect_coreName_get", _wrap_MatchCollect_coreName_get, METH_VARARGS, (char *)"MatchCollect_coreName_get(MatchCollect self) -> std::string const &"},
@@ -91062,6 +103387,34 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MatchInformation___ne__", _wrap_MatchInformation___ne__, METH_VARARGS, (char *)"MatchInformation___ne__(MatchInformation self, MatchInformation rhs) -> bool"},
 	 { (char *)"delete_MatchInformation", _wrap_delete_MatchInformation, METH_VARARGS, (char *)"delete_MatchInformation(MatchInformation self)"},
 	 { (char *)"MatchInformation_swigregister", MatchInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_NoiseLevel", _wrap_new_NoiseLevel, METH_VARARGS, (char *)"new_NoiseLevel() -> NoiseLevel"},
+	 { (char *)"NoiseLevel_noiseType_set", _wrap_NoiseLevel_noiseType_set, METH_VARARGS, (char *)"NoiseLevel_noiseType_set(NoiseLevel self, std::string const & noiseType)"},
+	 { (char *)"NoiseLevel_noiseType_get", _wrap_NoiseLevel_noiseType_get, METH_VARARGS, (char *)"NoiseLevel_noiseType_get(NoiseLevel self) -> std::string const &"},
+	 { (char *)"NoiseLevel_noisePoly_set", _wrap_NoiseLevel_noisePoly_set, METH_VARARGS, (char *)"NoiseLevel_noisePoly_set(NoiseLevel self, Poly2D noisePoly)"},
+	 { (char *)"NoiseLevel_noisePoly_get", _wrap_NoiseLevel_noisePoly_get, METH_VARARGS, (char *)"NoiseLevel_noisePoly_get(NoiseLevel self) -> Poly2D"},
+	 { (char *)"NoiseLevel___eq__", _wrap_NoiseLevel___eq__, METH_VARARGS, (char *)"NoiseLevel___eq__(NoiseLevel self, NoiseLevel rhs) -> bool"},
+	 { (char *)"NoiseLevel___ne__", _wrap_NoiseLevel___ne__, METH_VARARGS, (char *)"NoiseLevel___ne__(NoiseLevel self, NoiseLevel rhs) -> bool"},
+	 { (char *)"delete_NoiseLevel", _wrap_delete_NoiseLevel, METH_VARARGS, (char *)"delete_NoiseLevel(NoiseLevel self)"},
+	 { (char *)"NoiseLevel_swigregister", NoiseLevel_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_Radiometric", _wrap_new_Radiometric, METH_VARARGS, (char *)"new_Radiometric() -> Radiometric"},
+	 { (char *)"Radiometric_noiseLevel_set", _wrap_Radiometric_noiseLevel_set, METH_VARARGS, (char *)"Radiometric_noiseLevel_set(Radiometric self, NoiseLevel noiseLevel)"},
+	 { (char *)"Radiometric_noiseLevel_get", _wrap_Radiometric_noiseLevel_get, METH_VARARGS, (char *)"Radiometric_noiseLevel_get(Radiometric self) -> NoiseLevel"},
+	 { (char *)"Radiometric_rcsSFPoly_set", _wrap_Radiometric_rcsSFPoly_set, METH_VARARGS, (char *)"Radiometric_rcsSFPoly_set(Radiometric self, Poly2D rcsSFPoly)"},
+	 { (char *)"Radiometric_rcsSFPoly_get", _wrap_Radiometric_rcsSFPoly_get, METH_VARARGS, (char *)"Radiometric_rcsSFPoly_get(Radiometric self) -> Poly2D"},
+	 { (char *)"Radiometric_betaZeroSFPoly_set", _wrap_Radiometric_betaZeroSFPoly_set, METH_VARARGS, (char *)"Radiometric_betaZeroSFPoly_set(Radiometric self, Poly2D betaZeroSFPoly)"},
+	 { (char *)"Radiometric_betaZeroSFPoly_get", _wrap_Radiometric_betaZeroSFPoly_get, METH_VARARGS, (char *)"Radiometric_betaZeroSFPoly_get(Radiometric self) -> Poly2D"},
+	 { (char *)"Radiometric_sigmaZeroSFPoly_set", _wrap_Radiometric_sigmaZeroSFPoly_set, METH_VARARGS, (char *)"Radiometric_sigmaZeroSFPoly_set(Radiometric self, Poly2D sigmaZeroSFPoly)"},
+	 { (char *)"Radiometric_sigmaZeroSFPoly_get", _wrap_Radiometric_sigmaZeroSFPoly_get, METH_VARARGS, (char *)"Radiometric_sigmaZeroSFPoly_get(Radiometric self) -> Poly2D"},
+	 { (char *)"Radiometric_sigmaZeroSFIncidenceMap_set", _wrap_Radiometric_sigmaZeroSFIncidenceMap_set, METH_VARARGS, (char *)"Radiometric_sigmaZeroSFIncidenceMap_set(Radiometric self, AppliedType sigmaZeroSFIncidenceMap)"},
+	 { (char *)"Radiometric_sigmaZeroSFIncidenceMap_get", _wrap_Radiometric_sigmaZeroSFIncidenceMap_get, METH_VARARGS, (char *)"Radiometric_sigmaZeroSFIncidenceMap_get(Radiometric self) -> AppliedType"},
+	 { (char *)"Radiometric_gammaZeroSFPoly_set", _wrap_Radiometric_gammaZeroSFPoly_set, METH_VARARGS, (char *)"Radiometric_gammaZeroSFPoly_set(Radiometric self, Poly2D gammaZeroSFPoly)"},
+	 { (char *)"Radiometric_gammaZeroSFPoly_get", _wrap_Radiometric_gammaZeroSFPoly_get, METH_VARARGS, (char *)"Radiometric_gammaZeroSFPoly_get(Radiometric self) -> Poly2D"},
+	 { (char *)"Radiometric_gammaZeroSFIncidenceMap_set", _wrap_Radiometric_gammaZeroSFIncidenceMap_set, METH_VARARGS, (char *)"Radiometric_gammaZeroSFIncidenceMap_set(Radiometric self, AppliedType gammaZeroSFIncidenceMap)"},
+	 { (char *)"Radiometric_gammaZeroSFIncidenceMap_get", _wrap_Radiometric_gammaZeroSFIncidenceMap_get, METH_VARARGS, (char *)"Radiometric_gammaZeroSFIncidenceMap_get(Radiometric self) -> AppliedType"},
+	 { (char *)"Radiometric___eq__", _wrap_Radiometric___eq__, METH_VARARGS, (char *)"Radiometric___eq__(Radiometric self, Radiometric rhs) -> bool"},
+	 { (char *)"Radiometric___ne__", _wrap_Radiometric___ne__, METH_VARARGS, (char *)"Radiometric___ne__(Radiometric self, Radiometric rhs) -> bool"},
+	 { (char *)"delete_Radiometric", _wrap_delete_Radiometric, METH_VARARGS, (char *)"delete_Radiometric(Radiometric self)"},
+	 { (char *)"Radiometric_swigregister", Radiometric_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_Data", _wrap_delete_Data, METH_VARARGS, (char *)"delete_Data(Data self)"},
 	 { (char *)"Data_clone", _wrap_Data_clone, METH_VARARGS, (char *)"Data_clone(Data self) -> Data"},
 	 { (char *)"Data_getDataType", _wrap_Data_getDataType, METH_VARARGS, (char *)"Data_getDataType(Data self) -> DataType"},
@@ -91096,6 +103449,7 @@ static PyMethodDef SwigMethods[] = {
 		"setLogger(logging::Logger * log, bool ownLog=False)\n"
 		"XMLControl_setLogger(XMLControl self, logging::Logger * log)\n"
 		""},
+	 { (char *)"XMLControl_validate", _wrap_XMLControl_validate, METH_VARARGS, (char *)"XMLControl_validate(xml::lite::Document const * doc, VectorString schemaPaths, logging::Logger * log)"},
 	 { (char *)"XMLControl_toXML", _wrap_XMLControl_toXML, METH_VARARGS, (char *)"XMLControl_toXML(XMLControl self, Data data, VectorString schemaPaths) -> xml::lite::Document *"},
 	 { (char *)"XMLControl_fromXML", _wrap_XMLControl_fromXML, METH_VARARGS, (char *)"XMLControl_fromXML(XMLControl self, xml::lite::Document const * doc, VectorString schemaPaths) -> Data"},
 	 { (char *)"XMLControl_dataTypeToString", _wrap_XMLControl_dataTypeToString, METH_VARARGS, (char *)"\n"
@@ -91158,6 +103512,20 @@ static PyMethodDef SwigMethods[] = {
 		"toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string\n"
 		"toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log) -> std::string\n"
 		""},
+	 { (char *)"new_GeoInfo", _wrap_new_GeoInfo, METH_VARARGS, (char *)"new_GeoInfo() -> GeoInfo"},
+	 { (char *)"delete_GeoInfo", _wrap_delete_GeoInfo, METH_VARARGS, (char *)"delete_GeoInfo(GeoInfo self)"},
+	 { (char *)"GeoInfo_name_set", _wrap_GeoInfo_name_set, METH_VARARGS, (char *)"GeoInfo_name_set(GeoInfo self, std::string const & name)"},
+	 { (char *)"GeoInfo_name_get", _wrap_GeoInfo_name_get, METH_VARARGS, (char *)"GeoInfo_name_get(GeoInfo self) -> std::string const &"},
+	 { (char *)"GeoInfo_geoInfos_set", _wrap_GeoInfo_geoInfos_set, METH_VARARGS, (char *)"GeoInfo_geoInfos_set(GeoInfo self, VectorScopedCopyableGeoInfo geoInfos)"},
+	 { (char *)"GeoInfo_geoInfos_get", _wrap_GeoInfo_geoInfos_get, METH_VARARGS, (char *)"GeoInfo_geoInfos_get(GeoInfo self) -> VectorScopedCopyableGeoInfo"},
+	 { (char *)"GeoInfo_desc_set", _wrap_GeoInfo_desc_set, METH_VARARGS, (char *)"GeoInfo_desc_set(GeoInfo self, ParameterCollection desc)"},
+	 { (char *)"GeoInfo_desc_get", _wrap_GeoInfo_desc_get, METH_VARARGS, (char *)"GeoInfo_desc_get(GeoInfo self) -> ParameterCollection"},
+	 { (char *)"GeoInfo_geometryLatLon_set", _wrap_GeoInfo_geometryLatLon_set, METH_VARARGS, (char *)"GeoInfo_geometryLatLon_set(GeoInfo self, std::vector< six::LatLon,std::allocator< six::LatLon > > * geometryLatLon)"},
+	 { (char *)"GeoInfo_geometryLatLon_get", _wrap_GeoInfo_geometryLatLon_get, METH_VARARGS, (char *)"GeoInfo_geometryLatLon_get(GeoInfo self) -> std::vector< six::LatLon,std::allocator< six::LatLon > > *"},
+	 { (char *)"GeoInfo___eq__", _wrap_GeoInfo___eq__, METH_VARARGS, (char *)"GeoInfo___eq__(GeoInfo self, GeoInfo rhs) -> bool"},
+	 { (char *)"GeoInfo___ne__", _wrap_GeoInfo___ne__, METH_VARARGS, (char *)"GeoInfo___ne__(GeoInfo self, GeoInfo rhs) -> bool"},
+	 { (char *)"GeoInfo_swigregister", GeoInfo_swigregister, METH_VARARGS, NULL},
+	 { (char *)"__lshift__", _wrap___lshift__, METH_VARARGS, (char *)"__lshift__(std::ostream & os, GeoInfo g) -> std::ostream &"},
 	 { (char *)"new_LatLonCorners", _wrap_new_LatLonCorners, METH_VARARGS, (char *)"new_LatLonCorners() -> LatLonCorners"},
 	 { (char *)"LatLonCorners_getCorner", _wrap_LatLonCorners_getCorner, METH_VARARGS, (char *)"\n"
 		"getCorner(size_t idx) -> LatLon\n"
@@ -91314,6 +103682,128 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorMatchType_capacity", _wrap_VectorMatchType_capacity, METH_VARARGS, (char *)"VectorMatchType_capacity(VectorMatchType self) -> std::vector< six::MatchType >::size_type"},
 	 { (char *)"delete_VectorMatchType", _wrap_delete_VectorMatchType, METH_VARARGS, (char *)"delete_VectorMatchType(VectorMatchType self)"},
 	 { (char *)"VectorMatchType_swigregister", VectorMatchType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VectorScopedCopyableMatchType_iterator", _wrap_VectorScopedCopyableMatchType_iterator, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_iterator(VectorScopedCopyableMatchType self) -> SwigPyIterator"},
+	 { (char *)"VectorScopedCopyableMatchType___nonzero__", _wrap_VectorScopedCopyableMatchType___nonzero__, METH_VARARGS, (char *)"VectorScopedCopyableMatchType___nonzero__(VectorScopedCopyableMatchType self) -> bool"},
+	 { (char *)"VectorScopedCopyableMatchType___bool__", _wrap_VectorScopedCopyableMatchType___bool__, METH_VARARGS, (char *)"VectorScopedCopyableMatchType___bool__(VectorScopedCopyableMatchType self) -> bool"},
+	 { (char *)"VectorScopedCopyableMatchType___len__", _wrap_VectorScopedCopyableMatchType___len__, METH_VARARGS, (char *)"VectorScopedCopyableMatchType___len__(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"},
+	 { (char *)"VectorScopedCopyableMatchType___getslice__", _wrap_VectorScopedCopyableMatchType___getslice__, METH_VARARGS, (char *)"VectorScopedCopyableMatchType___getslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j) -> VectorScopedCopyableMatchType"},
+	 { (char *)"VectorScopedCopyableMatchType___setslice__", _wrap_VectorScopedCopyableMatchType___setslice__, METH_VARARGS, (char *)"\n"
+		"__setslice__(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j)\n"
+		"VectorScopedCopyableMatchType___setslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j, VectorScopedCopyableMatchType v)\n"
+		""},
+	 { (char *)"VectorScopedCopyableMatchType___delslice__", _wrap_VectorScopedCopyableMatchType___delslice__, METH_VARARGS, (char *)"VectorScopedCopyableMatchType___delslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j)"},
+	 { (char *)"VectorScopedCopyableMatchType___delitem__", _wrap_VectorScopedCopyableMatchType___delitem__, METH_VARARGS, (char *)"\n"
+		"__delitem__(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i)\n"
+		"VectorScopedCopyableMatchType___delitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)\n"
+		""},
+	 { (char *)"VectorScopedCopyableMatchType___getitem__", _wrap_VectorScopedCopyableMatchType___getitem__, METH_VARARGS, (char *)"\n"
+		"__getitem__(PySliceObject * slice) -> VectorScopedCopyableMatchType\n"
+		"VectorScopedCopyableMatchType___getitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i) -> ScopedCopyableMatchType\n"
+		""},
+	 { (char *)"VectorScopedCopyableMatchType___setitem__", _wrap_VectorScopedCopyableMatchType___setitem__, METH_VARARGS, (char *)"\n"
+		"__setitem__(PySliceObject * slice, VectorScopedCopyableMatchType v)\n"
+		"__setitem__(PySliceObject * slice)\n"
+		"VectorScopedCopyableMatchType___setitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, ScopedCopyableMatchType x)\n"
+		""},
+	 { (char *)"VectorScopedCopyableMatchType_pop", _wrap_VectorScopedCopyableMatchType_pop, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_pop(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"},
+	 { (char *)"VectorScopedCopyableMatchType_append", _wrap_VectorScopedCopyableMatchType_append, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_append(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"},
+	 { (char *)"VectorScopedCopyableMatchType_empty", _wrap_VectorScopedCopyableMatchType_empty, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_empty(VectorScopedCopyableMatchType self) -> bool"},
+	 { (char *)"VectorScopedCopyableMatchType_size", _wrap_VectorScopedCopyableMatchType_size, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_size(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"},
+	 { (char *)"VectorScopedCopyableMatchType_swap", _wrap_VectorScopedCopyableMatchType_swap, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_swap(VectorScopedCopyableMatchType self, VectorScopedCopyableMatchType v)"},
+	 { (char *)"VectorScopedCopyableMatchType_begin", _wrap_VectorScopedCopyableMatchType_begin, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_begin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator"},
+	 { (char *)"VectorScopedCopyableMatchType_end", _wrap_VectorScopedCopyableMatchType_end, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_end(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator"},
+	 { (char *)"VectorScopedCopyableMatchType_rbegin", _wrap_VectorScopedCopyableMatchType_rbegin, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_rbegin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator"},
+	 { (char *)"VectorScopedCopyableMatchType_rend", _wrap_VectorScopedCopyableMatchType_rend, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_rend(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator"},
+	 { (char *)"VectorScopedCopyableMatchType_clear", _wrap_VectorScopedCopyableMatchType_clear, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_clear(VectorScopedCopyableMatchType self)"},
+	 { (char *)"VectorScopedCopyableMatchType_get_allocator", _wrap_VectorScopedCopyableMatchType_get_allocator, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_get_allocator(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type"},
+	 { (char *)"VectorScopedCopyableMatchType_pop_back", _wrap_VectorScopedCopyableMatchType_pop_back, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_pop_back(VectorScopedCopyableMatchType self)"},
+	 { (char *)"VectorScopedCopyableMatchType_erase", _wrap_VectorScopedCopyableMatchType_erase, METH_VARARGS, (char *)"\n"
+		"erase(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator\n"
+		"VectorScopedCopyableMatchType_erase(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator\n"
+		""},
+	 { (char *)"new_VectorScopedCopyableMatchType", _wrap_new_VectorScopedCopyableMatchType, METH_VARARGS, (char *)"\n"
+		"VectorScopedCopyableMatchType()\n"
+		"VectorScopedCopyableMatchType(VectorScopedCopyableMatchType arg2)\n"
+		"VectorScopedCopyableMatchType(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type size)\n"
+		"new_VectorScopedCopyableMatchType(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type size, ScopedCopyableMatchType value) -> VectorScopedCopyableMatchType\n"
+		""},
+	 { (char *)"VectorScopedCopyableMatchType_push_back", _wrap_VectorScopedCopyableMatchType_push_back, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_push_back(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"},
+	 { (char *)"VectorScopedCopyableMatchType_front", _wrap_VectorScopedCopyableMatchType_front, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_front(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"},
+	 { (char *)"VectorScopedCopyableMatchType_back", _wrap_VectorScopedCopyableMatchType_back, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_back(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"},
+	 { (char *)"VectorScopedCopyableMatchType_assign", _wrap_VectorScopedCopyableMatchType_assign, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_assign(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n, ScopedCopyableMatchType x)"},
+	 { (char *)"VectorScopedCopyableMatchType_resize", _wrap_VectorScopedCopyableMatchType_resize, METH_VARARGS, (char *)"\n"
+		"resize(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type new_size)\n"
+		"VectorScopedCopyableMatchType_resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type new_size, ScopedCopyableMatchType x)\n"
+		""},
+	 { (char *)"VectorScopedCopyableMatchType_insert", _wrap_VectorScopedCopyableMatchType_insert, METH_VARARGS, (char *)"\n"
+		"insert(std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos, ScopedCopyableMatchType x) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator\n"
+		"VectorScopedCopyableMatchType_insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n, ScopedCopyableMatchType x)\n"
+		""},
+	 { (char *)"VectorScopedCopyableMatchType_reserve", _wrap_VectorScopedCopyableMatchType_reserve, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_reserve(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n)"},
+	 { (char *)"VectorScopedCopyableMatchType_capacity", _wrap_VectorScopedCopyableMatchType_capacity, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_capacity(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"},
+	 { (char *)"delete_VectorScopedCopyableMatchType", _wrap_delete_VectorScopedCopyableMatchType, METH_VARARGS, (char *)"delete_VectorScopedCopyableMatchType(VectorScopedCopyableMatchType self)"},
+	 { (char *)"VectorScopedCopyableMatchType_swigregister", VectorScopedCopyableMatchType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VectorScopedCopyableGeoInfo_iterator", _wrap_VectorScopedCopyableGeoInfo_iterator, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_iterator(VectorScopedCopyableGeoInfo self) -> SwigPyIterator"},
+	 { (char *)"VectorScopedCopyableGeoInfo___nonzero__", _wrap_VectorScopedCopyableGeoInfo___nonzero__, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo___nonzero__(VectorScopedCopyableGeoInfo self) -> bool"},
+	 { (char *)"VectorScopedCopyableGeoInfo___bool__", _wrap_VectorScopedCopyableGeoInfo___bool__, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo___bool__(VectorScopedCopyableGeoInfo self) -> bool"},
+	 { (char *)"VectorScopedCopyableGeoInfo___len__", _wrap_VectorScopedCopyableGeoInfo___len__, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo___len__(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"},
+	 { (char *)"VectorScopedCopyableGeoInfo___getslice__", _wrap_VectorScopedCopyableGeoInfo___getslice__, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo___getslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j) -> VectorScopedCopyableGeoInfo"},
+	 { (char *)"VectorScopedCopyableGeoInfo___setslice__", _wrap_VectorScopedCopyableGeoInfo___setslice__, METH_VARARGS, (char *)"\n"
+		"__setslice__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)\n"
+		"VectorScopedCopyableGeoInfo___setslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j, VectorScopedCopyableGeoInfo v)\n"
+		""},
+	 { (char *)"VectorScopedCopyableGeoInfo___delslice__", _wrap_VectorScopedCopyableGeoInfo___delslice__, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo___delslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)"},
+	 { (char *)"VectorScopedCopyableGeoInfo___delitem__", _wrap_VectorScopedCopyableGeoInfo___delitem__, METH_VARARGS, (char *)"\n"
+		"__delitem__(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i)\n"
+		"VectorScopedCopyableGeoInfo___delitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice)\n"
+		""},
+	 { (char *)"VectorScopedCopyableGeoInfo___getitem__", _wrap_VectorScopedCopyableGeoInfo___getitem__, METH_VARARGS, (char *)"\n"
+		"__getitem__(PySliceObject * slice) -> VectorScopedCopyableGeoInfo\n"
+		"VectorScopedCopyableGeoInfo___getitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i) -> ScopedCopyableGeoInfo\n"
+		""},
+	 { (char *)"VectorScopedCopyableGeoInfo___setitem__", _wrap_VectorScopedCopyableGeoInfo___setitem__, METH_VARARGS, (char *)"\n"
+		"__setitem__(PySliceObject * slice, VectorScopedCopyableGeoInfo v)\n"
+		"__setitem__(PySliceObject * slice)\n"
+		"VectorScopedCopyableGeoInfo___setitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, ScopedCopyableGeoInfo x)\n"
+		""},
+	 { (char *)"VectorScopedCopyableGeoInfo_pop", _wrap_VectorScopedCopyableGeoInfo_pop, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_pop(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"},
+	 { (char *)"VectorScopedCopyableGeoInfo_append", _wrap_VectorScopedCopyableGeoInfo_append, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_append(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"},
+	 { (char *)"VectorScopedCopyableGeoInfo_empty", _wrap_VectorScopedCopyableGeoInfo_empty, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_empty(VectorScopedCopyableGeoInfo self) -> bool"},
+	 { (char *)"VectorScopedCopyableGeoInfo_size", _wrap_VectorScopedCopyableGeoInfo_size, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_size(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"},
+	 { (char *)"VectorScopedCopyableGeoInfo_swap", _wrap_VectorScopedCopyableGeoInfo_swap, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_swap(VectorScopedCopyableGeoInfo self, VectorScopedCopyableGeoInfo v)"},
+	 { (char *)"VectorScopedCopyableGeoInfo_begin", _wrap_VectorScopedCopyableGeoInfo_begin, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_begin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"},
+	 { (char *)"VectorScopedCopyableGeoInfo_end", _wrap_VectorScopedCopyableGeoInfo_end, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_end(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"},
+	 { (char *)"VectorScopedCopyableGeoInfo_rbegin", _wrap_VectorScopedCopyableGeoInfo_rbegin, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_rbegin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"},
+	 { (char *)"VectorScopedCopyableGeoInfo_rend", _wrap_VectorScopedCopyableGeoInfo_rend, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_rend(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"},
+	 { (char *)"VectorScopedCopyableGeoInfo_clear", _wrap_VectorScopedCopyableGeoInfo_clear, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_clear(VectorScopedCopyableGeoInfo self)"},
+	 { (char *)"VectorScopedCopyableGeoInfo_get_allocator", _wrap_VectorScopedCopyableGeoInfo_get_allocator, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_get_allocator(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type"},
+	 { (char *)"VectorScopedCopyableGeoInfo_pop_back", _wrap_VectorScopedCopyableGeoInfo_pop_back, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_pop_back(VectorScopedCopyableGeoInfo self)"},
+	 { (char *)"VectorScopedCopyableGeoInfo_erase", _wrap_VectorScopedCopyableGeoInfo_erase, METH_VARARGS, (char *)"\n"
+		"erase(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator\n"
+		"VectorScopedCopyableGeoInfo_erase(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator\n"
+		""},
+	 { (char *)"new_VectorScopedCopyableGeoInfo", _wrap_new_VectorScopedCopyableGeoInfo, METH_VARARGS, (char *)"\n"
+		"VectorScopedCopyableGeoInfo()\n"
+		"VectorScopedCopyableGeoInfo(VectorScopedCopyableGeoInfo arg2)\n"
+		"VectorScopedCopyableGeoInfo(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type size)\n"
+		"new_VectorScopedCopyableGeoInfo(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type size, ScopedCopyableGeoInfo value) -> VectorScopedCopyableGeoInfo\n"
+		""},
+	 { (char *)"VectorScopedCopyableGeoInfo_push_back", _wrap_VectorScopedCopyableGeoInfo_push_back, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_push_back(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"},
+	 { (char *)"VectorScopedCopyableGeoInfo_front", _wrap_VectorScopedCopyableGeoInfo_front, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_front(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"},
+	 { (char *)"VectorScopedCopyableGeoInfo_back", _wrap_VectorScopedCopyableGeoInfo_back, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_back(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"},
+	 { (char *)"VectorScopedCopyableGeoInfo_assign", _wrap_VectorScopedCopyableGeoInfo_assign, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_assign(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)"},
+	 { (char *)"VectorScopedCopyableGeoInfo_resize", _wrap_VectorScopedCopyableGeoInfo_resize, METH_VARARGS, (char *)"\n"
+		"resize(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size)\n"
+		"VectorScopedCopyableGeoInfo_resize(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size, ScopedCopyableGeoInfo x)\n"
+		""},
+	 { (char *)"VectorScopedCopyableGeoInfo_insert", _wrap_VectorScopedCopyableGeoInfo_insert, METH_VARARGS, (char *)"\n"
+		"insert(std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, ScopedCopyableGeoInfo x) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator\n"
+		"VectorScopedCopyableGeoInfo_insert(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)\n"
+		""},
+	 { (char *)"VectorScopedCopyableGeoInfo_reserve", _wrap_VectorScopedCopyableGeoInfo_reserve, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_reserve(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n)"},
+	 { (char *)"VectorScopedCopyableGeoInfo_capacity", _wrap_VectorScopedCopyableGeoInfo_capacity, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_capacity(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"},
+	 { (char *)"delete_VectorScopedCopyableGeoInfo", _wrap_delete_VectorScopedCopyableGeoInfo, METH_VARARGS, (char *)"delete_VectorScopedCopyableGeoInfo(VectorScopedCopyableGeoInfo self)"},
+	 { (char *)"VectorScopedCopyableGeoInfo_swigregister", VectorScopedCopyableGeoInfo_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_StdAutoRadiometric", _wrap_new_StdAutoRadiometric, METH_VARARGS, (char *)"new_StdAutoRadiometric() -> StdAutoRadiometric"},
 	 { (char *)"delete_StdAutoRadiometric", _wrap_delete_StdAutoRadiometric, METH_VARARGS, (char *)"delete_StdAutoRadiometric(StdAutoRadiometric self)"},
 	 { (char *)"StdAutoRadiometric_swigregister", StdAutoRadiometric_swigregister, METH_VARARGS, NULL},
@@ -91497,6 +103987,35 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyablePosVelError___ne__", _wrap_ScopedCopyablePosVelError___ne__, METH_VARARGS, (char *)"ScopedCopyablePosVelError___ne__(ScopedCopyablePosVelError self, PosVelError rhs) -> bool"},
 	 { (char *)"ScopedCopyablePosVelError_swigregister", ScopedCopyablePosVelError_swigregister, METH_VARARGS, NULL},
 	 { (char *)"makeScopedCopyablePosVelError", _wrap_makeScopedCopyablePosVelError, METH_VARARGS, (char *)"makeScopedCopyablePosVelError() -> ScopedCopyablePosVelError"},
+	 { (char *)"new_StdAutoGeoInfo", _wrap_new_StdAutoGeoInfo, METH_VARARGS, (char *)"new_StdAutoGeoInfo() -> StdAutoGeoInfo"},
+	 { (char *)"delete_StdAutoGeoInfo", _wrap_delete_StdAutoGeoInfo, METH_VARARGS, (char *)"delete_StdAutoGeoInfo(StdAutoGeoInfo self)"},
+	 { (char *)"StdAutoGeoInfo_swigregister", StdAutoGeoInfo_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_ScopedCopyableGeoInfo", _wrap_new_ScopedCopyableGeoInfo, METH_VARARGS, (char *)"\n"
+		"ScopedCopyableGeoInfo(GeoInfo ptr=None)\n"
+		"ScopedCopyableGeoInfo()\n"
+		"new_ScopedCopyableGeoInfo(ScopedCopyableGeoInfo rhs) -> ScopedCopyableGeoInfo\n"
+		""},
+	 { (char *)"ScopedCopyableGeoInfo___nonzero__", _wrap_ScopedCopyableGeoInfo___nonzero__, METH_VARARGS, (char *)"ScopedCopyableGeoInfo___nonzero__(ScopedCopyableGeoInfo self) -> bool"},
+	 { (char *)"ScopedCopyableGeoInfo_get", _wrap_ScopedCopyableGeoInfo_get, METH_VARARGS, (char *)"ScopedCopyableGeoInfo_get(ScopedCopyableGeoInfo self) -> GeoInfo"},
+	 { (char *)"ScopedCopyableGeoInfo___ref__", _wrap_ScopedCopyableGeoInfo___ref__, METH_VARARGS, (char *)"ScopedCopyableGeoInfo___ref__(ScopedCopyableGeoInfo self) -> GeoInfo"},
+	 { (char *)"ScopedCopyableGeoInfo___deref__", _wrap_ScopedCopyableGeoInfo___deref__, METH_VARARGS, (char *)"ScopedCopyableGeoInfo___deref__(ScopedCopyableGeoInfo self) -> GeoInfo"},
+	 { (char *)"ScopedCopyableGeoInfo_reset", _wrap_ScopedCopyableGeoInfo_reset, METH_VARARGS, (char *)"\n"
+		"reset(GeoInfo ptr=None)\n"
+		"ScopedCopyableGeoInfo_reset(ScopedCopyableGeoInfo self)\n"
+		""},
+	 { (char *)"delete_ScopedCopyableGeoInfo", _wrap_delete_ScopedCopyableGeoInfo, METH_VARARGS, (char *)"delete_ScopedCopyableGeoInfo(ScopedCopyableGeoInfo self)"},
+	 { (char *)"ScopedCopyableGeoInfo_name_set", _wrap_ScopedCopyableGeoInfo_name_set, METH_VARARGS, (char *)"ScopedCopyableGeoInfo_name_set(ScopedCopyableGeoInfo self, std::string const & name)"},
+	 { (char *)"ScopedCopyableGeoInfo_name_get", _wrap_ScopedCopyableGeoInfo_name_get, METH_VARARGS, (char *)"ScopedCopyableGeoInfo_name_get(ScopedCopyableGeoInfo self) -> std::string const &"},
+	 { (char *)"ScopedCopyableGeoInfo_geoInfos_set", _wrap_ScopedCopyableGeoInfo_geoInfos_set, METH_VARARGS, (char *)"ScopedCopyableGeoInfo_geoInfos_set(ScopedCopyableGeoInfo self, VectorScopedCopyableGeoInfo geoInfos)"},
+	 { (char *)"ScopedCopyableGeoInfo_geoInfos_get", _wrap_ScopedCopyableGeoInfo_geoInfos_get, METH_VARARGS, (char *)"ScopedCopyableGeoInfo_geoInfos_get(ScopedCopyableGeoInfo self) -> VectorScopedCopyableGeoInfo"},
+	 { (char *)"ScopedCopyableGeoInfo_desc_set", _wrap_ScopedCopyableGeoInfo_desc_set, METH_VARARGS, (char *)"ScopedCopyableGeoInfo_desc_set(ScopedCopyableGeoInfo self, ParameterCollection desc)"},
+	 { (char *)"ScopedCopyableGeoInfo_desc_get", _wrap_ScopedCopyableGeoInfo_desc_get, METH_VARARGS, (char *)"ScopedCopyableGeoInfo_desc_get(ScopedCopyableGeoInfo self) -> ParameterCollection"},
+	 { (char *)"ScopedCopyableGeoInfo_geometryLatLon_set", _wrap_ScopedCopyableGeoInfo_geometryLatLon_set, METH_VARARGS, (char *)"ScopedCopyableGeoInfo_geometryLatLon_set(ScopedCopyableGeoInfo self, std::vector< six::LatLon,std::allocator< six::LatLon > > * geometryLatLon)"},
+	 { (char *)"ScopedCopyableGeoInfo_geometryLatLon_get", _wrap_ScopedCopyableGeoInfo_geometryLatLon_get, METH_VARARGS, (char *)"ScopedCopyableGeoInfo_geometryLatLon_get(ScopedCopyableGeoInfo self) -> std::vector< six::LatLon,std::allocator< six::LatLon > > *"},
+	 { (char *)"ScopedCopyableGeoInfo___eq__", _wrap_ScopedCopyableGeoInfo___eq__, METH_VARARGS, (char *)"ScopedCopyableGeoInfo___eq__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"},
+	 { (char *)"ScopedCopyableGeoInfo___ne__", _wrap_ScopedCopyableGeoInfo___ne__, METH_VARARGS, (char *)"ScopedCopyableGeoInfo___ne__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"},
+	 { (char *)"ScopedCopyableGeoInfo_swigregister", ScopedCopyableGeoInfo_swigregister, METH_VARARGS, NULL},
+	 { (char *)"makeScopedCopyableGeoInfo", _wrap_makeScopedCopyableGeoInfo, METH_VARARGS, (char *)"makeScopedCopyableGeoInfo() -> ScopedCopyableGeoInfo"},
 	 { (char *)"new_StdAutoRadarSensor", _wrap_new_StdAutoRadarSensor, METH_VARARGS, (char *)"new_StdAutoRadarSensor() -> StdAutoRadarSensor"},
 	 { (char *)"delete_StdAutoRadarSensor", _wrap_delete_StdAutoRadarSensor, METH_VARARGS, (char *)"delete_StdAutoRadarSensor(StdAutoRadarSensor self)"},
 	 { (char *)"StdAutoRadarSensor_swigregister", StdAutoRadarSensor_swigregister, METH_VARARGS, NULL},
@@ -91700,6 +104219,47 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"ScopedCloneableAmplitudeTable_swigregister", ScopedCloneableAmplitudeTable_swigregister, METH_VARARGS, NULL},
 	 { (char *)"makeScopedCloneableAmplitudeTable", _wrap_makeScopedCloneableAmplitudeTable, METH_VARARGS, (char *)"makeScopedCloneableAmplitudeTable() -> ScopedCloneableAmplitudeTable"},
+	 { (char *)"new_StdAutoCollectionInformation", _wrap_new_StdAutoCollectionInformation, METH_VARARGS, (char *)"new_StdAutoCollectionInformation() -> StdAutoCollectionInformation"},
+	 { (char *)"delete_StdAutoCollectionInformation", _wrap_delete_StdAutoCollectionInformation, METH_VARARGS, (char *)"delete_StdAutoCollectionInformation(StdAutoCollectionInformation self)"},
+	 { (char *)"StdAutoCollectionInformation_swigregister", StdAutoCollectionInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_ScopedCloneableCollectionInformation", _wrap_new_ScopedCloneableCollectionInformation, METH_VARARGS, (char *)"\n"
+		"ScopedCloneableCollectionInformation(CollectionInformation ptr=None)\n"
+		"ScopedCloneableCollectionInformation()\n"
+		"new_ScopedCloneableCollectionInformation(ScopedCloneableCollectionInformation rhs) -> ScopedCloneableCollectionInformation\n"
+		""},
+	 { (char *)"ScopedCloneableCollectionInformation_get", _wrap_ScopedCloneableCollectionInformation_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_get(ScopedCloneableCollectionInformation self) -> CollectionInformation"},
+	 { (char *)"ScopedCloneableCollectionInformation___ref__", _wrap_ScopedCloneableCollectionInformation___ref__, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation___ref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"},
+	 { (char *)"ScopedCloneableCollectionInformation___deref__", _wrap_ScopedCloneableCollectionInformation___deref__, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation___deref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"},
+	 { (char *)"ScopedCloneableCollectionInformation_reset", _wrap_ScopedCloneableCollectionInformation_reset, METH_VARARGS, (char *)"\n"
+		"reset(CollectionInformation ptr=None)\n"
+		"ScopedCloneableCollectionInformation_reset(ScopedCloneableCollectionInformation self)\n"
+		""},
+	 { (char *)"delete_ScopedCloneableCollectionInformation", _wrap_delete_ScopedCloneableCollectionInformation, METH_VARARGS, (char *)"delete_ScopedCloneableCollectionInformation(ScopedCloneableCollectionInformation self)"},
+	 { (char *)"ScopedCloneableCollectionInformation_collectorName_set", _wrap_ScopedCloneableCollectionInformation_collectorName_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_collectorName_set(ScopedCloneableCollectionInformation self, std::string const & collectorName)"},
+	 { (char *)"ScopedCloneableCollectionInformation_collectorName_get", _wrap_ScopedCloneableCollectionInformation_collectorName_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_collectorName_get(ScopedCloneableCollectionInformation self) -> std::string const &"},
+	 { (char *)"ScopedCloneableCollectionInformation_illuminatorName_set", _wrap_ScopedCloneableCollectionInformation_illuminatorName_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_illuminatorName_set(ScopedCloneableCollectionInformation self, std::string const & illuminatorName)"},
+	 { (char *)"ScopedCloneableCollectionInformation_illuminatorName_get", _wrap_ScopedCloneableCollectionInformation_illuminatorName_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_illuminatorName_get(ScopedCloneableCollectionInformation self) -> std::string const &"},
+	 { (char *)"ScopedCloneableCollectionInformation_coreName_set", _wrap_ScopedCloneableCollectionInformation_coreName_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_coreName_set(ScopedCloneableCollectionInformation self, std::string const & coreName)"},
+	 { (char *)"ScopedCloneableCollectionInformation_coreName_get", _wrap_ScopedCloneableCollectionInformation_coreName_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_coreName_get(ScopedCloneableCollectionInformation self) -> std::string const &"},
+	 { (char *)"ScopedCloneableCollectionInformation_collectType_set", _wrap_ScopedCloneableCollectionInformation_collectType_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_collectType_set(ScopedCloneableCollectionInformation self, CollectType collectType)"},
+	 { (char *)"ScopedCloneableCollectionInformation_collectType_get", _wrap_ScopedCloneableCollectionInformation_collectType_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_collectType_get(ScopedCloneableCollectionInformation self) -> CollectType"},
+	 { (char *)"ScopedCloneableCollectionInformation_radarMode_set", _wrap_ScopedCloneableCollectionInformation_radarMode_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_radarMode_set(ScopedCloneableCollectionInformation self, RadarModeType radarMode)"},
+	 { (char *)"ScopedCloneableCollectionInformation_radarMode_get", _wrap_ScopedCloneableCollectionInformation_radarMode_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_radarMode_get(ScopedCloneableCollectionInformation self) -> RadarModeType"},
+	 { (char *)"ScopedCloneableCollectionInformation_radarModeID_set", _wrap_ScopedCloneableCollectionInformation_radarModeID_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_radarModeID_set(ScopedCloneableCollectionInformation self, std::string const & radarModeID)"},
+	 { (char *)"ScopedCloneableCollectionInformation_radarModeID_get", _wrap_ScopedCloneableCollectionInformation_radarModeID_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_radarModeID_get(ScopedCloneableCollectionInformation self) -> std::string const &"},
+	 { (char *)"ScopedCloneableCollectionInformation_releaseInfo_set", _wrap_ScopedCloneableCollectionInformation_releaseInfo_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_releaseInfo_set(ScopedCloneableCollectionInformation self, std::string const & releaseInfo)"},
+	 { (char *)"ScopedCloneableCollectionInformation_releaseInfo_get", _wrap_ScopedCloneableCollectionInformation_releaseInfo_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_releaseInfo_get(ScopedCloneableCollectionInformation self) -> std::string const &"},
+	 { (char *)"ScopedCloneableCollectionInformation_countryCodes_set", _wrap_ScopedCloneableCollectionInformation_countryCodes_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_countryCodes_set(ScopedCloneableCollectionInformation self, VectorString countryCodes)"},
+	 { (char *)"ScopedCloneableCollectionInformation_countryCodes_get", _wrap_ScopedCloneableCollectionInformation_countryCodes_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_countryCodes_get(ScopedCloneableCollectionInformation self) -> VectorString"},
+	 { (char *)"ScopedCloneableCollectionInformation_parameters_set", _wrap_ScopedCloneableCollectionInformation_parameters_set, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_parameters_set(ScopedCloneableCollectionInformation self, ParameterCollection parameters)"},
+	 { (char *)"ScopedCloneableCollectionInformation_parameters_get", _wrap_ScopedCloneableCollectionInformation_parameters_get, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_parameters_get(ScopedCloneableCollectionInformation self) -> ParameterCollection"},
+	 { (char *)"ScopedCloneableCollectionInformation_clone", _wrap_ScopedCloneableCollectionInformation_clone, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_clone(ScopedCloneableCollectionInformation self) -> CollectionInformation"},
+	 { (char *)"ScopedCloneableCollectionInformation___eq__", _wrap_ScopedCloneableCollectionInformation___eq__, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation___eq__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"},
+	 { (char *)"ScopedCloneableCollectionInformation___ne__", _wrap_ScopedCloneableCollectionInformation___ne__, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation___ne__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"},
+	 { (char *)"ScopedCloneableCollectionInformation_getClassificationLevel", _wrap_ScopedCloneableCollectionInformation_getClassificationLevel, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_getClassificationLevel(ScopedCloneableCollectionInformation self) -> std::string"},
+	 { (char *)"ScopedCloneableCollectionInformation_setClassificationLevel", _wrap_ScopedCloneableCollectionInformation_setClassificationLevel, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_setClassificationLevel(ScopedCloneableCollectionInformation self, std::string const & classification)"},
+	 { (char *)"ScopedCloneableCollectionInformation_swigregister", ScopedCloneableCollectionInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"makeScopedCloneableCollectionInformation", _wrap_makeScopedCloneableCollectionInformation, METH_VARARGS, (char *)"makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"},
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -91851,21 +104411,23 @@ static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|int64_t
 static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "sys::Int8_T *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__InputStream = {"_p_io__InputStream", "::io::InputStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__Logger = {"_p_logging__Logger", "logging::Logger *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_math__linear__VectorNT_2_double_t = {"_p_math__linear__VectorNT_2_double_t", "scene::Vector2 *|math::linear::VectorN< 2,double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_math__linear__VectorNT_2_double_t = {"_p_math__linear__VectorNT_2_double_t", "scene::Vector2 *|six::Vector2 *|math::linear::VectorN< 2,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorNT_3_double_t = {"_p_math__linear__VectorNT_3_double_t", "Vector3 *|scene::Vector3 *|six::Vector3 *|math::linear::VectorN< 3,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorT_double_t = {"_p_math__linear__VectorT_double_t", "VectorDouble *|math::linear::Vector< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__OneDT_double_t", "six::Poly1D *|math::poly::OneD< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "six::PolyXYZ *|math::poly::OneD< math::linear::VectorN< 3,double > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "six::Poly2D *|math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t = {"_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t", "mem::ScopedCloneablePtr< six::AmplitudeTable > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__ScopedCloneablePtrT_six__CollectionInformation_t = {"_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t", "mem::ScopedCloneablePtr< six::CollectionInformation > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__Components_t = {"_p_mem__ScopedCopyablePtrT_six__Components_t", "mem::ScopedCopyablePtr< six::Components > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t = {"_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t", "mem::ScopedCopyablePtr< six::CompositeSCP > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t = {"_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t", "mem::ScopedCopyablePtr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t = {"_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t", "mem::ScopedCopyablePtr< six::ErrorStatistics > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__GeoInfo_t = {"_p_mem__ScopedCopyablePtrT_six__GeoInfo_t", "mem::ScopedCopyablePtr< six::GeoInfo > *|std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__IonoError_t = {"_p_mem__ScopedCopyablePtrT_six__IonoError_t", "mem::ScopedCopyablePtr< six::IonoError > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__LUT_t = {"_p_mem__ScopedCopyablePtrT_six__LUT_t", "mem::ScopedCopyablePtr< six::LUT > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__MatchInformation_t = {"_p_mem__ScopedCopyablePtrT_six__MatchInformation_t", "mem::ScopedCopyablePtr< six::MatchInformation > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__MatchType_t = {"_p_mem__ScopedCopyablePtrT_six__MatchType_t", "mem::ScopedCopyablePtr< six::MatchType > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__MatchType_t = {"_p_mem__ScopedCopyablePtrT_six__MatchType_t", "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type *|mem::ScopedCopyablePtr< six::MatchType > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__PosVelError_t = {"_p_mem__ScopedCopyablePtrT_six__PosVelError_t", "mem::ScopedCopyablePtr< six::PosVelError > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__RadarSensor_t = {"_p_mem__ScopedCopyablePtrT_six__RadarSensor_t", "mem::ScopedCopyablePtr< six::RadarSensor > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_six__Radiometric_t = {"_p_mem__ScopedCopyablePtrT_six__Radiometric_t", "mem::ScopedCopyablePtr< six::Radiometric > *", 0, 0, (void*)0, 0};
@@ -91874,7 +104436,6 @@ static swig_type_info _swigt__p_mt__SingletonT_six__XMLControlRegistry_true_t = 
 static swig_type_info _swigt__p_nitf_DateTime = {"_p_nitf_DateTime", "nitf_DateTime *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf__DateTime = {"_p_nitf__DateTime", "nitf::DateTime *|six::DateTime *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf__FileSecurity = {"_p_nitf__FileSecurity", "nitf::FileSecurity *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_nitf__NITFException = {"_p_nitf__NITFException", "nitf::NITFException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_pid_t = {"_p_pid_t", "sys::Pid_T *|pid_t *", 0, 0, (void*)0, 0};
@@ -91891,6 +104452,7 @@ static swig_type_info _swigt__p_six__BooleanType = {"_p_six__BooleanType", "six:
 static swig_type_info _swigt__p_six__ByteSwapping = {"_p_six__ByteSwapping", "six::ByteSwapping *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__Classification = {"_p_six__Classification", "six::Classification *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__CollectType = {"_p_six__CollectType", "six::CollectType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__CollectionInformation = {"_p_six__CollectionInformation", "six::CollectionInformation *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ComplexImageGridType = {"_p_six__ComplexImageGridType", "six::ComplexImageGridType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ComplexImagePlaneType = {"_p_six__ComplexImagePlaneType", "six::ComplexImagePlaneType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__Components = {"_p_six__Components", "six::Components *", 0, 0, (void*)0, 0};
@@ -91910,6 +104472,7 @@ static swig_type_info _swigt__p_six__DualPolarizationType = {"_p_six__DualPolari
 static swig_type_info _swigt__p_six__EarthModelType = {"_p_six__EarthModelType", "six::EarthModelType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ErrorStatistics = {"_p_six__ErrorStatistics", "six::ErrorStatistics *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__FFTSign = {"_p_six__FFTSign", "six::FFTSign *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__GeoInfo = {"_p_six__GeoInfo", "six::GeoInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ImageBeamCompensationType = {"_p_six__ImageBeamCompensationType", "six::ImageBeamCompensationType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ImageFormationType = {"_p_six__ImageFormationType", "six::ImageFormationType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__Init = {"_p_six__Init", "six::Init *", 0, 0, (void*)0, 0};
@@ -91950,13 +104513,17 @@ static swig_type_info _swigt__p_six__XYZEnum = {"_p_six__XYZEnum", "six::XYZEnum
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t = {"_p_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t", "std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > *|std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t = {"_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t", "std::allocator< mem::ScopedCopyablePtr< six::MatchType > > *|std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_six__MatchCollect_t = {"_p_std__allocatorT_six__MatchCollect_t", "std::vector< six::MatchCollect >::allocator_type *|std::allocator< six::MatchCollect > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_six__MatchType_t = {"_p_std__allocatorT_six__MatchType_t", "std::vector< six::MatchType >::allocator_type *|std::allocator< six::MatchType > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__AmplitudeTable_t = {"_p_std__auto_ptrT_six__AmplitudeTable_t", "std::auto_ptr< six::AmplitudeTable > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__CollectionInformation_t = {"_p_std__auto_ptrT_six__CollectionInformation_t", "std::auto_ptr< six::CollectionInformation > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__Components_t = {"_p_std__auto_ptrT_six__Components_t", "std::auto_ptr< six::Components > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__CompositeSCP_t = {"_p_std__auto_ptrT_six__CompositeSCP_t", "std::auto_ptr< six::CompositeSCP > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__CorrCoefs_t = {"_p_std__auto_ptrT_six__CorrCoefs_t", "std::auto_ptr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__ErrorStatistics_t = {"_p_std__auto_ptrT_six__ErrorStatistics_t", "std::auto_ptr< six::ErrorStatistics > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__GeoInfo_t = {"_p_std__auto_ptrT_six__GeoInfo_t", "std::auto_ptr< six::GeoInfo > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__IonoError_t = {"_p_std__auto_ptrT_six__IonoError_t", "std::auto_ptr< six::IonoError > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__MatchInformation_t = {"_p_std__auto_ptrT_six__MatchInformation_t", "std::auto_ptr< six::MatchInformation > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__auto_ptrT_six__MatchType_t = {"_p_std__auto_ptrT_six__MatchType_t", "std::auto_ptr< six::MatchType > *", 0, 0, (void*)0, 0};
@@ -91969,6 +104536,9 @@ static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argume
 static swig_type_info _swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator = {"_p_std__mapT_std__string_six__Parameter_t__const_iterator", "std::map< std::string,six::Parameter >::const_iterator *|six::Options::ParameterIter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t = {"_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t", "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *|std::vector< mem::ScopedCopyablePtr< six::GeoInfo > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t = {"_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t", "std::vector< mem::ScopedCopyablePtr< six::MatchType > > *|std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t = {"_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t", "std::vector< six::LatLon,std::allocator< six::LatLon > > *|std::vector< scene::LatLon,std::allocator< scene::LatLon > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t = {"_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t", "std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *|std::vector< six::MatchCollect > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t = {"_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t", "std::vector< six::MatchType,std::allocator< six::MatchType > > *|std::vector< six::MatchType > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t = {"_p_std__vectorT_std__string_std__allocatorT_std__string_t_t", "std::vector< std::string,std::allocator< std::string > > *", 0, 0, (void*)0, 0};
@@ -92029,10 +104599,12 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   &_swigt__p_math__poly__TwoDT_double_t,
   &_swigt__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t,
+  &_swigt__p_mem__ScopedCloneablePtrT_six__CollectionInformation_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__Components_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t,
+  &_swigt__p_mem__ScopedCopyablePtrT_six__GeoInfo_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__IonoError_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__LUT_t,
   &_swigt__p_mem__ScopedCopyablePtrT_six__MatchInformation_t,
@@ -92045,7 +104617,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_nitf_DateTime,
   &_swigt__p_nitf__DateTime,
   &_swigt__p_nitf__FileSecurity,
-  &_swigt__p_nitf__NITFException,
   &_swigt__p_off_t,
   &_swigt__p_p_PyObject,
   &_swigt__p_pid_t,
@@ -92062,6 +104633,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__ByteSwapping,
   &_swigt__p_six__Classification,
   &_swigt__p_six__CollectType,
+  &_swigt__p_six__CollectionInformation,
   &_swigt__p_six__ComplexImageGridType,
   &_swigt__p_six__ComplexImagePlaneType,
   &_swigt__p_six__Components,
@@ -92081,6 +104653,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__EarthModelType,
   &_swigt__p_six__ErrorStatistics,
   &_swigt__p_six__FFTSign,
+  &_swigt__p_six__GeoInfo,
   &_swigt__p_six__ImageBeamCompensationType,
   &_swigt__p_six__ImageFormationType,
   &_swigt__p_six__Init,
@@ -92121,13 +104694,17 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_size_t,
   &_swigt__p_size_type,
   &_swigt__p_ssize_t,
+  &_swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t,
+  &_swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t,
   &_swigt__p_std__allocatorT_six__MatchCollect_t,
   &_swigt__p_std__allocatorT_six__MatchType_t,
   &_swigt__p_std__auto_ptrT_six__AmplitudeTable_t,
+  &_swigt__p_std__auto_ptrT_six__CollectionInformation_t,
   &_swigt__p_std__auto_ptrT_six__Components_t,
   &_swigt__p_std__auto_ptrT_six__CompositeSCP_t,
   &_swigt__p_std__auto_ptrT_six__CorrCoefs_t,
   &_swigt__p_std__auto_ptrT_six__ErrorStatistics_t,
+  &_swigt__p_std__auto_ptrT_six__GeoInfo_t,
   &_swigt__p_std__auto_ptrT_six__IonoError_t,
   &_swigt__p_std__auto_ptrT_six__MatchInformation_t,
   &_swigt__p_std__auto_ptrT_six__MatchType_t,
@@ -92140,6 +104717,9 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator,
   &_swigt__p_std__ostream,
   &_swigt__p_std__string,
+  &_swigt__p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t,
+  &_swigt__p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t,
+  &_swigt__p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t,
   &_swigt__p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t,
   &_swigt__p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t,
   &_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
@@ -92200,10 +104780,12 @@ static swig_cast_info _swigc__p_math__poly__OneDT_double_t[] = {  {&_swigt__p_ma
 static swig_cast_info _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t[] = {  {&_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__TwoDT_double_t[] = {  {&_swigt__p_math__poly__TwoDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t[] = {  {&_swigt__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_mem__ScopedCloneablePtrT_six__CollectionInformation_t[] = {  {&_swigt__p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__Components_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__Components_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__GeoInfo_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__IonoError_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__IonoError_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__LUT_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__LUT_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mem__ScopedCopyablePtrT_six__MatchInformation_t[] = {  {&_swigt__p_mem__ScopedCopyablePtrT_six__MatchInformation_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -92216,7 +104798,6 @@ static swig_cast_info _swigc__p_mt__SingletonT_six__XMLControlRegistry_true_t[] 
 static swig_cast_info _swigc__p_nitf_DateTime[] = {  {&_swigt__p_nitf_DateTime, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nitf__DateTime[] = {  {&_swigt__p_nitf__DateTime, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_nitf__FileSecurity[] = {  {&_swigt__p_nitf__FileSecurity, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_nitf__NITFException[] = {  {&_swigt__p_nitf__NITFException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_off_t[] = {  {&_swigt__p_off_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_pid_t[] = {  {&_swigt__p_pid_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -92233,6 +104814,7 @@ static swig_cast_info _swigc__p_six__BooleanType[] = {  {&_swigt__p_six__Boolean
 static swig_cast_info _swigc__p_six__ByteSwapping[] = {  {&_swigt__p_six__ByteSwapping, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__Classification[] = {  {&_swigt__p_six__Classification, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__CollectType[] = {  {&_swigt__p_six__CollectType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__CollectionInformation[] = {  {&_swigt__p_six__CollectionInformation, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ComplexImageGridType[] = {  {&_swigt__p_six__ComplexImageGridType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ComplexImagePlaneType[] = {  {&_swigt__p_six__ComplexImagePlaneType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__Components[] = {  {&_swigt__p_six__Components, 0, 0, 0},{0, 0, 0, 0}};
@@ -92252,6 +104834,7 @@ static swig_cast_info _swigc__p_six__DualPolarizationType[] = {  {&_swigt__p_six
 static swig_cast_info _swigc__p_six__EarthModelType[] = {  {&_swigt__p_six__EarthModelType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ErrorStatistics[] = {  {&_swigt__p_six__ErrorStatistics, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__FFTSign[] = {  {&_swigt__p_six__FFTSign, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__GeoInfo[] = {  {&_swigt__p_six__GeoInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ImageBeamCompensationType[] = {  {&_swigt__p_six__ImageBeamCompensationType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ImageFormationType[] = {  {&_swigt__p_six__ImageFormationType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__Init[] = {  {&_swigt__p_six__Init, 0, 0, 0},{0, 0, 0, 0}};
@@ -92292,13 +104875,17 @@ static swig_cast_info _swigc__p_six__XYZEnum[] = {  {&_swigt__p_six__XYZEnum, 0,
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t[] = {  {&_swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t[] = {  {&_swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_six__MatchCollect_t[] = {  {&_swigt__p_std__allocatorT_six__MatchCollect_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_six__MatchType_t[] = {  {&_swigt__p_std__allocatorT_six__MatchType_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__AmplitudeTable_t[] = {  {&_swigt__p_std__auto_ptrT_six__AmplitudeTable_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__auto_ptrT_six__CollectionInformation_t[] = {  {&_swigt__p_std__auto_ptrT_six__CollectionInformation_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__Components_t[] = {  {&_swigt__p_std__auto_ptrT_six__Components_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__CompositeSCP_t[] = {  {&_swigt__p_std__auto_ptrT_six__CompositeSCP_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__CorrCoefs_t[] = {  {&_swigt__p_std__auto_ptrT_six__CorrCoefs_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__ErrorStatistics_t[] = {  {&_swigt__p_std__auto_ptrT_six__ErrorStatistics_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__auto_ptrT_six__GeoInfo_t[] = {  {&_swigt__p_std__auto_ptrT_six__GeoInfo_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__IonoError_t[] = {  {&_swigt__p_std__auto_ptrT_six__IonoError_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__MatchInformation_t[] = {  {&_swigt__p_std__auto_ptrT_six__MatchInformation_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__auto_ptrT_six__MatchType_t[] = {  {&_swigt__p_std__auto_ptrT_six__MatchType_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -92311,6 +104898,9 @@ static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__in
 static swig_cast_info _swigc__p_std__mapT_std__string_six__Parameter_t__const_iterator[] = {  {&_swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t[] = {  {&_swigt__p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t[] = {  {&_swigt__p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t[] = {  {&_swigt__p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t[] = {  {&_swigt__p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t[] = {  {&_swigt__p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t[] = {  {&_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -92371,10 +104961,12 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   _swigc__p_math__poly__TwoDT_double_t,
   _swigc__p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t,
+  _swigc__p_mem__ScopedCloneablePtrT_six__CollectionInformation_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__Components_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__CompositeSCP_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__CorrCoefs_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t,
+  _swigc__p_mem__ScopedCopyablePtrT_six__GeoInfo_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__IonoError_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__LUT_t,
   _swigc__p_mem__ScopedCopyablePtrT_six__MatchInformation_t,
@@ -92387,7 +104979,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_nitf_DateTime,
   _swigc__p_nitf__DateTime,
   _swigc__p_nitf__FileSecurity,
-  _swigc__p_nitf__NITFException,
   _swigc__p_off_t,
   _swigc__p_p_PyObject,
   _swigc__p_pid_t,
@@ -92404,6 +104995,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__ByteSwapping,
   _swigc__p_six__Classification,
   _swigc__p_six__CollectType,
+  _swigc__p_six__CollectionInformation,
   _swigc__p_six__ComplexImageGridType,
   _swigc__p_six__ComplexImagePlaneType,
   _swigc__p_six__Components,
@@ -92423,6 +105015,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__EarthModelType,
   _swigc__p_six__ErrorStatistics,
   _swigc__p_six__FFTSign,
+  _swigc__p_six__GeoInfo,
   _swigc__p_six__ImageBeamCompensationType,
   _swigc__p_six__ImageFormationType,
   _swigc__p_six__Init,
@@ -92463,13 +105056,17 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_size_t,
   _swigc__p_size_type,
   _swigc__p_ssize_t,
+  _swigc__p_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t,
+  _swigc__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t,
   _swigc__p_std__allocatorT_six__MatchCollect_t,
   _swigc__p_std__allocatorT_six__MatchType_t,
   _swigc__p_std__auto_ptrT_six__AmplitudeTable_t,
+  _swigc__p_std__auto_ptrT_six__CollectionInformation_t,
   _swigc__p_std__auto_ptrT_six__Components_t,
   _swigc__p_std__auto_ptrT_six__CompositeSCP_t,
   _swigc__p_std__auto_ptrT_six__CorrCoefs_t,
   _swigc__p_std__auto_ptrT_six__ErrorStatistics_t,
+  _swigc__p_std__auto_ptrT_six__GeoInfo_t,
   _swigc__p_std__auto_ptrT_six__IonoError_t,
   _swigc__p_std__auto_ptrT_six__MatchInformation_t,
   _swigc__p_std__auto_ptrT_six__MatchType_t,
@@ -92482,6 +105079,9 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__mapT_std__string_six__Parameter_t__const_iterator,
   _swigc__p_std__ostream,
   _swigc__p_std__string,
+  _swigc__p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t,
+  _swigc__p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t,
+  _swigc__p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t,
   _swigc__p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t,
   _swigc__p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t,
   _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,

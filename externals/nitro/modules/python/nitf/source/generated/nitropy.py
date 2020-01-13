@@ -547,6 +547,10 @@ nitf_Reader_newDEReader = _nitropy.nitf_Reader_newDEReader
 def nitf_Reader_getNITFVersion(fileName):
     return _nitropy.nitf_Reader_getNITFVersion(fileName)
 nitf_Reader_getNITFVersion = _nitropy.nitf_Reader_getNITFVersion
+
+def nitf_Reader_getNITFVersionIO(io):
+    return _nitropy.nitf_Reader_getNITFVersionIO(io)
+nitf_Reader_getNITFVersionIO = _nitropy.nitf_Reader_getNITFVersionIO
 NITF_WRITER_FILL_LEFT = _nitropy.NITF_WRITER_FILL_LEFT
 NITF_WRITER_FILL_RIGHT = _nitropy.NITF_WRITER_FILL_RIGHT
 class nitf_Writer(_object):
@@ -1620,8 +1624,8 @@ def nitf_ImageWriter_setWriteCaching(iWriter, enable):
     return _nitropy.nitf_ImageWriter_setWriteCaching(iWriter, enable)
 nitf_ImageWriter_setWriteCaching = _nitropy.nitf_ImageWriter_setWriteCaching
 
-def nitf_ImageWriter_setDirectBlockWrite(iWriter, enable):
-    return _nitropy.nitf_ImageWriter_setDirectBlockWrite(iWriter, enable)
+def nitf_ImageWriter_setDirectBlockWrite(iWriter, enable, error):
+    return _nitropy.nitf_ImageWriter_setDirectBlockWrite(iWriter, enable, error)
 nitf_ImageWriter_setDirectBlockWrite = _nitropy.nitf_ImageWriter_setDirectBlockWrite
 
 def nitf_ImageWriter_setPadPixel(imageWriter, value, length, error):

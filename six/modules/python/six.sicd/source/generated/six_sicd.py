@@ -1544,6 +1544,7 @@ cvar = _six_sicd.cvar
 SICDMeshes.SLANT_PLANE_MESH_ID = _six_sicd.cvar.SICDMeshes_SLANT_PLANE_MESH_ID
 SICDMeshes.OUTPUT_PLANE_MESH_ID = _six_sicd.cvar.SICDMeshes_OUTPUT_PLANE_MESH_ID
 SICDMeshes.NOISE_MESH_ID = _six_sicd.cvar.SICDMeshes_NOISE_MESH_ID
+SICDMeshes.SCALAR_MESH_ID = _six_sicd.cvar.SICDMeshes_SCALAR_MESH_ID
 
 class PlanarCoordinateMesh(_object):
     """Proxy of C++ six::sicd::PlanarCoordinateMesh class."""
@@ -1603,6 +1604,59 @@ class PlanarCoordinateMesh(_object):
     __del__ = lambda self: None
 PlanarCoordinateMesh_swigregister = _six_sicd.PlanarCoordinateMesh_swigregister
 PlanarCoordinateMesh_swigregister(PlanarCoordinateMesh)
+
+class ScalarMesh(PlanarCoordinateMesh):
+    """Proxy of C++ six::sicd::ScalarMesh class."""
+
+    __swig_setmethods__ = {}
+    for _s in [PlanarCoordinateMesh]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScalarMesh, name, value)
+    __swig_getmethods__ = {}
+    for _s in [PlanarCoordinateMesh]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ScalarMesh, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(six::sicd::ScalarMesh self, std::string const & name) -> ScalarMesh
+        __init__(six::sicd::ScalarMesh self, std::string const & name, RowColSizeT meshDims, std_vector_double x, std_vector_double y, size_t numScalarsPerCoord, std::map< std::string,std::vector< double,std::allocator< double > > > const & scalars) -> ScalarMesh
+        """
+        this = _six_sicd.new_ScalarMesh(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getScalars(self) -> "std::map< std::string,std::vector< double,std::allocator< double > > > const &":
+        """getScalars(ScalarMesh self) -> std::map< std::string,std::vector< double,std::allocator< double > > > const &"""
+        return _six_sicd.ScalarMesh_getScalars(self)
+
+
+    def getNumScalarsPerCoord(self) -> "size_t":
+        """getNumScalarsPerCoord(ScalarMesh self) -> size_t"""
+        return _six_sicd.ScalarMesh_getNumScalarsPerCoord(self)
+
+
+    def getFields(self) -> "std::vector< Mesh::Field,std::allocator< Mesh::Field > >":
+        """getFields(ScalarMesh self) -> std::vector< Mesh::Field,std::allocator< Mesh::Field > >"""
+        return _six_sicd.ScalarMesh_getFields(self)
+
+
+    def serialize(self, values: 'std::vector< sys::byte,std::allocator< sys::byte > > &') -> "void":
+        """serialize(ScalarMesh self, std::vector< sys::byte,std::allocator< sys::byte > > & values)"""
+        return _six_sicd.ScalarMesh_serialize(self, values)
+
+
+    def deserialize(self, values: 'sys::byte const *&') -> "void":
+        """deserialize(ScalarMesh self, sys::byte const *& values)"""
+        return _six_sicd.ScalarMesh_deserialize(self, values)
+
+    __swig_destroy__ = _six_sicd.delete_ScalarMesh
+    __del__ = lambda self: None
+ScalarMesh_swigregister = _six_sicd.ScalarMesh_swigregister
+ScalarMesh_swigregister(ScalarMesh)
 
 class NoiseMesh(PlanarCoordinateMesh):
     """Proxy of C++ six::sicd::NoiseMesh class."""
@@ -1934,53 +1988,6 @@ def schema_path():
         pysix_path = os.path.dirname(sys.argv[0])
     return os.path.abspath(os.path.join(pysix_path, 'schemas'))
 
-class GeoInfo(_object):
-    """Proxy of C++ six::GeoInfo class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, GeoInfo, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, GeoInfo, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::GeoInfo self) -> GeoInfo"""
-        this = _six_sicd.new_GeoInfo()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _six_sicd.delete_GeoInfo
-    __del__ = lambda self: None
-    __swig_setmethods__["name"] = _six_sicd.GeoInfo_name_set
-    __swig_getmethods__["name"] = _six_sicd.GeoInfo_name_get
-    if _newclass:
-        name = _swig_property(_six_sicd.GeoInfo_name_get, _six_sicd.GeoInfo_name_set)
-    __swig_setmethods__["geoInfos"] = _six_sicd.GeoInfo_geoInfos_set
-    __swig_getmethods__["geoInfos"] = _six_sicd.GeoInfo_geoInfos_get
-    if _newclass:
-        geoInfos = _swig_property(_six_sicd.GeoInfo_geoInfos_get, _six_sicd.GeoInfo_geoInfos_set)
-    __swig_setmethods__["desc"] = _six_sicd.GeoInfo_desc_set
-    __swig_getmethods__["desc"] = _six_sicd.GeoInfo_desc_get
-    if _newclass:
-        desc = _swig_property(_six_sicd.GeoInfo_desc_get, _six_sicd.GeoInfo_desc_set)
-    __swig_setmethods__["geometryLatLon"] = _six_sicd.GeoInfo_geometryLatLon_set
-    __swig_getmethods__["geometryLatLon"] = _six_sicd.GeoInfo_geometryLatLon_get
-    if _newclass:
-        geometryLatLon = _swig_property(_six_sicd.GeoInfo_geometryLatLon_get, _six_sicd.GeoInfo_geometryLatLon_set)
-
-    def __eq__(self, rhs: 'GeoInfo') -> "bool":
-        """__eq__(GeoInfo self, GeoInfo rhs) -> bool"""
-        return _six_sicd.GeoInfo___eq__(self, rhs)
-
-
-    def __ne__(self, rhs: 'GeoInfo') -> "bool":
-        """__ne__(GeoInfo self, GeoInfo rhs) -> bool"""
-        return _six_sicd.GeoInfo___ne__(self, rhs)
-
-GeoInfo_swigregister = _six_sicd.GeoInfo_swigregister
-GeoInfo_swigregister(GeoInfo)
-
 class ProjectionPolynomialFitter(_object):
     """Proxy of C++ scene::ProjectionPolynomialFitter class."""
 
@@ -2129,78 +2136,6 @@ class ComplexClassification(pysix.six_base.Classification):
     __del__ = lambda self: None
 ComplexClassification_swigregister = _six_sicd.ComplexClassification_swigregister
 ComplexClassification_swigregister(ComplexClassification)
-
-class CollectionInformation(_object):
-    """Proxy of C++ six::sicd::CollectionInformation class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionInformation, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, CollectionInformation, name)
-    __repr__ = _swig_repr
-    __swig_setmethods__["collectorName"] = _six_sicd.CollectionInformation_collectorName_set
-    __swig_getmethods__["collectorName"] = _six_sicd.CollectionInformation_collectorName_get
-    if _newclass:
-        collectorName = _swig_property(_six_sicd.CollectionInformation_collectorName_get, _six_sicd.CollectionInformation_collectorName_set)
-    __swig_setmethods__["illuminatorName"] = _six_sicd.CollectionInformation_illuminatorName_set
-    __swig_getmethods__["illuminatorName"] = _six_sicd.CollectionInformation_illuminatorName_get
-    if _newclass:
-        illuminatorName = _swig_property(_six_sicd.CollectionInformation_illuminatorName_get, _six_sicd.CollectionInformation_illuminatorName_set)
-    __swig_setmethods__["coreName"] = _six_sicd.CollectionInformation_coreName_set
-    __swig_getmethods__["coreName"] = _six_sicd.CollectionInformation_coreName_get
-    if _newclass:
-        coreName = _swig_property(_six_sicd.CollectionInformation_coreName_get, _six_sicd.CollectionInformation_coreName_set)
-    __swig_setmethods__["collectType"] = _six_sicd.CollectionInformation_collectType_set
-    __swig_getmethods__["collectType"] = _six_sicd.CollectionInformation_collectType_get
-    if _newclass:
-        collectType = _swig_property(_six_sicd.CollectionInformation_collectType_get, _six_sicd.CollectionInformation_collectType_set)
-    __swig_setmethods__["radarMode"] = _six_sicd.CollectionInformation_radarMode_set
-    __swig_getmethods__["radarMode"] = _six_sicd.CollectionInformation_radarMode_get
-    if _newclass:
-        radarMode = _swig_property(_six_sicd.CollectionInformation_radarMode_get, _six_sicd.CollectionInformation_radarMode_set)
-    __swig_setmethods__["radarModeID"] = _six_sicd.CollectionInformation_radarModeID_set
-    __swig_getmethods__["radarModeID"] = _six_sicd.CollectionInformation_radarModeID_get
-    if _newclass:
-        radarModeID = _swig_property(_six_sicd.CollectionInformation_radarModeID_get, _six_sicd.CollectionInformation_radarModeID_set)
-    __swig_setmethods__["classification"] = _six_sicd.CollectionInformation_classification_set
-    __swig_getmethods__["classification"] = _six_sicd.CollectionInformation_classification_get
-    if _newclass:
-        classification = _swig_property(_six_sicd.CollectionInformation_classification_get, _six_sicd.CollectionInformation_classification_set)
-    __swig_setmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_set
-    __swig_getmethods__["countryCodes"] = _six_sicd.CollectionInformation_countryCodes_get
-    if _newclass:
-        countryCodes = _swig_property(_six_sicd.CollectionInformation_countryCodes_get, _six_sicd.CollectionInformation_countryCodes_set)
-    __swig_setmethods__["parameters"] = _six_sicd.CollectionInformation_parameters_set
-    __swig_getmethods__["parameters"] = _six_sicd.CollectionInformation_parameters_get
-    if _newclass:
-        parameters = _swig_property(_six_sicd.CollectionInformation_parameters_get, _six_sicd.CollectionInformation_parameters_set)
-
-    def __init__(self):
-        """__init__(six::sicd::CollectionInformation self) -> CollectionInformation"""
-        this = _six_sicd.new_CollectionInformation()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _six_sicd.delete_CollectionInformation
-    __del__ = lambda self: None
-
-    def clone(self) -> "six::sicd::CollectionInformation *":
-        """clone(CollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.CollectionInformation_clone(self)
-
-
-    def __eq__(self, other: 'CollectionInformation') -> "bool":
-        """__eq__(CollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.CollectionInformation___eq__(self, other)
-
-
-    def __ne__(self, other: 'CollectionInformation') -> "bool":
-        """__ne__(CollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.CollectionInformation___ne__(self, other)
-
-CollectionInformation_swigregister = _six_sicd.CollectionInformation_swigregister
-CollectionInformation_swigregister(CollectionInformation)
 
 class ImageCreation(_object):
     """Proxy of C++ six::sicd::ImageCreation class."""
@@ -4850,7 +4785,7 @@ class SixSicdUtilities(_object):
     def readSicd(*args) -> "void":
         """
         readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
-        readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh)
+        readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh, std::auto_ptr< six::sicd::ScalarMesh > & scalarMesh)
         """
         return _six_sicd.SixSicdUtilities_readSicd(*args)
 
@@ -4939,6 +4874,12 @@ class SixSicdUtilities(_object):
 
     getNoiseMesh = staticmethod(getNoiseMesh)
 
+    def getScalarMesh(reader: 'NITFReadControl &') -> "std::auto_ptr< six::sicd::ScalarMesh >":
+        """getScalarMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ScalarMesh >"""
+        return _six_sicd.SixSicdUtilities_getScalarMesh(reader)
+
+    getScalarMesh = staticmethod(getScalarMesh)
+
     def getProjectionPolys(reader: 'NITFReadControl &', orderX: 'size_t', orderY: 'size_t', complexData: 'std::auto_ptr< six::sicd::ComplexData > &', outputRowColToSlantRow: 'Poly2D', outputRowColToSlantCol: 'Poly2D') -> "void":
         """getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
         return _six_sicd.SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
@@ -5020,7 +4961,7 @@ def SixSicdUtilities_getValidDataPolygon(sicdData: 'ComplexData', projection: 'P
 def SixSicdUtilities_readSicd(*args) -> "void":
     """
     readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
-    SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh)
+    SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh, std::auto_ptr< six::sicd::ScalarMesh > & scalarMesh)
     """
     return _six_sicd.SixSicdUtilities_readSicd(*args)
 
@@ -5084,6 +5025,10 @@ def SixSicdUtilities_createFakeComplexData() -> "std::auto_ptr< six::sicd::Compl
 def SixSicdUtilities_getNoiseMesh(reader: 'NITFReadControl &') -> "std::auto_ptr< six::sicd::NoiseMesh >":
     """SixSicdUtilities_getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
     return _six_sicd.SixSicdUtilities_getNoiseMesh(reader)
+
+def SixSicdUtilities_getScalarMesh(reader: 'NITFReadControl &') -> "std::auto_ptr< six::sicd::ScalarMesh >":
+    """SixSicdUtilities_getScalarMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ScalarMesh >"""
+    return _six_sicd.SixSicdUtilities_getScalarMesh(reader)
 
 def SixSicdUtilities_getProjectionPolys(reader: 'NITFReadControl &', orderX: 'size_t', orderY: 'size_t', complexData: 'std::auto_ptr< six::sicd::ComplexData > &', outputRowColToSlantRow: 'Poly2D', outputRowColToSlantCol: 'Poly2D') -> "void":
     """SixSicdUtilities_getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
@@ -5210,130 +5155,125 @@ class GeoLocator(_object):
 GeoLocator_swigregister = _six_sicd.GeoLocator_swigregister
 GeoLocator_swigregister(GeoLocator)
 
-class StdAutoCollectionInformation(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::CollectionInformation)> class."""
+class StdAutoGeoData(_object):
+    """Proxy of C++ std::auto_ptr<(six::sicd::GeoData)> class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCollectionInformation, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGeoData, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoCollectionInformation, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoGeoData, name)
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::CollectionInformation)> self) -> StdAutoCollectionInformation"""
-        this = _six_sicd.new_StdAutoCollectionInformation()
+        """__init__(std::auto_ptr<(six::sicd::GeoData)> self) -> StdAutoGeoData"""
+        this = _six_sicd.new_StdAutoGeoData()
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _six_sicd.delete_StdAutoCollectionInformation
+    __swig_destroy__ = _six_sicd.delete_StdAutoGeoData
     __del__ = lambda self: None
-StdAutoCollectionInformation_swigregister = _six_sicd.StdAutoCollectionInformation_swigregister
-StdAutoCollectionInformation_swigregister(StdAutoCollectionInformation)
+StdAutoGeoData_swigregister = _six_sicd.StdAutoGeoData_swigregister
+StdAutoGeoData_swigregister(StdAutoGeoData)
 
-class ScopedCloneableCollectionInformation(_object):
-    """Proxy of C++ mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> class."""
+class ScopedCopyableGeoData(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::GeoData)> class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableCollectionInformation, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableGeoData, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableCollectionInformation, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableGeoData, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> self, CollectionInformation ptr=None) -> ScopedCloneableCollectionInformation
-        __init__(mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> self) -> ScopedCloneableCollectionInformation
-        __init__(mem::ScopedCloneablePtr<(six::sicd::CollectionInformation)> self, ScopedCloneableCollectionInformation rhs) -> ScopedCloneableCollectionInformation
+        __init__(mem::ScopedCopyablePtr<(six::sicd::GeoData)> self, GeoData ptr=None) -> ScopedCopyableGeoData
+        __init__(mem::ScopedCopyablePtr<(six::sicd::GeoData)> self) -> ScopedCopyableGeoData
+        __init__(mem::ScopedCopyablePtr<(six::sicd::GeoData)> self, ScopedCopyableGeoData rhs) -> ScopedCopyableGeoData
         """
-        this = _six_sicd.new_ScopedCloneableCollectionInformation(*args)
+        this = _six_sicd.new_ScopedCopyableGeoData(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
 
-    def get(self) -> "six::sicd::CollectionInformation *":
-        """get(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation_get(self)
+    def __nonzero__(self):
+        return _six_sicd.ScopedCopyableGeoData___nonzero__(self)
+    __bool__ = __nonzero__
 
 
-    def __ref__(self) -> "six::sicd::CollectionInformation &":
-        """__ref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation___ref__(self)
+
+    def get(self) -> "six::sicd::GeoData *":
+        """get(ScopedCopyableGeoData self) -> GeoData"""
+        return _six_sicd.ScopedCopyableGeoData_get(self)
 
 
-    def __deref__(self) -> "six::sicd::CollectionInformation *":
-        """__deref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation___deref__(self)
+    def __ref__(self) -> "six::sicd::GeoData &":
+        """__ref__(ScopedCopyableGeoData self) -> GeoData"""
+        return _six_sicd.ScopedCopyableGeoData___ref__(self)
 
 
-    def reset(self, ptr: 'CollectionInformation'=None) -> "void":
+    def __deref__(self) -> "six::sicd::GeoData *":
+        """__deref__(ScopedCopyableGeoData self) -> GeoData"""
+        return _six_sicd.ScopedCopyableGeoData___deref__(self)
+
+
+    def reset(self, ptr: 'GeoData'=None) -> "void":
         """
-        reset(ScopedCloneableCollectionInformation self, CollectionInformation ptr=None)
-        reset(ScopedCloneableCollectionInformation self)
+        reset(ScopedCopyableGeoData self, GeoData ptr=None)
+        reset(ScopedCopyableGeoData self)
         """
-        return _six_sicd.ScopedCloneableCollectionInformation_reset(self, ptr)
+        return _six_sicd.ScopedCopyableGeoData_reset(self, ptr)
 
-    __swig_destroy__ = _six_sicd.delete_ScopedCloneableCollectionInformation
+    __swig_destroy__ = _six_sicd.delete_ScopedCopyableGeoData
     __del__ = lambda self: None
-    __swig_setmethods__["collectorName"] = _six_sicd.ScopedCloneableCollectionInformation_collectorName_set
-    __swig_getmethods__["collectorName"] = _six_sicd.ScopedCloneableCollectionInformation_collectorName_get
+    __swig_setmethods__["earthModel"] = _six_sicd.ScopedCopyableGeoData_earthModel_set
+    __swig_getmethods__["earthModel"] = _six_sicd.ScopedCopyableGeoData_earthModel_get
     if _newclass:
-        collectorName = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_collectorName_get, _six_sicd.ScopedCloneableCollectionInformation_collectorName_set)
-    __swig_setmethods__["illuminatorName"] = _six_sicd.ScopedCloneableCollectionInformation_illuminatorName_set
-    __swig_getmethods__["illuminatorName"] = _six_sicd.ScopedCloneableCollectionInformation_illuminatorName_get
+        earthModel = _swig_property(_six_sicd.ScopedCopyableGeoData_earthModel_get, _six_sicd.ScopedCopyableGeoData_earthModel_set)
+    __swig_setmethods__["scp"] = _six_sicd.ScopedCopyableGeoData_scp_set
+    __swig_getmethods__["scp"] = _six_sicd.ScopedCopyableGeoData_scp_get
     if _newclass:
-        illuminatorName = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_illuminatorName_get, _six_sicd.ScopedCloneableCollectionInformation_illuminatorName_set)
-    __swig_setmethods__["coreName"] = _six_sicd.ScopedCloneableCollectionInformation_coreName_set
-    __swig_getmethods__["coreName"] = _six_sicd.ScopedCloneableCollectionInformation_coreName_get
+        scp = _swig_property(_six_sicd.ScopedCopyableGeoData_scp_get, _six_sicd.ScopedCopyableGeoData_scp_set)
+    __swig_setmethods__["imageCorners"] = _six_sicd.ScopedCopyableGeoData_imageCorners_set
+    __swig_getmethods__["imageCorners"] = _six_sicd.ScopedCopyableGeoData_imageCorners_get
     if _newclass:
-        coreName = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_coreName_get, _six_sicd.ScopedCloneableCollectionInformation_coreName_set)
-    __swig_setmethods__["collectType"] = _six_sicd.ScopedCloneableCollectionInformation_collectType_set
-    __swig_getmethods__["collectType"] = _six_sicd.ScopedCloneableCollectionInformation_collectType_get
+        imageCorners = _swig_property(_six_sicd.ScopedCopyableGeoData_imageCorners_get, _six_sicd.ScopedCopyableGeoData_imageCorners_set)
+    __swig_setmethods__["validData"] = _six_sicd.ScopedCopyableGeoData_validData_set
+    __swig_getmethods__["validData"] = _six_sicd.ScopedCopyableGeoData_validData_get
     if _newclass:
-        collectType = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_collectType_get, _six_sicd.ScopedCloneableCollectionInformation_collectType_set)
-    __swig_setmethods__["radarMode"] = _six_sicd.ScopedCloneableCollectionInformation_radarMode_set
-    __swig_getmethods__["radarMode"] = _six_sicd.ScopedCloneableCollectionInformation_radarMode_get
+        validData = _swig_property(_six_sicd.ScopedCopyableGeoData_validData_get, _six_sicd.ScopedCopyableGeoData_validData_set)
+    __swig_setmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoData_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoData_geoInfos_get
     if _newclass:
-        radarMode = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_radarMode_get, _six_sicd.ScopedCloneableCollectionInformation_radarMode_set)
-    __swig_setmethods__["radarModeID"] = _six_sicd.ScopedCloneableCollectionInformation_radarModeID_set
-    __swig_getmethods__["radarModeID"] = _six_sicd.ScopedCloneableCollectionInformation_radarModeID_get
-    if _newclass:
-        radarModeID = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_radarModeID_get, _six_sicd.ScopedCloneableCollectionInformation_radarModeID_set)
-    __swig_setmethods__["classification"] = _six_sicd.ScopedCloneableCollectionInformation_classification_set
-    __swig_getmethods__["classification"] = _six_sicd.ScopedCloneableCollectionInformation_classification_get
-    if _newclass:
-        classification = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_classification_get, _six_sicd.ScopedCloneableCollectionInformation_classification_set)
-    __swig_setmethods__["countryCodes"] = _six_sicd.ScopedCloneableCollectionInformation_countryCodes_set
-    __swig_getmethods__["countryCodes"] = _six_sicd.ScopedCloneableCollectionInformation_countryCodes_get
-    if _newclass:
-        countryCodes = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_countryCodes_get, _six_sicd.ScopedCloneableCollectionInformation_countryCodes_set)
-    __swig_setmethods__["parameters"] = _six_sicd.ScopedCloneableCollectionInformation_parameters_set
-    __swig_getmethods__["parameters"] = _six_sicd.ScopedCloneableCollectionInformation_parameters_get
-    if _newclass:
-        parameters = _swig_property(_six_sicd.ScopedCloneableCollectionInformation_parameters_get, _six_sicd.ScopedCloneableCollectionInformation_parameters_set)
+        geoInfos = _swig_property(_six_sicd.ScopedCopyableGeoData_geoInfos_get, _six_sicd.ScopedCopyableGeoData_geoInfos_set)
 
-    def clone(self) -> "six::sicd::CollectionInformation *":
-        """clone(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
-        return _six_sicd.ScopedCloneableCollectionInformation_clone(self)
+    def __eq__(self, rhs: 'GeoData') -> "bool":
+        """__eq__(ScopedCopyableGeoData self, GeoData rhs) -> bool"""
+        return _six_sicd.ScopedCopyableGeoData___eq__(self, rhs)
 
 
-    def __eq__(self, other: 'CollectionInformation') -> "bool":
-        """__eq__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.ScopedCloneableCollectionInformation___eq__(self, other)
+    def __ne__(self, rhs: 'GeoData') -> "bool":
+        """__ne__(ScopedCopyableGeoData self, GeoData rhs) -> bool"""
+        return _six_sicd.ScopedCopyableGeoData___ne__(self, rhs)
 
 
-    def __ne__(self, other: 'CollectionInformation') -> "bool":
-        """__ne__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
-        return _six_sicd.ScopedCloneableCollectionInformation___ne__(self, other)
-
-ScopedCloneableCollectionInformation_swigregister = _six_sicd.ScopedCloneableCollectionInformation_swigregister
-ScopedCloneableCollectionInformation_swigregister(ScopedCloneableCollectionInformation)
+    def fillDerivedFields(self, imageData: 'ImageData', model: 'ProjectionModel') -> "void":
+        """fillDerivedFields(ScopedCopyableGeoData self, ImageData imageData, ProjectionModel model)"""
+        return _six_sicd.ScopedCopyableGeoData_fillDerivedFields(self, imageData, model)
 
 
-def makeScopedCloneableCollectionInformation() -> "mem::ScopedCloneablePtr< six::sicd::CollectionInformation >":
-    """makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"""
-    return _six_sicd.makeScopedCloneableCollectionInformation()
+    def validate(self, log: 'logging::Logger &') -> "bool":
+        """validate(ScopedCopyableGeoData self, logging::Logger & log) -> bool"""
+        return _six_sicd.ScopedCopyableGeoData_validate(self, log)
+
+ScopedCopyableGeoData_swigregister = _six_sicd.ScopedCopyableGeoData_swigregister
+ScopedCopyableGeoData_swigregister(ScopedCopyableGeoData)
+
+
+def makeScopedCopyableGeoData() -> "mem::ScopedCopyablePtr< six::sicd::GeoData >":
+    """makeScopedCopyableGeoData() -> ScopedCopyableGeoData"""
+    return _six_sicd.makeScopedCopyableGeoData()
 class StdAutoImageCreation(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::ImageCreation)> class."""
 
@@ -5568,125 +5508,6 @@ ScopedCopyableImageData_swigregister(ScopedCopyableImageData)
 def makeScopedCopyableImageData() -> "mem::ScopedCopyablePtr< six::sicd::ImageData >":
     """makeScopedCopyableImageData() -> ScopedCopyableImageData"""
     return _six_sicd.makeScopedCopyableImageData()
-class StdAutoGeoData(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::GeoData)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGeoData, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoGeoData, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::GeoData)> self) -> StdAutoGeoData"""
-        this = _six_sicd.new_StdAutoGeoData()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _six_sicd.delete_StdAutoGeoData
-    __del__ = lambda self: None
-StdAutoGeoData_swigregister = _six_sicd.StdAutoGeoData_swigregister
-StdAutoGeoData_swigregister(StdAutoGeoData)
-
-class ScopedCopyableGeoData(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::sicd::GeoData)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableGeoData, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableGeoData, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::sicd::GeoData)> self, GeoData ptr=None) -> ScopedCopyableGeoData
-        __init__(mem::ScopedCopyablePtr<(six::sicd::GeoData)> self) -> ScopedCopyableGeoData
-        __init__(mem::ScopedCopyablePtr<(six::sicd::GeoData)> self, ScopedCopyableGeoData rhs) -> ScopedCopyableGeoData
-        """
-        this = _six_sicd.new_ScopedCopyableGeoData(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def __nonzero__(self):
-        return _six_sicd.ScopedCopyableGeoData___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
-    def get(self) -> "six::sicd::GeoData *":
-        """get(ScopedCopyableGeoData self) -> GeoData"""
-        return _six_sicd.ScopedCopyableGeoData_get(self)
-
-
-    def __ref__(self) -> "six::sicd::GeoData &":
-        """__ref__(ScopedCopyableGeoData self) -> GeoData"""
-        return _six_sicd.ScopedCopyableGeoData___ref__(self)
-
-
-    def __deref__(self) -> "six::sicd::GeoData *":
-        """__deref__(ScopedCopyableGeoData self) -> GeoData"""
-        return _six_sicd.ScopedCopyableGeoData___deref__(self)
-
-
-    def reset(self, ptr: 'GeoData'=None) -> "void":
-        """
-        reset(ScopedCopyableGeoData self, GeoData ptr=None)
-        reset(ScopedCopyableGeoData self)
-        """
-        return _six_sicd.ScopedCopyableGeoData_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyableGeoData
-    __del__ = lambda self: None
-    __swig_setmethods__["earthModel"] = _six_sicd.ScopedCopyableGeoData_earthModel_set
-    __swig_getmethods__["earthModel"] = _six_sicd.ScopedCopyableGeoData_earthModel_get
-    if _newclass:
-        earthModel = _swig_property(_six_sicd.ScopedCopyableGeoData_earthModel_get, _six_sicd.ScopedCopyableGeoData_earthModel_set)
-    __swig_setmethods__["scp"] = _six_sicd.ScopedCopyableGeoData_scp_set
-    __swig_getmethods__["scp"] = _six_sicd.ScopedCopyableGeoData_scp_get
-    if _newclass:
-        scp = _swig_property(_six_sicd.ScopedCopyableGeoData_scp_get, _six_sicd.ScopedCopyableGeoData_scp_set)
-    __swig_setmethods__["imageCorners"] = _six_sicd.ScopedCopyableGeoData_imageCorners_set
-    __swig_getmethods__["imageCorners"] = _six_sicd.ScopedCopyableGeoData_imageCorners_get
-    if _newclass:
-        imageCorners = _swig_property(_six_sicd.ScopedCopyableGeoData_imageCorners_get, _six_sicd.ScopedCopyableGeoData_imageCorners_set)
-    __swig_setmethods__["validData"] = _six_sicd.ScopedCopyableGeoData_validData_set
-    __swig_getmethods__["validData"] = _six_sicd.ScopedCopyableGeoData_validData_get
-    if _newclass:
-        validData = _swig_property(_six_sicd.ScopedCopyableGeoData_validData_get, _six_sicd.ScopedCopyableGeoData_validData_set)
-    __swig_setmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoData_geoInfos_set
-    __swig_getmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoData_geoInfos_get
-    if _newclass:
-        geoInfos = _swig_property(_six_sicd.ScopedCopyableGeoData_geoInfos_get, _six_sicd.ScopedCopyableGeoData_geoInfos_set)
-
-    def __eq__(self, rhs: 'GeoData') -> "bool":
-        """__eq__(ScopedCopyableGeoData self, GeoData rhs) -> bool"""
-        return _six_sicd.ScopedCopyableGeoData___eq__(self, rhs)
-
-
-    def __ne__(self, rhs: 'GeoData') -> "bool":
-        """__ne__(ScopedCopyableGeoData self, GeoData rhs) -> bool"""
-        return _six_sicd.ScopedCopyableGeoData___ne__(self, rhs)
-
-
-    def fillDerivedFields(self, imageData: 'ImageData', model: 'ProjectionModel') -> "void":
-        """fillDerivedFields(ScopedCopyableGeoData self, ImageData imageData, ProjectionModel model)"""
-        return _six_sicd.ScopedCopyableGeoData_fillDerivedFields(self, imageData, model)
-
-
-    def validate(self, log: 'logging::Logger &') -> "bool":
-        """validate(ScopedCopyableGeoData self, logging::Logger & log) -> bool"""
-        return _six_sicd.ScopedCopyableGeoData_validate(self, log)
-
-ScopedCopyableGeoData_swigregister = _six_sicd.ScopedCopyableGeoData_swigregister
-ScopedCopyableGeoData_swigregister(ScopedCopyableGeoData)
-
-
-def makeScopedCopyableGeoData() -> "mem::ScopedCopyablePtr< six::sicd::GeoData >":
-    """makeScopedCopyableGeoData() -> ScopedCopyableGeoData"""
-    return _six_sicd.makeScopedCopyableGeoData()
 class StdAutoGrid(_object):
     """Proxy of C++ std::auto_ptr<(six::sicd::Grid)> class."""
 
@@ -7163,327 +6984,6 @@ ScopedCopyableRgAzComp_swigregister(ScopedCopyableRgAzComp)
 def makeScopedCopyableRgAzComp() -> "mem::ScopedCopyablePtr< six::sicd::RgAzComp >":
     """makeScopedCopyableRgAzComp() -> ScopedCopyableRgAzComp"""
     return _six_sicd.makeScopedCopyableRgAzComp()
-class StdAutoGeoInfo(_object):
-    """Proxy of C++ std::auto_ptr<(six::GeoInfo)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGeoInfo, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoGeoInfo, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(std::auto_ptr<(six::GeoInfo)> self) -> StdAutoGeoInfo"""
-        this = _six_sicd.new_StdAutoGeoInfo()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _six_sicd.delete_StdAutoGeoInfo
-    __del__ = lambda self: None
-StdAutoGeoInfo_swigregister = _six_sicd.StdAutoGeoInfo_swigregister
-StdAutoGeoInfo_swigregister(StdAutoGeoInfo)
-
-class ScopedCopyableGeoInfo(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::GeoInfo)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableGeoInfo, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableGeoInfo, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self, GeoInfo ptr=None) -> ScopedCopyableGeoInfo
-        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self) -> ScopedCopyableGeoInfo
-        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self, ScopedCopyableGeoInfo rhs) -> ScopedCopyableGeoInfo
-        """
-        this = _six_sicd.new_ScopedCopyableGeoInfo(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def __nonzero__(self):
-        return _six_sicd.ScopedCopyableGeoInfo___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
-    def get(self) -> "six::GeoInfo *":
-        """get(ScopedCopyableGeoInfo self) -> GeoInfo"""
-        return _six_sicd.ScopedCopyableGeoInfo_get(self)
-
-
-    def __ref__(self) -> "six::GeoInfo &":
-        """__ref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
-        return _six_sicd.ScopedCopyableGeoInfo___ref__(self)
-
-
-    def __deref__(self) -> "six::GeoInfo *":
-        """__deref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
-        return _six_sicd.ScopedCopyableGeoInfo___deref__(self)
-
-
-    def reset(self, ptr: 'GeoInfo'=None) -> "void":
-        """
-        reset(ScopedCopyableGeoInfo self, GeoInfo ptr=None)
-        reset(ScopedCopyableGeoInfo self)
-        """
-        return _six_sicd.ScopedCopyableGeoInfo_reset(self, ptr)
-
-    __swig_destroy__ = _six_sicd.delete_ScopedCopyableGeoInfo
-    __del__ = lambda self: None
-    __swig_setmethods__["name"] = _six_sicd.ScopedCopyableGeoInfo_name_set
-    __swig_getmethods__["name"] = _six_sicd.ScopedCopyableGeoInfo_name_get
-    if _newclass:
-        name = _swig_property(_six_sicd.ScopedCopyableGeoInfo_name_get, _six_sicd.ScopedCopyableGeoInfo_name_set)
-    __swig_setmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoInfo_geoInfos_set
-    __swig_getmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoInfo_geoInfos_get
-    if _newclass:
-        geoInfos = _swig_property(_six_sicd.ScopedCopyableGeoInfo_geoInfos_get, _six_sicd.ScopedCopyableGeoInfo_geoInfos_set)
-    __swig_setmethods__["desc"] = _six_sicd.ScopedCopyableGeoInfo_desc_set
-    __swig_getmethods__["desc"] = _six_sicd.ScopedCopyableGeoInfo_desc_get
-    if _newclass:
-        desc = _swig_property(_six_sicd.ScopedCopyableGeoInfo_desc_get, _six_sicd.ScopedCopyableGeoInfo_desc_set)
-    __swig_setmethods__["geometryLatLon"] = _six_sicd.ScopedCopyableGeoInfo_geometryLatLon_set
-    __swig_getmethods__["geometryLatLon"] = _six_sicd.ScopedCopyableGeoInfo_geometryLatLon_get
-    if _newclass:
-        geometryLatLon = _swig_property(_six_sicd.ScopedCopyableGeoInfo_geometryLatLon_get, _six_sicd.ScopedCopyableGeoInfo_geometryLatLon_set)
-
-    def __eq__(self, rhs: 'GeoInfo') -> "bool":
-        """__eq__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
-        return _six_sicd.ScopedCopyableGeoInfo___eq__(self, rhs)
-
-
-    def __ne__(self, rhs: 'GeoInfo') -> "bool":
-        """__ne__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
-        return _six_sicd.ScopedCopyableGeoInfo___ne__(self, rhs)
-
-ScopedCopyableGeoInfo_swigregister = _six_sicd.ScopedCopyableGeoInfo_swigregister
-ScopedCopyableGeoInfo_swigregister(ScopedCopyableGeoInfo)
-
-
-def makeScopedCopyableGeoInfo() -> "mem::ScopedCopyablePtr< six::GeoInfo >":
-    """makeScopedCopyableGeoInfo() -> ScopedCopyableGeoInfo"""
-    return _six_sicd.makeScopedCopyableGeoInfo()
-class VectorScopedCopyableGeoInfo(_object):
-    """Proxy of C++ std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorScopedCopyableGeoInfo, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCopyableGeoInfo, name)
-    __repr__ = _swig_repr
-
-    def iterator(self) -> "swig::SwigPyIterator *":
-        """iterator(VectorScopedCopyableGeoInfo self) -> SwigPyIterator"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self) -> "bool":
-        """__nonzero__(VectorScopedCopyableGeoInfo self) -> bool"""
-        return _six_sicd.VectorScopedCopyableGeoInfo___nonzero__(self)
-
-
-    def __bool__(self) -> "bool":
-        """__bool__(VectorScopedCopyableGeoInfo self) -> bool"""
-        return _six_sicd.VectorScopedCopyableGeoInfo___bool__(self)
-
-
-    def __len__(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
-        """__len__(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
-        return _six_sicd.VectorScopedCopyableGeoInfo___len__(self)
-
-
-    def __getslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type') -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *":
-        """__getslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j) -> VectorScopedCopyableGeoInfo"""
-        return _six_sicd.VectorScopedCopyableGeoInfo___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args) -> "void":
-        """
-        __setslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)
-        __setslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j, VectorScopedCopyableGeoInfo v)
-        """
-        return _six_sicd.VectorScopedCopyableGeoInfo___setslice__(self, *args)
-
-
-    def __delslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type') -> "void":
-        """__delslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)"""
-        return _six_sicd.VectorScopedCopyableGeoInfo___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args) -> "void":
-        """
-        __delitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i)
-        __delitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice)
-        """
-        return _six_sicd.VectorScopedCopyableGeoInfo___delitem__(self, *args)
-
-
-    def __getitem__(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
-        """
-        __getitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice) -> VectorScopedCopyableGeoInfo
-        __getitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i) -> ScopedCopyableGeoInfo
-        """
-        return _six_sicd.VectorScopedCopyableGeoInfo___getitem__(self, *args)
-
-
-    def __setitem__(self, *args) -> "void":
-        """
-        __setitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice, VectorScopedCopyableGeoInfo v)
-        __setitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice)
-        __setitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, ScopedCopyableGeoInfo x)
-        """
-        return _six_sicd.VectorScopedCopyableGeoInfo___setitem__(self, *args)
-
-
-    def pop(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type":
-        """pop(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_pop(self)
-
-
-    def append(self, x: 'ScopedCopyableGeoInfo') -> "void":
-        """append(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_append(self, x)
-
-
-    def empty(self) -> "bool":
-        """empty(VectorScopedCopyableGeoInfo self) -> bool"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_empty(self)
-
-
-    def size(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
-        """size(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_size(self)
-
-
-    def swap(self, v: 'VectorScopedCopyableGeoInfo') -> "void":
-        """swap(VectorScopedCopyableGeoInfo self, VectorScopedCopyableGeoInfo v)"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_swap(self, v)
-
-
-    def begin(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
-        """begin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_begin(self)
-
-
-    def end(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
-        """end(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_end(self)
-
-
-    def rbegin(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator":
-        """rbegin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_rbegin(self)
-
-
-    def rend(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator":
-        """rend(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_rend(self)
-
-
-    def clear(self) -> "void":
-        """clear(VectorScopedCopyableGeoInfo self)"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_clear(self)
-
-
-    def get_allocator(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type":
-        """get_allocator(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_get_allocator(self)
-
-
-    def pop_back(self) -> "void":
-        """pop_back(VectorScopedCopyableGeoInfo self)"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_pop_back(self)
-
-
-    def erase(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
-        """
-        erase(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
-        erase(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
-        """
-        return _six_sicd.VectorScopedCopyableGeoInfo_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self) -> VectorScopedCopyableGeoInfo
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, VectorScopedCopyableGeoInfo arg2) -> VectorScopedCopyableGeoInfo
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type size) -> VectorScopedCopyableGeoInfo
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type size, ScopedCopyableGeoInfo value) -> VectorScopedCopyableGeoInfo
-        """
-        this = _six_sicd.new_VectorScopedCopyableGeoInfo(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def push_back(self, x: 'ScopedCopyableGeoInfo') -> "void":
-        """push_back(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_push_back(self, x)
-
-
-    def front(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
-        """front(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_front(self)
-
-
-    def back(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
-        """back(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_back(self)
-
-
-    def assign(self, n: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type', x: 'ScopedCopyableGeoInfo') -> "void":
-        """assign(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_assign(self, n, x)
-
-
-    def resize(self, *args) -> "void":
-        """
-        resize(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size)
-        resize(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size, ScopedCopyableGeoInfo x)
-        """
-        return _six_sicd.VectorScopedCopyableGeoInfo_resize(self, *args)
-
-
-    def insert(self, *args) -> "void":
-        """
-        insert(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, ScopedCopyableGeoInfo x) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
-        insert(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)
-        """
-        return _six_sicd.VectorScopedCopyableGeoInfo_insert(self, *args)
-
-
-    def reserve(self, n: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type') -> "void":
-        """reserve(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n)"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_reserve(self, n)
-
-
-    def capacity(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
-        """capacity(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
-        return _six_sicd.VectorScopedCopyableGeoInfo_capacity(self)
-
-
-    def __getstate__(self):
-    # Return a nonempty (thus non-false) tuple with dummy value in first position
-        return (-1, tuple(pickle.dumps(elem) for elem in self))
-
-    def __setstate__(self, state):
-        self.__init__()
-    # State will have a dummy entry in the first position
-        for elem in state[1]:
-            self.push_back(pickle.loads(elem))
-
-    __swig_destroy__ = _six_sicd.delete_VectorScopedCopyableGeoInfo
-    __del__ = lambda self: None
-VectorScopedCopyableGeoInfo_swigregister = _six_sicd.VectorScopedCopyableGeoInfo_swigregister
-VectorScopedCopyableGeoInfo_swigregister(VectorScopedCopyableGeoInfo)
-
 class VectorLatLon(_object):
     """Proxy of C++ std::vector<(scene::LatLon)> class."""
 

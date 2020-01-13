@@ -56,10 +56,10 @@ public:
     RESubheader(nitf_RESubheader * x);
 
      //! Constructor
-    RESubheader() throw(nitf::NITFException);
+    RESubheader();
 
     //! Clone
-    nitf::RESubheader clone() throw(nitf::NITFException);
+    nitf::RESubheader clone();
 
     ~RESubheader();
 

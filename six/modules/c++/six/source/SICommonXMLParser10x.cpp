@@ -36,7 +36,7 @@ SICommonXMLParser10x::SICommonXMLParser10x(
     const std::string& siCommonURI,
     logging::Logger* log,
     bool ownLog) :
-    SICommonXMLParser(defaultURI, addClassAttributes, 
+    SICommonXMLParser(defaultURI, addClassAttributes,
                       siCommonURI, log, ownLog)
 {
 }
@@ -51,11 +51,11 @@ XMLElem SICommonXMLParser10x::convertCompositeSCPToXML(
     {
         XMLElem scpXML = newElement("CompositeSCP", defaultURI, errorStatsXML);
 
-        createDouble("Rg", defaultURI, errorStatistics->compositeSCP->xErr, 
+        createDouble("Rg", defaultURI, errorStatistics->compositeSCP->xErr,
                      scpXML);
-        createDouble("Az", defaultURI, errorStatistics->compositeSCP->yErr, 
+        createDouble("Az", defaultURI, errorStatistics->compositeSCP->yErr,
                      scpXML);
-        createDouble("RgAz", defaultURI, errorStatistics->compositeSCP->xyErr, 
+        createDouble("RgAz", defaultURI, errorStatistics->compositeSCP->xyErr,
                      scpXML);
         return scpXML;
     }
@@ -123,7 +123,7 @@ XMLElem SICommonXMLParser10x::convertRadiometryToXML(
 }
 
 void SICommonXMLParser10x::parseRadiometryFromXML(
-    const XMLElem radiometricXML, 
+    const XMLElem radiometricXML,
     Radiometric* radiometric) const
 {
     XMLElem tmpElem = NULL;
@@ -131,9 +131,9 @@ void SICommonXMLParser10x::parseRadiometryFromXML(
     tmpElem = getOptional(radiometricXML, "NoiseLevel");
     if (tmpElem)
     {
-        parseString(getFirstAndOnly(tmpElem, "NoiseLevelType"), 
+        parseString(getFirstAndOnly(tmpElem, "NoiseLevelType"),
                     radiometric->noiseLevel.noiseType);
-        parsePoly2D(getFirstAndOnly(tmpElem, "NoisePoly"), 
+        parsePoly2D(getFirstAndOnly(tmpElem, "NoisePoly"),
                     radiometric->noiseLevel.noisePoly);
     }
 
@@ -165,34 +165,35 @@ void SICommonXMLParser10x::parseRadiometryFromXML(
         parsePoly2D(tmpElem, radiometric->gammaZeroSFPoly);
     }
 }
-
 XMLElem SICommonXMLParser10x::convertMatchInformationToXML(
     const MatchInformation& matchInfo,
     XMLElem parent) const
 {
-    // This is SICD 1.x, SIDD 1.1 format
     XMLElem matchInfoXML = newElement("MatchInfo", parent);
 
-    createInt("NumMatchTypes", matchInfo.types.size(), matchInfoXML);
+    createInt("NumMatchTypes",
+              static_cast<int>(matchInfo.types.size()),
+              matchInfoXML);
 
-    for (size_t i = 0; i < matchInfo.types.size(); ++i)
+    for (size_t ii = 0; ii < matchInfo.types.size(); ++ii)
     {
-        const MatchType& mt = matchInfo.types[i];
+        const MatchType& mt = matchInfo.types[ii];
         XMLElem mtXML = newElement("MatchType", matchInfoXML);
-        setAttribute(mtXML, "index", str::toString(i + 1));
+        setAttribute(mtXML, "index", str::toString(ii + 1));
 
         createString("TypeID", mt.typeID, mtXML);
         createInt("CurrentIndex", mt.currentIndex, mtXML);
-        createInt("NumMatchCollections", mt.matchCollects.size(), mtXML);
+        createInt("NumMatchCollections",
+                  static_cast<int>(mt.matchCollects.size()), mtXML);
 
-        for (size_t j = 0; j < mt.matchCollects.size(); ++j)
+        for (size_t jj = 0; jj < mt.matchCollects.size(); ++jj)
         {
             XMLElem mcXML = newElement("MatchCollection", mtXML);
-            setAttribute(mcXML, "index", str::toString(j + 1));
+            setAttribute(mcXML, "index", str::toString(jj + 1));
 
-            createString("CoreName", mt.matchCollects[j].coreName, mcXML);
-            createInt("MatchIndex", mt.matchCollects[j].matchIndex, mcXML);
-            addParameters("Parameter", mt.matchCollects[j].parameters, mcXML);
+            createString("CoreName", mt.matchCollects[jj].coreName, mcXML);
+            createInt("MatchIndex", mt.matchCollects[jj].matchIndex, mcXML);
+            addParameters("Parameter", mt.matchCollects[jj].parameters, mcXML);
         }
     }
 
@@ -203,34 +204,31 @@ void SICommonXMLParser10x::parseMatchInformationFromXML(
     const XMLElem matchInfoXML,
     MatchInformation* matchInfo) const
 {
-    //This is the SICD 1.x, SIDD 1.1 format
-    int numMatchTypes = 0;
+    size_t numMatchTypes = 0;
     parseInt(getFirstAndOnly(matchInfoXML, "NumMatchTypes"), numMatchTypes);
+    if (numMatchTypes == 0)
+    {
+        throw except::Exception(Ctxt("NumMatchTypes cannot be zero"));
+    }
 
     std::vector < XMLElem > typesXML;
     matchInfoXML->getElementsByTagName("MatchType", typesXML);
 
     //! validate the numMatchTypes
-    if (typesXML.size() != (size_t)numMatchTypes)
+    if (typesXML.size() != numMatchTypes)
     {
         throw except::Exception(
             Ctxt("NumMatchTypes does not match number of MatchType fields"));
     }
 
-    if (typesXML.size() == 0)
-    {
-        throw except::Exception(
-            Ctxt("Must be at least one MatchType"));
-    }
-
     matchInfo->types.resize(typesXML.size());
-    for (size_t i = 0; i < typesXML.size(); i++)
+    for (size_t ii = 0; ii < typesXML.size(); ii++)
     {
-        MatchType& type = matchInfo->types[i];
+        MatchType& type = matchInfo->types[ii];
 
-        parseString(getFirstAndOnly(typesXML[i], "TypeID"), type.typeID);
+        parseString(getFirstAndOnly(typesXML[ii], "TypeID"), type.typeID);
 
-        XMLElem curIndexElem = getOptional(typesXML[i], "CurrentIndex");
+        XMLElem curIndexElem = getOptional(typesXML[ii], "CurrentIndex");
         if (curIndexElem)
         {
             //optional
@@ -238,11 +236,11 @@ void SICommonXMLParser10x::parseMatchInformationFromXML(
         }
 
         int numMatchCollections = 0;
-        parseInt(getFirstAndOnly(typesXML[i], "NumMatchCollections"),
-            numMatchCollections);
+        parseInt(getFirstAndOnly(typesXML[ii], "NumMatchCollections"),
+                 numMatchCollections);
 
         std::vector < XMLElem > matchCollectionsXML;
-        typesXML[i]->getElementsByTagName("MatchCollection", matchCollectionsXML);
+        typesXML[ii]->getElementsByTagName("MatchCollection", matchCollectionsXML);
 
         //! validate the numMatchTypes
         if (matchCollectionsXML.size() !=
@@ -250,7 +248,7 @@ void SICommonXMLParser10x::parseMatchInformationFromXML(
         {
             throw except::Exception(
                 Ctxt("NumMatchCollections does not match number of " \
-                    "MatchCollect fields"));
+                     "MatchCollect fields"));
         }
 
         // Need to make sure this is resized properly - at MatchType

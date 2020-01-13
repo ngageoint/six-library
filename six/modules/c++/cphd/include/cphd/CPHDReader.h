@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,121 +19,147 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #ifndef __CPHD_CPHD_READER_H__
 #define __CPHD_CPHD_READER_H__
 
 #include <memory>
 
 #include <sys/Conf.h>
+
 #include <cphd/Metadata.h>
 #include <cphd/FileHeader.h>
-#include <cphd/VBM.h>
+#include <cphd/PVPBlock.h>
 #include <cphd/Wideband.h>
+#include <cphd/SupportBlock.h>
 
 namespace cphd
 {
+/*
+ *  \class CPHDReader
+ *
+ *  \brief Used to read a CPHD file.
+ *  Requires a valid CPHD file,and optional schemas
+ *  for XML format verification
+ */
 class CPHDReader
 {
 public:
-    //!  Constructor
+    /*
+     *  \func CPHDReader constructor
+     *  \brief Construct CPHDReader from an input stream
+     *
+     *  \param inStream Input stream containing CPHD file
+     *  \param numThreads Number of threads for parallelization
+     *  \param schemaPaths (Optional) XML schemas for validation
+     *  \param logger (Optional) Provide custom log
+     */
     // Provides access to wideband but doesn't read it
-    CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
+    CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
                size_t numThreads,
-               mem::SharedPtr<logging::Logger> logger =
-                       mem::SharedPtr<logging::Logger>());
+               const std::vector<std::string>& schemaPaths =
+                       std::vector<std::string>(),
+               std::shared_ptr<logging::Logger> logger =
+                       std::shared_ptr<logging::Logger>());
 
+    /*
+     *  \func CPHDReader constructor
+     *  \brief Construct CPHDReader from a file pathname
+     *
+     *  \param fromFile File path of CPHD file
+     *  \param numThreads Number of threads for parallelization
+     *  \param schemaPaths (Optional) XML schemas for validation
+     *  \param logger (Optional) Provide custom log
+     */
+    // Provides access to wideband but doesn't read it
     CPHDReader(const std::string& fromFile,
                size_t numThreads,
-               mem::SharedPtr<logging::Logger> logger =
-                       mem::SharedPtr<logging::Logger>());
+               const std::vector<std::string>& schemaPaths =
+                       std::vector<std::string>(),
+               std::shared_ptr<logging::Logger> logger =
+                       std::shared_ptr<logging::Logger>());
 
+    //! Get parameter functions
     size_t getNumChannels() const
     {
-        return mMetadata->getNumChannels();
+        return mMetadata->data.getNumChannels();
     }
-
-    // 0-based channel number
+    //! 0-based channel number
     size_t getNumVectors(size_t channel) const
     {
-        return mMetadata->getNumVectors(channel);
+        return mMetadata->data.getNumVectors(channel);
     }
-
-    // 0-based channel number
+    //! 0-based channel number
     size_t getNumSamples(size_t channel) const
     {
-        return mMetadata->getNumSamples(channel);
+        return mMetadata->data.getNumSamples(channel);
     }
-
-    // returns total per complex sample (2, 4, or 8)
+    //! returns total per complex sample (2, 4, or 8)
     size_t getNumBytesPerSample() const
     {
-        return mMetadata->getNumBytesPerSample();
+        return mMetadata->data.getNumBytesPerSample();
     }
 
-    // Return offset from start of CPHD file for a vector and sample for a channel
-    // first channel is 0!
-    // 0-based vector in channel
-    // 0-based sample in channel
+    /*
+     *  \func getFileOffset
+     *  \brief Calculate signal array offset in file
+     *
+     *  \param channel The channel number
+     *  \param vector The vector number
+     *  \param sample The sample number
+     *
+     *  \return offset of signal sample in file
+     */
     sys::Off_T getFileOffset(size_t channel, size_t vector, size_t sample) const
     {
         return mWideband->getFileOffset(channel, vector, sample);
     }
 
-    bool isFX() const
-    {
-        return (getDomainType() == DomainType::FX);
-    }
-
-    bool isTOA() const
-    {
-        return (getDomainType() == DomainType::TOA);
-    }
-
-    // returns "FX", "TOA", or "NOT_SET"
-    std::string getDomainTypeString() const
-    {
-        return std::string(getDomainType());
-    }
-
-    // returns enum for FX, TOA, or NOT_SET
-    cphd::DomainType getDomainType() const
-    {
-        return mMetadata->getDomainType();
-    }
-
-    // Functions required to access Header, Metadata, VBP and PH data
+    //! Get file header object
     const FileHeader& getFileHeader() const
     {
         return mFileHeader;
     }
-
+    //! Get metadata object
     const Metadata& getMetadata() const
     {
         return *mMetadata;
     }
-
-    const VBM& getVBM() const
+    //! Get per vector parameters
+    const PVPBlock& getPVPBlock() const
     {
-        return *mVBM;
+        return *mPVPBlock;
     }
-
-    Wideband& getWideband()
+    //! Get signal data
+    const Wideband& getWideband() const
     {
         return *mWideband;
+    }
+    //! Get support data
+    const SupportBlock& getSupportBlock() const
+    {
+        return *mSupportBlock;
     }
 
 private:
     // Keep info about the CPHD collection
+    //! New cphd file header
     FileHeader mFileHeader;
-    std::auto_ptr<Metadata> mMetadata;
-    std::auto_ptr<VBM> mVBM;
-    std::auto_ptr<Wideband> mWideband;
+    //! Metadata read in from CPHD file
+    std::unique_ptr<Metadata> mMetadata;
+    //! Support Block book-keeping info read in from CPHD file
+    std::unique_ptr<SupportBlock> mSupportBlock;
+    //! Per Vector Parameter info read in from CPHD file
+    std::unique_ptr<PVPBlock> mPVPBlock;
+    //! Signal block book-keeping info read in from CPHD file
+    std::unique_ptr<Wideband> mWideband;
 
-    void initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
+    /*
+     *  Read in header, metadata, supportblock, pvpblock and wideband
+     */
+    void initialize(std::shared_ptr<io::SeekableInputStream> inStream,
                     size_t numThreads,
-                    mem::SharedPtr<logging::Logger> logger);
-
+                    std::shared_ptr<logging::Logger> logger,
+                    const std::vector<std::string>& schemaPaths);
 };
 }
 

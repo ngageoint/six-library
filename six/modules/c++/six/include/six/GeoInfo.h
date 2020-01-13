@@ -82,8 +82,10 @@ public:
     {
         return !(*this == rhs);
     }
-
 };
+
+//! Ostream operator
+std::ostream& operator<< (std::ostream& os, const GeoInfo& g);
 }
 
 #endif

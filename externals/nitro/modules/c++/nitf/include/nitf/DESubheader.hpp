@@ -57,10 +57,10 @@ public:
     DESubheader(nitf_DESubheader * x);
 
     //! Constructor
-    DESubheader() throw(nitf::NITFException);
+    DESubheader();
 
     //! Clone
-    nitf::DESubheader clone() throw(nitf::NITFException);
+    nitf::DESubheader clone();
 
     ~DESubheader();
 

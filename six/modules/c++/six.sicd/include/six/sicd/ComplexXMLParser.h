@@ -162,8 +162,6 @@ protected:
     }
 
 private:
-    XMLElem convertCollectionInformationToXML(const CollectionInformation *obj,
-                                              XMLElem parent = NULL) const;
     XMLElem convertImageCreationToXML(const ImageCreation *obj,
                                       XMLElem parent = NULL) const;
     XMLElem convertImageDataToXML(const ImageData *obj,
@@ -189,8 +187,6 @@ private:
             const AreaDirectionParameters *obj,
             XMLElem parent = NULL) const;
 
-    void parseCollectionInformationFromXML(const XMLElem collectionInfoXML,
-                                           CollectionInformation *obj) const;
     void parseImageCreationFromXML(const XMLElem imageCreationXML,
                                    ImageCreation *obj) const;
     void parseImageDataFromXML(const XMLElem imageDataXML,

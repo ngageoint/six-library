@@ -5,6 +5,7 @@ import numpy
 from coda.math_poly import Poly1D, Poly2D
 from pysix.wrapper import wrap, unwrap
 from pysix.six_sicd import *
+from pysix.six_base import *
 
 class TestWrapping(unittest.TestCase):
 
@@ -66,9 +67,9 @@ class TestWrapping(unittest.TestCase):
     def testWrapVectorOfSmartPointers(self):
         originalObject = GeoData()
         originalObject.geoInfos.resize(3)
-        originalObject.geoInfos[0] = makeScopedCloneableGeoInfo()
+        originalObject.geoInfos[0] = makeScopedCopyableGeoInfo()
         originalObject.geoInfos[0].name = "first name"
-        originalObject.geoInfos[2] = makeScopedCloneableGeoInfo()
+        originalObject.geoInfos[2] = makeScopedCopyableGeoInfo()
         originalObject.geoInfos[2].name = "third name"
 
         wrappedObject = wrap(originalObject)
@@ -150,13 +151,13 @@ class TestUnwrapping(unittest.TestCase):
     def testUnwrapVectorOfSmartPointers(self):
         originalObject = GeoData()
         originalObject.geoInfos.resize(3)
-        originalObject.geoInfos[0] = makeScopedCloneableGeoInfo()
+        originalObject.geoInfos[0] = makeScopedCopyableGeoInfo()
         originalObject.geoInfos[0].name = "first name"
-        originalObject.geoInfos[2] = makeScopedCloneableGeoInfo()
+        originalObject.geoInfos[2] = makeScopedCopyableGeoInfo()
         originalObject.geoInfos[2].name = "third name"
         wrappedObject = wrap(originalObject)
         wrappedObject.geoInfos[2] = None
-        wrappedObject.geoInfos[1] = makeScopedCloneableGeoInfo()
+        wrappedObject.geoInfos[1] = makeScopedCopyableGeoInfo()
         wrappedObject.geoInfos[1].name = "second name"
 
         unwrapped = unwrap(wrappedObject)

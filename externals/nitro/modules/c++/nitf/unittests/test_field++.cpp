@@ -20,7 +20,7 @@
  *
  */
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 #include <nitf/Field.hpp>
 #include "TestCase.h"
 
@@ -71,7 +71,7 @@ TEST_CASE(testCastOperator)
     TEST_ASSERT_EQ(valInt32, -1234567890);
 #if SIZEOF_SIZE_T == 4
     const size_t valSSizeT = field;
-    TEST_ASSERT_EQ(valSSizeT, -1234567890);
+    TEST_ASSERT_EQ(valSSizeT, static_cast<size_t>(-1234567890));
 #endif
 
     // TODO: I think the %lld isn't working, at least in VS, in
@@ -81,7 +81,7 @@ TEST_CASE(testCastOperator)
     TEST_ASSERT_EQ(valInt64, -1234567890987);
 #if SIZEOF_SIZE_T == 8
     const size_t valSSizeT = field;
-    TEST_ASSERT_EQ(valSSizeT, -1234567890987);
+    TEST_ASSERT_EQ(valSSizeT, static_cast<size_t>(-1234567890987));
 #endif
 
     // Test float values
