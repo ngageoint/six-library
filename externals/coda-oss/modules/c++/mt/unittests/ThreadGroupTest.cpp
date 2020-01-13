@@ -80,9 +80,35 @@ TEST_CASE(ThreadGroupTest)
     TEST_ASSERT_EQ(numDeleted, 3);
 }
 
+TEST_CASE(PinToCPUTest)
+{
+    bool defaultValue;
+#if defined(MT_DEFAULT_PINNING)
+    defaultValue = true;
+#else
+    defaultValue = false;
+#endif
+    // Check the pinning settings for the default value
+    TEST_ASSERT_EQ(ThreadGroup::getDefaultPinToCPU(), defaultValue);
+    ThreadGroup threads1;
+    TEST_ASSERT_EQ(threads1.isPinToCPUEnabled(), defaultValue);
+
+    // Check the pinning settings when pinning is enabled
+    ThreadGroup::setDefaultPinToCPU(true);
+    TEST_ASSERT_EQ(ThreadGroup::getDefaultPinToCPU(), true);
+    ThreadGroup threads2;
+    TEST_ASSERT_EQ(threads2.isPinToCPUEnabled(), true);
+   
+    // Check the pinning settings when pinning is disabled
+    ThreadGroup::setDefaultPinToCPU(false);
+    TEST_ASSERT_EQ(ThreadGroup::getDefaultPinToCPU(), false);
+    ThreadGroup threads3;
+    TEST_ASSERT_EQ(threads3.isPinToCPUEnabled(), false);
+}
+
 int main(int, char**)
 {
     TEST_CHECK(ThreadGroupTest);
-
+    TEST_CHECK(PinToCPUTest);
     return 0;
 }

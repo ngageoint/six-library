@@ -33,13 +33,13 @@ class TestDirectBlockSource: public nitf::DirectBlockSource
 public:
     TestDirectBlockSource(nitf::ImageReader& imageReader,
                       nitf::Uint32 numBands)
-        throw (nitf::NITFException) : nitf::DirectBlockSource(imageReader, numBands){}
+        : nitf::DirectBlockSource(imageReader, numBands){}
 
 protected:
     virtual void nextBlock(void* buf,
                            const void* block,
                            nitf::Uint32 blockNumber,
-                           nitf::Uint64 blockSize) throw (nitf::NITFException)
+                           nitf::Uint64 blockSize)
     {
         std::cout << "BLOCK NUMBER: " << blockNumber << " " << blockSize << std::endl;
         if (buf)

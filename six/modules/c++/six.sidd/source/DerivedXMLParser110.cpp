@@ -560,23 +560,8 @@ void DerivedXMLParser110::parseRRDSFromXML(const XMLElem rrdsElem,
 {
     parseEnum(getFirstAndOnly(rrdsElem, "DownsamplingMethod"), rrds.downsamplingMethod);
 
-    bool hasMoreFields = true;
-    if (rrds.downsamplingMethod == DownsamplingMethod::DECIMATE ||
-            rrds.downsamplingMethod == DownsamplingMethod::MAX_PIXEL);
-    {
-        hasMoreFields = false;
-    }
     XMLElem antiAliasElem = getOptional(rrdsElem, "AntiAlias");
     XMLElem interpolationElem = getOptional(rrdsElem, "Interpolation");
-
-    if (hasMoreFields && (antiAliasElem == NULL || interpolationElem == NULL))
-    {
-        throw except::Exception(Ctxt("Both AntiAlias and Interpolation required unless DownsamplingMethod = DECIMATE or MAX_PIXEL"));
-    }
-    if (hasMoreFields == false && (antiAliasElem || interpolationElem))
-    {
-        throw except::Exception(Ctxt("If DownsamplingMethod = DECIMATE or MAX_PIXEL, neither AntiAlias nor Interpolation allowed"));
-    }
 
     if (antiAliasElem)
     {

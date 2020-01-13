@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __CPHD_GLOBAL_H__
 #define __CPHD_GLOBAL_H__
 
@@ -28,111 +27,236 @@
 
 #include <mem/ScopedCopyablePtr.h>
 #include <six/sicd/RadarCollection.h>
+
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
 
 namespace cphd
 {
-// Optional segment DwellTime
-struct DwellTimeParameters
+/*
+ *  \struct Timeline
+ *
+ *  \brief Parameters that describe the collection times for
+ *   the data contained in the product
+ */
+struct Timeline
 {
-    DwellTimeParameters();
+    //! Constructor
+    Timeline();
 
-    bool operator==(const DwellTimeParameters& other) const
+    //! Equality operators
+    bool operator==(const Timeline& other) const
     {
-        return codTimePoly == other.codTimePoly &&
-               dwellTimePoly == other.dwellTimePoly;
+        return collectionStart == other.collectionStart &&
+            rcvCollectionStart == other.rcvCollectionStart &&
+            txTime1 == other.txTime1 &&
+            txTime2 == other.txTime2;
     }
-
-    bool operator!=(const DwellTimeParameters& other) const
+    bool operator!=(const Timeline& other) const
     {
         return !((*this) == other);
     }
 
-    Poly2D codTimePoly;
-    Poly2D dwellTimePoly;
+    //! Collection Start date and time (UTC)
+    DateTime collectionStart;
+
+    //! (Optional) Receive only platform collection date
+    //! and start time.
+    DateTime rcvCollectionStart; // Optional
+
+    //! Earliest TxTime value for any signal vector in the
+    //! product
+    double txTime1;
+
+    //! Latest TxTime value for any signal vector in the
+    //! product
+    double txTime2;
 };
 
-std::ostream& operator<< (std::ostream& os, const DwellTimeParameters& d);
-
-typedef six::sicd::AreaDirectionParameters AreaDirectionParameters;
-
-struct AreaPlane
+/*
+ *  \struct FxBand
+ *
+ *  \brief Parameters that describe the FX frequency limits
+ *   for the signal array(s) contained in the product
+ */
+struct FxBand
 {
-    AreaPlane();
+    //! Constructor
+    FxBand();
 
-    bool operator==(const AreaPlane& other) const;
-
-    bool operator!=(const AreaPlane& other) const
+    //! Equality operators
+    bool operator==(const FxBand& other) const
+    {
+        return fxMin == other.fxMin &&
+            fxMax == other.fxMax;
+    }
+    bool operator!=(const FxBand& other) const
     {
         return !((*this) == other);
     }
 
-    six::ReferencePoint referencePoint;
-    AreaDirectionParameters xDirection;
-    AreaDirectionParameters yDirection;
-    mem::ScopedCopyablePtr<DwellTimeParameters> dwellTime;
+    //! Minimum fx_1 value for any signal vector in the
+    //! product.
+    double fxMin;
+
+    //! Maximum fx_2 value for any signal vector in the
+    //! product
+    double fxMax;
 };
 
-std::ostream& operator<< (std::ostream& os, const AreaPlane& d);
-
-struct ImageArea
+/*
+ *  \struct TOASwath
+ *
+ *  \brief Parameters that describe the TOA swath limits
+ *   for the signal array(s) contained in the product
+ */
+struct TOASwath
 {
-    ImageArea();
+    //! Constructor
+    TOASwath();
 
-    bool operator==(const ImageArea& other) const;
-
-    bool operator!=(const ImageArea& other) const
+    //! Equality operators
+    bool operator==(const TOASwath& other) const
+    {
+        return toaMin == other.toaMin &&
+            toaMax == other.toaMax;
+    }
+    bool operator!=(const TOASwath& other) const
     {
         return !((*this) == other);
     }
 
-    LatLonAltCorners acpCorners;
-    mem::ScopedCopyablePtr<AreaPlane> plane;
+    //! Minimum DTOA_1 value for any signal vector in
+    //! the product
+    double toaMin;
+
+    //! Maximum DTOA_2 value for any signal vector
+    //! in the product
+    double toaMax;
 };
 
-std::ostream& operator<< (std::ostream& os, const ImageArea& d);
+/*
+ *  \struct TropoParameters
+ *
+ *  \brief (Optional) Parameters that compute the propogation
+ *   delay due to the troposphere
+ */
+struct TropoParameters
+{
+    //! Constructor
+    TropoParameters();
 
+    //! Equality operators
+    bool operator==(const TropoParameters& other) const
+    {
+        return n0 == other.n0 && refHeight == other.refHeight;
+    }
+    bool operator!=(const TropoParameters& other) const
+    {
+        return !((*this) == other);
+    }
+
+    //! Refractivity value of the troposphere for the
+    //! imaged scene used to form the product
+    //! (dimensionless).
+    double n0;
+
+    //! Reference Height for the N0 value.
+    RefHeight refHeight;
+};
+
+/*
+ *  \struct IonoParameters
+ *
+ *  \brief (Optional) Parameters that compute the propogation
+ *   delay due to the ionosphere
+ */
+struct IonoParameters
+{
+    //! Constructor
+    IonoParameters();
+
+    //! Equality operators
+    bool operator==(const IonoParameters& other) const
+    {
+        return tecv == other.tecv && f2Height == other.f2Height;
+    }
+    bool operator!=(const IonoParameters& other) const
+    {
+        return !((*this) == other);
+    }
+
+    //! Total Electron Content (TEC)
+    double tecv;
+
+    //! (Optional) The F2 height of the ionosphere.
+    double f2Height; // Optional
+};
+
+/*
+ *  \sturct Global
+ *
+ *  \brief Global parameters that apply to metadata components
+ *   and CPHD signal arrays
+ */
 struct Global
 {
+    //! Constructor
     Global();
 
-    bool operator==(const Global& other) const
-    {
-        return domainType == other.domainType &&
-               phaseSGN == other.phaseSGN &&
-               refFrequencyIndex == other.refFrequencyIndex &&
-               collectStart == other.collectStart &&
-               collectDuration == other.collectDuration &&
-               txTime1 == other.txTime1 &&
-               txTime2 == other.txTime2 &&
-               imageArea == other.imageArea;
-    }
-
+    //! Equality operators
+    bool operator==(const Global& other) const;
     bool operator !=(const Global& other) const
     {
         return !((*this) == other);
     }
 
+    /*
+     *  \func getDomainType
+     *
+     *  \brief Get domain represented by the sample dimension
+     */
+    DomainType getDomainType() const
+    {
+        return domainType;
+    }
+
+    //! Indicates the domain represented by the sample
+    //! dimension of the CPHD signal array(s)
     DomainType domainType;
-    PhaseSGN   phaseSGN;
 
-    //! Indicates the RF freq values expressed as offsets from a ref freq
-    size_t refFrequencyIndex;
+    //! Phase SGN applied to compute target signal
+    //! phase as a function of target delta TOA
+    PhaseSGN sgn;
 
-    //! Collection date/time UTC, measured from collection start
-    DateTime collectStart;
-    
-    //! Duration of collection period
-    double collectDuration;
+    //! Parameters that describe the collection times for
+    //! the data contained in the product
+    Timeline timeline;
 
-    double txTime1;
-    double txTime2;
+    //! Parameters that describe the FX frequency limits
+    //! for the signal array(s) contained in the product.
+    FxBand fxBand;
 
-    ImageArea imageArea;
+    //! Parameters that describe the TOA swath limits
+    //! for the signal array(s) contained in the product
+    TOASwath toaSwath;
+
+    //! (Optional) Parameters used to compute the propagation
+    //! delay due to the troposphere.
+    mem::ScopedCopyablePtr<TropoParameters> tropoParameters;
+
+    //! (Optional) Parameters used to compute propagation effects
+    //! due to the ionosphere
+    mem::ScopedCopyablePtr<IonoParameters> ionoParameters;
 };
 
+//! Ostream operators
 std::ostream& operator<< (std::ostream& os, const Global& d);
+std::ostream& operator<< (std::ostream& os, const Timeline& d);
+std::ostream& operator<< (std::ostream& os, const FxBand& d);
+std::ostream& operator<< (std::ostream& os, const TOASwath& d);
+std::ostream& operator<< (std::ostream& os, const TropoParameters& d);
+std::ostream& operator<< (std::ostream& os, const IonoParameters& d);
 }
 
 #endif

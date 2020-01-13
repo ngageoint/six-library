@@ -142,6 +142,50 @@ struct Serializer<std::vector<T> >
 };
 
 /*!
+ * \struct Serializer
+ * \brief Implements serialization and deserialization for std::strings
+ */
+template <>
+struct Serializer<std::string>
+{
+    /*!
+     * Serialize a std::string into the byte buffer.
+     *
+     * \param val The std::string to serialize.
+     * \param swapBytes Should byte-swapping be applied?
+     * \param[out] buffer The serialized data.
+     */
+    static void serializeImpl(const std::string& val,
+                              bool swapBytes,
+                              std::vector<sys::byte>& buffer)
+    {
+        const size_t length = val.size();
+        Serializer<size_t>::serializeImpl(length, swapBytes, buffer);
+        std::copy(val.begin(), val.end(), std::back_inserter(buffer));
+    }
+
+    /*!
+     * Deserialize a byte array into a std::string.
+     *
+     * \param buffer The data to deserialize. Pointer is incremented
+     *        by sizeof(size_t) + string_length.
+     * \param swapBytes Should byte-swapping be applied?
+     * \param[out] val The std::string to deserialize into.
+     */
+    static void deserializeImpl(const sys::byte*& buffer,
+                                bool swapBytes,
+                                std::string& val)
+    {
+        size_t length;
+        Serializer<size_t>::deserializeImpl(buffer, swapBytes, length);
+
+        const char* charPtr = reinterpret_cast<const char*>(buffer);
+        val.assign(charPtr, charPtr + length);
+        buffer += length;
+    }
+};
+
+/*!
  * Function interface to serialize.
  * \tparam T Data type to serialize. Argument determines which
  *  Serializer functor's implementation to use.

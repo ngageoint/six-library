@@ -109,12 +109,12 @@ class SwigPyIterator(_object):
     __swig_destroy__ = _six_base.delete_SwigPyIterator
     __del__ = lambda self: None
 
-    def value(self):
+    def value(self) -> "PyObject *":
         """value(SwigPyIterator self) -> PyObject *"""
         return _six_base.SwigPyIterator_value(self)
 
 
-    def incr(self, n=1):
+    def incr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
         """
         incr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         incr(SwigPyIterator self) -> SwigPyIterator
@@ -122,7 +122,7 @@ class SwigPyIterator(_object):
         return _six_base.SwigPyIterator_incr(self, n)
 
 
-    def decr(self, n=1):
+    def decr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
         """
         decr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         decr(SwigPyIterator self) -> SwigPyIterator
@@ -130,67 +130,67 @@ class SwigPyIterator(_object):
         return _six_base.SwigPyIterator_decr(self, n)
 
 
-    def distance(self, x):
+    def distance(self, x: 'SwigPyIterator') -> "ptrdiff_t":
         """distance(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t"""
         return _six_base.SwigPyIterator_distance(self, x)
 
 
-    def equal(self, x):
+    def equal(self, x: 'SwigPyIterator') -> "bool":
         """equal(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _six_base.SwigPyIterator_equal(self, x)
 
 
-    def copy(self):
+    def copy(self) -> "swig::SwigPyIterator *":
         """copy(SwigPyIterator self) -> SwigPyIterator"""
         return _six_base.SwigPyIterator_copy(self)
 
 
-    def next(self):
+    def next(self) -> "PyObject *":
         """next(SwigPyIterator self) -> PyObject *"""
         return _six_base.SwigPyIterator_next(self)
 
 
-    def __next__(self):
+    def __next__(self) -> "PyObject *":
         """__next__(SwigPyIterator self) -> PyObject *"""
         return _six_base.SwigPyIterator___next__(self)
 
 
-    def previous(self):
+    def previous(self) -> "PyObject *":
         """previous(SwigPyIterator self) -> PyObject *"""
         return _six_base.SwigPyIterator_previous(self)
 
 
-    def advance(self, n):
+    def advance(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
         """advance(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _six_base.SwigPyIterator_advance(self, n)
 
 
-    def __eq__(self, x):
+    def __eq__(self, x: 'SwigPyIterator') -> "bool":
         """__eq__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _six_base.SwigPyIterator___eq__(self, x)
 
 
-    def __ne__(self, x):
+    def __ne__(self, x: 'SwigPyIterator') -> "bool":
         """__ne__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _six_base.SwigPyIterator___ne__(self, x)
 
 
-    def __iadd__(self, n):
+    def __iadd__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
         """__iadd__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _six_base.SwigPyIterator___iadd__(self, n)
 
 
-    def __isub__(self, n):
+    def __isub__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
         """__isub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _six_base.SwigPyIterator___isub__(self, n)
 
 
-    def __add__(self, n):
+    def __add__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
         """__add__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _six_base.SwigPyIterator___add__(self, n)
 
 
-    def __sub__(self, *args):
+    def __sub__(self, *args) -> "ptrdiff_t":
         """
         __sub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator
         __sub__(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t
@@ -238,37 +238,37 @@ class DateTime(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __lt__(self, rhs):
+    def __lt__(self, rhs: 'DateTime') -> "bool":
         """__lt__(DateTime self, DateTime rhs) -> bool"""
         return _six_base.DateTime___lt__(self, rhs)
 
 
-    def __le__(self, rhs):
+    def __le__(self, rhs: 'DateTime') -> "bool":
         """__le__(DateTime self, DateTime rhs) -> bool"""
         return _six_base.DateTime___le__(self, rhs)
 
 
-    def __gt__(self, rhs):
+    def __gt__(self, rhs: 'DateTime') -> "bool":
         """__gt__(DateTime self, DateTime rhs) -> bool"""
         return _six_base.DateTime___gt__(self, rhs)
 
 
-    def __ge__(self, rhs):
+    def __ge__(self, rhs: 'DateTime') -> "bool":
         """__ge__(DateTime self, DateTime rhs) -> bool"""
         return _six_base.DateTime___ge__(self, rhs)
 
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'DateTime') -> "bool":
         """__eq__(DateTime self, DateTime rhs) -> bool"""
         return _six_base.DateTime___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'DateTime') -> "bool":
         """__ne__(DateTime self, DateTime rhs) -> bool"""
         return _six_base.DateTime___ne__(self, rhs)
 
 
-    def getNative(self, *args):
+    def getNative(self, *args) -> "nitf_DateTime const *":
         """
         getNative(DateTime self) -> nitf_DateTime
         getNative(DateTime self) -> nitf_DateTime const *
@@ -276,7 +276,7 @@ class DateTime(_object):
         return _six_base.DateTime_getNative(self, *args)
 
 
-    def format(self, *args):
+    def format(self, *args) -> "std::string":
         """
         format(DateTime self, std::string const & format, char * outBuf, size_t maxSize)
         format(DateTime self, std::string const & format, std::string & str)
@@ -285,87 +285,87 @@ class DateTime(_object):
         return _six_base.DateTime_format(self, *args)
 
 
-    def getYear(self):
+    def getYear(self) -> "int":
         """getYear(DateTime self) -> int"""
         return _six_base.DateTime_getYear(self)
 
 
-    def getMonth(self):
+    def getMonth(self) -> "int":
         """getMonth(DateTime self) -> int"""
         return _six_base.DateTime_getMonth(self)
 
 
-    def getDayOfMonth(self):
+    def getDayOfMonth(self) -> "int":
         """getDayOfMonth(DateTime self) -> int"""
         return _six_base.DateTime_getDayOfMonth(self)
 
 
-    def getDayOfWeek(self):
+    def getDayOfWeek(self) -> "int":
         """getDayOfWeek(DateTime self) -> int"""
         return _six_base.DateTime_getDayOfWeek(self)
 
 
-    def getDayOfYear(self):
+    def getDayOfYear(self) -> "int":
         """getDayOfYear(DateTime self) -> int"""
         return _six_base.DateTime_getDayOfYear(self)
 
 
-    def getHour(self):
+    def getHour(self) -> "int":
         """getHour(DateTime self) -> int"""
         return _six_base.DateTime_getHour(self)
 
 
-    def getMinute(self):
+    def getMinute(self) -> "int":
         """getMinute(DateTime self) -> int"""
         return _six_base.DateTime_getMinute(self)
 
 
-    def getSecond(self):
+    def getSecond(self) -> "double":
         """getSecond(DateTime self) -> double"""
         return _six_base.DateTime_getSecond(self)
 
 
-    def getTimeInMillis(self):
+    def getTimeInMillis(self) -> "double":
         """getTimeInMillis(DateTime self) -> double"""
         return _six_base.DateTime_getTimeInMillis(self)
 
 
-    def setYear(self, year):
+    def setYear(self, year: 'int') -> "void":
         """setYear(DateTime self, int year)"""
         return _six_base.DateTime_setYear(self, year)
 
 
-    def setMonth(self, month):
+    def setMonth(self, month: 'int') -> "void":
         """setMonth(DateTime self, int month)"""
         return _six_base.DateTime_setMonth(self, month)
 
 
-    def setDayOfMonth(self, dayOfMonth):
+    def setDayOfMonth(self, dayOfMonth: 'int') -> "void":
         """setDayOfMonth(DateTime self, int dayOfMonth)"""
         return _six_base.DateTime_setDayOfMonth(self, dayOfMonth)
 
 
-    def setHour(self, hour):
+    def setHour(self, hour: 'int') -> "void":
         """setHour(DateTime self, int hour)"""
         return _six_base.DateTime_setHour(self, hour)
 
 
-    def setMinute(self, minute):
+    def setMinute(self, minute: 'int') -> "void":
         """setMinute(DateTime self, int minute)"""
         return _six_base.DateTime_setMinute(self, minute)
 
 
-    def setSecond(self, second):
+    def setSecond(self, second: 'double') -> "void":
         """setSecond(DateTime self, double second)"""
         return _six_base.DateTime_setSecond(self, second)
 
 
-    def setTimeInMillis(self, timeInMillis):
+    def setTimeInMillis(self, timeInMillis: 'double') -> "void":
         """setTimeInMillis(DateTime self, double timeInMillis)"""
         return _six_base.DateTime_setTimeInMillis(self, timeInMillis)
 
 
-    def toPythonDateTime(self):
+    def toPythonDateTime(self) -> "PyObject *":
         """toPythonDateTime(DateTime self) -> PyObject *"""
         return _six_base.DateTime_toPythonDateTime(self)
 
@@ -410,12 +410,12 @@ class AppliedType(_object):
     __swig_destroy__ = _six_base.delete_AppliedType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(AppliedType self) -> std::string"""
         return _six_base.AppliedType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(AppliedType self, AppliedType o) -> bool
         __eq__(AppliedType self, int const & o) -> bool
@@ -423,7 +423,7 @@ class AppliedType(_object):
         return _six_base.AppliedType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(AppliedType self, AppliedType o) -> bool
         __ne__(AppliedType self, int const & o) -> bool
@@ -431,27 +431,27 @@ class AppliedType(_object):
         return _six_base.AppliedType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'AppliedType') -> "bool":
         """__lt__(AppliedType self, AppliedType o) -> bool"""
         return _six_base.AppliedType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'AppliedType') -> "bool":
         """__gt__(AppliedType self, AppliedType o) -> bool"""
         return _six_base.AppliedType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'AppliedType') -> "bool":
         """__le__(AppliedType self, AppliedType o) -> bool"""
         return _six_base.AppliedType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'AppliedType') -> "bool":
         """__ge__(AppliedType self, AppliedType o) -> bool"""
         return _six_base.AppliedType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.AppliedType_size()
 
@@ -465,7 +465,7 @@ AppliedType_swigregister(AppliedType)
 cvar = _six_base.cvar
 NOT_SET_VALUE = cvar.NOT_SET_VALUE
 
-def AppliedType_size():
+def AppliedType_size() -> "size_t":
     """AppliedType_size() -> size_t"""
     return _six_base.AppliedType_size()
 
@@ -496,12 +496,12 @@ class AutofocusType(_object):
     __swig_destroy__ = _six_base.delete_AutofocusType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(AutofocusType self) -> std::string"""
         return _six_base.AutofocusType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(AutofocusType self, AutofocusType o) -> bool
         __eq__(AutofocusType self, int const & o) -> bool
@@ -509,7 +509,7 @@ class AutofocusType(_object):
         return _six_base.AutofocusType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(AutofocusType self, AutofocusType o) -> bool
         __ne__(AutofocusType self, int const & o) -> bool
@@ -517,27 +517,27 @@ class AutofocusType(_object):
         return _six_base.AutofocusType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'AutofocusType') -> "bool":
         """__lt__(AutofocusType self, AutofocusType o) -> bool"""
         return _six_base.AutofocusType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'AutofocusType') -> "bool":
         """__gt__(AutofocusType self, AutofocusType o) -> bool"""
         return _six_base.AutofocusType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'AutofocusType') -> "bool":
         """__le__(AutofocusType self, AutofocusType o) -> bool"""
         return _six_base.AutofocusType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'AutofocusType') -> "bool":
         """__ge__(AutofocusType self, AutofocusType o) -> bool"""
         return _six_base.AutofocusType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.AutofocusType_size()
 
@@ -549,7 +549,7 @@ class AutofocusType(_object):
 AutofocusType_swigregister = _six_base.AutofocusType_swigregister
 AutofocusType_swigregister(AutofocusType)
 
-def AutofocusType_size():
+def AutofocusType_size() -> "size_t":
     """AutofocusType_size() -> size_t"""
     return _six_base.AutofocusType_size()
 
@@ -579,12 +579,12 @@ class BooleanType(_object):
     __swig_destroy__ = _six_base.delete_BooleanType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(BooleanType self) -> std::string"""
         return _six_base.BooleanType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(BooleanType self, BooleanType o) -> bool
         __eq__(BooleanType self, int const & o) -> bool
@@ -592,7 +592,7 @@ class BooleanType(_object):
         return _six_base.BooleanType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(BooleanType self, BooleanType o) -> bool
         __ne__(BooleanType self, int const & o) -> bool
@@ -600,27 +600,27 @@ class BooleanType(_object):
         return _six_base.BooleanType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'BooleanType') -> "bool":
         """__lt__(BooleanType self, BooleanType o) -> bool"""
         return _six_base.BooleanType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'BooleanType') -> "bool":
         """__gt__(BooleanType self, BooleanType o) -> bool"""
         return _six_base.BooleanType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'BooleanType') -> "bool":
         """__le__(BooleanType self, BooleanType o) -> bool"""
         return _six_base.BooleanType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'BooleanType') -> "bool":
         """__ge__(BooleanType self, BooleanType o) -> bool"""
         return _six_base.BooleanType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.BooleanType_size()
 
@@ -632,7 +632,7 @@ class BooleanType(_object):
 BooleanType_swigregister = _six_base.BooleanType_swigregister
 BooleanType_swigregister(BooleanType)
 
-def BooleanType_size():
+def BooleanType_size() -> "size_t":
     """BooleanType_size() -> size_t"""
     return _six_base.BooleanType_size()
 
@@ -663,12 +663,12 @@ class ByteSwapping(_object):
     __swig_destroy__ = _six_base.delete_ByteSwapping
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(ByteSwapping self) -> std::string"""
         return _six_base.ByteSwapping_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(ByteSwapping self, ByteSwapping o) -> bool
         __eq__(ByteSwapping self, int const & o) -> bool
@@ -676,7 +676,7 @@ class ByteSwapping(_object):
         return _six_base.ByteSwapping___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(ByteSwapping self, ByteSwapping o) -> bool
         __ne__(ByteSwapping self, int const & o) -> bool
@@ -684,27 +684,27 @@ class ByteSwapping(_object):
         return _six_base.ByteSwapping___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'ByteSwapping') -> "bool":
         """__lt__(ByteSwapping self, ByteSwapping o) -> bool"""
         return _six_base.ByteSwapping___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'ByteSwapping') -> "bool":
         """__gt__(ByteSwapping self, ByteSwapping o) -> bool"""
         return _six_base.ByteSwapping___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'ByteSwapping') -> "bool":
         """__le__(ByteSwapping self, ByteSwapping o) -> bool"""
         return _six_base.ByteSwapping___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'ByteSwapping') -> "bool":
         """__ge__(ByteSwapping self, ByteSwapping o) -> bool"""
         return _six_base.ByteSwapping___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.ByteSwapping_size()
 
@@ -716,7 +716,7 @@ class ByteSwapping(_object):
 ByteSwapping_swigregister = _six_base.ByteSwapping_swigregister
 ByteSwapping_swigregister(ByteSwapping)
 
-def ByteSwapping_size():
+def ByteSwapping_size() -> "size_t":
     """ByteSwapping_size() -> size_t"""
     return _six_base.ByteSwapping_size()
 
@@ -746,12 +746,12 @@ class CollectType(_object):
     __swig_destroy__ = _six_base.delete_CollectType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(CollectType self) -> std::string"""
         return _six_base.CollectType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(CollectType self, CollectType o) -> bool
         __eq__(CollectType self, int const & o) -> bool
@@ -759,7 +759,7 @@ class CollectType(_object):
         return _six_base.CollectType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(CollectType self, CollectType o) -> bool
         __ne__(CollectType self, int const & o) -> bool
@@ -767,27 +767,27 @@ class CollectType(_object):
         return _six_base.CollectType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'CollectType') -> "bool":
         """__lt__(CollectType self, CollectType o) -> bool"""
         return _six_base.CollectType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'CollectType') -> "bool":
         """__gt__(CollectType self, CollectType o) -> bool"""
         return _six_base.CollectType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'CollectType') -> "bool":
         """__le__(CollectType self, CollectType o) -> bool"""
         return _six_base.CollectType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'CollectType') -> "bool":
         """__ge__(CollectType self, CollectType o) -> bool"""
         return _six_base.CollectType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.CollectType_size()
 
@@ -799,7 +799,7 @@ class CollectType(_object):
 CollectType_swigregister = _six_base.CollectType_swigregister
 CollectType_swigregister(CollectType)
 
-def CollectType_size():
+def CollectType_size() -> "size_t":
     """CollectType_size() -> size_t"""
     return _six_base.CollectType_size()
 
@@ -832,12 +832,12 @@ class ComplexImageGridType(_object):
     __swig_destroy__ = _six_base.delete_ComplexImageGridType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(ComplexImageGridType self) -> std::string"""
         return _six_base.ComplexImageGridType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(ComplexImageGridType self, ComplexImageGridType o) -> bool
         __eq__(ComplexImageGridType self, int const & o) -> bool
@@ -845,7 +845,7 @@ class ComplexImageGridType(_object):
         return _six_base.ComplexImageGridType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(ComplexImageGridType self, ComplexImageGridType o) -> bool
         __ne__(ComplexImageGridType self, int const & o) -> bool
@@ -853,27 +853,27 @@ class ComplexImageGridType(_object):
         return _six_base.ComplexImageGridType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'ComplexImageGridType') -> "bool":
         """__lt__(ComplexImageGridType self, ComplexImageGridType o) -> bool"""
         return _six_base.ComplexImageGridType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'ComplexImageGridType') -> "bool":
         """__gt__(ComplexImageGridType self, ComplexImageGridType o) -> bool"""
         return _six_base.ComplexImageGridType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'ComplexImageGridType') -> "bool":
         """__le__(ComplexImageGridType self, ComplexImageGridType o) -> bool"""
         return _six_base.ComplexImageGridType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'ComplexImageGridType') -> "bool":
         """__ge__(ComplexImageGridType self, ComplexImageGridType o) -> bool"""
         return _six_base.ComplexImageGridType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.ComplexImageGridType_size()
 
@@ -885,7 +885,7 @@ class ComplexImageGridType(_object):
 ComplexImageGridType_swigregister = _six_base.ComplexImageGridType_swigregister
 ComplexImageGridType_swigregister(ComplexImageGridType)
 
-def ComplexImageGridType_size():
+def ComplexImageGridType_size() -> "size_t":
     """ComplexImageGridType_size() -> size_t"""
     return _six_base.ComplexImageGridType_size()
 
@@ -916,12 +916,12 @@ class ComplexImagePlaneType(_object):
     __swig_destroy__ = _six_base.delete_ComplexImagePlaneType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(ComplexImagePlaneType self) -> std::string"""
         return _six_base.ComplexImagePlaneType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(ComplexImagePlaneType self, ComplexImagePlaneType o) -> bool
         __eq__(ComplexImagePlaneType self, int const & o) -> bool
@@ -929,7 +929,7 @@ class ComplexImagePlaneType(_object):
         return _six_base.ComplexImagePlaneType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(ComplexImagePlaneType self, ComplexImagePlaneType o) -> bool
         __ne__(ComplexImagePlaneType self, int const & o) -> bool
@@ -937,27 +937,27 @@ class ComplexImagePlaneType(_object):
         return _six_base.ComplexImagePlaneType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'ComplexImagePlaneType') -> "bool":
         """__lt__(ComplexImagePlaneType self, ComplexImagePlaneType o) -> bool"""
         return _six_base.ComplexImagePlaneType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'ComplexImagePlaneType') -> "bool":
         """__gt__(ComplexImagePlaneType self, ComplexImagePlaneType o) -> bool"""
         return _six_base.ComplexImagePlaneType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'ComplexImagePlaneType') -> "bool":
         """__le__(ComplexImagePlaneType self, ComplexImagePlaneType o) -> bool"""
         return _six_base.ComplexImagePlaneType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'ComplexImagePlaneType') -> "bool":
         """__ge__(ComplexImagePlaneType self, ComplexImagePlaneType o) -> bool"""
         return _six_base.ComplexImagePlaneType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.ComplexImagePlaneType_size()
 
@@ -969,7 +969,7 @@ class ComplexImagePlaneType(_object):
 ComplexImagePlaneType_swigregister = _six_base.ComplexImagePlaneType_swigregister
 ComplexImagePlaneType_swigregister(ComplexImagePlaneType)
 
-def ComplexImagePlaneType_size():
+def ComplexImagePlaneType_size() -> "size_t":
     """ComplexImagePlaneType_size() -> size_t"""
     return _six_base.ComplexImagePlaneType_size()
 
@@ -999,12 +999,12 @@ class DataType(_object):
     __swig_destroy__ = _six_base.delete_DataType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(DataType self) -> std::string"""
         return _six_base.DataType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(DataType self, DataType o) -> bool
         __eq__(DataType self, int const & o) -> bool
@@ -1012,7 +1012,7 @@ class DataType(_object):
         return _six_base.DataType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(DataType self, DataType o) -> bool
         __ne__(DataType self, int const & o) -> bool
@@ -1020,27 +1020,27 @@ class DataType(_object):
         return _six_base.DataType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'DataType') -> "bool":
         """__lt__(DataType self, DataType o) -> bool"""
         return _six_base.DataType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'DataType') -> "bool":
         """__gt__(DataType self, DataType o) -> bool"""
         return _six_base.DataType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'DataType') -> "bool":
         """__le__(DataType self, DataType o) -> bool"""
         return _six_base.DataType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'DataType') -> "bool":
         """__ge__(DataType self, DataType o) -> bool"""
         return _six_base.DataType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.DataType_size()
 
@@ -1052,7 +1052,7 @@ class DataType(_object):
 DataType_swigregister = _six_base.DataType_swigregister
 DataType_swigregister(DataType)
 
-def DataType_size():
+def DataType_size() -> "size_t":
     """DataType_size() -> size_t"""
     return _six_base.DataType_size()
 
@@ -1084,12 +1084,12 @@ class DecimationMethod(_object):
     __swig_destroy__ = _six_base.delete_DecimationMethod
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(DecimationMethod self) -> std::string"""
         return _six_base.DecimationMethod_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(DecimationMethod self, DecimationMethod o) -> bool
         __eq__(DecimationMethod self, int const & o) -> bool
@@ -1097,7 +1097,7 @@ class DecimationMethod(_object):
         return _six_base.DecimationMethod___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(DecimationMethod self, DecimationMethod o) -> bool
         __ne__(DecimationMethod self, int const & o) -> bool
@@ -1105,27 +1105,27 @@ class DecimationMethod(_object):
         return _six_base.DecimationMethod___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'DecimationMethod') -> "bool":
         """__lt__(DecimationMethod self, DecimationMethod o) -> bool"""
         return _six_base.DecimationMethod___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'DecimationMethod') -> "bool":
         """__gt__(DecimationMethod self, DecimationMethod o) -> bool"""
         return _six_base.DecimationMethod___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'DecimationMethod') -> "bool":
         """__le__(DecimationMethod self, DecimationMethod o) -> bool"""
         return _six_base.DecimationMethod___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'DecimationMethod') -> "bool":
         """__ge__(DecimationMethod self, DecimationMethod o) -> bool"""
         return _six_base.DecimationMethod___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.DecimationMethod_size()
 
@@ -1137,7 +1137,7 @@ class DecimationMethod(_object):
 DecimationMethod_swigregister = _six_base.DecimationMethod_swigregister
 DecimationMethod_swigregister(DecimationMethod)
 
-def DecimationMethod_size():
+def DecimationMethod_size() -> "size_t":
     """DecimationMethod_size() -> size_t"""
     return _six_base.DecimationMethod_size()
 
@@ -1167,12 +1167,12 @@ class DemodType(_object):
     __swig_destroy__ = _six_base.delete_DemodType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(DemodType self) -> std::string"""
         return _six_base.DemodType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(DemodType self, DemodType o) -> bool
         __eq__(DemodType self, int const & o) -> bool
@@ -1180,7 +1180,7 @@ class DemodType(_object):
         return _six_base.DemodType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(DemodType self, DemodType o) -> bool
         __ne__(DemodType self, int const & o) -> bool
@@ -1188,27 +1188,27 @@ class DemodType(_object):
         return _six_base.DemodType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'DemodType') -> "bool":
         """__lt__(DemodType self, DemodType o) -> bool"""
         return _six_base.DemodType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'DemodType') -> "bool":
         """__gt__(DemodType self, DemodType o) -> bool"""
         return _six_base.DemodType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'DemodType') -> "bool":
         """__le__(DemodType self, DemodType o) -> bool"""
         return _six_base.DemodType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'DemodType') -> "bool":
         """__ge__(DemodType self, DemodType o) -> bool"""
         return _six_base.DemodType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.DemodType_size()
 
@@ -1220,7 +1220,7 @@ class DemodType(_object):
 DemodType_swigregister = _six_base.DemodType_swigregister
 DemodType_swigregister(DemodType)
 
-def DemodType_size():
+def DemodType_size() -> "size_t":
     """DemodType_size() -> size_t"""
     return _six_base.DemodType_size()
 
@@ -1250,12 +1250,12 @@ class DisplayType(_object):
     __swig_destroy__ = _six_base.delete_DisplayType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(DisplayType self) -> std::string"""
         return _six_base.DisplayType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(DisplayType self, DisplayType o) -> bool
         __eq__(DisplayType self, int const & o) -> bool
@@ -1263,7 +1263,7 @@ class DisplayType(_object):
         return _six_base.DisplayType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(DisplayType self, DisplayType o) -> bool
         __ne__(DisplayType self, int const & o) -> bool
@@ -1271,27 +1271,27 @@ class DisplayType(_object):
         return _six_base.DisplayType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'DisplayType') -> "bool":
         """__lt__(DisplayType self, DisplayType o) -> bool"""
         return _six_base.DisplayType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'DisplayType') -> "bool":
         """__gt__(DisplayType self, DisplayType o) -> bool"""
         return _six_base.DisplayType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'DisplayType') -> "bool":
         """__le__(DisplayType self, DisplayType o) -> bool"""
         return _six_base.DisplayType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'DisplayType') -> "bool":
         """__ge__(DisplayType self, DisplayType o) -> bool"""
         return _six_base.DisplayType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.DisplayType_size()
 
@@ -1303,7 +1303,7 @@ class DisplayType(_object):
 DisplayType_swigregister = _six_base.DisplayType_swigregister
 DisplayType_swigregister(DisplayType)
 
-def DisplayType_size():
+def DisplayType_size() -> "size_t":
     """DisplayType_size() -> size_t"""
     return _six_base.DisplayType_size()
 
@@ -1341,12 +1341,12 @@ class DualPolarizationType(_object):
     __swig_destroy__ = _six_base.delete_DualPolarizationType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(DualPolarizationType self) -> std::string"""
         return _six_base.DualPolarizationType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(DualPolarizationType self, DualPolarizationType o) -> bool
         __eq__(DualPolarizationType self, int const & o) -> bool
@@ -1354,7 +1354,7 @@ class DualPolarizationType(_object):
         return _six_base.DualPolarizationType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(DualPolarizationType self, DualPolarizationType o) -> bool
         __ne__(DualPolarizationType self, int const & o) -> bool
@@ -1362,27 +1362,27 @@ class DualPolarizationType(_object):
         return _six_base.DualPolarizationType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'DualPolarizationType') -> "bool":
         """__lt__(DualPolarizationType self, DualPolarizationType o) -> bool"""
         return _six_base.DualPolarizationType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'DualPolarizationType') -> "bool":
         """__gt__(DualPolarizationType self, DualPolarizationType o) -> bool"""
         return _six_base.DualPolarizationType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'DualPolarizationType') -> "bool":
         """__le__(DualPolarizationType self, DualPolarizationType o) -> bool"""
         return _six_base.DualPolarizationType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'DualPolarizationType') -> "bool":
         """__ge__(DualPolarizationType self, DualPolarizationType o) -> bool"""
         return _six_base.DualPolarizationType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.DualPolarizationType_size()
 
@@ -1394,7 +1394,7 @@ class DualPolarizationType(_object):
 DualPolarizationType_swigregister = _six_base.DualPolarizationType_swigregister
 DualPolarizationType_swigregister(DualPolarizationType)
 
-def DualPolarizationType_size():
+def DualPolarizationType_size() -> "size_t":
     """DualPolarizationType_size() -> size_t"""
     return _six_base.DualPolarizationType_size()
 
@@ -1423,12 +1423,12 @@ class EarthModelType(_object):
     __swig_destroy__ = _six_base.delete_EarthModelType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(EarthModelType self) -> std::string"""
         return _six_base.EarthModelType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(EarthModelType self, EarthModelType o) -> bool
         __eq__(EarthModelType self, int const & o) -> bool
@@ -1436,7 +1436,7 @@ class EarthModelType(_object):
         return _six_base.EarthModelType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(EarthModelType self, EarthModelType o) -> bool
         __ne__(EarthModelType self, int const & o) -> bool
@@ -1444,27 +1444,27 @@ class EarthModelType(_object):
         return _six_base.EarthModelType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'EarthModelType') -> "bool":
         """__lt__(EarthModelType self, EarthModelType o) -> bool"""
         return _six_base.EarthModelType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'EarthModelType') -> "bool":
         """__gt__(EarthModelType self, EarthModelType o) -> bool"""
         return _six_base.EarthModelType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'EarthModelType') -> "bool":
         """__le__(EarthModelType self, EarthModelType o) -> bool"""
         return _six_base.EarthModelType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'EarthModelType') -> "bool":
         """__ge__(EarthModelType self, EarthModelType o) -> bool"""
         return _six_base.EarthModelType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.EarthModelType_size()
 
@@ -1476,7 +1476,7 @@ class EarthModelType(_object):
 EarthModelType_swigregister = _six_base.EarthModelType_swigregister
 EarthModelType_swigregister(EarthModelType)
 
-def EarthModelType_size():
+def EarthModelType_size() -> "size_t":
     """EarthModelType_size() -> size_t"""
     return _six_base.EarthModelType_size()
 
@@ -1506,12 +1506,12 @@ class FFTSign(_object):
     __swig_destroy__ = _six_base.delete_FFTSign
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(FFTSign self) -> std::string"""
         return _six_base.FFTSign_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(FFTSign self, FFTSign o) -> bool
         __eq__(FFTSign self, int const & o) -> bool
@@ -1519,7 +1519,7 @@ class FFTSign(_object):
         return _six_base.FFTSign___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(FFTSign self, FFTSign o) -> bool
         __ne__(FFTSign self, int const & o) -> bool
@@ -1527,27 +1527,27 @@ class FFTSign(_object):
         return _six_base.FFTSign___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'FFTSign') -> "bool":
         """__lt__(FFTSign self, FFTSign o) -> bool"""
         return _six_base.FFTSign___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'FFTSign') -> "bool":
         """__gt__(FFTSign self, FFTSign o) -> bool"""
         return _six_base.FFTSign___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'FFTSign') -> "bool":
         """__le__(FFTSign self, FFTSign o) -> bool"""
         return _six_base.FFTSign___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'FFTSign') -> "bool":
         """__ge__(FFTSign self, FFTSign o) -> bool"""
         return _six_base.FFTSign___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.FFTSign_size()
 
@@ -1559,7 +1559,7 @@ class FFTSign(_object):
 FFTSign_swigregister = _six_base.FFTSign_swigregister
 FFTSign_swigregister(FFTSign)
 
-def FFTSign_size():
+def FFTSign_size() -> "size_t":
     """FFTSign_size() -> size_t"""
     return _six_base.FFTSign_size()
 
@@ -1589,12 +1589,12 @@ class ImageBeamCompensationType(_object):
     __swig_destroy__ = _six_base.delete_ImageBeamCompensationType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(ImageBeamCompensationType self) -> std::string"""
         return _six_base.ImageBeamCompensationType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(ImageBeamCompensationType self, ImageBeamCompensationType o) -> bool
         __eq__(ImageBeamCompensationType self, int const & o) -> bool
@@ -1602,7 +1602,7 @@ class ImageBeamCompensationType(_object):
         return _six_base.ImageBeamCompensationType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(ImageBeamCompensationType self, ImageBeamCompensationType o) -> bool
         __ne__(ImageBeamCompensationType self, int const & o) -> bool
@@ -1610,27 +1610,27 @@ class ImageBeamCompensationType(_object):
         return _six_base.ImageBeamCompensationType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'ImageBeamCompensationType') -> "bool":
         """__lt__(ImageBeamCompensationType self, ImageBeamCompensationType o) -> bool"""
         return _six_base.ImageBeamCompensationType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'ImageBeamCompensationType') -> "bool":
         """__gt__(ImageBeamCompensationType self, ImageBeamCompensationType o) -> bool"""
         return _six_base.ImageBeamCompensationType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'ImageBeamCompensationType') -> "bool":
         """__le__(ImageBeamCompensationType self, ImageBeamCompensationType o) -> bool"""
         return _six_base.ImageBeamCompensationType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'ImageBeamCompensationType') -> "bool":
         """__ge__(ImageBeamCompensationType self, ImageBeamCompensationType o) -> bool"""
         return _six_base.ImageBeamCompensationType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.ImageBeamCompensationType_size()
 
@@ -1642,7 +1642,7 @@ class ImageBeamCompensationType(_object):
 ImageBeamCompensationType_swigregister = _six_base.ImageBeamCompensationType_swigregister
 ImageBeamCompensationType_swigregister(ImageBeamCompensationType)
 
-def ImageBeamCompensationType_size():
+def ImageBeamCompensationType_size() -> "size_t":
     """ImageBeamCompensationType_size() -> size_t"""
     return _six_base.ImageBeamCompensationType_size()
 
@@ -1674,12 +1674,12 @@ class ImageFormationType(_object):
     __swig_destroy__ = _six_base.delete_ImageFormationType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(ImageFormationType self) -> std::string"""
         return _six_base.ImageFormationType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(ImageFormationType self, ImageFormationType o) -> bool
         __eq__(ImageFormationType self, int const & o) -> bool
@@ -1687,7 +1687,7 @@ class ImageFormationType(_object):
         return _six_base.ImageFormationType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(ImageFormationType self, ImageFormationType o) -> bool
         __ne__(ImageFormationType self, int const & o) -> bool
@@ -1695,27 +1695,27 @@ class ImageFormationType(_object):
         return _six_base.ImageFormationType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'ImageFormationType') -> "bool":
         """__lt__(ImageFormationType self, ImageFormationType o) -> bool"""
         return _six_base.ImageFormationType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'ImageFormationType') -> "bool":
         """__gt__(ImageFormationType self, ImageFormationType o) -> bool"""
         return _six_base.ImageFormationType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'ImageFormationType') -> "bool":
         """__le__(ImageFormationType self, ImageFormationType o) -> bool"""
         return _six_base.ImageFormationType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'ImageFormationType') -> "bool":
         """__ge__(ImageFormationType self, ImageFormationType o) -> bool"""
         return _six_base.ImageFormationType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.ImageFormationType_size()
 
@@ -1727,7 +1727,7 @@ class ImageFormationType(_object):
 ImageFormationType_swigregister = _six_base.ImageFormationType_swigregister
 ImageFormationType_swigregister(ImageFormationType)
 
-def ImageFormationType_size():
+def ImageFormationType_size() -> "size_t":
     """ImageFormationType_size() -> size_t"""
     return _six_base.ImageFormationType_size()
 
@@ -1758,12 +1758,12 @@ class MagnificationMethod(_object):
     __swig_destroy__ = _six_base.delete_MagnificationMethod
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(MagnificationMethod self) -> std::string"""
         return _six_base.MagnificationMethod_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(MagnificationMethod self, MagnificationMethod o) -> bool
         __eq__(MagnificationMethod self, int const & o) -> bool
@@ -1771,7 +1771,7 @@ class MagnificationMethod(_object):
         return _six_base.MagnificationMethod___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(MagnificationMethod self, MagnificationMethod o) -> bool
         __ne__(MagnificationMethod self, int const & o) -> bool
@@ -1779,27 +1779,27 @@ class MagnificationMethod(_object):
         return _six_base.MagnificationMethod___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'MagnificationMethod') -> "bool":
         """__lt__(MagnificationMethod self, MagnificationMethod o) -> bool"""
         return _six_base.MagnificationMethod___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'MagnificationMethod') -> "bool":
         """__gt__(MagnificationMethod self, MagnificationMethod o) -> bool"""
         return _six_base.MagnificationMethod___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'MagnificationMethod') -> "bool":
         """__le__(MagnificationMethod self, MagnificationMethod o) -> bool"""
         return _six_base.MagnificationMethod___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'MagnificationMethod') -> "bool":
         """__ge__(MagnificationMethod self, MagnificationMethod o) -> bool"""
         return _six_base.MagnificationMethod___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.MagnificationMethod_size()
 
@@ -1811,7 +1811,7 @@ class MagnificationMethod(_object):
 MagnificationMethod_swigregister = _six_base.MagnificationMethod_swigregister
 MagnificationMethod_swigregister(MagnificationMethod)
 
-def MagnificationMethod_size():
+def MagnificationMethod_size() -> "size_t":
     """MagnificationMethod_size() -> size_t"""
     return _six_base.MagnificationMethod_size()
 
@@ -1844,12 +1844,12 @@ class OrientationType(_object):
     __swig_destroy__ = _six_base.delete_OrientationType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(OrientationType self) -> std::string"""
         return _six_base.OrientationType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(OrientationType self, OrientationType o) -> bool
         __eq__(OrientationType self, int const & o) -> bool
@@ -1857,7 +1857,7 @@ class OrientationType(_object):
         return _six_base.OrientationType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(OrientationType self, OrientationType o) -> bool
         __ne__(OrientationType self, int const & o) -> bool
@@ -1865,27 +1865,27 @@ class OrientationType(_object):
         return _six_base.OrientationType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'OrientationType') -> "bool":
         """__lt__(OrientationType self, OrientationType o) -> bool"""
         return _six_base.OrientationType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'OrientationType') -> "bool":
         """__gt__(OrientationType self, OrientationType o) -> bool"""
         return _six_base.OrientationType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'OrientationType') -> "bool":
         """__le__(OrientationType self, OrientationType o) -> bool"""
         return _six_base.OrientationType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'OrientationType') -> "bool":
         """__ge__(OrientationType self, OrientationType o) -> bool"""
         return _six_base.OrientationType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.OrientationType_size()
 
@@ -1897,7 +1897,7 @@ class OrientationType(_object):
 OrientationType_swigregister = _six_base.OrientationType_swigregister
 OrientationType_swigregister(OrientationType)
 
-def OrientationType_size():
+def OrientationType_size() -> "size_t":
     """OrientationType_size() -> size_t"""
     return _six_base.OrientationType_size()
 
@@ -1933,12 +1933,12 @@ class PixelType(_object):
     __swig_destroy__ = _six_base.delete_PixelType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(PixelType self) -> std::string"""
         return _six_base.PixelType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(PixelType self, PixelType o) -> bool
         __eq__(PixelType self, int const & o) -> bool
@@ -1946,7 +1946,7 @@ class PixelType(_object):
         return _six_base.PixelType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(PixelType self, PixelType o) -> bool
         __ne__(PixelType self, int const & o) -> bool
@@ -1954,27 +1954,27 @@ class PixelType(_object):
         return _six_base.PixelType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'PixelType') -> "bool":
         """__lt__(PixelType self, PixelType o) -> bool"""
         return _six_base.PixelType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'PixelType') -> "bool":
         """__gt__(PixelType self, PixelType o) -> bool"""
         return _six_base.PixelType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'PixelType') -> "bool":
         """__le__(PixelType self, PixelType o) -> bool"""
         return _six_base.PixelType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'PixelType') -> "bool":
         """__ge__(PixelType self, PixelType o) -> bool"""
         return _six_base.PixelType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.PixelType_size()
 
@@ -1986,7 +1986,7 @@ class PixelType(_object):
 PixelType_swigregister = _six_base.PixelType_swigregister
 PixelType_swigregister(PixelType)
 
-def PixelType_size():
+def PixelType_size() -> "size_t":
     """PixelType_size() -> size_t"""
     return _six_base.PixelType_size()
 
@@ -2021,12 +2021,12 @@ class PolarizationSequenceType(_object):
     __swig_destroy__ = _six_base.delete_PolarizationSequenceType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(PolarizationSequenceType self) -> std::string"""
         return _six_base.PolarizationSequenceType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(PolarizationSequenceType self, PolarizationSequenceType o) -> bool
         __eq__(PolarizationSequenceType self, int const & o) -> bool
@@ -2034,7 +2034,7 @@ class PolarizationSequenceType(_object):
         return _six_base.PolarizationSequenceType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(PolarizationSequenceType self, PolarizationSequenceType o) -> bool
         __ne__(PolarizationSequenceType self, int const & o) -> bool
@@ -2042,27 +2042,27 @@ class PolarizationSequenceType(_object):
         return _six_base.PolarizationSequenceType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'PolarizationSequenceType') -> "bool":
         """__lt__(PolarizationSequenceType self, PolarizationSequenceType o) -> bool"""
         return _six_base.PolarizationSequenceType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'PolarizationSequenceType') -> "bool":
         """__gt__(PolarizationSequenceType self, PolarizationSequenceType o) -> bool"""
         return _six_base.PolarizationSequenceType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'PolarizationSequenceType') -> "bool":
         """__le__(PolarizationSequenceType self, PolarizationSequenceType o) -> bool"""
         return _six_base.PolarizationSequenceType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'PolarizationSequenceType') -> "bool":
         """__ge__(PolarizationSequenceType self, PolarizationSequenceType o) -> bool"""
         return _six_base.PolarizationSequenceType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.PolarizationSequenceType_size()
 
@@ -2074,7 +2074,7 @@ class PolarizationSequenceType(_object):
 PolarizationSequenceType_swigregister = _six_base.PolarizationSequenceType_swigregister
 PolarizationSequenceType_swigregister(PolarizationSequenceType)
 
-def PolarizationSequenceType_size():
+def PolarizationSequenceType_size() -> "size_t":
     """PolarizationSequenceType_size() -> size_t"""
     return _six_base.PolarizationSequenceType_size()
 
@@ -2107,12 +2107,12 @@ class PolarizationType(_object):
     __swig_destroy__ = _six_base.delete_PolarizationType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(PolarizationType self) -> std::string"""
         return _six_base.PolarizationType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(PolarizationType self, PolarizationType o) -> bool
         __eq__(PolarizationType self, int const & o) -> bool
@@ -2120,7 +2120,7 @@ class PolarizationType(_object):
         return _six_base.PolarizationType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(PolarizationType self, PolarizationType o) -> bool
         __ne__(PolarizationType self, int const & o) -> bool
@@ -2128,27 +2128,27 @@ class PolarizationType(_object):
         return _six_base.PolarizationType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'PolarizationType') -> "bool":
         """__lt__(PolarizationType self, PolarizationType o) -> bool"""
         return _six_base.PolarizationType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'PolarizationType') -> "bool":
         """__gt__(PolarizationType self, PolarizationType o) -> bool"""
         return _six_base.PolarizationType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'PolarizationType') -> "bool":
         """__le__(PolarizationType self, PolarizationType o) -> bool"""
         return _six_base.PolarizationType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'PolarizationType') -> "bool":
         """__ge__(PolarizationType self, PolarizationType o) -> bool"""
         return _six_base.PolarizationType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.PolarizationType_size()
 
@@ -2160,7 +2160,7 @@ class PolarizationType(_object):
 PolarizationType_swigregister = _six_base.PolarizationType_swigregister
 PolarizationType_swigregister(PolarizationType)
 
-def PolarizationType_size():
+def PolarizationType_size() -> "size_t":
     """PolarizationType_size() -> size_t"""
     return _six_base.PolarizationType_size()
 
@@ -2192,12 +2192,12 @@ class ProjectionType(_object):
     __swig_destroy__ = _six_base.delete_ProjectionType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(ProjectionType self) -> std::string"""
         return _six_base.ProjectionType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(ProjectionType self, ProjectionType o) -> bool
         __eq__(ProjectionType self, int const & o) -> bool
@@ -2205,7 +2205,7 @@ class ProjectionType(_object):
         return _six_base.ProjectionType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(ProjectionType self, ProjectionType o) -> bool
         __ne__(ProjectionType self, int const & o) -> bool
@@ -2213,27 +2213,27 @@ class ProjectionType(_object):
         return _six_base.ProjectionType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'ProjectionType') -> "bool":
         """__lt__(ProjectionType self, ProjectionType o) -> bool"""
         return _six_base.ProjectionType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'ProjectionType') -> "bool":
         """__gt__(ProjectionType self, ProjectionType o) -> bool"""
         return _six_base.ProjectionType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'ProjectionType') -> "bool":
         """__le__(ProjectionType self, ProjectionType o) -> bool"""
         return _six_base.ProjectionType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'ProjectionType') -> "bool":
         """__ge__(ProjectionType self, ProjectionType o) -> bool"""
         return _six_base.ProjectionType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.ProjectionType_size()
 
@@ -2245,7 +2245,7 @@ class ProjectionType(_object):
 ProjectionType_swigregister = _six_base.ProjectionType_swigregister
 ProjectionType_swigregister(ProjectionType)
 
-def ProjectionType_size():
+def ProjectionType_size() -> "size_t":
     """ProjectionType_size() -> size_t"""
     return _six_base.ProjectionType_size()
 
@@ -2276,12 +2276,12 @@ class RMAlgoType(_object):
     __swig_destroy__ = _six_base.delete_RMAlgoType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(RMAlgoType self) -> std::string"""
         return _six_base.RMAlgoType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(RMAlgoType self, RMAlgoType o) -> bool
         __eq__(RMAlgoType self, int const & o) -> bool
@@ -2289,7 +2289,7 @@ class RMAlgoType(_object):
         return _six_base.RMAlgoType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(RMAlgoType self, RMAlgoType o) -> bool
         __ne__(RMAlgoType self, int const & o) -> bool
@@ -2297,27 +2297,27 @@ class RMAlgoType(_object):
         return _six_base.RMAlgoType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'RMAlgoType') -> "bool":
         """__lt__(RMAlgoType self, RMAlgoType o) -> bool"""
         return _six_base.RMAlgoType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'RMAlgoType') -> "bool":
         """__gt__(RMAlgoType self, RMAlgoType o) -> bool"""
         return _six_base.RMAlgoType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'RMAlgoType') -> "bool":
         """__le__(RMAlgoType self, RMAlgoType o) -> bool"""
         return _six_base.RMAlgoType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'RMAlgoType') -> "bool":
         """__ge__(RMAlgoType self, RMAlgoType o) -> bool"""
         return _six_base.RMAlgoType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.RMAlgoType_size()
 
@@ -2329,7 +2329,7 @@ class RMAlgoType(_object):
 RMAlgoType_swigregister = _six_base.RMAlgoType_swigregister
 RMAlgoType_swigregister(RMAlgoType)
 
-def RMAlgoType_size():
+def RMAlgoType_size() -> "size_t":
     """RMAlgoType_size() -> size_t"""
     return _six_base.RMAlgoType_size()
 
@@ -2361,12 +2361,12 @@ class RadarModeType(_object):
     __swig_destroy__ = _six_base.delete_RadarModeType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(RadarModeType self) -> std::string"""
         return _six_base.RadarModeType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(RadarModeType self, RadarModeType o) -> bool
         __eq__(RadarModeType self, int const & o) -> bool
@@ -2374,7 +2374,7 @@ class RadarModeType(_object):
         return _six_base.RadarModeType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(RadarModeType self, RadarModeType o) -> bool
         __ne__(RadarModeType self, int const & o) -> bool
@@ -2382,27 +2382,27 @@ class RadarModeType(_object):
         return _six_base.RadarModeType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'RadarModeType') -> "bool":
         """__lt__(RadarModeType self, RadarModeType o) -> bool"""
         return _six_base.RadarModeType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'RadarModeType') -> "bool":
         """__gt__(RadarModeType self, RadarModeType o) -> bool"""
         return _six_base.RadarModeType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'RadarModeType') -> "bool":
         """__le__(RadarModeType self, RadarModeType o) -> bool"""
         return _six_base.RadarModeType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'RadarModeType') -> "bool":
         """__ge__(RadarModeType self, RadarModeType o) -> bool"""
         return _six_base.RadarModeType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.RadarModeType_size()
 
@@ -2414,7 +2414,7 @@ class RadarModeType(_object):
 RadarModeType_swigregister = _six_base.RadarModeType_swigregister
 RadarModeType_swigregister(RadarModeType)
 
-def RadarModeType_size():
+def RadarModeType_size() -> "size_t":
     """RadarModeType_size() -> size_t"""
     return _six_base.RadarModeType_size()
 
@@ -2444,12 +2444,12 @@ class RegionType(_object):
     __swig_destroy__ = _six_base.delete_RegionType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(RegionType self) -> std::string"""
         return _six_base.RegionType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(RegionType self, RegionType o) -> bool
         __eq__(RegionType self, int const & o) -> bool
@@ -2457,7 +2457,7 @@ class RegionType(_object):
         return _six_base.RegionType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(RegionType self, RegionType o) -> bool
         __ne__(RegionType self, int const & o) -> bool
@@ -2465,27 +2465,27 @@ class RegionType(_object):
         return _six_base.RegionType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'RegionType') -> "bool":
         """__lt__(RegionType self, RegionType o) -> bool"""
         return _six_base.RegionType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'RegionType') -> "bool":
         """__gt__(RegionType self, RegionType o) -> bool"""
         return _six_base.RegionType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'RegionType') -> "bool":
         """__le__(RegionType self, RegionType o) -> bool"""
         return _six_base.RegionType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'RegionType') -> "bool":
         """__ge__(RegionType self, RegionType o) -> bool"""
         return _six_base.RegionType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.RegionType_size()
 
@@ -2497,7 +2497,7 @@ class RegionType(_object):
 RegionType_swigregister = _six_base.RegionType_swigregister
 RegionType_swigregister(RegionType)
 
-def RegionType_size():
+def RegionType_size() -> "size_t":
     """RegionType_size() -> size_t"""
     return _six_base.RegionType_size()
 
@@ -2527,12 +2527,12 @@ class RowColEnum(_object):
     __swig_destroy__ = _six_base.delete_RowColEnum
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(RowColEnum self) -> std::string"""
         return _six_base.RowColEnum_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(RowColEnum self, RowColEnum o) -> bool
         __eq__(RowColEnum self, int const & o) -> bool
@@ -2540,7 +2540,7 @@ class RowColEnum(_object):
         return _six_base.RowColEnum___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(RowColEnum self, RowColEnum o) -> bool
         __ne__(RowColEnum self, int const & o) -> bool
@@ -2548,27 +2548,27 @@ class RowColEnum(_object):
         return _six_base.RowColEnum___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'RowColEnum') -> "bool":
         """__lt__(RowColEnum self, RowColEnum o) -> bool"""
         return _six_base.RowColEnum___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'RowColEnum') -> "bool":
         """__gt__(RowColEnum self, RowColEnum o) -> bool"""
         return _six_base.RowColEnum___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'RowColEnum') -> "bool":
         """__le__(RowColEnum self, RowColEnum o) -> bool"""
         return _six_base.RowColEnum___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'RowColEnum') -> "bool":
         """__ge__(RowColEnum self, RowColEnum o) -> bool"""
         return _six_base.RowColEnum___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.RowColEnum_size()
 
@@ -2580,7 +2580,7 @@ class RowColEnum(_object):
 RowColEnum_swigregister = _six_base.RowColEnum_swigregister
 RowColEnum_swigregister(RowColEnum)
 
-def RowColEnum_size():
+def RowColEnum_size() -> "size_t":
     """RowColEnum_size() -> size_t"""
     return _six_base.RowColEnum_size()
 
@@ -2610,12 +2610,12 @@ class SCPType(_object):
     __swig_destroy__ = _six_base.delete_SCPType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(SCPType self) -> std::string"""
         return _six_base.SCPType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(SCPType self, SCPType o) -> bool
         __eq__(SCPType self, int const & o) -> bool
@@ -2623,7 +2623,7 @@ class SCPType(_object):
         return _six_base.SCPType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(SCPType self, SCPType o) -> bool
         __ne__(SCPType self, int const & o) -> bool
@@ -2631,27 +2631,27 @@ class SCPType(_object):
         return _six_base.SCPType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'SCPType') -> "bool":
         """__lt__(SCPType self, SCPType o) -> bool"""
         return _six_base.SCPType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'SCPType') -> "bool":
         """__gt__(SCPType self, SCPType o) -> bool"""
         return _six_base.SCPType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'SCPType') -> "bool":
         """__le__(SCPType self, SCPType o) -> bool"""
         return _six_base.SCPType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'SCPType') -> "bool":
         """__ge__(SCPType self, SCPType o) -> bool"""
         return _six_base.SCPType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.SCPType_size()
 
@@ -2663,7 +2663,7 @@ class SCPType(_object):
 SCPType_swigregister = _six_base.SCPType_swigregister
 SCPType_swigregister(SCPType)
 
-def SCPType_size():
+def SCPType_size() -> "size_t":
     """SCPType_size() -> size_t"""
     return _six_base.SCPType_size()
 
@@ -2693,12 +2693,12 @@ class SideOfTrackType(_object):
     __swig_destroy__ = _six_base.delete_SideOfTrackType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(SideOfTrackType self) -> std::string"""
         return _six_base.SideOfTrackType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(SideOfTrackType self, SideOfTrackType o) -> bool
         __eq__(SideOfTrackType self, int const & o) -> bool
@@ -2706,7 +2706,7 @@ class SideOfTrackType(_object):
         return _six_base.SideOfTrackType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(SideOfTrackType self, SideOfTrackType o) -> bool
         __ne__(SideOfTrackType self, int const & o) -> bool
@@ -2714,27 +2714,27 @@ class SideOfTrackType(_object):
         return _six_base.SideOfTrackType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'SideOfTrackType') -> "bool":
         """__lt__(SideOfTrackType self, SideOfTrackType o) -> bool"""
         return _six_base.SideOfTrackType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'SideOfTrackType') -> "bool":
         """__gt__(SideOfTrackType self, SideOfTrackType o) -> bool"""
         return _six_base.SideOfTrackType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'SideOfTrackType') -> "bool":
         """__le__(SideOfTrackType self, SideOfTrackType o) -> bool"""
         return _six_base.SideOfTrackType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'SideOfTrackType') -> "bool":
         """__ge__(SideOfTrackType self, SideOfTrackType o) -> bool"""
         return _six_base.SideOfTrackType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.SideOfTrackType_size()
 
@@ -2746,7 +2746,7 @@ class SideOfTrackType(_object):
 SideOfTrackType_swigregister = _six_base.SideOfTrackType_swigregister
 SideOfTrackType_swigregister(SideOfTrackType)
 
-def SideOfTrackType_size():
+def SideOfTrackType_size() -> "size_t":
     """SideOfTrackType_size() -> size_t"""
     return _six_base.SideOfTrackType_size()
 
@@ -2777,12 +2777,12 @@ class SlowTimeBeamCompensationType(_object):
     __swig_destroy__ = _six_base.delete_SlowTimeBeamCompensationType
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(SlowTimeBeamCompensationType self) -> std::string"""
         return _six_base.SlowTimeBeamCompensationType_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(SlowTimeBeamCompensationType self, SlowTimeBeamCompensationType o) -> bool
         __eq__(SlowTimeBeamCompensationType self, int const & o) -> bool
@@ -2790,7 +2790,7 @@ class SlowTimeBeamCompensationType(_object):
         return _six_base.SlowTimeBeamCompensationType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(SlowTimeBeamCompensationType self, SlowTimeBeamCompensationType o) -> bool
         __ne__(SlowTimeBeamCompensationType self, int const & o) -> bool
@@ -2798,27 +2798,27 @@ class SlowTimeBeamCompensationType(_object):
         return _six_base.SlowTimeBeamCompensationType___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'SlowTimeBeamCompensationType') -> "bool":
         """__lt__(SlowTimeBeamCompensationType self, SlowTimeBeamCompensationType o) -> bool"""
         return _six_base.SlowTimeBeamCompensationType___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'SlowTimeBeamCompensationType') -> "bool":
         """__gt__(SlowTimeBeamCompensationType self, SlowTimeBeamCompensationType o) -> bool"""
         return _six_base.SlowTimeBeamCompensationType___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'SlowTimeBeamCompensationType') -> "bool":
         """__le__(SlowTimeBeamCompensationType self, SlowTimeBeamCompensationType o) -> bool"""
         return _six_base.SlowTimeBeamCompensationType___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'SlowTimeBeamCompensationType') -> "bool":
         """__ge__(SlowTimeBeamCompensationType self, SlowTimeBeamCompensationType o) -> bool"""
         return _six_base.SlowTimeBeamCompensationType___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.SlowTimeBeamCompensationType_size()
 
@@ -2830,7 +2830,7 @@ class SlowTimeBeamCompensationType(_object):
 SlowTimeBeamCompensationType_swigregister = _six_base.SlowTimeBeamCompensationType_swigregister
 SlowTimeBeamCompensationType_swigregister(SlowTimeBeamCompensationType)
 
-def SlowTimeBeamCompensationType_size():
+def SlowTimeBeamCompensationType_size() -> "size_t":
     """SlowTimeBeamCompensationType_size() -> size_t"""
     return _six_base.SlowTimeBeamCompensationType_size()
 
@@ -2861,12 +2861,12 @@ class XYZEnum(_object):
     __swig_destroy__ = _six_base.delete_XYZEnum
     __del__ = lambda self: None
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(XYZEnum self) -> std::string"""
         return _six_base.XYZEnum_toString(self)
 
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(XYZEnum self, XYZEnum o) -> bool
         __eq__(XYZEnum self, int const & o) -> bool
@@ -2874,7 +2874,7 @@ class XYZEnum(_object):
         return _six_base.XYZEnum___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(XYZEnum self, XYZEnum o) -> bool
         __ne__(XYZEnum self, int const & o) -> bool
@@ -2882,27 +2882,27 @@ class XYZEnum(_object):
         return _six_base.XYZEnum___ne__(self, *args)
 
 
-    def __lt__(self, o):
+    def __lt__(self, o: 'XYZEnum') -> "bool":
         """__lt__(XYZEnum self, XYZEnum o) -> bool"""
         return _six_base.XYZEnum___lt__(self, o)
 
 
-    def __gt__(self, o):
+    def __gt__(self, o: 'XYZEnum') -> "bool":
         """__gt__(XYZEnum self, XYZEnum o) -> bool"""
         return _six_base.XYZEnum___gt__(self, o)
 
 
-    def __le__(self, o):
+    def __le__(self, o: 'XYZEnum') -> "bool":
         """__le__(XYZEnum self, XYZEnum o) -> bool"""
         return _six_base.XYZEnum___le__(self, o)
 
 
-    def __ge__(self, o):
+    def __ge__(self, o: 'XYZEnum') -> "bool":
         """__ge__(XYZEnum self, XYZEnum o) -> bool"""
         return _six_base.XYZEnum___ge__(self, o)
 
 
-    def size():
+    def size() -> "size_t":
         """size() -> size_t"""
         return _six_base.XYZEnum_size()
 
@@ -2914,7 +2914,7 @@ class XYZEnum(_object):
 XYZEnum_swigregister = _six_base.XYZEnum_swigregister
 XYZEnum_swigregister(XYZEnum)
 
-def XYZEnum_size():
+def XYZEnum_size() -> "size_t":
     """XYZEnum_size() -> size_t"""
     return _six_base.XYZEnum_size()
 
@@ -2946,7 +2946,7 @@ class DESValidationException(coda.coda_except.Exception):
     __swig_destroy__ = _six_base.delete_DESValidationException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(DESValidationException self) -> std::string"""
         return _six_base.DESValidationException_getType(self)
 
@@ -2976,7 +2976,7 @@ class DecorrType(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'DecorrType') -> "bool":
         """__eq__(DecorrType self, DecorrType rhs) -> bool"""
         return _six_base.DecorrType___eq__(self, rhs)
 
@@ -3002,7 +3002,7 @@ class Constants(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, Constants, name)
     __repr__ = _swig_repr
 
-    def getNumBytesPerPixel(type):
+    def getNumBytesPerPixel(type: 'PixelType') -> "int":
         """getNumBytesPerPixel(PixelType type) -> int"""
         return _six_base.Constants_getNumBytesPerPixel(type)
 
@@ -3033,7 +3033,7 @@ Constants.SICD_DESSHSI = _six_base.cvar.Constants_SICD_DESSHSI
 Constants.SIDD_DESSHSI = _six_base.cvar.Constants_SIDD_DESSHSI
 Constants.EXCESS_BANDWIDTH_FACTOR = _six_base.cvar.Constants_EXCESS_BANDWIDTH_FACTOR
 
-def Constants_getNumBytesPerPixel(type):
+def Constants_getNumBytesPerPixel(type: 'PixelType') -> "int":
     """Constants_getNumBytesPerPixel(PixelType type) -> int"""
     return _six_base.Constants_getNumBytesPerPixel(type)
 
@@ -3074,12 +3074,12 @@ class ReferencePoint(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, x):
+    def __eq__(self, x: 'ReferencePoint') -> "bool":
         """__eq__(ReferencePoint self, ReferencePoint x) -> bool"""
         return _six_base.ReferencePoint___eq__(self, x)
 
 
-    def __ne__(self, x):
+    def __ne__(self, x: 'ReferencePoint') -> "bool":
         """__ne__(ReferencePoint self, ReferencePoint x) -> bool"""
         return _six_base.ReferencePoint___ne__(self, x)
 
@@ -3113,12 +3113,12 @@ class SCP(_object):
     if _newclass:
         llh = _swig_property(_six_base.SCP_llh_get, _six_base.SCP_llh_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'SCP') -> "bool":
         """__eq__(SCP self, SCP rhs) -> bool"""
         return _six_base.SCP___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'SCP') -> "bool":
         """__ne__(SCP self, SCP rhs) -> bool"""
         return _six_base.SCP___ne__(self, rhs)
 
@@ -3144,17 +3144,17 @@ class AmplitudeTable(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'AmplitudeTable') -> "bool":
         """__eq__(AmplitudeTable self, AmplitudeTable rhs) -> bool"""
         return _six_base.AmplitudeTable___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'AmplitudeTable') -> "bool":
         """__ne__(AmplitudeTable self, AmplitudeTable rhs) -> bool"""
         return _six_base.AmplitudeTable___ne__(self, rhs)
 
 
-    def clone(self):
+    def clone(self) -> "six::AmplitudeTable *":
         """clone(AmplitudeTable self) -> AmplitudeTable"""
         return _six_base.AmplitudeTable_clone(self)
 
@@ -3166,7 +3166,7 @@ AmplitudeTable_swigregister(AmplitudeTable)
 FRAME_MODE = _six_base.FRAME_MODE
 SCAN_MODE = _six_base.SCAN_MODE
 
-def getImageMode(radarMode):
+def getImageMode(radarMode: 'RadarModeType') -> "six::ImageMode":
     """getImageMode(RadarModeType radarMode) -> six::ImageMode"""
     return _six_base.getImageMode(radarMode)
 class MissingRequiredException(coda.coda_except.Exception):
@@ -3197,7 +3197,7 @@ class MissingRequiredException(coda.coda_except.Exception):
     __swig_destroy__ = _six_base.delete_MissingRequiredException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(MissingRequiredException self) -> std::string"""
         return _six_base.MissingRequiredException_getType(self)
 
@@ -3232,7 +3232,7 @@ class UninitializedValueException(coda.coda_except.Exception):
     __swig_destroy__ = _six_base.delete_UninitializedValueException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(UninitializedValueException self) -> std::string"""
         return _six_base.UninitializedValueException_getType(self)
 
@@ -3282,27 +3282,27 @@ class Parameter(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def str(self):
+    def str(self) -> "std::string":
         """str(Parameter self) -> std::string"""
         return _six_base.Parameter_str(self)
 
 
-    def getName(self):
+    def getName(self) -> "std::string":
         """getName(Parameter self) -> std::string"""
         return _six_base.Parameter_getName(self)
 
 
-    def setName(self, name):
+    def setName(self, name: 'std::string') -> "void":
         """setName(Parameter self, std::string name)"""
         return _six_base.Parameter_setName(self, name)
 
 
-    def __eq__(self, o):
+    def __eq__(self, o: 'Parameter') -> "bool":
         """__eq__(Parameter self, Parameter o) -> bool"""
         return _six_base.Parameter___eq__(self, o)
 
 
-    def __ne__(self, o):
+    def __ne__(self, o: 'Parameter') -> "bool":
         """__ne__(Parameter self, Parameter o) -> bool"""
         return _six_base.Parameter___ne__(self, o)
 
@@ -3315,17 +3315,17 @@ class Parameter(_object):
 
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Parameter self) -> std::string"""
         return _six_base.Parameter___str__(self)
 
 
-    def __int__(self):
+    def __int__(self) -> "long":
         """__int__(Parameter self) -> long"""
         return _six_base.Parameter___int__(self)
 
 
-    def __float__(self):
+    def __float__(self) -> "double":
         """__float__(Parameter self) -> double"""
         return _six_base.Parameter___float__(self)
 
@@ -3341,22 +3341,22 @@ class ParameterCollection(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, ParameterCollection, name)
     __repr__ = _swig_repr
 
-    def findParameterIndex(self, paramName):
+    def findParameterIndex(self, paramName: 'std::string const &') -> "size_t":
         """findParameterIndex(ParameterCollection self, std::string const & paramName) -> size_t"""
         return _six_base.ParameterCollection_findParameterIndex(self, paramName)
 
 
-    def findParameter(self, paramName):
+    def findParameter(self, paramName: 'std::string const &') -> "six::Parameter const &":
         """findParameter(ParameterCollection self, std::string const & paramName) -> Parameter"""
         return _six_base.ParameterCollection_findParameter(self, paramName)
 
 
-    def containsParameter(self, paramName):
+    def containsParameter(self, paramName: 'std::string const &') -> "bool":
         """containsParameter(ParameterCollection self, std::string const & paramName) -> bool"""
         return _six_base.ParameterCollection_containsParameter(self, paramName)
 
 
-    def at(self, *args):
+    def at(self, *args) -> "six::Parameter const &":
         """
         at(ParameterCollection self, size_t i) -> Parameter
         at(ParameterCollection self, size_t i) -> Parameter
@@ -3364,22 +3364,22 @@ class ParameterCollection(_object):
         return _six_base.ParameterCollection_at(self, *args)
 
 
-    def push_back(self, p):
+    def push_back(self, p: 'Parameter') -> "void":
         """push_back(ParameterCollection self, Parameter p)"""
         return _six_base.ParameterCollection_push_back(self, p)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(ParameterCollection self) -> size_t"""
         return _six_base.ParameterCollection_size(self)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(ParameterCollection self) -> bool"""
         return _six_base.ParameterCollection_empty(self)
 
 
-    def front(self, *args):
+    def front(self, *args) -> "six::Parameter &":
         """
         front(ParameterCollection self) -> Parameter
         front(ParameterCollection self) -> Parameter
@@ -3387,7 +3387,7 @@ class ParameterCollection(_object):
         return _six_base.ParameterCollection_front(self, *args)
 
 
-    def back(self, *args):
+    def back(self, *args) -> "six::Parameter &":
         """
         back(ParameterCollection self) -> Parameter
         back(ParameterCollection self) -> Parameter
@@ -3395,22 +3395,22 @@ class ParameterCollection(_object):
         return _six_base.ParameterCollection_back(self, *args)
 
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ParameterCollection') -> "bool":
         """__eq__(ParameterCollection self, ParameterCollection rhs) -> bool"""
         return _six_base.ParameterCollection___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'ParameterCollection') -> "bool":
         """__ne__(ParameterCollection self, ParameterCollection rhs) -> bool"""
         return _six_base.ParameterCollection___ne__(self, rhs)
 
 
-    def __getitem__(self, i):
+    def __getitem__(self, i: 'size_t') -> "six::Parameter &":
         """__getitem__(ParameterCollection self, size_t i) -> Parameter"""
         return _six_base.ParameterCollection___getitem__(self, i)
 
 
-    def __setitem__(self, i, v):
+    def __setitem__(self, i: 'size_t', v: 'Parameter') -> "void":
         """__setitem__(ParameterCollection self, size_t i, Parameter v)"""
         return _six_base.ParameterCollection___setitem__(self, i, v)
 
@@ -3427,6 +3427,88 @@ class ParameterCollection(_object):
 ParameterCollection_swigregister = _six_base.ParameterCollection_swigregister
 ParameterCollection_swigregister(ParameterCollection)
 
+class CollectionInformation(_object):
+    """Proxy of C++ six::CollectionInformation class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionInformation, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["collectorName"] = _six_base.CollectionInformation_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_base.CollectionInformation_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_base.CollectionInformation_collectorName_get, _six_base.CollectionInformation_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_base.CollectionInformation_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_base.CollectionInformation_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_base.CollectionInformation_illuminatorName_get, _six_base.CollectionInformation_illuminatorName_set)
+    __swig_setmethods__["coreName"] = _six_base.CollectionInformation_coreName_set
+    __swig_getmethods__["coreName"] = _six_base.CollectionInformation_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_base.CollectionInformation_coreName_get, _six_base.CollectionInformation_coreName_set)
+    __swig_setmethods__["collectType"] = _six_base.CollectionInformation_collectType_set
+    __swig_getmethods__["collectType"] = _six_base.CollectionInformation_collectType_get
+    if _newclass:
+        collectType = _swig_property(_six_base.CollectionInformation_collectType_get, _six_base.CollectionInformation_collectType_set)
+    __swig_setmethods__["radarMode"] = _six_base.CollectionInformation_radarMode_set
+    __swig_getmethods__["radarMode"] = _six_base.CollectionInformation_radarMode_get
+    if _newclass:
+        radarMode = _swig_property(_six_base.CollectionInformation_radarMode_get, _six_base.CollectionInformation_radarMode_set)
+    __swig_setmethods__["radarModeID"] = _six_base.CollectionInformation_radarModeID_set
+    __swig_getmethods__["radarModeID"] = _six_base.CollectionInformation_radarModeID_get
+    if _newclass:
+        radarModeID = _swig_property(_six_base.CollectionInformation_radarModeID_get, _six_base.CollectionInformation_radarModeID_set)
+    __swig_setmethods__["releaseInfo"] = _six_base.CollectionInformation_releaseInfo_set
+    __swig_getmethods__["releaseInfo"] = _six_base.CollectionInformation_releaseInfo_get
+    if _newclass:
+        releaseInfo = _swig_property(_six_base.CollectionInformation_releaseInfo_get, _six_base.CollectionInformation_releaseInfo_set)
+    __swig_setmethods__["countryCodes"] = _six_base.CollectionInformation_countryCodes_set
+    __swig_getmethods__["countryCodes"] = _six_base.CollectionInformation_countryCodes_get
+    if _newclass:
+        countryCodes = _swig_property(_six_base.CollectionInformation_countryCodes_get, _six_base.CollectionInformation_countryCodes_set)
+    __swig_setmethods__["parameters"] = _six_base.CollectionInformation_parameters_set
+    __swig_getmethods__["parameters"] = _six_base.CollectionInformation_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_base.CollectionInformation_parameters_get, _six_base.CollectionInformation_parameters_set)
+
+    def __init__(self):
+        """__init__(six::CollectionInformation self) -> CollectionInformation"""
+        this = _six_base.new_CollectionInformation()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_CollectionInformation
+    __del__ = lambda self: None
+
+    def clone(self) -> "six::CollectionInformation *":
+        """clone(CollectionInformation self) -> CollectionInformation"""
+        return _six_base.CollectionInformation_clone(self)
+
+
+    def __eq__(self, other: 'CollectionInformation') -> "bool":
+        """__eq__(CollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.CollectionInformation___eq__(self, other)
+
+
+    def __ne__(self, other: 'CollectionInformation') -> "bool":
+        """__ne__(CollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.CollectionInformation___ne__(self, other)
+
+
+    def getClassificationLevel(self) -> "std::string":
+        """getClassificationLevel(CollectionInformation self) -> std::string"""
+        return _six_base.CollectionInformation_getClassificationLevel(self)
+
+
+    def setClassificationLevel(self, classification: 'std::string const &') -> "void":
+        """setClassificationLevel(CollectionInformation self, std::string const & classification)"""
+        return _six_base.CollectionInformation_setClassificationLevel(self, classification)
+
+CollectionInformation_swigregister = _six_base.CollectionInformation_swigregister
+CollectionInformation_swigregister(CollectionInformation)
+
 class Classification(_object):
     """Proxy of C++ six::Classification class."""
 
@@ -3441,22 +3523,22 @@ class Classification(_object):
     __swig_destroy__ = _six_base.delete_Classification
     __del__ = lambda self: None
 
-    def getLevel(self):
+    def getLevel(self) -> "std::string":
         """getLevel(Classification self) -> std::string"""
         return _six_base.Classification_getLevel(self)
 
 
-    def isUnclassified(self):
+    def isUnclassified(self) -> "bool":
         """isUnclassified(Classification self) -> bool"""
         return _six_base.Classification_isUnclassified(self)
 
 
-    def setSecurity(self, arg2, arg3, arg4):
+    def setSecurity(self, arg2: 'std::string const &', arg3: 'logging::Logger &', arg4: 'nitf::FileSecurity') -> "void":
         """setSecurity(Classification self, std::string const & arg2, logging::Logger & arg3, nitf::FileSecurity arg4)"""
         return _six_base.Classification_setSecurity(self, arg2, arg3, arg4)
 
 
-    def put(self, os):
+    def put(self, os: 'std::ostream &') -> "std::ostream &":
         """put(Classification self, std::ostream & os) -> std::ostream &"""
         return _six_base.Classification_put(self, os)
 
@@ -3544,12 +3626,12 @@ class CorrCoefs(_object):
     if _newclass:
         v2v3 = _swig_property(_six_base.CorrCoefs_v2v3_get, _six_base.CorrCoefs_v2v3_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'CorrCoefs') -> "bool":
         """__eq__(CorrCoefs self, CorrCoefs rhs) -> bool"""
         return _six_base.CorrCoefs___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'CorrCoefs') -> "bool":
         """__ne__(CorrCoefs self, CorrCoefs rhs) -> bool"""
         return _six_base.CorrCoefs___ne__(self, rhs)
 
@@ -3611,12 +3693,12 @@ class PosVelError(_object):
     if _newclass:
         positionDecorr = _swig_property(_six_base.PosVelError_positionDecorr_get, _six_base.PosVelError_positionDecorr_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'PosVelError') -> "bool":
         """__eq__(PosVelError self, PosVelError rhs) -> bool"""
         return _six_base.PosVelError___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'PosVelError') -> "bool":
         """__ne__(PosVelError self, PosVelError rhs) -> bool"""
         return _six_base.PosVelError___ne__(self, rhs)
 
@@ -3658,12 +3740,12 @@ class RadarSensor(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RadarSensor') -> "bool":
         """__eq__(RadarSensor self, RadarSensor rhs) -> bool"""
         return _six_base.RadarSensor___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RadarSensor') -> "bool":
         """__ne__(RadarSensor self, RadarSensor rhs) -> bool"""
         return _six_base.RadarSensor___ne__(self, rhs)
 
@@ -3701,12 +3783,12 @@ class TropoError(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'TropoError') -> "bool":
         """__eq__(TropoError self, TropoError rhs) -> bool"""
         return _six_base.TropoError___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'TropoError') -> "bool":
         """__ne__(TropoError self, TropoError rhs) -> bool"""
         return _six_base.TropoError___ne__(self, rhs)
 
@@ -3748,12 +3830,12 @@ class IonoError(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'IonoError') -> "bool":
         """__eq__(IonoError self, IonoError rhs) -> bool"""
         return _six_base.IonoError___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'IonoError') -> "bool":
         """__ne__(IonoError self, IonoError rhs) -> bool"""
         return _six_base.IonoError___ne__(self, rhs)
 
@@ -3795,12 +3877,12 @@ class Components(_object):
     if _newclass:
         ionoError = _swig_property(_six_base.Components_ionoError_get, _six_base.Components_ionoError_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Components') -> "bool":
         """__eq__(Components self, Components rhs) -> bool"""
         return _six_base.Components___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Components') -> "bool":
         """__ne__(Components self, Components rhs) -> bool"""
         return _six_base.Components___ne__(self, rhs)
 
@@ -3847,12 +3929,12 @@ class CompositeSCP(_object):
     if _newclass:
         xyErr = _swig_property(_six_base.CompositeSCP_xyErr_get, _six_base.CompositeSCP_xyErr_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'CompositeSCP') -> "bool":
         """__eq__(CompositeSCP self, CompositeSCP rhs) -> bool"""
         return _six_base.CompositeSCP___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'CompositeSCP') -> "bool":
         """__ne__(CompositeSCP self, CompositeSCP rhs) -> bool"""
         return _six_base.CompositeSCP___ne__(self, rhs)
 
@@ -3890,12 +3972,12 @@ class ErrorStatistics(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ErrorStatistics') -> "bool":
         """__eq__(ErrorStatistics self, ErrorStatistics rhs) -> bool"""
         return _six_base.ErrorStatistics___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'ErrorStatistics') -> "bool":
         """__ne__(ErrorStatistics self, ErrorStatistics rhs) -> bool"""
         return _six_base.ErrorStatistics___ne__(self, rhs)
 
@@ -3903,6 +3985,139 @@ class ErrorStatistics(_object):
     __del__ = lambda self: None
 ErrorStatistics_swigregister = _six_base.ErrorStatistics_swigregister
 ErrorStatistics_swigregister(ErrorStatistics)
+
+class MatchCollect(_object):
+    """Proxy of C++ six::MatchCollect class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MatchCollect, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MatchCollect, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::MatchCollect self) -> MatchCollect"""
+        this = _six_base.new_MatchCollect()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_setmethods__["coreName"] = _six_base.MatchCollect_coreName_set
+    __swig_getmethods__["coreName"] = _six_base.MatchCollect_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_base.MatchCollect_coreName_get, _six_base.MatchCollect_coreName_set)
+    __swig_setmethods__["matchIndex"] = _six_base.MatchCollect_matchIndex_set
+    __swig_getmethods__["matchIndex"] = _six_base.MatchCollect_matchIndex_get
+    if _newclass:
+        matchIndex = _swig_property(_six_base.MatchCollect_matchIndex_get, _six_base.MatchCollect_matchIndex_set)
+    __swig_setmethods__["parameters"] = _six_base.MatchCollect_parameters_set
+    __swig_getmethods__["parameters"] = _six_base.MatchCollect_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_base.MatchCollect_parameters_get, _six_base.MatchCollect_parameters_set)
+
+    def __eq__(self, rhs: 'MatchCollect') -> "bool":
+        """__eq__(MatchCollect self, MatchCollect rhs) -> bool"""
+        return _six_base.MatchCollect___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'MatchCollect') -> "bool":
+        """__ne__(MatchCollect self, MatchCollect rhs) -> bool"""
+        return _six_base.MatchCollect___ne__(self, rhs)
+
+    __swig_destroy__ = _six_base.delete_MatchCollect
+    __del__ = lambda self: None
+MatchCollect_swigregister = _six_base.MatchCollect_swigregister
+MatchCollect_swigregister(MatchCollect)
+
+class MatchType(_object):
+    """Proxy of C++ six::MatchType class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MatchType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MatchType, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::MatchType self) -> MatchType"""
+        this = _six_base.new_MatchType()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_setmethods__["collectorName"] = _six_base.MatchType_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_base.MatchType_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_base.MatchType_collectorName_get, _six_base.MatchType_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_base.MatchType_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_base.MatchType_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_base.MatchType_illuminatorName_get, _six_base.MatchType_illuminatorName_set)
+    __swig_setmethods__["matchType"] = _six_base.MatchType_matchType_set
+    __swig_getmethods__["matchType"] = _six_base.MatchType_matchType_get
+    if _newclass:
+        matchType = _swig_property(_six_base.MatchType_matchType_get, _six_base.MatchType_matchType_set)
+    __swig_setmethods__["typeID"] = _six_base.MatchType_typeID_set
+    __swig_getmethods__["typeID"] = _six_base.MatchType_typeID_get
+    if _newclass:
+        typeID = _swig_property(_six_base.MatchType_typeID_get, _six_base.MatchType_typeID_set)
+    __swig_setmethods__["currentIndex"] = _six_base.MatchType_currentIndex_set
+    __swig_getmethods__["currentIndex"] = _six_base.MatchType_currentIndex_get
+    if _newclass:
+        currentIndex = _swig_property(_six_base.MatchType_currentIndex_get, _six_base.MatchType_currentIndex_set)
+    __swig_setmethods__["matchCollects"] = _six_base.MatchType_matchCollects_set
+    __swig_getmethods__["matchCollects"] = _six_base.MatchType_matchCollects_get
+    if _newclass:
+        matchCollects = _swig_property(_six_base.MatchType_matchCollects_get, _six_base.MatchType_matchCollects_set)
+
+    def __eq__(self, rhs: 'MatchType') -> "bool":
+        """__eq__(MatchType self, MatchType rhs) -> bool"""
+        return _six_base.MatchType___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'MatchType') -> "bool":
+        """__ne__(MatchType self, MatchType rhs) -> bool"""
+        return _six_base.MatchType___ne__(self, rhs)
+
+    __swig_destroy__ = _six_base.delete_MatchType
+    __del__ = lambda self: None
+MatchType_swigregister = _six_base.MatchType_swigregister
+MatchType_swigregister(MatchType)
+
+class MatchInformation(_object):
+    """Proxy of C++ six::MatchInformation class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MatchInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MatchInformation, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::MatchInformation self) -> MatchInformation"""
+        this = _six_base.new_MatchInformation()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_setmethods__["types"] = _six_base.MatchInformation_types_set
+    __swig_getmethods__["types"] = _six_base.MatchInformation_types_get
+    if _newclass:
+        types = _swig_property(_six_base.MatchInformation_types_get, _six_base.MatchInformation_types_set)
+
+    def __eq__(self, rhs: 'MatchInformation') -> "bool":
+        """__eq__(MatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_base.MatchInformation___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'MatchInformation') -> "bool":
+        """__ne__(MatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_base.MatchInformation___ne__(self, rhs)
+
+    __swig_destroy__ = _six_base.delete_MatchInformation
+    __del__ = lambda self: None
+MatchInformation_swigregister = _six_base.MatchInformation_swigregister
+MatchInformation_swigregister(MatchInformation)
 
 class NoiseLevel(_object):
     """Proxy of C++ six::NoiseLevel class."""
@@ -3929,12 +4144,12 @@ class NoiseLevel(_object):
     if _newclass:
         noisePoly = _swig_property(_six_base.NoiseLevel_noisePoly_get, _six_base.NoiseLevel_noisePoly_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'NoiseLevel') -> "bool":
         """__eq__(NoiseLevel self, NoiseLevel rhs) -> bool"""
         return _six_base.NoiseLevel___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'NoiseLevel') -> "bool":
         """__ne__(NoiseLevel self, NoiseLevel rhs) -> bool"""
         return _six_base.NoiseLevel___ne__(self, rhs)
 
@@ -3988,12 +4203,12 @@ class Radiometric(_object):
     if _newclass:
         gammaZeroSFIncidenceMap = _swig_property(_six_base.Radiometric_gammaZeroSFIncidenceMap_get, _six_base.Radiometric_gammaZeroSFIncidenceMap_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Radiometric') -> "bool":
         """__eq__(Radiometric self, Radiometric rhs) -> bool"""
         return _six_base.Radiometric___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Radiometric') -> "bool":
         """__ne__(Radiometric self, Radiometric rhs) -> bool"""
         return _six_base.Radiometric___ne__(self, rhs)
 
@@ -4003,139 +4218,6 @@ Radiometric_swigregister = _six_base.Radiometric_swigregister
 Radiometric_swigregister(Radiometric)
 Radiometric.NL_ABSOLUTE = _six_base.cvar.Radiometric_NL_ABSOLUTE
 Radiometric.NL_RELATIVE = _six_base.cvar.Radiometric_NL_RELATIVE
-
-class MatchCollect(_object):
-    """Proxy of C++ six::MatchCollect class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, MatchCollect, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, MatchCollect, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::MatchCollect self) -> MatchCollect"""
-        this = _six_base.new_MatchCollect()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_setmethods__["coreName"] = _six_base.MatchCollect_coreName_set
-    __swig_getmethods__["coreName"] = _six_base.MatchCollect_coreName_get
-    if _newclass:
-        coreName = _swig_property(_six_base.MatchCollect_coreName_get, _six_base.MatchCollect_coreName_set)
-    __swig_setmethods__["matchIndex"] = _six_base.MatchCollect_matchIndex_set
-    __swig_getmethods__["matchIndex"] = _six_base.MatchCollect_matchIndex_get
-    if _newclass:
-        matchIndex = _swig_property(_six_base.MatchCollect_matchIndex_get, _six_base.MatchCollect_matchIndex_set)
-    __swig_setmethods__["parameters"] = _six_base.MatchCollect_parameters_set
-    __swig_getmethods__["parameters"] = _six_base.MatchCollect_parameters_get
-    if _newclass:
-        parameters = _swig_property(_six_base.MatchCollect_parameters_get, _six_base.MatchCollect_parameters_set)
-
-    def __eq__(self, rhs):
-        """__eq__(MatchCollect self, MatchCollect rhs) -> bool"""
-        return _six_base.MatchCollect___eq__(self, rhs)
-
-
-    def __ne__(self, rhs):
-        """__ne__(MatchCollect self, MatchCollect rhs) -> bool"""
-        return _six_base.MatchCollect___ne__(self, rhs)
-
-    __swig_destroy__ = _six_base.delete_MatchCollect
-    __del__ = lambda self: None
-MatchCollect_swigregister = _six_base.MatchCollect_swigregister
-MatchCollect_swigregister(MatchCollect)
-
-class MatchType(_object):
-    """Proxy of C++ six::MatchType class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, MatchType, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, MatchType, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::MatchType self) -> MatchType"""
-        this = _six_base.new_MatchType()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_setmethods__["collectorName"] = _six_base.MatchType_collectorName_set
-    __swig_getmethods__["collectorName"] = _six_base.MatchType_collectorName_get
-    if _newclass:
-        collectorName = _swig_property(_six_base.MatchType_collectorName_get, _six_base.MatchType_collectorName_set)
-    __swig_setmethods__["illuminatorName"] = _six_base.MatchType_illuminatorName_set
-    __swig_getmethods__["illuminatorName"] = _six_base.MatchType_illuminatorName_get
-    if _newclass:
-        illuminatorName = _swig_property(_six_base.MatchType_illuminatorName_get, _six_base.MatchType_illuminatorName_set)
-    __swig_setmethods__["matchType"] = _six_base.MatchType_matchType_set
-    __swig_getmethods__["matchType"] = _six_base.MatchType_matchType_get
-    if _newclass:
-        matchType = _swig_property(_six_base.MatchType_matchType_get, _six_base.MatchType_matchType_set)
-    __swig_setmethods__["typeID"] = _six_base.MatchType_typeID_set
-    __swig_getmethods__["typeID"] = _six_base.MatchType_typeID_get
-    if _newclass:
-        typeID = _swig_property(_six_base.MatchType_typeID_get, _six_base.MatchType_typeID_set)
-    __swig_setmethods__["currentIndex"] = _six_base.MatchType_currentIndex_set
-    __swig_getmethods__["currentIndex"] = _six_base.MatchType_currentIndex_get
-    if _newclass:
-        currentIndex = _swig_property(_six_base.MatchType_currentIndex_get, _six_base.MatchType_currentIndex_set)
-    __swig_setmethods__["matchCollects"] = _six_base.MatchType_matchCollects_set
-    __swig_getmethods__["matchCollects"] = _six_base.MatchType_matchCollects_get
-    if _newclass:
-        matchCollects = _swig_property(_six_base.MatchType_matchCollects_get, _six_base.MatchType_matchCollects_set)
-
-    def __eq__(self, rhs):
-        """__eq__(MatchType self, MatchType rhs) -> bool"""
-        return _six_base.MatchType___eq__(self, rhs)
-
-
-    def __ne__(self, rhs):
-        """__ne__(MatchType self, MatchType rhs) -> bool"""
-        return _six_base.MatchType___ne__(self, rhs)
-
-    __swig_destroy__ = _six_base.delete_MatchType
-    __del__ = lambda self: None
-MatchType_swigregister = _six_base.MatchType_swigregister
-MatchType_swigregister(MatchType)
-
-class MatchInformation(_object):
-    """Proxy of C++ six::MatchInformation class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, MatchInformation, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, MatchInformation, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::MatchInformation self) -> MatchInformation"""
-        this = _six_base.new_MatchInformation()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_setmethods__["types"] = _six_base.MatchInformation_types_set
-    __swig_getmethods__["types"] = _six_base.MatchInformation_types_get
-    if _newclass:
-        types = _swig_property(_six_base.MatchInformation_types_get, _six_base.MatchInformation_types_set)
-
-    def __eq__(self, rhs):
-        """__eq__(MatchInformation self, MatchInformation rhs) -> bool"""
-        return _six_base.MatchInformation___eq__(self, rhs)
-
-
-    def __ne__(self, rhs):
-        """__ne__(MatchInformation self, MatchInformation rhs) -> bool"""
-        return _six_base.MatchInformation___ne__(self, rhs)
-
-    __swig_destroy__ = _six_base.delete_MatchInformation
-    __del__ = lambda self: None
-MatchInformation_swigregister = _six_base.MatchInformation_swigregister
-MatchInformation_swigregister(MatchInformation)
 
 class Data(_object):
     """Proxy of C++ six::Data class."""
@@ -4151,102 +4233,102 @@ class Data(_object):
     __swig_destroy__ = _six_base.delete_Data
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "six::Data *":
         """clone(Data self) -> Data"""
         return _six_base.Data_clone(self)
 
 
-    def getDataType(self):
+    def getDataType(self) -> "six::DataType":
         """getDataType(Data self) -> DataType"""
         return _six_base.Data_getDataType(self)
 
 
-    def getPixelType(self):
+    def getPixelType(self) -> "six::PixelType":
         """getPixelType(Data self) -> PixelType"""
         return _six_base.Data_getPixelType(self)
 
 
-    def setPixelType(self, pixelType):
+    def setPixelType(self, pixelType: 'PixelType') -> "void":
         """setPixelType(Data self, PixelType pixelType)"""
         return _six_base.Data_setPixelType(self, pixelType)
 
 
-    def getNumRows(self):
+    def getNumRows(self) -> "size_t":
         """getNumRows(Data self) -> size_t"""
         return _six_base.Data_getNumRows(self)
 
 
-    def setNumRows(self, numRows):
+    def setNumRows(self, numRows: 'size_t') -> "void":
         """setNumRows(Data self, size_t numRows)"""
         return _six_base.Data_setNumRows(self, numRows)
 
 
-    def getNumCols(self):
+    def getNumCols(self) -> "size_t":
         """getNumCols(Data self) -> size_t"""
         return _six_base.Data_getNumCols(self)
 
 
-    def setNumCols(self, numCols):
+    def setNumCols(self, numCols: 'size_t') -> "void":
         """setNumCols(Data self, size_t numCols)"""
         return _six_base.Data_setNumCols(self, numCols)
 
 
-    def getImageCorners(self):
+    def getImageCorners(self) -> "six::LatLonCorners":
         """getImageCorners(Data self) -> LatLonCorners"""
         return _six_base.Data_getImageCorners(self)
 
 
-    def setImageCorners(self, corners):
+    def setImageCorners(self, corners: 'LatLonCorners') -> "void":
         """setImageCorners(Data self, LatLonCorners corners)"""
         return _six_base.Data_setImageCorners(self, corners)
 
 
-    def getName(self):
+    def getName(self) -> "std::string":
         """getName(Data self) -> std::string"""
         return _six_base.Data_getName(self)
 
 
-    def setName(self, name):
+    def setName(self, name: 'std::string') -> "void":
         """setName(Data self, std::string name)"""
         return _six_base.Data_setName(self, name)
 
 
-    def getSource(self):
+    def getSource(self) -> "std::string":
         """getSource(Data self) -> std::string"""
         return _six_base.Data_getSource(self)
 
 
-    def setSource(self, name):
+    def setSource(self, name: 'std::string') -> "void":
         """setSource(Data self, std::string name)"""
         return _six_base.Data_setSource(self, name)
 
 
-    def getCreationTime(self):
+    def getCreationTime(self) -> "six::DateTime":
         """getCreationTime(Data self) -> DateTime"""
         return _six_base.Data_getCreationTime(self)
 
 
-    def setCreationTime(self, creationTime):
+    def setCreationTime(self, creationTime: 'DateTime') -> "void":
         """setCreationTime(Data self, DateTime creationTime)"""
         return _six_base.Data_setCreationTime(self, creationTime)
 
 
-    def getCollectionStartDateTime(self):
+    def getCollectionStartDateTime(self) -> "six::DateTime":
         """getCollectionStartDateTime(Data self) -> DateTime"""
         return _six_base.Data_getCollectionStartDateTime(self)
 
 
-    def getNumBytesPerPixel(self):
+    def getNumBytesPerPixel(self) -> "size_t":
         """getNumBytesPerPixel(Data self) -> size_t"""
         return _six_base.Data_getNumBytesPerPixel(self)
 
 
-    def getNumChannels(self):
+    def getNumChannels(self) -> "size_t":
         """getNumChannels(Data self) -> size_t"""
         return _six_base.Data_getNumChannels(self)
 
 
-    def getClassification(self, *args):
+    def getClassification(self, *args) -> "six::Classification &":
         """
         getClassification(Data self) -> Classification
         getClassification(Data self) -> Classification
@@ -4254,22 +4336,22 @@ class Data(_object):
         return _six_base.Data_getClassification(self, *args)
 
 
-    def getDisplayLUT(self):
+    def getDisplayLUT(self) -> "mem::ScopedCopyablePtr< six::LUT > &":
         """getDisplayLUT(Data self) -> mem::ScopedCopyablePtr< six::LUT > &"""
         return _six_base.Data_getDisplayLUT(self)
 
 
-    def getVendorID(self):
+    def getVendorID(self) -> "std::string":
         """getVendorID(Data self) -> std::string"""
         return _six_base.Data_getVendorID(self)
 
 
-    def getVersion(self):
+    def getVersion(self) -> "std::string":
         """getVersion(Data self) -> std::string"""
         return _six_base.Data_getVersion(self)
 
 
-    def setVersion(self, version):
+    def setVersion(self, version: 'std::string const &') -> "void":
         """setVersion(Data self, std::string const & version)"""
         return _six_base.Data_setVersion(self, version)
 
@@ -4290,7 +4372,7 @@ class XMLControl(_object):
     __swig_destroy__ = _six_base.delete_XMLControl
     __del__ = lambda self: None
 
-    def setLogger(self, log, ownLog=False):
+    def setLogger(self, log: 'logging::Logger *', ownLog: 'bool'=False) -> "void":
         """
         setLogger(XMLControl self, logging::Logger * log, bool ownLog=False)
         setLogger(XMLControl self, logging::Logger * log)
@@ -4298,17 +4380,23 @@ class XMLControl(_object):
         return _six_base.XMLControl_setLogger(self, log, ownLog)
 
 
-    def toXML(self, data, schemaPaths):
+    def validate(doc: 'xml::lite::Document const *', schemaPaths: 'VectorString', log: 'logging::Logger *') -> "void":
+        """validate(xml::lite::Document const * doc, VectorString schemaPaths, logging::Logger * log)"""
+        return _six_base.XMLControl_validate(doc, schemaPaths, log)
+
+    validate = staticmethod(validate)
+
+    def toXML(self, data: 'Data', schemaPaths: 'VectorString') -> "xml::lite::Document *":
         """toXML(XMLControl self, Data data, VectorString schemaPaths) -> xml::lite::Document *"""
         return _six_base.XMLControl_toXML(self, data, schemaPaths)
 
 
-    def fromXML(self, doc, schemaPaths):
+    def fromXML(self, doc: 'xml::lite::Document const *', schemaPaths: 'VectorString') -> "six::Data *":
         """fromXML(XMLControl self, xml::lite::Document const * doc, VectorString schemaPaths) -> Data"""
         return _six_base.XMLControl_fromXML(self, doc, schemaPaths)
 
 
-    def dataTypeToString(dataType, appendXML=True):
+    def dataTypeToString(dataType: 'DataType', appendXML: 'bool'=True) -> "std::string":
         """
         dataTypeToString(DataType dataType, bool appendXML=True) -> std::string
         dataTypeToString(DataType dataType) -> std::string
@@ -4317,7 +4405,7 @@ class XMLControl(_object):
 
     dataTypeToString = staticmethod(dataTypeToString)
 
-    def splitVersion(versionStr, version):
+    def splitVersion(versionStr: 'std::string const &', version: 'VectorString') -> "void":
         """splitVersion(std::string const & versionStr, VectorString version)"""
         return _six_base.XMLControl_splitVersion(versionStr, version)
 
@@ -4325,56 +4413,60 @@ class XMLControl(_object):
 XMLControl_swigregister = _six_base.XMLControl_swigregister
 XMLControl_swigregister(XMLControl)
 
-def XMLControl_dataTypeToString(dataType, appendXML=True):
+def XMLControl_validate(doc: 'xml::lite::Document const *', schemaPaths: 'VectorString', log: 'logging::Logger *') -> "void":
+    """XMLControl_validate(xml::lite::Document const * doc, VectorString schemaPaths, logging::Logger * log)"""
+    return _six_base.XMLControl_validate(doc, schemaPaths, log)
+
+def XMLControl_dataTypeToString(dataType: 'DataType', appendXML: 'bool'=True) -> "std::string":
     """
     dataTypeToString(DataType dataType, bool appendXML=True) -> std::string
     XMLControl_dataTypeToString(DataType dataType) -> std::string
     """
     return _six_base.XMLControl_dataTypeToString(dataType, appendXML)
 
-def XMLControl_splitVersion(versionStr, version):
+def XMLControl_splitVersion(versionStr: 'std::string const &', version: 'VectorString') -> "void":
     """XMLControl_splitVersion(std::string const & versionStr, VectorString version)"""
     return _six_base.XMLControl_splitVersion(versionStr, version)
 
 
-def remapZeroTo360(degree):
+def remapZeroTo360(degree: 'double') -> "double":
     """remapZeroTo360(double degree) -> double"""
     return _six_base.remapZeroTo360(degree)
 
-def loadPluginDir(pluginDir):
+def loadPluginDir(pluginDir: 'std::string const &') -> "void":
     """loadPluginDir(std::string const & pluginDir)"""
     return _six_base.loadPluginDir(pluginDir)
 
-def loadXmlDataContentHandler():
+def loadXmlDataContentHandler() -> "void":
     """loadXmlDataContentHandler()"""
     return _six_base.loadXmlDataContentHandler()
 
-def parseData(*args):
+def parseData(*args) -> "std::auto_ptr< six::Data >":
     """
     parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     """
     return _six_base.parseData(*args)
 
-def parseDataFromFile(*args):
+def parseDataFromFile(*args) -> "std::auto_ptr< six::Data >":
     """
     parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     """
     return _six_base.parseDataFromFile(*args)
 
-def parseDataFromString(*args):
+def parseDataFromString(*args) -> "std::auto_ptr< six::Data >":
     """
     parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
     """
     return _six_base.parseDataFromString(*args)
 
-def getErrors(errorStats, sampleSpacing, errors):
+def getErrors(errorStats: 'ErrorStatistics', sampleSpacing: 'RgAzDouble', errors: 'Errors') -> "void":
     """getErrors(ErrorStatistics errorStats, RgAzDouble sampleSpacing, Errors errors)"""
     return _six_base.getErrors(errorStats, sampleSpacing, errors)
 
-def findSchemaPath(progname):
+def findSchemaPath(progname: 'std::string const &') -> "std::string":
     """findSchemaPath(std::string const & progname) -> std::string"""
     return _six_base.findSchemaPath(progname)
 class Options(_object):
@@ -4388,7 +4480,7 @@ class Options(_object):
     __swig_destroy__ = _six_base.delete_Options
     __del__ = lambda self: None
 
-    def getParameter(self, *args):
+    def getParameter(self, *args) -> "six::Parameter":
         """
         getParameter(Options self, std::string const & option) -> Parameter
         getParameter(Options self, std::string const & option, Parameter defaultValue) -> Parameter
@@ -4396,32 +4488,32 @@ class Options(_object):
         return _six_base.Options_getParameter(self, *args)
 
 
-    def setParameter(self, option, value):
+    def setParameter(self, option: 'std::string const &', value: 'Parameter') -> "void":
         """setParameter(Options self, std::string const & option, Parameter value)"""
         return _six_base.Options_setParameter(self, option, value)
 
 
-    def hasParameter(self, option):
+    def hasParameter(self, option: 'std::string const &') -> "bool":
         """hasParameter(Options self, std::string const & option) -> bool"""
         return _six_base.Options_hasParameter(self, option)
 
 
-    def begin(self):
+    def begin(self) -> "six::Options::ParameterIter":
         """begin(Options self) -> six::Options::ParameterIter"""
         return _six_base.Options_begin(self)
 
 
-    def end(self):
+    def end(self) -> "six::Options::ParameterIter":
         """end(Options self) -> six::Options::ParameterIter"""
         return _six_base.Options_end(self)
 
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Options') -> "bool":
         """__eq__(Options self, Options rhs) -> bool"""
         return _six_base.Options___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Options') -> "bool":
         """__ne__(Options self, Options rhs) -> bool"""
         return _six_base.Options___ne__(self, rhs)
 
@@ -4450,7 +4542,7 @@ class XMLControlCreator(_object):
     __swig_destroy__ = _six_base.delete_XMLControlCreator
     __del__ = lambda self: None
 
-    def newXMLControl(self, log):
+    def newXMLControl(self, log: 'logging::Logger *') -> "six::XMLControl *":
         """newXMLControl(XMLControlCreator self, logging::Logger * log) -> XMLControl"""
         return _six_base.XMLControlCreator_newXMLControl(self, log)
 
@@ -4476,7 +4568,7 @@ class XMLControlRegistry(_object):
     __swig_destroy__ = _six_base.delete_XMLControlRegistry
     __del__ = lambda self: None
 
-    def addCreator(self, *args):
+    def addCreator(self, *args) -> "void":
         """
         addCreator(XMLControlRegistry self, std::string const & identifier, std::auto_ptr< six::XMLControlCreator > creator)
         addCreator(XMLControlRegistry self, std::string const & identifier, XMLControlCreator creator)
@@ -4486,7 +4578,7 @@ class XMLControlRegistry(_object):
         return _six_base.XMLControlRegistry_addCreator(self, *args)
 
 
-    def newXMLControl(self, *args):
+    def newXMLControl(self, *args) -> "six::XMLControl *":
         """
         newXMLControl(XMLControlRegistry self, std::string const & identifier, logging::Logger * log) -> XMLControl
         newXMLControl(XMLControlRegistry self, DataType dataType, logging::Logger * log) -> XMLControl
@@ -4497,19 +4589,70 @@ XMLControlRegistry_swigregister = _six_base.XMLControlRegistry_swigregister
 XMLControlRegistry_swigregister(XMLControlRegistry)
 
 
-def toXMLString(data, xmlRegistry=None):
+def toXMLString(data: 'Data', xmlRegistry: 'XMLControlRegistry'=None) -> "std::string":
     """
     toXMLString(Data data, XMLControlRegistry xmlRegistry=None) -> std::string
     toXMLString(Data data) -> std::string
     """
     return _six_base.toXMLString(data, xmlRegistry)
 
-def toValidXMLString(data, schemaPaths, log, xmlRegistry=None):
+def toValidXMLString(data: 'Data', schemaPaths: 'VectorString', log: 'logging::Logger *', xmlRegistry: 'XMLControlRegistry'=None) -> "std::string":
     """
     toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string
     toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log) -> std::string
     """
     return _six_base.toValidXMLString(data, schemaPaths, log, xmlRegistry)
+class GeoInfo(_object):
+    """Proxy of C++ six::GeoInfo class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, GeoInfo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::GeoInfo self) -> GeoInfo"""
+        this = _six_base.new_GeoInfo()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_GeoInfo
+    __del__ = lambda self: None
+    __swig_setmethods__["name"] = _six_base.GeoInfo_name_set
+    __swig_getmethods__["name"] = _six_base.GeoInfo_name_get
+    if _newclass:
+        name = _swig_property(_six_base.GeoInfo_name_get, _six_base.GeoInfo_name_set)
+    __swig_setmethods__["geoInfos"] = _six_base.GeoInfo_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_base.GeoInfo_geoInfos_get
+    if _newclass:
+        geoInfos = _swig_property(_six_base.GeoInfo_geoInfos_get, _six_base.GeoInfo_geoInfos_set)
+    __swig_setmethods__["desc"] = _six_base.GeoInfo_desc_set
+    __swig_getmethods__["desc"] = _six_base.GeoInfo_desc_get
+    if _newclass:
+        desc = _swig_property(_six_base.GeoInfo_desc_get, _six_base.GeoInfo_desc_set)
+    __swig_setmethods__["geometryLatLon"] = _six_base.GeoInfo_geometryLatLon_set
+    __swig_getmethods__["geometryLatLon"] = _six_base.GeoInfo_geometryLatLon_get
+    if _newclass:
+        geometryLatLon = _swig_property(_six_base.GeoInfo_geometryLatLon_get, _six_base.GeoInfo_geometryLatLon_set)
+
+    def __eq__(self, rhs: 'GeoInfo') -> "bool":
+        """__eq__(GeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.GeoInfo___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'GeoInfo') -> "bool":
+        """__ne__(GeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.GeoInfo___ne__(self, rhs)
+
+GeoInfo_swigregister = _six_base.GeoInfo_swigregister
+GeoInfo_swigregister(GeoInfo)
+
+
+def __lshift__(os: 'std::ostream &', g: 'GeoInfo') -> "std::ostream &":
+    """__lshift__(std::ostream & os, GeoInfo g) -> std::ostream &"""
+    return _six_base.__lshift__(os, g)
 class LatLonCorners(_object):
     """Proxy of C++ six::Corners<(scene::LatLon)> class."""
 
@@ -4536,7 +4679,7 @@ class LatLonCorners(_object):
     LOWER_LEFT = _six_base.LatLonCorners_LOWER_LEFT
     LAST_ROW_FIRST_COL = _six_base.LatLonCorners_LAST_ROW_FIRST_COL
 
-    def getCorner(self, *args):
+    def getCorner(self, *args) -> "scene::LatLon &":
         """
         getCorner(LatLonCorners self, size_t idx) -> LatLon
         getCorner(LatLonCorners self, size_t idx) -> LatLon
@@ -4544,12 +4687,12 @@ class LatLonCorners(_object):
         return _six_base.LatLonCorners_getCorner(self, *args)
 
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'LatLonCorners') -> "bool":
         """__eq__(LatLonCorners self, LatLonCorners rhs) -> bool"""
         return _six_base.LatLonCorners___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'LatLonCorners') -> "bool":
         """__ne__(LatLonCorners self, LatLonCorners rhs) -> bool"""
         return _six_base.LatLonCorners___ne__(self, rhs)
 
@@ -4600,7 +4743,7 @@ class LatLonAltCorners(_object):
     LOWER_LEFT = _six_base.LatLonAltCorners_LOWER_LEFT
     LAST_ROW_FIRST_COL = _six_base.LatLonAltCorners_LAST_ROW_FIRST_COL
 
-    def getCorner(self, *args):
+    def getCorner(self, *args) -> "scene::LatLonAlt &":
         """
         getCorner(LatLonAltCorners self, size_t idx) -> LatLonAlt
         getCorner(LatLonAltCorners self, size_t idx) -> LatLonAlt
@@ -4608,12 +4751,12 @@ class LatLonAltCorners(_object):
         return _six_base.LatLonAltCorners_getCorner(self, *args)
 
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'LatLonAltCorners') -> "bool":
         """__eq__(LatLonAltCorners self, LatLonAltCorners rhs) -> bool"""
         return _six_base.LatLonAltCorners___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'LatLonAltCorners') -> "bool":
         """__ne__(LatLonAltCorners self, LatLonAltCorners rhs) -> bool"""
         return _six_base.LatLonAltCorners___ne__(self, rhs)
 
@@ -4647,34 +4790,34 @@ class VectorMatchCollect(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorMatchCollect, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorMatchCollect self) -> SwigPyIterator"""
         return _six_base.VectorMatchCollect_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorMatchCollect self) -> bool"""
         return _six_base.VectorMatchCollect___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorMatchCollect self) -> bool"""
         return _six_base.VectorMatchCollect___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< six::MatchCollect >::size_type":
         """__len__(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"""
         return _six_base.VectorMatchCollect___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< six::MatchCollect >::difference_type', j: 'std::vector< six::MatchCollect >::difference_type') -> "std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *":
         """__getslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j) -> VectorMatchCollect"""
         return _six_base.VectorMatchCollect___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j)
         __setslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j, VectorMatchCollect v)
@@ -4682,12 +4825,12 @@ class VectorMatchCollect(_object):
         return _six_base.VectorMatchCollect___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< six::MatchCollect >::difference_type', j: 'std::vector< six::MatchCollect >::difference_type') -> "void":
         """__delslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j)"""
         return _six_base.VectorMatchCollect___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i)
         __delitem__(VectorMatchCollect self, PySliceObject * slice)
@@ -4695,7 +4838,7 @@ class VectorMatchCollect(_object):
         return _six_base.VectorMatchCollect___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< six::MatchCollect >::value_type const &":
         """
         __getitem__(VectorMatchCollect self, PySliceObject * slice) -> VectorMatchCollect
         __getitem__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i) -> MatchCollect
@@ -4703,7 +4846,7 @@ class VectorMatchCollect(_object):
         return _six_base.VectorMatchCollect___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorMatchCollect self, PySliceObject * slice, VectorMatchCollect v)
         __setitem__(VectorMatchCollect self, PySliceObject * slice)
@@ -4712,67 +4855,67 @@ class VectorMatchCollect(_object):
         return _six_base.VectorMatchCollect___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< six::MatchCollect >::value_type":
         """pop(VectorMatchCollect self) -> MatchCollect"""
         return _six_base.VectorMatchCollect_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'MatchCollect') -> "void":
         """append(VectorMatchCollect self, MatchCollect x)"""
         return _six_base.VectorMatchCollect_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorMatchCollect self) -> bool"""
         return _six_base.VectorMatchCollect_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< six::MatchCollect >::size_type":
         """size(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"""
         return _six_base.VectorMatchCollect_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorMatchCollect') -> "void":
         """swap(VectorMatchCollect self, VectorMatchCollect v)"""
         return _six_base.VectorMatchCollect_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< six::MatchCollect >::iterator":
         """begin(VectorMatchCollect self) -> std::vector< six::MatchCollect >::iterator"""
         return _six_base.VectorMatchCollect_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< six::MatchCollect >::iterator":
         """end(VectorMatchCollect self) -> std::vector< six::MatchCollect >::iterator"""
         return _six_base.VectorMatchCollect_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< six::MatchCollect >::reverse_iterator":
         """rbegin(VectorMatchCollect self) -> std::vector< six::MatchCollect >::reverse_iterator"""
         return _six_base.VectorMatchCollect_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< six::MatchCollect >::reverse_iterator":
         """rend(VectorMatchCollect self) -> std::vector< six::MatchCollect >::reverse_iterator"""
         return _six_base.VectorMatchCollect_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorMatchCollect self)"""
         return _six_base.VectorMatchCollect_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< six::MatchCollect >::allocator_type":
         """get_allocator(VectorMatchCollect self) -> std::vector< six::MatchCollect >::allocator_type"""
         return _six_base.VectorMatchCollect_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorMatchCollect self)"""
         return _six_base.VectorMatchCollect_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< six::MatchCollect >::iterator":
         """
         erase(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator pos) -> std::vector< six::MatchCollect >::iterator
         erase(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator first, std::vector< six::MatchCollect >::iterator last) -> std::vector< six::MatchCollect >::iterator
@@ -4793,27 +4936,27 @@ class VectorMatchCollect(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'MatchCollect') -> "void":
         """push_back(VectorMatchCollect self, MatchCollect x)"""
         return _six_base.VectorMatchCollect_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< six::MatchCollect >::value_type const &":
         """front(VectorMatchCollect self) -> MatchCollect"""
         return _six_base.VectorMatchCollect_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< six::MatchCollect >::value_type const &":
         """back(VectorMatchCollect self) -> MatchCollect"""
         return _six_base.VectorMatchCollect_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< six::MatchCollect >::size_type', x: 'MatchCollect') -> "void":
         """assign(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type n, MatchCollect x)"""
         return _six_base.VectorMatchCollect_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type new_size)
         resize(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type new_size, MatchCollect x)
@@ -4821,7 +4964,7 @@ class VectorMatchCollect(_object):
         return _six_base.VectorMatchCollect_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator pos, MatchCollect x) -> std::vector< six::MatchCollect >::iterator
         insert(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator pos, std::vector< six::MatchCollect >::size_type n, MatchCollect x)
@@ -4829,12 +4972,12 @@ class VectorMatchCollect(_object):
         return _six_base.VectorMatchCollect_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< six::MatchCollect >::size_type') -> "void":
         """reserve(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type n)"""
         return _six_base.VectorMatchCollect_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< six::MatchCollect >::size_type":
         """capacity(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"""
         return _six_base.VectorMatchCollect_capacity(self)
 
@@ -4863,34 +5006,34 @@ class VectorMatchType(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, VectorMatchType, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(VectorMatchType self) -> SwigPyIterator"""
         return _six_base.VectorMatchType_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(VectorMatchType self) -> bool"""
         return _six_base.VectorMatchType___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(VectorMatchType self) -> bool"""
         return _six_base.VectorMatchType___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< six::MatchType >::size_type":
         """__len__(VectorMatchType self) -> std::vector< six::MatchType >::size_type"""
         return _six_base.VectorMatchType___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< six::MatchType >::difference_type', j: 'std::vector< six::MatchType >::difference_type') -> "std::vector< six::MatchType,std::allocator< six::MatchType > > *":
         """__getslice__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j) -> VectorMatchType"""
         return _six_base.VectorMatchType___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j)
         __setslice__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j, VectorMatchType v)
@@ -4898,12 +5041,12 @@ class VectorMatchType(_object):
         return _six_base.VectorMatchType___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< six::MatchType >::difference_type', j: 'std::vector< six::MatchType >::difference_type') -> "void":
         """__delslice__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j)"""
         return _six_base.VectorMatchType___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(VectorMatchType self, std::vector< six::MatchType >::difference_type i)
         __delitem__(VectorMatchType self, PySliceObject * slice)
@@ -4911,7 +5054,7 @@ class VectorMatchType(_object):
         return _six_base.VectorMatchType___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< six::MatchType >::value_type const &":
         """
         __getitem__(VectorMatchType self, PySliceObject * slice) -> VectorMatchType
         __getitem__(VectorMatchType self, std::vector< six::MatchType >::difference_type i) -> MatchType
@@ -4919,7 +5062,7 @@ class VectorMatchType(_object):
         return _six_base.VectorMatchType___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(VectorMatchType self, PySliceObject * slice, VectorMatchType v)
         __setitem__(VectorMatchType self, PySliceObject * slice)
@@ -4928,67 +5071,67 @@ class VectorMatchType(_object):
         return _six_base.VectorMatchType___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< six::MatchType >::value_type":
         """pop(VectorMatchType self) -> MatchType"""
         return _six_base.VectorMatchType_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'MatchType') -> "void":
         """append(VectorMatchType self, MatchType x)"""
         return _six_base.VectorMatchType_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(VectorMatchType self) -> bool"""
         return _six_base.VectorMatchType_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< six::MatchType >::size_type":
         """size(VectorMatchType self) -> std::vector< six::MatchType >::size_type"""
         return _six_base.VectorMatchType_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'VectorMatchType') -> "void":
         """swap(VectorMatchType self, VectorMatchType v)"""
         return _six_base.VectorMatchType_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< six::MatchType >::iterator":
         """begin(VectorMatchType self) -> std::vector< six::MatchType >::iterator"""
         return _six_base.VectorMatchType_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< six::MatchType >::iterator":
         """end(VectorMatchType self) -> std::vector< six::MatchType >::iterator"""
         return _six_base.VectorMatchType_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< six::MatchType >::reverse_iterator":
         """rbegin(VectorMatchType self) -> std::vector< six::MatchType >::reverse_iterator"""
         return _six_base.VectorMatchType_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< six::MatchType >::reverse_iterator":
         """rend(VectorMatchType self) -> std::vector< six::MatchType >::reverse_iterator"""
         return _six_base.VectorMatchType_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(VectorMatchType self)"""
         return _six_base.VectorMatchType_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< six::MatchType >::allocator_type":
         """get_allocator(VectorMatchType self) -> std::vector< six::MatchType >::allocator_type"""
         return _six_base.VectorMatchType_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(VectorMatchType self)"""
         return _six_base.VectorMatchType_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< six::MatchType >::iterator":
         """
         erase(VectorMatchType self, std::vector< six::MatchType >::iterator pos) -> std::vector< six::MatchType >::iterator
         erase(VectorMatchType self, std::vector< six::MatchType >::iterator first, std::vector< six::MatchType >::iterator last) -> std::vector< six::MatchType >::iterator
@@ -5009,27 +5152,27 @@ class VectorMatchType(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'MatchType') -> "void":
         """push_back(VectorMatchType self, MatchType x)"""
         return _six_base.VectorMatchType_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< six::MatchType >::value_type const &":
         """front(VectorMatchType self) -> MatchType"""
         return _six_base.VectorMatchType_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< six::MatchType >::value_type const &":
         """back(VectorMatchType self) -> MatchType"""
         return _six_base.VectorMatchType_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< six::MatchType >::size_type', x: 'MatchType') -> "void":
         """assign(VectorMatchType self, std::vector< six::MatchType >::size_type n, MatchType x)"""
         return _six_base.VectorMatchType_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(VectorMatchType self, std::vector< six::MatchType >::size_type new_size)
         resize(VectorMatchType self, std::vector< six::MatchType >::size_type new_size, MatchType x)
@@ -5037,7 +5180,7 @@ class VectorMatchType(_object):
         return _six_base.VectorMatchType_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(VectorMatchType self, std::vector< six::MatchType >::iterator pos, MatchType x) -> std::vector< six::MatchType >::iterator
         insert(VectorMatchType self, std::vector< six::MatchType >::iterator pos, std::vector< six::MatchType >::size_type n, MatchType x)
@@ -5045,12 +5188,12 @@ class VectorMatchType(_object):
         return _six_base.VectorMatchType_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< six::MatchType >::size_type') -> "void":
         """reserve(VectorMatchType self, std::vector< six::MatchType >::size_type n)"""
         return _six_base.VectorMatchType_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< six::MatchType >::size_type":
         """capacity(VectorMatchType self) -> std::vector< six::MatchType >::size_type"""
         return _six_base.VectorMatchType_capacity(self)
 
@@ -5069,6 +5212,438 @@ class VectorMatchType(_object):
     __del__ = lambda self: None
 VectorMatchType_swigregister = _six_base.VectorMatchType_swigregister
 VectorMatchType_swigregister(VectorMatchType)
+
+class VectorScopedCopyableMatchType(_object):
+    """Proxy of C++ std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorScopedCopyableMatchType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCopyableMatchType, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(VectorScopedCopyableMatchType self) -> SwigPyIterator"""
+        return _six_base.VectorScopedCopyableMatchType_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(VectorScopedCopyableMatchType self) -> bool"""
+        return _six_base.VectorScopedCopyableMatchType___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(VectorScopedCopyableMatchType self) -> bool"""
+        return _six_base.VectorScopedCopyableMatchType___bool__(self)
+
+
+    def __len__(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
+        """__len__(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
+        return _six_base.VectorScopedCopyableMatchType___len__(self)
+
+
+    def __getslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type') -> "std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *":
+        """__getslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j) -> VectorScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j)
+        __setslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j, VectorScopedCopyableMatchType v)
+        """
+        return _six_base.VectorScopedCopyableMatchType___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type') -> "void":
+        """__delslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j)"""
+        return _six_base.VectorScopedCopyableMatchType___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i)
+        __delitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
+        """
+        return _six_base.VectorScopedCopyableMatchType___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
+        """
+        __getitem__(VectorScopedCopyableMatchType self, PySliceObject * slice) -> VectorScopedCopyableMatchType
+        __getitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i) -> ScopedCopyableMatchType
+        """
+        return _six_base.VectorScopedCopyableMatchType___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice, VectorScopedCopyableMatchType v)
+        __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
+        __setitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, ScopedCopyableMatchType x)
+        """
+        return _six_base.VectorScopedCopyableMatchType___setitem__(self, *args)
+
+
+    def pop(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type":
+        """pop(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType_pop(self)
+
+
+    def append(self, x: 'ScopedCopyableMatchType') -> "void":
+        """append(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
+        return _six_base.VectorScopedCopyableMatchType_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(VectorScopedCopyableMatchType self) -> bool"""
+        return _six_base.VectorScopedCopyableMatchType_empty(self)
+
+
+    def size(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
+        """size(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
+        return _six_base.VectorScopedCopyableMatchType_size(self)
+
+
+    def swap(self, v: 'VectorScopedCopyableMatchType') -> "void":
+        """swap(VectorScopedCopyableMatchType self, VectorScopedCopyableMatchType v)"""
+        return _six_base.VectorScopedCopyableMatchType_swap(self, v)
+
+
+    def begin(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
+        """begin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator"""
+        return _six_base.VectorScopedCopyableMatchType_begin(self)
+
+
+    def end(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
+        """end(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator"""
+        return _six_base.VectorScopedCopyableMatchType_end(self)
+
+
+    def rbegin(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator":
+        """rbegin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableMatchType_rbegin(self)
+
+
+    def rend(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator":
+        """rend(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableMatchType_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(VectorScopedCopyableMatchType self)"""
+        return _six_base.VectorScopedCopyableMatchType_clear(self)
+
+
+    def get_allocator(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type":
+        """get_allocator(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type"""
+        return _six_base.VectorScopedCopyableMatchType_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(VectorScopedCopyableMatchType self)"""
+        return _six_base.VectorScopedCopyableMatchType_pop_back(self)
+
+
+    def erase(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
+        """
+        erase(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
+        erase(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
+        """
+        return _six_base.VectorScopedCopyableMatchType_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self) -> VectorScopedCopyableMatchType
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, VectorScopedCopyableMatchType arg2) -> VectorScopedCopyableMatchType
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type size) -> VectorScopedCopyableMatchType
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type size, ScopedCopyableMatchType value) -> VectorScopedCopyableMatchType
+        """
+        this = _six_base.new_VectorScopedCopyableMatchType(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x: 'ScopedCopyableMatchType') -> "void":
+        """push_back(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
+        return _six_base.VectorScopedCopyableMatchType_push_back(self, x)
+
+
+    def front(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
+        """front(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType_front(self)
+
+
+    def back(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
+        """back(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType_back(self)
+
+
+    def assign(self, n: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type', x: 'ScopedCopyableMatchType') -> "void":
+        """assign(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n, ScopedCopyableMatchType x)"""
+        return _six_base.VectorScopedCopyableMatchType_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type new_size)
+        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type new_size, ScopedCopyableMatchType x)
+        """
+        return _six_base.VectorScopedCopyableMatchType_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos, ScopedCopyableMatchType x) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
+        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n, ScopedCopyableMatchType x)
+        """
+        return _six_base.VectorScopedCopyableMatchType_insert(self, *args)
+
+
+    def reserve(self, n: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type') -> "void":
+        """reserve(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n)"""
+        return _six_base.VectorScopedCopyableMatchType_reserve(self, n)
+
+
+    def capacity(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
+        """capacity(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
+        return _six_base.VectorScopedCopyableMatchType_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
+    __swig_destroy__ = _six_base.delete_VectorScopedCopyableMatchType
+    __del__ = lambda self: None
+VectorScopedCopyableMatchType_swigregister = _six_base.VectorScopedCopyableMatchType_swigregister
+VectorScopedCopyableMatchType_swigregister(VectorScopedCopyableMatchType)
+
+class VectorScopedCopyableGeoInfo(_object):
+    """Proxy of C++ std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorScopedCopyableGeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCopyableGeoInfo, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(VectorScopedCopyableGeoInfo self) -> SwigPyIterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(VectorScopedCopyableGeoInfo self) -> bool"""
+        return _six_base.VectorScopedCopyableGeoInfo___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(VectorScopedCopyableGeoInfo self) -> bool"""
+        return _six_base.VectorScopedCopyableGeoInfo___bool__(self)
+
+
+    def __len__(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
+        """__len__(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
+        return _six_base.VectorScopedCopyableGeoInfo___len__(self)
+
+
+    def __getslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type') -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *":
+        """__getslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j) -> VectorScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)
+        __setslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j, VectorScopedCopyableGeoInfo v)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type') -> "void":
+        """__delslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)"""
+        return _six_base.VectorScopedCopyableGeoInfo___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i)
+        __delitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
+        """
+        __getitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice) -> VectorScopedCopyableGeoInfo
+        __getitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i) -> ScopedCopyableGeoInfo
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice, VectorScopedCopyableGeoInfo v)
+        __setitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice)
+        __setitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, ScopedCopyableGeoInfo x)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___setitem__(self, *args)
+
+
+    def pop(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type":
+        """pop(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo_pop(self)
+
+
+    def append(self, x: 'ScopedCopyableGeoInfo') -> "void":
+        """append(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"""
+        return _six_base.VectorScopedCopyableGeoInfo_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(VectorScopedCopyableGeoInfo self) -> bool"""
+        return _six_base.VectorScopedCopyableGeoInfo_empty(self)
+
+
+    def size(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
+        """size(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
+        return _six_base.VectorScopedCopyableGeoInfo_size(self)
+
+
+    def swap(self, v: 'VectorScopedCopyableGeoInfo') -> "void":
+        """swap(VectorScopedCopyableGeoInfo self, VectorScopedCopyableGeoInfo v)"""
+        return _six_base.VectorScopedCopyableGeoInfo_swap(self, v)
+
+
+    def begin(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
+        """begin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_begin(self)
+
+
+    def end(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
+        """end(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_end(self)
+
+
+    def rbegin(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator":
+        """rbegin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_rbegin(self)
+
+
+    def rend(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator":
+        """rend(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(VectorScopedCopyableGeoInfo self)"""
+        return _six_base.VectorScopedCopyableGeoInfo_clear(self)
+
+
+    def get_allocator(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type":
+        """get_allocator(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type"""
+        return _six_base.VectorScopedCopyableGeoInfo_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(VectorScopedCopyableGeoInfo self)"""
+        return _six_base.VectorScopedCopyableGeoInfo_pop_back(self)
+
+
+    def erase(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
+        """
+        erase(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
+        erase(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
+        """
+        return _six_base.VectorScopedCopyableGeoInfo_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self) -> VectorScopedCopyableGeoInfo
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, VectorScopedCopyableGeoInfo arg2) -> VectorScopedCopyableGeoInfo
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type size) -> VectorScopedCopyableGeoInfo
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type size, ScopedCopyableGeoInfo value) -> VectorScopedCopyableGeoInfo
+        """
+        this = _six_base.new_VectorScopedCopyableGeoInfo(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x: 'ScopedCopyableGeoInfo') -> "void":
+        """push_back(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"""
+        return _six_base.VectorScopedCopyableGeoInfo_push_back(self, x)
+
+
+    def front(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
+        """front(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo_front(self)
+
+
+    def back(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
+        """back(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo_back(self)
+
+
+    def assign(self, n: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type', x: 'ScopedCopyableGeoInfo') -> "void":
+        """assign(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)"""
+        return _six_base.VectorScopedCopyableGeoInfo_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size)
+        resize(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size, ScopedCopyableGeoInfo x)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, ScopedCopyableGeoInfo x) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
+        insert(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo_insert(self, *args)
+
+
+    def reserve(self, n: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type') -> "void":
+        """reserve(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n)"""
+        return _six_base.VectorScopedCopyableGeoInfo_reserve(self, n)
+
+
+    def capacity(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
+        """capacity(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
+        return _six_base.VectorScopedCopyableGeoInfo_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
+    __swig_destroy__ = _six_base.delete_VectorScopedCopyableGeoInfo
+    __del__ = lambda self: None
+VectorScopedCopyableGeoInfo_swigregister = _six_base.VectorScopedCopyableGeoInfo_swigregister
+VectorScopedCopyableGeoInfo_swigregister(VectorScopedCopyableGeoInfo)
 
 class StdAutoRadiometric(_object):
     """Proxy of C++ std::auto_ptr<(six::Radiometric)> class."""
@@ -5118,22 +5693,22 @@ class ScopedCopyableRadiometric(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::Radiometric *":
         """get(ScopedCopyableRadiometric self) -> Radiometric"""
         return _six_base.ScopedCopyableRadiometric_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::Radiometric &":
         """__ref__(ScopedCopyableRadiometric self) -> Radiometric"""
         return _six_base.ScopedCopyableRadiometric___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::Radiometric *":
         """__deref__(ScopedCopyableRadiometric self) -> Radiometric"""
         return _six_base.ScopedCopyableRadiometric___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'Radiometric'=None) -> "void":
         """
         reset(ScopedCopyableRadiometric self, Radiometric ptr=None)
         reset(ScopedCopyableRadiometric self)
@@ -5177,12 +5752,12 @@ class ScopedCopyableRadiometric(_object):
     if _newclass:
         gammaZeroSFIncidenceMap = _swig_property(_six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get, _six_base.ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Radiometric') -> "bool":
         """__eq__(ScopedCopyableRadiometric self, Radiometric rhs) -> bool"""
         return _six_base.ScopedCopyableRadiometric___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Radiometric') -> "bool":
         """__ne__(ScopedCopyableRadiometric self, Radiometric rhs) -> bool"""
         return _six_base.ScopedCopyableRadiometric___ne__(self, rhs)
 
@@ -5190,7 +5765,7 @@ ScopedCopyableRadiometric_swigregister = _six_base.ScopedCopyableRadiometric_swi
 ScopedCopyableRadiometric_swigregister(ScopedCopyableRadiometric)
 
 
-def makeScopedCopyableRadiometric():
+def makeScopedCopyableRadiometric() -> "mem::ScopedCopyablePtr< six::Radiometric >":
     """makeScopedCopyableRadiometric() -> ScopedCopyableRadiometric"""
     return _six_base.makeScopedCopyableRadiometric()
 class StdAutoErrorStatistics(_object):
@@ -5241,22 +5816,22 @@ class ScopedCopyableErrorStatistics(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::ErrorStatistics *":
         """get(ScopedCopyableErrorStatistics self) -> ErrorStatistics"""
         return _six_base.ScopedCopyableErrorStatistics_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::ErrorStatistics &":
         """__ref__(ScopedCopyableErrorStatistics self) -> ErrorStatistics"""
         return _six_base.ScopedCopyableErrorStatistics___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::ErrorStatistics *":
         """__deref__(ScopedCopyableErrorStatistics self) -> ErrorStatistics"""
         return _six_base.ScopedCopyableErrorStatistics___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'ErrorStatistics'=None) -> "void":
         """
         reset(ScopedCopyableErrorStatistics self, ErrorStatistics ptr=None)
         reset(ScopedCopyableErrorStatistics self)
@@ -5278,12 +5853,12 @@ class ScopedCopyableErrorStatistics(_object):
     if _newclass:
         additionalParameters = _swig_property(_six_base.ScopedCopyableErrorStatistics_additionalParameters_get, _six_base.ScopedCopyableErrorStatistics_additionalParameters_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'ErrorStatistics') -> "bool":
         """__eq__(ScopedCopyableErrorStatistics self, ErrorStatistics rhs) -> bool"""
         return _six_base.ScopedCopyableErrorStatistics___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'ErrorStatistics') -> "bool":
         """__ne__(ScopedCopyableErrorStatistics self, ErrorStatistics rhs) -> bool"""
         return _six_base.ScopedCopyableErrorStatistics___ne__(self, rhs)
 
@@ -5291,7 +5866,7 @@ ScopedCopyableErrorStatistics_swigregister = _six_base.ScopedCopyableErrorStatis
 ScopedCopyableErrorStatistics_swigregister(ScopedCopyableErrorStatistics)
 
 
-def makeScopedCopyableErrorStatistics():
+def makeScopedCopyableErrorStatistics() -> "mem::ScopedCopyablePtr< six::ErrorStatistics >":
     """makeScopedCopyableErrorStatistics() -> ScopedCopyableErrorStatistics"""
     return _six_base.makeScopedCopyableErrorStatistics()
 class StdAutoComponents(_object):
@@ -5342,22 +5917,22 @@ class ScopedCopyableComponents(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::Components *":
         """get(ScopedCopyableComponents self) -> Components"""
         return _six_base.ScopedCopyableComponents_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::Components &":
         """__ref__(ScopedCopyableComponents self) -> Components"""
         return _six_base.ScopedCopyableComponents___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::Components *":
         """__deref__(ScopedCopyableComponents self) -> Components"""
         return _six_base.ScopedCopyableComponents___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'Components'=None) -> "void":
         """
         reset(ScopedCopyableComponents self, Components ptr=None)
         reset(ScopedCopyableComponents self)
@@ -5383,12 +5958,12 @@ class ScopedCopyableComponents(_object):
     if _newclass:
         ionoError = _swig_property(_six_base.ScopedCopyableComponents_ionoError_get, _six_base.ScopedCopyableComponents_ionoError_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'Components') -> "bool":
         """__eq__(ScopedCopyableComponents self, Components rhs) -> bool"""
         return _six_base.ScopedCopyableComponents___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'Components') -> "bool":
         """__ne__(ScopedCopyableComponents self, Components rhs) -> bool"""
         return _six_base.ScopedCopyableComponents___ne__(self, rhs)
 
@@ -5396,7 +5971,7 @@ ScopedCopyableComponents_swigregister = _six_base.ScopedCopyableComponents_swigr
 ScopedCopyableComponents_swigregister(ScopedCopyableComponents)
 
 
-def makeScopedCopyableComponents():
+def makeScopedCopyableComponents() -> "mem::ScopedCopyablePtr< six::Components >":
     """makeScopedCopyableComponents() -> ScopedCopyableComponents"""
     return _six_base.makeScopedCopyableComponents()
 class StdAutoCorrCoefs(_object):
@@ -5447,22 +6022,22 @@ class ScopedCopyableCorrCoefs(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::CorrCoefs *":
         """get(ScopedCopyableCorrCoefs self) -> CorrCoefs"""
         return _six_base.ScopedCopyableCorrCoefs_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::CorrCoefs &":
         """__ref__(ScopedCopyableCorrCoefs self) -> CorrCoefs"""
         return _six_base.ScopedCopyableCorrCoefs___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::CorrCoefs *":
         """__deref__(ScopedCopyableCorrCoefs self) -> CorrCoefs"""
         return _six_base.ScopedCopyableCorrCoefs___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'CorrCoefs'=None) -> "void":
         """
         reset(ScopedCopyableCorrCoefs self, CorrCoefs ptr=None)
         reset(ScopedCopyableCorrCoefs self)
@@ -5532,12 +6107,12 @@ class ScopedCopyableCorrCoefs(_object):
     if _newclass:
         v2v3 = _swig_property(_six_base.ScopedCopyableCorrCoefs_v2v3_get, _six_base.ScopedCopyableCorrCoefs_v2v3_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'CorrCoefs') -> "bool":
         """__eq__(ScopedCopyableCorrCoefs self, CorrCoefs rhs) -> bool"""
         return _six_base.ScopedCopyableCorrCoefs___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'CorrCoefs') -> "bool":
         """__ne__(ScopedCopyableCorrCoefs self, CorrCoefs rhs) -> bool"""
         return _six_base.ScopedCopyableCorrCoefs___ne__(self, rhs)
 
@@ -5545,7 +6120,7 @@ ScopedCopyableCorrCoefs_swigregister = _six_base.ScopedCopyableCorrCoefs_swigreg
 ScopedCopyableCorrCoefs_swigregister(ScopedCopyableCorrCoefs)
 
 
-def makeScopedCopyableCorrCoefs():
+def makeScopedCopyableCorrCoefs() -> "mem::ScopedCopyablePtr< six::CorrCoefs >":
     """makeScopedCopyableCorrCoefs() -> ScopedCopyableCorrCoefs"""
     return _six_base.makeScopedCopyableCorrCoefs()
 class StdAutoPosVelError(_object):
@@ -5596,22 +6171,22 @@ class ScopedCopyablePosVelError(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::PosVelError *":
         """get(ScopedCopyablePosVelError self) -> PosVelError"""
         return _six_base.ScopedCopyablePosVelError_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::PosVelError &":
         """__ref__(ScopedCopyablePosVelError self) -> PosVelError"""
         return _six_base.ScopedCopyablePosVelError___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::PosVelError *":
         """__deref__(ScopedCopyablePosVelError self) -> PosVelError"""
         return _six_base.ScopedCopyablePosVelError___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'PosVelError'=None) -> "void":
         """
         reset(ScopedCopyablePosVelError self, PosVelError ptr=None)
         reset(ScopedCopyablePosVelError self)
@@ -5657,12 +6232,12 @@ class ScopedCopyablePosVelError(_object):
     if _newclass:
         positionDecorr = _swig_property(_six_base.ScopedCopyablePosVelError_positionDecorr_get, _six_base.ScopedCopyablePosVelError_positionDecorr_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'PosVelError') -> "bool":
         """__eq__(ScopedCopyablePosVelError self, PosVelError rhs) -> bool"""
         return _six_base.ScopedCopyablePosVelError___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'PosVelError') -> "bool":
         """__ne__(ScopedCopyablePosVelError self, PosVelError rhs) -> bool"""
         return _six_base.ScopedCopyablePosVelError___ne__(self, rhs)
 
@@ -5670,9 +6245,114 @@ ScopedCopyablePosVelError_swigregister = _six_base.ScopedCopyablePosVelError_swi
 ScopedCopyablePosVelError_swigregister(ScopedCopyablePosVelError)
 
 
-def makeScopedCopyablePosVelError():
+def makeScopedCopyablePosVelError() -> "mem::ScopedCopyablePtr< six::PosVelError >":
     """makeScopedCopyablePosVelError() -> ScopedCopyablePosVelError"""
     return _six_base.makeScopedCopyablePosVelError()
+class StdAutoGeoInfo(_object):
+    """Proxy of C++ std::auto_ptr<(six::GeoInfo)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoGeoInfo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::GeoInfo)> self) -> StdAutoGeoInfo"""
+        this = _six_base.new_StdAutoGeoInfo()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoGeoInfo
+    __del__ = lambda self: None
+StdAutoGeoInfo_swigregister = _six_base.StdAutoGeoInfo_swigregister
+StdAutoGeoInfo_swigregister(StdAutoGeoInfo)
+
+class ScopedCopyableGeoInfo(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::GeoInfo)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableGeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableGeoInfo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self, GeoInfo ptr=None) -> ScopedCopyableGeoInfo
+        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self) -> ScopedCopyableGeoInfo
+        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self, ScopedCopyableGeoInfo rhs) -> ScopedCopyableGeoInfo
+        """
+        this = _six_base.new_ScopedCopyableGeoInfo(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableGeoInfo___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
+    def get(self) -> "six::GeoInfo *":
+        """get(ScopedCopyableGeoInfo self) -> GeoInfo"""
+        return _six_base.ScopedCopyableGeoInfo_get(self)
+
+
+    def __ref__(self) -> "six::GeoInfo &":
+        """__ref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
+        return _six_base.ScopedCopyableGeoInfo___ref__(self)
+
+
+    def __deref__(self) -> "six::GeoInfo *":
+        """__deref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
+        return _six_base.ScopedCopyableGeoInfo___deref__(self)
+
+
+    def reset(self, ptr: 'GeoInfo'=None) -> "void":
+        """
+        reset(ScopedCopyableGeoInfo self, GeoInfo ptr=None)
+        reset(ScopedCopyableGeoInfo self)
+        """
+        return _six_base.ScopedCopyableGeoInfo_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableGeoInfo
+    __del__ = lambda self: None
+    __swig_setmethods__["name"] = _six_base.ScopedCopyableGeoInfo_name_set
+    __swig_getmethods__["name"] = _six_base.ScopedCopyableGeoInfo_name_get
+    if _newclass:
+        name = _swig_property(_six_base.ScopedCopyableGeoInfo_name_get, _six_base.ScopedCopyableGeoInfo_name_set)
+    __swig_setmethods__["geoInfos"] = _six_base.ScopedCopyableGeoInfo_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_base.ScopedCopyableGeoInfo_geoInfos_get
+    if _newclass:
+        geoInfos = _swig_property(_six_base.ScopedCopyableGeoInfo_geoInfos_get, _six_base.ScopedCopyableGeoInfo_geoInfos_set)
+    __swig_setmethods__["desc"] = _six_base.ScopedCopyableGeoInfo_desc_set
+    __swig_getmethods__["desc"] = _six_base.ScopedCopyableGeoInfo_desc_get
+    if _newclass:
+        desc = _swig_property(_six_base.ScopedCopyableGeoInfo_desc_get, _six_base.ScopedCopyableGeoInfo_desc_set)
+    __swig_setmethods__["geometryLatLon"] = _six_base.ScopedCopyableGeoInfo_geometryLatLon_set
+    __swig_getmethods__["geometryLatLon"] = _six_base.ScopedCopyableGeoInfo_geometryLatLon_get
+    if _newclass:
+        geometryLatLon = _swig_property(_six_base.ScopedCopyableGeoInfo_geometryLatLon_get, _six_base.ScopedCopyableGeoInfo_geometryLatLon_set)
+
+    def __eq__(self, rhs: 'GeoInfo') -> "bool":
+        """__eq__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.ScopedCopyableGeoInfo___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'GeoInfo') -> "bool":
+        """__ne__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.ScopedCopyableGeoInfo___ne__(self, rhs)
+
+ScopedCopyableGeoInfo_swigregister = _six_base.ScopedCopyableGeoInfo_swigregister
+ScopedCopyableGeoInfo_swigregister(ScopedCopyableGeoInfo)
+
+
+def makeScopedCopyableGeoInfo() -> "mem::ScopedCopyablePtr< six::GeoInfo >":
+    """makeScopedCopyableGeoInfo() -> ScopedCopyableGeoInfo"""
+    return _six_base.makeScopedCopyableGeoInfo()
 class StdAutoRadarSensor(_object):
     """Proxy of C++ std::auto_ptr<(six::RadarSensor)> class."""
 
@@ -5721,22 +6401,22 @@ class ScopedCopyableRadarSensor(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::RadarSensor *":
         """get(ScopedCopyableRadarSensor self) -> RadarSensor"""
         return _six_base.ScopedCopyableRadarSensor_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::RadarSensor &":
         """__ref__(ScopedCopyableRadarSensor self) -> RadarSensor"""
         return _six_base.ScopedCopyableRadarSensor___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::RadarSensor *":
         """__deref__(ScopedCopyableRadarSensor self) -> RadarSensor"""
         return _six_base.ScopedCopyableRadarSensor___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'RadarSensor'=None) -> "void":
         """
         reset(ScopedCopyableRadarSensor self, RadarSensor ptr=None)
         reset(ScopedCopyableRadarSensor self)
@@ -5762,12 +6442,12 @@ class ScopedCopyableRadarSensor(_object):
     if _newclass:
         rangeBiasDecorr = _swig_property(_six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_get, _six_base.ScopedCopyableRadarSensor_rangeBiasDecorr_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'RadarSensor') -> "bool":
         """__eq__(ScopedCopyableRadarSensor self, RadarSensor rhs) -> bool"""
         return _six_base.ScopedCopyableRadarSensor___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'RadarSensor') -> "bool":
         """__ne__(ScopedCopyableRadarSensor self, RadarSensor rhs) -> bool"""
         return _six_base.ScopedCopyableRadarSensor___ne__(self, rhs)
 
@@ -5775,7 +6455,7 @@ ScopedCopyableRadarSensor_swigregister = _six_base.ScopedCopyableRadarSensor_swi
 ScopedCopyableRadarSensor_swigregister(ScopedCopyableRadarSensor)
 
 
-def makeScopedCopyableRadarSensor():
+def makeScopedCopyableRadarSensor() -> "mem::ScopedCopyablePtr< six::RadarSensor >":
     """makeScopedCopyableRadarSensor() -> ScopedCopyableRadarSensor"""
     return _six_base.makeScopedCopyableRadarSensor()
 class StdAutoTropoError(_object):
@@ -5826,22 +6506,22 @@ class ScopedCopyableTropoError(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::TropoError *":
         """get(ScopedCopyableTropoError self) -> TropoError"""
         return _six_base.ScopedCopyableTropoError_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::TropoError &":
         """__ref__(ScopedCopyableTropoError self) -> TropoError"""
         return _six_base.ScopedCopyableTropoError___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::TropoError *":
         """__deref__(ScopedCopyableTropoError self) -> TropoError"""
         return _six_base.ScopedCopyableTropoError___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'TropoError'=None) -> "void":
         """
         reset(ScopedCopyableTropoError self, TropoError ptr=None)
         reset(ScopedCopyableTropoError self)
@@ -5863,12 +6543,12 @@ class ScopedCopyableTropoError(_object):
     if _newclass:
         tropoRangeDecorr = _swig_property(_six_base.ScopedCopyableTropoError_tropoRangeDecorr_get, _six_base.ScopedCopyableTropoError_tropoRangeDecorr_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'TropoError') -> "bool":
         """__eq__(ScopedCopyableTropoError self, TropoError rhs) -> bool"""
         return _six_base.ScopedCopyableTropoError___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'TropoError') -> "bool":
         """__ne__(ScopedCopyableTropoError self, TropoError rhs) -> bool"""
         return _six_base.ScopedCopyableTropoError___ne__(self, rhs)
 
@@ -5876,7 +6556,7 @@ ScopedCopyableTropoError_swigregister = _six_base.ScopedCopyableTropoError_swigr
 ScopedCopyableTropoError_swigregister(ScopedCopyableTropoError)
 
 
-def makeScopedCopyableTropoError():
+def makeScopedCopyableTropoError() -> "mem::ScopedCopyablePtr< six::TropoError >":
     """makeScopedCopyableTropoError() -> ScopedCopyableTropoError"""
     return _six_base.makeScopedCopyableTropoError()
 class StdAutoIonoError(_object):
@@ -5927,22 +6607,22 @@ class ScopedCopyableIonoError(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::IonoError *":
         """get(ScopedCopyableIonoError self) -> IonoError"""
         return _six_base.ScopedCopyableIonoError_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::IonoError &":
         """__ref__(ScopedCopyableIonoError self) -> IonoError"""
         return _six_base.ScopedCopyableIonoError___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::IonoError *":
         """__deref__(ScopedCopyableIonoError self) -> IonoError"""
         return _six_base.ScopedCopyableIonoError___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'IonoError'=None) -> "void":
         """
         reset(ScopedCopyableIonoError self, IonoError ptr=None)
         reset(ScopedCopyableIonoError self)
@@ -5968,12 +6648,12 @@ class ScopedCopyableIonoError(_object):
     if _newclass:
         ionoRangeVertDecorr = _swig_property(_six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_get, _six_base.ScopedCopyableIonoError_ionoRangeVertDecorr_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'IonoError') -> "bool":
         """__eq__(ScopedCopyableIonoError self, IonoError rhs) -> bool"""
         return _six_base.ScopedCopyableIonoError___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'IonoError') -> "bool":
         """__ne__(ScopedCopyableIonoError self, IonoError rhs) -> bool"""
         return _six_base.ScopedCopyableIonoError___ne__(self, rhs)
 
@@ -5981,7 +6661,7 @@ ScopedCopyableIonoError_swigregister = _six_base.ScopedCopyableIonoError_swigreg
 ScopedCopyableIonoError_swigregister(ScopedCopyableIonoError)
 
 
-def makeScopedCopyableIonoError():
+def makeScopedCopyableIonoError() -> "mem::ScopedCopyablePtr< six::IonoError >":
     """makeScopedCopyableIonoError() -> ScopedCopyableIonoError"""
     return _six_base.makeScopedCopyableIonoError()
 class StdAutoCompositeSCP(_object):
@@ -6032,22 +6712,22 @@ class ScopedCopyableCompositeSCP(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::CompositeSCP *":
         """get(ScopedCopyableCompositeSCP self) -> CompositeSCP"""
         return _six_base.ScopedCopyableCompositeSCP_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::CompositeSCP &":
         """__ref__(ScopedCopyableCompositeSCP self) -> CompositeSCP"""
         return _six_base.ScopedCopyableCompositeSCP___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::CompositeSCP *":
         """__deref__(ScopedCopyableCompositeSCP self) -> CompositeSCP"""
         return _six_base.ScopedCopyableCompositeSCP___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'CompositeSCP'=None) -> "void":
         """
         reset(ScopedCopyableCompositeSCP self, CompositeSCP ptr=None)
         reset(ScopedCopyableCompositeSCP self)
@@ -6073,12 +6753,12 @@ class ScopedCopyableCompositeSCP(_object):
     if _newclass:
         xyErr = _swig_property(_six_base.ScopedCopyableCompositeSCP_xyErr_get, _six_base.ScopedCopyableCompositeSCP_xyErr_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'CompositeSCP') -> "bool":
         """__eq__(ScopedCopyableCompositeSCP self, CompositeSCP rhs) -> bool"""
         return _six_base.ScopedCopyableCompositeSCP___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'CompositeSCP') -> "bool":
         """__ne__(ScopedCopyableCompositeSCP self, CompositeSCP rhs) -> bool"""
         return _six_base.ScopedCopyableCompositeSCP___ne__(self, rhs)
 
@@ -6086,7 +6766,7 @@ ScopedCopyableCompositeSCP_swigregister = _six_base.ScopedCopyableCompositeSCP_s
 ScopedCopyableCompositeSCP_swigregister(ScopedCopyableCompositeSCP)
 
 
-def makeScopedCopyableCompositeSCP():
+def makeScopedCopyableCompositeSCP() -> "mem::ScopedCopyablePtr< six::CompositeSCP >":
     """makeScopedCopyableCompositeSCP() -> ScopedCopyableCompositeSCP"""
     return _six_base.makeScopedCopyableCompositeSCP()
 class StdAutoMatchInformation(_object):
@@ -6137,22 +6817,22 @@ class ScopedCopyableMatchInformation(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::MatchInformation *":
         """get(ScopedCopyableMatchInformation self) -> MatchInformation"""
         return _six_base.ScopedCopyableMatchInformation_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::MatchInformation &":
         """__ref__(ScopedCopyableMatchInformation self) -> MatchInformation"""
         return _six_base.ScopedCopyableMatchInformation___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::MatchInformation *":
         """__deref__(ScopedCopyableMatchInformation self) -> MatchInformation"""
         return _six_base.ScopedCopyableMatchInformation___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'MatchInformation'=None) -> "void":
         """
         reset(ScopedCopyableMatchInformation self, MatchInformation ptr=None)
         reset(ScopedCopyableMatchInformation self)
@@ -6166,12 +6846,12 @@ class ScopedCopyableMatchInformation(_object):
     if _newclass:
         types = _swig_property(_six_base.ScopedCopyableMatchInformation_types_get, _six_base.ScopedCopyableMatchInformation_types_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'MatchInformation') -> "bool":
         """__eq__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
         return _six_base.ScopedCopyableMatchInformation___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'MatchInformation') -> "bool":
         """__ne__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
         return _six_base.ScopedCopyableMatchInformation___ne__(self, rhs)
 
@@ -6179,7 +6859,7 @@ ScopedCopyableMatchInformation_swigregister = _six_base.ScopedCopyableMatchInfor
 ScopedCopyableMatchInformation_swigregister(ScopedCopyableMatchInformation)
 
 
-def makeScopedCopyableMatchInformation():
+def makeScopedCopyableMatchInformation() -> "mem::ScopedCopyablePtr< six::MatchInformation >":
     """makeScopedCopyableMatchInformation() -> ScopedCopyableMatchInformation"""
     return _six_base.makeScopedCopyableMatchInformation()
 class StdAutoMatchType(_object):
@@ -6230,22 +6910,22 @@ class ScopedCopyableMatchType(_object):
 
 
 
-    def get(self):
+    def get(self) -> "six::MatchType *":
         """get(ScopedCopyableMatchType self) -> MatchType"""
         return _six_base.ScopedCopyableMatchType_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::MatchType &":
         """__ref__(ScopedCopyableMatchType self) -> MatchType"""
         return _six_base.ScopedCopyableMatchType___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::MatchType *":
         """__deref__(ScopedCopyableMatchType self) -> MatchType"""
         return _six_base.ScopedCopyableMatchType___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'MatchType'=None) -> "void":
         """
         reset(ScopedCopyableMatchType self, MatchType ptr=None)
         reset(ScopedCopyableMatchType self)
@@ -6279,12 +6959,12 @@ class ScopedCopyableMatchType(_object):
     if _newclass:
         matchCollects = _swig_property(_six_base.ScopedCopyableMatchType_matchCollects_get, _six_base.ScopedCopyableMatchType_matchCollects_set)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'MatchType') -> "bool":
         """__eq__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
         return _six_base.ScopedCopyableMatchType___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'MatchType') -> "bool":
         """__ne__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
         return _six_base.ScopedCopyableMatchType___ne__(self, rhs)
 
@@ -6292,7 +6972,7 @@ ScopedCopyableMatchType_swigregister = _six_base.ScopedCopyableMatchType_swigreg
 ScopedCopyableMatchType_swigregister(ScopedCopyableMatchType)
 
 
-def makeScopedCopyableMatchType():
+def makeScopedCopyableMatchType() -> "mem::ScopedCopyablePtr< six::MatchType >":
     """makeScopedCopyableMatchType() -> ScopedCopyableMatchType"""
     return _six_base.makeScopedCopyableMatchType()
 class StdAutoAmplitudeTable(_object):
@@ -6337,22 +7017,22 @@ class ScopedCloneableAmplitudeTable(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def get(self):
+    def get(self) -> "six::AmplitudeTable *":
         """get(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
         return _six_base.ScopedCloneableAmplitudeTable_get(self)
 
 
-    def __ref__(self):
+    def __ref__(self) -> "six::AmplitudeTable &":
         """__ref__(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
         return _six_base.ScopedCloneableAmplitudeTable___ref__(self)
 
 
-    def __deref__(self):
+    def __deref__(self) -> "six::AmplitudeTable *":
         """__deref__(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
         return _six_base.ScopedCloneableAmplitudeTable___deref__(self)
 
 
-    def reset(self, ptr=None):
+    def reset(self, ptr: 'AmplitudeTable'=None) -> "void":
         """
         reset(ScopedCloneableAmplitudeTable self, AmplitudeTable ptr=None)
         reset(ScopedCloneableAmplitudeTable self)
@@ -6360,29 +7040,29 @@ class ScopedCloneableAmplitudeTable(_object):
         return _six_base.ScopedCloneableAmplitudeTable_reset(self, ptr)
 
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: 'size_t') -> "double":
         """__getitem__(ScopedCloneableAmplitudeTable self, size_t key) -> double"""
         return _six_base.ScopedCloneableAmplitudeTable___getitem__(self, key)
 
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: 'size_t', value: 'double') -> "void":
         """__setitem__(ScopedCloneableAmplitudeTable self, size_t key, double value)"""
         return _six_base.ScopedCloneableAmplitudeTable___setitem__(self, key, value)
 
     __swig_destroy__ = _six_base.delete_ScopedCloneableAmplitudeTable
     __del__ = lambda self: None
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: 'AmplitudeTable') -> "bool":
         """__eq__(ScopedCloneableAmplitudeTable self, AmplitudeTable rhs) -> bool"""
         return _six_base.ScopedCloneableAmplitudeTable___eq__(self, rhs)
 
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: 'AmplitudeTable') -> "bool":
         """__ne__(ScopedCloneableAmplitudeTable self, AmplitudeTable rhs) -> bool"""
         return _six_base.ScopedCloneableAmplitudeTable___ne__(self, rhs)
 
 
-    def clone(self):
+    def clone(self) -> "six::AmplitudeTable *":
         """clone(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
         return _six_base.ScopedCloneableAmplitudeTable_clone(self)
 
@@ -6399,7 +7079,7 @@ class ScopedCloneableAmplitudeTable(_object):
     if _newclass:
         elementSize = _swig_property(_six_base.ScopedCloneableAmplitudeTable_elementSize_get, _six_base.ScopedCloneableAmplitudeTable_elementSize_set)
 
-    def getTable(self, *args):
+    def getTable(self, *args) -> "unsigned char const *":
         """
         getTable(ScopedCloneableAmplitudeTable self) -> unsigned char
         getTable(ScopedCloneableAmplitudeTable self) -> unsigned char const *
@@ -6410,9 +7090,143 @@ ScopedCloneableAmplitudeTable_swigregister = _six_base.ScopedCloneableAmplitudeT
 ScopedCloneableAmplitudeTable_swigregister(ScopedCloneableAmplitudeTable)
 
 
-def makeScopedCloneableAmplitudeTable():
+def makeScopedCloneableAmplitudeTable() -> "mem::ScopedCloneablePtr< six::AmplitudeTable >":
     """makeScopedCloneableAmplitudeTable() -> ScopedCloneableAmplitudeTable"""
     return _six_base.makeScopedCloneableAmplitudeTable()
+class StdAutoCollectionInformation(_object):
+    """Proxy of C++ std::auto_ptr<(six::CollectionInformation)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCollectionInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoCollectionInformation, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::CollectionInformation)> self) -> StdAutoCollectionInformation"""
+        this = _six_base.new_StdAutoCollectionInformation()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoCollectionInformation
+    __del__ = lambda self: None
+StdAutoCollectionInformation_swigregister = _six_base.StdAutoCollectionInformation_swigregister
+StdAutoCollectionInformation_swigregister(StdAutoCollectionInformation)
+
+class ScopedCloneableCollectionInformation(_object):
+    """Proxy of C++ mem::ScopedCloneablePtr<(six::CollectionInformation)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCloneableCollectionInformation, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCloneableCollectionInformation, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCloneablePtr<(six::CollectionInformation)> self, CollectionInformation ptr=None) -> ScopedCloneableCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::CollectionInformation)> self) -> ScopedCloneableCollectionInformation
+        __init__(mem::ScopedCloneablePtr<(six::CollectionInformation)> self, ScopedCloneableCollectionInformation rhs) -> ScopedCloneableCollectionInformation
+        """
+        this = _six_base.new_ScopedCloneableCollectionInformation(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def get(self) -> "six::CollectionInformation *":
+        """get(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation_get(self)
+
+
+    def __ref__(self) -> "six::CollectionInformation &":
+        """__ref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation___ref__(self)
+
+
+    def __deref__(self) -> "six::CollectionInformation *":
+        """__deref__(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation___deref__(self)
+
+
+    def reset(self, ptr: 'CollectionInformation'=None) -> "void":
+        """
+        reset(ScopedCloneableCollectionInformation self, CollectionInformation ptr=None)
+        reset(ScopedCloneableCollectionInformation self)
+        """
+        return _six_base.ScopedCloneableCollectionInformation_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCloneableCollectionInformation
+    __del__ = lambda self: None
+    __swig_setmethods__["collectorName"] = _six_base.ScopedCloneableCollectionInformation_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_base.ScopedCloneableCollectionInformation_collectorName_get
+    if _newclass:
+        collectorName = _swig_property(_six_base.ScopedCloneableCollectionInformation_collectorName_get, _six_base.ScopedCloneableCollectionInformation_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_base.ScopedCloneableCollectionInformation_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_base.ScopedCloneableCollectionInformation_illuminatorName_get
+    if _newclass:
+        illuminatorName = _swig_property(_six_base.ScopedCloneableCollectionInformation_illuminatorName_get, _six_base.ScopedCloneableCollectionInformation_illuminatorName_set)
+    __swig_setmethods__["coreName"] = _six_base.ScopedCloneableCollectionInformation_coreName_set
+    __swig_getmethods__["coreName"] = _six_base.ScopedCloneableCollectionInformation_coreName_get
+    if _newclass:
+        coreName = _swig_property(_six_base.ScopedCloneableCollectionInformation_coreName_get, _six_base.ScopedCloneableCollectionInformation_coreName_set)
+    __swig_setmethods__["collectType"] = _six_base.ScopedCloneableCollectionInformation_collectType_set
+    __swig_getmethods__["collectType"] = _six_base.ScopedCloneableCollectionInformation_collectType_get
+    if _newclass:
+        collectType = _swig_property(_six_base.ScopedCloneableCollectionInformation_collectType_get, _six_base.ScopedCloneableCollectionInformation_collectType_set)
+    __swig_setmethods__["radarMode"] = _six_base.ScopedCloneableCollectionInformation_radarMode_set
+    __swig_getmethods__["radarMode"] = _six_base.ScopedCloneableCollectionInformation_radarMode_get
+    if _newclass:
+        radarMode = _swig_property(_six_base.ScopedCloneableCollectionInformation_radarMode_get, _six_base.ScopedCloneableCollectionInformation_radarMode_set)
+    __swig_setmethods__["radarModeID"] = _six_base.ScopedCloneableCollectionInformation_radarModeID_set
+    __swig_getmethods__["radarModeID"] = _six_base.ScopedCloneableCollectionInformation_radarModeID_get
+    if _newclass:
+        radarModeID = _swig_property(_six_base.ScopedCloneableCollectionInformation_radarModeID_get, _six_base.ScopedCloneableCollectionInformation_radarModeID_set)
+    __swig_setmethods__["releaseInfo"] = _six_base.ScopedCloneableCollectionInformation_releaseInfo_set
+    __swig_getmethods__["releaseInfo"] = _six_base.ScopedCloneableCollectionInformation_releaseInfo_get
+    if _newclass:
+        releaseInfo = _swig_property(_six_base.ScopedCloneableCollectionInformation_releaseInfo_get, _six_base.ScopedCloneableCollectionInformation_releaseInfo_set)
+    __swig_setmethods__["countryCodes"] = _six_base.ScopedCloneableCollectionInformation_countryCodes_set
+    __swig_getmethods__["countryCodes"] = _six_base.ScopedCloneableCollectionInformation_countryCodes_get
+    if _newclass:
+        countryCodes = _swig_property(_six_base.ScopedCloneableCollectionInformation_countryCodes_get, _six_base.ScopedCloneableCollectionInformation_countryCodes_set)
+    __swig_setmethods__["parameters"] = _six_base.ScopedCloneableCollectionInformation_parameters_set
+    __swig_getmethods__["parameters"] = _six_base.ScopedCloneableCollectionInformation_parameters_get
+    if _newclass:
+        parameters = _swig_property(_six_base.ScopedCloneableCollectionInformation_parameters_get, _six_base.ScopedCloneableCollectionInformation_parameters_set)
+
+    def clone(self) -> "six::CollectionInformation *":
+        """clone(ScopedCloneableCollectionInformation self) -> CollectionInformation"""
+        return _six_base.ScopedCloneableCollectionInformation_clone(self)
+
+
+    def __eq__(self, other: 'CollectionInformation') -> "bool":
+        """__eq__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.ScopedCloneableCollectionInformation___eq__(self, other)
+
+
+    def __ne__(self, other: 'CollectionInformation') -> "bool":
+        """__ne__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"""
+        return _six_base.ScopedCloneableCollectionInformation___ne__(self, other)
+
+
+    def getClassificationLevel(self) -> "std::string":
+        """getClassificationLevel(ScopedCloneableCollectionInformation self) -> std::string"""
+        return _six_base.ScopedCloneableCollectionInformation_getClassificationLevel(self)
+
+
+    def setClassificationLevel(self, classification: 'std::string const &') -> "void":
+        """setClassificationLevel(ScopedCloneableCollectionInformation self, std::string const & classification)"""
+        return _six_base.ScopedCloneableCollectionInformation_setClassificationLevel(self, classification)
+
+ScopedCloneableCollectionInformation_swigregister = _six_base.ScopedCloneableCollectionInformation_swigregister
+ScopedCloneableCollectionInformation_swigregister(ScopedCloneableCollectionInformation)
+
+
+def makeScopedCloneableCollectionInformation() -> "mem::ScopedCloneablePtr< six::CollectionInformation >":
+    """makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"""
+    return _six_base.makeScopedCloneableCollectionInformation()
 # This file is compatible with both classic and new-style classes.
 
 

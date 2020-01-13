@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,66 +19,70 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <sys/Conf.h>
 #include <except/Exception.h>
 #include <io/StringStream.h>
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <mem/ScopedArray.h>
-#include <mem/SharedPtr.h>
 #include <xml/lite/MinidomParser.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDXMLControl.h>
 
 namespace cphd
 {
-CPHDReader::CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
+CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
                        size_t numThreads,
-                       mem::SharedPtr<logging::Logger> logger)
+                       const std::vector<std::string>& schemaPaths,
+                       std::shared_ptr<logging::Logger> logger)
 {
-    initialize(inStream, numThreads, logger);
+    initialize(inStream, numThreads, logger, schemaPaths);
 }
 
 CPHDReader::CPHDReader(const std::string& fromFile,
                        size_t numThreads,
-                       mem::SharedPtr<logging::Logger> logger)
+                       const std::vector<std::string>& schemaPaths,
+                       std::shared_ptr<logging::Logger> logger)
 {
-    initialize(mem::SharedPtr<io::SeekableInputStream>(
-        new io::FileInputStream(fromFile)), numThreads, logger);
+    initialize(std::shared_ptr<io::SeekableInputStream>(
+        new io::FileInputStream(fromFile)), numThreads, logger, schemaPaths);
 }
 
-void CPHDReader::initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
+void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
                             size_t numThreads,
-                            mem::SharedPtr<logging::Logger> logger)
+                            std::shared_ptr<logging::Logger> logger,
+                            const std::vector<std::string>& schemaPaths)
 {
     mFileHeader.read(*inStream);
 
     // Read in the XML string
-    const int xmlSize = static_cast<int>(mFileHeader.getXMLsize());
-    inStream->seek(mFileHeader.getXMLoffset(), io::Seekable::START);
+    inStream->seek(mFileHeader.getXMLBlockByteOffset(), io::Seekable::START);
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
-    xmlParser.parse(*inStream, xmlSize);
+    xmlParser.parse(*inStream, mFileHeader.getXMLBlockSize());
 
     if (logger.get() == NULL)
     {
         logger.reset(new logging::NullLogger());
     }
 
-    mMetadata = CPHDXMLControl(logger.get()).fromXML(xmlParser.getDocument());
+    mMetadata = CPHDXMLControl(logger.get(), false).fromXML(xmlParser.getDocument(), schemaPaths);
 
-    // Load the VBP into memory
-    mVBM.reset(new VBM(mMetadata->data, mMetadata->vectorParameters));
-    mVBM->load(*inStream,
-               mFileHeader.getVBMoffset(),
-               mFileHeader.getVBMsize(),
-               numThreads);
+    mSupportBlock.reset(new SupportBlock(inStream, mMetadata->data,
+                        mFileHeader.getSupportBlockByteOffset(),
+                        mFileHeader.getSupportBlockSize()));
+
+    // Load the PVPBlock into memory
+    mPVPBlock.reset(new PVPBlock(mMetadata->pvp, mMetadata->data));
+    mPVPBlock->load(*inStream,
+                    mFileHeader.getPvpBlockByteOffset(),
+                    mFileHeader.getPvpBlockSize(),
+                    numThreads);
 
     // Setup for wideband reading
-    mWideband.reset(new Wideband(inStream, mMetadata->data,
-                                 mFileHeader.getCPHDoffset(),
-                                 mFileHeader.getCPHDsize()));
+    mWideband.reset(new Wideband(inStream, *mMetadata,
+                                 mFileHeader.getSignalBlockByteOffset(),
+                                 mFileHeader.getSignalBlockSize()));
 }
 }

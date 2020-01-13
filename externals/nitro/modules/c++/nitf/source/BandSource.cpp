@@ -26,7 +26,7 @@ nitf::MemorySource::MemorySource(const void* data,
                                  size_t size,
                                  nitf::Off start,
                                  int numBytesPerPixel,
-                                 int pixelSkip) throw(nitf::NITFException)
+                                 int pixelSkip)
 {
     setNative(nitf_MemorySource_construct(data, size, start, numBytesPerPixel, pixelSkip, &error));
     setManaged(false);
@@ -35,7 +35,7 @@ nitf::MemorySource::MemorySource(const void* data,
 nitf::FileSource::FileSource(nitf::IOHandle & io,
                              nitf::Off start,
                              int numBytesPerPixel,
-                             int pixelSkip) throw(nitf::NITFException)
+                             int pixelSkip)
 {
     setNative(nitf_IOSource_construct(io.getNative(), start, numBytesPerPixel, pixelSkip, &error));
     setManaged(false);
@@ -45,7 +45,7 @@ nitf::FileSource::FileSource(nitf::IOHandle & io,
 nitf::FileSource::FileSource(const std::string& fname,
                              nitf::Off start,
                              int numBytesPerPixel,
-                             int pixelSkip) throw (nitf::NITFException)
+                             int pixelSkip)
 {
     setNative(nitf_FileSource_constructFile(fname.c_str(),
                                             start,
@@ -59,7 +59,7 @@ nitf::RowSource::RowSource(
     nitf::Uint32 numRows,
     nitf::Uint32 numCols,
     nitf::Uint32 pixelSize,
-    nitf::RowSourceCallback *callback) throw(nitf::NITFException)
+    nitf::RowSourceCallback *callback)
     : mBand(band),
       mNumRows(numRows),
       mNumCols(numCols),
@@ -121,7 +121,6 @@ NITF_BOOL nitf::RowSource::nextRow(void* algorithm,
 }
 
 nitf::DirectBlockSource::DirectBlockSource(nitf::ImageReader& imageReader, nitf::Uint32 numBands)
-    throw(nitf::NITFException)
 {
     setNative(nitf_DirectBlockSource_construct(this,
                                                &DirectBlockSource::nextBlock, 

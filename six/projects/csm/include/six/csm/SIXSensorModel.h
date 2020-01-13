@@ -361,13 +361,6 @@ public: // GeometricModel methods
 
 public: // RasterGM methods
     /**
-    * Returns the starting coordinate for the imaging operation.
-    *
-    * \return Always returns (0, 0)
-    */
-   virtual csm::ImageCoord getImageStart() const;
-
-    /**
      * Converts groundPt in ground space (ECEF) to returned ImageCoord in image
      * space.
      *
@@ -621,10 +614,9 @@ protected:
      * Transforms the given l, s values from units of meters with the origin
      * at the center of the image to pixels from upper left.
      *
-     * \param[in] l     Line position in terms of meters from the image center
-     * \param[in] s     Sample position in terms of meters from the image center
+     * \param[in] pos Line position in terms of meters from the image center
      * \return A types::RowCol<double> containing the distance in pixels from
-     * the upper left of the image
+     * the upper left of the full image
      */
     virtual
     types::RowCol<double> toPixel(const types::RowCol<double>& pos) const = 0;
@@ -633,8 +625,8 @@ protected:
      * Transforms the given l, s values from units of pixels from upper left
      * to meters with the origin at the center of the image.
      *
-     * \param[in] l     Line position in terms of pixels from upper left
-     * \param[in] s     Sample position in terms of pixels from upper left
+     * \param[in] pos Line and sample positions in terms of pixels from upper
+     *                left of the full image
      * \return A types::RowCol<double> containing the distance in meters from
      * the center of the image
      */

@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,135 +19,122 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <six/Init.h>
 #include <six/Utilities.h>
-#include <cphd/Utilities.h>
 #include <cphd/Global.h>
 
 namespace cphd
 {
-DwellTimeParameters::DwellTimeParameters() :
-    codTimePoly(six::Init::undefined<Poly2D>()),
-    dwellTimePoly(six::Init::undefined<Poly2D>())
+Global::Global()
 {
 }
 
-std::ostream& operator<< (std::ostream& os, const DwellTimeParameters& d)
-{
-    os << "DwellTimeParameters::\n"
-       << "  CODTimePoly  :\n" << d.codTimePoly << "\n"
-       << "  DwellTimePoly:\n" << d.dwellTimePoly << "\n";
-    return os;
-}
-
-AreaPlane::AreaPlane() :
-    referencePoint(six::Init::undefined<six::ReferencePoint>())
-{
-}
-
-bool AreaPlane::operator==(const AreaPlane& other) const
-{
-    if (referencePoint != other.referencePoint &&
-        xDirection != other.xDirection &&
-        yDirection != other.yDirection)
-    {
-        return false;
-    }
-
-    if (dwellTime.get() && other.dwellTime.get())
-    {
-        if (*dwellTime != *other.dwellTime)
-        {
-            return false;
-        }
-    }
-    else if (dwellTime.get() || other.dwellTime.get())
-    {
-        return false;
-    }
-
-    return true;
-}
-
-std::ostream& operator<< (std::ostream& os, const AreaPlane& d)
-{
-    os << "AreaPlane::\n"
-       << "  xDirection: " << d.xDirection << "\n"
-       << "  yDirection: " << d.yDirection << "\n";
-    if (d.dwellTime.get())
-    {
-        os << "  dwellTime : " << *d.dwellTime << "\n";
-    }
-    return os;
-}
-
-ImageArea::ImageArea() :
-    acpCorners(six::Init::undefined<LatLonAltCorners>())
-{
-}
-
-bool ImageArea::operator==(const ImageArea& other) const
-{
-    for (size_t ii = 0; ii < LatLonAltCorners::NUM_CORNERS; ++ii)\
-    {
-        if (!(acpCorners.getCorner(ii) == other.acpCorners.getCorner(ii)))
-        {
-           return false;
-        }
-    }
-
-    if (plane.get() && other.plane.get())
-    {
-        if (*plane.get() != *other.plane.get())
-        {
-            return false;
-        }
-    }
-    else if (plane.get() || other.plane.get())
-    {
-        return false;
-    }
-
-    return true;
-}
-
-std::ostream& operator<< (std::ostream& os, const ImageArea& d)
-{
-    os << "ImageArea::\n";
-    if (d.plane.get())
-    {
-        os << "  plane     : " <<  *d.plane << "\n";
-    }
-
-    return os;
-}
-
-Global::Global() :
-    refFrequencyIndex(six::Init::undefined<size_t>()),
-    collectDuration(0.0),
+Timeline::Timeline() :
+    collectionStart(six::Init::undefined<DateTime>()),
+    rcvCollectionStart(six::Init::undefined<DateTime>()),
     txTime1(0.0),
     txTime2(0.0)
 {
 }
 
+FxBand::FxBand() :
+    fxMin(0.0),
+    fxMax(0.0)
+{
+}
+
+TOASwath::TOASwath() :
+    toaMin(0.0),
+    toaMax(0.0)
+{
+}
+
+TropoParameters::TropoParameters() :
+    n0(0.0)
+{
+}
+
+IonoParameters::IonoParameters() :
+    tecv(0.0),
+    f2Height(six::Init::undefined<size_t>())
+{
+}
+
+bool Global::operator==(const Global& other) const
+{
+    return domainType == other.domainType &&
+           sgn == other.sgn &&
+           timeline == other.timeline &&
+           fxBand == other.fxBand &&
+           toaSwath == other.toaSwath &&
+           tropoParameters == other.tropoParameters &&
+           ionoParameters == other.ionoParameters;
+}
+
+
 std::ostream& operator<< (std::ostream& os, const Global& d)
 {
     os << "Global::\n"
        << "  domainType       : " << d.domainType.toString() << "\n"
-       << "  phaseSGN         : " << d.phaseSGN.toString() << "\n";
-
-    if (!six::Init::isUndefined(d.refFrequencyIndex))
+       << "  SGN              : " << d.sgn.toString() << "\n"
+       << "  timeline         : " << d.timeline << "\n"
+       << "  fxBand           : " << d.fxBand << "\n"
+       << "  toaSwath         : " << d.toaSwath << "\n";
+    if (d.tropoParameters.get())
     {
-        os << "  refFrequencyIndex: " << d.refFrequencyIndex << "\n";
+        os << "  tropoParameters  : " << *d.tropoParameters << "\n";
     }
+    if (d.ionoParameters.get())
+    {
+        os << " ionoParameters    : " << *d.ionoParameters << "\n";
+    }
+    return os;
+}
 
-    os << "  collectStart     : " << six::toString(d.collectStart)
-       << "\n"
-       << "  collectDuration  : " << d.collectDuration << "\n"
-       << "  txTime1          : " << d.txTime1 << "\n"
-       << "  txTime2          : " << d.txTime2 << "\n"
-       << "  imageArea        : " << d.imageArea << "\n";
+std::ostream& operator<< (std::ostream& os, const Timeline& d)
+{
+    os << "Timeline::\n"
+       << "  collectionStart       : "
+       << six::toString(d.collectionStart) << "\n";
+    if (!six::Init::isUndefined(d.rcvCollectionStart))
+    {
+        os << "  rcvCollectionStart    : "
+           << six::toString(d.rcvCollectionStart) << "\n";
+    }
+    os << "  txTime1               : " << d.txTime1 << "\n"
+       << "  txTime2               : " << d.txTime2 << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const FxBand& d)
+{
+    os << "FxBand::\n"
+       << "  fxMin                 : " << d.fxMin << "\n"
+       << "  fxMax                 : " << d.fxMax << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const TOASwath& d)
+{
+    os << "TOASwath::\n"
+       << "  toaMin                : " << d.toaMin << "\n"
+       << "  toaMax                : " << d.toaMax << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const TropoParameters& d)
+{
+    os << "TropoParameters::\n"
+       << "  n0                    : " << d.n0<< "\n"
+       << "  refHeight             : " << d.refHeight << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const IonoParameters& d)
+{
+    os << "IonoParameters::\n"
+       << "  tecv                  : " << d.tecv << "\n"
+       << "  f2Height              : " << d.f2Height << "\n";
     return os;
 }
 }

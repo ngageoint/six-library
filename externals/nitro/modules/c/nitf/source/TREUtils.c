@@ -336,18 +336,10 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
         fprintf(stdout, "Setting (and filling) Field [%s] to TRE [%s]\n",
                 tag, tre->tag);
 #endif
-
-        /* Now we need to fill our data */
-        if (!nitf_TREUtils_fillData(tre,
-                                    ((nitf_TREPrivateData*)tre->priv)->description,
-                                    error))
-            return NITF_FAILURE;
-
     }
     /* it doesn't exist in the hash yet, so we need to find it */
     else
     {
-
         cursor = nitf_TRECursor_begin(tre);
         while (!nitf_TRECursor_isDone(&cursor) && !done && status)
         {
@@ -401,11 +393,6 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
                     nitf_HashTable_insert(
                             ((nitf_TREPrivateData*)tre->priv)->hash,
                             cursor.tag_str, field, error);
-
-
-                    /* Now we need to fill our data */
-                    if (!nitf_TREUtils_fillData(tre, ((nitf_TREPrivateData*)tre->priv)->description, error))
-                        return NITF_FAILURE;
 
                     done = 1; /* set, so we break out of loop */
                 }
@@ -492,6 +479,72 @@ nitf_TREUtils_setDescription(nitf_TRE* tre,
     return NITF_SUCCESS;
 }
 
+NITFPRIV(NITF_BOOL) fillEmptyTREField(nitf_TRECursor* cursor, nitf_Pair* pair, nitf_Error* error)
+{
+    nitf_Field* field = NULL;
+    int fieldLength = cursor->length;
+
+    /* If it is a GOBBLE length, there isn't really a standard
+     * on how long it can be... therefore we'll just throw in
+     * a field of size 1, just to have something...
+     */
+    if (fieldLength == NITF_TRE_GOBBLE)
+    {
+        fieldLength = 1;
+    }
+
+    field = nitf_Field_construct(fieldLength,
+            cursor->desc_ptr->data_type,
+            error);
+
+    /* set the field to be resizable later on */
+    if (cursor->length == NITF_TRE_GOBBLE)
+    {
+        field->resizable = 1;
+    }
+
+    /* special case if BINARY... must set Raw Data */
+    if (cursor->desc_ptr->data_type == NITF_BINARY)
+    {
+        char* tempBuf = (char *) NITF_MALLOC(fieldLength);
+        if (!tempBuf)
+        {
+            nitf_Field_destruct(&field);
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                    NITF_CTXT, NITF_ERR_MEMORY);
+            return NITF_FAILURE;
+        }
+
+        memset(tempBuf, 0, fieldLength);
+        nitf_Field_setRawData(field, (NITF_DATA *) tempBuf,
+                fieldLength, error);
+    }
+    else if (cursor->desc_ptr->data_type == NITF_BCS_N)
+    {
+        /* this will get zero/blank filled by the function */
+        nitf_Field_setString(field, "0", error);
+    }
+    else
+    {
+        /* this will get zero/blank filled by the function */
+        nitf_Field_setString(field, " ", error);
+    }
+
+    /* add to hash if there wasn't an entry yet */
+    if (!pair)
+    {
+        nitf_HashTable_insert(
+                ((nitf_TREPrivateData*)cursor->tre->priv)->hash,
+                cursor->tag_str, field, error);
+    }
+    /* otherwise, just set the data pointer */
+    else
+    {
+        pair->data = (NITF_DATA *) field;
+    }
+    return NITF_SUCCESS;
+}
+
 NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
         const nitf_TREDescription* descrip,
         nitf_Error * error)
@@ -516,64 +569,9 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
 
             if (!pair || !pair->data)
             {
-                nitf_Field* field = NULL;
-                int fieldLength = cursor.length;
-
-                /* If it is a GOBBLE length, there isn't really a standard
-                 * on how long it can be... therefore we'll just throw in
-                 * a field of size 1, just to have something...
-                 */
-                if (fieldLength == NITF_TRE_GOBBLE)
+                if (!fillEmptyTREField(&cursor, pair, error))
                 {
-                    fieldLength = 1;
-                }
-
-                field = nitf_Field_construct(fieldLength,
-                        cursor.desc_ptr->data_type,
-                        error);
-
-                /* set the field to be resizable later on */
-                if (cursor.length == NITF_TRE_GOBBLE)
-                    field->resizable = 1;
-
-                /* special case if BINARY... must set Raw Data */
-                if (cursor.desc_ptr->data_type == NITF_BINARY)
-                {
-                    char* tempBuf = (char *) NITF_MALLOC(fieldLength);
-                    if (!tempBuf)
-                    {
-                        nitf_Field_destruct(&field);
-                        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                                NITF_CTXT, NITF_ERR_MEMORY);
-                        goto CATCH_ERROR;
-                    }
-
-                    memset(tempBuf, 0, fieldLength);
-                    nitf_Field_setRawData(field, (NITF_DATA *) tempBuf,
-                            fieldLength, error);
-                }
-                else if (cursor.desc_ptr->data_type == NITF_BCS_N)
-                {
-                    /* this will get zero/blank filled by the function */
-                    nitf_Field_setString(field, "0", error);
-                }
-                else
-                {
-                    /* this will get zero/blank filled by the function */
-                    nitf_Field_setString(field, " ", error);
-                }
-
-                /* add to hash if there wasn't an entry yet */
-                if (!pair)
-                {
-                    nitf_HashTable_insert(
-                            ((nitf_TREPrivateData*)tre->priv)->hash,
-                            cursor.tag_str, field, error);
-                }
-                /* otherwise, just set the data pointer */
-                else
-                {
-                    pair->data = (NITF_DATA *) field;
+                    goto CATCH_ERROR;
                 }
             }
         }
@@ -971,7 +969,7 @@ NITFPRIV(nitf_Pair*) basicIncrement(nitf_TREEnumerator* it, nitf_Error* error)
 {
     /* get the next value, and increment the cursor */
     nitf_TRECursor* cursor = it ? (nitf_TRECursor*)it->data : NULL;
-    nitf_Pair* data;
+    nitf_Pair* data = NULL;
 
     if (!cursor || !nitf_TRECursor_iterate(cursor, error))
     {
@@ -981,7 +979,12 @@ NITFPRIV(nitf_Pair*) basicIncrement(nitf_TREEnumerator* it, nitf_Error* error)
     }
 
     if (!nitf_TRE_exists(cursor->tre, cursor->tag_str))
-        goto CATCH_ERROR;
+    {
+        if (!fillEmptyTREField(cursor, data, error))
+        {
+            goto CATCH_ERROR;
+        }
+    }
 
     data = nitf_HashTable_find(((nitf_TREPrivateData*)cursor->tre->priv)->hash,
             cursor->tag_str);

@@ -95,7 +95,7 @@ nitf::HashTable::HashTable(nitf_HashTable * x)
     getNativeOrThrow();
 }
 
-nitf::HashTable::HashTable(int nbuckets) throw(nitf::NITFException)
+nitf::HashTable::HashTable(int nbuckets)
 {
     setNative(nitf_HashTable_construct(nbuckets, &error));
     getNativeOrThrow();
@@ -103,7 +103,7 @@ nitf::HashTable::HashTable(int nbuckets) throw(nitf::NITFException)
 }
 
 
-nitf::HashTable nitf::HashTable::clone(NITF_DATA_ITEM_CLONE cloner) throw(nitf::NITFException)
+nitf::HashTable nitf::HashTable::clone(NITF_DATA_ITEM_CLONE cloner)
 {
     nitf::HashTable dolly(nitf_HashTable_clone(getNativeOrThrow(),
         cloner, &error));
@@ -139,7 +139,6 @@ void nitf::HashTable::print()
 }
 
 void nitf::HashTable::forEach(HashIterator& fun, NITF_DATA* userData)
-    throw(nitf::NITFException)
 {
     int numBuckets = getNumBuckets();
     for (int i = 0; i < numBuckets; i++)
@@ -154,7 +153,7 @@ void nitf::HashTable::forEach(HashIterator& fun, NITF_DATA* userData)
     }
 }
 
-void nitf::HashTable::insert(const std::string& key, NITF_DATA* data) throw(nitf::NITFException)
+void nitf::HashTable::insert(const std::string& key, NITF_DATA* data)
 {
     if (key.length() == 0)
         throw except::NoSuchKeyException(Ctxt("Empty key value"));
@@ -163,7 +162,7 @@ void nitf::HashTable::insert(const std::string& key, NITF_DATA* data) throw(nitf
         throw nitf::NITFException(&error);
 }
 
-nitf::Pair nitf::HashTable::find(const std::string& key) throw(except::NoSuchKeyException)
+nitf::Pair nitf::HashTable::find(const std::string& key)
 {
     if (key.length() == 0)
         throw except::NoSuchKeyException(Ctxt("Empty key value"));
@@ -173,12 +172,12 @@ nitf::Pair nitf::HashTable::find(const std::string& key) throw(except::NoSuchKey
     return nitf::Pair(x);
 }
 
-nitf::Pair nitf::HashTable::operator[] (const std::string& key) throw(except::NoSuchKeyException)
+nitf::Pair nitf::HashTable::operator[] (const std::string& key)
 {
     return find(key);
 }
 
-nitf::List nitf::HashTable::getBucket(int i) throw(nitf::NITFException)
+nitf::List nitf::HashTable::getBucket(int i)
 {
     //return *mBuckets.at(i);
     if (!getNativeOrThrow()->buckets || !getNativeOrThrow()->buckets[i])

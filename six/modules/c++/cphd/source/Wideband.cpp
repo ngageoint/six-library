@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -29,8 +29,8 @@
 #include <except/Exception.h>
 #include <io/FileInputStream.h>
 #include <cphd/ByteSwap.h>
-#include <cphd/Utilities.h>
 #include <cphd/Wideband.h>
+#include <six/Init.h>
 
 namespace
 {
@@ -230,32 +230,33 @@ void scale(const void* input,
 
 namespace cphd
 {
+
 const size_t Wideband::ALL = std::numeric_limits<size_t>::max();
 
 Wideband::Wideband(const std::string& pathname,
-                   const cphd::Data& data,
+                   const cphd::MetadataBase& metadata,
                    sys::Off_T startWB,
                    sys::Off_T sizeWB) :
     mInStream(new io::FileInputStream(pathname)),
-    mData(data),
+    mMetadata(metadata),
     mWBOffset(startWB),
     mWBSize(sizeWB),
-    mElementSize(getNumBytesPerSample(mData.sampleType)),
-    mOffsets(mData.getNumChannels())
+    mElementSize(mMetadata.getNumBytesPerSample()),
+    mOffsets(mMetadata.getNumChannels())
 {
     initialize();
 }
 
-Wideband::Wideband(mem::SharedPtr<io::SeekableInputStream> inStream,
-                   const cphd::Data& data,
+Wideband::Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
+                   const cphd::MetadataBase& metadata,
                    sys::Off_T startWB,
                    sys::Off_T sizeWB) :
     mInStream(inStream),
-    mData(data),
+    mMetadata(metadata),
     mWBOffset(startWB),
     mWBSize(sizeWB),
-    mElementSize(getNumBytesPerSample(mData.sampleType)),
-    mOffsets(mData.getNumChannels())
+    mElementSize(mMetadata.getNumBytesPerSample()),
+    mOffsets(mMetadata.getNumChannels())
 {
     initialize();
 }
@@ -263,14 +264,26 @@ Wideband::Wideband(mem::SharedPtr<io::SeekableInputStream> inStream,
 void Wideband::initialize()
 {
     mOffsets[0] = mWBOffset;
-    for (size_t ii = 1; ii < mData.getNumChannels(); ++ii)
+    if (!mMetadata.isCompressed())
     {
-        const sys::Off_T offset =
-            static_cast<sys::Off_T>(mData.getNumSamples(ii - 1)) *
-            mData.getNumVectors(ii - 1) *
-            mElementSize;
+        // No Signal Array Compression
+        for (size_t ii = 1; ii < mMetadata.getNumChannels(); ++ii)
+        {
+            const sys::Off_T offset =
+                static_cast<sys::Off_T>(mMetadata.getNumSamples(ii - 1)) *
+                mMetadata.getNumVectors(ii - 1) *
+                mElementSize;
 
-        mOffsets[ii] = mOffsets[ii - 1] + offset;
+            mOffsets[ii] = mOffsets[ii - 1] + offset;
+        }
+    }
+    else
+    {
+        // Signal Array is Compressed
+        for (size_t ii = 1; ii < mMetadata.getNumChannels(); ++ii)
+        {
+            mOffsets[ii] = mOffsets[ii - 1] + mMetadata.getCompressedSignalSize(ii);
+        }
     }
 }
 
@@ -283,23 +296,34 @@ sys::Off_T Wideband::getFileOffset(size_t channel,
         throw(except::Exception(Ctxt("Invalid channel number")));
     }
 
-    if (vector >= mData.getNumVectors(channel))
+    if (vector >= mMetadata.getNumVectors(channel))
     {
         throw(except::Exception(Ctxt("Invalid vector")));
     }
 
-    if (sample >= mData.getNumSamples(channel))
+    if (sample >= mMetadata.getNumSamples(channel))
     {
         throw(except::Exception(Ctxt("Invalid sample")));
     }
 
     const sys::Off_T bytesPerVectorFile =
-            mData.getNumSamples(channel) * mElementSize;
+            mMetadata.getNumSamples(channel) * mElementSize;
 
     const sys::Off_T offset =
             mOffsets[channel] +
             bytesPerVectorFile * vector +
             sample * mElementSize;
+    return offset;
+}
+
+sys::Off_T Wideband::getFileOffset(size_t channel) const
+{
+    if (channel >= mOffsets.size())
+    {
+        throw(except::Exception(Ctxt("Invalid channel number")));
+    }
+
+    const sys::Off_T offset = mOffsets[channel];
     return offset;
 }
 
@@ -310,7 +334,9 @@ void Wideband::checkReadInputs(size_t channel,
                                size_t& lastSample,
                                types::RowCol<size_t>& dims) const
 {
-    const size_t maxVector = mData.getNumVectors(channel) - 1;
+    checkChannelInput(channel);
+
+    const size_t maxVector = mMetadata.getNumVectors(channel) - 1;
     if (firstVector > maxVector)
     {
         throw except::Exception(Ctxt("Invalid first vector"));
@@ -325,7 +351,7 @@ void Wideband::checkReadInputs(size_t channel,
         throw except::Exception(Ctxt("Invalid last vector"));
     }
 
-    const size_t maxSample = mData.getNumSamples(channel) - 1;
+    const size_t maxSample = mMetadata.getNumSamples(channel) - 1;
     if (firstSample > maxSample)
     {
         throw except::Exception(Ctxt("Invalid first sample"));
@@ -344,12 +370,20 @@ void Wideband::checkReadInputs(size_t channel,
     dims.col = lastSample - firstSample + 1;
 }
 
+void Wideband::checkChannelInput(size_t channel) const
+{
+    if (channel >= mMetadata.getNumChannels())
+    {
+        throw except::Exception(Ctxt("Invalid channel"));
+    }
+}
+
 void Wideband::readImpl(size_t channel,
                         size_t firstVector,
                         size_t lastVector,
                         size_t firstSample,
                         size_t lastSample,
-                        void* data)
+                        void* data) const
 {
     types::RowCol<size_t> dims;
     checkReadInputs(channel, firstVector, lastVector, firstSample, lastSample,
@@ -360,7 +394,7 @@ void Wideband::readImpl(size_t channel,
     sys::Off_T inOffset = getFileOffset(channel, firstVector, firstSample);
 
     sys::byte* dataPtr = static_cast<sys::byte*>(data);
-    if (dims.col == mData.getNumSamples(channel))
+    if (dims.col == mMetadata.getNumSamples(channel))
     {
         // Life is easy - can do a single seek and read
         mInStream->seek(inOffset, io::FileInputStream::START);
@@ -372,7 +406,7 @@ void Wideband::readImpl(size_t channel,
         // of the columns
         const size_t bytesPerVectorAOI = dims.col * mElementSize;
         const size_t bytesPerVectorFile =
-                    mData.getNumSamples(channel) * mElementSize;
+                    mMetadata.getNumSamples(channel) * mElementSize;
 
         for (size_t row = 0; row < dims.row; ++row)
         {
@@ -384,18 +418,30 @@ void Wideband::readImpl(size_t channel,
     }
 }
 
+void Wideband::readImpl(size_t channel,
+                        void* data) const
+{
+    // Compute the byte offset into this channel's wideband in the CPHD file
+    // First to the start of the first pulse we're going to read
+    sys::Off_T inOffset = getFileOffset(channel);
+
+    sys::byte* dataPtr = static_cast<sys::byte*>(data);
+    mInStream->seek(inOffset, io::FileInputStream::START);
+    mInStream->read(dataPtr, mMetadata.getCompressedSignalSize(channel));
+}
+
 void Wideband::read(size_t channel,
                     size_t firstVector,
                     size_t lastVector,
                     size_t firstSample,
                     size_t lastSample,
                     size_t numThreads,
-                    const mem::BufferView<sys::ubyte>& data)
+                    const mem::BufferView<sys::ubyte>& data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;
-    checkReadInputs(channel, firstVector, lastVector, firstSample, lastSample,
-                    dims);
+    checkReadInputs(channel, firstVector, lastVector,
+                    firstSample, lastSample, dims);
 
     const size_t numPixels(dims.row * dims.col);
     const size_t minSize = numPixels * mElementSize;
@@ -415,7 +461,33 @@ void Wideband::read(size_t channel,
     // Element size is half mElementSize because it's complex
     if (!sys::isBigEndianSystem() && mElementSize > 2)
     {
-        byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
+        cphd::byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
+    }
+}
+
+void Wideband::read(size_t channel,
+                    const mem::BufferView<sys::ubyte>& data) const
+{
+    // Sanity checks
+    checkChannelInput(channel);
+
+    const size_t minSize = mMetadata.getCompressedSignalSize(channel);
+    if (data.size < minSize)
+    {
+        std::ostringstream ostr;
+        ostr << "Need at least " << minSize << " bytes but only got "
+             << data.size;
+        throw except::Exception(Ctxt(ostr.str()));
+    }
+
+    // Perform the read
+    readImpl(channel, data.data);
+
+    if (!sys::isBigEndianSystem())
+    {
+        // Each thread only reads 1 or more element?
+        // So only 1 thread can be used at max
+        cphd::byteSwap(data.data, minSize, 1, 1);
     }
 }
 
@@ -425,7 +497,7 @@ void Wideband::read(size_t channel,
                     size_t firstSample,
                     size_t lastSample,
                     size_t numThreads,
-                    mem::ScopedArray<sys::ubyte>& data)
+                    mem::ScopedArray<sys::ubyte>& data) const
 {
     types::RowCol<size_t> dims;
     checkReadInputs(channel, firstVector, lastVector, firstSample, lastSample,
@@ -438,6 +510,15 @@ void Wideband::read(size_t channel,
          mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }
 
+void Wideband::read(size_t channel,
+                    mem::ScopedArray<sys::ubyte>& data) const
+{
+    const size_t bufSize = mMetadata.getCompressedSignalSize(channel);
+    data.reset(new sys::ubyte[bufSize]);
+
+    read(channel, mem::BufferView<sys::ubyte>(data.get(), bufSize));
+}
+
 bool Wideband::allOnes(const std::vector<double>& vectorScaleFactors)
 {
     for (size_t ii = 0; ii < vectorScaleFactors.size(); ++ii)
@@ -447,7 +528,6 @@ bool Wideband::allOnes(const std::vector<double>& vectorScaleFactors)
             return false;
         }
     }
-
     return true;
 }
 
@@ -459,7 +539,7 @@ void Wideband::read(size_t channel,
                     const std::vector<double>& vectorScaleFactors,
                     size_t numThreads,
                     const mem::BufferView<sys::ubyte>& scratch,
-                    const mem::BufferView<std::complex<float> >& data)
+                    const mem::BufferView<std::complex<float> >& data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;
@@ -504,9 +584,6 @@ void Wideband::read(size_t channel,
             throw except::Exception(Ctxt(ostr.str()));
         }
 
-        // TODO: If we wanted to get fancy here, we could do this in blocks so
-        //       that we wouldn't need as big of a scratch buffer
-
         // Perform the read into the scratch buffer
         readImpl(channel, firstVector, lastVector, firstSample, lastSample,
                  scratch.data);
@@ -515,7 +592,7 @@ void Wideband::read(size_t channel,
         if (!sys::isBigEndianSystem() && mElementSize > 2)
         {
             // Need to endian swap and then scale
-            byteSwapAndScale(scratch.data, mElementSize, dims,
+            cphd::byteSwapAndScale(scratch.data, mElementSize, dims,
                              &vectorScaleFactors[0], numThreads, data.data);
         }
         else
@@ -534,7 +611,7 @@ void Wideband::read(size_t channel,
 
         if (!sys::isBigEndianSystem() && mElementSize > 2)
         {
-            byteSwapAndPromote(scratch.data, mElementSize, dims, numThreads,
+            cphd::byteSwapAndPromote(scratch.data, mElementSize, dims, numThreads,
                     data.data);
         }
         else
@@ -552,7 +629,7 @@ void Wideband::read(size_t channel,
         // Element size is half mElementSize because it's complex
         if (!sys::isBigEndianSystem() && mElementSize > 2)
         {
-            byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
+            cphd::byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
         }
     }
 }
@@ -560,7 +637,6 @@ void Wideband::read(size_t channel,
 std::ostream& operator<< (std::ostream& os, const Wideband& d)
 {
     os << "Wideband::\n"
-       << "  mData: " << d.mData << "\n"
        << "  mWBOffset: " << d.mWBOffset << "\n"
        << "  mWBSize: " << d.mWBSize << "\n"
        << "  mElementSize: " << d.mElementSize << "\n";
@@ -576,7 +652,6 @@ std::ostream& operator<< (std::ostream& os, const Wideband& d)
             os << "[" << ii << "] mOffsets: " << d.mOffsets[ii] << "\n";
         }
     }
-
     return os;
 }
 }

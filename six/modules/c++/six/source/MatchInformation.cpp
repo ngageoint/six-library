@@ -2,9 +2,9 @@
  * This file is part of six-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
  *
- * six.sicd-c++ is free software; you can redistribute it and/or modify
+ * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -52,5 +52,37 @@ bool MatchType::operator==(const MatchType& rhs) const
 MatchInformation::MatchInformation() :
     types(1) //! One is mandatory
 {
+}
+
+std::ostream& operator<< (std::ostream& os, const MatchInformation& m)
+{
+    os << "MatchInformation:: \n"
+        << "  Types:: \n";
+    for (size_t ii = 0; ii < m.types.size(); ++ii)
+    {
+        os << "  TypeID           : " << m.types[ii].typeID << "\n";
+        if (!six::Init::isUndefined(m.types[ii].currentIndex))
+        {
+            os << "  CurrentIndex     : " << m.types[ii].currentIndex << "\n";
+        }
+        os << " NumMatchCollections : " << m.types[ii].matchCollects.size() << "\n";
+
+        for (size_t jj = 0; jj < m.types[ii].matchCollects.size(); ++jj)
+        {
+            os << "  MatchCollect     : \n"
+                << "    CoreName       : " << m.types[ii].matchCollects[jj].coreName << "\n";
+            if (!six::Init::isUndefined(m.types[ii].matchCollects[jj].matchIndex))
+            {
+                os << "    MatchIndex     : " << m.types[ii].matchCollects[jj].matchIndex << "\n";
+            }
+            for (size_t kk = 0; kk < m.types[ii].matchCollects[jj].parameters.size(); ++kk)
+            {
+                os << "    Parameter      : "
+                    << m.types[ii].matchCollects[jj].parameters[kk].getName()
+                    << ": " << m.types[ii].matchCollects[jj].parameters[kk].str() << "\n";
+            }
+        }
+    }
+    return os;
 }
 }

@@ -200,7 +200,7 @@ NRTPRIV(NRT_BOOL) BufferAdapter_read(NRT_DATA * data, void *buf, size_t size,
 
     if (size > 0)
     {
-        memcpy(buf, (char *) (control->buf + control->mark), size);
+        memcpy(buf, control->buf + control->mark, size);
         control->mark += size;
     }
     return NRT_SUCCESS;
@@ -220,7 +220,7 @@ NRTPRIV(NRT_BOOL) BufferAdapter_write(NRT_DATA * data, const void *buf,
 
     if (size > 0)
     {
-        memcpy((char *) (control->buf + control->mark), buf, size);
+        memcpy(control->buf + control->mark, buf, size);
         control->mark += size;
         if (control->mark > control->bytesWritten)
         {
@@ -246,22 +246,10 @@ NRTPRIV(nrt_Off) BufferAdapter_seek(NRT_DATA * data, nrt_Off offset, int whence,
 
     if (whence == NRT_SEEK_SET)
     {
-        if (offset >= (nrt_Off) control->size)
-        {
-            nrt_Error_init(error, "Invalid offset requested - EOF", NRT_CTXT,
-                           NRT_ERR_MEMORY);
-            return -1;
-        }
         control->mark = (size_t) offset;
     }
     else if (whence == NRT_SEEK_CUR)
     {
-        if (offset >= (nrt_Off)control->size - (nrt_Off)control->mark)
-        {
-            nrt_Error_init(error, "Invalid offset requested - EOF", NRT_CTXT,
-                           NRT_ERR_MEMORY);
-            return -1;
-        }
         control->mark += (size_t) offset;
     }
     else
@@ -290,7 +278,7 @@ NRTPRIV(nrt_Off) BufferAdapter_getSize(NRT_DATA * data, nrt_Error * error)
     /* Silence compiler warnings about unused variables */
     (void)error;
 
-    return (nrt_Off) control->bytesWritten;
+    return (nrt_Off) control->size;
 }
 
 NRTPRIV(int) BufferAdapter_getMode(NRT_DATA * data, nrt_Error * error)
