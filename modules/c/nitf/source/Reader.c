@@ -518,8 +518,8 @@ NITFPRIV(NITF_BOOL) readImageSubheader(nitf_Reader * reader,
     nitf_Uint32 numComments;    /* Number of comment fields */
     nitf_Uint32 nbands;         /* An integer representing the \nbands field */
     nitf_Uint32 xbands;         /* An integer representing the xbands field */
-    nitf_Uint32 imageSubheaderStart;  /* Start position of image subheader */
-    nitf_Off imageSubheaderEnd;       /* End position of image subheader */
+    nitf_Off subheaderStart;  /* Start position of image subheader */
+    nitf_Off subheaderEnd;    /* End position of image subheader */
     nitf_Off expectedSubheaderLength = 0; /* What the file header says the
                                          subheader length ought to be. */
 
@@ -531,7 +531,7 @@ NITFPRIV(NITF_BOOL) readImageSubheader(nitf_Reader * reader,
         ((nitf_ImageSegment *) nitf_ListIterator_get(&listIter))->
         subheader;
 
-    imageSubheaderStart = nitf_IOInterface_tell(reader->input, error);
+    subheaderStart = nitf_IOInterface_tell(reader->input, error);
 
     /* If this isn't IM, is there something we can do? */
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_IM);
@@ -626,10 +626,10 @@ NITFPRIV(NITF_BOOL) readImageSubheader(nitf_Reader * reader,
     /* Read the extended header info section */
     TRY_READ_IXSHD(reader, imageIndex, subhdr);
 
-    imageSubheaderEnd = nitf_IOInterface_tell(reader->input, error);
+    subheaderEnd = nitf_IOInterface_tell(reader->input, error);
     NITF_TRY_GET_UINT32(hdr->NITF_LISH(imageIndex), &expectedSubheaderLength, error);
 
-    if (imageSubheaderEnd - imageSubheaderStart != expectedSubheaderLength)
+    if (subheaderEnd - subheaderStart != expectedSubheaderLength)
     {
         nitf_Error_initf(error,
                          NITF_CTXT,
@@ -638,7 +638,7 @@ NITFPRIV(NITF_BOOL) readImageSubheader(nitf_Reader * reader,
                          "but read %u bytes",
                          imageIndex,
                          expectedSubheaderLength,
-                         imageSubheaderEnd - imageSubheaderStart);
+                         subheaderEnd - subheaderStart);
         goto CATCH_ERROR;
     }
 
@@ -801,9 +801,9 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     nitf_Uint32 subLen;
     nitf_Off currentOffset;
     /* Position where this DE Subheader begins */
-    nitf_Off startOffset;
+    nitf_Off subheaderStart;
     /* End position of DE Subheader */
-    nitf_Off endOffset;
+    nitf_Off subheaderEnd;
     /* What the header says the length ought to be */
     nitf_Uint32 expectedSubheaderLength = 0;
     char desID[NITF_DESTAG_SZ + 1];     /* DES ID string */
@@ -818,7 +818,7 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     segment = (nitf_DESegment *) nitf_ListIterator_get(&listIter);
     subhdr = segment->subheader;
     hdr = reader->record->header;
-    startOffset = nitf_IOInterface_tell(reader->input, error);
+    subheaderStart = nitf_IOInterface_tell(reader->input, error);
 
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_DE);
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_DESTAG);
@@ -901,9 +901,9 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     }
 
     NITF_TRY_GET_UINT32(hdr->NITF_LDSH(desIndex), &expectedSubheaderLength, error);
-    endOffset = nitf_IOInterface_tell(reader->input, error);
+    subheaderEnd = nitf_IOInterface_tell(reader->input, error);
 
-    if (endOffset - startOffset != expectedSubheaderLength)
+    if (subheaderEnd - subheaderStart != expectedSubheaderLength)
     {
         nitf_Error_initf(error,
                          NITF_CTXT,
@@ -912,7 +912,7 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
                          "but read %u bytes",
                          desIndex,
                          expectedSubheaderLength,
-                         endOffset - startOffset);
+                         subheaderEnd - subheaderStart);
         goto CATCH_ERROR;
 
     }
