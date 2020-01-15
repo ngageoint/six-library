@@ -34,7 +34,7 @@ namespace sidd
  *  \brief The implementation of Classification for derived products
  *
  *  SIDD 1.0 uses IC ISM v4
- *  SIDD 1.1 uses IC ISM v13
+ *  SIDD 2.0 uses IC ISM v13
  *
  *  Compiler-generated copy constructor and assignment operator are sufficient
  */
@@ -69,7 +69,7 @@ public:
     //! An indicator of what ISM rule sets the documents complies with. This
     //  allows systems to know that the document claims compliance with these
     //  rule sets and they should be enforced.
-    //  This is optional in SIDD 1.0 but required in SIDD 1.1
+    //  This is optional in SIDD 1.0 but required in SIDD 2.0
     std::vector<std::string>         compliesWith;
 
     // 'classification' and 'ownerProducer' are required
@@ -176,7 +176,7 @@ public:
     //  This only exists in SIDD 1.0
     mem::ScopedCopyablePtr<DateTime> exemptedSourceDate;
 
-    // The following are new in SIDD 1.1 (IC ISM v13)
+    // The following are new in SIDD 2.0 (IC ISM v13)
 
     //! This attribute is used to declare specific exemptions within a rule
     //  set - for example exemption from ICD 710 FD&R requirements. This

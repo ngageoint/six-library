@@ -67,12 +67,12 @@ def runSICDTests():
 def runSIDDTests():
     testDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')
     inputFiles = os.listdir(os.path.join(
-        utils.findSixHome(), 'regression_files', 'six.sidd', '1.1.0'))
+        utils.findSixHome(), 'regression_files', 'six.sidd', '2.0.0'))
     passed = True
     for pathname in inputFiles:
         passed = passed and runTests(testDir, 'test_read_and_write_lut',
                 os.path.join(utils.findSixHome(), 'regression_files',
-                'six.sidd', '1.1.0', pathname))
+                'six.sidd', '2.0.0', pathname))
     return passed
 
 

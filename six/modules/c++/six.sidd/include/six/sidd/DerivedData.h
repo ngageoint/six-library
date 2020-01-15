@@ -118,7 +118,7 @@ struct DerivedData: public Data
     Annotations annotations;
 
     /*
-     * (Optional) In SIDD 1.1, the LUT stored in the NITF
+     * (Optional) In SIDD 2.0, the LUT stored in the NITF
      * In 1.0, each Display element has a single LUT which corresponds
      * to the LUT in the NITF, making this redundant.
      */
@@ -201,14 +201,14 @@ struct DerivedData: public Data
     /*!
      *  Maps to:
      *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint in 1.0 and
-     *  /SIDD/GeographicAndTarget/ImageCorners in 1.1
+     *  /SIDD/GeographicAndTarget/ImageCorners in 2.0
      */
     virtual LatLonCorners getImageCorners() const;
 
     /*!
      *  Maps to:
      *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint in 1.0 and
-     *  /SIDD/GeographicAndTarget/ImageCorners in 1.1
+     *  /SIDD/GeographicAndTarget/ImageCorners in 2.0
      */
     virtual void setImageCorners(const LatLonCorners& imageCorners);
 
@@ -330,4 +330,3 @@ private:
 }
 }
 #endif
-

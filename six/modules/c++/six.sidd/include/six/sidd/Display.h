@@ -206,7 +206,7 @@ struct BandEqualization
 {
     BandEqualizationAlgorithm algorithm;
     std::vector<mem::ScopedCopyablePtr<LookupTable> > bandLUTs;
-    
+
     bool operator==(const BandEqualization& rhs) const;
     bool operator!=(const BandEqualization& rhs) const
     {
@@ -381,7 +381,7 @@ struct DynamicRangeAdjustment
     size_t bandStatsSource; //! Indicates which band to use for DRA stats
 
     // In SIDD 1.0, must include exactly one of draParameters or draOverrides
-    // In SIDD 1.1, include draParameters if algorithmType == AUTO,
+    // In SIDD 2.0, include draParameters if algorithmType == AUTO,
     //              may include draOverrides unless algorithmType == None
     mem::ScopedCopyablePtr<DRAParameters> draParameters;
     mem::ScopedCopyablePtr<DRAOverrides> draOverrides;
@@ -457,7 +457,7 @@ struct Display
             monitorCompensationApplied;
 
     // End of SIDD 1.0-only section
-    // Beginning of SIDD 1.1-only section
+    // Beginning of SIDD 2.0-only section
 
     //Required
     size_t numBands;
@@ -470,7 +470,7 @@ struct Display
     std::vector<mem::ScopedCopyablePtr<InteractiveProcessing> >
             interactiveProcessing;
 
-    // End of SIDD 1.1-only section
+    // End of SIDD 2.0-only section
 
     /*!
      * Extensible parameters used to support profile-specific needs related to

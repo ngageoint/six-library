@@ -35,7 +35,7 @@ public:
     /*!
      *  Establishes the scene, computing the slant plane, ground plane
      *  normal, ground track and ground range vector.
-     *  
+     *
      *  No computations involving the image geometry can be performed prior
      *  to calling setImageVectors().
      *
@@ -197,7 +197,7 @@ public:
     /*
      * Returns the doppler cone angle in [0, 180) degrees
      *
-     * This implements Section 4.9 of SICD / Section 7.5.3 of SIDD 1.1
+     * This implements Section 4.9 of SICD / Section 7.5.3 of SIDD 2.0
      * and can be assigned directly to sicdData.scpCoa->dopplerConeAngle or
      * siddData.exploitationFeatures->collections[idx]->geometry->dopplerConeAngle
      */
@@ -364,13 +364,13 @@ protected:
 
     //! Ground track vector (nadir)
     Vector3 mVg;
-    
+
     //! Range vector in ground nadir
     Vector3 mRg;
 
     //! ARP Position vector
     const Vector3 mPa;
-    
+
     //! ORP Position vector
     const Vector3 mPo;
 

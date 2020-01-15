@@ -429,9 +429,9 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
             }
         }
 
-        // SIDD 1.1 needs to read LUT directly from NITF
+        // SIDD 2.0 needs to read LUT directly from NITF
         if (currentInfo->getData()->getDataType() == DataType::DERIVED &&
-            currentInfo->getData()->getVersion() == "1.1.0")
+            currentInfo->getData()->getVersion() == "2.0.0")
         {
             nitf::LookupTable nitfLut =
                     subheader.getBandInfo(0).getLookupTable();

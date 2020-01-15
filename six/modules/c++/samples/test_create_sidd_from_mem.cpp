@@ -2148,7 +2148,7 @@ void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures,
     exFeatures.product[0].north = 58.332;
     exFeatures.product[0].extensions.push_back(param);
 
-    if (version == "1.1.0")
+    if (version == "2.0.0")
     {
         exFeatures.product[0].ellipticity = 12.0;
         exFeatures.product[0].polarization.resize(1);
@@ -2299,10 +2299,10 @@ void populateData(six::sidd::DerivedData& siddData, const std::string&
     siddData.setVersion(version);
     size_t elementSize = lutType == "Mono" ? 2 : 3;
 
-    if (version == "1.1.0")
+    if (version == "2.0.0")
     {
         // This will naturally get constructed in the course of 1.0.0
-        // Separate field in 1.1.0
+        // Separate field in 2.0.0
         siddData.getDisplayLUT().reset(new six::LUT(256, elementSize));
 
         for (size_t ii = 0; ii < siddData.getDisplayLUT()->table.size(); ++ii)
@@ -2414,9 +2414,9 @@ int main(int argc, char** argv)
             "multipleImages", "", 0, 1);
     argParser.addArgument("--smallImage", "Use 2x2 image with dummy data",
             cli::STORE_TRUE, "smallImage", "", 0, 1);
-    argParser.addArgument("--version", "1.1.0 or 1.0.0", cli::STORE, "version",
-            "version", 0, 1)->setChoices(str::split("1.0.0 1.1.0"))->
-            setDefault("1.1.0");
+    argParser.addArgument("--version", "2.0.0 or 1.0.0", cli::STORE, "version",
+            "version", 0, 1)->setChoices(str::split("1.0.0 2.0.0"))->
+            setDefault("2.0.0");
     argParser.addArgument("output", "File to write to", cli::STORE, "output",
             "output-file", 1, 1, true);
     argParser.addArgument("xml", "Optional SICD .xml file", cli::STORE,
@@ -2569,4 +2569,3 @@ int main(int argc, char** argv)
 
     return 0;
 }
-

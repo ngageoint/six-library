@@ -549,7 +549,14 @@ void NITFHeaderCreator::addUserDefinedSubheader(
         }
         else if (version == "1.1.0")
         {
-            specVers = "1.1";
+            throw except::Exception(Ctxt(
+                "SIDD Version 1.1.0 does not exist. "
+                "Did you mean 2.0.0?"
+            ));
+        }
+        else if (version == "2.0.0")
+        {
+            specVers = "2.0";
             specDT = "2016-07-15T00:00:00Z";
         }
     }
@@ -916,7 +923,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
 
     for (auto desSource : container->getDESSources())
     {
-        std::shared_ptr<nitf::SegmentWriter> desWriter(
+        mem::SharedPtr<nitf::SegmentWriter> desWriter(
                 new nitf::SegmentWriter(desSource));
         mSegmentWriters.push_back(desWriter);
     }

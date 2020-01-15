@@ -71,7 +71,7 @@ def run():
         '--multipleSegments' : 'siddMultipleSegments.nitf'
         }
 
-    for version in ['1.0.0', '1.1.0']:
+    for version in ['1.0.0', '2.0.0']:
         outdir = os.path.join(outBase, version)
         for arg in argToOutput.keys():
             print('Creating file {}'.format(argToOutput[arg]))
@@ -85,4 +85,3 @@ def run():
                         version, argToOutput[arg]])
 
         moveToOutputDir(argToOutput.values(), outdir)
-

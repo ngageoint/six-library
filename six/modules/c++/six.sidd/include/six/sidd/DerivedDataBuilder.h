@@ -68,7 +68,7 @@ public:
     virtual DerivedDataBuilder& addDisplay(PixelType pixelType);
 
     /*!
-     *  Add geographic and target information.  Use this for SIDD 1.1.
+     *  Add geographic and target information.  Use this for SIDD 2.0.
      */
     virtual DerivedDataBuilder& addGeographicAndTarget();
 

@@ -93,11 +93,11 @@ struct MatchType
     std::vector<std::string> matchType;
 
     //! Text string identifying the match type. Examples: COHERENT, STEREO
-    //  added in SICD 1.0.0, present in SIDD 1.1.0
+    //  added in SICD 1.0.0, present in SIDD 2.0.0
     std::string typeID;
 
     //! Optional - Collection sequence index for the current collection.
-    //  added in SICD 1.0.0, present in SIDD 1.1.0
+    //  added in SICD 1.0.0, present in SIDD 2.0.0
     int currentIndex;
 
     //! Block containing information about match collection. Block repeated
@@ -113,7 +113,7 @@ struct MatchType
 
 /*!
  *  \struct MatchInformation
- *  \brief SICD and SIDD (starting in 1.1) MatchInfo
+ *  \brief SICD and SIDD (starting in 2.0) MatchInfo
  *
  *  Parameters describing other imaging collections that are matched
  *  or related to this collection.  This parameter block is optional

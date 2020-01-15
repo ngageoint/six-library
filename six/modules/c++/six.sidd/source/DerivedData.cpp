@@ -44,7 +44,7 @@ LatLonCorners DerivedData::getImageCorners() const
 {
     if (geographicAndTarget.get())
     {
-        // SIDD 1.1
+        // SIDD 2.0
         if (geographicAndTarget->imageCorners.get())
         {
             return *geographicAndTarget->imageCorners;
@@ -101,13 +101,13 @@ mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT()
         }
         return display->remapInformation->remapLUT;
     }
-    else if (mVersion == "1.1.0")
+    else if (mVersion == "2.0.0")
     {
         return nitfLUT;
     }
     else
     {
-        throw except::Exception(Ctxt("Unknown version. Expected 1.1.0 or 1.0.0"));
+        throw except::Exception(Ctxt("Unknown version. Expected 2.0.0 or 1.0.0"));
     }
 }
 

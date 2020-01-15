@@ -151,12 +151,12 @@ public:
  *  Contains generic and extensible targeting and geographic region
  *  information
  *
- *  NOTE: This block looks completely different between SIDD 1.0 and SIDD 1.1
- *        (SIDD 1.1 was changed to more closely resemble SICD).  If a block is
+ *  NOTE: This block looks completely different between SIDD 1.0 and SIDD 2.0
+ *        (SIDD 2.0 was changed to more closely resemble SICD).  If a block is
  *        marked as required below, it is required only for the particular
  *        version of SIDD that it's associated with (everything in this class
  *        is a pointer or vector even when required since we don't know if
- *        we're dealing with 1.0 or 1.1)
+ *        we're dealing with 1.0 or 2.0)
  *
  */
 class GeographicAndTarget
@@ -178,7 +178,7 @@ public:
     std::vector<mem::ScopedCopyablePtr<TargetInformation> > targetInformation;
 
 
-    // This section is used for SIDD 1.1
+    // This section is used for SIDD 2.0
     EarthModelType earthModel;
     /*!
      *  Parameters apply to image corners of the
@@ -186,7 +186,7 @@ public:
      *  These corners are an approximate geographic location
      *  not intended for analytical use
      *
-     *  Required for SIDD 1.1
+     *  Required for SIDD 2.0
      */
     mem::ScopedCopyablePtr<LatLonCorners> imageCorners;
 
@@ -195,7 +195,7 @@ public:
      *  valid data and some zero-filled pixels.  Vector size
      *  is the number of vertices.
      *
-     *  Required for SIDD 1.1
+     *  Required for SIDD 2.0
      */
     std::vector<LatLon> validData;
 
@@ -216,4 +216,3 @@ public:
 }
 
 #endif
-
