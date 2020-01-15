@@ -112,7 +112,7 @@ public:
             DecorrType dt, XMLElem p) const;
 
     // TODO: Can make this virtual if we ever need it
-    //       This is the implementation for SICD 1.x / SIDD 1.1+
+    //       This is the implementation for SICD 1.x / SIDD 2.0+
     XMLElem convertGeoInfoToXML(const GeoInfo& geoInfo,
             bool hasSIPrefix, XMLElem parent = NULL) const;
     void parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo) const;
@@ -217,4 +217,3 @@ private:
 
 
 #endif
-

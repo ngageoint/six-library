@@ -217,4 +217,3 @@ std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
     return str;
 }
 }
-

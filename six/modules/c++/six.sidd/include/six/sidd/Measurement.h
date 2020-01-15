@@ -147,7 +147,7 @@ private:
 };
 
 /*!
- *  Provides some more utility (TimeCOAPOly) than projection but 
+ *  Provides some more utility (TimeCOAPOly) than projection but
  *  still pure.
  */
 struct MeasurableProjection : public Projection
@@ -172,7 +172,7 @@ private:
  *  \struct GeographicProjection
  *  \brief SIDD GeographicProjection (GGD)
  *
- *  Geographic mapping of the pixel grid referred 
+ *  Geographic mapping of the pixel grid referred
  *  to as GGD in the Design and Exploitation document.
  *
  */
@@ -201,7 +201,7 @@ private:
  *  \struct CylindricalProection
  *  \brief SIDD CylindricalProjection
  *
- *  Cylindrical mapping of the pixel grid 
+ *  Cylindrical mapping of the pixel grid
  *  referred to as CGD in the Design and Exploitation document.
  *
  */
@@ -229,9 +229,9 @@ struct CylindricalProjection : public MeasurableProjection
     Vector3 stripmapDirection;
 
     /*!
-     *  Radius of Curvature defined at scene center.  
-     *  If not present, the radius of curvature will be derived 
-     *  based upon the equations provided in the Design and 
+     *  Radius of Curvature defined at scene center.
+     *  If not present, the radius of curvature will be derived
+     *  based upon the equations provided in the Design and
      *  Exploitation Document
      */
     double curvatureRadius;
@@ -257,7 +257,7 @@ struct PlaneProjection : public MeasurableProjection
     {
         this->projectionType = ProjectionType::PLANE;
     }
-    
+
     virtual ~PlaneProjection() {}
 
     //!  Clone operation
@@ -293,7 +293,7 @@ struct Measurement
     /*!
      * Flag indicating whether ARP polynomial is based on the best available
      * ("collect time") or "predicted" ephemeris
-     * New (and optional) in SIDD 1.1
+     * New (and optional) in SIDD 2.0
      */
     ARPFlag arpFlag;
 
@@ -302,7 +302,7 @@ struct Measurement
 
     /*! Indicates the full image includes both valid data and some zero-filled
      *  pixels.
-     *  New (and required) in SIDD 1.1
+     *  New (and required) in SIDD 2.0
      */
     std::vector<RowColInt> validData;
 
@@ -329,4 +329,3 @@ struct Measurement
 }
 }
 #endif
-

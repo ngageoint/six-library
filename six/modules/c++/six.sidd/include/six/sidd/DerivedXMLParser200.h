@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SIX_SIDD_DERIVED_Elem_PARSER_110_H__
-#define __SIX_SIDD_DERIVED_Elem_PARSER_110_H__
+#ifndef __SIX_SIDD_DERIVED_Elem_PARSER_200_H__
+#define __SIX_SIDD_DERIVED_Elem_PARSER_200_H__
 
 #include <six/sidd/DerivedXMLParser.h>
 
@@ -29,10 +29,10 @@ namespace six
 {
 namespace sidd
 {
-class DerivedXMLParser110 : public DerivedXMLParser
+class DerivedXMLParser200 : public DerivedXMLParser
 {
 public:
-    DerivedXMLParser110(logging::Logger* log = NULL,
+    DerivedXMLParser200(logging::Logger* log = NULL,
                         bool ownLog = false);
 
     virtual xml::lite::Document* toXML(const DerivedData* data) const;
@@ -136,22 +136,22 @@ private:
 
     void parseDigitalElevationDataFromXML(const XMLElem elem,
                                           DigitalElevationData& ded) const;
-    
+
     void parseNonInteractiveProcessingFromXML(const XMLElem procElem,
          NonInteractiveProcessing& nonInteractiveProcessing) const;
 
     void parseProductGenerationOptionsFromXML(const XMLElem optionsElem,
-         ProductGenerationOptions& options) const; 
+         ProductGenerationOptions& options) const;
 
     void parseBandEqualizationFromXML(const XMLElem bandElem,
          BandEqualization& band) const;
-    
+
     void parseRRDSFromXML(const XMLElem rrdsElem, RRDS& rrds) const;
 
     void parsePredefinedFilterFromXML(const XMLElem predefinedElem,
          Filter::Predefined& predefined) const;
 
-    void parseKernelFromXML(const XMLElem kernelElem, 
+    void parseKernelFromXML(const XMLElem kernelElem,
          Filter::Kernel& kernel) const;
 
     void parseBankFromXML(const XMLElem bankElem, Filter::Bank& bank) const;
@@ -163,7 +163,7 @@ private:
 
     void parseGeometricTransformFromXML(const XMLElem geomElem,
          GeometricTransform& transform) const;
-         
+
     void parseSharpnessEnhancementFromXML(const XMLElem sharpElem,
          SharpnessEnhancement& sharpness) const;
 
