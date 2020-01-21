@@ -99,10 +99,6 @@ TEST_CASE(ecfFromLlh)
                                       -1);
 
     geoData.fillDerivedFields(imageData, model);
-    std::vector<double> expectedData(3);
-    expectedData[0] = 5903057.30519;
-    expectedData[1] = 2148537.15026;
-    expectedData[2] = 1100253.75718;
     const six::Vector3 expected({5903057.30519,
                                  2148537.15026,
                                  1100253.75718});
@@ -122,4 +118,3 @@ int main(int, char**)
     TEST_CHECK(fillValidData);
     return 0;
 }
-
