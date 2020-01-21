@@ -10,12 +10,32 @@
 
 namespace
 {
+std::string findSixHome(const sys::Path& exePath)
+{
+    sys::Path sixHome = exePath.join("..");
+    do
+    {
+        if (sixHome.join("croppedNitfs").isDirectory())
+        {
+            return sixHome;
+        }
+        sixHome = sixHome.join("..");
+    } while (sixHome.getAbsolutePath() != sixHome.join("..").getAbsolutePath());
+    return "";
+}
+
 std::auto_ptr<scene::ProjectionPolynomialFitter>
 loadPolynomialFitter(const sys::Path& exePath)
 {
-    const sys::Path sixHome = exePath.
-        join("..").join("..").join("..").join("..");
-    const sys::Path sicdPathname = sixHome.
+    const std::string sixHome = findSixHome(exePath);
+    if (sixHome.empty())
+    {
+        std::ostringstream oss;
+        oss << "Environment error: Cannot determine source tree root";
+        throw except::Exception(Ctxt(oss.str()));
+    }
+
+    const sys::Path sicdPathname = sys::Path(sixHome).
         join("croppedNitfs").
         join("SICD").
         join("cropped_sicd_110.nitf").getAbsolutePath();
