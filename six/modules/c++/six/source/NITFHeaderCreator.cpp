@@ -911,7 +911,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
 
     for (auto desSource : container->getDESSources())
     {
-        std::shared_ptr<nitf::SegmentWriter> desWriter(
+        mem::SharedPtr<nitf::SegmentWriter> desWriter(
                 new nitf::SegmentWriter(desSource));
         mSegmentWriters.push_back(desWriter);
     }
