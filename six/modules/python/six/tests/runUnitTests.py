@@ -36,9 +36,10 @@ def run():
         for test in os.listdir(os.path.join(unitTestDir, childDir)):
             print(os.path.join(unitTestDir, childDir, test))
             testPathname = os.path.join(unitTestDir, childDir, test)
-            command = [utils.executableName(testPathname)]
             if test.endswith('.py'):
-                command = ['python'] + command
+                command = ['python', testPathname]
+            else:
+                command = [utils.executableName(testPathname)]
             if call(command) != 0:
                 success = False
 
