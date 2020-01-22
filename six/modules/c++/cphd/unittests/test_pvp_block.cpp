@@ -296,7 +296,9 @@ TEST_CASE(testLoadPVPBlockFromMemory)
 {
     // For ease of testing, we make the somewhat specious assumption
     // that an item of PVP data is equivalent to a double.
-    static_assert(sizeof(double) == cphd::PVPType::WORD_BYTE_SIZE);
+    static_assert(sizeof(double) == cphd::PVPType::WORD_BYTE_SIZE,
+                  "This test is not valid for compilers with "
+                  "sizeof(double) != 8");
 
     cphd::Pvp pvp;
     cphd::setPVPXML(pvp);
