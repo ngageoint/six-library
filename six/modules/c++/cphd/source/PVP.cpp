@@ -28,7 +28,6 @@
 
 namespace cphd
 {
-
 PVPType::PVPType() :
     mSize(0),
     mOffset(six::Init::undefined<size_t>()),
