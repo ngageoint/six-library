@@ -291,6 +291,49 @@ TEST_CASE(testPvpEquality)
     }
     TEST_ASSERT_EQ(pvpBlock1, pvpBlock2);
 }
+
+TEST_CASE(testLoadPVPBlockFromMemory)
+{
+    // For ease of testing, we make the somewhat specious assumption
+    // that an item of PVP data is equivalent to a double.
+    static_assert(sizeof(double) == cphd::PVPType::WORD_BYTE_SIZE,
+                  "This test is not valid for compilers with "
+                  "sizeof(double) != 8");
+
+    cphd::Pvp pvp;
+    cphd::setPVPXML(pvp);
+    std::vector<std::vector<double>> dataSource(NUM_CHANNELS);
+    std::vector<const void*> pvpData(NUM_CHANNELS);
+    const size_t elementsPerChannel = pvp.getReqSetSize() * NUM_VECTORS;
+    for (size_t channel = 0; channel < NUM_CHANNELS; channel++)
+    {
+        dataSource[channel].reserve(elementsPerChannel);
+        for (size_t ii = 0; ii < elementsPerChannel; ++ii)
+        {
+            dataSource[channel].push_back(channel + ii * NUM_CHANNELS);
+        }
+        pvpData[channel] = dataSource[channel].data();
+    }
+
+    cphd::PVPBlock pvpBlock(NUM_CHANNELS,
+                            std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
+                            pvp,
+                            pvpData);
+
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(0, 0), 0);
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(1, 0), 1);
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(2, 0), 2);
+
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(0, 1), pvp.getReqSetSize() * NUM_CHANNELS);
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(1, 1),
+                   1 + pvp.getReqSetSize() * NUM_CHANNELS);
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(2, 1),
+                   2 + pvp.getReqSetSize() * NUM_CHANNELS);
+
+    TEST_ASSERT_EQ(pvpBlock.getTxPos(0, 0)[0], 3);
+    TEST_ASSERT_EQ(pvpBlock.getTxPos(0, 0)[1], 6);
+    TEST_ASSERT_EQ(pvpBlock.getTxPos(0, 0)[2], 9);
+}
 }
 
 int main(int , char** )
@@ -300,6 +343,6 @@ int main(int , char** )
     TEST_CHECK(testPvpOptional);
     TEST_CHECK(testPvpThrow);
     TEST_CHECK(testPvpEquality);
+    TEST_CHECK(testLoadPVPBlockFromMemory);
     return 0;
 }
-

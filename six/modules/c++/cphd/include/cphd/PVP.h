@@ -46,7 +46,7 @@ namespace cphd
  */
 struct PVPType
 {
-    static const size_t WORD_BYTE_SIZE;
+    static constexpr size_t WORD_BYTE_SIZE = 8;
 
     /*!
      *  \func PVPType
@@ -398,6 +398,9 @@ struct Pvp
     //! Get size of pvp set in blocks
     size_t getReqSetSize() const;
 
+    //! Get total byte size of pvp set
+    size_t sizeInBytes() const;
+
     /*
      *  \func setOffset
      *
@@ -480,4 +483,3 @@ std::ostream& operator<< (std::ostream& os, const APVPType& a);
 std::ostream& operator<< (std::ostream& os, const Pvp& p);
 }
 #endif
-
