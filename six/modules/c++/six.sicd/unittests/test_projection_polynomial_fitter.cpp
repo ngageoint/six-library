@@ -154,6 +154,7 @@ int main(int argc, char** argv)
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << "\n";
+        return 1;
     }
     TEST_CHECK(testProjectOutputToSlant);
     TEST_CHECK(testProjectSlantToOutput);
