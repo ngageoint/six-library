@@ -15,7 +15,8 @@ std::string findSixHome(const sys::Path& exePath)
     sys::Path sixHome = exePath.join("..");
     do
     {
-        if (sixHome.join("croppedNitfs").isDirectory())
+        const sys::Path croppedNitfs = sixHome.join("croppedNitfs");
+        if (sys::OS().isDirectory(croppedNitfs.getAbsolutePath()))
         {
             return sixHome;
         }
@@ -146,7 +147,15 @@ int main(int argc, char** argv)
         return 1;
     }
     // Making this global so we don't have to re-read the file every test
-    globalFitter = loadPolynomialFitter(std::string(argv[0]));
+    try
+    {
+        globalFitter = loadPolynomialFitter(std::string(argv[0]));
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << "\n";
+        return 1;
+    }
     TEST_CHECK(testProjectOutputToSlant);
     TEST_CHECK(testProjectSlantToOutput);
     return 0;
