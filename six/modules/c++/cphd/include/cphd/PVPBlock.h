@@ -133,7 +133,6 @@ struct PVPBlock
      * parameter in a PVP set.
      * \param data Actual PVP data, used to set the PVPSet members
      */
-
     PVPBlock(size_t numChannels,
             const std::vector<size_t>& numVectors,
             const Pvp& pvp,
