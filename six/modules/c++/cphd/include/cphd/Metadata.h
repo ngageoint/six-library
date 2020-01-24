@@ -58,6 +58,7 @@ namespace cphd
 struct Metadata : MetadataBase
 {
     //! Default constructor
+    //! Initializes CPHD version to default version specified in FileHeader
     Metadata();
 
     /*

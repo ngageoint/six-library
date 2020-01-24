@@ -107,7 +107,7 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& metadata)
 {
-    if (VERSION_URI_MAP.find(metadata.getVersion()) != std::unordered_map::end)
+    if (VERSION_URI_MAP.find(metadata.getVersion()) != VERSION_URI_MAP.end())
     {
         return getParser(VERSION_URI_MAP.find(metadata.getVersion())->second)->toXML(metadata);
     }
