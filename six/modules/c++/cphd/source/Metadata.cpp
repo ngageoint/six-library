@@ -23,6 +23,13 @@
 
 namespace cphd
 {
+
+Metadata::Metadata()
+{
+  // Default version defined in cphd::FileHeader
+  mVersion = FileHeader::DEFAULT_VERSION;
+}
+
 size_t Metadata::getNumChannels() const
 {
     return data.getNumChannels();

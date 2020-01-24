@@ -58,11 +58,7 @@ namespace cphd
 struct Metadata : MetadataBase
 {
     //! Default constructor
-    Metadata()
-    {
-        // Default version defined in cphd::FileHeader
-        mVersion = FileHeader::DEFAULT_VERSION;
-    }
+    Metadata();
 
     /*
      * Getter functions
@@ -74,10 +70,10 @@ struct Metadata : MetadataBase
     size_t getCompressedSignalSize(size_t channel) const override;
     bool isCompressed() const override;
 
-    //! Get version for new header
+    //! Get CPHD version
     std::string getVersion() const;
 
-    //! Set version for new header
+    //! Set CPHD version
     void setVersion(const std::string& version);
 
     //!  CollectionInfo block.  Contains the general collection information

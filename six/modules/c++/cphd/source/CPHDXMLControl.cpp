@@ -107,7 +107,15 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& metadata)
 {
-    return getParser(VERSION_URI_MAP.find(metadata.getVersion())->second)->toXML(metadata);
+    if (VERSION_URI_MAP.find(metadata.getVersion()) != std::unordered_map::end)
+    {
+        return getParser(VERSION_URI_MAP.find(metadata.getVersion())->second)->toXML(metadata);
+    }
+    std::ostringstream ostr;
+    ostr << "The version " << metadata.getVersion() << " is invalid. "
+         << "Check if version is valid or "
+         << "add a <version, URI> entry to VERSION_URI_MAP";
+    throw except::Exception(Ctxt(ostr.str()));
 }
 
 /* FROM XML */

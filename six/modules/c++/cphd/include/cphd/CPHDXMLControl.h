@@ -42,8 +42,6 @@ namespace cphd
 class CPHDXMLControl
 {
 public:
-    static const std::unordered_map<std::string, std::string> VERSION_URI_MAP;
-
     /*!
      *  \func CPHDXMLControl
      *  \brief Default constructor
@@ -123,6 +121,9 @@ protected:
     bool mOwnLog;
 
 private:
+    //! Hardcoded version to uri mapping
+    static const std::unordered_map<std::string, std::string> VERSION_URI_MAP;
+
     /*!
      *  This function takes in a Metadata object and converts
      *  it to a new-allocated XML DOM.
