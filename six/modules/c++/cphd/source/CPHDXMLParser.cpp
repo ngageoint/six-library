@@ -20,7 +20,6 @@
  *
  */
 #include <set>
-#include <unordered_map>
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <mem/ScopedCopyablePtr.h>
