@@ -57,16 +57,6 @@ void Metadata::setVersion(const std::string& version)
     mVersion = version;
 }
 
-std::string Metadata::getUri() const
-{
-    return mUri;
-}
-
-void Metadata::setUri(const std::string& uri)
-{
-    mUri = uri;
-}
-
 bool Metadata::operator==(const Metadata& other) const
 {
     return collectionID == other.collectionID &&

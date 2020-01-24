@@ -24,7 +24,7 @@
 #define __CPHD_CPHD_XML_CONTROL_H__
 
 #include <memory>
-
+#include <unordered_map>
 #include <logging/Logger.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Document.h>
@@ -42,6 +42,8 @@ namespace cphd
 class CPHDXMLControl
 {
 public:
+    static const std::unordered_map<std::string, std::string> VERSION_URI_MAP;
+
     /*!
      *  \func CPHDXMLControl
      *  \brief Default constructor
@@ -146,6 +148,9 @@ private:
      */
     std::unique_ptr<CPHDXMLParser>
     getParser(const std::string& uri) const;
+
+    // Given the URI get associated version
+    std::string uriToVersion(const std::string& uri) const;
 };
 }
 

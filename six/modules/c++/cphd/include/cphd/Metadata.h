@@ -80,25 +80,6 @@ struct Metadata : MetadataBase
     //! Set version for new header
     void setVersion(const std::string& version);
 
-    /*
-     *  \func getUri
-     *  \brief get URI of XML
-     *
-     *  Get the uri stored in metadata object
-     *  Not intended to be used by user
-     */
-    std::string getUri() const;
-
-    /*
-     *  \func setUri
-     *  \brief set URI of XML
-     *
-     *  Set the URI from the metadata
-     *  Not intended to be used by user
-     */
-    void setUri(const std::string& uri);
-
-
     //!  CollectionInfo block.  Contains the general collection information
     //!  CPHD can use the SICD Collection Information block directly
     CollectionInformation collectionID;
@@ -165,9 +146,6 @@ struct Metadata : MetadataBase
     }
 
 private:
-
-    //! Stores file URI
-    std::string mUri;
 
     //! Stores file Version
     std::string mVersion;

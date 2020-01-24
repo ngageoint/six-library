@@ -24,6 +24,7 @@
 #define __CPHD_CPHD_XML_PARSER_H__
 
 #include <memory>
+#include <unordered_map>
 
 #include <mem/SharedPtr.h>
 #include <logging/Logger.h>
@@ -50,6 +51,7 @@ namespace cphd
 class CPHDXMLParser : public six::XMLParser
 {
 public:
+
     /*!
      *  \func CPHDXMLParser
      *  \brief Constructor
