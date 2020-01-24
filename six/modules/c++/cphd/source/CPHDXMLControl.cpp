@@ -82,7 +82,7 @@ std::string CPHDXMLControl::toXMLString(
     (prettyPrint) ?
             doc->getRootElement()->prettyPrint(ss) :
             doc->getRootElement()->print(ss);
-    return (std::string("<?xml version=\"1.0\"?>") + ss.stream().str());
+    return ss.stream().str();
 }
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(

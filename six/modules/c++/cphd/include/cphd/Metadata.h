@@ -30,6 +30,7 @@
 #include <cphd/Data.h>
 #include <cphd/Dwell.h>
 #include <cphd/ErrorParameters.h>
+#include <cphd/FileHeader.h>
 #include <cphd/Global.h>
 #include <cphd/MetadataBase.h>
 #include <cphd/ProductInfo.h>
@@ -59,6 +60,8 @@ struct Metadata : MetadataBase
     //! Default constructor
     Metadata()
     {
+        // Default version defined in cphd::FileHeader
+        mVersion = FileHeader::DEFAULT_VERSION;
     }
 
     /*
@@ -71,8 +74,30 @@ struct Metadata : MetadataBase
     size_t getCompressedSignalSize(size_t channel) const override;
     bool isCompressed() const override;
 
+    //! Get version for new header
+    std::string getVersion() const;
+
+    //! Set version for new header
+    void setVersion(const std::string& version);
+
+    /*
+     *  \func getUri
+     *  \brief get URI of XML
+     *
+     *  Get the uri stored in metadata object
+     *  Not intended to be used by user
+     */
     std::string getUri() const;
-    void setUri(const std::string& version);
+
+    /*
+     *  \func setUri
+     *  \brief set URI of XML
+     *
+     *  Set the URI from the metadata
+     *  Not intended to be used by user
+     */
+    void setUri(const std::string& uri);
+
 
     //!  CollectionInfo block.  Contains the general collection information
     //!  CPHD can use the SICD Collection Information block directly
@@ -140,8 +165,12 @@ struct Metadata : MetadataBase
     }
 
 private:
+
     //! Stores file URI
     std::string mUri;
+
+    //! Stores file Version
+    std::string mVersion;
 };
 
 //! Ostream operator

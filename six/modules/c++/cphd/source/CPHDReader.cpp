@@ -68,6 +68,7 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
     }
 
     mMetadata = CPHDXMLControl(logger.get(), false).fromXML(xmlParser.getDocument(), schemaPaths);
+    mMetadata->setVersion(mFileHeader.getVersion());
 
     mSupportBlock.reset(new SupportBlock(inStream, mMetadata->data,
                         mFileHeader.getSupportBlockByteOffset(),
