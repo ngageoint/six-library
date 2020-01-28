@@ -26,13 +26,15 @@ using namespace nitf;
 
 BandInfo::BandInfo(const BandInfo & x)
 {
-    setNative(x.getNative());
+    cloneFromNative(x.getNative());
 }
 
-BandInfo & BandInfo::operator=(const BandInfo & x)
+BandInfo& BandInfo::operator=(const BandInfo & x)
 {
     if (&x != this)
-        setNative(x.getNative());
+    {
+        cloneFromNative(x.getNative());
+    }
     return *this;
 }
 
@@ -40,6 +42,7 @@ BandInfo::BandInfo(nitf_BandInfo * x)
 {
     setNative(x);
     getNativeOrThrow();
+    setManaged(false);
 }
 
 BandInfo::BandInfo()
@@ -145,3 +148,15 @@ void BandInfo::init(const std::string& representation,
         throw nitf::NITFException(&error);
 }
 
+void BandInfo::cloneFromNative(nitf_BandInfo* bandInfo)
+{
+    nitf_BandInfo* clone;
+
+    clone = nitf_BandInfo_clone(bandInfo, &error);
+    if (!clone)
+    {
+        throw nitf::NITFException(&error);
+    }
+    setNative(clone);
+    setManaged(false);
+}
