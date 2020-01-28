@@ -20,6 +20,7 @@
  *
  */
 #include <set>
+#include <unordered_map>
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <xml/lite/MinidomParser.h>
@@ -36,6 +37,13 @@
 
 namespace cphd
 {
+
+const std::unordered_map<std::string, std::string> CPHDXMLControl::VERSION_URI_MAP =
+{
+    {"1.0.0", "urn:CPHD:1.0.0"},
+    {"1.0.1", "http://api.nsgreg.nga.mil/schema/cphd/1.0.1"}
+};
+
 CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog) :
     mLog(NULL),
     mOwnLog(false)
@@ -82,7 +90,7 @@ std::string CPHDXMLControl::toXMLString(
     (prettyPrint) ?
             doc->getRootElement()->prettyPrint(ss) :
             doc->getRootElement()->print(ss);
-    return (std::string("<?xml version=\"1.0\"?>") + ss.stream().str());
+    return ss.stream().str();
 }
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
@@ -99,7 +107,15 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& metadata)
 {
-    return getParser(metadata.getUri())->toXML(metadata);
+    if (VERSION_URI_MAP.find(metadata.getVersion()) != VERSION_URI_MAP.end())
+    {
+        return getParser(VERSION_URI_MAP.find(metadata.getVersion())->second)->toXML(metadata);
+    }
+    std::ostringstream ostr;
+    ostr << "The version " << metadata.getVersion() << " is invalid. "
+         << "Check if version is valid or "
+         << "add a <version, URI> entry to VERSION_URI_MAP";
+    throw except::Exception(Ctxt(ostr.str()));
 }
 
 /* FROM XML */
@@ -121,7 +137,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc
         six::XMLControl::validate(doc, schemaPaths, mLog);
     }
     std::unique_ptr<Metadata> metadata = fromXMLImpl(doc);
-    metadata->setUri(doc->getRootElement()->getUri());
+    metadata->setVersion(uriToVersion(doc->getRootElement()->getUri()));
     return metadata;
 }
 
@@ -137,4 +153,21 @@ CPHDXMLControl::getParser(const std::string& uri) const
     parser.reset(new CPHDXMLParser(uri, false, mLog));
     return parser;
 }
+
+std::string CPHDXMLControl::uriToVersion(const std::string& uri) const
+{
+    for (auto it = VERSION_URI_MAP.begin(); it != VERSION_URI_MAP.end(); ++it)
+    {
+        if (it->second == uri)
+        {
+            return it->first;
+        }
+    }
+    std::ostringstream ostr;
+    ostr << "The URI " << uri << " is invalid. "
+         << "Either input a valid URI or "
+         << "add a <version, URI> entry to VERSION_URI_MAP";
+    throw except::Exception(Ctxt(ostr.str()));
+}
+
 }

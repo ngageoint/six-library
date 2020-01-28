@@ -146,7 +146,6 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     }
 }
 
-
 void CPHDWriter::writeMetadata(
         size_t supportSize,
         size_t pvpSize,
@@ -154,6 +153,10 @@ void CPHDWriter::writeMetadata(
 {
     const std::string xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
 
+    // update header version, or remains default if unset
+    mHeader.setVersion(mMetadata.getVersion());
+
+    //update classification and release info
     if (!six::Init::isUndefined(mMetadata.collectionID.getClassificationLevel()) &&
         !six::Init::isUndefined(mMetadata.collectionID.releaseInfo))
     {

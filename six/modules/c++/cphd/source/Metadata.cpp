@@ -23,6 +23,13 @@
 
 namespace cphd
 {
+
+Metadata::Metadata()
+{
+  // Default version defined in cphd::FileHeader
+  mVersion = FileHeader::DEFAULT_VERSION;
+}
+
 size_t Metadata::getNumChannels() const
 {
     return data.getNumChannels();
@@ -48,14 +55,13 @@ bool Metadata::isCompressed() const
     return data.isCompressed();
 }
 
-std::string Metadata::getUri() const
+std::string Metadata::getVersion() const
 {
-    return mUri;
+    return mVersion;
 }
-
-void Metadata::setUri(const std::string& uri)
+void Metadata::setVersion(const std::string& version)
 {
-    mUri = uri;
+    mVersion = version;
 }
 
 bool Metadata::operator==(const Metadata& other) const

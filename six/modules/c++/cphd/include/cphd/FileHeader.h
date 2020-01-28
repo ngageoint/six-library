@@ -75,6 +75,29 @@ public:
     std::string toString() const override;
 
     /*
+     *  \func getVersion
+     *
+     *  \brief Get the file version
+     *
+     *  Get the version of the CPHD file
+     *  ex: 1.0.0, 1.0.1 etc
+     *
+     * returns file version string
+     */
+    std::string getVersion() const;
+
+    /*
+     *  \func setVersion
+     *
+     *  \brief Set the file version
+     *
+     *  Set the version of the CPHD file
+     *  ex: 1.0.0, 1.0.1 etc
+     *
+     */
+    void setVersion(const std::string& version);
+
+    /*
      *  \func set
      *
      *  \brief Set the file header

@@ -172,6 +172,16 @@ std::string FileHeader::toString() const
     return os.str();
 }
 
+std::string FileHeader::getVersion() const
+{
+    return mVersion;
+}
+
+void FileHeader::setVersion(const std::string& version)
+{
+    mVersion = version;
+}
+
 size_t FileHeader::set(sys::Off_T xmlBlockSize,
                        sys::Off_T supportBlockSize,
                        sys::Off_T pvpBlockSize,
