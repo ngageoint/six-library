@@ -76,7 +76,7 @@ struct Metadata : MetadataBase
      * FX for frequency domain,
      * TOA for time-of-arrival domain
      */
-    cphd::DomainType getDomainType() const override;
+    DomainType getDomainType() const override;
 
     //! Get CPHD version
     std::string getVersion() const;

@@ -60,7 +60,7 @@ bool Metadata::isCompressed() const
     return data.isCompressed();
 }
 
-cphd::DomainType Metadata::getDomainType() const
+DomainType Metadata::getDomainType() const
 {
     return global.getDomainType();
 }

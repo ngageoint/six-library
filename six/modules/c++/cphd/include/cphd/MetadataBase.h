@@ -92,7 +92,7 @@ struct MetadataBase
      * FX for frequency domain,
      * TOA for time-of-arrival domain
      */
-    virtual cphd::DomainType getDomainType() const = 0;
+    virtual DomainType getDomainType() const = 0;
 
     //! Is this CPHD formed in the transmit frequency domain?
     bool isFX() const
