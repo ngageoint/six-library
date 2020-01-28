@@ -150,9 +150,7 @@ void BandInfo::init(const std::string& representation,
 
 void BandInfo::cloneFromNative(nitf_BandInfo* bandInfo)
 {
-    nitf_BandInfo* clone;
-
-    clone = nitf_BandInfo_clone(bandInfo, &error);
+    nitf_BandInfo* clone = nitf_BandInfo_clone(bandInfo, &error);
     if (!clone)
     {
         throw nitf::NITFException(&error);
