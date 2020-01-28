@@ -15251,6 +15251,162 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_MetadataBase_getDomainType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  cphd::DomainType result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetadataBase_getDomainType",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetadataBase_getDomainType" "', argument " "1"" of type '" "cphd::MetadataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
+  {
+    try
+    {
+      result = ((cphd::MetadataBase const *)arg1)->getDomainType();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new cphd::DomainType(static_cast< const cphd::DomainType& >(result))), SWIGTYPE_p_cphd__DomainType, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetadataBase_isFX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetadataBase_isFX",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetadataBase_isFX" "', argument " "1"" of type '" "cphd::MetadataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
+  {
+    try
+    {
+      result = (bool)((cphd::MetadataBase const *)arg1)->isFX();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetadataBase_isTOA(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cphd::MetadataBase *arg1 = (cphd::MetadataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetadataBase_isTOA",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__MetadataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetadataBase_isTOA" "', argument " "1"" of type '" "cphd::MetadataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< cphd::MetadataBase * >(argp1);
+  {
+    try
+    {
+      result = (bool)((cphd::MetadataBase const *)arg1)->isTOA();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *MetadataBase_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
@@ -27148,110 +27304,6 @@ SWIGINTERN PyObject *_wrap_Metadata_getNumBytesPerSample(PyObject *SWIGUNUSEDPAR
     }
   }
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Metadata_isFX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  cphd03::Metadata *arg1 = (cphd03::Metadata *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Metadata_isFX",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Metadata, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Metadata_isFX" "', argument " "1"" of type '" "cphd03::Metadata const *""'"); 
-  }
-  arg1 = reinterpret_cast< cphd03::Metadata * >(argp1);
-  {
-    try
-    {
-      result = (bool)((cphd03::Metadata const *)arg1)->isFX();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Metadata_isTOA(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  cphd03::Metadata *arg1 = (cphd03::Metadata *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Metadata_isTOA",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__Metadata, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Metadata_isTOA" "', argument " "1"" of type '" "cphd03::Metadata const *""'"); 
-  }
-  arg1 = reinterpret_cast< cphd03::Metadata * >(argp1);
-  {
-    try
-    {
-      result = (bool)((cphd03::Metadata const *)arg1)->isTOA();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
   return NULL;
@@ -58381,6 +58433,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MetadataBase_getNumBytesPerSample", _wrap_MetadataBase_getNumBytesPerSample, METH_VARARGS, (char *)"MetadataBase_getNumBytesPerSample(MetadataBase self) -> size_t"},
 	 { (char *)"MetadataBase_getCompressedSignalSize", _wrap_MetadataBase_getCompressedSignalSize, METH_VARARGS, (char *)"MetadataBase_getCompressedSignalSize(MetadataBase self, size_t channel) -> size_t"},
 	 { (char *)"MetadataBase_isCompressed", _wrap_MetadataBase_isCompressed, METH_VARARGS, (char *)"MetadataBase_isCompressed(MetadataBase self) -> bool"},
+	 { (char *)"MetadataBase_getDomainType", _wrap_MetadataBase_getDomainType, METH_VARARGS, (char *)"MetadataBase_getDomainType(MetadataBase self) -> DomainType"},
+	 { (char *)"MetadataBase_isFX", _wrap_MetadataBase_isFX, METH_VARARGS, (char *)"MetadataBase_isFX(MetadataBase self) -> bool"},
+	 { (char *)"MetadataBase_isTOA", _wrap_MetadataBase_isTOA, METH_VARARGS, (char *)"MetadataBase_isTOA(MetadataBase self) -> bool"},
 	 { (char *)"MetadataBase_swigregister", MetadataBase_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FileHeader", _wrap_new_FileHeader, METH_VARARGS, (char *)"new_FileHeader() -> FileHeader"},
 	 { (char *)"delete_FileHeader", _wrap_delete_FileHeader, METH_VARARGS, (char *)"delete_FileHeader(FileHeader self)"},
@@ -58590,8 +58645,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Metadata_getNumVectors", _wrap_Metadata_getNumVectors, METH_VARARGS, (char *)"Metadata_getNumVectors(Metadata self, size_t channel) -> size_t"},
 	 { (char *)"Metadata_getNumSamples", _wrap_Metadata_getNumSamples, METH_VARARGS, (char *)"Metadata_getNumSamples(Metadata self, size_t channel) -> size_t"},
 	 { (char *)"Metadata_getNumBytesPerSample", _wrap_Metadata_getNumBytesPerSample, METH_VARARGS, (char *)"Metadata_getNumBytesPerSample(Metadata self) -> size_t"},
-	 { (char *)"Metadata_isFX", _wrap_Metadata_isFX, METH_VARARGS, (char *)"Metadata_isFX(Metadata self) -> bool"},
-	 { (char *)"Metadata_isTOA", _wrap_Metadata_isTOA, METH_VARARGS, (char *)"Metadata_isTOA(Metadata self) -> bool"},
 	 { (char *)"Metadata_getDomainTypeString", _wrap_Metadata_getDomainTypeString, METH_VARARGS, (char *)"Metadata_getDomainTypeString(Metadata self) -> std::string"},
 	 { (char *)"Metadata_getDomainType", _wrap_Metadata_getDomainType, METH_VARARGS, (char *)"Metadata_getDomainType(Metadata self) -> DomainType"},
 	 { (char *)"Metadata_collectionInformation_set", _wrap_Metadata_collectionInformation_set, METH_VARARGS, (char *)"Metadata_collectionInformation_set(Metadata self, CollectionInformation collectionInformation)"},
