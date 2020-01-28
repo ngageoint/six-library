@@ -71,6 +71,13 @@ struct Metadata : MetadataBase
     size_t getCompressedSignalSize(size_t channel) const override;
     bool isCompressed() const override;
 
+    /*!
+     * Get domain type
+     * FX for frequency domain,
+     * TOA for time-of-arrival domain
+     */
+    cphd::DomainType getDomainType() const override;
+
     //! Get CPHD version
     std::string getVersion() const;
 
