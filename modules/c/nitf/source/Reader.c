@@ -869,6 +869,7 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     if (!NITF_IO_SUCCESS(segment->offset))
         goto CATCH_ERROR;
     segment->end = segment->offset + subhdr->dataLength;
+    subheaderEnd = segment->offset;
 
     /* see if we need to read the data now as part of a TRE */
     if ((strcmp(desID, "TRE_OVERFLOW") == 0) ||
@@ -901,7 +902,6 @@ NITFPRIV(NITF_BOOL) readDESubheader(nitf_Reader * reader,
     }
 
     NITF_TRY_GET_UINT32(hdr->NITF_LDSH(desIndex), &expectedSubheaderLength, error);
-    subheaderEnd = nitf_IOInterface_tell(reader->input, error);
 
     if (subheaderEnd - subheaderStart != expectedSubheaderLength)
     {
