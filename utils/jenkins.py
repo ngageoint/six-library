@@ -22,20 +22,39 @@
  *
 """
 
+import filecmp
 import os
+import shutil
 import subprocess
+import sys
 import tarfile
 
 
+GOLD = 'nitro_gold.tar.gz'
+NITF_VARNAME = 'JENKINS_NITF_LOCATION'
+GOLD_DIR = 'expected'
+
+
 def get_previous_regression_files():
-    return None
+    if os.path.exists(GOLD):
+        with tarfile.open(GOLD) as tar:
+            nitfs = tar.getnames()
+            tar.extractall()
+        os.mkdir(GOLD_DIR)
+        for nitf in nitfs:
+            shutil.move(nitf, GOLD_DIR)
+        return [os.path.join(GOLD_DIR, nitf) for nitf in nitfs]
+    else:
+        # No known good files, so we'll generate them later for this job
+        return []
+
 
 
 def get_source_files():
-    nitf_home = os.environ.get('JENKINS_NITF_LOCATION', None)
+    nitf_home = os.environ.get(NITF_VARNAME, None)
     if nitf_home is None:
         raise EnvironmentError(
-            'JENKINS_NITF_LOCATION environment variable not set')
+            '{} environment variable not set'.format(NITF_VARNAME))
 
     nitfs = []
     for root, dirs, files in os.walk(nitf_home):
@@ -80,16 +99,41 @@ def remove_files(files):
         os.remove(item)
 
 
+def compare_output(expected, actual):
+    success = True
+    for expected_nitf in expected:
+        basename = os.path.basename(expected_nitf)
+        if basename not in actual:
+            raise EnvironmentError(
+                'Cannot find generated file corresponding to {}'.format(expected_nitf))
+        print('Comparing {} and {}'.format(expected_nitf, basename))
+        if not filecmp.cmp(expected_nitf, basename):
+            print('Files {} and {} differ'.format(expected_nitf, basename))
+            success = False
+
+    if success:
+        print('Test passed')
+    else:
+        print('Test failed')
+    return success
+
+
 def main():
+    return_code = 0
     regression_files = get_previous_regression_files()
     nitfs = get_source_files()
     output_files = run_regressions(nitfs)
     if regression_files:
-        # TODO: Run regressions
-        raise NotImplementedError('Not implemented yet!')
+        if not compare_output(regression_files, output_files):
+            return_code = -1
     else:
-        tar_files(output_files, 'nitro_gold.tar.gz')
-        remove_files(output_files)
+        # First run: generate initial files
+        tar_files(output_files, GOLD)
+
+    if os.path.isdir(GOLD_DIR):
+        shutil.rmtree(GOLD_DIR)
+    remove_files(output_files)
+    sys.exit(return_code)
 
 
 if __name__ == '__main__':
