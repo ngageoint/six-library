@@ -33,7 +33,7 @@
 #include "TestCase.h"
 
 static const char XML[] =
-"<CPHD xmlns=\"urn:CPHD:1.0\">\n"
+"<CPHD xmlns=\"urn:CPHD:1.0.0\">\n"
 "    <CollectionID>\n"
 "        <CollectorName>Collector</CollectorName>\n"
 "        <CoreName>Core</CoreName>\n"
