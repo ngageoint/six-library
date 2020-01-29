@@ -115,7 +115,6 @@ public:
               const std::string& imageFilterCode);
 
 private:
-    void cloneFromNative(nitf_BandInfo* bandInfo);
     nitf_Error error;
 };
 
