@@ -29,6 +29,15 @@ import subprocess
 import sys
 import tarfile
 
+"""
+Jenkins script for NITRO.
+The known good results are in nitro_gold.tar.gz.
+If this file does not exist (Jenkins should handle this),
+this script will create it. If the tarball does exist,
+this script will run show_nitf on a collection of NITFs
+(and possibly other tasks in the future) and compare the output.
+"""
+
 
 GOLD = 'nitro_gold.tar.gz'
 NITF_VARNAME = 'JENKINS_NITF_LOCATION'
@@ -46,8 +55,6 @@ def get_previous_regression_files():
         return [os.path.join(GOLD_DIR, nitf) for nitf in nitfs]
     else:
         # No known good files, so we'll generate them later for this job
-        print('Unable to find {}'.format(GOLD))
-        print(os.listdir(os.getcwd()))
         return []
 
 
