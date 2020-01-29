@@ -46,6 +46,8 @@ def get_previous_regression_files():
         return [os.path.join(GOLD_DIR, nitf) for nitf in nitfs]
     else:
         # No known good files, so we'll generate them later for this job
+        print('Unable to find {}'.format(GOLD))
+        print(os.listdir(os.getcwd()))
         return []
 
 
