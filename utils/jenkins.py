@@ -58,7 +58,6 @@ def get_previous_regression_files():
         return []
 
 
-
 def get_source_files():
     nitf_home = os.environ.get(NITF_VARNAME, None)
     if nitf_home is None:
