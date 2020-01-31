@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six-c++
+ * This file is part of six.sicd-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2020, MDA Information Systems LLC
@@ -51,16 +51,15 @@ public:
      *                 with either bad data or guesses
      * \throws If `targetVersion` is invalid
      */
-    SicdVersionUpdater(six::sicd::ComplexData& complexData,
+    SicdVersionUpdater(ComplexData& complexData,
                        const std::string& targetVersion,
                        logging::Logger& log);
 
 private:
     void updateSingleIncrement() override;
 
-    six::sicd::ComplexData& mData;
+    ComplexData& mData;
 };
-
 }
 }
 
