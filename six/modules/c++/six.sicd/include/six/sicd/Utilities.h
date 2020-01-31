@@ -598,23 +598,6 @@ public:
         const six::sicd::ComplexData& complexData,
         const std::vector<types::RowCol<double> >& opPixels,
         std::vector<types::RowCol<double> >& spPixels);
-
-    /*!
-     * Try to increase version of ComplexData,
-     * along with all associated metadata changes.
-     * This is intended as a prototyping aide,
-     * not for production use.
-     * \param[in,out] complexData SICD Metadata to update
-     * \param version Target version to update to
-     * \param[out] log Method will log which fields it populated
-     *                 with guesses or garbage data.
-     * \throw If version argument is not greater
-     *        than current version
-     */
-    static void updateVersion(
-        six::sicd::ComplexData& complexData,
-        const std::string& targetVersion,
-        logging::Logger& log);
 };
 }
 }
