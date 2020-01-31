@@ -22,6 +22,7 @@
 #include <cassert>
 #include <six/sicd/Utilities.h>
 #include <logging/Logger.h>
+#include <scene/SceneGeometry.h>
 #include <six/VersionUpdater.h>
 #include <six/sicd/SicdVersionUpdater.h>
 
@@ -145,10 +146,9 @@ void SicdVersionUpdater::updateSingleIncrement()
 
         if (mData.scpcoa)
         {
-            mData.scpcoa->azimAngle = 0;
-            mData.scpcoa->layoverAngle = 0;
-            emitWarning("ComplexData.SCPCOA.AzimAngle");
-            emitWarning("ComplexData.SCPCOA.LayoverAngle");
+            auto* sceneGeometry = Utilities::getSceneGeometry(&mData);
+            mData.scpcoa->azimAngle = sceneGeometry->getAzimuthAngle();
+            mData.scpcoa->layoverAngle = sceneGeometry->getETPLayoverAngle();
         }
 
         if (mData.rma && mData.rma->rmat)
