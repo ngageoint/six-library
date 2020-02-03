@@ -32,7 +32,7 @@ namespace six
 namespace sicd
 {
 /*!
- * \class VersionUpdater
+ * \class SICDVersionUpdater
  * Responsible for updating SICD metadata to a valid state
  * for a new version.
  * This is intended to be used quick prototyping work for standards

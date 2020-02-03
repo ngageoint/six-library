@@ -27,7 +27,6 @@
 #include <vector>
 #include <utility>
 
-#include <logging/Logger.h>
 #include <scene/SceneGeometry.h>
 #include <scene/ProjectionModel.h>
 #include <six/sicd/ComplexData.h>

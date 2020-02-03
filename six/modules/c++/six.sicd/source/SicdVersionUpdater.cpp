@@ -103,10 +103,8 @@ void SicdVersionUpdater::updateSingleIncrement()
                 emitWarning("ComplexData.RMA.RMAT.DistRefLinePoly");
             }
         }
-        return;
     }
-
-    if (thisVersion == "0.5.0")
+    else if (thisVersion == "0.5.0")
     {
         if (mData.radarCollection.get())
         {
@@ -195,6 +193,10 @@ void SicdVersionUpdater::updateSingleIncrement()
             mData.rma->rmat->dopConeAngleRef = 0;
             emitWarning("ComplexData.RMA.RMAT.DopConeAngleRef");
         }
+    }
+    else
+    {
+        throw except::Exception(Ctxt("Unhandled version: " + thisVersion));
     }
 }
 }
