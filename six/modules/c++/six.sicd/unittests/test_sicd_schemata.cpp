@@ -2399,6 +2399,7 @@ void diffXMLs(std::string label1, std::string xml1,
               unsigned int dispCnt=-1, unsigned int size=60)
 {
     if (dispCnt != 0)
+    {
         for (unsigned int i=0,n=0; i<=xml1.size()/size; ++i)
         {
             if (xml1.substr(i*size,size) != xml2.substr(i*size,size))
@@ -2409,7 +2410,7 @@ void diffXMLs(std::string label1, std::string xml1,
                 if (dispCnt>0 && (++n)>=dispCnt) break;
             }
         }
-        return;
+    }
 }
 
 

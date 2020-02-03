@@ -24,7 +24,8 @@ def build(bld):
                'test_large_offset'                   : 'six.sicd six.sidd io mem',
                'test_parse_xml'                      : 'six.sicd six.sidd',
                'test_six_xml_parsing'                : 'six.sicd six.sidd',
-               'test_compare_sidd'                   : 'cli six.sicd six.sidd' }
+               'test_compare_sidd'                   : 'cli six.sicd six.sidd',
+               'update_sicd_version'                 : 'cli six.sicd' }
 
     for sample, module_deps in samples.items():
         bld.program_helper(module_deps=module_deps,

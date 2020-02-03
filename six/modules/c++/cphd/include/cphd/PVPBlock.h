@@ -36,8 +36,6 @@
 #include <cphd/ByteSwap.h>
 #include <six/Parameter.h>
 
-
-
 namespace cphd
 {
 /*
@@ -113,7 +111,6 @@ struct PVPBlock
      *
      *  Does not update metadata data numBytesPVP with calculated pvp bytes per set
      *
-     *  \param numBytesPerVector Used to allocate memory for per vector parameters
      *  \param numChannels Set the number of PVP Arrays to allocate in the block
      *  \param numVectors Set the number of PVP Sets to allocate per array
      *  \param pvp A filled out pvp sturcture. This will be used for
@@ -122,7 +119,24 @@ struct PVPBlock
      */
     PVPBlock(size_t numChannels,
              const std::vector<size_t>& numVectors,
-             const Pvp& p);
+             const Pvp& pvp);
+
+    /*!
+     * Constructor.
+     * Same as above, and also sets the underlying PVPSets
+     * from the provided data
+     *
+     * \param numChannels Set the number of PVP Arrays to allocate in the block
+     * \param numVectors Set the number of PVP Sets to allocate per array
+     * \param pvp A filled out pvp sturcture. This will be used for
+     * information on where to allocate memory and set each
+     * parameter in a PVP set.
+     * \param data Actual PVP data, used to set the PVPSet members
+     */
+    PVPBlock(size_t numChannels,
+            const std::vector<size_t>& numVectors,
+            const Pvp& pvp,
+            const std::vector<const void*>& data);
 
     /*!
      *  \func verifyChannelVector
@@ -450,4 +464,3 @@ private:
 };
 }
 #endif
-

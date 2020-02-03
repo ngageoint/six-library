@@ -72,7 +72,7 @@ void GeoData::fillDerivedFields(const ImageData& imageData,
         for (size_t ii = 0; ii < cornerLineSample.size(); ++ii)
         {
             LatLonAlt lla = transformer.transform(model.imageGridToECEF(
-                    imageData.validData[ii]));
+                    cornerLineSample[ii]));
             imageCorners.getCorner(ii).setLat(lla.getLat());
             imageCorners.getCorner(ii).setLon(lla.getLon());
         }

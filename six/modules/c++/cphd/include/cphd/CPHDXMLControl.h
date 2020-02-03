@@ -24,7 +24,7 @@
 #define __CPHD_CPHD_XML_CONTROL_H__
 
 #include <memory>
-
+#include <unordered_map>
 #include <logging/Logger.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Document.h>
@@ -121,6 +121,9 @@ protected:
     bool mOwnLog;
 
 private:
+    //! Hardcoded version to uri mapping
+    static const std::unordered_map<std::string, std::string> VERSION_URI_MAP;
+
     /*!
      *  This function takes in a Metadata object and converts
      *  it to a new-allocated XML DOM.
@@ -146,6 +149,9 @@ private:
      */
     std::unique_ptr<CPHDXMLParser>
     getParser(const std::string& uri) const;
+
+    // Given the URI get associated version
+    std::string uriToVersion(const std::string& uri) const;
 };
 }
 

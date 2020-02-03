@@ -561,9 +561,9 @@ public:
             const six::sicd::PlanarCoordinateMesh& slantMesh,
             size_t orderX,
             size_t orderY,
-            six::Poly2D& outputXYToSlantX,                  
-            six::Poly2D& outputXYToSlantY,                  
-            six::Poly2D& slantXYToOutputX,                  
+            six::Poly2D& outputXYToSlantX,
+            six::Poly2D& outputXYToSlantY,
+            six::Poly2D& slantXYToOutputX,
             six::Poly2D& slantXYToOutputY);
 
     /*!
@@ -601,4 +601,3 @@ public:
 }
 }
 #endif
-

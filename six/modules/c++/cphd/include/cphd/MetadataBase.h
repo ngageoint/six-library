@@ -25,6 +25,7 @@
 
 #include <ostream>
 #include <six/Init.h>
+#include <cphd/Enums.h>
 
 namespace cphd
 {
@@ -86,6 +87,24 @@ struct MetadataBase
         return false;
     }
 
+    /*!
+     * Get domain type
+     * FX for frequency domain,
+     * TOA for time-of-arrival domain
+     */
+    virtual DomainType getDomainType() const = 0;
+
+    //! Is this CPHD formed in the transmit frequency domain?
+    bool isFX() const
+    {
+        return (getDomainType() == cphd::DomainType::FX);
+    }
+
+    //! Is this CPHD formed in the Time of Arrival domain?
+    bool isTOA() const
+    {
+        return (getDomainType() == cphd::DomainType::TOA);
+    }
 };
 }
 
