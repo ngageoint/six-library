@@ -166,10 +166,10 @@ void SICDVersionUpdater::updateSingleIncrement()
         {
             for (auto &matchType : mData.matchInformation->types)
             {
-                matchType->typeID = "NOT SET";
-                matchType->collectorName = "";
-                matchType->illuminatorName = "";
-                matchType->matchCollects.clear();
+                matchType.typeID = "NOT SET";
+                matchType.collectorName = "";
+                matchType.illuminatorName = "";
+                matchType.matchCollects.clear();
                 emitWarning("ComplexData.MatchInformation.MatchType.TypeID");
             }
         }
