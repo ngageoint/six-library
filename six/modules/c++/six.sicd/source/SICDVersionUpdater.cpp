@@ -56,7 +56,7 @@ void SICDVersionUpdater::recordProcessingStep()
     if (!mData.imageFormation)
     {
         throw except::Exception(Ctxt(
-            "ComplexData.ImageFormation is required in all SICD versions."));
+                "ComplexData.ImageFormation is required in all SICD versions."));
     }
 
     // Add a new processing block to tell consumers about
