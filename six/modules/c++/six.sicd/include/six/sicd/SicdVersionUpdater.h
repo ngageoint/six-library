@@ -58,6 +58,10 @@ public:
 private:
     void updateSingleIncrement() override;
 
+    void addProcessingParameter(const std::string& fieldName) override;
+
+    void recordProcessingStep() override;
+
     ComplexData& mData;
 };
 }

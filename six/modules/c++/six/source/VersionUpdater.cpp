@@ -28,9 +28,9 @@ VersionUpdater::VersionUpdater(Data& data,
                                const std::string& targetVersion,
                                const std::vector<std::string>& versions,
                                logging::Logger& log) :
-    mData(data),
     mTarget(targetVersion),
     mVersions(versions),
+    mData(data),
     mLog(log),
     mLoggingInitialized(false)
 {
@@ -79,6 +79,8 @@ void VersionUpdater::bumpVersion()
 
 void VersionUpdater::update()
 {
+    recordProcessingStep();
+
     while (!finished())
     {
         updateSingleIncrement();
@@ -102,5 +104,7 @@ void VersionUpdater::emitWarning(const std::string& fieldName)
     std::ostringstream msg;
     msg << "  - " << fieldName;
     mLog.warn(msg.str());
+
+    addProcessingParameter(fieldName);
 }
 }

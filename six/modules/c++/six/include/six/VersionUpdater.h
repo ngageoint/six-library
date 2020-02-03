@@ -74,6 +74,20 @@ protected:
     virtual void updateSingleIncrement() = 0;
     void emitWarning(const std::string& fieldName);
 
+    /*!
+     * Add a parameter to the appropriate processing block,
+     * indicating that a metadata field has been populated
+     * with a guess, or garbage data to force XML validation
+     * \param fieldName Name of Metadata field with bad value
+     */
+    virtual void addProcessingParameter(const std::string& fieldName) = 0;
+
+    /*!
+     * Add metadata-appropriate XML block indicating that
+     * a version-update processing step was applied.
+     */
+    virtual void recordProcessingStep() = 0;
+
     const std::string& mTarget;
     const std::vector<std::string> mVersions;
 

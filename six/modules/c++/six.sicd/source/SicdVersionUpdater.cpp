@@ -29,30 +29,55 @@
 namespace
 {
 static const std::vector<std::string> SICD_VERSIONS =
-{
-    "0.4.0", "0.4.1", "0.5.0", "1.0.0", "1.0.1", "1.1.0", "1.2.0"
-};
+    {
+        "0.4.0", "0.4.1", "0.5.0", "1.0.0", "1.0.1", "1.1.0", "1.2.0"};
 }
 
 namespace six
 {
 namespace sicd
 {
-SicdVersionUpdater::SicdVersionUpdater(ComplexData& complexData,
-                                       const std::string& targetVersion,
-                                       logging::Logger& log) :
-    VersionUpdater(complexData, targetVersion, SICD_VERSIONS, log),
-    mData(complexData)
+SicdVersionUpdater::SicdVersionUpdater(ComplexData &complexData,
+                                       const std::string &targetVersion,
+                                       logging::Logger &log) : VersionUpdater(complexData, targetVersion, SICD_VERSIONS, log),
+                                                               mData(complexData)
 {
+}
+
+void SicdVersionUpdater::recordProcessingStep()
+{
+    if (!mData.imageFormation)
+    {
+        throw except::Exception(Ctxt(
+            "ComplexData.ImageFormation is required in all SICD versions."));
+    }
+
+    // Add a new processing block to tell consumers about
+    // the automated version update.
+    Processing versionProcessing;
+    versionProcessing.applied = six::BooleanType::IS_TRUE;
+    versionProcessing.type = "Automated version update";
+
+    if (mData.imageFormation->processing.empty())
+    {
+        mData.imageFormation->processing.push_back(versionProcessing);
+    }
+}
+
+void SicdVersionUpdater::addProcessingParameter(const std::string &fieldName)
+{
+    Parameter parameter(fieldName);
+    parameter.setName("Guessed Field");
+    mData.imageFormation->processing[0].parameters.push_back(parameter);
 }
 
 void SicdVersionUpdater::updateSingleIncrement()
 {
     const std::string thisVersion = mData.getVersion();
     if (thisVersion == "0.4.1" ||
-            thisVersion == "1.0.0" ||
-            thisVersion == "1.0.1" ||
-            thisVersion == "1.1.0")
+        thisVersion == "1.0.0" ||
+        thisVersion == "1.0.1" ||
+        thisVersion == "1.1.0")
     {
         // Nothing to do
         return;
@@ -68,7 +93,7 @@ void SicdVersionUpdater::updateSingleIncrement()
                 // again in 1.0.0. So if we're going to end up there anyway,
                 // no need to do anything.
                 mData.rma->rmat->distRefLinePoly = six::Poly1D(1);
-                emitWarning("ComplexData.RMA.RMAT.DistRLPoly");
+                emitWarning("ComplexData.RMA.RMAT.DistRefLinePoly");
             }
         }
         return;
@@ -78,8 +103,8 @@ void SicdVersionUpdater::updateSingleIncrement()
     {
         if (mData.radarCollection.get())
         {
-            auto& radarCollection = *mData.radarCollection;
-            for (auto& rcvChannel : radarCollection.rcvChannels)
+            auto &radarCollection = *mData.radarCollection;
+            for (auto &rcvChannel : radarCollection.rcvChannels)
             {
                 rcvChannel->txRcvPolarization = six::DualPolarizationType::OTHER;
                 emitWarning("ComplexData.RadarCollection.RcvChannel.TxRcvPolarization");
@@ -134,7 +159,7 @@ void SicdVersionUpdater::updateSingleIncrement()
 
         if (mData.matchInformation)
         {
-            for (auto& matchType : mData.matchInformation->types)
+            for (auto &matchType : mData.matchInformation->types)
             {
                 matchType->typeID = "NOT SET";
                 matchType->collectorName = "";
@@ -146,7 +171,7 @@ void SicdVersionUpdater::updateSingleIncrement()
 
         if (mData.scpcoa)
         {
-            auto* sceneGeometry = Utilities::getSceneGeometry(&mData);
+            auto *sceneGeometry = Utilities::getSceneGeometry(&mData);
             mData.scpcoa->azimAngle = sceneGeometry->getAzimuthAngle();
             mData.scpcoa->layoverAngle = sceneGeometry->getETPLayoverAngle();
         }

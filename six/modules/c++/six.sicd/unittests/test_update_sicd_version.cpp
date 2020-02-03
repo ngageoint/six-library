@@ -62,6 +62,14 @@ TEST_CASE(testTransitiveUpdate)
 
     // This is still the only notable difference
     TEST_ASSERT_EQ(complexData.getVersion(), "1.1.0");
+
+    // We should still have a new processing block for this "empty"
+    // version update
+    TEST_ASSERT(complexData.imageFormation.get());
+    TEST_ASSERT_EQ(complexData.imageFormation->processing.size(), 1);
+    const auto& processing = complexData.imageFormation->processing[0];
+    TEST_ASSERT_FALSE(processing.type.empty());
+    TEST_ASSERT_EQ(processing.applied, six::AppliedType::IS_TRUE);
 }
 
 TEST_CASE(testUpdateDistRefLinePoly)
@@ -86,6 +94,29 @@ TEST_CASE(testUpdateDistRefLinePoly)
     TEST_ASSERT_TRUE(six::Init::isUndefined(complexData.rma->rmat->distRefLinePoly));
 }
 
+TEST_CASE(testWarningParameters)
+{
+    logging::NullLogger log;
+    six::sicd::ComplexData complexData;
+
+    complexData.setVersion("0.4.0");
+    complexData.rma.reset(new six::sicd::RMA());
+    complexData.rma->rmat.reset(new six::sicd::RMAT());
+
+    six::sicd::SicdVersionUpdater(complexData, "0.5.0", log).update();
+
+    TEST_ASSERT(complexData.imageFormation.get());
+    TEST_ASSERT_EQ(complexData.imageFormation->processing.size(), 1);
+    const auto& processing = complexData.imageFormation->processing[0];
+    TEST_ASSERT_FALSE(processing.type.empty());
+    TEST_ASSERT_EQ(processing.applied, six::AppliedType::IS_TRUE);
+    const auto& parameters = processing.parameters;
+    TEST_ASSERT_EQ(parameters.size(), 1);
+    TEST_ASSERT_EQ(parameters[0].getName(), "Guessed Field");
+    TEST_ASSERT_EQ(parameters[0].str(), "ComplexData.RMA.RMAT.DistRefLinePoly");
+
+}
+
 int main(int, char**)
 {
     // These tests should suffice to cover all of the "tricky"
@@ -95,5 +126,6 @@ int main(int, char**)
     TEST_CHECK(test110To120);
     TEST_CHECK(testTransitiveUpdate);
     TEST_CHECK(testUpdateDistRefLinePoly);
+    TEST_CHECK(testWarningParameters);
     return 0;
 }
