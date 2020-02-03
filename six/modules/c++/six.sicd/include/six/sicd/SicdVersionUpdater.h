@@ -55,6 +55,12 @@ public:
                        const std::string& targetVersion,
                        logging::Logger& log);
 
+    /*!
+     * Get a collection of valid version strings.
+     * \return All the allowable version strings for this type of metadata
+     */
+    static const std::vector<std::string>& getValidVersions();
+
 private:
     void updateSingleIncrement() override;
 

@@ -52,11 +52,6 @@ void writeSicd(std::auto_ptr<six::Data> complexData,
     buffers.push_back(reinterpret_cast<const six::UByte*>(widebandData.data()));
     writer.save(buffers, pathname, schemaPaths);
 }
-
-const std::vector<std::string> SICD_VERSIONS =
-{
-    "0.4.1", "0.5.0", "1.0.0", "1.0.1", "1.1.0", "1.2.0"
-};
 }
 
 int main(int argc, char **argv)
@@ -75,7 +70,8 @@ int main(int argc, char **argv)
         parser.addArgument("input", "Input SICD for version upgrade", cli::STORE,
                            "input", "INPUT", 1, 1);
         parser.addArgument("version", "New version to target",
-                           cli::STORE, "version")->setChoices(SICD_VERSIONS);
+                           cli::STORE, "version")->setChoices(
+                                   six::sicd::SicdVersionUpdater::getValidVersions());
         parser.addArgument("output", "Pathname of output SICD", cli::STORE,
                            "output", "OUTPUT", 1, 1);
         const auto options = parser.parse(argc, argv);

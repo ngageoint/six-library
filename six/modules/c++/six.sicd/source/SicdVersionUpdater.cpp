@@ -26,22 +26,29 @@
 #include <six/VersionUpdater.h>
 #include <six/sicd/SicdVersionUpdater.h>
 
-namespace
-{
-static const std::vector<std::string> SICD_VERSIONS =
-    {
-        "0.4.0", "0.4.1", "0.5.0", "1.0.0", "1.0.1", "1.1.0", "1.2.0"};
-}
-
 namespace six
 {
 namespace sicd
 {
-SicdVersionUpdater::SicdVersionUpdater(ComplexData &complexData,
-                                       const std::string &targetVersion,
-                                       logging::Logger &log) : VersionUpdater(complexData, targetVersion, SICD_VERSIONS, log),
-                                                               mData(complexData)
+SicdVersionUpdater::SicdVersionUpdater(ComplexData& complexData,
+                                       const std::string& targetVersion,
+                                       logging::Logger& log) :
+    VersionUpdater(complexData,
+                   targetVersion,
+                   getValidVersions(),
+                   log),
+    mData(complexData)
 {
+}
+
+const std::vector<std::string>&
+SicdVersionUpdater::getValidVersions()
+{
+    static const std::vector<std::string> sicdVersions =
+    {
+        "0.4.0", "0.4.1", "0.5.0", "1.0.0", "1.0.1", "1.1.0", "1.2.0"
+    };
+    return sicdVersions;
 }
 
 void SicdVersionUpdater::recordProcessingStep()
