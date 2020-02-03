@@ -39,7 +39,7 @@ namespace sicd
  * updates. Some inserted fields will be valid XML but
  * mathematically garbage.
  */
-class SicdVersionUpdater : public VersionUpdater
+class SICDVersionUpdater : public VersionUpdater
 {
 public:
     /*!
@@ -51,7 +51,7 @@ public:
      *                 with either bad data or guesses
      * \throws If `targetVersion` is invalid
      */
-    SicdVersionUpdater(ComplexData& complexData,
+    SICDVersionUpdater(ComplexData& complexData,
                        const std::string& targetVersion,
                        logging::Logger& log);
 

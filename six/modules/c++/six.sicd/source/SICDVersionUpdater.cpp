@@ -24,13 +24,13 @@
 #include <logging/Logger.h>
 #include <scene/SceneGeometry.h>
 #include <six/VersionUpdater.h>
-#include <six/sicd/SicdVersionUpdater.h>
+#include <six/sicd/SICDVersionUpdater.h>
 
 namespace six
 {
 namespace sicd
 {
-SicdVersionUpdater::SicdVersionUpdater(ComplexData& complexData,
+SICDVersionUpdater::SICDVersionUpdater(ComplexData& complexData,
                                        const std::string& targetVersion,
                                        logging::Logger& log) :
     VersionUpdater(complexData,
@@ -42,7 +42,7 @@ SicdVersionUpdater::SicdVersionUpdater(ComplexData& complexData,
 }
 
 const std::vector<std::string>&
-SicdVersionUpdater::getValidVersions()
+SICDVersionUpdater::getValidVersions()
 {
     static const std::vector<std::string> sicdVersions =
     {
@@ -51,7 +51,7 @@ SicdVersionUpdater::getValidVersions()
     return sicdVersions;
 }
 
-void SicdVersionUpdater::recordProcessingStep()
+void SICDVersionUpdater::recordProcessingStep()
 {
     if (!mData.imageFormation)
     {
@@ -71,14 +71,14 @@ void SicdVersionUpdater::recordProcessingStep()
     }
 }
 
-void SicdVersionUpdater::addProcessingParameter(const std::string &fieldName)
+void SICDVersionUpdater::addProcessingParameter(const std::string &fieldName)
 {
     Parameter parameter(fieldName);
     parameter.setName("Guessed Field");
     mData.imageFormation->processing[0].parameters.push_back(parameter);
 }
 
-void SicdVersionUpdater::updateSingleIncrement()
+void SICDVersionUpdater::updateSingleIncrement()
 {
     const std::string thisVersion = mData.getVersion();
     if (thisVersion == "0.4.1" ||

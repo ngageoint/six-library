@@ -27,7 +27,7 @@
 #include <six/NITFWriteControl.h>
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/ComplexXMLControl.h>
-#include <six/sicd/SicdVersionUpdater.h>
+#include <six/sicd/SICDVersionUpdater.h>
 #include <six/sicd/Utilities.h>
 #include <logging/Logger.h>
 
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
                            "input", "INPUT", 1, 1);
         parser.addArgument("version", "New version to target",
                            cli::STORE, "version")->setChoices(
-                                   six::sicd::SicdVersionUpdater::getValidVersions());
+                                   six::sicd::SICDVersionUpdater::getValidVersions());
         parser.addArgument("output", "Pathname of output SICD", cli::STORE,
                            "output", "OUTPUT", 1, 1);
         const auto options = parser.parse(argc, argv);
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
                                        complexData, widebandData);
 
         logging::DefaultLogger log("SICD Update");
-        six::sicd::SicdVersionUpdater(*complexData, version, log).update();
+        six::sicd::SICDVersionUpdater(*complexData, version, log).update();
 
         std::auto_ptr<six::Data> data(complexData.release());
         writeSicd(data, widebandData, schemaPaths,
