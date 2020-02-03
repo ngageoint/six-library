@@ -8,6 +8,9 @@
 .cproject
 .project
 
+# VS Code
+.vscode
+
 # Waf
 .lock-waf*
 .waf*
