@@ -64,18 +64,15 @@ void SICDVersionUpdater::recordProcessingStep()
     Processing versionProcessing;
     versionProcessing.applied = six::BooleanType::IS_TRUE;
     versionProcessing.type = "Automated version update";
-
-    if (mData.imageFormation->processing.empty())
-    {
-        mData.imageFormation->processing.push_back(versionProcessing);
-    }
+    mData.imageFormation->processing.push_back(versionProcessing);
 }
 
-void SICDVersionUpdater::addProcessingParameter(const std::string &fieldName)
+void SICDVersionUpdater::addProcessingParameter(const std::string& fieldName)
 {
     Parameter parameter(fieldName);
     parameter.setName("Guessed Field");
-    mData.imageFormation->processing[0].parameters.push_back(parameter);
+    const size_t index = mData.imageFormation->processing.size() - 1;
+    mData.imageFormation->processing[index].parameters.push_back(parameter);
 }
 
 void SICDVersionUpdater::updateSingleIncrement()
@@ -108,8 +105,8 @@ void SICDVersionUpdater::updateSingleIncrement()
     {
         if (mData.radarCollection.get())
         {
-            auto &radarCollection = *mData.radarCollection;
-            for (auto &rcvChannel : radarCollection.rcvChannels)
+            auto& radarCollection = *mData.radarCollection;
+            for (auto& rcvChannel : radarCollection.rcvChannels)
             {
                 rcvChannel->txRcvPolarization = six::DualPolarizationType::OTHER;
                 emitWarning("ComplexData.RadarCollection.RcvChannel.TxRcvPolarization");
@@ -164,7 +161,7 @@ void SICDVersionUpdater::updateSingleIncrement()
 
         if (mData.matchInformation)
         {
-            for (auto &matchType : mData.matchInformation->types)
+            for (auto& matchType : mData.matchInformation->types)
             {
                 matchType->typeID = "NOT SET";
                 matchType->collectorName = "";
