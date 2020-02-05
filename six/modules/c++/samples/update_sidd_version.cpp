@@ -35,12 +35,20 @@ namespace
 {
 void readSidd(const std::string& pathname,
               std::vector<std::string> schemaPaths,
-              std::auto_ptr<six::sidd::DerivedData> derivedData,
+              std::auto_ptr<six::sidd::DerivedData>& derivedData,
               std::vector<six::UByte>& widebandData)
 {
     logging::NullLogger log;
-    derivedData =
-            six::sidd::Utilities::parseDataFromFile(pathname, schemaPaths, log);
+
+    six::NITFReadControl reader;
+    reader.load(pathname);
+    auto container = reader.getContainer();
+    if (container->getDataType() != six::DataType::DERIVED)
+    {
+        throw except::Exception(Ctxt(pathname + " is not a SIDD"));
+    }
+    derivedData.reset(reinterpret_cast<six::sidd::DerivedData*>(
+            container->getData(0)->clone()));
 
     const types::RowCol<size_t> extent(derivedData->getNumRows(),
                                        derivedData->getNumCols());
@@ -52,8 +60,6 @@ void readSidd(const std::string& pathname,
     region.setNumCols(extent.col);
     region.setBuffer(widebandData.data());
 
-    six::NITFReadControl reader;
-    reader.load(pathname);
     reader.interleaved(region, 0);
 }
 

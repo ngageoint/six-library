@@ -76,7 +76,61 @@ void SIDDVersionUpdater::updateSingleIncrement()
     const std::string thisVersion = mData.getVersion();
     if (thisVersion == "1.0.0")
     {
-        // TODO:
+        // GeographicAndTarget
+        mData.geographicAndTarget->imageCorners.reset(new LatLonCorners());
+        *mData.geographicAndTarget->imageCorners =
+                mData.geographicAndTarget->geographicCoverage->footprint;
+
+        // TODO: Since validData doesn't seem to be present in SIDD 1.0,
+        // I'm assuming that the validData and imageCorners would be
+        // the same?
+        // This might also come from TargetInformation.footprint
+        mData.geographicAndTarget->validData.resize(4);
+        for (size_t ii = 0; ii < 4; ++ii)
+        {
+            mData.geographicAndTarget->validData[ii] =
+                    mData.geographicAndTarget->imageCorners->getCorner(ii);
+        }
+        emitWarning("GeographicAndTarget.ValidData");
+
+        mData.geographicAndTarget->geographicCoverage.reset();
+        mData.geographicAndTarget->targetInformation.clear();
+
+        // Measurement
+        // See comment for GeographicAndTarget.ValidData
+        const RowColInt& footprint = mData.measurement->pixelFootprint;
+        mData.measurement->validData.resize(4);
+        mData.measurement->validData[0] = RowColInt(0, 0);
+        mData.measurement->validData[1] = RowColInt(footprint.row, 0);
+        mData.measurement->validData[2] =
+                RowColInt(footprint.row, footprint.col);
+        mData.measurement->validData[3] = RowColInt(0, footprint.col);
+        emitWarning("Measurement.ValidData");
+
+        if (mData.exploitationFeatures)
+        {
+            for (size_t ii = 0; ii < mData.exploitationFeatures->product.size();
+                 ++ii)
+            {
+                Product& product = mData.exploitationFeatures->product[ii];
+                product.ellipticity = 0;
+                ProcTxRcvPolarization polarization;
+                polarization.txPolarizationProc =
+                        PolarizationSequenceType::OTHER;
+                polarization.rcvPolarizationProc =
+                        PolarizationSequenceType::OTHER;
+                product.polarization.push_back(polarization);
+
+                std::ostringstream msg;
+                msg << "ExploitationFeatures.Product[" << ii << "].Ellipcitiy";
+                emitWarning(msg.str());
+
+                msg.str("");
+                msg << "ExploitationFeatures.Product[" << ii
+                    << "].Polarization";
+                emitWarning(msg.str());
+            }
+        }
     }
     else
     {
