@@ -130,10 +130,10 @@ void SIDDVersionUpdater::updateSingleIncrement()
         *mData.geographicAndTarget->imageCorners =
                 mData.geographicAndTarget->geographicCoverage->footprint;
 
-        // TODO: Since validData doesn't seem to be present in SIDD 1.0,
-        // I'm assuming that the validData and imageCorners would be
-        // the same?
-        // This might also come from TargetInformation.footprint
+        // This is a "close-enough" guess that the validData will be
+        // at least similar to the image corners.
+        // You should still repopulate this block with the actual
+        // numbers though.
         mData.geographicAndTarget->validData.resize(4);
         for (size_t ii = 0; ii < 4; ++ii)
         {
