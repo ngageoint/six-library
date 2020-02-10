@@ -26,6 +26,20 @@
 #include <six/sidd/Utilities.h>
 #include <cassert>
 
+namespace
+{
+void populateFilter(six::sidd::Filter& filter)
+{
+    filter.filterName = "Placeholder";
+    filter.filterKernel.reset(new six::sidd::Filter::Kernel());
+    filter.filterKernel->custom.reset(new six::sidd::Filter::Kernel::Custom());
+    filter.filterKernel->custom->size = six::RowColInt(1, 1);
+    filter.filterKernel->custom->filterCoef.resize(
+            filter.filterKernel->custom->size.area());
+    filter.operation = six::sidd::FilterOperation::CONVOLUTION;
+}
+}
+
 namespace six
 {
 namespace sidd
@@ -76,6 +90,13 @@ void SIDDVersionUpdater::updateSingleIncrement()
     const std::string thisVersion = mData.getVersion();
     if (thisVersion == "1.0.0")
     {
+        // Classification
+        if (mData.productCreation->classification.compliesWith.empty())
+        {
+            mData.productCreation->classification.compliesWith.push_back(
+                    "OtherAuthority");
+            emitWarning("ProductCreation.Classification.CompliesWith");
+        }
         // GeographicAndTarget
         mData.geographicAndTarget->imageCorners.reset(new LatLonCorners());
         *mData.geographicAndTarget->imageCorners =
@@ -131,6 +152,43 @@ void SIDDVersionUpdater::updateSingleIncrement()
                 emitWarning(msg.str());
             }
         }
+
+        // Display
+        mData.display->nonInteractiveProcessing.resize(1);
+        mData.display->nonInteractiveProcessing[0].reset(
+                new six::sidd::NonInteractiveProcessing());
+        mData.display->nonInteractiveProcessing[0]->rrds.downsamplingMethod =
+                DownsamplingMethod::DECIMATE;
+
+        mData.display->nonInteractiveProcessing[0]
+                ->productGenerationOptions.dataRemapping.reset(
+                        new LookupTable());
+        auto& lut = *mData.display->nonInteractiveProcessing[0]
+                             ->productGenerationOptions.dataRemapping;
+        lut.lutName = "Placeholder";
+        lut.custom.reset(new LookupTable::Custom(1, 1));
+        emitWarning("Display.NoninteractiveProcessing");
+
+        mData.display->interactiveProcessing.resize(1);
+        mData.display->interactiveProcessing[0].reset(
+                new six::sidd::InteractiveProcessing());
+        auto& filter = mData.display->interactiveProcessing[0]
+                               ->geometricTransform.scaling.antiAlias;
+        populateFilter(filter);
+        populateFilter(mData.display->interactiveProcessing[0]
+                               ->geometricTransform.scaling.interpolation);
+        mData.display->interactiveProcessing[0]
+                ->geometricTransform.orientation.shadowDirection =
+                ShadowDirection::RIGHT;
+        mData.display->interactiveProcessing[0]
+                ->sharpnessEnhancement.modularTransferFunctionEnhancement.reset(
+                        new Filter());
+        populateFilter(*mData.display->interactiveProcessing[0]
+                                ->sharpnessEnhancement
+                                .modularTransferFunctionEnhancement);
+        mData.display->interactiveProcessing[0]
+                ->dynamicRangeAdjustment.algorithmType = DRAType::NONE;
+        emitWarning("Display.InteractiveProcessing");
     }
     else
     {

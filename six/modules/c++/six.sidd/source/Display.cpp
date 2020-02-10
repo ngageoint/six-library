@@ -53,7 +53,8 @@ DynamicRangeAdjustment::DRAOverrides::DRAOverrides() :
 
 bool MonochromeDisplayRemap::equalTo(const Remap& rhs) const
 {
-    const MonochromeDisplayRemap* remap = dynamic_cast<const MonochromeDisplayRemap*>(&rhs);
+    const MonochromeDisplayRemap* remap =
+            dynamic_cast<const MonochromeDisplayRemap*>(&rhs);
     if (remap != NULL)
     {
         return *this == *remap;
@@ -64,13 +65,13 @@ bool MonochromeDisplayRemap::equalTo(const Remap& rhs) const
 bool MonochromeDisplayRemap::operator==(const MonochromeDisplayRemap& rhs) const
 {
     return (remapType == rhs.remapType &&
-        remapParameters == rhs.remapParameters &&
-        remapLUT == rhs.remapLUT);
+            remapParameters == rhs.remapParameters && remapLUT == rhs.remapLUT);
 }
 
 bool ColorDisplayRemap::equalTo(const Remap& rhs) const
 {
-    ColorDisplayRemap const* remap = dynamic_cast<ColorDisplayRemap const*>(&rhs);
+    ColorDisplayRemap const* remap =
+            dynamic_cast<ColorDisplayRemap const*>(&rhs);
     if (remap != NULL)
     {
         return *this == *remap;
@@ -86,14 +87,14 @@ bool ColorDisplayRemap::operator==(const ColorDisplayRemap& rhs) const
 bool RRDS::operator==(const RRDS& rhs) const
 {
     return (downsamplingMethod == rhs.downsamplingMethod &&
-            antiAlias == rhs.antiAlias &&
-            interpolation == rhs.interpolation);
+            antiAlias == rhs.antiAlias && interpolation == rhs.interpolation);
 }
 
-bool ProductGenerationOptions::operator==(const ProductGenerationOptions& rhs) const
+bool ProductGenerationOptions::operator==(
+        const ProductGenerationOptions& rhs) const
 {
     return (bandEqualization == rhs.bandEqualization &&
-            modularTransferFunctionRestoration == 
+            modularTransferFunctionRestoration ==
                     rhs.modularTransferFunctionRestoration &&
             dataRemapping == rhs.dataRemapping &&
             asymmetricPixelCorrection == rhs.asymmetricPixelCorrection);
@@ -101,8 +102,7 @@ bool ProductGenerationOptions::operator==(const ProductGenerationOptions& rhs) c
 
 bool BandEqualization::operator==(const BandEqualization& rhs) const
 {
-    return (algorithm == rhs.algorithm &&
-            bandLUTs == rhs.bandLUTs);
+    return (algorithm == rhs.algorithm && bandLUTs == rhs.bandLUTs);
 }
 
 bool NonInteractiveProcessing::operator==(
@@ -120,9 +120,9 @@ bool Scaling::operator==(const Scaling& rhs) const
 bool ColorManagementModule::operator==(const ColorManagementModule& rhs) const
 {
     return (renderingIntent == rhs.renderingIntent &&
-        sourceProfile == rhs.sourceProfile &&
-        displayProfile == rhs.displayProfile &&
-        iccProfile == rhs.iccProfile);
+            sourceProfile == rhs.sourceProfile &&
+            displayProfile == rhs.displayProfile &&
+            iccProfile == rhs.iccProfile);
 }
 
 bool ColorManagementModule::operator!=(const ColorManagementModule& rhs) const
@@ -138,41 +138,38 @@ bool GeometricTransform::operator==(const GeometricTransform& rhs) const
 bool SharpnessEnhancement::operator==(const SharpnessEnhancement& rhs) const
 {
     return (modularTransferFunctionCompensation ==
-                rhs.modularTransferFunctionCompensation &&
-            modularTransferFunctionRestoration ==
-                rhs.modularTransferFunctionRestoration);
+                    rhs.modularTransferFunctionCompensation &&
+            modularTransferFunctionEnhancement ==
+                    rhs.modularTransferFunctionEnhancement);
 }
 
 bool DynamicRangeAdjustment::DRAParameters::operator==(
-    const DynamicRangeAdjustment::DRAParameters& rhs) const
+        const DynamicRangeAdjustment::DRAParameters& rhs) const
 {
-    return (pMin == rhs.pMin &&
-        pMax == rhs.pMax &&
-        eMinModifier == rhs.eMinModifier &&
-        eMaxModifier == rhs.eMaxModifier);
+    return (pMin == rhs.pMin && pMax == rhs.pMax &&
+            eMinModifier == rhs.eMinModifier &&
+            eMaxModifier == rhs.eMaxModifier);
 }
 
 bool DynamicRangeAdjustment::DRAOverrides::operator==(
-    const DynamicRangeAdjustment::DRAOverrides& rhs) const
+        const DynamicRangeAdjustment::DRAOverrides& rhs) const
 {
-    return (subtractor == rhs.subtractor &&
-        multiplier == rhs.multiplier);
+    return (subtractor == rhs.subtractor && multiplier == rhs.multiplier);
 }
 
-bool DynamicRangeAdjustment::operator==(
-        const DynamicRangeAdjustment& rhs) const
+bool DynamicRangeAdjustment::operator==(const DynamicRangeAdjustment& rhs) const
 {
     return (draParameters == rhs.draParameters &&
-        draOverrides == rhs.draOverrides);
+            draOverrides == rhs.draOverrides);
 }
 
 bool InteractiveProcessing::operator==(const InteractiveProcessing& rhs) const
 {
     return (geometricTransform == rhs.geometricTransform &&
-        sharpnessEnhancement == rhs.sharpnessEnhancement &&
-        colorSpaceTransform == rhs.colorSpaceTransform &&
-        dynamicRangeAdjustment == rhs.dynamicRangeAdjustment &&
-        tonalTransferCurve == rhs.tonalTransferCurve);
+            sharpnessEnhancement == rhs.sharpnessEnhancement &&
+            colorSpaceTransform == rhs.colorSpaceTransform &&
+            dynamicRangeAdjustment == rhs.dynamicRangeAdjustment &&
+            tonalTransferCurve == rhs.tonalTransferCurve);
 }
 
 Display::Display() :
@@ -188,17 +185,17 @@ Display::Display() :
 bool Display::operator==(const Display& rhs) const
 {
     return (pixelType == rhs.pixelType &&
-        remapInformation == rhs.remapInformation &&
-        magnificationMethod == rhs.magnificationMethod &&
-        decimationMethod == rhs.decimationMethod &&
-        histogramOverrides == rhs.histogramOverrides &&
-        monitorCompensationApplied == rhs.monitorCompensationApplied &&
-        numBands == rhs.numBands &&
-        defaultBandDisplay == rhs.defaultBandDisplay,
-        nonInteractiveProcessing == rhs.nonInteractiveProcessing &&
-        interactiveProcessing == rhs.interactiveProcessing &&
-        displayExtensions == rhs.displayExtensions);
+                    remapInformation == rhs.remapInformation &&
+                    magnificationMethod == rhs.magnificationMethod &&
+                    decimationMethod == rhs.decimationMethod &&
+                    histogramOverrides == rhs.histogramOverrides &&
+                    monitorCompensationApplied ==
+                            rhs.monitorCompensationApplied &&
+                    numBands == rhs.numBands &&
+                    defaultBandDisplay == rhs.defaultBandDisplay,
+            nonInteractiveProcessing == rhs.nonInteractiveProcessing &&
+                    interactiveProcessing == rhs.interactiveProcessing &&
+                    displayExtensions == rhs.displayExtensions);
 }
-
 }
 }

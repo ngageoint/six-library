@@ -296,9 +296,9 @@ struct Orientation
 struct SharpnessEnhancement
 {
     // Must include exactly one of modularTransferFunctionCompensation or
-    // modularTransferFunctionRestoration
+    // modularTransferFunctionEnhancement
     mem::ScopedCopyablePtr<Filter> modularTransferFunctionCompensation;
-    mem::ScopedCopyablePtr<Filter> modularTransferFunctionRestoration;
+    mem::ScopedCopyablePtr<Filter> modularTransferFunctionEnhancement;
 
     bool operator==(const SharpnessEnhancement& rhs) const;
     bool operator!=(const SharpnessEnhancement& rhs) const
