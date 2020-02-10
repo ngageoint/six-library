@@ -38,6 +38,33 @@ void populateFilter(six::sidd::Filter& filter)
             filter.filterKernel->custom->size.area());
     filter.operation = six::sidd::FilterOperation::CONVOLUTION;
 }
+
+void populateNoninteractiveProcessing(
+        six::sidd::NonInteractiveProcessing& processing)
+{
+    processing.rrds.downsamplingMethod =
+            six::sidd::DownsamplingMethod::DECIMATE;
+
+    processing.productGenerationOptions.dataRemapping.reset(
+            new six::sidd::LookupTable());
+    auto& lut = *processing.productGenerationOptions.dataRemapping;
+    lut.lutName = "Placeholder";
+    lut.custom.reset(new six::sidd::LookupTable::Custom(1, 1));
+}
+
+void populateInteractiveProcessing(six::sidd::InteractiveProcessing& processing)
+{
+    populateFilter(processing.geometricTransform.scaling.antiAlias);
+    populateFilter(processing.geometricTransform.scaling.interpolation);
+    processing.geometricTransform.orientation.shadowDirection =
+            six::sidd::ShadowDirection::RIGHT;
+    processing.sharpnessEnhancement.modularTransferFunctionEnhancement.reset(
+            new six::sidd::Filter());
+    auto& mtfeFilter =
+            *processing.sharpnessEnhancement.modularTransferFunctionEnhancement;
+    populateFilter(mtfeFilter);
+    processing.dynamicRangeAdjustment.algorithmType = six::sidd::DRAType::NONE;
+}
 }
 
 namespace six
@@ -97,6 +124,7 @@ void SIDDVersionUpdater::updateSingleIncrement()
                     "OtherAuthority");
             emitWarning("ProductCreation.Classification.CompliesWith");
         }
+
         // GeographicAndTarget
         mData.geographicAndTarget->imageCorners.reset(new LatLonCorners());
         *mData.geographicAndTarget->imageCorners =
@@ -157,37 +185,14 @@ void SIDDVersionUpdater::updateSingleIncrement()
         mData.display->nonInteractiveProcessing.resize(1);
         mData.display->nonInteractiveProcessing[0].reset(
                 new six::sidd::NonInteractiveProcessing());
-        mData.display->nonInteractiveProcessing[0]->rrds.downsamplingMethod =
-                DownsamplingMethod::DECIMATE;
-
-        mData.display->nonInteractiveProcessing[0]
-                ->productGenerationOptions.dataRemapping.reset(
-                        new LookupTable());
-        auto& lut = *mData.display->nonInteractiveProcessing[0]
-                             ->productGenerationOptions.dataRemapping;
-        lut.lutName = "Placeholder";
-        lut.custom.reset(new LookupTable::Custom(1, 1));
+        populateNoninteractiveProcessing(
+                *mData.display->nonInteractiveProcessing[0]);
         emitWarning("Display.NoninteractiveProcessing");
 
         mData.display->interactiveProcessing.resize(1);
         mData.display->interactiveProcessing[0].reset(
                 new six::sidd::InteractiveProcessing());
-        auto& filter = mData.display->interactiveProcessing[0]
-                               ->geometricTransform.scaling.antiAlias;
-        populateFilter(filter);
-        populateFilter(mData.display->interactiveProcessing[0]
-                               ->geometricTransform.scaling.interpolation);
-        mData.display->interactiveProcessing[0]
-                ->geometricTransform.orientation.shadowDirection =
-                ShadowDirection::RIGHT;
-        mData.display->interactiveProcessing[0]
-                ->sharpnessEnhancement.modularTransferFunctionEnhancement.reset(
-                        new Filter());
-        populateFilter(*mData.display->interactiveProcessing[0]
-                                ->sharpnessEnhancement
-                                .modularTransferFunctionEnhancement);
-        mData.display->interactiveProcessing[0]
-                ->dynamicRangeAdjustment.algorithmType = DRAType::NONE;
+        populateInteractiveProcessing(*mData.display->interactiveProcessing[0]);
         emitWarning("Display.InteractiveProcessing");
     }
     else
