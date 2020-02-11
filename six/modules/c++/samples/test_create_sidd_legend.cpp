@@ -118,7 +118,6 @@ int main(int argc, char** argv)
             return 1;
         }
         const std::string outPathnamePrefix(argv[1]);
-        verifySchemaEnvVariableIsSet();
 
         // In order to make it easier to test segmenting, let's artificially set
         // the segment size really small

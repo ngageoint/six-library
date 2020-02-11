@@ -2240,16 +2240,6 @@ int main(int argc, char** argv)
             throw except::Exception(Ctxt(
                 "Small image too small to segment"));
         }
-        try
-        {
-            sys::OS().getEnv(six::SCHEMA_PATH);
-        }
-        catch(const except::Exception& )
-        {
-            throw except::Exception(Ctxt(
-                    "Must specify SIDD schema path via " +
-                    std::string(six::SCHEMA_PATH) + " environment variable"));
-        }
 
         const bool smallImage = options->get<bool>("smallImage");
 
