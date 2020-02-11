@@ -104,8 +104,10 @@ int main(int argc, char** argv)
                            "INPUT",
                            1,
                            1);
-        parser.addArgument(
-                      "version", "New version to target", cli::STORE, "version")
+        parser.addArgument("version",
+                           "New version to target",
+                           cli::STORE,
+                           "version")
                 ->setChoices(versions);
         parser.addArgument("output",
                            "Pathname of output SIDD",
