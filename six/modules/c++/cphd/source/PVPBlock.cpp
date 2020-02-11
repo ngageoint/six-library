@@ -349,6 +349,32 @@ PVPBlock::PVPBlock(size_t numChannels,
     }
 }
 
+PVPBlock::PVPBlock(size_t numChannels,
+                   const std::vector<size_t>& numVectors,
+                   const Pvp& pvp,
+                   const std::vector<const void*>& data) :
+    PVPBlock(numChannels, numVectors, pvp)
+{
+    if (data.size() != numChannels)
+    {
+        std::ostringstream msg;
+        msg << "<" << numChannels << "> channels specified, "
+            << "but `data` argument has <" << data.size() << "> channels";
+        throw except::Exception(Ctxt(msg.str()));
+    }
+
+    for (size_t channel = 0; channel < numChannels; ++channel)
+    {
+        const sys::byte* buf = static_cast<const sys::byte*>(data[channel]);
+
+        for (size_t vector = 0; vector < numVectors[channel]; ++vector)
+        {
+            mData[channel][vector].write(*this, mPvp, buf);
+            buf += mPvp.sizeInBytes();
+        }
+    }
+}
+
 size_t PVPBlock::getNumBytesPVPSet() const
 {
     return mNumBytesPerVector;

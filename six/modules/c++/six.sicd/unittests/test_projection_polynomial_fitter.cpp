@@ -10,12 +10,33 @@
 
 namespace
 {
+std::string findSixHome(const sys::Path& exePath)
+{
+    sys::Path sixHome = exePath.join("..");
+    do
+    {
+        const sys::Path croppedNitfs = sixHome.join("croppedNitfs");
+        if (sys::OS().isDirectory(croppedNitfs.getAbsolutePath()))
+        {
+            return sixHome;
+        }
+        sixHome = sixHome.join("..");
+    } while (sixHome.getAbsolutePath() != sixHome.join("..").getAbsolutePath());
+    return "";
+}
+
 std::auto_ptr<scene::ProjectionPolynomialFitter>
 loadPolynomialFitter(const sys::Path& exePath)
 {
-    const sys::Path sixHome = exePath.
-        join("..").join("..").join("..").join("..");
-    const sys::Path sicdPathname = sixHome.
+    const std::string sixHome = findSixHome(exePath);
+    if (sixHome.empty())
+    {
+        std::ostringstream oss;
+        oss << "Environment error: Cannot determine source tree root";
+        throw except::Exception(Ctxt(oss.str()));
+    }
+
+    const sys::Path sicdPathname = sys::Path(sixHome).
         join("croppedNitfs").
         join("SICD").
         join("cropped_sicd_110.nitf").getAbsolutePath();
@@ -126,7 +147,15 @@ int main(int argc, char** argv)
         return 1;
     }
     // Making this global so we don't have to re-read the file every test
-    globalFitter = loadPolynomialFitter(std::string(argv[0]));
+    try
+    {
+        globalFitter = loadPolynomialFitter(std::string(argv[0]));
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << "\n";
+        return 1;
+    }
     TEST_CHECK(testProjectOutputToSlant);
     TEST_CHECK(testProjectSlantToOutput);
     return 0;

@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 
         std::auto_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float> > widebandData;
-        six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, 
+        six::sicd::Utilities::readSicd(sicdPathname, schemaPaths,
                 complexData, widebandData);
 
         std::cout << "Loaded!" << std::endl;
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 
         double sumMag   = 0.0;
         double sumPhase = 0.0;
-        for(size_t ii = 0; ii < nl*ne; ++ii) 
+        for(size_t ii = 0; ii < nl*ne; ++ii)
         {
             sumMag   += std::abs(widebandData[ii]);
             sumPhase += std::arg(widebandData[ii]);

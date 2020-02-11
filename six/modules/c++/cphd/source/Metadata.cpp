@@ -23,39 +23,55 @@
 
 namespace cphd
 {
+
+Metadata::Metadata()
+{
+  // Default version defined in cphd::FileHeader
+  mVersion = FileHeader::DEFAULT_VERSION;
+}
+
 size_t Metadata::getNumChannels() const
 {
     return data.getNumChannels();
 }
+
 size_t Metadata::getNumVectors(size_t channel) const
 {
     return data.getNumVectors(channel);
 }
+
 size_t Metadata::getNumSamples(size_t channel) const
 {
     return data.getNumSamples(channel);
 }
+
 size_t Metadata::getNumBytesPerSample() const
 {
     return data.getNumBytesPerSample();
 }
+
 size_t Metadata::getCompressedSignalSize(size_t channel) const
 {
     return data.getCompressedSignalSize(channel);
 }
+
 bool Metadata::isCompressed() const
 {
     return data.isCompressed();
 }
 
-std::string Metadata::getUri() const
+DomainType Metadata::getDomainType() const
 {
-    return mUri;
+    return global.getDomainType();
 }
 
-void Metadata::setUri(const std::string& uri)
+std::string Metadata::getVersion() const
 {
-    mUri = uri;
+    return mVersion;
+}
+void Metadata::setVersion(const std::string& version)
+{
+    mVersion = version;
 }
 
 bool Metadata::operator==(const Metadata& other) const

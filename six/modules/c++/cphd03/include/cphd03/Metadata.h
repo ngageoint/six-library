@@ -71,21 +71,11 @@ struct Metadata : cphd::MetadataBase
     size_t getNumSamples(size_t channel) const;   // 0-based channel number
     size_t getNumBytesPerSample() const;          // 2, 4, or 8 bytes/complex sample
 
-    bool isFX() const
-    {
-        return (getDomainType() == cphd::DomainType::FX);
-    }
-
-    bool isTOA() const
-    {
-        return (getDomainType() == cphd::DomainType::TOA);
-    }
-
     // returns "FX", "TOA", or "NOT_SET"
     std::string getDomainTypeString() const;
 
     // returns enum for FX, TOA, or NOT_SET
-    cphd::DomainType getDomainType() const;
+    cphd::DomainType getDomainType() const override;
 
     //!  CollectionInfo block.  Contains the general collection information
     //!  CPHD03 can use the SICD Collection Information block directly

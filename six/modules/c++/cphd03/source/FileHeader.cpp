@@ -83,11 +83,11 @@ void FileHeader::read(io::SeekableInputStream& inStream)
             {
                mVbByteOffset = str::toType<sys::Off_T>(headerEntry.second);
             }
-            else if (headerEntry.first == "CPHD03_DATA_SIZE")
+            else if (headerEntry.first == "CPHD_DATA_SIZE")
             {
                mCphdDataSize = str::toType<sys::Off_T>(headerEntry.second);
             }
-            else if (headerEntry.first == "CPHD03_BYTE_OFFSET")
+            else if (headerEntry.first == "CPHD_BYTE_OFFSET")
             {
                mCphdByteOffset = str::toType<sys::Off_T>(headerEntry.second);
             }
@@ -148,8 +148,8 @@ std::string FileHeader::toString() const
        << LINE_TERMINATOR
        << "VB_DATA_SIZE" << KVP_DELIMITER << mVbDataSize << LINE_TERMINATOR
        << "VB_BYTE_OFFSET" << KVP_DELIMITER << mVbByteOffset << LINE_TERMINATOR
-       << "CPHD03_DATA_SIZE" << KVP_DELIMITER << mCphdDataSize << LINE_TERMINATOR
-       << "CPHD03_BYTE_OFFSET" << KVP_DELIMITER << mCphdByteOffset
+       << "CPHD_DATA_SIZE" << KVP_DELIMITER << mCphdDataSize << LINE_TERMINATOR
+       << "CPHD_BYTE_OFFSET" << KVP_DELIMITER << mCphdByteOffset
        << LINE_TERMINATOR;
 
     return os.str();

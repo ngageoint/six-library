@@ -151,8 +151,8 @@ TEST_CASE(testRotatePlane)
     plane.segmentList[0]->endLine = 4;
     plane.segmentList[0]->endSample = 8;
 
-    const int originalNumLines = plane.segmentList[0]->getNumLines();
-    const int originalNumSamples = plane.segmentList[0]->getNumSamples();
+    const size_t originalNumLines = plane.segmentList[0]->getNumLines();
+    const size_t originalNumSamples = plane.segmentList[0]->getNumSamples();
 
     plane.rotateCCW();
     TEST_ASSERT(plane.orientation ==

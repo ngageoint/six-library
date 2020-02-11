@@ -153,7 +153,7 @@ void getDesBuffer(six::NITFReadControl& reader,
                   mem::ScopedAlignedArray<sys::byte>& buffer)
 {
     nitf::List des = reader.getRecord().getDataExtensions();
-    
+
     if (desIndex >= des.getSize())
     {
         throw except::Exception(Ctxt("DES index out of range."));
@@ -1043,17 +1043,17 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
         complexData->imageData->scpPixel.row,
         complexData->imageData->scpPixel.col);
 
-    six::Poly2D outputXYToSlantX;               
+    six::Poly2D outputXYToSlantX;
     six::Poly2D outputXYToSlantY;
-    six::Poly2D slantXYToOutputX;               
+    six::Poly2D slantXYToOutputX;
     six::Poly2D slantXYToOutputY;
     fitXYProjectionPolys(*outputMesh,
                          *slantMesh,
                          orderX,
                          orderY,
-                         outputXYToSlantX,                  
-                         outputXYToSlantY,                  
-                         slantXYToOutputX,               
+                         outputXYToSlantX,
+                         outputXYToSlantY,
+                         slantXYToOutputX,
                          slantXYToOutputY);
 
     transformXYProjectionPolys(outputXYToSlantX,
@@ -1077,9 +1077,9 @@ six::Poly2D Utilities::transformXYPolyToRowColPoly(
         getXYtoRowColTransform(outCenter.row, outSampleSpacing.row, true);
 
     const six::Poly2D yToColTransform =
-        getXYtoRowColTransform(outCenter.col, outSampleSpacing.col, false);    
+        getXYtoRowColTransform(outCenter.col, outSampleSpacing.col, false);
 
-    // Transform the output to input polynomials to 
+    // Transform the output to input polynomials to
     // take row, column inputs
     six::Poly2D polyRowCol = polyXY.transformInput(
         xToRowTransform, yToColTransform);
@@ -1119,10 +1119,10 @@ void Utilities::fitXYProjectionPolys(
     const six::sicd::PlanarCoordinateMesh& slantMesh,
     size_t orderX,
     size_t orderY,
-    six::Poly2D& outputXYToSlantX,                  
-    six::Poly2D& outputXYToSlantY,                  
-    six::Poly2D& slantXYToOutputX,                  
-    six::Poly2D& slantXYToOutputY)              
+    six::Poly2D& outputXYToSlantX,
+    six::Poly2D& outputXYToSlantY,
+    six::Poly2D& slantXYToOutputX,
+    six::Poly2D& slantXYToOutputY)
 {
     // Meshes must be the same size.
     const types::RowCol<size_t> slantMeshDims = slantMesh.getMeshDims();
@@ -1162,7 +1162,7 @@ void Utilities::projectPixelsToOutputPlane(
 
     const types::RowCol<double> opSampleSpacing(areaPlane.xDirection->spacing,
                                                areaPlane.yDirection->spacing);
- 
+
     const types::RowCol<double> opCenterPixel(
         static_cast<double>(areaPlane.xDirection->elements / 2 + 1),
         static_cast<double>(areaPlane.yDirection->elements / 2 + 1));
@@ -1191,7 +1191,7 @@ void Utilities::projectPixelsToOutputPlane(
             opX / opSampleSpacing.row + opCenterPixel.row,
             opY / opSampleSpacing.col + opCenterPixel.col);
     }
-   
+
 }
 
 void Utilities::projectValidDataPolygonToOutputPlane(
@@ -1254,14 +1254,14 @@ void Utilities::projectPixelsToSlantPlane(
     const types::RowCol<double> spOffset(
         spSCP.row - spOrigOffset.row,
         spSCP.col - spOrigOffset.col);
-    
+
     // Project output plane pixels to slant plane pixels.
     spPixels.resize(opPixels.size());
     for (size_t ii = 0; ii < opPixels.size(); ++ii)
     {
         // Convert output plane pixel to ECEF.
         const scene::Vector3 ecef = ecefTransform.rowColToECEF(opPixels[ii]);
-        
+
         // Convert ECEF to slant plane distance from SCP.
         double timeCOA = 0.0;
         const types::RowCol<double> spXY =

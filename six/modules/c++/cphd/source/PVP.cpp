@@ -28,8 +28,6 @@
 
 namespace cphd
 {
-const size_t PVPType::WORD_BYTE_SIZE = 8;
-
 PVPType::PVPType() :
     mSize(0),
     mOffset(six::Init::undefined<size_t>()),
@@ -182,7 +180,12 @@ size_t Pvp::getReqSetSize() const
     {
         res += it->second.getSize();
     }
-    return res; // Num Bytes
+    return res;
+}
+
+size_t Pvp::sizeInBytes() const
+{
+    return getReqSetSize() * PVPType::WORD_BYTE_SIZE;
 }
 
 std::ostream& operator<< (std::ostream& os, const PVPType& p)
@@ -256,5 +259,3 @@ std::ostream& operator<< (std::ostream& os, const Pvp& p)
     return os;
 }
 }
-
-

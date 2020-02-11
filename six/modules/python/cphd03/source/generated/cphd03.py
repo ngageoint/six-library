@@ -849,6 +849,21 @@ class MetadataBase(_object):
         """isCompressed(MetadataBase self) -> bool"""
         return _cphd03.MetadataBase_isCompressed(self)
 
+
+    def getDomainType(self) -> "cphd::DomainType":
+        """getDomainType(MetadataBase self) -> DomainType"""
+        return _cphd03.MetadataBase_getDomainType(self)
+
+
+    def isFX(self) -> "bool":
+        """isFX(MetadataBase self) -> bool"""
+        return _cphd03.MetadataBase_isFX(self)
+
+
+    def isTOA(self) -> "bool":
+        """isTOA(MetadataBase self) -> bool"""
+        return _cphd03.MetadataBase_isTOA(self)
+
 MetadataBase_swigregister = _cphd03.MetadataBase_swigregister
 MetadataBase_swigregister(MetadataBase)
 
@@ -1655,16 +1670,6 @@ class Metadata(MetadataBase):
     def getNumBytesPerSample(self) -> "size_t":
         """getNumBytesPerSample(Metadata self) -> size_t"""
         return _cphd03.Metadata_getNumBytesPerSample(self)
-
-
-    def isFX(self) -> "bool":
-        """isFX(Metadata self) -> bool"""
-        return _cphd03.Metadata_isFX(self)
-
-
-    def isTOA(self) -> "bool":
-        """isTOA(Metadata self) -> bool"""
-        return _cphd03.Metadata_isTOA(self)
 
 
     def getDomainTypeString(self) -> "std::string":
