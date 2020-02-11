@@ -202,15 +202,15 @@ std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 
     switch (dataType)
     {
-        case DataType::COMPLEX:
-            str = "SICD";
-            break;
-        case DataType::DERIVED:
-            str = "SIDD";
-            break;
-        default:
-            throw except::Exception(
-                    Ctxt("Invalid data type " + str::toString(dataType)));
+    case DataType::COMPLEX:
+        str = "SICD";
+        break;
+    case DataType::DERIVED:
+        str = "SIDD";
+        break;
+    default:
+        throw except::Exception(
+                Ctxt("Invalid data type " + str::toString(dataType)));
     }
 
     if (appendXML)
