@@ -88,7 +88,7 @@ int main(int argc, char** argv)
                 six::sidd::SIDDVersionUpdater::getValidVersions();
         cli::ArgumentParser parser;
         parser.setDescription("This program is a command-line utility for "
-                              "upgrading the SICD metadata. This makes various "
+                              "upgrading the SIDD metadata. This makes various "
                               "assumptions and is intended to aide in quickly "
                               "generating test products for new standards. It "
                               "is not encouraged for production use.");
@@ -98,7 +98,7 @@ int main(int argc, char** argv)
                            "schema",
                            "FILE");
         parser.addArgument("input",
-                           "Input SICD for version upgrade",
+                           "Input SIDD for version upgrade",
                            cli::STORE,
                            "input",
                            "INPUT",
@@ -108,7 +108,7 @@ int main(int argc, char** argv)
                       "version", "New version to target", cli::STORE, "version")
                 ->setChoices(versions);
         parser.addArgument("output",
-                           "Pathname of output SICD",
+                           "Pathname of output SIDD",
                            cli::STORE,
                            "output",
                            "OUTPUT",
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
         std::vector<six::UByte> widebandData;
         readSidd(pathname, schemaPaths, derivedData, widebandData);
 
-        logging::DefaultLogger log("SICD Update");
+        logging::DefaultLogger log("SIDD Update");
         six::sidd::SIDDVersionUpdater(*derivedData, version, log).update();
 
         std::auto_ptr<six::Data> data(derivedData.release());
