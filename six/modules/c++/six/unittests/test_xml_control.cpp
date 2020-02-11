@@ -31,7 +31,6 @@ TEST_CASE(loadCompiledSchemaPath)
     std::vector<std::string> schemaPaths;
     six::XMLControl::loadSchemaPaths(schemaPaths);
     TEST_ASSERT_EQ(schemaPaths.size(), 1);
-    TEST_ASSERT_TRUE(sys::OS().isDirectory(schemaPaths[0]));
     TEST_ASSERT_EQ(schemaPaths[0], DEFAULT_SCHEMA_PATH);
 }
 
