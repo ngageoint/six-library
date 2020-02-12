@@ -262,7 +262,7 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
     if (!pluginEnvVar)
     {
         /*  Take the default path  */
-        /*strcpy(reg->path, NITF_DEFAULT_PLUGIN_PATH);*/
+        strcpy(reg->path, NITF_DEFAULT_PLUGIN_PATH);
         return reg;
     }
     else
