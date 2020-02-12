@@ -11,6 +11,10 @@ def configure(conf):
     # have to set NITF_PLUGIN_PATH
     conf.env['enable_static_tres'] = True
 
+    conf.define('DEFAULT_SCHEMA_PATH',
+                os.path.join(os.path.abspath(conf.options.prefix),
+                             'conf', 'schema', 'six'))
+
     conf.recurse()
 
 def build(bld):
