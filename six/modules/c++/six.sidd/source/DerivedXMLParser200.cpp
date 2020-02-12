@@ -775,7 +775,7 @@ void DerivedXMLParser200::parseSharpnessEnhancementFromXML(
     XMLElem mTFCElem = getOptional(sharpElem,
                                    "ModularTransferFunctionCompensation");
     XMLElem mTFRElem = getOptional(sharpElem,
-                                   "ModularTransferFunctionRestoration");
+                                   "ModularTransferFunctionEnhancement");
     if (mTFCElem)
     {
         if (!mTFRElem)
@@ -789,15 +789,15 @@ void DerivedXMLParser200::parseSharpnessEnhancementFromXML(
     else if (mTFRElem)
     {
         ok = true;
-        sharpness.modularTransferFunctionRestoration.reset(new Filter());
+        sharpness.modularTransferFunctionEnhancement.reset(new Filter());
         parseFilterFromXML(mTFRElem,
-                           *sharpness.modularTransferFunctionRestoration);
+                           *sharpness.modularTransferFunctionEnhancement);
     }
     if (!ok)
     {
         throw except::Exception(Ctxt(
                 "Exactly one of modularTransferFunctionCompensation or "
-                "modularTransferFunctionRestoration must be set"));
+                "modularTransferFunctionEnhancement must be set"));
     }
 }
 
@@ -1167,7 +1167,7 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
     bool ok = false;
     if (sharpness.modularTransferFunctionCompensation.get())
     {
-        if (sharpness.modularTransferFunctionRestoration.get() == NULL)
+        if (sharpness.modularTransferFunctionEnhancement.get() == NULL)
         {
             ok = true;
             convertFilterToXML("ModularTransferFunctionCompensation",
@@ -1175,11 +1175,11 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
                                sharpElem);
         }
     }
-    else if (sharpness.modularTransferFunctionRestoration.get())
+    else if (sharpness.modularTransferFunctionEnhancement.get())
     {
         ok = true;
-        convertFilterToXML("ModularTransferFunctionRestoration",
-                           *sharpness.modularTransferFunctionRestoration,
+        convertFilterToXML("ModularTransferFunctionEnhancement",
+                           *sharpness.modularTransferFunctionEnhancement,
                            sharpElem);
     }
 
@@ -1187,7 +1187,7 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
     {
         throw except::Exception(Ctxt(
                 "Exactly one of modularTransferFunctionCompensation or "
-                "modularTransferFunctionRestoration must be set"));
+                "modularTransferFunctionEnhancement must be set"));
     }
 
     // ColorSpaceTransform
