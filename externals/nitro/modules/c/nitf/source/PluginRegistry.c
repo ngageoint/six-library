@@ -22,22 +22,23 @@
 
 #include "nitf/PluginRegistry.h"
 
-NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error);
-NITFPRIV(void) implicitDestruct(nitf_PluginRegistry ** reg);
+NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error);
+NITFPRIV(void) implicitDestruct(nitf_PluginRegistry** reg);
 NITFPRIV(void) exitListener(void);
-NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
-                                  nitf_HashTable* handlers,
-                                  const char* ident,
-                                  const char* suffix,
-                                  nitf_Error* error);
+NITFPRIV(NITF_BOOL)
+insertCreator(nitf_DLL* dso,
+              nitf_HashTable* handlers,
+              const char* ident,
+              const char* suffix,
+              nitf_Error* error);
 
 #ifndef WIN32
-    static nitf_Mutex  __PluginRegistryLock = NITF_MUTEX_INIT;
-    static const char DIR_DELIMITER = '/';
+static nitf_Mutex __PluginRegistryLock = NITF_MUTEX_INIT;
+static const char DIR_DELIMITER = '/';
 #else
-    static nitf_Mutex __PluginRegistryLock = NULL;
-    static long __PluginRegistryInitLock = 0;
-    static const char DIR_DELIMITER = '\\';
+static nitf_Mutex __PluginRegistryLock = NULL;
+static long __PluginRegistryInitLock = 0;
+static const char DIR_DELIMITER = '\\';
 #endif
 /*
  *  This function retrieves the mutex that is necessary
@@ -51,7 +52,7 @@ NITFPRIV(nitf_Mutex*) GET_MUTEX()
     if (__PluginRegistryLock == NULL)
     {
         while (InterlockedExchange(&__PluginRegistryInitLock, 1) == 1)
-            /* loop, another thread own the lock */ ;
+            /* loop, another thread own the lock */;
         if (__PluginRegistryLock == NULL)
             nitf_Mutex_init(&__PluginRegistryLock);
         InterlockedExchange(&__PluginRegistryInitLock, 0);
@@ -59,8 +60,7 @@ NITFPRIV(nitf_Mutex*) GET_MUTEX()
     return &__PluginRegistryLock;
 }
 
-static
-NITF_BOOL isDelimiter(char ch)
+static NITF_BOOL isDelimiter(char ch)
 {
     /* On Windows, allow either delimiter */
     return (ch == '/' || ch == '\\');
@@ -68,8 +68,7 @@ NITF_BOOL isDelimiter(char ch)
 #else
 #define GET_MUTEX() &__PluginRegistryLock
 
-static
-NITF_BOOL isDelimiter(char ch)
+static NITF_BOOL isDelimiter(char ch)
 {
     /* On Unix, allow only forward slash */
     return (ch == '/');
@@ -84,17 +83,17 @@ NITF_BOOL isDelimiter(char ch)
  *  in an attempt to load up all DSO references
  *
  */
-NITFPROT(nitf_PluginRegistry *)
-    nitf_PluginRegistry_getInstance(nitf_Error * error)
+NITFPROT(nitf_PluginRegistry*)
+nitf_PluginRegistry_getInstance(nitf_Error* error)
 {
-    static nitf_PluginRegistry *theInstance = NULL;
+    static nitf_PluginRegistry* theInstance = NULL;
 
     /*nitf_Mutex mutex = GET_MUTEX();*/
     /*nitf_Mutex_lock(&mutex);*/
 
     if (theInstance == NULL)
     {
-        nitf_Mutex_lock( GET_MUTEX());
+        nitf_Mutex_lock(GET_MUTEX());
 
         /*  If this call below fails, the error will have been  */
         /*  constructed                                         */
@@ -108,7 +107,7 @@ NITFPROT(nitf_PluginRegistry *)
                         nitf_PluginRegistry_load(theInstance, error);
                 if (loadedOK)
                 {
-                	atexit(exitListener);
+                    atexit(exitListener);
                 }
                 else
                 {
@@ -118,19 +117,19 @@ NITFPROT(nitf_PluginRegistry *)
             }
         }
 
-        nitf_Mutex_unlock( GET_MUTEX());
+        nitf_Mutex_unlock(GET_MUTEX());
     }
-
 
     return theInstance;
 }
 
-NITFPRIV(NITF_BOOL) insertPlugin(nitf_PluginRegistry * reg,
-                                 const char **ident,
-                                 nitf_DLL * dll,
-                                 nitf_Error * error)
+NITFPRIV(NITF_BOOL)
+insertPlugin(nitf_PluginRegistry* reg,
+             const char** ident,
+             nitf_DLL* dll,
+             nitf_Error* error)
 {
-    nitf_HashTable *hash = NULL;
+    nitf_HashTable* hash = NULL;
     int i;
     int ok;
     const char* suffix = NULL;
@@ -140,7 +139,6 @@ NITFPRIV(NITF_BOOL) insertPlugin(nitf_PluginRegistry * reg,
     {
         return NITF_FAILURE;
     }
-
 
     if (strcmp(ident[0], NITF_PLUGIN_TRE_KEY) == 0)
     {
@@ -162,13 +160,14 @@ NITFPRIV(NITF_BOOL) insertPlugin(nitf_PluginRegistry * reg,
         nitf_Error_initf(error,
                          NITF_CTXT,
                          NITF_ERR_INVALID_OBJECT,
-                         "The identity [%s] is not supported", ident[0]);
+                         "The identity [%s] is not supported",
+                         ident[0]);
         return NITF_FAILURE;
     }
     /* Go through each identity and add it as a creator */
     for (i = 1;; i++)
     {
-        const char *key = ident[i];
+        const char* key = ident[i];
 
         if (key == NULL)
             break;
@@ -179,27 +178,26 @@ NITFPRIV(NITF_BOOL) insertPlugin(nitf_PluginRegistry * reg,
         {
             return NITF_FAILURE;
         }
-
     }
     return NITF_SUCCESS;
 }
 
-
-NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
+NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
 {
     size_t pathLen;
-    const char *pluginEnvVar;
+    const char* pluginEnvVar;
 
     /*  Create the registry object  */
-    nitf_PluginRegistry *reg =
-        (nitf_PluginRegistry *) NITF_MALLOC(sizeof(nitf_PluginRegistry));
+    nitf_PluginRegistry* reg =
+            (nitf_PluginRegistry*)NITF_MALLOC(sizeof(nitf_PluginRegistry));
 
     /*  If we have a memory problem, init our error struct and return  */
     if (!reg)
     {
         nitf_Error_init(error,
                         NITF_STRERROR(NITF_ERRNO),
-                        NITF_CTXT, NITF_ERR_MEMORY);
+                        NITF_CTXT,
+                        NITF_ERR_MEMORY);
         return NULL;
     }
 
@@ -216,7 +214,6 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
         return NULL;
     }
 
-
     /*  Construct our hash object  */
     reg->treHandlers = nitf_HashTable_construct(NITF_TRE_HASH_SIZE, error);
 
@@ -231,8 +228,7 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
     nitf_HashTable_setPolicy(reg->treHandlers, NITF_DATA_RETAIN_OWNER);
 
     reg->compressionHandlers =
-        nitf_HashTable_construct(NITF_COMPRESSION_HASH_SIZE, error);
-
+            nitf_HashTable_construct(NITF_COMPRESSION_HASH_SIZE, error);
 
     /*  If we have a problem, get rid of this object and return  */
     if (!reg->compressionHandlers)
@@ -245,7 +241,7 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
     nitf_HashTable_setPolicy(reg->compressionHandlers, NITF_DATA_RETAIN_OWNER);
 
     reg->decompressionHandlers =
-        nitf_HashTable_construct(NITF_DECOMPRESSION_HASH_SIZE, error);
+            nitf_HashTable_construct(NITF_DECOMPRESSION_HASH_SIZE, error);
 
     /*  If we have a problem, get rid of this object and return  */
     if (!reg->decompressionHandlers)
@@ -266,7 +262,7 @@ NITFPRIV(nitf_PluginRegistry *) implicitConstruct(nitf_Error * error)
     if (!pluginEnvVar)
     {
         /*  Take the default path  */
-        /*strcpy(reg->path, NITF_DEFAULT_PLUGIN_PATH);*/
+        strcpy(reg->path, NITF_DEFAULT_PLUGIN_PATH);
         return reg;
     }
     else
@@ -304,7 +300,7 @@ NITFPRIV(void) exitListener(void)
 {
     nitf_Error error;
     nitf_Mutex* mutex = GET_MUTEX();
-    nitf_PluginRegistry *single = nitf_PluginRegistry_getInstance(&error);
+    nitf_PluginRegistry* single = nitf_PluginRegistry_getInstance(&error);
     if (single)
     {
         int unloadRet = nitf_PluginRegistry_unload(single, &error);
@@ -316,9 +312,8 @@ NITFPRIV(void) exitListener(void)
     nitf_Mutex_delete(mutex);
 }
 
-NITFPRIV(void) implicitDestruct(nitf_PluginRegistry ** reg)
+NITFPRIV(void) implicitDestruct(nitf_PluginRegistry** reg)
 {
-
     /*  If it is not NULL set  */
     if (*reg)
     {
@@ -341,17 +336,16 @@ NITFPRIV(void) implicitDestruct(nitf_PluginRegistry ** reg)
  *  when the DSO is loaded
  */
 
-NITFPRIV(const char **) doInit(nitf_DLL * dll,
-                               const char *prefix,
-                               nitf_Error * error)
+NITFPRIV(const char**)
+doInit(nitf_DLL* dll, const char* prefix, nitf_Error* error)
 {
     NITF_PLUGIN_INIT_FUNCTION init;
-    const char **ident;
+    const char** ident;
 
     char name[NITF_MAX_PATH];
     memset(name, 0, NITF_MAX_PATH);
     NITF_SNPRINTF(name, NITF_MAX_PATH, "%s%s", prefix, NITF_PLUGIN_INIT_SUFFIX);
-    init = (NITF_PLUGIN_INIT_FUNCTION) nitf_DLL_retrieve(dll, name, error);
+    init = (NITF_PLUGIN_INIT_FUNCTION)nitf_DLL_retrieve(dll, name, error);
     if (!init)
     {
         nitf_Error_print(error, stdout, "Invalid init hook in DSO");
@@ -366,18 +360,18 @@ NITFPRIV(const char **) doInit(nitf_DLL * dll,
         nitf_Error_initf(error,
                          NITF_CTXT,
                          NITF_ERR_INVALID_OBJECT,
-                         "The plugin [%s] is not retrievable", prefix);
+                         "The plugin [%s] is not retrievable",
+                         prefix);
         return NULL;
     }
     return ident;
 }
 
-
 /*
  *  Cleanup the DLL.  This is called once when the registry is
  *  shut down.
  */
-NITFPRIV(int) doCleanup(nitf_DLL * dll, nitf_Error* error)
+NITFPRIV(int) doCleanup(nitf_DLL* dll, nitf_Error* error)
 {
     NITF_PLUGIN_CLEANUP_FUNCTION cleanup;
     const char* cleanupName = NITF_PLUGIN_CLEANUP;
@@ -395,7 +389,6 @@ NITFPRIV(int) doCleanup(nitf_DLL * dll, nitf_Error* error)
     return 1;
 }
 
-
 /*!
  *  Unload the plugin registry.  This will unload the DLLs and free
  *  the nodes in the data structure containing them.
@@ -405,65 +398,53 @@ NITFPRIV(int) doCleanup(nitf_DLL * dll, nitf_Error* error)
  *  \return 1 on success, 0 on failure
  *
  */
-NITFPRIV(NITF_BOOL) unloadDSO(nitf_DLL* dll, nitf_Error * error)
+NITFPRIV(NITF_BOOL) unloadDSO(nitf_DLL* dll, nitf_Error* error)
 {
-
     NITF_BOOL ok = NITF_SUCCESS;
-
 
     if (nitf_DLL_isValid(dll))
     {
-	doCleanup(dll, error);
+        doCleanup(dll, error);
 
-	/* destroy the lib */
+        /* destroy the lib */
         ok &= nitf_DLL_unload(dll, error);
-	if ( dll->libname )
-	{
-
+        if (dll->libname)
+        {
 #ifdef NITF_DEBUG_PLUGIN_REG
             printf("Unloaded dll with name [%s]\n", dll->libname);
 #endif
 
-	    NITF_FREE( dll->libname );
-	    dll->libname = NULL;
-	}
+            NITF_FREE(dll->libname);
+            dll->libname = NULL;
+        }
 
         nitf_DLL_destruct(&dll);
-
-
     }
     return ok;
 }
 
-
-
-
-NITFPROT(NITF_BOOL) nitf_PluginRegistry_unload(nitf_PluginRegistry * reg,
-        nitf_Error * error)
+NITFPROT(NITF_BOOL)
+nitf_PluginRegistry_unload(nitf_PluginRegistry* reg, nitf_Error* error)
 {
-
     /*  Pop the front off, until the list is empty  */
     nitf_List* l = reg->dsos;
     NITF_BOOL success = NITF_SUCCESS;
-    while ( ! nitf_List_isEmpty(l) )
+    while (!nitf_List_isEmpty(l))
     {
         nitf_DLL* dso = (nitf_DLL*)nitf_List_popFront(l);
         success &= unloadDSO(dso, error);
     }
     return success;
-
 }
 
-
 NITFAPI(NITF_BOOL)
-    nitf_PluginRegistry_loadPlugin(const char* fullName, nitf_Error * error)
+nitf_PluginRegistry_loadPlugin(const char* fullName, nitf_Error* error)
 {
-
     /*  For now, the key is the dll name minus the extension  */
     char keyName[NITF_MAX_PATH] = "";
     int ok;
-    nitf_DLL *dll;
-    const char **ident;
+    nitf_DLL* dll;
+    const char** ident;
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
 
     /*  Construct the DLL object  */
@@ -498,20 +479,18 @@ NITFAPI(NITF_BOOL)
             return NITF_FAILURE;
         }
 #ifdef NITF_DEBUG_PLUGIN_REG
-        printf("Successfully loaded plugin: [%s] at [%p]\n",
-               keyName, dll);
+        printf("Successfully loaded plugin: [%s] at [%p]\n", keyName, dll);
 #endif
         return NITF_SUCCESS;
     }
     return NITF_FAILURE;
-
 }
 
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_registerCompressionHandler(
         NITF_PLUGIN_INIT_FUNCTION init,
         NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handle,
-        nitf_Error * error)
+        nitf_Error* error)
 {
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
 
@@ -522,7 +501,7 @@ nitf_PluginRegistry_registerCompressionHandler(
     {
         return NITF_FAILURE;
     }
-    if ( (ident = (*init)(error)) == NULL)
+    if ((ident = (*init)(error)) == NULL)
     {
         return NITF_FAILURE;
     }
@@ -544,8 +523,10 @@ nitf_PluginRegistry_registerCompressionHandler(
             printf("Warning, static handler overriding [%s] hook\n", ident[i]);
         }
 #endif
-        ok &= nitf_HashTable_insert(reg->compressionHandlers, ident[i],
-                (NITF_DATA*)handle, error);
+        ok &= nitf_HashTable_insert(reg->compressionHandlers,
+                                    ident[i],
+                                    (NITF_DATA*)handle,
+                                    error);
     }
 
     return ok;
@@ -555,7 +536,7 @@ NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_registerDecompressionHandler(
         NITF_PLUGIN_INIT_FUNCTION init,
         NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION handle,
-        nitf_Error * error)
+        nitf_Error* error)
 {
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
 
@@ -566,7 +547,7 @@ nitf_PluginRegistry_registerDecompressionHandler(
     {
         return NITF_FAILURE;
     }
-    if ( (ident = (*init)(error)) == NULL)
+    if ((ident = (*init)(error)) == NULL)
     {
         return NITF_FAILURE;
     }
@@ -588,8 +569,10 @@ nitf_PluginRegistry_registerDecompressionHandler(
             printf("Warning, static handler overriding [%s] hook\n", ident[i]);
         }
 #endif
-        ok &= nitf_HashTable_insert(reg->decompressionHandlers, ident[i],
-                (NITF_DATA*)handle, error);
+        ok &= nitf_HashTable_insert(reg->decompressionHandlers,
+                                    ident[i],
+                                    (NITF_DATA*)handle,
+                                    error);
     }
 
     return ok;
@@ -598,9 +581,8 @@ nitf_PluginRegistry_registerDecompressionHandler(
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
                                        NITF_PLUGIN_TRE_HANDLER_FUNCTION handle,
-                                       nitf_Error * error)
+                                       nitf_Error* error)
 {
-
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
 
     const char** ident;
@@ -610,7 +592,7 @@ nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
     {
         return NITF_FAILURE;
     }
-    if ( (ident = (*init)(error)) == NULL)
+    if ((ident = (*init)(error)) == NULL)
     {
         return NITF_FAILURE;
     }
@@ -632,26 +614,29 @@ nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
             printf("Warning, static handler overriding [%s] hook\n", ident[i]);
         }
 #endif
-        ok &= nitf_HashTable_insert(reg->treHandlers, ident[i], (NITF_DATA*)handle, error);
+        ok &= nitf_HashTable_insert(reg->treHandlers,
+                                    ident[i],
+                                    (NITF_DATA*)handle,
+                                    error);
     }
 
     return ok;
-
 }
 
-
 NITFPROT(NITF_BOOL)
-    nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry * reg,
-                                        const char *dirName,
-                                        nitf_Error * error)
+nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry* reg,
+                                    const char* dirName,
+                                    nitf_Error* error)
 {
-    const char *name;
+    const char* name;
     size_t sizePath;
-    nitf_Directory *dir = NULL;
+    nitf_Directory* dir = NULL;
 
     if (!dirName)
     {
-        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_OPENING_FILE,
+        nitf_Error_initf(error,
+                         NITF_CTXT,
+                         NITF_ERR_OPENING_FILE,
                          "Null directory name");
         return NITF_FAILURE;
     }
@@ -671,8 +656,7 @@ NITFPROT(NITF_BOOL)
         {
             do
             {
-
-                char *end;
+                char* end;
                 char fullName[NITF_MAX_PATH];
                 int pathSize = sizePath;
                 memset(fullName, 0, NITF_MAX_PATH);
@@ -682,8 +666,7 @@ NITFPROT(NITF_BOOL)
                 memcpy(fullName + pathSize, name, strlen(name));
 
                 /*  See if we have .so or .dll extensions  */
-                if ((end =
-                     (char *) strstr(name, NITF_DLL_EXTENSION)) != NULL)
+                if ((end = (char*)strstr(name, NITF_DLL_EXTENSION)) != NULL)
                 {
                     if (!nitf_PluginRegistry_loadPlugin(fullName, error))
                     {
@@ -701,8 +684,7 @@ NITFPROT(NITF_BOOL)
                 }
 
                 name = nitf_Directory_findNextFile(dir);
-            }
-            while (name);
+            } while (name);
         }
         else
         {
@@ -714,8 +696,10 @@ NITFPROT(NITF_BOOL)
 #ifdef NITF_DEBUG_PLUGIN_REG
         fprintf(stdout,
                 "Could not open plug-in directory '%s'. "
-                "You may have forgotten to set your NITF_PLUGIN_PATH environment "
-                "variable : continuing without plugins...\n", dirName);
+                "You may have forgotten to set your NITF_PLUGIN_PATH "
+                "environment "
+                "variable : continuing without plugins...\n",
+                dirName);
 #endif
     }
     nitf_Directory_destruct(&dir);
@@ -769,28 +753,27 @@ nitf_PluginRegistry_internalHandlerExists(
     return exists;
 }
 
-NITFPROT(NITF_BOOL) nitf_PluginRegistry_load(nitf_PluginRegistry * reg,
-                                             nitf_Error * error)
+NITFPROT(NITF_BOOL)
+nitf_PluginRegistry_load(nitf_PluginRegistry* reg, nitf_Error* error)
 {
     return nitf_PluginRegistry_internalLoadDir(reg, reg->path, error);
 }
 
-
-NITFAPI(NITF_BOOL) nitf_PluginRegistry_loadDir(const char *dirName,
-                                               nitf_Error * error)
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_loadDir(const char* dirName, nitf_Error* error)
 {
     NITF_BOOL status;
 
     /* first, get the registry */
-    nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
+    nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
 
     /* must be thread safe */
-    nitf_Mutex_lock( GET_MUTEX() );
+    nitf_Mutex_lock(GET_MUTEX());
 
     status = nitf_PluginRegistry_internalLoadDir(reg, dirName, error);
 
     /* unlock */
-    nitf_Mutex_unlock( GET_MUTEX() );
+    nitf_Mutex_unlock(GET_MUTEX());
     return status;
 }
 
@@ -798,35 +781,31 @@ NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_TREHandlerExists(const char* ident)
 {
     return nitf_PluginRegistry_internalHandlerExists(
-            ident,
-            nitf_PluginRegistry_internalTREHandlerExists);
+            ident, nitf_PluginRegistry_internalTREHandlerExists);
 }
 
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_compressionHandlerExists(const char* ident)
 {
     return nitf_PluginRegistry_internalHandlerExists(
-            ident,
-            nitf_PluginRegistry_internalCompressionHandlerExists);
+            ident, nitf_PluginRegistry_internalCompressionHandlerExists);
 }
 
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_decompressionHandlerExists(const char* ident)
 {
     return nitf_PluginRegistry_internalHandlerExists(
-            ident,
-            nitf_PluginRegistry_internalDecompressionHandlerExists);
+            ident, nitf_PluginRegistry_internalDecompressionHandlerExists);
 }
 
 NITFPROT(NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)
-nitf_PluginRegistry_retrieveDecompConstructor(nitf_PluginRegistry * reg,
-                                              const char *ident,
-                                              int *hadError,
-                                              nitf_Error * error)
+nitf_PluginRegistry_retrieveDecompConstructor(nitf_PluginRegistry* reg,
+                                              const char* ident,
+                                              int* hadError,
+                                              nitf_Error* error)
 {
-
     /*  We get back a pair from the hash table  */
-    nitf_Pair *pair;
+    nitf_Pair* pair;
 
     /*  No error has occurred (yet)  */
     *hadError = 0;
@@ -834,8 +813,10 @@ nitf_PluginRegistry_retrieveDecompConstructor(nitf_PluginRegistry * reg,
     if (!nitf_HashTable_exists(reg->decompressionHandlers, ident))
     {
         *hadError = 1;
-        nitf_Error_init(error, "Decompression handlers not set", NRT_CTXT,
-        		        NRT_ERR_DECOMPRESSION);
+        nitf_Error_init(error,
+                        "Decompression handlers not set",
+                        NRT_CTXT,
+                        NRT_ERR_DECOMPRESSION);
         return NULL;
     }
     pair = nitf_HashTable_find(reg->decompressionHandlers, ident);
@@ -843,24 +824,25 @@ nitf_PluginRegistry_retrieveDecompConstructor(nitf_PluginRegistry * reg,
     /*  If nothing is there, we don't have a handler, plain and simple  */
     if (!pair)
     {
-        nitf_Error_initf(error, NRT_CTXT, NRT_ERR_DECOMPRESSION,
-        		         "Don't have a handler for '%s'",
-        		         ident);
+        nitf_Error_initf(error,
+                         NRT_CTXT,
+                         NRT_ERR_DECOMPRESSION,
+                         "Don't have a handler for '%s'",
+                         ident);
         return NULL;
     }
 
-    return (NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION) pair->data;
+    return (NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)pair->data;
 }
 
 NITFPROT(NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION)
-nitf_PluginRegistry_retrieveCompConstructor(nitf_PluginRegistry * reg,
-                                            const char *ident,
-                                            int *hadError,
-                                            nitf_Error * error)
+nitf_PluginRegistry_retrieveCompConstructor(nitf_PluginRegistry* reg,
+                                            const char* ident,
+                                            int* hadError,
+                                            nitf_Error* error)
 {
-
     /*  We get back a pair from the hash table  */
-    nitf_Pair *pair;
+    nitf_Pair* pair;
 
     /*  No error has occurred (yet)  */
     *hadError = 0;
@@ -868,8 +850,10 @@ nitf_PluginRegistry_retrieveCompConstructor(nitf_PluginRegistry * reg,
     if (!nitf_HashTable_exists(reg->compressionHandlers, ident))
     {
         *hadError = 1;
-        nitf_Error_init(error, "Compression handlers not set", NRT_CTXT,
-        		        NRT_ERR_COMPRESSION);
+        nitf_Error_init(error,
+                        "Compression handlers not set",
+                        NRT_CTXT,
+                        NRT_ERR_COMPRESSION);
         return NULL;
     }
     pair = nitf_HashTable_find(reg->compressionHandlers, ident);
@@ -877,21 +861,23 @@ nitf_PluginRegistry_retrieveCompConstructor(nitf_PluginRegistry * reg,
     /*  If nothing is there, we don't have a handler, plain and simple  */
     if (!pair)
     {
-        nitf_Error_initf(error, NRT_CTXT, NRT_ERR_COMPRESSION,
-        		         "Don't have a handler for '%s'",
-        		         ident);
+        nitf_Error_initf(error,
+                         NRT_CTXT,
+                         NRT_ERR_COMPRESSION,
+                         "Don't have a handler for '%s'",
+                         ident);
         return NULL;
     }
 
-    return (NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION) pair->data;
+    return (NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION)pair->data;
 }
 
-
-NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
-                                  nitf_HashTable* hash,
-                                  const char* ident,
-                                  const char* suffix,
-                                  nitf_Error* error)
+NITFPRIV(NITF_BOOL)
+insertCreator(nitf_DLL* dso,
+              nitf_HashTable* hash,
+              const char* ident,
+              const char* suffix,
+              nitf_Error* error)
 {
     /*  We are trying to find tre_main  */
     NITF_DLL_FUNCTION_PTR dsoMain = NULL;
@@ -906,7 +892,6 @@ NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
                          NITF_ERR_INVALID_PARAMETER,
                          "DSO is not valid for [%s]",
                          ident);
-
     }
 
     memset(name, 0, NITF_MAX_PATH);
@@ -932,7 +917,6 @@ NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
     if (nitf_HashTable_exists(hash, ident))
     {
         printf("Warning, overriding [%s] hook", ident);
-
     }
 #endif
 
@@ -946,14 +930,14 @@ NITFPRIV(NITF_BOOL) insertCreator(nitf_DLL* dso,
  *  No more talking to the DSOs directly
  */
 NITFPROT(nitf_TREHandler*)
-nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
-                                       const char *treIdent,
-                                       int *hadError,
-                                       nitf_Error * error)
+nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry* reg,
+                                       const char* treIdent,
+                                       int* hadError,
+                                       nitf_Error* error)
 {
     nitf_TREHandler* theHandler;
     /*  We get back a pair from the hash table  */
-    nitf_Pair *pair;
+    nitf_Pair* pair;
     /*  We are trying to find tre_main  */
     NITF_PLUGIN_TRE_HANDLER_FUNCTION treMain = NULL;
 
@@ -972,7 +956,7 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
         return NULL;
 
     /*  If something is, get its DLL part  */
-    treMain = (NITF_PLUGIN_TRE_HANDLER_FUNCTION) pair->data;
+    treMain = (NITF_PLUGIN_TRE_HANDLER_FUNCTION)pair->data;
 
     theHandler = (*treMain)(error);
     if (!theHandler)
@@ -982,14 +966,13 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
     return theHandler;
 }
 
-NITFPROT(nitf_CompressionInterface* )
-nitf_PluginRegistry_retrieveCompInterface(const char *comp,
-                                          nitf_Error* error)
+NITFPROT(nitf_CompressionInterface*)
+nitf_PluginRegistry_retrieveCompInterface(const char* comp, nitf_Error* error)
 {
     /* In all cases below, the function we're calling should populate the
      * error if one occurs. */
-    nitf_PluginRegistry *reg;
-    nitf_CompressionInterface *compIface;
+    nitf_PluginRegistry* reg;
+    nitf_CompressionInterface* compIface;
     NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION constructCompIface;
     int hadError = 0;
 
@@ -1001,18 +984,17 @@ nitf_PluginRegistry_retrieveCompInterface(const char *comp,
     }
 
     /*  Now retrieve the comp iface creator  */
-    constructCompIface =
-        nitf_PluginRegistry_retrieveCompConstructor(reg,
-                comp, &hadError, error);
+    constructCompIface = nitf_PluginRegistry_retrieveCompConstructor(reg,
+                                                                     comp,
+                                                                     &hadError,
+                                                                     error);
     if (hadError || constructCompIface == NULL)
     {
         return NULL;
     }
 
     /* Now actually construct it */
-    compIface =
-        (nitf_CompressionInterface *) (*constructCompIface) (comp,
-                error);
+    compIface = (nitf_CompressionInterface*)(*constructCompIface)(comp, error);
     if (compIface == NULL)
     {
         return NULL;
