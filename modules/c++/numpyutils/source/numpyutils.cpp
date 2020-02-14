@@ -129,7 +129,7 @@ types::RowCol<size_t> getDimensionsRC(PyObject* pyArrayObject)
 }
 
 void verifyObjectsAreOfSameDimensions(PyObject* lhs,
-                                                  PyObject* rhs)
+                                      PyObject* rhs)
 {
     if(getDimensionsRC(lhs) != getDimensionsRC(rhs))
     {
@@ -139,8 +139,8 @@ void verifyObjectsAreOfSameDimensions(PyObject* lhs,
 }
 
 void createOrVerify(PyObject*& pyObject,
-                                int typeNum,
-                                const types::RowCol<size_t>& dims)
+                    int typeNum,
+                    const types::RowCol<size_t>& dims)
 {
     if (pyObject == Py_None) // none passed in-- so create new
     {
@@ -161,7 +161,7 @@ void createOrVerify(PyObject*& pyObject,
 }
 
 PyObject* toNumpyArray(size_t numRows, size_t numColumns,
-        int typenum, void* data)
+        int typenum, const void* data)
 {
     const int nDims = (numRows == 1 ? 1 : 2);
     npy_intp dimensions[2];
@@ -174,8 +174,18 @@ PyObject* toNumpyArray(size_t numRows, size_t numColumns,
         dimensions[0] = numRows;
         dimensions[1] = numColumns;
     }
-    PyObject* copy = PyArray_NewCopy(reinterpret_cast<PyArrayObject*>(
-            PyArray_SimpleNewFromData(nDims, dimensions, typenum, data)),
+
+    // PyArray_SimpleNewFromData takes a void* for the buffer it's wrapping.
+    // The buffer is non-const, and this makes sense because we're wrapping it
+    // in a numpy array which anyone else would be free to modify.
+    //
+    // Since the function shouldn't be modifying the data itself, we're casting
+    // away the const in order to get the intermediate array object.  We then
+    // immediately copy and return, so nothing is actually getting modified
+    PyObject* wrappedArray =
+            PyArray_SimpleNewFromData(nDims, dimensions, typenum,
+                                      const_cast<void*>(data));
+    PyObject* copy = PyArray_NewCopy(reinterpret_cast<PyArrayObject*>(wrappedArray),
             NPY_CORDER);
     verifyNewPyObject(copy);
     return copy;
@@ -200,20 +210,26 @@ PyObject* toNumpyArray(size_t numColumns, int typenum,
     return newArray;
 }
 
+size_t getNumElements(PyObject* pyArrayObject)
+{
+    verifyArray(pyArrayObject);
+    return PyArray_Size(pyArrayObject);
+}
+
 void prepareInputAndOutputArray(PyObject* pyInObject,
-                                            PyObject*& pyOutObject,
-                                            int inputTypeNum,
-                                            int outputTypeNum,
-                                            types::RowCol<size_t> dims)
+                                PyObject*& pyOutObject,
+                                int inputTypeNum,
+                                int outputTypeNum,
+                                types::RowCol<size_t> dims)
 {
     verifyArrayType(pyInObject, inputTypeNum);
     createOrVerify(pyOutObject, outputTypeNum, dims);
 }
 
 void prepareInputAndOutputArray(PyObject* pyInObject,
-                                            PyObject*& pyOutObject,
-                                            int inputTypeNum,
-                                            int outputTypeNum)
+                                PyObject*& pyOutObject,
+                                int inputTypeNum,
+                                int outputTypeNum)
 {
     prepareInputAndOutputArray(pyInObject,
                                pyOutObject,

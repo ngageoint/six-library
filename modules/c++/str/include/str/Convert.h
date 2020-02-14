@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of str-c++ 
+ * This file is part of str-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * str-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -49,6 +49,10 @@ template<typename T> std::string toString(const T& value)
     buf << std::boolalpha << value;
     return buf.str();
 }
+
+template<> std::string toString(const uint8_t& value);
+
+template<> std::string toString(const int8_t& value);
 
 template<typename T> std::string toString(const T& real, const T& imag)
 {
@@ -103,7 +107,7 @@ template<typename T> T toType(const std::string& s, int base)
     char* end;
     errno = 0;
     const char* str = s.c_str();
-    
+
     T res;
     bool overflow = false;
     if (std::numeric_limits<T>::is_signed)
@@ -126,7 +130,7 @@ template<typename T> T toType(const std::string& s, int base)
         }
         res = static_cast<T>(longRes);
     }
-    
+
     if (overflow || errno == ERANGE)
         throw except::BadCastException(except::Context(__FILE__, __LINE__,
             std::string(""), std::string(""),
@@ -138,7 +142,7 @@ template<typename T> T toType(const std::string& s, int base)
             std::string(""), std::string(""),
             std::string("Conversion failed: '")
                 + s + std::string("' -> ") + typeid(T).name()));
-    
+
     return res;
 }
 

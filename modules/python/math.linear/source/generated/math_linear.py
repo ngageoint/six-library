@@ -110,12 +110,12 @@ class SwigPyIterator(_object):
     __swig_destroy__ = _math_linear.delete_SwigPyIterator
     __del__ = lambda self: None
 
-    def value(self):
+    def value(self) -> "PyObject *":
         """value(SwigPyIterator self) -> PyObject *"""
         return _math_linear.SwigPyIterator_value(self)
 
 
-    def incr(self, n=1):
+    def incr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
         """
         incr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         incr(SwigPyIterator self) -> SwigPyIterator
@@ -123,7 +123,7 @@ class SwigPyIterator(_object):
         return _math_linear.SwigPyIterator_incr(self, n)
 
 
-    def decr(self, n=1):
+    def decr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
         """
         decr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         decr(SwigPyIterator self) -> SwigPyIterator
@@ -131,67 +131,67 @@ class SwigPyIterator(_object):
         return _math_linear.SwigPyIterator_decr(self, n)
 
 
-    def distance(self, x):
+    def distance(self, x: 'SwigPyIterator') -> "ptrdiff_t":
         """distance(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t"""
         return _math_linear.SwigPyIterator_distance(self, x)
 
 
-    def equal(self, x):
+    def equal(self, x: 'SwigPyIterator') -> "bool":
         """equal(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _math_linear.SwigPyIterator_equal(self, x)
 
 
-    def copy(self):
+    def copy(self) -> "swig::SwigPyIterator *":
         """copy(SwigPyIterator self) -> SwigPyIterator"""
         return _math_linear.SwigPyIterator_copy(self)
 
 
-    def next(self):
+    def next(self) -> "PyObject *":
         """next(SwigPyIterator self) -> PyObject *"""
         return _math_linear.SwigPyIterator_next(self)
 
 
-    def __next__(self):
+    def __next__(self) -> "PyObject *":
         """__next__(SwigPyIterator self) -> PyObject *"""
         return _math_linear.SwigPyIterator___next__(self)
 
 
-    def previous(self):
+    def previous(self) -> "PyObject *":
         """previous(SwigPyIterator self) -> PyObject *"""
         return _math_linear.SwigPyIterator_previous(self)
 
 
-    def advance(self, n):
+    def advance(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
         """advance(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _math_linear.SwigPyIterator_advance(self, n)
 
 
-    def __eq__(self, x):
+    def __eq__(self, x: 'SwigPyIterator') -> "bool":
         """__eq__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _math_linear.SwigPyIterator___eq__(self, x)
 
 
-    def __ne__(self, x):
+    def __ne__(self, x: 'SwigPyIterator') -> "bool":
         """__ne__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _math_linear.SwigPyIterator___ne__(self, x)
 
 
-    def __iadd__(self, n):
+    def __iadd__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
         """__iadd__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _math_linear.SwigPyIterator___iadd__(self, n)
 
 
-    def __isub__(self, n):
+    def __isub__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
         """__isub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _math_linear.SwigPyIterator___isub__(self, n)
 
 
-    def __add__(self, n):
+    def __add__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
         """__add__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _math_linear.SwigPyIterator___add__(self, n)
 
 
-    def __sub__(self, *args):
+    def __sub__(self, *args) -> "ptrdiff_t":
         """
         __sub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator
         __sub__(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t
@@ -217,34 +217,34 @@ class std_vector_double(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, std_vector_double, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(std_vector_double self) -> SwigPyIterator"""
         return _math_linear.std_vector_double_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(std_vector_double self) -> bool"""
         return _math_linear.std_vector_double___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(std_vector_double self) -> bool"""
         return _math_linear.std_vector_double___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< double >::size_type":
         """__len__(std_vector_double self) -> std::vector< double >::size_type"""
         return _math_linear.std_vector_double___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< double >::difference_type', j: 'std::vector< double >::difference_type') -> "std::vector< double,std::allocator< double > > *":
         """__getslice__(std_vector_double self, std::vector< double >::difference_type i, std::vector< double >::difference_type j) -> std_vector_double"""
         return _math_linear.std_vector_double___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(std_vector_double self, std::vector< double >::difference_type i, std::vector< double >::difference_type j)
         __setslice__(std_vector_double self, std::vector< double >::difference_type i, std::vector< double >::difference_type j, std_vector_double v)
@@ -252,12 +252,12 @@ class std_vector_double(_object):
         return _math_linear.std_vector_double___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< double >::difference_type', j: 'std::vector< double >::difference_type') -> "void":
         """__delslice__(std_vector_double self, std::vector< double >::difference_type i, std::vector< double >::difference_type j)"""
         return _math_linear.std_vector_double___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(std_vector_double self, std::vector< double >::difference_type i)
         __delitem__(std_vector_double self, PySliceObject * slice)
@@ -265,7 +265,7 @@ class std_vector_double(_object):
         return _math_linear.std_vector_double___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< double >::value_type const &":
         """
         __getitem__(std_vector_double self, PySliceObject * slice) -> std_vector_double
         __getitem__(std_vector_double self, std::vector< double >::difference_type i) -> std::vector< double >::value_type const &
@@ -273,7 +273,7 @@ class std_vector_double(_object):
         return _math_linear.std_vector_double___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(std_vector_double self, PySliceObject * slice, std_vector_double v)
         __setitem__(std_vector_double self, PySliceObject * slice)
@@ -282,67 +282,67 @@ class std_vector_double(_object):
         return _math_linear.std_vector_double___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< double >::value_type":
         """pop(std_vector_double self) -> std::vector< double >::value_type"""
         return _math_linear.std_vector_double_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'std::vector< double >::value_type const &') -> "void":
         """append(std_vector_double self, std::vector< double >::value_type const & x)"""
         return _math_linear.std_vector_double_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(std_vector_double self) -> bool"""
         return _math_linear.std_vector_double_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< double >::size_type":
         """size(std_vector_double self) -> std::vector< double >::size_type"""
         return _math_linear.std_vector_double_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'std_vector_double') -> "void":
         """swap(std_vector_double self, std_vector_double v)"""
         return _math_linear.std_vector_double_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< double >::iterator":
         """begin(std_vector_double self) -> std::vector< double >::iterator"""
         return _math_linear.std_vector_double_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< double >::iterator":
         """end(std_vector_double self) -> std::vector< double >::iterator"""
         return _math_linear.std_vector_double_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< double >::reverse_iterator":
         """rbegin(std_vector_double self) -> std::vector< double >::reverse_iterator"""
         return _math_linear.std_vector_double_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< double >::reverse_iterator":
         """rend(std_vector_double self) -> std::vector< double >::reverse_iterator"""
         return _math_linear.std_vector_double_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(std_vector_double self)"""
         return _math_linear.std_vector_double_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< double >::allocator_type":
         """get_allocator(std_vector_double self) -> std::vector< double >::allocator_type"""
         return _math_linear.std_vector_double_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(std_vector_double self)"""
         return _math_linear.std_vector_double_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< double >::iterator":
         """
         erase(std_vector_double self, std::vector< double >::iterator pos) -> std::vector< double >::iterator
         erase(std_vector_double self, std::vector< double >::iterator first, std::vector< double >::iterator last) -> std::vector< double >::iterator
@@ -363,27 +363,27 @@ class std_vector_double(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'std::vector< double >::value_type const &') -> "void":
         """push_back(std_vector_double self, std::vector< double >::value_type const & x)"""
         return _math_linear.std_vector_double_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< double >::value_type const &":
         """front(std_vector_double self) -> std::vector< double >::value_type const &"""
         return _math_linear.std_vector_double_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< double >::value_type const &":
         """back(std_vector_double self) -> std::vector< double >::value_type const &"""
         return _math_linear.std_vector_double_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< double >::size_type', x: 'std::vector< double >::value_type const &') -> "void":
         """assign(std_vector_double self, std::vector< double >::size_type n, std::vector< double >::value_type const & x)"""
         return _math_linear.std_vector_double_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(std_vector_double self, std::vector< double >::size_type new_size)
         resize(std_vector_double self, std::vector< double >::size_type new_size, std::vector< double >::value_type const & x)
@@ -391,7 +391,7 @@ class std_vector_double(_object):
         return _math_linear.std_vector_double_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(std_vector_double self, std::vector< double >::iterator pos, std::vector< double >::value_type const & x) -> std::vector< double >::iterator
         insert(std_vector_double self, std::vector< double >::iterator pos, std::vector< double >::size_type n, std::vector< double >::value_type const & x)
@@ -399,12 +399,12 @@ class std_vector_double(_object):
         return _math_linear.std_vector_double_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< double >::size_type') -> "void":
         """reserve(std_vector_double self, std::vector< double >::size_type n)"""
         return _math_linear.std_vector_double_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< double >::size_type":
         """capacity(std_vector_double self) -> std::vector< double >::size_type"""
         return _math_linear.std_vector_double_capacity(self)
 
@@ -433,34 +433,34 @@ class std_vector_vector_double(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, std_vector_vector_double, name)
     __repr__ = _swig_repr
 
-    def iterator(self):
+    def iterator(self) -> "swig::SwigPyIterator *":
         """iterator(std_vector_vector_double self) -> SwigPyIterator"""
         return _math_linear.std_vector_vector_double_iterator(self)
 
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> "bool":
         """__nonzero__(std_vector_vector_double self) -> bool"""
         return _math_linear.std_vector_vector_double___nonzero__(self)
 
 
-    def __bool__(self):
+    def __bool__(self) -> "bool":
         """__bool__(std_vector_vector_double self) -> bool"""
         return _math_linear.std_vector_vector_double___bool__(self)
 
 
-    def __len__(self):
+    def __len__(self) -> "std::vector< std::vector< double > >::size_type":
         """__len__(std_vector_vector_double self) -> std::vector< std::vector< double > >::size_type"""
         return _math_linear.std_vector_vector_double___len__(self)
 
 
-    def __getslice__(self, i, j):
+    def __getslice__(self, i: 'std::vector< std::vector< double > >::difference_type', j: 'std::vector< std::vector< double > >::difference_type') -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > *":
         """__getslice__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i, std::vector< std::vector< double > >::difference_type j) -> std_vector_vector_double"""
         return _math_linear.std_vector_vector_double___getslice__(self, i, j)
 
 
-    def __setslice__(self, *args):
+    def __setslice__(self, *args) -> "void":
         """
         __setslice__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i, std::vector< std::vector< double > >::difference_type j)
         __setslice__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i, std::vector< std::vector< double > >::difference_type j, std_vector_vector_double v)
@@ -468,12 +468,12 @@ class std_vector_vector_double(_object):
         return _math_linear.std_vector_vector_double___setslice__(self, *args)
 
 
-    def __delslice__(self, i, j):
+    def __delslice__(self, i: 'std::vector< std::vector< double > >::difference_type', j: 'std::vector< std::vector< double > >::difference_type') -> "void":
         """__delslice__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i, std::vector< std::vector< double > >::difference_type j)"""
         return _math_linear.std_vector_vector_double___delslice__(self, i, j)
 
 
-    def __delitem__(self, *args):
+    def __delitem__(self, *args) -> "void":
         """
         __delitem__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i)
         __delitem__(std_vector_vector_double self, PySliceObject * slice)
@@ -481,7 +481,7 @@ class std_vector_vector_double(_object):
         return _math_linear.std_vector_vector_double___delitem__(self, *args)
 
 
-    def __getitem__(self, *args):
+    def __getitem__(self, *args) -> "std::vector< std::vector< double > >::value_type const &":
         """
         __getitem__(std_vector_vector_double self, PySliceObject * slice) -> std_vector_vector_double
         __getitem__(std_vector_vector_double self, std::vector< std::vector< double > >::difference_type i) -> std_vector_double
@@ -489,7 +489,7 @@ class std_vector_vector_double(_object):
         return _math_linear.std_vector_vector_double___getitem__(self, *args)
 
 
-    def __setitem__(self, *args):
+    def __setitem__(self, *args) -> "void":
         """
         __setitem__(std_vector_vector_double self, PySliceObject * slice, std_vector_vector_double v)
         __setitem__(std_vector_vector_double self, PySliceObject * slice)
@@ -498,67 +498,67 @@ class std_vector_vector_double(_object):
         return _math_linear.std_vector_vector_double___setitem__(self, *args)
 
 
-    def pop(self):
+    def pop(self) -> "std::vector< std::vector< double > >::value_type":
         """pop(std_vector_vector_double self) -> std_vector_double"""
         return _math_linear.std_vector_vector_double_pop(self)
 
 
-    def append(self, x):
+    def append(self, x: 'std_vector_double') -> "void":
         """append(std_vector_vector_double self, std_vector_double x)"""
         return _math_linear.std_vector_vector_double_append(self, x)
 
 
-    def empty(self):
+    def empty(self) -> "bool":
         """empty(std_vector_vector_double self) -> bool"""
         return _math_linear.std_vector_vector_double_empty(self)
 
 
-    def size(self):
+    def size(self) -> "std::vector< std::vector< double > >::size_type":
         """size(std_vector_vector_double self) -> std::vector< std::vector< double > >::size_type"""
         return _math_linear.std_vector_vector_double_size(self)
 
 
-    def swap(self, v):
+    def swap(self, v: 'std_vector_vector_double') -> "void":
         """swap(std_vector_vector_double self, std_vector_vector_double v)"""
         return _math_linear.std_vector_vector_double_swap(self, v)
 
 
-    def begin(self):
+    def begin(self) -> "std::vector< std::vector< double > >::iterator":
         """begin(std_vector_vector_double self) -> std::vector< std::vector< double > >::iterator"""
         return _math_linear.std_vector_vector_double_begin(self)
 
 
-    def end(self):
+    def end(self) -> "std::vector< std::vector< double > >::iterator":
         """end(std_vector_vector_double self) -> std::vector< std::vector< double > >::iterator"""
         return _math_linear.std_vector_vector_double_end(self)
 
 
-    def rbegin(self):
+    def rbegin(self) -> "std::vector< std::vector< double > >::reverse_iterator":
         """rbegin(std_vector_vector_double self) -> std::vector< std::vector< double > >::reverse_iterator"""
         return _math_linear.std_vector_vector_double_rbegin(self)
 
 
-    def rend(self):
+    def rend(self) -> "std::vector< std::vector< double > >::reverse_iterator":
         """rend(std_vector_vector_double self) -> std::vector< std::vector< double > >::reverse_iterator"""
         return _math_linear.std_vector_vector_double_rend(self)
 
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(std_vector_vector_double self)"""
         return _math_linear.std_vector_vector_double_clear(self)
 
 
-    def get_allocator(self):
+    def get_allocator(self) -> "std::vector< std::vector< double > >::allocator_type":
         """get_allocator(std_vector_vector_double self) -> std::vector< std::vector< double > >::allocator_type"""
         return _math_linear.std_vector_vector_double_get_allocator(self)
 
 
-    def pop_back(self):
+    def pop_back(self) -> "void":
         """pop_back(std_vector_vector_double self)"""
         return _math_linear.std_vector_vector_double_pop_back(self)
 
 
-    def erase(self, *args):
+    def erase(self, *args) -> "std::vector< std::vector< double > >::iterator":
         """
         erase(std_vector_vector_double self, std::vector< std::vector< double > >::iterator pos) -> std::vector< std::vector< double > >::iterator
         erase(std_vector_vector_double self, std::vector< std::vector< double > >::iterator first, std::vector< std::vector< double > >::iterator last) -> std::vector< std::vector< double > >::iterator
@@ -579,27 +579,27 @@ class std_vector_vector_double(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def push_back(self, x):
+    def push_back(self, x: 'std_vector_double') -> "void":
         """push_back(std_vector_vector_double self, std_vector_double x)"""
         return _math_linear.std_vector_vector_double_push_back(self, x)
 
 
-    def front(self):
+    def front(self) -> "std::vector< std::vector< double > >::value_type const &":
         """front(std_vector_vector_double self) -> std_vector_double"""
         return _math_linear.std_vector_vector_double_front(self)
 
 
-    def back(self):
+    def back(self) -> "std::vector< std::vector< double > >::value_type const &":
         """back(std_vector_vector_double self) -> std_vector_double"""
         return _math_linear.std_vector_vector_double_back(self)
 
 
-    def assign(self, n, x):
+    def assign(self, n: 'std::vector< std::vector< double > >::size_type', x: 'std_vector_double') -> "void":
         """assign(std_vector_vector_double self, std::vector< std::vector< double > >::size_type n, std_vector_double x)"""
         return _math_linear.std_vector_vector_double_assign(self, n, x)
 
 
-    def resize(self, *args):
+    def resize(self, *args) -> "void":
         """
         resize(std_vector_vector_double self, std::vector< std::vector< double > >::size_type new_size)
         resize(std_vector_vector_double self, std::vector< std::vector< double > >::size_type new_size, std_vector_double x)
@@ -607,7 +607,7 @@ class std_vector_vector_double(_object):
         return _math_linear.std_vector_vector_double_resize(self, *args)
 
 
-    def insert(self, *args):
+    def insert(self, *args) -> "void":
         """
         insert(std_vector_vector_double self, std::vector< std::vector< double > >::iterator pos, std_vector_double x) -> std::vector< std::vector< double > >::iterator
         insert(std_vector_vector_double self, std::vector< std::vector< double > >::iterator pos, std::vector< std::vector< double > >::size_type n, std_vector_double x)
@@ -615,12 +615,12 @@ class std_vector_vector_double(_object):
         return _math_linear.std_vector_vector_double_insert(self, *args)
 
 
-    def reserve(self, n):
+    def reserve(self, n: 'std::vector< std::vector< double > >::size_type') -> "void":
         """reserve(std_vector_vector_double self, std::vector< std::vector< double > >::size_type n)"""
         return _math_linear.std_vector_vector_double_reserve(self, n)
 
 
-    def capacity(self):
+    def capacity(self) -> "std::vector< std::vector< double > >::size_type":
         """capacity(std_vector_vector_double self) -> std::vector< std::vector< double > >::size_type"""
         return _math_linear.std_vector_vector_double_capacity(self)
 
@@ -669,7 +669,7 @@ class Matrix1x1(_object):
     __swig_destroy__ = _math_linear.delete_Matrix1x1
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix1x1 self, size_t i, size_t j) -> double
         __call__(Matrix1x1 self, size_t i, size_t j) -> double &
@@ -677,7 +677,7 @@ class Matrix1x1(_object):
         return _math_linear.Matrix1x1___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix1x1 self, size_t i) -> double const
         row(Matrix1x1 self, size_t i) -> double
@@ -687,7 +687,7 @@ class Matrix1x1(_object):
         return _math_linear.Matrix1x1_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix1x1 self, size_t j) -> std_vector_double
         col(Matrix1x1 self, size_t j, double const * vec)
@@ -697,72 +697,72 @@ class Matrix1x1(_object):
         return _math_linear.Matrix1x1_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix1x1 self) -> size_t"""
         return _math_linear.Matrix1x1_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix1x1 self) -> size_t"""
         return _math_linear.Matrix1x1_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix1x1 self) -> size_t"""
         return _math_linear.Matrix1x1_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 1,1,double > &":
         """scale(Matrix1x1 self, double scalar) -> Matrix1x1"""
         return _math_linear.Matrix1x1_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 1,1 >":
         """multiply(Matrix1x1 self, double scalar) -> Matrix1x1"""
         return _math_linear.Matrix1x1_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 1,1,double > &":
         """scaleDiagonal(Matrix1x1 self, Matrix1x1 mx) -> Matrix1x1"""
         return _math_linear.Matrix1x1_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 1,1,double >":
         """multiplyDiagonal(Matrix1x1 self, Matrix1x1 mx) -> Matrix1x1"""
         return _math_linear.Matrix1x1_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 1,1,double >::Like_T &":
         """__iadd__(Matrix1x1 self, Matrix1x1 mx) -> Matrix1x1"""
         return _math_linear.Matrix1x1___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 1,1,double >::Like_T &":
         """__isub__(Matrix1x1 self, Matrix1x1 mx) -> Matrix1x1"""
         return _math_linear.Matrix1x1___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 1,1,double >::Like_T":
         """add(Matrix1x1 self, Matrix1x1 mx) -> Matrix1x1"""
         return _math_linear.Matrix1x1_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 1,1,double >::Like_T":
         """subtract(Matrix1x1 self, Matrix1x1 mx) -> Matrix1x1"""
         return _math_linear.Matrix1x1_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 1,1,double >":
         """transpose(Matrix1x1 self) -> Matrix1x1"""
         return _math_linear.Matrix1x1_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 1,1,double >::Like_T":
         """decomposeLU(Matrix1x1 self, VectorSizeT pivotsM) -> Matrix1x1"""
         return _math_linear.Matrix1x1_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=1):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=1) -> "math::linear::MatrixMxN< 1,1,double >::Like_T":
         """
         permute(Matrix1x1 self, VectorSizeT pivotsM, size_t n=1) -> Matrix1x1
         permute(Matrix1x1 self, VectorSizeT pivotsM) -> Matrix1x1
@@ -770,37 +770,37 @@ class Matrix1x1(_object):
         return _math_linear.Matrix1x1_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix1x1 self) -> double"""
         return _math_linear.Matrix1x1_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix1x1 self) -> double"""
         return _math_linear.Matrix1x1_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 1,1,double > &":
         """normalize(Matrix1x1 self) -> Matrix1x1"""
         return _math_linear.Matrix1x1_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 1,1,double >::Like_T":
         """unit(Matrix1x1 self) -> Matrix1x1"""
         return _math_linear.Matrix1x1_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 1,1,double >::Like_T":
         """__add__(Matrix1x1 self, Matrix1x1 mx) -> Matrix1x1"""
         return _math_linear.Matrix1x1___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 1,1,double >::Like_T":
         """__sub__(Matrix1x1 self, Matrix1x1 mx) -> Matrix1x1"""
         return _math_linear.Matrix1x1___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 1,1,double >::Like_T":
         """__mul__(Matrix1x1 self, double scalar) -> Matrix1x1"""
         return _math_linear.Matrix1x1___mul__(self, scalar)
 
@@ -811,27 +811,27 @@ class Matrix1x1(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 1,1,double >::Like_T":
         """__neg__(Matrix1x1 self) -> Matrix1x1"""
         return _math_linear.Matrix1x1___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix1x1 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix1x1___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix1x1 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix1x1___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix1x1 self) -> std::string"""
         return _math_linear.Matrix1x1___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix1x1 self) -> std_vector_vector_double"""
         return _math_linear.Matrix1x1_vals(self)
 
@@ -867,7 +867,7 @@ class Matrix1x2(_object):
     __swig_destroy__ = _math_linear.delete_Matrix1x2
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix1x2 self, size_t i, size_t j) -> double
         __call__(Matrix1x2 self, size_t i, size_t j) -> double &
@@ -875,7 +875,7 @@ class Matrix1x2(_object):
         return _math_linear.Matrix1x2___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix1x2 self, size_t i) -> double const
         row(Matrix1x2 self, size_t i) -> double
@@ -885,7 +885,7 @@ class Matrix1x2(_object):
         return _math_linear.Matrix1x2_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix1x2 self, size_t j) -> std_vector_double
         col(Matrix1x2 self, size_t j, double const * vec)
@@ -895,72 +895,72 @@ class Matrix1x2(_object):
         return _math_linear.Matrix1x2_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix1x2 self) -> size_t"""
         return _math_linear.Matrix1x2_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix1x2 self) -> size_t"""
         return _math_linear.Matrix1x2_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix1x2 self) -> size_t"""
         return _math_linear.Matrix1x2_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 1,2,double > &":
         """scale(Matrix1x2 self, double scalar) -> Matrix1x2"""
         return _math_linear.Matrix1x2_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 1,2 >":
         """multiply(Matrix1x2 self, double scalar) -> Matrix1x2"""
         return _math_linear.Matrix1x2_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 1,2,double > &":
         """scaleDiagonal(Matrix1x2 self, Matrix2x2 mx) -> Matrix1x2"""
         return _math_linear.Matrix1x2_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 1,2,double >":
         """multiplyDiagonal(Matrix1x2 self, Matrix2x2 mx) -> Matrix1x2"""
         return _math_linear.Matrix1x2_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix1x2') -> "math::linear::MatrixMxN< 1,2,double >::Like_T &":
         """__iadd__(Matrix1x2 self, Matrix1x2 mx) -> Matrix1x2"""
         return _math_linear.Matrix1x2___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix1x2') -> "math::linear::MatrixMxN< 1,2,double >::Like_T &":
         """__isub__(Matrix1x2 self, Matrix1x2 mx) -> Matrix1x2"""
         return _math_linear.Matrix1x2___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix1x2') -> "math::linear::MatrixMxN< 1,2,double >::Like_T":
         """add(Matrix1x2 self, Matrix1x2 mx) -> Matrix1x2"""
         return _math_linear.Matrix1x2_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix1x2') -> "math::linear::MatrixMxN< 1,2,double >::Like_T":
         """subtract(Matrix1x2 self, Matrix1x2 mx) -> Matrix1x2"""
         return _math_linear.Matrix1x2_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 2,1,double >":
         """transpose(Matrix1x2 self) -> Matrix2x1"""
         return _math_linear.Matrix1x2_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 1,2,double >::Like_T":
         """decomposeLU(Matrix1x2 self, VectorSizeT pivotsM) -> Matrix1x2"""
         return _math_linear.Matrix1x2_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=2):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=2) -> "math::linear::MatrixMxN< 1,2,double >::Like_T":
         """
         permute(Matrix1x2 self, VectorSizeT pivotsM, size_t n=2) -> Matrix1x2
         permute(Matrix1x2 self, VectorSizeT pivotsM) -> Matrix1x2
@@ -968,37 +968,37 @@ class Matrix1x2(_object):
         return _math_linear.Matrix1x2_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix1x2 self) -> double"""
         return _math_linear.Matrix1x2_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix1x2 self) -> double"""
         return _math_linear.Matrix1x2_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 1,2,double > &":
         """normalize(Matrix1x2 self) -> Matrix1x2"""
         return _math_linear.Matrix1x2_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 1,2,double >::Like_T":
         """unit(Matrix1x2 self) -> Matrix1x2"""
         return _math_linear.Matrix1x2_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix1x2') -> "math::linear::MatrixMxN< 1,2,double >::Like_T":
         """__add__(Matrix1x2 self, Matrix1x2 mx) -> Matrix1x2"""
         return _math_linear.Matrix1x2___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix1x2') -> "math::linear::MatrixMxN< 1,2,double >::Like_T":
         """__sub__(Matrix1x2 self, Matrix1x2 mx) -> Matrix1x2"""
         return _math_linear.Matrix1x2___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 1,2,double >::Like_T":
         """__mul__(Matrix1x2 self, double scalar) -> Matrix1x2"""
         return _math_linear.Matrix1x2___mul__(self, scalar)
 
@@ -1009,27 +1009,27 @@ class Matrix1x2(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 1,2,double >::Like_T":
         """__neg__(Matrix1x2 self) -> Matrix1x2"""
         return _math_linear.Matrix1x2___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix1x2 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix1x2___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix1x2 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix1x2___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix1x2 self) -> std::string"""
         return _math_linear.Matrix1x2___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix1x2 self) -> std_vector_vector_double"""
         return _math_linear.Matrix1x2_vals(self)
 
@@ -1065,7 +1065,7 @@ class Matrix1x3(_object):
     __swig_destroy__ = _math_linear.delete_Matrix1x3
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix1x3 self, size_t i, size_t j) -> double
         __call__(Matrix1x3 self, size_t i, size_t j) -> double &
@@ -1073,7 +1073,7 @@ class Matrix1x3(_object):
         return _math_linear.Matrix1x3___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix1x3 self, size_t i) -> double const
         row(Matrix1x3 self, size_t i) -> double
@@ -1083,7 +1083,7 @@ class Matrix1x3(_object):
         return _math_linear.Matrix1x3_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix1x3 self, size_t j) -> std_vector_double
         col(Matrix1x3 self, size_t j, double const * vec)
@@ -1093,72 +1093,72 @@ class Matrix1x3(_object):
         return _math_linear.Matrix1x3_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix1x3 self) -> size_t"""
         return _math_linear.Matrix1x3_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix1x3 self) -> size_t"""
         return _math_linear.Matrix1x3_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix1x3 self) -> size_t"""
         return _math_linear.Matrix1x3_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 1,3,double > &":
         """scale(Matrix1x3 self, double scalar) -> Matrix1x3"""
         return _math_linear.Matrix1x3_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 1,3 >":
         """multiply(Matrix1x3 self, double scalar) -> Matrix1x3"""
         return _math_linear.Matrix1x3_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 1,3,double > &":
         """scaleDiagonal(Matrix1x3 self, Matrix3x3 mx) -> Matrix1x3"""
         return _math_linear.Matrix1x3_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 1,3,double >":
         """multiplyDiagonal(Matrix1x3 self, Matrix3x3 mx) -> Matrix1x3"""
         return _math_linear.Matrix1x3_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix1x3') -> "math::linear::MatrixMxN< 1,3,double >::Like_T &":
         """__iadd__(Matrix1x3 self, Matrix1x3 mx) -> Matrix1x3"""
         return _math_linear.Matrix1x3___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix1x3') -> "math::linear::MatrixMxN< 1,3,double >::Like_T &":
         """__isub__(Matrix1x3 self, Matrix1x3 mx) -> Matrix1x3"""
         return _math_linear.Matrix1x3___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix1x3') -> "math::linear::MatrixMxN< 1,3,double >::Like_T":
         """add(Matrix1x3 self, Matrix1x3 mx) -> Matrix1x3"""
         return _math_linear.Matrix1x3_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix1x3') -> "math::linear::MatrixMxN< 1,3,double >::Like_T":
         """subtract(Matrix1x3 self, Matrix1x3 mx) -> Matrix1x3"""
         return _math_linear.Matrix1x3_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 3,1,double >":
         """transpose(Matrix1x3 self) -> Matrix3x1"""
         return _math_linear.Matrix1x3_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 1,3,double >::Like_T":
         """decomposeLU(Matrix1x3 self, VectorSizeT pivotsM) -> Matrix1x3"""
         return _math_linear.Matrix1x3_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=3):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=3) -> "math::linear::MatrixMxN< 1,3,double >::Like_T":
         """
         permute(Matrix1x3 self, VectorSizeT pivotsM, size_t n=3) -> Matrix1x3
         permute(Matrix1x3 self, VectorSizeT pivotsM) -> Matrix1x3
@@ -1166,37 +1166,37 @@ class Matrix1x3(_object):
         return _math_linear.Matrix1x3_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix1x3 self) -> double"""
         return _math_linear.Matrix1x3_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix1x3 self) -> double"""
         return _math_linear.Matrix1x3_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 1,3,double > &":
         """normalize(Matrix1x3 self) -> Matrix1x3"""
         return _math_linear.Matrix1x3_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 1,3,double >::Like_T":
         """unit(Matrix1x3 self) -> Matrix1x3"""
         return _math_linear.Matrix1x3_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix1x3') -> "math::linear::MatrixMxN< 1,3,double >::Like_T":
         """__add__(Matrix1x3 self, Matrix1x3 mx) -> Matrix1x3"""
         return _math_linear.Matrix1x3___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix1x3') -> "math::linear::MatrixMxN< 1,3,double >::Like_T":
         """__sub__(Matrix1x3 self, Matrix1x3 mx) -> Matrix1x3"""
         return _math_linear.Matrix1x3___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 1,3,double >::Like_T":
         """__mul__(Matrix1x3 self, double scalar) -> Matrix1x3"""
         return _math_linear.Matrix1x3___mul__(self, scalar)
 
@@ -1207,27 +1207,27 @@ class Matrix1x3(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 1,3,double >::Like_T":
         """__neg__(Matrix1x3 self) -> Matrix1x3"""
         return _math_linear.Matrix1x3___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix1x3 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix1x3___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix1x3 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix1x3___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix1x3 self) -> std::string"""
         return _math_linear.Matrix1x3___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix1x3 self) -> std_vector_vector_double"""
         return _math_linear.Matrix1x3_vals(self)
 
@@ -1263,7 +1263,7 @@ class Matrix2x1(_object):
     __swig_destroy__ = _math_linear.delete_Matrix2x1
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix2x1 self, size_t i, size_t j) -> double
         __call__(Matrix2x1 self, size_t i, size_t j) -> double &
@@ -1271,7 +1271,7 @@ class Matrix2x1(_object):
         return _math_linear.Matrix2x1___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix2x1 self, size_t i) -> double const
         row(Matrix2x1 self, size_t i) -> double
@@ -1281,7 +1281,7 @@ class Matrix2x1(_object):
         return _math_linear.Matrix2x1_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix2x1 self, size_t j) -> std_vector_double
         col(Matrix2x1 self, size_t j, double const * vec)
@@ -1291,72 +1291,72 @@ class Matrix2x1(_object):
         return _math_linear.Matrix2x1_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix2x1 self) -> size_t"""
         return _math_linear.Matrix2x1_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix2x1 self) -> size_t"""
         return _math_linear.Matrix2x1_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix2x1 self) -> size_t"""
         return _math_linear.Matrix2x1_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,1,double > &":
         """scale(Matrix2x1 self, double scalar) -> Matrix2x1"""
         return _math_linear.Matrix2x1_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,1 >":
         """multiply(Matrix2x1 self, double scalar) -> Matrix2x1"""
         return _math_linear.Matrix2x1_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 2,1,double > &":
         """scaleDiagonal(Matrix2x1 self, Matrix1x1 mx) -> Matrix2x1"""
         return _math_linear.Matrix2x1_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 2,1,double >":
         """multiplyDiagonal(Matrix2x1 self, Matrix1x1 mx) -> Matrix2x1"""
         return _math_linear.Matrix2x1_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix2x1') -> "math::linear::MatrixMxN< 2,1,double >::Like_T &":
         """__iadd__(Matrix2x1 self, Matrix2x1 mx) -> Matrix2x1"""
         return _math_linear.Matrix2x1___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix2x1') -> "math::linear::MatrixMxN< 2,1,double >::Like_T &":
         """__isub__(Matrix2x1 self, Matrix2x1 mx) -> Matrix2x1"""
         return _math_linear.Matrix2x1___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix2x1') -> "math::linear::MatrixMxN< 2,1,double >::Like_T":
         """add(Matrix2x1 self, Matrix2x1 mx) -> Matrix2x1"""
         return _math_linear.Matrix2x1_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix2x1') -> "math::linear::MatrixMxN< 2,1,double >::Like_T":
         """subtract(Matrix2x1 self, Matrix2x1 mx) -> Matrix2x1"""
         return _math_linear.Matrix2x1_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 1,2,double >":
         """transpose(Matrix2x1 self) -> Matrix1x2"""
         return _math_linear.Matrix2x1_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 2,1,double >::Like_T":
         """decomposeLU(Matrix2x1 self, VectorSizeT pivotsM) -> Matrix2x1"""
         return _math_linear.Matrix2x1_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=1):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=1) -> "math::linear::MatrixMxN< 2,1,double >::Like_T":
         """
         permute(Matrix2x1 self, VectorSizeT pivotsM, size_t n=1) -> Matrix2x1
         permute(Matrix2x1 self, VectorSizeT pivotsM) -> Matrix2x1
@@ -1364,37 +1364,37 @@ class Matrix2x1(_object):
         return _math_linear.Matrix2x1_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix2x1 self) -> double"""
         return _math_linear.Matrix2x1_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix2x1 self) -> double"""
         return _math_linear.Matrix2x1_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 2,1,double > &":
         """normalize(Matrix2x1 self) -> Matrix2x1"""
         return _math_linear.Matrix2x1_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 2,1,double >::Like_T":
         """unit(Matrix2x1 self) -> Matrix2x1"""
         return _math_linear.Matrix2x1_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix2x1') -> "math::linear::MatrixMxN< 2,1,double >::Like_T":
         """__add__(Matrix2x1 self, Matrix2x1 mx) -> Matrix2x1"""
         return _math_linear.Matrix2x1___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix2x1') -> "math::linear::MatrixMxN< 2,1,double >::Like_T":
         """__sub__(Matrix2x1 self, Matrix2x1 mx) -> Matrix2x1"""
         return _math_linear.Matrix2x1___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,1,double >::Like_T":
         """__mul__(Matrix2x1 self, double scalar) -> Matrix2x1"""
         return _math_linear.Matrix2x1___mul__(self, scalar)
 
@@ -1405,27 +1405,27 @@ class Matrix2x1(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 2,1,double >::Like_T":
         """__neg__(Matrix2x1 self) -> Matrix2x1"""
         return _math_linear.Matrix2x1___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix2x1 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix2x1___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix2x1 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix2x1___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix2x1 self) -> std::string"""
         return _math_linear.Matrix2x1___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix2x1 self) -> std_vector_vector_double"""
         return _math_linear.Matrix2x1_vals(self)
 
@@ -1461,7 +1461,7 @@ class Matrix2x2(_object):
     __swig_destroy__ = _math_linear.delete_Matrix2x2
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix2x2 self, size_t i, size_t j) -> double
         __call__(Matrix2x2 self, size_t i, size_t j) -> double &
@@ -1469,7 +1469,7 @@ class Matrix2x2(_object):
         return _math_linear.Matrix2x2___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix2x2 self, size_t i) -> double const
         row(Matrix2x2 self, size_t i) -> double
@@ -1479,7 +1479,7 @@ class Matrix2x2(_object):
         return _math_linear.Matrix2x2_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix2x2 self, size_t j) -> std_vector_double
         col(Matrix2x2 self, size_t j, double const * vec)
@@ -1489,72 +1489,72 @@ class Matrix2x2(_object):
         return _math_linear.Matrix2x2_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix2x2 self) -> size_t"""
         return _math_linear.Matrix2x2_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix2x2 self) -> size_t"""
         return _math_linear.Matrix2x2_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix2x2 self) -> size_t"""
         return _math_linear.Matrix2x2_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,2,double > &":
         """scale(Matrix2x2 self, double scalar) -> Matrix2x2"""
         return _math_linear.Matrix2x2_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,2 >":
         """multiply(Matrix2x2 self, double scalar) -> Matrix2x2"""
         return _math_linear.Matrix2x2_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 2,2,double > &":
         """scaleDiagonal(Matrix2x2 self, Matrix2x2 mx) -> Matrix2x2"""
         return _math_linear.Matrix2x2_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 2,2,double >":
         """multiplyDiagonal(Matrix2x2 self, Matrix2x2 mx) -> Matrix2x2"""
         return _math_linear.Matrix2x2_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 2,2,double >::Like_T &":
         """__iadd__(Matrix2x2 self, Matrix2x2 mx) -> Matrix2x2"""
         return _math_linear.Matrix2x2___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 2,2,double >::Like_T &":
         """__isub__(Matrix2x2 self, Matrix2x2 mx) -> Matrix2x2"""
         return _math_linear.Matrix2x2___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 2,2,double >::Like_T":
         """add(Matrix2x2 self, Matrix2x2 mx) -> Matrix2x2"""
         return _math_linear.Matrix2x2_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 2,2,double >::Like_T":
         """subtract(Matrix2x2 self, Matrix2x2 mx) -> Matrix2x2"""
         return _math_linear.Matrix2x2_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 2,2,double >":
         """transpose(Matrix2x2 self) -> Matrix2x2"""
         return _math_linear.Matrix2x2_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 2,2,double >::Like_T":
         """decomposeLU(Matrix2x2 self, VectorSizeT pivotsM) -> Matrix2x2"""
         return _math_linear.Matrix2x2_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=2):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=2) -> "math::linear::MatrixMxN< 2,2,double >::Like_T":
         """
         permute(Matrix2x2 self, VectorSizeT pivotsM, size_t n=2) -> Matrix2x2
         permute(Matrix2x2 self, VectorSizeT pivotsM) -> Matrix2x2
@@ -1562,37 +1562,37 @@ class Matrix2x2(_object):
         return _math_linear.Matrix2x2_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix2x2 self) -> double"""
         return _math_linear.Matrix2x2_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix2x2 self) -> double"""
         return _math_linear.Matrix2x2_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 2,2,double > &":
         """normalize(Matrix2x2 self) -> Matrix2x2"""
         return _math_linear.Matrix2x2_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 2,2,double >::Like_T":
         """unit(Matrix2x2 self) -> Matrix2x2"""
         return _math_linear.Matrix2x2_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 2,2,double >::Like_T":
         """__add__(Matrix2x2 self, Matrix2x2 mx) -> Matrix2x2"""
         return _math_linear.Matrix2x2___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 2,2,double >::Like_T":
         """__sub__(Matrix2x2 self, Matrix2x2 mx) -> Matrix2x2"""
         return _math_linear.Matrix2x2___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,2,double >::Like_T":
         """__mul__(Matrix2x2 self, double scalar) -> Matrix2x2"""
         return _math_linear.Matrix2x2___mul__(self, scalar)
 
@@ -1603,27 +1603,27 @@ class Matrix2x2(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 2,2,double >::Like_T":
         """__neg__(Matrix2x2 self) -> Matrix2x2"""
         return _math_linear.Matrix2x2___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix2x2 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix2x2___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix2x2 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix2x2___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix2x2 self) -> std::string"""
         return _math_linear.Matrix2x2___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix2x2 self) -> std_vector_vector_double"""
         return _math_linear.Matrix2x2_vals(self)
 
@@ -1659,7 +1659,7 @@ class Matrix2x3(_object):
     __swig_destroy__ = _math_linear.delete_Matrix2x3
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix2x3 self, size_t i, size_t j) -> double
         __call__(Matrix2x3 self, size_t i, size_t j) -> double &
@@ -1667,7 +1667,7 @@ class Matrix2x3(_object):
         return _math_linear.Matrix2x3___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix2x3 self, size_t i) -> double const
         row(Matrix2x3 self, size_t i) -> double
@@ -1677,7 +1677,7 @@ class Matrix2x3(_object):
         return _math_linear.Matrix2x3_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix2x3 self, size_t j) -> std_vector_double
         col(Matrix2x3 self, size_t j, double const * vec)
@@ -1687,72 +1687,72 @@ class Matrix2x3(_object):
         return _math_linear.Matrix2x3_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix2x3 self) -> size_t"""
         return _math_linear.Matrix2x3_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix2x3 self) -> size_t"""
         return _math_linear.Matrix2x3_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix2x3 self) -> size_t"""
         return _math_linear.Matrix2x3_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,3,double > &":
         """scale(Matrix2x3 self, double scalar) -> Matrix2x3"""
         return _math_linear.Matrix2x3_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,3 >":
         """multiply(Matrix2x3 self, double scalar) -> Matrix2x3"""
         return _math_linear.Matrix2x3_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 2,3,double > &":
         """scaleDiagonal(Matrix2x3 self, Matrix3x3 mx) -> Matrix2x3"""
         return _math_linear.Matrix2x3_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 2,3,double >":
         """multiplyDiagonal(Matrix2x3 self, Matrix3x3 mx) -> Matrix2x3"""
         return _math_linear.Matrix2x3_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix2x3') -> "math::linear::MatrixMxN< 2,3,double >::Like_T &":
         """__iadd__(Matrix2x3 self, Matrix2x3 mx) -> Matrix2x3"""
         return _math_linear.Matrix2x3___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix2x3') -> "math::linear::MatrixMxN< 2,3,double >::Like_T &":
         """__isub__(Matrix2x3 self, Matrix2x3 mx) -> Matrix2x3"""
         return _math_linear.Matrix2x3___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix2x3') -> "math::linear::MatrixMxN< 2,3,double >::Like_T":
         """add(Matrix2x3 self, Matrix2x3 mx) -> Matrix2x3"""
         return _math_linear.Matrix2x3_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix2x3') -> "math::linear::MatrixMxN< 2,3,double >::Like_T":
         """subtract(Matrix2x3 self, Matrix2x3 mx) -> Matrix2x3"""
         return _math_linear.Matrix2x3_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 3,2,double >":
         """transpose(Matrix2x3 self) -> Matrix3x2"""
         return _math_linear.Matrix2x3_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 2,3,double >::Like_T":
         """decomposeLU(Matrix2x3 self, VectorSizeT pivotsM) -> Matrix2x3"""
         return _math_linear.Matrix2x3_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=3):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=3) -> "math::linear::MatrixMxN< 2,3,double >::Like_T":
         """
         permute(Matrix2x3 self, VectorSizeT pivotsM, size_t n=3) -> Matrix2x3
         permute(Matrix2x3 self, VectorSizeT pivotsM) -> Matrix2x3
@@ -1760,37 +1760,37 @@ class Matrix2x3(_object):
         return _math_linear.Matrix2x3_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix2x3 self) -> double"""
         return _math_linear.Matrix2x3_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix2x3 self) -> double"""
         return _math_linear.Matrix2x3_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 2,3,double > &":
         """normalize(Matrix2x3 self) -> Matrix2x3"""
         return _math_linear.Matrix2x3_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 2,3,double >::Like_T":
         """unit(Matrix2x3 self) -> Matrix2x3"""
         return _math_linear.Matrix2x3_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix2x3') -> "math::linear::MatrixMxN< 2,3,double >::Like_T":
         """__add__(Matrix2x3 self, Matrix2x3 mx) -> Matrix2x3"""
         return _math_linear.Matrix2x3___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix2x3') -> "math::linear::MatrixMxN< 2,3,double >::Like_T":
         """__sub__(Matrix2x3 self, Matrix2x3 mx) -> Matrix2x3"""
         return _math_linear.Matrix2x3___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,3,double >::Like_T":
         """__mul__(Matrix2x3 self, double scalar) -> Matrix2x3"""
         return _math_linear.Matrix2x3___mul__(self, scalar)
 
@@ -1801,27 +1801,27 @@ class Matrix2x3(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 2,3,double >::Like_T":
         """__neg__(Matrix2x3 self) -> Matrix2x3"""
         return _math_linear.Matrix2x3___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix2x3 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix2x3___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix2x3 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix2x3___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix2x3 self) -> std::string"""
         return _math_linear.Matrix2x3___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix2x3 self) -> std_vector_vector_double"""
         return _math_linear.Matrix2x3_vals(self)
 
@@ -1857,7 +1857,7 @@ class Matrix2x7(_object):
     __swig_destroy__ = _math_linear.delete_Matrix2x7
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix2x7 self, size_t i, size_t j) -> double
         __call__(Matrix2x7 self, size_t i, size_t j) -> double &
@@ -1865,7 +1865,7 @@ class Matrix2x7(_object):
         return _math_linear.Matrix2x7___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix2x7 self, size_t i) -> double const
         row(Matrix2x7 self, size_t i) -> double
@@ -1875,7 +1875,7 @@ class Matrix2x7(_object):
         return _math_linear.Matrix2x7_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix2x7 self, size_t j) -> std_vector_double
         col(Matrix2x7 self, size_t j, double const * vec)
@@ -1885,72 +1885,72 @@ class Matrix2x7(_object):
         return _math_linear.Matrix2x7_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix2x7 self) -> size_t"""
         return _math_linear.Matrix2x7_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix2x7 self) -> size_t"""
         return _math_linear.Matrix2x7_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix2x7 self) -> size_t"""
         return _math_linear.Matrix2x7_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,7,double > &":
         """scale(Matrix2x7 self, double scalar) -> Matrix2x7"""
         return _math_linear.Matrix2x7_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,7 >":
         """multiply(Matrix2x7 self, double scalar) -> Matrix2x7"""
         return _math_linear.Matrix2x7_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 2,7,double > &":
         """scaleDiagonal(Matrix2x7 self, Matrix7x7 mx) -> Matrix2x7"""
         return _math_linear.Matrix2x7_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 2,7,double >":
         """multiplyDiagonal(Matrix2x7 self, Matrix7x7 mx) -> Matrix2x7"""
         return _math_linear.Matrix2x7_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix2x7') -> "math::linear::MatrixMxN< 2,7,double >::Like_T &":
         """__iadd__(Matrix2x7 self, Matrix2x7 mx) -> Matrix2x7"""
         return _math_linear.Matrix2x7___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix2x7') -> "math::linear::MatrixMxN< 2,7,double >::Like_T &":
         """__isub__(Matrix2x7 self, Matrix2x7 mx) -> Matrix2x7"""
         return _math_linear.Matrix2x7___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix2x7') -> "math::linear::MatrixMxN< 2,7,double >::Like_T":
         """add(Matrix2x7 self, Matrix2x7 mx) -> Matrix2x7"""
         return _math_linear.Matrix2x7_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix2x7') -> "math::linear::MatrixMxN< 2,7,double >::Like_T":
         """subtract(Matrix2x7 self, Matrix2x7 mx) -> Matrix2x7"""
         return _math_linear.Matrix2x7_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 7,2,double >":
         """transpose(Matrix2x7 self) -> Matrix7x2"""
         return _math_linear.Matrix2x7_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 2,7,double >::Like_T":
         """decomposeLU(Matrix2x7 self, VectorSizeT pivotsM) -> Matrix2x7"""
         return _math_linear.Matrix2x7_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=7):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=7) -> "math::linear::MatrixMxN< 2,7,double >::Like_T":
         """
         permute(Matrix2x7 self, VectorSizeT pivotsM, size_t n=7) -> Matrix2x7
         permute(Matrix2x7 self, VectorSizeT pivotsM) -> Matrix2x7
@@ -1958,37 +1958,37 @@ class Matrix2x7(_object):
         return _math_linear.Matrix2x7_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix2x7 self) -> double"""
         return _math_linear.Matrix2x7_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix2x7 self) -> double"""
         return _math_linear.Matrix2x7_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 2,7,double > &":
         """normalize(Matrix2x7 self) -> Matrix2x7"""
         return _math_linear.Matrix2x7_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 2,7,double >::Like_T":
         """unit(Matrix2x7 self) -> Matrix2x7"""
         return _math_linear.Matrix2x7_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix2x7') -> "math::linear::MatrixMxN< 2,7,double >::Like_T":
         """__add__(Matrix2x7 self, Matrix2x7 mx) -> Matrix2x7"""
         return _math_linear.Matrix2x7___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix2x7') -> "math::linear::MatrixMxN< 2,7,double >::Like_T":
         """__sub__(Matrix2x7 self, Matrix2x7 mx) -> Matrix2x7"""
         return _math_linear.Matrix2x7___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 2,7,double >::Like_T":
         """__mul__(Matrix2x7 self, double scalar) -> Matrix2x7"""
         return _math_linear.Matrix2x7___mul__(self, scalar)
 
@@ -1999,27 +1999,27 @@ class Matrix2x7(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 2,7,double >::Like_T":
         """__neg__(Matrix2x7 self) -> Matrix2x7"""
         return _math_linear.Matrix2x7___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix2x7 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix2x7___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix2x7 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix2x7___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix2x7 self) -> std::string"""
         return _math_linear.Matrix2x7___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix2x7 self) -> std_vector_vector_double"""
         return _math_linear.Matrix2x7_vals(self)
 
@@ -2055,7 +2055,7 @@ class Matrix3x1(_object):
     __swig_destroy__ = _math_linear.delete_Matrix3x1
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix3x1 self, size_t i, size_t j) -> double
         __call__(Matrix3x1 self, size_t i, size_t j) -> double &
@@ -2063,7 +2063,7 @@ class Matrix3x1(_object):
         return _math_linear.Matrix3x1___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix3x1 self, size_t i) -> double const
         row(Matrix3x1 self, size_t i) -> double
@@ -2073,7 +2073,7 @@ class Matrix3x1(_object):
         return _math_linear.Matrix3x1_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix3x1 self, size_t j) -> std_vector_double
         col(Matrix3x1 self, size_t j, double const * vec)
@@ -2083,72 +2083,72 @@ class Matrix3x1(_object):
         return _math_linear.Matrix3x1_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix3x1 self) -> size_t"""
         return _math_linear.Matrix3x1_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix3x1 self) -> size_t"""
         return _math_linear.Matrix3x1_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix3x1 self) -> size_t"""
         return _math_linear.Matrix3x1_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,1,double > &":
         """scale(Matrix3x1 self, double scalar) -> Matrix3x1"""
         return _math_linear.Matrix3x1_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,1 >":
         """multiply(Matrix3x1 self, double scalar) -> Matrix3x1"""
         return _math_linear.Matrix3x1_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 3,1,double > &":
         """scaleDiagonal(Matrix3x1 self, Matrix1x1 mx) -> Matrix3x1"""
         return _math_linear.Matrix3x1_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix1x1') -> "math::linear::MatrixMxN< 3,1,double >":
         """multiplyDiagonal(Matrix3x1 self, Matrix1x1 mx) -> Matrix3x1"""
         return _math_linear.Matrix3x1_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix3x1') -> "math::linear::MatrixMxN< 3,1,double >::Like_T &":
         """__iadd__(Matrix3x1 self, Matrix3x1 mx) -> Matrix3x1"""
         return _math_linear.Matrix3x1___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix3x1') -> "math::linear::MatrixMxN< 3,1,double >::Like_T &":
         """__isub__(Matrix3x1 self, Matrix3x1 mx) -> Matrix3x1"""
         return _math_linear.Matrix3x1___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix3x1') -> "math::linear::MatrixMxN< 3,1,double >::Like_T":
         """add(Matrix3x1 self, Matrix3x1 mx) -> Matrix3x1"""
         return _math_linear.Matrix3x1_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix3x1') -> "math::linear::MatrixMxN< 3,1,double >::Like_T":
         """subtract(Matrix3x1 self, Matrix3x1 mx) -> Matrix3x1"""
         return _math_linear.Matrix3x1_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 1,3,double >":
         """transpose(Matrix3x1 self) -> Matrix1x3"""
         return _math_linear.Matrix3x1_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 3,1,double >::Like_T":
         """decomposeLU(Matrix3x1 self, VectorSizeT pivotsM) -> Matrix3x1"""
         return _math_linear.Matrix3x1_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=1):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=1) -> "math::linear::MatrixMxN< 3,1,double >::Like_T":
         """
         permute(Matrix3x1 self, VectorSizeT pivotsM, size_t n=1) -> Matrix3x1
         permute(Matrix3x1 self, VectorSizeT pivotsM) -> Matrix3x1
@@ -2156,37 +2156,37 @@ class Matrix3x1(_object):
         return _math_linear.Matrix3x1_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix3x1 self) -> double"""
         return _math_linear.Matrix3x1_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix3x1 self) -> double"""
         return _math_linear.Matrix3x1_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 3,1,double > &":
         """normalize(Matrix3x1 self) -> Matrix3x1"""
         return _math_linear.Matrix3x1_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 3,1,double >::Like_T":
         """unit(Matrix3x1 self) -> Matrix3x1"""
         return _math_linear.Matrix3x1_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix3x1') -> "math::linear::MatrixMxN< 3,1,double >::Like_T":
         """__add__(Matrix3x1 self, Matrix3x1 mx) -> Matrix3x1"""
         return _math_linear.Matrix3x1___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix3x1') -> "math::linear::MatrixMxN< 3,1,double >::Like_T":
         """__sub__(Matrix3x1 self, Matrix3x1 mx) -> Matrix3x1"""
         return _math_linear.Matrix3x1___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,1,double >::Like_T":
         """__mul__(Matrix3x1 self, double scalar) -> Matrix3x1"""
         return _math_linear.Matrix3x1___mul__(self, scalar)
 
@@ -2197,27 +2197,27 @@ class Matrix3x1(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 3,1,double >::Like_T":
         """__neg__(Matrix3x1 self) -> Matrix3x1"""
         return _math_linear.Matrix3x1___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix3x1 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix3x1___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix3x1 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix3x1___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix3x1 self) -> std::string"""
         return _math_linear.Matrix3x1___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix3x1 self) -> std_vector_vector_double"""
         return _math_linear.Matrix3x1_vals(self)
 
@@ -2253,7 +2253,7 @@ class Matrix3x2(_object):
     __swig_destroy__ = _math_linear.delete_Matrix3x2
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix3x2 self, size_t i, size_t j) -> double
         __call__(Matrix3x2 self, size_t i, size_t j) -> double &
@@ -2261,7 +2261,7 @@ class Matrix3x2(_object):
         return _math_linear.Matrix3x2___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix3x2 self, size_t i) -> double const
         row(Matrix3x2 self, size_t i) -> double
@@ -2271,7 +2271,7 @@ class Matrix3x2(_object):
         return _math_linear.Matrix3x2_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix3x2 self, size_t j) -> std_vector_double
         col(Matrix3x2 self, size_t j, double const * vec)
@@ -2281,72 +2281,72 @@ class Matrix3x2(_object):
         return _math_linear.Matrix3x2_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix3x2 self) -> size_t"""
         return _math_linear.Matrix3x2_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix3x2 self) -> size_t"""
         return _math_linear.Matrix3x2_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix3x2 self) -> size_t"""
         return _math_linear.Matrix3x2_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,2,double > &":
         """scale(Matrix3x2 self, double scalar) -> Matrix3x2"""
         return _math_linear.Matrix3x2_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,2 >":
         """multiply(Matrix3x2 self, double scalar) -> Matrix3x2"""
         return _math_linear.Matrix3x2_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 3,2,double > &":
         """scaleDiagonal(Matrix3x2 self, Matrix2x2 mx) -> Matrix3x2"""
         return _math_linear.Matrix3x2_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 3,2,double >":
         """multiplyDiagonal(Matrix3x2 self, Matrix2x2 mx) -> Matrix3x2"""
         return _math_linear.Matrix3x2_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix3x2') -> "math::linear::MatrixMxN< 3,2,double >::Like_T &":
         """__iadd__(Matrix3x2 self, Matrix3x2 mx) -> Matrix3x2"""
         return _math_linear.Matrix3x2___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix3x2') -> "math::linear::MatrixMxN< 3,2,double >::Like_T &":
         """__isub__(Matrix3x2 self, Matrix3x2 mx) -> Matrix3x2"""
         return _math_linear.Matrix3x2___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix3x2') -> "math::linear::MatrixMxN< 3,2,double >::Like_T":
         """add(Matrix3x2 self, Matrix3x2 mx) -> Matrix3x2"""
         return _math_linear.Matrix3x2_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix3x2') -> "math::linear::MatrixMxN< 3,2,double >::Like_T":
         """subtract(Matrix3x2 self, Matrix3x2 mx) -> Matrix3x2"""
         return _math_linear.Matrix3x2_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 2,3,double >":
         """transpose(Matrix3x2 self) -> Matrix2x3"""
         return _math_linear.Matrix3x2_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 3,2,double >::Like_T":
         """decomposeLU(Matrix3x2 self, VectorSizeT pivotsM) -> Matrix3x2"""
         return _math_linear.Matrix3x2_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=2):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=2) -> "math::linear::MatrixMxN< 3,2,double >::Like_T":
         """
         permute(Matrix3x2 self, VectorSizeT pivotsM, size_t n=2) -> Matrix3x2
         permute(Matrix3x2 self, VectorSizeT pivotsM) -> Matrix3x2
@@ -2354,37 +2354,37 @@ class Matrix3x2(_object):
         return _math_linear.Matrix3x2_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix3x2 self) -> double"""
         return _math_linear.Matrix3x2_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix3x2 self) -> double"""
         return _math_linear.Matrix3x2_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 3,2,double > &":
         """normalize(Matrix3x2 self) -> Matrix3x2"""
         return _math_linear.Matrix3x2_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 3,2,double >::Like_T":
         """unit(Matrix3x2 self) -> Matrix3x2"""
         return _math_linear.Matrix3x2_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix3x2') -> "math::linear::MatrixMxN< 3,2,double >::Like_T":
         """__add__(Matrix3x2 self, Matrix3x2 mx) -> Matrix3x2"""
         return _math_linear.Matrix3x2___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix3x2') -> "math::linear::MatrixMxN< 3,2,double >::Like_T":
         """__sub__(Matrix3x2 self, Matrix3x2 mx) -> Matrix3x2"""
         return _math_linear.Matrix3x2___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,2,double >::Like_T":
         """__mul__(Matrix3x2 self, double scalar) -> Matrix3x2"""
         return _math_linear.Matrix3x2___mul__(self, scalar)
 
@@ -2395,27 +2395,27 @@ class Matrix3x2(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 3,2,double >::Like_T":
         """__neg__(Matrix3x2 self) -> Matrix3x2"""
         return _math_linear.Matrix3x2___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix3x2 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix3x2___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix3x2 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix3x2___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix3x2 self) -> std::string"""
         return _math_linear.Matrix3x2___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix3x2 self) -> std_vector_vector_double"""
         return _math_linear.Matrix3x2_vals(self)
 
@@ -2451,7 +2451,7 @@ class Matrix3x3(_object):
     __swig_destroy__ = _math_linear.delete_Matrix3x3
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix3x3 self, size_t i, size_t j) -> double
         __call__(Matrix3x3 self, size_t i, size_t j) -> double &
@@ -2459,7 +2459,7 @@ class Matrix3x3(_object):
         return _math_linear.Matrix3x3___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix3x3 self, size_t i) -> double const
         row(Matrix3x3 self, size_t i) -> double
@@ -2469,7 +2469,7 @@ class Matrix3x3(_object):
         return _math_linear.Matrix3x3_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix3x3 self, size_t j) -> std_vector_double
         col(Matrix3x3 self, size_t j, double const * vec)
@@ -2479,72 +2479,72 @@ class Matrix3x3(_object):
         return _math_linear.Matrix3x3_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix3x3 self) -> size_t"""
         return _math_linear.Matrix3x3_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix3x3 self) -> size_t"""
         return _math_linear.Matrix3x3_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix3x3 self) -> size_t"""
         return _math_linear.Matrix3x3_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,3,double > &":
         """scale(Matrix3x3 self, double scalar) -> Matrix3x3"""
         return _math_linear.Matrix3x3_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,3 >":
         """multiply(Matrix3x3 self, double scalar) -> Matrix3x3"""
         return _math_linear.Matrix3x3_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 3,3,double > &":
         """scaleDiagonal(Matrix3x3 self, Matrix3x3 mx) -> Matrix3x3"""
         return _math_linear.Matrix3x3_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 3,3,double >":
         """multiplyDiagonal(Matrix3x3 self, Matrix3x3 mx) -> Matrix3x3"""
         return _math_linear.Matrix3x3_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 3,3,double >::Like_T &":
         """__iadd__(Matrix3x3 self, Matrix3x3 mx) -> Matrix3x3"""
         return _math_linear.Matrix3x3___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 3,3,double >::Like_T &":
         """__isub__(Matrix3x3 self, Matrix3x3 mx) -> Matrix3x3"""
         return _math_linear.Matrix3x3___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 3,3,double >::Like_T":
         """add(Matrix3x3 self, Matrix3x3 mx) -> Matrix3x3"""
         return _math_linear.Matrix3x3_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 3,3,double >::Like_T":
         """subtract(Matrix3x3 self, Matrix3x3 mx) -> Matrix3x3"""
         return _math_linear.Matrix3x3_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 3,3,double >":
         """transpose(Matrix3x3 self) -> Matrix3x3"""
         return _math_linear.Matrix3x3_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 3,3,double >::Like_T":
         """decomposeLU(Matrix3x3 self, VectorSizeT pivotsM) -> Matrix3x3"""
         return _math_linear.Matrix3x3_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=3):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=3) -> "math::linear::MatrixMxN< 3,3,double >::Like_T":
         """
         permute(Matrix3x3 self, VectorSizeT pivotsM, size_t n=3) -> Matrix3x3
         permute(Matrix3x3 self, VectorSizeT pivotsM) -> Matrix3x3
@@ -2552,37 +2552,37 @@ class Matrix3x3(_object):
         return _math_linear.Matrix3x3_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix3x3 self) -> double"""
         return _math_linear.Matrix3x3_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix3x3 self) -> double"""
         return _math_linear.Matrix3x3_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 3,3,double > &":
         """normalize(Matrix3x3 self) -> Matrix3x3"""
         return _math_linear.Matrix3x3_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 3,3,double >::Like_T":
         """unit(Matrix3x3 self) -> Matrix3x3"""
         return _math_linear.Matrix3x3_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 3,3,double >::Like_T":
         """__add__(Matrix3x3 self, Matrix3x3 mx) -> Matrix3x3"""
         return _math_linear.Matrix3x3___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 3,3,double >::Like_T":
         """__sub__(Matrix3x3 self, Matrix3x3 mx) -> Matrix3x3"""
         return _math_linear.Matrix3x3___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,3,double >::Like_T":
         """__mul__(Matrix3x3 self, double scalar) -> Matrix3x3"""
         return _math_linear.Matrix3x3___mul__(self, scalar)
 
@@ -2593,27 +2593,27 @@ class Matrix3x3(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 3,3,double >::Like_T":
         """__neg__(Matrix3x3 self) -> Matrix3x3"""
         return _math_linear.Matrix3x3___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix3x3 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix3x3___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix3x3 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix3x3___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix3x3 self) -> std::string"""
         return _math_linear.Matrix3x3___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix3x3 self) -> std_vector_vector_double"""
         return _math_linear.Matrix3x3_vals(self)
 
@@ -2649,7 +2649,7 @@ class Matrix3x7(_object):
     __swig_destroy__ = _math_linear.delete_Matrix3x7
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix3x7 self, size_t i, size_t j) -> double
         __call__(Matrix3x7 self, size_t i, size_t j) -> double &
@@ -2657,7 +2657,7 @@ class Matrix3x7(_object):
         return _math_linear.Matrix3x7___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix3x7 self, size_t i) -> double const
         row(Matrix3x7 self, size_t i) -> double
@@ -2667,7 +2667,7 @@ class Matrix3x7(_object):
         return _math_linear.Matrix3x7_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix3x7 self, size_t j) -> std_vector_double
         col(Matrix3x7 self, size_t j, double const * vec)
@@ -2677,72 +2677,72 @@ class Matrix3x7(_object):
         return _math_linear.Matrix3x7_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix3x7 self) -> size_t"""
         return _math_linear.Matrix3x7_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix3x7 self) -> size_t"""
         return _math_linear.Matrix3x7_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix3x7 self) -> size_t"""
         return _math_linear.Matrix3x7_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,7,double > &":
         """scale(Matrix3x7 self, double scalar) -> Matrix3x7"""
         return _math_linear.Matrix3x7_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,7 >":
         """multiply(Matrix3x7 self, double scalar) -> Matrix3x7"""
         return _math_linear.Matrix3x7_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 3,7,double > &":
         """scaleDiagonal(Matrix3x7 self, Matrix7x7 mx) -> Matrix3x7"""
         return _math_linear.Matrix3x7_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 3,7,double >":
         """multiplyDiagonal(Matrix3x7 self, Matrix7x7 mx) -> Matrix3x7"""
         return _math_linear.Matrix3x7_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix3x7') -> "math::linear::MatrixMxN< 3,7,double >::Like_T &":
         """__iadd__(Matrix3x7 self, Matrix3x7 mx) -> Matrix3x7"""
         return _math_linear.Matrix3x7___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix3x7') -> "math::linear::MatrixMxN< 3,7,double >::Like_T &":
         """__isub__(Matrix3x7 self, Matrix3x7 mx) -> Matrix3x7"""
         return _math_linear.Matrix3x7___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix3x7') -> "math::linear::MatrixMxN< 3,7,double >::Like_T":
         """add(Matrix3x7 self, Matrix3x7 mx) -> Matrix3x7"""
         return _math_linear.Matrix3x7_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix3x7') -> "math::linear::MatrixMxN< 3,7,double >::Like_T":
         """subtract(Matrix3x7 self, Matrix3x7 mx) -> Matrix3x7"""
         return _math_linear.Matrix3x7_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 7,3,double >":
         """transpose(Matrix3x7 self) -> Matrix7x3"""
         return _math_linear.Matrix3x7_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 3,7,double >::Like_T":
         """decomposeLU(Matrix3x7 self, VectorSizeT pivotsM) -> Matrix3x7"""
         return _math_linear.Matrix3x7_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=7):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=7) -> "math::linear::MatrixMxN< 3,7,double >::Like_T":
         """
         permute(Matrix3x7 self, VectorSizeT pivotsM, size_t n=7) -> Matrix3x7
         permute(Matrix3x7 self, VectorSizeT pivotsM) -> Matrix3x7
@@ -2750,37 +2750,37 @@ class Matrix3x7(_object):
         return _math_linear.Matrix3x7_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix3x7 self) -> double"""
         return _math_linear.Matrix3x7_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix3x7 self) -> double"""
         return _math_linear.Matrix3x7_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 3,7,double > &":
         """normalize(Matrix3x7 self) -> Matrix3x7"""
         return _math_linear.Matrix3x7_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 3,7,double >::Like_T":
         """unit(Matrix3x7 self) -> Matrix3x7"""
         return _math_linear.Matrix3x7_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix3x7') -> "math::linear::MatrixMxN< 3,7,double >::Like_T":
         """__add__(Matrix3x7 self, Matrix3x7 mx) -> Matrix3x7"""
         return _math_linear.Matrix3x7___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix3x7') -> "math::linear::MatrixMxN< 3,7,double >::Like_T":
         """__sub__(Matrix3x7 self, Matrix3x7 mx) -> Matrix3x7"""
         return _math_linear.Matrix3x7___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 3,7,double >::Like_T":
         """__mul__(Matrix3x7 self, double scalar) -> Matrix3x7"""
         return _math_linear.Matrix3x7___mul__(self, scalar)
 
@@ -2791,27 +2791,27 @@ class Matrix3x7(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 3,7,double >::Like_T":
         """__neg__(Matrix3x7 self) -> Matrix3x7"""
         return _math_linear.Matrix3x7___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix3x7 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix3x7___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix3x7 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix3x7___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix3x7 self) -> std::string"""
         return _math_linear.Matrix3x7___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix3x7 self) -> std_vector_vector_double"""
         return _math_linear.Matrix3x7_vals(self)
 
@@ -2847,7 +2847,7 @@ class Matrix7x2(_object):
     __swig_destroy__ = _math_linear.delete_Matrix7x2
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix7x2 self, size_t i, size_t j) -> double
         __call__(Matrix7x2 self, size_t i, size_t j) -> double &
@@ -2855,7 +2855,7 @@ class Matrix7x2(_object):
         return _math_linear.Matrix7x2___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix7x2 self, size_t i) -> double const
         row(Matrix7x2 self, size_t i) -> double
@@ -2865,7 +2865,7 @@ class Matrix7x2(_object):
         return _math_linear.Matrix7x2_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix7x2 self, size_t j) -> std_vector_double
         col(Matrix7x2 self, size_t j, double const * vec)
@@ -2875,72 +2875,72 @@ class Matrix7x2(_object):
         return _math_linear.Matrix7x2_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix7x2 self) -> size_t"""
         return _math_linear.Matrix7x2_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix7x2 self) -> size_t"""
         return _math_linear.Matrix7x2_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix7x2 self) -> size_t"""
         return _math_linear.Matrix7x2_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 7,2,double > &":
         """scale(Matrix7x2 self, double scalar) -> Matrix7x2"""
         return _math_linear.Matrix7x2_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 7,2 >":
         """multiply(Matrix7x2 self, double scalar) -> Matrix7x2"""
         return _math_linear.Matrix7x2_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 7,2,double > &":
         """scaleDiagonal(Matrix7x2 self, Matrix2x2 mx) -> Matrix7x2"""
         return _math_linear.Matrix7x2_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix2x2') -> "math::linear::MatrixMxN< 7,2,double >":
         """multiplyDiagonal(Matrix7x2 self, Matrix2x2 mx) -> Matrix7x2"""
         return _math_linear.Matrix7x2_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix7x2') -> "math::linear::MatrixMxN< 7,2,double >::Like_T &":
         """__iadd__(Matrix7x2 self, Matrix7x2 mx) -> Matrix7x2"""
         return _math_linear.Matrix7x2___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix7x2') -> "math::linear::MatrixMxN< 7,2,double >::Like_T &":
         """__isub__(Matrix7x2 self, Matrix7x2 mx) -> Matrix7x2"""
         return _math_linear.Matrix7x2___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix7x2') -> "math::linear::MatrixMxN< 7,2,double >::Like_T":
         """add(Matrix7x2 self, Matrix7x2 mx) -> Matrix7x2"""
         return _math_linear.Matrix7x2_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix7x2') -> "math::linear::MatrixMxN< 7,2,double >::Like_T":
         """subtract(Matrix7x2 self, Matrix7x2 mx) -> Matrix7x2"""
         return _math_linear.Matrix7x2_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 2,7,double >":
         """transpose(Matrix7x2 self) -> Matrix2x7"""
         return _math_linear.Matrix7x2_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 7,2,double >::Like_T":
         """decomposeLU(Matrix7x2 self, VectorSizeT pivotsM) -> Matrix7x2"""
         return _math_linear.Matrix7x2_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=2):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=2) -> "math::linear::MatrixMxN< 7,2,double >::Like_T":
         """
         permute(Matrix7x2 self, VectorSizeT pivotsM, size_t n=2) -> Matrix7x2
         permute(Matrix7x2 self, VectorSizeT pivotsM) -> Matrix7x2
@@ -2948,37 +2948,37 @@ class Matrix7x2(_object):
         return _math_linear.Matrix7x2_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix7x2 self) -> double"""
         return _math_linear.Matrix7x2_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix7x2 self) -> double"""
         return _math_linear.Matrix7x2_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 7,2,double > &":
         """normalize(Matrix7x2 self) -> Matrix7x2"""
         return _math_linear.Matrix7x2_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 7,2,double >::Like_T":
         """unit(Matrix7x2 self) -> Matrix7x2"""
         return _math_linear.Matrix7x2_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix7x2') -> "math::linear::MatrixMxN< 7,2,double >::Like_T":
         """__add__(Matrix7x2 self, Matrix7x2 mx) -> Matrix7x2"""
         return _math_linear.Matrix7x2___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix7x2') -> "math::linear::MatrixMxN< 7,2,double >::Like_T":
         """__sub__(Matrix7x2 self, Matrix7x2 mx) -> Matrix7x2"""
         return _math_linear.Matrix7x2___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 7,2,double >::Like_T":
         """__mul__(Matrix7x2 self, double scalar) -> Matrix7x2"""
         return _math_linear.Matrix7x2___mul__(self, scalar)
 
@@ -2989,27 +2989,27 @@ class Matrix7x2(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 7,2,double >::Like_T":
         """__neg__(Matrix7x2 self) -> Matrix7x2"""
         return _math_linear.Matrix7x2___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix7x2 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix7x2___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix7x2 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix7x2___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix7x2 self) -> std::string"""
         return _math_linear.Matrix7x2___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix7x2 self) -> std_vector_vector_double"""
         return _math_linear.Matrix7x2_vals(self)
 
@@ -3045,7 +3045,7 @@ class Matrix7x3(_object):
     __swig_destroy__ = _math_linear.delete_Matrix7x3
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix7x3 self, size_t i, size_t j) -> double
         __call__(Matrix7x3 self, size_t i, size_t j) -> double &
@@ -3053,7 +3053,7 @@ class Matrix7x3(_object):
         return _math_linear.Matrix7x3___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix7x3 self, size_t i) -> double const
         row(Matrix7x3 self, size_t i) -> double
@@ -3063,7 +3063,7 @@ class Matrix7x3(_object):
         return _math_linear.Matrix7x3_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix7x3 self, size_t j) -> std_vector_double
         col(Matrix7x3 self, size_t j, double const * vec)
@@ -3073,72 +3073,72 @@ class Matrix7x3(_object):
         return _math_linear.Matrix7x3_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix7x3 self) -> size_t"""
         return _math_linear.Matrix7x3_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix7x3 self) -> size_t"""
         return _math_linear.Matrix7x3_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix7x3 self) -> size_t"""
         return _math_linear.Matrix7x3_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 7,3,double > &":
         """scale(Matrix7x3 self, double scalar) -> Matrix7x3"""
         return _math_linear.Matrix7x3_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 7,3 >":
         """multiply(Matrix7x3 self, double scalar) -> Matrix7x3"""
         return _math_linear.Matrix7x3_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 7,3,double > &":
         """scaleDiagonal(Matrix7x3 self, Matrix3x3 mx) -> Matrix7x3"""
         return _math_linear.Matrix7x3_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix3x3') -> "math::linear::MatrixMxN< 7,3,double >":
         """multiplyDiagonal(Matrix7x3 self, Matrix3x3 mx) -> Matrix7x3"""
         return _math_linear.Matrix7x3_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix7x3') -> "math::linear::MatrixMxN< 7,3,double >::Like_T &":
         """__iadd__(Matrix7x3 self, Matrix7x3 mx) -> Matrix7x3"""
         return _math_linear.Matrix7x3___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix7x3') -> "math::linear::MatrixMxN< 7,3,double >::Like_T &":
         """__isub__(Matrix7x3 self, Matrix7x3 mx) -> Matrix7x3"""
         return _math_linear.Matrix7x3___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix7x3') -> "math::linear::MatrixMxN< 7,3,double >::Like_T":
         """add(Matrix7x3 self, Matrix7x3 mx) -> Matrix7x3"""
         return _math_linear.Matrix7x3_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix7x3') -> "math::linear::MatrixMxN< 7,3,double >::Like_T":
         """subtract(Matrix7x3 self, Matrix7x3 mx) -> Matrix7x3"""
         return _math_linear.Matrix7x3_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 3,7,double >":
         """transpose(Matrix7x3 self) -> Matrix3x7"""
         return _math_linear.Matrix7x3_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 7,3,double >::Like_T":
         """decomposeLU(Matrix7x3 self, VectorSizeT pivotsM) -> Matrix7x3"""
         return _math_linear.Matrix7x3_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=3):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=3) -> "math::linear::MatrixMxN< 7,3,double >::Like_T":
         """
         permute(Matrix7x3 self, VectorSizeT pivotsM, size_t n=3) -> Matrix7x3
         permute(Matrix7x3 self, VectorSizeT pivotsM) -> Matrix7x3
@@ -3146,37 +3146,37 @@ class Matrix7x3(_object):
         return _math_linear.Matrix7x3_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix7x3 self) -> double"""
         return _math_linear.Matrix7x3_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix7x3 self) -> double"""
         return _math_linear.Matrix7x3_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 7,3,double > &":
         """normalize(Matrix7x3 self) -> Matrix7x3"""
         return _math_linear.Matrix7x3_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 7,3,double >::Like_T":
         """unit(Matrix7x3 self) -> Matrix7x3"""
         return _math_linear.Matrix7x3_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix7x3') -> "math::linear::MatrixMxN< 7,3,double >::Like_T":
         """__add__(Matrix7x3 self, Matrix7x3 mx) -> Matrix7x3"""
         return _math_linear.Matrix7x3___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix7x3') -> "math::linear::MatrixMxN< 7,3,double >::Like_T":
         """__sub__(Matrix7x3 self, Matrix7x3 mx) -> Matrix7x3"""
         return _math_linear.Matrix7x3___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 7,3,double >::Like_T":
         """__mul__(Matrix7x3 self, double scalar) -> Matrix7x3"""
         return _math_linear.Matrix7x3___mul__(self, scalar)
 
@@ -3187,27 +3187,27 @@ class Matrix7x3(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 7,3,double >::Like_T":
         """__neg__(Matrix7x3 self) -> Matrix7x3"""
         return _math_linear.Matrix7x3___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix7x3 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix7x3___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix7x3 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix7x3___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix7x3 self) -> std::string"""
         return _math_linear.Matrix7x3___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix7x3 self) -> std_vector_vector_double"""
         return _math_linear.Matrix7x3_vals(self)
 
@@ -3243,7 +3243,7 @@ class Matrix7x7(_object):
     __swig_destroy__ = _math_linear.delete_Matrix7x7
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(Matrix7x7 self, size_t i, size_t j) -> double
         __call__(Matrix7x7 self, size_t i, size_t j) -> double &
@@ -3251,7 +3251,7 @@ class Matrix7x7(_object):
         return _math_linear.Matrix7x7___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(Matrix7x7 self, size_t i) -> double const
         row(Matrix7x7 self, size_t i) -> double
@@ -3261,7 +3261,7 @@ class Matrix7x7(_object):
         return _math_linear.Matrix7x7_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(Matrix7x7 self, size_t j) -> std_vector_double
         col(Matrix7x7 self, size_t j, double const * vec)
@@ -3271,72 +3271,72 @@ class Matrix7x7(_object):
         return _math_linear.Matrix7x7_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(Matrix7x7 self) -> size_t"""
         return _math_linear.Matrix7x7_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(Matrix7x7 self) -> size_t"""
         return _math_linear.Matrix7x7_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Matrix7x7 self) -> size_t"""
         return _math_linear.Matrix7x7_size(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::MatrixMxN< 7,7,double > &":
         """scale(Matrix7x7 self, double scalar) -> Matrix7x7"""
         return _math_linear.Matrix7x7_scale(self, scalar)
 
 
-    def multiply(self, scalar):
+    def multiply(self, scalar: 'double') -> "math::linear::MatrixMxN< 7,7 >":
         """multiply(Matrix7x7 self, double scalar) -> Matrix7x7"""
         return _math_linear.Matrix7x7_multiply(self, scalar)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 7,7,double > &":
         """scaleDiagonal(Matrix7x7 self, Matrix7x7 mx) -> Matrix7x7"""
         return _math_linear.Matrix7x7_scaleDiagonal(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 7,7,double >":
         """multiplyDiagonal(Matrix7x7 self, Matrix7x7 mx) -> Matrix7x7"""
         return _math_linear.Matrix7x7_multiplyDiagonal(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 7,7,double >::Like_T &":
         """__iadd__(Matrix7x7 self, Matrix7x7 mx) -> Matrix7x7"""
         return _math_linear.Matrix7x7___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 7,7,double >::Like_T &":
         """__isub__(Matrix7x7 self, Matrix7x7 mx) -> Matrix7x7"""
         return _math_linear.Matrix7x7___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 7,7,double >::Like_T":
         """add(Matrix7x7 self, Matrix7x7 mx) -> Matrix7x7"""
         return _math_linear.Matrix7x7_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 7,7,double >::Like_T":
         """subtract(Matrix7x7 self, Matrix7x7 mx) -> Matrix7x7"""
         return _math_linear.Matrix7x7_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::MatrixMxN< 7,7,double >":
         """transpose(Matrix7x7 self) -> Matrix7x7"""
         return _math_linear.Matrix7x7_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::MatrixMxN< 7,7,double >::Like_T":
         """decomposeLU(Matrix7x7 self, VectorSizeT pivotsM) -> Matrix7x7"""
         return _math_linear.Matrix7x7_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=7):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=7) -> "math::linear::MatrixMxN< 7,7,double >::Like_T":
         """
         permute(Matrix7x7 self, VectorSizeT pivotsM, size_t n=7) -> Matrix7x7
         permute(Matrix7x7 self, VectorSizeT pivotsM) -> Matrix7x7
@@ -3344,37 +3344,37 @@ class Matrix7x7(_object):
         return _math_linear.Matrix7x7_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Matrix7x7 self) -> double"""
         return _math_linear.Matrix7x7_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Matrix7x7 self) -> double"""
         return _math_linear.Matrix7x7_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::MatrixMxN< 7,7,double > &":
         """normalize(Matrix7x7 self) -> Matrix7x7"""
         return _math_linear.Matrix7x7_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::MatrixMxN< 7,7,double >::Like_T":
         """unit(Matrix7x7 self) -> Matrix7x7"""
         return _math_linear.Matrix7x7_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 7,7,double >::Like_T":
         """__add__(Matrix7x7 self, Matrix7x7 mx) -> Matrix7x7"""
         return _math_linear.Matrix7x7___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'Matrix7x7') -> "math::linear::MatrixMxN< 7,7,double >::Like_T":
         """__sub__(Matrix7x7 self, Matrix7x7 mx) -> Matrix7x7"""
         return _math_linear.Matrix7x7___sub__(self, mx)
 
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: 'double') -> "math::linear::MatrixMxN< 7,7,double >::Like_T":
         """__mul__(Matrix7x7 self, double scalar) -> Matrix7x7"""
         return _math_linear.Matrix7x7___mul__(self, scalar)
 
@@ -3385,27 +3385,27 @@ class Matrix7x7(_object):
 
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::MatrixMxN< 7,7,double >::Like_T":
         """__neg__(Matrix7x7 self) -> Matrix7x7"""
         return _math_linear.Matrix7x7___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(Matrix7x7 self, PyObject * inObj) -> double"""
         return _math_linear.Matrix7x7___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(Matrix7x7 self, PyObject * inObj, double val)"""
         return _math_linear.Matrix7x7___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Matrix7x7 self) -> std::string"""
         return _math_linear.Matrix7x7___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(Matrix7x7 self) -> std_vector_vector_double"""
         return _math_linear.Matrix7x7_vals(self)
 
@@ -3438,7 +3438,7 @@ class Vector2(_object):
     __swig_destroy__ = _math_linear.delete_Vector2
     __del__ = lambda self: None
 
-    def matrix(self, *args):
+    def matrix(self, *args) -> "math::linear::MatrixMxN< 2,1,double > const &":
         """
         matrix(Vector2 self) -> Matrix2x1
         matrix(Vector2 self) -> Matrix2x1
@@ -3446,87 +3446,87 @@ class Vector2(_object):
         return _math_linear.Vector2_matrix(self, *args)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Vector2 self) -> size_t"""
         return _math_linear.Vector2_size(self)
 
 
-    def dot(self, vec):
+    def dot(self, vec: 'Vector2') -> "double":
         """dot(Vector2 self, Vector2 vec) -> double"""
         return _math_linear.Vector2_dot(self, vec)
 
 
-    def normDot(self, vec):
+    def normDot(self, vec: 'Vector2') -> "double":
         """normDot(Vector2 self, Vector2 vec) -> double"""
         return _math_linear.Vector2_normDot(self, vec)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Vector2 self) -> double"""
         return _math_linear.Vector2_norm(self)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Vector2 self) -> double"""
         return _math_linear.Vector2_normSq(self)
 
 
-    def angle(self, v):
+    def angle(self, v: 'Vector2') -> "double":
         """angle(Vector2 self, Vector2 v) -> double"""
         return _math_linear.Vector2_angle(self, v)
 
 
-    def normalize(self):
+    def normalize(self) -> "void":
         """normalize(Vector2 self)"""
         return _math_linear.Vector2_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::VectorN< 2,double >::Like_T":
         """unit(Vector2 self) -> Vector2"""
         return _math_linear.Vector2_unit(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "void":
         """scale(Vector2 self, double scalar)"""
         return _math_linear.Vector2_scale(self, scalar)
 
 
-    def __iadd__(self, v):
+    def __iadd__(self, v: 'Vector2') -> "math::linear::VectorN< 2,double >::Like_T &":
         """__iadd__(Vector2 self, Vector2 v) -> Vector2"""
         return _math_linear.Vector2___iadd__(self, v)
 
 
-    def __isub__(self, v):
+    def __isub__(self, v: 'Vector2') -> "math::linear::VectorN< 2,double >::Like_T &":
         """__isub__(Vector2 self, Vector2 v) -> Vector2"""
         return _math_linear.Vector2___isub__(self, v)
 
 
-    def add(self, v):
+    def add(self, v: 'Vector2') -> "math::linear::VectorN< 2,double >::Like_T":
         """add(Vector2 self, Vector2 v) -> Vector2"""
         return _math_linear.Vector2_add(self, v)
 
 
-    def subtract(self, v):
+    def subtract(self, v: 'Vector2') -> "math::linear::VectorN< 2,double >::Like_T":
         """subtract(Vector2 self, Vector2 v) -> Vector2"""
         return _math_linear.Vector2_subtract(self, v)
 
 
-    def __add__(self, v):
+    def __add__(self, v: 'Vector2') -> "math::linear::VectorN< 2,double >::Like_T":
         """__add__(Vector2 self, Vector2 v) -> Vector2"""
         return _math_linear.Vector2___add__(self, v)
 
 
-    def __sub__(self, v):
+    def __sub__(self, v: 'Vector2') -> "math::linear::VectorN< 2,double >::Like_T":
         """__sub__(Vector2 self, Vector2 v) -> Vector2"""
         return _math_linear.Vector2___sub__(self, v)
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::VectorN< 2,double >::Like_T":
         """__neg__(Vector2 self) -> Vector2"""
         return _math_linear.Vector2___neg__(self)
 
 
-    def __imul__(self, *args):
+    def __imul__(self, *args) -> "math::linear::VectorN< 2,double >::Like_T &":
         """
         __imul__(Vector2 self, Vector2 v) -> Vector2
         __imul__(Vector2 self, double sv) -> Vector2
@@ -3540,7 +3540,7 @@ class Vector2(_object):
 
 
 
-    def __mul__(self, *args):
+    def __mul__(self, *args) -> "math::linear::VectorN< 2,double >::Like_T":
         """
         __mul__(Vector2 self, double sv) -> Vector2
         __mul__(Vector2 self, Vector2 v) -> Vector2
@@ -3560,27 +3560,27 @@ class Vector2(_object):
         self.__init__(pickle.loads(state))
 
 
-    def __getitem__(self, i):
+    def __getitem__(self, i: 'long') -> "double":
         """__getitem__(Vector2 self, long i) -> double"""
         return _math_linear.Vector2___getitem__(self, i)
 
 
-    def __setitem__(self, i, val):
+    def __setitem__(self, i: 'long', val: 'double') -> "void":
         """__setitem__(Vector2 self, long i, double val)"""
         return _math_linear.Vector2___setitem__(self, i, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Vector2 self) -> std::string"""
         return _math_linear.Vector2___str__(self)
 
 
-    def __deepcopy__(self, memo):
+    def __deepcopy__(self, memo: 'PyObject *') -> "math::linear::VectorN< 2,double >":
         """__deepcopy__(Vector2 self, PyObject * memo) -> Vector2"""
         return _math_linear.Vector2___deepcopy__(self, memo)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< double,std::allocator< double > >":
         """vals(Vector2 self) -> std_vector_double"""
         return _math_linear.Vector2_vals(self)
 
@@ -3613,7 +3613,7 @@ class Vector3(_object):
     __swig_destroy__ = _math_linear.delete_Vector3
     __del__ = lambda self: None
 
-    def matrix(self, *args):
+    def matrix(self, *args) -> "math::linear::MatrixMxN< 3,1,double > const &":
         """
         matrix(Vector3 self) -> Matrix3x1
         matrix(Vector3 self) -> Matrix3x1
@@ -3621,87 +3621,87 @@ class Vector3(_object):
         return _math_linear.Vector3_matrix(self, *args)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(Vector3 self) -> size_t"""
         return _math_linear.Vector3_size(self)
 
 
-    def dot(self, vec):
+    def dot(self, vec: 'Vector3') -> "double":
         """dot(Vector3 self, Vector3 vec) -> double"""
         return _math_linear.Vector3_dot(self, vec)
 
 
-    def normDot(self, vec):
+    def normDot(self, vec: 'Vector3') -> "double":
         """normDot(Vector3 self, Vector3 vec) -> double"""
         return _math_linear.Vector3_normDot(self, vec)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(Vector3 self) -> double"""
         return _math_linear.Vector3_norm(self)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(Vector3 self) -> double"""
         return _math_linear.Vector3_normSq(self)
 
 
-    def angle(self, v):
+    def angle(self, v: 'Vector3') -> "double":
         """angle(Vector3 self, Vector3 v) -> double"""
         return _math_linear.Vector3_angle(self, v)
 
 
-    def normalize(self):
+    def normalize(self) -> "void":
         """normalize(Vector3 self)"""
         return _math_linear.Vector3_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::VectorN< 3,double >::Like_T":
         """unit(Vector3 self) -> Vector3"""
         return _math_linear.Vector3_unit(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "void":
         """scale(Vector3 self, double scalar)"""
         return _math_linear.Vector3_scale(self, scalar)
 
 
-    def __iadd__(self, v):
+    def __iadd__(self, v: 'Vector3') -> "math::linear::VectorN< 3,double >::Like_T &":
         """__iadd__(Vector3 self, Vector3 v) -> Vector3"""
         return _math_linear.Vector3___iadd__(self, v)
 
 
-    def __isub__(self, v):
+    def __isub__(self, v: 'Vector3') -> "math::linear::VectorN< 3,double >::Like_T &":
         """__isub__(Vector3 self, Vector3 v) -> Vector3"""
         return _math_linear.Vector3___isub__(self, v)
 
 
-    def add(self, v):
+    def add(self, v: 'Vector3') -> "math::linear::VectorN< 3,double >::Like_T":
         """add(Vector3 self, Vector3 v) -> Vector3"""
         return _math_linear.Vector3_add(self, v)
 
 
-    def subtract(self, v):
+    def subtract(self, v: 'Vector3') -> "math::linear::VectorN< 3,double >::Like_T":
         """subtract(Vector3 self, Vector3 v) -> Vector3"""
         return _math_linear.Vector3_subtract(self, v)
 
 
-    def __add__(self, v):
+    def __add__(self, v: 'Vector3') -> "math::linear::VectorN< 3,double >::Like_T":
         """__add__(Vector3 self, Vector3 v) -> Vector3"""
         return _math_linear.Vector3___add__(self, v)
 
 
-    def __sub__(self, v):
+    def __sub__(self, v: 'Vector3') -> "math::linear::VectorN< 3,double >::Like_T":
         """__sub__(Vector3 self, Vector3 v) -> Vector3"""
         return _math_linear.Vector3___sub__(self, v)
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::VectorN< 3,double >::Like_T":
         """__neg__(Vector3 self) -> Vector3"""
         return _math_linear.Vector3___neg__(self)
 
 
-    def __imul__(self, *args):
+    def __imul__(self, *args) -> "math::linear::VectorN< 3,double >::Like_T &":
         """
         __imul__(Vector3 self, Vector3 v) -> Vector3
         __imul__(Vector3 self, double sv) -> Vector3
@@ -3715,7 +3715,7 @@ class Vector3(_object):
 
 
 
-    def __mul__(self, *args):
+    def __mul__(self, *args) -> "math::linear::VectorN< 3,double >::Like_T":
         """
         __mul__(Vector3 self, double sv) -> Vector3
         __mul__(Vector3 self, Vector3 v) -> Vector3
@@ -3735,27 +3735,27 @@ class Vector3(_object):
         self.__init__(pickle.loads(state))
 
 
-    def __getitem__(self, i):
+    def __getitem__(self, i: 'long') -> "double":
         """__getitem__(Vector3 self, long i) -> double"""
         return _math_linear.Vector3___getitem__(self, i)
 
 
-    def __setitem__(self, i, val):
+    def __setitem__(self, i: 'long', val: 'double') -> "void":
         """__setitem__(Vector3 self, long i, double val)"""
         return _math_linear.Vector3___setitem__(self, i, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(Vector3 self) -> std::string"""
         return _math_linear.Vector3___str__(self)
 
 
-    def __deepcopy__(self, memo):
+    def __deepcopy__(self, memo: 'PyObject *') -> "math::linear::VectorN< 3,double >":
         """__deepcopy__(Vector3 self, PyObject * memo) -> Vector3"""
         return _math_linear.Vector3___deepcopy__(self, memo)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< double,std::allocator< double > >":
         """vals(Vector3 self) -> std_vector_double"""
         return _math_linear.Vector3_vals(self)
 
@@ -3763,7 +3763,7 @@ Vector3_swigregister = _math_linear.Vector3_swigregister
 Vector3_swigregister(Vector3)
 
 
-def cross(*args):
+def cross(*args) -> "math::linear::Vector< double >":
     """
     cross(Vector3 u, Vector3 v) -> Vector3
     cross(VectorDouble u, VectorDouble v) -> VectorDouble
@@ -3796,12 +3796,12 @@ class VectorDouble(_object):
     __swig_destroy__ = _math_linear.delete_VectorDouble
     __del__ = lambda self: None
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(VectorDouble self) -> size_t"""
         return _math_linear.VectorDouble_size(self)
 
 
-    def matrix(self, *args):
+    def matrix(self, *args) -> "math::linear::Matrix2D< double > const &":
         """
         matrix(VectorDouble self) -> MatrixDouble
         matrix(VectorDouble self) -> MatrixDouble
@@ -3809,82 +3809,82 @@ class VectorDouble(_object):
         return _math_linear.VectorDouble_matrix(self, *args)
 
 
-    def get(self):
+    def get(self) -> "double const *":
         """get(VectorDouble self) -> double const *"""
         return _math_linear.VectorDouble_get(self)
 
 
-    def dot(self, vec_):
+    def dot(self, vec_: 'VectorDouble') -> "double":
         """dot(VectorDouble self, VectorDouble vec_) -> double"""
         return _math_linear.VectorDouble_dot(self, vec_)
 
 
-    def angle(self, v):
+    def angle(self, v: 'VectorDouble') -> "double":
         """angle(VectorDouble self, VectorDouble v) -> double"""
         return _math_linear.VectorDouble_angle(self, v)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(VectorDouble self) -> double"""
         return _math_linear.VectorDouble_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(VectorDouble self) -> double"""
         return _math_linear.VectorDouble_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "void":
         """normalize(VectorDouble self)"""
         return _math_linear.VectorDouble_normalize(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "void":
         """scale(VectorDouble self, double scalar)"""
         return _math_linear.VectorDouble_scale(self, scalar)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::Vector< double >":
         """unit(VectorDouble self) -> VectorDouble"""
         return _math_linear.VectorDouble_unit(self)
 
 
-    def __iadd__(self, v):
+    def __iadd__(self, v: 'VectorDouble') -> "math::linear::Vector< double > &":
         """__iadd__(VectorDouble self, VectorDouble v) -> VectorDouble"""
         return _math_linear.VectorDouble___iadd__(self, v)
 
 
-    def __isub__(self, v):
+    def __isub__(self, v: 'VectorDouble') -> "math::linear::Vector< double > &":
         """__isub__(VectorDouble self, VectorDouble v) -> VectorDouble"""
         return _math_linear.VectorDouble___isub__(self, v)
 
 
-    def add(self, v):
+    def add(self, v: 'VectorDouble') -> "math::linear::Vector< double >":
         """add(VectorDouble self, VectorDouble v) -> VectorDouble"""
         return _math_linear.VectorDouble_add(self, v)
 
 
-    def subtract(self, v):
+    def subtract(self, v: 'VectorDouble') -> "math::linear::Vector< double >":
         """subtract(VectorDouble self, VectorDouble v) -> VectorDouble"""
         return _math_linear.VectorDouble_subtract(self, v)
 
 
-    def __add__(self, v):
+    def __add__(self, v: 'VectorDouble') -> "math::linear::Vector< double >":
         """__add__(VectorDouble self, VectorDouble v) -> VectorDouble"""
         return _math_linear.VectorDouble___add__(self, v)
 
 
-    def __sub__(self, v):
+    def __sub__(self, v: 'VectorDouble') -> "math::linear::Vector< double >":
         """__sub__(VectorDouble self, VectorDouble v) -> VectorDouble"""
         return _math_linear.VectorDouble___sub__(self, v)
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::Vector< double >":
         """__neg__(VectorDouble self) -> VectorDouble"""
         return _math_linear.VectorDouble___neg__(self)
 
 
-    def __imul__(self, *args):
+    def __imul__(self, *args) -> "math::linear::Vector< double > &":
         """
         __imul__(VectorDouble self, VectorDouble v) -> VectorDouble
         __imul__(VectorDouble self, double sv) -> VectorDouble
@@ -3898,7 +3898,7 @@ class VectorDouble(_object):
 
 
 
-    def __mul__(self, *args):
+    def __mul__(self, *args) -> "math::linear::Vector< double >":
         """
         __mul__(VectorDouble self, double sv) -> VectorDouble
         __mul__(VectorDouble self, VectorDouble v) -> VectorDouble
@@ -3912,22 +3912,22 @@ class VectorDouble(_object):
 
 
 
-    def __getitem__(self, i):
+    def __getitem__(self, i: 'long') -> "double":
         """__getitem__(VectorDouble self, long i) -> double"""
         return _math_linear.VectorDouble___getitem__(self, i)
 
 
-    def __setitem__(self, i, val):
+    def __setitem__(self, i: 'long', val: 'double') -> "void":
         """__setitem__(VectorDouble self, long i, double val)"""
         return _math_linear.VectorDouble___setitem__(self, i, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(VectorDouble self) -> std::string"""
         return _math_linear.VectorDouble___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< double,std::allocator< double > >":
         """vals(VectorDouble self) -> std_vector_double"""
         return _math_linear.VectorDouble_vals(self)
 
@@ -3961,7 +3961,7 @@ class MatrixDouble(_object):
     __swig_destroy__ = _math_linear.delete_MatrixDouble
     __del__ = lambda self: None
 
-    def __call__(self, *args):
+    def __call__(self, *args) -> "double &":
         """
         __call__(MatrixDouble self, size_t i, size_t j) -> double
         __call__(MatrixDouble self, size_t i, size_t j) -> double &
@@ -3969,7 +3969,7 @@ class MatrixDouble(_object):
         return _math_linear.MatrixDouble___call__(self, *args)
 
 
-    def row(self, *args):
+    def row(self, *args) -> "void":
         """
         row(MatrixDouble self, size_t i) -> double const
         row(MatrixDouble self, size_t i) -> double
@@ -3979,7 +3979,7 @@ class MatrixDouble(_object):
         return _math_linear.MatrixDouble_row(self, *args)
 
 
-    def col(self, *args):
+    def col(self, *args) -> "void":
         """
         col(MatrixDouble self, size_t j) -> std_vector_double
         col(MatrixDouble self, size_t j, double const * vec_)
@@ -3988,32 +3988,32 @@ class MatrixDouble(_object):
         return _math_linear.MatrixDouble_col(self, *args)
 
 
-    def rows(self):
+    def rows(self) -> "size_t":
         """rows(MatrixDouble self) -> size_t"""
         return _math_linear.MatrixDouble_rows(self)
 
 
-    def cols(self):
+    def cols(self) -> "size_t":
         """cols(MatrixDouble self) -> size_t"""
         return _math_linear.MatrixDouble_cols(self)
 
 
-    def size(self):
+    def size(self) -> "size_t":
         """size(MatrixDouble self) -> size_t"""
         return _math_linear.MatrixDouble_size(self)
 
 
-    def get(self):
+    def get(self) -> "double const *":
         """get(MatrixDouble self) -> double const *"""
         return _math_linear.MatrixDouble_get(self)
 
 
-    def scale(self, scalar):
+    def scale(self, scalar: 'double') -> "math::linear::Matrix2D< double > &":
         """scale(MatrixDouble self, double scalar) -> MatrixDouble"""
         return _math_linear.MatrixDouble_scale(self, scalar)
 
 
-    def multiply(self, *args):
+    def multiply(self, *args) -> "void":
         """
         multiply(MatrixDouble self, double scalar) -> MatrixDouble
         multiply(MatrixDouble self, MatrixDouble mx) -> MatrixDouble
@@ -4022,57 +4022,57 @@ class MatrixDouble(_object):
         return _math_linear.MatrixDouble_multiply(self, *args)
 
 
-    def scaleDiagonal(self, mx):
+    def scaleDiagonal(self, mx: 'MatrixDouble') -> "math::linear::Matrix2D< double > &":
         """scaleDiagonal(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
         return _math_linear.MatrixDouble_scaleDiagonal(self, mx)
 
 
-    def scaleDiagonalRowVector(self, mx):
+    def scaleDiagonalRowVector(self, mx: 'MatrixDouble') -> "math::linear::Matrix2D< double > &":
         """scaleDiagonalRowVector(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
         return _math_linear.MatrixDouble_scaleDiagonalRowVector(self, mx)
 
 
-    def multiplyDiagonal(self, mx):
+    def multiplyDiagonal(self, mx: 'MatrixDouble') -> "math::linear::Matrix2D< double >":
         """multiplyDiagonal(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
         return _math_linear.MatrixDouble_multiplyDiagonal(self, mx)
 
 
-    def multiplyDiagonalRowVector(self, mx):
+    def multiplyDiagonalRowVector(self, mx: 'MatrixDouble') -> "math::linear::Matrix2D< double >":
         """multiplyDiagonalRowVector(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
         return _math_linear.MatrixDouble_multiplyDiagonalRowVector(self, mx)
 
 
-    def __iadd__(self, mx):
+    def __iadd__(self, mx: 'MatrixDouble') -> "math::linear::Matrix2D< double > &":
         """__iadd__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
         return _math_linear.MatrixDouble___iadd__(self, mx)
 
 
-    def __isub__(self, mx):
+    def __isub__(self, mx: 'MatrixDouble') -> "math::linear::Matrix2D< double > &":
         """__isub__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
         return _math_linear.MatrixDouble___isub__(self, mx)
 
 
-    def add(self, mx):
+    def add(self, mx: 'MatrixDouble') -> "math::linear::Matrix2D< double >":
         """add(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
         return _math_linear.MatrixDouble_add(self, mx)
 
 
-    def subtract(self, mx):
+    def subtract(self, mx: 'MatrixDouble') -> "math::linear::Matrix2D< double >":
         """subtract(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
         return _math_linear.MatrixDouble_subtract(self, mx)
 
 
-    def transpose(self):
+    def transpose(self) -> "math::linear::Matrix2D< double >":
         """transpose(MatrixDouble self) -> MatrixDouble"""
         return _math_linear.MatrixDouble_transpose(self)
 
 
-    def decomposeLU(self, pivotsM):
+    def decomposeLU(self, pivotsM: 'VectorSizeT') -> "math::linear::Matrix2D< double >":
         """decomposeLU(MatrixDouble self, VectorSizeT pivotsM) -> MatrixDouble"""
         return _math_linear.MatrixDouble_decomposeLU(self, pivotsM)
 
 
-    def permute(self, pivotsM, n=0):
+    def permute(self, pivotsM: 'VectorSizeT', n: 'size_t'=0) -> "math::linear::Matrix2D< double >":
         """
         permute(MatrixDouble self, VectorSizeT pivotsM, size_t n=0) -> MatrixDouble
         permute(MatrixDouble self, VectorSizeT pivotsM) -> MatrixDouble
@@ -4080,32 +4080,32 @@ class MatrixDouble(_object):
         return _math_linear.MatrixDouble_permute(self, pivotsM, n)
 
 
-    def normSq(self):
+    def normSq(self) -> "double":
         """normSq(MatrixDouble self) -> double"""
         return _math_linear.MatrixDouble_normSq(self)
 
 
-    def norm(self):
+    def norm(self) -> "double":
         """norm(MatrixDouble self) -> double"""
         return _math_linear.MatrixDouble_norm(self)
 
 
-    def normalize(self):
+    def normalize(self) -> "math::linear::Matrix2D< double > &":
         """normalize(MatrixDouble self) -> MatrixDouble"""
         return _math_linear.MatrixDouble_normalize(self)
 
 
-    def unit(self):
+    def unit(self) -> "math::linear::Matrix2D< double >":
         """unit(MatrixDouble self) -> MatrixDouble"""
         return _math_linear.MatrixDouble_unit(self)
 
 
-    def __add__(self, mx):
+    def __add__(self, mx: 'MatrixDouble') -> "math::linear::Matrix2D< double >":
         """__add__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
         return _math_linear.MatrixDouble___add__(self, mx)
 
 
-    def __sub__(self, mx):
+    def __sub__(self, mx: 'MatrixDouble') -> "math::linear::Matrix2D< double >":
         """__sub__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"""
         return _math_linear.MatrixDouble___sub__(self, mx)
 
@@ -4116,7 +4116,7 @@ class MatrixDouble(_object):
 
 
 
-    def __mul__(self, *args):
+    def __mul__(self, *args) -> "math::linear::Matrix2D< double >":
         """
         __mul__(MatrixDouble self, double scalar) -> MatrixDouble
         __mul__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble
@@ -4124,27 +4124,27 @@ class MatrixDouble(_object):
         return _math_linear.MatrixDouble___mul__(self, *args)
 
 
-    def __neg__(self):
+    def __neg__(self) -> "math::linear::Matrix2D< double >":
         """__neg__(MatrixDouble self) -> MatrixDouble"""
         return _math_linear.MatrixDouble___neg__(self)
 
 
-    def __getitem__(self, inObj):
+    def __getitem__(self, inObj: 'PyObject *') -> "double":
         """__getitem__(MatrixDouble self, PyObject * inObj) -> double"""
         return _math_linear.MatrixDouble___getitem__(self, inObj)
 
 
-    def __setitem__(self, inObj, val):
+    def __setitem__(self, inObj: 'PyObject *', val: 'double') -> "void":
         """__setitem__(MatrixDouble self, PyObject * inObj, double val)"""
         return _math_linear.MatrixDouble___setitem__(self, inObj, val)
 
 
-    def __str__(self):
+    def __str__(self) -> "std::string":
         """__str__(MatrixDouble self) -> std::string"""
         return _math_linear.MatrixDouble___str__(self)
 
 
-    def vals(self):
+    def vals(self) -> "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >":
         """vals(MatrixDouble self) -> std_vector_vector_double"""
         return _math_linear.MatrixDouble_vals(self)
 
