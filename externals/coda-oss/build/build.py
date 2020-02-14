@@ -793,6 +793,29 @@ def options(opt):
     opt.add_option('--disable-swig-silent-leak', action='store_false', dest='swig_silent_leak',
                    default=True, help='Allow swig to print memory leaks it detects')
 
+
+def ensureCpp11Support(self):
+    # Visual Studio 2013 has nullptr but not constexpr.  Need to check for
+    # both in here to make sure we have full C++11 support... otherwise,
+    # long-term we may need multiple separate configure checks and
+    # corresponding defines
+
+    cpp11_str = '''
+            int main()
+            {
+                constexpr void* FOO = nullptr;
+            }
+            '''
+    self.check_cxx(fragment=cpp11_str,
+                   execute=0,
+                   msg='Checking for C++11 support',
+                   mandatory=True)
+
+    # DEPRECATED.
+    # Keeping for now in case downstream code is still looking for it
+    self.env['cpp11support'] = True
+
+
 def configureCompilerOptions(self):
     sys_platform = getPlatform(default=Options.platform)
     appleRegex = r'i.86-apple-.*'
@@ -1277,8 +1300,8 @@ def configure(self):
         env.append_unique('LINKFLAGS', Options.options.linkflags.split())
     if Options.options._defs:
         env.append_unique('DEFINES', Options.options._defs.split(','))
-    env['cpp11support'] = True
     configureCompilerOptions(self)
+    ensureCpp11Support(self)
 
     env['PLATFORM'] = sys_platform
 
