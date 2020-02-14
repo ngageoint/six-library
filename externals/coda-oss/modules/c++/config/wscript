@@ -26,6 +26,11 @@ def configure(conf):
         conf.check_cc(function_name='setenv', header_name="stdlib.h", mandatory=False)
         conf.check_cc(function_name='posix_memalign', header_name="stdlib.h", mandatory=False)
         conf.check_cc(function_name='memalign', header_name="stdlib.h", mandatory=False)
+
+        #find out the size of some types, etc.
+        # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
+        #    building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
+        #    erroneously be 8 here.
         types_str = '''
             #include <stdio.h>
             int isBigEndian()
@@ -41,21 +46,6 @@ def configure(conf):
                 return 0;
             }
             '''
-
-        # Visual Studio 2013 has nullptr but not constexpr.  Need to check for
-        # both in here to make sure we have full C++11 support... otherwise,
-        # long-term we may need multiple separate configure checks and
-        # corresponding defines
-        cpp11_str = '''
-            int main()
-            {
-                constexpr void* FOO = nullptr;
-            }
-            '''
-        #find out the size of some types, etc.
-        # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
-        #    building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
-        #    erroneously be 8 here.
         output = conf.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
         t = Utils.str_to_dict(output or '')
         for k, v in t.items():
@@ -68,11 +58,6 @@ def configure(conf):
                 elif v == 'False':
                     v = False
             conf.define(k.upper(), v)
-        conf.check_cxx(fragment=cpp11_str,
-                       execute=1,
-                       msg='Checking for C++11 support',
-                       define_name='__CODA_CPP11',
-                       mandatory=True)
         attribute_noinline_str = '''
             int __attribute__((noinline)) fn() { return 0; }
             int main()
@@ -98,6 +83,11 @@ def configure(conf):
                        mandatory=False)
 
         conf.define('CODA_EXPORT', conf.env['declspec_decoration'], quote=False)
+
+        # DEPRECATED.
+        # C++11 is required and will always be enabled.
+        # Continuing to define this in case downstream code is looking for it
+        conf.define('__CODA_CPP11', 1)
 
     writeConfig(conf, sys_callback, 'coda_oss',
                 path=os.path.join('include', 'config'),
