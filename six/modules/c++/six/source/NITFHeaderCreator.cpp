@@ -541,7 +541,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
         else if (version == "1.2.1")
         {
             specVers = "1.2.1";
-            specDT = "2020-02-19T00:00:00Z";
+            specDT = "2018-12-13T00:00:00Z";
         }
     }
     else if (dataType == "SIDD")
