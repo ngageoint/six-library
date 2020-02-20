@@ -2,8 +2,8 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
    elementFormDefault="qualified"
    attributeFormDefault="unqualified"
-   targetNamespace="urn:SICD:1.2.1-alpha"
-   xmlns="urn:SICD:1.2.1-alpha">
+   targetNamespace="urn:SICD:1.2.1"
+   xmlns="urn:SICD:1.2.1">
 
 <!-- SICD TYPES -->
 

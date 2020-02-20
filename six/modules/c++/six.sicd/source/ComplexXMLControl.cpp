@@ -126,7 +126,7 @@ ComplexXMLControl::getParser(const std::string& version) const
             // can be populated, so we can again reuse the 1.0.1 parser.
             parser.reset(new ComplexXMLParser101(version, mLog));
         }
-        else if (minorVersion == "2" && patchVersion == "1-alpha")
+        else if (minorVersion == "2" && patchVersion == "1")
         {
             // The only change is in the DualPolarization enum, which is handled in the schema
             parser.reset(new ComplexXMLParser101(version, mLog));
