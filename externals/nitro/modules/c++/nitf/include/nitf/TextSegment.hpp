@@ -55,14 +55,14 @@ public:
     TextSegment(nitf_TextSegment * x);
 
     //! Constructor
-    TextSegment() throw(nitf::NITFException);
+    TextSegment();
 
     TextSegment(NITF_DATA * x);
 
     TextSegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::TextSegment clone() throw(nitf::NITFException);
+    nitf::TextSegment clone();
 
     ~TextSegment();
 

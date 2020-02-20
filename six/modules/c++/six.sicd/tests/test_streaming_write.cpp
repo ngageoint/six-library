@@ -38,6 +38,163 @@
 
 namespace
 {
+/*!
+ *  This function converts DMS corners into decimal degrees using NITRO,
+ *  and then puts them into a lat-lon
+ */
+inline
+six::LatLonCorners makeUpCornersFromDMS()
+{
+    int latTopDMS[3] = { 42, 17, 50 };
+    int latBottomDMS[3] = { 42, 15, 14 };
+    int lonEastDMS[3] = { -83, 42, 12 };
+    int lonWestDMS[3] = { -83, 45, 44 };
+
+    const double latTopDecimal =
+        nitf::Utils::geographicToDecimal(latTopDMS[0],
+                                         latTopDMS[1],
+                                         latTopDMS[2]);
+
+    const double latBottomDecimal =
+        nitf::Utils::geographicToDecimal(latBottomDMS[0],
+                                         latBottomDMS[1],
+                                         latBottomDMS[2]);
+
+    const double lonEastDecimal =
+        nitf::Utils::geographicToDecimal(lonEastDMS[0],
+                                         lonEastDMS[1],
+                                         lonEastDMS[2]);
+
+    const double lonWestDecimal =
+        nitf::Utils::geographicToDecimal(lonWestDMS[0],
+                                         lonWestDMS[1],
+                                         lonWestDMS[2]);
+
+    six::LatLonCorners corners;
+    corners.upperLeft = six::LatLon(latTopDecimal, lonWestDecimal);
+    corners.upperRight = six::LatLon(latTopDecimal, lonEastDecimal);
+    corners.lowerRight = six::LatLon(latBottomDecimal, lonEastDecimal);
+    corners.lowerLeft = six::LatLon(latBottomDecimal, lonWestDecimal);
+    return corners;
+}
+
+template <typename DataTypeT>
+struct GetPixelType
+{
+};
+
+template <>
+struct GetPixelType<float>
+{
+    static six::PixelType getPixelType()
+    {
+        return six::PixelType::RE32F_IM32F;
+    }
+};
+
+template <>
+struct GetPixelType<sys::Int16_T>
+{
+    static six::PixelType getPixelType()
+    {
+        return six::PixelType::RE16I_IM16I;
+    }
+};
+
+// Create dummy SICD data
+template <typename DataTypeT>
+std::auto_ptr<six::Data>
+createData(const types::RowCol<size_t>& dims)
+{
+    six::sicd::ComplexData* data(new six::sicd::ComplexData());
+    std::auto_ptr<six::Data> scopedData(data);
+    data->setPixelType(GetPixelType<DataTypeT>::getPixelType());
+    data->setNumRows(dims.row);
+    data->setNumCols(dims.col);
+    data->setName("corename");
+    data->setSource("sensorname");
+    data->collectionInformation->setClassificationLevel("UNCLASSIFIED");
+    data->setCreationTime(six::DateTime());
+    data->setImageCorners(makeUpCornersFromDMS());
+    data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
+    data->scpcoa->sideOfTrack = six::SideOfTrackType::LEFT;
+    data->geoData->scp.llh = six::LatLonAlt(42.2708, -83.7264);
+    data->geoData->scp.ecf =
+            scene::Utilities::latLonToECEF(data->geoData->scp.llh);
+    data->grid->timeCOAPoly = six::Poly2D(0, 0);
+    data->grid->timeCOAPoly[0][0] = 15605743.142846;
+    data->position->arpPoly = six::PolyXYZ(0);
+    data->position->arpPoly[0] = 0.0;
+
+    data->radarCollection->txFrequencyMin = 0.0;
+    data->radarCollection->txFrequencyMax = 0.0;
+    data->radarCollection->txPolarization = six::PolarizationType::OTHER;
+    mem::ScopedCloneablePtr<six::sicd::ChannelParameters>
+            rcvChannel(new six::sicd::ChannelParameters());
+    rcvChannel->txRcvPolarization = six::DualPolarizationType::OTHER;
+    data->radarCollection->rcvChannels.push_back(rcvChannel);
+
+    data->grid->row->sign = six::FFTSign::POS;
+    data->grid->row->unitVector = 0.0;
+    data->grid->row->sampleSpacing = 0;
+    data->grid->row->impulseResponseWidth = 0;
+    data->grid->row->impulseResponseBandwidth = 0;
+    data->grid->row->kCenter = 0;
+    data->grid->row->deltaK1 = 0;
+    data->grid->row->deltaK2 = 0;
+    data->grid->col->sign = six::FFTSign::POS;
+    data->grid->col->unitVector = 0.0;
+    data->grid->col->sampleSpacing = 0;
+    data->grid->col->impulseResponseWidth = 0;
+    data->grid->col->impulseResponseBandwidth = 0;
+    data->grid->col->kCenter = 0;
+    data->grid->col->deltaK1 = 0;
+    data->grid->col->deltaK2 = 0;
+
+    data->imageFormation->rcvChannelProcessed->numChannelsProcessed = 1;
+    data->imageFormation->rcvChannelProcessed->channelIndex.push_back(0);
+
+    data->pfa.reset(new six::sicd::PFA());
+    data->pfa->spatialFrequencyScaleFactorPoly = six::Poly1D(0);
+    data->pfa->spatialFrequencyScaleFactorPoly[0] = 42;
+    data->pfa->polarAnglePoly = six::Poly1D(0);
+    data->pfa->polarAnglePoly[0] = 42;
+
+    data->timeline->collectStart = six::DateTime();
+    data->timeline->collectDuration = 1.0;
+    data->imageFormation->txRcvPolarizationProc =
+            six::DualPolarizationType::OTHER;
+    data->imageFormation->tStartProc = 0;
+    data->imageFormation->tEndProc = 0;
+
+    data->scpcoa->scpTime = 15605743.142846;
+    data->scpcoa->slantRange = 0.0;
+    data->scpcoa->groundRange = 0.0;
+    data->scpcoa->dopplerConeAngle = 0.0;
+    data->scpcoa->grazeAngle = 0.0;
+    data->scpcoa->incidenceAngle = 0.0;
+    data->scpcoa->twistAngle = 0.0;
+    data->scpcoa->slopeAngle = 0.0;
+    data->scpcoa->azimAngle = 0.0;
+    data->scpcoa->layoverAngle = 0.0;
+    data->scpcoa->arpPos = 0.0;
+    data->scpcoa->arpVel = 0.0;
+    data->scpcoa->arpAcc = 0.0;
+
+    data->pfa->focusPlaneNormal = 0.0;
+    data->pfa->imagePlaneNormal = 0.0;
+    data->pfa->polarAngleRefTime = 0.0;
+    data->pfa->krg1 = 0;
+    data->pfa->krg2 = 0;
+    data->pfa->kaz1 = 0;
+    data->pfa->kaz2 = 0;
+
+    data->imageFormation->txFrequencyProcMin = 0;
+    data->imageFormation->txFrequencyProcMax = 0;
+
+    return scopedData;
+}
+
 // Grab an AOI out of 'orig' specified by 'offset' and 'dims'
 template <typename T>
 void subsetData(const T* orig,
@@ -120,12 +277,12 @@ private:
         }
     }
 
-    void setMaxProductSize(six::NITFWriteControl& writer)
+    void setMaxProductSize(six::Options& options)
     {
         if (mSetMaxProductSize)
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
         }
     }
 
@@ -153,9 +310,9 @@ void Tester<DataTypeT>::normalWrite()
 {
     mContainer->addData(createData<DataTypeT>(mDims).release());
 
-    six::NITFWriteControl writer;
-    setMaxProductSize(writer);
-    writer.initialize(mContainer);
+    six::Options options;
+    setMaxProductSize(options);
+    six::NITFWriteControl writer(options, mContainer);
 
     six::BufferList buffers;
     buffers.push_back(reinterpret_cast<six::UByte*>(mImagePtr));
@@ -169,9 +326,10 @@ void Tester<DataTypeT>::testSingleWrite()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
+    six::Options options;
+    setMaxProductSize(options);
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
-    setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(options, mContainer);
 
     sicdWriter.save(mImagePtr, types::RowCol<size_t>(0, 0), mDims);
     sicdWriter.close();
@@ -184,9 +342,10 @@ void Tester<DataTypeT>::testMultipleWritesOfFullRows()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
+    six::Options options;
+    setMaxProductSize(options);
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
-    setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(options, mContainer);
 
     // Rows [40, 60)
     types::RowCol<size_t> offset(40, 0);
@@ -234,9 +393,11 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
+    six::Options options;
+    setMaxProductSize(options);
+
     six::sicd::SICDWriteControl sicdWriter(mTestPathname, mSchemaPaths);
-    setMaxProductSize(sicdWriter);
-    sicdWriter.initialize(mContainer);
+    sicdWriter.initialize(options, mContainer);
 
     // Rows [40, 60)
     // Cols [400, 456)

@@ -105,7 +105,7 @@ public:
                        nitf::Uint32 pixelType,
                        nitf::Uint32 pixelSize,
                        nitf::Uint32 rowsInLastWindow,
-                       nitf::Uint32 colsInLastWindow) throw (nitf::NITFException);
+                       nitf::Uint32 colsInLastWindow);
 
     nitf::Uint32 getRowSkip();
 
@@ -142,7 +142,7 @@ public:
      *  \param colSkip  The number of columns to skip
      */
     PixelSkip(nitf::Uint32 rowSkip,
-              nitf::Uint32 colSkip) throw (nitf::NITFException);
+              nitf::Uint32 colSkip);
 
     //! Destructor
     ~PixelSkip();
@@ -172,7 +172,7 @@ public:
      *  \param colSkip  The number of columns to skip
      */
     MaxDownSample(nitf::Uint32 rowSkip,
-                  nitf::Uint32 colSkip) throw (nitf::NITFException);
+                  nitf::Uint32 colSkip);
     //! Destructor
     ~MaxDownSample();
 };
@@ -198,7 +198,7 @@ public:
      *  \param colSkip  The number of cols to skip
      */
     SumSq2DownSample(nitf::Uint32 rowSkip,
-                     nitf::Uint32 colSkip) throw (nitf::NITFException);
+                     nitf::Uint32 colSkip);
     //! Destructor
     ~SumSq2DownSample();
 };
@@ -223,7 +223,7 @@ public:
      *  \param colSkip  The number of cols to skip
      */
     Select2DownSample(nitf::Uint32 rowSkip,
-                      nitf::Uint32 colSkip) throw (nitf::NITFException);
+                      nitf::Uint32 colSkip);
     //! Destructor
     ~Select2DownSample();
 };

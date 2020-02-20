@@ -35,7 +35,7 @@ namespace six
 {
 namespace CSM
 {
-const csm::Version SIDDSensorModel::VERSION(1, 1, 4);
+const csm::Version SIDDSensorModel::VERSION(1, 1, 5);
 const char SIDDSensorModel::NAME[] = "SIDD_SENSOR_MODEL";
 
 SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
@@ -340,21 +340,7 @@ six::DateTime SIDDSensorModel::getReferenceDateAndTimeImpl() const
 types::RowCol<double>
 SIDDSensorModel::fromPixel(const csm::ImageCoord& pos) const
 {
-    const types::RowCol<double> posRC(pos.line, pos.samp);
-    types::RowCol<double> fullScenePos;
-    if (mData->downstreamReprocessing.get() &&
-        mData->downstreamReprocessing->geometricChip.get())
-    {
-        // The point that was passed in was with respect to the chip
-        // ctrPt below will be with respect to the full image, so need to
-        // adjust
-        fullScenePos = mData->downstreamReprocessing->geometricChip->
-                getFullImageCoordinateFromChip(posRC);
-    }
-    else
-    {
-        fullScenePos = posRC;
-    }
+    const types::RowCol<double> fullScenePos(pos.line, pos.samp);
 
     const six::sidd::MeasurableProjection* projection(getProjection());
     const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
@@ -373,23 +359,31 @@ SIDDSensorModel::toPixel(const types::RowCol<double>& pos) const
     const types::RowCol<double> fullScenePos =
             pos / projection->sampleSpacing + ctrPt;
 
-    if (mData->downstreamReprocessing.get() &&
-        mData->downstreamReprocessing->geometricChip.get())
-    {
-        // 'fullScenePos' is with respect to the original full image, but we
-        // need it with respect to the chip that this SIDD actually represents
-        return mData->downstreamReprocessing->geometricChip->
-                getChipCoordinateFromFullImage(fullScenePos);
-    }
-    else
-    {
-        return fullScenePos;
-    }
+    return fullScenePos;
 }
 
 csm::ImageVector SIDDSensorModel::getImageSize() const
 {
     return csm::ImageVector(mData->getNumRows(), mData->getNumCols());
+}
+
+/*
+ * CSM works with full image coordinates.  So when working with
+ * a chipped image, the start would be the offset from the full
+ * top-left to the chip.
+ *
+ * See discussion https://github.com/ngageoint/six-library/issues/279
+ */
+csm::ImageCoord SIDDSensorModel::getImageStart() const
+{
+    types::RowCol<double> imageStart(0, 0);
+    if (mData->downstreamReprocessing.get() &&
+        mData->downstreamReprocessing->geometricChip.get())
+    {
+        imageStart = mData->downstreamReprocessing->geometricChip->
+                getChipCoordinateFromFullImage(imageStart);
+    }
+    return csm::ImageCoord(imageStart.row, imageStart.col);
 }
 
 void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)

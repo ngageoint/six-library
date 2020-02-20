@@ -42,19 +42,18 @@ namespace nitf
 class MemoryIO : public IOInterface
 {
 public:
-    MemoryIO(size_t capacity) throw(nitf::NITFException);
+    MemoryIO(size_t capacity);
 
     // If adopt is true, the memory will be deallocated via NRT_FREE(), so it
     // must be allocated via NRT_MALLOC() (not new[]).  If adopt is false, the
     // allocation method does not matter.
-    MemoryIO(void* buffer, size_t size, bool adopt = false)
-            throw(nitf::NITFException);
+    MemoryIO(void* buffer, size_t size, bool adopt = false);
 
 private:
     static
     nitf_IOInterface* create(void* buffer,
                              size_t size,
-                             bool adopt) throw(nitf::NITFException);
+                             bool adopt);
 };
 
 }

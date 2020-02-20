@@ -124,6 +124,28 @@ struct Range
     }
 
     /*!
+     * Determine if a given range touches our range. Touching ranges do not
+     * overlap, but can be placed next to one another (irrespective of order)
+     * with no missing values in between.
+     *
+     * If either of the ranges is empty, touching is defined as always false.
+     *
+     * \param rhs Range to compare with
+     *
+     * \return True if the ranges touch, false otherwise
+     */
+    bool touches(const types::Range& rhs) const
+    {
+        if (empty() || rhs.empty())
+        {
+            return false;
+        }
+
+        return (mStartElement == rhs.endElement()) ||
+               (rhs.mStartElement == endElement());
+    }
+
+    /*!
      * \param startElementToTest The start element
      * \param numElementsToTest The total number of elements to check
      *
@@ -162,6 +184,32 @@ struct Range
     bool operator!=(const Range& rhs) const
     {
         return !(*this == rhs);
+    }
+
+    /*!
+     * Comparator.  Primarily useful so that Range can be used as a key in an
+     * STL map.  Sorting first by the start element allows us to iterate
+     * through a map in order of when ranges start, which is generally speaking
+     * what we want.
+     *
+     * \param rhs Range to compare with
+     *
+     * \return True if this < rhs, false otherwise
+     */
+    bool operator<(const Range& rhs) const
+    {
+        if (mStartElement < rhs.mStartElement)
+        {
+            return true;
+        }
+        else if (rhs.mStartElement < mStartElement)
+        {
+            return false;
+        }
+        else
+        {
+            return (mNumElements < rhs.mNumElements);
+        }
     }
 };
 }

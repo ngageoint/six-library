@@ -41,7 +41,7 @@ class RowStreamer : public nitf::RowSourceCallback
 public:
     RowStreamer(nitf::Uint32 band,
                 nitf::Uint32 numCols,
-                nitf::ImageReader reader) throw (nitf::NITFException) :
+                nitf::ImageReader reader) :
         mReader(reader),
         mBand(band)
     {
@@ -53,7 +53,7 @@ public:
         mWindow.setNumBands(1);
     }
 
-    virtual void nextRow(nitf::Uint32 band, void* buffer) throw (nitf::NITFException)
+    virtual void nextRow(nitf::Uint32 band, void* buffer)
     {
         int padded;
         mReader.read(mWindow, (nitf::Uint8**) &buffer, &padded);
@@ -185,7 +185,8 @@ int main(int argc, char **argv)
     }
     catch (except::Throwable & t)
     {
-        std::cout << "ERROR!: " << t.toString() << std::endl;
+        std::cerr << "ERROR!: " << t.toString() << std::endl;
+        return 1;
     }
 }
 

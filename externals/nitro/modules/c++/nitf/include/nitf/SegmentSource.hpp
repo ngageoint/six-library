@@ -68,7 +68,7 @@ public:
      *  false, the data must outlive the memory source.
      */
     SegmentMemorySource(const char* data, size_t size, nitf::Off start,
-                        int byteSkip, bool copyData) throw (nitf::NITFException);
+                        int byteSkip, bool copyData);
 };
 
 /*!
@@ -88,8 +88,7 @@ public:
      *  \param start    The location to seek to (as the beginning)
      *  \param byteSkip The number of bytes to skip
      */
-    SegmentFileSource(nitf::IOHandle & io, nitf::Off start, int byteSkip)
-            throw (nitf::NITFException);
+    SegmentFileSource(nitf::IOHandle & io, nitf::Off start, int byteSkip);
 
     ~SegmentFileSource()
     {
@@ -105,7 +104,7 @@ public:
      *  \param start    The location to seek to (as the beginning)
      *  \param byteSkip The number of bytes to skip
      */
-    SegmentReaderSource(nitf::SegmentReader reader) throw (nitf::NITFException);
+    SegmentReaderSource(nitf::SegmentReader reader);
 
     ~SegmentReaderSource()
     {

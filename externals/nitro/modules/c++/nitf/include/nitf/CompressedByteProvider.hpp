@@ -71,15 +71,13 @@ public:
      * blocking.
      * \param numColsPerBlock The number of columns per block.  Defaults to no
      * blocking.
-     * \param maxRowsPerSegment The maximum rows allowed in an image segment
      */
     CompressedByteProvider(Record& record,
             const std::vector<std::vector<size_t> >& bytesPerBlock,
             const std::vector<PtrAndLength>& desData =
                     std::vector<PtrAndLength>(),
             size_t numRowsPerBlock = 0,
-            size_t numColsPerBlock = 0,
-            size_t maxRowsPerSegment = 0);
+            size_t numColsPerBlock = 0);
 
     /*!
      * Given a range of rows from [startRow, startRow + numRows), provide the
@@ -160,15 +158,13 @@ protected:
      * blocking.
      * \param numColsPerBlock The number of columns per block.  Defaults to no
      * blocking.
-     * \param maxRowsPerSegment The maximum rows allowed in an image segment
      */
     void initialize(Record& record,
             const std::vector<std::vector<size_t> >& bytesPerBlock,
             const std::vector<PtrAndLength>& desData =
                     std::vector<PtrAndLength>(),
             size_t numRowsPerBlock = 0,
-            size_t numColsPerBlock = 0,
-            size_t maxRowsPerSegment = 0);
+            size_t numColsPerBlock = 0);
 
     size_t countBytesForCompressedImageData(
             size_t seg, size_t startRow, size_t numRowsToWrite) const;
@@ -182,12 +178,11 @@ protected:
             NITFBufferList& buffers) const;
 
 private:
-    types::Range findBlocksToWrite(size_t seg, size_t startRow,
+    types::Range findBlocksToWrite(size_t seg, size_t globalStartRow,
             size_t numRowsToWrite) const;
 
 private:
     std::vector<std::vector<size_t> > mBytesInEachBlock;
-    size_t mMaxRowsPerSegment;
 };
 }
 

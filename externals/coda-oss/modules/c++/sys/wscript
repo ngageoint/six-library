@@ -1,79 +1,12 @@
 NAME            = 'sys'
 MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.2'
-MODULE_DEPS     = 'str except'
+MODULE_DEPS     = 'str except config'
 USELIB          = 'THREAD DL RT SOCKET'
 UNITTEST_DEPS   = 'mt'
 TEST_FILTER     = 'MMapReadOnlyTest.cpp ProcessTest1.cpp'
 
-options = distclean = lambda p: None
-
-from build import writeConfig
-from waflib import Utils
-
-def configure(conf):
-
-    # this check defines HAVE_CLOCK_GETTIME, undefine it to keep it out of dumpenv
-    if conf.check_cc(lib='rt', uselib_store='RT', function_name='clock_gettime', header_name='time.h', mandatory=False):
-        conf.undefine('HAVE_CLOCK_GETTIME')
-
-    # callback function to check for all #defines used by the sys module
-    def sys_callback(conf):
-        conf.check_cc(header_name='pthread.h', mandatory=False)
-        conf.check_cc(header_name='execinfo.h', mandatory=False)
-        conf.check_cc(function_name='clock_gettime', header_name='time.h', mandatory=False)
-        conf.check_cc(header_name="atomic.h", mandatory=False)
-        conf.check_cc(header_name="sys/time.h", mandatory=False)
-        conf.check_cc(function_name='localtime_r', header_name="time.h", mandatory=False)
-        conf.check_cc(function_name='gmtime_r', header_name="time.h", mandatory=False)
-        conf.check_cc(function_name='setenv', header_name="stdlib.h", mandatory=False)
-        conf.check_cc(function_name='posix_memalign', header_name="stdlib.h", mandatory=False)
-        conf.check_cc(function_name='memalign', header_name="stdlib.h", mandatory=False)
-        types_str = '''
-            #include <stdio.h>
-            int isBigEndian()
-            {
-                long one = 1;
-                return !(*((char *)(&one)));
-            }
-            int main()
-            {
-                if (isBigEndian()) printf("bigendian=True\\n");
-                else printf("bigendian=False\\n");
-                printf("sizeof_size_t=%d\\n", sizeof(size_t));
-                return 0;
-            }
-            '''
-
-        # Visual Studio 2013 has nullptr but not constexpr.  Need to check for
-        # both in here to make sure we have full C++11 support... otherwise,
-        # long-term we may need multiple separate configure checks and
-        # corresponding defines
-        cpp11_str = '''
-            int main()
-            {
-                constexpr void* FOO = nullptr;
-            }
-            '''
-        #find out the size of some types, etc.
-        # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
-        #    building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
-        #    erroneously be 8 here.
-        output = conf.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
-        t = Utils.str_to_dict(output or '')
-        for k, v in t.items():
-            try:
-                v = int(v)
-            except:
-                v = v.strip()
-                if v == 'True':
-                    v = True
-                elif v == 'False':
-                    v = False
-            conf.define(k.upper(), v)
-        conf.check_cxx(fragment = cpp11_str, execute=1, msg='Checking for C++11 support', define_name='__CODA_CPP11', mandatory=False)
-    writeConfig(conf, sys_callback, NAME)
+options = configure = distclean = lambda p: None
 
 def build(bld):
     bld.module(**globals())
-

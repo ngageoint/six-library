@@ -61,17 +61,7 @@ XMLVerifier::XMLVerifier()
     // Verify schema path is set
     sys::OS os;
 
-    try
-    {
-        mSchemaPaths.push_back(os.getEnv(six::SCHEMA_PATH));
-    }
-    catch(const except::Exception& /*ex*/)
-    {
-        std::ostringstream oss;
-        oss << "Must specify SICD/SIDD schema path via "
-            << six::SCHEMA_PATH << " environment variable";
-        throw except::Exception(Ctxt(oss.str()));
-    }
+    six::XMLControl::loadSchemaPaths(mSchemaPaths);
 
     mXmlRegistry.addCreator(six::DataType::COMPLEX,
             new six::XMLControlCreatorT<

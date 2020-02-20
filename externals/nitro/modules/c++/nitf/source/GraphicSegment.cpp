@@ -44,7 +44,7 @@ GraphicSegment::GraphicSegment(nitf_GraphicSegment * x)
 }
 
 
-GraphicSegment::GraphicSegment() throw(nitf::NITFException)
+GraphicSegment::GraphicSegment()
 {
     setNative(nitf_GraphicSegment_construct(&error));
     getNativeOrThrow();
@@ -65,7 +65,7 @@ GraphicSegment & GraphicSegment::operator=(NITF_DATA * x)
 }
 
 
-nitf::GraphicSegment GraphicSegment::clone() throw(nitf::NITFException)
+nitf::GraphicSegment GraphicSegment::clone()
 {
     nitf::GraphicSegment dolly(nitf_GraphicSegment_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);

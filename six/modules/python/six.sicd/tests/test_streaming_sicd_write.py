@@ -29,6 +29,7 @@
 
 import sys, os, filecmp
 from pysix.scene import *
+from pysix.sicdUtils import *
 from pysix.six_sicd import *
 from pysix.six_base import *
 from coda.xml_lite import *
@@ -45,7 +46,7 @@ def initCollectionInfo(cmplx):
     collectionInfo.collectType = CollectType('MONOSTATIC')
     collectionInfo.radarMode = RadarModeType('SPOTLIGHT')
     collectionInfo.radarModeID = 'Some ID'
-    collectionInfo.classification.level = 'UNCLASSIFIED'
+    collectionInfo.setClassificationLevel('UNCLASSIFIED')
     collectionInfo.countryCodes.push_back('US')
 
     param = Parameter()

@@ -63,6 +63,10 @@ void xml::lite::XMLReaderXerces::create()
     mNative->setFeature(XMLUni::fgSAX2CoreValidation, false);   // optional
     mNative->setFeature(XMLUni::fgSAX2CoreNameSpaces, true);    // optional
     mNative->setFeature(XMLUni::fgXercesSchema, false);
+    // We do schema validation as an option not DTDs
+    mNative->setFeature(XMLUni::fgXercesSkipDTDValidation, true);
+    // Trying to load external DTDs can cause the parser to hang
+    mNative->setFeature(XMLUni::fgXercesLoadExternalDTD, false);
     mNative->setContentHandler(mDriverContentHandler.get());
     mNative->setErrorHandler(mErrorHandler.get());
 }

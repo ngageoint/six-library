@@ -59,13 +59,11 @@ public:
     }
 
     cli::Value* operator[](const std::string& key) const
-            throw (except::NoSuchKeyException)
     {
         return getValue(key);
     }
 
     cli::Value* getValue(const std::string& key) const
-            throw (except::NoSuchKeyException)
     {
         ConstValueIter_T p = mValues.find(key);
         if (p == mValues.end())
@@ -78,20 +76,17 @@ public:
 
     template<typename T>
     T get(const std::string& key, unsigned int index = 0) const
-            throw (except::NoSuchKeyException)
     {
         return getValue(key)->get<T>(index);
     }
 
     template<typename T>
     T operator()(const std::string& key, unsigned int index = 0) const
-            throw (except::NoSuchKeyException)
     {
         return get<T>(key, index);
     }
 
     cli::Results* getSubResults(const std::string& key) const
-            throw (except::NoSuchKeyException)
     {
         ConstResultsIter_T p = mResults.find(key);
         if (p == mResults.end())

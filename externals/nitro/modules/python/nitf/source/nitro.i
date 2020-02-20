@@ -200,6 +200,8 @@
 %include "nrt/IOHandle.h"
 %include "nrt/IOInterface.h"
 %include "nitf/System.h"
+%include "nrt/nrt_config.h"
+%include "nitf/nitf_config.h"
 
 
 

@@ -1,7 +1,7 @@
 MAINTAINER         = 'adam.sylvester@mdaus.com'
-VERSION            = '1.1.2'
 MODULE_DEPS        = 'six.sicd six.sidd'
 PLUGIN             = 'CSM'
+PLUGIN_VERSION     = '115'
 REMOVEPLUGINPREFIX = True
 
 import sys, os, re
@@ -10,6 +10,9 @@ from waflib import Errors, Options
 DIRS = 'external'
 
 def options(opt):
+    opt.add_option('--csm-version', dest='csm_version',
+                   choices=['3.0.3', '3.0.1'], default='3.0.3',
+                   help='Choose verision of CSM to install')
     opt.recurse(DIRS)
 
 def configure(conf):
@@ -43,8 +46,11 @@ def configure(conf):
         else:
             raise Errors.WafError('Unsupported platform %s' % sys.platform)
 
-        pluginVersion = '114'
-        csmVersion = '301'
+        pluginVersion = '115'
+        if Options.options.csm_version == '3.0.3':
+            csmVersion = '303'
+        else:
+            csmVersion = '301'
         conf.env['SIX_CSM_PLATFORM_NAME'] = 'SIX_SAR_RADIANT-SOLUTIONS_' + pluginVersion + '_' + platformName + '_CSM' + csmVersion
 
 def build(bld):
@@ -63,21 +69,21 @@ def build(bld):
         else:
             modArgs['INCLUDES'] = ['include', bld.env['INCLUDES_CSM']]
         bld.plugin(**modArgs)
-    
+
         bld.program_helper(module_deps='six.sicd',
                                source='tests/test_sicd_csm.cpp',
                                use='CSMAPI',
                                name='test_sicd_csm')
-    
+
         bld.program_helper(module_deps='scene six.sidd',
                                source='tests/test_sidd_csm.cpp',
                                use='CSMAPI',
                                name='test_sidd_csm')
-    
-    
+
+
         # TODO: It seems like instead of this, I should be able to set
         #       modArgs['TARGETNAME'] to 'six-csm' and have that just be the
-        #       name of the target.  This works fine when building, but 
+        #       name of the target.  This works fine when building, but
         #       something about how 'waf list' and 'waf msvs' operate makes this
         #       not work right.
         bld(features='add_targets', target='six-csm',

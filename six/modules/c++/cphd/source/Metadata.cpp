@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,24 +19,30 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <cphd/Metadata.h>
 
 namespace cphd
 {
+
+Metadata::Metadata()
+{
+  // Default version defined in cphd::FileHeader
+  mVersion = FileHeader::DEFAULT_VERSION;
+}
+
 size_t Metadata::getNumChannels() const
 {
     return data.getNumChannels();
 }
 
-size_t Metadata::getNumVectors(size_t chan) const
+size_t Metadata::getNumVectors(size_t channel) const
 {
-    return data.getNumVectors(chan);
+    return data.getNumVectors(channel);
 }
 
-size_t Metadata::getNumSamples(size_t chan) const
+size_t Metadata::getNumSamples(size_t channel) const
 {
-    return data.getNumSamples(chan);
+    return data.getNumSamples(channel);
 }
 
 size_t Metadata::getNumBytesPerSample() const
@@ -44,58 +50,88 @@ size_t Metadata::getNumBytesPerSample() const
     return data.getNumBytesPerSample();
 }
 
-std::string Metadata::getDomainTypeString() const
+size_t Metadata::getCompressedSignalSize(size_t channel) const
 {
-    return global.domainType.toString();
+    return data.getCompressedSignalSize(channel);
 }
 
-cphd::DomainType Metadata::getDomainType() const
+bool Metadata::isCompressed() const
 {
-    return global.domainType;
+    return data.isCompressed();
+}
+
+DomainType Metadata::getDomainType() const
+{
+    return global.getDomainType();
+}
+
+std::string Metadata::getVersion() const
+{
+    return mVersion;
+}
+void Metadata::setVersion(const std::string& version)
+{
+    mVersion = version;
 }
 
 bool Metadata::operator==(const Metadata& other) const
 {
-    if (collectionInformation != other.collectionInformation ||
-        data != other.data ||
-        global != other.global ||
-        channel != other.channel ||
-        srp != other.srp ||
-        vectorParameters != other.vectorParameters)
-    {
-        return false;
-    }
-
-    if (antenna.get() && other.antenna.get())
-    {
-        if (*antenna != *other.antenna)
-        {
-            return false;
-        }
-    }
-    else if (antenna.get() || other.antenna.get())
-    {
-        return false;
-    }
-    return true;
+    return collectionID == other.collectionID &&
+           global == other.global &&
+           sceneCoordinates == other.sceneCoordinates &&
+           data == other.data &&
+           channel == other.channel &&
+           pvp == other.pvp &&
+           dwell == other.dwell &&
+           referenceGeometry == other.referenceGeometry &&
+           supportArray == other.supportArray &&
+           antenna == other.antenna &&
+           txRcv == other.txRcv &&
+           errorParameters == other.errorParameters &&
+           productInfo == other.productInfo &&
+           geoInfo == other.geoInfo &&
+           matchInfo == other.matchInfo;
 }
 
 std::ostream& operator<< (std::ostream& os, const Metadata& d)
 {
-    os << "Metadata::" << "\n"
-       <<  "  " << cphd::toString(d.collectionInformation) << "\n"
-       <<  "  " << d.data << "\n"
-       <<  "  " << d.global << "\n"
-       <<  "  " << d.channel << "\n"
-       <<  "  " << d.srp << "\n";
-
+    os << "Metadata:: \n"
+        << d.collectionID << "\n"
+        << d.global << "\n"
+        << d.sceneCoordinates << "\n"
+        << d.data << "\n"
+        << d.channel << "\n"
+        << d.pvp << "\n"
+        << d.dwell << "\n"
+        << d.referenceGeometry << "\n";
+    if (d.supportArray.get())
+    {
+        os << *(d.supportArray) << "\n";
+    }
     if (d.antenna.get())
     {
-        os << "  " << *d.antenna << "\n";
+        os << *(d.antenna) << "\n";
     }
-
-    os <<  "  " << d.vectorParameters << "\n";
-
+    if (d.txRcv.get())
+    {
+        os << *(d.txRcv) << "\n";
+    }
+    if (d.errorParameters.get())
+    {
+        os << *(d.errorParameters) << "\n";
+    }
+    if (d.productInfo.get())
+    {
+        os << *(d.productInfo) << "\n";
+    }
+    for (size_t ii = 0; ii < d.geoInfo.size(); ++ii)
+    {
+        os << d.geoInfo[ii] << "\n";
+    }
+    if (d.matchInfo.get())
+    {
+        os << *(d.matchInfo) << "\n";
+    }
     return os;
 }
 }

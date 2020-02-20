@@ -1,6 +1,6 @@
 NAME            = 'cphd'
-MAINTAINER      = 'clyde.stanfield@mdaus.com'
-MODULE_DEPS     = 'six.sicd'
+MAINTAINER      = 'vamsi.yadav@mdaus.com'
+MODULE_DEPS     = 'six six.sicd'
 TEST_DEPS       = 'cli'
 
 options = configure = distclean = lambda p: None
@@ -9,3 +9,9 @@ def build(bld):
     modArgs = globals()
     modArgs['VERSION'] = bld.env['SIX_VERSION']
     bld.module(**modArgs)
+
+    # install the schemas
+    lib = bld.get_tgen_by_name('cphd-c++')
+    lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
+                                  dir=bld.path.make_node('conf/schema'),
+                                  install_path='${PREFIX}/conf/schema/six/'))

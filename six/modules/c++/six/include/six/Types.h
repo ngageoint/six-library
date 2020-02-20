@@ -47,6 +47,7 @@ DECLARE_EXCEPTION(DESValidation)
 
 //! Vector types
 typedef math::linear::VectorN<3> Vector3;
+typedef math::linear::VectorN<2> Vector2;
 
 //! Date type
 typedef nitf::DateTime DateTime;

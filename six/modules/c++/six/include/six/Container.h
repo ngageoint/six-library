@@ -49,9 +49,9 @@ namespace six
 class Container
 {
 public:
-    /*! 
+    /*!
      *  The data class is either COMPLEX or DERIVED
-     *  This just tells us what kind of container.  Note that, in 
+     *  This just tells us what kind of container.  Note that, in
      *  the case of DERIVED, one or more Data*'s DataType will
      *  be DERIVED.
      *
@@ -147,6 +147,20 @@ public:
      */
     void removeData(const Data* data);
 
+    /*!
+     * Add segment source for a DES other than the
+     * SICD/SIDD DES.
+     * \param source SegmentSource to add
+     */
+    void addDESSource(const nitf::SegmentSource& source);
+
+    /*!
+     * Get all added DES sources for DES other than the
+     * SICD/SIDD DES.
+     * \return The DES sources
+     */
+    const std::vector<nitf::SegmentSource>& getDESSources() const;
+
 protected:
     typedef std::pair<mem::ScopedCloneablePtr<Data>,
     		          mem::ScopedCopyablePtr<Legend> > DataPair;
@@ -155,6 +169,7 @@ protected:
 
     DataType mDataType;
     DataVec mData;
+    std::vector<nitf::SegmentSource> mDESSources;
 
 private:
     static

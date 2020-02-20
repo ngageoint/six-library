@@ -49,7 +49,7 @@ void SegmentReader::read
 (
     NITF_DATA *buffer,           /*!< Buffer to hold data */
     size_t count                /*!< Amount of data to return */
-) throw (nitf::NITFException)
+)
 {
     if (!nitf_SegmentReader_read(getNativeOrThrow(), buffer, count, &error))
         throw nitf::NITFException(&error);
@@ -60,7 +60,7 @@ nitf::Off SegmentReader::seek
 (
     nitf::Off offset,                 /*!< The seek offset */
     int whence                   /*!< Starting at (SEEK_SET, SEEK_CUR, SEEK_END)*/
-) throw (nitf::NITFException)
+)
 {
     offset = nitf_SegmentReader_seek(getNativeOrThrow(), offset, whence, &error);
     if (offset < 0)

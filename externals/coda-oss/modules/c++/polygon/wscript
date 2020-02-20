@@ -1,0 +1,10 @@
+NAME            = 'polygon'
+MAINTAINER      = 'jeffrey.randolph@mdaus.com adam.sylvester@mdaus.com timothy.handy@radiantsolutions.com'
+VERSION         = '1.0'
+MODULE_DEPS     = 'sys mem types math except'
+TEST_DEPS       = 'sio.lite'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())

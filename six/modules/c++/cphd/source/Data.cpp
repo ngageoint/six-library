@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,71 +19,219 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#include <six/Init.h>
-#include <cphd/Utilities.h>
+#include <map>
 #include <cphd/Data.h>
+#include <six/Init.h>
 
 namespace cphd
 {
-ArraySize::ArraySize(size_t v, size_t s) :
-    numVectors(v),
-    numSamples(s)
-{
-}
-
-std::ostream& operator<< (std::ostream& os, const ArraySize& d)
-{
-    os << "ArraySize::\n"
-       << "  NumVectors: " << d.numVectors << "\n"
-       << "  NumSamples: " << d.numSamples << "\n";
-     return os;
-}
 
 Data::Data() :
-    sampleType(SampleType::NOT_SET),
-    numCPHDChannels(six::Init::undefined<size_t>()),
-    numBytesVBP(six::Init::undefined<size_t>())
+    numBytesPVP(six::Init::undefined<size_t>())
 {
 }
 
-size_t Data::getNumVectors(size_t chan) const
+bool Data::isCompressed() const
 {
-    if (chan >= numCPHDChannels)
+    if (six::Init::isUndefined<std::string>(signalCompressionID))
     {
-        return 0;
+        return false;
+    }
+    return true;
+}
+
+Data::Channel::Channel() :
+    numVectors(0),
+    numSamples(0),
+    signalArrayByteOffset(0),
+    pvpArrayByteOffset(0),
+    compressedSignalSize(six::Init::undefined<size_t>())
+{
+}
+
+Data::Channel::Channel(size_t vectors, size_t samples) :
+    numVectors(vectors),
+    numSamples(samples),
+    signalArrayByteOffset(0),
+    pvpArrayByteOffset(0),
+    compressedSignalSize(six::Init::undefined<size_t>())
+{
+}
+
+Data::Channel::Channel(size_t vectors, size_t samples,
+        size_t signalByteOffset, size_t pvpByteOffset,
+        size_t compressedSize) :
+    numVectors(vectors),
+    numSamples(samples),
+    signalArrayByteOffset(signalByteOffset),
+    pvpArrayByteOffset(pvpByteOffset),
+    compressedSignalSize(compressedSize)
+{
+}
+
+Data::SupportArray::SupportArray() :
+    identifier(six::Init::undefined<std::string>()),
+    numRows(0),
+    numCols(0),
+    bytesPerElement(0),
+    arrayByteOffset(0)
+{
+}
+
+Data::SupportArray::SupportArray(const std::string& id, size_t rows, size_t cols,
+                   size_t numBytes, size_t offset) :
+    identifier(id),
+    numRows(rows),
+    numCols(cols),
+    bytesPerElement(numBytes),
+    arrayByteOffset(offset)
+{
+}
+
+Data::SupportArray Data::getSupportArrayById(const std::string& id) const
+{
+    if(supportArrayMap.count(id) != 1)
+    {
+        std::ostringstream ostr;
+        ostr << "ID: " << id << " is not a valid identifier";
+        throw except::Exception(ostr.str());
+    }
+    return supportArrayMap.find(id)->second;
+}
+
+void Data::setSupportArray(const std::string& id, size_t numRows,
+                           size_t numCols, size_t numBytes,
+                           sys::Off_T offset)
+{
+    if (supportArrayMap.count(id))
+    {
+        std::ostringstream ostr;
+        ostr << "Identifier " << id << " is not unique";
+        throw except::Exception(ostr.str());
     }
 
-    return arraySize.at(chan).numVectors;
-}
-
-size_t Data::getNumSamples(size_t chan) const
-{
-    if (chan >= numCPHDChannels)
+    if (mOffsetMap.count(offset))
     {
-        return 0;
+        std::ostringstream ostr;
+        ostr << "Offset " << offset << " is not unique";
+        throw except::Exception(ostr.str());
     }
 
-    return arraySize.at(chan).numSamples;
+    // Add to ordered map
+    mOffsetMap.insert(std::pair<sys::Off_T,size_t>(offset,numBytes));
+
+    // Validate offset and size
+    if (mOffsetMap.find(offset) != mOffsetMap.begin())
+    {
+        if (offset < (sys::Off_T)((--mOffsetMap.find(offset))->first + (--mOffsetMap.find(offset))->second))
+        {
+            std::ostringstream ostr;
+            ostr << "Invalid size or offset of support array given for id: " << id;
+            throw except::Exception(ostr.str());
+        }
+    }
+    if (mOffsetMap.upper_bound(offset) != mOffsetMap.end())
+    {
+        if ((sys::Off_T)(offset + (numRows * numCols * numBytes)) > mOffsetMap.upper_bound(offset)->first)
+        {
+            std::ostringstream ostr;
+            ostr << "Invalid size or offset of support array given for id: " << id;
+            throw except::Exception(ostr.str());
+        }
+    }
+
+    // Add to supportArrayMap after validation
+    std::pair<std::string,Data::SupportArray> entry(id,Data::SupportArray(id, numRows, numCols, numBytes, offset));
+    supportArrayMap.insert(entry);
 }
 
-size_t Data::getNumBytesPerSample() const
+//! Getter functions
+size_t Data::getNumVectors(size_t channel) const
 {
-    return cphd::getNumBytesPerSample(sampleType);
+    verifyChannelInRange(channel);
+    return channels[channel].getNumVectors();
+}
+size_t Data::getNumSamples(size_t channel) const
+{
+    verifyChannelInRange(channel);
+    return channels[channel].getNumSamples();
+}
+size_t Data::getCompressedSignalSize(size_t channel) const
+{
+    verifyChannelInRange(channel);
+    return channels[channel].getCompressedSignalSize();
+}
+size_t Data::getSignalSize(size_t channel) const
+{
+    verifyChannelInRange(channel);
+    return getNumVectors(channel) *
+           getNumSamples(channel) *
+           getNumBytesPerSample();
+}
+
+size_t Data::getAllSupportSize() const
+{
+    size_t size = 0;
+    for (auto it = supportArrayMap.begin(); it != supportArrayMap.end(); ++it)
+    {
+        size += getSupportArrayById(it->first).getSize();
+    }
+    return size;
+}
+
+/*
+ * Check if channel is in range
+ */
+void Data::verifyChannelInRange(size_t channel) const
+{
+    if (channel >= channels.size())
+    {
+    std::ostringstream ostr;
+    ostr << "Channel provided is " << channel << "\n"
+            << "while only " << channels.size()
+            << " channels exist \n";
+    throw except::Exception(ostr.str());
+    }
+}
+
+
+std::ostream& operator<< (std::ostream& os, const Data::SupportArray& s)
+{
+    os << "    Identifier        : " << s.identifier << "\n"
+        << "    NumRows        : " << s.numRows << "\n"
+        << "    NumCols        : " << s.numCols << "\n"
+        << "    BytesPerElement : " << s.bytesPerElement << "\n"
+        << "    ArrayByteOffset : " << s.arrayByteOffset << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const Data::Channel& c)
+{
+    os << "  Channel:: \n"
+        << "    Identifier     : " << c.identifier << "\n"
+        << "    NumVectors     : " << c.numVectors << "\n"
+        << "    NumSamples     : " << c.numSamples << "\n"
+        << "    SignalArrayByteOffset : " << c.signalArrayByteOffset << "\n"
+        << "    PVPArrayByteOffset : " << c.pvpArrayByteOffset << "\n"
+        << "    CompressedSignalSize : " << c.compressedSignalSize << "\n";
+    return os;
 }
 
 std::ostream& operator<< (std::ostream& os, const Data& d)
 {
-    os << "Data::" << "\n"
-       << "  SampleType     : " << d.sampleType.toString() << "\n"
-       << "  NumCPHDChannels: " << d.numCPHDChannels << "\n"
-       << "  NumBytesVBP    : " << d.numBytesVBP << "\n";
-
-    for (size_t ii = 0; ii < d.arraySize.size(); ++ii)
+    os << "Data:: \n"
+        << "  SignalArrayFormat : " << d.signalArrayFormat << "\n"
+        << "  NumBytesPVP      : " << d.numBytesPVP << "\n";
+    for (size_t ii = 0; ii < d.channels.size(); ++ii)
     {
-        os << "  [" << (ii) << "] " << d.arraySize[ii] << "\n";
+        os << d.channels[ii] << "\n";
     }
-
+    os << "  SignalCompressionID : " << d.signalCompressionID << "\n";
+    for (auto it = d.supportArrayMap.begin(); it != d.supportArrayMap.end(); ++it)
+    {
+        os << "  SupportArrays:: \n"
+            << d.getSupportArrayById(it->first) << "\n";
+    }
     return os;
 }
 }

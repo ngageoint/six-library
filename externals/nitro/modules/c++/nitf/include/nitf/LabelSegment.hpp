@@ -53,14 +53,14 @@ public:
     LabelSegment(nitf_LabelSegment * x);
 
     //! Constructor
-    LabelSegment() throw(nitf::NITFException);
+    LabelSegment();
 
     LabelSegment(NITF_DATA * x);
 
     LabelSegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::LabelSegment clone() throw(nitf::NITFException);
+    nitf::LabelSegment clone();
 
     ~LabelSegment();
 

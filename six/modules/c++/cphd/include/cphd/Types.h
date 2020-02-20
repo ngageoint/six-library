@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,17 +19,20 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #ifndef __CPHD_TYPES_H__
 #define __CPHD_TYPES_H__
 
 #include <six/Types.h>
 #include <six/Enums.h>
-#include <six/sicd/CollectionInformation.h>
+#include <six/CollectionInformation.h>
+#include <six/MatchInformation.h>
+#include <six/sicd/GeoData.h>
 
 namespace cphd
 {
 // Use the same types that SIX uses
+
+typedef six::Vector2 Vector2;
 
 typedef six::Vector3 Vector3;
 
@@ -52,7 +55,7 @@ typedef six::LatLonCorners LatLonCorners;
 typedef six::LatLonAltCorners LatLonAltCorners;
 
 typedef six::FFTSign FFTSign;
- 
+
 typedef six::RadarModeType RadarModeType;
 
 typedef six::CollectType CollectType;
@@ -61,7 +64,12 @@ typedef six::DataType DataType;
 
 typedef six::BooleanType BooleanType;
 
-typedef six::sicd::CollectionInformation CollectionInformation;
+typedef six::CollectionInformation CollectionInformation;
+
+typedef six::sicd::GeoInfo GeoInfo;
+
+typedef six::MatchInformation MatchInformation;
 }
+
 
 #endif

@@ -229,6 +229,109 @@ TEST_CASE(test2DPolyfitLarge)
 
     TEST_ASSERT_ALMOST_EQ(meanResidualError, 0.0);
 }
+
+TEST_CASE(testVectorValuedOrderChange)
+{
+    // When fitting a vector-valued polynomial, math::poly::fit()
+    // will perform 3 independent fits, and then assemble the coefficients
+    // into vector-valued coefficients for the resulting polynomial.
+    // During each independent fit, however, the order may end up being reduced
+    // if the leading coefficient (and any sub-leading coefficients) are
+    // identically 0. As a result, care must be taken when assembling
+    // the scalar coefficients into a vector that zeros are added when
+    // we exceed the order of one of the reduced polynomials.
+
+    std::vector<double> indep(3);
+    indep[0] = 0.0; indep[1] = 1.0; indep[2] = 2.0;
+    std::vector<double> compZeroed(3);
+    compZeroed[0] = 0.0; compZeroed[1] = 0.0; compZeroed[2] = 0.0;
+    std::vector<double> comp1(3);
+    comp1[0] = 1.0; comp1[1] = 2.0; comp1[2] = 4.0;
+    std::vector<double> comp2(3);
+    comp2[0] = 0.1; comp2[1] = 0.9; comp2[2] = 0.1;
+
+    // First, test that we're actually reducing the order of some of the fits
+    const OneD<double> polyZeroed = fit(indep, compZeroed, 2);
+    const OneD<double> poly1 = fit(indep, comp1, 2);
+    const OneD<double> poly2 = fit(indep, comp2, 2);
+
+    TEST_ASSERT_EQ(polyZeroed.order(), 0);
+    TEST_ASSERT_EQ(poly1.order(), 2);
+    TEST_ASSERT_EQ(poly2.order(), 2);
+
+    // Now, attempt to fit the vector-vector version.
+    // We'll check reshuffle the zero component to make sure we caught all
+    // component order reductions.
+
+    // Zeroed values in the X component
+    {
+        const OneD<VectorN<3, double> > poly =
+                fit(indep, compZeroed, comp1, comp2, 2);
+
+        TEST_ASSERT_EQ(poly.order(), 2);
+
+        // X-component
+        TEST_ASSERT_ALMOST_EQ(poly[0][0], 0.0);
+        TEST_ASSERT_ALMOST_EQ(poly[1][0], 0.0);
+        TEST_ASSERT_ALMOST_EQ(poly[2][0], 0.0);
+
+        // Y-component
+        TEST_ASSERT_ALMOST_EQ(poly[0][1], 1.0);
+        TEST_ASSERT_ALMOST_EQ(poly[1][1], 0.5);
+        TEST_ASSERT_ALMOST_EQ(poly[2][1], 0.5);
+
+        // Z-component
+        TEST_ASSERT_ALMOST_EQ(poly[0][2], 0.1);
+        TEST_ASSERT_ALMOST_EQ(poly[1][2], 1.6);
+        TEST_ASSERT_ALMOST_EQ(poly[2][2], -0.8);
+    }
+
+    // Zeroed values in the Y component
+    {
+        const OneD<VectorN<3, double> > poly =
+                fit(indep, comp1, compZeroed, comp2, 2);
+
+        TEST_ASSERT_EQ(poly.order(), 2);
+
+        // X-component
+        TEST_ASSERT_ALMOST_EQ(poly[0][0], 1.0);
+        TEST_ASSERT_ALMOST_EQ(poly[1][0], 0.5);
+        TEST_ASSERT_ALMOST_EQ(poly[2][0], 0.5);
+
+        // Y-component
+        TEST_ASSERT_ALMOST_EQ(poly[0][1], 0.0);
+        TEST_ASSERT_ALMOST_EQ(poly[1][1], 0.0);
+        TEST_ASSERT_ALMOST_EQ(poly[2][1], 0.0);
+
+        // Z-component
+        TEST_ASSERT_ALMOST_EQ(poly[0][2], 0.1);
+        TEST_ASSERT_ALMOST_EQ(poly[1][2], 1.6);
+        TEST_ASSERT_ALMOST_EQ(poly[2][2], -0.8);
+    }
+
+    // Zeroed values in the Z component
+    {
+        const OneD<VectorN<3, double> > poly =
+                fit(indep, comp1, comp2, compZeroed, 2);
+
+        TEST_ASSERT_EQ(poly.order(), 2);
+
+        // X-component
+        TEST_ASSERT_ALMOST_EQ(poly[0][0], 1.0);
+        TEST_ASSERT_ALMOST_EQ(poly[1][0], 0.5);
+        TEST_ASSERT_ALMOST_EQ(poly[2][0], 0.5);
+
+        // Y-component
+        TEST_ASSERT_ALMOST_EQ(poly[0][1], 0.1);
+        TEST_ASSERT_ALMOST_EQ(poly[1][1], 1.6);
+        TEST_ASSERT_ALMOST_EQ(poly[2][1], -0.8);
+
+        // Z-component
+        TEST_ASSERT_ALMOST_EQ(poly[0][2], 0.0);
+        TEST_ASSERT_ALMOST_EQ(poly[1][2], 0.0);
+        TEST_ASSERT_ALMOST_EQ(poly[2][2], 0.0);
+    }
+}
 }
 
 int main(int, char**)
@@ -237,4 +340,6 @@ int main(int, char**)
     TEST_CHECK(test1DPolyfitLarge);
     TEST_CHECK(test2DPolyfit);
     TEST_CHECK(test2DPolyfitLarge);
+    TEST_CHECK(testVectorValuedOrderChange);
+    return 0;
 }

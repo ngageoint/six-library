@@ -23,8 +23,11 @@
 #ifndef __IO_NULL_STREAMS_H__
 #define __IO_NULL_STREAMS_H__
 
-#include "io/InputStream.h"
-#include "io/OutputStream.h"
+#include <algorithm>
+
+#include <io/InputStream.h>
+#include <io/OutputStream.h>
+#include <io/SeekableStreams.h>
 
 namespace io
 {
@@ -34,10 +37,6 @@ public:
     NullInputStream(sys::SSize_T size) :
         mSize(size),
         mAvailable(size)
-    {
-    }
-
-    virtual ~NullInputStream()
     {
     }
 
@@ -98,9 +97,6 @@ public:
     NullOutputStream()
     {
     }
-    virtual ~NullOutputStream()
-    {
-    }
 
     void write(sys::byte )
     {
@@ -121,6 +117,61 @@ public:
     virtual void flush()
     {
     }
+};
+
+/*!
+ * \class SeekableNullOutputStream
+ * \brief NullOutputStream that is Seekable (unfortunately, due to how the
+ * class hierarchy is set up, you can't just inherit from NullOutputStream and
+ * Seekable to get this
+ */
+class SeekableNullOutputStream : public io::SeekableOutputStream
+{
+public:
+    SeekableNullOutputStream() :
+        mOffset(0),
+        mMaxOffset(0)
+    {
+    }
+
+    virtual void write(const void*, size_t numBytes)
+    {
+        mOffset += numBytes;
+        mMaxOffset = std::max(mOffset, mMaxOffset);
+    }
+
+    virtual void flush()
+    {
+    }
+
+    virtual sys::Off_T seek(sys::Off_T offset, Whence whence)
+    {
+        switch (whence)
+        {
+        case END:
+            mOffset = mMaxOffset + offset;
+            break;
+        case START:
+            mOffset = offset;
+            break;
+        default:
+            mOffset += offset;
+            break;
+        }
+
+        mMaxOffset = std::max(mOffset, mMaxOffset);
+
+        return mOffset;
+    }
+
+    virtual sys::Off_T tell()
+    {
+        return mOffset;
+    }
+
+private:
+    sys::Off_T mOffset;
+    sys::Off_T mMaxOffset;
 };
 }
 

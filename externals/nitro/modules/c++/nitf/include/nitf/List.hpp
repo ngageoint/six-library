@@ -64,8 +64,7 @@ public:
      *  \param next  The next node
      *  \param data  The data to insert into the list
      */
-    ListNode(nitf::ListNode & prev, nitf::ListNode & next, NITF_DATA* data)
-        throw(nitf::NITFException);
+    ListNode(nitf::ListNode & prev, nitf::ListNode & next, NITF_DATA* data);
 
     //! Destructor
     ~ListNode() {}
@@ -194,10 +193,10 @@ public:
      *  need a copy, make one up front.
      *  \param data  The data to push to the front
      */
-    void pushFront(NITF_DATA* data) throw(nitf::NITFException);
+    void pushFront(NITF_DATA* data);
 
     template <typename  T>
-    void pushFront(nitf::Object<T> object) throw(nitf::NITFException)
+    void pushFront(nitf::Object<T> object)
     {
         pushFront((NITF_DATA*)object.getNativeOrThrow());
     }
@@ -206,10 +205,10 @@ public:
      *  Push something onto the back of our chain
      *  \param data  The data to push onto the back
      */
-    void pushBack(NITF_DATA* data) throw(nitf::NITFException);
+    void pushBack(NITF_DATA* data);
 
     template <typename  T>
-    void pushBack(T object) throw(nitf::NITFException)
+    void pushBack(T object)
     {
         pushBack((NITF_DATA*)object.getNativeOrThrow());
     }
@@ -231,10 +230,10 @@ public:
     NITF_DATA* popBack();
 
     //! Constructor
-    List() throw(nitf::NITFException);
+    List();
 
     //! Clone
-    nitf::List clone(NITF_DATA_ITEM_CLONE cloner) throw(nitf::NITFException);
+    nitf::List clone(NITF_DATA_ITEM_CLONE cloner);
 
     //! Destructor
     ~List();
@@ -265,10 +264,10 @@ public:
      *  \param iter  The iterator to insert before
      *  \param data  This is a pointer assignment, not a data copy
      */
-    void insert(nitf::ListIterator & iter, NITF_DATA* data) throw(nitf::NITFException);
+    void insert(nitf::ListIterator & iter, NITF_DATA* data);
 
     template <typename T>
-    void insert(nitf::ListIterator & iter, nitf::Object<T> object) throw(nitf::NITFException)
+    void insert(nitf::ListIterator & iter, nitf::Object<T> object)
     {
         insert(iter, (NITF_DATA*)object.getNativeOrThrow());
     }
@@ -294,7 +293,7 @@ public:
     size_t getSize();
 
     //! Returns the data at the given index
-    NITF_DATA* operator[] (size_t index) throw(nitf::NITFException);
+    NITF_DATA* operator[] (size_t index);
 
 private:
     nitf_Error error;

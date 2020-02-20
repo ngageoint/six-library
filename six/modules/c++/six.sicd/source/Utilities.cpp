@@ -19,16 +19,21 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <map>
 
+#include <sys/Conf.h>
+#include <except/Exception.h>
+#include <mem/ScopedAlignedArray.h>
+#include <types/RowCol.h>
+#include <math/poly/Fit.h>
+#include <math/Utilities.h>
 #include <io/StringStream.h>
+#include <str/Manip.h>
 #include <six/Utilities.h>
 #include <six/NITFReadControl.h>
-#include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/SICDMesh.h>
 #include <six/sicd/Utilities.h>
-
-#include <math/Utilities.h>
-#include <types/RowCol.h>
 
 namespace
 {
@@ -105,6 +110,81 @@ void readAndConvertSICD(six::NITFReadControl& reader,
             bufferPtr[index] = tempBuffer[index];
         }
     }
+}
+
+six::Poly2D getXYtoRowColTransform(double center,
+                                   double sampleSpacing,
+                                   bool rowTransform)
+{
+    const double coeffs[2] = {-sampleSpacing * center, sampleSpacing};
+    const size_t orderX = rowTransform ? 1 : 0;
+    const size_t orderY = rowTransform ? 0 : 1;
+    return six::Poly2D(orderX, orderY, coeffs);
+}
+
+std::map<std::string, size_t> getAdditionalDesMap(six::NITFReadControl& reader)
+{
+    std::map<std::string, size_t> nameToDesIndex;
+    nitf::List des = reader.getRecord().getDataExtensions();
+    nitf::ListIterator desIter = des.begin();
+
+    for (size_t ii = 0; desIter != des.end(); ++desIter, ++ii)
+    {
+        // Skip the first DES. The SICD specification document
+        // indicates that the first DES of the NITF 2.1 product is to
+        // be populated by the XML metadata.
+        if (ii == 0)
+        {
+            continue;
+        }
+
+        nitf::DESegment segment =
+            static_cast<nitf::DESegment>(*desIter);
+        nitf::DESubheader subheader = segment.getSubheader();
+        std::string typeID = subheader.getTypeID().toString();
+        str::trim(typeID);
+        nameToDesIndex[typeID] = ii;
+    }
+    return nameToDesIndex;
+}
+
+void getDesBuffer(six::NITFReadControl& reader,
+                  size_t desIndex,
+                  mem::ScopedAlignedArray<sys::byte>& buffer)
+{
+    nitf::List des = reader.getRecord().getDataExtensions();
+
+    if (desIndex >= des.getSize())
+    {
+        throw except::Exception(Ctxt("DES index out of range."));
+    }
+
+    // Pull out the DE segment and its reader
+    nitf::DESegment segment =
+        static_cast<nitf::DESegment>(des[desIndex]);
+    nitf::DESubheader subheader = segment.getSubheader();
+    nitf::SegmentReader deReader = reader.getReader().newDEReader(desIndex);
+
+    // Read the DE segment buffer
+    const size_t bufferSize = subheader.getDataLength();
+    buffer.reset(bufferSize);
+    deReader.read(buffer.get(), bufferSize);
+}
+
+template <typename MeshTypeT>
+std::auto_ptr<MeshTypeT> extractMesh(const std::string& meshID,
+                                     size_t desIndex,
+                                     six::NITFReadControl& reader)
+{
+    // Extract the mesh
+    std::auto_ptr<MeshTypeT> mesh(new MeshTypeT(meshID));
+    mem::ScopedAlignedArray<sys::byte> buffer;
+    getDesBuffer(reader, desIndex, buffer);
+
+    const sys::byte* bufferData = buffer.get();
+    mesh->deserialize(bufferData);
+
+    return mesh;
 }
 }
 
@@ -201,14 +281,15 @@ Utilities::getProjectionModel(const ComplexData* data,
     }
 }
 
-std::auto_ptr<scene::ProjectionPolynomialFitter>
-Utilities::getPolynomialFitter(const ComplexData& complexData)
+void Utilities::getModelComponents(
+    const ComplexData& complexData,
+    std::auto_ptr<scene::SceneGeometry>& geometry,
+    std::auto_ptr<scene::ProjectionModel>& projectionModel,
+    AreaPlane& areaPlane)
 {
-    std::auto_ptr<scene::SceneGeometry> geometry(
-            getSceneGeometry(&complexData));
-    std::auto_ptr<scene::ProjectionModel> projectionModel(
-            getProjectionModel(&complexData, geometry.get()));
-    AreaPlane areaPlane;
+    geometry.reset(getSceneGeometry(&complexData));
+    projectionModel.reset(getProjectionModel(&complexData, geometry.get()));
+
     if (AreaPlaneUtility::hasAreaPlane(complexData))
     {
         areaPlane = *complexData.radarCollection->area->plane;
@@ -217,6 +298,18 @@ Utilities::getPolynomialFitter(const ComplexData& complexData)
     {
         AreaPlaneUtility::deriveAreaPlane(complexData, areaPlane);
     }
+}
+
+std::auto_ptr<scene::ProjectionPolynomialFitter>
+Utilities::getPolynomialFitter(const ComplexData& complexData,
+                               size_t numPoints1D,
+                               bool sampleWithinValidDataPolygon)
+{
+    std::auto_ptr<scene::SceneGeometry> geometry;
+    std::auto_ptr<scene::ProjectionModel> projectionModel;
+    AreaPlane areaPlane;
+
+    Utilities::getModelComponents(complexData, geometry, projectionModel, areaPlane);
 
     const RowColDouble sampleSpacing(areaPlane.xDirection->spacing,
             areaPlane.yDirection->spacing);
@@ -230,12 +323,35 @@ Utilities::getPolynomialFitter(const ComplexData& complexData)
     types::RowCol<size_t> offset;
     types::RowCol<size_t> extent;
     complexData.getOutputPlaneOffsetAndExtent(areaPlane, offset, extent);
+
+    if (!sampleWithinValidDataPolygon)
+    {
+        return std::auto_ptr<scene::ProjectionPolynomialFitter>(
+                new scene::ProjectionPolynomialFitter(
+                    *projectionModel,
+                    ecefTransform,
+                    offset,
+                    extent,
+                    numPoints1D));
+    }
+
+    // Get the size of the output plane image.
+    types::RowCol<size_t> fullExtent(areaPlane.xDirection->elements,
+                                     areaPlane.yDirection->elements);
+
+    // Get the valid data polygon in the output plane.
+    std::vector<types::RowCol<double> > polygon;
+    Utilities::projectValidDataPolygonToOutputPlane(complexData, polygon);
+
     return std::auto_ptr<scene::ProjectionPolynomialFitter>(
             new scene::ProjectionPolynomialFitter(
                 *projectionModel,
                 ecefTransform,
+                fullExtent,
                 offset,
-                extent));
+                extent,
+                polygon,
+                numPoints1D));
 }
 
 void Utilities::getValidDataPolygon(
@@ -369,6 +485,42 @@ void Utilities::readSicd(const std::string& sicdPathname,
 
     complexData = getComplexData(reader);
     getWidebandData(reader, *(complexData.get()), widebandData);
+
+    // This tells the reader that it doesn't
+    // own an XMLControlRegistry
+    reader.setXMLControlRegistry(NULL);
+}
+
+void Utilities::readSicd(const std::string& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         size_t orderX,
+                         size_t orderY,
+                         std::auto_ptr<ComplexData>& complexData,
+                         std::vector<std::complex<float> >& widebandData,
+                         six::Poly2D& outputRowColToSlantRow,
+                         six::Poly2D& outputRowColToSlantCol,
+                         std::auto_ptr<NoiseMesh>& noiseMesh,
+                         std::auto_ptr<ScalarMesh>& scalarMesh)
+{
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::COMPLEX,
+            new six::XMLControlCreatorT<
+            six::sicd::ComplexXMLControl>());
+
+    six::NITFReadControl reader;
+    reader.setXMLControlRegistry(&xmlRegistry);
+    reader.load(sicdPathname, schemaPaths);
+
+    complexData = getComplexData(reader);
+    getWidebandData(reader, *complexData, widebandData);
+    getProjectionPolys(reader,
+                       orderX,
+                       orderY,
+                       complexData,
+                       outputRowColToSlantRow,
+                       outputRowColToSlantCol);
+    noiseMesh = getNoiseMesh(reader);
+    scalarMesh = getScalarMesh(reader);
 
     // This tells the reader that it doesn't
     // own an XMLControlRegistry
@@ -784,6 +936,340 @@ std::auto_ptr<ComplexData> Utilities::createFakeComplexData()
     data->pfa->kaz2 = 0;
     return data;
 }
-}
+
+std::auto_ptr<NoiseMesh> Utilities::getNoiseMesh(NITFReadControl& reader)
+{
+    const std::map<std::string, size_t> nameToDesIndex =
+        getAdditionalDesMap(reader);
+
+    std::map<std::string, size_t>::const_iterator it =
+            nameToDesIndex.find(SICDMeshes::NOISE_MESH_ID);
+
+    // Slant and output plane mesh IDs must be present in the DES
+    if (it == nameToDesIndex.end())
+    {
+        throw except::Exception(Ctxt("Noise mesh information not present"));
+    }
+
+    // Extract the noise mesh
+    return extractMesh<NoiseMesh>(
+            SICDMeshes::NOISE_MESH_ID,
+            it->second,
+            reader);
 }
 
+std::auto_ptr<ScalarMesh> Utilities::getScalarMesh(NITFReadControl& reader)
+{
+    const std::map<std::string, size_t> nameToDesIndex =
+            getAdditionalDesMap(reader);
+
+    std::map<std::string, size_t>::const_iterator it =
+            nameToDesIndex.find(SICDMeshes::SCALAR_MESH_ID);
+
+    // Scalar mesh is optional - return null if the ID is not present in the DES
+    if (it == nameToDesIndex.end())
+    {
+        return std::auto_ptr<ScalarMesh>();
+    }
+
+    // Extract the scalar mesh
+    return extractMesh<ScalarMesh>(
+            SICDMeshes::SCALAR_MESH_ID,
+            it->second,
+            reader);
+}
+
+void Utilities::getProjectionPolys(NITFReadControl& reader,
+                                   size_t orderX,
+                                   size_t orderY,
+                                   std::auto_ptr<ComplexData>& complexData,
+                                   six::Poly2D& outputRowColToSlantRow,
+                                   six::Poly2D& outputRowColToSlantCol)
+{
+    const std::map<std::string, size_t> nameToDesIndex =
+        getAdditionalDesMap(reader);
+
+    // Slant and output plane mesh IDs must be present in the DES
+    if (nameToDesIndex.find(SICDMeshes::SLANT_PLANE_MESH_ID) == nameToDesIndex.end())
+    {
+        throw except::Exception(Ctxt("Slant plane mesh information not present"));
+    }
+
+    if (nameToDesIndex.find(SICDMeshes::OUTPUT_PLANE_MESH_ID) == nameToDesIndex.end())
+    {
+        throw except::Exception(Ctxt("Output plane mesh information not present"));
+    }
+
+    // SICD metadata must have the AreaPlane populated. Otherwise, the
+    // projection mesh information is nonsense.
+    if (!AreaPlaneUtility::hasAreaPlane(*complexData))
+    {
+        throw except::Exception(Ctxt(
+            "AreaPlane information must be populated to use projection mesh"));
+    }
+
+    // Extract the slant plane mesh buffer and deserialize
+    std::auto_ptr<PlanarCoordinateMesh> slantMesh =
+            extractMesh<PlanarCoordinateMesh>(
+                    SICDMeshes::SLANT_PLANE_MESH_ID,
+                    nameToDesIndex.at(SICDMeshes::SLANT_PLANE_MESH_ID),
+                    reader);
+
+    // Extract the output plane mesh buffer and deserialize
+    std::auto_ptr<PlanarCoordinateMesh> outputMesh =
+            extractMesh<PlanarCoordinateMesh>(
+                    SICDMeshes::OUTPUT_PLANE_MESH_ID,
+                    nameToDesIndex.at(SICDMeshes::OUTPUT_PLANE_MESH_ID),
+                    reader);
+
+    const types::RowCol<double> outputSampleSpacing(
+        complexData->radarCollection->area->plane->xDirection->spacing,
+        complexData->radarCollection->area->plane->yDirection->spacing);
+
+    types::RowCol<size_t> outputPlaneOffset;
+    types::RowCol<size_t> outputPlaneExtent;
+    complexData->getOutputPlaneOffsetAndExtent(
+        outputPlaneOffset, outputPlaneExtent);
+
+    const types::RowCol<double> outputCenter(
+        0.5 * (static_cast<double>(outputPlaneExtent.row) - 1.0),
+        0.5 * (static_cast<double>(outputPlaneExtent.col) - 1.0));
+
+    const types::RowCol<double> slantSampleSpacing(
+        complexData->grid->row->sampleSpacing,
+        complexData->grid->col->sampleSpacing);
+
+    const types::RowCol<double> slantCenter(
+        complexData->imageData->scpPixel.row,
+        complexData->imageData->scpPixel.col);
+
+    six::Poly2D outputXYToSlantX;
+    six::Poly2D outputXYToSlantY;
+    six::Poly2D slantXYToOutputX;
+    six::Poly2D slantXYToOutputY;
+    fitXYProjectionPolys(*outputMesh,
+                         *slantMesh,
+                         orderX,
+                         orderY,
+                         outputXYToSlantX,
+                         outputXYToSlantY,
+                         slantXYToOutputX,
+                         slantXYToOutputY);
+
+    transformXYProjectionPolys(outputXYToSlantX,
+                               outputXYToSlantY,
+                               slantSampleSpacing,
+                               outputSampleSpacing,
+                               slantCenter,
+                               outputCenter,
+                               outputRowColToSlantRow,
+                               outputRowColToSlantCol);
+}
+
+six::Poly2D Utilities::transformXYPolyToRowColPoly(
+    const six::Poly2D& polyXY,
+    const types::RowCol<double>& outSampleSpacing,
+    const types::RowCol<double>& outCenter,
+    double polyScaleFactor,
+    double polyShift)
+{
+    const six::Poly2D xToRowTransform =
+        getXYtoRowColTransform(outCenter.row, outSampleSpacing.row, true);
+
+    const six::Poly2D yToColTransform =
+        getXYtoRowColTransform(outCenter.col, outSampleSpacing.col, false);
+
+    // Transform the output to input polynomials to
+    // take row, column inputs
+    six::Poly2D polyRowCol = polyXY.transformInput(
+        xToRowTransform, yToColTransform);
+
+    polyRowCol *= polyScaleFactor;
+    polyRowCol[0][0] += polyShift;
+
+    return polyRowCol;
+}
+
+void Utilities::transformXYProjectionPolys(
+    const six::Poly2D& outputXYToSlantX,
+    const six::Poly2D& outputXYToSlantY,
+    const types::RowCol<double>& slantSampleSpacing,
+    const types::RowCol<double>& outputSampleSpacing,
+    const types::RowCol<double>& slantCenter,
+    const types::RowCol<double>& outputCenter,
+    six::Poly2D& outputRowColToSlantRow,
+    six::Poly2D& outputRowColToSlantCol)
+{
+    outputRowColToSlantRow = transformXYPolyToRowColPoly(
+        outputXYToSlantX,
+        outputSampleSpacing,
+        outputCenter,
+        1.0 / slantSampleSpacing.row,
+        slantCenter.row);
+    outputRowColToSlantCol = transformXYPolyToRowColPoly(
+        outputXYToSlantY,
+        outputSampleSpacing,
+        outputCenter,
+        1.0 / slantSampleSpacing.col,
+        slantCenter.col);
+}
+
+void Utilities::fitXYProjectionPolys(
+    const six::sicd::PlanarCoordinateMesh& outputMesh,
+    const six::sicd::PlanarCoordinateMesh& slantMesh,
+    size_t orderX,
+    size_t orderY,
+    six::Poly2D& outputXYToSlantX,
+    six::Poly2D& outputXYToSlantY,
+    six::Poly2D& slantXYToOutputX,
+    six::Poly2D& slantXYToOutputY)
+{
+    // Meshes must be the same size.
+    const types::RowCol<size_t> slantMeshDims = slantMesh.getMeshDims();
+    const types::RowCol<size_t> outputMeshDims = outputMesh.getMeshDims();
+    if (slantMeshDims.row != outputMeshDims.row ||
+        slantMeshDims.col != outputMeshDims.col)
+    {
+        throw except::Exception(Ctxt("Mesh dimensions do not match"));
+    }
+
+    const types::RowCol<size_t>& dims = slantMeshDims;
+    math::linear::Matrix2D<double> outputX(
+        dims.row, dims.col, &outputMesh.getX()[0]);
+    math::linear::Matrix2D<double> outputY(
+        dims.row, dims.col, &outputMesh.getY()[0]);
+    math::linear::Matrix2D<double> slantX(
+        dims.row, dims.col, &slantMesh.getX()[0]);
+    math::linear::Matrix2D<double> slantY(
+        dims.row, dims.col, &slantMesh.getY()[0]);
+
+    outputXYToSlantX = math::poly::fit(outputX, outputY, slantX, orderX, orderY);
+    outputXYToSlantY = math::poly::fit(outputX, outputY, slantY, orderX, orderY);
+    slantXYToOutputX = math::poly::fit(slantX, slantY, outputX, orderX, orderY);
+    slantXYToOutputY = math::poly::fit(slantX, slantY, outputY, orderX, orderY);
+}
+
+void Utilities::projectPixelsToOutputPlane(
+    const six::sicd::ComplexData& complexData,
+    const std::vector<types::RowCol<double> >& spPixels,
+    std::vector<types::RowCol<double> >& opPixels)
+{
+    std::auto_ptr<scene::SceneGeometry> geometry;
+    std::auto_ptr<scene::ProjectionModel> projectionModel;
+    AreaPlane areaPlane;
+
+    Utilities::getModelComponents(complexData, geometry, projectionModel, areaPlane);
+
+    const types::RowCol<double> opSampleSpacing(areaPlane.xDirection->spacing,
+                                               areaPlane.yDirection->spacing);
+
+    const types::RowCol<double> opCenterPixel(
+        static_cast<double>(areaPlane.xDirection->elements / 2 + 1),
+        static_cast<double>(areaPlane.yDirection->elements / 2 + 1));
+
+    const six::Vector3 opORPECEF = areaPlane.referencePoint.ecef;
+    const six::Vector3 opZ = Utilities::getGroundPlaneNormal(complexData);
+
+    // Project slant plane pixels to output plane pixels.
+    opPixels.resize(spPixels.size());
+    for (size_t ii = 0; ii < spPixels.size(); ++ii)
+    {
+        const types::RowCol<double> spXY(
+            complexData.pixelToImagePoint(spPixels[ii]));
+
+        // Convert to output plane ECEF.
+        const six::Vector3 opECEF =
+            projectionModel->imageToScene(spXY, opORPECEF, opZ);
+
+        // Convert ECEF to output distance to the output plane ORP.
+        const six::Vector3 diffECEF = opECEF - opORPECEF;
+        const double opX = diffECEF.dot(areaPlane.xDirection->unitVector);
+        const double opY = diffECEF.dot(areaPlane.yDirection->unitVector);
+
+        // Convert XY to pixels.
+        opPixels[ii] = types::RowCol<double>(
+            opX / opSampleSpacing.row + opCenterPixel.row,
+            opY / opSampleSpacing.col + opCenterPixel.col);
+    }
+
+}
+
+void Utilities::projectValidDataPolygonToOutputPlane(
+    const six::sicd::ComplexData& complexData,
+    std::vector<types::RowCol<double> >& opPixels)
+{
+    // If we don't have a valid data polygon, then the entire SICD is valid.
+    std::vector<six::RowColInt> validData = complexData.imageData->validData;
+    if (validData.size() == 0)
+    {
+        // Get dimensions of SICD.
+        sys::SSize_T numRows =
+            static_cast<sys::SSize_T>(complexData.getNumRows());
+        sys::SSize_T numCols =
+            static_cast<sys::SSize_T>(complexData.getNumCols());
+
+        validData.push_back(six::RowColInt(0, 0));
+        validData.push_back(six::RowColInt(0, numCols - 1));
+        validData.push_back(six::RowColInt(numRows - 1, numCols - 1));
+        validData.push_back(six::RowColInt(numRows - 1, 0));
+    }
+
+    // Convert to double coordinates.
+    std::vector<types::RowCol<double> > spPixels(validData.size());
+    for (size_t ii = 0; ii < validData.size(); ++ii)
+    {
+        spPixels[ii] = validData[ii];
+    }
+
+    // Project to the output plane.
+    projectPixelsToOutputPlane(complexData, spPixels, opPixels);
+}
+
+void Utilities::projectPixelsToSlantPlane(
+    const six::sicd::ComplexData& complexData,
+    const std::vector<types::RowCol<double> >& opPixels,
+    std::vector<types::RowCol<double> >& spPixels)
+{
+    std::auto_ptr<scene::SceneGeometry> geometry;
+    std::auto_ptr<scene::ProjectionModel> projectionModel;
+    AreaPlane areaPlane;
+
+    Utilities::getModelComponents(complexData, geometry, projectionModel, areaPlane);
+
+    const types::RowCol<double> opSampleSpacing(areaPlane.xDirection->spacing,
+                                               areaPlane.yDirection->spacing);
+    const scene::PlanarGridECEFTransform ecefTransform(
+            opSampleSpacing,
+            areaPlane.referencePoint.rowCol,
+            areaPlane.xDirection->unitVector,
+            areaPlane.yDirection->unitVector,
+            areaPlane.referencePoint.ecef);
+    const types::RowCol<double> spSampleSpacing(
+        complexData.grid->row->sampleSpacing,
+        complexData.grid->col->sampleSpacing);
+    const types::RowCol<double> spOrigOffset(
+        static_cast<double>(complexData.imageData->firstRow),
+        static_cast<double>(complexData.imageData->firstCol));
+    const types::RowCol<double> spSCP(complexData.imageData->scpPixel);
+    const types::RowCol<double> spOffset(
+        spSCP.row - spOrigOffset.row,
+        spSCP.col - spOrigOffset.col);
+
+    // Project output plane pixels to slant plane pixels.
+    spPixels.resize(opPixels.size());
+    for (size_t ii = 0; ii < opPixels.size(); ++ii)
+    {
+        // Convert output plane pixel to ECEF.
+        const scene::Vector3 ecef = ecefTransform.rowColToECEF(opPixels[ii]);
+
+        // Convert ECEF to slant plane distance from SCP.
+        double timeCOA = 0.0;
+        const types::RowCol<double> spXY =
+            projectionModel->sceneToImage(ecef, &timeCOA);
+
+        // Convert to slant plane pixel.
+        spPixels[ii] = (spXY / spSampleSpacing + spOffset);
+    }
+}
+}
+}

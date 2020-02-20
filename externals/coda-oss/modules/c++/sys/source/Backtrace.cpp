@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,15 +14,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
 #include <sys/Backtrace.h>
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 #include <sstream>
 
 static const size_t MAX_STACK_ENTRIES = 62;
@@ -62,7 +62,7 @@ std::string sys::getBacktrace()
 {
     void* stackBuffer[MAX_STACK_ENTRIES];
     int currentStackSize = backtrace(stackBuffer, MAX_STACK_ENTRIES);
-    BacktraceHelper stackSymbols(backtrace_symbols(stackBuffer, 
+    BacktraceHelper stackSymbols(backtrace_symbols(stackBuffer,
                                                    currentStackSize));
 
     std::stringstream ss;
@@ -83,4 +83,3 @@ std::string sys::getBacktrace()
 }
 
 #endif
-

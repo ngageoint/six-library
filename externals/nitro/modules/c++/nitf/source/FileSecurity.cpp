@@ -42,14 +42,14 @@ FileSecurity::FileSecurity(nitf_FileSecurity * x)
     getNativeOrThrow();
 }
 
-FileSecurity::FileSecurity() throw(nitf::NITFException)
+FileSecurity::FileSecurity()
 {
     setNative(nitf_FileSecurity_construct(&error));
     getNativeOrThrow();
     setManaged(false);
 }
 
-nitf::FileSecurity FileSecurity::clone() throw(nitf::NITFException)
+nitf::FileSecurity FileSecurity::clone()
 {
     nitf::FileSecurity dolly(nitf_FileSecurity_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);

@@ -23,7 +23,6 @@
 #include "nitf/DataSource.hpp"
 
 void nitf::DataSource::read(void* buf, nitf::Off size)
-        throw (nitf::NITFException)
 {
     nitf_DataSource *ds = getNativeOrThrow();
     if (ds && ds->iface)

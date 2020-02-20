@@ -63,6 +63,33 @@ public:
             const types::RowCol<size_t>& outExtent,
             size_t numPoints1D = DEFAULTS_POINTS_1D);
 
+    /* Samples a numPoints1D x numPoints1D grid of points that spans
+     * the extent of a polygon using sceneToImage().
+     *
+     * \param projModel Projection model that knows how to use sceneToImage()
+     * to convert from an ECEF location to meters from the slant plane SCP
+     * \param gridTransform Transform that knows how to convert from
+     * output row/col pixel space to ECEF space
+     * \param fullExtent Full extent of the global output plane.
+     * \param outPixelStart Output space start pixel (i.e. if this is
+     * non-zero, it indicates the reference point used with gridTransform is
+     * with respect to a global space.  This basically translates to the
+     * segment's startLine/startSample values for a multi-segment SICD).
+     * \param outExtent Output extent in pixels
+     * \param polygon The polygon of output plane pixel coordinate used to
+     * determine the grid of points.
+     * \param numPoints1D Number of points to use in each direction when
+     * sampling the grid.  Defaults to 10.
+     */
+    ProjectionPolynomialFitter(
+            const ProjectionModel& projModel,
+            const GridECEFTransform& gridTransform,
+            const types::RowCol<size_t>& fullExtent,
+            const types::RowCol<double>& outPixelStart,
+            const types::RowCol<size_t>& outExtent,
+            const std::vector<types::RowCol<double> >& polygon,
+            size_t numPoints1D = DEFAULTS_POINTS_1D);
+
     // Returns the output plane rows used during sampling in case you want to
     // do your own polynomial fitting
     const math::linear::Matrix2D<double>& getOutputPlaneRows() const
@@ -291,6 +318,13 @@ public:
     }
 
 private:
+    void projectToSlantPlane(const ProjectionModel& projModel,
+                             const GridECEFTransform& gridTransform,
+                             const types::RowCol<double>& outPixelStart,
+                             const types::RowCol<double>& currentOffset,
+                             size_t row,
+                             size_t col);
+
     void getSlantPlaneSamples(
             const types::RowCol<size_t>& inPixelStart,
             const types::RowCol<double>& inSceneCenter,

@@ -49,7 +49,7 @@ public:
      *  Constructor
      *  \param subheader    The subheader of the Image to write
      */
-    ImageWriter(nitf::ImageSubheader& subheader) throw(nitf::NITFException);
+    ImageWriter(nitf::ImageSubheader& subheader);
 
     // Set native object
     ImageWriter(nitf_ImageWriter *x) : WriteHandler(x)
@@ -62,8 +62,7 @@ public:
      *  Attach an image source from which to write.
      *  \param imageSource  The image source from which to write
      */
-    void attachSource(nitf::ImageSource imageSource)
-            throw (nitf::NITFException);
+    void attachSource(nitf::ImageSource imageSource);
 
     //! Enable/disable cached writes
     void setWriteCaching(int enable);

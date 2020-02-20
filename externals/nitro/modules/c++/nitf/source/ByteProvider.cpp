@@ -31,21 +31,6 @@
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
-namespace
-{
-void copyFromStreamAndClear(io::ByteStream& stream,
-                            std::vector<sys::byte>& rawBytes)
-{
-    rawBytes.resize(stream.getSize());
-    if (!rawBytes.empty())
-    {
-        ::memcpy(&rawBytes[0], stream.get(), stream.getSize());
-    }
-
-    stream.clear();
-}
-}
-
 namespace nitf
 {
 ByteProvider::ByteProvider() :
@@ -243,14 +228,14 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
 
     std::vector<size_t> desSubheaderLengths(numDESs);
     std::vector<size_t> desDataLengths(numDESs);
-
     for (size_t ii = 0; ii < numDESs; ++ii)
     {
         nitf::DESegment deSegment = record.getDataExtensions()[ii];
         nitf::DESubheader subheader = deSegment.getSubheader();
         nitf::Uint32 userSublen;
+        const size_t prevSize = byteStream->getSize();
         writer.writeDESubheader(subheader, userSublen, record.getVersion());
-        desSubheaderLengths[ii] = byteStream->getSize();
+        desSubheaderLengths[ii] = byteStream->getSize() - prevSize;
 
         // Write data
         const PtrAndLength& curData(desData[ii]);
@@ -501,7 +486,7 @@ size_t ByteProvider::countBytesForDES(size_t seg, size_t imageDataEndRow) const
 void ByteProvider::addDES(size_t seg, size_t imageDataEndRow,
         NITFBufferList& buffers) const
 {
-    if (shouldAddDES(seg, imageDataEndRow))
+    if (shouldAddDES(seg, imageDataEndRow) && !mDesSubheaderAndData.empty())
     {
         buffers.pushBack(mDesSubheaderAndData);
     }

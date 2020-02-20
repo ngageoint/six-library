@@ -175,8 +175,7 @@ public:
      *  Get the raw byte user data for a given user data ID.
      *  @return An array of user data for a given key
      */
-    std::vector<sys::byte>& getUserData(const std::string& key)
-        throw (except::NoSuchKeyException);
+    std::vector<sys::byte>& getUserData(const std::string& key);
 
     /**
      *  Get back the whole hash table

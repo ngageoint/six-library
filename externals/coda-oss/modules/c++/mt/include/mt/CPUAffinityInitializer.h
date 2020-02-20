@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -24,17 +24,24 @@
 #ifndef __MT_CPU_AFFINITY_INITIALIZER_H__
 #define __MT_CPU_AFFINITY_INITIALIZER_H__
 
-#include "mt/CPUAffinityThreadInitializer.h"
+#include <mt/AbstractCPUAffinityInitializer.h>
 
+#if defined(WIN32)
+#include <mt/CPUAffinityInitializerWin32.h>
 namespace mt
 {
-    class CPUAffinityInitializer
-    {
-    public:
-	CPUAffinityInitializer() {}
-	virtual ~CPUAffinityInitializer() {}
-	virtual CPUAffinityThreadInitializer* newThreadInitializer() = 0;
-    };
+typedef CPUAffinityInitializerWin32 CPUAffinityInitializer;
 }
+#endif
+
+#if !defined(__APPLE_CC__)
+#if defined(__linux) || defined(__linux__)
+#include <mt/CPUAffinityInitializerLinux.h>
+namespace mt
+{
+typedef CPUAffinityInitializerLinux CPUAffinityInitializer;
+}
+#endif
+#endif
 
 #endif

@@ -62,7 +62,7 @@ public:
     ComponentInfo(nitf_ComponentInfo * x);
 
     //! Clone
-    nitf::ComponentInfo clone() throw(nitf::NITFException);
+    nitf::ComponentInfo clone();
 
     ~ComponentInfo();
 
@@ -78,8 +78,7 @@ protected:
      *  \param subHeaderSize  The size of the subheader
      *  \param dataSize  The size of the data
      */
-    ComponentInfo(nitf::Uint32 subHeaderSize = 0, nitf::Uint64 dataSize = 0)
-        throw(nitf::NITFException);
+    ComponentInfo(nitf::Uint32 subHeaderSize = 0, nitf::Uint64 dataSize = 0);
 
 private:
     nitf_Error error;

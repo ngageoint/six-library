@@ -24,6 +24,7 @@
 #define __MATH_ROUND_H__
 
 #include <cmath>
+#include <stddef.h>
 
 namespace math
 {

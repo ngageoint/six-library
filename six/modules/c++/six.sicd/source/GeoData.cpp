@@ -88,7 +88,7 @@ void GeoData::fillDerivedFields(const ImageData& imageData,
         for (size_t ii = 0; ii < cornerLineSample.size(); ++ii)
         {
             LatLonAlt lla = transformer.transform(model.imageGridToECEF(
-                    imageData.validData[ii]));
+                    cornerLineSample[ii]));
             imageCorners.getCorner(ii).setLat(lla.getLat());
             imageCorners.getCorner(ii).setLon(lla.getLon());
         }
@@ -139,6 +139,42 @@ bool GeoData::validate(logging::Logger& log) const
         }
     }
     return valid;
+}
+
+std::ostream& operator<< (std::ostream& os, const GeoInfo& g)
+{
+    os << "GeoInfo:: \n"
+        << "  Name             : " << g.name << "\n";
+    for (size_t ii = 0; ii < g.desc.size(); ++ii)
+    {
+        os << "  Description      : " << g.desc[ii].getName() << ": " << g.desc[ii].str() << "\n";
+    }
+    if (g.geometryLatLon.size() == 1)
+    {
+        os << "  Point            : " << g.geometryLatLon[0].getLat() << ", " << g.geometryLatLon[0].getLon() << "\n";
+    }
+    else if (g.geometryLatLon.size() == 2)
+    {
+        os << "  Line             : " << "\n";
+        for (size_t ii = 0; ii < g.geometryLatLon.size(); ++ii)
+        {
+            os << "  Endpoint         : " << g.geometryLatLon[ii].getLat() << ", " << g.geometryLatLon[ii].getLon() << "\n";
+        }
+    }
+    else if (g.geometryLatLon.size() > 2)
+    {
+        os << "  Polygon          : " << "\n";
+        for (size_t ii = 0; ii < g.geometryLatLon.size(); ++ii)
+        {
+            os << "  Vertex           : " << g.geometryLatLon[ii].getLat() << ", " << g.geometryLatLon[ii].getLon() << "\n";
+        }
+    }
+
+    for (size_t ii = 0; ii < g.geoInfos.size(); ++ii)
+    {
+        os << *g.geoInfos[ii] << "\n";
+    }
+    return os;
 }
 }
 }

@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,58 +19,205 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#include <six/Init.h>
 #include <cphd/Channel.h>
+#include <six/Init.h>
 
 namespace cphd
 {
-ChannelParameters::ChannelParameters() :
-    srpIndex(0),
-    nomTOARateSF(0.0),
-    fxCtrNom(0.0),
-    bwSavedNom(0.0),
-    toaSavedNom(0.0),
-    txAntIndex(six::Init::undefined<size_t>()),
-    rcvAntIndex(six::Init::undefined<size_t>()),
-    twAntIndex(six::Init::undefined<size_t>())
+
+TOAExtended::TOAExtended() :
+    toaExtSaved(six::Init::undefined<double>())
 {
 }
 
-std::ostream& operator<< (std::ostream& os, const ChannelParameters& d)
+TOAExtended::LFMEclipse::LFMEclipse() :
+    fxEarlyLow(six::Init::undefined<double>()),
+    fxEarlyHigh(six::Init::undefined<double>()),
+    fxLateLow(six::Init::undefined<double>()),
+    fxLateHigh(six::Init::undefined<double>())
 {
-    os << "ChannelParameters::\n"
-       << "  srpIndex    : " << d.srpIndex << "\n"
-       << "  nomTOARateSF: " << d.nomTOARateSF << "\n"
-       << "  fxCtrNom    : " << d.fxCtrNom<< "\n"
-       << "  bwSavedNom  : " << d.bwSavedNom<< "\n"
-       << "  toaSavedNom : " << d.toaSavedNom << "\n";
+}
 
-    if (!six::Init::isUndefined(d.txAntIndex))
-    {
-        os << "  txAntIndex : " << d.txAntIndex << "\n";
-    }
+DwellTimes::DwellTimes() :
+    codId(six::Init::undefined<std::string>()),
+    dwellId(six::Init::undefined<std::string>())
+{
+}
 
-    if (!six::Init::isUndefined(d.rcvAntIndex))
-    {
-        os << "  rcvAntIndex: " << d.rcvAntIndex << "\n";
-    }
-    if (!six::Init::isUndefined(d.twAntIndex))
-    {
-        os << "  twAntIndex : " << d.twAntIndex << "\n";
-    }
+TgtRefLevel::TgtRefLevel() :
+    ptRef(six::Init::undefined<double>())
+{
+}
 
+Point::Point() :
+    fx(six::Init::undefined<double>()),
+    pn(six::Init::undefined<double>())
+{
+}
+
+NoiseLevel::NoiseLevel() :
+    pnRef(six::Init::undefined<double>()),
+    bnRef(six::Init::undefined<double>())
+{
+}
+
+ChannelParameter::ChannelParameter() :
+    identifier(six::Init::undefined<std::string>()),
+    refVectorIndex(six::Init::undefined<size_t>()),
+    fxFixed(six::Init::undefined<six::BooleanType>()),
+    toaFixed(six::Init::undefined<six::BooleanType>()),
+    srpFixed(six::Init::undefined<six::BooleanType>()),
+    signalNormal(six::Init::undefined<six::BooleanType>()),
+    fxC(six::Init::undefined<double>()),
+    fxBW(six::Init::undefined<double>()),
+    fxBWNoise(six::Init::undefined<double>()),
+    toaSaved(six::Init::undefined<double>())
+{
+}
+
+ChannelParameter::Antenna::Antenna() :
+    txAPCId(six::Init::undefined<std::string>()),
+    txAPATId(six::Init::undefined<std::string>()),
+    rcvAPCId(six::Init::undefined<std::string>()),
+    rcvAPATId(six::Init::undefined<std::string>())
+{
+}
+
+Channel::Channel() :
+    refChId(six::Init::undefined<std::string>()),
+    fxFixedCphd(six::Init::undefined<six::BooleanType>()),
+    toaFixedCphd(six::Init::undefined<six::BooleanType>()),
+    srpFixedCphd(six::Init::undefined<six::BooleanType>())
+{
+}
+
+std::ostream& operator<< (std::ostream& os, const Polarization& p)
+{
+    os << "      TxPol        : " << p.txPol << "\n"
+        << "      RcvPol       : " << p.rcvPol << "\n";
     return os;
 }
 
-std::ostream& operator<< (std::ostream& os, const Channel& d)
+std::ostream& operator<< (std::ostream& os, const TOAExtended& t)
 {
-    os << "Channel::\n";
-    for (size_t ii = 0; ii < d.parameters.size(); ++ii)
-    {
-        os << "  [" << (ii + 1) << "] Parameters: " << d.parameters[ii] << "\n";
-    }
+    os << "      TOAExtended:: \n"
+        << "      TOAExtSaved  : " << t.toaExtSaved << "\n"
+        << "      LFMEclipse:: \n"
+        << "        FxEarlyLow : " << t.lfmEclipse->fxEarlyLow << "\n"
+        << "        FxEarlyHigh : " << t.lfmEclipse->fxEarlyHigh << "\n"
+        << "        FxLateLow : " << t.lfmEclipse->fxLateLow << "\n"
+        << "        FxLateHigh : " << t.lfmEclipse->fxLateHigh << "\n";
+    return os;
+}
 
+std::ostream& operator<< (std::ostream& os, const DwellTimes& d)
+{
+    os << "      DwellTimes:: \n"
+        << "      CODId        : " << d.codId << "\n"
+        << "      DwellId        : " << d.dwellId << "\n";
+        return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const TgtRefLevel& t)
+{
+    os << "      TgtRefLevel:: \n"
+        << "      PtRef        : " << t.ptRef << "\n";
+        return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const Point& p)
+{
+    os << "      Point:: \n"
+        << "      Fx        : " << p.fx << "\n"
+        << "      Pn        : " << p.pn << "\n";
+        return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const FxNoiseProfile& f)
+{
+    os << "        FxNoiseProfile:: \n";
+    for (size_t ii = 0; ii < f.point.size(); ++ii)
+    {
+        os << "        Point        : " << f.point[ii] << "\n";
+    }
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const NoiseLevel& n)
+{
+    os << "      NoiseLevel:: \n"
+        << "      PnRef        : " << n.pnRef << "\n"
+        << "      BnRef        : " << n.bnRef << "\n";
+    if(n.fxNoiseProfile.get())
+    {
+        os << *(n.fxNoiseProfile) << "\n";
+    }
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const ChannelParameter& c)
+{
+    os << "    ChannelParameter:: \n"
+        << "      Identifier   : " << c.identifier << "\n"
+        << "      RefVectorIndex : " << c.refVectorIndex << "\n"
+        << "      FxFixed      : " << c.fxFixed << "\n"
+        << "      TOAFixed     : " << c.toaFixed << "\n"
+        << "      SRPFixed     : " << c.srpFixed << "\n"
+        << "      SginalNormal : " << c.signalNormal << "\n"
+        << "      Polarization:: \n"
+        << c.polarization << "\n"
+        << "      FxC          : " << c.fxC << "\n"
+        << "      FxBW         : " << c.fxBW << "\n"
+        << "      FxBWNoise    : " << c.fxBWNoise << "\n"
+        << "      TOASaved     : " << c.toaSaved << "\n";
+    if (c.toaExtended.get())
+    {
+        os << *(c.toaExtended) << "\n";
+    }
+    os << c.dwellTimes << "\n"
+        << c.imageArea << "\n"
+        << "      Antenna:: \n"
+        << "      TxAPCId      : " << c.antenna->txAPCId << "\n"
+        << "      TxAPATId     : " << c.antenna->txAPATId << "\n"
+        << "      RcvAPCId     : " << c.antenna->rcvAPCId << "\n"
+        << "      RcvAPATId    : " << c.antenna->rcvAPATId << "\n"
+        << "      TxRcv:: \n";
+    for (size_t ii = 0; ii < c.txRcv->txWFId.size(); ++ii)
+    {
+        os << "      TxWFId       : " << c.txRcv->txWFId[ii] << "\n";
+    }
+    for (size_t ii = 0; ii < c.txRcv->rcvId.size(); ++ii)
+    {
+        os << "      RcvId       : " << c.txRcv->rcvId[ii] << "\n";
+    }
+    if (c.tgtRefLevel.get())
+    {
+        os << *(c.tgtRefLevel) << "\n";
+    }
+    if (c.noiseLevel.get())
+    {
+        os << *(c.noiseLevel) << "\n";
+    }
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const Channel& c)
+{
+    os << "Channel:: \n"
+        << "  RefChId          : " << c.refChId << "\n"
+        << "  FxFixedCphd      : " << c.fxFixedCphd << "\n"
+        << "  TOAFixedCphd     : " << c.toaFixedCphd << "\n"
+        << "  SRPFixedCphd     : " << c.srpFixedCphd << "\n"
+        << "  Parameters:: \n";
+    for (size_t ii = 0; ii < c.parameters.size(); ++ii)
+    {
+        os << c.parameters[ii] << "\n";
+    }
+    for (size_t ii = 0; ii < c.addedParameters.size(); ++ii)
+    {
+        os << "  Parameter name   : " << c.addedParameters[ii].getName() << "\n";
+        os << "  Parameter value   : " << c.addedParameters[ii].str() << "\n";
+    }
     return os;
 }
 }

@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <string.h>
 #include <sstream>
 
@@ -31,120 +30,19 @@
 
 namespace cphd
 {
-const char FileHeader::FILE_TYPE[] = "CPHD";
-const char FileHeader::DEFAULT_VERSION[] = "0.3";
-const char FileHeader::KVP_DELIMITER[] = " := ";
-const char FileHeader::LINE_TERMINATOR = '\n';
-const char FileHeader::SECTION_TERMINATOR = '\f';
-const size_t FileHeader::MAX_HEADER_SIZE = 10485760;
+const char FileHeader::DEFAULT_VERSION[] = "1.0.1";
 
 FileHeader::FileHeader() :
     mVersion(DEFAULT_VERSION),
-    mXmlDataSize(0),
-    mXmlByteOffset(0),
-    mVbDataSize(0),
-    mVbByteOffset(0),
-    mCphdDataSize(0),
-    mCphdByteOffset(0)
+    mXmlBlockSize(0),
+    mXmlBlockByteOffset(0),
+    mPvpBlockSize(0),
+    mPvpBlockByteOffset(0),
+    mSignalBlockSize(0),
+    mSignalBlockByteOffset(0),
+    mSupportBlockSize(0),
+    mSupportBlockByteOffset(0)
 {
-}
-
-bool FileHeader::isCPHD(io::SeekableInputStream& inStream)
-{
-    inStream.seek(0, io::Seekable::START);
-
-    char buf[4] = {'\0', '\0', '\0', '\0'};
-    inStream.read(buf, 4);
-
-    return (::strncmp(buf, FILE_TYPE, 4) == 0);
-}
-
-std::string FileHeader::readVersion(io::SeekableInputStream& inStream)
-{
-    char buf[128];
-    inStream.seek(0, io::Seekable::START);
-    inStream.readln(buf, sizeof(buf));
-
-    const KeyValuePair kvPair(tokenize(buf, "/"));
-    if (kvPair.first != FILE_TYPE)
-    {
-        throw except::Exception(Ctxt("Not a CPHD file"));
-    }
-    
-    // Remove any trailing whitespace from the version
-    std::string ret = kvPair.second;
-    str::trim(ret);
-
-    return ret;
-}
-
-void FileHeader::tokenize(const std::string& in,
-                          const std::string& delimiter,
-                          KeyValuePair& kvPair)
-{
-    const std::string::size_type pos = in.find(delimiter);
-    if (pos == std::string::npos)
-    {
-        throw except::Exception(Ctxt(
-                "Delimiter '" + delimiter + "' not found in '" + in + "'"));
-    }
-
-    kvPair.first = in.substr(0, pos);
-    kvPair.second = in.substr(pos + delimiter.length());
-}
-
-void FileHeader::blockReadHeader(io::SeekableInputStream& inStream,
-                                 size_t blockSize,
-                                 std::string& headerBlock)
-{
-    static const char ERROR_MSG[] = "CPHD file malformed: Header must terminate with '\\f\\n'";
-
-    mem::ScopedArray<sys::byte> buf(new sys::byte[blockSize + 1]);
-    std::fill_n(buf.get(), blockSize + 1, 0);
-    headerBlock.clear();
-
-    // read each block in succession
-    size_t terminatorLoc = std::string::npos;
-    size_t totalBytesRead = 0;
-    while (inStream.read(buf.get(), blockSize) != io::InputStream::IS_EOF &&
-           terminatorLoc == std::string::npos)
-    {
-        std::string thisBlock = buf.get();
-
-        // find the terminator in the block
-        terminatorLoc = thisBlock.find('\f');
-        if (terminatorLoc != std::string::npos)
-        {
-            // read one more byte if our block missed the trailing '\n'
-            if (terminatorLoc == thisBlock.length() - 1)
-            {
-                sys::byte c(0);
-                inStream.read(&c, 1);
-                thisBlock.insert(thisBlock.length(), &c, 1);
-            }
-
-            // verify proper formatting
-            if (thisBlock[terminatorLoc + 1] != '\n')
-            {
-                throw except::Exception(Ctxt(ERROR_MSG));
-            }
-
-            // trim off anything after the terminator
-            thisBlock = thisBlock.substr(0, terminatorLoc);
-        }
-        
-        // build the header
-        headerBlock += thisBlock;
-
-        // verify we aren't past 10MB in the header --
-        // this stops processing before we start reading into the
-        // image data and potentially run out of memory
-        totalBytesRead += thisBlock.length();
-        if (totalBytesRead > MAX_HEADER_SIZE)
-        {
-            throw except::Exception(Ctxt(ERROR_MSG));
-        }
-    }
 }
 
 void FileHeader::read(io::SeekableInputStream& inStream)
@@ -162,7 +60,7 @@ void FileHeader::read(io::SeekableInputStream& inStream)
     std::string headerBlock;
     blockReadHeader(inStream, 1024, headerBlock);
 
-    // Read each line with its tokens    
+    // Read each line with its tokens
     if (!headerBlock.empty())
     {
         std::vector<std::string> headerLines = str::split(headerBlock, "\n");
@@ -171,29 +69,41 @@ void FileHeader::read(io::SeekableInputStream& inStream)
             // Determine our header entry
             tokenize(headerLines[ii], KVP_DELIMITER, headerEntry);
 
-            if (headerEntry.first == "XML_DATA_SIZE")
+            if (headerEntry.first == "XML_BLOCK_SIZE")
             {
-                mXmlDataSize = str::toType<sys::Off_T>(headerEntry.second);
+                mXmlBlockSize = str::toType<sys::Off_T>(headerEntry.second);
             }
-            else if (headerEntry.first == "XML_BYTE_OFFSET")
+            else if (headerEntry.first == "XML_BLOCK_BYTE_OFFSET")
             {
-                mXmlByteOffset = str::toType<sys::Off_T>(headerEntry.second);
+                mXmlBlockByteOffset =
+                        str::toType<sys::Off_T>(headerEntry.second);
             }
-            else if (headerEntry.first == "VB_DATA_SIZE")
+            else if (headerEntry.first == "SUPPORT_BLOCK_SIZE")
             {
-               mVbDataSize = str::toType<sys::Off_T>(headerEntry.second);
+               mSupportBlockSize = str::toType<sys::Off_T>(headerEntry.second);
             }
-            else if (headerEntry.first == "VB_BYTE_OFFSET")
+            else if (headerEntry.first == "SUPPORT_BLOCK_BYTE_OFFSET")
             {
-               mVbByteOffset = str::toType<sys::Off_T>(headerEntry.second);
+               mSupportBlockByteOffset =
+                    str::toType<sys::Off_T>(headerEntry.second);
             }
-            else if (headerEntry.first == "CPHD_DATA_SIZE")
+            else if (headerEntry.first == "PVP_BLOCK_SIZE")
             {
-               mCphdDataSize = str::toType<sys::Off_T>(headerEntry.second);
+               mPvpBlockSize = str::toType<sys::Off_T>(headerEntry.second);
             }
-            else if (headerEntry.first == "CPHD_BYTE_OFFSET")
+            else if (headerEntry.first == "PVP_BLOCK_BYTE_OFFSET")
             {
-               mCphdByteOffset = str::toType<sys::Off_T>(headerEntry.second);
+               mPvpBlockByteOffset =
+                    str::toType<sys::Off_T>(headerEntry.second);
+            }
+            else if (headerEntry.first == "SIGNAL_BLOCK_SIZE")
+            {
+                mSignalBlockSize = str::toType<sys::Off_T>(headerEntry.second);
+            }
+            else if (headerEntry.first == "SIGNAL_BLOCK_BYTE_OFFSET")
+            {
+                mSignalBlockByteOffset =
+                        str::toType<sys::Off_T>(headerEntry.second);
             }
             else if (headerEntry.first == "CLASSIFICATION")
             {
@@ -212,12 +122,14 @@ void FileHeader::read(io::SeekableInputStream& inStream)
     }
 
     // check for any required values that are uninitialized
-    if (mXmlDataSize == 0  ||
-        mXmlByteOffset == 0  ||
-        mVbDataSize == 0  ||
-        mVbByteOffset == 0  ||
-        mCphdDataSize == 0  ||
-        mCphdByteOffset == 0)
+    if (mXmlBlockSize == 0  ||
+        mXmlBlockByteOffset == 0  ||
+        mPvpBlockSize == 0  ||
+        mPvpBlockByteOffset == 0  ||
+        mSignalBlockSize == 0  ||
+        mSignalBlockByteOffset == 0 ||
+        mClassification.empty() ||
+        mReleaseInfo.empty())
     {
         throw except::Exception(Ctxt("CPHD header information is incomplete"));
     }
@@ -234,40 +146,52 @@ std::string FileHeader::toString() const
     os << FILE_TYPE << "/" << mVersion << LINE_TERMINATOR;
 
     // Classification fields, if present
-    if (!mClassification.empty())
+    if (mSupportBlockSize > 0)
     {
-        os << "CLASSIFICATION" << KVP_DELIMITER << mClassification
-           << LINE_TERMINATOR;
-    }
-
-    if (!mReleaseInfo.empty())
-    {
-        os << "RELEASE_INFO" << KVP_DELIMITER << mReleaseInfo
-           << LINE_TERMINATOR;
+        os << "SUPPORT_BLOCK_SIZE" << KVP_DELIMITER << mSupportBlockSize
+           << LINE_TERMINATOR
+           << "SUPPORT_BLOCK_BYTE_OFFSET" << KVP_DELIMITER
+           << mSupportBlockByteOffset << LINE_TERMINATOR;
     }
 
     // Required fields.
-    os << "XML_DATA_SIZE" << KVP_DELIMITER << mXmlDataSize << LINE_TERMINATOR
-       << "XML_BYTE_OFFSET" << KVP_DELIMITER << mXmlByteOffset
+    os << "XML_BLOCK_SIZE" << KVP_DELIMITER << mXmlBlockSize << LINE_TERMINATOR
+       << "XML_BLOCK_BYTE_OFFSET" << KVP_DELIMITER << mXmlBlockByteOffset
        << LINE_TERMINATOR
-       << "VB_DATA_SIZE" << KVP_DELIMITER << mVbDataSize << LINE_TERMINATOR
-       << "VB_BYTE_OFFSET" << KVP_DELIMITER << mVbByteOffset << LINE_TERMINATOR
-       << "CPHD_DATA_SIZE" << KVP_DELIMITER << mCphdDataSize << LINE_TERMINATOR
-       << "CPHD_BYTE_OFFSET" << KVP_DELIMITER << mCphdByteOffset
-       << LINE_TERMINATOR;
-
+       << "PVP_BLOCK_SIZE" << KVP_DELIMITER << mPvpBlockSize << LINE_TERMINATOR
+       << "PVP_BLOCK_BYTE_OFFSET" << KVP_DELIMITER << mPvpBlockByteOffset
+       << LINE_TERMINATOR
+       << "SIGNAL_BLOCK_SIZE" << KVP_DELIMITER << mSignalBlockSize
+       << LINE_TERMINATOR
+       << "SIGNAL_BLOCK_BYTE_OFFSET" << KVP_DELIMITER << mSignalBlockByteOffset
+       << LINE_TERMINATOR
+       << "CLASSIFICATION" << KVP_DELIMITER << mClassification
+       << LINE_TERMINATOR
+       << "RELEASE_INFO" << KVP_DELIMITER << mReleaseInfo << LINE_TERMINATOR
+       << SECTION_TERMINATOR << LINE_TERMINATOR;
     return os.str();
 }
 
-size_t FileHeader::set(sys::Off_T xmlSize,
-                       sys::Off_T vbmSize,
-                       sys::Off_T cphdSize)
+std::string FileHeader::getVersion() const
+{
+    return mVersion;
+}
+
+void FileHeader::setVersion(const std::string& version)
+{
+    mVersion = version;
+}
+
+size_t FileHeader::set(sys::Off_T xmlBlockSize,
+                       sys::Off_T supportBlockSize,
+                       sys::Off_T pvpBlockSize,
+                       sys::Off_T signalBlockSize)
 {
     // Resolve all of the offsets based on known sizes.
-    setXMLsize(xmlSize);
-    setVBMsize(vbmSize);
-    setCPHDsize(cphdSize);
-
+    setXMLBlockSize(xmlBlockSize);
+    setSupportBlockSize(supportBlockSize);
+    setPvpBlockSize(pvpBlockSize);
+    setSignalBlockSize(signalBlockSize);
     return set();
 }
 
@@ -281,39 +205,73 @@ size_t FileHeader::set()
         initialHeaderSize = size();
 
         // Add the header section terminator, not part of the header size
-        setXMLoffset(initialHeaderSize + 2);
+        sys::Off_T xmlOffset = initialHeaderSize + 2;
+        setXMLBlockByteOffset(xmlOffset);
 
-        // Add two for the XML section terminator
-        sys::Off_T vbmOffs = getXMLoffset() + getXMLsize() + 2;
 
-        // Add padding (VBMs are doubles)
-        const sys::Off_T remainder = vbmOffs % sizeof(double);
-        if (remainder != 0)
+        if (mSupportBlockSize > 0)
         {
-            vbmOffs += sizeof(double) - remainder;
+            // Add two for the XML section terminator
+            sys::Off_T supportOff = getXMLBlockByteOffset() + getXMLBlockSize() + 2;
+            setSupportBlockByteOffset(supportOff);
+
+            // Calculate pvp offset based on support position and size
+            sys::Off_T pvpOff = getSupportBlockByteOffset() +
+                    getSupportBlockSize();
+            // Add padding (pvp are doubles)
+            const sys::Off_T pvpRemainder = pvpOff % sizeof(double);
+            if (pvpRemainder != 0)
+            {
+                pvpOff += sizeof(double) - pvpRemainder;
+            }
+            setPvpBlockByteOffset(pvpOff);
+        }
+        else
+        {
+            // Add two for the XML section terminator
+            sys::Off_T pvpOff = getXMLBlockByteOffset() +
+                    getXMLBlockSize() + 2;
+            // Add padding (pvp are doubles)
+            const sys::Off_T pvpRemainder = pvpOff % sizeof(double);
+            if (pvpRemainder != 0)
+            {
+                pvpOff += sizeof(double) - pvpRemainder;
+            }
+            setPvpBlockByteOffset(pvpOff);
         }
 
-        setVBMoffset(vbmOffs);
-
-        // Position to the CPHD, no padding needed, as VBM entries are all
+        // Position to the CPHD, no padding needed, as PVP entries are all
         // doubles
-        setCPHDoffset (getVBMoffset() + getVBMsize());
+        setSignalBlockByteOffset(getPvpBlockByteOffset() + getPvpBlockSize());
 
     } while (size() != initialHeaderSize);
 
     return size();
 }
 
+//! Pad bytes don't include the Section terminator
+sys::Off_T FileHeader::getPvpPadBytes() const
+{
+    if (mSupportBlockSize != 0)
+    {
+        return (getPvpBlockByteOffset() - (getSupportBlockByteOffset() + getSupportBlockSize()));
+    }
+    return (getPvpBlockByteOffset() - (getXMLBlockByteOffset() + getXMLBlockSize() + 2));
+}
+
+
 std::ostream& operator<< (std::ostream& os, const FileHeader& fh)
 {
     os << "FileHeader::\n"
-       << "  mVersion       : " << fh.mVersion << "\n"
-       << "  mXmlDataSize   : " << fh.mXmlDataSize << "\n"
-       << "  mXmlByteOffset : " << fh.mXmlByteOffset << "\n"
-       << "  mVbDataSize    : " << fh.mVbDataSize << "\n"
-       << "  mVbByteOffset  : " << fh.mVbByteOffset << "\n"
-       << "  mCphdDataSize  : " << fh.mCphdDataSize << "\n"
-       << "  mCphdByteOffset: " << fh.mCphdByteOffset << "\n"
+       << "  mVersion               : " << fh.mVersion << "\n"
+       << "  mXmlBlockSize          : " << fh.mXmlBlockSize << "\n"
+       << "  mXmlBlockByteOffset    : " << fh.mXmlBlockByteOffset << "\n"
+       << "  mSupportBlockSize      : " << fh.mSupportBlockSize << "\n"
+       << "  mSupportBlockSize      : " << fh.mSupportBlockByteOffset << "\n"
+       << "  mPvpBlockByteOffset    : " << fh.mPvpBlockSize << "\n"
+       << "  mPvpBlockByteOffset    : " << fh.mPvpBlockByteOffset << "\n"
+       << "  mSignalBlockSize       : " << fh.mSignalBlockSize << "\n"
+       << "  mSignalBlockByteOffset : " << fh.mSignalBlockByteOffset << "\n"
        << "  mClassification: " << fh.mClassification << "\n"
        << "  mReleaseInfo   : " << fh.mReleaseInfo << "\n";
     return os;

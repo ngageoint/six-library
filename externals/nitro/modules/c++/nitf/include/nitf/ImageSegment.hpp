@@ -55,14 +55,14 @@ public:
     ImageSegment(nitf_ImageSegment * x);
 
     //! Constructor
-    ImageSegment() throw(nitf::NITFException);
+    ImageSegment();
 
     ImageSegment(NITF_DATA * x);
 
     ImageSegment & operator=(NITF_DATA * x);
 
      //! Clone
-    nitf::ImageSegment clone() throw(nitf::NITFException);
+    nitf::ImageSegment clone();
 
     ~ImageSegment();
 

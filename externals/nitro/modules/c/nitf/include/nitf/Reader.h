@@ -176,6 +176,14 @@ NITFAPI(nitf_SegmentReader *) nitf_Reader_newDEReader
  */
 NITFAPI(nitf_Version) nitf_Reader_getNITFVersion(const char* fileName);
 
+/*!
+ * Return the NITFVersion of the file passed in by its file name.
+ * This is a static method (not associated with a specific Reader).
+ * \param io Open IOInterface to read from
+ * \return NITFVersion of the file
+ */
+NITFAPI(nitf_Version) nitf_Reader_getNITFVersionIO(nitf_IOInterface* io);
+
 
 NITF_CXX_ENDGUARD
 

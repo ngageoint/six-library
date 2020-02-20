@@ -42,7 +42,7 @@ DESegment::DESegment(nitf_DESegment * x)
     getNativeOrThrow();
 }
 
-DESegment::DESegment() throw(nitf::NITFException)
+DESegment::DESegment()
 {
     setNative(nitf_DESegment_construct(&error));
     getNativeOrThrow();
@@ -62,7 +62,7 @@ DESegment & DESegment::operator=(NITF_DATA * x)
     return *this;
 }
 
-nitf::DESegment DESegment::clone() throw(nitf::NITFException)
+nitf::DESegment DESegment::clone()
 {
     nitf::DESegment dolly(nitf_DESegment_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);

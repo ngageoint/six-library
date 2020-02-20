@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <climits>
 #include <cstdio>
+#include <cwctype>
 
 #include <str/Manip.h>
 
@@ -65,14 +66,14 @@ void trim(std::string & s)
     size_t i;
     for (i = 0; i < s.length(); i++)
     {
-        if (!isspace(s[i]))
+        if (!iswspace(s[i]))
             break;
     }
     s.erase(0, i);
 
     for (i = s.length() - 1; (int) i >= 0; i--)
     {
-        if (!isspace(s[i]))
+        if (!iswspace(s[i]))
             break;
 
     }

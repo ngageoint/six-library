@@ -521,8 +521,9 @@ typedef struct
     /*!< Control structure for current read */
     struct _nitf_ImageIOReadControl_s *readControl;
     _NITF_IMAGE_IO_PAD_SCAN_FUNC padScanner; /*! Scans for pad pixels in write */
-}
-_nitf_ImageIO;
+    /*! Total blocks written to disk */
+    nitf_Int64 totalBlocksWritten;
+} _nitf_ImageIO;
 
 /*!
   \brief _nitf_ImageIOControl - IO control structure
@@ -837,8 +838,8 @@ typedef struct _nitf_ImageIOBlock_s
 
     /*! Block control for cached write */
     _nitf_ImageIOBlockCacheControl blockControl;
-}
-_nitf_ImageIOBlock;
+
+} _nitf_ImageIOBlock;
 
 /*!
   \brief _nitf_ImageIOWriteControl - Write control structure
@@ -3268,7 +3269,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_construct(
             return(NULL);
         }
     }
-
+    nitf->totalBlocksWritten = 0;
     return (nitf_ImageIO *) nitf;
 
 CATCH_ERROR:
@@ -3646,7 +3647,6 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
     nitf = ioCntl->nitf;
     numBands = ioCntl->numBandSubset;
     nBlockCols = ioCntl->nBlockIO / numBands;
-
     /* Check for row out of bounds */
 
     if (cntl->nextRow + numRows > nitf->numRows)
@@ -5568,7 +5568,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
              * in the read case and is set to 0 in the write case.
              *
              * For reading, the first read for a given row segment reads
-             * all of the bands for that segment. The initial offset of 0
+             * all of the requested bands for that segment. The initial offset
              * for the first band is the correct buffer offset for the read.
              * The pixel size times band offset then correctly line-up the
              * start buffer for the unpack operations.
@@ -5582,8 +5582,12 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
 
             if (cntl->reading)
             {
-                blockIO->rwBuffer.offset.mark = bytes * band;
-                blockIO->rwBuffer.offset.orig = bytes * band;
+                /* In all cases, we are reading all bands for the block.
+                 * If we're only requesting e.g. bands 2..n, need to adjust
+                 * the starting point so that band 2 maps to position 0.
+                 */
+                blockIO->rwBuffer.offset.mark = bytes * (band - cntl->bandSubset[0]);
+                blockIO->rwBuffer.offset.orig = bytes * (band - cntl->bandSubset[0]);
             }
             else
             {
@@ -5662,6 +5666,7 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
                               nitf_Error * error)
 {
     _nitf_ImageIOControl *cntl; /* The result */
+    nitf_Uint32 bandIdx;
 
     cntl =
         (_nitf_ImageIOControl *) NITF_MALLOC(sizeof(_nitf_ImageIOControl));
@@ -5825,7 +5830,7 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
 NITFPRIV(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
 {
     _nitf_ImageIOBlock *blocks;     /* Block I/Os as a linrar array */
-    nitf_Uint32 i;
+    nitf_Uint32 i, j;
     nitf_Uint32 nBlockCols;
 
     /* Actual object */
@@ -5855,12 +5860,16 @@ NITFPRIV(void) nitf_ImageIOControl_destruct(_nitf_ImageIOControl ** cntl)
          * They are allocated
          */
         nBlockCols = cntlActual->nBlockIO / cntlActual->numBandSubset;
-        blocks = &(cntlActual->blockIO[0][0]);
+
         for (i = 0; i < nBlockCols; ++i)
         {
-            if (blocks[i].blockControl.freeFlag)
+            for (j = 0; j < cntlActual->numBandSubset; ++j)
             {
-                NITF_FREE(blocks[i].blockControl.block);
+                blocks = &(cntlActual->blockIO[i][j]);
+                if (blocks->blockControl.freeFlag)
+                {
+                    NITF_FREE(blocks->blockControl.block);
+                }
             }
         }
 
@@ -6074,6 +6083,18 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
                              "Invalid band %ld (limit is %ld)\n",
                              subWindow->bandList[bandIdx],
                              nitf->numBands - 1);
+            return NITF_FAILURE;
+        }
+    }
+
+    /* Require bandList[0] == min(bandList) */
+    for (bandIdx = 1; bandIdx < subWindow->numBands; bandIdx++)
+    {
+        if (subWindow->bandList[bandIdx] < subWindow->bandList[0])
+        {
+            nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
+                             "Band <%ld> at index 0 is not the lowest band\n",
+                             subWindow->bandList[0]);
             return NITF_FAILURE;
         }
     }
@@ -6743,7 +6764,7 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
     nitf_Uint32 col;           /* Block column index */
     nitf_Uint32 row;           /* Current row in sub-window */
     nitf_Uint32 band;          /* Current band in sub-window */
-    _nitf_ImageIOBlock *blockIO; /* The current  block IO structure */
+    _nitf_ImageIOBlock *blockIO; /* The current block IO structure */
 
     nitf = cntl->nitf;
     numRows = cntl->numRows;
@@ -6758,17 +6779,26 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
             {
                 blockIO = &(cntl->blockIO[col][band]);
                 if (blockIO->doIO)
+                {
                     if (!(*(nitf->vtbl.reader)) (blockIO, io, error))
+                    {
                         return NITF_FAILURE;
+                    }
+                }
 
                 if (nitf->vtbl.unpack != NULL)
+                {
                     (*(nitf->vtbl.unpack)) (blockIO, error);
+                }
 
                 if (nitf->vtbl.unformat != NULL)
+                {
                     (*(nitf->vtbl.unformat)) (blockIO->user.buffer +
-                                              blockIO->user.offset.mark,
-                                              blockIO->pixelCountDR,
-                                              nitf->pixel.shift);
+                        blockIO->user.offset.mark,
+                        blockIO->pixelCountDR,
+                        nitf->pixel.shift);
+                }
+
                 /*
                  * You have to check for last row and not call
                  * nitf_ImageIO_nextRow because if the last row is the
@@ -6778,17 +6808,24 @@ NITFPRIV(int) nitf_ImageIO_readRequest(_nitf_ImageIOControl * cntl,
                  * the non-existant next block.
                  */
                 if (row != numRows - 1)
+                {
                     nitf_ImageIO_nextRow(blockIO, 0);
+                }
 
                 if (blockIO->rowsUntil == 0)
+                {
                     /*
                      * See documentation of nitf_ImageIOBlock  for an
                      * explaination of the - 1
                      */
                     blockIO->rowsUntil = nitf->numRowsPerBlock - 1;
+                }
                 else
+                {
                     blockIO->rowsUntil -= 1;
+                }
             }
+
         }
     }
 
@@ -7098,19 +7135,17 @@ NITFPRIV(int) nitf_ImageIO_readFromFile(nitf_IOInterface* io,
                                         size_t count,
                                         nitf_Error * error)
 {
-    size_t bytes;               /* Amount of current read */
     char *bufp;                 /* pointer into the buffer */
-    /* Seek to the offset */
-    bytes = count;
     bufp = (char *) buffer;
 
+    /* Seek to the offset */
     if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(io,
                                                (nitf_Off) fileOffset,
                                                NITF_SEEK_SET, error)))
     {
         return NITF_FAILURE;
     }
-    if (!nitf_IOInterface_read(io, bufp, bytes, error))
+    if (!nitf_IOInterface_read(io, bufp, count, error))
     {
         return NITF_FAILURE;
     }
@@ -7145,12 +7180,12 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
                                         size_t count,
                                         nitf_Error * error)
 {
-    _nitf_ImageIO *nitf;                    /* Associated image I/O object */
+    _nitf_ImageIO *nitf = ((_nitf_ImageIOControl *)(blockIO->cntl))->nitf; /* Associated image I/O object */
     _nitf_ImageIOBlockCacheControl *blockCntl; /* Associated block control */
-    nitf_Uint64 fileOffset;                 /* Offset in filw for write */
+    nitf_Uint64 fileOffset;                 /* Offset in file for write */
     _NITF_IMAGE_IO_PAD_SCAN_FUNC scanner;   /* Pad scanning function */
-
-    nitf = ((_nitf_ImageIOControl *) (blockIO->cntl))->nitf;
+    const nitf_Int64 nBlocks = nitf->nBlocksTotal;
+    const NITF_BOOL lastBlock = (blockIO->number == (nBlocks - 1));
     blockCntl = &(blockIO->blockControl);
     scanner = nitf->padScanner;
 
@@ -7166,7 +7201,6 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
             return NITF_FAILURE;
         }
     }
-
     /* Overflow check*/
 
     if ((blockOffset + count) > nitf->blockSize)
@@ -7194,6 +7228,17 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
             (*scanner)(blockIO, &padPresent, &dataPresent);
             if (!dataPresent)                  /* Pad only do not write */
             {
+                if (lastBlock && (blockIO->cntl->nitf->totalBlocksWritten == 0))
+                {
+                    /*
+                     * we will need to seek to the start of where the data is written.
+                     * For no data was ever written and we need the offsets to be set
+                     * to the next subimage.
+                     */
+                    /* Seek to the offset */
+                    fileOffset = nitf->pixelBase;
+                    if (!NITF_IO_SUCCESS(nitf_IOInterface_seek(io, (nitf_Off)fileOffset, NITF_SEEK_SET, error))) return NITF_FAILURE;
+                }
                 /*
                  * Copy down all of the offsets since with the missing block
                  * this gives the correct offset for the following blocks. Copy
@@ -7266,7 +7311,7 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
                 blockIO->padMask[blockIO->number] =
                     blockIO->blockMask[blockIO->number];
         }
-
+        ++blockIO->cntl->nitf->totalBlocksWritten;
         /*
          * Reset the image data offset since it may be different now
          * due to skipped blocks
@@ -8496,12 +8541,16 @@ void nitf_ImageIO_unpack_P_1(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
+    const nitf_Uint32 bytes = blockIO->cntl->nitf->pixel.bytes;
+    const nitf_Uint32 firstBand = blockIO->cntl->bandSubset[0];
+    const nitf_Uint32 bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
 
     src = (nitf_Uint8 *) (blockIO->rwBuffer.buffer
-                          + blockIO->rwBuffer.offset.mark);
+                          + blockIO->rwBuffer.offset.mark
+                          + bandOffset);
     dst = (nitf_Uint8 *) (blockIO->unpacked.buffer
                           + blockIO->unpacked.offset.mark);
     count = blockIO->pixelCountFR;
@@ -8524,12 +8573,16 @@ void nitf_ImageIO_unpack_P_2(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
+    const nitf_Uint32 bytes = blockIO->cntl->nitf->pixel.bytes;
+    const nitf_Uint32 firstBand = blockIO->cntl->bandSubset[0];
+    const nitf_Uint32 bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
 
     src = (nitf_Uint16 *) (blockIO->rwBuffer.buffer
-                           + blockIO->rwBuffer.offset.mark);
+                           + blockIO->rwBuffer.offset.mark
+                           + bandOffset);
     dst = (nitf_Uint16 *) (blockIO->unpacked.buffer
                            + blockIO->unpacked.offset.mark);
     count = blockIO->pixelCountFR;
@@ -8543,7 +8596,6 @@ void nitf_ImageIO_unpack_P_2(_nitf_ImageIOBlock * blockIO,
     return;
 }
 
-
 void nitf_ImageIO_unpack_P_4(_nitf_ImageIOBlock * blockIO,
                              nitf_Error * error)
 {
@@ -8552,12 +8604,16 @@ void nitf_ImageIO_unpack_P_4(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
+    const nitf_Uint32 bytes = blockIO->cntl->nitf->pixel.bytes;
+    const nitf_Uint32 firstBand = blockIO->cntl->bandSubset[0];
+    const nitf_Uint32 bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
 
     src = (nitf_Uint32 *) (blockIO->rwBuffer.buffer
-                           + blockIO->rwBuffer.offset.mark);
+                           + blockIO->rwBuffer.offset.mark
+                           + bandOffset);
     dst = (nitf_Uint32 *) (blockIO->unpacked.buffer
                            + blockIO->unpacked.offset.mark);
     count = blockIO->pixelCountFR;
@@ -8580,12 +8636,16 @@ void nitf_ImageIO_unpack_P_8(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
+    const nitf_Uint32 bytes = blockIO->cntl->nitf->pixel.bytes;
+    const nitf_Uint32 firstBand = blockIO->cntl->bandSubset[0];
+    const nitf_Uint32 bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
 
     src = (nitf_Uint64 *) (blockIO->rwBuffer.buffer
-                           + blockIO->rwBuffer.offset.mark);
+                           + blockIO->rwBuffer.offset.mark
+                           + bandOffset);
     dst = (nitf_Uint64 *) (blockIO->unpacked.buffer
                            + blockIO->unpacked.offset.mark);
     count = blockIO->pixelCountFR;
@@ -8610,12 +8670,16 @@ void nitf_ImageIO_unpack_P_16(_nitf_ImageIOBlock * blockIO,
     size_t count;               /* Number of pixels to transfer */
     nitf_Uint32 skip;           /* Source buffer skip count */
     size_t i;
+    const nitf_Uint32 bytes = blockIO->cntl->nitf->pixel.bytes;
+    const nitf_Uint32 firstBand = blockIO->cntl->bandSubset[0];
+    const nitf_Uint32 bandOffset = firstBand * bytes;
 
     /* Silence compiler warnings about unused variables */
     (void)error;
 
     src1 = (nitf_Uint64 *) (blockIO->rwBuffer.buffer
-                            + blockIO->rwBuffer.offset.mark);
+                            + blockIO->rwBuffer.offset.mark
+                            + bandOffset);
     dst1 = (nitf_Uint64 *) (blockIO->unpacked.buffer
                             + blockIO->unpacked.offset.mark);
     src2 = src1 + 1;
@@ -9120,6 +9184,7 @@ nitf_ImageIO_bPixelOpen(nitf_ImageSubheader * subheader,
                         NITF_CTXT, NITF_ERR_DECOMPRESSION);
         return NULL;
     }
+    icntl->buffer = NULL;
 
     return (nitf_DecompressionControl *) icntl;
 }
@@ -9267,6 +9332,7 @@ nitf_ImageIO_12PixelOpen(nitf_ImageSubheader * subheader,
                         NITF_CTXT, NITF_ERR_DECOMPRESSION);
         return NULL;
     }
+    icntl->buffer = NULL;
 
     return (nitf_DecompressionControl *) icntl;
 }
@@ -9435,15 +9501,7 @@ nitf_CompressionControl  *nitf_ImageIO_12PixelComOpen
   icntl->odd = icntl->blockPixelCount & 1;
   icntl->blockSizeCompressed = 3*(icntl->blockPixelCount/2) + 2*(icntl->odd);
   icntl->blockSizeUncompressed = icntl->blockPixelCount*2;
-  icntl->buffer = NITF_MALLOC(icntl->blockSizeCompressed);
-  if(icntl->buffer == NULL)
-  {
-    nitf_Error_init(error, "Error creating control object",
-                                          NITF_CTXT, NITF_ERR_COMPRESSION);
-    NITF_FREE(icntl);
-    return(NULL);
-  }
-
+  icntl->buffer = NULL;
 
   return((nitf_CompressionControl *) icntl);
 
@@ -9472,14 +9530,16 @@ nitf_ImageIO_12PixelComStart(nitf_CompressionControl *object,
   icntl->offset = offset;
   icntl->blockMask = blockMask;
   icntl->padMask = padMask;
-  icntl->buffer = NULL;
   icntl->written = 0;
 
 /* Allocate compressed block buffer */
 
-  icntl->buffer = (nitf_Uint8 *) NITF_MALLOC(icntl->blockSizeCompressed);
-  if(icntl->buffer == NULL)
-    return(NITF_FAILURE);
+  if (icntl->buffer == NULL)
+  {
+    icntl->buffer = (nitf_Uint8 *) NITF_MALLOC(icntl->blockSizeCompressed);
+    if (icntl->buffer == NULL)
+      return(NITF_FAILURE);
+  }
 
   return(NITF_SUCCESS);
 }
@@ -9562,8 +9622,6 @@ NITF_BOOL nitf_ImageIO_12PixelComEnd
 void nitf_ImageIO_12PixelComDestroy(nitf_CompressionControl ** object)
 {
   nitf_ImageIO_12PixelComControl *icntl;  /* The internal data structure */
-
-  icntl = (nitf_ImageIO_12PixelComControl *) object;
 
    if(object != NULL)
    {

@@ -204,17 +204,6 @@ int main(int argc, char** argv)
 
     try
     {
-        try
-        {
-            sys::OS().getEnv(six::SCHEMA_PATH);
-        }
-        catch(const except::Exception& )
-        {
-            throw except::Exception(Ctxt(
-                    "Must specify SIDD schema path via " +
-                    std::string(six::SCHEMA_PATH) + " environment variable"));
-        }
-
         six::XMLControlFactory::getInstance().
             addCreator(
                 six::DataType::COMPLEX,
@@ -365,11 +354,11 @@ int main(int argc, char** argv)
             std::cout << "Overriding NITF product size and max ILOC"
                     << std::endl;
             writer->getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, str::toType<
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, str::toType<
                             long>(argv[5]));
 
             writer->getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_ILOC_ROWS,
+                    six::NITFHeaderCreator::OPT_MAX_ILOC_ROWS,
                     str::toType<long>(argv[6]));
 
         }

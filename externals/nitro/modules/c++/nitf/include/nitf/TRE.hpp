@@ -189,17 +189,16 @@ typedef nitf::TREFieldIterator Iterator;
     //! Without the const char* constructors, in VS if you do something like
     //  TRE("my_tre_tag")
     //  You get the NITF_DATA* constructor rather than the std::string one
-    TRE(const char* tag) throw(nitf::NITFException);
+    TRE(const char* tag);
 
-    TRE(const char* tag, const char* id) throw(nitf::NITFException);
+    TRE(const char* tag, const char* id);
 
-    TRE(const std::string& tag) throw(nitf::NITFException);
+    TRE(const std::string& tag);
 
-    TRE(const std::string& tag, const std::string& id)
-        throw(nitf::NITFException);
+    TRE(const std::string& tag, const std::string& id);
 
     //! Clone
-    nitf::TRE clone() throw(nitf::NITFException);
+    nitf::TRE clone();
 
     ~TRE();
 
@@ -213,17 +212,15 @@ typedef nitf::TREFieldIterator Iterator;
      *  Get an end TRE field iterator
      *  \return  A field iterator pointing PAST the last field in the TRE
      */
-    Iterator end() throw (nitf::NITFException);
+    Iterator end();
 
     /*!
      * Get the field specified by the key. Throws an exception if the field
      * does not exist.
      */
-    nitf::Field getField(const std::string& key)
-        throw(except::NoSuchKeyException);
+    nitf::Field getField(const std::string& key);
 
-    nitf::Field operator[] (const std::string& key)
-        throw(except::NoSuchKeyException);
+    nitf::Field operator[] (const std::string& key);
 
     /*!
      * Returns a List of Fields that match the given pattern.
@@ -242,8 +239,7 @@ typedef nitf::TREFieldIterator Iterator;
 	                            key.c_str(),
 	                            (NITF_DATA*)s.c_str(),
 	                            s.size(),
-	                            &error) )
-	        throw nitf::NITFException(&error);
+	                            &error) );
     }
 
     /*!

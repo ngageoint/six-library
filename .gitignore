@@ -2,10 +2,14 @@
 *.pyc
 *~
 *.swp
+*venv
 
 # Eclipse
 .cproject
 .project
+
+# VS Code
+.vscode
 
 # Waf
 .lock-waf*
@@ -17,4 +21,9 @@ install/
 
 # Drivers
 six/projects/csm/external/csm-master/
+six/projects/csm/external/csm-3.0.3/
 six/projects/csm/external/vts_301_0/
+
+# Giant test files
+regression_files/
+six/modules/c++/cphd/tests/sample_cphd/

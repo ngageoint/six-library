@@ -43,6 +43,7 @@
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedDataBuilder.h>
+#include <six/NITFHeaderCreator.h>
 #include "utils.h"
 
 namespace
@@ -117,7 +118,6 @@ int main(int argc, char** argv)
             return 1;
         }
         const std::string outPathnamePrefix(argv[1]);
-        verifySchemaEnvVariableIsSet();
 
         // In order to make it easier to test segmenting, let's artificially set
         // the segment size really small
@@ -201,38 +201,32 @@ int main(int argc, char** argv)
 
         // Write it out
         {
-            six::NITFWriteControl writer;
-
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+            six::Options options;
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     str::toString(maxSize));
 
-            writer.setXMLControlRegistry(&xmlRegistry);
-            writer.initialize(container);
-
+            six::NITFWriteControl writer(options, container, &xmlRegistry);
             writer.save(buffers, outPathnamePrefix + "_unblocked.nitf");
         }
 
         // Write it out with blocking
         {
-            six::NITFWriteControl writer;
-
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+            six::Options options;
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     str::toString(maxSize));
 
             const std::string blockSize("23");
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                     blockSize);
 
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                     blockSize);
 
-            writer.setXMLControlRegistry(&xmlRegistry);
-            writer.initialize(container);
-
+            six::NITFWriteControl writer(options, container, &xmlRegistry);
             writer.save(buffers, outPathnamePrefix + "_blocked.nitf");
         }
 

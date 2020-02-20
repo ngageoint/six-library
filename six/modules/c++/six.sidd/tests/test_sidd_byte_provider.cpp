@@ -260,26 +260,26 @@ private:
         }
     }
 
-    void setWriterOptions(six::NITFWriteControl& writer)
+    void setWriterOptions(six::Options& options)
     {
         if (mSetMaxProductSize)
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE,
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
                     mMaxProductSize);
         }
 
         if (mNumRowsPerBlock != 0)
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_ROWS_PER_BLOCK,
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                     mNumRowsPerBlock);
         }
 
         if (mNumColsPerBlock != 0)
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_NUM_COLS_PER_BLOCK,
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                     mNumColsPerBlock);
         }
     }
@@ -373,10 +373,9 @@ void Tester<DataTypeT>::normalWrite()
                            new six::XMLControlCreatorT<
                                    six::sidd::DerivedXMLControl>());
 
-    six::NITFWriteControl writer;
-    writer.setXMLControlRegistry(&xmlRegistry);
-    setWriterOptions(writer);
-    writer.initialize(container);
+    six::Options options;
+    setWriterOptions(options);
+    six::NITFWriteControl writer(options, container, &xmlRegistry);
 
     six::BufferList buffers;
     buffers.push_back(reinterpret_cast<six::UByte*>(&mImage[0]));

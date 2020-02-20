@@ -23,6 +23,8 @@
 #ifndef __SIX_SI_COMMON_XML_PARSER_H__
 #define __SIX_SI_COMMON_XML_PARSER_H__
 
+#include <six/CollectionInformation.h>
+#include <six/MatchInformation.h>
 #include <six/XMLParser.h>
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
@@ -47,27 +49,31 @@ public:
 
     XMLElem createComplex(const std::string& name, std::complex<double> c,
             XMLElem parent = NULL) const;
+    XMLElem createVector2D(const std::string& name, const std::string& uri,
+            Vector2 p = 0.0, XMLElem parent = nullptr) const;
+    XMLElem createVector2D(const std::string& name, Vector2 p = 0.0,
+            XMLElem parent = nullptr) const;
     XMLElem createVector3D(const std::string& name, const std::string& uri,
             Vector3 p = 0.0, XMLElem parent = NULL) const;
-    XMLElem createVector3D(const std::string& name, Vector3 p = 0.0, 
+    XMLElem createVector3D(const std::string& name, Vector3 p = 0.0,
             XMLElem parent = NULL) const;
-    XMLElem createRowCol(const std::string& name, const std::string& uri, 
-            const std::string& rowName, const std::string& colName, 
+    XMLElem createRowCol(const std::string& name, const std::string& uri,
+            const std::string& rowName, const std::string& colName,
             const RowColInt& value, XMLElem parent = NULL) const;
     XMLElem createRowCol(const std::string& name, const std::string& rowName,
             const std::string& colName, const RowColInt& value,
             XMLElem parent = NULL) const;
     XMLElem createRowCol(const std::string& name, const std::string& uri,
-            const std::string& rowName, const std::string& colName, 
+            const std::string& rowName, const std::string& colName,
             const RowColDouble& value, XMLElem parent = NULL) const;
     XMLElem createRowCol(const std::string& name, const std::string& rowName,
             const std::string& colName, const RowColDouble& value,
             XMLElem parent = NULL) const;
-    XMLElem createRowCol(const std::string& name, const std::string& uri, 
+    XMLElem createRowCol(const std::string& name, const std::string& uri,
             const RowColInt& value, XMLElem parent = NULL) const;
     XMLElem createRowCol(const std::string& name, const RowColInt& value,
             XMLElem parent = NULL) const;
-    XMLElem createRowCol(const std::string& name, const std::string& uri, 
+    XMLElem createRowCol(const std::string& name, const std::string& uri,
             const RowColDouble& value, XMLElem parent = NULL) const;
     XMLElem createRowCol(const std::string& name, const RowColDouble& value,
             XMLElem parent = NULL) const;
@@ -105,6 +111,7 @@ public:
     void parsePoly2D(XMLElem polyXML, Poly2D& poly2D) const;
     void parsePolyXYZ(XMLElem polyXML, PolyXYZ& polyXYZ) const;
 
+    void parseVector2D(XMLElem vecXML, Vector2& vec) const;
     void parseVector3D(XMLElem vecXML, Vector3& vec) const;
     void parseLatLonAlt(XMLElem llaXML, LatLonAlt& lla) const;
     void parseLatLon(XMLElem parent, LatLon& ll) const;
@@ -144,14 +151,29 @@ public:
         const XMLElem errorStatsXML,
         ErrorStatistics* errorStatistics) const;
 
+    XMLElem convertCollectionInformationToXML(
+        const CollectionInformation *obj,
+        XMLElem parent = nullptr) const;
+
+    void parseCollectionInformationFromXML(
+        const XMLElem collectionInfoXML,
+        CollectionInformation *obj) const;
+
+    XMLElem convertMatchInformationToXML(
+            const MatchInformation* matchInformation,
+            XMLElem parent = nullptr) const;
+
+    void parseMatchInformationFromXML(
+            const XMLElem matchInfoXML,
+            MatchInformation* matchInformation) const;
+
     virtual XMLElem convertRadiometryToXML(
-        const Radiometric *obj, 
+        const Radiometric *obj,
         XMLElem parent = NULL) const = 0;
 
     virtual void parseRadiometryFromXML(
-        const XMLElem radiometricXML, 
+        const XMLElem radiometricXML,
         Radiometric *obj) const = 0;
-
 
 protected:
 

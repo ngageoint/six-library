@@ -43,10 +43,9 @@ namespace nitf
 class SegmentWriter : public WriteHandler
 {
 public:
-    SegmentWriter() throw (nitf::NITFException);
+    SegmentWriter();
 
-    SegmentWriter(nitf::SegmentSource segmentSource)
-            throw (nitf::NITFException);
+    SegmentWriter(nitf::SegmentSource segmentSource);
 
     // Set native object
     SegmentWriter(nitf_SegmentWriter *x) : WriteHandler(x)
@@ -59,8 +58,7 @@ public:
      *  Attach a segment source from which to write.
      *  \param segmentSource  The segment source from which to write
      */
-    void attachSource(nitf::SegmentSource segmentSource)
-            throw (nitf::NITFException);
+    void attachSource(nitf::SegmentSource segmentSource);
 
 private:
     nitf_Error error;

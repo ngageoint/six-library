@@ -90,16 +90,19 @@ TEST_CASE(ecfFromLlh)
 
     // This data doesn't matter; just need the object to pass to the function
     six::sicd::ImageData imageData;
-    scene::PlaneProjectionModel model(six::Vector3(), six::Vector3(),
-            six::Vector3(), six::Vector3(), six::PolyXYZ(1), six::Poly2D(1, 1),
-            -1);
+    scene::PlaneProjectionModel model(six::Vector3({0, 0, 0}),
+                                      six::Vector3({0, 0, 0}),
+                                      six::Vector3({0, 0, 0}),
+                                      six::Vector3({0, 0, 0}),
+                                      six::PolyXYZ(1),
+                                      six::Poly2D(1, 1),
+                                      -1);
 
     geoData.fillDerivedFields(imageData, model);
-    std::vector<double> expectedData(3);
-    expectedData[0] = 5903057.30519;
-    expectedData[1] = 2148537.15026;
-    expectedData[2] = 1100253.75718;
-    six::Vector3 expected(expectedData);
+    const six::Vector3 expected({5903057.30519,
+                                 2148537.15026,
+                                 1100253.75718});
+
     for (size_t ii = 0; ii < 3; ++ii)
     {
         // This is as much accuracy as the results from
@@ -115,4 +118,3 @@ int main(int, char**)
     TEST_CHECK(fillValidData);
     return 0;
 }
-

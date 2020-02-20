@@ -42,7 +42,7 @@ LabelSubheader::LabelSubheader(nitf_LabelSubheader * x)
     getNativeOrThrow();
 }
 
-LabelSubheader::LabelSubheader() throw(nitf::NITFException)
+LabelSubheader::LabelSubheader()
 {
     setNative(nitf_LabelSubheader_construct(&error));
     getNativeOrThrow();
@@ -50,7 +50,7 @@ LabelSubheader::LabelSubheader() throw(nitf::NITFException)
 }
 
 
-LabelSubheader LabelSubheader::clone() throw(nitf::NITFException)
+LabelSubheader LabelSubheader::clone()
 {
     nitf::LabelSubheader dolly(
         nitf_LabelSubheader_clone(getNativeOrThrow(), &error));

@@ -26,7 +26,7 @@ namespace nitf
 {
 IOHandle::IOHandle(const std::string& fname,
                    nitf::AccessFlags access,
-                   nitf::CreationFlags creation) throw (nitf::NITFException) :
+                   nitf::CreationFlags creation) :
     IOInterface(open(fname.c_str(), access, creation))
 {
     setManaged(false);
@@ -34,7 +34,7 @@ IOHandle::IOHandle(const std::string& fname,
 
 IOHandle::IOHandle(const char* fname,
                    nitf::AccessFlags access,
-                   nitf::CreationFlags creation) throw (nitf::NITFException) :
+                   nitf::CreationFlags creation) :
     IOInterface(open(fname, access, creation))
 {
     setManaged(false);
@@ -43,7 +43,7 @@ IOHandle::IOHandle(const char* fname,
 nitf_IOInterface*
 IOHandle::open(const char* fname,
                nitf::AccessFlags access,
-               nitf::CreationFlags creation) throw (nitf::NITFException)
+               nitf::CreationFlags creation)
 {
     nitf_Error error;
     nitf_IOInterface* const ioInterface =

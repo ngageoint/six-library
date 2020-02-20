@@ -276,15 +276,21 @@ class CPPContext(Context.Context):
                                  lang=lang, path=testNode, includes=includes, defines=defines,
                                  install_path='${PREFIX}/tests/%s' % modArgs['name'])
 
-        pythonTestNode = path.parent.parent.make_node('python').make_node(str(path)).make_node('tests')
-        if os.path.exists(pythonTestNode.abspath()) and not Options.options.libs_only:
-            tests = [str(test) for test in pythonTestNode.ant_glob('*.py') if
-                    str(test) not in listify(modArgs.get('test_filter', ''))]
-            for test in tests:
-                bld(features='install_tgt',
-                        files=[test], dir=pythonTestNode,
-                        name=test, target=test,
-                        install_path='${PREFIX}/tests/%s' % modArgs['name'])
+
+        # Create install target for python tests
+        if not Options.options.libs_only:
+            for testDirname in ['tests', 'unittests']:
+                pythonTestNode = path.parent.parent.make_node('python').\
+                        make_node(str(path)).make_node(testDirname)
+                if os.path.exists(pythonTestNode.abspath()):
+                    tests = [str(test) for test in pythonTestNode.ant_glob('*.py') if
+                             str(test) not in listify(modArgs.get('test_filter', ''))]
+                    for test in tests:
+                        installPath = '${PREFIX}/%s/%s' % (testDirname, modArgs['name'])
+                        bld(features='install_tgt',
+                            files=[test], dir=pythonTestNode,
+                            name=test, target=test,
+                            install_path=installPath)
 
 
         testNode = path.make_node('unittests')
@@ -305,23 +311,13 @@ class CPPContext(Context.Context):
                 for test in testNode.ant_glob('*%s' % sourceExtensions):
                     if str(test) not in listify(modArgs.get('unittest_filter', '')):
                         testName = splitext(str(test))[0]
-                        exe = self(features='%s %sprogram' % (libExeType, libExeType),
+                        exe = self(features='%s %sprogram test' % (libExeType, libExeType),
                                      env=env.derive(), name=testName, target=testName, source=str(test), use=test_deps,
                                      uselib = modArgs.get('unittest_uselib', modArgs.get('uselib', '')),
                                      lang=lang, path=testNode, defines=defines,
                                      includes=includes,
                                      install_path='${PREFIX}/unittests/%s' % modArgs['name'])
-                        if Options.options.unittests or Options.options.all_tests:
-                            exe.features += ' test'
-
                         tests.append(testName)
-
-                # add a post-build hook to run the unit tests
-                # I use partial so I can pass arguments to a post build hook
-                #if Options.options.unittests:
-                #    bld.add_post_fun(partial(CPPBuildContext.runUnitTests,
-                #                             tests=tests,
-                #                             path=self.getBuildDir(testNode)))
 
         confDir = path.make_node('conf')
         if exists(confDir.abspath()):
@@ -339,7 +335,7 @@ class CPPContext(Context.Context):
         plugin (via the plugin kwarg).
         """
         bld = self
-        env = self._getEnv(modArgs)
+        env = self._getEnv(modArgs).derive()
 
         modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
         lang = modArgs.get('lang', 'c++')
@@ -370,7 +366,7 @@ class CPPContext(Context.Context):
         lib = bld(features='%s %sshlib add_targets no_implib' % (libExeType, libExeType),
                 target=libName, name=targetName, source=source,
                 includes=includes, export_includes=exportIncludes,
-                use=uselib_local, uselib=uselib, env=env.derive(),
+                use=uselib_local, uselib=uselib, env=env,
                 defines=defines, path=path, targets_to_add=targetsToAdd,
                 install_path=join(env['install_sharedir'], plugin, 'plugins'))
 
@@ -545,7 +541,7 @@ class CPPContext(Context.Context):
                 # actually check it in so other developers can still use the Python
                 # bindings even if they don't have Swig
                 flags = '-python -c++'
-                if sys.version_info[0] >= 3:
+                if sys.version_info[0] >= 3 and not env['PYTHON_AGNOSTIC']:
                     flags += ' -py3'
                 bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
                     source = swigSource,
@@ -643,7 +639,7 @@ class GlobDirectoryWalker:
             except IndexError:
                 # pop next directory from stack
                 if len(self.stack) == 0:
-                    raise StopIteration
+                    return
                 self.directory = self.stack.pop()
                 if isdir(self.directory):
                     self.files = os.listdir(self.directory)
@@ -653,7 +649,7 @@ class GlobDirectoryWalker:
             else:
                 # got a filename
                 fullname = join(self.directory, file)
-                if isdir(fullname):# and not os.path.islink(fullname):
+                if isdir(fullname) and not os.path.islink(fullname):
                     self.stack.append(fullname)
                 for p in self.patterns:
                     if fnmatch.fnmatch(file, p):
@@ -724,6 +720,11 @@ def unzipper(inFile, outDir):
         outFile.flush()
         outFile.close()
 
+
+def deprecated_callback(option, opt, value, parser):
+    Logs.warn('Warning: {0} is deprecated'.format(opt))
+
+
 def options(opt):
     opt.load('compiler_cc')
     opt.load('compiler_cxx')
@@ -747,8 +748,7 @@ def options(opt):
                    default=False, help='Treat compiler warnings as errors')
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
-    opt.add_option('--enable-cpp11', action='store_true', default=False, dest='enablecpp11',
-                   help='Enable C++11 features')
+    opt.add_option('--enable-cpp11', action='callback', callback=deprecated_callback)
     #TODO - get rid of enable64 - it's useless now
     opt.add_option('--enable-64bit', action='store_true', dest='enable64',
                    help='Enable 64bit builds')
@@ -772,8 +772,6 @@ def options(opt):
                    help='Build all libs as shared libs')
     opt.add_option('--disable-symlinks', action='store_false', dest='symlinks',
                    default=True, help='Disable creating symlinks for libs')
-    opt.add_option('--unittests', action='store_true', dest='unittests',
-                   help='Build-time option to run unit tests after the build has completed')
     opt.add_option('--no-headers', action='store_false', dest='install_headers',
                     default=True, help='Don\'t install module headers')
     opt.add_option('--no-libs', action='store_false', dest='install_libs',
@@ -794,6 +792,29 @@ def options(opt):
                    help='Specify a prebuilt modules config file (created from dumpconfig)')
     opt.add_option('--disable-swig-silent-leak', action='store_false', dest='swig_silent_leak',
                    default=True, help='Allow swig to print memory leaks it detects')
+
+
+def ensureCpp11Support(self):
+    # Visual Studio 2013 has nullptr but not constexpr.  Need to check for
+    # both in here to make sure we have full C++11 support... otherwise,
+    # long-term we may need multiple separate configure checks and
+    # corresponding defines
+
+    cpp11_str = '''
+            int main()
+            {
+                constexpr void* FOO = nullptr;
+            }
+            '''
+    self.check_cxx(fragment=cpp11_str,
+                   execute=0,
+                   msg='Checking for C++11 support',
+                   mandatory=True)
+
+    # DEPRECATED.
+    # Keeping for now in case downstream code is still looking for it
+    self.env['cpp11support'] = True
+
 
 def configureCompilerOptions(self):
     sys_platform = getPlatform(default=Options.platform)
@@ -884,12 +905,7 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
 
-            gxxCompileFlags='-fPIC'
-            if self.env['cpp11support'] and \
-            ((cxxCompiler == 'g++' and gccHasCpp11()) or \
-             (cxxCompiler == 'icpc' and iccHasCpp11())):
-                gxxCompileFlags+=' -std=c++11'
-
+            gxxCompileFlags='-fPIC -std=c++11'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -1193,6 +1209,9 @@ def configure(self):
     if self.env['DETECTED_BUILD_PY']:
         return
 
+    if sys.version_info < (2, 7, 0):
+        self.fatal('build.py requires at least Python 2.7')
+
     sys_platform = getPlatform(default=Options.platform)
     winRegex = r'win32'
 
@@ -1281,14 +1300,17 @@ def configure(self):
         env.append_unique('LINKFLAGS', Options.options.linkflags.split())
     if Options.options._defs:
         env.append_unique('DEFINES', Options.options._defs.split(','))
-    #if its already defined in a wscript, don't touch.
-    if not env['cpp11support']:
-        env['cpp11support'] = Options.options.enablecpp11
     configureCompilerOptions(self)
+    ensureCpp11Support(self)
 
     env['PLATFORM'] = sys_platform
 
     env['LIB_TYPE'] = Options.options.shared_libs and 'shlib' or 'stlib'
+    env['declspec_decoration'] = ''
+    env['windows_dll'] = False
+    if Options.options.shared_libs and env['COMPILER_CXX'] == 'msvc':
+        env['declspec_decoration'] = '__declspec(dllexport)'
+        env['windows_dll'] = True
 
     env['install_headers'] = Options.options.install_headers
     env['install_libs'] = Options.options.install_libs
@@ -1437,7 +1459,6 @@ def process_swig_linkage(tsk):
 
     # newlib is now a list of our non-python libraries
     tsk.env.LIB = newlib
-
 
 
 #
@@ -1711,33 +1732,6 @@ def getSolarisFlags(compilerName):
 
     return (bitFlag32, bitFlag64)
 
-def gccHasCpp11():
-    try:
-        output = subprocess.check_output("g++ --help=c++",
-                                         stderr=subprocess.STDOUT,
-                                         shell=True,
-                                         universal_newlines=True)
-    except subprocess.CalledProcessError:
-        # If gcc is too old for --help=, then it is too old for C++11
-        return False
-    for line in output.split('\n'):
-        if re.search(r'-std=c\+\+11', line):
-            return True
-    return False
-
-def iccHasCpp11():
-    try:
-        output = subprocess.check_output("icpc -help",
-                                         stderr=subprocess.STDOUT,
-                                         shell=True,
-                                         universal_newlines=True)
-    except subprocess.CalledProcessError:
-        # If icc is too old for -help, then it is too old for C++11
-        return False
-    for line in output.split('\n'):
-        if re.search(r'c\+\+11', line):
-            return True
-    return False
 
 def getWscriptTargets(bld, env, path):
     # Here we're taking a look at the current stack and adding on all the
@@ -1801,6 +1795,19 @@ def addSourceTargets(bld, env, path, target):
                                          relative_trick=True))
 
         target.targets_to_add += wscriptTargets
+
+def enableWafUnitTests(bld, set_exit_code=True):
+    """
+    If called, run all C++ unit tests after building
+    :param set_exit_code Flag to set a non-zero exit code if a unit test fails
+    """
+    # TODO: This does not work for Python files.
+    # The "nice" way to handle this is possibly not
+    # supported in this version of Waf.
+    bld.add_post_fun(waf_unit_test.summary)
+    if set_exit_code:
+        bld.add_post_fun(waf_unit_test.set_exit_code)
+
 
 class SwitchContext(Context.Context):
     """
@@ -1876,4 +1883,3 @@ class CPPPackageContext(package, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPPackageContext, self).__init__(**kw)
-

@@ -33,18 +33,18 @@ from runner import PythonTestRunner
 
 def createSampleCPHD():
     programPathname = os.path.join(utils.installPath(), 'tests',
-            'cphd', 'test_cphd_write_simple')
+            'cphd03', 'test_cphd_write_simple')
     if not os.path.exists(programPathname):
         programPathname += '.exe'
     if not os.path.exists(programPathname):
         raise IOError('Unable to find ' + programPathname)
-    cphdHandle, cphdPathname = tempfile.mkstemp()
-    os.close(cphdHandle)
-    os.remove(cphdPathname)
-    success = subprocess.check_call([programPathname, cphdPathname])
+    cphd03Handle, cphd03Pathname = tempfile.mkstemp()
+    os.close(cphd03Handle)
+    os.remove(cphd03Pathname)
+    success = subprocess.check_call([programPathname, cphd03Pathname])
     if success != 0:
         raise OSError('An error occured while executing ' + programPathname)
-    return cphdPathname
+    return cphd03Pathname
 
 
 def run():
@@ -65,12 +65,13 @@ def run():
         sicdRunner.run('test_read_complex_data.py', sampleNITF))
 
     # CPHD tests
-    cphdPathname = createSampleCPHD()
+    cphd03Pathname = createSampleCPHD()
     testsDir = os.path.join(utils.findSixHome(), 'six',
-            'modules', 'python', 'cphd', 'tests')
-    cphdRunner = PythonTestRunner(testsDir)
-    result = result and cphdRunner.run('test_round_trip_cphd.py', cphdPathname,
+            'modules', 'python', 'cphd03', 'tests')
+    cphd03Runner = PythonTestRunner(testsDir)
+    result = result and cphd03Runner.run('test_round_trip_cphd.py', cphd03Pathname,
             'out.cphd')
+    os.remove(cphd03Pathname)
 
     # SIX tests
     testsDir = os.path.join(utils.findSixHome(), 'six',

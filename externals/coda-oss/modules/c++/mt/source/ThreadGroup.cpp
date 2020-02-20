@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
@@ -14,21 +14,32 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
+
 #include <mt/ThreadGroup.h>
 #include <mt/CriticalSection.h>
 
-mt::ThreadGroup::ThreadGroup() :
+namespace mt
+{
+#if defined(MT_DEFAULT_PINNING)
+    bool ThreadGroup::DEFAULT_PIN_TO_CPU = true;
+#else
+    bool ThreadGroup::DEFAULT_PIN_TO_CPU = false;
+#endif
+
+
+ThreadGroup::ThreadGroup(bool pinToCPU) :
+    mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : NULL),
     mLastJoined(0)
 {
 }
 
-mt::ThreadGroup::~ThreadGroup()
+ThreadGroup::~ThreadGroup()
 {
     try
     {
@@ -40,21 +51,28 @@ mt::ThreadGroup::~ThreadGroup()
     }
 }
 
-void mt::ThreadGroup::createThread(sys::Runnable *runnable)
+void ThreadGroup::createThread(sys::Runnable *runnable)
 {
     createThread(std::auto_ptr<sys::Runnable>(runnable));
 }
 
-void mt::ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
+void ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
 {
-    std::auto_ptr<sys::Runnable> internalRunnable(new ThreadGroupRunnable(runnable, *this));
+    // Note: If getNextInitializer throws, any previously created
+    //       threads may never finish if cross-thread communication is used.
+    std::auto_ptr<sys::Runnable> internalRunnable(
+            new ThreadGroupRunnable(
+                    runnable,
+                    *this,
+                    getNextInitializer()));
+
     mem::SharedPtr<sys::Thread> thread(new sys::Thread(internalRunnable.get()));
     internalRunnable.release();
     mThreads.push_back(thread);
     thread->start();
 }
 
-void mt::ThreadGroup::joinAll()
+void ThreadGroup::joinAll()
 {
     bool failed = false;
     // Keep track of which threads we've already joined.
@@ -69,7 +87,7 @@ void mt::ThreadGroup::joinAll()
             failed = true;
         }
     }
-    
+
     if (!mExceptions.empty())
     {
         std::string messageString("Exceptions thrown from ThreadGroup in the following order:\n");
@@ -84,11 +102,11 @@ void mt::ThreadGroup::joinAll()
         throw except::Error(Ctxt("ThreadGroup could not be joined"));
 }
 
-void mt::ThreadGroup::addException(const except::Exception& ex)
+void ThreadGroup::addException(const except::Exception& ex)
 {
     try
     {
-        mt::CriticalSection<sys::Mutex> pushLock(&mMutex);
+        CriticalSection<sys::Mutex> pushLock(&mMutex);
         mExceptions.push_back(ex);
     }
     catch(...)
@@ -97,16 +115,35 @@ void mt::ThreadGroup::addException(const except::Exception& ex)
     }
 }
 
-mt::ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable
-    (std::auto_ptr<sys::Runnable> runnable, mt::ThreadGroup& parentThreadGroup):
-        mRunnable(runnable), mParentThreadGroup(parentThreadGroup)
+std::auto_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer()
+{
+    std::auto_ptr<CPUAffinityThreadInitializer> threadInit(NULL);
+    if (mAffinityInit.get())
+    {
+        threadInit = mAffinityInit->newThreadInitializer();
+    }
+
+    return threadInit;
+}
+
+ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
+        std::auto_ptr<sys::Runnable> runnable,
+        ThreadGroup& parentThreadGroup,
+        std::auto_ptr<CPUAffinityThreadInitializer> threadInit) :
+        mRunnable(runnable),
+        mParentThreadGroup(parentThreadGroup),
+        mCPUInit(threadInit)
 {
 }
 
-void mt::ThreadGroup::ThreadGroupRunnable::run()
+void ThreadGroup::ThreadGroupRunnable::run()
 {
     try
     {
+        if (mCPUInit.get())
+        {
+            mCPUInit->initialize();
+        }
         mRunnable->run();
     }
     catch(const except::Exception& ex)
@@ -122,4 +159,20 @@ void mt::ThreadGroup::ThreadGroupRunnable::run()
         mParentThreadGroup.addException(
             except::Exception(Ctxt("Unknown ThreadGroup exception.")));
     }
+}
+
+bool ThreadGroup::isPinToCPUEnabled() const
+{
+    return mAffinityInit.get() != NULL;
+}
+
+bool ThreadGroup::getDefaultPinToCPU()
+{
+    return DEFAULT_PIN_TO_CPU;
+}
+
+void ThreadGroup::setDefaultPinToCPU(bool newDefault)
+{
+    DEFAULT_PIN_TO_CPU = newDefault;
+}
 }

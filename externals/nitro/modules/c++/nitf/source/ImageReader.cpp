@@ -44,7 +44,7 @@ ImageReader::ImageReader(nitf_ImageReader * x)
 
 ImageReader::~ImageReader(){}
 
-nitf::BlockingInfo ImageReader::getBlockingInfo() throw (nitf::NITFException)
+nitf::BlockingInfo ImageReader::getBlockingInfo()
 {
     nitf_BlockingInfo* blockingInfo =
             nitf_ImageReader_getBlockingInfo(getNativeOrThrow(), &error);
@@ -55,7 +55,7 @@ nitf::BlockingInfo ImageReader::getBlockingInfo() throw (nitf::NITFException)
     return cppBlockingInfo;
 }
 
-void ImageReader::read(nitf::SubWindow & subWindow, nitf::Uint8 ** user, int * padded) throw (nitf::NITFException)
+void ImageReader::read(nitf::SubWindow & subWindow, nitf::Uint8 ** user, int * padded)
 {
     NITF_BOOL x = nitf_ImageReader_read(getNativeOrThrow(), subWindow.getNative(), user, padded, &error);
     if (!x)
@@ -63,7 +63,6 @@ void ImageReader::read(nitf::SubWindow & subWindow, nitf::Uint8 ** user, int * p
 }
 
 const nitf::Uint8* ImageReader::readBlock(nitf::Uint32 blockNumber, nitf::Uint64* blockSize)
-    throw (nitf::NITFException)
 {
     const nitf::Uint8* x = nitf_ImageReader_readBlock(
         getNativeOrThrow(), blockNumber, blockSize, &error);

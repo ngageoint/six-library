@@ -65,39 +65,50 @@ public:
     Reader(nitf_Reader * x);
 
     //! Default Constructor
-    Reader() throw(nitf::NITFException);
+    Reader();
 
     ~Reader();
 
     /*!
      * Return the Version of the file passed in by its file name.
-     * Valid return values are:
-     *      NITF_VER_20, NITF_VER_21, or NITF_VER_UNKNOWN
+     * \param fileName Pathname of file to read
+     * \return NITF_VER_20, NITF_VER_21, or NITF_VER_UNKNOWN
      */
     static nitf::Version getNITFVersion(const std::string& fileName);
 
     /*!
-     *  This is the preferred method for reading a NITF 2.1 file.
-     *  \param io  The IO handle
-     *  \return  A Record containing the read information
+     * Return the Version of the file
+     * \param io IOInterface wrapping file contents
+     * \return NITF_VER_20, NITF_VER_21, or NITF_VER_UNKNOWN
+     * \note If file is not a NITF, or if errors occur, returns
+     *       NITF_VER_UNKNOWN
+     * \note IOInterface should be at the start of the file. Its location
+     *       will be reset to wherever it began after reading the neccesary
+     *       bytes.
      */
-    nitf::Record read(nitf::IOHandle & io) throw (nitf::NITFException);
+    static nitf::Version getNITFVersion(nitf::IOInterface& io);
 
     /*!
      *  This is the preferred method for reading a NITF 2.1 file.
      *  \param io  The IO handle
      *  \return  A Record containing the read information
      */
-    nitf::Record readIO(nitf::IOInterface & io) throw (nitf::NITFException);
+    nitf::Record read(nitf::IOHandle & io);
+
+    /*!
+     *  This is the preferred method for reading a NITF 2.1 file.
+     *  \param io  The IO handle
+     *  \return  A Record containing the read information
+     */
+    nitf::Record readIO(nitf::IOInterface & io);
 
     /*!
      *  Get a new image reader for the segment
      *  \param imageSegmentNumber  The image segment number
      *  \return  An ImageReader matching the imageSegmentNumber
      */
-    nitf::ImageReader newImageReader(int imageSegmentNumber)
-        throw (nitf::NITFException);
-    
+    nitf::ImageReader newImageReader(int imageSegmentNumber);
+
     /*!
      *  Get a new image reader for the segment
      *  \param imageSegmentNumber  The image segment number
@@ -105,32 +116,28 @@ public:
      *  \return  An ImageReader matching the imageSegmentNumber
      */
     nitf::ImageReader newImageReader(int imageSegmentNumber,
-                                     const std::map<std::string, void*>& options)
-        throw (nitf::NITFException);
+                                     const std::map<std::string, void*>& options);
 
     /*!
      *  Get a new DE reader for the segment
      *  \param deSegmentNumber  The DE segment number
      *  \return  A SegmentReader matching the deSegmentNumber
      */
-    nitf::SegmentReader newDEReader(int deSegmentNumber)
-        throw (nitf::NITFException);
+    nitf::SegmentReader newDEReader(int deSegmentNumber);
 
     /*!
      *  Get a new SegmentReader for the Graphic segment
      *  \param segmentNumber the segment Number
      *  \return  A SegmentReader matching the segmentNumber
      */
-    nitf::SegmentReader newGraphicReader(int segmentNumber)
-        throw (nitf::NITFException);
+    nitf::SegmentReader newGraphicReader(int segmentNumber);
 
     /*!
      *  Get a new SegmentReader for the Text segment
      *  \param segmentNumber the segment Number
      *  \return  A SegmentReader matching the segmentNumber
      */
-    nitf::SegmentReader newTextReader(int segmentNumber)
-        throw (nitf::NITFException);
+    nitf::SegmentReader newTextReader(int segmentNumber);
 
     //! Get the warningList
     nitf::List getWarningList() const;

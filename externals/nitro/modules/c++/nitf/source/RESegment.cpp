@@ -42,7 +42,7 @@ RESegment::RESegment(nitf_RESegment * x)
     getNativeOrThrow();
 }
 
-RESegment::RESegment() throw(nitf::NITFException)
+RESegment::RESegment()
 {
     setNative(nitf_RESegment_construct(&error));
     getNativeOrThrow();
@@ -62,7 +62,7 @@ RESegment & RESegment::operator=(NITF_DATA * x)
     return *this;
 }
 
-nitf::RESegment RESegment::clone() throw(nitf::NITFException)
+nitf::RESegment RESegment::clone()
 {
     nitf::RESegment dolly(
         nitf_RESegment_clone(getNativeOrThrow(), &error));

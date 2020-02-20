@@ -23,7 +23,7 @@
 #include "nitf/SegmentSource.hpp"
 
 nitf::SegmentMemorySource::SegmentMemorySource(const char * data, size_t size,
-        nitf::Off start, int byteSkip, bool copyData) throw (nitf::NITFException)
+        nitf::Off start, int byteSkip, bool copyData)
 {
     setNative(nitf_SegmentMemorySource_construct(data, size, start, byteSkip,
     		                                     copyData, &error));
@@ -31,7 +31,7 @@ nitf::SegmentMemorySource::SegmentMemorySource(const char * data, size_t size,
 }
 
 nitf::SegmentFileSource::SegmentFileSource(nitf::IOHandle & io,
-        nitf::Off start, int byteSkip) throw (nitf::NITFException)
+        nitf::Off start, int byteSkip)
 {
     setNative(nitf_SegmentFileSource_constructIO(io.getNative(),
                                                  start, byteSkip,
@@ -41,7 +41,6 @@ nitf::SegmentFileSource::SegmentFileSource(nitf::IOHandle & io,
 }
 
 nitf::SegmentReaderSource::SegmentReaderSource(nitf::SegmentReader reader)
-        throw (nitf::NITFException)
 {
     setNative(nitf_SegmentReaderSource_construct(reader.getNativeOrThrow(),
                                                  &error));

@@ -83,8 +83,10 @@ using namespace six;
 %include "six/Init.h"
 %include "six/Parameter.h"
 %include "six/ParameterCollection.h"
+%include "six/CollectionInformation.h"
 %include "six/Classification.h"
 %include "six/ErrorStatistics.h"
+%include "six/MatchInformation.h"
 %include "six/Radiometric.h"
 %include "six/Data.h"
 %include "six/XMLControl.h"
@@ -178,6 +180,7 @@ def setValue(self, *args):
 
 SCOPED_COPYABLE(six, Radiometric)
 SCOPED_COPYABLE(six, ErrorStatistics)
+SCOPED_COPYABLE(six, MatchInformation)
 SCOPED_COPYABLE(six, CorrCoefs)
 SCOPED_COPYABLE(six, PosVelError)
 SCOPED_COPYABLE(six, RadarSensor)
@@ -186,6 +189,12 @@ SCOPED_COPYABLE(six, IonoError)
 SCOPED_COPYABLE(six, CompositeSCP)
 SCOPED_COPYABLE(six, Components)
 SCOPED_CLONEABLE(six, AmplitudeTable)
+SCOPED_CLONEABLE(six, CollectionInformation)
+
+SCOPED_COPYABLE(six, MatchType)
+
+%template(VectorMatchCollect) std::vector<six::MatchCollect>;
+%template(VectorScopedCopyableMatchType) std::vector<mem::ScopedCopyablePtr<six::MatchType> >;
 
 %extend mem::ScopedCloneablePtr<six::AmplitudeTable>
 {

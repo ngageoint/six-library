@@ -43,14 +43,13 @@ ComponentInfo::ComponentInfo(nitf_ComponentInfo * x)
 }
 
 ComponentInfo::ComponentInfo(nitf::Uint32 subHeaderSize, nitf::Uint64 dataSize)
-    throw(nitf::NITFException)
 {
     setNative(nitf_ComponentInfo_construct(subHeaderSize, dataSize, &error));
     getNativeOrThrow();
     setManaged(false);
 }
 
-ComponentInfo ComponentInfo::clone() throw(nitf::NITFException)
+ComponentInfo ComponentInfo::clone()
 {
     nitf::ComponentInfo dolly(nitf_ComponentInfo_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);

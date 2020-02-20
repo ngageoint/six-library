@@ -95,7 +95,6 @@ except __builtin__.Exception:
         pass
     _newclass = 0
 
-NRT_LIB_VERSION = _nitropy.NRT_LIB_VERSION
 NRT_FILE = _nitropy.NRT_FILE
 NRT_LINE = _nitropy.NRT_LINE
 NRT_FUNC = _nitropy.NRT_FUNC
@@ -129,7 +128,6 @@ nrt_System_swap64 = _nitropy.nrt_System_swap64
 def nrt_System_swap64c(inl):
     return _nitropy.nrt_System_swap64c(inl)
 nrt_System_swap64c = _nitropy.nrt_System_swap64c
-NITF_LIB_VERSION = _nitropy.NITF_LIB_VERSION
 NITF_VER_20 = _nitropy.NITF_VER_20
 NITF_VER_21 = _nitropy.NITF_VER_21
 NITF_VER_UNKNOWN = _nitropy.NITF_VER_UNKNOWN
@@ -382,6 +380,10 @@ NITF_MAX_READ_ATTEMPTS = _nitropy.NITF_MAX_READ_ATTEMPTS
 NITF_DATE_FORMAT_20 = _nitropy.NITF_DATE_FORMAT_20
 NITF_DATE_FORMAT_21 = _nitropy.NITF_DATE_FORMAT_21
 NITF_TRE_HASH_SIZE = _nitropy.NITF_TRE_HASH_SIZE
+HAVE_CLOCK_GETTIME = _nitropy.HAVE_CLOCK_GETTIME
+HAVE_SYS_TIME_H = _nitropy.HAVE_SYS_TIME_H
+NRT_LIB_VERSION = _nitropy.NRT_LIB_VERSION
+NITF_LIB_VERSION = _nitropy.NITF_LIB_VERSION
 NITF_COMPRESSION_HASH_SIZE = _nitropy.NITF_COMPRESSION_HASH_SIZE
 NITF_DECOMPRESSION_HASH_SIZE = _nitropy.NITF_DECOMPRESSION_HASH_SIZE
 NITF_PLUGIN_PATH = _nitropy.NITF_PLUGIN_PATH
@@ -545,6 +547,10 @@ nitf_Reader_newDEReader = _nitropy.nitf_Reader_newDEReader
 def nitf_Reader_getNITFVersion(fileName):
     return _nitropy.nitf_Reader_getNITFVersion(fileName)
 nitf_Reader_getNITFVersion = _nitropy.nitf_Reader_getNITFVersion
+
+def nitf_Reader_getNITFVersionIO(io):
+    return _nitropy.nitf_Reader_getNITFVersionIO(io)
+nitf_Reader_getNITFVersionIO = _nitropy.nitf_Reader_getNITFVersionIO
 NITF_WRITER_FILL_LEFT = _nitropy.NITF_WRITER_FILL_LEFT
 NITF_WRITER_FILL_RIGHT = _nitropy.NITF_WRITER_FILL_RIGHT
 class nitf_Writer(_object):
@@ -1618,8 +1624,8 @@ def nitf_ImageWriter_setWriteCaching(iWriter, enable):
     return _nitropy.nitf_ImageWriter_setWriteCaching(iWriter, enable)
 nitf_ImageWriter_setWriteCaching = _nitropy.nitf_ImageWriter_setWriteCaching
 
-def nitf_ImageWriter_setDirectBlockWrite(iWriter, enable):
-    return _nitropy.nitf_ImageWriter_setDirectBlockWrite(iWriter, enable)
+def nitf_ImageWriter_setDirectBlockWrite(iWriter, enable, error):
+    return _nitropy.nitf_ImageWriter_setDirectBlockWrite(iWriter, enable, error)
 nitf_ImageWriter_setDirectBlockWrite = _nitropy.nitf_ImageWriter_setDirectBlockWrite
 
 def nitf_ImageWriter_setPadPixel(imageWriter, value, length, error):

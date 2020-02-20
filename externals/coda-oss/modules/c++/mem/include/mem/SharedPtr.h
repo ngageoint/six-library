@@ -23,12 +23,21 @@
 #ifndef __MEM_SHARED_PTR_H__
 #define __MEM_SHARED_PTR_H__
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 
-#ifdef __CODA_CPP11
+// Adding a forward declaration here in order to have SWIG correctly generate
+// bindings for SharedPtr.
+//
+// SWIG's default behavior is to not process includes recursively when given an
+// %include directive (neither SharedPtrCpp11 or SharedPtrLegacy will get
+// processed) - including this header without the forward declaration
+// as part of a SWIG interface will result in a missing template type error.
+namespace mem
+{
+template<typename T>
+class SharedPtr;
+}
+
 #include <mem/SharedPtrCpp11.h>
-#else
-#include <mem/SharedPtrLegacy.h>
-#endif
 
 #endif

@@ -59,17 +59,19 @@ void CompressedByteProvider::initialize(
         size_t numRowsPerBlock,
         size_t numColsPerBlock)
 {
-    NITFWriteControl writer;
     const double byterate =
             static_cast<double>(countCompressedBytes(bytesPerBlock)) /
              countUncompressedPixels(*container->getData(0));
-    writer.getOptions().setParameter(
-            six::NITFWriteControl::OPT_J2K_COMPRESSION_BYTERATE, byterate);
-    writer.getOptions().setParameter(
-            six::NITFWriteControl::OPT_J2K_COMPRESSION_LOSSLESS,
+    Options options;
+    options.setParameter(
+            six::NITFHeaderCreator::OPT_J2K_COMPRESSION_BYTERATE, byterate);
+    options.setParameter(
+            six::NITFHeaderCreator::OPT_J2K_COMPRESSION_LOSSLESS,
             isNumericallyLossless);
-    six::ByteProvider::populateWriter(container, xmlRegistry,
-            maxProductSize, numRowsPerBlock, numColsPerBlock, writer);
+    six::ByteProvider::populateOptions(container,
+            maxProductSize, numRowsPerBlock, numColsPerBlock, options);
+
+    NITFWriteControl writer(options, container, &xmlRegistry);
 
     initialize(writer, schemaPaths, bytesPerBlock);
 }

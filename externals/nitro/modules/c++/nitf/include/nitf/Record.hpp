@@ -66,10 +66,10 @@ public:
     Record(nitf_Record * x);
 
     //! Default Constructor
-    Record(nitf::Version version = NITF_VER_21) throw(nitf::NITFException);
+    Record(nitf::Version version = NITF_VER_21);
 
     //! Clone
-    nitf::Record clone() const throw(nitf::NITFException);
+    nitf::Record clone() const;
 
     ~Record();
 

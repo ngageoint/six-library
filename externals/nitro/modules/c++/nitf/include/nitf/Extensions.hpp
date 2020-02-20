@@ -199,7 +199,7 @@ typedef nitf::ExtensionsIterator Iterator;
     }
 
     //! Constructor
-    Extensions() throw(nitf::NITFException)
+    Extensions()
     {
         setNative(nitf_Extensions_construct(&error));
         getNativeOrThrow();
@@ -207,7 +207,7 @@ typedef nitf::ExtensionsIterator Iterator;
     }
 
     //! Clone
-    nitf::Extensions clone() throw(nitf::NITFException)
+    nitf::Extensions clone()
     {
         nitf::Extensions dolly(nitf_Extensions_clone(getNativeOrThrow(), &error));
         dolly.setManaged(false);
@@ -221,7 +221,7 @@ typedef nitf::ExtensionsIterator Iterator;
      *  \param name  The name of the TRE
      *  \param tre  The TRE itself
      */
-    void appendTRE(nitf::TRE & tre) throw(nitf::NITFException)
+    void appendTRE(nitf::TRE & tre)
     {
         //if the TRE is already managed, we throw an Exception
         if (tre.isManaged())
@@ -239,7 +239,7 @@ typedef nitf::ExtensionsIterator Iterator;
      *  \param  The name of the TRE to get
      *  \return  A List of TREs matching the specified name
      */
-    nitf::List getTREsByName(const std::string& name) throw(except::NoSuchKeyException)
+    nitf::List getTREsByName(const std::string& name)
     {
         nitf_List* x = nitf_Extensions_getTREsByName(getNative(), name.c_str());
         if (!x)

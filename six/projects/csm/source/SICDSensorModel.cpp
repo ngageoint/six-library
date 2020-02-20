@@ -35,7 +35,7 @@ namespace six
 {
 namespace CSM
 {
-const csm::Version SICDSensorModel::VERSION(1, 1, 4);
+const csm::Version SICDSensorModel::VERSION(1, 1, 5);
 const char SICDSensorModel::NAME[] = "SICD_SENSOR_MODEL";
 
 SICDSensorModel::SICDSensorModel(const csm::Isd& isd,
@@ -320,8 +320,6 @@ types::RowCol<double>
 SICDSensorModel::toPixel(const types::RowCol<double>& pos) const
 {
     const six::sicd::ImageData& imageData(*mData->imageData);
-    const types::RowCol<double> aoiOffset(imageData.firstRow,
-                                          imageData.firstCol);
 
     // NOTE: The CSM convention is that the upper-left corner of a pixel is
     //       defined as 0,0, but the SICD convention is that the center of a
@@ -331,16 +329,16 @@ SICDSensorModel::toPixel(const types::RowCol<double>& pos) const
     const types::RowCol<double> csmOffset(0.5, 0.5);
 
     const types::RowCol<double> offset(
-            imageData.scpPixel.row - aoiOffset.row + csmOffset.row,
-            imageData.scpPixel.col - aoiOffset.col + csmOffset.col);
+            imageData.scpPixel.row + csmOffset.row,
+            imageData.scpPixel.col + csmOffset.col);
 
     // 'pos' is a distance in meters from the SCP
     // We want to return the position in the image plane in pixels
     // So, first we divide by sample spacing (in meters/pixel) to get a distance
     // in pixels from the SCP
     // Then, we add on the SCP pixel (if we were 0 meters from the SCP, we want
-    // to return the SCP pixel location) and account for an AOI SICD as well as
-    // the CSM coordinate convention mentioned above.
+    // to return the SCP pixel location) and account for the CSM coordinate
+    // convention mentioned above.
     return types::RowCol<double>(
             (pos.row / mData->grid->row->sampleSpacing) + offset.row,
             (pos.col / mData->grid->col->sampleSpacing) + offset.col);
@@ -350,8 +348,6 @@ types::RowCol<double>
 SICDSensorModel::fromPixel(const csm::ImageCoord& pos) const
 {
     const six::sicd::ImageData& imageData(*mData->imageData);
-    const types::RowCol<double> aoiOffset(imageData.firstRow,
-                                          imageData.firstCol);
 
     // NOTE: The CSM convention is that the upper-left corner of a pixel is
     //       defined as 0,0, but the SICD convention is that the center of a
@@ -363,8 +359,8 @@ SICDSensorModel::fromPixel(const csm::ImageCoord& pos) const
                                        pos.samp - csmOffset.col);
 
     const types::RowCol<double> pixelsFromSCP(
-            sixPos.row - (imageData.scpPixel.row - aoiOffset.row),
-            sixPos.col - (imageData.scpPixel.col - aoiOffset.col));
+            sixPos.row - imageData.scpPixel.row,
+            sixPos.col - imageData.scpPixel.col);
 
     // 'sixPos' is a position in pixels in the image plane
     // 'pixelsFromSCP' is a distance in pixels from the SCP
@@ -385,6 +381,19 @@ SICDSensorModel::getSampleSpacing() const
 csm::ImageVector SICDSensorModel::getImageSize() const
 {
     return csm::ImageVector(mData->getNumRows(), mData->getNumCols());
+}
+
+/*
+ * CSM works with full image coordinates.  So when working with
+ * a chipped image, the start would be the offset from the full
+ * top-left to the chip.
+ *
+ * See discussion https://github.com/ngageoint/six-library/issues/279
+ */
+csm::ImageCoord SICDSensorModel::getImageStart() const
+{
+    return csm::ImageCoord(mData->imageData->firstRow,
+                           mData->imageData->firstCol);
 }
 
 void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)

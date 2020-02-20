@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -43,7 +43,7 @@ namespace sys
  *  \class OSWin32
  *  \brief The abstraction definition layer for windows
  *
- *  This class is the abstraction layer as defined for 
+ *  This class is the abstraction layer as defined for
  *  the windows operating system.
  */
 class OSWin32 : public AbstractOS
@@ -70,7 +70,7 @@ public:
     /*!
      *  Determine the username
      *  \return The username
-     */ 
+     */
     //virtual std::string getUsername() const;
 
 
@@ -89,10 +89,10 @@ public:
      * (including its children) either in the same directory or across
      *  directories. The one caveat is that it will fail on directory
      *  moves when the destination is on a different volume.
-     * 
+     *
      *  \return True upon success, false if failure
      */
-    virtual bool move(const std::string& path, 
+    virtual bool move(const std::string& path,
                       const std::string& newPath) const;
 
     /*!
@@ -172,7 +172,7 @@ public:
     /*!
      *  Set an environment variable
      */
-    virtual void setEnv(const std::string& var, 
+    virtual void setEnv(const std::string& var,
                         const std::string& val,
                         bool overwrite);
 
@@ -181,12 +181,58 @@ public:
      */
     virtual void unsetEnv(const std::string& var);
 
+    /*!
+     * \return the number of logical CPUs present on the machine
+     *         (includes hyperthreading)
+     */
     virtual size_t getNumCPUs() const;
+
+    /*!
+     * \todo Not yet implemented
+     * \return the number of logical CPUs available. This will be
+     *         affected by pinning (e.g. start/affinity), and will
+     *         always be <= getNumCPUs.
+     */
+    virtual size_t getNumCPUsAvailable() const;
+
+    /*!
+     * \todo Not yet implemented
+     * \return the number of physical CPUs present on the machine
+     *         (excludes hyperthreading)
+     */
+    virtual size_t getNumPhysicalCPUs() const;
+
+    /*!
+     * \todo Not yet implemented
+     * \return the number of physical CPUs available. This will be
+     *         affected by pinning (e.g. start/affinity), and will
+     *         always be <= getNumPhysicalCPUs.
+     */
+    virtual size_t getNumPhysicalCPUsAvailable() const;
+
+    /*!
+     * Divide the available CPUs (pinned with start/affinity) into
+     * a set of physical CPUs and a set of hyperthreaded CPUs. Note
+     * that there is no real distinction between CPUs that share a core,
+     * and the separation here is not unique. However, there will only ever
+     * be 1 entry per core in the physical CPUs list, while the remainder
+     * of CPUs present in the core will be assigned to the htCPU list.
+     *
+     * \todo Not yet implemented
+     *
+     * \param[out] physicalCPUs List of physical CPUs. Size of
+     *                          getNumPhysicalCPUsAvailable().
+     * \param[out] htCPUs List of CPUs that share a core with a CPU in
+     *                    'physicalCPUs'. Size of
+     *                    getNumCPUsAvailable() - getNumPhysicalCPUsAvailable().
+     */
+    virtual void getAvailableCPUs(std::vector<int>& physicalCPUs,
+                                  std::vector<int>& htCPUs) const;
 
     /*!
      *  Create a symlink, pathnames can be either absolute or relative
      */
-    virtual void createSymlink(const std::string& origPathname, 
+    virtual void createSymlink(const std::string& origPathname,
                                const std::string& symlinkPathname) const;
 
     /*!

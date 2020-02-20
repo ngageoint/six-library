@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of io-c++ 
+ * This file is part of io-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * io-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -29,12 +29,12 @@
  *
  *  This package is based on the Java io package.
  *  For the upcoming 0.1.1 release of the modules,
- *  we will support the io.File API as well.  
+ *  we will support the io.File API as well.
  *
  *  The io package takes a more simple but still powerful
  *  approach to streaming.  We have a built in buffering mechanism
  *  that can be activated simply by using the InputStream interface's
- *  streamTo() method, connecting it to an OutputStream. 
+ *  streamTo() method, connecting it to an OutputStream.
  *
  *  Many of the streams are also implemented as filters, allowing them
  *  to pipe or stream, or sort data that is incoming, and affect its
@@ -51,26 +51,28 @@
  *
  */
 
-#include "io/BidirectionalStream.h"
-#include "io/ByteStream.h"
-#include "io/DataStream.h"
-#include "io/DbgStream.h"
-#include "io/InputStream.h"
-#include "io/OutputStream.h"
-#include "io/FileInputStream.h"
-#include "io/FileOutputStream.h"
-#include "io/Seekable.h"
-#include "io/Serializable.h"
-#include "io/SerializableFile.h"
-#include "io/PipeStream.h"
-#include "io/StandardStreams.h"
-#include "io/StringStream.h"
-#include "io/NullStreams.h"
-#include "io/ProxyStreams.h"
-#include "io/FileUtils.h"
-#include "io/SerializableArray.h"
-#include "io/CountingStreams.h"
-#include "io/RotatingFileOutputStream.h"
+#include <io/BidirectionalStream.h>
+#include <io/BufferViewStream.h>
+#include <io/ByteStream.h>
+#include <io/DataStream.h>
+#include <io/DbgStream.h>
+#include <io/InputStream.h>
+#include <io/OutputStream.h>
+#include <io/FileInputStream.h>
+#include <io/FileOutputStream.h>
+#include <io/Seekable.h>
+#include <io/Serializable.h>
+#include <io/SerializableFile.h>
+#include <io/PipeStream.h>
+#include <io/StandardStreams.h>
+#include <io/StringStream.h>
+#include <io/NullStreams.h>
+#include <io/ProxyStreams.h>
+#include <io/FileUtils.h>
+#include <io/SerializableArray.h>
+#include <io/CountingStreams.h>
+#include <io/RotatingFileOutputStream.h>
+#include <io/StreamSplitter.h>
 
 //#include "io/MMapInputStream.h"
 //using namespace io;

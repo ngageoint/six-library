@@ -3016,16 +3016,17 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_io__Seekable swig_types[9]
 #define SWIGTYPE_p_io__SeekableBidirectionalStream swig_types[10]
 #define SWIGTYPE_p_io__SeekableInputStream swig_types[11]
-#define SWIGTYPE_p_io__SeekableOutputStream swig_types[12]
-#define SWIGTYPE_p_io__StringStream swig_types[13]
-#define SWIGTYPE_p_std__stringstream swig_types[14]
-#define SWIGTYPE_p_sys__File swig_types[15]
-#define SWIGTYPE_p_sys__Off_T swig_types[16]
-#define SWIGTYPE_p_sys__SSize_T swig_types[17]
-#define SWIGTYPE_p_sys__Size_T swig_types[18]
-#define SWIGTYPE_p_sys__byte swig_types[19]
-static swig_type_info *swig_types[21];
-static swig_module_info swig_module = {swig_types, 20, 0, 0, 0, 0};
+#define SWIGTYPE_p_io__SeekableNullOutputStream swig_types[12]
+#define SWIGTYPE_p_io__SeekableOutputStream swig_types[13]
+#define SWIGTYPE_p_io__StringStream swig_types[14]
+#define SWIGTYPE_p_std__stringstream swig_types[15]
+#define SWIGTYPE_p_sys__File swig_types[16]
+#define SWIGTYPE_p_sys__Off_T swig_types[17]
+#define SWIGTYPE_p_sys__SSize_T swig_types[18]
+#define SWIGTYPE_p_sys__Size_T swig_types[19]
+#define SWIGTYPE_p_sys__byte swig_types[20]
+static swig_type_info *swig_types[22];
+static swig_module_info swig_module = {swig_types, 21, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3621,6 +3622,9 @@ SWIG_From_std_string  (const std::string& s)
   return SWIG_FromCharPtrAndSize(s.data(), s.size());
 }
 
+SWIGINTERN void io_StringStream_writeBytes(io::StringStream *self,PyObject *bytes){
+        self->write(PyBytes_AsString(bytes), PyBytes_Size(bytes));
+    }
 
 SWIGINTERNINLINE PyObject*
   SWIG_From_bool  (bool value)
@@ -5274,6 +5278,30 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_StringStream_writeBytes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::StringStream *arg1 = (io::StringStream *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:StringStream_writeBytes",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__StringStream, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StringStream_writeBytes" "', argument " "1"" of type '" "io::StringStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::StringStream * >(argp1);
+  arg2 = obj1;
+  io_StringStream_writeBytes(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_StringStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   io::StringStream *arg1 = (io::StringStream *) 0 ;
@@ -5326,27 +5354,6 @@ SWIGINTERN PyObject *_wrap_new_NullInputStream(PyObject *SWIGUNUSEDPARM(self), P
   }
   result = (io::NullInputStream *)new io::NullInputStream(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_io__NullInputStream, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_NullInputStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  io::NullInputStream *arg1 = (io::NullInputStream *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_NullInputStream",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__NullInputStream, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_NullInputStream" "', argument " "1"" of type '" "io::NullInputStream *""'"); 
-  }
-  arg1 = reinterpret_cast< io::NullInputStream * >(argp1);
-  delete arg1;
-  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -5562,6 +5569,27 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_NullInputStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::NullInputStream *arg1 = (io::NullInputStream *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_NullInputStream",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__NullInputStream, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_NullInputStream" "', argument " "1"" of type '" "io::NullInputStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::NullInputStream * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *NullInputStream_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
@@ -5576,27 +5604,6 @@ SWIGINTERN PyObject *_wrap_new_NullOutputStream(PyObject *SWIGUNUSEDPARM(self), 
   if (!PyArg_ParseTuple(args,(char *)":new_NullOutputStream")) SWIG_fail;
   result = (io::NullOutputStream *)new io::NullOutputStream();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_io__NullOutputStream, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_NullOutputStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  io::NullOutputStream *arg1 = (io::NullOutputStream *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_NullOutputStream",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__NullOutputStream, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_NullOutputStream" "', argument " "1"" of type '" "io::NullOutputStream *""'"); 
-  }
-  arg1 = reinterpret_cast< io::NullOutputStream * >(argp1);
-  delete arg1;
-  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -5842,10 +5849,200 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_NullOutputStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::NullOutputStream *arg1 = (io::NullOutputStream *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_NullOutputStream",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__NullOutputStream, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_NullOutputStream" "', argument " "1"" of type '" "io::NullOutputStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::NullOutputStream * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *NullOutputStream_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_io__NullOutputStream, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_SeekableNullOutputStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::SeekableNullOutputStream *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_SeekableNullOutputStream")) SWIG_fail;
+  result = (io::SeekableNullOutputStream *)new io::SeekableNullOutputStream();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_io__SeekableNullOutputStream, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SeekableNullOutputStream_write(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::SeekableNullOutputStream *arg1 = (io::SeekableNullOutputStream *) 0 ;
+  void *arg2 = (void *) 0 ;
+  size_t arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SeekableNullOutputStream_write",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__SeekableNullOutputStream, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SeekableNullOutputStream_write" "', argument " "1"" of type '" "io::SeekableNullOutputStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::SeekableNullOutputStream * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SeekableNullOutputStream_write" "', argument " "2"" of type '" "void const *""'"); 
+  }
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SeekableNullOutputStream_write" "', argument " "3"" of type '" "size_t""'");
+  } 
+  arg3 = static_cast< size_t >(val3);
+  (arg1)->write((void const *)arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SeekableNullOutputStream_flush(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::SeekableNullOutputStream *arg1 = (io::SeekableNullOutputStream *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SeekableNullOutputStream_flush",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__SeekableNullOutputStream, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SeekableNullOutputStream_flush" "', argument " "1"" of type '" "io::SeekableNullOutputStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::SeekableNullOutputStream * >(argp1);
+  (arg1)->flush();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SeekableNullOutputStream_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::SeekableNullOutputStream *arg1 = (io::SeekableNullOutputStream *) 0 ;
+  sys::Off_T arg2 ;
+  io::Seekable::Whence arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  sys::Off_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SeekableNullOutputStream_seek",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__SeekableNullOutputStream, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SeekableNullOutputStream_seek" "', argument " "1"" of type '" "io::SeekableNullOutputStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::SeekableNullOutputStream * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_sys__Off_T,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SeekableNullOutputStream_seek" "', argument " "2"" of type '" "sys::Off_T""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SeekableNullOutputStream_seek" "', argument " "2"" of type '" "sys::Off_T""'");
+    } else {
+      sys::Off_T * temp = reinterpret_cast< sys::Off_T * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SeekableNullOutputStream_seek" "', argument " "3"" of type '" "io::Seekable::Whence""'");
+  } 
+  arg3 = static_cast< io::Seekable::Whence >(val3);
+  result = (arg1)->seek(arg2,arg3);
+  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_sys__Off_T, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SeekableNullOutputStream_tell(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::SeekableNullOutputStream *arg1 = (io::SeekableNullOutputStream *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  sys::Off_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SeekableNullOutputStream_tell",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__SeekableNullOutputStream, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SeekableNullOutputStream_tell" "', argument " "1"" of type '" "io::SeekableNullOutputStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::SeekableNullOutputStream * >(argp1);
+  result = (arg1)->tell();
+  resultobj = SWIG_NewPointerObj((new sys::Off_T(static_cast< const sys::Off_T& >(result))), SWIGTYPE_p_sys__Off_T, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_SeekableNullOutputStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  io::SeekableNullOutputStream *arg1 = (io::SeekableNullOutputStream *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_SeekableNullOutputStream",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__SeekableNullOutputStream, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_SeekableNullOutputStream" "', argument " "1"" of type '" "io::SeekableNullOutputStream *""'"); 
+  }
+  arg1 = reinterpret_cast< io::SeekableNullOutputStream * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *SeekableNullOutputStream_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_io__SeekableNullOutputStream, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -6826,19 +7023,19 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"StringStream_reset", _wrap_StringStream_reset, METH_VARARGS, (char *)"StringStream_reset(StringStream self)"},
 	 { (char *)"StringStream_str", _wrap_StringStream_str, METH_VARARGS, (char *)"StringStream_str(StringStream self) -> std::string"},
+	 { (char *)"StringStream_writeBytes", _wrap_StringStream_writeBytes, METH_VARARGS, (char *)"StringStream_writeBytes(StringStream self, PyObject * bytes)"},
 	 { (char *)"delete_StringStream", _wrap_delete_StringStream, METH_VARARGS, (char *)"delete_StringStream(StringStream self)"},
 	 { (char *)"StringStream_swigregister", StringStream_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_NullInputStream", _wrap_new_NullInputStream, METH_VARARGS, (char *)"new_NullInputStream(sys::SSize_T size) -> NullInputStream"},
-	 { (char *)"delete_NullInputStream", _wrap_delete_NullInputStream, METH_VARARGS, (char *)"delete_NullInputStream(NullInputStream self)"},
 	 { (char *)"NullInputStream_available", _wrap_NullInputStream_available, METH_VARARGS, (char *)"NullInputStream_available(NullInputStream self) -> sys::Off_T"},
 	 { (char *)"NullInputStream_readln", _wrap_NullInputStream_readln, METH_VARARGS, (char *)"NullInputStream_readln(NullInputStream self, sys::byte * cStr, sys::Size_T const strLenPlusNullByte) -> sys::SSize_T"},
 	 { (char *)"NullInputStream_streamTo", _wrap_NullInputStream_streamTo, METH_VARARGS, (char *)"\n"
 		"streamTo(OutputStream soi, sys::SSize_T numBytes) -> sys::SSize_T\n"
 		"NullInputStream_streamTo(NullInputStream self, OutputStream soi) -> sys::SSize_T\n"
 		""},
+	 { (char *)"delete_NullInputStream", _wrap_delete_NullInputStream, METH_VARARGS, (char *)"delete_NullInputStream(NullInputStream self)"},
 	 { (char *)"NullInputStream_swigregister", NullInputStream_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_NullOutputStream", _wrap_new_NullOutputStream, METH_VARARGS, (char *)"new_NullOutputStream() -> NullOutputStream"},
-	 { (char *)"delete_NullOutputStream", _wrap_delete_NullOutputStream, METH_VARARGS, (char *)"delete_NullOutputStream(NullOutputStream self)"},
 	 { (char *)"NullOutputStream_writeln", _wrap_NullOutputStream_writeln, METH_VARARGS, (char *)"NullOutputStream_writeln(NullOutputStream self, std::string const & arg3)"},
 	 { (char *)"NullOutputStream_write", _wrap_NullOutputStream_write, METH_VARARGS, (char *)"\n"
 		"write(sys::byte arg2)\n"
@@ -6846,7 +7043,15 @@ static PyMethodDef SwigMethods[] = {
 		"NullOutputStream_write(NullOutputStream self, void const * arg3, size_t arg4)\n"
 		""},
 	 { (char *)"NullOutputStream_flush", _wrap_NullOutputStream_flush, METH_VARARGS, (char *)"NullOutputStream_flush(NullOutputStream self)"},
+	 { (char *)"delete_NullOutputStream", _wrap_delete_NullOutputStream, METH_VARARGS, (char *)"delete_NullOutputStream(NullOutputStream self)"},
 	 { (char *)"NullOutputStream_swigregister", NullOutputStream_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_SeekableNullOutputStream", _wrap_new_SeekableNullOutputStream, METH_VARARGS, (char *)"new_SeekableNullOutputStream() -> SeekableNullOutputStream"},
+	 { (char *)"SeekableNullOutputStream_write", _wrap_SeekableNullOutputStream_write, METH_VARARGS, (char *)"SeekableNullOutputStream_write(SeekableNullOutputStream self, void const * arg3, size_t numBytes)"},
+	 { (char *)"SeekableNullOutputStream_flush", _wrap_SeekableNullOutputStream_flush, METH_VARARGS, (char *)"SeekableNullOutputStream_flush(SeekableNullOutputStream self)"},
+	 { (char *)"SeekableNullOutputStream_seek", _wrap_SeekableNullOutputStream_seek, METH_VARARGS, (char *)"SeekableNullOutputStream_seek(SeekableNullOutputStream self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"},
+	 { (char *)"SeekableNullOutputStream_tell", _wrap_SeekableNullOutputStream_tell, METH_VARARGS, (char *)"SeekableNullOutputStream_tell(SeekableNullOutputStream self) -> sys::Off_T"},
+	 { (char *)"delete_SeekableNullOutputStream", _wrap_delete_SeekableNullOutputStream, METH_VARARGS, (char *)"delete_SeekableNullOutputStream(SeekableNullOutputStream self)"},
+	 { (char *)"SeekableNullOutputStream_swigregister", SeekableNullOutputStream_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FileInputStream", _wrap_new_FileInputStream, METH_VARARGS, (char *)"\n"
 		"FileInputStreamOS()\n"
 		"FileInputStreamOS(std::string const & inputFile)\n"
@@ -6887,11 +7092,14 @@ static PyMethodDef SwigMethods[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static void *_p_io__FileInputStreamOSTo_p_io__SeekableInputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((io::SeekableInputStream *)  ((io::FileInputStreamOS *) x));
+}
 static void *_p_io__FileOutputStreamOSTo_p_io__SeekableOutputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::SeekableOutputStream *)  ((io::FileOutputStreamOS *) x));
 }
-static void *_p_io__FileInputStreamOSTo_p_io__SeekableInputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::SeekableInputStream *)  ((io::FileInputStreamOS *) x));
+static void *_p_io__SeekableNullOutputStreamTo_p_io__SeekableOutputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((io::SeekableOutputStream *)  ((io::SeekableNullOutputStream *) x));
 }
 static void *_p_io__StringStreamTo_p_io__SeekableBidirectionalStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::SeekableBidirectionalStream *)  ((io::StringStream *) x));
@@ -6919,6 +7127,9 @@ static void *_p_io__SeekableBidirectionalStreamTo_p_io__OutputStream(void *x, in
 }
 static void *_p_io__NullOutputStreamTo_p_io__OutputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::OutputStream *)  ((io::NullOutputStream *) x));
+}
+static void *_p_io__SeekableNullOutputStreamTo_p_io__OutputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((io::OutputStream *) (io::SeekableOutputStream *) ((io::SeekableNullOutputStream *) x));
 }
 static void *_p_io__StringStreamTo_p_io__InputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::InputStream *) (io::BidirectionalStream *)(io::SeekableBidirectionalStream *) ((io::StringStream *) x));
@@ -6956,6 +7167,9 @@ static void *_p_io__SeekableOutputStreamTo_p_io__Seekable(void *x, int *SWIGUNUS
 static void *_p_io__SeekableBidirectionalStreamTo_p_io__Seekable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::Seekable *)  ((io::SeekableBidirectionalStream *) x));
 }
+static void *_p_io__SeekableNullOutputStreamTo_p_io__Seekable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((io::Seekable *) (io::SeekableOutputStream *) ((io::SeekableNullOutputStream *) x));
+}
 static swig_type_info _swigt__p_OutputStream = {"_p_OutputStream", "OutputStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__BidirectionalStream = {"_p_io__BidirectionalStream", "io::BidirectionalStream *", 0, 0, (void*)0, 0};
@@ -6968,6 +7182,7 @@ static swig_type_info _swigt__p_io__OutputStream = {"_p_io__OutputStream", "io::
 static swig_type_info _swigt__p_io__Seekable = {"_p_io__Seekable", "io::Seekable *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__SeekableBidirectionalStream = {"_p_io__SeekableBidirectionalStream", "io::SeekableBidirectionalStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__SeekableInputStream = {"_p_io__SeekableInputStream", "io::SeekableInputStream *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_io__SeekableNullOutputStream = {"_p_io__SeekableNullOutputStream", "io::SeekableNullOutputStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__SeekableOutputStream = {"_p_io__SeekableOutputStream", "io::SeekableOutputStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__StringStream = {"_p_io__StringStream", "io::StringStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__stringstream = {"_p_std__stringstream", "std::stringstream *", 0, 0, (void*)0, 0};
@@ -6990,6 +7205,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_io__Seekable,
   &_swigt__p_io__SeekableBidirectionalStream,
   &_swigt__p_io__SeekableInputStream,
+  &_swigt__p_io__SeekableNullOutputStream,
   &_swigt__p_io__SeekableOutputStream,
   &_swigt__p_io__StringStream,
   &_swigt__p_std__stringstream,
@@ -7008,11 +7224,12 @@ static swig_cast_info _swigc__p_io__FileOutputStreamOS[] = {  {&_swigt__p_io__Fi
 static swig_cast_info _swigc__p_io__InputStream[] = {  {&_swigt__p_io__StringStream, _p_io__StringStreamTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__FileInputStreamOS, _p_io__FileInputStreamOSTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__InputStream, 0, 0, 0},  {&_swigt__p_io__BidirectionalStream, _p_io__BidirectionalStreamTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__SeekableInputStream, _p_io__SeekableInputStreamTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__NullInputStream, _p_io__NullInputStreamTo_p_io__InputStream, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__NullInputStream[] = {  {&_swigt__p_io__NullInputStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__NullOutputStream[] = {  {&_swigt__p_io__NullOutputStream, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_io__OutputStream[] = {  {&_swigt__p_io__StringStream, _p_io__StringStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__FileOutputStreamOS, _p_io__FileOutputStreamOSTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__OutputStream, 0, 0, 0},  {&_swigt__p_io__BidirectionalStream, _p_io__BidirectionalStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableOutputStream, _p_io__SeekableOutputStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__NullOutputStream, _p_io__NullOutputStreamTo_p_io__OutputStream, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_io__Seekable[] = {  {&_swigt__p_io__StringStream, _p_io__StringStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__FileInputStreamOS, _p_io__FileInputStreamOSTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__FileOutputStreamOS, _p_io__FileOutputStreamOSTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__Seekable, 0, 0, 0},  {&_swigt__p_io__SeekableInputStream, _p_io__SeekableInputStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__SeekableOutputStream, _p_io__SeekableOutputStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__Seekable, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__OutputStream[] = {  {&_swigt__p_io__StringStream, _p_io__StringStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__FileOutputStreamOS, _p_io__FileOutputStreamOSTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__OutputStream, 0, 0, 0},  {&_swigt__p_io__BidirectionalStream, _p_io__BidirectionalStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableOutputStream, _p_io__SeekableOutputStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableNullOutputStream, _p_io__SeekableNullOutputStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__NullOutputStream, _p_io__NullOutputStreamTo_p_io__OutputStream, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__Seekable[] = {  {&_swigt__p_io__StringStream, _p_io__StringStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__FileInputStreamOS, _p_io__FileInputStreamOSTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__FileOutputStreamOS, _p_io__FileOutputStreamOSTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__Seekable, 0, 0, 0},  {&_swigt__p_io__SeekableInputStream, _p_io__SeekableInputStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__SeekableOutputStream, _p_io__SeekableOutputStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__SeekableNullOutputStream, _p_io__SeekableNullOutputStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__Seekable, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__SeekableBidirectionalStream[] = {  {&_swigt__p_io__StringStream, _p_io__StringStreamTo_p_io__SeekableBidirectionalStream, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__SeekableInputStream[] = {  {&_swigt__p_io__FileInputStreamOS, _p_io__FileInputStreamOSTo_p_io__SeekableInputStream, 0, 0},  {&_swigt__p_io__SeekableInputStream, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_io__SeekableOutputStream[] = {  {&_swigt__p_io__FileOutputStreamOS, _p_io__FileOutputStreamOSTo_p_io__SeekableOutputStream, 0, 0},  {&_swigt__p_io__SeekableOutputStream, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__SeekableNullOutputStream[] = {  {&_swigt__p_io__SeekableNullOutputStream, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__SeekableOutputStream[] = {  {&_swigt__p_io__FileOutputStreamOS, _p_io__FileOutputStreamOSTo_p_io__SeekableOutputStream, 0, 0},  {&_swigt__p_io__SeekableOutputStream, 0, 0, 0},  {&_swigt__p_io__SeekableNullOutputStream, _p_io__SeekableNullOutputStreamTo_p_io__SeekableOutputStream, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__StringStream[] = {  {&_swigt__p_io__StringStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__stringstream[] = {  {&_swigt__p_std__stringstream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sys__File[] = {  {&_swigt__p_sys__File, 0, 0, 0},{0, 0, 0, 0}};
@@ -7034,6 +7251,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_io__Seekable,
   _swigc__p_io__SeekableBidirectionalStream,
   _swigc__p_io__SeekableInputStream,
+  _swigc__p_io__SeekableNullOutputStream,
   _swigc__p_io__SeekableOutputStream,
   _swigc__p_io__StringStream,
   _swigc__p_std__stringstream,

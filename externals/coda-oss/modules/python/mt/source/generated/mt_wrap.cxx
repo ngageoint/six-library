@@ -3385,6 +3385,70 @@ SWIGINTERN PyObject *mt_ThreadPlanner_getThreadInfo(mt::ThreadPlanner *self,size
 
     return Py_BuildValue("Nnn", PyBool_FromLong(isValid), startElement, numElementsThisThread);
 }
+
+SWIGINTERN int
+SWIG_AsVal_long (PyObject *obj, long* val)
+{
+#if PY_VERSION_HEX < 0x03000000
+  if (PyInt_Check(obj)) {
+    if (val) *val = PyInt_AsLong(obj);
+    return SWIG_OK;
+  } else
+#endif
+  if (PyLong_Check(obj)) {
+    long v = PyLong_AsLong(obj);
+    if (!PyErr_Occurred()) {
+      if (val) *val = v;
+      return SWIG_OK;
+    } else {
+      PyErr_Clear();
+      return SWIG_OverflowError;
+    }
+  }
+#ifdef SWIG_PYTHON_CAST_MODE
+  {
+    int dispatch = 0;
+    long v = PyInt_AsLong(obj);
+    if (!PyErr_Occurred()) {
+      if (val) *val = v;
+      return SWIG_AddCast(SWIG_OK);
+    } else {
+      PyErr_Clear();
+    }
+    if (!dispatch) {
+      double d;
+      int res = SWIG_AddCast(SWIG_AsVal_double (obj,&d));
+      if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, LONG_MIN, LONG_MAX)) {
+	if (val) *val = (long)(d);
+	return res;
+      }
+    }
+  }
+#endif
+  return SWIG_TypeError;
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
+{
+  int r;
+  if (!PyBool_Check(obj))
+    return SWIG_ERROR;
+  r = PyObject_IsTrue(obj);
+  if (r == -1)
+    return SWIG_ERROR;
+  if (val) *val = r ? true : false;
+  return SWIG_OK;
+}
+
+
+SWIGINTERNINLINE PyObject*
+  SWIG_From_bool  (bool value)
+{
+  return PyBool_FromLong(value ? 1 : 0);
+}
+
 SWIGINTERN void mt_ThreadGroup_createThread(mt::ThreadGroup *self,PyObject *runnable){
     sys::Runnable *n;
     if (SWIG_ConvertPtr(runnable, (void **) &n, SWIGTYPE_p_sys__Runnable, SWIG_POINTER_DISOWN) == -1)
@@ -3791,7 +3855,59 @@ SWIGINTERN PyObject *ThreadPlanner_swigregister(PyObject *SWIGUNUSEDPARM(self), 
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_new_ThreadGroup(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_ThreadGroup__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  bool arg1 ;
+  bool val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  mt::ThreadGroup *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ThreadGroup",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_bool(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ThreadGroup" "', argument " "1"" of type '" "bool""'");
+  } 
+  arg1 = static_cast< bool >(val1);
+  {
+    try
+    {
+      result = (mt::ThreadGroup *)new mt::ThreadGroup(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mt__ThreadGroup, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ThreadGroup__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   mt::ThreadGroup *result = 0 ;
   
@@ -3831,6 +3947,41 @@ SWIGINTERN PyObject *_wrap_new_ThreadGroup(PyObject *SWIGUNUSEDPARM(self), PyObj
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ThreadGroup(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[2] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ThreadGroup__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_bool(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_ThreadGroup__SWIG_0(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ThreadGroup'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    mt::ThreadGroup::ThreadGroup(bool)\n"
+    "    mt::ThreadGroup::ThreadGroup()\n");
+  return 0;
 }
 
 
@@ -3902,6 +4053,152 @@ SWIGINTERN PyObject *_wrap_ThreadGroup_joinAll(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       (arg1)->joinAll();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ThreadGroup_isPinToCPUEnabled(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  mt::ThreadGroup *arg1 = (mt::ThreadGroup *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ThreadGroup_isPinToCPUEnabled",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_mt__ThreadGroup, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ThreadGroup_isPinToCPUEnabled" "', argument " "1"" of type '" "mt::ThreadGroup const *""'"); 
+  }
+  arg1 = reinterpret_cast< mt::ThreadGroup * >(argp1);
+  {
+    try
+    {
+      result = (bool)((mt::ThreadGroup const *)arg1)->isPinToCPUEnabled();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ThreadGroup_getDefaultPinToCPU(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":ThreadGroup_getDefaultPinToCPU")) SWIG_fail;
+  {
+    try
+    {
+      result = (bool)mt::ThreadGroup::getDefaultPinToCPU();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ThreadGroup_setDefaultPinToCPU(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  bool arg1 ;
+  bool val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ThreadGroup_setDefaultPinToCPU",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_bool(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "ThreadGroup_setDefaultPinToCPU" "', argument " "1"" of type '" "bool""'");
+  } 
+  arg1 = static_cast< bool >(val1);
+  {
+    try
+    {
+      mt::ThreadGroup::setDefaultPinToCPU(arg1);
     } 
     catch (const std::exception& e)
     {
@@ -4008,9 +4305,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ThreadPlanner_getThreadInfo", _wrap_ThreadPlanner_getThreadInfo, METH_VARARGS, (char *)"ThreadPlanner_getThreadInfo(ThreadPlanner self, size_t threadNum) -> PyObject *"},
 	 { (char *)"delete_ThreadPlanner", _wrap_delete_ThreadPlanner, METH_VARARGS, (char *)"delete_ThreadPlanner(ThreadPlanner self)"},
 	 { (char *)"ThreadPlanner_swigregister", ThreadPlanner_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_ThreadGroup", _wrap_new_ThreadGroup, METH_VARARGS, (char *)"new_ThreadGroup() -> ThreadGroup"},
+	 { (char *)"new_ThreadGroup", _wrap_new_ThreadGroup, METH_VARARGS, (char *)"\n"
+		"ThreadGroup(bool pinToCPU)\n"
+		"new_ThreadGroup() -> ThreadGroup\n"
+		""},
 	 { (char *)"delete_ThreadGroup", _wrap_delete_ThreadGroup, METH_VARARGS, (char *)"delete_ThreadGroup(ThreadGroup self)"},
 	 { (char *)"ThreadGroup_joinAll", _wrap_ThreadGroup_joinAll, METH_VARARGS, (char *)"ThreadGroup_joinAll(ThreadGroup self)"},
+	 { (char *)"ThreadGroup_isPinToCPUEnabled", _wrap_ThreadGroup_isPinToCPUEnabled, METH_VARARGS, (char *)"ThreadGroup_isPinToCPUEnabled(ThreadGroup self) -> bool"},
+	 { (char *)"ThreadGroup_getDefaultPinToCPU", _wrap_ThreadGroup_getDefaultPinToCPU, METH_VARARGS, (char *)"ThreadGroup_getDefaultPinToCPU() -> bool"},
+	 { (char *)"ThreadGroup_setDefaultPinToCPU", _wrap_ThreadGroup_setDefaultPinToCPU, METH_VARARGS, (char *)"ThreadGroup_setDefaultPinToCPU(bool newDefault)"},
 	 { (char *)"ThreadGroup_createThread", _wrap_ThreadGroup_createThread, METH_VARARGS, (char *)"ThreadGroup_createThread(ThreadGroup self, PyObject * runnable)"},
 	 { (char *)"ThreadGroup_swigregister", ThreadGroup_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

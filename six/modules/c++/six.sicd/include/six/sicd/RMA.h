@@ -25,9 +25,9 @@
 #include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
 
+#include "six/CollectionInformation.h"
 #include "six/Types.h"
 #include "six/Init.h"
-#include "six/sicd/CollectionInformation.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Position.h"
 #include "six/sicd/SCPCOA.h"
@@ -49,7 +49,7 @@ struct RMAT
 
     //! Reference time when the reference position and velocity
     //  are defined.
-    //  depricated in 1.0.0
+    //  deprecated in 1.0.0
     double refTime;
 
     //! Platform reference position used to establish the reference
@@ -63,15 +63,15 @@ struct RMAT
 
     //! Polynomial function that yields the distance along the
     //  reference straight line trajectory as function of time.
-    //  depricated in 1.0.0
+    //  deprecated in 1.0.0
     Poly1D distRefLinePoly;
 
     //! Polynomial function that yields the cosine of the Doppler
     //  cone angle at COA as a function of the image location.
-    //  depricated in 1.0.0
+    //  deprecated in 1.0.0
     Poly2D cosDCACOAPoly;
 
-    //!  all depricated in 1.0.0
+    //!  all deprecated in 1.0.0
     double kx1;
     double kx2;
     double ky1;
@@ -257,4 +257,3 @@ struct RMA
 }
 }
 #endif
-

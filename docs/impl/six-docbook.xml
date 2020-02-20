@@ -94,9 +94,9 @@
       <emphasis>Waf</emphasis> build system to facilitate code compilation and
       installation. <emphasis>Waf</emphasis> is a cross-platform Python tool that
       enables developers to build the code in a standard way.
-      The version of <emphasis>Waf</emphasis> bundled with the codebase is
-      1.7.9 and requires Python 2.7 or higher, but will not work with
-      Python 3.x. The most recent release of Python 2.x is recommended
+      The version of <emphasis>Waf</emphasis> bundled with the codebase is a
+      custom modification of 1.7.14 and requires Python 2.7 or higher.
+      The most recent release of Python 2.x is recommended
       (currently Python 2.7.10).</para>
 
       <para>In order to build on Windows, you will need a <emphasis>Visual
@@ -129,11 +129,11 @@
       important configure-time flags you can use to customize your build.</para>
 
       <programlisting>
-      &gt;cd C:\dev\six\modules
+      &gt;cd C:\dev\six
 
       &gt;python waf configure --prefix=install
-Setting top to                           : C:\dev\six\modules
-Setting out to                           : C:\dev\six\modules\target
+Setting top to                           : C:\dev\six
+Setting out to                           : C:\dev\six\target
 Platform                                 : win32
 Checking for 'msvc' (c compiler)         : C:\Program Files (x86)\Microsoft Visu
 al Studio 11.0\VC\BIN\x86_amd64\CL.exe
@@ -400,7 +400,7 @@ Building local lib
       <programlisting>$ ./waf configure --prefix=install
 ...
 'configure' finished successfully (3.438s)
-Waf: Leaving directory `/home/user/six-user/trunk/modules/target'
+Waf: Leaving directory `/home/user/six-user/trunk/target'
 $ ./waf
 ...
 'build' finished successfully (32.147s)

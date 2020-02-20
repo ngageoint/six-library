@@ -106,12 +106,12 @@ private:
         }
     }
 
-    void setMaxProductSize(six::NITFWriteControl& writer)
+    void setMaxProductSize(six::Options& options)
     {
         if (mSetMaxProductSize)
         {
-            writer.getOptions().setParameter(
-                    six::NITFWriteControl::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
+            options.setParameter(
+                    six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
         }
     }
 
@@ -172,10 +172,9 @@ void Tester<DataTypeT>::normalWrite()
                            new six::XMLControlCreatorT<
                                    six::sicd::ComplexXMLControl>());
 
-    six::NITFWriteControl writer;
-    writer.setXMLControlRegistry(&xmlRegistry);
-    setMaxProductSize(writer);
-    writer.initialize(container);
+    six::Options options;
+    setMaxProductSize(options);
+    six::NITFWriteControl writer(options, container, &xmlRegistry);
 
     six::BufferList buffers;
     buffers.push_back(reinterpret_cast<six::UByte*>(&mImage[0]));

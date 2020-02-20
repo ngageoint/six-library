@@ -274,39 +274,40 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
     {
         nitf::DESegment segment = (nitf::DESegment) *desIter;
         nitf::DESubheader subheader = segment.getSubheader();
+        nitf::SegmentReader deReader = mReader.newDEReader(i);
 
-        //Skip over any non-SICD/SIDD DESs
         if (getDataType(segment) == DataType::NOT_SET)
         {
-            continue;
-        }
-
-        nitf::SegmentReader deReader = mReader.newDEReader(i);
-        SegmentInputStreamAdapter ioAdapter(deReader);
-        std::auto_ptr<Data> data(parseData(*mXMLRegistry,
-                                           ioAdapter,
-                                           dataType,
-                                           schemaPaths,
-                                           *mLog));
-        if (data.get() == NULL)
-        {
-            throw except::Exception(Ctxt("Unable to transform XML DES"));
-        }
-
-        // Note that DE override data never should clash, there
-        // is one DES per data, so it's safe to do this
-        addDEClassOptions(subheader, data->getClassification());
-
-        if (data->getDataType() == six::DataType::DERIVED)
-        {
-            mContainer->addData(data, findLegend(productNum));
+            mContainer->addDESSource(nitf::SegmentReaderSource(deReader));
         }
         else
         {
-            mContainer->addData(data);
-        }
+            SegmentInputStreamAdapter ioAdapter(deReader);
+            std::auto_ptr<Data> data(parseData(*mXMLRegistry,
+                                               ioAdapter,
+                                               dataType,
+                                               schemaPaths,
+                                               *mLog));
+            if (data.get() == NULL)
+            {
+                throw except::Exception(Ctxt("Unable to transform XML DES"));
+            }
 
-        ++productNum;
+            // Note that DE override data never should clash, there
+            // is one DES per data, so it's safe to do this
+            addDEClassOptions(subheader, data->getClassification());
+
+            if (data->getDataType() == six::DataType::DERIVED)
+            {
+                mContainer->addData(data, findLegend(productNum));
+            }
+            else
+            {
+                mContainer->addData(data);
+            }
+
+            ++productNum;
+        }
     }
 
     // Get the total number of images in the NITF

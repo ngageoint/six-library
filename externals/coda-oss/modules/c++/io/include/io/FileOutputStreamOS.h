@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of io-c++ 
+ * This file is part of io-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * io-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -69,7 +69,12 @@ public:
 
     //! Destructor, closes the file stream.
     virtual ~FileOutputStreamOS()
-    {}
+    {
+        if ( isOpen() )
+        {
+            close();
+        }
+    }
 
     /*!
      *  Report whether or not the file is open
@@ -95,9 +100,9 @@ public:
     }
 
     virtual void flush();
-    
+
     sys::Off_T seek(sys::Off_T offset, io::Seekable::Whence whence);
-    
+
     sys::Off_T tell();
 
     using OutputStream::write;

@@ -79,7 +79,12 @@ nitf::Off IOStreamReader::tellImpl() const
 
 nitf::Off IOStreamReader::getSizeImpl() const
 {
-    return mStream.available();
+    // There's no way to ask a stream what its total size is, so need to seek
+    // to the end to find out
+    const nitf::Off origPos = mStream.tell();
+    const nitf::Off size = mStream.seek(0, io::Seekable::END);
+    mStream.seek(origPos, io::Seekable::START);
+    return size;
 }
 
 int IOStreamReader::getModeImpl() const

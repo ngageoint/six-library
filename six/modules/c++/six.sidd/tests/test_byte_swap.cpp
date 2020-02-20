@@ -98,9 +98,9 @@ void write(const sys::Int16_T* data, bool useStream, bool byteSwap)
             six::DataType::DERIVED));
     container->addData(createData().release());
 
-    six::NITFWriteControl writer;
-    writer.getOptions().setParameter(six::WriteControl::OPT_BYTE_SWAP, static_cast<int>(byteSwap));
-    writer.initialize(container);
+    six::Options options;
+    options.setParameter(six::WriteControl::OPT_BYTE_SWAP, static_cast<int>(byteSwap));
+    six::NITFWriteControl writer(options, container);
 
     if (useStream)
     {

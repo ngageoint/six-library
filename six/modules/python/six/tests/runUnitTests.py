@@ -24,6 +24,7 @@
 
 import os
 from subprocess import call
+import sys
 
 import utils
 
@@ -31,15 +32,21 @@ def run():
     install = utils.installPath()
     unitTestDir = os.path.join(install, 'unittests')
     childDirs = os.listdir(unitTestDir)
-    success = True
     for childDir in childDirs:
         for test in os.listdir(os.path.join(unitTestDir, childDir)):
             print(os.path.join(unitTestDir, childDir, test))
-            if call([utils.executableName(os.path.join(unitTestDir, childDir, test))]) != 0:
-                success = False
+            testPathname = os.path.join(unitTestDir, childDir, test)
+            if test.endswith('.py'):
+                command = ['python', testPathname]
+            else:
+                command = [utils.executableName(testPathname)]
+            if call(command) != 0:
+                print('{} failed'.format(testPathname))
+                return False
 
-    return success
+    return True
 
 if __name__ == '__main__':
+    utils.setPaths()
     run()
-    
+

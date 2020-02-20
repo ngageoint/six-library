@@ -265,7 +265,7 @@ struct DerivedData: public Data
         productCreation->processorInformation->processingDateTime
                 = creationTime;
     }
-    
+
     /*!
      *  Maps to: /SIDD/ExploitationFeatures/Collection[0]/Information/CollectionDateTime
      */

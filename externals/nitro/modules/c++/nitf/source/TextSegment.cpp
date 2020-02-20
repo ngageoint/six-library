@@ -42,7 +42,7 @@ TextSegment::TextSegment(nitf_TextSegment * x)
     getNativeOrThrow();
 }
 
-TextSegment::TextSegment() throw(nitf::NITFException)
+TextSegment::TextSegment()
 {
     setNative(nitf_TextSegment_construct(&error));
     getNativeOrThrow();
@@ -62,7 +62,7 @@ TextSegment & TextSegment::operator=(NITF_DATA * x)
     return *this;
 }
 
-nitf::TextSegment TextSegment::clone() throw(nitf::NITFException)
+nitf::TextSegment TextSegment::clone()
 {
     nitf::TextSegment dolly(
         nitf_TextSegment_clone(getNativeOrThrow(), &error));

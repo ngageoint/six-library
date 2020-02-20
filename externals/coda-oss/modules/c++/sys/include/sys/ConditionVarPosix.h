@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -24,7 +24,7 @@
 #ifndef __SYS_THREAD_PTHREAD_CONDITION_VARIABLE_H__
 #define __SYS_THREAD_PTHREAD_CONDITION_VARIABLE_H__
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 
 #if defined(HAVE_PTHREAD_H)
 
@@ -63,7 +63,7 @@ public:
      *  Drop (release) the lock
      */
     virtual void dropLock();
-    
+
     /*!
      *  Signal using pthread_cond_signal
      */
@@ -72,9 +72,9 @@ public:
     /*!
      *  Wait using pthread_cond_wait
      *
-     *  WARNING: The user is responsible for locking the mutex prior 
-     *           to using this method. There will be no check and on 
-     *           certain systems, undefined/unfavorable behavior may 
+     *  WARNING: The user is responsible for locking the mutex prior
+     *           to using this method. There will be no check and on
+     *           certain systems, undefined/unfavorable behavior may
      *           result.
      */
     virtual void wait();
@@ -82,12 +82,12 @@ public:
     /*!
      *  Wait using pthread_cond_timed_wait.  I kept this and the above
      *  function separate only to be explicit.
-     *  \param seconds Fraction of a second to wait.  
+     *  \param seconds Fraction of a second to wait.
      *  \todo Want a TimeInterval
      *
-     *  WARNING: The user is responsible for locking the mutex prior 
-     *           to using this method. There will be no check and on 
-     *           certain systems, undefined/unfavorable behavior may 
+     *  WARNING: The user is responsible for locking the mutex prior
+     *           to using this method. There will be no check and on
+     *           certain systems, undefined/unfavorable behavior may
      *           result.
      */
     virtual void wait(double seconds);
@@ -96,12 +96,12 @@ public:
      *  Broadcast (notify all)
      */
     virtual void broadcast();
-    
+
     /*!
      *  Returns the native type.
      */
     pthread_cond_t& getNative();
-    
+
     /*!
      *  Return the type name.  This function is essentially free,
      *  because it is static RTTI.
@@ -110,7 +110,7 @@ public:
     {
         return typeid(mNative).name();
     }
-    
+
 private:
     // This is set if we own the mutex, to make sure it gets deleted.
     std::auto_ptr<MutexPosix> mMutexOwned;

@@ -57,14 +57,14 @@ public:
     DESegment(nitf_DESegment * x);
 
     //! Constructor
-    DESegment() throw(nitf::NITFException);
+    DESegment();
 
     DESegment(NITF_DATA * x);
 
     DESegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::DESegment clone() throw(nitf::NITFException);
+    nitf::DESegment clone();
 
     ~DESegment();
 

@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,101 +20,138 @@
  *
  */
 
-
 #ifndef __CPHD_CPHD_XML_CONTROL_H__
 #define __CPHD_CPHD_XML_CONTROL_H__
 
 #include <memory>
-
-#include <mem/SharedPtr.h>
+#include <unordered_map>
 #include <logging/Logger.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Document.h>
-#include <six/XMLParser.h>
-#include <six/SICommonXMLParser10x.h>
-#include <cphd/Metadata.h>
+#include <cphd/CPHDXMLParser.h>
+#include <cphd/Types.h>
 
 namespace cphd
 {
 /*!
- *  This class converts a Metadata object into a CPHD XML
- *  Document Object Model (DOM).
+ *  \class CPHDXMLControl
+ *
+ *  \brief This class converts a Metadata object into a CPHD XML
+ *  Document Object Model (DOM) and vice-versa.
  */
-class CPHDXMLControl : public six::XMLParser
+class CPHDXMLControl
 {
 public:
-    //!  Constructor
-    CPHDXMLControl();
+    /*!
+     *  \func CPHDXMLControl
+     *  \brief Default constructor
+     *
+     *  \param log provide logger object
+     *  \param ownLog flag indicates if log should be deleted
+     */
+    CPHDXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
 
-    CPHDXMLControl(logging::Logger* log, bool ownLog = false);
+    //! Destructor
+    virtual ~CPHDXMLControl();
+
+    /*
+     *  \func setLogger
+     *  \brief Handles setting logger based on log provided and ownLog flag
+     *
+     *  \param log provide logger object
+     *  \param ownLog flag indicates if log should be deleted
+     */
+    void setLogger(logging::Logger* log, bool ownLog = false);
+
+    /*!
+     *  \func toXMLString
+     *
+     *  \brief Convert metadata to XML string
+     *  Calls toXML
+     *  \return XML String
+     */
+    virtual std::string toXMLString(
+            const Metadata& metadata,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
+            bool prettyPrint = false);
+
+    /*!
+     *  \func toXML
+     *
+     *  \brief Convert metadata to XML document object
+     *
+     *  \param metadata Valid CPHD metadata object
+     *  \param schemaPaths Vector of XML Schema for validation
+     *  \return pointer to xml Document object
+     */
+    virtual std::unique_ptr<xml::lite::Document> toXML(
+            const Metadata& metadata,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>());
+
+    /*!
+     *  \func fromXML
+     *
+     *  \brief Parse XML string to Metadata object
+     *
+     *  \param xmlString Valid cphd XML string
+     *  \param schemaPaths Vector of XML Schema for validation
+     *
+     *  \return pointer to metadata object
+     */
+    virtual std::unique_ptr<Metadata> fromXML(
+            const std::string& xmlString,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>());
+
+    /*!
+     *  \func fromXML
+     *
+     *  \brief Parse XML document to Metadata object
+     *
+     *  \param doc XML document object of CPHD
+     *  \param schemaPaths Vector of XML Schema for validation
+     *
+     *  \return pointer to metadata object
+     */
+    virtual std::unique_ptr<Metadata> fromXML(
+            const xml::lite::Document* doc,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>());
+
+protected:
+    logging::Logger *mLog;
+    bool mOwnLog;
+
+private:
+    //! Hardcoded version to uri mapping
+    static const std::unordered_map<std::string, std::string> VERSION_URI_MAP;
 
     /*!
      *  This function takes in a Metadata object and converts
      *  it to a new-allocated XML DOM.
+     *
+     *  \param data A Metadata object
+     *  \return An XML DOM
      */
-    std::auto_ptr<xml::lite::Document> toXML(const Metadata& metadata);
+    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Metadata& metadata);
 
     /*!
      *  Function takes a DOM Document* node and creates a new-allocated
-     *  CPHDData* populated by the DOM.
+     *  ComplexData* populated by the DOM.
+     *
+     *  \param doc An XML document pointer
+     *  \return A Metadata object
      */
-    std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
+    virtual std::unique_ptr<Metadata> fromXMLImpl(const xml::lite::Document* doc);
 
-    std::auto_ptr<Metadata> fromXML(const std::string& xmlString);
+    /*
+     *  \Function creates a new parser to parse XML or document
+     *
+     *  \param uri A string specifying CPHD uri
+     */
+    std::unique_ptr<CPHDXMLParser>
+    getParser(const std::string& uri) const;
 
-    std::string toXMLString(const Metadata& metadata);
-    size_t getXMLsize(const Metadata& metadata);
-
-private:
-    typedef xml::lite::Element* XMLElem;
-
-    // TODO: These are copies from some of the six.sicd XMLParsers
-    XMLElem toXML(const CollectionInformation& obj, XMLElem parent = NULL);
-
-    void fromXML(const XMLElem collectionInfoXML, CollectionInformation& obj);
-
-    XMLElem createLatLonAltFootprint(const std::string& name,
-                                     const std::string& cornerName,
-                                     const LatLonAltCorners& corners,
-                                     XMLElem parent = NULL) const;
-
-private:
-    static const char CPHD_URI[];
-
-    //! Returns the default URI
-    std::string getDefaultURI() const;
-
-    //! Returns the URI to use with SI Common types
-    std::string getSICommonURI() const;
-
-    // Write functions
-    XMLElem toXML(const Data& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Global& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Channel& obj, XMLElem parent = NULL);
-    XMLElem toXML(const SRP& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Antenna& obj, XMLElem parent = NULL);
-    XMLElem toXML(const std::string& name, const AntennaParameters &ap,
-            XMLElem parent = NULL);
-    XMLElem toXML(const VectorParameters& obj, XMLElem parent = NULL);
-
-    XMLElem areaLineDirectionParametersToXML(const std::string& name,
-            const AreaDirectionParameters& obj,
-            XMLElem parent = NULL);
-    XMLElem areaSampleDirectionParametersToXML(const std::string& name,
-            const AreaDirectionParameters& obj,
-            XMLElem parent = NULL);
-
-    // Read functions
-    void fromXML(const XMLElem dataXML, Data& obj);
-    void fromXML(const XMLElem globalXML, Global& obj);
-    void fromXML(const XMLElem channelXML, Channel& obj);
-    void fromXML(const XMLElem srpXML, SRP& obj);
-    void fromXML(const XMLElem antennaXML, Antenna& obj);
-    void fromXML(const XMLElem antennaParamsXML, AntennaParameters& params);
-    void fromXML(const XMLElem vectorParametersXML, VectorParameters& obj);
-
-private:
-    six::SICommonXMLParser10x mCommon;
+    // Given the URI get associated version
+    std::string uriToVersion(const std::string& uri) const;
 };
 }
 

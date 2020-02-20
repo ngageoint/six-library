@@ -43,7 +43,7 @@ def checkArgs(version, alg, imageType):
 
 def createNITFs(version, alg, imageType, home):
     imp.load_source('test_create_sicd_xml', os.path.join(home, 'six',
-	    	'modules', 'python', 'six.sicd', 'tests',
+            'modules', 'python', 'six.sicd', 'tests',
                 'test_create_sicd_xml.py'))
 
     from test_create_sicd_xml import initData, writeNITF

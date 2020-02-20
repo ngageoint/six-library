@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sicd/CollectionInformation.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Grid.h"
 #include "six/sicd/ImageData.h"
@@ -915,7 +914,7 @@ bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
         messageBuilder << "UVect fields inconsistent." << std::endl
             << "Grid.Col.UVectECF: " << col->unitVector << std::endl
             << "Derived Grid.Col.UVectECF: "
-            << derivedRowUnitVector(rmcr, scp);
+            << derivedColUnitVector(rmcr, scp);
         log.error(messageBuilder.str());
         valid = false;
     }

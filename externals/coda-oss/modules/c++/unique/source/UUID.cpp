@@ -28,7 +28,7 @@
 #include <uuid/uuid.h>
 #endif
 
-std::string unique::generateUUID() throw(unique::UUIDException)
+std::string unique::generateUUID()
 {
 #ifdef WIN32
     GUID uuid;

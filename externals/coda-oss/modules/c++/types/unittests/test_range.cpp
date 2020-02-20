@@ -53,10 +53,54 @@ TEST_CASE(TestGetNumSharedElements)
     // Ranges are the same - should share [100, 150)
     TEST_ASSERT_EQ(range.getNumSharedElements(100, 50), 50);
 }
+
+TEST_CASE(TestTouches)
+{
+    // Ranges do not overlap or touch -- touches(...) returns false
+    {
+        const types::Range A(5, 4);  // [5, 8]
+        const types::Range B(12, 1); // [12, 12]
+        TEST_ASSERT_FALSE(A.touches(B));
+        TEST_ASSERT_FALSE(B.touches(A));
+    }
+
+    // Ranges overlap -- touches(...) returns false
+    {
+        const types::Range A(5, 4); // [5, 8]
+        const types::Range B(8, 1); // [8, 8]
+        TEST_ASSERT_FALSE(A.touches(B));
+        TEST_ASSERT_FALSE(B.touches(A));
+    }
+
+    // Ranges touch -- touches(...) returns true
+    {
+        const types::Range A(5, 4); // [5, 8]
+        const types::Range B(9, 1); // [9, 9]
+        TEST_ASSERT_TRUE(A.touches(B));
+        TEST_ASSERT_TRUE(B.touches(A));
+    }
+
+    // One of the ranges is empty -- touches(...) returns false
+    {
+        const types::Range A(10, 0);  // [10, 0)
+        const types::Range B(10, 10); // [10, 20)
+        TEST_ASSERT_FALSE(A.touches(B));
+        TEST_ASSERT_FALSE(B.touches(A));
+    }
+
+    // Both of the ranges are empty -- touches(...) returns false
+    {
+        const types::Range A(10, 0);  // [10, 0)
+        const types::Range B(10, 0); // [10, 20)
+        TEST_ASSERT_FALSE(A.touches(B));
+        TEST_ASSERT_FALSE(B.touches(A));
+    }
+}
 }
 
 int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(TestGetNumSharedElements);
+    TEST_CHECK(TestTouches);
     return 0;
 }

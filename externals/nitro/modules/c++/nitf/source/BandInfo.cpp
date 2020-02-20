@@ -99,7 +99,7 @@ void BandInfo::init(const std::string& representation,
                     const std::string& imageFilterCode,
                     nitf::Uint32 numLUTs,
                     nitf::Uint32 bandEntriesPerLUT,
-                    nitf::LookupTable& lut) throw(nitf::NITFException)
+                    nitf::LookupTable& lut)
 {
     if (getNativeOrThrow()->lut)
     {
@@ -127,7 +127,7 @@ void BandInfo::init(const std::string& representation,
 void BandInfo::init(const std::string& representation,
                     const std::string& subcategory,
                     const std::string& imageFilterCondition,
-                    const std::string& imageFilterCode) throw(nitf::NITFException)
+                    const std::string& imageFilterCode)
 {
     if (getNativeOrThrow()->lut)
     {

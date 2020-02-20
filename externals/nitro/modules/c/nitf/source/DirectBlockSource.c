@@ -54,14 +54,9 @@ NITFPRIV(DirectBlockSourceImpl *) toDirectBlockSource(NITF_DATA * data,
 }
 
 
-/*
- *     DirectBlockSource_read - Read data function for row source
- */
-
-/* Instance data */
-/* Output buffer */
-NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf, nitf_Off size,    /* Amount to read */
-                                           nitf_Error * error)  /* For error returns */
+NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf,
+                                           nitf_Off size,
+                                           nitf_Error * error)
 {
     DirectBlockSourceImpl *directBlockSource = toDirectBlockSource(data, error);
     const void* block;
@@ -76,6 +71,15 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf, nitf_Off
                                          &blockSize, error);
     if(!block)
         return NITF_FAILURE;
+
+    if (blockSize != size)
+    {
+        nitf_Error_initf(error, NITF_CTXT,
+                         NITF_ERR_READING_FROM_FILE,
+                         "Expected %lu bytes, but read %llu",
+                         size, blockSize);
+        return NITF_FAILURE;
+    }
 
     if(!directBlockSource->nextBlock(directBlockSource->algorithm,
                                      buf,

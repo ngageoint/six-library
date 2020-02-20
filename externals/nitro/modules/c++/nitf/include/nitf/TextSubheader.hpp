@@ -56,10 +56,10 @@ public:
     TextSubheader(nitf_TextSubheader * x);
 
     //! Default Constructor
-    TextSubheader() throw(nitf::NITFException);
+    TextSubheader();
 
     //! Clone
-    nitf::TextSubheader clone() throw(nitf::NITFException);
+    nitf::TextSubheader clone();
 
     ~TextSubheader();
 

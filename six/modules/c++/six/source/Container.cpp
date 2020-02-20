@@ -103,4 +103,14 @@ Data* Container::getData(const std::string& iid, size_t numImages)
 
     return getData(dataID);
 }
+
+void Container::addDESSource(const nitf::SegmentSource& source)
+{
+    mDESSources.push_back(source);
+}
+
+const std::vector<nitf::SegmentSource>& Container::getDESSources() const
+{
+    return mDESSources;
+}
 }

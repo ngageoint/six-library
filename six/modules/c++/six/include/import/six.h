@@ -23,10 +23,13 @@
 #define __IMPORT_SIX_H__
 
 #include "six/Adapters.h"
+#include "six/CollectionInformation.h"
 #include "six/Container.h"
 #include "six/Data.h"
 #include "six/Enums.h"
 #include "six/ErrorStatistics.h"
+#include "six/MatchInformation.h"
+#include "six/Mesh.h"
 #include "six/NITFImageInfo.h"
 #include "six/NITFImageInputStream.h"
 #include "six/NITFSegmentInfo.h"
@@ -41,6 +44,7 @@
 #include "six/Region.h"
 #include "six/ReadControl.h"
 #include "six/ReadControlFactory.h"
+#include "six/Serialize.h"
 #include "six/WriteControl.h"
 #include "six/XMLControl.h"
 #include "six/XMLControlFactory.h"

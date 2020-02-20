@@ -11,7 +11,7 @@ typedef except::InvalidFormatException UUIDException;
 /*!
  * Create a 36-character UUID and return as a std::string
  */ 
-std::string generateUUID() throw(unique::UUIDException);
+std::string generateUUID();
 
 }
 #endif

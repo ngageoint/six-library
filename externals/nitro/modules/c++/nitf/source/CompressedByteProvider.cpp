@@ -44,20 +44,18 @@ CompressedByteProvider::CompressedByteProvider(Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
         const std::vector<PtrAndLength>& desData,
         size_t numRowsPerBlock,
-        size_t numColsPerBlock,
-        size_t maxRowsPerSegment) :
+        size_t numColsPerBlock) :
     ByteProvider()
 {
-    initialize(record, bytesPerBlock, desData, numRowsPerBlock, numColsPerBlock,
-            maxRowsPerSegment);
+    initialize(record, bytesPerBlock, desData,
+               numRowsPerBlock, numColsPerBlock);
 }
 
 void CompressedByteProvider::initialize(Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
         const std::vector<PtrAndLength>& desData,
         size_t numRowsPerBlock,
-        size_t numColsPerBlock,
-        size_t maxRowsPerSegment)
+        size_t numColsPerBlock)
 {
     // Get all the file headers and offsets
     const size_t numImages = record.getNumImages();
@@ -80,7 +78,6 @@ void CompressedByteProvider::initialize(Record& record,
         }
     }
     mBytesInEachBlock = bytesPerBlock;
-    mMaxRowsPerSegment = maxRowsPerSegment;
     initializeImpl(record, desData, numRowsPerBlock, numColsPerBlock);
 }
 
@@ -90,8 +87,17 @@ size_t CompressedByteProvider::countBytesForCompressedImageData(
     // If we've already compressed, we don't care about padding.
     // We just need to figure out -which- blocks we're writing, and then grab
     // that from the member vector
-    const std::vector<size_t>& bytesPerBlock = mBytesInEachBlock[seg];
-    types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
+    const std::vector<size_t>& bytesPerBlock = mBytesInEachBlock.at(seg);
+    const types::Range blockRange =
+            findBlocksToWrite(seg, startRow, numRowsToWrite);
+    if (blockRange.endElement() > bytesPerBlock.size())
+    {
+        std::ostringstream ostr;
+        ostr << "Trying to get bytes from blocks [" << blockRange.mStartElement
+             << ", " << blockRange.endElement() << ") but seg " << seg
+             << " only has " << bytesPerBlock.size() << " blocks";
+        throw except::Exception(Ctxt(ostr.str()));
+    }
 
     size_t numBytes = 0;
     for (size_t ii = blockRange.mStartElement;
@@ -103,23 +109,29 @@ size_t CompressedByteProvider::countBytesForCompressedImageData(
 }
 
 types::Range CompressedByteProvider::findBlocksToWrite(
-        size_t seg, size_t startRow, size_t numRowsToWrite) const
+        size_t seg, size_t globalStartRow, size_t numRowsToWrite) const
 {
-    size_t firstRowOfImage = 0;
-    size_t firstBlockOfImage = 0;
-    for (size_t ii = 0; ii < seg; ++ii)
+    const SegmentInfo& segmentInfo(mImageSegmentInfo.at(seg));
+    if (globalStartRow < segmentInfo.firstRow ||
+        globalStartRow + numRowsToWrite > segmentInfo.endRow())
     {
-        firstRowOfImage += mMaxRowsPerSegment;
-        firstBlockOfImage += mBytesInEachBlock[ii].size();
+        std::ostringstream ostr;
+        ostr << "Asking for global rows [" << globalStartRow << ", "
+              << (globalStartRow + numRowsToWrite) << ") from seg " << seg
+              << " which contains global rows [" << segmentInfo.firstRow
+              << ", " << segmentInfo.endRow() << ")";
+        throw except::Exception(Ctxt(ostr.str()));
     }
-    startRow -= firstRowOfImage;
+
+    const size_t startRow = globalStartRow - segmentInfo.firstRow;
+    const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
 
     const size_t numHorizontalBlocks = math::ceilingDivide(mNumCols,
                                                            mNumColsPerBlock);
     const size_t firstRowOfBlocks = math::ceilingDivide(startRow,
-                                                        mNumRowsPerBlock[0]);
+                                                        numRowsPerBlock);
     const size_t numRowsOfBlocks = math::ceilingDivide(numRowsToWrite,
-                                                       mNumRowsPerBlock[0]);
+                                                       numRowsPerBlock);
     const size_t numBlocks = numRowsOfBlocks * numHorizontalBlocks;
     const size_t firstBlock = firstRowOfBlocks * numHorizontalBlocks;
 
@@ -160,15 +172,17 @@ size_t CompressedByteProvider::addImageData(
     }
 
     // Copy the image data into the buffer
-    size_t bytesWritten = 0;
-    for (size_t ii = blockRange.mStartElement;
-            ii < blockRange.mStartElement + blockRange.mNumElements;
-            ++ii)
+    // Since we have it in contiguous memory, this can be added as one buffer
+    size_t numBufferBytes(0);
+    for (size_t ii = blockRange.mStartElement, end = blockRange.endElement();
+         ii < end;
+         ++ii)
     {
-        buffers.pushBack(imageData + bytesWritten, bytesPerBlock[ii]);
-        bytesWritten += bytesPerBlock[ii];
+        numBufferBytes += bytesPerBlock[ii];
     }
-    return bytesWritten;
+    buffers.pushBack(imageData, numBufferBytes);
+
+    return numBufferBytes;
 }
 
 nitf::Off CompressedByteProvider::getNumBytes(size_t startRow, size_t numRows) const

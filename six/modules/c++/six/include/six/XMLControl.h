@@ -22,14 +22,13 @@
 #ifndef __SIX_XML_CONTROL_H__
 #define __SIX_XML_CONTROL_H__
 
-#include <xml/lite/Document.h>
-#include <xml/lite/Validator.h>
 #include <logging/Logger.h>
 #include <six/Data.h>
+#include <xml/lite/Document.h>
+#include <xml/lite/Validator.h>
 
 namespace six
 {
-
 /*!
  *  \class XMLControl
  *  \brief Base class for reading and writing a Data object
@@ -54,8 +53,7 @@ namespace six
  */
 class XMLControl
 {
-
-public:
+    public:
     //!  Constructor
     XMLControl(logging::Logger* log = NULL, bool ownLog = false);
 
@@ -63,6 +61,34 @@ public:
     virtual ~XMLControl();
 
     void setLogger(logging::Logger* log, bool ownLog = false);
+
+    /*
+     *  \func validate
+     *  \brief Validate the xml and log any errors
+     *
+     *  \param doc XML document
+     *  \param schemaPaths  Directories or files of schema locations
+     *  \param log Logs validation errors
+     */
+    static void validate(const xml::lite::Document* doc,
+                         const std::vector<std::string>& schemaPaths,
+                         logging::Logger* log);
+
+    /*!
+     * Retrieve the proper schema paths for validation.
+     * Schema paths can come from three sources, in
+     * order of priority:
+     *  - User-provided paths
+     *  - The environment variable SIX_SCHEMA_PATH
+     *  - Default path set by the build system
+     * Unless you need something specific (and know what you're doing),
+     * just use the default path.
+     * \param[in,out] schemaPaths to use for validation.
+     *                If this is empty, it will be filled with the
+     *                appropriate paths from the sources documented above.
+     *                Otherwise, we can just use what's already there.
+     */
+    static void loadSchemaPaths(std::vector<std::string>& schemaPaths);
 
     /*!
      *  Convert the Data model into an XML DOM.
@@ -85,11 +111,20 @@ public:
     /*!
      *  Provides a mapping from COMPLEX --> SICD and DERIVED --> SIDD
      */
-    static
-    std::string dataTypeToString(DataType dataType, bool appendXML = true);
+    static std::string dataTypeToString(DataType dataType,
+                                        bool appendXML = true);
 
-protected:
-    logging::Logger *mLog;
+    /*!
+     * Split version string into multiple period-separated parts
+     * \param versionStr Version string containing (at minimum) major
+     *  and minor parts separated by '.'
+     * \param[out] Version string components <major, minor, ...>
+     */
+    static void splitVersion(const std::string& versionStr,
+                             std::vector<std::string>& version);
+
+    protected:
+    logging::Logger* mLog;
     bool mOwnLog;
 
     /*!
@@ -106,22 +141,13 @@ protected:
      */
     virtual xml::lite::Document* toXMLImpl(const Data* data) = 0;
 
-    static
-    std::string getDefaultURI(const Data& data);
+    static std::string getDefaultURI(const Data& data);
 
-    static
-    std::string getVersionFromURI(const xml::lite::Document* doc);
+    static std::string getVersionFromURI(const xml::lite::Document* doc);
 
-    static
-    void getVersionFromURI(const xml::lite::Document* doc,
-                           std::vector<std::string>& version);
-
-    static
-    void splitVersion(const std::string& versionStr,
-                      std::vector<std::string>& version);
+    static void getVersionFromURI(const xml::lite::Document* doc,
+                                  std::vector<std::string>& version);
 };
-
 }
 
 #endif
-

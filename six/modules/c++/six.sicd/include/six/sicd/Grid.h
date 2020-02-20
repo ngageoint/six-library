@@ -25,12 +25,12 @@
 #include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
+#include "six/CollectionInformation.h"
 #include "six/sicd/Functor.h"
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
-#include "six/sicd/CollectionInformation.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/RadarCollection.h"
@@ -55,7 +55,7 @@ struct WeightType
      */
     std::string windowName;
 
-    /*! 
+    /*!
      *  Optional free format field that can be used to pass forward the
      *  weighting parameter information.
      *  This is present in 1.0 (but not 0.4.1) and can be 0 to unbounded

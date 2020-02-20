@@ -21,6 +21,7 @@
  */
 
 #include <import/nitf.hpp>
+#include <io/FileInputStream.h>
 
 #define SHOW(X) std::cout << #X << " = [" << X << "]" << std::endl
 #define SHOWI(X) printf("%s=[%d]\n", #X, (int)X)
@@ -529,23 +530,18 @@ int main(int argc, char **argv)
             exit(EXIT_FAILURE);
         }
 
-        if (nitf::Reader::getNITFVersion( argv[1] ) == NITF_VER_UNKNOWN)
+        const std::string nitfPathname(argv[1]);
+        io::FileInputStream fis(nitfPathname);
+        nitf::IOStreamReader io(fis);
+        if (nitf::Reader::getNITFVersion(io) == NITF_VER_UNKNOWN)
         {
             std::cout << "This file does not appear to be a valid NITF"
                       << std::endl;
             exit(EXIT_FAILURE);
         }
 
-        /*
-         *  Using an IO handle is one valid way to read a NITF in
-         *
-         *  NITRO 2.5 offers other ways, using the readIO() function
-         *  in the Reader
-         */
-        nitf::IOHandle io(argv[1]);
-
         //  This parses all header data within the NITF
-        nitf::Record record = reader.read(io);
+        nitf::Record record = reader.readIO(io);
 
         // Now show the header
         nitf::FileHeader fileHeader = record.getHeader();

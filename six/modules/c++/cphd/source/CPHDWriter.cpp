@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,29 +19,29 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <except/Exception.h>
+#include <cphd/ByteSwap.h>
+#include <cphd/FileHeader.h>
 #include <cphd/CPHDWriter.h>
 #include <cphd/CPHDXMLControl.h>
+#include <cphd/Wideband.h>
 #include <cphd/Utilities.h>
-#include <cphd/FileHeader.h>
-#include <cphd/ByteSwap.h>
 
 namespace cphd
 {
-CPHDWriter::DataWriter::DataWriter(io::FileOutputStream& stream,
+DataWriter::DataWriter(std::shared_ptr<io::SeekableOutputStream> stream,
             size_t numThreads) :
     mStream(stream),
     mNumThreads(numThreads == 0 ? sys::OS().getNumCPUs() : numThreads)
 {
 }
 
-CPHDWriter::DataWriter::~DataWriter()
+DataWriter::~DataWriter()
 {
 }
 
-CPHDWriter::DataWriterLittleEndian::DataWriterLittleEndian(
-        io::FileOutputStream& stream,
+DataWriterLittleEndian::DataWriterLittleEndian(
+        std::shared_ptr<io::SeekableOutputStream> stream,
         size_t numThreads,
         size_t scratchSize) :
     DataWriter(stream, numThreads),
@@ -50,14 +50,13 @@ CPHDWriter::DataWriterLittleEndian::DataWriterLittleEndian(
 {
 }
 
-void CPHDWriter::DataWriterLittleEndian::operator()(
+void DataWriterLittleEndian::operator()(
         const sys::ubyte* data,
         size_t numElements,
         size_t elementSize)
 {
     size_t dataProcessed = 0;
     const size_t dataSize = numElements * elementSize;
-
     while (dataProcessed < dataSize)
     {
         const size_t dataToProcess =
@@ -67,143 +66,123 @@ void CPHDWriter::DataWriterLittleEndian::operator()(
                data + dataProcessed,
                dataToProcess);
 
-        byteSwap(mScratch.get(),
+        cphd::byteSwap(mScratch.get(),
                  elementSize,
                  dataToProcess / elementSize,
                  mNumThreads);
 
-        mStream.write(mScratch.get(), dataToProcess);
+        mStream->write(mScratch.get(), dataToProcess);
 
         dataProcessed += dataToProcess;
     }
 }
 
-CPHDWriter::DataWriterBigEndian::DataWriterBigEndian(
-        io::FileOutputStream& stream,
+DataWriterBigEndian::DataWriterBigEndian(
+        std::shared_ptr<io::SeekableOutputStream> stream,
         size_t numThreads) :
     DataWriter(stream, numThreads)
 {
 }
 
-void CPHDWriter::DataWriterBigEndian::operator()(
+void DataWriterBigEndian::operator()(
         const sys::ubyte* data,
         size_t numElements,
         size_t elementSize)
 {
-    mStream.write(reinterpret_cast<const sys::byte*>(data),
+    mStream->write(reinterpret_cast<const sys::byte*>(data),
                   numElements * elementSize);
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
+                       std::shared_ptr<io::SeekableOutputStream> outStream,
+                       const std::vector<std::string>& schemaPaths,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
     mMetadata(metadata),
-    mElementSize(getNumBytesPerSample(metadata.data.sampleType)),
+    mElementSize(metadata.data.getNumBytesPerSample()),
     mScratchSpaceSize(scratchSpaceSize),
     mNumThreads(numThreads),
-    mCPHDSize(0),
-    mVBMSize(0)
+    mSchemaPaths(schemaPaths),
+    mStream(outStream)
 {
-    //! Get the correct dataWriter.
-    //  The CPHD file needs to be big endian.
+    // Get the correct dataWriter.
+    // The CPHD file needs to be big endian.
     if (sys::isBigEndianSystem())
     {
-        mDataWriter.reset(new DataWriterBigEndian(mFile, mNumThreads));
+        mDataWriter.reset(new DataWriterBigEndian(mStream, mNumThreads));
     }
     else
     {
         mDataWriter.reset(new DataWriterLittleEndian(
-                mFile, mNumThreads, mScratchSpaceSize));
+                mStream, mNumThreads, mScratchSpaceSize));
     }
 }
 
-template <typename T>
-void CPHDWriter::addImage(const T* image,
-                          const types::RowCol<size_t>& dims,
-                          const sys::ubyte* vbmData)
+CPHDWriter::CPHDWriter(const Metadata& metadata,
+                       const std::string& pathname,
+                       const std::vector<std::string>& schemaPaths,
+                       size_t numThreads,
+                       size_t scratchSpaceSize) :
+    mMetadata(metadata),
+    mElementSize(metadata.data.getNumBytesPerSample()),
+    mScratchSpaceSize(scratchSpaceSize),
+    mNumThreads(numThreads),
+    mSchemaPaths(schemaPaths)
 {
-    if (mElementSize != sizeof(T))
+
+    // Initialize output stream
+    mStream.reset(new io::FileOutputStream(pathname));
+
+    // Get the correct dataWriter.
+    // The CPHD file needs to be big endian.
+    if (sys::isBigEndianSystem())
     {
-        throw except::Exception(Ctxt(
-                "Incorrect buffer data type used for metadata!"));
+        mDataWriter.reset(new DataWriterBigEndian(mStream, mNumThreads));
     }
-
-    //! If this is the first time you called addImage. We will clear
-    //  out the metadata image here and start adding it manually.
-    if (mCPHDData.empty())
+    else
     {
-        mMetadata.data.arraySize.clear();
-        mMetadata.data.numCPHDChannels = 0;
+        mDataWriter.reset(new DataWriterLittleEndian(
+                mStream, mNumThreads, mScratchSpaceSize));
     }
-
-    mVBMData.push_back(vbmData);
-    mCPHDData.push_back(reinterpret_cast<const sys::ubyte*>(image));
-
-    mCPHDSize += dims.area() * mElementSize;
-    mVBMSize += dims.row * mMetadata.data.getNumBytesVBP();
-
-    mMetadata.data.numCPHDChannels += 1;
-    mMetadata.data.arraySize.push_back(ArraySize(dims.row, dims.col));
 }
 
-template
-void CPHDWriter::addImage<std::complex<sys::Int8_T> >(
-        const std::complex<sys::Int8_T>* image,
-        const types::RowCol<size_t>& dims,
-        const sys::ubyte* vbmData);
-
-template
-void CPHDWriter::addImage<std::complex<sys::Int16_T> >(
-        const std::complex<sys::Int16_T>* image,
-        const types::RowCol<size_t>& dims,
-        const sys::ubyte* vbmData);
-
-template
-void CPHDWriter::addImage<std::complex<float> >(
-        const std::complex<float>* image,
-        const types::RowCol<size_t>& dims,
-        const sys::ubyte* vbmData);
-
-void CPHDWriter::writeMetadata(size_t vbmSize,
-                               size_t cphdSize,
-                               const std::string& classification,
-                               const std::string& releaseInfo)
+void CPHDWriter::writeMetadata(
+        size_t supportSize,
+        size_t pvpSize,
+        size_t cphdSize)
 {
-    const std::string xmlMetadata(CPHDXMLControl().toXMLString(mMetadata));
+    const std::string xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
 
-    FileHeader header;
-    if (!classification.empty())
-    {
-        header.setClassification(classification);
-    }
-    if (!releaseInfo.empty())
-    {
-        header.setReleaseInfo(releaseInfo);
-    }
+    // update header version, or remains default if unset
+    mHeader.setVersion(mMetadata.getVersion());
 
+    //update classification and release info
+    if (!six::Init::isUndefined(mMetadata.collectionID.getClassificationLevel()) &&
+        !six::Init::isUndefined(mMetadata.collectionID.releaseInfo))
+    {
+        mHeader.setClassification(mMetadata.collectionID.getClassificationLevel());
+        mHeader.setReleaseInfo(mMetadata.collectionID.releaseInfo);
+    }
+    else
+    {
+        throw except::Exception(Ctxt("Classification level and Release informaion must be specified"));
+    }
     // set header size, final step before write
-    header.set(xmlMetadata.size(), vbmSize, cphdSize);
-    mFile.write(header.toString().c_str(), header.size());
-    mFile.write("\f\n", 2);
-    mFile.write(xmlMetadata.c_str(), xmlMetadata.size());
-    mFile.write("\f\n", 2);
-
-    // Pad bytes
-    char zero = 0;
-    for (sys::Off_T ii = 0; ii < header.getPadBytes(); ++ii)
-    {
-        mFile.write(&zero, 1);
-    }
+    mHeader.set(xmlMetadata.size(), supportSize, pvpSize, cphdSize);
+    mStream->write(mHeader.toString().c_str(), mHeader.size());
+    mStream->write("\f\n", 2);
+    mStream->write(xmlMetadata.c_str(), xmlMetadata.size());
+    mStream->write("\f\n", 2);
 }
 
-void CPHDWriter::writeVBMData(const sys::ubyte* vbm,
-                              size_t index)
+void CPHDWriter::writePVPData(const sys::ubyte* pvpBlock,
+                              size_t channel)
 {
-    const size_t size = (mMetadata.data.arraySize[index].numVectors *
-            mMetadata.data.getNumBytesVBP()) / 8;
+    const size_t size = (mMetadata.data.getNumVectors(channel) *
+            mMetadata.data.getNumBytesPVPSet()) / 8;
 
     //! The vector based parameters are always 64 bit
-    (*mDataWriter)(vbm, size, 8);
+    (*mDataWriter)(pvpBlock, size, 8);
 }
 
 void CPHDWriter::writeCPHDDataImpl(const sys::ubyte* data,
@@ -214,87 +193,175 @@ void CPHDWriter::writeCPHDDataImpl(const sys::ubyte* data,
     (*mDataWriter)(data, size * 2, mElementSize / 2);
 }
 
-void CPHDWriter::writeMetadata(const std::string& pathname,
-                               const VBM& vbm,
-                               const std::string& classification,
-                               const std::string& releaseInfo)
+void CPHDWriter::writeCompressedCPHDDataImpl(const sys::ubyte* data,
+                                             size_t channel)
 {
-    // Update the number of bytes per VBP
-    mMetadata.data.numBytesVBP = vbm.getNumBytesVBP();
+    //! We have to pass in the data as though it was 1 signal array sized
+    // element of ubytes
+    (*mDataWriter)(data, 1, mMetadata.data.getCompressedSignalSize(channel));
+}
 
-    mFile.create(pathname);
+void CPHDWriter::writeSupportDataImpl(const sys::ubyte* data,
+                                      size_t numElements,
+                                      size_t elementSize)
+{
+    (*mDataWriter)(data, numElements, elementSize);
+}
 
-    const size_t numChannels = vbm.getNumChannels();
-    size_t totalVBMSize = 0;
+template<typename T>
+void CPHDWriter::write(const PVPBlock& pvpBlock,
+                       const T* widebandData,
+                       const sys::ubyte* supportData)
+{
+    // Write File header and metadata to file
+    // Padding is added in writeMetadata
+    writeMetadata(pvpBlock);
+
+    // Write optional support array block
+    // Padding is added in writeSupportData
+    if (mMetadata.data.getNumSupportArrays() != 0)
+    {
+        if (supportData == nullptr)
+        {
+            throw except::Exception(Ctxt("SupportData is not provided"));
+        }
+        writeSupportData(supportData);
+    }
+
+    // Write pvp data block
+    // Padding is added in writePVPData
+    writePVPData(pvpBlock);
+
+    // Doesn't require pading because pvp block is always 8 bytes words
+    // Write wideband (or signal) block
+    for (size_t ii = 0; ii < mMetadata.data.getNumChannels(); ++ii)
+    {
+        size_t numElements = mMetadata.data.getNumVectors(ii)*mMetadata.data.getNumSamples(ii);
+        // writeCPHDData handles compressed data as well
+        writeCPHDData<T>(widebandData, numElements, ii);
+    }
+}
+
+// For compressed data
+template
+void CPHDWriter::write<sys::ubyte>(
+        const PVPBlock& pvpBlock,
+        const sys::ubyte* widebandData,
+        const sys::ubyte* supportData);
+
+template
+void CPHDWriter::write<std::complex<sys::Int8_T> >(
+        const PVPBlock& pvpBlock,
+        const std::complex<sys::Int8_T>* widebandData,
+        const sys::ubyte* supportData);
+
+template
+void CPHDWriter::write<std::complex<sys::Int16_T> >(
+        const PVPBlock& pvpBlock,
+        const std::complex<sys::Int16_T>* widebandData,
+        const sys::ubyte* supportData);
+
+template
+void CPHDWriter::write<std::complex<float> >(
+        const PVPBlock& pvpBlock,
+        const std::complex<float>* widebandData,
+        const sys::ubyte* supportData);
+
+void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
+{
+    // Update the number of bytes per PVP
+    if (mMetadata.data.numBytesPVP != pvpBlock.getNumBytesPVPSet())
+    {
+        std::ostringstream ostr;
+        ostr << "Number of pvp block bytes in metadata: " << mMetadata.data.numBytesPVP
+             << " does not match calculated size of pvp block: " << pvpBlock.getNumBytesPVPSet();
+        throw except::Exception(ostr.str());
+    }
+
+    const size_t numChannels = mMetadata.data.getNumChannels();
+    size_t totalSupportSize = 0;
+    size_t totalPVPSize = 0;
     size_t totalCPHDSize = 0;
+
+    for (auto it = mMetadata.data.supportArrayMap.begin();
+         it != mMetadata.data.supportArrayMap.end(); ++it)
+    {
+        totalSupportSize += it->second.getSize();
+    }
 
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        totalVBMSize += vbm.getVBMsize(ii);
+        totalPVPSize += pvpBlock.getPVPsize(ii);
         totalCPHDSize += mMetadata.data.getNumVectors(ii) *
                 mMetadata.data.getNumSamples(ii) * mElementSize;
     }
 
-    writeMetadata(totalVBMSize, totalCPHDSize, classification, releaseInfo);
+    writeMetadata(totalSupportSize, totalPVPSize, totalCPHDSize);
+}
 
-    std::vector<sys::ubyte> vbmData;
+void CPHDWriter::writePVPData(const PVPBlock& pvpBlock)
+{
+    // Add padding
+    char zero = 0;
+    for (sys::Off_T ii = 0; ii < mHeader.getPvpPadBytes(); ++ii)
+    {
+        mStream->write(&zero, 1);
+    }
+
+    // Write each PVP array
+    const size_t numChannels = mMetadata.data.getNumChannels();
+    std::vector<sys::ubyte> pvpData;
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        vbm.getVBMdata(ii, vbmData);
-        if (!vbmData.empty())
+        pvpBlock.getPVPdata(ii, pvpData);
+        if (pvpData.empty())
         {
-            writeVBMData(&vbmData[0], ii);
+            std::ostringstream ostr;
+            ostr << "PVPBlock of channel " << ii << " is empty";
+            throw except::Exception(Ctxt(ostr.str()));
         }
+        writePVPData(&pvpData[0], ii);
     }
 }
 
 template <typename T>
 void CPHDWriter::writeCPHDData(const T* data,
-                               size_t numElements)
+                               size_t numElements,
+                               size_t channel)
 {
-    if (mElementSize != sizeof(T))
+    if (mMetadata.data.isCompressed())
     {
-        throw except::Exception(Ctxt(
-                "Incorrect buffer data type used for metadata!"));
+        writeCompressedCPHDDataImpl(reinterpret_cast<const sys::ubyte*>(data), channel);
     }
-    writeCPHDDataImpl(reinterpret_cast<const sys::ubyte*>(data), numElements);
+    else
+    {
+        if (mElementSize != sizeof(T))
+        {
+            throw except::Exception(Ctxt(
+                    "Incorrect buffer data type used for metadata!"));
+        }
+        writeCPHDDataImpl(reinterpret_cast<const sys::ubyte*>(data), numElements);
+    }
 }
+
+// For compressed data
+template
+void CPHDWriter::writeCPHDData(
+        const sys::ubyte* data,
+        size_t numElements, size_t channel);
 
 template
 void CPHDWriter::writeCPHDData<std::complex<sys::Int8_T> >(
         const std::complex<sys::Int8_T>* data,
-        size_t numElements);
+        size_t numElements, size_t channel);
 
 template
 void CPHDWriter::writeCPHDData<std::complex<sys::Int16_T> >(
         const std::complex<sys::Int16_T>* data,
-        size_t numElements);
+        size_t numElements, size_t channel);
 
 template
 void CPHDWriter::writeCPHDData<std::complex<float> >(
         const std::complex<float>* data,
-        size_t numElements);
-
-void CPHDWriter::write(const std::string& pathname,
-                       const std::string& classification,
-                       const std::string& releaseInfo)
-{
-    mFile.create(pathname);
-
-    writeMetadata(mVBMSize, mCPHDSize, classification, releaseInfo);
-
-    for (size_t ii = 0; ii < mVBMData.size(); ++ii)
-    {
-        writeVBMData(mVBMData[ii], ii);
-    }
-
-    for (size_t ii = 0; ii < mCPHDData.size(); ++ii)
-    {
-        const size_t cphdDataSize = mMetadata.data.arraySize[ii].numVectors *
-                mMetadata.data.arraySize[ii].numSamples;
-        writeCPHDDataImpl(mCPHDData[ii], cphdDataSize);
-    }
-
-    mFile.close();
-}
+        size_t numElements, size_t channel);
 }

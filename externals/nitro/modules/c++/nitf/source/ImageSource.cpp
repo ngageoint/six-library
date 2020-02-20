@@ -42,7 +42,7 @@ ImageSource::ImageSource(nitf_ImageSource * x)
     getNativeOrThrow();
 }
 
-ImageSource::ImageSource() throw (nitf::NITFException)
+ImageSource::ImageSource()
 {
     setNative(nitf_ImageSource_construct(&error));
     getNativeOrThrow();
@@ -61,7 +61,6 @@ ImageSource::~ImageSource()
 }
 
 void ImageSource::addBand(nitf::BandSource bandSource)
-        throw (nitf::NITFException)
 {
     NITF_BOOL x = nitf_ImageSource_addBand(getNativeOrThrow(),
                                            bandSource.getNativeOrThrow(),
@@ -73,7 +72,7 @@ void ImageSource::addBand(nitf::BandSource bandSource)
     //    bandSource->incRef();
 }
 
-nitf::BandSource ImageSource::getBand(int n) throw (nitf::NITFException)
+nitf::BandSource ImageSource::getBand(int n)
 {
     nitf_DataSource * x = nitf_ImageSource_getBand(getNativeOrThrow(), n,
                                                    &error);

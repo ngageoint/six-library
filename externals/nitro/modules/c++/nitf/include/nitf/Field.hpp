@@ -90,7 +90,7 @@ enum FieldType
         BINARY = NITF_BINARY
     };
 
-    Field & operator=(const char * value) throw(nitf::NITFException)
+    Field & operator=(const char * value)
     {
         set(value);
         return *this;
@@ -213,14 +213,14 @@ enum FieldType
             throw nitf::NITFException(&error);
     }
 
-    void set(nitf::Uint32 data) throw(nitf::NITFException)
+    void set(nitf::Uint32 data)
     {
         NITF_BOOL x = nitf_Field_setUint32(getNativeOrThrow(), data, &error);
         if (!x)
             throw nitf::NITFException(&error);
     }
 
-    void set(nitf::Uint64 data) throw(nitf::NITFException)
+    void set(nitf::Uint64 data)
     {
         NITF_BOOL x = nitf_Field_setUint64(getNativeOrThrow(), data, &error);
         if (!x)
@@ -269,14 +269,14 @@ enum FieldType
             throw nitf::NITFException(&error);
     }
 
-    void set(const char * data) throw(nitf::NITFException)
+    void set(const char * data)
     {
         NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), (char*)data, &error);
         if (!x)
             throw nitf::NITFException(&error);
     }
 
-    void set(const std::string& data) throw(nitf::NITFException)
+    void set(const std::string& data)
     {
         const NITF_BOOL x =
                 nitf_Field_setString(getNativeOrThrow(), data.c_str(), &error);
@@ -285,7 +285,7 @@ enum FieldType
     }
 
     void set(const nitf::DateTime& dateTime,
-             const std::string& format = NITF_DATE_FORMAT_21) throw(nitf::NITFException)
+             const std::string& format = NITF_DATE_FORMAT_21)
     {
         const NITF_BOOL x = nitf_Field_setDateTime(getNativeOrThrow(),
                 dateTime.getNative(), format.c_str(), &error);
@@ -293,7 +293,7 @@ enum FieldType
             throw nitf::NITFException(&error);
     }
 
-    nitf::DateTime asDateTime(const std::string& format = NITF_DATE_FORMAT_21) throw(nitf::NITFException)
+    nitf::DateTime asDateTime(const std::string& format = NITF_DATE_FORMAT_21)
     {
         nitf_DateTime* const dateTime =
                 nitf_Field_asDateTime(getNativeOrThrow(), format.c_str(),
@@ -323,7 +323,7 @@ enum FieldType
         return getNativeOrThrow()->raw;
     }
     //! Set the data
-    void setRawData(char * raw, size_t length) throw(nitf::NITFException)
+    void setRawData(char * raw, size_t length)
     {
         set(raw, length);
     }
@@ -387,7 +387,7 @@ private:
     }
 
     //! set the value
-    void set(NITF_DATA* inval, size_t length) throw(nitf::NITFException)
+    void set(NITF_DATA* inval, size_t length)
     {
         NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length, &error);
         if (!x)

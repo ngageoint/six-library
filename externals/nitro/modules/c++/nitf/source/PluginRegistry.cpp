@@ -24,14 +24,14 @@
 
 namespace nitf
 {
-void PluginRegistry::loadDir(const std::string& dirName) throw(NITFException)
+void PluginRegistry::loadDir(const std::string& dirName)
 {
     nitf_Error error;
     if (!nitf_PluginRegistry_loadDir(dirName.c_str(), &error))
         throw NITFException(&error);
 }
 
-void PluginRegistry::loadPlugin(const std::string& path) throw(NITFException)
+void PluginRegistry::loadPlugin(const std::string& path)
 {
     nitf_Error error;
     if (!nitf_PluginRegistry_loadPlugin(path.c_str(), &error))
@@ -40,7 +40,6 @@ void PluginRegistry::loadPlugin(const std::string& path) throw(NITFException)
 
 void PluginRegistry::registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
         NITF_PLUGIN_TRE_HANDLER_FUNCTION handler)
-        throw(NITFException)
 {
     nitf_Error error;
     if (!nitf_PluginRegistry_registerTREHandler(init, handler, &error))
@@ -49,7 +48,6 @@ void PluginRegistry::registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
 
 void PluginRegistry::registerCompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
         NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handler)
-        throw(NITFException)
 {
     nitf_Error error;
     if (!nitf_PluginRegistry_registerCompressionHandler(init, handler, &error))
@@ -60,7 +58,6 @@ void PluginRegistry::registerCompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
 
 void PluginRegistry::registerDecompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
         NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION handler)
-        throw(NITFException)
 {
     nitf_Error error;
     if (!nitf_PluginRegistry_registerDecompressionHandler(init, handler, &error))
@@ -70,7 +67,7 @@ void PluginRegistry::registerDecompressionHandler(NITF_PLUGIN_INIT_FUNCTION init
 }
 
 nitf_CompressionInterface* PluginRegistry::retrieveCompressionInterface(
-        const std::string& comp) throw(NITFException)
+        const std::string& comp)
 {
     nitf_Error error;
     nitf_CompressionInterface* const compIface =

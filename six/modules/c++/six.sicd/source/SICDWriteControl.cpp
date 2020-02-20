@@ -29,7 +29,8 @@ namespace sicd
 {
 SICDWriteControl::SICDWriteControl(const std::string& outputPathname,
                                    const std::vector<std::string>& schemaPaths) :
-    mIO(new nitf::BufferedWriter(outputPathname, DEFAULT_BUFFER_SIZE)),
+    mIO(new nitf::BufferedWriter(outputPathname,
+                                 NITFHeaderCreator::DEFAULT_BUFFER_SIZE)),
     mSchemaPaths(schemaPaths),
     mHaveWrittenHeaders(false)
 {
@@ -37,11 +38,11 @@ SICDWriteControl::SICDWriteControl(const std::string& outputPathname,
 
 void SICDWriteControl::initialize(const ComplexData& data)
 {
-    mem::SharedPtr<Container> container(new Container(
-            DataType::COMPLEX));
+    mem::SharedPtr<Container> container(new Container(DataType::COMPLEX));
 
     // The container wants to take ownership of the data
-    // To avoid memory problems, we'll just clone it
+    // To avoid memory problems, we'll just clone it. After calling
+    // initialize, the base class will refer to this Container.
     container->addData(data.clone());
     initialize(container);
 }
@@ -56,10 +57,10 @@ void SICDWriteControl::write(const std::vector<sys::byte>& data)
 
 void SICDWriteControl::writeHeaders()
 {
-    mWriter.prepareIO(*mIO, mRecord);
+    mWriter.prepareIO(*mIO, getRecord());
 
     const SICDByteProvider byteProvider(*this, mSchemaPaths);
-    mImageSegmentInfo = mInfos.at(0)->getImageSegments();
+    mImageSegmentInfo = getInfos().at(0)->getImageSegments();
 
     // Write the file header
     write(byteProvider.getFileHeader());
@@ -88,7 +89,7 @@ void SICDWriteControl::save(void* imageData,
                             const types::RowCol<size_t>& dims,
                             bool restoreData)
 {
-    if (mContainer.get() == NULL)
+    if (getContainer().get() == NULL)
     {
         throw except::Exception(Ctxt(
                 "initialize() must be called prior to calling save()"));
@@ -101,7 +102,7 @@ void SICDWriteControl::save(void* imageData,
         mHaveWrittenHeaders = true;
     }
 
-    const six::Data* const data = mContainer->getData(0);
+    const six::Data* const data = getContainer()->getData(0);
     static const size_t NUM_BANDS = 2;
     const size_t numBytesPerPixel = data->getNumBytesPerPixel() / NUM_BANDS;
     const size_t numPixelsTotal = dims.area() * NUM_BANDS;

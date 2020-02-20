@@ -42,7 +42,7 @@ ImageSegment::ImageSegment(nitf_ImageSegment * x)
     getNativeOrThrow();
 }
 
-ImageSegment::ImageSegment() throw(nitf::NITFException)
+ImageSegment::ImageSegment()
 {
     setNative(nitf_ImageSegment_construct(&error));
     getNativeOrThrow();
@@ -63,7 +63,7 @@ ImageSegment & ImageSegment::operator=(NITF_DATA * x)
 }
 
 
-nitf::ImageSegment ImageSegment::clone() throw(nitf::NITFException)
+nitf::ImageSegment ImageSegment::clone()
 {
     nitf::ImageSegment dolly(nitf_ImageSegment_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);

@@ -77,7 +77,6 @@ public:
      */
     FieldWarning(nitf::Off fileOffset, const std::string& fieldName,
         nitf::Field & field, const std::string& expectation)
-            throw(nitf::NITFException)
     {
         setNative(nitf_FieldWarning_construct(fileOffset, fieldName.c_str(),
             field.getNative(), expectation.c_str(), &error));

@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,19 +20,26 @@
  *
  */
 
-
 #ifndef __CPHD_METADATA_H__
 #define __CPHD_METADATA_H__
 
 #include <ostream>
 
-#include <cphd/Types.h>
-#include <cphd/Data.h>
-#include <cphd/Global.h>
-#include <cphd/Channel.h>
-#include <cphd/SRP.h>
 #include <cphd/Antenna.h>
-#include <cphd/VectorParameters.h>
+#include <cphd/Channel.h>
+#include <cphd/Data.h>
+#include <cphd/Dwell.h>
+#include <cphd/ErrorParameters.h>
+#include <cphd/FileHeader.h>
+#include <cphd/Global.h>
+#include <cphd/MetadataBase.h>
+#include <cphd/ProductInfo.h>
+#include <cphd/PVP.h>
+#include <cphd/ReferenceGeometry.h>
+#include <cphd/SceneCoordinates.h>
+#include <cphd/SupportArray.h>
+#include <cphd/TxRcv.h>
+#include <cphd/Utilities.h>
 
 namespace cphd
 {
@@ -47,68 +54,93 @@ namespace cphd
  *
  *  This object contains all of the sub-blocks for CPHD.
  *
- *
  */
-struct Metadata
+struct Metadata : MetadataBase
 {
-    Metadata()
-    {
-    }
+    //! Default constructor
+    //! Initializes CPHD version to default version specified in FileHeader
+    Metadata();
 
-    void setSampleType(SampleType sampleType)
-    {
-        data.sampleType = sampleType;
-    }
+    /*
+     * Getter functions
+     */
+    size_t getNumChannels() const override;
+    size_t getNumVectors(size_t channel) const override;    // 0-based channel number
+    size_t getNumSamples(size_t channel) const override;   // 0-based channel number
+    size_t getNumBytesPerSample() const override;   // 2, 4, or 8 bytes/complex sample
+    size_t getCompressedSignalSize(size_t channel) const override;
+    bool isCompressed() const override;
 
-    SampleType getSampleType() const
-    {
-        return data.sampleType;
-    }
+    /*!
+     * Get domain type
+     * FX for frequency domain,
+     * TOA for time-of-arrival domain
+     */
+    DomainType getDomainType() const override;
 
-    size_t getNumChannels() const;
-    size_t getNumVectors(size_t channel) const;   // 0-based channel number
-    size_t getNumSamples(size_t channel) const;   // 0-based channel number
-    size_t getNumBytesPerSample() const;          // 2, 4, or 8 bytes/complex sample
+    //! Get CPHD version
+    std::string getVersion() const;
 
-    bool isFX() const
-    {
-        return (getDomainType() == DomainType::FX);
-    }
-
-    bool isTOA() const
-    {
-        return (getDomainType() == DomainType::TOA);
-    }
-    
-    // returns "FX", "TOA", or "NOT_SET"
-    std::string getDomainTypeString() const;
-
-    // returns enum for FX, TOA, or NOT_SET
-    cphd::DomainType getDomainType() const;
+    //! Set CPHD version
+    void setVersion(const std::string& version);
 
     //!  CollectionInfo block.  Contains the general collection information
     //!  CPHD can use the SICD Collection Information block directly
-    CollectionInformation collectionInformation;
-
-    //!  Data block. Very unfortunate name, but matches the CPHD spec.
-    //!  Contains the  information
-    cphd::Data data;
+    CollectionInformation collectionID;
 
     //!  Global block. Contains the information
     Global global;
 
-    //! Channel block. Contains the information
+    //! Scene Coordinates block. Parameters that define geographic
+    //! coordinates for in the imaged scene
+    SceneCoordinates sceneCoordinates;
+
+    //!  Data block. Very unfortunate name, but matches the CPHD spec.
+    //!  Contains parameters that describe binary data components contained
+    //!  in the product
+    Data data;
+
+    //! Channel block. Parameters that describe the data channels contained
+    //! in the product
     Channel channel;
 
-    //!  SRP block.  Contains the  information
-    SRP srp;
+    //! PVP block. Parameters that describe the size of position of each
+    //! vector paramter
+    Pvp pvp;
 
-    //!  Optional Antenna block.  Contains the  information
-    //!  This is similar to, but not identical to, the SICD Antenna
+    //! Dwell block. Paramaters that specify the dwell time supported by
+    //! the signal arrays contained in the CPHD product
+    Dwell dwell;
+
+    //! Reference Geometry block. Parameter describes the collection geometry
+    //! for the reference vector (v_CH_REF) of the reference channel (REF_CH_ID)
+    ReferenceGeometry referenceGeometry;
+
+    //! (Optional) SupportArray block. Describes the binary support array
+    //! content and grid coordinates
+    mem::ScopedCopyablePtr<SupportArray> supportArray;
+
+    //! (optional) Atenna block. Describes the trasmit and receive antennas
     mem::ScopedCopyablePtr<Antenna> antenna;
 
-    //!  VectorParameters block.  Contains the  information
-    VectorParameters vectorParameters;
+    //! (Optional) TxRcv block. Describes the transmitted waveform(s) and
+    //! receiver configurations used in the collection.
+    mem::ScopedCopyablePtr<TxRcv> txRcv;
+
+    //! (Optional) Error Parameters block. Describes the statistics of errors
+    //! in measured or estimated parameters that describe the collection
+    mem::ScopedCopyablePtr<ErrorParameters> errorParameters;
+
+    //! (Optional) Product Information block. General information about the CPHD
+    // product or derived products created from it
+    mem::ScopedCopyablePtr<ProductInfo> productInfo;
+
+    //! (Optional) Geograpy Information block. Describes geographic features
+    std::vector<six::sicd::GeoInfo> geoInfo;
+
+    //! (Optional) Match Information block. Information about other collections
+    //! that are matched to the collection generated by this CPHD product
+    mem::ScopedCopyablePtr<MatchInformation> matchInfo;
 
     bool operator==(const Metadata& other) const;
 
@@ -116,8 +148,14 @@ struct Metadata
     {
         return !((*this) == other);
     }
+
+private:
+
+    //! Stores file Version
+    std::string mVersion;
 };
 
+//! Ostream operator
 std::ostream& operator<< (std::ostream& os, const Metadata& d);
 }
 

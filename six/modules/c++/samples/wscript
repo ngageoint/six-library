@@ -4,7 +4,8 @@ VERSION         = '0.1'
 options = configure = distclean = lambda p: None
 
 def build(bld):
-    samples = {'check_valid_six'                     : 'cli six.sicd six.sidd',
+    samples = {'extract_cphd_xml'                    : 'cli cphd xml.lite',
+               'check_valid_six'                     : 'cli six.sicd six.sidd',
                'crop_sicd'                           : 'cli six.sicd',
                'crop_sidd'                           : 'cli six.sidd',
                'sicd_output_plane_pixel_to_lat_lon'  : 'cli six.sicd',
@@ -23,7 +24,8 @@ def build(bld):
                'test_large_offset'                   : 'six.sicd six.sidd io mem',
                'test_parse_xml'                      : 'six.sicd six.sidd',
                'test_six_xml_parsing'                : 'six.sicd six.sidd',
-               'test_compare_sidd'                   : 'cli six.sicd six.sidd' }
+               'test_compare_sidd'                   : 'cli six.sicd six.sidd',
+               'update_sicd_version'                 : 'cli six.sicd' }
 
     for sample, module_deps in samples.items():
         bld.program_helper(module_deps=module_deps,

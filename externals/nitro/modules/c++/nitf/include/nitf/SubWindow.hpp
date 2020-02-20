@@ -68,7 +68,7 @@ public:
     SubWindow(nitf_SubWindow * x);
 
     //! Constructor
-    SubWindow() throw(nitf::NITFException);
+    SubWindow();
 
     //! Destructor
     ~SubWindow();
@@ -92,14 +92,13 @@ public:
      * The SubWindow does NOT own the DownSampler
      * \param downSampler  The down sampler to reference
      */
-    void setDownSampler(nitf::DownSampler* downSampler)
-        throw (nitf::NITFException);
+    void setDownSampler(nitf::DownSampler* downSampler);
 
     /*!
      * Return the DownSampler that is referenced by this SubWindow.
      * If no DownSampler is referenced, a NITFException is thrown.
      */
-    nitf::DownSampler* getDownSampler() throw (nitf::NITFException);
+    nitf::DownSampler* getDownSampler();
 
 private:
     nitf::DownSampler* mDownSampler;

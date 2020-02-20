@@ -76,7 +76,7 @@ public:
      *  Write to the given output IOInterface
      *  \param handle   the output IOInterface
      */
-    virtual void write(IOInterface& handle) throw (nitf::NITFException);
+    virtual void write(IOInterface& handle);
 
 protected:
     //! Constructor

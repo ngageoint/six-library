@@ -109,12 +109,12 @@ class SwigPyIterator(_object):
     __swig_destroy__ = _scene.delete_SwigPyIterator
     __del__ = lambda self: None
 
-    def value(self):
+    def value(self) -> "PyObject *":
         """value(SwigPyIterator self) -> PyObject *"""
         return _scene.SwigPyIterator_value(self)
 
 
-    def incr(self, n=1):
+    def incr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
         """
         incr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         incr(SwigPyIterator self) -> SwigPyIterator
@@ -122,7 +122,7 @@ class SwigPyIterator(_object):
         return _scene.SwigPyIterator_incr(self, n)
 
 
-    def decr(self, n=1):
+    def decr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
         """
         decr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         decr(SwigPyIterator self) -> SwigPyIterator
@@ -130,67 +130,67 @@ class SwigPyIterator(_object):
         return _scene.SwigPyIterator_decr(self, n)
 
 
-    def distance(self, x):
+    def distance(self, x: 'SwigPyIterator') -> "ptrdiff_t":
         """distance(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t"""
         return _scene.SwigPyIterator_distance(self, x)
 
 
-    def equal(self, x):
+    def equal(self, x: 'SwigPyIterator') -> "bool":
         """equal(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _scene.SwigPyIterator_equal(self, x)
 
 
-    def copy(self):
+    def copy(self) -> "swig::SwigPyIterator *":
         """copy(SwigPyIterator self) -> SwigPyIterator"""
         return _scene.SwigPyIterator_copy(self)
 
 
-    def next(self):
+    def next(self) -> "PyObject *":
         """next(SwigPyIterator self) -> PyObject *"""
         return _scene.SwigPyIterator_next(self)
 
 
-    def __next__(self):
+    def __next__(self) -> "PyObject *":
         """__next__(SwigPyIterator self) -> PyObject *"""
         return _scene.SwigPyIterator___next__(self)
 
 
-    def previous(self):
+    def previous(self) -> "PyObject *":
         """previous(SwigPyIterator self) -> PyObject *"""
         return _scene.SwigPyIterator_previous(self)
 
 
-    def advance(self, n):
+    def advance(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
         """advance(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _scene.SwigPyIterator_advance(self, n)
 
 
-    def __eq__(self, x):
+    def __eq__(self, x: 'SwigPyIterator') -> "bool":
         """__eq__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _scene.SwigPyIterator___eq__(self, x)
 
 
-    def __ne__(self, x):
+    def __ne__(self, x: 'SwigPyIterator') -> "bool":
         """__ne__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _scene.SwigPyIterator___ne__(self, x)
 
 
-    def __iadd__(self, n):
+    def __iadd__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
         """__iadd__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _scene.SwigPyIterator___iadd__(self, n)
 
 
-    def __isub__(self, n):
+    def __isub__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
         """__isub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _scene.SwigPyIterator___isub__(self, n)
 
 
-    def __add__(self, n):
+    def __add__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
         """__add__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _scene.SwigPyIterator___add__(self, n)
 
 
-    def __sub__(self, *args):
+    def __sub__(self, *args) -> "ptrdiff_t":
         """
         __sub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator
         __sub__(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t
@@ -227,7 +227,7 @@ class AngleMagnitude(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, AngleMagnitude, name)
     __repr__ = _swig_repr
 
-    def __init__(self, _angle=0, _magnitude=0):
+    def __init__(self, _angle: 'double'=0, _magnitude: 'double'=0):
         """
         __init__(scene::AngleMagnitude self, double _angle=0, double _magnitude=0) -> AngleMagnitude
         __init__(scene::AngleMagnitude self, double _angle=0) -> AngleMagnitude
@@ -247,12 +247,12 @@ class AngleMagnitude(_object):
     if _newclass:
         magnitude = _swig_property(_scene.AngleMagnitude_magnitude_get, _scene.AngleMagnitude_magnitude_set)
 
-    def __eq__(self, am):
+    def __eq__(self, am: 'AngleMagnitude') -> "bool":
         """__eq__(AngleMagnitude self, AngleMagnitude am) -> bool"""
         return _scene.AngleMagnitude___eq__(self, am)
 
 
-    def __ne__(self, am):
+    def __ne__(self, am: 'AngleMagnitude') -> "bool":
         """__ne__(AngleMagnitude self, AngleMagnitude am) -> bool"""
         return _scene.AngleMagnitude___ne__(self, am)
 
@@ -283,52 +283,52 @@ class LatLon(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getLat(self):
+    def getLat(self) -> "double":
         """getLat(LatLon self) -> double"""
         return _scene.LatLon_getLat(self)
 
 
-    def getLon(self):
+    def getLon(self) -> "double":
         """getLon(LatLon self) -> double"""
         return _scene.LatLon_getLon(self)
 
 
-    def getLatRadians(self):
+    def getLatRadians(self) -> "double":
         """getLatRadians(LatLon self) -> double"""
         return _scene.LatLon_getLatRadians(self)
 
 
-    def getLonRadians(self):
+    def getLonRadians(self) -> "double":
         """getLonRadians(LatLon self) -> double"""
         return _scene.LatLon_getLonRadians(self)
 
 
-    def setLat(self, lat):
+    def setLat(self, lat: 'double') -> "void":
         """setLat(LatLon self, double lat)"""
         return _scene.LatLon_setLat(self, lat)
 
 
-    def setLon(self, lon):
+    def setLon(self, lon: 'double') -> "void":
         """setLon(LatLon self, double lon)"""
         return _scene.LatLon_setLon(self, lon)
 
 
-    def setLatRadians(self, lat):
+    def setLatRadians(self, lat: 'double') -> "void":
         """setLatRadians(LatLon self, double lat)"""
         return _scene.LatLon_setLatRadians(self, lat)
 
 
-    def setLonRadians(self, lon):
+    def setLonRadians(self, lon: 'double') -> "void":
         """setLonRadians(LatLon self, double lon)"""
         return _scene.LatLon_setLonRadians(self, lon)
 
 
-    def __eq__(self, x):
+    def __eq__(self, x: 'LatLon') -> "bool":
         """__eq__(LatLon self, LatLon x) -> bool"""
         return _scene.LatLon___eq__(self, x)
 
 
-    def __ne__(self, x):
+    def __ne__(self, x: 'LatLon') -> "bool":
         """__ne__(LatLon self, LatLon x) -> bool"""
         return _scene.LatLon___ne__(self, x)
 
@@ -364,57 +364,57 @@ class LatLonAlt(LatLon):
         except __builtin__.Exception:
             self.this = this
 
-    def getLat(self):
+    def getLat(self) -> "double":
         """getLat(LatLonAlt self) -> double"""
         return _scene.LatLonAlt_getLat(self)
 
 
-    def getLon(self):
+    def getLon(self) -> "double":
         """getLon(LatLonAlt self) -> double"""
         return _scene.LatLonAlt_getLon(self)
 
 
-    def getLatRadians(self):
+    def getLatRadians(self) -> "double":
         """getLatRadians(LatLonAlt self) -> double"""
         return _scene.LatLonAlt_getLatRadians(self)
 
 
-    def getLonRadians(self):
+    def getLonRadians(self) -> "double":
         """getLonRadians(LatLonAlt self) -> double"""
         return _scene.LatLonAlt_getLonRadians(self)
 
 
-    def setLat(self, lat):
+    def setLat(self, lat: 'double') -> "void":
         """setLat(LatLonAlt self, double lat)"""
         return _scene.LatLonAlt_setLat(self, lat)
 
 
-    def setLon(self, lon):
+    def setLon(self, lon: 'double') -> "void":
         """setLon(LatLonAlt self, double lon)"""
         return _scene.LatLonAlt_setLon(self, lon)
 
 
-    def setLatRadians(self, lat):
+    def setLatRadians(self, lat: 'double') -> "void":
         """setLatRadians(LatLonAlt self, double lat)"""
         return _scene.LatLonAlt_setLatRadians(self, lat)
 
 
-    def setLonRadians(self, lon):
+    def setLonRadians(self, lon: 'double') -> "void":
         """setLonRadians(LatLonAlt self, double lon)"""
         return _scene.LatLonAlt_setLonRadians(self, lon)
 
 
-    def getAlt(self):
+    def getAlt(self) -> "double":
         """getAlt(LatLonAlt self) -> double"""
         return _scene.LatLonAlt_getAlt(self)
 
 
-    def setAlt(self, alt):
+    def setAlt(self, alt: 'double') -> "void":
         """setAlt(LatLonAlt self, double alt)"""
         return _scene.LatLonAlt_setAlt(self, alt)
 
 
-    def __eq__(self, x):
+    def __eq__(self, x: 'LatLonAlt') -> "bool":
         """__eq__(LatLonAlt self, LatLonAlt x) -> bool"""
         return _scene.LatLonAlt___eq__(self, x)
 
@@ -446,52 +446,52 @@ class EllipsoidModel(_object):
     __swig_destroy__ = _scene.delete_EllipsoidModel
     __del__ = lambda self: None
 
-    def getUnits(self):
+    def getUnits(self) -> "scene::Units":
         """getUnits(EllipsoidModel self) -> scene::Units"""
         return _scene.EllipsoidModel_getUnits(self)
 
 
-    def getAngularUnits(self):
+    def getAngularUnits(self) -> "scene::AngularUnits":
         """getAngularUnits(EllipsoidModel self) -> scene::AngularUnits"""
         return _scene.EllipsoidModel_getAngularUnits(self)
 
 
-    def getEquatorialRadius(self):
+    def getEquatorialRadius(self) -> "double":
         """getEquatorialRadius(EllipsoidModel self) -> double"""
         return _scene.EllipsoidModel_getEquatorialRadius(self)
 
 
-    def getPolarRadius(self):
+    def getPolarRadius(self) -> "double":
         """getPolarRadius(EllipsoidModel self) -> double"""
         return _scene.EllipsoidModel_getPolarRadius(self)
 
 
-    def calculateFlattening(self):
+    def calculateFlattening(self) -> "double":
         """calculateFlattening(EllipsoidModel self) -> double"""
         return _scene.EllipsoidModel_calculateFlattening(self)
 
 
-    def calculateEccentricity(self):
+    def calculateEccentricity(self) -> "double":
         """calculateEccentricity(EllipsoidModel self) -> double"""
         return _scene.EllipsoidModel_calculateEccentricity(self)
 
 
-    def setUnits(self, val):
+    def setUnits(self, val: 'scene::Units') -> "void":
         """setUnits(EllipsoidModel self, scene::Units val)"""
         return _scene.EllipsoidModel_setUnits(self, val)
 
 
-    def setAngularUnits(self, val):
+    def setAngularUnits(self, val: 'scene::AngularUnits') -> "void":
         """setAngularUnits(EllipsoidModel self, scene::AngularUnits val)"""
         return _scene.EllipsoidModel_setAngularUnits(self, val)
 
 
-    def setEquatorialRadius(self, val):
+    def setEquatorialRadius(self, val: 'double') -> "void":
         """setEquatorialRadius(EllipsoidModel self, double val)"""
         return _scene.EllipsoidModel_setEquatorialRadius(self, val)
 
 
-    def setPolarRadius(self, val):
+    def setPolarRadius(self, val: 'double') -> "void":
         """setPolarRadius(EllipsoidModel self, double val)"""
         return _scene.EllipsoidModel_setPolarRadius(self, val)
 
@@ -525,22 +525,22 @@ class WGS84EllipsoidModel(EllipsoidModel):
     __swig_destroy__ = _scene.delete_WGS84EllipsoidModel
     __del__ = lambda self: None
 
-    def initRadiusValues(self):
+    def initRadiusValues(self) -> "void":
         """initRadiusValues(WGS84EllipsoidModel self)"""
         return _scene.WGS84EllipsoidModel_initRadiusValues(self)
 
 
-    def setEquatorialRadius(self, val):
+    def setEquatorialRadius(self, val: 'double') -> "void":
         """setEquatorialRadius(WGS84EllipsoidModel self, double val)"""
         return _scene.WGS84EllipsoidModel_setEquatorialRadius(self, val)
 
 
-    def setPolarRadius(self, val):
+    def setPolarRadius(self, val: 'double') -> "void":
         """setPolarRadius(WGS84EllipsoidModel self, double val)"""
         return _scene.WGS84EllipsoidModel_setPolarRadius(self, val)
 
 
-    def getNormalVector(self, point):
+    def getNormalVector(self, point: 'Vector3') -> "scene::Vector3":
         """getNormalVector(WGS84EllipsoidModel self, Vector3 point) -> Vector3"""
         return _scene.WGS84EllipsoidModel_getNormalVector(self, point)
 
@@ -559,7 +559,7 @@ class Utilities(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, Utilities, name)
     __repr__ = _swig_repr
 
-    def latLonToECEF(*args):
+    def latLonToECEF(*args) -> "scene::Vector3":
         """
         latLonToECEF(LatLonAlt latLon) -> Vector3
         latLonToECEF(LatLon latLon) -> Vector3
@@ -568,13 +568,13 @@ class Utilities(_object):
 
     latLonToECEF = staticmethod(latLonToECEF)
 
-    def ecefToLatLon(vec):
+    def ecefToLatLon(vec: 'Vector3') -> "scene::LatLonAlt":
         """ecefToLatLon(Vector3 vec) -> LatLonAlt"""
         return _scene.Utilities_ecefToLatLon(vec)
 
     ecefToLatLon = staticmethod(ecefToLatLon)
 
-    def remapZeroTo360(degree):
+    def remapZeroTo360(degree: 'double') -> "double":
         """remapZeroTo360(double degree) -> double"""
         return _scene.Utilities_remapZeroTo360(degree)
 
@@ -592,18 +592,18 @@ class Utilities(_object):
 Utilities_swigregister = _scene.Utilities_swigregister
 Utilities_swigregister(Utilities)
 
-def Utilities_latLonToECEF(*args):
+def Utilities_latLonToECEF(*args) -> "scene::Vector3":
     """
     latLonToECEF(LatLonAlt latLon) -> Vector3
     Utilities_latLonToECEF(LatLon latLon) -> Vector3
     """
     return _scene.Utilities_latLonToECEF(*args)
 
-def Utilities_ecefToLatLon(vec):
+def Utilities_ecefToLatLon(vec: 'Vector3') -> "scene::LatLonAlt":
     """Utilities_ecefToLatLon(Vector3 vec) -> LatLonAlt"""
     return _scene.Utilities_ecefToLatLon(vec)
 
-def Utilities_remapZeroTo360(degree):
+def Utilities_remapZeroTo360(degree: 'double') -> "double":
     """Utilities_remapZeroTo360(double degree) -> double"""
     return _scene.Utilities_remapZeroTo360(degree)
 
@@ -629,12 +629,12 @@ class CoordinateTransform(_object):
     __swig_destroy__ = _scene.delete_CoordinateTransform
     __del__ = lambda self: None
 
-    def setEllipsoidModel(self, initVals):
+    def setEllipsoidModel(self, initVals: 'EllipsoidModel') -> "void":
         """setEllipsoidModel(CoordinateTransform self, EllipsoidModel initVals)"""
         return _scene.CoordinateTransform_setEllipsoidModel(self, initVals)
 
 
-    def getEllipsoidModel(self, *args):
+    def getEllipsoidModel(self, *args) -> "scene::EllipsoidModel const *":
         """
         getEllipsoidModel(CoordinateTransform self) -> EllipsoidModel
         getEllipsoidModel(CoordinateTransform self) -> EllipsoidModel
@@ -642,7 +642,7 @@ class CoordinateTransform(_object):
         return _scene.CoordinateTransform_getEllipsoidModel(self, *args)
 
 
-    def clone(self):
+    def clone(self) -> "scene::CoordinateTransform *":
         """clone(CoordinateTransform self) -> CoordinateTransform"""
         return _scene.CoordinateTransform_clone(self)
 
@@ -675,12 +675,12 @@ class ECEFToLLATransform(CoordinateTransform):
     __swig_destroy__ = _scene.delete_ECEFToLLATransform
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "scene::ECEFToLLATransform *":
         """clone(ECEFToLLATransform self) -> ECEFToLLATransform"""
         return _scene.ECEFToLLATransform_clone(self)
 
 
-    def transform(self, ecef):
+    def transform(self, ecef: 'Vector3') -> "scene::LatLonAlt":
         """transform(ECEFToLLATransform self, Vector3 ecef) -> LatLonAlt"""
         return _scene.ECEFToLLATransform_transform(self, ecef)
 
@@ -713,12 +713,12 @@ class LLAToECEFTransform(CoordinateTransform):
     __swig_destroy__ = _scene.delete_LLAToECEFTransform
     __del__ = lambda self: None
 
-    def clone(self):
+    def clone(self) -> "scene::LLAToECEFTransform *":
         """clone(LLAToECEFTransform self) -> LLAToECEFTransform"""
         return _scene.LLAToECEFTransform_clone(self)
 
 
-    def transform(self, lla):
+    def transform(self, lla: 'LatLonAlt') -> "scene::Vector3":
         """transform(LLAToECEFTransform self, LatLonAlt lla) -> Vector3"""
         return _scene.LLAToECEFTransform_transform(self, lla)
 
@@ -734,7 +734,7 @@ class LocalCoordinateTransform(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, LocalCoordinateTransform, name)
     __repr__ = _swig_repr
 
-    def __init__(self, refPt):
+    def __init__(self, refPt: 'LatLonAlt'):
         """__init__(scene::LocalCoordinateTransform self, LatLonAlt refPt) -> LocalCoordinateTransform"""
         this = _scene.new_LocalCoordinateTransform(refPt)
         try:
@@ -744,37 +744,37 @@ class LocalCoordinateTransform(_object):
     __swig_destroy__ = _scene.delete_LocalCoordinateTransform
     __del__ = lambda self: None
 
-    def toECEFPoint(self, localPoint):
+    def toECEFPoint(self, localPoint: 'Vector3') -> "scene::Vector3":
         """toECEFPoint(LocalCoordinateTransform self, Vector3 localPoint) -> Vector3"""
         return _scene.LocalCoordinateTransform_toECEFPoint(self, localPoint)
 
 
-    def toLocalPoint(self, ecefPoint):
+    def toLocalPoint(self, ecefPoint: 'Vector3') -> "scene::Vector3":
         """toLocalPoint(LocalCoordinateTransform self, Vector3 ecefPoint) -> Vector3"""
         return _scene.LocalCoordinateTransform_toLocalPoint(self, ecefPoint)
 
 
-    def getTransformMatrix(self):
+    def getTransformMatrix(self) -> "math::linear::MatrixMxN< 3,3,double >":
         """getTransformMatrix(LocalCoordinateTransform self) -> Matrix3x3"""
         return _scene.LocalCoordinateTransform_getTransformMatrix(self)
 
 
-    def getUnitVectorX(self):
+    def getUnitVectorX(self) -> "scene::Vector3":
         """getUnitVectorX(LocalCoordinateTransform self) -> Vector3"""
         return _scene.LocalCoordinateTransform_getUnitVectorX(self)
 
 
-    def getUnitVectorY(self):
+    def getUnitVectorY(self) -> "scene::Vector3":
         """getUnitVectorY(LocalCoordinateTransform self) -> Vector3"""
         return _scene.LocalCoordinateTransform_getUnitVectorY(self)
 
 
-    def getUnitVectorZ(self):
+    def getUnitVectorZ(self) -> "scene::Vector3":
         """getUnitVectorZ(LocalCoordinateTransform self) -> Vector3"""
         return _scene.LocalCoordinateTransform_getUnitVectorZ(self)
 
 
-    def rotate90(self):
+    def rotate90(self) -> "void":
         """rotate90(LocalCoordinateTransform self)"""
         return _scene.LocalCoordinateTransform_rotate90(self)
 
@@ -794,7 +794,7 @@ class ENUCoordinateTransform(LocalCoordinateTransform):
     __getattr__ = lambda self, name: _swig_getattr(self, ENUCoordinateTransform, name)
     __repr__ = _swig_repr
 
-    def __init__(self, refPt):
+    def __init__(self, refPt: 'LatLonAlt'):
         """__init__(scene::ENUCoordinateTransform self, LatLonAlt refPt) -> ENUCoordinateTransform"""
         this = _scene.new_ENUCoordinateTransform(refPt)
         try:
@@ -819,7 +819,7 @@ class NEDCoordinateTransform(LocalCoordinateTransform):
     __getattr__ = lambda self, name: _swig_getattr(self, NEDCoordinateTransform, name)
     __repr__ = _swig_repr
 
-    def __init__(self, refPt):
+    def __init__(self, refPt: 'LatLonAlt'):
         """__init__(scene::NEDCoordinateTransform self, LatLonAlt refPt) -> NEDCoordinateTransform"""
         this = _scene.new_NEDCoordinateTransform(refPt)
         try:
@@ -852,172 +852,172 @@ class SceneGeometry(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def setImageVectors(self, row, col):
+    def setImageVectors(self, row: 'Vector3', col: 'Vector3') -> "void":
         """setImageVectors(SceneGeometry self, Vector3 row, Vector3 col)"""
         return _scene.SceneGeometry_setImageVectors(self, row, col)
 
 
-    def setOutputPlaneVectors(self, opX, opY):
+    def setOutputPlaneVectors(self, opX: 'Vector3', opY: 'Vector3') -> "void":
         """setOutputPlaneVectors(SceneGeometry self, Vector3 opX, Vector3 opY)"""
         return _scene.SceneGeometry_setOutputPlaneVectors(self, opX, opY)
 
 
-    def getImageRowVector(self):
+    def getImageRowVector(self) -> "scene::Vector3":
         """getImageRowVector(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getImageRowVector(self)
 
 
-    def getImageColVector(self):
+    def getImageColVector(self) -> "scene::Vector3":
         """getImageColVector(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getImageColVector(self)
 
 
-    def getOPXVector(self):
+    def getOPXVector(self) -> "scene::Vector3":
         """getOPXVector(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getOPXVector(self)
 
 
-    def getOPYVector(self):
+    def getOPYVector(self) -> "scene::Vector3":
         """getOPYVector(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getOPYVector(self)
 
 
-    def getOPZVector(self):
+    def getOPZVector(self) -> "scene::Vector3":
         """getOPZVector(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getOPZVector(self)
 
 
-    def getARPPosition(self):
+    def getARPPosition(self) -> "scene::Vector3":
         """getARPPosition(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getARPPosition(self)
 
 
-    def getARPVelocity(self):
+    def getARPVelocity(self) -> "scene::Vector3":
         """getARPVelocity(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getARPVelocity(self)
 
 
-    def getReferencePosition(self):
+    def getReferencePosition(self) -> "scene::Vector3":
         """getReferencePosition(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getReferencePosition(self)
 
 
-    def getGroundTrack(self, normalVec):
+    def getGroundTrack(self, normalVec: 'Vector3') -> "scene::Vector3":
         """getGroundTrack(SceneGeometry self, Vector3 normalVec) -> Vector3"""
         return _scene.SceneGeometry_getGroundTrack(self, normalVec)
 
 
-    def getETPGroundTrack(self):
+    def getETPGroundTrack(self) -> "scene::Vector3":
         """getETPGroundTrack(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getETPGroundTrack(self)
 
 
-    def getOPGroundTrack(self):
+    def getOPGroundTrack(self) -> "scene::Vector3":
         """getOPGroundTrack(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getOPGroundTrack(self)
 
 
-    def getGroundRange(self):
+    def getGroundRange(self) -> "scene::Vector3":
         """getGroundRange(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getGroundRange(self)
 
 
-    def getSideOfTrack(self):
+    def getSideOfTrack(self) -> "scene::SideOfTrack":
         """getSideOfTrack(SceneGeometry self) -> scene::SideOfTrack"""
         return _scene.SceneGeometry_getSideOfTrack(self)
 
 
-    def getImageAngle(self, vec):
+    def getImageAngle(self, vec: 'Vector3') -> "double":
         """getImageAngle(SceneGeometry self, Vector3 vec) -> double"""
         return _scene.SceneGeometry_getImageAngle(self, vec)
 
 
-    def getSlantPlaneX(self):
+    def getSlantPlaneX(self) -> "scene::Vector3":
         """getSlantPlaneX(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getSlantPlaneX(self)
 
 
-    def getSlantPlaneY(self):
+    def getSlantPlaneY(self) -> "scene::Vector3":
         """getSlantPlaneY(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getSlantPlaneY(self)
 
 
-    def getSlantPlaneZ(self):
+    def getSlantPlaneZ(self) -> "scene::Vector3":
         """getSlantPlaneZ(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getSlantPlaneZ(self)
 
 
-    def getGroundPlaneNormal(self):
+    def getGroundPlaneNormal(self) -> "scene::Vector3":
         """getGroundPlaneNormal(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getGroundPlaneNormal(self)
 
 
-    def getGrazingAngle(self, normalVec):
+    def getGrazingAngle(self, normalVec: 'Vector3') -> "double":
         """getGrazingAngle(SceneGeometry self, Vector3 normalVec) -> double"""
         return _scene.SceneGeometry_getGrazingAngle(self, normalVec)
 
 
-    def getETPGrazingAngle(self):
+    def getETPGrazingAngle(self) -> "double":
         """getETPGrazingAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getETPGrazingAngle(self)
 
 
-    def getOPGrazingAngle(self):
+    def getOPGrazingAngle(self) -> "double":
         """getOPGrazingAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getOPGrazingAngle(self)
 
 
-    def getTiltAngle(self, normalVec):
+    def getTiltAngle(self, normalVec: 'Vector3') -> "double":
         """getTiltAngle(SceneGeometry self, Vector3 normalVec) -> double"""
         return _scene.SceneGeometry_getTiltAngle(self, normalVec)
 
 
-    def getETPTiltAngle(self):
+    def getETPTiltAngle(self) -> "double":
         """getETPTiltAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getETPTiltAngle(self)
 
 
-    def getOPTiltAngle(self):
+    def getOPTiltAngle(self) -> "double":
         """getOPTiltAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getOPTiltAngle(self)
 
 
-    def getDopplerConeAngle(self):
+    def getDopplerConeAngle(self) -> "double":
         """getDopplerConeAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getDopplerConeAngle(self)
 
 
-    def getSquintAngle(self):
+    def getSquintAngle(self) -> "double":
         """getSquintAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getSquintAngle(self)
 
 
-    def getSlopeAngle(self, normalVec):
+    def getSlopeAngle(self, normalVec: 'Vector3') -> "double":
         """getSlopeAngle(SceneGeometry self, Vector3 normalVec) -> double"""
         return _scene.SceneGeometry_getSlopeAngle(self, normalVec)
 
 
-    def getETPSlopeAngle(self):
+    def getETPSlopeAngle(self) -> "double":
         """getETPSlopeAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getETPSlopeAngle(self)
 
 
-    def getOPSlopeAngle(self):
+    def getOPSlopeAngle(self) -> "double":
         """getOPSlopeAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getOPSlopeAngle(self)
 
 
-    def getAzimuthAngle(self):
+    def getAzimuthAngle(self) -> "double":
         """getAzimuthAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getAzimuthAngle(self)
 
 
-    def getRotationAngle(self):
+    def getRotationAngle(self) -> "double":
         """getRotationAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getRotationAngle(self)
 
 
-    def getMultiPathVector(self, *args):
+    def getMultiPathVector(self, *args) -> "scene::Vector3":
         """
         getMultiPathVector(SceneGeometry self, Vector3 normalVec) -> Vector3
         getMultiPathVector(SceneGeometry self) -> Vector3
@@ -1025,57 +1025,57 @@ class SceneGeometry(_object):
         return _scene.SceneGeometry_getMultiPathVector(self, *args)
 
 
-    def getMultiPathAngle(self):
+    def getMultiPathAngle(self) -> "double":
         """getMultiPathAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getMultiPathAngle(self)
 
 
-    def getOPGroundTrackAngle(self):
+    def getOPGroundTrackAngle(self) -> "double":
         """getOPGroundTrackAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getOPGroundTrackAngle(self)
 
 
-    def getOPAngle(self, vec):
+    def getOPAngle(self, vec: 'Vector3') -> "double":
         """getOPAngle(SceneGeometry self, Vector3 vec) -> double"""
         return _scene.SceneGeometry_getOPAngle(self, vec)
 
 
-    def getOPNorthAngle(self):
+    def getOPNorthAngle(self) -> "double":
         """getOPNorthAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getOPNorthAngle(self)
 
 
-    def getOPLayoverAngle(self):
+    def getOPLayoverAngle(self) -> "double":
         """getOPLayoverAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getOPLayoverAngle(self)
 
 
-    def getOPShadowAngle(self):
+    def getOPShadowAngle(self) -> "double":
         """getOPShadowAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getOPShadowAngle(self)
 
 
-    def getNorthVector(self):
+    def getNorthVector(self) -> "scene::Vector3":
         """getNorthVector(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getNorthVector(self)
 
 
-    def getSceneCenterNorthVector(self):
+    def getSceneCenterNorthVector(self) -> "scene::Vector3":
         """getSceneCenterNorthVector(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getSceneCenterNorthVector(self)
 
 
-    def getNorthAngle(self):
+    def getNorthAngle(self) -> "double":
         """getNorthAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getNorthAngle(self)
 
 
-    def getHeadingAngle(self):
+    def getHeadingAngle(self) -> "double":
         """getHeadingAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getHeadingAngle(self)
 
 
-    def getLayoverVector(self, *args):
+    def getLayoverVector(self, *args) -> "scene::Vector3":
         """
         getLayoverVector(SceneGeometry self, Vector3 planeZ) -> Vector3
         getLayoverVector(SceneGeometry self) -> Vector3
@@ -1083,27 +1083,27 @@ class SceneGeometry(_object):
         return _scene.SceneGeometry_getLayoverVector(self, *args)
 
 
-    def getLayover(self):
+    def getLayover(self) -> "scene::AngleMagnitude":
         """getLayover(SceneGeometry self) -> AngleMagnitude"""
         return _scene.SceneGeometry_getLayover(self)
 
 
-    def getETPLayoverAngle(self):
+    def getETPLayoverAngle(self) -> "double":
         """getETPLayoverAngle(SceneGeometry self) -> double"""
         return _scene.SceneGeometry_getETPLayoverAngle(self)
 
 
-    def getShadowVector(self):
+    def getShadowVector(self) -> "scene::Vector3":
         """getShadowVector(SceneGeometry self) -> Vector3"""
         return _scene.SceneGeometry_getShadowVector(self)
 
 
-    def getShadow(self):
+    def getShadow(self) -> "scene::AngleMagnitude":
         """getShadow(SceneGeometry self) -> AngleMagnitude"""
         return _scene.SceneGeometry_getShadow(self)
 
 
-    def getGroundResolution(self, res):
+    def getGroundResolution(self, res: 'RgAzDouble') -> "types::RowCol< double >":
         """getGroundResolution(SceneGeometry self, RgAzDouble res) -> RowColDouble"""
         return _scene.SceneGeometry_getGroundResolution(self, res)
 
@@ -1137,18 +1137,18 @@ class FrameType(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(FrameType self) -> std::string"""
         return _scene.FrameType_toString(self)
 
 
-    def fromString(str):
+    def fromString(str: 'std::string const &') -> "scene::FrameType::FrameTypesEnum":
         """fromString(std::string const & str) -> scene::FrameType::FrameTypesEnum"""
         return _scene.FrameType_fromString(str)
 
     fromString = staticmethod(fromString)
 
-    def __eq__(self, *args):
+    def __eq__(self, *args) -> "bool":
         """
         __eq__(FrameType self, scene::FrameType::FrameTypesEnum rhs) -> bool
         __eq__(FrameType self, FrameType rhs) -> bool
@@ -1156,7 +1156,7 @@ class FrameType(_object):
         return _scene.FrameType___eq__(self, *args)
 
 
-    def __ne__(self, *args):
+    def __ne__(self, *args) -> "bool":
         """
         __ne__(FrameType self, scene::FrameType::FrameTypesEnum rhs) -> bool
         __ne__(FrameType self, FrameType rhs) -> bool
@@ -1172,7 +1172,7 @@ class FrameType(_object):
 FrameType_swigregister = _scene.FrameType_swigregister
 FrameType_swigregister(FrameType)
 
-def FrameType_fromString(str):
+def FrameType_fromString(str: 'std::string const &') -> "scene::FrameType::FrameTypesEnum":
     """FrameType_fromString(std::string const & str) -> scene::FrameType::FrameTypesEnum"""
     return _scene.FrameType_fromString(str)
 
@@ -1193,7 +1193,7 @@ class Errors(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def clear(self):
+    def clear(self) -> "void":
         """clear(Errors self)"""
         return _scene.Errors_clear(self)
 
@@ -1264,30 +1264,30 @@ class AdjustableParams(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def name(param):
+    def name(param: 'scene::AdjustableParams::ParamsEnum') -> "std::string":
         """name(scene::AdjustableParams::ParamsEnum param) -> std::string"""
         return _scene.AdjustableParams_name(param)
 
     name = staticmethod(name)
 
-    def units(param):
+    def units(param: 'scene::AdjustableParams::ParamsEnum') -> "std::string":
         """units(scene::AdjustableParams::ParamsEnum param) -> std::string"""
         return _scene.AdjustableParams_units(param)
 
     units = staticmethod(units)
 
-    def group(param):
+    def group(param: 'scene::AdjustableParams::ParamsEnum') -> "int":
         """group(scene::AdjustableParams::ParamsEnum param) -> int"""
         return _scene.AdjustableParams_group(param)
 
     group = staticmethod(group)
 
-    def getARPVector(self):
+    def getARPVector(self) -> "scene::Vector3":
         """getARPVector(AdjustableParams self) -> Vector3"""
         return _scene.AdjustableParams_getARPVector(self)
 
 
-    def getARPVelocityVector(self):
+    def getARPVelocityVector(self) -> "scene::Vector3":
         """getARPVelocityVector(AdjustableParams self) -> Vector3"""
         return _scene.AdjustableParams_getARPVelocityVector(self)
 
@@ -1296,12 +1296,12 @@ class AdjustableParams(_object):
     if _newclass:
         mParams = _swig_property(_scene.AdjustableParams_mParams_get, _scene.AdjustableParams_mParams_set)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: 'std::ptrdiff_t') -> "double":
         """__getitem__(AdjustableParams self, std::ptrdiff_t idx) -> double"""
         return _scene.AdjustableParams___getitem__(self, idx)
 
 
-    def __setitem__(self, idx, val):
+    def __setitem__(self, idx: 'std::ptrdiff_t', val: 'double') -> "void":
         """__setitem__(AdjustableParams self, std::ptrdiff_t idx, double val)"""
         return _scene.AdjustableParams___setitem__(self, idx, val)
 
@@ -1310,15 +1310,15 @@ class AdjustableParams(_object):
 AdjustableParams_swigregister = _scene.AdjustableParams_swigregister
 AdjustableParams_swigregister(AdjustableParams)
 
-def AdjustableParams_name(param):
+def AdjustableParams_name(param: 'scene::AdjustableParams::ParamsEnum') -> "std::string":
     """AdjustableParams_name(scene::AdjustableParams::ParamsEnum param) -> std::string"""
     return _scene.AdjustableParams_name(param)
 
-def AdjustableParams_units(param):
+def AdjustableParams_units(param: 'scene::AdjustableParams::ParamsEnum') -> "std::string":
     """AdjustableParams_units(scene::AdjustableParams::ParamsEnum param) -> std::string"""
     return _scene.AdjustableParams_units(param)
 
-def AdjustableParams_group(param):
+def AdjustableParams_group(param: 'scene::AdjustableParams::ParamsEnum') -> "int":
     """AdjustableParams_group(scene::AdjustableParams::ParamsEnum param) -> int"""
     return _scene.AdjustableParams_group(param)
 
@@ -1337,42 +1337,42 @@ class ProjectionModel(_object):
     __swig_destroy__ = _scene.delete_ProjectionModel
     __del__ = lambda self: None
 
-    def computeImageTime(self, pixel):
+    def computeImageTime(self, pixel: 'RowColDouble') -> "double":
         """computeImageTime(ProjectionModel self, RowColDouble pixel) -> double"""
         return _scene.ProjectionModel_computeImageTime(self, pixel)
 
 
-    def computeARPPosition(self, time):
+    def computeARPPosition(self, time: 'double const') -> "scene::Vector3":
         """computeARPPosition(ProjectionModel self, double const time) -> Vector3"""
         return _scene.ProjectionModel_computeARPPosition(self, time)
 
 
-    def computeARPVelocity(self, time):
+    def computeARPVelocity(self, time: 'double const') -> "scene::Vector3":
         """computeARPVelocity(ProjectionModel self, double const time) -> Vector3"""
         return _scene.ProjectionModel_computeARPVelocity(self, time)
 
 
-    def computeImageCoordinates(self, imagePlanePoint):
+    def computeImageCoordinates(self, imagePlanePoint: 'Vector3') -> "types::RowCol< double >":
         """computeImageCoordinates(ProjectionModel self, Vector3 imagePlanePoint) -> RowColDouble"""
         return _scene.ProjectionModel_computeImageCoordinates(self, imagePlanePoint)
 
 
-    def imageGridToECEF(self, gridPt):
+    def imageGridToECEF(self, gridPt: 'RowColDouble') -> "scene::Vector3":
         """imageGridToECEF(ProjectionModel self, RowColDouble gridPt) -> Vector3"""
         return _scene.ProjectionModel_imageGridToECEF(self, gridPt)
 
 
-    def computeContour(self, arpCOA, velCOA, timeCOA, imageGridPoint, r, rDot):
+    def computeContour(self, arpCOA: 'Vector3', velCOA: 'Vector3', timeCOA: 'double', imageGridPoint: 'RowColDouble', r: 'double *', rDot: 'double *') -> "void":
         """computeContour(ProjectionModel self, Vector3 arpCOA, Vector3 velCOA, double timeCOA, RowColDouble imageGridPoint, double * r, double * rDot)"""
         return _scene.ProjectionModel_computeContour(self, arpCOA, velCOA, timeCOA, imageGridPoint, r, rDot)
 
 
-    def contourToGroundPlane(self, rCOA, rDotCOA, arpCOA, velCOA, groundPlaneNormal, groundRefPoint):
+    def contourToGroundPlane(self, rCOA: 'double', rDotCOA: 'double', arpCOA: 'Vector3', velCOA: 'Vector3', groundPlaneNormal: 'Vector3', groundRefPoint: 'Vector3') -> "scene::Vector3":
         """contourToGroundPlane(ProjectionModel self, double rCOA, double rDotCOA, Vector3 arpCOA, Vector3 velCOA, Vector3 groundPlaneNormal, Vector3 groundRefPoint) -> Vector3"""
         return _scene.ProjectionModel_contourToGroundPlane(self, rCOA, rDotCOA, arpCOA, velCOA, groundPlaneNormal, groundRefPoint)
 
 
-    def sceneToImage(self, *args):
+    def sceneToImage(self, *args) -> "types::RowCol< double >":
         """
         sceneToImage(ProjectionModel self, Vector3 scenePoint, AdjustableParams delta, double * oTimeCOA=None) -> RowColDouble
         sceneToImage(ProjectionModel self, Vector3 scenePoint, AdjustableParams delta) -> RowColDouble
@@ -1382,7 +1382,7 @@ class ProjectionModel(_object):
         return _scene.ProjectionModel_sceneToImage(self, *args)
 
 
-    def slantToImagePartials(self, imageGridPoint, delta=0.0001):
+    def slantToImagePartials(self, imageGridPoint: 'RowColDouble', delta: 'double'=0.0001) -> "math::linear::MatrixMxN< 2,2,double >":
         """
         slantToImagePartials(ProjectionModel self, RowColDouble imageGridPoint, double delta=0.0001) -> Matrix2x2
         slantToImagePartials(ProjectionModel self, RowColDouble imageGridPoint) -> Matrix2x2
@@ -1390,7 +1390,7 @@ class ProjectionModel(_object):
         return _scene.ProjectionModel_slantToImagePartials(self, imageGridPoint, delta)
 
 
-    def imageToSceneSensorPartials(self, *args):
+    def imageToSceneSensorPartials(self, *args) -> "math::linear::MatrixMxN< 3,7,double >":
         """
         imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> Matrix3x7
         imageToSceneSensorPartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint) -> Matrix3x7
@@ -1400,7 +1400,7 @@ class ProjectionModel(_object):
         return _scene.ProjectionModel_imageToSceneSensorPartials(self, *args)
 
 
-    def imageToScenePartials(self, *args):
+    def imageToScenePartials(self, *args) -> "math::linear::MatrixMxN< 3,2,double >":
         """
         imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> Matrix3x2
         imageToScenePartials(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint) -> Matrix3x2
@@ -1410,7 +1410,7 @@ class ProjectionModel(_object):
         return _scene.ProjectionModel_imageToScenePartials(self, *args)
 
 
-    def imageToSceneHeightPartial(self, *args):
+    def imageToSceneHeightPartial(self, *args) -> "math::linear::MatrixMxN< 3,1,double >":
         """
         imageToSceneHeightPartial(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint, double delta=0.0001) -> Matrix3x1
         imageToSceneHeightPartial(ProjectionModel self, RowColDouble imageGridPoint, double height, Vector3 scenePoint) -> Matrix3x1
@@ -1420,7 +1420,7 @@ class ProjectionModel(_object):
         return _scene.ProjectionModel_imageToSceneHeightPartial(self, *args)
 
 
-    def sceneToImageSensorPartials(self, *args):
+    def sceneToImageSensorPartials(self, *args) -> "math::linear::MatrixMxN< 2,7,double >":
         """
         sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint, double delta=0.0001) -> Matrix2x7
         sceneToImageSensorPartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint) -> Matrix2x7
@@ -1430,7 +1430,7 @@ class ProjectionModel(_object):
         return _scene.ProjectionModel_sceneToImageSensorPartials(self, *args)
 
 
-    def sceneToImagePartials(self, *args):
+    def sceneToImagePartials(self, *args) -> "math::linear::MatrixMxN< 2,3,double >":
         """
         sceneToImagePartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint, double delta=0.0001) -> Matrix2x3
         sceneToImagePartials(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint) -> Matrix2x3
@@ -1440,7 +1440,7 @@ class ProjectionModel(_object):
         return _scene.ProjectionModel_sceneToImagePartials(self, *args)
 
 
-    def getErrorCovariance(self, *args):
+    def getErrorCovariance(self, *args) -> "math::linear::MatrixMxN< 7,7,double >":
         """
         getErrorCovariance(ProjectionModel self, Vector3 scenePoint, double timeCOA) -> Matrix7x7
         getErrorCovariance(ProjectionModel self, Vector3 scenePoint, RowColDouble imageGridPoint) -> Matrix7x7
@@ -1450,12 +1450,12 @@ class ProjectionModel(_object):
         return _scene.ProjectionModel_getErrorCovariance(self, *args)
 
 
-    def getUnmodeledErrorCovariance(self, imageGridPoint):
+    def getUnmodeledErrorCovariance(self, imageGridPoint: 'RowColDouble') -> "math::linear::MatrixMxN< 2,2,double >":
         """getUnmodeledErrorCovariance(ProjectionModel self, RowColDouble imageGridPoint) -> Matrix2x2"""
         return _scene.ProjectionModel_getUnmodeledErrorCovariance(self, imageGridPoint)
 
 
-    def getAdjustableParams(self, *args):
+    def getAdjustableParams(self, *args) -> "scene::AdjustableParams const &":
         """
         getAdjustableParams(ProjectionModel self) -> AdjustableParams
         getAdjustableParams(ProjectionModel self) -> AdjustableParams
@@ -1463,7 +1463,7 @@ class ProjectionModel(_object):
         return _scene.ProjectionModel_getAdjustableParams(self, *args)
 
 
-    def getErrors(self, *args):
+    def getErrors(self, *args) -> "scene::Errors const &":
         """
         getErrors(ProjectionModel self) -> Errors
         getErrors(ProjectionModel self) -> Errors
@@ -1471,7 +1471,7 @@ class ProjectionModel(_object):
         return _scene.ProjectionModel_getErrors(self, *args)
 
 
-    def imageToScene(self, *args):
+    def imageToScene(self, *args) -> "PyObject *":
         """
         imageToScene(ProjectionModel self, RowColDouble imageGridPoint, Vector3 groundRefPoint, Vector3 groundPlaneNormal, AdjustableParams delta, double * oTimeCOA=None) -> Vector3
         imageToScene(ProjectionModel self, RowColDouble imageGridPoint, Vector3 groundRefPoint, Vector3 groundPlaneNormal, AdjustableParams delta) -> Vector3
@@ -1504,12 +1504,12 @@ class ProjectionModelWithImageVectors(ProjectionModel):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
 
-    def computeImageCoordinates(self, imagePlanePoint):
+    def computeImageCoordinates(self, imagePlanePoint: 'Vector3') -> "types::RowCol< double >":
         """computeImageCoordinates(ProjectionModelWithImageVectors self, Vector3 imagePlanePoint) -> RowColDouble"""
         return _scene.ProjectionModelWithImageVectors_computeImageCoordinates(self, imagePlanePoint)
 
 
-    def imageGridToECEF(self, gridPt):
+    def imageGridToECEF(self, gridPt: 'RowColDouble') -> "scene::Vector3":
         """imageGridToECEF(ProjectionModelWithImageVectors self, RowColDouble gridPt) -> Vector3"""
         return _scene.ProjectionModelWithImageVectors_imageGridToECEF(self, gridPt)
 
@@ -1542,7 +1542,7 @@ class RangeAzimProjectionModel(ProjectionModelWithImageVectors):
         except __builtin__.Exception:
             self.this = this
 
-    def computeContour(self, arpCOA, velCOA, timeCOA, imageGridPoint, r, rDot):
+    def computeContour(self, arpCOA: 'Vector3', velCOA: 'Vector3', timeCOA: 'double', imageGridPoint: 'RowColDouble', r: 'double *', rDot: 'double *') -> "void":
         """computeContour(RangeAzimProjectionModel self, Vector3 arpCOA, Vector3 velCOA, double timeCOA, RowColDouble imageGridPoint, double * r, double * rDot)"""
         return _scene.RangeAzimProjectionModel_computeContour(self, arpCOA, velCOA, timeCOA, imageGridPoint, r, rDot)
 
@@ -1575,7 +1575,7 @@ class RangeZeroProjectionModel(ProjectionModelWithImageVectors):
         except __builtin__.Exception:
             self.this = this
 
-    def computeContour(self, arpCOA, velCOA, timeCOA, imageGridPoint, r, rDot):
+    def computeContour(self, arpCOA: 'Vector3', velCOA: 'Vector3', timeCOA: 'double', imageGridPoint: 'RowColDouble', r: 'double *', rDot: 'double *') -> "void":
         """computeContour(RangeZeroProjectionModel self, Vector3 arpCOA, Vector3 velCOA, double timeCOA, RowColDouble imageGridPoint, double * r, double * rDot)"""
         return _scene.RangeZeroProjectionModel_computeContour(self, arpCOA, velCOA, timeCOA, imageGridPoint, r, rDot)
 
@@ -1608,7 +1608,7 @@ class PlaneProjectionModel(ProjectionModelWithImageVectors):
         except __builtin__.Exception:
             self.this = this
 
-    def computeContour(self, arpCOA, velCOA, timeCOA, imageGridPoint, r, rDot):
+    def computeContour(self, arpCOA: 'Vector3', velCOA: 'Vector3', timeCOA: 'double', imageGridPoint: 'RowColDouble', r: 'double *', rDot: 'double *') -> "void":
         """computeContour(PlaneProjectionModel self, Vector3 arpCOA, Vector3 velCOA, double timeCOA, RowColDouble imageGridPoint, double * r, double * rDot)"""
         return _scene.PlaneProjectionModel_computeContour(self, arpCOA, velCOA, timeCOA, imageGridPoint, r, rDot)
 
@@ -1641,17 +1641,17 @@ class GeodeticProjectionModel(ProjectionModel):
         except __builtin__.Exception:
             self.this = this
 
-    def computeImageCoordinates(self, imagePlanePoint):
+    def computeImageCoordinates(self, imagePlanePoint: 'Vector3') -> "types::RowCol< double >":
         """computeImageCoordinates(GeodeticProjectionModel self, Vector3 imagePlanePoint) -> RowColDouble"""
         return _scene.GeodeticProjectionModel_computeImageCoordinates(self, imagePlanePoint)
 
 
-    def computeContour(self, arpCOA, velCOA, timeCOA, imageGridPoint, r, rDot):
+    def computeContour(self, arpCOA: 'Vector3', velCOA: 'Vector3', timeCOA: 'double', imageGridPoint: 'RowColDouble', r: 'double *', rDot: 'double *') -> "void":
         """computeContour(GeodeticProjectionModel self, Vector3 arpCOA, Vector3 velCOA, double timeCOA, RowColDouble imageGridPoint, double * r, double * rDot)"""
         return _scene.GeodeticProjectionModel_computeContour(self, arpCOA, velCOA, timeCOA, imageGridPoint, r, rDot)
 
 
-    def imageGridToECEF(self, gridPt):
+    def imageGridToECEF(self, gridPt: 'RowColDouble') -> "scene::Vector3":
         """imageGridToECEF(GeodeticProjectionModel self, RowColDouble gridPt) -> Vector3"""
         return _scene.GeodeticProjectionModel_imageGridToECEF(self, gridPt)
 
@@ -1675,12 +1675,12 @@ class GridGeometry(_object):
     __swig_destroy__ = _scene.delete_GridGeometry
     __del__ = lambda self: None
 
-    def gridToScene(self, gridPt, height):
+    def gridToScene(self, gridPt: 'Vector3', height: 'double') -> "scene::Vector3":
         """gridToScene(GridGeometry self, Vector3 gridPt, double height) -> Vector3"""
         return _scene.GridGeometry_gridToScene(self, gridPt, height)
 
 
-    def sceneToGrid(self, groundPt):
+    def sceneToGrid(self, groundPt: 'Vector3') -> "scene::Vector3":
         """sceneToGrid(GridGeometry self, Vector3 groundPt) -> Vector3"""
         return _scene.GridGeometry_sceneToGrid(self, groundPt)
 
@@ -1700,7 +1700,7 @@ class PlanarGridGeometry(GridGeometry):
     __getattr__ = lambda self, name: _swig_getattr(self, PlanarGridGeometry, name)
     __repr__ = _swig_repr
 
-    def __init__(self, row, col, refPt, arpPoly, timeCOAPoly):
+    def __init__(self, row: 'Vector3', col: 'Vector3', refPt: 'Vector3', arpPoly: 'PolyVector3', timeCOAPoly: 'Poly2D'):
         """__init__(scene::PlanarGridGeometry self, Vector3 row, Vector3 col, Vector3 refPt, PolyVector3 arpPoly, Poly2D timeCOAPoly) -> PlanarGridGeometry"""
         this = _scene.new_PlanarGridGeometry(row, col, refPt, arpPoly, timeCOAPoly)
         try:
@@ -1708,12 +1708,12 @@ class PlanarGridGeometry(GridGeometry):
         except __builtin__.Exception:
             self.this = this
 
-    def gridToScene(self, gridPt, height):
+    def gridToScene(self, gridPt: 'Vector3', height: 'double') -> "scene::Vector3":
         """gridToScene(PlanarGridGeometry self, Vector3 gridPt, double height) -> Vector3"""
         return _scene.PlanarGridGeometry_gridToScene(self, gridPt, height)
 
 
-    def sceneToGrid(self, groundPt):
+    def sceneToGrid(self, groundPt: 'Vector3') -> "scene::Vector3":
         """sceneToGrid(PlanarGridGeometry self, Vector3 groundPt) -> Vector3"""
         return _scene.PlanarGridGeometry_sceneToGrid(self, groundPt)
 

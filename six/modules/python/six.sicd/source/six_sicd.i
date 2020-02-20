@@ -36,6 +36,7 @@
 #include "six/sicd/AreaPlaneUtility.h"
 #include "six/sicd/GeoLocator.h"
 #include "six/sicd/SICDWriteControl.h"
+#include "six/sicd/Utilities.h"
 #include <numpyutils/numpyutils.h>
 
 
@@ -125,6 +126,40 @@ Data* readNITF(const std::string& pathname,
     region.setBuffer(buffer.get() + offset);
     return reinterpret_cast<Data*>(reader.interleaved(region, 0));
 }
+%}
+
+%ignore six::sicd::cropSICD;
+%include <std_auto_ptr.i>
+%include <std_string.i>
+%include <std_vector.i>
+%rename (cropSICD) cropSICDWrap;
+
+%inline %{
+
+
+void cropSICDWrap(const std::string& inPathname,
+              const std::vector<std::string>& schemaPaths,
+              const types::RowCol<size_t>& aoiOffset,
+              const types::RowCol<size_t>& aoiDims,
+              const std::string& outPathname);
+
+void cropSICDWrap(const std::string& inPathname,
+              const std::vector<std::string>& schemaPaths,
+              const types::RowCol<size_t>& aoiOffset,
+              const types::RowCol<size_t>& aoiDims,
+              const std::string& outPathname)
+{
+
+    six::XMLControlFactory::getInstance().addCreator(
+          six::DataType::COMPLEX,
+	      new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+
+    cropSICD(inPathname, schemaPaths, aoiOffset,
+	         aoiDims, outPathname);
+}
+%}
+
+%{
 
 nitf::Record _readRecord(const std::string& pathname);
 
@@ -141,7 +176,8 @@ nitf::Record _readRecord(const std::string& pathname)
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;
 
-%rename(_fitPolyImpl) scene::ProjectionPolynomialFitter::fitOutputToSlantPolynomials;
+%rename(_fitOutputToSlantImpl) scene::ProjectionPolynomialFitter::fitOutputToSlantPolynomials;
+%rename(_fitSlantToOutputImpl) scene::ProjectionPolynomialFitter::fitSlantToOutputPolynomials;
 
 %import <nitf/List.hpp>
 %import <nitf/Object.hpp>
@@ -163,6 +199,8 @@ nitf::Record _readRecord(const std::string& pathname)
 %include <nitf/ImageSubheader.hpp>
 %include <nitf/System.hpp>
 %include <nitf/Types.h>
+#include <six/sicd/SICDMesh.h>
+%include <six/sicd/SICDMesh.h>
 
 %import "math_poly.i"
 %import "types.i"
@@ -173,6 +211,8 @@ nitf::Record _readRecord(const std::string& pathname)
 // This allows functions that return auto_ptrs to work properly
 %auto_ptr(six::sicd::ComplexData);
 %auto_ptr(scene::ProjectionPolynomialFitter);
+%auto_ptr(six::sicd::NoiseMesh);
+%auto_ptr(six::sicd::ScalarMesh);
 
 %typemap(out) nitf::Uint32, nitf::Int32{$result = PyInt_FromLong($1);}
 %typemap(in) nitf::Uint32{$1 = (nitf::Uint32)PyInt_AsLong($input);}
@@ -197,6 +237,11 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
 
+std::auto_ptr<six::sicd::ComplexData> cropMetaData(
+        const six::sicd::ComplexData& complexData,
+	    const types::RowCol<size_t>& aoiOffset,
+	    const types::RowCol<size_t>& aoiDims);
+
 nitf::Record _readRecord(const std::string& pathname);
 
 %pythoncode
@@ -220,10 +265,10 @@ def schema_path():
 /* prevent name conflicts */
 %rename ("SixSicdUtilities") six::sicd::Utilities;
 
+%include "six/CollectionInformation.h"
 %import "scene/GridECEFTransform.h"
 %include "scene/ProjectionPolynomialFitter.h"
 %include "six/sicd/ComplexClassification.h"
-%include "six/sicd/CollectionInformation.h"
 %include "six/sicd/ImageCreation.h"
 %include "six/sicd/ImageData.h"
 %include "six/sicd/GeoData.h"
@@ -234,7 +279,6 @@ def schema_path():
 %include "six/sicd/ImageFormation.h"
 %include "six/sicd/SCPCOA.h"
 %include "six/sicd/Antenna.h"
-%include "six/sicd/MatchInformation.h"
 %include "six/sicd/PFA.h"
 %include "six/sicd/RMA.h"
 %include "six/sicd/RgAzComp.h"
@@ -247,7 +291,6 @@ def schema_path():
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
 
-SCOPED_CLONEABLE(six::sicd, CollectionInformation)
 SCOPED_CLONEABLE(six::sicd, ImageCreation)
 SCOPED_COPYABLE(six::sicd, ImageData)
 SCOPED_CLONEABLE(six::sicd, GeoData)
@@ -259,7 +302,6 @@ SCOPED_CLONEABLE(six::sicd, RadarCollection)
 SCOPED_COPYABLE(six::sicd, ImageFormation)
 SCOPED_COPYABLE(six::sicd, SCPCOA)
 SCOPED_COPYABLE(six::sicd, Antenna)
-SCOPED_COPYABLE(six::sicd, MatchInformation)
 SCOPED_COPYABLE(six::sicd, SlowTimeDeskew)
 SCOPED_COPYABLE(six::sicd, PFA)
 SCOPED_COPYABLE(six::sicd, RMA)
@@ -274,7 +316,6 @@ SCOPED_COPYABLE(six::sicd, ElectricalBoresight)
 SCOPED_COPYABLE(six::sicd, HalfPowerBeamwidths)
 SCOPED_COPYABLE(six::sicd, GainAndPhasePolys)
 
-SCOPED_COPYABLE(six::sicd, MatchType)
 SCOPED_COPYABLE(six::sicd, WeightType)
 
 %template(VectorPolyXYZ) std::vector<math::poly::OneD<Vector3> >;
@@ -293,13 +334,12 @@ SCOPED_CLONEABLE(six::sicd, ChannelParameters)
 %template(vectorScopedClonableSegment)             std::vector<mem::ScopedCloneablePtr<six::sicd::Segment> >;
 %template(VectorScopedCloneableChannelParameters)  std::vector<mem::ScopedCloneablePtr<six::sicd::ChannelParameters> >;
 %template(VectorInt)                               std::vector<int>;
+%template(VectorString)                            std::vector<std::string>;
 SCOPED_COPYABLE(six::sicd, RcvChannelProcessed)
 %template(VectorProcessing)                        std::vector<six::sicd::Processing>;
 SCOPED_COPYABLE(six::sicd, PolarizationCalibration)
 SCOPED_COPYABLE(six::sicd, Distortion)
 
-%template(VectorMatchCollect)                      std::vector<six::sicd::MatchCollect>;
-%template(VectorScopedCopyableMatchType)           std::vector<mem::ScopedCopyablePtr<six::sicd::MatchType> >;
 
 SCOPED_COPYABLE(six::sicd, RMAT)
 SCOPED_COPYABLE(six::sicd, RMCR)
@@ -471,11 +511,21 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
                 polyOrderX, polyOrderY):
             toSlantRow = Poly2D()
             toSlantCol = Poly2D()
-            self._fitPolyImpl(
+            self._fitOutputToSlantImpl(
                 offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
                 polyOrderX, polyOrderY, toSlantRow, toSlantCol)
             return (toSlantRow, toSlantCol)
 
+        def fitSlantToOutputPolynomials(
+                self, offset, inSceneCenter,
+                interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY):
+            toOutputRow = Poly2D()
+            toOutputCol = Poly2D()
+            self._fitSlantToOutputImpl(
+                offset, inSceneCenter, interimSceneCenter, interimSampleSpacing,
+                polyOrderX, polyOrderY, toOutputRow, toOutputCol)
+            return (toOutputRow, toOutputCol)
+
     %}
 }
-

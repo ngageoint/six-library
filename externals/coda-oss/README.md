@@ -127,8 +127,13 @@ Enabling a debugger
 `-g` and its variants can be achieved at configure time using the 
 `--enable-debugging` switch at waf configure time
 
-SVN Issues
-----------
-Please DONT POLLUTE SVN!  Don't put binaries in there,
-unless you have a very good reason.
+Common Errors
+-------------
+    Fatal Python error: initfsencoding: unable to load the file system codec
+    ModuleNotFoundError: No module named 'encodings'
 
+Problem: Python is unable to find its `modules` directory, necessary for using the Python C API.
+
+Solution: Set the `PYTHONHOME` environment variable. On Windows, this may look like:
+
+    set PYTHONHOME=C:\ProgramData\Anaconda3\

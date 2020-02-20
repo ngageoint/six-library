@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -24,7 +24,7 @@
 #ifndef __SYS_THREAD_PTHREAD_THREAD_H__
 #define __SYS_THREAD_PTHREAD_THREAD_H__
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 
 #if defined(HAVE_PTHREAD_H)
 
@@ -55,8 +55,8 @@ namespace sys
 /*!
  *  \class ThreadPosix
  *  \brief The implementation of a pthread-specialized thread
- *  
- *  This class provides the wrapper for a pthread_t.  
+ *
+ *  This class provides the wrapper for a pthread_t.
  *
  */
 class ThreadPosix : public ThreadInterface
@@ -120,7 +120,7 @@ public:
      *  Calls sched_yield to yield the thread of control
      */
     static void yield();
-    
+
     /*!
      *  Returns the native type.  You probably should not use this
      *  unless you have specific constraints on which package you use

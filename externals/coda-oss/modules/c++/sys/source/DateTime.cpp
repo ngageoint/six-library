@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,13 +14,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 
 #include "except/Exception.h"
 #include "sys/DateTime.h"
@@ -121,7 +121,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
                         "Value does not match format (%%):  " + bc));
             break;
 
-        /* 
+        /*
          * "Complex" conversion rules, implemented through recursion.
          */
         case 'c':              // Date and time, using the locale's format.
@@ -294,7 +294,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
 
         case 'U':              // The week of year, beginning on sunday.
         case 'W':              // The week of year, beginning on monday.
-            /* 
+            /*
              * XXX This is bogus, as we can not assume any valid
              * information present in the tm structure at this
              * point to calculate a real value, so just check the
@@ -586,8 +586,8 @@ void sys::DateTime::setTime(const std::string& time, const std::string& format)
 
 std::string sys::DateTime::format(const std::string& formatStr) const
 {
-    // the longest string expansion is 
-    // %c => 'Thu Aug 23 14:55:02 2001' 
+    // the longest string expansion is
+    // %c => 'Thu Aug 23 14:55:02 2001'
     // which is an expansion of 22 characters
     size_t maxSize = formatStr.length() * 22 + 1;
     std::vector<char> expanded(maxSize);

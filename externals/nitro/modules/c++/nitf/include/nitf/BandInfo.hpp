@@ -98,7 +98,7 @@ public:
               const std::string& imageFilterCode,
               nitf::Uint32 numLUTs,
               nitf::Uint32 bandEntriesPerLUT,
-              nitf::LookupTable& lut) throw(nitf::NITFException);
+              nitf::LookupTable& lut);
 
     /*!
      * Initialize the BandInfo with the given data. This assumes there is no
@@ -112,7 +112,7 @@ public:
     void init(const std::string& representation,
               const std::string& subcategory,
               const std::string& imageFilterCondition,
-              const std::string& imageFilterCode) throw(nitf::NITFException);
+              const std::string& imageFilterCode);
 
 private:
     nitf_Error error;

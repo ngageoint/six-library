@@ -303,11 +303,24 @@ NITFAPI(int) nitf_ImageWriter_setWriteCaching(nitf_ImageWriter *imageWriter,
     return(nitf_ImageIO_setWriteCaching(impl->imageBlocker, enable));
 }
 
-NITFAPI(void) nitf_ImageWriter_setDirectBlockWrite(nitf_ImageWriter *imageWriter,
-        int enable)
+NITFAPI(NITF_BOOL) nitf_ImageWriter_setDirectBlockWrite(nitf_ImageWriter *imageWriter,
+        int enable,
+        nitf_Error *error)
 {
-    ImageWriterImpl *impl = (ImageWriterImpl*)imageWriter->data;
+    ImageWriterImpl *impl;
+    nitf_Uint32 numImageBands;
+
+    impl = (ImageWriterImpl*)imageWriter->data;
+    numImageBands = impl->numImageBands + impl->numMultispectralImageBands;
+
+    if (numImageBands > 1 && enable)
+    {
+        nitf_Error_init(error, "Direct block write not supported for multi-band images",
+            NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        return NITF_FAILURE;
+    }
     impl->directBlockWrite = enable;
+    return NITF_SUCCESS;
 }
 
 NITFAPI(NITF_BOOL) nitf_ImageWriter_setPadPixel(nitf_ImageWriter* imageWriter,

@@ -82,7 +82,7 @@ public:
                                         const std::string& user = "",
                                         const std::string& pass = "",
                                         const std::string& host = "localhost",
-                                        unsigned int port = 0) throw (except::Exception);
+                                        unsigned int port = 0);
 
     /*!
      *  Destroy a previously created connection
