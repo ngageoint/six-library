@@ -23,12 +23,12 @@
 #include <iomanip>
 #include <sstream>
 
+#include <io/ByteStream.h>
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
-#include <io/ByteStream.h>
-#include <nitf/IOStreamWriter.hpp>
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
+#include <nitf/IOStreamWriter.hpp>
 
 namespace six
 {
@@ -54,7 +54,8 @@ NITFWriteControl::NITFWriteControl(const six::Options& options,
     }
 }
 
-void NITFWriteControl::setXMLControlRegistryImpl(const XMLControlRegistry* xmlRegistry)
+void NITFWriteControl::setXMLControlRegistryImpl(
+        const XMLControlRegistry* xmlRegistry)
 {
     mNITFHeaderCreator->setXMLControlRegistry(xmlRegistry);
     WriteControl::setXMLControlRegistryImpl(xmlRegistry);
@@ -72,7 +73,7 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
 }
 
 void NITFWriteControl::setNITFHeaderCreator(
-    std::auto_ptr<six::NITFHeaderCreator> headerCreator)
+        std::auto_ptr<six::NITFHeaderCreator> headerCreator)
 {
     mNITFHeaderCreator.reset(headerCreator.release());
 }
@@ -94,8 +95,10 @@ std::string NITFWriteControl::getIID(DataType dataType,
                                      size_t numImageSegments,
                                      size_t productNum)
 {
-    return NITFHeaderCreator::getIID(dataType, segmentNum, numImageSegments,
-                                  productNum);
+    return NITFHeaderCreator::getIID(dataType,
+                                     segmentNum,
+                                     numImageSegments,
+                                     productNum);
 }
 
 void NITFWriteControl::setBlocking(const std::string& imode,
@@ -106,13 +109,13 @@ void NITFWriteControl::setBlocking(const std::string& imode,
 }
 
 void NITFWriteControl::setImageSecurity(const six::Classification& c,
-        nitf::ImageSubheader& subheader)
+                                        nitf::ImageSubheader& subheader)
 {
     mNITFHeaderCreator->setImageSecurity(c, subheader);
 }
 
 void NITFWriteControl::setDESecurity(const six::Classification& c,
-        nitf::DESubheader& subheader)
+                                     nitf::DESubheader& subheader)
 {
     mNITFHeaderCreator->setDESecurity(c, subheader);
 }
@@ -138,9 +141,9 @@ void NITFWriteControl::save(const SourceList& imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    const size_t bufferSize =
-            getOptions().getParameter(six::WriteControl::OPT_BUFFER_SIZE,
-                                      Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
+    const size_t bufferSize = getOptions().getParameter(
+            six::WriteControl::OPT_BUFFER_SIZE,
+            Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
 
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
@@ -152,9 +155,9 @@ bool NITFWriteControl::shouldByteSwap() const
 {
     bool doByteSwap;
 
-    const int byteSwapping =
-        (int) getOptions().getParameter(six::WriteControl::OPT_BYTE_SWAP,
-                                        Parameter((int) ByteSwapping::SWAP_AUTO));
+    const int byteSwapping = (int)getOptions().getParameter(
+            six::WriteControl::OPT_BYTE_SWAP,
+            Parameter((int)ByteSwapping::SWAP_AUTO));
 
     if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {
@@ -171,16 +174,15 @@ bool NITFWriteControl::shouldByteSwap() const
     return doByteSwap;
 }
 
-void NITFWriteControl::save(
-        const SourceList& imageData,
-        nitf::IOInterface& outputFile,
-        const std::vector<std::string>& schemaPaths)
+void NITFWriteControl::save(const SourceList& imageData,
+                            nitf::IOInterface& outputFile,
+                            const std::vector<std::string>& schemaPaths)
 {
     nitf::Record& record = getRecord();
     mWriter.prepareIO(outputFile, record);
     const bool doByteSwap = shouldByteSwap();
 
-    const std::vector<mem::SharedPtr<NITFImageInfo> >& infos = getInfos();
+    const std::vector<mem::SharedPtr<NITFImageInfo>>& infos = getInfos();
     if (infos.size() != imageData.size())
     {
         std::ostringstream ostr;
@@ -197,8 +199,7 @@ void NITFWriteControl::save(
     for (size_t i = 0; i < numImages; ++i)
     {
         const NITFImageInfo& info = *(infos[i]);
-        std::vector < NITFSegmentInfo > imageSegments
-                = info.getImageSegments();
+        std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
         size_t numIS = imageSegments.size();
         size_t pixelSize = info.getData()->getNumBytesPerPixel();
         size_t numCols = info.getData()->getNumCols();
@@ -208,13 +209,17 @@ void NITFWriteControl::save(
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            mem::SharedPtr< ::nitf::WriteHandler> writeHandler(
-                new StreamWriteHandler (segmentInfo, imageData[i], numCols,
-                                        numChannels, pixelSize, doByteSwap));
+            mem::SharedPtr<::nitf::WriteHandler> writeHandler(
+                    new StreamWriteHandler(segmentInfo,
+                                           imageData[i],
+                                           numCols,
+                                           numChannels,
+                                           pixelSize,
+                                           doByteSwap));
 
-            mWriter.setImageWriteHandler(
-                    static_cast<int>(info.getStartIndex() + j),
-                    writeHandler);
+            mWriter.setImageWriteHandler(static_cast<int>(info.getStartIndex() +
+                                                          j),
+                                         writeHandler);
         }
     }
 
@@ -225,28 +230,27 @@ void NITFWriteControl::save(const BufferList& imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    const size_t bufferSize =
-            getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE,
-                                      Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
+    const size_t bufferSize = getOptions().getParameter(
+            WriteControl::OPT_BUFFER_SIZE,
+            Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
     save(imageData, bufferedIO, schemaPaths);
     bufferedIO.close();
 }
 
-void NITFWriteControl::save(
-        const BufferList& imageData,
-        nitf::IOInterface& outputFile,
-        const std::vector<std::string>& schemaPaths)
+void NITFWriteControl::save(const BufferList& imageData,
+                            nitf::IOInterface& outputFile,
+                            const std::vector<std::string>& schemaPaths)
 {
     nitf::Record& record = getRecord();
     mWriter.prepareIO(outputFile, record);
     const bool doByteSwap = shouldByteSwap();
 
     if (getInfos().size() != imageData.size())
-        throw except::Exception(Ctxt("Require " +
-                str::toString(getInfos().size())
-                + " images, received " + str::toString(imageData.size())));
+        throw except::Exception(
+                Ctxt("Require " + str::toString(getInfos().size()) +
+                     " images, received " + str::toString(imageData.size())));
 
     // check to see if J2K compression is enabled
     double j2kCompression = (double)getOptions().getParameter(
@@ -255,18 +259,17 @@ void NITFWriteControl::save(
     bool enableJ2K = (getContainer()->getDataType() != DataType::COMPLEX) &&
             (j2kCompression <= 1.0) && j2kCompression > 0.0001;
 
-    //TODO maybe we need to see if the compression plug-in is even available
+    // TODO maybe we need to see if the compression plug-in is even available
 
     size_t numImages = getInfos().size();
     createCompressionOptions(mCompressionOptions);
     for (size_t i = 0; i < numImages; ++i)
     {
         const NITFImageInfo& info = *(getInfos()[i]);
-        std::vector < NITFSegmentInfo > imageSegments
-                = info.getImageSegments();
+        std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
         const size_t numIS = imageSegments.size();
-        const int pixelSize = static_cast<int>(
-                info.getData()->getNumBytesPerPixel());
+        const int pixelSize =
+                static_cast<int>(info.getData()->getNumBytesPerPixel());
         const size_t numCols = info.getData()->getNumCols();
         const size_t numChannels = info.getData()->getNumChannels();
 
@@ -275,8 +278,8 @@ void NITFWriteControl::save(
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
         const bool isBlocking =
-            static_cast<nitf::Uint32>(subheader.getNumBlocksPerRow()) > 1 ||
-            static_cast<nitf::Uint32>(subheader.getNumBlocksPerCol()) > 1;
+                static_cast<nitf::Uint32>(subheader.getNumBlocksPerRow()) > 1 ||
+                static_cast<nitf::Uint32>(subheader.getNumBlocksPerCol()) > 1;
 
         // The SIDD spec requires that a J2K compressed SIDDs be only a
         // single image segment. However this functionality remains untested.
@@ -286,18 +289,17 @@ void NITFWriteControl::save(
             if ((isBlocking || (enableJ2K && numIS == 1)) &&
                 info.getData()->getDataType() == six::DataType::COMPLEX)
             {
-                throw except::Exception(Ctxt(
-                    "SICD does not support blocked or J2K compressed output"));
+                throw except::Exception(Ctxt("SICD does not support blocked or "
+                                             "J2K compressed output"));
             }
 
             for (size_t jj = 0; jj < numIS; ++jj)
             {
                 // We will use the ImageWriter provided by NITRO so that we can
                 // take advantage of the built-in compression capabilities
-                nitf::ImageWriter iWriter =
-                    mWriter.newImageWriter(
-                            static_cast<int>(info.getStartIndex() + jj),
-                            mCompressionOptions);
+                nitf::ImageWriter iWriter = mWriter.newImageWriter(
+                        static_cast<int>(info.getStartIndex() + jj),
+                        mCompressionOptions);
                 iWriter.setWriteCaching(1);
 
                 nitf::ImageSource iSource;
@@ -308,10 +310,13 @@ void NITFWriteControl::save(
                 for (size_t chan = 0; chan < numChannels; ++chan)
                 {
                     nitf::MemorySource ms(imageData[i] +
-                            pixelSize * segmentInfo.firstRow * numCols,
-                            bandSize,
-                            bandSize * chan,
-                            pixelSize, 0);
+                                                  pixelSize *
+                                                          segmentInfo.firstRow *
+                                                          numCols,
+                                          bandSize,
+                                          bandSize * chan,
+                                          pixelSize,
+                                          0);
                     iSource.addBand(ms);
                 }
                 iWriter.attachSource(iSource);
@@ -325,14 +330,18 @@ void NITFWriteControl::save(
             {
                 const NITFSegmentInfo segmentInfo = imageSegments[jj];
 
-                mem::SharedPtr< ::nitf::WriteHandler> writeHandler(
-                    new MemoryWriteHandler(segmentInfo, imageData[i],
-                                           segmentInfo.firstRow, numCols,
-                                           numChannels, pixelSize, doByteSwap));
+                mem::SharedPtr<::nitf::WriteHandler> writeHandler(
+                        new MemoryWriteHandler(segmentInfo,
+                                               imageData[i],
+                                               segmentInfo.firstRow,
+                                               numCols,
+                                               numChannels,
+                                               pixelSize,
+                                               doByteSwap));
                 // Could set start index here
-                mWriter.setImageWriteHandler(
-                        static_cast<int>(info.getStartIndex() + jj),
-                        writeHandler);
+                mWriter.setImageWriteHandler(static_cast<int>(
+                                                     info.getStartIndex() + jj),
+                                             writeHandler);
             }
         }
 
@@ -359,9 +368,8 @@ void NITFWriteControl::save(
 
             iSource.addBand(memSource);
 
-            nitf::ImageWriter iWriter =
-                mWriter.newImageWriter(static_cast<int>(
-                        info.getStartIndex() + numIS));
+            nitf::ImageWriter iWriter = mWriter.newImageWriter(
+                    static_cast<int>(info.getStartIndex() + numIS));
             iWriter.setWriteCaching(1);
             iWriter.attachSource(iSource);
         }
@@ -385,12 +393,10 @@ void NITFWriteControl::addDataAndWrite(
         std::string& desStr(desStrs[ii]);
 
         desStr = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
-        nitf::SegmentWriter deWriter = mWriter.newDEWriter(static_cast<int>(ii));
-        nitf::SegmentMemorySource segSource(desStr.c_str(),
-                                            desStr.length(),
-                                            0,
-                                            0,
-                                            false);
+        nitf::SegmentWriter deWriter =
+                mWriter.newDEWriter(static_cast<int>(ii));
+        nitf::SegmentMemorySource segSource(
+                desStr.c_str(), desStr.length(), 0, 0, false);
         deWriter.attachSource(segSource);
     }
 
@@ -418,8 +424,7 @@ void NITFWriteControl::setOrganizationId(const std::string& organizationId)
 }
 
 void NITFWriteControl::setLocationIdentifier(
-    const std::string& locationId,
-    const std::string& locationIdNamespace)
+        const std::string& locationId, const std::string& locationIdNamespace)
 {
     mNITFHeaderCreator->setLocationIdentifier(locationId, locationIdNamespace);
 }
@@ -430,13 +435,13 @@ void NITFWriteControl::setAbstract(const std::string& abstract)
 }
 
 void NITFWriteControl::addUserDefinedSubheader(
-        const six::Data& data,
-        nitf::DESubheader& subheader) const
+        const six::Data& data, nitf::DESubheader& subheader) const
 {
     mNITFHeaderCreator->addUserDefinedSubheader(data, subheader);
 }
 
-void NITFWriteControl::addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
+void NITFWriteControl::addAdditionalDES(
+        mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
 {
     mNITFHeaderCreator->addAdditionalDES(segmentWriter);
 }
