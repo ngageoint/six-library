@@ -76,11 +76,9 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
             six::DataType::COMPLEX));
     std::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
 
-
     container->addData(data.clone());
 
     six::NITFWriteControl writer;
-
     writer.initialize(container);
     writer.setLogger(logger.get());
 
