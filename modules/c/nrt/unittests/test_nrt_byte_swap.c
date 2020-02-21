@@ -31,7 +31,7 @@ TEST_CASE(testFourBytes)
 
     value = 0x12345678;
     swappedValue = 0x78563412;
-    nrt_Utils_byteSwap(&value, 4);
+    nrt_Utils_byteSwap((nrt_Uint8*)&value, 4);
     TEST_ASSERT(value == swappedValue);
 }
 
@@ -42,7 +42,7 @@ TEST_CASE(testTwoBytes)
 
     value = 0x0304;
     swappedValue = 0x0403;
-    nrt_Utils_byteSwap(&value, 2);
+    nrt_Utils_byteSwap((nrt_Uint8*)&value, 2);
     TEST_ASSERT(value == swappedValue);
 }
 
@@ -54,7 +54,7 @@ TEST_CASE(testEightBytes)
 
     value = 0x0123456789ABCDEF;
     swappedValue = 0xEFCDAB8967452301;
-    nrt_Utils_byteSwap(&value, 8);
+    nrt_Utils_byteSwap((nrt_Uint8*)&value, 8);
     TEST_ASSERT(value == swappedValue);
 }
 

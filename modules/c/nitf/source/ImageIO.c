@@ -6573,7 +6573,7 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
     if (!nitf_ImageIO_bigEndian())
     {
         nitf_ImageIO_swapMaskHeader(&maskHeader);
-        nitf_Utils_byteSwap(&(padCodeLength), 2);
+        nitf_Utils_byteSwap((nitf_Uint8*)&(padCodeLength), 2);
     }
 
         /* Format and write the header buffer */
@@ -6711,10 +6711,10 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
 NITFPRIV(void) nitf_ImageIO_swapMaskHeader(_nitf_ImageIO_MaskHeader *
         header)
 {
-    nitf_Utils_byteSwap(&(header->imageDataOffset), 4);
-    nitf_Utils_byteSwap(&(header->blockRecordLength), 2);
-    nitf_Utils_byteSwap(&(header->padRecordLength), 2);
-    nitf_Utils_byteSwap(&(header->padPixelValueLength), 2);
+    nitf_Utils_byteSwap((nitf_Uint8*)&(header->imageDataOffset), 4);
+    nitf_Utils_byteSwap((nitf_Uint8*)&(header->blockRecordLength), 2);
+    nitf_Utils_byteSwap((nitf_Uint8*)&(header->padRecordLength), 2);
+    nitf_Utils_byteSwap((nitf_Uint8*)&(header->padPixelValueLength), 2);
 
     return;
 }
