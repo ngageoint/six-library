@@ -23,7 +23,6 @@
 #include "six/sidd/DerivedXMLControl.h"
 #include "six/sidd/Utilities.h"
 
-
 namespace
 {
 double getCenterTime(const six::sidd::DerivedData& derived)
