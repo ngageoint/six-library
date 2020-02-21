@@ -61707,6 +61707,60 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_XMLControl_loadSchemaPaths(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< std::string,std::allocator< std::string > > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:XMLControl_loadSchemaPaths",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLControl_loadSchemaPaths" "', argument " "1"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControl_loadSchemaPaths" "', argument " "1"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp1);
+  {
+    try
+    {
+      six::XMLControl::loadSchemaPaths(*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_XMLControl_toXML(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::XMLControl *arg1 = (six::XMLControl *) 0 ;
@@ -94538,6 +94592,7 @@ static PyMethodDef SwigMethods[] = {
 		"XMLControl_setLogger(XMLControl self, logging::Logger * log)\n"
 		""},
 	 { (char *)"XMLControl_validate", _wrap_XMLControl_validate, METH_VARARGS, (char *)"XMLControl_validate(xml::lite::Document const * doc, VectorString schemaPaths, logging::Logger * log)"},
+	 { (char *)"XMLControl_loadSchemaPaths", _wrap_XMLControl_loadSchemaPaths, METH_VARARGS, (char *)"XMLControl_loadSchemaPaths(VectorString schemaPaths)"},
 	 { (char *)"XMLControl_toXML", _wrap_XMLControl_toXML, METH_VARARGS, (char *)"XMLControl_toXML(XMLControl self, Data data, VectorString schemaPaths) -> xml::lite::Document *"},
 	 { (char *)"XMLControl_fromXML", _wrap_XMLControl_fromXML, METH_VARARGS, (char *)"XMLControl_fromXML(XMLControl self, xml::lite::Document const * doc, VectorString schemaPaths) -> Data"},
 	 { (char *)"XMLControl_dataTypeToString", _wrap_XMLControl_dataTypeToString, METH_VARARGS, (char *)"\n"
@@ -96719,12 +96774,20 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "DualPolarizationType_OTHER",SWIG_From_int(static_cast< int >(six::DualPolarizationType::OTHER)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_V_V",SWIG_From_int(static_cast< int >(six::DualPolarizationType::V_V)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_V_H",SWIG_From_int(static_cast< int >(six::DualPolarizationType::V_H)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_V_RHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::V_RHC)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_V_LHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::V_LHC)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_H_V",SWIG_From_int(static_cast< int >(six::DualPolarizationType::H_V)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_H_H",SWIG_From_int(static_cast< int >(six::DualPolarizationType::H_H)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_H_RHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::H_RHC)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_H_LHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::H_LHC)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_RHC_RHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::RHC_RHC)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_RHC_LHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::RHC_LHC)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_RHC_V",SWIG_From_int(static_cast< int >(six::DualPolarizationType::RHC_V)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_RHC_H",SWIG_From_int(static_cast< int >(six::DualPolarizationType::RHC_H)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_LHC_RHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::LHC_RHC)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_LHC_LHC",SWIG_From_int(static_cast< int >(six::DualPolarizationType::LHC_LHC)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_LHC_V",SWIG_From_int(static_cast< int >(six::DualPolarizationType::LHC_V)));
+  SWIG_Python_SetConstant(d, "DualPolarizationType_LHC_H",SWIG_From_int(static_cast< int >(six::DualPolarizationType::LHC_H)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_UNKNOWN",SWIG_From_int(static_cast< int >(six::DualPolarizationType::UNKNOWN)));
   SWIG_Python_SetConstant(d, "DualPolarizationType_NOT_SET",SWIG_From_int(static_cast< int >(six::DualPolarizationType::NOT_SET)));
   SWIG_Python_SetConstant(d, "EarthModelType_WGS84",SWIG_From_int(static_cast< int >(six::EarthModelType::WGS84)));

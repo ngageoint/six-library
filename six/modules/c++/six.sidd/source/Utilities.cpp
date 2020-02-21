@@ -417,20 +417,36 @@ six::PolarizationType _convertDualPolarization(six::DualPolarizationType pol,
         return six::PolarizationType::V;
     case six::DualPolarizationType::V_H:
         return useFirst ? six::PolarizationType::V : six::PolarizationType::H;
+    case six::DualPolarizationType::V_RHC:
+        return useFirst ? six::PolarizationType::V : six::PolarizationType::RHC;
+    case six::DualPolarizationType::V_LHC:
+        return useFirst ? six::PolarizationType::V : six::PolarizationType::LHC;
     case six::DualPolarizationType::H_V:
         return useFirst ? six::PolarizationType::H : six::PolarizationType::V;
     case six::DualPolarizationType::H_H:
         return six::PolarizationType::H;
+    case six::DualPolarizationType::H_RHC:
+        return useFirst ? six::PolarizationType::H : six::PolarizationType::RHC;
+    case six::DualPolarizationType::H_LHC:
+        return useFirst ? six::PolarizationType::H : six::PolarizationType::LHC;
     case six::DualPolarizationType::RHC_RHC:
         return six::PolarizationType::RHC;
     case six::DualPolarizationType::RHC_LHC:
         return useFirst ? six::PolarizationType::RHC
                         : six::PolarizationType::LHC;
+    case six::DualPolarizationType::RHC_V:
+        return useFirst ? six::PolarizationType::RHC : six::PolarizationType::V;
+    case six::DualPolarizationType::RHC_H:
+        return useFirst ? six::PolarizationType::RHC : six::PolarizationType::H;
     case six::DualPolarizationType::LHC_RHC:
         return useFirst ? six::PolarizationType::LHC
                         : six::PolarizationType::RHC;
     case six::DualPolarizationType::LHC_LHC:
         return six::PolarizationType::LHC;
+    case six::DualPolarizationType::LHC_V:
+        return useFirst ? six::PolarizationType::LHC : six::PolarizationType::V;
+    case six::DualPolarizationType::LHC_H:
+        return useFirst ? six::PolarizationType::LHC : six::PolarizationType::H;
     case six::DualPolarizationType::UNKNOWN:
         throw except::Exception(Ctxt("DualPolarizationType::UNKNOWN has no "
                                      "corresponding PolarizationType"));

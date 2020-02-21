@@ -244,7 +244,7 @@ def initPosition(cmplx):
     cmplx.position = position
     return cmplx
 
-def initRadarCollection(cmplx):
+def initRadarCollection(cmplx, version):
     radarCollection = makeScopedCloneableRadarCollection()
     radarCollection.refFrequencyIndex = 1
     radarCollection.txFrequencyMin = -99
@@ -273,7 +273,10 @@ def initRadarCollection(cmplx):
     radarCollection.waveform.push_back(wfParams)
 
     chanParams = makeScopedCloneableChannelParameters()
-    chanParams.txRcvPolarization = DualPolarizationType('V_V')
+    if version == '1.2.1':
+        chanParams.txRcvPolarization = DualPolarizationType('LHC_V')
+    else:
+        chanParams.txRcvPolarization = DualPolarizationType('V_V')
     chanParams.rcvAPCIndex = 47
     radarCollection.rcvChannels.push_back(chanParams)
 
@@ -771,7 +774,7 @@ def initData(includeNITF=False, version='1.2.0', alg='PFA', imageType=''):
     cmplx = initGrid(cmplx)
     cmplx = initTimeline(cmplx)
     cmplx = initPosition(cmplx)
-    cmplx = initRadarCollection(cmplx)
+    cmplx = initRadarCollection(cmplx, version)
     cmplx = initImageFormation(cmplx, alg)
     cmplx = initSCPCOA(cmplx)
     cmplx = initRadiometric(cmplx)
@@ -871,7 +874,7 @@ if __name__ == '__main__':
             help='Round-trip a NITF as well as an XML file')
     parser.add_argument('-v', '--version', default='1.1.0',
             choices=['0.4.0', '0.4.1', '0.5.0', '1.0.0', '1.0.1', '1.1.0',
-                     '1.2.0'],
+                     '1.2.0', '1.2.1'],
             help='Version of SICD to generate')
 
     args = parser.parse_args()

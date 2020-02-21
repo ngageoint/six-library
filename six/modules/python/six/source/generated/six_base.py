@@ -1318,12 +1318,20 @@ class DualPolarizationType(_object):
     OTHER = _six_base.DualPolarizationType_OTHER
     V_V = _six_base.DualPolarizationType_V_V
     V_H = _six_base.DualPolarizationType_V_H
+    V_RHC = _six_base.DualPolarizationType_V_RHC
+    V_LHC = _six_base.DualPolarizationType_V_LHC
     H_V = _six_base.DualPolarizationType_H_V
     H_H = _six_base.DualPolarizationType_H_H
+    H_RHC = _six_base.DualPolarizationType_H_RHC
+    H_LHC = _six_base.DualPolarizationType_H_LHC
     RHC_RHC = _six_base.DualPolarizationType_RHC_RHC
     RHC_LHC = _six_base.DualPolarizationType_RHC_LHC
+    RHC_V = _six_base.DualPolarizationType_RHC_V
+    RHC_H = _six_base.DualPolarizationType_RHC_H
     LHC_RHC = _six_base.DualPolarizationType_LHC_RHC
     LHC_LHC = _six_base.DualPolarizationType_LHC_LHC
+    LHC_V = _six_base.DualPolarizationType_LHC_V
+    LHC_H = _six_base.DualPolarizationType_LHC_H
     UNKNOWN = _six_base.DualPolarizationType_UNKNOWN
     NOT_SET = _six_base.DualPolarizationType_NOT_SET
 
@@ -4386,6 +4394,12 @@ class XMLControl(_object):
 
     validate = staticmethod(validate)
 
+    def loadSchemaPaths(schemaPaths: 'VectorString') -> "void":
+        """loadSchemaPaths(VectorString schemaPaths)"""
+        return _six_base.XMLControl_loadSchemaPaths(schemaPaths)
+
+    loadSchemaPaths = staticmethod(loadSchemaPaths)
+
     def toXML(self, data: 'Data', schemaPaths: 'VectorString') -> "xml::lite::Document *":
         """toXML(XMLControl self, Data data, VectorString schemaPaths) -> xml::lite::Document *"""
         return _six_base.XMLControl_toXML(self, data, schemaPaths)
@@ -4416,6 +4430,10 @@ XMLControl_swigregister(XMLControl)
 def XMLControl_validate(doc: 'xml::lite::Document const *', schemaPaths: 'VectorString', log: 'logging::Logger *') -> "void":
     """XMLControl_validate(xml::lite::Document const * doc, VectorString schemaPaths, logging::Logger * log)"""
     return _six_base.XMLControl_validate(doc, schemaPaths, log)
+
+def XMLControl_loadSchemaPaths(schemaPaths: 'VectorString') -> "void":
+    """XMLControl_loadSchemaPaths(VectorString schemaPaths)"""
+    return _six_base.XMLControl_loadSchemaPaths(schemaPaths)
 
 def XMLControl_dataTypeToString(dataType: 'DataType', appendXML: 'bool'=True) -> "std::string":
     """

@@ -24,25 +24,31 @@
 
 import os
 import subprocess
+import sys
 
-script = os.path.join(os.getcwd(), 'externals', 'coda-oss',
-                      'build', 'scripts', 'makeEnums.py')
 
-inputFile = os.path.join(os.path.split(__file__)[0], 'enums.txt')
-template = os.path.join(os.path.split(__file__)[0], 'Enums.h.template')
-outDir = os.path.join(os.path.split(__file__)[0], os.pardir, 'include', 'six')
+if __name__ == '__main__':
+    script = os.path.join(os.getcwd(), 'externals', 'coda-oss',
+                          'build', 'scripts', 'makeEnums.py')
 
-assert os.path.exists(script)
-assert os.path.exists(inputFile)
-assert os.path.exists(outDir)
-assert os.path.exists(template)
+    inputFile = os.path.join(os.path.split(__file__)[0], 'enums.txt')
+    template = os.path.join(os.path.split(__file__)[0], 'Enums.h.template')
+    outDir = os.path.join(os.path.split(__file__)[0], os.pardir, 'include', 'six')
 
-target = os.path.join(outDir, 'Enums.h')
-if os.path.exists(target):
-    os.remove(target)
+    assert os.path.exists(script)
+    assert os.path.exists(inputFile)
+    assert os.path.exists(outDir)
+    assert os.path.exists(template)
 
-with open(target, 'w') as f:
-    subprocess.call(['python', script, inputFile, '-t', template],
-                    stdout=f, shell=True)
-    
+    target = os.path.join(outDir, 'Enums.h')
+    if os.path.exists(target):
+        os.remove(target)
+
+    with open(target, 'w') as f:
+        subprocess.call(['python', script, inputFile, '-t', template],
+                        stdout=f)
+
+    print('Successfully wrote new Enum.h to {}'.format(outDir))
+    sys.exit(0)
+
 

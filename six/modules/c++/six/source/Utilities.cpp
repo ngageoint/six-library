@@ -565,18 +565,35 @@ DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
         return DualPolarizationType::V_V;
     else if (type == "V:H")
         return DualPolarizationType::V_H;
+    else if (type == "V:RHC")
+        return DualPolarizationType::V_RHC;
+    else if (type == "V:LHC")
+        return DualPolarizationType::V_LHC;
     else if (type == "H:V")
         return DualPolarizationType::H_V;
     else if (type == "H:H")
         return DualPolarizationType::H_H;
+    else if (type == "H:RHC")
+        return DualPolarizationType::H_RHC;
+    else if (type == "H:LHC")
+        return DualPolarizationType::H_LHC;
     else if (type == "RHC:RHC")
         return DualPolarizationType::RHC_RHC;
     else if (type == "RHC:LHC")
         return DualPolarizationType::RHC_LHC;
+    else if (type == "RHC:V")
+        return DualPolarizationType::RHC_V;
+    else if (type == "RHC:H")
+        return DualPolarizationType::RHC_H;
     else if (type == "LHC:LHC")
         return DualPolarizationType::LHC_LHC;
     else if (type == "LHC:RHC")
         return DualPolarizationType::LHC_RHC;
+    else if (type == "LHC:V")
+        return DualPolarizationType::LHC_V;
+    else if (type == "LHC:H")
+        return DualPolarizationType::LHC_H;
+
     else if (type == "UNKNOWN")
         return DualPolarizationType::UNKNOWN;
     else
@@ -598,18 +615,34 @@ std::string six::toString(const DualPolarizationType& t)
         return "V:V";
     case DualPolarizationType::V_H:
         return "V:H";
+    case DualPolarizationType::V_RHC:
+        return "V:RHC";
+    case DualPolarizationType::V_LHC:
+        return "V:LHC";
     case DualPolarizationType::H_V:
         return "H:V";
     case DualPolarizationType::H_H:
         return "H:H";
+    case DualPolarizationType::H_RHC:
+        return "H:RHC";
+    case DualPolarizationType::H_LHC:
+        return "H:LHC";
     case DualPolarizationType::RHC_RHC:
         return "RHC:RHC";
     case DualPolarizationType::RHC_LHC:
         return "RHC:LHC";
+    case DualPolarizationType::RHC_V:
+        return "RHC:V";
+    case DualPolarizationType::RHC_H:
+        return "RHC:H";
     case DualPolarizationType::LHC_LHC:
         return "LHC:LHC";
     case DualPolarizationType::LHC_RHC:
         return "LHC:RHC";
+    case DualPolarizationType::LHC_V:
+        return "LHC:V";
+    case DualPolarizationType::LHC_H:
+        return "LHC:H";
     case DualPolarizationType::UNKNOWN:
         return "UNKNOWN";
     default:
