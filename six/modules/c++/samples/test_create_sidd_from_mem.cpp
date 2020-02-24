@@ -60,6 +60,7 @@ static const struct
     unsigned int bytesPerPixel;
     unsigned char data[128 * 128 * 3 + 1];
 }
+
 // clang-format off
         IMAGE = {
                   128,
