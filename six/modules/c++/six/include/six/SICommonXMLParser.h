@@ -197,7 +197,6 @@ public:
         MatchInformation* info) const = 0;
 
 protected:
-
     virtual XMLElem convertCompositeSCPToXML(
         const ErrorStatistics* errorStatistics,
         XMLElem parent = NULL) const = 0;
@@ -214,6 +213,5 @@ private:
     const std::string mSICommonURI;
 };
 }
-
 
 #endif
