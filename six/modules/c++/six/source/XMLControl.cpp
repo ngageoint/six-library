@@ -25,7 +25,6 @@
 
 namespace six
 {
-
 XMLControl::XMLControl(logging::Logger* log, bool ownLog) :
     mLog(NULL),
     mOwnLog(false)
@@ -41,27 +40,36 @@ XMLControl::~XMLControl()
     }
 }
 
+void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
+{
+    if (schemaPaths.empty())
+    {
+        std::string envPath;
+        sys::OS().getEnvIfSet(six::SCHEMA_PATH, envPath);
+        str::trim(envPath);
+        if (!envPath.empty())
+        {
+            schemaPaths.push_back(envPath);
+        }
+        else
+        {
+            schemaPaths.push_back(DEFAULT_SCHEMA_PATH);
+        }
+    }
+}
+
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
 void XMLControl::validate(const xml::lite::Document* doc,
-              const std::vector<std::string>& schemaPaths,
-              logging::Logger* log)
+                          const std::vector<std::string>& schemaPaths,
+                          logging::Logger* log)
 {
     // attempt to get the schema location from the
     // environment if nothing is specified
     std::vector<std::string> paths(schemaPaths);
+    loadSchemaPaths(paths);
+
     sys::OS os;
-
-    if (paths.empty() && os.isEnvSet(six::SCHEMA_PATH))
-    {
-        std::string envPath = os.getEnv(six::SCHEMA_PATH);
-        str::trim(envPath);
-        if (!envPath.empty())
-        {
-            paths.push_back(envPath);
-        }
-    }
-
     // If the paths we have don't exist, throw
     for (size_t ii = 0; ii < paths.size(); ++ii)
     {
@@ -83,17 +91,15 @@ void XMLControl::validate(const xml::lite::Document* doc,
         if (doc->getRootElement()->getUri().empty())
         {
             throw six::DESValidationException(Ctxt(
-                "INVALID XML: URI is empty so document version cannot be "
-                "determined to use for validation"));
+                    "INVALID XML: URI is empty so document version cannot be "
+                    "determined to use for validation"));
         }
 
         // Pretty-print so that lines numbers are useful
         io::StringStream xmlStream;
         doc->getRootElement()->prettyPrint(xmlStream);
 
-        validator.validate(xmlStream,
-                           doc->getRootElement()->getUri(),
-                           errors);
+        validator.validate(xmlStream, doc->getRootElement()->getUri(), errors);
 
         // log any error found and throw
         if (!errors.empty())
@@ -108,9 +114,9 @@ void XMLControl::validate(const xml::lite::Document* doc,
             //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
             //  and attempt to rewrite the file. Continuing in this manner is
             //  highly discouraged
-            throw six::DESValidationException(Ctxt(
-                "INVALID XML: Check both the XML being " \
-                "produced and the schemas available"));
+            throw six::DESValidationException(
+                    Ctxt("INVALID XML: Check both the XML being "
+                         "produced and the schemas available"));
         }
     }
 }
@@ -137,8 +143,7 @@ void XMLControl::setLogger(logging::Logger* log, bool own)
 
 std::string XMLControl::getDefaultURI(const Data& data)
 {
-    const std::string dataTypeStr =
-            dataTypeToString(data.getDataType(), false);
+    const std::string dataTypeStr = dataTypeToString(data.getDataType(), false);
 
     return ("urn:" + dataTypeStr + ":" + data.getVersion());
 }
@@ -154,7 +159,7 @@ std::string XMLControl::getVersionFromURI(const xml::lite::Document* doc)
                 uri));
     }
 
-    return uri.substr(9); // remove "urn:SIxx:" from beginning
+    return uri.substr(9);  // remove "urn:SIxx:" from beginning
 }
 
 void XMLControl::getVersionFromURI(const xml::lite::Document* doc,
@@ -175,8 +180,7 @@ void XMLControl::splitVersion(const std::string& versionStr,
 }
 
 xml::lite::Document* XMLControl::toXML(
-        const Data* data,
-        const std::vector<std::string>& schemaPaths)
+        const Data* data, const std::vector<std::string>& schemaPaths)
 {
     xml::lite::Document* doc = toXMLImpl(data);
     validate(doc, schemaPaths, mLog);
@@ -205,8 +209,8 @@ std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
         str = "SIDD";
         break;
     default:
-        throw except::Exception(Ctxt("Invalid data type " +
-                                         str::toString(dataType)));
+        throw except::Exception(
+                Ctxt("Invalid data type " + str::toString(dataType)));
     }
 
     if (appendXML)

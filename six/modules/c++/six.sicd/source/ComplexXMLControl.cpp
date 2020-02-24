@@ -79,6 +79,7 @@ ComplexXMLControl::getParser(const std::string& version) const
     //   SICD 1.0.1
     //   SICD 1.1.0
     //   SICD 1.2.0
+    //   SICD 1.2.1
     if (majorVersion == "0")
     {
         if (minorVersion == "4")
@@ -123,6 +124,11 @@ ComplexXMLControl::getParser(const std::string& version) const
             // From a SIX standpoint, 1.2.0 is identical to 1.1.0. The only
             // difference between 1.2 and 1.1 is some rules with how FTITLE
             // can be populated, so we can again reuse the 1.0.1 parser.
+            parser.reset(new ComplexXMLParser101(version, mLog));
+        }
+        else if (minorVersion == "2" && patchVersion == "1")
+        {
+            // The only change is in the DualPolarization enum, which is handled in the schema
             parser.reset(new ComplexXMLParser101(version, mLog));
         }
     }

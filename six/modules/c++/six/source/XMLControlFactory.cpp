@@ -74,7 +74,7 @@ std::string six::toXMLString(const Data* data,
                              const six::XMLControlRegistry *xmlRegistry)
 {
     std::auto_ptr<logging::Logger> log (new logging::NullLogger());
-    return toValidXMLString(data, std::vector<std::string>(), 
+    return toValidXMLString(data, std::vector<std::string>(),
                             log.get(), xmlRegistry);
 }
 

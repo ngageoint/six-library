@@ -204,17 +204,6 @@ int main(int argc, char** argv)
 
     try
     {
-        try
-        {
-            sys::OS().getEnv(six::SCHEMA_PATH);
-        }
-        catch(const except::Exception& )
-        {
-            throw except::Exception(Ctxt(
-                    "Must specify SIDD schema path via " +
-                    std::string(six::SCHEMA_PATH) + " environment variable"));
-        }
-
         six::XMLControlFactory::getInstance().
             addCreator(
                 six::DataType::COMPLEX,

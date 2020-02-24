@@ -46,37 +46,6 @@ six::LatLonCorners makeUpCornersFromDMS()
 }
 
 inline
-void verifySchemaEnvVariableIsSet(const std::string& commandLineArg = "")
-{
-    sys::OS os;
-    std::string schemaPath;
-    try
-    {
-        schemaPath = os.getEnv(six::SCHEMA_PATH);
-    }
-    catch(const except::Exception& )
-    {
-        std::string errorMsg =
-                "Must specify SICD/SIDD schema path via ";
-        if (!commandLineArg.empty())
-        {
-            errorMsg += commandLineArg + " or ";
-        }
-
-        errorMsg += std::string(six::SCHEMA_PATH) + " environment variable";
-
-        throw except::Exception(Ctxt(errorMsg));
-    }
-
-    if (schemaPath.empty())
-    {
-        throw except::Exception(Ctxt(std::string(six::SCHEMA_PATH) +
-                " environment variable is set but is empty"));
-    }
-}
-
-// Throws if both schemaArg isn't present and six::SCHEMA_PATH isn't set
-inline
 void getSchemaPaths(const cli::Results& options,
                     const std::string& commandLineArg,
                     const std::string& cliArgName,
@@ -86,10 +55,7 @@ void getSchemaPaths(const cli::Results& options,
     {
         schemaPaths.push_back(options.get<std::string>(cliArgName));
     }
-    else
-    {
-        verifySchemaEnvVariableIsSet(commandLineArg);
-    }
+    six::XMLControl::loadSchemaPaths(schemaPaths);
 }
 
 #endif

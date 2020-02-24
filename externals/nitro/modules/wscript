@@ -1,3 +1,5 @@
+import os
+
 VERSION = '2.8'
 
 def options(opt):
@@ -5,6 +7,9 @@ def options(opt):
 
 def configure(conf):
     conf.env['VERSION'] = VERSION
+    conf.define('NITF_DEFAULT_PLUGIN_PATH',
+                os.path.join(os.path.abspath(conf.options.prefix),
+                             'share', 'nitf', 'plugins'))
     conf.recurse()
 
 def build(bld):
