@@ -19,8 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <numeric>
 
 #include "TestCase.h"
+
 #include <types/Range.h>
 
 namespace
@@ -96,11 +98,57 @@ TEST_CASE(TestTouches)
         TEST_ASSERT_FALSE(B.touches(A));
     }
 }
+
+TEST_CASE(TestSplit)
+{
+    // Test splitting all elements
+    {
+        const types::Range A(5, 10);
+        const types::Range splitRange = A.split(10);
+        TEST_ASSERT_EQ(splitRange.mNumElements, 10);
+        TEST_ASSERT_EQ(splitRange.mStartElement, 5);
+    }
+
+    // Test splitting a portion of elements
+    {
+        const types::Range A(5, 10);
+        const types::Range splitRange = A.split(5);
+        TEST_ASSERT_EQ(splitRange.mNumElements, 5);
+        TEST_ASSERT_EQ(splitRange.mStartElement, 10);
+    }
+
+    // Test splitting zero elements
+    {
+        const types::Range A(5, 10);
+        const types::Range splitRange = A.split(0);
+        TEST_ASSERT_EQ(splitRange.mNumElements, 0);
+        TEST_ASSERT_EQ(splitRange.mStartElement,
+                       std::numeric_limits<size_t>::max());
+    }
+
+    // Test splitting more elements than are available
+    {
+        const types::Range A(5, 10);
+        const types::Range splitRange = A.split(20);
+        TEST_ASSERT_EQ(splitRange.mNumElements, 10);
+        TEST_ASSERT_EQ(splitRange.mStartElement, 5);
+    }
+
+    // Test splitting from an empty range
+    {
+        const types::Range A(0, 0);
+        const types::Range splitRange = A.split(10);
+        TEST_ASSERT_EQ(splitRange.mNumElements, 0);
+        TEST_ASSERT_EQ(splitRange.mStartElement,
+                       std::numeric_limits<size_t>::max());
+    }
+}
 }
 
 int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(TestGetNumSharedElements);
     TEST_CHECK(TestTouches);
+    TEST_CHECK(TestSplit);
     return 0;
 }

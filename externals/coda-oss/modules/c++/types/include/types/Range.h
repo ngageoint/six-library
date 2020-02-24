@@ -159,6 +159,20 @@ struct Range
         return overlap.mNumElements;
     }
 
+    /*!
+     * Given an input range, removes numElementsReq elements from the end of it
+     * (if possible), and provides the new range composed of these elements
+     *
+     * \param inputRange Initial Range object
+     * \param numElementsReq The number elements requested to be split from
+     *        the end of inputRange
+     *
+     * \returns The resulting range formed from the removed elements of
+     *          inputRange. Has no more than numElementsReq elements,
+     *          but may have fewer depending on the size of inputRange.
+     */
+    Range split(size_t numElementsReq) const;
+
     //! \return True if there are no elements in this range, false otherwise
     bool empty() const
     {
