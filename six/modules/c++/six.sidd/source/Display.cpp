@@ -185,17 +185,16 @@ Display::Display() :
 bool Display::operator==(const Display& rhs) const
 {
     return (pixelType == rhs.pixelType &&
-                    remapInformation == rhs.remapInformation &&
-                    magnificationMethod == rhs.magnificationMethod &&
-                    decimationMethod == rhs.decimationMethod &&
-                    histogramOverrides == rhs.histogramOverrides &&
-                    monitorCompensationApplied ==
-                            rhs.monitorCompensationApplied &&
-                    numBands == rhs.numBands &&
-                    defaultBandDisplay == rhs.defaultBandDisplay,
+            remapInformation == rhs.remapInformation &&
+            magnificationMethod == rhs.magnificationMethod &&
+            decimationMethod == rhs.decimationMethod &&
+            histogramOverrides == rhs.histogramOverrides &&
+            monitorCompensationApplied == rhs.monitorCompensationApplied &&
+            numBands == rhs.numBands &&
+            defaultBandDisplay == rhs.defaultBandDisplay &&
             nonInteractiveProcessing == rhs.nonInteractiveProcessing &&
-                    interactiveProcessing == rhs.interactiveProcessing &&
-                    displayExtensions == rhs.displayExtensions);
+            interactiveProcessing == rhs.interactiveProcessing &&
+            displayExtensions == rhs.displayExtensions);
 }
 }
 }
