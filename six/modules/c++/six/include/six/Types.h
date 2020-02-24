@@ -22,6 +22,9 @@
 #ifndef __SIX_TYPES_H__
 #define __SIX_TYPES_H__
 
+#include <vector>
+#include <limits>
+
 #include <import/except.h>
 #include <import/mem.h>
 #include <import/str.h>
@@ -30,7 +33,7 @@
 #include <import/math/poly.h>
 #include <import/nitf.hpp>
 #include <import/io.h>
-#include <limits>
+
 #include "scene/Types.h"
 #include "scene/FrameType.h"
 #include "six/Enums.h"
@@ -266,26 +269,56 @@ struct SCP
  */
 struct LUT
 {
+    std::vector<unsigned char> table;
     size_t numEntries;
     size_t elementSize;
 
     //!  Initialize with a number of entries and known output space
     LUT(size_t entries, size_t outputSpace) :
+        table(entries * outputSpace),
         numEntries(entries),
-        elementSize(outputSpace),
-        table(new unsigned char[entries * outputSpace])
+        elementSize(outputSpace)
     {
     }
 
-    //!  Initialize with an existing LUT, which we clone
+    //!  Initialize with an existing LUT, which we copy
     LUT(const unsigned char* interleavedLUT,
         size_t entries,
         size_t outputSpace) :
+        table(interleavedLUT, interleavedLUT + entries * outputSpace),
         numEntries(entries),
-        elementSize(outputSpace),
-        table(new unsigned char[entries * outputSpace])
+        elementSize(outputSpace)
     {
-        memcpy(table.get(), interleavedLUT, numEntries * outputSpace);
+    }
+
+    //! Initialize from nitf::LookupTable read from a NITF
+    LUT(const nitf::LookupTable& lookupTable) :
+        table(lookupTable.getEntries() * lookupTable.getTables()),
+        numEntries(lookupTable.getEntries()),
+        elementSize(lookupTable.getTables())
+    {
+        // NITF stores the tables consecutively.
+        // Need to interleave them for SIX
+        if (elementSize == 3)
+        {
+            // Imagine the vector is a matrix and then transpose it
+            for (size_t ii = 0; ii < table.size(); ++ii)
+            {
+                table[(ii % numEntries) * elementSize +
+                    (ii / numEntries)] = lookupTable.getTable()[ii];
+            }
+        }
+
+        // I'm not sure why this is a special case, but elements get
+        // swapped if we try to use the above formula
+        else if (elementSize == 2)
+        {
+            for (size_t ii = 0; ii < numEntries; ++ii)
+            {
+                table[2 * ii] = lookupTable.getTable()[numEntries + ii];
+                table[2 * ii + 1] = lookupTable.getTable()[ii];
+            }
+        }
     }
 
     virtual ~LUT()
@@ -294,17 +327,9 @@ struct LUT
 
     bool operator==(const LUT& rhs) const
     {
-        return (numEntries == rhs.numEntries &&
-                elementSize == rhs.elementSize &&
-                std::equal(table.get(),
-                           table.get() + numEntries * elementSize,
-                           rhs.table.get()));
-    }
-
-    //!  Clone the LUT table
-    virtual LUT* clone() const
-    {
-        return new LUT(table.get(), numEntries, elementSize);
+        return (table == rhs.table &&
+                numEntries == rhs.numEntries &&
+                elementSize == rhs.elementSize);
     }
 
     //!  Gives back a pointer at table[i * elementSize]
@@ -321,17 +346,19 @@ struct LUT
 
     unsigned char* getTable()
     {
-        return table.get();
+        return table.empty() ? NULL : &table[0];
     }
 
     const unsigned char* getTable() const
     {
-        return table.get();
+
+        return table.empty() ? NULL : &table[0];
     }
 
-protected:
-    mem::ScopedArray<unsigned char> table;
-
+    virtual LUT* clone() const
+    {
+        return new LUT(getTable(), numEntries, elementSize);
+    }
 };
 
 /*!

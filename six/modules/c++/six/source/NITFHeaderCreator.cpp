@@ -551,6 +551,18 @@ void NITFHeaderCreator::addUserDefinedSubheader(
             specVers = "1.0";
             specDT = "2011-08-01T00:00:00Z";
         }
+        else if (version == "1.1.0")
+        {
+            throw except::Exception(Ctxt(
+                "SIDD Version 1.1.0 does not exist. "
+                "Did you mean 2.0.0?"
+            ));
+        }
+        else if (version == "2.0.0")
+        {
+            specVers = "2.0";
+            specDT = "2016-07-15T00:00:00Z";
+        }
     }
 
     // spec version

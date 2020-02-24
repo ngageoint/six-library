@@ -30,6 +30,8 @@
 #include <six/ParameterCollection.h>
 #include <six/ErrorStatistics.h>
 #include <six/Radiometric.h>
+#include <six/GeoInfo.h>
+#include <six/MatchInformation.h>
 
 namespace six
 {
@@ -83,6 +85,8 @@ public:
             const types::RgAz<double>& value, XMLElem parent = NULL) const;
     XMLElem createLatLon(const std::string& name, const LatLon& value,
             XMLElem parent = NULL) const;
+    XMLElem createLatLon(const std::string& name, const std::string& uri,
+            const LatLon& value, XMLElem parent = NULL) const;
     XMLElem createLatLonAlt(const std::string& name, const LatLonAlt& value,
             XMLElem parent = NULL) const;
 
@@ -106,6 +110,23 @@ public:
             const ParameterCollection& props, XMLElem parent = NULL) const;
     void addDecorrType(const std::string& name, const std::string& uri,
             DecorrType dt, XMLElem p) const;
+
+    // TODO: Can make this virtual if we ever need it
+    //       This is the implementation for SICD 1.x / SIDD 2.0+
+    XMLElem convertGeoInfoToXML(const GeoInfo& geoInfo,
+            bool hasSIPrefix, XMLElem parent = NULL) const;
+    void parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo) const;
+
+    void parseEarthModelType(XMLElem element, EarthModelType& value) const;
+
+    XMLElem createEarthModelType(const std::string& name,
+            const EarthModelType& value,
+            XMLElem parent = NULL) const;
+
+    XMLElem createLatLonFootprint(const std::string& name,
+                                  const std::string& cornerName,
+                                  const LatLonCorners& corners,
+                                  XMLElem parent) const;
 
     void parsePoly1D(XMLElem polyXML, Poly1D& poly1D) const;
     void parsePoly2D(XMLElem polyXML, Poly2D& poly2D) const;
@@ -159,14 +180,6 @@ public:
         const XMLElem collectionInfoXML,
         CollectionInformation *obj) const;
 
-    XMLElem convertMatchInformationToXML(
-            const MatchInformation* matchInformation,
-            XMLElem parent = nullptr) const;
-
-    void parseMatchInformationFromXML(
-            const XMLElem matchInfoXML,
-            MatchInformation* matchInformation) const;
-
     virtual XMLElem convertRadiometryToXML(
         const Radiometric *obj,
         XMLElem parent = NULL) const = 0;
@@ -175,8 +188,15 @@ public:
         const XMLElem radiometricXML,
         Radiometric *obj) const = 0;
 
-protected:
+    virtual XMLElem convertMatchInformationToXML(
+        const MatchInformation& matchInfo,
+        XMLElem parent) const = 0;
 
+    virtual void parseMatchInformationFromXML(
+        const XMLElem matchInfoXML,
+        MatchInformation* info) const = 0;
+
+protected:
     virtual XMLElem convertCompositeSCPToXML(
         const ErrorStatistics* errorStatistics,
         XMLElem parent = NULL) const = 0;
@@ -194,6 +214,4 @@ private:
 };
 }
 
-
 #endif
-

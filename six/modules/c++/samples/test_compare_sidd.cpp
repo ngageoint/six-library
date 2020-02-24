@@ -49,7 +49,7 @@ mem::SharedPtr<six::Data> readMetadata(const six::NITFReadControl& reader)
     return retv;
 }
 
-void readWideband(six::NITFReadControl& reader, 
+void readWideband(six::NITFReadControl& reader,
         const six::Data& data,
         mem::ScopedAlignedArray<six::UByte>& buffer)
 {
@@ -65,8 +65,8 @@ void readWideband(six::NITFReadControl& reader,
     reader.interleaved(region, 0);
 }
 
-bool siddsMatch(const std::string& sidd1Path, 
-        const std::string& sidd2Path, 
+bool siddsMatch(const std::string& sidd1Path,
+        const std::string& sidd2Path,
         bool ignoreMetadata,
         bool ignoreDate)
 {
@@ -76,7 +76,7 @@ bool siddsMatch(const std::string& sidd1Path,
             six::sicd::ComplexXMLControl>());
     xmlRegistry.addCreator(six::DataType::DERIVED,
             new six::XMLControlCreatorT<
-            six::sidd::DerivedXMLControl>()); 
+            six::sidd::DerivedXMLControl>());
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
@@ -103,19 +103,21 @@ bool siddsMatch(const std::string& sidd1Path,
             sidd2Metadata->setCreationTime(sidd1Metadata->getCreationTime());
 
             // Various SICD/SIDD specific fields
-            six::sidd::DerivedData* ddata1 = 
+            six::sidd::DerivedData* ddata1 =
                 dynamic_cast<six::sidd::DerivedData*>(sidd1Metadata.get());
-            six::sidd::DerivedData* ddata2 = 
+            six::sidd::DerivedData* ddata2 =
                 dynamic_cast<six::sidd::DerivedData*>(sidd2Metadata.get());
+
             if (ddata1 && ddata2)
             {
                 // Processing events
-                
+
                 // aliases for long names...
-                six::sidd::DownstreamReprocessing* dr1 = 
+                six::sidd::DownstreamReprocessing* dr1 =
                     ddata1->downstreamReprocessing.get();
-                six::sidd::DownstreamReprocessing* dr2 = 
+                six::sidd::DownstreamReprocessing* dr2 =
                     ddata2->downstreamReprocessing.get();
+
                 size_t nEvents1 = dr1->processingEvents.size();
                 size_t nEvents2 = dr2->processingEvents.size();
                 if (nEvents1 != nEvents2) return false;
@@ -126,7 +128,7 @@ bool siddsMatch(const std::string& sidd1Path,
                 }
 
                 // Collection information
-                
+
                 // aliases for long names...
                 six::sidd::ExploitationFeatures* ef1 =
                     ddata1->exploitationFeatures.get();
@@ -137,17 +139,16 @@ bool siddsMatch(const std::string& sidd1Path,
                 if (nCollect1 != nCollect2) return false;
                 for (size_t ii = 0; ii < nCollect1; ++ii)
                 {
-
-                    ef2->collections[ii]->information->collectionDateTime =
-                        ef1->collections[ii]->information->collectionDateTime;
-                    ef2->collections[ii]->information->localDateTime =
-                        ef1->collections[ii]->information->localDateTime;
+                    ef2->collections[ii]->information.collectionDateTime =
+                        ef1->collections[ii]->information.collectionDateTime;
+                    ef2->collections[ii]->information.localDateTime =
+                        ef1->collections[ii]->information.localDateTime;
                 }
 
                 // Derived specific classification times
-                six::sidd::DerivedClassification& class1 = 
+                six::sidd::DerivedClassification& class1 =
                     ddata1->productCreation->classification;
-                six::sidd::DerivedClassification& class2 = 
+                six::sidd::DerivedClassification& class2 =
                     ddata2->productCreation->classification;
                 class2.createDate = class1.createDate;
                 class2.exemptedSourceDate = class1.exemptedSourceDate;
@@ -158,7 +159,7 @@ bool siddsMatch(const std::string& sidd1Path,
                 // TODO: SICD specific time fields
             }
         }
-        
+
         bool metadataMatches = (*sidd1Metadata) == (*sidd2Metadata);
 
         if (!metadataMatches)
@@ -179,7 +180,7 @@ bool siddsMatch(const std::string& sidd1Path,
         }
     }
 
-    int result = 
+    int result =
         std::memcmp(sidd1Buffer.get(), sidd2Buffer.get(),
                 sidd1Metadata->getNumRows() *
                 sidd1Metadata->getNumCols() *
@@ -191,7 +192,7 @@ bool siddsMatch(const std::string& sidd1Path,
 
 int main(int argc, char* argv[])
 {
-    try 
+    try
     {
         cli::ArgumentParser parser;
         parser.setDescription("This program compares two SIDDs to determine "
@@ -204,9 +205,9 @@ int main(int argc, char* argv[])
         parser.addArgument("--ignore-date",
                 "Does not check SIDD creation date for differences",
                 cli::STORE_TRUE, "ignoreDate")->setDefault("false");
-        parser.addArgument("sidd1", "Input SIDD path", 
+        parser.addArgument("sidd1", "Input SIDD path",
                 cli::STORE, "SIDD1", "SIDD1", 1, 1, true);
-        parser.addArgument("sidd2", "Input SIDD path", 
+        parser.addArgument("sidd2", "Input SIDD path",
                 cli::STORE, "SIDD2", "SIDD2", 1, 1, true);
 
         const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));

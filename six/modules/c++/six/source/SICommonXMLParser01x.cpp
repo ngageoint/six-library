@@ -229,5 +229,75 @@ void SICommonXMLParser01x::parseRadiometryFromXML(
     }
 }
 
+XMLElem SICommonXMLParser01x::convertMatchInformationToXML(
+    const MatchInformation& matchInfo,
+    XMLElem parent) const
+{
+    // This is SICD 0.4 format
+    XMLElem matchInfoXML = newElement("MatchInfo", parent);
+
+    for (size_t i = 0; i < matchInfo.types.size(); ++i)
+    {
+        const MatchType& mt = matchInfo.types[i];
+        XMLElem mtXML = newElement("Collect", matchInfoXML);
+        setAttribute(mtXML, "index", str::toString(i + 1));
+
+        createString("CollectorName", mt.collectorName, mtXML);
+        if (!mt.illuminatorName.empty())
+            createString("IlluminatorName", mt.illuminatorName, mtXML);
+        createString("CoreName", mt.matchCollects[0].coreName, mtXML);
+
+        for (std::vector<std::string>::const_iterator it =
+                mt.matchType.begin(); it != mt.matchType.end(); ++it)
+        {
+            createString("MatchType", *it, mtXML);
+        }
+        addParameters("Parameter", mt.matchCollects[0].parameters, mtXML);
+    }
+
+    return matchInfoXML;
 }
 
+void SICommonXMLParser01x::parseMatchInformationFromXML(
+    const XMLElem matchInfoXML,
+    MatchInformation* matchInfo) const
+{
+    //This is SICD 0.4 format
+
+    //TODO make sure there is at least one
+    std::vector < XMLElem > typesXML;
+    matchInfoXML->getElementsByTagName("Collect", typesXML);
+
+    matchInfo->types.resize(typesXML.size());
+    for (size_t i = 0; i < typesXML.size(); i++)
+    {
+        MatchType& type = matchInfo->types[i];
+
+        parseString(getFirstAndOnly(typesXML[i], "CollectorName"), type.collectorName);
+
+        XMLElem illuminatorElem = getOptional(typesXML[i], "IlluminatorName");
+        if (illuminatorElem)
+        {
+            //optional
+            parseString(illuminatorElem, type.illuminatorName);
+        }
+
+        // in version 0.4 we use the matchCollect object
+        parseString(getFirstAndOnly(typesXML[i], "CoreName"), type.matchCollects[0].coreName);
+
+        //optional
+        std::vector < XMLElem > matchTypesXML;
+        typesXML[i]->getElementsByTagName("MatchType", matchTypesXML);
+        type.matchType.resize(matchTypesXML.size());
+        for (size_t j = 0; j < matchTypesXML.size(); j++)
+        {
+            parseString(matchTypesXML[j], type.matchType[j]);
+        }
+
+        //optional --
+        // in version 0.4 we use the matchCollect object
+        parseParameters(typesXML[i], "Parameter", type.matchCollects[0].parameters);
+    }
+}
+
+}

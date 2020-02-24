@@ -209,6 +209,132 @@ XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
     return polyXML;
 }
 
+XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
+                                               bool hasSIPrefix,
+                                               XMLElem parent) const
+{
+    const std::string uri = hasSIPrefix ? getSICommonURI() : "";
+
+    //! 1.0.x has ordering (1. Desc, 2. choice, 3. GeoInfo)
+    XMLElem geoInfoXML = newElement("GeoInfo", uri, parent);
+
+    addParameters("Desc", uri, geoInfo.desc, geoInfoXML);
+
+    const size_t numLatLons = geoInfo.geometryLatLon.size();
+    if (numLatLons == 1)
+    {
+        createLatLon("Point", uri, geoInfo.geometryLatLon[0], geoInfoXML);
+    }
+    else if (numLatLons >= 2)
+    {
+        XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
+                                         uri, geoInfoXML);
+
+        setAttribute(linePolyXML, "size", str::toString(numLatLons));
+
+        for (size_t ii = 0; ii < numLatLons; ++ii)
+        {
+            XMLElem v = createLatLon(
+                    numLatLons == 2 ? "Endpoint" : "Vertex",
+                    uri,
+                    geoInfo.geometryLatLon[ii],
+                    linePolyXML);
+
+            setAttribute(v, "index", str::toString(ii + 1));
+        }
+    }
+
+    if (!geoInfo.name.empty())
+    {
+        setAttribute(geoInfoXML, "name", geoInfo.name);
+    }
+
+    for (size_t ii = 0; ii < geoInfo.geoInfos.size(); ++ii)
+    {
+        convertGeoInfoToXML(*geoInfo.geoInfos[ii], hasSIPrefix, geoInfoXML);
+    }
+
+    return geoInfoXML;
+}
+
+void SICommonXMLParser::parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo) const
+{
+    std::vector < XMLElem > geoInfosXML;
+    geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
+    geoInfo->name = geoInfoXML->getAttributes().getValue("name");
+
+    //optional
+    size_t idx(geoInfo->geoInfos.size());
+    geoInfo->geoInfos.resize(idx + geoInfosXML.size());
+
+    for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
+        != geoInfosXML.end(); ++it, ++idx)
+    {
+        geoInfo->geoInfos[idx].reset(new GeoInfo());
+        parseGeoInfoFromXML(*it, geoInfo->geoInfos[idx].get());
+    }
+
+    //optional
+    parseParameters(geoInfoXML, "Desc", geoInfo->desc);
+
+    XMLElem tmpElem = getOptional(geoInfoXML, "Point");
+    if (tmpElem)
+    {
+        LatLon ll;
+        parseLatLon(tmpElem, ll);
+        geoInfo->geometryLatLon.push_back(ll);
+    }
+    else
+    {
+        std::string pointName = "Endpoint";
+        tmpElem = getOptional(geoInfoXML, "Line");
+        if (!tmpElem)
+        {
+            pointName = "Vertex";
+            tmpElem = getOptional(geoInfoXML, "Polygon");
+        }
+        if (tmpElem)
+        {
+            parseLatLons(tmpElem, pointName, geoInfo->geometryLatLon);
+        }
+    }
+}
+
+XMLElem SICommonXMLParser::createEarthModelType(const std::string& name,
+    const EarthModelType& value,
+    XMLElem parent) const
+{
+    return createString(name, six::toString(value), parent);
+}
+void SICommonXMLParser::parseEarthModelType(XMLElem element,
+    EarthModelType& value) const
+{
+    value = six::toType<EarthModelType>(element->getCharacterData());
+}
+
+XMLElem SICommonXMLParser::createLatLonFootprint(const std::string& name,
+                                                 const std::string& cornerName,
+                                                 const LatLonCorners& corners,
+                                                 XMLElem parent) const
+{
+    XMLElem footprint = newElement(name, parent);
+
+    // Write the corners in CW order
+    XMLElem vertex = createLatLon(cornerName, corners.upperLeft, footprint);
+    setAttribute(vertex, "index", "1:FRFC");
+
+    vertex = createLatLon(cornerName, corners.upperRight, footprint);
+    setAttribute(vertex, "index", "2:FRLC");
+
+    vertex = createLatLon(cornerName, corners.lowerRight, footprint);
+    setAttribute(vertex, "index", "3:LRLC");
+
+    vertex = createLatLon(cornerName, corners.lowerLeft, footprint);
+    setAttribute(vertex, "index", "4:LRFC");
+
+    return footprint;
+}
+
 void SICommonXMLParser::parsePoly1D(XMLElem polyXML, Poly1D& poly1D) const
 {
     int order1 = str::toType<int>(polyXML->getAttributes().getValue("order1"));
@@ -367,13 +493,22 @@ XMLElem SICommonXMLParser::createRangeAzimuth(const std::string& name,
 
 XMLElem SICommonXMLParser::createLatLon(
         const std::string& name,
+        const std::string& uri,
         const LatLon& value,
         XMLElem parent) const
 {
-    XMLElem e = newElement(name, getDefaultURI(), parent);
+    XMLElem e = newElement(name, uri, parent);
     createDouble("Lat", getSICommonURI(), value.getLat(), e);
     createDouble("Lon", getSICommonURI(), value.getLon(), e);
     return e;
+}
+
+XMLElem SICommonXMLParser::createLatLon(
+        const std::string& name,
+        const LatLon& value,
+        XMLElem parent) const
+{
+    return createLatLon(name, getDefaultURI(), value, parent);
 }
 
 XMLElem SICommonXMLParser::createLatLonAlt(const std::string& name,
@@ -1038,166 +1173,6 @@ void SICommonXMLParser::parseFootprint(XMLElem footprint,
     }
 }
 
-void SICommonXMLParser::parseMatchInformationFromXML(
-    const XMLElem matchInfoXML,
-    MatchInformation* matchInfo) const
-{
-    size_t numMatchTypes = 0;
-    parseInt(getFirstAndOnly(matchInfoXML, "NumMatchTypes"), numMatchTypes);
-    if (numMatchTypes == 0)
-    {
-        throw except::Exception(Ctxt("NumMatchTypes cannot be zero"));
-    }
-
-    std::vector < XMLElem > typesXML;
-    matchInfoXML->getElementsByTagName("MatchType", typesXML);
-
-    //! validate the numMatchTypes
-    if (typesXML.size() != numMatchTypes)
-    {
-        throw except::Exception(
-            Ctxt("NumMatchTypes does not match number of MatchType fields"));
-    }
-
-    matchInfo->types.reserve(typesXML.size());
-    for (size_t ii = 0; ii < typesXML.size(); ii++)
-    {
-        // The MatchInformation object was given a MatchType when
-        // it was instantiated.  The first time through, just populate it.
-        if (ii != 0)
-        {
-            matchInfo->types.push_back(
-                mem::ScopedCopyablePtr<MatchType>(new MatchType()));
-        }
-        MatchType* type = matchInfo->types[ii].get();
-
-        parseString(getFirstAndOnly(typesXML[ii], "TypeID"), type->typeID);
-
-        XMLElem curIndexElem = getOptional(typesXML[ii], "CurrentIndex");
-        if (curIndexElem)
-        {
-            //optional
-            parseInt(curIndexElem, type->currentIndex);
-        }
-
-        int numMatchCollections = 0;
-        parseInt(getFirstAndOnly(typesXML[ii], "NumMatchCollections"),
-                 numMatchCollections);
-
-        std::vector < XMLElem > matchCollectionsXML;
-        typesXML[ii]->getElementsByTagName("MatchCollection", matchCollectionsXML);
-
-        //! validate the numMatchTypes
-        if (matchCollectionsXML.size() !=
-            static_cast<size_t>(numMatchCollections))
-        {
-            throw except::Exception(
-                Ctxt("NumMatchCollections does not match number of " \
-                     "MatchCollect fields"));
-        }
-
-        // Need to make sure this is resized properly - at MatchType
-        // construction time, matchCollects is initialized to size 1, but in
-        // SICD 1.1 this entire block may be missing.
-        type->matchCollects.resize(matchCollectionsXML.size());
-        for (size_t jj = 0; jj < matchCollectionsXML.size(); jj++)
-        {
-            MatchCollect& collect(type->matchCollects[jj]);
-
-            parseString(getFirstAndOnly(
-                matchCollectionsXML[jj], "CoreName"), collect.coreName);
-
-            XMLElem matchIndexXML =
-                getOptional(matchCollectionsXML[jj], "MatchIndex");
-            if (matchIndexXML)
-            {
-                parseInt(matchIndexXML, collect.matchIndex);
-            }
-
-            parseParameters(
-                matchCollectionsXML[jj], "Parameter", collect.parameters);
-        }
-    }
-}
-
-XMLElem SICommonXMLParser::convertMatchInformationToXML(
-    const MatchInformation* matchInfo,
-    XMLElem parent) const
-{
-    XMLElem matchInfoXML = newElement("MatchInfo", parent);
-
-    createInt("NumMatchTypes",
-              static_cast<int>(matchInfo->types.size()),
-              matchInfoXML);
-
-    for (size_t ii = 0; ii < matchInfo->types.size(); ++ii)
-    {
-        const MatchType* mt = matchInfo->types[ii].get();
-        XMLElem mtXML = newElement("MatchType", matchInfoXML);
-        setAttribute(mtXML, "index", str::toString(ii + 1));
-
-        createString("TypeID", mt->typeID, mtXML);
-        createInt("CurrentIndex", mt->currentIndex, mtXML);
-        createInt("NumMatchCollections",
-                  static_cast<int>(mt->matchCollects.size()), mtXML);
-
-        for (size_t jj = 0; jj < mt->matchCollects.size(); ++jj)
-        {
-            XMLElem mcXML = newElement("MatchCollection", mtXML);
-            setAttribute(mcXML, "index", str::toString(jj + 1));
-
-            createString("CoreName", mt->matchCollects[jj].coreName, mcXML);
-            createInt("MatchIndex", mt->matchCollects[jj].matchIndex, mcXML);
-            addParameters("Parameter", mt->matchCollects[jj].parameters, mcXML);
-        }
-    }
-
-    return matchInfoXML;
-}
-
-XMLElem SICommonXMLParser::convertCollectionInformationToXML(
-    const CollectionInformation *collInfo,
-    XMLElem parent) const
-{
-    XMLElem collInfoXML = newElement("CollectionInfo", parent);
-
-    const std::string si = getSICommonURI();
-
-    createString("CollectorName", si, collInfo->collectorName, collInfoXML);
-    if (!collInfo->illuminatorName.empty())
-    {
-        createString("IlluminatorName", si, collInfo->illuminatorName,
-                     collInfoXML);
-    }
-    createString("CoreName", si, collInfo->coreName, collInfoXML);
-    if (!Init::isUndefined(collInfo->collectType))
-    {
-        createString("CollectType", si,
-                     six::toString<six::CollectType>(collInfo->collectType),
-                     collInfoXML);
-    }
-
-    XMLElem radarModeXML = newElement("RadarMode", si, collInfoXML);
-    createString("ModeType", si, six::toString(collInfo->radarMode),
-                 radarModeXML);
-    if (!collInfo->radarModeID.empty())
-    {
-        createString("ModeID", si, collInfo->radarModeID, radarModeXML);
-    }
-
-    createString("Classification", si, collInfo->getClassificationLevel(),
-                 collInfoXML);
-
-    for (std::vector<std::string>::const_iterator it =
-            collInfo->countryCodes.begin(); it != collInfo->countryCodes.end();
-            ++it)
-    {
-        createString("CountryCode", si, *it, collInfoXML);
-    }
-    addParameters("Parameter", si, collInfo->parameters, collInfoXML);
-    return collInfoXML;
-}
-
 void SICommonXMLParser::parseCollectionInformationFromXML(
     const XMLElem collectionInfoXML,
     CollectionInformation *collInfo) const
@@ -1257,5 +1232,47 @@ void SICommonXMLParser::parseCollectionInformationFromXML(
     parseParameters(collectionInfoXML, "Parameter", collInfo->parameters);
 }
 
+XMLElem SICommonXMLParser::convertCollectionInformationToXML(
+    const CollectionInformation *collInfo,
+    XMLElem parent) const
+{
+    XMLElem collInfoXML = newElement("CollectionInfo", parent);
+
+    const std::string si = getSICommonURI();
+
+    createString("CollectorName", si, collInfo->collectorName, collInfoXML);
+    if (!collInfo->illuminatorName.empty())
+    {
+        createString("IlluminatorName", si, collInfo->illuminatorName,
+                     collInfoXML);
+    }
+    createString("CoreName", si, collInfo->coreName, collInfoXML);
+    if (!Init::isUndefined(collInfo->collectType))
+    {
+        createString("CollectType", si,
+                     six::toString<six::CollectType>(collInfo->collectType),
+                     collInfoXML);
+    }
+
+    XMLElem radarModeXML = newElement("RadarMode", si, collInfoXML);
+    createString("ModeType", si, six::toString(collInfo->radarMode),
+                 radarModeXML);
+    if (!collInfo->radarModeID.empty())
+    {
+        createString("ModeID", si, collInfo->radarModeID, radarModeXML);
+    }
+
+    createString("Classification", si, collInfo->getClassificationLevel(),
+                 collInfoXML);
+
+    for (std::vector<std::string>::const_iterator it =
+            collInfo->countryCodes.begin(); it != collInfo->countryCodes.end();
+            ++it)
+    {
+        createString("CountryCode", si, *it, collInfoXML);
+    }
+    addParameters("Parameter", si, collInfo->parameters, collInfoXML);
+    return collInfoXML;
+}
 }
 

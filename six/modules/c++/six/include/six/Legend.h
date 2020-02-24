@@ -27,7 +27,7 @@
 
 #include <sys/Conf.h>
 #include <types/RowCol.h>
-#include <mem/ScopedCloneablePtr.h>
+#include <mem/ScopedCopyablePtr.h>
 #include <six/Types.h>
 
 namespace six
@@ -59,22 +59,22 @@ public:
 
     //! Pixel type of legend image data.
     //  TODO: For now, only MONO8I and RGB8LU are supported
-	PixelType mType;
+    PixelType mType;
 
-	//! Location of the legend with respect to the upper-left corner of the
-	//  image segment it's attached to
-	types::RowCol<size_t> mLocation;
+    //! Location of the legend with respect to the upper-left corner of the
+    //  image segment it's attached to
+    types::RowCol<size_t> mLocation;
 
-	//! Dimensions of the legend image pixels
-	types::RowCol<size_t> mDims;
+    //! Dimensions of the legend image pixels
+    types::RowCol<size_t> mDims;
 
-	//! Image legend pixels.  These are either pixel values or LUT indices
-	//  depending on of the pixel type is MONO8I or RGB8LU, respectively.
-	std::vector<sys::ubyte> mImage;
+    //! Image legend pixels.  These are either pixel values or LUT indices
+    //  depending on of the pixel type is MONO8I or RGB8LU, respectively.
+    std::vector<sys::ubyte> mImage;
 
-	//! LUT associated with image pixels.  Must be present if pixel type is
-	//  RGB8LU.
-	mem::ScopedCloneablePtr<LUT> mLUT;
+    //! LUT associated with image pixels.  Must be present if pixel type is
+    //  RGB8LU.
+    mem::ScopedCopyablePtr<LUT> mLUT;
 };
 }
 

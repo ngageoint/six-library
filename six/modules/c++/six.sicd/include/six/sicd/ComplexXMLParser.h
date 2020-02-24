@@ -65,9 +65,6 @@ protected:
                                                    const RgAzComp* rgAzComp,
                                                    XMLElem parent = NULL) const = 0;
 
-    virtual XMLElem convertMatchInformationToXML(const MatchInformation *obj,
-                                                 XMLElem parent = NULL) const = 0;
-
     virtual XMLElem convertRMAToXML(const RMA* obj, XMLElem parent = NULL) const = 0;
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, XMLElem parent = NULL) const = 0;
@@ -82,9 +79,6 @@ protected:
 
     virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
                         mem::ScopedCopyablePtr<WeightType>& obj) const = 0;
-
-    virtual void parseMatchInformationFromXML(const XMLElem matchInfoXML,
-                                              MatchInformation *obj) const = 0;
 
     virtual void parsePolarizationCalibrationFromXML(const XMLElem polCalXML,
                          six::sicd::PolarizationCalibration* obj) const = 0;
@@ -136,8 +130,13 @@ protected:
                                        XMLElem parent = NULL) const;
     virtual void convertDRateSFPolyToXML(const INCA* inca, XMLElem incaElem) const;
 
+    virtual XMLElem convertMatchInformationToXML(const MatchInformation& obj,
+                                                 XMLElem parent = NULL) const;
+
     virtual void parseSCPCOAFromXML(const XMLElem scpcoaXML, SCPCOA *obj) const;
     virtual void parseDRateSFPolyFromXML(const XMLElem incaElem, INCA* inca) const;
+    virtual void parseMatchInformationFromXML(const XMLElem matchInfoXML,
+                                              MatchInformation *obj) const;
 
     virtual void parseRadarCollectionFromXML(const XMLElem radarCollectionXML,
                                              RadarCollection *obj) const = 0;
@@ -193,7 +192,6 @@ private:
     void parseImageDataFromXML(const XMLElem imageDataXML,
                                ImageData *obj) const;
     void parseGeoDataFromXML(const XMLElem geoDataXML, GeoData *obj) const;
-    void parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo *obj) const;
     void parseGridFromXML(const XMLElem gridXML, Grid *obj) const;
     void parseTimelineFromXML(const XMLElem timelineXML, Timeline *obj) const;
     void parsePositionFromXML(const XMLElem positionXML, Position *obj) const;
@@ -208,7 +206,6 @@ private:
     void parseRgAzCompFromXML(const XMLElem rgAzCompXML, RgAzComp *obj) const;
     void parseINCAFromXML(const XMLElem incaElem, INCA* obj) const;
 
-    void parseEarthModelType(const XMLElem element, EarthModelType& value) const;
     void parseSideOfTrackType(const XMLElem element, SideOfTrackType& value) const;
 
     XMLElem createFFTSign(const std::string& name, six::FFTSign sign,
@@ -223,10 +220,6 @@ private:
                                      const std::string& cornerName,
                                      const LatLonAltCorners& corners,
                                      XMLElem parent = NULL) const;
-
-    XMLElem createEarthModelType(const std::string& name,
-                                 const EarthModelType& value,
-                                 XMLElem parent = NULL) const;
 
     XMLElem createSideOfTrackType(const std::string& name,
                                   const SideOfTrackType& value, XMLElem parent =

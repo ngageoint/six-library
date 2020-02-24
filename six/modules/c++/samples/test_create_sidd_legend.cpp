@@ -55,7 +55,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
 
     six::sidd::DerivedDataBuilder siddBuilder;
     siddBuilder.addDisplay(pixelType);
-    siddBuilder.addGeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO);
+    siddBuilder.addGeographicAndTarget();
     siddBuilder.addMeasurement(six::ProjectionType::PLANE).
             addExploitationFeatures(1);
 
@@ -70,13 +70,35 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     siddData->productCreation->productClass = "Classy";
     siddData->productCreation->classification.classification = "U";
 
-    siddData->productCreation->processorInformation->application = "ProcessorName";
-    siddData->productCreation->processorInformation->profile = "Profile";
-    siddData->productCreation->processorInformation->site = "Ypsilanti, MI";
+    siddData->productCreation->processorInformation.application = "ProcessorName";
+    siddData->productCreation->processorInformation.profile = "Profile";
+    siddData->productCreation->processorInformation.site = "Ypsilanti, MI";
 
     siddData->display->decimationMethod = six::DecimationMethod::BRIGHTEST_PIXEL;
     siddData->display->magnificationMethod =
             six::MagnificationMethod::NEAREST_NEIGHBOR;
+
+    six::Parameter param;
+    param.setName("GeoName");
+    param.setValue("GeoValue");
+    siddData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget());
+    siddData->geographicAndTarget->geographicCoverage.reset(
+            new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
+
+    six::sidd::GeographicCoverage* geoCoverage =
+            siddData->geographicAndTarget->geographicCoverage.get();
+    geoCoverage->georegionIdentifiers.push_back(param);
+    geoCoverage->footprint.getCorner(0).setLat(10);
+    geoCoverage->footprint.getCorner(0).setLon(30);
+
+    geoCoverage->footprint.getCorner(1).setLat(11);
+    geoCoverage->footprint.getCorner(1).setLon(30);
+
+    geoCoverage->footprint.getCorner(2).setLat(11);
+    geoCoverage->footprint.getCorner(2).setLon(31);
+
+    geoCoverage->footprint.getCorner(3).setLat(10);
+    geoCoverage->footprint.getCorner(3).setLon(31);
 
     // We know this is PGD so this is safe
     six::sidd::PlaneProjection* const planeProjection =
@@ -92,15 +114,17 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
 
     six::sidd::Collection* const parent =
             siddData->exploitationFeatures->collections[0].get();
-    parent->information->resolution.rg = 0;
-    parent->information->resolution.az = 0;
-    parent->information->collectionDuration = 0;
+    parent->information.resolution.rg = 0;
+    parent->information.resolution.az = 0;
+    parent->information.collectionDuration = 0;
 
-    parent->information->collectionDateTime = six::DateTime();
-    parent->information->radarMode = six::RadarModeType::SPOTLIGHT;
-    parent->information->sensorName.clear();
-    siddData->exploitationFeatures->product.resolution.row = 0;
-    siddData->exploitationFeatures->product.resolution.col = 0;
+    parent->information.collectionDateTime = six::DateTime();
+    parent->information.radarMode = six::RadarModeType::SPOTLIGHT;
+    parent->information.sensorName.clear();
+
+    siddData->exploitationFeatures->product.resize(1);
+    siddData->exploitationFeatures->product[0].resolution.row = 0;
+    siddData->exploitationFeatures->product[0].resolution.col = 0;
 
     return siddDataScoped;
 }

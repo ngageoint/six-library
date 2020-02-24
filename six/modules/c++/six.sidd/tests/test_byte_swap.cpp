@@ -59,31 +59,42 @@ std::auto_ptr<six::sidd::DerivedData> createData()
     derivedData->display->pixelType = six::PixelType::MONO16I;
     derivedData->setNumRows(10);
     derivedData->setNumCols(40);
-    derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO));
+    derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget());
+    derivedData->geographicAndTarget->geographicCoverage.reset(
+            new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
+    // Set image corners
+    for (size_t ii = 0; ii < 4; ++ii)
+    {
+        derivedData->geographicAndTarget->geographicCoverage->footprint.
+                getCorner(ii).setLat(0);
+        derivedData->geographicAndTarget->geographicCoverage->footprint.
+            getCorner(ii).setLon(0);
+    }
 
     // Set image corners
     for (size_t ii = 0; ii < 4; ++ii)
     {
-        derivedData->geographicAndTarget->geographicCoverage.footprint.
+        derivedData->geographicAndTarget->geographicCoverage->footprint.
                 getCorner(ii).setLat(0);
-        derivedData->geographicAndTarget->geographicCoverage.footprint.
+        derivedData->geographicAndTarget->geographicCoverage->footprint.
             getCorner(ii).setLon(0);
     }
 
     derivedData->exploitationFeatures.reset(new six::sidd::ExploitationFeatures());
-    derivedData->exploitationFeatures->product.resolution.row = 0;
-    derivedData->exploitationFeatures->product.resolution.col = 0;
-    derivedData->exploitationFeatures->collections.push_back(mem::ScopedCloneablePtr<six::sidd::Collection>());
+    derivedData->exploitationFeatures->product.resize(1);
+    derivedData->exploitationFeatures->product[0].resolution.row = 0;
+    derivedData->exploitationFeatures->product[0].resolution.col = 0;
+    derivedData->exploitationFeatures->collections.push_back(mem::ScopedCopyablePtr<six::sidd::Collection>());
     derivedData->exploitationFeatures->collections[0].reset(new six::sidd::Collection());
 
     six::sidd::Collection* parent =
         derivedData->exploitationFeatures->collections[0].get();
-    parent->information->resolution.rg = 0;
-    parent->information->resolution.az = 0;
-    parent->information->collectionDuration = 0;
-    parent->information->collectionDateTime = six::DateTime();
-    parent->information->radarMode = six::RadarModeType::SPOTLIGHT;
-    parent->information->sensorName.clear();
+    parent->information.resolution.rg = 0;
+    parent->information.resolution.az = 0;
+    parent->information.collectionDuration = 0;
+    parent->information.collectionDateTime = six::DateTime();
+    parent->information.radarMode = six::RadarModeType::SPOTLIGHT;
+    parent->information.sensorName.clear();
     parent->geometry.reset(new six::sidd::Geometry());
 
     derivedData->setNumRows(DATA_LENGTH / 10);

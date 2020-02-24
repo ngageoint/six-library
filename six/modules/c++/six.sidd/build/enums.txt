@@ -1,9 +1,65 @@
-[Version]
-NOT_SET=six::sidd::NOT_SET_VALUE
-0_5_0,0.5.0=0,0.5.0
-1_0_0,1.0.0=1,1.0.0
-__default__=1
-__enum_prefix__=SIDD:
-__string_noprefix__=True
-__const_shortcuts__=True
-__tostring_noprefix__=True
+[FilterDatabaseName]
+BILINEAR=0
+CUBIC=1
+LAGRANGE=2
+NEAREST NEIGHBOR=3
+NOT SET=six::NOT_SET_VALUE
+__default__=six::NOT_SET_VALUE
+
+[FilterOperation]
+CONVOLUTION=0
+CORRELATION=1
+NOT SET=six::NOT_SET_VALUE
+__default__=six::NOT_SET_VALUE
+
+[BandEqualizationAlgorithm]
+LUT 1D=0
+NOT SET=six::NOT_SET_VALUE
+__default__=six::NOT_SET_VALUE
+
+[ARPFlag]
+REALTIME=0
+PREDICTED=1
+POST PROCESSED=2
+NOT SET=six::NOT_SET_VALUE
+__default__=six::NOT_SET_VALUE
+
+[DownsamplingMethod]
+DECIMATE=0
+MAX PIXEL=1
+AVERAGE=2
+NEAREST NEIGHBOR=3
+BILINEAR=4
+LAGRANGE=5
+NOT SET=six::NOT_SET_VALUE
+__default__=six::NOT_SET_VALUE
+
+[ShadowDirection]
+UP=0
+DOWN=1
+LEFT=2
+RIGHT=3
+ARBITRARY=4
+NOT SET=six::NOT_SET_VALUE
+__default__=six::NOT_SET_VALUE
+
+[RenderingIntent]
+PERCEPTUAL=0
+SATURATION=1
+RELATIVE INTENT=2
+ABSOLUTE INTENT=3
+NOT SET=six::NOT_SET_VALUE
+__default__=six::NOT_SET_VALUE
+
+[DRAType]
+AUTO=0
+MANUAL=1
+NONE=2
+NOT SET=six::NOT_SET_VALUE
+__default__=six::NOT_SET_VALUE
+
+[CoordinateSystemType]
+GCS=0
+UTM=1
+NOT SET=six::NOT_SET_VALUE
+__default__=six::NOT_SET_VALUE

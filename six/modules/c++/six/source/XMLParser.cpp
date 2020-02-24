@@ -313,8 +313,6 @@ XMLElem XMLParser::require(XMLElem element, const std::string& name)
     return element;
 }
 
-
-
 void XMLParser::setAttribute(XMLElem e, const std::string& name,
                              const std::string& v, const std::string& uri)
 {

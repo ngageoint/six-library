@@ -66,7 +66,7 @@ typedef six::BooleanType BooleanType;
 
 typedef six::CollectionInformation CollectionInformation;
 
-typedef six::sicd::GeoInfo GeoInfo;
+typedef six::GeoInfo GeoInfo;
 
 typedef six::MatchInformation MatchInformation;
 }

@@ -122,4 +122,3 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
 
     return valid;
 }
-

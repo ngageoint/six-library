@@ -35,7 +35,7 @@ public:
     /*!
      *  Establishes the scene, computing the slant plane, ground plane
      *  normal, ground track and ground range vector.
-     *  
+     *
      *  No computations involving the image geometry can be performed prior
      *  to calling setImageVectors().
      *
@@ -195,10 +195,11 @@ public:
     }
 
     /*
-     * Returns the doppler cone angle in [0, 180] degrees
+     * Returns the doppler cone angle in [0, 180) degrees
      *
-     * This implements Section 4.9 of SICD and can be assigned directly to
-     * sicdData.scpCoa->dopplerConeAngle
+     * This implements Section 4.9 of SICD / Section 7.5.3 of SIDD 2.0
+     * and can be assigned directly to sicdData.scpCoa->dopplerConeAngle or
+     * siddData.exploitationFeatures->collections[idx]->geometry->dopplerConeAngle
      */
     double getDopplerConeAngle() const;
 
@@ -322,7 +323,7 @@ public:
     Vector3 getLayoverVector() const;
 
     /*!
-     * The layover angle (in [-180, 180] degrees) and magnitude in the pixel
+     * The layover angle (in [-180, 180) degrees) and magnitude in the pixel
      * grid
      *
      * This implements Section 6.5.2 of SIDD and can be assigned directly to
@@ -344,7 +345,7 @@ public:
     Vector3 getShadowVector() const;
 
     /*
-     * The shadow angle and magnitude
+     * The shadow angle (in [-180, 180) degrees) and magnitude
      *
      * This implements Section 6.5.1 of SIDD and can be assigned directly to
      * siddData.exploitationFeatures->collections[idx]->phenomenology->shadow
@@ -363,13 +364,13 @@ protected:
 
     //! Ground track vector (nadir)
     Vector3 mVg;
-    
+
     //! Range vector in ground nadir
     Vector3 mRg;
 
     //! ARP Position vector
     const Vector3 mPa;
-    
+
     //! ORP Position vector
     const Vector3 mPo;
 

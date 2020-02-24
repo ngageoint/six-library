@@ -44,4 +44,3 @@
 #include "six/sicd/Utilities.h"
 
 #endif
-

@@ -40,6 +40,46 @@ Data* DerivedData::clone() const
     return new DerivedData(*this);
 }
 
+LatLonCorners DerivedData::getImageCorners() const
+{
+    if (geographicAndTarget.get())
+    {
+        // SIDD 2.0
+        if (geographicAndTarget->imageCorners.get())
+        {
+            return *geographicAndTarget->imageCorners;
+        }
+
+        // SIDD 1.0
+        if (geographicAndTarget->geographicCoverage.get())
+        {
+            return geographicAndTarget->geographicCoverage->footprint;
+        }
+    }
+
+    throw except::Exception(Ctxt(
+            "GeographicAndTarget fields aren't set to provide image corners"));
+}
+
+void DerivedData::setImageCorners(const LatLonCorners& imageCorners)
+{
+    if (geographicAndTarget.get() && geographicAndTarget->imageCorners.get())
+    {
+        *geographicAndTarget->imageCorners = imageCorners;
+    }
+    else if (geographicAndTarget.get() &&
+             geographicAndTarget->geographicCoverage.get())
+    {
+        geographicAndTarget->geographicCoverage->footprint = imageCorners;
+    }
+    else
+    {
+        throw except::Exception(Ctxt(
+                "GeographicAndTarget fields aren't allocated to set image "
+                "corners"));
+    }
+}
+
 DateTime DerivedData::getCollectionStartDateTime() const
 {
     if (!exploitationFeatures.get() ||
@@ -48,7 +88,27 @@ DateTime DerivedData::getCollectionStartDateTime() const
         throw except::Exception(Ctxt("Must add a collection first"));
     }
 
-    return exploitationFeatures->collections[0]->information->collectionDateTime;
+    return exploitationFeatures->collections[0]->information.collectionDateTime;
+}
+
+mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT()
+{
+    if (mVersion == "1.0.0")
+    {
+        if (display->remapInformation.get() == NULL)
+        {
+            throw except::Exception(Ctxt("Display.RemapInformation is NULL"));
+        }
+        return display->remapInformation->remapLUT;
+    }
+    else if (mVersion == "2.0.0")
+    {
+        return nitfLUT;
+    }
+    else
+    {
+        throw except::Exception(Ctxt("Unknown version. Expected 2.0.0 or 1.0.0"));
+    }
 }
 
 types::RowCol<double>

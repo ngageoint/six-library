@@ -34,3 +34,6 @@ def run():
     makeSIDDRegressionFiles.run()
     makeSICDRegressionFiles.run()
 
+
+if __name__ == '__main__':
+    run()

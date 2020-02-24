@@ -23,6 +23,7 @@
 #define __SIX_DERIVED_XML_CONTROL_H__
 
 #include <six/XMLControl.h>
+#include <six/sidd/DerivedXMLParser.h>
 
 namespace six
 {
@@ -39,7 +40,6 @@ namespace sidd
  */
 class DerivedXMLControl : public XMLControl
 {
-
 public:
     DerivedXMLControl(logging::Logger* log = NULL, bool ownLog = false);
 
@@ -53,6 +53,10 @@ protected:
      *
      */
     virtual Data* fromXMLImpl(const xml::lite::Document* doc);
+
+private:
+    std::auto_ptr<DerivedXMLParser>
+    getParser(const std::string& version) const;
 };
 }
 }

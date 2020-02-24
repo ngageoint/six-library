@@ -30,14 +30,13 @@ typedef xml::lite::Element* XMLElem;
 
 namespace six
 {
-
 SICommonXMLParser10x::SICommonXMLParser10x(
     const std::string& defaultURI,
     bool addClassAttributes,
     const std::string& siCommonURI,
     logging::Logger* log,
     bool ownLog) :
-    SICommonXMLParser(defaultURI, addClassAttributes, 
+    SICommonXMLParser(defaultURI, addClassAttributes,
                       siCommonURI, log, ownLog)
 {
 }
@@ -52,11 +51,11 @@ XMLElem SICommonXMLParser10x::convertCompositeSCPToXML(
     {
         XMLElem scpXML = newElement("CompositeSCP", defaultURI, errorStatsXML);
 
-        createDouble("Rg", defaultURI, errorStatistics->compositeSCP->xErr, 
+        createDouble("Rg", defaultURI, errorStatistics->compositeSCP->xErr,
                      scpXML);
-        createDouble("Az", defaultURI, errorStatistics->compositeSCP->yErr, 
+        createDouble("Az", defaultURI, errorStatistics->compositeSCP->yErr,
                      scpXML);
-        createDouble("RgAz", defaultURI, errorStatistics->compositeSCP->xyErr, 
+        createDouble("RgAz", defaultURI, errorStatistics->compositeSCP->xyErr,
                      scpXML);
         return scpXML;
     }
@@ -124,7 +123,7 @@ XMLElem SICommonXMLParser10x::convertRadiometryToXML(
 }
 
 void SICommonXMLParser10x::parseRadiometryFromXML(
-    const XMLElem radiometricXML, 
+    const XMLElem radiometricXML,
     Radiometric* radiometric) const
 {
     XMLElem tmpElem = NULL;
@@ -132,9 +131,9 @@ void SICommonXMLParser10x::parseRadiometryFromXML(
     tmpElem = getOptional(radiometricXML, "NoiseLevel");
     if (tmpElem)
     {
-        parseString(getFirstAndOnly(tmpElem, "NoiseLevelType"), 
+        parseString(getFirstAndOnly(tmpElem, "NoiseLevelType"),
                     radiometric->noiseLevel.noiseType);
-        parsePoly2D(getFirstAndOnly(tmpElem, "NoisePoly"), 
+        parsePoly2D(getFirstAndOnly(tmpElem, "NoisePoly"),
                     radiometric->noiseLevel.noisePoly);
     }
 
@@ -166,6 +165,113 @@ void SICommonXMLParser10x::parseRadiometryFromXML(
         parsePoly2D(tmpElem, radiometric->gammaZeroSFPoly);
     }
 }
+XMLElem SICommonXMLParser10x::convertMatchInformationToXML(
+    const MatchInformation& matchInfo,
+    XMLElem parent) const
+{
+    XMLElem matchInfoXML = newElement("MatchInfo", parent);
 
+    createInt("NumMatchTypes",
+              static_cast<int>(matchInfo.types.size()),
+              matchInfoXML);
+
+    for (size_t ii = 0; ii < matchInfo.types.size(); ++ii)
+    {
+        const MatchType& mt = matchInfo.types[ii];
+        XMLElem mtXML = newElement("MatchType", matchInfoXML);
+        setAttribute(mtXML, "index", str::toString(ii + 1));
+
+        createString("TypeID", mt.typeID, mtXML);
+        createInt("CurrentIndex", mt.currentIndex, mtXML);
+        createInt("NumMatchCollections",
+                  static_cast<int>(mt.matchCollects.size()), mtXML);
+
+        for (size_t jj = 0; jj < mt.matchCollects.size(); ++jj)
+        {
+            XMLElem mcXML = newElement("MatchCollection", mtXML);
+            setAttribute(mcXML, "index", str::toString(jj + 1));
+
+            createString("CoreName", mt.matchCollects[jj].coreName, mcXML);
+            createInt("MatchIndex", mt.matchCollects[jj].matchIndex, mcXML);
+            addParameters("Parameter", mt.matchCollects[jj].parameters, mcXML);
+        }
+    }
+
+    return matchInfoXML;
 }
 
+void SICommonXMLParser10x::parseMatchInformationFromXML(
+    const XMLElem matchInfoXML,
+    MatchInformation* matchInfo) const
+{
+    size_t numMatchTypes = 0;
+    parseInt(getFirstAndOnly(matchInfoXML, "NumMatchTypes"), numMatchTypes);
+    if (numMatchTypes == 0)
+    {
+        throw except::Exception(Ctxt("NumMatchTypes cannot be zero"));
+    }
+
+    std::vector < XMLElem > typesXML;
+    matchInfoXML->getElementsByTagName("MatchType", typesXML);
+
+    //! validate the numMatchTypes
+    if (typesXML.size() != numMatchTypes)
+    {
+        throw except::Exception(
+            Ctxt("NumMatchTypes does not match number of MatchType fields"));
+    }
+
+    matchInfo->types.resize(typesXML.size());
+    for (size_t ii = 0; ii < typesXML.size(); ii++)
+    {
+        MatchType& type = matchInfo->types[ii];
+
+        parseString(getFirstAndOnly(typesXML[ii], "TypeID"), type.typeID);
+
+        XMLElem curIndexElem = getOptional(typesXML[ii], "CurrentIndex");
+        if (curIndexElem)
+        {
+            //optional
+            parseInt(curIndexElem, type.currentIndex);
+        }
+
+        int numMatchCollections = 0;
+        parseInt(getFirstAndOnly(typesXML[ii], "NumMatchCollections"),
+                 numMatchCollections);
+
+        std::vector < XMLElem > matchCollectionsXML;
+        typesXML[ii]->getElementsByTagName("MatchCollection", matchCollectionsXML);
+
+        //! validate the numMatchTypes
+        if (matchCollectionsXML.size() !=
+            static_cast<size_t>(numMatchCollections))
+        {
+            throw except::Exception(
+                Ctxt("NumMatchCollections does not match number of " \
+                     "MatchCollect fields"));
+        }
+
+        // Need to make sure this is resized properly - at MatchType
+        // construction time, matchCollects is initialized to size 1, but in
+        // SICD 1.1 this entire block may be missing.
+        type.matchCollects.resize(matchCollectionsXML.size());
+        for (size_t jj = 0; jj < matchCollectionsXML.size(); jj++)
+        {
+            MatchCollect& collect(type.matchCollects[jj]);
+
+            parseString(getFirstAndOnly(
+                matchCollectionsXML[jj], "CoreName"), collect.coreName);
+
+            XMLElem matchIndexXML =
+                getOptional(matchCollectionsXML[jj], "MatchIndex");
+            if (matchIndexXML)
+            {
+                parseInt(matchIndexXML, collect.matchIndex);
+            }
+
+            parseParameters(
+                matchCollectionsXML[jj], "Parameter", collect.parameters);
+        }
+    }
+}
+}

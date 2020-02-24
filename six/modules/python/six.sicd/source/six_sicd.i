@@ -24,6 +24,8 @@
 
 %feature("autodoc", "1");
 
+%include <std_string.i>
+
 %{
 
 #include <complex>
@@ -124,6 +126,7 @@ Data* readNITF(const std::string& pathname,
     region.setBuffer(buffer.get() + offset);
     return reinterpret_cast<Data*>(reader.interleaved(region, 0));
 }
+
 %}
 
 %ignore six::sicd::cropSICD;
@@ -289,9 +292,9 @@ def schema_path():
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
 
+SCOPED_COPYABLE(six::sicd, GeoData)
 SCOPED_CLONEABLE(six::sicd, ImageCreation)
 SCOPED_COPYABLE(six::sicd, ImageData)
-SCOPED_CLONEABLE(six::sicd, GeoData)
 SCOPED_CLONEABLE(six::sicd, Grid)
 SCOPED_COPYABLE(six::sicd, Timeline)
 SCOPED_COPYABLE(six::sicd, Position)
@@ -305,8 +308,6 @@ SCOPED_COPYABLE(six::sicd, PFA)
 SCOPED_COPYABLE(six::sicd, RMA)
 SCOPED_COPYABLE(six::sicd, RgAzComp)
 
-SCOPED_CLONEABLE(six::sicd, GeoInfo)
-%template(VectorScopedCloneableGeoInfo) std::vector<mem::ScopedCloneablePtr<six::sicd::GeoInfo> >;
 %template(VectorLatLon) std::vector<scene::LatLon>;
 
 SCOPED_COPYABLE(six::sicd, AntennaParameters)
@@ -337,7 +338,6 @@ SCOPED_COPYABLE(six::sicd, RcvChannelProcessed)
 %template(VectorProcessing)                        std::vector<six::sicd::Processing>;
 SCOPED_COPYABLE(six::sicd, PolarizationCalibration)
 SCOPED_COPYABLE(six::sicd, Distortion)
-
 
 SCOPED_COPYABLE(six::sicd, RMAT)
 SCOPED_COPYABLE(six::sicd, RMCR)

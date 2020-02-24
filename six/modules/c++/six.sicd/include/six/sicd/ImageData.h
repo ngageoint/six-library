@@ -74,7 +74,7 @@ struct ImageData
 
     //!  Global row index (assuming this is an ROI)
     size_t firstRow;
-    
+
     //!  Global col index (assuming this is an ROI)
     size_t firstCol;
 
@@ -84,7 +84,7 @@ struct ImageData
     //!  Scene center (in global scene)
     RowColInt scpPixel;
 
-    // If this doesnt have at least 3 vertices, its not going to get written
+    // If this doesn't have at least 3 vertices, it's not going to get written
     std::vector<RowColInt> validData;
 
     //! Equality operators
@@ -99,5 +99,5 @@ struct ImageData
 };
 }
 }
-#endif
 
+#endif

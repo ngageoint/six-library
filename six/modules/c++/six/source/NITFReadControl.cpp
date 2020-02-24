@@ -190,7 +190,6 @@ DataType NITFReadControl::getDataType(const std::string& fromFile) const
     {
         return DataType::NOT_SET;
     }
-
 }
 
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
@@ -263,7 +262,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
     mInterface = ioInterface;
 
     mRecord = mReader.readIO(*ioInterface);
-    DataType dataType = getDataType(mRecord);
+    const DataType dataType = getDataType(mRecord);
     mContainer.reset(new Container(dataType));
 
     // First, read in the DE segments, and organize them
@@ -430,6 +429,15 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
             }
         }
 
+        // SIDD 2.0 needs to read LUT directly from NITF
+        if (currentInfo->getData()->getDataType() == DataType::DERIVED &&
+            currentInfo->getData()->getVersion() == "2.0.0")
+        {
+            nitf::LookupTable nitfLut =
+                    subheader.getBandInfo(0).getLookupTable();
+
+            currentInfo->getData()->getDisplayLUT().reset(new LUT(nitfLut));
+        }
         currentInfo->addSegment(si);
     }
 }

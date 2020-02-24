@@ -24,6 +24,7 @@
 
 #include "six/Types.h"
 #include "six/Init.h"
+#include "six/GeoInfo.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
 #include "scene/ProjectionModel.h"
@@ -35,61 +36,6 @@ namespace six
 namespace sicd
 {
 struct ImageData;
-/*!
- *  \struct GeoInfo
- *  \brief (Optional) SICD GeoInfo parameters
- *
- *  Parameters describing geographic features.
- *  Note: the GeoInfo block may be used as a block within
- *  itself
- */
-class GeoInfo
-{
-public:
-    //!  Constructor
-    GeoInfo()
-    {
-    }
-
-    /*!  Destructor (this may be required by some old compilers that otherwise
-     *   can't handle a ScopedCloneablePtr of the same object being a member
-     *   variable)
-     */
-
-    ~GeoInfo()
-    {
-    }
-
-    //!  Clone, including all sub-nodes
-    GeoInfo* clone() const;
-
-    //!  Name of a geographic feature
-    std::string name;
-
-    //! (Optional) sub-nodes
-    std::vector<mem::ScopedCloneablePtr<GeoInfo> > geoInfos;
-
-    //! (Optional) description of geographic feature
-    ParameterCollection desc;
-
-    /*!
-     *  This could be a point if one, a line if 2, or a polygon if > 2
-     *  In other words, this simultaneously represents SICD's
-     *  GeoInfo/Point, GeoInfo/Line, and GeoInfo/Polygon
-     */
-    std::vector<LatLon> geometryLatLon;
-
-    bool operator==(const GeoInfo& rhs) const;
-    bool operator!=(const GeoInfo& rhs) const
-    {
-        return !(*this == rhs);
-    }
-};
-
-/*
- *  Ostream operators for six::sicd::GeoInfo type
- */
-std::ostream& operator<< (std::ostream& os, const GeoInfo& g);
 
 /*!
  *  \struct GeoData
@@ -97,6 +43,8 @@ std::ostream& operator<< (std::ostream& os, const GeoInfo& g);
  *
  *  This block describes the geographic coordinates of the region
  *  covered by the image
+ *
+ *  Compiler-generated copy constructor and assignment operator are sufficient
  */
 class GeoData
 {
@@ -106,9 +54,6 @@ public:
         earthModel(EarthModelType::WGS84)
     {
     }
-
-    //!  Clone, including non-NULL GeoInfo objects
-    GeoData* clone();
 
     /*!
      *  Identifies the earth model used for
@@ -142,7 +87,7 @@ public:
      *  (Optional) Parameters that describe geographic features.
      *  Note that this may be used as a block inside of a block.
      */
-    std::vector<mem::ScopedCloneablePtr<GeoInfo> > geoInfos;
+    std::vector<mem::ScopedCopyablePtr<GeoInfo> > geoInfos;
 
     bool operator==(const GeoData& rhs) const;
     bool operator!=(const GeoData& rhs) const
@@ -158,8 +103,7 @@ public:
 private:
     static const double ECF_THRESHOLD;
 };
+}
+}
 
-}
-}
 #endif
-

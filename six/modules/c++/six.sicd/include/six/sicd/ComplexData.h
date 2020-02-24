@@ -83,7 +83,7 @@ public:
     mem::ScopedCopyablePtr<ImageData> imageData;
 
     //!  Describes the geographic coords of the region covered by the image
-    mem::ScopedCloneablePtr<GeoData> geoData;
+    mem::ScopedCopyablePtr<GeoData> geoData;
 
     //!  Block of parameters describes the image sample grid
     mem::ScopedCloneablePtr<Grid> grid;
@@ -128,8 +128,6 @@ public:
     mem::ScopedCopyablePtr<RgAzComp> rgAzComp;
 
     ComplexData();
-
-    ~ComplexData(){}
 
     /*!
      *  Returns COMPLEX.  This is used by Read/Write to determine
@@ -290,7 +288,7 @@ public:
     }
 
     // Okay, little bit of a hack for now
-    virtual LUT* getDisplayLUT()
+    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT()
     {
         throw except::Exception(Ctxt("Display LUT operation not supported"));
     }

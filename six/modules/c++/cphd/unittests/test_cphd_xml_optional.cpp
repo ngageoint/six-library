@@ -1103,18 +1103,18 @@ TEST_CASE(testOptional)
 
     const cphd::MatchInformation& matchInfo = *(metadata->matchInfo);
     TEST_ASSERT_EQ(matchInfo.types.size(), 2);
-    TEST_ASSERT_EQ(matchInfo.types[0]->typeID, "STEREO");
-    TEST_ASSERT_EQ(matchInfo.types[0]->currentIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.types[0]->matchCollects.size(), 1);
-    TEST_ASSERT_EQ(matchInfo.types[0]->matchCollects[0].coreName, "CollectionName");
-    TEST_ASSERT_EQ(matchInfo.types[0]->matchCollects[0].matchIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.types[0]->matchCollects[0].parameters[0].getName(), "param1");
-    TEST_ASSERT_EQ(matchInfo.types[1]->typeID, "COHERENT");
-    TEST_ASSERT_EQ(matchInfo.types[1]->currentIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.types[1]->matchCollects.size(), 1);
-    TEST_ASSERT_EQ(matchInfo.types[1]->matchCollects[0].coreName, "CollectionName");
-    TEST_ASSERT_EQ(matchInfo.types[1]->matchCollects[0].matchIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.types[1]->matchCollects[0].parameters[0].getName(), "param1");
+    TEST_ASSERT_EQ(matchInfo.types[0].typeID, "STEREO");
+    TEST_ASSERT_EQ(matchInfo.types[0].currentIndex, 1);
+    TEST_ASSERT_EQ(matchInfo.types[0].matchCollects.size(), 1);
+    TEST_ASSERT_EQ(matchInfo.types[0].matchCollects[0].coreName, "CollectionName");
+    TEST_ASSERT_EQ(matchInfo.types[0].matchCollects[0].matchIndex, 1);
+    TEST_ASSERT_EQ(matchInfo.types[0].matchCollects[0].parameters[0].getName(), "param1");
+    TEST_ASSERT_EQ(matchInfo.types[1].typeID, "COHERENT");
+    TEST_ASSERT_EQ(matchInfo.types[1].currentIndex, 1);
+    TEST_ASSERT_EQ(matchInfo.types[1].matchCollects.size(), 1);
+    TEST_ASSERT_EQ(matchInfo.types[1].matchCollects[0].coreName, "CollectionName");
+    TEST_ASSERT_EQ(matchInfo.types[1].matchCollects[0].matchIndex, 1);
+    TEST_ASSERT_EQ(matchInfo.types[1].matchCollects[0].parameters[0].getName(), "param1");
 }
 
 int main()

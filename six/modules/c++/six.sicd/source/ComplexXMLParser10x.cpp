@@ -49,38 +49,7 @@ XMLElem ComplexXMLParser10x::convertGeoInfoToXML(
     XMLElem parent) const
 {
     //! 1.0.x has ordering (1. Desc, 2. choice, 3. GeoInfo)
-    XMLElem geoInfoXML = newElement("GeoInfo", parent);
-
-    common().addParameters("Desc", geoInfo->desc, geoInfoXML);
-
-    const size_t numLatLons = geoInfo->geometryLatLon.size();
-    if (numLatLons == 1)
-    {
-        common().createLatLon("Point", geoInfo->geometryLatLon[0], geoInfoXML);
-    }
-    else if (numLatLons >= 2)
-    {
-        XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
-                                         geoInfoXML);
-        setAttribute(linePolyXML, "size", str::toString(numLatLons));
-
-        for (size_t ii = 0; ii < numLatLons; ++ii)
-        {
-            XMLElem v = common().createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
-                         geoInfo->geometryLatLon[ii], linePolyXML);
-            setAttribute(v, "index", str::toString(ii + 1));
-        }
-    }
-
-    if (!geoInfo->name.empty())
-        setAttribute(geoInfoXML, "name", geoInfo->name);
-
-    for (size_t ii = 0; ii < geoInfo->geoInfos.size(); ++ii)
-    {
-        convertGeoInfoToXML(geoInfo->geoInfos[ii].get(), geoInfoXML);
-    }
-
-    return geoInfoXML;
+    return common().convertGeoInfoToXML(*geoInfo, false, parent);
 }
 
 XMLElem ComplexXMLParser10x::convertWeightTypeToXML(
@@ -122,13 +91,6 @@ XMLElem ComplexXMLParser10x::convertRadarCollectionToXML(
 
     common().addParameters("Parameter", radar->parameters, radarXML);
     return radarXML;
-}
-
-XMLElem ComplexXMLParser10x::convertMatchInformationToXML(
-    const MatchInformation* matchInfo,
-    XMLElem parent) const
-{
-    return common().convertMatchInformationToXML(matchInfo, parent);
 }
 
 XMLElem ComplexXMLParser10x::convertImageFormationToXML(
@@ -377,13 +339,6 @@ void ComplexXMLParser10x::parseSCPCOAFromXML(
     //! Added in 1.0.0
     parseDouble(getFirstAndOnly(scpcoaXML, "AzimAng"), scpcoa->azimAngle);
     parseDouble(getFirstAndOnly(scpcoaXML, "LayoverAng"), scpcoa->layoverAngle);
-}
-
-void ComplexXMLParser10x::parseMatchInformationFromXML(
-    const XMLElem matchInfoXML,
-    MatchInformation* matchInfo) const
-{
-    common().parseMatchInformationFromXML(matchInfoXML, matchInfo);
 }
 
 void ComplexXMLParser10x::parseRMATFromXML(const XMLElem rmatElem,

@@ -48,18 +48,7 @@ def runTests(testDir, testName, *args):
     print('Failed')
     return False
 
-
 def runSICDTests():
-    # Make sure plugins installed properly
-    nitfPluginPath = os.environ['NITF_PLUGIN_PATH_REAL']
-
-    if (not os.path.exists(nitfPluginPath) or
-            not any(plugin.startswith('PIAIMB') for plugin in
-                    os.listdir(nitfPluginPath))):
-        print('Could not find NITF plugins. Please re-install with '
-                'the following command.')
-        print('python waf install --target=PIAIMB')
-        sys.exit(1)
     testDir = os.path.join(utils.installPath(), 'tests', 'six.sicd')
 
     success = runTests(testDir, 'test_add_additional_des', getSampleSicdXML())
@@ -74,8 +63,33 @@ def runSICDTests():
 
     return success
 
+
+def runSIDDTests():
+    testDir = os.path.join(utils.installPath(), 'tests', 'six.sidd')
+    inputFiles = os.listdir(os.path.join(
+        utils.findSixHome(), 'regression_files', 'six.sidd', '2.0.0'))
+    passed = True
+    for pathname in inputFiles:
+        passed = passed and runTests(testDir, 'test_read_and_write_lut',
+                os.path.join(utils.findSixHome(), 'regression_files',
+                'six.sidd', '2.0.0', pathname))
+    return passed
+
+
 def run():
-    return runSICDTests()
+    # Make sure plugins installed properly
+    nitfPluginPath = os.environ['NITF_PLUGIN_PATH_REAL']
+
+    if (not os.path.exists(nitfPluginPath) or
+            not any(plugin.startswith('PIAIMB') for plugin in
+                    os.listdir(nitfPluginPath))):
+        print('Could not find NITF plugins. Please re-install with '
+                'the following command.')
+        print('python waf install --target=PIAIMB')
+        sys.exit(1)
+
+    return runSICDTests() and runSIDDTests()
+
 
 if __name__ == '__main__':
     run()

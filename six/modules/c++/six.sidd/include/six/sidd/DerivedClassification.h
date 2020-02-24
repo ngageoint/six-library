@@ -23,7 +23,6 @@
 #define __SIX_DERIVED_CLASSIFICATION_H__
 
 #include "mem/ScopedCopyablePtr.h"
-#include "six/Types.h"
 #include "six/Classification.h"
 #include "six/ParameterCollection.h"
 namespace six
@@ -34,16 +33,14 @@ namespace sidd
  *  \class DerivedClassification
  *  \brief The implementation of Classification for derived products
  *
+ *  SIDD 1.0 uses IC ISM v4
+ *  SIDD 2.0 uses IC ISM v13
+ *
  *  Compiler-generated copy constructor and assignment operator are sufficient
  */
 class DerivedClassification: public Classification
 {
 public:
-    DerivedClassification()
-    : desVersion(Constants::DES_VERSION)
-    {
-    }
-
     virtual std::string getLevel() const
     {
         return classification;
@@ -69,9 +66,10 @@ public:
     //  document meets all the business rules.
     DateTime                         createDate;
 
-    //! An indicator of what optional ISM rule sets the documents complies
-    //  with. This allows sytems to know that the document claims compliance
-    //  with these rule sets and they should be enforced.
+    //! An indicator of what ISM rule sets the documents complies with. This
+    //  allows systems to know that the document claims compliance with these
+    //  rule sets and they should be enforced.
+    //  This is optional in SIDD 1.0 but required in SIDD 2.0
     std::vector<std::string>         compliesWith;
 
     // 'classification' and 'ownerProducer' are required
@@ -168,16 +166,72 @@ public:
     //  current, derivative document to be exempted from automatic
     //  declassification.  This is always used in conjunction with the
     //  exemptedSourceDate.
+    //  This only exists in SIDD 1.0
     std::string                      exemptedSourceType;
 
     //! A specific year, month, and day of publication or release of a source
     //  document, or the most recent source document, that was itself marked
     //  with a declassification constraint.  This is always used in
     // conjunction with the exemptedSourceType.
+    //  This only exists in SIDD 1.0
     mem::ScopedCopyablePtr<DateTime> exemptedSourceDate;
+
+    // The following are new in SIDD 2.0 (IC ISM v13)
+
+    //! This attribute is used to declare specific exemptions within a rule
+    //  set - for example exemption from ICD 710 FD&R requirements. This
+    //  attribute is used on the resource node of a document in conjunction
+    //  with compliesWith.
+    std::string exemptFrom;
+
+    //! This attribute, when true, is used to signify that multiple values in
+    //  the ownerProducer attribute are JOINT owners of the data.
+    BooleanType joint;
+
+    //! This attribute is used at both the resource and the portion levels.
+    //  One or more indicators identifying DoE markings. It is manifested in
+    //  portion marks and security banners.
+    std::vector<std::string> atomicEnergyMarkings;
+
+    //! This attribute is used at both the resource and the portion levels.
+    //  One or more indicators identifying the country or countries and/or
+    //  international organization(s) to which classified information may be
+    //  displayed but NOT released based on the determination of an originator
+    //  in accordance with established foreign disclosure procedures. This
+    // element is used in conjunction with the DisplayOnly Dissemination
+    // Controls value. It is manifested in portion marks and security banners.
+    std::vector<std::string> displayOnlyTo;
+
+    //! A single Notice that may consist of 1 or more NoticeText
+    std::string noticeType;
+
+    //! A Reason (less than 2048 chars) associated with a notice such as the
+    //  DoD Distribution reason.
+    std::string noticeReason;
+
+    //! A Date associated with a notice such as the DoD Distribution notice
+    //  date.
+    mem::ScopedCopyablePtr<DateTime> noticeDate;
+
+    //! A notice that is of a category that is not described in the CAPCO
+    //  Register and/or is not sufficiently defined to be represented in the
+    //  Controlled Value Enumeration CVEnumISMNotice.xml. This attribute can
+    //  be used by specifications that import ISM to represent a wider variety
+    //  of security-related notices.
+    std::string unregisteredNoticeType;
+
+    //! This attribute is an indicator that the element contains a
+    //  security-related notice NOT in this document. This flag allows for a
+    //  notice to exist in a document without the data that would normally
+    //  require the notice. Example: a FISA notice when there is no FISA data
+    //  present.  A common use case is source citations where the notice if
+    //  for the sourced document and should not impact the requirements for
+    //  that type of data in this document.
+    BooleanType externalNotice;
 
     //! Equality operator
     bool operator==(const DerivedClassification& rhs) const;
+
 
 private:
     virtual bool equalTo(const Classification& rhs) const;
@@ -202,4 +256,3 @@ private:
 }
 }
 #endif
-

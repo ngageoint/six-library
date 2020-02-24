@@ -95,7 +95,7 @@ def initImageData(cmplx):
     return cmplx
 
 def initGeoData(cmplx):
-    geoData = makeScopedCloneableGeoData()
+    geoData = makeScopedCopyableGeoData()
     geoData.earthModel = EarthModelType('WGS84')
     geoData.scp.ecf[0] = 100
     geoData.scp.ecf[1] = 200
@@ -110,7 +110,7 @@ def initGeoData(cmplx):
     for i in range(4):
         geoData.validData.push_back(LatLon(i * 11, i * 11 + 13))
 
-    geoInfo = makeScopedCloneableGeoInfo()
+    geoInfo = makeScopedCopyableGeoInfo()
     geoInfo.name = 'My name'
     param = Parameter()
     param.setName('Some GeoData param')
@@ -609,7 +609,7 @@ def initErrorStats(cmplx):
 def initMatchInfo(cmplx):
     matchInfo = makeScopedCopyableMatchInformation()
 
-    matchType = makeScopedCopyableMatchType()
+    matchType = MatchType()
     matchType.collectorName = 'Collector'
     matchType.illuminatorName = 'Illuminator'
     matchType.matchType.push_back('Some match type')

@@ -4344,8 +4344,8 @@ class Data(_object):
         return _six_base.Data_getClassification(self, *args)
 
 
-    def getDisplayLUT(self) -> "six::LUT *":
-        """getDisplayLUT(Data self) -> six::LUT *"""
+    def getDisplayLUT(self) -> "mem::ScopedCopyablePtr< six::LUT > &":
+        """getDisplayLUT(Data self) -> mem::ScopedCopyablePtr< six::LUT > &"""
         return _six_base.Data_getDisplayLUT(self)
 
 
@@ -4620,6 +4620,57 @@ def toValidXMLString(data: 'Data', schemaPaths: 'VectorString', log: 'logging::L
     toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log) -> std::string
     """
     return _six_base.toValidXMLString(data, schemaPaths, log, xmlRegistry)
+class GeoInfo(_object):
+    """Proxy of C++ six::GeoInfo class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, GeoInfo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::GeoInfo self) -> GeoInfo"""
+        this = _six_base.new_GeoInfo()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_GeoInfo
+    __del__ = lambda self: None
+    __swig_setmethods__["name"] = _six_base.GeoInfo_name_set
+    __swig_getmethods__["name"] = _six_base.GeoInfo_name_get
+    if _newclass:
+        name = _swig_property(_six_base.GeoInfo_name_get, _six_base.GeoInfo_name_set)
+    __swig_setmethods__["geoInfos"] = _six_base.GeoInfo_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_base.GeoInfo_geoInfos_get
+    if _newclass:
+        geoInfos = _swig_property(_six_base.GeoInfo_geoInfos_get, _six_base.GeoInfo_geoInfos_set)
+    __swig_setmethods__["desc"] = _six_base.GeoInfo_desc_set
+    __swig_getmethods__["desc"] = _six_base.GeoInfo_desc_get
+    if _newclass:
+        desc = _swig_property(_six_base.GeoInfo_desc_get, _six_base.GeoInfo_desc_set)
+    __swig_setmethods__["geometryLatLon"] = _six_base.GeoInfo_geometryLatLon_set
+    __swig_getmethods__["geometryLatLon"] = _six_base.GeoInfo_geometryLatLon_get
+    if _newclass:
+        geometryLatLon = _swig_property(_six_base.GeoInfo_geometryLatLon_get, _six_base.GeoInfo_geometryLatLon_set)
+
+    def __eq__(self, rhs: 'GeoInfo') -> "bool":
+        """__eq__(GeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.GeoInfo___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'GeoInfo') -> "bool":
+        """__ne__(GeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.GeoInfo___ne__(self, rhs)
+
+GeoInfo_swigregister = _six_base.GeoInfo_swigregister
+GeoInfo_swigregister(GeoInfo)
+
+
+def __lshift__(os: 'std::ostream &', g: 'GeoInfo') -> "std::ostream &":
+    """__lshift__(std::ostream & os, GeoInfo g) -> std::ostream &"""
+    return _six_base.__lshift__(os, g)
 class LatLonCorners(_object):
     """Proxy of C++ six::Corners<(scene::LatLon)> class."""
 
@@ -4747,6 +4798,870 @@ class LatLonAltCorners(_object):
     __del__ = lambda self: None
 LatLonAltCorners_swigregister = _six_base.LatLonAltCorners_swigregister
 LatLonAltCorners_swigregister(LatLonAltCorners)
+
+class VectorMatchCollect(_object):
+    """Proxy of C++ std::vector<(six::MatchCollect)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorMatchCollect, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorMatchCollect, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(VectorMatchCollect self) -> SwigPyIterator"""
+        return _six_base.VectorMatchCollect_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(VectorMatchCollect self) -> bool"""
+        return _six_base.VectorMatchCollect___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(VectorMatchCollect self) -> bool"""
+        return _six_base.VectorMatchCollect___bool__(self)
+
+
+    def __len__(self) -> "std::vector< six::MatchCollect >::size_type":
+        """__len__(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"""
+        return _six_base.VectorMatchCollect___len__(self)
+
+
+    def __getslice__(self, i: 'std::vector< six::MatchCollect >::difference_type', j: 'std::vector< six::MatchCollect >::difference_type') -> "std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *":
+        """__getslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j) -> VectorMatchCollect"""
+        return _six_base.VectorMatchCollect___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j)
+        __setslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j, VectorMatchCollect v)
+        """
+        return _six_base.VectorMatchCollect___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'std::vector< six::MatchCollect >::difference_type', j: 'std::vector< six::MatchCollect >::difference_type') -> "void":
+        """__delslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j)"""
+        return _six_base.VectorMatchCollect___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i)
+        __delitem__(VectorMatchCollect self, PySliceObject * slice)
+        """
+        return _six_base.VectorMatchCollect___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "std::vector< six::MatchCollect >::value_type const &":
+        """
+        __getitem__(VectorMatchCollect self, PySliceObject * slice) -> VectorMatchCollect
+        __getitem__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i) -> MatchCollect
+        """
+        return _six_base.VectorMatchCollect___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(VectorMatchCollect self, PySliceObject * slice, VectorMatchCollect v)
+        __setitem__(VectorMatchCollect self, PySliceObject * slice)
+        __setitem__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, MatchCollect x)
+        """
+        return _six_base.VectorMatchCollect___setitem__(self, *args)
+
+
+    def pop(self) -> "std::vector< six::MatchCollect >::value_type":
+        """pop(VectorMatchCollect self) -> MatchCollect"""
+        return _six_base.VectorMatchCollect_pop(self)
+
+
+    def append(self, x: 'MatchCollect') -> "void":
+        """append(VectorMatchCollect self, MatchCollect x)"""
+        return _six_base.VectorMatchCollect_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(VectorMatchCollect self) -> bool"""
+        return _six_base.VectorMatchCollect_empty(self)
+
+
+    def size(self) -> "std::vector< six::MatchCollect >::size_type":
+        """size(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"""
+        return _six_base.VectorMatchCollect_size(self)
+
+
+    def swap(self, v: 'VectorMatchCollect') -> "void":
+        """swap(VectorMatchCollect self, VectorMatchCollect v)"""
+        return _six_base.VectorMatchCollect_swap(self, v)
+
+
+    def begin(self) -> "std::vector< six::MatchCollect >::iterator":
+        """begin(VectorMatchCollect self) -> std::vector< six::MatchCollect >::iterator"""
+        return _six_base.VectorMatchCollect_begin(self)
+
+
+    def end(self) -> "std::vector< six::MatchCollect >::iterator":
+        """end(VectorMatchCollect self) -> std::vector< six::MatchCollect >::iterator"""
+        return _six_base.VectorMatchCollect_end(self)
+
+
+    def rbegin(self) -> "std::vector< six::MatchCollect >::reverse_iterator":
+        """rbegin(VectorMatchCollect self) -> std::vector< six::MatchCollect >::reverse_iterator"""
+        return _six_base.VectorMatchCollect_rbegin(self)
+
+
+    def rend(self) -> "std::vector< six::MatchCollect >::reverse_iterator":
+        """rend(VectorMatchCollect self) -> std::vector< six::MatchCollect >::reverse_iterator"""
+        return _six_base.VectorMatchCollect_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(VectorMatchCollect self)"""
+        return _six_base.VectorMatchCollect_clear(self)
+
+
+    def get_allocator(self) -> "std::vector< six::MatchCollect >::allocator_type":
+        """get_allocator(VectorMatchCollect self) -> std::vector< six::MatchCollect >::allocator_type"""
+        return _six_base.VectorMatchCollect_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(VectorMatchCollect self)"""
+        return _six_base.VectorMatchCollect_pop_back(self)
+
+
+    def erase(self, *args) -> "std::vector< six::MatchCollect >::iterator":
+        """
+        erase(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator pos) -> std::vector< six::MatchCollect >::iterator
+        erase(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator first, std::vector< six::MatchCollect >::iterator last) -> std::vector< six::MatchCollect >::iterator
+        """
+        return _six_base.VectorMatchCollect_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(six::MatchCollect)> self) -> VectorMatchCollect
+        __init__(std::vector<(six::MatchCollect)> self, VectorMatchCollect arg2) -> VectorMatchCollect
+        __init__(std::vector<(six::MatchCollect)> self, std::vector< six::MatchCollect >::size_type size) -> VectorMatchCollect
+        __init__(std::vector<(six::MatchCollect)> self, std::vector< six::MatchCollect >::size_type size, MatchCollect value) -> VectorMatchCollect
+        """
+        this = _six_base.new_VectorMatchCollect(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x: 'MatchCollect') -> "void":
+        """push_back(VectorMatchCollect self, MatchCollect x)"""
+        return _six_base.VectorMatchCollect_push_back(self, x)
+
+
+    def front(self) -> "std::vector< six::MatchCollect >::value_type const &":
+        """front(VectorMatchCollect self) -> MatchCollect"""
+        return _six_base.VectorMatchCollect_front(self)
+
+
+    def back(self) -> "std::vector< six::MatchCollect >::value_type const &":
+        """back(VectorMatchCollect self) -> MatchCollect"""
+        return _six_base.VectorMatchCollect_back(self)
+
+
+    def assign(self, n: 'std::vector< six::MatchCollect >::size_type', x: 'MatchCollect') -> "void":
+        """assign(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type n, MatchCollect x)"""
+        return _six_base.VectorMatchCollect_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type new_size)
+        resize(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type new_size, MatchCollect x)
+        """
+        return _six_base.VectorMatchCollect_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator pos, MatchCollect x) -> std::vector< six::MatchCollect >::iterator
+        insert(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator pos, std::vector< six::MatchCollect >::size_type n, MatchCollect x)
+        """
+        return _six_base.VectorMatchCollect_insert(self, *args)
+
+
+    def reserve(self, n: 'std::vector< six::MatchCollect >::size_type') -> "void":
+        """reserve(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type n)"""
+        return _six_base.VectorMatchCollect_reserve(self, n)
+
+
+    def capacity(self) -> "std::vector< six::MatchCollect >::size_type":
+        """capacity(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"""
+        return _six_base.VectorMatchCollect_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
+    __swig_destroy__ = _six_base.delete_VectorMatchCollect
+    __del__ = lambda self: None
+VectorMatchCollect_swigregister = _six_base.VectorMatchCollect_swigregister
+VectorMatchCollect_swigregister(VectorMatchCollect)
+
+class VectorMatchType(_object):
+    """Proxy of C++ std::vector<(six::MatchType)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorMatchType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorMatchType, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(VectorMatchType self) -> SwigPyIterator"""
+        return _six_base.VectorMatchType_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(VectorMatchType self) -> bool"""
+        return _six_base.VectorMatchType___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(VectorMatchType self) -> bool"""
+        return _six_base.VectorMatchType___bool__(self)
+
+
+    def __len__(self) -> "std::vector< six::MatchType >::size_type":
+        """__len__(VectorMatchType self) -> std::vector< six::MatchType >::size_type"""
+        return _six_base.VectorMatchType___len__(self)
+
+
+    def __getslice__(self, i: 'std::vector< six::MatchType >::difference_type', j: 'std::vector< six::MatchType >::difference_type') -> "std::vector< six::MatchType,std::allocator< six::MatchType > > *":
+        """__getslice__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j) -> VectorMatchType"""
+        return _six_base.VectorMatchType___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j)
+        __setslice__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j, VectorMatchType v)
+        """
+        return _six_base.VectorMatchType___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'std::vector< six::MatchType >::difference_type', j: 'std::vector< six::MatchType >::difference_type') -> "void":
+        """__delslice__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, std::vector< six::MatchType >::difference_type j)"""
+        return _six_base.VectorMatchType___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(VectorMatchType self, std::vector< six::MatchType >::difference_type i)
+        __delitem__(VectorMatchType self, PySliceObject * slice)
+        """
+        return _six_base.VectorMatchType___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "std::vector< six::MatchType >::value_type const &":
+        """
+        __getitem__(VectorMatchType self, PySliceObject * slice) -> VectorMatchType
+        __getitem__(VectorMatchType self, std::vector< six::MatchType >::difference_type i) -> MatchType
+        """
+        return _six_base.VectorMatchType___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(VectorMatchType self, PySliceObject * slice, VectorMatchType v)
+        __setitem__(VectorMatchType self, PySliceObject * slice)
+        __setitem__(VectorMatchType self, std::vector< six::MatchType >::difference_type i, MatchType x)
+        """
+        return _six_base.VectorMatchType___setitem__(self, *args)
+
+
+    def pop(self) -> "std::vector< six::MatchType >::value_type":
+        """pop(VectorMatchType self) -> MatchType"""
+        return _six_base.VectorMatchType_pop(self)
+
+
+    def append(self, x: 'MatchType') -> "void":
+        """append(VectorMatchType self, MatchType x)"""
+        return _six_base.VectorMatchType_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(VectorMatchType self) -> bool"""
+        return _six_base.VectorMatchType_empty(self)
+
+
+    def size(self) -> "std::vector< six::MatchType >::size_type":
+        """size(VectorMatchType self) -> std::vector< six::MatchType >::size_type"""
+        return _six_base.VectorMatchType_size(self)
+
+
+    def swap(self, v: 'VectorMatchType') -> "void":
+        """swap(VectorMatchType self, VectorMatchType v)"""
+        return _six_base.VectorMatchType_swap(self, v)
+
+
+    def begin(self) -> "std::vector< six::MatchType >::iterator":
+        """begin(VectorMatchType self) -> std::vector< six::MatchType >::iterator"""
+        return _six_base.VectorMatchType_begin(self)
+
+
+    def end(self) -> "std::vector< six::MatchType >::iterator":
+        """end(VectorMatchType self) -> std::vector< six::MatchType >::iterator"""
+        return _six_base.VectorMatchType_end(self)
+
+
+    def rbegin(self) -> "std::vector< six::MatchType >::reverse_iterator":
+        """rbegin(VectorMatchType self) -> std::vector< six::MatchType >::reverse_iterator"""
+        return _six_base.VectorMatchType_rbegin(self)
+
+
+    def rend(self) -> "std::vector< six::MatchType >::reverse_iterator":
+        """rend(VectorMatchType self) -> std::vector< six::MatchType >::reverse_iterator"""
+        return _six_base.VectorMatchType_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(VectorMatchType self)"""
+        return _six_base.VectorMatchType_clear(self)
+
+
+    def get_allocator(self) -> "std::vector< six::MatchType >::allocator_type":
+        """get_allocator(VectorMatchType self) -> std::vector< six::MatchType >::allocator_type"""
+        return _six_base.VectorMatchType_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(VectorMatchType self)"""
+        return _six_base.VectorMatchType_pop_back(self)
+
+
+    def erase(self, *args) -> "std::vector< six::MatchType >::iterator":
+        """
+        erase(VectorMatchType self, std::vector< six::MatchType >::iterator pos) -> std::vector< six::MatchType >::iterator
+        erase(VectorMatchType self, std::vector< six::MatchType >::iterator first, std::vector< six::MatchType >::iterator last) -> std::vector< six::MatchType >::iterator
+        """
+        return _six_base.VectorMatchType_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(six::MatchType)> self) -> VectorMatchType
+        __init__(std::vector<(six::MatchType)> self, VectorMatchType arg2) -> VectorMatchType
+        __init__(std::vector<(six::MatchType)> self, std::vector< six::MatchType >::size_type size) -> VectorMatchType
+        __init__(std::vector<(six::MatchType)> self, std::vector< six::MatchType >::size_type size, MatchType value) -> VectorMatchType
+        """
+        this = _six_base.new_VectorMatchType(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x: 'MatchType') -> "void":
+        """push_back(VectorMatchType self, MatchType x)"""
+        return _six_base.VectorMatchType_push_back(self, x)
+
+
+    def front(self) -> "std::vector< six::MatchType >::value_type const &":
+        """front(VectorMatchType self) -> MatchType"""
+        return _six_base.VectorMatchType_front(self)
+
+
+    def back(self) -> "std::vector< six::MatchType >::value_type const &":
+        """back(VectorMatchType self) -> MatchType"""
+        return _six_base.VectorMatchType_back(self)
+
+
+    def assign(self, n: 'std::vector< six::MatchType >::size_type', x: 'MatchType') -> "void":
+        """assign(VectorMatchType self, std::vector< six::MatchType >::size_type n, MatchType x)"""
+        return _six_base.VectorMatchType_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(VectorMatchType self, std::vector< six::MatchType >::size_type new_size)
+        resize(VectorMatchType self, std::vector< six::MatchType >::size_type new_size, MatchType x)
+        """
+        return _six_base.VectorMatchType_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(VectorMatchType self, std::vector< six::MatchType >::iterator pos, MatchType x) -> std::vector< six::MatchType >::iterator
+        insert(VectorMatchType self, std::vector< six::MatchType >::iterator pos, std::vector< six::MatchType >::size_type n, MatchType x)
+        """
+        return _six_base.VectorMatchType_insert(self, *args)
+
+
+    def reserve(self, n: 'std::vector< six::MatchType >::size_type') -> "void":
+        """reserve(VectorMatchType self, std::vector< six::MatchType >::size_type n)"""
+        return _six_base.VectorMatchType_reserve(self, n)
+
+
+    def capacity(self) -> "std::vector< six::MatchType >::size_type":
+        """capacity(VectorMatchType self) -> std::vector< six::MatchType >::size_type"""
+        return _six_base.VectorMatchType_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
+    __swig_destroy__ = _six_base.delete_VectorMatchType
+    __del__ = lambda self: None
+VectorMatchType_swigregister = _six_base.VectorMatchType_swigregister
+VectorMatchType_swigregister(VectorMatchType)
+
+class VectorScopedCopyableMatchType(_object):
+    """Proxy of C++ std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorScopedCopyableMatchType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCopyableMatchType, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(VectorScopedCopyableMatchType self) -> SwigPyIterator"""
+        return _six_base.VectorScopedCopyableMatchType_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(VectorScopedCopyableMatchType self) -> bool"""
+        return _six_base.VectorScopedCopyableMatchType___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(VectorScopedCopyableMatchType self) -> bool"""
+        return _six_base.VectorScopedCopyableMatchType___bool__(self)
+
+
+    def __len__(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
+        """__len__(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
+        return _six_base.VectorScopedCopyableMatchType___len__(self)
+
+
+    def __getslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type') -> "std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *":
+        """__getslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j) -> VectorScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j)
+        __setslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j, VectorScopedCopyableMatchType v)
+        """
+        return _six_base.VectorScopedCopyableMatchType___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type') -> "void":
+        """__delslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j)"""
+        return _six_base.VectorScopedCopyableMatchType___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i)
+        __delitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
+        """
+        return _six_base.VectorScopedCopyableMatchType___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
+        """
+        __getitem__(VectorScopedCopyableMatchType self, PySliceObject * slice) -> VectorScopedCopyableMatchType
+        __getitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i) -> ScopedCopyableMatchType
+        """
+        return _six_base.VectorScopedCopyableMatchType___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice, VectorScopedCopyableMatchType v)
+        __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
+        __setitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, ScopedCopyableMatchType x)
+        """
+        return _six_base.VectorScopedCopyableMatchType___setitem__(self, *args)
+
+
+    def pop(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type":
+        """pop(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType_pop(self)
+
+
+    def append(self, x: 'ScopedCopyableMatchType') -> "void":
+        """append(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
+        return _six_base.VectorScopedCopyableMatchType_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(VectorScopedCopyableMatchType self) -> bool"""
+        return _six_base.VectorScopedCopyableMatchType_empty(self)
+
+
+    def size(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
+        """size(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
+        return _six_base.VectorScopedCopyableMatchType_size(self)
+
+
+    def swap(self, v: 'VectorScopedCopyableMatchType') -> "void":
+        """swap(VectorScopedCopyableMatchType self, VectorScopedCopyableMatchType v)"""
+        return _six_base.VectorScopedCopyableMatchType_swap(self, v)
+
+
+    def begin(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
+        """begin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator"""
+        return _six_base.VectorScopedCopyableMatchType_begin(self)
+
+
+    def end(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
+        """end(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator"""
+        return _six_base.VectorScopedCopyableMatchType_end(self)
+
+
+    def rbegin(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator":
+        """rbegin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableMatchType_rbegin(self)
+
+
+    def rend(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator":
+        """rend(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableMatchType_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(VectorScopedCopyableMatchType self)"""
+        return _six_base.VectorScopedCopyableMatchType_clear(self)
+
+
+    def get_allocator(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type":
+        """get_allocator(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type"""
+        return _six_base.VectorScopedCopyableMatchType_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(VectorScopedCopyableMatchType self)"""
+        return _six_base.VectorScopedCopyableMatchType_pop_back(self)
+
+
+    def erase(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
+        """
+        erase(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
+        erase(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
+        """
+        return _six_base.VectorScopedCopyableMatchType_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self) -> VectorScopedCopyableMatchType
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, VectorScopedCopyableMatchType arg2) -> VectorScopedCopyableMatchType
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type size) -> VectorScopedCopyableMatchType
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type size, ScopedCopyableMatchType value) -> VectorScopedCopyableMatchType
+        """
+        this = _six_base.new_VectorScopedCopyableMatchType(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x: 'ScopedCopyableMatchType') -> "void":
+        """push_back(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
+        return _six_base.VectorScopedCopyableMatchType_push_back(self, x)
+
+
+    def front(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
+        """front(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType_front(self)
+
+
+    def back(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
+        """back(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
+        return _six_base.VectorScopedCopyableMatchType_back(self)
+
+
+    def assign(self, n: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type', x: 'ScopedCopyableMatchType') -> "void":
+        """assign(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n, ScopedCopyableMatchType x)"""
+        return _six_base.VectorScopedCopyableMatchType_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type new_size)
+        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type new_size, ScopedCopyableMatchType x)
+        """
+        return _six_base.VectorScopedCopyableMatchType_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos, ScopedCopyableMatchType x) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
+        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n, ScopedCopyableMatchType x)
+        """
+        return _six_base.VectorScopedCopyableMatchType_insert(self, *args)
+
+
+    def reserve(self, n: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type') -> "void":
+        """reserve(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n)"""
+        return _six_base.VectorScopedCopyableMatchType_reserve(self, n)
+
+
+    def capacity(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
+        """capacity(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
+        return _six_base.VectorScopedCopyableMatchType_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
+    __swig_destroy__ = _six_base.delete_VectorScopedCopyableMatchType
+    __del__ = lambda self: None
+VectorScopedCopyableMatchType_swigregister = _six_base.VectorScopedCopyableMatchType_swigregister
+VectorScopedCopyableMatchType_swigregister(VectorScopedCopyableMatchType)
+
+class VectorScopedCopyableGeoInfo(_object):
+    """Proxy of C++ std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorScopedCopyableGeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCopyableGeoInfo, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(VectorScopedCopyableGeoInfo self) -> SwigPyIterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(VectorScopedCopyableGeoInfo self) -> bool"""
+        return _six_base.VectorScopedCopyableGeoInfo___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(VectorScopedCopyableGeoInfo self) -> bool"""
+        return _six_base.VectorScopedCopyableGeoInfo___bool__(self)
+
+
+    def __len__(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
+        """__len__(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
+        return _six_base.VectorScopedCopyableGeoInfo___len__(self)
+
+
+    def __getslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type') -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *":
+        """__getslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j) -> VectorScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)
+        __setslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j, VectorScopedCopyableGeoInfo v)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type') -> "void":
+        """__delslice__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type j)"""
+        return _six_base.VectorScopedCopyableGeoInfo___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i)
+        __delitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
+        """
+        __getitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice) -> VectorScopedCopyableGeoInfo
+        __getitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i) -> ScopedCopyableGeoInfo
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice, VectorScopedCopyableGeoInfo v)
+        __setitem__(VectorScopedCopyableGeoInfo self, PySliceObject * slice)
+        __setitem__(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::difference_type i, ScopedCopyableGeoInfo x)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo___setitem__(self, *args)
+
+
+    def pop(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type":
+        """pop(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo_pop(self)
+
+
+    def append(self, x: 'ScopedCopyableGeoInfo') -> "void":
+        """append(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"""
+        return _six_base.VectorScopedCopyableGeoInfo_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(VectorScopedCopyableGeoInfo self) -> bool"""
+        return _six_base.VectorScopedCopyableGeoInfo_empty(self)
+
+
+    def size(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
+        """size(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
+        return _six_base.VectorScopedCopyableGeoInfo_size(self)
+
+
+    def swap(self, v: 'VectorScopedCopyableGeoInfo') -> "void":
+        """swap(VectorScopedCopyableGeoInfo self, VectorScopedCopyableGeoInfo v)"""
+        return _six_base.VectorScopedCopyableGeoInfo_swap(self, v)
+
+
+    def begin(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
+        """begin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_begin(self)
+
+
+    def end(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
+        """end(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_end(self)
+
+
+    def rbegin(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator":
+        """rbegin(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_rbegin(self)
+
+
+    def rend(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator":
+        """rend(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::reverse_iterator"""
+        return _six_base.VectorScopedCopyableGeoInfo_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(VectorScopedCopyableGeoInfo self)"""
+        return _six_base.VectorScopedCopyableGeoInfo_clear(self)
+
+
+    def get_allocator(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type":
+        """get_allocator(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type"""
+        return _six_base.VectorScopedCopyableGeoInfo_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(VectorScopedCopyableGeoInfo self)"""
+        return _six_base.VectorScopedCopyableGeoInfo_pop_back(self)
+
+
+    def erase(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator":
+        """
+        erase(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
+        erase(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
+        """
+        return _six_base.VectorScopedCopyableGeoInfo_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self) -> VectorScopedCopyableGeoInfo
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, VectorScopedCopyableGeoInfo arg2) -> VectorScopedCopyableGeoInfo
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type size) -> VectorScopedCopyableGeoInfo
+        __init__(std::vector<(mem::ScopedCopyablePtr<(six::GeoInfo)>)> self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type size, ScopedCopyableGeoInfo value) -> VectorScopedCopyableGeoInfo
+        """
+        this = _six_base.new_VectorScopedCopyableGeoInfo(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x: 'ScopedCopyableGeoInfo') -> "void":
+        """push_back(VectorScopedCopyableGeoInfo self, ScopedCopyableGeoInfo x)"""
+        return _six_base.VectorScopedCopyableGeoInfo_push_back(self, x)
+
+
+    def front(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
+        """front(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo_front(self)
+
+
+    def back(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type const &":
+        """back(VectorScopedCopyableGeoInfo self) -> ScopedCopyableGeoInfo"""
+        return _six_base.VectorScopedCopyableGeoInfo_back(self)
+
+
+    def assign(self, n: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type', x: 'ScopedCopyableGeoInfo') -> "void":
+        """assign(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)"""
+        return _six_base.VectorScopedCopyableGeoInfo_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size)
+        resize(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type new_size, ScopedCopyableGeoInfo x)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, ScopedCopyableGeoInfo x) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator
+        insert(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n, ScopedCopyableGeoInfo x)
+        """
+        return _six_base.VectorScopedCopyableGeoInfo_insert(self, *args)
+
+
+    def reserve(self, n: 'std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type') -> "void":
+        """reserve(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n)"""
+        return _six_base.VectorScopedCopyableGeoInfo_reserve(self, n)
+
+
+    def capacity(self) -> "std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type":
+        """capacity(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"""
+        return _six_base.VectorScopedCopyableGeoInfo_capacity(self)
+
+
+    def __getstate__(self):
+    # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+
+    def __setstate__(self, state):
+        self.__init__()
+    # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+
+    __swig_destroy__ = _six_base.delete_VectorScopedCopyableGeoInfo
+    __del__ = lambda self: None
+VectorScopedCopyableGeoInfo_swigregister = _six_base.VectorScopedCopyableGeoInfo_swigregister
+VectorScopedCopyableGeoInfo_swigregister(VectorScopedCopyableGeoInfo)
 
 class StdAutoRadiometric(_object):
     """Proxy of C++ std::auto_ptr<(six::Radiometric)> class."""
@@ -4972,99 +5887,111 @@ ScopedCopyableErrorStatistics_swigregister(ScopedCopyableErrorStatistics)
 def makeScopedCopyableErrorStatistics() -> "mem::ScopedCopyablePtr< six::ErrorStatistics >":
     """makeScopedCopyableErrorStatistics() -> ScopedCopyableErrorStatistics"""
     return _six_base.makeScopedCopyableErrorStatistics()
-class StdAutoMatchInformation(_object):
-    """Proxy of C++ std::auto_ptr<(six::MatchInformation)> class."""
+class StdAutoComponents(_object):
+    """Proxy of C++ std::auto_ptr<(six::Components)> class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoMatchInformation, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoComponents, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoMatchInformation, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoComponents, name)
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::MatchInformation)> self) -> StdAutoMatchInformation"""
-        this = _six_base.new_StdAutoMatchInformation()
+        """__init__(std::auto_ptr<(six::Components)> self) -> StdAutoComponents"""
+        this = _six_base.new_StdAutoComponents()
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _six_base.delete_StdAutoMatchInformation
+    __swig_destroy__ = _six_base.delete_StdAutoComponents
     __del__ = lambda self: None
-StdAutoMatchInformation_swigregister = _six_base.StdAutoMatchInformation_swigregister
-StdAutoMatchInformation_swigregister(StdAutoMatchInformation)
+StdAutoComponents_swigregister = _six_base.StdAutoComponents_swigregister
+StdAutoComponents_swigregister(StdAutoComponents)
 
-class ScopedCopyableMatchInformation(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::MatchInformation)> class."""
+class ScopedCopyableComponents(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::Components)> class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableMatchInformation, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableComponents, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableMatchInformation, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableComponents, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCopyablePtr<(six::MatchInformation)> self, MatchInformation ptr=None) -> ScopedCopyableMatchInformation
-        __init__(mem::ScopedCopyablePtr<(six::MatchInformation)> self) -> ScopedCopyableMatchInformation
-        __init__(mem::ScopedCopyablePtr<(six::MatchInformation)> self, ScopedCopyableMatchInformation rhs) -> ScopedCopyableMatchInformation
+        __init__(mem::ScopedCopyablePtr<(six::Components)> self, Components ptr=None) -> ScopedCopyableComponents
+        __init__(mem::ScopedCopyablePtr<(six::Components)> self) -> ScopedCopyableComponents
+        __init__(mem::ScopedCopyablePtr<(six::Components)> self, ScopedCopyableComponents rhs) -> ScopedCopyableComponents
         """
-        this = _six_base.new_ScopedCopyableMatchInformation(*args)
+        this = _six_base.new_ScopedCopyableComponents(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
 
     def __nonzero__(self):
-        return _six_base.ScopedCopyableMatchInformation___nonzero__(self)
+        return _six_base.ScopedCopyableComponents___nonzero__(self)
     __bool__ = __nonzero__
 
 
 
-    def get(self) -> "six::MatchInformation *":
-        """get(ScopedCopyableMatchInformation self) -> MatchInformation"""
-        return _six_base.ScopedCopyableMatchInformation_get(self)
+    def get(self) -> "six::Components *":
+        """get(ScopedCopyableComponents self) -> Components"""
+        return _six_base.ScopedCopyableComponents_get(self)
 
 
-    def __ref__(self) -> "six::MatchInformation &":
-        """__ref__(ScopedCopyableMatchInformation self) -> MatchInformation"""
-        return _six_base.ScopedCopyableMatchInformation___ref__(self)
+    def __ref__(self) -> "six::Components &":
+        """__ref__(ScopedCopyableComponents self) -> Components"""
+        return _six_base.ScopedCopyableComponents___ref__(self)
 
 
-    def __deref__(self) -> "six::MatchInformation *":
-        """__deref__(ScopedCopyableMatchInformation self) -> MatchInformation"""
-        return _six_base.ScopedCopyableMatchInformation___deref__(self)
+    def __deref__(self) -> "six::Components *":
+        """__deref__(ScopedCopyableComponents self) -> Components"""
+        return _six_base.ScopedCopyableComponents___deref__(self)
 
 
-    def reset(self, ptr: 'MatchInformation'=None) -> "void":
+    def reset(self, ptr: 'Components'=None) -> "void":
         """
-        reset(ScopedCopyableMatchInformation self, MatchInformation ptr=None)
-        reset(ScopedCopyableMatchInformation self)
+        reset(ScopedCopyableComponents self, Components ptr=None)
+        reset(ScopedCopyableComponents self)
         """
-        return _six_base.ScopedCopyableMatchInformation_reset(self, ptr)
+        return _six_base.ScopedCopyableComponents_reset(self, ptr)
 
-    __swig_destroy__ = _six_base.delete_ScopedCopyableMatchInformation
+    __swig_destroy__ = _six_base.delete_ScopedCopyableComponents
     __del__ = lambda self: None
-    __swig_setmethods__["types"] = _six_base.ScopedCopyableMatchInformation_types_set
-    __swig_getmethods__["types"] = _six_base.ScopedCopyableMatchInformation_types_get
+    __swig_setmethods__["posVelError"] = _six_base.ScopedCopyableComponents_posVelError_set
+    __swig_getmethods__["posVelError"] = _six_base.ScopedCopyableComponents_posVelError_get
     if _newclass:
-        types = _swig_property(_six_base.ScopedCopyableMatchInformation_types_get, _six_base.ScopedCopyableMatchInformation_types_set)
+        posVelError = _swig_property(_six_base.ScopedCopyableComponents_posVelError_get, _six_base.ScopedCopyableComponents_posVelError_set)
+    __swig_setmethods__["radarSensor"] = _six_base.ScopedCopyableComponents_radarSensor_set
+    __swig_getmethods__["radarSensor"] = _six_base.ScopedCopyableComponents_radarSensor_get
+    if _newclass:
+        radarSensor = _swig_property(_six_base.ScopedCopyableComponents_radarSensor_get, _six_base.ScopedCopyableComponents_radarSensor_set)
+    __swig_setmethods__["tropoError"] = _six_base.ScopedCopyableComponents_tropoError_set
+    __swig_getmethods__["tropoError"] = _six_base.ScopedCopyableComponents_tropoError_get
+    if _newclass:
+        tropoError = _swig_property(_six_base.ScopedCopyableComponents_tropoError_get, _six_base.ScopedCopyableComponents_tropoError_set)
+    __swig_setmethods__["ionoError"] = _six_base.ScopedCopyableComponents_ionoError_set
+    __swig_getmethods__["ionoError"] = _six_base.ScopedCopyableComponents_ionoError_get
+    if _newclass:
+        ionoError = _swig_property(_six_base.ScopedCopyableComponents_ionoError_get, _six_base.ScopedCopyableComponents_ionoError_set)
 
-    def __eq__(self, rhs: 'MatchInformation') -> "bool":
-        """__eq__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
-        return _six_base.ScopedCopyableMatchInformation___eq__(self, rhs)
+    def __eq__(self, rhs: 'Components') -> "bool":
+        """__eq__(ScopedCopyableComponents self, Components rhs) -> bool"""
+        return _six_base.ScopedCopyableComponents___eq__(self, rhs)
 
 
-    def __ne__(self, rhs: 'MatchInformation') -> "bool":
-        """__ne__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
-        return _six_base.ScopedCopyableMatchInformation___ne__(self, rhs)
+    def __ne__(self, rhs: 'Components') -> "bool":
+        """__ne__(ScopedCopyableComponents self, Components rhs) -> bool"""
+        return _six_base.ScopedCopyableComponents___ne__(self, rhs)
 
-ScopedCopyableMatchInformation_swigregister = _six_base.ScopedCopyableMatchInformation_swigregister
-ScopedCopyableMatchInformation_swigregister(ScopedCopyableMatchInformation)
+ScopedCopyableComponents_swigregister = _six_base.ScopedCopyableComponents_swigregister
+ScopedCopyableComponents_swigregister(ScopedCopyableComponents)
 
 
-def makeScopedCopyableMatchInformation() -> "mem::ScopedCopyablePtr< six::MatchInformation >":
-    """makeScopedCopyableMatchInformation() -> ScopedCopyableMatchInformation"""
-    return _six_base.makeScopedCopyableMatchInformation()
+def makeScopedCopyableComponents() -> "mem::ScopedCopyablePtr< six::Components >":
+    """makeScopedCopyableComponents() -> ScopedCopyableComponents"""
+    return _six_base.makeScopedCopyableComponents()
 class StdAutoCorrCoefs(_object):
     """Proxy of C++ std::auto_ptr<(six::CorrCoefs)> class."""
 
@@ -5339,6 +6266,111 @@ ScopedCopyablePosVelError_swigregister(ScopedCopyablePosVelError)
 def makeScopedCopyablePosVelError() -> "mem::ScopedCopyablePtr< six::PosVelError >":
     """makeScopedCopyablePosVelError() -> ScopedCopyablePosVelError"""
     return _six_base.makeScopedCopyablePosVelError()
+class StdAutoGeoInfo(_object):
+    """Proxy of C++ std::auto_ptr<(six::GeoInfo)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoGeoInfo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::GeoInfo)> self) -> StdAutoGeoInfo"""
+        this = _six_base.new_StdAutoGeoInfo()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoGeoInfo
+    __del__ = lambda self: None
+StdAutoGeoInfo_swigregister = _six_base.StdAutoGeoInfo_swigregister
+StdAutoGeoInfo_swigregister(StdAutoGeoInfo)
+
+class ScopedCopyableGeoInfo(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::GeoInfo)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableGeoInfo, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableGeoInfo, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self, GeoInfo ptr=None) -> ScopedCopyableGeoInfo
+        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self) -> ScopedCopyableGeoInfo
+        __init__(mem::ScopedCopyablePtr<(six::GeoInfo)> self, ScopedCopyableGeoInfo rhs) -> ScopedCopyableGeoInfo
+        """
+        this = _six_base.new_ScopedCopyableGeoInfo(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableGeoInfo___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
+    def get(self) -> "six::GeoInfo *":
+        """get(ScopedCopyableGeoInfo self) -> GeoInfo"""
+        return _six_base.ScopedCopyableGeoInfo_get(self)
+
+
+    def __ref__(self) -> "six::GeoInfo &":
+        """__ref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
+        return _six_base.ScopedCopyableGeoInfo___ref__(self)
+
+
+    def __deref__(self) -> "six::GeoInfo *":
+        """__deref__(ScopedCopyableGeoInfo self) -> GeoInfo"""
+        return _six_base.ScopedCopyableGeoInfo___deref__(self)
+
+
+    def reset(self, ptr: 'GeoInfo'=None) -> "void":
+        """
+        reset(ScopedCopyableGeoInfo self, GeoInfo ptr=None)
+        reset(ScopedCopyableGeoInfo self)
+        """
+        return _six_base.ScopedCopyableGeoInfo_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableGeoInfo
+    __del__ = lambda self: None
+    __swig_setmethods__["name"] = _six_base.ScopedCopyableGeoInfo_name_set
+    __swig_getmethods__["name"] = _six_base.ScopedCopyableGeoInfo_name_get
+    if _newclass:
+        name = _swig_property(_six_base.ScopedCopyableGeoInfo_name_get, _six_base.ScopedCopyableGeoInfo_name_set)
+    __swig_setmethods__["geoInfos"] = _six_base.ScopedCopyableGeoInfo_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_base.ScopedCopyableGeoInfo_geoInfos_get
+    if _newclass:
+        geoInfos = _swig_property(_six_base.ScopedCopyableGeoInfo_geoInfos_get, _six_base.ScopedCopyableGeoInfo_geoInfos_set)
+    __swig_setmethods__["desc"] = _six_base.ScopedCopyableGeoInfo_desc_set
+    __swig_getmethods__["desc"] = _six_base.ScopedCopyableGeoInfo_desc_get
+    if _newclass:
+        desc = _swig_property(_six_base.ScopedCopyableGeoInfo_desc_get, _six_base.ScopedCopyableGeoInfo_desc_set)
+    __swig_setmethods__["geometryLatLon"] = _six_base.ScopedCopyableGeoInfo_geometryLatLon_set
+    __swig_getmethods__["geometryLatLon"] = _six_base.ScopedCopyableGeoInfo_geometryLatLon_get
+    if _newclass:
+        geometryLatLon = _swig_property(_six_base.ScopedCopyableGeoInfo_geometryLatLon_get, _six_base.ScopedCopyableGeoInfo_geometryLatLon_set)
+
+    def __eq__(self, rhs: 'GeoInfo') -> "bool":
+        """__eq__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.ScopedCopyableGeoInfo___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'GeoInfo') -> "bool":
+        """__ne__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"""
+        return _six_base.ScopedCopyableGeoInfo___ne__(self, rhs)
+
+ScopedCopyableGeoInfo_swigregister = _six_base.ScopedCopyableGeoInfo_swigregister
+ScopedCopyableGeoInfo_swigregister(ScopedCopyableGeoInfo)
+
+
+def makeScopedCopyableGeoInfo() -> "mem::ScopedCopyablePtr< six::GeoInfo >":
+    """makeScopedCopyableGeoInfo() -> ScopedCopyableGeoInfo"""
+    return _six_base.makeScopedCopyableGeoInfo()
 class StdAutoRadarSensor(_object):
     """Proxy of C++ std::auto_ptr<(six::RadarSensor)> class."""
 
@@ -5755,111 +6787,212 @@ ScopedCopyableCompositeSCP_swigregister(ScopedCopyableCompositeSCP)
 def makeScopedCopyableCompositeSCP() -> "mem::ScopedCopyablePtr< six::CompositeSCP >":
     """makeScopedCopyableCompositeSCP() -> ScopedCopyableCompositeSCP"""
     return _six_base.makeScopedCopyableCompositeSCP()
-class StdAutoComponents(_object):
-    """Proxy of C++ std::auto_ptr<(six::Components)> class."""
+class StdAutoMatchInformation(_object):
+    """Proxy of C++ std::auto_ptr<(six::MatchInformation)> class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoComponents, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoMatchInformation, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoComponents, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoMatchInformation, name)
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::Components)> self) -> StdAutoComponents"""
-        this = _six_base.new_StdAutoComponents()
+        """__init__(std::auto_ptr<(six::MatchInformation)> self) -> StdAutoMatchInformation"""
+        this = _six_base.new_StdAutoMatchInformation()
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _six_base.delete_StdAutoComponents
+    __swig_destroy__ = _six_base.delete_StdAutoMatchInformation
     __del__ = lambda self: None
-StdAutoComponents_swigregister = _six_base.StdAutoComponents_swigregister
-StdAutoComponents_swigregister(StdAutoComponents)
+StdAutoMatchInformation_swigregister = _six_base.StdAutoMatchInformation_swigregister
+StdAutoMatchInformation_swigregister(StdAutoMatchInformation)
 
-class ScopedCopyableComponents(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::Components)> class."""
+class ScopedCopyableMatchInformation(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::MatchInformation)> class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableComponents, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableMatchInformation, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableComponents, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableMatchInformation, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(mem::ScopedCopyablePtr<(six::Components)> self, Components ptr=None) -> ScopedCopyableComponents
-        __init__(mem::ScopedCopyablePtr<(six::Components)> self) -> ScopedCopyableComponents
-        __init__(mem::ScopedCopyablePtr<(six::Components)> self, ScopedCopyableComponents rhs) -> ScopedCopyableComponents
+        __init__(mem::ScopedCopyablePtr<(six::MatchInformation)> self, MatchInformation ptr=None) -> ScopedCopyableMatchInformation
+        __init__(mem::ScopedCopyablePtr<(six::MatchInformation)> self) -> ScopedCopyableMatchInformation
+        __init__(mem::ScopedCopyablePtr<(six::MatchInformation)> self, ScopedCopyableMatchInformation rhs) -> ScopedCopyableMatchInformation
         """
-        this = _six_base.new_ScopedCopyableComponents(*args)
+        this = _six_base.new_ScopedCopyableMatchInformation(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
 
     def __nonzero__(self):
-        return _six_base.ScopedCopyableComponents___nonzero__(self)
+        return _six_base.ScopedCopyableMatchInformation___nonzero__(self)
     __bool__ = __nonzero__
 
 
 
-    def get(self) -> "six::Components *":
-        """get(ScopedCopyableComponents self) -> Components"""
-        return _six_base.ScopedCopyableComponents_get(self)
+    def get(self) -> "six::MatchInformation *":
+        """get(ScopedCopyableMatchInformation self) -> MatchInformation"""
+        return _six_base.ScopedCopyableMatchInformation_get(self)
 
 
-    def __ref__(self) -> "six::Components &":
-        """__ref__(ScopedCopyableComponents self) -> Components"""
-        return _six_base.ScopedCopyableComponents___ref__(self)
+    def __ref__(self) -> "six::MatchInformation &":
+        """__ref__(ScopedCopyableMatchInformation self) -> MatchInformation"""
+        return _six_base.ScopedCopyableMatchInformation___ref__(self)
 
 
-    def __deref__(self) -> "six::Components *":
-        """__deref__(ScopedCopyableComponents self) -> Components"""
-        return _six_base.ScopedCopyableComponents___deref__(self)
+    def __deref__(self) -> "six::MatchInformation *":
+        """__deref__(ScopedCopyableMatchInformation self) -> MatchInformation"""
+        return _six_base.ScopedCopyableMatchInformation___deref__(self)
 
 
-    def reset(self, ptr: 'Components'=None) -> "void":
+    def reset(self, ptr: 'MatchInformation'=None) -> "void":
         """
-        reset(ScopedCopyableComponents self, Components ptr=None)
-        reset(ScopedCopyableComponents self)
+        reset(ScopedCopyableMatchInformation self, MatchInformation ptr=None)
+        reset(ScopedCopyableMatchInformation self)
         """
-        return _six_base.ScopedCopyableComponents_reset(self, ptr)
+        return _six_base.ScopedCopyableMatchInformation_reset(self, ptr)
 
-    __swig_destroy__ = _six_base.delete_ScopedCopyableComponents
+    __swig_destroy__ = _six_base.delete_ScopedCopyableMatchInformation
     __del__ = lambda self: None
-    __swig_setmethods__["posVelError"] = _six_base.ScopedCopyableComponents_posVelError_set
-    __swig_getmethods__["posVelError"] = _six_base.ScopedCopyableComponents_posVelError_get
+    __swig_setmethods__["types"] = _six_base.ScopedCopyableMatchInformation_types_set
+    __swig_getmethods__["types"] = _six_base.ScopedCopyableMatchInformation_types_get
     if _newclass:
-        posVelError = _swig_property(_six_base.ScopedCopyableComponents_posVelError_get, _six_base.ScopedCopyableComponents_posVelError_set)
-    __swig_setmethods__["radarSensor"] = _six_base.ScopedCopyableComponents_radarSensor_set
-    __swig_getmethods__["radarSensor"] = _six_base.ScopedCopyableComponents_radarSensor_get
+        types = _swig_property(_six_base.ScopedCopyableMatchInformation_types_get, _six_base.ScopedCopyableMatchInformation_types_set)
+
+    def __eq__(self, rhs: 'MatchInformation') -> "bool":
+        """__eq__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_base.ScopedCopyableMatchInformation___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'MatchInformation') -> "bool":
+        """__ne__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"""
+        return _six_base.ScopedCopyableMatchInformation___ne__(self, rhs)
+
+ScopedCopyableMatchInformation_swigregister = _six_base.ScopedCopyableMatchInformation_swigregister
+ScopedCopyableMatchInformation_swigregister(ScopedCopyableMatchInformation)
+
+
+def makeScopedCopyableMatchInformation() -> "mem::ScopedCopyablePtr< six::MatchInformation >":
+    """makeScopedCopyableMatchInformation() -> ScopedCopyableMatchInformation"""
+    return _six_base.makeScopedCopyableMatchInformation()
+class StdAutoMatchType(_object):
+    """Proxy of C++ std::auto_ptr<(six::MatchType)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoMatchType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoMatchType, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(std::auto_ptr<(six::MatchType)> self) -> StdAutoMatchType"""
+        this = _six_base.new_StdAutoMatchType()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _six_base.delete_StdAutoMatchType
+    __del__ = lambda self: None
+StdAutoMatchType_swigregister = _six_base.StdAutoMatchType_swigregister
+StdAutoMatchType_swigregister(StdAutoMatchType)
+
+class ScopedCopyableMatchType(_object):
+    """Proxy of C++ mem::ScopedCopyablePtr<(six::MatchType)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableMatchType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableMatchType, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(mem::ScopedCopyablePtr<(six::MatchType)> self, MatchType ptr=None) -> ScopedCopyableMatchType
+        __init__(mem::ScopedCopyablePtr<(six::MatchType)> self) -> ScopedCopyableMatchType
+        __init__(mem::ScopedCopyablePtr<(six::MatchType)> self, ScopedCopyableMatchType rhs) -> ScopedCopyableMatchType
+        """
+        this = _six_base.new_ScopedCopyableMatchType(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __nonzero__(self):
+        return _six_base.ScopedCopyableMatchType___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
+    def get(self) -> "six::MatchType *":
+        """get(ScopedCopyableMatchType self) -> MatchType"""
+        return _six_base.ScopedCopyableMatchType_get(self)
+
+
+    def __ref__(self) -> "six::MatchType &":
+        """__ref__(ScopedCopyableMatchType self) -> MatchType"""
+        return _six_base.ScopedCopyableMatchType___ref__(self)
+
+
+    def __deref__(self) -> "six::MatchType *":
+        """__deref__(ScopedCopyableMatchType self) -> MatchType"""
+        return _six_base.ScopedCopyableMatchType___deref__(self)
+
+
+    def reset(self, ptr: 'MatchType'=None) -> "void":
+        """
+        reset(ScopedCopyableMatchType self, MatchType ptr=None)
+        reset(ScopedCopyableMatchType self)
+        """
+        return _six_base.ScopedCopyableMatchType_reset(self, ptr)
+
+    __swig_destroy__ = _six_base.delete_ScopedCopyableMatchType
+    __del__ = lambda self: None
+    __swig_setmethods__["collectorName"] = _six_base.ScopedCopyableMatchType_collectorName_set
+    __swig_getmethods__["collectorName"] = _six_base.ScopedCopyableMatchType_collectorName_get
     if _newclass:
-        radarSensor = _swig_property(_six_base.ScopedCopyableComponents_radarSensor_get, _six_base.ScopedCopyableComponents_radarSensor_set)
-    __swig_setmethods__["tropoError"] = _six_base.ScopedCopyableComponents_tropoError_set
-    __swig_getmethods__["tropoError"] = _six_base.ScopedCopyableComponents_tropoError_get
+        collectorName = _swig_property(_six_base.ScopedCopyableMatchType_collectorName_get, _six_base.ScopedCopyableMatchType_collectorName_set)
+    __swig_setmethods__["illuminatorName"] = _six_base.ScopedCopyableMatchType_illuminatorName_set
+    __swig_getmethods__["illuminatorName"] = _six_base.ScopedCopyableMatchType_illuminatorName_get
     if _newclass:
-        tropoError = _swig_property(_six_base.ScopedCopyableComponents_tropoError_get, _six_base.ScopedCopyableComponents_tropoError_set)
-    __swig_setmethods__["ionoError"] = _six_base.ScopedCopyableComponents_ionoError_set
-    __swig_getmethods__["ionoError"] = _six_base.ScopedCopyableComponents_ionoError_get
+        illuminatorName = _swig_property(_six_base.ScopedCopyableMatchType_illuminatorName_get, _six_base.ScopedCopyableMatchType_illuminatorName_set)
+    __swig_setmethods__["matchType"] = _six_base.ScopedCopyableMatchType_matchType_set
+    __swig_getmethods__["matchType"] = _six_base.ScopedCopyableMatchType_matchType_get
     if _newclass:
-        ionoError = _swig_property(_six_base.ScopedCopyableComponents_ionoError_get, _six_base.ScopedCopyableComponents_ionoError_set)
+        matchType = _swig_property(_six_base.ScopedCopyableMatchType_matchType_get, _six_base.ScopedCopyableMatchType_matchType_set)
+    __swig_setmethods__["typeID"] = _six_base.ScopedCopyableMatchType_typeID_set
+    __swig_getmethods__["typeID"] = _six_base.ScopedCopyableMatchType_typeID_get
+    if _newclass:
+        typeID = _swig_property(_six_base.ScopedCopyableMatchType_typeID_get, _six_base.ScopedCopyableMatchType_typeID_set)
+    __swig_setmethods__["currentIndex"] = _six_base.ScopedCopyableMatchType_currentIndex_set
+    __swig_getmethods__["currentIndex"] = _six_base.ScopedCopyableMatchType_currentIndex_get
+    if _newclass:
+        currentIndex = _swig_property(_six_base.ScopedCopyableMatchType_currentIndex_get, _six_base.ScopedCopyableMatchType_currentIndex_set)
+    __swig_setmethods__["matchCollects"] = _six_base.ScopedCopyableMatchType_matchCollects_set
+    __swig_getmethods__["matchCollects"] = _six_base.ScopedCopyableMatchType_matchCollects_get
+    if _newclass:
+        matchCollects = _swig_property(_six_base.ScopedCopyableMatchType_matchCollects_get, _six_base.ScopedCopyableMatchType_matchCollects_set)
 
-    def __eq__(self, rhs: 'Components') -> "bool":
-        """__eq__(ScopedCopyableComponents self, Components rhs) -> bool"""
-        return _six_base.ScopedCopyableComponents___eq__(self, rhs)
+    def __eq__(self, rhs: 'MatchType') -> "bool":
+        """__eq__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
+        return _six_base.ScopedCopyableMatchType___eq__(self, rhs)
 
 
-    def __ne__(self, rhs: 'Components') -> "bool":
-        """__ne__(ScopedCopyableComponents self, Components rhs) -> bool"""
-        return _six_base.ScopedCopyableComponents___ne__(self, rhs)
+    def __ne__(self, rhs: 'MatchType') -> "bool":
+        """__ne__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
+        return _six_base.ScopedCopyableMatchType___ne__(self, rhs)
 
-ScopedCopyableComponents_swigregister = _six_base.ScopedCopyableComponents_swigregister
-ScopedCopyableComponents_swigregister(ScopedCopyableComponents)
+ScopedCopyableMatchType_swigregister = _six_base.ScopedCopyableMatchType_swigregister
+ScopedCopyableMatchType_swigregister(ScopedCopyableMatchType)
 
 
-def makeScopedCopyableComponents() -> "mem::ScopedCopyablePtr< six::Components >":
-    """makeScopedCopyableComponents() -> ScopedCopyableComponents"""
-    return _six_base.makeScopedCopyableComponents()
+def makeScopedCopyableMatchType() -> "mem::ScopedCopyablePtr< six::MatchType >":
+    """makeScopedCopyableMatchType() -> ScopedCopyableMatchType"""
+    return _six_base.makeScopedCopyableMatchType()
 class StdAutoAmplitudeTable(_object):
     """Proxy of C++ std::auto_ptr<(six::AmplitudeTable)> class."""
 
@@ -5951,6 +7084,10 @@ class ScopedCloneableAmplitudeTable(_object):
         """clone(ScopedCloneableAmplitudeTable self) -> AmplitudeTable"""
         return _six_base.ScopedCloneableAmplitudeTable_clone(self)
 
+    __swig_setmethods__["table"] = _six_base.ScopedCloneableAmplitudeTable_table_set
+    __swig_getmethods__["table"] = _six_base.ScopedCloneableAmplitudeTable_table_get
+    if _newclass:
+        table = _swig_property(_six_base.ScopedCloneableAmplitudeTable_table_get, _six_base.ScopedCloneableAmplitudeTable_table_set)
     __swig_setmethods__["numEntries"] = _six_base.ScopedCloneableAmplitudeTable_numEntries_set
     __swig_getmethods__["numEntries"] = _six_base.ScopedCloneableAmplitudeTable_numEntries_get
     if _newclass:
@@ -6108,551 +7245,6 @@ ScopedCloneableCollectionInformation_swigregister(ScopedCloneableCollectionInfor
 def makeScopedCloneableCollectionInformation() -> "mem::ScopedCloneablePtr< six::CollectionInformation >":
     """makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"""
     return _six_base.makeScopedCloneableCollectionInformation()
-class StdAutoMatchType(_object):
-    """Proxy of C++ std::auto_ptr<(six::MatchType)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoMatchType, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, StdAutoMatchType, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(std::auto_ptr<(six::MatchType)> self) -> StdAutoMatchType"""
-        this = _six_base.new_StdAutoMatchType()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _six_base.delete_StdAutoMatchType
-    __del__ = lambda self: None
-StdAutoMatchType_swigregister = _six_base.StdAutoMatchType_swigregister
-StdAutoMatchType_swigregister(StdAutoMatchType)
-
-class ScopedCopyableMatchType(_object):
-    """Proxy of C++ mem::ScopedCopyablePtr<(six::MatchType)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ScopedCopyableMatchType, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ScopedCopyableMatchType, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(mem::ScopedCopyablePtr<(six::MatchType)> self, MatchType ptr=None) -> ScopedCopyableMatchType
-        __init__(mem::ScopedCopyablePtr<(six::MatchType)> self) -> ScopedCopyableMatchType
-        __init__(mem::ScopedCopyablePtr<(six::MatchType)> self, ScopedCopyableMatchType rhs) -> ScopedCopyableMatchType
-        """
-        this = _six_base.new_ScopedCopyableMatchType(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def __nonzero__(self):
-        return _six_base.ScopedCopyableMatchType___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
-    def get(self) -> "six::MatchType *":
-        """get(ScopedCopyableMatchType self) -> MatchType"""
-        return _six_base.ScopedCopyableMatchType_get(self)
-
-
-    def __ref__(self) -> "six::MatchType &":
-        """__ref__(ScopedCopyableMatchType self) -> MatchType"""
-        return _six_base.ScopedCopyableMatchType___ref__(self)
-
-
-    def __deref__(self) -> "six::MatchType *":
-        """__deref__(ScopedCopyableMatchType self) -> MatchType"""
-        return _six_base.ScopedCopyableMatchType___deref__(self)
-
-
-    def reset(self, ptr: 'MatchType'=None) -> "void":
-        """
-        reset(ScopedCopyableMatchType self, MatchType ptr=None)
-        reset(ScopedCopyableMatchType self)
-        """
-        return _six_base.ScopedCopyableMatchType_reset(self, ptr)
-
-    __swig_destroy__ = _six_base.delete_ScopedCopyableMatchType
-    __del__ = lambda self: None
-    __swig_setmethods__["collectorName"] = _six_base.ScopedCopyableMatchType_collectorName_set
-    __swig_getmethods__["collectorName"] = _six_base.ScopedCopyableMatchType_collectorName_get
-    if _newclass:
-        collectorName = _swig_property(_six_base.ScopedCopyableMatchType_collectorName_get, _six_base.ScopedCopyableMatchType_collectorName_set)
-    __swig_setmethods__["illuminatorName"] = _six_base.ScopedCopyableMatchType_illuminatorName_set
-    __swig_getmethods__["illuminatorName"] = _six_base.ScopedCopyableMatchType_illuminatorName_get
-    if _newclass:
-        illuminatorName = _swig_property(_six_base.ScopedCopyableMatchType_illuminatorName_get, _six_base.ScopedCopyableMatchType_illuminatorName_set)
-    __swig_setmethods__["matchType"] = _six_base.ScopedCopyableMatchType_matchType_set
-    __swig_getmethods__["matchType"] = _six_base.ScopedCopyableMatchType_matchType_get
-    if _newclass:
-        matchType = _swig_property(_six_base.ScopedCopyableMatchType_matchType_get, _six_base.ScopedCopyableMatchType_matchType_set)
-    __swig_setmethods__["typeID"] = _six_base.ScopedCopyableMatchType_typeID_set
-    __swig_getmethods__["typeID"] = _six_base.ScopedCopyableMatchType_typeID_get
-    if _newclass:
-        typeID = _swig_property(_six_base.ScopedCopyableMatchType_typeID_get, _six_base.ScopedCopyableMatchType_typeID_set)
-    __swig_setmethods__["currentIndex"] = _six_base.ScopedCopyableMatchType_currentIndex_set
-    __swig_getmethods__["currentIndex"] = _six_base.ScopedCopyableMatchType_currentIndex_get
-    if _newclass:
-        currentIndex = _swig_property(_six_base.ScopedCopyableMatchType_currentIndex_get, _six_base.ScopedCopyableMatchType_currentIndex_set)
-    __swig_setmethods__["matchCollects"] = _six_base.ScopedCopyableMatchType_matchCollects_set
-    __swig_getmethods__["matchCollects"] = _six_base.ScopedCopyableMatchType_matchCollects_get
-    if _newclass:
-        matchCollects = _swig_property(_six_base.ScopedCopyableMatchType_matchCollects_get, _six_base.ScopedCopyableMatchType_matchCollects_set)
-
-    def __eq__(self, rhs: 'MatchType') -> "bool":
-        """__eq__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
-        return _six_base.ScopedCopyableMatchType___eq__(self, rhs)
-
-
-    def __ne__(self, rhs: 'MatchType') -> "bool":
-        """__ne__(ScopedCopyableMatchType self, MatchType rhs) -> bool"""
-        return _six_base.ScopedCopyableMatchType___ne__(self, rhs)
-
-ScopedCopyableMatchType_swigregister = _six_base.ScopedCopyableMatchType_swigregister
-ScopedCopyableMatchType_swigregister(ScopedCopyableMatchType)
-
-
-def makeScopedCopyableMatchType() -> "mem::ScopedCopyablePtr< six::MatchType >":
-    """makeScopedCopyableMatchType() -> ScopedCopyableMatchType"""
-    return _six_base.makeScopedCopyableMatchType()
-class VectorMatchCollect(_object):
-    """Proxy of C++ std::vector<(six::MatchCollect)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorMatchCollect, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, VectorMatchCollect, name)
-    __repr__ = _swig_repr
-
-    def iterator(self) -> "swig::SwigPyIterator *":
-        """iterator(VectorMatchCollect self) -> SwigPyIterator"""
-        return _six_base.VectorMatchCollect_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self) -> "bool":
-        """__nonzero__(VectorMatchCollect self) -> bool"""
-        return _six_base.VectorMatchCollect___nonzero__(self)
-
-
-    def __bool__(self) -> "bool":
-        """__bool__(VectorMatchCollect self) -> bool"""
-        return _six_base.VectorMatchCollect___bool__(self)
-
-
-    def __len__(self) -> "std::vector< six::MatchCollect >::size_type":
-        """__len__(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"""
-        return _six_base.VectorMatchCollect___len__(self)
-
-
-    def __getslice__(self, i: 'std::vector< six::MatchCollect >::difference_type', j: 'std::vector< six::MatchCollect >::difference_type') -> "std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > *":
-        """__getslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j) -> VectorMatchCollect"""
-        return _six_base.VectorMatchCollect___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args) -> "void":
-        """
-        __setslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j)
-        __setslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j, VectorMatchCollect v)
-        """
-        return _six_base.VectorMatchCollect___setslice__(self, *args)
-
-
-    def __delslice__(self, i: 'std::vector< six::MatchCollect >::difference_type', j: 'std::vector< six::MatchCollect >::difference_type') -> "void":
-        """__delslice__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, std::vector< six::MatchCollect >::difference_type j)"""
-        return _six_base.VectorMatchCollect___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args) -> "void":
-        """
-        __delitem__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i)
-        __delitem__(VectorMatchCollect self, PySliceObject * slice)
-        """
-        return _six_base.VectorMatchCollect___delitem__(self, *args)
-
-
-    def __getitem__(self, *args) -> "std::vector< six::MatchCollect >::value_type const &":
-        """
-        __getitem__(VectorMatchCollect self, PySliceObject * slice) -> VectorMatchCollect
-        __getitem__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i) -> MatchCollect
-        """
-        return _six_base.VectorMatchCollect___getitem__(self, *args)
-
-
-    def __setitem__(self, *args) -> "void":
-        """
-        __setitem__(VectorMatchCollect self, PySliceObject * slice, VectorMatchCollect v)
-        __setitem__(VectorMatchCollect self, PySliceObject * slice)
-        __setitem__(VectorMatchCollect self, std::vector< six::MatchCollect >::difference_type i, MatchCollect x)
-        """
-        return _six_base.VectorMatchCollect___setitem__(self, *args)
-
-
-    def pop(self) -> "std::vector< six::MatchCollect >::value_type":
-        """pop(VectorMatchCollect self) -> MatchCollect"""
-        return _six_base.VectorMatchCollect_pop(self)
-
-
-    def append(self, x: 'MatchCollect') -> "void":
-        """append(VectorMatchCollect self, MatchCollect x)"""
-        return _six_base.VectorMatchCollect_append(self, x)
-
-
-    def empty(self) -> "bool":
-        """empty(VectorMatchCollect self) -> bool"""
-        return _six_base.VectorMatchCollect_empty(self)
-
-
-    def size(self) -> "std::vector< six::MatchCollect >::size_type":
-        """size(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"""
-        return _six_base.VectorMatchCollect_size(self)
-
-
-    def swap(self, v: 'VectorMatchCollect') -> "void":
-        """swap(VectorMatchCollect self, VectorMatchCollect v)"""
-        return _six_base.VectorMatchCollect_swap(self, v)
-
-
-    def begin(self) -> "std::vector< six::MatchCollect >::iterator":
-        """begin(VectorMatchCollect self) -> std::vector< six::MatchCollect >::iterator"""
-        return _six_base.VectorMatchCollect_begin(self)
-
-
-    def end(self) -> "std::vector< six::MatchCollect >::iterator":
-        """end(VectorMatchCollect self) -> std::vector< six::MatchCollect >::iterator"""
-        return _six_base.VectorMatchCollect_end(self)
-
-
-    def rbegin(self) -> "std::vector< six::MatchCollect >::reverse_iterator":
-        """rbegin(VectorMatchCollect self) -> std::vector< six::MatchCollect >::reverse_iterator"""
-        return _six_base.VectorMatchCollect_rbegin(self)
-
-
-    def rend(self) -> "std::vector< six::MatchCollect >::reverse_iterator":
-        """rend(VectorMatchCollect self) -> std::vector< six::MatchCollect >::reverse_iterator"""
-        return _six_base.VectorMatchCollect_rend(self)
-
-
-    def clear(self) -> "void":
-        """clear(VectorMatchCollect self)"""
-        return _six_base.VectorMatchCollect_clear(self)
-
-
-    def get_allocator(self) -> "std::vector< six::MatchCollect >::allocator_type":
-        """get_allocator(VectorMatchCollect self) -> std::vector< six::MatchCollect >::allocator_type"""
-        return _six_base.VectorMatchCollect_get_allocator(self)
-
-
-    def pop_back(self) -> "void":
-        """pop_back(VectorMatchCollect self)"""
-        return _six_base.VectorMatchCollect_pop_back(self)
-
-
-    def erase(self, *args) -> "std::vector< six::MatchCollect >::iterator":
-        """
-        erase(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator pos) -> std::vector< six::MatchCollect >::iterator
-        erase(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator first, std::vector< six::MatchCollect >::iterator last) -> std::vector< six::MatchCollect >::iterator
-        """
-        return _six_base.VectorMatchCollect_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(six::MatchCollect)> self) -> VectorMatchCollect
-        __init__(std::vector<(six::MatchCollect)> self, VectorMatchCollect arg2) -> VectorMatchCollect
-        __init__(std::vector<(six::MatchCollect)> self, std::vector< six::MatchCollect >::size_type size) -> VectorMatchCollect
-        __init__(std::vector<(six::MatchCollect)> self, std::vector< six::MatchCollect >::size_type size, MatchCollect value) -> VectorMatchCollect
-        """
-        this = _six_base.new_VectorMatchCollect(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def push_back(self, x: 'MatchCollect') -> "void":
-        """push_back(VectorMatchCollect self, MatchCollect x)"""
-        return _six_base.VectorMatchCollect_push_back(self, x)
-
-
-    def front(self) -> "std::vector< six::MatchCollect >::value_type const &":
-        """front(VectorMatchCollect self) -> MatchCollect"""
-        return _six_base.VectorMatchCollect_front(self)
-
-
-    def back(self) -> "std::vector< six::MatchCollect >::value_type const &":
-        """back(VectorMatchCollect self) -> MatchCollect"""
-        return _six_base.VectorMatchCollect_back(self)
-
-
-    def assign(self, n: 'std::vector< six::MatchCollect >::size_type', x: 'MatchCollect') -> "void":
-        """assign(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type n, MatchCollect x)"""
-        return _six_base.VectorMatchCollect_assign(self, n, x)
-
-
-    def resize(self, *args) -> "void":
-        """
-        resize(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type new_size)
-        resize(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type new_size, MatchCollect x)
-        """
-        return _six_base.VectorMatchCollect_resize(self, *args)
-
-
-    def insert(self, *args) -> "void":
-        """
-        insert(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator pos, MatchCollect x) -> std::vector< six::MatchCollect >::iterator
-        insert(VectorMatchCollect self, std::vector< six::MatchCollect >::iterator pos, std::vector< six::MatchCollect >::size_type n, MatchCollect x)
-        """
-        return _six_base.VectorMatchCollect_insert(self, *args)
-
-
-    def reserve(self, n: 'std::vector< six::MatchCollect >::size_type') -> "void":
-        """reserve(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type n)"""
-        return _six_base.VectorMatchCollect_reserve(self, n)
-
-
-    def capacity(self) -> "std::vector< six::MatchCollect >::size_type":
-        """capacity(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"""
-        return _six_base.VectorMatchCollect_capacity(self)
-
-
-    def __getstate__(self):
-    # Return a nonempty (thus non-false) tuple with dummy value in first position
-        return (-1, tuple(pickle.dumps(elem) for elem in self))
-
-    def __setstate__(self, state):
-        self.__init__()
-    # State will have a dummy entry in the first position
-        for elem in state[1]:
-            self.push_back(pickle.loads(elem))
-
-    __swig_destroy__ = _six_base.delete_VectorMatchCollect
-    __del__ = lambda self: None
-VectorMatchCollect_swigregister = _six_base.VectorMatchCollect_swigregister
-VectorMatchCollect_swigregister(VectorMatchCollect)
-
-class VectorScopedCopyableMatchType(_object):
-    """Proxy of C++ std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, VectorScopedCopyableMatchType, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, VectorScopedCopyableMatchType, name)
-    __repr__ = _swig_repr
-
-    def iterator(self) -> "swig::SwigPyIterator *":
-        """iterator(VectorScopedCopyableMatchType self) -> SwigPyIterator"""
-        return _six_base.VectorScopedCopyableMatchType_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self) -> "bool":
-        """__nonzero__(VectorScopedCopyableMatchType self) -> bool"""
-        return _six_base.VectorScopedCopyableMatchType___nonzero__(self)
-
-
-    def __bool__(self) -> "bool":
-        """__bool__(VectorScopedCopyableMatchType self) -> bool"""
-        return _six_base.VectorScopedCopyableMatchType___bool__(self)
-
-
-    def __len__(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
-        """__len__(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
-        return _six_base.VectorScopedCopyableMatchType___len__(self)
-
-
-    def __getslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type') -> "std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > > *":
-        """__getslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j) -> VectorScopedCopyableMatchType"""
-        return _six_base.VectorScopedCopyableMatchType___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args) -> "void":
-        """
-        __setslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j)
-        __setslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j, VectorScopedCopyableMatchType v)
-        """
-        return _six_base.VectorScopedCopyableMatchType___setslice__(self, *args)
-
-
-    def __delslice__(self, i: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type', j: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type') -> "void":
-        """__delslice__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type j)"""
-        return _six_base.VectorScopedCopyableMatchType___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args) -> "void":
-        """
-        __delitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i)
-        __delitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
-        """
-        return _six_base.VectorScopedCopyableMatchType___delitem__(self, *args)
-
-
-    def __getitem__(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
-        """
-        __getitem__(VectorScopedCopyableMatchType self, PySliceObject * slice) -> VectorScopedCopyableMatchType
-        __getitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i) -> ScopedCopyableMatchType
-        """
-        return _six_base.VectorScopedCopyableMatchType___getitem__(self, *args)
-
-
-    def __setitem__(self, *args) -> "void":
-        """
-        __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice, VectorScopedCopyableMatchType v)
-        __setitem__(VectorScopedCopyableMatchType self, PySliceObject * slice)
-        __setitem__(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::difference_type i, ScopedCopyableMatchType x)
-        """
-        return _six_base.VectorScopedCopyableMatchType___setitem__(self, *args)
-
-
-    def pop(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type":
-        """pop(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
-        return _six_base.VectorScopedCopyableMatchType_pop(self)
-
-
-    def append(self, x: 'ScopedCopyableMatchType') -> "void":
-        """append(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
-        return _six_base.VectorScopedCopyableMatchType_append(self, x)
-
-
-    def empty(self) -> "bool":
-        """empty(VectorScopedCopyableMatchType self) -> bool"""
-        return _six_base.VectorScopedCopyableMatchType_empty(self)
-
-
-    def size(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
-        """size(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
-        return _six_base.VectorScopedCopyableMatchType_size(self)
-
-
-    def swap(self, v: 'VectorScopedCopyableMatchType') -> "void":
-        """swap(VectorScopedCopyableMatchType self, VectorScopedCopyableMatchType v)"""
-        return _six_base.VectorScopedCopyableMatchType_swap(self, v)
-
-
-    def begin(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
-        """begin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator"""
-        return _six_base.VectorScopedCopyableMatchType_begin(self)
-
-
-    def end(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
-        """end(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator"""
-        return _six_base.VectorScopedCopyableMatchType_end(self)
-
-
-    def rbegin(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator":
-        """rbegin(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator"""
-        return _six_base.VectorScopedCopyableMatchType_rbegin(self)
-
-
-    def rend(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator":
-        """rend(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::reverse_iterator"""
-        return _six_base.VectorScopedCopyableMatchType_rend(self)
-
-
-    def clear(self) -> "void":
-        """clear(VectorScopedCopyableMatchType self)"""
-        return _six_base.VectorScopedCopyableMatchType_clear(self)
-
-
-    def get_allocator(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type":
-        """get_allocator(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type"""
-        return _six_base.VectorScopedCopyableMatchType_get_allocator(self)
-
-
-    def pop_back(self) -> "void":
-        """pop_back(VectorScopedCopyableMatchType self)"""
-        return _six_base.VectorScopedCopyableMatchType_pop_back(self)
-
-
-    def erase(self, *args) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator":
-        """
-        erase(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
-        erase(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator first, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator last) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
-        """
-        return _six_base.VectorScopedCopyableMatchType_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self) -> VectorScopedCopyableMatchType
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, VectorScopedCopyableMatchType arg2) -> VectorScopedCopyableMatchType
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type size) -> VectorScopedCopyableMatchType
-        __init__(std::vector<(mem::ScopedCopyablePtr<(six::MatchType)>)> self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type size, ScopedCopyableMatchType value) -> VectorScopedCopyableMatchType
-        """
-        this = _six_base.new_VectorScopedCopyableMatchType(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def push_back(self, x: 'ScopedCopyableMatchType') -> "void":
-        """push_back(VectorScopedCopyableMatchType self, ScopedCopyableMatchType x)"""
-        return _six_base.VectorScopedCopyableMatchType_push_back(self, x)
-
-
-    def front(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
-        """front(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
-        return _six_base.VectorScopedCopyableMatchType_front(self)
-
-
-    def back(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type const &":
-        """back(VectorScopedCopyableMatchType self) -> ScopedCopyableMatchType"""
-        return _six_base.VectorScopedCopyableMatchType_back(self)
-
-
-    def assign(self, n: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type', x: 'ScopedCopyableMatchType') -> "void":
-        """assign(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n, ScopedCopyableMatchType x)"""
-        return _six_base.VectorScopedCopyableMatchType_assign(self, n, x)
-
-
-    def resize(self, *args) -> "void":
-        """
-        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type new_size)
-        resize(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type new_size, ScopedCopyableMatchType x)
-        """
-        return _six_base.VectorScopedCopyableMatchType_resize(self, *args)
-
-
-    def insert(self, *args) -> "void":
-        """
-        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos, ScopedCopyableMatchType x) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator
-        insert(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator pos, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n, ScopedCopyableMatchType x)
-        """
-        return _six_base.VectorScopedCopyableMatchType_insert(self, *args)
-
-
-    def reserve(self, n: 'std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type') -> "void":
-        """reserve(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n)"""
-        return _six_base.VectorScopedCopyableMatchType_reserve(self, n)
-
-
-    def capacity(self) -> "std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type":
-        """capacity(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"""
-        return _six_base.VectorScopedCopyableMatchType_capacity(self)
-
-
-    def __getstate__(self):
-    # Return a nonempty (thus non-false) tuple with dummy value in first position
-        return (-1, tuple(pickle.dumps(elem) for elem in self))
-
-    def __setstate__(self, state):
-        self.__init__()
-    # State will have a dummy entry in the first position
-        for elem in state[1]:
-            self.push_back(pickle.loads(elem))
-
-    __swig_destroy__ = _six_base.delete_VectorScopedCopyableMatchType
-    __del__ = lambda self: None
-VectorScopedCopyableMatchType_swigregister = _six_base.VectorScopedCopyableMatchType_swigregister
-VectorScopedCopyableMatchType_swigregister(VectorScopedCopyableMatchType)
-
 # This file is compatible with both classic and new-style classes.
 
 

@@ -32,6 +32,8 @@ def writeXML(complexData, pathname):
     schemaPaths = VectorString()
     schemaPaths.push_back( os.environ['SIX_SCHEMA_PATH'] )
     xmlControl = ComplexXMLControl()
+    print('pathname: {}'.format(pathname))
+    print(type(pathname))
     outputStream = FileOutputStream(pathname)
     try:
         xml = xmlControl.toXML(complexData, schemaPaths)

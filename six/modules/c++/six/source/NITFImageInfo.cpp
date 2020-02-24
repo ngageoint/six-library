@@ -42,7 +42,7 @@ public:
 
     const six::LUT* operator()() const
     {
-        return mData.getDisplayLUT();
+        return mData.getDisplayLUT().get();
     }
 
 private:

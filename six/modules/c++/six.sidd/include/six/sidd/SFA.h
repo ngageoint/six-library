@@ -1,24 +1,24 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
- * =========================================================================
- *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
- *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
- * see <http://www.gnu.org/licenses/>.
- *
- */
+* This file is part of six.sidd-c++
+* =========================================================================
+*
+* (C) Copyright 2004 - 2014, MDA Information Systems LLC
+*
+* six.sidd-c++ is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this program; If not,
+* see <http://www.gnu.org/licenses/>.
+*
+*/
 #ifndef __SIX_SIDD_SFA_H__
 #define __SIX_SIDD_SFA_H__
 
@@ -81,28 +81,28 @@ struct SFAPoint : public SFAGeometry
     double x, y, z, m;
 
     SFAPoint() :
-        SFAGeometry(TYPE_NAME), 
-        x(0), 
+        SFAGeometry(TYPE_NAME),
+        x(0),
         y(0),
         z(::six::Init::undefined<double>()),
         m(::six::Init::undefined<double>())
     {
     }
-    
+
     SFAPoint(double _x, double _y) :
-        SFAGeometry(TYPE_NAME), 
-        x(_x), 
+        SFAGeometry(TYPE_NAME),
+        x(_x),
         y(_y),
         z(::six::Init::undefined<double>()),
         m(::six::Init::undefined<double>())
     {
     }
-    
+
     SFAPoint(double _x, double _y, double _z, double _m) :
-        SFAGeometry(TYPE_NAME), 
-        x(_x), 
-        y(_y), 
-        z(_z), 
+        SFAGeometry(TYPE_NAME),
+        x(_x),
+        y(_y),
+        z(_z),
         m(_m)
     {
     }
@@ -606,7 +606,7 @@ struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
 
     virtual SFAGeocentricCoordinateSystem* clone() const
     {
-        return new SFAGeocentricCoordinateSystem(*this); 
+        return new SFAGeocentricCoordinateSystem(*this);
     }
 
     bool operator==(const SFAGeocentricCoordinateSystem& rhs) const

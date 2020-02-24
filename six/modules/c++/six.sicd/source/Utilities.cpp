@@ -88,7 +88,7 @@ void readAndConvertSICD(six::NITFReadControl& reader,
         {
             rowsToRead = endRow - row;
         }
-
+        
         // Read into the temp buffer
         types::RowCol<size_t> swathOffset(row, offset.col);
         types::RowCol<size_t> swathExtent(rowsToRead, extent.col);

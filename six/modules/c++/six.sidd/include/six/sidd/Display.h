@@ -22,12 +22,15 @@
 #ifndef __SIX_DISPLAY_H__
 #define __SIX_DISPLAY_H__
 
-#include <import/mem.h>
-
-#include "six/Types.h"
-#include "six/Init.h"
-#include "six/Parameter.h"
-#include "six/ParameterCollection.h"
+#include <mem/ScopedCopyablePtr.h>
+#include <mem/ScopedCloneablePtr.h>
+#include <six/Types.h>
+#include <six/Init.h>
+#include <six/Parameter.h>
+#include <six/ParameterCollection.h>
+#include <six/sidd/Enums.h>
+#include <six/sidd/Filter.h>
+#include <six/sidd/LookupTable.h>
 
 namespace six
 {
@@ -49,12 +52,13 @@ struct Remap
         remapLUT(lut)
     {
     }
+
     virtual ~Remap()
     {
     }
 
     DisplayType displayType;
-    mem::ScopedCloneablePtr<LUT> remapLUT; // MonoLUT or ColorLUT or NULL
+    mem::ScopedCopyablePtr<LUT> remapLUT; // MonoLUT or ColorLUT or NULL
 
     virtual Remap* clone() const = 0;
 
@@ -91,9 +95,6 @@ struct MonochromeDisplayRemap : public Remap
     {
         this->displayType = DisplayType::MONO;
     }
-    virtual ~MonochromeDisplayRemap()
-    {
-    }
 
     /*!
      *  Clone this object, and any sub-LUT
@@ -129,9 +130,6 @@ struct ColorDisplayRemap : public Remap
     {
         this->displayType = DisplayType::COLOR;
     }
-    virtual ~ColorDisplayRemap()
-    {
-    }
 
     //!  Clone the remap
     virtual Remap* clone() const
@@ -154,17 +152,9 @@ struct MonitorCompensationApplied
 {
     double gamma;
     double xMin;
+
     //! Constructor
-    MonitorCompensationApplied()
-    {
-        gamma = Init::undefined<double>();
-        xMin = Init::undefined<double>();
-    }
-    //! Copy this
-    MonitorCompensationApplied* clone() const
-    {
-        return new MonitorCompensationApplied(*this);
-    }
+    MonitorCompensationApplied();
 
     //! Equality operator
     bool operator==(const MonitorCompensationApplied& rhs) const
@@ -180,11 +170,13 @@ struct MonitorCompensationApplied
 
 /*!
  *  \struct DRAHistogramOverrides
- *  \brief 
+ *  \brief
  *
  */
 struct DRAHistogramOverrides
 {
+    DRAHistogramOverrides();
+
     /*!
      *  Suggested override for the low clip point in the
      *  ELT DRA application.  Referred to as Pmin in SIPS docs.
@@ -198,17 +190,6 @@ struct DRAHistogramOverrides
      */
     int clipMax;
 
-    DRAHistogramOverrides()
-    {
-        clipMin = Init::undefined<int>();
-        clipMax = Init::undefined<int>();
-    }
-
-    DRAHistogramOverrides* clone() const
-    {
-        return new DRAHistogramOverrides(*this);
-    }
-
     //! Equality operator
     bool operator==(const DRAHistogramOverrides& rhs) const
     {
@@ -221,33 +202,231 @@ struct DRAHistogramOverrides
     }
 };
 
+struct BandEqualization
+{
+    BandEqualizationAlgorithm algorithm;
+    std::vector<mem::ScopedCopyablePtr<LookupTable> > bandLUTs;
+
+    bool operator==(const BandEqualization& rhs) const;
+    bool operator!=(const BandEqualization& rhs) const
+    {
+        return !(*this == rhs);
+    }
+};
+
+struct RRDS
+{
+    //! Algorithm used to perform RRDS downsampling
+    DownsamplingMethod downsamplingMethod;
+
+    /*!
+     * Anti-aliasing filter.  Included for all values except
+     * downsamplingMethod = DECIMATE or MAX_PIXEL.
+     */
+    mem::ScopedCopyablePtr<Filter> antiAlias;
+
+    /*!
+     * Interpolation filter.  Included for all values except
+     * downsamplingMethod = DECIMATE or MAX_PIXEL.
+     */
+    mem::ScopedCopyablePtr<Filter> interpolation;
+
+    bool operator==(const RRDS& rhs) const;
+    bool operator!=(const RRDS& rhs) const
+    {
+        return !(*this == rhs);
+    }
+};
+
+struct ProductGenerationOptions
+{
+    mem::ScopedCopyablePtr<BandEqualization> bandEqualization;
+    mem::ScopedCopyablePtr<Filter> modularTransferFunctionRestoration;
+
+    // Required
+    mem::ScopedCopyablePtr<LookupTable> dataRemapping;
+
+    mem::ScopedCopyablePtr<Filter> asymmetricPixelCorrection;
+
+    bool operator==(const ProductGenerationOptions& rhs) const;
+    bool operator!=(const ProductGenerationOptions& rhs) const
+    {
+        return !(*this == rhs);
+    }
+};
+
+struct NonInteractiveProcessing
+{
+    ProductGenerationOptions productGenerationOptions;
+    RRDS rrds;
+
+    bool operator==(const NonInteractiveProcessing& rhs) const;
+    bool operator!=(const NonInteractiveProcessing& rhs) const
+    {
+        return !(*this == rhs);
+    }
+};
+
+struct Scaling
+{
+    Filter antiAlias;
+    Filter interpolation;
+
+    bool operator==(const Scaling& rhs) const;
+    bool operator!=(const Scaling& rhs) const
+    {
+        return !(*this == rhs);
+    }
+};
+
+struct Orientation
+{
+    //! Describes the shadow direction relative to the pixels in the file.
+    ShadowDirection shadowDirection;
+    bool operator==(const Orientation& rhs) const
+    {
+        return shadowDirection == rhs.shadowDirection;
+    }
+    bool operator!=(const Orientation& rhs) const
+    {
+        return !(*this == rhs);
+    }
+};
+
+struct SharpnessEnhancement
+{
+    // Must include exactly one of modularTransferFunctionCompensation or
+    // modularTransferFunctionEnhancement
+    mem::ScopedCopyablePtr<Filter> modularTransferFunctionCompensation;
+    mem::ScopedCopyablePtr<Filter> modularTransferFunctionEnhancement;
+
+    bool operator==(const SharpnessEnhancement& rhs) const;
+    bool operator!=(const SharpnessEnhancement& rhs) const
+    {
+        return !(*this == rhs);
+    }
+};
+
+struct ColorManagementModule
+{
+    RenderingIntent renderingIntent;
+
+    std::string sourceProfile;
+    std::string displayProfile;
+    std::string iccProfile;
+
+    bool operator==(const ColorManagementModule& rhs) const;
+    bool operator!=(const ColorManagementModule& rhs) const;
+};
+
+struct ColorSpaceTransform
+{
+    ColorManagementModule colorManagementModule;
+    bool operator==(const ColorSpaceTransform& rhs) const
+    {
+        return (colorManagementModule == rhs.colorManagementModule);
+    }
+    bool operator!=(const ColorSpaceTransform& rhs) const
+    {
+        return !(*this == rhs);
+    }
+};
+
+struct GeometricTransform
+{
+    Scaling scaling;
+    Orientation orientation;
+
+    bool operator==(const GeometricTransform& rhs) const;
+    bool operator!=(const GeometricTransform& rhs) const
+    {
+        return !(*this == rhs);
+    }
+};
+
+struct DynamicRangeAdjustment
+{
+    struct DRAParameters
+    {
+        DRAParameters();
+
+        double pMin; //! DRA clip low point
+        double pMax; //! DRA clip high point
+
+        double eMinModifier; //! eMin modifier
+        double eMaxModifier; //! eMax modifier
+
+        bool operator==(const DRAParameters& rhs) const;
+        bool operator!=(const DRAParameters& rhs) const
+        {
+            return !(*this == rhs);
+        }
+    };
+
+    struct DRAOverrides
+    {
+        DRAOverrides();
+
+        double subtractor; //! Subtractor value used to reduce haze in the image
+        double multiplier; //! Multiplier value used to brighten the image data
+
+        bool operator==(const DRAOverrides& rhs) const;
+        bool operator!=(const DRAOverrides& rhs) const
+        {
+            return !(*this == rhs);
+        }
+    };
+
+    DRAType algorithmType; //! Algorithm used for dynamic range adjustment
+    size_t bandStatsSource; //! Indicates which band to use for DRA stats
+
+    // In SIDD 1.0, must include exactly one of draParameters or draOverrides
+    // In SIDD 2.0, include draParameters if algorithmType == AUTO,
+    //              may include draOverrides unless algorithmType == None
+    mem::ScopedCopyablePtr<DRAParameters> draParameters;
+    mem::ScopedCopyablePtr<DRAOverrides> draOverrides;
+    bool operator==(const DynamicRangeAdjustment& rhs) const;
+    bool operator!=(const DynamicRangeAdjustment& rhs)
+    {
+        return !(*this == rhs);
+    }
+};
+
+struct InteractiveProcessing
+{
+    GeometricTransform geometricTransform;
+    SharpnessEnhancement sharpnessEnhancement;
+    mem::ScopedCopyablePtr<ColorSpaceTransform> colorSpaceTransform;
+    DynamicRangeAdjustment dynamicRangeAdjustment;
+    mem::ScopedCopyablePtr<LookupTable> tonalTransferCurve;
+
+    bool operator==(const InteractiveProcessing& rhs) const;
+    bool operator!=(const InteractiveProcessing& rhs) const
+    {
+        return !(*this == rhs);
+    }
+};
+
 /*
- *  The Display grouping contains information required for 
- *  proper display of the imagery. The parameters in this block 
+ *  The Display grouping contains information required for
+ *  proper display of the imagery. The parameters in this block
  *  are expected to be utilized in conjunction with a viewer compliant
- *  with the NGA Softcopy Image Processing Standard (SIPS) v2.1. In 
- *  addition, it also describes any remaps or monitor compensations 
- *  applied to the data, as well as, differentiating whether a color 
+ *  with the NGA Softcopy Image Processing Standard (SIPS) v2.1. In
+ *  addition, it also describes any remaps or monitor compensations
+ *  applied to the data, as well as, differentiating whether a color
  *  remap or monochrome remap was applied to the data.
  */
 struct Display
 {
     Display();
-    virtual ~Display()
-    {
-    }
-
-    /*!
-     *  Contract requires Display to clone itself properly, irrespective
-     *  of whether it is color or mono data.
-     */
-    Display* clone() const;
 
     /*!
      *  Defines the pixel type, based on enumeration and definition in
      *  D&E
      */
     PixelType pixelType;
+
+    // Beginning of SIDD 1.0-only section
 
     /*!
      *  (Optional) Information regarding the encoding of the pixel data.
@@ -256,20 +435,47 @@ struct Display
     mem::ScopedCloneablePtr<Remap> remapInformation;
 
     /*!
-     *  Recommended ELT magnification method for this data.
+     *  (Optional) Recommended ELT magnification method for this data.
      */
     MagnificationMethod magnificationMethod;
 
     /*!
-     *  Recommended ELT decimation method for this data.
+     *  (Optional) Recommended ELT decimation method for this data.
      */
     DecimationMethod decimationMethod;
 
-    mem::ScopedCloneablePtr<DRAHistogramOverrides> histogramOverrides;
+    /*!
+     * (Optional) Recommended ELT DRA overrides.
+     */
+    mem::ScopedCopyablePtr<DRAHistogramOverrides> histogramOverrides;
 
-    mem::ScopedCloneablePtr<MonitorCompensationApplied> 
+    /*!
+     * (Optional) Describes monitor compensation that may have been applied to
+     * the product during processing.
+     */
+    mem::ScopedCopyablePtr<MonitorCompensationApplied>
             monitorCompensationApplied;
 
+    // End of SIDD 1.0-only section
+    // Beginning of SIDD 2.0-only section
+
+    //Required
+    size_t numBands;
+    //Optional
+    size_t defaultBandDisplay;
+
+    //Required
+    std::vector<mem::ScopedCopyablePtr<NonInteractiveProcessing> >
+            nonInteractiveProcessing;
+    std::vector<mem::ScopedCopyablePtr<InteractiveProcessing> >
+            interactiveProcessing;
+
+    // End of SIDD 2.0-only section
+
+    /*!
+     * Extensible parameters used to support profile-specific needs related to
+     * product display.
+     */
     ParameterCollection displayExtensions;
 
     bool operator==(const Display& rhs) const;
@@ -278,8 +484,7 @@ struct Display
         return !(*this == rhs);
     }
 };
+}
+}
 
-}
-}
 #endif
-

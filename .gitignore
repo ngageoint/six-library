@@ -17,7 +17,9 @@
 
 # Build artifacts
 target/
+target.dbg/
 install/
+install.dbg/
 
 # Drivers
 six/projects/csm/external/csm-master/

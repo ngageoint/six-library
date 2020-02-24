@@ -37,26 +37,33 @@ public:
                          logging::Logger* log = NULL,
                          bool ownLog = false);
 
-    virtual XMLElem convertRadiometryToXML(
-        const Radiometric *obj, 
-        XMLElem parent = NULL) const;
+    XMLElem convertRadiometryToXML(
+        const Radiometric *obj,
+        XMLElem parent = NULL) const override;
 
-    virtual void parseRadiometryFromXML(
-        const XMLElem radiometricXML, 
-        Radiometric *obj) const;
+    void parseRadiometryFromXML(
+        const XMLElem radiometricXML,
+        Radiometric *obj) const override;
+
+    XMLElem convertMatchInformationToXML(
+        const MatchInformation& matchInfo,
+        XMLElem parent) const override;
+
+    void parseMatchInformationFromXML(
+        const XMLElem matchInfoXML,
+        MatchInformation* info) const override;
 
 protected:
 
-    virtual XMLElem convertCompositeSCPToXML(
+    XMLElem convertCompositeSCPToXML(
         const ErrorStatistics* errorStatistics,
-        XMLElem parent = NULL) const;
+        XMLElem parent = NULL) const override;
 
-    virtual void parseCompositeSCPFromXML(
+    void parseCompositeSCPFromXML(
         const XMLElem errorStatsXML,
-        ErrorStatistics* errorStatistics) const;
+        ErrorStatistics* errorStatistics) const override;
 
 };
-
 }
 
 #endif

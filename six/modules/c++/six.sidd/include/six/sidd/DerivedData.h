@@ -22,24 +22,24 @@
 #ifndef __SIX_DERIVED_DATA_H__
 #define __SIX_DERIVED_DATA_H__
 
-#include <mem/ScopedCloneablePtr.h>
 #include <mem/ScopedCopyablePtr.h>
-
-#include "six/Data.h"
-#include "six/ErrorStatistics.h"
-#include "six/sidd/ProductCreation.h"
-#include "six/sidd/Display.h"
-#include "six/sidd/GeographicAndTarget.h"
-#include "six/sidd/Measurement.h"
-#include "six/sidd/ExploitationFeatures.h"
-#include "six/sidd/ProductProcessing.h"
-#include "six/sidd/DownstreamReprocessing.h"
-#include "six/Radiometric.h"
-#include "six/sidd/Annotations.h"
+#include <six/Data.h>
+#include <six/ErrorStatistics.h>
+#include <six/MatchInformation.h>
+#include <six/sidd/ProductCreation.h>
+#include <six/sidd/Display.h>
+#include <six/sidd/GeographicAndTarget.h>
+#include <six/sidd/Measurement.h>
+#include <six/sidd/ExploitationFeatures.h>
+#include <six/sidd/ProductProcessing.h>
+#include <six/sidd/DownstreamReprocessing.h>
+#include <six/Radiometric.h>
+#include <six/sidd/Compression.h>
+#include <six/sidd/DigitalElevationData.h>
+#include <six/sidd/Annotations.h>
 
 namespace six
 {
-
 namespace sidd
 {
 /*!
@@ -52,18 +52,17 @@ namespace sidd
  */
 struct DerivedData: public Data
 {
-
     /*!
      *  Information related to processor, classification,
      *  and product type
      */
-    mem::ScopedCloneablePtr<ProductCreation> productCreation;
+    mem::ScopedCopyablePtr<ProductCreation> productCreation;
 
     /*!
      *  Contains information on the parameters needed to display
      *  the product in an exploitation tool
      */
-    mem::ScopedCloneablePtr<Display> display;
+    mem::ScopedCopyablePtr<Display> display;
 
     /*!
      *  Contains generic and extensible targeting and geographic
@@ -75,18 +74,18 @@ struct DerivedData: public Data
      *  Contains the meta-data necessary for performing
      *  measurements
      */
-    mem::ScopedCloneablePtr<Measurement> measurement;
+    mem::ScopedCopyablePtr<Measurement> measurement;
 
     /*!
      *  Computed metadata for collections
      */
-    mem::ScopedCloneablePtr<ExploitationFeatures> exploitationFeatures;
+    mem::ScopedCopyablePtr<ExploitationFeatures> exploitationFeatures;
 
     /*!
      *  (Optional) Contains meta-data related to algorithms used
      *  during product generation
      */
-    mem::ScopedCloneablePtr<ProductProcessing> productProcessing;
+    mem::ScopedCopyablePtr<ProductProcessing> productProcessing;
 
     /*!
      *  (Optional) Contains meta-data related to downstream
@@ -104,10 +103,26 @@ struct DerivedData: public Data
      */
     mem::ScopedCopyablePtr<Radiometric> radiometric;
 
+    //!  (Optional) Params describing other related imaging collections
+    mem::ScopedCopyablePtr<MatchInformation> matchInformation;
+
+    //!  (Optional) Params describing compression
+    mem::ScopedCopyablePtr<Compression> compression;
+
+    //!  (Optional) Params describing digital elevation data
+    mem::ScopedCopyablePtr<DigitalElevationData> digitalElevationData;
+
     /*!
      * (Optional) Contains SFA annotations
      */
     Annotations annotations;
+
+    /*
+     * (Optional) In SIDD 2.0, the LUT stored in the NITF
+     * In 1.0, each Display element has a single LUT which corresponds
+     * to the LUT in the NITF, making this redundant.
+     */
+    mem::ScopedCopyablePtr<LUT> nitfLUT;
 
     /*!
      *  Constructor.  Creates only the product creation.  All other
@@ -185,21 +200,17 @@ struct DerivedData: public Data
 
     /*!
      *  Maps to:
-     *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
+     *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint in 1.0 and
+     *  /SIDD/GeographicAndTarget/ImageCorners in 2.0
      */
-    virtual LatLonCorners getImageCorners() const
-    {
-        return geographicAndTarget->geographicCoverage.footprint;
-    }
+    virtual LatLonCorners getImageCorners() const;
 
     /*!
      *  Maps to:
-     *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
+     *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint in 1.0 and
+     *  /SIDD/GeographicAndTarget/ImageCorners in 2.0
      */
-    virtual void setImageCorners(const LatLonCorners& imageCorners)
-    {
-        geographicAndTarget->geographicCoverage.footprint = imageCorners;
-    }
+    virtual void setImageCorners(const LatLonCorners& imageCorners);
 
     /*!
      *  Maps to:
@@ -227,8 +238,8 @@ struct DerivedData: public Data
     {
         // TODO throw exception instead of returning empty string?
         return (exploitationFeatures.get()
-                && !exploitationFeatures->collections.empty() ? 
-                    exploitationFeatures->collections[0]->information->sensorName : 
+                && !exploitationFeatures->collections.empty() ?
+                    exploitationFeatures->collections[0]->information.sensorName :
                     std::string(""));
     }
 
@@ -239,30 +250,30 @@ struct DerivedData: public Data
     virtual void setSource(std::string name)
     {
         // TODO throw exception if cannot set?
-        if (exploitationFeatures.get() && 
+        if (exploitationFeatures.get() &&
             !exploitationFeatures->collections.empty())
         {
-            exploitationFeatures->collections[0]->information->sensorName = 
+            exploitationFeatures->collections[0]->information.sensorName =
                 name;
         }
     }
 
     /*!
      *  Maps to:
-     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime  
+     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime
      */
     virtual DateTime getCreationTime() const
     {
-        return productCreation->processorInformation->processingDateTime;
+        return productCreation->processorInformation.processingDateTime;
     }
 
     /*!
      *  Maps to:
-     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime  
+     *  /SIDD/ProductCreation/ProcessorInformation/ProcessingDateTime
      */
     virtual void setCreationTime(DateTime creationTime)
     {
-        productCreation->processorInformation->processingDateTime
+        productCreation->processorInformation.processingDateTime
                 = creationTime;
     }
 
@@ -285,10 +296,7 @@ struct DerivedData: public Data
         return productCreation->classification;
     }
 
-    virtual LUT* getDisplayLUT()
-    {
-        return display->remapInformation->remapLUT.get();
-    }
+    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT();
 
     virtual std::string getVendorID() const
     {
@@ -322,4 +330,3 @@ private:
 }
 }
 #endif
-

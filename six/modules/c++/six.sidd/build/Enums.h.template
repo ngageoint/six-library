@@ -2,7 +2,7 @@
  * This file is part of six.sidd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2016, MDA Information Systems LLC
  *
  * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,13 +22,14 @@
 #ifndef __SIX_SIDD_ENUMS_H__
 #define __SIX_SIDD_ENUMS_H__
 
-#include <import/except.h>
-#include <import/str.h>
-#include <import/sys.h>
+#include <string>
 
-// -----------------------------------------------------------------------------
+#include <sys/Conf.h>
+#include <except/Exception.h>
+
+// ---------------------------------------------------------------------------
 // This file is auto-generated - please do NOT edit directly
-// -----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 namespace six
 {

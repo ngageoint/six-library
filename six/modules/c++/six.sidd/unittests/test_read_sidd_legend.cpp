@@ -80,7 +80,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
 
     six::sidd::DerivedDataBuilder siddBuilder;
     siddBuilder.addDisplay(pixelType);
-    siddBuilder.addGeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO);
+    siddBuilder.addGeographicAndTarget();
     siddBuilder.addMeasurement(six::ProjectionType::PLANE).
             addExploitationFeatures(1);
 
@@ -95,9 +95,9 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     siddData->productCreation->productClass = "Classy";
     siddData->productCreation->classification.classification = "U";
 
-    siddData->productCreation->processorInformation->application = "ProcessorName";
-    siddData->productCreation->processorInformation->profile = "Profile";
-    siddData->productCreation->processorInformation->site = "Ypsilanti, MI";
+    siddData->productCreation->processorInformation.application = "ProcessorName";
+    siddData->productCreation->processorInformation.profile = "Profile";
+    siddData->productCreation->processorInformation.site = "Ypsilanti, MI";
 
     siddData->display->decimationMethod = six::DecimationMethod::BRIGHTEST_PIXEL;
     siddData->display->magnificationMethod =
@@ -117,15 +117,34 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
 
     six::sidd::Collection* const parent =
             siddData->exploitationFeatures->collections[0].get();
-    parent->information->resolution.rg = 0;
-    parent->information->resolution.az = 0;
-    parent->information->collectionDuration = 0;
+    parent->information.resolution.rg = 0;
+    parent->information.resolution.az = 0;
+    parent->information.collectionDuration = 0;
 
-    parent->information->collectionDateTime = six::DateTime();
-    parent->information->radarMode = six::RadarModeType::SPOTLIGHT;
-    parent->information->sensorName.clear();
-    siddData->exploitationFeatures->product.resolution.row = 0;
-    siddData->exploitationFeatures->product.resolution.col = 0;
+    parent->information.collectionDateTime = six::DateTime();
+    parent->information.radarMode = six::RadarModeType::SPOTLIGHT;
+    parent->information.sensorName.clear();
+
+    siddData->exploitationFeatures->product.resize(1);
+    siddData->exploitationFeatures->product[0].resolution.row = 0;
+    siddData->exploitationFeatures->product[0].resolution.col = 0;
+    siddData->geographicAndTarget->geographicCoverage.reset(
+            new six::sidd::GeographicCoverage(
+            six::RegionType::GEOGRAPHIC_INFO));
+
+    six::LatLonCorners& corners =
+        siddData->geographicAndTarget->geographicCoverage->footprint;
+    corners.getCorner(0).setLat(1);
+    corners.getCorner(0).setLon(2);
+
+    corners.getCorner(1).setLat(2);
+    corners.getCorner(1).setLon(3);
+
+    corners.getCorner(2).setLat(3);
+    corners.getCorner(2).setLon(4);
+
+    corners.getCorner(3).setLat(4);
+    corners.getCorner(3).setLon(5);
 
     return siddDataScoped;
 }
@@ -304,7 +323,6 @@ int main(int, char**)
     try
     {
         TEST_CHECK(testRead);
-
         return 0;
     }
     catch (const except::Exception& e)

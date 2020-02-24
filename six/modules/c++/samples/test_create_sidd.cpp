@@ -265,7 +265,7 @@ int main(int argc, char** argv)
             six::sidd::DerivedData* data = builder.steal(); //steal it
 
             builder.addDisplay(pixelType);
-            builder.addGeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO);
+            builder.addGeographicAndTarget();
             builder.addMeasurement(six::ProjectionType::PLANE);
             builder.addExploitationFeatures(1);
 
@@ -277,7 +277,7 @@ int main(int argc, char** argv)
             data->productCreation->classification.classification = "U";
 
             six::sidd::ProcessorInformation& processorInformation =
-                *data->productCreation->processorInformation;
+                data->productCreation->processorInformation;
 
             processorInformation.application = "ProcessorName";
             processorInformation.profile = "Profile";
@@ -316,19 +316,19 @@ int main(int argc, char** argv)
             six::sidd::Collection* parent =
                 data->exploitationFeatures->collections[0].get();
 
-            parent->information->resolution.rg = 0;
-            parent->information->resolution.az = 0;
-            parent->information->collectionDuration = 0;
-            parent->information->collectionDateTime = six::DateTime();
-            parent->information->radarMode = six::RadarModeType::SPOTLIGHT;
-            parent->information->sensorName = "the sensor";
-            data->exploitationFeatures->product.resolution.row = 0;
-            data->exploitationFeatures->product.resolution.col = 0;
+            parent->information.resolution.rg = 0;
+            parent->information.resolution.az = 0;
+            parent->information.collectionDuration = 0;
+            parent->information.collectionDateTime = six::DateTime();
+            parent->information.radarMode = six::RadarModeType::SPOTLIGHT;
+            parent->information.sensorName = "the sensor";
+            data->exploitationFeatures->product.resize(1);
+            data->exploitationFeatures->product[0].resolution.row = 0;
+            data->exploitationFeatures->product[0].resolution.col = 0;
 
             data->annotations.push_back(mem::ScopedCopyablePtr<
                     six::sidd::Annotation>(new six::sidd::Annotation));
             six::sidd::Annotation *ann = (*data->annotations.rbegin()).get();
-            std::cout << "Hey: " << ann->spatialReferenceSystem.get() << std::endl;
             ann->identifier = "1st Annotation";
             ann->objects.push_back(mem::ScopedCloneablePtr<
                     six::sidd::SFAGeometry>(new six::sidd::SFAPoint));

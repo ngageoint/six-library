@@ -42,15 +42,25 @@ DerivedDataBuilder::~DerivedDataBuilder()
 
 DerivedDataBuilder& DerivedDataBuilder::addDisplay(PixelType pixelType)
 {
-    mData->display.reset(new Display);
+    mData->display.reset(new Display());
     mData->display->pixelType = pixelType;
     return *this;
 }
 
-DerivedDataBuilder& DerivedDataBuilder::addGeographicAndTarget(
-                                                               RegionType regionType)
+DerivedDataBuilder& DerivedDataBuilder::addGeographicAndTarget()
 {
-    mData->geographicAndTarget.reset(new GeographicAndTarget(regionType));
+    mData->geographicAndTarget.reset(new GeographicAndTarget());
+    mData->geographicAndTarget->imageCorners.reset(new LatLonCorners());
+
+    return *this;
+}
+
+DerivedDataBuilder&
+DerivedDataBuilder::addGeographicAndTargetOld(RegionType regionType)
+{
+    mData->geographicAndTarget.reset(new GeographicAndTarget());
+    mData->geographicAndTarget->geographicCoverage.reset(
+            new GeographicCoverage(regionType));
 
     return *this;
 }
@@ -64,7 +74,7 @@ DerivedDataBuilder& DerivedDataBuilder::addMeasurement(
 }
 
 DerivedDataBuilder& DerivedDataBuilder::addExploitationFeatures(
-                                                                size_t num)
+                                                                unsigned int num)
 {
     mData->exploitationFeatures.reset(new ExploitationFeatures(num));
 
@@ -98,6 +108,33 @@ DerivedDataBuilder& DerivedDataBuilder::addRadiometric()
 
     return *this;
 }
+DerivedDataBuilder& DerivedDataBuilder::addMatchInformation()
+{
+    mData->matchInformation.reset(new MatchInformation());
+
+    return *this;
+}
+
+DerivedDataBuilder& DerivedDataBuilder::addCompression()
+{
+    mData->compression.reset(new Compression());
+
+    return *this;
+}
+
+DerivedDataBuilder& DerivedDataBuilder::addDigitalElevationData()
+{
+    mData->digitalElevationData.reset(new DigitalElevationData());
+
+    return *this;
+}
+
+DerivedDataBuilder& DerivedDataBuilder::addNitfLUT()
+{
+    mData->nitfLUT.reset(new LUT(256, 2));
+
+    return *this;
+}
 
 DerivedData* DerivedDataBuilder::get()
 {
@@ -109,4 +146,3 @@ DerivedData* DerivedDataBuilder::steal()
     mAdopt = false;
     return get();
 }
-

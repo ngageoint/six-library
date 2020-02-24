@@ -58,6 +58,7 @@ def installPath():
             if 'tests' in subdirs and 'bin' in subdirs:
                 return fullChildPath
 
+
 def findPythonPath():
     if platform.system() == 'Linux':
         return glob(os.path.join(installPath(), 'lib', 'python*',
@@ -67,11 +68,13 @@ def findPythonPath():
                                 'site-packages')
     return ''
 
+
 def ensureInitFiles(pythonPath):
     for child in os.listdir(pythonPath):
         childPath = os.path.join(pythonPath, child)
         if '__init__.py' not in os.listdir(childPath):
             open(os.path.join(childPath, '__init__.py'), 'w').close()
+
 
 
 def setPaths():

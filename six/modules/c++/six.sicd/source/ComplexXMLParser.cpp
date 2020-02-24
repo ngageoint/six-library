@@ -174,7 +174,9 @@ xml::lite::Document* ComplexXMLParser::toXML(const ComplexData* sicd) const
         common().convertErrorStatisticsToXML(sicd->errorStatistics.get(), root);
     }
     if (sicd->matchInformation.get() && !sicd->matchInformation->types.empty())
-        convertMatchInformationToXML(sicd->matchInformation.get(), root);
+    {
+        convertMatchInformationToXML(*sicd->matchInformation, root);
+    }
 
     // parse the choice per version
     convertImageFormationAlgoToXML(sicd->pfa.get(), sicd->rma.get(), sicd->rgAzComp.get(), root);
@@ -222,10 +224,10 @@ XMLElem ComplexXMLParser::convertImageDataToXML(
     createString("PixelType", six::toString(imageData->pixelType), imageDataXML);
     if (imageData->amplitudeTable.get())
     {
-        AmplitudeTable& ampTable = *(imageData->amplitudeTable);
+        const AmplitudeTable& ampTable = *imageData->amplitudeTable;
         XMLElem ampTableXML = newElement("AmpTable", imageDataXML);
         setAttribute(ampTableXML, "size", str::toString(ampTable.numEntries));
-        for (unsigned int i = 0; i < ampTable.numEntries; ++i)
+        for (size_t i = 0; i < ampTable.numEntries; ++i)
         {
             XMLElem ampXML = createDouble("Amplitude", *(double*) ampTable[i],
                                           ampTableXML);
@@ -263,7 +265,7 @@ XMLElem ComplexXMLParser::convertGeoDataToXML(
 {
     XMLElem geoDataXML = newElement("GeoData", parent);
 
-    createEarthModelType("EarthModel", geoData->earthModel, geoDataXML);
+    common().createEarthModelType("EarthModel", geoData->earthModel, geoDataXML);
 
     XMLElem scpXML = newElement("SCP", geoDataXML);
     common().createVector3D("ECF", geoData->scp.ecf, scpXML);
@@ -931,7 +933,7 @@ void ComplexXMLParser::parseImageDataFromXML(
         ampTableXML->getElementsByTagName("Amplitude", ampsXML);
         imageData->amplitudeTable.reset(new AmplitudeTable());
 
-        AmplitudeTable& ampTable = *(imageData->amplitudeTable);
+        AmplitudeTable& ampTable = *imageData->amplitudeTable;
         for (std::vector<XMLElem>::const_iterator it = ampsXML.begin(); it
                 != ampsXML.end(); ++it)
         {
@@ -981,7 +983,7 @@ void ComplexXMLParser::parseGeoDataFromXML(
     const XMLElem geoDataXML,
     GeoData *geoData) const
 {
-    parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
+    common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
                         geoData->earthModel);
 
     XMLElem tmpElem = getFirstAndOnly(geoDataXML, "SCP");
@@ -1008,51 +1010,7 @@ void ComplexXMLParser::parseGeoDataFromXML(
             != geoInfosXML.end(); ++it, ++idx)
     {
         geoData->geoInfos[idx].reset(new GeoInfo());
-        parseGeoInfoFromXML(*it, geoData->geoInfos[idx].get());
-    }
-
-}
-
-void ComplexXMLParser::parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo) const
-{
-    std::vector < XMLElem > geoInfosXML;
-    geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
-    geoInfo->name = geoInfoXML->getAttributes().getValue("name");
-
-    //optional
-    size_t idx(geoInfo->geoInfos.size());
-    geoInfo->geoInfos.resize(idx + geoInfosXML.size());
-
-    for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
-            != geoInfosXML.end(); ++it, ++idx)
-    {
-        geoInfo->geoInfos[idx].reset(new GeoInfo());
-        parseGeoInfoFromXML(*it, geoInfo->geoInfos[idx].get());
-    }
-
-    //optional
-    common().parseParameters(geoInfoXML, "Desc", geoInfo->desc);
-
-    XMLElem tmpElem = getOptional(geoInfoXML, "Point");
-    if (tmpElem)
-    {
-        LatLon ll;
-        common().parseLatLon(tmpElem, ll);
-        geoInfo->geometryLatLon.push_back(ll);
-    }
-    else
-    {
-        std::string pointName = "Endpoint";
-        tmpElem = getOptional(geoInfoXML, "Line");
-        if (!tmpElem)
-        {
-            pointName = "Vertex";
-            tmpElem = getOptional(geoInfoXML, "Polygon");
-        }
-        if (tmpElem)
-        {
-            common().parseLatLons(tmpElem, pointName, geoInfo->geometryLatLon);
-        }
+        common().parseGeoInfoFromXML(*it, geoData->geoInfos[idx].get());
     }
 }
 
@@ -1841,22 +1799,7 @@ XMLElem ComplexXMLParser::createLatLonFootprint(const std::string& name,
                                                 const LatLonCorners& corners,
                                                 XMLElem parent) const
 {
-    XMLElem footprint = newElement(name, parent);
-
-    // Write the corners in CW order
-    XMLElem vertex = common().createLatLon(cornerName, corners.upperLeft, footprint);
-    setAttribute(vertex, "index", "1:FRFC");
-
-    vertex = common().createLatLon(cornerName, corners.upperRight, footprint);
-    setAttribute(vertex, "index", "2:FRLC");
-
-    vertex = common().createLatLon(cornerName, corners.lowerRight, footprint);
-    setAttribute(vertex, "index", "3:LRLC");
-
-    vertex = common().createLatLon(cornerName, corners.lowerLeft, footprint);
-    setAttribute(vertex, "index", "4:LRFC");
-
-    return footprint;
+    return common().createLatLonFootprint(name, cornerName, corners, parent);
 }
 
 XMLElem ComplexXMLParser::createLatLonAltFootprint(const std::string& name,
@@ -1883,25 +1826,11 @@ XMLElem ComplexXMLParser::createLatLonAltFootprint(const std::string& name,
     return footprint;
 }
 
-
-XMLElem ComplexXMLParser::createEarthModelType(const std::string& name,
-                                               const EarthModelType& value,
-                                               XMLElem parent) const
-{
-    return createString(name, six::toString(value), parent);
-}
-
 XMLElem ComplexXMLParser::createSideOfTrackType(const std::string& name,
                                                 const SideOfTrackType& value,
                                                 XMLElem parent) const
 {
     return createString(name, six::toString(value), parent);
-}
-
-void ComplexXMLParser::parseEarthModelType(XMLElem element,
-                                           EarthModelType& value) const
-{
-    value = six::toType<EarthModelType>(element->getCharacterData());
 }
 
 void ComplexXMLParser::parseSideOfTrackType(XMLElem element,
@@ -1910,6 +1839,19 @@ void ComplexXMLParser::parseSideOfTrackType(XMLElem element,
     value = six::toType<SideOfTrackType>(element->getCharacterData());
 }
 
+void ComplexXMLParser::parseMatchInformationFromXML(
+    const XMLElem matchInfoXML,
+    MatchInformation* matchInfo) const
+{
+    return common().parseMatchInformationFromXML(matchInfoXML, matchInfo);
+}
+
+XMLElem ComplexXMLParser::convertMatchInformationToXML(
+    const MatchInformation& matchInfo,
+    XMLElem parent) const
+{
+    return common().convertMatchInformationToXML(matchInfo, parent);
+}
 }
 }
 

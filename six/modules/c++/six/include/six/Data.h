@@ -180,7 +180,7 @@ struct Data
 
     virtual Classification& getClassification() = 0;
 
-    virtual LUT* getDisplayLUT() = 0;
+    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT() = 0;
 
     /*!
      * Returns an identifier of the Vendor supplying the implementation code.

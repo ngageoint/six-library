@@ -19,11 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sidd/Measurement.h"
+#include <six/sidd/Measurement.h>
 
-using namespace six;
-using namespace six::sidd;
-
+namespace six
+{
+namespace sidd
+{
 bool PolynomialProjection::equalTo(const Projection& rhs) const
 {
     PolynomialProjection const* projection = dynamic_cast<PolynomialProjection const*>(&rhs);
@@ -101,25 +102,28 @@ bool PlaneProjection::equalTo(const Projection& rhs) const
 }
 
 Measurement::Measurement(ProjectionType projectionType) :
-    projection(NULL)
+    pixelFootprint(Init::undefined<RowColInt>())
 {
-    pixelFootprint = Init::undefined<RowColInt>();
-
-    if (projectionType == ProjectionType::GEOGRAPHIC)
+    switch (projectionType)
+    {
+    case ProjectionType::GEOGRAPHIC:
         projection.reset(new GeographicProjection());
-
-    else if (projectionType == ProjectionType::CYLINDRICAL)
+        break;
+    case ProjectionType::CYLINDRICAL:
         projection.reset(new CylindricalProjection());
-
-    else if (projectionType == ProjectionType::PLANE)
+        break;
+    case ProjectionType::PLANE:
         projection.reset(new PlaneProjection());
-
-    else if (projectionType == ProjectionType::POLYNOMIAL)
+        break;
+    case ProjectionType::POLYNOMIAL:
         projection.reset(new PolynomialProjection());
+        break;
+    default:
+        // TODO: Should we throw or is it valid they wouldn't know this
+        //       at construction time?
+        break;
+    }
 }
 
-Measurement* Measurement::clone()
-{
-    return new Measurement(*this);
 }
-
+}

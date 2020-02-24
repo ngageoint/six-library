@@ -58,8 +58,6 @@ protected:
         const PFA* pfa, const RMA* rma, 
         const RgAzComp* rgAzComp, 
         XMLElem parent = NULL) const;
-    virtual XMLElem convertMatchInformationToXML(const MatchInformation *obj, 
-                                                 XMLElem parent = NULL) const;
     virtual XMLElem convertRMAToXML(const RMA *obj, 
                                     XMLElem parent = NULL) const;
     virtual XMLElem convertHPBWToXML(const HalfPowerBeamwidths* obj, 
@@ -76,8 +74,6 @@ protected:
         six::sicd::PolarizationCalibration* obj) const;
     virtual void parseTxRcvPolFromXML(const XMLElem parent,
                          six::DualPolarizationType& obj) const;
-    virtual void parseMatchInformationFromXML(const XMLElem matchInfoXML, 
-                                              MatchInformation *obj) const;
     virtual void parseRMCRFromXML(const XMLElem rmcrElem, RMCR* obj) const;
     virtual void parseAntennaParamArrayFromXML(
         const XMLElem antennaParamsXML, 

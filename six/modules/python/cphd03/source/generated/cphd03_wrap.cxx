@@ -3103,16 +3103,16 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_six__Data swig_types[93]
 #define SWIGTYPE_p_six__DataType swig_types[94]
 #define SWIGTYPE_p_six__FFTSign swig_types[95]
-#define SWIGTYPE_p_six__MatchInformation swig_types[96]
-#define SWIGTYPE_p_six__RadarModeType swig_types[97]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[98]
-#define SWIGTYPE_p_six__XMLControlCreator swig_types[99]
-#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[100]
-#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[101]
-#define SWIGTYPE_p_six__sicd__ComplexData swig_types[102]
-#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[103]
-#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[104]
-#define SWIGTYPE_p_six__sicd__GeoInfo swig_types[105]
+#define SWIGTYPE_p_six__GeoInfo swig_types[96]
+#define SWIGTYPE_p_six__MatchInformation swig_types[97]
+#define SWIGTYPE_p_six__RadarModeType swig_types[98]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[99]
+#define SWIGTYPE_p_six__XMLControlCreator swig_types[100]
+#define SWIGTYPE_p_six__sicd__AntennaParameters swig_types[101]
+#define SWIGTYPE_p_six__sicd__AreaDirectionParameters swig_types[102]
+#define SWIGTYPE_p_six__sicd__ComplexData swig_types[103]
+#define SWIGTYPE_p_six__sicd__ElectricalBoresight swig_types[104]
+#define SWIGTYPE_p_six__sicd__GainAndPhasePolys swig_types[105]
 #define SWIGTYPE_p_six__sicd__HalfPowerBeamwidths swig_types[106]
 #define SWIGTYPE_p_six__sicd__NoiseMesh swig_types[107]
 #define SWIGTYPE_p_six__sicd__ScalarMesh swig_types[108]
@@ -59338,6 +59338,7 @@ static swig_type_info _swigt__p_six__CornersT_scene__LatLon_t = {"_p_six__Corner
 static swig_type_info _swigt__p_six__Data = {"_p_six__Data", "six::Data *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__DataType = {"_p_six__DataType", "six::DataType *|cphd::DataType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__FFTSign = {"_p_six__FFTSign", "six::FFTSign *|cphd::FFTSign *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__GeoInfo = {"_p_six__GeoInfo", "six::GeoInfo *|cphd::GeoInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__MatchInformation = {"_p_six__MatchInformation", "six::MatchInformation *|cphd::MatchInformation *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__RadarModeType = {"_p_six__RadarModeType", "six::RadarModeType *|cphd::RadarModeType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ReferencePoint = {"_p_six__ReferencePoint", "six::ReferencePoint *", 0, 0, (void*)0, 0};
@@ -59347,7 +59348,6 @@ static swig_type_info _swigt__p_six__sicd__AreaDirectionParameters = {"_p_six__s
 static swig_type_info _swigt__p_six__sicd__ComplexData = {"_p_six__sicd__ComplexData", "six::sicd::ComplexData *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__ElectricalBoresight = {"_p_six__sicd__ElectricalBoresight", "six::sicd::ElectricalBoresight *|cphd03::ElectricalBoresight *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__GainAndPhasePolys = {"_p_six__sicd__GainAndPhasePolys", "six::sicd::GainAndPhasePolys *|cphd03::GainAndPhasePolys *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_six__sicd__GeoInfo = {"_p_six__sicd__GeoInfo", "six::sicd::GeoInfo *|cphd::GeoInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__HalfPowerBeamwidths = {"_p_six__sicd__HalfPowerBeamwidths", "six::sicd::HalfPowerBeamwidths *|cphd03::HalfPowerBeamwidths *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__NoiseMesh = {"_p_six__sicd__NoiseMesh", "six::sicd::NoiseMesh *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__ScalarMesh = {"_p_six__sicd__ScalarMesh", "six::sicd::ScalarMesh *", 0, 0, (void*)0, 0};
@@ -59485,6 +59485,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__Data,
   &_swigt__p_six__DataType,
   &_swigt__p_six__FFTSign,
+  &_swigt__p_six__GeoInfo,
   &_swigt__p_six__MatchInformation,
   &_swigt__p_six__RadarModeType,
   &_swigt__p_six__ReferencePoint,
@@ -59494,7 +59495,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__sicd__ComplexData,
   &_swigt__p_six__sicd__ElectricalBoresight,
   &_swigt__p_six__sicd__GainAndPhasePolys,
-  &_swigt__p_six__sicd__GeoInfo,
   &_swigt__p_six__sicd__HalfPowerBeamwidths,
   &_swigt__p_six__sicd__NoiseMesh,
   &_swigt__p_six__sicd__ScalarMesh,
@@ -59632,6 +59632,7 @@ static swig_cast_info _swigc__p_six__CornersT_scene__LatLon_t[] = {  {&_swigt__p
 static swig_cast_info _swigc__p_six__Data[] = {  {&_swigt__p_six__Data, 0, 0, 0},  {&_swigt__p_six__sicd__ComplexData, _p_six__sicd__ComplexDataTo_p_six__Data, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__DataType[] = {  {&_swigt__p_six__DataType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__FFTSign[] = {  {&_swigt__p_six__FFTSign, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__GeoInfo[] = {  {&_swigt__p_six__GeoInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__MatchInformation[] = {  {&_swigt__p_six__MatchInformation, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__RadarModeType[] = {  {&_swigt__p_six__RadarModeType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ReferencePoint[] = {  {&_swigt__p_six__ReferencePoint, 0, 0, 0},{0, 0, 0, 0}};
@@ -59641,7 +59642,6 @@ static swig_cast_info _swigc__p_six__sicd__AreaDirectionParameters[] = {  {&_swi
 static swig_cast_info _swigc__p_six__sicd__ComplexData[] = {  {&_swigt__p_six__sicd__ComplexData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__ElectricalBoresight[] = {  {&_swigt__p_six__sicd__ElectricalBoresight, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__GainAndPhasePolys[] = {  {&_swigt__p_six__sicd__GainAndPhasePolys, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_six__sicd__GeoInfo[] = {  {&_swigt__p_six__sicd__GeoInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__HalfPowerBeamwidths[] = {  {&_swigt__p_six__sicd__HalfPowerBeamwidths, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__NoiseMesh[] = {  {&_swigt__p_six__sicd__NoiseMesh, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__sicd__ScalarMesh[] = {  {&_swigt__p_six__sicd__ScalarMesh, 0, 0, 0},{0, 0, 0, 0}};
@@ -59779,6 +59779,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__Data,
   _swigc__p_six__DataType,
   _swigc__p_six__FFTSign,
+  _swigc__p_six__GeoInfo,
   _swigc__p_six__MatchInformation,
   _swigc__p_six__RadarModeType,
   _swigc__p_six__ReferencePoint,
@@ -59788,7 +59789,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__sicd__ComplexData,
   _swigc__p_six__sicd__ElectricalBoresight,
   _swigc__p_six__sicd__GainAndPhasePolys,
-  _swigc__p_six__sicd__GeoInfo,
   _swigc__p_six__sicd__HalfPowerBeamwidths,
   _swigc__p_six__sicd__NoiseMesh,
   _swigc__p_six__sicd__ScalarMesh,

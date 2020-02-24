@@ -39,27 +39,27 @@ void Container::addData(Data* data)
 }
 
 void Container::addData(std::auto_ptr<Data> data,
-    	                mem::ScopedCopyablePtr<Legend> legend)
+                        mem::ScopedCopyablePtr<Legend> legend)
 {
-	mem::ScopedCloneablePtr<Data> cloneableData(data.release());
-	mData.push_back(DataPair(cloneableData, legend));
+    mem::ScopedCloneablePtr<Data> cloneableData(data.release());
+    mData.push_back(DataPair(cloneableData, legend));
 }
 
 void Container::addData(std::auto_ptr<Data> data)
 {
-	addData(data, nullLegend());
+    addData(data, nullLegend());
 }
 
 void Container::addData(std::auto_ptr<Data> data, std::auto_ptr<Legend> legend)
 {
-	if (data->getDataType() != DataType::DERIVED)
-	{
-		throw except::Exception(Ctxt(
-				"Legends can only be associated with derived data"));
-	}
+    if (data->getDataType() != DataType::DERIVED)
+    {
+        throw except::Exception(Ctxt(
+                "Legends can only be associated with derived data"));
+    }
 
-	mem::ScopedCopyablePtr<Legend> copyableLegend(legend.release());
-	addData(data, copyableLegend);
+    mem::ScopedCopyablePtr<Legend> copyableLegend(legend.release());
+    addData(data, copyableLegend);
 }
 
 void Container::setData(size_t i, Data* data)
@@ -74,14 +74,14 @@ void Container::setData(size_t i, Data* data)
 
 void Container::removeData(const Data* data)
 {
-	for (DataVec::iterator iter = mData.begin(); iter != mData.end(); ++iter)
-	{
-		if (iter->first.get() == data)
-		{
-			mData.erase(iter);
-			break;
-		}
-	}
+    for (DataVec::iterator iter = mData.begin(); iter != mData.end(); ++iter)
+    {
+        if (iter->first.get() == data)
+        {
+            mData.erase(iter);
+            break;
+        }
+    }
 }
 
 Data* Container::getData(const std::string& iid, size_t numImages)

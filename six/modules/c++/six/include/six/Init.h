@@ -50,6 +50,11 @@ struct Init
         return (value == Init::undefined<T>());
     }
 
+    template<typename T> static bool isDefined(T value)
+    {
+        return !isUndefined<T>(value);
+    }
+
     template<typename T> static T undefined()
     {
         // This will handle integer types

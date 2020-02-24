@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is file is part of six.sidd-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -22,25 +22,15 @@
 #include "six/sidd/ProductCreation.h"
 
 //using namespace six;
-//using namespace six::sidd;
+//using namespace sidd;
 
 // Windows also has a ProcessorInformation in the API
-six::sidd::ProcessorInformation* six::sidd::ProcessorInformation::clone() const
-{
-    return new six::sidd::ProcessorInformation(*this);
-}
-
 bool six::sidd::ProcessorInformation::operator==(const six::sidd::ProcessorInformation& rhs) const
 {
     return (application == rhs.application &&
         processingDateTime == rhs.processingDateTime &&
         site == rhs.site &&
         profile == rhs.profile);
-}
-
-six::sidd::ProductCreation* six::sidd::ProductCreation::clone() const
-{
-     return new six::sidd::ProductCreation(*this);
 }
 
 bool six::sidd::ProductCreation::operator==(const six::sidd::ProductCreation& rhs) const

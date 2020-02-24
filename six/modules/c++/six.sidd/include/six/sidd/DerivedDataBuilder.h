@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #ifndef __SIX_DERIVED_DATA_BUILDER_H__
 #define __SIX_DERIVED_DATA_BUILDER_H__
 
@@ -32,10 +33,10 @@ namespace sidd
  *  \class DerivedDataBuilder
  *  \brief Incrementally builds a DerivedData object
  *
- *  This class implements the Builder design pattern by building 
+ *  This class implements the Builder design pattern by building
  *  and maintaining a DerivedData instance.  This class is the preferred
  *  method for creating a DerivedData object.  It should be used for one-offs
- *  or using get() in conjunction with the clone() method in the 
+ *  or using get() in conjunction with the clone() method in the
  *  DerivedData object as a prototype.
  *
  */
@@ -44,9 +45,9 @@ class DerivedDataBuilder
 public:
     //!  Construct. Creates and owns a new DerivedData object
     DerivedDataBuilder();
-    
+
     /*!
-     *  Construct, taking in a DerivedData object.  Warning: the builder 
+     *  Construct, taking in a DerivedData object.  Warning: the builder
      *  does not take ownership of this object in this case.
      */
     DerivedDataBuilder(DerivedData *data);
@@ -67,14 +68,19 @@ public:
     virtual DerivedDataBuilder& addDisplay(PixelType pixelType);
 
     /*!
+     *  Add geographic and target information.  Use this for SIDD 2.0.
+     */
+    virtual DerivedDataBuilder& addGeographicAndTarget();
+
+    /*!
      *  Add geographic and target information.  This requires that the
      *  user provide us with a RegionType, in order to properly initialize
-     *  the block.
+     *  the block.  Use this for SIDD 1.0
      *
      *  \param regionType What kind of region type scheme does the product use
      *  \return Reference to self
      */
-    virtual DerivedDataBuilder& addGeographicAndTarget(RegionType regionType);
+    virtual DerivedDataBuilder& addGeographicAndTargetOld(RegionType regionType);
 
     /*!
      *  Add the block containing the meta-data for doing measurements.
@@ -95,12 +101,12 @@ public:
      *  derived product.  The builder initializes the ExploitationFeatures
      *  constructor with this, which in turn, creates that number of
      *  collections in its vector
-     *  
+     *
      *  \param num The number of collections to create this product (defaults
      *  to one)
      *  \return Refrence to self
      */
-    virtual DerivedDataBuilder& addExploitationFeatures(size_t num = 1);
+    virtual DerivedDataBuilder& addExploitationFeatures(unsigned int num = 1);
 
     /*!
      *  Add the Optional ProductProcessing block to the SIDD Data object.
@@ -125,7 +131,7 @@ public:
      *  since we require that to do any work
      *
      *  \return Reference to self
-     *  
+     *
      */
     virtual DerivedDataBuilder& addErrorStatistics();
 
@@ -138,12 +144,40 @@ public:
     virtual DerivedDataBuilder& addRadiometric();
 
     /*!
+     * Add optional MatchInformation element
+     *
+     * \return Reference to self
+     */
+    virtual DerivedDataBuilder& addMatchInformation();
+
+    /*!
+     *  Add the optional compression component.
+     *
+     * \return Reference to self
+     */
+    virtual DerivedDataBuilder& addCompression();
+
+    /*!
+    *  Add the optional digital elevation data component.
+    *
+    * \return Reference to self
+    */
+    virtual DerivedDataBuilder& addDigitalElevationData();
+
+    /*!
+     * Add the optional NITF LUT element.
+     *
+     * \return Reference to self
+     */
+    virtual DerivedDataBuilder& addNitfLUT();
+
+    /*!
      *  Get the pointer to the object that is being built, but do not
      *  take ownership
      *
      */
     DerivedData* get();
-    
+
     /*!
      *  Get the pointer to the object that is being build, and do take
      *  ownership.  Note that while the builder is in scope, it will
@@ -160,4 +194,3 @@ protected:
 }
 }
 #endif
-

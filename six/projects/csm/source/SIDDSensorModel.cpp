@@ -318,7 +318,7 @@ std::string SIDDSensorModel::getCollectionIdentifier() const
 std::string SIDDSensorModel::getSensorMode() const
 {
     // TODO: If there's more than one collection, what should we use?
-    switch (mData->exploitationFeatures->collections[0]->information->radarMode)
+    switch (mData->exploitationFeatures->collections[0]->information.radarMode)
     {
     case six::RadarModeType::SPOTLIGHT:
         return CSM_SENSOR_MODE_SPOT;
@@ -333,7 +333,7 @@ std::string SIDDSensorModel::getSensorMode() const
 six::DateTime SIDDSensorModel::getReferenceDateAndTimeImpl() const
 {
     // TODO: If there's more than one collection, what should we use?
-    return mData->exploitationFeatures->collections[0]->information->
+    return mData->exploitationFeatures->collections[0]->information.
             collectionDateTime;
 }
 

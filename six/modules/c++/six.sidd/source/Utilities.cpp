@@ -40,7 +40,7 @@ double getCenterTime(const six::sidd::DerivedData& derived)
     {
         // we estimate...
         centerTime = derived.exploitationFeatures->collections[0]
-                             ->information->collectionDuration /
+                             ->information.collectionDuration /
                 2;
     }
 
@@ -582,12 +582,13 @@ std::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
     data->productCreation.reset(new ProductCreation());
     data->productCreation->classification.classification = "U";
     data->display.reset(new Display());
-    data->geographicAndTarget.reset(
-            new GeographicAndTarget(RegionType::SUB_REGION));
-    data->geographicAndTarget->geographicCoverage.geographicInformation.reset(
+    data->geographicAndTarget.reset(new GeographicAndTarget());
+    data->geographicAndTarget->geographicCoverage.reset(
+            new GeographicCoverage(RegionType::SUB_REGION));
+    data->geographicAndTarget->geographicCoverage->geographicInformation.reset(
             new GeographicInformation());
     LatLonCorners& imageCorners =
-            data->geographicAndTarget->geographicCoverage.footprint;
+            data->geographicAndTarget->geographicCoverage->footprint;
     imageCorners.getCorner(0).setLat(3.001596271329710E01);
     imageCorners.getCorner(0).setLon(-9.331563100917214E01);
 
@@ -623,19 +624,18 @@ std::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
 
     data->exploitationFeatures.reset(new ExploitationFeatures());
     data->exploitationFeatures->collections.push_back(
-            mem::ScopedCloneablePtr<Collection>());
+            mem::ScopedCopyablePtr<Collection>());
     data->exploitationFeatures->collections[0].reset(new Collection());
-    data->exploitationFeatures->collections[0]->information.reset(
-            new Information());
     Information& information =
-            *data->exploitationFeatures->collections[0]->information;
+            data->exploitationFeatures->collections[0]->information;
     information.radarMode = RadarModeType::SPOTLIGHT;
     information.collectionDuration = 0;
     information.resolution.rg = 0;
     information.resolution.az = 0;
 
-    data->exploitationFeatures->product.resolution.row = 0;
-    data->exploitationFeatures->product.resolution.col = 0;
+    data->exploitationFeatures->product.resize(1);
+    data->exploitationFeatures->product[0].resolution.row = 0;
+    data->exploitationFeatures->product[0].resolution.col = 0;
     return data;
 }
 }

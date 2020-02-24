@@ -41,7 +41,6 @@ struct ProcessorInformation
 
     // Optional
     std::string profile;
-    ProcessorInformation* clone() const;
 
     //! Equality operators
     bool operator==(const ProcessorInformation& rhs) const;
@@ -60,17 +59,8 @@ struct ProcessorInformation
 class ProductCreation
 {
 public:
-    //!  Allocate mandatory processorInformation
-    ProductCreation() :
-        processorInformation(new ProcessorInformation())
-    {
-    }
-
-    //!  Clone this, including processorInformation
-    ProductCreation* clone() const;
-
     //!  Details regarding processor
-    mem::ScopedCloneablePtr<ProcessorInformation> processorInformation;
+    ProcessorInformation processorInformation;
 
     //!  The overall classification of the product
     DerivedClassification classification;
@@ -82,8 +72,8 @@ public:
     std::string productClass;
 
     /*! 
-     *  (Optional) type of sub-product. 
-     *  Leave this blank if none
+     *  (Optional) Information on the type of prodcut
+     *  Omit if a single product suite
      */
     std::string productType;
 

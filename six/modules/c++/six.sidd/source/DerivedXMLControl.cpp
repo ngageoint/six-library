@@ -22,7 +22,23 @@
 
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
-#include <six/sidd/DerivedXMLParser.h>
+#include <six/sidd/DerivedXMLParser100.h>
+#include <six/sidd/DerivedXMLParser200.h>
+
+namespace
+{
+std::string normalizeVersion(const std::string& version)
+{
+    std::vector<std::string> versionParts;
+    six::XMLControl::splitVersion(version, versionParts);
+    if (versionParts.size() != 3)
+    {
+        throw except::Exception(
+            Ctxt("Unsupported SIDD Version: " + version));
+    }
+    return str::join(versionParts, "");
+}
+}
 
 namespace six
 {
@@ -35,8 +51,7 @@ DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) :
 
 Data* DerivedXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
-    DerivedXMLParser parser(getVersionFromURI(doc), mLog, false);
-    return parser.fromXML(doc);
+    return getParser(getVersionFromURI(doc))->fromXML(doc);
 }
 
 xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
@@ -46,9 +61,42 @@ xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
         throw except::Exception(Ctxt("Data must be SIDD"));
     }
 
-    DerivedXMLParser parser(data->getVersion(), mLog, false);
-    return parser.toXML(reinterpret_cast<const DerivedData*>(data));
-}
-}
+    const DerivedData* const sidd(reinterpret_cast<const DerivedData*>(data));
+    return getParser(data->getVersion())->toXML(sidd);
 }
 
+std::auto_ptr<DerivedXMLParser>
+DerivedXMLControl::getParser(const std::string& version) const
+{
+    std::auto_ptr<DerivedXMLParser> parser;
+
+    const std::string normalizedVersion = normalizeVersion(version);
+
+    // six.sidd only currently supports --
+    //   SIDD 1.0.0
+    //   SIDD 2.0.0
+    if (normalizedVersion == "100")
+    {
+        parser.reset(new DerivedXMLParser100(mLog));
+    }
+    else if (normalizedVersion == "200")
+    {
+        parser.reset(new DerivedXMLParser200(mLog));
+    }
+    else if (normalizedVersion == "110")
+    {
+        throw except::Exception(Ctxt(
+            "SIDD Version 1.1.0 does not exist. "
+            "Did you mean 2.0.0 instead?"
+        ));
+    }
+    else
+    {
+        throw except::Exception(
+            Ctxt("Unsupported SIDD Version: " + version));
+    }
+
+    return parser;
+}
+}
+}

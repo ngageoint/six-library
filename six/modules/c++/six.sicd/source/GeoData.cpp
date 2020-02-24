@@ -30,22 +30,6 @@ namespace sicd
 {
 const double GeoData::ECF_THRESHOLD = 1e-2;
 
-GeoInfo* GeoInfo::clone() const
-{
-    return new GeoInfo(*this);
-}
-
-bool GeoInfo::operator==(const GeoInfo& rhs) const
-{
-    return (name == rhs.name && geoInfos == rhs.geoInfos &&
-            desc == rhs.desc && geometryLatLon == rhs.geometryLatLon);
-}
-
-GeoData* GeoData::clone()
-{
-    return new GeoData(*this);
-}
-
 bool GeoData::operator==(const GeoData& rhs) const
 {
     return (earthModel == rhs.earthModel && scp == rhs.scp &&
@@ -139,42 +123,6 @@ bool GeoData::validate(logging::Logger& log) const
         }
     }
     return valid;
-}
-
-std::ostream& operator<< (std::ostream& os, const GeoInfo& g)
-{
-    os << "GeoInfo:: \n"
-        << "  Name             : " << g.name << "\n";
-    for (size_t ii = 0; ii < g.desc.size(); ++ii)
-    {
-        os << "  Description      : " << g.desc[ii].getName() << ": " << g.desc[ii].str() << "\n";
-    }
-    if (g.geometryLatLon.size() == 1)
-    {
-        os << "  Point            : " << g.geometryLatLon[0].getLat() << ", " << g.geometryLatLon[0].getLon() << "\n";
-    }
-    else if (g.geometryLatLon.size() == 2)
-    {
-        os << "  Line             : " << "\n";
-        for (size_t ii = 0; ii < g.geometryLatLon.size(); ++ii)
-        {
-            os << "  Endpoint         : " << g.geometryLatLon[ii].getLat() << ", " << g.geometryLatLon[ii].getLon() << "\n";
-        }
-    }
-    else if (g.geometryLatLon.size() > 2)
-    {
-        os << "  Polygon          : " << "\n";
-        for (size_t ii = 0; ii < g.geometryLatLon.size(); ++ii)
-        {
-            os << "  Vertex           : " << g.geometryLatLon[ii].getLat() << ", " << g.geometryLatLon[ii].getLon() << "\n";
-        }
-    }
-
-    for (size_t ii = 0; ii < g.geoInfos.size(); ++ii)
-    {
-        os << *g.geoInfos[ii] << "\n";
-    }
-    return os;
 }
 }
 }

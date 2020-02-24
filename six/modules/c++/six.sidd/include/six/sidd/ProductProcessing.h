@@ -34,7 +34,7 @@ namespace sidd
  *  \struct ProcessingModule
  *  \brief SIDD ProcessingModule
  *
- *  Processing module to keep track of the name and 
+ *  Processing module to keep track of the name and
  *  any parameters associated with the algorithms used
  *  to produce the SIDD.  Note that moduleParameters and
  *  processingModules are mutually exclusive.
@@ -45,22 +45,18 @@ struct ProcessingModule
     //!  The name of the module
     Parameter moduleName;
 
-    /*! 
+    /*!
      *  Parameters associated with the algorithm used in
      *  processing the product.
      */
     ParameterCollection moduleParameters;
 
     /*!
-     *  ProcessingModule is a repeatabl structure within
+     *  ProcessingModule is a repeatable structure within
      *  itself to create an algorithm as a subset of another
      *  algorithm
-     *
      */
-    std::vector<mem::ScopedCloneablePtr<ProcessingModule> > processingModules;
-
-    //!  Clone
-    ProcessingModule* clone() const;
+    std::vector<mem::ScopedCopyablePtr<ProcessingModule> > processingModules;
 
     //! Equality operator
     bool operator==(const ProcessingModule& rhs) const
@@ -79,16 +75,13 @@ struct ProcessingModule
  *  \struct ProductProcessing
  *  \brief SIDD ProductProcessing parameters
  *
- *  (Optional) Contains metadata related to algorithms 
+ *  (Optional) Contains metadata related to algorithms
  *  used during product generation.
  */
 struct ProductProcessing
 {
-    //!  Clone
-    ProductProcessing* clone() const;
-
     //!  Contains only a set of ProcessingModule components
-    std::vector<mem::ScopedCloneablePtr<ProcessingModule> > processingModules;
+    std::vector<mem::ScopedCopyablePtr<ProcessingModule> > processingModules;
 
     //! Equality operator
     bool operator==(const ProductProcessing& rhs) const
@@ -101,7 +94,6 @@ struct ProductProcessing
         return !(*this == rhs);
     }
 };
-
 }
 }
 #endif

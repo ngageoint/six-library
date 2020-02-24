@@ -25,6 +25,7 @@
 #include <import/six.h>
 
 #include "six/sidd/Annotations.h"
+#include "six/sidd/Compression.h"
 #include "six/sidd/CropUtils.h"
 #include "six/sidd/DerivedData.h"
 #include "six/sidd/DerivedDataBuilder.h"

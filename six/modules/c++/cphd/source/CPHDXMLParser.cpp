@@ -940,7 +940,7 @@ XMLElem CPHDXMLParser::toXML(const GeoInfo& geoInfo, XMLElem parent)
 
 XMLElem CPHDXMLParser::toXML(const MatchInformation& matchInfo, XMLElem parent)
 {
-    return mCommon.convertMatchInformationToXML(&matchInfo, parent);
+    return mCommon.convertMatchInformationToXML(matchInfo, parent);
 }
 
 /*

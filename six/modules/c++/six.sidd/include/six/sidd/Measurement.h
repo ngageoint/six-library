@@ -22,8 +22,9 @@
 #ifndef __SIX_SIDD_MEASUREMENT_H__
 #define __SIX_SIDD_MEASUREMENT_H__
 
-#include "six/Types.h"
-#include "six/Init.h"
+#include <six/Types.h>
+#include <six/Init.h>
+#include <six/sidd/Enums.h>
 
 namespace six
 {
@@ -146,7 +147,7 @@ private:
 };
 
 /*!
- *  Provides some more utility (TimeCOAPOly) than projection but 
+ *  Provides some more utility (TimeCOAPOly) than projection but
  *  still pure.
  */
 struct MeasurableProjection : public Projection
@@ -171,7 +172,7 @@ private:
  *  \struct GeographicProjection
  *  \brief SIDD GeographicProjection (GGD)
  *
- *  Geographic mapping of the pixel grid referred 
+ *  Geographic mapping of the pixel grid referred
  *  to as GGD in the Design and Exploitation document.
  *
  */
@@ -200,7 +201,7 @@ private:
  *  \struct CylindricalProection
  *  \brief SIDD CylindricalProjection
  *
- *  Cylindrical mapping of the pixel grid 
+ *  Cylindrical mapping of the pixel grid
  *  referred to as CGD in the Design and Exploitation document.
  *
  */
@@ -228,9 +229,9 @@ struct CylindricalProjection : public MeasurableProjection
     Vector3 stripmapDirection;
 
     /*!
-     *  Radius of Curvature defined at scene center.  
-     *  If not present, the radius of curvature will be derived 
-     *  based upon the equations provided in the Design and 
+     *  Radius of Curvature defined at scene center.
+     *  If not present, the radius of curvature will be derived
+     *  based upon the equations provided in the Design and
      *  Exploitation Document
      */
     double curvatureRadius;
@@ -256,7 +257,7 @@ struct PlaneProjection : public MeasurableProjection
     {
         this->projectionType = ProjectionType::PLANE;
     }
-    
+
     virtual ~PlaneProjection() {}
 
     //!  Clone operation
@@ -272,7 +273,6 @@ struct PlaneProjection : public MeasurableProjection
 
 private:
     virtual bool equalTo(const Projection& rhs) const;
-
 
 };
 
@@ -290,18 +290,28 @@ struct Measurement
     //!  Number of rows/cols in the SIDD product
     RowColInt pixelFootprint;
 
+    /*!
+     * Flag indicating whether ARP polynomial is based on the best available
+     * ("collect time") or "predicted" ephemeris
+     * New (and optional) in SIDD 2.0
+     */
+    ARPFlag arpFlag;
+
     //!  The ARP Polynomial
     PolyXYZ arpPoly;
 
+    /*! Indicates the full image includes both valid data and some zero-filled
+     *  pixels.
+     *  New (and required) in SIDD 2.0
+     */
+    std::vector<RowColInt> validData;
+
     /*!
-     *  To initialize a measurenet, we need a product projection
+     *  To initialize a measurement, we need a product projection
      *  definition.  The currently available are geographic, plane
      *  and cylindrical (see ProjectionType).
      */
     Measurement(ProjectionType projectionType);
-
-    //!  Deep copy including projection
-    Measurement* clone();
 
     //! Equality operator
     bool operator==(const Measurement& rhs) const
@@ -314,10 +324,8 @@ struct Measurement
     {
         return !(*this == rhs);
     }
-
 };
 
 }
 }
 #endif
-

@@ -37,7 +37,7 @@ ComplexXMLParser101::ComplexXMLParser101(const std::string& version,
 }
 
 XMLElem ComplexXMLParser101::convertGeoInfoToXML(
-    const GeoInfo *geoInfo, 
+    const six::GeoInfo *geoInfo,
     XMLElem parent) const
 {
     //! 1.0.1 has ordering (1. Desc, 2. choice, 3. GeoInfo)

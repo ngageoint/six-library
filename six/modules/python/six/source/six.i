@@ -35,8 +35,9 @@
 #include <cstddef>
 using std::ptrdiff_t;
 
-#include "import/nitf.hpp"
 #include "import/six.h"
+
+#include "import/nitf.hpp"
 #include "Python.h"
 #include "datetime.h"
 
@@ -50,6 +51,12 @@ using namespace six;
 // This allows functions that deal with auto_ptrs to work properly
 %auto_ptr(six::Data);
 %auto_ptr(six::XMLControlCreator);
+
+%ignore mem::ScopedCopyablePtr::operator!=;
+%ignore mem::ScopedCopyablePtr::operator==;
+%ignore mem::ScopedCloneablePtr::operator!=;
+%ignore mem::ScopedCloneablePtr::operator==;
+%ignore six::GeoInfo::operator<<;
 
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;
@@ -93,6 +100,7 @@ using namespace six;
 %include "six/Utilities.h"
 %include "six/Options.h"
 %include "six/XMLControlFactory.h"
+%include "six/GeoInfo.h"
 
 %feature("shadow") six::Parameter::setValue(const std::string &)
 %{
@@ -175,26 +183,29 @@ def setValue(self, *args):
 /* We need this because SWIG cannot do it itself, for some reason */
 /* TODO: write script to generate all of these instantiations for us? */
 
-%template(LatLonCorners) six::Corners<scene::LatLon>;
-%template(LatLonAltCorners) six::Corners<scene::LatLonAlt>;
+%template(VectorString)       std::vector<std::string>;
+%template(LatLonCorners)      six::Corners<scene::LatLon>;
+%template(LatLonAltCorners)   six::Corners<scene::LatLonAlt>;
+%template(VectorMatchCollect) std::vector<six::MatchCollect>;
+%template(VectorMatchType)    std::vector<six::MatchType>;
+%template(VectorScopedCopyableMatchType) std::vector<mem::ScopedCopyablePtr<six::MatchType> >;
+%template(VectorScopedCopyableGeoInfo) std::vector<mem::ScopedCopyablePtr<six::GeoInfo> >;
 
 SCOPED_COPYABLE(six, Radiometric)
 SCOPED_COPYABLE(six, ErrorStatistics)
-SCOPED_COPYABLE(six, MatchInformation)
+SCOPED_COPYABLE(six, Components)
 SCOPED_COPYABLE(six, CorrCoefs)
 SCOPED_COPYABLE(six, PosVelError)
+SCOPED_COPYABLE(six, GeoInfo)
 SCOPED_COPYABLE(six, RadarSensor)
 SCOPED_COPYABLE(six, TropoError)
 SCOPED_COPYABLE(six, IonoError)
 SCOPED_COPYABLE(six, CompositeSCP)
-SCOPED_COPYABLE(six, Components)
+SCOPED_COPYABLE(six, MatchInformation)
+SCOPED_COPYABLE(six, MatchType)
 SCOPED_CLONEABLE(six, AmplitudeTable)
 SCOPED_CLONEABLE(six, CollectionInformation)
 
-SCOPED_COPYABLE(six, MatchType)
-
-%template(VectorMatchCollect) std::vector<six::MatchCollect>;
-%template(VectorScopedCopyableMatchType) std::vector<mem::ScopedCopyablePtr<six::MatchType> >;
 
 %extend mem::ScopedCloneablePtr<six::AmplitudeTable>
 {
