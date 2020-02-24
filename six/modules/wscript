@@ -5,7 +5,7 @@ def options(opt):
     opt.recurse()
 
 def configure(conf):
-    conf.env['SIX_VERSION'] = '2.2.9'
+    conf.env['SIX_VERSION'] = '3.0.0'
 
     # This allows us to build XML_DATA_CONTENT statically so that users don't
     # have to set NITF_PLUGIN_PATH
