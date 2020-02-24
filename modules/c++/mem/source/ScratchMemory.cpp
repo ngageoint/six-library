@@ -19,24 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <mem/Align.h>
 
 #include <mem/ScratchMemory.h>
-
-namespace
-{
-/*!
- * \brief Advance sys::ubyte pointer to next alignment boundary
- */
-void align(sys::ubyte*& dataPtr, size_t alignment)
-{
-    const size_t beyondBoundary = reinterpret_cast<size_t>(dataPtr) % alignment;
-
-    if (beyondBoundary != 0)
-    {
-        dataPtr += alignment - beyondBoundary;
-    }
-}
-}
 
 namespace mem
 {
@@ -218,7 +203,7 @@ void ScratchMemory::setup(const BufferView<sys::ubyte>& scratchBuffer)
         for (size_t i = 0; i < segment.numBuffers; ++i)
         {
             segment.buffers[i] = mBuffer.data + currentOffset;
-            align(segment.buffers[i], segment.alignment);
+            align(&segment.buffers[i], segment.alignment);
             currentOffset = segment.buffers[i] + segment.numBytes -
                     mBuffer.data;
         }
