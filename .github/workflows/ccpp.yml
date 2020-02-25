@@ -33,7 +33,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ..
+        cmake -DCMAKE_INSTALL_PREFIX installLinux-Github ..
     - name: make
       run: |
         pwd
@@ -42,4 +42,13 @@ jobs:
         cmake --build . --target install
     - name: test
       run: ctest
+    - name: compress
+      run: tar -czvf installLinux-Github.tar.gz installLinux-Github
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: linux_install
+        # Directory containing files to upload
+        path: installLinux-Github.tar.gz
 
