@@ -3,8 +3,8 @@ name: C/C++ CI
 on: [push]
 
 jobs:
-  build:
-
+  build-windows:
+    name: Windows
     runs-on: [windows-latest]
     
     steps:
@@ -22,3 +22,24 @@ jobs:
         cmake --build . --target install
     - name: test
       run: ctest
+      
+  build-linux:
+    name: Linux
+    runs-on: [ubuntu-latest]
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+    - name: make
+      run: |
+        pwd
+        cd build
+        cmake --build .
+        cmake --build . --target install
+    - name: test
+      run: ctest
+
