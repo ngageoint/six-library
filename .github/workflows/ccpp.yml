@@ -16,6 +16,8 @@ jobs:
         cmake ..
     - name: make
       run: |
+        pwd
+        cd build
         cmake --build .
         cmake --build . --target install
     - name: test
