@@ -51,7 +51,7 @@ add_library(nitf source/BandInfo.c
 common_module_config(nitf)
 
 target_link_libraries(nitf nrt)
-target_compile_definitions(nitf PRIVATE
+target_compile_definitions(nitf PUBLIC
                            NITF_DEFAULT_PLUGIN_PATH="${CMAKE_INSTALL_PREFIX}/share/nitf/plugins")
 
 
