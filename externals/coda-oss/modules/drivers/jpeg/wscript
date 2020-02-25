@@ -151,7 +151,8 @@ def build(bld):
 
         if env['install_headers']:
             bld(features='install_tgt', install_path=env['install_includedir'],
-                dir=driverNode, pattern=('jpeglib.h', 'jconfig.h', 'jmorecfg.h'),
+                dir=driverNode, pattern=('jpeglib.h', 'jconfig.h', 'jmorecfg.h',
+                                         'jerror.h'),
                 name='JPEG_HEADERS_INSTALL')
             jpeglib.targets_to_add += ['JPEG_HEADERS_INSTALL']
 
