@@ -24,15 +24,11 @@ jobs:
         cd build
         ctest
     - name: compress
-      run: |
-        ls build
-        Compress-Archive -DestinationPath installWindows-Github.zip -Path build/installWindows-Github
+      run: Compress-Archive -DestinationPath installWindows-Github.zip -Path build/installWindows-Github
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
-        # Artifact name
         name: windows_install
-        # Directory containing files to upload
         path: installWindows-Github.zip
       
   build-linux:
@@ -48,7 +44,6 @@ jobs:
         cmake -DCMAKE_INSTALL_PREFIX=installLinux-Github ..
     - name: make
       run: |
-        pwd
         cd build
         cmake --build . -j
         cmake --build . --target install
@@ -57,14 +52,10 @@ jobs:
         cd build
         ctest
     - name: compress
-      run: |
-        ls build
-        tar -czvf installLinux-Github.tar.gz build/installLinux-Github
+      run: tar -czvf installLinux-Github.tar.gz build/installLinux-Github
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
-        # Artifact name
         name: linux_install
-        # Directory containing files to upload
         path: installLinux-Github.tar.gz
 
