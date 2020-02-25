@@ -40,11 +40,13 @@ jobs:
         cmake --build . -j
         cmake --build . --target install
     - name: test
-      run: ctest
+      run: |
+        cd build
+        ctest
     - name: compress
       run: |
         ls build
-        tar -czvf build/installLinux-Github.tar.gz installLinux-Github
+        tar -czvf installLinux-Github.tar.gz build/installLinux-Github
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
