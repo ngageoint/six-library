@@ -43,8 +43,8 @@ jobs:
       run: ctest
     - name: compress
       run: |
-        ls
-        tar -czvf installLinux-Github.tar.gz installLinux-Github
+        ls build
+        tar -czvf build/installLinux-Github.tar.gz installLinux-Github
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
