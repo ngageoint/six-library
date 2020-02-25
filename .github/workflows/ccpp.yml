@@ -33,7 +33,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake -DCMAKE_INSTALL_PREFIX installLinux-Github ..
+        cmake -DCMAKE_INSTALL_PREFIX=installLinux-Github ..
     - name: make
       run: |
         pwd
