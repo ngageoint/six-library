@@ -19,7 +19,16 @@ include(CMakeLists-CODA.txt)
 set(CMAKE_C_STANDARD 90)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-add_compile_options(-Wno-deprecated -Wno-deprecated-declarations)
+
+if (UNIX)
+    add_compile_options(-Wno-deprecated -Wno-deprecated-declarations)
+elseif(MSVC)
+    add_definitions(-DWIN32_LEAN_AND_MEAN
+                    -DNOMINMAX
+                    -D_CRT_SECURE_NO_WARNINGS
+                    -D_SCL_SECURE_NO_WARNINGS
+                    -D_USE_MATH_DEFINES)
+endif()
 
 function(common_module_config module)
     target_include_directories(${module} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -28,19 +37,26 @@ function(common_module_config module)
             DESTINATION include)
 endfunction()
 
-function(add_unittests unittests ext deps)
+function(add_unittests unittests ext deps module)
     foreach(TEST_NAME ${unittests})
         add_executable(${TEST_NAME} unittests/${TEST_NAME}.${ext})
         target_link_libraries(${TEST_NAME} ${deps})
         add_test(${TEST_NAME} ${TEST_NAME})
-        install(TARGETS ${TEST_NAME} DESTINATION unittests/nrt)
+        install(TARGETS ${TEST_NAME} DESTINATION unittests/${module})
     endforeach()
 endfunction()
 
 function(add_coda_module module)
     add_library(${module} STATIC IMPORTED)
-    set_target_properties(${module} PROPERTIES
-        IMPORTED_LOCATION ${CODA_INSTALL_DIR}/lib/lib${module}.a)
+    if(UNIX)
+        set_target_properties(${module} PROPERTIES
+            IMPORTED_LOCATION ${CODA_INSTALL_DIR}/lib/lib${module}.a)
+    elseif(MSVC)
+        set_target_properties(${module} PROPERTIES
+            IMPORTED_LOCATION ${CODA_INSTALL_DIR}/lib/${module}.lib)
+    else()
+        message(FATAL_ERROR "Unsupported platform")
+    endif()
 endfunction()
 
 add_coda_module(except-c++)

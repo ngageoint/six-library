@@ -1,8 +1,8 @@
 include(CheckIncludeFile)
 include(CheckSymbolExists)
 
-check_include_file("sys/time.h" HAVE_SYS_TIME_H)
-check_symbol_exists("clock_gettime" "time.h" HAVE_CLOCK_GETTIME)
+check_include_file("sys/time.h" CMAKE_HAVE_SYS_TIME_H)
+check_symbol_exists("clock_gettime" "time.h" CMAKE_HAVE_CLOCK_GETTIME)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/nrt/nrt_config.h.cmake.in
                ${CMAKE_CURRENT_SOURCE_DIR}/include/nrt/nrt_config.h)
 
@@ -38,5 +38,4 @@ set(unittest_srcs test_buffer_adapter
                   test_tree
                   test_utils)
 
-add_unittests("${unittest_srcs}" c nrt)
-
+add_unittests("${unittest_srcs}" c nrt nrt)

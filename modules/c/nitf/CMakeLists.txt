@@ -63,7 +63,7 @@ set(unittest_srcs test_create
                   test_tre_mods
                   test_zero_field)
 
-add_unittests("${unittest_srcs}" c nitf)
+add_unittests("${unittest_srcs}" c nitf nitf)
 
 
 # Build all the TRE
@@ -169,4 +169,3 @@ foreach(tre ${tre_srcs})
 endforeach()
 
 install(TARGETS ${tre_srcs} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/nitf/plugins)
-

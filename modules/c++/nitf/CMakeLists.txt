@@ -56,6 +56,10 @@ add_library(nitf-c++ source/BandInfo.cpp
 
 common_module_config(nitf-c++)
 target_link_libraries(nitf-c++ nitf except-c++ io-c++ mt-c++ sys-c++ str-c++)
+if (MSVC)
+    target_link_libraries(nitf-c++ wsock32 ws2_32)
+endif()
+
 add_dependencies(nitf-c++ coda-oss nitf)
 
 set(unittest_srcs test_field++
@@ -66,4 +70,4 @@ set(unittest_srcs test_field++
                   test_tre_mods++)
 
 set(unittest_deps nitf-c++ nitf math-c++)
-add_unittests("${unittest_srcs}" cpp "${unittest_deps}")
+add_unittests("${unittest_srcs}" cpp "${unittest_deps}" nitf)

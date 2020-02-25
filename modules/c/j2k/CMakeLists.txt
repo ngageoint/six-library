@@ -5,7 +5,7 @@ set_target_properties(J2K PROPERTIES
 target_link_libraries(J2K INTERFACE m)
 
 add_library(j2k_config INTERFACE)
-target_include_directories(j2k_config INTERFACE ${CODA_DIR}/modules/drivers/j2k/include/)
+target_include_directories(j2k_config INTERFACE ${CODA_DIR}/target/modules/drivers/j2k/include/)
 
 add_library(j2k-c source/Container.c
                   source/Component.c
