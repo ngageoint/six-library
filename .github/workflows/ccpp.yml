@@ -10,6 +10,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: python waf configure --prefix=install
+      run: mkdir build && cd build && cmake ..
     - name: make
-      run: python waf install
+      run: cmake --build . && cmake --build . --target install
+    - name: test
+      run: ctest
