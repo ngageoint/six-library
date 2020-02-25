@@ -59,6 +59,7 @@ target_link_libraries(nitf-c++ nitf except-c++ io-c++ mt-c++ sys-c++ str-c++)
 if (MSVC)
     target_link_libraries(nitf-c++ wsock32 ws2_32)
 endif()
+target_compile_features(nitf-c++ PUBLIC cxx_inheriting_constructors)
 
 add_dependencies(nitf-c++ coda-oss nitf)
 

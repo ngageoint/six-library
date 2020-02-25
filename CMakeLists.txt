@@ -67,6 +67,10 @@ add_coda_module(mt-c++)
 add_coda_module(str-c++)
 add_coda_module(math-c++)
 
+add_library(coda_oss_config INTERFACE)
+target_include_directories(coda_oss_config INTERFACE ${CODA_DIR}/target/moudules/c++/config/include/)
+add_dependencies(coda_oss_config coda-oss)
+
 # Everyone can include coda's headers
 include_directories(${CODA_INSTALL_DIR}/include)
 
