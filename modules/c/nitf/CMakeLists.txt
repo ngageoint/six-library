@@ -1,5 +1,5 @@
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/nitf/nitf_config.h.cmake.in
-               ${CMAKE_CURRENT_SOURCE_DIR}/include/nitf/nitf_config.h)
+               ${CMAKE_CURRENT_BINARY_DIR}/include/nitf/nitf_config.h)
 
 add_library(nitf source/BandInfo.c
                  source/BandSource.c

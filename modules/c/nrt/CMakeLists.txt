@@ -1,10 +1,10 @@
 include(CheckIncludeFile)
 include(CheckSymbolExists)
 
-check_include_file("sys/time.h" CMAKE_HAVE_SYS_TIME_H)
-check_symbol_exists("clock_gettime" "time.h" CMAKE_HAVE_CLOCK_GETTIME)
+check_include_file("sys/time.h" HAVE_SYS_TIME_H)
+check_symbol_exists("clock_gettime" "time.h" HAVE_CLOCK_GETTIME)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/nrt/nrt_config.h.cmake.in
-               ${CMAKE_CURRENT_SOURCE_DIR}/include/nrt/nrt_config.h)
+               ${CMAKE_CURRENT_BINARY_DIR}/include/nrt/nrt_config.h)
 
 add_library(nrt source/DateTime.c
                 source/Debug.c

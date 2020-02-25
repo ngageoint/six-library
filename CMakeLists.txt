@@ -31,7 +31,8 @@ elseif(MSVC)
 endif()
 
 function(common_module_config module)
-    target_include_directories(${module} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+    target_include_directories(${module} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+                                                ${CMAKE_CURRENT_BINARY_DIR}/include)
     install(TARGETS ${module})
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
             DESTINATION include)
