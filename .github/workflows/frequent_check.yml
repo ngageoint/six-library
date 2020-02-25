@@ -1,0 +1,48 @@
+name: Build, unittest
+
+on: [push]
+  
+  
+jobs:
+  build-windows:
+    name: Windows
+    runs-on: [windows-latest]
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: |
+        mkdir build
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=installWindows-Github ..
+    - name: make
+      run: |
+        cd build
+        cmake --build . -j
+        cmake --build . --target install
+    - name: test
+      run: |
+        cd build
+        ctest
+   
+      
+  build-linux:
+    name: Linux
+    runs-on: [ubuntu-latest]
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: |
+        mkdir build
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=installLinux-Github ..
+    - name: make
+      run: |
+        cd build
+        cmake --build . -j
+        cmake --build . --target install
+    - name: test
+      run: |
+        cd build
+        ctest
