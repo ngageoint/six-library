@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of types-c++
+ * This file is part of mem-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2020, Radiant Geospatial Solutions
  *
- * types-c++ is free software; you can redistribute it and/or modify
+ * mem-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -19,14 +19,17 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <mem/Align.h>
 
-#ifndef __IMPORT_TYPES_H__
-#define __IMPORT_TYPES_H__
-
-#include <types/RgAz.h>
-#include <types/RowCol.h>
-#include <types/PageRowCol.h>
-#include <types/Range.h>
-#include <types/RangeList.h>
-
-#endif
+namespace mem
+{
+void align(sys::ubyte* __restrict* data, size_t alignment)
+{
+    const size_t beyondBoundary = reinterpret_cast<size_t>(*data) %
+                                  alignment;
+    if (beyondBoundary != 0)
+    {
+        *data += alignment - beyondBoundary;
+    }
+}
+}

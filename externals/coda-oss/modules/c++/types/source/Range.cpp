@@ -2,7 +2,7 @@
  * This file is part of types-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2020, Radiant Geospatial Solutions
  *
  * types-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,14 +19,31 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef __IMPORT_TYPES_H__
-#define __IMPORT_TYPES_H__
-
-#include <types/RgAz.h>
-#include <types/RowCol.h>
-#include <types/PageRowCol.h>
 #include <types/Range.h>
-#include <types/RangeList.h>
 
-#endif
+namespace types
+{
+Range Range::split(size_t numElementsReq) const
+{
+    // If the input range is empty, we can't remove any elements from it...
+    if (empty() || numElementsReq == 0)
+    {
+        return types::Range();
+    }
+
+    // If fewer elements are requested than are in inputRange,
+    // pull off numElementsReq elements and update the split range
+    if (numElementsReq <= mNumElements)
+    {
+        return types::Range(endElement() - numElementsReq,
+                            numElementsReq);
+    }
+    // Otherwise, if more elements are requested than are in inputRange,
+    // set the split range to be input range (denoting that we have taken
+    // all of the elements)
+    else
+    {
+        return types::Range(mStartElement, mNumElements);
+    }
+}
+}
