@@ -50,7 +50,6 @@ TEST_CASE(testEightBytes)
 {
     nrt_Uint64 value;
     nrt_Uint64 swappedValue;
-    nrt_Uint64 originalValue;
 
     value = 0x0123456789ABCDEF;
     swappedValue = 0xEFCDAB8967452301;
