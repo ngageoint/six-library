@@ -1,7 +1,40 @@
 Building NITRO
 ---------------
 
-We primarily use Waf for building. Below are all of the options available.
+CMake is the preferred build method. Version 3.11 or better is required.
+
+Sample Build Scenario
+---------------------
+
+    mkdir build;
+    cd build;
+    cmake ..
+    cmake --build . -j
+    cmake --build . --target install
+    ctest
+
+Problems and Configurations
+---------------------------
+
+ - If your system compiler does not fully support C++11, you may have to
+   specify a different one during the configure step. e.g.
+
+       cmake -DCMAKE_C_COMPILER=/some/path/gcc/4.9.1/bin/gcc -DCMAKE_CXX_COMPILER=/...../bin/g++ ..
+
+ - NITRO will construct a default local install location for you. Pass -DCMAKE_INSTALL_PREFIX to override.
+
+  - Java, MATLAB, Python, C++ bindings all build. Just make sure the relevant tools
+    are on your PATH
+
+  - Debug symbols are available by default. Configure release type with [-DCMAKE_BUILD_TYPE](https://cmake.org/cmake/help/v3.0/variable/CMAKE_BUILD_TYPE.html)
+
+  - If the CMake build system does not support a required feature that Waf does, open
+    a ticket or a pull request!
+
+
+Building with Waf
+-----------------
+Waf is the legacy build system. Below are all of the options available.
 
 
     > python waf --help
@@ -15,7 +48,7 @@ We primarily use Waf for building. Below are all of the options available.
       distcheck: checks if the sources compile (tarball from 'dist')
       install  : installs the build files
       uninstall: removes the installed files
-    
+
     Options:
       --version             show program's version number and exit
       -h, --help            show this help message and exit
@@ -48,22 +81,22 @@ We primarily use Waf for building. Below are all of the options available.
       --disable-python      Disable python
       --require-python      Require Python lib/headers (configure option)
       --enable-openjpeg     Enable openjpeg
-    
+
       configuration options:
         -b BLDDIR, --blddir=BLDDIR
                             build dir for the project (configuration)
         -s SRCDIR, --srcdir=SRCDIR
                             src dir for the project (configuration)
         --prefix=PREFIX     installation prefix (configuration) [default: '/usr/local/']
-    
+
       installation options:
         --destdir=DESTDIR   installation root [default: '']
         -f, --force         force file installation
-    
+
       C Compiler Options:
         --check-c-compiler=CHECK_C_COMPILER
                             On this platform (linux) the following C-Compiler will be checked by default: "gcc icc suncc"
-    
+
       C++ Compiler Options:
         --check-cxx-compiler=CHECK_CXX_COMPILER
                             On this platform (linux) the following C++ Compiler will be checked by default: "g++ icpc
@@ -80,7 +113,7 @@ Sample Build Scenario
 
 Enabling a debugger
 -------------------
-`-g` and its variants can be achieved at configure time using the 
+`-g` and its variants can be achieved at configure time using the
 `--enable-debugging` switch at waf configure time
 
 Memory Debugging
@@ -124,10 +157,10 @@ above all, OO, we stick to certain conventions herein:
 
 *	All functions that are non-static should be wrapped in
 	a `NITFAPI(return-val)` or `NITFPROT(return-val)` for protected
-	data.  
+	data.
 
-*	This allows for easy macro definitions in order to 
-	control the decoration algorithm for windows, and to assure 
+*	This allows for easy macro definitions in order to
+	control the decoration algorithm for windows, and to assure
 	that the import decoration and
 	export decoration are identical (otherwise we cant use them)
 
@@ -141,25 +174,27 @@ above all, OO, we stick to certain conventions herein:
 
 Platforms
 ---------
-While the ultimate goal is cross-platform, cross-language,
-for this release, we are focusing only on C/C++.  For TREs,
-they need to be coded in C (only).  
+While the ultimate goal is to be cross-platform and cross-language,
+the C and C++ layers get the most support.
 
-SVN Issues
-----------
-Please DONT POLLUTE SVN!  Don't put binaries in there,
-unless you have a very good reason
+The Python layer gets some use for scripting convenience.
 
-*IMPORTANT: Before you commit:*
+The MATLAB and JAVA layers have not been touched in years.
+Use at your own risk.
 
-*	Please create a unit test for your all code you
-	are adding 
+TREs need to be coded in C (only).
 
-*	Please compile and test.
+Before you commit
+-----------------
+*	Create a unit test for your all code you
+	are adding
 
-*	Please 'make clean'
+*	Compile and test. (`ctest`)
 
-*   Please doxygen on root directory and view in
+* A clang-format script is available at `externals/coda-oss/.clang-format`.
+  Use it.
+
+* Doxygen on root directory and view in
 	browser the doxygen code (in nitf/doc/html/).
 
 Doxygen Commenting
@@ -173,14 +208,9 @@ of fixing it later, which will make me eternally grateful.
 
 NITF Library Users: General Issues
 ----------------------------------
-Dont forget to set your environment variable: `NITF_PLUGIN_PATH`.
-For instance, in my location, it could be:
+If you want to use the default TRE plugins that come with the library,
+NITRO already knows where they are installed, and you don't have to
+do anything.
 
-    setenv NITF_PLUGIN_PATH ~/nitf/plugins/i686-pc-linux-gnu/
-
-NOTE: If you do not set the NITF_PLUGIN_PATH variable, the parser
-will assume that the plugin path is "./plugins/" 
-If you choose to ignore this variable, you MUST have your DSOs in
-that directory (The Makefile will generate it in
-nitf/plugins/@target@).
-
+If you want to override this behavior, you can set the
+`NITF_PLUGIN_PATH` environment variable to your preferred location.
