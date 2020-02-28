@@ -27,20 +27,20 @@ if (!JNI_FOUND)
     message(WARNING "JNI libraries not found. Skipping Java modules")
 elseif(!Java_FOUND)
     message(WARNING "Java SDK not found. Skipping Java modules")
-#else()
-#    set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.5" "-target" "1.5")
-#
-#    # CODA doesn't know how to install jars, so we'll handle it here
-#    set(jar_path ${CODA_DIR}/modules/drivers/jars)
-#    set(coda_jars ${jar_path}/commons-io-1.3.2.jar
-#                  ${jar_path}/commons-cli-1.0-beta-2.jar
-#                  ${jar_path}/commons-lang-2.0.jar
-#                  ${jar_path}/commons-logging-1.1.1.jar
-#                  ${jar_path}/log4j-1.2.13.jar)
-#    install(FILES ${coda_jars} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-#
-#    add_subdirectory(nitf)
-#    add_subdirectory(cgm)
-#    add_subdirectory(nitf.imageio)
-#    add_subdirectory(nitf.imagej)
+else()
+    set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.5" "-target" "1.5")
+
+    # CODA doesn't know how to install jars, so we'll handle it here
+    set(jar_path ${CODA_DIR}/modules/drivers/jars)
+    set(coda_jars ${jar_path}/commons-io-1.3.2.jar
+                  ${jar_path}/commons-cli-1.0-beta-2.jar
+                  ${jar_path}/commons-lang-2.0.jar
+                  ${jar_path}/commons-logging-1.1.1.jar
+                  ${jar_path}/log4j-1.2.13.jar)
+    install(FILES ${coda_jars} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+
+    add_subdirectory(nitf)
+    add_subdirectory(cgm)
+    add_subdirectory(nitf.imageio)
+    add_subdirectory(nitf.imagej)
 endif()

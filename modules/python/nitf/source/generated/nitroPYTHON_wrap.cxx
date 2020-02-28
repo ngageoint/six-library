@@ -34647,7 +34647,7 @@ SWIG_init(void) {
   
   SWIG_InstallConstants(d,swig_const_table);
   
-  SWIG_Python_SetConstant(d, "NRT_FILE",SWIG_FromCharPtr("/home/jmeans/oss/nitro/modules/c/nrt/include/nrt/Defines.h"));
+  SWIG_Python_SetConstant(d, "NRT_FILE",SWIG_FromCharPtr("/corp/SST/jmeans/workspace/nitro/modules/c/nrt/include/nrt/Defines.h"));
   SWIG_Python_SetConstant(d, "NRT_LINE",SWIG_From_int(static_cast< int >(95)));
   SWIG_Python_SetConstant(d, "NRT_FUNC",SWIG_FromCharPtr("unknown function"));
   SWIG_Python_SetConstant(d, "NRT_DEFAULT_PERM",SWIG_From_int(static_cast< int >(0644)));
@@ -34688,7 +34688,7 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NRT_ERR_INT_STACK_OVERFLOW",SWIG_From_int(static_cast< int >(NRT_ERR_INT_STACK_OVERFLOW)));
   SWIG_Python_SetConstant(d, "NRT_ERR_UNK",SWIG_From_int(static_cast< int >(NRT_ERR_UNK)));
   SWIG_Python_SetConstant(d, "NRT_MAX_READ_ATTEMPTS",SWIG_From_int(static_cast< int >(100)));
-  SWIG_Python_SetConstant(d, "NITF_FILE",SWIG_FromCharPtr("/home/jmeans/oss/nitro/modules/c/nitf/include/nitf/System.h"));
+  SWIG_Python_SetConstant(d, "NITF_FILE",SWIG_FromCharPtr("/corp/SST/jmeans/workspace/nitro/modules/c/nitf/include/nitf/System.h"));
   SWIG_Python_SetConstant(d, "NITF_LINE",SWIG_From_int(static_cast< int >(58)));
   SWIG_Python_SetConstant(d, "NITF_FUNC",SWIG_FromCharPtr("unknown function"));
   SWIG_Python_SetConstant(d, "NITF_MAX_PATH",SWIG_From_int(static_cast< int >(1024)));
