@@ -13,4 +13,4 @@ add_library(j2k-c source/Container.c
 common_module_config(j2k-c)
 add_dependencies(j2k-c coda-oss)
 
-target_link_libraries(j2k-c j2k_config J2K nrt nitf)
+target_link_libraries(j2k-c j2k_config J2K nitf-c)

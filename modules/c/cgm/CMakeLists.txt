@@ -25,4 +25,4 @@ add_library(cgm source/CircleElement.c
                 source/Vertex.c
                 source/VertexClose.c)
 common_module_config(cgm)
-target_link_libraries(cgm nitf)
+target_link_libraries(cgm nitf-c)

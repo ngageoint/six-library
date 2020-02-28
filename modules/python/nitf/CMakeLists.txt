@@ -18,10 +18,11 @@ if (Python_FOUND)
                              OUTFILE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source/generated
                              SOURCES source/nitro.i)
 
-    target_include_directories(nitropy PRIVATE ${Python_INCLUDE_DIRS} ${Python_NumPy_INCLUDE_DIRS}
-                                               ${NITRO_C_SOURCE_DIR}/nrt/include
-                                               ${NITRO_C_SOURCE_DIR}/nitf/include)
-    target_link_libraries(nitropy nitf numpyutils-c++ sys-c++ except-c++ io-c++ str-c++)
+    target_include_directories(nitropy PRIVATE ${Python_INCLUDE_DIRS}
+    ${Python_NumPy_INCLUDE_DIRS})
+                                    #           ${NITRO_C_SOURCE_DIR}/nrt/include
+                                    #           ${NITRO_C_SOURCE_DIR}/nitf/include)
+    target_link_libraries(nitropy nitf-c numpyutils-c++ sys-c++ except-c++ io-c++ str-c++)
     install(TARGETS nitropy DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/site-packages/)
     install(FILES source/__init__.py source/generated/nitropy.py
             DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/site-packages/)

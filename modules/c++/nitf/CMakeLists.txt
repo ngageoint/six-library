@@ -55,13 +55,11 @@ add_library(nitf-c++ source/BandInfo.cpp
                      source/Writer.cpp)
 
 common_module_config(nitf-c++)
-target_link_libraries(nitf-c++ nitf except-c++ io-c++ mt-c++ sys-c++ str-c++)
+target_link_libraries(nitf-c++ nitf-c except-c++ io-c++ mt-c++ sys-c++ str-c++)
 if (MSVC)
     target_link_libraries(nitf-c++ wsock32 ws2_32)
 endif()
 target_compile_features(nitf-c++ PUBLIC cxx_inheriting_constructors)
-
-add_dependencies(nitf-c++ coda-oss nitf)
 
 set(unittest_srcs test_field++
                   test_image_blocker
@@ -70,5 +68,5 @@ set(unittest_srcs test_field++
                   test_nitf_buffer_list
                   test_tre_mods++)
 
-set(unittest_deps nitf-c++ nitf math-c++)
+set(unittest_deps nitf-c++ math-c++)
 add_unittests("${unittest_srcs}" cpp "${unittest_deps}" nitf)
