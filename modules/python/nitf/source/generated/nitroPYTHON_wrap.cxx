@@ -14,7 +14,6 @@
 #endif
 
 #define SWIG_PYTHON_DIRECTOR_NO_VTABLE
-#define SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS
 
 
 #ifdef __cplusplus
@@ -3758,6 +3757,9 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
   if (val) *val = r ? true : false;
   return SWIG_OK;
 }
+
+
+  #define SWIG_From_double   PyFloat_FromDouble 
 
 
 SWIGINTERN int
@@ -34645,7 +34647,7 @@ SWIG_init(void) {
   
   SWIG_InstallConstants(d,swig_const_table);
   
-  SWIG_Python_SetConstant(d, "NRT_FILE",SWIG_FromCharPtr("/data1/u/jmeans/nitro/modules/c/nrt/include/nrt/Defines.h"));
+  SWIG_Python_SetConstant(d, "NRT_FILE",SWIG_FromCharPtr("/home/jmeans/oss/nitro/modules/c/nrt/include/nrt/Defines.h"));
   SWIG_Python_SetConstant(d, "NRT_LINE",SWIG_From_int(static_cast< int >(95)));
   SWIG_Python_SetConstant(d, "NRT_FUNC",SWIG_FromCharPtr("unknown function"));
   SWIG_Python_SetConstant(d, "NRT_DEFAULT_PERM",SWIG_From_int(static_cast< int >(0644)));
@@ -34686,7 +34688,7 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NRT_ERR_INT_STACK_OVERFLOW",SWIG_From_int(static_cast< int >(NRT_ERR_INT_STACK_OVERFLOW)));
   SWIG_Python_SetConstant(d, "NRT_ERR_UNK",SWIG_From_int(static_cast< int >(NRT_ERR_UNK)));
   SWIG_Python_SetConstant(d, "NRT_MAX_READ_ATTEMPTS",SWIG_From_int(static_cast< int >(100)));
-  SWIG_Python_SetConstant(d, "NITF_FILE",SWIG_FromCharPtr("/data1/u/jmeans/nitro/modules/c/nitf/include/nitf/System.h"));
+  SWIG_Python_SetConstant(d, "NITF_FILE",SWIG_FromCharPtr("/home/jmeans/oss/nitro/modules/c/nitf/include/nitf/System.h"));
   SWIG_Python_SetConstant(d, "NITF_LINE",SWIG_From_int(static_cast< int >(58)));
   SWIG_Python_SetConstant(d, "NITF_FUNC",SWIG_FromCharPtr("unknown function"));
   SWIG_Python_SetConstant(d, "NITF_MAX_PATH",SWIG_From_int(static_cast< int >(1024)));
@@ -34700,9 +34702,7 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NITF_DATE_FORMAT_20",SWIG_FromCharPtr("%d%H%M%SZ%b%y"));
   SWIG_Python_SetConstant(d, "NITF_DATE_FORMAT_21",SWIG_FromCharPtr("%Y%m%d%H%M%S"));
   SWIG_Python_SetConstant(d, "NITF_TRE_HASH_SIZE",SWIG_From_int(static_cast< int >(8)));
-  SWIG_Python_SetConstant(d, "HAVE_CLOCK_GETTIME",SWIG_From_int(static_cast< int >(1)));
-  SWIG_Python_SetConstant(d, "HAVE_SYS_TIME_H",SWIG_From_int(static_cast< int >(1)));
-  SWIG_Python_SetConstant(d, "NRT_LIB_VERSION",SWIG_FromCharPtr("2.8"));
+  SWIG_Python_SetConstant(d, "NRT_LIB_VERSION",SWIG_From_double(static_cast< double >(2.8)));
   SWIG_Python_SetConstant(d, "NITF_LIB_VERSION",SWIG_FromCharPtr("2.8"));
   SWIG_Python_SetConstant(d, "NITF_COMPRESSION_HASH_SIZE",SWIG_From_int(static_cast< int >(2)));
   SWIG_Python_SetConstant(d, "NITF_DECOMPRESSION_HASH_SIZE",SWIG_From_int(static_cast< int >(2)));
