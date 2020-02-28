@@ -20,7 +20,7 @@ endif()
 
 ExternalProject_Add_Step(coda-oss
         waf-configure
-        COMMAND ${Python_EXECUTABLE} waf configure --prefix=${CODA_INSTALL_DIR} "${configure_flags}"
+        COMMAND ${PYTHON} waf configure --prefix=${CODA_INSTALL_DIR} "${configure_flags}"
         DEPENDERS build
         ALWAYS 0
         WORKING_DIRECTORY ${CODA_DIR})
@@ -28,20 +28,10 @@ ExternalProject_Add_Step(coda-oss
 foreach(module ${coda_modules})
     ExternalProject_Add_Step(coda-oss
             waf-build-${module}
-            COMMAND ${Python_EXECUTABLE} waf install --target=${module}
+            COMMAND ${PYTHON} waf install --target=${module}
             DEPENDEES waf-configure
             DEPENDERS build
             ALWAYS 0
             WORKING_DIRECTORY ${CODA_DIR})
 endforeach()
 
-#if(Python_NumPy_FOUND)
-#    ExternalProject_Add_Step(coda-oss
-#            waf-build-numpyutils
-#            COMMAND ${Python_EXECUTABLE} waf install --target=numpyutils-c++
-#            DEPENDEES waf-configure
-#            DEPENDERS build
-#            ALWAYS 0
-#            WORKING_DIRECTORY ${CODA_DIR})
-#
-#endif()

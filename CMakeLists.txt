@@ -13,8 +13,14 @@ endif()
 find_package(Python COMPONENTS Interpreter Development NumPy)
 list(APPEND coda_modules except-c++ io-c++ sys-c++ mt-c++ str-c++ math-c++
 xml.lite-c++ JPEG J2K)
+
 if (Python_NumPy_FOUND)
     list(APPEND coda_modules numpyutils-c++)
+endif()
+if (Python_FOUND)
+    set(PYTHON ${Python_EXECUTABLE})
+else()
+    set(PYTHON python)
 endif()
 
 include(CMakeLists-CODA.txt)
