@@ -112,7 +112,7 @@ static nitf_TREDescription description[] = {
     {NITF_BCS_A, 21, "Illum Elevation Angle Coeff Per Row-Col", "IERC" },
     {NITF_BCS_A, 21, "Illum Elevation Angle Coeff Per Col^2", "IECC" },
 
-    {NITF_BCS_A, 21, "Illum Azimuth Angle Const", "IE0" },
+    {NITF_BCS_A, 21, "Illum Azimuth Angle Const", "IA0" },
     {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Row", "IAR" },
     {NITF_BCS_A, 21, "Illum Azimuth Angle Coeff Per Col", "IAC" },
 
