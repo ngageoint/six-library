@@ -17,7 +17,11 @@ if (Python_NumPy_FOUND)
     list(APPEND coda_modules numpyutils-c++)
 endif()
 
-include(CMakeLists-CODA.txt)
+if (NOT DEFINED CODA_INSTALL_DIR)
+    include(CMakeLists-CODA.txt)
+else()
+    add_library(coda-oss INTERFACE)
+endif()
 
 foreach(module ${coda_modules})
     add_coda_module(${module})
@@ -29,9 +33,6 @@ add_dependencies(coda_oss_config coda-oss)
 
 # Everyone can include coda's headers
 include_directories(${CODA_INSTALL_DIR}/include)
-
-# TestCase.h lives here
-include_directories(${CODA_DIR}/modules/c++/include)
 
 enable_testing()
 set(NITRO_C_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/c)

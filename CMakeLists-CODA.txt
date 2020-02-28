@@ -34,14 +34,3 @@ foreach(module ${coda_modules})
             ALWAYS 0
             WORKING_DIRECTORY ${CODA_DIR})
 endforeach()
-
-#if(Python_NumPy_FOUND)
-#    ExternalProject_Add_Step(coda-oss
-#            waf-build-numpyutils
-#            COMMAND ${Python_EXECUTABLE} waf install --target=numpyutils-c++
-#            DEPENDEES waf-configure
-#            DEPENDERS build
-#            ALWAYS 0
-#            WORKING_DIRECTORY ${CODA_DIR})
-#
-#endif()
