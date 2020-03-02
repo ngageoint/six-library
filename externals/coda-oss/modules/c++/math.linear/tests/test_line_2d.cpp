@@ -70,7 +70,7 @@ TEST_CASE(testVertical)
     math::linear::Line2D vertLine2(P1, P2);
     TEST_EXCEPTION(vertLine.intersection(vertLine2));
 
-    // Intersecting a horizontal line should give (vertLine.xIntercept, \
+    // Intersecting a horizontal line should give (vertLine.xIntercept,
     // horiLine.yIntercept)
     math::linear::Line2D::Point P3(5,5);
     math::linear::Line2D::Point P4(6,5);
