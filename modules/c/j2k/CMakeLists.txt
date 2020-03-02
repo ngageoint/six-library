@@ -1,5 +1,5 @@
-add_library(j2k_config INTERFACE)
-target_include_directories(j2k_config INTERFACE ${CODA_DIR}/target/modules/drivers/j2k/include/)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/j2k/j2k_config.h.cmake.in
+               ${CMAKE_CURRENT_BINARY_DIR}/include/j2k/j2k_config.h)
 
 add_library(j2k-c source/Container.c
                   source/Component.c
