@@ -161,7 +161,12 @@ set(tre_srcs  ACCHZB
 
 foreach(tre ${tre_srcs})
     add_library(${tre} SHARED shared/${tre}.c)
+<<<<<<< HEAD
     target_link_libraries(${tre} nitf-c)
+=======
+    target_link_libraries(${tre} nitf)
+    target_compile_definitions(${tre} PRIVATE NITF_MODULE_EXPORTS)
+>>>>>>> master
 
     # This line is making sure the resultant TRE is named, e.g.
     # XML_DATA_CONTENT.so instead of libXML_DATA_CONTENT.so
