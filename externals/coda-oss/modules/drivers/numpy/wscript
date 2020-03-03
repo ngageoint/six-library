@@ -1,23 +1,21 @@
-import os, sys
-from os.path import join, exists
 from waflib import Options
-from waflib.TaskGen import feature, before, task_gen
 
 build = distclean = lambda x: None
 
+
 def options(opt):
-    opt.add_option('--disable-numpy', action='store_false', dest='enable_numpy', default=True,
+    opt.add_option('--disable-numpy', action='store_false',
+                   dest='enable_numpy', default=True,
                    help='Turn off Numpy C headers/libs')
 
-def configure(conf):    
+
+def configure(conf):
     if Options.options.enable_numpy and \
-        hasattr(Options.options, 'python') and Options.options.python:
+            hasattr(Options.options, 'python') and Options.options.python:
         # a little magic borrowed from python-config and extended for numpy and -L flags
         try:
-            from distutils import sysconfig
             import numpy.distutils
-            import os
-            
+
             np_info = numpy.distutils.misc_util.get_info('npymath')
 
             warningmessage = ""
@@ -31,11 +29,11 @@ def configure(conf):
 
             conf.check(uselib_store='NUMPY',
                        use='PYEXT',
-                       lib='npymath',  
-                       header_name=['Python.h','numpy/arrayobject.h'],
+                       lib='npymath',
+                       header_name=['Python.h', 'numpy/arrayobject.h'],
                        includes=inc_dir,
                        libpath=lib_dir,
-                       msg='Checking for library numpy' + warningmessage, 
+                       msg='Checking for library numpy' + warningmessage,
                        mandatory=True)
 
             conf.undefine("HAVE_NUMPY_ARRAYOBJECT_H")

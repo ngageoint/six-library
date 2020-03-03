@@ -74,7 +74,7 @@ public:
     }
 
 private:
-    size_t mThread;
+    sys::AtomicCounter::ValueType mThread;
     sys::Mutex mMutex;
     sys::AtomicCounter& mThreadCounter;
 };
