@@ -19,9 +19,7 @@ if (Python_FOUND)
                              SOURCES source/nitro.i)
 
     target_include_directories(nitropy PRIVATE ${Python_INCLUDE_DIRS}
-    ${Python_NumPy_INCLUDE_DIRS})
-                                    #           ${NITRO_C_SOURCE_DIR}/nrt/include
-                                    #           ${NITRO_C_SOURCE_DIR}/nitf/include)
+                                               ${Python_NumPy_INCLUDE_DIRS})
     target_link_libraries(nitropy nitf-c numpyutils-c++ sys-c++ except-c++ io-c++ str-c++)
     install(TARGETS nitropy DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/site-packages/)
     install(FILES source/__init__.py source/generated/nitropy.py
