@@ -16,20 +16,24 @@ Sample Build Scenario
 Problems and Configurations
 ---------------------------
 
- - If your system compiler does not fully support C++11, you may have to
-   specify a different one during the configure step. e.g.
+  - The Python layer will not build on Windows
+  - Nothing will build on WSL
+  - Both these problems are due to how coda-oss's waf talks to Python. They will
+    be addressed once CODA-OSS is building with CMake.
+  - If your system compiler does not fully support C++11, you may have to
+    specify a different one during the configure step. e.g.
 
-       cmake -DCMAKE_C_COMPILER=/some/path/gcc/4.9.1/bin/gcc -DCMAKE_CXX_COMPILER=/...../bin/g++ ..
+        cmake -DCMAKE_C_COMPILER=/some/path/gcc/4.9.1/bin/gcc -DCMAKE_CXX_COMPILER=/...../bin/g++ ..
 
- - NITRO will construct a default local install location for you. Pass -DCMAKE_INSTALL_PREFIX to override.
+  - NITRO will construct a default local install location for you. Pass -DCMAKE_INSTALL_PREFIX to override.
 
   - Java, MATLAB, Python, C++ bindings all build. Just make sure the relevant tools
     are on your PATH
 
   - Debug symbols are available by default. Configure release type with [-DCMAKE_BUILD_TYPE](https://cmake.org/cmake/help/v3.0/variable/CMAKE_BUILD_TYPE.html)
 
-  - If the CMake build system does not support a required feature that Waf does, open
-    a ticket or a pull request!
+  - If the CMake build system does not support a required feature that Waf does, create
+    an issue or a pull request!
 
 
 Building with Waf
