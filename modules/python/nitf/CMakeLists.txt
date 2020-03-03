@@ -12,6 +12,7 @@ if (Python_FOUND)
         "${NITRO_C_SOURCE_DIR}/nrt/include"
         "${NITRO_C_SOURCE_DIR}/nitf/include")
     set_property(SOURCE source/nitro.i PROPERTY CPLUSPLUS ON)
+    set_property(SOURCE source/nitro.i PROPERTY COMPILE_OPTIONS -extranative -py3)
     swig_add_library(nitropy TYPE SHARED
                              LANGUAGE python
                              OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source/generated
