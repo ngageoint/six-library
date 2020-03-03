@@ -31,9 +31,10 @@
  * for the source and some discussion
  */
 #if PY_MAJOR_VERSION >= 3
-int init_numpy()
+void* init_numpy()
 {
     import_array();
+    return nullptr;
 }
 #else
 void init_numpy()

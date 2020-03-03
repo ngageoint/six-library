@@ -23,26 +23,28 @@
 #ifndef __STR_CONVERT_H__
 #define __STR_CONVERT_H__
 
-#include <string>
+#include <import/except.h>
+#include <cerrno>
 #include <complex>
+#include <cstdlib>
+#include <iomanip>
+#include <iostream>
 #include <limits>
 #include <ostream>
 #include <sstream>
-#include <iomanip>
+#include <string>
 #include <typeinfo>
-#include <iostream>
-#include <cstdlib>
-#include <cerrno>
-#include <limits>
-#include <import/except.h>
 
 namespace str
 {
+template <typename T>
+int getPrecision(const T& type);
 
-template<typename T> int getPrecision(const T& type);
-template<typename T> int getPrecision(const std::complex<T>& type);
+template <typename T>
+int getPrecision(const std::complex<T>& type);
 
-template<typename T> std::string toString(const T& value)
+template <typename T>
+std::string toString(const T& value)
 {
     std::ostringstream buf;
     buf.precision(getPrecision(value));
@@ -50,20 +52,28 @@ template<typename T> std::string toString(const T& value)
     return buf.str();
 }
 
-template<> std::string toString(const uint8_t& value);
+template <>
+std::string toString(const uint8_t& value);
 
-template<> std::string toString(const int8_t& value);
+template <>
+std::string toString(const int8_t& value);
 
-template<typename T> std::string toString(const T& real, const T& imag)
+template <typename T>
+std::string toString(const T& real, const T& imag)
 {
     return toString(std::complex<T>(real, imag));
 }
 
-template<typename T> T toType(const std::string& s)
+template <typename T>
+T toType(const std::string& s)
 {
     if (s.empty())
-        throw except::BadCastException(except::Context(__FILE__, __LINE__,
-            std::string(""), std::string(""), std::string("Empty string")));
+        throw except::BadCastException(
+                except::Context(__FILE__,
+                                __LINE__,
+                                std::string(""),
+                                std::string(""),
+                                std::string("Empty string")));
 
     T value;
 
@@ -73,26 +83,32 @@ template<typename T> T toType(const std::string& s)
 
     if (buf.fail())
     {
-        throw except::BadCastException(except::Context(__FILE__, __LINE__,
-            std::string(""), std::string(""),
-            std::string("Conversion failed: '")
-                + s + std::string("' -> ") + typeid(T).name()));
+        throw except::BadCastException(
+                except::Context(__FILE__,
+                                __LINE__,
+                                std::string(""),
+                                std::string(""),
+                                std::string("Conversion failed: '") + s +
+                                        std::string("' -> ") +
+                                        typeid(T).name()));
     }
 
     return value;
 }
 
-template<> bool toType<bool> (const std::string& s);
-template<> std::string toType<std::string> (const std::string& s);
+template <>
+bool toType<bool>(const std::string& s);
+template <>
+std::string toType<std::string>(const std::string& s);
 
 /**
  *  strtoll wrapper for msvc compatibility.
  */
-long long strtoll(const char *str, char **endptr, int base);
+long long strtoll(const char* str, char** endptr, int base);
 /**
  *  strtoull wrapper for msvc compatibility.
  */
-unsigned long long strtoull(const char *str, char **endptr, int base);
+unsigned long long strtoull(const char* str, char** endptr, int base);
 
 /**
  *  Convert a string containing a number in any base to a numerical type.
@@ -102,7 +118,8 @@ unsigned long long strtoull(const char *str, char **endptr, int base);
  *  @return a numberical representation of the number
  *  @throw BadCastException thrown if cast cannot be performed.
  */
-template<typename T> T toType(const std::string& s, int base)
+template <typename T>
+T toType(const std::string& s, int base)
 {
     char* end;
     errno = 0;
@@ -113,8 +130,8 @@ template<typename T> T toType(const std::string& s, int base)
     if (std::numeric_limits<T>::is_signed)
     {
         const long long longRes = str::strtoll(str, &end, base);
-        if (longRes < std::numeric_limits<T>::min() ||
-            longRes > std::numeric_limits<T>::max())
+        if (longRes < static_cast<long long>(std::numeric_limits<T>::min()) ||
+            longRes > static_cast<long long>(std::numeric_limits<T>::max()))
         {
             overflow = true;
         }
@@ -123,8 +140,10 @@ template<typename T> T toType(const std::string& s, int base)
     else
     {
         const unsigned long long longRes = str::strtoull(str, &end, base);
-        if (longRes < std::numeric_limits<T>::min() ||
-            longRes > std::numeric_limits<T>::max())
+        if (longRes < static_cast<unsigned long long>(
+                              std::numeric_limits<T>::min()) ||
+            longRes > static_cast<unsigned long long>(
+                              std::numeric_limits<T>::max()))
         {
             overflow = true;
         }
@@ -132,16 +151,25 @@ template<typename T> T toType(const std::string& s, int base)
     }
 
     if (overflow || errno == ERANGE)
-        throw except::BadCastException(except::Context(__FILE__, __LINE__,
-            std::string(""), std::string(""),
-            std::string("Overflow: '")
-                + s + std::string("' -> ") + typeid(T).name()));
-    // If the end pointer is at the start of the string, we didn't convert anything.
+        throw except::BadCastException(
+                except::Context(__FILE__,
+                                __LINE__,
+                                std::string(""),
+                                std::string(""),
+                                std::string("Overflow: '") + s +
+                                        std::string("' -> ") +
+                                        typeid(T).name()));
+    // If the end pointer is at the start of the string, we didn't convert
+    // anything.
     else if (end == str)
-        throw except::BadCastException(except::Context(__FILE__, __LINE__,
-            std::string(""), std::string(""),
-            std::string("Conversion failed: '")
-                + s + std::string("' -> ") + typeid(T).name()));
+        throw except::BadCastException(
+                except::Context(__FILE__,
+                                __LINE__,
+                                std::string(""),
+                                std::string(""),
+                                std::string("Conversion failed: '") + s +
+                                        std::string("' -> ") +
+                                        typeid(T).name()));
 
     return res;
 }
@@ -153,18 +181,26 @@ template<typename T> T toType(const std::string& s, int base)
  *  @return The integer argument required by ios::precision() to represent
  *  this type.
  */
-template<typename T> int getPrecision(const T& )
+template <typename T>
+int getPrecision(const T&)
 {
     return 0;
 }
-template<typename T> int getPrecision(const std::complex<T>& type)
+
+template <typename T>
+int getPrecision(const std::complex<T>& type)
 {
     return getPrecision(type.real());
 }
 
-template<> int getPrecision(const float& type);
-template<> int getPrecision(const double& type);
-template<> int getPrecision(const long double& type);
+template <>
+int getPrecision(const float& type);
+
+template <>
+int getPrecision(const double& type);
+
+template <>
+int getPrecision(const long double& type);
 
 /** Generic casting routine; used by explicitly overloaded
  conversion operators.
@@ -174,12 +210,11 @@ template<> int getPrecision(const long double& type);
  to the desired type, if possible.
  @throw BadCastException thrown if cast cannot be performed.
  */
-template<typename T>
+template <typename T>
 T generic_cast(const std::string& value)
 {
     return str::toType<T>(value);
 }
-
 }
 
 #endif
