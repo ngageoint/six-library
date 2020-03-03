@@ -6,7 +6,7 @@ function(add_mex_module name extension dependencies)
                        nitf/${name}.def
                        nitf/${name}-64.def
                    LINK_TO ${dependencies})
-    install(TARGETS ${target} DESTINATION ${CMAKE_INSTALL_PREFIX}/mex)
+    install(TARGETS ${name} DESTINATION ${CMAKE_INSTALL_PREFIX}/mex)
 endfunction()
 
 if (Matlab_FOUND)
