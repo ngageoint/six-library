@@ -2097,6 +2097,7 @@ NITFAPI(nitf_Version) nitf_Reader_getNITFVersion(const char* fileName)
     if (io)
     {
         version = nitf_Reader_getNITFVersionIO(io);
+        nitf_IOInterface_close(io, &error);
         nitf_IOInterface_destruct(&io);
     }
 
