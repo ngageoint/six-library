@@ -3760,9 +3760,6 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
 }
 
 
-  #define SWIG_From_double   PyFloat_FromDouble 
-
-
 SWIGINTERN int
 SWIG_AsVal_char (PyObject * obj, char *val)
 {    
@@ -34703,7 +34700,7 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NITF_DATE_FORMAT_20",SWIG_FromCharPtr("%d%H%M%SZ%b%y"));
   SWIG_Python_SetConstant(d, "NITF_DATE_FORMAT_21",SWIG_FromCharPtr("%Y%m%d%H%M%S"));
   SWIG_Python_SetConstant(d, "NITF_TRE_HASH_SIZE",SWIG_From_int(static_cast< int >(8)));
-  SWIG_Python_SetConstant(d, "NRT_LIB_VERSION",SWIG_From_double(static_cast< double >(2.8)));
+  SWIG_Python_SetConstant(d, "NRT_LIB_VERSION",SWIG_FromCharPtr("2.8"));
   SWIG_Python_SetConstant(d, "NITF_LIB_VERSION",SWIG_FromCharPtr("2.8"));
   SWIG_Python_SetConstant(d, "NITF_COMPRESSION_HASH_SIZE",SWIG_From_int(static_cast< int >(2)));
   SWIG_Python_SetConstant(d, "NITF_DECOMPRESSION_HASH_SIZE",SWIG_From_int(static_cast< int >(2)));
