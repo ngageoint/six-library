@@ -11,7 +11,8 @@ if(PYTHON_HOME)
 endif()
 
 find_package(Python COMPONENTS Interpreter Development NumPy)
-list(APPEND coda_modules except-c++ io-c++ sys-c++ mt-c++ str-c++ math-c++ xml.lite-c++ JPEG J2K)
+list(APPEND coda_modules except-c++ io-c++ sys-c++ mt-c++ str-c++
+                         math-c++ xml.lite-c++ JPEG J2K)
 
 if (Python_NumPy_FOUND AND NOT MSVC)
     list(APPEND coda_modules numpyutils-c++)
@@ -31,9 +32,6 @@ endif()
 foreach(module ${coda_modules})
     add_coda_module(${module})
 endforeach()
-
-add_coda_module(xerces-c)
-target_link_libraries(xml.lite-c++ INTERFACE xerces-c)
 
 add_library(coda_oss_config INTERFACE)
 target_include_directories(coda_oss_config INTERFACE ${CODA_DIR}/target/moudules/c++/config/include/)
