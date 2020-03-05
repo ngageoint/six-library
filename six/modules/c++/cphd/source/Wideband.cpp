@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2019, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2020, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,7 @@ namespace
 template <typename InT>
 class PromoteRunnable : public sys::Runnable
 {
-    public:
+public:
     PromoteRunnable(const std::complex<InT>* input,
                     size_t startRow,
                     size_t numRows,
@@ -61,7 +61,7 @@ class PromoteRunnable : public sys::Runnable
         }
     }
 
-    private:
+private:
     const std::complex<InT>* const mInput;
     const types::RowCol<size_t> mDims;
     std::complex<float>* const mOutput;
@@ -70,7 +70,7 @@ class PromoteRunnable : public sys::Runnable
 template <typename InT>
 class ScaleRunnable : public sys::Runnable
 {
-    public:
+public:
     ScaleRunnable(const std::complex<InT>* input,
                   size_t startRow,
                   size_t numRows,
@@ -98,7 +98,7 @@ class ScaleRunnable : public sys::Runnable
         }
     }
 
-    private:
+private:
     const std::complex<InT>* const mInput;
     const types::RowCol<size_t> mDims;
     const double* const mScaleFactors;
@@ -368,6 +368,19 @@ void Wideband::checkReadInputs(size_t channel,
 
     dims.row = lastVector - firstVector + 1;
     dims.col = lastSample - firstSample + 1;
+
+    if (isPartialRead(channel, dims) && mMetadata.isCompressed())
+    {
+        throw except::Exception(
+                Ctxt("Cannot do partial read of compressed channel"));
+    }
+}
+
+bool Wideband::isPartialRead(size_t channel,
+                             const types::RowCol<size_t>& dims) const
+{
+    return dims.row != mMetadata.getNumVectors(channel) ||
+            dims.col != mMetadata.getNumSamples(channel);
 }
 
 void Wideband::checkChannelInput(size_t channel) const
@@ -426,7 +439,7 @@ void Wideband::readImpl(size_t channel, void* data) const
 
     sys::byte* dataPtr = static_cast<sys::byte*>(data);
     mInStream->seek(inOffset, io::FileInputStream::START);
-    mInStream->read(dataPtr, mMetadata.getCompressedSignalSize(channel));
+    mInStream->read(dataPtr, getBytesRequiredForRead(channel));
 }
 
 void Wideband::read(size_t channel,
@@ -462,10 +475,35 @@ void Wideband::read(size_t channel,
 
     // Byte swap to little endian if necessary
     // Element size is half mElementSize because it's complex
-    if (!sys::isBigEndianSystem() && mElementSize > 2)
+    if (shouldByteSwap())
     {
         cphd::byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
     }
+}
+
+size_t Wideband::getBytesRequiredForRead(size_t channel) const
+{
+    if (mMetadata.isCompressed())
+    {
+        return mMetadata.getCompressedSignalSize(channel);
+    }
+    else
+    {
+        return mMetadata.getNumBytesPerSample() *
+                mMetadata.getNumSamples(channel) *
+                mMetadata.getNumVectors(channel);
+    }
+}
+
+size_t Wideband::getBytesRequiredForRead(size_t channel,
+                                         size_t firstVector,
+                                         size_t lastVector,
+                                         size_t firstSample,
+                                         size_t lastSample) const
+{
+    const auto dims = getBufferDims(
+            channel, firstVector, lastVector, firstSample, lastSample);
+    return dims.area() * mMetadata.getNumBytesPerSample();
 }
 
 void Wideband::read(size_t channel,
@@ -474,7 +512,7 @@ void Wideband::read(size_t channel,
     // Sanity checks
     checkChannelInput(channel);
 
-    const size_t minSize = mMetadata.getCompressedSignalSize(channel);
+    const size_t minSize = getBytesRequiredForRead(channel);
     if (data.size < minSize)
     {
         std::ostringstream ostr;
@@ -486,12 +524,22 @@ void Wideband::read(size_t channel,
     // Perform the read
     readImpl(channel, data.data);
 
-    if (!sys::isBigEndianSystem())
+    if (shouldByteSwap())
     {
-        // Each thread only reads 1 or more element?
-        // So only 1 thread can be used at max
-        cphd::byteSwap(data.data, minSize, 1, 1);
+        // TODO: Would be nice to have a way to test this without
+        // logging onto Solaris...
+        const size_t numPixels = getBufferDims(0, 0, ALL, 0, ALL).area();
+        cphd::byteSwap(data.data,
+                       mElementSize / 2,
+                       numPixels * 2,
+                       sys::OS().getNumCPUsAvailable());
     }
+}
+
+bool Wideband::shouldByteSwap() const
+{
+    return !sys::isBigEndianSystem() && !mMetadata.isCompressed() &&
+            mElementSize > 2;
 }
 
 void Wideband::read(size_t channel,
@@ -520,7 +568,7 @@ void Wideband::read(size_t channel,
 
 void Wideband::read(size_t channel, mem::ScopedArray<sys::ubyte>& data) const
 {
-    const size_t bufSize = mMetadata.getCompressedSignalSize(channel);
+    const size_t bufSize = getBytesRequiredForRead(channel);
     data.reset(new sys::ubyte[bufSize]);
 
     read(channel, mem::BufferView<sys::ubyte>(data.get(), bufSize));
@@ -654,7 +702,7 @@ void Wideband::read(size_t channel,
 
         // Byte swap to little endian if necessary
         // Element size is half mElementSize because it's complex
-        if (!sys::isBigEndianSystem() && mElementSize > 2)
+        if (shouldByteSwap())
         {
             cphd::byteSwap(data.data,
                            mElementSize / 2,

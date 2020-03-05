@@ -2,7 +2,7 @@
  * This file is part of cphd-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2019, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2020, MDA Information Systems LLC
  *
  * cphd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -44,10 +44,10 @@ namespace cphd
 //  Provides methods read wideband data from CPHD file/stream
 class Wideband
 {
-    public:
+public:
     static const size_t ALL;
 
-    /*
+    /*!
      *  \func Wideband
      *
      *  \brief Constructor initializes signal block book keeping
@@ -62,7 +62,7 @@ class Wideband
              sys::Off_T startWB,
              sys::Off_T sizeWB);
 
-    /*
+    /*!
      *  \func Wideband
      *
      *  \brief Constructor initializes signal block book keeping
@@ -77,7 +77,7 @@ class Wideband
              sys::Off_T startWB,
              sys::Off_T sizeWB);
 
-    /*
+    /*!
      *  \func getFileOffset
      *
      *  \brief Get the byte offset of a specific signal array in the CPHD file
@@ -97,7 +97,7 @@ class Wideband
                              size_t vector,
                              size_t sample) const;
 
-    /*
+    /*!
      *  \func getFileOffset
      *
      *  \brief Get the byte offset of a compressed signal block in the CPHD file
@@ -114,7 +114,7 @@ class Wideband
     // 0-based sample in channel
     sys::Off_T getFileOffset(size_t channel) const;
 
-    /*
+    /*!
      *  \func read
      *
      *  \brief Read the specified channel, vector(s), and sample(s)
@@ -133,9 +133,10 @@ class Wideband
      *  \param[in,out] data A pre allocated mem::BufferView that will hold the
      * data read from the file.
      *
-     *  \throws except::Exception If invalid channel, firstVector, lastVector,
+     *  \throw except::Exception If invalid channel, firstVector, lastVector,
      *   firstSample or lastSample
-     *  \throws except::Exception If BufferView memory allocated is insufficient
+     *  \throw except::Exception If BufferView memory allocated is insufficient
+     *  \throw except::Exception If wideband data is compressed
      */
     void read(size_t channel,
               size_t firstVector,
@@ -145,7 +146,7 @@ class Wideband
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& data) const;
 
-    /*
+    /*!
      *  \func read
      *
      *  \brief Read the specified channel's compressed signal block
@@ -154,13 +155,13 @@ class Wideband
      *  \param[in,out] data A pre allocated mem::BufferView that will hold the
      * data read from the file.
      *
-     *  \throws except::Exception If invalid channel
-     *  \throws except::Exception If BufferView memory allocated is insufficient
+     *  \throw except::Exception If invalid channel
+     *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
     void read(size_t channel, const mem::BufferView<sys::ubyte>& data) const;
 
-    /*
+    /*!
      *  \func read
      *
      *  \brief Read the specified channel, vector(s), and sample(s)
@@ -179,8 +180,9 @@ class Wideband
      *  \param[out] data An empty mem::ScopedArray that will hold the data
      *   read from the file.
      *
-     *  \throws except::Exception If invalid channel, firstVector, lastVector,
+     *  \throw except::Exception If invalid channel, firstVector, lastVector,
      *   firstSample or lastSample
+     *  \throw except::Exception If wideband data is compressed
      */
     // Same as above but allocates the memory
     void read(size_t channel,
@@ -191,7 +193,7 @@ class Wideband
               size_t numThreads,
               mem::ScopedArray<sys::ubyte>& data) const;
 
-    /*
+    /*!
      *  \func read
      *
      *  \brief Read the specified channel's compressed signal block
@@ -200,13 +202,13 @@ class Wideband
      *  \param[out] data An empty mem::ScopedArray that will hold the data
      *   read from the file.
      *
-     *  \throws except::Exception If invalid channel
-     *  \throws except::Exception If BufferView memory allocated is insufficient
+     *  \throw except::Exception If invalid channel
+     *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
     void read(size_t channel, mem::ScopedArray<sys::ubyte>& data) const;
 
-    /*
+    /*!
      *  \func read
      *
      *  \brief Read the specified channel, vector(s), and sample(s)
@@ -227,11 +229,13 @@ class Wideband
      * scaling, promoting and/or byte swapping \param[out] data A pre allocated
      * mem::BufferView that will hold the data read from the file.
      *
-     *  \throws except::Exception If invalid channel, firstVector, lastVector,
+     *  \throw except::Exception If invalid channel, firstVector, lastVector,
      *   firstSample or lastSample
-     *  \throws except::Exception If scaleFactors vector size is not equal to
-     * number of samples \throws except::Exception If scratch size is not
-     * atleast the bytes size of one signal array
+     *  \throw except::Exception If scaleFactors vector size is not equal to
+     * number of samples
+     *  \throw except::Exception If scratch size is not
+     * at least the bytes size of one signal array
+     *  \throw except::Exception If wideband data is compressed
      */
     // Same as above but also applies a per-vector scale factor
     void read(size_t channel,
@@ -244,7 +248,7 @@ class Wideband
               const mem::BufferView<sys::ubyte>& scratch,
               const mem::BufferView<std::complex<float>>& data) const;
 
-    /*
+    /*!
      *  \func read
      *
      *  \brief Read the specified channel, vector(s), and sample(s)
@@ -262,8 +266,9 @@ class Wideband
      *  necessary
      *  \param[out] data A void pointer to a data buffer.
      *
-     *  \throws except::Exception If invalid channel, firstVector, lastVector,
+     *  \throw except::Exception If invalid channel, firstVector, lastVector,
      *   firstSample or lastSample
+     *  \throw except::Exception If wideband data is compressed
      */
     // Same as above but for a raw pointer
     // The pointer needs to be preallocated. Use getBufferDims for this.
@@ -287,10 +292,35 @@ class Wideband
              buffer);
     }
 
-    /*
+    /*!
+     * Calculate the number of bytes required to read requested channel
+     * Overload for simply requesting entire channel.
+     * \param channel 0-based channel
+     * \return Number of bytes
+     */
+    size_t getBytesRequiredForRead(size_t channel) const;
+
+    /*!
+     * Calculate the number of bytes required to read requested
+     * portion of wideband data.
+     * \param channel 0-based channel
+     * \param firstVector 0-based first vector of read request (inclusive)
+     * \param lastVector 0-based last vector of read request (inclusive)
+     * \param firstSample 0-based first sample of read request (inclusive)
+     * \param lastSample 0-based last sample of read request(inclusive)
+     * \return Number of bytes in area
+     * \throw except::Exception If wideband data is compressed
+     */
+    size_t getBytesRequiredForRead(size_t channel,
+                                   size_t firstVector,
+                                   size_t lastVector,
+                                   size_t firstSample,
+                                   size_t lastSample) const;
+
+    /*!
      *  \func getBufferDims
      *
-     *  \brief Gets the dimensions of the wideband block to be read
+     *  \brief Gets the uncompressed dimensions of the wideband block to be read
      *
      *  \param channel 0-based channel
      *  \param firstVector 0-based first vector to read (inclusive)
@@ -316,7 +346,7 @@ class Wideband
         return dims;
     }
 
-    /*
+    /*!
      * Get sample type element size
      */
     size_t getElementSize()
@@ -324,12 +354,14 @@ class Wideband
         return mElementSize;
     }
 
-    private:
+private:
     /*
      *  Initialize mOffsets for each array
      *  both for uncompressed and compressed data
      */
     void initialize();
+
+    bool isPartialRead(size_t channel, const types::RowCol<size_t>& dims) const;
 
     /*
      *  Validate all inputs
@@ -370,12 +402,13 @@ class Wideband
      */
     static bool allOnes(const std::vector<double>& vectorScaleFactors);
 
-    private:
-    // Noncopyable
-    Wideband(const Wideband&);
-    const Wideband& operator=(const Wideband&);
+    bool shouldByteSwap() const;
 
-    private:
+private:
+    Wideband(const Wideband&) = delete;
+    const Wideband& operator=(const Wideband&) = delete;
+
+private:
     const std::shared_ptr<io::SeekableInputStream> mInStream;
     const cphd::MetadataBase& mMetadata;  // pointer to data metadata
     const sys::Off_T mWBOffset;  // offset in bytes to start of wideband
