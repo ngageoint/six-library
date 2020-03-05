@@ -2188,6 +2188,14 @@ class Wideband(_object):
         return _cphd03.Wideband_read(self, *args)
 
 
+    def getBytesRequiredForRead(self, *args) -> "size_t":
+        """
+        getBytesRequiredForRead(Wideband self, size_t channel) -> size_t
+        getBytesRequiredForRead(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample) -> size_t
+        """
+        return _cphd03.Wideband_getBytesRequiredForRead(self, *args)
+
+
     def getBufferDims(self, channel: 'size_t', firstVector: 'size_t', lastVector: 'size_t', firstSample: 'size_t', lastSample: 'size_t') -> "types::RowCol< size_t >":
         """getBufferDims(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample) -> RowColSizeT"""
         return _cphd03.Wideband_getBufferDims(self, channel, firstVector, lastVector, firstSample, lastSample)
