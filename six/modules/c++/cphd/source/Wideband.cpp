@@ -23,14 +23,14 @@
 #include <limits>
 #include <sstream>
 
-#include <sys/Conf.h>
-#include <mt/ThreadGroup.h>
-#include <mt/ThreadPlanner.h>
-#include <except/Exception.h>
-#include <io/FileInputStream.h>
 #include <cphd/ByteSwap.h>
 #include <cphd/Wideband.h>
+#include <except/Exception.h>
+#include <io/FileInputStream.h>
+#include <mt/ThreadGroup.h>
+#include <mt/ThreadPlanner.h>
 #include <six/Init.h>
+#include <sys/Conf.h>
 
 namespace
 {
@@ -39,10 +39,10 @@ class PromoteRunnable : public sys::Runnable
 {
 public:
     PromoteRunnable(const std::complex<InT>* input,
-                  size_t startRow,
-                  size_t numRows,
-                  size_t numCols,
-                  std::complex<float>* output) :
+                    size_t startRow,
+                    size_t numRows,
+                    size_t numCols,
+                    std::complex<float>* output) :
         mInput(input + startRow * numCols),
         mDims(numRows, numCols),
         mOutput(output + startRow * numCols)
@@ -56,8 +56,7 @@ public:
             for (size_t col = 0; col < mDims.col; ++col, ++idx)
             {
                 const std::complex<InT>& input(mInput[idx]);
-                mOutput[idx] = std::complex<float>(input.real(),
-                                                   input.imag());
+                mOutput[idx] = std::complex<float>(input.real(), input.imag());
             }
         }
     }
@@ -68,7 +67,7 @@ private:
     std::complex<float>* const mOutput;
 };
 
-template<typename InT>
+template <typename InT>
 class ScaleRunnable : public sys::Runnable
 {
 public:
@@ -115,7 +114,11 @@ void promote(const void* input,
     if (numThreads <= 1)
     {
         PromoteRunnable<InT>(static_cast<const std::complex<InT>*>(input),
-                            0, dims.row, dims.col, output).run();
+                             0,
+                             dims.row,
+                             dims.col,
+                             output)
+                .run();
     }
     else
     {
@@ -125,9 +128,7 @@ void promote(const void* input,
         size_t threadNum(0);
         size_t startRow(0);
         size_t numRowsThisThread(0);
-        while (planner.getThreadInfo(threadNum++,
-                                     startRow,
-                                     numRowsThisThread))
+        while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
             std::auto_ptr<sys::Runnable> scaler(new PromoteRunnable<InT>(
                     static_cast<const std::complex<InT>*>(input),
@@ -139,7 +140,6 @@ void promote(const void* input,
         }
 
         threads.joinAll();
-
     }
 }
 
@@ -161,8 +161,8 @@ void promote(const void* input,
         promote<float>(input, dims, numThreads, output);
         break;
     default:
-        throw except::Exception(Ctxt(
-                "Unexpected element size " + str::toString(elementSize)));
+        throw except::Exception(
+                Ctxt("Unexpected element size " + str::toString(elementSize)));
     }
 }
 template <typename InT>
@@ -175,7 +175,12 @@ void scale(const void* input,
     if (numThreads <= 1)
     {
         ScaleRunnable<InT>(static_cast<const std::complex<InT>*>(input),
-                           0, dims.row, dims.col, scaleFactors, output).run();
+                           0,
+                           dims.row,
+                           dims.col,
+                           scaleFactors,
+                           output)
+                .run();
     }
     else
     {
@@ -185,9 +190,7 @@ void scale(const void* input,
         size_t threadNum(0);
         size_t startRow(0);
         size_t numRowsThisThread(0);
-        while (planner.getThreadInfo(threadNum++,
-                                     startRow,
-                                     numRowsThisThread))
+        while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
             std::auto_ptr<sys::Runnable> scaler(new ScaleRunnable<InT>(
                     static_cast<const std::complex<InT>*>(input),
@@ -222,15 +225,14 @@ void scale(const void* input,
         scale<float>(input, dims, scaleFactors, numThreads, output);
         break;
     default:
-        throw except::Exception(Ctxt(
-                "Unexpected element size " + str::toString(elementSize)));
+        throw except::Exception(
+                Ctxt("Unexpected element size " + str::toString(elementSize)));
     }
 }
 }
 
 namespace cphd
 {
-
 const size_t Wideband::ALL = std::numeric_limits<size_t>::max();
 
 Wideband::Wideband(const std::string& pathname,
@@ -270,9 +272,8 @@ void Wideband::initialize()
         for (size_t ii = 1; ii < mMetadata.getNumChannels(); ++ii)
         {
             const sys::Off_T offset =
-                static_cast<sys::Off_T>(mMetadata.getNumSamples(ii - 1)) *
-                mMetadata.getNumVectors(ii - 1) *
-                mElementSize;
+                    static_cast<sys::Off_T>(mMetadata.getNumSamples(ii - 1)) *
+                    mMetadata.getNumVectors(ii - 1) * mElementSize;
 
             mOffsets[ii] = mOffsets[ii - 1] + offset;
         }
@@ -282,7 +283,8 @@ void Wideband::initialize()
         // Signal Array is Compressed
         for (size_t ii = 1; ii < mMetadata.getNumChannels(); ++ii)
         {
-            mOffsets[ii] = mOffsets[ii - 1] + mMetadata.getCompressedSignalSize(ii);
+            mOffsets[ii] =
+                    mOffsets[ii - 1] + mMetadata.getCompressedSignalSize(ii);
         }
     }
 }
@@ -309,9 +311,7 @@ sys::Off_T Wideband::getFileOffset(size_t channel,
     const sys::Off_T bytesPerVectorFile =
             mMetadata.getNumSamples(channel) * mElementSize;
 
-    const sys::Off_T offset =
-            mOffsets[channel] +
-            bytesPerVectorFile * vector +
+    const sys::Off_T offset = mOffsets[channel] + bytesPerVectorFile * vector +
             sample * mElementSize;
     return offset;
 }
@@ -386,8 +386,8 @@ void Wideband::readImpl(size_t channel,
                         void* data) const
 {
     types::RowCol<size_t> dims;
-    checkReadInputs(channel, firstVector, lastVector, firstSample, lastSample,
-                    dims);
+    checkReadInputs(
+            channel, firstVector, lastVector, firstSample, lastSample, dims);
 
     // Compute the byte offset into this channel's wideband in the CPHD file
     // First to the start of the first pulse we're going to read
@@ -406,7 +406,7 @@ void Wideband::readImpl(size_t channel,
         // of the columns
         const size_t bytesPerVectorAOI = dims.col * mElementSize;
         const size_t bytesPerVectorFile =
-                    mMetadata.getNumSamples(channel) * mElementSize;
+                mMetadata.getNumSamples(channel) * mElementSize;
 
         for (size_t row = 0; row < dims.row; ++row)
         {
@@ -418,8 +418,7 @@ void Wideband::readImpl(size_t channel,
     }
 }
 
-void Wideband::readImpl(size_t channel,
-                        void* data) const
+void Wideband::readImpl(size_t channel, void* data) const
 {
     // Compute the byte offset into this channel's wideband in the CPHD file
     // First to the start of the first pulse we're going to read
@@ -440,8 +439,8 @@ void Wideband::read(size_t channel,
 {
     // Sanity checks
     types::RowCol<size_t> dims;
-    checkReadInputs(channel, firstVector, lastVector,
-                    firstSample, lastSample, dims);
+    checkReadInputs(
+            channel, firstVector, lastVector, firstSample, lastSample, dims);
 
     const size_t numPixels(dims.row * dims.col);
     const size_t minSize = numPixels * mElementSize;
@@ -454,7 +453,11 @@ void Wideband::read(size_t channel,
     }
 
     // Perform the read
-    readImpl(channel, firstVector, lastVector, firstSample, lastSample,
+    readImpl(channel,
+             firstVector,
+             lastVector,
+             firstSample,
+             lastSample,
              data.data);
 
     // Byte swap to little endian if necessary
@@ -500,18 +503,22 @@ void Wideband::read(size_t channel,
                     mem::ScopedArray<sys::ubyte>& data) const
 {
     types::RowCol<size_t> dims;
-    checkReadInputs(channel, firstVector, lastVector, firstSample, lastSample,
-                    dims);
+    checkReadInputs(
+            channel, firstVector, lastVector, firstSample, lastSample, dims);
 
     const size_t bufSize = dims.row * dims.col * mElementSize;
     data.reset(new sys::ubyte[bufSize]);
 
-    read(channel, firstVector, lastVector, firstSample, lastSample, numThreads,
+    read(channel,
+         firstVector,
+         lastVector,
+         firstSample,
+         lastSample,
+         numThreads,
          mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }
 
-void Wideband::read(size_t channel,
-                    mem::ScopedArray<sys::ubyte>& data) const
+void Wideband::read(size_t channel, mem::ScopedArray<sys::ubyte>& data) const
 {
     const size_t bufSize = mMetadata.getCompressedSignalSize(channel);
     data.reset(new sys::ubyte[bufSize]);
@@ -539,12 +546,12 @@ void Wideband::read(size_t channel,
                     const std::vector<double>& vectorScaleFactors,
                     size_t numThreads,
                     const mem::BufferView<sys::ubyte>& scratch,
-                    const mem::BufferView<std::complex<float> >& data) const
+                    const mem::BufferView<std::complex<float>>& data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;
-    checkReadInputs(channel, firstVector, lastVector, firstSample, lastSample,
-                    dims);
+    checkReadInputs(
+            channel, firstVector, lastVector, firstSample, lastSample, dims);
 
     if (vectorScaleFactors.size() != dims.row)
     {
@@ -585,34 +592,50 @@ void Wideband::read(size_t channel,
         }
 
         // Perform the read into the scratch buffer
-        readImpl(channel, firstVector, lastVector, firstSample, lastSample,
+        readImpl(channel,
+                 firstVector,
+                 lastVector,
+                 firstSample,
+                 lastSample,
                  scratch.data);
 
         // Byte swap to little endian if necessary
         if (!sys::isBigEndianSystem() && mElementSize > 2)
         {
             // Need to endian swap and then scale
-            cphd::byteSwapAndScale(scratch.data, mElementSize, dims,
-                             &vectorScaleFactors[0], numThreads, data.data);
+            cphd::byteSwapAndScale(scratch.data,
+                                   mElementSize,
+                                   dims,
+                                   &vectorScaleFactors[0],
+                                   numThreads,
+                                   data.data);
         }
         else
         {
             // Just need to scale
-            scale(scratch.data, mElementSize, dims, &vectorScaleFactors[0],
-                  numThreads, data.data);
+            scale(scratch.data,
+                  mElementSize,
+                  dims,
+                  &vectorScaleFactors[0],
+                  numThreads,
+                  data.data);
         }
     }
     // We need to convert the output to floating-point data
     else if (mElementSize != 8)
     {
         // Perform the read into the scratch buffer
-        readImpl(channel, firstVector, lastVector, firstSample, lastSample,
+        readImpl(channel,
+                 firstVector,
+                 lastVector,
+                 firstSample,
+                 lastSample,
                  scratch.data);
 
         if (!sys::isBigEndianSystem() && mElementSize > 2)
         {
-            cphd::byteSwapAndPromote(scratch.data, mElementSize, dims, numThreads,
-                    data.data);
+            cphd::byteSwapAndPromote(
+                    scratch.data, mElementSize, dims, numThreads, data.data);
         }
         else
         {
@@ -622,19 +645,26 @@ void Wideband::read(size_t channel,
     else
     {
         // Perform the read directly into the output buffer
-        readImpl(channel, firstVector, lastVector, firstSample, lastSample,
+        readImpl(channel,
+                 firstVector,
+                 lastVector,
+                 firstSample,
+                 lastSample,
                  data.data);
 
         // Byte swap to little endian if necessary
         // Element size is half mElementSize because it's complex
         if (!sys::isBigEndianSystem() && mElementSize > 2)
         {
-            cphd::byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
+            cphd::byteSwap(data.data,
+                           mElementSize / 2,
+                           numPixels * 2,
+                           numThreads);
         }
     }
 }
 
-std::ostream& operator<< (std::ostream& os, const Wideband& d)
+std::ostream& operator<<(std::ostream& os, const Wideband& d)
 {
     os << "Wideband::\n"
        << "  mWBOffset: " << d.mWBOffset << "\n"
@@ -643,7 +673,8 @@ std::ostream& operator<< (std::ostream& os, const Wideband& d)
 
     if (d.mOffsets.empty())
     {
-        os << "   mOffsets: (empty)" << "\n";
+        os << "   mOffsets: (empty)"
+           << "\n";
     }
     else
     {
