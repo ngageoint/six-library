@@ -22,8 +22,8 @@
 #ifndef __CPHD_WIDEBAND_H__
 #define __CPHD_WIDEBAND_H__
 
-#include <string>
 #include <complex>
+#include <string>
 
 #include <cphd/MetadataBase.h>
 #include <cphd/Utilities.h>
@@ -31,13 +31,11 @@
 #include <io/SeekableStreams.h>
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
-#include <types/RowCol.h>
 #include <sys/Conf.h>
-
+#include <types/RowCol.h>
 
 namespace cphd
 {
-
 /*
  * \class Wideband
  * \brief Information about the wideband CPHD data
@@ -46,7 +44,7 @@ namespace cphd
 //  Provides methods read wideband data from CPHD file/stream
 class Wideband
 {
-public:
+    public:
     static const size_t ALL;
 
     /*
@@ -132,8 +130,8 @@ public:
      *  read all samples
      *  \param numThreads Number of threads to use for endian swapping if
      *  necessary
-     *  \param[in,out] data A pre allocated mem::BufferView that will hold the data
-     *   read from the file.
+     *  \param[in,out] data A pre allocated mem::BufferView that will hold the
+     * data read from the file.
      *
      *  \throws except::Exception If invalid channel, firstVector, lastVector,
      *   firstSample or lastSample
@@ -153,15 +151,14 @@ public:
      *  \brief Read the specified channel's compressed signal block
      *
      *  \param channel 0-based channel
-     *  \param[in,out] data A pre allocated mem::BufferView that will hold the data
-     *   read from the file.
+     *  \param[in,out] data A pre allocated mem::BufferView that will hold the
+     * data read from the file.
      *
      *  \throws except::Exception If invalid channel
      *  \throws except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel,
-              const mem::BufferView<sys::ubyte>& data) const;
+    void read(size_t channel, const mem::BufferView<sys::ubyte>& data) const;
 
     /*
      *  \func read
@@ -207,8 +204,7 @@ public:
      *  \throws except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel,
-              mem::ScopedArray<sys::ubyte>& data) const;
+    void read(size_t channel, mem::ScopedArray<sys::ubyte>& data) const;
 
     /*
      *  \func read
@@ -224,18 +220,18 @@ public:
      *  \param firstSample 0-based first sample to read (inclusive)
      *  \param lastSample 0-based last sample to read (inclusive).  Use ALL to
      *   read all samples
-     *  \param vectorScaleFactors A vector of scaleFactors to scale signal samples
-     *  \param numThreads Number of threads to use for endian swapping if
+     *  \param vectorScaleFactors A vector of scaleFactors to scale signal
+     * samples \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param scratch A pre allocated mem::BufferView for scratch space for scaling,
-     *  promoting and/or byte swapping
-     *  \param[out] data A pre allocated mem::BufferView that will hold the data
-     *   read from the file.
+     *  \param scratch A pre allocated mem::BufferView for scratch space for
+     * scaling, promoting and/or byte swapping \param[out] data A pre allocated
+     * mem::BufferView that will hold the data read from the file.
      *
      *  \throws except::Exception If invalid channel, firstVector, lastVector,
      *   firstSample or lastSample
-     *  \throws except::Exception If scaleFactors vector size is not equal to number of samples
-     *  \throws except::Exception If scratch size is not atleast the bytes size of one signal array
+     *  \throws except::Exception If scaleFactors vector size is not equal to
+     * number of samples \throws except::Exception If scratch size is not
+     * atleast the bytes size of one signal array
      */
     // Same as above but also applies a per-vector scale factor
     void read(size_t channel,
@@ -246,7 +242,7 @@ public:
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& scratch,
-              const mem::BufferView<std::complex<float> >& data) const;
+              const mem::BufferView<std::complex<float>>& data) const;
 
     /*
      *  \func read
@@ -280,11 +276,15 @@ public:
               const types::RowCol<size_t>& dims,
               void* data)
     {
-        const mem::BufferView<sys::ubyte> buffer(
-                static_cast<sys::ubyte*>(data),
-                dims.area() * mElementSize);
-        read(channel, firstVector, lastVector, firstSample,
-             lastSample, numThreads, buffer);
+        const mem::BufferView<sys::ubyte> buffer(static_cast<sys::ubyte*>(data),
+                                                 dims.area() * mElementSize);
+        read(channel,
+             firstVector,
+             lastVector,
+             firstSample,
+             lastSample,
+             numThreads,
+             buffer);
     }
 
     /*
@@ -307,8 +307,12 @@ public:
                                         size_t lastSample) const
     {
         types::RowCol<size_t> dims;
-        checkReadInputs(channel, firstVector, lastVector,
-                        firstSample, lastSample, dims);
+        checkReadInputs(channel,
+                        firstVector,
+                        lastVector,
+                        firstSample,
+                        lastSample,
+                        dims);
         return dims;
     }
 
@@ -320,7 +324,7 @@ public:
         return mElementSize;
     }
 
-private:
+    private:
     /*
      *  Initialize mOffsets for each array
      *  both for uncompressed and compressed data
@@ -358,31 +362,29 @@ private:
      *  Just performs the read for compressed data
      *  No allocation, endian swapping or scaling
      */
-    void readImpl(size_t channel,
-                  void* data) const;
+    void readImpl(size_t channel, void* data) const;
 
     /*
      *  Returns true if scale factor vector is all ones
      *  False otherwise.
      */
-    static
-    bool allOnes(const std::vector<double>& vectorScaleFactors);
+    static bool allOnes(const std::vector<double>& vectorScaleFactors);
 
-private:
+    private:
     // Noncopyable
-    Wideband(const Wideband& );
-    const Wideband& operator=(const Wideband& );
+    Wideband(const Wideband&);
+    const Wideband& operator=(const Wideband&);
 
-private:
+    private:
     const std::shared_ptr<io::SeekableInputStream> mInStream;
-    const cphd::MetadataBase& mMetadata;          // pointer to data metadata
-    const sys::Off_T mWBOffset;       // offset in bytes to start of wideband
-    const size_t mWBSize;             // total size in bytes of wideband
-    const size_t mElementSize;        // element size (bytes / complex sample)
+    const cphd::MetadataBase& mMetadata;  // pointer to data metadata
+    const sys::Off_T mWBOffset;  // offset in bytes to start of wideband
+    const size_t mWBSize;  // total size in bytes of wideband
+    const size_t mElementSize;  // element size (bytes / complex sample)
 
-    std::vector<sys::Off_T> mOffsets; // Offset to start of each channel
+    std::vector<sys::Off_T> mOffsets;  // Offset to start of each channel
 
-    friend std::ostream& operator<< (std::ostream& os, const Wideband& d);
+    friend std::ostream& operator<<(std::ostream& os, const Wideband& d);
 };
 }
 
