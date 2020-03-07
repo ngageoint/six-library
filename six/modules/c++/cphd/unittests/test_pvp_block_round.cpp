@@ -143,7 +143,6 @@ bool checkData(const std::string& pathname,
                cphd::PVPBlock& pvpBlock)
 {
     cphd::CPHDReader reader(pathname, numThreads);
-    const cphd::Wideband& wideband = reader.getWideband();
 
     if (metadata.pvp != reader.getMetadata().pvp)
     {

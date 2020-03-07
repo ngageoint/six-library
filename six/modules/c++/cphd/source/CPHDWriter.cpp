@@ -196,7 +196,7 @@ void CPHDWriter::writeCompressedCPHDDataImpl(const sys::ubyte* data,
 {
     //! We have to pass in the data as though it was 1 signal array sized
     // element of ubytes
-    (*mDataWriter)(data, 1, mMetadata.data.getCompressedSignalSize(channel));
+    (*mDataWriter)(data, mMetadata.data.getCompressedSignalSize(channel), 1);
 }
 
 void CPHDWriter::writeSupportDataImpl(const sys::ubyte* data,
