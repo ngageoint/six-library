@@ -19,33 +19,33 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <cstdio>
-#include <stdlib.h>
-#include <iostream>
-#include <stdexcept>
-#include <string>
-#include <memory>
-#include <cphd/Wideband.h>
+#include <TestCase.h>
+#include <cli/ArgumentParser.h>
+#include <cphd/CPHDReader.h>
+#include <cphd/CPHDWriter.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>
 #include <cphd/PVPBlock.h>
-#include <cphd/CPHDWriter.h>
-#include <cphd/CPHDReader.h>
 #include <cphd/ReferenceGeometry.h>
 #include <cphd/TestDataGenerator.h>
-#include <types/RowCol.h>
-#include <cli/ArgumentParser.h>
-#include <io/TempFile.h>
+#include <cphd/Wideband.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
-#include <TestCase.h>
+#include <io/TempFile.h>
+#include <stdlib.h>
+#include <types/RowCol.h>
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
 
 namespace
 {
-template<typename T>
-std::vector<std::complex<T> > generateComplexData(size_t length)
+template <typename T>
+std::vector<std::complex<T>> generateComplexData(size_t length)
 {
-    std::vector<std::complex<T> > data(length);
+    std::vector<std::complex<T>> data(length);
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
@@ -56,10 +56,14 @@ std::vector<std::complex<T> > generateComplexData(size_t length)
     return data;
 }
 
-void setPVPBlock(const types::RowCol<size_t> dims, cphd::PVPBlock& pvpBlock,
-                 bool isAmpSF, bool isFxN1,
-                 bool isFxN2, bool isTOAE1,
-                 bool isTOAE2, bool isSignal,
+void setPVPBlock(const types::RowCol<size_t> dims,
+                 cphd::PVPBlock& pvpBlock,
+                 bool isAmpSF,
+                 bool isFxN1,
+                 bool isFxN2,
+                 bool isTOAE1,
+                 bool isTOAE2,
+                 bool isSignal,
                  const std::vector<std::string>& addedParams)
 {
     const size_t numChannels = 1;
@@ -111,21 +115,25 @@ void setPVPBlock(const types::RowCol<size_t> dims, cphd::PVPBlock& pvpBlock,
     }
 }
 
-template<typename T>
-void writeCPHD(const std::string& outPathname, size_t numThreads,
-        const types::RowCol<size_t> dims,
-        const std::vector<std::complex<T> >& writeData,
-        cphd::Metadata& metadata,
-        cphd::PVPBlock& pvpBlock)
+template <typename T>
+void writeCPHD(const std::string& outPathname,
+               size_t numThreads,
+               const types::RowCol<size_t> dims,
+               const std::vector<std::complex<T>>& writeData,
+               cphd::Metadata& metadata,
+               cphd::PVPBlock& pvpBlock)
 {
     const size_t numChannels = 1;
 
-    cphd::CPHDWriter writer(metadata, outPathname, std::vector<std::string>(), numThreads);
+    cphd::CPHDWriter writer(metadata,
+                            outPathname,
+                            std::vector<std::string>(),
+                            numThreads);
     writer.writeMetadata(pvpBlock);
     writer.writePVPData(pvpBlock);
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        writer.writeCPHDData(writeData.data(),dims.area());
+        writer.writeCPHDData(writeData.data(), dims.area());
     }
 }
 
@@ -148,9 +156,11 @@ bool checkData(const std::string& pathname,
     return true;
 }
 
-template<typename T>
-bool runTest(bool scale, const std::vector<std::complex<T> >& writeData,
-             cphd::Metadata& meta, cphd::PVPBlock& pvpBlock,
+template <typename T>
+bool runTest(bool scale,
+             const std::vector<std::complex<T>>& writeData,
+             cphd::Metadata& meta,
+             cphd::PVPBlock& pvpBlock,
              const types::RowCol<size_t> dims)
 {
     io::TempFile tempfile;
@@ -162,7 +172,7 @@ bool runTest(bool scale, const std::vector<std::complex<T> >& writeData,
 TEST_CASE(testPVPBlockSimple)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int16_T> > writeData =
+    const std::vector<std::complex<sys::Int16_T>> writeData =
             generateComplexData<sys::Int16_T>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
@@ -170,8 +180,15 @@ TEST_CASE(testPVPBlockSimple)
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     std::vector<std::string> addedParams;
-    setPVPBlock(dims, pvpBlock, false, false, false,
-                false, false, false, addedParams);
+    setPVPBlock(dims,
+                pvpBlock,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                addedParams);
 
     TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));
 }
@@ -179,7 +196,7 @@ TEST_CASE(testPVPBlockSimple)
 TEST_CASE(testPVPBlockOptional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int16_T> > writeData =
+    const std::vector<std::complex<sys::Int16_T>> writeData =
             generateComplexData<sys::Int16_T>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
@@ -187,11 +204,18 @@ TEST_CASE(testPVPBlockOptional)
     cphd::setPVPXML(meta.pvp);
     meta.pvp.setOffset(27, meta.pvp.fxN1);
     meta.pvp.setOffset(28, meta.pvp.fxN2);
-    meta.data.numBytesPVP += 2*8;
+    meta.data.numBytesPVP += 2 * 8;
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     std::vector<std::string> addedParams;
-    setPVPBlock(dims, pvpBlock, false, true, true,
-                false, false, false, addedParams);
+    setPVPBlock(dims,
+                pvpBlock,
+                false,
+                true,
+                true,
+                false,
+                false,
+                false,
+                addedParams);
 
     TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));
 }
@@ -199,7 +223,7 @@ TEST_CASE(testPVPBlockOptional)
 TEST_CASE(testPVPBlockAdditional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int16_T> > writeData =
+    const std::vector<std::complex<sys::Int16_T>> writeData =
             generateComplexData<sys::Int16_T>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
@@ -207,13 +231,20 @@ TEST_CASE(testPVPBlockAdditional)
     cphd::setPVPXML(meta.pvp);
     meta.pvp.setCustomParameter(1, 27, "F8", "param1");
     meta.pvp.setCustomParameter(1, 28, "F8", "param2");
-    meta.data.numBytesPVP += 2*8;
+    meta.data.numBytesPVP += 2 * 8;
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     std::vector<std::string> addedParams;
     addedParams.push_back("param1");
     addedParams.push_back("param2");
-    setPVPBlock(dims, pvpBlock, false, false, false,
-                false, false, false, addedParams);
+    setPVPBlock(dims,
+                pvpBlock,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                addedParams);
 
     TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));
 }
