@@ -279,7 +279,7 @@ public:
               size_t lastSample,
               size_t numThreads,
               const types::RowCol<size_t>& dims,
-              void* data)
+              void* data) const
     {
         const mem::BufferView<sys::ubyte> buffer(static_cast<sys::ubyte*>(data),
                                                  dims.area() * mElementSize);
