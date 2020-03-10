@@ -21,7 +21,7 @@
  */
 
 #include "j2k/j2k_config.h"
- 
+
 #ifdef HAVE_JASPER_H
 
 #include "j2k/Container.h"
