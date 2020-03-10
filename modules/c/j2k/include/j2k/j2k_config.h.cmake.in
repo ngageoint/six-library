@@ -1,0 +1,6 @@
+#ifndef NITFO_J2K_CONFIG_H
+#define NITFO_J2K_CONFIG_H
+
+#cmakedefine HAVE_OPENJPEG_H @HAVE_OPENJPEG_H@
+
+#endif
