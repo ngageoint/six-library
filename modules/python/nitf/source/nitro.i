@@ -191,6 +191,17 @@
 
 %typemap(out) nitf_Uint8 {$result = SWIG_From_char((char)($1));}
 
+/* NRT_FILE is supposed to expand to the current source file during
+ * preprocessing (and similar with the other ignored values below).
+ * By the time SWIG gets at it, it's just a hardcoded path to what
+ * is almost certainly a useless location.
+ */
+%ignore NRT_FILE;
+%ignore NRT_LINE;
+%ignore NRT_FUNC;
+%ignore NITF_FILE;
+%ignore NITF_LINE;
+%ignore NITF_FUNC;
 
 %include "nrt/Defines.h"
 %include "nrt/Types.h"

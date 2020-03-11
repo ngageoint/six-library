@@ -3266,6 +3266,13 @@ namespace swig {
 #include <limits>
 
 
+SWIGINTERNINLINE PyObject*
+  SWIG_From_int  (int value)
+{
+  return PyInt_FromLong((long) value);
+}
+
+
 SWIGINTERN swig_type_info*
 SWIG_pchar_descriptor(void)
 {
@@ -3276,49 +3283,6 @@ SWIG_pchar_descriptor(void)
     init = 1;
   }
   return info;
-}
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_FromCharPtrAndSize(const char* carray, size_t size)
-{
-  if (carray) {
-    if (size > INT_MAX) {
-      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
-      return pchar_descriptor ? 
-	SWIG_InternalNewPointerObj(const_cast< char * >(carray), pchar_descriptor, 0) : SWIG_Py_Void();
-    } else {
-#if PY_VERSION_HEX >= 0x03000000
-#if defined(SWIG_PYTHON_STRICT_BYTE_CHAR)
-      return PyBytes_FromStringAndSize(carray, static_cast< Py_ssize_t >(size));
-#else
-#if PY_VERSION_HEX >= 0x03010000
-      return PyUnicode_DecodeUTF8(carray, static_cast< Py_ssize_t >(size), "surrogateescape");
-#else
-      return PyUnicode_FromStringAndSize(carray, static_cast< Py_ssize_t >(size));
-#endif
-#endif
-#else
-      return PyString_FromStringAndSize(carray, static_cast< Py_ssize_t >(size));
-#endif
-    }
-  } else {
-    return SWIG_Py_Void();
-  }
-}
-
-
-SWIGINTERNINLINE PyObject * 
-SWIG_FromCharPtr(const char *cptr)
-{ 
-  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
-}
-
-
-SWIGINTERNINLINE PyObject*
-  SWIG_From_int  (int value)
-{
-  return PyInt_FromLong((long) value);
 }
 
 
@@ -3457,6 +3421,35 @@ SWIG_AsCharArray(PyObject * obj, char *val, size_t size)
     if (alloc == SWIG_NEWOBJ) delete[] cptr;
   }
   return SWIG_TypeError;
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_FromCharPtrAndSize(const char* carray, size_t size)
+{
+  if (carray) {
+    if (size > INT_MAX) {
+      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+      return pchar_descriptor ? 
+	SWIG_InternalNewPointerObj(const_cast< char * >(carray), pchar_descriptor, 0) : SWIG_Py_Void();
+    } else {
+#if PY_VERSION_HEX >= 0x03000000
+#if defined(SWIG_PYTHON_STRICT_BYTE_CHAR)
+      return PyBytes_FromStringAndSize(carray, static_cast< Py_ssize_t >(size));
+#else
+#if PY_VERSION_HEX >= 0x03010000
+      return PyUnicode_DecodeUTF8(carray, static_cast< Py_ssize_t >(size), "surrogateescape");
+#else
+      return PyUnicode_FromStringAndSize(carray, static_cast< Py_ssize_t >(size));
+#endif
+#endif
+#else
+      return PyString_FromStringAndSize(carray, static_cast< Py_ssize_t >(size));
+#endif
+    }
+  } else {
+    return SWIG_Py_Void();
+  }
 }
 
 
@@ -3757,6 +3750,13 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
     return SWIG_ERROR;
   if (val) *val = r ? true : false;
   return SWIG_OK;
+}
+
+
+SWIGINTERNINLINE PyObject * 
+SWIG_FromCharPtr(const char *cptr)
+{ 
+  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
 }
 
 
@@ -34645,9 +34645,6 @@ SWIG_init(void) {
   
   SWIG_InstallConstants(d,swig_const_table);
   
-  SWIG_Python_SetConstant(d, "NRT_FILE",SWIG_FromCharPtr("/corp/SST/jmeans/workspace/nitro/modules/c/nrt/include/nrt/Defines.h"));
-  SWIG_Python_SetConstant(d, "NRT_LINE",SWIG_From_int(static_cast< int >(95)));
-  SWIG_Python_SetConstant(d, "NRT_FUNC",SWIG_FromCharPtr("unknown function"));
   SWIG_Python_SetConstant(d, "NRT_DEFAULT_PERM",SWIG_From_int(static_cast< int >(0644)));
   SWIG_Python_SetConstant(d, "NRT_INVALID_HANDLE_VALUE",SWIG_From_int(static_cast< int >(-1)));
   SWIG_Python_SetConstant(d, "NRT_OPEN_EXISTING",SWIG_From_int(static_cast< int >(0)));
@@ -34686,9 +34683,6 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NRT_ERR_INT_STACK_OVERFLOW",SWIG_From_int(static_cast< int >(NRT_ERR_INT_STACK_OVERFLOW)));
   SWIG_Python_SetConstant(d, "NRT_ERR_UNK",SWIG_From_int(static_cast< int >(NRT_ERR_UNK)));
   SWIG_Python_SetConstant(d, "NRT_MAX_READ_ATTEMPTS",SWIG_From_int(static_cast< int >(100)));
-  SWIG_Python_SetConstant(d, "NITF_FILE",SWIG_FromCharPtr("/corp/SST/jmeans/workspace/nitro/modules/c/nitf/include/nitf/System.h"));
-  SWIG_Python_SetConstant(d, "NITF_LINE",SWIG_From_int(static_cast< int >(58)));
-  SWIG_Python_SetConstant(d, "NITF_FUNC",SWIG_FromCharPtr("unknown function"));
   SWIG_Python_SetConstant(d, "NITF_MAX_PATH",SWIG_From_int(static_cast< int >(1024)));
   SWIG_Python_SetConstant(d, "NITF_DEFAULT_PERM",SWIG_From_int(static_cast< int >(0644)));
   SWIG_Python_SetConstant(d, "NITF_INVALID_HANDLE_VALUE",SWIG_From_int(static_cast< int >(-1)));
@@ -34700,6 +34694,8 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NITF_DATE_FORMAT_20",SWIG_FromCharPtr("%d%H%M%SZ%b%y"));
   SWIG_Python_SetConstant(d, "NITF_DATE_FORMAT_21",SWIG_FromCharPtr("%Y%m%d%H%M%S"));
   SWIG_Python_SetConstant(d, "NITF_TRE_HASH_SIZE",SWIG_From_int(static_cast< int >(8)));
+  SWIG_Python_SetConstant(d, "HAVE_CLOCK_GETTIME",SWIG_From_int(static_cast< int >(1)));
+  SWIG_Python_SetConstant(d, "HAVE_SYS_TIME_H",SWIG_From_int(static_cast< int >(1)));
   SWIG_Python_SetConstant(d, "NRT_LIB_VERSION",SWIG_FromCharPtr("2.8"));
   SWIG_Python_SetConstant(d, "NITF_LIB_VERSION",SWIG_FromCharPtr("2.8"));
   SWIG_Python_SetConstant(d, "NITF_COMPRESSION_HASH_SIZE",SWIG_From_int(static_cast< int >(2)));
