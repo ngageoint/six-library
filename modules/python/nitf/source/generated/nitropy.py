@@ -95,9 +95,6 @@ except __builtin__.Exception:
         pass
     _newclass = 0
 
-NRT_FILE = _nitropy.NRT_FILE
-NRT_LINE = _nitropy.NRT_LINE
-NRT_FUNC = _nitropy.NRT_FUNC
 NRT_DEFAULT_PERM = _nitropy.NRT_DEFAULT_PERM
 NRT_INVALID_HANDLE_VALUE = _nitropy.NRT_INVALID_HANDLE_VALUE
 NRT_OPEN_EXISTING = _nitropy.NRT_OPEN_EXISTING
@@ -366,9 +363,6 @@ nrt_IOHandleAdapter_open = _nitropy.nrt_IOHandleAdapter_open
 def nrt_BufferAdapter_construct(buf, size, ownBuf, error):
     return _nitropy.nrt_BufferAdapter_construct(buf, size, ownBuf, error)
 nrt_BufferAdapter_construct = _nitropy.nrt_BufferAdapter_construct
-NITF_FILE = _nitropy.NITF_FILE
-NITF_LINE = _nitropy.NITF_LINE
-NITF_FUNC = _nitropy.NITF_FUNC
 NITF_MAX_PATH = _nitropy.NITF_MAX_PATH
 NITF_DEFAULT_PERM = _nitropy.NITF_DEFAULT_PERM
 NITF_INVALID_HANDLE_VALUE = _nitropy.NITF_INVALID_HANDLE_VALUE
