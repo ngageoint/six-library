@@ -270,9 +270,9 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
         else
         {
             fprintf(stderr,
-                    "Warning: Unable to find plugin path. Specify plugin "
-                    "location by setting environment variable %s,"
-                    " or by building the library from source\n",
+                    "Warning: Unable to find plugin path.\n"
+                    "Specify plugin location by setting environment variable "
+                    "%s, or by building the library from source\n",
                     NITF_PLUGIN_PATH);
             return reg;
         }
