@@ -219,8 +219,9 @@ to make sure NITRO can find them.
   you don't have to do anything extra.
       
 * If you are working from a binary release, you will have to tell
-      NITRO where the plugins are by setting the `NITF_PLUGIN_PATH`
-      enviornment variable.
-      This should look something like `<install>/share/nitf/plugins`.
+  NITRO where the plugins are by setting the `NITF_PLUGIN_PATH`
+  enviornment variable.
+  This should look something like `<install>/share/nitf/plugins`.
+  
 * If you wish to use a custom TRE location, you can also specify that
-      with `NITF_PLUGIN_PATH`.
+  with `NITF_PLUGIN_PATH`.
