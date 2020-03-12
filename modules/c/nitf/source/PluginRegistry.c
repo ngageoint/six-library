@@ -264,7 +264,7 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
         /*  Take the default path  */
         if (nrt_Directory_exists(NITF_DEFAULT_PLUGIN_PATH))
         {
-            strcpy(reg->path, NITF_DEFAULT_PLUGIN_PATH);
+            strncpy(reg->path, NITF_DEFAULT_PLUGIN_PATH, NITF_MAX_PATH);
             return reg;
         }
         else
@@ -279,7 +279,7 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
     }
     else
     {
-        strcpy(reg->path, pluginEnvVar);
+        strncpy(reg->path, pluginEnvVar, NITF_MAX_PATH);
     }
     /*
      * If the we have a user-defined path, they might not
