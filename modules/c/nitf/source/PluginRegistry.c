@@ -262,8 +262,20 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
     if (!pluginEnvVar)
     {
         /*  Take the default path  */
-        strcpy(reg->path, NITF_DEFAULT_PLUGIN_PATH);
-        return reg;
+        if (nrt_Directory_exists(NITF_DEFAULT_PLUGIN_PATH))
+        {
+            strcpy(reg->path, NITF_DEFAULT_PLUGIN_PATH);
+            return reg;
+        }
+        else
+        {
+            fprintf(stderr,
+                    "Warning: Unable to find plugin path. Specify plugin "
+                    "location by setting environment variable %s,"
+                    " or by building the library from source\n",
+                    NITF_PLUGIN_PATH);
+            return reg;
+        }
     }
     else
     {
