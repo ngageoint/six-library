@@ -561,7 +561,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
         else if (version == "2.0.0")
         {
             specVers = "2.0";
-            specDT = "2016-07-15T00:00:00Z";
+            specDT = "2019-05-31T00:00:00Z";
         }
     }
 
