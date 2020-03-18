@@ -1,4 +1,4 @@
-set(NITRO_VERSION "2.8")
+set(NITRO_VERSION "2.9")
 
 add_subdirectory(nrt)
 add_subdirectory(nitf)

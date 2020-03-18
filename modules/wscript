@@ -1,6 +1,6 @@
 import os
 
-VERSION = '2.8'
+VERSION = '2.9'
 
 def options(opt):
     opt.recurse()
