@@ -26,7 +26,6 @@
 
 #include <import/cli.h>
 #include <import/six.h>
-#include <import/sio/lite.h>
 #include <import/io.h>
 
 // For SICD implementation

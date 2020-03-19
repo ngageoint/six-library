@@ -20,7 +20,6 @@
  *
  */
 #include <TestCase.h>
-#include <cli/ArgumentParser.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDWriter.h>
 #include <cphd/Metadata.h>
