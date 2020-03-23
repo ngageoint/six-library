@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -25,11 +25,11 @@
 #define __SYS_ERR_H__
 
 /*!
- *  \file Err.h 
+ *  \file Err.h
  *  \brief Errno like object
- * 
+ *
  *  This object is very much like errno or the GetLastError() function
- *  in Win32.  It doesnt do anything dazzling.  It just reports the 
+ *  in Win32.  It doesnt do anything dazzling.  It just reports the
  *  last error.  This class is sometimes useful, because it understands
  *  that its error id maps to a system string error, and it knows how
  *  to obtain the error
@@ -45,13 +45,13 @@ const static int __last_err__ = 0;
 /*!
  *  \class Err
  *  \brief Errno like object
- * 
+ *
  *  This object is very much like errno or the GetLastError() function
  *  in Win32.  It doesnt do anything dazzling.  It just reports the
  *  last error.  This class is sometimes useful, because it understands
  *  that its error id maps to a system string error, and it knows how
  *  to obtain the error.
- *  
+ *
  */
 
 class Err
@@ -66,7 +66,7 @@ public:
     {
         mErrId = err.getErrID();
     }
-    
+
     /*!
      * Constructor from int error id
      * \param errNum  The error to initialize with. Defaults to last
@@ -75,7 +75,7 @@ public:
     {
         setThis(errNum);
     }
-    
+
     /*!
      *  Assignment operator
      *  \param err The err to take
@@ -88,13 +88,13 @@ public:
         }
         return *this;
     }
-    
+
     //! Destructor
     virtual ~Err() {}
-    
+
     /*!
      *  This is the equivalent of strerror, done in a cross-platform
-     *  manner, wrapped in this class.  Prints this object to 
+     *  manner, wrapped in this class.  Prints this object to
      *  its error string
      *  \return a string representation of this error
      *
@@ -112,10 +112,10 @@ public:
             mErrId = getLast();
         }
     }
-    
+
     //!  Return the last error
     virtual int getLast() const;
-    
+
     int getErrID() const { return mErrId; }
 
 protected:
@@ -140,21 +140,21 @@ public:
      *  \param err An error to initialize from
      *
      */
-    SocketErr(const SocketErr& err)
+    SocketErr(const SocketErr& err) :
+        Err(err.getErrID())
     {
-        mErrId = err.getErrID();
     }
-    
+
     /*!
      *  Constructor
      *  \param errNum  An int to initialize from
      *
-     */     
+     */
     SocketErr(int errNum = __last_err__)
     {
         setThis(errNum);
     }
-    
+
     /*!
      *  Assignment operator
      *  \param err The err to take
@@ -168,10 +168,10 @@ public:
         }
         return *this;
     }
-    
+
     //!  Destructor
     virtual ~SocketErr() {}
-    
+
     //!  Redefined for socket errors
     virtual int getLast() const;
 
