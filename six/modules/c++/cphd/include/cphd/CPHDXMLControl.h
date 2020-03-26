@@ -121,8 +121,8 @@ protected:
     bool mOwnLog;
 
 private:
-    //! Hardcoded version to uri mapping
-    static const std::unordered_map<std::string, std::string> VERSION_URI_MAP;
+    //! \return Hardcoded version to uri mapping
+    static std::unordered_map<std::string, std::string> getVersionUriMap();
 
     /*!
      *  This function takes in a Metadata object and converts
