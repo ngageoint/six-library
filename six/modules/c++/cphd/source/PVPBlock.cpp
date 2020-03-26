@@ -660,6 +660,17 @@ double PVPBlock::getTdIonoSRP(size_t channel, size_t set) const
                     "Parameter was not set"));
 }
 
+double PVPBlock::getSignal(size_t channel, size_t set) const
+{
+    verifyChannelVector(channel, set);
+    if (mData[channel][set].signal.get())
+    {
+        return *mData[channel][set].signal;
+    }
+    throw except::Exception(Ctxt(
+                    "Parameter was not set"));
+}
+
 void PVPBlock::setTxTime(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
