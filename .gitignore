@@ -20,6 +20,7 @@ target/
 target.dbg/
 install/
 install.dbg/
+test_package/build/
 
 # Drivers
 six/projects/csm/external/csm-master/

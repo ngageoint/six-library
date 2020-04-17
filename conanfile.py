@@ -5,8 +5,8 @@ class SixConan(ConanFile):
     url = "https://github.com/ngageoint/six-library"
     description = "library for reading and writing the Sensor Independent XML (SIX) format"
     settings = "os", "compiler", "build_type", "arch"
-    requires = ("coda-oss/CMake_update_win_12c8a1574ed4694c@user/testing",
-                "nitro/cmake-integration_f1886c24e7c4ddf2@user/testing")
+    requires = ("coda-oss/CMake_update_win_b71f5a2ec26e09e9@user/testing",
+                "nitro/cmake-integration_db93dedc6b94d285@user/testing")
     options = {"shared": [True, False],
                }
     default_options = {"shared": False,
