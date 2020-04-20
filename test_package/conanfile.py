@@ -1,4 +1,5 @@
 from conans import ConanFile, CMake
+import os
 
 class SixTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
@@ -10,4 +11,4 @@ class SixTestConan(ConanFile):
         cmake.build()
 
     def test(self):
-        self.run("./test", run_environment=True)
+        self.run(os.path.join("bin", "test"), run_environment=True)
