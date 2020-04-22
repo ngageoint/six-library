@@ -119,7 +119,7 @@ XMLElem CPHDXMLParser::toXML(const CollectionInformation& collectionID, XMLElem 
 
     // RadarMode
     XMLElem radarModeXML = newElement("RadarMode", collectionXML);
-    createString("ModeType", collectionID.radarMode.toString(), radarModeXML);
+    createString("ModeType", six::toString(collectionID.radarMode), radarModeXML);
     if(!six::Init::isUndefined(collectionID.radarModeID))
     {
         createString("ModeID", collectionID.radarModeID, radarModeXML);

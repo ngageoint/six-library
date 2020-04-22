@@ -349,7 +349,7 @@ public:
     /*!
      * Get sample type element size
      */
-    size_t getElementSize()
+    size_t getElementSize() const
     {
         return mElementSize;
     }
