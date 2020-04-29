@@ -80,7 +80,7 @@ coda_add_tests(
 install(DIRECTORY "conf/schema/"
         DESTINATION "conf/schema/six/")
 
-if (Python_FOUND)
+if (Python_Development_FOUND)
     # Install the Python schemas
     install(DIRECTORY "conf/schema/"
             DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/pysix/schema/")
