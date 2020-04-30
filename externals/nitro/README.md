@@ -1,13 +1,13 @@
 Building NITRO
 ---------------
 
-CMake is the preferred build method. Version 3.11 or better is required.
+CMake is the preferred build method. Version 3.14 or better is required.
 
 Sample Build Scenario
 ---------------------
 
-    mkdir build;
-    cd build;
+    mkdir build
+    cd build
     cmake ..
     cmake --build . -j
     cmake --build . --target install
@@ -15,23 +15,27 @@ Sample Build Scenario
 
 Problems and Configurations
 ---------------------------
-
-  - The Python layer will not build on Windows
-  - Nothing will build on WSL
-  - Both these problems are due to how coda-oss's waf talks to Python. They will
-    be addressed once CODA-OSS is building with CMake.
   - If your system compiler does not fully support C++11, you may have to
     specify a different one during the configure step. e.g.
 
         cmake -DCMAKE_C_COMPILER=/some/path/gcc/4.9.1/bin/gcc -DCMAKE_CXX_COMPILER=/...../bin/g++ ..
 
-  - NITRO will construct a default local install location for you. Pass -DCMAKE_INSTALL_PREFIX to override.
+  - Pass -DCMAKE_INSTALL_PREFIX to set the install location.
 
   - Java, MATLAB, Python, C++ bindings all build. Just make sure the relevant tools
     are on your PATH
 
-  - Debug symbols are available by default. Configure release type with [-DCMAKE_BUILD_TYPE](https://cmake.org/cmake/help/v3.0/variable/CMAKE_BUILD_TYPE.html)
+  - See the [coda-oss CMake build README](externals/coda-oss/cmake/README.md)
+    for further build configuration information, particularly for Python-related
+    details. The same options there may be passed to Nitro.
 
+  - Build types `Release`, `RelWithDebInfo`, and `Debug` may be chosen
+    - On Linux, debug symbols are available by default (`RelWithDebInfo`). Configure build type with [-DCMAKE_BUILD_TYPE](https://cmake.org/cmake/help/v3.0/variable/CMAKE_BUILD_TYPE.html)
+    - On Windows, release type should be configured during the build and install steps
+
+          cmake --build . --config Release -j
+          cmake --build . --config Release --target install
+      The CMake default build type `Debug` may not work with Python, unless the Python installation includes debug versions of the Python libraries.
   - If the CMake build system does not support a required feature that Waf does, create
     an issue or a pull request!
 
@@ -217,11 +221,11 @@ to make sure NITRO can find them.
 
 * If you are building from source, the location will be compiled in, and
   you don't have to do anything extra.
-      
+
 * If you are working from a binary release, you will have to tell
   NITRO where the plugins are by setting the `NITF_PLUGIN_PATH`
   enviornment variable.
   This should look something like `<install>/share/nitf/plugins`.
-  
+
 * If you wish to use a custom TRE location, you can also specify that
   with `NITF_PLUGIN_PATH`.

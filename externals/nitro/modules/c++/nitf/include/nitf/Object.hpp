@@ -69,6 +69,28 @@ protected:
         }
     }
 
+    /*!
+     * Attempt to set native object, or throw if it is null
+     * Convenience method to help check errors from C "constructors"
+     * \param nativeObj Native C object to set
+     * \param error The error object used in "construction" of native C object
+     *              This allows the resulting exception to easily propogate
+     *              the correct error information
+     * \throws NITFException if `nativeObj` is NULL
+     *
+     * Usage:
+     *    auto* native = nitf_DESegment_construct(&error);
+     *    setNativeOrThrow(native, &error);
+     */
+    virtual void setNativeOrThrow(T* nativeObj, nitf_Error* error)
+    {
+        if (nativeObj == nullptr)
+        {
+            throw nitf::NITFException(error);
+        }
+        setNative(nativeObj);
+    }
+
 public:
     //! Constructor
     Object() : mHandle(NULL) {}

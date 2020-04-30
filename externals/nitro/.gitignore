@@ -4,6 +4,7 @@
 
 # Build artifacts
 target/
+test_package/build/
 *.pyc
 *.swp
 .depproj
