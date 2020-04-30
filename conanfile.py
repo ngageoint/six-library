@@ -8,7 +8,7 @@ class SixConan(ConanFile):
     description = "library for reading and writing the Sensor Independent XML (SIX) format"
     settings = "os", "compiler", "build_type", "arch"
     requires = ("coda-oss/master_67d6362bcfcf07e2",
-                "nitro/master_038069b2eaea5981")
+                "nitro/master_496bfba71889054c")
     options = {"shared": [True, False],
                "PYTHON_HOME": "ANY",
                "PYTHON_VERSION": "ANY",
