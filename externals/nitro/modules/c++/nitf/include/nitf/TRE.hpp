@@ -23,12 +23,12 @@
 #ifndef __NITF_TRE_HPP__
 #define __NITF_TRE_HPP__
 
-#include "nitf/TRE.h"
-#include "nitf/System.hpp"
-#include "nitf/Field.hpp"
-#include "nitf/Pair.hpp"
-#include "nitf/Object.hpp"
 #include <string>
+#include "nitf/Field.hpp"
+#include "nitf/Object.hpp"
+#include "nitf/Pair.hpp"
+#include "nitf/System.hpp"
+#include "nitf/TRE.h"
 
 /*!
  *  \file TRE.hpp
@@ -36,29 +36,30 @@
  */
 namespace nitf
 {
-
 /*!
  *  \class FieldIterator
  *  \brief  The C++ wrapper for the nitf_TREEnumerator
  */
 class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
 {
-public:
+    public:
     TREFieldIterator() : mPair(NULL)
     {
         setNative(NULL);
     }
 
-    ~TREFieldIterator(){}
+    ~TREFieldIterator()
+    {
+    }
 
     //! Copy constructor
-    TREFieldIterator(const TREFieldIterator & x)
+    TREFieldIterator(const TREFieldIterator& x)
     {
         setNative(x.getNative());
     }
 
     //! Assignment Operator
-    TREFieldIterator & operator=(const TREFieldIterator & x)
+    TREFieldIterator& operator=(const TREFieldIterator& x)
     {
         if (&x != this)
         {
@@ -69,21 +70,21 @@ public:
     }
 
     //! Set native object
-    TREFieldIterator(nitf_TREEnumerator * x) : mPair(NULL)
+    TREFieldIterator(nitf_TREEnumerator* x) : mPair(NULL)
     {
         setNative(x);
         getNativeOrThrow();
         increment();
     }
 
-    TREFieldIterator(NITF_DATA * x)
+    TREFieldIterator(NITF_DATA* x)
     {
         setNative((nitf_TREEnumerator*)x);
         getNativeOrThrow();
         increment();
     }
 
-    TREFieldIterator & operator=(NITF_DATA * x)
+    TREFieldIterator& operator=(NITF_DATA* x)
     {
         setNative((nitf_TREEnumerator*)x);
         getNativeOrThrow();
@@ -98,8 +99,8 @@ public:
      */
     bool operator==(const nitf::TREFieldIterator& it2)
     {
-        //need to do this double-check so that the last iteration of an iterator
-        //doesn't get skipped
+        // need to do this double-check so that the last iteration of an
+        // iterator doesn't get skipped
         if (getNative() == it2.getNative())
             return mPair == it2.mPair;
         return false;
@@ -120,11 +121,11 @@ public:
             mPair = enumerator->next(enumerator, &error);
         else
             mPair = NULL;
-        setNative(enumerator); //always reset, in case it got destroyed
+        setNative(enumerator);  // always reset, in case it got destroyed
     }
 
     //! Increment the iterator (postfix)
-    void operator++(int )
+    void operator++(int)
     {
         increment();
     }
@@ -148,20 +149,18 @@ public:
         nitf_TREEnumerator* enumerator = getNative();
         if (enumerator && isValid())
         {
-            const char* desc = enumerator->getFieldDescription(enumerator,
-                                                               &error);
+            const char* desc =
+                    enumerator->getFieldDescription(enumerator, &error);
             if (desc)
                 return std::string(desc);
         }
         return "";
     }
 
-private:
+    private:
     nitf_Error error;
-    nitf_Pair *mPair;
+    nitf_Pair* mPair;
 };
-
-
 
 /*!
  *  \class TRE
@@ -169,22 +168,21 @@ private:
  */
 DECLARE_CLASS(TRE)
 {
-public:
-
-typedef nitf::TREFieldIterator Iterator;
+    public:
+    typedef nitf::TREFieldIterator Iterator;
 
     //! Copy constructor
-    TRE(const TRE & x);
+    TRE(const TRE& x);
 
     //! Assignment Operator
-    TRE & operator=(const TRE & x);
+    TRE& operator=(const TRE& x);
 
     //! Set native object
     TRE(nitf_TRE * x);
 
     TRE(NITF_DATA * x);
 
-    TRE & operator=(NITF_DATA * x);
+    TRE& operator=(NITF_DATA* x);
 
     //! Without the const char* constructors, in VS if you do something like
     //  TRE("my_tre_tag")
@@ -220,26 +218,30 @@ typedef nitf::TREFieldIterator Iterator;
      */
     nitf::Field getField(const std::string& key);
 
-    nitf::Field operator[] (const std::string& key);
+    nitf::Field operator[](const std::string& key);
 
     /*!
      * Returns a List of Fields that match the given pattern.
      */
     nitf::List find(const std::string& pattern);
 
-	/*!
-	 * Sets the field with the given value. The input value
-	 * is converted to a std::string, and the string-ized value
-	 * is then used as the value input for the TRE field.
-	 */
-    template <typename T> void setField(std::string key, T value)
+    /*!
+     * Sets the field with the given value. The input value
+     * is converted to a std::string, and the string-ized value
+     * is then used as the value input for the TRE field.
+     */
+    template <typename T>
+    void setField(std::string key, T value)
     {
-    	std::string s = str::toString<T>(value);
-	    if (!nitf_TRE_setField(getNative(),
-	                            key.c_str(),
-	                            (NITF_DATA*)s.c_str(),
-	                            s.size(),
-	                            &error) );
+        std::string s = str::toString<T>(value);
+        if (!nitf_TRE_setField(getNative(),
+                               key.c_str(),
+                               (NITF_DATA*)s.c_str(),
+                               s.size(),
+                               &error))
+        {
+            throw NITFException(&error);
+        }
     }
 
     /*!
@@ -255,7 +257,7 @@ typedef nitf::TREFieldIterator Iterator;
     std::string getTag() const;
 
     //! Set the tag
-    void setTag(const std::string & value);
+    void setTag(const std::string& value);
 
     /**
      * Get the TRE identifier. This is NOT the tag, however it may be the
@@ -265,10 +267,8 @@ typedef nitf::TREFieldIterator Iterator;
      */
     std::string getID() const;
 
-
-private:
+    private:
     nitf_Error error;
 };
-
 }
 #endif

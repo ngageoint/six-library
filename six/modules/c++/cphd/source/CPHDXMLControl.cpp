@@ -38,12 +38,6 @@
 namespace cphd
 {
 
-const std::unordered_map<std::string, std::string> CPHDXMLControl::VERSION_URI_MAP =
-{
-    {"1.0.0", "urn:CPHD:1.0.0"},
-    {"1.0.1", "http://api.nsgreg.nga.mil/schema/cphd/1.0.1"}
-};
-
 CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog) :
     mLog(NULL),
     mOwnLog(false)
@@ -105,16 +99,25 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
     return doc;
 }
 
+std::unordered_map<std::string, std::string> CPHDXMLControl::getVersionUriMap()
+{
+    return {
+        {"1.0.0", "urn:CPHD:1.0.0"},
+        {"1.0.1", "http://api.nsgreg.nga.mil/schema/cphd/1.0.1"}
+    };
+}
+
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& metadata)
 {
-    if (VERSION_URI_MAP.find(metadata.getVersion()) != VERSION_URI_MAP.end())
+    const auto versionUriMap = getVersionUriMap();
+    if (versionUriMap.find(metadata.getVersion()) != versionUriMap.end())
     {
-        return getParser(VERSION_URI_MAP.find(metadata.getVersion())->second)->toXML(metadata);
+        return getParser(versionUriMap.find(metadata.getVersion())->second)->toXML(metadata);
     }
     std::ostringstream ostr;
     ostr << "The version " << metadata.getVersion() << " is invalid. "
          << "Check if version is valid or "
-         << "add a <version, URI> entry to VERSION_URI_MAP";
+         << "add a <version, URI> entry to versionUriMap";
     throw except::Exception(Ctxt(ostr.str()));
 }
 
@@ -156,7 +159,8 @@ CPHDXMLControl::getParser(const std::string& uri) const
 
 std::string CPHDXMLControl::uriToVersion(const std::string& uri) const
 {
-    for (auto it = VERSION_URI_MAP.begin(); it != VERSION_URI_MAP.end(); ++it)
+    const auto versionUriMap = getVersionUriMap();
+    for (auto it = versionUriMap.begin(); it != versionUriMap.end(); ++it)
     {
         if (it->second == uri)
         {
@@ -166,7 +170,7 @@ std::string CPHDXMLControl::uriToVersion(const std::string& uri) const
     std::ostringstream ostr;
     ostr << "The URI " << uri << " is invalid. "
          << "Either input a valid URI or "
-         << "add a <version, URI> entry to VERSION_URI_MAP";
+         << "add a <version, URI> entry to versionUriMap";
     throw except::Exception(Ctxt(ostr.str()));
 }
 
