@@ -1,3 +1,3 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/nitf/include)
+set(TARGET_LANGUAGE c++)
 
 add_subdirectory(nitf)

@@ -45,6 +45,17 @@ TEST_CASE(setFields)
     TEST_EXCEPTION(tre.setField("invalid-tag", "some data"));
 }
 
+TEST_CASE(setBinaryFields)
+{
+    nitf::TRE tre("RPFHDR");
+    const int value = 123;
+    tre.setField("LOCSEC", value);
+
+    nitf::Field field = tre.getField("LOCSEC");
+    const int readValue = *reinterpret_cast<int*>(field.getRawData());
+    TEST_ASSERT_EQ(readValue, value);
+}
+
 TEST_CASE(cloneTRE)
 {
     nitf::TRE tre("JITCID");
@@ -73,7 +84,7 @@ TEST_CASE(basicIteration)
     TEST_ASSERT_EQ(numFields, 1);
 
     numFields = 0;
-    tre.setField("NUMACPO", 2);
+    tre.setField("NUMACPO", 2, true);
     tre.setField("NUMPTS[0]", 3);
     tre.setField("NUMPTS[1]", 2);
     for (nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
@@ -106,13 +117,41 @@ TEST_CASE(populateWhileIterating)
     }
     TEST_ASSERT_EQ(numFields, 29);
 }
+
+TEST_CASE(overflowingNumericFields)
+{
+    nitf::TRE tre("CSCRNA");
+
+    // This field has a length of 9, so check that it's properly
+    // truncated
+    tre.setField("ULCNR_LAT", 1.0 / 9);
+    TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "0.1111111");
+
+    tre.setField("ULCNR_LAT", 123456789);
+    TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "123456789");
+
+    tre.setField("ULCNR_LAT", 12345678.);
+    TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "012345678");
+
+    tre.setField("ULCNR_LAT", 12345678.9);
+    TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "012345678");
+
+    tre.setField("ULCNR_LAT", 1);
+    TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "000000001");
+
+    // If we run out of digits before hitting the decimal, there's no
+    // saving it
+    TEST_EXCEPTION(tre.setField("ULCNR_LAT", 123456789012LL));
+}
 }
 
 int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(setFields);
+    TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
     TEST_CHECK(populateWhileIterating);
+    TEST_CHECK(overflowingNumericFields);
     return 0;
 }

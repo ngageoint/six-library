@@ -1,4 +1,4 @@
-     _________________________         
+     _________________________
     |   ____  _||_  ___  __   |
     |  /___ \/_||_\| __\/  \  |
     | //   \// || \||  \\ _ \ |
@@ -7,18 +7,18 @@
     | \\ _/ |\_||_/||__/|| || |
     |  \___/ \_||_/|___/|| || |
     |__________||_____________|
- 
-CODA is a set of modules, and each module, while complimentary to one another, has 
+
+CODA is a set of modules, and each module, while complimentary to one another, has
 a very specific and largely independent purpose.
 
 Building CODA
 --------------
 
-We primarily use Waf for building. Below are all of the options available.
+CODA may be built using Waf or CMake. Below are all of the options available for Waf. See cmake/README.md for CMake build instructions.
 
     > python waf --help
     waf [command] [options]
-    
+
     Main commands (example: ./waf build -j4)
       build    : builds the project
       clean    : removes the build files
@@ -27,7 +27,7 @@ We primarily use Waf for building. Below are all of the options available.
       distcheck: checks if the sources compile (tarball from 'dist')
       install  : installs the build files
       uninstall: removes the installed files
-    
+
     Options:
       --version             show program's version number and exit
       -h, --help            show this help message and exit
@@ -100,15 +100,15 @@ We primarily use Waf for building. Below are all of the options available.
         -s SRCDIR, --srcdir=SRCDIR
                             src dir for the project (configuration)
         --prefix=PREFIX     installation prefix (configuration) [default: '/usr/local/']
-    
+
       installation options:
         --destdir=DESTDIR   installation root [default: '']
         -f, --force         force file installation
-    
+
       C Compiler Options:
         --check-c-compiler=CHECK_C_COMPILER
                             On this platform (linux) the following C-Compiler will be checked by default: "gcc icc suncc"
-    
+
       C++ Compiler Options:
         --check-cxx-compiler=CHECK_CXX_COMPILER
                             On this platform (linux) the following C++ Compiler will be checked by default: "g++ icpc sunc++"
@@ -124,7 +124,7 @@ Sample Build Scenario
 
 Enabling a debugger
 -------------------
-`-g` and its variants can be achieved at configure time using the 
+`-g` and its variants can be achieved at configure time using the
 `--enable-debugging` switch at waf configure time
 
 Common Errors

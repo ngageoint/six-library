@@ -1,0 +1,17 @@
+#ifndef _@tgt_munged_name@_CONFIG_H_
+#define _@tgt_munged_name@_CONFIG_H_
+
+#cmakedefine HAVE_PTHREAD_H @HAVE_PTHREAD_H@
+#cmakedefine HAVE_EXECINFO_H @HAVE_EXECINFO_H@
+#cmakedefine HAVE_CLOCK_GETTIME @HAVE_CLOCK_GETTIME@
+#cmakedefine HAVE_ATOMIC_H @HAVE_ATOMIC_H@
+#cmakedefine HAVE_SYS_TIME_H @HAVE_SYS_TIME_H@
+#cmakedefine HAVE_LOCALTIME_R @HAVE_LOCALTIME_R@
+#cmakedefine HAVE_GMTIME_R @HAVE_GMTIME_R@
+#cmakedefine HAVE_SETENV @HAVE_SETENV@
+#cmakedefine HAVE_POSIX_MEMALIGN @HAVE_POSIX_MEMALIGN@
+#cmakedefine HAVE_MEMALIGN @HAVE_MEMALIGN@
+#cmakedefine BIGENDIAN @BIGENDIAN@
+#cmakedefine SIZEOF_SIZE_T @SIZEOF_SIZE_T@
+
+#endif /* _@tgt_munged_name@_CONFIG_H_ */

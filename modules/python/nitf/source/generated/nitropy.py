@@ -110,19 +110,19 @@ NRT_CORNERS_UTM_UPS_N = _nitropy.NRT_CORNERS_UTM_UPS_N
 NRT_CORNERS_GEO = _nitropy.NRT_CORNERS_GEO
 NRT_CORNERS_DECIMAL = _nitropy.NRT_CORNERS_DECIMAL
 
-def nrt_System_swap16(ins):
+def nrt_System_swap16(ins: 'nrt_Uint16') -> "nrt_Uint16":
     return _nitropy.nrt_System_swap16(ins)
 nrt_System_swap16 = _nitropy.nrt_System_swap16
 
-def nrt_System_swap32(inl):
+def nrt_System_swap32(inl: 'nrt_Uint32') -> "nrt_Uint32":
     return _nitropy.nrt_System_swap32(inl)
 nrt_System_swap32 = _nitropy.nrt_System_swap32
 
-def nrt_System_swap64(inl):
+def nrt_System_swap64(inl: 'nrt_Uint64') -> "nrt_Uint64":
     return _nitropy.nrt_System_swap64(inl)
 nrt_System_swap64 = _nitropy.nrt_System_swap64
 
-def nrt_System_swap64c(inl):
+def nrt_System_swap64c(inl: 'nrt_Uint64') -> "nrt_Uint64":
     return _nitropy.nrt_System_swap64c(inl)
 nrt_System_swap64c = _nitropy.nrt_System_swap64c
 NITF_VER_20 = _nitropy.NITF_VER_20
@@ -187,52 +187,52 @@ nrt_Error_swigregister = _nitropy.nrt_Error_swigregister
 nrt_Error_swigregister(nrt_Error)
 
 
-def nrt_Error_init(error, message, file, line, func, level):
+def nrt_Error_init(error: 'nrt_Error', message: 'char const *', file: 'char const *', line: 'int', func: 'char const *', level: 'int') -> "void":
     return _nitropy.nrt_Error_init(error, message, file, line, func, level)
 nrt_Error_init = _nitropy.nrt_Error_init
 
-def nrt_Error_flogf(error, file, level, format):
+def nrt_Error_flogf(error: 'nrt_Error', file: 'FILE *', level: 'int', format: 'char const *') -> "void":
     return _nitropy.nrt_Error_flogf(error, file, level, format)
 nrt_Error_flogf = _nitropy.nrt_Error_flogf
 
-def nrt_Error_fprintf(error, file, format):
+def nrt_Error_fprintf(error: 'nrt_Error', file: 'FILE *', format: 'char const *') -> "void":
     return _nitropy.nrt_Error_fprintf(error, file, format)
 nrt_Error_fprintf = _nitropy.nrt_Error_fprintf
 
-def nrt_Error_initf(error, file, line, func, level, format):
+def nrt_Error_initf(error: 'nrt_Error', file: 'char const *', line: 'int', func: 'char const *', level: 'int', format: 'char const *') -> "void":
     return _nitropy.nrt_Error_initf(error, file, line, func, level, format)
 nrt_Error_initf = _nitropy.nrt_Error_initf
 
-def nrt_Error_print(error, file, userMessage):
+def nrt_Error_print(error: 'nrt_Error', file: 'FILE *', userMessage: 'char const *') -> "void":
     return _nitropy.nrt_Error_print(error, file, userMessage)
 nrt_Error_print = _nitropy.nrt_Error_print
 NRT_MAX_READ_ATTEMPTS = _nitropy.NRT_MAX_READ_ATTEMPTS
 
-def nrt_IOHandle_create(fname, access, creation, error):
+def nrt_IOHandle_create(fname: 'char const *', access: 'nrt_AccessFlags', creation: 'nrt_CreationFlags', error: 'nrt_Error') -> "nrt_IOHandle":
     return _nitropy.nrt_IOHandle_create(fname, access, creation, error)
 nrt_IOHandle_create = _nitropy.nrt_IOHandle_create
 
-def nrt_IOHandle_read(handle, buf, size, error):
+def nrt_IOHandle_read(handle: 'nrt_IOHandle', buf: 'void *', size: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.nrt_IOHandle_read(handle, buf, size, error)
 nrt_IOHandle_read = _nitropy.nrt_IOHandle_read
 
-def nrt_IOHandle_write(handle, buf, size, error):
+def nrt_IOHandle_write(handle: 'nrt_IOHandle', buf: 'void const *', size: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.nrt_IOHandle_write(handle, buf, size, error)
 nrt_IOHandle_write = _nitropy.nrt_IOHandle_write
 
-def nrt_IOHandle_seek(handle, offset, whence, error):
+def nrt_IOHandle_seek(handle: 'nrt_IOHandle', offset: 'nrt_Off', whence: 'int', error: 'nrt_Error') -> "nrt_Off":
     return _nitropy.nrt_IOHandle_seek(handle, offset, whence, error)
 nrt_IOHandle_seek = _nitropy.nrt_IOHandle_seek
 
-def nrt_IOHandle_tell(handle, error):
+def nrt_IOHandle_tell(handle: 'nrt_IOHandle', error: 'nrt_Error') -> "nrt_Off":
     return _nitropy.nrt_IOHandle_tell(handle, error)
 nrt_IOHandle_tell = _nitropy.nrt_IOHandle_tell
 
-def nrt_IOHandle_getSize(handle, error):
+def nrt_IOHandle_getSize(handle: 'nrt_IOHandle', error: 'nrt_Error') -> "nrt_Off":
     return _nitropy.nrt_IOHandle_getSize(handle, error)
 nrt_IOHandle_getSize = _nitropy.nrt_IOHandle_getSize
 
-def nrt_IOHandle_close(handle):
+def nrt_IOHandle_close(handle: 'nrt_IOHandle') -> "void":
     return _nitropy.nrt_IOHandle_close(handle)
 nrt_IOHandle_close = _nitropy.nrt_IOHandle_close
 class nrt_IIOInterface(_object):
@@ -316,51 +316,51 @@ nrt_IOInterface_swigregister = _nitropy.nrt_IOInterface_swigregister
 nrt_IOInterface_swigregister(nrt_IOInterface)
 
 
-def nrt_IOInterface_read(arg1, buf, size, error):
+def nrt_IOInterface_read(arg1: 'nrt_IOInterface', buf: 'void *', size: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.nrt_IOInterface_read(arg1, buf, size, error)
 nrt_IOInterface_read = _nitropy.nrt_IOInterface_read
 
-def nrt_IOInterface_write(io, buf, size, error):
+def nrt_IOInterface_write(io: 'nrt_IOInterface', buf: 'void const *', size: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.nrt_IOInterface_write(io, buf, size, error)
 nrt_IOInterface_write = _nitropy.nrt_IOInterface_write
 
-def nrt_IOInterface_canSeek(io, arg2):
+def nrt_IOInterface_canSeek(io: 'nrt_IOInterface', arg2: 'nrt_Error') -> "bool":
     return _nitropy.nrt_IOInterface_canSeek(io, arg2)
 nrt_IOInterface_canSeek = _nitropy.nrt_IOInterface_canSeek
 
-def nrt_IOInterface_seek(io, offset, whence, error):
+def nrt_IOInterface_seek(io: 'nrt_IOInterface', offset: 'nrt_Off', whence: 'int', error: 'nrt_Error') -> "nrt_Off":
     return _nitropy.nrt_IOInterface_seek(io, offset, whence, error)
 nrt_IOInterface_seek = _nitropy.nrt_IOInterface_seek
 
-def nrt_IOInterface_tell(io, error):
+def nrt_IOInterface_tell(io: 'nrt_IOInterface', error: 'nrt_Error') -> "nrt_Off":
     return _nitropy.nrt_IOInterface_tell(io, error)
 nrt_IOInterface_tell = _nitropy.nrt_IOInterface_tell
 
-def nrt_IOInterface_getSize(io, error):
+def nrt_IOInterface_getSize(io: 'nrt_IOInterface', error: 'nrt_Error') -> "nrt_Off":
     return _nitropy.nrt_IOInterface_getSize(io, error)
 nrt_IOInterface_getSize = _nitropy.nrt_IOInterface_getSize
 
-def nrt_IOInterface_getMode(io, error):
+def nrt_IOInterface_getMode(io: 'nrt_IOInterface', error: 'nrt_Error') -> "int":
     return _nitropy.nrt_IOInterface_getMode(io, error)
 nrt_IOInterface_getMode = _nitropy.nrt_IOInterface_getMode
 
-def nrt_IOInterface_close(io, error):
+def nrt_IOInterface_close(io: 'nrt_IOInterface', error: 'nrt_Error') -> "bool":
     return _nitropy.nrt_IOInterface_close(io, error)
 nrt_IOInterface_close = _nitropy.nrt_IOInterface_close
 
-def nrt_IOInterface_destruct(io):
+def nrt_IOInterface_destruct(io: 'nrt_IOInterface **') -> "void":
     return _nitropy.nrt_IOInterface_destruct(io)
 nrt_IOInterface_destruct = _nitropy.nrt_IOInterface_destruct
 
-def nrt_IOHandleAdapter_construct(handle, accessMode, error):
+def nrt_IOHandleAdapter_construct(handle: 'nrt_IOHandle', accessMode: 'int', error: 'nrt_Error') -> "nrt_IOInterface *":
     return _nitropy.nrt_IOHandleAdapter_construct(handle, accessMode, error)
 nrt_IOHandleAdapter_construct = _nitropy.nrt_IOHandleAdapter_construct
 
-def nrt_IOHandleAdapter_open(fname, accessFlags, creationFlags, error):
+def nrt_IOHandleAdapter_open(fname: 'char const *', accessFlags: 'int', creationFlags: 'int', error: 'nrt_Error') -> "nrt_IOInterface *":
     return _nitropy.nrt_IOHandleAdapter_open(fname, accessFlags, creationFlags, error)
 nrt_IOHandleAdapter_open = _nitropy.nrt_IOHandleAdapter_open
 
-def nrt_BufferAdapter_construct(buf, size, ownBuf, error):
+def nrt_BufferAdapter_construct(buf: 'char *', size: 'size_t', ownBuf: 'bool', error: 'nrt_Error') -> "nrt_IOInterface *":
     return _nitropy.nrt_BufferAdapter_construct(buf, size, ownBuf, error)
 nrt_BufferAdapter_construct = _nitropy.nrt_BufferAdapter_construct
 NITF_MAX_PATH = _nitropy.NITF_MAX_PATH
@@ -374,8 +374,6 @@ NITF_MAX_READ_ATTEMPTS = _nitropy.NITF_MAX_READ_ATTEMPTS
 NITF_DATE_FORMAT_20 = _nitropy.NITF_DATE_FORMAT_20
 NITF_DATE_FORMAT_21 = _nitropy.NITF_DATE_FORMAT_21
 NITF_TRE_HASH_SIZE = _nitropy.NITF_TRE_HASH_SIZE
-HAVE_CLOCK_GETTIME = _nitropy.HAVE_CLOCK_GETTIME
-HAVE_SYS_TIME_H = _nitropy.HAVE_SYS_TIME_H
 NRT_LIB_VERSION = _nitropy.NRT_LIB_VERSION
 NITF_LIB_VERSION = _nitropy.NITF_LIB_VERSION
 NITF_COMPRESSION_HASH_SIZE = _nitropy.NITF_COMPRESSION_HASH_SIZE
@@ -416,63 +414,63 @@ nitf_PluginRegistry_swigregister = _nitropy.nitf_PluginRegistry_swigregister
 nitf_PluginRegistry_swigregister(nitf_PluginRegistry)
 
 
-def nitf_PluginRegistry_getInstance(error):
+def nitf_PluginRegistry_getInstance(error: 'nrt_Error') -> "nitf_PluginRegistry *":
     return _nitropy.nitf_PluginRegistry_getInstance(error)
 nitf_PluginRegistry_getInstance = _nitropy.nitf_PluginRegistry_getInstance
 
-def nitf_PluginRegistry_load(reg, error):
+def nitf_PluginRegistry_load(reg: 'nitf_PluginRegistry', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_PluginRegistry_load(reg, error)
 nitf_PluginRegistry_load = _nitropy.nitf_PluginRegistry_load
 
-def nitf_PluginRegistry_registerTREHandler(init, handler, error):
+def nitf_PluginRegistry_registerTREHandler(init: 'NITF_PLUGIN_INIT_FUNCTION', handler: 'NITF_PLUGIN_TRE_HANDLER_FUNCTION', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_PluginRegistry_registerTREHandler(init, handler, error)
 nitf_PluginRegistry_registerTREHandler = _nitropy.nitf_PluginRegistry_registerTREHandler
 
-def nitf_PluginRegistry_registerCompressionHandler(init, handler, error):
+def nitf_PluginRegistry_registerCompressionHandler(init: 'NITF_PLUGIN_INIT_FUNCTION', handler: 'NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_PluginRegistry_registerCompressionHandler(init, handler, error)
 nitf_PluginRegistry_registerCompressionHandler = _nitropy.nitf_PluginRegistry_registerCompressionHandler
 
-def nitf_PluginRegistry_registerDecompressionHandler(init, handler, error):
+def nitf_PluginRegistry_registerDecompressionHandler(init: 'NITF_PLUGIN_INIT_FUNCTION', handler: 'NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_PluginRegistry_registerDecompressionHandler(init, handler, error)
 nitf_PluginRegistry_registerDecompressionHandler = _nitropy.nitf_PluginRegistry_registerDecompressionHandler
 
-def nitf_PluginRegistry_loadDir(dirName, error):
+def nitf_PluginRegistry_loadDir(dirName: 'char const *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_PluginRegistry_loadDir(dirName, error)
 nitf_PluginRegistry_loadDir = _nitropy.nitf_PluginRegistry_loadDir
 
-def nitf_PluginRegistry_loadPlugin(fullPathName, error):
+def nitf_PluginRegistry_loadPlugin(fullPathName: 'char const *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_PluginRegistry_loadPlugin(fullPathName, error)
 nitf_PluginRegistry_loadPlugin = _nitropy.nitf_PluginRegistry_loadPlugin
 
-def nitf_PluginRegistry_TREHandlerExists(ident):
+def nitf_PluginRegistry_TREHandlerExists(ident: 'char const *') -> "bool":
     return _nitropy.nitf_PluginRegistry_TREHandlerExists(ident)
 nitf_PluginRegistry_TREHandlerExists = _nitropy.nitf_PluginRegistry_TREHandlerExists
 
-def nitf_PluginRegistry_compressionHandlerExists(ident):
+def nitf_PluginRegistry_compressionHandlerExists(ident: 'char const *') -> "bool":
     return _nitropy.nitf_PluginRegistry_compressionHandlerExists(ident)
 nitf_PluginRegistry_compressionHandlerExists = _nitropy.nitf_PluginRegistry_compressionHandlerExists
 
-def nitf_PluginRegistry_decompressionHandlerExists(ident):
+def nitf_PluginRegistry_decompressionHandlerExists(ident: 'char const *') -> "bool":
     return _nitropy.nitf_PluginRegistry_decompressionHandlerExists(ident)
 nitf_PluginRegistry_decompressionHandlerExists = _nitropy.nitf_PluginRegistry_decompressionHandlerExists
 
-def nitf_PluginRegistry_unload(reg, error):
+def nitf_PluginRegistry_unload(reg: 'nitf_PluginRegistry', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_PluginRegistry_unload(reg, error)
 nitf_PluginRegistry_unload = _nitropy.nitf_PluginRegistry_unload
 
-def nitf_PluginRegistry_retrieveTREHandler(reg, ident, hadError, error):
+def nitf_PluginRegistry_retrieveTREHandler(reg: 'nitf_PluginRegistry', ident: 'char const *', hadError: 'int *', error: 'nrt_Error') -> "nitf_TREHandler *":
     return _nitropy.nitf_PluginRegistry_retrieveTREHandler(reg, ident, hadError, error)
 nitf_PluginRegistry_retrieveTREHandler = _nitropy.nitf_PluginRegistry_retrieveTREHandler
 
-def nitf_PluginRegistry_retrieveDecompConstructor(reg, ident, hadError, error):
+def nitf_PluginRegistry_retrieveDecompConstructor(reg: 'nitf_PluginRegistry', ident: 'char const *', hadError: 'int *', error: 'nrt_Error') -> "NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION":
     return _nitropy.nitf_PluginRegistry_retrieveDecompConstructor(reg, ident, hadError, error)
 nitf_PluginRegistry_retrieveDecompConstructor = _nitropy.nitf_PluginRegistry_retrieveDecompConstructor
 
-def nitf_PluginRegistry_retrieveCompConstructor(reg, ident, hadError, error):
+def nitf_PluginRegistry_retrieveCompConstructor(reg: 'nitf_PluginRegistry', ident: 'char const *', hadError: 'int *', error: 'nrt_Error') -> "NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION":
     return _nitropy.nitf_PluginRegistry_retrieveCompConstructor(reg, ident, hadError, error)
 nitf_PluginRegistry_retrieveCompConstructor = _nitropy.nitf_PluginRegistry_retrieveCompConstructor
 
-def nitf_PluginRegistry_retrieveCompInterface(comp, error):
+def nitf_PluginRegistry_retrieveCompInterface(comp: 'char const *', error: 'nrt_Error') -> "nitf_CompressionInterface *":
     return _nitropy.nitf_PluginRegistry_retrieveCompInterface(comp, error)
 nitf_PluginRegistry_retrieveCompInterface = _nitropy.nitf_PluginRegistry_retrieveCompInterface
 class nitf_Reader(_object):
@@ -506,43 +504,43 @@ nitf_Reader_swigregister = _nitropy.nitf_Reader_swigregister
 nitf_Reader_swigregister(nitf_Reader)
 
 
-def nitf_Reader_construct(error):
+def nitf_Reader_construct(error: 'nrt_Error') -> "nitf_Reader *":
     return _nitropy.nitf_Reader_construct(error)
 nitf_Reader_construct = _nitropy.nitf_Reader_construct
 
-def nitf_Reader_destruct(reader):
+def nitf_Reader_destruct(reader: 'nitf_Reader **') -> "void":
     return _nitropy.nitf_Reader_destruct(reader)
 nitf_Reader_destruct = _nitropy.nitf_Reader_destruct
 
-def nitf_Reader_read(reader, inputHandle, error):
+def nitf_Reader_read(reader: 'nitf_Reader', inputHandle: 'nitf_IOHandle', error: 'nrt_Error') -> "nitf_Record *":
     return _nitropy.nitf_Reader_read(reader, inputHandle, error)
 nitf_Reader_read = _nitropy.nitf_Reader_read
 
-def nitf_Reader_readIO(reader, io, error):
+def nitf_Reader_readIO(reader: 'nitf_Reader', io: 'nrt_IOInterface', error: 'nrt_Error') -> "nitf_Record *":
     return _nitropy.nitf_Reader_readIO(reader, io, error)
 nitf_Reader_readIO = _nitropy.nitf_Reader_readIO
 
-def nitf_Reader_newImageReader(reader, imageSegmentNumber, options, error):
+def nitf_Reader_newImageReader(reader: 'nitf_Reader', imageSegmentNumber: 'int', options: 'nrt_HashTable', error: 'nrt_Error') -> "nitf_ImageReader *":
     return _nitropy.nitf_Reader_newImageReader(reader, imageSegmentNumber, options, error)
 nitf_Reader_newImageReader = _nitropy.nitf_Reader_newImageReader
 
-def nitf_Reader_newTextReader(reader, textSegmentNumber, error):
+def nitf_Reader_newTextReader(reader: 'nitf_Reader', textSegmentNumber: 'int', error: 'nrt_Error') -> "nitf_SegmentReader *":
     return _nitropy.nitf_Reader_newTextReader(reader, textSegmentNumber, error)
 nitf_Reader_newTextReader = _nitropy.nitf_Reader_newTextReader
 
-def nitf_Reader_newGraphicReader(reader, graphicSegmentNumber, error):
+def nitf_Reader_newGraphicReader(reader: 'nitf_Reader', graphicSegmentNumber: 'int', error: 'nrt_Error') -> "nitf_SegmentReader *":
     return _nitropy.nitf_Reader_newGraphicReader(reader, graphicSegmentNumber, error)
 nitf_Reader_newGraphicReader = _nitropy.nitf_Reader_newGraphicReader
 
-def nitf_Reader_newDEReader(reader, DESegmentNumber, error):
+def nitf_Reader_newDEReader(reader: 'nitf_Reader', DESegmentNumber: 'int', error: 'nrt_Error') -> "nitf_SegmentReader *":
     return _nitropy.nitf_Reader_newDEReader(reader, DESegmentNumber, error)
 nitf_Reader_newDEReader = _nitropy.nitf_Reader_newDEReader
 
-def nitf_Reader_getNITFVersion(fileName):
+def nitf_Reader_getNITFVersion(fileName: 'char const *') -> "nitf_Version":
     return _nitropy.nitf_Reader_getNITFVersion(fileName)
 nitf_Reader_getNITFVersion = _nitropy.nitf_Reader_getNITFVersion
 
-def nitf_Reader_getNITFVersionIO(io):
+def nitf_Reader_getNITFVersionIO(io: 'nrt_IOInterface') -> "nitf_Version":
     return _nitropy.nitf_Reader_getNITFVersionIO(io)
 nitf_Reader_getNITFVersionIO = _nitropy.nitf_Reader_getNITFVersionIO
 NITF_WRITER_FILL_LEFT = _nitropy.NITF_WRITER_FILL_LEFT
@@ -610,71 +608,71 @@ nitf_Writer_swigregister = _nitropy.nitf_Writer_swigregister
 nitf_Writer_swigregister(nitf_Writer)
 
 
-def nitf_Writer_construct(error):
+def nitf_Writer_construct(error: 'nrt_Error') -> "nitf_Writer *":
     return _nitropy.nitf_Writer_construct(error)
 nitf_Writer_construct = _nitropy.nitf_Writer_construct
 
-def nitf_Writer_destruct(writer):
+def nitf_Writer_destruct(writer: 'nitf_Writer **') -> "void":
     return _nitropy.nitf_Writer_destruct(writer)
 nitf_Writer_destruct = _nitropy.nitf_Writer_destruct
 
-def nitf_Writer_prepare(writer, record, ioHandle, error):
+def nitf_Writer_prepare(writer: 'nitf_Writer', record: 'nitf_Record', ioHandle: 'nitf_IOHandle', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Writer_prepare(writer, record, ioHandle, error)
 nitf_Writer_prepare = _nitropy.nitf_Writer_prepare
 
-def nitf_Writer_prepareIO(writer, record, io, error):
+def nitf_Writer_prepareIO(writer: 'nitf_Writer', record: 'nitf_Record', io: 'nrt_IOInterface', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Writer_prepareIO(writer, record, io, error)
 nitf_Writer_prepareIO = _nitropy.nitf_Writer_prepareIO
 
-def nitf_Writer_setImageWriteHandler(writer, index, writeHandler, error):
+def nitf_Writer_setImageWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Writer_setImageWriteHandler(writer, index, writeHandler, error)
 nitf_Writer_setImageWriteHandler = _nitropy.nitf_Writer_setImageWriteHandler
 
-def nitf_Writer_setGraphicWriteHandler(writer, index, writeHandler, error):
+def nitf_Writer_setGraphicWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Writer_setGraphicWriteHandler(writer, index, writeHandler, error)
 nitf_Writer_setGraphicWriteHandler = _nitropy.nitf_Writer_setGraphicWriteHandler
 
-def nitf_Writer_setTextWriteHandler(writer, index, writeHandler, error):
+def nitf_Writer_setTextWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Writer_setTextWriteHandler(writer, index, writeHandler, error)
 nitf_Writer_setTextWriteHandler = _nitropy.nitf_Writer_setTextWriteHandler
 
-def nitf_Writer_setDEWriteHandler(writer, index, writeHandler, error):
+def nitf_Writer_setDEWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Writer_setDEWriteHandler(writer, index, writeHandler, error)
 nitf_Writer_setDEWriteHandler = _nitropy.nitf_Writer_setDEWriteHandler
 
-def nitf_Writer_newImageWriter(writer, index, options, error):
+def nitf_Writer_newImageWriter(writer: 'nitf_Writer', index: 'int', options: 'nrt_HashTable', error: 'nrt_Error') -> "nitf_ImageWriter *":
     return _nitropy.nitf_Writer_newImageWriter(writer, index, options, error)
 nitf_Writer_newImageWriter = _nitropy.nitf_Writer_newImageWriter
 
-def nitf_Writer_newGraphicWriter(writer, index, error):
+def nitf_Writer_newGraphicWriter(writer: 'nitf_Writer', index: 'int', error: 'nrt_Error') -> "nitf_SegmentWriter *":
     return _nitropy.nitf_Writer_newGraphicWriter(writer, index, error)
 nitf_Writer_newGraphicWriter = _nitropy.nitf_Writer_newGraphicWriter
 
-def nitf_Writer_newTextWriter(writer, index, error):
+def nitf_Writer_newTextWriter(writer: 'nitf_Writer', index: 'int', error: 'nrt_Error') -> "nitf_SegmentWriter *":
     return _nitropy.nitf_Writer_newTextWriter(writer, index, error)
 nitf_Writer_newTextWriter = _nitropy.nitf_Writer_newTextWriter
 
-def nitf_Writer_newDEWriter(writer, index, error):
+def nitf_Writer_newDEWriter(writer: 'nitf_Writer', index: 'int', error: 'nrt_Error') -> "nitf_SegmentWriter *":
     return _nitropy.nitf_Writer_newDEWriter(writer, index, error)
 nitf_Writer_newDEWriter = _nitropy.nitf_Writer_newDEWriter
 
-def nitf_Writer_write(writer, error):
+def nitf_Writer_write(writer: 'nitf_Writer', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Writer_write(writer, error)
 nitf_Writer_write = _nitropy.nitf_Writer_write
 
-def nitf_Writer_writeHeader(writer, fileLenOff, hdrLen, error):
+def nitf_Writer_writeHeader(writer: 'nitf_Writer', fileLenOff: 'nitf_Off *', hdrLen: 'nitf_Uint32 *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Writer_writeHeader(writer, fileLenOff, hdrLen, error)
 nitf_Writer_writeHeader = _nitropy.nitf_Writer_writeHeader
 
-def nitf_Writer_writeImageSubheader(writer, subhdr, fver, comratOff, error):
+def nitf_Writer_writeImageSubheader(writer: 'nitf_Writer', subhdr: 'nitf_ImageSubheader', fver: 'nitf_Version', comratOff: 'nitf_Off *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Writer_writeImageSubheader(writer, subhdr, fver, comratOff, error)
 nitf_Writer_writeImageSubheader = _nitropy.nitf_Writer_writeImageSubheader
 
-def nitf_Writer_writeDESubheader(writer, subhdr, userSublen, fver, error):
+def nitf_Writer_writeDESubheader(writer: 'nitf_Writer', subhdr: 'nitf_DESubheader', userSublen: 'nitf_Uint32 *', fver: 'nitf_Version', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Writer_writeDESubheader(writer, subhdr, userSublen, fver, error)
 nitf_Writer_writeDESubheader = _nitropy.nitf_Writer_writeDESubheader
 
-def nitf_Writer_writeInt64Field(writer, field, length, fill, fillDir, error):
+def nitf_Writer_writeInt64Field(writer: 'nitf_Writer', field: 'nitf_Uint64', length: 'nitf_Uint32', fill: 'char', fillDir: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Writer_writeInt64Field(writer, field, length, fill, fillDir, error)
 nitf_Writer_writeInt64Field = _nitropy.nitf_Writer_writeInt64Field
 class nitf_Record(_object):
@@ -720,115 +718,115 @@ nitf_Record_swigregister = _nitropy.nitf_Record_swigregister
 nitf_Record_swigregister(nitf_Record)
 
 
-def nitf_Record_construct(version, error):
+def nitf_Record_construct(version: 'nitf_Version', error: 'nrt_Error') -> "nitf_Record *":
     return _nitropy.nitf_Record_construct(version, error)
 nitf_Record_construct = _nitropy.nitf_Record_construct
 
-def nitf_Record_clone(source, error):
+def nitf_Record_clone(source: 'nitf_Record', error: 'nrt_Error') -> "nitf_Record *":
     return _nitropy.nitf_Record_clone(source, error)
 nitf_Record_clone = _nitropy.nitf_Record_clone
 
-def nitf_Record_destruct(record):
+def nitf_Record_destruct(record: 'nitf_Record **') -> "void":
     return _nitropy.nitf_Record_destruct(record)
 nitf_Record_destruct = _nitropy.nitf_Record_destruct
 
-def nitf_Record_getVersion(record):
+def nitf_Record_getVersion(record: 'nitf_Record') -> "nitf_Version":
     return _nitropy.nitf_Record_getVersion(record)
 nitf_Record_getVersion = _nitropy.nitf_Record_getVersion
 
-def nitf_Record_getNumImages(record, error):
+def nitf_Record_getNumImages(record: 'nitf_Record', error: 'nrt_Error') -> "nitf_Uint32":
     return _nitropy.nitf_Record_getNumImages(record, error)
 nitf_Record_getNumImages = _nitropy.nitf_Record_getNumImages
 
-def nitf_Record_newImageSegment(record, error):
+def nitf_Record_newImageSegment(record: 'nitf_Record', error: 'nrt_Error') -> "nitf_ImageSegment *":
     return _nitropy.nitf_Record_newImageSegment(record, error)
 nitf_Record_newImageSegment = _nitropy.nitf_Record_newImageSegment
 
-def nitf_Record_getNumGraphics(record, error):
+def nitf_Record_getNumGraphics(record: 'nitf_Record', error: 'nrt_Error') -> "nitf_Uint32":
     return _nitropy.nitf_Record_getNumGraphics(record, error)
 nitf_Record_getNumGraphics = _nitropy.nitf_Record_getNumGraphics
 
-def nitf_Record_newGraphicSegment(record, error):
+def nitf_Record_newGraphicSegment(record: 'nitf_Record', error: 'nrt_Error') -> "nitf_GraphicSegment *":
     return _nitropy.nitf_Record_newGraphicSegment(record, error)
 nitf_Record_newGraphicSegment = _nitropy.nitf_Record_newGraphicSegment
 
-def nitf_Record_getNumTexts(record, error):
+def nitf_Record_getNumTexts(record: 'nitf_Record', error: 'nrt_Error') -> "nitf_Uint32":
     return _nitropy.nitf_Record_getNumTexts(record, error)
 nitf_Record_getNumTexts = _nitropy.nitf_Record_getNumTexts
 
-def nitf_Record_newTextSegment(record, error):
+def nitf_Record_newTextSegment(record: 'nitf_Record', error: 'nrt_Error') -> "nitf_TextSegment *":
     return _nitropy.nitf_Record_newTextSegment(record, error)
 nitf_Record_newTextSegment = _nitropy.nitf_Record_newTextSegment
 
-def nitf_Record_getNumDataExtensions(record, error):
+def nitf_Record_getNumDataExtensions(record: 'nitf_Record', error: 'nrt_Error') -> "nitf_Uint32":
     return _nitropy.nitf_Record_getNumDataExtensions(record, error)
 nitf_Record_getNumDataExtensions = _nitropy.nitf_Record_getNumDataExtensions
 
-def nitf_Record_newDataExtensionSegment(record, error):
+def nitf_Record_newDataExtensionSegment(record: 'nitf_Record', error: 'nrt_Error') -> "nitf_DESegment *":
     return _nitropy.nitf_Record_newDataExtensionSegment(record, error)
 nitf_Record_newDataExtensionSegment = _nitropy.nitf_Record_newDataExtensionSegment
 
-def nitf_Record_removeImageSegment(record, segmentNumber, error):
+def nitf_Record_removeImageSegment(record: 'nitf_Record', segmentNumber: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_removeImageSegment(record, segmentNumber, error)
 nitf_Record_removeImageSegment = _nitropy.nitf_Record_removeImageSegment
 
-def nitf_Record_removeGraphicSegment(record, segmentNumber, error):
+def nitf_Record_removeGraphicSegment(record: 'nitf_Record', segmentNumber: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_removeGraphicSegment(record, segmentNumber, error)
 nitf_Record_removeGraphicSegment = _nitropy.nitf_Record_removeGraphicSegment
 
-def nitf_Record_getNumLabels(record, error):
+def nitf_Record_getNumLabels(record: 'nitf_Record', error: 'nrt_Error') -> "nitf_Uint32":
     return _nitropy.nitf_Record_getNumLabels(record, error)
 nitf_Record_getNumLabels = _nitropy.nitf_Record_getNumLabels
 
-def nitf_Record_removeLabelSegment(record, segmentNumber, error):
+def nitf_Record_removeLabelSegment(record: 'nitf_Record', segmentNumber: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_removeLabelSegment(record, segmentNumber, error)
 nitf_Record_removeLabelSegment = _nitropy.nitf_Record_removeLabelSegment
 
-def nitf_Record_removeTextSegment(record, segmentNumber, error):
+def nitf_Record_removeTextSegment(record: 'nitf_Record', segmentNumber: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_removeTextSegment(record, segmentNumber, error)
 nitf_Record_removeTextSegment = _nitropy.nitf_Record_removeTextSegment
 
-def nitf_Record_removeDataExtensionSegment(record, segmentNumber, error):
+def nitf_Record_removeDataExtensionSegment(record: 'nitf_Record', segmentNumber: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_removeDataExtensionSegment(record, segmentNumber, error)
 nitf_Record_removeDataExtensionSegment = _nitropy.nitf_Record_removeDataExtensionSegment
 
-def nitf_Record_getNumReservedExtensions(record, error):
+def nitf_Record_getNumReservedExtensions(record: 'nitf_Record', error: 'nrt_Error') -> "nitf_Uint32":
     return _nitropy.nitf_Record_getNumReservedExtensions(record, error)
 nitf_Record_getNumReservedExtensions = _nitropy.nitf_Record_getNumReservedExtensions
 
-def nitf_Record_removeReservedExtensionSegment(record, segmentNumber, error):
+def nitf_Record_removeReservedExtensionSegment(record: 'nitf_Record', segmentNumber: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_removeReservedExtensionSegment(record, segmentNumber, error)
 nitf_Record_removeReservedExtensionSegment = _nitropy.nitf_Record_removeReservedExtensionSegment
 
-def nitf_Record_moveImageSegment(record, oldIndex, newIndex, error):
+def nitf_Record_moveImageSegment(record: 'nitf_Record', oldIndex: 'nitf_Uint32', newIndex: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_moveImageSegment(record, oldIndex, newIndex, error)
 nitf_Record_moveImageSegment = _nitropy.nitf_Record_moveImageSegment
 
-def nitf_Record_moveGraphicSegment(record, oldIndex, newIndex, error):
+def nitf_Record_moveGraphicSegment(record: 'nitf_Record', oldIndex: 'nitf_Uint32', newIndex: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_moveGraphicSegment(record, oldIndex, newIndex, error)
 nitf_Record_moveGraphicSegment = _nitropy.nitf_Record_moveGraphicSegment
 
-def nitf_Record_moveLabelSegment(record, oldIndex, newIndex, error):
+def nitf_Record_moveLabelSegment(record: 'nitf_Record', oldIndex: 'nitf_Uint32', newIndex: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_moveLabelSegment(record, oldIndex, newIndex, error)
 nitf_Record_moveLabelSegment = _nitropy.nitf_Record_moveLabelSegment
 
-def nitf_Record_moveTextSegment(record, oldIndex, newIndex, error):
+def nitf_Record_moveTextSegment(record: 'nitf_Record', oldIndex: 'nitf_Uint32', newIndex: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_moveTextSegment(record, oldIndex, newIndex, error)
 nitf_Record_moveTextSegment = _nitropy.nitf_Record_moveTextSegment
 
-def nitf_Record_moveDataExtensionSegment(record, oldIndex, newIndex, error):
+def nitf_Record_moveDataExtensionSegment(record: 'nitf_Record', oldIndex: 'nitf_Uint32', newIndex: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_moveDataExtensionSegment(record, oldIndex, newIndex, error)
 nitf_Record_moveDataExtensionSegment = _nitropy.nitf_Record_moveDataExtensionSegment
 
-def nitf_Record_moveReservedExtensionSegment(record, oldIndex, newIndex, error):
+def nitf_Record_moveReservedExtensionSegment(record: 'nitf_Record', oldIndex: 'nitf_Uint32', newIndex: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_moveReservedExtensionSegment(record, oldIndex, newIndex, error)
 nitf_Record_moveReservedExtensionSegment = _nitropy.nitf_Record_moveReservedExtensionSegment
 
-def nitf_Record_mergeTREs(record, error):
+def nitf_Record_mergeTREs(record: 'nitf_Record', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_mergeTREs(record, error)
 nitf_Record_mergeTREs = _nitropy.nitf_Record_mergeTREs
 
-def nitf_Record_unmergeTREs(record, error):
+def nitf_Record_unmergeTREs(record: 'nitf_Record', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Record_unmergeTREs(record, error)
 nitf_Record_unmergeTREs = _nitropy.nitf_Record_unmergeTREs
 NITF_CONV_UINT = _nitropy.NITF_CONV_UINT
@@ -874,71 +872,71 @@ nitf_Field_swigregister = _nitropy.nitf_Field_swigregister
 nitf_Field_swigregister(nitf_Field)
 
 
-def nitf_Field_construct(length, type, error):
+def nitf_Field_construct(length: 'size_t', type: 'nitf_FieldType', error: 'nrt_Error') -> "nitf_Field *":
     return _nitropy.nitf_Field_construct(length, type, error)
 nitf_Field_construct = _nitropy.nitf_Field_construct
 
-def nitf_Field_setRawData(field, data, dataLength, error):
+def nitf_Field_setRawData(field: 'nitf_Field', data: 'NITF_DATA *', dataLength: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_setRawData(field, data, dataLength, error)
 nitf_Field_setRawData = _nitropy.nitf_Field_setRawData
 
-def nitf_Field_setUint32(field, number, error):
+def nitf_Field_setUint32(field: 'nitf_Field', number: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_setUint32(field, number, error)
 nitf_Field_setUint32 = _nitropy.nitf_Field_setUint32
 
-def nitf_Field_setUint64(field, number, error):
+def nitf_Field_setUint64(field: 'nitf_Field', number: 'nitf_Uint64', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_setUint64(field, number, error)
 nitf_Field_setUint64 = _nitropy.nitf_Field_setUint64
 
-def nitf_Field_setInt32(field, number, error):
+def nitf_Field_setInt32(field: 'nitf_Field', number: 'nitf_Int32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_setInt32(field, number, error)
 nitf_Field_setInt32 = _nitropy.nitf_Field_setInt32
 
-def nitf_Field_setInt64(field, number, error):
+def nitf_Field_setInt64(field: 'nitf_Field', number: 'nitf_Int64', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_setInt64(field, number, error)
 nitf_Field_setInt64 = _nitropy.nitf_Field_setInt64
 
-def nitf_Field_trimString(str):
+def nitf_Field_trimString(str: 'char *') -> "void":
     return _nitropy.nitf_Field_trimString(str)
 nitf_Field_trimString = _nitropy.nitf_Field_trimString
 
-def nitf_Field_setString(field, str, error):
+def nitf_Field_setString(field: 'nitf_Field', str: 'char const *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_setString(field, str, error)
 nitf_Field_setString = _nitropy.nitf_Field_setString
 
-def nitf_Field_setDateTime(field, dateTime, format, error):
+def nitf_Field_setDateTime(field: 'nitf_Field', dateTime: 'nitf_DateTime const *', format: 'char const *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_setDateTime(field, dateTime, format, error)
 nitf_Field_setDateTime = _nitropy.nitf_Field_setDateTime
 
-def nitf_Field_setReal(field, type, plus, value, error):
+def nitf_Field_setReal(field: 'nitf_Field', type: 'char const *', plus: 'bool', value: 'double', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_setReal(field, type, plus, value, error)
 nitf_Field_setReal = _nitropy.nitf_Field_setReal
 
-def nitf_Field_destruct(field):
+def nitf_Field_destruct(field: 'nitf_Field **') -> "void":
     return _nitropy.nitf_Field_destruct(field)
 nitf_Field_destruct = _nitropy.nitf_Field_destruct
 
-def nitf_Field_clone(source, error):
+def nitf_Field_clone(source: 'nitf_Field', error: 'nrt_Error') -> "nitf_Field *":
     return _nitropy.nitf_Field_clone(source, error)
 nitf_Field_clone = _nitropy.nitf_Field_clone
 
-def nitf_Field_get(field, outValue, convType, length, error):
+def nitf_Field_get(field: 'nitf_Field', outValue: 'NITF_DATA *', convType: 'nitf_ConvType', length: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_get(field, outValue, convType, length, error)
 nitf_Field_get = _nitropy.nitf_Field_get
 
-def nitf_Field_asDateTime(field, dateFormat, error):
+def nitf_Field_asDateTime(field: 'nitf_Field', dateFormat: 'char const *', error: 'nrt_Error') -> "nitf_DateTime *":
     return _nitropy.nitf_Field_asDateTime(field, dateFormat, error)
 nitf_Field_asDateTime = _nitropy.nitf_Field_asDateTime
 
-def nitf_Field_resetLength(field, newLength, keepData, error):
+def nitf_Field_resetLength(field: 'nitf_Field', newLength: 'size_t', keepData: 'bool', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_resetLength(field, newLength, keepData, error)
 nitf_Field_resetLength = _nitropy.nitf_Field_resetLength
 
-def nitf_Field_print(field):
+def nitf_Field_print(field: 'nitf_Field') -> "void":
     return _nitropy.nitf_Field_print(field)
 nitf_Field_print = _nitropy.nitf_Field_print
 
-def nitf_Field_resizeField(field, newLength, error):
+def nitf_Field_resizeField(field: 'nitf_Field', newLength: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_resizeField(field, newLength, error)
 nitf_Field_resizeField = _nitropy.nitf_Field_resizeField
 NITF_CLSY_SZ = _nitropy.NITF_CLSY_SZ
@@ -1039,19 +1037,19 @@ nitf_FileSecurity_swigregister = _nitropy.nitf_FileSecurity_swigregister
 nitf_FileSecurity_swigregister(nitf_FileSecurity)
 
 
-def nitf_FileSecurity_construct(error):
+def nitf_FileSecurity_construct(error: 'nrt_Error') -> "nitf_FileSecurity *":
     return _nitropy.nitf_FileSecurity_construct(error)
 nitf_FileSecurity_construct = _nitropy.nitf_FileSecurity_construct
 
-def nitf_FileSecurity_clone(source, error):
+def nitf_FileSecurity_clone(source: 'nitf_FileSecurity', error: 'nrt_Error') -> "nitf_FileSecurity *":
     return _nitropy.nitf_FileSecurity_clone(source, error)
 nitf_FileSecurity_clone = _nitropy.nitf_FileSecurity_clone
 
-def nitf_FileSecurity_destruct(fs):
+def nitf_FileSecurity_destruct(fs: 'nitf_FileSecurity **') -> "void":
     return _nitropy.nitf_FileSecurity_destruct(fs)
 nitf_FileSecurity_destruct = _nitropy.nitf_FileSecurity_destruct
 
-def nitf_FileSecurity_resizeForVersion(fs, ver, error):
+def nitf_FileSecurity_resizeForVersion(fs: 'nitf_FileSecurity', ver: 'nitf_Version', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_FileSecurity_resizeForVersion(fs, ver, error)
 nitf_FileSecurity_resizeForVersion = _nitropy.nitf_FileSecurity_resizeForVersion
 NITF_TRE_RAW = _nitropy.NITF_TRE_RAW
@@ -1188,47 +1186,47 @@ nitf_TREHandler_swigregister = _nitropy.nitf_TREHandler_swigregister
 nitf_TREHandler_swigregister(nitf_TREHandler)
 
 
-def nitf_TRE_createSkeleton(tag, error):
+def nitf_TRE_createSkeleton(tag: 'char const *', error: 'nrt_Error') -> "nitf_TRE *":
     return _nitropy.nitf_TRE_createSkeleton(tag, error)
 nitf_TRE_createSkeleton = _nitropy.nitf_TRE_createSkeleton
 
-def nitf_TRE_construct(tag, id, error):
+def nitf_TRE_construct(tag: 'char const *', id: 'char const *', error: 'nrt_Error') -> "nitf_TRE *":
     return _nitropy.nitf_TRE_construct(tag, id, error)
 nitf_TRE_construct = _nitropy.nitf_TRE_construct
 
-def nitf_TRE_clone(tre, error):
+def nitf_TRE_clone(tre: 'nitf_TRE', error: 'nrt_Error') -> "nitf_TRE *":
     return _nitropy.nitf_TRE_clone(tre, error)
 nitf_TRE_clone = _nitropy.nitf_TRE_clone
 
-def nitf_TRE_destruct(tre):
+def nitf_TRE_destruct(tre: 'nitf_TRE **') -> "void":
     return _nitropy.nitf_TRE_destruct(tre)
 nitf_TRE_destruct = _nitropy.nitf_TRE_destruct
 
-def nitf_TRE_exists(tre, tag):
+def nitf_TRE_exists(tre: 'nitf_TRE', tag: 'char const *') -> "bool":
     return _nitropy.nitf_TRE_exists(tre, tag)
 nitf_TRE_exists = _nitropy.nitf_TRE_exists
 
-def nitf_TRE_setField(tre, tag, data, dataLength, error):
+def nitf_TRE_setField(tre: 'nitf_TRE', tag: 'char const *', data: 'NITF_DATA *', dataLength: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_TRE_setField(tre, tag, data, dataLength, error)
 nitf_TRE_setField = _nitropy.nitf_TRE_setField
 
-def nitf_TRE_find(tre, pattern, error):
+def nitf_TRE_find(tre: 'nitf_TRE', pattern: 'char const *', error: 'nrt_Error') -> "nitf_List *":
     return _nitropy.nitf_TRE_find(tre, pattern, error)
 nitf_TRE_find = _nitropy.nitf_TRE_find
 
-def nitf_TRE_getField(tre, tag):
+def nitf_TRE_getField(tre: 'nitf_TRE', tag: 'char const *') -> "nitf_Field *":
     return _nitropy.nitf_TRE_getField(tre, tag)
 nitf_TRE_getField = _nitropy.nitf_TRE_getField
 
-def nitf_TRE_begin(tre, error):
+def nitf_TRE_begin(tre: 'nitf_TRE', error: 'nrt_Error') -> "nitf_TREEnumerator *":
     return _nitropy.nitf_TRE_begin(tre, error)
 nitf_TRE_begin = _nitropy.nitf_TRE_begin
 
-def nitf_TRE_getCurrentSize(tre, error):
+def nitf_TRE_getCurrentSize(tre: 'nitf_TRE', error: 'nrt_Error') -> "int":
     return _nitropy.nitf_TRE_getCurrentSize(tre, error)
 nitf_TRE_getCurrentSize = _nitropy.nitf_TRE_getCurrentSize
 
-def nitf_TRE_getID(tre):
+def nitf_TRE_getID(tre: 'nitf_TRE') -> "char const *":
     return _nitropy.nitf_TRE_getID(tre)
 nitf_TRE_getID = _nitropy.nitf_TRE_getID
 class nitf_Extensions(_object):
@@ -1272,67 +1270,67 @@ nitf_ExtensionsIterator_swigregister = _nitropy.nitf_ExtensionsIterator_swigregi
 nitf_ExtensionsIterator_swigregister(nitf_ExtensionsIterator)
 
 
-def nitf_Extensions_construct(error):
+def nitf_Extensions_construct(error: 'nrt_Error') -> "nitf_Extensions *":
     return _nitropy.nitf_Extensions_construct(error)
 nitf_Extensions_construct = _nitropy.nitf_Extensions_construct
 
-def nitf_Extensions_clone(source, error):
+def nitf_Extensions_clone(source: 'nitf_Extensions', error: 'nrt_Error') -> "nitf_Extensions *":
     return _nitropy.nitf_Extensions_clone(source, error)
 nitf_Extensions_clone = _nitropy.nitf_Extensions_clone
 
-def nitf_Extensions_destruct(ext):
+def nitf_Extensions_destruct(ext: 'nitf_Extensions **') -> "void":
     return _nitropy.nitf_Extensions_destruct(ext)
 nitf_Extensions_destruct = _nitropy.nitf_Extensions_destruct
 
-def nitf_Extensions_appendTRE(ext, tre, error):
+def nitf_Extensions_appendTRE(ext: 'nitf_Extensions', tre: 'nitf_TRE', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Extensions_appendTRE(ext, tre, error)
 nitf_Extensions_appendTRE = _nitropy.nitf_Extensions_appendTRE
 
-def nitf_Extensions_getTREsByName(ext, name):
+def nitf_Extensions_getTREsByName(ext: 'nitf_Extensions', name: 'char const *') -> "nitf_List *":
     return _nitropy.nitf_Extensions_getTREsByName(ext, name)
 nitf_Extensions_getTREsByName = _nitropy.nitf_Extensions_getTREsByName
 
-def nitf_Extensions_removeTREsByName(ext, name):
+def nitf_Extensions_removeTREsByName(ext: 'nitf_Extensions', name: 'char const *') -> "void":
     return _nitropy.nitf_Extensions_removeTREsByName(ext, name)
 nitf_Extensions_removeTREsByName = _nitropy.nitf_Extensions_removeTREsByName
 
-def nitf_Extensions_exists(ext, name):
+def nitf_Extensions_exists(ext: 'nitf_Extensions', name: 'char const *') -> "bool":
     return _nitropy.nitf_Extensions_exists(ext, name)
 nitf_Extensions_exists = _nitropy.nitf_Extensions_exists
 
-def nitf_Extensions_begin(ext):
+def nitf_Extensions_begin(ext: 'nitf_Extensions') -> "nitf_ExtensionsIterator":
     return _nitropy.nitf_Extensions_begin(ext)
 nitf_Extensions_begin = _nitropy.nitf_Extensions_begin
 
-def nitf_Extensions_end(ext):
+def nitf_Extensions_end(ext: 'nitf_Extensions') -> "nitf_ExtensionsIterator":
     return _nitropy.nitf_Extensions_end(ext)
 nitf_Extensions_end = _nitropy.nitf_Extensions_end
 
-def nitf_ExtensionsIterator_increment(extIt):
+def nitf_ExtensionsIterator_increment(extIt: 'nitf_ExtensionsIterator') -> "void":
     return _nitropy.nitf_ExtensionsIterator_increment(extIt)
 nitf_ExtensionsIterator_increment = _nitropy.nitf_ExtensionsIterator_increment
 
-def nitf_ExtensionsIterator_get(extIt):
+def nitf_ExtensionsIterator_get(extIt: 'nitf_ExtensionsIterator') -> "nitf_TRE *":
     return _nitropy.nitf_ExtensionsIterator_get(extIt)
 nitf_ExtensionsIterator_get = _nitropy.nitf_ExtensionsIterator_get
 
-def nitf_Extensions_insert(ext, extIter, tre, error):
+def nitf_Extensions_insert(ext: 'nitf_Extensions', extIter: 'nitf_ExtensionsIterator', tre: 'nitf_TRE', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Extensions_insert(ext, extIter, tre, error)
 nitf_Extensions_insert = _nitropy.nitf_Extensions_insert
 
-def nitf_Extensions_remove(ext, extIter, error):
+def nitf_Extensions_remove(ext: 'nitf_Extensions', extIter: 'nitf_ExtensionsIterator', error: 'nrt_Error') -> "nitf_TRE *":
     return _nitropy.nitf_Extensions_remove(ext, extIter, error)
 nitf_Extensions_remove = _nitropy.nitf_Extensions_remove
 
-def nitf_ExtensionsIterator_equals(it1, it2):
+def nitf_ExtensionsIterator_equals(it1: 'nitf_ExtensionsIterator', it2: 'nitf_ExtensionsIterator') -> "bool":
     return _nitropy.nitf_ExtensionsIterator_equals(it1, it2)
 nitf_ExtensionsIterator_equals = _nitropy.nitf_ExtensionsIterator_equals
 
-def nitf_ExtensionsIterator_notEqualTo(it1, it2):
+def nitf_ExtensionsIterator_notEqualTo(it1: 'nitf_ExtensionsIterator', it2: 'nitf_ExtensionsIterator') -> "bool":
     return _nitropy.nitf_ExtensionsIterator_notEqualTo(it1, it2)
 nitf_ExtensionsIterator_notEqualTo = _nitropy.nitf_ExtensionsIterator_notEqualTo
 
-def nitf_Extensions_computeLength(ext, fver, error):
+def nitf_Extensions_computeLength(ext: 'nitf_Extensions', fver: 'nitf_Version', error: 'nrt_Error') -> "nitf_Uint32":
     return _nitropy.nitf_Extensions_computeLength(ext, fver, error)
 nitf_Extensions_computeLength = _nitropy.nitf_Extensions_computeLength
 NRT_DATA_RETAIN_OWNER = _nitropy.NRT_DATA_RETAIN_OWNER
@@ -1394,75 +1392,75 @@ nrt_HashTableIterator_swigregister = _nitropy.nrt_HashTableIterator_swigregister
 nrt_HashTableIterator_swigregister(nrt_HashTableIterator)
 
 
-def nrt_HashTable_construct(nbuckets, error):
+def nrt_HashTable_construct(nbuckets: 'int', error: 'nrt_Error') -> "nrt_HashTable *":
     return _nitropy.nrt_HashTable_construct(nbuckets, error)
 nrt_HashTable_construct = _nitropy.nrt_HashTable_construct
 
-def nrt_HashTable_clone(source, cloner, error):
+def nrt_HashTable_clone(source: 'nrt_HashTable', cloner: 'NRT_DATA_ITEM_CLONE', error: 'nrt_Error') -> "nrt_HashTable *":
     return _nitropy.nrt_HashTable_clone(source, cloner, error)
 nrt_HashTable_clone = _nitropy.nrt_HashTable_clone
 
-def nrt_HashTable_setPolicy(ht, policy):
+def nrt_HashTable_setPolicy(ht: 'nrt_HashTable', policy: 'int') -> "void":
     return _nitropy.nrt_HashTable_setPolicy(ht, policy)
 nrt_HashTable_setPolicy = _nitropy.nrt_HashTable_setPolicy
 
-def nrt_HashTable_remove(ht, key):
+def nrt_HashTable_remove(ht: 'nrt_HashTable', key: 'char const *') -> "NRT_DATA *":
     return _nitropy.nrt_HashTable_remove(ht, key)
 nrt_HashTable_remove = _nitropy.nrt_HashTable_remove
 
-def __NRT_HashTable_defaultHash(ht, key):
+def __NRT_HashTable_defaultHash(ht: 'nrt_HashTable', key: 'char const *') -> "unsigned int":
     return _nitropy.__NRT_HashTable_defaultHash(ht, key)
 __NRT_HashTable_defaultHash = _nitropy.__NRT_HashTable_defaultHash
 
-def nrt_HashTable_initDefaults(ht):
+def nrt_HashTable_initDefaults(ht: 'nrt_HashTable') -> "void":
     return _nitropy.nrt_HashTable_initDefaults(ht)
 nrt_HashTable_initDefaults = _nitropy.nrt_HashTable_initDefaults
 
-def nrt_HashTable_destruct(ht):
+def nrt_HashTable_destruct(ht: 'nrt_HashTable **') -> "void":
     return _nitropy.nrt_HashTable_destruct(ht)
 nrt_HashTable_destruct = _nitropy.nrt_HashTable_destruct
 
-def nrt_HashTable_exists(ht, key):
+def nrt_HashTable_exists(ht: 'nrt_HashTable', key: 'char const *') -> "bool":
     return _nitropy.nrt_HashTable_exists(ht, key)
 nrt_HashTable_exists = _nitropy.nrt_HashTable_exists
 
-def nrt_HashTable_print(ht):
+def nrt_HashTable_print(ht: 'nrt_HashTable') -> "void":
     return _nitropy.nrt_HashTable_print(ht)
 nrt_HashTable_print = _nitropy.nrt_HashTable_print
 
-def nrt_HashTable_foreach(ht, fn, userData, error):
+def nrt_HashTable_foreach(ht: 'nrt_HashTable', fn: 'NRT_HASH_FUNCTOR', userData: 'NRT_DATA *', error: 'nrt_Error') -> "bool":
     return _nitropy.nrt_HashTable_foreach(ht, fn, userData, error)
 nrt_HashTable_foreach = _nitropy.nrt_HashTable_foreach
 
-def nrt_HashTable_insert(ht, key, data, error):
+def nrt_HashTable_insert(ht: 'nrt_HashTable', key: 'char const *', data: 'NRT_DATA *', error: 'nrt_Error') -> "bool":
     return _nitropy.nrt_HashTable_insert(ht, key, data, error)
 nrt_HashTable_insert = _nitropy.nrt_HashTable_insert
 
-def nrt_HashTable_find(ht, key):
+def nrt_HashTable_find(ht: 'nrt_HashTable', key: 'char const *') -> "nrt_Pair *":
     return _nitropy.nrt_HashTable_find(ht, key)
 nrt_HashTable_find = _nitropy.nrt_HashTable_find
 
-def nrt_HashTableIterator_equals(it1, it2):
+def nrt_HashTableIterator_equals(it1: 'nrt_HashTableIterator', it2: 'nrt_HashTableIterator') -> "bool":
     return _nitropy.nrt_HashTableIterator_equals(it1, it2)
 nrt_HashTableIterator_equals = _nitropy.nrt_HashTableIterator_equals
 
-def nrt_HashTableIterator_notEqualTo(it1, it2):
+def nrt_HashTableIterator_notEqualTo(it1: 'nrt_HashTableIterator', it2: 'nrt_HashTableIterator') -> "bool":
     return _nitropy.nrt_HashTableIterator_notEqualTo(it1, it2)
 nrt_HashTableIterator_notEqualTo = _nitropy.nrt_HashTableIterator_notEqualTo
 
-def nrt_HashTable_begin(ht):
+def nrt_HashTable_begin(ht: 'nrt_HashTable') -> "nrt_HashTableIterator":
     return _nitropy.nrt_HashTable_begin(ht)
 nrt_HashTable_begin = _nitropy.nrt_HashTable_begin
 
-def nrt_HashTable_end(ht):
+def nrt_HashTable_end(ht: 'nrt_HashTable') -> "nrt_HashTableIterator":
     return _nitropy.nrt_HashTable_end(ht)
 nrt_HashTable_end = _nitropy.nrt_HashTable_end
 
-def nrt_HashTableIterator_increment(iter):
+def nrt_HashTableIterator_increment(iter: 'nrt_HashTableIterator') -> "void":
     return _nitropy.nrt_HashTableIterator_increment(iter)
 nrt_HashTableIterator_increment = _nitropy.nrt_HashTableIterator_increment
 
-def nrt_HashTableIterator_get(iter):
+def nrt_HashTableIterator_get(iter: 'nrt_HashTableIterator') -> "nrt_Pair *":
     return _nitropy.nrt_HashTableIterator_get(iter)
 nrt_HashTableIterator_get = _nitropy.nrt_HashTableIterator_get
 class nrt_Pair(_object):
@@ -1488,11 +1486,11 @@ nrt_Pair_swigregister = _nitropy.nrt_Pair_swigregister
 nrt_Pair_swigregister(nrt_Pair)
 
 
-def nrt_Pair_init(pair, key, data):
+def nrt_Pair_init(pair: 'nrt_Pair', key: 'char const *', data: 'NRT_DATA *') -> "void":
     return _nitropy.nrt_Pair_init(pair, key, data)
 nrt_Pair_init = _nitropy.nrt_Pair_init
 
-def nrt_Pair_copy(dst, src):
+def nrt_Pair_copy(dst: 'nrt_Pair', src: 'nrt_Pair') -> "void":
     return _nitropy.nrt_Pair_copy(dst, src)
 nrt_Pair_copy = _nitropy.nrt_Pair_copy
 class nitf_ImageSource(_object):
@@ -1518,19 +1516,19 @@ nitf_ImageSource_swigregister = _nitropy.nitf_ImageSource_swigregister
 nitf_ImageSource_swigregister(nitf_ImageSource)
 
 
-def nitf_ImageSource_construct(error):
+def nitf_ImageSource_construct(error: 'nrt_Error') -> "nitf_ImageSource *":
     return _nitropy.nitf_ImageSource_construct(error)
 nitf_ImageSource_construct = _nitropy.nitf_ImageSource_construct
 
-def nitf_ImageSource_destruct(arg1):
+def nitf_ImageSource_destruct(arg1: 'nitf_ImageSource **') -> "void":
     return _nitropy.nitf_ImageSource_destruct(arg1)
 nitf_ImageSource_destruct = _nitropy.nitf_ImageSource_destruct
 
-def nitf_ImageSource_addBand(imageSource, bandSource, error):
+def nitf_ImageSource_addBand(imageSource: 'nitf_ImageSource', bandSource: 'nitf_DataSource', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSource_addBand(imageSource, bandSource, error)
 nitf_ImageSource_addBand = _nitropy.nitf_ImageSource_addBand
 
-def nitf_ImageSource_getBand(imageSource, n, error):
+def nitf_ImageSource_getBand(imageSource: 'nitf_ImageSource', n: 'int', error: 'nrt_Error') -> "nitf_BandSource *":
     return _nitropy.nitf_ImageSource_getBand(imageSource, n, error)
 nitf_ImageSource_getBand = _nitropy.nitf_ImageSource_getBand
 class nitf_IDataSource(_object):
@@ -1586,43 +1584,43 @@ nitf_DataSource_swigregister = _nitropy.nitf_DataSource_swigregister
 nitf_DataSource_swigregister(nitf_DataSource)
 
 
-def nitf_DataSource_destruct(dataSource):
+def nitf_DataSource_destruct(dataSource: 'nitf_DataSource **') -> "void":
     return _nitropy.nitf_DataSource_destruct(dataSource)
 nitf_DataSource_destruct = _nitropy.nitf_DataSource_destruct
 
-def nitf_MemorySource_construct(data, size, start, numBytesPerPixel, pixelSkip, error):
+def nitf_MemorySource_construct(data: 'void const *', size: 'nitf_Off', start: 'nitf_Off', numBytesPerPixel: 'int', pixelSkip: 'int', error: 'nrt_Error') -> "nitf_BandSource *":
     return _nitropy.nitf_MemorySource_construct(data, size, start, numBytesPerPixel, pixelSkip, error)
 nitf_MemorySource_construct = _nitropy.nitf_MemorySource_construct
 
-def nitf_FileSource_construct(arg1, start, numBytesPerPixel, pixelSkip, error):
+def nitf_FileSource_construct(arg1: 'nitf_IOHandle', start: 'nitf_Off', numBytesPerPixel: 'int', pixelSkip: 'int', error: 'nrt_Error') -> "nitf_BandSource *":
     return _nitropy.nitf_FileSource_construct(arg1, start, numBytesPerPixel, pixelSkip, error)
 nitf_FileSource_construct = _nitropy.nitf_FileSource_construct
 
-def nitf_FileSource_constructFile(fname, start, numBytesPerPixel, pixelSkip, error):
+def nitf_FileSource_constructFile(fname: 'char const *', start: 'nitf_Off', numBytesPerPixel: 'int', pixelSkip: 'int', error: 'nrt_Error') -> "nitf_BandSource *":
     return _nitropy.nitf_FileSource_constructFile(fname, start, numBytesPerPixel, pixelSkip, error)
 nitf_FileSource_constructFile = _nitropy.nitf_FileSource_constructFile
 
-def nitf_IOSource_construct(io, start, numBytesPerPixel, pixelSkip, error):
+def nitf_IOSource_construct(io: 'nrt_IOInterface', start: 'nitf_Off', numBytesPerPixel: 'int', pixelSkip: 'int', error: 'nrt_Error') -> "nitf_BandSource *":
     return _nitropy.nitf_IOSource_construct(io, start, numBytesPerPixel, pixelSkip, error)
 nitf_IOSource_construct = _nitropy.nitf_IOSource_construct
 
-def nitf_ImageWriter_construct(subheader, options, error):
+def nitf_ImageWriter_construct(subheader: 'nitf_ImageSubheader', options: 'nrt_HashTable', error: 'nrt_Error') -> "nitf_ImageWriter *":
     return _nitropy.nitf_ImageWriter_construct(subheader, options, error)
 nitf_ImageWriter_construct = _nitropy.nitf_ImageWriter_construct
 
-def nitf_ImageWriter_attachSource(writer, imageSource, error):
+def nitf_ImageWriter_attachSource(writer: 'nitf_ImageWriter *', imageSource: 'nitf_ImageSource', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageWriter_attachSource(writer, imageSource, error)
 nitf_ImageWriter_attachSource = _nitropy.nitf_ImageWriter_attachSource
 
-def nitf_ImageWriter_setWriteCaching(iWriter, enable):
+def nitf_ImageWriter_setWriteCaching(iWriter: 'nitf_ImageWriter *', enable: 'int') -> "int":
     return _nitropy.nitf_ImageWriter_setWriteCaching(iWriter, enable)
 nitf_ImageWriter_setWriteCaching = _nitropy.nitf_ImageWriter_setWriteCaching
 
-def nitf_ImageWriter_setDirectBlockWrite(iWriter, enable, error):
+def nitf_ImageWriter_setDirectBlockWrite(iWriter: 'nitf_ImageWriter *', enable: 'int', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageWriter_setDirectBlockWrite(iWriter, enable, error)
 nitf_ImageWriter_setDirectBlockWrite = _nitropy.nitf_ImageWriter_setDirectBlockWrite
 
-def nitf_ImageWriter_setPadPixel(imageWriter, value, length, error):
+def nitf_ImageWriter_setPadPixel(imageWriter: 'nitf_ImageWriter *', value: 'nitf_Uint8 *', length: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageWriter_setPadPixel(imageWriter, value, length, error)
 nitf_ImageWriter_setPadPixel = _nitropy.nitf_ImageWriter_setPadPixel
 NITF_FHDR_SZ = _nitropy.NITF_FHDR_SZ
@@ -1818,15 +1816,15 @@ nitf_FileHeader_swigregister = _nitropy.nitf_FileHeader_swigregister
 nitf_FileHeader_swigregister(nitf_FileHeader)
 
 
-def nitf_FileHeader_construct(error):
+def nitf_FileHeader_construct(error: 'nrt_Error') -> "nitf_FileHeader *":
     return _nitropy.nitf_FileHeader_construct(error)
 nitf_FileHeader_construct = _nitropy.nitf_FileHeader_construct
 
-def nitf_FileHeader_clone(source, error):
+def nitf_FileHeader_clone(source: 'nitf_FileHeader', error: 'nrt_Error') -> "nitf_FileHeader *":
     return _nitropy.nitf_FileHeader_clone(source, error)
 nitf_FileHeader_clone = _nitropy.nitf_FileHeader_clone
 
-def nitf_FileHeader_destruct(fh):
+def nitf_FileHeader_destruct(fh: 'nitf_FileHeader **') -> "void":
     return _nitropy.nitf_FileHeader_destruct(fh)
 nitf_FileHeader_destruct = _nitropy.nitf_FileHeader_destruct
 class nitf_ImageSegment(_object):
@@ -1856,15 +1854,15 @@ nitf_ImageSegment_swigregister = _nitropy.nitf_ImageSegment_swigregister
 nitf_ImageSegment_swigregister(nitf_ImageSegment)
 
 
-def nitf_ImageSegment_construct(error):
+def nitf_ImageSegment_construct(error: 'nrt_Error') -> "nitf_ImageSegment *":
     return _nitropy.nitf_ImageSegment_construct(error)
 nitf_ImageSegment_construct = _nitropy.nitf_ImageSegment_construct
 
-def nitf_ImageSegment_clone(source, error):
+def nitf_ImageSegment_clone(source: 'nitf_ImageSegment', error: 'nrt_Error') -> "nitf_ImageSegment *":
     return _nitropy.nitf_ImageSegment_clone(source, error)
 nitf_ImageSegment_clone = _nitropy.nitf_ImageSegment_clone
 
-def nitf_ImageSegment_destruct(segment):
+def nitf_ImageSegment_destruct(segment: 'nitf_ImageSegment **') -> "void":
     return _nitropy.nitf_ImageSegment_destruct(segment)
 nitf_ImageSegment_destruct = _nitropy.nitf_ImageSegment_destruct
 NITF_IM_SZ = _nitropy.NITF_IM_SZ
@@ -2088,83 +2086,83 @@ nitf_ImageSubheader_swigregister = _nitropy.nitf_ImageSubheader_swigregister
 nitf_ImageSubheader_swigregister(nitf_ImageSubheader)
 
 
-def nitf_ImageSubheader_construct(error):
+def nitf_ImageSubheader_construct(error: 'nrt_Error') -> "nitf_ImageSubheader *":
     return _nitropy.nitf_ImageSubheader_construct(error)
 nitf_ImageSubheader_construct = _nitropy.nitf_ImageSubheader_construct
 
-def nitf_ImageSubheader_clone(source, error):
+def nitf_ImageSubheader_clone(source: 'nitf_ImageSubheader', error: 'nrt_Error') -> "nitf_ImageSubheader *":
     return _nitropy.nitf_ImageSubheader_clone(source, error)
 nitf_ImageSubheader_clone = _nitropy.nitf_ImageSubheader_clone
 
-def nitf_ImageSubheader_destruct(subhdr):
+def nitf_ImageSubheader_destruct(subhdr: 'nitf_ImageSubheader **') -> "void":
     return _nitropy.nitf_ImageSubheader_destruct(subhdr)
 nitf_ImageSubheader_destruct = _nitropy.nitf_ImageSubheader_destruct
 
-def nitf_ImageSubheader_setPixelInformation(subhdr, pvtype, nbpp, abpp, justification, irep, icat, bandCount, bands, error):
+def nitf_ImageSubheader_setPixelInformation(subhdr: 'nitf_ImageSubheader', pvtype: 'char const *', nbpp: 'nitf_Uint32', abpp: 'nitf_Uint32', justification: 'char const *', irep: 'char const *', icat: 'char const *', bandCount: 'nitf_Uint32', bands: 'nitf_BandInfo **', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_setPixelInformation(subhdr, pvtype, nbpp, abpp, justification, irep, icat, bandCount, bands, error)
 nitf_ImageSubheader_setPixelInformation = _nitropy.nitf_ImageSubheader_setPixelInformation
 
-def nitf_ImageSubheader_getBandCount(subhdr, error):
+def nitf_ImageSubheader_getBandCount(subhdr: 'nitf_ImageSubheader', error: 'nrt_Error') -> "nitf_Uint32":
     return _nitropy.nitf_ImageSubheader_getBandCount(subhdr, error)
 nitf_ImageSubheader_getBandCount = _nitropy.nitf_ImageSubheader_getBandCount
 
-def nitf_ImageSubheader_getBandInfo(subhdr, band, error):
+def nitf_ImageSubheader_getBandInfo(subhdr: 'nitf_ImageSubheader', band: 'nitf_Uint32', error: 'nrt_Error') -> "nitf_BandInfo *":
     return _nitropy.nitf_ImageSubheader_getBandInfo(subhdr, band, error)
 nitf_ImageSubheader_getBandInfo = _nitropy.nitf_ImageSubheader_getBandInfo
 
-def nitf_ImageSubheader_createBands(subhdr, numBands, error):
+def nitf_ImageSubheader_createBands(subhdr: 'nitf_ImageSubheader', numBands: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_createBands(subhdr, numBands, error)
 nitf_ImageSubheader_createBands = _nitropy.nitf_ImageSubheader_createBands
 
-def nitf_ImageSubheader_removeBand(subhdr, index, error):
+def nitf_ImageSubheader_removeBand(subhdr: 'nitf_ImageSubheader', index: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_removeBand(subhdr, index, error)
 nitf_ImageSubheader_removeBand = _nitropy.nitf_ImageSubheader_removeBand
 
-def nitf_ImageSubheader_getDimensions(subhdr, numRows, numCols, error):
+def nitf_ImageSubheader_getDimensions(subhdr: 'nitf_ImageSubheader', numRows: 'nitf_Uint32 *', numCols: 'nitf_Uint32 *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_getDimensions(subhdr, numRows, numCols, error)
 nitf_ImageSubheader_getDimensions = _nitropy.nitf_ImageSubheader_getDimensions
 
-def nitf_ImageSubheader_getBlocking(subhdr, numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerRow, numBlocksPerCol, imode, error):
+def nitf_ImageSubheader_getBlocking(subhdr: 'nitf_ImageSubheader', numRows: 'nitf_Uint32 *', numCols: 'nitf_Uint32 *', numRowsPerBlock: 'nitf_Uint32 *', numColsPerBlock: 'nitf_Uint32 *', numBlocksPerRow: 'nitf_Uint32 *', numBlocksPerCol: 'nitf_Uint32 *', imode: 'char *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_getBlocking(subhdr, numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerRow, numBlocksPerCol, imode, error)
 nitf_ImageSubheader_getBlocking = _nitropy.nitf_ImageSubheader_getBlocking
 
-def nitf_ImageSubheader_getCompression(subhdr, imageCompression, compressionRate, error):
+def nitf_ImageSubheader_getCompression(subhdr: 'nitf_ImageSubheader', imageCompression: 'char *', compressionRate: 'char *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_getCompression(subhdr, imageCompression, compressionRate, error)
 nitf_ImageSubheader_getCompression = _nitropy.nitf_ImageSubheader_getCompression
 
-def nitf_ImageSubheader_setDimensions(subhdr, numRows, numCols, error):
+def nitf_ImageSubheader_setDimensions(subhdr: 'nitf_ImageSubheader', numRows: 'nitf_Uint32', numCols: 'nitf_Uint32', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_setDimensions(subhdr, numRows, numCols, error)
 nitf_ImageSubheader_setDimensions = _nitropy.nitf_ImageSubheader_setDimensions
 
-def nitf_ImageSubheader_setCornersFromLatLons(subheader, type, corners, error):
+def nitf_ImageSubheader_setCornersFromLatLons(subheader: 'nitf_ImageSubheader', type: 'nitf_CornersType', corners: 'double [4][2]', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_setCornersFromLatLons(subheader, type, corners, error)
 nitf_ImageSubheader_setCornersFromLatLons = _nitropy.nitf_ImageSubheader_setCornersFromLatLons
 
-def nitf_ImageSubheader_getCornersType(subheader):
+def nitf_ImageSubheader_getCornersType(subheader: 'nitf_ImageSubheader') -> "nitf_CornersType":
     return _nitropy.nitf_ImageSubheader_getCornersType(subheader)
 nitf_ImageSubheader_getCornersType = _nitropy.nitf_ImageSubheader_getCornersType
 
-def nitf_ImageSubheader_getCornersAsLatLons(subheader, corners, error):
+def nitf_ImageSubheader_getCornersAsLatLons(subheader: 'nitf_ImageSubheader', corners: 'double [4][2]', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_getCornersAsLatLons(subheader, corners, error)
 nitf_ImageSubheader_getCornersAsLatLons = _nitropy.nitf_ImageSubheader_getCornersAsLatLons
 
-def nitf_ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow):
+def nitf_ImageSubheader_computeBlocking(numRows: 'nitf_Uint32', numCols: 'nitf_Uint32', numRowsPerBlock: 'nitf_Uint32 *', numColsPerBlock: 'nitf_Uint32 *', numBlocksPerCol: 'nitf_Uint32 *', numBlocksPerRow: 'nitf_Uint32 *') -> "void":
     return _nitropy.nitf_ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow)
 nitf_ImageSubheader_computeBlocking = _nitropy.nitf_ImageSubheader_computeBlocking
 
-def nitf_ImageSubheader_setBlocking(subhdr, numRows, numCols, numRowsPerBlock, numColsPerBlock, imode, error):
+def nitf_ImageSubheader_setBlocking(subhdr: 'nitf_ImageSubheader', numRows: 'nitf_Uint32', numCols: 'nitf_Uint32', numRowsPerBlock: 'nitf_Uint32', numColsPerBlock: 'nitf_Uint32', imode: 'char const *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_setBlocking(subhdr, numRows, numCols, numRowsPerBlock, numColsPerBlock, imode, error)
 nitf_ImageSubheader_setBlocking = _nitropy.nitf_ImageSubheader_setBlocking
 
-def nitf_ImageSubheader_setCompression(subhdr, imageCompression, compressionRate, error):
+def nitf_ImageSubheader_setCompression(subhdr: 'nitf_ImageSubheader', imageCompression: 'char const *', compressionRate: 'char const *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_setCompression(subhdr, imageCompression, compressionRate, error)
 nitf_ImageSubheader_setCompression = _nitropy.nitf_ImageSubheader_setCompression
 
-def nitf_ImageSubheader_insertImageComment(subhdr, comment, position, error):
+def nitf_ImageSubheader_insertImageComment(subhdr: 'nitf_ImageSubheader', comment: 'char const *', position: 'int', error: 'nrt_Error') -> "int":
     return _nitropy.nitf_ImageSubheader_insertImageComment(subhdr, comment, position, error)
 nitf_ImageSubheader_insertImageComment = _nitropy.nitf_ImageSubheader_insertImageComment
 
-def nitf_ImageSubheader_removeImageComment(subhdr, position, error):
+def nitf_ImageSubheader_removeImageComment(subhdr: 'nitf_ImageSubheader', position: 'int', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_removeImageComment(subhdr, position, error)
 nitf_ImageSubheader_removeImageComment = _nitropy.nitf_ImageSubheader_removeImageComment
 class nitf_GraphicSegment(_object):
@@ -2198,15 +2196,15 @@ nitf_GraphicSegment_swigregister = _nitropy.nitf_GraphicSegment_swigregister
 nitf_GraphicSegment_swigregister(nitf_GraphicSegment)
 
 
-def nitf_GraphicSegment_construct(error):
+def nitf_GraphicSegment_construct(error: 'nrt_Error') -> "nitf_GraphicSegment *":
     return _nitropy.nitf_GraphicSegment_construct(error)
 nitf_GraphicSegment_construct = _nitropy.nitf_GraphicSegment_construct
 
-def nitf_GraphicSegment_clone(source, error):
+def nitf_GraphicSegment_clone(source: 'nitf_GraphicSegment', error: 'nrt_Error') -> "nitf_GraphicSegment *":
     return _nitropy.nitf_GraphicSegment_clone(source, error)
 nitf_GraphicSegment_clone = _nitropy.nitf_GraphicSegment_clone
 
-def nitf_GraphicSegment_destruct(segment):
+def nitf_GraphicSegment_destruct(segment: 'nitf_GraphicSegment **') -> "void":
     return _nitropy.nitf_GraphicSegment_destruct(segment)
 nitf_GraphicSegment_destruct = _nitropy.nitf_GraphicSegment_destruct
 NITF_SY_SZ = _nitropy.NITF_SY_SZ
@@ -2311,15 +2309,15 @@ nitf_GraphicSubheader_swigregister = _nitropy.nitf_GraphicSubheader_swigregister
 nitf_GraphicSubheader_swigregister(nitf_GraphicSubheader)
 
 
-def nitf_GraphicSubheader_construct(error):
+def nitf_GraphicSubheader_construct(error: 'nrt_Error') -> "nitf_GraphicSubheader *":
     return _nitropy.nitf_GraphicSubheader_construct(error)
 nitf_GraphicSubheader_construct = _nitropy.nitf_GraphicSubheader_construct
 
-def nitf_GraphicSubheader_clone(source, error):
+def nitf_GraphicSubheader_clone(source: 'nitf_GraphicSubheader', error: 'nrt_Error') -> "nitf_GraphicSubheader *":
     return _nitropy.nitf_GraphicSubheader_clone(source, error)
 nitf_GraphicSubheader_clone = _nitropy.nitf_GraphicSubheader_clone
 
-def nitf_GraphicSubheader_destruct(subhdr):
+def nitf_GraphicSubheader_destruct(subhdr: 'nitf_GraphicSubheader **') -> "void":
     return _nitropy.nitf_GraphicSubheader_destruct(subhdr)
 nitf_GraphicSubheader_destruct = _nitropy.nitf_GraphicSubheader_destruct
 class nitf_LabelSegment(_object):
@@ -2353,15 +2351,15 @@ nitf_LabelSegment_swigregister = _nitropy.nitf_LabelSegment_swigregister
 nitf_LabelSegment_swigregister(nitf_LabelSegment)
 
 
-def nitf_LabelSegment_construct(error):
+def nitf_LabelSegment_construct(error: 'nrt_Error') -> "nitf_LabelSegment *":
     return _nitropy.nitf_LabelSegment_construct(error)
 nitf_LabelSegment_construct = _nitropy.nitf_LabelSegment_construct
 
-def nitf_LabelSegment_clone(source, error):
+def nitf_LabelSegment_clone(source: 'nitf_LabelSegment', error: 'nrt_Error') -> "nitf_LabelSegment *":
     return _nitropy.nitf_LabelSegment_clone(source, error)
 nitf_LabelSegment_clone = _nitropy.nitf_LabelSegment_clone
 
-def nitf_LabelSegment_destruct(segment):
+def nitf_LabelSegment_destruct(segment: 'nitf_LabelSegment **') -> "void":
     return _nitropy.nitf_LabelSegment_destruct(segment)
 nitf_LabelSegment_destruct = _nitropy.nitf_LabelSegment_destruct
 NITF_LA_SZ = _nitropy.NITF_LA_SZ
@@ -2461,15 +2459,15 @@ nitf_LabelSubheader_swigregister = _nitropy.nitf_LabelSubheader_swigregister
 nitf_LabelSubheader_swigregister(nitf_LabelSubheader)
 
 
-def nitf_LabelSubheader_construct(error):
+def nitf_LabelSubheader_construct(error: 'nrt_Error') -> "nitf_LabelSubheader *":
     return _nitropy.nitf_LabelSubheader_construct(error)
 nitf_LabelSubheader_construct = _nitropy.nitf_LabelSubheader_construct
 
-def nitf_LabelSubheader_clone(source, error):
+def nitf_LabelSubheader_clone(source: 'nitf_LabelSubheader', error: 'nrt_Error') -> "nitf_LabelSubheader *":
     return _nitropy.nitf_LabelSubheader_clone(source, error)
 nitf_LabelSubheader_clone = _nitropy.nitf_LabelSubheader_clone
 
-def nitf_LabelSubheader_destruct(subhdr):
+def nitf_LabelSubheader_destruct(subhdr: 'nitf_LabelSubheader **') -> "void":
     return _nitropy.nitf_LabelSubheader_destruct(subhdr)
 nitf_LabelSubheader_destruct = _nitropy.nitf_LabelSubheader_destruct
 class nitf_TextSegment(_object):
@@ -2499,15 +2497,15 @@ nitf_TextSegment_swigregister = _nitropy.nitf_TextSegment_swigregister
 nitf_TextSegment_swigregister(nitf_TextSegment)
 
 
-def nitf_TextSegment_construct(error):
+def nitf_TextSegment_construct(error: 'nrt_Error') -> "nitf_TextSegment *":
     return _nitropy.nitf_TextSegment_construct(error)
 nitf_TextSegment_construct = _nitropy.nitf_TextSegment_construct
 
-def nitf_TextSegment_clone(source, error):
+def nitf_TextSegment_clone(source: 'nitf_TextSegment', error: 'nrt_Error') -> "nitf_TextSegment *":
     return _nitropy.nitf_TextSegment_clone(source, error)
 nitf_TextSegment_clone = _nitropy.nitf_TextSegment_clone
 
-def nitf_TextSegment_destruct(segment):
+def nitf_TextSegment_destruct(segment: 'nitf_TextSegment **') -> "void":
     return _nitropy.nitf_TextSegment_destruct(segment)
 nitf_TextSegment_destruct = _nitropy.nitf_TextSegment_destruct
 NITF_TE_SZ = _nitropy.NITF_TE_SZ
@@ -2582,15 +2580,15 @@ nitf_TextSubheader_swigregister = _nitropy.nitf_TextSubheader_swigregister
 nitf_TextSubheader_swigregister(nitf_TextSubheader)
 
 
-def nitf_TextSubheader_construct(error):
+def nitf_TextSubheader_construct(error: 'nrt_Error') -> "nitf_TextSubheader *":
     return _nitropy.nitf_TextSubheader_construct(error)
 nitf_TextSubheader_construct = _nitropy.nitf_TextSubheader_construct
 
-def nitf_TextSubheader_clone(source, error):
+def nitf_TextSubheader_clone(source: 'nitf_TextSubheader', error: 'nrt_Error') -> "nitf_TextSubheader *":
     return _nitropy.nitf_TextSubheader_clone(source, error)
 nitf_TextSubheader_clone = _nitropy.nitf_TextSubheader_clone
 
-def nitf_TextSubheader_destruct(subhdr):
+def nitf_TextSubheader_destruct(subhdr: 'nitf_TextSubheader **') -> "void":
     return _nitropy.nitf_TextSubheader_destruct(subhdr)
 nitf_TextSubheader_destruct = _nitropy.nitf_TextSubheader_destruct
 class nitf_DESegment(_object):
@@ -2620,15 +2618,15 @@ nitf_DESegment_swigregister = _nitropy.nitf_DESegment_swigregister
 nitf_DESegment_swigregister(nitf_DESegment)
 
 
-def nitf_DESegment_construct(error):
+def nitf_DESegment_construct(error: 'nrt_Error') -> "nitf_DESegment *":
     return _nitropy.nitf_DESegment_construct(error)
 nitf_DESegment_construct = _nitropy.nitf_DESegment_construct
 
-def nitf_DESegment_clone(source, error):
+def nitf_DESegment_clone(source: 'nitf_DESegment', error: 'nrt_Error') -> "nitf_DESegment *":
     return _nitropy.nitf_DESegment_clone(source, error)
 nitf_DESegment_clone = _nitropy.nitf_DESegment_clone
 
-def nitf_DESegment_destruct(segment):
+def nitf_DESegment_destruct(segment: 'nitf_DESegment **') -> "void":
     return _nitropy.nitf_DESegment_destruct(segment)
 nitf_DESegment_destruct = _nitropy.nitf_DESegment_destruct
 NITF_DE_SZ = _nitropy.NITF_DE_SZ
@@ -2697,15 +2695,15 @@ nitf_DESubheader_swigregister = _nitropy.nitf_DESubheader_swigregister
 nitf_DESubheader_swigregister(nitf_DESubheader)
 
 
-def nitf_DESubheader_construct(error):
+def nitf_DESubheader_construct(error: 'nrt_Error') -> "nitf_DESubheader *":
     return _nitropy.nitf_DESubheader_construct(error)
 nitf_DESubheader_construct = _nitropy.nitf_DESubheader_construct
 
-def nitf_DESubheader_clone(source, error):
+def nitf_DESubheader_clone(source: 'nitf_DESubheader', error: 'nrt_Error') -> "nitf_DESubheader *":
     return _nitropy.nitf_DESubheader_clone(source, error)
 nitf_DESubheader_clone = _nitropy.nitf_DESubheader_clone
 
-def nitf_DESubheader_destruct(subhdr):
+def nitf_DESubheader_destruct(subhdr: 'nitf_DESubheader **') -> "void":
     return _nitropy.nitf_DESubheader_destruct(subhdr)
 nitf_DESubheader_destruct = _nitropy.nitf_DESubheader_destruct
 class nitf_RESegment(_object):
@@ -2739,15 +2737,15 @@ nitf_RESegment_swigregister = _nitropy.nitf_RESegment_swigregister
 nitf_RESegment_swigregister(nitf_RESegment)
 
 
-def nitf_RESegment_construct(error):
+def nitf_RESegment_construct(error: 'nrt_Error') -> "nitf_RESegment *":
     return _nitropy.nitf_RESegment_construct(error)
 nitf_RESegment_construct = _nitropy.nitf_RESegment_construct
 
-def nitf_RESegment_clone(source, error):
+def nitf_RESegment_clone(source: 'nitf_RESegment', error: 'nrt_Error') -> "nitf_RESegment *":
     return _nitropy.nitf_RESegment_clone(source, error)
 nitf_RESegment_clone = _nitropy.nitf_RESegment_clone
 
-def nitf_RESegment_destruct(segment):
+def nitf_RESegment_destruct(segment: 'nitf_RESegment **') -> "void":
     return _nitropy.nitf_RESegment_destruct(segment)
 nitf_RESegment_destruct = _nitropy.nitf_RESegment_destruct
 NITF_RE_SZ = _nitropy.NITF_RE_SZ
@@ -2802,15 +2800,15 @@ nitf_RESubheader_swigregister = _nitropy.nitf_RESubheader_swigregister
 nitf_RESubheader_swigregister(nitf_RESubheader)
 
 
-def nitf_RESubheader_construct(error):
+def nitf_RESubheader_construct(error: 'nrt_Error') -> "nitf_RESubheader *":
     return _nitropy.nitf_RESubheader_construct(error)
 nitf_RESubheader_construct = _nitropy.nitf_RESubheader_construct
 
-def nitf_RESubheader_clone(source, error):
+def nitf_RESubheader_clone(source: 'nitf_RESubheader', error: 'nrt_Error') -> "nitf_RESubheader *":
     return _nitropy.nitf_RESubheader_clone(source, error)
 nitf_RESubheader_clone = _nitropy.nitf_RESubheader_clone
 
-def nitf_RESubheader_destruct(subhdr):
+def nitf_RESubheader_destruct(subhdr: 'nitf_RESubheader **') -> "void":
     return _nitropy.nitf_RESubheader_destruct(subhdr)
 nitf_RESubheader_destruct = _nitropy.nitf_RESubheader_destruct
 class nitf_ComponentInfo(_object):
@@ -2836,15 +2834,15 @@ nitf_ComponentInfo_swigregister = _nitropy.nitf_ComponentInfo_swigregister
 nitf_ComponentInfo_swigregister(nitf_ComponentInfo)
 
 
-def nitf_ComponentInfo_construct(subheaderFieldWidth, dataFieldWidth, error):
+def nitf_ComponentInfo_construct(subheaderFieldWidth: 'nitf_Uint32', dataFieldWidth: 'nitf_Uint32', error: 'nrt_Error') -> "nitf_ComponentInfo *":
     return _nitropy.nitf_ComponentInfo_construct(subheaderFieldWidth, dataFieldWidth, error)
 nitf_ComponentInfo_construct = _nitropy.nitf_ComponentInfo_construct
 
-def nitf_ComponentInfo_clone(source, error):
+def nitf_ComponentInfo_clone(source: 'nitf_ComponentInfo', error: 'nrt_Error') -> "nitf_ComponentInfo *":
     return _nitropy.nitf_ComponentInfo_clone(source, error)
 nitf_ComponentInfo_clone = _nitropy.nitf_ComponentInfo_clone
 
-def nitf_ComponentInfo_destruct(info):
+def nitf_ComponentInfo_destruct(info: 'nitf_ComponentInfo **') -> "void":
     return _nitropy.nitf_ComponentInfo_destruct(info)
 nitf_ComponentInfo_destruct = _nitropy.nitf_ComponentInfo_destruct
 class nitf_ImageReader(_object):
@@ -2874,23 +2872,23 @@ nitf_ImageReader_swigregister = _nitropy.nitf_ImageReader_swigregister
 nitf_ImageReader_swigregister(nitf_ImageReader)
 
 
-def nitf_ImageReader_getBlockingInfo(imageReader, error):
+def nitf_ImageReader_getBlockingInfo(imageReader: 'nitf_ImageReader', error: 'nrt_Error') -> "nitf_BlockingInfo *":
     return _nitropy.nitf_ImageReader_getBlockingInfo(imageReader, error)
 nitf_ImageReader_getBlockingInfo = _nitropy.nitf_ImageReader_getBlockingInfo
 
-def nitf_ImageReader_read(imageReader, subWindow, user, padded, error):
+def nitf_ImageReader_read(imageReader: 'nitf_ImageReader', subWindow: 'nitf_SubWindow', user: 'nitf_Uint8 **', padded: 'int *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageReader_read(imageReader, subWindow, user, padded, error)
 nitf_ImageReader_read = _nitropy.nitf_ImageReader_read
 
-def nitf_ImageReader_readBlock(imageReader, blockNumber, blockSize, error):
+def nitf_ImageReader_readBlock(imageReader: 'nitf_ImageReader', blockNumber: 'nitf_Uint32', blockSize: 'nitf_Uint64 *', error: 'nrt_Error') -> "nitf_Uint8 *":
     return _nitropy.nitf_ImageReader_readBlock(imageReader, blockNumber, blockSize, error)
 nitf_ImageReader_readBlock = _nitropy.nitf_ImageReader_readBlock
 
-def nitf_ImageReader_destruct(imageReader):
+def nitf_ImageReader_destruct(imageReader: 'nitf_ImageReader **') -> "void":
     return _nitropy.nitf_ImageReader_destruct(imageReader)
 nitf_ImageReader_destruct = _nitropy.nitf_ImageReader_destruct
 
-def nitf_ImageReader_setReadCaching(iReader):
+def nitf_ImageReader_setReadCaching(iReader: 'nitf_ImageReader') -> "void":
     return _nitropy.nitf_ImageReader_setReadCaching(iReader)
 nitf_ImageReader_setReadCaching = _nitropy.nitf_ImageReader_setReadCaching
 class nitf_SegmentReader(_object):
@@ -2924,31 +2922,31 @@ nitf_SegmentReader_swigregister = _nitropy.nitf_SegmentReader_swigregister
 nitf_SegmentReader_swigregister(nitf_SegmentReader)
 
 
-def nitf_SegmentReader_read(segmentReader, buffer, count, error):
+def nitf_SegmentReader_read(segmentReader: 'nitf_SegmentReader', buffer: 'NITF_DATA *', count: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_SegmentReader_read(segmentReader, buffer, count, error)
 nitf_SegmentReader_read = _nitropy.nitf_SegmentReader_read
 
-def nitf_SegmentReader_seek(segmentReader, offset, whence, error):
+def nitf_SegmentReader_seek(segmentReader: 'nitf_SegmentReader', offset: 'nitf_Off', whence: 'int', error: 'nrt_Error') -> "nitf_Off":
     return _nitropy.nitf_SegmentReader_seek(segmentReader, offset, whence, error)
 nitf_SegmentReader_seek = _nitropy.nitf_SegmentReader_seek
 
-def nitf_SegmentReader_tell(segmentReader, error):
+def nitf_SegmentReader_tell(segmentReader: 'nitf_SegmentReader', error: 'nrt_Error') -> "nitf_Off":
     return _nitropy.nitf_SegmentReader_tell(segmentReader, error)
 nitf_SegmentReader_tell = _nitropy.nitf_SegmentReader_tell
 
-def nitf_SegmentReader_getSize(segmentReader, error):
+def nitf_SegmentReader_getSize(segmentReader: 'nitf_SegmentReader', error: 'nrt_Error') -> "nitf_Off":
     return _nitropy.nitf_SegmentReader_getSize(segmentReader, error)
 nitf_SegmentReader_getSize = _nitropy.nitf_SegmentReader_getSize
 
-def nitf_SegmentReader_destruct(segmentReader):
+def nitf_SegmentReader_destruct(segmentReader: 'nitf_SegmentReader **') -> "void":
     return _nitropy.nitf_SegmentReader_destruct(segmentReader)
 nitf_SegmentReader_destruct = _nitropy.nitf_SegmentReader_destruct
 
-def nitf_SegmentWriter_construct(error):
+def nitf_SegmentWriter_construct(error: 'nrt_Error') -> "nitf_SegmentWriter *":
     return _nitropy.nitf_SegmentWriter_construct(error)
 nitf_SegmentWriter_construct = _nitropy.nitf_SegmentWriter_construct
 
-def nitf_SegmentWriter_attachSource(writer, segmentSource, error):
+def nitf_SegmentWriter_attachSource(writer: 'nitf_SegmentWriter *', segmentSource: 'nitf_DataSource', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_SegmentWriter_attachSource(writer, segmentSource, error)
 nitf_SegmentWriter_attachSource = _nitropy.nitf_SegmentWriter_attachSource
 class nitf_SubWindow(_object):
@@ -2994,15 +2992,15 @@ nitf_SubWindow_swigregister = _nitropy.nitf_SubWindow_swigregister
 nitf_SubWindow_swigregister(nitf_SubWindow)
 
 
-def nitf_SubWindow_construct(error):
+def nitf_SubWindow_construct(error: 'nrt_Error') -> "nitf_SubWindow *":
     return _nitropy.nitf_SubWindow_construct(error)
 nitf_SubWindow_construct = _nitropy.nitf_SubWindow_construct
 
-def nitf_SubWindow_destruct(subWindow):
+def nitf_SubWindow_destruct(subWindow: 'nitf_SubWindow **') -> "void":
     return _nitropy.nitf_SubWindow_destruct(subWindow)
 nitf_SubWindow_destruct = _nitropy.nitf_SubWindow_destruct
 
-def nitf_SubWindow_setDownSampler(subWindow, downsampler, error):
+def nitf_SubWindow_setDownSampler(subWindow: 'nitf_SubWindow', downsampler: 'nitf_DownSampler', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_SubWindow_setDownSampler(subWindow, downsampler, error)
 nitf_SubWindow_setDownSampler = _nitropy.nitf_SubWindow_setDownSampler
 class nitf_IDownSampler(_object):
@@ -3074,39 +3072,39 @@ nitf_DownSampler_swigregister = _nitropy.nitf_DownSampler_swigregister
 nitf_DownSampler_swigregister(nitf_DownSampler)
 
 
-def nitf_PixelSkip_construct(rowSkip, colSkip, error):
+def nitf_PixelSkip_construct(rowSkip: 'nitf_Uint32', colSkip: 'nitf_Uint32', error: 'nrt_Error') -> "nitf_DownSampler *":
     return _nitropy.nitf_PixelSkip_construct(rowSkip, colSkip, error)
 nitf_PixelSkip_construct = _nitropy.nitf_PixelSkip_construct
 
-def nitf_MaxDownSample_construct(rowSkip, colSkip, error):
+def nitf_MaxDownSample_construct(rowSkip: 'nitf_Uint32', colSkip: 'nitf_Uint32', error: 'nrt_Error') -> "nitf_DownSampler *":
     return _nitropy.nitf_MaxDownSample_construct(rowSkip, colSkip, error)
 nitf_MaxDownSample_construct = _nitropy.nitf_MaxDownSample_construct
 
-def nitf_SumSq2DownSample_construct(rowSkip, colSkip, error):
+def nitf_SumSq2DownSample_construct(rowSkip: 'nitf_Uint32', colSkip: 'nitf_Uint32', error: 'nrt_Error') -> "nitf_DownSampler *":
     return _nitropy.nitf_SumSq2DownSample_construct(rowSkip, colSkip, error)
 nitf_SumSq2DownSample_construct = _nitropy.nitf_SumSq2DownSample_construct
 
-def nitf_Select2DownSample_construct(rowSkip, colSkip, error):
+def nitf_Select2DownSample_construct(rowSkip: 'nitf_Uint32', colSkip: 'nitf_Uint32', error: 'nrt_Error') -> "nitf_DownSampler *":
     return _nitropy.nitf_Select2DownSample_construct(rowSkip, colSkip, error)
 nitf_Select2DownSample_construct = _nitropy.nitf_Select2DownSample_construct
 
-def nitf_DownSampler_destruct(downsampler):
+def nitf_DownSampler_destruct(downsampler: 'nitf_DownSampler **') -> "void":
     return _nitropy.nitf_DownSampler_destruct(downsampler)
 nitf_DownSampler_destruct = _nitropy.nitf_DownSampler_destruct
 
-def nitf_SegmentMemorySource_construct(data, size, start, byteSkip, copyData, error):
+def nitf_SegmentMemorySource_construct(data: 'char const *', size: 'nitf_Off', start: 'nitf_Off', byteSkip: 'int', copyData: 'bool', error: 'nrt_Error') -> "nitf_SegmentSource *":
     return _nitropy.nitf_SegmentMemorySource_construct(data, size, start, byteSkip, copyData, error)
 nitf_SegmentMemorySource_construct = _nitropy.nitf_SegmentMemorySource_construct
 
-def nitf_SegmentFileSource_construct(handle, start, byteSkip, error):
+def nitf_SegmentFileSource_construct(handle: 'nitf_IOHandle', start: 'nitf_Off', byteSkip: 'int', error: 'nrt_Error') -> "nitf_SegmentSource *":
     return _nitropy.nitf_SegmentFileSource_construct(handle, start, byteSkip, error)
 nitf_SegmentFileSource_construct = _nitropy.nitf_SegmentFileSource_construct
 
-def nitf_SegmentFileSource_constructIO(io, start, byteSkip, error):
+def nitf_SegmentFileSource_constructIO(io: 'nrt_IOInterface', start: 'nitf_Off', byteSkip: 'int', error: 'nrt_Error') -> "nitf_SegmentSource *":
     return _nitropy.nitf_SegmentFileSource_constructIO(io, start, byteSkip, error)
 nitf_SegmentFileSource_constructIO = _nitropy.nitf_SegmentFileSource_constructIO
 
-def nitf_SegmentReaderSource_construct(reader, error):
+def nitf_SegmentReaderSource_construct(reader: 'nitf_SegmentReader', error: 'nrt_Error') -> "nitf_SegmentSource *":
     return _nitropy.nitf_SegmentReaderSource_construct(reader, error)
 nitf_SegmentReaderSource_construct = _nitropy.nitf_SegmentReaderSource_construct
 NITF_IREPBAND_SZ = _nitropy.NITF_IREPBAND_SZ
@@ -3158,19 +3156,19 @@ nitf_BandInfo_swigregister = _nitropy.nitf_BandInfo_swigregister
 nitf_BandInfo_swigregister(nitf_BandInfo)
 
 
-def nitf_BandInfo_construct(error):
+def nitf_BandInfo_construct(error: 'nrt_Error') -> "nitf_BandInfo *":
     return _nitropy.nitf_BandInfo_construct(error)
 nitf_BandInfo_construct = _nitropy.nitf_BandInfo_construct
 
-def nitf_BandInfo_destruct(info):
+def nitf_BandInfo_destruct(info: 'nitf_BandInfo **') -> "void":
     return _nitropy.nitf_BandInfo_destruct(info)
 nitf_BandInfo_destruct = _nitropy.nitf_BandInfo_destruct
 
-def nitf_BandInfo_clone(source, error):
+def nitf_BandInfo_clone(source: 'nitf_BandInfo', error: 'nrt_Error') -> "nitf_BandInfo *":
     return _nitropy.nitf_BandInfo_clone(source, error)
 nitf_BandInfo_clone = _nitropy.nitf_BandInfo_clone
 
-def nitf_BandInfo_init(bandInfo, representation, subcategory, imageFilterCondition, imageFilterCode, numLUTs, bandEntriesPerLUT, lut, error):
+def nitf_BandInfo_init(bandInfo: 'nitf_BandInfo', representation: 'char const *', subcategory: 'char const *', imageFilterCondition: 'char const *', imageFilterCode: 'char const *', numLUTs: 'nitf_Uint32', bandEntriesPerLUT: 'nitf_Uint32', lut: 'nitf_LookupTable *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_BandInfo_init(bandInfo, representation, subcategory, imageFilterCondition, imageFilterCode, numLUTs, bandEntriesPerLUT, lut, error)
 nitf_BandInfo_init = _nitropy.nitf_BandInfo_init
 PY_NITF_CREATE = _nitropy.PY_NITF_CREATE
@@ -3183,143 +3181,143 @@ PY_NITF_SEEK_CUR = _nitropy.PY_NITF_SEEK_CUR
 PY_NITF_SEEK_SET = _nitropy.PY_NITF_SEEK_SET
 PY_NITF_SEEK_END = _nitropy.PY_NITF_SEEK_END
 
-def py_IOHandle_create(fname, accessFlag, createFlag, error):
+def py_IOHandle_create(fname: 'char const *', accessFlag: 'int', createFlag: 'int', error: 'nrt_Error') -> "nitf_IOHandle":
     return _nitropy.py_IOHandle_create(fname, accessFlag, createFlag, error)
 py_IOHandle_create = _nitropy.py_IOHandle_create
 
-def py_IOHandle_write(handle, address, size, error):
+def py_IOHandle_write(handle: 'nitf_IOHandle', address: 'long long', size: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.py_IOHandle_write(handle, address, size, error)
 py_IOHandle_write = _nitropy.py_IOHandle_write
 
-def py_IOHandle_seek(handle, offset, whence, error):
+def py_IOHandle_seek(handle: 'nitf_IOHandle', offset: 'nitf_Off', whence: 'int', error: 'nrt_Error') -> "nitf_Off":
     return _nitropy.py_IOHandle_seek(handle, offset, whence, error)
 py_IOHandle_seek = _nitropy.py_IOHandle_seek
 
-def py_Field_getString(field, error):
+def py_Field_getString(field: 'nitf_Field', error: 'nrt_Error') -> "char *":
     return _nitropy.py_Field_getString(field, error)
 py_Field_getString = _nitropy.py_Field_getString
 
-def py_Field_getInt(field, error):
+def py_Field_getInt(field: 'nitf_Field', error: 'nrt_Error') -> "nitf_Uint32":
     return _nitropy.py_Field_getInt(field, error)
 py_Field_getInt = _nitropy.py_Field_getInt
 
-def py_Field_setRawData(field, buf, length, error):
+def py_Field_setRawData(field: 'nitf_Field', buf: 'char *', length: 'int', error: 'nrt_Error') -> "void":
     return _nitropy.py_Field_setRawData(field, buf, length, error)
 py_Field_setRawData = _nitropy.py_Field_setRawData
 
-def py_TRE_setField(tre, tag, buf, length, error):
+def py_TRE_setField(tre: 'nitf_TRE', tag: 'char const *', buf: 'char *', length: 'int', error: 'nrt_Error') -> "void":
     return _nitropy.py_TRE_setField(tre, tag, buf, length, error)
 py_TRE_setField = _nitropy.py_TRE_setField
 
-def py_Record_getFileHeader(record):
+def py_Record_getFileHeader(record: 'nitf_Record') -> "nitf_FileHeader *":
     return _nitropy.py_Record_getFileHeader(record)
 py_Record_getFileHeader = _nitropy.py_Record_getFileHeader
 
-def py_Record_getImage(record, index, error):
+def py_Record_getImage(record: 'nitf_Record', index: 'int', error: 'nrt_Error') -> "nitf_ImageSegment *":
     return _nitropy.py_Record_getImage(record, index, error)
 py_Record_getImage = _nitropy.py_Record_getImage
 
-def py_Record_getNumImages(record):
+def py_Record_getNumImages(record: 'nitf_Record') -> "int":
     return _nitropy.py_Record_getNumImages(record)
 py_Record_getNumImages = _nitropy.py_Record_getNumImages
 
-def py_Record_getGraphic(record, index, error):
+def py_Record_getGraphic(record: 'nitf_Record', index: 'int', error: 'nrt_Error') -> "nitf_GraphicSegment *":
     return _nitropy.py_Record_getGraphic(record, index, error)
 py_Record_getGraphic = _nitropy.py_Record_getGraphic
 
-def py_Record_getNumGraphics(record):
+def py_Record_getNumGraphics(record: 'nitf_Record') -> "int":
     return _nitropy.py_Record_getNumGraphics(record)
 py_Record_getNumGraphics = _nitropy.py_Record_getNumGraphics
 
-def py_Record_getLabel(record, index, error):
+def py_Record_getLabel(record: 'nitf_Record', index: 'int', error: 'nrt_Error') -> "nitf_LabelSegment *":
     return _nitropy.py_Record_getLabel(record, index, error)
 py_Record_getLabel = _nitropy.py_Record_getLabel
 
-def py_Record_getNumLabels(record):
+def py_Record_getNumLabels(record: 'nitf_Record') -> "int":
     return _nitropy.py_Record_getNumLabels(record)
 py_Record_getNumLabels = _nitropy.py_Record_getNumLabels
 
-def py_Record_getText(record, index, error):
+def py_Record_getText(record: 'nitf_Record', index: 'int', error: 'nrt_Error') -> "nitf_TextSegment *":
     return _nitropy.py_Record_getText(record, index, error)
 py_Record_getText = _nitropy.py_Record_getText
 
-def py_Record_getNumTexts(record):
+def py_Record_getNumTexts(record: 'nitf_Record') -> "int":
     return _nitropy.py_Record_getNumTexts(record)
 py_Record_getNumTexts = _nitropy.py_Record_getNumTexts
 
-def py_Record_getDE(record, index, error):
+def py_Record_getDE(record: 'nitf_Record', index: 'int', error: 'nrt_Error') -> "nitf_DESegment *":
     return _nitropy.py_Record_getDE(record, index, error)
 py_Record_getDE = _nitropy.py_Record_getDE
 
-def py_Record_getNumDEs(record):
+def py_Record_getNumDEs(record: 'nitf_Record') -> "int":
     return _nitropy.py_Record_getNumDEs(record)
 py_Record_getNumDEs = _nitropy.py_Record_getNumDEs
 
-def py_Record_getRE(record, index, error):
+def py_Record_getRE(record: 'nitf_Record', index: 'int', error: 'nrt_Error') -> "nitf_RESegment *":
     return _nitropy.py_Record_getRE(record, index, error)
 py_Record_getRE = _nitropy.py_Record_getRE
 
-def py_Record_getNumREs(record):
+def py_Record_getNumREs(record: 'nitf_Record') -> "int":
     return _nitropy.py_Record_getNumREs(record)
 py_Record_getNumREs = _nitropy.py_Record_getNumREs
 
-def py_Record_destruct(record):
+def py_Record_destruct(record: 'nitf_Record') -> "void":
     return _nitropy.py_Record_destruct(record)
 py_Record_destruct = _nitropy.py_Record_destruct
 
-def py_Record_getVersion(record):
+def py_Record_getVersion(record: 'nitf_Record') -> "nitf_Version":
     return _nitropy.py_Record_getVersion(record)
 py_Record_getVersion = _nitropy.py_Record_getVersion
 
-def py_FileHeader_getComponentInfo(header, index, type, error):
+def py_FileHeader_getComponentInfo(header: 'nitf_FileHeader', index: 'int', type: 'char *', error: 'nrt_Error') -> "nitf_ComponentInfo *":
     return _nitropy.py_FileHeader_getComponentInfo(header, index, type, error)
 py_FileHeader_getComponentInfo = _nitropy.py_FileHeader_getComponentInfo
 
-def py_nitf_Reader_newImageReader(reader, imageSegmentNumber, options, error):
+def py_nitf_Reader_newImageReader(reader: 'nitf_Reader', imageSegmentNumber: 'int', options: 'PyObject *', error: 'nrt_Error') -> "nitf_ImageReader *":
     return _nitropy.py_nitf_Reader_newImageReader(reader, imageSegmentNumber, options, error)
 py_nitf_Reader_newImageReader = _nitropy.py_nitf_Reader_newImageReader
 
-def py_nitf_Writer_newImageWriter(writer, index, options, error):
+def py_nitf_Writer_newImageWriter(writer: 'nitf_Writer', index: 'int', options: 'PyObject *', error: 'nrt_Error') -> "nitf_ImageWriter *":
     return _nitropy.py_nitf_Writer_newImageWriter(writer, index, options, error)
 py_nitf_Writer_newImageWriter = _nitropy.py_nitf_Writer_newImageWriter
 
-def py_nitf_MemorySource_construct(data, size, start, numBytesPerPixel, pixelSkip, error):
+def py_nitf_MemorySource_construct(data: 'long long', size: 'nitf_Off', start: 'nitf_Off', numBytesPerPixel: 'int', pixelSkip: 'int', error: 'nrt_Error') -> "nitf_BandSource *":
     return _nitropy.py_nitf_MemorySource_construct(data, size, start, numBytesPerPixel, pixelSkip, error)
 py_nitf_MemorySource_construct = _nitropy.py_nitf_MemorySource_construct
 
-def py_nitf_SegmentMemorySource_construct(data, size, start, byteSkip, copyData, error):
+def py_nitf_SegmentMemorySource_construct(data: 'long long', size: 'nitf_Off', start: 'nitf_Off', byteSkip: 'int', copyData: 'bool', error: 'nrt_Error') -> "nitf_SegmentSource *":
     return _nitropy.py_nitf_SegmentMemorySource_construct(data, size, start, byteSkip, copyData, error)
 py_nitf_SegmentMemorySource_construct = _nitropy.py_nitf_SegmentMemorySource_construct
 
-def py_SubWindow_construct(startRow, startCol, numRows, numCols, bandList, downSampler, error):
+def py_SubWindow_construct(startRow: 'int', startCol: 'int', numRows: 'int', numCols: 'int', bandList: 'PyObject *', downSampler: 'nitf_DownSampler', error: 'nrt_Error') -> "nitf_SubWindow *":
     return _nitropy.py_SubWindow_construct(startRow, startCol, numRows, numCols, bandList, downSampler, error)
 py_SubWindow_construct = _nitropy.py_SubWindow_construct
 
-def py_ImageReader_read(reader, window, nbpp, error):
+def py_ImageReader_read(reader: 'nitf_ImageReader', window: 'nitf_SubWindow', nbpp: 'int', error: 'nrt_Error') -> "PyObject *":
     return _nitropy.py_ImageReader_read(reader, window, nbpp, error)
 py_ImageReader_read = _nitropy.py_ImageReader_read
 
-def py_Pair_getFieldData(pair):
+def py_Pair_getFieldData(pair: 'nrt_Pair') -> "nitf_Field *":
     return _nitropy.py_Pair_getFieldData(pair)
 py_Pair_getFieldData = _nitropy.py_Pair_getFieldData
 
-def py_TREEnumerator_hasNext(it):
+def py_TREEnumerator_hasNext(it: 'nitf_TREEnumerator **') -> "PyObject *":
     return _nitropy.py_TREEnumerator_hasNext(it)
 py_TREEnumerator_hasNext = _nitropy.py_TREEnumerator_hasNext
 
-def py_TREEnumerator_next(it, error):
+def py_TREEnumerator_next(it: 'nitf_TREEnumerator', error: 'nrt_Error') -> "nitf_Pair *":
     return _nitropy.py_TREEnumerator_next(it, error)
 py_TREEnumerator_next = _nitropy.py_TREEnumerator_next
 
-def py_DataSource_read(source, size, error):
+def py_DataSource_read(source: 'nitf_DataSource', size: 'size_t', error: 'nrt_Error') -> "PyObject *":
     return _nitropy.py_DataSource_read(source, size, error)
 py_DataSource_read = _nitropy.py_DataSource_read
 
-def py_SegmentReader_read(reader, size, error):
+def py_SegmentReader_read(reader: 'nitf_SegmentReader', size: 'size_t', error: 'nrt_Error') -> "PyObject *":
     return _nitropy.py_SegmentReader_read(reader, size, error)
 py_SegmentReader_read = _nitropy.py_SegmentReader_read
 
-def py_IOHandle_read(handle, size, error):
+def py_IOHandle_read(handle: 'nitf_IOHandle', size: 'size_t', error: 'nrt_Error') -> "PyObject *":
     return _nitropy.py_IOHandle_read(handle, size, error)
 py_IOHandle_read = _nitropy.py_IOHandle_read
 # This file is compatible with both classic and new-style classes.
