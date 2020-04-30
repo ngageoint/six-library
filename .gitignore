@@ -1,26 +1,26 @@
 *.swp
 *~
 *.pyc
-
+__pycache__/
 # Build artifacts
 
 install/
 target/
+test_package/build/
 
 # Waf
-
 .waf-*
 waf-*
 .waf3-*
 waf3-*
 .lock-waf*
+build/waf*/
 
 # Eclipse
 .project
 .cproject
 
 # Drivers
-
 modules/drivers/fftw/fftw-2.1.5/
 modules/drivers/jpeg/jpeg-9/
 modules/drivers/j2k/openjpeg/openjpeg-2.3.0_mod/
@@ -30,5 +30,6 @@ modules/drivers/xml/xerces/xerces-c-3.1.1/
 modules/drivers/zlib/zlib-1.2.7/
 
 # VS
+.vs/
 project.sln
 .depproj/
