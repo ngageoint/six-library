@@ -10,9 +10,11 @@ The SIX (Sensor Independent XML) library was developed at the National Geospatia
 
 The SIX library is a cross-platform C++ API for reading and writing NGA's complex phase history (CPHD), complex (SICD), and derived (SIDD) sensor independent radar formats; Python bindings are gradually being added as well.  Additionally it is the official reference implementation library for the [SIDD](https://github.com/ngageoint/six-library/wiki/Sensor-Independent-Derived-Data-(SIDD)-Standard) format. The library also provides a [sensor model implementation](https://github.com/ngageoint/six-library/wiki) of many equations in the SICD and SIDD document.  This sensor model implementation provides the foundations for the SICD and SIDD [CSM](https://github.com/sminster/csm) (Community Sensor Model) implementation.
 
-It is available as open-source software under the Lesser GNU Public License (LGPL). This license is commonly used in the open-source community, and allows applications that are not open source to make use of the library without penalty. As with other open source projects, the library is available as-is, with no warranty. 
+It is available as open-source software under the Lesser GNU Public License (LGPL). This license is commonly used in the open-source community, and allows applications that are not open source to make use of the library without penalty. As with other open source projects, the library is available as-is, with no warranty.
 
 See the [manual](https://github.com/ngageoint/six-library/blob/master/docs/six-manual.pdf) for detailed information including build instructions and API documentation.
+
+A preliminary CMake build system is available on Linux and Windows. See [coda-oss CMake README.md](externals/coda-oss/cmake/README.md) and [nitro README.md](externals/nitro/README.md) for information on how to build using CMake. The same configuration options may be passed to SIX.
 
 The latest version of the library is available at https://github.com/ngageoint/six-library.git.
 

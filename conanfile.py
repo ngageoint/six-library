@@ -23,6 +23,7 @@ class SixConan(ConanFile):
                        "LICENSE",
                        "README.md",
                        "cmake/*",
+                       "croppedNitfs/*",
                        "six/*",
                        )
     generators = "cmake_paths"
