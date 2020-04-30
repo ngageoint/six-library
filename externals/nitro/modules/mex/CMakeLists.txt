@@ -1,3 +1,4 @@
+include(FindMatlab)
 find_package(Matlab)
 
 function(add_mex_module name extension dependencies)
@@ -6,7 +7,7 @@ function(add_mex_module name extension dependencies)
                        nitf/${name}.def
                        nitf/${name}-64.def
                    LINK_TO ${dependencies})
-    install(TARGETS ${name} DESTINATION ${CMAKE_INSTALL_PREFIX}/mex)
+    install(TARGETS ${name} DESTINATION "mex")
 endfunction()
 
 if (Matlab_FOUND)

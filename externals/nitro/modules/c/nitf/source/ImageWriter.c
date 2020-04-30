@@ -236,8 +236,11 @@ NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
     /* Check for compression and get compression interface */
     /* get the compression string */
 
-    nitf_Field_get(subheader->NITF_IC,
-            compBuf, NITF_CONV_STRING, NITF_IC_SZ + 1, error);
+    if (!nitf_Field_get(subheader->NITF_IC,
+            compBuf, NITF_CONV_STRING, NITF_IC_SZ + 1, error))
+   {
+       goto CATCH_ERROR;
+   }
 
     if(memcmp(compBuf, "NC", 2) != 0 && memcmp(compBuf, "NM", 2) != 0)
     {

@@ -19,8 +19,8 @@ function(add_java_module target java_files c_files jars)
     set_target_properties(${target}-jni PROPERTIES SUFFIX .jni-c.so)
     set_target_properties(${target}-jni PROPERTIES OUTPUT_NAME ${target})
     target_link_libraries(${target}-jni ${JNI_LIBRARIES} nrt-c nitf-c cgm-c)
-    install(TARGETS ${target}-jni DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-    install(FILES ${jar_file} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+    install(TARGETS ${target}-jni DESTINATION lib)
+    install(FILES ${jar_file} DESTINATION lib)
 endfunction()
 
 if (NOT JNI_FOUND)
@@ -30,14 +30,11 @@ elseif(NOT Java_FOUND)
 else()
     set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.5" "-target" "1.5")
 
-    # CODA doesn't know how to install jars, so we'll handle it here
-    set(jar_path ${CODA_DIR}/modules/drivers/jars)
-    set(coda_jars ${jar_path}/commons-io-1.3.2.jar
-                  ${jar_path}/commons-cli-1.0-beta-2.jar
-                  ${jar_path}/commons-lang-2.0.jar
-                  ${jar_path}/commons-logging-1.1.1.jar
-                  ${jar_path}/log4j-1.2.13.jar)
-    install(FILES ${coda_jars} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+    set(coda_jars "${CODA-OSS_JARS_DIR}/commons-io-1.3.2.jar"
+                  "${CODA-OSS_JARS_DIR}/commons-cli-1.0-beta-2.jar"
+                  "${CODA-OSS_JARS_DIR}/commons-lang-2.0.jar"
+                  "${CODA-OSS_JARS_DIR}/commons-logging-1.1.1.jar"
+                  "${CODA-OSS_JARS_DIR}/log4j-1.2.13.jar")
 
     add_subdirectory(nitf)
     add_subdirectory(cgm)
