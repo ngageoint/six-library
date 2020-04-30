@@ -1,16 +1,30 @@
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/j2k/j2k_config.h.cmake.in
-               ${CMAKE_CURRENT_BINARY_DIR}/include/j2k/j2k_config.h)
+set(MODULE_NAME j2k)
 
-add_library(j2k-c source/Container.c
-                  source/Component.c
-                  source/JasPerImpl.c
-                  source/OpenJPEGImpl.c
-                  source/Reader.c
-                  source/SimpleComponentImpl.c
-                  source/SimpleContainerImpl.c
-                  source/Writer.c)
+if (TARGET openjpeg)
+    set(HAVE_OPENJPEG_H 1)
+endif()
 
-common_module_config(j2k-c)
-add_dependencies(j2k-c coda-oss)
+coda_generate_module_config_header(${MODULE_NAME})
 
-target_link_libraries(j2k-c j2k_config J2K nitf-c)
+coda_add_module(
+    ${MODULE_NAME}
+    DEPS ${J2K_LIB} nitf-c nrt-c
+    SOURCES
+        source/Container.c
+        source/Component.c
+        source/JasPerImpl.c
+        source/OpenJPEGImpl.c
+        source/Reader.c
+        source/SimpleComponentImpl.c
+        source/SimpleContainerImpl.c
+        source/Writer.c)
+
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "tests"
+    SOURCES
+        test_j2k_create.c
+        test_j2k_header.c
+        test_j2k_nitf.c
+        test_j2k_read_region.c
+        test_j2k_read_tile.c)

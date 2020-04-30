@@ -1,51 +1,50 @@
-# CODA_OSS uses FetchContent, which requires 3.11, in the zlib build
-#   It might be possible to rework if this has to work with older CMakes
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.14)
+project(nitro)
 
-project("nitro")
+set(CMAKE_C_STANDARD 90)
+set(CMAKE_CXX_STANDARD 11)
 
-include(common_build.cmake)
+if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
+    # we are the top-level project and are responsible for configuration
 
-if(PYTHON_HOME)
-    set(Python_ROOT_DIR ${PYTHON_HOME})
+    # set up warnings
+    if (MSVC)
+        # set warning level to /W3
+        string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        add_compile_options(/W3 /wd4290 /wd4512)
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
+    elseif (UNIX)
+        add_compile_options(
+            -Wno-deprecated
+            -Wno-unused-value
+            -Wno-unused-but-set-variable
+        )
+    endif()
+
+    if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
+        # use pre-built coda-oss from conan package
+        include("${CMAKE_BINARY_DIR}/conan_paths.cmake")
+        find_package(coda-oss REQUIRED)
+        include(CodaBuild)
+        coda_initialize_build()
+    else()
+        # build coda-oss ourselves
+
+        # disable some unneeded drivers from coda-oss
+        set(ENABLE_PCRE OFF CACHE BOOL "enable PCRE library" FORCE)
+        set(ENABLE_UUID OFF CACHE BOOL "enable uuid library" FORCE)
+        set(ENABLE_ZIP OFF CACHE BOOL "enable ZIP library" FORCE)
+
+        list(APPEND CMAKE_MODULE_PATH
+             "${CMAKE_CURRENT_SOURCE_DIR}/externals/coda-oss/cmake")
+        include(CodaBuild)
+        coda_initialize_build()
+        add_subdirectory("externals/coda-oss")
+    endif()
 endif()
 
-find_package(Python COMPONENTS Interpreter Development NumPy)
-list(APPEND coda_modules except-c++ io-c++ sys-c++ mt-c++ str-c++
-                         math-c++ xml.lite-c++ JPEG J2K)
-
-if (Python_NumPy_FOUND AND NOT MSVC)
-    list(APPEND coda_modules numpyutils-c++)
-endif()
-if (Python_FOUND)
-    set(PYTHON ${Python_EXECUTABLE})
-else()
-    set(PYTHON python)
-endif()
-
-if (NOT DEFINED CODA_INSTALL_DIR)
-    include(CMakeLists-CODA.txt)
-else()
-    add_library(coda-oss INTERFACE)
-endif()
-
-foreach(module ${coda_modules})
-    add_coda_module(${module})
-endforeach()
-
-add_library(coda_oss_config INTERFACE)
-target_include_directories(coda_oss_config INTERFACE ${CODA_DIR}/target/moudules/c++/config/include/)
-add_dependencies(coda_oss_config coda-oss)
-
-# Everyone can include coda's headers
-include_directories(${CODA_INSTALL_DIR}/include)
-
-enable_testing()
 set(NITRO_C_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/c)
-add_subdirectory(modules/c)
-add_subdirectory(modules/c++)
-if (NOT MSVC)
-    add_subdirectory(modules/python)
-endif()
-add_subdirectory(modules/java)
-add_subdirectory(modules/mex)
+add_subdirectory("modules")
+
+coda_generate_package_config()

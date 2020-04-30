@@ -44,8 +44,8 @@ DESegment::DESegment(nitf_DESegment * x)
 
 DESegment::DESegment()
 {
-    setNative(nitf_DESegment_construct(&error));
-    getNativeOrThrow();
+    auto* deSegment = nitf_DESegment_construct(&error);
+    setNativeOrThrow(deSegment, &error);
     setManaged(false);
 }
 

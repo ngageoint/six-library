@@ -26,27 +26,24 @@ using namespace nitf;
 
 ImageWriter::ImageWriter(nitf::ImageSubheader& subheader)
 {
-    setNative(nitf_ImageWriter_construct(subheader.getNative(), NULL, &error));
+    auto* writer =
+            nitf_ImageWriter_construct(subheader.getNative(), NULL, &error);
+    setNativeOrThrow(writer, &error);
 }
 
 ImageWriter::~ImageWriter()
 {
-    //    if (mAdopt && mImageSource)
-    //    {
-    //        mImageSource->decRef();
-    //        delete mImageSource;
-    //    }
 }
 
 void ImageWriter::attachSource(nitf::ImageSource imageSource)
 {
     if (!nitf_ImageWriter_attachSource(getNativeOrThrow(),
-                                       imageSource.getNative(), &error))
+                                       imageSource.getNative(),
+                                       &error))
+    {
         throw nitf::NITFException(&error);
+    }
     imageSource.setManaged(true);
-    //    imageSource->incRef();
-    //    mImageSource = imageSource;
-    //    mAdopt = adopt;
 }
 
 void ImageWriter::setWriteCaching(int enable)
@@ -56,7 +53,9 @@ void ImageWriter::setWriteCaching(int enable)
 
 void ImageWriter::setDirectBlockWrite(int enable)
 {
-    if (!nitf_ImageWriter_setDirectBlockWrite(getNativeOrThrow(), enable, &error))
+    if (!nitf_ImageWriter_setDirectBlockWrite(getNativeOrThrow(),
+                                              enable,
+                                              &error))
     {
         throw nitf::NITFException(&error);
     }
@@ -64,6 +63,9 @@ void ImageWriter::setDirectBlockWrite(int enable)
 
 void ImageWriter::setPadPixel(nitf::Uint8* value, nitf::Uint32 length)
 {
-    if (!nitf_ImageWriter_setPadPixel(getNativeOrThrow(), value, length, &error))
+    if (!nitf_ImageWriter_setPadPixel(
+                getNativeOrThrow(), value, length, &error))
+    {
         throw nitf::NITFException(&error);
+    }
 }

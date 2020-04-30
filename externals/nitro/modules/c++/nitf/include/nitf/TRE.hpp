@@ -226,21 +226,80 @@ DECLARE_CLASS(TRE)
     nitf::List find(const std::string& pattern);
 
     /*!
+     * Recalculate the field counts and positions for the TRE.
+     * This might be necessary if, for example, you need to
+     * change the number of iterations in a loop.
+     *
+     * setField does not do this by default, because some
+     * applications want to set each field all at once.
+     * If the TRE is large, recalculating the metadata each time
+     * you change something becomes expensive.
+     *
+     * If you find yourself writing code that looks like this:
+     *
+     *  tre.setField("key", value);
+     *  tre.updateFields();
+     *  tre.setField("key2", value);
+     *  tre.updateFields();
+     *  tre.setField("key3", value);
+     *  tre.updateFields();
+     *
+     * You probably want to run an iterator over the TRE instead.
+     * The incrementing will automatically figure out any changed
+     * positioning due to loops or conditionals as it goes, and it
+     * will be faster.
+     *
+     * In short, this is here if you need it, but if you're needing
+     * it frequently you should open an issue/look for a better solution
+     */
+    void updateFields();
+
+    /*!
      * Sets the field with the given value. The input value
      * is converted to a std::string, and the string-ized value
      * is then used as the value input for the TRE field.
+     * \param key The name of the field to set
+     * \param value New value for specified field
+     * \param forceUpdate If true, recalculate the number and positions
+     *                    of the TRE fields. See `updateFields()`
      */
     template <typename T>
-    void setField(std::string key, T value)
+    void setField(std::string key, T value, bool forceUpdate = false)
     {
-        std::string s = str::toString<T>(value);
-        if (!nitf_TRE_setField(getNative(),
-                               key.c_str(),
-                               (NITF_DATA*)s.c_str(),
-                               s.size(),
-                               &error))
+        nitf_Field* field = nitf_TRE_getField(getNative(), key.c_str());
+        if (!field)
         {
-            throw NITFException(&error);
+            std::ostringstream msg;
+            msg << key << " is not a recognized field for this TRE";
+            throw except::Exception(Ctxt(msg.str()));
+        }
+        if (field->type == NITF_BINARY)
+        {
+            if (!nitf_TRE_setField(getNative(),
+                                   key.c_str(),
+                                   &value,
+                                   sizeof(value),
+                                   &error))
+            {
+                throw NITFException(&error);
+            }
+        }
+        else
+        {
+            std::string s = truncate(str::toString(value), field->length);
+            if (!nitf_TRE_setField(getNative(),
+                                   key.c_str(),
+                                   (NITF_DATA*)s.c_str(),
+                                   s.size(),
+                                   &error))
+            {
+                throw NITFException(&error);
+            }
+        }
+
+        if (forceUpdate)
+        {
+            updateFields();
         }
     }
 
@@ -268,6 +327,8 @@ DECLARE_CLASS(TRE)
     std::string getID() const;
 
     private:
+    std::string truncate(const std::string& value, size_t maxDigits);
+
     nitf_Error error;
 };
 }
