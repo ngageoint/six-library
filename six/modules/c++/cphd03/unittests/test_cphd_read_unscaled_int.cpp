@@ -31,7 +31,6 @@
 #include <cphd03/CPHDWriter.h>
 #include <cphd/Wideband.h>
 #include <types/RowCol.h>
-#include <cli/ArgumentParser.h>
 #include <io/TempFile.h>
 
 #include "TestCase.h"

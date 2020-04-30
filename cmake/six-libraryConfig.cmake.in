@@ -1,0 +1,9 @@
+@PACKAGE_INIT@
+
+# import coda-oss and nitro targets from their packages
+include(CMakeFindDependencyMacro)
+find_dependency(coda-oss)
+find_dependency(nitro)
+
+# import six-library targets
+include("${CMAKE_CURRENT_LIST_DIR}/six-libraryTargets.cmake")
