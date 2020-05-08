@@ -28,6 +28,7 @@
 #include <import/io.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDXMLControl.h>
+#include "utils.h"
 
 /*!
  *  This extracts raw XML from a CPHD file using the CPHD module
@@ -57,7 +58,8 @@ int main(int argc, char** argv)
         std::string basename = options->get<std::string>("basename");
         const bool toConsole = options->get<bool>("console");
         const std::string inputFile = options->get<std::string> ("cphd");
-        const std::string schemaFile = options->get<std::string> ("schema");
+        std::vector<std::string> schemaPathnames;
+        getSchemaPaths(*options, "schema", "schema", schemaPathnames);
 
         // Check for conflicting input
         if (!basename.empty() && toConsole)
@@ -72,9 +74,6 @@ int main(int argc, char** argv)
             basename = sys::Path::basename(inputFile, true);
         }
         std::string outPathname = basename  + ".xml";
-
-        std::vector<std::string> schemaPathnames;
-        schemaPathnames.push_back(schemaFile);
 
         // Reads in CPHD and verifies XML using schema
         cphd::CPHDReader reader(inputFile, sys::OS().getNumCPUs());
