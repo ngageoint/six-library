@@ -23,7 +23,7 @@ add_sample(test_compare_sidd                    cli-c++ six.sicd-c++ six.sidd-c+
 add_sample(test_create_sicd                     cli-c++ six.sicd-c++ sio.lite-c++)
 add_sample(test_create_sicd_from_mem            cli-c++ six.sicd-c++)
 add_sample(test_create_sidd                     cli-c++ six.sicd-c++ six.sidd-c++ sio.lite-c++)
-add_sample(test_create_sidd_from_mem            cli-c++ six.sicd-c++ six.sidd-c++)
+add_sample(test_create_sidd_from_mem            cli-c++ six-c++ six.sicd-c++ six.sidd-c++)
 add_sample(test_create_sidd_legend              cli-c++ six.sidd-c++)
 add_sample(test_create_sidd_with_compressed_byte_provider   cli-c++ six.sidd-c++)
 add_sample(test_dump_images                     cli-c++ six.sicd-c++ six.sidd-c++ sio.lite-c++)
