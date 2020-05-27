@@ -920,37 +920,12 @@
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="GeographicAndTargetType">
-        <xs:annotation>
-            <xs:documentation>This block describes the geographic coordinates of the region covered by the image.</xs:documentation>
-        </xs:annotation>
+    <xs:complexType name="GeoDataType">
         <xs:sequence>
-            <xs:element name="EarthModel" type="EarthModelType">
-                <xs:annotation>
-                    <xs:documentation>Identifies the earth model used for latitude, longitude and height parameters. All height values are Height Above The Ellipsoid (HAE).</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="ImageCorners" type="ImageCornersType">
-                <xs:annotation>
-                    <xs:documentation>
-                        Parameters apply to image corners of the product projected to the same height as the SCP.
-                        These corners are an approximate geographic location that is not intended for analytical use.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="ValidData" type="PolygonType" minOccurs="1">
-                <xs:annotation>
-                    <xs:documentation>
-                        Indicates the full image includes both valid data and some zero filled pixels.
-                        Simple convex polygon enclosed the valid data (may include some zero filled pixels for simplification). Vertices in clockwise order.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element ref="sicommon:GeoInfo" minOccurs="0" maxOccurs="unbounded">
-                <xs:annotation>
-                    <xs:documentation>Parameters describing geographic features. Note: the GeoInfo block may be used as a block within itself.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
+            <xs:element name="EarthModel" type="EarthModelType"/>
+            <xs:element name="ImageCorners" type="ImageCornersType"/>
+            <xs:element name="ValidData" type="PolygonType"/>
+            <xs:element ref="sicommon:GeoInfo" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     <xs:simpleType name="EarthModelType">
@@ -1673,9 +1648,9 @@
                         <xs:documentation>Contains information on the parameters needed to display the product in an exploitation tool.</xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="GeographicAndTarget" type="GeographicAndTargetType">
+                <xs:element name="GeoData" type="GeoDataType">
                     <xs:annotation>
-                        <xs:documentation>Contains generic and extensible targeting and geographic region information.</xs:documentation>
+                        <xs:documentation>Contains geographic data.</xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="Measurement" type="MeasurementType">

@@ -20,10 +20,11 @@
  *
  */
 
-#ifndef __SIX_SIDD_DERIVED_Elem_PARSER_200_H__
-#define __SIX_SIDD_DERIVED_Elem_PARSER_200_H__
+#ifndef __SIX_SIDD_DERIVED_XML_PARSER_200_H__
+#define __SIX_SIDD_DERIVED_XML_PARSER_200_H__
 
 #include <six/sidd/DerivedXMLParser.h>
+#include <six/GeoDataBase.h>
 
 namespace six
 {
@@ -124,6 +125,9 @@ private:
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
                                          XMLElem parent = NULL) const;
 
+    XMLElem convertGeoDataToXML(const GeoDataBase* g,
+                                XMLElem parent = NULL) const;
+
     XMLElem convertDigitalElevationDataToXML(const DigitalElevationData& ded,
                                              XMLElem parent = NULL) const;
 
@@ -133,6 +137,9 @@ private:
     void parseGeographicTargetFromXML(
             const XMLElem elem,
             GeographicAndTarget& geographicAndTarget) const;
+
+    void parseGeoDataFromXML(
+            const XMLElem elem, GeoDataBase* geoData) const;
 
     void parseDigitalElevationDataFromXML(const XMLElem elem,
                                           DigitalElevationData& ded) const;

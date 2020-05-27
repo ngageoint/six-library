@@ -47,6 +47,14 @@ DerivedDataBuilder& DerivedDataBuilder::addDisplay(PixelType pixelType)
     return *this;
 }
 
+DerivedDataBuilder& DerivedDataBuilder::addGeoData()
+{
+    mData->geoData.reset(new six::GeoDataBase());
+
+    return *this;
+}
+
+
 DerivedDataBuilder& DerivedDataBuilder::addGeographicAndTarget()
 {
     mData->geographicAndTarget.reset(new GeographicAndTarget());

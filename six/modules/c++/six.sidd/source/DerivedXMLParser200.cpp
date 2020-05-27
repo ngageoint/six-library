@@ -115,7 +115,7 @@ DerivedData* DerivedXMLParser200::fromXML(
 
     XMLElem productCreationElem        = getFirstAndOnly(root, "ProductCreation");
     XMLElem displayElem                = getFirstAndOnly(root, "Display");
-    XMLElem geographicAndTargetElem    = getFirstAndOnly(root, "GeographicAndTarget");
+    XMLElem geoDataElem                = getFirstAndOnly(root, "GeoData");
     XMLElem measurementElem            = getFirstAndOnly(root, "Measurement");
     XMLElem exploitationFeaturesElem   = getFirstAndOnly(root, "ExploitationFeatures");
     XMLElem productProcessingElem      = getOptional(root, "ProductProcessing");
@@ -136,8 +136,8 @@ DerivedData* DerivedXMLParser200::fromXML(
             getFirstAndOnly(displayElem, "PixelType")->getCharacterData());
     builder.addDisplay(pixelType);
 
-    // create GeographicAndTarget
-    builder.addGeographicAndTarget();
+    // create GeoData
+    builder.addGeoData();
 
     // create Measurement
     six::ProjectionType projType = ProjectionType::NOT_SET;
@@ -159,7 +159,7 @@ DerivedData* DerivedXMLParser200::fromXML(
 
     parseProductCreationFromXML(productCreationElem, data->productCreation.get());
     parseDisplayFromXML(displayElem, *data->display);
-    parseGeographicTargetFromXML(geographicAndTargetElem, *data->geographicAndTarget);
+    parseGeoDataFromXML(geoDataElem, data->geoData.get());
     parseMeasurementFromXML(measurementElem, data->measurement.get());
     parseExploitationFeaturesFromXML(exploitationFeaturesElem, data->exploitationFeatures.get());
 
@@ -225,7 +225,7 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
 
     convertProductCreationToXML(derived->productCreation.get(), root);
     convertDisplayToXML(*derived->display, root);
-    convertGeographicTargetToXML(*derived->geographicAndTarget, root);
+    convertGeoDataToXML(derived->geoData.get(), root);
     convertMeasurementToXML(derived->measurement.get(), root);
     convertExploitationFeaturesToXML(derived->exploitationFeatures.get(),
                                      root);
@@ -285,6 +285,10 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("si", SI_COMMON_URI);
     root->setNamespacePrefix("sfa", SFA_URI);
     root->setNamespacePrefix("ism", ISM_URI);
+
+    // io::StringStream ss;
+    // root->prettyPrint(ss);
+    // std::cout << ss.stream().str() << std::endl;
 
     return doc;
 }
@@ -1805,6 +1809,40 @@ XMLElem DerivedXMLParser200::convertGeographicTargetToXML(
     return geographicAndTargetElem;
 }
 
+XMLElem DerivedXMLParser200::convertGeoDataToXML(
+        const GeoDataBase* geoData,
+        XMLElem parent) const
+{
+    XMLElem geoDataXML = newElement("GeoData", parent);
+
+    common().createEarthModelType("EarthModel", geoData->earthModel, geoDataXML);
+
+    common().createLatLonFootprint("ImageCorners", "ICP", geoData->imageCorners, geoDataXML);
+
+    //only if 3+ vertices
+    const size_t numVertices = geoData->validData.size();
+    if (numVertices >= 3)
+    {
+        XMLElem vXML = newElement("ValidData", geoDataXML);
+        setAttribute(vXML, "size", str::toString(numVertices));
+
+        for (size_t ii = 0; ii < numVertices; ++ii)
+        {
+            XMLElem vertexXML = common().createLatLon("Vertex", geoData->validData[ii],
+                                                      vXML);
+            setAttribute(vertexXML, "index", str::toString(ii + 1));
+        }
+    }
+
+    for (size_t ii = 0; ii < geoData->geoInfos.size(); ++ii)
+    {
+        common().convertGeoInfoToXML(*geoData->geoInfos[ii].get(), true, geoDataXML);
+    }
+
+    return geoDataXML;
+}
+
+
 XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
         const DigitalElevationData& ded,
         XMLElem parent) const
@@ -1899,6 +1937,37 @@ void DerivedXMLParser200::parseGeographicTargetFromXML(
         common().parseGeoInfoFromXML(*it, geographicAndTarget.geoInfos[idx].get());
     }
 }
+
+void DerivedXMLParser200::parseGeoDataFromXML(
+    const XMLElem geoDataXML, GeoDataBase* geoData) const
+{
+    common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
+                        geoData->earthModel);
+
+    common().parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP",
+                   geoData->imageCorners);
+
+    XMLElem tmpElem = getOptional(geoDataXML, "ValidData");
+    if (tmpElem != NULL)
+    {
+        common().parseLatLons(tmpElem, "Vertex", geoData->validData);
+    }
+
+    std::vector < XMLElem > geoInfosXML;
+    geoDataXML->getElementsByTagName("GeoInfo", geoInfosXML);
+
+    //optional
+    size_t idx(geoData->geoInfos.size());
+    geoData->geoInfos.resize(idx + geoInfosXML.size());
+
+    for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
+            != geoInfosXML.end(); ++it, ++idx)
+    {
+        geoData->geoInfos[idx].reset(new GeoInfo());
+        common().parseGeoInfoFromXML(*it, geoData->geoInfos[idx].get());
+    }
+}
+
 
 void DerivedXMLParser200::parseMeasurementFromXML(
         const XMLElem measurementElem,
