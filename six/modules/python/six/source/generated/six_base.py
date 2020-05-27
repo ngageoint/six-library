@@ -4671,6 +4671,53 @@ GeoInfo_swigregister(GeoInfo)
 def __lshift__(os: 'std::ostream &', g: 'GeoInfo') -> "std::ostream &":
     """__lshift__(std::ostream & os, GeoInfo g) -> std::ostream &"""
     return _six_base.__lshift__(os, g)
+class GeoDataBase(_object):
+    """Proxy of C++ six::GeoDataBase class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GeoDataBase, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, GeoDataBase, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(six::GeoDataBase self) -> GeoDataBase"""
+        this = _six_base.new_GeoDataBase()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_setmethods__["earthModel"] = _six_base.GeoDataBase_earthModel_set
+    __swig_getmethods__["earthModel"] = _six_base.GeoDataBase_earthModel_get
+    if _newclass:
+        earthModel = _swig_property(_six_base.GeoDataBase_earthModel_get, _six_base.GeoDataBase_earthModel_set)
+    __swig_setmethods__["imageCorners"] = _six_base.GeoDataBase_imageCorners_set
+    __swig_getmethods__["imageCorners"] = _six_base.GeoDataBase_imageCorners_get
+    if _newclass:
+        imageCorners = _swig_property(_six_base.GeoDataBase_imageCorners_get, _six_base.GeoDataBase_imageCorners_set)
+    __swig_setmethods__["validData"] = _six_base.GeoDataBase_validData_set
+    __swig_getmethods__["validData"] = _six_base.GeoDataBase_validData_get
+    if _newclass:
+        validData = _swig_property(_six_base.GeoDataBase_validData_get, _six_base.GeoDataBase_validData_set)
+    __swig_setmethods__["geoInfos"] = _six_base.GeoDataBase_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_base.GeoDataBase_geoInfos_get
+    if _newclass:
+        geoInfos = _swig_property(_six_base.GeoDataBase_geoInfos_get, _six_base.GeoDataBase_geoInfos_set)
+
+    def __eq__(self, rhs: 'GeoDataBase') -> "bool":
+        """__eq__(GeoDataBase self, GeoDataBase rhs) -> bool"""
+        return _six_base.GeoDataBase___eq__(self, rhs)
+
+
+    def __ne__(self, rhs: 'GeoDataBase') -> "bool":
+        """__ne__(GeoDataBase self, GeoDataBase rhs) -> bool"""
+        return _six_base.GeoDataBase___ne__(self, rhs)
+
+    __swig_destroy__ = _six_base.delete_GeoDataBase
+    __del__ = lambda self: None
+GeoDataBase_swigregister = _six_base.GeoDataBase_swigregister
+GeoDataBase_swigregister(GeoDataBase)
+
 class LatLonCorners(_object):
     """Proxy of C++ six::Corners<(scene::LatLon)> class."""
 

@@ -3102,92 +3102,93 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_six__EarthModelType swig_types[92]
 #define SWIGTYPE_p_six__ErrorStatistics swig_types[93]
 #define SWIGTYPE_p_six__FFTSign swig_types[94]
-#define SWIGTYPE_p_six__GeoInfo swig_types[95]
-#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[96]
-#define SWIGTYPE_p_six__ImageFormationType swig_types[97]
-#define SWIGTYPE_p_six__Init swig_types[98]
-#define SWIGTYPE_p_six__IonoError swig_types[99]
-#define SWIGTYPE_p_six__LUT swig_types[100]
-#define SWIGTYPE_p_six__MagnificationMethod swig_types[101]
-#define SWIGTYPE_p_six__MatchCollect swig_types[102]
-#define SWIGTYPE_p_six__MatchInformation swig_types[103]
-#define SWIGTYPE_p_six__MatchType swig_types[104]
-#define SWIGTYPE_p_six__MissingRequiredException swig_types[105]
-#define SWIGTYPE_p_six__NoiseLevel swig_types[106]
-#define SWIGTYPE_p_six__Options swig_types[107]
-#define SWIGTYPE_p_six__OrientationType swig_types[108]
-#define SWIGTYPE_p_six__Parameter swig_types[109]
-#define SWIGTYPE_p_six__ParameterCollection swig_types[110]
-#define SWIGTYPE_p_six__PixelType swig_types[111]
-#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[112]
-#define SWIGTYPE_p_six__PolarizationType swig_types[113]
-#define SWIGTYPE_p_six__PosVelError swig_types[114]
-#define SWIGTYPE_p_six__ProjectionType swig_types[115]
-#define SWIGTYPE_p_six__RMAlgoType swig_types[116]
-#define SWIGTYPE_p_six__RadarModeType swig_types[117]
-#define SWIGTYPE_p_six__RadarSensor swig_types[118]
-#define SWIGTYPE_p_six__Radiometric swig_types[119]
-#define SWIGTYPE_p_six__ReferencePoint swig_types[120]
-#define SWIGTYPE_p_six__RegionType swig_types[121]
-#define SWIGTYPE_p_six__RowColEnum swig_types[122]
-#define SWIGTYPE_p_six__SCP swig_types[123]
-#define SWIGTYPE_p_six__SCPType swig_types[124]
-#define SWIGTYPE_p_six__SideOfTrackType swig_types[125]
-#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[126]
-#define SWIGTYPE_p_six__TropoError swig_types[127]
-#define SWIGTYPE_p_six__UninitializedValueException swig_types[128]
-#define SWIGTYPE_p_six__XMLControl swig_types[129]
-#define SWIGTYPE_p_six__XMLControlCreator swig_types[130]
-#define SWIGTYPE_p_six__XMLControlRegistry swig_types[131]
-#define SWIGTYPE_p_six__XYZEnum swig_types[132]
-#define SWIGTYPE_p_size_t swig_types[133]
-#define SWIGTYPE_p_size_type swig_types[134]
-#define SWIGTYPE_p_ssize_t swig_types[135]
-#define SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t swig_types[136]
-#define SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t swig_types[137]
-#define SWIGTYPE_p_std__allocatorT_six__MatchCollect_t swig_types[138]
-#define SWIGTYPE_p_std__allocatorT_six__MatchType_t swig_types[139]
-#define SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t swig_types[140]
-#define SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t swig_types[141]
-#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[142]
-#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[143]
-#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[144]
-#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[145]
-#define SWIGTYPE_p_std__auto_ptrT_six__GeoInfo_t swig_types[146]
-#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[147]
-#define SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t swig_types[148]
-#define SWIGTYPE_p_std__auto_ptrT_six__MatchType_t swig_types[149]
-#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[150]
-#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[151]
-#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[152]
-#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[153]
-#define SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t swig_types[154]
-#define SWIGTYPE_p_std__invalid_argument swig_types[155]
-#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[156]
-#define SWIGTYPE_p_std__ostream swig_types[157]
-#define SWIGTYPE_p_std__string swig_types[158]
-#define SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t swig_types[159]
-#define SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t swig_types[160]
-#define SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t swig_types[161]
-#define SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t swig_types[162]
-#define SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t swig_types[163]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[164]
-#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[165]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[166]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[167]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[168]
-#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[169]
-#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[170]
-#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[171]
-#define SWIGTYPE_p_uint16_t swig_types[172]
-#define SWIGTYPE_p_uint32_t swig_types[173]
-#define SWIGTYPE_p_uint64_t swig_types[174]
-#define SWIGTYPE_p_uint8_t swig_types[175]
-#define SWIGTYPE_p_unsigned_char swig_types[176]
-#define SWIGTYPE_p_value_type swig_types[177]
-#define SWIGTYPE_p_xml__lite__Document swig_types[178]
-static swig_type_info *swig_types[180];
-static swig_module_info swig_module = {swig_types, 179, 0, 0, 0, 0};
+#define SWIGTYPE_p_six__GeoDataBase swig_types[95]
+#define SWIGTYPE_p_six__GeoInfo swig_types[96]
+#define SWIGTYPE_p_six__ImageBeamCompensationType swig_types[97]
+#define SWIGTYPE_p_six__ImageFormationType swig_types[98]
+#define SWIGTYPE_p_six__Init swig_types[99]
+#define SWIGTYPE_p_six__IonoError swig_types[100]
+#define SWIGTYPE_p_six__LUT swig_types[101]
+#define SWIGTYPE_p_six__MagnificationMethod swig_types[102]
+#define SWIGTYPE_p_six__MatchCollect swig_types[103]
+#define SWIGTYPE_p_six__MatchInformation swig_types[104]
+#define SWIGTYPE_p_six__MatchType swig_types[105]
+#define SWIGTYPE_p_six__MissingRequiredException swig_types[106]
+#define SWIGTYPE_p_six__NoiseLevel swig_types[107]
+#define SWIGTYPE_p_six__Options swig_types[108]
+#define SWIGTYPE_p_six__OrientationType swig_types[109]
+#define SWIGTYPE_p_six__Parameter swig_types[110]
+#define SWIGTYPE_p_six__ParameterCollection swig_types[111]
+#define SWIGTYPE_p_six__PixelType swig_types[112]
+#define SWIGTYPE_p_six__PolarizationSequenceType swig_types[113]
+#define SWIGTYPE_p_six__PolarizationType swig_types[114]
+#define SWIGTYPE_p_six__PosVelError swig_types[115]
+#define SWIGTYPE_p_six__ProjectionType swig_types[116]
+#define SWIGTYPE_p_six__RMAlgoType swig_types[117]
+#define SWIGTYPE_p_six__RadarModeType swig_types[118]
+#define SWIGTYPE_p_six__RadarSensor swig_types[119]
+#define SWIGTYPE_p_six__Radiometric swig_types[120]
+#define SWIGTYPE_p_six__ReferencePoint swig_types[121]
+#define SWIGTYPE_p_six__RegionType swig_types[122]
+#define SWIGTYPE_p_six__RowColEnum swig_types[123]
+#define SWIGTYPE_p_six__SCP swig_types[124]
+#define SWIGTYPE_p_six__SCPType swig_types[125]
+#define SWIGTYPE_p_six__SideOfTrackType swig_types[126]
+#define SWIGTYPE_p_six__SlowTimeBeamCompensationType swig_types[127]
+#define SWIGTYPE_p_six__TropoError swig_types[128]
+#define SWIGTYPE_p_six__UninitializedValueException swig_types[129]
+#define SWIGTYPE_p_six__XMLControl swig_types[130]
+#define SWIGTYPE_p_six__XMLControlCreator swig_types[131]
+#define SWIGTYPE_p_six__XMLControlRegistry swig_types[132]
+#define SWIGTYPE_p_six__XYZEnum swig_types[133]
+#define SWIGTYPE_p_size_t swig_types[134]
+#define SWIGTYPE_p_size_type swig_types[135]
+#define SWIGTYPE_p_ssize_t swig_types[136]
+#define SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t swig_types[137]
+#define SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t swig_types[138]
+#define SWIGTYPE_p_std__allocatorT_six__MatchCollect_t swig_types[139]
+#define SWIGTYPE_p_std__allocatorT_six__MatchType_t swig_types[140]
+#define SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t swig_types[141]
+#define SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t swig_types[142]
+#define SWIGTYPE_p_std__auto_ptrT_six__Components_t swig_types[143]
+#define SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t swig_types[144]
+#define SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t swig_types[145]
+#define SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t swig_types[146]
+#define SWIGTYPE_p_std__auto_ptrT_six__GeoInfo_t swig_types[147]
+#define SWIGTYPE_p_std__auto_ptrT_six__IonoError_t swig_types[148]
+#define SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t swig_types[149]
+#define SWIGTYPE_p_std__auto_ptrT_six__MatchType_t swig_types[150]
+#define SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t swig_types[151]
+#define SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t swig_types[152]
+#define SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t swig_types[153]
+#define SWIGTYPE_p_std__auto_ptrT_six__TropoError_t swig_types[154]
+#define SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t swig_types[155]
+#define SWIGTYPE_p_std__invalid_argument swig_types[156]
+#define SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator swig_types[157]
+#define SWIGTYPE_p_std__ostream swig_types[158]
+#define SWIGTYPE_p_std__string swig_types[159]
+#define SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t swig_types[160]
+#define SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t swig_types[161]
+#define SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t swig_types[162]
+#define SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t swig_types[163]
+#define SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t swig_types[164]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[165]
+#define SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t swig_types[166]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[167]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[168]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[169]
+#define SWIGTYPE_p_types__RowColT_math__poly__TwoDT_double_t_t swig_types[170]
+#define SWIGTYPE_p_types__RowColT_scene__LatLon_t swig_types[171]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[172]
+#define SWIGTYPE_p_uint16_t swig_types[173]
+#define SWIGTYPE_p_uint32_t swig_types[174]
+#define SWIGTYPE_p_uint64_t swig_types[175]
+#define SWIGTYPE_p_uint8_t swig_types[176]
+#define SWIGTYPE_p_unsigned_char swig_types[177]
+#define SWIGTYPE_p_value_type swig_types[178]
+#define SWIGTYPE_p_xml__lite__Document swig_types[179]
+static swig_type_info *swig_types[181];
+static swig_module_info swig_module = {swig_types, 180, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3801,6 +3802,7 @@ SWIG_AsVal_ptrdiff_t (PyObject * obj, ptrdiff_t *val)
 
 
 
+#include "import/mem.h"
 #include <memory>
 #include <vector>
 #include <cstddef>
@@ -66215,6 +66217,683 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_new_GeoDataBase(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_GeoDataBase")) SWIG_fail;
+  {
+    try
+    {
+      result = (six::GeoDataBase *)new six::GeoDataBase();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__GeoDataBase, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoDataBase_earthModel_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *arg1 = (six::GeoDataBase *) 0 ;
+  six::EarthModelType *arg2 = (six::EarthModelType *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoDataBase_earthModel_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoDataBase_earthModel_set" "', argument " "1"" of type '" "six::GeoDataBase *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoDataBase * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__EarthModelType, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoDataBase_earthModel_set" "', argument " "2"" of type '" "six::EarthModelType *""'"); 
+  }
+  arg2 = reinterpret_cast< six::EarthModelType * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->earthModel = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoDataBase_earthModel_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *arg1 = (six::GeoDataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::EarthModelType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GeoDataBase_earthModel_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoDataBase_earthModel_get" "', argument " "1"" of type '" "six::GeoDataBase *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoDataBase * >(argp1);
+  {
+    try
+    {
+      result = (six::EarthModelType *)& ((arg1)->earthModel);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__EarthModelType, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoDataBase_imageCorners_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *arg1 = (six::GeoDataBase *) 0 ;
+  six::LatLonCorners *arg2 = (six::LatLonCorners *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoDataBase_imageCorners_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoDataBase_imageCorners_set" "', argument " "1"" of type '" "six::GeoDataBase *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoDataBase * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__CornersT_scene__LatLon_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoDataBase_imageCorners_set" "', argument " "2"" of type '" "six::LatLonCorners *""'"); 
+  }
+  arg2 = reinterpret_cast< six::LatLonCorners * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->imageCorners = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoDataBase_imageCorners_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *arg1 = (six::GeoDataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  six::LatLonCorners *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GeoDataBase_imageCorners_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoDataBase_imageCorners_get" "', argument " "1"" of type '" "six::GeoDataBase *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoDataBase * >(argp1);
+  {
+    try
+    {
+      result = (six::LatLonCorners *)& ((arg1)->imageCorners);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CornersT_scene__LatLon_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoDataBase_validData_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *arg1 = (six::GeoDataBase *) 0 ;
+  std::vector< six::LatLon,std::allocator< six::LatLon > > *arg2 = (std::vector< six::LatLon,std::allocator< six::LatLon > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoDataBase_validData_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoDataBase_validData_set" "', argument " "1"" of type '" "six::GeoDataBase *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoDataBase * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoDataBase_validData_set" "', argument " "2"" of type '" "std::vector< six::LatLon,std::allocator< six::LatLon > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< six::LatLon,std::allocator< six::LatLon > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->validData = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoDataBase_validData_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *arg1 = (six::GeoDataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< six::LatLon,std::allocator< six::LatLon > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GeoDataBase_validData_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoDataBase_validData_get" "', argument " "1"" of type '" "six::GeoDataBase *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoDataBase * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< six::LatLon,std::allocator< six::LatLon > > *)& ((arg1)->validData);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoDataBase_geoInfos_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *arg1 = (six::GeoDataBase *) 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *arg2 = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoDataBase_geoInfos_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoDataBase_geoInfos_set" "', argument " "1"" of type '" "six::GeoDataBase *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoDataBase * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoDataBase_geoInfos_set" "', argument " "2"" of type '" "std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > * >(argp2);
+  {
+    try
+    {
+      if (arg1) (arg1)->geoInfos = *arg2;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoDataBase_geoInfos_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *arg1 = (six::GeoDataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GeoDataBase_geoInfos_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoDataBase_geoInfos_get" "', argument " "1"" of type '" "six::GeoDataBase *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoDataBase * >(argp1);
+  {
+    try
+    {
+      result = (std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > > *)& ((arg1)->geoInfos);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoDataBase___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *arg1 = (six::GeoDataBase *) 0 ;
+  six::GeoDataBase *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoDataBase___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoDataBase___eq__" "', argument " "1"" of type '" "six::GeoDataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoDataBase * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__GeoDataBase,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoDataBase___eq__" "', argument " "2"" of type '" "six::GeoDataBase const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GeoDataBase___eq__" "', argument " "2"" of type '" "six::GeoDataBase const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::GeoDataBase * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::GeoDataBase const *)arg1)->operator ==((six::GeoDataBase const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoDataBase___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *arg1 = (six::GeoDataBase *) 0 ;
+  six::GeoDataBase *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GeoDataBase___ne__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoDataBase___ne__" "', argument " "1"" of type '" "six::GeoDataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoDataBase * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_six__GeoDataBase,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GeoDataBase___ne__" "', argument " "2"" of type '" "six::GeoDataBase const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GeoDataBase___ne__" "', argument " "2"" of type '" "six::GeoDataBase const &""'"); 
+  }
+  arg2 = reinterpret_cast< six::GeoDataBase * >(argp2);
+  {
+    try
+    {
+      result = (bool)((six::GeoDataBase const *)arg1)->operator !=((six::GeoDataBase const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_GeoDataBase(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  six::GeoDataBase *arg1 = (six::GeoDataBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_GeoDataBase",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__GeoDataBase, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_GeoDataBase" "', argument " "1"" of type '" "six::GeoDataBase *""'"); 
+  }
+  arg1 = reinterpret_cast< six::GeoDataBase * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *GeoDataBase_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_six__GeoDataBase, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_LatLonCorners(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::Corners< scene::LatLon > *result = 0 ;
@@ -103581,6 +104260,19 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GeoInfo___ne__", _wrap_GeoInfo___ne__, METH_VARARGS, (char *)"GeoInfo___ne__(GeoInfo self, GeoInfo rhs) -> bool"},
 	 { (char *)"GeoInfo_swigregister", GeoInfo_swigregister, METH_VARARGS, NULL},
 	 { (char *)"__lshift__", _wrap___lshift__, METH_VARARGS, (char *)"__lshift__(std::ostream & os, GeoInfo g) -> std::ostream &"},
+	 { (char *)"new_GeoDataBase", _wrap_new_GeoDataBase, METH_VARARGS, (char *)"new_GeoDataBase() -> GeoDataBase"},
+	 { (char *)"GeoDataBase_earthModel_set", _wrap_GeoDataBase_earthModel_set, METH_VARARGS, (char *)"GeoDataBase_earthModel_set(GeoDataBase self, EarthModelType earthModel)"},
+	 { (char *)"GeoDataBase_earthModel_get", _wrap_GeoDataBase_earthModel_get, METH_VARARGS, (char *)"GeoDataBase_earthModel_get(GeoDataBase self) -> EarthModelType"},
+	 { (char *)"GeoDataBase_imageCorners_set", _wrap_GeoDataBase_imageCorners_set, METH_VARARGS, (char *)"GeoDataBase_imageCorners_set(GeoDataBase self, LatLonCorners imageCorners)"},
+	 { (char *)"GeoDataBase_imageCorners_get", _wrap_GeoDataBase_imageCorners_get, METH_VARARGS, (char *)"GeoDataBase_imageCorners_get(GeoDataBase self) -> LatLonCorners"},
+	 { (char *)"GeoDataBase_validData_set", _wrap_GeoDataBase_validData_set, METH_VARARGS, (char *)"GeoDataBase_validData_set(GeoDataBase self, std::vector< six::LatLon,std::allocator< six::LatLon > > * validData)"},
+	 { (char *)"GeoDataBase_validData_get", _wrap_GeoDataBase_validData_get, METH_VARARGS, (char *)"GeoDataBase_validData_get(GeoDataBase self) -> std::vector< six::LatLon,std::allocator< six::LatLon > > *"},
+	 { (char *)"GeoDataBase_geoInfos_set", _wrap_GeoDataBase_geoInfos_set, METH_VARARGS, (char *)"GeoDataBase_geoInfos_set(GeoDataBase self, VectorScopedCopyableGeoInfo geoInfos)"},
+	 { (char *)"GeoDataBase_geoInfos_get", _wrap_GeoDataBase_geoInfos_get, METH_VARARGS, (char *)"GeoDataBase_geoInfos_get(GeoDataBase self) -> VectorScopedCopyableGeoInfo"},
+	 { (char *)"GeoDataBase___eq__", _wrap_GeoDataBase___eq__, METH_VARARGS, (char *)"GeoDataBase___eq__(GeoDataBase self, GeoDataBase rhs) -> bool"},
+	 { (char *)"GeoDataBase___ne__", _wrap_GeoDataBase___ne__, METH_VARARGS, (char *)"GeoDataBase___ne__(GeoDataBase self, GeoDataBase rhs) -> bool"},
+	 { (char *)"delete_GeoDataBase", _wrap_delete_GeoDataBase, METH_VARARGS, (char *)"delete_GeoDataBase(GeoDataBase self)"},
+	 { (char *)"GeoDataBase_swigregister", GeoDataBase_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_LatLonCorners", _wrap_new_LatLonCorners, METH_VARARGS, (char *)"new_LatLonCorners() -> LatLonCorners"},
 	 { (char *)"LatLonCorners_getCorner", _wrap_LatLonCorners_getCorner, METH_VARARGS, (char *)"\n"
 		"getCorner(size_t idx) -> LatLon\n"
@@ -104527,6 +105219,7 @@ static swig_type_info _swigt__p_six__DualPolarizationType = {"_p_six__DualPolari
 static swig_type_info _swigt__p_six__EarthModelType = {"_p_six__EarthModelType", "six::EarthModelType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ErrorStatistics = {"_p_six__ErrorStatistics", "six::ErrorStatistics *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__FFTSign = {"_p_six__FFTSign", "six::FFTSign *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_six__GeoDataBase = {"_p_six__GeoDataBase", "six::GeoDataBase *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__GeoInfo = {"_p_six__GeoInfo", "six::GeoInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ImageBeamCompensationType = {"_p_six__ImageBeamCompensationType", "six::ImageBeamCompensationType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__ImageFormationType = {"_p_six__ImageFormationType", "six::ImageFormationType *", 0, 0, (void*)0, 0};
@@ -104708,6 +105401,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_six__EarthModelType,
   &_swigt__p_six__ErrorStatistics,
   &_swigt__p_six__FFTSign,
+  &_swigt__p_six__GeoDataBase,
   &_swigt__p_six__GeoInfo,
   &_swigt__p_six__ImageBeamCompensationType,
   &_swigt__p_six__ImageFormationType,
@@ -104889,6 +105583,7 @@ static swig_cast_info _swigc__p_six__DualPolarizationType[] = {  {&_swigt__p_six
 static swig_cast_info _swigc__p_six__EarthModelType[] = {  {&_swigt__p_six__EarthModelType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ErrorStatistics[] = {  {&_swigt__p_six__ErrorStatistics, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__FFTSign[] = {  {&_swigt__p_six__FFTSign, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_six__GeoDataBase[] = {  {&_swigt__p_six__GeoDataBase, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__GeoInfo[] = {  {&_swigt__p_six__GeoInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ImageBeamCompensationType[] = {  {&_swigt__p_six__ImageBeamCompensationType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_six__ImageFormationType[] = {  {&_swigt__p_six__ImageFormationType, 0, 0, 0},{0, 0, 0, 0}};
@@ -105070,6 +105765,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_six__EarthModelType,
   _swigc__p_six__ErrorStatistics,
   _swigc__p_six__FFTSign,
+  _swigc__p_six__GeoDataBase,
   _swigc__p_six__GeoInfo,
   _swigc__p_six__ImageBeamCompensationType,
   _swigc__p_six__ImageFormationType,
