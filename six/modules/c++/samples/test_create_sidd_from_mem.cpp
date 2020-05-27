@@ -2017,7 +2017,7 @@ void initDisplay(six::sidd::Display& display, const std::string& lutType)
     six::sidd::ColorManagementModule& cmm =
             display.interactiveProcessing[0]
                     ->colorSpaceTransform->colorManagementModule;
-    cmm.renderingIntent = six::sidd::RenderingIntent::ABSOLUTE;
+    cmm.renderingIntent = six::sidd::RenderingIntent::ABSOLUTE_INTENT;
     cmm.sourceProfile = "Some source profile";
     cmm.displayProfile = "Some display profile";
     cmm.iccProfile = "Some ICC profile";

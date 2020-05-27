@@ -547,7 +547,17 @@ void DerivedXMLParser200::parseLookupTableFromXML(
 void DerivedXMLParser200::parseBandEqualizationFromXML(const XMLElem bandElem,
                                                        BandEqualization& band) const
 {
-    parseEnum(getFirstAndOnly(bandElem, "Algorithm"), band.algorithm);
+    std::string bandAlgo;
+    parseString(getFirstAndOnly(bandElem, "Algorithm"), bandAlgo);
+
+    if (bandAlgo == "1DLUT")
+    {
+        band.algorithm = BandEqualizationAlgorithm("LUT 1D");
+    }
+    else
+    {
+        band.algorithm = BandEqualizationAlgorithm(bandAlgo);
+    }
 
     std::vector<XMLElem> lutElems;
     bandElem->getElementsByTagName("BandLUT", lutElems);
@@ -810,8 +820,20 @@ void DerivedXMLParser200::parseColorSpaceTransformFromXML(
 {
     XMLElem manageElem = getFirstAndOnly(colorElem, "ColorManagementModule");
 
-    parseEnum(getFirstAndOnly(manageElem, "RenderingIntent"),
-            transform.colorManagementModule.renderingIntent);
+    std::string renderIntentStr;
+    parseString(getFirstAndOnly(manageElem, "RenderingIntent"), renderIntentStr);
+    if (renderIntentStr == "RELATIVE")
+    {
+        transform.colorManagementModule.renderingIntent = RenderingIntent::RELATIVE_INTENT;
+    }
+    else if (renderIntentStr == "ABSOLUTE")
+    {
+        transform.colorManagementModule.renderingIntent = RenderingIntent::ABSOLUTE_INTENT;
+    }
+    else
+    {
+        transform.colorManagementModule.renderingIntent = RenderingIntent(renderIntentStr);
+    }
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
     XMLElem profXML = getOptional(manageElem, "DisplayProfile");
@@ -1095,7 +1117,14 @@ XMLElem DerivedXMLParser200::convertNonInteractiveProcessingToXML(
     {
         const BandEqualization& bandEq = *prodGen.bandEqualization;
         XMLElem bandEqElem = newElement("BandEqualization", prodGenElem);
-        createStringFromEnum("Algorithm", bandEq.algorithm, bandEqElem);
+        if (int(bandEq.algorithm) == 0)
+        {
+            createString("Algorithm", "1DLUT", bandEqElem);
+        }
+        else
+        {
+            createStringFromEnum("Algorithm", bandEq.algorithm, bandEqElem);
+        }
         for (size_t ii = 0; ii < bandEq.bandLUTs.size(); ++ii)
         {
             convertLookupTableToXML("BandLUT", *bandEq.bandLUTs[ii], bandEqElem);
@@ -1211,7 +1240,18 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
         XMLElem cmmElem =
                 newElement("ColorManagementModule", colorSpaceTransformElem);
 
-        createStringFromEnum("RenderingIntent", cmm.renderingIntent, cmmElem);
+        if (int(cmm.renderingIntent) == 2)
+        {
+            createString("RenderingIntent", "RELATIVE", cmmElem);
+        }
+        else if (int(cmm.renderingIntent) == 3)
+        {
+            createString("RenderingIntent", "ABSOLUTE", cmmElem);
+        }
+        else
+        {
+            createStringFromEnum("RenderingIntent", cmm.renderingIntent, cmmElem);
+        }
 
         // TODO: Not sure what this'll actually look like
         createString("SourceProfile", cmm.sourceProfile, cmmElem);
