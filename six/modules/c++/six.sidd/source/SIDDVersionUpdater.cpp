@@ -126,19 +126,19 @@ void SIDDVersionUpdater::updateSingleIncrement()
         }
 
         // GeographicAndTarget
-        mData.geographicAndTarget->imageCorners.reset(new LatLonCorners());
-        *mData.geographicAndTarget->imageCorners =
+        mData.geoData.reset(new six::GeoDataBase());
+        mData.geoData->imageCorners =
                 mData.geographicAndTarget->geographicCoverage->footprint;
 
         // This is a "close-enough" guess that the validData will be
         // at least similar to the image corners.
         // You should still repopulate this block with the actual
         // numbers though.
-        mData.geographicAndTarget->validData.resize(4);
+        mData.geoData->validData.resize(4);
         for (size_t ii = 0; ii < 4; ++ii)
         {
-            mData.geographicAndTarget->validData[ii] =
-                    mData.geographicAndTarget->imageCorners->getCorner(ii);
+            mData.geoData->validData[ii] =
+                    mData.geoData->imageCorners.getCorner(ii);
         }
         emitWarning("GeographicAndTarget.ValidData");
 
