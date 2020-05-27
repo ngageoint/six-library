@@ -814,10 +814,16 @@ void DerivedXMLParser200::parseColorSpaceTransformFromXML(
             transform.colorManagementModule.renderingIntent);
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
-    parseString(getFirstAndOnly(manageElem, "DisplayProfile"),
-                transform.colorManagementModule.displayProfile);
-    parseString(getFirstAndOnly(manageElem, "ICCProfile"),
-                transform.colorManagementModule.iccProfile);
+    XMLElem profXML = getOptional(manageElem, "DisplayProfile");
+    if (profXML)
+    {
+        parseString(profXML, transform.colorManagementModule.displayProfile);
+    }
+    profXML = getOptional(manageElem, "ICCProfileSignature");
+    if (profXML)
+    {
+        parseString(profXML, transform.colorManagementModule.iccProfile);
+    }
 }
 
 void DerivedXMLParser200::parseDynamicRangeAdjustmentFromXML(
@@ -1209,11 +1215,14 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
 
         // TODO: Not sure what this'll actually look like
         createString("SourceProfile", cmm.sourceProfile, cmmElem);
-        createString("DisplayProfile", cmm.displayProfile, cmmElem);
+        if (!cmm.displayProfile.empty())
+        {
+            createString("DisplayProfile", cmm.displayProfile, cmmElem);
+        }
 
         if (!cmm.iccProfile.empty())
         {
-            createString("ICCProfile", cmm.iccProfile, cmmElem);
+            createString("ICCProfileSignature", cmm.iccProfile, cmmElem);
         }
     }
 
