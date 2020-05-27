@@ -54,17 +54,8 @@ DerivedDataBuilder& DerivedDataBuilder::addGeoData()
     return *this;
 }
 
-
-DerivedDataBuilder& DerivedDataBuilder::addGeographicAndTarget()
-{
-    mData->geographicAndTarget.reset(new GeographicAndTarget());
-    mData->geographicAndTarget->imageCorners.reset(new LatLonCorners());
-
-    return *this;
-}
-
 DerivedDataBuilder&
-DerivedDataBuilder::addGeographicAndTargetOld(RegionType regionType)
+DerivedDataBuilder::addGeographicAndTarget(RegionType regionType)
 {
     mData->geographicAndTarget.reset(new GeographicAndTarget());
     mData->geographicAndTarget->geographicCoverage.reset(

@@ -122,9 +122,6 @@ private:
     void convertJ2KToXML(const J2KCompression& j2k,
                          XMLElem& parent) const;
 
-    XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
-                                         XMLElem parent = NULL) const;
-
     XMLElem convertGeoDataToXML(const GeoDataBase* g,
                                 XMLElem parent = NULL) const;
 
@@ -133,10 +130,6 @@ private:
 
     void parseJ2KCompression(const XMLElem j2kElem,
                              J2KCompression& j2k) const;
-
-    void parseGeographicTargetFromXML(
-            const XMLElem elem,
-            GeographicAndTarget& geographicAndTarget) const;
 
     void parseGeoDataFromXML(
             const XMLElem elem, GeoDataBase* geoData) const;

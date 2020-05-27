@@ -71,10 +71,6 @@ public:
      *  Add geographic data.  Use this for SIDD 2.0.
      */
     virtual DerivedDataBuilder& addGeoData();
-    /*!
-     *  Add geographic and target information.  Use this for SIDD 2.0.
-     */
-    virtual DerivedDataBuilder& addGeographicAndTarget();
 
     /*!
      *  Add geographic and target information.  This requires that the
@@ -84,7 +80,7 @@ public:
      *  \param regionType What kind of region type scheme does the product use
      *  \return Reference to self
      */
-    virtual DerivedDataBuilder& addGeographicAndTargetOld(RegionType regionType);
+    virtual DerivedDataBuilder& addGeographicAndTarget(RegionType regionType);
 
     /*!
      *  Add the block containing the meta-data for doing measurements.

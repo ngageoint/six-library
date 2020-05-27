@@ -1764,51 +1764,6 @@ XMLElem DerivedXMLParser200::convertDisplayToXML(
     return displayElem;
 }
 
-XMLElem DerivedXMLParser200::convertGeographicTargetToXML(
-        const GeographicAndTarget& geographicAndTarget,
-        XMLElem parent) const
-{
-    XMLElem geographicAndTargetElem = newElement("GeographicAndTarget", parent);
-
-    common().createEarthModelType("EarthModel", geographicAndTarget.earthModel, geographicAndTargetElem);
-
-    confirmNonNull(geographicAndTarget.imageCorners,
-                   "geographicAndTarget.imageCorners");
-    common().createLatLonFootprint("ImageCorners", "ICP",
-                                   *geographicAndTarget.imageCorners,
-                                   geographicAndTargetElem);
-
-    //only if 3+ vertices
-    const size_t numVertices = geographicAndTarget.validData.size();
-    if (numVertices >= 3)
-    {
-        XMLElem vElem = newElement("ValidData", geographicAndTargetElem);
-        setAttribute(vElem, "size", str::toString(numVertices));
-
-        for (size_t ii = 0; ii < numVertices; ++ii)
-        {
-            XMLElem vertexElem =
-                    common().createLatLon("Vertex",
-                                          geographicAndTarget.validData[ii],
-                                          vElem);
-            setAttribute(vertexElem, "index", str::toString(ii + 1));
-        }
-    }
-    else
-    {
-        throw except::Exception(Ctxt("ValidData must have at least 3 vertices"));
-    }
-
-    for (size_t ii = 0; ii < geographicAndTarget.geoInfos.size(); ++ii)
-    {
-        common().convertGeoInfoToXML(*geographicAndTarget.geoInfos[ii],
-                                     true,
-                                     geographicAndTargetElem);
-    }
-
-    return geographicAndTargetElem;
-}
-
 XMLElem DerivedXMLParser200::convertGeoDataToXML(
         const GeoDataBase* geoData,
         XMLElem parent) const
@@ -1908,34 +1863,6 @@ XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
     }
 
     return dedElem;
-}
-
-void DerivedXMLParser200::parseGeographicTargetFromXML(
-    const XMLElem geographicElem,
-    GeographicAndTarget& geographicAndTarget) const
-{
-    std::string model;
-
-    common().parseEarthModelType(getFirstAndOnly(geographicElem, "EarthModel"), geographicAndTarget.earthModel);
-    common().parseFootprint(getFirstAndOnly(geographicElem, "ImageCorners"), "ICP",
-        *geographicAndTarget.imageCorners);
-
-    common().parseLatLons(getFirstAndOnly(geographicElem, "ValidData"),
-                          "Vertex", geographicAndTarget.validData);
-
-    std::vector<XMLElem> geoInfosElem;
-    geographicElem->getElementsByTagName("GeoInfo", geoInfosElem);
-
-    //optional
-    size_t idx(geographicAndTarget.geoInfos.size());
-    geographicAndTarget.geoInfos.resize(idx + geoInfosElem.size());
-
-    for (std::vector<XMLElem>::const_iterator it = geoInfosElem.begin(); it
-        != geoInfosElem.end(); ++it, ++idx)
-    {
-        geographicAndTarget.geoInfos[idx].reset(new GeoInfo());
-        common().parseGeoInfoFromXML(*it, geographicAndTarget.geoInfos[idx].get());
-    }
 }
 
 void DerivedXMLParser200::parseGeoDataFromXML(

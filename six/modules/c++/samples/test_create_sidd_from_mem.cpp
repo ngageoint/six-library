@@ -1839,7 +1839,7 @@ std::auto_ptr<six::sidd::DerivedData> initData(const std::string& lutType)
     // the other.  Here is how you add them individually
     //-----------------------------------------------------------
     siddBuilder.addDisplay(pixelType);
-    siddBuilder.addGeographicAndTarget();
+    siddBuilder.addGeographicAndTarget(RegionType::GEOGRAPHIC_INFO);
     siddBuilder.addGeoData();
 
     // Here is how you can cascade them
@@ -2017,7 +2017,7 @@ void initDisplay(six::sidd::Display& display, const std::string& lutType)
     six::sidd::ColorManagementModule& cmm =
             display.interactiveProcessing[0]
                     ->colorSpaceTransform->colorManagementModule;
-    cmm.renderingIntent = six::sidd::RenderingIntent::ABSOLUTE_INTENT;
+    cmm.renderingIntent = six::sidd::RenderingIntent::ABSOLUTE;
     cmm.sourceProfile = "Some source profile";
     cmm.displayProfile = "Some display profile";
     cmm.iccProfile = "Some ICC profile";

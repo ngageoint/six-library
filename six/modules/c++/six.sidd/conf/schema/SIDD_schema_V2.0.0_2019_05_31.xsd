@@ -393,7 +393,7 @@
     </xs:complexType>
     <xs:simpleType name="EqualizationAlgorithmType">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="LUT 1D"/>
+            <xs:enumeration value="1DLUT"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="InteractiveProcessingType">
@@ -538,8 +538,8 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="PERCEPTUAL"/>
             <xs:enumeration value="SATURATION"/>
-            <xs:enumeration value="RELATIVE INTENT"/>
-            <xs:enumeration value="ABSOLUTE INTENT"/>
+            <xs:enumeration value="RELATIVE"/>
+            <xs:enumeration value="ABSOLUTE"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="DynamicRangeAdjustmentType">

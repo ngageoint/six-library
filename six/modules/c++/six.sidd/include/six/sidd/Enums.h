@@ -165,7 +165,7 @@ struct BandEqualizationAlgorithm
     //! string constructor
     BandEqualizationAlgorithm(std::string s)
     {
-        if (s == "LUT 1D")
+        if (s == "1DLUT")
             value = LUT_1D;
         else if (s == "NOT SET")
             value = NOT_SET;
@@ -198,7 +198,7 @@ struct BandEqualizationAlgorithm
         switch (value)
         {
         case 0:
-            return std::string("LUT 1D");
+            return std::string("1DLUT");
         case six::NOT_SET_VALUE:
             return std::string("NOT SET");
         default:
@@ -793,8 +793,8 @@ struct RenderingIntent
     {
         PERCEPTUAL = 0,
         SATURATION = 1,
-        RELATIVE_INTENT = 2,
-        ABSOLUTE_INTENT = 3,
+        RELATIVE = 2,
+        ABSOLUTE = 3,
         NOT_SET = six::NOT_SET_VALUE
     };
 
@@ -808,10 +808,10 @@ struct RenderingIntent
             value = PERCEPTUAL;
         else if (s == "SATURATION")
             value = SATURATION;
-        else if (s == "RELATIVE INTENT")
-            value = RELATIVE_INTENT;
-        else if (s == "ABSOLUTE INTENT")
-            value = ABSOLUTE_INTENT;
+        else if (s == "RELATIVE")
+            value = RELATIVE;
+        else if (s == "ABSOLUTE")
+            value = ABSOLUTE;
         else if (s == "NOT SET")
             value = NOT_SET;
         else
@@ -830,10 +830,10 @@ struct RenderingIntent
             value = SATURATION;
             break;
         case 2:
-            value = RELATIVE_INTENT;
+            value = RELATIVE;
             break;
         case 3:
-            value = ABSOLUTE_INTENT;
+            value = ABSOLUTE;
             break;
         case six::NOT_SET_VALUE:
             value = NOT_SET;
@@ -856,9 +856,9 @@ struct RenderingIntent
         case 1:
             return std::string("SATURATION");
         case 2:
-            return std::string("RELATIVE INTENT");
+            return std::string("RELATIVE");
         case 3:
-            return std::string("ABSOLUTE INTENT");
+            return std::string("ABSOLUTE");
         case six::NOT_SET_VALUE:
             return std::string("NOT SET");
         default:
