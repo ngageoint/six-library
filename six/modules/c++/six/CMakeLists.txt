@@ -12,6 +12,7 @@ coda_add_module(
         source/Container.cpp
         source/Data.cpp
         source/ErrorStatistics.cpp
+        source/GeoDataBase.cpp
         source/GeoInfo.cpp
         source/Init.cpp
         source/MatchInformation.cpp
