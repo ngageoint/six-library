@@ -286,10 +286,6 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("sfa", SFA_URI);
     root->setNamespacePrefix("ism", ISM_URI);
 
-    // io::StringStream ss;
-    // root->prettyPrint(ss);
-    // std::cout << ss.stream().str() << std::endl;
-
     return doc;
 }
 
