@@ -167,7 +167,6 @@ public:
     //! Default constructor initializes earthModel enum to only valid value
     GeographicAndTarget()
     {
-        earthModel = EarthModelType("WGS84");
     }
 
     //!  SIDD GeographicCoverage: Provides geo coverage information
@@ -176,28 +175,6 @@ public:
 
     //!  (Optional, Unbounded) Provides target specific geo information
     std::vector<mem::ScopedCopyablePtr<TargetInformation> > targetInformation;
-
-
-    // This section is used for SIDD 2.0
-    EarthModelType earthModel;
-    /*!
-     *  Parameters apply to image corners of the
-     *  product projected to the same height as the SCP.
-     *  These corners are an approximate geographic location
-     *  not intended for analytical use
-     *
-     *  Required for SIDD 2.0
-     */
-    mem::ScopedCopyablePtr<LatLonCorners> imageCorners;
-
-    /*!
-     *  Indicates the full image includes both
-     *  valid data and some zero-filled pixels.  Vector size
-     *  is the number of vertices.
-     *
-     *  Required for SIDD 2.0
-     */
-    std::vector<LatLon> validData;
 
     /*!
      *  (Optional) Parameters that describe geographic features.
