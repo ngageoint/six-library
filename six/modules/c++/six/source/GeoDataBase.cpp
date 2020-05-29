@@ -30,8 +30,8 @@ namespace six
 bool GeoDataBase::operator==(const GeoDataBase& rhs) const
 {
     return (earthModel == rhs.earthModel &&
-            imageCorners == rhs.imageCorners && validData == rhs.validData
-            && geoInfos == rhs.geoInfos);
+            imageCorners == rhs.imageCorners &&
+            validData == rhs.validData &&
+            geoInfos == rhs.geoInfos);
 }
 }
-
