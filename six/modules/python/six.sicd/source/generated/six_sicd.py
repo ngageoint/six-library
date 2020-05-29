@@ -2261,42 +2261,22 @@ class ImageData(_object):
 ImageData_swigregister = _six_sicd.ImageData_swigregister
 ImageData_swigregister(ImageData)
 
-class GeoData(_object):
+class GeoData(pysix.six_base.GeoDataBase):
     """Proxy of C++ six::sicd::GeoData class."""
 
     __swig_setmethods__ = {}
+    for _s in [pysix.six_base.GeoDataBase]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, GeoData, name, value)
     __swig_getmethods__ = {}
+    for _s in [pysix.six_base.GeoDataBase]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, GeoData, name)
     __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(six::sicd::GeoData self) -> GeoData"""
-        this = _six_sicd.new_GeoData()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_setmethods__["earthModel"] = _six_sicd.GeoData_earthModel_set
-    __swig_getmethods__["earthModel"] = _six_sicd.GeoData_earthModel_get
-    if _newclass:
-        earthModel = _swig_property(_six_sicd.GeoData_earthModel_get, _six_sicd.GeoData_earthModel_set)
     __swig_setmethods__["scp"] = _six_sicd.GeoData_scp_set
     __swig_getmethods__["scp"] = _six_sicd.GeoData_scp_get
     if _newclass:
         scp = _swig_property(_six_sicd.GeoData_scp_get, _six_sicd.GeoData_scp_set)
-    __swig_setmethods__["imageCorners"] = _six_sicd.GeoData_imageCorners_set
-    __swig_getmethods__["imageCorners"] = _six_sicd.GeoData_imageCorners_get
-    if _newclass:
-        imageCorners = _swig_property(_six_sicd.GeoData_imageCorners_get, _six_sicd.GeoData_imageCorners_set)
-    __swig_setmethods__["validData"] = _six_sicd.GeoData_validData_set
-    __swig_getmethods__["validData"] = _six_sicd.GeoData_validData_get
-    if _newclass:
-        validData = _swig_property(_six_sicd.GeoData_validData_get, _six_sicd.GeoData_validData_set)
-    __swig_setmethods__["geoInfos"] = _six_sicd.GeoData_geoInfos_set
-    __swig_getmethods__["geoInfos"] = _six_sicd.GeoData_geoInfos_get
-    if _newclass:
-        geoInfos = _swig_property(_six_sicd.GeoData_geoInfos_get, _six_sicd.GeoData_geoInfos_set)
 
     def __eq__(self, rhs: 'GeoData') -> "bool":
         """__eq__(GeoData self, GeoData rhs) -> bool"""
@@ -2317,6 +2297,14 @@ class GeoData(_object):
         """validate(GeoData self, logging::Logger & log) -> bool"""
         return _six_sicd.GeoData_validate(self, log)
 
+
+    def __init__(self):
+        """__init__(six::sicd::GeoData self) -> GeoData"""
+        this = _six_sicd.new_GeoData()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
     __swig_destroy__ = _six_sicd.delete_GeoData
     __del__ = lambda self: None
 GeoData_swigregister = _six_sicd.GeoData_swigregister
@@ -5227,26 +5215,10 @@ class ScopedCopyableGeoData(_object):
 
     __swig_destroy__ = _six_sicd.delete_ScopedCopyableGeoData
     __del__ = lambda self: None
-    __swig_setmethods__["earthModel"] = _six_sicd.ScopedCopyableGeoData_earthModel_set
-    __swig_getmethods__["earthModel"] = _six_sicd.ScopedCopyableGeoData_earthModel_get
-    if _newclass:
-        earthModel = _swig_property(_six_sicd.ScopedCopyableGeoData_earthModel_get, _six_sicd.ScopedCopyableGeoData_earthModel_set)
     __swig_setmethods__["scp"] = _six_sicd.ScopedCopyableGeoData_scp_set
     __swig_getmethods__["scp"] = _six_sicd.ScopedCopyableGeoData_scp_get
     if _newclass:
         scp = _swig_property(_six_sicd.ScopedCopyableGeoData_scp_get, _six_sicd.ScopedCopyableGeoData_scp_set)
-    __swig_setmethods__["imageCorners"] = _six_sicd.ScopedCopyableGeoData_imageCorners_set
-    __swig_getmethods__["imageCorners"] = _six_sicd.ScopedCopyableGeoData_imageCorners_get
-    if _newclass:
-        imageCorners = _swig_property(_six_sicd.ScopedCopyableGeoData_imageCorners_get, _six_sicd.ScopedCopyableGeoData_imageCorners_set)
-    __swig_setmethods__["validData"] = _six_sicd.ScopedCopyableGeoData_validData_set
-    __swig_getmethods__["validData"] = _six_sicd.ScopedCopyableGeoData_validData_get
-    if _newclass:
-        validData = _swig_property(_six_sicd.ScopedCopyableGeoData_validData_get, _six_sicd.ScopedCopyableGeoData_validData_set)
-    __swig_setmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoData_geoInfos_set
-    __swig_getmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoData_geoInfos_get
-    if _newclass:
-        geoInfos = _swig_property(_six_sicd.ScopedCopyableGeoData_geoInfos_get, _six_sicd.ScopedCopyableGeoData_geoInfos_set)
 
     def __eq__(self, rhs: 'GeoData') -> "bool":
         """__eq__(ScopedCopyableGeoData self, GeoData rhs) -> bool"""
@@ -5267,6 +5239,22 @@ class ScopedCopyableGeoData(_object):
         """validate(ScopedCopyableGeoData self, logging::Logger & log) -> bool"""
         return _six_sicd.ScopedCopyableGeoData_validate(self, log)
 
+    __swig_setmethods__["earthModel"] = _six_sicd.ScopedCopyableGeoData_earthModel_set
+    __swig_getmethods__["earthModel"] = _six_sicd.ScopedCopyableGeoData_earthModel_get
+    if _newclass:
+        earthModel = _swig_property(_six_sicd.ScopedCopyableGeoData_earthModel_get, _six_sicd.ScopedCopyableGeoData_earthModel_set)
+    __swig_setmethods__["imageCorners"] = _six_sicd.ScopedCopyableGeoData_imageCorners_set
+    __swig_getmethods__["imageCorners"] = _six_sicd.ScopedCopyableGeoData_imageCorners_get
+    if _newclass:
+        imageCorners = _swig_property(_six_sicd.ScopedCopyableGeoData_imageCorners_get, _six_sicd.ScopedCopyableGeoData_imageCorners_set)
+    __swig_setmethods__["validData"] = _six_sicd.ScopedCopyableGeoData_validData_set
+    __swig_getmethods__["validData"] = _six_sicd.ScopedCopyableGeoData_validData_get
+    if _newclass:
+        validData = _swig_property(_six_sicd.ScopedCopyableGeoData_validData_get, _six_sicd.ScopedCopyableGeoData_validData_set)
+    __swig_setmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoData_geoInfos_set
+    __swig_getmethods__["geoInfos"] = _six_sicd.ScopedCopyableGeoData_geoInfos_get
+    if _newclass:
+        geoInfos = _swig_property(_six_sicd.ScopedCopyableGeoData_geoInfos_get, _six_sicd.ScopedCopyableGeoData_geoInfos_set)
 ScopedCopyableGeoData_swigregister = _six_sicd.ScopedCopyableGeoData_swigregister
 ScopedCopyableGeoData_swigregister(ScopedCopyableGeoData)
 

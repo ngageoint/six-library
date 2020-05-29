@@ -30,6 +30,7 @@
 
 %{
 
+#include "import/mem.h"
 #include <memory>
 #include <vector>
 #include <cstddef>
@@ -101,6 +102,7 @@ using namespace six;
 %include "six/Options.h"
 %include "six/XMLControlFactory.h"
 %include "six/GeoInfo.h"
+%include "six/GeoDataBase.h"
 
 %feature("shadow") six::Parameter::setValue(const std::string &)
 %{

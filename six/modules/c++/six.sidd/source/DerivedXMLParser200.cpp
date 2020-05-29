@@ -115,7 +115,7 @@ DerivedData* DerivedXMLParser200::fromXML(
 
     XMLElem productCreationElem        = getFirstAndOnly(root, "ProductCreation");
     XMLElem displayElem                = getFirstAndOnly(root, "Display");
-    XMLElem geographicAndTargetElem    = getFirstAndOnly(root, "GeographicAndTarget");
+    XMLElem geoDataElem                = getFirstAndOnly(root, "GeoData");
     XMLElem measurementElem            = getFirstAndOnly(root, "Measurement");
     XMLElem exploitationFeaturesElem   = getFirstAndOnly(root, "ExploitationFeatures");
     XMLElem productProcessingElem      = getOptional(root, "ProductProcessing");
@@ -136,8 +136,8 @@ DerivedData* DerivedXMLParser200::fromXML(
             getFirstAndOnly(displayElem, "PixelType")->getCharacterData());
     builder.addDisplay(pixelType);
 
-    // create GeographicAndTarget
-    builder.addGeographicAndTarget();
+    // create GeoData
+    builder.addGeoData();
 
     // create Measurement
     six::ProjectionType projType = ProjectionType::NOT_SET;
@@ -159,7 +159,7 @@ DerivedData* DerivedXMLParser200::fromXML(
 
     parseProductCreationFromXML(productCreationElem, data->productCreation.get());
     parseDisplayFromXML(displayElem, *data->display);
-    parseGeographicTargetFromXML(geographicAndTargetElem, *data->geographicAndTarget);
+    parseGeoDataFromXML(geoDataElem, data->geoData.get());
     parseMeasurementFromXML(measurementElem, data->measurement.get());
     parseExploitationFeaturesFromXML(exploitationFeaturesElem, data->exploitationFeatures.get());
 
@@ -225,7 +225,7 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
 
     convertProductCreationToXML(derived->productCreation.get(), root);
     convertDisplayToXML(*derived->display, root);
-    convertGeographicTargetToXML(*derived->geographicAndTarget, root);
+    convertGeoDataToXML(derived->geoData.get(), root);
     convertMeasurementToXML(derived->measurement.get(), root);
     convertExploitationFeaturesToXML(derived->exploitationFeatures.get(),
                                      root);
@@ -543,7 +543,17 @@ void DerivedXMLParser200::parseLookupTableFromXML(
 void DerivedXMLParser200::parseBandEqualizationFromXML(const XMLElem bandElem,
                                                        BandEqualization& band) const
 {
-    parseEnum(getFirstAndOnly(bandElem, "Algorithm"), band.algorithm);
+    std::string bandAlgo;
+    parseString(getFirstAndOnly(bandElem, "Algorithm"), bandAlgo);
+
+    if (bandAlgo == "1DLUT")
+    {
+        band.algorithm = BandEqualizationAlgorithm("LUT 1D");
+    }
+    else
+    {
+        band.algorithm = BandEqualizationAlgorithm(bandAlgo);
+    }
 
     std::vector<XMLElem> lutElems;
     bandElem->getElementsByTagName("BandLUT", lutElems);
@@ -806,14 +816,32 @@ void DerivedXMLParser200::parseColorSpaceTransformFromXML(
 {
     XMLElem manageElem = getFirstAndOnly(colorElem, "ColorManagementModule");
 
-    parseEnum(getFirstAndOnly(manageElem, "RenderingIntent"),
-            transform.colorManagementModule.renderingIntent);
+    std::string renderIntentStr;
+    parseString(getFirstAndOnly(manageElem, "RenderingIntent"), renderIntentStr);
+    if (renderIntentStr == "RELATIVE")
+    {
+        transform.colorManagementModule.renderingIntent = RenderingIntent::RELATIVE_INTENT;
+    }
+    else if (renderIntentStr == "ABSOLUTE")
+    {
+        transform.colorManagementModule.renderingIntent = RenderingIntent::ABSOLUTE_INTENT;
+    }
+    else
+    {
+        transform.colorManagementModule.renderingIntent = RenderingIntent(renderIntentStr);
+    }
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
-    parseString(getFirstAndOnly(manageElem, "DisplayProfile"),
-                transform.colorManagementModule.displayProfile);
-    parseString(getFirstAndOnly(manageElem, "ICCProfile"),
-                transform.colorManagementModule.iccProfile);
+    XMLElem profXML = getOptional(manageElem, "DisplayProfile");
+    if (profXML)
+    {
+        parseString(profXML, transform.colorManagementModule.displayProfile);
+    }
+    profXML = getOptional(manageElem, "ICCProfileSignature");
+    if (profXML)
+    {
+        parseString(profXML, transform.colorManagementModule.iccProfile);
+    }
 }
 
 void DerivedXMLParser200::parseDynamicRangeAdjustmentFromXML(
@@ -1085,7 +1113,14 @@ XMLElem DerivedXMLParser200::convertNonInteractiveProcessingToXML(
     {
         const BandEqualization& bandEq = *prodGen.bandEqualization;
         XMLElem bandEqElem = newElement("BandEqualization", prodGenElem);
-        createStringFromEnum("Algorithm", bandEq.algorithm, bandEqElem);
+        if (int(bandEq.algorithm) == 0)
+        {
+            createString("Algorithm", "1DLUT", bandEqElem);
+        }
+        else
+        {
+            createStringFromEnum("Algorithm", bandEq.algorithm, bandEqElem);
+        }
         for (size_t ii = 0; ii < bandEq.bandLUTs.size(); ++ii)
         {
             convertLookupTableToXML("BandLUT", *bandEq.bandLUTs[ii], bandEqElem);
@@ -1201,15 +1236,29 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
         XMLElem cmmElem =
                 newElement("ColorManagementModule", colorSpaceTransformElem);
 
-        createStringFromEnum("RenderingIntent", cmm.renderingIntent, cmmElem);
+        if (int(cmm.renderingIntent) == 2)
+        {
+            createString("RenderingIntent", "RELATIVE", cmmElem);
+        }
+        else if (int(cmm.renderingIntent) == 3)
+        {
+            createString("RenderingIntent", "ABSOLUTE", cmmElem);
+        }
+        else
+        {
+            createStringFromEnum("RenderingIntent", cmm.renderingIntent, cmmElem);
+        }
 
         // TODO: Not sure what this'll actually look like
         createString("SourceProfile", cmm.sourceProfile, cmmElem);
-        createString("DisplayProfile", cmm.displayProfile, cmmElem);
+        if (!cmm.displayProfile.empty())
+        {
+            createString("DisplayProfile", cmm.displayProfile, cmmElem);
+        }
 
         if (!cmm.iccProfile.empty())
         {
-            createString("ICCProfile", cmm.iccProfile, cmmElem);
+            createString("ICCProfileSignature", cmm.iccProfile, cmmElem);
         }
     }
 
@@ -1760,50 +1809,39 @@ XMLElem DerivedXMLParser200::convertDisplayToXML(
     return displayElem;
 }
 
-XMLElem DerivedXMLParser200::convertGeographicTargetToXML(
-        const GeographicAndTarget& geographicAndTarget,
+XMLElem DerivedXMLParser200::convertGeoDataToXML(
+        const GeoDataBase* geoData,
         XMLElem parent) const
 {
-    XMLElem geographicAndTargetElem = newElement("GeographicAndTarget", parent);
+    XMLElem geoDataXML = newElement("GeoData", parent);
 
-    common().createEarthModelType("EarthModel", geographicAndTarget.earthModel, geographicAndTargetElem);
+    common().createEarthModelType("EarthModel", geoData->earthModel, geoDataXML);
 
-    confirmNonNull(geographicAndTarget.imageCorners,
-                   "geographicAndTarget.imageCorners");
-    common().createLatLonFootprint("ImageCorners", "ICP",
-                                   *geographicAndTarget.imageCorners,
-                                   geographicAndTargetElem);
+    common().createLatLonFootprint("ImageCorners", "ICP", geoData->imageCorners, geoDataXML);
 
     //only if 3+ vertices
-    const size_t numVertices = geographicAndTarget.validData.size();
+    const size_t numVertices = geoData->validData.size();
     if (numVertices >= 3)
     {
-        XMLElem vElem = newElement("ValidData", geographicAndTargetElem);
-        setAttribute(vElem, "size", str::toString(numVertices));
+        XMLElem vXML = newElement("ValidData", geoDataXML);
+        setAttribute(vXML, "size", str::toString(numVertices));
 
         for (size_t ii = 0; ii < numVertices; ++ii)
         {
-            XMLElem vertexElem =
-                    common().createLatLon("Vertex",
-                                          geographicAndTarget.validData[ii],
-                                          vElem);
-            setAttribute(vertexElem, "index", str::toString(ii + 1));
+            XMLElem vertexXML = common().createLatLon("Vertex", geoData->validData[ii],
+                                                      vXML);
+            setAttribute(vertexXML, "index", str::toString(ii + 1));
         }
     }
-    else
+
+    for (size_t ii = 0; ii < geoData->geoInfos.size(); ++ii)
     {
-        throw except::Exception(Ctxt("ValidData must have at least 3 vertices"));
+        common().convertGeoInfoToXML(*geoData->geoInfos[ii].get(), true, geoDataXML);
     }
 
-    for (size_t ii = 0; ii < geographicAndTarget.geoInfos.size(); ++ii)
-    {
-        common().convertGeoInfoToXML(*geographicAndTarget.geoInfos[ii],
-                                     true,
-                                     geographicAndTargetElem);
-    }
-
-    return geographicAndTargetElem;
+    return geoDataXML;
 }
+
 
 XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
         const DigitalElevationData& ded,
@@ -1872,33 +1910,36 @@ XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
     return dedElem;
 }
 
-void DerivedXMLParser200::parseGeographicTargetFromXML(
-    const XMLElem geographicElem,
-    GeographicAndTarget& geographicAndTarget) const
+void DerivedXMLParser200::parseGeoDataFromXML(
+    const XMLElem geoDataXML, GeoDataBase* geoData) const
 {
-    std::string model;
+    common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
+            geoData->earthModel);
 
-    common().parseEarthModelType(getFirstAndOnly(geographicElem, "EarthModel"), geographicAndTarget.earthModel);
-    common().parseFootprint(getFirstAndOnly(geographicElem, "ImageCorners"), "ICP",
-        *geographicAndTarget.imageCorners);
+    common().parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP",
+            geoData->imageCorners);
 
-    common().parseLatLons(getFirstAndOnly(geographicElem, "ValidData"),
-                          "Vertex", geographicAndTarget.validData);
+    XMLElem tmpElem = getOptional(geoDataXML, "ValidData");
+    if (tmpElem != NULL)
+    {
+        common().parseLatLons(tmpElem, "Vertex", geoData->validData);
+    }
 
-    std::vector<XMLElem> geoInfosElem;
-    geographicElem->getElementsByTagName("GeoInfo", geoInfosElem);
+    std::vector <XMLElem> geoInfosXML;
+    geoDataXML->getElementsByTagName("GeoInfo", geoInfosXML);
 
     //optional
-    size_t idx(geographicAndTarget.geoInfos.size());
-    geographicAndTarget.geoInfos.resize(idx + geoInfosElem.size());
+    size_t idx(geoData->geoInfos.size());
+    geoData->geoInfos.resize(idx + geoInfosXML.size());
 
-    for (std::vector<XMLElem>::const_iterator it = geoInfosElem.begin(); it
-        != geoInfosElem.end(); ++it, ++idx)
+    for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
+            != geoInfosXML.end(); ++it, ++idx)
     {
-        geographicAndTarget.geoInfos[idx].reset(new GeoInfo());
-        common().parseGeoInfoFromXML(*it, geographicAndTarget.geoInfos[idx].get());
+        geoData->geoInfos[idx].reset(new GeoInfo());
+        common().parseGeoInfoFromXML(*it, geoData->geoInfos[idx].get());
     }
 }
+
 
 void DerivedXMLParser200::parseMeasurementFromXML(
         const XMLElem measurementElem,

@@ -35674,7 +35674,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_5(PyObject *SWIGUNUSEDPARM(self),
   if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOO:Wideband_read",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd::Wideband *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_read" "', argument " "1"" of type '" "cphd::Wideband const *""'"); 
   }
   arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
@@ -35722,7 +35722,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_5(PyObject *SWIGUNUSEDPARM(self),
   {
     try
     {
-      (arg1)->read(arg2,arg3,arg4,arg5,arg6,arg7,(types::RowCol< size_t > const &)*arg8,arg9);
+      ((cphd::Wideband const *)arg1)->read(arg2,arg3,arg4,arg5,arg6,arg7,(types::RowCol< size_t > const &)*arg8,arg9);
     } 
     catch (const std::exception& e)
     {
@@ -36027,7 +36027,7 @@ fail:
     "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,mem::ScopedArray< sys::ubyte > &) const\n"
     "    cphd::Wideband::read(size_t,mem::ScopedArray< sys::ubyte > &) const\n"
     "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,std::vector< double,std::allocator< double > > const &,size_t,mem::BufferView< sys::ubyte > const &,mem::BufferView< std::complex< float > > const &) const\n"
-    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,types::RowCol< size_t > const &,void *)\n");
+    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,types::RowCol< size_t > const &,void *) const\n");
   return 0;
 }
 
@@ -36374,13 +36374,13 @@ SWIGINTERN PyObject *_wrap_Wideband_getElementSize(PyObject *SWIGUNUSEDPARM(self
   if (!PyArg_ParseTuple(args,(char *)"O:Wideband_getElementSize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_getElementSize" "', argument " "1"" of type '" "cphd::Wideband *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Wideband_getElementSize" "', argument " "1"" of type '" "cphd::Wideband const *""'"); 
   }
   arg1 = reinterpret_cast< cphd::Wideband * >(argp1);
   {
     try
     {
-      result = (arg1)->getElementSize();
+      result = ((cphd::Wideband const *)arg1)->getElementSize();
     } 
     catch (const std::exception& e)
     {
