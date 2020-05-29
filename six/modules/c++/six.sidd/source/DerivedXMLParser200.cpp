@@ -1914,10 +1914,10 @@ void DerivedXMLParser200::parseGeoDataFromXML(
     const XMLElem geoDataXML, GeoDataBase* geoData) const
 {
     common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
-                        geoData->earthModel);
+            geoData->earthModel);
 
     common().parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP",
-                   geoData->imageCorners);
+            geoData->imageCorners);
 
     XMLElem tmpElem = getOptional(geoDataXML, "ValidData");
     if (tmpElem != NULL)
@@ -1925,7 +1925,7 @@ void DerivedXMLParser200::parseGeoDataFromXML(
         common().parseLatLons(tmpElem, "Vertex", geoData->validData);
     }
 
-    std::vector < XMLElem > geoInfosXML;
+    std::vector <XMLElem> geoInfosXML;
     geoDataXML->getElementsByTagName("GeoInfo", geoInfosXML);
 
     //optional
