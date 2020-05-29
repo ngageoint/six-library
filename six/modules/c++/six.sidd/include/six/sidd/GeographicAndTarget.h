@@ -151,7 +151,7 @@ public:
  *  Contains generic and extensible targeting and geographic region
  *  information
  *
- * Note: Only used by SIDD 1.0
+ *  Note: Only used by SIDD 1.0
  *
  */
 class GeographicAndTarget
