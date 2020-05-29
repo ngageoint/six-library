@@ -151,12 +151,7 @@ public:
  *  Contains generic and extensible targeting and geographic region
  *  information
  *
- *  NOTE: This block looks completely different between SIDD 1.0 and SIDD 2.0
- *        (SIDD 2.0 was changed to more closely resemble SICD).  If a block is
- *        marked as required below, it is required only for the particular
- *        version of SIDD that it's associated with (everything in this class
- *        is a pointer or vector even when required since we don't know if
- *        we're dealing with 1.0 or 2.0)
+ * Note: Only used by SIDD 1.0
  *
  */
 class GeographicAndTarget
@@ -164,7 +159,7 @@ class GeographicAndTarget
 public:
     // This section is used for SIDD 1.0
 
-    //! Default constructor initializes earthModel enum to only valid value
+    //! Default constructor
     GeographicAndTarget()
     {
     }
