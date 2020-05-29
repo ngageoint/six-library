@@ -328,7 +328,7 @@
             <xsd:element name="Components" minOccurs="0">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="PosVelErr" minOccurs="0">
+                        <xsd:element name="PosVelErr">
                             <xsd:complexType>
                                 <xsd:sequence>
                                     <xsd:element name="Frame" type="ErrorFrameType"/>
@@ -370,7 +370,7 @@
                                 </xsd:sequence>
                             </xsd:complexType>
                         </xsd:element>
-                        <xsd:element name="RadarSensor" minOccurs="0">
+                        <xsd:element name="RadarSensor">
                             <xsd:complexType>
                                 <xsd:sequence>
                                     <xsd:element name="RangeBias" type="xsd:double"/>
