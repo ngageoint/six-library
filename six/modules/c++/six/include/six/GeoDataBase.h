@@ -35,7 +35,7 @@ namespace six
 {
 /*!
  *  \struct GeoDataBase
- *  \brief SICD GeoData block
+ *  \brief General GeoDataBase block
  *
  *  This block describes the geographic coordinates of the region
  *  covered by the image
@@ -84,14 +84,6 @@ public:
     {
         return !(*this == rhs);
     }
-
-    //Doesn't currently do anything
-    // void fillDerivedFields(const ImageData& imageData,
-    //         const scene::ProjectionModel& model);
-    // bool validate(logging::Logger& log) const;
-
-// private:
-//     static const double ECF_THRESHOLD;
 };
 }
 
