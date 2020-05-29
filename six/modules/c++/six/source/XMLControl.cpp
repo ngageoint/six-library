@@ -76,6 +76,7 @@ void XMLControl::validate(const xml::lite::Document* doc,
         if (!os.exists(paths[ii]))
         {
             std::ostringstream msg;
+            msg << paths[ii] << " does not exist!";
             throw except::Exception(Ctxt(msg.str()));
         }
     }
