@@ -28,7 +28,6 @@
 #include <import/io.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDXMLControl.h>
-#include "utils.h"
 
 /*!
  *  This extracts raw XML from a CPHD file using the CPHD module
