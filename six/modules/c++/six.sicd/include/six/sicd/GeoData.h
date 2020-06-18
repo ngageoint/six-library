@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six.sicd-c++
+ * This file is part of six-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2020, MDA Information Systems LLC
  *
- * six.sicd-c++ is free software; you can redistribute it and/or modify
+ * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -24,11 +24,9 @@
 
 #include "six/Types.h"
 #include "six/Init.h"
+#include "six/GeoDataBase.h"
 #include "six/GeoInfo.h"
-#include "six/Parameter.h"
-#include "six/ParameterCollection.h"
 #include "scene/ProjectionModel.h"
-#include <mem/ScopedCloneablePtr.h>
 #include <logging/Logger.h>
 
 namespace six
@@ -36,7 +34,6 @@ namespace six
 namespace sicd
 {
 struct ImageData;
-
 /*!
  *  \struct GeoData
  *  \brief SICD GeoData block
@@ -46,48 +43,15 @@ struct ImageData;
  *
  *  Compiler-generated copy constructor and assignment operator are sufficient
  */
-class GeoData
+class GeoData : public GeoDataBase
 {
 public:
-    //!  Constructor, force WGS84, since spec does.
-    GeoData() :
-        earthModel(EarthModelType::WGS84)
-    {
-    }
-
-    /*!
-     *  Identifies the earth model used for
-     *  latitude, longitude and height parameters.  All
-     *  height values are Height Above Ellipsoid (HAE)
-     */
-    EarthModelType earthModel;
 
     /*!
      *  Scene Center Point in full image.  This is the
      *  precise location
      */
     SCP scp;
-
-    /*!
-     *  Parameters apply to image corners of the
-     *  product projected to the same height as the SCP.
-     *  These corners are an approximate geographic location
-     *  not intended for analytical use
-     */
-    LatLonCorners imageCorners;
-
-    /*!
-     *  (Optional) indicates the full image includes both
-     *  valid data and some zero-filled pixels.  Vector size
-     *  is the number of vertices.
-     */
-    std::vector<LatLon> validData;
-
-    /*!
-     *  (Optional) Parameters that describe geographic features.
-     *  Note that this may be used as a block inside of a block.
-     */
-    std::vector<mem::ScopedCopyablePtr<GeoInfo> > geoInfos;
 
     bool operator==(const GeoData& rhs) const;
     bool operator!=(const GeoData& rhs) const

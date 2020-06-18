@@ -83,7 +83,7 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
         regionType = RegionType::SUB_REGION;
     else if (getOptional(tmpElem, "GeographicInfo"))
         regionType = RegionType::GEOGRAPHIC_INFO;
-    builder.addGeographicAndTargetOld(regionType);
+    builder.addGeographicAndTarget(regionType);
 
     // create Measurement
     six::ProjectionType projType = ProjectionType::NOT_SET;
@@ -735,7 +735,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
     // optional
     if (exploitationFeatures->product[0].north != Init::undefined<double>())
         createDouble("North", exploitationFeatures->product[0].north, productElem);
-    
+
     // optional to unbounded
     common().addParameters("Extension",
         exploitationFeatures->product[0].extensions,

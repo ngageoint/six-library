@@ -47,16 +47,15 @@ DerivedDataBuilder& DerivedDataBuilder::addDisplay(PixelType pixelType)
     return *this;
 }
 
-DerivedDataBuilder& DerivedDataBuilder::addGeographicAndTarget()
+DerivedDataBuilder& DerivedDataBuilder::addGeoData()
 {
-    mData->geographicAndTarget.reset(new GeographicAndTarget());
-    mData->geographicAndTarget->imageCorners.reset(new LatLonCorners());
+    mData->geoData.reset(new six::GeoDataBase());
 
     return *this;
 }
 
 DerivedDataBuilder&
-DerivedDataBuilder::addGeographicAndTargetOld(RegionType regionType)
+DerivedDataBuilder::addGeographicAndTarget(RegionType regionType)
 {
     mData->geographicAndTarget.reset(new GeographicAndTarget());
     mData->geographicAndTarget->geographicCoverage.reset(

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SIX_SIDD_DERIVED_Elem_PARSER_100_H__
-#define __SIX_SIDD_DERIVED_Elem_PARSER_100_H__
+#ifndef __SIX_SIDD_DERIVED_XML_PARSER_100_H__
+#define __SIX_SIDD_DERIVED_XML_PARSER_100_H__
 
 #include <six/sidd/DerivedXMLParser.h>
 

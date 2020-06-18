@@ -45,10 +45,7 @@ bool GeographicCoverage::operator==(const GeographicCoverage& rhs) const
 bool GeographicAndTarget::operator==(const GeographicAndTarget& rhs) const
 {
     return (geographicCoverage == rhs.geographicCoverage &&
-        targetInformation == rhs.targetInformation && 
-        earthModel == rhs.earthModel &&
-        imageCorners == rhs.imageCorners &&
-        validData == rhs.validData &&
+        targetInformation == rhs.targetInformation &&
         geoInfos == rhs.geoInfos);
 }
 

@@ -26,6 +26,7 @@
 #include <six/Data.h>
 #include <six/ErrorStatistics.h>
 #include <six/MatchInformation.h>
+#include <six/GeoDataBase.h>
 #include <six/sidd/ProductCreation.h>
 #include <six/sidd/Display.h>
 #include <six/sidd/GeographicAndTarget.h>
@@ -69,6 +70,14 @@ struct DerivedData: public Data
      *  region information.
      */
     mem::ScopedCopyablePtr<GeographicAndTarget> geographicAndTarget;
+
+    /*!
+     *  Contains generic and extensible targeting and geographic
+     *  region information.
+     Required SIDD 2.0
+     */
+    mem::ScopedCopyablePtr<GeoDataBase> geoData;
+
 
     /*!
      *  Contains the meta-data necessary for performing

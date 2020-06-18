@@ -263,6 +263,12 @@
             <xsd:maxExclusive value="180"/>
         </xsd:restriction>
     </xsd:simpleType>
+    <xsd:simpleType name="ZeroToExclusive360Type">
+        <xsd:restriction base="xsd:double">
+            <xsd:minInclusive value="0"/>
+            <xsd:maxExclusive value="360"/>
+        </xsd:restriction>
+    </xsd:simpleType>
     <xsd:simpleType name="Neg90To90Type">
         <xsd:restriction base="xsd:double">
             <xsd:minInclusive value="-90"/>
@@ -322,7 +328,7 @@
             <xsd:element name="Components" minOccurs="0">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="PosVelErr" minOccurs="0">
+                        <xsd:element name="PosVelErr">
                             <xsd:complexType>
                                 <xsd:sequence>
                                     <xsd:element name="Frame" type="ErrorFrameType"/>
@@ -364,7 +370,7 @@
                                 </xsd:sequence>
                             </xsd:complexType>
                         </xsd:element>
-                        <xsd:element name="RadarSensor" minOccurs="0">
+                        <xsd:element name="RadarSensor">
                             <xsd:complexType>
                                 <xsd:sequence>
                                     <xsd:element name="RangeBias" type="xsd:double"/>
@@ -526,7 +532,7 @@
             </xsd:annotation>
         </xsd:attribute>
     </xsd:complexType>
-    
+
     <xsd:complexType name="MatchInfoType">
         <xsd:sequence>
             <xsd:element name="NumMatchTypes" type="xsd:int"/>

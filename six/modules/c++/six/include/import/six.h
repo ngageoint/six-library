@@ -29,6 +29,7 @@
 #include "six/Enums.h"
 #include "six/ErrorStatistics.h"
 #include "six/MatchInformation.h"
+#include "six/GeoDataBase.h"
 #include "six/GeoInfo.h"
 #include "six/Mesh.h"
 #include "six/NITFImageInfo.h"
