@@ -56,8 +56,8 @@ int main(int argc, char** argv)
         const bool prettyPrint = options->get<bool>("prettyPrint");
         std::string basename = options->get<std::string>("basename");
         const bool toConsole = options->get<bool>("console");
-        const std::string inputFile = options->get<std::string> ("cphd");
-        const std::string schemaFile = options->get<std::string> ("schema");
+        const std::string inputFile = options->get<std::string>("cphd");
+        const std::string schemaFile = options->get<std::string>("schema");
 
         // Check for conflicting input
         if (!basename.empty() && toConsole)
@@ -74,7 +74,10 @@ int main(int argc, char** argv)
         std::string outPathname = basename  + ".xml";
 
         std::vector<std::string> schemaPathnames;
-        schemaPathnames.push_back(schemaFile);
+        if (!schemaFile.empty())
+        {
+            schemaPathnames.push_back(schemaFile);
+        }
 
         // Reads in CPHD and verifies XML using schema
         cphd::CPHDReader reader(inputFile, sys::OS().getNumCPUs());
