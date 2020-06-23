@@ -72,7 +72,7 @@ void Pvp::initialize()
     setDefaultValues(1,"F8", tdIonoSRP);
     setDefaultValues(1,"F8", sc0);
     setDefaultValues(1,"F8", scss);
-    setDefaultValues(1,"F8", signal);
+    setDefaultValues(1,"I8", signal);
 }
 
 void Pvp::validate(size_t size, size_t offset)
