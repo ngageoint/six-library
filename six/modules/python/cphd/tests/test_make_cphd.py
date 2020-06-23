@@ -2,9 +2,9 @@
 
 #
 # =========================================================================
-# This file is part of cphd-python 
+# This file is part of cphd-python
 # =========================================================================
-# 
+#
 # (C) Copyright 2004 - 2015, MDA Information Systems LLC
 #
 # cphd-python is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 #
-# You should have received a copy of the GNU Lesser General Public 
-# License along with this program; If not, 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this program; If not,
 # see <http://www.gnu.org/licenses/>.
 #
 
@@ -48,13 +48,15 @@ def get_poly_1d(coeffs):
         poly[ii] = coeffs[ii]
     return poly
 
+
 def get_poly_2d(coeffs):
     num_x = len(coeffs)
     num_y = len(coeffs[0])
     poly = math_poly.Poly2D(num_x - 1, num_y - 1)
     for ii, jj in itertools.product(range(num_x), range(num_y)):
-        poly[ii,jj] = coeffs[ii][jj]
+        poly[ii, jj] = coeffs[ii][jj]
     return poly
+
 
 def get_poly_vector(coeffs):
     num_x = len(coeffs)
@@ -65,16 +67,18 @@ def get_poly_vector(coeffs):
     for ii in range(num_x):
         poly[ii] = Vector3(coeffs[ii])
     return poly
-    
+
+
 def get_boolean(b):
     return six.BooleanType.IS_TRUE if b else six.BooleanType.IS_FALSE
+
 
 def get_parameter(name, value):
     p = six.Parameter()
     p.setName(name)
     p.setValue(value)
     return p
-    
+
 
 IMAGE_AREA = cphd.AreaType()
 IMAGE_AREA.x1y1 = Vector2([3.5, 5.3])
@@ -104,60 +108,60 @@ if __name__ == '__main__':
     metadata.collectionID = cid
 
     # Global Block
-    
+
     glob = cphd.Global()
     glob.domainType.value = cphd.DomainType.FX
-    glob.sgn.value   = cphd.PhaseSGN.MINUS_1
+    glob.sgn.value = cphd.PhaseSGN.MINUS_1
     glob.refFrequencyIndex = 1
-    
+
     timeline = cphd.Timeline()
     timeline.collectStart = six.DateTime()
     timeline.collectionDuration = 200
     timeline.txTime1 = 4
     timeline.txTime2 = 204
     glob.timeline = timeline
-    
+
     fx_band = cphd.FxBand()
     fx_band.fxMin = 9e-1
     fx_band.fxMax = 1.7e0
     glob.fxBand = fx_band
-    
+
     toa_swath = cphd.TOASwath()
     toa_swath.toaMin = 3.4e0
     toa_swath.toaMax = 6.1e0
     glob.toaSwath = toa_swath
-    
+
     glob.tropoParameters = cphd.makeScopedCopyableTropoParameters()
     glob.tropoParameters.n0 = 6.52e1
     glob.tropoParameters.refHeight.value = cphd.RefHeight.IARP
-    
+
     glob.ionoParameters = cphd.makeScopedCopyableIonoParameters()
     glob.ionoParameters.tecv = 5.8e0
     glob.ionoParameters.f2Height = 3.0e0
-    
+
     metadata._global = glob
-    
+
     # SceneCoordinates block
-    
+
     sc = cphd.SceneCoordinates()
     sc.earthModel.value = cphd.EarthModelType.WGS_84
-    
+
     sc.iarp = cphd.IARP()
     sc.iarp.ecf = Vector3([1.2, 2.3, 3.4])
     sc.iarp.llh = scene.LatLonAlt(45, -102, 34)
-    
+
     sc.referenceSurface.hae = cphd.makeScopedCopyableHAE()
     sc.referenceSurface.hae.uIax = scene.LatLon(12, 24)
     sc.referenceSurface.hae.uIay = scene.LatLon(36, 48)
-    
+
     sc.imageArea = IMAGE_AREA
-    
+
     sc.imageAreaCorners = six.LatLonCorners()
     sc.imageAreaCorners.upperLeft = scene.LatLon(10, 11)
     sc.imageAreaCorners.upperRight = scene.LatLon(20, 21)
     sc.imageAreaCorners.lowerRight = scene.LatLon(30, 31)
     sc.imageAreaCorners.lowerLeft = scene.LatLon(40, 41)
-    
+
     sc.imageGrid = cphd.makeScopedCopyableImageGrid()
     sc.imageGrid.identifier = 'Grid'
     sc.imageGrid.iarpLocation.line = 1.23
@@ -168,7 +172,7 @@ if __name__ == '__main__':
     sc.imageGrid.yExtent.sampleSpacing = 6.28
     sc.imageGrid.yExtent.firstSample = 8
     sc.imageGrid.yExtent.numSamples = 100
-    
+
     segments = {
         'Segment1': {
             'start': (0, 1),
@@ -189,7 +193,7 @@ if __name__ == '__main__':
             ],
         },
     }
-    
+
     for name, seg_data in segments.items():
         seg = cphd.Segment()
         seg.identifier = name
@@ -203,11 +207,11 @@ if __name__ == '__main__':
             ls.sample = p[1]
             seg.polygon.append(ls)
         sc.imageGrid.segments.append(seg)
-    
+
     metadata.sceneCoordinates = sc
-    
+
     # Data block
-    
+
     _channels = [
         {
             'id': 'Channel',
@@ -224,28 +228,28 @@ if __name__ == '__main__':
             'comp_sig_size': 3,
         },
     ]
-    
+
     _support_arrays = [
         {
             'id': '1.0',
-            'shape': (3,4),
+            'shape': (3, 4),
             'bytes_per_element': 8,
             'offset': 0,
         },
         {
             'id': '2.0',
-            'shape': (3,4),
+            'shape': (3, 4),
             'bytes_per_element': 4,
             'offset': 96,
         },
         {
             'id': 'AddedSupportArray',
-            'shape': (3,4),
+            'shape': (3, 4),
             'bytes_per_element': 4,
             'offset': 144,
         },
     ]
-    
+
     data = cphd.Data()
     data.signalArrayFormat.value = cphd.SignalArrayFormat.CI4
     data.numCPHDChannels = 2
@@ -258,7 +262,7 @@ if __name__ == '__main__':
         _chan.pvpArrayByteOffset = vals['pvp_byte_offset']
         _chan.compressedSignalSize = vals['comp_sig_size']
         data.channels.append(_chan)
-    
+
     for vals in _support_arrays:
         data.setSupportArray(
             vals['id'],
@@ -266,17 +270,17 @@ if __name__ == '__main__':
             vals['bytes_per_element'],
             vals['offset'],
         )
-    
+
     metadata.data = data
-    
+
     # Channel block
-    
+
     channel = cphd.Channel()
     channel.refChId = 'ChId'
     channel.fxFixedCphd.value = six.BooleanType.IS_TRUE
     channel.toaFixedCphd.value = six.BooleanType.IS_FALSE
     channel.srpFixedCphd.value = six.BooleanType.IS_TRUE
-    
+
     params = cphd.ChannelParameter()
     params.identifier = 'CPI'
     params.refVectorIndex = 1
@@ -290,12 +294,12 @@ if __name__ == '__main__':
     params.fxBW = 0.8
     params.fxBWNoise = 0.5
     params.toaSaved = 2.7
-    
+
     params.dwellTimes.codId = 'CODPolynomial'
     params.dwellTimes.dwellId = 'DwellPolynomial'
-    
+
     params.imageArea = IMAGE_AREA
-    
+
     params.toaExtended = cphd.makeScopedCopyableTOAExtended()
     params.toaExtended.toaExtSaved = 1.0
     params.toaExtended.lfmEclipse = cphd.makeScopedCopyableTOALFMEclipse()
@@ -303,27 +307,27 @@ if __name__ == '__main__':
     params.toaExtended.lfmEclipse.fxEarlyHigh = 2.0
     params.toaExtended.lfmEclipse.fxLateLow = 1.0
     params.toaExtended.lfmEclipse.fxLateHigh = 2.0
-    
+
     params.antenna = cphd.makeScopedCopyableChannelAntenna()
     params.antenna.txAPCId = 'TxAPCId'
     params.antenna.txAPATId = 'TxAPATId'
     params.antenna.rcvAPCId = 'RcvAPCId'
     params.antenna.rcvAPATId = 'RcvAPATId'
-    
+
     params.txRcv = cphd.makeScopedCopyableChannelTxRcv()
     params.txRcv.txWFId.clear()
     params.txRcv.txWFId.push_back('TxWFId')
     params.txRcv.rcvId.clear()
     params.txRcv.rcvId.push_back('RcvId')
-    
+
     params.tgtRefLevel = cphd.makeScopedCopyableTgtRefLevel()
     params.tgtRefLevel.ptRef = 12.0
-    
+
     noise_points = [
         (0.3, 2.7),
         (0.5, 2.7),
     ]
-    
+
     params.noiseLevel = cphd.makeScopedCopyableNoiseLevel()
     params.noiseLevel.pnRef = 0.5
     params.noiseLevel.bnRef = 0.8
@@ -333,21 +337,21 @@ if __name__ == '__main__':
         pt.fx = p[0]
         pt.pn = p[1]
         params.noiseLevel.fxNoiseProfile.point.append(pt)
-    
+
     channel.parameters.append(params)
-    
+
     added_params = [
         ('AddedParameter1', 'Param'),
         ('AddedParameter2', 'Param'),
     ]
-    
+
     for args in added_params:
         channel.addedParameters.push_back(get_parameter(*args))
-    
+
     metadata.channel = channel
-    
+
     # PVP block
-    
+
     pvp_data = {
         # Name: (offset, size, format
         'txTime': (0, 1, 'F8'),
@@ -368,13 +372,13 @@ if __name__ == '__main__':
         'sc0': (25, 1, 'F8'),
         'scss': (26, 1, 'F8'),
     }
-    
+
     added_pvp_data = [
         # size, offset, fmt, name
         (1, 27, 'F8', 'newParam1'),
         (1, 28, 'F8', 'newParam2'),
     ]
-    
+
     pvp = cphd.Pvp()
     for name, (offset, size, fmt) in pvp_data.items():
         attr = pvp.__getattr__(name)
@@ -383,16 +387,16 @@ if __name__ == '__main__':
         if size == 3:
             fmt = 'X={};Y={};Z={};'.format(fmt, fmt, fmt)
         attr.setFormat(fmt)
-    
+
     for args in added_pvp_data:
         pvp.setCustomParameter(*args)
-    
+
     metadata.pvp = pvp
-    
+
     # SupportArray block
-    
+
     sa = cphd.makeScopedCopyableSupportArray()
-    
+
     iaz = cphd.SupportArrayParameter()
     iaz.elementFormat = 'IAZ=F4;'
     iaz.x0 = 0.0
@@ -400,7 +404,7 @@ if __name__ == '__main__':
     iaz.xSS = 5.0
     iaz.ySS = 5.0
     sa.iazArray.append(iaz)
-    
+
     gainPhase = cphd.SupportArrayParameter()
     gainPhase.elementFormat = 'Gain=F4;Phase=F4;'
     gainPhase.x0 = 0.0
@@ -408,7 +412,7 @@ if __name__ == '__main__':
     gainPhase.xSS = 5.0
     gainPhase.ySS = 5.0
     sa.antGainPhase.append(gainPhase)
-    
+
     added_sa = cphd.AdditionalSupportArray()
     added_sa.identifier = 'AddedSupportArray'
     added_sa.elementFormat = 'F4'
@@ -422,44 +426,44 @@ if __name__ == '__main__':
     for args in [('Parameter1', 'Additional parameter'),
                  ('Parameter1', 'Additional parameter')]:
         added_sa.parameter.push_back(get_parameter(*args))
-    
+
     metadata.supportArray = sa
-    
+
     # Dwell block
-    
+
     dwell = cphd.Dwell()
-    
+
     cod_coeffs = [
-        [0.0, 5.0,],
-        [5.0, 0.0,],
+        [0.0, 5.0],
+        [5.0, 0.0],
     ]
-    
+
     dwell_time_coeffs = [
         [0.0, 2.0],
         [3.0, 0.0],
     ]
-    
+
     cod = cphd.COD()
     cod.identifier = 'codPolynomial1'
     cod.codTimePoly = get_poly_2d(cod_coeffs)
     dwell.cod.append(cod)
-    
+
     dtime = cphd.DwellTime()
     dtime.identifier = 'dwellPolynomial1'
     dtime.dwellTimePoly = get_poly_2d(dwell_time_coeffs)
     dwell.dtime.append(dtime)
-    
+
     metadata.dwell = dwell
-    
+
     # ReferenceGeometry block
-    
+
     geom = cphd.ReferenceGeometry()
     geom.referenceTime = 0.0
     geom.srpCODTime = 23.0
     geom.srpDwellTime = 25.0
     geom.srp.ecf = Vector3([1.0, 2.0, 3.5])
     geom.srp.iac = Vector3([1.5, 2.5, 4.0])
-    
+
     geom.monostatic = cphd.makeScopedCopyableMonostatic()
     geom.monostatic.arpPos = Vector3([10.0, 10.0, 10.0])
     geom.monostatic.arpVel = Vector3([10.0, 10.0, 10.0])
@@ -473,13 +477,13 @@ if __name__ == '__main__':
     geom.monostatic.twistAngle = 30.0
     geom.monostatic.slopeAngle = 30.0
     geom.monostatic.layoverAngle = 30.0
-    
+
     metadata.referenceGeometry = geom
-    
+
     # Antenna block
-    
+
     ant = cphd.makeScopedCopyableCphdAntenna()
-    
+
     coord_frames = {
         'ACF1': {
             'xaxis': [
@@ -504,14 +508,14 @@ if __name__ == '__main__':
             ],
         },
     }
-    
+
     for name, cf_data in coord_frames.items():
         cf = cphd.AntCoordFrame()
         cf.identifier = name
         cf.xAxisPoly = get_poly_vector(cf_data['xaxis'])
         cf.yAxisPoly = get_poly_vector(cf_data['yaxis'])
         ant.antCoordFrame.append(cf)
-    
+
     phase_centers = [
         {
             'identifier': 'APC',
@@ -519,14 +523,14 @@ if __name__ == '__main__':
             'xyz': [5.0, 5.0, 5.0],
         },
     ]
-    
+
     for pc_data in phase_centers:
         pc = cphd.AntPhaseCenter()
         pc.identifier = pc_data['identifier']
         pc.acfId = pc_data['acf_id']
         pc.apcXYZ = Vector3(pc_data['xyz'])
         ant.antPhaseCenter.append(pc)
-    
+
     ant_patterns = {
         'APAT': {
             'f0': 2.3,
@@ -565,8 +569,8 @@ if __name__ == '__main__':
                 },
             ],
         },
-    }        
-    
+    }
+
     for name, ap_data in ant_patterns.items():
         ap = cphd.AntPattern()
         ap.identifier = name
@@ -588,13 +592,13 @@ if __name__ == '__main__':
             gpa.elementId = gpa_data['element_id']
             ap.gainPhaseArray.append(gpa)
         ant.antPattern.append(ap)
-    
+
     metadata.antenna = ant
-    
+
     # TxRcv block
-    
+
     tr = cphd.makeScopedCopyableTxRcv()
-    
+
     tx_params = {
         'TxWFParams': {
             'pulseLength': 3.0,
@@ -605,7 +609,7 @@ if __name__ == '__main__':
             'polarization': cphd.PolarizationType.LHC,
         },
     }
-    
+
     rcv_params = {
         'RcvParam1': {
             'windowLength': 3.0,
@@ -626,7 +630,7 @@ if __name__ == '__main__':
             'pathGain': 5.0,
         },
     }
-    
+
     for name, params in tx_params.items():
         txp = cphd.TxWFParameters()
         txp.identifier = name
@@ -637,7 +641,7 @@ if __name__ == '__main__':
                 attr = txp.__getattr__(key)
                 attr.__setattr__('value', val)
         tr.txWFParameters.append(txp)
-    
+
     for name, params in rcv_params.items():
         rcvp = cphd.RcvParameters()
         rcvp.identifier = name
@@ -648,13 +652,13 @@ if __name__ == '__main__':
                 attr = rcvp.__getattr__(key)
                 attr.__setattr__('value', val)
         tr.rcvParameters.append(rcvp)
-    
+
     metadata.txRcv = tr
-    
+
     # ErrorParameters block
-    
+
     ep = cphd.makeScopedCopyableErrorParameters()
-    
+
     ep.monostatic = cphd.makeScopedCopyableErrorMonostatic()
     ep.monostatic.posVelErr.p1 = 1.0
     ep.monostatic.posVelErr.p2 = 1.0
@@ -662,44 +666,47 @@ if __name__ == '__main__':
     ep.monostatic.posVelErr.v1 = 1.0
     ep.monostatic.posVelErr.v2 = 1.0
     ep.monostatic.posVelErr.v3 = 1.0
-    
+
     ep.monostatic.posVelErr.corrCoefs = six.makeScopedCopyableCorrCoefs()
-    for s1, idx1, s2, idx2 in itertools.product(['p', 'v'], [1, 2, 3], ['p', 'v'], [1, 2, 3]):
+    for s1, idx1, s2, idx2 in itertools.product(['p', 'v'],
+                                                [1, 2, 3],
+                                                ['p', 'v'],
+                                                [1, 2, 3]):
         name = '{}{}{}{}'.format(s1, idx1, s2, idx2)
         if name in dir(ep.monostatic.posVelErr.corrCoefs):
             ep.monostatic.posVelErr.corrCoefs.__setattr__(name, 0.8)
-    
+
     ep.monostatic.posVelErr.positionDecorr.corrCoefZero = 0.5
     ep.monostatic.posVelErr.positionDecorr.decorrRate = 1.0
-    
+
     ep.monostatic.radarSensor.rangeBias = 0.5
     ep.monostatic.radarSensor.clockFreqSF = 1.0
     ep.monostatic.radarSensor.collectionStartTime = 1.0
-    ep.monostatic.radarSensor.rangeBiasDecorr = cphd.makeScopedCopyableDecorrType()
+    ep.monostatic.radarSensor.rangeBiasDecorr = \
+        cphd.makeScopedCopyableDecorrType()
     ep.monostatic.radarSensor.rangeBiasDecorr.corrCoefZero = 0.5
     ep.monostatic.radarSensor.rangeBiasDecorr.decorrRate = 1.0
-    
+
     ep.monostatic.tropoError = six.makeScopedCopyableTropoError()
     ep.monostatic.tropoError.tropoRangeVertical = 5.0
     ep.monostatic.tropoError.tropoRangeSlant = 5.0
     ep.monostatic.tropoError.tropoRangeDecorr.corrCoefZero = 0.5
     ep.monostatic.tropoError.tropoRangeDecorr.decorrRate = 1.0
-    
-    
+
     ep.monostatic.ionoError = six.makeScopedCopyableIonoError()
     ep.monostatic.ionoError.ionoRangeVertical = 5.0
     ep.monostatic.ionoError.ionoRangeRateVertical = 5.0
     ep.monostatic.ionoError.ionoRgRgRateCC = 0.5
     ep.monostatic.ionoError.ionoRangeVertDecorr.corrCoefZero = 0.5
     ep.monostatic.ionoError.ionoRangeVertDecorr.decorrRate = 1.0
-    
+
     cphd.errorParameters = ep
-    
+
     # ProductInfo block
-    
+
     pi = cphd.makeScopedCopyableProductInfo()
     pi.profile = 'Profile'
-    
+
     ci = cphd.CreationInfo()
     ci.application = 'Application'
     ci.datetime = six.DateTime()
@@ -708,26 +715,24 @@ if __name__ == '__main__':
                  ('Param1', 'Value2')]:
         ci.parameter.push_back(get_parameter(*args))
     pi.creationInfo.append(ci)
-    
+
     for args in [('Param1', 'Value1')]:
         pi.parameter.push_back(get_parameter(*args))
-    
+
     metadata.productInfo = pi
-    
+
     # GeoInfo block (TODO)
-    
+
     # MatchInfo block (TODO)
-    
-    
+
     xml_parser = cphd.CPHDXMLControl()
-    
+
     try:
         xml_str = xml_parser.toXMLString(metadata)
         meta_from_str = xml_parser.fromXMLString(xml_str)
         xml_str_from_meta_from_str = xml_parser.toXMLString(meta_from_str)
+        # TODO: Verify round-tripped strings are identical. Because of the
+        # use of std::unordered_map this is not guaranteed at the moment
         print('Test passed')
-    
-        # TODO: Verify round-tripped strings are identical. Because of the use of
-        # std::unordered_map this is not guaranteed at the moment
     except Exception:
         print('Test failed')
