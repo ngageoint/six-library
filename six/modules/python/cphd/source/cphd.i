@@ -23,6 +23,7 @@
 %module(package="pysix") cphd
 
 %feature("autodoc", "1");
+%feature("flatnested");
 
 %include <std_string.i>
 %include <std_vector.i>
@@ -62,8 +63,17 @@ using six::Vector3;
     const std::string& xmlString,
     const std::vector<std::string>& schemaPaths);
 
+// Nested class renames
 %rename(CphdAntenna) cphd::Antenna;
-
+%rename(DataChannel) cphd::Data::Channel;
+%rename(DataSupportArray) cphd::Data::SupportArray;
+%rename(ChannelTxRcv) cphd::ChannelParameter::TxRcv;
+%rename(ChannelAntenna) cphd::ChannelParameter::Antenna;
+%rename(TOALFMEclipse) cphd::TOAExtended::LFMEclipse;
+%rename(ErrorMonostatic) cphd::ErrorParameters::Monostatic;
+%rename(ErrorMonostaticRadarSensor) cphd::ErrorParameters::Monostatic::RadarSensor;
+%rename(ErrorBistatic) cphd::ErrorParameters::Bistatic;
+%rename(ErrorBistaticRadarSensor) cphd::ErrorParameters::Bistatic::RadarSensor;
 
 %include "cphd/Types.h"
 %include "cphd/Enums.h"
@@ -230,12 +240,47 @@ Wideband.read = read
     return retv;
   }
 }
+%template(VectorVector2) std::vector<math::linear::VectorN<2,double> >;
 %template(VectorVector3) std::vector<math::linear::VectorN<3,double> >;
+%template(VectorString) std::vector<std::string>;
+%template(VectorLineSample) std::vector<cphd::LineSample>;
+%template(VectorSegment) std::vector<cphd::Segment>;
+%template(VectorChannelParameters) std::vector<cphd::ChannelParameter>;
+%template(VectorPoint) std::vector<cphd::Point>;
+%template(VectorDataChannel) std::vector<cphd::Data::Channel>;
 %template(VectorAntennaParameters) std::vector<six::sicd::AntennaParameters>;
+%template(VectorSupportArrayParameter) std::vector<cphd::SupportArrayParameter>;
+%template(VectorCOD) std::vector<cphd::COD>;
+%template(VectorDwellTime) std::vector<cphd::DwellTime>;
+%template(VectorAntCoordFrame) std::vector<cphd::AntCoordFrame>;
+%template(VectorAntPhaseCenter) std::vector<cphd::AntPhaseCenter>;
+%template(VectorAntPattern) std::vector<cphd::AntPattern>;
+%template(VectorGainPhaseArray) std::vector<cphd::AntPattern::GainPhaseArray>;
+%template(VectorTxParams) std::vector<cphd::TxWFParameters>;
+%template(VectorRcvParams) std::vector<cphd::RcvParameters>;
+%template(VectorCreationInfo) std::vector<cphd::ProductInfo::CreationInfo>;
+%template(VectorGeoInfo) std::vector<six::GeoInfo>;
 
 SCOPED_COPYABLE(cphd,SupportArray);
+SCOPED_COPYABLE(cphd,TropoParameters);
+SCOPED_COPYABLE(cphd,IonoParameters);
+SCOPED_COPYABLE(cphd,Planar);
+SCOPED_COPYABLE(cphd,HAE);
+SCOPED_COPYABLE(cphd,AreaType);
+SCOPED_COPYABLE(cphd,ImageGrid);
 SCOPED_COPYABLE(cphd,TxRcv);
+SCOPED_COPYABLE(cphd,TOAExtended);
+SCOPED_COPYABLE_RENAME(cphd,TOAExtended::LFMEclipse,TOALFMEclipse);
+SCOPED_COPYABLE_RENAME(cphd,ChannelParameter::Antenna,ChannelAntenna);
+SCOPED_COPYABLE_RENAME(cphd,ChannelParameter::TxRcv,ChannelTxRcv);
+SCOPED_COPYABLE(cphd,TgtRefLevel);
+SCOPED_COPYABLE(cphd,NoiseLevel);
+SCOPED_COPYABLE(cphd,FxNoiseProfile);
+SCOPED_COPYABLE(cphd,Monostatic);
+SCOPED_COPYABLE(cphd,Bistatic);
 SCOPED_COPYABLE(cphd,ErrorParameters);
+SCOPED_COPYABLE_RENAME(cphd,ErrorParameters::Monostatic,ErrorMonostatic);
+SCOPED_COPYABLE(six,DecorrType);
 SCOPED_COPYABLE(cphd,ProductInfo);
 SCOPED_COPYABLE(cphd,MatchInformation);
 SCOPED_COPYABLE_RENAME(cphd,Antenna,CphdAntenna);
