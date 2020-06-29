@@ -2,6 +2,7 @@ add_subdirectory(scene)
 add_subdirectory(six)
 add_subdirectory(six.sicd)
 add_subdirectory(cphd03)
+add_subdirectory(cphd)
 
 # generate and install an empty __init__.py for the pysix package
 file(GENERATE OUTPUT "__init__.py" CONTENT "")
