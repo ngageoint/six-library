@@ -20,7 +20,18 @@ target/
 target.dbg/
 install/
 install.dbg/
+**/install-*/
 test_package/build/
+out/build/
+out/install/
+test_package/build/
+*.pyc
+*.swp
+.depproj
+.vs
+*.vcxproj.user
+**/Debug/
+**/Release/
 
 # Drivers
 six/projects/csm/external/csm-master/
