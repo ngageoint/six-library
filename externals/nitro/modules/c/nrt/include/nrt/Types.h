@@ -34,6 +34,7 @@
 #   include <sys/types.h>
 #   include <ctype.h>
 #   include <time.h>
+#include <stdint.h>
 
 #ifdef WIN32
 #      include <windows.h>

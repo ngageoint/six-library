@@ -24,7 +24,7 @@
 
 #ifdef NRT_DEBUG
 
-#ifndef WIN32
+#if ! (defined(WIN32) || defined(_WIN32))
 #    include <unistd.h>
 #    include <sys/types.h>
 #endif
@@ -36,7 +36,7 @@ NRTPROT(void *) nrt_Debug_malloc(const char *file, int line, size_t sz)
     FILE *f;
     char name[512];
 
-#ifndef WIN32
+#if ! (defined(WIN32) || defined(_WIN32))
     NRT_SNPRINTF(name, 512, "%s.%d", NRT_MEM_LOG, getpid());
 #else
     /* This can easily be modified to use GetCurrentProcessId() */
@@ -62,7 +62,7 @@ NRTPROT(void *) nrt_Debug_realloc(const char *file, int line, void *ptr,
     char name[512];
     FILE *f;
 
-#ifndef WIN32
+#if ! (defined(WIN32) || defined(_WIN32))
     NRT_SNPRINTF(name, 512, "%s.%d", NRT_MEM_LOG, getpid());
 #else
     /* This can easily be modified to use GetCurrentProcessId() */
@@ -85,7 +85,7 @@ NRTPROT(void) nrt_Debug_free(const char *file, int line, void *ptr)
     FILE *f;
     char name[512];
 
-#ifndef WIN32
+#if ! (defined(WIN32) || defined(_WIN32))
     NRT_SNPRINTF(name, 512, "%s.%d", NRT_MEM_LOG, getpid());
 #else
     /* This can easily be modified to use GetCurrentProcessId() */

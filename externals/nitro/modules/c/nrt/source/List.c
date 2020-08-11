@@ -362,10 +362,10 @@ NRTAPI(NRT_DATA *) nrt_List_remove(nrt_List * list, nrt_ListIterator * where)
     return data;
 }
 
-NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, nrt_Uint32 oldIndex,
-                               nrt_Uint32 newIndex, nrt_Error * error)
+NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, uint32_t oldIndex,
+                               uint32_t newIndex, nrt_Error * error)
 {
-    nrt_Uint32 listSize = nrt_List_size(chain);
+    uint32_t listSize = nrt_List_size(chain);
     nrt_ListIterator iter;
     NRT_DATA *data = NULL;
 
@@ -448,9 +448,9 @@ NRTAPI(NRT_DATA *) nrt_ListIterator_get(nrt_ListIterator * this_iter)
     return this_iter->current->data;
 }
 
-NRTAPI(nrt_Uint32) nrt_List_size(nrt_List * list)
+NRTAPI(uint32_t) nrt_List_size(nrt_List * list)
 {
-    nrt_Uint32 size = 0;
+    uint32_t size = 0;
 
     if (list)
     {
