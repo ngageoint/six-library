@@ -374,8 +374,8 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             //band1.getLookupTable().setTable(table, 2, lut.numEntries);
 
             band1.init("LU", "", "", "",
-                static_cast<nitf::Uint32>(lut->elementSize),
-                static_cast<nitf::Uint32>(lut->numEntries),
+                static_cast<uint32_t>(lut->elementSize),
+                static_cast<uint32_t>(lut->numEntries),
                 lookupTable);
             bands.push_back(band1);
         }
@@ -422,8 +422,8 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             //band1.getLookupTable().setTable(table, 3, lut->numEntries);
 
             band1.init("LU", "", "", "",
-                static_cast<nitf::Uint32>(lut->elementSize),
-                static_cast<nitf::Uint32>(lut->numEntries),
+                static_cast<uint32_t>(lut->elementSize),
+                static_cast<uint32_t>(lut->numEntries),
                 lookupTable);
             bands.push_back(band1);
         }
