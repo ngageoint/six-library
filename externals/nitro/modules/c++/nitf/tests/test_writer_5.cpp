@@ -45,7 +45,7 @@ int main(int argc, char **argv)
         nitf::Record record = reader.read(input);
 
         //create a Writer and prepare it for the Record
-        nitf::Uint32 numOfBytes = (nitf::Uint32)record.getHeader().getFileLength();
+        uint32_t numOfBytes = (uint32_t)record.getHeader().getFileLength();
         std::vector<char> outBufVec(numOfBytes);
         char* const outBuf(outBufVec.empty() ? NULL : &outBufVec[0]);
         nitf::MemoryIO memOutput(outBuf, numOfBytes, false);

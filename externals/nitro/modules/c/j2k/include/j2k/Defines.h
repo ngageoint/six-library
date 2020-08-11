@@ -24,7 +24,7 @@
 #define __J2K_DEFINES_H__
 
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #      if defined(J2K_MODULE_EXPORTS)
 #          define NRT_MODULE_EXPORTS
 #      elif defined(J2K_MODULE_IMPORTS)

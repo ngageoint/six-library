@@ -47,7 +47,7 @@ void SICDWriteControl::initialize(const ComplexData& data)
     initialize(container);
 }
 
-void SICDWriteControl::write(const std::vector<sys::byte>& data)
+void SICDWriteControl::write(const std::vector<std::byte>& data)
 {
     if (!data.empty())
     {
@@ -66,7 +66,7 @@ void SICDWriteControl::writeHeaders()
     write(byteProvider.getFileHeader());
 
     // Write image subheaders
-    const std::vector<std::vector<sys::byte> >& imageSubheaders =
+    const std::vector<std::vector<std::byte> >& imageSubheaders =
             byteProvider.getImageSubheaders();
     const std::vector<nitf::Off>& imageSubheaderFileOffsets =
             byteProvider.getImageSubheaderFileOffsets();

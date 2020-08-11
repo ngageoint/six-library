@@ -26,9 +26,9 @@
     if (OWNER->ID) nitf_Field_destruct(OWNER->ID);
 
 /*  Create the image info structure */
-NITFAPI(nitf_ComponentInfo *) nitf_ComponentInfo_construct(nitf_Uint32
+NITFAPI(nitf_ComponentInfo *) nitf_ComponentInfo_construct(uint32_t
         subheaderFieldWidth,
-        nitf_Uint32
+        uint32_t
         dataFieldWidth,
         nitf_Error *
         error)

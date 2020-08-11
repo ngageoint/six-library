@@ -58,7 +58,7 @@ std::string prepareIO()
 
 int main(int argc, char **argv)
 {
-    const int bandSize = MEMSIZE / NUM_BANDS;
+    const size_t bandSize = MEMSIZE / NUM_BANDS;
     const std::string fname = prepareIO();
 
     const int numBytesPerPix = 1;

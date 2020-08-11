@@ -23,7 +23,11 @@
 
 #ifndef __NITF_TRE_DESCRIPTION_H__
 #define __NITF_TRE_DESCRIPTION_H__
+#pragma once
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 
 /*!
  * The TREDescription structure encapsulates the metadata that describes one

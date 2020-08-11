@@ -107,12 +107,12 @@ char * RESubheader::getSubheaderFields() const
     return getNativeOrThrow()->subheaderFields;
 }
 
-nitf::Uint64 RESubheader::getDataLength() const
+uint64_t RESubheader::getDataLength() const
 {
     return getNativeOrThrow()->dataLength;
 }
 
-void RESubheader::setDataLength(nitf::Uint32 value)
+void RESubheader::setDataLength(uint32_t value)
 {
     getNativeOrThrow()->dataLength = value;
 }

@@ -63,7 +63,7 @@ public:
      *  \param  user  User-defined data buffers for read
      *  \param  padded  Returns TRUE if pad pixels may have been read
      */
-    void read(nitf::SubWindow & subWindow, nitf::Uint8 ** user, int * padded);
+    void read(nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
 
     /*!
      *  Read a block directly from file
@@ -72,8 +72,8 @@ public:
      *  \return The read block 
      *          (something must be done with buffer before next call)
      */
-    const nitf::Uint8* readBlock(nitf::Uint32 blockNumber, 
-                                 nitf::Uint64* blockSize);
+    const uint8_t* readBlock(uint32_t blockNumber, 
+                                 uint64_t* blockSize);
 
     //!  Set read caching
     void setReadCaching();

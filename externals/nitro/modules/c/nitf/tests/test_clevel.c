@@ -67,8 +67,8 @@ CLEVEL checkILOC(nitf_ImageSubheader* subhdr, nitf_Error* error)
     memcpy(num, &iloc[5], 5);
     colCoord = atoi(num);
 
-    subhdr->numRows;
-    subhdr->numCols;
+    //subhdr->numRows;
+    //subhdr->numCols;
 
     TRY_IT( nitf_Field_get(subhdr->numRows,
                            &nrows, NITF_CONV_INT, sizeof(int), error) );
@@ -121,7 +121,7 @@ CLEVEL checkCCSExtent(nitf_Record* record, nitf_Error* error)
 
 CLEVEL checkFileSize(nitf_Record* record, nitf_Error* error)
 {
-    nitf_Int64 fl;
+    int64_t fl;
     TRY_IT( nitf_Field_get(record->header->fileLength,
                            &fl, NITF_CONV_INT, 8, error ));
     if (fl <= 52428799)
@@ -492,6 +492,9 @@ char* clevelAsString(CLEVEL clevel)
             return "09";
         case CLEVEL_UNKNOWN:
             return "Unknown";
+        case CLEVEL_CHECK_FAILED:
+        default:
+            return "Error";
     }
     return "Error";
 }

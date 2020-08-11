@@ -28,6 +28,9 @@
 #include <except/Exception.h>
 #include <nitf/ImageBlocker.hpp>
 
+#undef min
+#undef max
+
 namespace
 {
 void getBlockInfo(size_t numElements,
@@ -262,8 +265,8 @@ void ImageBlocker::block(const void* input,
 {
     const size_t inStride = numCols * numBytesPerPixel;
     const size_t outNumValidBytes = numValidColsInBlock * numBytesPerPixel;
-    const sys::byte* inputPtr = static_cast<const sys::byte*>(input);
-    sys::byte* outputPtr = static_cast<sys::byte*>(output);
+    const std::byte* inputPtr = static_cast<const std::byte*>(input);
+    std::byte* outputPtr = static_cast<std::byte*>(output);
 
     if (numValidColsInBlock == numColsPerBlock)
     {
@@ -303,10 +306,10 @@ void ImageBlocker::block(const void* input,
 }
 
 void ImageBlocker::blockAcrossRow(size_t seg,
-                                  const sys::byte*& input,
+                                  const std::byte*& input,
                                   size_t numValidRowsInBlock,
                                   size_t numBytesPerPixel,
-                                  sys::byte*& output) const
+                                  std::byte*& output) const
 {
     const size_t outStride =
             mNumRowsPerBlock[seg] * mNumColsPerBlock * numBytesPerPixel;
@@ -355,8 +358,8 @@ void ImageBlocker::block(const void* input,
     findSegmentRange(startRow, numRows, firstSegIdx, startBlockWithinFirstSeg,
                      lastSegIdx, lastBlockWithinLastSeg);
 
-    const sys::byte* inputPtr = static_cast<const sys::byte*>(input);
-    sys::byte* outputPtr = static_cast<sys::byte*>(output);
+    const std::byte* inputPtr = static_cast<const std::byte*>(input);
+    std::byte* outputPtr = static_cast<std::byte*>(output);
 
     for (size_t seg = firstSegIdx; seg <= lastSegIdx; ++seg)
     {

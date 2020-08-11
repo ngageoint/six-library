@@ -115,7 +115,7 @@
 
 /*!< \def NITF_MAX_BAND_COUNT - Maximum band count */
 #define NITF_MAX_BAND_COUNT 99999
-#define NITF_INVALID_BAND_COUNT ((nitf_Uint32) -1)
+#define NITF_INVALID_BAND_COUNT ((uint32_t) -1)
 
 
 NITF_CXX_GUARD
@@ -258,12 +258,12 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setPixelInformation
 (
     nitf_ImageSubheader *subhdr,      /*!< Subheader object to set */
     const char *pvtype,               /*!< Pixel value type */
-    nitf_Uint32 nbpp,                 /*!< Number of bits/pixel */
-    nitf_Uint32 abpp,                 /*!< Actual number of bits/pixel */
+    uint32_t nbpp,                 /*!< Number of bits/pixel */
+    uint32_t abpp,                 /*!< Actual number of bits/pixel */
     const char *justification,        /*!< Pixel justification */
     const char *irep,                 /*!< Image representation */
     const char *icat,                 /*!< Image category */
-    nitf_Uint32 bandCount,            /*!< Number of bands */
+    uint32_t bandCount,            /*!< Number of bands */
     nitf_BandInfo **bands,            /*!< Band information object list */
     nitf_Error *error                 /*!< For error returns */
 );
@@ -282,7 +282,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setPixelInformation
   \return The number of bands or an error indicator
 
 */
-NITFAPI(nitf_Uint32) nitf_ImageSubheader_getBandCount
+NITFAPI(uint32_t) nitf_ImageSubheader_getBandCount
 (
     nitf_ImageSubheader* subhdr,     /*!< The associated subheader */
     nitf_Error *error                /*!< For error returns */
@@ -306,7 +306,7 @@ NITFAPI(nitf_Uint32) nitf_ImageSubheader_getBandCount
 NITFAPI(nitf_BandInfo *) nitf_ImageSubheader_getBandInfo
 (
     nitf_ImageSubheader* subhdr,    /*!< The associated subheader */
-    nitf_Uint32 band,               /*!< The band index */
+    uint32_t band,               /*!< The band index */
     nitf_Error *error               /*!< For error returns */
 );
 
@@ -324,7 +324,7 @@ NITFAPI(nitf_BandInfo *) nitf_ImageSubheader_getBandInfo
 */
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(
     nitf_ImageSubheader * subhdr, /*!< The associated subheader */
-    nitf_Uint32 numBands,         /*!< The number of bands to create/add*/
+    uint32_t numBands,         /*!< The number of bands to create/add*/
     nitf_Error * error            /*!< For error returns */
 );
 
@@ -338,7 +338,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(
 */
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
     nitf_ImageSubheader * subhdr, /*!< The associated subheader */
-    nitf_Uint32 index,            /*!< The index of the band to remove */
+    uint32_t index,            /*!< The index of the band to remove */
     nitf_Error * error            /*!< For error returns */
 );
 
@@ -357,8 +357,8 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_getDimensions
 (
     nitf_ImageSubheader* subhdr,  /*!< Associated image subheader object */
-    nitf_Uint32 *numRows,         /*!< Returns the number of rows */
-    nitf_Uint32 *numCols,         /*!< Returns the number of columns */
+    uint32_t *numRows,         /*!< Returns the number of rows */
+    uint32_t *numCols,         /*!< Returns the number of columns */
     nitf_Error *error             /*!< Object for error messages */
 );
 
@@ -379,12 +379,12 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_getDimensions
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_getBlocking
 (
     nitf_ImageSubheader* subhdr,  /*!< Associated image subheader object */
-    nitf_Uint32 *numRows,         /*!< Returns the number of rows */
-    nitf_Uint32 *numCols,         /*!< Returns the number of columns */
-    nitf_Uint32 *numRowsPerBlock, /*!< Returns the number of rows/block */
-    nitf_Uint32 *numColsPerBlock, /*!< Returns the number of columns/block */
-    nitf_Uint32 *numBlocksPerRow, /*!< Returns the number of blocks/row */
-    nitf_Uint32 *numBlocksPerCol, /*!< Returns the number of blocks/column */
+    uint32_t *numRows,         /*!< Returns the number of rows */
+    uint32_t *numCols,         /*!< Returns the number of columns */
+    uint32_t *numRowsPerBlock, /*!< Returns the number of rows/block */
+    uint32_t *numColsPerBlock, /*!< Returns the number of columns/block */
+    uint32_t *numBlocksPerRow, /*!< Returns the number of blocks/row */
+    uint32_t *numBlocksPerCol, /*!< Returns the number of blocks/column */
     char *imode,                  /*!< Returns the image mode string */
     nitf_Error *error             /*!< Object for error messages */
 );
@@ -433,8 +433,8 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_getCompression
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_setDimensions
 (
     nitf_ImageSubheader* subhdr,  /*!< Associated image subheader object */
-    nitf_Uint32 numRows,          /*!< The number of rows */
-    nitf_Uint32 numCols,          /*!< The number of columns */
+    uint32_t numRows,          /*!< The number of rows */
+    uint32_t numCols,          /*!< The number of columns */
     nitf_Error *error             /*!< Object for error messages */
 );
 
@@ -509,12 +509,12 @@ nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
 NITFAPI(void)
 nitf_ImageSubheader_computeBlocking
 (
-    nitf_Uint32 numRows,           /*!< The number of rows */
-    nitf_Uint32 numCols,           /*!< The number of columns */
-    nitf_Uint32* numRowsPerBlock,  /*!< The number of rows/block */
-    nitf_Uint32* numColsPerBlock,  /*!< The number of columns/block */
-    nitf_Uint32* numBlocksPerCol,  /*!< The number of blocks per column */
-    nitf_Uint32* numBlocksPerRow   /*!< The number of blocks per row */
+    uint32_t numRows,           /*!< The number of rows */
+    uint32_t numCols,           /*!< The number of columns */
+    uint32_t* numRowsPerBlock,  /*!< The number of rows/block */
+    uint32_t* numColsPerBlock,  /*!< The number of columns/block */
+    uint32_t* numBlocksPerCol,  /*!< The number of blocks per column */
+    uint32_t* numBlocksPerRow   /*!< The number of blocks per row */
 );
 
 /*!
@@ -533,10 +533,10 @@ nitf_ImageSubheader_computeBlocking
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking
 (
     nitf_ImageSubheader* subhdr,  /*!< Associated image subheader object */
-    nitf_Uint32 numRows,          /*!< The number of rows */
-    nitf_Uint32 numCols,          /*!< The number of columns */
-    nitf_Uint32 numRowsPerBlock,  /*!< The number of rows/block */
-    nitf_Uint32 numColsPerBlock,  /*!< The number of columns/block */
+    uint32_t numRows,          /*!< The number of rows */
+    uint32_t numCols,          /*!< The number of columns */
+    uint32_t numRowsPerBlock,  /*!< The number of rows/block */
+    uint32_t numColsPerBlock,  /*!< The number of columns/block */
     const char *imode,            /*!< Image mode */
     nitf_Error *error             /*!< Object for error messages */
 );

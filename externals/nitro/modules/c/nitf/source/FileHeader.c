@@ -116,9 +116,9 @@ CATCH_ERROR:
 NITFAPI(nitf_FileHeader *) nitf_FileHeader_clone(nitf_FileHeader * source,
         nitf_Error * error)
 {
-    nitf_Uint32 numImages, numGraphics, numLabels;
-    nitf_Uint32 numTexts, numDES, numRES;
-    nitf_Uint32 i;
+    uint32_t numImages, numGraphics, numLabels;
+    uint32_t numTexts, numDES, numRES;
+    uint32_t i;
 
     /*  Start with a NULL pointer  */
     nitf_FileHeader *header = NULL;
@@ -362,9 +362,9 @@ CATCH_ERROR:
  */
 NITFAPI(void) nitf_FileHeader_destruct(nitf_FileHeader ** fh)
 {
-    nitf_Uint32 numImages, numGraphics, numLabels;
-    nitf_Uint32 numTexts, numDES, numRES;
-    nitf_Uint32 i;
+    uint32_t numImages, numGraphics=0, numLabels=0;
+    uint32_t numTexts=0, numDES=0, numRES=0;
+    uint32_t i;
 
     nitf_Error error;
 

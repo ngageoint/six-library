@@ -158,7 +158,7 @@ readValue(nitf_Reader* reader,
           nitf_Error* error);
 NITFPRIV(NITF_BOOL)
 handleTRE(nitf_Reader* reader,
-          nitf_Uint32 length,
+          uint32_t length,
           nitf_TRE* tre,
           nitf_Error* error);
 
@@ -289,14 +289,14 @@ readValue(nitf_Reader* reader, nitf_Field* field, int length, nitf_Error* error)
     {
         if (length == NITF_INT16_SZ)
         {
-            nitf_Int16 int16 = (nitf_Int16)NITF_NTOHS(*((nitf_Int16*)buf));
+            int16_t int16 = (int16_t)NITF_NTOHS(*((int16_t*)buf));
             if (!nitf_Field_setRawData(
                         field, (NITF_DATA*)&int16, length, error))
                 goto CATCH_ERROR;
         }
         else if (length == NITF_INT32_SZ)
         {
-            nitf_Int32 int32 = (nitf_Int32)NITF_NTOHL(*((nitf_Int32*)buf));
+            int32_t int32 = (int32_t)NITF_NTOHL(*((int32_t*)buf));
             if (!nitf_Field_setRawData(
                         field, (NITF_DATA*)&int32, length, error))
                 goto CATCH_ERROR;
@@ -522,9 +522,9 @@ readImageSubheader(nitf_Reader* reader,
     /* List iterator pointing to the image segment */
     nitf_ListIterator listIter = nitf_List_begin(reader->record->images);
 
-    nitf_Uint32 numComments; /* Number of comment fields */
-    nitf_Uint32 nbands; /* An integer representing the \nbands field */
-    nitf_Uint32 xbands; /* An integer representing the xbands field */
+    uint32_t numComments; /* Number of comment fields */
+    uint32_t nbands; /* An integer representing the \nbands field */
+    uint32_t xbands; /* An integer representing the xbands field */
     nitf_Off subheaderStart; /* Start position of image subheader */
     nitf_Off subheaderEnd; /* End position of image subheader */
     nitf_Off expectedSubheaderLength = 0; /* What the file header says the
@@ -720,7 +720,7 @@ readLabelSubheader(nitf_Reader* reader,
     /* label sub-header object */
     subhdr = ((nitf_LabelSegment*)nitf_ListIterator_get(&listIter))->subheader;
 
-    /* nitf_Uint32 lxshdl, lxsofl; */
+    /* uint32_t lxshdl, lxsofl; */
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_LA);
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_LID);
     TRY_READ_MEMBER_VALUE(reader, subhdr, NITF_LSCLAS);
@@ -802,14 +802,14 @@ readDESubheader(nitf_Reader* reader,
     nitf_DESubheader* subhdr;
     nitf_FileHeader* hdr;
     /* Length of the sub-header */
-    nitf_Uint32 subLen;
+    uint32_t subLen;
     nitf_Off currentOffset;
     /* Position where this DE Subheader begins */
     nitf_Off subheaderStart;
     /* End position of DE Subheader */
     nitf_Off subheaderEnd;
     /* What the header says the length ought to be */
-    nitf_Uint32 expectedSubheaderLength = 0;
+    uint32_t expectedSubheaderLength = 0;
     char desID[NITF_DESTAG_SZ + 1]; /* DES ID string */
 
     nitf_ListIterator listIter =
@@ -940,7 +940,7 @@ readRESubheader(nitf_Reader* reader,
     int i;
     nitf_RESegment* segment;
     nitf_RESubheader* subhdr;
-    nitf_Uint32 subLen;
+    uint32_t subLen;
     /* List iterator pointing to the reserved extension segment */
     nitf_ListIterator listIter =
             nitf_List_begin(reader->record->reservedExtensions);
@@ -1005,16 +1005,16 @@ NITFPRIV(NITF_BOOL) readHeader(nitf_Reader* reader, nitf_Error* error)
     nitf_FileHeader* fileHeader = reader->record->header;
 
     /* generic uint32 */
-    nitf_Uint32 num32;
+    uint32_t num32;
 
     /* Number of bytes consumed when reading header */
-    nitf_Uint32 actualHeaderLength;
+    uint32_t actualHeaderLength;
 
     /* What the header says its lenght ought to be */
-    nitf_Uint32 expectedHeaderLength = 0;
+    uint32_t expectedHeaderLength = 0;
 
     nitf_Version fver;
-    /*nitf_Uint32 udhdl, udhofl, xhdl, xhdlofl; */
+    /*uint32_t udhdl, udhofl, xhdl, xhdlofl; */
 
     char fileLenBuf[NITF_FL_SZ + 1]; /* File length buffer */
     char streamingBuf[NITF_FL_SZ];
@@ -1152,7 +1152,7 @@ NITFPRIV(NITF_BOOL) readHeader(nitf_Reader* reader, nitf_Error* error)
     TRY_READ_XHD(reader);
 
     actualHeaderLength =
-            (nitf_Uint32)nitf_IOInterface_tell(reader->input, error);
+            (uint32_t)nitf_IOInterface_tell(reader->input, error);
     NITF_TRY_GET_UINT32(fileHeader->NITF_HL, &expectedHeaderLength, error);
     if (actualHeaderLength != expectedHeaderLength)
     {
@@ -1185,7 +1185,7 @@ readExtras(nitf_Reader* reader,
            nitf_Error* error)
 {
     /* Total length of the extras seciton */
-    nitf_Uint32 totalLength;
+    uint32_t totalLength;
     /* Offset in the stream to the end of the section */
     nitf_Off sectionEndOffset;
     /* The current io offset */
@@ -1268,10 +1268,10 @@ readTRE(nitf_Reader* reader, nitf_Extensions* ext, nitf_Error* error)
     char etag[NITF_ETAG_SZ + 1];
 
     /* tre object */
-    nitf_TRE* tre;
+    nitf_TRE* tre = NULL;
 
     /* length of the TRE object */
-    nitf_Uint32 length;
+    uint32_t length;
     nitf_Field* lengthValue;
 
     memset(etag, 0, NITF_ETAG_SZ + 1);
@@ -1321,7 +1321,7 @@ CATCH_ERROR:
 
 NITFPRIV(NITF_BOOL)
 handleTRE(nitf_Reader* reader,
-          nitf_Uint32 length,
+          uint32_t length,
           nitf_TRE* tre,
           nitf_Error* error)
 {
@@ -1411,8 +1411,8 @@ CATCH_ERROR:
 NITFPRIV(nitf_BandInfo**)
 readBandInfo(nitf_Reader* reader, unsigned int nbands, nitf_Error* error)
 {
-    nitf_Uint32 i;
-    nitf_Uint32 numLuts, bandEntriesPerLut;
+    uint32_t i;
+    uint32_t numLuts, bandEntriesPerLut;
     nitf_BandInfo** bandInfo = NULL;
     if (nbands > 0)
     {
@@ -1491,10 +1491,10 @@ nitf_Reader_read(nitf_Reader* reader, nitf_IOHandle ioHandle, nitf_Error* error)
 NITFAPI(nitf_Record*)
 nitf_Reader_readIO(nitf_Reader* reader, nitf_IOInterface* io, nitf_Error* error)
 {
-    nitf_Uint32 i = 0; /* iterator */
-    nitf_Uint32 num32; /* generic uint32 */
-    nitf_Uint32 length32;
-    nitf_Uint64 length;
+    uint32_t i = 0; /* iterator */
+    uint32_t num32; /* generic uint32 */
+    uint32_t length32;
+    uint64_t length;
     nitf_Version fver;
 
     reader->record = nitf_Record_construct(NITF_VER_21, error);
@@ -1869,15 +1869,20 @@ nitf_Reader_newImageReader(nitf_Reader* reader,
         /*  they are talking about, so throw something at them  */
         if (nitf_ListIterator_equals(&iter, &end))
         {
-            nitf_Error_initf(error,
-                             NITF_CTXT,
-                             NITF_ERR_INVALID_OBJECT,
-                             "Index [%d] is not a valid image segment",
-                             imageSegmentNumber);
-            nitf_ImageReader_destruct(&imageReader);
-            return NULL;
+            segment = NULL;
+            break;
         }
         nitf_ListIterator_increment(&iter);
+    }
+    if (segment == NULL)
+    {
+        nitf_Error_initf(error,
+            NITF_CTXT,
+            NITF_ERR_INVALID_OBJECT,
+            "Index [%d] is not a valid image segment",
+            imageSegmentNumber);
+        nitf_ImageReader_destruct(&imageReader);
+        return NULL;
     }
 
     imageReader->input = reader->input;
@@ -1921,14 +1926,19 @@ nitf_Reader_newTextReader(nitf_Reader* reader,
         text = (nitf_TextSegment*)nitf_ListIterator_get(&iter);
         if (nitf_ListIterator_equals(&iter, &end))
         {
-            nitf_Error_initf(error,
-                             NITF_CTXT,
-                             NITF_ERR_INVALID_OBJECT,
-                             "Index [%d] is not a valid Text segment",
-                             textSegmentNumber);
-            return NULL;
+            text = NULL;
+            break;
         }
         nitf_ListIterator_increment(&iter);
+    }
+    if (text == NULL)
+    {
+        nitf_Error_initf(error,
+            NITF_CTXT,
+            NITF_ERR_INVALID_OBJECT,
+            "Index [%d] is not a valid Text segment",
+            textSegmentNumber);
+        return NULL;
     }
 
     /*    Allocate the object */
@@ -1957,7 +1967,6 @@ nitf_Reader_newGraphicReader(nitf_Reader* reader, int index, nitf_Error* error)
     nitf_SegmentReader* segmentReader;
     nitf_ListIterator iter;
     nitf_ListIterator end;
-    nitf_GraphicSegment* segment = NULL;
 
     /*    Find the associated segment */
     iter = nitf_List_at(reader->record->graphics, index);
@@ -1971,7 +1980,7 @@ nitf_Reader_newGraphicReader(nitf_Reader* reader, int index, nitf_Error* error)
                          index);
         return NULL;
     }
-    segment = (nitf_GraphicSegment*)nitf_ListIterator_get(&iter);
+    nitf_GraphicSegment* segment = (nitf_GraphicSegment*)nitf_ListIterator_get(&iter);
 
     /*    Allocate the object */
     segmentReader =
@@ -2000,7 +2009,6 @@ nitf_Reader_newDEReader(nitf_Reader* reader, int index, nitf_Error* error)
     nitf_SegmentReader* segmentReader;
     nitf_ListIterator iter;
     nitf_ListIterator end;
-    nitf_DESegment* segment = NULL;
 
     /*    Find the associated segment */
     iter = nitf_List_at(reader->record->dataExtensions, index);
@@ -2014,7 +2022,7 @@ nitf_Reader_newDEReader(nitf_Reader* reader, int index, nitf_Error* error)
                          index);
         return NULL;
     }
-    segment = (nitf_DESegment*)nitf_ListIterator_get(&iter);
+    nitf_DESegment* segment = (nitf_DESegment*)nitf_ListIterator_get(&iter);
 
     /*    Allocate the object */
     segmentReader =

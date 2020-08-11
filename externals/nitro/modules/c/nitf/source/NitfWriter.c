@@ -145,7 +145,7 @@
 /*  even an option.                                                   */
 NITFPRIV(NITF_BOOL) writeField(nitf_Writer * writer,
                                char *field,
-                               nitf_Uint32 length, nitf_Error * error);
+                               uint32_t length, nitf_Error * error);
 
 /*  Pads a string with a fill character                              */
 /*  field The input string                                             */
@@ -153,9 +153,9 @@ NITFPRIV(NITF_BOOL) writeField(nitf_Writer * writer,
 /*  fill The fill character                                          */
 /*  fillDir The fill direction (either FILL_LEFT or FILL_RIGHT)      */
 NITFPRIV(NITF_BOOL) padString(char *field,
-                              nitf_Uint32 length,
+                              uint32_t length,
                               char fill,
-                              const nitf_Uint32 fillDir,
+                              const uint32_t fillDir,
                               nitf_Error * error);
 
 /*  Writes the given TRE  */
@@ -176,9 +176,9 @@ NITFPRIV(void) resetIOInterface(nitf_Writer * writer)
 
 NITFPRIV(NITF_BOOL) writeStringField(nitf_Writer * writer,
                                      char *field,
-                                     nitf_Uint32 length,
+                                     uint32_t length,
                                      char fill,
-                                     const nitf_Uint32 fillDir,
+                                     const uint32_t fillDir,
                                      nitf_Error * error)
 {
     char *buf = (char *) NITF_MALLOC(length + 1);
@@ -209,9 +209,9 @@ CATCH_ERROR:
 
 NITFPRIV(NITF_BOOL) writeValue(nitf_Writer * writer,
                                nitf_Field * field,
-                               nitf_Uint32 length,
+                               uint32_t length,
                                char fill,
-                               const nitf_Uint32 fillDir,
+                               const uint32_t fillDir,
                                nitf_Error * error)
 {
     char *buf = (char *) NITF_MALLOC(length + 1);
@@ -229,14 +229,14 @@ NITFPRIV(NITF_BOOL) writeValue(nitf_Writer * writer,
     {
         if (length == NITF_INT16_SZ)
         {
-            nitf_Int16 int16 =
-                (nitf_Int16)NITF_HTONS(*((nitf_Int16 *) field->raw));
+            int16_t int16 =
+                (int16_t)NITF_HTONS(*((int16_t *) field->raw));
             memcpy(buf, (char*)&int16, length);
         }
         else if (length == NITF_INT32_SZ)
         {
-            nitf_Int32 int32 =
-                (nitf_Int32)NITF_HTONL(*((nitf_Int32 *) field->raw));
+            int32_t int32 =
+                (int32_t)NITF_HTONL(*((int32_t *) field->raw));
             memcpy(buf, (char*)&int32, length);
         }
         else
@@ -268,10 +268,10 @@ CATCH_ERROR:
 
 
 NITFPRIV(NITF_BOOL) writeIntField(nitf_Writer * writer,
-                                  nitf_Uint32 field,
-                                  nitf_Uint32 length,
+                                  uint32_t field,
+                                  uint32_t length,
                                   char fill,
-                                  const nitf_Uint32 fillDir,
+                                  const uint32_t fillDir,
                                   nitf_Error * error)
 {
     char buf[20];
@@ -291,12 +291,12 @@ NITFPRIV(NITF_BOOL) writeIntField(nitf_Writer * writer,
 }
 
 
-/* This function pads the given nitf_Uint64, and writes it to the IOHandle */
+/* This function pads the given uint64_t, and writes it to the IOHandle */
 NITFPROT(NITF_BOOL) nitf_Writer_writeInt64Field(nitf_Writer* writer,
-                                                nitf_Uint64 field,
-                                                nitf_Uint32 length,
+                                                uint64_t field,
+                                                uint32_t length,
                                                 char fill,
-                                                nitf_Uint32 fillDir,
+                                                uint32_t fillDir,
                                                 nitf_Error* error)
 {
     char buf[20];
@@ -318,7 +318,7 @@ NITFPROT(NITF_BOOL) nitf_Writer_writeInt64Field(nitf_Writer* writer,
 
 NITFPRIV(NITF_BOOL) writeField(nitf_Writer * writer,
                                char *field,
-                               nitf_Uint32 length,
+                               uint32_t length,
                                nitf_Error * error)
 {
     if (!nitf_IOInterface_write(writer->output, field, length, error))
@@ -397,9 +397,9 @@ CATCH_ERROR:
 
 /* This function pads the given string with the fill character */
 NITFPRIV(NITF_BOOL) padString(char *field,
-                              nitf_Uint32 length,
+                              uint32_t length,
                               char fill,
-                              const nitf_Uint32 fillDir,
+                              const uint32_t fillDir,
                               nitf_Error * error)
 {
     /*  size and remainder  */
@@ -412,7 +412,7 @@ NITFPRIV(NITF_BOOL) padString(char *field,
                 "Trying to use NULL field. padString failed.");
         return NITF_FAILURE;
     }
-    size = (nitf_Uint32)strlen(field);
+    size = (uint32_t)strlen(field);
     if (size >= length)
     {
         /* Dont need to pad at all */
@@ -439,12 +439,12 @@ NITFPRIV(NITF_BOOL) padString(char *field,
 /* This function writes the given ComponentInfo section */
 NITFPRIV(NITF_BOOL) writeComponentInfo(nitf_Writer * writer,
                                        nitf_ComponentInfo ** info,
-                                       nitf_Uint32 num,
-                                       nitf_Uint32 subHdrSize,
-                                       nitf_Uint32 segmentSize,
+                                       uint32_t num,
+                                       uint32_t subHdrSize,
+                                       uint32_t segmentSize,
                                        nitf_Error * error)
 {
-    nitf_Uint32 i;
+    uint32_t i;
 
     /*  First, write the num*  */
     if (!writeIntField(writer, num, NITF_IVAL_SZ, ZERO, FILL_LEFT, error))
@@ -472,10 +472,10 @@ CATCH_ERROR:
 /* This function writes the given Extensions */
 NITFPRIV(NITF_BOOL) writeExtras(nitf_Writer * writer,
                                 nitf_Extensions * section,
-                                nitf_Uint32 * dataLength,
-                                nitf_Uint32 * dataOverflow,
-                                const nitf_Uint32 hdlFieldSize,
-                                const nitf_Uint32 oflFieldSize,
+                                uint32_t * dataLength,
+                                uint32_t * dataOverflow,
+                                const uint32_t hdlFieldSize,
+                                const uint32_t oflFieldSize,
                                 nitf_Error * error)
 {
     nitf_ExtensionsIterator iter, end;
@@ -539,7 +539,7 @@ NITFPRIV(NITF_BOOL) writeExtension(nitf_Writer * writer,
                                    nitf_TRE * tre, nitf_Error * error)
 {
 
-    nitf_Uint32 length;
+    uint32_t length;
 
     /* write the cetag and cel */
     if (!writeStringField(writer, tre->tag,
@@ -593,10 +593,10 @@ CATCH_ERROR:
 /* This function writes the given BandInfo */
 NITFPRIV(NITF_BOOL) writeBandInfo(nitf_Writer * writer,
                                   nitf_BandInfo ** bandInfo,
-                                  nitf_Uint32 nbands, nitf_Error * error)
+                                  uint32_t nbands, nitf_Error * error)
 {
-    nitf_Uint32 i;
-    nitf_Uint32 numLuts, bandEntriesPerLut;
+    uint32_t i;
+    uint32_t numLuts, bandEntriesPerLut;
 
     for (i = 0; i < nbands; ++i)
     {
@@ -732,11 +732,11 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer* writer,
                                             nitf_IOInterface* io,
                                             nitf_Error* error)
 {
-    nitf_Int32 i;
-    nitf_Int32 numImages;
-    nitf_Int32 numTexts;
-    nitf_Int32 numGraphics;
-    nitf_Int32 numDEs;
+    int32_t i;
+    int32_t numImages;
+    int32_t numTexts;
+    int32_t numGraphics;
+    int32_t numDEs;
     nitf_ListIterator iter;
 
     if (!writer)
@@ -839,8 +839,8 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer* writer,
         {
             nitf_ImageSegment *segment = NULL;
             nitf_ImageSubheader *subheader = NULL;
-            nitf_Uint32 nbpp, nbands, xbands, nrows, ncols;
-            nitf_Uint64 length;
+            uint32_t nbpp, nbands, xbands, nrows, ncols;
+            uint64_t length;
 
             /* first, set the writer to NULL */
             writer->imageWriters[i] = NULL;
@@ -857,7 +857,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer* writer,
             NITF_TRY_GET_UINT32(subheader->numRows, &nrows, error);
             NITF_TRY_GET_UINT32(subheader->numCols, &ncols, error);
 
-            length = (nitf_Uint64)ncols * (nitf_Uint64)nrows *
+            length = (uint64_t)ncols * (uint64_t)nrows *
                     NITF_NBPP_TO_BYTES(nbpp) * (nbands + xbands);
 
             if (length > NITF_MAX_IMAGE_LENGTH)
@@ -972,12 +972,12 @@ NITFAPI(void) nitf_Writer_destruct(nitf_Writer ** writer)
 
 NITFPROT(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
                                             nitf_Off* fileLenOff,
-                                            nitf_Uint32* hdrLen,
+                                            uint32_t* hdrLen,
                                             nitf_Error* error)
 {
-    nitf_Uint32 numImages, numGraphics, numLabels;
-    nitf_Uint32 numTexts, numDES, numRES;
-    nitf_Uint32 udhdl, udhofl, xhdl, xhdlofl;
+    uint32_t numImages, numGraphics, numLabels;
+    uint32_t numTexts, numDES, numRES;
+    uint32_t udhdl, udhofl, xhdl, xhdlofl;
     nitf_Version fver;
     char buf[256];              /* temp buf */
 
@@ -1124,10 +1124,10 @@ nitf_Writer_writeImageSubheader(nitf_Writer* writer,
                                 nitf_Off* comratOff,
                                 nitf_Error* error)
 {
-    nitf_Uint32 bands;
-    nitf_Uint32 i;
-    nitf_Uint32 numComments;
-    nitf_Uint32 udidl, udofl, ixshdl, ixsofl;
+    uint32_t bands;
+    uint32_t i;
+    uint32_t numComments;
+    uint32_t udidl, udofl, ixshdl, ixsofl;
     nitf_ListIterator iter, end;
 
     NITF_WRITE_VALUE(subhdr, NITF_IM, SPACE, FILL_RIGHT);
@@ -1250,7 +1250,7 @@ NITFPRIV(NITF_BOOL) writeGraphicSubheader(nitf_Writer * writer,
                                           nitf_Version fver,
                                           nitf_Error * error)
 {
-    nitf_Uint32 sxshdl, sxsofl;
+    uint32_t sxshdl, sxsofl;
 
     NITF_WRITE_VALUE(subhdr, NITF_SY, SPACE, FILL_RIGHT);
     NITF_WRITE_VALUE(subhdr, NITF_SID, SPACE, FILL_RIGHT);
@@ -1302,7 +1302,7 @@ NITFPRIV(NITF_BOOL) writeTextSubheader(nitf_Writer * writer,
                                        nitf_Version fver,
                                        nitf_Error * error)
 {
-    nitf_Uint32 txshdl, txsofl;
+    uint32_t txshdl, txsofl;
 
     NITF_WRITE_VALUE(subhdr, NITF_TE, SPACE, FILL_RIGHT);
     NITF_WRITE_VALUE(subhdr, NITF_TEXTID, SPACE, FILL_RIGHT);
@@ -1346,11 +1346,11 @@ CATCH_ERROR:
 
 NITFPROT(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
                                                  const nitf_DESubheader* subhdr,
-                                                 nitf_Uint32* userSublen,
+                                                 uint32_t* userSublen,
                                                  nitf_Version fver,
                                                  nitf_Error* error)
 {
-    nitf_Uint32 subLen;
+    uint32_t subLen;
 
     char* des_data = NULL;
 
@@ -1435,7 +1435,7 @@ NITFPRIV(NITF_BOOL) writeRESubheader(nitf_Writer * writer,
                                      nitf_RESubheader * subhdr,
                                      nitf_Version fver, nitf_Error * error)
 {
-    nitf_Uint32 subLen;
+    uint32_t subLen;
 
     NITF_WRITE_VALUE(subhdr, NITF_RE, SPACE, FILL_RIGHT);
     NITF_WRITE_VALUE(subhdr, NITF_RESTAG, SPACE, FILL_RIGHT);
@@ -1601,13 +1601,13 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     nitf_Off fileLen;
 
     /* Length of teh file header */
-    nitf_Uint32 hdrLen;
-    nitf_Uint32 i = 0;
+    uint32_t hdrLen;
+    uint32_t i = 0;
     int skipBytes = 0;
     nitf_Version fver;
 
     /* Number of images */
-    nitf_Uint32 numImgs = 0;
+    uint32_t numImgs = 0;
 
     /* Lengths of image subheaders */
     nitf_Off *imageSubLens = NULL;
@@ -1616,7 +1616,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     nitf_Off *imageDataLens = NULL;
 
     /* Number of texts */
-    nitf_Uint32 numTexts = 0;
+    uint32_t numTexts = 0;
 
     /* Lengths of text subheaders */
     nitf_Off *textSubLens = NULL;
@@ -1625,7 +1625,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     nitf_Off *textDataLens = NULL;
 
     /* Number of graphics */
-    nitf_Uint32 numGraphics = 0;
+    uint32_t numGraphics = 0;
 
     /* Lengths of graphic subheaders */
     nitf_Off *graphicSubLens = NULL;
@@ -1634,7 +1634,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     nitf_Off *graphicDataLens = NULL;
 
     /* Number of data extensions */
-    nitf_Uint32 numDEs = 0;
+    uint32_t numDEs = 0;
 
     /* Lengths of data extension subheaders */
     nitf_Off *deSubLens = NULL;
@@ -1964,7 +1964,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     {
 
         /* Length of current user subheader */
-        nitf_Uint32 userSublen;
+        uint32_t userSublen;
 
         deSubLens = (nitf_Off *) NITF_MALLOC(numDEs * sizeof(nitf_Off));
         if (!deSubLens)

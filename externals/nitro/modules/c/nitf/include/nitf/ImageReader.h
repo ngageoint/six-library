@@ -51,15 +51,15 @@ nitf_ImageReader_getBlockingInfo(nitf_ImageReader * imageReader,
  */
 NITFAPI(NITF_BOOL) nitf_ImageReader_read(nitf_ImageReader * imageReader,
         nitf_SubWindow * subWindow,
-        nitf_Uint8 ** user,
+        uint8_t ** user,
         int *padded, nitf_Error * error);
 
 /**
    Read a block directly from file
  */
-NITFAPI(nitf_Uint8*) nitf_ImageReader_readBlock(nitf_ImageReader * imageReader,
-                                                nitf_Uint32 blockNumber,
-                                                nitf_Uint64* blockSize,
+NITFAPI(uint8_t*) nitf_ImageReader_readBlock(nitf_ImageReader * imageReader,
+                                                uint32_t blockNumber,
+                                                uint64_t* blockSize,
                                                 nitf_Error * error);
 
 /*!

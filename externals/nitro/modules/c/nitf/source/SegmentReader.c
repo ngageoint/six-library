@@ -61,7 +61,7 @@ NITFAPI(nitf_Off) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
                                        nitf_Off offset,
                                        int whence, nitf_Error * error)
 {
-    nitf_Uint64 baseOffset;     /* Bas offset to the data */
+    uint64_t baseOffset;     /* Bas offset to the data */
     nitf_Off actualPosition;       /* Real file position (no base offset) */
 
     baseOffset = segmentReader->baseOffset;

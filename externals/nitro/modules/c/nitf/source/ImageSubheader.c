@@ -38,9 +38,9 @@
 #define _NITF_BLOCK_DEFAULT_MIN (1024)
 
 NITFPRIV(void)
-nitf_ImageSubheader_computeBlockingImpl(nitf_Uint32 numDims,
-                                        nitf_Uint32* numDimsPerBlock,
-                                        nitf_Uint32* numBlocksPerDim)
+nitf_ImageSubheader_computeBlockingImpl(uint32_t numDims,
+                                        uint32_t* numDimsPerBlock,
+                                        uint32_t* numBlocksPerDim)
 {
     /* for 2500C - if > 8192, then NROWS/NCOLS specifies NPPBV/NPPBH */
     if (*numDimsPerBlock > _NITF_BLOCK_DIM_MAX)
@@ -165,7 +165,7 @@ CATCH_ERROR:
 NITFAPI(nitf_ImageSubheader *)
 nitf_ImageSubheader_clone(nitf_ImageSubheader * source, nitf_Error * error)
 {
-    nitf_Uint32 nbands, i;
+    uint32_t nbands, i;
 
     nitf_ImageSubheader *subhdr = NULL;
     if (source)
@@ -452,7 +452,7 @@ nitf_ImageSubheader_getCornersAsLatLons(nitf_ImageSubheader* subheader,
 NITFAPI(void) nitf_ImageSubheader_destruct(nitf_ImageSubheader ** subhdr)
 {
     nitf_Error e;
-    nitf_Uint32 nbands, i;
+    uint32_t nbands, i;
 
     if (!*subhdr)
         return;
@@ -541,17 +541,17 @@ NITFAPI(void) nitf_ImageSubheader_destruct(nitf_ImageSubheader ** subhdr)
 
 NITFAPI(NITF_BOOL)
 nitf_ImageSubheader_setPixelInformation(nitf_ImageSubheader * subhdr,
-                                        const char *pvtype, nitf_Uint32 nbpp,
-                                        nitf_Uint32 abpp,
+                                        const char *pvtype, uint32_t nbpp,
+                                        uint32_t abpp,
                                         const char *justification,
                                         const char *irep,
-                                        const char *icat, nitf_Uint32 bandCount,
+                                        const char *icat, uint32_t bandCount,
                                         nitf_BandInfo ** bands,
                                         nitf_Error * error)
 {
-    nitf_Uint32 nbands;         /* The NBANDS value */
-    nitf_Uint32 xbands;         /* The XBANDS value */
-    nitf_Uint32 bandCountOld;   /* The current band count */
+    uint32_t nbands;         /* The NBANDS value */
+    uint32_t xbands;         /* The XBANDS value */
+    uint32_t bandCountOld;   /* The current band count */
 
     /*    Get currrent band count (need to free old bands) */
 
@@ -602,7 +602,7 @@ nitf_ImageSubheader_setPixelInformation(nitf_ImageSubheader * subhdr,
 
     if (subhdr->bandInfo != NULL)       /* Free existing band data */
     {
-        nitf_Uint32 i;
+        uint32_t i;
 
         for (i = 0; i < bandCountOld; i++)
         {
@@ -616,13 +616,13 @@ nitf_ImageSubheader_setPixelInformation(nitf_ImageSubheader * subhdr,
 }
 
 
-NITFAPI(nitf_Uint32) nitf_ImageSubheader_getBandCount(nitf_ImageSubheader *
+NITFAPI(uint32_t) nitf_ImageSubheader_getBandCount(nitf_ImageSubheader *
         subhdr,
         nitf_Error * error)
 {
-    nitf_Uint32 nbands;         /* The NBANDS field */
-    nitf_Uint32 xbands;         /* The XBANDS field */
-    nitf_Uint32 bandCount;      /* The result */
+    uint32_t nbands;         /* The NBANDS field */
+    uint32_t xbands;         /* The XBANDS field */
+    uint32_t bandCount;      /* The result */
 
     /*    Get the required subheader values */
 
@@ -662,9 +662,9 @@ NITFAPI(nitf_Uint32) nitf_ImageSubheader_getBandCount(nitf_ImageSubheader *
 
 NITFAPI(nitf_BandInfo *)
 nitf_ImageSubheader_getBandInfo(nitf_ImageSubheader * subhdr,
-                                nitf_Uint32 band, nitf_Error * error)
+                                uint32_t band, nitf_Error * error)
 {
-    nitf_Uint32 bandCount;      /* The band count for the range check */
+    uint32_t bandCount;      /* The band count for the range check */
 
     /*   Range check */
 
@@ -687,13 +687,13 @@ nitf_ImageSubheader_getBandInfo(nitf_ImageSubheader * subhdr,
 
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(nitf_ImageSubheader *
         subhdr,
-        nitf_Uint32 numBands,
+        uint32_t numBands,
         nitf_Error * error)
 {
     nitf_BandInfo *bandInfo = NULL;     /* temp BandInfo object */
     nitf_BandInfo **infos = NULL;       /* new BandInfo array */
-    nitf_Uint32 curBandCount;   /* current band count */
-    nitf_Uint32 totalBandCount; /* total band count */
+    uint32_t curBandCount;   /* current band count */
+    uint32_t totalBandCount; /* total band count */
     int i;
     char buf[256];              /* temp buf */
 
@@ -774,13 +774,13 @@ CATCH_ERROR:
 
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
     nitf_ImageSubheader * subhdr,
-    nitf_Uint32 index,
+    uint32_t index,
     nitf_Error * error
 )
 {
     nitf_BandInfo *bandInfo = NULL;     /* temp BandInfo object */
     nitf_BandInfo **infos = NULL;       /* new BandInfo array */
-    nitf_Uint32 curBandCount;   /* current band count */
+    uint32_t curBandCount;   /* current band count */
     int i;
     char buf[256];              /* temp buf */
 
@@ -860,14 +860,14 @@ CATCH_ERROR:
  *  8192
  */
 
-NITFPRIV(nitf_Uint32) selectBlockSize(nitf_Uint32 size)
+NITFPRIV(uint32_t) selectBlockSize(uint32_t size)
 {
-    nitf_Uint32 blockSize;      /* Current block size */
-    nitf_Uint32 blockSizeMin;   /* Block size that give minimum pad */
-    nitf_Uint32 padSize;        /* Current pad size */
-    nitf_Uint32 padSizeMin;     /* Current minimum pad size */
+    uint32_t blockSize;      /* Current block size */
+    uint32_t blockSizeMin;   /* Block size that give minimum pad */
+    uint32_t padSize;        /* Current pad size */
+    uint32_t padSizeMin;     /* Current minimum pad size */
 
-    nitf_Uint32 remainder;      /* Remainder of size/blockSize */
+    uint32_t remainder;      /* Remainder of size/blockSize */
 
     /*   Start at MAX and work backwards */
 
@@ -899,8 +899,8 @@ NITFPRIV(nitf_Uint32) selectBlockSize(nitf_Uint32 size)
 
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_getDimensions(nitf_ImageSubheader *
         subhdr,
-        nitf_Uint32 * numRows,
-        nitf_Uint32 * numCols,
+        uint32_t * numRows,
+        uint32_t * numCols,
         nitf_Error * error)
 {
 
@@ -920,15 +920,15 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_getDimensions(nitf_ImageSubheader *
 
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_getBlocking(nitf_ImageSubheader *
         subhdr,
-        nitf_Uint32 * numRows,
-        nitf_Uint32 * numCols,
-        nitf_Uint32 *
+        uint32_t * numRows,
+        uint32_t * numCols,
+        uint32_t *
         numRowsPerBlock,
-        nitf_Uint32 *
+        uint32_t *
         numColsPerBlock,
-        nitf_Uint32 *
+        uint32_t *
         numBlocksPerRow,
-        nitf_Uint32 *
+        uint32_t *
         numBlocksPerCol,
         char *imode,
         nitf_Error * error)
@@ -999,12 +999,12 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_getCompression(nitf_ImageSubheader *
 
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_setDimensions(nitf_ImageSubheader *
         subhdr,
-        nitf_Uint32 numRows,
-        nitf_Uint32 numCols,
+        uint32_t numRows,
+        uint32_t numCols,
         nitf_Error * error)
 {
-    nitf_Uint32 numRowsPerBlock;        /* The number of rows/block */
-    nitf_Uint32 numColsPerBlock;        /* The number of columns/block */
+    uint32_t numRowsPerBlock;        /* The number of rows/block */
+    uint32_t numColsPerBlock;        /* The number of columns/block */
 
     if (numRows <= _NITF_BLOCK_DIM_MAX)
         numRowsPerBlock = numRows;
@@ -1024,12 +1024,12 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setDimensions(nitf_ImageSubheader *
 
 NITFAPI(void)
 nitf_ImageSubheader_computeBlocking(
-        nitf_Uint32 numRows,
-        nitf_Uint32 numCols,
-        nitf_Uint32* numRowsPerBlock,
-        nitf_Uint32* numColsPerBlock,
-        nitf_Uint32* numBlocksPerCol,
-        nitf_Uint32* numBlocksPerRow)
+        uint32_t numRows,
+        uint32_t numCols,
+        uint32_t* numRowsPerBlock,
+        uint32_t* numColsPerBlock,
+        uint32_t* numBlocksPerCol,
+        uint32_t* numBlocksPerRow)
 {
     /*
        The number of blocks per column is a backwards way of saying the number
@@ -1046,15 +1046,15 @@ nitf_ImageSubheader_computeBlocking(
 }
 
 NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking(nitf_ImageSubheader *subhdr,
-        nitf_Uint32 numRows,
-        nitf_Uint32 numCols,
-        nitf_Uint32 numRowsPerBlock,
-        nitf_Uint32 numColsPerBlock,
+        uint32_t numRows,
+        uint32_t numCols,
+        uint32_t numRowsPerBlock,
+        uint32_t numColsPerBlock,
         const char *imode,
         nitf_Error *error)
 {
-    nitf_Uint32 numBlocksPerRow;        /* Number of blocks/row */
-    nitf_Uint32 numBlocksPerCol;        /* Number of blocks/column */
+    uint32_t numBlocksPerRow;        /* Number of blocks/row */
+    uint32_t numBlocksPerCol;        /* Number of blocks/column */
 
     nitf_ImageSubheader_computeBlocking(numRows,
                                         numCols,
@@ -1110,7 +1110,7 @@ NITFAPI(int) nitf_ImageSubheader_insertImageComment
     nitf_Error * error
 )
 {
-    nitf_Uint32 numComments;
+    uint32_t numComments;
     nitf_ListIterator iterPos;
     nitf_Field* field = NULL;
     char numCommentBuf[NITF_NICOM_SZ + 1];
@@ -1175,7 +1175,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeImageComment
     nitf_Error * error
 )
 {
-    nitf_Uint32 numComments;    /* number of comments */
+    uint32_t numComments;    /* number of comments */
     char commentBuf[NITF_NICOM_SZ + 1];
     nitf_ListIterator iterPos;
     nitf_Field* field = NULL;

@@ -35,7 +35,7 @@ NITF_CXX_GUARD
  */
 typedef struct _nitf_TREPrivateData
 {
-    nitf_Uint32 length;
+    uint32_t length;
     char* descriptionName;   /* the name/ID of the TREDescription */
     nitf_TREDescription* description;
     nitf_HashTable *hash;
