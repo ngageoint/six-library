@@ -70,7 +70,6 @@ TEST_CASE(testReadOutOfBounds)
     char buffer[TEST_BUF_SIZE];
     char output[5];
     nrt_Error error;
-    size_t ii;
     NRT_BOOL success;
 
     memset(buffer, 0, 3);
@@ -104,13 +103,11 @@ TEST_CASE(testWriteOutOfBounds)
     TEST_ASSERT(!success);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     (void) argc;
     (void) argv;
     CHECK(testReadInBounds);
     CHECK(testReadPastEnd);
     CHECK(testReadOutOfBounds);
     CHECK(testWriteOutOfBounds);
-    return 0;
-}
+    )

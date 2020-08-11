@@ -22,19 +22,18 @@
 
 #ifndef __NITF_RECORD_HPP__
 #define __NITF_RECORD_HPP__
+#pragma once
+
+#include <string>
 
 #include "nitf/Record.h"
-#include "nitf/System.hpp"
-#include "nitf/List.hpp"
-#include "nitf/FileHeader.hpp"
-#include "nitf/ImageSegment.hpp"
-#include "nitf/GraphicSegment.hpp"
-#include "nitf/LabelSegment.hpp"
-#include "nitf/TextSegment.hpp"
-#include "nitf/DESegment.hpp"
-#include "nitf/RESegment.hpp"
-#include "nitf/Object.hpp"
-#include <string>
+
+#include "List.hpp"
+#include "FileHeader.hpp"
+#include "ImageSegment.hpp"
+#include "GraphicSegment.hpp"
+#include "TextSegment.hpp"
+#include "DESegment.hpp"
 
 /*!
  *  \file Record.hpp
@@ -81,12 +80,12 @@ public:
     //! Set the header
     void setHeader(nitf::FileHeader & value);
 
-    nitf::Uint32 getNumImages() const;
-    nitf::Uint32 getNumGraphics() const;
-    nitf::Uint32 getNumLabels() const;
-    nitf::Uint32 getNumTexts() const;
-    nitf::Uint32 getNumDataExtensions() const;
-    nitf::Uint32 getNumReservedExtensions() const;
+    uint32_t getNumImages() const;
+    uint32_t getNumGraphics() const;
+    uint32_t getNumLabels() const;
+    uint32_t getNumTexts() const;
+    uint32_t getNumDataExtensions() const;
+    uint32_t getNumReservedExtensions() const;
 
     //! Get the images
     nitf::List getImages();
@@ -120,40 +119,40 @@ public:
     nitf::DESegment newDataExtensionSegment(int index = -1);
 
     //! Remove the image segment at the given index
-    void removeImageSegment(nitf::Uint32 index);
+    void removeImageSegment(uint32_t index);
 
     //! Remove the graphic segment at the given index
-    void removeGraphicSegment(nitf::Uint32 index);
+    void removeGraphicSegment(uint32_t index);
 
     //! Remove the text segment at the given index
-    void removeTextSegment(nitf::Uint32 index);
+    void removeTextSegment(uint32_t index);
 
     //! Remove the label segment at the given index
-    void removeLabelSegment(nitf::Uint32 index);
+    void removeLabelSegment(uint32_t index);
 
     //! Remove the DE segment at the given index
-    void removeDataExtensionSegment(nitf::Uint32 index);
+    void removeDataExtensionSegment(uint32_t index);
 
     //! Remove the RE segment at the given index
-    void removeReservedExtensionSegment(nitf::Uint32 index);
+    void removeReservedExtensionSegment(uint32_t index);
 
     //! Move the image segment from the oldIndex to the newIndex
-    void moveImageSegment(nitf::Uint32 oldIndex, int newIndex = -1);
+    void moveImageSegment(uint32_t oldIndex, int newIndex = -1);
 
     //! Move the text segment from the oldIndex to the newIndex
-    void moveTextSegment(nitf::Uint32 oldIndex, int newIndex = -1);
+    void moveTextSegment(uint32_t oldIndex, int newIndex = -1);
 
     //! Move the graphic segment from the oldIndex to the newIndex
-    void moveGraphicSegment(nitf::Uint32 oldIndex, int newIndex = -1);
+    void moveGraphicSegment(uint32_t oldIndex, int newIndex = -1);
 
     //! Move the label segment from the oldIndex to the newIndex
-    void moveLabelSegment(nitf::Uint32 oldIndex, int newIndex = -1);
+    void moveLabelSegment(uint32_t oldIndex, int newIndex = -1);
 
     //! Move the DE segment from the oldIndex to the newIndex
-    void moveDataExtensionSegment(nitf::Uint32 oldIndex, int newIndex = -1);
+    void moveDataExtensionSegment(uint32_t oldIndex, int newIndex = -1);
 
     //! Move the RE segment from the oldIndex to the newIndex
-    void moveReservedExtensionSegment(nitf::Uint32 oldIndex, int newIndex = -1);
+    void moveReservedExtensionSegment(uint32_t oldIndex, int newIndex = -1);
 
     /*!
      * If the CLEVEL field in this object is not set, computes the complexity

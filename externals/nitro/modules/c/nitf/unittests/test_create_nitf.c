@@ -1057,7 +1057,6 @@ NITF_BOOL addImageSegment(nitf_Record *record, nitf_Error *error)
     nitf_ImageSubheader *header = NULL;
     nitf_BandInfo **bands = NULL;
 
-    double corners[4][2];
     int i;
 
     segment = nitf_Record_newImageSegment(record, error);
@@ -1148,7 +1147,7 @@ NITF_BOOL writeNITF(nitf_Record *record, const char* filename, nitf_Error *error
     nitf_Writer *writer = NULL;
     nitf_ImageWriter *imageWriter = NULL;
     nitf_ImageSource *imageSource;
-    nitf_Uint32 i;
+    uint32_t i;
 
     /* create the IOHandle */
     out = nitf_IOHandle_create(filename, NITF_ACCESS_WRITEONLY,
@@ -1244,10 +1243,8 @@ TEST_CASE_ARGS(testRead)
     nitf_Record_destruct(&record);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK_ARGS(testCreate);
     CHECK_ARGS(testRead);
-    return 0;
-}
+    )
 

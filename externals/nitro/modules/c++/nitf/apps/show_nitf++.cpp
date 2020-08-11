@@ -42,7 +42,7 @@ void printTRE(nitf::TRE tre)
 
 
     // This is so you know how long the TRE is
-    nitf_Uint32 treLength = tre.getCurrentSize();
+    uint32_t treLength = tre.getCurrentSize();
 
     /*
      *  This is the name for the description that was selected to field
@@ -235,7 +235,7 @@ void showImageSubheader(nitf::ImageSubheader imsub)
     SHOW( imsub.getImageCoordinateSystem().toString() );
     SHOW( imsub.getCornerCoordinates().toString() );
 
-    SHOW( (nitf::Uint32)imsub.getNumImageComments() );
+    SHOW( (uint32_t)imsub.getNumImageComments() );
     nitf::List comments = imsub.getImageComments();
     for (nitf::ListIterator it = comments.begin(); it != comments.end(); ++it)
         SHOW(((nitf::Field)*it).toString());
@@ -244,7 +244,7 @@ void showImageSubheader(nitf::ImageSubheader imsub)
     SHOW( imsub.getCompressionRate().toString() );
 
     SHOW( imsub.getNumImageBands().toString() );
-    SHOW( (nitf::Uint32)imsub.getNumMultispectralImageBands() );
+    SHOW( (uint32_t)imsub.getNumMultispectralImageBands() );
 
     for (i = 0; i < (unsigned int)imsub.getNumImageBands(); i++)
     {
@@ -252,17 +252,17 @@ void showImageSubheader(nitf::ImageSubheader imsub)
         SHOW( imsub.getBandInfo(i).getSubcategory().toString() );
         SHOW( imsub.getBandInfo(i).getImageFilterCondition().toString() );
         SHOW( imsub.getBandInfo(i).getImageFilterCode().toString() );
-        SHOW( (nitf::Uint32)imsub.getBandInfo(i).getNumLUTs() );
-        SHOW( (nitf::Uint32)imsub.getBandInfo(i).getBandEntriesPerLUT() );
+        SHOW( (uint32_t)imsub.getBandInfo(i).getNumLUTs() );
+        SHOW( (uint32_t)imsub.getBandInfo(i).getBandEntriesPerLUT() );
     }
 
     SHOW( imsub.getImageSyncCode().toString() );
     SHOW( imsub.getImageMode().toString() );
-    SHOW( (nitf::Uint32)imsub.getNumBlocksPerRow() );
-    SHOW( (nitf::Uint32)imsub.getNumBlocksPerCol() );
-    SHOW( (nitf::Uint32)imsub.getNumPixelsPerHorizBlock() );
-    SHOW( (nitf::Uint32)imsub.getNumPixelsPerVertBlock() );
-    SHOW( (nitf::Uint32)imsub.getNumBitsPerPixel() );
+    SHOW( (uint32_t)imsub.getNumBlocksPerRow() );
+    SHOW( (uint32_t)imsub.getNumBlocksPerCol() );
+    SHOW( (uint32_t)imsub.getNumPixelsPerHorizBlock() );
+    SHOW( (uint32_t)imsub.getNumPixelsPerVertBlock() );
+    SHOW( (uint32_t)imsub.getNumBitsPerPixel() );
     SHOW( imsub.getImageDisplayLevel().toString() );
     SHOW( imsub.getImageAttachmentLevel().toString() );
     SHOW( imsub.getImageLocation().toString() );
@@ -277,7 +277,7 @@ void showImageSubheader(nitf::ImageSubheader imsub)
     // nitf::HashTable htUd = udExts.getHash();
     //    htUd.forEach(showTRE);
 
-    SHOW( (nitf::Uint32)imsub.getExtendedHeaderLength() );
+    SHOW( (uint32_t)imsub.getExtendedHeaderLength() );
     SHOW( imsub.getExtendedHeaderOverflow().toString() );
 
     nitf::Extensions exExts = imsub.getExtendedSection();
@@ -475,7 +475,7 @@ void showDESubheader(nitf::DESubheader sub)
      *  It is only valid if the subheader fields length > 0; otherwise, it will
      *  throw an Exception since there is no TRE defining the subheader fields.
      */
-    if (((nitf::Uint32)sub.getSubheaderFieldsLength()) > 0)
+    if (((uint32_t)sub.getSubheaderFieldsLength()) > 0)
     {
         nitf::TRE tre = sub.getSubheaderFields();
         printTRE( tre );

@@ -42,8 +42,8 @@ NITF_CXX_GUARD
  */
 NITFAPI(nitf_WriteHandler*) nitf_StreamIOWriteHandler_construct(
     nitf_IOInterface *io,
-    nitf_Uint64 offset,
-    nitf_Uint64 bytes,
+    uint64_t offset,
+    uint64_t bytes,
     nitf_Error *error);
 
 

@@ -1134,10 +1134,10 @@ bool testRead(const std::string& pathname, bool isMono = false,
     for (size_t ii = 0; ii < record.getNumImages(); ++ii)
     {
         nitf::ImageReader imageReader = reader.newImageReader(ii);
-        nitf::Uint64 blockSize;
+        uint64_t blockSize;
         // Read one block. It should match the first blockSize points of the
         // image. If it does, we got the blocking mode right.
-        const nitf::Uint8 *block = imageReader.readBlock(0, &blockSize);
+        const uint8_t *block = imageReader.readBlock(0, &blockSize);
         const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
 
         // The image data is interleaved by pixel. When feeding it to the

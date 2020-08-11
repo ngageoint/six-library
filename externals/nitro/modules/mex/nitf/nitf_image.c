@@ -104,10 +104,10 @@ nitf_SubWindow* createSubWindow(long startRow,
     nitf_SubWindow* subWindow;
 
     /* Band ordering list */
-    nitf_Uint32* bandList = NULL;
+    uint32_t* bandList = NULL;
 
     /* Starting bandID is always 1 for now */
-    nitf_Uint32 bandID = 0;
+    uint32_t bandID = 0;
 
     /* Error handler */
     nitf_Error error;
@@ -125,14 +125,14 @@ nitf_SubWindow* createSubWindow(long startRow,
      *  have a band of magnitude and a band of phase.  If you order the
      *  bandList backwards, the phase buffer comes first in the output
      */
-    bandList = (nitf_Uint32 *) malloc(sizeof(nitf_Uint32 *) * numBands);
+    bandList = (uint32_t *) malloc(sizeof(uint32_t *) * numBands);
     if(bandList == NULL)
     {
         nitf_SubWindow_destruct(&subWindow);
         return(NULL);
     }
 
-    for (bandID = 0; bandID < (nitf_Uint32)numBands; ++bandID)
+    for (bandID = 0; bandID < (uint32_t)numBands; ++bandID)
         bandList[bandID] = bandID;
 
     subWindow->numBands = numBands;
@@ -164,9 +164,9 @@ mxArray* read32BitFloatPixelArray(nitf_Reader* reader,
     nitf_ImageReader* imageReader = NULL;
 
     /* Buffer array ptr */
-    nitf_Uint8* buffers[1];
+    uint8_t* buffers[1];
 
-    nitf_Uint8* buffer = NULL;
+    uint8_t* buffer = NULL;
 
     int numBands = 1;
 
@@ -180,7 +180,7 @@ mxArray* read32BitFloatPixelArray(nitf_Reader* reader,
                                 numRows, numCols, numBands);
 
     /* Now attach the buffer up to the mxImageArray */
-    buffer = (nitf_Uint8*)mxGetData(mxImageArray);
+    buffer = (uint8_t*)mxGetData(mxImageArray);
 
     /* Only works with one band */
     buffers[0] = buffer;
@@ -240,9 +240,9 @@ mxArray* readSingleBandPixelArray(nitf_Reader* reader,
     nitf_ImageReader* imageReader = NULL;
 
     /* Buffer array ptr */
-    nitf_Uint8** buffers = NULL;
+    uint8_t** buffers = NULL;
 
-    nitf_Uint8* buffer = NULL;
+    uint8_t* buffer = NULL;
 
     int numBands = 1;
 
@@ -251,13 +251,13 @@ mxArray* readSingleBandPixelArray(nitf_Reader* reader,
                                 numRows, numCols, numBands);
 
     /* Create the image buffer - will fail internally if error */
-    buffers = (nitf_Uint8**)malloc( sizeof(nitf_Uint8*) * numBands);
+    buffers = (uint8_t**)malloc( sizeof(uint8_t*) * numBands);
 
     mxImageArray = 
         mxCreateNumericMatrix(numCols, numRows, matlabClassType, mxREAL);
 
     /* Now attach the buffer up to the mxImageArray */
-    buffer = (nitf_Uint8*)mxGetData(mxImageArray);
+    buffer = (uint8_t*)mxGetData(mxImageArray);
 
     /* Only works with one band */
     buffers[0] = buffer;
@@ -361,7 +361,7 @@ mxArray* read2BandComplexPixelArray(nitf_Reader* reader,
     nitf_ImageReader* imageReader = NULL;
 
     /* Buffer array ptr */
-    nitf_Uint8* buffers[2];
+    uint8_t* buffers[2];
 
     int numBands = 2;
 
@@ -378,8 +378,8 @@ mxArray* read2BandComplexPixelArray(nitf_Reader* reader,
 
 
     /* Now attach the buffer up to the mxImageArray */
-    buffers[0] = (nitf_Uint8*)mxGetData(mxImageArray);
-    buffers[1] = (nitf_Uint8*)mxGetImagData(mxImageArray);
+    buffers[0] = (uint8_t*)mxGetData(mxImageArray);
+    buffers[1] = (uint8_t*)mxGetImagData(mxImageArray);
 
     /* Image reader (could fail) */
     imageReader = nitf_Reader_newImageReader(reader, idx, NULL, error);
@@ -466,7 +466,7 @@ mxArray* read24BitPixelArray(nitf_Reader* reader,
     nitf_ImageReader* imageReader = NULL;
 
     /* Buffer array ptr */
-    nitf_Uint8* buffers[3];
+    uint8_t* buffers[3];
 
     const mwSize dims[] = { numCols, numRows, 3 };
     const int numBands = 3;
@@ -482,9 +482,9 @@ mxArray* read24BitPixelArray(nitf_Reader* reader,
     subWindow = createSubWindow(startRow, startCol,
                                 numRows, numCols, numBands);
 
-    buffers[0] = ((nitf_Uint8*)mxGetData(mxImageArray));
-    buffers[1] = ((nitf_Uint8*)mxGetData(mxImageArray)) + frame;
-    buffers[2] = ((nitf_Uint8*)mxGetData(mxImageArray)) + 2 * frame;
+    buffers[0] = ((uint8_t*)mxGetData(mxImageArray));
+    buffers[1] = ((uint8_t*)mxGetData(mxImageArray)) + frame;
+    buffers[2] = ((uint8_t*)mxGetData(mxImageArray)) + 2 * frame;
     /* Image reader (could fail) */
     imageReader = nitf_Reader_newImageReader(reader, idx, NULL, error);
     if (!imageReader)

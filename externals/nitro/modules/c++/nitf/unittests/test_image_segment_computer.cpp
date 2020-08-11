@@ -210,12 +210,10 @@ TEST_CASE(testKnownCase)
 }
 
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN
+(
     TEST_CHECK(testBlockSizedBoundaries);
     TEST_CHECK(testPerfectSplitting);
     TEST_CHECK(testOneRowOver);
     TEST_CHECK(testKnownCase);
-
-    return 0;
-}
+    )

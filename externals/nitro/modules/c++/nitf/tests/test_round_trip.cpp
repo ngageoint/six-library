@@ -39,8 +39,8 @@ namespace
 class RowStreamer : public nitf::RowSourceCallback
 {
 public:
-    RowStreamer(nitf::Uint32 band,
-                nitf::Uint32 numCols,
+    RowStreamer(uint32_t band,
+                uint32_t numCols,
                 nitf::ImageReader reader) :
         mReader(reader),
         mBand(band)
@@ -53,17 +53,17 @@ public:
         mWindow.setNumBands(1);
     }
 
-    virtual void nextRow(nitf::Uint32 band, void* buffer)
+    virtual void nextRow(uint32_t band, void* buffer)
     {
         int padded;
-        mReader.read(mWindow, (nitf::Uint8**) &buffer, &padded);
+        mReader.read(mWindow, (uint8_t**) &buffer, &padded);
         mWindow.setStartRow(mWindow.getStartRow() + 1);
     }
 
 private:
     nitf::ImageReader mReader;
     nitf::SubWindow mWindow;
-    nitf::Uint32 mBand;
+    uint32_t mBand;
 };
 
 // RAII for managing a list of RowStreamer's
@@ -78,8 +78,8 @@ public:
         }
     }
 
-    nitf::RowSourceCallback* add(nitf::Uint32 band,
-                                 nitf::Uint32 numCols,
+    nitf::RowSourceCallback* add(uint32_t band,
+                                 uint32_t numCols,
                                  nitf::ImageReader reader)
     {
         std::auto_ptr<RowStreamer>
@@ -126,9 +126,9 @@ int main(int argc, char **argv)
         writer.prepare(output, record);
 
         nitf::ListIterator iter = record.getImages().begin();
-        nitf::Uint32 num = record.getNumImages();
+        uint32_t num = record.getNumImages();
         RowStreamers rowStreamers;
-        for (nitf::Uint32 i = 0; i < num; i++)
+        for (uint32_t i = 0; i < num; i++)
         {
             //for the images, we'll use a RowSource for streaming
             nitf::ImageSegment imseg = *iter;
@@ -136,13 +136,13 @@ int main(int argc, char **argv)
             nitf::ImageReader iReader = reader.newImageReader(i);
             nitf::ImageWriter iWriter = writer.newImageWriter(i);
             nitf::ImageSource iSource;
-            nitf::Uint32 nBands = imseg.getSubheader().getNumImageBands();
-            nitf::Uint32 nRows = imseg.getSubheader().getNumRows();
-            nitf::Uint32 nCols = imseg.getSubheader().getNumCols();
-            nitf::Uint32 pixelSize = NITF_NBPP_TO_BYTES(
+            uint32_t nBands = imseg.getSubheader().getNumImageBands();
+            uint32_t nRows = imseg.getSubheader().getNumRows();
+            uint32_t nCols = imseg.getSubheader().getNumCols();
+            uint32_t pixelSize = NITF_NBPP_TO_BYTES(
                     imseg.getSubheader().getNumBitsPerPixel());
 
-            for (nitf::Uint32 i = 0; i < nBands; i++)
+            for (uint32_t i = 0; i < nBands; i++)
             {
                 nitf::RowSource rowSource(i, nRows, nCols, pixelSize,
                                           rowStreamers.add(i, nCols, iReader));
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
         }
 
         num = record.getNumGraphics();
-        for (nitf::Uint32 i = 0; i < num; i++)
+        for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
             mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
@@ -161,7 +161,7 @@ int main(int argc, char **argv)
         }
 
         num = record.getNumTexts();
-        for (nitf::Uint32 i = 0; i < num; i++)
+        for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
             mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
@@ -170,7 +170,7 @@ int main(int argc, char **argv)
         }
 
         num = record.getNumDataExtensions();
-        for (nitf::Uint32 i = 0; i < num; i++)
+        for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
             mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(

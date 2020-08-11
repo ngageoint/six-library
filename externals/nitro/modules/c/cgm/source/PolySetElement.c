@@ -123,10 +123,11 @@ NITFAPI(cgm_Element*) cgm_PolySetElement_construct(nitf_Error* error)
         }
 
         element->data = (NITF_DATA*)poly;
+
+        element->print = &polyPrint;
+        element->clone = &polyClone;
+        element->destroy = &polyDestroy;
     }
-    element->print = &polyPrint;
-    element->clone = &polyClone;
-    element->destroy = &polyDestroy;
 
     return element;
 }

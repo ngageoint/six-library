@@ -87,22 +87,22 @@ void DESegment::setSubheader(nitf::DESubheader & value)
     value.setManaged(true);
 }
 
-nitf::Uint64 DESegment::getOffset() const
+uint64_t DESegment::getOffset() const
 {
     return getNativeOrThrow()->offset;
 }
 
-void DESegment::setOffset(nitf::Uint64 value)
+void DESegment::setOffset(uint64_t value)
 {
     getNativeOrThrow()->offset = value;
 }
 
-nitf::Uint64 DESegment::getEnd() const
+uint64_t DESegment::getEnd() const
 {
     return getNativeOrThrow()->end;
 }
 
-void DESegment::setEnd(nitf::Uint64 value)
+void DESegment::setEnd(uint64_t value)
 {
     getNativeOrThrow()->end = value;
 }

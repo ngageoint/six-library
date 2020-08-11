@@ -36,7 +36,10 @@ NITFAPI(cgm_Text*) cgm_Text_construct(const char* text, nitf_Error* error)
     if (text)
     {
         v->str = (char*)NITF_MALLOC( strlen( text ) + 1 );
-        strcpy(v->str, text);
+        if (v->str != NULL)
+        {
+            strcpy(v->str, text);
+        }
     }
     return v;
 }

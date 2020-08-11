@@ -80,7 +80,7 @@ void measureComplexity(nitf_Record* record)
 void printTRE(nitf_TRE* tre)
 {
     nitf_Error error;
-    nitf_Uint32 treLength;
+    uint32_t treLength;
     nitf_TREEnumerator* it = NULL;
     const char* treID = NULL;
 
@@ -183,11 +183,11 @@ void showSecurityGroup(nitf_FileSecurity* securityGroup)
 void showFileHeader(nitf_Record * record)
 {
     unsigned int i;
-    nitf_Uint32 num;
+    uint32_t num;
     nitf_Error error;
-    nitf_Uint32 len;
-    nitf_Uint64 dataLen;
-    nitf_Uint32 dataLen32;
+    uint32_t len;
+    uint64_t dataLen;
+    uint32_t dataLen32;
     nitf_Version fver;
     nitf_FileHeader *header;
 

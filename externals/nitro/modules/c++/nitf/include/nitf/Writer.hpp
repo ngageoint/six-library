@@ -202,7 +202,7 @@ public:
      * \param hdrLen Output parameter providing the total number of bytes the
      *     file header is on disk
      */
-    void writeHeader(nitf::Off& fileLenOff, nitf::Uint32& hdrLen);
+    void writeHeader(nitf::Off& fileLenOff, uint32_t& hdrLen);
 
     /*!
      * Writes out an image subheader.  No seeking is performed so the underlying
@@ -229,7 +229,7 @@ public:
      * \param version NITF file version to write (you probably want NITF_VER_21)
      */
     void writeDESubheader(nitf::DESubheader subheader,
-                          nitf::Uint32& userSublen,
+                          uint32_t& userSublen,
                           nitf::Version version);
 
     /*!
@@ -241,10 +241,10 @@ public:
      * \param fillDir Fill direction (NITF_WRITER_FILL_LEFT or
      *     NITF_WRITER_FILL_RIGHT)
      */
-    void writeInt64Field(nitf::Uint64 field,
-                         nitf::Uint32 length,
+    void writeInt64Field(uint64_t field,
+                         uint32_t length,
                          char fill,
-                         nitf::Uint32 fillDir);
+                         uint32_t fillDir);
 
 private:
     nitf_Error error;

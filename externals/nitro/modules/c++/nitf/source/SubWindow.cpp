@@ -59,62 +59,62 @@ SubWindow::~SubWindow()
     }
 }
 
-nitf::Uint32 SubWindow::getStartRow() const
+uint32_t SubWindow::getStartRow() const
 {
     return getNativeOrThrow()->startRow;
 }
 
-void SubWindow::setStartRow(nitf::Uint32 value)
+void SubWindow::setStartRow(uint32_t value)
 {
     getNativeOrThrow()->startRow = value;
 }
 
-nitf::Uint32 SubWindow::getNumRows() const
+uint32_t SubWindow::getNumRows() const
 {
     return getNativeOrThrow()->numRows;
 }
 
-void SubWindow::setNumRows(nitf::Uint32 value)
+void SubWindow::setNumRows(uint32_t value)
 {
     getNativeOrThrow()->numRows = value;
 }
 
-nitf::Uint32 SubWindow::getStartCol() const
+uint32_t SubWindow::getStartCol() const
 {
     return getNativeOrThrow()->startCol;
 }
 
-void SubWindow::setStartCol(nitf::Uint32 value)
+void SubWindow::setStartCol(uint32_t value)
 {
     getNativeOrThrow()->startCol = value;
 }
 
-nitf::Uint32 SubWindow::getNumCols() const
+uint32_t SubWindow::getNumCols() const
 {
     return getNativeOrThrow()->numCols;
 }
 
-void SubWindow::setNumCols(nitf::Uint32 value)
+void SubWindow::setNumCols(uint32_t value)
 {
     getNativeOrThrow()->numCols = value;
 }
 
-nitf::Uint32 SubWindow::getBandList(int i)
+uint32_t SubWindow::getBandList(int i)
 {
     return getNativeOrThrow()->bandList[i];
 }
 
-void SubWindow::setBandList(nitf::Uint32 * value)
+void SubWindow::setBandList(uint32_t * value)
 {
-    getNativeOrThrow()->bandList = (nitf_Uint32*)value;
+    getNativeOrThrow()->bandList = (uint32_t*)value;
 }
 
-nitf::Uint32 SubWindow::getNumBands() const
+uint32_t SubWindow::getNumBands() const
 {
     return getNativeOrThrow()->numBands;
 }
 
-void SubWindow::setNumBands(nitf::Uint32 value)
+void SubWindow::setNumBands(uint32_t value)
 {
     getNativeOrThrow()->numBands = value;
 }

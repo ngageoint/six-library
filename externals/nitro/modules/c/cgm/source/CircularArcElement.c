@@ -106,10 +106,10 @@ NITFAPI(cgm_Element*) cgm_CircularArcElement_construct(nitf_Error* error)
         arc->radius = -1;
         element->data = (NITF_DATA*)arc;
 
+        element->print = &circularArcPrint;
+        element->clone = &circularArcClone;
+        element->destroy = &circularArcDestroy;
     }
-    element->print = &circularArcPrint;
-    element->clone = &circularArcClone;
-    element->destroy = &circularArcDestroy;
 
     return element;
 }

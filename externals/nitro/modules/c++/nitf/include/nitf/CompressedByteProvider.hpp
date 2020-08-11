@@ -22,6 +22,7 @@
 
 #ifndef __NITF_COMPRESSED_BYTE_PROVIDER_HPP__
 #define __NITF_COMPRESSED_BYTE_PROVIDER_HPP__
+#pragma once
 
 #include <vector>
 #include <utility>
@@ -35,6 +36,7 @@
 #include <nitf/NITFBufferList.hpp>
 #include <nitf/ImageSegmentComputer.h>
 
+#include "cstddef.h"
 
 namespace nitf
 {
@@ -173,7 +175,7 @@ protected:
             size_t seg,
             size_t startRow,
             size_t numRowsToWrite,
-            const sys::byte* imageData,
+            const std::byte* imageData,
             nitf::Off& fileOffset,
             NITFBufferList& buffers) const;
 

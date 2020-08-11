@@ -1122,7 +1122,7 @@ void writeNITF(nitf::Record& record, const std::string& filename)
     for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
     {
         outputStream.write(
-                static_cast<const sys::byte*>(buffers.mBuffers[ii].mData),
+                static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
                 buffers.mBuffers[ii].mNumBytes);
     }
 }
@@ -1146,10 +1146,10 @@ bool testRead(const std::string& pathname)
     for (size_t ii = 0; ii < record.getNumImages(); ++ii)
     {
         nitf::ImageReader imageReader = reader.newImageReader(ii);
-        nitf::Uint64 blockSize;
+        uint64_t blockSize;
         // Read one block. It should match the first blockSize points of the
         // image. If it does, we got the blocking mode right.
-        const nitf::Uint8 *block = imageReader.readBlock(0, &blockSize);
+        const uint8_t *block = imageReader.readBlock(0, &blockSize);
         const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
 
         for (size_t jj = 0; jj < imageLength * NUM_BANDS; ++jj)
