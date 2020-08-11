@@ -697,7 +697,7 @@ class Field(_object):
         set(Field self, uint16_t data)
         set(Field self, uint32_t data)
         set(Field self, uint64_t data)
-        set(Field self, nitf::Int8 data)
+        set(Field self, int8_t data)
         set(Field self, int16_t data)
         set(Field self, int32_t data)
         set(Field self, int64_t data)
