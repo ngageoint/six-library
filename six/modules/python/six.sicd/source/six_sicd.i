@@ -215,8 +215,8 @@ nitf::Record _readRecord(const std::string& pathname)
 %auto_ptr(six::sicd::NoiseMesh);
 %auto_ptr(six::sicd::ScalarMesh);
 
-%typemap(out) uint32_t, int32_t{$result = PyInt_FromLong($1);}
-%typemap(in) uint32_t{$1 = (uint32_t)PyInt_AsLong($input);}
+%typemap(out) nitf::Uint32, nitf::Int32{$result = PyInt_FromLong($1);}
+%typemap(in) nitf::Uint32{$1 = (nitf::Uint32)PyInt_AsLong($input);}
 %typemap(out) nitf::Off{$result = PyLong_FromLong($1);}
 %typemap(in) nitf::Off{$1 = (nitf::Off)PyLong_AsLong($input);}
 

@@ -71,7 +71,7 @@ protected:
     sys::Size_T mRowBufferRemaining, mRowSize, mRowOffset;
     mem::ScopedArray<sys::ubyte> mRowBuffer;
     nitf::SubWindow mWindow;
-    mem::ScopedArray<uint32_t> mBandList;
+    mem::ScopedArray<nitf::Uint32> mBandList;
 };
 
 }

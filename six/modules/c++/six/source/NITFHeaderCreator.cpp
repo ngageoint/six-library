@@ -175,7 +175,7 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
 {
     const bool isSICD = (mContainer->getDataType() == DataType::COMPLEX);
 
-    uint32_t numRowsPerBlock;
+    nitf::Uint32 numRowsPerBlock;
     if (mOptions.hasParameter(OPT_NUM_ROWS_PER_BLOCK))
     {
         if (isSICD)
@@ -194,10 +194,10 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
         // Unblocked (per 2500C, if > 8192, should be set to 0)
         numRowsPerBlock = (segmentDims.row > 8192)
                 ? 0
-                : static_cast<uint32_t>(segmentDims.row);
+                : static_cast<nitf::Uint32>(segmentDims.row);
     }
 
-    uint32_t numColsPerBlock;
+    nitf::Uint32 numColsPerBlock;
     if (mOptions.hasParameter(OPT_NUM_COLS_PER_BLOCK))
     {
         if (isSICD)
@@ -216,11 +216,11 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
         // Unblocked (per 2500C, if > 8192, should be set to 0)
         numColsPerBlock = (segmentDims.col > 8192)
                 ? 0
-                : static_cast<uint32_t>(segmentDims.col);
+                : static_cast<nitf::Uint32>(segmentDims.col);
     }
 
-    subheader.setBlocking(static_cast<uint32_t>(segmentDims.row),
-                          static_cast<uint32_t>(segmentDims.col),
+    subheader.setBlocking(static_cast<nitf::Uint32>(segmentDims.row),
+                          static_cast<nitf::Uint32>(segmentDims.col),
                           numRowsPerBlock,
                           numColsPerBlock,
                           imode);
@@ -650,18 +650,18 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
         enableJ2K = (j2kCompression <= 1.0) && j2kCompression > 0.0001;
 
         // get row blocking parameters
-        uint32_t optNumRowsPerBlock = 0;
+        nitf::Uint32 optNumRowsPerBlock = 0;
         if (mOptions.hasParameter(OPT_NUM_ROWS_PER_BLOCK))
         {
-            optNumRowsPerBlock = static_cast<uint32_t>(
+            optNumRowsPerBlock = static_cast<nitf::Uint32>(
                     mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
         }
 
         // get column blocking parameters
-        uint32_t optNumColsPerBlock = 0;
+        nitf::Uint32 optNumColsPerBlock = 0;
         if (mOptions.hasParameter(OPT_NUM_COLS_PER_BLOCK))
         {
-            optNumColsPerBlock = static_cast<uint32_t>(
+            optNumColsPerBlock = static_cast<nitf::Uint32>(
                     mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
         }
 
@@ -670,13 +670,13 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
             Data* const ith = container->getData(ii);
             if (ith->getDataType() == DataType::DERIVED)
             {
-                const uint32_t numRowsPerBlock =
+                const nitf::Uint32 numRowsPerBlock =
                         std::min(optNumRowsPerBlock,
-                                 static_cast<uint32_t>(ith->getNumRows()));
+                                 static_cast<nitf::Uint32>(ith->getNumRows()));
 
-                const uint32_t numColsPerBlock =
+                const nitf::Uint32 numColsPerBlock =
                         std::min(optNumColsPerBlock,
-                                 static_cast<uint32_t>(ith->getNumCols()));
+                                 static_cast<nitf::Uint32>(ith->getNumCols()));
 
                 mem::SharedPtr<NITFImageInfo> info(
                         new NITFImageInfo(ith,
@@ -713,8 +713,8 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
                 info.getImageSegments();
 
         size_t numIS = imageSegments.size();
-        uint32_t nbpp =
-                static_cast<uint32_t>(info.getNumBitsPerPixel());
+        nitf::Uint32 nbpp =
+                static_cast<nitf::Uint32>(info.getNumBitsPerPixel());
         size_t numCols = info.getData()->getNumCols();
         std::string irep = info.getRepresentation();
         std::string imode = info.getMode();
@@ -796,7 +796,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
             {
                 // Need to attach to last segment
                 subheader.getImageAttachmentLevel().set(
-                        (uint16_t)(info.getStartIndex() + jj));
+                        (nitf::Uint16)(info.getStartIndex() + jj));
             }
 
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
@@ -845,7 +845,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
             subheader.getImageLocation().set(generateILOC(legend->mLocation));
 
             // Set NBPP and sanity check if LUT is set appropriately
-            uint32_t legendNbpp;
+            nitf::Uint32 legendNbpp;
             switch (legend->mType)
             {
             case PixelType::MONO8I:
@@ -885,8 +885,8 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
                     "LEG",
                     bandInfo);
 
-            subheader.setBlocking(static_cast<uint32_t>(legend->mDims.row),
-                                  static_cast<uint32_t>(legend->mDims.col),
+            subheader.setBlocking(static_cast<nitf::Uint32>(legend->mDims.row),
+                                  static_cast<nitf::Uint32>(legend->mDims.col),
                                   0,
                                   0,
                                   NITFImageInfo::getMode(legend->mType));
@@ -897,7 +897,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
             // to (which is the first image segment for this product which is
             // conveniently at info.getStartIndex()... but IDLVL is 1-based).
             subheader.getImageAttachmentLevel().set(
-                    static_cast<uint16_t>(info.getStartIndex() + 1));
+                    static_cast<nitf::Uint16>(info.getStartIndex() + 1));
 
             setImageSecurity(info.getData()->getClassification(), subheader);
 

@@ -27,9 +27,9 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
             mRowOffset(0)
 {
     int bytesPerPixel = NITF_NBPP_TO_BYTES(subheader.getNumBitsPerPixel());
-    mRowSize = (uint32_t) subheader.getNumCols() * bytesPerPixel;
+    mRowSize = (nitf::Uint32) subheader.getNumCols() * bytesPerPixel;
 
-    uint32_t nBands = subheader.getBandCount();
+    nitf::Uint32 nBands = subheader.getBandCount();
     std::string imageMode = subheader.getImageMode().toString();
     std::string irep = subheader.getImageRepresentation().toString();
     std::string ic = subheader.getImageCompression().toString();
@@ -58,16 +58,16 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     }
 
     mRowBuffer.reset(new sys::ubyte[mRowSize]);
-    mAvailable = mRowSize * (uint32_t) subheader.getNumRows();
+    mAvailable = mRowSize * (nitf::Uint32) subheader.getNumRows();
 
-    mBandList.reset(new uint32_t[nBands]);
-    for (uint32_t band = 0; band < nBands; ++band)
+    mBandList.reset(new nitf::Uint32[nBands]);
+    for (nitf::Uint32 band = 0; band < nBands; ++band)
         mBandList.get()[band] = band;
 
     //setup the window
     mWindow.setStartCol(0);
     mWindow.setNumRows(1);
-    mWindow.setNumCols((uint32_t) subheader.getNumCols());
+    mWindow.setNumCols((nitf::Uint32) subheader.getNumCols());
     mWindow.setBandList(mBandList.get());
     mWindow.setNumBands(nBands);
 }
@@ -111,9 +111,9 @@ sys::SSize_T six::NITFImageInputStream::read(sys::byte* b, sys::Size_T len)
 
 sys::SSize_T six::NITFImageInputStream::readRow()
 {
-    mWindow.setStartRow(static_cast<uint32_t>(mRowOffset++));
+    mWindow.setStartRow(static_cast<nitf::Uint32>(mRowOffset++));
     int padded;
-    uint8_t* buffer = mRowBuffer.get();
+    nitf::Uint8* buffer = mRowBuffer.get();
     mReader.read(mWindow, &buffer, &padded);
     mRowBufferRemaining = mRowSize;
     return (sys::SSize_T)mRowSize;

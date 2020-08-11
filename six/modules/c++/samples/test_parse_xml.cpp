@@ -85,8 +85,8 @@ std::vector<std::string> extractXML(std::string inputFile,
     nitf::IOHandle io(inputFile);
     nitf::Record record = reader.read(io);
 
-    uint32_t numDES = record.getNumDataExtensions();
-    for (uint32_t i = 0; i < numDES; ++i)
+    nitf::Uint32 numDES = record.getNumDataExtensions();
+    for (nitf::Uint32 i = 0; i < numDES; ++i)
     {
         nitf::DESegment segment = record.getDataExtensions()[i];
         nitf::DESubheader subheader = segment.getSubheader();
