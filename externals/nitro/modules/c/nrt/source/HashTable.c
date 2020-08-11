@@ -87,10 +87,7 @@ NRTAPI(nrt_HashTable *) nrt_HashTable_construct(int nbuckets, nrt_Error * error)
 NRTAPI(void) nrt_HashTable_setPolicy(nrt_HashTable * ht, int policy)
 {
     assert(ht);
-    if (ht != NULL)
-    {
-        ht->adopt = policy;
-    }
+    ht->adopt = policy;
 }
 
 NRTAPI(unsigned int) __NRT_HashTable_defaultHash(nrt_HashTable * ht, const char *key)
@@ -216,10 +213,6 @@ NRTAPI(NRT_DATA *) nrt_HashTable_remove(nrt_HashTable * ht, const char *key)
 
         /* We'll see */
         assert(pair);
-        if (pair == NULL)
-        {
-            return NULL;
-        }
 
         /* We found a match, remove and go home */
         if (strcmp(pair->key, key) == 0)
@@ -397,10 +390,6 @@ NRTAPI(nrt_Pair *) nrt_HashTable_find(nrt_HashTable * ht, const char *key)
 
         /* Should NOT get a null pair */
         assert(pair);
-        if (pair == NULL)
-        {
-            return NULL;
-        }
 
         /* We have a match!!! */
         if (strcmp(pair->key, key) == 0)
@@ -423,7 +412,7 @@ NRTAPI(nrt_HashTableIterator) nrt_HashTable_begin(nrt_HashTable * ht)
     hash_iterator.listIter.current = NULL;
     hash_iterator.hash = ht;
 
-    if ((ht != NULL) && (ht->buckets))
+    if (ht->buckets)
     {
         int i;
         for (i = 0; i < ht->nbuckets && hash_iterator.curBucket < 0; i++)
@@ -475,10 +464,11 @@ NRTAPI(void) nrt_HashTableIterator_increment(nrt_HashTableIterator * iter)
             found = 1;
         else
         {
-            for (int i = iter->curBucket + 1; i < iter->hash->nbuckets && !found;
+            int i;
+            for (i = iter->curBucket + 1; i < iter->hash->nbuckets && !found;
                  i++)
             {
-                l = iter->hash->buckets[i];
+                nrt_List *l = iter->hash->buckets[i];
                 if (l != NULL && nrt_List_size(l) > 0)
                 {
                     iter->curBucket = i;

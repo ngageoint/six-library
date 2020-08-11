@@ -22,7 +22,7 @@
 
 #include "nrt/IOHandle.h"
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef WIN32
 
 NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
                                          nrt_AccessFlags access,
@@ -70,7 +70,7 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, void* buf, size_t size,
         /* Read from file */
         DWORD bytesThisRead = 0;
         if (!ReadFile(handle,
-                      (uint8_t*)buf + bytesRead,
+                      (nrt_Uint8*)buf + bytesRead,
                       bytesToRead,
                       &bytesThisRead,
                       NULL))
@@ -113,7 +113,7 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const void *buf,
         DWORD bytesThisWrite = 0;
 
         if (!WriteFile(handle,
-                       (const uint8_t*)buf + bytesWritten,
+                       (const nrt_Uint8*)buf + bytesWritten,
                        bytesToWrite,
                        &bytesThisWrite,
                        NULL))
@@ -162,7 +162,7 @@ NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle, nrt_Error * error)
 {
     DWORD ret;
     DWORD highOff;
-    uint64_t off;
+    nrt_Uint64 off;
     ret = GetFileSize(handle, &highOff);
     if ((ret == -1))
     {
@@ -171,7 +171,7 @@ NRTAPI(nrt_Off) nrt_IOHandle_getSize(nrt_IOHandle handle, nrt_Error * error)
         return (nrt_Off) - 1;
     }
 
-    off = (uint64_t)highOff;
+    off = (nrt_Uint64)highOff;
     return (nrt_Off)((off << 32) + ret);
 }
 

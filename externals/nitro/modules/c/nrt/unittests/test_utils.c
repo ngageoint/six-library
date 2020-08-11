@@ -178,7 +178,8 @@ TEST_CASE(testDmsToCharArrayZero)
     TEST_ASSERT(strcmp(lonCharArray, "0000000E") == 0);
 }
 
-TEST_MAIN(
+int main(int argc, char** argv)
+{
     (void)argc;
     (void)argv;
     CHECK(testParseZeroDegrees);
@@ -194,5 +195,6 @@ TEST_MAIN(
     CHECK(testDmsToCharArrayNegativeSeconds);
     CHECK(testDmsToCharArrayPositiveSeconds);
     CHECK(testDmsToCharArrayZero);
-    )
+    return 0;
+}
 

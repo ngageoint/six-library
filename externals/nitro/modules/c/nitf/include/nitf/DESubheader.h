@@ -54,7 +54,7 @@ typedef struct _nitf_DESubheader
     nitf_Field *dataItemOverflowed;
     nitf_Field *subheaderFieldsLength;
     nitf_TRE *subheaderFields;
-    uint64_t dataLength;
+    nitf_Uint64 dataLength;
 
     nitf_Extensions *userDefinedSection;
 }

@@ -20,10 +20,8 @@
  *
  */
 
+#include <import/nitf.hpp>
 #include <iostream>
-
-#include <nitf/TRE.hpp>
-
 #include "TestCase.h"
 
 namespace
@@ -147,12 +145,13 @@ TEST_CASE(overflowingNumericFields)
 }
 }
 
-TEST_MAIN(
+int main(int /*argc*/, char** /*argv*/)
+{
     TEST_CHECK(setFields);
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
     TEST_CHECK(populateWhileIterating);
     TEST_CHECK(overflowingNumericFields);
-    )
-
+    return 0;
+}

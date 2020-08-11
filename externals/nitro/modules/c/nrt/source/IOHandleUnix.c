@@ -20,11 +20,7 @@
  *
  */
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4206) //	nonstandard extension used : translation unit is empty
-#endif
-
-#if !(defined(WIN32) || defined(_WIN32))
+#ifndef WIN32
 
 #include "nrt/IOHandle.h"
 
@@ -63,7 +59,7 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_read(nrt_IOHandle handle, void* buf, size_t size,
     {
         /* Make the next read */
         bytesRead = read(handle,
-                         (uint8_t*)buf + totalBytesRead,
+                         (nrt_Uint8*)buf + totalBytesRead,
                          size - totalBytesRead);
 
         switch (bytesRead)
@@ -116,7 +112,7 @@ NRTAPI(NRT_BOOL) nrt_IOHandle_write(nrt_IOHandle handle, const void *buf,
     do
     {
         const ssize_t bytesThisWrite =
-            write(handle, (const uint8_t*)buf + bytesActuallyWritten, size);
+            write(handle, (const nrt_Uint8*)buf + bytesActuallyWritten, size);
         if (bytesThisWrite == -1)
         {
             nrt_Error_init(error, strerror(errno), NRT_CTXT,

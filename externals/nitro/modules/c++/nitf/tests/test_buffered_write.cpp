@@ -143,13 +143,13 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
     nitf::ImageSubheader subheader = segment.getSubheader();
 
 
-    uint32_t nBits = subheader.getNumBitsPerPixel();
-    uint32_t nBands = subheader.getNumImageBands();
-    uint32_t xBands = subheader.getNumMultispectralImageBands();
+    nitf::Uint32 nBits = subheader.getNumBitsPerPixel();
+    nitf::Uint32 nBands = subheader.getNumImageBands();
+    nitf::Uint32 xBands = subheader.getNumMultispectralImageBands();
     nBands += xBands;
 
-    uint32_t nRows = subheader.getNumRows();
-    uint32_t nColumns = subheader.getNumCols();
+    nitf::Uint32 nRows = subheader.getNumRows();
+    nitf::Uint32 nColumns = subheader.getNumCols();
 
     //one row at a time
     size_t subWindowSize = nColumns * NITF_NBPP_TO_BYTES(nBits);
@@ -170,10 +170,10 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
         << "IC -> " << subheader.getImageCompression().toString() << std::endl
         << "COMRAT -> " << subheader.getCompressionRate().toString() << std::endl;
 
-    uint8_t** buffer = new uint8_t*[nBands];
-    uint32_t* bandList = new uint32_t[nBands];
+    nitf::Uint8** buffer = new nitf::Uint8*[nBands];
+    nitf::Uint32* bandList = new nitf::Uint32[nBands];
 
-    for (uint32_t band = 0; band < nBands; band++)
+    for (nitf::Uint32 band = 0; band < nBands; band++)
         bandList[band] = band;
 
     nitf::SubWindow subWindow;
@@ -188,15 +188,15 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
     subWindow.setNumBands(nBands);
 
     assert(buffer);
-    for (uint32_t i = 0; i < nBands; i++)
+    for (nitf::Uint32 i = 0; i < nBands; i++)
     {
-        buffer[i] = new uint8_t[subWindowSize];
+        buffer[i] = new nitf::Uint8[subWindowSize];
         assert(buffer[i]);
     }
 
     std::vector<nitf::IOHandle> handles;
     //make the files
-    for (uint32_t i = 0; i < nBands; i++)
+    for (nitf::Uint32 i = 0; i < nBands; i++)
     {
         std::string name = makeBandName(imageName, imageNumber, i);
         nitf::IOHandle toFile(name, NITF_ACCESS_WRITEONLY, NITF_CREATE);
@@ -204,22 +204,22 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
     }
 
     //read all row blocks and write to disk
-    for (uint32_t i = 0; i < nRows; ++i)
+    for (nitf::Uint32 i = 0; i < nRows; ++i)
     {
         subWindow.setStartRow(i);
         deserializer.read(subWindow, buffer, &padded);
-        for (uint32_t j = 0; j < nBands; j++)
+        for (nitf::Uint32 j = 0; j < nBands; j++)
         {
             handles[j].write((const char*)buffer[j], subWindowSize);
         }
     }
 
     //close output handles
-    for (uint32_t i = 0; i < nBands; i++)
+    for (nitf::Uint32 i = 0; i < nBands; i++)
         handles[i].close();
 
     /* free buffers */
-    for (uint32_t i = 0; i < nBands; i++)
+    for (nitf::Uint32 i = 0; i < nBands; i++)
         delete [] buffer[i];
     delete [] buffer;
     delete [] bandList;

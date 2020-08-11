@@ -69,28 +69,28 @@ public:
     ~BlockingInfo();
 
     //! Get the number of blocks per row
-    uint32_t getNumBlocksPerRow() const;
+    nitf::Uint32 getNumBlocksPerRow() const;
 
     //! Set the number of blocks per row
-    void setNumBlocksPerRow(uint32_t value);
+    void setNumBlocksPerRow(nitf::Uint32 value);
 
     //! Get the number of blocks per column
-    uint32_t getNumBlocksPerCol() const;
+    nitf::Uint32 getNumBlocksPerCol() const;
 
     //! Set the number of blocks per column
-    void setNumBlocksPerCol(uint32_t value);
+    void setNumBlocksPerCol(nitf::Uint32 value);
 
     //! Get the number of rows per block
-    uint32_t getNumRowsPerBlock() const;
+    nitf::Uint32 getNumRowsPerBlock() const;
 
     //! Set the number of rows per block
-    void setNumRowsPerBlock(uint32_t value);
+    void setNumRowsPerBlock(nitf::Uint32 value);
 
     //! Get the number of columns per block
-    uint32_t getNumColsPerBlock() const;
+    nitf::Uint32 getNumColsPerBlock() const;
 
     //! Set the number of columns per block
-    void setNumColsPerBlock(uint32_t value);
+    void setNumColsPerBlock(nitf::Uint32 value);
 
     //! Get the length
     size_t getLength() const;

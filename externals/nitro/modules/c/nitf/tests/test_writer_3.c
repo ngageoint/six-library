@@ -87,10 +87,10 @@ void freeBandName(char **rootFile)
 void showFileHeader(nitf_FileHeader * header)
 {
     unsigned int i;
-    uint32_t num;
+    nitf_Uint32 num;
     nitf_Error error;
-    uint32_t len;
-    uint64_t dataLen;
+    nitf_Uint32 len;
+    nitf_Uint64 dataLen;
     NITF_BOOL success;
 
     SHOW_VAL(header->fileHeader);
@@ -469,9 +469,9 @@ void writeDEData(nitf_DESegment * segment,
         size_t leftToRead;
         size_t amtToRead;
     */
-    uint64_t toRead = DE_READ_SIZE;
-    uint64_t leftToRead;
-    uint64_t amtToRead;
+    nitf_Uint64 toRead = DE_READ_SIZE;
+    nitf_Uint64 leftToRead;
+    nitf_Uint64 amtToRead;
     char * buf = NULL;
     char * outName = NULL;
 
@@ -536,14 +536,14 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
                              int imageNumber, nitf_Error * error)
 {
     char *file;
-    uint32_t nBits, nBands, xBands, nRows, nColumns;
+    nitf_Uint32 nBits, nBands, xBands, nRows, nColumns;
     size_t subimageSize;
     nitf_SubWindow *subimage;
     unsigned int i;
     int padded;
-    uint8_t **buffer = NULL;
-    uint32_t band;
-    uint32_t *bandList = NULL;
+    nitf_Uint8 **buffer = NULL;
+    nitf_Uint32 band;
+    nitf_Uint32 *bandList = NULL;
 
     NITF_TRY_GET_UINT32(segment->subheader->numBitsPerPixel, &nBits,
                         error);
@@ -599,9 +599,9 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
            segment->subheader->compressionRate->raw);
 
 
-    buffer = (uint8_t **) malloc(sizeof(uint8_t*) * nBands);
+    buffer = (nitf_Uint8 **) malloc(sizeof(nitf_Uint8*) * nBands);
     band = 0;
-    bandList = (uint32_t *) malloc(sizeof(uint32_t *) * nBands);
+    bandList = (nitf_Uint32 *) malloc(sizeof(nitf_Uint32 *) * nBands);
 
     subimage = nitf_SubWindow_construct(error);
     assert(subimage);
@@ -619,7 +619,7 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
     assert(buffer);
     for (i = 0; i < nBands; i++)
     {
-        buffer[i] = (uint8_t *) malloc(subimageSize);
+        buffer[i] = (nitf_Uint8 *) malloc(subimageSize);
         assert(buffer[i]);
     }
     /*  This should change to returning failures!  */

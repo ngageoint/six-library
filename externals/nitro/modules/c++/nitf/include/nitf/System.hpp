@@ -23,8 +23,6 @@
 #ifndef __NITF_SYSTEM_HPP__
 #define __NITF_SYSTEM_HPP__
 
-#pragma once
-
 /*!
  *  \file System.hpp
  */
@@ -35,6 +33,14 @@
 
 namespace nitf
 {
+typedef nitf_Uint64 Uint64;
+typedef nitf_Uint32 Uint32;
+typedef nitf_Uint16 Uint16;
+typedef nitf_Uint8 Uint8;
+typedef nitf_Int64 Int64;
+typedef nitf_Int32 Int32;
+typedef nitf_Int16 Int16;
+typedef nitf_Int8 Int8;
 typedef nitf_Off Off;
 typedef nitf_Version Version;
 typedef nitf_ConvType ConvType;

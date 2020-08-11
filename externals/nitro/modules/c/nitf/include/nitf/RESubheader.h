@@ -55,7 +55,7 @@ typedef struct _nitf_RESubheader
     nitf_FileSecurity *securityGroup;
     nitf_Field *subheaderFieldsLength;
     char *subheaderFields;
-    uint64_t dataLength;
+    nitf_Uint64 dataLength;
 }
 nitf_RESubheader;
 

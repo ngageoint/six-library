@@ -165,7 +165,7 @@ nitf::Off BufferedReader::seekImpl(nitf::Off offset, int whence)
         break;
     default:
         throw except::Exception(Ctxt(
-                "Invalid whence " + std::to_string(whence)));
+                "Invalid whence " + str::toString(whence)));
     }
 
     if (desiredPos >= bufferStart && desiredPos < bufferEnd)

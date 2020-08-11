@@ -45,7 +45,10 @@ class ExtensionsIterator
 {
 public:
     //! Constructor
-    ExtensionsIterator() = default;
+    ExtensionsIterator(){}
+
+    //! Destructor
+    ~ExtensionsIterator(){}
 
     //! Copy constructor
     ExtensionsIterator(const ExtensionsIterator & x)
@@ -315,7 +318,7 @@ typedef nitf::ExtensionsIterator Iterator;
         return nitf::ExtensionsIterator(x);
     }
 
-    uint64_t computeLength(nitf::Version version)
+    nitf::Uint64 computeLength(nitf::Version version)
     {
         return nitf_Extensions_computeLength(getNative(), version, &error);
     }

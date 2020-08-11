@@ -27,10 +27,10 @@ NITF_CXX_GUARD
 static int numopg(nitf_TRE* tre, char idx[10][10], int depth, nitf_Error* error)
 {
     nitf_Field* field;
-    int numopg;
+    int numopg, x;
     char fname[64];
     strcpy(fname, "NUMOPG");
-    (void) strlen(idx[0]);
+    x = strlen(idx[0]);
 
     strcat(fname, idx[0]);
 

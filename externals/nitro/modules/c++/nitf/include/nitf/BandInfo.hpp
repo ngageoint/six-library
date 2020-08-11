@@ -96,8 +96,8 @@ public:
               const std::string& subcategory,
               const std::string& imageFilterCondition,
               const std::string& imageFilterCode,
-              uint32_t numLUTs,
-              uint32_t bandEntriesPerLUT,
+              nitf::Uint32 numLUTs,
+              nitf::Uint32 bandEntriesPerLUT,
               nitf::LookupTable& lut);
 
     /*!

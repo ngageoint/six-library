@@ -403,7 +403,7 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_FileHeader_getImageInfo
     jobjectArray info;
     jobject element;
     jint i;
-    uint32_t num;
+    nitf_Uint32 num;
     jmethodID methodID;
 
     NITF_TRY_GET_UINT32(header->numImages, &num, &error);

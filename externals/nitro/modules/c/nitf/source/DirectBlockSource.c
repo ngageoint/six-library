@@ -35,7 +35,7 @@ typedef struct _DirectBlockSourceImpl
     /* Pointer to the next row function */
     NITF_DIRECT_BLOCK_SOURCE_NEXT_BLOCK nextBlock;
     nitf_ImageReader* imageReader;
-    uint32_t blockNumber;
+    nitf_Uint32 blockNumber;
     size_t numBlocks;
 }
 DirectBlockSourceImpl;
@@ -60,7 +60,7 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf,
 {
     DirectBlockSourceImpl *directBlockSource = toDirectBlockSource(data, error);
     const void* block;
-    uint64_t blockSize;
+    nitf_Uint64 blockSize;
 
     if (!directBlockSource)
         return NITF_FAILURE;
@@ -131,7 +131,7 @@ NITFAPI(nitf_BandSource *) nitf_DirectBlockSource_construct(void * algorithm,
                                                             NITF_DIRECT_BLOCK_SOURCE_NEXT_BLOCK
                                                             nextBlock,
                                                             nitf_ImageReader* imageReader,
-                                                            uint32_t numBands,
+                                                            nitf_Uint32 numBands,
                                                             nitf_Error * error)
 {
     static nitf_IDataSource iDirectBlockSource =

@@ -36,13 +36,14 @@ int main(int argc, char *argv[])
 {
     nitf_FileHeader *fhdr;          /* File header supplying fields */
     nitf_ImageSubheader *subhdr;    /* Subheader supplying fields */
-    uint32_t valueU32Before;     /* Value buffer */
-    uint32_t valueU32After;      /* Value buffer */
-    uint64_t valueU64Before;     /* Value buffer */
-    uint64_t valueU64After;      /* Value buffer */
+    nitf_Uint32 valueU32Before;     /* Value buffer */
+    nitf_Uint32 valueU32After;      /* Value buffer */
+    nitf_Uint64 valueU64Before;     /* Value buffer */
+    nitf_Uint64 valueU64After;      /* Value buffer */
     char *valueStrBefore;           /* Value buffer */
     /* Value buffer */
     static char valueStrAfter[STR_LEN + 2];
+    nitf_Uint32 valueStrLen;        /* Value buffer */
     static nitf_Error errorObj;     /* Error object for messages */
     nitf_Error *error;              /* Pointer to the error object */
 
@@ -103,7 +104,7 @@ int main(int argc, char *argv[])
                    NITF_CONV_UINT, NITF_INT64_SZ, error);
     fprintf(stdout,
             "Set of FL via nitf_Field_setUint64 original %llu readback %llu\n",
-            (long long unsigned int)valueU64Before, (long long unsigned int)valueU64After);
+            valueU64Before, valueU64After);
 
     valueStrBefore = "TestStr";
     if (nitf_Field_setString(subhdr->NITF_IID2, valueStrBefore, error))

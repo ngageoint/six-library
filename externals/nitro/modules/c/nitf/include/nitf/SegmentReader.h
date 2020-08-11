@@ -57,9 +57,9 @@ NITF_CXX_GUARD
 typedef struct _nitf_SegmentReader
 {
     nitf_IOInterface* input;
-    uint32_t dataLength;
-    uint64_t baseOffset;
-    uint64_t virtualOffset;
+    nitf_Uint32 dataLength;
+    nitf_Uint64 baseOffset;
+    nitf_Uint64 virtualOffset;
 }
 nitf_SegmentReader;
 

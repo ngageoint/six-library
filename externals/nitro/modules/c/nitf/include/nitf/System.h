@@ -23,7 +23,7 @@
 #ifndef __NITF_SYSTEM_H__
 #define __NITF_SYSTEM_H__
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef WIN32
 #      if defined(NITF_MODULE_EXPORTS)
 #          ifndef NRT_MODULE_EXPORTS
 #              define NRT_MODULE_EXPORTS
@@ -87,6 +87,14 @@
 /* TYPES                                                                      */
 /******************************************************************************/
 #include "nrt/Types.h"
+typedef nrt_Uint8                   nitf_Uint8;
+typedef nrt_Uint16                  nitf_Uint16;
+typedef nrt_Uint32                  nitf_Uint32;
+typedef nrt_Uint64                  nitf_Uint64;
+typedef nrt_Int8                    nitf_Int8;
+typedef nrt_Int16                   nitf_Int16;
+typedef nrt_Int32                   nitf_Int32;
+typedef nrt_Int64                   nitf_Int64;
 typedef nrt_IOHandle                nitf_IOHandle;
 typedef NRT_NATIVE_DLL              NITF_NATIVE_DLL;
 typedef NRT_DLL_FUNCTION_PTR        NITF_DLL_FUNCTION_PTR;

@@ -51,10 +51,10 @@
 void showFileHeader(nitf_FileHeader* header)
 {
     unsigned int i;
-    uint32_t num;
+    nitf_Uint32 num;
     nitf_Error error;
-    uint32_t len;
-    uint64_t dataLen;
+    nitf_Uint32 len;
+    nitf_Uint64 dataLen;
     NITF_BOOL success;
 
     SHOW_VAL(header->fileHeader);
@@ -124,12 +124,12 @@ NITF_BOOL writeImage(nitf_ImageSegment* segment, nitf_IOHandle input_io, nitf_IO
 
     nitf_ImageIO* ioClone;
 
-    uint8_t** buffer;
-    uint32_t nBits, nBands, xBands, nRows, nColumns;
+    nitf_Uint8** buffer;
+    nitf_Uint32 nBits, nBands, xBands, nRows, nColumns;
     nitf_SubWindow *subimage;
     size_t subimageSize;
-    uint32_t band;
-    uint32_t *bandList;
+    nitf_Uint32 band;
+    nitf_Uint32 *bandList;
     NITF_BOOL success;
     int padded;
 
@@ -166,18 +166,18 @@ NITF_BOOL writeImage(nitf_ImageSegment* segment, nitf_IOHandle input_io, nitf_IO
 
 
     /* Allcoate buffers */
-    buffer = (uint8_t **)malloc(8 * nBands);
+    buffer = (nitf_Uint8 **)malloc(8 * nBands);
     assert(buffer);
 
     for (band = 0; band < nBands; band++)
     {
-        buffer[band] = (uint8_t*)malloc(subimageSize);
+        buffer[band] = (nitf_Uint8*)malloc(subimageSize);
         assert(buffer[band]);
     }
 
     /*  Set-up band array and subimage */
 
-    bandList = (uint32_t *)malloc(sizeof(uint32_t *) * nBands);
+    bandList = (nitf_Uint32 *)malloc(sizeof(nitf_Uint32 *) * nBands);
 
     subimage = nitf_SubWindow_construct(&error);
     assert(subimage);
@@ -242,8 +242,8 @@ int doWrite(nitf_ImageSegment* segment, nitf_ImageSource *imgSrc,
             nitf_IOHandle output_io, nitf_ImageIO* ioClone)
 {
     nitf_Error error;
-    uint8_t** user;
-    uint32_t nBits, nBands, xBands, nRows, nColumns, row;
+    nitf_Uint8** user;
+    nitf_Uint32 nBits, nBands, xBands, nRows, nColumns, row;
     size_t rowSize;
     int band;
     NITF_BOOL success; /* Used in GET macros */
@@ -261,11 +261,11 @@ int doWrite(nitf_ImageSegment* segment, nitf_ImageSource *imgSrc,
 
     /*    Allocate buffers */
 
-    user = (uint8_t **)malloc(8 * nBands);
+    user = (nitf_Uint8 **)malloc(8 * nBands);
     assert(user);
     for (band = 0; band < nBands; band++)
     {
-        user[band] = (uint8_t*)malloc(rowSize);
+        user[band] = (nitf_Uint8*)malloc(rowSize);
         assert(user[band]);
     }
 
