@@ -336,23 +336,23 @@ class DESegment(_object):
         return _six_sicd.DESegment_setSubheader(self, value)
 
 
-    def getOffset(self) -> "nitf::Uint64":
-        """getOffset(DESegment self) -> nitf::Uint64"""
+    def getOffset(self) -> "uint64_t":
+        """getOffset(DESegment self) -> uint64_t"""
         return _six_sicd.DESegment_getOffset(self)
 
 
-    def setOffset(self, value: 'nitf::Uint64') -> "void":
-        """setOffset(DESegment self, nitf::Uint64 value)"""
+    def setOffset(self, value: 'uint64_t') -> "void":
+        """setOffset(DESegment self, uint64_t value)"""
         return _six_sicd.DESegment_setOffset(self, value)
 
 
-    def getEnd(self) -> "nitf::Uint64":
-        """getEnd(DESegment self) -> nitf::Uint64"""
+    def getEnd(self) -> "uint64_t":
+        """getEnd(DESegment self) -> uint64_t"""
         return _six_sicd.DESegment_getEnd(self)
 
 
-    def setEnd(self, value: 'nitf::Uint64') -> "void":
-        """setEnd(DESegment self, nitf::Uint64 value)"""
+    def setEnd(self, value: 'uint64_t') -> "void":
+        """setEnd(DESegment self, uint64_t value)"""
         return _six_sicd.DESegment_setEnd(self, value)
 
 DESegment_swigregister = _six_sicd.DESegment_swigregister
@@ -467,13 +467,13 @@ class DESubheader(_object):
         return _six_sicd.DESubheader_setSubheaderFields(self, fields)
 
 
-    def getDataLength(self) -> "nitf::Uint32":
-        """getDataLength(DESubheader self) -> nitf::Uint32"""
+    def getDataLength(self) -> "uint32_t":
+        """getDataLength(DESubheader self) -> uint32_t"""
         return _six_sicd.DESubheader_getDataLength(self)
 
 
-    def setDataLength(self, value: 'nitf::Uint32') -> "void":
-        """setDataLength(DESubheader self, nitf::Uint32 value)"""
+    def setDataLength(self, value: 'uint32_t') -> "void":
+        """setDataLength(DESubheader self, uint32_t value)"""
         return _six_sicd.DESubheader_setDataLength(self, value)
 
 
@@ -658,8 +658,8 @@ class Extensions(_object):
         return _six_sicd.Extensions_end(self)
 
 
-    def computeLength(self, version: 'nitf::Version') -> "nitf::Uint64":
-        """computeLength(Extensions self, nitf::Version version) -> nitf::Uint64"""
+    def computeLength(self, version: 'nitf::Version') -> "uint64_t":
+        """computeLength(Extensions self, nitf::Version version) -> uint64_t"""
         return _six_sicd.Extensions_computeLength(self, version)
 
 Extensions_swigregister = _six_sicd.Extensions_swigregister
@@ -693,14 +693,14 @@ class Field(_object):
 
     def set(self, *args) -> "void":
         """
-        set(Field self, nitf::Uint8 data)
-        set(Field self, nitf::Uint16 data)
-        set(Field self, nitf::Uint32 data)
-        set(Field self, nitf::Uint64 data)
+        set(Field self, uint8_t data)
+        set(Field self, uint16_t data)
+        set(Field self, uint32_t data)
+        set(Field self, uint64_t data)
         set(Field self, nitf::Int8 data)
-        set(Field self, nitf::Int16 data)
-        set(Field self, nitf::Int32 data)
-        set(Field self, nitf::Int64 data)
+        set(Field self, int16_t data)
+        set(Field self, int32_t data)
+        set(Field self, int64_t data)
         set(Field self, float data)
         set(Field self, double data)
         set(Field self, char const * data)
@@ -1078,23 +1078,23 @@ class ImageSegment(_object):
         return _six_sicd.ImageSegment_setSubheader(self, value)
 
 
-    def getImageOffset(self) -> "nitf::Uint64":
-        """getImageOffset(ImageSegment self) -> nitf::Uint64"""
+    def getImageOffset(self) -> "uint64_t":
+        """getImageOffset(ImageSegment self) -> uint64_t"""
         return _six_sicd.ImageSegment_getImageOffset(self)
 
 
-    def setImageOffset(self, value: 'nitf::Uint64') -> "void":
-        """setImageOffset(ImageSegment self, nitf::Uint64 value)"""
+    def setImageOffset(self, value: 'uint64_t') -> "void":
+        """setImageOffset(ImageSegment self, uint64_t value)"""
         return _six_sicd.ImageSegment_setImageOffset(self, value)
 
 
-    def getImageEnd(self) -> "nitf::Uint64":
-        """getImageEnd(ImageSegment self) -> nitf::Uint64"""
+    def getImageEnd(self) -> "uint64_t":
+        """getImageEnd(ImageSegment self) -> uint64_t"""
         return _six_sicd.ImageSegment_getImageEnd(self)
 
 
-    def setImageEnd(self, value: 'nitf::Uint64') -> "void":
-        """setImageEnd(ImageSegment self, nitf::Uint64 value)"""
+    def setImageEnd(self, value: 'uint64_t') -> "void":
+        """setImageEnd(ImageSegment self, uint64_t value)"""
         return _six_sicd.ImageSegment_setImageEnd(self, value)
 
 ImageSegment_swigregister = _six_sicd.ImageSegment_swigregister
@@ -1215,8 +1215,8 @@ class ImageSubheader(_object):
     __swig_destroy__ = _six_sicd.delete_ImageSubheader
     __del__ = lambda self: None
 
-    def setPixelInformation(self, pvtype: 'std::string', nbpp: 'nitf::Uint32', abpp: 'nitf::Uint32', justification: 'std::string', irep: 'std::string', icat: 'std::string', bands: 'std::vector< nitf::BandInfo,std::allocator< nitf::BandInfo > > &') -> "void":
-        """setPixelInformation(ImageSubheader self, std::string pvtype, nitf::Uint32 nbpp, nitf::Uint32 abpp, std::string justification, std::string irep, std::string icat, std::vector< nitf::BandInfo,std::allocator< nitf::BandInfo > > & bands)"""
+    def setPixelInformation(self, pvtype: 'std::string', nbpp: 'uint32_t', abpp: 'uint32_t', justification: 'std::string', irep: 'std::string', icat: 'std::string', bands: 'std::vector< nitf::BandInfo,std::allocator< nitf::BandInfo > > &') -> "void":
+        """setPixelInformation(ImageSubheader self, std::string pvtype, uint32_t nbpp, uint32_t abpp, std::string justification, std::string irep, std::string icat, std::vector< nitf::BandInfo,std::allocator< nitf::BandInfo > > & bands)"""
         return _six_sicd.ImageSubheader_setPixelInformation(self, pvtype, nbpp, abpp, justification, irep, icat, bands)
 
 
@@ -1235,29 +1235,29 @@ class ImageSubheader(_object):
         return _six_sicd.ImageSubheader_getCornersType(self)
 
 
-    def setBlocking(self, numRows: 'nitf::Uint32', numCols: 'nitf::Uint32', numRowsPerBlock: 'nitf::Uint32', numColsPerBlock: 'nitf::Uint32', imode: 'std::string const &') -> "void":
-        """setBlocking(ImageSubheader self, nitf::Uint32 numRows, nitf::Uint32 numCols, nitf::Uint32 numRowsPerBlock, nitf::Uint32 numColsPerBlock, std::string const & imode)"""
+    def setBlocking(self, numRows: 'uint32_t', numCols: 'uint32_t', numRowsPerBlock: 'uint32_t', numColsPerBlock: 'uint32_t', imode: 'std::string const &') -> "void":
+        """setBlocking(ImageSubheader self, uint32_t numRows, uint32_t numCols, uint32_t numRowsPerBlock, uint32_t numColsPerBlock, std::string const & imode)"""
         return _six_sicd.ImageSubheader_setBlocking(self, numRows, numCols, numRowsPerBlock, numColsPerBlock, imode)
 
 
-    def computeBlocking(numRows: 'nitf::Uint32', numCols: 'nitf::Uint32', numRowsPerBlock: 'nitf::Uint32 &', numColsPerBlock: 'nitf::Uint32 &', numBlocksPerCol: 'nitf::Uint32 &', numBlocksPerRow: 'nitf::Uint32 &') -> "void":
-        """computeBlocking(nitf::Uint32 numRows, nitf::Uint32 numCols, nitf::Uint32 & numRowsPerBlock, nitf::Uint32 & numColsPerBlock, nitf::Uint32 & numBlocksPerCol, nitf::Uint32 & numBlocksPerRow)"""
+    def computeBlocking(numRows: 'uint32_t', numCols: 'uint32_t', numRowsPerBlock: 'uint32_t &', numColsPerBlock: 'uint32_t &', numBlocksPerCol: 'uint32_t &', numBlocksPerRow: 'uint32_t &') -> "void":
+        """computeBlocking(uint32_t numRows, uint32_t numCols, uint32_t & numRowsPerBlock, uint32_t & numColsPerBlock, uint32_t & numBlocksPerCol, uint32_t & numBlocksPerRow)"""
         return _six_sicd.ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow)
 
     computeBlocking = staticmethod(computeBlocking)
 
-    def setDimensions(self, numRows: 'nitf::Uint32', numCols: 'nitf::Uint32') -> "void":
-        """setDimensions(ImageSubheader self, nitf::Uint32 numRows, nitf::Uint32 numCols)"""
+    def setDimensions(self, numRows: 'uint32_t', numCols: 'uint32_t') -> "void":
+        """setDimensions(ImageSubheader self, uint32_t numRows, uint32_t numCols)"""
         return _six_sicd.ImageSubheader_setDimensions(self, numRows, numCols)
 
 
-    def getBandCount(self) -> "nitf::Uint32":
-        """getBandCount(ImageSubheader self) -> nitf::Uint32"""
+    def getBandCount(self) -> "uint32_t":
+        """getBandCount(ImageSubheader self) -> uint32_t"""
         return _six_sicd.ImageSubheader_getBandCount(self)
 
 
-    def createBands(self, numBands: 'nitf::Uint32') -> "void":
-        """createBands(ImageSubheader self, nitf::Uint32 numBands)"""
+    def createBands(self, numBands: 'uint32_t') -> "void":
+        """createBands(ImageSubheader self, uint32_t numBands)"""
         return _six_sicd.ImageSubheader_createBands(self, numBands)
 
 
@@ -1396,8 +1396,8 @@ class ImageSubheader(_object):
         return _six_sicd.ImageSubheader_getNumMultispectralImageBands(self)
 
 
-    def getBandInfo(self, band: 'nitf::Uint32') -> "nitf::BandInfo":
-        """getBandInfo(ImageSubheader self, nitf::Uint32 band) -> nitf::BandInfo"""
+    def getBandInfo(self, band: 'uint32_t') -> "nitf::BandInfo":
+        """getBandInfo(ImageSubheader self, uint32_t band) -> nitf::BandInfo"""
         return _six_sicd.ImageSubheader_getBandInfo(self, band)
 
 
@@ -1509,8 +1509,8 @@ class ImageSubheader(_object):
 ImageSubheader_swigregister = _six_sicd.ImageSubheader_swigregister
 ImageSubheader_swigregister(ImageSubheader)
 
-def ImageSubheader_computeBlocking(numRows: 'nitf::Uint32', numCols: 'nitf::Uint32', numRowsPerBlock: 'nitf::Uint32 &', numColsPerBlock: 'nitf::Uint32 &', numBlocksPerCol: 'nitf::Uint32 &', numBlocksPerRow: 'nitf::Uint32 &') -> "void":
-    """ImageSubheader_computeBlocking(nitf::Uint32 numRows, nitf::Uint32 numCols, nitf::Uint32 & numRowsPerBlock, nitf::Uint32 & numColsPerBlock, nitf::Uint32 & numBlocksPerCol, nitf::Uint32 & numBlocksPerRow)"""
+def ImageSubheader_computeBlocking(numRows: 'uint32_t', numCols: 'uint32_t', numRowsPerBlock: 'uint32_t &', numColsPerBlock: 'uint32_t &', numBlocksPerCol: 'uint32_t &', numBlocksPerRow: 'uint32_t &') -> "void":
+    """ImageSubheader_computeBlocking(uint32_t numRows, uint32_t numCols, uint32_t & numRowsPerBlock, uint32_t & numColsPerBlock, uint32_t & numBlocksPerCol, uint32_t & numBlocksPerRow)"""
     return _six_sicd.ImageSubheader_computeBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, numBlocksPerCol, numBlocksPerRow)
 
 def ImageSubheader_getActualImageDim(dim: 'size_t', numDimsPerBlock: 'size_t') -> "size_t":
@@ -1795,33 +1795,33 @@ class Record(_object):
         return _six_sicd.Record_setHeader(self, value)
 
 
-    def getNumImages(self) -> "nitf::Uint32":
-        """getNumImages(Record self) -> nitf::Uint32"""
+    def getNumImages(self) -> "uint32_t":
+        """getNumImages(Record self) -> uint32_t"""
         return _six_sicd.Record_getNumImages(self)
 
 
-    def getNumGraphics(self) -> "nitf::Uint32":
-        """getNumGraphics(Record self) -> nitf::Uint32"""
+    def getNumGraphics(self) -> "uint32_t":
+        """getNumGraphics(Record self) -> uint32_t"""
         return _six_sicd.Record_getNumGraphics(self)
 
 
-    def getNumLabels(self) -> "nitf::Uint32":
-        """getNumLabels(Record self) -> nitf::Uint32"""
+    def getNumLabels(self) -> "uint32_t":
+        """getNumLabels(Record self) -> uint32_t"""
         return _six_sicd.Record_getNumLabels(self)
 
 
-    def getNumTexts(self) -> "nitf::Uint32":
-        """getNumTexts(Record self) -> nitf::Uint32"""
+    def getNumTexts(self) -> "uint32_t":
+        """getNumTexts(Record self) -> uint32_t"""
         return _six_sicd.Record_getNumTexts(self)
 
 
-    def getNumDataExtensions(self) -> "nitf::Uint32":
-        """getNumDataExtensions(Record self) -> nitf::Uint32"""
+    def getNumDataExtensions(self) -> "uint32_t":
+        """getNumDataExtensions(Record self) -> uint32_t"""
         return _six_sicd.Record_getNumDataExtensions(self)
 
 
-    def getNumReservedExtensions(self) -> "nitf::Uint32":
-        """getNumReservedExtensions(Record self) -> nitf::Uint32"""
+    def getNumReservedExtensions(self) -> "uint32_t":
+        """getNumReservedExtensions(Record self) -> uint32_t"""
         return _six_sicd.Record_getNumReservedExtensions(self)
 
 
@@ -1857,80 +1857,80 @@ class Record(_object):
         return _six_sicd.Record_newDataExtensionSegment(self, index)
 
 
-    def removeImageSegment(self, index: 'nitf::Uint32') -> "void":
-        """removeImageSegment(Record self, nitf::Uint32 index)"""
+    def removeImageSegment(self, index: 'uint32_t') -> "void":
+        """removeImageSegment(Record self, uint32_t index)"""
         return _six_sicd.Record_removeImageSegment(self, index)
 
 
-    def removeGraphicSegment(self, index: 'nitf::Uint32') -> "void":
-        """removeGraphicSegment(Record self, nitf::Uint32 index)"""
+    def removeGraphicSegment(self, index: 'uint32_t') -> "void":
+        """removeGraphicSegment(Record self, uint32_t index)"""
         return _six_sicd.Record_removeGraphicSegment(self, index)
 
 
-    def removeTextSegment(self, index: 'nitf::Uint32') -> "void":
-        """removeTextSegment(Record self, nitf::Uint32 index)"""
+    def removeTextSegment(self, index: 'uint32_t') -> "void":
+        """removeTextSegment(Record self, uint32_t index)"""
         return _six_sicd.Record_removeTextSegment(self, index)
 
 
-    def removeLabelSegment(self, index: 'nitf::Uint32') -> "void":
-        """removeLabelSegment(Record self, nitf::Uint32 index)"""
+    def removeLabelSegment(self, index: 'uint32_t') -> "void":
+        """removeLabelSegment(Record self, uint32_t index)"""
         return _six_sicd.Record_removeLabelSegment(self, index)
 
 
-    def removeDataExtensionSegment(self, index: 'nitf::Uint32') -> "void":
-        """removeDataExtensionSegment(Record self, nitf::Uint32 index)"""
+    def removeDataExtensionSegment(self, index: 'uint32_t') -> "void":
+        """removeDataExtensionSegment(Record self, uint32_t index)"""
         return _six_sicd.Record_removeDataExtensionSegment(self, index)
 
 
-    def removeReservedExtensionSegment(self, index: 'nitf::Uint32') -> "void":
-        """removeReservedExtensionSegment(Record self, nitf::Uint32 index)"""
+    def removeReservedExtensionSegment(self, index: 'uint32_t') -> "void":
+        """removeReservedExtensionSegment(Record self, uint32_t index)"""
         return _six_sicd.Record_removeReservedExtensionSegment(self, index)
 
 
-    def moveImageSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
+    def moveImageSegment(self, oldIndex: 'uint32_t', newIndex: 'int'=-1) -> "void":
         """
-        moveImageSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
-        moveImageSegment(Record self, nitf::Uint32 oldIndex)
+        moveImageSegment(Record self, uint32_t oldIndex, int newIndex=-1)
+        moveImageSegment(Record self, uint32_t oldIndex)
         """
         return _six_sicd.Record_moveImageSegment(self, oldIndex, newIndex)
 
 
-    def moveTextSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
+    def moveTextSegment(self, oldIndex: 'uint32_t', newIndex: 'int'=-1) -> "void":
         """
-        moveTextSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
-        moveTextSegment(Record self, nitf::Uint32 oldIndex)
+        moveTextSegment(Record self, uint32_t oldIndex, int newIndex=-1)
+        moveTextSegment(Record self, uint32_t oldIndex)
         """
         return _six_sicd.Record_moveTextSegment(self, oldIndex, newIndex)
 
 
-    def moveGraphicSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
+    def moveGraphicSegment(self, oldIndex: 'uint32_t', newIndex: 'int'=-1) -> "void":
         """
-        moveGraphicSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
-        moveGraphicSegment(Record self, nitf::Uint32 oldIndex)
+        moveGraphicSegment(Record self, uint32_t oldIndex, int newIndex=-1)
+        moveGraphicSegment(Record self, uint32_t oldIndex)
         """
         return _six_sicd.Record_moveGraphicSegment(self, oldIndex, newIndex)
 
 
-    def moveLabelSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
+    def moveLabelSegment(self, oldIndex: 'uint32_t', newIndex: 'int'=-1) -> "void":
         """
-        moveLabelSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
-        moveLabelSegment(Record self, nitf::Uint32 oldIndex)
+        moveLabelSegment(Record self, uint32_t oldIndex, int newIndex=-1)
+        moveLabelSegment(Record self, uint32_t oldIndex)
         """
         return _six_sicd.Record_moveLabelSegment(self, oldIndex, newIndex)
 
 
-    def moveDataExtensionSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
+    def moveDataExtensionSegment(self, oldIndex: 'uint32_t', newIndex: 'int'=-1) -> "void":
         """
-        moveDataExtensionSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
-        moveDataExtensionSegment(Record self, nitf::Uint32 oldIndex)
+        moveDataExtensionSegment(Record self, uint32_t oldIndex, int newIndex=-1)
+        moveDataExtensionSegment(Record self, uint32_t oldIndex)
         """
         return _six_sicd.Record_moveDataExtensionSegment(self, oldIndex, newIndex)
 
 
-    def moveReservedExtensionSegment(self, oldIndex: 'nitf::Uint32', newIndex: 'int'=-1) -> "void":
+    def moveReservedExtensionSegment(self, oldIndex: 'uint32_t', newIndex: 'int'=-1) -> "void":
         """
-        moveReservedExtensionSegment(Record self, nitf::Uint32 oldIndex, int newIndex=-1)
-        moveReservedExtensionSegment(Record self, nitf::Uint32 oldIndex)
+        moveReservedExtensionSegment(Record self, uint32_t oldIndex, int newIndex=-1)
+        moveReservedExtensionSegment(Record self, uint32_t oldIndex)
         """
         return _six_sicd.Record_moveReservedExtensionSegment(self, oldIndex, newIndex)
 
