@@ -81,8 +81,11 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(nitf_Off fileOffset,
     {
         strLength = strlen(fieldName);
         result->fieldName = (char *) NITF_MALLOC(strLength + 1);
-        strcpy(result->fieldName, fieldName);
-        result->fieldName[strLength] = 0;
+        if (result->fieldName != NULL)
+        {
+            strcpy(result->fieldName, fieldName);
+            result->fieldName[strLength] = 0;
+        }
     }
 
     /* expectation */

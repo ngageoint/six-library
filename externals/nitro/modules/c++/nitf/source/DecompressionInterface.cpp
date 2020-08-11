@@ -28,10 +28,10 @@ using namespace nitf;
 NITF_BOOL DecompressionInterface::adapterStart(
     nitf_DecompressionControl* object,
     nitf_IOInterface* io,
-    nitf_Uint64 offset,
-    nitf_Uint64 fileLength,
+    uint64_t offset,
+    uint64_t fileLength,
     nitf_BlockingInfo* blockingDefinition,
-    nitf_Uint64* blockMask, 
+    uint64_t* blockMask, 
     nitf_Error* error)
 {
     try
@@ -67,10 +67,10 @@ NITF_BOOL DecompressionInterface::adapterStart(
     }
 }
 
-nitf_Uint8* DecompressionInterface::adapterReadBlock(
+uint8_t* DecompressionInterface::adapterReadBlock(
     nitf_DecompressionControl* object,
-    nitf_Uint32 blockNumber, 
-    nitf_Uint64* blockSize, 
+    uint32_t blockNumber, 
+    uint64_t* blockSize, 
     nitf_Error* error)
 {
     try
@@ -100,7 +100,7 @@ nitf_Uint8* DecompressionInterface::adapterReadBlock(
 
 NITF_BOOL DecompressionInterface::adapterFreeBlock(
     nitf_DecompressionControl* object,
-    nitf_Uint8* block, 
+    uint8_t* block, 
     nitf_Error* error)
 {
     try

@@ -39,8 +39,8 @@ NITF_CXX_GUARD
 typedef struct _nitf_DESegment
 {
     nitf_DESubheader *subheader;
-    nitf_Uint64 offset;
-    nitf_Uint64 end;
+    uint64_t offset;
+    uint64_t end;
 }
 nitf_DESegment;
 

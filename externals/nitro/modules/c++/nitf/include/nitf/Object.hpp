@@ -22,6 +22,7 @@
 
 #ifndef __NITF_OBJECT_HPP__
 #define __NITF_OBJECT_HPP__
+#pragma once
 
 #include "nitf/Handle.hpp"
 #include "nitf/HandleManager.hpp"

@@ -67,7 +67,7 @@ NITF_CXX_GUARD
   \return Returns true on success. On failure the error object is set
 */
 typedef NITF_BOOL(*NITF_ROW_SOURCE_NEXT_ROW) (void *algorithm,
-        nitf_Uint32 band,
+        uint32_t band,
         NITF_DATA * buffer,
         nitf_Error * error);
 
@@ -84,9 +84,9 @@ NITFAPI(nitf_BandSource *) nitf_RowSource_construct
 (
     void *algorithm,                    /*!< The algorithm object */
     NITF_ROW_SOURCE_NEXT_ROW nextRow,   /*!< Pointer to the next row function */
-    nitf_Uint32 band,                   /*!< Associate output band */
-    nitf_Uint32 numRows,                /*!< Number of rows */
-    nitf_Uint32 rowLength,              /*!< Length of each row in bytes (single band) */
+    uint32_t band,                   /*!< Associate output band */
+    uint32_t numRows,                /*!< Number of rows */
+    uint32_t rowLength,              /*!< Length of each row in bytes (single band) */
     nitf_Error * error                  /*!< For error returns */
 );
 

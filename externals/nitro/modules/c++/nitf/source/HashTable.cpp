@@ -22,6 +22,9 @@
 
 #include "nitf/HashTable.hpp"
 
+#include "nitf/NITFException.hpp"
+
+
 nitf::HashTableIterator & nitf::HashTableIterator::operator=(const nitf::HashTableIterator & x)
 {
     if (&x != this)

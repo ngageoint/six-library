@@ -609,7 +609,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeImageSegment
 	nitf_Record *record = _GetObj(env, self);
 	nitf_Error error;
 
-	if (!nitf_Record_removeImageSegment(record, (nitf_Uint32)segmentNumber, &error))
+	if (!nitf_Record_removeImageSegment(record, (uint32_t)segmentNumber, &error))
 	{
 		_ThrowNITFException(env, error.message);
 	}
@@ -627,7 +627,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeGraphicSegment
 	nitf_Record *record = _GetObj(env, self);
 	nitf_Error error;
 
-	if (!nitf_Record_removeGraphicSegment(record, (nitf_Uint32)segmentNumber, &error))
+	if (!nitf_Record_removeGraphicSegment(record, (uint32_t)segmentNumber, &error))
 	{
 		_ThrowNITFException(env, error.message);
 	}
@@ -645,7 +645,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeLabelSegment
 	nitf_Record *record = _GetObj(env, self);
 	nitf_Error error;
 
-	if (!nitf_Record_removeLabelSegment(record, (nitf_Uint32)segmentNumber, &error))
+	if (!nitf_Record_removeLabelSegment(record, (uint32_t)segmentNumber, &error))
 	{
 		_ThrowNITFException(env, error.message);
 	}
@@ -663,7 +663,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeTextSegment
 	nitf_Record *record = _GetObj(env, self);
 	nitf_Error error;
 
-	if (!nitf_Record_removeTextSegment(record, (nitf_Uint32)segmentNumber, &error))
+	if (!nitf_Record_removeTextSegment(record, (uint32_t)segmentNumber, &error))
 	{
 		_ThrowNITFException(env, error.message);
 	}
@@ -681,7 +681,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeDataExtensionSegment
 	nitf_Record *record = _GetObj(env, self);
 	nitf_Error error;
 
-	if (!nitf_Record_removeDataExtensionSegment(record, (nitf_Uint32)segmentNumber, &error))
+	if (!nitf_Record_removeDataExtensionSegment(record, (uint32_t)segmentNumber, &error))
 	{
 		_ThrowNITFException(env, error.message);
 	}
@@ -699,7 +699,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_removeReservedExtensionSegment
 	nitf_Record *record = _GetObj(env, self);
 	nitf_Error error;
 
-	if (!nitf_Record_removeReservedExtensionSegment(record, (nitf_Uint32)segmentNumber, &error))
+	if (!nitf_Record_removeReservedExtensionSegment(record, (uint32_t)segmentNumber, &error))
 	{
 		_ThrowNITFException(env, error.message);
 	}
@@ -713,7 +713,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveImageSegment
     nitf_Error error;
 
     if (!nitf_Record_moveImageSegment(record,
-            (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+            (uint32_t)oldIndex, (uint32_t)newIndex, &error))
     {
         _ThrowNITFException(env, error.message);
     }
@@ -727,7 +727,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveGraphicSegment
     nitf_Error error;
 
     if (!nitf_Record_moveGraphicSegment(record,
-                    (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+                    (uint32_t)oldIndex, (uint32_t)newIndex, &error))
     {
         _ThrowNITFException(env, error.message);
     }
@@ -741,7 +741,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveTextSegment
     nitf_Error error;
 
     if (!nitf_Record_moveTextSegment(record,
-                    (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+                    (uint32_t)oldIndex, (uint32_t)newIndex, &error))
     {
         _ThrowNITFException(env, error.message);
     }
@@ -755,7 +755,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveLabelSegment
     nitf_Error error;
 
     if (!nitf_Record_moveLabelSegment(record,
-                    (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+                    (uint32_t)oldIndex, (uint32_t)newIndex, &error))
     {
         _ThrowNITFException(env, error.message);
     }
@@ -769,7 +769,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveDataExtensionSegment
     nitf_Error error;
 
     if (!nitf_Record_moveDataExtensionSegment(record,
-                    (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+                    (uint32_t)oldIndex, (uint32_t)newIndex, &error))
     {
         _ThrowNITFException(env, error.message);
     }
@@ -783,7 +783,7 @@ JNIEXPORT void JNICALL Java_nitf_Record_moveReservedExtensionSegment
     nitf_Error error;
 
     if (!nitf_Record_moveReservedExtensionSegment(record,
-                    (nitf_Uint32)oldIndex, (nitf_Uint32)newIndex, &error))
+                    (uint32_t)oldIndex, (uint32_t)newIndex, &error))
     {
         _ThrowNITFException(env, error.message);
     }

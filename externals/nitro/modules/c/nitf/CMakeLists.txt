@@ -35,7 +35,7 @@ coda_add_module(
         source/PluginRegistry.c
         source/RESegment.c
         source/RESubheader.c
-        source/Reader.c
+        source/NitfReader.c
         source/Record.c
         source/RowSource.c
         source/SegmentReader.c
@@ -50,7 +50,7 @@ coda_add_module(
         source/TextSegment.c
         source/TextSubheader.c
         source/WriteHandler.c
-        source/Writer.c)
+        source/NitfWriter.c)
 
 target_compile_definitions(nitf-c PRIVATE
                            NITF_DEFAULT_PLUGIN_PATH="${CMAKE_INSTALL_PREFIX}/share/nitf/plugins")

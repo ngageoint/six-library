@@ -4,7 +4,7 @@ from os.path import splitext, dirname, join
 from build import writeConfig
 
 NAME            = 'nitf'
-MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+MAINTAINER      = 'dan.smith@maxar.com'
 MODULE_DEPS     = 'nrt'
 LANG            = 'c'
 DEFINES         = 'NITF_MODULE_EXPORTS'

@@ -20,6 +20,10 @@
  *
  */
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
@@ -245,7 +249,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
                                            int dayOfYear,
                                            nrt_Error * error)
 {
-    int month, dayOfMonth;
+    int month=0, dayOfMonth=0;
     if (nrt_DateTime_setMonthInfoFromDayOfYear(dateTime->year,
                                                dayOfYear,
                                                &month,
@@ -260,6 +264,19 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
 
     return NRT_FAILURE;
 }
+
+static struct tm* nrt_DateTime_gmtime(const time_t* const t)
+{
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(push)
+#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+#endif
+    return gmtime(t);
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(pop)
+#endif
+}
+#define gmtime(t) nrt_DateTime_gmtime(t)
 
 NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
                                               double timeInMillis,
@@ -358,6 +375,20 @@ NRTAPI(NRT_BOOL) nrt_DateTime_format(const nrt_DateTime * dateTime,
     return nrt_DateTime_formatMillis(dateTime->timeInMillis, format, outBuf,
                                      maxSize, error);
 }
+
+static int nrt_Date_Time_formatMillis_sscanf(char const* const buffer, char const* const format,
+    int* decimalPlaces)
+{
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(push)
+#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+#endif
+    return sscanf(buffer, format, decimalPlaces);
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(pop)
+#endif
+}
+#define sscanf(buffer, format, decimalPlaces) nrt_Date_Time_formatMillis_sscanf(buffer, format, decimalPlaces)
 
 NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                                            char *outBuf, size_t maxSize,
@@ -922,7 +953,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
      * if either was provided */
     if (isYearSet && isDayOfYearSet)
     {
-        int month, dayOfMonth;
+        int month=0, dayOfMonth=0;
         if (!nrt_DateTime_setMonthInfoFromDayOfYear(tm->tm_year + 1900,
                                                     tm->tm_yday + 1,
                                                     &month,

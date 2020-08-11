@@ -59,14 +59,14 @@
 
 typedef struct _imgInfo
 {
-    nitf_Uint32 index;               /* Segment index */
+    uint32_t index;               /* Segment index */
     nitf_ImageSegment *seg;          /* Image segment object */
     nitf_ImageSubheader *subhdr;     /* Image subheader object */
-    nitf_Uint32 nBands;              /* Number of bands */
-    nitf_Uint32 bytes;               /* Bytes/pixel */
+    uint32_t nBands;              /* Number of bands */
+    uint32_t bytes;               /* Bytes/pixel */
     size_t imgSize;                  /* Size of each band in bytes */
-    nitf_Uint8 padValue[MAX_PAD];    /* Pad value */
-    nitf_Uint8 **buffers;            /* Buffers containing the data */
+    uint8_t padValue[MAX_PAD];    /* Pad value */
+    uint8_t **buffers;            /* Buffers containing the data */
     nitf_ImageWriter *imgWriter;     /* Image writer for segment */
     nitf_ImageSource *imgSource;     /* Image source for segment */
 }
@@ -79,7 +79,7 @@ NITF_BOOL readImageSegment(imgInfo *img, nitf_Reader *reader, nitf_Error *error)
 NITF_BOOL makeImageSource(imgInfo *img, nitf_Writer *writer, nitf_Error *error);
 
 NITF_BOOL decodePadValue(imgInfo *info,
-                         char *string, nitf_Uint8 *value, nitf_Error *error);
+                         char *string, uint8_t *value, nitf_Error *error);
 
 int main(int argc, char *argv[])
 {
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     nitf_Record *record;          /* Record used for input and output */
     imgInfo *imgs;                /* Image segment information */
     nitf_FileHeader *fileHdr;     /* File header */
-    nitf_Uint32 numImages;        /* Total number of image segments */
+    uint32_t numImages;        /* Total number of image segments */
     nitf_ListIterator imgIter;    /* Image segment list iterator */
     nitf_IOHandle in;             /* Input I/O handle */
     nitf_IOHandle out;            /* Output I/O handle */
@@ -283,17 +283,17 @@ int main(int argc, char *argv[])
 
 NITF_BOOL readImageSegment(imgInfo *img, nitf_Reader *reader, nitf_Error *error)
 {
-    nitf_Uint32 nBits;         /* Bits/pixel */
-    nitf_Uint32 nBands;        /* Number of bands */
-    nitf_Uint32 xBands;        /* Number of extended bands */
-    nitf_Uint32 nRows;         /* Number of rows */
-    nitf_Uint32 nColumns;      /* Number of columns */
+    uint32_t nBits;         /* Bits/pixel */
+    uint32_t nBands;        /* Number of bands */
+    uint32_t xBands;        /* Number of extended bands */
+    uint32_t nRows;         /* Number of rows */
+    uint32_t nColumns;      /* Number of columns */
     size_t subimageSize;       /* Image band size in bytes */
     nitf_SubWindow *subimage;  /* Sub-image object specifying full image */
     nitf_DownSampler *pixelSkip; /* Downsample for sub-window */
-    nitf_Uint32 *bandList;     /* List of bands for read */
-    nitf_Uint32 band;          /* Current band */
-    nitf_Uint8 **buffers;      /* Read buffer one/band */
+    uint32_t *bandList;     /* List of bands for read */
+    uint32_t band;          /* Current band */
+    uint8_t **buffers;      /* Read buffer one/band */
     /* Image reader */
     nitf_ImageReader *deserializer;
     int padded;                /* Argument for read */
@@ -324,7 +324,7 @@ NITF_BOOL readImageSegment(imgInfo *img, nitf_Reader *reader, nitf_Error *error)
     if (subimage == NULL)
         return(NITF_FAILURE);
 
-    bandList = (nitf_Uint32 *) NITF_MALLOC(sizeof(nitf_Uint32 *) * nBands);
+    bandList = (uint32_t *) NITF_MALLOC(sizeof(uint32_t *) * nBands);
     if (bandList == NULL)
         return(NITF_FAILURE);
 
@@ -346,13 +346,13 @@ NITF_BOOL readImageSegment(imgInfo *img, nitf_Reader *reader, nitf_Error *error)
 
     /*  Set-up buffers (one/band) */
 
-    buffers = (nitf_Uint8 **) NITF_MALLOC(nBands * sizeof(nitf_Uint8*));
+    buffers = (uint8_t **) NITF_MALLOC(nBands * sizeof(uint8_t*));
     if (buffers == NULL)
         return(NITF_FAILURE);
 
     for (i = 0;i < nBands;i++)
     {
-        buffers[i] = (nitf_Uint8 *) malloc(subimageSize);
+        buffers[i] = (uint8_t *) malloc(subimageSize);
         if (buffers[i] == NULL)
             return(NITF_FAILURE);
     }
@@ -403,12 +403,12 @@ NITF_BOOL makeImageSource(imgInfo *img, nitf_Writer *writer, nitf_Error *error)
 }
 
 NITF_BOOL decodePadValue(imgInfo *info,
-                         char *string, nitf_Uint8 *value, nitf_Error *error)
+                         char *string, uint8_t *value, nitf_Error *error)
 {
     char *str;           /* Pointer into the string */
     size_t len;          /* Current length of the value string */
-    nitf_Uint32 nValues; /* Number of byte values in pad value */
-    nitf_Uint32 i;
+    uint32_t nValues; /* Number of byte values in pad value */
+    uint32_t i;
 
     str = string;
     len = strlen(str);

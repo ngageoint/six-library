@@ -60,11 +60,11 @@ int main(int argc, char *argv[])
     nitf_IOHandle io;                /* Handle for output */
     nitf_Error error;                /* Error object */
     nitf_ImageIO *image;             /* ImageIO for image */
-    nitf_Uint8 *user[NUM_BANDS_MAX]; /* User buffer for write rows */
-    nitf_Uint8 ***data;              /* Generated data [band][row][col] */
-    nitf_Uint32 band;                /* Current band */
-    nitf_Uint32 row;                 /* Current row */
-    nitf_Uint32 col;                 /* Current  column*/
+    uint8_t *user[NUM_BANDS_MAX]; /* User buffer for write rows */
+    uint8_t ***data;              /* Generated data [band][row][col] */
+    uint32_t band;                /* Current band */
+    uint32_t row;                 /* Current row */
+    uint32_t col;                 /* Current  column*/
 
     if (argc < 3)
     {
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 
     if (strcmp(newArgs->dataPattern, "brcI4") == 0)
     {
-        data = (nitf_Uint8 ***) test_nitf_ImageIO_brcI4(newArgs, &errorStr);
+        data = (uint8_t ***) test_nitf_ImageIO_brcI4(newArgs, &errorStr);
         if (data == NULL)
         {
             fprintf(stderr, "%s\n", errorStr);
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(newArgs->dataPattern, "brcC8") == 0)
     {
-        data = (nitf_Uint8 ***) test_nitf_ImageIO_brcC8(newArgs, &errorStr);
+        data = (uint8_t ***) test_nitf_ImageIO_brcC8(newArgs, &errorStr);
         if (data == NULL)
         {
             fprintf(stderr, "%s\n", errorStr);
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
     for (row = 0;row < newArgs->nRows;row++)
     {
         for (band = 0;band < newArgs->nBands;band++)
-            user[band] = (nitf_Uint8 *) & (data[band][row][0]);
+            user[band] = (uint8_t *) & (data[band][row][0]);
         if (!nitf_ImageIO_writeRows(image, io, 1, user, &error))
         {
             nitf_Error_print(&error, stderr, "Writing rows");
