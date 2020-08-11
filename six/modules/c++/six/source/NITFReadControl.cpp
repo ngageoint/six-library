@@ -196,7 +196,7 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
                                       const NITFImageInfo* info)
 {
     const size_t numBandsSeg =
-            static_cast<nitf::Uint32>(subheader.getNumImageBands());
+            static_cast<uint32_t>(subheader.getNumImageBands());
 
     const std::string pjust = subheader.getPixelJustification().toString();
     // TODO: More validation in here!
@@ -209,7 +209,7 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
     // case of 24-bit true color and 8 in the case of complex float
     // and 1 in the case of most SIDD data
     const size_t numBitsPerPixel =
-            static_cast<nitf::Uint32>(subheader.getNumBitsPerPixel());
+            static_cast<uint32_t>(subheader.getNumBitsPerPixel());
     const size_t numBytesPerPixel = (numBitsPerPixel + 7) / 8;
     const size_t numBytesSeg = numBytesPerPixel * numBandsSeg;
 
@@ -224,7 +224,7 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 
     const size_t numCols = info->getData()->getNumCols();
     const size_t numColsSubheader =
-            static_cast<nitf::Uint32>(subheader.getNumCols());
+            static_cast<uint32_t>(subheader.getNumCols());
 
     if (numColsSubheader != numCols)
     {
@@ -310,7 +310,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
     }
 
     // Get the total number of images in the NITF
-    nitf::Uint32 numImages = mRecord.getNumImages();
+    uint32_t numImages = mRecord.getNumImages();
 
     if (numImages == 0)
     {
@@ -366,7 +366,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         nitf::ImageSubheader subheader = segment.getSubheader();
 
         // The number of rows in the segment (actual)
-        size_t numRowsSeg = (nitf::Uint32) subheader.getNumRows();
+        size_t numRowsSeg = (uint32_t) subheader.getNumRows();
 
         // This function should throw if the data does not exist
         const std::pair<size_t, size_t> imageAndSegment =
@@ -633,23 +633,23 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
                                           numColsReq)));
 
     // Allocate one band
-    nitf::Uint32 bandList(0);
+    uint32_t bandList(0);
 
-    nitf::Uint8* buffer = region.getBuffer();
+    uint8_t* buffer = region.getBuffer();
 
     size_t subWindowSize = numRowsReq * numColsReq
             * thisImage->getData()->getNumBytesPerPixel();
 
     if (buffer == NULL)
     {
-        buffer = new nitf::Uint8[subWindowSize];
+        buffer = new uint8_t[subWindowSize];
         region.setBuffer(buffer);
     }
 
     // Do segmenting here
     nitf::SubWindow sw;
-    sw.setStartCol(static_cast<nitf::Uint32>(startCol));
-    sw.setNumCols(static_cast<nitf::Uint32>(numColsReq));
+    sw.setStartCol(static_cast<uint32_t>(startCol));
+    sw.setNumCols(static_cast<uint32_t>(numColsReq));
     sw.setNumBands(1);
     sw.setBandList(&bandList);
 
@@ -677,7 +677,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     --i; // Need to get rid of the last one
     size_t totalRead = 0;
     size_t numRowsLeft = numRowsReq;
-    sw.setStartRow(static_cast<nitf::Uint32>(startRow - startOff));
+    sw.setStartRow(static_cast<uint32_t>(startRow - startOff));
 #if DEBUG_OFFSETS
     std::cout << "startRow: " << startRow
     << " startOff: " << startOff
@@ -694,12 +694,12 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
                 std::min<size_t>(numRowsLeft, imageSegments[i].numRows
                         - sw.getStartRow());
 
-        sw.setNumRows(static_cast<nitf::Uint32>(numRowsReqSeg));
+        sw.setNumRows(static_cast<uint32_t>(numRowsReqSeg));
         nitf::ImageReader imageReader = mReader.newImageReader(
                 static_cast<int>(startIndex + i),
                 mCompressionOptions);
 
-        nitf::Uint8* bufferPtr = buffer + totalRead;
+        uint8_t* bufferPtr = buffer + totalRead;
 
         int padded;
         imageReader.read(sw, &bufferPtr, &padded);
@@ -756,13 +756,13 @@ void NITFReadControl::readLegendPixelData(nitf::ImageSubheader& subheader,
                                           size_t imageSeg,
                                           Legend& legend)
 {
-    const types::RowCol<nitf::Uint32> dims(
-            static_cast<nitf::Uint32>(subheader.getNumRows()),
-            static_cast<nitf::Uint32>(subheader.getNumCols()));
+    const types::RowCol<uint32_t> dims(
+            static_cast<uint32_t>(subheader.getNumRows()),
+            static_cast<uint32_t>(subheader.getNumCols()));
 
     legend.setDims(dims);
 
-    nitf::Uint32 bandList(0);
+    uint32_t bandList(0);
     nitf::SubWindow sw;
     sw.setStartRow(0);
     sw.setStartCol(0);
@@ -774,7 +774,7 @@ void NITFReadControl::readLegendPixelData(nitf::ImageSubheader& subheader,
     if (!legend.mImage.empty())
     {
         int padded;
-        nitf::Uint8* bufferPtr = &legend.mImage[0];
+        uint8_t* bufferPtr = &legend.mImage[0];
         nitf::ImageReader imageReader = mReader.newImageReader(
                 static_cast<int>(imageSeg));
         imageReader.read(sw, &bufferPtr, &padded);

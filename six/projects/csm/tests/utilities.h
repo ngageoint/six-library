@@ -52,7 +52,7 @@ std::string toString(nitf::FileSecurity security)
  */
 std::string toString(nitf::DESubheader subheader)
 {
-    const nitf::Uint32 subheaderFieldsLen(subheader.getSubheaderFieldsLength());
+    const uint32_t subheaderFieldsLen(subheader.getSubheaderFieldsLength());
 
     std::ostringstream ostr;
     ostr << subheader.getFilePartType().toString()
