@@ -41,8 +41,8 @@ NITF_CXX_GUARD
 typedef struct _nitf_ImageSegment
 {
     nitf_ImageSubheader *subheader;
-    nitf_Uint64 imageOffset;    /* Make these nitf_Off's */
-    nitf_Uint64 imageEnd;       /* Make these nitf_Off's */
+    uint64_t imageOffset;    /* Make these nitf_Off's */
+    uint64_t imageEnd;       /* Make these nitf_Off's */
     /*nitf_ImageSource *imageSource;*/
 }
 nitf_ImageSegment;

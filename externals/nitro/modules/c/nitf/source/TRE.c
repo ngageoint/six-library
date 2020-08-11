@@ -115,12 +115,11 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
                                        const char* id,
                                        nitf_Error * error)
 {
-    int bad = 0;
     nitf_TRE* tre = nitf_TRE_createSkeleton(tag, error);
-    nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
-
     if (!tre)
         return NULL;
+
+    nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
     if (!reg)
         return NULL;
 
@@ -128,6 +127,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
     /* if it's not a RAW id, try to load it from the registry */
     if (!id || strcmp(id, NITF_TRE_RAW) != 0)
     {
+        int bad = 0;
         tre->handler =
             nitf_PluginRegistry_retrieveTREHandler(reg, tag, &bad, error);
 

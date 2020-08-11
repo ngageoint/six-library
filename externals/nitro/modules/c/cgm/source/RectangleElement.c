@@ -101,11 +101,11 @@ NITFAPI(cgm_Element*) cgm_RectangleElement_construct(nitf_Error* error)
         rect->rectangle = NULL;
 
         element->data = (NITF_DATA*)rect;
-    }
 
-    element->print = &rectanglePrint;
-    element->clone = &rectangleClone;
-    element->destroy = &rectangleDestroy;
+        element->print = &rectanglePrint;
+        element->clone = &rectangleClone;
+        element->destroy = &rectangleDestroy;
+    }
 
     return element;
 }

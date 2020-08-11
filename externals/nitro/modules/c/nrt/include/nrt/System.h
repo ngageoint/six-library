@@ -32,9 +32,9 @@
 #include "nrt/Directory.h"
 #include "nrt/IOHandle.h"
 
-NRTPROT(nrt_Uint16) nrt_System_swap16(nrt_Uint16 ins);
-NRTPROT(nrt_Uint32) nrt_System_swap32(nrt_Uint32 inl);
-NRTPROT(nrt_Uint64) nrt_System_swap64c(nrt_Uint64 inl);
-NRTPROT(nrt_Uint64) nrt_System_swap64(nrt_Uint64 inl);
+NRTPROT(uint16_t) nrt_System_swap16(uint16_t ins);
+NRTPROT(uint32_t) nrt_System_swap32(uint32_t inl);
+NRTPROT(uint64_t) nrt_System_swap64c(uint64_t inl);
+NRTPROT(uint64_t) nrt_System_swap64(uint64_t inl);
 
 #endif

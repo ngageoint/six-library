@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 #include "nitf/Field.h"
 
 /*  Spaces are added to the right  */
@@ -154,11 +156,11 @@ NITFAPI(void) nitf_Field_trimString(char *str)
 /*  Set a number field from a uint32 */
 
 NITFAPI(NITF_BOOL) nitf_Field_setUint32(nitf_Field * field,
-                                        nitf_Uint32 number,
+                                        uint32_t number,
                                         nitf_Error * error)
 {
     char numberBuffer[20];      /* Holds converted number */
-    nitf_Uint32 numberLen;      /* Length of converted number string */
+    uint32_t numberLen;      /* Length of converted number string */
 
     /*  Check the field type */
 
@@ -202,11 +204,11 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint32(nitf_Field * field,
 /*  Set a number field from a uint64 */
 
 NITFAPI(NITF_BOOL) nitf_Field_setUint64(nitf_Field * field,
-                                        nitf_Uint64 number,
+                                        uint64_t number,
                                         nitf_Error * error)
 {
     char numberBuffer[20];      /* Holds converted number */
-    nitf_Uint32 numberLen;      /* Length of converted number string */
+    uint32_t numberLen;      /* Length of converted number string */
 
     /*  Check the field type */
 
@@ -249,11 +251,11 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint64(nitf_Field * field,
 /*  Set a number field from a int32 */
 
 NITFAPI(NITF_BOOL) nitf_Field_setInt32(nitf_Field * field,
-                                       nitf_Int32 number,
+                                       int32_t number,
                                        nitf_Error * error)
 {
     char numberBuffer[20];      /* Holds converted number */
-    nitf_Uint32 numberLen;      /* Length of converted number string */
+    uint32_t numberLen;      /* Length of converted number string */
 
     /*  Check the field type */
 
@@ -296,11 +298,11 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt32(nitf_Field * field,
 /*  Set a number field from a int64 */
 
 NITFAPI(NITF_BOOL) nitf_Field_setInt64(nitf_Field * field,
-                                       nitf_Int64 number,
+                                       int64_t number,
                                        nitf_Error * error)
 {
     char numberBuffer[20];      /* Holds converted number */
-    nitf_Uint32 numberLen;      /* Length of converted number string */
+    uint32_t numberLen;      /* Length of converted number string */
 
     /*  Check the field type */
 
@@ -348,7 +350,7 @@ NITFPRIV(NITF_BOOL) isBCSA(const char *str, size_t len, nitf_Error * error);
 NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
                                         const char *str, nitf_Error * error)
 {
-    nitf_Uint32 strLen;         /* Length of input string */
+    uint32_t strLen;         /* Length of input string */
 
     /*  Check the field type */
 
@@ -438,8 +440,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
                                       const char *type, NITF_BOOL plus,
                                       double value, nitf_Error *error)
 {
-    nitf_Uint32 precision;     /* Format precision */
-    nitf_Uint32 bufferLen;     /* Length of buffer */
+    uint32_t precision;     /* Format precision */
     char *buffer;              /* Holds intermediate and final results */
     char fmt[64];              /* Format used */
 
@@ -458,7 +459,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
     /* Allocate buffer used to build value */
 
     /* The 64 covers the puncuation and exponent and is overkill */
-    bufferLen = field->length * 2 + 64;
+    size_t bufferLen = field->length * 2 + 64;  /* Length of buffer */
     buffer = (char* )NITF_MALLOC(bufferLen + 1);
     if (buffer == NULL)
     {
@@ -589,17 +590,17 @@ NITFPRIV(NITF_BOOL) fromStringToString(nitf_Field * field, char *outValue,
 }
 
 
-NITFPRIV(NITF_BOOL) toInt16(nitf_Field * field, nitf_Int16 * int16,
+NITFPRIV(NITF_BOOL) toInt16(nitf_Field * field, int16_t * int16,
                             nitf_Error * error);
-NITFPRIV(NITF_BOOL) toInt32(nitf_Field * field, nitf_Int32 * int32,
+NITFPRIV(NITF_BOOL) toInt32(nitf_Field * field, int32_t * int32,
                             nitf_Error * error);
-NITFPRIV(NITF_BOOL) toInt64(nitf_Field * field, nitf_Int64 * int64,
+NITFPRIV(NITF_BOOL) toInt64(nitf_Field * field, int64_t * int64,
                             nitf_Error * error);
-NITFPRIV(NITF_BOOL) toUint16(nitf_Field * field, nitf_Uint16 * int16,
+NITFPRIV(NITF_BOOL) toUint16(nitf_Field * field, uint16_t * int16,
                              nitf_Error * error);
-NITFPRIV(NITF_BOOL) toUint32(nitf_Field * field, nitf_Uint32 * int32,
+NITFPRIV(NITF_BOOL) toUint32(nitf_Field * field, uint32_t * int32,
                              nitf_Error * error);
-NITFPRIV(NITF_BOOL) toUint64(nitf_Field * field, nitf_Uint64 * int64,
+NITFPRIV(NITF_BOOL) toUint64(nitf_Field * field, uint64_t * int64,
                              nitf_Error * error);
 
 /* We may want to rethink this function a bit.
@@ -618,7 +619,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
     {
         case 2:
         {
-            nitf_Int16 int16;
+            int16_t int16;
             if (!toInt16(field, &int16, error))
                 goto CATCH_ERROR;
             actualLength = NITF_SNPRINTF(buffer, 256, "%d", int16);
@@ -626,7 +627,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
         break;
         case 4:
         {
-            nitf_Int32 int32;
+            int32_t int32;
             if (!toInt32(field, &int32, error))
                 goto CATCH_ERROR;
             actualLength = NITF_SNPRINTF(buffer, 256, "%ld", (long) int32);
@@ -634,7 +635,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
         break;
         case 8:
         {
-            nitf_Int64 int64;
+            int64_t int64;
             if (!toInt64(field, &int64, error))
                 goto CATCH_ERROR;
             actualLength = NITF_SNPRINTF(buffer, 256, "%lld", (long long)int64);
@@ -748,50 +749,50 @@ NITFPRIV(NITF_BOOL) toReal(nitf_Field * field, NITF_DATA * outData,
 }
 
 
-NITFPRIV(NITF_BOOL) toInt16(nitf_Field * field, nitf_Int16 * int16,
+NITFPRIV(NITF_BOOL) toInt16(nitf_Field * field, int16_t * int16,
                             nitf_Error * error)
 {
-    *int16 = *((nitf_Int16 *) field->raw);
+    *int16 = *((int16_t *) field->raw);
     return NITF_SUCCESS;
 }
 
 
-NITFPRIV(NITF_BOOL) toInt32(nitf_Field * field, nitf_Int32 * int32,
+NITFPRIV(NITF_BOOL) toInt32(nitf_Field * field, int32_t * int32,
                             nitf_Error * error)
 {
-    *int32 = *((nitf_Int32 *) field->raw);
+    *int32 = *((int32_t *) field->raw);
     return NITF_SUCCESS;
 }
 
 
-NITFPRIV(NITF_BOOL) toInt64(nitf_Field * field, nitf_Int64 * int64,
+NITFPRIV(NITF_BOOL) toInt64(nitf_Field * field, int64_t * int64,
                             nitf_Error * error)
 {
-    *int64 = *((nitf_Int64 *) field->raw);
+    *int64 = *((int64_t *) field->raw);
     return NITF_SUCCESS;
 }
 
 
-NITFPRIV(NITF_BOOL) toUint16(nitf_Field * field, nitf_Uint16 * int16,
+NITFPRIV(NITF_BOOL) toUint16(nitf_Field * field, uint16_t * int16,
                              nitf_Error * error)
 {
-    *int16 = *((nitf_Uint16 *) field->raw);
+    *int16 = *((uint16_t *) field->raw);
     return NITF_SUCCESS;
 }
 
 
-NITFPRIV(NITF_BOOL) toUint32(nitf_Field * field, nitf_Uint32 * int32,
+NITFPRIV(NITF_BOOL) toUint32(nitf_Field * field, uint32_t * int32,
                              nitf_Error * error)
 {
-    *int32 = *((nitf_Uint32 *) field->raw);
+    *int32 = *((uint32_t *) field->raw);
     return NITF_SUCCESS;
 }
 
 
-NITFPRIV(NITF_BOOL) toUint64(nitf_Field * field, nitf_Uint64 * int64,
+NITFPRIV(NITF_BOOL) toUint64(nitf_Field * field, uint64_t * int64,
                              nitf_Error * error)
 {
-    *int64 = *((nitf_Uint64 *) field->raw);
+    *int64 = *((uint64_t *) field->raw);
     return NITF_SUCCESS;
 }
 
@@ -801,7 +802,7 @@ NITFPRIV(NITF_BOOL) fromStringToInt(nitf_Field * field,
                                     nitf_Error * error)
 {
     char buffer[256];
-    if (field->length > 256)
+    if (field->length >= 256)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                          "Field length too long for string conversion [%d]",
@@ -814,25 +815,25 @@ NITFPRIV(NITF_BOOL) fromStringToInt(nitf_Field * field,
     {
         case 1:
         {
-            nitf_Int8 *int8 = (nitf_Int8 *) outData;
-            *int8 = (nitf_Int8) NITF_ATO32(buffer);
+            int8_t *int8 = (int8_t *) outData;
+            *int8 = (int8_t) NITF_ATO32(buffer);
         }
         break;
         case 2:
         {
-            nitf_Int16 *int16 = (nitf_Int16 *) outData;
-            *int16 = (nitf_Int16) NITF_ATO32(buffer);
+            int16_t *int16 = (int16_t *) outData;
+            *int16 = (int16_t) NITF_ATO32(buffer);
         }
         break;
         case 4:
         {
-            nitf_Int32 *int32 = (nitf_Int32 *) outData;
+            int32_t *int32 = (int32_t *) outData;
             *int32 = NITF_ATO32(buffer);
         }
         break;
         case 8:
         {
-            nitf_Int64 *int64 = (nitf_Int64 *) outData;
+            int64_t *int64 = (int64_t *) outData;
 #if defined(__aix__)
             sscanf(buffer, "%lld", int64);
 #else
@@ -854,7 +855,7 @@ NITFPRIV(NITF_BOOL) fromStringToUint(nitf_Field * field,
                                      nitf_Error * error)
 {
     char buffer[256];
-    if (field->length > 256)
+    if (field->length >= 256)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                          "Field length too long for string conversion [%d]",
@@ -867,29 +868,29 @@ NITFPRIV(NITF_BOOL) fromStringToUint(nitf_Field * field,
     {
         case 1:
         {
-            nitf_Uint8 *int8 = (nitf_Uint8 *) outData;
-            *int8 = (nitf_Uint8) NITF_ATO32(buffer);
+            uint8_t *int8 = (uint8_t *) outData;
+            *int8 = (uint8_t) NITF_ATO32(buffer);
         }
         break;
         case 2:
         {
-            nitf_Uint16 *int16 = (nitf_Uint16 *) outData;
-            *int16 = (nitf_Uint16) NITF_ATO32(buffer);
+            uint16_t *int16 = (uint16_t *) outData;
+            *int16 = (uint16_t) NITF_ATO32(buffer);
         }
         break;
         case 4:
         {
-            nitf_Uint32 *int32 = (nitf_Uint32 *) outData;
-            *int32 = (nitf_Uint32) NITF_ATOU32(buffer);
+            uint32_t *int32 = (uint32_t *) outData;
+            *int32 = (uint32_t) NITF_ATOU32(buffer);
         }
         break;
         case 8:
         {
-            nitf_Uint64 *int64 = (nitf_Uint64 *) outData;
+            uint64_t *int64 = (uint64_t *) outData;
 #if defined(__aix__)
             sscanf(buffer, "%lld", int64);
 #else
-            *int64 = (nitf_Uint64) NITF_ATO64(buffer);
+            *int64 = (uint64_t) NITF_ATO64(buffer);
 #endif
         }
         break;
@@ -915,13 +916,13 @@ NITFPRIV(NITF_BOOL) toInt(nitf_Field * field,
         switch (field->length)
         {
             case 2:
-                status = toInt16(field, (nitf_Int16 *) outData, error);
+                status = toInt16(field, (int16_t *) outData, error);
                 break;
             case 4:
-                status = toInt32(field, (nitf_Int32 *) outData, error);
+                status = toInt32(field, (int32_t *) outData, error);
                 break;
             case 8:
-                status = toInt64(field, (nitf_Int64 *) outData, error);
+                status = toInt64(field, (int64_t *) outData, error);
                 break;
             default:
                 nitf_Error_initf(error, NITF_CTXT,
@@ -951,13 +952,13 @@ NITFPRIV(NITF_BOOL) toUint(nitf_Field * field,
         switch (field->length)
         {
             case 2:
-                status = toUint16(field, (nitf_Uint16 *) outData, error);
+                status = toUint16(field, (uint16_t *) outData, error);
                 break;
             case 4:
-                status = toUint32(field, (nitf_Uint32 *) outData, error);
+                status = toUint32(field, (uint32_t *) outData, error);
                 break;
             case 8:
-                status = toUint64(field, (nitf_Uint64 *) outData, error);
+                status = toUint64(field, (uint64_t *) outData, error);
                 break;
             default:
                 nitf_Error_initf(error, NITF_CTXT,
@@ -1083,9 +1084,12 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field)
     switch (field->type)
     {
         case NITF_BINARY:
+        {
             /* avoid printing binary */
-            printf("<binary data, length %llu>", (unsigned long long)field->length);
+            uint64_t length = (uint64_t) field->length;
+            printf("<binary data, length %llu>", length);
             break;
+        }
 
         case NITF_BCS_N:
         case NITF_BCS_A:
@@ -1221,7 +1225,7 @@ NITFPRIV(NITF_BOOL) isBCSA(const char *str, size_t len, nitf_Error * error)
 
     for (ii = 0; ii < len; ++ii)
     {
-        const nitf_Uint8 ch = (nitf_Uint8)str[ii];
+        const uint8_t ch = (uint8_t)str[ii];
 
         if (ch < 0x20 || ch > 0x7e)
         {

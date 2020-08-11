@@ -376,10 +376,10 @@ nitf_ExtensionsIterator_notEqualTo(nitf_ExtensionsIterator * it1,
 }
 
 
-NITFAPI(nitf_Uint32) nitf_Extensions_computeLength
+NITFAPI(uint32_t) nitf_Extensions_computeLength
 (nitf_Extensions * ext, nitf_Version fver, nitf_Error * error)
 {
-    nitf_Uint32 dataLength = 0;
+    uint32_t dataLength = 0;
     nitf_ExtensionsIterator iter, end;
     nitf_TRE *tre;
 
@@ -395,7 +395,7 @@ NITFAPI(nitf_Uint32) nitf_Extensions_computeLength
             tre = (nitf_TRE *) nitf_ExtensionsIterator_get(&iter);
 
             /* if unknown length, we need to compute it */
-            dataLength += (nitf_Uint32)tre->handler->getCurrentSize(tre, error);
+            dataLength += (uint32_t)tre->handler->getCurrentSize(tre, error);
             dataLength += NITF_ETAG_SZ + NITF_EL_SZ;
 
             /* increment */

@@ -154,7 +154,7 @@ typedef const char* (*NITF_TRE_ID_GET) (nitf_TRE* tre);
  * \return          NITF_FAILURE if an error occurred, otherwise NITF_SUCCESS
  */
 typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOInterface* io,
-                                     nitf_Uint32 length,
+                                     uint32_t length,
                                      nitf_TRE *tre,
                                      struct _nitf_Record *record,
                                      nitf_Error *error);

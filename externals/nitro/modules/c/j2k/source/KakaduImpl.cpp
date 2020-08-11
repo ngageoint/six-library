@@ -38,15 +38,15 @@
 /* TYPES & DECLARATIONS                                                       */
 /******************************************************************************/
 
-J2KPRIV( nrt_Uint32) KakaduContainer_getTilesX(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) KakaduContainer_getTilesY(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) KakaduContainer_getTileWidth(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) KakaduContainer_getTileHeight(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) KakaduContainer_getWidth(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) KakaduContainer_getHeight(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) KakaduContainer_getNumComponents(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) KakaduContainer_getComponentBytes(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) KakaduContainer_getComponentBits(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) KakaduContainer_getTilesX(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) KakaduContainer_getTilesY(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) KakaduContainer_getTileWidth(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) KakaduContainer_getTileHeight(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) KakaduContainer_getWidth(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) KakaduContainer_getHeight(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) KakaduContainer_getNumComponents(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) KakaduContainer_getComponentBytes(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) KakaduContainer_getComponentBits(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( int)        KakaduContainer_getImageType(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( J2K_BOOL)   KakaduContainer_isSigned(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV(void)        KakaduContainer_destruct(J2K_USER_DATA *);
@@ -65,12 +65,12 @@ static j2k_IContainer ContainerInterface = { &KakaduContainer_getTilesX,
                                              &KakaduContainer_destruct};
 
 J2KPRIV( NRT_BOOL  )     KakaduReader_canReadTiles(J2K_USER_DATA *,  nrt_Error *);
-J2KPRIV( nrt_Uint64)     KakaduReader_readTile(J2K_USER_DATA *, nrt_Uint32,
-                                               nrt_Uint32, nrt_Uint8 **,
+J2KPRIV( uint64_t)     KakaduReader_readTile(J2K_USER_DATA *, uint32_t,
+                                               uint32_t, uint8_t **,
                                                nrt_Error *);
-J2KPRIV( nrt_Uint64)     KakaduReader_readRegion(J2K_USER_DATA *, nrt_Uint32,
-                                                 nrt_Uint32, nrt_Uint32,
-                                                 nrt_Uint32, nrt_Uint8 **,
+J2KPRIV( uint64_t)     KakaduReader_readRegion(J2K_USER_DATA *, uint32_t,
+                                                 uint32_t, uint32_t,
+                                                 uint32_t, uint8_t **,
                                                  nrt_Error *);
 J2KPRIV( j2k_Container*) KakaduReader_getContainer(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV(void)            KakaduReader_destruct(J2K_USER_DATA *);
@@ -82,8 +82,8 @@ static j2k_IReader ReaderInterface = {&KakaduReader_canReadTiles,
                                       &KakaduReader_destruct };
 
 J2KPRIV( NRT_BOOL)       KakaduWriter_setTile(J2K_USER_DATA *,
-                                              nrt_Uint32, nrt_Uint32,
-                                              nrt_Uint8 *, nrt_Uint32,
+                                              uint32_t, uint32_t,
+                                              uint8_t *, uint32_t,
                                               nrt_Error *);
 J2KPRIV( NRT_BOOL)       KakaduWriter_write(J2K_USER_DATA *, nrt_IOInterface *,
                                             nrt_Error *);
@@ -197,7 +197,7 @@ protected:
 
 
 
-void copyLine(nrt_Uint8 *dest, kdu_line_buf &src, int bitsPerSample,
+void copyLine(uint8_t *dest, kdu_line_buf &src, int bitsPerSample,
               int outputBytes)
 {
     int samples = src.get_width();
@@ -241,7 +241,7 @@ void copyLine(nrt_Uint8 *dest, kdu_line_buf &src, int bitsPerSample,
 
 #if 0
 void
-copyBlock(nrt_Uint8 *dest, kdu_block *block, int bitsPerSample, int outputBytes)
+copyBlock(uint8_t *dest, kdu_block *block, int bitsPerSample, int outputBytes)
 {
     size_t samples = (size_t)block->size.x * block->size.y;
     size_t i;
@@ -276,12 +276,12 @@ public:
     {
     }
 
-    UserContainer(nrt_Uint32 width,
-                  nrt_Uint32 height,
-                  nrt_Uint32 bands,
-                  nrt_Uint32 actualBitsPerPixel,
-                  nrt_Uint32 tileWidth,
-                  nrt_Uint32 tileHeight,
+    UserContainer(uint32_t width,
+                  uint32_t height,
+                  uint32_t bands,
+                  uint32_t actualBitsPerPixel,
+                  uint32_t tileWidth,
+                  uint32_t tileHeight,
                   int imageType = J2K_TYPE_UNKNOWN,
                   bool isSigned = false) :
                       mWidth(width),
@@ -295,47 +295,47 @@ public:
     {
     }
 
-    nrt_Uint32 getNumComponents() const
+    uint32_t getNumComponents() const
     {
         return mComponents;
     }
 
-    nrt_Uint32 getWidth() const
+    uint32_t getWidth() const
     {
         return mWidth;
     }
 
-    nrt_Uint32 getHeight() const
+    uint32_t getHeight() const
     {
         return mHeight;
     }
 
-    nrt_Uint32 getComponentBytes() const
+    uint32_t getComponentBytes() const
     {
         return (getActualBitsPerPixel() - 1) / 8 + 1;
     }
 
-    nrt_Uint32 getActualBitsPerPixel() const
+    uint32_t getActualBitsPerPixel() const
     {
         return mBitsPerPixel;
     }
 
-    nrt_Uint32 getTileWidth() const
+    uint32_t getTileWidth() const
     {
         return mTileWidth;
     }
 
-    nrt_Uint32 getTileHeight() const
+    uint32_t getTileHeight() const
     {
         return mTileHeight;
     }
 
-    nrt_Uint32 getTilesX() const
+    uint32_t getTilesX() const
     {
         return mWidth / mTileWidth + (mWidth % mTileWidth == 0 ? 0 : 1);
     }
 
-    nrt_Uint32 getTilesY() const
+    uint32_t getTilesY() const
     {
         return mHeight / mTileHeight + (mHeight % mTileHeight == 0 ? 0 : 1);
     }
@@ -353,8 +353,8 @@ public:
 
 protected:
     friend class Reader;
-    nrt_Uint32 mHeight, mWidth, mComponents, mBitsPerPixel;
-    nrt_Uint32 mTileWidth, mTileHeight;
+    uint32_t mHeight, mWidth, mComponents, mBitsPerPixel;
+    uint32_t mTileWidth, mTileHeight;
     int mType;
     bool mSigned;
 };
@@ -395,18 +395,18 @@ public:
         return mContainer;
     }
 
-    nrt_Uint64 readTile(nrt_Uint32 tileX, nrt_Uint32 tileY, nrt_Uint8 **buf)
+    uint64_t readTile(uint32_t tileX, uint32_t tileY, uint8_t **buf)
     {
         UserContainer *container = getUserContainer();
-        nrt_Uint32 nComps = container->getNumComponents();
-        nrt_Uint32 sampleSize = container->getComponentBytes();
-        nrt_Uint64 lineSize = (nrt_Uint64)container->getTileWidth() * sampleSize;
-        nrt_Uint64 compSize = lineSize * container->getTileHeight();
+        uint32_t nComps = container->getNumComponents();
+        uint32_t sampleSize = container->getComponentBytes();
+        uint64_t lineSize = (uint64_t)container->getTileWidth() * sampleSize;
+        uint64_t compSize = lineSize * container->getTileHeight();
 
-        nrt_Uint64 bufSize = compSize * nComps;
+        uint64_t bufSize = compSize * nComps;
         if (buf && !*buf)
         {
-            *buf = (nrt_Uint8*)J2K_MALLOC(bufSize);
+            *buf = (uint8_t*)J2K_MALLOC(bufSize);
             if (!*buf)
                 throw std::string("Out of memory");
         }
@@ -417,8 +417,8 @@ public:
         int tileComponents = tile.get_num_components();
         assert(tileComponents == nComps);
 
-        nrt_Uint8 *bufPtr = *buf;
-        for(nrt_Uint32 i = 0; i < nComps; ++i)
+        uint8_t *bufPtr = *buf;
+        for(uint32_t i = 0; i < nComps; ++i)
         {
             kdu_tile_comp tileComponent = tile.access_component(i);
             kdu_resolution tileRes = tileComponent.access_resolution();
@@ -451,9 +451,9 @@ public:
 
 #if 0
             int minBand;
-            nrt_Uint32 nBands = tileRes.get_valid_band_indices(minBand);
+            uint32_t nBands = tileRes.get_valid_band_indices(minBand);
 
-            for(nrt_Uint32 b = minBand; nBands > 0; --nBands, ++b)
+            for(uint32_t b = minBand; nBands > 0; --nBands, ++b)
             {
                 kdu_subband tileBand = tileRes.access_subband(b);
                 kdu_dims validBlocks;
@@ -518,14 +518,14 @@ protected:
 
         kdu_dims compSize;
         mCodestream->get_dims(-1, compSize, true);
-        container->mWidth = (nrt_Uint32)(compSize.size.x);
-        container->mHeight = (nrt_Uint32)(compSize.size.y);
+        container->mWidth = (uint32_t)(compSize.size.x);
+        container->mHeight = (uint32_t)(compSize.size.y);
         container->mBitsPerPixel = mCodestream->get_bit_depth(-1, true);
 
         kdu_dims partition;
         mCodestream->get_tile_partition(partition);
-        container->mTileWidth = (nrt_Uint32)partition.size.x;
-        container->mTileHeight = (nrt_Uint32)partition.size.y;
+        container->mTileWidth = (uint32_t)partition.size.x;
+        container->mTileHeight = (uint32_t)partition.size.y;
 
 //        kdu_dims indices;
 //        mCodestream->get_valid_tiles(indices);
@@ -543,63 +543,63 @@ protected:
 /* CONTAINER                                                                  */
 /******************************************************************************/
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 KakaduContainer_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
 {
     j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
     return impl->getTilesX();
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 KakaduContainer_getTilesY(J2K_USER_DATA *data, nrt_Error *error)
 {
     j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
     return impl->getTilesY();
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 KakaduContainer_getTileWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
     j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
     return impl->getTileWidth();
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 KakaduContainer_getTileHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
     j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
     return impl->getTileHeight();
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 KakaduContainer_getWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
     j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
     return impl->getWidth();
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 KakaduContainer_getHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
     j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
     return impl->getHeight();
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 KakaduContainer_getNumComponents(J2K_USER_DATA *data, nrt_Error *error)
 {
     j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
     return impl->getNumComponents();
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 KakaduContainer_getComponentBytes(J2K_USER_DATA *data, nrt_Error *error)
 {
     j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
     return impl->getComponentBytes();
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 KakaduContainer_getComponentBits(J2K_USER_DATA *data, nrt_Error *error)
 {
     j2k::kakadu::UserContainer *impl = (j2k::kakadu::UserContainer*) data;
@@ -640,9 +640,9 @@ KakaduReader_canReadTiles(J2K_USER_DATA *data, nrt_Error *error)
     return NRT_SUCCESS;
 }
 
-J2KPRIV( nrt_Uint64)
-KakaduReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
-                  nrt_Uint8 **buf, nrt_Error *error)
+J2KPRIV( uint64_t)
+KakaduReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
+                  uint8_t **buf, nrt_Error *error)
 {
     j2k::kakadu::Reader *reader = (j2k::kakadu::Reader*) data;
 
@@ -657,9 +657,9 @@ KakaduReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
     }
 }
 
-J2KPRIV( nrt_Uint64)
-KakaduReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
-                    nrt_Uint32 x1, nrt_Uint32 y1, nrt_Uint8 **buf,
+J2KPRIV( uint64_t)
+KakaduReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
+                    uint32_t x1, uint32_t y1, uint8_t **buf,
                     nrt_Error *error)
 {
     j2k::kakadu::Reader *reader = (j2k::kakadu::Reader*) data;
@@ -689,8 +689,8 @@ KakaduReader_destruct(J2K_USER_DATA * data)
 /******************************************************************************/
 
 J2KPRIV( NRT_BOOL)
-KakaduWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
-                     nrt_Uint8 *buf, nrt_Uint32 tileSize, nrt_Error *error)
+KakaduWriter_setTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
+                     uint8_t *buf, uint32_t tileSize, nrt_Error *error)
 {
     nrt_Error_init(error, "Writer->setTile not yet implemented",
                    NRT_CTXT, NRT_ERR_INVALID_OBJECT);
@@ -804,12 +804,12 @@ J2KAPI(j2k_Reader*) j2k_Reader_openIO(nrt_IOInterface *io, nrt_Error *error)
     }
 }
 
-J2KAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 width,
-        nrt_Uint32 height,
-        nrt_Uint32 bands,
-        nrt_Uint32 actualBitsPerPixel,
-        nrt_Uint32 tileWidth,
-        nrt_Uint32 tileHeight,
+J2KAPI(j2k_Container*) j2k_Container_construct(uint32_t width,
+        uint32_t height,
+        uint32_t bands,
+        uint32_t actualBitsPerPixel,
+        uint32_t tileWidth,
+        uint32_t tileHeight,
         int imageType,
         int isSigned,
         nrt_Error *error)

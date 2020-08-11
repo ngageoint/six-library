@@ -23,7 +23,7 @@
 #include <import/nrt.h>
 #include <import/j2k.h>
 
-J2K_BOOL readFile(const char* filename, char **buf, nrt_Uint64 *bufSize,
+J2K_BOOL readFile(const char* filename, char **buf, uint64_t *bufSize,
                   nrt_Error *error)
 {
     J2K_BOOL rc = J2K_TRUE;
@@ -75,9 +75,9 @@ int main(int argc, char **argv)
     j2k_Writer *writer = NULL;
     j2k_WriterOptions options;
     char *buf = NULL;
-    nrt_Uint64 bufSize;
+    uint64_t bufSize;
     nrt_IOInterface *outIO = NULL;
-    nrt_Uint32 width, height, precision, tileWidth, tileHeight;
+    uint32_t width, height, precision, tileWidth, tileHeight;
 
     for (argIt = 1; argIt < argc; ++argIt)
     {
@@ -136,8 +136,8 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!j2k_Writer_setTile(writer, 0, 0, (nrt_Uint8*)buf,
-                            (nrt_Uint32)bufSize, &error))
+    if (!j2k_Writer_setTile(writer, 0, 0, (uint8_t*)buf,
+                            (uint32_t)bufSize, &error))
     {
         goto CATCH_ERROR;
     }

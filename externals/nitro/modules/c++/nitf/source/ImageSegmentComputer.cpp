@@ -32,7 +32,7 @@
 namespace nitf
 {
 const size_t ImageSegmentComputer::ILOC_MAX = 99999;
-const Uint64 ImageSegmentComputer::NUM_BYTES_MAX = 9999999998LL;
+const uint64_t ImageSegmentComputer::NUM_BYTES_MAX = 9999999998LL;
 
 std::string ImageSegmentComputer::Segment::getILOC() const
 {
@@ -85,7 +85,7 @@ ImageSegmentComputer::ImageSegmentComputer(size_t numRows,
                                            size_t numCols,
                                            size_t numBytesPerPixel,
                                            size_t maxRows,
-                                           Uint64 maxSize,
+                                           uint64_t maxSize,
                                            size_t rowsPerBlock,
                                            size_t colsPerBlock) :
     mNumRows(numRows),
@@ -95,7 +95,7 @@ ImageSegmentComputer::ImageSegmentComputer(size_t numRows,
     mNumColsPaddedForBlocking(getActualDim(mNumCols, colsPerBlock)),
     mNumRowsPerBlock(rowsPerBlock),
     mMaxNumBytesPerSegment(maxSize),
-    mNumBytesTotal(static_cast<Uint64>(mNumBytesPerPixel) *
+    mNumBytesTotal(static_cast<uint64_t>(mNumBytesPerPixel) *
                  getActualDim(mNumRows, rowsPerBlock) *
                  mNumColsPaddedForBlocking)
 {
@@ -140,12 +140,12 @@ size_t ImageSegmentComputer::getActualDim(size_t dim, size_t numDimsPerBlock)
 void ImageSegmentComputer::computeImageInfo()
 {
     // Consider possible blocking when determining the maximum number of rows
-    const Uint64 bytesPerRow =
-            static_cast<Uint64>(mNumBytesPerPixel) *
+    const uint64_t bytesPerRow =
+            static_cast<uint64_t>(mNumBytesPerPixel) *
             mNumColsPaddedForBlocking;
 
-    const Uint64 maxRowsUint64 =
-            static_cast<Uint64>(mMaxNumBytesPerSegment) / bytesPerRow;
+    const uint64_t maxRowsUint64 =
+            static_cast<uint64_t>(mMaxNumBytesPerSegment) / bytesPerRow;
     if (maxRowsUint64 > std::numeric_limits<size_t>::max())
     {
         // This should not be possible
