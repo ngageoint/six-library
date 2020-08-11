@@ -30,6 +30,8 @@ TEST_CASE( testZeroField)
     TEST_ASSERT_NULL(field);
 }
 
-TEST_MAIN(
+int main(int argc, char **argv)
+{
     CHECK(testZeroField);
-)
+    return 0;
+}

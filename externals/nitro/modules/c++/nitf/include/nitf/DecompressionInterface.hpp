@@ -93,19 +93,19 @@ public:
     //  and call the nitf_DecompressionControl of your choice
     static NITF_BOOL adapterStart(nitf_DecompressionControl* object,
                                   nitf_IOInterface* io,
-                                  uint64_t offset,
-                                  uint64_t fileLength,
+                                  nitf_Uint64 offset,
+                                  nitf_Uint64 fileLength,
                                   nitf_BlockingInfo* blockingDefinition,
-                                  uint64_t* blockMask, 
+                                  nitf_Uint64* blockMask, 
                                   nitf_Error* error);
 
-    static uint8_t* adapterReadBlock(nitf_DecompressionControl* object,
-                                        uint32_t blockNumber, 
-                                        uint64_t* blockSize, 
+    static nitf_Uint8* adapterReadBlock(nitf_DecompressionControl* object,
+                                        nitf_Uint32 blockNumber, 
+                                        nitf_Uint64* blockSize, 
                                         nitf_Error* error);
 
     static NITF_BOOL adapterFreeBlock(nitf_DecompressionControl* object,
-                                      uint8_t* block, 
+                                      nitf_Uint8* block, 
                                       nitf_Error* error);
 
     static void adapterDestroy(nitf_DecompressionControl** object);
@@ -123,15 +123,15 @@ public:
     virtual ~Decompressor() {}
 
     virtual void start(nitf::IOInterface& io,
-                       uint64_t offset,
-                       uint64_t fileLength,
+                       nitf::Uint64 offset,
+                       nitf::Uint64 fileLength,
                        nitf::BlockingInfo& blockingDefinition,
-                       uint64_t* blockMask) = 0;
+                       nitf::Uint64* blockMask) = 0;
 
-    virtual uint8_t* readBlock(uint32_t blockNumber, 
-                                  uint64_t* blockSize) = 0;
+    virtual nitf_Uint8* readBlock(nitf::Uint32 blockNumber, 
+                                  nitf::Uint64* blockSize) = 0;
 
-    virtual void freeBlock(uint8_t* block) = 0;
+    virtual void freeBlock(nitf::Uint8* block) = 0;
 };
 
 }

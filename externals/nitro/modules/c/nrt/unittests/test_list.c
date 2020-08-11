@@ -72,7 +72,7 @@ TEST_CASE(testPushPop)
 
 char *cloneString(char *data, nrt_Error * error)
 {
-    size_t data_len = strlen(data);
+    int data_len = strlen(data);
     char *new_data = (char *) NRT_MALLOC(data_len + 1);
     new_data[data_len] = 0;
     assert(new_data);
@@ -82,7 +82,7 @@ char *cloneString(char *data, nrt_Error * error)
 
 TEST_CASE(testClone)
 {
-    uint32_t i;
+    nrt_Uint32 i;
     nrt_Error e;
     nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
     TEST_ASSERT(l);
@@ -114,9 +114,9 @@ TEST_CASE(testClone)
 
 TEST_CASE(testIterate)
 {
-    uint32_t i;
+    nrt_Uint32 i;
     nrt_Error e;
-    nrt_List *l = nrt_List_construct(&e);
+    nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
     nrt_ListIterator it, end;
 
     TEST_ASSERT(l);
@@ -146,7 +146,7 @@ TEST_CASE(testIterate)
 TEST_CASE(testIterateRemove)
 {
     nrt_Error e;
-    nrt_List *l = nrt_List_construct(&e);
+    nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
     nrt_ListIterator it, end;
 
     TEST_ASSERT(l);
@@ -171,10 +171,12 @@ TEST_CASE(testIterateRemove)
     TEST_ASSERT_NULL(l);
 }
 
-TEST_MAIN(
+int main(int argc, char **argv)
+{
     CHECK(testCreate);
     CHECK(testPushPop);
     CHECK(testClone);
     CHECK(testIterate);
     CHECK(testIterateRemove);
-)
+    return 0;
+}

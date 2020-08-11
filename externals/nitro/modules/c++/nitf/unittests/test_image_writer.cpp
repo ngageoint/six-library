@@ -45,7 +45,9 @@ TEST_CASE(constructValidImageWriter)
 }
 }
 
-TEST_MAIN(
+int main(int, char**)
+{
     TEST_CHECK(imageWriterThrowsOnFailedConstruction);
     TEST_CHECK(constructValidImageWriter);
-    )
+    return 0;
+}

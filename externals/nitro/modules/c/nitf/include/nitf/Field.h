@@ -135,7 +135,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setRawData(nitf_Field * field,
  */
 
 NITFAPI(NITF_BOOL) nitf_Field_setUint32(nitf_Field * field,
-                                        uint32_t number,
+                                        nitf_Uint32 number,
                                         nitf_Error * error);
 
 /*!
@@ -160,7 +160,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint32(nitf_Field * field,
  */
 
 NITFAPI(NITF_BOOL) nitf_Field_setUint64(nitf_Field * field,
-                                        uint64_t number,
+                                        nitf_Uint64 number,
                                         nitf_Error * error);
 
 /*!
@@ -184,7 +184,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint64(nitf_Field * field,
  */
 
 NITFAPI(NITF_BOOL) nitf_Field_setInt32(nitf_Field * field,
-                                       int32_t number,
+                                       nitf_Int32 number,
                                        nitf_Error * error);
 
 /*!
@@ -207,7 +207,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt32(nitf_Field * field,
  */
 
 NITFAPI(NITF_BOOL) nitf_Field_setInt64(nitf_Field * field,
-                                       int64_t number,
+                                       nitf_Int64 number,
                                        nitf_Error * error);
 
 /*!

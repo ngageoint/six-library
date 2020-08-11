@@ -22,22 +22,22 @@
 
 #include "nitf/DownSampler.hpp"
 
-uint32_t nitf::DownSampler::getRowSkip()
+nitf::Uint32 nitf::DownSampler::getRowSkip()
 {
     return getNativeOrThrow()->rowSkip;
 }
 
-uint32_t nitf::DownSampler::getColSkip()
+nitf::Uint32 nitf::DownSampler::getColSkip()
 {
     return getNativeOrThrow()->colSkip;
 }
 
 void nitf::DownSampler::apply(NITF_DATA ** inputWindow,
-        NITF_DATA ** outputWindow, uint32_t numBands,
-        uint32_t numWindowRows, uint32_t numWindowCols,
-        uint32_t numInputCols, uint32_t numSubWindowCols,
-        uint32_t pixelType, uint32_t pixelSize,
-        uint32_t rowsInLastWindow, uint32_t colsInLastWindow)
+        NITF_DATA ** outputWindow, nitf::Uint32 numBands,
+        nitf::Uint32 numWindowRows, nitf::Uint32 numWindowCols,
+        nitf::Uint32 numInputCols, nitf::Uint32 numSubWindowCols,
+        nitf::Uint32 pixelType, nitf::Uint32 pixelSize,
+        nitf::Uint32 rowsInLastWindow, nitf::Uint32 colsInLastWindow)
 {
     nitf_DownSampler *ds = getNativeOrThrow();
     if (ds && ds->iface)
@@ -54,7 +54,7 @@ void nitf::DownSampler::apply(NITF_DATA ** inputWindow,
     }
 }
 
-nitf::PixelSkip::PixelSkip(uint32_t rowSkip, uint32_t colSkip)
+nitf::PixelSkip::PixelSkip(nitf::Uint32 rowSkip, nitf::Uint32 colSkip)
 {
     setNative(nitf_PixelSkip_construct(rowSkip, colSkip, &error));
     setManaged(false);
@@ -64,7 +64,7 @@ nitf::PixelSkip::~PixelSkip()
 {
 }
 
-nitf::MaxDownSample::MaxDownSample(uint32_t rowSkip, uint32_t colSkip)
+nitf::MaxDownSample::MaxDownSample(nitf::Uint32 rowSkip, nitf::Uint32 colSkip)
 {
     setNative(nitf_MaxDownSample_construct(rowSkip, colSkip, &error));
     setManaged(false);
@@ -74,8 +74,8 @@ nitf::MaxDownSample::~MaxDownSample()
 {
 }
 
-nitf::SumSq2DownSample::SumSq2DownSample(uint32_t rowSkip,
-        uint32_t colSkip)
+nitf::SumSq2DownSample::SumSq2DownSample(nitf::Uint32 rowSkip,
+        nitf::Uint32 colSkip)
 {
     setNative(nitf_SumSq2DownSample_construct(rowSkip, colSkip, &error));
     setManaged(false);
@@ -85,8 +85,8 @@ nitf::SumSq2DownSample::~SumSq2DownSample()
 {
 }
 
-nitf::Select2DownSample::Select2DownSample(uint32_t rowSkip,
-        uint32_t colSkip)
+nitf::Select2DownSample::Select2DownSample(nitf::Uint32 rowSkip,
+        nitf::Uint32 colSkip)
 {
     setNative(nitf_Select2DownSample_construct(rowSkip, colSkip, &error));
     setManaged(false);

@@ -20,9 +20,7 @@
  *
  */
 
-#ifndef NRT_LIB_VERSION
- #include "nrt/nrt_config.h"
-#endif
+#include "nrt/nrt_config.h"
 #include "nrt/Utils.h"
 
 NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,
@@ -271,7 +269,7 @@ NRTAPI(double) nrt_Utils_getCurrentTimeMillis()
     struct timeval now;
     gettimeofday(&now, NULL);
     millis = (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
-#elif defined(WIN32) || defined(_WIN32)
+#elif defined(WIN32)
     // Getting time twice may be inefficient but is quicker
     // than converting the SYSTEMTIME structure into milliseconds
     // We could add an additional flag here if the user
@@ -447,8 +445,6 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
     case NRT_CORNERS_DECIMAL:
         cornerRep = 'D';
         break;
-
-    case NRT_CORNERS_UNKNOWN:
     default:
         break;
     }
@@ -567,7 +563,7 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8)
     nrt_Utils_geographicLonToCharArray(d, m, s, buffer8);
 }
 
-NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
+NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8 *value, size_t size)
 {
     switch(size)
     {
@@ -591,26 +587,4 @@ NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
         /* Not handled */
         break;
     }
-}
-
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
-
-NRTAPI(char*) nrt_Utils_strcpy(char* destination, char const* source)
-{
-    #undef strcpy
-    return strcpy(destination, source);
-}
-
-NRTAPI(char*) nrt_Utils_strncpy(char* destination, char const* source, size_t count)
-{
-#undef strncpy
-    return strncpy(destination, source, count);
-}
-
-NRTAPI(char*) nrt_Utils_strcat(char* destination, char const* source)
-{
-    #undef strcat
-    return strcat(destination, source);
 }

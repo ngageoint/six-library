@@ -61,7 +61,7 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(
         nitf_Error * error)
 {
     memcpy(buf,
-           (const uint8_t*)memorySource->data + memorySource->mark,
+           (const nitf_Uint8*)memorySource->data + memorySource->mark,
            size);
     memorySource->mark += size;
     return NITF_SUCCESS;
@@ -75,8 +75,8 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(
         nitf_Error * error)
 {
     int i = 0;
-    const uint8_t* src = (const uint8_t*)memorySource->data;
-    uint8_t* dest = (uint8_t*)buf;
+    const nitf_Uint8* src = (const nitf_Uint8*)memorySource->data;
+    nitf_Uint8* dest = (nitf_Uint8*)buf;
 
     while (i < size)
     {
@@ -309,15 +309,15 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
 
     nitf_Off tsize = size * (fileSource->byteSkip + 1);
 
-    uint8_t* tbuf;
-    uint8_t* bufPtr = (uint8_t*)buf;
+    nitf_Uint8* tbuf;
+    nitf_Uint8* bufPtr = (nitf_Uint8*)buf;
 
     nitf_Off lmark = 0;
     int i = 0;
     if (tsize + fileSource->mark > fileSource->size)
         tsize = fileSource->size - fileSource->mark;
 
-    tbuf = (uint8_t *) NITF_MALLOC(tsize);
+    tbuf = (nitf_Uint8 *) NITF_MALLOC(tsize);
     if (!tbuf)
     {
         nitf_Error_init(error,
@@ -389,10 +389,9 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
                         NITF_ERR_MEMORY);
         return NULL;
     }
-    impl->io = nitf_IOHandleAdapter_construct(handle,
-        NRT_ACCESS_READONLY,
-        error);
-    if (!impl->io)
+    if (!(impl->io = nitf_IOHandleAdapter_construct(handle,
+                                                    NRT_ACCESS_READONLY,
+                                                    error)))
         return NULL;
 
     impl->byteSkip = byteSkip >= 0 ? byteSkip : 0;

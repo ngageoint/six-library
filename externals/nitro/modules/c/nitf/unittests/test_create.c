@@ -34,6 +34,8 @@ TEST_CASE(testCreate)
     nitf_IOHandle_close(handle);
 }
 
-TEST_MAIN(
+int main(int argc, char **argv)
+{
     CHECK(testCreate);
-)
+    return 0;
+}

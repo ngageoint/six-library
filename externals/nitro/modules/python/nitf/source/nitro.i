@@ -56,8 +56,8 @@
     }
 
 
-%typemap(out) uint32_t, int32_t{$result = PyInt_FromLong($1);}
-%typemap(in) uint32_t{$1 = (uint32_t)PyInt_AsLong($input);}
+%typemap(out) nitf_Uint32, nitf_Int32{$result = PyInt_FromLong($1);}
+%typemap(in) nitf_Uint32{$1 = (nitf_Uint32)PyInt_AsLong($input);}
 %typemap(out) nitf_Off{$result = PyLong_FromLong($1);}
 %typemap(in) nitf_Off{$1 = (nitf_Off)PyLong_AsLong($input);}
 
@@ -189,7 +189,7 @@
 }
 
 
-%typemap(out) uint8_t {$result = SWIG_From_char((char)($1));}
+%typemap(out) nitf_Uint8 {$result = SWIG_From_char((char)($1));}
 
 /* NRT_FILE is supposed to expand to the current source file during
  * preprocessing (and similar with the other ignored values below).
@@ -364,9 +364,9 @@
         return buf;
     }
 
-    uint32_t py_Field_getInt(nitf_Field *field, nitf_Error *error)
+    nitf_Uint32 py_Field_getInt(nitf_Field *field, nitf_Error *error)
     {
-        uint32_t intVal;
+        nitf_Uint32 intVal;
         NITF_TRY_GET_UINT32(field, &intVal, error);
         return intVal;
 
@@ -478,7 +478,7 @@
 
     nitf_ComponentInfo* py_FileHeader_getComponentInfo(nitf_FileHeader* header, int index, char* type, nitf_Error* error)
     {
-        uint32_t num;
+        nitf_Uint32 num;
 
         if (!type)
         	goto CATCH_ERROR;
@@ -579,7 +579,7 @@
 
         window->numBands = PySequence_Length(bandList);
         if (window->numBands < 0) window->numBands = 0;
-        window->bandList = (uint32_t*)NITF_MALLOC(sizeof(uint32_t) * window->numBands);
+        window->bandList = (nitf_Uint32*)NITF_MALLOC(sizeof(nitf_Uint32) * window->numBands);
         if (!window->bandList)
         {
             PyErr_NoMemory();
@@ -605,17 +605,17 @@
     PyObject* py_ImageReader_read(nitf_ImageReader* reader, nitf_SubWindow* window, int nbpp, nitf_Error* error)
     {
         /* TODO somehow get the NUMBITSPERPIXEL in the future */
-        uint8_t **buf = NULL;
-        uint8_t *pyArrayBuffer = NULL;
+        nitf_Uint8 **buf = NULL;
+        nitf_Uint8 *pyArrayBuffer = NULL;
         PyObject* result = Py_None;
         int padded, rowSkip, colSkip;
-        uint64_t subimageSize;
-        uint32_t i;
+        nitf_Uint64 subimageSize;
+        nitf_Uint32 i;
         types::RowCol<size_t> dims;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
-        subimageSize = static_cast<uint64_t>(window->numRows/rowSkip) *
+        subimageSize = static_cast<nitf_Uint64>(window->numRows/rowSkip) *
                 (window->numCols/colSkip) *
                 nitf_ImageIO_pixelSize(reader->imageDeblocker);
         if (subimageSize > std::numeric_limits<size_t>::max())
@@ -631,18 +631,18 @@
 
         numpyutils::createOrVerify(result, NPY_UINT8, dims);
 
-        buf = (uint8_t**) NITF_MALLOC(sizeof(uint8_t*) * window->numBands);
+        buf = (nitf_Uint8**) NITF_MALLOC(sizeof(nitf_Uint8*) * window->numBands);
         if (!buf)
         {
             PyErr_NoMemory();
             goto CATCH_ERROR;
         }
 
-        memset(buf, 0, sizeof(uint8_t*) * window->numBands);
+        memset(buf, 0, sizeof(nitf_Uint8*) * window->numBands);
 
         for (i = 0; i < window->numBands; ++i)
         {
-            buf[i] = (uint8_t*) NITF_MALLOC(sizeof(uint8_t) * subimageSize);
+            buf[i] = (nitf_Uint8*) NITF_MALLOC(sizeof(nitf_Uint8) * subimageSize);
             if (!buf[i])
             {
                 PyErr_NoMemory();
@@ -659,11 +659,11 @@
         }
 
         // Copy to output numpy array
-        pyArrayBuffer = numpyutils::getBuffer<uint8_t>(result);
+        pyArrayBuffer = numpyutils::getBuffer<nitf_Uint8>(result);
         for (i = 0; i < window->numBands; ++i)
         {
             memcpy(pyArrayBuffer + i * subimageSize,
-                   buf[i], sizeof(uint8_t) * subimageSize);
+                   buf[i], sizeof(nitf_Uint8) * subimageSize);
         }
 
         for (i = 0; i < window->numBands; ++i)

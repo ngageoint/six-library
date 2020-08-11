@@ -62,7 +62,7 @@ void findInExtensions(nitf::Extensions ext)
                     std::cout << "Mission ID: [" << v.toString() << "]" << std::endl;
 
                 }
-                catch (const except::NoSuchKeyException& none)
+                catch (except::NoSuchKeyException& none)
                 {
                     throw nitf::NITFException(none,
                                               Ctxt("Error: no Mission ID available"));
@@ -71,7 +71,7 @@ void findInExtensions(nitf::Extensions ext)
             }
         }
     }
-    catch (const except::NoSuchKeyException&)
+    catch (except::NoSuchKeyException& noACFTB)
     {
         std::cout << "No ACFTB" << std::endl;
         return ;

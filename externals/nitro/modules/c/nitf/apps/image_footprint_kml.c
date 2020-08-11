@@ -109,7 +109,7 @@ int main(int argc, char** argv)
     nitf_Error error;
     char file[NITF_MAX_PATH];
     int i;
-    uint32_t num;
+    nitf_Uint32 num;
 
     if ( argc != 2 )
     {

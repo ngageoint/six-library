@@ -44,10 +44,7 @@ NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
     if (name)
     {
         picture->name = (char*)NITF_MALLOC( strlen( name ) + 1 );
-        if (picture->name != NULL)
-        {
-            strcpy(picture->name, name);
-        }
+        strcpy(picture->name, name);
     }
 
     return picture;

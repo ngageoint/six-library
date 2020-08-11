@@ -60,7 +60,7 @@ TEST_CASE(testIncompleteCondMod)
 {
     nitf_Error error;
     NITF_BOOL exists;
-    uint32_t treLength = 0;
+    nitf_Uint32 treLength = 0;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
     TEST_ASSERT(tre);
     treLength = tre->handler->getCurrentSize(tre, &error);
@@ -156,7 +156,7 @@ TEST_CASE(iterateUnfilled)
     nitf_Error error;
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
-    uint32_t numFields = 0;
+    nitf_Uint32 numFields = 0;
     TEST_ASSERT(tre);
     cursor = nitf_TRECursor_begin(tre);
 
@@ -177,7 +177,7 @@ TEST_CASE(populateThenIterate)
     nitf_Error error;
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
-    uint32_t numFields = 0;
+    nitf_Uint32 numFields = 0;
     TEST_ASSERT(tre);
 
     nitf_TRE_setField(tre, "NUMACPO", "2", 1, &error);
@@ -203,7 +203,7 @@ TEST_CASE(populateWhileIterating)
     nitf_Error error;
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
-    uint32_t numFields = 0;
+    nitf_Uint32 numFields = 0;
     TEST_ASSERT(tre);
 
     cursor = nitf_TRECursor_begin(tre);
@@ -230,7 +230,8 @@ TEST_CASE(populateWhileIterating)
     nitf_TRE_destruct(&tre);
 }
 
-TEST_MAIN(
+int main(int argc, char **argv)
+{
     (void) argc;
     (void) argv;
 
@@ -242,4 +243,5 @@ TEST_MAIN(
     CHECK(iterateUnfilled);
     CHECK(populateThenIterate);
     CHECK(populateWhileIterating);
-    )
+    return 0;
+}

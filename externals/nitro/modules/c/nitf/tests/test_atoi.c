@@ -28,8 +28,8 @@
 
 int main(int argc, char *argv[])
 {
-    int32_t  i32;
-    uint32_t u32;
+    nitf_Int32  i32;
+    nitf_Uint32 u32;
 
     i32 = NITF_ATO32(BIG);
     u32 = NITF_ATO32(BIG);

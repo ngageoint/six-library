@@ -129,12 +129,12 @@ void DESubheader::setSubheaderFields(nitf::TRE fields)
     fields.setManaged(true);
 }
 
-uint32_t DESubheader::getDataLength() const
+nitf::Uint32 DESubheader::getDataLength() const
 {
     return getNativeOrThrow()->dataLength;
 }
 
-void DESubheader::setDataLength(uint32_t value)
+void DESubheader::setDataLength(nitf::Uint32 value)
 {
     getNativeOrThrow()->dataLength = value;
 }

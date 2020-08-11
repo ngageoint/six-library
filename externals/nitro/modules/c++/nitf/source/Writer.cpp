@@ -313,7 +313,7 @@ nitf::List Writer::getWarningList()
     return nitf::List(getNativeOrThrow()->warningList);
 }
 
-void Writer::writeHeader(nitf::Off& fileLenOff, uint32_t& hdrLen)
+void Writer::writeHeader(nitf::Off& fileLenOff, nitf::Uint32& hdrLen)
 {
     if (!nitf_Writer_writeHeader(getNativeOrThrow(),
                                  &fileLenOff,
@@ -339,7 +339,7 @@ void Writer::writeImageSubheader(nitf::ImageSubheader subheader,
 }
 
 void Writer::writeDESubheader(nitf::DESubheader subheader,
-                              uint32_t& userSublen,
+                              nitf::Uint32& userSublen,
                               nitf::Version version)
 {
     if (!nitf_Writer_writeDESubheader(getNativeOrThrow(),
@@ -352,10 +352,10 @@ void Writer::writeDESubheader(nitf::DESubheader subheader,
     }
 }
 
-void Writer::writeInt64Field(uint64_t field,
-                             uint32_t length,
+void Writer::writeInt64Field(nitf::Uint64 field,
+                             nitf::Uint32 length,
                              char fill,
-                             uint32_t fillDir)
+                             nitf::Uint32 fillDir)
 {
     if (!nitf_Writer_writeInt64Field(getNativeOrThrow(),
                                      field,

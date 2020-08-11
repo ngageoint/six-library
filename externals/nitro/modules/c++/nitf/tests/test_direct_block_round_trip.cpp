@@ -32,14 +32,14 @@ class TestDirectBlockSource: public nitf::DirectBlockSource
 {
 public:
     TestDirectBlockSource(nitf::ImageReader& imageReader,
-                      uint32_t numBands)
+                      nitf::Uint32 numBands)
         : nitf::DirectBlockSource(imageReader, numBands){}
 
 protected:
     virtual void nextBlock(void* buf,
                            const void* block,
-                           uint32_t blockNumber,
-                           uint64_t blockSize)
+                           nitf::Uint32 blockNumber,
+                           nitf::Uint64 blockSize)
     {
         std::cout << "BLOCK NUMBER: " << blockNumber << " " << blockSize << std::endl;
         if (buf)
@@ -86,17 +86,17 @@ int main(int argc, char **argv)
         writer.prepare(output, record);
 
         nitf::ListIterator iter = record.getImages().begin();
-        uint32_t num = record.getNumImages();
+        nitf::Uint32 num = record.getNumImages();
 
         std::vector<nitf::ImageReader> imageReaders;
         std::vector<nitf::ImageWriter> imageWriters;
         std::map<std::string, void*> writerOptions;
         std::vector<mem::SharedPtr<nitf::DirectBlockSource> > bandSources;
 
-        //uint32_t numRes = 1;
+        //nitf::Uint32 numRes = 1;
         //writerOptions[C8_NUM_RESOLUTIONS_KEY] = &numRes;
 
-        for (uint32_t i = 0; i < num; i++)
+        for (nitf::Uint32 i = 0; i < num; i++)
         {
             //for the images, we'll use a DirectBlockSource for streaming
             nitf::ImageSegment imseg = *iter;
@@ -114,7 +114,7 @@ int main(int argc, char **argv)
         }
 
         num = record.getNumGraphics();
-        for (uint32_t i = 0; i < num; i++)
+        for (nitf::Uint32 i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
             mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
         }
 
         num = record.getNumTexts();
-        for (uint32_t i = 0; i < num; i++)
+        for (nitf::Uint32 i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
             mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
         }
 
         num = record.getNumDataExtensions();
-        for (uint32_t i = 0; i < num; i++)
+        for (nitf::Uint32 i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
             mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(

@@ -147,9 +147,6 @@ NRTPROT(void) nrt_Error_initf(nrt_Error * error, const char *file, int line,
 
     error->line = line;
     error->level = level;
-}
 
-NRTAPI(char*) nrt_strerror(int errnum)
-{
-    return strerror(errnum);
+    return;
 }

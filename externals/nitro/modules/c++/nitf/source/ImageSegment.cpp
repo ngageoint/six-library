@@ -90,22 +90,22 @@ void ImageSegment::setSubheader(nitf::ImageSubheader & value)
     value.setManaged(true);
 }
 
-uint64_t ImageSegment::getImageOffset() const
+nitf::Uint64 ImageSegment::getImageOffset() const
 {
     return getNativeOrThrow()->imageOffset;
 }
 
-void ImageSegment::setImageOffset(uint64_t value)
+void ImageSegment::setImageOffset(nitf::Uint64 value)
 {
     getNativeOrThrow()->imageOffset = value;
 }
 
-uint64_t ImageSegment::getImageEnd() const
+nitf::Uint64 ImageSegment::getImageEnd() const
 {
     return getNativeOrThrow()->imageEnd;
 }
 
-void ImageSegment::setImageEnd(uint64_t value)
+void ImageSegment::setImageEnd(nitf::Uint64 value)
 {
     getNativeOrThrow()->imageEnd = value;
 }

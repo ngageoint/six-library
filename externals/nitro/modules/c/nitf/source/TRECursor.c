@@ -51,13 +51,11 @@ NITFPRIV(int) nitf_TRECursor_evalLoops(nitf_TRE * tre,
                                       nitf_Error * error);
 
 
-#ifdef NITF_DEBUG
 NITFPRIV(int) nitf_TRECursor_evalCondLength(nitf_TRE * tre,
                                            nitf_TREDescription * desc_ptr,
                                            char idx_str[10][10],
                                            int looping,
                                            nitf_Error * error);
-#endif
 
 
 /*!
@@ -168,7 +166,7 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
     /* the pair to return */
     nitf_Pair *pair = NULL;
 
-    strncpy(tag_str, descTag, sizeof(tag_str)-1);
+    strncpy(tag_str, descTag, sizeof(tag_str));
 
     /* deal with braces */
     if (strchr(descTag, '['))
@@ -745,7 +743,6 @@ NITFPRIV(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
 
 
 
-#ifdef NITF_DEBUG
 /**
  * Helper function for evaluating loops
  * Returns the number of loops that will be processed
@@ -844,7 +841,6 @@ NITFPRIV(int) nitf_TRECursor_evalCondLength(nitf_TRE* tre,
     }
     return computedLength < 0 ? 0 : computedLength;
 }
-#endif // NITF_DEBUG
 
 NITFPRIV(int) nitf_TRECursor_evaluatePostfix(nitf_TRE *tre,
                                              char idx[10][10],
