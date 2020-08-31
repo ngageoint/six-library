@@ -46,7 +46,7 @@ static const char DIR_DELIMITER = '\\';
  */
 
 #if defined(WIN32) || defined(_WIN32)
-NITFPRIV(nitf_Mutex*) GET_MUTEX()
+NITFPRIV(nitf_Mutex*) GET_MUTEX(void)
 {
     if (__PluginRegistryLock == NULL)
     {

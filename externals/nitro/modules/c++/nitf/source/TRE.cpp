@@ -174,6 +174,16 @@ std::string TRE::getID() const
     return id ? std::string(id) : "";
 }
 
+static bool endsWith(const std::string& s, const std::string& match)
+{
+    const size_t mLen = match.length();
+    const size_t sLen = s.length();
+    for (size_t i = 0; i < sLen && i < mLen; ++i)
+        if (!(s[sLen - i - 1] == match[mLen - i - 1]))
+            return false;
+    return sLen >= mLen;
+}
+
 std::string TRE::truncate(const std::string& value, size_t maxDigits)
 {
     const size_t decimalIndex = value.find('.');
@@ -183,7 +193,7 @@ std::string TRE::truncate(const std::string& value, size_t maxDigits)
     }
 
     const std::string truncated = value.substr(0, maxDigits);
-    if (str::endsWith(truncated, "."))
+    if (endsWith(truncated, "."))
     {
         return truncated.substr(0, truncated.size() - 1);
     }

@@ -260,7 +260,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
     return NRT_SUCCESS;
 }
 
-NRTAPI(double) nrt_Utils_getCurrentTimeMillis()
+NRTAPI(double) nrt_Utils_getCurrentTimeMillis(void)
 {
     double millis = 0;
 #if defined(HAVE_PTHREAD_H) && defined(HAVE_CLOCK_GETTIME)

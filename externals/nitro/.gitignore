@@ -16,6 +16,7 @@ test_package/build/
 *.vcxproj.user
 **/Debug/
 **/Release/
+packages/
 
 # Drivers
 modules/c/j2k/external/openjpeg/openjpeg-2.0.0/

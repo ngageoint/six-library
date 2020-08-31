@@ -138,6 +138,7 @@ public:
                 from = sys::File::FROM_START;
                 break;
 
+            case CURRENT:
             default:
                 from = sys::File::FROM_CURRENT;
         }

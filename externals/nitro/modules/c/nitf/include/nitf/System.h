@@ -22,6 +22,9 @@
 
 #ifndef __NITF_SYSTEM_H__
 #define __NITF_SYSTEM_H__
+#pragma once
+
+#include <stdint.h>
 
 #if defined(WIN32) || defined(_WIN32)
 #      if defined(NITF_MODULE_EXPORTS)
@@ -87,6 +90,16 @@
 /* TYPES                                                                      */
 /******************************************************************************/
 #include "nrt/Types.h"
+ // Keeping these here so that code using "nitf_Uint8" still compiles;
+ // we can't make others change to "uint8_t".
+typedef uint8_t                   nitf_Uint8;
+typedef uint16_t                  nitf_Uint16;
+typedef uint32_t                  nitf_Uint32;
+typedef uint64_t                  nitf_Uint64;
+typedef int8_t                    nitf_Int8;
+typedef int16_t                   nitf_Int16;
+typedef int32_t                   nitf_Int32;
+typedef int64_t                   nitf_Int64;
 typedef nrt_IOHandle                nitf_IOHandle;
 typedef NRT_NATIVE_DLL              NITF_NATIVE_DLL;
 typedef NRT_DLL_FUNCTION_PTR        NITF_DLL_FUNCTION_PTR;

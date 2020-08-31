@@ -22,6 +22,7 @@
 
 #ifndef __NRT_TYPES_H__
 #define __NRT_TYPES_H__
+#pragma once
 
 #include "nrt/nrt_config.h"
 
@@ -35,6 +36,18 @@
 #   include <sys/types.h>
 #   include <ctype.h>
 #   include <time.h>
+
+ // Keeping these here so that code using "nrt_Uint8" still compiles;
+ // we can't make others change to "uint8_t".
+typedef uint8_t nrt_Uint8;
+typedef uint16_t nrt_Uint16;
+typedef uint32_t nrt_Uint32;
+typedef uint64_t nrt_Uint64;
+
+typedef int8_t nrt_Int8;
+typedef int16_t nrt_Int16;
+typedef int32_t nrt_Int32;
+typedef int64_t nrt_Int64;
 
 #if defined(WIN32) || defined(_WIN32)
 #      include <windows.h>

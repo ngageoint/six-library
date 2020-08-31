@@ -26,7 +26,6 @@
 #include <limits>
 
 #include <except/Exception.h>
-#include <math/Round.h>
 #include <nitf/Writer.hpp>
 #include <nitf/CompressedByteProvider.hpp>
 #include <nitf/IOStreamWriter.hpp>
@@ -108,6 +107,15 @@ size_t CompressedByteProvider::countBytesForCompressedImageData(
     return numBytes;
 }
 
+static size_t ceilingDivide(size_t numerator, size_t denominator)
+{
+    if (denominator == 0)
+    {
+        throw except::Exception(Ctxt("Attempted division by 0"));
+    }
+    return (numerator / denominator) + (numerator % denominator != 0);
+}
+
 types::Range CompressedByteProvider::findBlocksToWrite(
         size_t seg, size_t globalStartRow, size_t numRowsToWrite) const
 {
@@ -126,18 +134,16 @@ types::Range CompressedByteProvider::findBlocksToWrite(
     const size_t startRow = globalStartRow - segmentInfo.firstRow;
     const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
 
-    const size_t numHorizontalBlocks = math::ceilingDivide(mNumCols,
-                                                           mNumColsPerBlock);
-    const size_t firstRowOfBlocks = math::ceilingDivide(startRow,
-                                                        numRowsPerBlock);
-    const size_t numRowsOfBlocks = math::ceilingDivide(numRowsToWrite,
-                                                       numRowsPerBlock);
+    const size_t numHorizontalBlocks = ceilingDivide(mNumCols, mNumColsPerBlock);
+    const size_t firstRowOfBlocks = ceilingDivide(startRow, numRowsPerBlock);
+    const size_t numRowsOfBlocks = ceilingDivide(numRowsToWrite, numRowsPerBlock);
     const size_t numBlocks = numRowsOfBlocks * numHorizontalBlocks;
     const size_t firstBlock = firstRowOfBlocks * numHorizontalBlocks;
 
     return types::Range(firstBlock, numBlocks);
 }
 
+#undef max
 size_t CompressedByteProvider::addImageData(
         size_t seg,
         size_t startRow,

@@ -80,6 +80,7 @@ public:
         case END:
             flags = std::ios::end;
             break;
+        case CURRENT:
         default:
             flags = std::ios::cur;
             break;

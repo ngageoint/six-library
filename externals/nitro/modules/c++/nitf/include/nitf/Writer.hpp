@@ -22,8 +22,10 @@
 
 #ifndef __NITF_WRITER_HPP__
 #define __NITF_WRITER_HPP__
+#pragma once
 
-#include <mem/SharedPtr.h>
+#include <memory>
+
 #include "nitf/Writer.h"
 #include "nitf/List.hpp"
 #include "nitf/NITFException.hpp"
@@ -128,25 +130,25 @@ public:
      * Sets the WriteHandler for the Image at the given index.
      */
     void setImageWriteHandler(int index,
-                              mem::SharedPtr<WriteHandler> writeHandler);
+                              std::shared_ptr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the Graphic at the given index.
      */
     void setGraphicWriteHandler(int index,
-                                mem::SharedPtr<WriteHandler> writeHandler);
+                                std::shared_ptr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the Text at the given index.
      */
     void setTextWriteHandler(int index,
-                             mem::SharedPtr<WriteHandler> writeHandler);
+                             std::shared_ptr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the DE Segment at the given index.
      */
     void setDEWriteHandler(int index,
-                           mem::SharedPtr<WriteHandler> writeHandler);
+                           std::shared_ptr<WriteHandler> writeHandler);
 
     /**
      * Returns a NEW ImageWriter for the given index
@@ -250,7 +252,7 @@ private:
     nitf_Error error;
 
     //! c++ write handlers need to be kept in scope
-    std::vector<mem::SharedPtr<nitf::WriteHandler> > mWriteHandlers;
+    std::vector<std::shared_ptr<nitf::WriteHandler> > mWriteHandlers;
 };
 
 }

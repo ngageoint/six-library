@@ -423,7 +423,7 @@ int main(int argc, char** argv)
     {
         system("firefox scratch_release.html");
     }
-    catch(except::Exception& ex)
+    catch(const except::Exception&)
     {
         std::cout << "Failed to open html file in firefox\n";
     }
