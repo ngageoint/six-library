@@ -193,11 +193,44 @@ using six::Vector3;
 
 %extend cphd::CPHDWriter
 {
+
+%template(write) write<std::complex<float>>;
+
 %pythoncode
 %{
     def __del__(self):
         self.close()
 %}
+
+/*! Write NumPy array(s) of wideband data to CPHD file
+ * \param PVPBlock (cphd::PVPBlock)
+ * \param widebandArray
+ *        A single NumPy array of wideband data (multiple channels are vstack()'d together)
+ * \param rows
+ *        Expected number of rows in widebandArray
+ * \param cols
+ *        Expected number of cols in widebandArray
+ */
+void writeWidebandImpl(PVPBlock pvpBlock, PyObject* widebandArray, size_t rows, size_t cols)
+{
+    // Verify that widebandArray is a complex64 NumPy array with the expected dimensions
+    numpyutils::verifyArrayType(widebandArray, NPY_COMPLEX64);
+    const types::RowCol<size_t> expectedWidebandDims(rows, cols);
+    const types::RowCol<size_t> actualWidebandDims = numpyutils::getDimensionsRC(widebandArray);
+    if (expectedWidebandDims != actualWidebandDims)
+    {
+        throw except::Exception("Wideband array dimensions ("
+                                + std::to_string(actualWidebandDims.row) + ", "
+                                + std::to_string(actualWidebandDims.col)
+                                + ") do not match expected ("
+                                + std::to_string(expectedWidebandDims.row) + ", "
+                                + std::to_string(expectedWidebandDims.col) + ")");
+    }
+
+    std::complex<float>* widebandPtr = numpyutils::getBuffer<std::complex<float>>(widebandArray);
+    self->write(pvpBlock, widebandPtr);  // write() is templated for complex<float> above
+}
+
 }
 
 %pythoncode
