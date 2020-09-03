@@ -143,6 +143,109 @@ using six::Vector3;
     }
 }
 
+%extend cphd::PVPBlock
+{
+%pythoncode
+%{
+    # We could generate these programmatically, but this is maybe more readable(?)
+    PVP_PARAM_GETTERS = {
+        'txTime': 'getTxTime',
+        'txPos': 'getTxPos',
+        'txVel': 'getTxVel',
+        'rcvTime': 'getRcvTime',
+        'rcvPos': 'getRcvPos',
+        'rcvVel': 'getRcvVel',
+        'srpPos': 'getSRPPos',
+        'aFDOP': 'getaFDOP',
+        'aFRR1': 'getaFRR1',
+        'aFRR2': 'getaFRR2',
+        'fx1': 'getFx1',
+        'fx2': 'getFx2',
+        'toa1': 'getTOA1',
+        'toa2': 'getTOA2',
+        'tdTropoSRP': 'getTdTropoSRP',
+        'sc0': 'getSC0',
+        'scss': 'getSCSS'
+    }
+    OPTIONAL_PVP_PARAMS = {
+        'ampSF': ('hasAmpSF', 'getAmpSF'),
+        'fxN1': ('hasFxN1', 'getFxN1'),
+        'fxN2': ('hasFxN2', 'getFxN2'),
+        'signal': ('hasSignal', 'getSignal'),
+        'tdIonoSRP': ('hasTDIonoSRP', 'getTdIonoSRP'),
+        'toaE1': ('hasToaE1', 'getTOAE1'),
+        'toaE2': ('hasToaE2', 'getTOAE2')
+    }
+
+    @staticmethod
+    def _pvpFormatToNPdtype(pvpFormatStr):
+        import numpy as np
+        # Maps valid PVP format strings (CPHD Spec Table 10-2) to NumPy dtypes
+        if '=' in pvpFormatStr and ';' in pvpFormatStr:
+            # Multiple parameters, assert that they are all the same type
+            paramTypes = [param[param.index('=')+1:] for param in pvpFormatStr.split(';') if param]
+
+            # TODO support multiple different parameter types ('A=U2;B=I2')
+            if not all(paramType == paramTypes[0] for paramType in paramTypes[1:]):
+                raise Exception('Multiple parameters with different data types are not yet supported')
+            pvpFormatStr = paramTypes[0]
+
+        first = pvpFormatStr[0]
+        if first in ['U', 'I', 'F']:  # Unsigned int, signed int, float
+            return np.dtype(pvpFormatStr.lower())
+        elif first == 'C':  # Complex float ('CF') or complex int ('CI')
+            # This uses complex floats for both, which works but will take more space
+            # TODO define a custom dtype for complex ints?
+            return np.dtype('c' + pvpFormatStr[2:])
+        elif first == 'S':  # String
+            # TODO official format is “S[1-9][0-9]*”:
+            #   Is the '*' literal or indicating that these can be however long?
+            return np.dtype('U' + pvpFormatStr[1:])
+
+        raise Exception('Unknown or unsupported format string: \'{0}\''.format(pvpFormatStr))
+
+    def toListOfDicts(self, cphdMetadata):
+        import numpy as np
+        paramsToCopy = dict(self.PVP_PARAM_GETTERS)  # Get all required PVP params
+        for optionalParam in self.OPTIONAL_PVP_PARAMS:
+            # Get boolean `has[param]` method of PVPBlock and call it to check if this PVPBlock
+            # has this parameter
+            if getattr(self, self.OPTIONAL_PVP_PARAMS[optionalParam][0])():
+                # Copy `get[param]` method into paramsToCopy
+                paramsToCopy[optionalParam] = self.OPTIONAL_PVP_PARAMS[optionalParam][1]
+
+        pvpData = []
+
+        for channel in range(cphdMetadata.getNumChannels()):
+            # Initialize dict of parameters for this channel
+            channelPVP = {}
+            for param in paramsToCopy:
+                paramSize = getattr(cphdMetadata.pvp, param).getSize()
+                paramShape = (cphdMetadata.getNumVectors(channel),)
+                if paramSize != 1:
+                    # If data is a vector, add another dimension to the array
+                    paramShape += (paramSize,)
+                paramDtype = self._pvpFormatToNPdtype(getattr(cphdMetadata.pvp, param).getFormat())
+                channelPVP[param] = np.empty(shape=paramShape, dtype=paramDtype)
+
+            # Copy PVP data for this channel by vector
+            for vector in range(cphdMetadata.getNumVectors(channel)):
+                for param in paramsToCopy:
+                    # Call get[param]() method for current channel and vector
+                    pulseVector = getattr(self, paramsToCopy[param])(channel, vector)
+                    paramSize = getattr(cphdMetadata.pvp, param).getSize()
+                    if paramSize == 1:
+                        channelPVP[param][vector] = pulseVector
+                    else:
+                        for i in range(paramSize):
+                            channelPVP[param][vector][i] = pulseVector[i]
+
+            pvpData.append(channelPVP)
+
+        return pvpData
+%}
+}
+
 %extend cphd::Wideband
 {
     // We need to expose a way to read into a raw buffer
