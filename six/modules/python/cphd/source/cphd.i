@@ -198,6 +198,23 @@ using six::Vector3;
 
 %pythoncode
 %{
+    def writeWideband(self, pvpBlock, widebands):
+        """
+        \brief  Write NumPy array(s) of wideband data to CPHD file
+
+        \param  pvpBlock (cphd.PVPBlock)
+        \param  widebands (np.ndarray OR list of np.ndarrays)
+        """
+
+        # Stack wideband arrays if they aren't already stacked
+        if isinstance(widebands, list):
+            import numpy as np
+            contiguousWidebands = np.vstack(tuple(wideband for wideband in widebands))
+        else:
+            contiguousWidebands = widebands  # wideband is already contiguous
+        # writeWidebandImpl() requires a single wideband array
+        self.writeWidebandImpl(pvpBlock, contiguousWidebands, *contiguousWidebands.shape)
+
     def __del__(self):
         self.close()
 %}
