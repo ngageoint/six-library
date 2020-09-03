@@ -5216,8 +5216,38 @@ class CPHDWriter(_object):
         return _cphd.CPHDWriter_close(self)
 
 
+    def write(self, pvpBlock: 'PVPBlock', widebandData: 'std::complex< float > const *', supportData: 'sys::ubyte const *'=None) -> "void":
+        """
+        write(CPHDWriter self, PVPBlock pvpBlock, std::complex< float > const * widebandData, sys::ubyte const * supportData=None)
+        write(CPHDWriter self, PVPBlock pvpBlock, std::complex< float > const * widebandData)
+        """
+        return _cphd.CPHDWriter_write(self, pvpBlock, widebandData, supportData)
+
+
+    def writeWideband(self, pvpBlock, widebands):
+        """
+        \brief  Write NumPy array(s) of wideband data to CPHD file
+
+        \param  pvpBlock (cphd.PVPBlock)
+        \param  widebands (np.ndarray OR list of np.ndarrays)
+        """
+
+    # Stack wideband arrays if they aren't already stacked
+        if isinstance(widebands, list):
+            import numpy as np
+            contiguousWidebands = np.vstack(tuple(wideband for wideband in widebands))
+        else:
+            contiguousWidebands = widebands  # wideband is already contiguous
+    # writeWidebandImpl() requires a single wideband array
+        self.writeWidebandImpl(pvpBlock, contiguousWidebands, *contiguousWidebands.shape)
+
     def __del__(self):
         self.close()
+
+
+    def writeWidebandImpl(self, pvpBlock: 'PVPBlock', widebandArray: 'PyObject *', rows: 'size_t', cols: 'size_t') -> "void":
+        """writeWidebandImpl(CPHDWriter self, PVPBlock pvpBlock, PyObject * widebandArray, size_t rows, size_t cols)"""
+        return _cphd.CPHDWriter_writeWidebandImpl(self, pvpBlock, widebandArray, rows, cols)
 
     __swig_destroy__ = _cphd.delete_CPHDWriter
     __del__ = lambda self: None
