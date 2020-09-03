@@ -147,7 +147,8 @@ using six::Vector3;
 {
 %pythoncode
 %{
-    # We could generate these programmatically, but this is maybe more readable(?)
+    # List of field names and get[param]/has[param] methods for each PVP parameter in a CPHD PVP
+    # object.  We could generate these programmatically, but this is maybe more readable(?)
     PVP_PARAM_GETTERS = {
         'txTime': 'getTxTime',
         'txPos': 'getTxPos',
@@ -177,10 +178,21 @@ using six::Vector3;
         'toaE2': ('hasToaE2', 'getTOAE2')
     }
 
+    import numpy  # 'as np' doesn't work unless the import is within each function
+
     @staticmethod
     def _pvpFormatToNPdtype(pvpFormatStr):
-        import numpy as np
-        # Maps valid PVP format strings (CPHD Spec Table 10-2) to NumPy dtypes
+        """
+        \brief  Maps valid PVP format strings (CPHD Spec Table 10-2) to NumPy dtypes
+                Currently doesn't support multiple parameters with different types,
+                e.g. 'X=U2,Y=F4'
+
+        \param  pvpFormatStr (str)
+                CPHD PVP format string, e.g. 'U1' or 'CI2'. See CPHD Spec Table 10-2
+
+        \return NumPy dtype corresponding to pvpFormatStr
+        """
+
         if '=' in pvpFormatStr and ';' in pvpFormatStr:
             # Multiple parameters, assert that they are all the same type
             paramTypes = [param[param.index('=')+1:] for param in pvpFormatStr.split(';') if param]
@@ -192,30 +204,49 @@ using six::Vector3;
 
         first = pvpFormatStr[0]
         if first in ['U', 'I', 'F']:  # Unsigned int, signed int, float
-            return np.dtype(pvpFormatStr.lower())
+            return numpy.dtype(pvpFormatStr.lower())
         elif first == 'C':  # Complex float ('CF') or complex int ('CI')
             # This uses complex floats for both, which works but will take more space
             # TODO define a custom dtype for complex ints?
-            return np.dtype('c' + pvpFormatStr[2:])
+            return numpy.dtype('c' + pvpFormatStr[2:])
         elif first == 'S':  # String
             # TODO official format is “S[1-9][0-9]*”:
             #   Is the '*' literal or indicating that these can be however long?
-            return np.dtype('U' + pvpFormatStr[1:])
+            return numpy.dtype('U' + pvpFormatStr[1:])
 
         raise Exception('Unknown or unsupported format string: \'{0}\''.format(pvpFormatStr))
 
     def toListOfDicts(self, cphdMetadata):
-        import numpy as np
-        paramsToCopy = dict(self.PVP_PARAM_GETTERS)  # Get all required PVP params
+        """
+        \brief  Turns this PVPBlock object in a list of Python dictionaries with NumPy arrays
+                of PVP data
+
+        \param  cphdMetadata (SWIG-wrapped CPHD Metadata object)
+                The metadata used to create this PVPBlock
+
+        \return List of Python dictionaries containing NumPy arrays of PVP data.
+                Each dictionary in the list corresponds to a CPHD data channel.
+                The dictionary keys are string names of the PVP parameters in this PVPBlock
+                    (specifically, the names of the attributes used to store them in a CPHD PVP
+                    object, e.g. 'rcvTime').
+                The dictionary values are NumPy arrays of shape
+                    (cphdMetadata.getNumVectors(channel), cphdMetadata.getNumSamples(channel))
+                    (with an extra dimension of size cphdMetadata.pvp.[param].getSize() if the
+                    parameter size != 1).
+                The data types of these arrays are set based on the PVP format string,
+                    cphdMetadata.pvp.[param].getFormat(), using PVPBlock._pvpFormatToNPdtype()
+        """
+
+        # Determine which params need to be set
+        paramsToCopy = dict(self.PVP_PARAM_GETTERS)  # Copy all required PVP params
         for optionalParam in self.OPTIONAL_PVP_PARAMS:
-            # Get boolean `has[param]` method of PVPBlock and call it to check if this PVPBlock
-            # has this parameter
+            # Call boolean `has[param]` method of PVPBlock to check if this PVPBlock has this param
             if getattr(self, self.OPTIONAL_PVP_PARAMS[optionalParam][0])():
                 # Copy `get[param]` method into paramsToCopy
                 paramsToCopy[optionalParam] = self.OPTIONAL_PVP_PARAMS[optionalParam][1]
 
         pvpData = []
-
+        # Read data from each channel of this PVPBlock into list-of-dicts
         for channel in range(cphdMetadata.getNumChannels()):
             # Initialize dict of parameters for this channel
             channelPVP = {}
@@ -226,7 +257,7 @@ using six::Vector3;
                     # If data is a vector, add another dimension to the array
                     paramShape += (paramSize,)
                 paramDtype = self._pvpFormatToNPdtype(getattr(cphdMetadata.pvp, param).getFormat())
-                channelPVP[param] = np.empty(shape=paramShape, dtype=paramDtype)
+                channelPVP[param] = numpy.empty(shape=paramShape, dtype=paramDtype)
 
             # Copy PVP data for this channel by vector
             for vector in range(cphdMetadata.getNumVectors(channel)):
