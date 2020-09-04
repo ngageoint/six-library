@@ -237,27 +237,40 @@ using six::Vector3;
 
         raise Exception('Unknown or unsupported format string: \'{0}\''.format(pvpFormatStr))
 
-    def pvpFormatToAddedPVPMethod(self, get_or_set, pvp_format_str):
-        # PVPBlock.getAddedPVP() is templated based on the type of the parameter it returns,
-        # so we need to get the corect method name
+    def pvpFormatToAddedPVPMethod(self, getOrSet, pvpFormatStr):
+        """
+        \brief  Returns a callable method object to get or set an added PVP. PVPBlock.getAddedPVP()
+                is templated based on the type of the parameter it returns, so we need to get the
+                correct method name for the type of the parameter
+
+        \param  getOrSet (str)
+                'get' or 'set', depending on whether we want the getter or setter method for this
+                type of PVP
+        \param  pvpFormatStr (str)
+                CPHD PVP format string, e.g. 'U1' or 'CI2'. See CPHD Spec Table 10-2
+
+        \return Callable method object to get or set an added PVP for this PVPBlock
+        """
+
         # TODO multiple parameters
-        if get_or_set not in ['get', 'set']:
-            raise Exception()  # TODO
-        method_name = None
-        if pvp_format_str.startswith('U'):
-            method_name = 'UnsignedIntAddedPVP'
-        elif pvp_format_str.startswith('I'):
-            method_name = 'IntAddedPVP'
-        elif pvp_format_str.startswith('F'):
-            method_name = 'FloatAddedPVP'
-        elif pvp_format_str.startswith('CI'):
-            method_name = 'ComplexSignedIntAddedPVP'
-        elif pvp_format_str.startswith('CF'):
-            method_name = 'ComplexFloatAddedPVP'
-        elif pvp_format_str.startswith('S'):
-            method_name = 'StringAddedPVP'
-        return getattr(self, get_or_set + method_name)
+        if getOrSet not in ['get', 'set']:
+            raise Exception('getOrSet should be only either \'get\' or \'set\', not {}'.format(
+                getOrSet))
+        methodName = None
+        if pvpFormatStr.startswith('U'):
+            methodName = 'UnsignedIntAddedPVP'
+        elif pvpFormatStr.startswith('I'):
+            methodName = 'IntAddedPVP'
+        elif pvpFormatStr.startswith('F'):
+            methodName = 'FloatAddedPVP'
+        elif pvpFormatStr.startswith('CI'):
+            methodName = 'ComplexSignedIntAddedPVP'
+        elif pvpFormatStr.startswith('CF'):
+            methodName = 'ComplexFloatAddedPVP'
+        elif pvpFormatStr.startswith('S'):
+            methodName = 'StringAddedPVP'
         # setFloatVector3AddedPVP TODO
+        return getattr(self, getOrSet + methodName)
 
     def toListOfDicts(self, cphdMetadata):
         """
@@ -297,7 +310,8 @@ using six::Vector3;
         for paramName in paramsToCopy:
             # Append PVPType object to tuple inside paramsToCopy
             paramsToCopy[paramName] += (getattr(cphdMetadata.pvp, paramName),)
-        # Add custom PVP objects, which don't have getters (A(dded)PVPType derives from PVPType)
+        # Add custom PVP objects, which don't have getters (APVPType ("AddedPVPType") derives from
+        # PVPType)
         paramsToCopy.update({paramName: (None, paramObj)
                              for paramName, paramObj in cphdMetadata.pvp.addedPVP.items()})
 
@@ -308,6 +322,7 @@ using six::Vector3;
         # Read data from each channel of this PVPBlock into list-of-dicts
         for channel in range(cphdMetadata.getNumChannels()):
             # Initialize dict of parameters for this channel
+            # Doing this for each channel in case they have different numbers of vectors/samples
             channelPVP = {}
             for paramName, (paramGetter, paramObj) in paramsToCopy.items():
                 paramSize = paramObj.getSize()
