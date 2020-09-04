@@ -145,10 +145,31 @@ using six::Vector3;
 
 %extend cphd::PVPBlock
 {
+// Types from Table 10-2 of the CPHD spec
+%template(getUnsignedIntAddedPVP) getAddedPVP<unsigned>;
+%template(getIntAddedPVP) getAddedPVP<int>;
+%template(getFloatAddedPVP) getAddedPVP<float>;
+%template(getComplexSignedIntAddedPVP) getAddedPVP<std::complex<int>>;
+%template(getComplexFloatAddedPVP) getAddedPVP<std::complex<float>>;
+%template(getStringAddedPVP) getAddedPVP<std::string>;
+//%template(getFloatVector3AddedPVP) getAddedPVP<math::linear::VectorN<3, float>>;
+
+%template(setUnsignedIntAddedPVP) setAddedPVP<unsigned>;
+%template(setIntAddedPVP) setAddedPVP<int>;
+%template(setFloatAddedPVP) setAddedPVP<float>;
+%template(setComplexSignedIntAddedPVP) setAddedPVP<std::complex<int>>;
+%template(setComplexFloatAddedPVP) setAddedPVP<std::complex<float>>;
+%template(setStringAddedPVP) setAddedPVP<std::string>;
+%template(setFloatVector3AddedPVP) setAddedPVP<math::linear::VectorN<3, float>>;
+}
+
+%extend cphd::PVPBlock
+{
 %pythoncode
 %{
     # List of field names and get[param]/has[param] methods for each PVP parameter in a CPHD PVP
-    # object.  We could generate these programmatically, but this is maybe more readable(?)
+    # object.  We could generate these programmatically, but the upper/lowercasing of the method
+    # names is not 100% consistent, and this is maybe more readable(?)
     PVP_PARAM_GETTERS = {
         'txTime': 'getTxTime',
         'txPos': 'getTxPos',
@@ -185,7 +206,7 @@ using six::Vector3;
         """
         \brief  Maps valid PVP format strings (CPHD Spec Table 10-2) to NumPy dtypes
                 Currently doesn't support multiple parameters with different types,
-                e.g. 'X=U2,Y=F4'
+                e.g. 'X=U2;Y=F4'
 
         \param  pvpFormatStr (str)
                 CPHD PVP format string, e.g. 'U1' or 'CI2'. See CPHD Spec Table 10-2
@@ -216,6 +237,28 @@ using six::Vector3;
 
         raise Exception('Unknown or unsupported format string: \'{0}\''.format(pvpFormatStr))
 
+    def pvpFormatToAddedPVPMethod(self, get_or_set, pvp_format_str):
+        # PVPBlock.getAddedPVP() is templated based on the type of the parameter it returns,
+        # so we need to get the corect method name
+        # TODO multiple parameters
+        if get_or_set not in ['get', 'set']:
+            raise Exception()  # TODO
+        method_name = None
+        if pvp_format_str.startswith('U'):
+            method_name = 'UnsignedIntAddedPVP'
+        elif pvp_format_str.startswith('I'):
+            method_name = 'IntAddedPVP'
+        elif pvp_format_str.startswith('F'):
+            method_name = 'FloatAddedPVP'
+        elif pvp_format_str.startswith('CI'):
+            method_name = 'ComplexSignedIntAddedPVP'
+        elif pvp_format_str.startswith('CF'):
+            method_name = 'ComplexFloatAddedPVP'
+        elif pvp_format_str.startswith('S'):
+            method_name = 'StringAddedPVP'
+        return getattr(self, get_or_set + method_name)
+        # setFloatVector3AddedPVP TODO
+
     def toListOfDicts(self, cphdMetadata):
         """
         \brief  Turns this PVPBlock object in a list of Python dictionaries with NumPy arrays
@@ -237,7 +280,7 @@ using six::Vector3;
                     cphdMetadata.pvp.[param].getFormat(), using PVPBlock._pvpFormatToNPdtype()
         """
 
-        # Determine which params need to be set
+        # Determine which (non-custom) params need to be set
         paramsToCopy = dict(self.PVP_PARAM_GETTERS)  # Copy all required PVP params
         for optionalParam in self.OPTIONAL_PVP_PARAMS:
             # Call boolean `has[param]` method of PVPBlock to check if this PVPBlock has this param
@@ -245,31 +288,52 @@ using six::Vector3;
                 # Copy `get[param]` method into paramsToCopy
                 paramsToCopy[optionalParam] = self.OPTIONAL_PVP_PARAMS[optionalParam][1]
 
+        # Now paramsToCopy maps all string param names to their getter methods
+        # Reorganize paramsToCopy dict, wrap the string getter method names in tuples
+        paramsToCopy = {paramName: (paramGetter,)
+                        for paramName, paramGetter in paramsToCopy.items()}
+
+        # Call getter methods to gather cphd.PVPType objects
+        for paramName in paramsToCopy:
+            # Append PVPType object to tuple inside paramsToCopy
+            paramsToCopy[paramName] += (getattr(cphdMetadata.pvp, paramName),)
+        # Add custom PVP objects, which don't have getters (A(dded)PVPType derives from PVPType)
+        paramsToCopy.update({paramName: (None, paramObj)
+                             for paramName, paramObj in cphdMetadata.pvp.addedPVP.items()})
+
+        # Now paramsToCopy consists of:
+        # {'param1Name': ('getParam1', cphd.PVPType object for param1)}
+
         pvpData = []
         # Read data from each channel of this PVPBlock into list-of-dicts
         for channel in range(cphdMetadata.getNumChannels()):
             # Initialize dict of parameters for this channel
             channelPVP = {}
-            for param in paramsToCopy:
-                paramSize = getattr(cphdMetadata.pvp, param).getSize()
+            for paramName, (paramGetter, paramObj) in paramsToCopy.items():
+                paramSize = paramObj.getSize()
                 paramShape = (cphdMetadata.getNumVectors(channel),)
                 if paramSize != 1:
                     # If data is a vector, add another dimension to the array
                     paramShape += (paramSize,)
-                paramDtype = self._pvpFormatToNPdtype(getattr(cphdMetadata.pvp, param).getFormat())
-                channelPVP[param] = numpy.empty(shape=paramShape, dtype=paramDtype)
+                paramDtype = self._pvpFormatToNPdtype(paramObj.getFormat())
+                channelPVP[paramName] = numpy.empty(shape=paramShape, dtype=paramDtype)
 
             # Copy PVP data for this channel by vector
             for vector in range(cphdMetadata.getNumVectors(channel)):
-                for param in paramsToCopy:
-                    # Call get[param]() method for current channel and vector
-                    pulseVector = getattr(self, paramsToCopy[param])(channel, vector)
-                    paramSize = getattr(cphdMetadata.pvp, param).getSize()
+                for paramName, (paramGetter, paramObj) in paramsToCopy.items():
+                    # Get, then call, the PVPBlock.get[param]() method object for
+                    # current channel and vector (or use PVPBlock.getAddedPVP() if
+                    # this is a custom parameter)
+                    pulseVector = (getattr(self, paramGetter)(channel, vector)
+                                   if paramName not in cphdMetadata.pvp.addedPVP else
+                                   self.pvpFormatToAddedPVPMethod('get', paramObj.getFormat())(
+                                        channel, vector, paramName))
+                    paramSize = paramObj.getSize()
                     if paramSize == 1:
-                        channelPVP[param][vector] = pulseVector
+                        channelPVP[paramName][vector] = pulseVector
                     else:
                         for i in range(paramSize):
-                            channelPVP[param][vector][i] = pulseVector[i]
+                            channelPVP[paramName][vector][i] = pulseVector[i]
 
             pvpData.append(channelPVP)
 
