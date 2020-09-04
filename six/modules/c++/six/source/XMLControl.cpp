@@ -44,14 +44,16 @@ void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
 {
     if (schemaPaths.empty())
     {
+        const sys::OS os;
+
         std::string envPath;
-        sys::OS().getEnvIfSet(six::SCHEMA_PATH, envPath);
+        os.getEnvIfSet(six::SCHEMA_PATH, envPath);
         str::trim(envPath);
         if (!envPath.empty())
         {
             schemaPaths.push_back(envPath);
         }
-        else
+        else if (os.exists(DEFAULT_SCHEMA_PATH))
         {
             schemaPaths.push_back(DEFAULT_SCHEMA_PATH);
         }
