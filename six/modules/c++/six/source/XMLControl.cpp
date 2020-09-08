@@ -71,6 +71,15 @@ void XMLControl::validate(const xml::lite::Document* doc,
     std::vector<std::string> paths(schemaPaths);
     loadSchemaPaths(paths);
 
+    if (schemaPaths.empty() && log)
+    {
+        std::ostringstream oss;
+        oss << "Coudn't validate XML - no schemas paths provided "
+            << " and " << six::SCHEMA_PATH << " not set.";
+
+        log->warn(oss.str());
+    }
+
     sys::OS os;
     // If the paths we have don't exist, throw
     for (size_t ii = 0; ii < paths.size(); ++ii)
@@ -108,7 +117,10 @@ void XMLControl::validate(const xml::lite::Document* doc,
         {
             for (size_t i = 0; i < errors.size(); ++i)
             {
-                log->critical(errors[i].toString());
+                if (log)
+                {
+                    log->critical(errors[i].toString());
+                }
             }
 
             //! this is a unique error thrown only in this location --
