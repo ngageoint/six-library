@@ -115,9 +115,9 @@ void XMLControl::validate(const xml::lite::Document* doc,
         // log any error found and throw
         if (!errors.empty())
         {
-            for (size_t i = 0; i < errors.size(); ++i)
+            if (log)
             {
-                if (log)
+                for (size_t i = 0; i < errors.size(); ++i)
                 {
                     log->critical(errors[i].toString());
                 }
