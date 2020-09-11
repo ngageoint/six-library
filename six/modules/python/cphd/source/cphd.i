@@ -149,18 +149,18 @@ using six::Vector3;
 %template(getUnsignedIntAddedPVP) getAddedPVP<unsigned>;
 %template(getIntAddedPVP) getAddedPVP<int>;
 %template(getFloatAddedPVP) getAddedPVP<float>;
-%template(getComplexSignedIntAddedPVP) getAddedPVP<std::complex<int>>;
-%template(getComplexFloatAddedPVP) getAddedPVP<std::complex<float>>;
+%template(getComplexSignedIntAddedPVP) getAddedPVP<std::complex<int> >;
+%template(getComplexFloatAddedPVP) getAddedPVP<std::complex<float> >;
 %template(getStringAddedPVP) getAddedPVP<std::string>;
-//%template(getFloatVector3AddedPVP) getAddedPVP<math::linear::VectorN<3, float>>;
+//%template(getFloatVector3AddedPVP) getAddedPVP<math::linear::VectorN<3, float> >;  // TODO
 
 %template(setUnsignedIntAddedPVP) setAddedPVP<unsigned>;
 %template(setIntAddedPVP) setAddedPVP<int>;
 %template(setFloatAddedPVP) setAddedPVP<float>;
-%template(setComplexSignedIntAddedPVP) setAddedPVP<std::complex<int>>;
-%template(setComplexFloatAddedPVP) setAddedPVP<std::complex<float>>;
+%template(setComplexSignedIntAddedPVP) setAddedPVP<std::complex<int> >;
+%template(setComplexFloatAddedPVP) setAddedPVP<std::complex<float> >;
 %template(setStringAddedPVP) setAddedPVP<std::string>;
-%template(setFloatVector3AddedPVP) setAddedPVP<math::linear::VectorN<3, float>>;
+%template(setFloatVector3AddedPVP) setAddedPVP<math::linear::VectorN<3, float> >;
 }
 
 %extend cphd::PVPBlock
@@ -202,11 +202,34 @@ using six::Vector3;
     import numpy  # 'as np' doesn't work unless the import is within each function
 
     @staticmethod
+    def _validateMultiplePVPFormatStr(pvpFormatStr):
+        """
+        \brief  Confirms that a valid PVP format string (CPHD Spec Table 10-2) with multiple
+                parameters (e.g. 'X=U2;Y=U2;') uses the same data type for all parameters.
+                Returns the data type if it is the same for all parameters, raises an exception
+                otherwise.
+
+        \param  pvpFormatStr (str)
+                CPHD PVP format string, with multiple parameters e.g. 'X=U1;Y=U1;'
+                See CPHD Spec Table 10-2
+
+        \return Data type if it is the same for all parameters, raises an exception otherwise
+        """
+
+        paramTypes = [param[param.index('=')+1:] for param in pvpFormatStr.split(';') if param]
+
+        # TODO support multiple different parameter types ('A=U2;B=I2;')
+        if not all(paramType == paramTypes[0] for paramType in paramTypes[1:]):
+            raise Exception('Multiple parameters with different data types are not yet supported')
+
+        return paramTypes[0]
+
+    @staticmethod
     def _pvpFormatToNPdtype(pvpFormatStr):
         """
         \brief  Maps valid PVP format strings (CPHD Spec Table 10-2) to NumPy dtypes
                 Currently doesn't support multiple parameters with different types,
-                e.g. 'X=U2;Y=F4'
+                e.g. 'X=U2;Y=F4;'
 
         \param  pvpFormatStr (str)
                 CPHD PVP format string, e.g. 'U1' or 'CI2'. See CPHD Spec Table 10-2
@@ -215,13 +238,8 @@ using six::Vector3;
         """
 
         if '=' in pvpFormatStr and ';' in pvpFormatStr:
-            # Multiple parameters, assert that they are all the same type
-            paramTypes = [param[param.index('=')+1:] for param in pvpFormatStr.split(';') if param]
-
-            # TODO support multiple different parameter types ('A=U2;B=I2')
-            if not all(paramType == paramTypes[0] for paramType in paramTypes[1:]):
-                raise Exception('Multiple parameters with different data types are not yet supported')
-            pvpFormatStr = paramTypes[0]
+            # This string has multiple parameters, assert that they are all the same data type
+            pvpFormatStr = PVPBlock._validateMultiplePVPFormatStr(pvpFormatStr)
 
         first = pvpFormatStr[0]
         if first in ['U', 'I', 'F']:  # Unsigned int, signed int, float
@@ -252,10 +270,14 @@ using six::Vector3;
         \return Callable method object to get or set an added PVP for this PVPBlock
         """
 
-        # TODO multiple parameters
+        if '=' in pvpFormatStr and ';' in pvpFormatStr:
+            # This string has multiple parameters, assert that they are all the same data type
+            pvpFormatStr = PVPBlock._validateMultiplePVPFormatStr(pvpFormatStr)
+
         if getOrSet not in ['get', 'set']:
             raise Exception('getOrSet should be only either \'get\' or \'set\', not {}'.format(
                 getOrSet))
+
         methodName = None
         if pvpFormatStr.startswith('U'):
             methodName = 'UnsignedIntAddedPVP'
