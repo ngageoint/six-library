@@ -98,6 +98,12 @@ public:
 
     void addCreator(const std::string& identifier,
                     std::unique_ptr<XMLControlCreator>&& creator);
+    void addCreator(const std::string& identifier,
+                    std::auto_ptr<XMLControlCreator> creator_)
+    {
+        std::unique_ptr<XMLControlCreator> creator(creator_.release());
+        addCreator(identifier, std::move(creator));
+    }
 
     /*!
      * Takes ownership of creator
@@ -113,6 +119,12 @@ public:
                     std::unique_ptr<XMLControlCreator>&& creator)
     {
         addCreator(dataType.toString(), std::move(creator));
+    }
+    void addCreator(DataType dataType,
+                    std::auto_ptr<XMLControlCreator> creator_)
+    {
+        std::unique_ptr<XMLControlCreator> creator(creator_.release());
+        addCreator(dataType, std::move(creator));
     }
 
     /*!

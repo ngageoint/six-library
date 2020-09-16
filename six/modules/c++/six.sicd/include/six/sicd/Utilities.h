@@ -356,7 +356,11 @@ public:
      *
      * \return Data representation of 'xmlStr'
      */
-    static std::unique_ptr<ComplexData> parseData(
+    static std::auto_ptr<ComplexData> parseData(
+            ::io::InputStream& xmlStream,
+            const std::vector<std::string>& schemaPaths,
+            logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseData(std::nullptr_t,
             ::io::InputStream& xmlStream,
             const std::vector<std::string>& schemaPaths,
             logging::Logger& log);
@@ -371,7 +375,11 @@ public:
      *
      * \return Data representation of the contents of 'pathname'
      */
-    static std::unique_ptr<ComplexData> parseDataFromFile(
+    static std::auto_ptr<ComplexData> parseDataFromFile(
+            const std::string& pathname,
+            const std::vector<std::string>& schemaPaths,
+            logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseDataFromFile(std::nullptr_t,
             const std::string& pathname,
             const std::vector<std::string>& schemaPaths,
             logging::Logger& log);
@@ -385,7 +393,11 @@ public:
      *
      * \return Data representation of 'xmlStr'
      */
-    static std::unique_ptr<ComplexData> parseDataFromString(
+    static std::auto_ptr<ComplexData> parseDataFromString(
+        const std::string& xmlStr,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseDataFromString(std::nullptr_t,
         const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
@@ -456,6 +468,13 @@ public:
      * \throws except::Exception if the provided reader is not a SICD or
      *  projection polynomials can't be computed.
      */
+    static void getProjectionPolys(
+        NITFReadControl& reader,
+        size_t orderX,
+        size_t orderY,
+        std::auto_ptr<ComplexData>& complexData,
+        six::Poly2D& outputRowColToSlantRow,
+        six::Poly2D& outputRowColToSlantCol);
     static void getProjectionPolys(
         NITFReadControl& reader,
         size_t orderX,
