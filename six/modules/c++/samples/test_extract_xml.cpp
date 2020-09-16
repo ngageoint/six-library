@@ -74,9 +74,9 @@ int main(int argc, char** argv)
         nitf::IOHandle io(inputFile);
         nitf::Record record = reader.read(io);
 
-        const nitf::Uint32 numDES = record.getNumDataExtensions();
+        const uint32_t numDES = record.getNumDataExtensions();
         std::vector<char> xmlVec;
-        for (nitf::Uint32 ii = 0; ii < numDES; ++ii)
+        for (uint32_t ii = 0; ii < numDES; ++ii)
         {
             nitf::DESegment segment = record.getDataExtensions()[ii];
             nitf::DESubheader subheader = segment.getSubheader();

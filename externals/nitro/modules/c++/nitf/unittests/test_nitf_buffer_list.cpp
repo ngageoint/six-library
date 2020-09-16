@@ -47,18 +47,18 @@ TEST_CASE(testGetNumBlocks)
 TEST_CASE(testGetBlock)
 {
     // 100 total bytes
-    std::vector<sys::ubyte> buffer(100);
+    std::vector<std::byte> buffer(100);
     for (size_t ii = 0; ii < buffer.size(); ++ii)
     {
-        buffer[ii] = static_cast<sys::ubyte>(rand() % 256);
+        buffer[ii] = static_cast<std::byte>(rand() % 256);
     }
 
     // Break this into a few pieces
-    std::vector<sys::ubyte> buffer1(buffer.begin(), buffer.begin() + 10);
-    std::vector<sys::ubyte> buffer2(buffer.begin() + 10, buffer.begin() + 20);
-    std::vector<sys::ubyte> buffer3(buffer.begin() + 20, buffer.begin() + 35);
-    std::vector<sys::ubyte> buffer4(buffer.begin() + 35, buffer.begin() + 57);
-    std::vector<sys::ubyte> buffer5(buffer.begin() + 57, buffer.end());
+    std::vector<std::byte> buffer1(buffer.begin(), buffer.begin() + 10);
+    std::vector<std::byte> buffer2(buffer.begin() + 10, buffer.begin() + 20);
+    std::vector<std::byte> buffer3(buffer.begin() + 20, buffer.begin() + 35);
+    std::vector<std::byte> buffer4(buffer.begin() + 35, buffer.begin() + 57);
+    std::vector<std::byte> buffer5(buffer.begin() + 57, buffer.end());
 
     // Add them all on
     nitf::NITFBufferList bufferList;
@@ -82,9 +82,9 @@ TEST_CASE(testGetBlock)
         TEST_ASSERT_EQ(numTotalBytes, buffer.size());
 
         // Extract all the bytes
-        std::vector<sys::ubyte> extracted(numTotalBytes);
-        sys::ubyte* ptr = &extracted[0];
-        std::vector<sys::byte> scratch;
+        std::vector<std::byte> extracted(numTotalBytes);
+        std::byte* ptr = &extracted[0];
+        std::vector<std::byte> scratch;
 
         size_t numBytesInBlock;
         for (size_t block = 0; block < numBlocks; ++block)
@@ -101,7 +101,9 @@ TEST_CASE(testGetBlock)
         // Bytes should all match
         for (size_t ii = 0; ii < buffer.size(); ++ii)
         {
-            TEST_ASSERT_EQ(extracted[ii], buffer[ii]);
+            const auto extracted_ii = static_cast<uint8_t>(extracted[ii]);
+            const auto buffer_ii = static_cast<uint8_t>(buffer[ii]);
+            TEST_ASSERT_EQ(extracted_ii, buffer_ii);
         }
 
         TEST_EXCEPTION(bufferList.getBlock(blockSize, numBlocks, scratch,

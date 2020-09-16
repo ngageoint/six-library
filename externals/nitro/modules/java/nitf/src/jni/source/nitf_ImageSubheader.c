@@ -192,7 +192,7 @@ JNIEXPORT jobjectArray JNICALL Java_nitf_ImageSubheader_getImageComments
     (JNIEnv * env, jobject self)
 {
     nitf_ImageSubheader *header = _GetObj(env, self);
-    nitf_Uint32 numComments;
+    uint32_t numComments;
     nitf_Error error;
     jint i;
     jobjectArray array;
@@ -768,7 +768,7 @@ JNIEXPORT jboolean JNICALL Java_nitf_ImageSubheader_createBands
     nitf_Error error;
 
     if (!nitf_ImageSubheader_createBands
-        (header, (nitf_Uint32) numBands, &error))
+        (header, (uint32_t) numBands, &error))
     {
         _ThrowNITFException(env, error.message);
         return JNI_FALSE;
@@ -787,7 +787,7 @@ JNIEXPORT void JNICALL Java_nitf_ImageSubheader_removeBand
     nitf_ImageSubheader *header = _GetObj(env, self);
     nitf_Error error;
 
-    if (!nitf_ImageSubheader_removeBand(header, (nitf_Uint32) index, &error))
+    if (!nitf_ImageSubheader_removeBand(header, (uint32_t) index, &error))
     {
         _ThrowNITFException(env, error.message);
     }

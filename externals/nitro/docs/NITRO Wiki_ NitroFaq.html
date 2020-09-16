@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0058)http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>NITRO Wiki: NitroFaq</title>
+	<!--<base href="http://nitro-nitf.sourceforge.net/">--><base href=".">
+		
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<link rel="stylesheet" type="text/css" href="./NITRO Wiki_ NitroFaq_files/wikka.css">
+	<link rel="stylesheet" type="text/css" href="./NITRO Wiki_ NitroFaq_files/print.css" media="print">
+	<link rel="icon" href="http://nitro-nitf.sourceforge.net/images/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="http://nitro-nitf.sourceforge.net/images/favicon.ico" type="image/x-icon">
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for NitroFaq (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq/revisions.xml">
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq/recentchanges.xml">
+</head>
+<body>
+<div class="header">
+	<h2><a id="homepage_link" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=HomePage">NITRO Wiki</a> : <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq/backlinks" title="Display a list of pages linking to NitroFaq">NitroFaq</a></h2>
+	<a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=HomePage">HomePage</a> ::
+	<a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+
+<!--starting page content-->
+<div class="page">
+<h5>NITRO Frequently Asked Questions </h5>
+
+<br>
+<ul><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-code">Where can I get the code?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-langs">What languages does NITRO support?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-compression">Does NITRO support compression?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-plugin">What is NITF_PLUGIN_PATH all about?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-waf">How do I build NITRO with Waf?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-linux">How do I build NITRO on Linux/UNIX?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-windows">How do I build NITRO on Windows?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-vc">How do I build my code against NITRO within Visual Studio?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-darwin">How do I build NITRO on Darwin?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-doesnt-build">I can't get NITRO C to build on platform X?  What should I do?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-build-java">How do I build the Java library?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-build-python">How do I build the Python bindings?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-use-java">How do I use the Java library?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-api">Where is the API? Can I generate it myself for offline use?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-write-fields">What fields are automatically composed during writes?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-no-tre-handler">I looked at the plugins, and there is not a handler for XXXXXX tre.  What should I do?</a>
+</li><li> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq#faq-wrong-tre-handler">The implementation of a plugin does not match the description in the spec.  What should I do?</a>
+</li></ul><div class="indent"></div>
+<hr>
+
+<div id="faq-code"></div><br>
+<h5>Where can I get the code?</h5>
+
+<br>
+You can either download the latest posted tarball from the <a class="ext" href="http://sourceforge.net/project/showfiles.php?group_id=216949">SourceForge downloads page</a><span class="exttail">&#8734;</span>, or you can check out from subversion:<br>
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">svn <span class="kw2">co</span> https://nitro-nitf.svn.sourceforge.net/svnroot/nitro-nitf/trunk nitro</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq/grabcode" method="post" id="form_61092f4ded">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="NitroFaq">
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download"><input type="hidden" name="filename" value=""><input type="hidden" name="code" value="svn+co+https%3A%2F%2Fnitro-nitf.svn.sourceforge.net%2Fsvnroot%2Fnitro-nitf%2Ftrunk+nitro"></form>
+<br>
+<hr>
+
+<div id="faq-langs"></div><br>
+<h5>What languages does NITRO support?</h5>
+
+<br>
+The core of NITRO, along with the TRE and compression plug-ins, is written in C. We currently have bindings for Java and Python. The Java bindings are considered to be fairly stable while the Python bindings are more experimental. We plan on solidifying these APIs for the 2.0 release. Please tell us if you have any <a class="ext" href="https://sourceforge.net/tracker/?atid=1037961&amp;group_id=216949&amp;func=browse">feature requests</a><span class="exttail">&#8734;</span> or if you <a class="ext" href="https://sourceforge.net/tracker/?atid=1037958&amp;group_id=216949&amp;func=browse">find any bugs</a><span class="exttail">&#8734;</span>. Check out the <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI">APIs</a> for more information.<br>
+<br>
+<hr>
+
+<div id="faq-compression"></div><br>
+<h5>Does NITRO support compression?</h5>
+
+<br>
+NITRO supports both JPEG and JPEG 2000 decompression when reading imagery. Compression, when writing, is not yet supported. This means that "round-tripping" a compressed NITF file will always result in a larger (uncompressed) output file. NITRO uses a plug-in interface for decompression, and comes shipped with both libjpeg (JPEG) and libjasper (JPEG 2000) plug-ins. If building yourself, these plug-ins are in the top-level <tt>external/</tt> directory. Build using Waf or configure/make. The Windows installer comes with both plug-ins.<br>
+<br>
+Refer to the <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=LibjpegDecompressPluginDef">JPEG Decompression Plugin</a> documentation.<br>
+<br>
+<hr>
+
+<div id="faq-plugin"></div><br>
+<h5>What is NITF_PLUGIN_PATH all about?</h5>
+
+<br>
+Set the <tt>NITF_PLUGIN_PATH</tt> environment variable to point to the directory containing your plug-ins (TRE and image decompression). Otherwise, the library won't be able to parse TREs or decompress imagery. You can alternatively use the <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PluginRegistryDef">PluginRegistry</a> to load plug-ins at runtime. See the <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroSnippets">Snippets</a> page for an example.<br>
+<br>
+<span style="color:red;font-style:bold;">Update:</span> <span>You can now register static handlers if you don't want to use plug-ins.</span><br>
+<br>
+<hr>
+
+<div id="faq-waf"></div><br>
+<h5>How do I build NITRO with Waf?</h5>
+
+<br>
+See <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWithWaf">Building With Waf</a> for detailed information.<br>
+<br>
+<hr>
+
+<div id="faq-linux"></div><br>
+<h5>How do I build NITRO on Linux/UNIX?</h5>
+
+<br>
+See <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingLinuxUNIX">Building on Linux/UNIX</a> for detailed information.<br>
+Make sure to first read the page on <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWithWaf">Building With Waf</a> to learn more about the Waf build process.<br>
+<br>
+<hr>
+
+<div id="faq-windows"></div><br>
+<h5>How do I build NITRO on Windows?</h5>
+
+<br>
+See <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows">Building on Windows</a> for detailed information.<br>
+Make sure to first read the page on <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWithWaf">Building With Waf</a> to learn more about the Waf build process.<br>
+<br>
+<hr>
+
+<div id="faq-vc"></div><br>
+<h5>How do I build my code against NITRO within Visual Studio?</h5>
+
+<br>
+See <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingVisualStudio">Building with Visual Studio</a> for detailed information.<br>
+<br>
+<hr>
+
+<div id="faq-darwin"></div><br>
+<h5>How do I build NITRO on Darwin?</h5>
+
+<br>
+Make sure to first read the page on <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWithWaf">Building With Waf</a> to learn more about the Waf build process.<br>
+<br>
+Updated:<br>
+<br>
+If you are on a powerpc, your build should work properly -- just configure and make.  The 1.5 code doesnt yet support universal binaries, though the 2.0 branch will.  The DSOs will still be suffixed 'so' instead of 'dylib.'  That is because the library checks for that extension currently.  However, it should still work just fine.<br>
+<br>
+The intel macs will need an additional configure case statement inside of build/conf/configure.apple.in.  which they do not currently have.  We expect this to be resolved for 2.0.  To build on the intel macs, copy the linux version and modify the name accordingly and the code will probably build.  <br>
+<br>
+Outdated:<br>
+<br>
+<span class="strikethrough">There are two small modifications to the configuration that you need to make to get the 1.5 code base to compile on Darwin.  The first is that the bundled config.sub does not know about Darwin.  This is a common enough problem that your mac should ship with its own alternative config.sub.  You need to replace our config.guess with the one in /usr/share/libtool/.  For example, to build the c library, copy /usr/share/libtool/ to your /trunk/c/nitf/build/. directory.<br>
+<br>
+The second modification is that GCC on mac doesnt support the -shared command.  It uses libtool instead of ld to build the library.  You need to pass -dynamiclib to GCC instead.  Either you can modify it in the included configure.apple.in and run autoconf in the c/nitf directory, or just run configure as usual (without modification), and open shared/Makefile and replace the -shared in DLLFLAGS with -dynamiclib.</span><br>
+<br>
+<br>
+<hr>
+
+<div id="faq-doesnt-build"></div><br>
+<h5>I can't get NITRO C to build on platform X?  What should I do?</h5>
+
+<br>
+The C library works on most systems, so there is a good chance if you can give the makefile the right flags, you will be able to build it.  Try and run the config.guess by itself and see what it produces.  If it doesnt work, that means that it probably needs to be updated to include your system.  If it does, check the configure.in and see how your target system is handled (if at all).  If need be, you can add the case, and re-autoconf the configure and it should build.<br>
+<br>
+<hr>
+
+<div id="faq-build-java"></div><br>
+<h5>How do I build the Java library?</h5>
+
+<br>
+See <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingJava">Building the Java library</a> for detailed information.<br>
+<br>
+<hr>
+
+<div id="faq-build-python"></div><br>
+<h5>How do I build the Python bindings?</h5>
+
+<br>
+See <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingPython">Building the Python bindings</a> for detailed information.<br>
+<br>
+<hr>
+
+<div id="faq-use-java"></div><br>
+<h5>How do I use the Java library?</h5>
+
+<br>
+First, you have to build it. See the sections on building for more information. Once both the JNI library and the Java library are built, you are ready to go. You can use the Java library much like any other open source Java library. If you are using an IDE, such as Eclipse or <a class="missingpage" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=IntelliJ/edit" title="Create this page">IntelliJ</a> Idea, you can just include the NITRO jar in your build path. When running an application that requires NITRO, make sure to add the following to your VM arguments:<br>
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">-Djava.<span class="me1">library</span>.<span class="me1">path</span>=$PATH_TO_JNI_DLL_DIR</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq/grabcode" method="post" id="form_61092f4ded_1">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="NitroFaq">
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download"><input type="hidden" name="filename" value=""><input type="hidden" name="code" value="-Djava.library.path%3D%24PATH_TO_JNI_DLL_DIR"></form>
+<br>
+Where $PATH_TO_JNI_DLL_DIR is the directory where nitf.jni-c.dll (or libnitf.jni-c.so on Linux) is located.<br>
+<br>
+Note: Depending on how you retrieve image data, you may need to increase the Java heap size. We recommend that you retrieve data in small window chunks to keep the memory footprint low.<br>
+<br>
+<hr>
+
+<div id="faq-api"></div><br>
+<h5>Where is the API? Can I generate it myself for offline use?</h5>
+
+<br>
+There are a few ways to get both the C and Java APIs.<br>
+<br>
+<strong>Online:</strong> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI">NITRO API page</a><br>
+<br>
+<strong>Generate yourself:</strong><br>
+<ul><li> 	C API
+</li></ul><div class="indent"><!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; <span class="kw3">cd</span> c/nitf<br>
+&nbsp; &nbsp; doxygen</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq/grabcode" method="post" id="form_61092f4ded_2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="NitroFaq">
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download"><input type="hidden" name="filename" value=""><input type="hidden" name="code" value="%09cd+c%2Fnitf%0A%09doxygen"></form>
+<br>
+</div><ul><li>	Java API
+<ul><li>	Maven
+</li></ul></li></ul><div class="indent"><div class="indent"><!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw3">cd</span> java/nitf<br>
+&nbsp; &nbsp; &nbsp; &nbsp; maven javadoc</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq/grabcode" method="post" id="form_61092f4ded_3">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="NitroFaq">
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download"><input type="hidden" name="filename" value=""><input type="hidden" name="code" value="%09%09cd+java%2Fnitf%0A%09%09maven+javadoc"></form>
+<br>
+</div></div><ul><li><ul><li>	Ant
+</li></ul></li></ul><div class="indent"><div class="indent"><!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw3">cd</span> java/nitf<br>
+&nbsp; &nbsp; &nbsp; &nbsp; ant javadoc</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq/grabcode" method="post" id="form_61092f4ded_4">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="NitroFaq">
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download"><input type="hidden" name="filename" value=""><input type="hidden" name="code" value="%09%09cd+java%2Fnitf%0A%09%09ant+javadoc"></form>
+</div></div>
+<br>
+<strong>Installers:</strong><br>
+The Windows installer is now bundled w/the C and Java API documentation. (The linux java binaries also come bundled with the respective docs).<br>
+<br>
+<hr>
+
+<div id="faq-write-fields"></div><br>
+<h5>What fields are automatically composed during writes?</h5>
+
+<br>
+Some fields in the library are figured out by the writer as it is writing.  These values will be re-written or ignored, meaning also that you cannot affect them by setting (whether correctly or incorrectly):<br>
+<br>
+<ul><li> COMRAT (compression rate), will set automatically if IC (image compression) - NC or NM
+</li><li> user-defined/extended header lengths/overflow (UDIDL, UDOFL, etc.) 
+</li><li> FL/HL (file length, header length)- These are set to zero in writeHeader, and subsequently re-written after the rest of the file has been written. 
+</li><li> All NUM (NUMI, etc.) 
+</li><li> All component infos (LISH, LI, etc. -- this includes length) 
+</li><li> <strong>2.5</strong> CLEVEL (automatically measured only if the value is set to '00' -- the default)</li></ul>
+<br>
+Most of the fields default when the Record is created, and the user can set them to other values later.<br>
+<br>
+<hr>
+
+<div id="faq-no-tre-handler"></div><br>
+<h5>I looked at the plugins, and there is not a handler for XXXXXX tre.  What should I do?</h5>
+
+<br>
+Even though the library ships with a large number of plugins, you may find that you need to support a TRE that we do not already handle.  If the specification is available to us, you can put a feature request in our issue tracker, and we will try to get around to it as soon as possible.<br>
+<br>
+If you want to implement the TRE support, you just need to write a very short file that describes the TRE.  If you have a look in the C library's shared/ directory, you can see how to add one, or you can check out our <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroSnippets">snippets</a> to get an idea of how to do one.  There are examples for <br>
+simple and complex plugin creation.<br>
+<br>
+<hr>
+
+<div id="faq-wrong-tre-handler"></div><br>
+<h5>The implementation of a plugin does not match the description in the spec.  What should I do?</h5>
+
+<br>
+Our support plugins can handle multiple definitions for the same TRE.  We do that to be able to be backwards compatible with older specs.  Usually, if there are multiple specs for the same TRE, we make an effort to support all of them.  Sometimes that is not feasible due to time limitations, etc.  In other cases, we may have overlooked something, or there may be a bug.<br>
+<br>
+If you find a defect in a specification, please post a reference to the specification that you are using, along with the locations of the handler that should be patched.  If you have a dubious spec. or if you know that some data that you are viewing is formatted incorrectly, but the plugin is handling the information correctly (and thus causing a problem), you can write your own version of the plugin and install it to the plugin path over the default one.</div>
+				<div class="commentsheader">
+				<p>There are 872 comments on this page. 				[<a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq&amp;show_comments=1#comments">Display comments</a>]</p>
+				</div>
+				<div class="footer">
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch">
+</fieldset>
+<a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq/history" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq/revisions" title="Click to view recent revisions list for this page">2014-05-20 22:37:07</a> <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroFaq/revisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="./NITRO Wiki_ NitroFaq_files/xml.png" class="icon" width="36" height="14" alt="feed icon"></a> ::
+Owner: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAdmin">NitroAdmin</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox">
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world&#39;s largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.1158 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./NITRO Wiki_ NitroFaq_files/ga.js.download" type="text/javascript"></script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./NITRO Wiki_ NitroFaq_files/piwik.js.download" type="text/javascript"></script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+
+</body></html>
