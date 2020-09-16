@@ -34,8 +34,11 @@ namespace sys
 /**
  * Predicate interface for all entries
  */
-struct FilePredicate : std::unary_function<std::string, bool>
+struct FilePredicate
 {
+    using argument_type = std::string;
+    using result_type = bool;
+
     virtual ~FilePredicate() {}
     virtual bool operator()(const std::string& entry) const = 0;
 };

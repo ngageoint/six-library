@@ -40,7 +40,7 @@ namespace sys
 {
 typedef MutexNSPR Mutex;
 }
-#    elif defined(WIN32)
+#    elif (defined(WIN32) || defined(_WIN32))
 #        include "sys/MutexWin32.h"
 namespace sys
 {

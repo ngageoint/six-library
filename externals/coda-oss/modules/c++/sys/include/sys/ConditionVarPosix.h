@@ -113,7 +113,7 @@ public:
 
 private:
     // This is set if we own the mutex, to make sure it gets deleted.
-    std::auto_ptr<MutexPosix> mMutexOwned;
+    std::unique_ptr<MutexPosix> mMutexOwned;
     MutexPosix *mMutex;
     pthread_cond_t mNative;
 };

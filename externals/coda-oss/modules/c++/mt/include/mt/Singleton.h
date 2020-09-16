@@ -63,9 +63,9 @@ namespace mt
  * 
  * Notice that this implementation of the Singleton pattern uses the
  * atexit method for deleting the singleton instance, rather than an
- * auto_ptr. This is done b/c there is a valid use case the auto_ptr
+ * unique_ptr. This is done b/c there is a valid use case the unique_ptr
  * gets destroyed (as well as the underlying memory), but if the Singleton
- * gets revived, the auto_ptr does NOT get recreated, and returns an invalid
+ * gets revived, the unique_ptr does NOT get recreated, and returns an invalid
  * memory address.
  * 
  */

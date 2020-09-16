@@ -259,7 +259,7 @@ protected:
     std::vector< Field > mData;
 };
 
-//typedef std::auto_ptr< Row > pRow;
+//typedef std::unique_ptr< Row > pRow;
 
 /*!
  *  \class ResultSet
@@ -301,7 +301,7 @@ protected:
     Row mCurrentRow;
 };
 
-typedef std::auto_ptr< ResultSet > pResultSet;
+typedef std::unique_ptr< ResultSet > pResultSet;
 
 /*!
  * \class DatabaseConnection

@@ -38,7 +38,7 @@ namespace mt
 {
 struct AbstractNextCPUProviderLinux
 {
-    virtual std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU() = 0;
+    virtual std::unique_ptr <const sys::ScopedCPUMaskUnix> nextCPU() = 0;
 };
 
 /*!
@@ -68,9 +68,9 @@ public:
      * \returns a new CPUAffinityInitializerLinux for the next available
      *          CPU that can be bound to.
      */
-    std::auto_ptr<CPUAffinityThreadInitializerLinux> newThreadInitializer()
+    std::unique_ptr<CPUAffinityThreadInitializerLinux> newThreadInitializer()
     {
-        return std::auto_ptr<CPUAffinityThreadInitializerLinux>(
+        return std::unique_ptr<CPUAffinityThreadInitializerLinux>(
                 newThreadInitializerImpl());
     }
 
@@ -81,7 +81,7 @@ private:
         return new CPUAffinityThreadInitializerLinux(mCPUProvider->nextCPU());
     }
 
-    std::auto_ptr<AbstractNextCPUProviderLinux> mCPUProvider;
+    std::unique_ptr<AbstractNextCPUProviderLinux> mCPUProvider;
 };
 }
 

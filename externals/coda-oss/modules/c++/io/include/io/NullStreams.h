@@ -154,6 +154,7 @@ public:
         case START:
             mOffset = offset;
             break;
+        case CURRENT:
         default:
             mOffset += offset;
             break;

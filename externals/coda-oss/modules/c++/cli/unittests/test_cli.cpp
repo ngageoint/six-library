@@ -74,7 +74,7 @@ TEST_CASE(testChoices)
     std::ostringstream buf;
     parser.printHelp(buf);
 
-    std::auto_ptr<cli::Results> results(parser.parse(str::split("-v", " ")));
+    std::unique_ptr<cli::Results> results(parser.parse(str::split("-v", " ")));
     TEST_ASSERT(results->hasValue("verbose"));
     TEST_ASSERT(results->get<bool>("verbose", 0));
 
@@ -103,7 +103,7 @@ TEST_CASE(testMultiple)
     parser.setProgram("tester");
     parser.addArgument("-v --verbose --loud -l", "Toggle verbose", cli::STORE_TRUE);
 
-    std::auto_ptr<cli::Results> results(parser.parse(str::split("-v")));
+    std::unique_ptr<cli::Results> results(parser.parse(str::split("-v")));
     TEST_ASSERT(results->hasValue("verbose"));
     TEST_ASSERT(results->get<bool>("verbose"));
 
@@ -126,7 +126,7 @@ TEST_CASE(testSubOptions)
     std::ostringstream buf;
     parser.printHelp(buf);
 
-    std::auto_ptr<cli::Results> results(parser.parse(str::split("-x:special")));
+    std::unique_ptr<cli::Results> results(parser.parse(str::split("-x:special")));
     TEST_ASSERT(results->hasSubResults("extra"));
     TEST_ASSERT(results->getSubResults("extra")->get<bool>("special"));
 
@@ -150,7 +150,7 @@ TEST_CASE(testIterate)
     parser.addArgument("-v --verbose", "Toggle verbose", cli::STORE_TRUE);
     parser.addArgument("-c --config", "Specify a config file", cli::STORE);
 
-    std::auto_ptr<cli::Results>
+    std::unique_ptr<cli::Results>
             results(parser.parse(str::split("-v -c config.xml")));
     std::vector<std::string> keys;
     for(cli::Results::const_iterator it = results->begin(); it != results->end(); ++it)
@@ -168,7 +168,7 @@ TEST_CASE(testRequired)
     parser.addArgument("-v --verbose", "Toggle verbose", cli::STORE_TRUE);
     parser.addArgument("-c --config", "Specify a config file", cli::STORE)->setRequired(true);
 
-    std::auto_ptr<cli::Results> results;
+    std::unique_ptr<cli::Results> results;
     TEST_EXCEPTION(results.reset(parser.parse(str::split(""))));
     TEST_EXCEPTION(results.reset(parser.parse(str::split("-c"))));
     results.reset(parser.parse(str::split("-c configFile")));

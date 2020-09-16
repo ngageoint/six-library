@@ -22,7 +22,7 @@
 
 #include "config/coda_oss_config.h"
 
-#if !defined(WIN32)
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include <errno.h>
 

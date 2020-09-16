@@ -35,8 +35,8 @@
 namespace mt
 {
 CPUAffinityThreadInitializerLinux::CPUAffinityThreadInitializerLinux(
-        std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu) :
-    mCPU(cpu)
+        std::unique_ptr<const sys::ScopedCPUMaskUnix>&& cpu) :
+    mCPU(std::move(cpu))
 {
 }
 

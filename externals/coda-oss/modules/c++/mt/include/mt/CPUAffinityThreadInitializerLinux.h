@@ -24,10 +24,10 @@
 #ifndef __MT_CPU_AFFINITY_THREAD_INITIALIZER_LINUX_H__
 #define __MT_CPU_AFFINITY_THREAD_INITIALIZER_LINUX_H__
 
+#include <memory>
+
 #if !defined(__APPLE_CC__)
 #if defined(__linux) || defined(__linux__)
-
-#include <memory>
 
 #include <sys/ScopedCPUAffinityUnix.h>
 #include <mt/AbstractCPUAffinityThreadInitializer.h>
@@ -51,7 +51,7 @@ public:
      *            is allowed to bind to
      */
     CPUAffinityThreadInitializerLinux(
-            std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu);
+            std::unique_ptr<const sys::ScopedCPUMaskUnix>&& cpu);
 
     /*!
      * Attempt to bind to the affinity mask given during construction
@@ -61,7 +61,7 @@ public:
     virtual void initialize();
 
 private:
-    std::auto_ptr<const sys::ScopedCPUMaskUnix> mCPU;
+    std::unique_ptr<const sys::ScopedCPUMaskUnix> mCPU;
 };
 }
 

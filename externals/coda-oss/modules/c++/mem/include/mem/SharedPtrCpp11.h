@@ -51,20 +51,20 @@ public:
 
     using std::shared_ptr<T>::reset;
 
-    // The base class only handles auto_ptr<T>&&
-    explicit SharedPtr(std::auto_ptr<T> ptr) :
+    // The base class only handles unique_ptr<T>&&
+    explicit SharedPtr(std::unique_ptr<T>&& ptr) :
         std::shared_ptr<T>(ptr.release())
     {
     }
 
-    // The base class only handles auto_ptr<T>&&
+    // The base class only handles unique_ptr<T>&&
     template <typename OtherT>
-    explicit SharedPtr(std::auto_ptr<OtherT> ptr) :
+    explicit SharedPtr(std::unique_ptr<OtherT>&& ptr) :
         std::shared_ptr<T>(ptr.release())
     {
     }
 
-    void reset(std::auto_ptr<T> scopedPtr)
+    void reset(std::unique_ptr<T>&& scopedPtr)
     {
         std::shared_ptr<T>::reset(scopedPtr.release());
     }

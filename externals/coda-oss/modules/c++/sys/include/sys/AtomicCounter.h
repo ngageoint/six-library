@@ -27,7 +27,7 @@
 
 #if defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
 #include <sys/AtomicCounterX86.h>
-#elif defined(WIN32)
+#elif (defined(WIN32) || defined(_WIN32))
 #include <sys/AtomicCounterWin32.h>
 #elif defined(__sun) && defined(HAVE_ATOMIC_H)
 // atomic.h is available in Solaris 10+

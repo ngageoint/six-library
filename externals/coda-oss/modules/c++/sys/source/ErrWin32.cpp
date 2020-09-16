@@ -21,7 +21,7 @@
  */
 
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 #include <WinSock.h>
 #include "sys/Err.h"

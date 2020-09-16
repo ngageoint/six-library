@@ -30,7 +30,7 @@
 /* #define PLUGIN_DESTRUCTOR_NAME "DestroyPlugin" */
 #define GET_PLUGIN_IDENT "GetPluginIdentity"
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #    define PLUGIN_DSO_EXTENSION ".dll"
 #else
 #    define PLUGIN_DSO_EXTENSION ".so"
@@ -47,7 +47,7 @@
 #define PLUGIN_API_MINOR_VERSION 0
 
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #      if defined(PLUGIN_MODULE_EXPORTS)
 #          define PLUGIN_HOOK extern "C" __declspec(dllexport)
 #      else

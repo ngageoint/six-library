@@ -80,9 +80,9 @@ public:
      *
      *  \return A socket
      */
-    std::auto_ptr<Socket> create(const SocketAddress& address)
+    std::unique_ptr<Socket> create(const SocketAddress& address)
     {
-        std::auto_ptr<Socket> s (new Socket(mProto));
+        std::unique_ptr<Socket> s(new Socket(mProto));
 
         setOptions(*s);
 
