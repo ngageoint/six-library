@@ -25,8 +25,15 @@
 
 char *C(const char *p)
 {
-    char *x = malloc(strlen(p) + 1);
-    strcpy(x, p);
+    const size_t p_sz = strlen(p) + 1;
+    void* x_ = malloc(p_sz);
+    char* x =
+#if defined(__cplusplus)
+     static_cast<char*>(x_);
+#else
+    x_;
+#endif
+    nrt_strcpy_s(x, p_sz, p);
     return x;
 }
 
@@ -115,8 +122,6 @@ TEST_CASE(testTree)
     TEST_ASSERT_NULL(tc);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK(testTree);
-    return 0;
-}
+)

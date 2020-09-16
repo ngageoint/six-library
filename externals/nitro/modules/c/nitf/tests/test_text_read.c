@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 /*
     Test program for reading a Text segment
 
@@ -40,7 +42,6 @@ int main(int argc, char *argv[])
     nitf_IOHandle in;           /* Input I/O handle */
     nitf_ListIterator iter;     /* Iterator for getting the Texts */
     nitf_ListIterator end;      /* Iterator marking the end of texts */
-    nitf_TextSegment *text;     /* Text segment to read */
     nitf_SegmentReader *textReader;/* Text reader object for reading data */
     char *data;                 /* Data buffer */
     int count;                  /* keeps track of iter count */
@@ -88,7 +89,7 @@ int main(int argc, char *argv[])
     end = nitf_List_end(record->texts);
     while (nitf_ListIterator_notEqualTo(&iter, &end))
     {
-        text = (nitf_TextSegment *) nitf_ListIterator_get(&iter);
+        (void) nitf_ListIterator_get(&iter);
         textReader = nitf_Reader_newTextReader(reader, count, error);
 
         if (!textReader)
@@ -101,8 +102,8 @@ int main(int argc, char *argv[])
         }
 
         fprintf(stdout, "Data length = %d\n", textReader->dataLength);
-        fprintf(stdout, "File offset = %llu\n", textReader->baseOffset);
-        fprintf(stdout, "Virtual offset = %llu\n", textReader->virtualOffset);
+        fprintf(stdout, "File offset = %" PRIu64 "\n", textReader->baseOffset);
+        fprintf(stdout, "Virtual offset = %" PRIu64 "\n", textReader->virtualOffset);
 
         data = (char *) NITF_MALLOC
                (nitf_SegmentReader_getSize(textReader, error) + 1);

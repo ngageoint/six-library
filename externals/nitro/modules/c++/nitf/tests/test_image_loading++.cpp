@@ -27,31 +27,31 @@ void writeImage(nitf::ImageSegment &segment,
                 nitf::Reader &reader,
                 const int imageNumber,
                 const char *imageName,
-                nitf_Uint32 rowSkipFactor,
-                nitf_Uint32 columnSkipFactor, bool optz)
+                uint32_t rowSkipFactor,
+                uint32_t columnSkipFactor, bool optz)
 {
     size_t subWindowSize;
     nitf::SubWindow subWindow;
     unsigned int i;
     int padded;
-    nitf::Uint8** buffer = NULL;
-    nitf::Uint32 band;
-    nitf::Uint32 * bandList;
+    uint8_t** buffer = NULL;
+    uint32_t band;
+    uint32_t * bandList;
 
     nitf::ImageReader deserializer = reader.newImageReader(imageNumber);
 
     // missing skip factor
     nitf::ImageSubheader subheader = segment.getSubheader();
 
-    nitf::Uint32 nBits   = subheader.getNumBitsPerPixel();
+    uint32_t nBits   = subheader.getNumBitsPerPixel();
 
-    nitf::Uint32 nBands  = subheader.getNumImageBands();
-    nitf::Uint32 xBands  = subheader.getNumMultispectralImageBands();
+    uint32_t nBands  = subheader.getNumImageBands();
+    uint32_t xBands  = subheader.getNumMultispectralImageBands();
     nBands += xBands;
 
 
-    nitf::Uint32 nRows   = subheader.getNumRows();
-    nitf::Uint32 nCols   = subheader.getNumCols();
+    uint32_t nRows   = subheader.getNumRows();
+    uint32_t nCols   = subheader.getNumCols();
     subWindowSize = (size_t)(nRows / rowSkipFactor) *
         (size_t)(nCols / columnSkipFactor) *
         (size_t)NITF_NBPP_TO_BYTES(nBits);
@@ -100,11 +100,11 @@ void writeImage(nitf::ImageSegment &segment,
 
     std::cout << "Allocating work buffer..." << std::endl;
 
-    buffer = new nitf::Uint8*[nBands];
+    buffer = new uint8_t*[nBands];
     assert(buffer);
 
     band = 0;
-    bandList = new nitf::Uint32[nBands];
+    bandList = new uint32_t[nBands];
 
     subWindow.setStartCol(0);
     subWindow.setStartRow(0);
@@ -119,7 +119,7 @@ void writeImage(nitf::ImageSegment &segment,
     for (band = 0; band < nBands; band++)
     {
         bandList[band] = band;
-        buffer[band] = new nitf::Uint8[subWindowSize];
+        buffer[band] = new uint8_t[subWindowSize];
         assert(buffer[band]);
     }
     subWindow.setBandList(bandList);
@@ -162,8 +162,8 @@ void writeImage(nitf::ImageSegment &segment,
 int main(int argc, char **argv)
 {
     /* Skip factors */
-    nitf_Uint32 rowSkipFactor = 1;
-    nitf_Uint32 columnSkipFactor = 1;
+    uint32_t rowSkipFactor = 1;
+    uint32_t columnSkipFactor = 1;
 
     try
     {

@@ -33,7 +33,7 @@ TEST_CASE( testField)
     nitf_Field *fhdr = NULL, *ubin = NULL, *hl = NULL, *realField = NULL;
 
     nitf_Error error;
-    nitf_Int32 int32 = 16801;
+    int32_t int32 = 16801;
     fhdr = nitf_Field_construct(NITF_FHDR_SZ, NITF_BCS_A, &error);
     ubin = nitf_Field_construct(4, NITF_BINARY, &error);
     hl = nitf_Field_construct(NITF_HL_SZ, NITF_BCS_N, &error);
@@ -98,8 +98,6 @@ TEST_CASE( testField)
     TEST_ASSERT_NULL(realField);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK(testField);
-    return 0;
-}
+)

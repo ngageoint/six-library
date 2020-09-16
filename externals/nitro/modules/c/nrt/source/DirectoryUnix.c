@@ -20,7 +20,11 @@
  *
  */
 
-#ifndef WIN32
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(disable: 4206) //	nonstandard extension used : translation unit is empty
+#endif
+
+#if ! (defined(WIN32) || defined(_WIN32))
 
 #include "nrt/Directory.h"
 

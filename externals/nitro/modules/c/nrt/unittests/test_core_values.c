@@ -25,15 +25,15 @@
 
 TEST_CASE(testCoreValues)
 {
-    TEST_ASSERT(sizeof(nrt_Uint8) == 1);
-    TEST_ASSERT(sizeof(nrt_Uint16) == 2);
-    TEST_ASSERT(sizeof(nrt_Uint32) == 4);
-    TEST_ASSERT(sizeof(nrt_Uint64) == 8);
+    TEST_ASSERT(sizeof(uint8_t) == 1);
+    TEST_ASSERT(sizeof(uint16_t) == 2);
+    TEST_ASSERT(sizeof(uint32_t) == 4);
+    TEST_ASSERT(sizeof(uint64_t) == 8);
 
-    TEST_ASSERT(sizeof(nrt_Int8) == 1);
-    TEST_ASSERT(sizeof(nrt_Int16) == 2);
-    TEST_ASSERT(sizeof(nrt_Int32) == 4);
-    TEST_ASSERT(sizeof(nrt_Int64) == 8);
+    TEST_ASSERT(sizeof(int8_t) == 1);
+    TEST_ASSERT(sizeof(int16_t) == 2);
+    TEST_ASSERT(sizeof(int32_t) == 4);
+    TEST_ASSERT(sizeof(int64_t) == 8);
 
     if (sizeof(long) == 4)
     {
@@ -64,8 +64,6 @@ TEST_CASE(testCoreValues)
     }
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK(testCoreValues);
-    return 0;
-}
+)

@@ -25,14 +25,15 @@
 
 #ifdef __cplusplus
 
+#include <string>
+
 #include <import/sys.h>
-#include <import/str.h>
 
 #define CHECK(X) X(std::string(#X)); std::cout << #X << ": PASSED" << std::endl
 #define TEST_ASSERT(X) if (!(X)) { die_printf("%s (%s,%s,%d): FAILED: Value should not be NULL\n", testName.c_str(), __FILE__, __FUNC__, __LINE__) }
 #define TEST_ASSERT_NULL(X) if ((X) != NULL) { die_printf("%s (%s,%s,%d): FAILED: Value should be NULL\n", testName.c_str(), __FILE__, __FUNC__, __LINE__) }
-#define TEST_ASSERT_EQ(X1, X2) if ((X1) != (X2)) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, __FUNC__, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()) }
-#define TEST_ASSERT_ALMOST_EQ(X1, X2) if (fabs((X1) - (X2)) > std::numeric_limits<float>::epsilon()) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, __FUNC__, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()) }
+#define TEST_ASSERT_EQ(X1, X2) if ((X1) != (X2)) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, __FUNC__, __LINE__, std::to_string(X1).c_str(), std::to_string(X2).c_str()) }
+#define TEST_ASSERT_ALMOST_EQ(X1, X2) if (fabs((X1) - (X2)) > std::numeric_limits<float>::epsilon()) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, __FUNC__, __LINE__, std::to_string(X1).c_str(), std::to_string(X2).c_str()) }
 #define TEST_CASE(X) void X(std::string testName)
 
 #else
@@ -48,7 +49,7 @@
 #    define TEST_FUNC __PRETTY_FUNCTION__
 #elif __STDC_VERSION__ < 199901
 #    define TEST_FUNC "unknown function"
-#else /* Should be c99 */
+#else                           /* Should be c99 */
 #    define TEST_FUNC __func__
 #endif
 
@@ -78,6 +79,8 @@
 
 #define TEST_CASE(X) void X(const char* testName)
 #define TEST_CASE_ARGS(X) void X(const char* testName, int argc, char **argv)
+
+#define TEST_MAIN(X) int main(int argc, char** argv) { X; return 0; }
 
 #endif
 

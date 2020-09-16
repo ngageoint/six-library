@@ -87,10 +87,10 @@ typedef nitf_TREHandler* (*NITF_PLUGIN_TRE_HANDLER_FUNCTION)(nitf_Error * error)
 
 typedef int (*NITF_PLUGIN_COMPRESSION_HANDLER_FUNCTION)
 (
-    nitf_Uint8 *input,
-    nitf_Uint32 inputLen,
-    nitf_Uint8 **output,
-    nitf_Uint32 *outputLen,
+    uint8_t *input,
+    uint32_t inputLen,
+    uint8_t **output,
+    uint32_t *outputLen,
     nitf_Error *error
 );
 

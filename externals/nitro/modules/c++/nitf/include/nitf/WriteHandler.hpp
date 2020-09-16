@@ -96,8 +96,8 @@ class StreamIOWriteHandler : public WriteHandler
 {
 public:
     //! Constructor
-    StreamIOWriteHandler(IOInterface& sourceHandle, nitf::Uint64 offset,
-            nitf::Uint64 bytes);
+    StreamIOWriteHandler(IOInterface& sourceHandle, uint64_t offset,
+            uint64_t bytes);
     ~StreamIOWriteHandler()
     {
     }

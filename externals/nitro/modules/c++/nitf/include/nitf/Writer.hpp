@@ -22,8 +22,10 @@
 
 #ifndef __NITF_WRITER_HPP__
 #define __NITF_WRITER_HPP__
+#pragma once
 
-#include <mem/SharedPtr.h>
+#include <memory>
+
 #include "nitf/Writer.h"
 #include "nitf/List.hpp"
 #include "nitf/NITFException.hpp"
@@ -128,25 +130,25 @@ public:
      * Sets the WriteHandler for the Image at the given index.
      */
     void setImageWriteHandler(int index,
-                              mem::SharedPtr<WriteHandler> writeHandler);
+                              std::shared_ptr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the Graphic at the given index.
      */
     void setGraphicWriteHandler(int index,
-                                mem::SharedPtr<WriteHandler> writeHandler);
+                                std::shared_ptr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the Text at the given index.
      */
     void setTextWriteHandler(int index,
-                             mem::SharedPtr<WriteHandler> writeHandler);
+                             std::shared_ptr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the DE Segment at the given index.
      */
     void setDEWriteHandler(int index,
-                           mem::SharedPtr<WriteHandler> writeHandler);
+                           std::shared_ptr<WriteHandler> writeHandler);
 
     /**
      * Returns a NEW ImageWriter for the given index
@@ -202,7 +204,7 @@ public:
      * \param hdrLen Output parameter providing the total number of bytes the
      *     file header is on disk
      */
-    void writeHeader(nitf::Off& fileLenOff, nitf::Uint32& hdrLen);
+    void writeHeader(nitf::Off& fileLenOff, uint32_t& hdrLen);
 
     /*!
      * Writes out an image subheader.  No seeking is performed so the underlying
@@ -229,7 +231,7 @@ public:
      * \param version NITF file version to write (you probably want NITF_VER_21)
      */
     void writeDESubheader(nitf::DESubheader subheader,
-                          nitf::Uint32& userSublen,
+                          uint32_t& userSublen,
                           nitf::Version version);
 
     /*!
@@ -241,16 +243,16 @@ public:
      * \param fillDir Fill direction (NITF_WRITER_FILL_LEFT or
      *     NITF_WRITER_FILL_RIGHT)
      */
-    void writeInt64Field(nitf::Uint64 field,
-                         nitf::Uint32 length,
+    void writeInt64Field(uint64_t field,
+                         uint32_t length,
                          char fill,
-                         nitf::Uint32 fillDir);
+                         uint32_t fillDir);
 
 private:
     nitf_Error error;
 
     //! c++ write handlers need to be kept in scope
-    std::vector<mem::SharedPtr<nitf::WriteHandler> > mWriteHandlers;
+    std::vector<std::shared_ptr<nitf::WriteHandler> > mWriteHandlers;
 };
 
 }

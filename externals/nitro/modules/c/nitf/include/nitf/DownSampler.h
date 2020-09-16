@@ -27,19 +27,19 @@
 #include "nitf/System.h"
 
 /*! \def NITF_PIXEL_TYPE_INT - Integer */
-#   define NITF_PIXEL_TYPE_INT ((nitf_Uint32) 0x00080000)
+#   define NITF_PIXEL_TYPE_INT ((uint32_t) 0x00080000)
 
 /*! \def NITF_PIXEL_TYPE_B - Bi-valued */
-#   define NITF_PIXEL_TYPE_B ((nitf_Uint32) 0x00100000)
+#   define NITF_PIXEL_TYPE_B ((uint32_t) 0x00100000)
 
 /*! \def NITF_PIXEL_TYPE_SI - Two's complement signed integer */
-#   define NITF_PIXEL_TYPE_SI ((nitf_Uint32) 0x00200000)
+#   define NITF_PIXEL_TYPE_SI ((uint32_t) 0x00200000)
 
 /*! \def NITF_PIXEL_TYPE_R - Floating point */
-#   define NITF_PIXEL_TYPE_R ((nitf_Uint32) 0x00400000)
+#   define NITF_PIXEL_TYPE_R ((uint32_t) 0x00400000)
 
 /*! \def NITF_PIXEL_TYPE_C - Complex floating point */
-#   define NITF_PIXEL_TYPE_C ((nitf_Uint32) 0x00800000)
+#   define NITF_PIXEL_TYPE_C ((uint32_t) 0x00800000)
 
 
 NITF_CXX_GUARD
@@ -86,15 +86,15 @@ typedef NITF_BOOL(*NITF_IDOWNSAMPLER_APPLY) (struct _nitf_DownSampler *
         object,
         NITF_DATA ** inputWindows,
         NITF_DATA ** outputWindows,
-        nitf_Uint32 numBands,
-        nitf_Uint32 numWindowRows,
-        nitf_Uint32 numWindowCols,
-        nitf_Uint32 numInputCols,
-        nitf_Uint32 numSubWindowCols,
-        nitf_Uint32 pixelType,
-        nitf_Uint32 pixelSize,
-        nitf_Uint32 rowsInLastWindow,
-        nitf_Uint32 colsInLastWindow,
+        uint32_t numBands,
+        uint32_t numWindowRows,
+        uint32_t numWindowCols,
+        uint32_t numInputCols,
+        uint32_t numSubWindowCols,
+        uint32_t pixelType,
+        uint32_t pixelSize,
+        uint32_t rowsInLastWindow,
+        uint32_t colsInLastWindow,
         nitf_Error * error);
 
 
@@ -152,49 +152,49 @@ nitf_IDownSampler;
 typedef struct _nitf_DownSampler
 {
     nitf_IDownSampler *iface;   /* The functional interface  */
-    nitf_Uint32 rowSkip;        /* The number of rows in the down-sample window */
-    nitf_Uint32 colSkip;        /* The number of cols in the down-sample window */
+    uint32_t rowSkip;        /* The number of rows in the down-sample window */
+    uint32_t colSkip;        /* The number of cols in the down-sample window */
     NITF_BOOL multiBand;        /* The down-sampler method is muli-band */
-    nitf_Uint32 minBands;       /* Minimum number of bands in multi-band method */
-    nitf_Uint32 maxBands;       /* Maxmum number of bands in multi-band method */
-    nitf_Uint32 types;          /* Mask of type/pixel size flags */
+    uint32_t minBands;       /* Minimum number of bands in multi-band method */
+    uint32_t maxBands;       /* Maxmum number of bands in multi-band method */
+    uint32_t types;          /* Mask of type/pixel size flags */
     NITF_DATA *data;            /* To be overloaded by derived class  */
 }
 nitf_DownSampler;
 
 
 /*! \def NITF_DOWNSAMPLER_TYPE_INT_1BYTE - Integer, one byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_INT_1BYTE ((nitf_Uint32) 0x00000001)
+#   define NITF_DOWNSAMPLER_TYPE_INT_1BYTE ((uint32_t) 0x00000001)
 /*! \def NITF_DOWNSAMPLER_TYPE_INT_2BYTE - Integer, two byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_INT_2BYTE ((nitf_Uint32) 0x00000002)
+#   define NITF_DOWNSAMPLER_TYPE_INT_2BYTE ((uint32_t) 0x00000002)
 /*! \def NITF_DOWNSAMPLER_TYPE_INT_4BYTE - Integer, eight byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_INT_4BYTE ((nitf_Uint32) 0x00000004)
+#   define NITF_DOWNSAMPLER_TYPE_INT_4BYTE ((uint32_t) 0x00000004)
 /*! \def NITF_DOWNSAMPLER_TYPE_INT_8BYTE - Integer, eight byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_INT_8BYTE ((nitf_Uint32) 0x00000008)
+#   define NITF_DOWNSAMPLER_TYPE_INT_8BYTE ((uint32_t) 0x00000008)
 
 /*! \def NITF_DOWNSAMPLER_TYPE_B_1BYTE - Binary, one byte pixel
          Note: The one bit type is presented to the user as one byte pixels
 */
-#   define NITF_DOWNSAMPLER_TYPE_B_1BYTE ((nitf_Uint32) 0x00000001)
+#   define NITF_DOWNSAMPLER_TYPE_B_1BYTE ((uint32_t) 0x00000001)
 
 /*! \def NITF_DOWNSAMPLER_TYPE_SI_1BYTE - Signed integer, one byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_SI_1BYTE ((nitf_Uint32) 0x00000010)
+#   define NITF_DOWNSAMPLER_TYPE_SI_1BYTE ((uint32_t) 0x00000010)
 /*! \def NITF_DOWNSAMPLER_TYPE_SI_2BYTE - Signed integer, two byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_SI_2BYTE ((nitf_Uint32) 0x00000020)
+#   define NITF_DOWNSAMPLER_TYPE_SI_2BYTE ((uint32_t) 0x00000020)
 /*! \def NITF_DOWNSAMPLER_TYPE_SI_4BYTE - Signed integer, four byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_SI_4BYTE ((nitf_Uint32) 0x00000040)
+#   define NITF_DOWNSAMPLER_TYPE_SI_4BYTE ((uint32_t) 0x00000040)
 /*! \def NITF_DOWNSAMPLER_TYPE_SI_8BYTE - Signed integer, eight byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_SI_8BYTE ((nitf_Uint32) 0x00000080)
+#   define NITF_DOWNSAMPLER_TYPE_SI_8BYTE ((uint32_t) 0x00000080)
 
 /*! \def NITF_DOWNSAMPLER_TYPE_R_4BYTE - Float, four byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_R_4BYTE ((nitf_Uint32) 0x00000100)
+#   define NITF_DOWNSAMPLER_TYPE_R_4BYTE ((uint32_t) 0x00000100)
 /*! \def NITF_DOWNSAMPLER_TYPE_R_8BYTE - Float, eight byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_R_8BYTE ((nitf_Uint32) 0x00000200)
+#   define NITF_DOWNSAMPLER_TYPE_R_8BYTE ((uint32_t) 0x00000200)
 
 /*! \def NITF_DOWNSAMPLER_TYPE_C_8BYTE - Complex, eight byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_C_8BYTE ((nitf_Uint32) 0x00001000)
+#   define NITF_DOWNSAMPLER_TYPE_C_8BYTE ((uint32_t) 0x00001000)
 /*! \def NITF_DOWNSAMPLER_TYPE_C_16BYTE - Complex, sixteen byte pixel */
-#   define NITF_DOWNSAMPLER_TYPE_C_16BYTE ((nitf_Uint32) 0x00002000)
+#   define NITF_DOWNSAMPLER_TYPE_C_16BYTE ((uint32_t) 0x00002000)
 
 /*! \def NITF_DOWNSAMPLER_TYPE_ALL - All types */
 #   define NITF_DOWNSAMPLER_TYPE_ALL \
@@ -247,8 +247,8 @@ nitf_DownSampler;
  *  \return This method returns an object on success, and NULL on
  *          failure.
  */
-NITFAPI(nitf_DownSampler *) nitf_PixelSkip_construct(nitf_Uint32 rowSkip,
-        nitf_Uint32 colSkip,
+NITFAPI(nitf_DownSampler *) nitf_PixelSkip_construct(uint32_t rowSkip,
+        uint32_t colSkip,
         nitf_Error * error);
 
 
@@ -270,9 +270,9 @@ NITFAPI(nitf_DownSampler *) nitf_PixelSkip_construct(nitf_Uint32 rowSkip,
  *  \return This method returns an object on success, and NULL on
  &          failure.
  */
-NITFAPI(nitf_DownSampler *) nitf_MaxDownSample_construct(nitf_Uint32
+NITFAPI(nitf_DownSampler *) nitf_MaxDownSample_construct(uint32_t
         rowSkip,
-        nitf_Uint32
+        uint32_t
         colSkip,
         nitf_Error *
         error);
@@ -294,9 +294,9 @@ NITFAPI(nitf_DownSampler *) nitf_MaxDownSample_construct(nitf_Uint32
 *  \return This method returns an object on success, and NULL on failure.
 */
 
-NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(nitf_Uint32
+NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(uint32_t
         rowSkip,
-        nitf_Uint32
+        uint32_t
         colSkip,
         nitf_Error *
         error);
@@ -318,9 +318,9 @@ NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(nitf_Uint32
 *  \return This method returns an object on success, and NULL on failure.
 */
 
-NITFAPI(nitf_DownSampler *) nitf_Select2DownSample_construct(nitf_Uint32
+NITFAPI(nitf_DownSampler *) nitf_Select2DownSample_construct(uint32_t
         rowSkip,
-        nitf_Uint32
+        uint32_t
         colSkip,
         nitf_Error *
         error);

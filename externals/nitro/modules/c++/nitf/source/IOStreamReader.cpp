@@ -23,6 +23,8 @@
 #include <nitf/IOStreamReader.hpp>
 #include <except/Exception.h>
 
+#include "nitf/cstddef.h"
+
 namespace nitf
 {
 IOStreamReader::IOStreamReader(io::SeekableInputStream& stream) :
@@ -32,7 +34,7 @@ IOStreamReader::IOStreamReader(io::SeekableInputStream& stream) :
 
 void IOStreamReader::readImpl(void* buffer, size_t size)
 {
-    mStream.read(static_cast<sys::byte*>(buffer), size);
+    mStream.read(static_cast<std::byte*>(buffer), size);
 }
 
 void IOStreamReader::writeImpl(const void* , size_t)
@@ -66,7 +68,7 @@ nitf::Off IOStreamReader::seekImpl(nitf::Off offset, int whence)
     default:
         throw except::Exception(
                 Ctxt("Unknown whence value when seeking IOStreamReader: " +
-                     str::toString(whence)));
+                     std::to_string(whence)));
     }
 
     return mStream.seek(offset, ioWhence);

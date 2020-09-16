@@ -24,7 +24,7 @@
 #include "nrt/Sync.h"
 
 NRT_CXX_GUARD
-#if !defined(WIN32) && !defined(__sgi)
+#if !(defined(WIN32) || defined(_WIN32)) && !defined(__sgi)
 NRTPROT(void) nrt_Mutex_lock(nrt_Mutex * m)
 {
     nrt_Debug_flogf(stdout, "***Locking Mutex***\n");

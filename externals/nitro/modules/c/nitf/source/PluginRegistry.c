@@ -32,11 +32,10 @@ insertCreator(nitf_DLL* dso,
               const char* suffix,
               nitf_Error* error);
 
-#ifndef WIN32
 static nitf_Mutex __PluginRegistryLock = NITF_MUTEX_INIT;
+#if !(defined(WIN32) || defined(_WIN32))
 static const char DIR_DELIMITER = '/';
 #else
-static nitf_Mutex __PluginRegistryLock = NULL;
 static long __PluginRegistryInitLock = 0;
 static const char DIR_DELIMITER = '\\';
 #endif
@@ -46,8 +45,8 @@ static const char DIR_DELIMITER = '\\';
  *
  */
 
-#ifdef WIN32
-NITFPRIV(nitf_Mutex*) GET_MUTEX()
+#if defined(WIN32) || defined(_WIN32)
+NITFPRIV(nitf_Mutex*) GET_MUTEX(void)
 {
     if (__PluginRegistryLock == NULL)
     {
@@ -182,6 +181,19 @@ insertPlugin(nitf_PluginRegistry* reg,
     return NITF_SUCCESS;
 }
 
+static char* nitf_PluginRegistry_getenv(char const* varName)
+{
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(push)
+#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+#endif
+    return getenv(varName);
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(pop)
+#endif
+}
+#define getenv(varName) nitf_PluginRegistry_getenv(varName)
+
 NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
 {
     size_t pathLen;
@@ -262,9 +274,12 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
     if (!pluginEnvVar)
     {
         /*  Take the default path  */
+#ifndef NITF_DEFAULT_PLUGIN_PATH
+#define NITF_DEFAULT_PLUGIN_PATH "/putenv/" NITF_PLUGIN_PATH "/" // just to compile ...
+#endif
         if (nrt_Directory_exists(NITF_DEFAULT_PLUGIN_PATH))
         {
-            strncpy(reg->path, NITF_DEFAULT_PLUGIN_PATH, NITF_MAX_PATH);
+            nrt_strncpy_s(reg->path, NITF_MAX_PATH, NITF_DEFAULT_PLUGIN_PATH, NITF_MAX_PATH);
             return reg;
         }
         else
@@ -279,7 +294,7 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
     }
     else
     {
-        strncpy(reg->path, pluginEnvVar, NITF_MAX_PATH);
+        nrt_strncpy_s(reg->path, NITF_MAX_PATH, pluginEnvVar, NITF_MAX_PATH);
     }
     /*
      * If the we have a user-defined path, they might not
@@ -891,9 +906,6 @@ insertCreator(nitf_DLL* dso,
               const char* suffix,
               nitf_Error* error)
 {
-    /*  We are trying to find tre_main  */
-    NITF_DLL_FUNCTION_PTR dsoMain = NULL;
-
     /*  Get the name of the handler  */
     char name[NITF_MAX_PATH];
 
@@ -916,8 +928,9 @@ insertCreator(nitf_DLL* dso,
     printf("Loading function [%s] in dso at [%p]\n", name, dso);
 #endif
 
+    /*  We are trying to find tre_main  */
     /*  Retrieve the main  */
-    dsoMain = nitf_DLL_retrieve(dso, name, error);
+    NITF_DLL_FUNCTION_PTR dsoMain  = nitf_DLL_retrieve(dso, name, error);
 
     if (!dsoMain)
     {
@@ -932,7 +945,7 @@ insertCreator(nitf_DLL* dso,
     }
 #endif
 
-    return nitf_HashTable_insert(hash, ident, dsoMain, error);
+    return nitf_HashTable_insert(hash, ident, (NITF_DATA*)dsoMain, error);
 }
 
 /*

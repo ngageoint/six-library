@@ -80,8 +80,8 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE* tre, char* bufptr, nitf_Error* error)
             {
                 if (length == NITF_INT16_SZ)
                 {
-                    nitf_Int16 int16 = (nitf_Int16)NITF_NTOHS(
-                            *((nitf_Int16*)(bufptr + offset)));
+                    int16_t int16 = (int16_t)NITF_NTOHS(
+                            *((int16_t*)(bufptr + offset)));
                     status = nitf_Field_setRawData(field,
                                                    (NITF_DATA*)&int16,
                                                    length,
@@ -89,8 +89,8 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE* tre, char* bufptr, nitf_Error* error)
                 }
                 else if (length == NITF_INT32_SZ)
                 {
-                    nitf_Int32 int32 = (nitf_Int32)NITF_NTOHL(
-                            *((nitf_Int32*)(bufptr + offset)));
+                    int32_t int32 = (int32_t)NITF_NTOHL(
+                            *((int32_t*)(bufptr + offset)));
                     status = nitf_Field_setRawData(field,
                                                    (NITF_DATA*)&int32,
                                                    length,
@@ -156,12 +156,12 @@ CATCH_ERROR:
 
 NITFAPI(char*)
 nitf_TREUtils_getRawData(nitf_TRE* tre,
-                         nitf_Uint32* treLength,
+                         uint32_t* treLength,
                          nitf_Error* error)
 {
     int status = 1;
     int offset = 0;
-    nitf_Uint32 length;
+    uint32_t length;
     int tempLength;
 
     /* data buffer - Caller must free this */
@@ -242,14 +242,14 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
                 {
                     if (tempLength == NITF_INT16_SZ)
                     {
-                        nitf_Int16 int16 =
-                                (nitf_Int16)NITF_HTONS(*((nitf_Int16*)tempBuf));
+                        int16_t int16 =
+                                (int16_t)NITF_HTONS(*((int16_t*)tempBuf));
                         memcpy(tempBuf, (char*)&int16, tempLength);
                     }
                     else if (tempLength == NITF_INT32_SZ)
                     {
-                        nitf_Int32 int32 =
-                                (nitf_Int32)NITF_HTONL(*((nitf_Int32*)tempBuf));
+                        int32_t int32 =
+                                (int32_t)NITF_HTONL(*((int32_t*)tempBuf));
                         memcpy(tempBuf, (char*)&int32, tempLength);
                     }
                     else
@@ -462,7 +462,7 @@ nitf_TREUtils_setValue(nitf_TRE* tre,
 
 NITFAPI(NITF_BOOL)
 nitf_TREUtils_setDescription(nitf_TRE* tre,
-                             nitf_Uint32 length,
+                             uint32_t length,
                              nitf_Error* error)
 {
     nitf_TREDescriptionSet* descriptions = NULL;
@@ -759,7 +759,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_isSane(nitf_TRE* tre)
 
 NITFAPI(NITF_BOOL)
 nitf_TREUtils_basicRead(nitf_IOInterface* io,
-                        nitf_Uint32 length,
+                        uint32_t length,
                         nitf_TRE* tre,
                         struct _nitf_Record* record,
                         nitf_Error* error)
@@ -931,7 +931,7 @@ nitf_TREUtils_basicWrite(nitf_IOInterface* io,
                          struct _nitf_Record* record,
                          nitf_Error* error)
 {
-    nitf_Uint32 length;
+    uint32_t length;
     char* data = NULL;
     NITF_BOOL ok = NITF_FAILURE;
 
@@ -966,7 +966,8 @@ nitf_TREUtils_basicClone(nitf_TRE* source, nitf_TRE* tre, nitf_Error* error)
     sourcePriv = (nitf_TREPrivateData*)source->priv;
 
     /* this clones the hash */
-    if (!(trePriv = nitf_TREPrivateData_clone(sourcePriv, error)))
+    trePriv = nitf_TREPrivateData_clone(sourcePriv, error);
+    if (!trePriv)
         return NITF_FAILURE;
 
     /* just copy over the optional length and static description */
@@ -1109,15 +1110,20 @@ nitf_TREUtils_basicBegin(nitf_TRE* tre, nitf_Error* error)
 {
     nitf_TREEnumerator* it =
             (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
-    nitf_TRECursor* cursor =
+    if (it != NULL)
+    {
+        nitf_TRECursor* cursor =
             (nitf_TRECursor*)NITF_MALLOC(sizeof(nitf_TRECursor));
-    *cursor = nitf_TRECursor_begin(tre);
-    /*assert(nitf_TRECursor_iterate(cursor, error));*/
-
-    it->data = cursor;
-    it->next = basicIncrement;
-    it->hasNext = basicHasNext;
-    it->getFieldDescription = basicGetFieldDescription;
+        if (cursor != NULL)
+        {
+            *cursor = nitf_TRECursor_begin(tre);
+            /*assert(nitf_TRECursor_iterate(cursor, error));*/
+        }
+        it->data = cursor;
+        it->next = basicIncrement;
+        it->hasNext = basicHasNext;
+        it->getFieldDescription = basicGetFieldDescription;
+    }
     return it;
 }
 
