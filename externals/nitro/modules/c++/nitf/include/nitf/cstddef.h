@@ -8,10 +8,6 @@ namespace std
 {
 	enum class byte : unsigned char {};
 }
-<<<<<<< HEAD
-#endif
-=======
-#endif
 
 #define NITF_std_byte_defined
->>>>>>> develop/master
+
