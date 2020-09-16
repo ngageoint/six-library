@@ -47,7 +47,7 @@ int main(int argc, char** argv)
                            "CPHD", 1, 1);
         parser.addArgument("output", "Output pathname", cli::STORE, "output",
                            "CPHD", 1, 1);
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string inPathname(options->get<std::string>("input"));
         const std::string outPathname(options->get<std::string>("output"));
         const size_t numThreads(options->get<size_t>("threads"));

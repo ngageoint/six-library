@@ -59,12 +59,12 @@ int main(int argc, char** argv)
             schemaPaths.push_back(six::findSchemaPath(progname));
         }
 
-        std::auto_ptr<six::sicd::ComplexData> fileComplexData;
+        std::unique_ptr<six::sicd::ComplexData> fileComplexData;
         std::vector<std::complex<float> > fileWidebandData;
         six::sicd::Utilities::readSicd(sicdPathname, schemaPaths,
             fileComplexData, fileWidebandData);
 
-        std::auto_ptr<six::sicd::ComplexData> streamComplexData;
+        std::unique_ptr<six::sicd::ComplexData> streamComplexData;
         std::vector<std::complex<float> > streamWidebandData;
         io::FileInputStream stream(sicdPathname);
 

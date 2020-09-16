@@ -136,7 +136,7 @@ public:
      * Set the internal NITF header creator
      * \param headerCreator Populated NITF header creator
      */
-    void setNITFHeaderCreator(std::auto_ptr<six::NITFHeaderCreator> headerCreator);
+    void setNITFHeaderCreator(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator);
 
     virtual void initialize(const six::Options& options,
                             mem::SharedPtr<Container> container);
@@ -283,7 +283,7 @@ public:
 protected:
     nitf::Writer mWriter;
     std::map<std::string, void*> mCompressionOptions;
-    std::auto_ptr<six::NITFHeaderCreator> mNITFHeaderCreator;
+    std::unique_ptr<six::NITFHeaderCreator> mNITFHeaderCreator;
 
     void writeNITF(nitf::IOInterface& os);
 

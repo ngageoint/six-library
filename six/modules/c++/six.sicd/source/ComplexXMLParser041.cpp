@@ -36,7 +36,7 @@ namespace sicd
 ComplexXMLParser041::ComplexXMLParser041(const std::string& version,
                                          logging::Logger* log,
                                          bool ownLog) :
-    ComplexXMLParser04x(version, true, std::auto_ptr<six::SICommonXMLParser>(
+    ComplexXMLParser04x(version, true, std::unique_ptr<six::SICommonXMLParser>(
                            new six::SICommonXMLParser01x(
                                versionToURI(version), true,
                                versionToURI(version), log)),
@@ -47,10 +47,10 @@ ComplexXMLParser041::ComplexXMLParser041(const std::string& version,
 ComplexXMLParser041::ComplexXMLParser041(
     const std::string& version,
     bool addClassAttributes,
-    std::auto_ptr<SICommonXMLParser> comParser,
+    std::unique_ptr<SICommonXMLParser>&& comParser,
     logging::Logger* log,
     bool ownLog) :
-    ComplexXMLParser04x(version, addClassAttributes, comParser, log, ownLog)
+    ComplexXMLParser04x(version, addClassAttributes, std::move(comParser), log, ownLog)
 {
 }
 

@@ -130,13 +130,13 @@ void promote(const void* input,
         size_t numRowsThisThread(0);
         while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
-            std::auto_ptr<sys::Runnable> scaler(new PromoteRunnable<InT>(
+            std::unique_ptr<sys::Runnable> scaler(new PromoteRunnable<InT>(
                     static_cast<const std::complex<InT>*>(input),
                     startRow,
                     numRowsThisThread,
                     dims.col,
                     output));
-            threads.createThread(scaler);
+            threads.createThread(std::move(scaler));
         }
 
         threads.joinAll();
@@ -192,14 +192,14 @@ void scale(const void* input,
         size_t numRowsThisThread(0);
         while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
-            std::auto_ptr<sys::Runnable> scaler(new ScaleRunnable<InT>(
+            std::unique_ptr<sys::Runnable> scaler(new ScaleRunnable<InT>(
                     static_cast<const std::complex<InT>*>(input),
                     startRow,
                     numRowsThisThread,
                     dims.col,
                     scaleFactors,
                     output));
-            threads.createThread(scaler);
+            threads.createThread(std::move(scaler));
         }
 
         threads.joinAll();

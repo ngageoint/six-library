@@ -64,10 +64,10 @@ struct GetPixelType<sys::Uint16_T>
 
 // Create dummy SIDD data
 template <typename DataTypeT>
-std::auto_ptr<six::sidd::DerivedData>
+std::unique_ptr<six::sidd::DerivedData>
 createData(const types::RowCol<size_t>& dims)
 {
-    std::auto_ptr<six::sidd::DerivedData> data =
+    std::unique_ptr<six::sidd::DerivedData> data =
             six::sidd::Utilities::createFakeDerivedData();
     data->setNumRows(dims.row);
     data->setNumCols(dims.col);
@@ -318,7 +318,7 @@ private:
         const DataTypeT* retImage;
         if (mNumRowsPerBlock != 0 || mNumColsPerBlock != 0)
         {
-            std::auto_ptr<const nitf::ImageBlocker> imageBlocker =
+            std::unique_ptr<const nitf::ImageBlocker> imageBlocker =
                     siddByteProvider.getImageBlocker();
 
             const size_t numBlockedPixels =
@@ -345,11 +345,11 @@ private:
     const EnsureFileCleanup mNormalFileCleanup;
 
     const types::RowCol<size_t> mDims;
-    std::auto_ptr<six::sidd::DerivedData> mData;
+    std::unique_ptr<six::sidd::DerivedData> mData;
     std::vector<DataTypeT> mImage;
     std::vector<DataTypeT> mBigEndianImage;
 
-    std::auto_ptr<const CompareFiles> mCompareFiles;
+    std::unique_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
     const std::vector<std::string> mSchemaPaths;
 
@@ -546,7 +546,7 @@ void Tester<DataTypeT>::testMultipleWritesBlocked(size_t blocksPerWrite)
             mSetMaxProductSize ? mMaxProductSize : 0);
 
     // Write the blocks in reverse order
-    std::auto_ptr<const nitf::ImageBlocker> imageBlocker =
+    std::unique_ptr<const nitf::ImageBlocker> imageBlocker =
             siddByteProvider.getImageBlocker();
 
     const size_t numSegs(imageBlocker->getNumSegments());

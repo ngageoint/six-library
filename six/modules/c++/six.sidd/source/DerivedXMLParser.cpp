@@ -43,11 +43,11 @@ const char DerivedXMLParser::SFA_URI[] = "urn:SFA:1.2.0";
 
 DerivedXMLParser::DerivedXMLParser(
         const std::string& version,
-        std::auto_ptr<six::SICommonXMLParser> comParser,
+        std::unique_ptr<six::SICommonXMLParser>&& comParser,
         logging::Logger* log,
         bool ownLog) :
     XMLParser(versionToURI(version), false, log, ownLog),
-    mCommon(comParser)
+    mCommon(std::move(comParser))
 {
 }
 
@@ -395,7 +395,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
             // xs:list is space delimited
             std::string lutStr = remapLUTElem->getCharacterData();
             std::vector<std::string> lutVals = str::split(lutStr, " ");
-            std::auto_ptr<LUT> remapLUT(new LUT(size, 3));
+            std::unique_ptr<LUT> remapLUT(new LUT(size, 3));
 
             // TripleType is comma delimited
             size_t k = 0;
@@ -425,14 +425,14 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
             std::string remapType = "";
             parseString(getFirstAndOnly(monoRemapElem, "RemapType"), remapType);
 
-            std::auto_ptr<LUT> remapLUT;
+            std::unique_ptr<LUT> remapLUT;
             XMLElem remapLUTElem = getOptional(monoRemapElem, "RemapLUT");
             if (remapLUTElem)
             {
                 remapLUT = parseSingleLUT(remapLUTElem);
             }
 
-            std::auto_ptr<MonochromeDisplayRemap> monoRemap(
+            std::unique_ptr<MonochromeDisplayRemap> monoRemap(
                     new MonochromeDisplayRemap(remapType, remapLUT.release()));
 
             // optional
@@ -458,7 +458,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
     }
 }
 
-std::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
+std::unique_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
 {
     //get size attribute
     int size = str::toType<int>(elem->attribute("size"));
@@ -466,7 +466,7 @@ std::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
     std::string lutStr = "";
     parseString(elem, lutStr);
     std::vector<std::string> lutVals = str::split(lutStr, " ");
-    std::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
+    std::unique_ptr<LUT> lut(new LUT(size, sizeof(short)));
 
     for (size_t ii = 0; ii < lutVals.size(); ++ii)
     {

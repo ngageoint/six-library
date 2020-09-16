@@ -228,13 +228,13 @@ bool compareScalarMeshes(const std::string& baselineSicdPathname,
 }
 
 void readMeshes(const std::string& sicdPathname,
-                std::auto_ptr<six::sicd::NoiseMesh>& noiseMesh,
-                std::auto_ptr<six::sicd::ScalarMesh>& scalarMesh)
+                std::unique_ptr<six::sicd::NoiseMesh>& noiseMesh,
+                std::unique_ptr<six::sicd::ScalarMesh>& scalarMesh)
 {
     const size_t orderX = 3;
     const size_t orderY = 3;
 
-    std::auto_ptr<six::sicd::ComplexData> complexData;
+    std::unique_ptr<six::sicd::ComplexData> complexData;
     std::vector<std::complex<float> > widebandData;
 
     six::Poly2D outputRowColToSlantRow;
@@ -252,7 +252,7 @@ void readMeshes(const std::string& sicdPathname,
                                    scalarMesh);
 }
 
-std::auto_ptr<cli::Results> parseCommandLine(int argc, char** argv)
+std::unique_ptr<cli::Results> parseCommandLine(int argc, char** argv)
 {
     cli::ArgumentParser parser;
     parser.setDescription("Reads the full meshes from two SICDs and compares"
@@ -275,7 +275,7 @@ std::auto_ptr<cli::Results> parseCommandLine(int argc, char** argv)
                        1,
                        1);
 
-    return std::auto_ptr<cli::Results>(parser.parse(argc, argv));
+    return std::unique_ptr<cli::Results>(parser.parse(argc, argv));
 }
 }
 
@@ -283,21 +283,21 @@ int main(int argc, char** argv)
 {
     try
     {
-        std::auto_ptr<cli::Results> options = parseCommandLine(argc, argv);
+        std::unique_ptr<cli::Results> options = parseCommandLine(argc, argv);
         const std::string baselineSicdPathname =
                 options->get<std::string>("baselineSicdPathname");
 
         const std::string testSicdPathname =
                 options->get<std::string>("testSicdPathname");
 
-        std::auto_ptr<six::sicd::NoiseMesh> baselineNoiseMesh;
-        std::auto_ptr<six::sicd::ScalarMesh> baselineScalarMesh;
+        std::unique_ptr<six::sicd::NoiseMesh> baselineNoiseMesh;
+        std::unique_ptr<six::sicd::ScalarMesh> baselineScalarMesh;
         readMeshes(baselineSicdPathname,
                    baselineNoiseMesh,
                    baselineScalarMesh);
 
-        std::auto_ptr<six::sicd::NoiseMesh> testNoiseMesh;
-        std::auto_ptr<six::sicd::ScalarMesh> testScalarMesh;
+        std::unique_ptr<six::sicd::NoiseMesh> testNoiseMesh;
+        std::unique_ptr<six::sicd::ScalarMesh> testScalarMesh;
         readMeshes(testSicdPathname,
                    testNoiseMesh,
                    testScalarMesh);

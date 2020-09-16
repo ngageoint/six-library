@@ -73,7 +73,7 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
 }
 
 void NITFWriteControl::setNITFHeaderCreator(
-        std::auto_ptr<six::NITFHeaderCreator> headerCreator)
+        std::unique_ptr<six::NITFHeaderCreator>&& headerCreator)
 {
     mNITFHeaderCreator.reset(headerCreator.release());
 }

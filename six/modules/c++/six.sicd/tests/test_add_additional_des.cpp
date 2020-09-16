@@ -64,7 +64,7 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingNullSegmentWriterShouldThrow\n";
     logging::Logger log;
-    std::auto_ptr<six::sicd::ComplexData> data =
+    std::unique_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
@@ -96,7 +96,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingUnLoadedSegmentWriterShouldThrow\n";
     logging::Logger log;
-    std::auto_ptr<six::sicd::ComplexData> data =
+    std::unique_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
@@ -138,7 +138,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
 {
     std::cout << "Running canAddProperlyLoadedSegmentWriter\n";
     logging::Logger log;
-    std::auto_ptr<six::sicd::ComplexData> data =
+    std::unique_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
@@ -186,7 +186,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
 {
     std::cout << "Running canAddTwoSegmentWriters\n";
     logging::Logger log;
-    std::auto_ptr<six::sicd::ComplexData> data =
+    std::unique_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);

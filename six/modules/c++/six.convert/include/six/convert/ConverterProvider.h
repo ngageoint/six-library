@@ -49,7 +49,7 @@ public:
     virtual void load(const std::string& pathname) = 0;
 
     //! Parse loaded file and return a ComplexData object
-    virtual std::auto_ptr<six::sicd::ComplexData> convert() = 0;
+    virtual std::unique_ptr<six::sicd::ComplexData> convert() = 0;
 
     /*!
      * Read given region from image

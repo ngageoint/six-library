@@ -122,12 +122,12 @@ void cropSICD(six::NITFReadControl& reader,
     six::sicd::ComplexData* const aoiData = updateMetadata(
             data, geom,  projection,
             aoiOffset, aoiDims);
-    std::auto_ptr<six::Data> scopedData(aoiData);
+    std::unique_ptr<six::Data> scopedData(aoiData);
 
     // Write the AOI SICD out
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
-    container->addData(scopedData);
+    container->addData(std::move(scopedData));
     six::NITFWriteControl writer(container);
     six::BufferList images(1, buffer.get());
     writer.save(images, outPathname, schemaPaths);
@@ -140,16 +140,16 @@ namespace six
 namespace sicd
 {
 
-std::auto_ptr<six::sicd::ComplexData> cropMetaData(
+std::unique_ptr<six::sicd::ComplexData> cropMetaData(
         const six::sicd::ComplexData& complexData,
         const types::RowCol<size_t>& aoiOffset,
         const types::RowCol<size_t>& aoiDims)
 {
     // Build up the geometry info
-    std::auto_ptr<const scene::SceneGeometry> geom(
+    std::unique_ptr<const scene::SceneGeometry> geom(
             six::sicd::Utilities::getSceneGeometry(&complexData));
 
-    std::auto_ptr<const scene::ProjectionModel> projection(
+    std::unique_ptr<const scene::ProjectionModel> projection(
             six::sicd::Utilities::getProjectionModel(&complexData, geom.get()));
 
     six::sicd::ComplexData* const aoiData = updateMetadata(
@@ -159,7 +159,7 @@ std::auto_ptr<six::sicd::ComplexData> cropMetaData(
             aoiOffset,
             aoiDims);
 
-    return std::auto_ptr<six::sicd::ComplexData>(aoiData);
+    return std::unique_ptr<six::sicd::ComplexData>(aoiData);
 }
 
 void cropSICD(const std::string& inPathname,
@@ -193,10 +193,10 @@ void cropSICD(six::NITFReadControl& reader,
             reinterpret_cast<const ComplexData*>(dataPtr);
 
     // Build up the geometry info
-    std::auto_ptr<const scene::SceneGeometry> geom(
+    std::unique_ptr<const scene::SceneGeometry> geom(
             six::sicd::Utilities::getSceneGeometry(data));
 
-    std::auto_ptr<const scene::ProjectionModel> projection(
+    std::unique_ptr<const scene::ProjectionModel> projection(
             six::sicd::Utilities::getProjectionModel(data, geom.get()));
 
     // Actually do the cropping
@@ -249,10 +249,10 @@ void cropSICD(six::NITFReadControl& reader,
             imageData.scpPixel.row - aoiOffset.row,
             imageData.scpPixel.col - aoiOffset.col);
 
-    std::auto_ptr<const scene::SceneGeometry> geom(
+    std::unique_ptr<const scene::SceneGeometry> geom(
             six::sicd::Utilities::getSceneGeometry(data));
 
-    std::auto_ptr<const scene::ProjectionModel> projection(
+    std::unique_ptr<const scene::ProjectionModel> projection(
             six::sicd::Utilities::getProjectionModel(data, geom.get()));
 
     types::RowCol<double> minPixel(static_cast<double>(data->getNumRows()),

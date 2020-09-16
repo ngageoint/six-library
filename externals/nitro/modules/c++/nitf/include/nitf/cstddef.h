@@ -10,4 +10,5 @@ namespace std
 }
 
 #define NITF_std_byte_defined
+#endif
 

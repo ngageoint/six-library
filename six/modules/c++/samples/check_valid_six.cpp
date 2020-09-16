@@ -88,8 +88,8 @@ std::vector<std::string> getPathnames(const std::string& dirname)
                                    false);
 }
 
-bool runValidation(const std::auto_ptr<six::Data>& data,
-        std::auto_ptr<logging::Logger>& log)
+bool runValidation(const std::unique_ptr<six::Data>& data,
+        std::unique_ptr<logging::Logger>& log)
 {
     if (data->getDataType() == six::DataType::COMPLEX)
     {
@@ -133,7 +133,7 @@ int main(int argc, char** argv)
         parser.addArgument("input", "Input SICD/SIDD file or directory of files", cli::STORE, "input",
                            "INPUT", 1, 1);
 
-        const std::auto_ptr<cli::Results>
+        const std::unique_ptr<cli::Results>
             options(parser.parse(argc, (const char**) argv));
 
         const std::string inputPath(options->get<std::string>("input"));
@@ -156,7 +156,7 @@ int main(int argc, char** argv)
 
         str::upper(level);
         str::trim(level);
-        std::auto_ptr<logging::Logger> log =
+        std::unique_ptr<logging::Logger> log =
             logging::setupLogger(sys::Path::basename(argv[0]), level, logFile);
 
         // this validates the DES of the input against the
@@ -169,7 +169,7 @@ int main(int argc, char** argv)
         {
             const std::string& inputPathname(inputPathnames[ii]);
             log->info(Ctxt("Reading " + inputPathname));
-            std::auto_ptr<six::Data> data;
+            std::unique_ptr<six::Data> data;
             try
             {
                 if (nitf::Reader::getNITFVersion(inputPathname) ==

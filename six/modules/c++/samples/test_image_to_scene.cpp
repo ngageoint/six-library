@@ -73,15 +73,15 @@ int main(int argc, char** argv)
         xmlRegistry->addCreator(six::DataType::DERIVED,
                             new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
-        std::auto_ptr<logging::Logger> logger(logging::setupLogger(progname));
+        std::unique_ptr<logging::Logger> logger(logging::setupLogger(progname));
         six::NITFReadControl reader;
         reader.setLogger(logger.get());
         reader.setXMLControlRegistry(xmlRegistry);
         reader.load(sixPathname);
         // Check to see if it's a SICD
         mem::SharedPtr<six::Container> container = reader.getContainer();
-        std::auto_ptr<scene::ProjectionModel> projection;
-        std::auto_ptr<scene::SceneGeometry> geom;
+        std::unique_ptr<scene::ProjectionModel> projection;
+        std::unique_ptr<scene::SceneGeometry> geom;
         scene::Vector3 groundPlaneNormal;
         types::RowCol<double> imagePt;
         if (container->getDataType() == six::DataType::COMPLEX)

@@ -48,7 +48,7 @@ void findOutputToSlantPolynomials(const six::sicd::ComplexData& complexData,
         size_t polyOrderX, size_t polyOrderY,
         six::Poly2D& toSlantRow, six::Poly2D& toSlantCol)
 {
-    std::auto_ptr<scene::ProjectionPolynomialFitter> polynomialFitter(
+    std::unique_ptr<scene::ProjectionPolynomialFitter> polynomialFitter(
             six::sicd::Utilities::getPolynomialFitter(complexData));
     const six::RowColDouble sampleSpacing(
             complexData.grid->row->sampleSpacing,
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output SIO Pathname", cli::STORE,
                            "output", "OUTPUT", 1, 1);
 
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const std::string sicdPathname(options->get<std::string>("input"));
         const std::string outputPathname(options->get<std::string>("output"));
@@ -102,7 +102,7 @@ int main(int argc, char** argv)
         registry.addCreator(six::DataType::COMPLEX,
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-        std::auto_ptr<six::sicd::ComplexData> complexData;
+        std::unique_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float> > buffer;
         six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData,
                 buffer);

@@ -182,7 +182,7 @@ namespace sicd
 ComplexXMLParser050::ComplexXMLParser050(const std::string& version,
                                          logging::Logger* log,
                                          bool ownLog) :
-    ComplexXMLParser041(version, false, std::auto_ptr<six::SICommonXMLParser>(
+    ComplexXMLParser041(version, false, std::unique_ptr<six::SICommonXMLParser>(
                            new ::SICommonXMLParser050(
                                versionToURI(version), log)),
                         log, ownLog)

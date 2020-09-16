@@ -191,14 +191,14 @@ void byteSwapAndPromote(const void* input,
                                      startRow,
                                      numRowsThisThread))
         {
-            std::auto_ptr<sys::Runnable> scaler(
+            std::unique_ptr<sys::Runnable> scaler(
                 new ByteSwapAndPromoteRunnable<InT>(
                     input,
                     startRow,
                     numRowsThisThread,
                     dims.col,
                     output));
-            threads.createThread(scaler);
+            threads.createThread(std::move(scaler));
         }
 
         threads.joinAll();
@@ -229,14 +229,14 @@ void byteSwapAndScale(const void* input,
                                      startRow,
                                      numRowsThisThread))
         {
-            std::auto_ptr<sys::Runnable> scaler(new ByteSwapAndScaleRunnable<InT>(
+            std::unique_ptr<sys::Runnable> scaler(new ByteSwapAndScaleRunnable<InT>(
                     input,
                     startRow,
                     numRowsThisThread,
                     dims.col,
                     scaleFactors,
                     output));
-            threads.createThread(scaler);
+            threads.createThread(std::move(scaler));
         }
 
         threads.joinAll();
@@ -269,13 +269,13 @@ void byteSwap(void* buffer,
                                      startElement,
                                      numElementsThisThread))
         {
-            std::auto_ptr<sys::Runnable> thread(new ByteSwapRunnable(
+            std::unique_ptr<sys::Runnable> thread(new ByteSwapRunnable(
                     buffer,
                     elemSize,
                     startElement,
                     numElementsThisThread));
 
-            threads.createThread(thread);
+            threads.createThread(std::move(thread));
         }
         threads.joinAll();
     }

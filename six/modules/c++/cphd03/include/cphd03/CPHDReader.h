@@ -126,9 +126,9 @@ public:
 private:
     // Keep info about the CPHD collection
     FileHeader mFileHeader;
-    std::auto_ptr<Metadata> mMetadata;
-    std::auto_ptr<VBM> mVBM;
-    std::auto_ptr<cphd::Wideband> mWideband;
+    std::unique_ptr<Metadata> mMetadata;
+    std::unique_ptr<VBM> mVBM;
+    std::unique_ptr<cphd::Wideband> mWideband;
 
     void initialize(std::shared_ptr<io::SeekableInputStream> inStream,
                     size_t numThreads,

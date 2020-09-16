@@ -63,8 +63,8 @@ public:
     void imageToGround(double row, double col) const;
 
 private:
-    std::auto_ptr<const scene::SceneGeometry> mGeometry;
-    std::auto_ptr<const scene::ProjectionModel> mProjModel;
+    std::unique_ptr<const scene::SceneGeometry> mGeometry;
+    std::unique_ptr<const scene::ProjectionModel> mProjModel;
     scene::Vector3 mGroundPlaneNormal;
 
     types::RowCol<double> mSampleSpacing;

@@ -59,7 +59,7 @@ int main(int argc, char** argv)
                            "ROW", 1, 1);
         parser.addArgument("col", "Pixel col location", cli::STORE, "col",
                            "COL", 1, 1);
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const std::string sicdPathname(options->get<std::string>("input"));
         if (!sys::OS().exists(sicdPathname))
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
                                        options->get<double>("col"));
 
 
-        std::auto_ptr<six::sicd::ComplexData> complexData;
+        std::unique_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float> > widebandData;
         six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData,
                 widebandData);

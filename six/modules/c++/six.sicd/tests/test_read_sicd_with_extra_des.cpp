@@ -60,10 +60,10 @@ std::vector<six::UByte> generateBandData(const six::sicd::ComplexData& data)
     return bandData;
 }
 
-std::auto_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
+std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
 {
     logging::Logger log;
-    std::auto_ptr<six::sicd::ComplexData> data =
+    std::unique_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
@@ -156,7 +156,7 @@ std::auto_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
     shortSegmentWriter->attachSource(shortSource);
     writer.addAdditionalDES(shortSegmentWriter);
 
-    std::auto_ptr<io::TempFile> temp(new io::TempFile());
+    std::unique_ptr<io::TempFile> temp(new io::TempFile());
     writer.save(&bandData[0], temp->pathname());
     return temp;
 }
@@ -174,13 +174,13 @@ int main(int argc, char** argv)
             six::DataType::COMPLEX,
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-        std::auto_ptr<io::TempFile> nitf = createNITFFromXML(xmlPathname);
+        std::unique_ptr<io::TempFile> nitf = createNITFFromXML(xmlPathname);
         six::NITFReadControl reader;
         reader.load(nitf->pathname());
 
         // Make sure ComplexData got read in
         logging::Logger log;
-        std::auto_ptr<six::sicd::ComplexData> originalData =
+        std::unique_ptr<six::sicd::ComplexData> originalData =
                 six::sicd::Utilities::parseDataFromFile(xmlPathname,
                 std::vector<std::string>(),
                 log);

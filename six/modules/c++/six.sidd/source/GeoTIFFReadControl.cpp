@@ -140,8 +140,8 @@ void six::sidd::GeoTIFFReadControl::load(
 
     mContainer.reset(new six::Container(six::DataType::DERIVED));
 
-    std::auto_ptr<six::XMLControl> siddXMLControl;
-    std::auto_ptr<six::XMLControl> sicdXMLControl;
+    std::unique_ptr<six::XMLControl> siddXMLControl;
+    std::unique_ptr<six::XMLControl> sicdXMLControl;
 
     for (size_t ii = 0; ii < xmlStrs.size(); ++ii)
     {
@@ -183,7 +183,7 @@ void six::sidd::GeoTIFFReadControl::load(
 
         if (xmlControl)
         {
-            std::auto_ptr<six::Data> data(xmlControl->fromXML(doc,
+            std::unique_ptr<six::Data> data(xmlControl->fromXML(doc,
                                                               schemaPaths));
 
             if (!data.get())
@@ -191,7 +191,7 @@ void six::sidd::GeoTIFFReadControl::load(
                 throw except::Exception(Ctxt(
                           "Unable to transform " + rootName + " XML"));
             }
-            mContainer->addData(data);
+            mContainer->addData(std::move(data));
         }
     }
 }

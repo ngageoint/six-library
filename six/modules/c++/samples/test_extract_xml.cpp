@@ -49,7 +49,7 @@ int main(int argc, char** argv)
                            "", 1, 1, true);
 
         // Parse!
-        const std::auto_ptr<cli::Results>
+        const std::unique_ptr<cli::Results>
             options(parser.parse(argc, (const char**) argv));
 
         const bool prettyPrint = options->get<bool>("prettyPrint");
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
             xml::lite::MinidomParser xmlParser;
             xmlParser.parse(oss);
 
-            std::auto_ptr<io::OutputStream> os;
+            std::unique_ptr<io::OutputStream> os;
             if (toConsole)
             {
                 os.reset(new io::StandardOutStream());

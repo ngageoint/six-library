@@ -191,7 +191,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
         logging::NullLogger logger;
-        std::auto_ptr<six::XMLControl> control(
+        std::unique_ptr<six::XMLControl> control(
                 xmlRegistry.newXMLControl(six::DataType::COMPLEX, &logger));
 
         mData.reset(reinterpret_cast<six::sicd::ComplexData*>(control->fromXML(
@@ -429,7 +429,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
                 new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
         logging::NullLogger logger;
-        std::auto_ptr<six::XMLControl> control(
+        std::unique_ptr<six::XMLControl> control(
                 xmlRegistry.newXMLControl(six::DataType::COMPLEX, &logger));
 
         // get xml as string for sensor model state

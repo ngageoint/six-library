@@ -33,7 +33,7 @@ class ComplexXMLParser04x : public ComplexXMLParser
 public:
     ComplexXMLParser04x(const std::string& version,
                         bool addClassAttributes,
-                        std::auto_ptr<SICommonXMLParser> comParser,
+                        std::unique_ptr<SICommonXMLParser>&& comParser,
                         logging::Logger* log = NULL,
                         bool ownLog = false);
 

@@ -61,7 +61,7 @@ std::string CPHDXMLControl::getSICommonURI() const
 
 std::string CPHDXMLControl::toXMLString(const Metadata& metadata)
 {
-    std::auto_ptr<xml::lite::Document> doc(toXML(metadata));
+    std::unique_ptr<xml::lite::Document> doc(toXML(metadata));
     io::StringStream ss;
     doc->getRootElement()->print(ss);
 
@@ -73,9 +73,9 @@ size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)
     return toXMLString(metadata).size();
 }
 
-std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
+std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
 {
-    std::auto_ptr<xml::lite::Document> doc(new xml::lite::Document());
+    std::unique_ptr<xml::lite::Document> doc(new xml::lite::Document());
 
     XMLElem root = newElement("CPHD");
     doc->setRootElement(root);
@@ -477,7 +477,7 @@ XMLElem CPHDXMLControl::areaSampleDirectionParametersToXML(
     return adpXML;
 }
 
-std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
 {
     io::StringStream stringStream;
     stringStream.write(xmlString.c_str(), xmlString.size());
@@ -486,9 +486,9 @@ std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
     return fromXML(parser.getDocument());
 }
 
-std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 {
-    std::auto_ptr<Metadata> cphd03(new Metadata());
+    std::unique_ptr<Metadata> cphd03(new Metadata());
 
     XMLElem root = doc->getRootElement();
 

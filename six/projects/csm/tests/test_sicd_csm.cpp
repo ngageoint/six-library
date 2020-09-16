@@ -107,7 +107,7 @@ private:
             throw except::Exception(Ctxt("Can't construct ISD"));
         }
 
-        std::auto_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
+        std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
                 mPlugin.constructModelFromISD(isd, MODEL_NAME)));
 
         const six::RowColInt scpPixel = mComplexData->imageData->scpPixel;
@@ -187,7 +187,7 @@ private:
 
     six::XMLControlRegistry mXmlRegistry;
     six::NITFReadControl mReader;
-    std::auto_ptr<six::sicd::ComplexData> mComplexData;
+    std::unique_ptr<six::sicd::ComplexData> mComplexData;
 };
 
 const char Test::MODEL_NAME[] = "SICD_SENSOR_MODEL";

@@ -71,7 +71,7 @@ public:
 
     bool testNitfISD()
     {
-        std::auto_ptr<csm::Nitf21Isd> nitfIsd = constructIsd(mSiddPathname,
+        std::unique_ptr<csm::Nitf21Isd> nitfIsd = constructIsd(mSiddPathname,
                 mReader, mDerivedData.get(), mXmlRegistry);
         return testISD(*nitfIsd);
     }
@@ -113,7 +113,7 @@ private:
             throw except::Exception(Ctxt("Can't construct ISD"));
         }
 
-        std::auto_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
+        std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
                 mPlugin.constructModelFromISD(isd, MODEL_NAME)));
 
         if (!mDerivedData->measurement->projection->isMeasurable())
@@ -210,7 +210,7 @@ private:
 
     six::XMLControlRegistry mXmlRegistry;
     six::NITFReadControl mReader;
-    std::auto_ptr<six::sidd::DerivedData> mDerivedData;
+    std::unique_ptr<six::sidd::DerivedData> mDerivedData;
 };
 
 const char Test::MODEL_NAME[] = "SIDD_SENSOR_MODEL";

@@ -36,7 +36,7 @@ namespace sicd
 {
 ComplexXMLParser::ComplexXMLParser(const std::string& version,
                                    bool addClassAttributes,
-                                   std::auto_ptr<six::SICommonXMLParser> comParser,
+                                   std::unique_ptr<six::SICommonXMLParser>&& comParser,
                                    logging::Logger* log,
                                    bool ownLog) :
     XMLParser(versionToURI(version), addClassAttributes, log, ownLog),

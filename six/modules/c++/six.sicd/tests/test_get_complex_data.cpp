@@ -60,7 +60,7 @@ int main(int argc, char** argv)
         }
 
         // Parse out the XML into a C++ structure
-        std::auto_ptr<six::sicd::ComplexData> data =
+        std::unique_ptr<six::sicd::ComplexData> data =
                 six::sicd::Utilities::getComplexData(sicdPathname,
                                                      schemaPaths);
 
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
         // point let's convert it back to XML and print it out just to show
         // we really parsed it
         six::sicd::ComplexXMLControl xmlControl;
-        std::auto_ptr<xml::lite::Document>
+        std::unique_ptr<xml::lite::Document>
                 xmlDoc(xmlControl.toXML(data.get(), schemaPaths));
 
         io::StandardOutStream oss;

@@ -994,10 +994,10 @@ static const struct {
 };
 
 // Create dummy SIDD data
-std::auto_ptr<six::sidd::DerivedData>
+std::unique_ptr<six::sidd::DerivedData>
 createData(const types::RowCol<size_t>& dims)
 {
-    std::auto_ptr<six::sidd::DerivedData> data =
+    std::unique_ptr<six::sidd::DerivedData> data =
             six::sidd::Utilities::createFakeDerivedData();
     data->setNumRows(dims.row);
     data->setNumCols(dims.col);
@@ -1026,7 +1026,7 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
     std::vector<std::vector<size_t> > bytesPerBlock(1);
     std::vector<std::string> schemaPaths;
     bytesPerBlock[0].push_back(NITRO_IMAGE.width * NITRO_IMAGE.height * NUM_BANDS);
-    std::auto_ptr<six::sidd::DerivedData> data = createData(
+    std::unique_ptr<six::sidd::DerivedData> data = createData(
             types::RowCol<size_t>(NITRO_IMAGE.height, NITRO_IMAGE.width));
 
     // The ByteProvider can do all the NITFWriteControl setup for you.
@@ -1100,7 +1100,7 @@ int main(int argc, char **argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
             "OUTPUT", 1, 1, true)->setDefault("test_create.nitf");
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         // We can't actually compress. This is just for illustration.
         const bool shouldCompress(options->get<bool>("shouldCompress"));
         if (shouldCompress)

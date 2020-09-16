@@ -1136,7 +1136,7 @@ void six::loadXmlDataContentHandler()
     }
 }
 
-std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
                                    ::io::InputStream& xmlStream,
                                    DataType dataType,
                                    const std::vector<std::string>& schemaPaths,
@@ -1171,13 +1171,13 @@ std::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     }
 
     //! Create the correct type of XMLControl
-    const std::auto_ptr<XMLControl> xmlControl(
+    const std::unique_ptr<XMLControl> xmlControl(
             xmlReg.newXMLControl(xmlDataType, &log));
 
-    return std::auto_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
+    return std::unique_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
 }
 
-std::auto_ptr<Data> six::parseDataFromFile(
+std::unique_ptr<Data> six::parseDataFromFile(
         const XMLControlRegistry& xmlReg,
         const std::string& pathname,
         DataType dataType,
@@ -1188,7 +1188,7 @@ std::auto_ptr<Data> six::parseDataFromFile(
     return parseData(xmlReg, inStream, dataType, schemaPaths, log);
 }
 
-std::auto_ptr<Data> six::parseDataFromString(
+std::unique_ptr<Data> six::parseDataFromString(
         const XMLControlRegistry& xmlReg,
         const std::string& xmlStr,
         DataType dataType,

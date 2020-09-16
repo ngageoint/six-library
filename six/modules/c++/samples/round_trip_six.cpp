@@ -206,7 +206,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
                            "OUTPUT", 1, 1);
 
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const std::string inputFile(options->get<std::string> ("input"));
         const std::string outputFile(options->get<std::string> ("output"));
@@ -275,7 +275,7 @@ int main(int argc, char** argv)
         else
             log.addHandler(new logging::FileHandler(logFile, logLevel), true);
 
-        std::auto_ptr<six::ReadControl> reader;
+        std::unique_ptr<six::ReadControl> reader;
         const std::string extension = sys::Path::splitExt(inputFile).second;
         if (extension == ".nitf" || extension == ".ntf")
         {

@@ -35,10 +35,10 @@ namespace sicd
 ComplexXMLParser04x::ComplexXMLParser04x(
     const std::string& version,
     bool addClassAttributes,
-    std::auto_ptr<SICommonXMLParser> comParser,
+    std::unique_ptr<SICommonXMLParser>&& comParser,
     logging::Logger* log,
     bool ownLog) :
-    ComplexXMLParser(version, addClassAttributes, comParser, log, ownLog)
+    ComplexXMLParser(version, addClassAttributes, std::move(comParser), log, ownLog)
 {
 }
 
