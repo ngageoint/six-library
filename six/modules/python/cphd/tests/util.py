@@ -20,9 +20,14 @@
 # see <http://www.gnu.org/licenses/>.
 #
 
+# In general, if functionality in CPHD is borrowed from six.sicd,
+# refer to six.sicd's test script for more verification
+
 import sys
 import itertools
 import multiprocessing
+
+import numpy as np
 
 from pysix import cphd
 import pysix.six_base as six
@@ -345,9 +350,10 @@ def get_test_metadata():
     metadata.channel = channel
 
     # PVP block
+    # Note that the params used here correspond to the list-of-dicts PVP data in get_test_pvp_data() below
 
     pvp_data = {
-        # Name: (offset, size, format
+        # Name: (offset, size, format)
         'txTime': (0, 1, 'F8'),
         'txPos': (1, 3, 'F8'),
         'txVel': (4, 3, 'F8'),
@@ -365,12 +371,20 @@ def get_test_metadata():
         'tdTropoSRP': (24, 1, 'F8'),
         'sc0': (25, 1, 'F8'),
         'scss': (26, 1, 'F8'),
+        # Optional params
+        'ampSF': (27, 1, 'F8'),
+        'fxN1': (28, 1, 'F8'),
+        'fxN2': (29, 1, 'F8'),
+        'signal': (30, 1, 'F8'),
+        'tdIonoSRP': (31, 1, 'F8'),
+        'toaE1': (32, 1, 'F8'),
+        'toaE2': (33, 1, 'F8'),
     }
 
     added_pvp_data = [
         # size, offset, fmt, name
-        (1, 27, 'F8', 'newParam1'),
-        (1, 28, 'F8', 'newParam2'),
+        (1, 34, 'F8', 'newParam1'),
+        (1, 35, 'F8', 'newParam2'),
     ]
 
     pvp = cphd.Pvp()
@@ -720,3 +734,42 @@ def get_test_metadata():
     # MatchInfo block (TODO)
 
     return metadata
+
+def get_test_pvp_data(cphd_metadata):
+
+    # Note that the params used here correspond to the PVP in get_test_metadata() above
+
+    pvp_data = []
+    for channel in range(cphd_metadata.getNumChannels()):
+        pvp_data.append({
+            'txTime': np.random.rand(num_pulses), # (1, 'F8')
+            'txPos': np.random.rand(num_pulses, 3), # (3, 'X=F8;Y=F8;Z=F8;')
+            'txVel': np.random.rand(num_pulses, 3), # (3, 'X=F8;Y=F8;Z=F8;')
+            'rcvTime': np.random.rand(num_pulses), # (1, 'F8')
+            'rcvPos': np.random.rand(num_pulses, 3), # (3, 'X=F8;Y=F8;Z=F8;')
+            'rcvVel': np.random.rand(num_pulses, 3), # (3, 'X=F8;Y=F8;Z=F8;')
+            'srpPos': np.random.rand(num_pulses, 3), # (3, 'X=F8;Y=F8;Z=F8;')
+            'aFDOP': np.random.rand(num_pulses), # (1, 'F8')
+            'aFRR1': np.random.rand(num_pulses), # (1, 'F8')
+            'aFRR2': np.random.rand(num_pulses), # (1, 'F8')
+            'fx1': np.random.rand(num_pulses), # (1, 'F8')
+            'fx2': np.random.rand(num_pulses), # (1, 'F8')
+            'toa1': np.random.rand(num_pulses), # (1, 'F8')
+            'toa2': np.random.rand(num_pulses), # (1, 'F8')
+            'tdTropoSRP': np.random.rand(num_pulses), # (1, 'F8')
+            'sc0': np.random.rand(num_pulses), # (1, 'F8')
+            'scss': np.random.rand(num_pulses), # (1, 'F8')
+            # Optional params
+            'ampSF': np.random.rand(num_pulses), # (1, 'F8')
+            'fxN1': np.random.rand(num_pulses), # (1, 'F8')
+            'fxN2': np.random.rand(num_pulses), # (1, 'F8')
+            'signal': np.random.rand(num_pulses), # (1, 'F8')
+            'tdIonoSRP': np.random.rand(num_pulses), # (1, 'F8')
+            'toaE1': np.random.rand(num_pulses), # (1, 'F8')
+            'toaE2': np.random.rand(num_pulses), # (1, 'F8')
+            # Custom params
+            'newParam1': np.random.rand(num_pulses), # (1, 'F8')
+            'newParam2': np.random.rand(num_pulses) # (1, 'F8')
+        })
+
+    return pvp_data

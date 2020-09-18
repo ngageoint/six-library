@@ -25,22 +25,5 @@
 # In general, if functionality in CPHD is borrowed from six.sicd,
 # refer to six.sicd's test script for more verification
 
-from pysix.cphd import CPHDXMLControl
-
-from util import get_test_metadata
-
 if __name__ == '__main__':
-    xml_parser = CPHDXMLControl()
-    metadata = get_test_metadata()
 
-    try:
-        xml_str = xml_parser.toXMLString(metadata)
-        meta_from_str = xml_parser.fromXMLString(xml_str)
-        xml_str_from_meta_from_str = xml_parser.toXMLString(meta_from_str)
-
-        if xml_str == xml_str_from_meta_from_str:
-            print('Test passed')
-        else:
-            print('Test failed: XML strings differ')
-    except Exception as e:
-        print('Test failed with exception:', e)
