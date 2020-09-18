@@ -155,7 +155,6 @@ using six::Vector3;
 %template(getComplexSignedIntAddedPVP) getAddedPVP<std::complex<int> >;
 %template(getComplexFloatAddedPVP) getAddedPVP<std::complex<float> >;
 %template(getStringAddedPVP) getAddedPVP<std::string>;
-//%template(getFloatVector3AddedPVP) getAddedPVP<math::linear::VectorN<3, float> >;  // TODO
 
 %template(setUnsignedIntAddedPVP) setAddedPVP<unsigned>;
 %template(setIntAddedPVP) setAddedPVP<int>;
@@ -163,7 +162,6 @@ using six::Vector3;
 %template(setComplexSignedIntAddedPVP) setAddedPVP<std::complex<int> >;
 %template(setComplexFloatAddedPVP) setAddedPVP<std::complex<float> >;
 %template(setStringAddedPVP) setAddedPVP<std::string>;
-%template(setFloatVector3AddedPVP) setAddedPVP<math::linear::VectorN<3, float> >;
 }
 
 %extend cphd::PVPBlock
@@ -294,7 +292,7 @@ using six::Vector3;
             methodName = 'ComplexFloatAddedPVP'
         elif pvpFormatStr.startswith('S'):
             methodName = 'StringAddedPVP'
-        # setFloatVector3AddedPVP TODO
+
         return getattr(self, getOrSet + methodName)
 
     def getDefaultParametersInUse(self):
@@ -335,6 +333,7 @@ using six::Vector3;
                     parameter size != 1).
                 The data types of these arrays are set based on the PVP format string,
                     cphdMetadata.pvp.[param].getFormat(), using PVPBlock._pvpFormatToNPdtype()
+                Any added PVP parameters should also have been added to cphdMetadata.pvp.addedPVP
         """
 
         # getDefaultParametersInUse() maps all string param names to the names used in their
@@ -343,7 +342,6 @@ using six::Vector3;
         paramsToCopy = {paramName: ('get' + paramMethodName,)
                         for paramName, paramMethodName in self.getDefaultParametersInUse().items()}
 
-        # Call getter methods to gather cphd.PVPType objects
         for paramName in paramsToCopy:
             # Append PVPType object to tuple inside paramsToCopy
             paramsToCopy[paramName] += (getattr(cphdMetadata.pvp, paramName),)
@@ -381,7 +379,7 @@ using six::Vector3;
                                    if paramName not in cphdMetadata.pvp.addedPVP else
                                    self.pvpFormatToAddedPVPMethod('get', paramObj.getFormat())(
                                         channel, vector, paramName))
-                    paramSize = paramObj.getSize()  # TODO assert that sizes in metadata are correct?
+                    paramSize = paramObj.getSize()
                     if paramSize == 1:
                         channelPVP[paramName][vector] = pulseVector
                     else:
@@ -411,22 +409,52 @@ using six::Vector3;
         paramsToSet = {paramName: 'set' + paramMethodName for
                        paramName, paramMethodName in pvpBlock.getDefaultParametersInUse().items()}
 
-        # Populate PVPBlock object
+        # For each parameter, check that all actual data sizes equal metadata size
+        expectedParamSizes = {**{paramName: getattr(cphdMetadata.pvp, paramName).getSize()
+                                 for paramName in paramsToSet},
+                              **{paramName: paramObj.getSize()
+                                 for paramName, paramObj in cphdMetadata.pvp.addedPVP.items()}}
+        mismatchedParams = []  # Parameters for which actual size doesn't match size in metadata
+        for paramName in (list(paramsToSet.keys()) + list(cphdMetadata.pvp.addedPVP.keys())):
+            for channelIndex, channelData in enumerate(pvpData):
+                actualSize = 1 if len(channelData[paramName].shape) == 1 \
+                               else channelData[paramName].shape[1]
+                if actualSize != expectedParamSizes[paramName]:
+                    mismatchedParams.append(
+                        (paramName, channelIndex, actualSize, expectedParamSizes[paramName]))
+        if mismatchedParams:
+            raise Exception('For the following parameters, actual data size does not match size '
+                            + 'in metadata object:\n'
+                            + '\n'.join(
+                                ['Parameter: {0}  Channel: {1}  Actual: {2}  Expected: {3}'
+                                 .format(param, channel, actual, expected)
+                                 for (param, channel, actual, expected) in mismatchedParams]))
+
+        # Populate PVPBlock object from pvpData
         for channelIndex, channelData in enumerate(pvpData):
-            # Samples are probably the same across all channels?
             for vectorIndex in range(cphdMetadata.getNumVectors(channelIndex)):
                 for paramName, data in channelData.items():
                     paramData = data[vectorIndex]
                     if isinstance(paramData, numpy.ndarray):
-                        # TODO should we just create a VectorN here?
-                        assert(len(paramData) == 3)
-                        paramData = coda.math_linear.Vector3(paramData)
+                        if len(paramData) == 1:
+                            # Turn 1D array into scalar so we can set it below
+                            # Note that, if reading this PVPBlock back into a list of dicts, this
+                            # parameter will have one less dimension than was originally passed in,
+                            # since we removed it here
+                            paramData = paramData.item()
+                        # Could use Vector2 here, but there aren't any size 2 default parameters
+                        elif len(paramData) == 3:
+                            paramData = coda.math_linear.Vector3(paramData)
+                        else:
+                            raise Exception(('Only PVP parameters of size 1 or 3 are supported, '
+                                             + '\'{0}\' has size {1}'
+                                             .format(paramName, len(paramData))))
                     if paramName not in cphdMetadata.pvp.addedPVP:
                         # Get the setter method for this parameter, then call it with indices and
                         # data to set for this parameter
                         getattr(pvpBlock, paramsToSet[paramName])(paramData, channelIndex, vectorIndex)
                     else:
-                        # Get setter method for custom parameter, then call it
+                        # Get and call setter method for the type of this custom parameter
                         pvpBlock.pvpFormatToAddedPVPMethod('set', cphdMetadata.pvp.addedPVP[paramName].getFormat())(
                             paramData, channelIndex, vectorIndex, paramName)
         return pvpBlock
