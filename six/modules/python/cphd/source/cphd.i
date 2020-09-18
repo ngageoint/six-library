@@ -173,7 +173,7 @@ using six::Vector3;
     # Map PVPBlock field names to how they're used in the get/set methods for each PVP parameter
     # in a CPHD PVPBlock object.  We could generate these programmatically, but the
     # upper/lowercasing of the method names is not 100% consistent (TOAE, TdIonoSRP)
-    # and this is maybe more readable(?)
+    # and this is very explicit
     PVP_PARAM_METHODS = {
         'txTime': 'TxTime',
         'txPos': 'TxPos',
@@ -211,7 +211,7 @@ using six::Vector3;
         \brief  Confirms that a valid PVP format string (CPHD Spec Table 10-2) with multiple
                 parameters (e.g. 'X=U2;Y=U2;') uses the same data type for all parameters.
                 Returns the data type if it is the same for all parameters, raises an exception
-                otherwise.
+                otherwise
 
         \param  pvpFormatStr (str)
                 CPHD PVP format string, with multiple parameters e.g. 'X=U1;Y=U1;'
@@ -220,7 +220,7 @@ using six::Vector3;
         \return Data type if it is the same for all parameters, raises an exception otherwise
         """
 
-        paramTypes = [param[param.index('=')+1:] for param in pvpFormatStr.split(';') if param]
+        paramTypes = [param[param.index('=') + 1:] for param in pvpFormatStr.split(';') if param]
 
         # TODO support multiple different parameter types ('A=U2;B=I2;')
         if not all(paramType == paramTypes[0] for paramType in paramTypes[1:]):
@@ -279,8 +279,7 @@ using six::Vector3;
             pvpFormatStr = PVPBlock._validateMultiplePVPFormatStr(pvpFormatStr)
 
         if getOrSet not in ['get', 'set']:
-            raise Exception('getOrSet should be only either \'get\' or \'set\', not {}'.format(
-                getOrSet))
+            raise Exception('getOrSet should be only \'get\' or \'set\', not {}'.format(getOrSet))
 
         methodName = None
         if pvpFormatStr.startswith('U'):
@@ -298,7 +297,7 @@ using six::Vector3;
         # setFloatVector3AddedPVP TODO
         return getattr(self, getOrSet + methodName)
 
-    def getUsedDefaultParameters(self):
+    def getDefaultParametersInUse(self):
         """
         \brief  Returns a dict mapping PVPBlock field names for the default PVP parameters
                 in this block to the names used in their get/set methods. Method names will
@@ -313,7 +312,7 @@ using six::Vector3;
         for optionalParam in self.OPTIONAL_PVP_PARAMS:
             # Call boolean `has[param]` method of PVPBlock to check if this PVPBlock has this param
             if getattr(self, self.OPTIONAL_PVP_PARAMS[optionalParam][0])():
-                # Copy `get[param]` method into usedParams
+                # Copy `get[param]` method name into usedParams
                 usedParams[optionalParam] = self.OPTIONAL_PVP_PARAMS[optionalParam][1]
         return usedParams
 
@@ -337,10 +336,12 @@ using six::Vector3;
                 The data types of these arrays are set based on the PVP format string,
                     cphdMetadata.pvp.[param].getFormat(), using PVPBlock._pvpFormatToNPdtype()
         """
-        # getUsedDefaultParameters() maps all string param names to the names used in their get/set methods
-        # Reorganize paramsToCopy dict, add 'get' and wrap the string method names in tuples
+
+        # getDefaultParametersInUse() maps all string param names to the names used in their
+        # get/set methods. Call it and reorganize a little: prepend 'get' and wrap the string
+        # method names in tuples
         paramsToCopy = {paramName: ('get' + paramMethodName,)
-                        for paramName, paramMethodName in self.getUsedDefaultParameters().items()}
+                        for paramName, paramMethodName in self.getDefaultParametersInUse().items()}
 
         # Call getter methods to gather cphd.PVPType objects
         for paramName in paramsToCopy:
@@ -380,7 +381,7 @@ using six::Vector3;
                                    if paramName not in cphdMetadata.pvp.addedPVP else
                                    self.pvpFormatToAddedPVPMethod('get', paramObj.getFormat())(
                                         channel, vector, paramName))
-                    paramSize = paramObj.getSize()
+                    paramSize = paramObj.getSize()  # TODO assert that sizes in metadata are correct?
                     if paramSize == 1:
                         channelPVP[paramName][vector] = pulseVector
                     else:
@@ -391,20 +392,24 @@ using six::Vector3;
 
         return pvpData
 
-    def populateFromListOfDicts(self, pvpData, cphdMetadata):
+    @staticmethod
+    def fromListOfDicts(pvpData, cphdMetadata):
         """
-        \brief  Sets data for this PVPBlock from a list of Python dicts
+        \brief  Initializes a PVPBlock using provided CPHD metadata and populates it from a list
+                of Python dicts
 
         \param  pvpData (list of Python dicts)
                 List of Python dicts (one for each channel) mapping parameter names
                 to NumPy arrays of data.  See PVPBlock.toListOfDicts() for more information
-                on the structure expected here.
+                on the structure expected here
         \param  cphdMetadata (SWIG-wrapped CPHD Metadata object)
                 The metadata used to create this PVPBlock
         """
 
+        pvpBlock = PVPBlock(cphdMetadata.pvp, cphdMetadata.data)  # Call other PVPBlock constructor
+
         paramsToSet = {paramName: 'set' + paramMethodName for
-                       paramName, paramMethodName in self.getUsedDefaultParameters().items()}
+                       paramName, paramMethodName in pvpBlock.getDefaultParametersInUse().items()}
 
         # Populate PVPBlock object
         for channelIndex, channelData in enumerate(pvpData):
@@ -419,11 +424,12 @@ using six::Vector3;
                     if paramName not in cphdMetadata.pvp.addedPVP:
                         # Get the setter method for this parameter, then call it with indices and
                         # data to set for this parameter
-                        getattr(self, paramsToSet[paramName])(paramData, channelIndex, vectorIndex)
+                        getattr(pvpBlock, paramsToSet[paramName])(paramData, channelIndex, vectorIndex)
                     else:
                         # Get setter method for custom parameter, then call it
-                        self.pvpFormatToAddedPVPMethod('set', cphdMetadata.pvp.addedPVP[paramName].getFormat())(
+                        pvpBlock.pvpFormatToAddedPVPMethod('set', cphdMetadata.pvp.addedPVP[paramName].getFormat())(
                             paramData, channelIndex, vectorIndex, paramName)
+        return pvpBlock
 %}
 }
 
