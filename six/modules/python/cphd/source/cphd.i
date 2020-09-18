@@ -167,36 +167,37 @@ using six::Vector3;
 {
 %pythoncode
 %{
-    # List of field names and get[param]/has[param] methods for each PVP parameter in a CPHD PVP
-    # object.  We could generate these programmatically, but the upper/lowercasing of the method
-    # names is not 100% consistent, and this is maybe more readable(?)
-    PVP_PARAM_GETTERS = {
-        'txTime': 'getTxTime',
-        'txPos': 'getTxPos',
-        'txVel': 'getTxVel',
-        'rcvTime': 'getRcvTime',
-        'rcvPos': 'getRcvPos',
-        'rcvVel': 'getRcvVel',
-        'srpPos': 'getSRPPos',
-        'aFDOP': 'getaFDOP',
-        'aFRR1': 'getaFRR1',
-        'aFRR2': 'getaFRR2',
-        'fx1': 'getFx1',
-        'fx2': 'getFx2',
-        'toa1': 'getTOA1',
-        'toa2': 'getTOA2',
-        'tdTropoSRP': 'getTdTropoSRP',
-        'sc0': 'getSC0',
-        'scss': 'getSCSS'
+    # Map PVPBlock field names to how they're used in the get/set methods for each PVP parameter
+    # in a CPHD PVPBlock object.  We could generate these programmatically, but the
+    # upper/lowercasing of the method names is not 100% consistent (TOAE, TdIonoSRP)
+    # and this is maybe more readable(?)
+    PVP_PARAM_METHODS = {
+        'txTime': 'TxTime',
+        'txPos': 'TxPos',
+        'txVel': 'TxVel',
+        'rcvTime': 'RcvTime',
+        'rcvPos': 'RcvPos',
+        'rcvVel': 'RcvVel',
+        'srpPos': 'SRPPos',
+        'aFDOP': 'aFDOP',
+        'aFRR1': 'aFRR1',
+        'aFRR2': 'aFRR2',
+        'fx1': 'Fx1',
+        'fx2': 'Fx2',
+        'toa1': 'TOA1',
+        'toa2': 'TOA2',
+        'tdTropoSRP': 'TdTropoSRP',
+        'sc0': 'SC0',
+        'scss': 'SCSS'
     }
     OPTIONAL_PVP_PARAMS = {
-        'ampSF': ('hasAmpSF', 'getAmpSF'),
-        'fxN1': ('hasFxN1', 'getFxN1'),
-        'fxN2': ('hasFxN2', 'getFxN2'),
-        'signal': ('hasSignal', 'getSignal'),
-        'tdIonoSRP': ('hasTDIonoSRP', 'getTdIonoSRP'),
-        'toaE1': ('hasToaE1', 'getTOAE1'),
-        'toaE2': ('hasToaE2', 'getTOAE2')
+        'ampSF': ('hasAmpSF', 'AmpSF'),
+        'fxN1': ('hasFxN1', 'FxN1'),
+        'fxN2': ('hasFxN2', 'FxN2'),
+        'signal': ('hasSignal', 'Signal'),
+        'tdIonoSRP': ('hasTDIonoSRP', 'TdIonoSRP'),
+        'toaE1': ('hasToaE1', 'TOAE1'),
+        'toaE2': ('hasToaE2', 'TOAE2')
     }
 
     import numpy  # 'as np' doesn't work unless the import is within each function
@@ -294,6 +295,25 @@ using six::Vector3;
         # setFloatVector3AddedPVP TODO
         return getattr(self, getOrSet + methodName)
 
+    def getUsedDefaultParameters(self):
+        """
+        \brief  Returns a dict mapping PVPBlock field names for the default PVP parameters
+                in this block to the names used in their get/set methods. Method names will
+                need to have 'get' or 'set' prepended
+
+        \return A dict mapping field names for the default PVP parameters used in this block
+                to the names used in their get/set methods
+        """
+
+        # Determine which (non-custom) params need to be set
+        usedParams = dict(self.PVP_PARAM_METHODS)  # Copy all required PVP params
+        for optionalParam in self.OPTIONAL_PVP_PARAMS:
+            # Call boolean `has[param]` method of PVPBlock to check if this PVPBlock has this param
+            if getattr(self, self.OPTIONAL_PVP_PARAMS[optionalParam][0])():
+                # Copy `get[param]` method into usedParams
+                usedParams[optionalParam] = self.OPTIONAL_PVP_PARAMS[optionalParam][1]
+        return usedParams
+
     def toListOfDicts(self, cphdMetadata):
         """
         \brief  Turns this PVPBlock object in a list of Python dictionaries with NumPy arrays
@@ -314,31 +334,23 @@ using six::Vector3;
                 The data types of these arrays are set based on the PVP format string,
                     cphdMetadata.pvp.[param].getFormat(), using PVPBlock._pvpFormatToNPdtype()
         """
-
-        # Determine which (non-custom) params need to be set
-        paramsToCopy = dict(self.PVP_PARAM_GETTERS)  # Copy all required PVP params
-        for optionalParam in self.OPTIONAL_PVP_PARAMS:
-            # Call boolean `has[param]` method of PVPBlock to check if this PVPBlock has this param
-            if getattr(self, self.OPTIONAL_PVP_PARAMS[optionalParam][0])():
-                # Copy `get[param]` method into paramsToCopy
-                paramsToCopy[optionalParam] = self.OPTIONAL_PVP_PARAMS[optionalParam][1]
-
-        # Now paramsToCopy maps all string param names to their getter methods
-        # Reorganize paramsToCopy dict, wrap the string getter method names in tuples
-        paramsToCopy = {paramName: (paramGetter,)
-                        for paramName, paramGetter in paramsToCopy.items()}
+        # getUsedDefaultParameters() maps all string param names to the names used in their get/set methods
+        # Reorganize paramsToCopy dict, add 'get' and wrap the string method names in tuples
+        paramsToCopy = {paramName: ('get' + paramMethodName,)
+                        for paramName, paramMethodName in self.getUsedDefaultParameters().items()}
 
         # Call getter methods to gather cphd.PVPType objects
         for paramName in paramsToCopy:
             # Append PVPType object to tuple inside paramsToCopy
             paramsToCopy[paramName] += (getattr(cphdMetadata.pvp, paramName),)
-        # Add custom PVP objects, which don't have getters (APVPType ("AddedPVPType") derives from
-        # PVPType)
+        # Add custom PVP objects, which don't have getters
+        # (APVPType ("AddedPVPType") derives from PVPType)
         paramsToCopy.update({paramName: (None, paramObj)
                              for paramName, paramObj in cphdMetadata.pvp.addedPVP.items()})
 
         # Now paramsToCopy consists of:
         # {'param1Name': ('getParam1', cphd.PVPType object for param1)}
+        # for all default and custom PVP parameters used in this PVPBlock
 
         pvpData = []
         # Read data from each channel of this PVPBlock into list-of-dicts
@@ -375,6 +387,40 @@ using six::Vector3;
             pvpData.append(channelPVP)
 
         return pvpData
+
+    def populateFromListOfDicts(self, pvpData, cphdMetadata):
+        """
+        \brief  Sets data for this PVPBlock from a list of Python dicts
+
+        \param  pvpData (list of Python dicts)
+                List of Python dicts (one for each channel) mapping parameter names
+                to NumPy arrays of data.  See PVPBlock.toListOfDicts() for more information
+                on the structure expected here.
+        \param  cphdMetadata (SWIG-wrapped CPHD Metadata object)
+                The metadata used to create this PVPBlock
+        """
+
+        paramsToSet = {paramName: 'set' + paramMethodName for
+                       paramName, paramMethodName in self.getUsedDefaultParameters().items()}
+
+        # Populate PVPBlock object
+        for channelIndex, channelData in enumerate(pvpData):
+            # Samples are probably the same across all channels?
+            for vectorIndex in range(cphdMetadata.getNumVectors(channelIndex)):
+                for paramName, data in channelData.items():
+                    paramData = data[vectorIndex]
+                    if isinstance(paramData, numpy.ndarray):
+                        # TODO should we just create a VectorN here?
+                        assert(len(paramData) == 3)
+                        paramData = coda.math_linear.Vector3(paramData)
+                    if paramName not in cphdMetadata.pvp.addedPVP:
+                        # Get the setter method for this parameter, then call it with indices and
+                        # data to set for this parameter
+                        getattr(self, paramsToSet[paramName])(paramData, channelIndex, vectorIndex)
+                    else:
+                        # Get setter method for custom parameter, then call it
+                        self.pvpFormatToAddedPVPMethod('set', cphdMetadata.pvp.addedPVP[paramName].getFormat())(
+                            paramData, channelIndex, vectorIndex, paramName)
 %}
 }
 
