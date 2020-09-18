@@ -482,37 +482,21 @@ using six::Vector3;
 
 %pythoncode
 %{
-    def writeWideband(self, pvpBlock, widebands):
-        """
-        \brief  Write NumPy array(s) of wideband data to CPHD file
-
-        \param  pvpBlock (cphd.PVPBlock)
-        \param  widebands (np.ndarray OR list of np.ndarrays)
-        """
-
-        # Stack wideband arrays if they aren't already stacked
-        if isinstance(widebands, list):
-            import numpy as np
-            contiguousWidebands = np.vstack(tuple(wideband for wideband in widebands))
-        else:
-            contiguousWidebands = widebands  # wideband is already contiguous
-        # writeWidebandImpl() requires a single wideband array
-        self.writeWidebandImpl(pvpBlock, contiguousWidebands, *contiguousWidebands.shape)
-
     def __del__(self):
         self.close()
 %}
 
-/*! Write NumPy array(s) of wideband data to CPHD file
+/*! Write NumPy array of wideband data to CPHD file
  * \param PVPBlock (cphd::PVPBlock)
  * \param widebandArray
- *        A single NumPy array of wideband data (multiple channels are vstack()'d together)
+ *        A single, contiguous NumPy array of all wideband data
+          Multiple data channels should be vstack'd together (first channel first)
  * \param rows
  *        Expected number of rows in widebandArray
  * \param cols
  *        Expected number of cols in widebandArray
  */
-void writeWidebandImpl(PVPBlock pvpBlock, PyObject* widebandArray, size_t rows, size_t cols)
+void writeWideband(PVPBlock pvpBlock, PyObject* widebandArray, size_t rows, size_t cols)
 {
     // Verify that widebandArray is a complex64 NumPy array with the expected dimensions
     numpyutils::verifyArrayType(widebandArray, NPY_COMPLEX64);
