@@ -143,6 +143,9 @@ using six::Vector3;
     }
 }
 
+%include "std_map.i"
+%template(MapStringAPVPType) std::map<std::string, cphd::APVPType>;
+
 %extend cphd::PVPBlock
 {
 // Types from Table 10-2 of the CPHD spec
