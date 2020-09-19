@@ -79,7 +79,7 @@ std::string CPHDXMLControl::toXMLString(
         const std::vector<std::string>& schemaPaths,
         bool prettyPrint)
 {
-    std::unique_ptr<xml::lite::Document> doc(toXML(metadata, schemaPaths));
+    std::unique_ptr<xml::lite::Document> doc(toXML(nullptr, metadata, schemaPaths));
     io::StringStream ss;
     (prettyPrint) ?
             doc->getRootElement()->prettyPrint(ss) :
@@ -87,11 +87,18 @@ std::string CPHDXMLControl::toXMLString(
     return ss.stream().str();
 }
 
+std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
+        const Metadata& metadata,
+        const std::vector<std::string>& schemaPaths)
+{
+  auto result = toXML(nullptr, metadata, schemaPaths);
+  return std::auto_ptr<xml::lite::Document>(result.release());
+}
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(std::nullptr_t,
         const Metadata& metadata,
         const std::vector<std::string>& schemaPaths)
 {
-    std::unique_ptr<xml::lite::Document> doc = toXMLImpl(metadata);
+    std::unique_ptr<xml::lite::Document> doc = toXMLImpl(nullptr, metadata);
     if(!schemaPaths.empty())
     {
         six::XMLControl::validate(doc.get(), schemaPaths, mLog);
@@ -107,12 +114,17 @@ std::unordered_map<std::string, std::string> CPHDXMLControl::getVersionUriMap()
     };
 }
 
+std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& metadata)
+{
+  auto result = toXMLImpl(nullptr, metadata);
+  return std::auto_ptr<xml::lite::Document>(result.release());
+}
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(std::nullptr_t, const Metadata& metadata)
 {
     const auto versionUriMap = getVersionUriMap();
     if (versionUriMap.find(metadata.getVersion()) != versionUriMap.end())
     {
-        return getParser(versionUriMap.find(metadata.getVersion())->second)->toXML(metadata);
+      return getParser(nullptr, versionUriMap.find(metadata.getVersion())->second)->toXML(nullptr, metadata);
     }
     std::ostringstream ostr;
     ostr << "The version " << metadata.getVersion() << " is invalid. "
@@ -122,6 +134,12 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(std::nullptr_t, c
 }
 
 /* FROM XML */
+std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
+                                     const std::vector<std::string>& schemaPaths)
+{
+  auto result = fromXML(nullptr, xmlString, schemaPaths);
+  return std::auto_ptr<Metadata>(result.release());
+}
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(std::nullptr_t, const std::string& xmlString,
                                      const std::vector<std::string>& schemaPaths)
 {
@@ -129,9 +147,15 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(std::nullptr_t, const std::str
     stringStream.write(xmlString.c_str(), xmlString.size());
     xml::lite::MinidomParser parser;
     parser.parse(stringStream);
-    return fromXML(parser.getDocument(), schemaPaths);
+    return fromXML(nullptr, parser.getDocument(), schemaPaths);
 }
 
+std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc,
+                                     const std::vector<std::string>& schemaPaths)
+{
+  auto result = fromXML(nullptr, doc, schemaPaths);
+  return std::auto_ptr<Metadata>(result.release());
+}
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(std::nullptr_t, const xml::lite::Document* doc,
                                      const std::vector<std::string>& schemaPaths)
 {
@@ -139,14 +163,19 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(std::nullptr_t, const xml::lit
     {
         six::XMLControl::validate(doc, schemaPaths, mLog);
     }
-    std::unique_ptr<Metadata> metadata = fromXMLImpl(doc);
+    std::unique_ptr<Metadata> metadata = fromXMLImpl(nullptr, doc);
     metadata->setVersion(uriToVersion(doc->getRootElement()->getUri()));
     return metadata;
 }
 
+std::auto_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document* doc)
+{
+  auto result = fromXMLImpl(nullptr, doc);
+  return std::auto_ptr<Metadata>(result.release());
+}
 std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(std::nullptr_t, const xml::lite::Document* doc)
 {
-    return getParser(doc->getRootElement()->getUri())->fromXML(doc);
+  return getParser(nullptr, doc->getRootElement()->getUri())->fromXML(nullptr, doc);
 }
 
 std::unique_ptr<CPHDXMLParser>

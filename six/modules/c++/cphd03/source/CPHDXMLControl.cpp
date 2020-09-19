@@ -61,7 +61,7 @@ std::string CPHDXMLControl::getSICommonURI() const
 
 std::string CPHDXMLControl::toXMLString(const Metadata& metadata)
 {
-    std::unique_ptr<xml::lite::Document> doc(toXML(metadata));
+    std::unique_ptr<xml::lite::Document> doc(toXML(nullptr, metadata));
     io::StringStream ss;
     doc->getRootElement()->print(ss);
 
@@ -483,7 +483,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(std::nullptr_t, const std::str
     stringStream.write(xmlString.c_str(), xmlString.size());
     xml::lite::MinidomParser parser;
     parser.parse(stringStream);
-    return fromXML(parser.getDocument());
+    return fromXML(nullptr, parser.getDocument());
 }
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(std::nullptr_t, const xml::lite::Document* doc)

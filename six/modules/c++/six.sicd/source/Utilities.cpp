@@ -290,6 +290,14 @@ void Utilities::getModelComponents(const ComplexData& complexData,
     }
 }
 
+std::auto_ptr<scene::ProjectionPolynomialFitter> Utilities::getPolynomialFitter(
+        const ComplexData& complexData,
+        size_t numPoints1D,
+        bool sampleWithinValidDataPolygon)
+{
+  auto result = getPolynomialFitter(nullptr, complexData, numPoints1D, sampleWithinValidDataPolygon);
+  return std::auto_ptr<scene::ProjectionPolynomialFitter>(result.release());
+}
 std::unique_ptr<scene::ProjectionPolynomialFitter> Utilities::getPolynomialFitter(std::nullptr_t,
         const ComplexData& complexData,
         size_t numPoints1D,
@@ -474,7 +482,7 @@ void Utilities::readSicd(const std::string& sicdPathname,
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(sicdPathname, schemaPaths);
 
-    complexData = getComplexData(reader);
+    complexData = getComplexData(nullptr, reader);
     getWidebandData(reader, *(complexData.get()), widebandData);
 
     // This tells the reader that it doesn't
@@ -502,7 +510,7 @@ void Utilities::readSicd(const std::string& sicdPathname,
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(sicdPathname, schemaPaths);
 
-    complexData = getComplexData(reader);
+    complexData = getComplexData(nullptr, reader);
     getWidebandData(reader, *complexData, widebandData);
     getProjectionPolys(reader,
                        orderX,
@@ -510,14 +518,19 @@ void Utilities::readSicd(const std::string& sicdPathname,
                        complexData,
                        outputRowColToSlantRow,
                        outputRowColToSlantCol);
-    noiseMesh = getNoiseMesh(reader);
-    scalarMesh = getScalarMesh(reader);
+    noiseMesh = getNoiseMesh(nullptr, reader);
+    scalarMesh = getScalarMesh(nullptr, reader);
 
     // This tells the reader that it doesn't
     // own an XMLControlRegistry
     reader.setXMLControlRegistry(NULL);
 }
 
+std::auto_ptr<ComplexData> Utilities::getComplexData(NITFReadControl& reader)
+{
+  auto result = getComplexData(nullptr, reader);
+  return std::auto_ptr<ComplexData>(result.release());
+}
 std::unique_ptr<ComplexData> Utilities::getComplexData(std::nullptr_t, NITFReadControl& reader)
 {
     const six::Data* data = reader.getContainer()->getData(0);
@@ -539,6 +552,13 @@ std::unique_ptr<ComplexData> Utilities::getComplexData(std::nullptr_t, NITFReadC
     return complexData;
 }
 
+std::auto_ptr<ComplexData> Utilities::getComplexData(
+        const std::string& pathname,
+        const std::vector<std::string>& schemaPaths)
+{
+  auto result = getComplexData(nullptr, pathname, schemaPaths);
+  return std::auto_ptr<ComplexData>(result.release());
+}
 std::unique_ptr<ComplexData> Utilities::getComplexData(std::nullptr_t,
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
@@ -546,7 +566,7 @@ std::unique_ptr<ComplexData> Utilities::getComplexData(std::nullptr_t,
     if (sys::Path::splitExt(pathname).second == ".xml")
     {
         logging::NullLogger log;
-        return parseDataFromFile(pathname, schemaPaths, log);
+        return parseDataFromFile(nullptr, pathname, schemaPaths, log);
     }
 
     else
@@ -560,7 +580,7 @@ std::unique_ptr<ComplexData> Utilities::getComplexData(std::nullptr_t,
         reader.setXMLControlRegistry(&xmlRegistry);
         reader.load(pathname, schemaPaths);
 
-        return getComplexData(reader);
+        return getComplexData(nullptr, reader);
     }
 }
 
@@ -751,7 +771,7 @@ std::unique_ptr<ComplexData> Utilities::parseData(std::nullptr_t,
                            new XMLControlCreatorT<ComplexXMLControl>());
 
     std::unique_ptr<Data> data(
-            six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
+			       six::parseData(nullptr, xmlRegistry, xmlStream, schemaPaths, log));
 
     std::unique_ptr<ComplexData> complexData(
             reinterpret_cast<ComplexData*>(data.release()));
@@ -759,13 +779,21 @@ std::unique_ptr<ComplexData> Utilities::parseData(std::nullptr_t,
     return complexData;
 }
 
+std::auto_ptr<ComplexData> Utilities::parseDataFromFile(
+        const std::string& pathname,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log)
+{
+  auto result = parseDataFromFile(nullptr, pathname, schemaPaths, log);
+  return std::auto_ptr<ComplexData>(result.release());
+}
 std::unique_ptr<ComplexData> Utilities::parseDataFromFile(std::nullptr_t,
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
 {
     io::FileInputStream inStream(pathname);
-    return parseData(inStream, schemaPaths, log);
+    return parseData(nullptr, inStream, schemaPaths, log);
 }
 
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(std::nullptr_t,
@@ -775,7 +803,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(std::nullptr_t,
 {
     io::StringStream inStream;
     inStream.write(xmlStr);
-    return parseData(inStream, schemaPaths, log);
+    return parseData(nullptr, inStream, schemaPaths, log);
 }
 
 std::string Utilities::toXMLString(const ComplexData& data,
@@ -793,6 +821,11 @@ std::string Utilities::toXMLString(const ComplexData& data,
                                    &xmlRegistry);
 }
 
+std::auto_ptr<ComplexData> Utilities::createFakeComplexData()
+{
+  auto result = createFakeComplexData(nullptr);
+  return std::auto_ptr<ComplexData>(result.release());
+}
 std::unique_ptr<ComplexData> Utilities::createFakeComplexData(std::nullptr_t)
 {
     std::unique_ptr<ComplexData> data(new six::sicd::ComplexData());
