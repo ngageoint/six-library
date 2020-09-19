@@ -85,6 +85,7 @@ IMAGE_AREA.polygon.append(Vector2([0.1, 0.3]))
 IMAGE_AREA.polygon.append(Vector2([0.4, 0.2]))
 IMAGE_AREA.polygon.append(Vector2([0.5, 0.9]))
 
+
 def get_test_metadata():
     # Returns a cphd.Metadata object populated with dummy values
 
@@ -735,41 +736,54 @@ def get_test_metadata():
 
     return metadata
 
-def get_test_pvp_data(cphd_metadata):
+
+def get_test_pvp_data(metadata):
 
     # Note that the params used here correspond to the PVP in get_test_metadata() above
 
     pvp_data = []
-    for channel in range(cphd_metadata.getNumChannels()):
+    for channel in range(metadata.getNumChannels()):
+        num_pulses = metadata.getNumVectors(channel)
         pvp_data.append({
-            'txTime': np.random.rand(num_pulses), # (1, 'F8')
-            'txPos': np.random.rand(num_pulses, 3), # (3, 'X=F8;Y=F8;Z=F8;')
-            'txVel': np.random.rand(num_pulses, 3), # (3, 'X=F8;Y=F8;Z=F8;')
-            'rcvTime': np.random.rand(num_pulses), # (1, 'F8')
-            'rcvPos': np.random.rand(num_pulses, 3), # (3, 'X=F8;Y=F8;Z=F8;')
-            'rcvVel': np.random.rand(num_pulses, 3), # (3, 'X=F8;Y=F8;Z=F8;')
-            'srpPos': np.random.rand(num_pulses, 3), # (3, 'X=F8;Y=F8;Z=F8;')
-            'aFDOP': np.random.rand(num_pulses), # (1, 'F8')
-            'aFRR1': np.random.rand(num_pulses), # (1, 'F8')
-            'aFRR2': np.random.rand(num_pulses), # (1, 'F8')
-            'fx1': np.random.rand(num_pulses), # (1, 'F8')
-            'fx2': np.random.rand(num_pulses), # (1, 'F8')
-            'toa1': np.random.rand(num_pulses), # (1, 'F8')
-            'toa2': np.random.rand(num_pulses), # (1, 'F8')
-            'tdTropoSRP': np.random.rand(num_pulses), # (1, 'F8')
-            'sc0': np.random.rand(num_pulses), # (1, 'F8')
-            'scss': np.random.rand(num_pulses), # (1, 'F8')
+            'txTime': np.random.rand(num_pulses),  # (1, 'F8')
+            'txPos': np.random.rand(num_pulses, 3),  # (3, 'X=F8;Y=F8;Z=F8;')
+            'txVel': np.random.rand(num_pulses, 3),  # (3, 'X=F8;Y=F8;Z=F8;')
+            'rcvTime': np.random.rand(num_pulses),  # (1, 'F8')
+            'rcvPos': np.random.rand(num_pulses, 3),  # (3, 'X=F8;Y=F8;Z=F8;')
+            'rcvVel': np.random.rand(num_pulses, 3),  # (3, 'X=F8;Y=F8;Z=F8;')
+            'srpPos': np.random.rand(num_pulses, 3),  # (3, 'X=F8;Y=F8;Z=F8;')
+            'aFDOP': np.random.rand(num_pulses),  # (1, 'F8')
+            'aFRR1': np.random.rand(num_pulses),  # (1, 'F8')
+            'aFRR2': np.random.rand(num_pulses),  # (1, 'F8')
+            'fx1': np.random.rand(num_pulses),  # (1, 'F8')
+            'fx2': np.random.rand(num_pulses),  # (1, 'F8')
+            'toa1': np.random.rand(num_pulses),  # (1, 'F8')
+            'toa2': np.random.rand(num_pulses),  # (1, 'F8')
+            'tdTropoSRP': np.random.rand(num_pulses),  # (1, 'F8')
+            'sc0': np.random.rand(num_pulses),  # (1, 'F8')
+            'scss': np.random.rand(num_pulses),  # (1, 'F8')
             # Optional params
-            'ampSF': np.random.rand(num_pulses), # (1, 'F8')
-            'fxN1': np.random.rand(num_pulses), # (1, 'F8')
-            'fxN2': np.random.rand(num_pulses), # (1, 'F8')
-            'signal': np.random.rand(num_pulses), # (1, 'F8')
-            'tdIonoSRP': np.random.rand(num_pulses), # (1, 'F8')
-            'toaE1': np.random.rand(num_pulses), # (1, 'F8')
-            'toaE2': np.random.rand(num_pulses), # (1, 'F8')
+            'ampSF': np.random.rand(num_pulses),  # (1, 'F8')
+            'fxN1': np.random.rand(num_pulses),  # (1, 'F8')
+            'fxN2': np.random.rand(num_pulses),  # (1, 'F8')
+            'signal': np.random.rand(num_pulses),  # (1, 'F8')
+            'tdIonoSRP': np.random.rand(num_pulses),  # (1, 'F8')
+            'toaE1': np.random.rand(num_pulses),  # (1, 'F8')
+            'toaE2': np.random.rand(num_pulses),  # (1, 'F8')
             # Custom params
-            'newParam1': np.random.rand(num_pulses), # (1, 'F8')
-            'newParam2': np.random.rand(num_pulses) # (1, 'F8')
+            'newParam1': np.random.rand(num_pulses),  # (1, 'F8')
+            'newParam2': np.random.rand(num_pulses)  # (1, 'F8')
         })
 
     return pvp_data
+
+
+def get_test_widebands(metadata):
+
+    widebands = []
+    for channel in range(metadata.getNumChannels()):
+        num_pulses = cphd_metadata.getNumVectors(channel)
+        widebands.append(
+            np.random.rand(metadata.getNumVectors(channel), metadata.getNumSamples(channel)))
+
+    return widebands

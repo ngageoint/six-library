@@ -25,6 +25,8 @@
 # In general, if functionality in CPHD is borrowed from six.sicd,
 # refer to six.sicd's test script for more verification
 
+import pdb; pdb.set_trace()
+
 import numpy as np
 
 from pysix.cphd import PVPBlock
