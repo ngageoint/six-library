@@ -4891,6 +4891,358 @@ class PVPBlock(_object):
         """
         return _cphd.PVPBlock_getPVPdata(self, *args)
 
+
+    def getUnsignedIntAddedPVP(self, channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "unsigned int":
+        """getUnsignedIntAddedPVP(PVPBlock self, size_t channel, size_t set, std::string const & name) -> unsigned int"""
+        return _cphd.PVPBlock_getUnsignedIntAddedPVP(self, channel, set, name)
+
+
+    def getIntAddedPVP(self, channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "int":
+        """getIntAddedPVP(PVPBlock self, size_t channel, size_t set, std::string const & name) -> int"""
+        return _cphd.PVPBlock_getIntAddedPVP(self, channel, set, name)
+
+
+    def getFloatAddedPVP(self, channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "float":
+        """getFloatAddedPVP(PVPBlock self, size_t channel, size_t set, std::string const & name) -> float"""
+        return _cphd.PVPBlock_getFloatAddedPVP(self, channel, set, name)
+
+
+    def getComplexSignedIntAddedPVP(self, channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "std::complex< int >":
+        """getComplexSignedIntAddedPVP(PVPBlock self, size_t channel, size_t set, std::string const & name) -> std::complex< int >"""
+        return _cphd.PVPBlock_getComplexSignedIntAddedPVP(self, channel, set, name)
+
+
+    def getComplexFloatAddedPVP(self, channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "std::complex< float >":
+        """getComplexFloatAddedPVP(PVPBlock self, size_t channel, size_t set, std::string const & name) -> std::complex< float >"""
+        return _cphd.PVPBlock_getComplexFloatAddedPVP(self, channel, set, name)
+
+
+    def getStringAddedPVP(self, channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "std::string":
+        """getStringAddedPVP(PVPBlock self, size_t channel, size_t set, std::string const & name) -> std::string"""
+        return _cphd.PVPBlock_getStringAddedPVP(self, channel, set, name)
+
+
+    def setUnsignedIntAddedPVP(self, value: 'unsigned int', channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "void":
+        """setUnsignedIntAddedPVP(PVPBlock self, unsigned int value, size_t channel, size_t set, std::string const & name)"""
+        return _cphd.PVPBlock_setUnsignedIntAddedPVP(self, value, channel, set, name)
+
+
+    def setIntAddedPVP(self, value: 'int', channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "void":
+        """setIntAddedPVP(PVPBlock self, int value, size_t channel, size_t set, std::string const & name)"""
+        return _cphd.PVPBlock_setIntAddedPVP(self, value, channel, set, name)
+
+
+    def setFloatAddedPVP(self, value: 'float', channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "void":
+        """setFloatAddedPVP(PVPBlock self, float value, size_t channel, size_t set, std::string const & name)"""
+        return _cphd.PVPBlock_setFloatAddedPVP(self, value, channel, set, name)
+
+
+    def setComplexSignedIntAddedPVP(self, value: 'std::complex< int >', channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "void":
+        """setComplexSignedIntAddedPVP(PVPBlock self, std::complex< int > value, size_t channel, size_t set, std::string const & name)"""
+        return _cphd.PVPBlock_setComplexSignedIntAddedPVP(self, value, channel, set, name)
+
+
+    def setComplexFloatAddedPVP(self, value: 'std::complex< float >', channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "void":
+        """setComplexFloatAddedPVP(PVPBlock self, std::complex< float > value, size_t channel, size_t set, std::string const & name)"""
+        return _cphd.PVPBlock_setComplexFloatAddedPVP(self, value, channel, set, name)
+
+
+    def setStringAddedPVP(self, value: 'std::string', channel: 'size_t', set: 'size_t', name: 'std::string const &') -> "void":
+        """setStringAddedPVP(PVPBlock self, std::string value, size_t channel, size_t set, std::string const & name)"""
+        return _cphd.PVPBlock_setStringAddedPVP(self, value, channel, set, name)
+
+
+        # Map PVPBlock field names to how they're used in the get/set methods for each PVP parameter
+        # in a CPHD PVPBlock object.  We could generate these programmatically, but the
+        # upper/lowercasing of the method names is not 100% consistent (TOAE, TdIonoSRP)
+        # and this is very explicit
+    PVP_PARAM_METHODS = {
+        'txTime': 'TxTime',
+        'txPos': 'TxPos',
+        'txVel': 'TxVel',
+        'rcvTime': 'RcvTime',
+        'rcvPos': 'RcvPos',
+        'rcvVel': 'RcvVel',
+        'srpPos': 'SRPPos',
+        'aFDOP': 'aFDOP',
+        'aFRR1': 'aFRR1',
+        'aFRR2': 'aFRR2',
+        'fx1': 'Fx1',
+        'fx2': 'Fx2',
+        'toa1': 'TOA1',
+        'toa2': 'TOA2',
+        'tdTropoSRP': 'TdTropoSRP',
+        'sc0': 'SC0',
+        'scss': 'SCSS'
+    }
+    OPTIONAL_PVP_PARAMS = {
+        'ampSF': ('hasAmpSF', 'AmpSF'),
+        'fxN1': ('hasFxN1', 'FxN1'),
+        'fxN2': ('hasFxN2', 'FxN2'),
+        'signal': ('hasSignal', 'Signal'),
+        'tdIonoSRP': ('hasTDIonoSRP', 'TdIonoSRP'),
+        'toaE1': ('hasToaE1', 'TOAE1'),
+        'toaE2': ('hasToaE2', 'TOAE2')
+    }
+
+    import numpy  # 'as np' doesn't work unless the import is within each function
+
+    @staticmethod
+    def _validateMultiplePVPFormatStr(pvpFormatStr):
+        """
+        \brief  Confirms that a valid PVP format string (CPHD Spec Table 10-2) with multiple
+                parameters (e.g. 'X=U2;Y=U2;') uses the same data type for all parameters.
+                Returns the data type if it is the same for all parameters, raises an exception
+                otherwise
+
+        \param  pvpFormatStr (str)
+                CPHD PVP format string, with multiple parameters e.g. 'X=U1;Y=U1;'
+                See CPHD Spec Table 10-2
+
+        \return Data type if it is the same for all parameters, raises an exception otherwise
+        """
+
+        paramTypes = [param[param.index('=') + 1:] for param in pvpFormatStr.split(';') if param]
+
+    # TODO support multiple different parameter types ('A=U2;B=I2;')
+        if not all(paramType == paramTypes[0] for paramType in paramTypes[1:]):
+            raise Exception('Multiple parameters with different data types are not yet supported')
+
+        return paramTypes[0]
+
+    @staticmethod
+    def _pvpFormatToNPdtype(pvpFormatStr):
+        """
+        \brief  Maps valid PVP format strings (CPHD Spec Table 10-2) to NumPy dtypes
+                Currently doesn't support multiple parameters with different types,
+                e.g. 'X=U2;Y=F4;'
+
+        \param  pvpFormatStr (str)
+                CPHD PVP format string, e.g. 'U1' or 'CI2'. See CPHD Spec Table 10-2
+
+        \return NumPy dtype corresponding to pvpFormatStr
+        """
+
+        if '=' in pvpFormatStr and ';' in pvpFormatStr:
+    # This string has multiple parameters, assert that they are all the same data type
+            pvpFormatStr = PVPBlock._validateMultiplePVPFormatStr(pvpFormatStr)
+
+        first = pvpFormatStr[0]
+        if first in ['U', 'I', 'F']:  # Unsigned int, signed int, float
+            return numpy.dtype(pvpFormatStr.lower())
+        elif first == 'C':  # Complex float ('CF') or complex int ('CI')
+    # This uses complex floats for both, which works but will take more space
+    # TODO define a custom dtype for complex ints?
+            return numpy.dtype('c' + pvpFormatStr[2:])
+        elif first == 'S':  # String
+    # TODO official format is “S[1-9][0-9]*”:
+    #   Is the '*' literal or indicating that these can be however long?
+            return numpy.dtype('U' + pvpFormatStr[1:])
+
+        raise Exception('Unknown or unsupported format string: \'{0}\''.format(pvpFormatStr))
+
+    def pvpFormatToAddedPVPMethod(self, getOrSet, pvpFormatStr):
+        """
+        \brief  Returns a callable method object to get or set an added PVP. PVPBlock.getAddedPVP()
+                is templated based on the type of the parameter it returns, so we need to get the
+                correct method name for the type of the parameter
+
+        \param  getOrSet (str)
+                'get' or 'set', depending on whether we want the getter or setter method for this
+                type of PVP
+        \param  pvpFormatStr (str)
+                CPHD PVP format string, e.g. 'U1' or 'CI2'. See CPHD Spec Table 10-2
+
+        \return Callable method object to get or set an added PVP for this PVPBlock
+        """
+
+        if '=' in pvpFormatStr and ';' in pvpFormatStr:
+    # This string has multiple parameters, assert that they are all the same data type
+            pvpFormatStr = PVPBlock._validateMultiplePVPFormatStr(pvpFormatStr)
+
+        if getOrSet not in ['get', 'set']:
+            raise Exception('getOrSet should be only \'get\' or \'set\', not {}'.format(getOrSet))
+
+        methodName = None
+        if pvpFormatStr.startswith('U'):
+            methodName = 'UnsignedIntAddedPVP'
+        elif pvpFormatStr.startswith('I'):
+            methodName = 'IntAddedPVP'
+        elif pvpFormatStr.startswith('F'):
+            methodName = 'FloatAddedPVP'
+        elif pvpFormatStr.startswith('CI'):
+            methodName = 'ComplexSignedIntAddedPVP'
+        elif pvpFormatStr.startswith('CF'):
+            methodName = 'ComplexFloatAddedPVP'
+        elif pvpFormatStr.startswith('S'):
+            methodName = 'StringAddedPVP'
+
+        return getattr(self, getOrSet + methodName)
+
+    def getDefaultParametersInUse(self):
+        """
+        \brief  Returns a dict mapping PVPBlock field names for the default PVP parameters
+                in this block to the names used in their get/set methods. Method names will
+                need to have 'get' or 'set' prepended
+
+        \return A dict mapping field names for the default PVP parameters used in this block
+                to the names used in their get/set methods
+        """
+
+    # Determine which (non-custom) params need to be set
+        usedParams = dict(self.PVP_PARAM_METHODS)  # Copy all required PVP params
+        for optionalParam in self.OPTIONAL_PVP_PARAMS:
+    # Call boolean `has[param]` method of PVPBlock to check if this PVPBlock has this param
+            if getattr(self, self.OPTIONAL_PVP_PARAMS[optionalParam][0])():
+    # Copy `get[param]` method name into usedParams
+                usedParams[optionalParam] = self.OPTIONAL_PVP_PARAMS[optionalParam][1]
+        return usedParams
+
+    def toListOfDicts(self, cphdMetadata):
+        """
+        \brief  Turns this PVPBlock object in a list of Python dictionaries with NumPy arrays
+                of PVP data
+
+        \param  cphdMetadata (SWIG-wrapped CPHD Metadata object)
+                The metadata used to create this PVPBlock
+
+        \return List of Python dictionaries containing NumPy arrays of PVP data.
+                Each dictionary in the list corresponds to a CPHD data channel.
+                The dictionary keys are string names of the PVP parameters in this PVPBlock
+                    (specifically, the names of the attributes used to store them in a CPHD PVP
+                    object, e.g. 'rcvTime').
+                The dictionary values are NumPy arrays of shape
+                    (cphdMetadata.getNumVectors(channel), cphdMetadata.getNumSamples(channel))
+                    (with an extra dimension of size cphdMetadata.pvp.[param].getSize() if the
+                    parameter size != 1).
+                The data types of these arrays are set based on the PVP format string,
+                    cphdMetadata.pvp.[param].getFormat(), using PVPBlock._pvpFormatToNPdtype()
+                Any added PVP parameters should also have been added to cphdMetadata.pvp.addedPVP
+        """
+
+    # getDefaultParametersInUse() maps all string param names to the names used in their
+    # get/set methods. Call it and reorganize a little: prepend 'get' and wrap the string
+    # method names in tuples
+        paramsToCopy = {paramName: ('get' + paramMethodName,)
+                        for paramName, paramMethodName in self.getDefaultParametersInUse().items()}
+
+        for paramName in paramsToCopy:
+    # Append PVPType object to tuple inside paramsToCopy
+            paramsToCopy[paramName] += (getattr(cphdMetadata.pvp, paramName),)
+    # Add custom PVP objects, which don't have getters
+    # (APVPType ("AddedPVPType") derives from PVPType)
+        paramsToCopy.update({paramName: (None, paramObj)
+                             for paramName, paramObj in cphdMetadata.pvp.addedPVP.items()})
+
+    # Now paramsToCopy consists of:
+    # {'param1Name': ('getParam1', cphd.PVPType object for param1)}
+    # for all default and custom PVP parameters used in this PVPBlock
+
+        pvpData = []
+    # Read data from each channel of this PVPBlock into list-of-dicts
+        for channel in range(cphdMetadata.getNumChannels()):
+    # Initialize dict of parameters for this channel
+    # Doing this for each channel in case they have different numbers of vectors/samples
+            channelPVP = {}
+            for paramName, (paramGetter, paramObj) in paramsToCopy.items():
+                paramSize = paramObj.getSize()
+                paramShape = (cphdMetadata.getNumVectors(channel),)
+                if paramSize != 1:
+    # If data is a vector, add another dimension to the array
+                    paramShape += (paramSize,)
+                paramDtype = self._pvpFormatToNPdtype(paramObj.getFormat())
+                channelPVP[paramName] = numpy.empty(shape=paramShape, dtype=paramDtype)
+
+    # Copy PVP data for this channel by vector
+            for vector in range(cphdMetadata.getNumVectors(channel)):
+                for paramName, (paramGetter, paramObj) in paramsToCopy.items():
+    # Get, then call, the PVPBlock.get[param]() method object for
+    # current channel and vector (or use PVPBlock.getAddedPVP() if
+    # this is a custom parameter)
+                    pulseVector = (getattr(self, paramGetter)(channel, vector)
+                                   if paramName not in cphdMetadata.pvp.addedPVP else
+                                   self.pvpFormatToAddedPVPMethod('get', paramObj.getFormat())(
+                                        channel, vector, paramName))
+                    paramSize = paramObj.getSize()
+                    if paramSize == 1:
+                        channelPVP[paramName][vector] = pulseVector
+                    else:
+                        for i in range(paramSize):
+                            channelPVP[paramName][vector][i] = pulseVector[i]
+
+            pvpData.append(channelPVP)
+
+        return pvpData
+
+    @staticmethod
+    def fromListOfDicts(pvpData, cphdMetadata):
+        """
+        \brief  Initializes a PVPBlock using provided CPHD metadata and populates it from a list
+                of Python dicts
+
+        \param  pvpData (list of Python dicts)
+                List of Python dicts (one for each channel) mapping parameter names
+                to NumPy arrays of data.  See PVPBlock.toListOfDicts() for more information
+                on the structure expected here
+        \param  cphdMetadata (SWIG-wrapped CPHD Metadata object)
+                The metadata used to create this PVPBlock
+        """
+
+        pvpBlock = PVPBlock(cphdMetadata.pvp, cphdMetadata.data)  # Call other PVPBlock constructor
+
+        paramsToSet = {paramName: 'set' + paramMethodName for
+                       paramName, paramMethodName in pvpBlock.getDefaultParametersInUse().items()}
+
+    # For each parameter, check that all actual data sizes equal metadata size
+        expectedParamSizes = {**{paramName: getattr(cphdMetadata.pvp, paramName).getSize()
+                                 for paramName in paramsToSet},
+                              **{paramName: paramObj.getSize()
+                                 for paramName, paramObj in cphdMetadata.pvp.addedPVP.items()}}
+        mismatchedParams = []  # Parameters for which actual size doesn't match size in metadata
+        for paramName in (list(paramsToSet.keys()) + list(cphdMetadata.pvp.addedPVP.keys())):
+            for channelIndex, channelData in enumerate(pvpData):
+                actualSize = 1 if len(channelData[paramName].shape) == 1 \
+                               else channelData[paramName].shape[1]
+                if actualSize != expectedParamSizes[paramName]:
+                    mismatchedParams.append(
+                        (paramName, channelIndex, actualSize, expectedParamSizes[paramName]))
+        if mismatchedParams:
+            raise Exception('For the following parameters, actual data size does not match size '
+                            + 'in metadata object:\n'
+                            + '\n'.join(
+                                ['Parameter: {0}  Channel: {1}  Actual: {2}  Expected: {3}'
+                                 .format(param, channel, actual, expected)
+                                 for (param, channel, actual, expected) in mismatchedParams]))
+
+    # Populate PVPBlock object from pvpData
+        for channelIndex, channelData in enumerate(pvpData):
+            for vectorIndex in range(cphdMetadata.getNumVectors(channelIndex)):
+                for paramName, data in channelData.items():
+                    paramData = data[vectorIndex]
+                    if isinstance(paramData, numpy.ndarray):
+                        if len(paramData) == 1:
+    # Turn 1D array into scalar so we can set it below
+    # Note that, if reading this PVPBlock back into a list of dicts, this
+    # parameter will have one less dimension than was originally passed in,
+    # since we removed it here
+                            paramData = paramData.item()
+    # Could use Vector2 here, but there aren't any size 2 default parameters
+                        elif len(paramData) == 3:
+                            paramData = coda.math_linear.Vector3(paramData)
+                        else:
+                            raise Exception(('Only PVP parameters of size 1 or 3 are supported, '
+                                             + '\'{0}\' has size {1}'
+                                             .format(paramName, len(paramData))))
+                    if paramName not in cphdMetadata.pvp.addedPVP:
+    # Get the setter method for this parameter, then call it with indices and
+    # data to set for this parameter
+                        getattr(pvpBlock, paramsToSet[paramName])(paramData, channelIndex, vectorIndex)
+                    else:
+    # Get and call setter method for the type of this custom parameter
+                        pvpBlock.pvpFormatToAddedPVPMethod('set', cphdMetadata.pvp.addedPVP[paramName].getFormat())(
+                            paramData, channelIndex, vectorIndex, paramName)
+        return pvpBlock
+
     __swig_destroy__ = _cphd.delete_PVPBlock
     __del__ = lambda self: None
 PVPBlock_swigregister = _cphd.PVPBlock_swigregister
@@ -5224,35 +5576,205 @@ class CPHDWriter(_object):
         return _cphd.CPHDWriter_write(self, pvpBlock, widebandData, supportData)
 
 
-    def writeWideband(self, pvpBlock, widebands):
-        """
-        \brief  Write NumPy array(s) of wideband data to CPHD file
-
-        \param  pvpBlock (cphd.PVPBlock)
-        \param  widebands (np.ndarray OR list of np.ndarrays)
-        """
-
-    # Stack wideband arrays if they aren't already stacked
-        if isinstance(widebands, list):
-            import numpy as np
-            contiguousWidebands = np.vstack(tuple(wideband for wideband in widebands))
-        else:
-            contiguousWidebands = widebands  # wideband is already contiguous
-    # writeWidebandImpl() requires a single wideband array
-        self.writeWidebandImpl(pvpBlock, contiguousWidebands, *contiguousWidebands.shape)
-
     def __del__(self):
         self.close()
 
 
-    def writeWidebandImpl(self, pvpBlock: 'PVPBlock', widebandArray: 'PyObject *', rows: 'size_t', cols: 'size_t') -> "void":
-        """writeWidebandImpl(CPHDWriter self, PVPBlock pvpBlock, PyObject * widebandArray, size_t rows, size_t cols)"""
-        return _cphd.CPHDWriter_writeWidebandImpl(self, pvpBlock, widebandArray, rows, cols)
+    def writeWideband(self, pvpBlock: 'PVPBlock', widebandArray: 'PyObject *', rows: 'size_t', cols: 'size_t') -> "void":
+        """writeWideband(CPHDWriter self, PVPBlock pvpBlock, PyObject * widebandArray, size_t rows, size_t cols)"""
+        return _cphd.CPHDWriter_writeWideband(self, pvpBlock, widebandArray, rows, cols)
 
     __swig_destroy__ = _cphd.delete_CPHDWriter
     __del__ = lambda self: None
 CPHDWriter_swigregister = _cphd.CPHDWriter_swigregister
 CPHDWriter_swigregister(CPHDWriter)
+
+class MapStringAPVPType(_object):
+    """Proxy of C++ std::map<(std::string,cphd::APVPType)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MapStringAPVPType, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MapStringAPVPType, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(MapStringAPVPType self) -> SwigPyIterator"""
+        return _cphd.MapStringAPVPType_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(MapStringAPVPType self) -> bool"""
+        return _cphd.MapStringAPVPType___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(MapStringAPVPType self) -> bool"""
+        return _cphd.MapStringAPVPType___bool__(self)
+
+
+    def __len__(self) -> "std::map< std::string,cphd::APVPType >::size_type":
+        """__len__(MapStringAPVPType self) -> std::map< std::string,cphd::APVPType >::size_type"""
+        return _cphd.MapStringAPVPType___len__(self)
+
+    def __iter__(self):
+        return self.key_iterator()
+    def iterkeys(self):
+        return self.key_iterator()
+    def itervalues(self):
+        return self.value_iterator()
+    def iteritems(self):
+        return self.iterator()
+
+    def __getitem__(self, key: 'std::map< std::string,cphd::APVPType >::key_type const &') -> "std::map< std::string,cphd::APVPType >::mapped_type const &":
+        """__getitem__(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::key_type const & key) -> APVPType"""
+        return _cphd.MapStringAPVPType___getitem__(self, key)
+
+
+    def __delitem__(self, key: 'std::map< std::string,cphd::APVPType >::key_type const &') -> "void":
+        """__delitem__(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::key_type const & key)"""
+        return _cphd.MapStringAPVPType___delitem__(self, key)
+
+
+    def has_key(self, key: 'std::map< std::string,cphd::APVPType >::key_type const &') -> "bool":
+        """has_key(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::key_type const & key) -> bool"""
+        return _cphd.MapStringAPVPType_has_key(self, key)
+
+
+    def keys(self) -> "PyObject *":
+        """keys(MapStringAPVPType self) -> PyObject *"""
+        return _cphd.MapStringAPVPType_keys(self)
+
+
+    def values(self) -> "PyObject *":
+        """values(MapStringAPVPType self) -> PyObject *"""
+        return _cphd.MapStringAPVPType_values(self)
+
+
+    def items(self) -> "PyObject *":
+        """items(MapStringAPVPType self) -> PyObject *"""
+        return _cphd.MapStringAPVPType_items(self)
+
+
+    def __contains__(self, key: 'std::map< std::string,cphd::APVPType >::key_type const &') -> "bool":
+        """__contains__(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::key_type const & key) -> bool"""
+        return _cphd.MapStringAPVPType___contains__(self, key)
+
+
+    def key_iterator(self) -> "swig::SwigPyIterator *":
+        """key_iterator(MapStringAPVPType self) -> SwigPyIterator"""
+        return _cphd.MapStringAPVPType_key_iterator(self)
+
+
+    def value_iterator(self) -> "swig::SwigPyIterator *":
+        """value_iterator(MapStringAPVPType self) -> SwigPyIterator"""
+        return _cphd.MapStringAPVPType_value_iterator(self)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::key_type const & key)
+        __setitem__(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::key_type const & key, APVPType x)
+        """
+        return _cphd.MapStringAPVPType___setitem__(self, *args)
+
+
+    def asdict(self) -> "PyObject *":
+        """asdict(MapStringAPVPType self) -> PyObject *"""
+        return _cphd.MapStringAPVPType_asdict(self)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::map<(std::string,cphd::APVPType)> self, std::less< std::string > const & arg2) -> MapStringAPVPType
+        __init__(std::map<(std::string,cphd::APVPType)> self) -> MapStringAPVPType
+        __init__(std::map<(std::string,cphd::APVPType)> self, MapStringAPVPType arg2) -> MapStringAPVPType
+        """
+        this = _cphd.new_MapStringAPVPType(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def empty(self) -> "bool":
+        """empty(MapStringAPVPType self) -> bool"""
+        return _cphd.MapStringAPVPType_empty(self)
+
+
+    def size(self) -> "std::map< std::string,cphd::APVPType >::size_type":
+        """size(MapStringAPVPType self) -> std::map< std::string,cphd::APVPType >::size_type"""
+        return _cphd.MapStringAPVPType_size(self)
+
+
+    def swap(self, v: 'MapStringAPVPType') -> "void":
+        """swap(MapStringAPVPType self, MapStringAPVPType v)"""
+        return _cphd.MapStringAPVPType_swap(self, v)
+
+
+    def begin(self) -> "std::map< std::string,cphd::APVPType >::iterator":
+        """begin(MapStringAPVPType self) -> std::map< std::string,cphd::APVPType >::iterator"""
+        return _cphd.MapStringAPVPType_begin(self)
+
+
+    def end(self) -> "std::map< std::string,cphd::APVPType >::iterator":
+        """end(MapStringAPVPType self) -> std::map< std::string,cphd::APVPType >::iterator"""
+        return _cphd.MapStringAPVPType_end(self)
+
+
+    def rbegin(self) -> "std::map< std::string,cphd::APVPType >::reverse_iterator":
+        """rbegin(MapStringAPVPType self) -> std::map< std::string,cphd::APVPType >::reverse_iterator"""
+        return _cphd.MapStringAPVPType_rbegin(self)
+
+
+    def rend(self) -> "std::map< std::string,cphd::APVPType >::reverse_iterator":
+        """rend(MapStringAPVPType self) -> std::map< std::string,cphd::APVPType >::reverse_iterator"""
+        return _cphd.MapStringAPVPType_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(MapStringAPVPType self)"""
+        return _cphd.MapStringAPVPType_clear(self)
+
+
+    def get_allocator(self) -> "std::map< std::string,cphd::APVPType >::allocator_type":
+        """get_allocator(MapStringAPVPType self) -> std::map< std::string,cphd::APVPType >::allocator_type"""
+        return _cphd.MapStringAPVPType_get_allocator(self)
+
+
+    def count(self, x: 'std::map< std::string,cphd::APVPType >::key_type const &') -> "std::map< std::string,cphd::APVPType >::size_type":
+        """count(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::key_type const & x) -> std::map< std::string,cphd::APVPType >::size_type"""
+        return _cphd.MapStringAPVPType_count(self, x)
+
+
+    def erase(self, *args) -> "void":
+        """
+        erase(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::key_type const & x) -> std::map< std::string,cphd::APVPType >::size_type
+        erase(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::iterator position)
+        erase(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::iterator first, std::map< std::string,cphd::APVPType >::iterator last)
+        """
+        return _cphd.MapStringAPVPType_erase(self, *args)
+
+
+    def find(self, x: 'std::map< std::string,cphd::APVPType >::key_type const &') -> "std::map< std::string,cphd::APVPType >::iterator":
+        """find(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::key_type const & x) -> std::map< std::string,cphd::APVPType >::iterator"""
+        return _cphd.MapStringAPVPType_find(self, x)
+
+
+    def lower_bound(self, x: 'std::map< std::string,cphd::APVPType >::key_type const &') -> "std::map< std::string,cphd::APVPType >::iterator":
+        """lower_bound(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::key_type const & x) -> std::map< std::string,cphd::APVPType >::iterator"""
+        return _cphd.MapStringAPVPType_lower_bound(self, x)
+
+
+    def upper_bound(self, x: 'std::map< std::string,cphd::APVPType >::key_type const &') -> "std::map< std::string,cphd::APVPType >::iterator":
+        """upper_bound(MapStringAPVPType self, std::map< std::string,cphd::APVPType >::key_type const & x) -> std::map< std::string,cphd::APVPType >::iterator"""
+        return _cphd.MapStringAPVPType_upper_bound(self, x)
+
+    __swig_destroy__ = _cphd.delete_MapStringAPVPType
+    __del__ = lambda self: None
+MapStringAPVPType_swigregister = _cphd.MapStringAPVPType_swigregister
+MapStringAPVPType_swigregister(MapStringAPVPType)
 
 
 import numpy
