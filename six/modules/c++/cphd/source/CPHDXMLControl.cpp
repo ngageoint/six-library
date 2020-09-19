@@ -87,7 +87,7 @@ std::string CPHDXMLControl::toXMLString(
     return ss.stream().str();
 }
 
-std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
+std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(std::nullptr_t,
         const Metadata& metadata,
         const std::vector<std::string>& schemaPaths)
 {
@@ -107,7 +107,7 @@ std::unordered_map<std::string, std::string> CPHDXMLControl::getVersionUriMap()
     };
 }
 
-std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& metadata)
+std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(std::nullptr_t, const Metadata& metadata)
 {
     const auto versionUriMap = getVersionUriMap();
     if (versionUriMap.find(metadata.getVersion()) != versionUriMap.end())
@@ -122,7 +122,7 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& m
 }
 
 /* FROM XML */
-std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(std::nullptr_t, const std::string& xmlString,
                                      const std::vector<std::string>& schemaPaths)
 {
     io::StringStream stringStream;
@@ -132,7 +132,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
     return fromXML(parser.getDocument(), schemaPaths);
 }
 
-std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc,
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(std::nullptr_t, const xml::lite::Document* doc,
                                      const std::vector<std::string>& schemaPaths)
 {
     if(!schemaPaths.empty())
@@ -144,13 +144,13 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc
     return metadata;
 }
 
-std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document* doc)
+std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(std::nullptr_t, const xml::lite::Document* doc)
 {
     return getParser(doc->getRootElement()->getUri())->fromXML(doc);
 }
 
 std::unique_ptr<CPHDXMLParser>
-CPHDXMLControl::getParser(const std::string& uri) const
+CPHDXMLControl::getParser(std::nullptr_t, const std::string& uri) const
 {
     std::unique_ptr<CPHDXMLParser> parser;
     parser.reset(new CPHDXMLParser(uri, false, mLog));

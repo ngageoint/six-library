@@ -272,8 +272,7 @@ scene::ProjectionModel* Utilities::getProjectionModel(
     }
 }
 
-void Utilities::getModelComponents(
-        const ComplexData& complexData,
+void Utilities::getModelComponents(const ComplexData& complexData,
         std::unique_ptr<scene::SceneGeometry>& geometry,
         std::unique_ptr<scene::ProjectionModel>& projectionModel,
         AreaPlane& areaPlane)
@@ -291,7 +290,7 @@ void Utilities::getModelComponents(
     }
 }
 
-std::unique_ptr<scene::ProjectionPolynomialFitter> Utilities::getPolynomialFitter(
+std::unique_ptr<scene::ProjectionPolynomialFitter> Utilities::getPolynomialFitter(std::nullptr_t,
         const ComplexData& complexData,
         size_t numPoints1D,
         bool sampleWithinValidDataPolygon)
@@ -519,7 +518,7 @@ void Utilities::readSicd(const std::string& sicdPathname,
     reader.setXMLControlRegistry(NULL);
 }
 
-std::unique_ptr<ComplexData> Utilities::getComplexData(NITFReadControl& reader)
+std::unique_ptr<ComplexData> Utilities::getComplexData(std::nullptr_t, NITFReadControl& reader)
 {
     const six::Data* data = reader.getContainer()->getData(0);
 
@@ -540,7 +539,7 @@ std::unique_ptr<ComplexData> Utilities::getComplexData(NITFReadControl& reader)
     return complexData;
 }
 
-std::unique_ptr<ComplexData> Utilities::getComplexData(
+std::unique_ptr<ComplexData> Utilities::getComplexData(std::nullptr_t,
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
@@ -742,7 +741,7 @@ bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
     return (area > 0);
 }
 
-std::unique_ptr<ComplexData> Utilities::parseData(
+std::unique_ptr<ComplexData> Utilities::parseData(std::nullptr_t,
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
@@ -760,7 +759,7 @@ std::unique_ptr<ComplexData> Utilities::parseData(
     return complexData;
 }
 
-std::unique_ptr<ComplexData> Utilities::parseDataFromFile(
+std::unique_ptr<ComplexData> Utilities::parseDataFromFile(std::nullptr_t,
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
@@ -769,7 +768,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromFile(
     return parseData(inStream, schemaPaths, log);
 }
 
-std::unique_ptr<ComplexData> Utilities::parseDataFromString(
+std::unique_ptr<ComplexData> Utilities::parseDataFromString(std::nullptr_t,
         const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
@@ -794,7 +793,7 @@ std::string Utilities::toXMLString(const ComplexData& data,
                                    &xmlRegistry);
 }
 
-std::unique_ptr<ComplexData> Utilities::createFakeComplexData()
+std::unique_ptr<ComplexData> Utilities::createFakeComplexData(std::nullptr_t)
 {
     std::unique_ptr<ComplexData> data(new six::sicd::ComplexData());
     data->position->arpPoly = six::PolyXYZ(5);
@@ -916,7 +915,7 @@ std::unique_ptr<ComplexData> Utilities::createFakeComplexData()
     return data;
 }
 
-std::unique_ptr<NoiseMesh> Utilities::getNoiseMesh(NITFReadControl& reader)
+std::unique_ptr<NoiseMesh> Utilities::getNoiseMesh(std::nullptr_t, NITFReadControl& reader)
 {
     const std::map<std::string, size_t> nameToDesIndex =
             getAdditionalDesMap(reader);
@@ -936,7 +935,7 @@ std::unique_ptr<NoiseMesh> Utilities::getNoiseMesh(NITFReadControl& reader)
                                   reader);
 }
 
-std::unique_ptr<ScalarMesh> Utilities::getScalarMesh(NITFReadControl& reader)
+std::unique_ptr<ScalarMesh> Utilities::getScalarMesh(std::nullptr_t, NITFReadControl& reader)
 {
     const std::map<std::string, size_t> nameToDesIndex =
             getAdditionalDesMap(reader);

@@ -84,7 +84,10 @@ public:
      *  \param schemaPaths Vector of XML Schema for validation
      *  \return pointer to xml Document object
      */
-    virtual std::unique_ptr<xml::lite::Document> toXML(
+    virtual std::auto_ptr<xml::lite::Document> toXML(
+            const Metadata& metadata,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>());
+    virtual std::unique_ptr<xml::lite::Document> toXML(std::nullptr_t,
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -98,7 +101,10 @@ public:
      *
      *  \return pointer to metadata object
      */
-    virtual std::unique_ptr<Metadata> fromXML(
+    virtual std::auto_ptr<Metadata> fromXML(
+            const std::string& xmlString,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>());
+    virtual std::unique_ptr<Metadata> fromXML(std::nullptr_t,
             const std::string& xmlString,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -112,7 +118,10 @@ public:
      *
      *  \return pointer to metadata object
      */
-    virtual std::unique_ptr<Metadata> fromXML(
+    virtual std::auto_ptr<Metadata> fromXML(
+            const xml::lite::Document* doc,
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>());
+    virtual std::unique_ptr<Metadata> fromXML(std::nullptr_t,
             const xml::lite::Document* doc,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -131,7 +140,8 @@ private:
      *  \param data A Metadata object
      *  \return An XML DOM
      */
-    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Metadata& metadata);
+    virtual std::auto_ptr<xml::lite::Document> toXMLImpl(const Metadata& metadata);
+    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(std::nullptr_t, const Metadata& metadata);
 
     /*!
      *  Function takes a DOM Document* node and creates a new-allocated
@@ -140,15 +150,16 @@ private:
      *  \param doc An XML document pointer
      *  \return A Metadata object
      */
-    virtual std::unique_ptr<Metadata> fromXMLImpl(const xml::lite::Document* doc);
+    virtual std::auto_ptr<Metadata> fromXMLImpl(const xml::lite::Document* doc);
+    virtual std::unique_ptr<Metadata> fromXMLImpl(std::nullptr_t, const xml::lite::Document* doc);
 
     /*
      *  \Function creates a new parser to parse XML or document
      *
      *  \param uri A string specifying CPHD uri
      */
-    std::unique_ptr<CPHDXMLParser>
-    getParser(const std::string& uri) const;
+    std::auto_ptr<CPHDXMLParser> getParser(const std::string& uri) const;
+    std::unique_ptr<CPHDXMLParser> getParser(std::nullptr_t, const std::string& uri) const;
 
     // Given the URI get associated version
     std::string uriToVersion(const std::string& uri) const;

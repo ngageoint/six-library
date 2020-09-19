@@ -140,7 +140,7 @@ namespace six
 namespace sicd
 {
 
-std::unique_ptr<six::sicd::ComplexData> cropMetaData(
+std::unique_ptr<six::sicd::ComplexData> cropMetaData(std::nullptr_t,
         const six::sicd::ComplexData& complexData,
         const types::RowCol<size_t>& aoiOffset,
         const types::RowCol<size_t>& aoiDims)

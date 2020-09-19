@@ -73,7 +73,7 @@ size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)
     return toXMLString(metadata).size();
 }
 
-std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
+std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(std::nullptr_t, const Metadata& metadata)
 {
     std::unique_ptr<xml::lite::Document> doc(new xml::lite::Document());
 
@@ -477,7 +477,7 @@ XMLElem CPHDXMLControl::areaSampleDirectionParametersToXML(
     return adpXML;
 }
 
-std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(std::nullptr_t, const std::string& xmlString)
 {
     io::StringStream stringStream;
     stringStream.write(xmlString.c_str(), xmlString.size());
@@ -486,7 +486,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
     return fromXML(parser.getDocument());
 }
 
-std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(std::nullptr_t, const xml::lite::Document* doc)
 {
     std::unique_ptr<Metadata> cphd03(new Metadata());
 
