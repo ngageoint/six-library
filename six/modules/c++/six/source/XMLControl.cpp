@@ -44,14 +44,16 @@ void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
 {
     if (schemaPaths.empty())
     {
+        const sys::OS os;
+
         std::string envPath;
-        sys::OS().getEnvIfSet(six::SCHEMA_PATH, envPath);
+        os.getEnvIfSet(six::SCHEMA_PATH, envPath);
         str::trim(envPath);
         if (!envPath.empty())
         {
             schemaPaths.push_back(envPath);
         }
-        else
+        else if (os.exists(DEFAULT_SCHEMA_PATH))
         {
             schemaPaths.push_back(DEFAULT_SCHEMA_PATH);
         }
@@ -68,6 +70,15 @@ void XMLControl::validate(const xml::lite::Document* doc,
     // environment if nothing is specified
     std::vector<std::string> paths(schemaPaths);
     loadSchemaPaths(paths);
+
+    if (schemaPaths.empty() && log)
+    {
+        std::ostringstream oss;
+        oss << "Coudn't validate XML - no schemas paths provided "
+            << " and " << six::SCHEMA_PATH << " not set.";
+
+        log->warn(oss.str());
+    }
 
     sys::OS os;
     // If the paths we have don't exist, throw
@@ -104,9 +115,12 @@ void XMLControl::validate(const xml::lite::Document* doc,
         // log any error found and throw
         if (!errors.empty())
         {
-            for (size_t i = 0; i < errors.size(); ++i)
+            if (log)
             {
-                log->critical(errors[i].toString());
+                for (size_t i = 0; i < errors.size(); ++i)
+                {
+                    log->critical(errors[i].toString());
+                }
             }
 
             //! this is a unique error thrown only in this location --
