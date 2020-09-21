@@ -230,6 +230,7 @@ using six::Vector3;
     def _pvpFormatToNPdtype(pvpFormatStr):
         """
         \brief  Maps valid PVP format strings (CPHD Spec Table 10-2) to NumPy dtypes
+                Note that both CPHD and NumPy types are in terms of bytes
                 Currently doesn't support multiple parameters with different types,
                 e.g. 'X=U2;Y=F4;'
 
@@ -436,19 +437,17 @@ using six::Vector3;
                 for paramName, data in channelData.items():
                     paramData = data[vectorIndex]
                     if isinstance(paramData, numpy.ndarray):
-                        if len(paramData) == 1:
-                            # Turn 1D array into scalar so we can set it below
-                            # Note that, if reading this PVPBlock back into a list of dicts, this
-                            # parameter will have one less dimension than was originally passed in,
-                            # since we removed it here
-                            paramData = paramData.item()
                         # Could use Vector2 here, but there aren't any size 2 default parameters
-                        elif len(paramData) == 3:
+                        if len(paramData) == 3:
                             paramData = coda.math_linear.Vector3(paramData)
                         else:
                             raise Exception(('Only PVP parameters of size 1 or 3 are supported, '
                                              + '\'{0}\' has size {1}'
                                              .format(paramName, len(paramData))))
+                    if 'numpy' in type(paramData).__module__:
+                        # Change 1D arrays to scalars AND convert NumPy types (e.g. numpy.int64)
+                        # to Python dtypes that SWIG can understand
+                        paramData = paramData.item()
                     if paramName not in cphdMetadata.pvp.addedPVP:
                         # Get the setter method for this parameter, then call it with indices and
                         # data to set for this parameter

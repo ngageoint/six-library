@@ -34,10 +34,10 @@ from util import get_test_metadata, get_test_pvp_data
 
 if __name__ == '__main__':
 
-    metadata = get_test_metadata()
+    metadata = get_test_metadata(has_support=True, is_compressed=True)
     pvp_data = get_test_pvp_data(metadata)  # list of dicts
 
-    if not len(pvp_data) == metadata.getNumChannels():
+    if len(pvp_data) != metadata.getNumChannels():
         print('Test failed: expected {0} channels but received {1} from PVPBlock.fromListOfDicts()'
               .format(metadata.getNumChannels(), len(pvp_data)))
         exit(1)
@@ -45,13 +45,13 @@ if __name__ == '__main__':
     pvp_block = PVPBlock.fromListOfDicts(pvp_data, metadata)
     pvp_data_from_block = pvp_block.toListOfDicts(metadata)  # list of dicts
 
-    if not len(pvp_data_from_block) == metadata.getNumChannels():
+    if len(pvp_data_from_block) != metadata.getNumChannels():
         print('Test failed: expected {0} channels but received {1} from PVPBlock.toListOfDicts()'
               .format(metadata.getNumChannels(), len(pvp_data_from_block)))
         exit(1)
 
     for channel in range(metadata.getNumChannels()):
-        if not pvp_data[channel].keys() == pvp_data_from_block[channel].keys():
+        if pvp_data[channel].keys() != pvp_data_from_block[channel].keys():
             print('Test failed: list of PVP parameters differs for channel {0}'.format(channel))
             exit(1)
         for param in pvp_data[channel]:

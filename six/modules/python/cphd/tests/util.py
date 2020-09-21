@@ -248,7 +248,7 @@ def get_test_metadata(has_support, is_compressed):
     data = cphd.Data()
     data.signalArrayFormat.value = cphd.SignalArrayFormat.CF8
     data.numCPHDChannels = 2
-    data.numBytesPVP = 288
+    data.numBytesPVP = 296
     # If signalCompressionID is set, then it thinks the data is compressed
     if is_compressed: data.signalCompressionID = 'Compress'
     for vals in _channels:
@@ -381,8 +381,9 @@ def get_test_metadata(has_support, is_compressed):
 
     added_pvp_data = [
         # size, offset, fmt, name
-        (1, 34, 'F8', 'newParam1'),
-        (1, 35, 'F8', 'newParam2'),
+        (1, 34, 'F8', 'customFloatParam'),
+        (1, 35, 'I8', 'customIntParam'),
+        (1, 36, 'CF8', 'customComplexFloatParam'),
     ]
 
     pvp = cphd.Pvp()
@@ -395,6 +396,7 @@ def get_test_metadata(has_support, is_compressed):
         attr.setFormat(fmt)
 
     for args in added_pvp_data:
+        # Note that this is (size, offset, format, name)
         pvp.setCustomParameter(*args)
 
     metadata.pvp = pvp
@@ -763,13 +765,15 @@ def get_test_pvp_data(metadata):
             'ampSF': np.random.rand(num_pulses),  # (1, 'F8')
             'fxN1': np.random.rand(num_pulses),  # (1, 'F8')
             'fxN2': np.random.rand(num_pulses),  # (1, 'F8')
-            'signal': np.random.rand(num_pulses),  # (1, 'F8')
+            'signal': np.ones(num_pulses),  # (1, 'I8')
             'tdIonoSRP': np.random.rand(num_pulses),  # (1, 'F8')
             'toaE1': np.random.rand(num_pulses),  # (1, 'F8')
             'toaE2': np.random.rand(num_pulses),  # (1, 'F8')
             # Custom params
-            'newParam1': np.random.rand(num_pulses),  # (1, 'F8')
-            'newParam2': np.random.rand(num_pulses)  # (1, 'F8')
+            'customFloatParam': np.random.rand(num_pulses).astype('float32'),  # (1, 'F8')
+            'customIntParam': np.zeros((num_pulses,)).astype(int),  # (1, 'I8')
+            'customComplexFloatParam': (np.random.rand(num_pulses) + np.random.rand(num_pulses) * 1j)
+                                        .astype('complex64')  # (1, 'CF8')
         })
 
     return pvp_data
