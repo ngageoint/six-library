@@ -230,25 +230,17 @@ def get_test_metadata(has_support, is_compressed):
     ]
 
     if has_support:
+        # Note that ordering of support arrays is not neccessarily defined
+        # when reading in metadata from an XML string. If there are multiple
+        # support arrays, they may not be in the same order, which will make
+        # the XML strings not compare equally
         _support_arrays = [
-            {
-                'id': '1.0',
-                'shape': (3, 4),
-                'bytes_per_element': 8,
-                'offset': 0,
-            },
-            {
-                'id': '2.0',
-                'shape': (3, 4),
-                'bytes_per_element': 4,
-                'offset': 96,
-            },
             {
                 'id': 'AddedSupportArray',
                 'shape': (3, 4),
                 'bytes_per_element': 4,
                 'offset': 144,
-            },
+            }
         ]
     else:  # In case we don't want to provide test support data too
         _support_arrays = []
