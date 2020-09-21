@@ -86,7 +86,7 @@ IMAGE_AREA.polygon.append(Vector2([0.4, 0.2]))
 IMAGE_AREA.polygon.append(Vector2([0.5, 0.9]))
 
 
-def get_test_metadata():
+def get_test_metadata(has_support, is_compressed):
     # Returns a cphd.Metadata object populated with dummy values
 
     metadata = cphd.Metadata()
@@ -98,8 +98,8 @@ def get_test_metadata():
     cid.corename = 'Core'
     cid.collectType.value = six.CollectType.MONOSTATIC
     cid.radarMode = six.RadarModeType('STRIPMAP')
-    cid.classification = 'U'
-    cid.releaseInfo = 'Release'
+    cid.setClassificationLevel('UNCLASSIFIED')
+    cid.releaseInfo = 'UNSPECIFIED'
     cid.countryCodes.push_back('US')
     cid.countryCodes.push_back('GB')
     cid.countryCodes.push_back('AZ')
@@ -165,13 +165,13 @@ def get_test_metadata():
     sc.imageGrid = cphd.makeScopedCopyableImageGrid()
     sc.imageGrid.identifier = 'Grid'
     sc.imageGrid.iarpLocation.line = 1.23
-    sc.imageGrid.iarpLocation.sample = 3.21
-    sc.imageGrid.xExtent.lineSpacing = 3.14
-    sc.imageGrid.xExtent.firstLine = 4
-    sc.imageGrid.xExtent.numLines = 50
-    sc.imageGrid.yExtent.sampleSpacing = 6.28
-    sc.imageGrid.yExtent.firstSample = 8
-    sc.imageGrid.yExtent.numSamples = 100
+    sc.imageGrid.iarpLocation.sample = 3.45
+    sc.imageGrid.xExtent.lineSpacing = 0.123
+    sc.imageGrid.xExtent.firstLine = 0
+    sc.imageGrid.xExtent.numLines = 2
+    sc.imageGrid.yExtent.sampleSpacing = 3.456
+    sc.imageGrid.yExtent.firstSample = 0
+    sc.imageGrid.yExtent.numSamples = 3
 
     segments = {
         'Segment1': {
@@ -217,44 +217,48 @@ def get_test_metadata():
             'id': 'Channel',
             'shape': (2, 3),
             'byte_offset': 0,
-            'pvp_byte_offset': 1,
-            'comp_sig_size': 3,
+            'pvp_byte_offset': 0,
+            'comp_sig_size': 8,
         },
         {
             'id': 'Channel',
             'shape': (2, 3),
             'byte_offset': 0,
-            'pvp_byte_offset': 1,
-            'comp_sig_size': 3,
+            'pvp_byte_offset': 0,
+            'comp_sig_size': 8,
         },
     ]
 
-    _support_arrays = [
-        {
-            'id': '1.0',
-            'shape': (3, 4),
-            'bytes_per_element': 8,
-            'offset': 0,
-        },
-        {
-            'id': '2.0',
-            'shape': (3, 4),
-            'bytes_per_element': 4,
-            'offset': 96,
-        },
-        {
-            'id': 'AddedSupportArray',
-            'shape': (3, 4),
-            'bytes_per_element': 4,
-            'offset': 144,
-        },
-    ]
+    if has_support:
+        _support_arrays = [
+            {
+                'id': '1.0',
+                'shape': (3, 4),
+                'bytes_per_element': 8,
+                'offset': 0,
+            },
+            {
+                'id': '2.0',
+                'shape': (3, 4),
+                'bytes_per_element': 4,
+                'offset': 96,
+            },
+            {
+                'id': 'AddedSupportArray',
+                'shape': (3, 4),
+                'bytes_per_element': 4,
+                'offset': 144,
+            },
+        ]
+    else:  # In case we don't want to provide test support data too
+        _support_arrays = []
 
     data = cphd.Data()
-    data.signalArrayFormat.value = cphd.SignalArrayFormat.CI4
+    data.signalArrayFormat.value = cphd.SignalArrayFormat.CF8
     data.numCPHDChannels = 2
-    data.numBytesPVP = 24
-    data.signalCompressionID = 'Compress'
+    data.numBytesPVP = 288
+    # If signalCompressionID is set, then it thinks the data is compressed
+    if is_compressed: data.signalCompressionID = 'Compress'
     for vals in _channels:
         _chan = cphd.DataChannel(*vals['shape'])
         _chan.identifier = vals['id']
@@ -352,6 +356,7 @@ def get_test_metadata():
 
     # PVP block
     # Note that the params used here correspond to the list-of-dicts PVP data in get_test_pvp_data() below
+    # Any changes that affect the total PVP size will require updating data.numBytesPVP (above)
 
     pvp_data = {
         # Name: (offset, size, format)
@@ -376,7 +381,7 @@ def get_test_metadata():
         'ampSF': (27, 1, 'F8'),
         'fxN1': (28, 1, 'F8'),
         'fxN2': (29, 1, 'F8'),
-        'signal': (30, 1, 'F8'),
+        'signal': (30, 1, 'I8'),
         'tdIonoSRP': (31, 1, 'F8'),
         'toaE1': (32, 1, 'F8'),
         'toaE2': (33, 1, 'F8'),
@@ -782,8 +787,9 @@ def get_test_widebands(metadata):
 
     widebands = []
     for channel in range(metadata.getNumChannels()):
-        num_pulses = cphd_metadata.getNumVectors(channel)
-        widebands.append(
-            np.random.rand(metadata.getNumVectors(channel), metadata.getNumSamples(channel)))
+        num_pulses = metadata.getNumVectors(channel)
+        shape = (metadata.getNumVectors(channel), metadata.getNumSamples(channel))
+        widebands.append((np.random.rand(*shape) + np.random.rand(*shape) * 1j)
+                         .astype('complex64'))
 
     return widebands

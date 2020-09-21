@@ -31,7 +31,10 @@ from util import get_test_metadata
 
 if __name__ == '__main__':
     xml_parser = CPHDXMLControl()
-    metadata = get_test_metadata()
+    metadata = get_test_metadata(has_support=True, is_compressed=True)
+
+    # For an 'Invalid XML' error below, you can use CPHDXMLControl.toXMLString(cphd_metadata)
+    # to write the invalid XML to a string and verify that against the CPHD schemas
 
     try:
         xml_str = xml_parser.toXMLString(metadata)
