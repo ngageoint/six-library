@@ -98,7 +98,7 @@ TRE::~TRE()
 {
 }
 
-TRE::Iterator TRE::begin()
+TRE::Iterator TRE::begin() const
 {
     nitf_TREEnumerator* iter = nitf_TRE_begin(getNativeOrThrow(), &error);
     if (!iter)
@@ -106,12 +106,12 @@ TRE::Iterator TRE::begin()
     return TRE::Iterator(iter);
 }
 
-TRE::Iterator TRE::end()
+TRE::Iterator TRE::end() const
 {
     return TRE::Iterator();
 }
 
-nitf::Field TRE::getField(const std::string& key)
+nitf::Field TRE::getField(const std::string& key) const
 {
     nitf_Field* field = nitf_TRE_getField(getNativeOrThrow(), key.c_str());
     if (!field)
@@ -136,12 +136,12 @@ nitf::Field TRE::operator[](const std::string& key)
     return getField(key);
 }
 
-bool TRE::exists(const std::string& key)
+bool TRE::exists(const std::string& key) const
 {
     return nitf_TRE_exists(getNativeOrThrow(), key.c_str()) == NITF_SUCCESS;
 }
 
-size_t TRE::getCurrentSize()
+size_t TRE::getCurrentSize() const
 {
     int size = nitf_TRE_getCurrentSize(getNativeOrThrow(), &error);
     if (size < 0)
@@ -160,7 +160,7 @@ void TRE::setTag(const std::string& value)
     memcpy(getNativeOrThrow()->tag, value.c_str(), 7);
 }
 
-nitf::List TRE::find(const std::string& pattern)
+nitf::List TRE::find(const std::string& pattern) const
 {
     nitf_List* list = nitf_TRE_find(getNative(), pattern.c_str(), &error);
     if (!list)
@@ -184,7 +184,7 @@ static bool endsWith(const std::string& s, const std::string& match)
     return sLen >= mLen;
 }
 
-std::string TRE::truncate(const std::string& value, size_t maxDigits)
+std::string TRE::truncate(const std::string& value, size_t maxDigits) const
 {
     const size_t decimalIndex = value.find('.');
     if (decimalIndex == std::string::npos)

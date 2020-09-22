@@ -236,7 +236,7 @@ typedef nitf::ExtensionsIterator Iterator;
      *  \param  The name of the TRE to get
      *  \return  A List of TREs matching the specified name
      */
-    nitf::List getTREsByName(const std::string& name)
+    nitf::List getTREsByName(const std::string& name) const
     {
         nitf_List* x = nitf_Extensions_getTREsByName(getNative(), name.c_str());
         if (!x)
@@ -268,7 +268,7 @@ typedef nitf::ExtensionsIterator Iterator;
 
 
     //! Get the hash
-    nitf::HashTable getHash()
+    nitf::HashTable getHash() const
     {
         return nitf::HashTable(getNativeOrThrow()->hash);
     }
@@ -289,7 +289,7 @@ typedef nitf::ExtensionsIterator Iterator;
      *  Checks if the TRE exists
      *  \param  The name of the TRE
      */
-    bool exists(const std::string& key)
+    bool exists(const std::string& key) const
     {
         NITF_BOOL x = nitf_Extensions_exists(getNative(), key.c_str());
         return x ? true : false;
@@ -299,7 +299,7 @@ typedef nitf::ExtensionsIterator Iterator;
      *  Get the begin iterator
      *  \return The iterator pointing to the first TRE
      */
-    Iterator begin()
+    Iterator begin() const
     {
         nitf_ExtensionsIterator x = nitf_Extensions_begin(getNative());
         return nitf::ExtensionsIterator(x);
@@ -309,19 +309,19 @@ typedef nitf::ExtensionsIterator Iterator;
      *  Get the end iterator
      *  \return  The iterator pointing PAST the last TRE (null)
      */
-    Iterator end()
+    Iterator end() const
     {
         nitf_ExtensionsIterator x = nitf_Extensions_end(getNative());
         return nitf::ExtensionsIterator(x);
     }
 
-    uint64_t computeLength(nitf::Version version)
+    uint64_t computeLength(nitf::Version version) const
     {
         return nitf_Extensions_computeLength(getNative(), version, &error);
     }
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error;
 };
 }
 #endif

@@ -60,39 +60,39 @@ public:
     DESubheader();
 
     //! Clone
-    nitf::DESubheader clone();
+    nitf::DESubheader clone() const;
 
     ~DESubheader();
 
     //! Get the filePartType
-    nitf::Field getFilePartType();
+    nitf::Field getFilePartType() const;
 
     //! Get the typeID
-    nitf::Field getTypeID();
+    nitf::Field getTypeID() const;
 
     //! Get the version
-    nitf::Field getVersion();
+    nitf::Field getVersion() const;
 
     //! Get the securityClass
-    nitf::Field getSecurityClass();
+    nitf::Field getSecurityClass() const;
 
     //! Get the securityGroup
-    nitf::FileSecurity getSecurityGroup();
+    nitf::FileSecurity getSecurityGroup() const;
 
     //! Set the securityGroup
     void setSecurityGroup(nitf::FileSecurity value);
 
     //! Get the overflowedHeaderType
-    nitf::Field getOverflowedHeaderType();
+    nitf::Field getOverflowedHeaderType() const;
 
     //! Get the dataItemOverflowed
-    nitf::Field getDataItemOverflowed();
+    nitf::Field getDataItemOverflowed() const;
 
     //! Get the subheaderFieldsLength
-    nitf::Field getSubheaderFieldsLength();
+    nitf::Field getSubheaderFieldsLength() const;
 
     //! Get the subheaderFields
-    nitf::TRE getSubheaderFields();
+    nitf::TRE getSubheaderFields() const;
 
     //! Set the subheaderFields
     void setSubheaderFields(nitf::TRE fields);
@@ -104,13 +104,13 @@ public:
     void setDataLength(uint32_t value);
 
     //! Get the userDefinedSection
-    nitf::Extensions getUserDefinedSection();
+    nitf::Extensions getUserDefinedSection() const;
 
     //! Set the userDefinedSection
     void setUserDefinedSection(nitf::Extensions value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error;
 };
 
 }

@@ -1184,7 +1184,7 @@ int main(int argc, char **argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
             "OUTPUT", 1, 1, true)->setDefault("test_create.nitf");
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        auto options = parser.parse(argc, argv);
         const bool isMono(options->get<bool>("isMono"));
         // If we're compressing, we're using the J2K plugin, so please ensure
         // that it is on your NITF_PLUGIN_PATH

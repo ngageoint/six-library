@@ -22,6 +22,7 @@
 
 #ifndef __NRT_ERROR_H__
 #define __NRT_ERROR_H__
+#pragma once
 
 #include "nrt/Defines.h"
 #include "nrt/Types.h"

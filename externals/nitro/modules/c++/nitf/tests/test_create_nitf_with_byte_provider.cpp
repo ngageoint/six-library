@@ -1176,7 +1176,7 @@ int main(int argc, char **argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
             "OUTPUT", 1, 1, true)->setDefault("test_create.nitf");
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        auto options = parser.parse(argc, argv);
         // We can't actually compress. This is just for illustration.
         const bool shouldCompress(options->get<bool>("shouldCompress"));
         if (shouldCompress)

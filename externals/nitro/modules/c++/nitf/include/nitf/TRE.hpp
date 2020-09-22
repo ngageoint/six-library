@@ -204,26 +204,26 @@ DECLARE_CLASS(TRE)
      *  Get a begin TRE field iterator
      *  \return  A field iterator pointing at the first field in the TRE
      */
-    Iterator begin();
+    Iterator begin() const;
 
     /*!
      *  Get an end TRE field iterator
      *  \return  A field iterator pointing PAST the last field in the TRE
      */
-    Iterator end();
+    Iterator end() const;
 
     /*!
      * Get the field specified by the key. Throws an exception if the field
      * does not exist.
      */
-    nitf::Field getField(const std::string& key);
+    nitf::Field getField(const std::string& key) const;
 
     nitf::Field operator[](const std::string& key);
 
     /*!
      * Returns a List of Fields that match the given pattern.
      */
-    nitf::List find(const std::string& pattern);
+    nitf::List find(const std::string& pattern) const;
 
     /*!
      * Recalculate the field counts and positions for the TRE.
@@ -307,10 +307,10 @@ DECLARE_CLASS(TRE)
      *  Does the field exist?
      *  \param key  The field name in which to check
      */
-    bool exists(const std::string& key);
+    bool exists(const std::string& key) const;
 
     //! Get the total length of the TRE data
-    size_t getCurrentSize();
+    size_t getCurrentSize() const;
 
     //! Get the tag
     std::string getTag() const;
@@ -327,9 +327,9 @@ DECLARE_CLASS(TRE)
     std::string getID() const;
 
     private:
-    std::string truncate(const std::string& value, size_t maxDigits);
+    std::string truncate(const std::string& value, size_t maxDigits) const;
 
-    nitf_Error error;
+    mutable nitf_Error error;
 };
 }
 #endif
