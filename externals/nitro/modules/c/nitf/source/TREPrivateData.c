@@ -222,16 +222,13 @@ NITFPROT(NITF_BOOL) nitf_TREPrivateData_setDescriptionName(
     }
 
     /* copy the description id */
-    if (name)
+    priv->descriptionName = nitf_strdup(name);
+    if (!priv->descriptionName)
     {
-        priv->descriptionName = (char*)NITF_MALLOC(strlen(name) + 1);
-        if (!priv->descriptionName)
-        {
-            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                    NITF_CTXT, NITF_ERR_MEMORY);
-            return NITF_FAILURE;
-        }
-        strcpy(priv->descriptionName, name);
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                NITF_CTXT, NITF_ERR_MEMORY);
+        return NITF_FAILURE;
     }
+
     return NITF_SUCCESS;
 }

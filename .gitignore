@@ -32,6 +32,24 @@ test_package/build/
 *.vcxproj.user
 **/Debug/
 **/Release/
+*.a
+*.so*
+
+# CMake
+_deps/
+CMakeFiles/
+*.cmake
+CMakeCache.txt
+# cmake generates these Makefiles
+externals/*/Makefile
+externals/coda-oss/modules/c++/**/Makefile
+externals/coda-oss/modules/python/**/Makefile
+externals/nitro/modules/**/Makefile
+Makefile
+six/Makefile
+six/modules/**/Makefile
+*_config.h
+*_config.hpp
 
 # Drivers
 six/projects/csm/external/csm-master/
@@ -41,3 +59,4 @@ six/projects/csm/external/vts_301_0/
 # Giant test files
 regression_files/
 six/modules/c++/cphd/tests/sample_cphd/
+

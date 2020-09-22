@@ -132,15 +132,15 @@ NITFPRIV(int) ENGRDA_parse(nitf_TRE * tre,
             {
                 if (length == NITF_INT16_SZ)
                 {
-                    nitf_Int16 int16 =
-                        (nitf_Int16)NITF_NTOHS(*((nitf_Int16 *) (bufptr + offset)));
+                    int16_t int16 =
+                        (int16_t)NITF_NTOHS(*((int16_t *) (bufptr + offset)));
                     status = nitf_Field_setRawData(field,
                             (NITF_DATA *) & int16, length, error);
                 }
                 else if (length == NITF_INT32_SZ)
                 {
-                    nitf_Int32 int32 =
-                        (nitf_Int32)NITF_NTOHL(*((nitf_Int32 *) (bufptr + offset)));
+                    int32_t int32 =
+                        (int32_t)NITF_NTOHL(*((int32_t *) (bufptr + offset)));
                     status = nitf_Field_setRawData(field,
                             (NITF_DATA *) & int32, length, error);
                 }
@@ -210,7 +210,7 @@ NITFPRIV(int) ENGRDA_parse(nitf_TRE * tre,
  *       original read function?
  */
 NITFPRIV(NITF_BOOL) ENGRDA_read(nitf_IOInterface* io,
-                                nitf_Uint32 length,
+                                uint32_t length,
                                 nitf_TRE* tre,
                                 struct _nitf_Record* record,
                                 nitf_Error* error)

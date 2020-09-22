@@ -103,9 +103,9 @@ protected:
     //! The amount of backlog
     int mBacklog;
     //! The socket we are listening on
-    std::auto_ptr<net::Socket> mSocket;
+    std::unique_ptr<net::Socket> mSocket;
 
-    std::auto_ptr<net::AllocStrategy> mAllocStrategy;
+    std::unique_ptr<net::AllocStrategy> mAllocStrategy;
 };
 }
 

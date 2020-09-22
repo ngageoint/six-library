@@ -73,7 +73,9 @@ public:
      *  \param schemaPaths Vector of XML Schema for validation
      *  \return pointer to xml Document object
      */
-    std::unique_ptr<xml::lite::Document> toXML(
+    std::auto_ptr<xml::lite::Document> toXML(
+            const Metadata& metadata);
+    std::unique_ptr<xml::lite::Document> toXML(std::nullptr_t,
             const Metadata& metadata);
 
     /*!
@@ -86,7 +88,9 @@ public:
      *
      *  \return pointer to metadata object
      */
-    std::unique_ptr<Metadata> fromXML(
+    std::auto_ptr<Metadata> fromXML(
+            const xml::lite::Document* doc);
+    std::unique_ptr<Metadata> fromXML(std::nullptr_t,
             const xml::lite::Document* doc);
 
 private:

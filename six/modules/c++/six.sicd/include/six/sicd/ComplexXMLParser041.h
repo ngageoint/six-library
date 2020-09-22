@@ -38,7 +38,7 @@ public:
 protected:
     ComplexXMLParser041(const std::string& version,
                         bool addClassAttributes,
-                        std::auto_ptr<SICommonXMLParser> comParser,
+                        std::unique_ptr<SICommonXMLParser>&& comParser,
                         logging::Logger* log = NULL,
                         bool ownLog = false);
 

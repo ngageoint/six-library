@@ -210,7 +210,7 @@ int main(int argc, char* argv[])
         parser.addArgument("sidd2", "Input SIDD path",
                 cli::STORE, "SIDD2", "SIDD2", 1, 1, true);
 
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const bool ignoreMetadata(options->get<bool>("ignoreMetadata"));
         const bool ignoreDate(options->get<bool>("ignoreDate"));

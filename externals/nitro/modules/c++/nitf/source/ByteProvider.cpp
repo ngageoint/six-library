@@ -60,7 +60,7 @@ ByteProvider::~ByteProvider()
 }
 
 void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
-                                          std::vector<sys::byte>& rawBytes)
+                                          std::vector<std::byte>& rawBytes)
 {
     rawBytes.resize(stream.getSize());
     if (!rawBytes.empty())
@@ -128,7 +128,7 @@ void ByteProvider::initialize(Record& record,
 void ByteProvider::getFileLayout(nitf::Record& inRecord,
                                  const std::vector<PtrAndLength>& desData)
 {
-    mem::SharedPtr<io::ByteStream> byteStream(new io::ByteStream());
+    std::shared_ptr<io::ByteStream> byteStream(new io::ByteStream());
 
     nitf::IOStreamWriter io(byteStream);
 
@@ -232,7 +232,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     {
         nitf::DESegment deSegment = record.getDataExtensions()[ii];
         nitf::DESubheader subheader = deSegment.getSubheader();
-        nitf::Uint32 userSublen;
+        uint32_t userSublen;
         const size_t prevSize = byteStream->getSize();
         writer.writeDESubheader(subheader, userSublen, record.getVersion());
         desSubheaderLengths[ii] = byteStream->getSize() - prevSize;
@@ -252,7 +252,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     // This initial write won't set a number of the lengths, so we'll seek
     // around to set those ourselves
     nitf_Off fileLenOff;
-    nitf_Uint32 hdrLen;
+    uint32_t hdrLen;
     record.setComplexityLevelIfUnset();
     writer.writeHeader(fileLenOff, hdrLen);
     const nitf::Off fileHeaderNumBytes = byteStream->getSize();
@@ -309,7 +309,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     mDesSubheaderFileOffset = offset;
 }
 
-std::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
+std::unique_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
 {
     std::vector<size_t> numRowsPerSegment(mImageSegmentInfo.size());
     for (size_t ii = 0; ii < mImageSegmentInfo.size(); ++ii)
@@ -317,7 +317,7 @@ std::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
         numRowsPerSegment[ii] = mImageSegmentInfo[ii].numRows;
     }
 
-    std::auto_ptr<const ImageBlocker> blocker(new ImageBlocker(
+    std::unique_ptr<const ImageBlocker> blocker(new ImageBlocker(
             numRowsPerSegment,
             mNumCols,
             mOverallNumRowsPerBlock,
@@ -403,8 +403,8 @@ void ByteProvider::addImageData(
     // Figure out what offset of 'imageData' we're writing from
     const size_t startLocalRowToWrite =
             startGlobalRowToWrite - startRow + numPadRowsSoFar;
-    const sys::byte* imageDataPtr =
-            static_cast<const sys::byte*>(imageData) +
+    const std::byte* imageDataPtr =
+            static_cast<const std::byte*>(imageData) +
             startLocalRowToWrite * mNumBytesPerRow;
 
     if (buffers.empty())

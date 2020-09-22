@@ -23,6 +23,8 @@
 
 #include <stdio.h>
 
+#include <chrono>
+
 #include "nitf/BufferedWriter.hpp"
 
 namespace nitf
@@ -50,7 +52,7 @@ BufferedWriter::BufferedWriter(const std::string& file,
                                size_t size,
                                bool adopt) :
     mBufferSize(size),
-    mScopedBuffer(adopt ? buffer : NULL),
+    mScopedBuffer(adopt ? buffer : nullptr),
     mBuffer(buffer),
     mPosition(0),
     mTotalWritten(0),
@@ -95,10 +97,11 @@ void BufferedWriter::flushBuffer(const char* buf)
 {
     if (mPosition > 0)
     {
-        sys::RealTimeStopWatch sw;
-        sw.start();
+        const auto start = std::chrono::steady_clock::now();
         mFile.writeFrom(buf, mPosition);
-        mElapsedTime += (sw.stop() / 1000.);
+        const auto end = std::chrono::steady_clock::now();
+        std::chrono::duration<double> diff = end - start; // in seconds
+        mElapsedTime += diff.count();
 
         mTotalWritten += mPosition;
 
@@ -201,10 +204,12 @@ void BufferedWriter::closeImpl()
     // just cached it)
     flushBuffer();
 
-    sys::RealTimeStopWatch sw;
-    sw.start();
+
+    const auto start = std::chrono::steady_clock::now();
     mFile.flush();
-    mElapsedTime += (sw.stop() / 1000.);
+    const auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> diff = end - start; // in seconds
+    mElapsedTime += diff.count();
 
     mFile.close();
 }

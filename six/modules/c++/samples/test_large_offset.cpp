@@ -60,7 +60,7 @@ void createNITF(const std::string& outputPathname,
                     six::sidd::DerivedXMLControl>());
     const std::vector<std::string> schemaPaths;
 
-    std::auto_ptr<six::Data> data;
+    std::unique_ptr<six::Data> data;
     if (datatype == six::DataType::COMPLEX)
     {
         data = six::sicd::Utilities::createFakeComplexData();
@@ -126,7 +126,7 @@ bool checkNITF(const std::string& pathname)
     reader.setXMLControlRegistry(&registry);
     const std::vector<std::string> schemaPaths;
     reader.load(pathname, schemaPaths);
-    std::auto_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
+    std::unique_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
     const size_t ROWS_TO_SKIP = data->getDataType() ==
             six::DataType::COMPLEX ? SICD_ROWS_TO_SKIP : SIDD_ROWS_TO_SKIP;
 

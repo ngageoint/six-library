@@ -179,7 +179,7 @@ private:
     void writeCPHDDataImpl(const sys::ubyte* data,
                            size_t size);
 
-    std::auto_ptr<cphd::DataWriter> mDataWriter;
+    std::unique_ptr<cphd::DataWriter> mDataWriter;
 
     Metadata mMetadata;
     const size_t mElementSize;

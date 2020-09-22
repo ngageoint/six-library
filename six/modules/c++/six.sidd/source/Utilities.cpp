@@ -86,7 +86,7 @@ scene::SideOfTrack Utilities::getSideOfTrack(const DerivedData* derived)
     return scene::SceneGeometry(arpVel, arpPos, refPt).getSideOfTrack();
 }
 
-std::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
+std::unique_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
         const DerivedData* derived)
 {
     const double centerTime = getCenterTime(*derived);
@@ -145,7 +145,7 @@ std::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
     {
         // In this case there are no image plane row/col vectors, so we want
         // to use a different constructor
-        std::auto_ptr<scene::SceneGeometry> geom(
+        std::unique_ptr<scene::SceneGeometry> geom(
                 new scene::SceneGeometry(arpVel, arpPos, refPt));
         return geom;
     }
@@ -155,12 +155,12 @@ std::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
                 Ctxt("Cylindrical projection not yet supported"));
     }
 
-    std::auto_ptr<scene::SceneGeometry> geom(
+    std::unique_ptr<scene::SceneGeometry> geom(
             new scene::SceneGeometry(arpVel, arpPos, refPt, rowVec, colVec));
     return geom;
 }
 
-std::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
+std::unique_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
         const DerivedData* derived)
 {
     if (!derived->measurement->projection->isMeasurable())
@@ -174,7 +174,7 @@ std::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
             reinterpret_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
-    std::auto_ptr<scene::GridECEFTransform> transform;
+    std::unique_ptr<scene::GridECEFTransform> transform;
 
     switch ((int)p->projectionType)
     {
@@ -250,7 +250,7 @@ std::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
     return transform;
 }
 
-std::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
+std::unique_ptr<scene::GridGeometry> Utilities::getGridGeometry(
         const DerivedData* derived)
 {
     if (!derived->measurement->projection->isMeasurable())
@@ -264,7 +264,7 @@ std::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
             reinterpret_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
-    std::auto_ptr<scene::GridGeometry> geom;
+    std::unique_ptr<scene::GridGeometry> geom;
 
     // Only currently have an implementation for PGD
     switch ((int)p->projectionType)
@@ -464,19 +464,19 @@ Utilities::convertDualPolarization(six::DualPolarizationType pol)
     return pols;
 }
 
-std::auto_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
+std::unique_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
         const DerivedData* data)
 {
     const int lookDir = getSideOfTrack(data);
     scene::Errors errors;
     ::getErrors(*data, errors);
 
-    std::auto_ptr<scene::SceneGeometry> geom(getSceneGeometry(data));
+    std::unique_ptr<scene::SceneGeometry> geom(getSceneGeometry(data));
 
     const six::ProjectionType gridType =
             data->measurement->projection->projectionType;
 
-    std::auto_ptr<scene::ProjectionModel> projModel;
+    std::unique_ptr<scene::ProjectionModel> projModel;
     switch (gridType)
     {
     case six::ProjectionType::PLANE:
@@ -524,7 +524,7 @@ std::auto_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     return projModel;
 }
 
-std::auto_ptr<DerivedData> Utilities::parseData(
+std::unique_ptr<DerivedData> Utilities::parseData(
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
@@ -533,16 +533,16 @@ std::auto_ptr<DerivedData> Utilities::parseData(
     xmlRegistry.addCreator(DataType::DERIVED,
                            new XMLControlCreatorT<DerivedXMLControl>());
 
-    std::auto_ptr<Data> data(
-            six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
+    std::unique_ptr<Data> data(
+			       six::parseData(nullptr, xmlRegistry, xmlStream, schemaPaths, log));
 
-    std::auto_ptr<DerivedData> derivedData(
+    std::unique_ptr<DerivedData> derivedData(
             reinterpret_cast<DerivedData*>(data.release()));
 
     return derivedData;
 }
 
-std::auto_ptr<DerivedData> Utilities::parseDataFromFile(
+std::unique_ptr<DerivedData> Utilities::parseDataFromFile(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
@@ -551,7 +551,7 @@ std::auto_ptr<DerivedData> Utilities::parseDataFromFile(
     return parseData(inStream, schemaPaths, log);
 }
 
-std::auto_ptr<DerivedData> Utilities::parseDataFromString(
+std::unique_ptr<DerivedData> Utilities::parseDataFromString(
         const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
@@ -576,9 +576,9 @@ std::string Utilities::toXMLString(const DerivedData& data,
                                    &xmlRegistry);
 }
 
-std::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
+std::unique_ptr<DerivedData> Utilities::createFakeDerivedData()
 {
-    std::auto_ptr<DerivedData> data(new DerivedData());
+    std::unique_ptr<DerivedData> data(new DerivedData());
     data->productCreation.reset(new ProductCreation());
     data->productCreation->classification.classification = "U";
     data->display.reset(new Display());

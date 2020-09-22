@@ -55,7 +55,7 @@ CPHDXMLParser::CPHDXMLParser(
 /*
  * TO XML
  */
-std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(
+std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(std::nullptr_t,
         const Metadata& metadata)
 {
     std::unique_ptr<xml::lite::Document> doc(new xml::lite::Document());
@@ -947,7 +947,7 @@ XMLElem CPHDXMLParser::toXML(const MatchInformation& matchInfo, XMLElem parent)
  * FROM XML
  */
 
-std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
+std::unique_ptr<Metadata> CPHDXMLParser::fromXML(std::nullptr_t,
         const xml::lite::Document* doc)
 {
     std::unique_ptr<Metadata> cphd(new Metadata());

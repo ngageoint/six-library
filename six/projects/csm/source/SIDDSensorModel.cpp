@@ -222,7 +222,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
                 new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
         logging::NullLogger logger;
-        std::auto_ptr<six::XMLControl> control(
+        std::unique_ptr<six::XMLControl> control(
                 xmlRegistry.newXMLControl(six::DataType::DERIVED, &logger));
 
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
@@ -419,7 +419,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
                 new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
         logging::NullLogger logger;
-        std::auto_ptr<six::XMLControl> control(xmlRegistry.newXMLControl(
+        std::unique_ptr<six::XMLControl> control(xmlRegistry.newXMLControl(
                 six::DataType::DERIVED, &logger));
 
         // get xml as string for sensor model state

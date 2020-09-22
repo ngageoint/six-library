@@ -43,7 +43,7 @@ int main(int argc, char** argv)
             "sicdPath")->setDefault(""); 
 
         // Parse the command line.
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string sicdPath = options->get<std::string>("sicdPath");
         const bool useVDP = options->get<bool>("useVDP");
         
@@ -56,12 +56,12 @@ int main(int argc, char** argv)
         }
 
         std::vector<std::string> schemaPaths; 
-        std::auto_ptr<six::sicd::ComplexData> complexData(
+        std::unique_ptr<six::sicd::ComplexData> complexData(
             six::sicd::Utilities::getComplexData(sicdPath, schemaPaths));
 
         const size_t numPoints1D =
             scene::ProjectionPolynomialFitter::DEFAULTS_POINTS_1D;
-        std::auto_ptr<scene::ProjectionPolynomialFitter> polyfitter(
+        std::unique_ptr<scene::ProjectionPolynomialFitter> polyfitter(
             six::sicd::Utilities::getPolynomialFitter(
                 *complexData,
                 numPoints1D,

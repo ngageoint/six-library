@@ -20,7 +20,7 @@
  *
  */
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 
 #include <limits>
 #include <cmath>

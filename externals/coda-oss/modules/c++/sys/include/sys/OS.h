@@ -26,7 +26,7 @@
 
 #include "sys/AbstractOS.h"
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 #  include "sys/OSWin32.h"
 namespace sys
 {

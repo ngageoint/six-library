@@ -161,8 +161,8 @@ int main(int argc, char** argv)
     /**********************************************
     *** Get a filename to use as a scratch file ***
     **********************************************/
-    strcpy(scratchFullFileName, fullFileName);
-    strcat(scratchFullFileName, "_temporary_IOTest_scratch");
+    nrt_strcpy_s(scratchFullFileName, 1024, fullFileName);
+    nrt_strcat_s(scratchFullFileName, 1024, "_temporary_IOTest_scratch");
 
 
     /****************************

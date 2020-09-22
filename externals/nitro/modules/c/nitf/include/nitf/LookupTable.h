@@ -39,9 +39,9 @@ NITF_CXX_GUARD
 */
 typedef struct _nitf_LookupTable
 {
-    nitf_Uint32 tables;         /*!< Number of tables */
-    nitf_Uint32 entries;        /*!< Number of entries per table */
-    nitf_Uint8 *table;          /*!< The tables */
+    uint32_t tables;         /*!< Number of tables */
+    uint32_t entries;        /*!< Number of entries per table */
+    uint8_t *table;          /*!< The tables */
 }
 nitf_LookupTable;
 
@@ -57,8 +57,8 @@ nitf_LookupTable;
  */
 NITFAPI(nitf_LookupTable *) nitf_LookupTable_construct
 (
-    nitf_Uint32 numTables,
-    nitf_Uint32 numEntries,
+    uint32_t numTables,
+    uint32_t numEntries,
     nitf_Error * error
 );
 
@@ -98,8 +98,8 @@ NITFAPI(void) nitf_LookupTable_destruct(nitf_LookupTable ** lut);
 */
 NITFAPI(NITF_BOOL) nitf_LookupTable_init(
     nitf_LookupTable * lut,      /*!< The lookup table to initialize */
-    nitf_Uint32 numTables,       /*!< Number of tables */
-    nitf_Uint32 numEntries,      /*!< Number of entries in the tablt */
+    uint32_t numTables,       /*!< Number of tables */
+    uint32_t numEntries,      /*!< Number of entries in the tablt */
     const NITF_DATA * tables,    /*!< The tables */
     nitf_Error * error           /*!< Error object for error returns */
 );

@@ -73,7 +73,7 @@ void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
 }
 
 void NITFWriteControl::setNITFHeaderCreator(
-        std::auto_ptr<six::NITFHeaderCreator> headerCreator)
+        std::unique_ptr<six::NITFHeaderCreator>&& headerCreator)
 {
     mNITFHeaderCreator.reset(headerCreator.release());
 }
@@ -278,8 +278,8 @@ void NITFWriteControl::save(const BufferList& imageData,
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
         const bool isBlocking =
-                static_cast<nitf::Uint32>(subheader.getNumBlocksPerRow()) > 1 ||
-                static_cast<nitf::Uint32>(subheader.getNumBlocksPerCol()) > 1;
+                static_cast<uint32_t>(subheader.getNumBlocksPerRow()) > 1 ||
+                static_cast<uint32_t>(subheader.getNumBlocksPerCol()) > 1;
 
         // The SIDD spec requires that a J2K compressed SIDDs be only a
         // single image segment. However this functionality remains untested.

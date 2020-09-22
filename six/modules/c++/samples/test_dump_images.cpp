@@ -97,7 +97,7 @@ int main(int argc, char** argv)
         parser.addArgument("file", "SICD/SIDD input file", cli::STORE, "file",
                            "FILE", 1, 1);
 
-        const std::auto_ptr<cli::Results>
+        const std::unique_ptr<cli::Results>
             options(parser.parse(argc, argv));
 
         size_t startRow(options->get<size_t>("startRow"));
@@ -124,7 +124,7 @@ int main(int argc, char** argv)
         readerRegistry.addCreator(new six::sidd::GeoTIFFReadControlCreator());
 
         // get the correct ReadControl for the given file
-        const std::auto_ptr<six::ReadControl>
+        const std::unique_ptr<six::ReadControl>
             reader(readerRegistry.newReadControl(inputFile));
         // set the optional registry, since we have one
         reader->setXMLControlRegistry(&xmlRegistry);

@@ -25,7 +25,7 @@ std::string findSixHome(const sys::Path& exePath)
     return "";
 }
 
-std::auto_ptr<scene::ProjectionPolynomialFitter>
+std::unique_ptr<scene::ProjectionPolynomialFitter>
 loadPolynomialFitter(const sys::Path& exePath)
 {
     const std::string sixHome = findSixHome(exePath);
@@ -49,13 +49,13 @@ loadPolynomialFitter(const sys::Path& exePath)
     }
 
     std::vector<std::string> schemaPaths;
-    std::auto_ptr<six::sicd::ComplexData> complexData;
+    std::unique_ptr<six::sicd::ComplexData> complexData;
     std::vector<std::complex<float> > buffer;
     six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData, buffer);
     return six::sicd::Utilities::getPolynomialFitter(*complexData);
 }
 
-std::auto_ptr<scene::ProjectionPolynomialFitter> globalFitter;
+std::unique_ptr<scene::ProjectionPolynomialFitter> globalFitter;
 
 static const size_t NUM_POINTS = 9;
 static const double SLANT_PLANE_POINTS[NUM_POINTS][2] =

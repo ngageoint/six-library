@@ -24,7 +24,7 @@
 #ifndef __SYS_SEMAPHORE_WIN32_H__
 #define __SYS_SEMAPHORE_WIN32_H__
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 #if !defined(USE_NSPR_THREADS)
 

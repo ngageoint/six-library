@@ -227,7 +227,7 @@ private:
     NITFReadControl& operator=(const NITFReadControl& other);
 
 private:
-    std::auto_ptr<Legend> findLegend(size_t productNum);
+    std::unique_ptr<Legend> findLegend(size_t productNum);
 
     void readLegendPixelData(nitf::ImageSubheader& subheader,
                              size_t imageSeg,

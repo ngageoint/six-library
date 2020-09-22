@@ -103,11 +103,11 @@ struct GetPixelType<sys::Int16_T>
 
 // Create dummy SICD data
 template <typename DataTypeT>
-std::auto_ptr<six::Data>
+std::unique_ptr<six::Data>
 createData(const types::RowCol<size_t>& dims)
 {
     six::sicd::ComplexData* data(new six::sicd::ComplexData());
-    std::auto_ptr<six::Data> scopedData(data);
+    std::unique_ptr<six::Data> scopedData(data);
     data->setPixelType(GetPixelType<DataTypeT>::getPixelType());
     data->setNumRows(dims.row);
     data->setNumCols(dims.col);
@@ -295,7 +295,7 @@ private:
     std::vector<std::complex<DataTypeT> > mImage;
     std::complex<DataTypeT>* const mImagePtr;
 
-    std::auto_ptr<const CompareFiles> mCompareFiles;
+    std::unique_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
     const std::vector<std::string> mSchemaPaths;
 

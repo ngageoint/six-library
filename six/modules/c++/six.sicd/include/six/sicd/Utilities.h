@@ -65,6 +65,11 @@ public:
         std::auto_ptr<scene::SceneGeometry>& geometry,
         std::auto_ptr<scene::ProjectionModel>& projectionModel,
         six::sicd::AreaPlane& areaPlane);
+    static void getModelComponents(
+        const ComplexData& complexData,
+        std::unique_ptr<scene::SceneGeometry>& geometry,
+        std::unique_ptr<scene::ProjectionModel>& projectionModel,
+        six::sicd::AreaPlane& areaPlane);
 
     /*!
      * Build ProjectionPolynomialFitter from complexData and
@@ -76,8 +81,13 @@ public:
      * with the valid data polygon.
      * \return ProjectionPolynomialFitter from ComplexData
      */
-    static std::auto_ptr<scene::ProjectionPolynomialFitter>
-    getPolynomialFitter(const ComplexData& complexData,
+    static std::auto_ptr<scene::ProjectionPolynomialFitter> getPolynomialFitter(
+                        const ComplexData& complexData,
+                        size_t numPoints1D =
+                         scene::ProjectionPolynomialFitter::DEFAULTS_POINTS_1D,
+                        bool sampleWithinValidDataPolygon = false);
+    static std::unique_ptr<scene::ProjectionPolynomialFitter> getPolynomialFitter(std::nullptr_t,
+                        const ComplexData& complexData,
                         size_t numPoints1D =
                          scene::ProjectionPolynomialFitter::DEFAULTS_POINTS_1D,
                         bool sampleWithinValidDataPolygon = false);
@@ -112,6 +122,10 @@ public:
     static void readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          std::auto_ptr<ComplexData>& complexData,
+                         std::vector<std::complex<float> >& widebandData);
+    static void readSicd(const std::string& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         std::unique_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float> >& widebandData);
 
     /*
@@ -153,6 +167,16 @@ public:
                          six::Poly2D& outputRowColToSlantCol,
                          std::auto_ptr<NoiseMesh>& noiseMesh,
                          std::auto_ptr<ScalarMesh>& scalarMesh);
+    static void readSicd(const std::string& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         size_t orderX,
+                         size_t orderY,
+                         std::unique_ptr<ComplexData>& complexData,
+                         std::vector<std::complex<float> >& widebandData,
+                         six::Poly2D& outputRowColToSlantRow,
+                         six::Poly2D& outputRowColToSlantCol,
+                         std::unique_ptr<NoiseMesh>& noiseMesh,
+                         std::unique_ptr<ScalarMesh>& scalarMesh);
 
     /*
      * Given a SICD pathname and list of schemas, provides a representation
@@ -166,8 +190,10 @@ public:
      *
      * \throws except::Exception if file is not a SICD or Complex XML
      */
-    static
-    std::auto_ptr<ComplexData> getComplexData(
+    static std::auto_ptr<ComplexData> getComplexData(
+            const std::string& pathname,
+            const std::vector<std::string>& schemaPaths);
+    static std::unique_ptr<ComplexData> getComplexData(std::nullptr_t,
             const std::string& pathname,
             const std::vector<std::string>& schemaPaths);
 
@@ -182,7 +208,10 @@ public:
      * \throws except::Exception if the provided reader is not a SICD
      *
      */
-    static std::auto_ptr<ComplexData> getComplexData(NITFReadControl& reader);
+    static std::auto_ptr<ComplexData> getComplexData(
+						     NITFReadControl& reader);
+    static std::unique_ptr<ComplexData> getComplexData(std::nullptr_t,
+						       NITFReadControl& reader);
 
     /*
      * Given a loaded NITFReadControl and a ComplexData object, this
@@ -360,6 +389,10 @@ public:
             ::io::InputStream& xmlStream,
             const std::vector<std::string>& schemaPaths,
             logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseData(std::nullptr_t,
+            ::io::InputStream& xmlStream,
+            const std::vector<std::string>& schemaPaths,
+            logging::Logger& log);
 
     /*
      * Parses the XML in 'pathname' and converts it into a ComplexData object.
@@ -375,6 +408,10 @@ public:
             const std::string& pathname,
             const std::vector<std::string>& schemaPaths,
             logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseDataFromFile(std::nullptr_t,
+            const std::string& pathname,
+            const std::vector<std::string>& schemaPaths,
+            logging::Logger& log);
 
     /*
      * Parses the XML in 'xmlStr' and converts it into a ComplexData object.
@@ -386,6 +423,10 @@ public:
      * \return Data representation of 'xmlStr'
      */
     static std::auto_ptr<ComplexData> parseDataFromString(
+        const std::string& xmlStr,
+        const std::vector<std::string>& schemaPaths,
+        logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseDataFromString(std::nullptr_t,
         const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
@@ -413,6 +454,7 @@ public:
      * \return mock ComplexData object
      */
     static std::auto_ptr<ComplexData> createFakeComplexData();
+    static std::unique_ptr<ComplexData> createFakeComplexData(std::nullptr_t);
 
     /*
      * Given a reference to a loaded NITFReadControl, this function
@@ -422,7 +464,10 @@ public:
      * \throws except::Exception if the provided reader is not a SICD
      *
      */
-    static std::auto_ptr<NoiseMesh> getNoiseMesh(NITFReadControl& reader);
+    static std::auto_ptr<NoiseMesh> getNoiseMesh(
+						 NITFReadControl& reader);
+    static std::unique_ptr<NoiseMesh> getNoiseMesh(std::nullptr_t,
+						   NITFReadControl& reader);
 
     /*
      * Given a reference to a loaded NITFReadControl, this function
@@ -435,7 +480,10 @@ public:
      *
      * \return Scalar Mesh associated with the SICD NITF
      */
-    static std::auto_ptr<ScalarMesh> getScalarMesh(NITFReadControl& reader);
+    static std::auto_ptr<ScalarMesh> getScalarMesh(
+						   NITFReadControl& reader);
+    static std::unique_ptr<ScalarMesh> getScalarMesh(std::nullptr_t,
+						     NITFReadControl& reader);
 
     /*
      * Given a reference to a loaded NITFReadControl, this function
@@ -461,6 +509,13 @@ public:
         size_t orderX,
         size_t orderY,
         std::auto_ptr<ComplexData>& complexData,
+        six::Poly2D& outputRowColToSlantRow,
+        six::Poly2D& outputRowColToSlantCol);
+    static void getProjectionPolys(
+        NITFReadControl& reader,
+        size_t orderX,
+        size_t orderY,
+        std::unique_ptr<ComplexData>& complexData,
         six::Poly2D& outputRowColToSlantRow,
         six::Poly2D& outputRowColToSlantCol);
 

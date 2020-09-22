@@ -41,9 +41,9 @@ void generateData(sys::Int16_T* data)
     }
 }
 
-std::auto_ptr<six::sidd::DerivedData> createData()
+std::unique_ptr<six::sidd::DerivedData> createData()
 {
-    std::auto_ptr<six::sidd::DerivedData> derivedData(new six::sidd::DerivedData());
+    std::unique_ptr<six::sidd::DerivedData> derivedData(new six::sidd::DerivedData());
     derivedData->productCreation.reset(new six::sidd::ProductCreation());
     derivedData->productCreation->classification.classification = "U";
     derivedData->measurement.reset(

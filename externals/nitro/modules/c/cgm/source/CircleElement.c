@@ -44,17 +44,20 @@ NITFPRIV(cgm_Element*) cloneCircle(NITF_DATA* data, nitf_Error* error)
         return NULL;
     dest = (cgm_CircleElement*)element->data;
 
-    dest->centerX = source->centerX;
-    dest->centerY = source->centerY;
-    dest->radius = source->radius;
-    
-    if (source->attributes)
+    if ((dest != NULL) && (source != NULL))
     {
-        dest->attributes = cgm_FillAttributes_clone(source->attributes, error);
-        if (!dest->attributes)
+        dest->centerX = source->centerX;
+        dest->centerY = source->centerY;
+        dest->radius = source->radius;
+
+        if (source->attributes)
         {
-            cgm_Element_destruct(&element);
-            return NULL;
+            dest->attributes = cgm_FillAttributes_clone(source->attributes, error);
+            if (!dest->attributes)
+            {
+                cgm_Element_destruct(&element);
+                return NULL;
+            }
         }
     }
     
@@ -87,10 +90,10 @@ NITFAPI(cgm_Element*) cgm_CircleElement_construct(nitf_Error* error)
         circle->centerY = -1;
         circle->radius = -1;
         element->data = (NITF_DATA*)circle;
-    }
-    element->print = &printCircle;
-    element->destroy = &destroyCircle;
-    element->clone = &cloneCircle;
 
+        element->print = &printCircle;
+        element->destroy = &destroyCircle;
+        element->clone = &cloneCircle;
+    }
     return element;
 }

@@ -49,7 +49,7 @@ int main(int argc, char** argv)
                            "", 1, 1, true);
 
         // Parse!
-        const std::auto_ptr<cli::Results>
+        const std::unique_ptr<cli::Results>
             options(parser.parse(argc, (const char**) argv));
 
         const bool prettyPrint = options->get<bool>("prettyPrint");
@@ -74,9 +74,9 @@ int main(int argc, char** argv)
         nitf::IOHandle io(inputFile);
         nitf::Record record = reader.read(io);
 
-        const nitf::Uint32 numDES = record.getNumDataExtensions();
+        const uint32_t numDES = record.getNumDataExtensions();
         std::vector<char> xmlVec;
-        for (nitf::Uint32 ii = 0; ii < numDES; ++ii)
+        for (uint32_t ii = 0; ii < numDES; ++ii)
         {
             nitf::DESegment segment = record.getDataExtensions()[ii];
             nitf::DESubheader subheader = segment.getSubheader();
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
             xml::lite::MinidomParser xmlParser;
             xmlParser.parse(oss);
 
-            std::auto_ptr<io::OutputStream> os;
+            std::unique_ptr<io::OutputStream> os;
             if (toConsole)
             {
                 os.reset(new io::StandardOutStream());

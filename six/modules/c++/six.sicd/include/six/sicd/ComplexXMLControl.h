@@ -72,7 +72,7 @@ protected:
     virtual Data* fromXMLImpl(const xml::lite::Document* doc);
 
 private:
-    std::auto_ptr<ComplexXMLParser>
+    std::unique_ptr<ComplexXMLParser>
     getParser(const std::string& version) const;
 };
 }

@@ -29,7 +29,7 @@
 #include <import/nitf.h>
 
 void testField(nitf_Field *field, char *type, NITF_BOOL plus,
-               nitf_Uint32 length, double value);
+               uint32_t length, double value);
 
 int main(int argc, char *argv[])
 {
@@ -72,12 +72,12 @@ int main(int argc, char *argv[])
 }
 
 void testField(nitf_Field *field, char *type, NITF_BOOL plus,
-               nitf_Uint32 length, double value)
+               uint32_t length, double value)
 {
     NITF_BOOL ret;        /* Return from function */
     nitf_Error errorObj;  /* Error object */
     nitf_Error *error;    /* Pointer to error object */
-    nitf_Uint32 i;
+    uint32_t i;
 
     error = &errorObj;
 

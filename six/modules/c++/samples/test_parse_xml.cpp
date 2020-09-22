@@ -85,8 +85,8 @@ std::vector<std::string> extractXML(std::string inputFile,
     nitf::IOHandle io(inputFile);
     nitf::Record record = reader.read(io);
 
-    nitf::Uint32 numDES = record.getNumDataExtensions();
-    for (nitf::Uint32 i = 0; i < numDES; ++i)
+    uint32_t numDES = record.getNumDataExtensions();
+    for (uint32_t i = 0; i < numDES; ++i)
     {
         nitf::DESegment segment = record.getDataExtensions()[i];
         nitf::DESubheader subheader = segment.getSubheader();
@@ -156,7 +156,7 @@ void run(std::string inputFile, std::string dataType)
         six::DataType dt = (dataType == "sicd") ? six::DataType::COMPLEX
                                                 : six::DataType::DERIVED;
 
-        std::auto_ptr<logging::Logger> log (new logging::NullLogger());
+        std::unique_ptr<logging::Logger> log (new logging::NullLogger());
         six::XMLControl *control =
                 six::XMLControlFactory::getInstance().newXMLControl(dt, log.get());
 

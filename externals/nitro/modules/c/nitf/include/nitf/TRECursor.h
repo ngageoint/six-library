@@ -35,6 +35,7 @@ NITF_CXX_GUARD
  *  to move everything related to the nitf_TRECursor
  *  out of the public realm.
  */
+#define NITF_TRECursor_tag_str_LEN 256
 typedef struct _nitf_TRECursor
 {
     /* DO NOT TOUCH THESE! */
@@ -50,7 +51,7 @@ typedef struct _nitf_TRECursor
     /* YOU CAN REFER TO THE MEMBERS BELOW IN YOUR CODE */
     nitf_TREDescription *prev_ptr; /* holds the previous description */
     nitf_TREDescription *desc_ptr;      /* pointer to the current nitf_TREDescription */
-    char tag_str[256];          /* holds the fully qualified tag name of the current tag */
+    char tag_str[NITF_TRECursor_tag_str_LEN];          /* holds the fully qualified tag name of the current tag */
     int length;                 /* the length of the field
                                      * This should be used over the TREDescription length because
                                      * the field may need to be computed. This will contain the

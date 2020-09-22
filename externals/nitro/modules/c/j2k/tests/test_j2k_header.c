@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 {
     int rc = 0;
     int argIt;
-    nrt_Uint32 cmpIt, nComponents;
+    uint32_t cmpIt, nComponents;
     nrt_Error error;
     j2k_Container *container = NULL;
     j2k_Reader *reader = NULL;

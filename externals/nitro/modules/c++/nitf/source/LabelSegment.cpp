@@ -89,22 +89,22 @@ void LabelSegment::setSubheader(nitf::LabelSubheader & value)
     value.setManaged(true);
 }
 
-nitf::Uint64 LabelSegment::getOffset() const
+uint64_t LabelSegment::getOffset() const
 {
     return getNativeOrThrow()->offset;
 }
 
-void LabelSegment::setOffset(nitf::Uint64 value)
+void LabelSegment::setOffset(uint64_t value)
 {
     getNativeOrThrow()->offset = value;
 }
 
-nitf::Uint64 LabelSegment::getEnd() const
+uint64_t LabelSegment::getEnd() const
 {
     return getNativeOrThrow()->end;
 }
 
-void LabelSegment::setEnd(nitf::Uint64 value)
+void LabelSegment::setEnd(uint64_t value)
 {
     getNativeOrThrow()->end = value;
 }

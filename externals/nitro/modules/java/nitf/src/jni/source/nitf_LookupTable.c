@@ -40,8 +40,8 @@ JNIEXPORT void JNICALL Java_nitf_LookupTable_construct
     char *dataBuf = NULL;
 
     /* construct the LUT */
-    lut = nitf_LookupTable_construct((nitf_Uint32) numTables,
-            (nitf_Uint32) numEntries, &error);
+    lut = nitf_LookupTable_construct((uint32_t) numTables,
+            (uint32_t) numEntries, &error);
 
     if (!lut)
     {
@@ -58,8 +58,8 @@ JNIEXPORT void JNICALL Java_nitf_LookupTable_construct
     }
 
     /* initialize the data */
-    nitf_LookupTable_init(lut, (nitf_Uint32) numTables,
-            (nitf_Uint32) numEntries, (NITF_DATA *) dataBuf,
+    nitf_LookupTable_init(lut, (uint32_t) numTables,
+            (uint32_t) numEntries, (NITF_DATA *) dataBuf,
             &error);
 
     (*env)->ReleaseByteArrayElements(env, lutData, dataBuf, 0);

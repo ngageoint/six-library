@@ -1134,10 +1134,10 @@ bool testRead(const std::string& pathname, bool isMono = false,
     for (size_t ii = 0; ii < record.getNumImages(); ++ii)
     {
         nitf::ImageReader imageReader = reader.newImageReader(ii);
-        nitf::Uint64 blockSize;
+        uint64_t blockSize;
         // Read one block. It should match the first blockSize points of the
         // image. If it does, we got the blocking mode right.
-        const nitf::Uint8 *block = imageReader.readBlock(0, &blockSize);
+        const uint8_t *block = imageReader.readBlock(0, &blockSize);
         const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
 
         // The image data is interleaved by pixel. When feeding it to the
@@ -1184,7 +1184,7 @@ int main(int argc, char **argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
             "OUTPUT", 1, 1, true)->setDefault("test_create.nitf");
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        auto options = parser.parse(argc, argv);
         const bool isMono(options->get<bool>("isMono"));
         // If we're compressing, we're using the J2K plugin, so please ensure
         // that it is on your NITF_PLUGIN_PATH

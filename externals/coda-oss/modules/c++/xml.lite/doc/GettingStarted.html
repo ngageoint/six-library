@@ -237,7 +237,7 @@ different from the 'hello world' code anyway.
 
 <h3>Tangent: Who owns what</h3>
 If you are using a MinidomParser, you must understand that <i>IT</i>
-owns the tree elements, not you.  This differs from auto_ptr based systems,
+owns the tree elements, not you.  This differs from unique_ptr based systems,
 etc.  This prevents multiple copies from being explicitly created.  When
 you use an accessor and retrieve node, you must not delete it using delete.
 Use the tree's remove() method to drop nodes.

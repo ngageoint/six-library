@@ -36,8 +36,8 @@ void nitf::WriteHandler::write(nitf::IOInterface& handle)
 }
 
 nitf::StreamIOWriteHandler::StreamIOWriteHandler(
-        nitf::IOInterface& sourceHandle, nitf::Uint64 offset,
-        nitf::Uint64 bytes)
+        nitf::IOInterface& sourceHandle, uint64_t offset,
+        uint64_t bytes)
 {
     setNative(nitf_StreamIOWriteHandler_construct(
             sourceHandle.getNative(), offset, bytes, &error));

@@ -68,7 +68,7 @@ NITFPRIV(const char*) defaultGetID(nitf_TRE *tre)
 
 
 NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
-                                nitf_Uint32 length,
+                                uint32_t length,
                                 nitf_TRE * tre,
                                 struct _nitf_Record* record,
                                 nitf_Error * error)
@@ -238,18 +238,20 @@ NITFPRIV(const char*) defaultGetFieldDescription(nitf_TREEnumerator* it,
 NITFPRIV(nitf_TREEnumerator*) defaultBegin(nitf_TRE* tre, nitf_Error* error)
 {
 	nitf_TREEnumerator* it = (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
-	/* Check rv here */
-	it->next = defaultIncrement;
-	it->hasNext = defaultHasNext;
-	it->getFieldDescription = defaultGetFieldDescription;
-	it->data = tre->priv;
+    if (it != NULL)
+    {
+        it->next = defaultIncrement;
+        it->hasNext = defaultHasNext;
+        it->getFieldDescription = defaultGetFieldDescription;
+        it->data = tre->priv;
 
-	if (!it->data || !nitf_HashTable_find(
-	        ((nitf_TREPrivateData*)it->data)->hash, NITF_TRE_RAW))
-	{
-		nitf_Error_init(error, "No raw_data in default!", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-		return NITF_FAILURE;
-	}
+        if (!it->data || !nitf_HashTable_find(
+            ((nitf_TREPrivateData*)it->data)->hash, NITF_TRE_RAW))
+        {
+            nitf_Error_init(error, "No raw_data in default!", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+            return NITF_FAILURE;
+        }
+    }
 	return it;
 }
 
@@ -283,44 +285,44 @@ NITFPRIV(nitf_List*) defaultFind(nitf_TRE* tre,
     return list;
 }
 
-NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE * tre,
-                                    const char *tag,
-                                    NITF_DATA * data,
-                                    size_t dataLength, nitf_Error * error)
+NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE* tre,
+    const char* tag,
+    NITF_DATA* data,
+    size_t dataLength, nitf_Error* error)
 {
-	nitf_Field* field = NULL;
+    nitf_Field* field = NULL;
 
-	if (strcmp(tag, NITF_TRE_RAW))
-	{
+    if (strcmp(tag, NITF_TRE_RAW))
+    {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER, "Invalid param [%s]", tag);
         return NITF_FAILURE;
-	}
+    }
 
-	field = nitf_Field_construct(dataLength, NITF_BINARY, error);
+    field = nitf_Field_construct(dataLength, NITF_BINARY, error);
     if (!field)
         return NITF_FAILURE;
 
     /* TODO -- likely inefficient, since we end up copying the raw data here */
-    if (!nitf_Field_setRawData(field, (NITF_DATA *) data, dataLength, error))
+    if (!nitf_Field_setRawData(field, (NITF_DATA*)data, dataLength, error))
         return NITF_FAILURE;
 
-	if (nitf_HashTable_exists(((nitf_TREPrivateData*)tre->priv)->hash, tag))
-	{
+    if (nitf_HashTable_exists(((nitf_TREPrivateData*)tre->priv)->hash, tag))
+    {
         nitf_Field* oldValue;
         nitf_Pair* pair = nitf_HashTable_find(
-                ((nitf_TREPrivateData*)tre->priv)->hash, tag);
+            ((nitf_TREPrivateData*)tre->priv)->hash, tag);
         oldValue = (nitf_Field*)pair->data;
         nitf_Field_destruct(&oldValue);
         pair->data = field;
         return NITF_SUCCESS;
-	}
+    }
 
-	/* reset the lengths in two places */
-	((nitf_TREPrivateData*)tre->priv)->length = dataLength;
-	((nitf_TREPrivateData*)tre->priv)->description[0].data_count = dataLength;
+    /* reset the lengths in two places */
+    ((nitf_TREPrivateData*)tre->priv)->length = dataLength;
+    ((nitf_TREPrivateData*)tre->priv)->description[0].data_count = dataLength;
 
-	return nitf_HashTable_insert(((nitf_TREPrivateData*)tre->priv)->hash,
-	        tag, field, error);
+    return nitf_HashTable_insert(((nitf_TREPrivateData*)tre->priv)->hash,
+        tag, field, error);
 }
 
 NITFPRIV(nitf_Field*) defaultGetField(nitf_TRE* tre, const char* tag)
@@ -343,16 +345,14 @@ NITFPRIV(NITF_BOOL) defaultClone(nitf_TRE *source,
                                  nitf_TRE *tre,
                                  nitf_Error* error)
 {
-    nitf_TREPrivateData *sourcePriv = NULL;
-    nitf_TREPrivateData *trePriv = NULL;
-
     if (!tre || !source || !source->priv)
         return NITF_FAILURE;
 
-    sourcePriv = (nitf_TREPrivateData*)source->priv;
+    nitf_TREPrivateData* sourcePriv = (nitf_TREPrivateData*)source->priv;
 
     /* this clones the hash */
-    if (!(trePriv = nitf_TREPrivateData_clone(sourcePriv, error)))
+    nitf_TREPrivateData* trePriv = nitf_TREPrivateData_clone(sourcePriv, error);
+    if (trePriv == NULL)
         return NITF_FAILURE;
 
     /* just copy over the optional length */

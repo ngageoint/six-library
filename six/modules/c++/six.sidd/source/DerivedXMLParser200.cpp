@@ -98,7 +98,7 @@ const char DerivedXMLParser200::ISM_URI[] = "urn:us:gov:ic:ism:13";
 DerivedXMLParser200::DerivedXMLParser200(logging::Logger* log,
                                          bool ownLog) :
     DerivedXMLParser(VERSION,
-                     std::auto_ptr<six::SICommonXMLParser>(
+                     std::unique_ptr<six::SICommonXMLParser>(
                          new six::SICommonXMLParser10x(versionToURI(VERSION),
                                                        false,
                                                        SI_COMMON_URI,
@@ -501,7 +501,7 @@ void DerivedXMLParser200::parseLookupTableFromXML(
 
             for (size_t ii = 0; ii < lutElems.size(); ++ii)
             {
-                std::auto_ptr<LUT> lut = parseSingleLUT(lutElems[ii], size);
+                std::unique_ptr<LUT> lut = parseSingleLUT(lutElems[ii], size);
                 lookupTable.custom->lutValues[ii] = *lut;
             }
         }
@@ -2071,13 +2071,13 @@ void DerivedXMLParser200::parseDigitalElevationDataFromXML(
     parseDouble(getFirstAndOnly(pointElem, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }
 
-std::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const XMLElem elem,
+std::unique_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const XMLElem elem,
         size_t size) const
 {
     std::string lutStr = "";
     parseString(elem, lutStr);
     std::vector<std::string> lutVals = str::split(lutStr, " ");
-    std::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
+    std::unique_ptr<LUT> lut(new LUT(size, sizeof(short)));
 
     for (size_t ii = 0; ii < lutVals.size(); ++ii)
     {

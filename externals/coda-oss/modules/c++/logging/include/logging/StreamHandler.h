@@ -68,7 +68,7 @@ protected:
     // used for the bulk of the logging for speed
     virtual void emitRecord(const LogRecord* record);
 
-    std::auto_ptr<io::OutputStream> mStream;
+    std::unique_ptr<io::OutputStream> mStream;
 
 private:
     bool mClosed;

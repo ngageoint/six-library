@@ -48,14 +48,14 @@ NITF_CXX_GUARD
  */
 typedef struct _nitf_SubWindow
 {
-    nitf_Uint32 startRow;       /*!< Start row */
-    nitf_Uint32 startCol;       /*!< Start column */
+    uint32_t startRow;       /*!< Start row */
+    uint32_t startCol;       /*!< Start column */
 
-    nitf_Uint32 numRows;        /*!< Number of rows to read */
-    nitf_Uint32 numCols;        /*!< Number of columns to read */
+    uint32_t numRows;        /*!< Number of rows to read */
+    uint32_t numCols;        /*!< Number of columns to read */
 
-    nitf_Uint32 *bandList;      /*!< List of bands to read */
-    nitf_Uint32 numBands;       /*!< Number of bands to read */
+    uint32_t *bandList;      /*!< List of bands to read */
+    uint32_t numBands;       /*!< Number of bands to read */
 
     nitf_DownSampler *downsampler;      /* A downsampler, if any  */
 

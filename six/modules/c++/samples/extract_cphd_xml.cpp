@@ -50,7 +50,7 @@ int main(int argc, char** argv)
                            "", 1, 1, false)->setDefault("");
 
         // Parse!
-        const std::auto_ptr<cli::Results>
+        const std::unique_ptr<cli::Results>
             options(parser.parse(argc, (const char**) argv));
 
         const bool prettyPrint = options->get<bool>("prettyPrint");

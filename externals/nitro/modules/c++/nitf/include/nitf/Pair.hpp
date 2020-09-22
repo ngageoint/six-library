@@ -22,9 +22,9 @@
 
 #ifndef __NITF_PAIR_HPP__
 #define __NITF_PAIR_HPP__
+#pragma once
 
 #include "nitf/System.hpp"
-#include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
 #include <string>
 

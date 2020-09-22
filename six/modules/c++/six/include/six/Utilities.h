@@ -190,7 +190,12 @@ void loadXmlDataContentHandler();
  *
  * \return Data representation of 'xmlStream'
  */
-std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg, 
+std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
+                              ::io::InputStream& xmlStream, 
+                              DataType dataType,
+                              const std::vector<std::string>& schemaPaths,
+                              logging::Logger& log);
+std::unique_ptr<Data> parseData(std::nullptr_t, const XMLControlRegistry& xmlReg,
                               ::io::InputStream& xmlStream, 
                               DataType dataType,
                               const std::vector<std::string>& schemaPaths,
@@ -213,7 +218,15 @@ std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log)
 {
-    return parseData(xmlReg, xmlStream, DataType::NOT_SET, schemaPaths, log);
+  return parseData(xmlReg, xmlStream, DataType::NOT_SET, schemaPaths, log);
+}
+inline
+std::unique_ptr<Data> parseData(std::nullptr_t, const XMLControlRegistry& xmlReg,
+                              ::io::InputStream& xmlStream,
+                              const std::vector<std::string>& schemaPaths,
+                              logging::Logger& log)
+{
+  return parseData(nullptr, xmlReg, xmlStream, DataType::NOT_SET, schemaPaths, log);
 }
 
 /*
@@ -229,6 +242,11 @@ std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
  * \return Data representation of the contents of 'pathname'
  */
 std::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
+    const std::string& pathname,
+    DataType dataType,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log);
+std::unique_ptr<Data> parseDataFromFile(std::nullptr_t, const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
@@ -254,6 +272,15 @@ std::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
     return parseDataFromFile(xmlReg, pathname, DataType::NOT_SET, schemaPaths,
                              log);
 }
+inline
+std::unique_ptr<Data> parseDataFromFile(std::nullptr_t, const XMLControlRegistry& xmlReg,
+    const std::string& pathname,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+  return parseDataFromFile(nullptr, xmlReg, pathname, DataType::NOT_SET, schemaPaths,
+                             log);
+}
 
 /*
  * Parses the XML in 'xmlStr' and converts it into a Data object.
@@ -268,6 +295,11 @@ std::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
  * \return Data representation of 'xmlStr'
  */
 std::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::string& xmlStr,
+    DataType dataType,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log);
+std::unique_ptr<Data> parseDataFromString(std::nullptr_t, const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
@@ -291,6 +323,15 @@ std::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     logging::Logger& log)
 {
     return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, schemaPaths,
+                               log);
+}
+inline
+std::unique_ptr<Data> parseDataFromString(std::nullptr_t, const XMLControlRegistry& xmlReg,
+    const std::string& xmlStr,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+  return parseDataFromString(nullptr, xmlReg, xmlStr, DataType::NOT_SET, schemaPaths,
                                log);
 }
 

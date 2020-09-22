@@ -344,7 +344,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             // TODO: Why do we need to byte swap here?  If it is required, could
             //       we avoid the clone and byte swap and instead index into
             //       the LUT in the opposite order?
-            std::auto_ptr<LUT> lut(lutPtr->clone());
+            std::unique_ptr<LUT> lut(lutPtr->clone());
             sys::byteSwap(reinterpret_cast<sys::byte*>(lut->getTable()),
                           static_cast<unsigned short>(lut->elementSize),
                           lut->numEntries);
@@ -374,8 +374,8 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             //band1.getLookupTable().setTable(table, 2, lut.numEntries);
 
             band1.init("LU", "", "", "",
-                static_cast<nitf::Uint32>(lut->elementSize),
-                static_cast<nitf::Uint32>(lut->numEntries),
+                static_cast<uint32_t>(lut->elementSize),
+                static_cast<uint32_t>(lut->numEntries),
                 lookupTable);
             bands.push_back(band1);
         }
@@ -422,8 +422,8 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             //band1.getLookupTable().setTable(table, 3, lut->numEntries);
 
             band1.init("LU", "", "", "",
-                static_cast<nitf::Uint32>(lut->elementSize),
-                static_cast<nitf::Uint32>(lut->numEntries),
+                static_cast<uint32_t>(lut->elementSize),
+                static_cast<uint32_t>(lut->numEntries),
                 lookupTable);
             bands.push_back(band1);
         }

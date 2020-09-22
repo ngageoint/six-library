@@ -41,12 +41,12 @@ void generateData(const six::Data& data, mem::ScopedArray<six::UByte>& buffer)
     }
 }
 
-std::auto_ptr<six::Data> read(const std::string& filename)
+std::unique_ptr<six::Data> read(const std::string& filename)
 {
     six::NITFReadControl reader;
     reader.load(filename);
     mem::SharedPtr<const six::Container> container = reader.getContainer();
-    std::auto_ptr<six::Data> data(container->getData(0)->clone());
+    std::unique_ptr<six::Data> data(container->getData(0)->clone());
     return data;
 }
 
@@ -66,7 +66,7 @@ std::string computeProductSize(const std::string& blockSizeStr,
 void writeSingleImage(const six::Data& data, const std::string& pathname,
         const std::string& blockSize, size_t imageSideSize)
 {
-    std::auto_ptr<six::Data> workingData(data.clone());
+    std::unique_ptr<six::Data> workingData(data.clone());
     const std::string productSize = computeProductSize(blockSize,
             imageSideSize, workingData->getNumBytesPerPixel());
     workingData->setNumRows(imageSideSize);
@@ -77,7 +77,7 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
 
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
-    container->addData(workingData);
+    container->addData(std::move(workingData));
 
     six::BufferList buffers(1);
     buffers[0] = buffer.get();
@@ -99,8 +99,8 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
         const std::string& blockSize, size_t largeImageSize,
         size_t smallImageSize)
 {
-    std::auto_ptr<six::Data> firstData(data.clone());
-    std::auto_ptr<six::Data> secondData(data.clone());
+    std::unique_ptr<six::Data> firstData(data.clone());
+    std::unique_ptr<six::Data> secondData(data.clone());
 
     // The first image will be blocked, and the second is too small.
     firstData->setNumRows(largeImageSize);
@@ -118,8 +118,8 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
 
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
-    container->addData(firstData);
-    container->addData(secondData);
+    container->addData(std::move(firstData));
+    container->addData(std::move(secondData));
 
     six::BufferList buffers(2);
     buffers[0] = firstBuffer.get();
@@ -205,7 +205,7 @@ int main(int argc, char** argv)
                 "set correctly.");
         parser.addArgument("inputSIDD", "Input SIDD", cli::STORE, "sidd",
                 "SIDD", 1, 1);
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const std::string siddPathname(options->get<std::string>("sidd"));
 
@@ -214,7 +214,7 @@ int main(int argc, char** argv)
                 new six::XMLControlCreatorT<
                 six::sidd::DerivedXMLControl>());
 
-        std::auto_ptr<six::Data> sidd = read(siddPathname);
+        std::unique_ptr<six::Data> sidd = read(siddPathname);
 
         if (sidd->getDataType() != six::DataType::DERIVED)
         {

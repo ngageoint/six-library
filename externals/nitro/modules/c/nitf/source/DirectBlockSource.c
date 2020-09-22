@@ -24,6 +24,8 @@
  *    Implementation of the direct block source object
  */
 
+#include <inttypes.h>
+
 #include "nitf/DirectBlockSource.h"
 
 /*   The instance data for the rowSource object */
@@ -35,7 +37,7 @@ typedef struct _DirectBlockSourceImpl
     /* Pointer to the next row function */
     NITF_DIRECT_BLOCK_SOURCE_NEXT_BLOCK nextBlock;
     nitf_ImageReader* imageReader;
-    nitf_Uint32 blockNumber;
+    uint32_t blockNumber;
     size_t numBlocks;
 }
 DirectBlockSourceImpl;
@@ -60,7 +62,7 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf,
 {
     DirectBlockSourceImpl *directBlockSource = toDirectBlockSource(data, error);
     const void* block;
-    nitf_Uint64 blockSize;
+    uint64_t blockSize;
 
     if (!directBlockSource)
         return NITF_FAILURE;
@@ -76,7 +78,7 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf,
     {
         nitf_Error_initf(error, NITF_CTXT,
                          NITF_ERR_READING_FROM_FILE,
-                         "Expected %lu bytes, but read %llu",
+                         "Expected %lu bytes, but read %"PRIu64"",
                          size, blockSize);
         return NITF_FAILURE;
     }
@@ -131,7 +133,7 @@ NITFAPI(nitf_BandSource *) nitf_DirectBlockSource_construct(void * algorithm,
                                                             NITF_DIRECT_BLOCK_SOURCE_NEXT_BLOCK
                                                             nextBlock,
                                                             nitf_ImageReader* imageReader,
-                                                            nitf_Uint32 numBands,
+                                                            uint32_t numBands,
                                                             nitf_Error * error)
 {
     static nitf_IDataSource iDirectBlockSource =

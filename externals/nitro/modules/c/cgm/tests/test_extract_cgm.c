@@ -52,7 +52,7 @@ void extractGraphics(nitf_Record *record, nitf_Reader *reader,
         while(nitf_ListIterator_notEqualTo(&iter, &end))
         {
             nitf_SegmentReader *segmentReader = NULL;
-            nitf_Uint8 *buf = NULL;
+            uint8_t *buf = NULL;
             size_t bytes;
             nitf_GraphicSegment *segment =
                     (nitf_GraphicSegment *) nitf_ListIterator_get(&iter);
@@ -60,7 +60,7 @@ void extractGraphics(nitf_Record *record, nitf_Reader *reader,
             segmentReader = nitf_Reader_newGraphicReader(reader, num, error);
             
             bytes = (size_t)(segment->end - segment->offset);
-            buf = (nitf_Uint8*)NITF_MALLOC(bytes);
+            buf = (uint8_t*)NITF_MALLOC(bytes);
             
             if (nitf_SegmentReader_read(segmentReader, buf, bytes, error))
             {
@@ -93,7 +93,6 @@ int main(int argc, char **argv)
 {
     nitf_Record *record = NULL;
     nitf_Reader *reader = NULL;
-    cgm_Metafile *metafile = NULL;
     nitf_Error error;
     nitf_IOHandle io;
     

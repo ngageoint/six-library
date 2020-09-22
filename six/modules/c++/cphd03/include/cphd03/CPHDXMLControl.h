@@ -53,14 +53,17 @@ public:
      *  it to a new-allocated XML DOM.
      */
     std::auto_ptr<xml::lite::Document> toXML(const Metadata& metadata);
+    std::unique_ptr<xml::lite::Document> toXML(std::nullptr_t, const Metadata& metadata);
 
     /*!
      *  Function takes a DOM Document* node and creates a new-allocated
      *  CPHDData* populated by the DOM.
      */
     std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
+    std::unique_ptr<Metadata> fromXML(std::nullptr_t, const xml::lite::Document* doc);
 
     std::auto_ptr<Metadata> fromXML(const std::string& xmlString);
+    std::unique_ptr<Metadata> fromXML(std::nullptr_t, const std::string& xmlString);
 
     std::string toXMLString(const Metadata& metadata);
     size_t getXMLsize(const Metadata& metadata);

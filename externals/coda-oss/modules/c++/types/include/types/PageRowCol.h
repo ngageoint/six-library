@@ -249,7 +249,7 @@ inline size_t PageRowCol<size_t>::volume() const
 template <>
 inline bool PageRowCol<float>::operator==(const PageRowCol<float>& p) const
 {
-    float eps = std::numeric_limits<float>::epsilon();
+    constexpr auto eps = std::numeric_limits<float>::epsilon();
     return std::abs(page - p.page) < eps &&
            std::abs(row - p.row) < eps &&
            std::abs(col - p.col) < eps;
@@ -257,7 +257,7 @@ inline bool PageRowCol<float>::operator==(const PageRowCol<float>& p) const
 template <>
 inline bool PageRowCol<double>::operator==(const PageRowCol<double>& p) const
 {
-    double eps = std::numeric_limits<double>::epsilon();
+    constexpr auto eps = std::numeric_limits<double>::epsilon();
     return std::abs(page - p.page) < eps &&
            std::abs(row - p.row) < eps &&
            std::abs(col - p.col) < eps;

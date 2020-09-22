@@ -2430,16 +2430,16 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
         doc->getRootElement()->print(oss);
         std::string preRTxml(oss.stream().str());
 
-        std::auto_ptr<logging::Logger> log(new logging::NullLogger());
+        std::unique_ptr<logging::Logger> log(new logging::NullLogger());
 
         // translate XML into Complex Data structure
-        const std::auto_ptr<six::XMLControl> xmlControl(
+        const std::unique_ptr<six::XMLControl> xmlControl(
             six::XMLControlFactory::getInstance().newXMLControl(six::DataType::COMPLEX, log.get()));
         six::sicd::ComplexData* data = (
             six::sicd::ComplexData*)xmlControl->fromXML(doc, std::vector<std::string>());
 
         // translate data structure to XML string
-        const std::auto_ptr<xml::lite::Document> rtDoc(
+        const std::unique_ptr<xml::lite::Document> rtDoc(
             xmlControl->toXML((six::sicd::ComplexData*)data, std::vector<std::string>()));
         oss.reset();
         rtDoc->getRootElement()->print(oss);

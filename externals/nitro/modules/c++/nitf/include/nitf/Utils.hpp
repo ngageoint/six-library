@@ -30,9 +30,9 @@ namespace nitf
 {
 struct Utils
 {
-    static bool isNumeric(std::string str);
+    static bool isNumeric(const std::string&);
 
-    static bool isAlpha(std::string str);
+    static bool isAlpha(const std::string&);
 
     static void decimalToGeographic(double decimal, int* degrees, int* minutes,
                                     double* seconds);
