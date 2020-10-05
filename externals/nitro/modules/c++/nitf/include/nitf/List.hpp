@@ -22,10 +22,12 @@
 
 #ifndef __NITF_LIST_HPP__
 #define __NITF_LIST_HPP__
+#pragma once
+
+#include <string>
 
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file List.hpp
@@ -50,7 +52,7 @@ public:
     ListNode() {}
 
     //! Copy constructor
-    ListNode(const ListNode & x) { setNative(x.getNative()); }
+    ListNode(const ListNode& x) { *this = x; }
 
     //! Assignment Operator
     ListNode & operator=(const ListNode & x);
@@ -243,14 +245,12 @@ public:
      *  Get the begin iterator
      *  \return  The iterator pointing to the first item in the list
      */
-    nitf::ListIterator begin();
     nitf::ListIterator begin() const;
 
     /*!
      *  Get the end iterator
      *  \return  The iterator pointing to PAST the last item in the list (null);
      */
-    nitf::ListIterator end();
     nitf::ListIterator end() const;
 
     /*!

@@ -107,14 +107,14 @@ public:
                        uint32_t rowsInLastWindow,
                        uint32_t colsInLastWindow);
 
-    uint32_t getRowSkip();
+    uint32_t getRowSkip() const;
 
-    uint32_t getColSkip();
+    uint32_t getColSkip() const;
 
 protected:
 
     DownSampler(){}
-    nitf_Error error;
+    mutable nitf_Error error;
 };
 
 

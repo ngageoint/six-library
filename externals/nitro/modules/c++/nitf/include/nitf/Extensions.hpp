@@ -148,14 +148,14 @@ public:
     /*!
      *  Get the TRE from the iterator
      */
-    nitf::TRE get()
+    nitf::TRE get() const
     {
         nitf_TRE * x = nitf_ExtensionsIterator_get(&handle);
         return nitf::TRE(x);
     }
 
 private:
-    nitf_ExtensionsIterator handle;
+    mutable nitf_ExtensionsIterator handle;
     nitf_Error error;
 };
 
@@ -204,7 +204,7 @@ typedef nitf::ExtensionsIterator Iterator;
     }
 
     //! Clone
-    nitf::Extensions clone()
+    nitf::Extensions clone() const
     {
         nitf::Extensions dolly(nitf_Extensions_clone(getNativeOrThrow(), &error));
         dolly.setManaged(false);

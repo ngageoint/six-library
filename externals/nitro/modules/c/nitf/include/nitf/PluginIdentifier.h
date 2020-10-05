@@ -30,7 +30,7 @@
 #define NITF_PLUGIN_CONSTRUCT_SUFFIX "_construct"
 #define NITF_PLUGIN_DESTRUCT_SUFFIX "_destruct"
 
-#include "nitf/nitf_config.h"
+#include "nitf/Config.h"
 #include "nitf/System.h"
 #include "nitf/TRE.h"
 

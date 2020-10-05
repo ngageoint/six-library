@@ -24,13 +24,14 @@
 #define __NITF_HASHTABLE_HPP__
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include "nitf/System.hpp"
 #include "nitf/Pair.hpp"
 #include "nitf/List.hpp"
 #include "nitf/Object.hpp"
 #include <import/except.h>
-#include <string>
-#include <vector>
 
 /*!
  *  \file HashTable.hpp
@@ -79,20 +80,21 @@ public:
     HashTableIterator(nitf_HashTableIterator x) { setHandle(x); }
 
     //! Get native object
-    nitf_HashTableIterator & getHandle();
+    nitf_HashTableIterator& getHandle();
+    nitf_HashTableIterator & getHandle() const;
 
     //! Check to see if two iterators are equal
-    bool equals(nitf::HashTableIterator& it2);
+    bool equals(const nitf::HashTableIterator& it2) const;
 
     //! Check to see if two iterators are not equal
-    bool notEqualTo(nitf::HashTableIterator& it2);
+    bool notEqualTo(const nitf::HashTableIterator& it2) const;
 
     //! Increment the iterator
     void increment();
 
-    bool operator==(const nitf::HashTableIterator& it2);
+    bool operator==(const nitf::HashTableIterator& it2) const;
 
-    bool operator!=(const nitf::HashTableIterator& it2);
+    bool operator!=(const nitf::HashTableIterator& it2) const;
 
     //! Increment the iterator (postfix);
     void operator++(int x);
@@ -109,11 +111,11 @@ public:
     nitf::Pair operator*() { return get(); }
 
     //! Get the data
-    nitf::Pair get() { return nitf_HashTableIterator_get(&handle); }
+    nitf::Pair get() const { return nitf_HashTableIterator_get(&handle); }
 
 
 private:
-    nitf_HashTableIterator handle;
+    mutable nitf_HashTableIterator handle;
 
     //! Set native object
     void setHandle(nitf_HashTableIterator x) { handle = x; }
@@ -180,12 +182,12 @@ public:
      *  \param  The key to lookup
      *  \return  True if exists, False otherwise.
      */
-    bool exists(const std::string& key);
+    bool exists(const std::string& key) const;
 
     /*!
      *  Debug tool to find out whats in the hash table
      */
-    void print();
+    void print() const;
 
     /*!
      *  For each item in the hash table, do something (slow);
@@ -214,12 +216,12 @@ public:
      *  \param key  The key to retrieve by
      *  \return  The key/value pair
      */
-    nitf::Pair find(const std::string& key);
+    nitf::Pair find(const std::string& key) const;
 
     nitf::Pair operator[] (const std::string& key);
 
     //! Get the buckets
-    nitf::List getBucket(int i);
+    nitf::List getBucket(int i) const;
 
     //! Get the nbuckets
     int getNumBuckets() const;
@@ -231,13 +233,13 @@ public:
      *  Get the begin iterator
      *  \return  The iterator pointing to the first item in the list
      */
-    nitf::HashTableIterator begin();
+    nitf::HashTableIterator begin() const;
 
     /*!
      *  Get the end iterator
      *  \return  The iterator pointing to PAST the last item in the list (null);
      */
-    nitf::HashTableIterator end();
+    nitf::HashTableIterator end() const;
 
 private:
 

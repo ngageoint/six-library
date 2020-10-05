@@ -53,7 +53,7 @@ ImageSubheader::ImageSubheader()
 }
 
 
-nitf::ImageSubheader ImageSubheader::clone()
+nitf::ImageSubheader ImageSubheader::clone() const
 {
     nitf::ImageSubheader dolly(nitf_ImageSubheader_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);

@@ -375,7 +375,7 @@ NRTAPI(nrt_IOInterface *) nrt_IOHandleAdapter_open(const char *fname,
          * TODO: Would really like to use one of the nrt_Error print functions
          */
         char origMessage[NRT_MAX_EMESSAGE + 1];
-        nrt_strcpy_s(origMessage, NRT_MAX_EMESSAGE + 1, error->message);
+        nrt_strcpy_s(origMessage, NRT_MAX_EMESSAGE +1, error->message);
 
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
                         "Invalid IO handle (%s)", origMessage);

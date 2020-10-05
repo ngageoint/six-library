@@ -8,7 +8,4 @@ namespace std
 {
 	enum class byte : unsigned char {};
 }
-
-#define NITF_std_byte_defined
 #endif
-

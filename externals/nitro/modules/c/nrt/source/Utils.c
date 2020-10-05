@@ -22,9 +22,7 @@
 
 #include <assert.h>
 
-#ifndef NRT_LIB_VERSION
- #include "nrt/nrt_config.h"
-#endif
+ #include "nrt/Version.h"
 #include "nrt/Utils.h"
 
 NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,

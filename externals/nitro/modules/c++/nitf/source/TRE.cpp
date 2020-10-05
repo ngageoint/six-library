@@ -28,7 +28,7 @@ using namespace nitf;
 
 TRE::TRE(const TRE& x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 TRE& TRE::operator=(const TRE& x)
@@ -44,10 +44,8 @@ TRE::TRE(nitf_TRE* x)
     getNativeOrThrow();
 }
 
-TRE::TRE(NITF_DATA* x)
+TRE::TRE(NITF_DATA* x) : TRE((nitf_TRE*)x)
 {
-    setNative((nitf_TRE*)x);
-    getNativeOrThrow();
 }
 
 TRE& TRE::operator=(NITF_DATA* x)
@@ -57,37 +55,28 @@ TRE& TRE::operator=(NITF_DATA* x)
     return *this;
 }
 
-TRE::TRE(const char* tag)
+TRE::TRE(const char* tag) : TRE(nitf_TRE_construct(tag, nullptr, &error))
 {
-    setNative(nitf_TRE_construct(tag, nullptr, &error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
 TRE::TRE(const char* tag, const char* id)
+    : TRE(nitf_TRE_construct(tag, (::strlen(id) > 0) ? id : nullptr, & error))
 {
-    setNative(nitf_TRE_construct(tag, (::strlen(id) > 0) ? id : nullptr, &error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
-TRE::TRE(const std::string& tag)
+TRE::TRE(const std::string& tag) : TRE(tag.c_str())
 {
-    setNative(nitf_TRE_construct(tag.c_str(), nullptr, &error));
-    getNativeOrThrow();
-    setManaged(false);
 }
 
 TRE::TRE(const std::string& tag, const std::string& id)
+    : TRE(nitf_TRE_construct(tag.c_str(), id.empty() ? nullptr : id.c_str(), & error))
 {
-    setNative(nitf_TRE_construct(tag.c_str(),
-                                 id.empty() ? nullptr : id.c_str(),
-                                 &error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
-nitf::TRE TRE::clone()
+nitf::TRE TRE::clone() const
 {
     nitf::TRE dolly(nitf_TRE_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);

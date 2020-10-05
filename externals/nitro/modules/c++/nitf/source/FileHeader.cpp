@@ -50,7 +50,7 @@ FileHeader::FileHeader()
 }
 
 
-nitf::FileHeader FileHeader::clone()
+nitf::FileHeader FileHeader::clone() const
 {
     nitf::FileHeader dolly(nitf_FileHeader_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);

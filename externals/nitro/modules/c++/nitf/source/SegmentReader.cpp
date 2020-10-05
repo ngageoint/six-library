@@ -69,13 +69,13 @@ nitf::Off SegmentReader::seek
 }
 
 
-nitf::Off SegmentReader::tell()
+nitf::Off SegmentReader::tell() const
 {
     return nitf_SegmentReader_tell(getNativeOrThrow(), &error);
 }
 
 
-nitf::Off SegmentReader::getSize()
+nitf::Off SegmentReader::getSize() const
 {
     return nitf_SegmentReader_getSize(getNativeOrThrow(), &error);
 }
