@@ -20,31 +20,64 @@
  *
  */
 
+#include <sstream>
+
 #include <import/nitf.hpp>
 #include <io/FileInputStream.h>
 
 bool format_as_xml = false;
 
+static size_t count_nul(const std::string& s)
+{
+    // Sometimes the field contains a bunch of NUL characters, which isn't valid in XML.
+    size_t nul_count = 0;
+    constexpr char nul = '\0';
+    for (const char& ch : s)
+    {
+        if (ch == nul)
+        {
+            nul_count++;
+        }
+    }
+    return nul_count;
+}
+
 template<typename T>
 inline void show(const std::string& x_, const T& x)
 {
+    std::stringstream ss;
+    ss << x;
+    const std::string str_x = ss.str();
+
     if (format_as_xml)
     {
         std::cout << "\t";
-        std::cout << "<" << x_ << ">";
-        std::cout << x;
-        std::cout << "</" << x_ << ">";
+        std::cout << "<" << x_;
+
+        // Sometimes the field contains a bunch of NUL characters, which isn't valid in XML.
+        const size_t nul_count = count_nul(str_x);
+        if (nul_count == str_x.size())
+        {
+            std::cout << " length=\"" << nul_count << "\" />";
+        }
+        else
+        {
+            std::cout << ">";
+            std::cout << str_x;
+            std::cout << "</" << x_ << ">";
+        }
     }
     else
     {
-        std::cout << x_ << " = [" << x << "]";
+        std::cout << x_ << " = [" << str_x << "]";
     }
     std::cout << "\n";
 }
 #define SHOW(X) show(#X, X)
 //#define SHOW(X) std::cout << #X << " = [" << X << "]\n"
 
-#define SHOWI(X) printf("%s=[%d]\n", #X, (int)X)
+#define SHOWI(X) show(#X, (int)X)
+//#define SHOWI(X) std::cout << #X << "=[" << (int)X << "]\n"
 #define SHOWRGB(X) printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, \
        (unsigned char) X[0], (unsigned char) X[1], (unsigned char) X[2])
 
@@ -56,13 +89,39 @@ inline void show(const std::string& x_, const T& x)
  *
  */
 
+static void printTREField(const nitf::Field& field)
+{
+    const std::string strField = field.toString();
+
+    if (!format_as_xml)
+    {
+        std::cout << " = [" << strField << "]\n";
+        return;
+    }
+
+    // Sometimes the field contains a bunch of NUL characters, which isn't valid in XML.
+    const size_t nul_count = count_nul(strField);
+    if (nul_count == strField.size())
+    {
+        std::cout << " length=\"";
+        std::cout << nul_count;
+        std::cout << "\"";
+    }
+    else
+    {
+        std::cout << " value=\"";
+        std::cout << strField;
+        std::cout << "\"";
+    }
+    
+    std::cout << " />";
+    std::cout << "\n";
+}
+
 void printTRE(const nitf::TRE& tre)
 {
-
-
-
     // This is so you know how long the TRE is
-    uint32_t treLength = tre.getCurrentSize();
+    const uint32_t treLength = tre.getCurrentSize();
 
     /*
      *  This is the name for the description that was selected to field
@@ -81,9 +140,9 @@ void printTRE(const nitf::TRE& tre)
     else
     {
         std::cout << "\t";
-        std::cout << "<TRE tag='" << tre.getTag() << "'";
-        std::cout << " length='" << treLength << "'";
-        std::cout << " ID='" << str_treID << "'";
+        std::cout << "<TRE tag=\"" << tre.getTag() << "\"";
+        std::cout << " length=\"" << treLength << "\"";
+        std::cout << " ID=\"" << str_treID << "\"";
         std::cout << ">";
         std::cout << "\n";
     }
@@ -97,12 +156,12 @@ void printTRE(const nitf::TRE& tre)
         if (format_as_xml)
         {
             std::cout << "\t\t";
-            std::cout << "<field name='";
+            std::cout << "<field name=\"";
         }
         std::cout << (*it).first();
         if (format_as_xml)
         {
-            std::cout << "'";
+            std::cout << "\"";
         }
 
         const nitf::Field::FieldType fieldType = field.getType();
@@ -116,7 +175,7 @@ void printTRE(const nitf::TRE& tre)
             case  nitf::Field::BINARY: strType = "BINARY"; break;
             default: strType = "Unknown"; break;
             }
-            std::cout << " type='" << strType << "'";
+            std::cout << " type=\"" << strType << "\"";
         }
 
         if (!desc.empty())
@@ -127,23 +186,11 @@ void printTRE(const nitf::TRE& tre)
             }
             else
             {
-                std::cout << " desc='" << desc << "'";
+                std::cout << " desc=\"" << desc << "\"";
             }
         }
 
-        if (!format_as_xml)
-        {
-            std::cout << " = [" << field.toString() << "]\n";
-        }
-        else
-        {
-            std::cout << " value='";
-            std::cout << field.toString();
-            std::cout << "'";
-
-            std::cout << " />";
-            std::cout << "\n";
-        }
+        printTREField(field);
     }
 
     if (!format_as_xml)
@@ -196,7 +243,7 @@ void showFileHeader(const nitf::FileHeader& header)
     {
         std::cout << "<FileHeader>\n";
     }
-    //#define SHOW_FILE_HEADER(X) SHOW(header.X(). toString())
+    //#define SHOW_FILE_HEADER(X) SHOW(header.get ## X(). toString())
     #define SHOW_FILE_HEADER(X) show(#X, header.get ## X(). toString())
     SHOW_FILE_HEADER(FileHeader);
     SHOW_FILE_HEADER(FileVersion);
@@ -311,15 +358,28 @@ void showFileHeader(const nitf::FileHeader& header)
     }
 
     SHOW_FILE_HEADER(UserDefinedHeaderLength);
-
-    nitf::Extensions udExts = header.getUserDefinedSection();
-
+    const nitf::Extensions udExts = header.getUserDefinedSection();
+    if (format_as_xml)
+    {
+        std::cout << "\t<UserDefinedHeader>\n";
+    }
     showExtensions(udExts);
+    if (format_as_xml)
+    {
+        std::cout << "\t</UserDefinedHeader>\n";
+    }
 
     SHOW_FILE_HEADER(ExtendedHeaderLength);
-
-    nitf::Extensions exExts = header.getExtendedSection();
-    showExtensions(exExts);
+    const nitf::Extensions exExts = header.getExtendedSection();
+    if (format_as_xml)
+    {
+        std::cout << "\t<ExtendedHeader>\n";
+    }
+    showExtensions(udExts);
+    if (format_as_xml)
+    {
+        std::cout << "\t</ExtendedHeader>\n";
+    }
 
     if (format_as_xml)
     {
@@ -433,6 +493,11 @@ void showImages(const nitf::Record& record)
  */
 void showSecurityGroup(const nitf::FileSecurity& securityGroup)
 {
+    if (format_as_xml)
+    {
+        return; // don't need XML output right now
+    }
+
     SHOW(securityGroup.getClassificationSystem().toString());
     SHOW(securityGroup.getCodewords().toString());
     SHOW(securityGroup.getControlAndHandling().toString());
@@ -670,18 +735,30 @@ void showTexts(const nitf::Record& record)
  */
 void showDESubheader(const nitf::DESubheader& sub)
 {
-    printf("DES subheader\n");
-    SHOW(sub.getFilePartType().toString());
-    SHOW(sub.getTypeID().toString());
-    SHOW(sub.getVersion().toString());
-    SHOW(sub.getSecurityClass().toString());
+    if (!format_as_xml)
+    {
+        printf("DES subheader\n");
+    }
+    else
+    {
+        std::cout << "<DESubheader>\n";
+    }
+    
+    //#define SHOW_DES_SUBHEADER(X) SHOW(sub.get ## X(). toString())
+   #define SHOW_DES_SUBHEADER(X) show(#X, sub.get ## X(). toString())
+    #define SHOWI_DES_SUBHEADER(X) show(#X, sub.get ## X())
+
+    SHOW_DES_SUBHEADER(FilePartType);
+    SHOW_DES_SUBHEADER(TypeID);
+    SHOW_DES_SUBHEADER(Version);
+    SHOW_DES_SUBHEADER(SecurityClass);
 
     if (*(sub.getSecurityClass().getRawData()) != 'U')
         showSecurityGroup(sub.getSecurityGroup());
 
-    SHOW(sub.getOverflowedHeaderType().toString());
-    SHOW(sub.getDataItemOverflowed().toString());
-    SHOW(sub.getSubheaderFieldsLength().toString());
+    SHOW_DES_SUBHEADER(OverflowedHeaderType);
+    SHOW_DES_SUBHEADER(DataItemOverflowed);
+    SHOW_DES_SUBHEADER(SubheaderFieldsLength);
 
     /*
      *  This is the user defined parameter section
@@ -693,11 +770,16 @@ void showDESubheader(const nitf::DESubheader& sub)
      */
     if (((uint32_t)sub.getSubheaderFieldsLength()) > 0)
     {
-        nitf::TRE tre = sub.getSubheaderFields();
+        const nitf::TRE tre = sub.getSubheaderFields();
         printTRE( tre );
     }
 
-    SHOWI(sub.getDataLength());
+    SHOWI_DES_SUBHEADER(DataLength);
+
+    if (!format_as_xml)
+    {
+        SHOWI(sub.getDataLength());
+    }
 
     /*
      *  NITRO only populates this object if the DESDATA contains
@@ -707,32 +789,45 @@ void showDESubheader(const nitf::DESubheader& sub)
      *  We wont bother to try and print whatever other things might
      *  have been put in here (e.g, text data or binary blobs)
      */
-    nitf::Extensions exts = sub.getUserDefinedSection();
+    const nitf::Extensions exts = sub.getUserDefinedSection();
     showExtensions(exts);
+
+    if (format_as_xml)
+    {
+        std::cout << "</DESubheader>\n";
+    }
 }
 
 void showDataExtensions(const nitf::Record& record)
 {
-    if (format_as_xml)
-    {
-        return; // don't need XML output right now
-    }
-
     if (record.getNumDataExtensions())
     {
+        if (format_as_xml)
+        {
+            std::cout << "<DataExtensions>\n";
+        }
+
         const nitf::List des = record.getDataExtensions();
 
         //  Walk each label and show
         for (nitf::ListIterator iter = des.begin();
             iter != des.end(); ++iter)
         {
-            nitf::DESegment segment = *iter;
+            const nitf::DESegment segment = *iter;
             showDESubheader(segment.getSubheader());
+        }
+
+        if (format_as_xml)
+        {
+            std::cout << "</DataExtensions>\n";
         }
     }
     else
     {
-        std::cout << "No data extensions in file" << std::endl;
+        if (!format_as_xml)
+        {
+            std::cout << "No data extensions in file\n";
+        }
     }
 }
 
@@ -821,7 +916,7 @@ void showWarnings(const nitf::Reader& reader)
 const std::string str_xml_option = "--xml";
 static int usage(const std::string& argv0)
 {
-    std::cout << "Usage: " << argv0 << " <nitf-file> [" << str_xml_option << "]\n";
+    std::cout << "Usage: " << argv0 << " [ " << str_xml_option << " ] <nitf-file>\n";
     return EXIT_FAILURE;
 }
 
@@ -831,15 +926,20 @@ static int main_(int argc, char** argv)
     {
         return usage(argv[0]);
     }
-    const std::string nitfPathname(argv[1]);
     
+    std::string nitfPathname;
     if (argc == 3)
     {
-        if (argv[2] != str_xml_option)
+        if (argv[1] != str_xml_option)
         {
             return usage(argv[0]);
         }
         format_as_xml = true;
+        nitfPathname = argv[2];
+    }
+    else
+    {
+        nitfPathname = argv[1];
     }
 
     io::FileInputStream fis(nitfPathname);
@@ -861,7 +961,7 @@ static int main_(int argc, char** argv)
 
     if (format_as_xml)
     {
-        std::cout << "<?xml version='1.0' standalone='yes' ?>" << "\n";
+        std::cout << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>" << "\n";
         std::cout << "<NITF>" << "\n";
     }
 

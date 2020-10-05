@@ -44,7 +44,7 @@ ImageReader::ImageReader(nitf_ImageReader * x)
 
 ImageReader::~ImageReader(){}
 
-nitf::BlockingInfo ImageReader::getBlockingInfo()
+nitf::BlockingInfo ImageReader::getBlockingInfo() const
 {
     nitf_BlockingInfo* blockingInfo =
             nitf_ImageReader_getBlockingInfo(getNativeOrThrow(), &error);

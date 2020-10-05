@@ -64,7 +64,7 @@ public:
 
 
     //! Clone
-    nitf::ImageSubheader clone();
+    nitf::ImageSubheader clone() const;
 
     /*!
      *  Destructor

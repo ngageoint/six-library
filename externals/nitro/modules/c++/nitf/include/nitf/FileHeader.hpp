@@ -64,7 +64,7 @@ public:
     FileHeader();
 
     //! Clone
-    nitf::FileHeader clone();
+    nitf::FileHeader clone() const;
 
     ~FileHeader();
 

@@ -39,10 +39,8 @@ nitf::ListNode::ListNode(nitf_ListNode * x)
 }
 
 nitf::ListNode::ListNode(nitf::ListNode & prev, nitf::ListNode & next, NITF_DATA* data)
+    : ListNode(nitf_ListNode_construct(prev.getNative(), next.getNative(), data, &error))
 {
-    setNative(nitf_ListNode_construct(prev.getNative(),
-        next.getNative(), data, &error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
@@ -83,7 +81,7 @@ bool nitf::ListIterator::equals(const nitf::ListIterator& it2) const
 
 bool nitf::ListIterator::operator==(const nitf::ListIterator& it2) const
 {
-    return this->equals((nitf::ListIterator&)it2);
+    return this->equals(it2);
 }
 
 bool nitf::ListIterator::notEqualTo(const nitf::ListIterator& it2) const
@@ -95,7 +93,7 @@ bool nitf::ListIterator::notEqualTo(const nitf::ListIterator& it2) const
 
 bool nitf::ListIterator::operator!=(const nitf::ListIterator& it2) const
 {
-    return this->notEqualTo((nitf::ListIterator&)it2);
+    return this->notEqualTo(it2);
 }
 
 void nitf::ListIterator::increment()
@@ -125,7 +123,7 @@ nitf::ListIterator nitf::ListIterator::operator+(int x)
 
 nitf::List::List(const nitf::List & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 nitf::List & nitf::List::operator=(const nitf::List & x)
@@ -173,10 +171,8 @@ NITF_DATA* nitf::List::popBack()
     return data;
 }
 
-nitf::List::List()
+nitf::List::List() : List(nitf_List_construct(&error))
 {
-    setNative(nitf_List_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
@@ -194,18 +190,8 @@ nitf::ListIterator nitf::List::begin() const
     nitf_ListIterator x = nitf_List_begin(getNativeOrThrow());
     return nitf::ListIterator(x);
 }
-nitf::ListIterator nitf::List::begin()
-{
-    nitf_ListIterator x = nitf_List_begin(getNativeOrThrow());
-    return nitf::ListIterator(x);
-}
 
 nitf::ListIterator nitf::List::end() const
-{
-    nitf_ListIterator x = nitf_List_end(getNativeOrThrow());
-    return nitf::ListIterator(x);
-}
-nitf::ListIterator nitf::List::end()
 {
     nitf_ListIterator x = nitf_List_end(getNativeOrThrow());
     return nitf::ListIterator(x);

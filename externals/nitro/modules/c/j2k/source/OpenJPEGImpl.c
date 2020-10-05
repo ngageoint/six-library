@@ -20,12 +20,11 @@
  *
  */
 
-#undef J2K_MODULE_EXPORTS
-#include "j2k/j2k_config.h"
+#include "j2k/Config.h"
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4206) //	nonstandard extension used : translation unit is empty
-#endif
+#ifdef _MSC_VER
+#pragma warning(disable: 4706) // assignment within conditional expression
+#endif // _MSC_VER
 
 #ifdef HAVE_OPENJPEG_H
 
@@ -427,6 +426,15 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
         case OPJ_CLRSPC_GRAY:
             imageType = J2K_TYPE_MONO;
             break;
+
+        case OPJ_CLRSPC_CMYK:
+        case OPJ_CLRSPC_SYCC:
+        case OPJ_CLRSPC_EYCC:
+            imageType = J2K_TYPE_UNKNOWN;
+            break;
+
+        case OPJ_CLRSPC_UNKNOWN:
+        case OPJ_CLRSPC_UNSPECIFIED:
         default:
             imageType = J2K_TYPE_UNKNOWN;
         }
