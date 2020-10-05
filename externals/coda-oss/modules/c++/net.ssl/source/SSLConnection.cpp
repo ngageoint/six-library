@@ -28,7 +28,7 @@ net::ssl::SSLConnection::SSLConnection(std::unique_ptr<net::Socket>&& socket,
                                        SSL_CTX * ctx,
                                        bool serverAuth,
                                        const std::string& host) :
-    NetConnection(socket),
+    NetConnection(std::move(socket)),
     mServerAuthentication(serverAuth)
 {
     mSSL = NULL;

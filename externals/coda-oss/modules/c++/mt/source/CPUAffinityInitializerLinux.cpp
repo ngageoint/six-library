@@ -68,7 +68,7 @@ struct AvailableCPUProvider final : public AbstractNextCPUProviderLinux
             throw except::Exception(Ctxt(msg.str()));
         }
 
-        std::unique_ptr<sys::ScopedCPUMaskUnix> mask(
+        std::unique_ptr<const sys::ScopedCPUMaskUnix> mask(
                 new sys::ScopedCPUMaskUnix());
         CPU_SET_S(mCPUs.at(mNextCPUIndex++), mask->getSize(), mask->getMask());
         return mask;
@@ -88,7 +88,7 @@ struct OffsetCPUProvider final : public AbstractNextCPUProviderLinux
 
     virtual std::unique_ptr<const sys::ScopedCPUMaskUnix> nextCPU() override
     {
-        std::unique_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
+        std::unique_ptr<const sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
         CPU_SET_S(mNextCPU++, mask->getSize(), mask->getMask());
         return mask;
     }
