@@ -130,7 +130,7 @@ bool isMultipleParam(const std::string& format)
             std::pair<std::string,std::string> keyVal = keyValueFinder(format, idx, pos);
             validateFormat(keyVal.second);
         }
-        catch(std::exception& e)
+        catch(const std::exception&)
         {
             return false;
         }

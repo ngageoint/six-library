@@ -1,5 +1,7 @@
 #pragma once
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 
 // We're building in Visual Studio ... used to control where we get a little bit of config info
@@ -92,6 +94,9 @@
 #include <import/nitf.hpp>
 #include <import/nitf.h>
 #include <import/nrt.h>
+
+#include <import/six.h>
+#include <import/six/sicd.h>
 
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
