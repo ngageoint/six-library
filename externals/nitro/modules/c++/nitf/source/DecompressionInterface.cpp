@@ -82,19 +82,19 @@ uint8_t* DecompressionInterface::adapterReadBlock(
     {
         nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return NULL;
+        return nullptr;
     }
     catch (const std::exception& ex)
     {
         nrt_Error_init(error, ex.what(), NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return NULL;
+        return nullptr;
     }
     catch (...)
     {
         nrt_Error_init(error, "Unknown error", NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -131,10 +131,10 @@ NITF_BOOL DecompressionInterface::adapterFreeBlock(
 void DecompressionInterface::adapterDestroy(
     nitf_DecompressionControl** object)
 {
-    if (object != NULL && *object != NULL)
+    if (object != nullptr && *object != nullptr)
     {
         delete reinterpret_cast<Decompressor*>(*object);
-        *object = NULL;
+        *object = nullptr;
     }
 }
 

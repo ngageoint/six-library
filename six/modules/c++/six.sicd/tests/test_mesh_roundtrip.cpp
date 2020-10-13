@@ -449,7 +449,7 @@ int main(int argc, char** argv)
                            cli::STORE_TRUE, "verbose",
                            "verbose")->setDefault(false);
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const types::RowCol<size_t> meshDims(
             options->get<size_t>("numRows"),
             options->get<size_t>("numCols"));

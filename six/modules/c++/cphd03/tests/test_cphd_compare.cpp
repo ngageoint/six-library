@@ -150,7 +150,7 @@ int main(int argc, char** argv)
                            "CPHD", 1, 1);
         parser.addArgument("input2", "Second pathname", cli::STORE, "input2",
                            "CPHD", 1, 1);
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string inPathname1(options->get<std::string>("input1"));
         const std::string inPathname2(options->get<std::string>("input2"));
         const size_t numThreads(options->get<size_t>("threads"));

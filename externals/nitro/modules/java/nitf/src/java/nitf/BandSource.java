@@ -123,7 +123,7 @@ public abstract class BandSource extends DestructibleObject
         BandSource source = null;
         synchronized (bandSourceMap)
         {
-            final Object o = bandSourceMap.get(new Long(address));
+            final Object o = bandSourceMap.get(Long.valueOf(address));
             if (o != null)
             {
                 source = (BandSource) o;
@@ -141,7 +141,7 @@ public abstract class BandSource extends DestructibleObject
     {
         synchronized (bandSourceMap)
         {
-            final Long key = new Long(bandSource.getAddress());
+            final Long key = Long.valueOf(bandSource.getAddress());
             if (!bandSourceMap.containsKey(key))
                 bandSourceMap.put(key, bandSource);
         }

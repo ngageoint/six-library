@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 /*
     Test program for reading a Text segment
 
@@ -100,8 +102,8 @@ int main(int argc, char *argv[])
         }
 
         fprintf(stdout, "Data length = %d\n", textReader->dataLength);
-        fprintf(stdout, "File offset = %llu\n", textReader->baseOffset);
-        fprintf(stdout, "Virtual offset = %llu\n", textReader->virtualOffset);
+        fprintf(stdout, "File offset = %" PRIu64 "\n", textReader->baseOffset);
+        fprintf(stdout, "Virtual offset = %" PRIu64 "\n", textReader->virtualOffset);
 
         data = (char *) NITF_MALLOC
                (nitf_SegmentReader_getSize(textReader, error) + 1);

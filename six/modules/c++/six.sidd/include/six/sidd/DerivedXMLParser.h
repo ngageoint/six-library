@@ -35,7 +35,7 @@ class DerivedXMLParser : public six::XMLParser
 {
 public:
     DerivedXMLParser(const std::string& version,
-                     std::auto_ptr<six::SICommonXMLParser> comParser,
+                     std::unique_ptr<six::SICommonXMLParser>&& comParser,
                      logging::Logger* log = NULL,
                      bool ownLog = false);
 
@@ -192,7 +192,7 @@ protected:
     void parseDownstreamReprocessingFromXML(const XMLElem elem,
                                             DownstreamReprocessing* downstreamReproc) const;
     Remap* parseRemapChoiceFromXML(const XMLElem remapInformationElem) const;
-    std::auto_ptr<LUT> parseSingleLUT(const XMLElem elem) const;
+    std::unique_ptr<LUT> parseSingleLUT(const XMLElem elem) const;
     void parseDisplayFromXML(const XMLElem displayElem, Display* display) const;
     virtual void parseMeasurementFromXML(const XMLElem measurementElem,
                                  Measurement* measurement) const;
@@ -218,7 +218,7 @@ protected:
     }
 
 private:
-    std::auto_ptr<six::SICommonXMLParser> mCommon;
+    std::unique_ptr<six::SICommonXMLParser> mCommon;
 };
 }
 }

@@ -22,12 +22,12 @@ int main(int argc, char** argv)
         std::vector<std::string> schemaPaths;
         const size_t orderX(4);
         const size_t orderY(4);
-        std::auto_ptr<six::sicd::ComplexData> complexData;
+        std::unique_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float> > widebandData;
         six::Poly2D outputRowColToSlantRow;
         six::Poly2D outputRowColToSlantCol;
-        std::auto_ptr<six::sicd::NoiseMesh> noiseMesh;
-        std::auto_ptr<six::sicd::ScalarMesh> scalarMesh;
+        std::unique_ptr<six::sicd::NoiseMesh> noiseMesh;
+        std::unique_ptr<six::sicd::ScalarMesh> scalarMesh;
 
         std::cout << "Read SICD: " << sicdPathname << std::endl;
         six::sicd::Utilities::readSicd(sicdPathname,

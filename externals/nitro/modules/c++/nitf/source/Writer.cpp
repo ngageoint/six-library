@@ -222,7 +222,7 @@ void Writer::setDEWriteHandler(int index,
 nitf::ImageWriter Writer::newImageWriter(int imageNumber)
 {
     nitf_SegmentWriter * x = nitf_Writer_newImageWriter(getNativeOrThrow(),
-                                                        imageNumber, NULL, &error);
+                                                        imageNumber, nullptr, &error);
     if (!x)
         throw nitf::NITFException(&error);
 
@@ -236,7 +236,7 @@ nitf::ImageWriter Writer::newImageWriter(int imageNumber,
                                          const std::map<std::string, void*>& options)
 {
     nitf::HashTable userOptions;
-    nrt_HashTable* userOptionsNative = NULL;
+    nrt_HashTable* userOptionsNative = nullptr;
 
     if (!options.empty())
     {

@@ -52,7 +52,7 @@ BufferedWriter::BufferedWriter(const std::string& file,
                                size_t size,
                                bool adopt) :
     mBufferSize(size),
-    mScopedBuffer(adopt ? buffer : NULL),
+    mScopedBuffer(adopt ? buffer : nullptr),
     mBuffer(buffer),
     mPosition(0),
     mTotalWritten(0),

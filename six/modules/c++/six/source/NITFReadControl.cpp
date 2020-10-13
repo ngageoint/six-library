@@ -282,7 +282,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         else
         {
             SegmentInputStreamAdapter ioAdapter(deReader);
-            std::auto_ptr<Data> data(parseData(*mXMLRegistry,
+            std::unique_ptr<Data> data(parseData(nullptr, *mXMLRegistry,
                                                ioAdapter,
                                                dataType,
                                                schemaPaths,
@@ -298,11 +298,11 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
 
             if (data->getDataType() == six::DataType::DERIVED)
             {
-                mContainer->addData(data, findLegend(productNum));
+                mContainer->addData(std::move(data), findLegend(productNum));
             }
             else
             {
-                mContainer->addData(data);
+                mContainer->addData(std::move(data));
             }
 
             ++productNum;
@@ -711,9 +711,9 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     return buffer;
 }
 
-std::auto_ptr<Legend> NITFReadControl::findLegend(size_t productNum)
+std::unique_ptr<Legend> NITFReadControl::findLegend(size_t productNum)
 {
-    std::auto_ptr<Legend> legend;
+    std::unique_ptr<Legend> legend;
 
     nitf::List images = mRecord.getImages();
     nitf::ListIterator imageIter = images.begin();

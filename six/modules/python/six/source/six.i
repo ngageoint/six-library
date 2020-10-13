@@ -49,9 +49,9 @@ using namespace six;
     PyDateTime_IMPORT;
 %}
 
-// This allows functions that deal with auto_ptrs to work properly
-%auto_ptr(six::Data);
-%auto_ptr(six::XMLControlCreator);
+// This allows functions that deal with unique_ptrs to work properly
+%unique_ptr(six::Data);
+%unique_ptr(six::XMLControlCreator);
 
 %ignore mem::ScopedCopyablePtr::operator!=;
 %ignore mem::ScopedCopyablePtr::operator==;

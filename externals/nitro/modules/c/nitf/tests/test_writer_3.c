@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 #include <import/nitf.h>
 
 
@@ -70,7 +72,7 @@ char *makeBandName(const char *rootFile, const char* segment, int segmentNum, in
             file[pos] = '_';
         }
     }
-    strcat(file, ".man");
+    nrt_strcat_s(file, NITF_MAX_PATH, ".man");
     printf("File: %s\n", file);
     return file;
 }
@@ -139,7 +141,7 @@ void showFileHeader(nitf_FileHeader * header)
         GET_UINT64(header->imageInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
                i, (long)len);
-        printf("\tThe length of the IMAGE data: %llu bytes\n\n", dataLen);
+        printf("\tThe length of the IMAGE data: %" PRIu64 " bytes\n\n", dataLen);
     }
 
     return;
@@ -478,7 +480,7 @@ void writeDEData(nitf_DESegment * segment,
     nitf_IOHandle file;
 
     leftToRead = (size_t)(segment->end - segment->offset);
-    fprintf(stderr, "XXX Data Ext write %llu %llu %llu\n", leftToRead, segment->end , segment->offset);
+    fprintf(stderr, "XXX Data Ext write %"PRIu64" %"PRIu64" %"PRIu64"\n", leftToRead, segment->end , segment->offset);
 
     buf = (char*)NITF_MALLOC(toRead + 1);
     if (!buf)
@@ -509,14 +511,14 @@ void writeDEData(nitf_DESegment * segment,
         amtToRead = DE_READ_SIZE;
         if (amtToRead > leftToRead)
             amtToRead = leftToRead;
-        fprintf(stderr, "XXX Data Ext C2 %llu\n", amtToRead);
+        fprintf(stderr, "XXX Data Ext C2 %"PRIu64"\n", amtToRead);
         if (nitf_SegmentReader_read(reader, buf, (size_t)amtToRead, error) != NITF_SUCCESS)
         {
             /* TODO populate error */
             goto CATCH_ERROR;
         }
 
-        fprintf(stderr, "XXX Data Ext D %llu\n", amtToRead);
+        fprintf(stderr, "XXX Data Ext D %"PRIu64"\n", amtToRead);
         if (!nitf_IOHandle_write(file, (const char*)buf, (size_t)amtToRead, error))
             goto CATCH_ERROR;
         fprintf(stderr, "XXX Data Ext E\n");

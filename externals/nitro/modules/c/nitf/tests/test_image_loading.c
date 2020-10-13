@@ -235,7 +235,7 @@ void writeImage(nitf_ImageSegment * segment,
         for (pos = strlen(file) - 1; pos; pos--)
             if (file[pos] == '.')
                 file[pos] = '_';
-        strcat(file, ".out");
+        nrt_strcat_s(file, NITF_MAX_PATH, ".out");
         printf("File: %s\n", file);
         toFile = nitf_IOHandle_create(file, NITF_ACCESS_WRITEONLY,
                                       NITF_CREATE, error);

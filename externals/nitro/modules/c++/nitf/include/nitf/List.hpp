@@ -22,10 +22,12 @@
 
 #ifndef __NITF_LIST_HPP__
 #define __NITF_LIST_HPP__
+#pragma once
+
+#include <string>
 
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file List.hpp
@@ -50,7 +52,7 @@ public:
     ListNode() {}
 
     //! Copy constructor
-    ListNode(const ListNode & x) { setNative(x.getNative()); }
+    ListNode(const ListNode& x) { *this = x; }
 
     //! Assignment Operator
     ListNode & operator=(const ListNode & x);
@@ -108,16 +110,17 @@ public:
 
     //! Get native object
     nitf_ListIterator & getHandle();
+    nitf_ListIterator& getHandle() const;
 
     //! Checks to see if two iterators are equal
-    bool equals(nitf::ListIterator& it2);
+    bool equals(const nitf::ListIterator& it2) const;
 
     //! Checks to see if two iterators are not equal
-    bool notEqualTo(nitf::ListIterator& it2);
+    bool notEqualTo(const nitf::ListIterator& it2) const;
 
-    bool operator==(const nitf::ListIterator& it2);
+    bool operator==(const nitf::ListIterator& it2) const;
 
-    bool operator!=(const nitf::ListIterator& it2);
+    bool operator!=(const nitf::ListIterator& it2) const;
 
     //! Increment the iterator
     void increment();
@@ -143,7 +146,7 @@ public:
     nitf::ListNode & getCurrent() { return mCurrent; }
 
 private:
-    nitf_ListIterator handle;
+    mutable nitf_ListIterator handle;
     nitf::ListNode mCurrent;
 
     //! Set native object
@@ -185,7 +188,7 @@ public:
      *  Is our chain empty?
      *  \return True if so, False otherwise
      */
-    bool isEmpty();
+    bool isEmpty() const;
 
     /*!
      *  Push something onto the front of our chain.  Note, as
@@ -233,7 +236,7 @@ public:
     List();
 
     //! Clone
-    nitf::List clone(NITF_DATA_ITEM_CLONE cloner);
+    nitf::List clone(NITF_DATA_ITEM_CLONE cloner) const;
 
     //! Destructor
     ~List();
@@ -242,13 +245,13 @@ public:
      *  Get the begin iterator
      *  \return  The iterator pointing to the first item in the list
      */
-    nitf::ListIterator begin();
+    nitf::ListIterator begin() const;
 
     /*!
      *  Get the end iterator
      *  \return  The iterator pointing to PAST the last item in the list (null);
      */
-    nitf::ListIterator end();
+    nitf::ListIterator end() const;
 
     /*!
      *  Insert data into the chain BEFORE the iterator, and make
@@ -284,19 +287,19 @@ public:
     NITF_DATA* remove(nitf::ListIterator & where);
 
     //! Get the first
-    nitf::ListNode getFirst();
+    nitf::ListNode getFirst() const;
 
     //! Get the last
-    nitf::ListNode getLast();
+    nitf::ListNode getLast() const;
 
     //! Returns the size of the list
-    size_t getSize();
+    size_t getSize() const;
 
     //! Returns the data at the given index
     NITF_DATA* operator[] (size_t index);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error;
 };
 
 }

@@ -74,7 +74,7 @@ nitf::Version Record::getVersion() const
     return nitf_Record_getVersion(getNativeOrThrow());
 }
 
-nitf::FileHeader Record::getHeader()
+nitf::FileHeader Record::getHeader() const
 {
     return nitf::FileHeader(getNativeOrThrow()->header);
 }
@@ -155,32 +155,32 @@ uint32_t Record::getNumReservedExtensions() const
 }
 
 
-nitf::List Record::getImages()
+nitf::List Record::getImages() const
 {
     return nitf::List(getNativeOrThrow()->images);
 }
 
-nitf::List Record::getGraphics()
+nitf::List Record::getGraphics() const
 {
     return nitf::List(getNativeOrThrow()->graphics);
 }
 
-nitf::List Record::getLabels()
+nitf::List Record::getLabels() const
 {
     return nitf::List(getNativeOrThrow()->labels);
 }
 
-nitf::List Record::getTexts()
+nitf::List Record::getTexts() const
 {
     return nitf::List(getNativeOrThrow()->texts);
 }
 
-nitf::List Record::getDataExtensions()
+nitf::List Record::getDataExtensions() const
 {
     return nitf::List(getNativeOrThrow()->dataExtensions);
 }
 
-nitf::List Record::getReservedExtensions()
+nitf::List Record::getReservedExtensions() const
 {
     return nitf::List(getNativeOrThrow()->reservedExtensions);
 }

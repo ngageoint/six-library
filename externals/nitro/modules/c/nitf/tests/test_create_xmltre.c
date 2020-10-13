@@ -199,7 +199,7 @@ char *makeBandName(const char *rootFile, const char* segment, int segmentNum, in
             file[pos] = '_';
         }
     }
-    strcat(file, ".man");
+    nrt_strcat_s(file, NITF_MAX_PATH, ".man");
     printf("File: %s\n", file);
     return file;
 }
@@ -536,7 +536,7 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
                              int imageNumber, nitf_Error * error)
 {
     char *file;
-    uint32_t nBits, nBands, xBands, nRows, nColumns;
+    uint32_t nBits, nBands=0, xBands, nRows, nColumns;
     size_t subimageSize;
     nitf_SubWindow *subimage;
     unsigned int i;

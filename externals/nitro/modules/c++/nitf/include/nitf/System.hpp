@@ -24,8 +24,6 @@
 #define __NITF_SYSTEM_HPP__
 #pragma once
 
-#pragma once
-
 /*!
  *  \file System.hpp
  */

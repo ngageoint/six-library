@@ -26,7 +26,7 @@
 
 #include <stdint.h>
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef WIN32
 #      if defined(NITF_MODULE_EXPORTS)
 #          ifndef NRT_MODULE_EXPORTS
 #              define NRT_MODULE_EXPORTS
@@ -84,6 +84,7 @@
 #define NITF_MALLOC NRT_MALLOC
 #define NITF_REALLOC NRT_REALLOC
 #define NITF_FREE NRT_FREE
+NITFAPI(char*) nitf_strdup(const char* src);
 
 
 /******************************************************************************/

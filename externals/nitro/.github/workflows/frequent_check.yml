@@ -42,6 +42,7 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
+        sudo apt-get install gcc-9 g++-9
         mkdir build
         cd build
         cmake -DCMAKE_INSTALL_PREFIX=installLinux-Github -DPYTHON_VERSION=3.7 ..

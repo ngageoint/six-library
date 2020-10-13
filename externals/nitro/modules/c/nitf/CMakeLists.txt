@@ -36,6 +36,7 @@ coda_add_module(
         source/RESegment.c
         source/RESubheader.c
         source/NitfReader.c
+        source/NitfSystem.c
         source/Record.c
         source/RowSource.c
         source/SegmentReader.c

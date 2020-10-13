@@ -32,11 +32,11 @@ insertCreator(nitf_DLL* dso,
               const char* suffix,
               nitf_Error* error);
 
-static long __PluginRegistryInitLock = 0;
 static nitf_Mutex __PluginRegistryLock = NITF_MUTEX_INIT;
 #if !(defined(WIN32) || defined(_WIN32))
 static const char DIR_DELIMITER = '/';
 #else
+static long __PluginRegistryInitLock = 0;
 static const char DIR_DELIMITER = '\\';
 #endif
 /*
@@ -181,6 +181,19 @@ insertPlugin(nitf_PluginRegistry* reg,
     return NITF_SUCCESS;
 }
 
+static char* nitf_PluginRegistry_getenv(char const* varName)
+{
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(push)
+#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+#endif
+    return getenv(varName);
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(pop)
+#endif
+}
+#define getenv(varName) nitf_PluginRegistry_getenv(varName)
+
 NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
 {
     size_t pathLen;
@@ -266,7 +279,7 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
 #endif
         if (nrt_Directory_exists(NITF_DEFAULT_PLUGIN_PATH))
         {
-            strncpy(reg->path, NITF_DEFAULT_PLUGIN_PATH, NITF_MAX_PATH);
+            nrt_strncpy_s(reg->path, NITF_MAX_PATH, NITF_DEFAULT_PLUGIN_PATH, NITF_MAX_PATH);
             return reg;
         }
         else
@@ -281,7 +294,7 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
     }
     else
     {
-        strncpy(reg->path, pluginEnvVar, NITF_MAX_PATH);
+        nrt_strncpy_s(reg->path, NITF_MAX_PATH, pluginEnvVar, NITF_MAX_PATH);
     }
     /*
      * If the we have a user-defined path, they might not

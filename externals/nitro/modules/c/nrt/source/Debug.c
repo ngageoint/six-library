@@ -40,7 +40,7 @@ NRTPROT(void *) nrt_Debug_malloc(const char *file, int line, size_t sz)
     NRT_SNPRINTF(name, 512, "%s.%d", NRT_MEM_LOG, getpid());
 #else
     /* This can easily be modified to use GetCurrentProcessId() */
-    strcpy(name, NRT_MEM_LOG);
+    nrt_strcpy_s(name, 512, NRT_MEM_LOG);
 #endif
 
     f = fopen(name, "a");
@@ -66,7 +66,7 @@ NRTPROT(void *) nrt_Debug_realloc(const char *file, int line, void *ptr,
     NRT_SNPRINTF(name, 512, "%s.%d", NRT_MEM_LOG, getpid());
 #else
     /* This can easily be modified to use GetCurrentProcessId() */
-    strcpy(name, NRT_MEM_LOG);
+    nrt_strcpy_s(name, 512, NRT_MEM_LOG);
 #endif
 
     f = fopen(name, "a");
@@ -89,7 +89,7 @@ NRTPROT(void) nrt_Debug_free(const char *file, int line, void *ptr)
     NRT_SNPRINTF(name, 512, "%s.%d", NRT_MEM_LOG, getpid());
 #else
     /* This can easily be modified to use GetCurrentProcessId() */
-    strcpy(name, NRT_MEM_LOG);
+    nrt_strcpy_s(name, 512, NRT_MEM_LOG);
 #endif
 
     f = fopen(name, "a");

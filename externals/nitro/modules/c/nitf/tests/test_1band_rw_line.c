@@ -142,7 +142,7 @@ void writeImage(nitf_ImageSegment* segment,
             file[i] = '_';
         }
     }
-    strcat(file, ".out");
+    nrt_strcat_s(file, NITF_MAX_PATH, ".out");
 
     printf("Filename: %s\n", file);
 

@@ -24,14 +24,13 @@
 #define __NITF_HANDLE_HPP__
 #pragma once
 
+#include <iostream>
+#include <mutex>
+
 /*!
  *  \file Handle.hpp
  *  \brief Contains handle wrapper to manage shared native objects
  */
-
-#include <future>
-#include <iostream>
-
 #include "nitf/System.hpp"
 
 namespace nitf
@@ -41,36 +40,36 @@ namespace nitf
  *  \class Handle
  *  \brief  This class is the base definition of a Handle
  */
-    struct Handle
+struct Handle
+{
+    Handle() = default;
+    virtual ~Handle() {}
+
+    //! Get the ref count
+    int getRef() const { return refCount; }
+
+    //! Increment the ref count
+    int incRef()
     {
-        Handle() = default;
-        virtual ~Handle() {}
+        std::lock_guard<std::mutex> lock(mutex);
+        if (refCount < 0) refCount = 0;
+        refCount++;
+        return refCount;
+    }
 
-        //! Get the ref count
-        int getRef() const { return refCount; }
+    //! Decrement the ref count
+    int decRef()
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        refCount--;
+        if (refCount < 0) refCount = 0;
+        return refCount;
+    }
 
-        //! Increment the ref count
-        int incRef()
-        {
-            std::lock_guard<std::mutex> lock(mutex);
-            if (refCount < 0) refCount = 0;
-            refCount++;
-            return refCount;
-        }
-
-        //! Decrement the ref count
-        int decRef()
-        {
-            std::lock_guard<std::mutex> lock(mutex);
-            refCount--;
-            if (refCount < 0) refCount = 0;
-            return refCount;
-        }
-
-    protected:
-        std::mutex mutex;
-        int refCount{ 0 };
-    };
+protected:
+    std::mutex mutex;
+    int refCount{ 0 };
+};
 
 
 /*!

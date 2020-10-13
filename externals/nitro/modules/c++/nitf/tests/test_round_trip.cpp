@@ -82,7 +82,7 @@ public:
                                  uint32_t numCols,
                                  nitf::ImageReader reader)
     {
-        std::auto_ptr<RowStreamer>
+        std::unique_ptr<RowStreamer>
             streamer(new RowStreamer(band, numCols, reader));
         RowStreamer* const streamerPtr(streamer.get());
 

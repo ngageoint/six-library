@@ -25,14 +25,15 @@
 
 char *C(const char *p)
 {
-    void* x_ = malloc(strlen(p) + 1);
+    const size_t p_sz = strlen(p) + 1;
+    void* x_ = malloc(p_sz);
     char* x =
 #if defined(__cplusplus)
      static_cast<char*>(x_);
 #else
     x_;
 #endif
-    strcpy(x, p);
+    nrt_strcpy_s(x, p_sz, p);
     return x;
 }
 

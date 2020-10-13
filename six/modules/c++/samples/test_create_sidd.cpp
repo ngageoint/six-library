@@ -224,7 +224,7 @@ int main(int argc, char** argv)
         xml::lite::MinidomParser parser;
         parser.parse(fis);
 
-        std::auto_ptr<logging::Logger> log (new logging::NullLogger());
+        std::unique_ptr<logging::Logger> log (new logging::NullLogger());
         six::Data* complexData =
             six::XMLControlFactory::getInstance().newXMLControl(
                 six::DataType::COMPLEX,

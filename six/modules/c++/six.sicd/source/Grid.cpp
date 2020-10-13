@@ -122,10 +122,10 @@ std::pair<double, double> DirectionParameters::calculateDeltaKs(
     return std::pair<double, double>(derivedDeltaK1, derivedDeltaK2);
 }
 
-std::auto_ptr<Functor>
+std::unique_ptr<Functor>
 DirectionParameters::calculateWeightFunction() const
 {
-    std::auto_ptr<Functor> weightFunction;
+    std::unique_ptr<Functor> weightFunction;
 
     if (weightType.get() != NULL)
     {
@@ -211,7 +211,7 @@ void DirectionParameters::fillDerivedFields(const ImageData& imageData)
         weights.empty() &&
         weightType->windowName != "UNKNOWN")
     {
-        std::auto_ptr<Functor> weightFunction = calculateWeightFunction();
+        std::unique_ptr<Functor> weightFunction = calculateWeightFunction();
         if (weightFunction.get())
         {
             weights = (*weightFunction)(DEFAULT_WEIGHT_SIZE);
@@ -307,7 +307,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
     }
 
     // Check weight functions
-    std::auto_ptr<Functor> weightFunction;
+    std::unique_ptr<Functor> weightFunction;
 
     if (weightType.get())
     {

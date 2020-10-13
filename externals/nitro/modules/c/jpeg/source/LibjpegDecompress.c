@@ -142,9 +142,10 @@ static int Q5[] =
         16,  14,  20,  21,  20,  27,  27,  36
     };
 
+#define JPEGMarkerItem_name_LEN 4
 typedef struct _JPEGMarkerItem
 {
-    char name[4];
+    char name[JPEGMarkerItem_name_LEN];
     nitf_Off off;
     uint32_t block;
 
@@ -784,7 +785,7 @@ NITFPRIV(NITF_BOOL) pushMarker(nitf_List* markerList,
                                nitf_Error* error)
 {
     JPEGMarkerItem* item = JPEGMarkerItem_construct(error);
-    strcpy(item->name,  name);
+    nrt_strcpy_s(item->name, JPEGMarkerItem_name_LEN, name);
     item->off = where;
     if (!item) return NITF_FAILURE;
     if (!nitf_List_pushBack(markerList, item, error) )

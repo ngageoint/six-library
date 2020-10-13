@@ -309,7 +309,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     mDesSubheaderFileOffset = offset;
 }
 
-std::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
+std::unique_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
 {
     std::vector<size_t> numRowsPerSegment(mImageSegmentInfo.size());
     for (size_t ii = 0; ii < mImageSegmentInfo.size(); ++ii)
@@ -317,7 +317,7 @@ std::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
         numRowsPerSegment[ii] = mImageSegmentInfo[ii].numRows;
     }
 
-    std::auto_ptr<const ImageBlocker> blocker(new ImageBlocker(
+    std::unique_ptr<const ImageBlocker> blocker(new ImageBlocker(
             numRowsPerSegment,
             mNumCols,
             mOverallNumRowsPerBlock,

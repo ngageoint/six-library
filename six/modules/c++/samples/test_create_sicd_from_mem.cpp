@@ -58,7 +58,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
                            "OUTPUT", 1, 1);
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const types::RowCol<size_t> dims(options->get<size_t>("numRows"),
                                          options->get<size_t>("numCols"));
@@ -67,7 +67,7 @@ int main(int argc, char** argv)
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
-        std::auto_ptr<logging::Logger> logger(
+        std::unique_ptr<logging::Logger> logger(
                 logging::setupLogger(sys::Path::basename(argv[0])));
 
         six::XMLControlFactory::getInstance().addCreator(
@@ -76,13 +76,13 @@ int main(int argc, char** argv)
 
         std::vector<std::complex<float> > image(dims.row * dims.col);
 
-        std::auto_ptr<six::Data> data(
+        std::unique_ptr<six::Data> data(
                 six::sicd::Utilities::createFakeComplexData().release());
         data->setPixelType(six::PixelType::RE32F_IM32F);
 
         mem::SharedPtr<six::Container> container(new six::Container(
                 six::DataType::COMPLEX));
-        container->addData(data);
+        container->addData(std::move(data));
 
         /*
          *  Under normal circumstances, the library uses the

@@ -1,3 +1,4 @@
+import platform
 import sys
 import os
 
@@ -11,10 +12,12 @@ def configure(conf):
     # have to set NITF_PLUGIN_PATH
     conf.env['enable_static_tres'] = True
 
-    conf.define('DEFAULT_SCHEMA_PATH',
-                os.path.join(os.path.abspath(conf.options.prefix),
-                             'conf', 'schema', 'six'))
+    schemaPath = os.path.join(os.path.abspath(conf.options.prefix),
+                             'conf', 'schema', 'six')
+    if platform.system() == 'Windows':
+        schemaPath = schemaPath.replace('\\', '\\\\')
 
+    conf.define('DEFAULT_SCHEMA_PATH', schemaPath)
     conf.recurse()
 
 def build(bld):

@@ -97,7 +97,7 @@ public:
     }
 
 private:
-    std::auto_ptr<const six::sidd::GeometricChip> mChip;
+    std::unique_ptr<const six::sidd::GeometricChip> mChip;
 };
 
 class PixelToLatLon
@@ -120,7 +120,7 @@ public:
     }
 
 private:
-    const std::auto_ptr<scene::GridECEFTransform> mGridTransform;
+    const std::unique_ptr<scene::GridECEFTransform> mGridTransform;
     const types::RowCol<double> mRefPoint;
     const ChipCoordinateToFullImageCoordinate mChipToFull;
 };

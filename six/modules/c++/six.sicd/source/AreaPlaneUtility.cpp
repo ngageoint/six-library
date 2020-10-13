@@ -59,7 +59,7 @@ std::vector<RowColDouble > AreaPlaneUtility::computeCornersPix(
 types::RowCol<Vector3> AreaPlaneUtility::deriveUnitVectors(
         const ComplexData& data)
 {
-    std::auto_ptr<scene::SceneGeometry> geometry(
+    std::unique_ptr<scene::SceneGeometry> geometry(
             Utilities::getSceneGeometry(&data));
 
     types::RowCol<Vector3> unitVectors;
@@ -78,7 +78,7 @@ RowColDouble AreaPlaneUtility::deriveSpacing(
         const types::RowCol<Vector3>& unitVectors,
         double sampleDensity)
 {
-    std::auto_ptr<scene::SceneGeometry> geometry(
+    std::unique_ptr<scene::SceneGeometry> geometry(
             Utilities::getSceneGeometry(&data));
     geometry->setImageVectors(unitVectors.row, unitVectors.col);
     geometry->setOutputPlaneVectors(unitVectors.row, unitVectors.col);
@@ -106,11 +106,11 @@ std::vector<Vector3> AreaPlaneUtility::computeInPlaneCorners(
         const ComplexData& data,
         const types::RowCol<Vector3>& unitVectors)
 {
-    std::auto_ptr<scene::SceneGeometry> geometry(
+    std::unique_ptr<scene::SceneGeometry> geometry(
             Utilities::getSceneGeometry(&data));
     geometry->setImageVectors(unitVectors.row, unitVectors.col);
     geometry->setOutputPlaneVectors(unitVectors.row, unitVectors.col);
-    std::auto_ptr<scene::ProjectionModel> projection(
+    std::unique_ptr<scene::ProjectionModel> projection(
             Utilities::getProjectionModel(&data, geometry.get()));
 
     std::vector<RowColDouble > cornersPix = computeCornersPix(data);
@@ -229,9 +229,9 @@ void AreaPlaneUtility::setAreaPlane(ComplexData& data,
         LatLonAltCorners& acpCorners =
                 data.radarCollection->area->acpCorners;
 
-        std::auto_ptr<scene::SceneGeometry> geometry(
+        std::unique_ptr<scene::SceneGeometry> geometry(
                 Utilities::getSceneGeometry(&data));
-        std::auto_ptr<scene::ProjectionModel> projectionModel(
+        std::unique_ptr<scene::ProjectionModel> projectionModel(
                 Utilities::getProjectionModel(&data, geometry.get()));
         const Vector3 groundPlaneNormal = Utilities::getGroundPlaneNormal(data);
         for (size_t ii = 0; ii < imageCorners.size(); ++ii)

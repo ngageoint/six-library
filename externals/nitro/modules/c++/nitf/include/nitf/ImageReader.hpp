@@ -55,7 +55,7 @@ public:
     ~ImageReader();
 
     //! Get the blocking info
-    nitf::BlockingInfo getBlockingInfo();
+    nitf::BlockingInfo getBlockingInfo() const;
 
     /*!
      *  Read a sub-window.  See ImageIO::read for more details.
@@ -79,7 +79,7 @@ public:
     void setReadCaching();
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error;
     ImageReader(){}
 };
 

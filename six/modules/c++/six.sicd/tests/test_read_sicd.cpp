@@ -58,7 +58,7 @@ int main(int argc, char** argv)
             schemaPaths.push_back(six::findSchemaPath(progname));
         }
 
-        std::auto_ptr<six::sicd::ComplexData> complexData;
+        std::unique_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float> > widebandData;
         six::sicd::Utilities::readSicd(sicdPathname, schemaPaths,
                 complexData, widebandData);

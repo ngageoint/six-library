@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 #include "nitf/ImageIO.h"
 
 
@@ -2761,9 +2763,7 @@ directly by the user.
 
 /*!< nitf_ImageIO object */
 /*!< FILE to use for print */
-#ifdef NITF_DEBUG
 NITFPRIV(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file);
-#endif
 
 /*!
   \brief nitf_ImageIOControl_print Do a formatted print of a
@@ -2784,10 +2784,8 @@ directly by the user.
 
 /*!< nitf_ImageIO control object */
 /*!< FILE to use for print */
-#ifdef NITF_DEBUG
 NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl, FILE * file, int full     /*!< Full print if TRUE */
                                         );
-#endif
 
 /*!
   \brief nitf_ImageIOBlock_print - Do a formatted print of
@@ -2805,10 +2803,9 @@ directly by the user.
 \return None
 
 */
-#ifdef NITF_DEBUG
+
 NITFPRIV(void) nitf_ImageIOBlock_print
 (_nitf_ImageIOBlock * blockIO, FILE * file, int longIndent);
-#endif
 
 /*!
   \brief nitf_ImageIO_getMaskInfo - Get block/pad mask information
@@ -4962,11 +4959,13 @@ uint32_t nitf_ImageIO_updateMyResidual(
         }
         else
         {
-            myResidual = cntl->column + numColsFR - nitf->numColumns;
-
-            if (myResidual < 0)
+            if (cntl->column + numColsFR < nitf->numColumns)
             {
                 myResidual = 0;
+            }
+            else
+            {
+                myResidual = cntl->column + numColsFR - nitf->numColumns;
             }
         }
     }
@@ -6027,7 +6026,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (numRowsFR > (nitf->numRows + rowSkip - 1) || numRowsFR == 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid number of rows %u (Full resolution) (limit is %ld)",
+                         "Invalid number of rows %"PRIu32" (Full resolution) (limit is %ld)",
                          numRowsFR, nitf->numRows);
         return NITF_FAILURE;
     }
@@ -6035,7 +6034,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (numColsFR > (nitf->numColumns + colSkip - 1) || numColsFR == 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid number of columns %u (Full resolution) (limit is %ld)",
+                         "Invalid number of columns %"PRIu32" (Full resolution) (limit is %ld)",
                          numColsFR, nitf->numColumns);
         return NITF_FAILURE;
     }
@@ -6205,6 +6204,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
     size_t bytesPerBlock;       /* Total bytes in one block */
     uint32_t headerOffset;   /* File offset of masks due to mask header */
     uint32_t padOffset;      /* File offset of pad mask due to block mask */
+    uint32_t i;
 
     nitf = (_nitf_ImageIO *) img;
 
@@ -6252,7 +6252,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
         maskOffset = 0;
 
         maskp = nitf->blockMask;
-        for (uint32_t i = 0; i < nBlocksTotal + 1; i++)
+        for (i = 0; i < nBlocksTotal + 1; i++)
         {
             *(maskp++) = maskOffset;
             maskOffset += bytesPerBlock;
@@ -6293,7 +6293,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
         if (!nitf_ImageIO_bigEndian())
             nitf_ImageIO_swapOnly_4((uint8_t *) fileMask, nBlocksTotal, 0);
 
-        for (uint32_t i = 0;i < nBlocksTotal;i++)
+        for (i = 0;i < nBlocksTotal;i++)
             nitf->blockMask[i] = fileMask[i];
 
         nitf->blockMask[nBlocksTotal] =
@@ -6323,7 +6323,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
 
     if ((nitf->maskHeader.padRecordLength == 0) || !reading)
     {                           /* No mask */
-        for (uint32_t i = 0;i < nBlocksTotal;i++)
+        for (i = 0;i < nBlocksTotal;i++)
             nitf->padMask[i] = NITF_IMAGE_IO_NO_BLOCK;
     }
     else
@@ -6358,7 +6358,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
         if (nitf_ImageIO_bigEndian())
             nitf_ImageIO_swapOnly_4((uint8_t *) fileMask, nBlocksTotal, 0);
 
-        for (uint32_t i = 0; i < nBlocksTotal;i++)
+        for (i = 0; i < nBlocksTotal;i++)
             nitf->padMask[i] = fileMask[i];
 
         NITF_FREE(fileMask);
@@ -6545,6 +6545,7 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
     uint8_t buffer[NITF_IMAGE_IO_MASK_HEADER_LEN];
     uint16_t padCodeLength;  /* Pad code length for header */
     uint64_t maskOffset;     /* Offset of block or pad mask */
+    uint32_t maskSizeFile;   /* Block mask size in bytes in the file */
 
     /* Do not write anything if the IC is not a mask type */
 
@@ -6617,7 +6618,7 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
         uint32_t *fileMask;   /* Buffer to hold file mask */
         uint32_t i;
 
-        size_t maskSizeFile = nitf->nBlocksTotal * sizeof(uint32_t);
+        maskSizeFile = nitf->nBlocksTotal * sizeof(uint32_t);
         fileMask = (uint32_t *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
         {
@@ -6667,7 +6668,7 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
         uint32_t *fileMask;   /* Buffer to hold file mask */
         uint32_t i;
 
-        size_t maskSizeFile = nitf->nBlocksTotal * sizeof(uint32_t);
+        maskSizeFile = nitf->nBlocksTotal * sizeof(uint32_t);
         fileMask = (uint32_t *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
         {
@@ -9643,9 +9644,9 @@ void nitf_ImageIO_12PixelComDestroy(nitf_CompressionControl ** object)
 
 /*========================= nitf_ImageIO_print ===============================*/
 
-#ifdef NITF_DEBUG
 NITFPRIV(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file)
 {
+#ifdef NITF_DEBUG
     /* Correct type for pointer */
     _nitf_ImageIO *nitfp = (_nitf_ImageIO *) nitf;
     int i;
@@ -9707,17 +9708,19 @@ NITFPRIV(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file)
             nitfp->oneBand);
 
     fflush(file);
-    ///* Silence compiler warnings about unused variables */
-    //(void)nitf;
-    //(void)file;
-}
+#else
+    /* Silence compiler warnings about unused variables */
+    (void)nitf;
+    (void)file;
 #endif
+    return;
+}
 
 
-#ifdef NITF_DEBUG
 NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
                                          FILE * file, int full)
 {
+#ifdef NITF_DEBUG
     uint32_t i;
 
     if (file == NULL)
@@ -9762,17 +9765,19 @@ NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
             cntl->ioCount, cntl->ioCountDown);
 
     fflush(file);
-    ///* Silence compiler warnings about unused variables */
-    //(void)cntl;
-    //(void)file;
-    //(void)full;
-}
+#else
+    /* Silence compiler warnings about unused variables */
+    (void)cntl;
+    (void)file;
+    (void)full;
 #endif
+    return;
+}
 
-#ifdef NITF_BLOCK_DEBUG
 NITFPRIV(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
                                        FILE * file, int longIndent)
 {
+#ifdef NITF_BLOCK_DEBUG
     char *sp;
 
     if (file == NULL)
@@ -9831,13 +9836,14 @@ NITFPRIV(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
             blockIO->currentRow);
 
     fflush(file);
-    ///* Silence compiler warnings about unused variables */
-    //(void)blockIO;
-    //(void)file;
-    //(void)longIndent;
-}
+#else
+    /* Silence compiler warnings about unused variables */
+    (void)blockIO;
+    (void)file;
+    (void)longIndent;
 #endif
-
+    return;
+}
 
 NITFAPI(NITF_BOOL) nitf_ImageIO_getMaskInfo(nitf_ImageIO *nitf,
                                             uint32_t *imageDataOffset,

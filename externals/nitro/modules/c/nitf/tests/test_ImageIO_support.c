@@ -759,13 +759,14 @@ char **makeBlockPattern(test_nitf_ImageIOConstructArgs *args,
     nBlkRows = args->nBlksPerColumn;
     nBlkCols = args->nBlksPerRow;
 
-    array = NITF_MALLOC(sizeof(char *) * nBlkRows + specLen + 1);
+    const size_t array_sz = sizeof(char*) * nBlkRows + specLen + 1;
+    array = NITF_MALLOC(array_sz);
     if (array == NULL)
     {
         *error = "Error allocating pattern array\n";
         return(NULL);
     }
-    strcpy((char *) (&(array[nBlkRows])), spec);
+    nrt_strcpy_s((char *) (&(array[nBlkRows])), array_sz, spec);
     for (i = 0;i < nBlkRows;i++)
     {
         array[i] = ((char *) & (array[nBlkRows])) + (nBlkCols + 1) * i;

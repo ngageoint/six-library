@@ -62,7 +62,7 @@ int main(int argc, char** argv)
                            str::split("FX TOA"))->setDefault("FX");
         parser.addArgument("output", "Output pathname", cli::STORE, "output",
                            "CPHD", 1, 1);
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const size_t numChannels = options->get<size_t>("channels");
         const types::RowCol<size_t> dims(options->get<size_t>("rows"),

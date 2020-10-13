@@ -90,7 +90,7 @@ char *makeBandName(const char *rootFile, const char* segment, int segmentNum, in
             file[pos] = '_';
         }
     }
-    strcat(file, ".man");
+    nrt_strcat_s(file, NITF_MAX_PATH, ".man");
     printf("File: %s\n", file);
     return file;
 }

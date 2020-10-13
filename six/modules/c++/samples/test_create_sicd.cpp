@@ -96,7 +96,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
                            "OUTPUT", 1, 1);
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         std::string inputName(options->get<std::string> ("sio"));
         std::string outputName(options->get<std::string> ("output"));
@@ -106,7 +106,7 @@ int main(int argc, char** argv)
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
-        std::auto_ptr<logging::Logger> logger(
+        std::unique_ptr<logging::Logger> logger(
                 logging::setupLogger(sys::Path::basename(argv[0])));
 
         // create an XML registry
@@ -144,7 +144,7 @@ int main(int argc, char** argv)
         // Create the Data
         // TODO: Use a ComplexDataBuilder?
         six::sicd::ComplexData* data(new six::sicd::ComplexData());
-        std::auto_ptr<six::Data> scopedData(data);
+        std::unique_ptr<six::Data> scopedData(data);
 
         if (options->hasValue("version"))
         {
@@ -236,7 +236,7 @@ int main(int argc, char** argv)
 
         mem::SharedPtr<six::Container> container(new six::Container(
                 six::DataType::COMPLEX));
-        container->addData(scopedData);
+        container->addData(std::move(scopedData));
 
         six::Options writerOptions;
         /*

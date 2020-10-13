@@ -192,7 +192,8 @@ CLEANUP:
         if (user != NULL && user[band] != NULL)
             NITF_FREE(user[band]);
     }
-    NITF_FREE(user);
+    if (user != NULL)
+        NITF_FREE(user);
     if(userContig != NULL)
         NITF_FREE(userContig);
     return rc;

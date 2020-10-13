@@ -21,16 +21,11 @@
  */
 
 #include "nrt/Pair.h"
+#include "nrt/Utils.h"
 
 NRTAPI(void) nrt_Pair_init(nrt_Pair * pair, const char *key, NRT_DATA * data)
 {
-    size_t len = strlen(key);
-    pair->key = (char *) NRT_MALLOC(len + 1);
-    if (pair->key != NULL)
-    {
-        pair->key[len] = 0;
-        strcpy(pair->key, key);
-    }
+    pair->key = nrt_strdup(key);
     pair->data = data;
 }
 

@@ -236,7 +236,7 @@ public:
      * \return ImageBlocker with settings in sync with how the image will be
      * blocked in the NITF
      */
-    std::auto_ptr<const ImageBlocker> getImageBlocker() const;
+    std::unique_ptr<const ImageBlocker> getImageBlocker() const;
 
 protected:
     /*!

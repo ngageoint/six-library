@@ -115,7 +115,7 @@ private:
     void write(const std::vector<std::byte>& data);
 
 private:
-    std::auto_ptr<nitf::IOInterface> mIO;
+    std::unique_ptr<nitf::IOInterface> mIO;
     const std::vector<std::string> mSchemaPaths;
 
     std::vector<nitf::Off> mImageDataStart;

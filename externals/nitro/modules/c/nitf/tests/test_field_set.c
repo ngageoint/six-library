@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 /*
     Test program for testing field set functions
 
@@ -102,8 +104,8 @@ int main(int argc, char *argv[])
     nitf_Field_get(fhdr->NITF_FL, (NITF_DATA *) & valueU64After,
                    NITF_CONV_UINT, NITF_INT64_SZ, error);
     fprintf(stdout,
-            "Set of FL via nitf_Field_setUint64 original %llu readback %llu\n",
-            (long long unsigned int)valueU64Before, (long long unsigned int)valueU64After);
+            "Set of FL via nitf_Field_setUint64 original %" PRIu64 " readback %" PRIu64 "\n",
+            valueU64Before, valueU64After);
 
     valueStrBefore = "TestStr";
     if (nitf_Field_setString(subhdr->NITF_IID2, valueStrBefore, error))

@@ -20,9 +20,9 @@
  *
  */
 
-#ifndef NRT_LIB_VERSION
- #include "nrt/nrt_config.h"
-#endif
+#include <assert.h>
+
+ #include "nrt/Version.h"
 #include "nrt/Utils.h"
 
 NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,
@@ -229,9 +229,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                                               nrt_Error * error)
 {
     /* +-dd.ddd or += ddd.ddd */
-    char* decimalCopy;
     const size_t len = strlen(d);
-    const char sign = d[0];
     if (len != 7 && len != 8)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
@@ -239,14 +237,16 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                         d);
         return NRT_FAILURE;
     }
-    decimalCopy = malloc(len + 1);
+    char* decimalCopy = nrt_strdup(d);
     if (!decimalCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
                         "Could not allocate %zu bytes", len + 1);
         return NRT_FAILURE;
     }
-    decimalCopy = strcpy(decimalCopy, d);
+
+    const char sign = d[0];
+
     /* Now replace all spaces */
     nrt_Utils_replace(decimalCopy, ' ', '0');
     *decimal = atof(&(decimalCopy[1]));
@@ -344,7 +344,6 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     int degreeOffset = 0;
     const size_t len = strlen(dms);
     char dir;
-    char* dmsCopy;
 
     char d[4];
     char m[3];
@@ -376,14 +375,13 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     }
 
     /* Now replace all spaces */
-    dmsCopy = malloc(strlen(dms) + 1);
+    char* dmsCopy = nrt_strdup(dms);
     if (!dmsCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
                         "Could not allocate %zu bytes.", strlen(dms) + 1);
         return NRT_FAILURE;
     }
-    dmsCopy = strcpy(dmsCopy, dms);
     nrt_Utils_replace(dmsCopy, ' ', '0');
 
     /* Now get the corners out as geographic coords */
@@ -593,24 +591,49 @@ NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
     }
 }
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
-
-NRTAPI(char*) nrt_Utils_strcpy(char* destination, char const* source)
+NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src)
 {
-    #undef strcpy
-    return strcpy(destination, source);
+    assert(sz > 0);
+    #ifdef _MSC_VER // str*_s() is in C11
+    (void) strcpy_s(dest, sz, src);
+    #else
+   (void)strcpy(dest, src);
+    #endif       
 }
 
-NRTAPI(char*) nrt_Utils_strncpy(char* destination, char const* source, size_t count)
+NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars)
 {
-#undef strncpy
-    return strncpy(destination, source, count);
+    assert(dest_sz > 0);
+    #ifdef _MSC_VER // str*_s() is in C11
+    (void) strncpy_s(dest, dest_sz, src, src_chars);
+    #else
+    (void)strncpy(dest, src, src_chars);
+    #endif       
 }
 
-NRTAPI(char*) nrt_Utils_strcat(char* destination, char const* source)
+NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src)
 {
-    #undef strcat
-    return strcat(destination, source);
+    assert(sz > 0);
+    #ifdef _MSC_VER // str*_s() is in C11
+    (void) strcat_s(dest, sz, src);
+    #else
+    (void) strcat(dest, src);
+    #endif
 }
+
+NRTAPI(char*) nrt_strdup(const char* src)
+{
+    if (src != NULL)
+    {
+        const size_t len = strlen(src);
+        char* retval = NRT_MALLOC(len + 1);
+        if (retval != NULL)
+        {
+            nrt_strcpy_s(retval, len + 1, src);
+            retval[len] = '\0';
+            return retval;
+        }
+    }
+    return NULL;
+}
+

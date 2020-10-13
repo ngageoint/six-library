@@ -24,6 +24,8 @@
  *    Implementation of the direct block source object
  */
 
+#include <inttypes.h>
+
 #include "nitf/DirectBlockSource.h"
 
 /*   The instance data for the rowSource object */
@@ -76,7 +78,7 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf,
     {
         nitf_Error_initf(error, NITF_CTXT,
                          NITF_ERR_READING_FROM_FILE,
-                         "Expected %lu bytes, but read %llu",
+                         "Expected %lu bytes, but read %"PRIu64"",
                          size, blockSize);
         return NITF_FAILURE;
     }

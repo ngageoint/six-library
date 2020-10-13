@@ -133,9 +133,9 @@ NITF_BOOL CompressionInterface::adapterEnd(
 void CompressionInterface::adapterDestroy(
     nitf_CompressionControl** object)
 {
-    if (object != NULL && *object != NULL)
+    if (object != nullptr && *object != nullptr)
     {
         delete reinterpret_cast<Compressor*>(*object);
-        *object = NULL;
+        *object = nullptr;
     }
 }

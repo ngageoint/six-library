@@ -53,10 +53,10 @@ xml::lite::Document* ComplexXMLControl::toXMLImpl(const Data* data)
     return getParser(data->getVersion())->toXML(sicd);
 }
 
-std::auto_ptr<ComplexXMLParser>
+std::unique_ptr<ComplexXMLParser>
 ComplexXMLControl::getParser(const std::string& version) const
 {
-    std::auto_ptr<ComplexXMLParser> parser;
+    std::unique_ptr<ComplexXMLParser> parser;
 
     std::vector<std::string> versionParts;
     splitVersion(version, versionParts);

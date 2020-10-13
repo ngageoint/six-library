@@ -146,11 +146,11 @@ private:
     const EnsureFileCleanup mNormalFileCleanup;
 
     const types::RowCol<size_t> mDims;
-    std::auto_ptr<six::sicd::ComplexData> mData;
+    std::unique_ptr<six::sicd::ComplexData> mData;
     std::vector<std::complex<DataTypeT> > mImage;
     std::vector<std::complex<DataTypeT> > mBigEndianImage;
 
-    std::auto_ptr<const CompareFiles> mCompareFiles;
+    std::unique_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
     const std::vector<std::string> mSchemaPaths;
 

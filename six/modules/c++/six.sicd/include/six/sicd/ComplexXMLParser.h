@@ -38,7 +38,7 @@ class ComplexXMLParser : public XMLParser
 public:
     ComplexXMLParser(const std::string& version,
                      bool addClassAttributes,
-                     std::auto_ptr<SICommonXMLParser> comParser,
+                     std::unique_ptr<SICommonXMLParser>&& comParser,
                      logging::Logger* log = NULL,
                      bool ownLog = false);
 
@@ -226,7 +226,7 @@ private:
                                           NULL) const;
 
 private:
-    std::auto_ptr<SICommonXMLParser> mCommon;
+    std::unique_ptr<SICommonXMLParser> mCommon;
 };
 
 }

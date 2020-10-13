@@ -119,11 +119,11 @@ std::string findDllPathname(const std::string& installPathname)
  *
  * \return A Nitf21ISD object
  */
-std::auto_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
+std::unique_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
         const six::NITFReadControl& loadedReadControl, const six::Data* data,
         const six::XMLControlRegistry& registry)
 {
-    std::auto_ptr<csm::Nitf21Isd> nitfIsd(new csm::Nitf21Isd(pathname));
+    std::unique_ptr<csm::Nitf21Isd> nitfIsd(new csm::Nitf21Isd(pathname));
     csm::Des des;
 
     // NITRO parsed the subheader into a nice structure - need to grab all

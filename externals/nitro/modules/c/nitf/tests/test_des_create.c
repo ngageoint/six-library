@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 /*
   Test program for creating a DE segment
 
@@ -66,7 +68,7 @@ char *makeBandName(const char *rootFile, const char* segment, int segmentNum, in
             file[pos] = '_';
         }
     }
-    strcat(file, ".man");
+    nrt_strcat_s(file, NITF_MAX_PATH, ".man");
     printf("File: %s\n", file);
     return file;
 }
@@ -87,14 +89,14 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
                              int imageNumber, nitf_Error * error)
 {
     char *file;
-    uint32_t nBits, nBands, xBands, nRows, nColumns;
+    uint32_t nBits, nBands=0, xBands, nRows, nColumns;
     size_t subimageSize;
     nitf_SubWindow *subimage;
     unsigned int i;
     int padded;
-    uint8_t **buffer;
+    uint8_t **buffer = NULL;
     uint32_t band;
-    uint32_t* bandList = NULL;
+    uint32_t *bandList=NULL;
 
     NITF_TRY_GET_UINT32(segment->subheader->numBitsPerPixel, &nBits,
                         error);
@@ -277,7 +279,7 @@ int main(int argc, char *argv[])
     nitf_DESegment *des = NULL;
     nitf_FileSecurity *security = NULL;
     int i;
-    nitf_IOHandle out;
+    nitf_IOHandle out = 0;
     nitf_Writer *writer = NULL;
     nitf_SegmentWriter *desWriter = NULL;
     nitf_SegmentSource *desData = NULL;

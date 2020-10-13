@@ -60,7 +60,7 @@ public:
      *  Extension Segment (DES) buffers and their lengths. This data
      *  will be stored in the DES portion of the NITF
      */
-    ByteProvider(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    ByteProvider(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
                  const std::vector<std::string>& schemaPaths,
                  const std::vector<PtrAndLength>& desBuffers);
 
@@ -136,7 +136,7 @@ public:
      *  Extension Segment (DES) buffers and their lengths. This data
      *  will be stored in the DES portion of the NITF
      */
-    void initialize(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    void initialize(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<PtrAndLength>& desBuffers);
 protected:

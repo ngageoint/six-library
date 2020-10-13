@@ -65,7 +65,7 @@ GraphicSegment & GraphicSegment::operator=(NITF_DATA * x)
 }
 
 
-nitf::GraphicSegment GraphicSegment::clone()
+nitf::GraphicSegment GraphicSegment::clone() const
 {
     nitf::GraphicSegment dolly(nitf_GraphicSegment_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
@@ -75,7 +75,7 @@ nitf::GraphicSegment GraphicSegment::clone()
 GraphicSegment::~GraphicSegment(){}
 
 
-nitf::GraphicSubheader GraphicSegment::getSubheader()
+nitf::GraphicSubheader GraphicSegment::getSubheader() const
 {
     return nitf::GraphicSubheader(getNativeOrThrow()->subheader);
 }

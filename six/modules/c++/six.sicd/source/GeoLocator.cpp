@@ -40,7 +40,7 @@ LatLonAlt GeoLocator::geolocate(const RowColDouble& rowCol) const
 scene::PlanarGridECEFTransform
 GeoLocator::buildTransformer(const ComplexData& complexData, bool shadowsDown) const
 {
-    std::auto_ptr<ComplexData> dataClone(
+    std::unique_ptr<ComplexData> dataClone(
             reinterpret_cast<ComplexData*>(complexData.clone()));
     if (!AreaPlaneUtility::hasAreaPlane(*dataClone))
     {

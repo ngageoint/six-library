@@ -140,7 +140,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output SICD pathname", cli::STORE,
                            "output", "<output SICD pathname>", 1, 1);
 
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string inPathname(options->get<std::string> ("input"));
         const std::string outPathname(options->get<std::string> ("output"));
         const bool trimCornersIfNeeded =

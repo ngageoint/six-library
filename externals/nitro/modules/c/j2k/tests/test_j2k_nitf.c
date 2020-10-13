@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 #include <import/nrt.h>
 #include <import/nitf.h>
 #include <import/j2k.h>
@@ -123,7 +125,7 @@ int main(int argc, char **argv)
                 j2k_Container *container = NULL;
                 uint32_t cmpIt, nComponents;
                 printf("Image %d contains J2K compressed data\n", (i + 1));
-                printf("Offset: %d\n", segment->imageOffset);
+                printf("Offset: %" PRIu64 "\n", segment->imageOffset);
                 if (!nrt_IOInterface_seek(io, segment->imageOffset,
                                           NRT_SEEK_SET, &error))
                     goto CATCH_ERROR;
