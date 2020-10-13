@@ -7,20 +7,34 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nitro-c", "externals\nitro\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nitro-c++", "externals\nitro\modules\c++\nitro-c++.vcxproj", "{8F357A19-799E-4971-850E-3F28485C130B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "six", "six\modules\c++\six\six.vcxproj", "{62AAD4DD-35BA-41A0-8263-1F4DFD755689}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F06550AD-CFC7-40B8-8727-6C82C69A8982}.Debug|x64.ActiveCfg = Debug|x64
 		{F06550AD-CFC7-40B8-8727-6C82C69A8982}.Debug|x64.Build.0 = Debug|x64
+		{F06550AD-CFC7-40B8-8727-6C82C69A8982}.Debug|x86.ActiveCfg = Debug|x64
 		{F06550AD-CFC7-40B8-8727-6C82C69A8982}.Release|x64.ActiveCfg = Release|x64
 		{F06550AD-CFC7-40B8-8727-6C82C69A8982}.Release|x64.Build.0 = Release|x64
+		{F06550AD-CFC7-40B8-8727-6C82C69A8982}.Release|x86.ActiveCfg = Release|x64
 		{8F357A19-799E-4971-850E-3F28485C130B}.Debug|x64.ActiveCfg = Debug|x64
 		{8F357A19-799E-4971-850E-3F28485C130B}.Debug|x64.Build.0 = Debug|x64
+		{8F357A19-799E-4971-850E-3F28485C130B}.Debug|x86.ActiveCfg = Debug|x64
 		{8F357A19-799E-4971-850E-3F28485C130B}.Release|x64.ActiveCfg = Release|x64
 		{8F357A19-799E-4971-850E-3F28485C130B}.Release|x64.Build.0 = Release|x64
+		{8F357A19-799E-4971-850E-3F28485C130B}.Release|x86.ActiveCfg = Release|x64
+		{62AAD4DD-35BA-41A0-8263-1F4DFD755689}.Debug|x64.ActiveCfg = Debug|x64
+		{62AAD4DD-35BA-41A0-8263-1F4DFD755689}.Debug|x64.Build.0 = Debug|x64
+		{62AAD4DD-35BA-41A0-8263-1F4DFD755689}.Debug|x86.ActiveCfg = Debug|x64
+		{62AAD4DD-35BA-41A0-8263-1F4DFD755689}.Release|x64.ActiveCfg = Release|x64
+		{62AAD4DD-35BA-41A0-8263-1F4DFD755689}.Release|x64.Build.0 = Release|x64
+		{62AAD4DD-35BA-41A0-8263-1F4DFD755689}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
