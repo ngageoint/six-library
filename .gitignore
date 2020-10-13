@@ -10,6 +10,7 @@
 
 # VS Code
 .vscode
+packages/
 
 # Waf
 .lock-waf*
