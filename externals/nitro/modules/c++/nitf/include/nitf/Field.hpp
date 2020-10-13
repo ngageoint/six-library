@@ -103,6 +103,11 @@ class Field : public nitf::Object<nitf_Field>
     }
 
 public:
+    using FieldType = nitf::FieldType;
+    static const auto BCS_A = FieldType::NITF_BCS_A;
+    static const auto BCS_N = FieldType::NITF_BCS_N;
+    static const auto BINARY = FieldType::NITF_BINARY;
+
     Field & operator=(const char * value)
     {
         set(value);
