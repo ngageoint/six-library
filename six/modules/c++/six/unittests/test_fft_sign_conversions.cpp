@@ -17,8 +17,6 @@ TEST_CASE(testToType)
 }
 }
 
-int main(int , char** )
-{
+TEST_MAIN(
     TEST_CHECK(testToType);
-    return 0;
-}
+)
