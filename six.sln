@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "six.sicd", "six\modules\c++
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "six.sidd", "six\modules\c++\six.sidd\six.sidd.vcxproj", "{DDC587C2-53BA-44A9-94E7-07BE52AF3D0B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "six.convert", "six\modules\c++\six.convert\six.convert.vcxproj", "{DB4ECC28-A862-4CF4-8A03-69B3CC0C4E8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -75,6 +77,12 @@ Global
 		{DDC587C2-53BA-44A9-94E7-07BE52AF3D0B}.Release|x64.ActiveCfg = Release|x64
 		{DDC587C2-53BA-44A9-94E7-07BE52AF3D0B}.Release|x64.Build.0 = Release|x64
 		{DDC587C2-53BA-44A9-94E7-07BE52AF3D0B}.Release|x86.ActiveCfg = Release|x64
+		{DB4ECC28-A862-4CF4-8A03-69B3CC0C4E8B}.Debug|x64.ActiveCfg = Debug|x64
+		{DB4ECC28-A862-4CF4-8A03-69B3CC0C4E8B}.Debug|x64.Build.0 = Debug|x64
+		{DB4ECC28-A862-4CF4-8A03-69B3CC0C4E8B}.Debug|x86.ActiveCfg = Debug|x64
+		{DB4ECC28-A862-4CF4-8A03-69B3CC0C4E8B}.Release|x64.ActiveCfg = Release|x64
+		{DB4ECC28-A862-4CF4-8A03-69B3CC0C4E8B}.Release|x64.Build.0 = Release|x64
+		{DB4ECC28-A862-4CF4-8A03-69B3CC0C4E8B}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
