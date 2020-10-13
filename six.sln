@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cphd03", "six\modules\c++\c
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "six.sicd", "six\modules\c++\six.sicd\six.sicd.vcxproj", "{34AC2314-FBD1-42AD-AAF4-0CEBC6BF737E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "six.sidd", "six\modules\c++\six.sidd\six.sidd.vcxproj", "{DDC587C2-53BA-44A9-94E7-07BE52AF3D0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -67,6 +69,12 @@ Global
 		{34AC2314-FBD1-42AD-AAF4-0CEBC6BF737E}.Release|x64.ActiveCfg = Release|x64
 		{34AC2314-FBD1-42AD-AAF4-0CEBC6BF737E}.Release|x64.Build.0 = Release|x64
 		{34AC2314-FBD1-42AD-AAF4-0CEBC6BF737E}.Release|x86.ActiveCfg = Release|x64
+		{DDC587C2-53BA-44A9-94E7-07BE52AF3D0B}.Debug|x64.ActiveCfg = Debug|x64
+		{DDC587C2-53BA-44A9-94E7-07BE52AF3D0B}.Debug|x64.Build.0 = Debug|x64
+		{DDC587C2-53BA-44A9-94E7-07BE52AF3D0B}.Debug|x86.ActiveCfg = Debug|x64
+		{DDC587C2-53BA-44A9-94E7-07BE52AF3D0B}.Release|x64.ActiveCfg = Release|x64
+		{DDC587C2-53BA-44A9-94E7-07BE52AF3D0B}.Release|x64.Build.0 = Release|x64
+		{DDC587C2-53BA-44A9-94E7-07BE52AF3D0B}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
