@@ -62,6 +62,7 @@ int main(int, char**)
         {
             x = 1 * 2 * 3;
         }
+        if (x > 0) { /*remove compiler warning*/ }
         std::cout << "Finish Loop 1" << std::endl;
         sw.pause();
         csw.pause();

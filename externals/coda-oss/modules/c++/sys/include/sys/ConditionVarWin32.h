@@ -24,7 +24,7 @@
 #ifndef __SYS_WIN32_CONDITION_VARIABLE_H__
 #define __SYS_WIN32_CONDITION_VARIABLE_H__
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 #if !defined(USE_NSPR_THREADS)
 
 #include "sys/ConditionVarInterface.h"
@@ -145,7 +145,7 @@ public:
 
 private:
     // This is set if we own the mutex, to make sure it gets deleted.
-    std::auto_ptr<MutexWin32> mMutexOwned;
+    std::unique_ptr<MutexWin32> mMutexOwned;
     MutexWin32 *mMutex;
     ConditionVarDataWin32 mNative;
 };

@@ -56,7 +56,7 @@
 #if defined(__GNUC__)
     /*  We get a really nice function macro  */
 #   define NativeLayer_func__ __PRETTY_FUNCTION__
-#elif defined(WIN32) && (_MSC_VER >= 1300)
+#elif (defined(WIN32) || defined(_WIN32)) && (_MSC_VER >= 1300)
 #   define NativeLayer_func__ __FUNCSIG__
 /*  Otherwise, lets look for C99 compatibility  */
 #elif defined (__STDC_VERSION__)
@@ -187,7 +187,7 @@ namespace sys
      *  NOTE: This should be updated as architectures require greater
      *        intervals. Alignments require base 2 increments.
      */
-    static const size_t SSE_INSTRUCTION_ALIGNMENT = 32;
+    static constexpr size_t SSE_INSTRUCTION_ALIGNMENT = 32;
 
     /*!
      * Returns true if the system is big-endian, otherwise false.
@@ -214,7 +214,7 @@ namespace sys
         if (!bufferPtr || elemSize < 2 || !numElems)
             return;
 
-        unsigned short half = elemSize >> 1;
+        const unsigned short half = elemSize >> 1;
         size_t offset = 0, innerOff = 0, innerSwap = 0;
 
         for(size_t i = 0; i < numElems; ++i, offset += elemSize)
@@ -319,7 +319,7 @@ namespace sys
     inline void* alignedAlloc(size_t size,
                               size_t alignment = SSE_INSTRUCTION_ALIGNMENT)
     {
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
         void* p = _aligned_malloc(size, alignment);
 #elif defined(HAVE_POSIX_MEMALIGN)
         void* p = NULL;
@@ -348,7 +348,7 @@ namespace sys
      */
     inline void alignedFree(void* p)
     {
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
         _aligned_free(p);
 #else
         free(p);

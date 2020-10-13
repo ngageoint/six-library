@@ -71,7 +71,7 @@ public:
      */
     void write(const std::string& str)
     {
-        write((sys::byte*) str.c_str(), (sys::Size_T) str.length());
+        write(reinterpret_cast<const sys::byte*>(str.c_str()), (sys::Size_T) str.length());
     }
 
     /*!

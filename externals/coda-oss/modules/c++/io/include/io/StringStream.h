@@ -71,7 +71,7 @@ public:
 
     sys::Off_T seek(sys::Off_T offset, Whence whence)
     {
-        std::ios::seekdir flags;
+        std::ios::seekdir flags = std::ios::cur;
         switch (whence)
         {
         case START:

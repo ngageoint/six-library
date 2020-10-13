@@ -116,7 +116,7 @@ public:
     }
 protected:
     //!  The bound stream
-    std::auto_ptr<OutputStream> mStream;
+    std::unique_ptr<OutputStream> mStream;
     //!  On or off??
     bool mOn;
 };

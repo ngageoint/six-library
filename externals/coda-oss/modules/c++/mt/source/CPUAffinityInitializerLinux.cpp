@@ -51,16 +51,15 @@ std::vector<int> mergeAvailableCPUs()
 
 namespace mt
 {
-class AvailableCPUProvider : public AbstractNextCPUProviderLinux
+struct AvailableCPUProvider final : public AbstractNextCPUProviderLinux
 {
-public:
     AvailableCPUProvider() :
         mCPUs(mergeAvailableCPUs()),
         mNextCPUIndex(0)
     {
     }
 
-    virtual std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU()
+    virtual std::unique_ptr<const sys::ScopedCPUMaskUnix> nextCPU() override
     {
         if (mNextCPUIndex >= mCPUs.size())
         {
@@ -69,9 +68,10 @@ public:
             throw except::Exception(Ctxt(msg.str()));
         }
 
-        std::auto_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
+        std::unique_ptr<const sys::ScopedCPUMaskUnix> mask(
+                new sys::ScopedCPUMaskUnix());
         CPU_SET_S(mCPUs.at(mNextCPUIndex++), mask->getSize(), mask->getMask());
-        return std::auto_ptr<const sys::ScopedCPUMaskUnix>(mask);
+        return mask;
     }
 
 private:
@@ -79,19 +79,18 @@ private:
     size_t mNextCPUIndex;
 };
 
-class OffsetCPUProvider : public AbstractNextCPUProviderLinux
+struct OffsetCPUProvider final : public AbstractNextCPUProviderLinux
 {
-public:
     OffsetCPUProvider(int initialOffset) :
         mNextCPU(initialOffset)
     {
     }
 
-    virtual std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU()
+    virtual std::unique_ptr<const sys::ScopedCPUMaskUnix> nextCPU() override
     {
-        std::auto_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
+        std::unique_ptr<const sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
         CPU_SET_S(mNextCPU++, mask->getSize(), mask->getMask());
-        return std::auto_ptr<const sys::ScopedCPUMaskUnix>(mask);
+        return mask;
     }
 
 private:

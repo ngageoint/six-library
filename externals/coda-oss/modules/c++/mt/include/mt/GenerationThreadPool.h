@@ -36,12 +36,12 @@ namespace mt
     class TiedRequestHandler : public sys::Runnable
     {
 	RunnableRequestQueue* mRequestQueue;
-	sys::Semaphore* mSem;
+	sys::Semaphore* mSem = nullptr;
 	CPUAffinityThreadInitializer* mAffinityInit;
 
     public:
 	TiedRequestHandler(RunnableRequestQueue* requestQueue) :
-	    mRequestQueue(requestQueue), mAffinityInit(NULL) {}
+	    mRequestQueue(requestQueue), mAffinityInit(nullptr) {}
 		
 	virtual ~TiedRequestHandler();
 

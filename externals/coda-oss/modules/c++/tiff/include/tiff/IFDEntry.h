@@ -260,7 +260,7 @@ public:
      * @param value
      *   the tiff::GenericType to add as a value
      *****************************************************************/
-    void addValue(std::auto_ptr<tiff::TypeInterface> value)
+    void addValue(std::unique_ptr<tiff::TypeInterface>&& value)
     {
         mValues.push_back(value.get());
         ++mCount;

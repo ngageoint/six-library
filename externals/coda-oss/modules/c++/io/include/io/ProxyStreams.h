@@ -63,7 +63,7 @@ protected:
         return mProxy->read(buffer, len);
     }
 
-    std::auto_ptr<InputStream> mProxy;
+    std::unique_ptr<InputStream> mProxy;
     bool mOwnPtr;
 };
 
@@ -110,7 +110,7 @@ public:
     }
 
 protected:
-    std::auto_ptr<OutputStream> mProxy;
+    std::unique_ptr<OutputStream> mProxy;
     bool mOwnPtr;
 };
 

@@ -63,7 +63,7 @@ public:
      *  \param serverAuth  Flag for server authentication
      *  \param host  The host name in which we are connected
      */
-    SSLConnection(std::auto_ptr<net::Socket> socket, 
+    SSLConnection(std::unique_ptr<net::Socket>&& socket, 
                   SSL_CTX * ctx, 
                   bool serverAuth = false,
                   const std::string& host = "");

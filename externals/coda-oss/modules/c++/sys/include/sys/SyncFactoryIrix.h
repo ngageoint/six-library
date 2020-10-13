@@ -110,7 +110,7 @@ class SyncImplIrix : public SyncInterface
         ulock_t* mGuard;
     };
 
-    static std::auto_ptr<ulock_t> cs;
+    static std::unique_ptr<ulock_t> cs;
     static SyncFactoryIrix::SyncImplIrix* createImpl()
     {
 

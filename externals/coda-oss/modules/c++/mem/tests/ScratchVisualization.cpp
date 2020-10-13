@@ -421,7 +421,8 @@ int main(int argc, char** argv)
 
     try
     {
-        system("firefox scratch_release.html");
+        int result = system("firefox scratch_release.html");
+        if (result > 0) { /*fix compiler warning*/ }
     }
     catch(const except::Exception&)
     {
