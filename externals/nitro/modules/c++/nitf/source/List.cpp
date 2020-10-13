@@ -74,7 +74,7 @@ nitf_ListIterator& nitf::ListIterator::getHandle() const { return handle; }
 
 bool nitf::ListIterator::equals(const nitf::ListIterator& it2) const
 {
-    NITF_BOOL x = nitf_ListIterator_equals(&handle, &it2.getHandle());
+    const NITF_BOOL x = nitf_ListIterator_equals(&handle, &it2.getHandle());
     if (!x) return false;
     return true;
 }
@@ -86,7 +86,7 @@ bool nitf::ListIterator::operator==(const nitf::ListIterator& it2) const
 
 bool nitf::ListIterator::notEqualTo(const nitf::ListIterator& it2) const
 {
-    NITF_BOOL x = nitf_ListIterator_notEqualTo(&handle, &it2.getHandle());
+    const NITF_BOOL x = nitf_ListIterator_notEqualTo(&handle, &it2.getHandle());
     if (!x) return false;
     return true;
 }
@@ -141,20 +141,20 @@ nitf::List::List(nitf_List * x)
 
 bool nitf::List::isEmpty() const
 {
-    NITF_BOOL x = nitf_List_isEmpty(getNativeOrThrow());
+    const NITF_BOOL x = nitf_List_isEmpty(getNativeOrThrow());
     return x ? true : false;
 }
 
 void nitf::List::pushFront(NITF_DATA* data)
 {
-    NITF_BOOL x = nitf_List_pushFront(getNativeOrThrow(), data, &error);
+    const NITF_BOOL x = nitf_List_pushFront(getNativeOrThrow(), data, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
 
 void nitf::List::pushBack(NITF_DATA* data)
 {
-    NITF_BOOL x = nitf_List_pushBack(getNativeOrThrow(), data, &error);
+    const NITF_BOOL x = nitf_List_pushBack(getNativeOrThrow(), data, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
@@ -187,19 +187,19 @@ nitf::List::~List(){}
 
 nitf::ListIterator nitf::List::begin() const
 {
-    nitf_ListIterator x = nitf_List_begin(getNativeOrThrow());
+    const nitf_ListIterator x = nitf_List_begin(getNativeOrThrow());
     return nitf::ListIterator(x);
 }
 
 nitf::ListIterator nitf::List::end() const
 {
-    nitf_ListIterator x = nitf_List_end(getNativeOrThrow());
+    const nitf_ListIterator x = nitf_List_end(getNativeOrThrow());
     return nitf::ListIterator(x);
 }
 
 void nitf::List::insert(nitf::ListIterator & iter, NITF_DATA* data)
 {
-    NITF_BOOL x = nitf_List_insert(getNativeOrThrow(), iter.getHandle(), data, &error);
+    const NITF_BOOL x = nitf_List_insert(getNativeOrThrow(), iter.getHandle(), data, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
@@ -222,7 +222,7 @@ nitf::ListNode nitf::List::getLast() const
 
 size_t nitf::List::getSize() const
 {
-    return (size_t)nitf_List_size(getNativeOrThrow());
+    return static_cast<size_t>(nitf_List_size(getNativeOrThrow()));
 }
 
 NITF_DATA* nitf::List::operator[] (size_t index)

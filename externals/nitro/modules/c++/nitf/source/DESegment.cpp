@@ -51,13 +51,13 @@ DESegment::DESegment()
 
 DESegment::DESegment(NITF_DATA * x)
 {
-    setNative((nitf_DESegment*)x);
+    setNative(static_cast<nitf_DESegment*>(x));
     getNativeOrThrow();
 }
 
 DESegment & DESegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_DESegment*)x);
+    setNative(static_cast<nitf_DESegment*>(x));
     getNativeOrThrow();
     return *this;
 }

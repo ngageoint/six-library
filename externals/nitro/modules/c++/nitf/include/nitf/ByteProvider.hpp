@@ -124,13 +124,13 @@ public:
     virtual ~ByteProvider();
 
     //! \return The total number of bytes in the NITF
-    nitf::Off getFileNumBytes() const
+    nitf::Off getFileNumBytes() const noexcept
     {
         return mFileNumBytes;
     }
 
     //! \return The raw file header bytes
-    const std::vector<std::byte>& getFileHeader() const
+    const std::vector<std::byte>& getFileHeader() const noexcept
     {
         return mFileHeader;
     }
@@ -139,7 +139,7 @@ public:
      * \return The raw bytes for each image subheader.  Vector size matches the
      * number of image segments.
      */
-    const std::vector<std::vector<std::byte> >& getImageSubheaders() const
+    const std::vector<std::vector<std::byte> >& getImageSubheaders() const noexcept
     {
         return mImageSubheaders;
     }
@@ -148,7 +148,7 @@ public:
      * \return The raw bytes for each DES (subheader immediately followed by
      * raw DES data).  Vector size matches the number of data extension segments.
      */
-    const std::vector<std::byte>& getDesSubheaderAndData() const
+    const std::vector<std::byte>& getDesSubheaderAndData() const noexcept
     {
         return mDesSubheaderAndData;
     }
@@ -256,7 +256,7 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Defaults to no
      * blocking.
      */
-    void initialize(Record& record,
+    void initialize(const Record& record,
                     const std::vector<PtrAndLength>& desData =
                             std::vector<PtrAndLength>(),
                     size_t numRowsPerBlock = 0,
@@ -298,7 +298,7 @@ protected:
     void addDES(size_t seg, size_t imageDataEndRow,
                 NITFBufferList& buffers) const;
 
-    void getFileLayout(nitf::Record& inRecord,
+    void getFileLayout(const nitf::Record& inRecord,
                        const std::vector<PtrAndLength>& desData);
 
     std::vector<size_t> mImageDataLengths;
@@ -308,7 +308,7 @@ protected:
                        size_t numRowsToWrite) const;
 
     void initializeImpl(
-            Record& record,
+            const Record& record,
             const std::vector<PtrAndLength>& desData,
             size_t numRowsPerBlock,
             size_t numColsPerBlock);

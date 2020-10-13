@@ -187,7 +187,7 @@ namespace sys
      *  NOTE: This should be updated as architectures require greater
      *        intervals. Alignments require base 2 increments.
      */
-    static const size_t SSE_INSTRUCTION_ALIGNMENT = 32;
+    static constexpr size_t SSE_INSTRUCTION_ALIGNMENT = 32;
 
     /*!
      * Returns true if the system is big-endian, otherwise false.
@@ -214,7 +214,7 @@ namespace sys
         if (!bufferPtr || elemSize < 2 || !numElems)
             return;
 
-        unsigned short half = elemSize >> 1;
+        const unsigned short half = elemSize >> 1;
         size_t offset = 0, innerOff = 0, innerSwap = 0;
 
         for(size_t i = 0; i < numElems; ++i, offset += elemSize)

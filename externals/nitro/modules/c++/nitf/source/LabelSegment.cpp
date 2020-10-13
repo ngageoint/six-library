@@ -51,13 +51,13 @@ LabelSegment::LabelSegment()
 
 LabelSegment::LabelSegment(NITF_DATA * x)
 {
-    setNative((nitf_LabelSegment*)x);
+    setNative(static_cast<nitf_LabelSegment*>(x));
     getNativeOrThrow();
 }
 
 LabelSegment & LabelSegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_LabelSegment*)x);
+    setNative(static_cast<nitf_LabelSegment*>(x));
     getNativeOrThrow();
     return *this;
 }

@@ -161,7 +161,7 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Defaults to no
      * blocking.
      */
-    void initialize(Record& record,
+    void initialize(const Record& record,
             const std::vector<std::vector<size_t> >& bytesPerBlock,
             const std::vector<PtrAndLength>& desData =
                     std::vector<PtrAndLength>(),

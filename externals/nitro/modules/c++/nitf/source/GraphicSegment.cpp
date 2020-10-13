@@ -53,13 +53,12 @@ GraphicSegment::GraphicSegment()
 
 GraphicSegment::GraphicSegment(NITF_DATA * x)
 {
-    setNative((nitf_GraphicSegment*)x);
-    getNativeOrThrow();
+    *this = x;
 }
 
 GraphicSegment & GraphicSegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_GraphicSegment*)x);
+    setNative(static_cast<nitf_GraphicSegment*>(x));
     getNativeOrThrow();
     return *this;
 }

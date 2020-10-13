@@ -167,7 +167,7 @@ public:
                void* output);
 
     //! \return The number of columns of blocks
-    size_t getNumColsOfBlocks() const
+    size_t getNumColsOfBlocks() const noexcept
     {
         return mNumBlocksAcrossCols;
     }
@@ -214,7 +214,7 @@ public:
     }
 
     //! \return The number of segments
-    size_t getNumSegments() const
+    size_t getNumSegments() const noexcept
     {
         return mNumBlocksDownRows.size();
     }
@@ -236,7 +236,7 @@ public:
      * columns in the image (i.e. no reason to bother to create blocks larger
      * than the image).
      */
-    size_t getNumColsPerBlock() const
+    size_t getNumColsPerBlock() const noexcept
     {
         return mNumColsPerBlock;
     }
@@ -253,7 +253,7 @@ private:
                      size_t& rowWithinSegment,
                      size_t& blockWithinSegment) const;
 
-    bool isFirstRowInBlock(size_t seg, size_t rowWithinSeg) const
+    bool isFirstRowInBlock(size_t seg, size_t rowWithinSeg) const noexcept
     {
         return (rowWithinSeg % mNumRowsPerBlock[seg] == 0);
     }

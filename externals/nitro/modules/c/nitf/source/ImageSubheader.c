@@ -787,8 +787,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
     /* first, get the current number of bands */
     curBandCount = nitf_ImageSubheader_getBandCount(subhdr, error);
     /* check to see if this is a NEW subheader with no bands yet */
-    if (curBandCount == NITF_INVALID_BAND_COUNT || index < 0 ||
-            index >= curBandCount)
+    if (curBandCount == NITF_INVALID_BAND_COUNT || index >= curBandCount)
     {
         nitf_Error_init(error, "Invalid band index",
                         NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -1119,7 +1118,7 @@ NITFAPI(int) nitf_ImageSubheader_insertImageComment
 
     NITF_TRY_GET_UINT32(subhdr->numImageComments, &numComments, error);
     /* in case there is bad info in numImageComments */
-    numComments = numComments < 0 ? 0 : numComments;
+    numComments = ((int32_t)numComments) < 0 ? 0 : numComments;
 
     /* see if we can really add another one */
     if (numComments < 9)
@@ -1181,7 +1180,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeImageComment
     nitf_Field* field = NULL;
 
     NITF_TRY_GET_UINT32(subhdr->numImageComments, &numComments, error);
-    numComments = numComments < 0 ? 0 : numComments;
+    numComments = ((int32_t)numComments) < 0 ? 0 : numComments;
 
     /* see if we can really remove anything */
     if (numComments > 0 && position >= 0 && position < numComments)

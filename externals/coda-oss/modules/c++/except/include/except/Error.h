@@ -46,7 +46,7 @@
       _Name##Error(const std::string& msg) : _Base(msg){} \
       _Name##Error(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
       virtual ~_Name##Error(){} \
-      virtual std::string getType() const{ return #_Name; } \
+      virtual std::string getType() const noexcept { return #_Name; } \
   };
 
 #define DECLARE_ERROR(_Name) DECLARE_EXTENDED_ERROR(_Name, except::Error)
@@ -106,7 +106,7 @@ public:
     {
     }
 
-    virtual std::string getType() const
+    virtual std::string getType() const noexcept override 
     {
         return "Error";
     }

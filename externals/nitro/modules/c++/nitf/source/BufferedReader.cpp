@@ -25,6 +25,8 @@
 
 #include <nitf/BufferedReader.hpp>
 
+#include "gsl/gsl.h"
+
 namespace nitf
 {
 BufferedReader::BufferedReader(const std::string& file, size_t bufferSize) :
@@ -85,7 +87,7 @@ void BufferedReader::readNextBuffer()
     const sys::Off_T currentOffset = mFile.getCurrentOffset();
 
     const sys::Off_T endOffsetIfPerformMaxRead =
-            currentOffset + static_cast<sys::Off_T>(mMaxBufferSize);
+            currentOffset + gsl::narrow<sys::Off_T>(mMaxBufferSize);
 
     const size_t bufferSize = (endOffsetIfPerformMaxRead > mFileLen) ?
             mFileLen - currentOffset : mMaxBufferSize;
@@ -109,7 +111,7 @@ void BufferedReader::readNextBuffer()
 void BufferedReader::readImpl(void* buf, size_t size)
 {
     //! Ensure there is enough data to read
-    if (tell() + static_cast<nitf::Off>(size) > getSize())
+    if (tell() + gsl::narrow<nitf::Off>(size) > getSize())
     {
         throw except::Exception(Ctxt(
                 "Attempting to read past the end of a buffered reader."));
@@ -152,7 +154,7 @@ nitf::Off BufferedReader::seekImpl(nitf::Off offset, int whence)
     const nitf::Off bufferEnd = mFile.getCurrentOffset();
     const nitf::Off bufferStart = bufferEnd - mBufferSize;
 
-    nitf::Off desiredPos;
+    nitf::Off desiredPos = 0;
     switch (whence)
     {
     case sys::File::FROM_START:

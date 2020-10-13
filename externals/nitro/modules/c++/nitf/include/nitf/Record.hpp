@@ -27,6 +27,7 @@
 #include <string>
 
 #include "nitf/Record.h"
+#include "nitf/ComplexityLevel.h"
 
 #include "List.hpp"
 #include "FileHeader.hpp"
@@ -170,4 +171,13 @@ private:
 };
 
 }
+
+constexpr auto NITF_CLEVEL_UNKNOWN = complianceLevel::NITF_CLEVEL_UNKNOWN;
+constexpr auto NITF_CLEVEL_03 = complianceLevel::NITF_CLEVEL_03;
+constexpr auto NITF_CLEVEL_05 = complianceLevel::NITF_CLEVEL_05;
+constexpr auto NITF_CLEVEL_06 = complianceLevel::NITF_CLEVEL_06;
+constexpr auto NITF_CLEVEL_07 = complianceLevel::NITF_CLEVEL_07;
+constexpr auto NITF_CLEVEL_09 = complianceLevel::NITF_CLEVEL_09;
+constexpr auto NITF_CLEVEL_CHECK_FAILED = complianceLevel::NITF_CLEVEL_CHECK_FAILED;
+
 #endif

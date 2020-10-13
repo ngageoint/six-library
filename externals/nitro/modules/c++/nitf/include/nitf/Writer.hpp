@@ -96,35 +96,35 @@ public:
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for images
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setImageWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for graphics
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setGraphicWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for texts
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setTextWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for DEs
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setDEWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setDEWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Sets the WriteHandler for the Image at the given index.

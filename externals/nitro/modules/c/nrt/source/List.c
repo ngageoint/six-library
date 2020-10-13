@@ -369,14 +369,13 @@ NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, uint32_t oldIndex,
     nrt_ListIterator iter;
     NRT_DATA *data = NULL;
 
-    /* don't need to check < 0, but in case params change, we'll do it anyway */
-    if (oldIndex < 0 || oldIndex == newIndex || oldIndex >= listSize)
+    if (oldIndex == newIndex || oldIndex >= listSize)
     {
         nrt_Error_init(error, "Invalid list index specified", NRT_CTXT,
                        NRT_ERR_INVALID_PARAMETER);
         return NRT_FAILURE;
     }
-    newIndex = newIndex > listSize || newIndex < 0 ? listSize : newIndex;
+    newIndex = newIndex > listSize ? listSize : newIndex;
 
     /* first, remove the data from the list */
     iter = nrt_List_at(chain, oldIndex);

@@ -106,7 +106,7 @@ uint32_t SubWindow::getBandList(int i)
 
 void SubWindow::setBandList(uint32_t * value)
 {
-    getNativeOrThrow()->bandList = (uint32_t*)value;
+    getNativeOrThrow()->bandList = value;
 }
 
 uint32_t SubWindow::getNumBands() const

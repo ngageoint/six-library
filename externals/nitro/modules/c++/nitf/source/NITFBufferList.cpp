@@ -28,11 +28,6 @@
 
 namespace nitf
 {
-NITFBuffer::NITFBuffer() :
-    mData(NULL),
-    mNumBytes(0)
-{
-}
 
 NITFBuffer::NITFBuffer(const void* data, size_t numBytes) :
     mData(data),
@@ -144,6 +139,6 @@ const void* NITFBufferList::getBlock(size_t blockSize,
     }
 
     // Should not be possible to get here
-    return NULL;
+    return nullptr;
 }
 }

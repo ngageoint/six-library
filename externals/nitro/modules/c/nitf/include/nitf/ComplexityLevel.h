@@ -22,9 +22,11 @@
 
 #ifndef __NITF_COMPLEXITY_LEVEL_H__
 #define __NITF_COMPLEXITY_LEVEL_H__
+#pragma once
 
 #include "nitf/Record.h"
 #include "nitf/System.h"
+#include "nitf/Types.h"
 
 NITF_CXX_GUARD
 
@@ -34,8 +36,7 @@ NITF_CXX_GUARD
  *
  */
 
-typedef enum _NITF_CLEVEL
-{
+NITF_DECLARE_ENUM(complianceLevel,
     NITF_CLEVEL_UNKNOWN = 0,
     NITF_CLEVEL_03 = 3,
     NITF_CLEVEL_05 = 5,
@@ -43,7 +44,7 @@ typedef enum _NITF_CLEVEL
     NITF_CLEVEL_07 = 7,
     NITF_CLEVEL_09 = 9,
     NITF_CLEVEL_CHECK_FAILED = 10
-} NITF_CLEVEL;
+);
 
 /*!
  *  This function attempts to measure the CLEVEL of a NITF 2.1 record.

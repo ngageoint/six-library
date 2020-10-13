@@ -47,13 +47,13 @@ TextSegment::TextSegment() : TextSegment(nitf_TextSegment_construct(&error))
     setManaged(false);
 }
 
-TextSegment::TextSegment(NITF_DATA * x) : TextSegment((nitf_TextSegment*)x)
+TextSegment::TextSegment(NITF_DATA * x) : TextSegment(static_cast<nitf_TextSegment*>(x))
 {
 }
 
 TextSegment & TextSegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_TextSegment*)x);
+    setNative(static_cast<nitf_TextSegment*>(x));
     getNativeOrThrow();
     return *this;
 }

@@ -86,7 +86,7 @@ public:
      *       will be reset to wherever it began after reading the neccesary
      *       bytes.
      */
-    static nitf::Version getNITFVersion(nitf::IOInterface& io);
+    static nitf::Version getNITFVersion(const nitf::IOInterface& io);
 
     /*!
      *  This is the preferred method for reading a NITF 2.1 file.

@@ -113,7 +113,7 @@ public:
 
 protected:
 
-    DownSampler(){}
+    DownSampler() = default;
     mutable nitf_Error error;
 };
 

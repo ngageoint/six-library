@@ -43,9 +43,9 @@ namespace nitf
 class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
 {
     public:
-    TREFieldIterator() : mPair(NULL)
+    TREFieldIterator() : mPair(nullptr)
     {
-        setNative(NULL);
+        setNative(nullptr);
     }
 
     ~TREFieldIterator()
@@ -70,7 +70,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
     }
 
     //! Set native object
-    TREFieldIterator(nitf_TREEnumerator* x) : mPair(NULL)
+    TREFieldIterator(nitf_TREEnumerator* x) : mPair(nullptr)
     {
         setNative(x);
         getNativeOrThrow();
@@ -79,14 +79,11 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
 
     TREFieldIterator(NITF_DATA* x)
     {
-        setNative((nitf_TREEnumerator*)x);
-        getNativeOrThrow();
-        increment();
+        *this = x;
     }
-
     TREFieldIterator& operator=(NITF_DATA* x)
     {
-        setNative((nitf_TREEnumerator*)x);
+        setNative(static_cast<nitf_TREEnumerator*>(x));
         getNativeOrThrow();
         increment();
         return *this;
@@ -120,7 +117,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
         if (isValid() && enumerator->hasNext(&enumerator))
             mPair = enumerator->next(enumerator, &error);
         else
-            mPair = NULL;
+            mPair = nullptr;
         setNative(enumerator);  // always reset, in case it got destroyed
     }
 

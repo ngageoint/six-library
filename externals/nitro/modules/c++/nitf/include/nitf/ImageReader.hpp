@@ -63,7 +63,7 @@ public:
      *  \param  user  User-defined data buffers for read
      *  \param  padded  Returns TRUE if pad pixels may have been read
      */
-    void read(nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
+    void read(const nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
 
     /*!
      *  Read a block directly from file
@@ -80,7 +80,7 @@ public:
 
 private:
     mutable nitf_Error error;
-    ImageReader(){}
+    ImageReader() = default;
 };
 
 }

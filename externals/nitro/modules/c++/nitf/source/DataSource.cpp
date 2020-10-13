@@ -37,7 +37,7 @@ void nitf::DataSource::read(void* buf, nitf::Off size)
 nitf::Off nitf::DataSource::getSize() const
 {
     nitf_DataSource *ds = getNativeOrThrow();
-    nitf::Off size = ds->iface->getSize(ds->data, &error);
+    const nitf::Off size = ds->iface->getSize(ds->data, &error);
     if (size < 0)
         throw nitf::NITFException(&error);
     return size;

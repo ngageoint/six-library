@@ -67,13 +67,12 @@ public:
 
     Pair(NITF_DATA * x)
     {
-        setNative((nitf_Pair*)x);
-        getNativeOrThrow();
+        *this = x;
     }
 
     Pair & operator=(NITF_DATA * x)
     {
-        setNative((nitf_Pair*)x);
+        setNative(static_cast<nitf_Pair*>(x));
         getNativeOrThrow();
         return *this;
     }
@@ -92,7 +91,7 @@ public:
      *  Simply calls the init method
      *  \param src  The source Pair
      */
-    void copy(nitf::Pair & src)
+    void copy(const nitf::Pair & src)
     {
         nitf_Pair_copy(getNative(), src.getNative());
     }

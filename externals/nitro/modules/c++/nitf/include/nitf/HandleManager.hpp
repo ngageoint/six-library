@@ -34,18 +34,30 @@ namespace nitf
 {
 class HandleManager
 {
-private:
-typedef void* CAddress;
+    using CAddress = void*;
 
     std::map<CAddress, Handle*> mHandleMap; //! map for storing the handles
-    std::mutex mMutex; //! mutex used for locking the map
+    mutable std::mutex mMutex; //! mutex used for locking the map
+
+    template <typename T, typename DestructFunctor_T>
+    BoundHandle<T, DestructFunctor_T>* acquireHandle_(T* object)
+    {
+        using retval_t = BoundHandle<T, DestructFunctor_T>;
+
+        std::lock_guard<std::mutex> obtainLock(mMutex);
+        if (mHandleMap.find(object) == mHandleMap.end())
+        {
+            mHandleMap[object] = new retval_t(object);
+        }
+        return static_cast<retval_t*>(mHandleMap[object]);
+    }
 
 public:
-    HandleManager() {}
+    HandleManager() = default;
     virtual ~HandleManager() {}
 
     template <typename T>
-    bool hasHandle(T* object)
+    bool hasHandle(T* object) const
     {
         if (!object) return false;
         std::lock_guard<std::mutex> obtainLock(mMutex);
@@ -55,17 +67,8 @@ public:
     template <typename T, typename DestructFunctor_T>
     BoundHandle<T, DestructFunctor_T>* acquireHandle(T* object)
     {
-        if (!object) return NULL;
-        BoundHandle<T, DestructFunctor_T>* handle;
-        {
-            std::lock_guard<std::mutex> obtainLock(mMutex);
-            if (mHandleMap.find(object) == mHandleMap.end())
-            {
-                mHandleMap[object] = new BoundHandle<T, DestructFunctor_T>(object);
-            }
-            handle = (BoundHandle<T, DestructFunctor_T>*)mHandleMap[object];
-        }
-
+        if (!object) return nullptr;
+        auto handle = acquireHandle_<T, DestructFunctor_T>(object);
         handle->incRef();
         return handle;
     }
@@ -79,7 +82,7 @@ public:
             std::map<CAddress, Handle*>::iterator it = mHandleMap.find(object);
             if (it != mHandleMap.end())
             {
-                handle = (Handle*)it->second;
+                handle = it->second;
                 if (handle->decRef() <= 0)
                 {
                     mHandleMap.erase(it);
@@ -103,7 +106,7 @@ public:
  * be deleted at exit, in case other singletons contain references to these
  * handles.
  */
-typedef mt::Singleton<HandleManager, false> HandleRegistry;
+using HandleRegistry =  mt::Singleton<HandleManager, false>;
 
 }
 #endif

@@ -133,10 +133,10 @@ template<typename T, bool AutoDestroy>
 T& Singleton<T, AutoDestroy>::getInstance()
 {
     //double-checked locking
-    if (mInstance == 0)
+    if (mInstance == nullptr)
     {
         CriticalSection<sys::Mutex> obtainLock(&mMutex);
-        if (mInstance == 0)
+        if (mInstance == nullptr)
         {
             mInstance = new T; //create the instance
             SingletonAutoDestroyer<AutoDestroy>::registerAtExit(destroy);
@@ -149,19 +149,19 @@ template<typename T, bool AutoDestroy>
 void Singleton<T, AutoDestroy>::destroy()
 {
     //double-checked locking
-    if (mInstance != 0)
+    if (mInstance != nullptr)
     {
         CriticalSection<sys::Mutex> obtainLock(&mMutex);
-        if (mInstance != 0)
+        if (mInstance != nullptr)
         {
             //we are OK to delete it
             delete mInstance;
-            mInstance = 0;
+            mInstance = nullptr;
         }
     }
 }
 
-template<typename T, bool AutoDestroy> T* Singleton<T, AutoDestroy>::mInstance = 0;
+template<typename T, bool AutoDestroy> T* Singleton<T, AutoDestroy>::mInstance = nullptr;
 template<typename T, bool AutoDestroy> sys::Mutex Singleton<T, AutoDestroy>::mMutex;
 
 }

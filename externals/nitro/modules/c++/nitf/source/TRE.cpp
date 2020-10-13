@@ -44,13 +44,13 @@ TRE::TRE(nitf_TRE* x)
     getNativeOrThrow();
 }
 
-TRE::TRE(NITF_DATA* x) : TRE((nitf_TRE*)x)
+TRE::TRE(NITF_DATA* x) : TRE(static_cast<nitf_TRE*>(x))
 {
 }
 
 TRE& TRE::operator=(NITF_DATA* x)
 {
-    setNative((nitf_TRE*)x);
+    setNative(static_cast<nitf_TRE*>(x));
     getNativeOrThrow();
     return *this;
 }
@@ -132,10 +132,10 @@ bool TRE::exists(const std::string& key) const
 
 size_t TRE::getCurrentSize() const
 {
-    int size = nitf_TRE_getCurrentSize(getNativeOrThrow(), &error);
+    const int size = nitf_TRE_getCurrentSize(getNativeOrThrow(), &error);
     if (size < 0)
         throw nitf::NITFException(&error);
-    return (size_t)size;
+    return size >= 0 ? size : 0;
 }
 
 std::string TRE::getTag() const
@@ -163,7 +163,7 @@ std::string TRE::getID() const
     return id ? std::string(id) : "";
 }
 
-static bool endsWith(const std::string& s, const std::string& match)
+static bool endsWith(const std::string& s, const std::string& match) noexcept
 {
     const size_t mLen = match.length();
     const size_t sLen = s.length();
