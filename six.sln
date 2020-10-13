@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "scene", "six\modules\c++\sc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cphd", "six\modules\c++\cphd\cphd.vcxproj", "{01BE4480-9620-4DED-B34F-D2E3AB4B7C8B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cphd03", "six\modules\c++\cphd03\cphd03.vcxproj", "{016EF417-E41C-404C-B3B5-34B6CDD94BB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,12 @@ Global
 		{01BE4480-9620-4DED-B34F-D2E3AB4B7C8B}.Release|x64.ActiveCfg = Release|x64
 		{01BE4480-9620-4DED-B34F-D2E3AB4B7C8B}.Release|x64.Build.0 = Release|x64
 		{01BE4480-9620-4DED-B34F-D2E3AB4B7C8B}.Release|x86.ActiveCfg = Release|x64
+		{016EF417-E41C-404C-B3B5-34B6CDD94BB3}.Debug|x64.ActiveCfg = Debug|x64
+		{016EF417-E41C-404C-B3B5-34B6CDD94BB3}.Debug|x64.Build.0 = Debug|x64
+		{016EF417-E41C-404C-B3B5-34B6CDD94BB3}.Debug|x86.ActiveCfg = Debug|x64
+		{016EF417-E41C-404C-B3B5-34B6CDD94BB3}.Release|x64.ActiveCfg = Release|x64
+		{016EF417-E41C-404C-B3B5-34B6CDD94BB3}.Release|x64.Build.0 = Release|x64
+		{016EF417-E41C-404C-B3B5-34B6CDD94BB3}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
