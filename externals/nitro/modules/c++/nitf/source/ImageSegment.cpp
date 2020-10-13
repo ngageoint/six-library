@@ -47,13 +47,13 @@ ImageSegment::ImageSegment() : ImageSegment(nitf_ImageSegment_construct(&error))
     setManaged(false);
 }
 
-ImageSegment::ImageSegment(NITF_DATA * x) : ImageSegment((nitf_ImageSegment*)x)
+ImageSegment::ImageSegment(NITF_DATA * x) : ImageSegment(static_cast<nitf_ImageSegment*>(x))
 {
 }
 
 ImageSegment & ImageSegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_ImageSegment*)x);
+    setNative(static_cast<nitf_ImageSegment*>(x));
     getNativeOrThrow();
     return *this;
 }

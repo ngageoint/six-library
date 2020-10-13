@@ -51,13 +51,12 @@ RESegment::RESegment()
 
 RESegment::RESegment(NITF_DATA * x)
 {
-    setNative((nitf_RESegment*)x);
-    getNativeOrThrow();
+    *this = x;
 }
 
 RESegment & RESegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_RESegment*)x);
+    setNative(static_cast<nitf_RESegment*>(x));
     getNativeOrThrow();
     return *this;
 }

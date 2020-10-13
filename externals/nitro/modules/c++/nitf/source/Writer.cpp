@@ -77,7 +77,7 @@ Writer::~Writer()
 
 void Writer::write()
 {
-    NITF_BOOL x = nitf_Writer_write(getNativeOrThrow(), &error);
+    const NITF_BOOL x = nitf_Writer_write(getNativeOrThrow(), &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
@@ -89,7 +89,7 @@ void Writer::prepare(nitf::IOHandle & io, nitf::Record & record)
 
 void Writer::prepareIO(nitf::IOInterface & io, nitf::Record & record)
 {
-    NITF_BOOL x = nitf_Writer_prepareIO(getNativeOrThrow(), record.getNative(),
+    const NITF_BOOL x = nitf_Writer_prepareIO(getNativeOrThrow(), record.getNative(),
                                         io.getNative(), &error);
 
     // It's possible prepareIO() failed but actually took ownership of one
@@ -111,7 +111,7 @@ void Writer::prepareIO(nitf::IOInterface & io, nitf::Record & record)
     }
 }
 
-void Writer::setWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
+void Writer::setWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     setImageWriteHandlers(io, record);
     setGraphicWriteHandlers(io, record);
@@ -119,7 +119,7 @@ void Writer::setWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
     setDEWriteHandlers(io, record);
 }
 
-void Writer::setImageWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
+void Writer::setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List images = record.getImages();
     const size_t numImages = record.getNumImages();
@@ -134,14 +134,14 @@ void Writer::setImageWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
     }
 }
 
-void Writer::setGraphicWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
+void Writer::setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List graphics = record.getGraphics();
     const size_t numGraphics = record.getNumGraphics();
     for (size_t ii = 0; ii < numGraphics; ++ii)
     {
        nitf::GraphicSegment segment = graphics[ii];
-       long offset = segment.getOffset();
+       const long offset = segment.getOffset();
        std::shared_ptr< ::nitf::WriteHandler> handler(
            new nitf::StreamIOWriteHandler (
                io, offset, segment.getEnd() - offset));
@@ -149,7 +149,7 @@ void Writer::setGraphicWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
     }
 }
 
-void Writer::setTextWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
+void Writer::setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List texts = record.getTexts();
     const size_t numTexts = record.getNumTexts();
@@ -164,7 +164,7 @@ void Writer::setTextWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
     }
 }
 
-void Writer::setDEWriteHandlers(nitf::IOHandle& io, nitf::Record& record)
+void Writer::setDEWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List dataExtensions = record.getDataExtensions();
     const size_t numDEs = record.getNumDataExtensions();

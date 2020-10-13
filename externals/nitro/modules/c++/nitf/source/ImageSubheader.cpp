@@ -74,8 +74,8 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
                          std::vector<nitf::BandInfo>& bands)
 {
     const size_t bandCount = bands.size();
-    nitf_BandInfo ** bandInfo = (nitf_BandInfo **)NITF_MALLOC(
-            sizeof(nitf_BandInfo*) * bandCount);
+    auto bandInfo = static_cast<nitf_BandInfo**>(NITF_MALLOC(
+            sizeof(nitf_BandInfo*) * bandCount));
     if (!bandInfo)
     {
         throw nitf::NITFException(Ctxt(FmtX("Out of Memory")));
@@ -88,7 +88,7 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
             throw nitf::NITFException(&error);
     }
 
-    NITF_BOOL x = nitf_ImageSubheader_setPixelInformation(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_setPixelInformation(getNativeOrThrow(),
         pvtype.c_str(), nbpp, abpp, justification.c_str(), irep.c_str(),
         icat.c_str(), static_cast<uint32_t>(bandCount), bandInfo, &error);
     if (!x)
@@ -101,7 +101,7 @@ void ImageSubheader::setBlocking(uint32_t numRows,
                      uint32_t numColsPerBlock,
                      const std::string& imode)
 {
-    NITF_BOOL x = nitf_ImageSubheader_setBlocking(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_setBlocking(getNativeOrThrow(),
         numRows, numCols, numRowsPerBlock, numColsPerBlock, imode.c_str(),
         &error);
     if (!x)
@@ -125,7 +125,7 @@ void ImageSubheader::computeBlocking(uint32_t numRows,
 
 void ImageSubheader::setDimensions(uint32_t numRows, uint32_t numCols)
 {
-    NITF_BOOL x = nitf_ImageSubheader_setDimensions(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_setDimensions(getNativeOrThrow(),
         numRows, numCols, &error);
     if (!x)
         throw nitf::NITFException(&error);
@@ -133,7 +133,7 @@ void ImageSubheader::setDimensions(uint32_t numRows, uint32_t numCols)
 
 uint32_t ImageSubheader::getBandCount() const
 {
-    uint32_t x = nitf_ImageSubheader_getBandCount(getNativeOrThrow(), &error);
+    const uint32_t x = nitf_ImageSubheader_getBandCount(getNativeOrThrow(), &error);
     if (x == NITF_INVALID_BAND_COUNT)
         throw nitf::NITFException(&error);
     return x;
@@ -149,7 +149,7 @@ void ImageSubheader::createBands(uint32_t numBands)
 void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
                                            double corners[4][2])
 {
-    NITF_BOOL x = nitf_ImageSubheader_setCornersFromLatLons(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_setCornersFromLatLons(getNativeOrThrow(),
                                                             type,
                                                             corners,
                                                             &error);
@@ -160,7 +160,7 @@ void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
 
 void ImageSubheader::getCornersAsLatLons(double corners[4][2]) const
 {
-    NITF_BOOL x = nitf_ImageSubheader_getCornersAsLatLons(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_getCornersAsLatLons(getNativeOrThrow(),
                                                           corners,
                                                           &error);
     if (!x)
@@ -175,8 +175,8 @@ nitf::CornersType ImageSubheader::getCornersType() const
 
 int ImageSubheader::insertImageComment(std::string comment, int index)
 {
-    int actualIndex = nitf_ImageSubheader_insertImageComment(getNativeOrThrow(),
-                  (char*)comment.c_str(), index, &error);
+    const int actualIndex = nitf_ImageSubheader_insertImageComment(getNativeOrThrow(),
+                  comment.c_str(), index, &error);
     if (actualIndex < 0)
         throw nitf::NITFException(&error);
     return actualIndex;
@@ -185,7 +185,7 @@ int ImageSubheader::insertImageComment(std::string comment, int index)
 
 void ImageSubheader::removeImageComment(int index)
 {
-    NITF_BOOL x = nitf_ImageSubheader_removeImageComment(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_removeImageComment(getNativeOrThrow(),
                   index, &error);
     if (!x)
         throw nitf::NITFException(&error);

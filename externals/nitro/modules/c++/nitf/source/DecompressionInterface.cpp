@@ -40,7 +40,7 @@ NITF_BOOL DecompressionInterface::adapterStart(
         ioInter.setManaged(true);
         nitf::BlockingInfo blockInfo(blockingDefinition);
         blockInfo.setManaged(true);
-        reinterpret_cast<Decompressor*>(object)->start(ioInter, 
+        static_cast<Decompressor*>(object)->start(ioInter,
                                                        offset, 
                                                        fileLength, 
                                                        blockInfo,
@@ -75,7 +75,7 @@ uint8_t* DecompressionInterface::adapterReadBlock(
 {
     try
     {
-        return reinterpret_cast<Decompressor*>(object)->readBlock(blockNumber,
+        return static_cast<Decompressor*>(object)->readBlock(blockNumber,
                                                                   blockSize); 
     }
     catch (const except::Exception& ex)
@@ -105,7 +105,7 @@ NITF_BOOL DecompressionInterface::adapterFreeBlock(
 {
     try
     {
-        reinterpret_cast<Decompressor*>(object)->freeBlock(block); 
+        static_cast<Decompressor*>(object)->freeBlock(block);
         return NRT_SUCCESS;
     }
     catch (const except::Exception& ex)
@@ -133,7 +133,7 @@ void DecompressionInterface::adapterDestroy(
 {
     if (object != nullptr && *object != nullptr)
     {
-        delete reinterpret_cast<Decompressor*>(*object);
+        delete static_cast<Decompressor*>(*object);
         *object = nullptr;
     }
 }

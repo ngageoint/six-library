@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="nitro" ToolsVersion="16.0">
+  <Include Path="concurrencycheckrules.ruleset" Action="Default" />
+  <Include Path="concurrencyrules.ruleset" Action="Default" />
+  <Include Path="cppcorecheckconcurrencyrules.ruleset" Action="Default" />
+  <Include Path="cppcorecheckconstrules.ruleset" Action="Default" />
+  <Include Path="cppcorecheckenumrules.ruleset" Action="Default" />
+  <Include Path="cppcorechecksharedpointerrules.ruleset" Action="Default" />
+  <Include Path="cppcorechecktyperules.ruleset" Action="Default" />
+  <Include Path="cppcorecheckuniquepointerrules.ruleset" Action="Default" />
+  <Include Path="nativerecommendedrules.ruleset" Action="Default" />
+</RuleSet>

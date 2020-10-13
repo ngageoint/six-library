@@ -31,6 +31,8 @@
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
+#include "gsl/gsl.h"
+
 namespace nitf
 {
 ByteProvider::ByteProvider() :
@@ -71,7 +73,7 @@ void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
     stream.clear();
 }
 
-void ByteProvider::initializeImpl(Record& record,
+void ByteProvider::initializeImpl(const Record& record,
                                   const std::vector<PtrAndLength>& desData,
                                   size_t numRowsPerBlock,
                                   size_t numColsPerBlock)
@@ -80,7 +82,7 @@ void ByteProvider::initializeImpl(Record& record,
     getFileLayout(record, desData);
     mOverallNumRowsPerBlock = numRowsPerBlock;
 
-    size_t numColsWithPad;
+    size_t numColsWithPad = 0;
     if (numColsPerBlock != 0)
     {
         mNumColsPerBlock = numColsPerBlock;
@@ -108,7 +110,7 @@ void ByteProvider::initializeImpl(Record& record,
     }
 }
 
-void ByteProvider::initialize(Record& record,
+void ByteProvider::initialize(const Record& record,
                               const std::vector<PtrAndLength>& desData,
                               size_t numRowsPerBlock,
                               size_t numColsPerBlock)
@@ -125,7 +127,7 @@ void ByteProvider::initialize(Record& record,
     initializeImpl(record, desData, numRowsPerBlock, numColsPerBlock);
 }
 
-void ByteProvider::getFileLayout(nitf::Record& inRecord,
+void ByteProvider::getFileLayout(const nitf::Record& inRecord,
                                  const std::vector<PtrAndLength>& desData)
 {
     std::shared_ptr<io::ByteStream> byteStream(new io::ByteStream());
@@ -232,8 +234,8 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     {
         nitf::DESegment deSegment = record.getDataExtensions()[ii];
         nitf::DESubheader subheader = deSegment.getSubheader();
-        uint32_t userSublen;
         const size_t prevSize = byteStream->getSize();
+        uint32_t userSublen;
         writer.writeDESubheader(subheader, userSublen, record.getVersion());
         desSubheaderLengths[ii] = byteStream->getSize() - prevSize;
 
@@ -301,7 +303,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     for (size_t ii = 0; ii < numImages; ++ii)
     {
          mImageSubheaderFileOffsets[ii] = offset;
-         offset += static_cast<nitf::Off>(mImageSubheaders[ii].size()) +
+         offset += gsl::narrow<nitf::Off>(mImageSubheaders[ii].size()) +
                  mImageDataLengths[ii];
     }
 

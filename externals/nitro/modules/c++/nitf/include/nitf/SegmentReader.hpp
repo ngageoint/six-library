@@ -41,9 +41,7 @@ namespace nitf
 DECLARE_CLASS(SegmentReader)
 {
 public:
-    SegmentReader()
-    {
-    }
+    SegmentReader() = default;
 
     //! Copy constructor
     SegmentReader(const SegmentReader & x);

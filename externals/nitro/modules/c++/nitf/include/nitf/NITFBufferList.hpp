@@ -40,7 +40,7 @@ struct NITFBuffer
     /*!
      * Initializes to an empty buffer
      */
-    NITFBuffer();
+    NITFBuffer() = default;
 
     /*!
      * Initializes to the specified pointer and size.  No copy is made and
@@ -52,8 +52,8 @@ struct NITFBuffer
      */
     NITFBuffer(const void* data, size_t numBytes);
 
-    const void* mData;
-    size_t mNumBytes;
+    const void* mData = nullptr;
+    size_t mNumBytes = 0;
 };
 
 /*!
@@ -74,7 +74,7 @@ struct NITFBufferList
     /*!
      * \return Whether or not the buffer list is empty
      */
-    bool empty() const
+    bool empty() const noexcept
     {
         return mBuffers.empty();
     }
@@ -82,7 +82,7 @@ struct NITFBufferList
     /*!
      * Clear the buffers
      */
-    void clear()
+    void clear() noexcept
     {
         mBuffers.clear();
     }
@@ -108,7 +108,7 @@ struct NITFBufferList
     template <typename DataT>
     void pushBack(const std::vector<DataT>& data)
     {
-        pushBack(data.empty() ? NULL : &data[0],
+        pushBack(data.empty() ? nullptr : &data[0],
                  data.size() * sizeof(DataT));
     }
 

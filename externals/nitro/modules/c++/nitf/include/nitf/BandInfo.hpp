@@ -57,7 +57,7 @@ public:
     BandInfo(nitf_BandInfo * x);
 
     //! Constructor
-    BandInfo();
+    BandInfo() noexcept;
 
     //! Destructor
     ~BandInfo();

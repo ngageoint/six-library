@@ -927,7 +927,7 @@ nitf_Record_newImageSegment(nitf_Record* record, nitf_Error* error)
     NITF_TRY_GET_UINT32(record->header->NITF_NUMI, &num, error);
 
     /* Verify the number is ok */
-    if (num < 0)
+    if (((int32_t)num) < 0)
         num = 0;
     else if (num >= 999)
     {
@@ -1013,7 +1013,7 @@ nitf_Record_newGraphicSegment(nitf_Record* record, nitf_Error* error)
     NITF_TRY_GET_UINT32(record->header->NITF_NUMS, &num, error);
 
     /* Verify the number is ok */
-    if (num < 0)
+    if (((int32_t)num) < 0)
         num = 0;
     else if (num >= 999)
     {
@@ -1121,7 +1121,7 @@ nitf_Record_newTextSegment(nitf_Record* record, nitf_Error* error)
     NITF_TRY_GET_UINT32(record->header->numTexts, &num, error);
 
     /* Verify the number is ok */
-    if (num < 0)
+    if (((int32_t)num) < 0)
         num = 0;
     else if (num >= 999)
     {
@@ -1229,7 +1229,7 @@ nitf_Record_newDataExtensionSegment(nitf_Record* record, nitf_Error* error)
     NITF_TRY_GET_UINT32(record->header->NITF_NUMDES, &num, error);
 
     /* Verify the number is ok */
-    if (num < 0)
+    if (((int32_t)num) < 0)
         num = 0;
 
     else if (num >= 999)
@@ -1767,7 +1767,7 @@ nitf_Record_moveImageSegment(nitf_Record* record,
 
     NITF_TRY_GET_UINT32(record->header->numImages, &num, error);
 
-    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    if (oldIndex >= num || newIndex >= num)
     {
         nitf_Error_initf(error,
                          NITF_CTXT,
@@ -1806,7 +1806,7 @@ nitf_Record_moveGraphicSegment(nitf_Record* record,
 
     NITF_TRY_GET_UINT32(record->header->numGraphics, &num, error);
 
-    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    if (oldIndex >= num || newIndex >= num)
     {
         nitf_Error_initf(error,
                          NITF_CTXT,
@@ -1848,7 +1848,7 @@ nitf_Record_moveLabelSegment(nitf_Record* record,
 
     NITF_TRY_GET_UINT32(record->header->numLabels, &num, error);
 
-    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    if (oldIndex >= num || newIndex >= num)
     {
         nitf_Error_initf(error,
                          NITF_CTXT,
@@ -1887,7 +1887,7 @@ nitf_Record_moveTextSegment(nitf_Record* record,
 
     NITF_TRY_GET_UINT32(record->header->numTexts, &num, error);
 
-    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    if (oldIndex >= num || newIndex >= num)
     {
         nitf_Error_initf(error,
                          NITF_CTXT,
@@ -1926,7 +1926,7 @@ nitf_Record_moveDataExtensionSegment(nitf_Record* record,
 
     NITF_TRY_GET_UINT32(record->header->numDataExtensions, &num, error);
 
-    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    if (oldIndex >= num || newIndex >= num)
     {
         nitf_Error_initf(error,
                          NITF_CTXT,
@@ -1966,7 +1966,7 @@ nitf_Record_moveReservedExtensionSegment(nitf_Record* record,
 
     NITF_TRY_GET_UINT32(record->header->numReservedExtensions, &num, error);
 
-    if (oldIndex < 0 || newIndex < 0 || oldIndex >= num || newIndex >= num)
+    if (oldIndex >= num || newIndex >= num)
     {
         nitf_Error_initf(error,
                          NITF_CTXT,

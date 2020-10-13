@@ -69,10 +69,14 @@
 #undef max
 #pragma warning(pop)
 
-#include <import/sys.h>
 #include <import/except.h>
-#include <import/io.h>
 #include <import/types.h>
+#pragma warning(push)
+#pragma warning(disable: 26493) // Don't use C-style casts (type.4).
+#pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
+#include <import/sys.h>
+#include <import/io.h>
+#pragma warning(pop)
 
 #include "import/nitf.h"
 
@@ -86,6 +90,8 @@
 #include "nitf/NITFException.hpp"
 #include "nitf/TRE.hpp"
 #include "nitf/Record.hpp"
+
+#include "gsl/gsl.h"
 
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")

@@ -79,8 +79,7 @@ NITF_BOOL nitf::RowSource::nextRow(void* algorithm,
                                    NITF_DATA* buffer,
                                    nitf_Error* error)
 {
-    nitf::RowSourceCallback* const callback =
-        reinterpret_cast<nitf::RowSourceCallback*>(algorithm);
+    auto const callback = static_cast<nitf::RowSourceCallback*>(algorithm);
     if (!callback)
     {
         nitf_Error_init(error, "Null pointer reference",
@@ -90,7 +89,7 @@ NITF_BOOL nitf::RowSource::nextRow(void* algorithm,
 
     try
     {
-        callback->nextRow(band, (char*)buffer);
+        callback->nextRow(band, static_cast<char*>(buffer));
     }
     catch (const except::Exception &ex)
     {
@@ -136,8 +135,6 @@ NITF_BOOL nitf::DirectBlockSource::nextBlock(void* callback,
                                              uint64_t blockSize,
                                              nitf_Error * error)
 {
-    nitf::DirectBlockSource* const cb =
-        reinterpret_cast<nitf::DirectBlockSource*>(callback);
     if (!callback)
     {
         nitf_Error_init(error, "Null pointer reference",
@@ -145,6 +142,7 @@ NITF_BOOL nitf::DirectBlockSource::nextBlock(void* callback,
         return NITF_FAILURE;
     }
 
+    auto const cb = static_cast<nitf::DirectBlockSource*>(callback);
     try
     {
         cb->nextBlock(buf, block, blockNumber, blockSize);

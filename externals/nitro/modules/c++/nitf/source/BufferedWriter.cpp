@@ -100,7 +100,7 @@ void BufferedWriter::flushBuffer(const char* buf)
         const auto start = std::chrono::steady_clock::now();
         mFile.writeFrom(buf, mPosition);
         const auto end = std::chrono::steady_clock::now();
-        std::chrono::duration<double> diff = end - start; // in seconds
+        const std::chrono::duration<double> diff = end - start; // in seconds
         mElapsedTime += diff.count();
 
         mTotalWritten += mPosition;
@@ -208,7 +208,7 @@ void BufferedWriter::closeImpl()
     const auto start = std::chrono::steady_clock::now();
     mFile.flush();
     const auto end = std::chrono::steady_clock::now();
-    std::chrono::duration<double> diff = end - start; // in seconds
+    const std::chrono::duration<double> diff = end - start; // in seconds
     mElapsedTime += diff.count();
 
     mFile.close();
