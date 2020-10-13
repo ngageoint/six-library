@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nitro-c++", "externals\nitr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "six", "six\modules\c++\six\six.vcxproj", "{62AAD4DD-35BA-41A0-8263-1F4DFD755689}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "scene", "six\modules\c++\scene\scene.vcxproj", "{1CFCDE59-6410-4037-95EB-B37D31E10820}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -35,6 +37,12 @@ Global
 		{62AAD4DD-35BA-41A0-8263-1F4DFD755689}.Release|x64.ActiveCfg = Release|x64
 		{62AAD4DD-35BA-41A0-8263-1F4DFD755689}.Release|x64.Build.0 = Release|x64
 		{62AAD4DD-35BA-41A0-8263-1F4DFD755689}.Release|x86.ActiveCfg = Release|x64
+		{1CFCDE59-6410-4037-95EB-B37D31E10820}.Debug|x64.ActiveCfg = Debug|x64
+		{1CFCDE59-6410-4037-95EB-B37D31E10820}.Debug|x64.Build.0 = Debug|x64
+		{1CFCDE59-6410-4037-95EB-B37D31E10820}.Debug|x86.ActiveCfg = Debug|x64
+		{1CFCDE59-6410-4037-95EB-B37D31E10820}.Release|x64.ActiveCfg = Release|x64
+		{1CFCDE59-6410-4037-95EB-B37D31E10820}.Release|x64.Build.0 = Release|x64
+		{1CFCDE59-6410-4037-95EB-B37D31E10820}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
