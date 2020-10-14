@@ -28,8 +28,11 @@
 
 #  include <cmath>
 #  include <limits>
+# include <exception>
+# include <iostream>
 #  include <import/sys.h>
 #  include <import/str.h>
+#  include <import/except.h>
 
 #  define IS_NAN(X) X != X
 #  define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED" << std::endl; } catch(except::Throwable& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.toString().c_str()); }
@@ -53,6 +56,12 @@
 #  define TEST_SPECIFIC_EXCEPTION(X,Y) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch(Y&) { }  catch (except::Throwable&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);}
 #  define TEST_CASE(X) void X(std::string testName)
 # define TEST_CASE_ARGS(X) void X(std::string testName, int argc, char** argv)
+
+#define TEST_MAIN(X) int main(int argc, char** argv) {  try { X;  return EXIT_SUCCESS; } \
+catch (const except::Exception& ex) { std::cerr << ex.toString() << std::endl; } \
+catch (const std::exception& e)  { std::cerr << e.what() << std::endl; } \
+catch (...) { std::cerr << "Unknown exception\n"; } \
+return EXIT_FAILURE; }
 
 #else /* C only */
 #  include <math.h>
@@ -99,7 +108,5 @@
 #  define TEST_CASE_ARGS(X) void X(const char* testName, int argc, char **argv)
 
 #endif
-
-#define TEST_MAIN(X) int main(int argc, char** argv) { X; return 0; }
 
 #endif

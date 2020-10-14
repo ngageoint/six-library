@@ -166,11 +166,9 @@ TEST_CASE(testCannotDoPartialReadOfCompressedChannel)
 }
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testReadCompressedChannel);
     TEST_CHECK(testReadUncompressedChannel);
     TEST_CHECK(testReadChannelSubset);
     TEST_CHECK(testCannotDoPartialReadOfCompressedChannel);
-    return 0;
-}
+    )
