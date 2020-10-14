@@ -112,10 +112,8 @@ bool runValidation(const std::unique_ptr<six::Data>& data,
 }
 }
 
-int main(int argc, char** argv)
+static int main_(int argc, char** argv)
 {
-    try
-    {
         // create a parser and add our options to it
         cli::ArgumentParser parser;
         parser.setDescription("This program reads a SIDD/SICD along with a "\
@@ -209,20 +207,25 @@ int main(int argc, char** argv)
         }
 
         return allValid ? 0 : 1;
+}
+int main(int argc, char** argv)
+{
+    try
+    {
+        return main_(argc, argv);
     }
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
-        return 1;
     }
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
-        return 1;
     }
     catch (...)
     {
         std::cerr << "Unknown exception\n";
-        return 1;
     }
+
+    return EXIT_FAILURE;
 }
