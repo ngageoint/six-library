@@ -108,5 +108,5 @@
 
 #pragma comment(lib, "ws2_32")
 
-
+#include "TestCase.h"
 #include "gtest/gtest.h"

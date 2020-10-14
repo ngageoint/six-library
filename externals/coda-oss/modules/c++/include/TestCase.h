@@ -22,6 +22,7 @@
 
 #ifndef __TEST_CASE_H__
 #define __TEST_CASE_H__
+#pragma once
 
 #ifdef __cplusplus
 
@@ -97,5 +98,7 @@
 #  define TEST_CASE_ARGS(X) void X(const char* testName, int argc, char **argv)
 
 #endif
+
+#define TEST_MAIN(X) int main(int argc, char** argv) { X; return 0; }
 
 #endif
