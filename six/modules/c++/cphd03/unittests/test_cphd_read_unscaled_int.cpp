@@ -203,7 +203,7 @@ TEST_CASE(testUnscaledInt8)
     const std::vector<std::complex<sys::Int8_T> > writeData =
             generateData<sys::Int8_T>(dims.area());
     const bool scale = false;
-    TEST_ASSERT(runTest(scale, writeData))
+    TEST_ASSERT(runTest(scale, writeData));
 }
 
 TEST_CASE(testScaledInt8)
@@ -220,7 +220,7 @@ TEST_CASE(testUnscaledInt16)
     const std::vector<std::complex<sys::Int16_T> > writeData =
             generateData<sys::Int16_T>(dims.area());
     const bool scale = false;
-    TEST_ASSERT(runTest(scale, writeData))
+    TEST_ASSERT(runTest(scale, writeData));
 }
 
 TEST_CASE(testScaledInt16)
@@ -238,7 +238,7 @@ TEST_CASE(testUnscaledFloat)
     const std::vector<std::complex<float> > writeData =
             generateData<float>(dims.area());
     const bool scale = false;
-    TEST_ASSERT(runTest(scale, writeData))
+    TEST_ASSERT(runTest(scale, writeData));
 }
 
 TEST_CASE(testScaledFloat)
@@ -251,32 +251,12 @@ TEST_CASE(testScaledFloat)
 }
 }
 
-int main(int argc, char** argv)
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testUnscaledInt8);
         TEST_CHECK(testScaledInt8);
         TEST_CHECK(testUnscaledInt16);
         TEST_CHECK(testScaledInt16);
         TEST_CHECK(testUnscaledFloat);
         TEST_CHECK(testScaledFloat);
-        return 0;
-    }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-        return 1;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-        return 1;
-    }
-}
+        )
 

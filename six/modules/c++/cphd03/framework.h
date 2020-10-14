@@ -103,5 +103,6 @@
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "sys-c++")
 #pragma comment(lib, "str-c++")
+#pragma comment(lib, "mt-c++")
 
 #pragma comment(lib, "ws2_32")
