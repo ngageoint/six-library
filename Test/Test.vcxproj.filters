@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="six_test_fft_sign_conversions.cpp">
+      <Filter>six</Filter>
+    </ClCompile>
+    <ClCompile Include="six_test_polarization_type_conversions.cpp">
+      <Filter>six</Filter>
+    </ClCompile>
+    <ClCompile Include="six_test_serialize.cpp">
+      <Filter>six</Filter>
+    </ClCompile>
+    <ClCompile Include="six_test_xml_control.cpp">
+      <Filter>six</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sidd_test_annotations_equality.cpp">
+      <Filter>six.sidd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sidd_test_geometric_chip.cpp">
+      <Filter>six.sidd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sidd_test_read_sidd_legend.cpp">
+      <Filter>six.sidd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_utilities.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_area_plane.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_filling_geo_data.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_filling_grid.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_filling_pfa.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_filling_position.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_filling_rgazcomp.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_filling_rma.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_filling_scpcoa.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_get_segment.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_projection_polynomial_fitter.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_radar_collection.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_update_sicd_version.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Test.h" />
+    <ClInclude Include="six_Test.h">
+      <Filter>six</Filter>
+    </ClInclude>
+    <ClInclude Include="sidd_Test.h">
+      <Filter>six.sidd</Filter>
+    </ClInclude>
+    <ClInclude Include="sicd_Test.h">
+      <Filter>six.sicd</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="six">
+      <UniqueIdentifier>{1f1d779d-e28e-4ce9-9861-51d7374ba3de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="six.sidd">
+      <UniqueIdentifier>{f0ddd87d-61c8-4d94-945a-d0364bc5c576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="six.sicd">
+      <UniqueIdentifier>{f16bae40-a534-49e4-a641-180ef8121614}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

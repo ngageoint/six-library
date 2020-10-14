@@ -84,8 +84,13 @@ static const double OUTPUT_PLANE_POINTS[NUM_POINTS][2] =
     {60, 60},
 };
 
-TEST_CASE(testProjectOutputToSlant)
+TEST_CASE_ARGS(testProjectOutputToSlant)
 {
+    if (globalFitter == nullptr)
+    {
+        globalFitter = loadPolynomialFitter(std::string(argv[0]));
+    }
+
     math::poly::TwoD<double> outputToSlantRow;
     math::poly::TwoD<double> outputToSlantCol;
     globalFitter->fitOutputToSlantPolynomials(
@@ -110,8 +115,13 @@ TEST_CASE(testProjectOutputToSlant)
     }
 }
 
-TEST_CASE(testProjectSlantToOutput)
+TEST_CASE_ARGS(testProjectSlantToOutput)
 {
+    if (globalFitter == nullptr)
+    {
+        globalFitter = loadPolynomialFitter(std::string(argv[0]));
+    }
+
     math::poly::TwoD<double> slantToOutputRow;
     math::poly::TwoD<double> slantToOutputCol;
     globalFitter->fitSlantToOutputPolynomials(
@@ -137,14 +147,14 @@ TEST_CASE(testProjectSlantToOutput)
 }
 }
 
-int main(int argc, char** argv)
+static int main_(int argc, char** argv)
 {
     if (argc == 0)
     {
         std::cerr << "This test makes assumptions about the directory structure."
             << " Make sure to call with the executable name as argv[0] so "
             << " we can find the necessary files.\n";
-        return 1;
+        return EXIT_FAILURE;
     }
     // Making this global so we don't have to re-read the file every test
     try
@@ -154,9 +164,14 @@ int main(int argc, char** argv)
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << "\n";
-        return 1;
+        return EXIT_FAILURE;
     }
+    return EXIT_SUCCESS;
+}
+
+TEST_MAIN(
+    TEST_ASSERT(main_(argc, argv) == EXIT_SUCCESS);
+
     TEST_CHECK(testProjectOutputToSlant);
     TEST_CHECK(testProjectSlantToOutput);
-    return 0;
-}
+    )
