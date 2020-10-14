@@ -110,9 +110,8 @@ TEST_CASE(SFALine)
     TEST_ASSERT(lineOne != *stringTwo);
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(SFAPoint);
     TEST_CHECK(SFALineString);
     TEST_CHECK(SFALine);
-}
+)

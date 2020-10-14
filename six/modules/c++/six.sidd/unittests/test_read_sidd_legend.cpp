@@ -280,7 +280,7 @@ TEST_CASE(testRead)
     TEST_ASSERT_EQ(container->getNumData(), 4);
     for (size_t ii = 0; ii < container->getNumData(); ++ii)
     {
-        TEST_ASSERT_NOT_EQ(container->getData(ii), NULL);
+        TEST_ASSERT_NOT_EQ(container->getData(ii), nullptr);
     }
 
     // First image shouldn't have a legend
@@ -288,7 +288,7 @@ TEST_CASE(testRead)
 
     // Second image should have a legend equal to the mono legend
     const six::Legend* legend = container->getLegend(1);
-    TEST_ASSERT_NOT_EQ(legend, NULL);
+    TEST_ASSERT_NOT_EQ(legend, nullptr);
     TEST_ASSERT_EQ(legend->mType, testHelper.mMonoLegend.mType);
     TEST_ASSERT_EQ(legend->mLocation.row,
                    testHelper.mMonoLegend.mLocation.row);
@@ -304,7 +304,7 @@ TEST_CASE(testRead)
 
     // Fourth image should have a legend equal to the RGB legend
     legend = container->getLegend(3);
-    TEST_ASSERT_NOT_EQ(legend, NULL);
+    TEST_ASSERT_NOT_EQ(legend, nullptr);
     TEST_ASSERT_EQ(legend->mType, testHelper.mRgbLegend.mType);
     TEST_ASSERT_EQ(legend->mLocation.row,
                    testHelper.mRgbLegend.mLocation.row);
@@ -313,31 +313,11 @@ TEST_CASE(testRead)
     TEST_ASSERT_EQ(legend->mDims.row, testHelper.mRgbLegend.mDims.row);
     TEST_ASSERT_EQ(legend->mDims.col, testHelper.mRgbLegend.mDims.col);
     TEST_ASSERT(legend->mImage == testHelper.mRgbLegend.mImage);
-    TEST_ASSERT_NOT_EQ(legend->mLUT.get(), NULL);
+    TEST_ASSERT_NOT_EQ(legend->mLUT.get(), nullptr);
     TEST_ASSERT(*legend->mLUT == *testHelper.mRgbLegend.mLUT);
 }
 }
 
-int main(int, char**)
-{
-    try
-    {
-        TEST_CHECK(testRead);
-        return 0;
-    }
-    catch (const except::Exception& e)
-    {
-        std::cerr << "Caught exception: " << e.getMessage() << std::endl;
-        return 1;
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << "Caught exception: " << e.what() << std::endl;
-        return 1;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-        return 1;
-    }
-}
+TEST_MAIN(
+    TEST_CHECK(testRead);
+)
