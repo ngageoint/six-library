@@ -20,12 +20,16 @@
  *
  */
 
+#include <string>
+
 #include <cphd03/CPHDWriter.h>
 #include <cphd03/CPHDReader.h>
 #include <cphd/Wideband.h>
 #include <types/RowCol.h>
 
 #include "TestCase.h"
+
+static std::string testName;
 
 namespace
 {
@@ -428,6 +432,8 @@ void runCPHDTest(const std::string& testName,
 
 TEST_CASE(testWriteFXOneWay)
 {
+    testName = "testWriteFXOneWay";
+
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
     addFXParams(metadata);
@@ -438,6 +444,8 @@ TEST_CASE(testWriteFXOneWay)
 
 TEST_CASE(testWriteFXTwoWay)
 {
+    testName = "testWriteFXTwoWay";
+
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
     addFXParams(metadata);
@@ -448,6 +456,8 @@ TEST_CASE(testWriteFXTwoWay)
 
 TEST_CASE(testWriteTOAOneWay)
 {
+    testName = "testWriteTOAOneWay";
+
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
     addTOAParams(metadata);
@@ -458,6 +468,8 @@ TEST_CASE(testWriteTOAOneWay)
 
 TEST_CASE(testWriteTOATwoWay)
 {
+    testName = "testWriteTOATwoWay";
+
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
     addTOAParams(metadata);
@@ -467,14 +479,19 @@ TEST_CASE(testWriteTOATwoWay)
 }
 }
 
-int main(int , char** )
+static int call_srand()
 {
-    ::srand(334);
+    const auto seed = 334;
+    ::srand(seed);
+    return seed;
+}
+static int unused_ = call_srand();
+
+TEST_MAIN(
     TEST_CHECK(testWriteFXOneWay);
     TEST_CHECK(testWriteFXTwoWay);
     TEST_CHECK(testWriteTOAOneWay);
     TEST_CHECK(testWriteTOATwoWay);
     sys::OS().remove(FILE_NAME);
-    return 0;
-}
+    )
 

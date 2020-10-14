@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cphd03_test_cphd_read_unscaled_int.cpp" />
+    <ClCompile Include="cphd03_test_cphd_write.cpp" />
+    <ClCompile Include="cphd03_test_vbm.cpp" />
     <ClCompile Include="six.sicd_test_area_plane.cpp" />
     <ClCompile Include="six.sicd_test_filling_geo_data.cpp" />
     <ClCompile Include="six.sicd_test_filling_grid.cpp" />

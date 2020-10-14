@@ -65,6 +65,12 @@
     <ClCompile Include="cphd03_test_cphd_read_unscaled_int.cpp">
       <Filter>cphd03</Filter>
     </ClCompile>
+    <ClCompile Include="cphd03_test_cphd_write.cpp">
+      <Filter>cphd03</Filter>
+    </ClCompile>
+    <ClCompile Include="cphd03_test_vbm.cpp">
+      <Filter>cphd03</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
