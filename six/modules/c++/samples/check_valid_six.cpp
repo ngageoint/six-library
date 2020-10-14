@@ -206,7 +206,7 @@ static int main_(int argc, char** argv)
             }
         }
 
-        return allValid ? 0 : 1;
+        return allValid ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 int main(int argc, char** argv)
 {
