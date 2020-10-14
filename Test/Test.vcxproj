@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ClInclude Include="cphd03_Test.h" />
+    <ClInclude Include="cphd_Test.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="sicd_Test.h" />
     <ClInclude Include="sidd_Test.h" />
@@ -50,6 +51,7 @@
     <ClCompile Include="cphd03_test_cphd_read_unscaled_int.cpp" />
     <ClCompile Include="cphd03_test_cphd_write.cpp" />
     <ClCompile Include="cphd03_test_vbm.cpp" />
+    <ClCompile Include="cphd_test_channel.cpp" />
     <ClCompile Include="six.sicd_test_area_plane.cpp" />
     <ClCompile Include="six.sicd_test_filling_geo_data.cpp" />
     <ClCompile Include="six.sicd_test_filling_grid.cpp" />
@@ -80,6 +82,9 @@
   <ItemGroup>
     <ProjectReference Include="..\six\modules\c++\cphd03\cphd03.vcxproj">
       <Project>{016ef417-e41c-404c-b3b5-34b6cdd94bb3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\six\modules\c++\cphd\cphd.vcxproj">
+      <Project>{01be4480-9620-4ded-b34f-d2e3ab4b7c8b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\six\modules\c++\six.sicd\six.sicd.vcxproj">
       <Project>{34ac2314-fbd1-42ad-aaf4-0cebc6bf737e}</Project>

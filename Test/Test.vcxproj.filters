@@ -71,6 +71,9 @@
     <ClCompile Include="cphd03_test_vbm.cpp">
       <Filter>cphd03</Filter>
     </ClCompile>
+    <ClCompile Include="cphd_test_channel.cpp">
+      <Filter>cphd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -86,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="cphd03_Test.h">
       <Filter>cphd03</Filter>
+    </ClInclude>
+    <ClInclude Include="cphd_Test.h">
+      <Filter>cphd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +109,9 @@
     </Filter>
     <Filter Include="cphd03">
       <UniqueIdentifier>{d356dcdd-bdb8-47ae-a3c1-b99f28c38909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cphd">
+      <UniqueIdentifier>{8dbd3ccb-d3e2-4154-8dd5-e135bb0d0364}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
