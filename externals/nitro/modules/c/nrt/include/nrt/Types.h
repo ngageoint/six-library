@@ -162,10 +162,12 @@ typedef int nrt_CreationFlags;
 #define NRT_TRUE     (1)
 #define NRT_FALSE    (0)
 
-#ifndef __cplusplus
-#define NRT_DECLARE_ENUM(name, ...) typedef enum _ ## name { __VA_ARGS__ } name
-#else
+
+#if defined(__cplusplus) && !defined(SWIGPYTHON)
+// "enum class" for C++ w/o SWIG
 #define NRT_DECLARE_ENUM(name, ...) enum class name { __VA_ARGS__ }
+#else
+#define NRT_DECLARE_ENUM(name, ...) typedef enum _ ## name { __VA_ARGS__ } name
 #endif
 
 NRT_DECLARE_ENUM(nrt_CornersType,
