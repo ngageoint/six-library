@@ -8,6 +8,8 @@
 #include "six/sicd/ComplexData.h"
 #include "six/sicd/Utilities.h"
 
+std::string argv0;
+
 namespace
 {
 std::string findSixHome(const sys::Path& exePath)
@@ -55,6 +57,7 @@ loadPolynomialFitter(const sys::Path& exePath)
     return six::sicd::Utilities::getPolynomialFitter(*complexData);
 }
 
+// Making this global so we don't have to re-read the file every test
 std::unique_ptr<scene::ProjectionPolynomialFitter> globalFitter;
 
 static const size_t NUM_POINTS = 9;
@@ -86,6 +89,11 @@ static const double OUTPUT_PLANE_POINTS[NUM_POINTS][2] =
 
 TEST_CASE(testProjectOutputToSlant)
 {
+    if (globalFitter == nullptr)
+    {
+        globalFitter = loadPolynomialFitter(argv0);
+    }
+
     math::poly::TwoD<double> outputToSlantRow;
     math::poly::TwoD<double> outputToSlantCol;
     globalFitter->fitOutputToSlantPolynomials(
@@ -112,6 +120,11 @@ TEST_CASE(testProjectOutputToSlant)
 
 TEST_CASE(testProjectSlantToOutput)
 {
+    if (globalFitter == nullptr)
+    {
+        globalFitter = loadPolynomialFitter(argv0);
+    }
+
     math::poly::TwoD<double> slantToOutputRow;
     math::poly::TwoD<double> slantToOutputCol;
     globalFitter->fitSlantToOutputPolynomials(
@@ -137,26 +150,9 @@ TEST_CASE(testProjectSlantToOutput)
 }
 }
 
-int main(int argc, char** argv)
-{
-    if (argc == 0)
-    {
-        std::cerr << "This test makes assumptions about the directory structure."
-            << " Make sure to call with the executable name as argv[0] so "
-            << " we can find the necessary files.\n";
-        return 1;
-    }
-    // Making this global so we don't have to re-read the file every test
-    try
-    {
-        globalFitter = loadPolynomialFitter(std::string(argv[0]));
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << "\n";
-        return 1;
-    }
+TEST_MAIN(
+     argv0 = argv[0];
+
     TEST_CHECK(testProjectOutputToSlant);
     TEST_CHECK(testProjectSlantToOutput);
-    return 0;
-}
+    )

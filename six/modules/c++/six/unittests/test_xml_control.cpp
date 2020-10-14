@@ -25,6 +25,14 @@
 #include <vector>
 #include "TestCase.h"
 
+#ifndef DEFAULT_SCHEMA_PATH
+#if defined(_WIN32)
+#define DEFAULT_SCHEMA_PATH "C:\\" // just to compile ...
+#else
+#define DEFAULT_SCHEMA_PATH "/" // just to compile ...
+#endif
+#endif
+
 TEST_CASE(loadCompiledSchemaPath)
 {
     sys::OS().unsetEnv("SIX_SCHEMA_PATH");
@@ -60,11 +68,9 @@ TEST_CASE(ignoreEmptyEnvVariable)
     TEST_ASSERT_EQ(schemaPaths[0], DEFAULT_SCHEMA_PATH);
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(loadCompiledSchemaPath);
     TEST_CHECK(respectGivenPaths);
     TEST_CHECK(loadFromEnvVariable);
     TEST_CHECK(ignoreEmptyEnvVariable);
-    return 0;
-}
+    )

@@ -71,11 +71,9 @@ TEST_CASE(testHandlesNullPointers)
 }
 }
 
-int main(int argc, char** argv)
-{
+TEST_MAIN(
     TEST_CHECK(testCanFindSegment);
     TEST_CHECK(testThrowIfMissingSegment);
     TEST_CHECK(testHandlesNullPointers);
-    return 0;
-}
+    )
 

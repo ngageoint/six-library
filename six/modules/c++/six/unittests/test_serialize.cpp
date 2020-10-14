@@ -139,10 +139,9 @@ TEST_CASE(VectorSerialize)
     TEST_ASSERT_TRUE(testVector<double>(length, true));
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     srand(time(NULL));
     TEST_CHECK(ScalarSerialize);
     TEST_CHECK(VectorSerialize);
     TEST_CHECK(StringSerialize);
-}
+    )

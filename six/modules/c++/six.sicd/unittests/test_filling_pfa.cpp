@@ -54,9 +54,6 @@ TEST_CASE(DefaultPFA)
     TEST_ASSERT_EQ(pfa.polarAngleRefTime, 123);
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(DefaultPFA);
-    return 0;
-}
-
+)

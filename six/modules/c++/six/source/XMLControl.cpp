@@ -46,6 +46,14 @@ void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
     {
         const sys::OS os;
 
+#ifndef DEFAULT_SCHEMA_PATH
+#if defined(_WIN32)
+#define DEFAULT_SCHEMA_PATH "C:\\" // just to compile ...
+#else
+#define DEFAULT_SCHEMA_PATH "/" // just to compile ...
+#endif
+#endif
+
         std::string envPath;
         os.getEnvIfSet(six::SCHEMA_PATH, envPath);
         str::trim(envPath);

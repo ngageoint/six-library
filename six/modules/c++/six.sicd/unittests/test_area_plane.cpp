@@ -203,27 +203,10 @@ TEST_CASE(testCanRotateFourTimes)
 }
 }
 
-int main(int /*argc*/, char** /*argv*/)
-{
-    try
-    {
-        TEST_CHECK(testAreaPlane);
-        TEST_CHECK(testBothMethodsGiveSamePlane);
-        TEST_CHECK(testRotatePlane);
-        TEST_CHECK(testCanRotateFourTimes);
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-    }
-    return 0;
-}
+TEST_MAIN(
+    TEST_CHECK(testAreaPlane);
+    TEST_CHECK(testBothMethodsGiveSamePlane);
+    TEST_CHECK(testRotatePlane);
+    TEST_CHECK(testCanRotateFourTimes);
+    )
 

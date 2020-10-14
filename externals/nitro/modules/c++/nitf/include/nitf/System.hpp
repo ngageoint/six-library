@@ -57,6 +57,8 @@ using ConvType = nitf_ConvType;
 using CornersType = nitf_CornersType;
 }
 
+#ifndef SWIGPYTHON
+// These are already global via C-style enum for SWIG
 constexpr auto NITF_VER_20 = nitf::Version::NITF_VER_20;
 constexpr auto NITF_VER_21 = nitf::Version::NITF_VER_21;
 constexpr auto NITF_VER_UNKNOWN = nitf::Version::NITF_VER_UNKNOWN;
@@ -77,5 +79,6 @@ constexpr auto NRT_CORNERS_UTM_UPS_S = nitf::CornersType::NRT_CORNERS_UTM_UPS_S;
 constexpr auto NRT_CORNERS_UTM_UPS_N = nitf::CornersType::NRT_CORNERS_UTM_UPS_N;
 constexpr auto NRT_CORNERS_GEO = nitf::CornersType::NRT_CORNERS_GEO;
 constexpr auto NRT_CORNERS_DECIMAL = nitf::CornersType::NRT_CORNERS_DECIMAL;
+#endif
 
 #endif

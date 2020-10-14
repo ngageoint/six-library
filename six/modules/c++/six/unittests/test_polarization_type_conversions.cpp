@@ -43,9 +43,9 @@ TEST_CASE(SixToString)
     std::string polarizationString = six::toString<six::DualPolarizationType>(pType);
     TEST_ASSERT_EQ("UNKNOWN", polarizationString);
 }
-int main(int, char**)
-{
+
+TEST_MAIN(
     TEST_CHECK(EnumConstructor);
     TEST_CHECK(ToType);
     TEST_CHECK(SixToString);
-}
+)

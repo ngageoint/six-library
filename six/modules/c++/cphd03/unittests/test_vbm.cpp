@@ -20,12 +20,16 @@
  *
  */
 
+#include <string>
+
 #include <cphd03/VBM.h>
 #include <cphd/TestDataGenerator.h>
 #include "TestCase.h"
 
 static const size_t NUM_CHANNELS = 3;
 static const size_t NUM_VECTORS = 7;
+
+static std::string testName;
 
 namespace
 {
@@ -70,6 +74,8 @@ void testVectorParameters(const std::string& testName,
 
 TEST_CASE(testVbmFx)
 {
+    testName = "testVbmFx";
+
     cphd03::VBM vbm(NUM_CHANNELS,
                   std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                   true,
@@ -105,6 +111,8 @@ TEST_CASE(testVbmFx)
 
 TEST_CASE(testVbmToa)
 {
+    testName = "testVbmToa";
+
     cphd03::VBM vbm(NUM_CHANNELS,
                   std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                   true,
@@ -275,14 +283,19 @@ TEST_CASE(testDataConstructor)
 }
 }
 
-int main(int , char** )
+static int call_srand()
 {
-    ::srand(174);
+    const auto seed = 174;
+    ::srand(seed);
+    return seed;
+}
+static int unused_ = call_srand();
+
+TEST_MAIN(
     TEST_CHECK(testVbmFx);
     TEST_CHECK(testVbmToa);
     TEST_CHECK(testVbmThrow);
     TEST_CHECK(testVbmCopy);
     TEST_CHECK(testDataConstructor);
-    return 0;
-}
+    )
 

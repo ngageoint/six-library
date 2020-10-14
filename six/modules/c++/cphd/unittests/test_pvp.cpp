@@ -104,28 +104,10 @@ TEST_CASE(testAddedParamsEqualityOperatorFalse)
 }
 }
 
-int main(int /*argc*/, char** /*argv*/)
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testSimpleEqualityOperatorTrue);
         TEST_CHECK(testAppend);
         TEST_CHECK(testAddedParamsEqualityOperatorTrue);
         TEST_CHECK(testSimpleEqualityOperatorFalse);
         TEST_CHECK(testAddedParamsEqualityOperatorFalse);
-        return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-    }
-    return 1;
-}
+        )
