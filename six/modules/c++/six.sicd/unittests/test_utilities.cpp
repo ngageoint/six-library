@@ -45,10 +45,8 @@ TEST_CASE(testCounterClockwiseTriangle)
     TEST_ASSERT(six::sicd::Utilities::isClockwise(vertices));
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testClockwiseBox);
     TEST_CHECK(testCounterClockwiseTriangle);
-    return 0;
-}
+)
 

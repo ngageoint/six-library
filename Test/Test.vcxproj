@@ -45,6 +45,7 @@
     <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="six.sicd_test_utilities.cpp" />
     <ClCompile Include="six.sidd_test_annotations_equality.cpp" />
     <ClCompile Include="six.sidd_test_geometric_chip.cpp" />
     <ClCompile Include="six.sidd_test_read_sidd_legend.cpp" />
@@ -60,6 +61,9 @@
     <ClCompile Include="six_test_xml_control.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\six\modules\c++\six.sicd\six.sicd.vcxproj">
+      <Project>{34ac2314-fbd1-42ad-aaf4-0cebc6bf737e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\six\modules\c++\six.sidd\six.sidd.vcxproj">
       <Project>{ddc587c2-53ba-44a9-94e7-07be52af3d0b}</Project>
     </ProjectReference>
@@ -99,7 +103,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)six\modules\c++\scene\include\;$(SolutionDir)six\modules\c++\six\include\;$(SolutionDir)six\modules\c++\six.sidd\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)six\modules\c++\scene\include\;$(SolutionDir)six\modules\c++\six\include\;$(SolutionDir)six\modules\c++\six.sidd\include\;$(SolutionDir)six\modules\c++\six.sicd\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -131,7 +135,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)six\modules\c++\scene\include\;$(SolutionDir)six\modules\c++\six\include\;$(SolutionDir)six\modules\c++\six.sidd\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)six\modules\c++\scene\include\;$(SolutionDir)six\modules\c++\six\include\;$(SolutionDir)six\modules\c++\six.sidd\include\;$(SolutionDir)six\modules\c++\six.sicd\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

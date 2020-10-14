@@ -101,14 +101,10 @@
 #include <import/scene.h>
 #include <import/six.h>
 
-//#pragma comment(lib, "io-c++")
-//#pragma comment(lib, "except-c++")
-//#pragma comment(lib, "sys-c++")
-//#pragma comment(lib, "str-c++")
-
 #pragma comment(lib, "ws2_32")
 
 #include "gtest/gtest.h"
 
 #include "six_Test.h"
 #include "sidd_Test.h"
+#include "sicd_Test.h"
