@@ -1136,7 +1136,7 @@ void six::loadXmlDataContentHandler()
     }
 }
 
-std::unique_ptr<Data> six::parseData(std::nullptr_t,
+std::unique_ptr<Data> six::parseData(
 				   const XMLControlRegistry& xmlReg,
                                    ::io::InputStream& xmlStream,
                                    DataType dataType,
@@ -1178,17 +1178,8 @@ std::unique_ptr<Data> six::parseData(std::nullptr_t,
     return std::unique_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
 }
 
-std::auto_ptr<Data> six::parseDataFromFile(
-        const XMLControlRegistry& xmlReg,
-        const std::string& pathname,
-        DataType dataType,
-        const std::vector<std::string>& schemaPaths,
-        logging::Logger& log)
-{
-  auto result = parseDataFromFile(nullptr, xmlReg, pathname, dataType, schemaPaths, log);
-  return std::auto_ptr<Data>(result.release());
-}
-std::unique_ptr<Data> six::parseDataFromFile(std::nullptr_t,
+
+std::unique_ptr<Data> six::parseDataFromFile(
         const XMLControlRegistry& xmlReg,
         const std::string& pathname,
         DataType dataType,
@@ -1196,10 +1187,10 @@ std::unique_ptr<Data> six::parseDataFromFile(std::nullptr_t,
         logging::Logger& log)
 {
     io::FileInputStream inStream(pathname);
-    return parseData(nullptr, xmlReg, inStream, dataType, schemaPaths, log);
+    return parseData(xmlReg, inStream, dataType, schemaPaths, log);
 }
 
-std::unique_ptr<Data> six::parseDataFromString(std::nullptr_t,
+std::unique_ptr<Data> six::parseDataFromString(
         const XMLControlRegistry& xmlReg,
         const std::string& xmlStr,
         DataType dataType,
@@ -1208,7 +1199,7 @@ std::unique_ptr<Data> six::parseDataFromString(std::nullptr_t,
 {
     io::StringStream inStream;
     inStream.write(xmlStr);
-    return parseData(nullptr, xmlReg, inStream, dataType, schemaPaths, log);
+    return parseData(xmlReg, inStream, dataType, schemaPaths, log);
 }
 
 std::string six::findSchemaPath(const std::string& progname)
