@@ -855,7 +855,7 @@ void DerivedXMLParser200::parseDynamicRangeAdjustmentFromXML(
     XMLElem overrideElem = getOptional(rangeElem, "DRAOverrides");
 
     validateDRAFields(rangeAdjustment.algorithmType,
-                      parameterElem, overrideElem);
+                      parameterElem ? true : false, overrideElem ? true : false);
 
     if (parameterElem)
     {
@@ -1275,8 +1275,8 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
     createInt("BandStatsSource", adjust.bandStatsSource, adjustElem);
 
     validateDRAFields(adjust.algorithmType,
-                      adjust.draParameters.get(),
-                      adjust.draOverrides.get());
+                      adjust.draParameters.get() ? true : false,
+                      adjust.draOverrides.get() ? true : false);
     if (adjust.draParameters.get())
     {
         XMLElem paramElem = newElement("DRAParameters", adjustElem);

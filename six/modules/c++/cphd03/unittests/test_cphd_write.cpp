@@ -352,9 +352,10 @@ void writeCPHD(
 }
 
 
-void runCPHDTest(const std::string& testName,
+void runCPHDTest(const std::string& testName_,
                  cphd03::Metadata& metadata)
 {
+    testName = testName_;
 
     metadata.data.numCPHDChannels = NUM_IMAGES;
 
