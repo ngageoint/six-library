@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "check_valid_six", "six\modules\c++\samples\check_valid_six.dir\check_valid_six.vcxproj", "{F0E2C8FF-57D4-4331-9BD2-76FF01CB54EB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "crop_sicd", "six\modules\c++\samples\crop_sicd.dir\crop_sicd.vcxproj", "{7DCFF6D2-72E8-43E8-8085-35C1721E8DAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -116,6 +118,14 @@ Global
 		{F0E2C8FF-57D4-4331-9BD2-76FF01CB54EB}.Release|x64.Build.0 = Release|x64
 		{F0E2C8FF-57D4-4331-9BD2-76FF01CB54EB}.Release|x86.ActiveCfg = Release|Win32
 		{F0E2C8FF-57D4-4331-9BD2-76FF01CB54EB}.Release|x86.Build.0 = Release|Win32
+		{7DCFF6D2-72E8-43E8-8085-35C1721E8DAC}.Debug|x64.ActiveCfg = Debug|x64
+		{7DCFF6D2-72E8-43E8-8085-35C1721E8DAC}.Debug|x64.Build.0 = Debug|x64
+		{7DCFF6D2-72E8-43E8-8085-35C1721E8DAC}.Debug|x86.ActiveCfg = Debug|Win32
+		{7DCFF6D2-72E8-43E8-8085-35C1721E8DAC}.Debug|x86.Build.0 = Debug|Win32
+		{7DCFF6D2-72E8-43E8-8085-35C1721E8DAC}.Release|x64.ActiveCfg = Release|x64
+		{7DCFF6D2-72E8-43E8-8085-35C1721E8DAC}.Release|x64.Build.0 = Release|x64
+		{7DCFF6D2-72E8-43E8-8085-35C1721E8DAC}.Release|x86.ActiveCfg = Release|Win32
+		{7DCFF6D2-72E8-43E8-8085-35C1721E8DAC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
