@@ -121,16 +121,23 @@ static fs::path getNitfPath()
 {
     const auto cwd = fs::current_path();
     const auto root_dir = cwd.parent_path().parent_path();
-    return root_dir / "six" / "tests" / "nitf" / "sidd_1.0.0.nitf";
+    return root_dir / "six" / "tests" / "nitf" / "sicd_1.1.0.nitf";
 }
 
 static void setNitfPluginPath()
 {
-    //const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\six\externals\nitro\modules\c\nitf\shared)";
     const auto cwd = fs::current_path();
     const auto root_dir = cwd.parent_path().parent_path().parent_path().parent_path().parent_path();
 
-    const auto path = root_dir / "externals" / "nitro" / "modules" / "c" / "nitf" / "shared";
+    const std::string configuration =
+#if defined(NDEBUG) // i.e., release
+        "Release";
+#else
+        "Debug";
+#endif
+    const std::string platform = "x64";
+
+    const auto path = root_dir / "externals" / "nitro" / platform / configuration / "share" / "nitf" / "plugins";
     const std::string putenv_ = "NITF_PLUGIN_PATH=" + path.string();
     _putenv(putenv_.c_str());
 }
