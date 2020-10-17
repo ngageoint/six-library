@@ -5273,7 +5273,7 @@ SWIGINTERN void cphd03_VBM_getVBMdata__SWIG_2(cphd03::VBM *self,size_t channel,s
     }
 SWIGINTERN cphd03::Metadata cphd03_CPHDXMLControl_fromXMLString(cphd03::CPHDXMLControl *self,std::string const &xmlString){
     cphd03::Metadata retv;
-    std::auto_ptr<cphd03::Metadata> apMetadata = self->fromXML(xmlString);
+    auto apMetadata = self->fromXML(xmlString);
     retv = *apMetadata;
     return retv;
   }
@@ -52107,13 +52107,13 @@ SWIGINTERN PyObject *VectorAntennaParameters_swigregister(PyObject *SWIGUNUSEDPA
 
 SWIGINTERN PyObject *_wrap_new_StdAutoDwellTimeParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< cphd03::DwellTimeParameters > *result = 0 ;
+  std::unique_ptr< cphd03::DwellTimeParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoDwellTimeParameters")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< cphd03::DwellTimeParameters > *)new std::auto_ptr< cphd03::DwellTimeParameters >();
+      result = new std::unique_ptr< cphd03::DwellTimeParameters >();
     } 
     catch (const std::exception& e)
     {
@@ -52150,7 +52150,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoDwellTimeParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< cphd03::DwellTimeParameters > *arg1 = (std::auto_ptr< cphd03::DwellTimeParameters > *) 0 ;
+  std::unique_ptr< cphd03::DwellTimeParameters > *arg1 = (std::unique_ptr< cphd03::DwellTimeParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -52160,7 +52160,7 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoDwellTimeParameters(PyObject *SWIGUNUSE
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoDwellTimeParameters" "', argument " "1"" of type '" "std::auto_ptr< cphd03::DwellTimeParameters > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< cphd03::DwellTimeParameters > * >(argp1);
+  arg1 = reinterpret_cast< std::unique_ptr< cphd03::DwellTimeParameters > * >(argp1);
   {
     try
     {
@@ -54452,13 +54452,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoFxParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< cphd03::FxParameters > *result = 0 ;
+  std::unique_ptr< cphd03::FxParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoFxParameters")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< cphd03::FxParameters > *)new std::auto_ptr< cphd03::FxParameters >();
+      result = (std::unique_ptr< cphd03::FxParameters > *)new std::unique_ptr< cphd03::FxParameters >();
     } 
     catch (const std::exception& e)
     {
@@ -54495,7 +54495,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoFxParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< cphd03::FxParameters > *arg1 = (std::auto_ptr< cphd03::FxParameters > *) 0 ;
+  std::unique_ptr< cphd03::FxParameters > *arg1 = (std::unique_ptr< cphd03::FxParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -54505,7 +54505,7 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoFxParameters(PyObject *SWIGUNUSEDPARM(s
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoFxParameters" "', argument " "1"" of type '" "std::auto_ptr< cphd03::FxParameters > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< cphd03::FxParameters > * >(argp1);
+  arg1 = reinterpret_cast< std::unique_ptr< cphd03::FxParameters > * >(argp1);
   {
     try
     {
@@ -55787,13 +55787,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoTOAParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< cphd03::TOAParameters > *result = 0 ;
+  std::unique_ptr< cphd03::TOAParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoTOAParameters")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< cphd03::TOAParameters > *)new std::auto_ptr< cphd03::TOAParameters >();
+      result = (std::unique_ptr< cphd03::TOAParameters > *)new std::unique_ptr< cphd03::TOAParameters >();
     } 
     catch (const std::exception& e)
     {
@@ -55830,7 +55830,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoTOAParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< cphd03::TOAParameters > *arg1 = (std::auto_ptr< cphd03::TOAParameters > *) 0 ;
+  std::unique_ptr< cphd03::TOAParameters > *arg1 = (std::unique_ptr< cphd03::TOAParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -55840,7 +55840,7 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoTOAParameters(PyObject *SWIGUNUSEDPARM(
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoTOAParameters" "', argument " "1"" of type '" "std::auto_ptr< cphd03::TOAParameters > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< cphd03::TOAParameters > * >(argp1);
+  arg1 = reinterpret_cast< std::unique_ptr< cphd03::TOAParameters > * >(argp1);
   {
     try
     {
@@ -56898,13 +56898,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoCphdAntenna(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< cphd03::Antenna > *result = 0 ;
+  std::unique_ptr< cphd03::Antenna > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCphdAntenna")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< cphd03::Antenna > *)new std::auto_ptr< cphd03::Antenna >();
+      result = (std::unique_ptr< cphd03::Antenna > *)new std::unique_ptr< cphd03::Antenna >();
     } 
     catch (const std::exception& e)
     {
@@ -56941,7 +56941,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoCphdAntenna(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< cphd03::Antenna > *arg1 = (std::auto_ptr< cphd03::Antenna > *) 0 ;
+  std::unique_ptr< cphd03::Antenna > *arg1 = (std::unique_ptr< cphd03::Antenna > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -56951,7 +56951,7 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCphdAntenna(PyObject *SWIGUNUSEDPARM(se
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCphdAntenna" "', argument " "1"" of type '" "std::auto_ptr< cphd03::Antenna > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< cphd03::Antenna > * >(argp1);
+  arg1 = reinterpret_cast< std::unique_ptr< cphd03::Antenna > * >(argp1);
   {
     try
     {
