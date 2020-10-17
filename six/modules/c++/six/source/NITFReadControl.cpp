@@ -282,7 +282,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         else
         {
             SegmentInputStreamAdapter ioAdapter(deReader);
-            std::unique_ptr<Data> data(parseData(nullptr, *mXMLRegistry,
+            std::unique_ptr<Data> data(parseData(*mXMLRegistry,
                                                ioAdapter,
                                                dataType,
                                                schemaPaths,

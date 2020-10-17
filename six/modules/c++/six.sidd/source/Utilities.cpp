@@ -534,7 +534,7 @@ std::unique_ptr<DerivedData> Utilities::parseData(
                            new XMLControlCreatorT<DerivedXMLControl>());
 
     std::unique_ptr<Data> data(
-			       six::parseData(nullptr, xmlRegistry, xmlStream, schemaPaths, log));
+			       six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
 
     std::unique_ptr<DerivedData> derivedData(
             reinterpret_cast<DerivedData*>(data.release()));

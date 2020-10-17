@@ -66,7 +66,7 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
         logger.reset(new logging::NullLogger());
     }
 
-    mMetadata = CPHDXMLControl(logger.get()).fromXML(nullptr, xmlParser.getDocument());
+    mMetadata = CPHDXMLControl(logger.get()).fromXML(xmlParser.getDocument());
 
     // Load the VBP into memory
     mVBM.reset(new VBM(mMetadata->data, mMetadata->vectorParameters));
