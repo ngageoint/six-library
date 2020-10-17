@@ -60,7 +60,6 @@
 #include <import/str.h>
 #include <import/logging.h>
 #include <math/Utilities.h>
-#include <import/math/poly.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Validator.h>
 
@@ -71,11 +70,4 @@
 #include <import/scene.h>
 #include <import/six.h>
 
-#pragma comment(lib, "io-c++")
-#pragma comment(lib, "except-c++")
-#pragma comment(lib, "sys-c++")
-#pragma comment(lib, "str-c++")
-#pragma comment(lib, "math-c++")
-#pragma comment(lib, "polygon-c++")
-
-#pragma comment(lib, "ws2_32")
+#pragma comment(lib, "cli-c++")
