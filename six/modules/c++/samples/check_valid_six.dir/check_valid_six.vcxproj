@@ -120,6 +120,7 @@
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,6 +142,7 @@
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
