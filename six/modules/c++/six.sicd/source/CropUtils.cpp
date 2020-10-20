@@ -32,6 +32,9 @@
 #include <six/sicd/Utilities.h>
 #include <six/sicd/SlantPlanePixelTransformer.h>
 
+#undef min
+#undef max
+
 namespace
 {
 void updateMinMax(double val, double& curMin, double& curMax)

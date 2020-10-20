@@ -96,7 +96,7 @@ std::string six::toValidXMLString(const Data* data,
         xmlControl->toXML(data, schemaPaths));
 
     io::StringStream oss;
-    doc->getRootElement()->print(oss);
+    doc->getRootElement()->print(oss, io::TextEncoding::Utf8);
 
     return oss.stream().str();
 }
