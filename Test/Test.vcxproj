@@ -65,6 +65,7 @@
     <ClCompile Include="cphd_test_signal_block_round.cpp" />
     <ClCompile Include="cphd_test_support_block_round.cpp" />
     <ClCompile Include="six.sicd_test_area_plane.cpp" />
+    <ClCompile Include="six.sicd_test_CollectionInfo.cpp" />
     <ClCompile Include="six.sicd_test_filling_geo_data.cpp" />
     <ClCompile Include="six.sicd_test_filling_grid.cpp" />
     <ClCompile Include="six.sicd_test_filling_pfa.cpp" />
