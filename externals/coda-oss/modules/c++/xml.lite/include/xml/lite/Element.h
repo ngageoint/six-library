@@ -205,10 +205,6 @@ public:
      *  \todo Add format capability
      */
     void print(io::OutputStream& stream, const io::TextEncoding* pEncoding = nullptr) const;
-    void print(io::OutputStream& stream, io::TextEncoding encoding) const
-    {
-        print(stream, &encoding);
-    }
 
     void prettyPrint(io::OutputStream& stream, const std::string& formatter, io::TextEncoding encoding) const
     {
