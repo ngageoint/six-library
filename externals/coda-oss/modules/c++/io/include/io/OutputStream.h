@@ -22,6 +22,7 @@
 
 #ifndef __IO_OUTPUT_STREAM_H__
 #define __IO_OUTPUT_STREAM_H__
+#pragma once
 
 #include "sys/Dbg.h"
 #include "sys/Conf.h"
@@ -35,6 +36,22 @@
 
 namespace io
 {
+    /*!
+     * \class TextEncoding
+     * \brief Specify how to encode text for various write() routines
+     *
+     */
+    enum class TextEncoding
+    {
+        Utf8
+        // There could be more here, but there's no need for them right now.
+        /*
+        , Iso8859_1
+       , Windows_1252 = Iso8859_1 // close enough for our purposes?
+        , Ascii
+        */
+    };
+
 /*!
  * \class OutputStream
  * \brief Class for handling output streams
@@ -69,19 +86,24 @@ public:
      *  Write a string
      *  \param str
      */
-    void write(const std::string& str)
+    void write(const std::string& str, const TextEncoding* pEncoding = nullptr);
+    void write(const std::string& str, TextEncoding encoding)
     {
-        write(reinterpret_cast<const sys::byte*>(str.c_str()), (sys::Size_T) str.length());
+        write(str, &encoding);
     }
 
     /*!
      *  Write a string with a newline at the end
      *  \param str
      */
-    void writeln(const std::string& str)
+    void writeln(const std::string& str, const TextEncoding* pEncoding = nullptr)
     {
-        write(str);
+        write(str, pEncoding);
         write('\n');
+    }
+    void writeln(const std::string& str, TextEncoding encoding)
+    {
+        writeln(str, &encoding);
     }
 
     /*!

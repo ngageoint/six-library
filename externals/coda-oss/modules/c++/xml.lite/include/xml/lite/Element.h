@@ -22,6 +22,7 @@
 
 #ifndef __XML_LITE_ELEMENT_H__
 #define __XML_LITE_ELEMENT_H__
+#pragma once
 
 #include <io/InputStream.h>
 #include <io/OutputStream.h>
@@ -203,10 +204,20 @@ public:
      *  \param formatter  The formatter
      *  \todo Add format capability
      */
-    void print(io::OutputStream& stream) const;
+    void print(io::OutputStream& stream, const io::TextEncoding* pEncoding = nullptr) const;
 
-    void prettyPrint(io::OutputStream& stream,
-                     const std::string& formatter = "    ") const;
+    void prettyPrint(io::OutputStream& stream, const std::string& formatter, io::TextEncoding encoding) const
+    {
+        prettyPrint(stream, formatter, &encoding);
+    }
+    void prettyPrint(io::OutputStream& stream, const std::string& formatter = "    ") const
+    {
+        prettyPrint(stream, formatter, nullptr /*pEncoding*/);
+    }
+    void prettyPrint(io::OutputStream& stream, io::TextEncoding encoding) const
+    {
+        prettyPrint(stream, "    ", encoding);
+    }
 
     /*!
      *  Determines if a child element exists
@@ -347,7 +358,7 @@ protected:
                    const std::string& uri);
 
     void depthPrint(io::OutputStream& stream, int depth,
-                    const std::string& formatter) const;
+                    const std::string& formatter, const io::TextEncoding* pEncoding = nullptr) const;
     
     Element* mParent;
     //! The children of this element
@@ -357,6 +368,10 @@ protected:
     xml::lite::Attributes mAttributes;
     //! The character data
     std::string mCharacterData;
+
+private:
+    void prettyPrint(io::OutputStream& stream, const std::string& formatter, const io::TextEncoding* pEncoding) const;
+
 };
 }
 }

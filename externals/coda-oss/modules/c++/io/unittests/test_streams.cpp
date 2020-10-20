@@ -53,6 +53,23 @@ TEST_CASE(testStringStream)
     TEST_ASSERT_EQ(std::string(buf), "test");
 }
 
+TEST_CASE(testStringStreamUtf8)
+{
+    io::StringStream stream;
+    const std::string input = "|I\xc9|"; // ISO8859-1, "|IÉ|"
+    stream.writeln(input, io::TextEncoding::Utf8);
+
+    stream.seek(0, io::Seekable::START);
+    sys::byte buf[255];
+    stream.read(buf, input.size()+1); // +1 for the new UTF-8 byte, *NOT* trailing '\0'
+    buf[input.size()+1] = '\0';
+    const std::string actual(buf);
+    TEST_ASSERT_EQ(actual.size(), input.size() + 1);
+
+     const auto expected = "|I\xc3\x89|"; // UTF-8,  "|IÉ|"
+    TEST_ASSERT_EQ(actual, expected);
+}
+
 TEST_CASE(testByteStream)
 {
     io::ByteStream stream;
@@ -299,6 +316,7 @@ TEST_CASE(testRotateReset)
 int main(int, char**)
 {
     TEST_CHECK(testStringStream);
+    TEST_CHECK(testStringStreamUtf8);
     TEST_CHECK(testByteStream);
     TEST_CHECK(testProxyOutputStream);
     TEST_CHECK(testCountingOutputStream);
