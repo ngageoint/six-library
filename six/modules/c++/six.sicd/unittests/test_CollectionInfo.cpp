@@ -73,7 +73,7 @@ TEST_CASE(ClassificationFrench)
     auto data = createData<float>(types::RowCol<size_t>(10, 10));
     data->collectionInformation->setClassificationLevel(classificationText);
     data->setPreserveCharacterData(true);  // needed to parse UTF-8 XML
-    //TEST_ASSERT_TRUE(data->getClassification().isUnclassified());
+    TEST_ASSERT_TRUE(data->getClassification().isUnclassified());
 
     const std::vector<std::string> schemaPaths;
     const auto strXml = six::sicd::Utilities::toXMLString(*data, schemaPaths);
@@ -83,7 +83,7 @@ TEST_CASE(ClassificationFrench)
     const auto UNCLASSIFIED = strXml.find(" / UNCLASSIFIED");
     TEST_ASSERT(UNCLASSIFIED != std::string::npos);
     const auto utf8 = strXml.substr(NON_CLASSIFI, UNCLASSIFIED - NON_CLASSIFI);
-    TEST_ASSERT_EQ(utf8.size(), 14);
+    TEST_ASSERT_EQ(utf8.size(), std::string("NON CLASSIFI\xc3\x89").size()); // UTF-8, "NON CLASSIFIÉ"
     const auto E_ = utf8.find("\xc3\x89"); // UTF-8,  "É"
     TEST_ASSERT(E_ != std::string::npos);
 
