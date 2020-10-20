@@ -21,6 +21,7 @@
  */
 #ifndef __SIX_COMPLEX_DATA_H__
 #define __SIX_COMPLEX_DATA_H__
+#pragma once
 
 #include <mem/ScopedCloneablePtr.h>
 #include <mem/ScopedCopyablePtr.h>
@@ -70,9 +71,8 @@ namespace sicd
  *
  *
  */
-class ComplexData: public Data
+struct ComplexData : public Data
 {
-public:
     //!  CollectionInfo block.  Contains the general collection information
     mem::ScopedCloneablePtr<CollectionInformation> collectionInformation;
 
@@ -369,6 +369,15 @@ public:
      */
     void fillDefaultFields();
 
+    bool getPreserveCharacterData() const override
+    {
+        return mPreserveCharacterData;
+    }
+    void setPreserveCharacterData(bool value) override
+    {
+        mPreserveCharacterData = value;
+    }
+
 private:
     virtual bool equalTo(const Data& rhs) const;
 
@@ -391,6 +400,7 @@ private:
     static const char VENDOR_ID[];
 
     std::string mVersion;
+    bool mPreserveCharacterData = false;
 };
 }
 }

@@ -1143,8 +1143,10 @@ std::unique_ptr<Data> six::parseData(
                                    const std::vector<std::string>& schemaPaths,
                                    logging::Logger& log)
 {
+    const bool preserveCharacterData = true;
+
     xml::lite::MinidomParser xmlParser;
-    xmlParser.preserveCharacterData(true);
+    xmlParser.preserveCharacterData(preserveCharacterData);
     try
     {
         xmlParser.parse(xmlStream);
@@ -1175,7 +1177,9 @@ std::unique_ptr<Data> six::parseData(
     const std::unique_ptr<XMLControl> xmlControl(
             xmlReg.newXMLControl(xmlDataType, &log));
 
-    return std::unique_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
+    std::unique_ptr<Data> retval(xmlControl->fromXML(doc, schemaPaths));
+    retval->setPreserveCharacterData(preserveCharacterData);
+    return retval;
 }
 
 

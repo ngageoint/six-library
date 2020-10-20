@@ -21,6 +21,7 @@
  */
 #ifndef __SIX_DERIVED_DATA_H__
 #define __SIX_DERIVED_DATA_H__
+#pragma once
 
 #include <mem/ScopedCopyablePtr.h>
 #include <six/Data.h>
@@ -51,7 +52,7 @@ namespace sidd
  *  Contains the structs that are the model for SIDD products
  *
  */
-struct DerivedData: public Data
+struct DerivedData : public Data
 {
     /*!
      *  Information related to processor, classification,
@@ -322,6 +323,15 @@ struct DerivedData: public Data
         mVersion = version;
     }
 
+    bool getPreserveCharacterData() const override
+    {
+        return mPreserveCharacterData;
+    }
+    void setPreserveCharacterData(bool value) override
+    {
+        mPreserveCharacterData = value;
+    }
+
     /*
      * Convert the output plane pixel location into meters from the reference
      * point
@@ -335,6 +345,7 @@ private:
     static const char VENDOR_ID[];
     virtual bool equalTo(const Data& rhs) const;
     std::string mVersion;
+    bool mPreserveCharacterData = false;
 };
 }
 }
