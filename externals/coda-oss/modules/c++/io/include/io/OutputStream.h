@@ -82,7 +82,6 @@ public:
     OutputStream()
     {
     }
-
     //! Destructor
     virtual ~OutputStream()
     {
