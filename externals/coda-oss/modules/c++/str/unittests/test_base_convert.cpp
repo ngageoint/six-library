@@ -55,10 +55,25 @@ TEST_CASE(testCharToString)
     TEST_ASSERT_EQ(str::toString<char>(65), "A");
 }
 
+static inline sys::u8string::value_type cast(std::string::value_type ch)
+{
+    static_assert(sizeof(sys::u8string::value_type) == sizeof(std::string::value_type),
+        "sizeof(Char8_T) != sizeof(char)");
+    return static_cast<sys::u8string::value_type>(ch);
+}
+TEST_CASE(test_string_to_u8string)
+{
+    const std::string input = "|I\xc9|";  // ISO8859-1, "|IÉ|"
+    const auto actual = str::toUtf8(input);
+    const sys::u8string expected { cast('|'), cast('I'), cast('\xc3'), cast('\x89'), cast('|') };  // UTF-8,  "|IÉ|"
+    TEST_ASSERT(actual == expected);
+}
+
 int main(int, char**)
 {
     TEST_CHECK(testConvert);
     TEST_CHECK(testBadConvert);
     TEST_CHECK(testEightBitIntToString);
     TEST_CHECK(testCharToString);
+    TEST_CHECK(test_string_to_u8string);
 }

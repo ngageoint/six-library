@@ -98,3 +98,39 @@ template<> int str::getPrecision(const long double& )
 {
     return std::numeric_limits<long double>::max_digits10;
 }
+
+// Convert a single ISO8859-1 character to UTF-8
+// https://en.wikipedia.org/wiki/ISO/IEC_8859-1
+static inline sys::u8string::value_type cast(std::string::value_type ch)
+{
+    static_assert(sizeof(sys::u8string::value_type) == sizeof(std::string::value_type),
+        "sizeof(Char8_T) != sizeof(char)");
+    return static_cast<sys::u8string::value_type>(ch);
+}
+static sys::u8string to_utf8(std::string::value_type ch)
+{
+    if ((ch >= '\x00') && (ch <= '\x7f'))  // ASCII
+    {
+        return sys::u8string{cast(ch)};
+    }
+
+    if ((ch >= '\xC0' /*À*/) && (ch <= '\xFF' /*y*/))  // ISO8859-1 letters
+    {
+        sys::u8string retval{cast('\xC3')};
+        ch -= 0x40;  // 0xC0 -> 0x80
+        retval.push_back(cast(ch));
+        return retval;
+    }
+
+    return sys::u8string{cast(ch)};  // ???
+}
+sys::u8string str::toUtf8(const std::string& str)
+{
+    sys::u8string retval;
+    // Assume the input string is ISO8859-1 (western European) and convert to UTF-8
+    for (const auto& ch : str)
+    {
+        retval += to_utf8(ch);
+    }
+    return retval;
+}

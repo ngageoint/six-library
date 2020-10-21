@@ -66,7 +66,7 @@ class SeekableBidirectionalStream :
             public BidirectionalStream, public Seekable
 {
 public:
-    SeekableBidirectionalStream()
+    SeekableBidirectionalStream(const TextEncoding* pEncoding = nullptr) : BidirectionalStream(pEncoding)
     {}
     virtual ~SeekableBidirectionalStream()
     {}

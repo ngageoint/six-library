@@ -20,65 +20,39 @@
  *
  */
 
+#include "io/OutputStream.h"
+
 #include <string>
 #include <stdexcept>
 
-#include <sys/Conf.h>
-#include <except/Exception.h>
-#include <io/OutputStream.h>
+#include <sys/String.h>
 
-// Convert a single ISO8859-1 character to UTF-8
-// // https://en.wikipedia.org/wiki/ISO/IEC_8859-1
-static std::string to_utf8_(std::string::value_type ch)
-{
-    if ((ch >= '\x00') && (ch <= '\x7f'))  // ASCII
-    {
-        return std::string{ch};
-    }
-
-    if ((ch >= '\xC0' /*À*/) && (ch <= '\xFF' /*y*/))  // ISO8859-1 letters
-    {
-        std::string retval{'\xC3'};
-        ch -= 0x40;  // 0xC0 -> 0x80
-        retval.push_back(ch);
-        return retval;
-    }
-    
-    return std::string{ch}; // ???
-}
-
-static std::string to_utf8(const std::string& str)
-{
-    std::string retval;
-    // Assume the input string is ISO8859-1 (western European) and convert to UTF-8
-    for (const auto& ch : str)
-    {
-        retval += to_utf8_(ch);
-    }
-    return retval;
-}
-
-static std::string convert(const std::string& str, io::TextEncoding encoding)
+static sys::u8string convert(const std::string& str, io::TextEncoding encoding)
 {
     if (encoding == io::TextEncoding::Utf8)
     {
-        return to_utf8(str);    
+        return str::toUtf8(str);
     }
 
     throw std::invalid_argument("Unexpected 'encoding' value.");
 }
 
-void io::OutputStream::write(const std::string& str_, const io::TextEncoding* pEncoding /*= nullptr*/)
+template<typename T>
+inline static void write(io::OutputStream& stream, const T& str)
 {
-    const std::string* pStr = &str_;
-    std::string str; // keep any result from convert() in-scope so we use its address
-    if (pEncoding != nullptr)
+    const auto buffer = reinterpret_cast<const sys::byte*>(str.c_str());
+    const sys::Size_T len{str.length()};
+    stream.write(buffer, len);
+}
+void io::OutputStream::write(const std::string& str)
+{
+    if (pEncoding == nullptr)
     {
-        str = convert(str_, *pEncoding);
-        pStr = &str; // stays in-scope, above
+        ::write(*this, str);
     }
-     
-    auto buffer = reinterpret_cast<const sys::byte*>(pStr->c_str());
-    const sys::Size_T len{pStr->length()};
-    write(buffer, len);
+    else
+    {
+        const auto u8str = convert(str, *pEncoding);
+        ::write(*this, u8str);
+    }
 }
