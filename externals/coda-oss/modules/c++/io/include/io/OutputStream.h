@@ -24,6 +24,9 @@
 #define __IO_OUTPUT_STREAM_H__
 #pragma once
 
+#include <string>
+#include <memory>
+
 #include "sys/Dbg.h"
 #include "sys/Conf.h"
 
@@ -63,11 +66,23 @@ namespace io
 
 class OutputStream
 {
+    std::shared_ptr<const TextEncoding> pEncoding;  // i.e., std::optional<>
+protected:
+    OutputStream(const TextEncoding* pEncoding) 
+    {
+        if (pEncoding != nullptr)
+        {
+            this->pEncoding = std::make_shared<const TextEncoding>(*pEncoding);
+        }
+    }
+
+public:
 public:
     //! Default constructor
     OutputStream()
     {
     }
+
     //! Destructor
     virtual ~OutputStream()
     {
@@ -86,24 +101,16 @@ public:
      *  Write a string
      *  \param str
      */
-    void write(const std::string& str, const TextEncoding* pEncoding = nullptr);
-    void write(const std::string& str, TextEncoding encoding)
-    {
-        write(str, &encoding);
-    }
+    void write(const std::string& str);
 
     /*!
      *  Write a string with a newline at the end
      *  \param str
      */
-    void writeln(const std::string& str, const TextEncoding* pEncoding = nullptr)
+    void writeln(const std::string& str)
     {
-        write(str, pEncoding);
+        write(str);
         write('\n');
-    }
-    void writeln(const std::string& str, TextEncoding encoding)
-    {
-        writeln(str, &encoding);
     }
 
     /*!
