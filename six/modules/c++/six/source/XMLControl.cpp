@@ -117,8 +117,8 @@ void XMLControl::validate(const xml::lite::Document* doc,
         }
 
         // Pretty-print so that lines numbers are useful
-        io::StringStream xmlStream;
-        doc->getRootElement()->prettyPrint(xmlStream, io::TextEncoding::Utf8);
+        io::StringStream xmlStream(io::TextEncoding::Utf8);
+        doc->getRootElement()->prettyPrint(xmlStream);
 
         validator.validate(xmlStream, doc->getRootElement()->getUri(), errors);
 

@@ -112,8 +112,8 @@ std::string six::toValidXMLString(const Data* data,
     const std::unique_ptr<xml::lite::Document> doc(
         xmlControl->toXML(data, schemaPaths));
 
-    io::StringStream oss;
-    doc->getRootElement()->print(oss, getEncoding(*data));
+    io::StringStream oss(getEncoding(*data));
+    doc->getRootElement()->print(oss);
 
     return oss.stream().str();
 }
