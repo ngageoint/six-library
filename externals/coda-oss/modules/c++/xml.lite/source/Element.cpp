@@ -142,22 +142,21 @@ void xml::lite::Element::destroyChildren()
     }
 }
 
-void xml::lite::Element::print(io::OutputStream& stream, const io::TextEncoding* pEncoding) const
+void xml::lite::Element::print(io::OutputStream& stream) const
 {
-    depthPrint(stream, 0, "", pEncoding);
+    depthPrint(stream, 0, "");
 }
 
 void xml::lite::Element::prettyPrint(io::OutputStream& stream,
-                                     const std::string& formatter,
-                                     const io::TextEncoding* pEncoding) const
+                                     const std::string& formatter) const
 {
-    depthPrint(stream, 0, formatter, pEncoding);
+    depthPrint(stream, 0, formatter);
     stream.writeln("");
 }
 
 void xml::lite::Element::depthPrint(io::OutputStream& stream,
                                     int depth,
-                                    const std::string& formatter, const io::TextEncoding* pEncoding) const
+                                    const std::string& formatter) const
 {
     std::string prefix = "";
     for (int i = 0; i < depth; ++i)
@@ -186,13 +185,13 @@ void xml::lite::Element::depthPrint(io::OutputStream& stream,
     else
     {
         stream.write(acc + rBrack);
-        stream.write(mCharacterData, pEncoding);
+        stream.write(mCharacterData);
 
         for (unsigned int i = 0; i < mChildren.size(); i++)
         {
             if (!formatter.empty())
                 stream.write("\n");
-            mChildren[i]->depthPrint(stream, depth + 1, formatter, pEncoding);
+            mChildren[i]->depthPrint(stream, depth + 1, formatter);
         }
 
         if (!mChildren.empty() && !formatter.empty())
