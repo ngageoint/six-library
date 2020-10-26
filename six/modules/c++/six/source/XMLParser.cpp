@@ -89,7 +89,8 @@ XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, const std::string& characterData,
         XMLElem parent)
 {
-    XMLElem elem = new xml::lite::Element(name, uri, characterData);
+    static const auto encoding = xml::lite::string_encoding::utf_8; // force UTF-8 for XML strings
+    XMLElem elem = new xml::lite::Element(name, uri, characterData, &encoding);
     if (parent)
         parent->addChild(elem);
     return elem;

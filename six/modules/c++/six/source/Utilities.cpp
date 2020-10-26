@@ -1145,7 +1145,7 @@ std::unique_ptr<Data> six::parseData(
 {
     const bool preserveCharacterData = true;
 
-    xml::lite::MinidomParser xmlParser;
+    xml::lite::MinidomParser xmlParser(true /*forceUtf8*/);
     xmlParser.preserveCharacterData(preserveCharacterData);
     try
     {
@@ -1178,7 +1178,6 @@ std::unique_ptr<Data> six::parseData(
             xmlReg.newXMLControl(xmlDataType, &log));
 
     std::unique_ptr<Data> retval(xmlControl->fromXML(doc, schemaPaths));
-    retval->setPreserveCharacterData(preserveCharacterData);
     return retval;
 }
 

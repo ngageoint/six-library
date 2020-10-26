@@ -369,15 +369,6 @@ struct ComplexData : public Data
      */
     void fillDefaultFields();
 
-    bool getPreserveCharacterData() const override
-    {
-        return mPreserveCharacterData;
-    }
-    void setPreserveCharacterData(bool value) override
-    {
-        mPreserveCharacterData = value;
-    }
-
 private:
     virtual bool equalTo(const Data& rhs) const;
 
@@ -400,7 +391,6 @@ private:
     static const char VENDOR_ID[];
 
     std::string mVersion;
-    bool mPreserveCharacterData = false;
 };
 }
 }

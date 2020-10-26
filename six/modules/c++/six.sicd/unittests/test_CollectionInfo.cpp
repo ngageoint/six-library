@@ -25,6 +25,7 @@
 #include <xml/lite/MinidomParser.h>
 #include <xml/lite/Document.h>
 #include <io/StringStream.h>
+#include <str/Convert.h>
 
 #include <import/six/sicd.h>
 #include "../tests/TestUtilities.h"
@@ -68,11 +69,12 @@ TEST_CASE(Classification)
 
 TEST_CASE(ClassificationFrench)
 {
-    const std::string classificationText("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
+    const std::string classificationText_("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
+    const auto classificationTextUtf8 = str::toUtf8(classificationText_);
+    const auto& classificationText = reinterpret_cast<const std::string&>(classificationTextUtf8);
 
     auto data = createData<float>(types::RowCol<size_t>(10, 10));
     data->collectionInformation->setClassificationLevel(classificationText);
-    data->setPreserveCharacterData(true);  // needed to parse UTF-8 XML
     TEST_ASSERT_TRUE(data->getClassification().isUnclassified());
 
     const std::vector<std::string> schemaPaths;
@@ -89,8 +91,8 @@ TEST_CASE(ClassificationFrench)
 
     io::StringStream ss;
     ss.stream() << strXml;
-    xml::lite::MinidomParser xmlParser;
-    xmlParser.preserveCharacterData(data->getPreserveCharacterData()); // needed to parse UTF-8 XML
+    xml::lite::MinidomParser xmlParser(true /*forceUtf8*/);
+    xmlParser.preserveCharacterData(true); // needed to parse UTF-8 XML
     xmlParser.parse(ss);
     const auto doc = xmlParser.getDocument();
     TEST_ASSERT(doc != nullptr);

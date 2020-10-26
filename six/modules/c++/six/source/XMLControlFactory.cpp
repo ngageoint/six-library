@@ -80,21 +80,6 @@ std::string six::toXMLString(const Data* data,
                             log.get(), xmlRegistry);
 }
 
-static const io::TextEncoding* getEncoding(const Data& data)
-{
-    // If we passed "true" to xml::lite::MinidomParser::preserveCharacterData(),
-    // then we want encoding to be UTF-8 so preserve any UTF-8 characers in
-    // the input.  Note that if preserveCharacterData()==false, an exceptiion
-    // will be thrown during parsing if there is UTF-8 data in the XML.
-    if (data.getPreserveCharacterData())
-    {
-        static const auto utf8 = io::TextEncoding::Utf8;
-        return &utf8;
-    }
-
-    return nullptr;
-}
-
 std::string six::toValidXMLString(const Data* data,
                                   const std::vector<std::string>& schemaPaths,
                                   logging::Logger* log,
@@ -112,8 +97,8 @@ std::string six::toValidXMLString(const Data* data,
     const std::unique_ptr<xml::lite::Document> doc(
         xmlControl->toXML(data, schemaPaths));
 
-    io::StringStream oss(getEncoding(*data));
-    doc->getRootElement()->print(oss);
+    io::StringStream oss;
+    doc->getRootElement()->print(oss, xml::lite::string_encoding::utf_8);
 
     return oss.stream().str();
 }

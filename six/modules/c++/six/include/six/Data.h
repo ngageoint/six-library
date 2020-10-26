@@ -195,13 +195,6 @@ struct Data
     //!  Set the version of the model contained within
     virtual void setVersion(const std::string& version) = 0;
 
-    /*!
-     * Value passed to xml::lite::MinidomParser::preserveCharacterData()
-     * This helps with generating UTF-8 XML.
-     */
-    virtual bool getPreserveCharacterData() const = 0;
-    virtual void setPreserveCharacterData(bool value) = 0;
-
 private:
     virtual bool equalTo(const Data& rhs) const = 0;
 };

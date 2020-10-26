@@ -323,15 +323,6 @@ struct DerivedData : public Data
         mVersion = version;
     }
 
-    bool getPreserveCharacterData() const override
-    {
-        return mPreserveCharacterData;
-    }
-    void setPreserveCharacterData(bool value) override
-    {
-        mPreserveCharacterData = value;
-    }
-
     /*
      * Convert the output plane pixel location into meters from the reference
      * point
@@ -345,7 +336,6 @@ private:
     static const char VENDOR_ID[];
     virtual bool equalTo(const Data& rhs) const;
     std::string mVersion;
-    bool mPreserveCharacterData = false;
 };
 }
 }
