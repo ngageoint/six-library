@@ -1145,7 +1145,7 @@ std::unique_ptr<Data> six::parseData(
 {
     const bool preserveCharacterData = true;
 
-    xml::lite::MinidomParser xmlParser(true /*forceUtf8*/);
+    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
     xmlParser.preserveCharacterData(preserveCharacterData);
     try
     {

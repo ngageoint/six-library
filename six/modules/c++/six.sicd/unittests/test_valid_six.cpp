@@ -65,7 +65,11 @@ TEST_CASE(valid_six_50x50)
         TEST_ASSERT_TRUE(classification.isUnclassified());
 
         // UTF-8 characters in 50x50.nitf
+        #ifdef _WIN32
+        const std::string classificationText("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
+        #else
         const std::string classificationText("NON CLASSIFI\xc3\x89 / UNCLASSIFIED"); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+        #endif
         const auto actual = classification.getLevel();
         TEST_ASSERT_EQ(actual, classificationText);
     }

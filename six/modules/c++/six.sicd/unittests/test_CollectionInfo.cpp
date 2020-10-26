@@ -69,9 +69,11 @@ TEST_CASE(Classification)
 
 TEST_CASE(ClassificationFrench)
 {
-    const std::string classificationText_("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
-    const auto classificationTextUtf8 = str::toUtf8(classificationText_);
-    const auto& classificationText = reinterpret_cast<const std::string&>(classificationTextUtf8);
+#ifdef _WIN32
+    const std::string classificationText("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
+#else
+    const std::string classificationText("NON CLASSIFI\xc3\x89 / UNCLASSIFIED"); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+#endif
 
     auto data = createData<float>(types::RowCol<size_t>(10, 10));
     data->collectionInformation->setClassificationLevel(classificationText);
@@ -91,7 +93,7 @@ TEST_CASE(ClassificationFrench)
 
     io::StringStream ss;
     ss.stream() << strXml;
-    xml::lite::MinidomParser xmlParser(true /*forceUtf8*/);
+    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
     xmlParser.preserveCharacterData(true); // needed to parse UTF-8 XML
     xmlParser.parse(ss);
     const auto doc = xmlParser.getDocument();
