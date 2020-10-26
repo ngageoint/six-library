@@ -60,7 +60,7 @@ public:
     /*!
      *  Constructor.  Set our SAX ContentHandler.
      */
-    MinidomParser(bool unused = true); // was storeEncoding, now controled by preserveCharacterData()
+    MinidomParser(bool forceUtf8 = false); // see MinidomHandler::storeEncoding()
 
     //! Destructor.
     virtual ~MinidomParser()
