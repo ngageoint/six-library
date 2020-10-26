@@ -21,7 +21,6 @@
  */
 #ifndef __SIX_DERIVED_DATA_H__
 #define __SIX_DERIVED_DATA_H__
-#pragma once
 
 #include <mem/ScopedCopyablePtr.h>
 #include <six/Data.h>
@@ -52,7 +51,7 @@ namespace sidd
  *  Contains the structs that are the model for SIDD products
  *
  */
-struct DerivedData : public Data
+struct DerivedData: public Data
 {
     /*!
      *  Information related to processor, classification,

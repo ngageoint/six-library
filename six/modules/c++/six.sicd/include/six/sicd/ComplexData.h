@@ -21,7 +21,6 @@
  */
 #ifndef __SIX_COMPLEX_DATA_H__
 #define __SIX_COMPLEX_DATA_H__
-#pragma once
 
 #include <mem/ScopedCloneablePtr.h>
 #include <mem/ScopedCopyablePtr.h>
@@ -71,8 +70,9 @@ namespace sicd
  *
  *
  */
-struct ComplexData : public Data
+class ComplexData: public Data
 {
+public:
     //!  CollectionInfo block.  Contains the general collection information
     mem::ScopedCloneablePtr<CollectionInformation> collectionInformation;
 

@@ -1177,8 +1177,7 @@ std::unique_ptr<Data> six::parseData(
     const std::unique_ptr<XMLControl> xmlControl(
             xmlReg.newXMLControl(xmlDataType, &log));
 
-    std::unique_ptr<Data> retval(xmlControl->fromXML(doc, schemaPaths));
-    return retval;
+    return std::unique_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
 }
 
 

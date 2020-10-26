@@ -20,8 +20,6 @@
  *
  */
 
-#include <io/OutputStream.h>
-
 #include "six/XMLControlFactory.h"
 #include <str/Convert.h>
 #include <logging/NullLogger.h>

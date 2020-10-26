@@ -21,7 +21,6 @@
  */
 #ifndef __SIX_DATA_H__
 #define __SIX_DATA_H__
-#pragma once
 
 #include "six/Types.h"
 #include "six/Classification.h"
@@ -44,7 +43,8 @@ namespace six
  */
 struct Data
 {
-    Data() = default;
+    //!  Constructor
+    Data() {}
 
     //!  Destructor
     virtual ~Data() {}
