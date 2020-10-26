@@ -40,6 +40,8 @@ namespace io
  */
 struct BidirectionalStream: public InputStream, public OutputStream
 {
+    BidirectionalStream(const TextEncoding* pEncoding = nullptr) : OutputStream(pEncoding) { }
+    virtual ~BidirectionalStream() { }
 };
 
 }
