@@ -49,13 +49,11 @@ class StringStream : public SeekableBidirectionalStream
 public:
 
     //! Default constructor
-    StringStream(const io::TextEncoding* pEncoding = nullptr) : SeekableBidirectionalStream(pEncoding),
+    StringStream() : 
         mData(std::stringstream::in | std::stringstream::out
                 | std::stringstream::binary)
     {
     }
-
-    StringStream(TextEncoding encoding) : StringStream(&encoding) { }
 
     /*!
      *  Returns the stringstream associated with this StringStream

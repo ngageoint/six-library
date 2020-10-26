@@ -22,6 +22,7 @@
 
 #ifndef __XML_LITE_MINIDOM_HANDLER_H__
 #define __XML_LITE_MINIDOM_HANDLER_H__
+#pragma once
 
 /*!
  *  \file MinidomHandler.h
@@ -45,6 +46,8 @@
  */
 
 #include <stack>
+#include <memory>
+
 #include "XMLReader.h"
 #include "io/StandardStreams.h"
 #include "io/DbgStream.h"
@@ -104,7 +107,11 @@ public:
      * \param value The value of the char data
      * \param length The length of the char data
      */
-    virtual void characters(const char *value, int length);
+    virtual void characters(const char* value, int length) override;
+    bool characters(const wchar_t* const value, const size_t length) override;
+
+    // Which characters() routine should be called?
+    bool use_wchar_t() const override;
 
     /*!
      * This method is fired when a new tag is entered.
@@ -155,9 +162,13 @@ public:
      * character data. Otherwise, it will be trimmed.
      */
     virtual void preserveCharacterData(bool preserve);
-
+    
 protected:
+    void characters(const char* value, int length, const string_encoding*);
+    bool storeEncoding() const;
+
     std::string currentCharacterData;
+    std::shared_ptr<const string_encoding> mpEncoding;
     std::stack<int> bytesForElement;
     std::stack<Element *> nodeStack;
     Document *mDocument;

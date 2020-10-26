@@ -22,6 +22,7 @@
 
 #ifndef __XML_LITE_DOM_DOCUMENT_H__
 #define __XML_LITE_DOM_DOCUMENT_H__
+#pragma once
 
 /*!
  * \file  Document.h
@@ -85,7 +86,7 @@ public:
      */
     virtual Element *createElement(const std::string & qname,
                                    const std::string & uri,
-                                   std::string characterData = "");
+                                   std::string characterData = "", const string_encoding* pEncoding = nullptr);
 
     /*!
      * Blanket destructor.  This thing deletes everything
