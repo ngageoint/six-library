@@ -22,7 +22,7 @@
 
 #include "xml/lite/MinidomParser.h"
 
-xml::lite::MinidomParser::MinidomParser()
+xml::lite::MinidomParser::MinidomParser(bool /*unused*/)
 {
     mReader.setContentHandler(&mHandler);
 }

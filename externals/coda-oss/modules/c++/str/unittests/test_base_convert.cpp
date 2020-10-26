@@ -69,6 +69,22 @@ TEST_CASE(test_string_to_u8string)
     TEST_ASSERT(actual == expected);
 }
 
+TEST_CASE(test_string_to_u8string_undefined)
+{
+    const std::string input = "|\x81|";  // Windows-1252, "|<UNDEFINED>|"
+    const auto actual = str::toUtf8(input);
+    const sys::u8string expected{cast('|'), cast(' '), cast('|')};  // UTF-8,  "| |"
+    TEST_ASSERT(actual == expected);
+}
+
+TEST_CASE(test_string_to_u8string_replacement)
+{
+    const std::string input = "|\x80|";  // Windows-1252, "|€|"
+    const auto actual = str::toUtf8(input);
+    const sys::u8string expected{cast('|'), cast('\xEF'), cast('\xBF'), cast('\xBD'), cast('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
+    TEST_ASSERT(actual == expected);
+}
+
 int main(int, char**)
 {
     TEST_CHECK(testConvert);
@@ -76,4 +92,6 @@ int main(int, char**)
     TEST_CHECK(testEightBitIntToString);
     TEST_CHECK(testCharToString);
     TEST_CHECK(test_string_to_u8string);
+    TEST_CHECK(test_string_to_u8string_undefined);
+    TEST_CHECK(test_string_to_u8string_replacement);
 }
