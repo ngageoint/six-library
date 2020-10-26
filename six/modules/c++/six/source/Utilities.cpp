@@ -1143,10 +1143,8 @@ std::unique_ptr<Data> six::parseData(
                                    const std::vector<std::string>& schemaPaths,
                                    logging::Logger& log)
 {
-    const bool preserveCharacterData = true;
-
     xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
-    xmlParser.preserveCharacterData(preserveCharacterData);
+    xmlParser.preserveCharacterData(true);
     try
     {
         xmlParser.parse(xmlStream);
