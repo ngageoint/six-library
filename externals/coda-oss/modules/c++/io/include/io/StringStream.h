@@ -49,7 +49,7 @@ class StringStream : public SeekableBidirectionalStream
 public:
 
     //! Default constructor
-    StringStream() :
+    StringStream() : 
         mData(std::stringstream::in | std::stringstream::out
                 | std::stringstream::binary)
     {
