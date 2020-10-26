@@ -229,7 +229,19 @@ public:
      *  \todo Add format capability
      */
     void print(io::OutputStream& stream) const;
+
+    // This is another slightly goofy routine to maintain backwards compatibility.
+    // XML documents must be properly (UTF-8, UTF-16 or UTF-32).  The legacy
+    // print() routine (above) can write documents with a Windows-1252 encoding
+    // as the string is just copied to the output.
+    //
+    // The only valid setting for string_encoding is utf_8; but defaulting that
+    // could change behavior on Windows.
+    void print(io::OutputStream& stream, string_encoding /*=utf_8*/) const;
+
     void prettyPrint(io::OutputStream& stream,
+                     const std::string& formatter = "    ") const;
+    void prettyPrint(io::OutputStream& stream, string_encoding /*=utf_8*/,
                      const std::string& formatter = "    ") const;
 
     /*!
@@ -381,6 +393,8 @@ protected:
 
     void depthPrint(io::OutputStream& stream, int depth,
                     const std::string& formatter) const;
+    void depthPrint(io::OutputStream& stream, string_encoding, int depth,
+                    const std::string& formatter) const;
 
     Element* mParent;
     //! The children of this element
@@ -392,6 +406,10 @@ protected:
     std::string mCharacterData;
     // ... and how that data is encoded
     std::shared_ptr<const string_encoding> mpEncoding;
+
+    private:
+        void depthPrint(io::OutputStream& stream, const string_encoding*, int depth,
+                const std::string& formatter) const;
 };
 }
 }

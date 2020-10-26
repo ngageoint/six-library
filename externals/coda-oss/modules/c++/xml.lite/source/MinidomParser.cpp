@@ -22,9 +22,10 @@
 
 #include "xml/lite/MinidomParser.h"
 
-xml::lite::MinidomParser::MinidomParser(bool /*unused*/)
+xml::lite::MinidomParser::MinidomParser(bool forceUtf8)
 {
     mReader.setContentHandler(&mHandler);
+    mHandler.forceUtf8(forceUtf8);
 }
 
 void xml::lite::MinidomParser::parse(io::InputStream& is,
