@@ -24,6 +24,8 @@
 #define __XML_LITE_ELEMENT_H__
 #pragma once
 
+#include <memory>
+
 #include <io/InputStream.h>
 #include <io/OutputStream.h>
 #include "xml/lite/XMLException.h"
@@ -43,6 +45,27 @@ namespace xml
 {
 namespace lite
 {
+ /*!
+ * \class string_encoding
+ * \brief Specifies how std::string is encoded by MinidomParser.
+ *
+ * This is needed because our use of Xerces generates different
+ * results on Windows/Linux, and changing things might break existing
+ * code.
+ *
+ * On Windows, the UTF-16 strings (internal to Xerces) are converted
+ * to std::strings with Windows-1252 (more-or-less ISO8859-1) encoding;
+ * this allows Western European languages to be displayed.  On *ix,
+ * UTF-8 is the norm ...
+ */
+enum class string_encoding
+{
+    windows_1252  // more-or-less ISO5589-1, https://en.wikipedia.org/wiki/Windows-1252
+    , utf_8
+};
+// Could do the same for std::wstring, but there isn't any code needing it right now.
+
+
 /*!
  * \class Element
  * \brief The class defining one element of an XML document
@@ -66,9 +89,10 @@ public:
      * \param characterData The character data (if any)
      */
     Element(const std::string& qname, const std::string& uri = "",
-            std::string characterData = "") :
-        mParent(NULL), mName(uri, qname), mCharacterData(characterData)
+            std::string characterData = "", const string_encoding* pEncoding = nullptr) :
+        mParent(NULL), mName(uri, qname)
     {
+        setCharacterData(characterData, pEncoding);
     }
 
     //! Destructor
@@ -205,7 +229,8 @@ public:
      *  \todo Add format capability
      */
     void print(io::OutputStream& stream) const;
-    void prettyPrint(io::OutputStream& stream, const std::string& formatter = "    ") const;
+    void prettyPrint(io::OutputStream& stream,
+                     const std::string& formatter = "    ") const;
 
     /*!
      *  Determines if a child element exists
@@ -232,13 +257,22 @@ public:
         return mCharacterData;
     }
 
+    const string_encoding* getEncoding() const
+    {
+        return mpEncoding.get();
+    }
+
     /*!
      *  Sets the character data for this element.
      *  \param characters The data to add to this element
      */
-    void setCharacterData(const std::string& characters)
+    void setCharacterData(const std::string& characters, const string_encoding* pEncoding = nullptr)
     {
         mCharacterData = characters;
+        if (pEncoding != nullptr)
+        {
+            mpEncoding = std::make_shared<const string_encoding>(*pEncoding);
+        }
     }
 
     /*!
@@ -305,7 +339,7 @@ public:
      *  Adds a child element to this element
      *  \param node the child element to add
      */
-    virtual void addChild(std::unique_ptr <Element>&& node);
+    virtual void addChild(std::unique_ptr<Element>&& node);
 
     /*!
      *  Returns all of the children of this element
@@ -347,16 +381,17 @@ protected:
 
     void depthPrint(io::OutputStream& stream, int depth,
                     const std::string& formatter) const;
-    
+
     Element* mParent;
     //! The children of this element
     std::vector<Element*> mChildren;
     xml::lite::QName mName;
     //! The attributes for this element
     xml::lite::Attributes mAttributes;
-    //! The character data
+    //! The character data ...
     std::string mCharacterData;
-
+    // ... and how that data is encoded
+    std::shared_ptr<const string_encoding> mpEncoding;
 };
 }
 }
