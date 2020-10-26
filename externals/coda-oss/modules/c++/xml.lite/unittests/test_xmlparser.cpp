@@ -103,7 +103,6 @@ static const xml::lite::Element& testXmlUtf8_(xml::lite::MinidomParser& xmlParse
     return a;
 }
 
-
 TEST_CASE(testXmlUtf8Legacy)
 {
     xml::lite::MinidomParser xmlParser;
@@ -123,25 +122,31 @@ TEST_CASE(testXmlUtf8Legacy)
 
 TEST_CASE(testXmlUtf8)
 {
-    xml::lite::MinidomParser xmlParser(true /*forceUtf8*/);
+    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
     const auto& a = testXmlUtf8_(xmlParser);
 
     const auto actual = a.getCharacterData();
-    TEST_ASSERT_EQ(actual, utf8Text);
     const auto pEncoding = a.getEncoding();
+    TEST_ASSERT(pEncoding != nullptr);
+#ifdef _WIN32
+    TEST_ASSERT_EQ(actual, iso88591Text);
+    TEST_ASSERT(*pEncoding == xml::lite::string_encoding::windows_1252);
+#else
+    TEST_ASSERT_EQ(actual, utf8Text);
     TEST_ASSERT(*pEncoding == xml::lite::string_encoding::utf_8);
+#endif
 }
 
-static std::string testXmlPrint_(std::string& expected, const std::string& text)
+static std::string testXmlPrint_(std::string& expected, const std::string& characterData)
 {
     xml::lite::MinidomParser xmlParser;
     auto pDocument = xmlParser.getDocument();
 
-    const auto pRootElement = pDocument->createElement("root", "" /*uri*/, text);
+    const auto pRootElement = pDocument->createElement("root", "" /*uri*/, characterData);
 
     io::StringStream output;
     pRootElement->print(output);
-    expected = "<root>" + text + "</root>";
+    expected = "<root>" + characterData + "</root>";
     return output.stream().str();
 }
 TEST_CASE(testXmlPrintSimple)

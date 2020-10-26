@@ -58,7 +58,7 @@ void xml::lite::MinidomHandler::characters(const char* value, int length, const 
                 throw std::invalid_argument("New 'encoding' is different than value already set.");
             }
         }
-        else if (forceUtf8())
+        else if (storeEncoding())
         {
             mpEncoding = std::make_shared<const string_encoding>(*pEncoding);
         }
@@ -87,50 +87,35 @@ void xml::lite::MinidomHandler::characters(const char *value, int length)
     #endif
     characters(value, length, pEncoding);
 }
-
-static std::string toUtf8(const wchar_t* value_, const size_t length)
-{
-    #ifdef _WIN32
-    const auto value = reinterpret_cast<const std::u16string::value_type*>(value_); // UTF-16
-    const std::u16string strValue(value, length);
-    #else
-    const auto value = reinterpret_cast<const std::u32string::value_type*>(value_); // UTF-32
-    const std::u32string strValue(value, length);
-    #endif
-    std::string retval;
-    str::toUtf8(strValue, retval);
-    return retval;
-}
-
 bool xml::lite::MinidomHandler::characters(const wchar_t* const value_, const size_t length_)
 {
-    #ifdef _WIN32
-    if (!forceUtf8())
-    {
-        // On Windows, we want std::string encoded as Windows-1252 (ISO8859-1)
-        // so that western European characters will be displayed.  We can't
-        // convert to UTF-8 (as above on Linux), because Windows doesn't have
-        // good support for displaying such strings.  Using UTF-16 would be
-        // preferred on Windows, but all existing code uses std::string instead
-        // of std::wstring.
-        return false;  // call characters(char*) to get a Windows-1252 string
-    }
-    #endif
-
-    // This is the preferred encoding: UTF-8 on both Windows and *ix.  However,
-    // it's not the default on Windows as that could break existing code.
-    const std::string utf8Value = toUtf8(value_, length_);
+    #ifndef _WIN32
+    // As on Windows, this comes to us already encoded ... but UTF-32
+    const auto value = reinterpret_cast<const std::u32string::value_type*>(value_);
+    const std::u32string strValue(value, length_);
+    std::string utf8Value;
+    str::toUtf8(strValue, utf8Value);
 
     const auto length = static_cast<int>(utf8Value.length());
     static const auto encoding = string_encoding::utf_8;
     characters(utf8Value.c_str(), length, &encoding);
-    return true;  // all done, characters(char*) already called, above    
+    return true; // all done, characters(char*) already called, above
+    #else
+    UNREFERENCED_PARAMETER(value_);
+    UNREFERENCED_PARAMETER(length_);
+    // On Windows, we want std::string encoded as Windows-1252 (ISO8859-1)
+    // so that western European characters will be displayed.  We can't convert
+    // to UTF-8 (as above on Linux), because Windows doesn't have good support
+    // for displaying such strings.  Using UTF-16 would be preferred on Windows, but
+    // all existing code uses std::string instead of std::wstring.
+    return false; // call characters(char*) to get a Windows-1252 string
+    #endif
 }
 
 bool xml::lite::MinidomHandler::use_wchar_t() const
 {
     // if we're storing the encoding, get wchar_t so that we can convert
-    return forceUtf8();
+    return storeEncoding();
 }
 
 void xml::lite::MinidomHandler::startElement(const std::string & uri,
@@ -208,23 +193,23 @@ void xml::lite::MinidomHandler::preserveCharacterData(bool preserve)
     mPreserveCharData = preserve;
 }
 
-void xml::lite::MinidomHandler::forceUtf8(bool value)
+void xml::lite::MinidomHandler::storeEncoding(bool value)
 {
-    mForceUtf8Encoding = value;
+    mStoreEncoding = value;
 }
 
-bool xml::lite::MinidomHandler::forceUtf8() const
+bool xml::lite::MinidomHandler::storeEncoding() const
 {
     // Without mPreserveCharData=true, we gets asserts when parsing text containing
     // non-ASCII characters.  Given that, don't bother storing an encoding w/o 
     // mPreserveCharData also set.  This also further preserves existing behavior.
     // Also note that much code leaves mPreserveCharData as it's default of false.
-    if (mForceUtf8Encoding)
+    if (mStoreEncoding)
     {
         if (!mPreserveCharData)
         {
             throw std::logic_error("preserveCharacterData() must be set with storeEncoding()");
         }
     }
-    return mForceUtf8Encoding && mPreserveCharData;
+    return mStoreEncoding && mPreserveCharData;
 }
