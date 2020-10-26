@@ -49,7 +49,6 @@ TEST_CASE(testXmlParseSimple)
     
     {
         const auto aElements = root->getElementsByTagName("a", true /*recurse*/);
-        TEST_ASSERT_FALSE(aElements.empty());
         TEST_ASSERT_EQ(aElements.size(), 1);
         const auto& a = *(aElements[0]);
 
@@ -64,7 +63,6 @@ TEST_CASE(testXmlParseSimple)
     TEST_ASSERT_EQ(docElements.size(), 1);
     {
         const auto aElements = docElements[0]->getElementsByTagName("a");
-        TEST_ASSERT_FALSE(aElements.empty());
         TEST_ASSERT_EQ(aElements.size(), 1);
         const auto& a = *(aElements[0]);
 
@@ -91,55 +89,47 @@ TEST_CASE(testXmlPreserveCharacterData)
     TEST_ASSERT_TRUE(true);
 }
 
-TEST_CASE(testXmlUtf8Legacy)
+static const xml::lite::Element& testXmlUtf8_(xml::lite::MinidomParser& xmlParser)
 {
     io::StringStream stream;
     stream.stream() << strUtf8Xml;
-    TEST_ASSERT_EQ(stream.stream().str(), strUtf8Xml);
 
-    xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(stream);
 
     const auto aElements =
-            xmlParser.getDocument()->getRootElement()->getElementsByTagName("a", true /*recurse*/);
-    TEST_ASSERT_EQ(aElements.size(), 1);
+        xmlParser.getDocument()->getRootElement()->getElementsByTagName("a", true /*recurse*/);
     const auto& a = *(aElements[0]);
+    return a;
+}
+
+
+TEST_CASE(testXmlUtf8Legacy)
+{
+    xml::lite::MinidomParser xmlParser;
+    const auto& a = testXmlUtf8_(xmlParser);
+
+    // This is LEGACY behavior, it is INCORRECT on Linux!
     auto actual = a.getCharacterData();
     #ifdef _WIN32
     TEST_ASSERT_EQ(actual, iso88591Text);
     #else
-    TEST_ASSERT_EQ(actual, utf8Text);
+    TEST_ASSERT_EQ(actual.length(), 4);
     #endif
 
     const auto pEncoding = a.getEncoding();
-    TEST_ASSERT(pEncoding != nullptr);
+    TEST_ASSERT_NULL(pEncoding);
 }
 
 TEST_CASE(testXmlUtf8)
 {
-    io::StringStream stream;
-    stream.stream() << strUtf8Xml;
-    TEST_ASSERT_EQ(stream.stream().str(), strUtf8Xml);
+    xml::lite::MinidomParser xmlParser(true /*forceUtf8*/);
+    const auto& a = testXmlUtf8_(xmlParser);
 
-    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
-    xmlParser.preserveCharacterData(true);
-    xmlParser.parse(stream);
-
-    const auto aElements =
-            xmlParser.getDocument()->getRootElement()->getElementsByTagName("a", true /*recurse*/);
-    TEST_ASSERT_EQ(aElements.size(), 1);
-    const auto& a = *(aElements[0]);
     const auto actual = a.getCharacterData();
-    const auto pEncoding = a.getEncoding();
-    TEST_ASSERT(pEncoding != nullptr);
-#ifdef _WIN32
-    TEST_ASSERT_EQ(actual, iso88591Text);
-    TEST_ASSERT(*pEncoding == xml::lite::string_encoding::windows_1252);
-#else
     TEST_ASSERT_EQ(actual, utf8Text);
+    const auto pEncoding = a.getEncoding();
     TEST_ASSERT(*pEncoding == xml::lite::string_encoding::utf_8);
-#endif
 }
 
 static std::string testXmlPrint_(std::string& expected, const std::string& text)
@@ -177,7 +167,7 @@ TEST_CASE(testXmlPrintUtf8)
     const auto pRootElement = pDocument->createElement("root", "" /*uri*/, iso88591Text, &encoding);
 
     io::StringStream output;
-    pRootElement->print(output);
+    pRootElement->print(output, xml::lite::string_encoding::utf_8); // write UTF-8
     const auto actual = output.stream().str();
     const auto expected = "<root>" + utf8Text + "</root>";
     TEST_ASSERT_EQ(actual, expected);
@@ -188,13 +178,13 @@ TEST_CASE(testXmlParseAndPrintUtf8)
     io::StringStream input;
     input.stream() << strUtf8Xml;
 
-    xml::lite::MinidomParser xmlParser;
+    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(input);
     const auto pRootElement = xmlParser.getDocument()->getRootElement();
 
     io::StringStream output;
-    pRootElement->print(output);
+    pRootElement->print(output, xml::lite::string_encoding::utf_8); // write UTF-8
     const auto actual = output.stream().str();
     TEST_ASSERT_EQ(actual, strUtf8Xml);
 }
