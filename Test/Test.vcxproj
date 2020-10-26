@@ -78,6 +78,7 @@
     <ClCompile Include="six.sicd_test_radar_collection.cpp" />
     <ClCompile Include="six.sicd_test_update_sicd_version.cpp" />
     <ClCompile Include="six.sicd_test_utilities.cpp" />
+    <ClCompile Include="six.sicd_test_valid_six.cpp" />
     <ClCompile Include="six.sidd_test_annotations_equality.cpp" />
     <ClCompile Include="six.sidd_test_geometric_chip.cpp" />
     <ClCompile Include="six.sidd_test_read_sidd_legend.cpp" />
