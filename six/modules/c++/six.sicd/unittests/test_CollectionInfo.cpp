@@ -67,7 +67,7 @@ TEST_CASE(Classification)
     TEST_ASSERT_EQ(characterData, classificationText);
 }
 
-TEST_CASE(ClassificationFrench)
+TEST_CASE(ClassificationCanada)
 {
 #ifdef _WIN32
     const std::string classificationText("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
@@ -112,6 +112,6 @@ TEST_CASE(ClassificationFrench)
 TEST_MAIN(
     TEST_CHECK(DummyData);
     TEST_CHECK(Classification);
-    TEST_CHECK(ClassificationFrench);
+    TEST_CHECK(ClassificationCanada);
     )
 
