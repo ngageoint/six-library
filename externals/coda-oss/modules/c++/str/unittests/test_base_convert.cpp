@@ -20,6 +20,8 @@
  *
  */
 
+#include <vector>
+
 #include <import/str.h>
 #include "TestCase.h"
 
@@ -55,34 +57,67 @@ TEST_CASE(testCharToString)
     TEST_ASSERT_EQ(str::toString<char>(65), "A");
 }
 
-static inline sys::u8string::value_type cast(std::string::value_type ch)
+static constexpr sys::u8string::value_type cast(char ch)
 {
-    static_assert(sizeof(sys::u8string::value_type) == sizeof(std::string::value_type),
+    static_assert(sizeof(sys::u8string::value_type) == sizeof(char),
         "sizeof(Char8_T) != sizeof(char)");
     return static_cast<sys::u8string::value_type>(ch);
 }
-TEST_CASE(test_string_to_u8string)
+TEST_CASE(test_string_to_u8string_ascii)
 {
-    const std::string input = "|I\xc9|";  // ISO8859-1, "|IÉ|"
-    const auto actual = str::toUtf8(input);
-    const sys::u8string expected { cast('|'), cast('I'), cast('\xc3'), cast('\x89'), cast('|') };  // UTF-8,  "|IÉ|"
-    TEST_ASSERT(actual == expected);
+    {
+        const std::string input = "|\x00";  //  ASCII, "|<NULL>"
+        const auto actual = str::toUtf8(input);
+        const sys::u8string expected{cast('|')}; // '\x00' is the end of the string in C/C++
+        TEST_ASSERT(actual == expected);
+    }
+    constexpr uint8_t start_of_heading = 0x01;
+    constexpr uint8_t delete_character = 0x7f;
+    for (uint8_t ch = start_of_heading; ch <= delete_character; ch++)  // ASCII
+    {
+        const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
+        const auto actual = str::toUtf8(input);
+        const sys::u8string expected{cast('|'), cast(ch), cast('|')};
+        TEST_ASSERT(actual == expected);
+    } 
 }
 
-TEST_CASE(test_string_to_u8string_undefined)
+TEST_CASE(test_string_to_u8string_windows_1252)
 {
-    const std::string input = "|\x81|";  // Windows-1252, "|<UNDEFINED>|"
-    const auto actual = str::toUtf8(input);
-    const sys::u8string expected{cast('|'), cast(' '), cast('|')};  // UTF-8,  "| |"
-    TEST_ASSERT(actual == expected);
+    // Windows-1252 only characters must be mapped to UTF-8
+    {
+        const std::string input = "|\x80|";  // Windows-1252, "|€|"
+        const auto actual = str::toUtf8(input);
+        const sys::u8string expected{cast('|'), cast('\xE2'), cast('\x82'), cast('\xAC'), cast('|')};  // UTF-8,  "|€|"
+        TEST_ASSERT(actual == expected);
+    }
+    {
+        const std::string input = "|\x9F|";  // Windows-1252, "|Ÿ|"
+        const auto actual = str::toUtf8(input);
+        const sys::u8string expected{cast('|'), cast('\xC5'), cast('\xB8'), cast('|')};  // UTF-8,  "|Ÿ|"
+        TEST_ASSERT(actual == expected);
+    }
+    const std::vector<char> undefined{ '\x81', '\x8d', '\x8f', '\x90', '\x9d' };
+    for (const auto& ch : undefined)
+    {
+        const std::string input{'|', ch, '|'};
+        const auto actual = str::toUtf8(input);
+        static const sys::u8string expected{cast('|'), cast('\xEF'), cast('\xBF'), cast('\xBD'), cast('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
+        TEST_ASSERT(actual == expected);
+    }
 }
 
-TEST_CASE(test_string_to_u8string_replacement)
+TEST_CASE(test_string_to_u8string_iso8859_1)
 {
-    const std::string input = "|\x80|";  // Windows-1252, "|€|"
-    const auto actual = str::toUtf8(input);
-    const sys::u8string expected{cast('|'), cast('\xEF'), cast('\xBF'), cast('\xBD'), cast('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
-    TEST_ASSERT(actual == expected);
+    constexpr uint8_t nobreak_space = 0xa0;
+    constexpr uint8_t latin_small_letter_y_with_diaeresis = 0xff;  // 'ÿ'
+    for (uint16_t ch = nobreak_space; ch <= latin_small_letter_y_with_diaeresis; ch++)  // ISO8859-1
+    {
+        const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
+        const auto actual = str::toUtf8(input);
+        const sys::u8string expected { cast('|'), cast('\xc3'), cast(ch-0x40), cast('|') };  // UTF-8
+       TEST_ASSERT(actual == expected);
+    }
 }
 
 int main(int, char**)
@@ -91,7 +126,7 @@ int main(int, char**)
     TEST_CHECK(testBadConvert);
     TEST_CHECK(testEightBitIntToString);
     TEST_CHECK(testCharToString);
-    TEST_CHECK(test_string_to_u8string);
-    TEST_CHECK(test_string_to_u8string_undefined);
-    TEST_CHECK(test_string_to_u8string_replacement);
+    TEST_CHECK(test_string_to_u8string_ascii);
+    TEST_CHECK(test_string_to_u8string_windows_1252);
+    TEST_CHECK(test_string_to_u8string_iso8859_1);
 }
