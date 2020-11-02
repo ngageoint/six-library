@@ -5,7 +5,7 @@ from waflib import Options
 from build import untarFile
 from build import writeConfig
 
-SOURCE = 'openjpeg-2.3.0_mod'
+SOURCE = 'openjpeg-2.3.1_mod'
 
 
 def options(opt):
@@ -146,7 +146,7 @@ def configure(conf):
                        'OPJ_HAVE_POSIX_MEMALIGN=' in conf.env['DEFINES']:
                         conf.define('_POSIX_C_SOURCE', '200112L', quote=False)
 
-                conf.define('OPJ_PACKAGE_VERSION', '"2.3.0"', quote=False)
+                conf.define('OPJ_PACKAGE_VERSION', '"2.3.1"', quote=False)
                 if sys.byteorder != 'little':
                     conf.define('OPJ_BIG_ENDIAN', ' ', quote=False)
 
