@@ -85,7 +85,7 @@ std::string toString(const T& real, const T& imag)
     return toString(std::complex<T>(real, imag));
 }
 
-sys::u8string toUtf8(const std::string&);
+sys::u8string fromWindows1252(const std::string&);
 sys::u8string toUtf8(const std::u16string&);
 sys::u8string toUtf8(const std::u32string&);
 
