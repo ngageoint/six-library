@@ -113,9 +113,9 @@ bool runValidation(const std::unique_ptr<six::Data>& data,
 }
 
 // make it a little easier to use from MSVC
-#if defined(_DEBUG) && defined(_MSC_VER)
-#include <filesystem>
-namespace fs = std::filesystem;
+#if !defined(NDEBUG)
+#include <sys/Filesystem.h>
+namespace fs = sys::filesystem;
 
 static fs::path getNitfPath()
 {
