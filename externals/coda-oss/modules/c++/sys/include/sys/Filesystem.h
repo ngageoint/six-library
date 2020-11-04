@@ -7,7 +7,7 @@
 
 namespace sys
 {
-    namespace filesystem
+    namespace Filesystem
     {
         // http://en.cppreference.com/w/cpp/filesystem/path
         struct path

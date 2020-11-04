@@ -4,7 +4,7 @@
 
 #include "sidd_Test.h"
 
-namespace fs = sys::filesystem;
+namespace fs = sys::Filesystem;
 
 static bool is_x64_Configuration(const fs::path& path) // "Configuration" is typically "Debug" or "Release"
 {

@@ -16,7 +16,7 @@
 
 #include "sys/Path.h"
 
-namespace fs = sys::filesystem;
+namespace fs = sys::Filesystem;
 
 
 static std::string strerror_(int errnum)
