@@ -20,24 +20,99 @@
 *
 */
 
+#include <string>
+
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <import/sys.h>
+#include <sys/Filesystem.h>
 
 #include <import/six.h>
 #include <import/six/sicd.h>
 #include "TestCase.h"
 
+namespace fs = sys::Filesystem;
+
+static fs::path argv0;
+static const fs::path file = __FILE__;
+
+static bool is_linux()
+{
+    const auto cpp = file.filename().stem(); // i.e., "test_valid_six"
+    const auto exe = argv0.filename(); // e.g., "test_valid_six.exe"
+    return cpp == exe; // no ".exe", must be Linux
+}
+
+static bool is_vs_gtest()
+{
+    return argv0.empty(); // no argv[0] in VS w/GTest
+}
+
+static fs::path nitfRelativelPath()
+{
+    return fs::path("six") / "modules" / "c++" / "six" / "tests" / "nitf" / "sicd_50x50.nitf";
+}
+
+static fs::path buildRootDir()
+{
+    const auto cpp = file.filename().stem(); // i.e., "test_valid_six"
+    const auto exe = argv0.filename(); // e.g., "test_valid_six.exe"
+    if (is_linux())
+    {
+        const auto root_dir = argv0.parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
+        return root_dir;
+    }
+
+    // On Windows ... in Visual Studio or stand-alone?
+    if (is_vs_gtest())
+    {
+        const auto cwd = fs::current_path();
+        const auto root_dir = cwd.parent_path().parent_path();
+        return root_dir;
+    }
+    else
+    {
+        // stand-alone
+        const auto root_dir = argv0.parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
+        return root_dir;
+    }
+}
+
+static fs::path getNitfPath()
+{
+    const auto root_dir = buildRootDir();
+    return root_dir / nitfRelativelPath();
+}
+
+static fs::path nitfPluginRelativelPath()
+{
+    if (is_vs_gtest())
+    {
+        const std::string configuration =
+#if defined(NDEBUG) // i.e., release
+            "Release";
+#else
+            "Debug";
+#endif
+        const std::string platform = "x64";
+        return fs::path("externals") / "nitro" / platform / configuration / "share" / "nitf" / "plugins";
+    }
+
+    //return fs::path("install") / "share" / "six.sicd" / "conf" / "schema";
+    return fs::path("install") / "share" / "CSM" / "plugins";
+}
+
+static void setNitfPluginPath()
+{
+    const auto path = buildRootDir() / nitfPluginRelativelPath();
+    //std::clog << "NITF_PLUGIN_PATH=" << path.string() << "\n";
+    sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
+}
+
 TEST_CASE(valid_six_50x50)
 {
-#ifndef _WIN32
-    // not setup on *ix ... yet
-    TEST_ASSERT_TRUE(true);
-    return;
-#endif
-
-    std::string inputPathname; // sicd_50x50.nitf
-    TEST_ASSERT_TRUE(sys::OS().getEnvIfSet("SIX_UNIT_TEST_NITF_PATH_", inputPathname));
+    setNitfPluginPath();
+    const std::string inputPathname = getNitfPath().string(); // sicd_50x50.nitf
 
     // create an XML registry
     // The reason to do this is to avoid adding XMLControlCreators to the
@@ -76,6 +151,7 @@ TEST_CASE(valid_six_50x50)
 }
 
 TEST_MAIN(
+    argv0 = sys::Path::absolutePath(argv[0]);
     TEST_CHECK(valid_six_50x50);
 )
 
