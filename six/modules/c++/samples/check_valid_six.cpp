@@ -114,8 +114,8 @@ bool runValidation(const std::unique_ptr<six::Data>& data,
 
 // make it a little easier to use from MSVC
 #if defined(_DEBUG) && defined(_MSC_VER)
-#include <filesystem>
-namespace fs = std::filesystem;
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
 
 static fs::path getNitfPath()
 {
@@ -146,7 +146,7 @@ static void setNitfPluginPath()
 static int main_(int argc, char** argv)
 {
     // make it a little easier to use from MSVC
-#if defined(_DEBUG) && defined(_MSC_VER)
+    #if defined(_DEBUG) && defined(_MSC_VER)
     if (argc == 1)
     {
         setNitfPluginPath();
@@ -160,7 +160,7 @@ static int main_(int argc, char** argv)
         //argv[1]
         argv = argv_;
     }
-#endif
+    #endif
 
 
     // create a parser and add our options to it
