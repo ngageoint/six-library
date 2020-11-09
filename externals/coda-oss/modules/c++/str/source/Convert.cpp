@@ -208,29 +208,30 @@ void str::toUtf8(const std::u32string& str, std::string& result)
     utf8::utf32to8(str.begin(), str.end(), std::back_inserter(result));
 }
 
-template <typename T,
-          typename uXbit_iterator = typename T::const_iterator, typename octet_iterator = uint8_t*>
-static inline sys::u8string toUtf8(const T& str,
-                             octet_iterator (*utfXto8)(uXbit_iterator, uXbit_iterator, octet_iterator))
-{
-    // Avoiding a copy w/cast between std::string/sys::u8string causes a nasty crash on some platforms.
+struct back_inserter final
+{ 
+    sys::u8string* container = nullptr;
+    explicit back_inserter(sys::u8string& s) noexcept : container(&s) { }
 
-    // using utf::utf_to8() we can put the result in the desired location
-    sys::u8string retval(4 * str.length(), cast('\0')); // one UTF-32 codepoint could be four UTF-8 characters
-    auto pBegin = reinterpret_cast<uint8_t*>(&(retval[0]));
-    utfXto8(str.begin(), str.end(), pBegin);
-
-    const auto pRetval = reinterpret_cast<const char*>(retval.c_str());
-    retval.resize(strlen(pRetval)); // get rid of any extra '\0's 
-    return retval;
-}
+    back_inserter& operator=(uint8_t v)
+    {
+        container->push_back(static_cast<sys::u8string::value_type>(v));
+        return *this;
+    }
+    back_inserter& operator*() noexcept { return *this; }
+    back_inserter operator++(int) noexcept { return *this; }
+};
 sys::u8string str::toUtf8(const std::u16string& str)
 {
-    return ::toUtf8(str, utf8::utf16to8);
+    sys::u8string retval;
+    utf8::utf16to8(str.begin(), str.end(), back_inserter(retval));
+    return retval;
 }
 sys::u8string str::toUtf8(const std::u32string& str)
 {
-    return ::toUtf8(str, utf8::utf32to8);
+    sys::u8string retval;
+    utf8::utf32to8(str.begin(), str.end(), back_inserter(retval));
+    return retval;
 }
 
 void str::toUtf8(const std::u16string& str, sys::u8string& result)
