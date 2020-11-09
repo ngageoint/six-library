@@ -9,6 +9,7 @@ _deps/
 CMakeFiles/
 *.cmake
 CMakeCache.txt
+build/
 
 externals/coda-oss/modules/c++/**/Makefile
 modules/**/Makefile
