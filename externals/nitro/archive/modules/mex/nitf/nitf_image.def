@@ -1,0 +1,2 @@
+LIBRARY nitf_image.mexw32
+EXPORTS mexFunction

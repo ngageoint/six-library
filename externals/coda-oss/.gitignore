@@ -34,7 +34,7 @@ build/waf*/
 # Drivers
 modules/drivers/fftw/fftw-2.1.5/
 modules/drivers/jpeg/jpeg-9/
-modules/drivers/j2k/openjpeg/openjpeg-2.3.0_mod/
+modules/drivers/j2k/openjpeg/openjpeg-2.3.*_mod/
 modules/drivers/pcre/pcre2-10.22/
 modules/drivers/uuid/e2fsprogs-1.40-uuid/
 modules/drivers/xml/xerces/xerces-c-*/

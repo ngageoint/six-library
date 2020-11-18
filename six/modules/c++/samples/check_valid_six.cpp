@@ -112,13 +112,10 @@ bool runValidation(const std::unique_ptr<six::Data>& data,
 }
 }
 
-// make it a little easier to use from Visual Studio
+// make it a little easier to use from MSVC
 #if defined(_DEBUG) && defined(_MSC_VER)
-// #define CHECK_VALID_SIX_USE_FILESYSTEM
-#endif
-#ifdef CHECK_VALID_SIX_USE_FILESYSTEM
-#include <filesystem>
-namespace fs = std::filesystem;
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
 
 static fs::path getNitfPath()
 {
@@ -148,8 +145,8 @@ static void setNitfPluginPath()
 
 static int main_(int argc, char** argv)
 {
-    // make it a little easier to use from Visual Studio
-    #ifdef CHECK_VALID_SIX_USE_FILESYSTEM
+    // make it a little easier to use from MSVC
+    #if defined(_DEBUG) && defined(_MSC_VER)
     if (argc == 1)
     {
         setNitfPluginPath();
@@ -164,6 +161,7 @@ static int main_(int argc, char** argv)
         argv = argv_;
     }
     #endif
+
 
     // create a parser and add our options to it
     cli::ArgumentParser parser;

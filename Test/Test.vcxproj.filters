@@ -110,6 +110,12 @@
     <ClCompile Include="cphd_test_support_block_round.cpp">
       <Filter>cphd</Filter>
     </ClCompile>
+    <ClCompile Include="six.sicd_test_CollectionInfo.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
+    <ClCompile Include="six.sicd_test_valid_six.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
