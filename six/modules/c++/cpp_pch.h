@@ -7,6 +7,7 @@
 #undef min
 #undef max
 
+#pragma warning(disable: 4355) // '...': used in base member initializer list
 #pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
 #pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
 #include <assert.h>
