@@ -93,7 +93,7 @@ void writeSupportData(const std::string& outPathname, size_t numThreads,
 
 std::vector<sys::ubyte> checkSupportData(
         const std::string& pathname,
-        size_t size,
+        size_t /*size*/,
         size_t numThreads)
 {
     cphd::CPHDReader reader(pathname, numThreads);

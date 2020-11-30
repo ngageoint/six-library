@@ -410,7 +410,7 @@ void AreaPlane::rotateCCW()
     }
 }
 
-void Segment::rotateCCW(size_t numColumns)
+void Segment::rotateCCW(size_t /*numColumns*/)
 {
     /*
      *   5   wth           --    ! is reference corner

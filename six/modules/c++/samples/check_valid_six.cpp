@@ -94,7 +94,7 @@ bool runValidation(const std::unique_ptr<six::Data>& data,
     if (data->getDataType() == six::DataType::COMPLEX)
     {
         six::sicd::ComplexData* complexData =
-                reinterpret_cast<six::sicd::ComplexData*>(
+                static_cast<six::sicd::ComplexData*>(
                         data.get());
 
         if (complexData->validate(*log))

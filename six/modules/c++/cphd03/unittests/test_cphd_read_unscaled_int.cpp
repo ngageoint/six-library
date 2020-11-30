@@ -147,7 +147,7 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
 std::vector<std::complex<float> > checkData(const std::string& pathname,
         size_t numThreads,
         const std::vector<double>& scaleFactors,
-        bool scale,
+        bool /*scale*/,
         const types::RowCol<size_t>& dims)
 {
     cphd03::CPHDReader reader(pathname, numThreads);

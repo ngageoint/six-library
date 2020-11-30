@@ -68,7 +68,7 @@ struct MetadataBase
      *
      * \return undefined value by default
      */
-    virtual size_t getCompressedSignalSize(size_t channel) const
+    virtual size_t getCompressedSignalSize(size_t /*channel*/) const
     {
         return six::Init::undefined<size_t>();
     }

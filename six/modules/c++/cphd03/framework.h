@@ -18,7 +18,6 @@
 
 // TODO: get rid of these someday?
 #pragma warning(disable: 4774) // '...' : format string expected in argument 3 is not a string literal
-#pragma warning(disable: 4100) // '...': unreferenced formal parameter
 #pragma warning(disable: 4296) // '...': expression is always false
 #pragma warning(disable: 4267) // '...': conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 4244) // 	'...': conversion from '...' to '...', possible loss of data
