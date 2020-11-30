@@ -28,6 +28,7 @@
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
 #pragma warning(disable: 4355) // '...': used in base member initializer list
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
+#pragma warning(disable: 4191) // '...': unsafe conversion from '...' to '...'
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
