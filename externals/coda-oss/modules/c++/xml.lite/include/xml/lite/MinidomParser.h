@@ -22,6 +22,8 @@
 
 #ifndef __XML_LITE_MINIDOM_PARSER_H__
 #define __XML_LITE_MINIDOM_PARSER_H__
+#pragma once
+
 
 #include "xml/lite/XMLReader.h"
 #include "xml/lite/Document.h"
@@ -58,7 +60,7 @@ public:
     /*!
      *  Constructor.  Set our SAX ContentHandler.
      */
-    MinidomParser();
+    MinidomParser(bool storeEncoding = false); // see MinidomHandler::storeEncoding()
 
     //! Destructor.
     virtual ~MinidomParser()

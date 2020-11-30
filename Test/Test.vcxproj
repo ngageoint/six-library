@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{d653e81e-9c18-4730-ba69-002982771529}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -65,6 +65,7 @@
     <ClCompile Include="cphd_test_signal_block_round.cpp" />
     <ClCompile Include="cphd_test_support_block_round.cpp" />
     <ClCompile Include="six.sicd_test_area_plane.cpp" />
+    <ClCompile Include="six.sicd_test_CollectionInfo.cpp" />
     <ClCompile Include="six.sicd_test_filling_geo_data.cpp" />
     <ClCompile Include="six.sicd_test_filling_grid.cpp" />
     <ClCompile Include="six.sicd_test_filling_pfa.cpp" />
@@ -77,6 +78,7 @@
     <ClCompile Include="six.sicd_test_radar_collection.cpp" />
     <ClCompile Include="six.sicd_test_update_sicd_version.cpp" />
     <ClCompile Include="six.sicd_test_utilities.cpp" />
+    <ClCompile Include="six.sicd_test_valid_six.cpp" />
     <ClCompile Include="six.sidd_test_annotations_equality.cpp" />
     <ClCompile Include="six.sidd_test_geometric_chip.cpp" />
     <ClCompile Include="six.sidd_test_read_sidd_legend.cpp" />
