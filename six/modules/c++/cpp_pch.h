@@ -1,6 +1,12 @@
 #pragma once
 
 #pragma warning(push)
+
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#include <windows.h>
+#undef min
+#undef max
+
 #pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
 #pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
 #include <assert.h>
@@ -32,7 +38,4 @@
 #include <future>
 #include <complex>
 
-#include <windows.h>
-#undef min
-#undef max
 #pragma warning(pop)

@@ -41,6 +41,7 @@
 #pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
 #pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
 
+#pragma warning(disable: 4464) // relative include path contains '..'
 #include "../../cpp_pch.h"
 
 #include <sys/File.h>
