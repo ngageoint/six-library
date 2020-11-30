@@ -67,6 +67,24 @@ std::vector<double> generateScaleFactors(size_t length, bool scale)
     return scaleFactors;
 }
 
+inline cphd::SampleType getSampleType(size_t writeDataSize)
+{
+    //! Must set the sample type
+    if (writeDataSize == 2)
+    {
+        return cphd::SampleType::RE08I_IM08I;
+    }
+    if (writeDataSize == 4)
+    {
+       return cphd::SampleType::RE16I_IM16I;
+    }
+    if (writeDataSize == 8)
+    {
+        return cphd::SampleType::RE32F_IM32F;
+    }
+    throw std::invalid_argument("Unespced writeDataSize");
+}
+
 template<typename T>
 void writeCPHD(const std::string& outPathname, size_t numThreads,
         const types::RowCol<size_t> dims,
@@ -85,18 +103,7 @@ void writeCPHD(const std::string& outPathname, size_t numThreads,
     }
 
     //! Must set the sample type
-    if (sizeof(writeData[0]) == 2)
-    {
-        metadata.data.sampleType = cphd::SampleType::RE08I_IM08I;
-    }
-    else if (sizeof(writeData[0]) == 4)
-    {
-        metadata.data.sampleType = cphd::SampleType::RE16I_IM16I;
-    }
-    else if (sizeof(writeData[0]) == 8)
-    {
-        metadata.data.sampleType = cphd::SampleType::RE32F_IM32F;
-    }
+   metadata.data.sampleType = getSampleType(sizeof(writeData[0]));
 
     //! We must have a radar mode set
     metadata.collectionInformation.radarMode = cphd::RadarModeType::SPOTLIGHT;

@@ -534,7 +534,7 @@ std::unique_ptr<ComplexData> Utilities::getComplexData(NITFReadControl& reader)
     // reader stays in scope.
     // TODO: If the container held shared pointers we wouldn't need to do this
     std::unique_ptr<ComplexData> complexData(
-            reinterpret_cast<ComplexData*>(data->clone()));
+        static_cast<ComplexData*>(data->clone()));
     return complexData;
 }
 
@@ -753,7 +753,7 @@ std::unique_ptr<ComplexData> Utilities::parseData(
 			       six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
 
     std::unique_ptr<ComplexData> complexData(
-            reinterpret_cast<ComplexData*>(data.release()));
+        static_cast<ComplexData*>(data.release()));
 
     return complexData;
 }
@@ -852,6 +852,7 @@ std::unique_ptr<ComplexData> Utilities::createFakeComplexData()
 
     data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
 
+    data->setPixelType(six::PixelType::RE32F_IM32F);
     data->imageData->validData = std::vector<six::RowColInt>(8);
     data->imageData->validData[0] = six::RowColInt(0, 0);
     data->imageData->validData[1] = six::RowColInt(0, 6163);

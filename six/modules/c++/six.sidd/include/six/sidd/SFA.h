@@ -721,6 +721,8 @@ struct SFAReferenceSystem
     {
         return !(*this == rhs);
     }
+
+    virtual ~SFAReferenceSystem() = default;
 };
 
 }

@@ -93,7 +93,7 @@ void GeoTIFFWriteControl::save(const SourceList& sources,
     {
         tiff::ImageWriter* const imageWriter = tiffWriter.addImage();
         const DerivedData* const data =
-            reinterpret_cast<DerivedData*>(mDerivedData[ii]);
+            static_cast<DerivedData*>(mDerivedData[ii]);
         const size_t oneRow =
             data->getNumCols() * data->getNumBytesPerPixel();
         tiff::IFD* ifd = imageWriter->getIFD();
@@ -211,7 +211,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
             data->measurement->projection->projectionType.toString()));
     }
     const GeographicProjection& projection =
-        *reinterpret_cast<GeographicProjection *>(
+        *static_cast<GeographicProjection *>(
             data->measurement->projection.get());
 
     addGeoTIFFKeys(projection,

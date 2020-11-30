@@ -398,6 +398,7 @@ void ProjectionModel::imageToSceneAdjustment(const AdjustableParams& delta,
         arpAddition = deltaARP.matrix() + ricEcfToEcef * adjustedARP.matrix();
         velAddition = deltaVel.matrix() + ricEcfToEcef * adjustedVel.matrix();
         break;
+    case FrameType::NOT_SET:
     default:
         throw except::Exception(Ctxt(
                 "Reference Frame for error parameters undefined"));

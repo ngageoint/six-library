@@ -329,11 +329,10 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 
     case PixelType::MONO8LU:
     {
-        nitf::BandInfo band1;
         const LUT* lutPtr = getDisplayLUT();
         //If LUT is NULL, we have a predefined LookupTable.
         //No LUT to write into NITF, so setting to MONO
-        if (lutPtr == NULL)
+        if (lutPtr == nullptr)
         {
             nitf::BandInfo band1;
             band1.getRepresentation().set("M");
@@ -373,6 +372,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             //band1.getRepresentation().set("LU");
             //band1.getLookupTable().setTable(table, 2, lut.numEntries);
 
+            nitf::BandInfo band1;
             band1.init("LU", "", "", "",
                 static_cast<uint32_t>(lut->elementSize),
                 static_cast<uint32_t>(lut->numEntries),
@@ -384,11 +384,9 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 
     case PixelType::RGB8LU:
     {
-        nitf::BandInfo band1;
-
         const LUT* const lut = getDisplayLUT();
 
-        if (lut == NULL)
+        if (lut == nullptr)
         {
             //If LUT is NULL, we have a predefined LookupTable.
             //No LUT to write into NITF, so setting to MONO
@@ -420,7 +418,8 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             //Using the init function instead.
             //band1.getRepresentation().set("LU");
             //band1.getLookupTable().setTable(table, 3, lut->numEntries);
-
+            
+            nitf::BandInfo band1;
             band1.init("LU", "", "", "",
                 static_cast<uint32_t>(lut->elementSize),
                 static_cast<uint32_t>(lut->numEntries),

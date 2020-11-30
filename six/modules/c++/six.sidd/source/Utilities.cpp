@@ -31,7 +31,7 @@ double getCenterTime(const six::sidd::DerivedData& derived)
     if (derived.measurement->projection->isMeasurable())
     {
         const six::sidd::MeasurableProjection* const projection =
-                reinterpret_cast<const six::sidd::MeasurableProjection*>(
+            static_cast<const six::sidd::MeasurableProjection*>(
                         derived.measurement->projection.get());
 
         centerTime = projection->timeCOAPoly(0, 0);
@@ -57,7 +57,7 @@ void getErrors(const six::sidd::DerivedData& data, scene::Errors& errors)
     }
 
     const six::sidd::MeasurableProjection* const projection =
-            reinterpret_cast<const six::sidd::MeasurableProjection*>(
+        static_cast<const six::sidd::MeasurableProjection*>(
                     data.measurement->projection.get());
 
     six::getErrors(data.errorStatistics.get(),
@@ -104,7 +104,7 @@ std::unique_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
         six::ProjectionType::POLYNOMIAL)
     {
         const six::sidd::PolynomialProjection* projection =
-                reinterpret_cast<const six::sidd::PolynomialProjection*>(
+            static_cast<const six::sidd::PolynomialProjection*>(
                         derived->measurement->projection.get());
 
         double cR = projection->referencePoint.rowCol.row;
@@ -134,7 +134,7 @@ std::unique_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
              six::ProjectionType::PLANE)
     {
         const six::sidd::PlaneProjection* projection =
-                reinterpret_cast<const six::sidd::PlaneProjection*>(
+            static_cast<const six::sidd::PlaneProjection*>(
                         derived->measurement->projection.get());
 
         rowVec = projection->productPlane.rowUnitVector;
@@ -171,7 +171,7 @@ std::unique_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
     }
 
     const six::sidd::MeasurableProjection* p =
-            reinterpret_cast<const six::sidd::MeasurableProjection*>(
+        static_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
     std::unique_ptr<scene::GridECEFTransform> transform;
@@ -181,7 +181,7 @@ std::unique_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
     case six::ProjectionType::PLANE:
     {
         const six::sidd::PlaneProjection* const planeP =
-                reinterpret_cast<const six::sidd::PlaneProjection*>(p);
+            static_cast<const six::sidd::PlaneProjection*>(p);
 
         transform.reset(new scene::PlanarGridECEFTransform(
                 p->sampleSpacing,
@@ -261,7 +261,7 @@ std::unique_ptr<scene::GridGeometry> Utilities::getGridGeometry(
     }
 
     const six::sidd::MeasurableProjection* p =
-            reinterpret_cast<const six::sidd::MeasurableProjection*>(
+        static_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
     std::unique_ptr<scene::GridGeometry> geom;
@@ -272,7 +272,7 @@ std::unique_ptr<scene::GridGeometry> Utilities::getGridGeometry(
     case six::ProjectionType::PLANE:
     {
         const six::sidd::PlaneProjection* const planeP =
-                reinterpret_cast<const six::sidd::PlaneProjection*>(p);
+            static_cast<const six::sidd::PlaneProjection*>(p);
 
         geom.reset(new scene::PlanarGridGeometry(
                 planeP->productPlane.rowUnitVector,
@@ -482,7 +482,7 @@ std::unique_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     case six::ProjectionType::PLANE:
     {
         const six::sidd::PlaneProjection* const plane =
-                reinterpret_cast<six::sidd::PlaneProjection*>(
+            static_cast<six::sidd::PlaneProjection*>(
                         data->measurement->projection.get());
 
         projModel.reset(new scene::PlaneProjectionModel(
@@ -499,7 +499,7 @@ std::unique_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     case six::ProjectionType::GEOGRAPHIC:
     {
         const six::sidd::MeasurableProjection* const geo =
-                reinterpret_cast<six::sidd::MeasurableProjection*>(
+            static_cast<six::sidd::MeasurableProjection*>(
                         data->measurement->projection.get());
 
         projModel.reset(
@@ -537,7 +537,7 @@ std::unique_ptr<DerivedData> Utilities::parseData(
 			       six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
 
     std::unique_ptr<DerivedData> derivedData(
-            reinterpret_cast<DerivedData*>(data.release()));
+        static_cast<DerivedData*>(data.release()));
 
     return derivedData;
 }

@@ -105,7 +105,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
 
     // We know this is PGD so this is safe
     six::sidd::PlaneProjection* const planeProjection =
-        reinterpret_cast<six::sidd::PlaneProjection*>(
+        static_cast<six::sidd::PlaneProjection*>(
                 siddData->measurement->projection.get());
 
     planeProjection->timeCOAPoly = six::Poly2D(0, 0);

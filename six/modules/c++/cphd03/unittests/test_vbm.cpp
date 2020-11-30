@@ -33,11 +33,13 @@ static std::string testName;
 
 namespace
 {
-void testVectorParameters(const std::string& testName,
+void testVectorParameters(const std::string& testName_,
                           size_t channel,
                           size_t vector,
                           cphd03::VBM& vbm)
 {
+    testName = testName_;
+
     const double txTime = cphd::getRandom();
     vbm.setTxTime(txTime, channel, vector);
 

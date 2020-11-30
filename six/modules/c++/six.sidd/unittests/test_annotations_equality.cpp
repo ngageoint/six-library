@@ -39,8 +39,8 @@ TEST_CASE(SFAPoint)
 
     TEST_ASSERT(*pointTyped == *secondPointTyped);
     TEST_ASSERT(rawPointOne == rawPointTwo);
-    TEST_ASSERT(rawPointOne == reinterpret_cast<six::sidd::SFATyped&>(rawPointTwo));
-    TEST_ASSERT(reinterpret_cast<six::sidd::SFATyped&>(rawPointOne) == rawPointTwo);
+    TEST_ASSERT(rawPointOne == static_cast<six::sidd::SFATyped&>(rawPointTwo));
+    TEST_ASSERT(static_cast<six::sidd::SFATyped&>(rawPointOne) == rawPointTwo);
     TEST_ASSERT(*pointPointerOne == *pointPointerTwo);
     TEST_ASSERT(*pointTyped == rawPointTwo);
     TEST_ASSERT(*pointTyped == *pointPointerOne);
