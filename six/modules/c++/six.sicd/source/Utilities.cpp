@@ -852,6 +852,7 @@ std::unique_ptr<ComplexData> Utilities::createFakeComplexData()
 
     data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
 
+    data->setPixelType(six::PixelType::RE32F_IM32F);
     data->imageData->validData = std::vector<six::RowColInt>(8);
     data->imageData->validData[0] = six::RowColInt(0, 0);
     data->imageData->validData[1] = six::RowColInt(0, 6163);
