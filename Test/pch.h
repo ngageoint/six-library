@@ -81,7 +81,13 @@
 
 #pragma comment(lib, "ws2_32")
 
+#pragma warning(push)
+#pragma warning(disable: 4800) // Implicit conversion from '...' to bool.Possible information loss
+#pragma warning(disable: 4388) // '...': signed / unsigned mismatch
+#pragma warning(disable: 4866) // compiler may not enforce left - to - right evaluation order for call to '...'
+
 #include "gtest/gtest.h"
+#pragma warning(pop)
 
 #include "six_Test.h"
 #include "sidd_Test.h"

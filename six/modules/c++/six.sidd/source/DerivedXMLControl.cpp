@@ -61,7 +61,7 @@ xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
         throw except::Exception(Ctxt("Data must be SIDD"));
     }
 
-    const DerivedData* const sidd(reinterpret_cast<const DerivedData*>(data));
+    const DerivedData* const sidd(static_cast<const DerivedData*>(data));
     return getParser(data->getVersion())->toXML(sidd);
 }
 

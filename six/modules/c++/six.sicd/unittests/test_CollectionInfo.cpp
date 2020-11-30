@@ -40,6 +40,15 @@ TEST_CASE(DummyData)
     TEST_ASSERT_FALSE(result.empty());
 }
 
+TEST_CASE(FakeComplexData)
+{
+    const auto data = six::sicd::Utilities::createFakeComplexData();
+
+    const std::vector<std::string> schemaPaths;
+    const auto result = six::sicd::Utilities::toXMLString(*data, schemaPaths);
+    TEST_ASSERT_FALSE(result.empty());
+}
+
 TEST_CASE(Classification)
 {
     const std::string classificationText("UNCLASSIFIED");
@@ -111,6 +120,7 @@ TEST_CASE(ClassificationCanada)
 
 TEST_MAIN(
     TEST_CHECK(DummyData);
+    TEST_CHECK(FakeComplexData);
     TEST_CHECK(Classification);
     TEST_CHECK(ClassificationCanada);
     )

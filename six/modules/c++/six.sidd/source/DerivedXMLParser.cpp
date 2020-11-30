@@ -935,7 +935,7 @@ void DerivedXMLParser::convertRemapToXML(const Remap& remap,
                                       parent);
         // a little risky, but let's assume the displayType is correct
         const MonochromeDisplayRemap& mdr =
-                reinterpret_cast<const MonochromeDisplayRemap&>(remap);
+                static_cast<const MonochromeDisplayRemap&>(remap);
         createString("RemapType", mdr.remapType, remapElem);
     /* TODO: Where does this actually go??
     XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);

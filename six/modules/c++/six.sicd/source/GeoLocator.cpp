@@ -41,7 +41,7 @@ scene::PlanarGridECEFTransform
 GeoLocator::buildTransformer(const ComplexData& complexData, bool shadowsDown) const
 {
     std::unique_ptr<ComplexData> dataClone(
-            reinterpret_cast<ComplexData*>(complexData.clone()));
+        static_cast<ComplexData*>(complexData.clone()));
     if (!AreaPlaneUtility::hasAreaPlane(*dataClone))
     {
         AreaPlaneUtility::setAreaPlane(*dataClone);
