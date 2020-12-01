@@ -26,6 +26,8 @@ NITF_CXX_GUARD
 
 static int nxptsXnypts(nitf_TRE* tre, char idx[10][10], int depth, nitf_Error* error)
 {
+    (void)depth;
+
     int nxpts, nypts;
     char fname[64];
     nitf_Field* field;

@@ -123,5 +123,7 @@ NITFAPI(cgm_Picture*) cgm_Metafile_createPicture(cgm_Metafile* metafile,
 
 NITFAPI(cgm_Metafile*) cgm_Metafile_clone(cgm_Metafile* mf, nitf_Error* error)
 {
+    (void)mf;
+    (void)error;
     return NULL;
 }

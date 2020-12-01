@@ -24,7 +24,7 @@
 #include <import/sys.h>
 #include <import/except.h>
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
     try
     {

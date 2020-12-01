@@ -57,7 +57,7 @@ public:
     NITFReadControl();
 
     //!  Destructor
-    virtual ~NITFReadControl()
+    virtual ~NITFReadControl() noexcept(false)
     {
         reset();
     }

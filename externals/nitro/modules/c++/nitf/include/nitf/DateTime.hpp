@@ -43,7 +43,7 @@ class DateTime
 {
 public:
     //! Sets to current date/time
-    DateTime();
+    DateTime() noexcept(false);
 
     //! Set native object - takes ownership
     DateTime(nitf_DateTime* dateTime);
@@ -97,42 +97,42 @@ public:
     //! Assignment Operator
     DateTime & operator=(const DateTime& rhs);
 
-    bool operator<(const DateTime& rhs) const
+    bool operator<(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis < rhs.mDateTime->timeInMillis);
     }
 
-    bool operator<=(const DateTime& rhs) const
+    bool operator<=(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis <= rhs.mDateTime->timeInMillis);
     }
 
-    bool operator>(const DateTime& rhs) const
+    bool operator>(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis > rhs.mDateTime->timeInMillis);
     }
 
-    bool operator>=(const DateTime& rhs) const
+    bool operator>=(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis >= rhs.mDateTime->timeInMillis);
     }
 
-    bool operator==(const DateTime& rhs) const
+    bool operator==(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis == rhs.mDateTime->timeInMillis);
     }
 
-    bool operator!=(const DateTime& rhs) const
+    bool operator!=(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis != rhs.mDateTime->timeInMillis);
     }
 
-    nitf_DateTime* getNative()
+    nitf_DateTime* getNative() noexcept
     {
         return mDateTime;
     }
 
-    const nitf_DateTime* getNative() const
+    const nitf_DateTime* getNative() const noexcept
     {
         return mDateTime;
     }
@@ -170,31 +170,31 @@ public:
     std::string format(const std::string& format) const;
 
     //! Get the year
-    int getYear() const;
+    int getYear() const noexcept;
 
     //! Get the month (1-based)
-    int getMonth() const;
+    int getMonth() const noexcept;
 
     //! Get the day of the month (1-based)
-    int getDayOfMonth() const;
+    int getDayOfMonth() const noexcept;
 
     //! Get the day of the week (0-based with 0 = Saturday)
-    int getDayOfWeek() const;
+    int getDayOfWeek() const noexcept;
 
     //! Get the day of the year (1-based)
-    int getDayOfYear() const;
+    int getDayOfYear() const noexcept;
 
     //! Get the hour [0, 23]
-    int getHour() const;
+    int getHour() const noexcept;
 
     //! Get the minute [0, 59]
-    int getMinute() const;
+    int getMinute() const noexcept;
 
     //! Get the second [0, 60), including fractional seconds
-    double getSecond() const;
+    double getSecond() const noexcept;
 
     //! Get the number of milliseconds since the epoch (1/1/1970)
-    double getTimeInMillis() const;
+    double getTimeInMillis() const noexcept;
 
     //! Set the year
     void setYear(int year);

@@ -66,8 +66,6 @@ nitf::ImageSegment ImageSegment::clone() const
     return dolly;
 }
 
-ImageSegment::~ImageSegment(){}
-
 
 nitf::ImageSubheader ImageSegment::getSubheader() const
 {

@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     uint8_t *padValue;           /* Pad value */
     uint64_t *blockMask;         /* Block mask array */
     uint64_t *padMask;           /* Pad mask array */
-    size_t imgCtr = 0;
+    int imgCtr = 0;
     const char* pathname;
 
     error = &errorObj;
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 
         /* Print the blocking information */
 
-        printf("Image %s segment %zu:\n", pathname, imgCtr);
+        printf("Image %s segment %u:\n", pathname, imgCtr);
         printf("  Blocking (mode is %s):\n", imageMode);
         printf("    Block array dimensions (r,c) = %d %d\n",
                blkInfo->numBlocksPerRow, blkInfo->numBlocksPerCol);

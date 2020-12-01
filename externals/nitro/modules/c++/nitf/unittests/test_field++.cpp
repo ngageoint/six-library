@@ -100,5 +100,7 @@ TEST_CASE(testCastOperator)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
     TEST_CHECK(testCastOperator);
 )

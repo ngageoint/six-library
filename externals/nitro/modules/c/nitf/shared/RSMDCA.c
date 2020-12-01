@@ -26,6 +26,9 @@ NITF_CXX_GUARD
 
 static int count(nitf_TRE* tre, char idx[10][10], int depth, nitf_Error* error)
 {
+    (void)idx;
+    (void)depth;
+
     int npart;
     nitf_Field* field = nitf_TRE_getField(tre, "NPART");
     nitf_Field_get(field, &npart, NITF_CONV_INT, sizeof(npart), error);

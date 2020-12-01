@@ -219,6 +219,12 @@ bool fs::is_directory(const path& p)
 	return os.isDirectory(p);
 }
 
+bool fs::exists(const path& p)
+{
+    const sys::OS os;
+    return os.exists(p);
+}
+
 bool fs::remove(const path& p)
 {
 	// https://en.cppreference.com/w/cpp/io/c/remove

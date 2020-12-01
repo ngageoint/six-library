@@ -35,4 +35,5 @@ packages/
 modules/c/j2k/external/openjpeg/openjpeg-2.0.0/
 modules/c/j2k/external/jasper/jasper-1.900.1-mod/
 
-
+# unittest output
+outputPathname.ntf

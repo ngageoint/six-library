@@ -108,7 +108,7 @@ public:
                                 nitf_IOInterface* io,
                                 nitf_Error* error);
 
-    static void adapterDestroy(nitf_CompressionControl** object);
+    static void adapterDestroy(nitf_CompressionControl** object) noexcept;
 
 };
 
@@ -116,10 +116,9 @@ public:
  *  \class Compressor
  *  \brief This is the c++ interface for nitf_CompressionControl
  */
-class Compressor
+struct Compressor
 {
-public:
-    Compressor() {}
+    Compressor() = default;
     virtual ~Compressor() {}
 
     virtual void start(uint64_t offset,

@@ -66,7 +66,7 @@ nitf_IOHandle prepare_io()
     return handle;
 }
 
-int main(int argc, char **argv)
+int main(void)
 {
     /*  Get the error object       */
     nitf_Error error;

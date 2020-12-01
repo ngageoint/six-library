@@ -356,6 +356,7 @@ NITFPROT(NITF_BOOL) nitf_Field_resetLength(nitf_Field * field,
  *  \param field The field object
  */
 NITFPROT(void) nitf_Field_print(nitf_Field * field);
+NITFPROT(void) nitf_Field_snprint(char* buffer, size_t buf_size, nitf_Field* field);
 
 
 /*!

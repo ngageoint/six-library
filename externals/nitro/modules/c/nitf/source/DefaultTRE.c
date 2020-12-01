@@ -27,6 +27,8 @@
 
 NITFPRIV(NITF_BOOL) defaultInit(nitf_TRE* tre, const char* id, nitf_Error * error)
 {
+    (void)id;
+
     nitf_TREDescription* descr;
 
     /* create a new private data struct */
@@ -62,6 +64,8 @@ NITFPRIV(NITF_BOOL) defaultInit(nitf_TRE* tre, const char* id, nitf_Error * erro
 
 NITFPRIV(const char*) defaultGetID(nitf_TRE *tre)
 {
+    (void)tre;
+
     /* always return raw - since it is a raw description */
     return NITF_TRE_RAW;
 }
@@ -73,6 +77,8 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
                                 struct _nitf_Record* record,
                                 nitf_Error * error)
 {
+    (void)record;
+
     nitf_Field *field = NULL;
     nitf_TREDescription *descr = NULL;
     char *data = NULL;
@@ -168,6 +174,8 @@ NITFPRIV(NITF_BOOL) defaultWrite(nitf_IOInterface* io,
 				 struct _nitf_Record* record,
 				 nitf_Error* error)
 {
+    (void)record;
+
     nitf_Field* field;
     nitf_Pair* pair = nitf_HashTable_find(
             ((nitf_TREPrivateData*)tre->priv)->hash, NITF_TRE_RAW);
@@ -318,8 +326,8 @@ NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE* tre,
     }
 
     /* reset the lengths in two places */
-    ((nitf_TREPrivateData*)tre->priv)->length = dataLength;
-    ((nitf_TREPrivateData*)tre->priv)->description[0].data_count = dataLength;
+    ((nitf_TREPrivateData*)tre->priv)->length = (uint32_t)dataLength;
+    ((nitf_TREPrivateData*)tre->priv)->description[0].data_count = (int)dataLength;
 
     return nitf_HashTable_insert(((nitf_TREPrivateData*)tre->priv)->hash,
         tag, field, error);
@@ -336,6 +344,8 @@ NITFPRIV(nitf_Field*) defaultGetField(nitf_TRE* tre, const char* tag)
 
 NITFPRIV(int) defaultGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
 {
+    (void)error;
+
     /* TODO - should we make sure length is equal to the descr data_count ? */
     return ((nitf_TREPrivateData*)tre->priv)->length;
 }
@@ -395,6 +405,7 @@ NITFPRIV(void) defaultDestruct(nitf_TRE *tre)
 
 NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error)
 {
+    (void)error;
     static nitf_TREHandler handler =
     {
         defaultInit,

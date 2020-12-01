@@ -63,7 +63,7 @@ public:
     }
 
     //!  Destructor doesnt release anything
-    virtual ~ReadControl()
+    virtual ~ReadControl() noexcept(false)
     {
         if (mLog && mOwnLog)
             delete mLog;

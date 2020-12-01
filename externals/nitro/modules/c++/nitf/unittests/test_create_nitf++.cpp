@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,19 +22,34 @@
 
 
 /**
- * This test serves as an example to show how one can construct and write
- * a NITF from scratch.
+ * This test serves as an example to show how one can use CompressedByteProvider
+ * to create a NITF with J2K compression.
+ *
+ * While this demonstrates use of CompressedByteProvider, the module for
+ * actually compressing the image data is not a part of NITRO. Actual data will
+ * be uncompressed. Search for COMPRESSION comments to see an explanation
+ * of what will change with a compressor.
  */
 
-#include <import/cli.h>
-#include <import/nitf.hpp>
 #include <string>
 
+#include <io/FileOutputStream.h>
+#include <import/sys.h>
 
+#include <import/nitf.hpp>
+#include <nitf/CompressedByteProvider.hpp>
+#include <gsl/gsl.h>
+
+#include "TestCase.h"
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4125) // decimal digit terminates octal escape sequence
+#endif
 static const struct {
-  size_t   width;
-  size_t   height;
-  size_t   bytesPerPixel;
+  uint32_t   width;
+  uint32_t   height;
+  uint32_t   bytesPerPixel;
   unsigned char  data[188 * 36 * 3 + 1];
 } NITRO_IMAGE = {
   188, 36, 3,
@@ -976,10 +991,9 @@ static const struct {
   "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377"
   "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377",
 };
-
-static const char* RGB[] = {"R", "G", "B"};
-
-
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 void populateFileHeader(nitf::Record& record, const std::string& title)
 {
@@ -997,31 +1011,31 @@ void setCornersFromDMSBox(nitf::ImageSubheader& header)
      *  You could do this in degrees as easily
      *  but this way we get to show off some new utilities
      */
-    int latTopDMS[3]    = { 42, 17, 50 };
+    int latTopDMS[3] = { 42, 17, 50 };
     int latBottomDMS[3] = { 42, 15, 14 };
-    int lonEastDMS[3]   = { -83, 42, 12 };
-    int lonWestDMS[3]   = { -83, 45, 44 };
+    int lonEastDMS[3] = { -83, 42, 12 };
+    int lonWestDMS[3] = { -83, 45, 44 };
 
     double latTopDecimal =
         nitf::Utils::geographicToDecimal(latTopDMS[0],
-                                         latTopDMS[1],
-                                         latTopDMS[2]);
+            latTopDMS[1],
+            latTopDMS[2]);
 
     double latBottomDecimal =
         nitf::Utils::geographicToDecimal(latBottomDMS[0],
-                                         latBottomDMS[1],
-                                         latBottomDMS[2]);
+            latBottomDMS[1],
+            latBottomDMS[2]);
 
     double lonEastDecimal =
         nitf::Utils::geographicToDecimal(lonEastDMS[0],
-                                         lonEastDMS[1],
-                                         lonEastDMS[2]);
+            lonEastDMS[1],
+            lonEastDMS[2]);
 
 
     double lonWestDecimal =
         nitf::Utils::geographicToDecimal(lonWestDMS[0],
-                                         lonWestDMS[1],
-                                         lonWestDMS[2]);
+            lonWestDMS[1],
+            lonWestDMS[2]);
 
     double corners[4][2];
     corners[0][0] = latTopDecimal;     corners[0][1] = lonWestDecimal;
@@ -1032,186 +1046,334 @@ void setCornersFromDMSBox(nitf::ImageSubheader& header)
     header.setCornersFromLatLons(NITF_CORNERS_DECIMAL, corners);
 }
 
-void addImageSegment(nitf::Record& record, bool isMono = false,
-        bool shouldCompress = false)
+namespace test_create_nitf_with_byte_provider
 {
-    nitf::ImageSegment segment = record.newImageSegment();
-    nitf::ImageSubheader header = segment.getSubheader();
-
-    header.getImageId().set("NITRO-TEST");
-    header.getImageDateAndTime().set("20080812000000");
-
-    if (shouldCompress)
+    void addImageSegment(nitf::Record& record,
+        bool shouldCompress = false)
     {
-        header.getImageCompression().set("C8");
+        nitf::ImageSegment segment = record.newImageSegment();
+        nitf::ImageSubheader header = segment.getSubheader();
+
+        header.getImageId().set("NITRO-TEST");
+        header.getImageDateAndTime().set("20080812000000");
+
+        if (shouldCompress)
+        {
+            header.getImageCompression().set("C8");
+        }
+
+        /* Set the geo-corners to Ann Arbor, MI */
+        setCornersFromDMSBox(header);
+
+        const size_t NUM_BANDS = 1;
+        std::vector<nitf::BandInfo> bands(NUM_BANDS, nitf::BandInfo());
+        for (size_t ii = 0; ii < bands.size(); ++ii)
+        {
+            bands[ii].init("M",   /* The band representation, Nth band */
+                " ",       /* The band subcategory */
+                "N",       /* The band filter condition */
+                "   ");     /* The band standard image filter code */
+
+        }
+
+        const std::string iRep = "MONO";
+        header.setPixelInformation("INT",     /* Pixel value type */
+            8,         /* Number of bits/pixel */
+            8,         /* Actual number of bits/pixel */
+            "R",       /* Pixel justification */
+            iRep,      /* Image representation */
+            "VIS",     /* Image category */
+            bands);    /* Band information object list */
+
+
+
+/* for fun, let's add a comment */
+        header.insertImageComment("NITF generated by NITRO", 0);
+
+        // The image mode P is part of an awful hack to workaround us not
+        // having a compression plugin for blocking mode P.
+        // If you run this test, it will throw an error. The error will reference
+        // a file in the j2k plugin. To make this test run, go to the file
+        // and disable the check for blocking mode B.
+        // To the best of my knowledge, nothing bad happens as a result.
+        header.setBlocking(NITRO_IMAGE.height, /*!< The number of rows */
+            NITRO_IMAGE.width,  /*!< The number of columns */
+            NITRO_IMAGE.height, /*!< The number of rows/block */
+            NITRO_IMAGE.width,  /*!< The number of columns/block */
+            "P");               /*!< Image mode */
     }
 
-    /* Set the geo-corners to Ann Arbor, MI */
-    setCornersFromDMSBox(header);
 
-    const size_t NUM_BANDS = isMono ? 1 : 3;
-    std::vector<nitf::BandInfo> bands(NUM_BANDS, nitf::BandInfo());
-    for (size_t ii = 0; ii < bands.size(); ++ii)
+    void writeNITF(nitf::Record& record, const std::string& filename)
     {
-        bands[ii].init(RGB[ii],   /* The band representation, Nth band */
-                       " ",       /* The band subcategory */
-                       "N",       /* The band filter condition */
-                       "   ");     /* The band standard image filter code */
-
+        const size_t NUM_BANDS = 1;
+        /*
+         * COMPRESSION:
+         * Right now, this is writing a single-segment single-block uncompressed
+         * NITF. If you want to compress, you would compress the data here.
+         *
+         * bytesPerBlock has an element for each image segment. Each image segment
+         * element has an element for each block. If you're compressing into a
+         * single tile, you can simple populate the single element with the
+         * compressed size of the image.
+         *
+         * If you are compressing to multiple tiles (blocks), each tile will have
+         * a different size, hence the need for a vector.
+         * Once you have CompressedByteProvider constructed, everything else
+         * should work the same
+         */
+        std::vector<std::vector<size_t> > bytesPerBlock(1);
+        bytesPerBlock[0].push_back(NITRO_IMAGE.width * NITRO_IMAGE.height * NUM_BANDS);
+        nitf::CompressedByteProvider byteProvider(record,
+            bytesPerBlock);
+        nitf::Off fileOffset;
+        nitf::NITFBufferList buffers;
+        byteProvider.getBytes(NITRO_IMAGE.data, 0, NITRO_IMAGE.height,
+            fileOffset, buffers);
+        io::FileOutputStream outputStream(filename);
+        for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
+        {
+            outputStream.write(
+                static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
+                buffers.mBuffers[ii].mNumBytes);
+        }
     }
 
-    const std::string iRep = isMono ? "MONO" : "RGB";
-    header.setPixelInformation("INT",     /* Pixel value type */
-                               8,         /* Number of bits/pixel */
-                               8,         /* Actual number of bits/pixel */
-                               "R",       /* Pixel justification */
-                               iRep,      /* Image representation */
-                               "VIS",     /* Image category */
-                               bands);    /* Band information object list */
+    void testCreate(const std::string& outname,
+        bool shouldCompress = false)
+    {
+        nitf::Record record;
+        populateFileHeader(record, outname);
+        addImageSegment(record, shouldCompress);
+        writeNITF(record, outname);
+    }
 
+    bool testRead(const std::string& pathname)
+    {
+        const size_t NUM_BANDS = 1;
+        nitf::IOHandle handle(pathname, NITF_ACCESS_READONLY, NITF_OPEN_EXISTING);
+        nitf::Reader reader;
+        nitf::Record record = reader.read(handle);
 
+        for (int ii = 0; ii < gsl::narrow<int>(record.getNumImages()); ++ii)
+        {
+            nitf::ImageReader imageReader = reader.newImageReader(ii);
+            uint64_t blockSize;
+            // Read one block. It should match the first blockSize points of the
+            // image. If it does, we got the blocking mode right.
+            const uint8_t* block = imageReader.readBlock(0, &blockSize);
+            const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
 
-    /* for fun, let's add a comment */
-    header.insertImageComment("NITF generated by NITRO", 0);
-
-    // The image mode P is part of an awful hack to workaround us not
-    // having a compression plugin for blocking mode P.
-    // If you run this test, it will throw an error. The error will reference
-    // a file in the j2k plugin. To make this test run, go to the file
-    // and disable the check for blocking mode B.
-    // To the best of my knowledge, nothing bad happens as a result.
-    header.setBlocking(NITRO_IMAGE.height, /*!< The number of rows */
-                       NITRO_IMAGE.width,  /*!< The number of columns */
-                       NITRO_IMAGE.height, /*!< The number of rows/block */
-                       NITRO_IMAGE.width,  /*!< The number of columns/block */
-                       "P");               /*!< Image mode */
+            for (size_t jj = 0; jj < imageLength * NUM_BANDS; ++jj)
+            {
+                if (block[jj] != NITRO_IMAGE.data[jj])
+                {
+                    std::cerr << "Image data doesn't match" << std::endl;
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
 
-
-void writeNITF(nitf::Record& record, const std::string& filename,
-        bool isMono = false)
+TEST_CASE(test_create_nitf_with_byte_provider_test)
 {
-    const size_t NUM_BANDS = isMono ? 1 : 3;
-    nitf::IOHandle out(filename, NITF_ACCESS_WRITEONLY, NITF_CREATE);
-    nitf::Writer writer;
-    writer.prepare(out, record);
+    // We can't actually compress. This is just for illustration.
+    const bool shouldCompress = false;
+    const std::string outname("test_create.nitf");
 
-    nitf::ImageWriter imageWriter = writer.newImageWriter(0);
-    nitf::ImageSource imageSource;
+    test_create_nitf_with_byte_provider::testCreate(outname, shouldCompress);
+    const auto result = test_create_nitf_with_byte_provider::testRead(outname);
+    TEST_ASSERT(result);
+}
 
-    /* make one bandSource per band */
-    for (size_t ii = 0; ii < NUM_BANDS; ++ii)
+namespace test_create_nitf
+{
+    static const char* RGB[] = { "R", "G", "B" };
+
+    void addImageSegment(nitf::Record& record, bool isMono = false,
+        bool shouldCompress = false)
     {
-        nitf::BandSource bandSource = nitf::MemorySource(
+        nitf::ImageSegment segment = record.newImageSegment();
+        nitf::ImageSubheader header = segment.getSubheader();
+
+        header.getImageId().set("NITRO-TEST");
+        header.getImageDateAndTime().set("20080812000000");
+
+        if (shouldCompress)
+        {
+            header.getImageCompression().set("C8");
+        }
+
+        /* Set the geo-corners to Ann Arbor, MI */
+        setCornersFromDMSBox(header);
+
+        const auto NUM_BANDS = gsl::narrow<size_t>(isMono ? 1 : 3);
+        std::vector<nitf::BandInfo> bands(NUM_BANDS, nitf::BandInfo());
+        for (size_t ii = 0; ii < bands.size(); ++ii)
+        {
+            bands[ii].init(RGB[ii],   /* The band representation, Nth band */
+                " ",       /* The band subcategory */
+                "N",       /* The band filter condition */
+                "   ");     /* The band standard image filter code */
+
+        }
+
+        const std::string iRep = isMono ? "MONO" : "RGB";
+        header.setPixelInformation("INT",     /* Pixel value type */
+            8,         /* Number of bits/pixel */
+            8,         /* Actual number of bits/pixel */
+            "R",       /* Pixel justification */
+            iRep,      /* Image representation */
+            "VIS",     /* Image category */
+            bands);    /* Band information object list */
+
+
+
+/* for fun, let's add a comment */
+        header.insertImageComment("NITF generated by NITRO", 0);
+
+        // The image mode P is part of an awful hack to workaround us not
+        // having a compression plugin for blocking mode P.
+        // If you run this test, it will throw an error. The error will reference
+        // a file in the j2k plugin. To make this test run, go to the file
+        // and disable the check for blocking mode B.
+        // To the best of my knowledge, nothing bad happens as a result.
+        header.setBlocking(NITRO_IMAGE.height, /*!< The number of rows */
+            NITRO_IMAGE.width,  /*!< The number of columns */
+            NITRO_IMAGE.height, /*!< The number of rows/block */
+            NITRO_IMAGE.width,  /*!< The number of columns/block */
+            "P");               /*!< Image mode */
+    }
+
+
+    void writeNITF(nitf::Record& record, const std::string& filename,
+        bool isMono = false)
+    {
+        const int NUM_BANDS = isMono ? 1 : 3;
+        nitf::IOHandle out(filename, NITF_ACCESS_WRITEONLY, NITF_CREATE);
+        nitf::Writer writer;
+        writer.prepare(out, record);
+
+        nitf::ImageWriter imageWriter = writer.newImageWriter(0);
+        nitf::ImageSource imageSource;
+
+        /* make one bandSource per band */
+        for (int ii = 0; ii < NUM_BANDS; ++ii)
+        {
+            nitf::BandSource bandSource = nitf::MemorySource(
                 (char*)NITRO_IMAGE.data,
                 NITRO_IMAGE.width * NITRO_IMAGE.height,
                 ii, 1, 2);
-        imageSource.addBand(bandSource);
+            imageSource.addBand(bandSource);
+        }
+
+        imageWriter.setWriteCaching(1);
+        imageWriter.attachSource(imageSource);
+        writer.write();
     }
 
-    imageWriter.setWriteCaching(1);
-    imageWriter.attachSource(imageSource);
-    writer.write();
-}
-
-void testCreate(const std::string& outname, bool isMono = false,
+    void testCreate(const std::string& outname, bool isMono = false,
         bool shouldCompress = false)
-{
-    nitf::Record record;
-    populateFileHeader(record, outname);
-    addImageSegment(record, isMono, shouldCompress);
-    writeNITF(record, outname, isMono);
-}
-
-bool testRead(const std::string& pathname, bool isMono = false,
-        bool shouldCompress = false)
-{
-    const size_t NUM_BANDS = isMono ? 1 : 3;
-    nitf::IOHandle handle(pathname, NITF_ACCESS_READONLY, NITF_OPEN_EXISTING);
-    nitf::Reader reader;
-    nitf::Record record = reader.read(handle);
-
-    for (size_t ii = 0; ii < record.getNumImages(); ++ii)
     {
-        nitf::ImageReader imageReader = reader.newImageReader(ii);
-        uint64_t blockSize;
-        // Read one block. It should match the first blockSize points of the
-        // image. If it does, we got the blocking mode right.
-        const uint8_t *block = imageReader.readBlock(0, &blockSize);
-        const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
+        nitf::Record record;
+        populateFileHeader(record, outname);
+        addImageSegment(record, isMono, shouldCompress);
+        writeNITF(record, outname, isMono);
+    }
 
-        // The image data is interleaved by pixel. When feeding it to the
-        // writer, we unpack to interleave by block. Now that we're reading
-        // it back in, we have to interleave by pixel again to compare.
-        // imageLength is the pixel length of a single band of image data
-        for (size_t jj = 0; jj < imageLength * NUM_BANDS; ++jj)
+    bool testRead(const std::string& pathname, bool isMono = false,
+        bool shouldCompress = false)
+    {
+        const int NUM_BANDS = isMono ? 1 : 3;
+        nitf::IOHandle handle(pathname, NITF_ACCESS_READONLY, NITF_OPEN_EXISTING);
+        nitf::Reader reader;
+        nitf::Record record = reader.read(handle);
+
+        for (int ii = 0; ii < gsl::narrow<int>(record.getNumImages()); ++ii)
         {
-            size_t offset = jj / imageLength;
-            size_t index = jj % imageLength;
+            nitf::ImageReader imageReader = reader.newImageReader(ii);
+            uint64_t blockSize;
+            // Read one block. It should match the first blockSize points of the
+            // image. If it does, we got the blocking mode right.
+            const uint8_t* block = imageReader.readBlock(0, &blockSize);
+            const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
 
-            // Even though there's only one band, the pixel skip still
-            // applies during the write
-            size_t imageIndex = (offset) + (3 * index);
+            // The image data is interleaved by pixel. When feeding it to the
+            // writer, we unpack to interleave by block. Now that we're reading
+            // it back in, we have to interleave by pixel again to compare.
+            // imageLength is the pixel length of a single band of image data
+            for (size_t jj = 0; jj < imageLength * NUM_BANDS; ++jj)
+            {
+                size_t offset = jj / imageLength;
+                size_t index = jj % imageLength;
 
-            // For this case, NITRO will have already undone our interleaving
-            // while writing, so we can ignore the stuff above and just
-            // compare directly
-            if (!shouldCompress && !isMono)
-            {
-                imageIndex = jj;
-            }
-            if (block[jj] != NITRO_IMAGE.data[imageIndex])
-            {
-                std::cerr << "Image data doesn't match" << std::endl;
-                return false;
+                // Even though there's only one band, the pixel skip still
+                // applies during the write
+                size_t imageIndex = (offset)+(3 * index);
+
+                // For this case, NITRO will have already undone our interleaving
+                // while writing, so we can ignore the stuff above and just
+                // compare directly
+                if (!shouldCompress && !isMono)
+                {
+                    imageIndex = jj;
+                }
+                if (block[jj] != NITRO_IMAGE.data[imageIndex])
+                {
+                    std::cerr << "Image data doesn't match" << std::endl;
+                    return false;
+                }
             }
         }
+        return true;
     }
-    return true;
 }
 
-int main(int argc, char **argv)
+TEST_CASE(test_create_nitf_test)
 {
-    try
-    {
-        cli::ArgumentParser parser;
-        parser.setDescription(
-            "This program creates a sample NITF file.");
-        parser.addArgument("-m --mono", "Mono image", cli::STORE_TRUE,
-                "isMono");
-        parser.addArgument("-c --compress", "Compress file", cli::STORE_TRUE,
-                "shouldCompress");
-        parser.addArgument("output", "Output filename", cli::STORE, "output",
-            "OUTPUT", 1, 1, true)->setDefault("test_create.nitf");
+    const std::string outname("test_create.nitf");
 
-        auto options = parser.parse(argc, argv);
-        const bool isMono(options->get<bool>("isMono"));
-        // If we're compressing, we're using the J2K plugin, so please ensure
-        // that it is on your NITF_PLUGIN_PATH
-        const bool shouldCompress(options->get<bool>("shouldCompress"));
-        const std::string outname(options->get<std::string>("output"));
 
-        testCreate(outname, isMono, shouldCompress);
-        if (testRead(outname, isMono, shouldCompress))
-        {
-            return 0;
-        }
-        return 1;
-    }
+    bool shouldCompress = false;
 
-    catch (const std::exception& ex)
+    bool isMono = true;
+    test_create_nitf::testCreate(outname, isMono, shouldCompress);
+    bool result = test_create_nitf::testRead(outname, isMono, shouldCompress);
+    TEST_ASSERT(result);
+
+    isMono = false;
+    test_create_nitf::testCreate(outname, isMono, shouldCompress);
+    result = test_create_nitf::testRead(outname, isMono, shouldCompress);
+    TEST_ASSERT(result);
+
+    // If we're compressing, we're using the J2K plugin, so please ensure
+    // that it is on your NITF_PLUGIN_PATH
+    std::string nitf_plugin_path;
+    if (sys::OS().getEnvIfSet("NITF_PLUGIN_PATH", nitf_plugin_path))
     {
-        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
-        return 1;
+        TEST_ASSERT_FALSE(nitf_plugin_path.empty());
+        shouldCompress = false; // TODO: true
+
+        test_create_nitf::testCreate(outname, isMono, shouldCompress);
+        result = test_create_nitf::testRead(outname, isMono, shouldCompress);
+        TEST_ASSERT(result);
+
+        isMono = true;
+        test_create_nitf::testCreate(outname, isMono, shouldCompress);
+        result = test_create_nitf::testRead(outname, isMono, shouldCompress);
+        TEST_ASSERT(result);
     }
-    catch (const except::Throwable & t)
+    else
     {
-        std::cerr << "Caught throwable: " << t.toString() << std::endl;
-        return 1;
-    }
-    catch (...)
-    {
-        std::cerr << "Caught unknown exception\n";
-        return 1;
+        TEST_ASSERT_TRUE(true);
     }
 }
+
+TEST_MAIN(
+    (void)argc;
+    (void)argv;
+    TEST_CHECK(test_create_nitf_with_byte_provider_test);
+    TEST_CHECK(test_create_nitf_test);
+)

@@ -28,18 +28,18 @@
 
 namespace nitf
 {
-struct Utils
+namespace Utils
 {
-    static bool isNumeric(const std::string&);
+    extern bool isNumeric(const std::string&) noexcept;
 
-    static bool isAlpha(const std::string&);
+    extern bool isAlpha(const std::string&) noexcept;
 
-    static void decimalToGeographic(double decimal, int* degrees, int* minutes,
-                                    double* seconds);
+    extern void decimalToGeographic(double decimal, int* degrees, int* minutes,
+                                    double* seconds) noexcept;
 
-    static double geographicToDecimal(int degrees, int minutes, double seconds);
+    extern double geographicToDecimal(int degrees, int minutes, double seconds) noexcept;
 
-    static char cornersTypeAsCoordRep(nitf::CornersType type);
+    extern char cornersTypeAsCoordRep(nitf::CornersType type) noexcept;
 
 };
 

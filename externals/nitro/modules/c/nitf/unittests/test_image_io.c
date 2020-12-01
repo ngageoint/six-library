@@ -927,6 +927,9 @@ TEST_CASE(testPBlock4BytePixels)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
+
     CHECK(testPBlockOneBand);
     CHECK(testPBlockTwoBands);
     CHECK(testPBlockOffsetBand);

@@ -475,9 +475,8 @@ NITF_BOOL measureComplexityLevel(nitf_Record* record,
     return NITF_SUCCESS;
 }
 
-char* clevelAsString(CLEVEL clevel)
+static char* clevelAsString(CLEVEL clevel)
 {
-
     switch (clevel)
     {
         case CLEVEL_03:
@@ -496,7 +495,6 @@ char* clevelAsString(CLEVEL clevel)
         default:
             return "Error";
     }
-    return "Error";
 }
 
 int main(int argc, char** argv)

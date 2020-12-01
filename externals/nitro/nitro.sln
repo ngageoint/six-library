@@ -33,7 +33,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CSCRNA", "modules\c\nitf\CS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RPFHDR", "modules\c\nitf\RPFHDR.vcxproj", "{CF5B4F02-364D-4117-9FB9-6C9C7938E412}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RPFHDR", "modules\c\nitf\XML_DATA_CONTENT.vcxproj", "{78849481-D356-4CC7-B182-31C21F857ED1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XML_DATA_CONTENT", "modules\c\nitf\XML_DATA_CONTENT.vcxproj", "{78849481-D356-4CC7-B182-31C21F857ED1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "show_nitf++", "modules\c++\nitf\apps\show_nitf++\show_nitf++.vcxproj", "{839FF52C-57D1-45B6-81FD-5C7D72523EE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,10 @@ Global
 		{78849481-D356-4CC7-B182-31C21F857ED1}.Debug|x64.Build.0 = Debug|x64
 		{78849481-D356-4CC7-B182-31C21F857ED1}.Release|x64.ActiveCfg = Release|x64
 		{78849481-D356-4CC7-B182-31C21F857ED1}.Release|x64.Build.0 = Release|x64
+		{839FF52C-57D1-45B6-81FD-5C7D72523EE5}.Debug|x64.ActiveCfg = Debug|x64
+		{839FF52C-57D1-45B6-81FD-5C7D72523EE5}.Debug|x64.Build.0 = Debug|x64
+		{839FF52C-57D1-45B6-81FD-5C7D72523EE5}.Release|x64.ActiveCfg = Release|x64
+		{839FF52C-57D1-45B6-81FD-5C7D72523EE5}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

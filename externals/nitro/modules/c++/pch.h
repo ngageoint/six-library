@@ -3,43 +3,63 @@
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
 
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined
 
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
 
-#pragma warning(disable: 4625) // '...': copy constructor was implicitly defined as deleted
-#pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted
-#pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
-#pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
-
 // TODO: get rid of these someday?
-#pragma warning(disable: 4774) // '...' : format string expected in argument 3 is not a string literal
-#pragma warning(disable: 4100) // '...': unreferenced formal parameter
-#pragma warning(disable: 4296) // '...': expression is always false
-#pragma warning(disable: 4267) // '...': conversion from '...' to '...', possible loss of data
-#pragma warning(disable: 4244) // 	'...': conversion from '...' to '...', possible loss of data
-#pragma warning(disable: 4242) // '...': conversion from '...' to '...', possible loss of data
-#pragma warning(disable: 4018) // '...': signed / unsigned mismatch
-#pragma warning(disable: 4389) // '...': signed / unsigned mismatch
-#pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed / unsigned mismatch
-#pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
-#pragma warning(disable: 4355) // '...': used in base member initializer list
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
-#pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
-#pragma warning(disable: 26451) // Arithmetic overflow : Using operator '...' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow(io.2).
-#pragma warning(disable: 6385) // Reading invalid data from '...':  the readable size is '...' bytes, but '...' bytes may be read.
-#pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
+#pragma warning(disable: 26401) // Do not delete a raw pointer that is not an owner<T>(i.11).
+#pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
+#pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
+#pragma warning(disable: 26446) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4)
+#pragma warning(disable: 26456) // Operator '...' hides a non-virtual operator '...' (c.128).
+#pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
+#pragma warning(disable: 26485) // Expression '...' : No array to pointer decay(bounds.3).
+#pragma warning(disable: 26486) // Don't pass a pointer that may be invalid to a function. Parameter 3 '...' in call to '...' may be invalid (lifetime.3).
+#pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid(lifetime.4).
+
+
+// need C++14 for std::make_unique<T>
+#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead(r.11).
+
 
 #pragma warning(push)
-#pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
-#pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
+#pragma warning(disable: 4355) // '...': used in base member initializer list
+#pragma warning(disable: 4625) // '...': copy constructor was implicitly defined as deleted
+#pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted#pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
+#pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
+#pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
+#pragma warning(disable: 5204) // '...': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
+#pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead(r.11).
+#pragma warning(disable: 26401) // Do not delete a raw pointer that is not an owner<T>(i.11).
+#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead(r.11).
+#pragma warning(disable: 26429) // Symbol '...' is never tested for nullness, it can be marked as not_null(f.23).
+#pragma warning(disable: 26426) // Global initializer calls a non-constexpr function '...' (i.22).
+#pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
+#pragma warning(disable: 26433) // Function '...' should be marked with '...' (c.128).
+#pragma warning(disable: 26434) // Function '...' hides a non - virtual function '...' (c.128).
+#pragma warning(disable: 26435) // Function '...' should specify exactly one of '...', '...', or '...' (c.128).
+#pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
+#pragma warning(disable: 26443) // Overriding destructor should not use explicit '...' or '...' specifiers(c.128).
+#pragma warning(disable: 26446) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
+#pragma warning(disable: 26447) // The function is declared '...' but calls function '...' which may throw exceptions(f.6).
+#pragma warning(disable: 26455) // Default constructor may not throw.Declare it '...' (f.6).
+#pragma warning(disable: 26456) // Operator '...' hides a non - virtual operator '...' (c.128).
+#pragma warning(disable: 26472) // Don't use a static_cast for arithmetic conversions. Use brace initialization, gsl::narrow_cast or gsl::narrow (type.1).
+#pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
+#pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
+
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#include <windows.h>
+#undef min
+#undef max
+
 #include <assert.h>
 #include <stdlib.h>
 #include <math.h>
@@ -66,11 +86,6 @@
 
 #include <sys/File.h>
 
-#include <windows.h>
-#undef min
-#undef max
-#pragma warning(pop)
-
 #include <import/except.h>
 #include <import/types.h>
 #pragma warning(push)
@@ -80,6 +95,13 @@
 #include <import/io.h>
 #pragma warning(pop)
 
+#include <import/mt.h>
+
+#include "gsl/gsl.h"
+
+#pragma warning(pop)
+
+
 #include "import/nitf.h"
 
 #include "nitf/ImageIO.h"
@@ -87,13 +109,7 @@
 #include "nitf/Field.h"
 #include "nitf/Types.h"
 
-
 #include "nitf/Object.hpp"
-#include "nitf/NITFException.hpp"
-#include "nitf/TRE.hpp"
-#include "nitf/Record.hpp"
-
-#include "gsl/gsl.h"
 
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")

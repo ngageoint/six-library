@@ -157,7 +157,7 @@ public:
      * \return The file offset for each image subheader.  Vector size matches
      * the number of image segments.
      */
-    const std::vector<nitf::Off>& getImageSubheaderFileOffsets() const
+    const std::vector<nitf::Off>& getImageSubheaderFileOffsets() const noexcept
     {
         return mImageSubheaderFileOffsets;
     }
@@ -165,7 +165,7 @@ public:
     /*!
      * \return The file offset for the first DES subheader.
      */
-    nitf::Off getDesSubheaderFileOffset() const
+    nitf::Off getDesSubheaderFileOffset() const noexcept
     {
         return mDesSubheaderFileOffset;
     }
@@ -244,7 +244,7 @@ protected:
      * this constructor, the inheriting class will call initialize() later in
      * its constructor.
      */
-    ByteProvider();
+    ByteProvider() = default;
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
@@ -267,7 +267,7 @@ protected:
 
     size_t countPadRows(
             size_t seg, size_t numRowsToWrite,
-            size_t imageDataEndRow) const;
+            size_t imageDataEndRow) const noexcept;
 
     void addImageData(
             size_t seg,
@@ -280,8 +280,8 @@ protected:
             nitf::Off& fileOffset,
             NITFBufferList& buffers) const;
 
-    size_t countBytesForHeaders(size_t seg, size_t startRow) const;
-    size_t countBytesForDES(size_t seg, size_t imageDataEndRow) const;
+    size_t countBytesForHeaders(size_t seg, size_t startRow) const noexcept;
+    size_t countBytesForDES(size_t seg, size_t imageDataEndRow) const noexcept;
 
     void addHeaders(size_t seg, size_t startRow,
             nitf::Off& fileOffset,
@@ -291,9 +291,9 @@ protected:
      * These functions assume that we've already checked
      * we're writing in a range which includes seg
      */
-    bool shouldAddHeader(size_t seg, size_t startRow) const;
-    bool shouldAddSubheader(size_t seg, size_t startRow) const;
-    bool shouldAddDES(size_t seg, size_t imageDataEndRow) const;
+    bool shouldAddHeader(size_t seg, size_t startRow) const noexcept;
+    bool shouldAddSubheader(size_t seg, size_t startRow) const noexcept;
+    bool shouldAddDES(size_t seg, size_t imageDataEndRow) const noexcept;
 
     void addDES(size_t seg, size_t imageDataEndRow,
                 NITFBufferList& buffers) const;
@@ -316,13 +316,9 @@ protected:
     // Represents the row information for a NITF image segment
     struct SegmentInfo
     {
-        SegmentInfo() :
-            firstRow(0),
-            numRows(0)
-        {
-        }
+        SegmentInfo() = default;
 
-        size_t endRow() const
+        size_t endRow() const noexcept
         {
             return (firstRow + numRows);
         }
@@ -330,24 +326,24 @@ protected:
         bool isInRange(size_t rangeStartRow,
                        size_t rangeNumRows,
                        size_t& firstGlobalRowInThisSegment,
-                       size_t& numRowsInThisSegment) const
+                       size_t& numRowsInThisSegment) const noexcept
         {
             return ImageSegmentComputer::Segment::isInRange(
                     firstRow, endRow(), rangeStartRow, rangeNumRows,
                     firstGlobalRowInThisSegment, numRowsInThisSegment);
         }
 
-        size_t firstRow;
-        size_t numRows;
+        size_t firstRow = 0;
+        size_t numRows = 0;
     };
 
-    size_t mNumCols;
-    size_t mOverallNumRowsPerBlock;
+    size_t mNumCols = 0;
+    size_t mOverallNumRowsPerBlock = 0;
 
     std::vector<size_t> mNumRowsPerBlock; // Per segment
-    size_t mNumColsPerBlock;
-    size_t mNumBytesPerRow;
-    size_t mNumBytesPerPixel;
+    size_t mNumColsPerBlock = 0;
+    size_t mNumBytesPerRow = 0;
+    size_t mNumBytesPerPixel = 0;
 
     std::vector<SegmentInfo> mImageSegmentInfo; // Per segment
 
@@ -358,8 +354,8 @@ protected:
     std::vector<std::byte> mDesSubheaderAndData;
 
     std::vector<nitf::Off> mImageSubheaderFileOffsets; // Per segment
-    nitf::Off mDesSubheaderFileOffset;
-    nitf::Off mFileNumBytes;
+    nitf::Off mDesSubheaderFileOffset = 0;
+    nitf::Off mFileNumBytes = 0;
 };
 }
 

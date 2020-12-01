@@ -50,7 +50,7 @@ struct NITFBuffer
      * \param numBytes The number of bytes of contiguous data this
      * represents
      */
-    NITFBuffer(const void* data, size_t numBytes);
+    NITFBuffer(const void* data, size_t numBytes) noexcept;
 
     const void* mData = nullptr;
     size_t mNumBytes = 0;
@@ -69,7 +69,7 @@ struct NITFBufferList
     /*!
      * \return The total number of bytes across all the buffers
      */
-    size_t getTotalNumBytes() const;
+    size_t getTotalNumBytes() const noexcept;
 
     /*!
      * \return Whether or not the buffer list is empty
@@ -108,7 +108,7 @@ struct NITFBufferList
     template <typename DataT>
     void pushBack(const std::vector<DataT>& data)
     {
-        pushBack(data.empty() ? nullptr : &data[0],
+        pushBack(data.empty() ? nullptr : data.data(),
                  data.size() * sizeof(DataT));
     }
 

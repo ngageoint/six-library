@@ -56,8 +56,6 @@ nitf::FileSecurity FileSecurity::clone() const
     return dolly;
 }
 
-FileSecurity::~FileSecurity(){}
-
 
 nitf::Field FileSecurity::getClassificationSystem() const
 {

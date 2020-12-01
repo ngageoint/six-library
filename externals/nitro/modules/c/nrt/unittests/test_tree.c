@@ -37,17 +37,24 @@ char *C(const char *p)
     return x;
 }
 
-NRT_BOOL deleteData(nrt_TreeNode * source, NRT_DATA * userData, int depth,
+static NRT_BOOL deleteData(nrt_TreeNode * source, NRT_DATA * userData, int depth,
                     nrt_Error * error)
 {
+    (void)userData;
+    (void)depth;
+    (void)error;
+
     char *p = (char *) source->data;
     printf("Deleting %s\n", p);
     free(p);
     return 1;
 }
 
-void makeTree(nrt_Tree * t, const char *testName)
+void makeTree(nrt_Tree * t, const char* testName_)
 {
+    (void)testName_;
+#define testName testName_ // "testName" can be a global which causes a compiler warning
+
     nrt_Error e;
     nrt_TreeNode *an, *ancho, *abso;
     t->root = nrt_TreeNode_construct(C("a"), &e);
@@ -77,9 +84,13 @@ void makeTree(nrt_Tree * t, const char *testName)
                           &e);
 
 }
+#undef testName
 
-NRT_BOOL printElement(nrt_TreeNode * t, NRT_DATA * ud, int depth, nrt_Error * e)
+static NRT_BOOL printElement(nrt_TreeNode * t, NRT_DATA * ud, int depth, nrt_Error * e)
 {
+    (void)ud;
+    (void)e;
+
     const char *p = (const char *) t->data;
     int i;
 
@@ -123,5 +134,7 @@ TEST_CASE(testTree)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
     CHECK(testTree);
 )

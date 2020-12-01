@@ -113,6 +113,8 @@ TEST_CASE(testGetBlock)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
     TEST_CHECK(testGetNumBlocks);
     TEST_CHECK(testGetBlock);
     )

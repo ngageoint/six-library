@@ -287,6 +287,7 @@ NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, uint32_t oldIndex,
  *  \return size of the list
  */
 NRTAPI(uint32_t) nrt_List_size(nrt_List * list);
+NRTAPI(uint16_t) nrt_List_size16(nrt_List* list);
 
 /*!
  *  Return the element at the specified position in the list

@@ -153,39 +153,39 @@ std::string nitf::DateTime::format(const std::string& format) const
     return str;
 }
 
-int nitf::DateTime::getYear() const
+int nitf::DateTime::getYear() const noexcept
 {
     return mDateTime->year;
 }
-int nitf::DateTime::getMonth() const
+int nitf::DateTime::getMonth() const noexcept
 {
     return mDateTime->month;
 }
-int nitf::DateTime::getDayOfMonth() const
+int nitf::DateTime::getDayOfMonth() const noexcept
 {
     return mDateTime->dayOfMonth;
 }
-int nitf::DateTime::getDayOfWeek() const
+int nitf::DateTime::getDayOfWeek() const noexcept
 {
     return mDateTime->dayOfWeek;
 }
-int nitf::DateTime::getDayOfYear() const
+int nitf::DateTime::getDayOfYear() const noexcept
 {
     return mDateTime->dayOfYear;
 }
-int nitf::DateTime::getHour() const
+int nitf::DateTime::getHour() const noexcept
 {
     return mDateTime->hour;
 }
-int nitf::DateTime::getMinute() const
+int nitf::DateTime::getMinute() const noexcept
 {
     return mDateTime->minute;
 }
-double nitf::DateTime::getSecond() const
+double nitf::DateTime::getSecond() const noexcept
 {
     return mDateTime->second;
 }
-double nitf::DateTime::getTimeInMillis() const
+double nitf::DateTime::getTimeInMillis() const noexcept
 {
     return mDateTime->timeInMillis;
 }

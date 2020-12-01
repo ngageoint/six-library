@@ -48,13 +48,13 @@ public:
     ExtensionsIterator() = default;
 
     //! Copy constructor
-    ExtensionsIterator(const ExtensionsIterator & x)
+    ExtensionsIterator(const ExtensionsIterator & x) noexcept
     {
-        handle = x.handle;
+        *this = x;
     }
 
     //! Assignment Operator
-    ExtensionsIterator & operator=(const ExtensionsIterator & x)
+    ExtensionsIterator & operator=(const ExtensionsIterator & x) noexcept
     {
         if (&x != this)
             handle = x.handle;
@@ -64,7 +64,7 @@ public:
     /*!
      *  Set native object
      */
-    ExtensionsIterator(nitf_ExtensionsIterator x)
+    ExtensionsIterator(nitf_ExtensionsIterator x) noexcept
     {
         setHandle(x);
     }
@@ -72,7 +72,7 @@ public:
     /*!
      *  Get native object
      */
-    nitf_ExtensionsIterator & getHandle()
+    nitf_ExtensionsIterator & getHandle() noexcept
     {
         return handle;
     }
@@ -80,7 +80,7 @@ public:
     /*!
      *  Set native object
      */
-    void setHandle(nitf_ExtensionsIterator x)
+    void setHandle(nitf_ExtensionsIterator x) noexcept
     {
         handle = x;
     }
@@ -90,14 +90,14 @@ public:
      *  \param it2  The iterator to compare with
      *  \return  True if so, and False otherwise
      */
-    bool equals(nitf::ExtensionsIterator & it2)
+    bool equals(nitf::ExtensionsIterator & it2) const noexcept
     {
         const NITF_BOOL x = nitf_ExtensionsIterator_equals(&handle, &it2.getHandle());
         if (!x) return false;
         return true;
     }
 
-    bool operator==(const nitf::ExtensionsIterator& it2)
+    bool operator==(const nitf::ExtensionsIterator& it2) const noexcept
     {
         return this->equals((nitf::ExtensionsIterator&)it2);
     }
@@ -107,14 +107,14 @@ public:
      *  \param it2  The iterator to compare with
      *  \return  True if so, and False otherwise
      */
-    bool notEqualTo(nitf::ExtensionsIterator & it2)
+    bool notEqualTo(nitf::ExtensionsIterator & it2) const noexcept
     {
         const NITF_BOOL x = nitf_ExtensionsIterator_notEqualTo(&handle, &it2.getHandle());
         if (!x) return false;
         return true;
     }
 
-    bool operator!=(const nitf::ExtensionsIterator& it2)
+    bool operator!=(const nitf::ExtensionsIterator& it2) const noexcept
     {
         return this->notEqualTo((nitf::ExtensionsIterator&)it2);
     }
@@ -122,19 +122,19 @@ public:
     /*!
      *  Increment the iterator
      */
-    void increment()
+    void increment() noexcept
     {
         nitf_ExtensionsIterator_increment(&handle);
     }
 
     //! Increment the iterator (postfix)
-    void operator++(int )
+    void operator++(int ) noexcept
     {
         increment();
     }
 
     //! Increment the iterator (prefix)
-    void operator++()
+    void operator++() noexcept
     {
         increment();
     }
@@ -196,7 +196,7 @@ typedef nitf::ExtensionsIterator Iterator;
     }
 
     //! Constructor
-    Extensions()
+    Extensions() noexcept(false)
     {
         setNative(nitf_Extensions_construct(&error));
         getNativeOrThrow();
@@ -211,7 +211,7 @@ typedef nitf::ExtensionsIterator Iterator;
         return dolly;
     }
 
-    ~Extensions(){}
+    ~Extensions() = default;
 
     /*!
      *  Insert a TRE into the extensions section
@@ -250,7 +250,7 @@ typedef nitf::ExtensionsIterator Iterator;
      *  this function.
      *  \param name  The name of the TREs to erase
      */
-    void removeTREsByName(const std::string& name)
+    void removeTREsByName(const std::string& name) noexcept
     {
         nitf_Extensions_removeTREsByName(getNative(), name.c_str());
     }
@@ -259,7 +259,7 @@ typedef nitf::ExtensionsIterator Iterator;
      * Remove the TRE at the given iterator position
      * \param iter  The ExtensionsIterator to erase
      */
-    void remove(Iterator& iter)
+    void remove(Iterator& iter) noexcept
     {
         nitf_TRE* tre = nitf_Extensions_remove(
                             getNative(), &iter.getHandle(), &error);
@@ -289,7 +289,7 @@ typedef nitf::ExtensionsIterator Iterator;
      *  Checks if the TRE exists
      *  \param  The name of the TRE
      */
-    bool exists(const std::string& key) const
+    bool exists(const std::string& key) const noexcept
     {
         const NITF_BOOL x = nitf_Extensions_exists(getNative(), key.c_str());
         return x ? true : false;
@@ -299,7 +299,7 @@ typedef nitf::ExtensionsIterator Iterator;
      *  Get the begin iterator
      *  \return The iterator pointing to the first TRE
      */
-    Iterator begin() const
+    Iterator begin() const noexcept
     {
         const nitf_ExtensionsIterator x = nitf_Extensions_begin(getNative());
         return nitf::ExtensionsIterator(x);
@@ -309,19 +309,19 @@ typedef nitf::ExtensionsIterator Iterator;
      *  Get the end iterator
      *  \return  The iterator pointing PAST the last TRE (null)
      */
-    Iterator end() const
+    Iterator end() const noexcept
     {
         const nitf_ExtensionsIterator x = nitf_Extensions_end(getNative());
         return nitf::ExtensionsIterator(x);
     }
 
-    uint64_t computeLength(nitf::Version version) const
+    uint64_t computeLength(nitf::Version version) const noexcept
     {
         return nitf_Extensions_computeLength(getNative(), version, &error);
     }
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 }
 #endif

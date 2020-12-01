@@ -73,6 +73,7 @@ NITF_CXX_ENDGUARD
 
 NITFAPI(const char**) J2KDecompress_init(nitf_Error *error)
 {
+    (void)error;
     return ident;
 }
 
@@ -86,6 +87,9 @@ NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
                             uint8_t* block,
                             nitf_Error* error)
 {
+    (void)control;
+    (void)error;
+
     if (block)
         implMemFree((void*)block);
     return 1;
@@ -209,11 +213,11 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader * subheader,
                                               nrt_HashTable * options, 
                                               nitf_Error * error)
 {
-    ImplControl *implControl = NULL;
     (void)subheader;
     (void)options;
 
-    if (!(implControl = (ImplControl*)implMemAlloc(sizeof(ImplControl), error)))
+    ImplControl* implControl = (ImplControl*)implMemAlloc(sizeof(ImplControl), error);
+    if (!implControl)
         goto CATCH_ERROR;
 
     return((nitf_DecompressionControl*) implControl);
@@ -233,17 +237,16 @@ NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
                               uint64_t*       blockMask,
                               nitf_Error*        error)
 {
-    ImplControl *implControl = NULL;
-
     /* TODO: In order to support M8, I think we would update this */
     (void)blockMask;
 
-    implControl = (ImplControl*)control;
+    ImplControl* implControl = (ImplControl*)control;
 
     if (nitf_IOInterface_seek(io, offset, NITF_SEEK_SET, error) < 0)
         goto CATCH_ERROR;
 
-    if (!(implControl->reader = j2k_Reader_openIO(io, error)))
+    implControl->reader = j2k_Reader_openIO(io, error);
+    if (!implControl->reader)
         goto CATCH_ERROR;
 
     implControl->offset     = offset;

@@ -64,11 +64,7 @@ public:
     }
 
     DataSource() = default;
-
-    //! Destructor
-    virtual ~DataSource()
-    {
-    }
+    ~DataSource() = default;
 
     // NOTE: The methods below are used just for testing - the underlying C
     //       function pointers are what need to be modified if you want to
@@ -91,7 +87,7 @@ public:
     void setSize(nitf::Off size);
 
 protected:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

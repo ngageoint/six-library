@@ -81,6 +81,7 @@ coda_add_tests(
     DIRECTORY "unittests"
     UNITTEST
     SOURCES
+	test_create_nitf++.cpp
         test_field++.cpp
         test_image_blocker.cpp
         test_image_segment_blank_nm_compression.cpp

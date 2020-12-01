@@ -26,7 +26,7 @@ using namespace nitf;
 
 GraphicSegment::GraphicSegment(const GraphicSegment & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 GraphicSegment & GraphicSegment::operator=(const GraphicSegment & x)
@@ -70,8 +70,6 @@ nitf::GraphicSegment GraphicSegment::clone() const
     dolly.setManaged(false);
     return dolly;
 }
-
-GraphicSegment::~GraphicSegment(){}
 
 
 nitf::GraphicSubheader GraphicSegment::getSubheader() const

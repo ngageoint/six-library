@@ -22,6 +22,7 @@
 
 #ifndef __NITF_TEXTSUBHEADER_HPP__
 #define __NITF_TEXTSUBHEADER_HPP__
+#pragma once
 
 #include "nitf/TextSubheader.h"
 #include "nitf/NITFException.hpp"
@@ -56,12 +57,12 @@ public:
     TextSubheader(nitf_TextSubheader * x);
 
     //! Default Constructor
-    TextSubheader();
+    TextSubheader() noexcept(false);
 
     //! Clone
     nitf::TextSubheader clone() const;
 
-    ~TextSubheader();
+    ~TextSubheader() = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;
@@ -106,7 +107,7 @@ public:
     void setExtendedSection(nitf::Extensions value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

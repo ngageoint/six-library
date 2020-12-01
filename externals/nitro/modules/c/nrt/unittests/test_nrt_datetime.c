@@ -243,6 +243,9 @@ TEST_CASE(testMillis)
 
 TEST_MAIN
 (
+    (void)argc;
+    (void)argv;
+
     CHECK(testNow);
     CHECK(testFromMillis);
     CHECK(testRoundTrip);

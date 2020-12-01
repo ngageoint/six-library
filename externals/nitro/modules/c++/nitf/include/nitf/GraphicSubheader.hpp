@@ -55,12 +55,12 @@ public:
     GraphicSubheader(nitf_GraphicSubheader * x);
 
     //! Default Constructor
-    GraphicSubheader();
+    GraphicSubheader() noexcept(false);
 
     //! Clone
     nitf::GraphicSubheader clone() const;
 
-    ~GraphicSubheader();
+    ~GraphicSubheader() = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;
@@ -123,7 +123,7 @@ public:
     void setExtendedSection(nitf::Extensions value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

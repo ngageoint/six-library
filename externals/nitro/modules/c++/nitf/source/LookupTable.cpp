@@ -22,12 +22,14 @@
 
 #include "nitf/LookupTable.hpp"
 
+#include "gsl/gsl.h"
+
 using namespace nitf;
 
 LookupTable::LookupTable(size_t numTables, size_t numEntries)
 {
     nitf_LookupTable* const lookupTable =
-        nitf_LookupTable_construct(numTables, numEntries, &error);
+        nitf_LookupTable_construct(gsl::narrow<uint32_t>(numTables), gsl::narrow<uint32_t>(numEntries), &error);
     if (!lookupTable)
     {
         throw nitf::NITFException(&error);
@@ -41,7 +43,7 @@ LookupTable::LookupTable(const unsigned char* table,
                          size_t numEntries)
 {
     nitf_LookupTable* const lookupTable =
-        nitf_LookupTable_construct(numTables, numEntries, &error);
+        nitf_LookupTable_construct(gsl::narrow<uint32_t>(numTables), gsl::narrow<uint32_t>(numEntries), &error);
     if (!lookupTable)
     {
         throw nitf::NITFException(&error);
@@ -90,8 +92,8 @@ void LookupTable::setTable(const unsigned char *table,
                            size_t numTables,
                            size_t numEntries)
 {
-    if (!nitf_LookupTable_init(getNativeOrThrow(), numTables,
-            numEntries, table, &error))
+    if (!nitf_LookupTable_init(getNativeOrThrow(), gsl::narrow<uint32_t>(numTables),
+        gsl::narrow<uint32_t>(numEntries), table, &error))
     {
         throw nitf::NITFException(&error);
     }

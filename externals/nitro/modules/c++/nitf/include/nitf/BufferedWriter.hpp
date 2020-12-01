@@ -39,27 +39,30 @@ public:
                    size_t size,
                    bool adopt = false);
 
-    virtual ~BufferedWriter();
+    ~BufferedWriter();
+
+    BufferedWriter(const BufferedWriter&) = delete;
+    BufferedWriter& operator=(const BufferedWriter&) = delete;
 
     void flushBuffer();
 
-    uint64_t getTotalWritten() const
+    uint64_t getTotalWritten() const noexcept
     {
         return mTotalWritten;
     }
 
-    uint64_t getNumBlocksWritten() const
+    uint64_t getNumBlocksWritten() const noexcept
     {
         return mBlocksWritten;
     }
 
-    uint64_t getNumPartialBlocksWritten() const
+    uint64_t getNumPartialBlocksWritten() const noexcept
     {
         return mPartialBlocks;
     }
 
     //! Time spent writing to disk in seconds
-    double getTotalWriteTime()
+    double getTotalWriteTime() const noexcept
     {
         return mElapsedTime;
     }
@@ -70,7 +73,7 @@ protected:
 
     void writeImpl(const void* buf, size_t size) override;
 
-    bool canSeekImpl() const override;
+    bool canSeekImpl() const noexcept override;
 
     nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
@@ -78,20 +81,20 @@ protected:
 
     nitf::Off getSizeImpl() const override;
 
-    int getModeImpl() const override;
+    int getModeImpl() const noexcept override;
 
     void closeImpl() override;
 
 private:
     const size_t mBufferSize;
-    const mem::ScopedArray<char> mScopedBuffer;
+    const std::shared_ptr<char[]> mScopedBuffer;
     char* const mBuffer;
 
-    uint64_t mPosition;
+    nitf::Off mPosition;
     uint64_t mTotalWritten;
     uint64_t mBlocksWritten;
     uint64_t mPartialBlocks;
-    double mElapsedTime;
+    double mElapsedTime = 0.0;
 
     // NOTE: This is at the end to give us a chance to adopt the buffer
     //       in ScopedArray in case sys::File's constructor throws

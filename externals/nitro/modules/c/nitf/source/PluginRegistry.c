@@ -369,9 +369,10 @@ doInit(nitf_DLL* dll, const char* prefix, nitf_Error* error)
     NITF_PLUGIN_INIT_FUNCTION init;
     const char** ident;
 
-    char name[NITF_MAX_PATH];
-    memset(name, 0, NITF_MAX_PATH);
-    NITF_SNPRINTF(name, NITF_MAX_PATH, "%s%s", prefix, NITF_PLUGIN_INIT_SUFFIX);
+#define NITF_MAX_PATH_NAME_SIZE_ NITF_MAX_PATH+4096
+    char name[NITF_MAX_PATH_NAME_SIZE_];
+    memset(name, 0, NITF_MAX_PATH_NAME_SIZE_);
+    NITF_SNPRINTF(name, NITF_MAX_PATH_NAME_SIZE_, "%s" NITF_PLUGIN_INIT_SUFFIX, prefix);
     init = (NITF_PLUGIN_INIT_FUNCTION)nitf_DLL_retrieve(dll, name, error);
     if (!init)
     {
@@ -655,6 +656,8 @@ nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry* reg,
                                     const char* dirName,
                                     nitf_Error* error)
 {
+    (void)reg;
+
     const char* name;
     size_t sizePath;
     nitf_Directory* dir = NULL;
@@ -685,7 +688,7 @@ nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry* reg,
             {
                 char* end;
                 char fullName[NITF_MAX_PATH];
-                int pathSize = sizePath;
+                size_t pathSize = sizePath;
                 memset(fullName, 0, NITF_MAX_PATH);
                 memcpy(fullName, dirName, sizePath);
                 if (!isDelimiter(dirName[pathSize - 1]))

@@ -81,7 +81,7 @@ public:
     }
 
     //!  Destructor.  Does not release any memory
-    virtual ~WriteControl()
+    virtual ~WriteControl() noexcept(false)
     {
         if (mLog && mOwnLog)
             delete mLog;

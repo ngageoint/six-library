@@ -48,7 +48,7 @@ class HashTable; //forward declaration
 class HashIterator
 {
 public:
-    virtual ~HashIterator(){}
+    virtual ~HashIterator() {}
     virtual void operator()(nitf::HashTable* ht,
                             nitf::Pair& pair,
                             NITF_DATA* userData) = 0;
@@ -61,51 +61,47 @@ public:
  *
  *  Iterates a hash table, unordered.
  */
-class HashTableIterator
+struct HashTableIterator final
 {
-public:
-    //! Constructor
-    HashTableIterator() {}
-
-    //! Destructor
-    ~HashTableIterator() {}
+    HashTableIterator() = default;
+    ~HashTableIterator() = default;
 
     //! Copy constructor
-    HashTableIterator(const HashTableIterator & x) { handle = x.handle; }
+    HashTableIterator(const HashTableIterator & x) noexcept { handle = x.handle; }
 
     //! Assignment Operator
-    HashTableIterator & operator=(const HashTableIterator & x);
+    HashTableIterator & operator=(const HashTableIterator & x) noexcept;
 
     //! Set native object
-    HashTableIterator(nitf_HashTableIterator x) { setHandle(x); }
+    HashTableIterator(nitf_HashTableIterator x) noexcept { setHandle(x); }
 
     //! Get native object
-    nitf_HashTableIterator& getHandle();
-    nitf_HashTableIterator & getHandle() const;
+    nitf_HashTableIterator& getHandle() noexcept;
+    nitf_HashTableIterator & getHandle() const noexcept;
 
     //! Check to see if two iterators are equal
-    bool equals(const nitf::HashTableIterator& it2) const;
+    bool equals(const nitf::HashTableIterator& it2) const noexcept;
 
     //! Check to see if two iterators are not equal
-    bool notEqualTo(const nitf::HashTableIterator& it2) const;
+    bool notEqualTo(const nitf::HashTableIterator& it2) const noexcept;
 
     //! Increment the iterator
-    void increment();
+    void increment() noexcept;
 
-    bool operator==(const nitf::HashTableIterator& it2) const;
+    bool operator==(const nitf::HashTableIterator& it2) const noexcept;
 
-    bool operator!=(const nitf::HashTableIterator& it2) const;
+    bool operator!=(const nitf::HashTableIterator& it2) const noexcept;
 
     //! Increment the iterator (postfix);
-    void operator++(int x);
+    void operator++(int x) noexcept;
 
     //! Increment the iterator by a specified amount
-    HashTableIterator & operator+=(int x);
+    HashTableIterator & operator+=(int x) noexcept;
 
-    HashTableIterator operator+(int x);
+    HashTableIterator operator+(int x) noexcept;
 
     //! Increment the iterator (prefix);
-    void operator++() { increment(); }
+    void operator++() noexcept { increment(); }
 
     //! Get the data
     nitf::Pair operator*() { return get(); }
@@ -115,10 +111,10 @@ public:
 
 
 private:
-    mutable nitf_HashTableIterator handle;
+    mutable nitf_HashTableIterator handle{};
 
     //! Set native object
-    void setHandle(nitf_HashTableIterator x) { handle = x; }
+    void setHandle(nitf_HashTableIterator x) noexcept  { handle = x; }
 };
 
 
@@ -143,7 +139,7 @@ public:
      *  Constructor
      *  \param nbuckets  The size of the hash
      */
-    HashTable(int nbuckets = 5);
+    HashTable(int nbuckets = 5) noexcept(false);
 
     //! Clone
     nitf::HashTable clone(NITF_DATA_ITEM_CLONE cloner);
@@ -157,7 +153,7 @@ public:
      *  remove it yourself, or I may be told to remove it for you.
      *  If you do not tell me, I will assume that you own it.
      */
-    void setPolicy(int policy);
+    void setPolicy(int policy) noexcept;
 
     /*!
      *  Remove data from the hash table.  Here is the removal policy:
@@ -168,26 +164,26 @@ public:
      *    - You are expected to delete the data we give you
      *
      */
-    NITF_DATA* remove(const std::string& key);
+    NITF_DATA* remove(const std::string& key) noexcept;
 
     /*!
      *  Assigns the hash function to a "good" default.
      */
-    void initDefaults();
+    void initDefaults() noexcept;
 
-    ~HashTable();
+    ~HashTable() = default;
 
     /*!
      *  Check to see whether such a key exists in the table
      *  \param  The key to lookup
      *  \return  True if exists, False otherwise.
      */
-    bool exists(const std::string& key) const;
+    bool exists(const std::string& key) const noexcept;
 
     /*!
      *  Debug tool to find out whats in the hash table
      */
-    void print() const;
+    void print() const noexcept;
 
     /*!
      *  For each item in the hash table, do something (slow);
@@ -233,18 +229,18 @@ public:
      *  Get the begin iterator
      *  \return  The iterator pointing to the first item in the list
      */
-    nitf::HashTableIterator begin() const;
+    nitf::HashTableIterator begin() const noexcept;
 
     /*!
      *  Get the end iterator
      *  \return  The iterator pointing to PAST the last item in the list (null);
      */
-    nitf::HashTableIterator end() const;
+    nitf::HashTableIterator end() const noexcept;
 
 private:
 
     std::vector<nitf::List *> mBuckets;
-    nitf_Error error;
+    nitf_Error error{};
 
     //! Clear the buckets
     void clearBuckets();

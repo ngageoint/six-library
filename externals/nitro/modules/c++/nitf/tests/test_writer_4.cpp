@@ -26,13 +26,16 @@
 #include <iostream>
 #include <string>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 int main(int argc, char **argv)
 {
     try
     {
         if (argc != 3)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <input-file> <output-file>\n\n";
             return 1;
         }

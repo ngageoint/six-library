@@ -49,9 +49,6 @@ BlockingInfo::BlockingInfo()
     setManaged(false);
 }
 
-BlockingInfo::~BlockingInfo(){}
-
-
 uint32_t BlockingInfo::getNumBlocksPerRow() const
 {
     return getNativeOrThrow()->numBlocksPerRow;

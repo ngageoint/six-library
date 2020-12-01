@@ -58,9 +58,6 @@ LabelSubheader LabelSubheader::clone() const
     return dolly;
 }
 
-LabelSubheader::~LabelSubheader(){}
-
-
 nitf::Field LabelSubheader::getFilePartType() const
 {
     return nitf::Field(getNativeOrThrow()->filePartType);

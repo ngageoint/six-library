@@ -55,7 +55,7 @@ public:
     GraphicSegment(nitf_GraphicSegment * x);
 
     //! Constructor
-    GraphicSegment();
+    GraphicSegment() noexcept(false);
 
     GraphicSegment(NITF_DATA * x);
 
@@ -64,7 +64,10 @@ public:
     //! Clone
     nitf::GraphicSegment clone() const;
 
-    ~GraphicSegment();
+
+    ~GraphicSegment() = default;
+    GraphicSegment(GraphicSegment&&) = default;
+    GraphicSegment& operator=(GraphicSegment&&) = default;
 
     //! Get the subheader
     nitf::GraphicSubheader getSubheader() const;
@@ -85,7 +88,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

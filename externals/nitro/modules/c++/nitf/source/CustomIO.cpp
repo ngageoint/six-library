@@ -25,9 +25,10 @@
 
 namespace nitf
 {
-CustomIO::CustomIO() :
-    IOInterface(createInterface(this))
+CustomIO::CustomIO()
 {
+    set_native_object(createInterface(this));
+
     setManaged(false);
 }
 
@@ -47,7 +48,7 @@ CustomIO::~CustomIO()
     mHandle->get()->data = nullptr;
 }
 
-nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
+nitf_IOInterface* CustomIO::createInterface(CustomIO* me) noexcept
 {
     static nrt_IIOInterface iIOHandle = {
         &CustomIO::adapterRead,
@@ -61,7 +62,14 @@ nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
         &CustomIO::adapterDestruct
     };
 
+    #ifdef _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
+    #endif
     auto const impl = static_cast<nitf_IOInterface*>(NITF_MALLOC(sizeof(nitf_IOInterface)));
+    #ifdef _MSC_VER
+    #pragma warning(pop)
+    #endif
     if (impl == nullptr)
     {
         return nullptr;
@@ -247,6 +255,13 @@ nrt_Off CustomIO::adapterGetSize(NRT_DATA* data,
 int CustomIO::adapterGetMode(NRT_DATA* data,
                              nrt_Error* error)
 {
+    if (data == nullptr)
+    {
+        nrt_Error_init(error, "Null pointer reference", NITF_CTXT,
+            NITF_ERR_INVALID_OBJECT);
+        return -1;
+    }
+
     try
     {
         return static_cast<CustomIO*>(data)->getMode();
@@ -309,7 +324,7 @@ NRT_BOOL CustomIO::adapterClose(NRT_DATA* data,
     }
 }
 
-void CustomIO::adapterDestruct(NRT_DATA* data)
+void CustomIO::adapterDestruct(NRT_DATA*) noexcept
 {
 }
 }
