@@ -289,7 +289,7 @@ void DerivedXMLParser::parseDerivedClassificationFromXML(
 
     //! from ism:ISMRootNodeAttributeGroup
     // Could do
-    // toType<sys::Int32_T>(
+    // toType<int32_t>(
     //        classificationAttributes.getValue("ism:DESVersion"));
     // here if we needed to verify this for any reason
 

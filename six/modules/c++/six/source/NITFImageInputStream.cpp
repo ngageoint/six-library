@@ -77,13 +77,13 @@ sys::Off_T six::NITFImageInputStream::available()
     return mAvailable;
 }
 
-sys::SSize_T six::NITFImageInputStream::read(sys::byte* b, sys::Size_T len)
+sys::SSize_T six::NITFImageInputStream::read(sys::byte* b, size_t len)
 {
     //TODO to be 100% complete, we need to interleave multi-bands
     //this does NOT include the special RGB case that is already interleaved
     //the special RGB case is already taken care of here
 
-    sys::Size_T bytesToGo = len, bOffset = 0, rowBufferOffset = 0;
+    size_t bytesToGo = len, bOffset = 0, rowBufferOffset = 0;
 
     while (bytesToGo > 0)
     {

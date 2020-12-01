@@ -164,11 +164,11 @@ void ByteProvider::populateInitArgs(
     const Options& options(headerCreator.getOptions());
     const Parameter zero(0);
 
-    numRowsPerBlock = static_cast<sys::Uint32_T>(
+    numRowsPerBlock = static_cast<uint32_t>(
             options.getParameter(NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                                  zero));
 
-    numColsPerBlock = static_cast<sys::Uint32_T>(
+    numColsPerBlock = static_cast<uint32_t>(
             options.getParameter(NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                                  zero));
 }

@@ -186,7 +186,7 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
         const size_t optNumRowsPerBlock = static_cast<size_t>(
                 mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
 
-        numRowsPerBlock = static_cast<sys::Uint32_T>(
+        numRowsPerBlock = static_cast<uint32_t>(
                 std::min(optNumRowsPerBlock, segmentDims.row));
     }
     else
@@ -208,7 +208,7 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
         const size_t optNumColsPerBlock = static_cast<size_t>(
                 mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
 
-        numColsPerBlock = static_cast<sys::Uint32_T>(
+        numColsPerBlock = static_cast<uint32_t>(
                 std::min(optNumColsPerBlock, segmentDims.col));
     }
     else
@@ -617,11 +617,11 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
     // Clean up
     mInfos.clear();
 
-    sys::Uint32_T ilocMax = Constants::ILOC_MAX;
-    sys::Uint32_T maxRows =
+    uint32_t ilocMax = Constants::ILOC_MAX;
+    uint32_t maxRows =
             mOptions.getParameter(OPT_MAX_ILOC_ROWS, Parameter(ilocMax));
 
-    sys::Uint64_T maxSize = (sys::Uint64_T)mOptions.getParameter(
+    uint64_t maxSize = (uint64_t)mOptions.getParameter(
             OPT_MAX_PRODUCT_SIZE, Parameter(six::Constants::IS_SIZE_MAX));
 
     double j2kCompression = 0;

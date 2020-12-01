@@ -86,7 +86,7 @@ const char NITFImageInfo::CTLN[] = "CTLN";
 
 NITFImageInfo::NITFImageInfo(Data* data,
                              size_t maxRows,
-                             sys::Uint64_T maxSize,
+                             uint64_t maxSize,
                              bool computeSegments,
                              size_t rowsPerBlock,
                              size_t colsPerBlock) :

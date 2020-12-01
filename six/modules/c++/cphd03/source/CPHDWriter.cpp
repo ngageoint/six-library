@@ -111,14 +111,14 @@ void CPHDWriter::addImage(const T* image,
 }
 
 template
-void CPHDWriter::addImage<std::complex<sys::Int8_T> >(
-        const std::complex<sys::Int8_T>* image,
+void CPHDWriter::addImage<std::complex<int8_t> >(
+        const std::complex<int8_t>* image,
         const types::RowCol<size_t>& dims,
         const sys::ubyte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<sys::Int16_T> >(
-        const std::complex<sys::Int16_T>* image,
+void CPHDWriter::addImage<std::complex<int16_t> >(
+        const std::complex<int16_t>* image,
         const types::RowCol<size_t>& dims,
         const sys::ubyte* vbmData);
 
@@ -222,13 +222,13 @@ void CPHDWriter::writeCPHDData(const T* data,
 }
 
 template
-void CPHDWriter::writeCPHDData<std::complex<sys::Int8_T> >(
-        const std::complex<sys::Int8_T>* data,
+void CPHDWriter::writeCPHDData<std::complex<int8_t> >(
+        const std::complex<int8_t>* data,
         size_t numElements);
 
 template
-void CPHDWriter::writeCPHDData<std::complex<sys::Int16_T> >(
-        const std::complex<sys::Int16_T>* data,
+void CPHDWriter::writeCPHDData<std::complex<int16_t> >(
+        const std::complex<int16_t>* data,
         size_t numElements);
 
 template
