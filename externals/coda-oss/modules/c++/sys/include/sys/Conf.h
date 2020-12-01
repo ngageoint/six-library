@@ -214,7 +214,7 @@ namespace sys
         if (!bufferPtr || elemSize < 2 || !numElems)
             return;
 
-        const unsigned short half = elemSize >> 1;
+        const auto half = elemSize >> 1;
         size_t offset = 0, innerOff = 0, innerSwap = 0;
 
         for(size_t i = 0; i < numElems; ++i, offset += elemSize)
@@ -252,7 +252,7 @@ namespace sys
             return;
         }
 
-        const unsigned short half = elemSize >> 1;
+        const auto half = elemSize >> 1;
         size_t offset = 0;
 
         for (size_t ii = 0; ii < numElems; ++ii, offset += elemSize)

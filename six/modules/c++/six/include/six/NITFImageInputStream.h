@@ -52,8 +52,7 @@ public:
     NITFImageInputStream(nitf::ImageSubheader subheader,
             nitf::ImageReader imageReader);
 
-    //!  Destructor
-    virtual ~NITFImageInputStream() {}
+    virtual ~NITFImageInputStream() noexcept {}
 
     //!  How many bytes in the image
     sys::Off_T available();
