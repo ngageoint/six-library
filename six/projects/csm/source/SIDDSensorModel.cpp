@@ -116,7 +116,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         // For multi-image SIDDs, all the SIDD DESs will appear first (in the
         // case where SICD DESs are also present), so we just have to grab out
         // the Nth Data object
-        const mem::SharedPtr<six::Container> container = reader.getContainer();
+        const std::shared_ptr<six::Container> container = reader.getContainer();
         if (container->getDataType() != six::DataType::DERIVED ||
             container->getNumData() < imageIndex + 1)
         {

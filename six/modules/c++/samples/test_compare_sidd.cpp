@@ -42,10 +42,10 @@
 
 namespace
 {
-mem::SharedPtr<six::Data> readMetadata(const six::NITFReadControl& reader)
+std::shared_ptr<six::Data> readMetadata(const six::NITFReadControl& reader)
 {
     const six::Data* data = reader.getContainer()->getData(0);
-    mem::SharedPtr<six::Data> retv(data->clone());
+    std::shared_ptr<six::Data> retv(data->clone());
     return retv;
 }
 
@@ -82,14 +82,14 @@ bool siddsMatch(const std::string& sidd1Path,
     reader.setXMLControlRegistry(&xmlRegistry);
 
     reader.load(sidd1Path);
-    mem::SharedPtr<six::Data> sidd1Metadata = readMetadata(reader);
+    std::shared_ptr<six::Data> sidd1Metadata = readMetadata(reader);
     mem::ScopedAlignedArray<six::UByte> sidd1Buffer;
     readWideband(reader,
             *sidd1Metadata,
             sidd1Buffer);
 
     reader.load(sidd2Path);
-    mem::SharedPtr<six::Data> sidd2Metadata = readMetadata(reader);
+    std::shared_ptr<six::Data> sidd2Metadata = readMetadata(reader);
     mem::ScopedAlignedArray<six::UByte> sidd2Buffer;
     readWideband(reader,
             *sidd2Metadata,

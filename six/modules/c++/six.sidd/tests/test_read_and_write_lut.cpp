@@ -85,7 +85,7 @@ std::string doRoundTrip(const std::string& siddPathname)
     reader.setXMLControlRegistry(&xmlRegistry);
 
     reader.load(siddPathname);
-    mem::SharedPtr<six::Container> container = reader.getContainer();
+    std::shared_ptr<six::Container> container = reader.getContainer();
 
     six::Region region;
     region.setStartRow(0);
@@ -189,7 +189,7 @@ mem::ScopedCopyablePtr<six::LUT> readLUT(const std::string& pathname)
     reader.setXMLControlRegistry(&xmlRegistry);
 
     reader.load(pathname);
-    mem::SharedPtr<six::Container> container = reader.getContainer();
+    std::shared_ptr<six::Container> container = reader.getContainer();
     six::Data* const data = container->getData(0);
     mem::ScopedCopyablePtr<six::LUT> lut = data->getDisplayLUT();
     if (lut.get() == NULL)

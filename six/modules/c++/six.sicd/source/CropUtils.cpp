@@ -128,7 +128,7 @@ void cropSICD(six::NITFReadControl& reader,
     std::unique_ptr<six::Data> scopedData(aoiData);
 
     // Write the AOI SICD out
-    mem::SharedPtr<six::Container> container(new six::Container(
+    std::shared_ptr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
     container->addData(std::move(scopedData));
     six::NITFWriteControl writer(container);
@@ -183,7 +183,7 @@ void cropSICD(six::NITFReadControl& reader,
               const std::string& outPathname)
 {
     // Make sure it's a SICD
-    const mem::SharedPtr<const six::Container> container = reader.getContainer();
+    const std::shared_ptr<const six::Container> container = reader.getContainer();
 
     const six::Data* const dataPtr = container->getData(0);
     if (container->getDataType() != six::DataType::COMPLEX ||
@@ -231,7 +231,7 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     // Make sure it's a SICD
-    const mem::SharedPtr<const six::Container> container = reader.getContainer();
+    const std::shared_ptr<const six::Container> container = reader.getContainer();
 
     const six::Data* const dataPtr = container->getData(0);
     if (container->getDataType() != six::DataType::COMPLEX ||

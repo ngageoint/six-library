@@ -155,7 +155,7 @@ int main(int argc, char** argv)
                 new six::XMLControlCreatorT<
                         six::sidd::DerivedXMLControl>());
 
-        mem::SharedPtr<six::Container> container(new six::Container(
+        std::shared_ptr<six::Container> container(new six::Container(
                 six::DataType::DERIVED));
 
         std::vector<six::UByte*> buffers;

@@ -231,7 +231,7 @@ static int main_(int argc, char** argv)
             else
             {
                 reader.load(inputPathname, schemaPaths);
-                mem::SharedPtr<six::Container> container =
+                std::shared_ptr<six::Container> container =
                         reader.getContainer();
                 for (size_t jj = 0; jj < container->getNumData(); ++jj)
                 {

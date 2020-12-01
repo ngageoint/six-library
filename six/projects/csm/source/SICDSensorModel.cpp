@@ -89,7 +89,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
         reader.setXMLControlRegistry(&xmlRegistry);
         reader.load(pathname, mSchemaDirs);
 
-        const mem::SharedPtr<six::Container> container = reader.getContainer();
+        const std::shared_ptr<six::Container> container = reader.getContainer();
         if (container->getDataType() != six::DataType::COMPLEX ||
             container->getNumData() != 1 ||
             container->getData(0)->getDataType() != six::DataType::COMPLEX)

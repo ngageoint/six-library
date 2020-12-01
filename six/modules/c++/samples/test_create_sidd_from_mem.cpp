@@ -2578,7 +2578,7 @@ int main(int argc, char** argv)
         const char smallData[4] = {'a', 'b', 'c', 'd'};
 
         // Create a file container
-        mem::SharedPtr<six::Container> container(
+        std::shared_ptr<six::Container> container(
                 new six::Container(DataType::DERIVED));
 
         std::vector<const UByte*> buffers;
