@@ -23,6 +23,9 @@
 #include <import/nitf.hpp>
 #include <import/except.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 void writeImage(nitf::ImageSegment &segment,
                 nitf::Reader &reader,
                 const int imageNumber,
@@ -134,7 +137,7 @@ void writeImage(nitf::ImageSegment &segment,
     for (i = 0; i < nBands; i++)
     {
         std::cout << "Writing band # " << i << std::endl;
-        std::string base = sys::Path::basename(imageName);
+        std::string base = fs::path(imageName).filename().string();
 
         size_t where = 0;
         while ((where = base.find(".")) != (size_t)std::string::npos)
