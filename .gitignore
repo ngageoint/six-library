@@ -51,6 +51,7 @@ six/Makefile
 six/modules/**/Makefile
 *_config.h
 *_config.hpp
+build/
 
 # Drivers
 six/projects/csm/external/csm-master/
