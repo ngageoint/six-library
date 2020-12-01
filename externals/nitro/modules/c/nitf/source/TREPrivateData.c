@@ -149,6 +149,10 @@ NITFPRIV(int) destructHashValue(nitf_HashTable * ht,
                                 NITF_DATA* userData,
                                 nitf_Error * error)
 {
+    (void)ht;
+    (void)userData;
+    (void)error;
+
     if (pair)
         if (pair->data)
             nitf_Field_destruct((nitf_Field **) & pair->data);

@@ -42,8 +42,6 @@ SegmentReader::SegmentReader(nitf_SegmentReader * x)
     getNativeOrThrow();
 }
 
-SegmentReader::~SegmentReader(){}
-
 
 void SegmentReader::read
 (

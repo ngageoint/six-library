@@ -56,7 +56,7 @@ std::string prepareIO()
 }
 }
 
-int main(int argc, char **argv)
+int main(int, char **)
 {
     const size_t bandSize = MEMSIZE / NUM_BANDS;
     const std::string fname = prepareIO();

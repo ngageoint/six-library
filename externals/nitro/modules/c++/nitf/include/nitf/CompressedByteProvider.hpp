@@ -95,7 +95,7 @@ public:
      *
      * \return The associated number of bytes in the NITF
      */
-    virtual nitf::Off getNumBytes(size_t startRow, size_t numRows) const;
+    nitf::Off getNumBytes(size_t startRow, size_t numRows) const override;
 
     /*!
      * The caller provides an AOI of the pixel data.  This method provides back
@@ -137,11 +137,11 @@ public:
      * bytes for the NITF headers) and the lifetime of the passed-in image
      * data.
      */
-    virtual void getBytes(const void* imageData,
+    void getBytes(const void* imageData,
                           size_t startRow,
                           size_t numRows,
                           nitf::Off& fileOffset,
-                          NITFBufferList& buffers) const;
+                          NITFBufferList& buffers) const override;
 
 protected:
     /*!
@@ -149,7 +149,7 @@ protected:
      * this constructor, the inheriting class will call initialize() later in
      * its constructor.
      */
-    CompressedByteProvider();
+    CompressedByteProvider() noexcept(false);
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and

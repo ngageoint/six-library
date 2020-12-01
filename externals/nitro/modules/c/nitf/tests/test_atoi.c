@@ -26,7 +26,7 @@
 #define BIG "3000000000"
 #define SMALLER "300000000"
 
-int main(int argc, char *argv[])
+int main(void)
 {
     int32_t  i32;
     uint32_t u32;

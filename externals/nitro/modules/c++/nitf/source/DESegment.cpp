@@ -69,8 +69,6 @@ nitf::DESegment DESegment::clone() const
     return dolly;
 }
 
-DESegment::~DESegment(){}
-
 nitf::DESubheader DESegment::getSubheader() const
 {
     return nitf::DESubheader(getNativeOrThrow()->subheader);

@@ -49,7 +49,7 @@ DECLARE_CLASS(ListNode)
 {
 public:
     //! Constructor
-    ListNode() {}
+    ListNode() = default;
 
     //! Copy constructor
     ListNode(const ListNode& x) { *this = x; }
@@ -79,9 +79,9 @@ public:
 
 private:
     friend class List;
-    friend class ListIterator;
+    friend struct ListIterator;
 
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 /*!
@@ -90,17 +90,13 @@ private:
  *
  *  Iterates a linked list.
  */
-class ListIterator
+struct ListIterator final
 {
-public:
-    //! Constructor
-    ListIterator() {}
-
-    //! Destructor
-    ~ListIterator() {}
+    ListIterator() = default;
+    ~ListIterator() = default;
 
     //! Copy constructor
-    ListIterator(const ListIterator & x) { handle = x.handle; }
+    ListIterator(const ListIterator & x) noexcept { handle = x.handle; }
 
     //! Assignment Operator
     ListIterator & operator=(const ListIterator & x);
@@ -109,18 +105,18 @@ public:
     ListIterator(nitf_ListIterator x);
 
     //! Get native object
-    nitf_ListIterator & getHandle();
-    nitf_ListIterator& getHandle() const;
+    nitf_ListIterator & getHandle() noexcept;
+    nitf_ListIterator& getHandle() const noexcept;
 
     //! Checks to see if two iterators are equal
-    bool equals(const nitf::ListIterator& it2) const;
+    bool equals(const nitf::ListIterator& it2) const noexcept;
 
     //! Checks to see if two iterators are not equal
-    bool notEqualTo(const nitf::ListIterator& it2) const;
+    bool notEqualTo(const nitf::ListIterator& it2) const noexcept;
 
-    bool operator==(const nitf::ListIterator& it2) const;
+    bool operator==(const nitf::ListIterator& it2) const noexcept;
 
-    bool operator!=(const nitf::ListIterator& it2) const;
+    bool operator!=(const nitf::ListIterator& it2) const noexcept;
 
     //! Increment the iterator
     void increment();
@@ -137,16 +133,16 @@ public:
     void operator++() { increment(); }
 
     //! Get the data
-    NITF_DATA* operator*() { return get(); }
+    NITF_DATA* operator*() noexcept { return get(); }
 
     //! Get the data
-    NITF_DATA* get() { return nitf_ListIterator_get(&handle); }
+    NITF_DATA* get() noexcept { return nitf_ListIterator_get(&handle); }
 
     //! Get the current
-    nitf::ListNode & getCurrent() { return mCurrent; }
+    nitf::ListNode & getCurrent() noexcept { return mCurrent; }
 
 private:
-    mutable nitf_ListIterator handle;
+    mutable nitf_ListIterator handle{ };
     nitf::ListNode mCurrent;
 
     //! Set native object
@@ -233,13 +229,12 @@ public:
     NITF_DATA* popBack();
 
     //! Constructor
-    List();
+    List() noexcept(false);
 
     //! Clone
     nitf::List clone(NITF_DATA_ITEM_CLONE cloner) const;
 
-    //! Destructor
-    ~List();
+    ~List() = default;
 
     /*!
      *  Get the begin iterator
@@ -299,7 +294,7 @@ public:
     NITF_DATA* operator[] (size_t index);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

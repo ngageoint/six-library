@@ -60,16 +60,13 @@ public:
     ImageSubheader(nitf_ImageSubheader * x);
 
     //! Constructor
-    ImageSubheader();
+    ImageSubheader() noexcept(false);
 
 
     //! Clone
     nitf::ImageSubheader clone() const;
 
-    /*!
-     *  Destructor
-     */
-    ~ImageSubheader();
+    ~ImageSubheader() = default;
 
     /*!
      *  Set the pixel type and band related information
@@ -182,7 +179,7 @@ public:
                          uint32_t& numRowsPerBlock,
                          uint32_t& numColsPerBlock,
                          uint32_t& numBlocksPerCol,
-                         uint32_t& numBlocksPerRow);
+                         uint32_t& numBlocksPerRow) noexcept;
 
     /*!
      * Set the image dimensions and blocking.
@@ -355,7 +352,7 @@ public:
      * an even multiple of numDimsPerBlock)
      */
     static
-    size_t getActualImageDim(size_t dim, size_t numDimsPerBlock);
+    size_t getActualImageDim(size_t dim, size_t numDimsPerBlock) noexcept;
 
     /*!
      * \return The number of bytes the image data associated with the image
@@ -402,7 +399,7 @@ private:
 
     size_t getNumBytesPerPixel_() const;
 
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

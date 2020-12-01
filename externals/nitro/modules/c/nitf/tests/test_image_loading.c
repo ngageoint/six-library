@@ -44,7 +44,7 @@ void writeImage(nitf_ImageSegment * segment,
                 nitf_Error * error)
 {
 
-    uint32_t nBits, nBands, xBands, nRows, nColumns;
+    uint32_t nBits, nBands=0, xBands, nRows, nColumns;
     size_t subimageSize;
     nitf_SubWindow *subimage;
     unsigned int i;

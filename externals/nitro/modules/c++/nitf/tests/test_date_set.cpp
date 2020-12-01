@@ -25,7 +25,7 @@
 
 #define MAX_DATE_STRING    1024
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
     try
     {

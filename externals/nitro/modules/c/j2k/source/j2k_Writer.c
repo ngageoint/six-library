@@ -27,6 +27,8 @@ J2KAPI(NRT_BOOL) j2k_Writer_setOptions(j2k_WriterOptions* options,
                                        nrt_HashTable* userOptions, 
                                        nrt_Error* error)
 {
+    (void)error;
+
     nrt_Pair* compressionRatio;
     nrt_Pair* numResolutions;
     if(options && userOptions)

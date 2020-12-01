@@ -45,13 +45,16 @@
 #include <iostream>
 #include <vector>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 template <typename T>
 class Foo
 {
 protected:
     virtual void bar() {std::cout << "HERE1" << std::endl;}
 public:
-    Foo(){}
+    Foo() = default;
     virtual ~Foo(){bar();}
 };
 
@@ -62,7 +65,7 @@ class Bar : public Foo<T>
 protected:
     virtual void bar() { std::cout << "HERE2" << std::endl; }
 public:
-    Bar(){}
+    Bar() = default;
     ~Bar(){bar();}
 };
 
@@ -166,11 +169,10 @@ int main(int argc, char** argv)
 
 
         //open a file
-        sys::OS os;
         std::vector< std::string > files;
         for (int i = 1; i < argc; ++i)
         {
-            if (!os.exists(argv[i]))
+            if (!fs::exists(argv[i]))
                 std::cout << "Error -> File does not exist: " << argv[i] << std::endl;
             else
                 files.push_back(argv[i]);

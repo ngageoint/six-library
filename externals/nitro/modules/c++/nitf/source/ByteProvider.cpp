@@ -20,6 +20,8 @@
  *
  */
 
+#include "nitf/ByteProvider.hpp"
+
 #include <string.h>
 #include <sstream>
 #include <algorithm>
@@ -27,7 +29,6 @@
 
 #include <except/Exception.h>
 #include <nitf/Writer.hpp>
-#include <nitf/ByteProvider.hpp>
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
@@ -35,14 +36,6 @@
 
 namespace nitf
 {
-ByteProvider::ByteProvider() :
-    mNumCols(0),
-    mOverallNumRowsPerBlock(0),
-    mNumColsPerBlock(0),
-    mNumBytesPerRow(0),
-    mNumBytesPerPixel(0)
-{
-}
 
 ByteProvider::ByteProvider(Record& record,
                            const std::vector<PtrAndLength>& desData,
@@ -67,7 +60,7 @@ void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
     rawBytes.resize(stream.getSize());
     if (!rawBytes.empty())
     {
-        ::memcpy(&rawBytes[0], stream.get(), stream.getSize());
+        ::memcpy(rawBytes.data(), stream.get(), stream.getSize());
     }
 
     stream.clear();
@@ -257,15 +250,15 @@ void ByteProvider::getFileLayout(const nitf::Record& inRecord,
     uint32_t hdrLen;
     record.setComplexityLevelIfUnset();
     writer.writeHeader(fileLenOff, hdrLen);
-    const nitf::Off fileHeaderNumBytes = byteStream->getSize();
+    const nitf::Off fileHeaderNumBytes = gsl::narrow<nitf::Off>(byteStream->getSize());
 
     // Overall file length and header length
     mFileNumBytes =
             fileHeaderNumBytes + imageSegmentsTotalNumBytes +
-            mDesSubheaderAndData.size();
+            gsl::narrow<nitf::Off>(mDesSubheaderAndData.size());
 
     byteStream->seek(fileLenOff, io::Seekable::START);
-    writer.writeInt64Field(mFileNumBytes, NITF_FL_SZ, '0', NITF_WRITER_FILL_LEFT);
+    writer.writeInt64Field(gsl::narrow<uint64_t>(mFileNumBytes), NITF_FL_SZ, '0', NITF_WRITER_FILL_LEFT);
     writer.writeInt64Field(hdrLen, NITF_HL_SZ, '0', NITF_WRITER_FILL_LEFT);
 
     // Image segments
@@ -299,7 +292,7 @@ void ByteProvider::getFileLayout(const nitf::Record& inRecord,
 
     // Figure out where the image subheader offsets are
     mImageSubheaderFileOffsets.resize(numImages);
-    nitf::Off offset = mFileHeader.size();
+    nitf::Off offset = gsl::narrow<nitf::Off>(mFileHeader.size());
     for (size_t ii = 0; ii < numImages; ++ii)
     {
          mImageSubheaderFileOffsets[ii] = offset;
@@ -367,7 +360,7 @@ void ByteProvider::checkBlocking(size_t seg,
 }
 
 size_t ByteProvider::countPadRows(
-        size_t seg, size_t numRowsToWrite, size_t imageDataEndRow) const
+        size_t seg, size_t /*numRowsToWrite*/, size_t imageDataEndRow) const noexcept
 {
     const SegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
     const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
@@ -414,9 +407,9 @@ void ByteProvider::addImageData(
         const size_t rowsInSegmentSkipped =
                 startRow - segStartRow;
 
-        fileOffset = mImageSubheaderFileOffsets[seg] +
+        fileOffset = gsl::narrow<nitf::Off>(mImageSubheaderFileOffsets[seg] +
                 mImageSubheaders[seg].size() +
-                rowsInSegmentSkipped * mNumBytesPerRow;
+                rowsInSegmentSkipped * mNumBytesPerRow);
     }
 
     const size_t numPadRows = countPadRows(seg, numRowsToWrite, imageDataEndRow);
@@ -426,7 +419,7 @@ void ByteProvider::addImageData(
     buffers.pushBack(imageDataPtr, numRowsToWrite * mNumBytesPerRow);
 }
 
-size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const
+size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const noexcept
 {
     size_t numBytes = 0;
     if (shouldAddHeader(seg, startRow))
@@ -440,12 +433,12 @@ size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const
     return numBytes;
 }
 
-bool ByteProvider::shouldAddHeader(size_t seg, size_t startRow) const
+bool ByteProvider::shouldAddHeader(size_t seg, size_t startRow) const noexcept
 {
     return seg == 0 && startRow == 0;
 }
 
-bool ByteProvider::shouldAddSubheader(size_t seg, size_t startRow) const
+bool ByteProvider::shouldAddSubheader(size_t seg, size_t startRow) const noexcept
 {
     const size_t segStartRow = mImageSegmentInfo[seg].firstRow;
     return startRow <= segStartRow;
@@ -472,7 +465,7 @@ void ByteProvider::addHeaders(size_t seg,
     }
 }
 
-bool ByteProvider::shouldAddDES(size_t seg, size_t imageDataEndRow) const
+bool ByteProvider::shouldAddDES(size_t seg, size_t imageDataEndRow) const noexcept
 {
     // When we write out the last row of the last image segment, we
     // tack on the DES(s)
@@ -480,7 +473,7 @@ bool ByteProvider::shouldAddDES(size_t seg, size_t imageDataEndRow) const
             mImageSegmentInfo[seg].endRow() == imageDataEndRow);
 }
 
-size_t ByteProvider::countBytesForDES(size_t seg, size_t imageDataEndRow) const
+size_t ByteProvider::countBytesForDES(size_t seg, size_t imageDataEndRow) const noexcept
 {
     return shouldAddDES(seg, imageDataEndRow) ? mDesSubheaderAndData.size() : 0;
 }

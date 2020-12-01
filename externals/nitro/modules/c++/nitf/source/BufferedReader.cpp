@@ -20,17 +20,18 @@
  *
  */
 
+#include "nitf/BufferedReader.hpp"
 
 #include <stdio.h>
 
-#include <nitf/BufferedReader.hpp>
+#include <chrono>
 
 #include "gsl/gsl.h"
 
 namespace nitf
 {
 BufferedReader::BufferedReader(const std::string& file, size_t bufferSize) :
-    mMaxBufferSize(bufferSize),
+    mMaxBufferSize(gsl::narrow<nitf::Off>(bufferSize)),
     mScopedBuffer(new char[bufferSize]),
     mBuffer(mScopedBuffer.get()),
     mPosition(0),
@@ -38,7 +39,6 @@ BufferedReader::BufferedReader(const std::string& file, size_t bufferSize) :
     mTotalRead(0),
     mBlocksRead(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::READ_ONLY, sys::File::EXISTING),
     mFileLen(mFile.length())
 {
@@ -56,7 +56,7 @@ BufferedReader::BufferedReader(const std::string& file,
                                void* buffer,
                                size_t size,
                                bool adopt) :
-    mMaxBufferSize(size),
+    mMaxBufferSize(gsl::narrow<nitf::Off>(size)),
     mScopedBuffer(adopt ? static_cast<char*>(buffer) : nullptr),
     mBuffer(static_cast<char*>(buffer)),
     mPosition(0),
@@ -64,7 +64,6 @@ BufferedReader::BufferedReader(const std::string& file,
     mTotalRead(0),
     mBlocksRead(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::READ_ONLY, sys::File::EXISTING),
     mFileLen(mFile.length())
 {
@@ -78,10 +77,6 @@ BufferedReader::BufferedReader(const std::string& file,
     readNextBuffer();
 }
 
-BufferedReader::~BufferedReader()
-{
-}
-
 void BufferedReader::readNextBuffer()
 {
     const sys::Off_T currentOffset = mFile.getCurrentOffset();
@@ -89,13 +84,14 @@ void BufferedReader::readNextBuffer()
     const sys::Off_T endOffsetIfPerformMaxRead =
             currentOffset + gsl::narrow<sys::Off_T>(mMaxBufferSize);
 
-    const size_t bufferSize = (endOffsetIfPerformMaxRead > mFileLen) ?
+    const nitf::Off bufferSize = (endOffsetIfPerformMaxRead > mFileLen) ?
             mFileLen - currentOffset : mMaxBufferSize;
 
-    sys::RealTimeStopWatch sw;
-    sw.start();
-    mFile.readInto(mBuffer, bufferSize);
-    mElapsedTime += (sw.stop() / 1000.0);
+    const auto start = std::chrono::steady_clock::now();
+    mFile.readInto(mBuffer, gsl::narrow<size_t>(bufferSize));
+    const auto end = std::chrono::steady_clock::now();
+    const std::chrono::duration<double> diff = end - start; // in seconds
+    mElapsedTime += diff.count();
 
     mPosition = 0;
     mBufferSize = bufferSize;
@@ -108,6 +104,12 @@ void BufferedReader::readNextBuffer()
 }
 
 #undef min
+inline size_t min(size_t amountLeftToRead, nitf::Off mBufferSize_mPosition_)
+{
+    const auto mBufferSize_mPosition = gsl::narrow<size_t>(mBufferSize_mPosition_);
+    return std::min(amountLeftToRead, mBufferSize_mPosition);
+}
+
 void BufferedReader::readImpl(void* buf, size_t size)
 {
     //! Ensure there is enough data to read
@@ -124,7 +126,7 @@ void BufferedReader::readImpl(void* buf, size_t size)
     while (amountLeftToRead)
     {
         const size_t readSize =
-                std::min(amountLeftToRead, mBufferSize - mPosition);
+                min(amountLeftToRead, mBufferSize - mPosition);
 
         memcpy(bufPtr + offset, mBuffer + mPosition, readSize);
         mPosition += readSize;
@@ -144,7 +146,7 @@ void BufferedReader::writeImpl(const void* , size_t )
         Ctxt("We cannot do writes on a read-only handle"));
 }
 
-bool BufferedReader::canSeekImpl() const
+bool BufferedReader::canSeekImpl() const noexcept
 {
     return true;
 }
@@ -192,12 +194,12 @@ nitf::Off BufferedReader::tellImpl() const
     return (mFile.getCurrentOffset() - mBufferSize + mPosition);
 }
 
-nitf::Off BufferedReader::getSizeImpl() const
+nitf::Off BufferedReader::getSizeImpl() const noexcept
 {
     return mFileLen;
 }
 
-int BufferedReader::getModeImpl() const
+int BufferedReader::getModeImpl() const noexcept
 {
     return NITF_ACCESS_READONLY;
 }

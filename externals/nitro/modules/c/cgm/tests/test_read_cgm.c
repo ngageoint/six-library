@@ -31,6 +31,8 @@
 
 void printCGM(cgm_Metafile *mf, nitf_Error *error)
 {
+    (void)error;
+
     nitf_ListIterator iter;
     nitf_ListIterator end;
     

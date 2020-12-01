@@ -111,9 +111,11 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!(reader = j2k_Reader_open(fname, &error)))
+    reader = j2k_Reader_open(fname, &error);
+    if (!reader)
         goto CATCH_ERROR;
-    if (!(container = j2k_Reader_getContainer(reader, &error)))
+    container = j2k_Reader_getContainer(reader, &error);
+    if (!container)
         goto CATCH_ERROR;
 
     if (x1 == 0)

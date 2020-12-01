@@ -5358,14 +5358,14 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
             blockIO->blockControl.block = cacheBuffer;
         }
 
-        userOff += blockIO->pixelCountDR * bytes;
+        userOff += (uint32_t)blockIO->pixelCountDR * bytes;
         startColumnThisBlock = 0;
 
         /*
          * Start at the begining after
          * first block column
          */
-        columnCountFR -= blockIO->pixelCountFR;
+        columnCountFR -= (uint32_t)blockIO->pixelCountFR;
         blockNumber += 1;
     }
 
@@ -5632,13 +5632,13 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
             blockIO->blockControl.block = cacheBuffer;
         }
 
-        userOff += blockIO->pixelCountDR * bytes;
+        userOff += (uint32_t)blockIO->pixelCountDR * bytes;
         startColumnThisBlock = 0;
         /*
          * Start at the begining after
          * first block column
          */
-        columnCountFR -= blockIO->pixelCountFR;
+        columnCountFR -= (uint32_t)blockIO->pixelCountFR;
         blockNumber += 1;
     }
 
@@ -6422,7 +6422,7 @@ NITFPRIV(int) nitf_ImageIO_initMaskHeader(_nitf_ImageIO * nitf,
          * block dimensions).
          */
         maskHeader->padRecordLength = 4;
-        maskHeader->padPixelValueLength = nitf->pixel.bytes;
+        maskHeader->padPixelValueLength = (uint16_t)nitf->pixel.bytes;
 
         /*
          * The image data offset is the base header length plus the pad pixel
@@ -6516,7 +6516,7 @@ NITFPRIV(int) nitf_ImageIO_readMaskHeader(_nitf_ImageIO * nitf,
      */
 
     if (maskHeader->padPixelValueLength != 0)
-        maskHeader->padPixelValueLength = nitf->pixel.bytes;
+        maskHeader->padPixelValueLength = (uint16_t)nitf->pixel.bytes;
 
     /*      Read pad pixel value */
 
@@ -6564,7 +6564,7 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
        fix later XXX
      */
     if (nitf->maskHeader.padPixelValueLength != 0)
-        padCodeLength = 8 * (nitf->pixel.bytes);
+        padCodeLength = (uint16_t)(8 * (nitf->pixel.bytes));
     else
         padCodeLength = 0;
 
@@ -6628,7 +6628,7 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
         }
 
         for (i = 0;i < nitf->nBlocksTotal;i++)
-            fileMask[i] = nitf->blockMask[i];
+            fileMask[i] = (uint32_t)nitf->blockMask[i];
 
         for (i = 0;i < nitf->nBlocksTotal;i++)   /* Overflow check */
             if (fileMask[i] != nitf->blockMask[i])
@@ -6678,7 +6678,7 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
         }
 
         for (i = 0;i < nitf->nBlocksTotal;i++)
-            fileMask[i] = nitf->padMask[i];
+            fileMask[i] = (uint32_t)nitf->padMask[i];
 
         for (i = 0;i < nitf->nBlocksTotal;i++)   /* Overflow check */
             if (fileMask[i] != nitf->padMask[i])
@@ -6885,7 +6885,7 @@ NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
             for (band = 0; band < numBands; band++)
             {
                 blockIO = &(cntl->blockIO[col][band]);
-                numColsDR = blockIO->pixelCountDR;
+                numColsDR = (uint32_t) blockIO->pixelCountDR;
 
                 if (blockIO->doIO)
                     if (!(*(nitf->vtbl.reader)) (blockIO, io, error))
@@ -7843,7 +7843,7 @@ void nitf_ImageIO_unformatExtend_1(uint8_t * buffer,
     for (i = 0; i < count; i++)
     {
         tmp8 = *bp8 << shift;
-        *(bp8++) = tmp8 >> shift;
+        *(bp8++) = (int8_t)(tmp8 >> shift);
     }
 
     return;
@@ -8302,7 +8302,7 @@ void nitf_ImageIO_unformatSwapExtend_4(uint8_t * buffer,
         bp8[1] = bp8[2];
         bp8[2] = tmp8;
 
-        tmp32 = *bp32 << shift;
+        tmp32 = (uint8_t)(*bp32 << shift);
         *(bp32++) = tmp32 >> shift;
     }
 
@@ -8921,7 +8921,7 @@ void nitf_ImageIO_formatMask_2(uint8_t * buffer,
     uint16_t *bp16;          /* Buffer pointer, 16 bit */
     size_t i;
 
-    mask = ((uint16_t) - 1) << (16 - shiftCount);
+    mask = (uint8_t)(((uint16_t) - 1) << (16 - shiftCount));
     bp16 = (uint16_t *) buffer;
     for (i = 0; i < count; i++)
         *(bp16++) &= mask;
@@ -8937,7 +8937,7 @@ void nitf_ImageIO_formatMask_4(uint8_t * buffer,
     uint32_t *bp32;          /* Buffer pointer, 32 bit */
     size_t i;
 
-    mask = ((uint32_t) - 1) << (32 - shiftCount);
+    mask = (uint8_t)(((uint32_t) - 1) << (32 - shiftCount));
     bp32 = (uint32_t *) buffer;
     for (i = 0; i < count; i++)
         *(bp32++) &= mask;
@@ -9067,7 +9067,7 @@ void nitf_ImageIO_formatMaskSwap_2(uint8_t * buffer,
     uint8_t tmp8;            /* Temp value, 8 bit */
     size_t i;
 
-    mask = ((uint16_t) - 1) << (16 - shiftCount);
+    mask = (uint8_t)(((uint16_t) - 1) << (16 - shiftCount));
     bp16 = (uint16_t *) buffer;
     for (i = 0; i < count; i++)
     {
@@ -9093,7 +9093,7 @@ void nitf_ImageIO_formatMaskSwap_4(uint8_t * buffer,
     uint8_t tmp8;            /* Temp value, 8 bit */
     size_t i;
 
-    mask = ((uint32_t) - 1) << (32 - shiftCount);
+    mask = (uint8_t)(((uint32_t) - 1) << (32 - shiftCount));
     bp32 = (uint32_t *) buffer;
     for (i = 0; i < count; i++)
     {
@@ -9473,6 +9473,8 @@ nitf_ImageIO_12PixelClose(nitf_DecompressionControl **control)
 nitf_CompressionControl  *nitf_ImageIO_12PixelComOpen
 ( nitf_ImageSubheader * subheader, nrt_HashTable* options, nitf_Error * error)
 {
+    (void)options;
+
   nitf_ImageIO_12PixelComControl *icntl;   /* The result */
   uint32_t numRowsPerBlock;      /* Number of rows per block */
   uint32_t numColumnsPerBlock;   /* Number of columns per block */

@@ -113,18 +113,20 @@ NITF_BOOL writeVDC(cgm_Rectangle* r, nitf_IOInterface* io, nitf_Error* error)
     return writeRectangle(r, io, error);
 }
 
+static NITF_BOOL nitf_IOInterface_writeRGB(nitf_IOInterface* io, short rgb, nitf_Error* error)
+{
+    unsigned char c = (unsigned char)rgb;
+    return nitf_IOInterface_write(io, (const char*)&c, 1, error);
+}
 NITF_BOOL writeRGB(cgm_Color* color3, nitf_IOInterface* io, nitf_Error* error)
 {
-    unsigned char c = color3->r;
-    if (!nitf_IOInterface_write(io, (const char*)&c, 1, error))
+    if (!nitf_IOInterface_writeRGB(io, color3->r, error))
         return NITF_FAILURE;
 
-    c = color3->g;
-    if (!nitf_IOInterface_write(io, (const char*)&c, 1, error))
+    if (!nitf_IOInterface_writeRGB(io, color3->g, error))
         return NITF_FAILURE;
 
-    c = color3->b;
-    return nitf_IOInterface_write(io, (const char*)&c, 1, error);
+    return nitf_IOInterface_writeRGB(io, color3->b, error);
 }
 
 NITF_BOOL writeRGBPadded(cgm_Color *color3, nitf_IOInterface* io, nitf_Error* error)
@@ -302,14 +304,14 @@ NITF_BOOL writeElements(cgm_MetafileWriter* writer, nitf_List* elements,
 NITF_BOOL writeBody(cgm_MetafileWriter* writer, cgm_PictureBody* body,
         nitf_IOInterface* io, nitf_Error* error)
 {
-    short actual, tmpShort;
+    short actual;
 
     /* Write picture body */
     if (!writeHeader(0, 4, 0, io, &actual, error))
         return NITF_FAILURE;
 
     /* Transparency */
-    tmpShort = NITF_HTONS(body->transparency);
+    short tmpShort = NITF_HTONS((uint16_t)body->transparency);
     if (!writeField(3, 4, (const char*)&tmpShort, 2, io, error))
         return NITF_FAILURE;
 
@@ -329,7 +331,7 @@ NITF_BOOL writePicture(cgm_MetafileWriter* writer, cgm_Picture* picture,
 {
     short actual, tmpShort;
     /* Begin picture */
-    if (!writeField(0, 3, picture->name, strlen(picture->name), io, error))
+    if (!writeField(0, 3, picture->name, nrt_strlen16(picture->name), io, error))
         return NITF_FAILURE;
 
     /* Color selection mode */
@@ -370,7 +372,7 @@ NITF_BOOL writeFontList(nitf_List* fontList, nitf_IOInterface* io, nitf_Error* e
     {
         char *data = (char*)nitf_ListIterator_get(&it);
         /* The extra byte is for the length each time */
-        dataLen += (strlen(data) + 1);
+        dataLen += nrt_strlen16(data) + 1;
         nitf_ListIterator_increment(&it);
     }
     
@@ -382,7 +384,7 @@ NITF_BOOL writeFontList(nitf_List* fontList, nitf_IOInterface* io, nitf_Error* e
     while (nitf_ListIterator_notEqualTo(&it, &end))
     {
         char *data = (char*)nitf_ListIterator_get(&it);
-        unsigned char len = strlen(data);
+        unsigned char len = nrt_strlen8(data);
         if (!nitf_IOInterface_write(io, (const char*)&len, 1, error))
             return NITF_FAILURE;
 
@@ -420,7 +422,7 @@ NITFPRIV(NITF_BOOL) writeMetafileInfo(cgm_MetafileWriter* writer,
     }
         
     /* Begin Metafile */
-    if (!writeField(0, 1, mf->name, strlen(mf->name), io, error))
+    if (!writeField(0, 1, mf->name, nrt_strlen16(mf->name), io, error))
         return NITF_FAILURE;
 
     /* Write version */
@@ -438,7 +440,7 @@ NITFPRIV(NITF_BOOL) writeMetafileInfo(cgm_MetafileWriter* writer,
         return NITF_FAILURE;
 
     /* Metafile description */
-    if (!writeField(1, 2, mf->description, strlen(mf->description), io, error))
+    if (!writeField(1, 2, mf->description, nrt_strlen16(mf->description), io, error))
         return NITF_FAILURE;
 
     if (mf->fontList != NULL)
@@ -466,7 +468,7 @@ NITF_BOOL writeText(cgm_Element* element, nitf_IOInterface* io, nitf_Error* erro
 {
     short s;
     short actual;
-    unsigned char slen;
+    uint8_t slen;
     cgm_TextElement* textElement = (cgm_TextElement*)element->data;
     cgm_Text* text = textElement->text;
     
@@ -485,7 +487,7 @@ NITF_BOOL writeText(cgm_Element* element, nitf_IOInterface* io, nitf_Error* erro
     }
 
     /* Text length + x + y */
-    s = strlen(text->str) + 1 + 6;
+    s = nrt_strlen16(text->str) + 1 + 6;
     if (!writeHeader(4, 4, s, io, &actual, error))
         return NITF_FAILURE;
 
@@ -501,7 +503,7 @@ NITF_BOOL writeText(cgm_Element* element, nitf_IOInterface* io, nitf_Error* erro
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    slen = strlen(text->str);
+    slen = nrt_strlen8(text->str);
     if (!nitf_IOInterface_write(io, (const char*)&slen, 1, error))
         return NITF_FAILURE;
 
@@ -517,7 +519,7 @@ NITF_BOOL writePolygon(cgm_Element* element, nitf_IOInterface* io, nitf_Error* e
     nitf_ListIterator it = nitf_List_begin(polyElement->vertices);
     nitf_ListIterator end = nitf_List_end(polyElement->vertices);
     short actual;
-    short size = nitf_List_size(polyElement->vertices);
+    uint16_t size = nitf_List_size16(polyElement->vertices);
     size *= 4;
 
     if (polyElement->attributes)
@@ -555,7 +557,7 @@ NITF_BOOL writePolySet(cgm_Element* element, nitf_IOInterface* io, nitf_Error* e
     nitf_ListIterator it = nitf_List_begin(polyElement->vertices);
     nitf_ListIterator end = nitf_List_end(polyElement->vertices);
     short actual;
-    short size = nitf_List_size(polyElement->vertices);
+    uint16_t size = nitf_List_size16(polyElement->vertices);
     size *= 6;
 
     if (polyElement->attributes)
@@ -605,7 +607,7 @@ NITF_BOOL writePolyLine(cgm_Element* element, nitf_IOInterface* io,
     nitf_ListIterator it = nitf_List_begin(polyElement->vertices);
     nitf_ListIterator end = nitf_List_end(polyElement->vertices);
     short actual;
-    short size = nitf_List_size(polyElement->vertices);
+    uint16_t size = nitf_List_size16(polyElement->vertices);
     size *= 4;
 
     if (polyElement->attributes)

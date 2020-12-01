@@ -335,6 +335,7 @@ typedef nrt_List                        nitf_List;
 #define nitf_List_remove                nrt_List_remove
 #define nitf_List_move                  nrt_List_move
 #define nitf_List_size                  nrt_List_size
+#define nitf_List_size16                  nrt_List_size16
 #define nitf_List_get                   nrt_List_get
 #define nitf_ListIterator_increment     nrt_ListIterator_increment
 #define nitf_ListIterator_get           nrt_ListIterator_get

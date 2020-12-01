@@ -26,7 +26,7 @@ using namespace nitf;
 
 SubWindow::SubWindow(const SubWindow & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 SubWindow & SubWindow::operator=(const SubWindow & x)
@@ -49,7 +49,7 @@ SubWindow::SubWindow() : mDownSampler(nullptr)
     setManaged(false);
 }
 
-SubWindow::~SubWindow()
+SubWindow::~SubWindow() noexcept(false)
 {
     if (isValid() && getNative()->downsampler)
     {
@@ -128,14 +128,17 @@ void SubWindow::setDownSampler(nitf::DownSampler* downSampler)
         ds.decRef();
     }
 
-    //increment the reference for this DownSampler
-    getNativeOrThrow()->downsampler = downSampler->getNative();
-    downSampler->incRef();
+    if (downSampler != nullptr)
+    {
+        //increment the reference for this DownSampler
+        getNativeOrThrow()->downsampler = downSampler->getNative();
+        downSampler->incRef();
+    }
     mDownSampler = downSampler;
 }
 
 
-nitf::DownSampler* SubWindow::getDownSampler()
+nitf::DownSampler* SubWindow::getDownSampler() noexcept
 {
     return mDownSampler;
 }

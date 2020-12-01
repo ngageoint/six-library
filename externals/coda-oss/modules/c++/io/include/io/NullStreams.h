@@ -78,16 +78,16 @@ protected:
 
     virtual sys::SSize_T readImpl(void* buffer, size_t len)
     {
-        const size_t numToRead =
+        const auto numToRead =
                 (mAvailable >= (sys::SSize_T) len ? len : (size_t) mAvailable);
 
-        mAvailable -= (sys::SSize_T) numToRead;
+        mAvailable -= numToRead;
 
         if (numToRead == 0)
             throw except::IOException(Ctxt("EOF - no more data to read"));
 
         processBytes(buffer, numToRead);
-        return numToRead;
+        return static_cast <sys::SSize_T>(numToRead);
     }
 };
 

@@ -47,7 +47,7 @@
 
 /*! \def NITF_NBPP_TO_BYTES  - Compute bytes per pixel from NBPP field */
 
-#define NITF_NBPP_TO_BYTES(nbpp) ((((int) (nbpp)) - 1)/8 + 1)
+#define NITF_NBPP_TO_BYTES(nbpp) ((((int64_t) (nbpp)) - 1)/8 + 1)
 
 /*! \def NITF_IMAGE_IO_PIXEL_TYPE_INT - Integer */
 #define NITF_IMAGE_IO_PIXEL_TYPE_INT ((uint32_t) 0x00080000)

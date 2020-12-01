@@ -66,8 +66,6 @@ nitf::TextSegment TextSegment::clone() const
     return dolly;
 }
 
-TextSegment::~TextSegment(){}
-
 nitf::TextSubheader TextSegment::getSubheader() const
 {
     return nitf::TextSubheader(getNativeOrThrow()->subheader);

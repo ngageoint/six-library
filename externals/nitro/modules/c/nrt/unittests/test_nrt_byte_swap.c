@@ -58,6 +58,8 @@ TEST_CASE(testEightBytes)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
     CHECK(testFourBytes);
     CHECK(testTwoBytes);
     CHECK(testEightBytes);

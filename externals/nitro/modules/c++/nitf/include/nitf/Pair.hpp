@@ -39,15 +39,16 @@ namespace nitf
  *  \class Pair
  *  \brief  The C++ wrapper for the nitf_Pair
  */
-class Pair : public nitf::Object<nitf_Pair>
+struct Pair final : public nitf::Object<nitf_Pair>
 {
-public:
-    ~Pair(){}
+    ~Pair() = default;
+    Pair(Pair&&) = default;
+    Pair& operator=(Pair&&) = default;
 
     //! Copy constructor
     Pair(const Pair & x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator
@@ -82,7 +83,7 @@ public:
      *  \param key  The key in the pair (is copied)
      *  \param data  The data in the pair (not a copy)
      */
-    void init(const std::string& key, NITF_DATA* data)
+    void init(const std::string& key, NITF_DATA* data) noexcept
     {
         nitf_Pair_init(getNative(), key.c_str(), data);
     }
@@ -91,7 +92,7 @@ public:
      *  Simply calls the init method
      *  \param src  The source Pair
      */
-    void copy(const nitf::Pair & src)
+    void copy(const nitf::Pair & src) noexcept
     {
         nitf_Pair_copy(getNative(), src.getNative());
     }
@@ -129,8 +130,8 @@ public:
     }
 
 private:
-    Pair(){}
-    nitf_Error error;
+    Pair() = default;
+    nitf_Error error{};
 };
 
 }

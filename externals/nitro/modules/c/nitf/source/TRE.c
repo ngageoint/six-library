@@ -28,7 +28,6 @@
 NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
                                             nitf_Error* error)
 {
-    int toCopy = NITF_MAX_TAG;
     nitf_TRE *tre = (nitf_TRE *) NITF_MALLOC(sizeof(nitf_TRE));
 
     if (!tre)
@@ -43,6 +42,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
     tre->priv = NULL;
 
     /* This happens with things like "DES" */
+    size_t toCopy = NITF_MAX_TAG;
     if (strlen(tag) < NITF_MAX_TAG )
     {
         toCopy = strlen(tag);

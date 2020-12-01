@@ -131,7 +131,7 @@ NITF_BOOL CompressionInterface::adapterEnd(
 }
 
 void CompressionInterface::adapterDestroy(
-    nitf_CompressionControl** object)
+    nitf_CompressionControl** object) noexcept
 {
     if (object != nullptr && *object != nullptr)
     {

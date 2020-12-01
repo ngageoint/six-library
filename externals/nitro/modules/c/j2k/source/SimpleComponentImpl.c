@@ -59,6 +59,8 @@ static j2k_IComponent ComponentInterface = { &Component_getWidth,
 J2KPRIV( uint32_t)
 Component_getWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->width;
 }
@@ -66,6 +68,8 @@ Component_getWidth(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( uint32_t)
 Component_getHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->height;
 }
@@ -73,6 +77,8 @@ Component_getHeight(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( uint32_t)
 Component_getPrecision(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->precision;
 }
@@ -80,6 +86,8 @@ Component_getPrecision(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( NRT_BOOL)
 Component_isSigned(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->isSigned;
 }
@@ -87,6 +95,8 @@ Component_isSigned(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( int32_t)
 Component_getOffsetX(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->x0;
 }
@@ -94,6 +104,8 @@ Component_getOffsetX(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( int32_t)
 Component_getOffsetY(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->y0;
 }
@@ -101,6 +113,8 @@ Component_getOffsetY(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( uint32_t)
 Component_getSeparationX(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->xSeparation;
 }
@@ -108,6 +122,8 @@ Component_getSeparationX(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( uint32_t)
 Component_getSeparationY(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->ySeparation;
 }
