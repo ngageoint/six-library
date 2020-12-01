@@ -72,6 +72,8 @@ TEST_CASE(testPushPop)
 
 char *cloneString(char *data, nrt_Error * error)
 {
+    (void)error;
+
     char* new_data = nrt_strdup(data);
     assert(new_data);
     return new_data;
@@ -79,7 +81,6 @@ char *cloneString(char *data, nrt_Error * error)
 
 TEST_CASE(testClone)
 {
-    uint32_t i;
     nrt_Error e;
     nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
     TEST_ASSERT(l);
@@ -94,7 +95,7 @@ TEST_CASE(testClone)
     TEST_ASSERT(dolly);
     TEST_ASSERT_EQ_INT(nrt_List_size(l), nrt_List_size(dolly));
 
-    i = 0;
+    int32_t i = 0;
     while (!nrt_List_isEmpty(dolly))
     {
         char *p = (char *) nrt_List_popFront(dolly);
@@ -111,7 +112,7 @@ TEST_CASE(testClone)
 
 TEST_CASE(testIterate)
 {
-    uint32_t i;
+    int32_t i;
     nrt_Error e;
     nrt_List *l = nrt_List_construct(&e);
     nrt_ListIterator it, end;
@@ -169,6 +170,9 @@ TEST_CASE(testIterateRemove)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
+
     CHECK(testCreate);
     CHECK(testPushPop);
     CHECK(testClone);

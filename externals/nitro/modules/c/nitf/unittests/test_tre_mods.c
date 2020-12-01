@@ -60,10 +60,9 @@ TEST_CASE(testIncompleteCondMod)
 {
     nitf_Error error;
     NITF_BOOL exists;
-    uint32_t treLength = 0;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
     TEST_ASSERT(tre);
-    treLength = tre->handler->getCurrentSize(tre, &error);
+    int treLength = tre->handler->getCurrentSize(tre, &error);
     TEST_ASSERT_EQ_INT(treLength, 2);
 
     exists = nitf_TRE_setField(tre, "NUMACPO", "01", 2, &error);

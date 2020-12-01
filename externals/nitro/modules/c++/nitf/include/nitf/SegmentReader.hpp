@@ -22,6 +22,7 @@
 
 #ifndef __NITF_SEGMENT_READER_HPP__
 #define __NITF_SEGMENT_READER_HPP__
+#pragma once
 
 #include "nitf/SegmentReader.h"
 #include "nitf/Object.hpp"
@@ -52,7 +53,7 @@ public:
     //! Set native object
     SegmentReader(nitf_SegmentReader * x);
 
-    ~SegmentReader();
+    ~SegmentReader() = default;
 
     /*!
      * \brief nitf_SegmentReader_read - Read segment data
@@ -110,7 +111,7 @@ public:
     nitf::Off getSize() const;
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

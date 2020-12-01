@@ -26,16 +26,19 @@
 #include <except/Exception.h>
 #include <nitf/NITFBufferList.hpp>
 
+#undef min
+#undef max
+
 namespace nitf
 {
 
-NITFBuffer::NITFBuffer(const void* data, size_t numBytes) :
+NITFBuffer::NITFBuffer(const void* data, size_t numBytes) noexcept :
     mData(data),
     mNumBytes(numBytes)
 {
 }
 
-size_t NITFBufferList::getTotalNumBytes() const
+size_t NITFBufferList::getTotalNumBytes() const noexcept
 {
     size_t numBytes(0);
 
@@ -111,7 +114,7 @@ const void* NITFBufferList::getBlock(size_t blockSize,
                 // and copy in the bytes we want to that
                 scratch.resize(numBytes);
                 size_t numBytesCopied(0);
-                memcpy(&scratch[0], startPtr, numBytesLeftInBuffer);
+                memcpy(scratch.data(), startPtr, numBytesLeftInBuffer);
                 numBytesCopied += numBytesLeftInBuffer;
 
                 for (size_t jj = ii + 1; jj < mBuffers.size(); ++jj)
@@ -131,7 +134,7 @@ const void* NITFBufferList::getBlock(size_t blockSize,
                     }
                 }
 
-                return &scratch[0];
+                return scratch.data();
             }
         }
 

@@ -161,9 +161,10 @@ TEST_CASE(changeFileHeader)
 }
 
 TEST_MAIN(
+    (void)argc;
 	argv0 = sys::Path::absolutePath(argv[0]);
 
     TEST_CHECK(imageWriterThrowsOnFailedConstruction);
     TEST_CHECK(constructValidImageWriter);
-    //TEST_CHECK(changeFileHeader);
+    TEST_CHECK(changeFileHeader);
     )

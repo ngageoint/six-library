@@ -62,6 +62,8 @@ static j2k_IContainer ContainerInterface = { &Container_getGridWidth,
 J2KPRIV( uint32_t)
 Container_getGridWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->gridWidth;
 }
@@ -69,6 +71,8 @@ Container_getGridWidth(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( uint32_t)
 Container_getGridHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->gridHeight;
 }
@@ -76,6 +80,8 @@ Container_getGridHeight(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( uint32_t)
 Container_getNumComponents(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->nComponents;
 }
@@ -83,6 +89,8 @@ Container_getNumComponents(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( j2k_Component*)
 Container_getComponent(J2K_USER_DATA *data, uint32_t idx, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     if (idx >= impl->nComponents)
     {
@@ -96,6 +104,8 @@ Container_getComponent(J2K_USER_DATA *data, uint32_t idx, nrt_Error *error)
 J2KPRIV( uint32_t)
 Container_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->xTiles;
 }
@@ -103,6 +113,8 @@ Container_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( uint32_t)
 Container_getTilesY(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->yTiles;
 }
@@ -110,6 +122,8 @@ Container_getTilesY(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( uint32_t)
 Container_getTileWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->tileWidth;
 }
@@ -117,6 +131,8 @@ Container_getTileWidth(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( uint32_t)
 Container_getTileHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->tileHeight;
 }
@@ -124,6 +140,8 @@ Container_getTileHeight(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( int)
 Container_getImageType(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->imageType;
 }

@@ -68,6 +68,7 @@ coda_add_tests(
         test_create.c
         test_create_nitf.c
         test_field.c
+        test_geo_utils.c
         test_image_io.c
         test_mem_source.c
         test_tre_mods.c

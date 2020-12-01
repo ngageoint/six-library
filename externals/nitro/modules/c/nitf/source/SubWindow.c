@@ -52,6 +52,8 @@ NITFAPI(NITF_BOOL) nitf_SubWindow_setDownSampler(nitf_SubWindow *subWindow,
                                                  nitf_DownSampler *downsampler,
                                                  nitf_Error * error)
 {
+    (void)error;
+
     assert(subWindow);
     subWindow->downsampler = downsampler;
     return NITF_SUCCESS;

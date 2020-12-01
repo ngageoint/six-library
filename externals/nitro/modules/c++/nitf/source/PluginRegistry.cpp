@@ -80,17 +80,17 @@ nitf_CompressionInterface* PluginRegistry::retrieveCompressionInterface(
     return compIface;
 }
 
-bool PluginRegistry::treHandlerExists(const std::string& ident)
+bool PluginRegistry::treHandlerExists(const std::string& ident) noexcept
 {
     return nitf_PluginRegistry_TREHandlerExists(ident.c_str());
 }
 
-bool PluginRegistry::compressionHandlerExists(const std::string& ident)
+bool PluginRegistry::compressionHandlerExists(const std::string& ident) noexcept
 {
     return nitf_PluginRegistry_compressionHandlerExists(ident.c_str());
 }
 
-bool PluginRegistry::decompressionHandlerExists(const std::string& ident)
+bool PluginRegistry::decompressionHandlerExists(const std::string& ident) noexcept
 {
     return nitf_PluginRegistry_decompressionHandlerExists(ident.c_str());
 }

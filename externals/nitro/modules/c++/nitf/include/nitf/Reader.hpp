@@ -42,10 +42,8 @@ namespace nitf
 
 struct ReaderDestructor : public nitf::MemoryDestructor<nitf_Reader>
 {
-    ~ReaderDestructor()
-    {
-    }
-    void operator()(nitf_Reader *reader);
+    ~ReaderDestructor() = default;
+    void operator()(nitf_Reader *reader) override;
 };
 
 /*!
@@ -65,16 +63,16 @@ public:
     Reader(nitf_Reader * x);
 
     //! Default Constructor
-    Reader();
+    Reader() noexcept(false);
 
-    ~Reader();
+    ~Reader() = default;
 
     /*!
      * Return the Version of the file passed in by its file name.
      * \param fileName Pathname of file to read
      * \return NITF_VER_20, NITF_VER_21, or NITF_VER_UNKNOWN
      */
-    static nitf::Version getNITFVersion(const std::string& fileName);
+    static nitf::Version getNITFVersion(const std::string& fileName) noexcept;
 
     /*!
      * Return the Version of the file
@@ -149,7 +147,7 @@ public:
     nitf::IOInterface getInput() const;
 
 private:
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 }

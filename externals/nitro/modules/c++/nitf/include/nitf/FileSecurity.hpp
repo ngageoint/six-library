@@ -57,12 +57,12 @@ public:
     FileSecurity(nitf_FileSecurity * x);
 
     //! Constructor
-    FileSecurity();
+    FileSecurity() noexcept(false);
 
     //! Clone
     nitf::FileSecurity clone() const;
 
-    ~FileSecurity();
+    ~FileSecurity() = default;
 
     //! Get the classificationSystem
     nitf::Field getClassificationSystem() const;
@@ -110,7 +110,7 @@ public:
     nitf::Field getSecurityControlNumber() const;
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

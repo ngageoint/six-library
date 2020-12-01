@@ -69,8 +69,6 @@ nitf::RESegment RESegment::clone() const
     return dolly;
 }
 
-RESegment::~RESegment(){}
-
 nitf::RESubheader RESegment::getSubheader() const
 {
     return nitf::RESubheader(getNativeOrThrow()->subheader);

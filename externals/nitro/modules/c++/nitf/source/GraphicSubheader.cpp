@@ -59,8 +59,6 @@ nitf::GraphicSubheader GraphicSubheader::clone() const
     return dolly;
 }
 
-GraphicSubheader::~GraphicSubheader(){}
-
 nitf::Field GraphicSubheader::getFilePartType() const
 {
     return nitf::Field(getNativeOrThrow()->filePartType);

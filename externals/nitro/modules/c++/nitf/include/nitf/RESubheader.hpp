@@ -22,6 +22,7 @@
 
 #ifndef __NITF_RESUBHEADER_HPP__
 #define __NITF_RESUBHEADER_HPP__
+#pragma once
 
 #include "nitf/RESubheader.h"
 #include "nitf/Object.hpp"
@@ -56,12 +57,12 @@ public:
     RESubheader(nitf_RESubheader * x);
 
      //! Constructor
-    RESubheader();
+    RESubheader() noexcept(false);
 
     //! Clone
     nitf::RESubheader clone() const;
 
-    ~RESubheader();
+    ~RESubheader() = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;
@@ -94,7 +95,7 @@ public:
     void setDataLength(uint32_t value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

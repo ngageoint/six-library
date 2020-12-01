@@ -21,6 +21,7 @@
  */
 
 #include <sstream>
+#include <iostream>
 
 #include <import/nitf.hpp>
 #include <io/FileInputStream.h>
@@ -121,7 +122,7 @@ static void printTREField(const nitf::Field& field)
 void printTRE(const nitf::TRE& tre)
 {
     // This is so you know how long the TRE is
-    const uint32_t treLength = tre.getCurrentSize();
+    const auto treLength = tre.getCurrentSize();
 
     /*
      *  This is the name for the description that was selected to field
@@ -264,11 +265,11 @@ void showFileHeader(const nitf::FileHeader& header)
 
     if (!format_as_xml) // don't need XML output right now
     {
-        unsigned int num = header.getNumImages();
+        int num = header.getNumImages();
         std::cout << "The number of images contained in this file ["
             << num << "]" << std::endl;
 
-        for (unsigned int i = 0; i < num; i++)
+        for (int i = 0; i < num; i++)
         {
             nitf::ComponentInfo info = header.getImageInfo(i);
 
@@ -277,11 +278,10 @@ void showFileHeader(const nitf::FileHeader& header)
         }
 
         num = header.getNumGraphics();
-
         std::cout << "The number of graphics contained in this file ["
             << num << "]" << std::endl;
 
-        for (unsigned int i = 0; i < num; i++)
+        for (int i = 0; i < num; i++)
         {
             nitf::ComponentInfo info = header.getGraphicInfo(i);
 
@@ -294,11 +294,10 @@ void showFileHeader(const nitf::FileHeader& header)
         }
 
         num = header.getNumLabels();
-
         std::cout << "The number of labels contained in this file ["
             << num << "]" << std::endl;
 
-        for (unsigned int i = 0; i < num; i++)
+        for (int i = 0; i < num; i++)
         {
             nitf::ComponentInfo info = header.getLabelInfo(i);
 
@@ -314,7 +313,7 @@ void showFileHeader(const nitf::FileHeader& header)
         std::cout << "The number of texts contained in this file ["
             << num << "]" << std::endl;
 
-        for (unsigned int i = 0; i < num; i++)
+        for (int i = 0; i < num; i++)
         {
             nitf::ComponentInfo info = header.getTextInfo(i);
             std::cout << "\tThe length of text subheader [" << i << "]: "
@@ -329,7 +328,7 @@ void showFileHeader(const nitf::FileHeader& header)
         std::cout << "The number of DES contained in this file ["
             << num << "]" << std::endl;
 
-        for (unsigned int i = 0; i < num; i++)
+        for (int i = 0; i < num; i++)
         {
             nitf::ComponentInfo info = header.getDataExtensionInfo(i);
 
@@ -345,7 +344,7 @@ void showFileHeader(const nitf::FileHeader& header)
         std::cout << "The number of RES contained in this file ["
             << num << "]" << std::endl;
 
-        for (unsigned int i = 0; i < num; i++)
+        for (int i = 0; i < num; i++)
         {
             nitf::ComponentInfo info = header.getReservedExtensionInfo(i);
             std::cout << "\tThe length of RES subheader [" << i << "]: "

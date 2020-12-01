@@ -47,10 +47,7 @@ namespace nitf
 
 struct WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
 {
-    ~WriterDestructor()
-    {
-    }
-    void operator()(nitf_Writer *writer);
+    void operator()(nitf_Writer *writer) override;
 };
 
 /*!
@@ -70,9 +67,11 @@ public:
     Writer(nitf_Writer * x);
 
     //! Constructor
-    Writer();
+    Writer() noexcept(false);
 
     ~Writer();
+    Writer(Writer&&) = default;
+    Writer& operator=(Writer&&) = default;
 
     //! Write the record to disk
     void write();
@@ -249,7 +248,7 @@ public:
                          uint32_t fillDir);
 
 private:
-    nitf_Error error;
+    nitf_Error  error{};
 
     //! c++ write handlers need to be kept in scope
     std::vector<std::shared_ptr<nitf::WriteHandler> > mWriteHandlers;

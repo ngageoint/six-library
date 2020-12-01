@@ -227,5 +227,10 @@ NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t s
 NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src);
 NRTAPI(char*) nrt_strdup(const char* src);
 
+NRTAPI(size_t) nrt_strlen(const char* src); // aka strlen()
+NRTAPI(uint32_t) nrt_strlen32(const char* src);
+NRTAPI(uint16_t) nrt_strlen16(const char* src);
+NRTAPI(uint8_t) nrt_strlen8(const char* src);
+
 NRT_CXX_ENDGUARD
 #endif
