@@ -56,7 +56,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\import\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
@@ -82,7 +82,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\import\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
@@ -181,12 +181,6 @@
     <ClCompile Include="source\XMLParser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\externals\nitro\modules\c++\nitro-c++.vcxproj">
-      <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\externals\nitro\modules\c\nitf\XML_DATA_CONTENT.vcxproj">
-      <Project>{78849481-d356-4cc7-b182-31c21f857ed1}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\scene\scene.vcxproj">
       <Project>{1cfcde59-6410-4037-95eb-b37d31e10820}</Project>
     </ProjectReference>

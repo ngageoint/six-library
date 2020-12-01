@@ -69,6 +69,12 @@
 #include <import/scene.h>
 #pragma warning(pop)
 
+#pragma comment(lib, "nitf-c++")
+#pragma comment(lib, "nitf-c")
+#pragma comment(lib, "nrt-c")
+
+#pragma comment(lib, "XML_DATA_CONTENT-static-c")
+
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "sys-c++")
