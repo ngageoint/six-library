@@ -22,13 +22,15 @@
 
 #include "nitf/BandSource.hpp"
 
+#include "gsl/gsl.h"
+
 nitf::MemorySource::MemorySource(const void* data,
                                  size_t size,
                                  nitf::Off start,
                                  int numBytesPerPixel,
                                  int pixelSkip)
 {
-    setNative(nitf_MemorySource_construct(data, size, start, numBytesPerPixel, pixelSkip, &error));
+    setNative(nitf_MemorySource_construct(data, gsl::narrow<nitf::Off>(size), start, numBytesPerPixel, pixelSkip, &error));
     setManaged(false);
 }
 
@@ -135,14 +137,14 @@ NITF_BOOL nitf::DirectBlockSource::nextBlock(void* callback,
                                              uint64_t blockSize,
                                              nitf_Error * error)
 {
-    if (!callback)
+    auto const cb = static_cast<nitf::DirectBlockSource*>(callback);
+    if (!cb)
     {
         nitf_Error_init(error, "Null pointer reference",
                 NITF_CTXT, NITF_ERR_INVALID_OBJECT);
         return NITF_FAILURE;
     }
 
-    auto const cb = static_cast<nitf::DirectBlockSource*>(callback);
     try
     {
         cb->nextBlock(buf, block, blockNumber, blockSize);

@@ -20,6 +20,8 @@
  *
  */
 
+#include "nitf/CompressedByteProvider.hpp"
+
 #include <string.h>
 #include <sstream>
 #include <algorithm>
@@ -27,10 +29,10 @@
 
 #include <except/Exception.h>
 #include <nitf/Writer.hpp>
-#include <nitf/CompressedByteProvider.hpp>
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
+#include "gsl/gsl.h"
 
 namespace nitf
 {
@@ -170,7 +172,7 @@ size_t CompressedByteProvider::addImageData(
             throw except::Exception(Ctxt(error.str()));
         }
 
-        fileOffset = mImageSubheaderFileOffsets[seg] + mImageSubheaders[seg].size();
+        fileOffset = mImageSubheaderFileOffsets[seg] + gsl::narrow<nitf::Off>(mImageSubheaders[seg].size());
         for (size_t block = 0; block < blockRange.mStartElement; ++block)
         {
             fileOffset += mBytesInEachBlock[seg][block];

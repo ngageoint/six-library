@@ -479,7 +479,7 @@ NITFPRIV(NITF_BOOL) writeExtras(nitf_Writer * writer,
                                 nitf_Error * error)
 {
     nitf_ExtensionsIterator iter, end;
-    size_t totalLength = 0;
+    uint32_t totalLength = 0;
     nitf_Version version;
     nitf_TRE *tre = NULL;
 
@@ -1104,9 +1104,10 @@ NITFPROT(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
                           buf, NITF_XHDLOFL_SZ, error);
 
     /*   Get the header length */
-    *hdrLen = nitf_IOInterface_tell(writer->output, error);
-    if (!NITF_IO_SUCCESS(*hdrLen))
+    const nitf_Off hdrLen_ = nitf_IOInterface_tell(writer->output, error);
+    if (!NITF_IO_SUCCESS(hdrLen_))
         goto CATCH_ERROR;
+    *hdrLen = (uint32_t)hdrLen_;
 
     /* Normal completion */
     return NITF_SUCCESS;
@@ -1350,8 +1351,6 @@ NITFPROT(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
                                                  nitf_Version fver,
                                                  nitf_Error* error)
 {
-    uint32_t subLen;
-
     char* des_data = NULL;
 
     /* DE type ID */
@@ -1394,6 +1393,7 @@ NITFPROT(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
         NITF_WRITE_VALUE(subhdr, NITF_DESITEM, SPACE, FILL_RIGHT);
     }
 
+    int32_t subLen;
     if (subhdr->subheaderFields)
     {
       subLen = subhdr->subheaderFields->handler->getCurrentSize(subhdr->subheaderFields, error);

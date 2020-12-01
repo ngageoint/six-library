@@ -104,7 +104,7 @@ public:
 
 struct RowSourceCallback
 {
-    virtual ~RowSourceCallback()
+    virtual ~RowSourceCallback() noexcept(false)
     {
     }
 
@@ -156,13 +156,13 @@ public:
         nitf::DirectBlockSource(imageReader, numBands)
     {}
 
-    virtual ~CopyBlockSource(){}
+    ~CopyBlockSource() = default;
 
 protected:
-    virtual void nextBlock(void* buf,
+    void nextBlock(void* buf,
                            const void* block,
                            uint32_t /*blockNumber*/,
-                           uint64_t blockSize)
+                           uint64_t blockSize) noexcept override
     {
         memcpy(buf, block, blockSize);
     }

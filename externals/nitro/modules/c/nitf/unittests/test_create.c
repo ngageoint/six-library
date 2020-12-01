@@ -35,5 +35,7 @@ TEST_CASE(testCreate)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
     CHECK(testCreate);
 )

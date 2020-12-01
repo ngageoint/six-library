@@ -153,6 +153,8 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
                                                 char idx_str[10][10],
                                                 int looping, nitf_Error * error)
 {
+    (void)error;
+
     /* temp buf used for storing the qualified tag */
     char tag_str[TAG_BUF_LEN];
 

@@ -60,6 +60,8 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(
         nitf_Off size,
         nitf_Error * error)
 {
+    (void)error;
+
     memcpy(buf,
            (const uint8_t*)memorySource->data + memorySource->mark,
            size);
@@ -74,6 +76,8 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(
         nitf_Off size,
         nitf_Error * error)
 {
+    (void)error;
+
     int i = 0;
     const uint8_t* src = (const uint8_t*)memorySource->data;
     uint8_t* dest = (uint8_t*)buf;
@@ -126,6 +130,8 @@ NITFPRIV(void) MemorySource_destruct(NITF_DATA * data)
 
 NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data, nitf_Error *e)
 {
+    (void)e;
+
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
     assert(memorySource);
     return memorySource->sizeSet ? (nitf_Off)memorySource->size :
@@ -134,6 +140,8 @@ NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data, nitf_Error *e)
 
 NITFPRIV(NITF_BOOL) MemorySource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *e)
 {
+    (void)e;
+
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
     assert(memorySource);
     memorySource->size = size;
@@ -247,6 +255,8 @@ NITFPRIV(void) FileSource_destruct(NITF_DATA * data)
 
 NITFPRIV(nitf_Off) FileSource_getSize(NITF_DATA * data, nitf_Error *e)
 {
+    (void)e;
+
     FileSourceImpl *fileSource = (FileSourceImpl *) data;
     assert(fileSource);
     assert(fileSource->fileSize > fileSource->start);
@@ -255,6 +265,8 @@ NITFPRIV(nitf_Off) FileSource_getSize(NITF_DATA * data, nitf_Error *e)
 
 NITFPRIV(NITF_BOOL) FileSource_setSize(NITF_DATA* data, nitf_Off size, nitf_Error *e)
 {
+    (void)e;
+
     /* you better know what you're doing if you set the size yourself! */
     FileSourceImpl* fileSource = (FileSourceImpl*)data;
     assert(fileSource);
@@ -475,11 +487,14 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_constructIO
 
 NITFPRIV(void) SegmentReader_destruct(NITF_DATA * data)
 {
+    (void)data;
     /* nothing... */
 }
 
 NITFPRIV(nitf_Off) SegmentReader_getSize(NITF_DATA * data, nitf_Error *e)
 {
+    (void)e;
+
     nitf_SegmentReader *reader =  (nitf_SegmentReader*)data;
     assert(reader);
     return reader->dataLength;
@@ -487,6 +502,9 @@ NITFPRIV(nitf_Off) SegmentReader_getSize(NITF_DATA * data, nitf_Error *e)
 
 NITFPRIV(NITF_BOOL) SegmentReader_setSize(NITF_DATA* data, nitf_Off size, nitf_Error *e)
 {
+    (void)data;
+    (void)size;
+    (void)e;
     /* does nothing... - should we return an error instead? */
     return NITF_SUCCESS;
 }

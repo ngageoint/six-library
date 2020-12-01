@@ -22,6 +22,7 @@
 
 #ifndef __NITF_DESEGMENT_HPP__
 #define __NITF_DESEGMENT_HPP__
+#pragma once
 
 #include "nitf/DESegment.h"
 #include "nitf/System.hpp"
@@ -57,7 +58,7 @@ public:
     DESegment(nitf_DESegment * x);
 
     //! Constructor
-    DESegment();
+    DESegment() noexcept(false);
 
     DESegment(NITF_DATA * x);
 
@@ -66,7 +67,7 @@ public:
     //! Clone
     nitf::DESegment clone() const;
 
-    ~DESegment();
+    ~DESegment() = default;
 
     //! Get the subheader
     nitf::DESubheader getSubheader() const;
@@ -87,7 +88,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

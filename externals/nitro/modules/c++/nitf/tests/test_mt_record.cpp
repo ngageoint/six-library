@@ -67,7 +67,7 @@ public:
 //sys::Mutex RecordThread::m;
 
 const int NTHR = 2;
-int main(int argc, char** argv)
+int main(int, char**)
 {
     try
     {

@@ -26,7 +26,7 @@ using namespace nitf;
 
 TextSubheader::TextSubheader(const TextSubheader & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 TextSubheader & TextSubheader::operator=(const TextSubheader & x)
@@ -55,8 +55,6 @@ nitf::TextSubheader TextSubheader::clone() const
     dolly.setManaged(false);
     return dolly;
 }
-
-TextSubheader::~TextSubheader(){}
 
 nitf::Field TextSubheader::getFilePartType() const
 {

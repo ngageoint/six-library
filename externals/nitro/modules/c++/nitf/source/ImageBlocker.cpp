@@ -36,7 +36,7 @@ namespace
 void getBlockInfo(size_t numElements,
                   size_t numElementsPerBlock,
                   size_t& numBlocks,
-                  size_t& numPadElementsInFinalBlock)
+                  size_t& numPadElementsInFinalBlock) noexcept
 {
     numBlocks = (numElements / numElementsPerBlock);
     const size_t numLeftovers = numElements % numElementsPerBlock;
@@ -261,7 +261,7 @@ void ImageBlocker::block(const void* input,
                          size_t numColsPerBlock,
                          size_t numValidRowsInBlock,
                          size_t numValidColsInBlock,
-                         void* output)
+                         void* output) noexcept
 {
     const size_t inStride = numCols * numBytesPerPixel;
     const size_t outNumValidBytes = numValidColsInBlock * numBytesPerPixel;
@@ -309,7 +309,7 @@ void ImageBlocker::blockAcrossRow(size_t seg,
                                   const std::byte*& input,
                                   size_t numValidRowsInBlock,
                                   size_t numBytesPerPixel,
-                                  std::byte*& output) const
+                                  std::byte*& output) const noexcept
 {
     const size_t outStride =
             mNumRowsPerBlock[seg] * mNumColsPerBlock * numBytesPerPixel;

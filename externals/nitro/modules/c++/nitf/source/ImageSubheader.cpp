@@ -19,11 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "nitf/ImageSubheader.hpp"
 
 #include <nitf/ImageIO.h>
-#include <nitf/ImageSubheader.hpp>
 #include <nitf/Object.hpp>
 #include <nitf/NITFException.hpp>
+
+#include "gsl/gsl.h"
 
 namespace nitf
 {
@@ -60,12 +62,6 @@ nitf::ImageSubheader ImageSubheader::clone() const
     return dolly;
 }
 
-/*!
- *  Destructor
- */
-ImageSubheader::~ImageSubheader(){}
-
-
 void ImageSubheader::setPixelInformation(std::string pvtype,
                          uint32_t nbpp,
                          uint32_t abpp,
@@ -74,8 +70,16 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
                          std::vector<nitf::BandInfo>& bands)
 {
     const size_t bandCount = bands.size();
+    #ifdef _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
+    #endif
     auto bandInfo = static_cast<nitf_BandInfo**>(NITF_MALLOC(
             sizeof(nitf_BandInfo*) * bandCount));
+    #ifdef _MSC_VER
+    #pragma warning(pop)
+    #endif
+
     if (!bandInfo)
     {
         throw nitf::NITFException(Ctxt(FmtX("Out of Memory")));
@@ -83,9 +87,21 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
 
     for (size_t i = 0; i < bandCount; i++)
     {
-        bandInfo[i] = nitf_BandInfo_clone(bands[i].getNative(), &error);
-        if (!bandInfo[i])
+        auto clone = nitf_BandInfo_clone(bands[i].getNative(), &error);
+        if (!clone)
             throw nitf::NITFException(&error);
+
+        // not sure what's causing this warning
+        #ifdef _MSC_VER
+        #pragma warning(push)
+        #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
+        #endif
+
+        bandInfo[i] = clone;
+
+        #ifdef _MSC_VER
+        #pragma warning(pop)
+        #endif
     }
 
     const NITF_BOOL x = nitf_ImageSubheader_setPixelInformation(getNativeOrThrow(),
@@ -113,7 +129,7 @@ void ImageSubheader::computeBlocking(uint32_t numRows,
                                      uint32_t& numRowsPerBlock,
                                      uint32_t& numColsPerBlock,
                                      uint32_t& numBlocksPerCol,
-                                     uint32_t& numBlocksPerRow)
+                                     uint32_t& numBlocksPerRow) noexcept
 {
     nitf_ImageSubheader_computeBlocking(numRows,
                                         numCols,
@@ -444,7 +460,7 @@ void ImageSubheader::setExtendedSection(nitf::Extensions value)
     value.setManaged(true);
 }
 
-size_t ImageSubheader::getActualImageDim(size_t dim, size_t numDimsPerBlock)
+size_t ImageSubheader::getActualImageDim(size_t dim, size_t numDimsPerBlock) noexcept
 {
     if (numDimsPerBlock == 0)
     {
@@ -464,7 +480,7 @@ size_t ImageSubheader::getNumBytesPerPixel_() const
 {
     const size_t numBitsPerPixel =
             nitf::Field(getNativeOrThrow()->numBitsPerPixel);
-    return NITF_NBPP_TO_BYTES(numBitsPerPixel);
+    return gsl::narrow<size_t>(NITF_NBPP_TO_BYTES(numBitsPerPixel));
 }
 
 size_t ImageSubheader::getNumBytesOfImageData() const

@@ -26,6 +26,7 @@
 /*  I hand it NULL!  */
 char* clone_string(char* data, nitf_Error* error)
 {
+    (void)error;
 
     printf("Cloning '%s'...\n", data);
     char* new_data = nitf_strdup(data);

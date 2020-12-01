@@ -49,7 +49,7 @@ public:
     //! Copy constructor
     WriteHandler(const WriteHandler & x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator
@@ -67,10 +67,7 @@ public:
         getNativeOrThrow();
     }
 
-    //! Destructor
-    virtual ~WriteHandler()
-    {
-    }
+    ~WriteHandler() = default;
 
     /*!
      *  Write to the given output IOInterface
@@ -82,7 +79,7 @@ protected:
     //! Constructor
     WriteHandler() = default;
 
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 

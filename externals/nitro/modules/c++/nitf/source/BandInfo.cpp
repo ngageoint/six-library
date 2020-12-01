@@ -42,7 +42,7 @@ BandInfo::BandInfo(nitf_BandInfo * x)
     getNativeOrThrow();
 }
 
-BandInfo::BandInfo() noexcept : BandInfo(nitf_BandInfo_construct(&error))
+BandInfo::BandInfo() : BandInfo(nitf_BandInfo_construct(&error))
 {
     setManaged(false);
 }

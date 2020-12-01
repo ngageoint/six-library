@@ -22,7 +22,7 @@
 
 #include "nitf/IOInterface.hpp"
 
-void nitf::IOInterfaceDestructor::operator()(nitf_IOInterface *io)
+void nitf::IOInterfaceDestructor::operator()(nitf_IOInterface *io) noexcept
 {
     if (io)
     {
@@ -35,6 +35,10 @@ void nitf::IOInterfaceDestructor::operator()(nitf_IOInterface *io)
 void nitf::IOInterface::read(void* buf, size_t size)
 {
     nitf_IOInterface *io = getNativeOrThrow();
+    if (io == nullptr)
+    {
+        throw except::NullPointerReference(Ctxt("IOInterface"));
+    }
     const NITF_BOOL x = io->iface->read(io->data, buf, size, &error);
     if (!x)
         throw nitf::NITFException(&error);
@@ -43,20 +47,31 @@ void nitf::IOInterface::read(void* buf, size_t size)
 void nitf::IOInterface::write(const void* buf, size_t size)
 {
     nitf_IOInterface *io = getNativeOrThrow();
-    const NITF_BOOL x = io->iface->write(io->data, buf, size, &error);
-    if (!x)
-        throw nitf::NITFException(&error);
+    if (io != nullptr)
+    {
+        const NITF_BOOL x = io->iface->write(io->data, buf, size, &error);
+        if (!x)
+            throw nitf::NITFException(&error);
+    }
 }
 
 bool nitf::IOInterface::canSeek() const
 {
-    nitf_IOInterface *io = getNativeOrThrow();
+    nitf_IOInterface* io = getNativeOrThrow();
+    if (io == nullptr)
+    {
+        throw except::NullPointerReference(Ctxt("IOInterface"));
+    }
     return io->iface->canSeek(io->data, &error) == NRT_SUCCESS;
 }
 
 nitf::Off nitf::IOInterface::seek(nitf::Off offset, int whence)
 {
-    nitf_IOInterface *io = getNativeOrThrow();
+    nitf_IOInterface* io = getNativeOrThrow();
+    if (io == nullptr)
+    {
+        throw except::NullPointerReference(Ctxt("IOInterface"));
+    }
     if (!NRT_IO_SUCCESS(io->iface->seek(io->data, offset, whence, &error)))
     {
         throw nitf::NITFException(&error);
@@ -66,7 +81,11 @@ nitf::Off nitf::IOInterface::seek(nitf::Off offset, int whence)
 
 nitf::Off nitf::IOInterface::tell() const
 {
-    nitf_IOInterface *io = getNativeOrThrow();
+    nitf_IOInterface* io = getNativeOrThrow();
+    if (io == nullptr)
+    {
+        throw except::NullPointerReference(Ctxt("IOInterface"));
+    }
     const nitf::Off t = io->iface->tell(io->data, &error);
     if (!NRT_IO_SUCCESS(t))
     {
@@ -77,7 +96,11 @@ nitf::Off nitf::IOInterface::tell() const
 
 nitf::Off nitf::IOInterface::getSize() const
 {
-    nitf_IOInterface *io = getNativeOrThrow();
+    nitf_IOInterface* io = getNativeOrThrow();
+    if (io == nullptr)
+    {
+        throw except::NullPointerReference(Ctxt("IOInterface"));
+    }
     const nitf::Off size = io->iface->getSize(io->data, &error);
     if (!NRT_IO_SUCCESS(size))
     {
@@ -89,11 +112,18 @@ nitf::Off nitf::IOInterface::getSize() const
 int nitf::IOInterface::getMode() const
 {
     nitf_IOInterface *io = getNativeOrThrow();
+    if (io == nullptr)
+    {
+        throw except::NullPointerReference(Ctxt("IOInterface"));
+    }
     return io->iface->getMode(io->data, &error);
 }
 
 void nitf::IOInterface::close()
 {
     nitf_IOInterface *io = getNativeOrThrow();
-    io->iface->close(io->data, &error);
+    if (io != nullptr)
+    {
+        io->iface->close(io->data, &error);
+    }
 }

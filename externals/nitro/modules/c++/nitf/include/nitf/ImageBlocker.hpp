@@ -42,9 +42,11 @@ namespace nitf
  * means for multi-segment cases, there may be a different num rows / block in
  * each segment).
  */
-class ImageBlocker
+struct ImageBlocker final
 {
-public:
+    ImageBlocker(const ImageBlocker&) = delete;
+    ImageBlocker& operator=(const ImageBlocker&) = delete;
+
     /*!
      * Use when there's a single image segment
      *
@@ -134,7 +136,7 @@ public:
     void block(const DataT* input,
                size_t startRow,
                size_t numRows,
-               DataT* output) const
+               DataT* output) const noexcept
     {
         block(input, startRow, numRows, sizeof(DataT), output);
     }
@@ -164,7 +166,7 @@ public:
                size_t numColsPerBlock,
                size_t numValidRowsInBlock,
                size_t numValidColsInBlock,
-               void* output);
+               void* output) noexcept;
 
     //! \return The number of columns of blocks
     size_t getNumColsOfBlocks() const noexcept
@@ -270,7 +272,7 @@ private:
                    size_t numValidRowsInBlock,
                    size_t numValidColsInBlock,
                    size_t numBytesPerPixel,
-                   std::byte* output) const
+                   std::byte* output) const noexcept
     {
         block(input, numBytesPerPixel, mNumCols, mNumRowsPerBlock[seg],
               mNumColsPerBlock, numValidRowsInBlock, numValidColsInBlock,
@@ -281,7 +283,7 @@ private:
                         const std::byte*& input,
                         size_t numValidRowsInBlock,
                         size_t numBytesPerPixel,
-                        std::byte*& output) const;
+                        std::byte*& output) const noexcept;
 
 private:
     // Vectors all indexed by segment

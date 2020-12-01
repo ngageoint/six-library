@@ -55,7 +55,7 @@ public:
     ImageSegment(nitf_ImageSegment * x);
 
     //! Constructor
-    ImageSegment();
+    ImageSegment() noexcept(false);
 
     ImageSegment(NITF_DATA * x);
 
@@ -64,7 +64,7 @@ public:
      //! Clone
     nitf::ImageSegment clone() const;
 
-    ~ImageSegment();
+    ~ImageSegment() = default;
 
     //! Get the subheader
     nitf::ImageSubheader getSubheader() const;
@@ -85,7 +85,7 @@ public:
     void setImageEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

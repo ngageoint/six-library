@@ -51,7 +51,7 @@ class Foo
 protected:
     virtual void bar() {std::cout << "HERE1" << std::endl;}
 public:
-    Foo(){}
+    Foo() = default;
     virtual ~Foo(){bar();}
 };
 
@@ -62,7 +62,7 @@ class Bar : public Foo<T>
 protected:
     virtual void bar() { std::cout << "HERE2" << std::endl; }
 public:
-    Bar(){}
+    Bar() = default;
     ~Bar(){bar();}
 };
 

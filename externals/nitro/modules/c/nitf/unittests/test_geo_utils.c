@@ -2,7 +2,7 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2017, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,22 +15,21 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, If not,
- * see <http://www.gnu.org/licenses/>.
+ * License along with this program;
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-
 #include <import/nitf.h>
+#include "Test.h"
 
-#define DECIMAL_LAT_STR "-12.345"
-#define DECIMAL_LON_STR "+123.456"
-
-#define DMS_LAT_STR "123456S"
-#define DMS_LON_STR "1234567E"
-
-int main(int argc, char**argv)
+TEST_CASE(test_geo_utils)
 {
+    const char* DECIMAL_LAT_STR = "-12.345";
+    const char* DECIMAL_LON_STR = "+123.456";
+
+    const char* DMS_LAT_STR = "123456S";
+    const char* DMS_LON_STR = "1234567E";
 
     /* Try geographic stuff */
     char ll[10];
@@ -41,64 +40,70 @@ int main(int argc, char**argv)
     if (!nitf_Utils_parseGeographicString(DMS_LAT_STR, &d, &m, &s, &e))
     {
         nitf_Error_print(&e, stdout, "Exiting...");
-        exit(EXIT_FAILURE);
+        TEST_ASSERT(0);
     }
     decimal = nitf_Utils_geographicToDecimal(d, m, s);
-    printf("DMS: [%s]\n", DMS_LAT_STR);
-    printf("\tSeparated: %d %d %f\n", d, m, s);
+    TEST_ASSERT_EQ_INT(d, -12);
+    TEST_ASSERT_EQ_INT(m, 34);
+    TEST_ASSERT_EQ_FLOAT(s, 56.0);
     nitf_Utils_geographicLatToCharArray(d, m, s, ll);
-    printf("\tRe-formatted: [%s]\n", ll);
+    TEST_ASSERT_EQ_STR(ll, "112504S");
 
-    printf("\tAs decimal: %f\n", decimal);
+    TEST_ASSERT((decimal <= -12.582) && (decimal >= -12.583));
     nitf_Utils_decimalLatToGeoCharArray(decimal, ll);
-    printf("\tRe-formatted (as decimal): [%s]\n", ll);
+    TEST_ASSERT_EQ_STR(ll, "112504S");
 
     /* Now convert it back */
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
-    printf("\tRound trip: %d %d %f\n", d, m, s);
-
-
+    TEST_ASSERT_EQ_INT(d, -12);
+    TEST_ASSERT_EQ_INT(m, 34);
+    TEST_ASSERT_EQ_FLOAT(s, 56.0);
 
 
     if (!nitf_Utils_parseGeographicString(DMS_LON_STR, &d, &m, &s, &e))
     {
         nitf_Error_print(&e, stdout, "Exiting...");
-        exit(EXIT_FAILURE);
+        TEST_ASSERT(0);
     }
     decimal = nitf_Utils_geographicToDecimal(d, m, s);
-    printf("DMS: [%s]\n", DMS_LON_STR);
-    printf("\tSeparated: %d %d %f\n", d, m, s);
+    TEST_ASSERT_EQ_INT(d, 123);
+    TEST_ASSERT_EQ_INT(m, 45);
+    TEST_ASSERT_EQ_FLOAT(s, 67.0);
     nitf_Utils_geographicLonToCharArray(d, m, s, ll);
-    printf("\tRe-formatted: [%s]\n", ll);
-    printf("\tAs decimal: %f\n", decimal);
+    TEST_ASSERT_EQ_STR(ll, "1234607E");
+    TEST_ASSERT((decimal >= 123.768) && (decimal <= 123.769));
+
     nitf_Utils_decimalLonToGeoCharArray(decimal, ll);
-    printf("\tRe-formatted (as decimal): [%s]\n", ll);
+    TEST_ASSERT_EQ_STR(ll, "1234607E");
 
     /* Now convert it back */
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
-    printf("\tRound trip: %d %d %f\n", d, m, s);
-
-
+    TEST_ASSERT_EQ_INT(d, 123);
+    TEST_ASSERT_EQ_INT(m, 46);
+    TEST_ASSERT_EQ_FLOAT(s, 7.0);
 
     /* Try decimal stuff */
     if (!nitf_Utils_parseDecimalString(DECIMAL_LAT_STR, &decimal, &e))
     {
         nitf_Error_print(&e, stdout, "Exiting...");
-        exit(EXIT_FAILURE);
+        TEST_ASSERT(0);
     }
-    printf("Decimal: [%s]\n", DECIMAL_LAT_STR);
     nitf_Utils_decimalLatToCharArray(decimal, ll);
-    printf("\tRe-formatted: [%s]\n", ll);
+    TEST_ASSERT_EQ_STR(ll, "-12.345");
 
     /* Try decimal stuff */
     if (!nitf_Utils_parseDecimalString(DECIMAL_LON_STR, &decimal, &e))
     {
         nitf_Error_print(&e, stdout, "Exiting...");
-        exit(EXIT_FAILURE);
+        TEST_ASSERT(0);
     }
-    printf("Decimal: [%s]\n", DECIMAL_LON_STR);
     nitf_Utils_decimalLonToCharArray(decimal, ll);
-    printf("\tRe-formatted: [%s]\n", ll);
-    return 0;
+    TEST_ASSERT_EQ_STR(ll, "+123.456");
 }
+
+TEST_MAIN(
+    (void)argc;
+    (void)argv;
+    CHECK(test_geo_utils);
+    )
 

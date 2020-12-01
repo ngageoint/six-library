@@ -58,9 +58,6 @@ nitf::RESubheader RESubheader::clone() const
     return dolly;
 }
 
-RESubheader::~RESubheader(){}
-
-
 nitf::Field RESubheader::getFilePartType() const
 {
     return nitf::Field(getNativeOrThrow()->filePartType);

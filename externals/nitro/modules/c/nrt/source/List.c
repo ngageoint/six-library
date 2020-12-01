@@ -463,6 +463,22 @@ NRTAPI(uint32_t) nrt_List_size(nrt_List * list)
     }
     return size;
 }
+NRTAPI(uint16_t) nrt_List_size16(nrt_List* list)
+{
+    uint16_t size = 0;
+
+    if (list)
+    {
+        nrt_ListIterator iter = nrt_List_begin(list);
+        nrt_ListIterator end = nrt_List_end(list);
+        while (nrt_ListIterator_notEqualTo(&iter, &end))
+        {
+            ++size;
+            nrt_ListIterator_increment(&iter);
+        }
+    }
+    return size;
+}
 
 NRTAPI(NRT_DATA *) nrt_List_get(nrt_List * list, int index, nrt_Error * error)
 {

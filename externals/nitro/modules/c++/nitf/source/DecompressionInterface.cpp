@@ -129,7 +129,7 @@ NITF_BOOL DecompressionInterface::adapterFreeBlock(
 }
 
 void DecompressionInterface::adapterDestroy(
-    nitf_DecompressionControl** object)
+    nitf_DecompressionControl** object) noexcept
 {
     if (object != nullptr && *object != nullptr)
     {

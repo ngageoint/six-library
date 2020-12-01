@@ -478,6 +478,9 @@ TEST_CASE(testBlockPartialImage)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
+
     TEST_CHECK(testSingleSegmentNoLeftovers);
     TEST_CHECK(testSingleSegmentPadCols);
     TEST_CHECK(testSingleSegmentPadRowsAndPadCols);

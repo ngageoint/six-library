@@ -56,7 +56,7 @@ public:
     TextSegment(nitf_TextSegment * x);
 
     //! Constructor
-    TextSegment();
+    TextSegment() noexcept(false);
 
     TextSegment(NITF_DATA * x);
 
@@ -65,7 +65,7 @@ public:
     //! Clone
     nitf::TextSegment clone() const;
 
-    ~TextSegment();
+    ~TextSegment() = default;
 
     //! Get the subheader
     nitf::TextSubheader getSubheader() const;
@@ -86,7 +86,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

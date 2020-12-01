@@ -56,12 +56,12 @@ public:
     LabelSubheader(nitf_LabelSubheader * x);
 
     //! Default Constructor
-    LabelSubheader();
+    LabelSubheader() noexcept(false);
 
     //! Clone
     nitf::LabelSubheader clone() const;
 
-    ~LabelSubheader();
+    ~LabelSubheader() = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;
@@ -121,7 +121,7 @@ public:
     void setExtendedSection(nitf::Extensions value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

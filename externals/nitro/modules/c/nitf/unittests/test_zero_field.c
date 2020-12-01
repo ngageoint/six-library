@@ -31,5 +31,7 @@ TEST_CASE( testZeroField)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
     CHECK(testZeroField);
 )

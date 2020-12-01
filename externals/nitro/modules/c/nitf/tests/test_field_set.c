@@ -34,7 +34,7 @@
 
 #define STR_LEN 100             /* Test string max length */
 
-int main(int argc, char *argv[])
+int main(void)
 {
     nitf_FileHeader *fhdr;          /* File header supplying fields */
     nitf_ImageSubheader *subhdr;    /* Subheader supplying fields */

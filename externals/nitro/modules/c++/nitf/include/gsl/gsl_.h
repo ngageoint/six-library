@@ -44,11 +44,18 @@ namespace gsl
     // narrow() : a checked version of narrow_cast() that throws if the cast changed the value
     namespace details
     {
+        #ifdef _MSC_VER
+        #pragma warning(push)
+        #pragma warning(disable: 4702) // unreachable code
+        #endif
         template <class T>
         constexpr T narrow_throw_exception(T t) noexcept(false)
         {
             return gsl::details::throw_exception(narrowing_error()), t;
         }
+        #ifdef _MSC_VER
+        #pragma warning(pop)
+        #endif
 
         template <class T, class U>
         constexpr T narrow1_(T t, U u) noexcept(false)

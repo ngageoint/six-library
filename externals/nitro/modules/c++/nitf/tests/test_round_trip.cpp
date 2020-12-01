@@ -53,7 +53,7 @@ public:
         mWindow.setNumBands(1);
     }
 
-    virtual void nextRow(uint32_t band, void* buffer)
+    virtual void nextRow(uint32_t /*band*/, void* buffer)
     {
         int padded;
         mReader.read(mWindow, (uint8_t**) &buffer, &padded);
@@ -142,10 +142,10 @@ int main(int argc, char **argv)
             uint32_t pixelSize = NITF_NBPP_TO_BYTES(
                     imseg.getSubheader().getNumBitsPerPixel());
 
-            for (uint32_t i = 0; i < nBands; i++)
+            for (uint32_t ii = 0; i < nBands; i++)
             {
-                nitf::RowSource rowSource(i, nRows, nCols, pixelSize,
-                                          rowStreamers.add(i, nCols, iReader));
+                nitf::RowSource rowSource(ii, nRows, nCols, pixelSize,
+                                          rowStreamers.add(ii, nCols, iReader));
                 iSource.addBand(rowSource);
             }
             iWriter.attachSource(iSource);

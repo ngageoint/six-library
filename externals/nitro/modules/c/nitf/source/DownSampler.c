@@ -48,6 +48,11 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
                                     uint32_t colsInLastWindow,
                                     nitf_Error * error)
 {
+    (void)pixelType;
+    (void)rowsInLastWindow;
+    (void)colsInLastWindow;
+    (void)error;
+
     uint32_t row;            /* Current row */
     uint32_t column;         /* Current column */
     uint32_t colInc;         /* Column increment */
@@ -199,6 +204,7 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
 
 NITFPRIV(void) PixelSkip_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no implementation data */
 }
 
@@ -522,6 +528,7 @@ NITFPRIV(NITF_BOOL) MaxDownSample_apply(nitf_DownSampler * object,
 
 NITFPRIV(void) MaxDownSample_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no instance data */
 }
 
@@ -772,6 +779,7 @@ nitf_Error * error)
 
 NITFPRIV(void) SumSq2DownSample_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no instance data */
 }
 
@@ -1031,6 +1039,7 @@ nitf_Error * error)
 
 NITFPRIV(void) Select2DownSample_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no instance data */
 }
 

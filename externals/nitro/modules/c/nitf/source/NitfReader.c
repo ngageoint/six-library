@@ -803,7 +803,6 @@ readDESubheader(nitf_Reader* reader,
     nitf_FileHeader* hdr;
     /* Length of the sub-header */
     uint32_t subLen;
-    nitf_Off currentOffset;
     /* Position where this DE Subheader begins */
     nitf_Off subheaderStart;
     /* End position of DE Subheader */
@@ -874,9 +873,10 @@ readDESubheader(nitf_Reader* reader,
             error);
 
     /* set the offset and end of the segment */
-    segment->offset = nitf_IOInterface_tell(reader->input, error);
-    if (!NITF_IO_SUCCESS(segment->offset))
+    const nitf_Off offset = nitf_IOInterface_tell(reader->input, error);
+    if (!NITF_IO_SUCCESS(offset))
         goto CATCH_ERROR;
+    segment->offset = offset;
     segment->end = segment->offset + subhdr->dataLength;
     subheaderEnd = segment->offset;
 
@@ -884,7 +884,7 @@ readDESubheader(nitf_Reader* reader,
     if ((strcmp(desID, "TRE_OVERFLOW") == 0) ||
         (strcmp(desID, "Controlled Extensions") == 0))
     {
-        currentOffset = segment->offset;
+        uint64_t currentOffset = segment->offset;
 
         /* loop until we are done */
         while (currentOffset < segment->end)
@@ -894,9 +894,10 @@ readDESubheader(nitf_Reader* reader,
                 goto CATCH_ERROR;
 
             /* update the offset */
-            currentOffset = nitf_IOInterface_tell(reader->input, error);
-            if (!NITF_IO_SUCCESS(currentOffset))
+            const nitf_Off currentOffset_ = nitf_IOInterface_tell(reader->input, error);
+            if (!NITF_IO_SUCCESS(currentOffset_))
                 goto CATCH_ERROR;
+            currentOffset = currentOffset_;
         }
     }
     else
@@ -978,9 +979,10 @@ readRESubheader(nitf_Reader* reader,
             error);
 
     /* set the offset and end of the segment */
-    segment->offset = nitf_IOInterface_tell(reader->input, error);
-    if (!NITF_IO_SUCCESS(segment->offset))
+    const nitf_Off offset = nitf_IOInterface_tell(reader->input, error);
+    if (!NITF_IO_SUCCESS(offset))
         goto CATCH_ERROR;
+    segment->offset = offset;
     segment->end = segment->offset + subhdr->dataLength;
 
     return NITF_SUCCESS;
@@ -1954,7 +1956,7 @@ nitf_Reader_newTextReader(nitf_Reader* reader,
 
     /* set the fields */
     textReader->input = reader->input;
-    textReader->dataLength = text->end - text->offset;
+    textReader->dataLength = (uint32_t)(text->end - text->offset);
     textReader->baseOffset = text->offset;
     textReader->virtualOffset = 0;
 
@@ -1996,7 +1998,7 @@ nitf_Reader_newGraphicReader(nitf_Reader* reader, int index, nitf_Error* error)
 
     /* set the fields */
     segmentReader->input = reader->input;
-    segmentReader->dataLength = segment->end - segment->offset;
+    segmentReader->dataLength = (uint32_t)(segment->end - segment->offset);
     segmentReader->baseOffset = segment->offset;
     segmentReader->virtualOffset = 0;
 
@@ -2038,7 +2040,7 @@ nitf_Reader_newDEReader(nitf_Reader* reader, int index, nitf_Error* error)
 
     /* set the fields */
     segmentReader->input = reader->input;
-    segmentReader->dataLength = segment->end - segment->offset;
+    segmentReader->dataLength = (uint32_t)(segment->end - segment->offset);
     segmentReader->baseOffset = segment->offset;
     segmentReader->virtualOffset = 0;
 

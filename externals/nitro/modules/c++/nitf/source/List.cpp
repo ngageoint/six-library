@@ -22,6 +22,8 @@
 
 #include "nitf/List.hpp"
 
+#include "gsl/gsl.h"
+
 ///////////////////////////////////////////////////////////////////////////////
 // ListNode
 
@@ -69,29 +71,29 @@ nitf::ListIterator & nitf::ListIterator::operator=(const nitf::ListIterator & x)
 
 nitf::ListIterator::ListIterator(nitf_ListIterator x) { setHandle(x); }
 
-nitf_ListIterator & nitf::ListIterator::getHandle() { return handle; }
-nitf_ListIterator& nitf::ListIterator::getHandle() const { return handle; }
+nitf_ListIterator & nitf::ListIterator::getHandle() noexcept { return handle; }
+nitf_ListIterator& nitf::ListIterator::getHandle() const noexcept { return handle; }
 
-bool nitf::ListIterator::equals(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::equals(const nitf::ListIterator& it2) const noexcept
 {
     const NITF_BOOL x = nitf_ListIterator_equals(&handle, &it2.getHandle());
     if (!x) return false;
     return true;
 }
 
-bool nitf::ListIterator::operator==(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::operator==(const nitf::ListIterator& it2) const noexcept
 {
     return this->equals(it2);
 }
 
-bool nitf::ListIterator::notEqualTo(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::notEqualTo(const nitf::ListIterator& it2) const noexcept
 {
     const NITF_BOOL x = nitf_ListIterator_notEqualTo(&handle, &it2.getHandle());
     if (!x) return false;
     return true;
 }
 
-bool nitf::ListIterator::operator!=(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::operator!=(const nitf::ListIterator& it2) const noexcept
 {
     return this->notEqualTo(it2);
 }
@@ -102,7 +104,7 @@ void nitf::ListIterator::increment()
     setMembers();
 }
 
-void nitf::ListIterator::operator++(int x) { increment(); }
+void nitf::ListIterator::operator++(int) { increment(); }
 
 nitf::ListIterator & nitf::ListIterator::operator+=(int x)
 {
@@ -183,8 +185,6 @@ nitf::List nitf::List::clone(NITF_DATA_ITEM_CLONE cloner) const
     return dolly;
 }
 
-nitf::List::~List(){}
-
 nitf::ListIterator nitf::List::begin() const
 {
     const nitf_ListIterator x = nitf_List_begin(getNativeOrThrow());
@@ -227,7 +227,7 @@ size_t nitf::List::getSize() const
 
 NITF_DATA* nitf::List::operator[] (size_t index)
 {
-    NITF_DATA* x = nitf_List_get(getNativeOrThrow(), index, &error);
+    NITF_DATA* x = nitf_List_get(getNativeOrThrow(), gsl::narrow<int>(index), &error);
     if (!x)
         throw nitf::NITFException(&error);
     return x;

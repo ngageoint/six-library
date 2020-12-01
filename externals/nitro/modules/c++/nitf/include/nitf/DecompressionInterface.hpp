@@ -108,7 +108,7 @@ public:
                                       uint8_t* block, 
                                       nitf_Error* error);
 
-    static void adapterDestroy(nitf_DecompressionControl** object);
+    static void adapterDestroy(nitf_DecompressionControl** object) noexcept;
 
 };
 
@@ -116,10 +116,9 @@ public:
  *  \class Compressor
  *  \brief This is the c++ interface for nitf_CompressionControl
  */
-class Decompressor
+struct Decompressor
 {
-public:
-    Decompressor() {}
+    Decompressor() = default;
     virtual ~Decompressor() {}
 
     virtual void start(nitf::IOInterface& io,

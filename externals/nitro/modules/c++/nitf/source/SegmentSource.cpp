@@ -22,10 +22,12 @@
 
 #include "nitf/SegmentSource.hpp"
 
+#include "gsl/gsl.h"
+
 nitf::SegmentMemorySource::SegmentMemorySource(const char * data, size_t size,
         nitf::Off start, int byteSkip, bool copyData)
 {
-    setNative(nitf_SegmentMemorySource_construct(data, size, start, byteSkip,
+    setNative(nitf_SegmentMemorySource_construct(data, gsl::narrow<nitf::Off>(size), start, byteSkip,
     		                                     copyData, &error));
     setManaged(false);
 }
