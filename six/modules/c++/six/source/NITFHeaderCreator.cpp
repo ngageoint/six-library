@@ -109,7 +109,7 @@ NITFHeaderCreator::NITFHeaderCreator() :
     loadXmlDataContentHandler();
 }
 
-NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
+NITFHeaderCreator::NITFHeaderCreator(std::shared_ptr<Container> container) :
     mRecord(NITF_VER_21),
     mXMLRegistry(NULL),
     mLog(NULL),
@@ -120,7 +120,7 @@ NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
 }
 
 NITFHeaderCreator::NITFHeaderCreator(const six::Options& options,
-                                     mem::SharedPtr<Container> container) :
+                                     std::shared_ptr<Container> container) :
     mRecord(NITF_VER_21),
     mXMLRegistry(NULL),
     mLog(NULL),
@@ -595,7 +595,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
 }
 
 void NITFHeaderCreator::addAdditionalDES(
-        mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
+        std::shared_ptr<nitf::SegmentWriter> segmentWriter)
 {
     if (segmentWriter.get() == NULL)
     {
@@ -605,7 +605,7 @@ void NITFHeaderCreator::addAdditionalDES(
     mSegmentWriters.push_back(segmentWriter);
 }
 
-void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
+void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 {
     mContainer = container;
 
@@ -636,7 +636,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
      */
     if (container->getDataType() == DataType::COMPLEX)
     {
-        mem::SharedPtr<NITFImageInfo> info(new NITFImageInfo(
+        std::shared_ptr<NITFImageInfo> info(new NITFImageInfo(
                 container->getData(0), maxRows, maxSize, true, 0, 0));
 
         mInfos.push_back(info);
@@ -678,7 +678,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
                         std::min(optNumColsPerBlock,
                                  static_cast<uint32_t>(ith->getNumCols()));
 
-                mem::SharedPtr<NITFImageInfo> info(
+                std::shared_ptr<NITFImageInfo> info(
                         new NITFImageInfo(ith,
                                           maxRows,
                                           maxSize,
@@ -925,7 +925,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
 
     for (auto desSource : container->getDESSources())
     {
-        mem::SharedPtr<nitf::SegmentWriter> desWriter(
+        std::shared_ptr<nitf::SegmentWriter> desWriter(
                 new nitf::SegmentWriter(desSource));
         mSegmentWriters.push_back(desWriter);
     }
@@ -934,7 +934,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
 }
 
 void NITFHeaderCreator::initialize(const six::Options& options,
-                                   mem::SharedPtr<Container> container)
+                                   std::shared_ptr<Container> container)
 {
     mOptions = options;
     initialize(container);
@@ -961,7 +961,7 @@ void NITFHeaderCreator::loadMeshSegment(
     // Add the data and writer for this segment
     nitf::SegmentMemorySource dataSource(
             meshBuffer.data(), meshBuffer.size(), 0, 0, true);
-    mem::SharedPtr<nitf::SegmentWriter> desWriter(
+    std::shared_ptr<nitf::SegmentWriter> desWriter(
             new nitf::SegmentWriter(dataSource));
     addAdditionalDES(desWriter);
 }

@@ -68,7 +68,7 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Only applies
      * for SIDD.  Defaults to no blocking.
      */
-    void initialize(mem::SharedPtr<Container> container,
+    void initialize(std::shared_ptr<Container> container,
                     const XMLControlRegistry& xmlRegistry,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<std::vector<size_t> >& bytesPerBlock,

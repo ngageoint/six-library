@@ -79,7 +79,7 @@ void createNITF(const std::string& outputPathname,
     const size_t elementsInImage = data->getNumRows() * data->getNumCols();
     const size_t imageSize = elementsInImage * data->getNumBytesPerPixel();
 
-    mem::SharedPtr<six::Container> container(
+    std::shared_ptr<six::Container> container(
             new six::Container(data->getDataType()));
     container->addData(data.release());
 

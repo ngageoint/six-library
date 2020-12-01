@@ -232,7 +232,7 @@ int main(int argc, char** argv)
                                     std::vector<std::string>());
 
         // Create a file container
-        mem::SharedPtr<six::Container> container(new six::Container(
+        std::shared_ptr<six::Container> container(new six::Container(
                 six::DataType::DERIVED));
 
         // We have a source for each image
