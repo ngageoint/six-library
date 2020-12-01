@@ -74,7 +74,7 @@ std::vector<double> generateScaleFactors(size_t length, bool scale)
 }
 
 template<typename T>
-void writeCPHD(const std::string& outPathname, size_t numThreads,
+void writeCPHD(const std::string& outPathname, size_t /*numThreads*/,
         const types::RowCol<size_t> dims,
         const std::vector<std::complex<T> >& writeData,
         cphd::Metadata& metadata,
