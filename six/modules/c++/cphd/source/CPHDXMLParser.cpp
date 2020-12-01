@@ -1934,7 +1934,7 @@ XMLElem CPHDXMLParser::createAPVPType(const std::string& name,
 }
 
 XMLElem CPHDXMLParser::createErrorParamPlatform(
-        const std::string& name,
+        const std::string& /*name*/,
         const ErrorParameters::Bistatic::Platform p,
         XMLElem parent) const
 {

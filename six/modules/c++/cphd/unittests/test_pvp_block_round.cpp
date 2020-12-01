@@ -155,7 +155,7 @@ bool checkData(const std::string& pathname,
 }
 
 template <typename T>
-bool runTest(bool scale,
+bool runTest(bool /*scale*/,
              const std::vector<std::complex<T>>& writeData,
              cphd::Metadata& meta,
              cphd::PVPBlock& pvpBlock,

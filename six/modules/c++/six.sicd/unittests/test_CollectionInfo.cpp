@@ -28,7 +28,12 @@
 #include <str/Convert.h>
 
 #include <import/six/sicd.h>
+
+#ifdef _MSC_VER
+#pragma warning(disable: 4464) // relative include path contains '..'
+#endif
 #include "../tests/TestUtilities.h"
+
 #include "TestCase.h"
 
 TEST_CASE(DummyData)
