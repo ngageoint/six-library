@@ -102,7 +102,7 @@ DataType NITFReadControl::getDataType(nitf::Record& record)
 }
 
 DataType NITFReadControl::getDataType(const std::string& desid,
-        sys::Uint64_T subheaderLength, const std::string& desshsiField,
+        uint64_t subheaderLength, const std::string& desshsiField,
         const std::string& treTag)
 {
     // SICD/SIDD 1.0 specify DESID as XML_DATA_CONTENT
@@ -158,7 +158,7 @@ DataType NITFReadControl::getDataType(nitf::DESegment& segment)
     // case there is no subheader (in which case
     // subheader.getSubheaderFields() will throw with a
     // NITRO-specific message).
-    const sys::Uint64_T subheaderLength(subheader.getSubheaderFieldsLength());
+    const uint64_t subheaderLength(subheader.getSubheaderFieldsLength());
     std::string treTag;
     std::string desshsiField;
     if (subheaderLength != 0)

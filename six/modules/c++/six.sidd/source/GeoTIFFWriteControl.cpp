@@ -48,7 +48,7 @@ void GeoTIFFWriteControl::initialize(mem::SharedPtr<Container> container)
     // There still could be complex data in the container though, so we
     // will keep those around for later
 
-    sys::Uint64_T length = 0;
+    uint64_t length = 0;
     for (size_t ii = 0; ii < container->getNumData(); ++ii)
     {
         Data* data = container->getData(ii);
@@ -57,9 +57,9 @@ void GeoTIFFWriteControl::initialize(mem::SharedPtr<Container> container)
         else if (data->getDataType() == DataType::DERIVED)
         {
             //length = ??
-            length += (sys::Uint64_T) data->getNumBytesPerPixel()
-                    * (sys::Uint64_T) data->getNumRows()
-                    * (sys::Uint64_T) data->getNumCols();
+            length += (uint64_t) data->getNumBytesPerPixel()
+                    * (uint64_t) data->getNumRows()
+                    * (uint64_t) data->getNumCols();
 
             if (length > Constants::GT_SIZE_MAX)
                 throw except::Exception(Ctxt(
@@ -120,8 +120,8 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
                                    const std::vector<std::string>& schemaPaths)
 {
     PixelType pixelType = data->getPixelType();
-    sys::Uint32_T numRows = (sys::Uint32_T) data->getNumRows();
-    sys::Uint32_T numCols = (sys::Uint32_T) data->getNumCols();
+    uint32_t numRows = (uint32_t) data->getNumRows();
+    uint32_t numCols = (uint32_t) data->getNumCols();
 
     // Start by initializing the TIFF info
     ifd->addEntry(tiff::KnownTags::IMAGE_WIDTH, numCols);
