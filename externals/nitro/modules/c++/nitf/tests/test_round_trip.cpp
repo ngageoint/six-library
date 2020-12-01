@@ -155,7 +155,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setGraphicWriteHandler(i, segmentWriter);
         }
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setTextWriteHandler(i, segmentWriter);
         }
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setDEWriteHandler(i, segmentWriter);
         }

@@ -57,6 +57,7 @@ namespace sys
 
 		bool is_regular_file(const path& p); // https://en.cppreference.com/w/cpp/filesystem/is_regular_file
 		bool is_directory(const path& p); // https://en.cppreference.com/w/cpp/filesystem/is_directory
+        bool exists(const path& p ); // https://en.cppreference.com/w/cpp/filesystem/exists
     }
 }
 

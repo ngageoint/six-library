@@ -87,7 +87,7 @@ protected:
 
 private:
     const size_t mBufferSize;
-    const mem::ScopedArray<char> mScopedBuffer;
+    const std::shared_ptr<char[]> mScopedBuffer;
     char* const mBuffer;
 
     nitf::Off mPosition;

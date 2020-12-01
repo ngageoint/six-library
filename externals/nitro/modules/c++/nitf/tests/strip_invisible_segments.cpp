@@ -28,6 +28,9 @@
 #include <vector>
 #include <memory>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 // Round-trip a NITF, removing any image segments with an IREP of NODISPLY
 namespace
 {
@@ -73,7 +76,7 @@ int main(int argc, char** argv)
         //  Check argv and make sure we are happy
         if (argc != 3)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                     << " <input-file> <output-file>" << std::endl;
             return 1;
         }

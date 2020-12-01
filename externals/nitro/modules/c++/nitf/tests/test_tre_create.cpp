@@ -31,6 +31,9 @@
 #include <except/Exception.h>
 #include <nitf/Writer.hpp>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 int main(int argc, char** argv)
 {
     try
@@ -38,7 +41,7 @@ int main(int argc, char** argv)
         // Parse the command line
         if (argc != 2)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <output pathname>\n\n";
             return 1;
         }

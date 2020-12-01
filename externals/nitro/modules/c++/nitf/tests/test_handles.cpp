@@ -45,6 +45,9 @@
 #include <iostream>
 #include <vector>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 template <typename T>
 class Foo
 {
@@ -166,11 +169,10 @@ int main(int argc, char** argv)
 
 
         //open a file
-        sys::OS os;
         std::vector< std::string > files;
         for (int i = 1; i < argc; ++i)
         {
-            if (!os.exists(argv[i]))
+            if (!fs::exists(argv[i]))
                 std::cout << "Error -> File does not exist: " << argv[i] << std::endl;
             else
                 files.push_back(argv[i]);
