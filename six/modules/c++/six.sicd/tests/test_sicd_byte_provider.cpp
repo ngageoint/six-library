@@ -163,7 +163,7 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    mem::SharedPtr<six::Container> container(
+    std::shared_ptr<six::Container> container(
             new six::Container(six::DataType::COMPLEX));
     container->addData(mData->clone());
 

@@ -139,7 +139,7 @@ void cropSIDD(const std::string& inPathname,
     // Make sure it's a SIDD
     six::NITFReadControl reader;
     reader.load(inPathname, schemaPaths);
-    mem::SharedPtr<six::Container> container(reader.getContainer());
+    std::shared_ptr<six::Container> container(reader.getContainer());
 
     if (container->getDataType() != six::DataType::DERIVED)
     {

@@ -202,7 +202,7 @@ struct TestHelper
 
         const size_t maxSize = numCols * 50;
 
-        mem::SharedPtr<six::Container> container(new six::Container(
+        std::shared_ptr<six::Container> container(new six::Container(
                 six::DataType::DERIVED));
 
         std::vector<six::UByte*> buffers;
@@ -275,7 +275,7 @@ TEST_CASE(testRead)
     reader.setXMLControlRegistry(&testHelper.mXmlRegistry);
 
     reader.load(testHelper.mPathname);
-    const mem::SharedPtr<const six::Container> container = reader.getContainer();
+    const std::shared_ptr<const six::Container> container = reader.getContainer();
 
     TEST_ASSERT_EQ(container->getNumData(), 4);
     for (size_t ii = 0; ii < container->getNumData(); ++ii)

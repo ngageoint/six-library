@@ -132,7 +132,7 @@ int main(int argc, char** argv)
         // load the file
         reader->load(inputFile, schemaPaths);
 
-        mem::SharedPtr<six::Container> container = reader->getContainer();
+        std::shared_ptr<six::Container> container = reader->getContainer();
         std::string base = sys::Path::basename(inputFile, true);
         size_t numImages = 0;
 
