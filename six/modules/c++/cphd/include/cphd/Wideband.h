@@ -144,7 +144,7 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              const mem::BufferView<sys::ubyte>& data) const;
+              const mem::BufferView<std::byte>& data) const;
 
     /*!
      *  \func read
@@ -159,7 +159,7 @@ public:
      *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel, const mem::BufferView<sys::ubyte>& data) const;
+    void read(size_t channel, const mem::BufferView<std::byte>& data) const;
 
     /*!
      *  \func read
@@ -191,7 +191,7 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              std::unique_ptr<sys::ubyte[]>& data) const;
+              std::unique_ptr<std::byte[]>& data) const;
 
     /*!
      *  \func read
@@ -206,7 +206,7 @@ public:
      *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel, std::unique_ptr<sys::ubyte[]>& data) const;
+    void read(size_t channel, std::unique_ptr<std::byte[]>& data) const;
 
     /*!
      *  \func read
@@ -245,7 +245,7 @@ public:
               size_t lastSample,
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
-              const mem::BufferView<sys::ubyte>& scratch,
+              const mem::BufferView<std::byte>& scratch,
               const mem::BufferView<std::complex<float>>& data) const;
 
     /*!
@@ -281,7 +281,7 @@ public:
               const types::RowCol<size_t>& dims,
               void* data) const
     {
-        const mem::BufferView<sys::ubyte> buffer(static_cast<sys::ubyte*>(data),
+        const mem::BufferView<std::byte> buffer(static_cast<std::byte*>(data),
                                                  dims.area() * mElementSize);
         read(channel,
              firstVector,

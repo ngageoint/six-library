@@ -57,7 +57,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
                         "Only 1 band images (and special-case RGB) are currently supported"));
     }
 
-    mRowBuffer.reset(new sys::ubyte[mRowSize]);
+    mRowBuffer.reset(new std::byte[mRowSize]);
     mAvailable = mRowSize * (uint32_t) subheader.getNumRows();
 
     mBandList.reset(new uint32_t[nBands]);
@@ -77,7 +77,7 @@ sys::Off_T six::NITFImageInputStream::available()
     return mAvailable;
 }
 
-sys::SSize_T six::NITFImageInputStream::read(sys::byte* b, size_t len)
+sys::SSize_T six::NITFImageInputStream::read(std::byte* b, size_t len)
 {
     //TODO to be 100% complete, we need to interleave multi-bands
     //this does NOT include the special RGB case that is already interleaved
@@ -113,7 +113,7 @@ sys::SSize_T six::NITFImageInputStream::readRow()
 {
     mWindow.setStartRow(static_cast<uint32_t>(mRowOffset++));
     int padded;
-    uint8_t* buffer = mRowBuffer.get();
+    auto buffer = reinterpret_cast<uint8_t*>(mRowBuffer.get());
     mReader.read(mWindow, &buffer, &padded);
     mRowBufferRemaining = mRowSize;
     return (sys::SSize_T)mRowSize;

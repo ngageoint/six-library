@@ -55,7 +55,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
 
     // Read SupportBlock
     const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
-    std::unique_ptr<sys::ubyte[]> readPtr;
+    std::unique_ptr<std::byte[]> readPtr;
     supportBlock.readAll(numThreads, readPtr);
 
     // Read PVPBlock
@@ -71,8 +71,8 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
     cphd::CPHDWriter writer(reader.getMetadata(), outPathname, schemaPathnames, numThreads);
 
     // Declare and allocate the wideband data storage
-    std::unique_ptr<sys::ubyte[]> data;
-    data.reset(new sys::ubyte[header.getSignalBlockSize()]);
+    std::unique_ptr<std::byte[]> data;
+    data.reset(new std::byte[header.getSignalBlockSize()]);
 
     // Check if signal data is compressed
     if (metadata.data.isCompressed())
@@ -81,7 +81,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
         for (size_t channel = 0, idx = 0; channel < metadata.data.getNumChannels(); ++channel)
         {
             const size_t bufSize = metadata.data.getCompressedSignalSize(channel);
-            wideband.read(channel, mem::BufferView<sys::ubyte>(&data[idx], bufSize));
+            wideband.read(channel, mem::BufferView<std::byte>(&data[idx], bufSize));
             idx += bufSize;
         }
         writer.write(
@@ -97,7 +97,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
             const size_t bufSize = metadata.data.getSignalSize(channel);
             wideband.read(channel, 0, cphd::Wideband::ALL,
                  0, cphd::Wideband::ALL, numThreads,
-                 mem::BufferView<sys::ubyte>(&data[idx], bufSize));
+                 mem::BufferView<std::byte>(&data[idx], bufSize));
             idx += bufSize;
         }
 

@@ -47,14 +47,14 @@ void validateArguments(int argc, char** argv)
     }
 }
 
-std::vector<six::UByte> generateBandData(const six::sicd::ComplexData& data)
+std::vector<std::byte> generateBandData(const six::sicd::ComplexData& data)
 {
-    std::vector<six::UByte> bandData(data.getNumRows() * data.getNumCols()
+    std::vector<std::byte> bandData(data.getNumRows() * data.getNumCols()
             * data.getNumBytesPerPixel());
 
     for (size_t ii = 0; ii < bandData.size(); ++ii)
     {
-        bandData[ii] = static_cast<six::UByte>(ii);
+        bandData[ii] = static_cast<std::byte>(ii);
     }
 
     return bandData;
@@ -100,7 +100,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
-    std::vector<six::UByte> bandData(
+    std::vector<std::byte> bandData(
         generateBandData(*data));
 
     std::shared_ptr<six::Container> container(new six::Container(
@@ -143,7 +143,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
             std::vector<std::string>(),
             log);
 
-    std::vector<six::UByte> bandData(
+    std::vector<std::byte> bandData(
         generateBandData(*data));
 
     std::shared_ptr<six::Container> container(new six::Container(
@@ -190,7 +190,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
-    std::vector<six::UByte> bandData(
+    std::vector<std::byte> bandData(
         generateBandData(*data));
 
     std::shared_ptr<six::Container> container(new six::Container(

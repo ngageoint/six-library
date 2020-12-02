@@ -69,13 +69,13 @@ extern "C" NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
     for (i = 0; i < impl->numRows; i++)
     {
 
-        memcpy(rowCopy, (const sys::byte*) &impl->buffer[off], rowSize);
+        memcpy(rowCopy, (const std::byte*) &impl->buffer[off], rowSize);
 
         if (impl->doByteSwap)
-            sys::byteSwap((sys::byte*) rowCopy, impl->pixelSize
+            sys::byteSwap((std::byte*) rowCopy, impl->pixelSize
                     / impl->numChannels, impl->numCols * impl->numChannels);
         // And write it back
-        if (!nitf_IOInterface_write(io, (const sys::byte*) rowCopy, rowSize,
+        if (!nitf_IOInterface_write(io, (const std::byte*) rowCopy, rowSize,
                                     error))
             goto CATCH_ERROR;
         off += rowSize;
@@ -160,14 +160,14 @@ extern "C" NITF_BOOL __six_StreamWriteHandler_write(NITF_DATA * data,
     for (i = 0; i < impl->numRows; i++)
     {
 
-        impl->inputStream->read((sys::byte*) rowCopy, rowSize);
+        impl->inputStream->read((std::byte*) rowCopy, rowSize);
 
         if (impl->doByteSwap)
-            sys::byteSwap((sys::byte*) rowCopy, impl->pixelSize
+            sys::byteSwap((std::byte*) rowCopy, impl->pixelSize
                     / impl->numChannels, impl->numCols * impl->numChannels);
 
         // And write it back
-        if (!nitf_IOInterface_write(io, (const sys::byte*) rowCopy, rowSize,
+        if (!nitf_IOInterface_write(io, (const std::byte*) rowCopy, rowSize,
                                     error))
             goto CATCH_ERROR;
     }

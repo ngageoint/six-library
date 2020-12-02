@@ -104,7 +104,7 @@ void GeoTIFFWriteControl::save(const SourceList& sources,
 
         for (size_t row = 0; row < numRows; ++row)
         {
-            sources[ii]->read((sys::byte*)&buf[0], oneRow);
+            sources[ii]->read((std::byte*)&buf[0], oneRow);
             imageWriter->putData(&buf[0], numCols);
         }
         imageWriter->writeIFD();
@@ -259,7 +259,8 @@ void GeoTIFFWriteControl::save(const BufferList& sources,
         setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
         // Now we hack to write
 
-        imageWriter->putData(sources[ii], data->getNumRows()
+        const auto sources_ii = reinterpret_cast<const unsigned char*>(sources[ii]);
+        imageWriter->putData(sources_ii, data->getNumRows()
                 * data->getNumCols());
 
         imageWriter->writeIFD();
@@ -395,7 +396,7 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     const std::string tfwContents(ostr.str());
 
     io::FileOutputStream stream(tfwPathname);
-    stream.write(reinterpret_cast<const sys::byte*>(tfwContents.c_str()),
+    stream.write(reinterpret_cast<const std::byte*>(tfwContents.c_str()),
                  tfwContents.length());
     stream.flush();
     stream.close();

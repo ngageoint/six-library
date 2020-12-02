@@ -105132,7 +105132,7 @@ static swig_type_info _swigt__p_ParameterIter = {"_p_ParameterIter", "ParameterI
 static swig_type_info _swigt__p_ParameterMap = {"_p_ParameterMap", "ParameterMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_XMLControlRegistry = {"_p_XMLControlRegistry", "XMLControlRegistry *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_char = {"_p_char", "char *|std::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__Context = {"_p_except__Context", "except::Context *|six::ValidationContext *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__Exception = {"_p_except__Exception", "except::Exception *", 0, 0, (void*)0, 0};
@@ -105301,7 +105301,7 @@ static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "uint16_t *|uint16_t 
 static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "uint32_t *|uint32_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "uint64_t *|uint64_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "uint8_t *|uint8_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|sys::ubyte *|six::UByte *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|std::byte *|std::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_xml__lite__Document = {"_p_xml__lite__Document", "xml::lite::Document *", 0, 0, (void*)0, 0};
 

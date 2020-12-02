@@ -36,7 +36,7 @@ namespace
 void readSidd(const std::string& pathname,
               std::vector<std::string> schemaPaths,
               std::unique_ptr<six::sidd::DerivedData>& derivedData,
-              std::vector<six::UByte>& widebandData)
+              std::vector<std::byte>& widebandData)
 {
     logging::NullLogger log;
 
@@ -64,7 +64,7 @@ void readSidd(const std::string& pathname,
 }
 
 void writeSidd(std::unique_ptr<six::Data>&& derivedData,
-               const std::vector<six::UByte>& widebandData,
+               const std::vector<std::byte>& widebandData,
                const std::vector<std::string>& schemaPaths,
                const std::string& pathname)
 {
@@ -75,7 +75,7 @@ void writeSidd(std::unique_ptr<six::Data>&& derivedData,
     six::NITFWriteControl writer(container);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<const six::UByte*>(widebandData.data()));
+    buffers.push_back(reinterpret_cast<const std::byte*>(widebandData.data()));
     writer.save(buffers, pathname, schemaPaths);
 }
 }
@@ -131,7 +131,7 @@ int main(int argc, char** argv)
                 new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
         std::unique_ptr<six::sidd::DerivedData> derivedData;
-        std::vector<six::UByte> widebandData;
+        std::vector<std::byte> widebandData;
         readSidd(pathname, schemaPaths, derivedData, widebandData);
 
         logging::DefaultLogger log("SIDD Update");

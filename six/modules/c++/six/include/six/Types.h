@@ -55,7 +55,7 @@ typedef math::linear::VectorN<2> Vector2;
 //! Date type
 typedef nitf::DateTime DateTime;
 
-typedef unsigned char UByte;
+using UByte = std::byte;
 
 //! POLY type
 typedef math::poly::OneD<double> Poly1D;

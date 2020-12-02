@@ -32,8 +32,8 @@
 namespace
 {
 template <typename T>
-bool compareCPHDData(const sys::ubyte* data1,
-                     const sys::ubyte* data2,
+bool compareCPHDData(const std::byte* data1,
+                     const std::byte* data2,
                      size_t size,
                      size_t channel)
 {
@@ -64,8 +64,8 @@ bool compareWideband(cphd03::CPHDReader& reader1,
     cphd::Wideband& wideband1 = reader1.getWideband();
     cphd::Wideband& wideband2 = reader2.getWideband();
 
-    std::unique_ptr<sys::ubyte[]> cphd03Data1;
-    std::unique_ptr<sys::ubyte[]> cphd03Data2;
+    std::unique_ptr<std::byte[]> cphd03Data1;
+    std::unique_ptr<std::byte[]> cphd03Data2;
 
     for (size_t ii = 0; ii < channelsToProcess; ++ii)
     {

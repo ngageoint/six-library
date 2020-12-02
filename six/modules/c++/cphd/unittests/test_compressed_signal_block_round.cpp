@@ -47,20 +47,20 @@
  */
 namespace
 {
-std::vector<sys::ubyte> generateCompressedData(size_t length)
+std::vector<std::byte> generateCompressedData(size_t length)
 {
-    std::vector<sys::ubyte> data(length);
+    std::vector<std::byte> data(length);
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
-        data[ii] = rand() % 16;
+        data[ii] = static_cast<std::byte>(rand() % 16);
     }
     return data;
 }
 
 void writeCompressedCPHD(const std::string& outPathname, size_t numThreads,
         const types::RowCol<size_t> dims,
-        const std::vector<sys::ubyte>& writeData,
+        const std::vector<std::byte>& writeData,
         cphd::Metadata& metadata,
         cphd::PVPBlock& pvpBlock)
 {
@@ -87,16 +87,16 @@ void writeCompressedCPHD(const std::string& outPathname, size_t numThreads,
     }
 }
 
-std::vector<sys::ubyte> checkCompressedData(const std::string& pathname,
+std::vector<std::byte> checkCompressedData(const std::string& pathname,
         size_t numThreads,
         const types::RowCol<size_t>& dims)
 {
 
     cphd::CPHDReader reader(pathname, numThreads);
     const cphd::Wideband& wideband = reader.getWideband();
-    std::vector<sys::ubyte> readData(dims.area());
+    std::vector<std::byte> readData(dims.area());
 
-    mem::BufferView<sys::ubyte> data(&readData[0], readData.size());
+    mem::BufferView<std::byte> data(&readData[0], readData.size());
     for (size_t ii = 0; ii < reader.getMetadata().data.getNumChannels(); ++ii)
     {
         wideband.read(ii, data);
@@ -104,8 +104,8 @@ std::vector<sys::ubyte> checkCompressedData(const std::string& pathname,
     return readData;
 }
 
-bool compareVectors(const std::vector<sys::ubyte>& readData,
-                    const std::vector<sys::ubyte>& writeData)
+bool compareVectors(const std::vector<std::byte>& readData,
+                    const std::vector<std::byte>& writeData)
 {
     for (size_t ii = 0; ii < readData.size(); ++ii)
     {
@@ -118,7 +118,7 @@ bool compareVectors(const std::vector<sys::ubyte>& readData,
     return true;
 }
 
-bool runTest(const std::vector<sys::ubyte>& writeData)
+bool runTest(const std::vector<std::byte>& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = sys::OS().getNumCPUs();
@@ -130,7 +130,7 @@ bool runTest(const std::vector<sys::ubyte>& writeData)
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
 
     writeCompressedCPHD(tempfile.pathname(), numThreads, dims, writeData, meta, pvpBlock);
-    const std::vector<sys::ubyte> readData =
+    const std::vector<std::byte> readData =
             checkCompressedData(tempfile.pathname(), numThreads,
             dims);
     return compareVectors(readData, writeData);
@@ -139,7 +139,7 @@ bool runTest(const std::vector<sys::ubyte>& writeData)
 TEST_CASE(testCompressed)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<sys::ubyte> writeData =
+    const std::vector<std::byte> writeData =
             generateCompressedData(dims.area());
     TEST_ASSERT_TRUE(runTest(writeData));
 }

@@ -55,7 +55,7 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
     retv.setStartCol(offset.col);
     retv.setNumRows(extent.row);
     retv.setNumCols(extent.col);
-    retv.setBuffer(reinterpret_cast<six::UByte*>(buffer));
+    retv.setBuffer(reinterpret_cast<std::byte*>(buffer));
     return retv;
 }
 
@@ -144,7 +144,7 @@ std::map<std::string, size_t> getAdditionalDesMap(six::NITFReadControl& reader)
 
 void getDesBuffer(six::NITFReadControl& reader,
                   size_t desIndex,
-                  mem::ScopedAlignedArray<sys::byte>& buffer)
+                  mem::ScopedAlignedArray<std::byte>& buffer)
 {
     nitf::List des = reader.getRecord().getDataExtensions();
 
@@ -171,10 +171,10 @@ std::unique_ptr<MeshTypeT> extractMesh(const std::string& meshID,
 {
     // Extract the mesh
     std::unique_ptr<MeshTypeT> mesh(new MeshTypeT(meshID));
-    mem::ScopedAlignedArray<sys::byte> buffer;
+    mem::ScopedAlignedArray<std::byte> buffer;
     getDesBuffer(reader, desIndex, buffer);
 
-    const sys::byte* bufferData = buffer.get();
+    const std::byte* bufferData = buffer.get();
     mesh->deserialize(bufferData);
 
     return mesh;

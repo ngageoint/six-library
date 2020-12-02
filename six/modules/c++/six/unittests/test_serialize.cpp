@@ -43,9 +43,9 @@ template<> size_t getRandomScalar<size_t>()
     return static_cast<size_t>(rand());
 }
 
-template<> sys::byte getRandomScalar<sys::byte>()
+template<> std::byte getRandomScalar<std::byte>()
 {
-    return static_cast<sys::byte>(rand());
+    return static_cast<std::byte>(rand());
 }
 
 template<typename T> std::vector<T> getRandomVector(size_t length)
@@ -62,9 +62,9 @@ template<typename T>
 bool testScalar(bool byteSwap)
 {
     const T val = getRandomScalar<T>();
-    std::vector<sys::byte> serializedData;
+    std::vector<std::byte> serializedData;
     six::serialize<T>(val, byteSwap, serializedData);
-    const sys::byte* buffer = &serializedData[0];
+    const std::byte* buffer = &serializedData[0];
     T valCopy;
     six::deserialize<T>(buffer, byteSwap, valCopy);
     return val == valCopy;
@@ -74,9 +74,9 @@ template<typename T>
 bool testVector(size_t length, bool byteSwap)
 {
     const std::vector<T> val = getRandomVector<T>(length);
-    std::vector<sys::byte> serializedData;
+    std::vector<std::byte> serializedData;
     six::serialize<std::vector<T> >(val, byteSwap, serializedData);
-    const sys::byte* buffer = &serializedData[0];
+    const std::byte* buffer = &serializedData[0];
     std::vector<T> valCopy;
     six::deserialize<std::vector<T> >(buffer, byteSwap, valCopy);
     return val == valCopy;
@@ -84,10 +84,10 @@ bool testVector(size_t length, bool byteSwap)
 
 bool testString(const std::string& str, bool byteSwap)
 {
-    std::vector<sys::byte> serializedData;
+    std::vector<std::byte> serializedData;
     six::serialize<std::string>(str, byteSwap, serializedData);
 
-    const sys::byte* buffer = &serializedData[0];
+    const std::byte* buffer = &serializedData[0];
     std::string strCopy;
     six::deserialize<std::string>(buffer, byteSwap, strCopy);
     return str == strCopy;
@@ -99,11 +99,11 @@ TEST_CASE(ScalarSerialize)
     // Test with no byte swapping
     TEST_ASSERT_TRUE(testScalar<int>(false));
     TEST_ASSERT_TRUE(testScalar<size_t>(false));
-    TEST_ASSERT_TRUE(testScalar<sys::byte>(false));
+    TEST_ASSERT_TRUE(testScalar<std::byte>(false));
     TEST_ASSERT_TRUE(testScalar<float>(false));
     TEST_ASSERT_TRUE(testScalar<double>(false));
 
-    // Test with byte swapping (do not test sys::byte)
+    // Test with byte swapping (do not test std::byte)
     TEST_ASSERT_TRUE(testScalar<int>(true));
     TEST_ASSERT_TRUE(testScalar<size_t>(true));
     TEST_ASSERT_TRUE(testScalar<float>(true));
@@ -130,9 +130,9 @@ TEST_CASE(VectorSerialize)
     TEST_ASSERT_TRUE(testVector<size_t>(length, false));
     TEST_ASSERT_TRUE(testVector<float>(length, false));
     TEST_ASSERT_TRUE(testVector<double>(length, false));
-    TEST_ASSERT_TRUE(testVector<sys::byte>(length, false));
+    TEST_ASSERT_TRUE(testVector<std::byte>(length, false));
 
-    // Test with byte swapping (do not test sys::byte)
+    // Test with byte swapping (do not test std::byte)
     TEST_ASSERT_TRUE(testVector<int>(length, true));
     TEST_ASSERT_TRUE(testVector<size_t>(length, true));
     TEST_ASSERT_TRUE(testVector<float>(length, true));

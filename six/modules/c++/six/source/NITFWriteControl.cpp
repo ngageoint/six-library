@@ -363,7 +363,7 @@ void NITFWriteControl::save(const BufferList& imageData,
             nitf::MemorySource memSource(&legend->mImage[0],
                                          legend->mImage.size(),
                                          0,
-                                         sizeof(sys::ubyte),
+                                         sizeof(std::byte),
                                          0);
 
             iSource.addBand(memSource);

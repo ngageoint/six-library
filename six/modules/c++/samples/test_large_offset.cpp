@@ -87,7 +87,7 @@ void createNITF(const std::string& outputPathname,
     writer.setXMLControlRegistry(&registry);
     writer.initialize(container);
 
-    std::unique_ptr<six::UByte[]> imageData(new six::UByte[imageSize]);
+    std::unique_ptr<std::byte[]> imageData(new std::byte[imageSize]);
     if (container->getDataType() == six::DataType::COMPLEX)
     {
         std::complex<float>* complexData =
@@ -135,7 +135,7 @@ bool checkNITF(const std::string& pathname)
     region.setNumRows(data->getNumRows() - ROWS_TO_SKIP);
     region.setStartCol(0);
     reader.interleaved(region, 0);
-    six::UByte* buffer = region.getBuffer();
+    std::byte* buffer = region.getBuffer();
 
     const size_t elementsPerRow = data->getNumCols();
     const size_t skipSize = ROWS_TO_SKIP * elementsPerRow;

@@ -112,7 +112,7 @@ void cropSICD(six::NITFReadControl& reader,
     // Read in the AOI
     const size_t numBytesPerPixel(data.getNumBytesPerPixel());
     const size_t numBytes(origDims.row * origDims.col * numBytesPerPixel);
-    const std::unique_ptr<sys::ubyte[]> buffer(new sys::ubyte[numBytes]);
+    const std::unique_ptr<std::byte[]> buffer(new std::byte[numBytes]);
 
     six::Region region;
     region.setStartRow(aoiOffset.row);

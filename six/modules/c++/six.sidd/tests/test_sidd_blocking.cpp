@@ -162,9 +162,9 @@ bool checkBlocking(const std::string& originalPathname,
             originalContainer->getData(0)->getNumBytesPerPixel();
     const size_t bufferSize = numRows * numCols * bytesPerPixel;
 
-    std::unique_ptr<six::UByte[]> originalBuffer(
+    std::unique_ptr<std::byte[]> originalBuffer(
             originalReader.interleaved(originalRegion, 0));
-    std::unique_ptr<six::UByte[]> convertedBuffer(
+    std::unique_ptr<std::byte[]> convertedBuffer(
             convertedReader.interleaved(convertedRegion, 0));
     for (size_t jj = 0; jj < bufferSize; ++jj)
     {

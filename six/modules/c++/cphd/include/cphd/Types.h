@@ -38,7 +38,7 @@ typedef six::Vector3 Vector3;
 
 typedef six::DateTime DateTime;
 
-typedef six::UByte UByte;
+typedef std::byte UByte;
 
 typedef six::Poly1D Poly1D;
 

@@ -57,20 +57,20 @@ public:
         }
     }
 
-    sys::ubyte* add(size_t numBytes)
+    std::byte* add(size_t numBytes)
     {
-        std::unique_ptr<sys::ubyte[]> buffer(new sys::ubyte[numBytes]);
+        std::unique_ptr<std::byte[]> buffer(new std::byte[numBytes]);
         mBuffers.push_back(buffer.get());
         return buffer.release();
     }
 
-    std::vector<sys::ubyte*> get() const
+    std::vector<std::byte*> get() const
     {
         return mBuffers;
     }
 
 private:
-    std::vector<sys::ubyte*> mBuffers;
+    std::vector<std::byte*> mBuffers;
 };
 
 std::string doRoundTrip(const std::string& siddPathname)
@@ -105,7 +105,7 @@ std::string doRoundTrip(const std::string& siddPathname)
 
             size_t numBytesPerPixel = data->getNumBytesPerPixel();
 
-            sys::ubyte* buffer =
+            std::byte* buffer =
                 buffers.add(numPixels * numBytesPerPixel);
 
             region.setNumRows(extent.row);

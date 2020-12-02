@@ -108,7 +108,7 @@ public:
      */
     void read(const std::string& id,
               size_t numThreads,
-              const mem::BufferView<sys::ubyte>& data) const;
+              const mem::BufferView<std::byte>& data) const;
 
     /*
      *  \func read
@@ -125,7 +125,7 @@ public:
     // Same as above but allocates the memory
     void read(const std::string& id,
               size_t numThreads,
-              std::unique_ptr<sys::ubyte[]>& data) const;
+              std::unique_ptr<std::byte[]>& data) const;
 
     /*
      *  \func readAll
@@ -140,7 +140,7 @@ public:
      *
      */
     void readAll(size_t numThreads,
-                 std::unique_ptr<sys::ubyte[]>& data) const;
+                 std::unique_ptr<std::byte[]>& data) const;
 
 private:
     //! Initialize mOffsets for each array
