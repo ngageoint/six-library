@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
         writer.prepare(output_io, record);
 
         nitf::SegmentWriter sWriter = writer.newDEWriter(0);
-        nitf::SegmentMemorySource sSource(data, strlen(data), 0, 0, false);
+        nitf::SegmentMemorySource sSource(reinterpret_cast<const std::byte*>(data), strlen(data), 0, 0, false);
         sWriter.attachSource(sSource);
         writer.write();
 

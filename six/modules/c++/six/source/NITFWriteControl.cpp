@@ -395,8 +395,7 @@ void NITFWriteControl::addDataAndWrite(
         desStr = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
         nitf::SegmentWriter deWriter =
                 mWriter.newDEWriter(static_cast<int>(ii));
-        nitf::SegmentMemorySource segSource(
-                desStr.c_str(), desStr.length(), 0, 0, false);
+        nitf::SegmentMemorySource segSource(desStr, 0, 0, false);
         deWriter.attachSource(segSource);
     }
 
