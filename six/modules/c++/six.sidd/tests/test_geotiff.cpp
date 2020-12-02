@@ -30,7 +30,7 @@ namespace
 {
 static const std::string OUTPUT_NAME("GeoTIFFTest");
 static const size_t DATA_LENGTH = 100;
-static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(int16_t) / sizeof(six::UByte);
+static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(int16_t) / sizeof(std::byte);
 static const size_t BYTES_PER_PIXEL = sizeof(int16_t);
 
 void generateData(int16_t* data)
@@ -102,7 +102,7 @@ void write(const int16_t* data)
 
     six::sidd::GeoTIFFWriteControl writer;
     writer.initialize(container);
-    writer.save(reinterpret_cast<const six::UByte*>(data), OUTPUT_NAME);
+    writer.save(reinterpret_cast<const std::byte*>(data), OUTPUT_NAME);
 }
 
 void read(const std::string& filename, std::unique_ptr<int16_t[]>& data)

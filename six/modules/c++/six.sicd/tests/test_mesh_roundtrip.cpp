@@ -338,7 +338,7 @@ bool roundTripPlanarMesh(const types::RowCol<size_t>& meshDims,
         name, meshDims, x, y);
 
     // Serialize the mesh.
-    std::vector<sys::byte> serializedValues;
+    std::vector<std::byte> serializedValues;
     serializedMesh.serialize(serializedValues);
 
     // Deserialize the mesh.
@@ -346,7 +346,7 @@ bool roundTripPlanarMesh(const types::RowCol<size_t>& meshDims,
     y.clear();
 
     six::sicd::PlanarCoordinateMesh deserializedMesh(name);
-    const sys::byte* serializedValuesBuffer = &serializedValues[0];
+    const std::byte* serializedValuesBuffer = &serializedValues[0];
     deserializedMesh.deserialize(serializedValuesBuffer);
 
     // Compare meshes.
@@ -383,12 +383,12 @@ bool roundTripScalarMesh(const types::RowCol<size_t>& meshDims,
             numScalarsPerCoord,
             scalars);
 
-    std::vector<sys::byte> serializedValues;
+    std::vector<std::byte> serializedValues;
     serializedScalarMesh.serialize(serializedValues);
 
     six::sicd::ScalarMesh deserializedScalarMesh(meshName);
 
-    const sys::byte* serializedValuesBuffer = serializedValues.data();
+    const std::byte* serializedValuesBuffer = serializedValues.data();
     deserializedScalarMesh.deserialize(serializedValuesBuffer);
 
     return compareScalarMesh(
@@ -415,13 +415,13 @@ bool roundTripNoiseMesh(const types::RowCol<size_t>& meshDims,
         azimuthAmbiguityNoise, combinedNoise);
 
     // Serialize the mesh.
-    std::vector<sys::byte> serializedValues;
+    std::vector<std::byte> serializedValues;
     serializedNoiseMesh.serialize(serializedValues);
 
     // Deserialize the mesh.
     six::sicd::NoiseMesh deserializedNoiseMesh(name);
 
-    const sys::byte* serializedValuesBuffer = &serializedValues[0];
+    const std::byte* serializedValuesBuffer = &serializedValues[0];
     deserializedNoiseMesh.deserialize(serializedValuesBuffer);
 
     // Compare meshes.

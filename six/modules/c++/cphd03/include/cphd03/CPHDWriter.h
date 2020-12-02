@@ -107,7 +107,7 @@ public:
     template <typename T>
     void addImage(const T* image,
                   const types::RowCol<size_t>& dims,
-                  const sys::ubyte* vbmData);
+                  const std::byte* vbmData);
 
     /*
      *  \func writeMetadata
@@ -173,10 +173,10 @@ private:
                        const std::string& classification = "",
                        const std::string& releaseInfo = "");
 
-    void writeVBMData(const sys::ubyte* vbm,
+    void writeVBMData(const std::byte* vbm,
                       size_t index);
 
-    void writeCPHDDataImpl(const sys::ubyte* data,
+    void writeCPHDDataImpl(const std::byte* data,
                            size_t size);
 
     std::unique_ptr<cphd::DataWriter> mDataWriter;
@@ -188,8 +188,8 @@ private:
 
     std::shared_ptr<io::SeekableOutputStream> mStream;
 
-    std::vector<const sys::ubyte*> mCPHDData;
-    std::vector<const sys::ubyte*> mVBMData;
+    std::vector<const std::byte*> mCPHDData;
+    std::vector<const std::byte*> mVBMData;
 
     size_t mCPHDSize;
     size_t mVBMSize;

@@ -30,7 +30,7 @@ namespace
 {
 static const std::string OUTPUT_NAME("ByteSwapTest");
 static const size_t DATA_LENGTH = 100;
-static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(int16_t) / sizeof(six::UByte);
+static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(int16_t) / sizeof(std::byte);
 static const size_t BYTES_PER_PIXEL = sizeof(int16_t);
 
 void generateData(std::unique_ptr<int16_t[]>& data)
@@ -116,8 +116,8 @@ void write(const int16_t* data, bool useStream, bool byteSwap)
     if (useStream)
     {
         io::ByteStream stream;
-        stream.write(reinterpret_cast<const sys::byte*>(data),
-            DATA_SIZE_IN_BYTES / sizeof(sys::byte));
+        stream.write(reinterpret_cast<const std::byte*>(data),
+            DATA_SIZE_IN_BYTES / sizeof(std::byte));
         stream.seek(0, io::Seekable::START);
         std::vector<io::InputStream*> streams;
         streams.push_back(&stream);
@@ -125,7 +125,7 @@ void write(const int16_t* data, bool useStream, bool byteSwap)
     }
     else
     {
-        writer.save(reinterpret_cast<const six::UByte*>(data), OUTPUT_NAME);
+        writer.save(reinterpret_cast<const std::byte*>(data), OUTPUT_NAME);
     }
 }
 
@@ -135,7 +135,7 @@ void read(const std::string& filename, int16_t* data)
     reader.load(filename);
 
     six::Region region;
-    region.setBuffer(reinterpret_cast<six::UByte*>(data));
+    region.setBuffer(reinterpret_cast<std::byte*>(data));
     reader.interleaved(region, 0);
 }
 
@@ -150,7 +150,7 @@ bool run(bool useStream = false, bool byteswap = false)
     if ((!sys::isBigEndianSystem() && !byteswap) ||
         (sys::isBigEndianSystem() && byteswap))
     {
-        sys::byteSwap(reinterpret_cast<six::UByte*>(imageData.get()),
+        sys::byteSwap(reinterpret_cast<std::byte*>(imageData.get()),
                 BYTES_PER_PIXEL, DATA_LENGTH);
     }
     write(testData.get(), useStream, byteswap);

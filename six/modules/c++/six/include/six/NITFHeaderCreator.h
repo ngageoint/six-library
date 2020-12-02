@@ -253,7 +253,7 @@ public:
      * \param classification The classification of the information.
      */
     void loadMeshSegment(const std::string& meshName,
-                         const std::vector<sys::byte>& meshBuffer,
+                         const std::vector<std::byte>& meshBuffer,
                          const six::Classification& classification);
 
     /*!

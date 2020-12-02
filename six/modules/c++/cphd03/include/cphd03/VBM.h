@@ -194,7 +194,7 @@ public:
      *         be resized and zeroed internally.
      */
     void getVBMdata(size_t channel,
-                    std::vector<sys::ubyte>& data) const;
+                    std::vector<std::byte>& data) const;
 
     /*
      *  \func getVBMdata
@@ -281,9 +281,9 @@ private:
 
         size_t getNumBytes() const;
 
-        void getData(sys::ubyte* data) const;
+        void getData(std::byte* data) const;
 
-        void setData(const sys::byte* data);
+        void setData(const std::byte* data);
 
         bool operator==(const VectorBasedParameters& other) const;
 

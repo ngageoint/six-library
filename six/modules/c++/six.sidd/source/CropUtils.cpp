@@ -48,20 +48,20 @@ public:
         }
     }
 
-    sys::ubyte* add(size_t numBytes)
+    std::byte* add(size_t numBytes)
     {
-        std::unique_ptr<sys::ubyte[]> buffer(new sys::ubyte[numBytes]);
+        std::unique_ptr<std::byte[]> buffer(new std::byte[numBytes]);
         mBuffers.push_back(buffer.get());
         return buffer.release();
     }
 
-    std::vector<sys::ubyte*> get() const
+    std::vector<std::byte*> get() const
     {
         return mBuffers;
     }
 
 private:
-    std::vector<sys::ubyte*> mBuffers;
+    std::vector<std::byte*> mBuffers;
 };
 
 class ChipCoordinateToFullImageCoordinate
@@ -174,7 +174,7 @@ void cropSIDD(const std::string& inPathname,
             const size_t numBytesPerPixel(data->getNumBytesPerPixel());
             const size_t numBytes =
                     origDims.row * origDims.col * numBytesPerPixel;
-            sys::ubyte* const buffer = buffers.add(numBytes);
+            std::byte* const buffer = buffers.add(numBytes);
 
             six::Region region;
             region.setStartRow(aoiOffset.row);

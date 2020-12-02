@@ -29,14 +29,14 @@
 
 namespace
 {
-inline void setData(const sys::byte*& data,
+inline void setData(const std::byte*& data,
                     double& dest)
 {
     memcpy(&dest, data, sizeof(double));
     data += sizeof(double);
 }
 
-inline void setData(const sys::byte*& data,
+inline void setData(const std::byte*& data,
                     cphd::Vector3& dest)
 {
     setData(data, dest[0]);
@@ -45,14 +45,14 @@ inline void setData(const sys::byte*& data,
 }
 
 inline void getData(double value,
-                    sys::ubyte*& dest)
+                    std::byte*& dest)
 {
     memcpy(dest, &value, sizeof(double));
     dest += sizeof(double);
 }
 
 inline void getData(const cphd::Vector3& value,
-                    sys::ubyte*& dest)
+                    std::byte*& dest)
 {
     getData(value[0], dest);
     getData(value[1], dest);
@@ -123,7 +123,7 @@ size_t VBM::VectorBasedParameters::getNumBytes() const
     return ret;
 }
 
-void VBM::VectorBasedParameters::getData(sys::ubyte* data) const
+void VBM::VectorBasedParameters::getData(std::byte* data) const
 {
     //! This uses memcpy's here because on Sun these addresses may not be
     //  8 byte aligned. So trying to derefence data as a double results in
@@ -159,7 +159,7 @@ void VBM::VectorBasedParameters::getData(sys::ubyte* data) const
     }
 }
 
-void VBM::VectorBasedParameters::setData(const sys::byte* data)
+void VBM::VectorBasedParameters::setData(const std::byte* data)
 {
     //! This uses memcpy's here because on Sun these addresses may not be
     //  8 byte aligned. So trying to derefence data as a double results in
@@ -343,7 +343,7 @@ VBM::VBM(size_t numChannels,
     //! For each channel
     for (size_t ii = 0; ii < mData.size(); ++ii)
     {
-        const sys::byte* ptr = static_cast<const sys::byte*>(data[ii]);
+        const std::byte* ptr = static_cast<const std::byte*>(data[ii]);
 
         //! For each vector
         for (size_t jj = 0;
@@ -652,11 +652,11 @@ void VBM::clearAmpSF()
 }
 
 void VBM::getVBMdata(size_t channel,
-                     std::vector<sys::ubyte>& data) const
+                     std::vector<std::byte>& data) const
 {
     verifyChannelVector(channel, 0);
     data.resize(getVBMsize(channel));
-    std::fill(data.begin(), data.end(), 0);
+    std::fill(data.begin(), data.end(), static_cast<std::byte>(0));
 
     getVBMdata(channel, &data[0]);
 }
@@ -666,7 +666,7 @@ void VBM::getVBMdata(size_t channel,
 {
     verifyChannelVector(channel, 0);
     const size_t numBytes = getNumBytesVBP();
-    sys::ubyte* ptr = static_cast<sys::ubyte*>(data);
+    std::byte* ptr = static_cast<std::byte*>(data);
 
     for (size_t ii = 0;
          ii < mData[channel].size();
@@ -746,17 +746,17 @@ sys::Off_T VBM::load(io::SeekableInputStream& inStream,
     // Seek to start of VBM
     size_t totalBytesRead(0);
     inStream.seek(startVBM, io::Seekable::START);
-    std::vector<sys::ubyte> data;
+    std::vector<std::byte> data;
     const size_t numBytesPerVector = getNumBytesVBP();
 
     // Read the data for each channel
     for (size_t ii = 0; ii < mData.size(); ++ii)
     {
         data.resize(getVBMsize(ii));
-        //std::vector<sys::ubyte>& data(mVBMdata[ii]);
+        //std::vector<std::byte>& data(mVBMdata[ii]);
         if (!data.empty())
         {
-            sys::byte* const buf = reinterpret_cast<sys::byte*>(&data[0]);
+            std::byte* const buf = reinterpret_cast<std::byte*>(&data[0]);
             sys::SSize_T bytesThisRead = inStream.read(buf, data.size());
             if (bytesThisRead == io::InputStream::IS_EOF)
             {
@@ -776,7 +776,7 @@ sys::Off_T VBM::load(io::SeekableInputStream& inStream,
                          numThreads);
             }
 
-            sys::byte* ptr = buf;
+            std::byte* ptr = buf;
             for (size_t jj = 0; jj < mData[ii].size(); ++jj, ptr += numBytesPerVector)
             {
                 mData[ii][jj].setData(ptr);

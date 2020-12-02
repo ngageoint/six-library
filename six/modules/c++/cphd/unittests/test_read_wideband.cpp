@@ -25,6 +25,43 @@
 #include <io/ByteStream.h>
 #include "TestCase.h"
 
+#ifdef GTEST_API_
+namespace testing
+{
+    namespace internal
+    {
+        template<>
+        AssertionResult CmpHelperEQ(const char* lhs_expression,
+            const char* rhs_expression,
+            const std::byte& lhs,
+            const char& rhs) {
+            if (static_cast<char>(lhs) == rhs) {
+                return AssertionSuccess();
+            }
+
+            return CmpHelperEQFailure(lhs_expression, rhs_expression, lhs, rhs);
+        }
+    }
+}
+#else
+
+inline bool operator==(std::byte lhs, char rhs)
+{
+    return static_cast<char>(lhs) == rhs;
+}
+inline bool operator!=(std::byte lhs, char rhs)
+{
+    return !(lhs == rhs);
+}
+
+inline std::ostream& operator<<(std::ostream& os, std::byte v)
+{
+    os << static_cast<unsigned char>(v);
+    return os;
+}
+
+#endif // GTEST_API_
+
 namespace
 {
 TEST_CASE(testReadCompressedChannel)
@@ -43,7 +80,7 @@ TEST_CASE(testReadCompressedChannel)
 
     cphd::Wideband wideband(input, metadata, 0, 4);
 
-    std::unique_ptr<sys::ubyte[]> readData;
+    std::unique_ptr<std::byte[]> readData;
     wideband.read(0, readData);
 
     TEST_ASSERT_EQ(wideband.getBytesRequiredForRead(0), 4);
@@ -69,7 +106,7 @@ TEST_CASE(testReadUncompressedChannel)
 
     cphd::Wideband wideband(input, metadata, 0, 4);
 
-    std::unique_ptr<sys::ubyte[]> readData;
+    std::unique_ptr<std::byte[]> readData;
     wideband.read(0, readData);
 
     TEST_ASSERT_EQ(wideband.getBytesRequiredForRead(0), 8);
@@ -95,7 +132,7 @@ TEST_CASE(testReadChannelSubset)
     input->seek(0, io::Seekable::START);
 
     cphd::Wideband wideband(input, metadata, 0, 32);
-    std::unique_ptr<sys::ubyte[]> readData;
+    std::unique_ptr<std::byte[]> readData;
 
     // Single pixel reads
     wideband.read(0, 0, 0, 0, 0, 1, readData);
@@ -160,7 +197,7 @@ TEST_CASE(testCannotDoPartialReadOfCompressedChannel)
 
     cphd::Wideband wideband(input, metadata, 0, 4);
 
-    std::unique_ptr<sys::ubyte[]> readData;
+    std::unique_ptr<std::byte[]> readData;
     TEST_EXCEPTION(wideband.read(0, 0, 0, 1, 1, 1, readData));
     TEST_EXCEPTION(wideband.getBytesRequiredForRead(0, 0, 0, 1, 1));
 }

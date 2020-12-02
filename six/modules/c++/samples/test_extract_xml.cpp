@@ -122,7 +122,7 @@ int main(int argc, char** argv)
             else
             {
                 // Just dump out the raw contents
-                os->write(reinterpret_cast<sys::byte*>(xml), size);
+                os->write(reinterpret_cast<std::byte*>(xml), size);
             }
             os->close();
         }

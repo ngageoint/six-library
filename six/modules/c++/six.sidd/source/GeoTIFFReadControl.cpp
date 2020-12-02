@@ -196,7 +196,7 @@ void six::sidd::GeoTIFFReadControl::load(
     }
 }
 
-six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
+std::byte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
                                                        size_t imIndex)
 {
     if (mReader.getImageCount() <= imIndex)
@@ -238,24 +238,24 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
                 str::toString(numColsReq) + "]"));
     }
 
-    six::UByte* buffer = region.getBuffer();
+    std::byte* buffer = region.getBuffer();
 
     if (buffer == NULL)
     {
-        buffer = new six::UByte[numRowsReq * numColsReq * elemSize];
+        buffer = new std::byte[numRowsReq * numColsReq * elemSize];
         region.setBuffer(buffer);
     }
 
     if (numRowsReq == numRowsTotal && numColsReq == numColsTotal)
     {
         // one read
-        imReader->getData(buffer, numRowsReq * numColsReq);
+        imReader->getData(reinterpret_cast<unsigned char*>(buffer), numRowsReq * numColsReq);
     }
     else
     {
-        const std::unique_ptr<six::UByte[]>
-            scopedRowBuf(new six::UByte[numColsTotal * elemSize]);
-        six::UByte* const rowBuf(scopedRowBuf.get());
+        const std::unique_ptr<std::byte[]>
+            scopedRowBuf(new std::byte[numColsTotal * elemSize]);
+        std::byte* const rowBuf(scopedRowBuf.get());
 
         //        // skip past rows
         //        for (size_t i = 0; i < startRow; ++i)
@@ -265,15 +265,16 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
         // this is not the most efficient, but it works
         for (size_t i = 0; i < numRowsReq; ++i)
         {
+            auto rowBuf_ = reinterpret_cast<unsigned char*>(rowBuf);
             // possibly skip past some cols
             if (startCol > 0)
-                imReader->getData(rowBuf, startCol);
-            imReader->getData(rowBuf, numColsReq);
+                imReader->getData(rowBuf_, startCol);
+            imReader->getData(rowBuf_, numColsReq);
             memcpy(buffer + offset, rowBuf, numColsReq * elemSize);
             offset += numColsReq * elemSize;
             // more skipping..
             if (extentCols < numColsTotal)
-                imReader->getData(rowBuf, numColsTotal - extentCols);
+                imReader->getData(rowBuf_, numColsTotal - extentCols);
         }
     }
     return buffer;

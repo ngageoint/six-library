@@ -132,8 +132,8 @@ void SICDWriteControl::save(void* imageData,
             const size_t startLocalRowToWrite =
                     startGlobalRowToWrite - offset.row;
             const size_t numBytesPerRow = dims.col * numBytesPerPixel * NUM_BANDS;
-            const sys::ubyte* imageDataPtr =
-                    static_cast<sys::ubyte*>(imageData) +
+            const std::byte* imageDataPtr =
+                    static_cast<std::byte*>(imageData) +
                     startLocalRowToWrite * numBytesPerRow;
 
             // Now figure out our offset into the segment

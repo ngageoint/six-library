@@ -102,7 +102,7 @@ void XMLVerifier::verify(const std::string& pathname) const
     // Parse the XML - this verifies both that the XML validates against
     // the schema and that our parser reads it without errors
     io::StringStream inStream;
-    inStream.write(reinterpret_cast<const sys::byte*>(inStr.c_str()),
+    inStream.write(reinterpret_cast<const std::byte*>(inStr.c_str()),
                    inStr.length());
 
     std::unique_ptr<six::Data> data(six::parseDataFromFile(mXmlRegistry,

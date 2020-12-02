@@ -155,8 +155,8 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
     std::vector<std::complex<float> > readData(dims.area());
 
     size_t sizeInBytes = readData.size() * sizeof(readData[0]);
-    std::unique_ptr<sys::ubyte[]> scratchData(new sys::ubyte[sizeInBytes]);
-    mem::BufferView<sys::ubyte> scratch(scratchData.get(), sizeInBytes);
+    std::unique_ptr<std::byte[]> scratchData(new std::byte[sizeInBytes]);
+    mem::BufferView<std::byte> scratch(scratchData.get(), sizeInBytes);
     mem::BufferView<std::complex<float> > data(&readData[0], readData.size());
 
     wideband.read(0, 0, cphd::Wideband::ALL, 0, cphd::Wideband::ALL,

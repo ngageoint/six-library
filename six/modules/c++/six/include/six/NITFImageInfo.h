@@ -344,7 +344,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             //       we avoid the clone and byte swap and instead index into
             //       the LUT in the opposite order?
             std::unique_ptr<LUT> lut(lutPtr->clone());
-            sys::byteSwap(reinterpret_cast<sys::byte*>(lut->getTable()),
+            sys::byteSwap(reinterpret_cast<std::byte*>(lut->getTable()),
                           static_cast<unsigned short>(lut->elementSize),
                           lut->numEntries);
 

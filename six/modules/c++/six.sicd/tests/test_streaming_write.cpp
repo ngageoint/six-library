@@ -315,7 +315,7 @@ void Tester<DataTypeT>::normalWrite()
     six::NITFWriteControl writer(options, mContainer);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<six::UByte*>(mImagePtr));
+    buffers.push_back(reinterpret_cast<std::byte*>(mImagePtr));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));

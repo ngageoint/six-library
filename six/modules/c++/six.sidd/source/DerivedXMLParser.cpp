@@ -411,11 +411,11 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
                             "LUT vals expected to be in [0, 255]."));
                     }
 
-                    sys::ubyte val = static_cast<sys::ubyte>(
+                    std::byte val = static_cast<std::byte>(
                             intermediateVal);
 
                     ::memcpy(&(remapLUT->getTable()[k++]), &val,
-                             sizeof(sys::ubyte));
+                             sizeof(std::byte));
                 }
             }
             return new ColorDisplayRemap(remapLUT.release());

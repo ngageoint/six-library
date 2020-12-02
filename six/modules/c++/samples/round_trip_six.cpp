@@ -75,25 +75,25 @@ public:
         }
     }
 
-    sys::ubyte* add(size_t numBytes)
+    std::byte* add(size_t numBytes)
     {
-        std::unique_ptr<sys::ubyte[]> buffer(new sys::ubyte[numBytes]);
+        std::unique_ptr<std::byte[]> buffer(new std::byte[numBytes]);
         mBuffers.push_back(buffer.get());
         return buffer.release();
     }
 
-    std::vector<sys::ubyte*> get() const
+    std::vector<std::byte*> get() const
     {
         return mBuffers;
     }
 
 private:
-    std::vector<sys::ubyte*> mBuffers;
+    std::vector<std::byte*> mBuffers;
 };
 
 // We've stored the complex<short> in the second half of the buffer
 // We'll expand to complex<float> starting in the first half of the buffer
-void expandComplex(size_t numPixels, sys::ubyte* buffer)
+void expandComplex(size_t numPixels, std::byte* buffer)
 {
     const std::complex<short>* const input =
             reinterpret_cast<std::complex<short>*>(
@@ -116,7 +116,7 @@ void expandComplex(size_t numPixels, sys::ubyte* buffer)
 // Since our buffer could be in the range of [-1.0f, 1.0f] we cannot simply
 // cast to a 16 bit int. Instead we expand the values so they always go from
 // [-32K, 32K].
-void compressInteger(size_t numPixels, sys::ubyte* buffer)
+void compressInteger(size_t numPixels, std::byte* buffer)
 {
     const float* const floatValues = reinterpret_cast<float*>(buffer);
 
@@ -339,7 +339,7 @@ int main(int argc, char** argv)
                     numBytesPerPixel *= 2;
                 }
 
-                sys::ubyte* buffer =
+                std::byte* buffer =
                         buffers.add(numPixels * numBytesPerPixel);
 
                 region.setNumRows(extent.row);

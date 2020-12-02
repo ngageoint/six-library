@@ -406,7 +406,7 @@ void Wideband::readImpl(size_t channel,
     // First to the start of the first pulse we're going to read
     sys::Off_T inOffset = getFileOffset(channel, firstVector, firstSample);
 
-    sys::byte* dataPtr = static_cast<sys::byte*>(data);
+    std::byte* dataPtr = static_cast<std::byte*>(data);
     if (dims.col == mMetadata.getNumSamples(channel))
     {
         // Life is easy - can do a single seek and read
@@ -437,7 +437,7 @@ void Wideband::readImpl(size_t channel, void* data) const
     // First to the start of the first pulse we're going to read
     sys::Off_T inOffset = getFileOffset(channel);
 
-    sys::byte* dataPtr = static_cast<sys::byte*>(data);
+    std::byte* dataPtr = static_cast<std::byte*>(data);
     mInStream->seek(inOffset, io::FileInputStream::START);
     mInStream->read(dataPtr, getBytesRequiredForRead(channel));
 }
@@ -448,7 +448,7 @@ void Wideband::read(size_t channel,
                     size_t firstSample,
                     size_t lastSample,
                     size_t numThreads,
-                    const mem::BufferView<sys::ubyte>& data) const
+                    const mem::BufferView<std::byte>& data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;
@@ -507,7 +507,7 @@ size_t Wideband::getBytesRequiredForRead(size_t channel,
 }
 
 void Wideband::read(size_t channel,
-                    const mem::BufferView<sys::ubyte>& data) const
+                    const mem::BufferView<std::byte>& data) const
 {
     // Sanity checks
     checkChannelInput(channel);
@@ -548,14 +548,14 @@ void Wideband::read(size_t channel,
                     size_t firstSample,
                     size_t lastSample,
                     size_t numThreads,
-                    std::unique_ptr<sys::ubyte[]>& data) const
+                    std::unique_ptr<std::byte[]>& data) const
 {
     types::RowCol<size_t> dims;
     checkReadInputs(
             channel, firstVector, lastVector, firstSample, lastSample, dims);
 
     const size_t bufSize = dims.row * dims.col * mElementSize;
-    data.reset(new sys::ubyte[bufSize]);
+    data.reset(new std::byte[bufSize]);
 
     read(channel,
          firstVector,
@@ -563,15 +563,15 @@ void Wideband::read(size_t channel,
          firstSample,
          lastSample,
          numThreads,
-         mem::BufferView<sys::ubyte>(data.get(), bufSize));
+         mem::BufferView<std::byte>(data.get(), bufSize));
 }
 
-void Wideband::read(size_t channel, std::unique_ptr<sys::ubyte[]>& data) const
+void Wideband::read(size_t channel, std::unique_ptr<std::byte[]>& data) const
 {
     const size_t bufSize = getBytesRequiredForRead(channel);
-    data.reset(new sys::ubyte[bufSize]);
+    data.reset(new std::byte[bufSize]);
 
-    read(channel, mem::BufferView<sys::ubyte>(data.get(), bufSize));
+    read(channel, mem::BufferView<std::byte>(data.get(), bufSize));
 }
 
 bool Wideband::allOnes(const std::vector<double>& vectorScaleFactors)
@@ -593,7 +593,7 @@ void Wideband::read(size_t channel,
                     size_t lastSample,
                     const std::vector<double>& vectorScaleFactors,
                     size_t numThreads,
-                    const mem::BufferView<sys::ubyte>& scratch,
+                    const mem::BufferView<std::byte>& scratch,
                     const mem::BufferView<std::complex<float>>& data) const
 {
     // Sanity checks
