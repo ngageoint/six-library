@@ -170,8 +170,8 @@ bool runTest(bool /*scale*/,
 TEST_CASE(testPVPBlockSimple)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int16_T>> writeData =
-            generateComplexData<sys::Int16_T>(dims.area());
+    const std::vector<std::complex<int16_t>> writeData =
+            generateComplexData<int16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
@@ -194,8 +194,8 @@ TEST_CASE(testPVPBlockSimple)
 TEST_CASE(testPVPBlockOptional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int16_T>> writeData =
-            generateComplexData<sys::Int16_T>(dims.area());
+    const std::vector<std::complex<int16_t>> writeData =
+            generateComplexData<int16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
@@ -221,8 +221,8 @@ TEST_CASE(testPVPBlockOptional)
 TEST_CASE(testPVPBlockAdditional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int16_T>> writeData =
-            generateComplexData<sys::Int16_T>(dims.area());
+    const std::vector<std::complex<int16_t>> writeData =
+            generateComplexData<int16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);

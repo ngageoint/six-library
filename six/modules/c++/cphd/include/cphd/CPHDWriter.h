@@ -226,8 +226,8 @@ public:
      *  This only works with valid CPHDWriter data types:
      *      std:: ubyte*  (for compressed data)
      *      std::complex<float>
-     *      std::complex<sys::Int16_T>
-     *      std::complex<sys::Int8_T>
+     *      std::complex<int16_t>
+     *      std::complex<int8_t>
      *
      *  \param pvpBlock The vector based metadata to write.
      *  \param widebandData .The wideband data to write to disk
@@ -311,8 +311,8 @@ public:
      *  valid CPHDWriter data types:
      *      std:: ubyte*  (for compressed data)
      *      std::complex<float>
-     *      std::complex<sys::Int16_T>
-     *      std::complex<sys::Int8_T>
+     *      std::complex<int16_t>
+     *      std::complex<int8_t>
      *
      *  \param data The data to write to disk.
      *  \param numElements The number of elements in data. Treat the data

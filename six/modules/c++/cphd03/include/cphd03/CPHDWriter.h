@@ -95,8 +95,8 @@ public:
      *  \brief Pushes a new image to the file for writing. This only works with
      *         valid CPHDWriter data types:
      *              std::complex<float>
-     *              std::complex<sys::Int16_T>
-     *              std::complex<sys::Int8_T>
+     *              std::complex<int16_t>
+     *              std::complex<int8_t>
      *
      *  \param image The image to be added. This should be sized to match the
      *         dims parameter.
@@ -134,8 +134,8 @@ public:
      *         you may instead use addImage and write. This only works with
      *         valid CPHDWriter data types:
      *              std::complex<float>
-     *              std::complex<sys::Int16_T>
-     *              std::complex<sys::Int8_T>
+     *              std::complex<int16_t>
+     *              std::complex<int8_t>
      *
      *  \param data The data to write to disk.
      *  \param numElements The number of elements in data. Treat the data

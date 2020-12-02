@@ -131,20 +131,20 @@ typedef types::RowCol<LatLon> RowColLatLon;
 struct Constants
 {
     //!  This is the upper bound of a NITF segment
-    static const sys::Uint64_T IS_SIZE_MAX; // = 9999999998LL;
-    static const sys::Uint64_T GT_SIZE_MAX;
+    static const uint64_t IS_SIZE_MAX; // = 9999999998LL;
+    static const uint64_t GT_SIZE_MAX;
     static const size_t ILOC_MAX;
 
     static const unsigned short GT_XML_KEY;
     static const char GT_XML_TAG[];
 
     // DESVER is 2 byte BCS-N
-    static const sys::Int32_T DES_VERSION;
+    static const int32_t DES_VERSION;
     static const char DES_VERSION_STR[];
 
     static const char DES_USER_DEFINED_SUBHEADER_TAG[];
     static const char DES_USER_DEFINED_SUBHEADER_ID[];
-    static const sys::Uint64_T DES_USER_DEFINED_SUBHEADER_LENGTH;
+    static const uint64_t DES_USER_DEFINED_SUBHEADER_LENGTH;
 
     static const char SICD_DESSHSI[];
     static const char SIDD_DESSHSI[];

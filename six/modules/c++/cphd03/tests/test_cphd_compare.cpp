@@ -91,7 +91,7 @@ bool compareWideband(cphd03::CPHDReader& reader1,
             switch (reader1.getMetadata().getSampleType())
             {
             case cphd::SampleType::RE08I_IM08I:
-                if (!compareCPHDData<std::complex<sys::Int8_T> >(
+                if (!compareCPHDData<std::complex<int8_t> >(
                         cphd03Data1.get(),
                         cphd03Data2.get(),
                         dims1.area(),
@@ -101,7 +101,7 @@ bool compareWideband(cphd03::CPHDReader& reader1,
                 }
                 break;
             case cphd::SampleType::RE16I_IM16I:
-                if (!compareCPHDData<std::complex<sys::Int16_T> >(
+                if (!compareCPHDData<std::complex<int16_t> >(
                         cphd03Data1.get(),
                         cphd03Data2.get(),
                         dims1.area(),

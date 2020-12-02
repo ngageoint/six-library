@@ -93,7 +93,7 @@ struct GetPixelType<float>
 };
 
 template <>
-struct GetPixelType<sys::Int16_T>
+struct GetPixelType<int16_t>
 {
     static six::PixelType getPixelType()
     {
@@ -479,7 +479,7 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
         success = false;
     }
 
-    if (!doTests<sys::Int16_T>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<int16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }

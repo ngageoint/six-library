@@ -58,7 +58,7 @@ public:
     sys::Off_T available();
 
     //!  Read N bytes from a NITF file
-    sys::SSize_T read(sys::byte* b, sys::Size_T len);
+    sys::SSize_T read(sys::byte* b, size_t len);
 
 protected:
 
@@ -67,7 +67,7 @@ protected:
     nitf::ImageSubheader mSubheader;
     nitf::ImageReader mReader;
     sys::Off_T mAvailable;
-    sys::Size_T mRowBufferRemaining, mRowSize, mRowOffset;
+    size_t mRowBufferRemaining, mRowSize, mRowOffset;
     std::unique_ptr<sys::ubyte[]> mRowBuffer;
     nitf::SubWindow mWindow;
     std::unique_ptr<uint32_t[]> mBandList;

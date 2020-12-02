@@ -79,7 +79,7 @@ struct DigitalElevationData
     Geopositioning geopositioning;
     PositionalAccuracy positionalAccuracy;
 
-    sys::Int64_T nullValue;
+    int64_t nullValue;
 };
 }
 }

@@ -356,7 +356,7 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
         success = false;
     }
 
-    if (!doTests<sys::Int16_T>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<int16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }

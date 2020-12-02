@@ -365,7 +365,7 @@ int main(int argc, char** argv)
 
         // Override auto-byte swap
         writer->getOptions().setParameter(six::WriteControl::OPT_BYTE_SWAP,
-                six::Parameter((sys::Uint16_T) needsByteSwap));
+                six::Parameter((uint16_t) needsByteSwap));
 
         // Init the container
         writer->initialize(container);
