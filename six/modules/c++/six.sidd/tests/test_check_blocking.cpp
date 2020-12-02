@@ -31,7 +31,7 @@
 
 namespace
 {
-void generateData(const six::Data& data, mem::ScopedArray<six::UByte>& buffer)
+void generateData(const six::Data& data, std::unique_ptr<six::UByte[]>& buffer)
 {
     const size_t size = data.getNumRows() * data.getNumCols();
     buffer.reset(new six::UByte[size]);
@@ -72,7 +72,7 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
     workingData->setNumRows(imageSideSize);
     workingData->setNumCols(imageSideSize);
 
-    mem::ScopedArray<six::UByte> buffer;
+    std::unique_ptr<six::UByte[]> buffer;
     generateData(*workingData, buffer);
 
     std::shared_ptr<six::Container> container(new six::Container(
@@ -111,8 +111,8 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     const std::string productSize = computeProductSize(blockSize,
             largeImageSize, data.getNumBytesPerPixel());
 
-    mem::ScopedArray<six::UByte> firstBuffer;
-    mem::ScopedArray<six::UByte> secondBuffer;
+    std::unique_ptr<six::UByte[]> firstBuffer;
+    std::unique_ptr<six::UByte[]> secondBuffer;
     generateData(*firstData, firstBuffer);
     generateData(*secondData, secondBuffer);
 
@@ -137,7 +137,7 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     writer.save(buffers, pathname, std::vector<std::string>());
 }
 
-void assignBuffer(mem::ScopedArray<six::UByte>& buffer, size_t& bufferSize,
+void assignBuffer(std::unique_ptr<six::UByte[]>& buffer, size_t& bufferSize,
         size_t index, six::NITFReadControl& reader)
 {
     six::Region region;
@@ -152,7 +152,7 @@ bool compare(const std::string& twoImageSidd,
     six::NITFReadControl firstReader;
     firstReader.load(twoImageSidd);
 
-    mem::ScopedArray<six::UByte> firstBuffers[2];
+    std::unique_ptr<six::UByte[]> firstBuffers[2];
     size_t firstBufferSizes[2];
     assignBuffer(firstBuffers[0], firstBufferSizes[0], 0, firstReader);
     assignBuffer(firstBuffers[1], firstBufferSizes[1], 1, firstReader);
@@ -162,7 +162,7 @@ bool compare(const std::string& twoImageSidd,
     six::NITFReadControl thirdReader;
     thirdReader.load(secondImage);
 
-    mem::ScopedArray<six::UByte> secondBuffers[2];
+    std::unique_ptr<six::UByte[]> secondBuffers[2];
     size_t secondBufferSizes[2];
     assignBuffer(secondBuffers[0], secondBufferSizes[0], 0, secondReader);
     assignBuffer(secondBuffers[1], secondBufferSizes[1], 0, thirdReader);

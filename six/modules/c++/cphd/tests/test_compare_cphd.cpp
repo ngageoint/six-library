@@ -60,8 +60,8 @@ bool compareCPHDData(const sys::ubyte* data1,
     return true;
 }
 
-bool compareSupportData(const mem::ScopedArray<sys::ubyte>& data1,
-                     const mem::ScopedArray<sys::ubyte>& data2,
+bool compareSupportData(const std::unique_ptr<sys::ubyte[]>& data1,
+                     const std::unique_ptr<sys::ubyte[]>& data2,
                      size_t size)
 {
     for (size_t ii = 0; ii < size; ++ii)
@@ -86,8 +86,8 @@ bool compareWideband(cphd::CPHDReader& reader1,
     const cphd::Wideband& wideband1 = reader1.getWideband();
     const cphd::Wideband& wideband2 = reader2.getWideband();
 
-    mem::ScopedArray<sys::ubyte> cphdData1;
-    mem::ScopedArray<sys::ubyte> cphdData2;
+    std::unique_ptr<sys::ubyte[]> cphdData1;
+    std::unique_ptr<sys::ubyte[]> cphdData2;
 
     for (size_t ii = 0; ii < channelsToProcess; ++ii)
     {
@@ -175,9 +175,9 @@ bool checkCPHD(const std::string& pathname1, const std::string& pathname2, size_
     }
 
     // Check support block
-    mem::ScopedArray<sys::ubyte> readPtr1;
+    std::unique_ptr<sys::ubyte[]> readPtr1;
     reader1.getSupportBlock().readAll(numThreads, readPtr1);
-    mem::ScopedArray<sys::ubyte> readPtr2;
+    std::unique_ptr<sys::ubyte[]> readPtr2;
     reader2.getSupportBlock().readAll(numThreads, readPtr2);
     if (!compareSupportData(readPtr1, readPtr2, reader1.getMetadata().data.getAllSupportSize()))
     {

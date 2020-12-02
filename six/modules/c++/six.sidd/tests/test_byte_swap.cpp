@@ -33,7 +33,7 @@ static const size_t DATA_LENGTH = 100;
 static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(sys::Int16_T) / sizeof(six::UByte);
 static const size_t BYTES_PER_PIXEL = sizeof(sys::Int16_T);
 
-void generateData(mem::ScopedArray<sys::Int16_T>& data)
+void generateData(std::unique_ptr<sys::Int16_T[]>& data)
 {
     for (size_t ii = 0; ii < DATA_LENGTH; ++ii)
     {
@@ -141,10 +141,10 @@ void read(const std::string& filename, sys::Int16_T* data)
 
 bool run(bool useStream = false, bool byteswap = false)
 {
-    mem::ScopedArray<sys::Int16_T> imageData(new sys::Int16_T[DATA_LENGTH]);
+    std::unique_ptr<sys::Int16_T[]> imageData(new sys::Int16_T[DATA_LENGTH]);
     generateData(imageData);
 
-    mem::ScopedArray<sys::Int16_T> testData(new sys::Int16_T[DATA_LENGTH]);
+    std::unique_ptr<sys::Int16_T[]> testData(new sys::Int16_T[DATA_LENGTH]);
     memcpy(testData.get(), imageData.get(), DATA_SIZE_IN_BYTES);
 
     if ((!sys::isBigEndianSystem() && !byteswap) ||

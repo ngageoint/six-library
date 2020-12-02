@@ -59,7 +59,7 @@ public:
 
     sys::ubyte* add(size_t numBytes)
     {
-        mem::ScopedArray<sys::ubyte> buffer(new sys::ubyte[numBytes]);
+        std::unique_ptr<sys::ubyte[]> buffer(new sys::ubyte[numBytes]);
         mBuffers.push_back(buffer.get());
         return buffer.release();
     }

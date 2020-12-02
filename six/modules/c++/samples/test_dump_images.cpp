@@ -211,7 +211,7 @@ int main(int argc, char** argv)
             {
                 region.setNumRows(numRows);
                 size_t totalBytes = nbpp * numCols * numRows;
-                const mem::ScopedArray<six::UByte>
+                const std::unique_ptr<six::UByte[]>
                     workBuffer(new six::UByte[totalBytes]);
                 region.setBuffer(workBuffer.get());
 
@@ -225,7 +225,7 @@ int main(int argc, char** argv)
                 const size_t nbpr = nbpp * numCols;
 
                 // allocate this so we can reuse it for each row
-                const mem::ScopedArray<six::UByte> workBuffer(new six::UByte[nbpr]);
+                const std::unique_ptr<six::UByte[]> workBuffer(new six::UByte[nbpr]);
                 region.setBuffer(workBuffer.get());
 
                 for (size_t jj = startRow;

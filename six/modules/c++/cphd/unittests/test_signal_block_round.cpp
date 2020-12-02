@@ -110,7 +110,7 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
     std::vector<std::complex<float> > readData(dims.area());
 
     size_t sizeInBytes = readData.size() * sizeof(readData[0]);
-    mem::ScopedArray<sys::ubyte> scratchData(new sys::ubyte[sizeInBytes]);
+    std::unique_ptr<sys::ubyte[]> scratchData(new sys::ubyte[sizeInBytes]);
     mem::BufferView<sys::ubyte> scratch(scratchData.get(), sizeInBytes);
     mem::BufferView<std::complex<float> > data(&readData[0], readData.size());
 

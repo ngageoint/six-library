@@ -177,7 +177,7 @@ public:
      *  read all samples
      *  \param numThreads Number of threads to use for endian swapping if
      *  necessary
-     *  \param[out] data An empty mem::ScopedArray that will hold the data
+     *  \param[out] data An empty std::unique_ptr<[]> that will hold the data
      *   read from the file.
      *
      *  \throw except::Exception If invalid channel, firstVector, lastVector,
@@ -191,7 +191,7 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              mem::ScopedArray<sys::ubyte>& data) const;
+              std::unique_ptr<sys::ubyte[]>& data) const;
 
     /*!
      *  \func read
@@ -199,14 +199,14 @@ public:
      *  \brief Read the specified channel's compressed signal block
      *
      *  \param channel 0-based channel
-     *  \param[out] data An empty mem::ScopedArray that will hold the data
+     *  \param[out] data An empty std::unique_ptr<[]> that will hold the data
      *   read from the file.
      *
      *  \throw except::Exception If invalid channel
      *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel, mem::ScopedArray<sys::ubyte>& data) const;
+    void read(size_t channel, std::unique_ptr<sys::ubyte[]>& data) const;
 
     /*!
      *  \func read

@@ -87,7 +87,7 @@ void createNITF(const std::string& outputPathname,
     writer.setXMLControlRegistry(&registry);
     writer.initialize(container);
 
-    mem::ScopedArray<six::UByte> imageData(new six::UByte[imageSize]);
+    std::unique_ptr<six::UByte[]> imageData(new six::UByte[imageSize]);
     if (container->getDataType() == six::DataType::COMPLEX)
     {
         std::complex<float>* complexData =

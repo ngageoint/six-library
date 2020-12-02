@@ -411,7 +411,7 @@ void runCPHDTest(const std::string& testName_,
     std::vector<sys::ubyte> readVBM;
     for (size_t ii = 0; ii < NUM_IMAGES; ++ii)
     {
-        mem::ScopedArray<sys::ubyte> readData;
+        std::unique_ptr<sys::ubyte[]> readData;
         TEST_ASSERT_EQ(reader.getNumVectors(ii), dims[ii].row);
         TEST_ASSERT_EQ(reader.getNumSamples(ii), dims[ii].col);
 

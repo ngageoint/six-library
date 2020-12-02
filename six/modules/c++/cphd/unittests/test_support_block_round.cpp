@@ -99,7 +99,7 @@ std::vector<sys::ubyte> checkSupportData(
     cphd::CPHDReader reader(pathname, numThreads);
     const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
 
-    mem::ScopedArray<sys::ubyte> readPtr;
+    std::unique_ptr<sys::ubyte[]> readPtr;
     supportBlock.readAll(numThreads, readPtr);
 
     std::vector<sys::ubyte> readData(readPtr.get(), readPtr.get() + reader.getMetadata().data.getAllSupportSize());
