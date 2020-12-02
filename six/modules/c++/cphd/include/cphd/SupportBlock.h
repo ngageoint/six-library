@@ -120,12 +120,12 @@ public:
      *  \param id unique identifier of support array
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param[out] data mem::ScopedArray that will hold the data read from the file.
+     *  \param[out] data std::unique_ptr<[]> that will hold the data read from the file.
      */
     // Same as above but allocates the memory
     void read(const std::string& id,
               size_t numThreads,
-              mem::ScopedArray<sys::ubyte>& data) const;
+              std::unique_ptr<sys::ubyte[]>& data) const;
 
     /*
      *  \func readAll
@@ -136,11 +136,11 @@ public:
      *
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param[out] data mem::ScopedArray that will hold the data read from the file.
+     *  \param[out] data std::unique_ptr<[]> that will hold the data read from the file.
      *
      */
     void readAll(size_t numThreads,
-                 mem::ScopedArray<sys::ubyte>& data) const;
+                 std::unique_ptr<sys::ubyte[]>& data) const;
 
 private:
     //! Initialize mOffsets for each array

@@ -64,8 +64,8 @@ bool compareWideband(cphd03::CPHDReader& reader1,
     cphd::Wideband& wideband1 = reader1.getWideband();
     cphd::Wideband& wideband2 = reader2.getWideband();
 
-    mem::ScopedArray<sys::ubyte> cphd03Data1;
-    mem::ScopedArray<sys::ubyte> cphd03Data2;
+    std::unique_ptr<sys::ubyte[]> cphd03Data1;
+    std::unique_ptr<sys::ubyte[]> cphd03Data2;
 
     for (size_t ii = 0; ii < channelsToProcess; ++ii)
     {

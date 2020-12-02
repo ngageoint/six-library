@@ -385,7 +385,7 @@ void NITFWriteControl::addDataAndWrite(
 
     // These must stick around until mWriter.write() is called since the
     // SegmentMemorySource's will be pointing to them
-    const mem::ScopedArray<std::string> desStrs(new std::string[numDES]);
+    const std::unique_ptr<std::string[]> desStrs(new std::string[numDES]);
 
     for (size_t ii = 0; ii < getContainer()->getNumData(); ++ii)
     {

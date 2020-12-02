@@ -68,9 +68,9 @@ protected:
     nitf::ImageReader mReader;
     sys::Off_T mAvailable;
     sys::Size_T mRowBufferRemaining, mRowSize, mRowOffset;
-    mem::ScopedArray<sys::ubyte> mRowBuffer;
+    std::unique_ptr<sys::ubyte[]> mRowBuffer;
     nitf::SubWindow mWindow;
-    mem::ScopedArray<uint32_t> mBandList;
+    std::unique_ptr<uint32_t[]> mBandList;
 };
 
 }

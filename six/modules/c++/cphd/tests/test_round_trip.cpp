@@ -55,7 +55,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
 
     // Read SupportBlock
     const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
-    mem::ScopedArray<sys::ubyte> readPtr;
+    std::unique_ptr<sys::ubyte[]> readPtr;
     supportBlock.readAll(numThreads, readPtr);
 
     // Read PVPBlock
@@ -71,7 +71,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
     cphd::CPHDWriter writer(reader.getMetadata(), outPathname, schemaPathnames, numThreads);
 
     // Declare and allocate the wideband data storage
-    mem::ScopedArray<sys::ubyte> data;
+    std::unique_ptr<sys::ubyte[]> data;
     data.reset(new sys::ubyte[header.getSignalBlockSize()]);
 
     // Check if signal data is compressed

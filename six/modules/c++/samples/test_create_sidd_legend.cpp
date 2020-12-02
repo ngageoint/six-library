@@ -164,7 +164,7 @@ int main(int argc, char** argv)
         types::RowCol<size_t> dims1(40, numCols);
         std::unique_ptr<six::Data> data1(mockupDerivedData(dims1));
 
-        const mem::ScopedArray<sys::ubyte> buffer1(new sys::ubyte[dims1.area()]);
+        const std::unique_ptr<sys::ubyte[]> buffer1(new sys::ubyte[dims1.area()]);
         std::fill_n(buffer1.get(), dims1.area(), 20);
 
         container->addData(std::move(data1));
@@ -181,7 +181,7 @@ int main(int argc, char** argv)
         monoLegend->mLocation.col = 10;
         monoLegend->setDims(legendDims);
 
-        const mem::ScopedArray<sys::ubyte> buffer2(new sys::ubyte[dims2.area()]);
+        const std::unique_ptr<sys::ubyte[]> buffer2(new sys::ubyte[dims2.area()]);
         std::fill_n(buffer2.get(), dims2.area(), 100);
 
         container->addData(std::move(data2), std::move(monoLegend));
@@ -191,7 +191,7 @@ int main(int argc, char** argv)
         types::RowCol<size_t> dims3(150, numCols);
         std::unique_ptr<six::Data> data3(mockupDerivedData(dims3));
 
-        const mem::ScopedArray<sys::ubyte> buffer3(new sys::ubyte[dims3.area()]);
+        const std::unique_ptr<sys::ubyte[]> buffer3(new sys::ubyte[dims3.area()]);
         std::fill_n(buffer3.get(), dims3.area(), 60);
 
         container->addData(std::move(data3));
@@ -217,7 +217,7 @@ int main(int argc, char** argv)
             rgbLegend->mLUT->getTable()[idx + 2] = lutValue;
         }
 
-        const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.area()]);
+        const std::unique_ptr<sys::ubyte[]> buffer4(new sys::ubyte[dims4.area()]);
         std::fill_n(buffer4.get(), dims4.area(), 200);
 
         container->addData(std::move(data4), std::move(rgbLegend));

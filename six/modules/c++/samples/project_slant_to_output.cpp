@@ -123,7 +123,7 @@ int main(int argc, char** argv)
 
         toSlantRow = toSlantRow.flipXY();
         toSlantCol = toSlantCol.flipXY();
-        mem::ScopedArray<float> outputArray(new float[
+        std::unique_ptr<float[]> outputArray(new float[
                 plane.xDirection->elements * plane.yDirection->elements]);
         // Iterate over output plane, grabbing the appropriate input point
         for (size_t outRow = 0; outRow < plane.xDirection->elements; ++outRow)

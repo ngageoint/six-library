@@ -253,7 +253,7 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     }
     else
     {
-        const mem::ScopedArray<six::UByte>
+        const std::unique_ptr<six::UByte[]>
             scopedRowBuf(new six::UByte[numColsTotal * elemSize]);
         six::UByte* const rowBuf(scopedRowBuf.get());
 

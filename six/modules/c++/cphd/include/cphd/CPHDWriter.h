@@ -118,7 +118,7 @@ private:
     // Size of scratch space
     const size_t mScratchSize;
     // Scratch space buffer
-    const mem::ScopedArray<sys::byte> mScratch;
+    const std::unique_ptr<sys::byte[]> mScratch;
 };
 
 /*
