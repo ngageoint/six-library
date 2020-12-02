@@ -120,8 +120,8 @@ public:
     }
 
 private:
-    std::vector<std::byte> mLHS;
-    mutable std::vector<std::byte> mRHS;
+    std::vector<sys::byte> mLHS;
+    mutable std::vector<sys::byte> mRHS;
 };
 
 // Makes sure a file gets removed
