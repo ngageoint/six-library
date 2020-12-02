@@ -168,8 +168,8 @@ bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
 TEST_CASE(testUnscaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<sys::Int8_T> > writeData =
-            generateData<sys::Int8_T>(dims.area());
+    const std::vector<std::complex<int8_t> > writeData =
+            generateData<int8_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
@@ -177,8 +177,8 @@ TEST_CASE(testUnscaledInt8)
 TEST_CASE(testScaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<sys::Int8_T> > writeData =
-            generateData<sys::Int8_T>(dims.area());
+    const std::vector<std::complex<int8_t> > writeData =
+            generateData<int8_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
@@ -186,8 +186,8 @@ TEST_CASE(testScaledInt8)
 TEST_CASE(testUnscaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<sys::Int16_T> > writeData =
-            generateData<sys::Int16_T>(dims.area());
+    const std::vector<std::complex<int16_t> > writeData =
+            generateData<int16_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
@@ -195,8 +195,8 @@ TEST_CASE(testUnscaledInt16)
 TEST_CASE(testScaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<sys::Int16_T> > writeData =
-            generateData<sys::Int16_T>(dims.area());
+    const std::vector<std::complex<int16_t> > writeData =
+            generateData<int16_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
 }

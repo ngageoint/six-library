@@ -70,7 +70,7 @@ public:
      */
     NITFImageInfo(Data* data,
                   size_t maxRows = Constants::ILOC_MAX,
-                  sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
+                  uint64_t maxSize = Constants::IS_SIZE_MAX,
                   bool computeSegments = false,
                   size_t rowsPerBlock = 0,
                   size_t colsPerBlock = 0);
@@ -176,7 +176,7 @@ public:
     }
 
     //! \return Number of total bytes in the image
-    sys::Uint64_T getNumBytesTotal() const
+    uint64_t getNumBytesTotal() const
     {
         return mSegmentComputer.getNumBytesTotal();
     }
@@ -188,7 +188,7 @@ public:
     }
 
     //! \return Max number of bytes that each image segment can be
-    sys::Uint64_T getMaxNumBytesPerSegment() const
+    uint64_t getMaxNumBytesPerSegment() const
     {
         return mSegmentComputer.getMaxNumBytesPerSegment();
     }

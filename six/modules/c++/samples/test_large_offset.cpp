@@ -102,11 +102,11 @@ void createNITF(const std::string& outputPathname,
     }
     else
     {
-        sys::Uint16_T* derivedData =
-                reinterpret_cast<sys::Uint16_T*>(imageData.get());
+        uint16_t* derivedData =
+                reinterpret_cast<uint16_t*>(imageData.get());
         for (size_t ii = 0; ii < elementsInImage; ++ii)
         {
-            derivedData[ii] = static_cast<sys::Uint16_T>(ii);
+            derivedData[ii] = static_cast<uint16_t>(ii);
         }
     }
     writer.save(imageData.get(), outputPathname);
@@ -161,11 +161,11 @@ bool checkNITF(const std::string& pathname)
     }
     else
     {
-        sys::Uint16_T* derivedBuffer =
-                reinterpret_cast<sys::Uint16_T*>(buffer);
+        uint16_t* derivedBuffer =
+                reinterpret_cast<uint16_t*>(buffer);
         for (size_t ii = skipSize; ii < imageSize; ++ii)
         {
-            if (derivedBuffer[ii - skipSize] != static_cast<sys::Uint16_T>(ii))
+            if (derivedBuffer[ii - skipSize] != static_cast<uint16_t>(ii))
             {
                 return false;
             }

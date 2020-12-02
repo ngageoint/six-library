@@ -47,12 +47,12 @@ public:
     {
     }
 
-    inline sys::Int16_T operator()(float value) const
+    inline int16_t operator()(float value) const
     {
         const float ret(round((((value - mMin) / mDiff) *
-                std::numeric_limits<sys::Uint16_T>::max()) +
-                        std::numeric_limits<sys::Int16_T>::min()));
-        return static_cast<sys::Int16_T>(ret);
+                std::numeric_limits<uint16_t>::max()) +
+                        std::numeric_limits<int16_t>::min()));
+        return static_cast<int16_t>(ret);
     }
 
 private:
@@ -138,8 +138,8 @@ void compressInteger(size_t numPixels, sys::ubyte* buffer)
     const std::complex<float>* const input =
             reinterpret_cast<std::complex<float>*>(buffer);
 
-    std::complex<sys::Int16_T>* const output =
-            reinterpret_cast<std::complex<sys::Int16_T>*>(buffer);
+    std::complex<int16_t>* const output =
+            reinterpret_cast<std::complex<int16_t>*>(buffer);
     const float diff = max - min;
 
     // If diff ends up being zero, we will get a division by 0 error.
@@ -147,14 +147,14 @@ void compressInteger(size_t numPixels, sys::ubyte* buffer)
     // fill it with 0s.
     if (diff == 0.0f)
     {
-        std::fill_n(output, numPixels, std::complex<sys::Int16_T>(0, 0));
+        std::fill_n(output, numPixels, std::complex<int16_t>(0, 0));
         return;
     }
 
     const CompressFloat compressFloat(min, diff);
     for (size_t ii = 0; ii < numPixels; ++ii)
     {
-        output[ii] = std::complex<sys::Int16_T>(
+        output[ii] = std::complex<int16_t>(
                 compressFloat(input[ii].real()),
                 compressFloat(input[ii].imag()));
     }

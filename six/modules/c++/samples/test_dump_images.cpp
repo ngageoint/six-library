@@ -47,15 +47,15 @@ void writeSIOFileHeader(size_t numRows,
         elementType = sio::lite::FileHeader::COMPLEX_FLOAT;
         break;
     case six::PixelType::RE16I_IM16I:
-        elementSize = sizeof(std::complex<sys::Int16_T>);
+        elementSize = sizeof(std::complex<int16_t>);
         elementType = sio::lite::FileHeader::COMPLEX_SIGNED;
         break;
     case six::PixelType::MONO8I:
-        elementSize = sizeof(sys::Int8_T);
+        elementSize = sizeof(int8_t);
         elementType = sio::lite::FileHeader::SIGNED;
         break;
     case six::PixelType::MONO16I:
-        elementSize = sizeof(sys::Int16_T);
+        elementSize = sizeof(int16_t);
         elementType = sio::lite::FileHeader::SIGNED;
         break;
     default:

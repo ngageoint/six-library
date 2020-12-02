@@ -30,14 +30,14 @@ namespace
 {
 static const std::string OUTPUT_NAME("ByteSwapTest");
 static const size_t DATA_LENGTH = 100;
-static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(sys::Int16_T) / sizeof(six::UByte);
-static const size_t BYTES_PER_PIXEL = sizeof(sys::Int16_T);
+static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(int16_t) / sizeof(six::UByte);
+static const size_t BYTES_PER_PIXEL = sizeof(int16_t);
 
-void generateData(std::unique_ptr<sys::Int16_T[]>& data)
+void generateData(std::unique_ptr<int16_t[]>& data)
 {
     for (size_t ii = 0; ii < DATA_LENGTH; ++ii)
     {
-        data[ii] = sys::Int16_T(static_cast<sys::Int16_T>(ii));
+        data[ii] = int16_t(static_cast<int16_t>(ii));
     }
 }
 
@@ -103,7 +103,7 @@ std::unique_ptr<six::sidd::DerivedData> createData()
     return derivedData;
 }
 
-void write(const sys::Int16_T* data, bool useStream, bool byteSwap)
+void write(const int16_t* data, bool useStream, bool byteSwap)
 {
     std::shared_ptr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
@@ -129,7 +129,7 @@ void write(const sys::Int16_T* data, bool useStream, bool byteSwap)
     }
 }
 
-void read(const std::string& filename, sys::Int16_T* data)
+void read(const std::string& filename, int16_t* data)
 {
     six::NITFReadControl reader;
     reader.load(filename);
@@ -141,10 +141,10 @@ void read(const std::string& filename, sys::Int16_T* data)
 
 bool run(bool useStream = false, bool byteswap = false)
 {
-    std::unique_ptr<sys::Int16_T[]> imageData(new sys::Int16_T[DATA_LENGTH]);
+    std::unique_ptr<int16_t[]> imageData(new int16_t[DATA_LENGTH]);
     generateData(imageData);
 
-    std::unique_ptr<sys::Int16_T[]> testData(new sys::Int16_T[DATA_LENGTH]);
+    std::unique_ptr<int16_t[]> testData(new int16_t[DATA_LENGTH]);
     memcpy(testData.get(), imageData.get(), DATA_SIZE_IN_BYTES);
 
     if ((!sys::isBigEndianSystem() && !byteswap) ||

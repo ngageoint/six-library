@@ -30,14 +30,14 @@ namespace
 {
 static const std::string OUTPUT_NAME("GeoTIFFTest");
 static const size_t DATA_LENGTH = 100;
-static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(sys::Int16_T) / sizeof(six::UByte);
-static const size_t BYTES_PER_PIXEL = sizeof(sys::Int16_T);
+static const size_t DATA_SIZE_IN_BYTES = DATA_LENGTH * sizeof(int16_t) / sizeof(six::UByte);
+static const size_t BYTES_PER_PIXEL = sizeof(int16_t);
 
-void generateData(sys::Int16_T* data)
+void generateData(int16_t* data)
 {
     for (size_t ii = 0; ii < DATA_LENGTH; ++ii)
     {
-        data[ii] = static_cast<sys::Int16_T>(ii);
+        data[ii] = static_cast<int16_t>(ii);
     }
 }
 
@@ -94,7 +94,7 @@ std::unique_ptr<six::sidd::DerivedData> createData()
     return derivedData;
 }
 
-void write(const sys::Int16_T* data)
+void write(const int16_t* data)
 {
     std::shared_ptr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
@@ -105,7 +105,7 @@ void write(const sys::Int16_T* data)
     writer.save(reinterpret_cast<const six::UByte*>(data), OUTPUT_NAME);
 }
 
-void read(const std::string& filename, std::unique_ptr<sys::Int16_T[]>& data)
+void read(const std::string& filename, std::unique_ptr<int16_t[]>& data)
 {
     six::sidd::GeoTIFFReadControl reader;
     reader.load(filename);
@@ -115,12 +115,12 @@ void read(const std::string& filename, std::unique_ptr<sys::Int16_T[]>& data)
 
 bool run()
 {
-    std::unique_ptr<sys::Int16_T[]> imageData(new sys::Int16_T[DATA_LENGTH]);
+    std::unique_ptr<int16_t[]> imageData(new int16_t[DATA_LENGTH]);
     generateData(imageData.get());
 
     write(imageData.get());
 
-    std::unique_ptr<sys::Int16_T[]> testData;
+    std::unique_ptr<int16_t[]> testData;
     read(OUTPUT_NAME, testData);
 
     if (memcmp(testData.get(), imageData.get(), DATA_SIZE_IN_BYTES) == 0)

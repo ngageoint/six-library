@@ -45,7 +45,7 @@ struct GetPixelType
 };
 
 template <>
-struct GetPixelType<sys::Uint8_T>
+struct GetPixelType<uint8_t>
 {
     static six::PixelType getPixelType()
     {
@@ -54,7 +54,7 @@ struct GetPixelType<sys::Uint8_T>
 };
 
 template <>
-struct GetPixelType<sys::Uint16_T>
+struct GetPixelType<uint16_t>
 {
     static six::PixelType getPixelType()
     {
@@ -714,25 +714,25 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
                           size_t numRowsPerSeg = 0)
 {
     bool success = true;
-    if (!doTests<sys::Uint8_T>(schemaPaths, false,
+    if (!doTests<uint8_t>(schemaPaths, false,
                                setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<sys::Uint8_T>(schemaPaths, true,
+    if (!doTests<uint8_t>(schemaPaths, true,
                                setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<sys::Uint16_T>(schemaPaths, false,
+    if (!doTests<uint16_t>(schemaPaths, false,
                                 setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<sys::Uint16_T>(schemaPaths, true,
+    if (!doTests<uint16_t>(schemaPaths, true,
                                 setMaxProductSize, numRowsPerSeg))
     {
         success = false;
