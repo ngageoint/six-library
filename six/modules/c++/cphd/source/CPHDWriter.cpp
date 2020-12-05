@@ -32,7 +32,7 @@ namespace cphd
 DataWriter::DataWriter(std::shared_ptr<io::SeekableOutputStream> stream,
                        size_t numThreads) :
     mStream(stream),
-    mNumThreads(numThreads == 0 ? sys::OS().getNumCPUs() : numThreads)
+    mNumThreads(numThreads == 0 ? std::thread::hardware_concurrency() : numThreads)
 {
 }
 
@@ -300,7 +300,7 @@ void CPHDWriter::writePVPData(const PVPBlock& pvpBlock)
 {
     // Add padding
     char zero = 0;
-    for (sys::Off_T ii = 0; ii < mHeader.getPvpPadBytes(); ++ii)
+    for (ptrdiff_t ii = 0; ii < mHeader.getPvpPadBytes(); ++ii)
     {
         mStream->write(&zero, 1);
     }

@@ -92,15 +92,15 @@ void DerivedXMLParser::getAttributeIfExists(
 void DerivedXMLParser::getAttributeIfExists(
     const xml::lite::Attributes& attributes,
     const std::string& attributeName,
-    sys::SSize_T& value)
+    ptrdiff_t& value)
 {
     if (attributes.contains(attributeName))
     {
-        value = str::toType<sys::SSize_T>(attributes.getValue(attributeName));
+        value = str::toType<ptrdiff_t>(attributes.getValue(attributeName));
     }
     else
     {
-        value = six::Init::undefined<sys::SSize_T>();
+        value = six::Init::undefined<ptrdiff_t>();
     }
 }
 

@@ -121,7 +121,7 @@ bool compareVectors(const std::vector<std::byte>& readData,
 bool runTest(const std::vector<std::byte>& writeData)
 {
     io::TempFile tempfile;
-    const size_t numThreads = sys::OS().getNumCPUs();
+    const size_t numThreads = std::thread::hardware_concurrency();
     const types::RowCol<size_t> dims(128, 256);
     cphd::Metadata meta = cphd::Metadata();
     meta.data.signalCompressionID = "Huffman";

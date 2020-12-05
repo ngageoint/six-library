@@ -55,18 +55,18 @@ public:
     virtual ~NITFImageInputStream() noexcept {}
 
     //!  How many bytes in the image
-    sys::Off_T available();
+    ptrdiff_t available();
 
     //!  Read N bytes from a NITF file
-    sys::SSize_T read(std::byte* b, size_t len);
+    ptrdiff_t read(std::byte* b, size_t len);
 
 protected:
 
-    sys::SSize_T readRow();
+    ptrdiff_t readRow();
 
     nitf::ImageSubheader mSubheader;
     nitf::ImageReader mReader;
-    sys::Off_T mAvailable;
+    ptrdiff_t mAvailable;
     size_t mRowBufferRemaining, mRowSize, mRowOffset;
     std::unique_ptr<std::byte[]> mRowBuffer;
     nitf::SubWindow mWindow;

@@ -230,7 +230,7 @@ int main(int argc, char** argv)
                            "Specify the number of threads to use",
                            cli::STORE,
                            "threads",
-                           "NUM")->setDefault(sys::OS().getNumCPUs());
+                           "NUM")->setDefault(std::thread::hardware_concurrency());
         parser.addArgument("file1", "First pathname", cli::STORE, "file1",
                            "CPHD", 1, 1);
         parser.addArgument("file2", "Second pathname", cli::STORE, "file2",

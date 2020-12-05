@@ -54,71 +54,71 @@ public:
     // Add in padding to modulo 8 also.
     // Returns size of the header
     size_t set();
-    size_t set(sys::Off_T xmlSize, sys::Off_T vbmSize, sys::Off_T cphd03Size);
+    size_t set(ptrdiff_t xmlSize, ptrdiff_t vbmSize, ptrdiff_t cphd03Size);
 
     // Required elements
-    void setXMLsize(sys::Off_T size)
+    void setXMLsize(ptrdiff_t size)
     {
         mXmlDataSize = size;
     }
 
-    void setVBMsize(sys::Off_T size)
+    void setVBMsize(ptrdiff_t size)
     {
         mVbDataSize = size;
     }
 
-    void setCPHDsize(sys::Off_T size)
+    void setCPHDsize(ptrdiff_t size)
     {
         mCphdDataSize = size;
     }
 
-    void setXMLoffset(sys::Off_T offset)
+    void setXMLoffset(ptrdiff_t offset)
     {
         mXmlByteOffset = offset;
     }
 
-    void setVBMoffset(sys::Off_T offset)
+    void setVBMoffset(ptrdiff_t offset)
     {
         mVbByteOffset = offset;
     }
 
-    void setCPHDoffset(sys::Off_T offset)
+    void setCPHDoffset(ptrdiff_t offset)
     {
         mCphdByteOffset = offset;
     }
 
-    sys::Off_T getXMLsize() const
+    ptrdiff_t getXMLsize() const
     {
         return mXmlDataSize;
     }
 
-    sys::Off_T getVBMsize() const
+    ptrdiff_t getVBMsize() const
     {
         return mVbDataSize;
     }
 
-    sys::Off_T getCPHDsize() const
+    ptrdiff_t getCPHDsize() const
     {
         return mCphdDataSize;
     }
 
-    sys::Off_T getXMLoffset() const
+    ptrdiff_t getXMLoffset() const
     {
         return mXmlByteOffset;
     }
 
-    sys::Off_T getVBMoffset() const
+    ptrdiff_t getVBMoffset() const
     {
         return mVbByteOffset;
     }
 
-    sys::Off_T getCPHDoffset() const
+    ptrdiff_t getCPHDoffset() const
     {
         return mCphdByteOffset;
     }
 
     // Pad bytes don't include the Section terminator
-    sys::Off_T getPadBytes() const
+    ptrdiff_t getPadBytes() const
     {
         return (getVBMoffset() - (getXMLoffset() + getXMLsize() + 2));
     }
@@ -152,12 +152,12 @@ private:
     std::string mVersion;
 
     // Required key-value pairs
-    sys::Off_T mXmlDataSize;
-    sys::Off_T mXmlByteOffset;
-    sys::Off_T mVbDataSize;
-    sys::Off_T mVbByteOffset;
-    sys::Off_T mCphdDataSize;
-    sys::Off_T mCphdByteOffset;
+    ptrdiff_t mXmlDataSize;
+    ptrdiff_t mXmlByteOffset;
+    ptrdiff_t mVbDataSize;
+    ptrdiff_t mVbByteOffset;
+    ptrdiff_t mCphdDataSize;
+    ptrdiff_t mCphdByteOffset;
 
     // Optional key-value pairs
     std::string mClassification;

@@ -55,7 +55,7 @@ struct Geopositioning
 
     size_t falseOrigin;
 
-    sys::SSize_T utmGridZoneNumber; // Only present for UTM
+    ptrdiff_t utmGridZoneNumber; // Only present for UTM
 };
 
 struct PositionalAccuracy
