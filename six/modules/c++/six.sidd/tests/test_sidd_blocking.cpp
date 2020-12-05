@@ -30,6 +30,9 @@
 #include "six/NITFWriteControl.h"
 #include "six/Types.h"
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 class TempFileWithExtension
@@ -75,12 +78,12 @@ std::string getProgramPathname(const std::string& installPathname,
     std::string testPathname = str::toString(sys::Path(installPathname).
         join("bin").join(programName));
 
-    if (!sys::OS().exists(testPathname))
+    if (!fs::exists(testPathname))
     {
         testPathname += ".exe";
     }
 
-    if (!sys::OS().exists(testPathname))
+    if (!fs::exists(testPathname))
     {
         throw except::Exception(Ctxt("Unable to find " + testPathname));
     }

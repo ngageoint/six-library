@@ -25,12 +25,12 @@
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <import/sys.h>
-#include <sys/Filesystem.h>
 
 #include <import/six.h>
 #include <import/six/sicd.h>
 #include "TestCase.h"
 
+#include <sys/Filesystem.h>
 namespace fs = sys::Filesystem;
 
 static fs::path argv0;
@@ -151,7 +151,7 @@ TEST_CASE(valid_six_50x50)
 }
 
 TEST_MAIN(
-    argv0 = sys::Path::absolutePath(argv[0]);
+    argv0 = fs::absolute(argv[0]);
     TEST_CHECK(valid_six_50x50);
 )
 

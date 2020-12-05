@@ -57,7 +57,7 @@ public:
             return false;
         }
 
-        std::string ext = sys::Path::splitExt(pathname).second;
+        std::string ext = fs::path(pathname).extension().string();
         if (mIgnoreCase)
         {
             str::lower(ext);

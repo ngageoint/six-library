@@ -49,6 +49,9 @@
 #include <import/six/sidd.h>
 #include "utils.h"
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 using namespace six;
 
 namespace
@@ -1716,12 +1719,12 @@ static const struct
 
 std::unique_ptr<six::WriteControl> getWriteControl(std::string outputName)
 {
-    sys::Path::StringPair p = sys::Path::splitExt(outputName);
-    str::lower(p.second);
+    std::string extension = fs::path(outputName).extension().string();
+    str::lower(extension);
 
     std::unique_ptr<six::WriteControl> writer;
 
-    if (p.second == ".nitf" || p.second == ".ntf")
+    if (extension == ".nitf" || extension == ".ntf")
     {
         writer.reset(new six::NITFWriteControl());
         std::cout << "Selecting NITF write control" << std::endl;

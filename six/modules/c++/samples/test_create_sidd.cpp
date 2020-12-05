@@ -35,6 +35,9 @@ namespace std
     using endian = sys::Endian;
 }
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 /*!
  *  This file takes in an SIO and turns it in to a SICD.
  *  It uses the WriteControl::save() function to stream
@@ -126,12 +129,12 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
 six::WriteControl* getWriteControl(std::string outputName)
 {
 
-    sys::Path::StringPair p = sys::Path::splitExt(outputName);
-    str::lower(p.second);
+    auto extension = fs::path(outputName).extension().string();
+    str::lower(extension);
 
     six::WriteControl* writer = NULL;
 
-    if (p.second == ".nitf" || p.second == ".ntf")
+    if (extension == ".nitf" || extension == ".ntf")
     {
         writer = new six::NITFWriteControl();
         std::cout << "Selecting NITF write control" << std::endl;

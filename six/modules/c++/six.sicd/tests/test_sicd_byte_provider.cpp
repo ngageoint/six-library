@@ -34,6 +34,12 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDByteProvider.h>
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace
 {
 // Main test class
@@ -65,7 +71,7 @@ public:
         }
 
         mBigEndianImage = mImage;
-        if (!sys::isBigEndianSystem())
+        if (std::endian::native == std::endian::little)
         {
             sys::byteSwap(&mBigEndianImage[0],
                           sizeof(DataTypeT),

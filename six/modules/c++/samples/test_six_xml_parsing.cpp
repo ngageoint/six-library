@@ -62,8 +62,6 @@ private:
 XMLVerifier::XMLVerifier()
 {
     // Verify schema path is set
-    sys::OS os;
-
     six::XMLControl::loadSchemaPaths(mSchemaPaths);
 
     mXmlRegistry.addCreator(six::DataType::COMPLEX,

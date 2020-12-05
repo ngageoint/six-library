@@ -26,6 +26,12 @@
 #include "six/NITFWriteControl.h"
 #include "six/Types.h"
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace
 {
 static const std::string OUTPUT_NAME("ByteSwapTest");
@@ -147,8 +153,8 @@ bool run(bool useStream = false, bool byteswap = false)
     std::unique_ptr<int16_t[]> testData(new int16_t[DATA_LENGTH]);
     memcpy(testData.get(), imageData.get(), DATA_SIZE_IN_BYTES);
 
-    if ((!sys::isBigEndianSystem() && !byteswap) ||
-        (sys::isBigEndianSystem() && byteswap))
+    if ( ((std::endian::native == std::endian::little) && !byteswap) ||
+        ((std::endian::native == std::endian::big) && byteswap) )
     {
         sys::byteSwap(reinterpret_cast<std::byte*>(imageData.get()),
                 BYTES_PER_PIXEL, DATA_LENGTH);

@@ -35,6 +35,10 @@
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 
+
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 void getErrors(const six::sicd::ComplexData& data, scene::Errors& errors)
@@ -542,7 +546,10 @@ std::unique_ptr<ComplexData> Utilities::getComplexData(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
-    if (sys::Path::splitExt(pathname).second == ".xml")
+    std::string extension = fs::path(pathname).extension().string();
+    str::lower(extension);
+
+    if (extension == ".xml")
     {
         logging::NullLogger log;
         return parseDataFromFile(pathname, schemaPaths, log);
