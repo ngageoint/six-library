@@ -162,9 +162,6 @@
     <ClCompile Include="source\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\externals\nitro\modules\c++\nitro-c++.vcxproj">
-      <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\scene\scene.vcxproj">
       <Project>{1cfcde59-6410-4037-95eb-b37d31e10820}</Project>
     </ProjectReference>
