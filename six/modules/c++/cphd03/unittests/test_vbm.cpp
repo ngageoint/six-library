@@ -239,7 +239,7 @@ TEST_CASE(testDataConstructor)
     std::vector<const void*> data(NUM_CHANNELS);
     for (size_t ii = 0; ii < NUM_CHANNELS; ++ii)
     {
-        data[ii] = &actualData[ii][0];
+        data[ii] = actualData[ii].data();
     }
 
     cphd03::VBM vbm(NUM_CHANNELS,

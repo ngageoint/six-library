@@ -92,7 +92,7 @@ public:
      *    std::vector<std::byte> serializedData;
      *    mesh.serialize(buffer);
      *    DerivedMesh meshCopy;  // Not populated
-     *    const std::byte* buffer = &serializedData[0];
+     *    const std::byte* buffer = serializedData.data();
      *    meshCopy.deserialize(buffer); // meshCopy == mesh
      * Any implementation of serialize() and deserialize() must
      * satisfy this property.

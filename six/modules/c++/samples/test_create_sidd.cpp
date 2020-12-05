@@ -117,7 +117,7 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
         {
             pixelType = six::PixelType::RGB8LU;
             // Switch the mode, and dont forget to slurp the colormap
-            lut = new six::LUT((unsigned char*) &(p->second)[0], 256, 3);
+            lut = new six::LUT((unsigned char*) p->second.data(), 256, 3);
             break;
         }
 

@@ -664,7 +664,7 @@ void VBM::getVBMdata(size_t channel,
     data.resize(getVBMsize(channel));
     std::fill(data.begin(), data.end(), static_cast<std::byte>(0));
 
-    getVBMdata(channel, &data[0]);
+    getVBMdata(channel, data.data());
 }
 
 void VBM::getVBMdata(size_t channel,
@@ -762,7 +762,7 @@ int64_t VBM::load(io::SeekableInputStream& inStream,
         //std::vector<std::byte>& data(mVBMdata[ii]);
         if (!data.empty())
         {
-            std::byte* const buf = reinterpret_cast<std::byte*>(&data[0]);
+            auto const buf = reinterpret_cast<std::byte*>(data.data());
             ptrdiff_t bytesThisRead = inStream.read(buf, data.size());
             if (bytesThisRead == io::InputStream::IS_EOF)
             {

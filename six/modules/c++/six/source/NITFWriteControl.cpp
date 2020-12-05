@@ -366,7 +366,7 @@ void NITFWriteControl::save(const BufferList& imageData,
 
             nitf::ImageSource iSource;
 
-            nitf::MemorySource memSource(&legend->mImage[0],
+            nitf::MemorySource memSource(legend->mImage.data(),
                                          legend->mImage.size(),
                                          0,
                                          sizeof(std::byte),
