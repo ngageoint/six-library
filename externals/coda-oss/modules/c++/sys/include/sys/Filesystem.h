@@ -37,6 +37,7 @@ namespace sys
             path parent_path() const; // http://en.cppreference.com/w/cpp/filesystem/path/parent_path
             path filename() const; // http://en.cppreference.com/w/cpp/filesystem/path/filename
             path stem() const; // http://en.cppreference.com/w/cpp/filesystem/path/stem
+            path extension() const; // https://en.cppreference.com/w/cpp/filesystem/path/extension
 
             bool empty() const noexcept; // http://en.cppreference.com/w/cpp/filesystem/path/empty
             bool is_absolute() const; // http://en.cppreference.com/w/cpp/filesystem/path/is_absrel
