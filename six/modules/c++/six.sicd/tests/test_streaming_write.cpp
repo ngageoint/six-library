@@ -205,7 +205,7 @@ void subsetData(const T* orig,
 {
     output.resize(dims.area());
     const T* origPtr = orig + offset.row * origNumCols + offset.col;
-    T* outputPtr = &output[0];
+    auto outputPtr = output.data();
     for (size_t row = 0;
          row < dims.row;
          ++row, origPtr += origNumCols, outputPtr += dims.col)

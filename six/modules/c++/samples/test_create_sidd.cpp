@@ -104,10 +104,10 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
     }
 
     if (!fileHeader->getNumUserDataFields())
-        return NULL;
+        return nullptr;
 
     // Otherwise
-    six::LUT* lut = NULL;
+    six::LUT* lut = nullptr;
 
     sio::lite::UserDataDictionary dict = fileHeader->getUserDataSection();
     for (sio::lite::UserDataDictionary::Iterator p = dict.begin(); p
@@ -132,7 +132,7 @@ six::WriteControl* getWriteControl(std::string outputName)
     auto extension = fs::path(outputName).extension().string();
     str::lower(extension);
 
-    six::WriteControl* writer = NULL;
+    six::WriteControl* writer = nullptr;
 
     if (extension == ".nitf" || extension == ".ntf")
     {

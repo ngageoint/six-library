@@ -133,8 +133,8 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
     //! a lot of the variables has been updated
     XMLElem imageFormationXML = newElement("ImageFormation", parent);
 
-    if (radarCollection.area.get() != NULL &&
-        radarCollection.area->plane.get() != NULL &&
+    if (radarCollection.area.get() != nullptr &&
+        radarCollection.area->plane.get() != nullptr &&
         !radarCollection.area->plane->segmentList.empty() &&
         imageFormation->segmentIdentifier.empty())
     {
@@ -306,7 +306,7 @@ XMLElem ComplexXMLParser04x::convertHPBWToXML(
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -325,7 +325,7 @@ XMLElem ComplexXMLParser04x::convertAntennaParamArrayToXML(
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 

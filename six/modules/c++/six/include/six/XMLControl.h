@@ -55,7 +55,7 @@ class XMLControl
 {
     public:
     //!  Constructor
-    XMLControl(logging::Logger* log = NULL, bool ownLog = false);
+    XMLControl(logging::Logger* log = nullptr, bool ownLog = false);
 
     //!  Destructor
     virtual ~XMLControl();

@@ -330,7 +330,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
     case PixelType::MONO8LU:
     {
         const LUT* lutPtr = getDisplayLUT();
-        //If LUT is NULL, we have a predefined LookupTable.
+        //If LUT is nullptr, we have a predefined LookupTable.
         //No LUT to write into NITF, so setting to MONO
         if (lutPtr == nullptr)
         {
@@ -388,7 +388,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 
         if (lut == nullptr)
         {
-            //If LUT is NULL, we have a predefined LookupTable.
+            //If LUT is nullptr, we have a predefined LookupTable.
             //No LUT to write into NITF, so setting to MONO
             nitf::BandInfo band1;
             band1.getRepresentation().set("M");

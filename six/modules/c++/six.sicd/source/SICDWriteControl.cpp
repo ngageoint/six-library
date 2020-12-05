@@ -89,7 +89,7 @@ void SICDWriteControl::save(void* imageData,
                             const types::RowCol<size_t>& dims,
                             bool restoreData)
 {
-    if (getContainer().get() == NULL)
+    if (getContainer().get() == nullptr)
     {
         throw except::Exception(Ctxt(
                 "initialize() must be called prior to calling save()"));

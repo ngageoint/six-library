@@ -32,23 +32,23 @@ class ComplexXMLParser050 : public ComplexXMLParser041
 {
 public:
     ComplexXMLParser050(const std::string& version,
-                        logging::Logger* log = NULL,
+                        logging::Logger* log = nullptr,
                         bool ownLog = false);
 
 protected:
     virtual XMLElem convertWeightTypeToXML(const WeightType& obj,
-                                           XMLElem parent = NULL) const;
+                                           XMLElem parent = nullptr) const;
 
     virtual XMLElem convertImageFormationAlgoToXML(
         const PFA* pfa, const RMA* rma,
         const RgAzComp* rgAzComp,
-        XMLElem parent = NULL) const;
+        XMLElem parent = nullptr) const;
 
     virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
             mem::ScopedCopyablePtr<WeightType>& obj) const;
 
     virtual XMLElem convertMatchInformationToXML(const MatchInformation& obj,
-                                                 XMLElem parent = NULL) const;
+                                                 XMLElem parent = nullptr) const;
 };
 }
 }

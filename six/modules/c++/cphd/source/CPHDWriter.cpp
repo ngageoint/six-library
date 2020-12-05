@@ -325,7 +325,7 @@ void CPHDWriter::writePVPData(const PVPBlock& pvpBlock)
             ostr << "PVPBlock of channel " << ii << " is empty";
             throw except::Exception(Ctxt(ostr.str()));
         }
-        writePVPData(&pvpData[0], ii);
+        writePVPData(pvpData.data(), ii);
     }
 }
 

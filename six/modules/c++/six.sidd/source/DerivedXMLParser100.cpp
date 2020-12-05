@@ -401,7 +401,7 @@ XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
 {
     XMLElem geographicAndTargetElem = newElement("GeographicAndTarget", parent);
 
-    if (geographicAndTarget.geographicCoverage.get() == NULL)
+    if (geographicAndTarget.geographicCoverage.get() == nullptr)
     {
         throw except::Exception(Ctxt("geographicCoverage is required"));
     }
@@ -659,7 +659,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
 
         // create Geometry -- optional
         Geometry* geom = collection->geometry.get();
-        if (geom != NULL)
+        if (geom != nullptr)
         {
             XMLElem geometryElem = newElement("Geometry", collectionElem);
 
@@ -685,7 +685,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
 
         // create Phenomenology -- optional
         Phenomenology* phenom = collection->phenomenology.get();
-        if (phenom != NULL)
+        if (phenom != nullptr)
         {
             XMLElem phenomenologyElem = newElement("Phenomenology",
                 collectionElem);

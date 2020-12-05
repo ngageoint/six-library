@@ -34,12 +34,12 @@ public:
     SICommonXMLParser10x(const std::string& defaultURI,
                          bool addClassAttributes,
                          const std::string& siCommonURI,
-                         logging::Logger* log = NULL,
+                         logging::Logger* log = nullptr,
                          bool ownLog = false);
 
     XMLElem convertRadiometryToXML(
         const Radiometric *obj,
-        XMLElem parent = NULL) const override;
+        XMLElem parent = nullptr) const override;
 
     void parseRadiometryFromXML(
         const XMLElem radiometricXML,
@@ -57,7 +57,7 @@ protected:
 
     XMLElem convertCompositeSCPToXML(
         const ErrorStatistics* errorStatistics,
-        XMLElem parent = NULL) const override;
+        XMLElem parent = nullptr) const override;
 
     void parseCompositeSCPFromXML(
         const XMLElem errorStatsXML,

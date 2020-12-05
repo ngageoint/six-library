@@ -100,8 +100,8 @@ const size_t NITFHeaderCreator::DEFAULT_BUFFER_SIZE = 8 * 1024 * 1024;
 
 NITFHeaderCreator::NITFHeaderCreator() :
     mRecord(NITF_VER_21),
-    mXMLRegistry(NULL),
-    mLog(NULL),
+    mXMLRegistry(nullptr),
+    mLog(nullptr),
     mOwnLog(false)
 {
     // Make sure that if we use XML_DATA_CONTENT that we've loaded it into the
@@ -111,8 +111,8 @@ NITFHeaderCreator::NITFHeaderCreator() :
 
 NITFHeaderCreator::NITFHeaderCreator(std::shared_ptr<Container> container) :
     mRecord(NITF_VER_21),
-    mXMLRegistry(NULL),
-    mLog(NULL),
+    mXMLRegistry(nullptr),
+    mLog(nullptr),
     mOwnLog(false)
 {
     loadXmlDataContentHandler();
@@ -122,8 +122,8 @@ NITFHeaderCreator::NITFHeaderCreator(std::shared_ptr<Container> container) :
 NITFHeaderCreator::NITFHeaderCreator(const six::Options& options,
                                      std::shared_ptr<Container> container) :
     mRecord(NITF_VER_21),
-    mXMLRegistry(NULL),
-    mLog(NULL),
+    mXMLRegistry(nullptr),
+    mLog(nullptr),
     mOwnLog(false)
 {
     loadXmlDataContentHandler();
@@ -348,7 +348,7 @@ void NITFHeaderCreator::setSecurity(const six::Classification& classification,
         security.getClassificationSystem().set("US");
     }
 
-    if (mLog != NULL)
+    if (mLog != nullptr)
     {
         classification.setSecurity(prefix, *mLog, security);
     }
@@ -597,9 +597,9 @@ void NITFHeaderCreator::addUserDefinedSubheader(
 void NITFHeaderCreator::addAdditionalDES(
         std::shared_ptr<nitf::SegmentWriter> segmentWriter)
 {
-    if (segmentWriter.get() == NULL)
+    if (segmentWriter.get() == nullptr)
     {
-        throw except::Exception(Ctxt("segmentWriter is NULL"));
+        throw except::Exception(Ctxt("segmentWriter is nullptr"));
     }
 
     mSegmentWriters.push_back(segmentWriter);
@@ -860,7 +860,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 
             case PixelType::RGB8LU:
                 // We should have a legend
-                if (legend->mLUT.get() == NULL)
+                if (legend->mLUT.get() == nullptr)
                 {
                     throw except::Exception(Ctxt(
                             "LUT should be present for indexed RGB legend"));

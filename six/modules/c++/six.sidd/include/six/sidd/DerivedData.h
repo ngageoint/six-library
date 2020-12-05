@@ -135,7 +135,7 @@ struct DerivedData: public Data
 
     /*!
      *  Constructor.  Creates only the product creation.  All other
-     *  elements are set to NULL.  A builder should be used where possible
+     *  elements are set to nullptr.  A builder should be used where possible
      *  rather than invoking this object directly.
      */
     DerivedData();

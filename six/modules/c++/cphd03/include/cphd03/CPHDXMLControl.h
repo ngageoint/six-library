@@ -72,7 +72,7 @@ private:
     XMLElem createLatLonAltFootprint(const std::string& name,
                                      const std::string& cornerName,
                                      const cphd::LatLonAltCorners& corners,
-                                     XMLElem parent = NULL) const;
+                                     XMLElem parent = nullptr) const;
 
 private:
     static const char CPHD03_URI[];
@@ -84,21 +84,21 @@ private:
     std::string getSICommonURI() const;
 
     // Write functions
-    XMLElem toXML(const Data& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Global& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Channel& obj, XMLElem parent = NULL);
-    XMLElem toXML(const SRP& obj, XMLElem parent = NULL);
-    XMLElem toXML(const Antenna& obj, XMLElem parent = NULL);
+    XMLElem toXML(const Data& obj, XMLElem parent = nullptr);
+    XMLElem toXML(const Global& obj, XMLElem parent = nullptr);
+    XMLElem toXML(const Channel& obj, XMLElem parent = nullptr);
+    XMLElem toXML(const SRP& obj, XMLElem parent = nullptr);
+    XMLElem toXML(const Antenna& obj, XMLElem parent = nullptr);
     XMLElem toXML(const std::string& name, const AntennaParameters &ap,
-            XMLElem parent = NULL);
-    XMLElem toXML(const VectorParameters& obj, XMLElem parent = NULL);
+            XMLElem parent = nullptr);
+    XMLElem toXML(const VectorParameters& obj, XMLElem parent = nullptr);
 
     XMLElem areaLineDirectionParametersToXML(const std::string& name,
             const AreaDirectionParameters& obj,
-            XMLElem parent = NULL);
+            XMLElem parent = nullptr);
     XMLElem areaSampleDirectionParametersToXML(const std::string& name,
             const AreaDirectionParameters& obj,
-            XMLElem parent = NULL);
+            XMLElem parent = nullptr);
 
     // Read functions
     void fromXML(const XMLElem dataXML, Data& obj);

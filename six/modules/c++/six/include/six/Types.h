@@ -346,13 +346,13 @@ struct LUT
 
     unsigned char* getTable()
     {
-        return table.empty() ? NULL : &table[0];
+        return table.empty() ? nullptr : table.data();
     }
 
     const unsigned char* getTable() const
     {
 
-        return table.empty() ? NULL : &table[0];
+        return table.empty() ? nullptr : table.data();
     }
 
     virtual LUT* clone() const

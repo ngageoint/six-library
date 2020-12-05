@@ -913,16 +913,16 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         const XMLElem errorStatsXML,
         ErrorStatistics* errorStatistics) const
 {
-    XMLElem tmpElem = NULL;
+    XMLElem tmpElem = nullptr;
     //optional
 
     //! version specific CompositeSCP parsing
     parseCompositeSCPFromXML(errorStatsXML, errorStatistics);
 
-    XMLElem posVelErrXML = NULL;
-    XMLElem radarSensorXML = NULL;
-    XMLElem tropoErrorXML = NULL;
-    XMLElem ionoErrorXML = NULL;
+    XMLElem posVelErrXML = nullptr;
+    XMLElem radarSensorXML = nullptr;
+    XMLElem tropoErrorXML = nullptr;
+    XMLElem ionoErrorXML = nullptr;
 
     tmpElem = getOptional(errorStatsXML, "Components");
     if (tmpElem)
@@ -959,7 +959,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         }
     }
 
-    if (posVelErrXML != NULL)
+    if (posVelErrXML != nullptr)
     {
         errorStatistics->components->posVelError->frame
                 = six::toType<FrameType>(getFirstAndOnly(
@@ -1024,7 +1024,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         }
     }
 
-    if (radarSensorXML != NULL)
+    if (radarSensorXML != nullptr)
     {
         parseDouble(getFirstAndOnly(radarSensorXML, "RangeBias"),
                     errorStatistics->components->radarSensor->rangeBias);
@@ -1053,7 +1053,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         }
     }
 
-    if (tropoErrorXML != NULL)
+    if (tropoErrorXML != nullptr)
     {
         tmpElem = getOptional(tropoErrorXML, "TropoRangeVertical");
         if (tmpElem)
@@ -1079,7 +1079,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         }
     }
 
-    if (ionoErrorXML != NULL)
+    if (ionoErrorXML != nullptr)
     {
         tmpElem = getOptional(ionoErrorXML, "IonoRangeVertical");
         if (tmpElem)

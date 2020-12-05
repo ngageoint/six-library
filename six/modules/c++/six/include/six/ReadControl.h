@@ -56,10 +56,10 @@ public:
 
     //!  Constructor.  Null-set the current container reference
     ReadControl() :
-        mContainer(NULL), mLog(NULL), mOwnLog(false), mXMLRegistry(NULL)
+        mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
-        setLogger(NULL);
-        setXMLControlRegistry(NULL);
+        setLogger(nullptr);
+        setXMLControlRegistry(nullptr);
     }
 
     //!  Destructor doesnt release anything

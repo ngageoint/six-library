@@ -121,7 +121,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
     try
     {
         // Check for the first SICD DES and parse it
-        xml::lite::Document* sicdXML = NULL;
+        xml::lite::Document* sicdXML = nullptr;
         xml::lite::MinidomParser domParser;
 
         const std::vector< csm::Des>& desList(isd.fileDess());
@@ -174,7 +174,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
             }
         }
 
-        if (sicdXML == NULL)
+        if (sicdXML == nullptr)
         {
             throw csm::Error(csm::Error::UNKNOWN_ERROR,
                                "Not a SICD",

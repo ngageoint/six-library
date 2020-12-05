@@ -96,9 +96,9 @@ VBM::VectorBasedParameters::VectorBasedParameters(
     tropoSrp(tropoSrpEnabled ? 0.0 : six::Init::undefined<double>()),
     ampSF(ampSFEnabled ? 0.0 : six::Init::undefined<double>()),
     frequencyParameters(domainType == cphd::DomainType::FX ?
-            new FrequencyParameters() : NULL),
+            new FrequencyParameters() : nullptr),
     toaParameters(domainType == cphd::DomainType::TOA ?
-            new TOAParameters() : NULL)
+            new TOAParameters() : nullptr)
 {
 }
 

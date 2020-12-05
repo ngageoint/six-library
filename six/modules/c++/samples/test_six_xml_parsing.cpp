@@ -132,7 +132,7 @@ void XMLVerifier::verify(const std::string& pathname) const
         mSchemaPaths,
         mLog));
 
-    if (data.get() == NULL || readData.get() == NULL || *data != *readData)
+    if (data.get() == nullptr || readData.get() == nullptr || *data != *readData)
     {
         throw except::Exception(Ctxt(
             "Round-tripped Data does not match for '" + pathname + "'"));

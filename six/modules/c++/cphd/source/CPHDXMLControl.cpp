@@ -39,7 +39,7 @@ namespace cphd
 {
 
 CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog) :
-    mLog(NULL),
+    mLog(nullptr),
     mOwnLog(false)
 {
     setLogger(log, ownLog);
@@ -58,7 +58,7 @@ void CPHDXMLControl::setLogger(logging::Logger* log, bool own)
     if (mLog && mOwnLog && log != mLog)
     {
         delete mLog;
-        mLog = NULL;
+        mLog = nullptr;
     }
 
     if (log)

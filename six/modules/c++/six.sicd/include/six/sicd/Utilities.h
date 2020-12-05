@@ -137,7 +137,7 @@ public:
      * \param[out] noiseMesh Noise mesh
      * \param[out] scalarMesh Optional scalar mesh - note that if the
      *             mesh is not present within the SICD, scalarMesh
-     *             will be NULL.
+     *             will be nullptr.
      *
      * \throws See six::sicd::Utilities::getComplexData and
      *           six::sicd::Utilities::getWidebandData
@@ -396,7 +396,7 @@ public:
      * \param data Representation of SICD data
      * \param schemaPaths Schema paths.  If empty, the SIX_SCHEMA_PATH
      * environment variable will be used.
-     * \param logger Logger.  If NULL, no logger will be used.
+     * \param logger Logger.  If nullptr, no logger will be used.
      *
      * \return XML string representation of 'data'
      */
@@ -404,7 +404,7 @@ public:
             const ComplexData& data,
             const std::vector<std::string>& schemaPaths =
                     std::vector<std::string>(),
-            logging::Logger* logger = NULL);
+            logging::Logger* logger = nullptr);
 
     /*!
      * Create a fake SICD that's populated enough for
