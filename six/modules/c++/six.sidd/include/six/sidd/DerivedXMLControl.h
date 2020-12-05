@@ -41,7 +41,7 @@ namespace sidd
 class DerivedXMLControl : public XMLControl
 {
 public:
-    DerivedXMLControl(logging::Logger* log = NULL, bool ownLog = false);
+    DerivedXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
 
 protected:
     /*!

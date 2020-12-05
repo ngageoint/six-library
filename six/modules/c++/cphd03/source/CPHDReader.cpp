@@ -61,7 +61,7 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(*inStream, xmlSize);
 
-    if (logger.get() == NULL)
+    if (logger.get() == nullptr)
     {
         logger.reset(new logging::NullLogger());
     }

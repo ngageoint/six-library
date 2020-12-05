@@ -421,7 +421,7 @@ void PVPBlock::getPVPdata(size_t channel,
     data.resize(getPVPsize(channel));
     std::fill(data.begin(), data.end(), static_cast<std::byte>(0));
 
-    getPVPdata(channel, &data[0]);
+    getPVPdata(channel, data.data());
 }
 
 void PVPBlock::getPVPdata(size_t channel,
@@ -476,7 +476,7 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
         readBuf.resize(getPVPsize(ii));
         if (!readBuf.empty())
         {
-            std::byte* const buf = reinterpret_cast<std::byte*>(&readBuf[0]);
+            auto const buf = readBuf.data();
             ptrdiff_t bytesThisRead = inStream.read(buf, readBuf.size());
             if (bytesThisRead == io::InputStream::IS_EOF)
             {

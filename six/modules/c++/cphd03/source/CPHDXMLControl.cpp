@@ -418,21 +418,21 @@ XMLElem CPHDXMLControl::toXML(const VectorParameters& vp, XMLElem parent)
     }
 
     // Error check the conditional elements
-    if (vp.fxParameters.get() == NULL && vp.toaParameters.get() == NULL)
+    if (vp.fxParameters.get() == nullptr && vp.toaParameters.get() == nullptr)
     {
         throw except::Exception(Ctxt(
                 "VectorParameters: either FxParameters or TOAParameters must "
                 "be present"));
     }
 
-    if (vp.fxParameters.get() != NULL  && vp.toaParameters .get()!= NULL)
+    if (vp.fxParameters.get() != nullptr  && vp.toaParameters .get()!= nullptr)
     {
         throw except::Exception(Ctxt(
                 "VectorParameters: FxParameters and TOAParameters cannot both "
                 "be present"));
     }
 
-    if (vp.fxParameters.get() != NULL)
+    if (vp.fxParameters.get() != nullptr)
     {
         XMLElem fxParametersXML = newElement("FxParameters", vectorParametersXML);
         createInt("Fx0", vp.fxParameters->Fx0, fxParametersXML);
@@ -441,7 +441,7 @@ XMLElem CPHDXMLControl::toXML(const VectorParameters& vp, XMLElem parent)
         createInt("Fx2", vp.fxParameters->Fx2, fxParametersXML);
     }
 
-    if (vp.toaParameters.get() != NULL)
+    if (vp.toaParameters.get() != nullptr)
     {
         XMLElem toaParametersXML = newElement("TOAParameters", vectorParametersXML);
         createInt("DeltaTOA0", vp.toaParameters->deltaTOA0, toaParametersXML);
@@ -508,7 +508,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc
     fromXML(channelXML, cphd03->channel);
     fromXML(srpXML, cphd03->srp);
 
-    if (antennaXML != NULL)
+    if (antennaXML != nullptr)
     {
         cphd03->antenna.reset(new Antenna());
         fromXML(antennaXML, *cphd03->antenna);
@@ -547,7 +547,7 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
 
 void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
 {
-    XMLElem tmpElem = NULL;
+    XMLElem tmpElem = nullptr;
 
     global.domainType = cphd::DomainType(getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
     global.phaseSGN   = cphd::PhaseSGN(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
@@ -879,21 +879,21 @@ void CPHDXMLControl::fromXML(const XMLElem vectorParametersXML,
     XMLElem FxParametersXML = getOptional(vectorParametersXML, "FxParameters");
     XMLElem TOAParametersXML = getOptional(vectorParametersXML, "TOAParameters");
 
-    if (FxParametersXML == NULL  && TOAParametersXML == NULL)
+    if (FxParametersXML == nullptr  && TOAParametersXML == nullptr)
     {
         throw except::Exception(Ctxt(
                 "VectorParameters: either FxParameters or TOAParameters must "
                 "be present"));
     }
 
-    if (FxParametersXML != NULL  && TOAParametersXML != NULL)
+    if (FxParametersXML != nullptr  && TOAParametersXML != nullptr)
     {
         throw except::Exception(Ctxt(
                 "VectorParameters: FxParameters and TOAParameters cannot both "
                 "be present"));
     }
 
-    if (FxParametersXML != NULL)
+    if (FxParametersXML != nullptr)
     {
         vp.fxParameters.reset(new FxParameters());
         parseInt(getFirstAndOnly(FxParametersXML, "Fx0"), vp.fxParameters->Fx0);
@@ -902,7 +902,7 @@ void CPHDXMLControl::fromXML(const XMLElem vectorParametersXML,
         parseInt(getFirstAndOnly(FxParametersXML, "Fx2"), vp.fxParameters->Fx2);
     }
 
-    if (TOAParametersXML != NULL)
+    if (TOAParametersXML != nullptr)
     {
         vp.toaParameters.reset(new TOAParameters());
         parseInt(getFirstAndOnly(TOAParametersXML, "DeltaTOA0"), vp.toaParameters->deltaTOA0);

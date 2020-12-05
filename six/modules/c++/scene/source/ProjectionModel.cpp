@@ -220,7 +220,7 @@ ProjectionModel::imageToScene(const types::RowCol<double>& imageGridPoint,
     const double timeCOA = mTimeCOAPoly(imageGridPoint.row,
                                         imageGridPoint.col);
 
-    if (oTimeCOA != NULL)
+    if (oTimeCOA != nullptr)
     {
         *oTimeCOA = timeCOA;
     }

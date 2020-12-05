@@ -95,7 +95,7 @@ int main(int argc, char** argv)
 
             // Read the DES
             xmlVec.resize(size);
-            char* const xml = xmlVec.empty() ? NULL : &xmlVec[0];
+            char* const xml = xmlVec.empty() ? nullptr : xmlVec.data();
             deReader.read(xml, size);
 
             // Parse it with xml::lite

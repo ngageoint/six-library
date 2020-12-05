@@ -122,17 +122,17 @@ public:
      *  \param scenePoint A scene (ground) point in 3-space
      *  \param delta Delta values to apply for the adjustable parameters
      *  \param oTimeCOA [output] An optional ptr to the timeCOA,
-     *  which, if NULL is not set.
+     *  which, if nullptr is not set.
      *  \return An continuous surface image point
      *
      */
     types::RowCol<double> sceneToImage(const Vector3& scenePoint,
                                        const AdjustableParams& delta,
-                                       double* oTimeCOA = NULL) const;
+                                       double* oTimeCOA = nullptr) const;
 
     // Same as above but with a delta of all 0's
     types::RowCol<double> sceneToImage(const Vector3& scenePoint,
-                                       double* oTimeCOA = NULL) const
+                                       double* oTimeCOA = nullptr) const
     {
         return sceneToImage(scenePoint, AdjustableParams(), oTimeCOA);
     }
@@ -154,13 +154,13 @@ public:
                          const Vector3& groundRefPoint,
                          const Vector3& groundPlaneNormal,
                          const AdjustableParams& delta,
-                         double* oTimeCOA = NULL) const;
+                         double* oTimeCOA = nullptr) const;
 
     // Same as above but with a delta of all 0's
     Vector3 imageToScene(const types::RowCol<double>& imageGridPoint,
                          const Vector3& groundRefPoint,
                          const Vector3& groundPlaneNormal,
-                         double* oTimeCOA = NULL) const
+                         double* oTimeCOA = nullptr) const
     {
         return imageToScene(imageGridPoint,
                             groundRefPoint,

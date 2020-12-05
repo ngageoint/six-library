@@ -48,7 +48,7 @@ void confirmNonNull(const SmartPtrT& ptr,
                     const std::string& name,
                     const std::string& suffix = "")
 {
-    if (ptr.get() == NULL)
+    if (ptr.get() == nullptr)
     {
         std::string msg = name + " is required";
         if (!suffix.empty())
@@ -1043,7 +1043,7 @@ XMLElem DerivedXMLParser200::convertLookupTableToXML(
     bool ok = false;
     if (table.predefined.get())
     {
-        if (table.custom.get() == NULL)
+        if (table.custom.get() == nullptr)
         {
             ok = true;
             XMLElem predefElem = newElement("Predefined", lookupElem);
@@ -1202,7 +1202,7 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
     bool ok = false;
     if (sharpness.modularTransferFunctionCompensation.get())
     {
-        if (sharpness.modularTransferFunctionEnhancement.get() == NULL)
+        if (sharpness.modularTransferFunctionEnhancement.get() == nullptr)
         {
             ok = true;
             convertFilterToXML("ModularTransferFunctionCompensation",
@@ -1345,7 +1345,7 @@ XMLElem DerivedXMLParser200::convertKernelToXML(
     bool ok = false;
     if (kernel.predefined.get())
     {
-        if (kernel.custom.get() == NULL)
+        if (kernel.custom.get() == nullptr)
         {
             ok = true;
             convertPredefinedFilterToXML(*kernel.predefined, kernelElem);
@@ -1398,7 +1398,7 @@ XMLElem DerivedXMLParser200::convertBankToXML(const Filter::Bank& bank,
     bool ok = false;
     if (bank.predefined.get())
     {
-        if (bank.custom.get() == NULL)
+        if (bank.custom.get() == nullptr)
         {
             ok = true;
             convertPredefinedFilterToXML(*bank.predefined, bankElem);
@@ -1455,7 +1455,7 @@ XMLElem DerivedXMLParser200::convertFilterToXML(const std::string& name,
     bool ok = false;
     if (filter.filterKernel.get())
     {
-        if (filter.filterBank.get() == NULL)
+        if (filter.filterBank.get() == nullptr)
         {
             ok = true;
             convertKernelToXML(*filter.filterKernel, filterElem);
@@ -1651,7 +1651,7 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
 
         // create Geometry -- optional
         Geometry* geom = collection->geometry.get();
-        if (geom != NULL)
+        if (geom != nullptr)
         {
             XMLElem geometryElem = newElement("Geometry", collectionElem);
 
@@ -1680,7 +1680,7 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
 
         // create Phenomenology -- optional
         Phenomenology* phenom = collection->phenomenology.get();
-        if (phenom != NULL)
+        if (phenom != nullptr)
         {
             XMLElem phenomenologyElem = newElement("Phenomenology",
                 collectionElem);
@@ -1920,7 +1920,7 @@ void DerivedXMLParser200::parseGeoDataFromXML(
             geoData->imageCorners);
 
     XMLElem tmpElem = getOptional(geoDataXML, "ValidData");
-    if (tmpElem != NULL)
+    if (tmpElem != nullptr)
     {
         common().parseLatLons(tmpElem, "Vertex", geoData->validData);
     }

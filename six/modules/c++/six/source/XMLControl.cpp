@@ -29,7 +29,7 @@ namespace fs = sys::Filesystem;
 namespace six
 {
 XMLControl::XMLControl(logging::Logger* log, bool ownLog) :
-    mLog(NULL),
+    mLog(nullptr),
     mOwnLog(false)
 {
     setLogger(log, ownLog);
@@ -152,7 +152,7 @@ void XMLControl::setLogger(logging::Logger* log, bool own)
     if (mLog && mOwnLog && log != mLog)
     {
         delete mLog;
-        mLog = NULL;
+        mLog = nullptr;
     }
 
     if (log)

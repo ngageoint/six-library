@@ -90,9 +90,9 @@ mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT()
 {
     if (mVersion == "1.0.0")
     {
-        if (display->remapInformation.get() == NULL)
+        if (display->remapInformation.get() == nullptr)
         {
-            throw except::Exception(Ctxt("Display.RemapInformation is NULL"));
+            throw except::Exception(Ctxt("Display.RemapInformation is nullptr"));
         }
         return display->remapInformation->remapLUT;
     }
@@ -155,7 +155,7 @@ bool DerivedData::operator==(const DerivedData& rhs) const
 bool DerivedData::equalTo(const Data& rhs) const
 {
     const DerivedData* data = dynamic_cast<const DerivedData*>(&rhs);
-    if (data != NULL)
+    if (data != nullptr)
     {
         return *this == *data;
     }

@@ -155,7 +155,7 @@ private:
  *
  */
 std::string toXMLString(const Data* data,
-                        const XMLControlRegistry *xmlRegistry = NULL);
+                        const XMLControlRegistry *xmlRegistry = nullptr);
 
 /*!
  *  Additionally performs schema validation --
@@ -165,7 +165,7 @@ std::string toValidXMLString(
         const Data* data,
         const std::vector<std::string>& schemaPaths,
         logging::Logger* log,
-        const XMLControlRegistry *xmlRegistry = NULL);
+        const XMLControlRegistry *xmlRegistry = nullptr);
 
 
 //!  Singleton declaration of our XMLControlRegistry

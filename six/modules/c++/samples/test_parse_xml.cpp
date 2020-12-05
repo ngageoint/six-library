@@ -46,7 +46,7 @@ std::string generateKML(six::Data* data, const sys::Path& outputDir);
 void preview(std::string outputFile)
 {
     // ShellExecute might get assigned to ShellExecuteW if we arent careful
-    ShellExecuteA(NULL, "open", outputFile.c_str(), NULL, NULL, SW_SHOWDEFAULT);
+    ShellExecuteA(nullptr, "open", outputFile.c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
 }
 #   else
 // TODO Could open this using EDITOR or html view

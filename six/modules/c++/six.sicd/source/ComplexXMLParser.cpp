@@ -68,7 +68,7 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
     XMLElem pfaXML             = getOptional(root, "PFA");
     XMLElem rmaXML             = getOptional(root, "RMA");
     XMLElem rgAzCompXML        = getOptional(root, "RGAZCOMP");
-    if (rgAzCompXML != NULL)
+    if (rgAzCompXML != nullptr)
     {
         // In 0.5, the element was in all caps and contained additional
         // elements that disappeared in 1.0.  For the time being at least,
@@ -81,7 +81,7 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
     common().parseCollectionInformationFromXML(collectionInfoXML,
             sicd->collectionInformation.get());
 
-    if (imageCreationXML != NULL)
+    if (imageCreationXML != nullptr)
     {
         builder.addImageCreation();
         parseImageCreationFromXML(imageCreationXML, sicd->imageCreation.get());
@@ -96,43 +96,43 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
     parseImageFormationFromXML(imageFormationXML, *sicd->radarCollection, sicd->imageFormation.get());
     parseSCPCOAFromXML(scpcoaXML, sicd->scpcoa.get());
 
-    if (radiometricXML != NULL)
+    if (radiometricXML != nullptr)
     {
         builder.addRadiometric();
         common().parseRadiometryFromXML(radiometricXML,
                                        sicd->radiometric.get());
     }
 
-    if (antennaXML != NULL)
+    if (antennaXML != nullptr)
     {
         builder.addAntenna();
         parseAntennaFromXML(antennaXML, sicd->antenna.get());
     }
 
-    if (errorStatisticsXML != NULL)
+    if (errorStatisticsXML != nullptr)
     {
         builder.addErrorStatistics();
         common().parseErrorStatisticsFromXML(errorStatisticsXML,
                                             sicd->errorStatistics.get());
     }
 
-    if (matchInfoXML != NULL)
+    if (matchInfoXML != nullptr)
     {
         builder.addMatchInformation();
         parseMatchInformationFromXML(matchInfoXML, sicd->matchInformation.get());
     }
 
-    if (pfaXML != NULL)
+    if (pfaXML != nullptr)
     {
         sicd->pfa.reset(new PFA());
         parsePFAFromXML(pfaXML, sicd->pfa.get());
     }
-    if (rmaXML != NULL)
+    if (rmaXML != nullptr)
     {
         sicd->rma.reset(new RMA());
         parseRMAFromXML(rmaXML, sicd->rma.get());
     }
-    if (rgAzCompXML != NULL)
+    if (rgAzCompXML != nullptr)
     {
         sicd->rgAzComp.reset(new RgAzComp());
         parseRgAzCompFromXML(rgAzCompXML, sicd->rgAzComp.get());
@@ -449,7 +449,7 @@ XMLElem ComplexXMLParser::createTxSequence(const RadarCollection* radar,
 {
     if (radar->txSequence.empty())
     {
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -483,7 +483,7 @@ XMLElem ComplexXMLParser::createWaveform(const RadarCollection* radar,
 {
     if (radar->waveform.empty())
     {
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -528,9 +528,9 @@ XMLElem ComplexXMLParser::createWaveform(const RadarCollection* radar,
 XMLElem ComplexXMLParser::createArea(const RadarCollection* radar,
                                      XMLElem parent) const
 {
-    if (radar->area.get() == NULL)
+    if (radar->area.get() == nullptr)
     {
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -927,7 +927,7 @@ void ComplexXMLParser::parseImageDataFromXML(
 
     XMLElem ampTableXML = getOptional(imageDataXML, "AmpTable");
 
-    if (ampTableXML != NULL)
+    if (ampTableXML != nullptr)
     {
         std::vector < XMLElem > ampsXML;
         ampTableXML->getElementsByTagName("Amplitude", ampsXML);
@@ -994,7 +994,7 @@ void ComplexXMLParser::parseGeoDataFromXML(
                    geoData->imageCorners);
 
     tmpElem = getOptional(geoDataXML, "ValidData");
-    if (tmpElem != NULL)
+    if (tmpElem != nullptr)
     {
         common().parseLatLons(tmpElem, "Vertex", geoData->validData);
     }
@@ -1190,8 +1190,8 @@ void ComplexXMLParser::parseImageFormationFromXML(
     ImageFormation *imageFormation) const
 {
     XMLElem tmpElem = getOptional(imageFormationXML, "SegmentIdentifier");
-    if (radarCollection.area.get() != NULL &&
-        radarCollection.area->plane.get() != NULL &&
+    if (radarCollection.area.get() != nullptr &&
+        radarCollection.area->plane.get() != nullptr &&
         !radarCollection.area->plane->segmentList.empty() &&
         !tmpElem)
     {
@@ -1715,7 +1715,7 @@ void ComplexXMLParser::parseAreaFromXML(
                   area->plane->yDirection->first);
 
         XMLElem segmentListXML = getOptional(planeXML, "SegmentList");
-        if (segmentListXML != NULL)
+        if (segmentListXML != nullptr)
         {
             std::vector<XMLElem> segmentsXML;
             segmentListXML->getElementsByTagName("Segment", segmentsXML);

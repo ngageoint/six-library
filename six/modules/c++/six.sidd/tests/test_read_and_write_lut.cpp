@@ -152,8 +152,8 @@ nitf::LookupTable readLookupTable(const std::string& pathname)
 
 bool operator==(const nitf::LookupTable& lhs, const nitf::LookupTable& rhs)
 {
-    if ((lhs.getTable() == NULL && rhs.getTable() != NULL) ||
-            (lhs.getTable() != NULL && rhs.getTable() == NULL))
+    if ((lhs.getTable() == nullptr && rhs.getTable() != nullptr) ||
+            (lhs.getTable() != nullptr && rhs.getTable() == nullptr))
     {
         return false;
     }
@@ -161,7 +161,7 @@ bool operator==(const nitf::LookupTable& lhs, const nitf::LookupTable& rhs)
     bool isEqual = (lhs.getTables() == rhs.getTables() &&
         lhs.getEntries() == rhs.getEntries());
 
-    if (lhs.getTable() == NULL && rhs.getTable() == NULL)
+    if (lhs.getTable() == nullptr && rhs.getTable() == nullptr)
     {
         isEqual = isEqual && true;
     }
@@ -195,7 +195,7 @@ mem::ScopedCopyablePtr<six::LUT> readLUT(const std::string& pathname)
     std::shared_ptr<six::Container> container = reader.getContainer();
     six::Data* const data = container->getData(0);
     mem::ScopedCopyablePtr<six::LUT> lut = data->getDisplayLUT();
-    if (lut.get() == NULL)
+    if (lut.get() == nullptr)
     {
         return mem::ScopedCopyablePtr<six::LUT>();
     }

@@ -32,13 +32,13 @@ class ComplexXMLParser040 : public ComplexXMLParser04x
 {
 public:
     ComplexXMLParser040(const std::string& version,
-                        logging::Logger* log = NULL,
+                        logging::Logger* log = nullptr,
                         bool ownLog = false);
 
 protected:
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, 
-                                     XMLElem parent = NULL) const;
+                                     XMLElem parent = nullptr) const;
     virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const;
 
     virtual void convertDRateSFPolyToXML(const INCA* inca, XMLElem incaElem) const;

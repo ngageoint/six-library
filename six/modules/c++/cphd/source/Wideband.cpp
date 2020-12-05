@@ -661,7 +661,7 @@ void Wideband::read(size_t channel,
             cphd::byteSwapAndScale(scratch.data,
                                    mElementSize,
                                    dims,
-                                   &vectorScaleFactors[0],
+                                   vectorScaleFactors.data(),
                                    numThreads,
                                    data.data);
         }
@@ -671,7 +671,7 @@ void Wideband::read(size_t channel,
             scale(scratch.data,
                   mElementSize,
                   dims,
-                  &vectorScaleFactors[0],
+                  vectorScaleFactors.data(),
                   numThreads,
                   data.data);
         }

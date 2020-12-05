@@ -116,8 +116,8 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
     createDouble("MinProc", imageFormation->txFrequencyProcMin, txFreqXML);
     createDouble("MaxProc", imageFormation->txFrequencyProcMax, txFreqXML);
 
-    if (radarCollection.area.get() != NULL &&
-        radarCollection.area->plane.get() != NULL &&
+    if (radarCollection.area.get() != nullptr &&
+        radarCollection.area->plane.get() != nullptr &&
         !radarCollection.area->plane->segmentList.empty() &&
         imageFormation->segmentIdentifier.empty())
     {
@@ -195,8 +195,8 @@ XMLElem ComplexXMLParser10x::convertImageFormationAlgoToXML(
     else if (!pfa && !rma && !rgAzComp)
     {
         //! This will occur when set to OTHER. We do not want to include
-        //  a specialized image formation algorithm so we return NULL.
-        return NULL;
+        //  a specialized image formation algorithm so we return nullptr.
+        return nullptr;
     }
     else
     {
@@ -268,7 +268,7 @@ XMLElem ComplexXMLParser10x::convertHPBWToXML(
     XMLElem) const
 {
     //! this field was deprecated in 1.0.0
-    return NULL;
+    return nullptr;
 }
 
 XMLElem ComplexXMLParser10x::convertAntennaParamArrayToXML(

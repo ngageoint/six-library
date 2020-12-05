@@ -223,16 +223,16 @@ struct RMA
     RMAlgoType algoType;
 
     //! (Choice) Parameters for range migration with along track motion
-    //  compensation -- if this is present, rmcr & inca should be NULL.
+    //  compensation -- if this is present, rmcr & inca should be nullptr.
     mem::ScopedCopyablePtr<RMAT> rmat;
 
     //! (Choice) Parameters for range migration with cross range motion
-    //  compensation -- if this is present, rmat & inca should be NULL.
+    //  compensation -- if this is present, rmat & inca should be nullptr.
     //  added in version 1.0.0
     mem::ScopedCopyablePtr<RMCR> rmcr;
 
     //! (Choice) Parameter for imaging near closest approach image
-    //  description -- if this is present, rmat & rmcr should be NULL.
+    //  description -- if this is present, rmat & rmcr should be nullptr.
     mem::ScopedCopyablePtr<INCA> inca;
 
     bool operator==(const RMA& rhs) const

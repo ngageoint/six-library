@@ -130,7 +130,7 @@ int64_t VectorParameters::ampSFOffset() const
 int64_t VectorParameters::Fx0Offset() const
 {
     int64_t pos = -1;
-    if (fxParameters.get() != NULL)
+    if (fxParameters.get() != nullptr)
     {
         pos = srpPosOffset() + srpPos;
         if (!six::Init::isUndefined(tropoSRP))
@@ -178,7 +178,7 @@ int64_t VectorParameters::Fx2Offset() const
 int64_t VectorParameters::deltaTOA0Offset() const
 {
     int64_t pos = -1;
-    if (toaParameters.get() != NULL)
+    if (toaParameters.get() != nullptr)
     {
         pos = srpPosOffset() + srpPos;
         if (!six::Init::isUndefined(tropoSRP))

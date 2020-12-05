@@ -331,16 +331,16 @@ private:
                     imageBlocker->getNumBytesRequired(0, mDims.row, 1);
             blockedImage.resize(numBlockedPixels);
 
-            imageBlocker->block(&mBigEndianImage[0],
+            imageBlocker->block(mBigEndianImage.data(),
                                 0,
                                 mDims.row,
-                                &blockedImage[0]);
+                                blockedImage.data());
 
-            retImage = &blockedImage[0];
+            retImage = blockedImage.data();
         }
         else
         {
-            retImage = &mBigEndianImage[0];
+            retImage = mBigEndianImage.data();
         }
 
         return retImage;

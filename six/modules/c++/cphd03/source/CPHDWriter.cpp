@@ -210,7 +210,7 @@ void CPHDWriter::writeMetadata(const VBM& vbm,
         vbm.getVBMdata(ii, vbmData);
         if (!vbmData.empty())
         {
-            writeVBMData(&vbmData[0], ii);
+            writeVBMData(vbmData.data(), ii);
         }
     }
 }

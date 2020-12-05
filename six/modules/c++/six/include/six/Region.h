@@ -34,9 +34,9 @@ namespace six
  *  used for both complex and derived products.  When you initialize
  *  this object, you can set your own malloc'ed work buffer.  When you
  *  request a read from ReadControl, we check your mBuffer value to
- *  see if you set it to a non-NULL address.  If so, we assume that you
+ *  see if you set it to a non-nullptr address.  If so, we assume that you
  *  have created a properly sized buffer, and we will use that buffer
- *  for the request.  If you leave it NULL (the path of least resistance),
+ *  for the request.  If you leave it nullptr (the path of least resistance),
  *  we assume that you intend for us to allocate a properly sized rectangle
  *  before the buffer is filled with pixel data.
  *
@@ -52,9 +52,9 @@ class Region
     ptrdiff_t startCol;
     ptrdiff_t numCols;
 public:
-    //!  Constructor.  Sets params for full window size, and buffer is NULL
+    //!  Constructor.  Sets params for full window size, and buffer is nullptr
     Region() :
-        mBuffer(NULL), startRow(0), numRows(-1), startCol(0), numCols(-1)
+        mBuffer(nullptr), startRow(0), numRows(-1), startCol(0), numCols(-1)
     {
     }
 
@@ -142,10 +142,10 @@ public:
     }
 
     /*!
-     *  Get the buffer.  Before a read has been done, this may be NULL,
+     *  Get the buffer.  Before a read has been done, this may be nullptr,
      *  depending on if the user has initialized the buffer using the
      *  setBuffer() function.  After a read has been done, this value
-     *  should be non-NULL.  The work buffer must be deallocated by the
+     *  should be non-nullptr.  The work buffer must be deallocated by the
      *  program, since the Region does not currently do so.
      */
     UByte* getBuffer()
