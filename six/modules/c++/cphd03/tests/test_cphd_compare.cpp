@@ -23,6 +23,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <thread>
 
 #include <cphd03/CPHDReader.h>
 #include <cphd/Wideband.h>

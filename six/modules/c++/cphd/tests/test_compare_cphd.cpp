@@ -23,6 +23,8 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <thread>
+
 #include <logging/NullLogger.h>
 #include <cli/Value.h>
 #include <cli/ArgumentParser.h>

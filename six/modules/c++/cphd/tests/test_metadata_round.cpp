@@ -22,6 +22,7 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <thread>
 
 #include <cli/Value.h>
 #include <cli/ArgumentParser.h>

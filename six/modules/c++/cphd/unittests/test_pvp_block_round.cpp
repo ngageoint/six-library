@@ -19,6 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <thread>
+
 #include <TestCase.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDWriter.h>
