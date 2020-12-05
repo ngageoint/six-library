@@ -37,7 +37,7 @@ void writeImage(nitf::ImageSegment &segment,
     nitf::SubWindow subWindow;
     unsigned int i;
     int padded;
-    uint8_t** buffer = NULL;
+    uint8_t** buffer = nullptr;
     uint32_t band;
     uint32_t * bandList;
 

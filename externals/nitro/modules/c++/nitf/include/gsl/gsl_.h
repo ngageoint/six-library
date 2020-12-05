@@ -99,7 +99,7 @@ namespace gsl
     template<typename T>
     inline span<T> make_span(T* d, size_t sz)
     {
-      return span<T>(d, sz);
+        return span<T>(d, sz);
     }
 
     template<typename TContainer>
