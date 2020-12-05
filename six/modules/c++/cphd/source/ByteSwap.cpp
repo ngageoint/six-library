@@ -290,10 +290,10 @@ void byteSwapAndPromote(const void* input,
     switch (elementSize)
     {
     case 2:
-        ::byteSwapAndPromote<sys::Int8_T>(input, dims, numThreads, output);
+        ::byteSwapAndPromote<int8_t>(input, dims, numThreads, output);
         break;
     case 4:
-        ::byteSwapAndPromote<sys::Int16_T>(input, dims, numThreads, output);
+        ::byteSwapAndPromote<int16_t>(input, dims, numThreads, output);
         break;
     case 8:
         ::byteSwapAndPromote<float>(input, dims, numThreads, output);
@@ -314,11 +314,11 @@ void byteSwapAndScale(const void* input,
     switch (elementSize)
     {
     case 2:
-        ::byteSwapAndScale<sys::Int8_T>(input, dims, scaleFactors, numThreads,
+        ::byteSwapAndScale<int8_t>(input, dims, scaleFactors, numThreads,
                                         output);
         break;
     case 4:
-        ::byteSwapAndScale<sys::Int16_T>(input, dims, scaleFactors, numThreads,
+        ::byteSwapAndScale<int16_t>(input, dims, scaleFactors, numThreads,
                                          output);
         break;
     case 8:

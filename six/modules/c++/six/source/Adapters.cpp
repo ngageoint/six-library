@@ -56,7 +56,7 @@ extern "C" NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
 {
     size_t rowSize;
-    sys::Uint64_T off;
+    uint64_t off;
     UByte* rowCopy;
     unsigned int i;
 

@@ -55,7 +55,7 @@ PositionalAccuracy::PositionalAccuracy() :
 }
 
 DigitalElevationData::DigitalElevationData() :
-    nullValue(six::Init::undefined<sys::Int64_T>())
+    nullValue(six::Init::undefined<int64_t>())
 {
 }
 }

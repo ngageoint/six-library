@@ -63,7 +63,7 @@ public:
     /*!
      *  Init the GeoTIFF writer.  Throws if we are a SICD container
      */
-    virtual void initialize(mem::SharedPtr<Container> container);
+    virtual void initialize(std::shared_ptr<Container> container);
 
     using WriteControl::save;
 

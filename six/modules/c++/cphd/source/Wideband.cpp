@@ -152,10 +152,10 @@ void promote(const void* input,
     switch (elementSize)
     {
     case 2:
-        promote<sys::Int8_T>(input, dims, numThreads, output);
+        promote<int8_t>(input, dims, numThreads, output);
         break;
     case 4:
-        promote<sys::Int16_T>(input, dims, numThreads, output);
+        promote<int16_t>(input, dims, numThreads, output);
         break;
     case 8:
         promote<float>(input, dims, numThreads, output);
@@ -216,10 +216,10 @@ void scale(const void* input,
     switch (elementSize)
     {
     case 2:
-        scale<sys::Int8_T>(input, dims, scaleFactors, numThreads, output);
+        scale<int8_t>(input, dims, scaleFactors, numThreads, output);
         break;
     case 4:
-        scale<sys::Int16_T>(input, dims, scaleFactors, numThreads, output);
+        scale<int16_t>(input, dims, scaleFactors, numThreads, output);
         break;
     case 8:
         scale<float>(input, dims, scaleFactors, numThreads, output);

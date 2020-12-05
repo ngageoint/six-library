@@ -105,7 +105,7 @@ std::unique_ptr<six::sidd::DerivedData> createData()
 
 void write(const sys::Int16_T* data, bool useStream, bool byteSwap)
 {
-    mem::SharedPtr<six::Container> container(new six::Container(
+    std::shared_ptr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
     container->addData(createData().release());
 

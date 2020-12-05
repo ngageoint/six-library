@@ -37,13 +37,13 @@ NITFWriteControl::NITFWriteControl()
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator());
 }
 
-NITFWriteControl::NITFWriteControl(mem::SharedPtr<Container> container)
+NITFWriteControl::NITFWriteControl(std::shared_ptr<Container> container)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(container));
 }
 
 NITFWriteControl::NITFWriteControl(const six::Options& options,
-                                   mem::SharedPtr<Container> container,
+                                   std::shared_ptr<Container> container,
                                    const XMLControlRegistry* xmlRegistry)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(options, container));
@@ -62,12 +62,12 @@ void NITFWriteControl::setXMLControlRegistryImpl(
 }
 
 void NITFWriteControl::initialize(const six::Options& options,
-                                  mem::SharedPtr<Container> container)
+                                  std::shared_ptr<Container> container)
 {
     mNITFHeaderCreator->initialize(options, container);
 }
 
-void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
+void NITFWriteControl::initialize(std::shared_ptr<Container> container)
 {
     mNITFHeaderCreator->initialize(container);
 }
@@ -182,7 +182,7 @@ void NITFWriteControl::save(const SourceList& imageData,
     mWriter.prepareIO(outputFile, record);
     const bool doByteSwap = shouldByteSwap();
 
-    const std::vector<mem::SharedPtr<NITFImageInfo>>& infos = getInfos();
+    const std::vector<std::shared_ptr<NITFImageInfo>>& infos = getInfos();
     if (infos.size() != imageData.size())
     {
         std::ostringstream ostr;
@@ -209,7 +209,7 @@ void NITFWriteControl::save(const SourceList& imageData,
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            mem::SharedPtr<::nitf::WriteHandler> writeHandler(
+            std::shared_ptr<::nitf::WriteHandler> writeHandler(
                     new StreamWriteHandler(segmentInfo,
                                            imageData[i],
                                            numCols,
@@ -330,7 +330,7 @@ void NITFWriteControl::save(const BufferList& imageData,
             {
                 const NITFSegmentInfo segmentInfo = imageSegments[jj];
 
-                mem::SharedPtr<::nitf::WriteHandler> writeHandler(
+                std::shared_ptr<::nitf::WriteHandler> writeHandler(
                         new MemoryWriteHandler(segmentInfo,
                                                imageData[i],
                                                segmentInfo.firstRow,
@@ -440,7 +440,7 @@ void NITFWriteControl::addUserDefinedSubheader(
 }
 
 void NITFWriteControl::addAdditionalDES(
-        mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
+        std::shared_ptr<nitf::SegmentWriter> segmentWriter)
 {
     mNITFHeaderCreator->addAdditionalDES(segmentWriter);
 }

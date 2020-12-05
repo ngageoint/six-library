@@ -290,7 +290,7 @@ int main(int argc, char** argv)
         reader->setXMLControlRegistry(&xmlRegistry);
 
         reader->load(inputFile, schemaPaths);
-        mem::SharedPtr<six::Container> container(reader->getContainer());
+        std::shared_ptr<six::Container> container(reader->getContainer());
 
         // Update the XML to reflect the creation time as right now
         if (!retainDateTime)

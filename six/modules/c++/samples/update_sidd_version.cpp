@@ -68,7 +68,7 @@ void writeSidd(std::unique_ptr<six::Data>&& derivedData,
                const std::vector<std::string>& schemaPaths,
                const std::string& pathname)
 {
-    mem::SharedPtr<six::Container> container(
+    std::shared_ptr<six::Container> container(
             new six::Container(six::DataType::DERIVED));
     container->addData(std::move(derivedData));
 

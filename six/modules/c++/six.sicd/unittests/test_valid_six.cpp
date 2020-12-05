@@ -127,7 +127,7 @@ TEST_CASE(valid_six_50x50)
 
     std::vector<std::string> schemaPaths;
     reader.load(inputPathname, schemaPaths);
-    mem::SharedPtr<six::Container> container = reader.getContainer();
+    std::shared_ptr<six::Container> container = reader.getContainer();
     TEST_ASSERT_EQ(container->getNumData(), 1);
     for (size_t jj = 0; jj < container->getNumData(); ++jj)
     {

@@ -39,7 +39,7 @@ ByteProvider::ByteProvider(std::unique_ptr<six::NITFHeaderCreator>&& headerCreat
 }
 
 void ByteProvider::populateOptions(
-        mem::SharedPtr<Container> container,
+        std::shared_ptr<Container> container,
         size_t maxProductSize,
         size_t numRowsPerBlock,
         size_t numColsPerBlock,
@@ -113,7 +113,7 @@ void ByteProvider::populateInitArgs(
         size_t& numColsPerBlock)
 {
     // Sanity check the container
-    mem::SharedPtr<const Container> container = headerCreator.getContainer();
+    std::shared_ptr<const Container> container = headerCreator.getContainer();
 
     if (container->getNumData() == 0)
     {
@@ -164,16 +164,16 @@ void ByteProvider::populateInitArgs(
     const Options& options(headerCreator.getOptions());
     const Parameter zero(0);
 
-    numRowsPerBlock = static_cast<sys::Uint32_T>(
+    numRowsPerBlock = static_cast<uint32_t>(
             options.getParameter(NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
                                  zero));
 
-    numColsPerBlock = static_cast<sys::Uint32_T>(
+    numColsPerBlock = static_cast<uint32_t>(
             options.getParameter(NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
                                  zero));
 }
 
-void ByteProvider::initialize(mem::SharedPtr<Container> container,
+void ByteProvider::initialize(std::shared_ptr<Container> container,
                               const XMLControlRegistry& xmlRegistry,
                               const std::vector<std::string>& schemaPaths,
                               size_t maxProductSize,

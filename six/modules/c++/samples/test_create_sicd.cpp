@@ -234,7 +234,7 @@ int main(int argc, char** argv)
         data->imageFormation->txFrequencyProcMin = 0;
         data->imageFormation->txFrequencyProcMax = 0;
 
-        mem::SharedPtr<six::Container> container(new six::Container(
+        std::shared_ptr<six::Container> container(new six::Container(
                 six::DataType::COMPLEX));
         container->addData(std::move(scopedData));
 
