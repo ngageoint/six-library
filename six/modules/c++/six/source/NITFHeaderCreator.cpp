@@ -960,7 +960,7 @@ void NITFHeaderCreator::loadMeshSegment(
 
     // Add the data and writer for this segment
     nitf::SegmentMemorySource dataSource(
-            gsl::make_span(meshBuffer), 0, 0, true);
+            meshBuffer, 0, 0, true);
     std::shared_ptr<nitf::SegmentWriter> desWriter(
             new nitf::SegmentWriter(dataSource));
     addAdditionalDES(desWriter);

@@ -26,6 +26,8 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
+#include <thread>
+
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 #include <io/TempFile.h>
