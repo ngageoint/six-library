@@ -21,6 +21,7 @@
  */
 #ifndef __CPHD_WIDEBAND_H__
 #define __CPHD_WIDEBAND_H__
+#pragma once
 
 #include <complex>
 #include <string>
@@ -29,10 +30,11 @@
 #include <cphd/Utilities.h>
 
 #include <io/SeekableStreams.h>
-#include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
+
+#include <nitf/span.h>
 
 namespace cphd
 {
@@ -130,7 +132,7 @@ public:
      *  read all samples
      *  \param numThreads Number of threads to use for endian swapping if
      *  necessary
-     *  \param[in,out] data A pre allocated mem::BufferView that will hold the
+     *  \param[in,out] data A pre allocated std::span that will hold the
      * data read from the file.
      *
      *  \throw except::Exception If invalid channel, firstVector, lastVector,
@@ -144,7 +146,7 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              const mem::BufferView<std::byte>& data) const;
+              const std::span<std::byte>& data) const;
 
     /*!
      *  \func read
@@ -152,14 +154,14 @@ public:
      *  \brief Read the specified channel's compressed signal block
      *
      *  \param channel 0-based channel
-     *  \param[in,out] data A pre allocated mem::BufferView that will hold the
+     *  \param[in,out] data A pre allocated std::span that will hold the
      * data read from the file.
      *
      *  \throw except::Exception If invalid channel
      *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel, const mem::BufferView<std::byte>& data) const;
+    void read(size_t channel, const std::span<std::byte>& data) const;
 
     /*!
      *  \func read
@@ -225,9 +227,9 @@ public:
      *  \param vectorScaleFactors A vector of scaleFactors to scale signal
      * samples \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param scratch A pre allocated mem::BufferView for scratch space for
+     *  \param scratch A pre allocated std::span for scratch space for
      * scaling, promoting and/or byte swapping \param[out] data A pre allocated
-     * mem::BufferView that will hold the data read from the file.
+     *std::span that will hold the data read from the file.
      *
      *  \throw except::Exception If invalid channel, firstVector, lastVector,
      *   firstSample or lastSample
@@ -245,8 +247,8 @@ public:
               size_t lastSample,
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
-              const mem::BufferView<std::byte>& scratch,
-              const mem::BufferView<std::complex<float>>& data) const;
+              const std::span<std::byte>& scratch,
+              const std::span<std::complex<float>>& data) const;
 
     /*!
      *  \func read
@@ -281,7 +283,7 @@ public:
               const types::RowCol<size_t>& dims,
               void* data) const
     {
-        const mem::BufferView<std::byte> buffer(static_cast<std::byte*>(data),
+        const std::span<std::byte> buffer(static_cast<std::byte*>(data),
                                                  dims.area() * mElementSize);
         read(channel,
              firstVector,
