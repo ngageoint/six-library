@@ -193,7 +193,7 @@ template<typename T>
 bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
 {
     io::TempFile tempfile;
-    const size_t numThreads = sys::OS().getNumCPUs();
+    const size_t numThreads = std::thread::hardware_concurrency();
     const types::RowCol<size_t> dims(128, 128);
     const std::vector<double> scaleFactors =
             generateScaleFactors(dims.row, scale);

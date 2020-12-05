@@ -32,7 +32,7 @@ namespace cphd
 DataWriter::DataWriter(std::shared_ptr<io::SeekableOutputStream> stream,
                        size_t numThreads) :
     mStream(stream),
-    mNumThreads(numThreads == 0 ? sys::OS().getNumCPUs() : numThreads)
+    mNumThreads(numThreads == 0 ? std::thread::hardware_concurrency() : numThreads)
 {
 }
 

@@ -42,7 +42,7 @@ int main(int argc, char** argv)
                            "Specify the number of threads to use",
                            cli::STORE,
                            "threads",
-                           "NUM")->setDefault(sys::OS().getNumCPUs());
+                           "NUM")->setDefault(std::thread::hardware_concurrency());
         parser.addArgument("input", "Input pathname", cli::STORE, "input",
                            "CPHD", 1, 1);
         parser.addArgument("output", "Output pathname", cli::STORE, "output",

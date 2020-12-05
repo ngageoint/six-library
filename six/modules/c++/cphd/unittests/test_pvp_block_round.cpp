@@ -162,7 +162,7 @@ bool runTest(bool /*scale*/,
              const types::RowCol<size_t> dims)
 {
     io::TempFile tempfile;
-    const size_t numThreads = sys::OS().getNumCPUs();
+    const size_t numThreads = std::thread::hardware_concurrency();
     writeCPHD(tempfile.pathname(), numThreads, dims, writeData, meta, pvpBlock);
     return checkData(tempfile.pathname(), numThreads, meta, pvpBlock);
 }
