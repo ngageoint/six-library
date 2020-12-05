@@ -72,12 +72,12 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     mWindow.setNumBands(nBands);
 }
 
-ptrdiff_t six::NITFImageInputStream::available()
+sys::Off_T six::NITFImageInputStream::available()
 {
     return mAvailable;
 }
 
-ptrdiff_t six::NITFImageInputStream::read(std::byte* b, size_t len)
+sys::SSize_T six::NITFImageInputStream::read(std::byte* b, size_t len)
 {
     //TODO to be 100% complete, we need to interleave multi-bands
     //this does NOT include the special RGB case that is already interleaved
@@ -109,13 +109,13 @@ ptrdiff_t six::NITFImageInputStream::read(std::byte* b, size_t len)
     return len;
 }
 
-ptrdiff_t six::NITFImageInputStream::readRow()
+sys::SSize_T six::NITFImageInputStream::readRow()
 {
     mWindow.setStartRow(static_cast<uint32_t>(mRowOffset++));
     int padded;
     auto buffer = reinterpret_cast<uint8_t*>(mRowBuffer.get());
     mReader.read(mWindow, &buffer, &padded);
     mRowBufferRemaining = mRowSize;
-    return (ptrdiff_t)mRowSize;
+    return (sys::SSize_T)mRowSize;
 }
 

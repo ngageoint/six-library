@@ -75,7 +75,7 @@ public:
     // first channel is 0!
     // 0-based vector in channel
     // 0-based sample in channel
-    ptrdiff_t getFileOffset(size_t channel, size_t vector, size_t sample) const
+    sys::Off_T getFileOffset(size_t channel, size_t vector, size_t sample) const
     {
         return mWideband->getFileOffset(channel, vector, sample);
     }

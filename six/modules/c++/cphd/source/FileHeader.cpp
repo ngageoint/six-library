@@ -71,39 +71,39 @@ void FileHeader::read(io::SeekableInputStream& inStream)
 
             if (headerEntry.first == "XML_BLOCK_SIZE")
             {
-                mXmlBlockSize = str::toType<ptrdiff_t>(headerEntry.second);
+                mXmlBlockSize = str::toType<sys::Off_T>(headerEntry.second);
             }
             else if (headerEntry.first == "XML_BLOCK_BYTE_OFFSET")
             {
                 mXmlBlockByteOffset =
-                        str::toType<ptrdiff_t>(headerEntry.second);
+                        str::toType<sys::Off_T>(headerEntry.second);
             }
             else if (headerEntry.first == "SUPPORT_BLOCK_SIZE")
             {
-               mSupportBlockSize = str::toType<ptrdiff_t>(headerEntry.second);
+               mSupportBlockSize = str::toType<sys::Off_T>(headerEntry.second);
             }
             else if (headerEntry.first == "SUPPORT_BLOCK_BYTE_OFFSET")
             {
                mSupportBlockByteOffset =
-                    str::toType<ptrdiff_t>(headerEntry.second);
+                    str::toType<sys::Off_T>(headerEntry.second);
             }
             else if (headerEntry.first == "PVP_BLOCK_SIZE")
             {
-               mPvpBlockSize = str::toType<ptrdiff_t>(headerEntry.second);
+               mPvpBlockSize = str::toType<sys::Off_T>(headerEntry.second);
             }
             else if (headerEntry.first == "PVP_BLOCK_BYTE_OFFSET")
             {
                mPvpBlockByteOffset =
-                    str::toType<ptrdiff_t>(headerEntry.second);
+                    str::toType<sys::Off_T>(headerEntry.second);
             }
             else if (headerEntry.first == "SIGNAL_BLOCK_SIZE")
             {
-                mSignalBlockSize = str::toType<ptrdiff_t>(headerEntry.second);
+                mSignalBlockSize = str::toType<sys::Off_T>(headerEntry.second);
             }
             else if (headerEntry.first == "SIGNAL_BLOCK_BYTE_OFFSET")
             {
                 mSignalBlockByteOffset =
-                        str::toType<ptrdiff_t>(headerEntry.second);
+                        str::toType<sys::Off_T>(headerEntry.second);
             }
             else if (headerEntry.first == "CLASSIFICATION")
             {
@@ -182,10 +182,10 @@ void FileHeader::setVersion(const std::string& version)
     mVersion = version;
 }
 
-size_t FileHeader::set(ptrdiff_t xmlBlockSize,
-                       ptrdiff_t supportBlockSize,
-                       ptrdiff_t pvpBlockSize,
-                       ptrdiff_t signalBlockSize)
+size_t FileHeader::set(sys::Off_T xmlBlockSize,
+                       sys::Off_T supportBlockSize,
+                       sys::Off_T pvpBlockSize,
+                       sys::Off_T signalBlockSize)
 {
     // Resolve all of the offsets based on known sizes.
     setXMLBlockSize(xmlBlockSize);
@@ -205,21 +205,21 @@ size_t FileHeader::set()
         initialHeaderSize = size();
 
         // Add the header section terminator, not part of the header size
-        ptrdiff_t xmlOffset = initialHeaderSize + 2;
+        sys::Off_T xmlOffset = initialHeaderSize + 2;
         setXMLBlockByteOffset(xmlOffset);
 
 
         if (mSupportBlockSize > 0)
         {
             // Add two for the XML section terminator
-            ptrdiff_t supportOff = getXMLBlockByteOffset() + getXMLBlockSize() + 2;
+            sys::Off_T supportOff = getXMLBlockByteOffset() + getXMLBlockSize() + 2;
             setSupportBlockByteOffset(supportOff);
 
             // Calculate pvp offset based on support position and size
-            ptrdiff_t pvpOff = getSupportBlockByteOffset() +
+            sys::Off_T pvpOff = getSupportBlockByteOffset() +
                     getSupportBlockSize();
             // Add padding (pvp are doubles)
-            const ptrdiff_t pvpRemainder = pvpOff % sizeof(double);
+            const sys::Off_T pvpRemainder = pvpOff % sizeof(double);
             if (pvpRemainder != 0)
             {
                 pvpOff += sizeof(double) - pvpRemainder;
@@ -229,10 +229,10 @@ size_t FileHeader::set()
         else
         {
             // Add two for the XML section terminator
-            ptrdiff_t pvpOff = getXMLBlockByteOffset() +
+            sys::Off_T pvpOff = getXMLBlockByteOffset() +
                     getXMLBlockSize() + 2;
             // Add padding (pvp are doubles)
-            const ptrdiff_t pvpRemainder = pvpOff % sizeof(double);
+            const sys::Off_T pvpRemainder = pvpOff % sizeof(double);
             if (pvpRemainder != 0)
             {
                 pvpOff += sizeof(double) - pvpRemainder;
@@ -250,7 +250,7 @@ size_t FileHeader::set()
 }
 
 //! Pad bytes don't include the Section terminator
-ptrdiff_t FileHeader::getPvpPadBytes() const
+sys::Off_T FileHeader::getPvpPadBytes() const
 {
     if (mSupportBlockSize != 0)
     {

@@ -84,24 +84,24 @@ struct VectorParameters
 
     // These functions return the offset, in bytes, to the parameter requested
     // -1 is returned if the parameter is not in the vector
-    ptrdiff_t txTimeOffset() const;
-    ptrdiff_t txPosOffset() const;
-    ptrdiff_t rcvTimeOffset() const;
-    ptrdiff_t rcvPosOffset() const;
-    ptrdiff_t srpTimeOffset() const;
-    ptrdiff_t srpPosOffset() const;
-    ptrdiff_t tropoSRPOffset() const;
-    ptrdiff_t ampSFOffset() const;
-    ptrdiff_t Fx0Offset() const;
-    ptrdiff_t FxSSOffset() const;
-    ptrdiff_t Fx1Offset() const;
-    ptrdiff_t Fx2Offset() const;
-    ptrdiff_t deltaTOA0Offset() const;
-    ptrdiff_t toaSSOffset() const;
+    sys::Off_T txTimeOffset() const;
+    sys::Off_T txPosOffset() const;
+    sys::Off_T rcvTimeOffset() const;
+    sys::Off_T rcvPosOffset() const;
+    sys::Off_T srpTimeOffset() const;
+    sys::Off_T srpPosOffset() const;
+    sys::Off_T tropoSRPOffset() const;
+    sys::Off_T ampSFOffset() const;
+    sys::Off_T Fx0Offset() const;
+    sys::Off_T FxSSOffset() const;
+    sys::Off_T Fx1Offset() const;
+    sys::Off_T Fx2Offset() const;
+    sys::Off_T deltaTOA0Offset() const;
+    sys::Off_T toaSSOffset() const;
 
     void clearAmpSF()
     {
-        ampSF = six::Init::undefined<ptrdiff_t>();
+        ampSF = six::Init::undefined<sys::Off_T>();
     }
 
     bool operator==(const VectorParameters& other) const;
@@ -112,14 +112,14 @@ struct VectorParameters
     }
 
     // Size, in bytes, of each of the fields in the binary VBM
-    ptrdiff_t txTime;
-    ptrdiff_t txPos;
-    ptrdiff_t rcvTime;
-    ptrdiff_t rcvPos;
-    ptrdiff_t srpTime;        // Optional
-    ptrdiff_t srpPos;
-    ptrdiff_t tropoSRP;       // Optional   TropoSRP appears before AmpSF in the binary data
-    ptrdiff_t ampSF;          // Optional
+    sys::Off_T txTime;
+    sys::Off_T txPos;
+    sys::Off_T rcvTime;
+    sys::Off_T rcvPos;
+    sys::Off_T srpTime;        // Optional
+    sys::Off_T srpPos;
+    sys::Off_T tropoSRP;       // Optional   TropoSRP appears before AmpSF in the binary data
+    sys::Off_T ampSF;          // Optional
 
 
     mem::ScopedCopyablePtr<FxParameters> fxParameters;

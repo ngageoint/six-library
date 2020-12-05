@@ -47,10 +47,10 @@ namespace six
 class Region
 {
     UByte* mBuffer;
-    ptrdiff_t startRow;
-    ptrdiff_t numRows;
-    ptrdiff_t startCol;
-    ptrdiff_t numCols;
+    sys::SSize_T startRow;
+    sys::SSize_T numRows;
+    sys::SSize_T startCol;
+    sys::SSize_T numCols;
 public:
     //!  Constructor.  Sets params for full window size, and buffer is NULL
     Region() :
@@ -67,7 +67,7 @@ public:
      *  this until read time.
      *
      */
-    void setStartRow(ptrdiff_t row)
+    void setStartRow(sys::SSize_T row)
     {
         startRow = row;
     }
@@ -78,7 +78,7 @@ public:
      *
      */
 
-    void setStartCol(ptrdiff_t col)
+    void setStartCol(sys::SSize_T col)
     {
         startCol = col;
     }
@@ -88,7 +88,7 @@ public:
      *  numRows, or -1 to request numRows without querying the
      *  actual rows
      */
-    void setNumRows(ptrdiff_t rows)
+    void setNumRows(sys::SSize_T rows)
     {
         numRows = rows;
     }
@@ -98,7 +98,7 @@ public:
      *  numRows, or -1 to request numRows without querying the
      *  actual rows
      */
-    void setNumCols(ptrdiff_t cols)
+    void setNumCols(sys::SSize_T cols)
     {
         numCols = cols;
     }
@@ -106,7 +106,7 @@ public:
     /*!
      *  Get the start row
      */
-    ptrdiff_t getStartRow() const
+    sys::SSize_T getStartRow() const
     {
         return startRow;
     }
@@ -114,7 +114,7 @@ public:
     /*!
      *  Get the start col
      */
-    ptrdiff_t getStartCol() const
+    sys::SSize_T getStartCol() const
     {
         return startCol;
     }
@@ -125,7 +125,7 @@ public:
      *  should not be used before a read has been done, except to verify
      *  the number of requested rows.
      */
-    ptrdiff_t getNumRows() const
+    sys::SSize_T getNumRows() const
     {
         return numRows;
     }
@@ -136,7 +136,7 @@ public:
      *  should not be used before a read has been done, except to verify
      *  the number of requested cols.
      */
-    ptrdiff_t getNumCols() const
+    sys::SSize_T getNumCols() const
     {
         return numCols;
     }

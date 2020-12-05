@@ -79,7 +79,7 @@ typedef except::Context ValidationContext;
 
 // These are heavily used and we don't want any mistakes
 typedef types::RowCol<double> RowColDouble;
-typedef types::RowCol<ptrdiff_t> RowColInt;
+typedef types::RowCol<sys::SSize_T> RowColInt;
 
 typedef scene::FrameType FrameType;
 

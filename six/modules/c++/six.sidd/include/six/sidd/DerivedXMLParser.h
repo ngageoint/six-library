@@ -83,7 +83,7 @@ protected:
     static
     void getAttributeIfExists(const xml::lite::Attributes& attributes,
                               const std::string& attributeName,
-                              ptrdiff_t& value);
+                              sys::SSize_T& value);
 
     static
     void getAttributeIfExists(const xml::lite::Attributes& attributes,

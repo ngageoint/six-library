@@ -62,43 +62,43 @@ VectorParameters::VectorParameters() :
     txPos(0),
     rcvTime(0),
     rcvPos(0),
-    srpTime (six::Init::undefined<ptrdiff_t>()),
+    srpTime (six::Init::undefined<sys::Off_T>()),
     srpPos(0),
-    tropoSRP(six::Init::undefined<ptrdiff_t>()),
-    ampSF(six::Init::undefined<ptrdiff_t>())
+    tropoSRP(six::Init::undefined<sys::Off_T>()),
+    ampSF(six::Init::undefined<sys::Off_T>())
 {
 }
 
-ptrdiff_t VectorParameters::txTimeOffset() const
+sys::Off_T VectorParameters::txTimeOffset() const
 {
     return 0;
 }
 
-ptrdiff_t VectorParameters::txPosOffset() const
+sys::Off_T VectorParameters::txPosOffset() const
 {
     return (txTimeOffset() + txTime);
 }
 
-ptrdiff_t VectorParameters::rcvTimeOffset() const
+sys::Off_T VectorParameters::rcvTimeOffset() const
 {
     return (txPosOffset() + txPos);
 }
 
-ptrdiff_t VectorParameters::rcvPosOffset() const
+sys::Off_T VectorParameters::rcvPosOffset() const
 {
     return (rcvTimeOffset() + rcvTime);
 }
 
-ptrdiff_t VectorParameters::srpTimeOffset() const
+sys::Off_T VectorParameters::srpTimeOffset() const
 {
-    const ptrdiff_t pos = six::Init::isUndefined(srpTime) ?
+    const sys::Off_T pos = six::Init::isUndefined(srpTime) ?
             -1 : rcvPosOffset() + rcvPos;
     return pos;
 }
 
-ptrdiff_t VectorParameters::srpPosOffset() const
+sys::Off_T VectorParameters::srpPosOffset() const
 {
-    ptrdiff_t pos = rcvPosOffset() + rcvPos;
+    sys::Off_T pos = rcvPosOffset() + rcvPos;
     if (!six::Init::isUndefined(srpTime))
     {
         pos += srpTime;
@@ -106,16 +106,16 @@ ptrdiff_t VectorParameters::srpPosOffset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::tropoSRPOffset() const
+sys::Off_T VectorParameters::tropoSRPOffset() const
 {
-    const ptrdiff_t pos = six::Init::isUndefined(tropoSRP) ?
+    const sys::Off_T pos = six::Init::isUndefined(tropoSRP) ?
             -1 : (srpPosOffset() + srpPos);
     return pos;
 }
 
-ptrdiff_t VectorParameters::ampSFOffset() const
+sys::Off_T VectorParameters::ampSFOffset() const
 {
-    ptrdiff_t pos = -1;
+    sys::Off_T pos = -1;
     if (!six::Init::isUndefined(ampSF))
     {
         pos = srpPosOffset() + srpPos;
@@ -127,9 +127,9 @@ ptrdiff_t VectorParameters::ampSFOffset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::Fx0Offset() const
+sys::Off_T VectorParameters::Fx0Offset() const
 {
-    ptrdiff_t pos = -1;
+    sys::Off_T pos = -1;
     if (fxParameters.get() != NULL)
     {
         pos = srpPosOffset() + srpPos;
@@ -145,9 +145,9 @@ ptrdiff_t VectorParameters::Fx0Offset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::FxSSOffset() const
+sys::Off_T VectorParameters::FxSSOffset() const
 {
-    ptrdiff_t pos = Fx0Offset();
+    sys::Off_T pos = Fx0Offset();
     if (pos != -1)
     {
         pos += fxParameters->Fx0;
@@ -155,9 +155,9 @@ ptrdiff_t VectorParameters::FxSSOffset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::Fx1Offset() const
+sys::Off_T VectorParameters::Fx1Offset() const
 {
-    ptrdiff_t pos = FxSSOffset();
+    sys::Off_T pos = FxSSOffset();
     if (pos != -1)
     {
         pos += fxParameters->FxSS;
@@ -165,9 +165,9 @@ ptrdiff_t VectorParameters::Fx1Offset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::Fx2Offset() const
+sys::Off_T VectorParameters::Fx2Offset() const
 {
-    ptrdiff_t pos = Fx1Offset();
+    sys::Off_T pos = Fx1Offset();
     if (pos != -1)
     {
         pos += fxParameters->Fx1;
@@ -175,9 +175,9 @@ ptrdiff_t VectorParameters::Fx2Offset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::deltaTOA0Offset() const
+sys::Off_T VectorParameters::deltaTOA0Offset() const
 {
-    ptrdiff_t pos = -1;
+    sys::Off_T pos = -1;
     if (toaParameters.get() != NULL)
     {
         pos = srpPosOffset() + srpPos;
@@ -193,9 +193,9 @@ ptrdiff_t VectorParameters::deltaTOA0Offset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::toaSSOffset() const
+sys::Off_T VectorParameters::toaSSOffset() const
 {
-    ptrdiff_t pos = deltaTOA0Offset();
+    sys::Off_T pos = deltaTOA0Offset();
     if (pos != -1)
     {
         pos += toaParameters->deltaTOA0;
