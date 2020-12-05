@@ -122,6 +122,36 @@ fs::path fs::path::stem() const
 {
     return sys::Path::basename(native(), true /*rmvExt*/);
 }
+
+fs::path fs::path::extension() const
+{
+    // https://en.cppreference.com/w/cpp/filesystem/path/extension
+
+    // "If the pathname is either . or .., ... then empty path is returned."
+    if ((native() == ".") || (native() == ".."))
+    {
+        return "";
+    }
+
+    auto fn = filename().string();
+    const auto dot = fn.find(".");
+
+    // "If ... filename() does not contain the . character, then empty path is returned."
+    if (dot == std::string::npos)
+    {
+        return "";    
+    }
+
+    // "If the first character in the filename is a period, that period is ignored
+    // (a filename like '.profile' is not treated as an extension)"
+    if (dot == 0)
+    {
+        fn = fn.substr(1);
+    }
+
+    return sys::Path::splitExt(fn).second;
+}
+
 bool fs::path::empty() const noexcept
 {
     return native().empty();
