@@ -30,6 +30,9 @@
 #include <import/six/sidd.h>
 #include "utils.h"
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 float round(float num)
@@ -276,7 +279,8 @@ int main(int argc, char** argv)
             log.addHandler(new logging::FileHandler(logFile, logLevel), true);
 
         std::unique_ptr<six::ReadControl> reader;
-        const std::string extension = sys::Path::splitExt(inputFile).second;
+        std::string extension = fs::path(inputFile).extension().string();
+        str::lower(extension);
         if (extension == ".nitf" || extension == ".ntf")
         {
             reader.reset(new six::NITFReadControl());

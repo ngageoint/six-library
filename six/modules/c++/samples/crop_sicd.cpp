@@ -33,6 +33,9 @@
 #include <six/XMLControlFactory.h>
 #include "utils.h"
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 void parseECEF(cli::Results& options, std::vector<scene::Vector3>& ecef)
@@ -88,16 +91,11 @@ int main(int argc, char** argv)
 {
     try
     {
-        sys::OS os;
-        const sys::Path::StringPair splitName(sys::Path::splitPath(
-                os.getCurrentExecutable(argv[0])));
-        const sys::Path progDirname(splitName.first);
-        const sys::Path installPath(progDirname.join("..").getAbsolutePath());
-
-        const sys::Path nitroDir(
-            installPath.join("share").join("nitf").join("plugins"));
-        const sys::Path schemaDir(
-            installPath.join("conf").join("schema").join("six"));
+        const fs::path argv0(argv[0]);
+        const auto progDirname = argv0.parent_path();
+        const auto installPath = fs::absolute(progDirname.parent_path());
+        const auto nitroDir = installPath / "share" / "nitf" / "plugins";
+        const auto schemaDir = installPath / "conf" / "schema" / "six";
 
         // Parse the command line
         cli::ArgumentParser parser;
@@ -125,7 +123,7 @@ int main(int argc, char** argv)
                            "Specify a schema or directory of schemas "
                            "(or set SIX_SCHEMA_PATH). Use \"\" as value to "
                            "skip schema validation.",
-                           cli::STORE)->setDefault(schemaDir);
+                           cli::STORE)->setDefault(schemaDir.string());
         parser.addArgument("--require-aoi-in-bounds",
                            "When the AOI is specified in ECEF or lat/lon, by "
                            "default it will be trimmed to be within the "

@@ -36,6 +36,9 @@
 #include <six/NITFWriteControl.h>
 #include <six/NITFHeaderCreator.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 six::LatLonCorners makeUpCornersFromDMS()
@@ -187,7 +190,7 @@ struct TestHelper
     {
         try
         {
-            sys::OS().remove(mPathname);
+           fs::remove(mPathname);
         }
         catch (...)
         {

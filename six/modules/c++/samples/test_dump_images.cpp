@@ -154,16 +154,15 @@ int main(int argc, char** argv)
 
         std::cout << "Found: " << numImages << " image(s)" << std::endl;
 
-        sys::OS os;
-        if (!os.exists(outputDir))
-            os.makeDirectory(outputDir);
+        if (!fs::exists(outputDir))
+            fs::create_directory(outputDir);
 
         // first, write out the XMLs
         for (size_t i = 0, total = container->getNumData(); i < total; ++i)
         {
             const six::Data* data = container->getData(i);
             std::string filename = FmtX("%s_DES_%d.xml", base.c_str(), i);
-            std::string xmlFile = sys::Path::joinPaths(outputDir, filename);
+            std::string xmlFile = fs::path(outputDir) / filename;
             io::FileOutputStream xmlStream(xmlFile);
 
             std::string xmlData = six::toXMLString(data, &xmlRegistry);
@@ -193,8 +192,7 @@ int main(int argc, char** argv)
                      << ii
                      << (isSIO ? "sio" : "raw");
 
-            const std::string outputFile =
-                sys::Path::joinPaths(outputDir, filename.str());
+            const std::string outputFile = fs::path(outputDir) / filename.str();
             io::FileOutputStream outputStream(outputFile);
 
             if (isSIO)
