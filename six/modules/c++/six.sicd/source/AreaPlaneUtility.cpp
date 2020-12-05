@@ -18,20 +18,20 @@ std::vector<RowColDouble > AreaPlaneUtility::computeCornersPix(
     //  If it's a cropped product, use the full extent. Here we assume the
     //  cropped region is in the valid region, and do not perform a check.
     if (data.imageData->validData.size() >= 3 &&
-        (static_cast<sys::SSize_T>(data.imageData->numRows) ==
+        (static_cast<ptrdiff_t>(data.imageData->numRows) ==
         data.imageData->fullImage.row) &&
-        (static_cast<sys::SSize_T>(data.imageData->numCols) ==
+        (static_cast<ptrdiff_t>(data.imageData->numCols) ==
         data.imageData->fullImage.col))
     {
-        std::vector<types::RowCol<sys::SSize_T> > validPixelRegion(
+        std::vector<types::RowCol<ptrdiff_t> > validPixelRegion(
                 data.imageData->validData.size());
         for (size_t ii = 0; ii < validPixelRegion.size(); ++ii)
         {
             validPixelRegion[ii] = data.imageData->validData[ii];
         }
 
-        std::vector<types::RowCol<sys::SSize_T> > hullPoints;
-        math::ConvexHull<sys::SSize_T> convexHull(validPixelRegion, hullPoints);
+        std::vector<types::RowCol<ptrdiff_t> > hullPoints;
+        math::ConvexHull<ptrdiff_t> convexHull(validPixelRegion, hullPoints);
 
         // ConvexHull makes a copy of the first vertex into the last,  so pop
         // off the last entry

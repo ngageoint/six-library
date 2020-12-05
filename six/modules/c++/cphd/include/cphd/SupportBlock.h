@@ -61,8 +61,8 @@ public:
      */
     SupportBlock(const std::string& pathname,
                  const cphd::Data& data,
-                 sys::Off_T startSupport,
-                 sys::Off_T sizeSupport);
+                 ptrdiff_t startSupport,
+                 ptrdiff_t sizeSupport);
 
     /*
      *  \func SupportBlock
@@ -76,8 +76,8 @@ public:
      */
     SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
                  const cphd::Data& data,
-                 sys::Off_T startSupport,
-                 sys::Off_T sizeSupport);
+                 ptrdiff_t startSupport,
+                 ptrdiff_t sizeSupport);
 
     /*
      *  \func getFileOffset
@@ -88,7 +88,7 @@ public:
      *
      *  \return Returns offset from start of CPHD file
      */
-    sys::Off_T getFileOffset(const std::string& id) const;
+    ptrdiff_t getFileOffset(const std::string& id) const;
 
     /*
      *  \func read
@@ -155,9 +155,9 @@ private:
 private:
     const std::shared_ptr<io::SeekableInputStream> mInStream;
     cphd::Data mData;
-    const sys::Off_T mSupportOffset;       // offset in bytes to start of SupportBlock
+    const ptrdiff_t mSupportOffset;       // offset in bytes to start of SupportBlock
     const size_t mSupportSize;             // total size in bytes of SupportBlock
-    std::unordered_map<std::string,sys::Off_T> mOffsets; // Offset to start of each support array
+    std::unordered_map<std::string,ptrdiff_t> mOffsets; // Offset to start of each support array
 
     friend std::ostream& operator<< (std::ostream& os, const SupportBlock& d);
 };

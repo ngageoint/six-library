@@ -300,7 +300,7 @@ void CPHDWriter::writePVPData(const PVPBlock& pvpBlock)
 {
     // Add padding
     char zero = 0;
-    for (sys::Off_T ii = 0; ii < mHeader.getPvpPadBytes(); ++ii)
+    for (ptrdiff_t ii = 0; ii < mHeader.getPvpPadBytes(); ++ii)
     {
         mStream->write(&zero, 1);
     }

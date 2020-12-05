@@ -433,9 +433,9 @@ void PVPBlock::getPVPdata(size_t channel,
     }
 }
 
-sys::Off_T PVPBlock::load(io::SeekableInputStream& inStream,
-                     sys::Off_T startPVP,
-                     sys::Off_T sizePVP,
+ptrdiff_t PVPBlock::load(io::SeekableInputStream& inStream,
+                     ptrdiff_t startPVP,
+                     ptrdiff_t sizePVP,
                      size_t numThreads)
 {
     // Allocate the buffers
@@ -471,7 +471,7 @@ sys::Off_T PVPBlock::load(io::SeekableInputStream& inStream,
         if (!readBuf.empty())
         {
             std::byte* const buf = reinterpret_cast<std::byte*>(&readBuf[0]);
-            sys::SSize_T bytesThisRead = inStream.read(buf, readBuf.size());
+            ptrdiff_t bytesThisRead = inStream.read(buf, readBuf.size());
             if (bytesThisRead == io::InputStream::IS_EOF)
             {
                 std::ostringstream oss;

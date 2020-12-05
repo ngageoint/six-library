@@ -695,12 +695,12 @@ void VBM::updateVectorParameters(VectorParameters& vp) const
     vp.rcvTime = doubleSize;
     vp.rcvPos = vector3Size;
     vp.srpTime = mSRPTimeEnabled ? doubleSize :
-                                   six::Init::undefined<sys::Off_T>();
+                                   six::Init::undefined<ptrdiff_t>();
     vp.srpPos = vector3Size;
     vp.tropoSRP = mTropoSRPEnabled ? doubleSize :
-                                     six::Init::undefined<sys::Off_T>();
+                                     six::Init::undefined<ptrdiff_t>();
     vp.ampSF = mAmpSFEnabled ? doubleSize :
-                               six::Init::undefined<sys::Off_T>();
+                               six::Init::undefined<ptrdiff_t>();
     if (mDomainType == cphd::DomainType::FX)
     {
         vp.toaParameters.reset();
@@ -719,9 +719,9 @@ void VBM::updateVectorParameters(VectorParameters& vp) const
     }
 }
 
-sys::Off_T VBM::load(io::SeekableInputStream& inStream,
-                     sys::Off_T startVBM,
-                     sys::Off_T sizeVBM,
+ptrdiff_t VBM::load(io::SeekableInputStream& inStream,
+                     ptrdiff_t startVBM,
+                     ptrdiff_t sizeVBM,
                      size_t numThreads)
 {
     // Allocate the buffers
@@ -757,7 +757,7 @@ sys::Off_T VBM::load(io::SeekableInputStream& inStream,
         if (!data.empty())
         {
             std::byte* const buf = reinterpret_cast<std::byte*>(&data[0]);
-            sys::SSize_T bytesThisRead = inStream.read(buf, data.size());
+            ptrdiff_t bytesThisRead = inStream.read(buf, data.size());
             if (bytesThisRead == io::InputStream::IS_EOF)
             {
                 std::ostringstream oss;

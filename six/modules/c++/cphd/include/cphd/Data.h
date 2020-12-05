@@ -286,7 +286,7 @@ struct Data
     //! Validates, and add new support array to supportArrayMap
     void setSupportArray(const std::string& id, size_t numRows,
                          size_t numCols, size_t numBytes,
-                         sys::Off_T offset);
+                         ptrdiff_t offset);
 
     //! Checks if wideband data is compressed
     bool isCompressed() const;
@@ -321,7 +321,7 @@ private:
     {
         // Overload operator ()
         // Returns true if offset lhs is less than other offset
-        bool operator()(const sys::Off_T& lhs, const sys::Off_T& rhs) const
+        bool operator()(const ptrdiff_t& lhs, const ptrdiff_t& rhs) const
         {
             return lhs < rhs;
         }
@@ -335,7 +335,7 @@ private:
     // Book keeping map for efficient validation
     // Support Array Map with:
     // key: offset, value: array size
-    std::map<sys::Off_T, size_t, CmpByOffset> mOffsetMap;
+    std::map<ptrdiff_t, size_t, CmpByOffset> mOffsetMap;
 };
 
 //! Ostream operators
