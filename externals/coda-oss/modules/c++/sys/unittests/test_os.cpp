@@ -24,7 +24,10 @@
 
 #include <sys/OS.h>
 #include <sys/Path.h>
+#include <sys/Filesystem.h>
 #include "TestCase.h"
+
+namespace fs = sys::Filesystem;
 
 namespace
 {
@@ -147,6 +150,44 @@ TEST_CASE(testEnvVariables)
     TEST_ASSERT_FALSE(os.isEnvSet(testvar));
 }
 
+
+TEST_CASE(testFsExtension)
+{
+    // https://en.cppreference.com/w/cpp/filesystem/path/extension
+
+    // "If the pathname is either . or .., ... then empty path is returned."
+    const fs::path dot(".");
+    TEST_ASSERT_EQ("", dot.extension().string());
+    const fs::path dotdot("..");
+    TEST_ASSERT_EQ("", dotdot.extension().string());
+
+    // "If the first character in the filename is a period, that period is ignored
+    // (a filename like '.profile' is not treated as an extension)"
+    fs::path dotprofile("/path/to/.profile");
+    TEST_ASSERT_EQ("", dotprofile.extension().string());
+    dotprofile = ".profile";
+    TEST_ASSERT_EQ("", dotprofile.extension().string());
+    dotprofile = "/path/to/.profile.user";
+    TEST_ASSERT_EQ(".user", dotprofile.extension().string());
+    dotprofile = "/path.to/.profile.user";
+    TEST_ASSERT_EQ(".user", dotprofile.extension().string());
+    dotprofile = ".profile.user";
+    TEST_ASSERT_EQ(".user", dotprofile.extension().string());
+
+    fs::path filedottext("/path/to/file.txt");
+    TEST_ASSERT_EQ(".txt", filedottext.extension().string());
+    filedottext = "file.txt";
+    TEST_ASSERT_EQ(".txt", filedottext.extension().string());
+
+    // "If ... filename() does not contain the . character, then empty path is returned."
+    filedottext = "/path/to/file";
+    TEST_ASSERT_EQ("", filedottext.extension().string());
+    filedottext = "file";
+    TEST_ASSERT_EQ("", filedottext.extension().string());
+    filedottext = "/path.to/file";
+    TEST_ASSERT_EQ("", filedottext.extension().string());
+}
+
 }
 
 int main(int, char**)
@@ -154,6 +195,7 @@ int main(int, char**)
     TEST_CHECK(testRecursiveRemove);
     TEST_CHECK(testForcefulMove);
     TEST_CHECK(testEnvVariables);
+    TEST_CHECK(testFsExtension);
     return 0;
 }
 
