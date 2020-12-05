@@ -21,6 +21,7 @@
  */
 
 #include <complex>
+#include <thread>
 
 #include <cphd/PVP.h>
 #include <cphd/PVPBlock.h>

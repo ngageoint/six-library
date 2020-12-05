@@ -19,6 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <thread>
+
 #include <cphd/ByteSwap.h>
 #include <cphd/CPHDWriter.h>
 #include <cphd/CPHDXMLControl.h>

@@ -23,6 +23,8 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <thread>
+
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
 #include <str/Convert.h>

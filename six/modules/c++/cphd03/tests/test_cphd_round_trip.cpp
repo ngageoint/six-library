@@ -24,6 +24,7 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
+#include <thread>
 
 #include <cphd03/CPHDWriter.h>
 #include <cphd03/CPHDReader.h>
