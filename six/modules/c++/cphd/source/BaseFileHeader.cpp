@@ -22,6 +22,7 @@
 #include <mem/ScopedArray.h>
 #include <io/SeekableStreams.h>
 #include <str/Manip.h>
+#include <nitf/cstddef.h>
 #include <cphd/BaseFileHeader.h>
 
 namespace cphd
@@ -83,8 +84,8 @@ void BaseFileHeader::blockReadHeader(io::SeekableInputStream& inStream,
     static const char ERROR_MSG[] =
             "CPHD file malformed: Header must terminate with '\\f\\n'";
 
-    mem::ScopedArray<sys::byte> buf(new sys::byte[blockSize + 1]);
-    std::fill_n(buf.get(), blockSize + 1, 0);
+    std::unique_ptr <std::byte[]> buf(new std::byte[blockSize + 1]);
+    std::fill_n(buf.get(), blockSize + 1, static_cast<std::byte>(0));
     headerBlock.clear();
 
     // read each block in succession
@@ -93,7 +94,7 @@ void BaseFileHeader::blockReadHeader(io::SeekableInputStream& inStream,
     while (inStream.read(buf.get(), blockSize) != io::InputStream::IS_EOF &&
            terminatorLoc == std::string::npos)
     {
-        std::string thisBlock = buf.get();
+        std::string thisBlock = reinterpret_cast<const char*>(buf.get());
 
         // find the terminator in the block
         terminatorLoc = thisBlock.find('\f');
@@ -102,8 +103,9 @@ void BaseFileHeader::blockReadHeader(io::SeekableInputStream& inStream,
             // read one more byte if our block missed the trailing '\n'
             if (terminatorLoc == thisBlock.length() - 1)
             {
-                sys::byte c(0);
+                char c;
                 inStream.read(&c, 1);
+
                 thisBlock.insert(thisBlock.length(), &c, 1);
             }
 

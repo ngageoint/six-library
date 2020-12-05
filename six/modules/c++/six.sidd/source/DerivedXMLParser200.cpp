@@ -1371,9 +1371,9 @@ XMLElem DerivedXMLParser200::convertKernelToXML(
         setAttribute(filterCoef, "numRows", str::toString(kernel.custom->size.row));
         setAttribute(filterCoef, "numCols", str::toString(kernel.custom->size.col));
 
-        for (sys::SSize_T row = 0, idx = 0; row < kernel.custom->size.row; ++row)
+        for (ptrdiff_t row = 0, idx = 0; row < kernel.custom->size.row; ++row)
         {
-            for (sys::SSize_T col = 0; col < kernel.custom->size.col; ++col, ++idx)
+            for (ptrdiff_t col = 0; col < kernel.custom->size.col; ++col, ++idx)
             {
                 XMLElem coefElem = createDouble("Coef", kernel.custom->filterCoef[idx],
                     filterCoef);

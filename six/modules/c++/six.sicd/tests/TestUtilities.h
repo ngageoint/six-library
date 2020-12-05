@@ -46,7 +46,7 @@ struct GetPixelType<float>
 };
 
 template <>
-struct GetPixelType<sys::Int16_T>
+struct GetPixelType<int16_t>
 {
     static six::PixelType getPixelType()
     {

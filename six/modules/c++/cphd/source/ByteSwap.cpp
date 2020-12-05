@@ -22,6 +22,7 @@
 #include <sys/Conf.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
+#include <nitf/cstddef.h>
 #include <cphd/ByteSwap.h>
 
 namespace
@@ -36,8 +37,8 @@ template <typename T>
 inline
 void byteSwap(const void* in, T& out)
 {
-    const sys::ubyte* const inPtr = static_cast<const sys::ubyte*>(in);
-    sys::ubyte* const outPtr = reinterpret_cast<sys::ubyte*>(&out);
+    const std::byte* const inPtr = static_cast<const std::byte*>(in);
+    std::byte* const outPtr = reinterpret_cast<std::byte*>(&out);
 
     for (size_t ii = 0, jj = sizeof(T) - 1; ii < jj; ++ii, --jj)
     {
@@ -53,7 +54,7 @@ public:
                      size_t elemSize,
                      size_t startElement,
                      size_t numElements) :
-        mBuffer(static_cast<sys::byte*>(buffer) + startElement * elemSize),
+        mBuffer(static_cast<std::byte*>(buffer) + startElement * elemSize),
         mElemSize(static_cast<unsigned short>(elemSize)),
         mNumElements(numElements)
     {
@@ -65,7 +66,7 @@ public:
     }
 
 private:
-    sys::byte* const mBuffer;
+    std::byte* const mBuffer;
     const unsigned short mElemSize;
     const size_t mNumElements;
 };
@@ -79,7 +80,7 @@ public:
                              size_t numRows,
                              size_t numCols,
                              std::complex<float>* output) :
-        mInput(static_cast<const sys::ubyte*>(input) +
+        mInput(static_cast<const std::byte*>(input) +
                        startRow * numCols * sizeof(std::complex<InT>)),
         mDims(numRows, numCols),
         mOutput(output + startRow * numCols)
@@ -100,7 +101,7 @@ public:
                 // Have to be careful here - can't treat mInput as a
                 // std::complex<InT> directly in case InT is a float (see
                 // explanation in byteSwap() comments)
-                const sys::ubyte* const input = mInput + inIdx;
+                const std::byte* const input = mInput + inIdx;
                 byteSwap(input, real);
                 byteSwap(input + sizeof(InT), imag);
 
@@ -111,7 +112,7 @@ public:
     }
 
 private:
-    const sys::ubyte* const mInput;
+    const std::byte* const mInput;
     const types::RowCol<size_t> mDims;
     std::complex<float>* const mOutput;
 };
@@ -127,7 +128,7 @@ public:
                              size_t numCols,
                              const double* scaleFactors,
                              std::complex<float>* output) :
-        mInput(static_cast<const sys::ubyte*>(input) +
+        mInput(static_cast<const std::byte*>(input) +
                        startRow * numCols * sizeof(std::complex<InT>)),
         mDims(numRows, numCols),
         mScaleFactors(scaleFactors + startRow),
@@ -151,7 +152,7 @@ public:
                 // Have to be careful here - can't treat mInput as a
                 // std::complex<InT> directly in case InT is a float (see
                 // explanation in byteSwap() comments)
-                const sys::ubyte* const input = mInput + inIdx;
+                const std::byte* const input = mInput + inIdx;
                 byteSwap(input, real);
                 byteSwap(input + sizeof(InT), imag);
 
@@ -163,7 +164,7 @@ public:
     }
 
 private:
-    const sys::ubyte* const mInput;
+    const std::byte* const mInput;
     const types::RowCol<size_t> mDims;
     const double* const mScaleFactors;
     std::complex<float>* const mOutput;

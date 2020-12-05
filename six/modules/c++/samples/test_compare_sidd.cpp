@@ -51,7 +51,7 @@ std::shared_ptr<six::Data> readMetadata(const six::NITFReadControl& reader)
 
 void readWideband(six::NITFReadControl& reader,
         const six::Data& data,
-        mem::ScopedAlignedArray<six::UByte>& buffer)
+        mem::ScopedAlignedArray<std::byte>& buffer)
 {
     buffer.reset(data.getNumRows() *
                  data.getNumCols() *
@@ -83,14 +83,14 @@ bool siddsMatch(const std::string& sidd1Path,
 
     reader.load(sidd1Path);
     std::shared_ptr<six::Data> sidd1Metadata = readMetadata(reader);
-    mem::ScopedAlignedArray<six::UByte> sidd1Buffer;
+    mem::ScopedAlignedArray<std::byte> sidd1Buffer;
     readWideband(reader,
             *sidd1Metadata,
             sidd1Buffer);
 
     reader.load(sidd2Path);
     std::shared_ptr<six::Data> sidd2Metadata = readMetadata(reader);
-    mem::ScopedAlignedArray<six::UByte> sidd2Buffer;
+    mem::ScopedAlignedArray<std::byte> sidd2Buffer;
     readWideband(reader,
             *sidd2Metadata,
             sidd2Buffer);

@@ -635,14 +635,14 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     // Allocate one band
     uint32_t bandList(0);
 
-    uint8_t* buffer = region.getBuffer();
+    auto buffer = region.getBuffer();
 
     size_t subWindowSize = numRowsReq * numColsReq
             * thisImage->getData()->getNumBytesPerPixel();
 
     if (buffer == NULL)
     {
-        buffer = new uint8_t[subWindowSize];
+        buffer = new std::byte[subWindowSize];
         region.setBuffer(buffer);
     }
 
@@ -699,7 +699,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
                 static_cast<int>(startIndex + i),
                 mCompressionOptions);
 
-        uint8_t* bufferPtr = buffer + totalRead;
+        auto bufferPtr = reinterpret_cast<uint8_t*>(buffer + totalRead);
 
         int padded;
         imageReader.read(sw, &bufferPtr, &padded);
@@ -774,7 +774,7 @@ void NITFReadControl::readLegendPixelData(nitf::ImageSubheader& subheader,
     if (!legend.mImage.empty())
     {
         int padded;
-        uint8_t* bufferPtr = &legend.mImage[0];
+        auto bufferPtr = reinterpret_cast<uint8_t*>(legend.mImage.data());
         nitf::ImageReader imageReader = mReader.newImageReader(
                 static_cast<int>(imageSeg));
         imageReader.read(sw, &bufferPtr, &padded);

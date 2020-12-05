@@ -942,7 +942,7 @@ void NITFHeaderCreator::initialize(const six::Options& options,
 
 void NITFHeaderCreator::loadMeshSegment(
         const std::string& meshName,
-        const std::vector<sys::byte>& meshBuffer,
+        const std::vector<std::byte>& meshBuffer,
         const six::Classification& classification)
 {
     nitf::Record& record = getRecord();
@@ -960,7 +960,7 @@ void NITFHeaderCreator::loadMeshSegment(
 
     // Add the data and writer for this segment
     nitf::SegmentMemorySource dataSource(
-            gsl::make_span(meshBuffer), 0, 0, true);
+            meshBuffer, 0, 0, true);
     std::shared_ptr<nitf::SegmentWriter> desWriter(
             new nitf::SegmentWriter(dataSource));
     addAdditionalDES(desWriter);

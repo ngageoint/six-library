@@ -47,12 +47,12 @@ public:
     {
     }
 
-    inline sys::Int16_T operator()(float value) const
+    inline int16_t operator()(float value) const
     {
         const float ret(round((((value - mMin) / mDiff) *
-                std::numeric_limits<sys::Uint16_T>::max()) +
-                        std::numeric_limits<sys::Int16_T>::min()));
-        return static_cast<sys::Int16_T>(ret);
+                std::numeric_limits<uint16_t>::max()) +
+                        std::numeric_limits<int16_t>::min()));
+        return static_cast<int16_t>(ret);
     }
 
 private:
@@ -75,25 +75,25 @@ public:
         }
     }
 
-    sys::ubyte* add(size_t numBytes)
+    std::byte* add(size_t numBytes)
     {
-        mem::ScopedArray<sys::ubyte> buffer(new sys::ubyte[numBytes]);
+        std::unique_ptr<std::byte[]> buffer(new std::byte[numBytes]);
         mBuffers.push_back(buffer.get());
         return buffer.release();
     }
 
-    std::vector<sys::ubyte*> get() const
+    std::vector<std::byte*> get() const
     {
         return mBuffers;
     }
 
 private:
-    std::vector<sys::ubyte*> mBuffers;
+    std::vector<std::byte*> mBuffers;
 };
 
 // We've stored the complex<short> in the second half of the buffer
 // We'll expand to complex<float> starting in the first half of the buffer
-void expandComplex(size_t numPixels, sys::ubyte* buffer)
+void expandComplex(size_t numPixels, std::byte* buffer)
 {
     const std::complex<short>* const input =
             reinterpret_cast<std::complex<short>*>(
@@ -116,7 +116,7 @@ void expandComplex(size_t numPixels, sys::ubyte* buffer)
 // Since our buffer could be in the range of [-1.0f, 1.0f] we cannot simply
 // cast to a 16 bit int. Instead we expand the values so they always go from
 // [-32K, 32K].
-void compressInteger(size_t numPixels, sys::ubyte* buffer)
+void compressInteger(size_t numPixels, std::byte* buffer)
 {
     const float* const floatValues = reinterpret_cast<float*>(buffer);
 
@@ -138,8 +138,8 @@ void compressInteger(size_t numPixels, sys::ubyte* buffer)
     const std::complex<float>* const input =
             reinterpret_cast<std::complex<float>*>(buffer);
 
-    std::complex<sys::Int16_T>* const output =
-            reinterpret_cast<std::complex<sys::Int16_T>*>(buffer);
+    std::complex<int16_t>* const output =
+            reinterpret_cast<std::complex<int16_t>*>(buffer);
     const float diff = max - min;
 
     // If diff ends up being zero, we will get a division by 0 error.
@@ -147,14 +147,14 @@ void compressInteger(size_t numPixels, sys::ubyte* buffer)
     // fill it with 0s.
     if (diff == 0.0f)
     {
-        std::fill_n(output, numPixels, std::complex<sys::Int16_T>(0, 0));
+        std::fill_n(output, numPixels, std::complex<int16_t>(0, 0));
         return;
     }
 
     const CompressFloat compressFloat(min, diff);
     for (size_t ii = 0; ii < numPixels; ++ii)
     {
-        output[ii] = std::complex<sys::Int16_T>(
+        output[ii] = std::complex<int16_t>(
                 compressFloat(input[ii].real()),
                 compressFloat(input[ii].imag()));
     }
@@ -339,7 +339,7 @@ int main(int argc, char** argv)
                     numBytesPerPixel *= 2;
                 }
 
-                sys::ubyte* buffer =
+                std::byte* buffer =
                         buffers.add(numPixels * numBytesPerPixel);
 
                 region.setNumRows(extent.row);

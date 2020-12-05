@@ -23,6 +23,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <thread>
 
 #include <cphd03/CPHDReader.h>
 #include <cphd/Wideband.h>
@@ -32,8 +33,8 @@
 namespace
 {
 template <typename T>
-bool compareCPHDData(const sys::ubyte* data1,
-                     const sys::ubyte* data2,
+bool compareCPHDData(const std::byte* data1,
+                     const std::byte* data2,
                      size_t size,
                      size_t channel)
 {
@@ -64,8 +65,8 @@ bool compareWideband(cphd03::CPHDReader& reader1,
     cphd::Wideband& wideband1 = reader1.getWideband();
     cphd::Wideband& wideband2 = reader2.getWideband();
 
-    mem::ScopedArray<sys::ubyte> cphd03Data1;
-    mem::ScopedArray<sys::ubyte> cphd03Data2;
+    std::unique_ptr<std::byte[]> cphd03Data1;
+    std::unique_ptr<std::byte[]> cphd03Data2;
 
     for (size_t ii = 0; ii < channelsToProcess; ++ii)
     {
@@ -91,7 +92,7 @@ bool compareWideband(cphd03::CPHDReader& reader1,
             switch (reader1.getMetadata().getSampleType())
             {
             case cphd::SampleType::RE08I_IM08I:
-                if (!compareCPHDData<std::complex<sys::Int8_T> >(
+                if (!compareCPHDData<std::complex<int8_t> >(
                         cphd03Data1.get(),
                         cphd03Data2.get(),
                         dims1.area(),
@@ -101,7 +102,7 @@ bool compareWideband(cphd03::CPHDReader& reader1,
                 }
                 break;
             case cphd::SampleType::RE16I_IM16I:
-                if (!compareCPHDData<std::complex<sys::Int16_T> >(
+                if (!compareCPHDData<std::complex<int16_t> >(
                         cphd03Data1.get(),
                         cphd03Data2.get(),
                         dims1.area(),
@@ -145,7 +146,7 @@ int main(int argc, char** argv)
                            "Specify the number of threads to use",
                            cli::STORE,
                            "threads",
-                           "NUM")->setDefault(sys::OS().getNumCPUs());
+                           "NUM")->setDefault(std::thread::hardware_concurrency());
         parser.addArgument("input1", "First pathname", cli::STORE, "input1",
                            "CPHD", 1, 1);
         parser.addArgument("input2", "Second pathname", cli::STORE, "input2",
