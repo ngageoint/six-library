@@ -25,6 +25,9 @@
 #include <import/xml/lite.h>
 #include <import/io.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 /*
  *  Generate a KML file for a SICD XML to help with
  *  visualization
@@ -79,7 +82,7 @@ std::vector<std::string> extractXML(std::string inputFile,
                                     const sys::Path& outputDir)
 {
     std::vector<std::string> allFiles;
-    std::string prefix = sys::Path::basename(inputFile, true);
+    std::string prefix = fs::path(inputFile).stem().string();
 
     nitf::Reader reader;
     nitf::IOHandle io(inputFile);
@@ -125,7 +128,7 @@ void run(std::string inputFile, std::string dataType)
     try
     {
         // Create an output directory if it doesnt already exist
-        sys::Path outputDir(sys::Path::basename(inputFile, true));
+        sys::Path outputDir(fs::path(inputFile).stem().string());
         if (!outputDir.exists())
             outputDir.makeDirectory();
 

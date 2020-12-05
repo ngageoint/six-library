@@ -27,6 +27,9 @@
 #include <except/Exception.h>
 #include <six/NITFReadControl.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 void testDataType(const std::string& pathname, six::DataType expectedDataType)
@@ -54,7 +57,7 @@ int main(int argc, char** argv)
         // Parse the command line
         if (argc != 2)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <samples/nitf directory>\n\n";
             return 1;
         }

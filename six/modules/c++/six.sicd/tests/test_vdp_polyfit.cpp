@@ -31,6 +31,9 @@
 #include <six/sicd/ComplexData.h>
 #include <import/cli.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 int main(int argc, char** argv)
 {
     try
@@ -50,7 +53,7 @@ int main(int argc, char** argv)
         const std::string progname(argv[0]);
         if (sicdPath.empty())
         {
-            std::cerr << "Usage: " << sys::Path::basename(progname)
+            std::cerr << "Usage: " << fs::path(progname).filename().string()
                       << " <SICD pathname> [--vdp]\n\n";
             return 1;
         }

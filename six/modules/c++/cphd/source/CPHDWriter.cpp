@@ -29,6 +29,11 @@
 #include <cphd/Utilities.h>
 #include <cphd/Wideband.h>
 #include <except/Exception.h>
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
 
 namespace cphd
 {
@@ -105,7 +110,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 {
     // Get the correct dataWriter.
     // The CPHD file needs to be big endian.
-    if (sys::isBigEndianSystem())
+    if (std::endian::native == std::endian::big)
     {
         mDataWriter.reset(new DataWriterBigEndian(mStream, mNumThreads));
     }
@@ -133,7 +138,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 
     // Get the correct dataWriter.
     // The CPHD file needs to be big endian.
-    if (sys::isBigEndianSystem())
+    if (std::endian::native == std::endian::big)
     {
         mDataWriter.reset(new DataWriterBigEndian(mStream, mNumThreads));
     }

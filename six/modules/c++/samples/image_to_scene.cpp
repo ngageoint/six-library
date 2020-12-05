@@ -36,6 +36,9 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sidd/DerivedXMLControl.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 void usage(const std::string& progname, std::ostream& ostr)
@@ -164,7 +167,7 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        const std::string progname(sys::Path::basename(argv[0]));
+        const std::string progname(fs::path(argv[0]).filename().string());
         if (argc < 2)
         {
             usage(progname, std::cerr);

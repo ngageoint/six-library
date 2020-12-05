@@ -22,6 +22,7 @@
 
 #include <limits>
 #include <sstream>
+#include <thread>
 
 #include <cphd/ByteSwap.h>
 #include <cphd/Wideband.h>
@@ -31,6 +32,12 @@
 #include <mt/ThreadPlanner.h>
 #include <six/Init.h>
 #include <sys/Conf.h>
+
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
 
 namespace
 {
@@ -532,13 +539,13 @@ void Wideband::read(size_t channel,
         cphd::byteSwap(data.data,
                        mElementSize / 2,
                        numPixels * 2,
-                       sys::OS().getNumCPUsAvailable());
+                       std::thread::hardware_concurrency());
     }
 }
 
 bool Wideband::shouldByteSwap() const
 {
-    return !sys::isBigEndianSystem() && !mMetadata.isCompressed() &&
+    return (std::endian::native == std::endian::little) && !mMetadata.isCompressed() &&
             mElementSize > 2;
 }
 
@@ -648,7 +655,7 @@ void Wideband::read(size_t channel,
                  scratch.data);
 
         // Byte swap to little endian if necessary
-        if (!sys::isBigEndianSystem() && mElementSize > 2)
+        if ((std::endian::native == std::endian::little) && mElementSize > 2)
         {
             // Need to endian swap and then scale
             cphd::byteSwapAndScale(scratch.data,
@@ -680,7 +687,7 @@ void Wideband::read(size_t channel,
                  lastSample,
                  scratch.data);
 
-        if (!sys::isBigEndianSystem() && mElementSize > 2)
+        if ((std::endian::native == std::endian::little) && mElementSize > 2)
         {
             cphd::byteSwapAndPromote(
                     scratch.data, mElementSize, dims, numThreads, data.data);

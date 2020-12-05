@@ -30,6 +30,9 @@
 #include <import/sio/lite.h>
 #include "utils.h"
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 void writeSIOFileHeader(size_t numRows,
@@ -133,7 +136,7 @@ int main(int argc, char** argv)
         reader->load(inputFile, schemaPaths);
 
         std::shared_ptr<six::Container> container = reader->getContainer();
-        std::string base = sys::Path::basename(inputFile, true);
+        std::string base = fs::path(inputFile).stem().string();
         size_t numImages = 0;
 
         if (container->getDataType() == six::DataType::COMPLEX

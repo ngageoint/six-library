@@ -32,6 +32,12 @@
 #include <cphd/SupportBlock.h>
 #include <six/Init.h>
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace cphd
 {
 SupportBlock::SupportBlock(const std::string& pathname,
@@ -98,7 +104,7 @@ void SupportBlock::read(const std::string& id,
     size_t size = mData.getSupportArrayById(id).getSize();
     mInStream->read(dataPtr, size);
 
-    if (!sys::isBigEndianSystem() && mData.getElementSize(id) > 1)
+    if ((std::endian::native == std::endian::little) && mData.getElementSize(id) > 1)
     {
         cphd::byteSwap(data.data, mData.getElementSize(id),
                        mData.getSupportArrayById(id).numRows *
