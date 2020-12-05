@@ -25,6 +25,7 @@
 #include <sys/Conf.h>
 #include <except/Exception.h>
 #include <nitf/NITFBufferList.hpp>
+#include <sys/Conf.h>
 
 #undef min
 #undef max

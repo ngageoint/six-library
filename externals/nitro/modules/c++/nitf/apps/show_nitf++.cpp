@@ -901,7 +901,7 @@ void showWarnings(const nitf::Reader& reader)
             char* p = (char*)*iter;
 
             //  Make sure
-            assert(p != NULL);
+            assert(p != nullptr);
 
             //  Show the data
             std::cout << "\tFound problem: [" << p << "]\n" << std::endl;

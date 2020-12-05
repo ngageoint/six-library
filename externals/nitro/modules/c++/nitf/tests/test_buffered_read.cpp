@@ -59,7 +59,7 @@ void doRead(const std::string& inFile,
         {
             bandList.push_back(ii);
         }
-        subWindow.setBandList(&bandList[0]);
+        subWindow.setBandList(bandList.data());
 
         // Read in the image
         const size_t numBitsPerPixel(static_cast<uint64_t>(subheader.getActualBitsPerPixel()));
@@ -75,7 +75,7 @@ void doRead(const std::string& inFile,
         if (!image.empty())
         {
             std::vector<uint8_t *> imagePtrs;
-            uint8_t *imagePtr(&image[0]);
+            uint8_t *imagePtr(image.data());
             for (size_t ii = 0;
                     ii < subWindow.getNumBands();
                     ++ii, imagePtr += numBytesPerBand)
@@ -86,7 +86,7 @@ void doRead(const std::string& inFile,
             nitf::ImageReader imageReader(reader.newImageReader(idx));
 
             int padded(0);
-            imageReader.read(subWindow, &imagePtrs[0], &padded);
+            imageReader.read(subWindow, imagePtrs.data(), &padded);
         }
 
         std::cout << "done.\n" << std::endl;

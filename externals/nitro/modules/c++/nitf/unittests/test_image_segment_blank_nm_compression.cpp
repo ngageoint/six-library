@@ -241,9 +241,9 @@ TEST_CASE(testBlankSegmentsValid)
          uint32_t blockRecordLength=0;      /* Block mask record length */
          uint32_t padRecordLength=0;        /* Pad mask record length */
          uint32_t padPixelValueLength=0;    /* Pad pixel value length in bytes */
-         uint8_t  *padValue = NULL;         /* Pad value */
-         uint64_t *blockMask=NULL;          /* Block mask array */
-         uint64_t *padMask=NULL;            /* Pad mask array */
+         uint8_t  *padValue = nullptr;         /* Pad value */
+         uint64_t *blockMask= nullptr;          /* Block mask array */
+         uint64_t *padMask= nullptr;            /* Pad mask array */
          int imgCtr = 0;
          nitf::IOHandle input_io(tempNitf.pathname(),
                                  NITF_ACCESS_READONLY,
