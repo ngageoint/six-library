@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nitro-c", "externals\nitro\modules\c\nitro-c.vcxproj", "{F06550AD-CFC7-40B8-8727-6C82C69A8982}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nitf-c", "externals\nitro\modules\c\nitf-c.vcxproj", "{F06550AD-CFC7-40B8-8727-6C82C69A8982}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nitro-c++", "externals\nitro\modules\c++\nitro-c++.vcxproj", "{8F357A19-799E-4971-850E-3F28485C130B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nitf-c++", "externals\nitro\modules\c++\nitf-c++.vcxproj", "{8F357A19-799E-4971-850E-3F28485C130B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "six", "six\modules\c++\six\six.vcxproj", "{62AAD4DD-35BA-41A0-8263-1F4DFD755689}"
 EndProject

@@ -95,7 +95,7 @@
 #define NRT_LINE __LINE__
 #if defined(__GNUC__)
 #    define NRT_FUNC __PRETTY_FUNCTION__
-#elif __STDC_VERSION__ < 199901
+#elif defined(__STDC_VERSION__) && (__STDC_VERSION__ < 199901)
 #    define NRT_FUNC "unknown function"
 #else                           /* Should be c99 */
 #    define NRT_FUNC __func__

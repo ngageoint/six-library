@@ -49,10 +49,6 @@
 # include <sys/stat.h>
 #include <sys/Filesystem.h>
 
-extern int close(int fd);
-extern int read(int fd, void* buf, unsigned int count);
-extern int write(int fd, const void* buf, unsigned int count);
-extern int _isatty(int fd);
 #pragma warning(push)
 #pragma warning(disable: 4388) // '...': signed / unsigned mismatch
 #pragma warning(disable: 4389) // '...': signed / unsigned mismatch
