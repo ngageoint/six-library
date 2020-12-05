@@ -148,7 +148,7 @@ public:
      * \param imageNumber Index of the image to read
      *
      * \return Buffer of image data.  This is simply a pointer to the buffer
-     * that is held by 'region'.  If it is NULL in the incoming region, the
+     * that is held by 'region'.  If it is nullptr in the incoming region, the
      * memory is allocated and the region's buffer is updated.  In this case
      * it is up to the caller to delete the memory.
      */

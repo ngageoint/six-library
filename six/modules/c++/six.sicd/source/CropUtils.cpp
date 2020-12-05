@@ -264,7 +264,7 @@ void cropSICD(six::NITFReadControl& reader,
     for (size_t ii = 0; ii < corners.size(); ++ii)
     {
         const types::RowCol<double> imagePt =
-                projection->sceneToImage(corners[ii], NULL);
+                projection->sceneToImage(corners[ii], nullptr);
 
         const types::RowCol<double> spPixel(
                 (imagePt.row / data->grid->row->sampleSpacing) + offset.row,

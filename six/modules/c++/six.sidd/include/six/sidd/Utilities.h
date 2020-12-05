@@ -130,7 +130,7 @@ public:
      * \param data Representation of SIDD data
      * \param schemaPaths Schema paths.  If empty, the SIX_SCHEMA_PATH
      *  environment variable will be used.
-     * \param logger Logger.  If NULL, no logger will be used.
+     * \param logger Logger.  If nullptr, no logger will be used.
      *
      * \return XML string representation of
      *'data'

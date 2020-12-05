@@ -29,6 +29,16 @@
 #include <scene/Utilities.h>
 #include "utils.h"
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
+
 // For SICD implementation
 #include <import/six/sicd.h>
 
@@ -107,7 +117,7 @@ int main(int argc, char** argv)
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         std::unique_ptr<logging::Logger> logger(
-                logging::setupLogger(sys::Path::basename(argv[0])));
+            logging::setupLogger(fs::path(argv[0]).filename().string()));
 
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the
@@ -266,8 +276,8 @@ int main(int argc, char** argv)
 
         // NITF data is always big endian, so check if we need to swap
         const bool needsByteSwap =
-            (sys::isBigEndianSystem() && fileHeader->isDifferentByteOrdering())
-         || (!sys::isBigEndianSystem() && !fileHeader->isDifferentByteOrdering());
+            ((std::endian::native == std::endian::big) && fileHeader->isDifferentByteOrdering())
+         || ((std::endian::native == std::endian::little) && !fileHeader->isDifferentByteOrdering());
 
         writerOptions.setParameter(
                 six::WriteControl::OPT_BYTE_SWAP,

@@ -23,10 +23,13 @@
 #include <logging/NullLogger.h>
 #include <six/XMLControl.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace six
 {
 XMLControl::XMLControl(logging::Logger* log, bool ownLog) :
-    mLog(NULL),
+    mLog(nullptr),
     mOwnLog(false)
 {
     setLogger(log, ownLog);
@@ -90,11 +93,10 @@ void XMLControl::validate(const xml::lite::Document* doc,
         log->warn(oss.str());
     }
 
-    sys::OS os;
     // If the paths we have don't exist, throw
     for (size_t ii = 0; ii < paths.size(); ++ii)
     {
-        if (!os.exists(paths[ii]))
+        if (!fs::exists(paths[ii]))
         {
             std::ostringstream msg;
             msg << paths[ii] << " does not exist!";
@@ -150,7 +152,7 @@ void XMLControl::setLogger(logging::Logger* log, bool own)
     if (mLog && mOwnLog && log != mLog)
     {
         delete mLog;
-        mLog = NULL;
+        mLog = nullptr;
     }
 
     if (log)

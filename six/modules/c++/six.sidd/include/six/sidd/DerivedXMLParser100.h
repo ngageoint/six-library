@@ -32,7 +32,7 @@ namespace sidd
 class DerivedXMLParser100 : public DerivedXMLParser
 {
 public:
-    DerivedXMLParser100(logging::Logger* log = NULL,
+    DerivedXMLParser100(logging::Logger* log = nullptr,
                         bool ownLog = false);
 
     virtual xml::lite::Document* toXML(const DerivedData* data) const;
@@ -46,11 +46,11 @@ protected:
 
     virtual XMLElem convertDerivedClassificationToXML(
             const DerivedClassification& classification,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
 
     virtual XMLElem convertMeasurementToXML(
             const Measurement* measurement,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
 
     virtual void parseMeasurementFromXML(
             const XMLElem measruementElem,
@@ -58,14 +58,14 @@ protected:
 
     virtual XMLElem convertExploitationFeaturesToXML(
         const ExploitationFeatures* exploitationFeatures,
-        XMLElem parent = NULL) const;
+        XMLElem parent = nullptr) const;
 
     virtual void parseProductFromXML(
         const XMLElem exploitationFeaturesElem,
         ExploitationFeatures* exploitationFeatures) const;
 
     virtual XMLElem convertDisplayToXML(const Display& display,
-                                        XMLElem parent = NULL) const;
+                                        XMLElem parent = nullptr) const;
 
 private:
     static const char VERSION[];
@@ -73,7 +73,7 @@ private:
     static const char ISM_URI[];
 
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
-                                         XMLElem parent = NULL) const;
+                                         XMLElem parent = nullptr) const;
 
     void parseGeographicTargetFromXML(
             const XMLElem elem,

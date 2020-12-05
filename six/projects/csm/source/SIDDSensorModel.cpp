@@ -157,7 +157,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         // Check for the SIDD DES associated with imageIndex and parse it
         // DES's are always in the same order as the images, so we just have to
         // find the Nth DES
-        xml::lite::Document* siddXML = NULL;
+        xml::lite::Document* siddXML = nullptr;
         xml::lite::MinidomParser domParser;
 
         size_t numSIDD = 0;
@@ -200,7 +200,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
             }
         }
 
-        if (siddXML == NULL)
+        if (siddXML == nullptr)
         {
             const std::string message = (numSIDD == 0) ? "Not a SIDD" :
                     "Found " + str::toString(numSIDD) +

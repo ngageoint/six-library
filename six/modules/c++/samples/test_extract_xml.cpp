@@ -29,6 +29,9 @@
 #include <import/xml/lite.h>
 #include <import/io.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 /*!
  *  This extracts raw XML from each NITF DES, just using nitf,
  *  xml.lite and io modules.
@@ -67,7 +70,7 @@ int main(int argc, char** argv)
         //! Fill out basename if not user specified
         if (basename.empty())
         {
-            basename = sys::Path::basename(inputFile, true);
+            basename = fs::path(inputFile).stem().string();
         }
 
         nitf::Reader reader;
@@ -92,7 +95,7 @@ int main(int argc, char** argv)
 
             // Read the DES
             xmlVec.resize(size);
-            char* const xml = xmlVec.empty() ? NULL : &xmlVec[0];
+            char* const xml = xmlVec.empty() ? nullptr : xmlVec.data();
             deReader.read(xml, size);
 
             // Parse it with xml::lite

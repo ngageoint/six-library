@@ -150,7 +150,7 @@ void SceneGeometry::setOutputPlaneVectors(const Vector3& opX,
 
 Vector3 SceneGeometry::getImageRowVector() const
 {
-    if (mImageRow.get() == NULL)
+    if (mImageRow.get() == nullptr)
     {
         throw except::Exception(Ctxt("The image row vector is not set!"));
     }
@@ -159,7 +159,7 @@ Vector3 SceneGeometry::getImageRowVector() const
 
 Vector3 SceneGeometry::getImageColVector() const
 {
-    if (mImageCol.get() == NULL)
+    if (mImageCol.get() == nullptr)
     {
         throw except::Exception(Ctxt("The image column vector is not set!"));
     }
@@ -169,7 +169,7 @@ Vector3 SceneGeometry::getImageColVector() const
 
 Vector3 SceneGeometry::getOPXVector() const
 {
-    if (mXo.get() == NULL)
+    if (mXo.get() == nullptr)
     {
         throw except::Exception(Ctxt("The output plane x vector is not set!"));
     }
@@ -178,7 +178,7 @@ Vector3 SceneGeometry::getOPXVector() const
 
 Vector3 SceneGeometry::getOPYVector() const
 {
-    if (mYo.get() == NULL)
+    if (mYo.get() == nullptr)
     {
         throw except::Exception(Ctxt("The output plane y vector is not set!"));
     }
@@ -187,7 +187,7 @@ Vector3 SceneGeometry::getOPYVector() const
 
 Vector3 SceneGeometry::getOPZVector() const
 {
-    if (mZo.get() == NULL)
+    if (mZo.get() == nullptr)
     {
         throw except::Exception(Ctxt("The output plane z vector is not set!"));
     }

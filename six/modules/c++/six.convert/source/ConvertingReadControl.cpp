@@ -49,7 +49,7 @@ void ConvertingReadControl::load(const std::string& pathname,
 {
     mContainer.reset(new Container(getDataType(pathname)));
     mConverter = mRegistry.loadAndFind(mPluginPathnames, pathname);
-    if (mConverter == NULL)
+    if (mConverter == nullptr)
     {
         throw except::Exception(Ctxt("Unable to load " + pathname));
     }
@@ -59,7 +59,7 @@ void ConvertingReadControl::load(const std::string& pathname,
 
 std::string ConvertingReadControl::getFileType() const
 {
-    if (mConverter == NULL)
+    if (mConverter == nullptr)
     {
         throw except::Exception(Ctxt("Please load ConvertingReadControl "
                 "before calling getFileType()"));
@@ -79,7 +79,7 @@ UByte* ConvertingReadControl::interleaved(size_t imageNumber)
 
 UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
 {
-    if (mConverter == NULL)
+    if (mConverter == nullptr)
     {
         throw except::Exception(Ctxt("Please load ConvertingReadControl "
                 "before calling interleaved()"));
@@ -112,7 +112,7 @@ UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
     }
 
     UByte* buffer = region.getBuffer();
-    if (buffer == NULL)
+    if (buffer == nullptr)
     {
         buffer = new UByte[region.getNumRows() * region.getNumCols() *
                 data->getNumBytesPerPixel()];

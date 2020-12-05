@@ -443,7 +443,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
         }
         else if (!colorRemapElem && !monoRemapElem)
         {
-            return NULL;
+            return nullptr;
         }
         else
         {
@@ -454,7 +454,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -634,7 +634,7 @@ void DerivedXMLParser::parseMeasurementFromXML(
         const XMLElem measurementElem,
         Measurement* measurement) const
 {
-    XMLElem projElem = NULL;
+    XMLElem projElem = nullptr;
     //  choice: ProjectionType --
     //  this is first parsed in fromXML()
     if (measurement->projection->projectionType == ProjectionType::POLYNOMIAL)
@@ -689,7 +689,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
     {
         XMLElem collectionElem = collectionsElem[i];
 
-        // At least one was created at construction, so check for NULL
+        // At least one was created at construction, so check for nullptr
         if (!exploitationFeatures->collections[i].get())
             exploitationFeatures->collections[i].reset(new Collection());
         Collection* coll = exploitationFeatures->collections[i].get();
@@ -1875,7 +1875,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
         const SFAGeometry* g,
         XMLElem parent) const
 {
-    XMLElem geoElem = NULL;
+    XMLElem geoElem = nullptr;
 
     std::string geoType = g->getType();
     if (geoType == SFAPoint::TYPE_NAME)

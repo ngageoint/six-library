@@ -66,7 +66,7 @@ public:
      */
     NITFWriteControl(const six::Options& options,
                      std::shared_ptr<Container> container,
-                     const XMLControlRegistry* xmlRegistry = NULL);
+                     const XMLControlRegistry* xmlRegistry = nullptr);
 
     //!  We are a 'NITF'
     std::string getFileType() const

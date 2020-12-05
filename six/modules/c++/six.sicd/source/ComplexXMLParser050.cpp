@@ -42,7 +42,7 @@ public:
 
     virtual XMLElem convertRadiometryToXML(
         const six::Radiometric *obj,
-        XMLElem parent = NULL) const;
+        XMLElem parent = nullptr) const;
 
     virtual void parseRadiometryFromXML(
         const XMLElem radiometricXML,
@@ -113,7 +113,7 @@ void SICommonXMLParser050::parseRadiometryFromXML(
     const XMLElem radiometricXML,
     six::Radiometric* radiometric) const
 {
-    XMLElem tmpElem = NULL;
+    XMLElem tmpElem = nullptr;
 
     tmpElem = getOptional(radiometricXML, "NoisePoly");
     if (tmpElem)
@@ -223,8 +223,8 @@ XMLElem ComplexXMLParser050::convertImageFormationAlgoToXML(
     else if (!pfa && !rma)
     {
         //! This will occur when set to OTHER. We do not want to include
-        //  a specialized image formation algorithm so we return NULL.
-        return NULL;
+        //  a specialized image formation algorithm so we return nullptr.
+        return nullptr;
     }
     else
     {

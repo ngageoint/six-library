@@ -87,7 +87,7 @@ void DerivedClassification::setSecurity(const std::string& prefix,
         // By default, mark as exempt from automatic declassification
         std::string declassType("X");
 
-        if (declassDate.get() != NULL)
+        if (declassDate.get() != nullptr)
         {
             std::string declassDateStr;
             declassDate->format("%Y%m%d", declassDateStr);
@@ -312,7 +312,7 @@ bool DerivedClassification::operator==(const DerivedClassification& rhs) const
 bool DerivedClassification::equalTo(const Classification& rhs) const
 {
     const DerivedClassification* derivedClassification = dynamic_cast<const DerivedClassification*>(&rhs);
-    if (derivedClassification != NULL)
+    if (derivedClassification != nullptr)
     {
         return *this == *derivedClassification;
     }

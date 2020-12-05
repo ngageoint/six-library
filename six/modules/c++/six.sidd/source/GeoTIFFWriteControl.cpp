@@ -28,6 +28,9 @@
 #include "scene/Utilities.h"
 #include "six/sidd/GeoTIFFWriteControl.h"
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 #if !defined(SIX_TIFF_DISABLED)
 
 using namespace six;
