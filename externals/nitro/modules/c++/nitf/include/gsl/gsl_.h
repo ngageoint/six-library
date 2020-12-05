@@ -10,6 +10,8 @@
 #include <type_traits>
 #include <utility>  
 
+#include <mem/BufferView.h>
+
 namespace gsl
 {
     namespace details
@@ -44,19 +46,11 @@ namespace gsl
     // narrow() : a checked version of narrow_cast() that throws if the cast changed the value
     namespace details
     {
-        #ifdef _MSC_VER
-        #pragma warning(push)
-        #pragma warning(disable: 4702) // unreachable code
-        #endif
         template <class T>
         constexpr T narrow_throw_exception(T t) noexcept(false)
         {
             return gsl::details::throw_exception(narrowing_error()), t;
         }
-        #ifdef _MSC_VER
-        #pragma warning(pop)
-        #endif
-
         template <class T, class U>
         constexpr T narrow1_(T t, U u) noexcept(false)
         {
@@ -79,5 +73,33 @@ namespace gsl
     constexpr T narrow(U u) noexcept(false)
     {
         return details::narrow(narrow_cast<T>(u), u);
+    }
+}
+
+namespace gsl
+{
+    // super-simple version of span
+    template<typename T>
+    class span final
+    {
+        T* p_;
+        size_t sz_;
+
+    public:
+        span(T* p, size_t sz) : p_(p), sz_(sz) {}
+
+        template<typename TContainer>
+        span(TContainer&& c) : span(const_cast<T*>(c.data()), c.size()) {}
+
+        T* data() { return p_; }
+        const T* data() const { return p_; }
+        size_t size() const { return sz_; }
+    };
+
+    template<typename TContainer>
+    inline span<typename TContainer::value_type> make_span(TContainer& c)
+    {
+        using value_type = typename TContainer::value_type;
+        return span<value_type>(c);
     }
 }

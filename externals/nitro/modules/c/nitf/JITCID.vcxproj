@@ -14,7 +14,7 @@
     <ClCompile Include="shared\$(ProjectName).c" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\nitro-c.vcxproj">
+    <ProjectReference Include="..\nitf-c.vcxproj">
       <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
     </ProjectReference>
   </ItemGroup>

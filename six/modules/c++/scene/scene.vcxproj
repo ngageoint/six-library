@@ -99,11 +99,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\externals\nitro\modules\c++\nitro-c++.vcxproj">
-      <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="include\scene\AdjustableParams.h" />
     <ClInclude Include="include\scene\CoordinateTransform.h" />
@@ -142,6 +137,11 @@
     <ClCompile Include="source\SceneGeometry.cpp" />
     <ClCompile Include="source\Types.cpp" />
     <ClCompile Include="source\Utilities.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\externals\nitro\modules\c++\nitf-c++.vcxproj">
+      <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -24,6 +24,8 @@
 #include <sstream>
 
 #include <types/RowCol.h>
+#include <sys/Conf.h>
+#include <import/except.h>
 #include <nitf/ImageSegmentComputer.h>
 #include <nitf/ImageBlocker.hpp>
 
