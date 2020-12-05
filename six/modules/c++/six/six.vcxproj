@@ -181,7 +181,7 @@
     <ClCompile Include="source\XMLParser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\externals\nitro\modules\c++\nitro-c++.vcxproj">
+    <ProjectReference Include="..\..\..\..\externals\nitro\modules\c++\nitf-c++.vcxproj">
       <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\externals\nitro\modules\c\nitf\XML_DATA_CONTENT.vcxproj">
