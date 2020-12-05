@@ -36,7 +36,7 @@ class DerivedXMLParser : public six::XMLParser
 public:
     DerivedXMLParser(const std::string& version,
                      std::unique_ptr<six::SICommonXMLParser>&& comParser,
-                     logging::Logger* log = NULL,
+                     logging::Logger* log = nullptr,
                      bool ownLog = false);
 
     virtual xml::lite::Document* toXML(const DerivedData* data) const = 0;
@@ -50,14 +50,14 @@ protected:
 
     virtual XMLElem convertDerivedClassificationToXML(
             const DerivedClassification& classification,
-            XMLElem parent = NULL) const = 0;
+            XMLElem parent = nullptr) const = 0;
 
     virtual void parseProductFromXML(
             const XMLElem exploitationFeaturesElem,
             ExploitationFeatures* exploitationFeatures) const = 0;
 
     virtual XMLElem convertDisplayToXML(const Display& display,
-                                        XMLElem parent = NULL) const = 0;
+                                        XMLElem parent = nullptr) const = 0;
 
     static const char SFA_URI[];
 
@@ -126,21 +126,21 @@ protected:
                                const std::string& uri = "");
 
     virtual XMLElem createLUT(const std::string& name, const LUT *l,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createLUTImpl(const LUT *l, XMLElem lutElem) const;
     XMLElem createFootprint(const std::string& name,
                             const std::string& cornerName,
                             const LatLonCorners& corners,
-                            XMLElem parent = NULL) const;
+                            XMLElem parent = nullptr) const;
 
     XMLElem createFootprint(const std::string& name,
                             const std::string& cornerName,
                             const LatLonAltCorners& corners,
-                            XMLElem parent = NULL) const;
+                            XMLElem parent = nullptr) const;
 
     XMLElem createSFAPoint(const std::string& localName,
                            const SFAPoint* point,
-                           XMLElem parent = NULL) const;
+                           XMLElem parent = nullptr) const;
 
     XMLElem createSFALine(const std::string& localName,
                           const SFALineString* lineStr,
@@ -148,36 +148,36 @@ protected:
 
     XMLElem createSFADatum(const std::string& name,
                            const six::sidd::SFADatum& datum,
-                           XMLElem parent = NULL) const;
+                           XMLElem parent = nullptr) const;
 
     XMLElem convertProductCreationToXML(const ProductCreation* productCreation,
-                                        XMLElem parent = NULL) const;
+                                        XMLElem parent = nullptr) const;
     XMLElem convertProcessorInformationToXML(const ProcessorInformation* processorInformation,
                                              XMLElem parent) const;
     XMLElem convertProductProcessingToXML(const ProductProcessing* productProcessing,
-                                          XMLElem parent = NULL) const;
+                                          XMLElem parent = nullptr) const;
     XMLElem convertProcessingModuleToXML(const ProcessingModule* procMod,
-                                         XMLElem parent = NULL) const;
+                                         XMLElem parent = nullptr) const;
     XMLElem convertDownstreamReprocessingToXML(const DownstreamReprocessing* d,
-                                               XMLElem parent = NULL) const;
+                                               XMLElem parent = nullptr) const;
     XMLElem convertDisplayToXML(const Display* display,
-                                XMLElem parent = NULL) const;
-    void convertRemapToXML(const Remap& remap, XMLElem parent = NULL) const;
+                                XMLElem parent = nullptr) const;
+    void convertRemapToXML(const Remap& remap, XMLElem parent = nullptr) const;
 
     XMLElem convertGeographicCoverageToXML(const std::string& localName,
                                            const GeographicCoverage* g,
-                                           XMLElem parent = NULL) const;
+                                           XMLElem parent = nullptr) const;
     virtual XMLElem convertMeasurementToXML(const Measurement* measurement,
-                                    XMLElem parent = NULL) const;
+                                    XMLElem parent = nullptr) const;
     virtual XMLElem convertExploitationFeaturesToXML(const ExploitationFeatures* exploitationFeatures,
-                                                     XMLElem parent = NULL) const = 0;
+                                                     XMLElem parent = nullptr) const = 0;
     XMLElem convertAnnotationToXML(const Annotation *a,
-                                   XMLElem parent = NULL) const;
+                                   XMLElem parent = nullptr) const;
     XMLElem convertCompressionToXML(const Compression *c,
-                                    XMLElem parent = NULL) const;
+                                    XMLElem parent = nullptr) const;
     void    convertJ2KToXML(const J2KCompression* c, XMLElem& parent) const;
     XMLElem convertSFAGeometryToXML(const SFAGeometry *g,
-                                    XMLElem parent = NULL) const;
+                                    XMLElem parent = nullptr) const;
     XMLElem convertGeographicCoordinateSystemToXML(
             const SFAGeographicCoordinateSystem* geographicCoordinateSystem,
             XMLElem parent) const;

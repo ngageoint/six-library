@@ -2453,18 +2453,18 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
         if (!xmlPath.empty())
         {
             std::string  baseName = xmlPath + std::string("\\") + data->getVersion();
-            if (data->pfa.get() != NULL)
+            if (data->pfa.get() != nullptr)
                 baseName += "_PFA";
-            else if (data->rma.get() != NULL)
+            else if (data->rma.get() != nullptr)
             {
-                if (data->rma->inca.get() != NULL)
+                if (data->rma->inca.get() != nullptr)
                     baseName += "_RMA_INCA";
-                else if (data->rma->rmat.get() != NULL)
+                else if (data->rma->rmat.get() != nullptr)
                     baseName += "_RMA_RMAT";
-                else if (data->rma->rmcr.get() != NULL)
+                else if (data->rma->rmcr.get() != nullptr)
                     baseName += "_RMA_RMCR";
             }
-            else if (data->rgAzComp.get() != NULL)
+            else if (data->rgAzComp.get() != nullptr)
                 baseName += "_RgAzComp";
 
             if (verbose) std::cout << std::endl;

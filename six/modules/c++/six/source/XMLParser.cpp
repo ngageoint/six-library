@@ -40,7 +40,7 @@ XMLParser::XMLParser(const std::string& defaultURI,
                      bool ownLog) :
     mDefaultURI(defaultURI),
     mAddClassAttributes(addClassAttributes),
-    mLog(NULL),
+    mLog(nullptr),
     mOwnLog(false)
 {
     setLogger(log, ownLog);
@@ -59,7 +59,7 @@ void XMLParser::setLogger(logging::Logger* log, bool own)
     if (mLog && mOwnLog && log != mLog)
     {
         delete mLog;
-        mLog = NULL;
+        mLog = nullptr;
     }
 
     if (log)
@@ -208,7 +208,7 @@ XMLElem XMLParser::createBooleanType(const std::string& name,
 {
     if (p == six::BooleanType::NOT_SET)
     {
-        return NULL;
+        return nullptr;
     }
 
     XMLElem const elem =
@@ -304,7 +304,7 @@ XMLElem XMLParser::getOptional(XMLElem parent, const std::string& tag)
     std::vector < XMLElem > children;
     parent->getElementsByTagName(tag, children);
     if (children.size() != 1)
-        return NULL;
+        return nullptr;
     return children[0];
 }
 

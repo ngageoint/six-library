@@ -22,6 +22,7 @@
 
 #include <limits>
 #include <sstream>
+#include <thread>
 
 #include <cphd/ByteSwap.h>
 #include <cphd/Wideband.h>
@@ -31,6 +32,12 @@
 #include <mt/ThreadPlanner.h>
 #include <six/Init.h>
 #include <sys/Conf.h>
+
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
 
 namespace
 {
@@ -448,7 +455,7 @@ void Wideband::read(size_t channel,
                     size_t firstSample,
                     size_t lastSample,
                     size_t numThreads,
-                    const mem::BufferView<std::byte>& data) const
+                    std::span<std::byte> data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;
@@ -457,11 +464,11 @@ void Wideband::read(size_t channel,
 
     const size_t numPixels(dims.row * dims.col);
     const size_t minSize = numPixels * mElementSize;
-    if (data.size < minSize)
+    if (data.size() < minSize)
     {
         std::ostringstream ostr;
         ostr << "Need at least " << minSize << " bytes but only got "
-             << data.size;
+             << data.size();
         throw except::Exception(Ctxt(ostr.str()));
     }
 
@@ -471,13 +478,13 @@ void Wideband::read(size_t channel,
              lastVector,
              firstSample,
              lastSample,
-             data.data);
+             data.data());
 
     // Byte swap to little endian if necessary
     // Element size is half mElementSize because it's complex
     if (shouldByteSwap())
     {
-        cphd::byteSwap(data.data, mElementSize / 2, numPixels * 2, numThreads);
+        cphd::byteSwap(data.data(), mElementSize / 2, numPixels * 2, numThreads);
     }
 }
 
@@ -507,38 +514,38 @@ size_t Wideband::getBytesRequiredForRead(size_t channel,
 }
 
 void Wideband::read(size_t channel,
-                    const mem::BufferView<std::byte>& data) const
+                    std::span<std::byte> data) const
 {
     // Sanity checks
     checkChannelInput(channel);
 
     const size_t minSize = getBytesRequiredForRead(channel);
-    if (data.size < minSize)
+    if (data.size() < minSize)
     {
         std::ostringstream ostr;
         ostr << "Need at least " << minSize << " bytes but only got "
-             << data.size;
+             << data.size();
         throw except::Exception(Ctxt(ostr.str()));
     }
 
     // Perform the read
-    readImpl(channel, data.data);
+    readImpl(channel, data.data());
 
     if (shouldByteSwap())
     {
         // TODO: Would be nice to have a way to test this without
         // logging onto Solaris...
         const size_t numPixels = getBufferDims(0, 0, ALL, 0, ALL).area();
-        cphd::byteSwap(data.data,
+        cphd::byteSwap(data.data(),
                        mElementSize / 2,
                        numPixels * 2,
-                       sys::OS().getNumCPUsAvailable());
+                       std::thread::hardware_concurrency());
     }
 }
 
 bool Wideband::shouldByteSwap() const
 {
-    return !sys::isBigEndianSystem() && !mMetadata.isCompressed() &&
+    return (std::endian::native == std::endian::little) && !mMetadata.isCompressed() &&
             mElementSize > 2;
 }
 
@@ -563,7 +570,7 @@ void Wideband::read(size_t channel,
          firstSample,
          lastSample,
          numThreads,
-         mem::BufferView<std::byte>(data.get(), bufSize));
+         gsl::make_span(data.get(), bufSize));
 }
 
 void Wideband::read(size_t channel, std::unique_ptr<std::byte[]>& data) const
@@ -571,7 +578,7 @@ void Wideband::read(size_t channel, std::unique_ptr<std::byte[]>& data) const
     const size_t bufSize = getBytesRequiredForRead(channel);
     data.reset(new std::byte[bufSize]);
 
-    read(channel, mem::BufferView<std::byte>(data.get(), bufSize));
+    read(channel, gsl::make_span(data.get(), bufSize));
 }
 
 bool Wideband::allOnes(const std::vector<double>& vectorScaleFactors)
@@ -593,8 +600,8 @@ void Wideband::read(size_t channel,
                     size_t lastSample,
                     const std::vector<double>& vectorScaleFactors,
                     size_t numThreads,
-                    const mem::BufferView<std::byte>& scratch,
-                    const mem::BufferView<std::complex<float>>& data) const
+                    std::span<std::byte> scratch,
+                    std::span<std::complex<float>> data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;
@@ -620,22 +627,22 @@ void Wideband::read(size_t channel,
 
     const size_t numPixels(dims.row * dims.col);
 
-    if (data.size < numPixels)
+    if (data.size() < numPixels)
     {
         std::ostringstream ostr;
         ostr << "Need at least " << numPixels << " pixels but only got "
-             << data.size;
+             << data.size();
         throw except::Exception(Ctxt(ostr.str()));
     }
 
     if (needToScale)
     {
         const size_t minScratchSize = numPixels * mElementSize;
-        if (scratch.size < minScratchSize)
+        if (scratch.size() < minScratchSize)
         {
             std::ostringstream ostr;
             ostr << "Need at least " << minScratchSize << " bytes but only got "
-                 << scratch.size;
+                 << scratch.size();
             throw except::Exception(Ctxt(ostr.str()));
         }
 
@@ -645,28 +652,28 @@ void Wideband::read(size_t channel,
                  lastVector,
                  firstSample,
                  lastSample,
-                 scratch.data);
+                 scratch.data());
 
         // Byte swap to little endian if necessary
-        if (!sys::isBigEndianSystem() && mElementSize > 2)
+        if ((std::endian::native == std::endian::little) && mElementSize > 2)
         {
             // Need to endian swap and then scale
-            cphd::byteSwapAndScale(scratch.data,
+            cphd::byteSwapAndScale(scratch.data(),
                                    mElementSize,
                                    dims,
-                                   &vectorScaleFactors[0],
+                                   vectorScaleFactors.data(),
                                    numThreads,
-                                   data.data);
+                                   data.data());
         }
         else
         {
             // Just need to scale
-            scale(scratch.data,
+            scale(scratch.data(),
                   mElementSize,
                   dims,
-                  &vectorScaleFactors[0],
+                  vectorScaleFactors.data(),
                   numThreads,
-                  data.data);
+                  data.data());
         }
     }
     // We need to convert the output to floating-point data
@@ -678,16 +685,16 @@ void Wideband::read(size_t channel,
                  lastVector,
                  firstSample,
                  lastSample,
-                 scratch.data);
+                 scratch.data());
 
-        if (!sys::isBigEndianSystem() && mElementSize > 2)
+        if ((std::endian::native == std::endian::little) && mElementSize > 2)
         {
             cphd::byteSwapAndPromote(
-                    scratch.data, mElementSize, dims, numThreads, data.data);
+                    scratch.data(), mElementSize, dims, numThreads, data.data());
         }
         else
         {
-            promote(scratch.data, mElementSize, dims, numThreads, data.data);
+            promote(scratch.data(), mElementSize, dims, numThreads, data.data());
         }
     }
     else
@@ -698,13 +705,13 @@ void Wideband::read(size_t channel,
                  lastVector,
                  firstSample,
                  lastSample,
-                 data.data);
+                 data.data());
 
         // Byte swap to little endian if necessary
         // Element size is half mElementSize because it's complex
         if (shouldByteSwap())
         {
-            cphd::byteSwap(data.data,
+            cphd::byteSwap(data.data(),
                            mElementSize / 2,
                            numPixels * 2,
                            numThreads);

@@ -59,7 +59,7 @@ XMLElem SICommonXMLParser10x::convertCompositeSCPToXML(
                      scpXML);
         return scpXML;
     }
-    return NULL;
+    return nullptr;
 }
 
 void SICommonXMLParser10x::parseCompositeSCPFromXML(
@@ -126,7 +126,7 @@ void SICommonXMLParser10x::parseRadiometryFromXML(
     const XMLElem radiometricXML,
     Radiometric* radiometric) const
 {
-    XMLElem tmpElem = NULL;
+    XMLElem tmpElem = nullptr;
 
     tmpElem = getOptional(radiometricXML, "NoiseLevel");
     if (tmpElem)

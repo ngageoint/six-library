@@ -35,6 +35,10 @@
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 
+
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 void getErrors(const six::sicd::ComplexData& data, scene::Errors& errors)
@@ -76,7 +80,7 @@ void readAndConvertSICD(six::NITFReadControl& reader,
 
     // Allocate temp buffer
     std::vector<short> tempVector(elementsPerRow * rowsAtATime);
-    short* const tempBuffer = &tempVector[0];
+    short* const tempBuffer = tempVector.data();
 
     const size_t endRow = offset.row + extent.row;
 
@@ -478,7 +482,7 @@ void Utilities::readSicd(const std::string& sicdPathname,
 
     // This tells the reader that it doesn't
     // own an XMLControlRegistry
-    reader.setXMLControlRegistry(NULL);
+    reader.setXMLControlRegistry(nullptr);
 }
 
 void Utilities::readSicd(const std::string& sicdPathname,
@@ -514,7 +518,7 @@ void Utilities::readSicd(const std::string& sicdPathname,
 
     // This tells the reader that it doesn't
     // own an XMLControlRegistry
-    reader.setXMLControlRegistry(NULL);
+    reader.setXMLControlRegistry(nullptr);
 }
 
 std::unique_ptr<ComplexData> Utilities::getComplexData(NITFReadControl& reader)
@@ -542,7 +546,10 @@ std::unique_ptr<ComplexData> Utilities::getComplexData(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
-    if (sys::Path::splitExt(pathname).second == ".xml")
+    std::string extension = fs::path(pathname).extension().string();
+    str::lower(extension);
+
+    if (extension == ".xml")
     {
         logging::NullLogger log;
         return parseDataFromFile(pathname, schemaPaths, log);
@@ -575,7 +582,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     const size_t requiredBufferBytes =
             sizeof(std::complex<float>) * extent.area();
 
-    if (buffer == NULL)
+    if (buffer == nullptr)
     {
         // for some reason we don't have a buffer
 
@@ -623,7 +630,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
 
     if (requiredNumElements > 0)
     {
-        getWidebandData(reader, complexData, offset, extent, &buffer[0]);
+        getWidebandData(reader, complexData, offset, extent, buffer.data());
     }
 }
 
@@ -788,7 +795,7 @@ std::string Utilities::toXMLString(const ComplexData& data,
     logging::NullLogger nullLogger;
     return ::six::toValidXMLString(&data,
                                    schemaPaths,
-                                   (logger == NULL) ? &nullLogger : logger,
+                                   (logger == nullptr) ? &nullLogger : logger,
                                    &xmlRegistry);
 }
 
@@ -1116,16 +1123,16 @@ void Utilities::fitXYProjectionPolys(
     const types::RowCol<size_t>& dims = slantMeshDims;
     math::linear::Matrix2D<double> outputX(dims.row,
                                            dims.col,
-                                           &outputMesh.getX()[0]);
+                                           outputMesh.getX().data());
     math::linear::Matrix2D<double> outputY(dims.row,
                                            dims.col,
-                                           &outputMesh.getY()[0]);
+                                           outputMesh.getY().data());
     math::linear::Matrix2D<double> slantX(dims.row,
                                           dims.col,
-                                          &slantMesh.getX()[0]);
+                                          slantMesh.getX().data());
     math::linear::Matrix2D<double> slantY(dims.row,
                                           dims.col,
-                                          &slantMesh.getY()[0]);
+                                          slantMesh.getY().data());
 
     outputXYToSlantX =
             math::poly::fit(outputX, outputY, slantX, orderX, orderY);

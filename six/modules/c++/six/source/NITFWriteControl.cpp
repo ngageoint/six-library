@@ -30,6 +30,12 @@
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace six
 {
 NITFWriteControl::NITFWriteControl()
@@ -162,7 +168,7 @@ bool NITFWriteControl::shouldByteSwap() const
     if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {
         // Have to if it's not a BE machine
-        doByteSwap = !sys::isBigEndianSystem();
+        doByteSwap = (std::endian::native == std::endian::little);
     }
     else
     {
@@ -360,7 +366,7 @@ void NITFWriteControl::save(const BufferList& imageData,
 
             nitf::ImageSource iSource;
 
-            nitf::MemorySource memSource(&legend->mImage[0],
+            nitf::MemorySource memSource(legend->mImage.data(),
                                          legend->mImage.size(),
                                          0,
                                          sizeof(std::byte),

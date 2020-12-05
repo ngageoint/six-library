@@ -101,8 +101,8 @@ XMLElem ComplexXMLParser041::convertImageFormationAlgoToXML(
     if (!pfa && !rma && !rgAzComp)
     {
         //! This will occur when set to OTHER. We do not want to include
-        //  a specialized image formation algorithm so we return NULL.
-        return NULL;
+        //  a specialized image formation algorithm so we return nullptr.
+        return nullptr;
     }
 
     return ComplexXMLParser04x::convertImageFormationAlgoToXML(

@@ -28,6 +28,9 @@
 #include <six/sicd/Utilities.h>
 #include <io/TempFile.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 
@@ -35,7 +38,7 @@ void validateArguments(int argc, char** argv)
 {
     if (argc != 2)
     {
-        std::string message = "Usage: " + sys::Path::basename(argv[0])
+        std::string message = "Usage: " + fs::path(argv[0]).filename().string()
                 + " <XML pathname>";
         throw except::Exception(Ctxt(message));
     }
@@ -123,7 +126,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     io::TempFile temp;
     try
     {
-        writer.save(&bandData[0], temp.pathname());
+        writer.save(bandData.data(), temp.pathname());
         std::cerr << "Test failed" << std::endl;
         return false;
     }
@@ -170,7 +173,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     io::TempFile temp;
     try
     {
-        writer.save(&bandData[0], temp.pathname());
+        writer.save(bandData.data(), temp.pathname());
         std::cout << "Test passed" << std::endl;
         return true;
     }
@@ -230,7 +233,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     io::TempFile temp;
     try
     {
-        writer.save(&bandData[0], temp.pathname());
+        writer.save(bandData.data(), temp.pathname());
         std::cout << "Test passed" << std::endl;
         return true;
     }

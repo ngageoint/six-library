@@ -32,6 +32,9 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/NITFHeaderCreator.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 #include "utils.h"
 
 int main(int argc, char** argv)
@@ -68,7 +71,7 @@ int main(int argc, char** argv)
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         std::unique_ptr<logging::Logger> logger(
-                logging::setupLogger(sys::Path::basename(argv[0])));
+                logging::setupLogger(fs::path(argv[0]).filename().string()));
 
         six::XMLControlFactory::getInstance().addCreator(
                 six::DataType::COMPLEX,
@@ -118,7 +121,7 @@ int main(int argc, char** argv)
         writer.setLogger(logger.get());
 
         six::BufferList buffers;
-        buffers.push_back(reinterpret_cast<std::byte*>(&image[0]));
+        buffers.push_back(reinterpret_cast<std::byte*>(image.data()));
         writer.save(buffers, outputName, schemaPaths);
 
         return 0;

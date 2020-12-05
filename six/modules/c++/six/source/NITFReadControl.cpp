@@ -287,7 +287,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
                                                dataType,
                                                schemaPaths,
                                                *mLog));
-            if (data.get() == NULL)
+            if (data.get() == nullptr)
             {
                 throw except::Exception(Ctxt("Unable to transform XML DES"));
             }
@@ -640,7 +640,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     size_t subWindowSize = numRowsReq * numColsReq
             * thisImage->getData()->getNumBytesPerPixel();
 
-    if (buffer == NULL)
+    if (buffer == nullptr)
     {
         buffer = new std::byte[subWindowSize];
         region.setBuffer(buffer);

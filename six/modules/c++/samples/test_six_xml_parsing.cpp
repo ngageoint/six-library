@@ -36,6 +36,9 @@
 #include <io/FileInputStream.h>
 #include <logging/StreamHandler.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 class XMLVerifier
@@ -59,8 +62,6 @@ private:
 XMLVerifier::XMLVerifier()
 {
     // Verify schema path is set
-    sys::OS os;
-
     six::XMLControl::loadSchemaPaths(mSchemaPaths);
 
     mXmlRegistry.addCreator(six::DataType::COMPLEX,
@@ -86,8 +87,8 @@ void XMLVerifier::readFile(const std::string& pathname,
     }
     else
     {
-        inFile.readInto(&mScratch[0], mScratch.size());
-        contents.assign(&mScratch[0], mScratch.size());
+        inFile.readInto(mScratch.data(), mScratch.size());
+        contents.assign(mScratch.data(), mScratch.size());
     }
 }
 
@@ -131,7 +132,7 @@ void XMLVerifier::verify(const std::string& pathname) const
         mSchemaPaths,
         mLog));
 
-    if (data.get() == NULL || readData.get() == NULL || *data != *readData)
+    if (data.get() == nullptr || readData.get() == nullptr || *data != *readData)
     {
         throw except::Exception(Ctxt(
             "Round-tripped Data does not match for '" + pathname + "'"));
@@ -148,7 +149,7 @@ int main(int argc, char** argv)
         // Parse the command line
         if (argc < 2)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <SICD or SIDD XML pathname #1>"
                       << " <SICD or SIDD XML pathname #2> ...\n";
             return 1;

@@ -25,6 +25,9 @@
 #include <vector>
 #include "TestCase.h"
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 #ifndef DEFAULT_SCHEMA_PATH
 #if defined(_WIN32)
 #define DEFAULT_SCHEMA_PATH "C:\\some\\path" // just to compile ...
@@ -39,9 +42,8 @@ TEST_CASE(loadCompiledSchemaPath)
     std::vector<std::string> schemaPaths;
     six::XMLControl::loadSchemaPaths(schemaPaths);
 
-    const sys::OS os;
     size_t schemaPathsSize = 0;
-    if (os.exists(DEFAULT_SCHEMA_PATH))
+    if (fs::exists(DEFAULT_SCHEMA_PATH))
     {
         schemaPathsSize++;
     }
@@ -75,9 +77,8 @@ TEST_CASE(ignoreEmptyEnvVariable)
     sys::OS().setEnv("SIX_SCHEMA_PATH", "   ", 1);
     six::XMLControl::loadSchemaPaths(schemaPaths);
 
-    const sys::OS os;
     size_t schemaPathsSize = 0;
-    if (os.exists(DEFAULT_SCHEMA_PATH))
+    if (fs::exists(DEFAULT_SCHEMA_PATH))
     {
         schemaPathsSize++;
     }

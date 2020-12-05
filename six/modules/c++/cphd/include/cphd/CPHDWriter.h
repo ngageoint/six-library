@@ -171,7 +171,7 @@ public:
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
      *
-     *  The default argument for numThreads should be sys::OS().getNumCPUs().
+     *  The default argument for numThreads should be std::thread::hardware_concurrency().
      *  However, SWIG doesn't seem to like that.
      *  As a workaround, we pass in 0 for the default, and the ctor sets the
      *  number of threads to the number of CPUs if this happens.
@@ -197,7 +197,7 @@ public:
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
      *
-     *  The default argument for numThreads should be sys::OS().getNumCPUs().
+     *  The default argument for numThreads should be std::thread::hardware_concurrency().
      *  However, SWIG doesn't seem to like that.
      *  As a workaround, we pass in 0 for the default, and the ctor sets the
      *  number of threads to the number of CPUs if this happens.

@@ -36,6 +36,12 @@
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/SIDDByteProvider.h>
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace
 {
 // Template specialization to get appropriate pixel type
@@ -202,9 +208,9 @@ public:
         }
 
         mBigEndianImage = mImage;
-        if (!sys::isBigEndianSystem())
+        if (std::endian::native == std::endian::little)
         {
-            sys::byteSwap(&mBigEndianImage[0],
+            sys::byteSwap(mBigEndianImage.data(),
                           sizeof(DataTypeT),
                           mBigEndianImage.size());
         }
@@ -325,16 +331,16 @@ private:
                     imageBlocker->getNumBytesRequired(0, mDims.row, 1);
             blockedImage.resize(numBlockedPixels);
 
-            imageBlocker->block(&mBigEndianImage[0],
+            imageBlocker->block(mBigEndianImage.data(),
                                 0,
                                 mDims.row,
-                                &blockedImage[0]);
+                                blockedImage.data());
 
-            retImage = &blockedImage[0];
+            retImage = blockedImage.data();
         }
         else
         {
-            retImage = &mBigEndianImage[0];
+            retImage = mBigEndianImage.data();
         }
 
         return retImage;
@@ -378,7 +384,7 @@ void Tester<DataTypeT>::normalWrite()
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(&mImage[0]));
+    buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
@@ -423,7 +429,7 @@ void Tester<DataTypeT>::testMultipleWrites()
             mNumColsPerBlock,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
-    const DataTypeT* const inImage = &mBigEndianImage[0];
+    const DataTypeT* const inImage = mBigEndianImage.data();
 
     // Rows [40, 60)
     nitf::Off fileOffset;
@@ -605,11 +611,11 @@ void Tester<DataTypeT>::testMultipleWritesBlocked(size_t blocksPerWrite)
         imageBlocker->block(&mBigEndianImage[iter->startRow * 456],
                             iter->startRow,
                             iter->numRows,
-                            &blockData[0]);
+                            blockData.data());
 
         nitf::Off fileOffset;
         nitf::NITFBufferList buffers;
-        siddByteProvider.getBytes(&blockData[0],
+        siddByteProvider.getBytes(blockData.data(),
                                   iter->startRow,
                                   iter->numRows,
                                   fileOffset,

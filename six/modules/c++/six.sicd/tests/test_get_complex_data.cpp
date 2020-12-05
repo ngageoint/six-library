@@ -29,6 +29,9 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 int main(int argc, char** argv)
 {
     try
@@ -37,7 +40,7 @@ int main(int argc, char** argv)
         const std::string progname(argv[0]);
         if (argc != 2 && argc != 3)
         {
-            std::cerr << "Usage: " << sys::Path::basename(progname)
+            std::cerr << "Usage: " << fs::path(progname).filename().string()
                       << " <SICD pathname> [<schema dirname>]\n\n";
             return 1;
         }
@@ -54,9 +57,8 @@ int main(int argc, char** argv)
             // In a normal installation, we can infer the path
             const sys::Path progDirname =
                     sys::Path::splitPath(progname).first;
-            const sys::Path schemaPath = progDirname.join("..").join("..").
-                    join("conf").join("schema").join("six");
-            schemaPaths.push_back(sys::Path::absolutePath(schemaPath));
+            const fs::path schemaPath = fs::path(progDirname).parent_path().parent_path() / "conf" / "schema" / "six";
+            schemaPaths.push_back(fs::absolute(schemaPath));
         }
 
         // Parse out the XML into a C++ structure

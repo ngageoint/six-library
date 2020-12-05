@@ -27,6 +27,12 @@
 #include <cphd/ByteSwap.h>
 #include <cphd03/VBM.h>
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace
 {
 inline void setData(const std::byte*& data,
@@ -90,9 +96,9 @@ VBM::VectorBasedParameters::VectorBasedParameters(
     tropoSrp(tropoSrpEnabled ? 0.0 : six::Init::undefined<double>()),
     ampSF(ampSFEnabled ? 0.0 : six::Init::undefined<double>()),
     frequencyParameters(domainType == cphd::DomainType::FX ?
-            new FrequencyParameters() : NULL),
+            new FrequencyParameters() : nullptr),
     toaParameters(domainType == cphd::DomainType::TOA ?
-            new TOAParameters() : NULL)
+            new TOAParameters() : nullptr)
 {
 }
 
@@ -658,7 +664,7 @@ void VBM::getVBMdata(size_t channel,
     data.resize(getVBMsize(channel));
     std::fill(data.begin(), data.end(), static_cast<std::byte>(0));
 
-    getVBMdata(channel, &data[0]);
+    getVBMdata(channel, data.data());
 }
 
 void VBM::getVBMdata(size_t channel,
@@ -741,7 +747,7 @@ int64_t VBM::load(io::SeekableInputStream& inStream,
         throw except::Exception(Ctxt(oss.str()));
     }
 
-    const bool swapToLittleEndian = !(sys::isBigEndianSystem());
+    const bool swapToLittleEndian = (std::endian::native == std::endian::little);
 
     // Seek to start of VBM
     size_t totalBytesRead(0);
@@ -756,7 +762,7 @@ int64_t VBM::load(io::SeekableInputStream& inStream,
         //std::vector<std::byte>& data(mVBMdata[ii]);
         if (!data.empty())
         {
-            std::byte* const buf = reinterpret_cast<std::byte*>(&data[0]);
+            auto const buf = reinterpret_cast<std::byte*>(data.data());
             ptrdiff_t bytesThisRead = inStream.read(buf, data.size());
             if (bytesThisRead == io::InputStream::IS_EOF)
             {

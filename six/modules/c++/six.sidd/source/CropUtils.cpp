@@ -212,12 +212,12 @@ void cropSIDD(const std::string& inPathname,
             chip.originalLowerLeftCoordinate =
                     chipToFull(lastRow, aoiOffset.col);
 
-            if (data->downstreamReprocessing.get() == NULL)
+            if (data->downstreamReprocessing.get() == nullptr)
             {
                 data->downstreamReprocessing.reset(
                         new six::sidd::DownstreamReprocessing());
             }
-            if (data->downstreamReprocessing->geometricChip.get() == NULL)
+            if (data->downstreamReprocessing->geometricChip.get() == nullptr)
             {
                 data->downstreamReprocessing->geometricChip.reset(
                         new six::sidd::GeometricChip());

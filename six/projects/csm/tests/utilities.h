@@ -20,6 +20,8 @@
  *
  */
 
+#include <sys/Filesystem.h>
+
 #include <six/Utilities.h>
 #include <NitfIsd.h>
 

@@ -164,8 +164,8 @@ public:
             size_t polyOrderY,
             math::poly::TwoD<double>& outputToSlantRow,
             math::poly::TwoD<double>& outputToSlantCol,
-            double* meanResidualErrorRow = NULL,
-            double* meanResidualErrorCol = NULL) const;
+            double* meanResidualErrorRow = nullptr,
+            double* meanResidualErrorCol = nullptr) const;
 
     /*
      * Uses the samples computed in the constructor to fit pixel-based
@@ -211,8 +211,8 @@ public:
             size_t polyOrderY,
             math::poly::TwoD<double>& slantToOutputRow,
             math::poly::TwoD<double>& slantToOutputCol,
-            double* meanResidualErrorRow = NULL,
-            double* meanResidualErrorCol = NULL) const;
+            double* meanResidualErrorRow = nullptr,
+            double* meanResidualErrorCol = nullptr) const;
 
     /*
      * Uses the samples computed in the constructor to fit a time COA
@@ -240,7 +240,7 @@ public:
             size_t polyOrderX,
             size_t polyOrderY,
             math::poly::TwoD<double>& timeCOAPoly,
-            double* meanResidualError = NULL) const;
+            double* meanResidualError = nullptr) const;
 
     /*
      * Uses the samples computed in the constructor to fit a time COA
@@ -266,7 +266,7 @@ public:
             size_t polyOrderX,
             size_t polyOrderY,
             math::poly::TwoD<double>& timeCOAPoly,
-            double* meanResidualError = NULL) const;
+            double* meanResidualError = nullptr) const;
 
     // Same as above but allows an arbitrary transform to be applied to the
     // row and column samples
@@ -277,7 +277,7 @@ public:
             size_t polyOrderX,
             size_t polyOrderY,
             math::poly::TwoD<double>& timeCOAPoly,
-            double* meanResidualError = NULL) const
+            double* meanResidualError = nullptr) const
     {
         math::linear::Matrix2D<double> rowMapping(mNumPoints1D, mNumPoints1D);
         math::linear::Matrix2D<double> colMapping(mNumPoints1D, mNumPoints1D);

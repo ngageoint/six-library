@@ -34,6 +34,12 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDByteProvider.h>
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace
 {
 // Main test class
@@ -65,9 +71,9 @@ public:
         }
 
         mBigEndianImage = mImage;
-        if (!sys::isBigEndianSystem())
+        if (std::endian::native == std::endian::little)
         {
-            sys::byteSwap(&mBigEndianImage[0],
+            sys::byteSwap(mBigEndianImage.data(),
                           sizeof(DataTypeT),
                           mBigEndianImage.size() * 2);
         }
@@ -177,7 +183,7 @@ void Tester<DataTypeT>::normalWrite()
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(&mImage[0]));
+    buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
@@ -195,7 +201,7 @@ void Tester<DataTypeT>::testSingleWrite()
 
     nitf::NITFBufferList buffers;
     nitf::Off fileOffset;
-    sicdByteProvider.getBytes(&mBigEndianImage[0], 0, mDims.row,
+    sicdByteProvider.getBytes(mBigEndianImage.data(), 0, mDims.row,
                               fileOffset, buffers);
     const nitf::Off numBytes = sicdByteProvider.getNumBytes(0, mDims.row);
 

@@ -356,11 +356,11 @@ void Utilities::setCollectionValues(Vector3 arpVel,
 {
     const scene::SceneGeometry sceneGeom(arpVel, arpPos, refPos, *row, *col);
 
-    if (collection->geometry.get() == NULL)
+    if (collection->geometry.get() == nullptr)
     {
         collection->geometry.reset(new Geometry());
     }
-    if (collection->phenomenology.get() == NULL)
+    if (collection->phenomenology.get() == nullptr)
     {
         collection->phenomenology.reset(new Phenomenology());
     }
@@ -572,7 +572,7 @@ std::string Utilities::toXMLString(const DerivedData& data,
     logging::NullLogger nullLogger;
     return ::six::toValidXMLString(&data,
                                    schemaPaths,
-                                   (logger == NULL) ? &nullLogger : logger,
+                                   (logger == nullptr) ? &nullLogger : logger,
                                    &xmlRegistry);
 }
 

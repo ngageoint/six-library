@@ -28,6 +28,9 @@
 #include "scene/Utilities.h"
 #include "six/sidd/GeoTIFFWriteControl.h"
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 #if !defined(SIX_TIFF_DISABLED)
 
 using namespace six;
@@ -104,8 +107,8 @@ void GeoTIFFWriteControl::save(const SourceList& sources,
 
         for (size_t row = 0; row < numRows; ++row)
         {
-            sources[ii]->read((std::byte*)&buf[0], oneRow);
-            imageWriter->putData(&buf[0], numCols);
+            sources[ii]->read((std::byte*)buf.data(), oneRow);
+            imageWriter->putData(buf.data(), numCols);
         }
         imageWriter->writeIFD();
     }

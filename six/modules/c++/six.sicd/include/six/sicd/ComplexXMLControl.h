@@ -51,7 +51,7 @@ class ComplexXMLControl : public XMLControl
 
 public:
     //!  Constructor
-    ComplexXMLControl(logging::Logger* log = NULL, bool ownLog = false);
+    ComplexXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
 
 protected:
     /*!

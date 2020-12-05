@@ -468,7 +468,7 @@ double RadarCollection::waveformMax() const
     double derivedMax = -std::numeric_limits<double>::infinity();
     for (size_t ii = 0; ii < waveform.size(); ++ii)
     {
-        if (waveform[ii].get() != NULL)
+        if (waveform[ii].get() != nullptr)
         {
             derivedMax = std::max(derivedMax,
                 waveform[ii]->txFrequencyStart +
@@ -483,7 +483,7 @@ double RadarCollection::waveformMin() const
     double derivedMin = std::numeric_limits<double>::infinity();
     for (size_t ii = 0; ii < waveform.size(); ++ii)
     {
-        if (waveform[ii].get() != NULL)
+        if (waveform[ii].get() != nullptr)
         {
             derivedMin = std::min(derivedMin,
                 waveform[ii]->txFrequencyStart);
@@ -508,7 +508,7 @@ void RadarCollection::fillDerivedFields()
 
         for (size_t ii = 0; ii < waveform.size(); ++ii)
         {
-            if (waveform[ii].get() != NULL)
+            if (waveform[ii].get() != nullptr)
             {
                 waveform[ii]->fillDerivedFields();
             }
@@ -516,7 +516,7 @@ void RadarCollection::fillDerivedFields()
     }
 
     if (waveform.size() == 1 &&
-        waveform[0].get() != NULL)
+        waveform[0].get() != nullptr)
     {
         if (Init::isUndefined(waveform[0]->txFrequencyStart))
         {

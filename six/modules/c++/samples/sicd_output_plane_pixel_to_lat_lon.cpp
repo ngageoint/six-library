@@ -39,6 +39,8 @@
 #include <six/sicd/Utilities.h>
 #include "utils.h"
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
 
 int main(int argc, char** argv)
 {
@@ -62,7 +64,7 @@ int main(int argc, char** argv)
         const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const std::string sicdPathname(options->get<std::string>("input"));
-        if (!sys::OS().exists(sicdPathname))
+        if (!fs::exists(sicdPathname))
         {
             std::cerr << sicdPathname << " does not exist.\n";
             return 1;

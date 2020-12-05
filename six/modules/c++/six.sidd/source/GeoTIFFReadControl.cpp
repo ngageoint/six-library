@@ -28,7 +28,7 @@
 namespace
 {
 // This entry should contain XML entries as strings.  Each separate entry is
-// NULL-terminated, so we split on this.
+// nullptr-terminated, so we split on this.
 void parseXMLEntry(const tiff::IFDEntry *entry,
                    std::vector<std::string> &entries)
 {
@@ -69,7 +69,7 @@ void parseXMLEntry(const tiff::IFDEntry *entry,
         }
 
         // TODO: Should we treat this as an error instead?  We expect the
-        //       string to be NULL-terminated according to the TIFF spec.
+        //       string to be nullptr-terminated according to the TIFF spec.
         str::trim(curStr);
         if (!curStr.empty())
         {
@@ -159,7 +159,7 @@ void six::sidd::GeoTIFFReadControl::load(
         six::XMLControl *xmlControl;
         if (rootName == "SIDD")
         {
-            if (siddXMLControl.get() == NULL)
+            if (siddXMLControl.get() == nullptr)
             {
                 siddXMLControl.reset(
                     mXMLRegistry->newXMLControl(DataType::DERIVED, mLog));
@@ -168,7 +168,7 @@ void six::sidd::GeoTIFFReadControl::load(
         }
         else if (rootName == "SICD")
         {
-            if (sicdXMLControl.get() == NULL)
+            if (sicdXMLControl.get() == nullptr)
             {
                 sicdXMLControl.reset(
                     mXMLRegistry->newXMLControl(DataType::COMPLEX, mLog));
@@ -178,7 +178,7 @@ void six::sidd::GeoTIFFReadControl::load(
         else
         {
             // If it's something we don't know about, just skip it
-            xmlControl = NULL;
+            xmlControl = nullptr;
         }
 
         if (xmlControl)
@@ -240,7 +240,7 @@ std::byte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
 
     std::byte* buffer = region.getBuffer();
 
-    if (buffer == NULL)
+    if (buffer == nullptr)
     {
         buffer = new std::byte[numRowsReq * numColsReq * elemSize];
         region.setBuffer(buffer);

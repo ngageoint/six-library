@@ -205,7 +205,7 @@ void subsetData(const T* orig,
 {
     output.resize(dims.area());
     const T* origPtr = orig + offset.row * origNumCols + offset.col;
-    T* outputPtr = &output[0];
+    auto outputPtr = output.data();
     for (size_t row = 0;
          row < dims.row;
          ++row, origPtr += origNumCols, outputPtr += dims.col)
@@ -227,7 +227,7 @@ public:
         mContainer(new six::Container(six::DataType::COMPLEX)),
         mDims(123, 456),
         mImage(mDims.area()),
-        mImagePtr(&mImage[0]),
+        mImagePtr(mImage.data()),
         mTestPathname("streaming_write.nitf"),
         mSchemaPaths(schemaPaths),
         mSetMaxProductSize(setMaxProductSize),
@@ -405,7 +405,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     std::vector<std::complex<DataTypeT> > subset;
     types::RowCol<size_t> subsetDims(20, 56);
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
-    sicdWriter.save(&subset[0], offset, subsetDims);
+    sicdWriter.save(subset.data(), offset, subsetDims);
 
     // Rows [60, 123)
     offset.row = 60;
@@ -413,7 +413,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     subsetDims.row = 63;
     subsetDims.col = mDims.col;
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
-    sicdWriter.save(&subset[0], offset, subsetDims);
+    sicdWriter.save(subset.data(), offset, subsetDims);
 
     // Rows [40, 60)
     // Cols [150, 400)
@@ -422,7 +422,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     subsetDims.row = 20;
     subsetDims.col = 250;
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
-    sicdWriter.save(&subset[0], offset, subsetDims);
+    sicdWriter.save(subset.data(), offset, subsetDims);
 
     // Rows [0, 40)
     offset.row = 0;
@@ -430,7 +430,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     subsetDims.row = 40;
     subsetDims.col = mDims.col;
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
-    sicdWriter.save(&subset[0], offset, subsetDims);
+    sicdWriter.save(subset.data(), offset, subsetDims);
 
     // Rows [40, 60)
     // Cols [0, 150)
@@ -439,7 +439,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     subsetDims.row = 20;
     subsetDims.col = 150;
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
-    sicdWriter.save(&subset[0], offset, subsetDims);
+    sicdWriter.save(subset.data(), offset, subsetDims);
 
     sicdWriter.close();
 

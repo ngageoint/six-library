@@ -30,6 +30,9 @@
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDXMLControl.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 /*!
  *  This extracts raw XML from a CPHD file using the CPHD module
  */
@@ -70,7 +73,7 @@ int main(int argc, char** argv)
         // Fill out basename if not user specified
         if (basename.empty())
         {
-            basename = sys::Path::basename(inputFile, true);
+            basename = fs::path(inputFile).stem().string();
         }
         std::string outPathname = basename  + ".xml";
 

@@ -127,7 +127,7 @@ DirectionParameters::calculateWeightFunction() const
 {
     std::unique_ptr<Functor> weightFunction;
 
-    if (weightType.get() != NULL)
+    if (weightType.get() != nullptr)
     {
         std::string windowName(weightType->windowName);
         str::upper(windowName);
@@ -207,7 +207,7 @@ void DirectionParameters::fillDerivedFields(const ImageData& imageData)
         deltaK2 = deltas.second;
     }
 
-    if (weightType.get() != NULL &&
+    if (weightType.get() != nullptr &&
         weights.empty() &&
         weightType->windowName != "UNKNOWN")
     {
@@ -1097,7 +1097,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
 
     //Slow-time deskew would allow for PFA.Kaz2-PFA.Kaz1>(1/Grid.Col.SS),
     //since Kaz bandwidth is compressed from original polar annulus.
-    if (pfa.slowTimeDeskew.get() != NULL &&
+    if (pfa.slowTimeDeskew.get() != nullptr &&
         pfa.slowTimeDeskew->applied != BooleanType::IS_TRUE)
     {
         //2.3.10

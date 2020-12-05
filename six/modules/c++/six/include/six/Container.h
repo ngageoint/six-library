@@ -175,7 +175,7 @@ private:
     static
     mem::ScopedCopyablePtr<Legend> nullLegend()
     {
-        return mem::ScopedCopyablePtr<Legend>(NULL);
+        return mem::ScopedCopyablePtr<Legend>(nullptr);
     }
 
     void addData(std::unique_ptr<Data>&& data,
