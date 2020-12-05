@@ -3,6 +3,9 @@
 // Need a fairly decent C++ compiler to use the real GSL
 #if (__cplusplus >= 201402L /*C++14*/)
 #define NITRO_USE_gsl_ 1
+#elif defined(_MSC_VER) && (_MSC_VER >= 1920 /* Visual Studio 2019 */)
+// need /Zc:__cplusplus to get the right version for __cplusplus
+#define NITRO_USE_gsl_ 1
 #endif
 
 #if !NITRO_USE_gsl_
