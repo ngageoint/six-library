@@ -154,7 +154,7 @@ void CPHDWriter::writeMetadata(size_t vbmSize,
 
     // Pad bytes
     char zero = 0;
-    for (sys::Off_T ii = 0; ii < header.getPadBytes(); ++ii)
+    for (int64_t ii = 0; ii < header.getPadBytes(); ++ii)
     {
         mStream->write(&zero, 1);
     }

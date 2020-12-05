@@ -72,9 +72,9 @@ public:
      *  are left in the stream
      *
      */
-    virtual sys::Off_T available()
+    virtual int64_t available()
     {
-        return (sys::Off_T) mReader.getSize();
+        return (int64_t) mReader.getSize();
     }
 
 protected:
@@ -83,7 +83,7 @@ protected:
      *  bytes that succeeded (which is guaranteed to be len
      *  by SegmentReader)
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t len)
+    virtual ptrdiff_t readImpl(void* buffer, size_t len)
     {
         mReader.read(buffer, len);
         return len;

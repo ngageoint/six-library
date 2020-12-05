@@ -237,8 +237,8 @@ const size_t Wideband::ALL = std::numeric_limits<size_t>::max();
 
 Wideband::Wideband(const std::string& pathname,
                    const cphd::MetadataBase& metadata,
-                   sys::Off_T startWB,
-                   sys::Off_T sizeWB) :
+                   int64_t startWB,
+                   int64_t sizeWB) :
     mInStream(new io::FileInputStream(pathname)),
     mMetadata(metadata),
     mWBOffset(startWB),
@@ -251,8 +251,8 @@ Wideband::Wideband(const std::string& pathname,
 
 Wideband::Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
                    const cphd::MetadataBase& metadata,
-                   sys::Off_T startWB,
-                   sys::Off_T sizeWB) :
+                   int64_t startWB,
+                   int64_t sizeWB) :
     mInStream(inStream),
     mMetadata(metadata),
     mWBOffset(startWB),
@@ -271,8 +271,8 @@ void Wideband::initialize()
         // No Signal Array Compression
         for (size_t ii = 1; ii < mMetadata.getNumChannels(); ++ii)
         {
-            const sys::Off_T offset =
-                    static_cast<sys::Off_T>(mMetadata.getNumSamples(ii - 1)) *
+            const int64_t offset =
+                    static_cast<int64_t>(mMetadata.getNumSamples(ii - 1)) *
                     mMetadata.getNumVectors(ii - 1) * mElementSize;
 
             mOffsets[ii] = mOffsets[ii - 1] + offset;
@@ -289,7 +289,7 @@ void Wideband::initialize()
     }
 }
 
-sys::Off_T Wideband::getFileOffset(size_t channel,
+int64_t Wideband::getFileOffset(size_t channel,
                                    size_t vector,
                                    size_t sample) const
 {
@@ -308,22 +308,22 @@ sys::Off_T Wideband::getFileOffset(size_t channel,
         throw(except::Exception(Ctxt("Invalid sample")));
     }
 
-    const sys::Off_T bytesPerVectorFile =
+    const int64_t bytesPerVectorFile =
             mMetadata.getNumSamples(channel) * mElementSize;
 
-    const sys::Off_T offset = mOffsets[channel] + bytesPerVectorFile * vector +
+    const int64_t offset = mOffsets[channel] + bytesPerVectorFile * vector +
             sample * mElementSize;
     return offset;
 }
 
-sys::Off_T Wideband::getFileOffset(size_t channel) const
+int64_t Wideband::getFileOffset(size_t channel) const
 {
     if (channel >= mOffsets.size())
     {
         throw(except::Exception(Ctxt("Invalid channel number")));
     }
 
-    const sys::Off_T offset = mOffsets[channel];
+    const int64_t offset = mOffsets[channel];
     return offset;
 }
 
@@ -404,7 +404,7 @@ void Wideband::readImpl(size_t channel,
 
     // Compute the byte offset into this channel's wideband in the CPHD file
     // First to the start of the first pulse we're going to read
-    sys::Off_T inOffset = getFileOffset(channel, firstVector, firstSample);
+    int64_t inOffset = getFileOffset(channel, firstVector, firstSample);
 
     std::byte* dataPtr = static_cast<std::byte*>(data);
     if (dims.col == mMetadata.getNumSamples(channel))
@@ -435,7 +435,7 @@ void Wideband::readImpl(size_t channel, void* data) const
 {
     // Compute the byte offset into this channel's wideband in the CPHD file
     // First to the start of the first pulse we're going to read
-    sys::Off_T inOffset = getFileOffset(channel);
+    int64_t inOffset = getFileOffset(channel);
 
     std::byte* dataPtr = static_cast<std::byte*>(data);
     mInStream->seek(inOffset, io::FileInputStream::START);
