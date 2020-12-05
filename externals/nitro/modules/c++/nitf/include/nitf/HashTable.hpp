@@ -189,7 +189,7 @@ public:
      *  For each item in the hash table, do something (slow);
      *  \param fn  The function to perform
      */
-    void forEach(HashIterator& fun, NITF_DATA* userData = NULL);
+    void forEach(HashIterator& fun, NITF_DATA* userData = nullptr);
 
     /*!
      *  Insert this key/data pair into the hash table

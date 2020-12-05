@@ -120,7 +120,7 @@ private:
     size_t mPartialBlocks;
     double mElapsedTime;
     mutable sys::File mFile;
-    const sys::Off_T mFileLen;
+    const int64_t mFileLen;
 };
 
 }

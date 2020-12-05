@@ -50,7 +50,7 @@ int main(int argc, char **argv)
         //create a Writer and prepare it for the Record
         uint32_t numOfBytes = (uint32_t)record.getHeader().getFileLength();
         std::vector<char> outBufVec(numOfBytes);
-        char* const outBuf(outBufVec.empty() ? NULL : &outBufVec[0]);
+        char* const outBuf(outBufVec.empty() ? nullptr : outBufVec.data());
         nitf::MemoryIO memOutput(outBuf, numOfBytes, false);
 
         nitf::Writer memWriter;
