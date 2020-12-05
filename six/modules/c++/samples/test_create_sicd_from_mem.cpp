@@ -121,7 +121,7 @@ int main(int argc, char** argv)
         writer.setLogger(logger.get());
 
         six::BufferList buffers;
-        buffers.push_back(reinterpret_cast<std::byte*>(&image[0]));
+        buffers.push_back(reinterpret_cast<std::byte*>(image.data()));
         writer.save(buffers, outputName, schemaPaths);
 
         return 0;

@@ -96,6 +96,12 @@ namespace gsl
         size_t size() const { return sz_; }
     };
 
+    template<typename T>
+    inline span<T> make_span(T* d, size_t sz)
+    {
+      return span<T>(d, sz);
+    }
+
     template<typename TContainer>
     inline span<typename TContainer::value_type> make_span(TContainer& c)
     {

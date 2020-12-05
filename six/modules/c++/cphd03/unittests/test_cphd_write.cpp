@@ -349,7 +349,7 @@ void writeCPHD(
                     getRandomReal(), getRandomReal());
         }
 
-        writer.writeCPHDData(&data[ii][0], data[ii].size());
+        writer.writeCPHDData(data[ii].data(), data[ii].size());
     }
 }
 

@@ -87,8 +87,8 @@ void XMLVerifier::readFile(const std::string& pathname,
     }
     else
     {
-        inFile.readInto(&mScratch[0], mScratch.size());
-        contents.assign(&mScratch[0], mScratch.size());
+        inFile.readInto(mScratch.data(), mScratch.size());
+        contents.assign(mScratch.data(), mScratch.size());
     }
 }
 

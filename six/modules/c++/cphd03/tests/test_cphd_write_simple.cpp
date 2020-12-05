@@ -132,7 +132,7 @@ int main(int argc, char** argv)
         writer.writeMetadata(vbm);
         for (size_t ii = 0; ii < numChannels; ++ii)
         {
-            writer.writeCPHDData(&data[0], dims.area());
+            writer.writeCPHDData(data.data(), dims.area());
         }
 
         std::cout << "Successfully wrote CPHD file: " << outPathname << "\n";

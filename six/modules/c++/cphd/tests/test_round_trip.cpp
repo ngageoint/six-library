@@ -83,7 +83,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
         for (size_t channel = 0, idx = 0; channel < metadata.data.getNumChannels(); ++channel)
         {
             const size_t bufSize = metadata.data.getCompressedSignalSize(channel);
-            wideband.read(channel, mem::BufferView<std::byte>(&data[idx], bufSize));
+            wideband.read(channel, gsl::make_span(&data[idx], bufSize));
             idx += bufSize;
         }
         writer.write(
@@ -99,7 +99,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
             const size_t bufSize = metadata.data.getSignalSize(channel);
             wideband.read(channel, 0, cphd::Wideband::ALL,
                  0, cphd::Wideband::ALL, numThreads,
-                 mem::BufferView<std::byte>(&data[idx], bufSize));
+                gsl::make_span(&data[idx], bufSize));
             idx += bufSize;
         }
 

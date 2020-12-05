@@ -630,7 +630,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
 
     if (requiredNumElements > 0)
     {
-        getWidebandData(reader, complexData, offset, extent, &buffer[0]);
+        getWidebandData(reader, complexData, offset, extent, buffer.data());
     }
 }
 
@@ -1123,16 +1123,16 @@ void Utilities::fitXYProjectionPolys(
     const types::RowCol<size_t>& dims = slantMeshDims;
     math::linear::Matrix2D<double> outputX(dims.row,
                                            dims.col,
-                                           &outputMesh.getX()[0]);
+                                           outputMesh.getX().data());
     math::linear::Matrix2D<double> outputY(dims.row,
                                            dims.col,
-                                           &outputMesh.getY()[0]);
+                                           outputMesh.getY().data());
     math::linear::Matrix2D<double> slantX(dims.row,
                                           dims.col,
-                                          &slantMesh.getX()[0]);
+                                          slantMesh.getX().data());
     math::linear::Matrix2D<double> slantY(dims.row,
                                           dims.col,
-                                          &slantMesh.getY()[0]);
+                                          slantMesh.getY().data());
 
     outputXYToSlantX =
             math::poly::fit(outputX, outputY, slantX, orderX, orderY);

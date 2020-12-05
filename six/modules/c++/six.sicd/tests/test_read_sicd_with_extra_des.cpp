@@ -160,7 +160,7 @@ std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
     writer.addAdditionalDES(shortSegmentWriter);
 
     std::unique_ptr<io::TempFile> temp(new io::TempFile());
-    writer.save(&bandData[0], temp->pathname());
+    writer.save(bandData.data(), temp->pathname());
     return temp;
 }
 }

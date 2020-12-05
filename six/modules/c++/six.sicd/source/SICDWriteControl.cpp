@@ -51,7 +51,7 @@ void SICDWriteControl::write(const std::vector<std::byte>& data)
 {
     if (!data.empty())
     {
-        mIO->write(&data[0], data.size());
+        mIO->write(data.data(), data.size());
     }
 }
 

@@ -126,7 +126,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     io::TempFile temp;
     try
     {
-        writer.save(&bandData[0], temp.pathname());
+        writer.save(bandData.data(), temp.pathname());
         std::cerr << "Test failed" << std::endl;
         return false;
     }
@@ -173,7 +173,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     io::TempFile temp;
     try
     {
-        writer.save(&bandData[0], temp.pathname());
+        writer.save(bandData.data(), temp.pathname());
         std::cout << "Test passed" << std::endl;
         return true;
     }
@@ -233,7 +233,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     io::TempFile temp;
     try
     {
-        writer.save(&bandData[0], temp.pathname());
+        writer.save(bandData.data(), temp.pathname());
         std::cout << "Test passed" << std::endl;
         return true;
     }

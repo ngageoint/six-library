@@ -21,6 +21,7 @@
  */
 #ifndef __CPHD_SUPPORT_BLOCK_H__
 #define __CPHD_SUPPORT_BLOCK_H__
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -30,9 +31,9 @@
 #include <sys/Conf.h>
 #include <io/SeekableStreams.h>
 #include <types/RowCol.h>
-
 #include <mem/ScopedArray.h>
-#include <mem/BufferView.h>
+
+#include <nitf/span.h>
 
 #include <cphd/Data.h>
 #include <cphd/Utilities.h>
@@ -100,7 +101,7 @@ public:
      *  \param id unique identifier of support array
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param[in,out] data A pre allocated mem::BufferView that will hold the data
+     *  \param[in,out] data A pre allocated std::span that will hold the data
      *   read from the file.
      *
      *  \throws except::Exception Throws if buffer has not been allocated to a sufficient size
@@ -108,7 +109,7 @@ public:
      */
     void read(const std::string& id,
               size_t numThreads,
-              const mem::BufferView<std::byte>& data) const;
+              std::span<std::byte> data) const;
 
     /*
      *  \func read

@@ -30733,7 +30733,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   size_t arg5 ;
   size_t arg6 ;
   size_t arg7 ;
-  mem::BufferView< std::byte > *arg8 = 0 ;
+  std::span< std::byte > *arg8 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -30797,16 +30797,16 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   arg7 = static_cast< size_t >(val7);
   res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_mem__BufferViewT_unsigned_char_t,  0  | 0);
   if (!SWIG_IsOK(res8)) {
-    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "Wideband_read" "', argument " "8"" of type '" "mem::BufferView< std::byte > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "Wideband_read" "', argument " "8"" of type '" "std::span< std::byte > const &""'"); 
   }
   if (!argp8) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "8"" of type '" "mem::BufferView< std::byte > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "8"" of type '" "std::span< std::byte > const &""'"); 
   }
-  arg8 = reinterpret_cast< mem::BufferView< std::byte > * >(argp8);
+  arg8 = reinterpret_cast< std::span< std::byte > * >(argp8);
   {
     try
     {
-      (arg1)->read(arg2,arg3,arg4,arg5,arg6,arg7,(mem::BufferView< std::byte > const &)*arg8);
+      (arg1)->read(arg2,arg3,arg4,arg5,arg6,arg7,(std::span< std::byte > const &)*arg8);
     } 
     catch (const std::exception& e)
     {
@@ -30968,8 +30968,8 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
   size_t arg6 ;
   std::vector< double,std::allocator< double > > *arg7 = 0 ;
   size_t arg8 ;
-  mem::BufferView< std::byte > *arg9 = 0 ;
-  mem::BufferView< std::complex< float > > *arg10 = 0 ;
+  std::span< std::byte > *arg9 = 0 ;
+  std::span< std::complex< float > > *arg10 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -31049,24 +31049,24 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
   arg8 = static_cast< size_t >(val8);
   res9 = SWIG_ConvertPtr(obj8, &argp9, SWIGTYPE_p_mem__BufferViewT_unsigned_char_t,  0  | 0);
   if (!SWIG_IsOK(res9)) {
-    SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "Wideband_read" "', argument " "9"" of type '" "mem::BufferView< std::byte > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "Wideband_read" "', argument " "9"" of type '" "std::span< std::byte > const &""'"); 
   }
   if (!argp9) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "9"" of type '" "mem::BufferView< std::byte > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "9"" of type '" "std::span< std::byte > const &""'"); 
   }
-  arg9 = reinterpret_cast< mem::BufferView< std::byte > * >(argp9);
+  arg9 = reinterpret_cast< std::span< std::byte > * >(argp9);
   res10 = SWIG_ConvertPtr(obj9, &argp10, SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t,  0  | 0);
   if (!SWIG_IsOK(res10)) {
-    SWIG_exception_fail(SWIG_ArgError(res10), "in method '" "Wideband_read" "', argument " "10"" of type '" "mem::BufferView< std::complex< float > > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res10), "in method '" "Wideband_read" "', argument " "10"" of type '" "std::span< std::complex< float > > const &""'"); 
   }
   if (!argp10) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "10"" of type '" "mem::BufferView< std::complex< float > > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "10"" of type '" "std::span< std::complex< float > > const &""'"); 
   }
-  arg10 = reinterpret_cast< mem::BufferView< std::complex< float > > * >(argp10);
+  arg10 = reinterpret_cast< std::span< std::complex< float > > * >(argp10);
   {
     try
     {
-      (arg1)->read(arg2,arg3,arg4,arg5,arg6,(std::vector< double,std::allocator< double > > const &)*arg7,arg8,(mem::BufferView< std::byte > const &)*arg9,(mem::BufferView< std::complex< float > > const &)*arg10);
+      (arg1)->read(arg2,arg3,arg4,arg5,arg6,(std::vector< double,std::allocator< double > > const &)*arg7,arg8,(std::span< std::byte > const &)*arg9,(std::span< std::complex< float > > const &)*arg10);
     } 
     catch (const std::exception& e)
     {
@@ -31453,9 +31453,9 @@ SWIGINTERN PyObject *_wrap_Wideband_read(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Wideband_read'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    cphd03::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,mem::BufferView< std::byte > const &)\n"
+    "    cphd03::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,std::span< std::byte > const &)\n"
     "    cphd03::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,std::unique_ptr< std::byte[] > &)\n"
-    "    cphd03::Wideband::read(size_t,size_t,size_t,size_t,size_t,std::vector< double,std::allocator< double > > const &,size_t,mem::BufferView< std::byte > const &,mem::BufferView< std::complex< float > > const &)\n"
+    "    cphd03::Wideband::read(size_t,size_t,size_t,size_t,size_t,std::vector< double,std::allocator< double > > const &,size_t,std::span< std::byte > const &,std::span< std::complex< float > > const &)\n"
     "    cphd03::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,types::RowCol< size_t > const &,void *)\n");
   return 0;
 }
@@ -53618,9 +53618,9 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"Wideband_getFileOffset", _wrap_Wideband_getFileOffset, METH_VARARGS, (char *)"Wideband_getFileOffset(Wideband self, size_t channel, size_t vector, size_t sample) -> int64_t"},
 	 { (char *)"Wideband_read", _wrap_Wideband_read, METH_VARARGS, (char *)"\n"
-		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::BufferView< std::byte > const & data)\n"
+		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, std::span< std::byte > const & data)\n"
 		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, std::unique_ptr< std::byte[] > & data)\n"
-		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, std_vector_double vectorScaleFactors, size_t numThreads, mem::BufferView< std::byte > const & scratch, mem::BufferView< std::complex< float > > const & data)\n"
+		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, std_vector_double vectorScaleFactors, size_t numThreads, std::span< std::byte > const & scratch, std::span< std::complex< float > > const & data)\n"
 		"Wideband_read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, RowColSizeT dims, void * data)\n"
 		""},
 	 { (char *)"Wideband_getBufferDims", _wrap_Wideband_getBufferDims, METH_VARARGS, (char *)"Wideband_getBufferDims(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample) -> RowColSizeT"},
@@ -54111,8 +54111,8 @@ static swig_type_info _swigt__p_math__linear__VectorT_double_t = {"_p_math__line
 static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__OneDT_double_t", "six::Poly1D *|cphd03::Poly1D *|math::poly::OneD< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "six::PolyXYZ *|cphd03::PolyXYZ *|math::poly::OneD< math::linear::VectorN< 3,double > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "six::Poly2D *|cphd03::Poly2D *|math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_mem__BufferViewT_std__complexT_float_t_t = {"_p_mem__BufferViewT_std__complexT_float_t_t", "mem::BufferView< std::complex< float > > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_mem__BufferViewT_unsigned_char_t = {"_p_mem__BufferViewT_unsigned_char_t", "mem::BufferView< std::byte > *|mem::BufferView< unsigned char > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__BufferViewT_std__complexT_float_t_t = {"_p_mem__BufferViewT_std__complexT_float_t_t", "std::span< std::complex< float > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__BufferViewT_unsigned_char_t = {"_p_mem__BufferViewT_unsigned_char_t", "std::span< std::byte > *|std::span< unsigned char > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedArrayT_unsigned_char_t = {"_p_mem__ScopedArrayT_unsigned_char_t", "std::unique_ptr< std::byte[] > *|std::unique_ptr< unsigned char[] > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd03__Antenna_t = {"_p_mem__ScopedCopyablePtrT_cphd03__Antenna_t", "mem::ScopedCopyablePtr< cphd03::Antenna > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd03__AreaPlane_t = {"_p_mem__ScopedCopyablePtrT_cphd03__AreaPlane_t", "mem::ScopedCopyablePtr< cphd03::AreaPlane > *", 0, 0, (void*)0, 0};
