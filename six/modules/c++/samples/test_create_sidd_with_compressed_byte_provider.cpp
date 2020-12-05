@@ -1055,7 +1055,7 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
     for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
     {
         outputStream.write(
-                static_cast<const sys::byte*>(buffers.mBuffers[ii].mData),
+                static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
                 buffers.mBuffers[ii].mNumBytes);
     }
 }

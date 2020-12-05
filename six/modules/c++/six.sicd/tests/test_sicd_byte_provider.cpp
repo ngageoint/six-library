@@ -126,7 +126,7 @@ private:
         for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
         {
             outStream.write(
-                    static_cast<const sys::byte*>(buffers.mBuffers[ii].mData),
+                    static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
                     buffers.mBuffers[ii].mNumBytes);
 
             numBytes += buffers.mBuffers[ii].mNumBytes;
@@ -177,7 +177,7 @@ void Tester<DataTypeT>::normalWrite()
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<six::UByte*>(&mImage[0]));
+    buffers.push_back(reinterpret_cast<std::byte*>(&mImage[0]));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
@@ -356,7 +356,7 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
         success = false;
     }
 
-    if (!doTests<sys::Int16_T>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<int16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }

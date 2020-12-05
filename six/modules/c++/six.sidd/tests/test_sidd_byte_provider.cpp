@@ -45,7 +45,7 @@ struct GetPixelType
 };
 
 template <>
-struct GetPixelType<sys::Uint8_T>
+struct GetPixelType<uint8_t>
 {
     static six::PixelType getPixelType()
     {
@@ -54,7 +54,7 @@ struct GetPixelType<sys::Uint8_T>
 };
 
 template <>
-struct GetPixelType<sys::Uint16_T>
+struct GetPixelType<uint16_t>
 {
     static six::PixelType getPixelType()
     {
@@ -295,7 +295,7 @@ private:
         for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
         {
             outStream.write(
-                    static_cast<const sys::byte*>(buffers.mBuffers[ii].mData),
+                    static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
                     buffers.mBuffers[ii].mNumBytes);
 
             numBytes += buffers.mBuffers[ii].mNumBytes;
@@ -378,7 +378,7 @@ void Tester<DataTypeT>::normalWrite()
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<six::UByte*>(&mImage[0]));
+    buffers.push_back(reinterpret_cast<std::byte*>(&mImage[0]));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
@@ -714,25 +714,25 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
                           size_t numRowsPerSeg = 0)
 {
     bool success = true;
-    if (!doTests<sys::Uint8_T>(schemaPaths, false,
+    if (!doTests<uint8_t>(schemaPaths, false,
                                setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<sys::Uint8_T>(schemaPaths, true,
+    if (!doTests<uint8_t>(schemaPaths, true,
                                setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<sys::Uint16_T>(schemaPaths, false,
+    if (!doTests<uint16_t>(schemaPaths, false,
                                 setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<sys::Uint16_T>(schemaPaths, true,
+    if (!doTests<uint16_t>(schemaPaths, true,
                                 setMaxProductSize, numRowsPerSeg))
     {
         success = false;

@@ -942,7 +942,7 @@ void NITFHeaderCreator::initialize(const six::Options& options,
 
 void NITFHeaderCreator::loadMeshSegment(
         const std::string& meshName,
-        const std::vector<sys::byte>& meshBuffer,
+        const std::vector<std::byte>& meshBuffer,
         const six::Classification& classification)
 {
     nitf::Record& record = getRecord();

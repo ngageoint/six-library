@@ -62,43 +62,43 @@ VectorParameters::VectorParameters() :
     txPos(0),
     rcvTime(0),
     rcvPos(0),
-    srpTime (six::Init::undefined<sys::Off_T>()),
+    srpTime (six::Init::undefined<int64_t>()),
     srpPos(0),
-    tropoSRP(six::Init::undefined<sys::Off_T>()),
-    ampSF(six::Init::undefined<sys::Off_T>())
+    tropoSRP(six::Init::undefined<int64_t>()),
+    ampSF(six::Init::undefined<int64_t>())
 {
 }
 
-sys::Off_T VectorParameters::txTimeOffset() const
+int64_t VectorParameters::txTimeOffset() const
 {
     return 0;
 }
 
-sys::Off_T VectorParameters::txPosOffset() const
+int64_t VectorParameters::txPosOffset() const
 {
     return (txTimeOffset() + txTime);
 }
 
-sys::Off_T VectorParameters::rcvTimeOffset() const
+int64_t VectorParameters::rcvTimeOffset() const
 {
     return (txPosOffset() + txPos);
 }
 
-sys::Off_T VectorParameters::rcvPosOffset() const
+int64_t VectorParameters::rcvPosOffset() const
 {
     return (rcvTimeOffset() + rcvTime);
 }
 
-sys::Off_T VectorParameters::srpTimeOffset() const
+int64_t VectorParameters::srpTimeOffset() const
 {
-    const sys::Off_T pos = six::Init::isUndefined(srpTime) ?
+    const int64_t pos = six::Init::isUndefined(srpTime) ?
             -1 : rcvPosOffset() + rcvPos;
     return pos;
 }
 
-sys::Off_T VectorParameters::srpPosOffset() const
+int64_t VectorParameters::srpPosOffset() const
 {
-    sys::Off_T pos = rcvPosOffset() + rcvPos;
+    int64_t pos = rcvPosOffset() + rcvPos;
     if (!six::Init::isUndefined(srpTime))
     {
         pos += srpTime;
@@ -106,16 +106,16 @@ sys::Off_T VectorParameters::srpPosOffset() const
     return pos;
 }
 
-sys::Off_T VectorParameters::tropoSRPOffset() const
+int64_t VectorParameters::tropoSRPOffset() const
 {
-    const sys::Off_T pos = six::Init::isUndefined(tropoSRP) ?
+    const int64_t pos = six::Init::isUndefined(tropoSRP) ?
             -1 : (srpPosOffset() + srpPos);
     return pos;
 }
 
-sys::Off_T VectorParameters::ampSFOffset() const
+int64_t VectorParameters::ampSFOffset() const
 {
-    sys::Off_T pos = -1;
+    int64_t pos = -1;
     if (!six::Init::isUndefined(ampSF))
     {
         pos = srpPosOffset() + srpPos;
@@ -127,9 +127,9 @@ sys::Off_T VectorParameters::ampSFOffset() const
     return pos;
 }
 
-sys::Off_T VectorParameters::Fx0Offset() const
+int64_t VectorParameters::Fx0Offset() const
 {
-    sys::Off_T pos = -1;
+    int64_t pos = -1;
     if (fxParameters.get() != NULL)
     {
         pos = srpPosOffset() + srpPos;
@@ -145,9 +145,9 @@ sys::Off_T VectorParameters::Fx0Offset() const
     return pos;
 }
 
-sys::Off_T VectorParameters::FxSSOffset() const
+int64_t VectorParameters::FxSSOffset() const
 {
-    sys::Off_T pos = Fx0Offset();
+    int64_t pos = Fx0Offset();
     if (pos != -1)
     {
         pos += fxParameters->Fx0;
@@ -155,9 +155,9 @@ sys::Off_T VectorParameters::FxSSOffset() const
     return pos;
 }
 
-sys::Off_T VectorParameters::Fx1Offset() const
+int64_t VectorParameters::Fx1Offset() const
 {
-    sys::Off_T pos = FxSSOffset();
+    int64_t pos = FxSSOffset();
     if (pos != -1)
     {
         pos += fxParameters->FxSS;
@@ -165,9 +165,9 @@ sys::Off_T VectorParameters::Fx1Offset() const
     return pos;
 }
 
-sys::Off_T VectorParameters::Fx2Offset() const
+int64_t VectorParameters::Fx2Offset() const
 {
-    sys::Off_T pos = Fx1Offset();
+    int64_t pos = Fx1Offset();
     if (pos != -1)
     {
         pos += fxParameters->Fx1;
@@ -175,9 +175,9 @@ sys::Off_T VectorParameters::Fx2Offset() const
     return pos;
 }
 
-sys::Off_T VectorParameters::deltaTOA0Offset() const
+int64_t VectorParameters::deltaTOA0Offset() const
 {
-    sys::Off_T pos = -1;
+    int64_t pos = -1;
     if (toaParameters.get() != NULL)
     {
         pos = srpPosOffset() + srpPos;
@@ -193,9 +193,9 @@ sys::Off_T VectorParameters::deltaTOA0Offset() const
     return pos;
 }
 
-sys::Off_T VectorParameters::toaSSOffset() const
+int64_t VectorParameters::toaSSOffset() const
 {
-    sys::Off_T pos = deltaTOA0Offset();
+    int64_t pos = deltaTOA0Offset();
     if (pos != -1)
     {
         pos += toaParameters->deltaTOA0;

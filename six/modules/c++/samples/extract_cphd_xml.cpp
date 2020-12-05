@@ -80,7 +80,7 @@ int main(int argc, char** argv)
         }
 
         // Reads in CPHD and verifies XML using schema
-        cphd::CPHDReader reader(inputFile, sys::OS().getNumCPUs());
+        cphd::CPHDReader reader(inputFile, std::thread::hardware_concurrency());
         cphd::CPHDXMLControl xmlControl;
         std::string xml = xmlControl.toXMLString(reader.getMetadata(), schemaPathnames, prettyPrint);
 

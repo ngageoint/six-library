@@ -271,7 +271,7 @@ int main(int argc, char** argv)
 
         writerOptions.setParameter(
                 six::WriteControl::OPT_BYTE_SWAP,
-                six::Parameter((sys::Uint16_T) needsByteSwap));
+                six::Parameter((uint16_t) needsByteSwap));
 
         six::NITFWriteControl writer(writerOptions, container);
         writer.setLogger(logger.get());

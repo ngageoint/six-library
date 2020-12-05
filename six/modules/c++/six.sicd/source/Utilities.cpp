@@ -55,7 +55,7 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
     retv.setStartCol(offset.col);
     retv.setNumRows(extent.row);
     retv.setNumCols(extent.col);
-    retv.setBuffer(reinterpret_cast<six::UByte*>(buffer));
+    retv.setBuffer(reinterpret_cast<std::byte*>(buffer));
     return retv;
 }
 
@@ -144,7 +144,7 @@ std::map<std::string, size_t> getAdditionalDesMap(six::NITFReadControl& reader)
 
 void getDesBuffer(six::NITFReadControl& reader,
                   size_t desIndex,
-                  mem::ScopedAlignedArray<sys::byte>& buffer)
+                  mem::ScopedAlignedArray<std::byte>& buffer)
 {
     nitf::List des = reader.getRecord().getDataExtensions();
 
@@ -171,10 +171,10 @@ std::unique_ptr<MeshTypeT> extractMesh(const std::string& meshID,
 {
     // Extract the mesh
     std::unique_ptr<MeshTypeT> mesh(new MeshTypeT(meshID));
-    mem::ScopedAlignedArray<sys::byte> buffer;
+    mem::ScopedAlignedArray<std::byte> buffer;
     getDesBuffer(reader, desIndex, buffer);
 
-    const sys::byte* bufferData = buffer.get();
+    const std::byte* bufferData = buffer.get();
     mesh->deserialize(bufferData);
 
     return mesh;
@@ -718,18 +718,18 @@ bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
 
     // If the signed area is positive, and y values are ascending,
     // then it is clockwise
-    sys::SSize_T area = 0;
+    ptrdiff_t area = 0;
     for (size_t ii = 0; ii < vertices.size(); ++ii)
     {
-        const sys::SSize_T x1 = static_cast<sys::SSize_T>(vertices[ii].col);
-        const sys::SSize_T y1 = static_cast<sys::SSize_T>(vertices[ii].row);
+        const ptrdiff_t x1 = static_cast<ptrdiff_t>(vertices[ii].col);
+        const ptrdiff_t y1 = static_cast<ptrdiff_t>(vertices[ii].row);
 
         const size_t nextIndex = (ii == vertices.size() - 1) ? 0 : ii + 1;
 
-        const sys::SSize_T x2 =
-                static_cast<sys::SSize_T>(vertices[nextIndex].col);
-        const sys::SSize_T y2 =
-                static_cast<sys::SSize_T>(vertices[nextIndex].row);
+        const ptrdiff_t x2 =
+                static_cast<ptrdiff_t>(vertices[nextIndex].col);
+        const ptrdiff_t y2 =
+                static_cast<ptrdiff_t>(vertices[nextIndex].row);
 
         area += (x1 * y2 - x2 * y1);
     }
@@ -1192,10 +1192,10 @@ void Utilities::projectValidDataPolygonToOutputPlane(
     if (validData.size() == 0)
     {
         // Get dimensions of SICD.
-        sys::SSize_T numRows =
-                static_cast<sys::SSize_T>(complexData.getNumRows());
-        sys::SSize_T numCols =
-                static_cast<sys::SSize_T>(complexData.getNumCols());
+        ptrdiff_t numRows =
+                static_cast<ptrdiff_t>(complexData.getNumRows());
+        ptrdiff_t numCols =
+                static_cast<ptrdiff_t>(complexData.getNumCols());
 
         validData.push_back(six::RowColInt(0, 0));
         validData.push_back(six::RowColInt(0, numCols - 1));

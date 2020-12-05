@@ -97,7 +97,7 @@ public:
     */
     static
     DataType getDataType(const std::string& desid,
-            sys::Uint64_T subheaderLength,
+            uint64_t subheaderLength,
             const std::string& desshsiField,
             const std::string& treTag="");
 

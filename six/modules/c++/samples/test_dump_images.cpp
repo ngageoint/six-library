@@ -47,15 +47,15 @@ void writeSIOFileHeader(size_t numRows,
         elementType = sio::lite::FileHeader::COMPLEX_FLOAT;
         break;
     case six::PixelType::RE16I_IM16I:
-        elementSize = sizeof(std::complex<sys::Int16_T>);
+        elementSize = sizeof(std::complex<int16_t>);
         elementType = sio::lite::FileHeader::COMPLEX_SIGNED;
         break;
     case six::PixelType::MONO8I:
-        elementSize = sizeof(sys::Int8_T);
+        elementSize = sizeof(int8_t);
         elementType = sio::lite::FileHeader::SIGNED;
         break;
     case six::PixelType::MONO16I:
-        elementSize = sizeof(sys::Int16_T);
+        elementSize = sizeof(int16_t);
         elementType = sio::lite::FileHeader::SIGNED;
         break;
     default:
@@ -211,12 +211,12 @@ int main(int argc, char** argv)
             {
                 region.setNumRows(numRows);
                 size_t totalBytes = nbpp * numCols * numRows;
-                const mem::ScopedArray<six::UByte>
-                    workBuffer(new six::UByte[totalBytes]);
+                const std::unique_ptr<std::byte[]>
+                    workBuffer(new std::byte[totalBytes]);
                 region.setBuffer(workBuffer.get());
 
                 reader->interleaved(region, ii);
-                outputStream.write((const sys::byte*) workBuffer.get(),
+                outputStream.write((const std::byte*) workBuffer.get(),
                                    totalBytes);
             }
             else
@@ -225,7 +225,7 @@ int main(int argc, char** argv)
                 const size_t nbpr = nbpp * numCols;
 
                 // allocate this so we can reuse it for each row
-                const mem::ScopedArray<six::UByte> workBuffer(new six::UByte[nbpr]);
+                const std::unique_ptr<std::byte[]> workBuffer(new std::byte[nbpr]);
                 region.setBuffer(workBuffer.get());
 
                 for (size_t jj = startRow;
@@ -233,8 +233,8 @@ int main(int argc, char** argv)
                      ++jj)
                 {
                     region.setStartRow(jj);
-                    six::UByte* line = reader->interleaved(region, ii);
-                    outputStream.write((const sys::byte*) line, nbpr);
+                    std::byte* line = reader->interleaved(region, ii);
+                    outputStream.write((const std::byte*) line, nbpr);
                 }
             }
             outputStream.close();

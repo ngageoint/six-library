@@ -36,8 +36,8 @@ namespace cphd
 {
 SupportBlock::SupportBlock(const std::string& pathname,
                            const cphd::Data& data,
-                           sys::Off_T startSupport,
-                           sys::Off_T sizeSupport) :
+                           int64_t startSupport,
+                           int64_t sizeSupport) :
     mInStream(new io::FileInputStream(pathname)),
     mData(data),
     mSupportOffset(startSupport),
@@ -48,8 +48,8 @@ SupportBlock::SupportBlock(const std::string& pathname,
 
 SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
                            const cphd::Data& data,
-                           sys::Off_T startSupport,
-                           sys::Off_T sizeSupport) :
+                           int64_t startSupport,
+                           int64_t sizeSupport) :
     mInStream(inStream),
     mData(data),
     mSupportOffset(startSupport),
@@ -67,7 +67,7 @@ void SupportBlock::initialize()
     }
 }
 
-sys::Off_T SupportBlock::getFileOffset(const std::string& id) const
+int64_t SupportBlock::getFileOffset(const std::string& id) const
 {
     if (mOffsets.count(id) != 1)
     {
@@ -78,7 +78,7 @@ sys::Off_T SupportBlock::getFileOffset(const std::string& id) const
 
 void SupportBlock::read(const std::string& id,
                         size_t numThreads,
-                        const mem::BufferView<sys::ubyte>& data) const
+                        const mem::BufferView<std::byte>& data) const
 {
     const size_t minSize = mData.getSupportArrayById(id).getSize();
 
@@ -92,8 +92,8 @@ void SupportBlock::read(const std::string& id,
     // Perform the read
     // Compute the byte offset into this SupportArray in the CPHD file
     // First to the start of the first support array we're going to read
-    sys::Off_T inOffset = getFileOffset(id);
-    sys::byte* dataPtr = reinterpret_cast<sys::byte*>(data.data);
+    int64_t inOffset = getFileOffset(id);
+    std::byte* dataPtr = reinterpret_cast<std::byte*>(data.data);
     mInStream->seek(inOffset, io::FileInputStream::START);
     size_t size = mData.getSupportArrayById(id).getSize();
     mInStream->read(dataPtr, size);
@@ -108,23 +108,23 @@ void SupportBlock::read(const std::string& id,
 }
 
 void SupportBlock::readAll(size_t numThreads,
-                           mem::ScopedArray<sys::ubyte>& data) const
+                           std::unique_ptr<std::byte[]>& data) const
 {
-    data.reset(new sys::ubyte[mSupportSize]);
+    data.reset(new std::byte[mSupportSize]);
     for (auto it = mData.supportArrayMap.begin(); it != mData.supportArrayMap.end(); ++it)
     {
         const size_t bufSize = it->second.getSize();
-        read(it->first, numThreads, mem::BufferView<sys::ubyte>(&data[it->second.arrayByteOffset], bufSize));
+        read(it->first, numThreads, mem::BufferView<std::byte>(&data[it->second.arrayByteOffset], bufSize));
     }
 }
 
 void SupportBlock::read(const std::string& id,
                         size_t numThreads,
-                        mem::ScopedArray<sys::ubyte>& data) const
+                        std::unique_ptr<std::byte[]>& data) const
 {
     const size_t bufSize = mData.getSupportArrayById(id).getSize();
-    data.reset(new sys::ubyte[bufSize]);
-    read(id, numThreads, mem::BufferView<sys::ubyte>(data.get(), bufSize));
+    data.reset(new std::byte[bufSize]);
+    read(id, numThreads, mem::BufferView<std::byte>(data.get(), bufSize));
 }
 
 std::ostream& operator<< (std::ostream& os, const SupportBlock& d)

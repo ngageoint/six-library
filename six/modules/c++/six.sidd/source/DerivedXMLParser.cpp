@@ -92,15 +92,15 @@ void DerivedXMLParser::getAttributeIfExists(
 void DerivedXMLParser::getAttributeIfExists(
     const xml::lite::Attributes& attributes,
     const std::string& attributeName,
-    sys::SSize_T& value)
+    ptrdiff_t& value)
 {
     if (attributes.contains(attributeName))
     {
-        value = str::toType<sys::SSize_T>(attributes.getValue(attributeName));
+        value = str::toType<ptrdiff_t>(attributes.getValue(attributeName));
     }
     else
     {
-        value = six::Init::undefined<sys::SSize_T>();
+        value = six::Init::undefined<ptrdiff_t>();
     }
 }
 
@@ -411,11 +411,11 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
                             "LUT vals expected to be in [0, 255]."));
                     }
 
-                    sys::ubyte val = static_cast<sys::ubyte>(
+                    std::byte val = static_cast<std::byte>(
                             intermediateVal);
 
                     ::memcpy(&(remapLUT->getTable()[k++]), &val,
-                             sizeof(sys::ubyte));
+                             sizeof(std::byte));
                 }
             }
             return new ColorDisplayRemap(remapLUT.release());

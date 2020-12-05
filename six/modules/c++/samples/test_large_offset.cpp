@@ -87,7 +87,7 @@ void createNITF(const std::string& outputPathname,
     writer.setXMLControlRegistry(&registry);
     writer.initialize(container);
 
-    mem::ScopedArray<six::UByte> imageData(new six::UByte[imageSize]);
+    std::unique_ptr<std::byte[]> imageData(new std::byte[imageSize]);
     if (container->getDataType() == six::DataType::COMPLEX)
     {
         std::complex<float>* complexData =
@@ -102,11 +102,11 @@ void createNITF(const std::string& outputPathname,
     }
     else
     {
-        sys::Uint16_T* derivedData =
-                reinterpret_cast<sys::Uint16_T*>(imageData.get());
+        uint16_t* derivedData =
+                reinterpret_cast<uint16_t*>(imageData.get());
         for (size_t ii = 0; ii < elementsInImage; ++ii)
         {
-            derivedData[ii] = static_cast<sys::Uint16_T>(ii);
+            derivedData[ii] = static_cast<uint16_t>(ii);
         }
     }
     writer.save(imageData.get(), outputPathname);
@@ -135,7 +135,7 @@ bool checkNITF(const std::string& pathname)
     region.setNumRows(data->getNumRows() - ROWS_TO_SKIP);
     region.setStartCol(0);
     reader.interleaved(region, 0);
-    six::UByte* buffer = region.getBuffer();
+    std::byte* buffer = region.getBuffer();
 
     const size_t elementsPerRow = data->getNumCols();
     const size_t skipSize = ROWS_TO_SKIP * elementsPerRow;
@@ -161,11 +161,11 @@ bool checkNITF(const std::string& pathname)
     }
     else
     {
-        sys::Uint16_T* derivedBuffer =
-                reinterpret_cast<sys::Uint16_T*>(buffer);
+        uint16_t* derivedBuffer =
+                reinterpret_cast<uint16_t*>(buffer);
         for (size_t ii = skipSize; ii < imageSize; ++ii)
         {
-            if (derivedBuffer[ii - skipSize] != static_cast<sys::Uint16_T>(ii))
+            if (derivedBuffer[ii - skipSize] != static_cast<uint16_t>(ii))
             {
                 return false;
             }

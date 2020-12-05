@@ -49,7 +49,7 @@ void writeSicd(std::unique_ptr<six::Data>&& complexData,
     six::NITFWriteControl writer(container);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<const six::UByte*>(widebandData.data()));
+    buffers.push_back(reinterpret_cast<const std::byte*>(widebandData.data()));
     writer.save(buffers, pathname, schemaPaths);
 }
 }
