@@ -84,7 +84,7 @@ int64_t SupportBlock::getFileOffset(const std::string& id) const
 
 void SupportBlock::read(const std::string& id,
                         size_t numThreads,
-                        const std::span<std::byte>& data) const
+                        std::span<std::byte> data) const
 {
     const size_t minSize = mData.getSupportArrayById(id).getSize();
 

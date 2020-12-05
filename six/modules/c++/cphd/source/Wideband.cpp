@@ -455,7 +455,7 @@ void Wideband::read(size_t channel,
                     size_t firstSample,
                     size_t lastSample,
                     size_t numThreads,
-                    const std::span<std::byte>& data) const
+                    std::span<std::byte> data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;
@@ -514,7 +514,7 @@ size_t Wideband::getBytesRequiredForRead(size_t channel,
 }
 
 void Wideband::read(size_t channel,
-                    const std::span<std::byte>& data) const
+                    std::span<std::byte> data) const
 {
     // Sanity checks
     checkChannelInput(channel);
@@ -600,8 +600,8 @@ void Wideband::read(size_t channel,
                     size_t lastSample,
                     const std::vector<double>& vectorScaleFactors,
                     size_t numThreads,
-                    const std::span<std::byte>& scratch,
-                    const std::span<std::complex<float>>& data) const
+                    std::span<std::byte> scratch,
+                    std::span<std::complex<float>> data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;

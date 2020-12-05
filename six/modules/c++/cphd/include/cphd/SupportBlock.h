@@ -109,7 +109,7 @@ public:
      */
     void read(const std::string& id,
               size_t numThreads,
-              const std::span<std::byte>& data) const;
+              std::span<std::byte> data) const;
 
     /*
      *  \func read
