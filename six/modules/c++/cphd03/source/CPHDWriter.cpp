@@ -27,6 +27,12 @@
 #include <cphd03/FileHeader.h>
 #include <cphd/ByteSwap.h>
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace cphd03
 {
 CPHDWriter::CPHDWriter(const Metadata& metadata,
@@ -43,7 +49,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 {
     //! Get the correct dataWriter.
     //  The CPHD file needs to be big endian.
-    if (sys::isBigEndianSystem())
+    if (std::endian::native == std::endian::big)
     {
         mDataWriter.reset(new cphd::DataWriterBigEndian(mStream, mNumThreads));
     }
@@ -70,7 +76,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 
     //! Get the correct dataWriter.
     //  The CPHD file needs to be big endian.
-    if (sys::isBigEndianSystem())
+    if (std::endian::native == std::endian::big)
     {
         mDataWriter.reset(new cphd::DataWriterBigEndian(mStream, mNumThreads));
     }

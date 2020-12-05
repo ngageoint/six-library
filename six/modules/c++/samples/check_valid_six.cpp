@@ -27,6 +27,9 @@
 #include <import/six/sidd.h>
 #include "utils.h"
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 // TODO: Does this belong in sys?
@@ -204,7 +207,7 @@ static int main_(int argc, char** argv)
     str::upper(level);
     str::trim(level);
     std::unique_ptr<logging::Logger> log =
-        logging::setupLogger(sys::Path::basename(argv[0]), level, logFile);
+        logging::setupLogger(fs::path(argv[0]).filename().string(), level, logFile);
 
     // this validates the DES of the input against the
     // best available schema

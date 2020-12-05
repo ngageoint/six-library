@@ -28,6 +28,9 @@
 #include <six/sicd/Utilities.h>
 #include <io/TempFile.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 
@@ -35,7 +38,7 @@ void validateArguments(int argc, char** argv)
 {
     if (argc != 2)
     {
-        std::string message = "Usage: " + sys::Path::basename(argv[0])
+        std::string message = "Usage: " + fs::path(argv[0]).filename().string()
             + " <XML pathname>";
         throw except::Exception(Ctxt(message));
     }

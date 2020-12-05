@@ -36,6 +36,9 @@
 #include <io/FileInputStream.h>
 #include <logging/StreamHandler.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 class XMLVerifier
@@ -148,7 +151,7 @@ int main(int argc, char** argv)
         // Parse the command line
         if (argc < 2)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <SICD or SIDD XML pathname #1>"
                       << " <SICD or SIDD XML pathname #2> ...\n";
             return 1;

@@ -30,6 +30,9 @@
 #include <six/sidd/Utilities.h>
 #include <scene/ECEFToLLATransform.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 // CSM includes
 #include <RasterGM.h>
 #include <Plugin.h>
@@ -223,7 +226,7 @@ int main(int argc, char** argv)
         // Parse the command line
         if (argc != 2)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <SIDD pathname>\n\n";
             return 1;
         }

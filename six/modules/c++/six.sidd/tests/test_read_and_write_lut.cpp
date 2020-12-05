@@ -23,13 +23,16 @@
 #include <import/six/sidd.h>
 #include <import/nitf.hpp>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 void validateArguments(int argc, char** argv)
 {
     if (argc != 2)
     {
-        std::string message = "Usage: " + sys::Path::basename(argv[0])
+        std::string message = "Usage: " + fs::path(argv[0]).filename().string()
             + " <SIDD pathname>";
         throw except::Exception(Ctxt(message));
     }

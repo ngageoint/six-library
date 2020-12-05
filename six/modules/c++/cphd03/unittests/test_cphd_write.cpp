@@ -26,6 +26,8 @@
 #include <cphd03/CPHDReader.h>
 #include <cphd/Wideband.h>
 #include <types/RowCol.h>
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
 
 #include "TestCase.h"
 
@@ -493,6 +495,6 @@ TEST_MAIN(
     TEST_CHECK(testWriteFXTwoWay);
     TEST_CHECK(testWriteTOAOneWay);
     TEST_CHECK(testWriteTOATwoWay);
-    sys::OS().remove(FILE_NAME);
+    fs::remove(FILE_NAME);
     )
 

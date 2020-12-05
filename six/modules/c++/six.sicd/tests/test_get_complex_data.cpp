@@ -29,6 +29,9 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 int main(int argc, char** argv)
 {
     try
@@ -37,7 +40,7 @@ int main(int argc, char** argv)
         const std::string progname(argv[0]);
         if (argc != 2 && argc != 3)
         {
-            std::cerr << "Usage: " << sys::Path::basename(progname)
+            std::cerr << "Usage: " << fs::path(progname).filename().string()
                       << " <SICD pathname> [<schema dirname>]\n\n";
             return 1;
         }

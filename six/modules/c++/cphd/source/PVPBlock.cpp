@@ -34,6 +34,12 @@
 #include <cphd/Metadata.h>
 #include <cphd/Utilities.h>
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace
 {
 // Set data from data block into data struct
@@ -456,7 +462,7 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
         throw except::Exception(Ctxt(oss.str()));
     }
 
-    const bool swapToLittleEndian = !(sys::isBigEndianSystem());
+    const bool swapToLittleEndian = std::endian::native == std::endian::little;
 
     // Seek to start of PVPBlock
     size_t totalBytesRead(0);

@@ -29,6 +29,12 @@
 #include <import/xml/lite.h>
 #include "utils.h"
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 /*!
  *  This file takes in an SIO and turns it in to a SICD.
  *  It uses the WriteControl::save() function to stream
@@ -252,7 +258,7 @@ int main(int argc, char** argv)
              * Yeah, this is getting set over and over, but that way its
              * easy to make this test case into a program with multiple images
              */
-            needsByteSwap = sys::isBigEndianSystem()
+            needsByteSwap = (std::endian::native == std::endian::big)
                     && fileHeader->isDifferentByteOrdering();
 
             six::PixelType pixelType;

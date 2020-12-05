@@ -36,6 +36,9 @@
 #include <six/sidd/Utilities.h>
 #include <scene/ECEFToLLATransform.h>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 namespace
 {
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& lla)
@@ -51,7 +54,7 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        const std::string progname(sys::Path::basename(argv[0]));
+        const std::string progname(fs::path(argv[0]).filename().string());
         if (argc != 4 && argc != 5)
         {
             std::cerr << "Usage: " << progname
