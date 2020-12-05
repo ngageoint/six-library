@@ -69,27 +69,27 @@ void FileHeader::read(io::SeekableInputStream& inStream)
             tokenize(headerLines[ii], KVP_DELIMITER, headerEntry);
             if (headerEntry.first == "XML_DATA_SIZE")
             {
-                mXmlDataSize = str::toType<ptrdiff_t>(headerEntry.second);
+                mXmlDataSize = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "XML_BYTE_OFFSET")
             {
-                mXmlByteOffset = str::toType<ptrdiff_t>(headerEntry.second);
+                mXmlByteOffset = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "VB_DATA_SIZE")
             {
-               mVbDataSize = str::toType<ptrdiff_t>(headerEntry.second);
+               mVbDataSize = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "VB_BYTE_OFFSET")
             {
-               mVbByteOffset = str::toType<ptrdiff_t>(headerEntry.second);
+               mVbByteOffset = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "CPHD_DATA_SIZE")
             {
-               mCphdDataSize = str::toType<ptrdiff_t>(headerEntry.second);
+               mCphdDataSize = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "CPHD_BYTE_OFFSET")
             {
-               mCphdByteOffset = str::toType<ptrdiff_t>(headerEntry.second);
+               mCphdByteOffset = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "CLASSIFICATION")
             {
@@ -155,9 +155,9 @@ std::string FileHeader::toString() const
     return os.str();
 }
 
-size_t FileHeader::set(ptrdiff_t xmlSize,
-                       ptrdiff_t vbmSize,
-                       ptrdiff_t cphd03Size)
+size_t FileHeader::set(int64_t xmlSize,
+                       int64_t vbmSize,
+                       int64_t cphd03Size)
 {
     // Resolve all of the offsets based on known sizes.
     setXMLsize(xmlSize);
@@ -180,10 +180,10 @@ size_t FileHeader::set()
         setXMLoffset(initialHeaderSize + 2);
 
         // Add two for the XML section terminator
-        ptrdiff_t vbmOffs = getXMLoffset() + getXMLsize() + 2;
+        int64_t vbmOffs = getXMLoffset() + getXMLsize() + 2;
 
         // Add padding (VBMs are doubles)
-        const ptrdiff_t remainder = vbmOffs % sizeof(double);
+        const int64_t remainder = vbmOffs % sizeof(double);
         if (remainder != 0)
         {
             vbmOffs += sizeof(double) - remainder;

@@ -36,8 +36,8 @@ namespace cphd
 {
 SupportBlock::SupportBlock(const std::string& pathname,
                            const cphd::Data& data,
-                           ptrdiff_t startSupport,
-                           ptrdiff_t sizeSupport) :
+                           int64_t startSupport,
+                           int64_t sizeSupport) :
     mInStream(new io::FileInputStream(pathname)),
     mData(data),
     mSupportOffset(startSupport),
@@ -48,8 +48,8 @@ SupportBlock::SupportBlock(const std::string& pathname,
 
 SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
                            const cphd::Data& data,
-                           ptrdiff_t startSupport,
-                           ptrdiff_t sizeSupport) :
+                           int64_t startSupport,
+                           int64_t sizeSupport) :
     mInStream(inStream),
     mData(data),
     mSupportOffset(startSupport),
@@ -67,7 +67,7 @@ void SupportBlock::initialize()
     }
 }
 
-ptrdiff_t SupportBlock::getFileOffset(const std::string& id) const
+int64_t SupportBlock::getFileOffset(const std::string& id) const
 {
     if (mOffsets.count(id) != 1)
     {
@@ -92,7 +92,7 @@ void SupportBlock::read(const std::string& id,
     // Perform the read
     // Compute the byte offset into this SupportArray in the CPHD file
     // First to the start of the first support array we're going to read
-    ptrdiff_t inOffset = getFileOffset(id);
+    int64_t inOffset = getFileOffset(id);
     std::byte* dataPtr = reinterpret_cast<std::byte*>(data.data);
     mInStream->seek(inOffset, io::FileInputStream::START);
     size_t size = mData.getSupportArrayById(id).getSize();

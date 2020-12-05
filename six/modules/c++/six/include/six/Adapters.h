@@ -72,9 +72,9 @@ public:
      *  are left in the stream
      *
      */
-    virtual ptrdiff_t available()
+    virtual int64_t available()
     {
-        return (ptrdiff_t) mReader.getSize();
+        return (int64_t) mReader.getSize();
     }
 
 protected:

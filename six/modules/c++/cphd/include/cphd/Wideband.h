@@ -59,8 +59,8 @@ public:
      */
     Wideband(const std::string& pathname,
              const cphd::MetadataBase& metadata,
-             ptrdiff_t startWB,
-             ptrdiff_t sizeWB);
+             int64_t startWB,
+             int64_t sizeWB);
 
     /*!
      *  \func Wideband
@@ -74,8 +74,8 @@ public:
      */
     Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
              const cphd::MetadataBase& metadata,
-             ptrdiff_t startWB,
-             ptrdiff_t sizeWB);
+             int64_t startWB,
+             int64_t sizeWB);
 
     /*!
      *  \func getFileOffset
@@ -93,7 +93,7 @@ public:
     // first channel is 0!
     // 0-based vector in channel
     // 0-based sample in channel
-    ptrdiff_t getFileOffset(size_t channel,
+    int64_t getFileOffset(size_t channel,
                              size_t vector,
                              size_t sample) const;
 
@@ -112,7 +112,7 @@ public:
     // first channel is 0!
     // 0-based vector in channel
     // 0-based sample in channel
-    ptrdiff_t getFileOffset(size_t channel) const;
+    int64_t getFileOffset(size_t channel) const;
 
     /*!
      *  \func read
@@ -411,11 +411,11 @@ private:
 private:
     const std::shared_ptr<io::SeekableInputStream> mInStream;
     const cphd::MetadataBase& mMetadata;  // pointer to data metadata
-    const ptrdiff_t mWBOffset;  // offset in bytes to start of wideband
+    const int64_t mWBOffset;  // offset in bytes to start of wideband
     const size_t mWBSize;  // total size in bytes of wideband
     const size_t mElementSize;  // element size (bytes / complex sample)
 
-    std::vector<ptrdiff_t> mOffsets;  // Offset to start of each channel
+    std::vector<int64_t> mOffsets;  // Offset to start of each channel
 
     friend std::ostream& operator<<(std::ostream& os, const Wideband& d);
 };

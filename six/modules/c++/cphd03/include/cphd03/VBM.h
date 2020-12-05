@@ -180,9 +180,9 @@ public:
     // Read the entire VBM, return number of bytes read or -1 if error
     // startVBM = cphd03 header keyword "VB_BYTE_OFFSET"
     // sizeVBM = cphd03 header keyword "VB_DATA_SIZE"
-    ptrdiff_t load(io::SeekableInputStream& inStream,
-                    ptrdiff_t startVBM,
-                    ptrdiff_t sizeVBM,
+    int64_t load(io::SeekableInputStream& inStream,
+                    int64_t startVBM,
+                    int64_t sizeVBM,
                     size_t numThreads);
 
     /*

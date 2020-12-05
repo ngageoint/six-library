@@ -72,7 +72,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     mWindow.setNumBands(nBands);
 }
 
-ptrdiff_t six::NITFImageInputStream::available()
+int64_t six::NITFImageInputStream::available()
 {
     return mAvailable;
 }

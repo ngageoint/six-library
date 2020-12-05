@@ -433,9 +433,9 @@ void PVPBlock::getPVPdata(size_t channel,
     }
 }
 
-ptrdiff_t PVPBlock::load(io::SeekableInputStream& inStream,
-                     ptrdiff_t startPVP,
-                     ptrdiff_t sizePVP,
+int64_t PVPBlock::load(io::SeekableInputStream& inStream,
+                     int64_t startPVP,
+                     int64_t sizePVP,
                      size_t numThreads)
 {
     // Allocate the buffers

@@ -84,24 +84,24 @@ struct VectorParameters
 
     // These functions return the offset, in bytes, to the parameter requested
     // -1 is returned if the parameter is not in the vector
-    ptrdiff_t txTimeOffset() const;
-    ptrdiff_t txPosOffset() const;
-    ptrdiff_t rcvTimeOffset() const;
-    ptrdiff_t rcvPosOffset() const;
-    ptrdiff_t srpTimeOffset() const;
-    ptrdiff_t srpPosOffset() const;
-    ptrdiff_t tropoSRPOffset() const;
-    ptrdiff_t ampSFOffset() const;
-    ptrdiff_t Fx0Offset() const;
-    ptrdiff_t FxSSOffset() const;
-    ptrdiff_t Fx1Offset() const;
-    ptrdiff_t Fx2Offset() const;
-    ptrdiff_t deltaTOA0Offset() const;
-    ptrdiff_t toaSSOffset() const;
+    int64_t txTimeOffset() const;
+    int64_t txPosOffset() const;
+    int64_t rcvTimeOffset() const;
+    int64_t rcvPosOffset() const;
+    int64_t srpTimeOffset() const;
+    int64_t srpPosOffset() const;
+    int64_t tropoSRPOffset() const;
+    int64_t ampSFOffset() const;
+    int64_t Fx0Offset() const;
+    int64_t FxSSOffset() const;
+    int64_t Fx1Offset() const;
+    int64_t Fx2Offset() const;
+    int64_t deltaTOA0Offset() const;
+    int64_t toaSSOffset() const;
 
     void clearAmpSF()
     {
-        ampSF = six::Init::undefined<ptrdiff_t>();
+        ampSF = six::Init::undefined<int64_t>();
     }
 
     bool operator==(const VectorParameters& other) const;
@@ -112,14 +112,14 @@ struct VectorParameters
     }
 
     // Size, in bytes, of each of the fields in the binary VBM
-    ptrdiff_t txTime;
-    ptrdiff_t txPos;
-    ptrdiff_t rcvTime;
-    ptrdiff_t rcvPos;
-    ptrdiff_t srpTime;        // Optional
-    ptrdiff_t srpPos;
-    ptrdiff_t tropoSRP;       // Optional   TropoSRP appears before AmpSF in the binary data
-    ptrdiff_t ampSF;          // Optional
+    int64_t txTime;
+    int64_t txPos;
+    int64_t rcvTime;
+    int64_t rcvPos;
+    int64_t srpTime;        // Optional
+    int64_t srpPos;
+    int64_t tropoSRP;       // Optional   TropoSRP appears before AmpSF in the binary data
+    int64_t ampSF;          // Optional
 
 
     mem::ScopedCopyablePtr<FxParameters> fxParameters;

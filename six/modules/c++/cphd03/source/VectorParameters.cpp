@@ -62,43 +62,43 @@ VectorParameters::VectorParameters() :
     txPos(0),
     rcvTime(0),
     rcvPos(0),
-    srpTime (six::Init::undefined<ptrdiff_t>()),
+    srpTime (six::Init::undefined<int64_t>()),
     srpPos(0),
-    tropoSRP(six::Init::undefined<ptrdiff_t>()),
-    ampSF(six::Init::undefined<ptrdiff_t>())
+    tropoSRP(six::Init::undefined<int64_t>()),
+    ampSF(six::Init::undefined<int64_t>())
 {
 }
 
-ptrdiff_t VectorParameters::txTimeOffset() const
+int64_t VectorParameters::txTimeOffset() const
 {
     return 0;
 }
 
-ptrdiff_t VectorParameters::txPosOffset() const
+int64_t VectorParameters::txPosOffset() const
 {
     return (txTimeOffset() + txTime);
 }
 
-ptrdiff_t VectorParameters::rcvTimeOffset() const
+int64_t VectorParameters::rcvTimeOffset() const
 {
     return (txPosOffset() + txPos);
 }
 
-ptrdiff_t VectorParameters::rcvPosOffset() const
+int64_t VectorParameters::rcvPosOffset() const
 {
     return (rcvTimeOffset() + rcvTime);
 }
 
-ptrdiff_t VectorParameters::srpTimeOffset() const
+int64_t VectorParameters::srpTimeOffset() const
 {
-    const ptrdiff_t pos = six::Init::isUndefined(srpTime) ?
+    const int64_t pos = six::Init::isUndefined(srpTime) ?
             -1 : rcvPosOffset() + rcvPos;
     return pos;
 }
 
-ptrdiff_t VectorParameters::srpPosOffset() const
+int64_t VectorParameters::srpPosOffset() const
 {
-    ptrdiff_t pos = rcvPosOffset() + rcvPos;
+    int64_t pos = rcvPosOffset() + rcvPos;
     if (!six::Init::isUndefined(srpTime))
     {
         pos += srpTime;
@@ -106,16 +106,16 @@ ptrdiff_t VectorParameters::srpPosOffset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::tropoSRPOffset() const
+int64_t VectorParameters::tropoSRPOffset() const
 {
-    const ptrdiff_t pos = six::Init::isUndefined(tropoSRP) ?
+    const int64_t pos = six::Init::isUndefined(tropoSRP) ?
             -1 : (srpPosOffset() + srpPos);
     return pos;
 }
 
-ptrdiff_t VectorParameters::ampSFOffset() const
+int64_t VectorParameters::ampSFOffset() const
 {
-    ptrdiff_t pos = -1;
+    int64_t pos = -1;
     if (!six::Init::isUndefined(ampSF))
     {
         pos = srpPosOffset() + srpPos;
@@ -127,9 +127,9 @@ ptrdiff_t VectorParameters::ampSFOffset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::Fx0Offset() const
+int64_t VectorParameters::Fx0Offset() const
 {
-    ptrdiff_t pos = -1;
+    int64_t pos = -1;
     if (fxParameters.get() != NULL)
     {
         pos = srpPosOffset() + srpPos;
@@ -145,9 +145,9 @@ ptrdiff_t VectorParameters::Fx0Offset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::FxSSOffset() const
+int64_t VectorParameters::FxSSOffset() const
 {
-    ptrdiff_t pos = Fx0Offset();
+    int64_t pos = Fx0Offset();
     if (pos != -1)
     {
         pos += fxParameters->Fx0;
@@ -155,9 +155,9 @@ ptrdiff_t VectorParameters::FxSSOffset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::Fx1Offset() const
+int64_t VectorParameters::Fx1Offset() const
 {
-    ptrdiff_t pos = FxSSOffset();
+    int64_t pos = FxSSOffset();
     if (pos != -1)
     {
         pos += fxParameters->FxSS;
@@ -165,9 +165,9 @@ ptrdiff_t VectorParameters::Fx1Offset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::Fx2Offset() const
+int64_t VectorParameters::Fx2Offset() const
 {
-    ptrdiff_t pos = Fx1Offset();
+    int64_t pos = Fx1Offset();
     if (pos != -1)
     {
         pos += fxParameters->Fx1;
@@ -175,9 +175,9 @@ ptrdiff_t VectorParameters::Fx2Offset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::deltaTOA0Offset() const
+int64_t VectorParameters::deltaTOA0Offset() const
 {
-    ptrdiff_t pos = -1;
+    int64_t pos = -1;
     if (toaParameters.get() != NULL)
     {
         pos = srpPosOffset() + srpPos;
@@ -193,9 +193,9 @@ ptrdiff_t VectorParameters::deltaTOA0Offset() const
     return pos;
 }
 
-ptrdiff_t VectorParameters::toaSSOffset() const
+int64_t VectorParameters::toaSSOffset() const
 {
-    ptrdiff_t pos = deltaTOA0Offset();
+    int64_t pos = deltaTOA0Offset();
     if (pos != -1)
     {
         pos += toaParameters->deltaTOA0;

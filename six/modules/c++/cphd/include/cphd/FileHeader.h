@@ -127,31 +127,31 @@ public:
      *
      *  \return Return size of header
      */
-    size_t set(ptrdiff_t xmlBlockSize, ptrdiff_t supportBlockSize,
-            ptrdiff_t pvpBlockSize, ptrdiff_t signalBlockSize);
+    size_t set(int64_t xmlBlockSize, int64_t supportBlockSize,
+            int64_t pvpBlockSize, int64_t signalBlockSize);
 
     //! Set required elements
-    void setXMLBlockSize(ptrdiff_t size)
+    void setXMLBlockSize(int64_t size)
     {
         mXmlBlockSize = size;
     }
-    void setPvpBlockSize(ptrdiff_t size)
+    void setPvpBlockSize(int64_t size)
     {
         mPvpBlockSize = size;
     }
-    void setSignalBlockSize(ptrdiff_t size)
+    void setSignalBlockSize(int64_t size)
     {
         mSignalBlockSize = size;
     }
-    void setXMLBlockByteOffset(ptrdiff_t offset)
+    void setXMLBlockByteOffset(int64_t offset)
     {
         mXmlBlockByteOffset = offset;
     }
-    void setPvpBlockByteOffset(ptrdiff_t offset)
+    void setPvpBlockByteOffset(int64_t offset)
     {
         mPvpBlockByteOffset = offset;
     }
-    void setSignalBlockByteOffset(ptrdiff_t offset)
+    void setSignalBlockByteOffset(int64_t offset)
     {
         mSignalBlockByteOffset = offset;
     }
@@ -165,27 +165,27 @@ public:
     }
 
     //! Get required elements
-    ptrdiff_t getXMLBlockSize() const
+    int64_t getXMLBlockSize() const
     {
         return mXmlBlockSize;
     }
-    ptrdiff_t getPvpBlockSize() const
+    int64_t getPvpBlockSize() const
     {
         return mPvpBlockSize;
     }
-    ptrdiff_t getSignalBlockSize() const
+    int64_t getSignalBlockSize() const
     {
         return mSignalBlockSize;
     }
-    ptrdiff_t getXMLBlockByteOffset() const
+    int64_t getXMLBlockByteOffset() const
     {
         return mXmlBlockByteOffset;
     }
-    ptrdiff_t getPvpBlockByteOffset() const
+    int64_t getPvpBlockByteOffset() const
     {
         return mPvpBlockByteOffset;
     }
-    ptrdiff_t getSignalBlockByteOffset() const
+    int64_t getSignalBlockByteOffset() const
     {
         return mSignalBlockByteOffset;
     }
@@ -206,23 +206,23 @@ public:
      *
      *  \return number of pad bytes
      */
-    ptrdiff_t getPvpPadBytes() const;
+    int64_t getPvpPadBytes() const;
 
     //! Optional elements
-    void setSupportBlockSize(ptrdiff_t size)
+    void setSupportBlockSize(int64_t size)
     {
         mSupportBlockSize = size;
     }
-    void setSupportBlockByteOffset(ptrdiff_t offset)
+    void setSupportBlockByteOffset(int64_t offset)
     {
         mSupportBlockByteOffset = offset;
     }
 
-    ptrdiff_t getSupportBlockSize() const
+    int64_t getSupportBlockSize() const
     {
         return mSupportBlockSize;
     }
-    ptrdiff_t getSupportBlockByteOffset() const
+    int64_t getSupportBlockByteOffset() const
     {
         return mSupportBlockByteOffset;
     }
@@ -235,18 +235,18 @@ private:
     std::string mVersion;
 
     // Required key-value pairs
-    ptrdiff_t mXmlBlockSize;
-    ptrdiff_t mXmlBlockByteOffset;
-    ptrdiff_t mPvpBlockSize;
-    ptrdiff_t mPvpBlockByteOffset;
-    ptrdiff_t mSignalBlockSize;
-    ptrdiff_t mSignalBlockByteOffset;
+    int64_t mXmlBlockSize;
+    int64_t mXmlBlockByteOffset;
+    int64_t mPvpBlockSize;
+    int64_t mPvpBlockByteOffset;
+    int64_t mSignalBlockSize;
+    int64_t mSignalBlockByteOffset;
     std::string mClassification;
     std::string mReleaseInfo;
 
     // Optional key-value pairs
-    ptrdiff_t mSupportBlockSize;
-    ptrdiff_t mSupportBlockByteOffset;
+    int64_t mSupportBlockSize;
+    int64_t mSupportBlockByteOffset;
 };
 }
 

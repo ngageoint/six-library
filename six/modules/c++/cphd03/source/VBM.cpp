@@ -695,12 +695,12 @@ void VBM::updateVectorParameters(VectorParameters& vp) const
     vp.rcvTime = doubleSize;
     vp.rcvPos = vector3Size;
     vp.srpTime = mSRPTimeEnabled ? doubleSize :
-                                   six::Init::undefined<ptrdiff_t>();
+                                   six::Init::undefined<int64_t>();
     vp.srpPos = vector3Size;
     vp.tropoSRP = mTropoSRPEnabled ? doubleSize :
-                                     six::Init::undefined<ptrdiff_t>();
+                                     six::Init::undefined<int64_t>();
     vp.ampSF = mAmpSFEnabled ? doubleSize :
-                               six::Init::undefined<ptrdiff_t>();
+                               six::Init::undefined<int64_t>();
     if (mDomainType == cphd::DomainType::FX)
     {
         vp.toaParameters.reset();
@@ -719,9 +719,9 @@ void VBM::updateVectorParameters(VectorParameters& vp) const
     }
 }
 
-ptrdiff_t VBM::load(io::SeekableInputStream& inStream,
-                     ptrdiff_t startVBM,
-                     ptrdiff_t sizeVBM,
+int64_t VBM::load(io::SeekableInputStream& inStream,
+                     int64_t startVBM,
+                     int64_t sizeVBM,
                      size_t numThreads)
 {
     // Allocate the buffers

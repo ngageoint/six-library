@@ -322,9 +322,9 @@ struct PVPBlock
      */
     // startPVP = cphd header keyword "PVP_BYTE_OFFSET" contains PVP block starting offset
     // sizePVP = cphd header keyword "PVP_DATA_SIZE" contains PVP block size
-    ptrdiff_t load(io::SeekableInputStream& inStream,
-                    ptrdiff_t startPVP,
-                    ptrdiff_t sizePVP,
+    int64_t load(io::SeekableInputStream& inStream,
+                    int64_t startPVP,
+                    int64_t sizePVP,
                     size_t numThreads);
 
     //! Equality operators
