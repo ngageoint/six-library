@@ -2,7 +2,7 @@
  * This file is part of sys-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2020, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,8 +15,7 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
- * see <http://www.gnu.org/licenses/>.
+ * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
 
@@ -42,3 +41,19 @@ namespace sys
     #endif
     };
 }
+
+#if __cplusplus < 202002L  // pre-C++20
+#define CODA_OSS_DEFINE_std_endian_ 1
+#else
+// Recent versions of _MSC_VER might already have std::endian; the /Zc:__cplusplus
+// command-line option is required to get the correct value of __cplusplus.
+#define CODA_OSS_DEFINE_std_endian_ 0
+#endif
+
+#if CODA_OSS_DEFINE_std_endian_
+// This is ever-so-slightly uncouth: we're not supposed to augment "std".
+namespace std
+{
+    using endian = sys::Endian;
+}
+#endif

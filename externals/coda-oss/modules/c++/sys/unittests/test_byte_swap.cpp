@@ -22,6 +22,7 @@
 
 #include "TestCase.h"
 #include <sys/Conf.h>
+#include <sys/Bit.h>
 
 namespace
 {
@@ -54,10 +55,39 @@ TEST_CASE(testByteSwap)
         TEST_ASSERT_EQ(values1[ii], swappedValues2[ii]);
     }
 }
+
+TEST_CASE(testEndianness)
+{
+    const bool isBigEndianSystem = sys::isBigEndianSystem();
+
+    if (std::endian::native == std::endian::big)
+    {
+        TEST_ASSERT_TRUE(isBigEndianSystem);
+    }
+    else if (std::endian::native == std::endian::little)
+    {
+        TEST_ASSERT_FALSE(isBigEndianSystem);    
+    }
+    else
+    {
+        TEST_FAIL("Mixed-endian not supported!");
+    }
+
+
+    if (isBigEndianSystem)
+    {
+        TEST_ASSERT_TRUE(std::endian::native == std::endian::big);
+    }
+    else
+    {
+        TEST_ASSERT_TRUE(std::endian::native == std::endian::little);    
+    }
+}
 }
 
 int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(testByteSwap);
+    TEST_CHECK(testEndianness);
     return 0;
 }
