@@ -24,20 +24,16 @@
 #include <sstream>
 #include <thread>
 
-#include <cphd/ByteSwap.h>
-#include <cphd/Wideband.h>
+#include <sys/Conf.h>
+#include <sys/Bit.h>
 #include <except/Exception.h>
 #include <io/FileInputStream.h>
 #include <mt/ThreadGroup.h>
 #include <mt/ThreadPlanner.h>
-#include <six/Init.h>
-#include <sys/Conf.h>
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
+#include <six/Init.h>
+#include <cphd/ByteSwap.h>
+#include <cphd/Wideband.h>
 
 namespace
 {

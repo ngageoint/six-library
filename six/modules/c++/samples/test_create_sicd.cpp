@@ -26,17 +26,14 @@
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <logging/Setup.h>
+#include <sys/Bit.h>
+
 #include <scene/Utilities.h>
 #include "utils.h"
 
 #include <sys/Filesystem.h>
 namespace fs = sys::Filesystem;
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 
 // For SICD implementation

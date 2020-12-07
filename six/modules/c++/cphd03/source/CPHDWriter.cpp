@@ -20,18 +20,14 @@
  *
  */
 
+#include <sys/Bit.h>
 #include <except/Exception.h>
+
 #include <cphd03/CPHDWriter.h>
 #include <cphd03/CPHDXMLControl.h>
 #include <cphd03/Utilities.h>
 #include <cphd03/FileHeader.h>
 #include <cphd/ByteSwap.h>
-
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace cphd03
 {

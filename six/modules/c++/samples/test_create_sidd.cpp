@@ -27,13 +27,9 @@
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <import/xml/lite.h>
+#include <sys/Bit.h>
 #include "utils.h"
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 #include <sys/Filesystem.h>
 namespace fs = sys::Filesystem;
