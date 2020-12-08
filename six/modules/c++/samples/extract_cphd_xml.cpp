@@ -31,7 +31,7 @@
 #include <cphd/CPHDXMLControl.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 /*!
  *  This extracts raw XML from a CPHD file using the CPHD module

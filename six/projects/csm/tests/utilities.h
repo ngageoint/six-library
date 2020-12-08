@@ -85,19 +85,17 @@ std::string toString(nitf::DESubheader subheader)
  */
 std::string findDllPathname(const std::string& installPathname)
 {
-    const std::string csmPluginPathname =
-            sys::Path(installPathname).join("share").join("CSM").join("plugins");
+    namespace fs = std::filesystem;
+    const auto csmPluginPathname = fs::path(installPathname) / "share" / "CSM" / "plugins";
 
-    const std::vector<std::string> csmPluginContents =
-            sys::Path::list(csmPluginPathname);
+    const std::vector<std::string> csmPluginContents = sys::Path::list(csmPluginPathname);
 
     // Get rid of contents like '.' and '..'
     std::vector<std::string> csmPlugins;
     for (size_t ii = 0; ii < csmPluginContents.size(); ++ii)
     {
-        const std::string pathname = sys::Path::joinPaths(csmPluginPathname,
-                csmPluginContents[ii]);
-        if (sys::Path(pathname).isFile())
+        const std::string pathname = csmPluginPathname / csmPluginContents[ii];
+        if (fs::is_regular_file(pathname))
         {
             csmPlugins.push_back(pathname);
         }
@@ -106,7 +104,7 @@ std::string findDllPathname(const std::string& installPathname)
     if (csmPlugins.size() != 1)
     {
         throw except::Exception(Ctxt("Expected exactly one plugin in "
-                + csmPluginPathname));
+                + csmPluginPathname.string()));
     }
 
     return csmPlugins[0];

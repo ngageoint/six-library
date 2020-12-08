@@ -30,7 +30,7 @@
 #include <import/io.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 /*!
  *  This extracts raw XML from each NITF DES, just using nitf,

@@ -33,7 +33,7 @@
 #include <six/NITFHeaderCreator.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 #include "utils.h"
 

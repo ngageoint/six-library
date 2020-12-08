@@ -31,7 +31,7 @@
 #include "six/Types.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -75,8 +75,7 @@ private:
 std::string getProgramPathname(const std::string& installPathname,
         const std::string& programName)
 {
-    std::string testPathname = str::toString(sys::Path(installPathname).
-        join("bin").join(programName));
+    std::string testPathname = fs::path(installPathname) / "bin" / programName;
 
     if (!fs::exists(testPathname))
     {

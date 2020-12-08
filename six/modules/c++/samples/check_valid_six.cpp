@@ -29,7 +29,7 @@
 #include "utils.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -119,7 +119,7 @@ bool runValidation(const std::unique_ptr<six::Data>& data,
 // make it a little easier to use from MSVC
 #if defined(_DEBUG) && defined(_MSC_VER)
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 static fs::path getNitfPath()
 {
