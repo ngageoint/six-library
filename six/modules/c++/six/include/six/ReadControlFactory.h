@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_READ_CONTROL_FACTORY_H__
-#define __SIX_READ_CONTROL_FACTORY_H__
+#pragma once
+
+#include <memory>
 
 #include <import/mt.h>
 
@@ -31,16 +32,15 @@ namespace six
 
 struct ReadControlCreator
 {
-    ReadControlCreator() {}
+    virtual ~ReadControlCreator() = default;
 
-    virtual ~ReadControlCreator() {}
-
-    virtual six::ReadControl* newReadControl() const = 0;
+    virtual std::unique_ptr<six::ReadControl> newReadControl() const = 0;
 
     virtual bool supports(const std::string& filename) const = 0;
 
+protected:
+    ReadControlCreator() = default;
 };
-
 
 class ReadControlRegistry
 {
@@ -60,7 +60,7 @@ public:
         mCreators.push_back(creator);
     }
 
-    virtual six::ReadControl* newReadControl(const std::string& filename) const;
+    virtual std::unique_ptr<six::ReadControl> newReadControl(const std::string& filename) const;
 
 };
 
@@ -68,6 +68,4 @@ public:
 typedef mt::Singleton<ReadControlRegistry, true> ReadControlFactory;
 
 }
-
-#endif
 

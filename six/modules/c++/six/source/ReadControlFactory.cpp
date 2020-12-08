@@ -23,7 +23,7 @@
 
 using namespace six;
 
-six::ReadControl* ReadControlRegistry::newReadControl(
+std::unique_ptr<six::ReadControl> ReadControlRegistry::newReadControl(
         const std::string& filename) const
 {
     for (std::list<ReadControlCreator*>::const_iterator it = mCreators.begin(); it

@@ -781,9 +781,9 @@ void NITFReadControl::reset()
 }
 
 
-six::ReadControl* NITFReadControlCreator::newReadControl() const
+std::unique_ptr<six::ReadControl> NITFReadControlCreator::newReadControl() const
 {
-    return new NITFReadControl();
+    return std::unique_ptr<six::ReadControl>(new NITFReadControl());
 }
 
 bool NITFReadControlCreator::supports(const std::string& filename) const

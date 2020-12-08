@@ -127,8 +127,7 @@ int main(int argc, char** argv)
         readerRegistry.addCreator(new six::sidd::GeoTIFFReadControlCreator());
 
         // get the correct ReadControl for the given file
-        const std::unique_ptr<six::ReadControl>
-            reader(readerRegistry.newReadControl(inputFile));
+        auto reader(readerRegistry.newReadControl(inputFile));
         // set the optional registry, since we have one
         reader->setXMLControlRegistry(&xmlRegistry);
 

@@ -280,9 +280,9 @@ std::byte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     return buffer;
 }
 
-six::ReadControl* six::sidd::GeoTIFFReadControlCreator::newReadControl() const
+std::unique_ptr<six::ReadControl> six::sidd::GeoTIFFReadControlCreator::newReadControl() const
 {
-    return new six::sidd::GeoTIFFReadControl();
+    return std::unique_ptr<six::ReadControl>(new six::sidd::GeoTIFFReadControl());
 }
 
 bool six::sidd::GeoTIFFReadControlCreator::supports(const std::string& filename) const
