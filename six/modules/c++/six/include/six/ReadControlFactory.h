@@ -65,6 +65,13 @@ public:
 
 struct ReadControlFactory final
 {
+    ReadControlFactory() = delete;
+    ~ReadControlFactory() = delete;
+    ReadControlFactory(const ReadControlFactory&) = delete;
+    ReadControlFactory(ReadControlFactory&&) = delete;
+    ReadControlFactory& operator=(const ReadControlFactory&) = delete;
+    ReadControlFactory& operator=(ReadControlFactory&&) = delete;
+
     static ReadControlRegistry& getInstance();
 };
 

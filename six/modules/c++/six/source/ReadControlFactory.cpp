@@ -20,8 +20,6 @@
  *
  */
 
-#include <mutex>
-
 #include "six/ReadControlFactory.h"
 
 using namespace six;
@@ -40,18 +38,11 @@ std::unique_ptr<six::ReadControl> ReadControlRegistry::newReadControl(
 }
 
 
-static std::unique_ptr<six::ReadControlRegistry> mInstance;
-static std::mutex g_ReadControlFactory_mutex;
+// https://stackoverflow.com/a/11711991/8877
+// "C++11 removes the need for manual locking.
+// Concurrent execution shall wait if a static local variable is already being initialized."
 six::ReadControlRegistry& six::ReadControlFactory::getInstance()
 {
-    //double-checked locking
-    if (mInstance == nullptr)
-    {
-        std::lock_guard<std::mutex> guard(g_ReadControlFactory_mutex);
-        if (mInstance == nullptr)
-        {
-            mInstance.reset(new ReadControlRegistry); //create the instance
-        }
-    }
-    return *mInstance;
+    static ReadControlRegistry instance;
+    return instance;
 }
