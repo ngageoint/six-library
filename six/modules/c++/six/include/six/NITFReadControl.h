@@ -49,18 +49,17 @@ namespace six
  *  This class is not copyable.
  *
  */
-class NITFReadControl : public ReadControl
+struct NITFReadControl : public ReadControl
 {
-public:
-
-    //!  Constructor
     NITFReadControl();
-
-    //!  Destructor
     virtual ~NITFReadControl() noexcept(false)
     {
         reset();
     }
+
+    // NITFReadControl is not copyable
+    NITFReadControl(const NITFReadControl& other) = delete;
+    NITFReadControl& operator=(const NITFReadControl& other) = delete;
 
     /*!
      *  Read whether a file has COMPLEX or DERIVED data
@@ -199,7 +198,7 @@ protected:
      *
      */
     std::pair<size_t, size_t>
-    getIndices(nitf::ImageSubheader& subheader) const;
+    getIndices(const nitf::ImageSubheader& subheader) const;
 
     void addImageClassOptions(nitf::ImageSubheader& s,
             six::Classification& c) const;
@@ -222,23 +221,16 @@ protected:
     }
 
 private:
-    // Unimplemented - NITFReadControl is not copyable
-    NITFReadControl(const NITFReadControl& other);
-    NITFReadControl& operator=(const NITFReadControl& other);
-
-private:
     std::unique_ptr<Legend> findLegend(size_t productNum);
 
-    void readLegendPixelData(nitf::ImageSubheader& subheader,
+    void readLegendPixelData(const nitf::ImageSubheader& subheader,
                              size_t imageSeg,
                              Legend& legend);
 
     static
-    bool isLegend(nitf::ImageSubheader& subheader)
+    bool isLegend(const nitf::ImageSubheader& subheader)
     {
-        std::string iCat = subheader.getImageCategory().toString();
-        str::trim(iCat);
-
+        const auto iCat = subheader.imageCategory();
         return (iCat == "LEG");
     }
 

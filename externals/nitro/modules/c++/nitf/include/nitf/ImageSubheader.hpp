@@ -20,8 +20,6 @@
  *
  */
 
-#ifndef __NITF_IMAGESUBHEADER_HPP__
-#define __NITF_IMAGESUBHEADER_HPP__
 #pragma once
 
 #include <string>
@@ -213,6 +211,10 @@ public:
 
     //! Get the imageId
     nitf::Field getImageId() const;
+    std::string imageId() const
+    {
+        return getImageId().toTrimString();
+    }
 
     //! Get the imageDateAndTime
     nitf::Field getImageDateAndTime() const;
@@ -240,18 +242,34 @@ public:
 
     //! Get the numRows
     nitf::Field getNumRows() const;
+    size_t numRows() const
+    {
+        return getNumRows();
+    }
 
     //! Get the numCols
     nitf::Field getNumCols() const;
+    size_t numCols() const
+    {
+        return getNumCols();
+    }
 
     //! Get the pixelValueType
     nitf::Field getPixelValueType() const;
 
     //! Get the imageRepresentation
     nitf::Field getImageRepresentation() const;
+    std::string imageRepresentation() const
+    {
+        return getImageRepresentation().toTrimString();
+    }
 
     //! Get the imageCategory
     nitf::Field getImageCategory() const;
+    std::string imageCategory() const
+    {
+        return getImageCategory().toTrimString();
+    }
 
     //! Get the actualBitsPerPixel
     nitf::Field getActualBitsPerPixel() const;
@@ -273,12 +291,20 @@ public:
 
     //! Get the imageCompression
     nitf::Field getImageCompression() const;
+    std::string imageCompression() const
+    {
+        return getImageCompression().toTrimString();
+    }
 
     //! Get the compressionRate
     nitf::Field getCompressionRate() const;
 
     //! Get the numImageBands
     nitf::Field getNumImageBands() const;
+    size_t numImageBands() const
+    {
+        return getNumImageBands();
+    }
 
     //! Get the numMultispectralImageBands
     nitf::Field getNumMultispectralImageBands() const;
@@ -294,18 +320,38 @@ public:
 
     //! Get the numBlocksPerRow
     nitf::Field getNumBlocksPerRow() const;
+    size_t numBlocksPerRow() const
+    {
+        return getNumBlocksPerRow();
+    }
 
     //! Get the numBlocksPerCol
     nitf::Field getNumBlocksPerCol() const;
+    size_t numBlocksPerCol() const
+    {
+        return getNumBlocksPerCol();
+    }
 
     //! Get the numPixelsPerHorizBlock
     nitf::Field getNumPixelsPerHorizBlock() const;
+    size_t numPixelsPerHorizBlock() const
+    {
+        return getNumPixelsPerHorizBlock();
+    }
 
     //! Get the numPixelsPerVertBlock
     nitf::Field getNumPixelsPerVertBlock() const;
+    size_t numPixelsPerVertBlock() const
+    {
+        return getNumPixelsPerVertBlock();
+    }
 
     //! Get the numBitsPerPixel
     nitf::Field getNumBitsPerPixel() const;
+    size_t numBitsPerPixel() const
+    {
+        return getNumBitsPerPixel();
+    }
 
     //! Get the imageDisplayLevel
     nitf::Field getImageDisplayLevel() const;
@@ -362,45 +408,20 @@ public:
     size_t getNumBytesOfImageData() const;
 
 private:
-    size_t getNumRows_() const
-    {
-        return nitf::Field(getNativeOrThrow()->numRows);
-    }
-
-    size_t getNumCols_() const
-    {
-        return nitf::Field(getNativeOrThrow()->numCols);
-    }
-
-    size_t getNumPixelsPerHorizBlock_() const
-    {
-        return nitf::Field(getNativeOrThrow()->numPixelsPerHorizBlock);
-    }
-
-    size_t getNumPixelsPerVertBlock_() const
-    {
-        return nitf::Field(getNativeOrThrow()->numPixelsPerVertBlock);
-    }
-
-    size_t getActualNumRows_() const
+    size_t actualNumRows() const
     {
         return getActualImageDim(getNumRows(), getNumPixelsPerVertBlock());
     }
 
-    size_t getActualNumCols_() const
+    size_t actualNumCols() const
     {
         return getActualImageDim(getNumCols(), getNumPixelsPerHorizBlock());
     }
 
-    size_t getNumImageBands_() const
-    {
-        return nitf::Field(getNativeOrThrow()->numImageBands);
-    }
-
-    size_t getNumBytesPerPixel_() const;
+    size_t numBytesPerPixel() const;
 
     mutable nitf_Error error{};
 };
 
 }
-#endif
+

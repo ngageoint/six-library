@@ -139,8 +139,7 @@ std::map<std::string, size_t> getAdditionalDesMap(six::NITFReadControl& reader)
 
         nitf::DESegment segment = static_cast<nitf::DESegment>(*desIter);
         nitf::DESubheader subheader = segment.getSubheader();
-        std::string typeID = subheader.getTypeID().toString();
-        str::trim(typeID);
+        const auto typeID = subheader.typeID();
         nameToDesIndex[typeID] = ii;
     }
     return nameToDesIndex;

@@ -27,15 +27,12 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
             mRowOffset(0)
 {
     int bytesPerPixel = NITF_NBPP_TO_BYTES(subheader.getNumBitsPerPixel());
-    mRowSize = (uint32_t) subheader.getNumCols() * bytesPerPixel;
+    mRowSize = subheader.numCols() * bytesPerPixel;
 
     uint32_t nBands = subheader.getBandCount();
-    std::string imageMode = subheader.getImageMode().toString();
-    std::string irep = subheader.getImageRepresentation().toString();
-    std::string ic = subheader.getImageCompression().toString();
-
-    str::trim(irep);
-    str::trim(ic);
+    const auto imageMode = subheader.getImageMode().toString();
+    const auto irep = subheader.imageRepresentation();
+    const auto ic = subheader.imageCompression();
 
     //Check for optimization cases - RGB and IQ
     if ((nBands == 3 && imageMode[0] == 'P' && irep == "RGB" && bytesPerPixel
@@ -58,7 +55,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     }
 
     mRowBuffer.reset(new std::byte[mRowSize]);
-    mAvailable = mRowSize * (uint32_t) subheader.getNumRows();
+    mAvailable = mRowSize * subheader.numRows();
 
     mBandList.reset(new uint32_t[nBands]);
     for (uint32_t band = 0; band < nBands; ++band)
@@ -67,7 +64,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     //setup the window
     mWindow.setStartCol(0);
     mWindow.setNumRows(1);
-    mWindow.setNumCols((uint32_t) subheader.getNumCols());
+    mWindow.setNumCols(subheader.numCols());
     mWindow.setBandList(mBandList.get());
     mWindow.setNumBands(nBands);
 }

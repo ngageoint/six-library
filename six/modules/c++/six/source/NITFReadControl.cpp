@@ -60,9 +60,7 @@ void assignLUT(nitf::ImageSubheader& subheader, six::Legend& legend)
 
 six::PixelType getPixelType(nitf::ImageSubheader& subheader)
 {
-    std::string iRep = subheader.getImageRepresentation().toString();
-    str::trim(iRep);
-
+    const auto iRep = subheader.imageRepresentation();
     if (iRep == "MONO")
     {
         return six::PixelType::MONO8I;
@@ -150,8 +148,7 @@ DataType NITFReadControl::getDataType(nitf::DESegment& segment)
     //       DESID for really old versions and the DESSHSI from
     //       XML_DATA_CONTENT for newer versions.
     nitf::DESubheader subheader = segment.getSubheader();
-    std::string desid = subheader.getTypeID().toString();
-    str::trim(desid);
+    const auto desid = subheader.typeID();
 
     // Note that we need to check the subheader
     // length first rather than calling tre.getCurrentSize() in
@@ -168,8 +165,7 @@ DataType NITFReadControl::getDataType(nitf::DESegment& segment)
 
         if (tre.exists("DESSHSI"))
         {
-            desshsiField = tre.getField("DESSHSI").toString();
-            str::trim(desshsiField);
+            desshsiField = tre.getField("DESSHSI").toTrimString();
         }
     }
 
@@ -195,8 +191,7 @@ DataType NITFReadControl::getDataType(const std::string& fromFile) const
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
                                       const NITFImageInfo* info)
 {
-    const size_t numBandsSeg =
-            static_cast<uint32_t>(subheader.getNumImageBands());
+    const size_t numBandsSeg = subheader.numImageBands();
 
     const std::string pjust = subheader.getPixelJustification().toString();
     // TODO: More validation in here!
@@ -208,8 +203,7 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
     // The number of bytes per pixel, which we count to be 3 in the
     // case of 24-bit true color and 8 in the case of complex float
     // and 1 in the case of most SIDD data
-    const size_t numBitsPerPixel =
-            static_cast<uint32_t>(subheader.getNumBitsPerPixel());
+    const size_t numBitsPerPixel = subheader.numBitsPerPixel();
     const size_t numBytesPerPixel = (numBitsPerPixel + 7) / 8;
     const size_t numBytesSeg = numBytesPerPixel * numBandsSeg;
 
@@ -223,8 +217,7 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
     }
 
     const size_t numCols = info->getData()->getNumCols();
-    const size_t numColsSubheader =
-            static_cast<uint32_t>(subheader.getNumCols());
+    const size_t numColsSubheader = subheader.numCols();
 
     if (numColsSubheader != numCols)
     {
@@ -366,11 +359,10 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         nitf::ImageSubheader subheader = segment.getSubheader();
 
         // The number of rows in the segment (actual)
-        size_t numRowsSeg = (uint32_t) subheader.getNumRows();
+        size_t numRowsSeg = subheader.numRows();
 
         // This function should throw if the data does not exist
-        const std::pair<size_t, size_t> imageAndSegment =
-                getIndices(subheader);
+        const auto imageAndSegment = getIndices(subheader);
         if (imageAndSegment.first >= mInfos.size())
         {
             throw except::Exception(Ctxt(
@@ -378,8 +370,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
                     " is out of bounds"));
         }
 
-        NITFImageInfo* const currentInfo = mInfos[imageAndSegment.first];
-
+        auto& currentInfo = mInfos[imageAndSegment.first];
         const size_t productSegmentIdx = imageAndSegment.second;
 
         // We have to enforce a number of rules, namely that the #
@@ -387,7 +378,6 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         // But, we don't do this for legends since their size has nothing to
         // do with the size of the pixel data
         const bool segIsLegend = isLegend(subheader);
-
         if (!segIsLegend)
         {
             validateSegment(subheader, currentInfo);
@@ -559,10 +549,9 @@ void NITFReadControl::addSecurityOptions(nitf::FileSecurity security,
 }
 
 std::pair<size_t, size_t>
-NITFReadControl::getIndices(nitf::ImageSubheader& subheader) const
+NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
 {
-    std::string imageID = subheader.getImageId().toString();
-    str::trim(imageID);
+    const auto imageID = subheader.imageId();
 
     // There is definitely something in here
     std::pair<size_t, size_t> imageAndSegment;
@@ -752,13 +741,13 @@ std::unique_ptr<Legend> NITFReadControl::findLegend(size_t productNum)
     return legend;
 }
 
-void NITFReadControl::readLegendPixelData(nitf::ImageSubheader& subheader,
+void NITFReadControl::readLegendPixelData(const nitf::ImageSubheader& subheader,
                                           size_t imageSeg,
                                           Legend& legend)
 {
     const types::RowCol<uint32_t> dims(
-            static_cast<uint32_t>(subheader.getNumRows()),
-            static_cast<uint32_t>(subheader.getNumCols()));
+            static_cast<uint32_t>(subheader.numRows()),
+            static_cast<uint32_t>(subheader.numCols()));
 
     legend.setDims(dims);
 
