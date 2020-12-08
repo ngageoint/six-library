@@ -106,13 +106,13 @@ static void setNitfPluginPath()
 {
     const auto path = buildRootDir() / nitfPluginRelativelPath();
     //std::clog << "NITF_PLUGIN_PATH=" << path << "\n";
-    sys::OS().setEnv("NITF_PLUGIN_PATH", path, true /*overwrite*/);
+    sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
 
 TEST_CASE(valid_six_50x50)
 {
     setNitfPluginPath();
-    const std::string inputPathname = getNitfPath(); // sicd_50x50.nitf
+    const std::string inputPathname = getNitfPath().string(); // sicd_50x50.nitf
 
     // create an XML registry
     // The reason to do this is to avoid adding XMLControlCreators to the

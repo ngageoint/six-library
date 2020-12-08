@@ -58,7 +58,7 @@ public:
             return false;
         }
 
-        std::string ext = fs::path(pathname).extension();
+        std::string ext = fs::path(pathname).extension().string();
         if (mIgnoreCase)
         {
             str::lower(ext);
@@ -142,7 +142,7 @@ static void setNitfPluginPath()
     const std::string platform = "x64";
 
     const auto path = root_dir / "externals" / "nitro" / platform / configuration / "share" / "nitf" / "plugins";
-    sys::OS().setEnv("NITF_PLUGIN_PATH", path, true /*overwrite*/);
+    sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
 #endif
 
@@ -155,7 +155,7 @@ static int main_(int argc, char** argv)
         setNitfPluginPath();
 
         // ./six/modules/c++/six/tests/nitf/sidd_1.0.0.nitf
-        static const std::string nitf_path = getNitfPath();
+        static const std::string nitf_path = getNitfPath().string();
         argc = 2;
         auto argv_ = static_cast<char**>(malloc(argc * sizeof(char*)));
         argv_[0] = argv[0];
@@ -207,7 +207,7 @@ static int main_(int argc, char** argv)
     str::upper(level);
     str::trim(level);
     std::unique_ptr<logging::Logger> log =
-        logging::setupLogger(fs::path(argv[0]).filename(), level, logFile);
+        logging::setupLogger(fs::path(argv[0]).filename().string(), level, logFile);
 
     // this validates the DES of the input against the
     // best available schema

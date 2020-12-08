@@ -100,7 +100,7 @@ struct sidd_test_read_sidd_legend : public ::testing::Test {
         // initialization code here
         //const std::string SIX_SCHEMA_PATH = R"(C:\Users\jdsmith\source\repos\six\six\modules\c++\six.sidd\conf\schema)";
 		const auto SIX_SCHEMA_PATH = buildSchemaDir();
-		sys::OS().setEnv("SIX_SCHEMA_PATH", SIX_SCHEMA_PATH, true /*overwrite*/);
+		sys::OS().setEnv("SIX_SCHEMA_PATH", SIX_SCHEMA_PATH.string(), true /*overwrite*/);
     }
 
     void SetUp() {
