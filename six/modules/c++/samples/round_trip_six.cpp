@@ -31,7 +31,7 @@
 #include "utils.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -279,7 +279,7 @@ int main(int argc, char** argv)
             log.addHandler(new logging::FileHandler(logFile, logLevel), true);
 
         std::unique_ptr<six::ReadControl> reader;
-        std::string extension = fs::path(inputFile).extension().string();
+        std::string extension = fs::path(inputFile).extension();
         str::lower(extension);
         if (extension == ".nitf" || extension == ".ntf")
         {

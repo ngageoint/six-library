@@ -2,7 +2,7 @@
  * This file is part of sys-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2020, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,16 +15,13 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
- * see <http://www.gnu.org/licenses/>.
+ * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
 
 #pragma once
 
-#if __cplusplus >= 202002L // C++20
-#include <bit>
-#endif
+#include "Conf.h"
 
 namespace sys
 {
@@ -42,3 +39,21 @@ namespace sys
     #endif
     };
 }
+
+#ifndef CODA_OSS_DEFINE_std_endian_
+#if CODA_OSS_cplusplus < 202002L  // pre-C++20
+#define CODA_OSS_DEFINE_std_endian_ 1
+#else
+#define CODA_OSS_DEFINE_std_endian_ 0  // std::filesystem part of C++17
+#endif  // CODA_OSS_cplusplus
+#endif  // CODA_OSS_DEFINE_std_endian_
+
+#if CODA_OSS_DEFINE_std_endian_
+// This is ever-so-slightly uncouth: we're not supposed to augment "std".
+namespace std
+{
+    using endian = sys::Endian;
+}
+#else
+#include <bit>
+#endif

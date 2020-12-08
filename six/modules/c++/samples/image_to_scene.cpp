@@ -37,7 +37,7 @@
 #include <six/sidd/DerivedXMLControl.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -167,7 +167,7 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        const std::string progname(fs::path(argv[0]).filename().string());
+        const std::string progname(fs::path(argv[0]).filename());
         if (argc < 2)
         {
             usage(progname, std::cerr);

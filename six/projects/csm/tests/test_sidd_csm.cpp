@@ -31,7 +31,7 @@
 #include <scene/ECEFToLLATransform.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 // CSM includes
 #include <RasterGM.h>

@@ -26,17 +26,14 @@
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <logging/Setup.h>
+#include <sys/Bit.h>
+
 #include <scene/Utilities.h>
 #include "utils.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 
 // For SICD implementation
@@ -117,7 +114,7 @@ int main(int argc, char** argv)
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         std::unique_ptr<logging::Logger> logger(
-            logging::setupLogger(fs::path(argv[0]).filename().string()));
+            logging::setupLogger(fs::path(argv[0]).filename()));
 
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the

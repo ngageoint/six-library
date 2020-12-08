@@ -24,7 +24,7 @@
 #include <six/XMLControl.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace six
 {

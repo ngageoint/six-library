@@ -34,7 +34,7 @@
 #include <six/sicd/ComplexData.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 int main(int argc, char** argv)
 {

@@ -50,7 +50,7 @@
 #include "utils.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 using namespace six;
 
@@ -1719,7 +1719,7 @@ static const struct
 
 std::unique_ptr<six::WriteControl> getWriteControl(std::string outputName)
 {
-    std::string extension = fs::path(outputName).extension().string();
+    std::string extension = fs::path(outputName).extension();
     str::lower(extension);
 
     std::unique_ptr<six::WriteControl> writer;

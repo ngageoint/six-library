@@ -29,6 +29,9 @@
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
 namespace
 {
 NITF_TRE_STATIC_HANDLER_REF(XML_DATA_CONTENT);
@@ -1205,30 +1208,29 @@ std::unique_ptr<Data> six::parseDataFromString(
 
 std::string six::findSchemaPath(const std::string& progname)
 {
-    sys::OS os;
-    std::string currentDir = os.getCurrentExecutable(progname);
+    const sys::OS os;
+    fs::path currentDir = os.getCurrentExecutable(progname);
 
     // Arbitrary depth to prevent infinite loop in case
     // of weird project structure
     const static size_t MAX_DEPTH = 5;
     size_t levelsTraversed = 0;
 
-    std::string schemaPath;
+    fs::path schemaPath;
     while (levelsTraversed < MAX_DEPTH)
     {
-        currentDir =
-                sys::Path::absolutePath(sys::Path::joinPaths(currentDir, ".."));
-        const std::string confDir = sys::Path::joinPaths(currentDir, "conf");
-        if (os.exists(confDir))
+        currentDir = fs::absolute(currentDir.parent_path());
+        const auto confDir = currentDir / "conf";
+        if (fs::exists(confDir))
         {
-            schemaPath = sys::Path(confDir).join("schema").join("six");
+            schemaPath = confDir / "schema" / "six";
             break;
         }
         ++levelsTraversed;
     }
 
     // If we got lost, this will be empty
-    return schemaPath;
+    return schemaPath.string();
 }
 
 void six::getErrors(const ErrorStatistics* errorStats,

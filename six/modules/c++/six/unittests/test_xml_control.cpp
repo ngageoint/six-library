@@ -26,7 +26,7 @@
 #include "TestCase.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 #ifndef DEFAULT_SCHEMA_PATH
 #if defined(_WIN32)

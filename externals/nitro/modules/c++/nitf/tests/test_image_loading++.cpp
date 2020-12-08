@@ -24,7 +24,7 @@
 #include <import/except.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 void writeImage(nitf::ImageSegment &segment,
                 nitf::Reader &reader,
