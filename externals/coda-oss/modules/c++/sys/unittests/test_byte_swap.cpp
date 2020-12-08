@@ -58,29 +58,46 @@ TEST_CASE(testByteSwap)
 
 TEST_CASE(testEndianness)
 {
-    const bool isBigEndianSystem = sys::isBigEndianSystem();
-
-    if (std::endian::native == std::endian::big)
+    if (sys::Endian::native == sys::Endian::big)
     {
-        TEST_ASSERT_TRUE(isBigEndianSystem);
+        TEST_ASSERT(std::endian::native == std::endian::big);
     }
-    else if (std::endian::native == std::endian::little)
+    else if (sys::Endian::native == sys::Endian::little)
     {
-        TEST_ASSERT_FALSE(isBigEndianSystem);    
+        TEST_ASSERT(std::endian::native == std::endian::little);
     }
     else
     {
         TEST_FAIL("Mixed-endian not supported!");
     }
 
+    const bool isBigEndianSystem = sys::isBigEndianSystem();
 
-    if (isBigEndianSystem)
+    if (std::endian::native == std::endian::big)
     {
-        TEST_ASSERT_TRUE(std::endian::native == std::endian::big);
+        TEST_ASSERT(isBigEndianSystem);
     }
     else
     {
-        TEST_ASSERT_TRUE(std::endian::native == std::endian::little);    
+        TEST_ASSERT(!isBigEndianSystem);    
+    }
+    if (std::endian::native == std::endian::little)
+    {
+        TEST_ASSERT(!isBigEndianSystem);
+    }
+    else
+    {
+        TEST_ASSERT(isBigEndianSystem);
+    }
+
+
+    if (isBigEndianSystem)
+    {
+        TEST_ASSERT(std::endian::native == std::endian::big);
+    }
+    else
+    {
+        TEST_ASSERT(std::endian::native == std::endian::little);    
     }
 }
 }

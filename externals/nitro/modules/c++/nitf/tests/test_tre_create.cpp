@@ -32,7 +32,7 @@
 #include <nitf/Writer.hpp>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 int main(int argc, char** argv)
 {

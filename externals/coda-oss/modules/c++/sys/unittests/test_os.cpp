@@ -21,13 +21,12 @@
  */
 
 #include <fstream>
+#include <sstream>
 
 #include <sys/OS.h>
 #include <sys/Path.h>
 #include <sys/Filesystem.h>
 #include "TestCase.h"
-
-namespace fs = sys::Filesystem;
 
 namespace
 {
@@ -153,39 +152,66 @@ TEST_CASE(testEnvVariables)
 
 TEST_CASE(testFsExtension)
 {
+    namespace fs = std::filesystem;
+
     // https://en.cppreference.com/w/cpp/filesystem/path/extension
 
     // "If the pathname is either . or .., ... then empty path is returned."
     const fs::path dot(".");
-    TEST_ASSERT_EQ("", dot.extension().string());
+    TEST_ASSERT_EQ("", dot.extension());
     const fs::path dotdot("..");
-    TEST_ASSERT_EQ("", dotdot.extension().string());
+    TEST_ASSERT_EQ("", dotdot.extension());
 
     // "If the first character in the filename is a period, that period is ignored
     // (a filename like '.profile' is not treated as an extension)"
     fs::path dotprofile("/path/to/.profile");
-    TEST_ASSERT_EQ("", dotprofile.extension().string());
+    TEST_ASSERT_EQ("", dotprofile.extension());
     dotprofile = ".profile";
-    TEST_ASSERT_EQ("", dotprofile.extension().string());
+    TEST_ASSERT_EQ("", dotprofile.extension());
     dotprofile = "/path/to/.profile.user";
-    TEST_ASSERT_EQ(".user", dotprofile.extension().string());
+    TEST_ASSERT_EQ(".user", dotprofile.extension());
     dotprofile = "/path.to/.profile.user";
-    TEST_ASSERT_EQ(".user", dotprofile.extension().string());
+    TEST_ASSERT_EQ(".user", dotprofile.extension());
     dotprofile = ".profile.user";
-    TEST_ASSERT_EQ(".user", dotprofile.extension().string());
+    TEST_ASSERT_EQ(".user", dotprofile.extension());
 
     fs::path filedottext("/path/to/file.txt");
-    TEST_ASSERT_EQ(".txt", filedottext.extension().string());
+    TEST_ASSERT_EQ(".txt", filedottext.extension());
     filedottext = "file.txt";
-    TEST_ASSERT_EQ(".txt", filedottext.extension().string());
+    TEST_ASSERT_EQ(".txt", filedottext.extension());
 
     // "If ... filename() does not contain the . character, then empty path is returned."
     filedottext = "/path/to/file";
-    TEST_ASSERT_EQ("", filedottext.extension().string());
+    TEST_ASSERT_EQ("", filedottext.extension());
     filedottext = "file";
-    TEST_ASSERT_EQ("", filedottext.extension().string());
+    TEST_ASSERT_EQ("", filedottext.extension());
     filedottext = "/path.to/file";
-    TEST_ASSERT_EQ("", filedottext.extension().string());
+    TEST_ASSERT_EQ("", filedottext.extension());
+}
+
+TEST_CASE(testFsOutput)
+{
+    {
+        namespace fs = std::filesystem;
+        const fs::path path("/path/to/file.txt");
+        const std::string expected = "\"" + path.string() + "\"";
+
+        std::stringstream ss;
+        ss << path;
+        const auto actual = ss.str();
+        TEST_ASSERT_EQ(expected, actual);
+    }
+
+    {
+        namespace fs = sys::Filesystem;
+        const fs::path path("/path/to/file.txt");
+        const std::string expected = "\"" + path.string() + "\"";
+
+        std::stringstream ss;
+        ss << path;
+        const auto actual = ss.str();
+        TEST_ASSERT_EQ(expected, actual);
+    }
 }
 
 }
@@ -196,6 +222,7 @@ int main(int, char**)
     TEST_CHECK(testForcefulMove);
     TEST_CHECK(testEnvVariables);
     TEST_CHECK(testFsExtension);
+    TEST_CHECK(testFsOutput);
     return 0;
 }
 
