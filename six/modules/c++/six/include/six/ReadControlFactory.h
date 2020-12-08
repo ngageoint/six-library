@@ -23,8 +23,6 @@
 
 #include <memory>
 
-#include <import/mt.h>
-
 #include "six/ReadControl.h"
 
 namespace six
@@ -44,28 +42,31 @@ protected:
 
 class ReadControlRegistry
 {
-    std::list<ReadControlCreator*> mCreators;
+    std::list<std::unique_ptr<ReadControlCreator>> mCreators;
 public:
-    ReadControlRegistry()
-    {
-    }
-
-    virtual ~ReadControlRegistry();
+    ReadControlRegistry() = default;
+    virtual ~ReadControlRegistry() = default;
 
     /**
      * Add a known creator to the registry. The registry takes ownership.
      */
-    inline void addCreator(ReadControlCreator* creator)
+    inline void addCreator(std::unique_ptr<ReadControlCreator>&& creator)
     {
-        mCreators.push_back(creator);
+        mCreators.push_back(std::move(creator));
+    }
+    inline void addCreator(ReadControlCreator* creator) // preserve existing client code
+    {
+        addCreator(std::unique_ptr<ReadControlCreator>(creator));
     }
 
     virtual std::unique_ptr<six::ReadControl> newReadControl(const std::string& filename) const;
 
 };
 
-//!  Singleton declaration of our ReadControlRegistry
-typedef mt::Singleton<ReadControlRegistry, true> ReadControlFactory;
+struct ReadControlFactory final
+{
+    static ReadControlRegistry& getInstance();
+};
 
 }
 

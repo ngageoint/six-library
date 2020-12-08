@@ -19,6 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <mutex>
+
 #include "six/ReadControlFactory.h"
 
 using namespace six;
@@ -26,25 +29,29 @@ using namespace six;
 std::unique_ptr<six::ReadControl> ReadControlRegistry::newReadControl(
         const std::string& filename) const
 {
-    for (std::list<ReadControlCreator*>::const_iterator it = mCreators.begin(); it
-            != mCreators.end(); ++it)
+    for (const auto& creator : mCreators)
     {
-        if ((*it)->supports(filename))
-            return (*it)->newReadControl();
+        if (creator->supports(filename))
+            return creator->newReadControl();
     }
     throw except::NotImplementedException(
                                           Ctxt(
                                                "No supported ReadControl for input file"));
 }
 
-ReadControlRegistry::~ReadControlRegistry()
-{
-    while(!mCreators.empty())
-    {
-        ReadControlCreator *creator = mCreators.front();
-        if (creator)
-            delete creator;
-        mCreators.pop_front();
-    }
-}
 
+static std::unique_ptr<six::ReadControlRegistry> mInstance;
+static std::mutex g_ReadControlFactory_mutex;
+six::ReadControlRegistry& six::ReadControlFactory::getInstance()
+{
+    //double-checked locking
+    if (mInstance == nullptr)
+    {
+        std::lock_guard<std::mutex> guard(g_ReadControlFactory_mutex);
+        if (mInstance == nullptr)
+        {
+            mInstance.reset(new ReadControlRegistry); //create the instance
+        }
+    }
+    return *mInstance;
+}
