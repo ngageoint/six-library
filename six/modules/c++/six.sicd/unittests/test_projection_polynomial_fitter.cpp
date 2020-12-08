@@ -45,7 +45,7 @@ loadPolynomialFitter(const fs::path& exePath)
     if (!fs::is_regular_file(sicdPathname))
     {
         std::ostringstream oss;
-        oss << "Environment error: Cannot find SICD file: " << sicdPathname.string();
+        oss << "Environment error: Cannot find SICD file: " << sicdPathname;
         throw except::Exception(Ctxt(oss.str()));
     }
 

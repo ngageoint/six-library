@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include <sys/Filesystem.h>
+#include <sys/OS.h>
 
 #include "sidd_Test.h"
 
@@ -99,8 +100,7 @@ struct sidd_test_read_sidd_legend : public ::testing::Test {
         // initialization code here
         //const std::string SIX_SCHEMA_PATH = R"(C:\Users\jdsmith\source\repos\six\six\modules\c++\six.sidd\conf\schema)";
 		const auto SIX_SCHEMA_PATH = buildSchemaDir();
-		const std::string putenv_ = "SIX_SCHEMA_PATH=" + SIX_SCHEMA_PATH.string();
-        _putenv(putenv_.c_str());
+		sys::OS().setEnv("SIX_SCHEMA_PATH", SIX_SCHEMA_PATH, true /*overwrite*/);
     }
 
     void SetUp() {

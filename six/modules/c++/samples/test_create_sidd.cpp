@@ -125,7 +125,7 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
 six::WriteControl* getWriteControl(std::string outputName)
 {
 
-    auto extension = fs::path(outputName).extension().string();
+    std::string extension = fs::path(outputName).extension();
     str::lower(extension);
 
     six::WriteControl* writer = nullptr;

@@ -1219,11 +1219,11 @@ std::string six::findSchemaPath(const std::string& progname)
     std::string schemaPath;
     while (levelsTraversed < MAX_DEPTH)
     {
-        currentDir = fs::absolute(fs::path(currentDir).parent_path()).string();
-        const std::string confDir = (fs::path(currentDir) / "conf").string();
+        currentDir = fs::absolute(fs::path(currentDir).parent_path());
+        const std::string confDir = fs::path(currentDir) / "conf";
         if (fs::exists(confDir))
         {
-            schemaPath = (fs::path(confDir) / "schema" / "six").string();
+            schemaPath = fs::path(confDir) / "schema" / "six";
             break;
         }
         ++levelsTraversed;

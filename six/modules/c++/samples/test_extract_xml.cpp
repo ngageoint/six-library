@@ -70,7 +70,7 @@ int main(int argc, char** argv)
         //! Fill out basename if not user specified
         if (basename.empty())
         {
-            basename = fs::path(inputFile).stem().string();
+            basename = fs::path(inputFile).stem();
         }
 
         nitf::Reader reader;

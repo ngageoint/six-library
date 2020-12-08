@@ -546,7 +546,7 @@ std::unique_ptr<ComplexData> Utilities::getComplexData(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
-    std::string extension = fs::path(pathname).extension().string();
+    std::string extension = fs::path(pathname).extension();
     str::lower(extension);
 
     if (extension == ".xml")

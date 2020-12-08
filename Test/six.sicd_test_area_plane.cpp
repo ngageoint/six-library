@@ -5,8 +5,7 @@
 struct sicd_test_area_plane : public ::testing::Test {
     sicd_test_area_plane() {
         // initialization code here
-        const std::string putenv_ = "NITF_PLUGIN_PATH=" NITF_PLUGIN_PATH;
-        _putenv(putenv_.c_str());
+        sys::OS().setEnv("NITF_PLUGIN_PATH", NITF_PLUGIN_PATH, true /*overwrite*/);
     }
 
     void SetUp() {
