@@ -304,11 +304,7 @@ PixelType six::toType<PixelType>(const std::string& s)
 template <>
 std::string six::toString(const PixelType& type)
 {
-    if (type == PixelType::NOT_SET)
-    {
-        throw except::Exception(Ctxt("Unsupported pixel type"));
-    }
-    return type.toString();
+    return type.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -328,17 +324,7 @@ MagnificationMethod six::toType<MagnificationMethod>(const std::string& s)
 template <>
 std::string six::toString(const MagnificationMethod& method)
 {
-    switch (method)
-    {
-    case MagnificationMethod::NEAREST_NEIGHBOR:
-        return "NEAREST_NEIGHBOR";
-    case MagnificationMethod::BILINEAR:
-        return "BILINEAR";
-    case MagnificationMethod::LAGRANGE:
-        return "LAGRANGE";
-    default:
-        throw except::Exception(Ctxt("Unsupported method"));
-    }
+    return method.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -360,19 +346,7 @@ DecimationMethod six::toType<DecimationMethod>(const std::string& s)
 template <>
 std::string six::toString(const DecimationMethod& method)
 {
-    switch (method)
-    {
-    case DecimationMethod::NEAREST_NEIGHBOR:
-        return "NEAREST_NEIGHBOR";
-    case DecimationMethod::BILINEAR:
-        return "BILINEAR";
-    case DecimationMethod::BRIGHTEST_PIXEL:
-        return "BRIGHTEST_PIXEL";
-    case DecimationMethod::LAGRANGE:
-        return "LAGRANGE";
-    default:
-        throw except::Exception(Ctxt("Unsupported method"));
-    }
+    return method.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -421,21 +395,7 @@ OrientationType six::toType<OrientationType>(const std::string& s)
 template <>
 std::string six::toString(const OrientationType& t)
 {
-    switch (t)
-    {
-    case OrientationType::UP:
-        return "UP";
-    case OrientationType::DOWN:
-        return "DOWN";
-    case OrientationType::LEFT:
-        return "LEFT";
-    case OrientationType::RIGHT:
-        return "RIGHT";
-    case OrientationType::ARBITRARY:
-        return "ARBITRARY";
-    default:
-        throw except::Exception(Ctxt("Unsupported orientation"));
-    }
+    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -482,26 +442,7 @@ PolarizationSequenceType six::toType<PolarizationSequenceType>(
 template <>
 std::string six::toString(const PolarizationSequenceType& t)
 {
-    switch (t)
-    {
-    case PolarizationSequenceType::OTHER:
-        return "OTHER";
-    case PolarizationSequenceType::V:
-        return "V";
-    case PolarizationSequenceType::H:
-        return "H";
-    case PolarizationSequenceType::RHC:
-        return "RHC";
-    case PolarizationSequenceType::LHC:
-        return "LHC";
-    case PolarizationSequenceType::UNKNOWN:
-        return "UNKNOWN";
-    case PolarizationSequenceType::SEQUENCE:
-        return "SEQUENCE";
-    default:
-        throw except::Exception(
-                Ctxt("Unsupported conversion from polarization type"));
-    }
+    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -539,22 +480,7 @@ PolarizationType six::toType<PolarizationType>(const std::string& s)
 template <>
 std::string six::toString(const PolarizationType& t)
 {
-    switch (t)
-    {
-    case PolarizationType::OTHER:
-        return "OTHER";
-    case PolarizationType::V:
-        return "V";
-    case PolarizationType::H:
-        return "H";
-    case PolarizationType::RHC:
-        return "RHC";
-    case PolarizationType::LHC:
-        return "LHC";
-    default:
-        throw except::Exception(
-                Ctxt("Unsupported conversion from polarization type"));
-    }
+    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -670,15 +596,7 @@ DemodType six::toType<DemodType>(const std::string& s)
 template <>
 std::string six::toString(const DemodType& t)
 {
-    switch (t)
-    {
-    case DemodType::STRETCH:
-        return "STRETCH";
-    case DemodType::CHIRP:
-        return "CHIRP";
-    default:
-        throw except::Exception(Ctxt("Unsupported demod type"));
-    }
+    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -704,19 +622,7 @@ ImageFormationType six::toType<ImageFormationType>(const std::string& s)
 template <>
 std::string six::toString(const ImageFormationType& t)
 {
-    switch (t)
-    {
-    case ImageFormationType::OTHER:
-        return "OTHER";
-    case ImageFormationType::PFA:
-        return "PFA";
-    case ImageFormationType::RMA:
-        return "RMA";
-    case ImageFormationType::RGAZCOMP:
-        return "RGAZCOMP";
-    default:
-        throw except::Exception(Ctxt("Unsupported image formation type"));
-    }
+    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -741,18 +647,7 @@ SlowTimeBeamCompensationType six::toType<SlowTimeBeamCompensationType>(
 template <>
 std::string six::toString(const SlowTimeBeamCompensationType& t)
 {
-    switch (t)
-    {
-    case SlowTimeBeamCompensationType::NO:
-        return "NO";
-    case SlowTimeBeamCompensationType::GLOBAL:
-        return "GLOBAL";
-    case SlowTimeBeamCompensationType::SV:
-        return "SV";
-    default:
-        throw except::Exception(
-                Ctxt("Unsupported slow time beam compensation type"));
-    }
+    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -775,16 +670,7 @@ ImageBeamCompensationType six::toType<ImageBeamCompensationType>(
 template <>
 std::string six::toString(const ImageBeamCompensationType& t)
 {
-    switch (t)
-    {
-    case ImageBeamCompensationType::NO:
-        return "NO";
-    case ImageBeamCompensationType::SV:
-        return "SV";
-    default:
-        throw except::Exception(
-                Ctxt("Unsupported image beam compensation type"));
-    }
+    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -808,17 +694,7 @@ AutofocusType six::toType<AutofocusType>(const std::string& s)
 template <>
 std::string six::toString(const AutofocusType& t)
 {
-    switch (t)
-    {
-    case AutofocusType::NO:
-        return "NO";
-    case AutofocusType::GLOBAL:
-        return "GLOBAL";
-    case AutofocusType::SV:
-        return "SV";
-    default:
-        throw except::Exception(Ctxt("Unsupported autofocus type"));
-    }
+    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -842,17 +718,7 @@ RMAlgoType six::toType<RMAlgoType>(const std::string& s)
 template <>
 std::string six::toString(const RMAlgoType& t)
 {
-    switch (t)
-    {
-    case RMAlgoType::OMEGA_K:
-        return "OMEGA_K";
-    case RMAlgoType::CSA:
-        return "CSA";
-    case RMAlgoType::RG_DOP:
-        return "RG_DOP";
-    default:
-        throw except::Exception(Ctxt("Unsupported RM algorithm type"));
-    }
+    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -903,17 +769,7 @@ ComplexImagePlaneType six::toType<ComplexImagePlaneType>(const std::string& s)
 template <>
 std::string six::toString(const ComplexImagePlaneType& t)
 {
-    switch (t)
-    {
-    case ComplexImagePlaneType::OTHER:
-        return "OTHER";
-    case ComplexImagePlaneType::SLANT:
-        return "SLANT";
-    case ComplexImagePlaneType::GROUND:
-        return "GROUND";
-    default:
-        throw except::Exception(Ctxt("Unsupported complex image plane"));
-    }
+    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -941,21 +797,7 @@ ComplexImageGridType six::toType<ComplexImageGridType>(const std::string& s)
 template <>
 std::string six::toString(const ComplexImageGridType& t)
 {
-    switch (t)
-    {
-    case ComplexImageGridType::RGAZIM:
-        return "RGAZIM";
-    case ComplexImageGridType::RGZERO:
-        return "RGZERO";
-    case ComplexImageGridType::XRGYCR:
-        return "XRGYCR";
-    case ComplexImageGridType::XCTYAT:
-        return "XCTYAT";
-    case ComplexImageGridType::PLANE:
-        return "PLANE";
-    default:
-        throw except::Exception(Ctxt("Unsupported complex image grid"));
-    }
+    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -1049,15 +891,7 @@ CollectType six::toType<CollectType>(const std::string& s)
 template <>
 std::string six::toString(const CollectType& value)
 {
-    switch (value)
-    {
-    case CollectType::MONOSTATIC:
-        return "MONOSTATIC";
-    case CollectType::BISTATIC:
-        return "BISTATIC";
-    default:
-        throw except::Exception(Ctxt("Unsupported collect type"));
-    }
+    return value.toString(true /*throw_if_not_set*/);
 }
 
 template <>

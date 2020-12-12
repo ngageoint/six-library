@@ -88,15 +88,20 @@ namespace details
 
     public:
         //! Returns string representation of the value
-        std::string toString() const
+        std::string toString(bool throw_if_not_set = false) const
         {
+            if (throw_if_not_set && (value == NOT_SET_VALUE))
+            {
+                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+            }
+
             const auto it = int_to_string().find(value);
             if (it != int_to_string().end())
             {
                 return it->second;
             }
-            else
-                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
 
         operator int() const { return value; }
