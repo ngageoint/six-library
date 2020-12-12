@@ -104,6 +104,23 @@ namespace details
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
 
+        static T toType(const std::string& s, int not_found_value = -1)
+        {
+            std::string type(s);
+            str::trim(type);
+            const auto it = string_to_int().find(type);
+            if (it != string_to_int().end())
+            {
+                return it->second;
+            }
+
+            if (not_found_value == T::NOT_SET)
+            {
+                return not_found_value;
+            }
+            throw except::Exception(Ctxt("Unknown type '" + s + "'"));
+        }
+
         operator int() const { return value; }
         operator std::string() const { return toString(); }
         static size_t size() { return int_to_string().size(); }
