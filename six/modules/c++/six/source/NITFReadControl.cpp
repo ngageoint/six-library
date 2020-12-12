@@ -363,15 +363,15 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
 
         // This function should throw if the data does not exist
         const auto imageAndSegment = getIndices(subheader);
-        if (imageAndSegment.first >= mInfos.size())
+        if (imageAndSegment.image >= mInfos.size())
         {
             throw except::Exception(Ctxt(
-                    "Image " + str::toString(imageAndSegment.first) +
+                    "Image " + str::toString(imageAndSegment.image) +
                     " is out of bounds"));
         }
 
-        auto& currentInfo = mInfos[imageAndSegment.first];
-        const size_t productSegmentIdx = imageAndSegment.second;
+        auto& currentInfo = mInfos[imageAndSegment.image];
+        const size_t productSegmentIdx = imageAndSegment.segment;
 
         // We have to enforce a number of rules, namely that the #
         // columns match, and the pixel type, etc.
@@ -548,17 +548,21 @@ void NITFReadControl::addSecurityOptions(nitf::FileSecurity security,
                           (const char*) p)));
 }
 
-std::pair<size_t, size_t>
+NITFReadControl::ImageAndSegment
 NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
 {
     const auto imageID = subheader.imageId();
 
     // There is definitely something in here
-    std::pair<size_t, size_t> imageAndSegment;
-    imageAndSegment.first = 0;
-    imageAndSegment.second = 0;
+    ImageAndSegment imageAndSegment;
 
-    const size_t iid = str::toType<size_t>(imageID.substr(4, 3));
+    const auto digit_pos = imageID.find_first_of("0123456789");
+    if (digit_pos == std::string::npos)
+    {
+        throw except::Exception(Ctxt("Can't parse 'iid' from '" + imageID + "'"));
+    }
+    const auto str_iid = imageID.substr(digit_pos, 3);
+    const size_t iid = str::toType<size_t>(str_iid);
 
     /*
      *  Always first = 0, second = N - 1 (where N is numSegments)
@@ -566,11 +570,10 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
      */
     if (mContainer->getDataType() == DataType::COMPLEX)
     {
-        // We need to find the SICD data here, and there is
-        // only one
+        // We need to find the SICD data here, and there is only one
         if (iid != 0)
         {
-            imageAndSegment.second = iid - 1;
+            imageAndSegment.segment = iid - 1;
         }
     }
     /*
@@ -579,10 +582,12 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
      */
     else
     {
-        // If it's SIDD, we need to check the first three
-        // digits within the IID
-        imageAndSegment.first = iid - 1;
-        imageAndSegment.second = str::toType<size_t>(imageID.substr(7)) - 1;
+        // If it's SIDD, we need to check the first three digits within the IID
+        imageAndSegment.image = iid - 1;
+        if (str::startsWith(imageID, "SIDD")) // might also be "DED001"
+        {
+            imageAndSegment.segment = str::toType<size_t>(imageID.substr(7)) - 1;
+        }
     }
 
     return imageAndSegment;
@@ -714,7 +719,7 @@ std::unique_ptr<Legend> NITFReadControl::findLegend(size_t productNum)
         nitf::ImageSegment segment = (nitf::ImageSegment) *imageIter;
         nitf::ImageSubheader subheader = segment.getSubheader();
 
-        if (productNum == getIndices(subheader).first && isLegend(subheader))
+        if (productNum == getIndices(subheader).image && isLegend(subheader))
         {
             // It's an image segment associated with the product we care
             // about and it's a legend (for simplicity right now we're going

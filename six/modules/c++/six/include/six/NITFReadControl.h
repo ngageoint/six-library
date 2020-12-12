@@ -197,7 +197,13 @@ protected:
      *  it is only unique when it's Complex data.
      *
      */
-    std::pair<size_t, size_t>
+    struct ImageAndSegment final
+    {
+        size_t image = 0;
+        size_t segment = 0;
+
+    };
+    ImageAndSegment
     getIndices(const nitf::ImageSubheader& subheader) const;
 
     void addImageClassOptions(nitf::ImageSubheader& s,
