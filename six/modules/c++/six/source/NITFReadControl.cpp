@@ -21,6 +21,7 @@
  */
 
 #include <sstream>
+#include <stdexcept>
 
 #include <six/NITFReadControl.h>
 #include <six/XMLControlFactory.h>
@@ -561,14 +562,15 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
     {
         throw except::Exception(Ctxt("Can't parse 'iid' from '" + imageID + "'"));
     }
-    const auto str_iid = imageID.substr(digit_pos, 3);
-    const size_t iid = str::toType<size_t>(str_iid);
+    const auto str_image = imageID.substr(digit_pos, 3);
+    const size_t iid = str::toType<size_t>(str_image);
 
     /*
      *  Always first = 0, second = N - 1 (where N is numSegments)
      *
      */
-    if (mContainer->getDataType() == DataType::COMPLEX)
+    const auto dataType = mContainer->getDataType();
+    if (dataType == DataType::COMPLEX)
     {
         // We need to find the SICD data here, and there is only one
         if (iid != 0)
@@ -580,14 +582,23 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
      *  First is always iid - 1
      *  Second is always str::toType<int>(substr(7)) - 1
      */
-    else
+    else if (dataType == DataType::DERIVED)
     {
         // If it's SIDD, we need to check the first three digits within the IID
         imageAndSegment.image = iid - 1;
         if (str::startsWith(imageID, "SIDD")) // might also be "DED001"
         {
-            imageAndSegment.segment = str::toType<size_t>(imageID.substr(7)) - 1;
+            const auto str_segment = imageID.substr(digit_pos+3);
+            imageAndSegment.segment = str::toType<size_t>(str_segment) - 1;
         }
+        else
+        {
+            throw except::Exception(Ctxt("Unknown DERIVED imageID: " + imageID));
+        }
+    }
+    else
+    {
+        throw except::Exception(Ctxt("Unknown 'DataType' value: " + dataType.toString()));
     }
 
     return imageAndSegment;
