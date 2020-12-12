@@ -586,14 +586,16 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
     {
         // If it's SIDD, we need to check the first three digits within the IID
         imageAndSegment.image = iid - 1;
-        if (str::startsWith(imageID, "SIDD")) // might also be "DED001"
+        const auto segment_pos = digit_pos + 3;
+        if (segment_pos < imageID.length())
         {
-            const auto str_segment = imageID.substr(digit_pos+3);
+            const auto str_segment = imageID.substr(segment_pos);
             imageAndSegment.segment = str::toType<size_t>(str_segment) - 1;
         }
         else
         {
-            throw except::Exception(Ctxt("Unknown DERIVED imageID: " + imageID));
+            // 'imageID' might also be "DED001"
+            throw except::Exception(Ctxt("Can't extract segment # from: " + imageID));
         }
     }
     else
