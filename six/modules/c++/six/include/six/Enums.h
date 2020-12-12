@@ -120,7 +120,7 @@ namespace details
         int value = NOT_SET_VALUE;
     };
  
-    #define SIX_Enum_map_entry_(v) { v, #v }
+    #define SIX_Enum_map_entry_(n) { n, #n }
 
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
@@ -134,19 +134,19 @@ namespace details
 
     #define SIX_Enum_DECLARE_ENUM_1(name, n, v) SIX_Enum_struct_1_(name) \
         n = v, SIX_Enum_struct_2_ \
-        { v, #v }, SIX_Enum_struct_3_
+        { n, #n }, SIX_Enum_struct_3_
     #define SIX_Enum_DECLARE_ENUM_2(name, n1, v1, n2, v2) SIX_Enum_struct_1_(name) \
         n1 = v1, n2 = v2, SIX_Enum_struct_2_ \
-        { v1, #v1 }, {v2, #v2}, SIX_Enum_struct_3_
+        { n1, #n1 }, {n2, #n2}, SIX_Enum_struct_3_
     #define SIX_Enum_DECLARE_ENUM_3(name, n1, v1, n2, v2, n3, v3) SIX_Enum_struct_1_(name) \
         n1 = v1, n2 = v2, n3 = v3, SIX_Enum_struct_2_ \
-        { v1, #v1 }, {v2, #v2}, {v3, #v3}, SIX_Enum_struct_3_
+        { n1, #n1 }, {n2, #n2}, {n3, #n3}, SIX_Enum_struct_3_
     #define SIX_Enum_DECLARE_ENUM_4(name, n1, v1, n2, v2, n3, v3, n4, v4) SIX_Enum_struct_1_(name) \
         n1 = v1, n2 = v2, n3 = v3, n4 = v4, SIX_Enum_struct_2_ \
-        { v1, #v1 }, {v2, #v2}, {v3, #v3}, {v4, #v4}, SIX_Enum_struct_3_
+        { n1, #n1 }, {n2, #n2}, {n3, #n3}, {n4, #n4}, SIX_Enum_struct_3_
     #define SIX_Enum_DECLARE_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) SIX_Enum_struct_1_(name) \
         n1 = v1, n2 = v2, n3 = v3, n4 = v4, n5 = v5, SIX_Enum_struct_2_ \
-        { v1, #v1 }, {v2, #v2}, {v3, #v3}, {v4, #v4}, {v5, #v5}, SIX_Enum_struct_3_
+        { n1, #n1 }, {n2, #n2}, {n3, #n3}, {n4, #n4}, {n5, #n5}, SIX_Enum_struct_3_
 } // namespace details
 
 /*!
