@@ -103,58 +103,51 @@ namespace details
         operator std::string() const { return toString(); }
         static size_t size() { return int_to_string().size(); }
 
+        // needed for SWIG
+        bool operator==(const int& o) const { return value == o; }
+        bool operator==(const Enum& o) const { return value == o.value; }
+        bool operator!=(const int& o) const { return value != o; }
+        bool operator!=(const Enum& o) const { return value != o.value; }
+        bool operator<(const int& o) const { return value < o; }
+        bool operator<(const Enum& o) const { return value < o.value; }
+        bool operator<=(const int& o) const { return value <= o; }
+        bool operator<=(const Enum& o) const { return value <= o.value; }
+        bool operator>(const int& o) const { return value > o; }
+        bool operator>(const Enum& o) const { return value > o.value; }
+        bool operator>=(const int& o) const { return value >= o; }
+        bool operator>=(const Enum& o) const { return value >= o.value; }
+
         int value = NOT_SET_VALUE;
     };
-
-    #define SIX_Enum_value_(n, v, ...) n = v, __VA_ARGS__
-    #define SIX_Enum_map_entry_(v, ...) { v, #v }, __VA_ARGS__
+ 
+    #define SIX_Enum_map_entry_(v) { v, #v }
 
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
-    #define SIX_Enum_DECLARE_ENUM_(name, enum_values, map_entries) \
-        struct name final : public details::Enum<name> { \
-        enum { enum_values, NOT_SET = six::NOT_SET_VALUE }; \
-        static const std::map<int, std::string>& int_to_string_() { \
-            static const std::map<int, std::string> retval{ map_entries, SIX_Enum_map_entry_(NOT_SET) }; \
-            return retval; } \
-        name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
-        name& operator=(const int& o) { value = o; return *this; } }
+    #define SIX_Enum_struct_1_(name) struct name final : public details::Enum<name> { \
+            name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
+            name& operator=(const int& o) { value = o; return *this; } enum {
+    #define SIX_Enum_struct_2_ NOT_SET = six::NOT_SET_VALUE }; \
+            static const std::map<int, std::string>& int_to_string_() { \
+	      static const std::map<int, std::string> retval{ 
+    #define SIX_Enum_struct_3_ SIX_Enum_map_entry_(NOT_SET) }; return retval; } }
 
-    #define SIX_Enum_DECLARE_ENUM_1_(name, n, v, enum_values, map_entries) \
-                SIX_Enum_DECLARE_ENUM_(name, \
-                    SIX_Enum_value_(n, v, enum_values), \
-                    SIX_Enum_map_entry_(n, map_entries))
-    #define SIX_Enum_DECLARE_ENUM_1(name, n, v) \
-                SIX_Enum_DECLARE_ENUM_1_(name, n, v, ,)
-
-    #define SIX_Enum_DECLARE_ENUM_2_(name, n1, v1, n2, v2, enum_values, map_entries) \
-                SIX_Enum_DECLARE_ENUM_1_(name, n1, v1,\
-                    SIX_Enum_value_(n2, v2, enum_values), \
-                    SIX_Enum_map_entry_(n2, map_entries))
-    #define SIX_Enum_DECLARE_ENUM_2(name, n1, v1, n2, v2) \
-                SIX_Enum_DECLARE_ENUM_2_(name, n1, v1, n2, v2, ,)
-
-    #define SIX_Enum_DECLARE_ENUM_3_(name, n1, v1, n2, v2, n3, v3, enum_values, map_entries) \
-                SIX_Enum_DECLARE_ENUM_2_(name, n1, v1, n2, v2, \
-                    SIX_Enum_value_(n3, v3, enum_values), \
-                    SIX_Enum_map_entry_(n3, map_entries))
-    #define SIX_Enum_DECLARE_ENUM_3(name, n1, v1, n2, v2, n3, v3) \
-                SIX_Enum_DECLARE_ENUM_3_(name, n1, v1, n2, v2, n3, v3, ,)
-
-    #define SIX_Enum_DECLARE_ENUM_4_(name, n1, v1, n2, v2, n3, v3, n4, v4, enum_values, map_entries) \
-                    SIX_Enum_DECLARE_ENUM_3_(name, n1, v1, n2, v2, n3, v3, \
-                        SIX_Enum_value_(n4, v4, enum_values), \
-                        SIX_Enum_map_entry_(n4, map_entries))
-    #define SIX_Enum_DECLARE_ENUM_4(name, n1, v1, n2, v2, n3, v3, n4, v4) \
-                    SIX_Enum_DECLARE_ENUM_4_(name, n1, v1, n2, v2, n3, v3, n4, v4, ,)
-
-    #define SIX_Enum_DECLARE_ENUM_5_(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5, enum_values, map_entries) \
-                    SIX_Enum_DECLARE_ENUM_4_(name, n1, v1, n2, v2, n3, v3, n4, v4, \
-                        SIX_Enum_value_(n5, v5, enum_values), \
-                        SIX_Enum_map_entry_(n5, map_entries))
-    #define SIX_Enum_DECLARE_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) \
-                    SIX_Enum_DECLARE_ENUM_5_(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5, ,)
-}
+    #define SIX_Enum_DECLARE_ENUM_1(name, n, v) SIX_Enum_struct_1_(name) \
+        n = v, SIX_Enum_struct_2_ \
+        { v, #v }, SIX_Enum_struct_3_
+    #define SIX_Enum_DECLARE_ENUM_2(name, n1, v1, n2, v2) SIX_Enum_struct_1_(name) \
+        n1 = v1, n2 = v2, SIX_Enum_struct_2_ \
+        { v1, #v1 }, {v2, #v2}, SIX_Enum_struct_3_
+    #define SIX_Enum_DECLARE_ENUM_3(name, n1, v1, n2, v2, n3, v3) SIX_Enum_struct_1_(name) \
+        n1 = v1, n2 = v2, n3 = v3, SIX_Enum_struct_2_ \
+        { v1, #v1 }, {v2, #v2}, {v3, #v3}, SIX_Enum_struct_3_
+    #define SIX_Enum_DECLARE_ENUM_4(name, n1, v1, n2, v2, n3, v3, n4, v4) SIX_Enum_struct_1_(name) \
+        n1 = v1, n2 = v2, n3 = v3, n4 = v4, SIX_Enum_struct_2_ \
+        { v1, #v1 }, {v2, #v2}, {v3, #v3}, {v4, #v4}, SIX_Enum_struct_3_
+    #define SIX_Enum_DECLARE_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) SIX_Enum_struct_1_(name) \
+        n1 = v1, n2 = v2, n3 = v3, n4 = v4, n5 = v5, SIX_Enum_struct_2_ \
+        { v1, #v1 }, {v2, #v2}, {v3, #v3}, {v4, #v4}, {v5, #v5}, SIX_Enum_struct_3_
+} // namespace details
 
 /*!
  *  \struct AppliedType
