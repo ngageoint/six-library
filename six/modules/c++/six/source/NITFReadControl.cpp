@@ -189,7 +189,7 @@ DataType NITFReadControl::getDataType(const std::string& fromFile) const
 }
 
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
-                                      const NITFImageInfo* info)
+                                      const NITFImageInfo& info)
 {
     const size_t numBandsSeg = subheader.numImageBands();
 
@@ -207,7 +207,7 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
     const size_t numBytesPerPixel = (numBitsPerPixel + 7) / 8;
     const size_t numBytesSeg = numBytesPerPixel * numBandsSeg;
 
-    const size_t nbpp = info->getData()->getNumBytesPerPixel();
+    const size_t nbpp = info.getData()->getNumBytesPerPixel();
     if (numBytesSeg != nbpp)
     {
         std::ostringstream ostr;
@@ -216,7 +216,7 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    const size_t numCols = info->getData()->getNumCols();
+    const size_t numCols = info.getData()->getNumCols();
     const size_t numColsSubheader = subheader.numCols();
 
     if (numColsSubheader != numCols)
@@ -325,7 +325,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
                     str::toString(mContainer->getNumData())));
         }
 
-        mInfos.push_back(new NITFImageInfo(mContainer->getData(0)));
+        mInfos.push_back(std::unique_ptr<NITFImageInfo>(new NITFImageInfo(mContainer->getData(0))));
     }
     else
     {
@@ -336,7 +336,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
             Data* const data = mContainer->getData(ii);
             if (data->getDataType() == DataType::DERIVED)
             {
-                mInfos.push_back(new NITFImageInfo(data));
+                mInfos.push_back(std::unique_ptr<NITFImageInfo>(new NITFImageInfo(data)));
             }
         }
     }
@@ -370,7 +370,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
                     " is out of bounds"));
         }
 
-        auto& currentInfo = mInfos[imageAndSegment.image];
+        const auto& currentInfo = mInfos[imageAndSegment.image];
         const size_t productSegmentIdx = imageAndSegment.segment;
 
         // We have to enforce a number of rules, namely that the #
@@ -380,7 +380,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         const bool segIsLegend = isLegend(subheader);
         if (!segIsLegend)
         {
-            validateSegment(subheader, currentInfo);
+            validateSegment(subheader, *currentInfo);
         }
 
         // We are propagating the last segment's
@@ -595,10 +595,10 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
 
 UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
-    NITFImageInfo* thisImage = mInfos[imageNumber];
+    const NITFImageInfo& thisImage = *(mInfos[imageNumber]);
 
-    size_t numRowsTotal = thisImage->getData()->getNumRows();
-    size_t numColsTotal = thisImage->getData()->getNumCols();
+    size_t numRowsTotal = thisImage.getData()->getNumRows();
+    size_t numColsTotal = thisImage.getData()->getNumCols();
 
     if (region.getNumRows() == -1)
     {
@@ -632,7 +632,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     auto buffer = region.getBuffer();
 
     size_t subWindowSize = numRowsReq * numColsReq
-            * thisImage->getData()->getNumBytesPerPixel();
+            * thisImage.getData()->getNumBytesPerPixel();
 
     if (buffer == nullptr)
     {
@@ -647,8 +647,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     sw.setNumBands(1);
     sw.setBandList(&bandList);
 
-    std::vector < NITFSegmentInfo > imageSegments
-            = thisImage->getImageSegments();
+    std::vector < NITFSegmentInfo > imageSegments = thisImage.getImageSegments();
     size_t numIS = imageSegments.size();
     size_t startOff = 0;
 
@@ -679,8 +678,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     << " i: " << i << std::endl;
 #endif
 
-    size_t nbpp = thisImage->getData()->getNumBytesPerPixel();
-    size_t startIndex = thisImage->getStartIndex();
+    size_t nbpp = thisImage.getData()->getNumBytesPerPixel();
+    size_t startIndex = thisImage.getStartIndex();
     createCompressionOptions(mCompressionOptions);
     for (; i < numIS && totalRead < subWindowSize; i++)
     {
@@ -777,10 +776,6 @@ void NITFReadControl::readLegendPixelData(const nitf::ImageSubheader& subheader,
 
 void NITFReadControl::reset()
 {
-    for (size_t ii = 0; ii < mInfos.size(); ++ii)
-    {
-        delete mInfos[ii];
-    }
     mInfos.clear();
     mInterface.reset();
 }

@@ -19,10 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_NITF_READ_CONTROL_H__
-#define __SIX_NITF_READ_CONTROL_H__
+#pragma once
 
 #include <map>
+#include <memory>
 
 #include "six/NITFImageInfo.h"
 #include "six/ReadControl.h"
@@ -106,8 +106,7 @@ struct NITFReadControl : public ReadControl
      *  segment in question at least follows some of the rules
      *  that its supposed to.
      */
-    void validateSegment(nitf::ImageSubheader subheader,
-                         const NITFImageInfo* info);
+    void validateSegment(nitf::ImageSubheader subheader, const NITFImageInfo&);
 
     using ReadControl::load;
 
@@ -177,7 +176,7 @@ protected:
     //! We keep a ref to the record
     nitf::Record mRecord;
 
-    std::vector<NITFImageInfo*> mInfos;
+    std::vector<std::unique_ptr<NITFImageInfo>> mInfos;
 
     std::map<std::string, void*> mCompressionOptions;
 
@@ -259,5 +258,4 @@ struct NITFReadControlCreator final : public ReadControlCreator
 
 }
 
-#endif
 
