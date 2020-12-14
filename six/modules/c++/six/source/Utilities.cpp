@@ -276,6 +276,16 @@ RadarModeType six::toType<RadarModeType>(const std::string& s)
 }
 
 template <>
+DataType six::toType<DataType>(const std::string& s)
+{
+    if (str::startsWith(s, "SICD"))
+        return DataType::COMPLEX;
+    if (str::startsWith(s, "SIDD"))
+        return DataType::DERIVED;
+
+    throw except::Exception(Ctxt("Unsupported conversion to DataType type '" + s + "'"));
+}
+template <>
 std::string six::toString(const DataType& type)
 {
     switch (type)
@@ -781,14 +791,8 @@ std::unique_ptr<Data> six::parseData(
     xml::lite::Document* doc = xmlParser.getDocument();
 
     //! Check the root localName for the XML type
-    std::string xmlType = doc->getRootElement()->getLocalName();
-    DataType xmlDataType;
-    if (str::startsWith(xmlType, "SICD"))
-        xmlDataType = DataType::COMPLEX;
-    else if (str::startsWith(xmlType, "SIDD"))
-        xmlDataType = DataType::DERIVED;
-    else
-        throw except::Exception(Ctxt("Unexpected XML type"));
+    const std::string xmlType = doc->getRootElement()->getLocalName();
+    const auto xmlDataType = toType<DataType>(xmlType);
 
     //! Only SIDDs can have mismatched types
     if (dataType == DataType::COMPLEX && dataType != xmlDataType)

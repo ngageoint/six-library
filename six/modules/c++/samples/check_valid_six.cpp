@@ -111,6 +111,7 @@ bool runValidation(const std::unique_ptr<six::Data>& data,
     else
     {
         // Nothing to validate
+        log->info(Ctxt("Nothing done: not a SICD."));
         return true;
     }
 }

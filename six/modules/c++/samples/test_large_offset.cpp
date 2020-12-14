@@ -100,7 +100,7 @@ void createNITF(const std::string& outputPathname,
                     static_cast<float>(ii) * -1);
         }
     }
-    else
+    else if (container->getDataType() == six::DataType::DERIVED)
     {
         uint16_t* derivedData =
                 reinterpret_cast<uint16_t*>(imageData.get());

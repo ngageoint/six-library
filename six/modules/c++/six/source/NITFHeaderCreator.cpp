@@ -29,6 +29,10 @@
 #include <six/WriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
+#include <six/Utilities.h>
+
+#undef min
+#undef max
 
 namespace
 {
@@ -502,14 +506,14 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     tre["DESSHDT"] = data.getCreationTime().format("%Y-%m-%dT%H:%M:%SZ");
     setField("DESSHRP", mOrganizationId, tre);
 
-    const std::string dataType =
-            (data.getDataType() == DataType::COMPLEX) ? "SICD" : "SIDD";
+    const auto dataType = data.getDataType();
+    const std::string strDataType = six::toString(dataType);
 
-    if (dataType == "SICD")
+    if (dataType == DataType::COMPLEX)
     {
         tre["DESSHSI"] = Constants::SICD_DESSHSI;
     }
-    else
+    else if (dataType == DataType::DERIVED)
     {
         tre["DESSHSI"] = Constants::SIDD_DESSHSI;
     }
@@ -521,7 +525,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     const std::string version(data.getVersion());
     std::string specVers;
     std::string specDT;
-    if (dataType == "SICD")
+    if (dataType == DataType::COMPLEX)
     {
         if (version == "1.0.0" || version == "1.0.1")
         {
@@ -544,7 +548,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
             specDT = "2018-12-13T00:00:00Z";
         }
     }
-    else if (dataType == "SIDD")
+    else if (dataType == DataType::DERIVED)
     {
         if (version == "1.0.0")
         {
@@ -569,7 +573,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     if (specVers.empty())
     {
         throw except::Exception(Ctxt("DESSHSV Failure - Unsupported in " +
-                                     dataType + " version: " + version));
+                                     strDataType + " version: " + version));
     }
     tre["DESSHSV"] = specVers;
 
@@ -577,11 +581,11 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     if (specDT.empty())
     {
         throw except::Exception(Ctxt("DESSHSD Failure - Unsupported in " +
-                                     dataType + " version: " + version));
+            strDataType + " version: " + version));
     }
     tre["DESSHSD"] = specDT;
 
-    tre["DESSHTN"] = "urn:" + dataType + ":" + version;
+    tre["DESSHTN"] = "urn:" + strDataType + ":" + version;
     tre["DESSHLPG"] = toString(data.getImageCorners());
 
     // Spec specifies leaving this blank
