@@ -242,8 +242,7 @@ std::byte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
 
     if (buffer == nullptr)
     {
-        buffer = new std::byte[numRowsReq * numColsReq * elemSize];
-        region.setBuffer(buffer);
+        buffer = region.setBuffer(numRowsReq * numColsReq * elemSize).release();
     }
 
     if (numRowsReq == numRowsTotal && numColsReq == numColsTotal)

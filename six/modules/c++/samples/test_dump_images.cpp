@@ -212,8 +212,7 @@ int main(int argc, char** argv)
                 region.setNumRows(numRows);
                 size_t totalBytes = nbpp * numCols * numRows;
                 const std::unique_ptr<std::byte[]>
-                    workBuffer(new std::byte[totalBytes]);
-                region.setBuffer(workBuffer.get());
+                    workBuffer = region.setBuffer(totalBytes);
 
                 reader->interleaved(region, ii);
                 outputStream.write((const std::byte*) workBuffer.get(),
@@ -225,8 +224,7 @@ int main(int argc, char** argv)
                 const size_t nbpr = nbpp * numCols;
 
                 // allocate this so we can reuse it for each row
-                const std::unique_ptr<std::byte[]> workBuffer(new std::byte[nbpr]);
-                region.setBuffer(workBuffer.get());
+                const std::unique_ptr<std::byte[]> workBuffer = region.setBuffer(nbpr);
 
                 for (size_t jj = startRow;
                      jj < numRows + startRow;

@@ -19,8 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_H__
-#define __SIX_H__
+#pragma once
+
+#include <assert.h>
+
+#include <memory>
+
+#include <nitf/cstddef.h>
 
 #include "six/Types.h"
 
@@ -161,10 +166,21 @@ public:
      */
     void setBuffer(UByte* buffer)
     {
-        mBuffer = (UByte*) buffer;
+        mBuffer = buffer;
+    }
+
+    /*!
+     *  Create a buffer of the given size, call setBuffer() and return the buffer.
+     */
+    std::unique_ptr<std::byte[]> setBuffer(size_t size)
+    {
+        assert(getBuffer() == nullptr);
+
+        std::unique_ptr<std::byte[]> retval(new std::byte[size]);
+        setBuffer(retval.get());
+        return retval;
     }
 };
 }
 
-#endif
 

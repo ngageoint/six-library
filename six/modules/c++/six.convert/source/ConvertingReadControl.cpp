@@ -114,9 +114,8 @@ UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
     UByte* buffer = region.getBuffer();
     if (buffer == nullptr)
     {
-        buffer = new UByte[region.getNumRows() * region.getNumCols() *
-                data->getNumBytesPerPixel()];
-        region.setBuffer(buffer);
+        buffer = region.setBuffer(region.getNumRows() * region.getNumCols() *
+                data->getNumBytesPerPixel()).release();
     }
 
     const types::RowCol<size_t> startingLocation(region.getStartRow(),

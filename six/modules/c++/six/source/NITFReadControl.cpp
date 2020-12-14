@@ -555,7 +555,9 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
     const auto imageID = subheader.imageId();
 
     // There is definitely something in here
-    ImageAndSegment imageAndSegment;
+    ImageAndSegment retval;
+    auto& image = retval.image;
+    auto& segment = retval.segment;
 
     const auto digit_pos = imageID.find_first_of("0123456789");
     if (digit_pos == std::string::npos)
@@ -575,7 +577,7 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
         // We need to find the SICD data here, and there is only one
         if (iid != 0)
         {
-            imageAndSegment.segment = iid - 1;
+            segment = iid - 1;
         }
     }
     /*
@@ -585,12 +587,12 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
     else if (dataType == DataType::DERIVED)
     {
         // If it's SIDD, we need to check the first three digits within the IID
-        imageAndSegment.image = iid - 1;
+        image = iid - 1;
         const auto segment_pos = digit_pos + 3;
         if (segment_pos < imageID.length())
         {
             const auto str_segment = imageID.substr(segment_pos);
-            imageAndSegment.segment = str::toType<size_t>(str_segment) - 1;
+            segment = str::toType<size_t>(str_segment) - 1;
         }
         else
         {
@@ -603,7 +605,7 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
         throw except::Exception(Ctxt("Unknown 'DataType' value: " + dataType.toString()));
     }
 
-    return imageAndSegment;
+    return retval;
 }
 
 UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
@@ -649,8 +651,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 
     if (buffer == nullptr)
     {
-        buffer = new std::byte[subWindowSize];
-        region.setBuffer(buffer);
+        buffer = region.setBuffer(subWindowSize).release();
     }
 
     // Do segmenting here
