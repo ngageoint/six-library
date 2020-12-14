@@ -212,8 +212,8 @@ void NITFWriteControl::save(const SourceList& imageData,
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            std::shared_ptr<::nitf::WriteHandler> writeHandler(
-                    new StreamWriteHandler(segmentInfo,
+            auto writeHandler(
+                std::make_shared<StreamWriteHandler>(segmentInfo,
                                            imageData[i],
                                            numCols,
                                            numChannels,
@@ -331,8 +331,8 @@ void NITFWriteControl::save(const BufferList& imageData,
             {
                 const NITFSegmentInfo segmentInfo = imageSegments[jj];
 
-                std::shared_ptr<::nitf::WriteHandler> writeHandler(
-                        new MemoryWriteHandler(segmentInfo,
+                auto writeHandler(
+                        std::make_shared<MemoryWriteHandler>(segmentInfo,
                                                imageData[i],
                                                segmentInfo.firstRow,
                                                numCols,

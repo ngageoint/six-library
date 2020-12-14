@@ -66,7 +66,7 @@ struct NITFReadControl : public ReadControl
      *  \param fromFile path to file
      *  \return datatype of file contents
      */
-    virtual DataType getDataType(const std::string& fromFile) const;
+    DataType getDataType(const std::string& fromFile) const override;
 
     /*!
     *  Read whether a Record has COMPLEX or DERIVED data
@@ -117,7 +117,7 @@ struct NITFReadControl : public ReadControl
      *  \param schemaPaths Directories or files of schema locations
      */
     void load(const std::string& fromFile,
-              const std::vector<std::string>& schemaPaths);
+              const std::vector<std::string>& schemaPaths) override;
 
     /*
      *  \func load
@@ -150,9 +150,9 @@ struct NITFReadControl : public ReadControl
      * memory is allocated and the region's buffer is updated.  In this case
      * it is up to the caller to delete the memory.
      */
-    virtual UByte* interleaved(Region& region, size_t imageNumber);
+    virtual UByte* interleaved(Region& region, size_t imageNumber) override;
 
-    virtual std::string getFileType() const
+    std::string getFileType() const override
     {
         return "NITF";
     }
@@ -221,7 +221,7 @@ protected:
     //  to be cleaned up elsewhere. There is no access
     //  to deallocation in NITFReadControl directly
     virtual void createCompressionOptions(
-            std::map<std::string, void*>& )
+            std::map<std::string, void*>& ) 
     {
     }
 

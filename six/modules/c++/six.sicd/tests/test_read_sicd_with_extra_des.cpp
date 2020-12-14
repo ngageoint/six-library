@@ -137,7 +137,7 @@ std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
 
     nitf::SegmentMemorySource middleSource(segmentData, strlen(segmentData),
             0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> middleSegmentWriter(new nitf::SegmentWriter);
+    auto middleSegmentWriter(std::make_shared<nitf::SegmentWriter>());
     middleSegmentWriter->attachSource(middleSource);
     writer.addAdditionalDES(middleSegmentWriter);
 

@@ -148,7 +148,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    std::shared_ptr<six::Container> container(new six::Container(
+    auto container(std::make_shared<six::Container>(
             six::DataType::COMPLEX));
     container->addData(dynamic_cast<six::Data*>(data.release()));
 
@@ -165,7 +165,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     static const char segmentData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sSource(segmentData, strlen(segmentData),
         0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
+    auto segmentWriter(std::make_shared<nitf::SegmentWriter>());
     segmentWriter->attachSource(sSource);
     writer.addAdditionalDES(segmentWriter);
 
@@ -195,7 +195,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    std::shared_ptr<six::Container> container(new six::Container(
+    auto container(std::make_shared<six::Container>(
             six::DataType::COMPLEX));
     container->addData(data.release());
 
@@ -212,7 +212,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     static const char segmentOneData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sOneSource(segmentOneData, strlen(segmentOneData),
         0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> segmentOneWriter(new nitf::SegmentWriter);
+    auto segmentOneWriter(std::make_shared<nitf::SegmentWriter>());
     segmentOneWriter->attachSource(sOneSource);
     writer.addAdditionalDES(segmentOneWriter);
 
@@ -225,7 +225,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     static const char segmentTwoData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sTwoSource(segmentTwoData, strlen(segmentTwoData),
         0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> segmentTwoWriter(new nitf::SegmentWriter);
+    auto segmentTwoWriter(std::make_shared<nitf::SegmentWriter>());
     segmentTwoWriter->attachSource(sTwoSource);
     writer.addAdditionalDES(segmentTwoWriter);
 
