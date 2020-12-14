@@ -114,8 +114,8 @@ void makeMultiBandSIDD(const std::string& inputPathname,
     std::unique_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
     data->setPixelType(six::PixelType::MONO16I);
     data->setNumRows(data->getNumRows() / 2);
-    std::shared_ptr<six::Container> container(
-            new six::Container(six::DataType::DERIVED));
+    auto container(
+            std::make_shared<six::Container>(six::DataType::DERIVED));
     container->addData(std::move(data));
 
     six::NITFWriteControl writer;
@@ -147,8 +147,7 @@ bool checkBlocking(const std::string& originalPathname,
     six::NITFReadControl convertedReader;
     convertedReader.load(convertedPathname);
 
-    std::shared_ptr<six::Container> originalContainer =
-            originalReader.getContainer();
+    auto originalContainer = originalReader.getContainer();
 
     six::Region originalRegion;
     originalRegion.setStartRow(0);

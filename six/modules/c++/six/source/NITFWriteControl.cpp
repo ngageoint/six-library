@@ -185,7 +185,7 @@ void NITFWriteControl::save(const SourceList& imageData,
     mWriter.prepareIO(outputFile, record);
     const bool doByteSwap = shouldByteSwap();
 
-    const std::vector<std::shared_ptr<NITFImageInfo>>& infos = getInfos();
+    const auto& infos = getInfos();
     if (infos.size() != imageData.size())
     {
         std::ostringstream ostr;

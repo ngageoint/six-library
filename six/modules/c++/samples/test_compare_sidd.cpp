@@ -45,8 +45,7 @@ namespace
 std::shared_ptr<six::Data> readMetadata(const six::NITFReadControl& reader)
 {
     const six::Data* data = reader.getContainer()->getData(0);
-    std::shared_ptr<six::Data> retv(data->clone());
-    return retv;
+    return std::shared_ptr<six::Data>(data->clone());
 }
 
 void readWideband(six::NITFReadControl& reader,
@@ -82,14 +81,14 @@ bool siddsMatch(const std::string& sidd1Path,
     reader.setXMLControlRegistry(&xmlRegistry);
 
     reader.load(sidd1Path);
-    std::shared_ptr<six::Data> sidd1Metadata = readMetadata(reader);
+    auto sidd1Metadata = readMetadata(reader);
     mem::ScopedAlignedArray<std::byte> sidd1Buffer;
     readWideband(reader,
             *sidd1Metadata,
             sidd1Buffer);
 
     reader.load(sidd2Path);
-    std::shared_ptr<six::Data> sidd2Metadata = readMetadata(reader);
+    auto sidd2Metadata = readMetadata(reader);
     mem::ScopedAlignedArray<std::byte> sidd2Buffer;
     readWideband(reader,
             *sidd2Metadata,

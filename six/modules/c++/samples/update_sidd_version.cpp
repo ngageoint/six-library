@@ -68,8 +68,8 @@ void writeSidd(std::unique_ptr<six::Data>&& derivedData,
                const std::vector<std::string>& schemaPaths,
                const std::string& pathname)
 {
-    std::shared_ptr<six::Container> container(
-            new six::Container(six::DataType::DERIVED));
+    auto container(std::make_shared<six::Container>(
+        six::DataType::DERIVED));
     container->addData(std::move(derivedData));
 
     six::NITFWriteControl writer(container);

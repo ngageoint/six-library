@@ -1040,8 +1040,8 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
 
     six::NITFWriteControl writer;
     writer.setXMLControlRegistry(&xmlRegistry);
-    std::shared_ptr<six::Container> container(
-            new six::Container(six::DataType::DERIVED));
+    auto container(std::make_shared<six::Container>(
+        six::DataType::DERIVED));
     container->addData(data.release());
     writer.initialize(container);
 

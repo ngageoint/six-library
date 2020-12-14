@@ -233,14 +233,14 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 void NITFReadControl::load(const std::string& fromFile,
                            const std::vector<std::string>& schemaPaths)
 {
-    std::shared_ptr<nitf::IOInterface> handle(new nitf::IOHandle(fromFile));
+    auto handle(std::make_shared<nitf::IOHandle>(fromFile));
     load(handle, schemaPaths);
 }
 
 void NITFReadControl::load(io::SeekableInputStream& stream,
                            const std::vector<std::string>& schemaPaths)
 {
-    std::shared_ptr<nitf::IOInterface> handle(new nitf::IOStreamReader(stream));
+    auto handle(std::make_shared<nitf::IOStreamReader>(stream));
     load(handle, schemaPaths);
 }
 

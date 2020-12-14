@@ -42,8 +42,8 @@ void writeSicd(std::unique_ptr<six::Data>&& complexData,
             six::DataType::COMPLEX,
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-    std::shared_ptr<six::Container> container(new six::Container(
-            six::DataType::COMPLEX));
+    auto container(std::make_shared<six::Container>(
+        six::DataType::COMPLEX));
     container->addData(std::move(complexData));
 
     six::NITFWriteControl writer(container);

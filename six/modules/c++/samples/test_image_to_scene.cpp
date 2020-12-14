@@ -82,7 +82,7 @@ int main(int argc, char** argv)
         reader.setXMLControlRegistry(xmlRegistry);
         reader.load(sixPathname);
         // Check to see if it's a SICD
-        std::shared_ptr<six::Container> container = reader.getContainer();
+        auto container = reader.getContainer();
         std::unique_ptr<scene::ProjectionModel> projection;
         std::unique_ptr<scene::SceneGeometry> geom;
         scene::Vector3 groundPlaneNormal;

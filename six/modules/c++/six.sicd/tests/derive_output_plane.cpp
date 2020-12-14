@@ -48,8 +48,8 @@ void roundTripNITF(const std::string& sicdPathname,
     bufferList[0] = reinterpret_cast<std::byte*>(buffer.data());
 
     six::NITFWriteControl writer;
-    std::shared_ptr<six::Container> container(
-            new six::Container(six::DataType::COMPLEX));
+    auto container(
+            std::make_shared<six::Container>(six::DataType::COMPLEX));
     container->addData(complexData->clone());
 
     writer.initialize(container);

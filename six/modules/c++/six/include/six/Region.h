@@ -166,6 +166,7 @@ public:
      */
     void setBuffer(UByte* buffer)
     {
+        assert(buffer != nullptr);
         mBuffer = buffer;
     }
 

@@ -61,7 +61,7 @@ public:
 
         const std::string schemaDir =  (fs::path(confDir) / "schema" / "six");
         mReader.load(mSiddPathname, std::vector<std::string>(1, schemaDir));
-        std::shared_ptr<six::Container> container(mReader.getContainer());
+        auto container(mReader.getContainer());
         mDerivedData.reset(reinterpret_cast<six::sidd::DerivedData*>(
                 container->getData(0)->clone()));
     }

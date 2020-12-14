@@ -640,9 +640,8 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
      */
     if (container->getDataType() == DataType::COMPLEX)
     {
-        std::shared_ptr<NITFImageInfo> info(new NITFImageInfo(
+        auto info(std::make_shared<NITFImageInfo>(
                 container->getData(0), maxRows, maxSize, true, 0, 0));
-
         mInfos.push_back(info);
     }
     else
@@ -682,8 +681,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
                         std::min(optNumColsPerBlock,
                                  static_cast<uint32_t>(ith->getNumCols()));
 
-                std::shared_ptr<NITFImageInfo> info(
-                        new NITFImageInfo(ith,
+                auto info(std::make_shared<NITFImageInfo>(ith,
                                           maxRows,
                                           maxSize,
                                           true,
@@ -929,8 +927,8 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 
     for (auto desSource : container->getDESSources())
     {
-        std::shared_ptr<nitf::SegmentWriter> desWriter(
-                new nitf::SegmentWriter(desSource));
+        auto desWriter(
+                std::make_shared<nitf::SegmentWriter>(desSource));
         mSegmentWriters.push_back(desWriter);
     }
 
@@ -965,8 +963,8 @@ void NITFHeaderCreator::loadMeshSegment(
     // Add the data and writer for this segment
     nitf::SegmentMemorySource dataSource(
             meshBuffer, 0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> desWriter(
-            new nitf::SegmentWriter(dataSource));
+    auto desWriter(
+        std::make_shared<nitf::SegmentWriter>(dataSource));
     addAdditionalDES(desWriter);
 }
 }

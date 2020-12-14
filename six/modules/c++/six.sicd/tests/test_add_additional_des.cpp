@@ -72,7 +72,7 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
             std::vector<std::string>(),
             log);
 
-    std::shared_ptr<six::Container> container(new six::Container(
+    auto container(std::make_shared<six::Container>(
             six::DataType::COMPLEX));
     container->addData(data.release());
 
@@ -106,7 +106,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    std::shared_ptr<six::Container> container(new six::Container(
+    auto container(std::make_shared<six::Container>(
             six::DataType::COMPLEX));
     container->addData(data.release());
 
@@ -120,8 +120,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     des.getSubheader().getVersion().set("01");
     des.getSubheader().getSecurityClass().set("U");
 
-    std::shared_ptr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
-    writer.addAdditionalDES(segmentWriter);
+    writer.addAdditionalDES(std::make_shared<nitf::SegmentWriter>());
 
     io::TempFile temp;
     try

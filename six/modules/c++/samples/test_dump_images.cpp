@@ -134,7 +134,7 @@ int main(int argc, char** argv)
         // load the file
         reader->load(inputFile, schemaPaths);
 
-        std::shared_ptr<six::Container> container = reader->getContainer();
+        auto container = reader->getContainer();
         std::string base = fs::path(inputFile).stem();
         size_t numImages = 0;
 
