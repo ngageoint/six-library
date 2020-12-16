@@ -263,7 +263,7 @@ typedef nitf::ExtensionsIterator Iterator;
     {
         nitf_TRE* tre = nitf_Extensions_remove(
                             getNative(), &iter.getHandle(), &error);
-        if (tre) delete tre;
+        delete tre;
     }
 
 

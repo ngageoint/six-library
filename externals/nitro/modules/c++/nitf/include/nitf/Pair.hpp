@@ -98,14 +98,14 @@ struct Pair final : public nitf::Object<nitf_Pair>
     }
 
     //! Get the key
-    char * getKey() const
+    const char * getKey() const
     {
         return getNativeOrThrow()->key;
     }
     //! Set the key
-    void setKey(char * value)
+    void setKey(const char * value)
     {
-        getNativeOrThrow()->key = value;
+        getNativeOrThrow()->key = const_cast<char*>(value);
     }
     //! Get the data
     NITF_DATA * getData() const
@@ -119,7 +119,7 @@ struct Pair final : public nitf::Object<nitf_Pair>
     }
 
     //! Get the first component (key)
-    char * first() const
+    const char * first() const
     {
         return getKey();
     }

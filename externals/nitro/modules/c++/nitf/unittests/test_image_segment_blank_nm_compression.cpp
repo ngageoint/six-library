@@ -121,7 +121,7 @@ int64_t getNumberBlocksPresent(const uint64_t* mask,
    return numBlocksPresent;
 }
 
-void createSingleBandBuffer(std::vector<uint8_t>& buffer,
+void createSingleBandBuffer(std::vector<std::byte>& buffer,
                             const nitf::ImageSegmentComputer& segmentComputer,
                             const types::RowCol<int64_t>& fullDims,
                             const size_t segmentIdxToMakeEmpty)
@@ -135,16 +135,16 @@ void createSingleBandBuffer(std::vector<uint8_t>& buffer,
    memset(&buffer.front(), '\0', bytes);
    for (uint32_t segIdx = 0; segIdx < segments.size(); ++segIdx)
    {
-      uint8_t *segStart = &buffer.front() + (segmentSizeInBytes * segIdx);
+      auto segStart = &buffer.front() + (segmentSizeInBytes * segIdx);
       /* Set only the center that way we are surrounded by empty blocks */
       if (segIdx != segmentIdxToMakeEmpty)
       {
-         segStart[segmentSizeInBytes/2] = 0xff;
+         segStart[segmentSizeInBytes/2] = static_cast<std::byte>(0xff);
       }
    }
 }
 
-void createBuffers(std::vector<std::vector<uint8_t> >& buffers,
+void createBuffers(std::vector<std::vector<std::byte> >& buffers,
                    const nitf::ImageSegmentComputer& imageSegmentComputer,
                    const types::RowCol<int64_t>& fullDims)
 {
@@ -180,7 +180,7 @@ TEST_CASE(testBlankSegmentsValid)
    const int64_t bytesPerSegment = BLOCK_LENGTH_SCALED * BLOCK_LENGTH_SCALED * 2;
    const int64_t elementSize     = 1;
    const types::RowCol<int64_t> fullDims(numberLines, numberElements);
-   std::vector<std::vector<uint8_t> > buffers;
+   std::vector<std::vector<std::byte> > buffers;
    nitf::ImageSegmentComputer imageSegmentComputer(numberLines,
                                                    numberElements,
                                                    elementSize,
@@ -223,7 +223,7 @@ TEST_CASE(testBlankSegmentsValid)
 
       for (int ii = 0; ii < gsl::narrow<int>(numSegments); ++ii)
       {
-         uint8_t *buf = &buffers[testIdx].front() + (ii * bytesPerSegment);
+         auto buf = &buffers[testIdx].front() + (ii * bytesPerSegment);
          nitf::ImageWriter imageWriter = writer.newImageWriter(ii);
          imageWriter.setWriteCaching(1);
          nitf::ImageSource iSource;
