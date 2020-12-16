@@ -118,10 +118,6 @@ protected:
             XMLElem parent = nullptr) const {
         return createString_(name, t.toString(), parent);
     }
-    template<> XMLElem createString(const std::string& name,
-            const std::string& p, XMLElem parent) const {
-        return createString_(name, p, parent);
-    }
     XMLElem createString(const std::string& name, const char* p="",
         XMLElem parent = nullptr) const {
         return createString_(name, p, parent);
@@ -197,6 +193,12 @@ private:
     logging::Logger* mLog;
     bool mOwnLog;
 };
+
+ template<> inline XMLParser::XMLElem XMLParser::createString(const std::string& name,
+						      const std::string& p, XMLElem parent) const
+  {
+    return createString_(name, p, parent);
+  }
 }
 
 
