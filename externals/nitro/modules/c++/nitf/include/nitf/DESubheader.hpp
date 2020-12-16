@@ -20,9 +20,9 @@
  *
  */
 
-#ifndef __NITF_DESUBHEADER_HPP__
-#define __NITF_DESUBHEADER_HPP__
 #pragma once
+
+#include <string>
 
 #include "nitf/DESubheader.h"
 #include "nitf/Object.hpp"
@@ -30,7 +30,6 @@
 #include "nitf/FileSecurity.hpp"
 #include "nitf/Extensions.hpp"
 #include "nitf/TRE.hpp"
-#include <string>
 
 /*!
  *  \file DESubheader.hpp
@@ -70,6 +69,10 @@ public:
 
     //! Get the typeID
     nitf::Field getTypeID() const;
+    std::string typeID() const
+    {
+        return getTypeID().toTrimString();
+    }
 
     //! Get the version
     nitf::Field getVersion() const;
@@ -115,4 +118,4 @@ private:
 };
 
 }
-#endif
+

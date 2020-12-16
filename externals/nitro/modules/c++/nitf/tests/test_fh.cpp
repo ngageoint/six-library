@@ -55,16 +55,18 @@ int main(int, char**)
         std::cout << "Copied yet another FileHeader" << std::endl;
         //myFileCopy.name = "6";
 
-        nitf::FileHeader* myNewCopy = new nitf::FileHeader(myFileCopy);
-        std::cout << "New-allocated copy of FileHeader" << std::endl;
-        //myNewCopy->name = "7";
-        delete myNewCopy;
+        {
+            std::unique_ptr<nitf::FileHeader> myNewCopy(new nitf::FileHeader(myFileCopy));
+            std::cout << "New-allocated copy of FileHeader" << std::endl;
+            //myNewCopy->name = "7";
+        }
         std::cout << "Deleted new-allocated copy of FileHeader" << std::endl;
 
-        nitf::FileHeader* myNonCopy = new nitf::FileHeader;
-        std::cout << "New-allocated a FileHeader" << std::endl;
-        //myNonCopy->name = "8";
-        delete myNonCopy;
+        {
+            std::unique_ptr<nitf::FileHeader> myNonCopy(new nitf::FileHeader);
+            std::cout << "New-allocated a FileHeader" << std::endl;
+            //myNonCopy->name = "8";
+        }
         std::cout << "Deleted new-allocated FileHeader" << std::endl;
 
         std::cout << "Setting file header" << std::endl;

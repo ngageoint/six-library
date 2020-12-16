@@ -63,7 +63,7 @@ NITF_BOOL CompressionInterface::adapterStart(
 NITF_BOOL CompressionInterface::adapterWriteBlock(
     nitf_CompressionControl* object, 
     nitf_IOInterface* io,
-    const uint8_t* data,
+    const std::byte* data,
     NITF_BOOL pad,
     NITF_BOOL noData,
     nitf_Error* error)

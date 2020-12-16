@@ -60,6 +60,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(MSDIRA, description)
+NITF_DECLARE_SINGLE_PLUGIN(PTPRAA, description)
 
 NITF_CXX_ENDGUARD

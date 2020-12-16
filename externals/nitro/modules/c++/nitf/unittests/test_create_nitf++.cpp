@@ -34,6 +34,8 @@
 #include <string>
 #include <sstream>
 #include <thread>
+#include <array>
+#include <memory>
 
 #include <io/FileOutputStream.h>
 
@@ -1162,7 +1164,7 @@ namespace test_create_nitf_with_byte_provider
             uint64_t blockSize;
             // Read one block. It should match the first blockSize points of the
             // image. If it does, we got the blocking mode right.
-            const uint8_t* block = imageReader.readBlock(0, &blockSize);
+            auto block = reinterpret_cast<const unsigned char*>(imageReader.readBlock(0, &blockSize));
             const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
 
             for (size_t jj = 0; jj < imageLength * NUM_BANDS; ++jj)
@@ -1298,7 +1300,7 @@ namespace test_create_nitf
             uint64_t blockSize;
             // Read one block. It should match the first blockSize points of the
             // image. If it does, we got the blocking mode right.
-            const uint8_t* block = imageReader.readBlock(0, &blockSize);
+            auto block = reinterpret_cast<const unsigned char*>(imageReader.readBlock(0, &blockSize));
             const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
 
             // The image data is interleaved by pixel. When feeding it to the
@@ -1411,22 +1413,19 @@ TEST_CASE(test_mt_record)
 {
     const int NTHR = 2;
     
+    std::array<std::thread, NTHR> thrs;
     try
     {
-        std::thread** thrs = new std::thread * [NTHR];
-        for (unsigned int i = 0; i < NTHR; ++i)
+        for (auto& thrs_i : thrs)
         {
-            thrs[i] = new std::thread(RecordThread_run);
+            thrs_i = std::thread(RecordThread_run);
         }
 
-        for (unsigned int i = 0; i < NTHR; ++i)
+        for (auto& thrs_i : thrs)
         {
 
-            thrs[i]->join();
-            delete thrs[i];
-
+            thrs_i.join();
         }
-        delete[] thrs;
     }
     catch (const except::Exception&)
     {

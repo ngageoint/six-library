@@ -158,7 +158,7 @@ void nitf::HashTable::forEach(HashIterator& fun, NITF_DATA* userData)
 
 void nitf::HashTable::insert(const std::string& key, NITF_DATA* data)
 {
-    if (key.length() == 0)
+    if (key.empty())
         throw except::NoSuchKeyException(Ctxt("Empty key value"));
     const NITF_BOOL x = nitf_HashTable_insert(getNative(), key.c_str(), data, &error);
     if (!x)
@@ -167,7 +167,7 @@ void nitf::HashTable::insert(const std::string& key, NITF_DATA* data)
 
 nitf::Pair nitf::HashTable::find(const std::string& key) const
 {
-    if (key.length() == 0)
+    if (key.empty())
         throw except::NoSuchKeyException(Ctxt("Empty key value"));
     nitf_Pair* x = nitf_HashTable_find(getNative(), key.c_str());
     if (!x)
@@ -217,7 +217,7 @@ void nitf::HashTable::clearBuckets()
     i = mBuckets.begin();
     for (; i != mBuckets.end(); ++i)
     {
-        if (*i) delete *i;
+        delete *i;
     }
     mBuckets.clear();
 }
