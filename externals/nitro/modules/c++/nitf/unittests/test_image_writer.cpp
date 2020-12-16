@@ -36,7 +36,7 @@
 
 #include "TestCase.h"
 
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 static fs::path argv0;
 static const fs::path file = __FILE__;

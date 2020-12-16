@@ -27,16 +27,12 @@
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <import/xml/lite.h>
+#include <sys/Bit.h>
 #include "utils.h"
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 /*!
  *  This file takes in an SIO and turns it in to a SICD.
@@ -129,7 +125,7 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
 six::WriteControl* getWriteControl(std::string outputName)
 {
 
-    auto extension = fs::path(outputName).extension().string();
+    std::string extension = fs::path(outputName).extension();
     str::lower(extension);
 
     six::WriteControl* writer = nullptr;

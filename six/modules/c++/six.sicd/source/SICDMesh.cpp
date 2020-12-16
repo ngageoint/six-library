@@ -21,14 +21,10 @@
  */
 #include <numeric>
 
+#include <sys/Bit.h>
+
 #include <six/sicd/SICDMesh.h>
 #include <six/Serialize.h>
-
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace six
 {

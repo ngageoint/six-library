@@ -22,18 +22,16 @@
 
 #include <thread>
 
+#include <except/Exception.h>
+#include <sys/Bit.h>
+
 #include <cphd/ByteSwap.h>
 #include <cphd/CPHDWriter.h>
 #include <cphd/CPHDXMLControl.h>
 #include <cphd/FileHeader.h>
 #include <cphd/Utilities.h>
 #include <cphd/Wideband.h>
-#include <except/Exception.h>
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
+
 
 namespace cphd
 {

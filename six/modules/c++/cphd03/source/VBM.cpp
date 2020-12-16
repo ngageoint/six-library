@@ -24,14 +24,10 @@
 #include <string.h>
 
 #include <six/Init.h>
+#include <sys/Bit.h>
+
 #include <cphd/ByteSwap.h>
 #include <cphd03/VBM.h>
-
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace
 {

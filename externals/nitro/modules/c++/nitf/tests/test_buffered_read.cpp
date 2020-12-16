@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 
         size_t blockSize = 8192;
         if (argc == 3)
-            blockSize = str::toType<int>(argv[2]);
+            blockSize = std::stoi(argv[2]);
 
         // Check that wew have a valid NITF
         if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN )

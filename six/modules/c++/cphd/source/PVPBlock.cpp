@@ -27,18 +27,14 @@
 
 #include <six/Init.h>
 #include <sys/Conf.h>
+#include <sys/Bit.h>
+
 #include <nitf/cstddef.h>
 
 #include <cphd/Types.h>
 #include <cphd/PVPBlock.h>
 #include <cphd/Metadata.h>
 #include <cphd/Utilities.h>
-
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace
 {

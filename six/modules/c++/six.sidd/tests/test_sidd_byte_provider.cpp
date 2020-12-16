@@ -30,17 +30,14 @@
 
 #include <io/ReadUtils.h>
 #include <math/Round.h>
+#include <sys/Bit.h>
+
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/sidd/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/SIDDByteProvider.h>
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace
 {

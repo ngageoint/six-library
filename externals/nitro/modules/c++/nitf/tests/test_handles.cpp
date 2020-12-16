@@ -46,7 +46,7 @@
 #include <vector>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 template <typename T>
 class Foo

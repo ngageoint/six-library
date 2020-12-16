@@ -8,29 +8,32 @@
 #include "six/sicd/ComplexData.h"
 #include "six/sicd/Utilities.h"
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
 std::string argv0;
 
 namespace
 {
-std::string findSixHome(const sys::Path& exePath)
+fs::path findSixHome(const fs::path& exePath)
 {
-    sys::Path sixHome = exePath.join("..");
+    auto sixHome = exePath.parent_path();
     do
     {
-        const sys::Path croppedNitfs = sixHome.join("croppedNitfs");
-        if (sys::OS().isDirectory(croppedNitfs.getAbsolutePath()))
+        const auto croppedNitfs = sixHome / "croppedNitfs";
+        if (fs::is_directory(fs::absolute(croppedNitfs)))
         {
             return sixHome;
         }
-        sixHome = sixHome.join("..");
-    } while (sixHome.getAbsolutePath() != sixHome.join("..").getAbsolutePath());
+        sixHome = sixHome.parent_path();
+    } while (fs::absolute(sixHome) != fs::absolute(sixHome.parent_path()));
     return "";
 }
 
 std::unique_ptr<scene::ProjectionPolynomialFitter>
-loadPolynomialFitter(const sys::Path& exePath)
+loadPolynomialFitter(const fs::path& exePath)
 {
-    const std::string sixHome = findSixHome(exePath);
+    const auto sixHome = findSixHome(exePath);
     if (sixHome.empty())
     {
         std::ostringstream oss;
@@ -38,12 +41,8 @@ loadPolynomialFitter(const sys::Path& exePath)
         throw except::Exception(Ctxt(oss.str()));
     }
 
-    const sys::Path sicdPathname = sys::Path(sixHome).
-        join("croppedNitfs").
-        join("SICD").
-        join("cropped_sicd_110.nitf").getAbsolutePath();
-
-    if (!sicdPathname.isFile())
+    const auto sicdPathname = fs::absolute(sixHome / "croppedNitfs" / "SICD"/ "cropped_sicd_110.nitf");
+    if (!fs::is_regular_file(sicdPathname))
     {
         std::ostringstream oss;
         oss << "Environment error: Cannot find SICD file: " << sicdPathname;

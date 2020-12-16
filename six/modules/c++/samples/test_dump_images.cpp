@@ -31,7 +31,7 @@
 #include "utils.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -136,7 +136,7 @@ int main(int argc, char** argv)
         reader->load(inputFile, schemaPaths);
 
         std::shared_ptr<six::Container> container = reader->getContainer();
-        std::string base = fs::path(inputFile).stem().string();
+        std::string base = fs::path(inputFile).stem();
         size_t numImages = 0;
 
         if (container->getDataType() == six::DataType::COMPLEX

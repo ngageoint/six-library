@@ -21,9 +21,7 @@
 
 #pragma once
 
-#if __cplusplus >= 202002L // C++20
-#include <bit>
-#endif
+#include "Conf.h"
 
 namespace sys
 {
@@ -42,13 +40,13 @@ namespace sys
     };
 }
 
-#if __cplusplus < 202002L  // pre-C++20
+#ifndef CODA_OSS_DEFINE_std_endian_
+#if CODA_OSS_cplusplus < 202002L  // pre-C++20
 #define CODA_OSS_DEFINE_std_endian_ 1
 #else
-// Recent versions of _MSC_VER might already have std::endian; the /Zc:__cplusplus
-// command-line option is required to get the correct value of __cplusplus.
-#define CODA_OSS_DEFINE_std_endian_ 0
-#endif
+#define CODA_OSS_DEFINE_std_endian_ 0  // std::filesystem part of C++17
+#endif  // CODA_OSS_cplusplus
+#endif  // CODA_OSS_DEFINE_std_endian_
 
 #if CODA_OSS_DEFINE_std_endian_
 // This is ever-so-slightly uncouth: we're not supposed to augment "std".
@@ -56,4 +54,6 @@ namespace std
 {
     using endian = sys::Endian;
 }
+#else
+#include <bit>
 #endif

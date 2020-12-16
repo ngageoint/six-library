@@ -27,6 +27,8 @@
 #include <iostream>
 #include <stdlib.h>
 
+#include <sys/Bit.h>
+
 #include "TestUtilities.h"
 
 #include <six/NITFWriteControl.h>
@@ -34,11 +36,6 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDByteProvider.h>
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace
 {

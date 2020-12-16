@@ -30,7 +30,7 @@
 #include <six/sicd/Utilities.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 int main(int argc, char** argv)
 {
@@ -55,9 +55,8 @@ int main(int argc, char** argv)
         else
         {
             // In a normal installation, we can infer the path
-            const sys::Path progDirname =
-                    sys::Path::splitPath(progname).first;
-            const fs::path schemaPath = fs::path(progDirname).parent_path().parent_path() / "conf" / "schema" / "six";
+            const auto progDirname = fs::path(progname).parent_path();
+            const fs::path schemaPath = progDirname.parent_path().parent_path() / "conf" / "schema" / "six";
             schemaPaths.push_back(fs::absolute(schemaPath));
         }
 

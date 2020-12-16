@@ -30,7 +30,7 @@
 #include <import/io.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 /*!
  *  This extracts raw XML from each NITF DES, just using nitf,
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
         //! Fill out basename if not user specified
         if (basename.empty())
         {
-            basename = fs::path(inputFile).stem().string();
+            basename = fs::path(inputFile).stem();
         }
 
         nitf::Reader reader;
