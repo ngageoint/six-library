@@ -30,7 +30,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     mRowSize = subheader.numCols() * bytesPerPixel;
 
     uint32_t nBands = subheader.getBandCount();
-    const auto imageMode = subheader.getImageMode().toString();
+    const auto imageMode = subheader.imageMode();
     const auto irep = subheader.imageRepresentation();
     const auto ic = subheader.imageCompression();
 
@@ -38,8 +38,8 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     if ((nBands == 3 && imageMode[0] == 'P' && irep == "RGB" && bytesPerPixel
             == 1 && (ic == "NC" || ic == "NM")) || (nBands == 2 && imageMode[0]
             == 'P' && bytesPerPixel == 4 && (ic == "NC" || ic == "NM")
-            && subheader.getBandInfo(0).getSubcategory().toString()[0] == 'I'
-            && subheader.getBandInfo(1).getSubcategory().toString()[0] == 'Q'))
+            && subheader.getBandInfo(0).subcategory()[0] == 'I'
+            && subheader.getBandInfo(1).subcategory()[0] == 'Q'))
     {
         //using special interleaved shortcut
         std::cout << "Using optimized pre pixel-interleaved image" << std::endl;

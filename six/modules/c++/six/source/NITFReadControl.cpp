@@ -194,7 +194,7 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
 {
     const size_t numBandsSeg = subheader.numImageBands();
 
-    const std::string pjust = subheader.getPixelJustification().toString();
+    const std::string pjust = subheader.pixelJustification();
     // TODO: More validation in here!
     if (pjust != "R")
     {
@@ -742,9 +742,7 @@ std::unique_ptr<Legend> NITFReadControl::findLegend(size_t productNum)
             legend.reset(new Legend());
             legend->mType = getPixelType(subheader);
 
-            legend->mLocation =
-                    parseILOC(subheader.getImageLocation().toString());
-
+            legend->mLocation = parseILOC(subheader.imageLocation());
             if (legend->mType == PixelType::RGB8LU)
             {
                 assignLUT(subheader, *legend);

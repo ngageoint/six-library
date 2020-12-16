@@ -347,7 +347,7 @@ void NITFHeaderCreator::setSecurity(const six::Classification& classification,
     }
 
     // Now, do some specific overrides
-    if (security.getClassificationSystem().toString().empty())
+    if (security.classificationSystem().empty())
     {
         security.getClassificationSystem().set("US");
     }
@@ -393,7 +393,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
     bool changed = false;
     std::string classOrder = "URCST";
     size_t foundLoc =
-            classOrder.find(record.getHeader().getClassification().toString());
+            classOrder.find(record.getHeader().classification());
     int classIndex =
             foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
 
@@ -404,7 +404,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
         nitf::ImageSubheader subheader =
                 nitf::ImageSegment(record.getImages()[i]).getSubheader();
         foundLoc =
-                classOrder.find(subheader.getImageSecurityClass().toString());
+                classOrder.find(subheader.imageSecurityClass());
         int idx =
                 foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
 
@@ -421,7 +421,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
     {
         nitf::DESubheader subheader =
                 nitf::DESegment(record.getDataExtensions()[i]).getSubheader();
-        foundLoc = classOrder.find(subheader.getSecurityClass().toString());
+        foundLoc = classOrder.find(subheader.securityClass());
         int idx =
                 foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
 
