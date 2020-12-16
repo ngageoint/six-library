@@ -302,8 +302,6 @@ int main(int argc, char** argv)
         // DES's with SICD XML in them.  So here we want to read every image
         // that's present.
         six::Region region;
-        region.setStartRow(0);
-        region.setStartCol(0);
 
         Buffers buffers;
         for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)

@@ -54,8 +54,6 @@ void readSidd(const std::string& pathname,
                                        derivedData->getNumCols());
     widebandData.resize(extent.area() * derivedData->getNumBytesPerPixel());
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
     region.setNumRows(extent.row);
     region.setNumCols(extent.col);
     region.setBuffer(widebandData.data());

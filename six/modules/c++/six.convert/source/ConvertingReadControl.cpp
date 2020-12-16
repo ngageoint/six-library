@@ -70,10 +70,6 @@ std::string ConvertingReadControl::getFileType() const
 UByte* ConvertingReadControl::interleaved(size_t imageNumber)
 {
     Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
-    region.setNumRows(-1);
-    region.setNumCols(-1);
     return interleaved(region, imageNumber);
 }
 

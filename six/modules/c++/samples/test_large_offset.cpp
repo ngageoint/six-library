@@ -133,7 +133,6 @@ bool checkNITF(const std::string& pathname)
     six::Region region;
     region.setStartRow(ROWS_TO_SKIP);
     region.setNumRows(data->getNumRows() - ROWS_TO_SKIP);
-    region.setStartCol(0);
     reader.interleaved(region, 0);
     std::byte* buffer = region.getBuffer();
 

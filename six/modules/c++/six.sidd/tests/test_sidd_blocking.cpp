@@ -121,8 +121,6 @@ void makeMultiBandSIDD(const std::string& inputPathname,
     six::NITFWriteControl writer;
     writer.initialize(container);
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
     writer.save(reader.interleaved(region, 0), outputPathname,
             std::vector<std::string>());
 }
@@ -150,12 +148,7 @@ bool checkBlocking(const std::string& originalPathname,
     auto originalContainer = originalReader.getContainer();
 
     six::Region originalRegion;
-    originalRegion.setStartRow(0);
-    originalRegion.setStartCol(0);
-
     six::Region convertedRegion;
-    convertedRegion.setStartRow(0);
-    convertedRegion.setStartCol(0);
 
     const size_t numRows = originalContainer->getData(0)->getNumRows();
     const size_t numCols = originalContainer->getData(0)->getNumCols();

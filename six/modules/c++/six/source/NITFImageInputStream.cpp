@@ -62,7 +62,6 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
         mBandList.get()[band] = band;
 
     //setup the window
-    mWindow.setStartCol(0);
     mWindow.setNumRows(1);
     mWindow.setNumCols(subheader.numCols());
     mWindow.setBandList(mBandList.get());

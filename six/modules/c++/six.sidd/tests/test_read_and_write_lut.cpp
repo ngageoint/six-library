@@ -82,8 +82,6 @@ std::string doRoundTrip(const std::string& siddPathname)
     auto container = reader.getContainer();
 
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
 
     Buffers buffers;
     for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)

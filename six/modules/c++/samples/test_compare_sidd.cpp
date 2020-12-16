@@ -56,8 +56,6 @@ void readWideband(six::NITFReadControl& reader,
                  data.getNumCols() *
                  data.getNumBytesPerPixel());
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
     region.setNumRows(data.getNumRows());
     region.setNumCols(data.getNumCols());
     region.setBuffer(buffer.get());

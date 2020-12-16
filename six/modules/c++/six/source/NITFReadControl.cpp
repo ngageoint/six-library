@@ -771,8 +771,6 @@ void NITFReadControl::readLegendPixelData(const nitf::ImageSubheader& subheader,
 
     uint32_t bandList(0);
     nitf::SubWindow sw;
-    sw.setStartRow(0);
-    sw.setStartCol(0);
     sw.setNumRows(dims.row);
     sw.setNumCols(dims.col);
     sw.setNumBands(1);

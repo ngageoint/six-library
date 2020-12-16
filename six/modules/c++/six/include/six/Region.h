@@ -49,22 +49,19 @@ namespace six
  *
  *
  */
-class Region
+class Region final
 {
-    UByte* mBuffer;
-    ptrdiff_t startRow;
-    ptrdiff_t numRows;
-    ptrdiff_t startCol;
-    ptrdiff_t numCols;
+    UByte* mBuffer = nullptr;
+    ptrdiff_t startRow = 0;
+    ptrdiff_t numRows = -1;
+    ptrdiff_t startCol = 0;
+    ptrdiff_t numCols = -1;
 public:
     //!  Constructor.  Sets params for full window size, and buffer is nullptr
-    Region() :
-        mBuffer(nullptr), startRow(0), numRows(-1), startCol(0), numCols(-1)
-    {
-    }
+    Region() = default;
 
     //!  Destructor.  Does not deallocate a work buffer, that is up to the user
-    ~Region() {}
+    ~Region() = default;
 
     /*!
      *  Set the start row.  Valid values are between 0 and numRows-1
