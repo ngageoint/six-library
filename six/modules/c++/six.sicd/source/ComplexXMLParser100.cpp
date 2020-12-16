@@ -62,13 +62,13 @@ XMLElem ComplexXMLParser100::convertGeoInfoToXML(
     {
         XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
                                          geoInfoXML);
-        setAttribute(linePolyXML, "size", str::toString(numLatLons));
+        setAttribute(linePolyXML, "size", numLatLons);
 
         for (size_t ii = 0; ii < numLatLons; ++ii)
         {
             XMLElem v = common().createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
                          geoInfo->geometryLatLon[ii], linePolyXML);
-            setAttribute(v, "index", str::toString(ii + 1));
+            setAttribute(v, "index", ii + 1);
         }
     }
 

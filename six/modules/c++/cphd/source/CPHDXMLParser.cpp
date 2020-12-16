@@ -212,11 +212,11 @@ XMLElem CPHDXMLParser::toXML(const SceneCoordinates& sceneCoords, XMLElem parent
     if (!sceneCoords.imageArea.polygon.empty())
     {
         XMLElem polygonXML = newElement("Polygon", imageAreaXML);
-        setAttribute(polygonXML, "size", six::toString(sceneCoords.imageArea.polygon.size()));
+        setAttribute(polygonXML, "size", sceneCoords.imageArea.polygon.size());
         for (size_t ii = 0; ii < sceneCoords.imageArea.polygon.size(); ++ii)
         {
             XMLElem vertexXML = mCommon.createVector2D("Vertex", sceneCoords.imageArea.polygon[ii], polygonXML);
-            setAttribute(vertexXML, "index", six::toString(ii+1));
+            setAttribute(vertexXML, "index", ii+1);
         }
     }
     createLatLonFootprint("ImageAreaCornerPoints", "IACP", sceneCoords.imageAreaCorners, sceneCoordsXML);
@@ -231,11 +231,11 @@ XMLElem CPHDXMLParser::toXML(const SceneCoordinates& sceneCoords, XMLElem parent
         if (!sceneCoords.extendedArea->polygon.empty())
         {
             XMLElem polygonXML = newElement("Polygon", sceneCoordsXML);
-            setAttribute(polygonXML, "size", six::toString(sceneCoords.extendedArea->polygon.size()));
+            setAttribute(polygonXML, "size", sceneCoords.extendedArea->polygon.size());
             for (size_t ii = 0; ii < sceneCoords.extendedArea->polygon.size(); ++ii)
             {
                 XMLElem vertexXML = mCommon.createVector2D("Vertex", sceneCoords.extendedArea->polygon[ii], polygonXML);
-                setAttribute(vertexXML, "index", six::toString(ii+1));
+                setAttribute(vertexXML, "index", ii+1);
             }
         }
     }
@@ -279,11 +279,11 @@ XMLElem CPHDXMLParser::toXML(const SceneCoordinates& sceneCoords, XMLElem parent
                 if (!sceneCoords.imageGrid->segments[ii].polygon.empty())
                 {
                     XMLElem polygonXML = newElement("SegmentPolygon", segmentXML);
-                    setAttribute(polygonXML, "size", six::toString(sceneCoords.imageGrid->segments[ii].polygon.size()));
+                    setAttribute(polygonXML, "size", sceneCoords.imageGrid->segments[ii].polygon.size());
                     for (size_t jj = 0; jj < sceneCoords.imageGrid->segments[ii].polygon.size(); ++jj)
                     {
                         XMLElem svXML = newElement("SV", polygonXML);
-                        setAttribute(svXML, "index", six::toString(sceneCoords.imageGrid->segments[ii].polygon[jj].getIndex()));
+                        setAttribute(svXML, "index", sceneCoords.imageGrid->segments[ii].polygon[jj].getIndex());
                         createDouble("Line", sceneCoords.imageGrid->segments[ii].polygon[jj].line, svXML);
                         createDouble("Sample", sceneCoords.imageGrid->segments[ii].polygon[jj].sample, svXML);
                     }
@@ -386,11 +386,11 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
             if(!channel.parameters[ii].imageArea.polygon.empty())
             {
                 XMLElem polygonXML = newElement("Polygon", imageAreaXML);
-                setAttribute(polygonXML, "size", six::toString(channel.parameters[ii].imageArea.polygon.size()));
+                setAttribute(polygonXML, "size", channel.parameters[ii].imageArea.polygon.size());
                 for (size_t jj = 0; jj < channel.parameters[ii].imageArea.polygon.size(); ++jj)
                 {
                     XMLElem vertexXML = mCommon.createVector2D("Vertex", channel.parameters[ii].imageArea.polygon[jj], polygonXML);
-                    setAttribute(vertexXML, "index", six::toString(jj+1));
+                    setAttribute(vertexXML, "index", jj+1);
                 }
             }
         }
@@ -917,13 +917,13 @@ XMLElem CPHDXMLParser::toXML(const GeoInfo& geoInfo, XMLElem parent)
     {
         XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
                                          geoInfoXML);
-        setAttribute(linePolyXML, "size", str::toString(numLatLons));
+        setAttribute(linePolyXML, "size", numLatLons);
 
         for (size_t ii = 0; ii < numLatLons; ++ii)
         {
             XMLElem v = mCommon.createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
                          geoInfo.geometryLatLon[ii], linePolyXML);
-            setAttribute(v, "index", str::toString(ii + 1));
+            setAttribute(v, "index", ii + 1);
         }
     }
 

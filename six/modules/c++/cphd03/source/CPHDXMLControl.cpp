@@ -136,7 +136,7 @@ XMLElem CPHDXMLControl::toXML(const Data& data, XMLElem parent)
         XMLElem arrsizeXML = newElement("ArraySize", dataXML);
         createInt("NumVectors", data.arraySize.at(ii).numVectors, arrsizeXML);
         createInt("NumSamples", data.arraySize.at(ii).numSamples, arrsizeXML);
-        setAttribute(arrsizeXML, "index", str::toString(ii + 1));
+        setAttribute(arrsizeXML, "index", ii + 1);
     }
 
     return dataXML;

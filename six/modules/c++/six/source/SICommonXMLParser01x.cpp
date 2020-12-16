@@ -240,7 +240,7 @@ XMLElem SICommonXMLParser01x::convertMatchInformationToXML(
     {
         const MatchType& mt = matchInfo.types[i];
         XMLElem mtXML = newElement("Collect", matchInfoXML);
-        setAttribute(mtXML, "index", str::toString(i + 1));
+        setAttribute(mtXML, "index", i + 1);
 
         createString("CollectorName", mt.collectorName, mtXML);
         if (!mt.illuminatorName.empty())

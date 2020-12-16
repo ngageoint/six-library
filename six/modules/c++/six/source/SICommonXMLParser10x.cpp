@@ -179,7 +179,7 @@ XMLElem SICommonXMLParser10x::convertMatchInformationToXML(
     {
         const MatchType& mt = matchInfo.types[ii];
         XMLElem mtXML = newElement("MatchType", matchInfoXML);
-        setAttribute(mtXML, "index", str::toString(ii + 1));
+        setAttribute(mtXML, "index", ii + 1);
 
         createString("TypeID", mt.typeID, mtXML);
         createInt("CurrentIndex", mt.currentIndex, mtXML);
@@ -189,7 +189,7 @@ XMLElem SICommonXMLParser10x::convertMatchInformationToXML(
         for (size_t jj = 0; jj < mt.matchCollects.size(); ++jj)
         {
             XMLElem mcXML = newElement("MatchCollection", mtXML);
-            setAttribute(mcXML, "index", str::toString(jj + 1));
+            setAttribute(mcXML, "index", jj + 1);
 
             createString("CoreName", mt.matchCollects[jj].coreName, mcXML);
             createInt("MatchIndex", mt.matchCollects[jj].matchIndex, mcXML);

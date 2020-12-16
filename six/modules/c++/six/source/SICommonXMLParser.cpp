@@ -116,13 +116,13 @@ XMLElem SICommonXMLParser::createPoly1D(const std::string& name,
 {
     size_t order = poly1D.order();
     XMLElem poly1DXML = newElement(name, uri, parent);
-    setAttribute(poly1DXML, "order1", six::toString(order));
+    setAttribute(poly1DXML, "order1", order);
 
     for (size_t ii = 0; ii <= order; ++ii)
     {
         XMLElem coefXML = createDouble("Coef", getSICommonURI(), poly1D[ii],
                                        poly1DXML);
-        setAttribute(coefXML, "exponent1", six::toString(ii));
+        setAttribute(coefXML, "exponent1", ii);
     }
     return poly1DXML;
 }
@@ -191,9 +191,9 @@ XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
     XMLElem yXML = newElement("Y", getSICommonURI(), polyXML);
     XMLElem zXML = newElement("Z", getSICommonURI(), polyXML);
 
-    setAttribute(xXML, "order1", six::toString(order));
-    setAttribute(yXML, "order1", six::toString(order));
-    setAttribute(zXML, "order1", six::toString(order));
+    setAttribute(xXML, "order1", order);
+    setAttribute(yXML, "order1", order);
+    setAttribute(zXML, "order1", order);
 
     for (size_t ii = 0; ii <= order; ++ii)
     {
@@ -202,9 +202,9 @@ XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
         XMLElem yCoefXML = createDouble("Coef", getSICommonURI(), v3[1], yXML);
         XMLElem zCoefXML = createDouble("Coef", getSICommonURI(), v3[2], zXML);
 
-        setAttribute(xCoefXML, "exponent1", six::toString(ii));
-        setAttribute(yCoefXML, "exponent1", six::toString(ii));
-        setAttribute(zCoefXML, "exponent1", six::toString(ii));
+        setAttribute(xCoefXML, "exponent1", ii);
+        setAttribute(yCoefXML, "exponent1", ii);
+        setAttribute(zCoefXML, "exponent1", ii);
     }
     return polyXML;
 }
@@ -230,7 +230,7 @@ XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
         XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
                                          uri, geoInfoXML);
 
-        setAttribute(linePolyXML, "size", str::toString(numLatLons));
+        setAttribute(linePolyXML, "size", numLatLons);
 
         for (size_t ii = 0; ii < numLatLons; ++ii)
         {
@@ -240,7 +240,7 @@ XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
                     geoInfo.geometryLatLon[ii],
                     linePolyXML);
 
-            setAttribute(v, "index", str::toString(ii + 1));
+            setAttribute(v, "index", ii + 1);
         }
     }
 
@@ -378,8 +378,8 @@ XMLElem SICommonXMLParser::createPoly2D(const std::string& name,
 {
     xml::lite::AttributeNode node;
     XMLElem poly2DXML = newElement(name, uri, parent);
-    setAttribute(poly2DXML, "order1", six::toString(poly2D.orderX()));
-    setAttribute(poly2DXML, "order2", six::toString(poly2D.orderY()));
+    setAttribute(poly2DXML, "order1", poly2D.orderX());
+    setAttribute(poly2DXML, "order2", poly2D.orderY());
 
     for (size_t ii = 0; ii <= poly2D.orderX(); ii++)
     {
@@ -387,8 +387,8 @@ XMLElem SICommonXMLParser::createPoly2D(const std::string& name,
         {
             XMLElem coefXML = createDouble("Coef", getSICommonURI(),
                                            poly2D[ii][jj], poly2DXML);
-            setAttribute(coefXML, "exponent1", six::toString(ii));
-            setAttribute(coefXML, "exponent2", six::toString(jj));
+            setAttribute(coefXML, "exponent1", ii);
+            setAttribute(coefXML, "exponent2", jj);
         }
     }
 

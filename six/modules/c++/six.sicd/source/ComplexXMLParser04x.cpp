@@ -67,13 +67,13 @@ XMLElem ComplexXMLParser04x::convertGeoInfoToXML(
     {
         XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
                                          geoInfoXML);
-        setAttribute(linePolyXML, "size", str::toString(numLatLons));
+        setAttribute(linePolyXML, "size", numLatLons);
 
         for (size_t ii = 0; ii < numLatLons; ++ii)
         {
             XMLElem v = common().createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
                          geoInfo->geometryLatLon[ii], linePolyXML);
-            setAttribute(v, "index", str::toString(ii + 1));
+            setAttribute(v, "index", ii + 1);
         }
     }
     return geoInfoXML;
@@ -414,12 +414,12 @@ XMLElem ComplexXMLParser04x::createRcvChannels(const RadarCollection* radar,
 {
     const size_t numChannels = radar->rcvChannels.size();
     XMLElem rcvChanXML = newElement("RcvChannels", parent);
-    setAttribute(rcvChanXML, "size", str::toString(numChannels));
+    setAttribute(rcvChanXML, "size", numChannels);
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         const ChannelParameters* const cp = radar->rcvChannels[ii].get();
         XMLElem cpXML = newElement("ChanParameters", rcvChanXML);
-        setAttribute(cpXML, "index", str::toString(ii + 1));
+        setAttribute(cpXML, "index", ii + 1);
 
         if (!Init::isUndefined(cp->rcvAPCIndex))
             createInt("RcvAPCIndex", cp->rcvAPCIndex, cpXML);
