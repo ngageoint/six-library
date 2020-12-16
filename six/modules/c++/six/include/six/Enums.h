@@ -146,7 +146,7 @@ namespace details
 
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
-    #define SIX_Enum_struct_1_(name) struct name final : public details::Enum<name> { \
+    #define SIX_Enum_struct_1_(name) struct name final : public six::details::Enum<name> { \
             name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
             name& operator=(const int& o) { value = o; return *this; } enum {
     #define SIX_Enum_struct_2_ NOT_SET = six::NOT_SET_VALUE }; \
