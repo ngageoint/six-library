@@ -116,7 +116,7 @@ XMLElem XMLParser::createString(const std::string& name,
     return elem;
 }
 
-XMLElem XMLParser::createString(const std::string& name,
+XMLElem XMLParser::createString_(const std::string& name,
         const std::string& p, XMLElem parent) const
 {
     return createString(name, mDefaultURI, p, parent);

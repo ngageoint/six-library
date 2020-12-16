@@ -19,8 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_XML_PARSER_H__
-#define __SIX_XML_PARSER_H__
+#pragma once
 
 #include <string>
 
@@ -114,8 +113,19 @@ protected:
             const std::string& uri, const DateTime& p, XMLElem parent = nullptr) const;
 
     // generic element creation methods, using default URI
-    XMLElem createString(const std::string& name,
-            const std::string& p = "", XMLElem parent = nullptr) const;
+    template<typename T>
+    XMLElem createString(const std::string& name, const T& t,
+            XMLElem parent = nullptr) const {
+        return createString_(name, t.toString(), parent);
+    }
+    template<> XMLElem createString(const std::string& name,
+            const std::string& p, XMLElem parent) const {
+        return createString_(name, p, parent);
+    }
+    XMLElem createString(const std::string& name, const char* p="",
+        XMLElem parent = nullptr) const {
+        return createString_(name, p, parent);
+    }
     XMLElem createInt(const std::string& name, int p = 0,
             XMLElem parent = nullptr) const;
     XMLElem createDouble(const std::string& name, double p = 0,
@@ -178,6 +188,9 @@ protected:
     static XMLElem require(XMLElem element, const std::string& name);
 
 private:
+    XMLElem createString_(const std::string& name,
+        const std::string& p, XMLElem parent) const;
+
     const std::string mDefaultURI;
     const bool mAddClassAttributes;
 
@@ -186,5 +199,4 @@ private:
 };
 }
 
-#endif
 

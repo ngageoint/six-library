@@ -227,7 +227,6 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
              << "], got [" << numColsSubheader << "]";
         throw except::Exception(Ctxt(ostr.str()));
     }
-
 }
 
 void NITFReadControl::load(const std::string& fromFile,
@@ -294,9 +293,13 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
             {
                 mContainer->addData(std::move(data), findLegend(productNum));
             }
-            else
+            else if (data->getDataType() == six::DataType::COMPLEX)
             {
                 mContainer->addData(std::move(data));
+            }
+            else
+            {
+                throw except::Exception(Ctxt("Unknown 'getDataType()' value."));
             }
 
             ++productNum;
@@ -438,7 +441,7 @@ void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
 {
 
     Parameter p;
-    p = subheader.getImageSecurityClass().toString();
+    p = subheader.imageSecurityClass();
     c.fileOptions.setParameter("ISCLAS", p);
     addSecurityOptions(subheader.getSecurityGroup(), "IS", c.fileOptions);
 }
@@ -447,106 +450,47 @@ void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
         six::Classification& c) const
 {
     Parameter p;
-    p = subheader.getSecurityClass().toString();
+    p = subheader.securityClass();
     c.fileOptions.setParameter("DECLAS", p);
     addSecurityOptions(subheader.getSecurityGroup(), "DES", c.fileOptions);
 }
 
+struct AddSecurityOption final
+{
+    const std::string& prefix;
+    six::Options& options;
+    logging::Logger& log;
+    void operator()(const nitf::Field& parameter, const std::string& field)
+    {
+        Parameter p = parameter.toString();
+        const auto k = NITFImageInfo::generateFieldKey(field, prefix);
+        options.setParameter(k, p);
+        log.debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
+            static_cast<const char*>(p))));
+    }
+    AddSecurityOption() = delete;
+};
+
 void NITFReadControl::addSecurityOptions(nitf::FileSecurity security,
         const std::string& prefix, six::Options& options) const
 {
-    Parameter p;
-    std::string k;
+    AddSecurityOption addSecurityOption{ prefix, options, *mLog };
 
-    p = security.getClassificationSystem().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CLSY, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getCodewords().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CODE, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getControlAndHandling().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CTLH, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getReleasingInstructions().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::REL, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getDeclassificationType().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCTP, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getDeclassificationDate().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCDT, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getDeclassificationExemption().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCXM, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getDowngrade().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DG, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getDowngradeDateTime().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DGDT, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getClassificationText().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CLTX, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getClassificationAuthorityType().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CATP, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getClassificationAuthority().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CAUT, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getClassificationReason().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CRSN, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getSecuritySourceDate().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::SRDT, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getSecurityControlNumber().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CTLN, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
+    addSecurityOption(security.getClassificationSystem(), NITFImageInfo::CLSY);
+    addSecurityOption(security.getCodewords(), NITFImageInfo::CODE);
+    addSecurityOption(security.getControlAndHandling(), NITFImageInfo::CTLH);
+    addSecurityOption(security.getReleasingInstructions(), NITFImageInfo::REL);
+    addSecurityOption(security.getDeclassificationType(), NITFImageInfo::DCTP);
+    addSecurityOption(security.getDeclassificationDate(), NITFImageInfo::DCDT);
+    addSecurityOption(security.getDeclassificationExemption(), NITFImageInfo::DCXM);
+    addSecurityOption(security.getDowngrade(), NITFImageInfo::DG);
+    addSecurityOption(security.getDowngradeDateTime(), NITFImageInfo::DGDT);
+    addSecurityOption(security.getClassificationText(), NITFImageInfo::CLTX);
+    addSecurityOption(security.getClassificationAuthorityType(), NITFImageInfo::CATP);
+    addSecurityOption(security.getClassificationAuthority(), NITFImageInfo::CAUT);
+    addSecurityOption(security.getClassificationReason(), NITFImageInfo::CRSN);
+    addSecurityOption(security.getSecuritySourceDate(), NITFImageInfo::SRDT);
+    addSecurityOption(security.getSecurityControlNumber(), NITFImageInfo::CTLN);
 }
 
 NITFReadControl::ImageAndSegment
