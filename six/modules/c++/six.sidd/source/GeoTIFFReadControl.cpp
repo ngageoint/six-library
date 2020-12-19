@@ -291,7 +291,7 @@ bool six::sidd::GeoTIFFReadControlCreator::supports(const std::string& filename)
         six::sidd::GeoTIFFReadControl control;
         return control.getDataType(filename) != DataType::NOT_SET;
     }
-    catch (except::Exception&)
+    catch (const except::Exception&)
     {
         return false;
     }

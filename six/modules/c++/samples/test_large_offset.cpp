@@ -204,10 +204,6 @@ int main(int argc, char** argv)
                 "Skipping test.\n";
         return 0;
     }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-    }
     catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;

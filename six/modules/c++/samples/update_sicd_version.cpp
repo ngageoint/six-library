@@ -97,10 +97,6 @@ int main(int argc, char **argv)
                   options->get<std::string>("output"));
         return 0;
     }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << "\n";
-    }
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << "\n";

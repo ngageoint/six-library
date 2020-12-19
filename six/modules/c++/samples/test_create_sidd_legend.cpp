@@ -261,11 +261,6 @@ int main(int argc, char** argv)
 
         return 0;
     }
-    catch (const except::Exception& e)
-    {
-        std::cerr << "Caught exception: " << e.getMessage() << std::endl;
-        return 1;
-    }
     catch (const std::exception& e)
     {
         std::cerr << "Caught exception: " << e.what() << std::endl;

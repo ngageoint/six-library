@@ -147,7 +147,7 @@ int main(int argc, char** argv)
 
 
     }
-    catch (except::Exception& ex)
+    catch (const except::Exception& ex)
     {
 	std::cout << "Exception: " << ex.getMessage() << std::endl;
 	

@@ -337,10 +337,6 @@ int main(int argc, char** argv)
         std::cout << "Success - mesh data matches." << std::endl;
         return 0;
     }
-    catch (const except::Exception& e)
-    {
-        std::cerr << e.getMessage() << std::endl;
-    }
     catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;

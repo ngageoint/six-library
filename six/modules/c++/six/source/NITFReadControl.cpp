@@ -747,7 +747,7 @@ bool NITFReadControlCreator::supports(const std::string& filename) const
         NITFReadControl control;
         return control.getDataType(filename) != DataType::NOT_SET;
     }
-    catch(except::Exception&)
+    catch(const except::Exception&)
     {
         return false;
     }

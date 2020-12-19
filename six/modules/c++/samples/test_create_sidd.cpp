@@ -384,9 +384,9 @@ int main(int argc, char** argv)
             delete sources[i];
         }
     }
-    catch (except::Exception& ex)
+    catch (const std::exception& ex)
     {
-        std::cout << ex.toString() << std::endl;
+        std::cout << ex.what() << std::endl;
     }
 
     delete writer;

@@ -227,11 +227,6 @@ int main(int argc, char** argv)
         std::cout << "Round-trip succeeded\n";
         return 0;
     }
-    catch (const except::Exception& e)
-    {
-        std::cerr << e.getMessage() << std::endl;
-        return 1;
-    }
     catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;

@@ -196,9 +196,9 @@ void run(std::string inputFile, std::string dataType)
         delete control;
         delete data;
     }
-    catch (except::Exception& ex)
+    catch (const std::exception& ex)
     {
-        std::cout << "ERROR!: " << ex.getMessage() << std::endl;
+        std::cout << "ERROR!: " << ex.what() << std::endl;
     }
 }
 

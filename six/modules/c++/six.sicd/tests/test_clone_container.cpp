@@ -49,9 +49,9 @@ int main(int argc, char** argv)
         delete reader;
         return 0;
     }
-    catch (except::Exception& e)
+    catch (const std::exception& e)
     {
-        std::cout << e.getMessage() << std::endl;
+        std::cout << e.what() << std::endl;
     }
 }
 
