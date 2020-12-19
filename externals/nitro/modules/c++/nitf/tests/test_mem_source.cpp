@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 
         return 0;
     }
-    catch (except::Throwable & t)
+    catch (const except::Throwable & t)
     {
         std::cout << t.getMessage() << std::endl;
     }

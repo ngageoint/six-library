@@ -79,7 +79,7 @@ int main(int argc, char **argv)
         /*  Double check  */
         //assert( l.getHandle() == nullptr );
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
         std::cout << t.getTrace() << std::endl;
     }

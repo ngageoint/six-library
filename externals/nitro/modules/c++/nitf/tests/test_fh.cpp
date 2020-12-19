@@ -86,17 +86,17 @@ int main(int, char**)
         nitf::HashTable hash;
         ext.setHash(hash);
 
-        std::cout << fileHeader.getFileHeader().toString() << std::endl;
-        std::cout << fileHeader.getFileVersion().toString() << std::endl;
-        std::cout << two.getFileHeader().toString() << std::endl;
-        std::cout << two.getFileVersion().toString() << std::endl;
+        std::cout << fileHeader.fileHeader() << "\n";
+        std::cout << fileHeader.fileVersion() << "\n";
+        std::cout << two.fileHeader() << "\n";
+        std::cout << two.fileVersion() << "\n";
 
-        std::cout << myFileHeader.getFileHeader().toString() << std::endl;
-        std::cout << myFileHeader.getFileVersion().toString() << std::endl;
+        std::cout << myFileHeader.fileHeader() << "\n";
+        std::cout << myFileHeader.fileVersion() << "\n";
 
         return 0;
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
         std::cout << t.getTrace() << std::endl;
     }

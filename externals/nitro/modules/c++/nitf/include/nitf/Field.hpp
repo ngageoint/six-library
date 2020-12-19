@@ -353,17 +353,16 @@ public:
     //! Returns the field as a string
     operator std::string() const
     {
-        return toString();
+        return std::string(getNativeOrThrow()->raw,
+            getNativeOrThrow()->length);
     }
-
     std::string toString() const
     {
-        return std::string(getNativeOrThrow()->raw,
-                           getNativeOrThrow()->length );
+        return *this;
     }
     std::string toTrimString() const
     {
-        auto retval = toString();
+        std::string retval = *this; // implicitly converted to std::string
         str::trim(retval);
         return retval;
     }

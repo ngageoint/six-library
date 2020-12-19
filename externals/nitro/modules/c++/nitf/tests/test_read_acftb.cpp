@@ -40,12 +40,8 @@ void findInExtensions(nitf::Extensions ext)
     {
         //TREPrintFunctor treTraverser;
         nitf::List l = ext.getTREsByName("ACFTB");
-        nitf::ListIterator iter;
-        nitf::ListIterator end = l.end();
-        for (iter = l.begin(); iter != end; ++iter )
+        for (nitf::TRE tre : l)
         {
-
-            nitf::TRE tre = *iter;
             //tre.foreach(treTraverser);
             if (tre.exists( "raw_data" ) )
             {
@@ -93,12 +89,8 @@ int main(int argc, char** argv)
         nitf::IOHandle io(argv[1]);
         nitf::Record record = reader.read(io);
 
-        nitf::ListIterator end = record.getImages().end();
-
-        for (nitf::ListIterator iter = record.getImages().begin();
-                iter != end; ++iter)
+        for (nitf::ImageSegment imageSegment : record.getImages())
         {
-            nitf::ImageSegment imageSegment = *iter;
             assert( imageSegment.isValid() );
 
             if ( imageSegment.getSubheader().getUserDefinedSection().isValid() )
@@ -121,7 +113,7 @@ int main(int argc, char** argv)
         }
 
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
         std::cout << t.getMessage() << std::endl;
         std::cout << t.getTrace() << std::endl;
