@@ -42,10 +42,9 @@ NITFBuffer::NITFBuffer(const void* data, size_t numBytes) noexcept :
 size_t NITFBufferList::getTotalNumBytes() const noexcept
 {
     size_t numBytes(0);
-
-    for (size_t ii = 0; ii < mBuffers.size(); ++ii)
+    for (const auto& buffer : mBuffers)
     {
-        numBytes += mBuffers[ii].mNumBytes;
+        numBytes += buffer.mNumBytes;
     }
 
     return numBytes;

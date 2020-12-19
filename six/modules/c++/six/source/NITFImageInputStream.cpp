@@ -113,7 +113,7 @@ ptrdiff_t six::NITFImageInputStream::readRow()
 {
     mWindow.setStartRow(static_cast<uint32_t>(mRowOffset++));
     int padded;
-    auto buffer = reinterpret_cast<uint8_t*>(mRowBuffer.get());
+    auto buffer = mRowBuffer.get();
     mReader.read(mWindow, &buffer, &padded);
     mRowBufferRemaining = mRowSize;
     return (ptrdiff_t)mRowSize;

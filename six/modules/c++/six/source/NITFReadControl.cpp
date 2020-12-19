@@ -699,7 +699,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
                 static_cast<int>(startIndex + i),
                 mCompressionOptions);
 
-        auto bufferPtr = reinterpret_cast<uint8_t*>(buffer + totalRead);
+        auto bufferPtr = buffer + totalRead;
 
         int padded;
         imageReader.read(sw, &bufferPtr, &padded);
@@ -774,7 +774,7 @@ void NITFReadControl::readLegendPixelData(nitf::ImageSubheader& subheader,
     if (!legend.mImage.empty())
     {
         int padded;
-        auto bufferPtr = reinterpret_cast<uint8_t*>(legend.mImage.data());
+        auto bufferPtr = legend.mImage.data();
         nitf::ImageReader imageReader = mReader.newImageReader(
                 static_cast<int>(imageSeg));
         imageReader.read(sw, &bufferPtr, &padded);

@@ -20,12 +20,12 @@
  *
  */
 
-#ifndef __NITF_FIELD_HPP__
-#define __NITF_FIELD_HPP__
 #pragma once
 
 #include <string>
 #include <limits>
+
+#include <import/str.h>
 
 #include <nitf/Field.h>
 #include <nitf/System.hpp>
@@ -82,7 +82,7 @@ struct GetConvType<false, IsSignedT>
  *  The Field is a generic type object that allows storage
  *  and casting of data amongst disparate data types.
  */
-class Field : public nitf::Object<nitf_Field>
+class Field final : public nitf::Object<nitf_Field>
 {
     void setU_(uint32_t data)
     {
@@ -213,8 +213,7 @@ public:
         return *this;
     }
 
-    //! Destructor
-    ~Field() {}
+    ~Field() = default;
 
     void set(uint8_t data)
     {
@@ -362,10 +361,17 @@ public:
         return std::string(getNativeOrThrow()->raw,
                            getNativeOrThrow()->length );
     }
+    std::string toTrimString() const
+    {
+        auto retval = toString();
+        str::trim(retval);
+        return retval;
+    }
+
+    Field() = delete; // does not make sense to construct a Field from scratch
+    operator char* () const = delete; // Don't allow this cast ever.
 
 private:
-    Field() = default; //private -- does not make sense to construct a Field from scratch
-
     //! get the value
     void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const
     {
@@ -384,10 +390,7 @@ private:
     }
 
     nitf_Error error{};
-
-    operator char*() const = delete; // Don't allow this cast ever.
 };
 
 }
 
-#endif
