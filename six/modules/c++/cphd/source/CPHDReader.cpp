@@ -44,8 +44,8 @@ CPHDReader::CPHDReader(const std::string& fromFile,
                        const std::vector<std::string>& schemaPaths,
                        std::shared_ptr<logging::Logger> logger)
 {
-    initialize(std::shared_ptr<io::SeekableInputStream>(
-        new io::FileInputStream(fromFile)), numThreads, logger, schemaPaths);
+    initialize(std::make_shared<io::FileInputStream>(fromFile),
+        numThreads, logger, schemaPaths);
 }
 
 void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,

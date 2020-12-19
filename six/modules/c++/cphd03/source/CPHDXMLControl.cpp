@@ -127,7 +127,7 @@ XMLElem CPHDXMLControl::toXML(const Data& data, XMLElem parent)
 {
     XMLElem dataXML = newElement("Data", parent);
 
-    createString("SampleType", data.sampleType.toString(), dataXML);
+    createString("SampleType", data.sampleType, dataXML);
 
     createInt("NumCPHDChannels", data.numCPHDChannels, dataXML);
     createInt("NumBytesVBP", data.numBytesVBP, dataXML);
@@ -136,7 +136,7 @@ XMLElem CPHDXMLControl::toXML(const Data& data, XMLElem parent)
         XMLElem arrsizeXML = newElement("ArraySize", dataXML);
         createInt("NumVectors", data.arraySize.at(ii).numVectors, arrsizeXML);
         createInt("NumSamples", data.arraySize.at(ii).numSamples, arrsizeXML);
-        setAttribute(arrsizeXML, "index", str::toString(ii + 1));
+        setAttribute(arrsizeXML, "index", ii + 1);
     }
 
     return dataXML;
@@ -146,8 +146,8 @@ XMLElem CPHDXMLControl::toXML(const Global& global, XMLElem parent)
 {
     XMLElem globalXML = newElement("Global", parent);
 
-    createString("DomainType", global.domainType.toString(), globalXML);
-    createString("PhaseSGN", global.phaseSGN.toString(), globalXML);
+    createString("DomainType", global.domainType, globalXML);
+    createString("PhaseSGN", global.phaseSGN, globalXML);
 
     if (!six::Init::isUndefined(global.refFrequencyIndex))
     {
@@ -248,7 +248,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
 {
     XMLElem srpXML = newElement("SRP", parent);
 
-    createString("SRPType", srp.srpType.toString(), srpXML);
+    createString("SRPType", srp.srpType, srpXML);
     createInt("NumSRPs", srp.numSRPs, srpXML);
 
     switch ((int)srp.srpType)

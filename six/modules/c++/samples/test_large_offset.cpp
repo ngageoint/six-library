@@ -79,8 +79,8 @@ void createNITF(const std::string& outputPathname,
     const size_t elementsInImage = data->getNumRows() * data->getNumCols();
     const size_t imageSize = elementsInImage * data->getNumBytesPerPixel();
 
-    std::shared_ptr<six::Container> container(
-            new six::Container(data->getDataType()));
+    auto container(std::make_shared<six::Container>(
+        data->getDataType()));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
@@ -100,7 +100,7 @@ void createNITF(const std::string& outputPathname,
                     static_cast<float>(ii) * -1);
         }
     }
-    else
+    else if (container->getDataType() == six::DataType::DERIVED)
     {
         uint16_t* derivedData =
                 reinterpret_cast<uint16_t*>(imageData.get());
@@ -133,7 +133,6 @@ bool checkNITF(const std::string& pathname)
     six::Region region;
     region.setStartRow(ROWS_TO_SKIP);
     region.setNumRows(data->getNumRows() - ROWS_TO_SKIP);
-    region.setStartCol(0);
     reader.interleaved(region, 0);
     std::byte* buffer = region.getBuffer();
 

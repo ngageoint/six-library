@@ -127,15 +127,14 @@ int main(int argc, char** argv)
         readerRegistry.addCreator(new six::sidd::GeoTIFFReadControlCreator());
 
         // get the correct ReadControl for the given file
-        const std::unique_ptr<six::ReadControl>
-            reader(readerRegistry.newReadControl(inputFile));
+        auto reader(readerRegistry.newReadControl(inputFile));
         // set the optional registry, since we have one
         reader->setXMLControlRegistry(&xmlRegistry);
 
         // load the file
         reader->load(inputFile, schemaPaths);
 
-        std::shared_ptr<six::Container> container = reader->getContainer();
+        auto container = reader->getContainer();
         std::string base = fs::path(inputFile).stem();
         size_t numImages = 0;
 
@@ -213,8 +212,7 @@ int main(int argc, char** argv)
                 region.setNumRows(numRows);
                 size_t totalBytes = nbpp * numCols * numRows;
                 const std::unique_ptr<std::byte[]>
-                    workBuffer(new std::byte[totalBytes]);
-                region.setBuffer(workBuffer.get());
+                    workBuffer = region.setBuffer(totalBytes);
 
                 reader->interleaved(region, ii);
                 outputStream.write((const std::byte*) workBuffer.get(),
@@ -226,8 +224,7 @@ int main(int argc, char** argv)
                 const size_t nbpr = nbpp * numCols;
 
                 // allocate this so we can reuse it for each row
-                const std::unique_ptr<std::byte[]> workBuffer(new std::byte[nbpr]);
-                region.setBuffer(workBuffer.get());
+                const std::unique_ptr<std::byte[]> workBuffer = region.setBuffer(nbpr);
 
                 for (size_t jj = startRow;
                      jj < numRows + startRow;

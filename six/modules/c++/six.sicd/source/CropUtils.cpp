@@ -112,14 +112,13 @@ void cropSICD(six::NITFReadControl& reader,
     // Read in the AOI
     const size_t numBytesPerPixel(data.getNumBytesPerPixel());
     const size_t numBytes(origDims.row * origDims.col * numBytesPerPixel);
-    const std::unique_ptr<std::byte[]> buffer(new std::byte[numBytes]);
 
     six::Region region;
     region.setStartRow(aoiOffset.row);
     region.setStartCol(aoiOffset.col);
     region.setNumRows(aoiDims.row);
     region.setNumCols(aoiDims.col);
-    region.setBuffer(buffer.get());
+    const std::unique_ptr<std::byte[]> buffer = region.setBuffer(numBytes);
     reader.interleaved(region, 0);
 
     six::sicd::ComplexData* const aoiData = updateMetadata(
@@ -128,7 +127,7 @@ void cropSICD(six::NITFReadControl& reader,
     std::unique_ptr<six::Data> scopedData(aoiData);
 
     // Write the AOI SICD out
-    std::shared_ptr<six::Container> container(new six::Container(
+    auto container(std::make_shared<six::Container>(
             six::DataType::COMPLEX));
     container->addData(std::move(scopedData));
     six::NITFWriteControl writer(container);
@@ -183,7 +182,7 @@ void cropSICD(six::NITFReadControl& reader,
               const std::string& outPathname)
 {
     // Make sure it's a SICD
-    const std::shared_ptr<const six::Container> container = reader.getContainer();
+    const auto container = reader.getContainer();
 
     const six::Data* const dataPtr = container->getData(0);
     if (container->getDataType() != six::DataType::COMPLEX ||
@@ -231,7 +230,7 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     // Make sure it's a SICD
-    const std::shared_ptr<const six::Container> container = reader.getContainer();
+    const auto container = reader.getContainer();
 
     const six::Data* const dataPtr = container->getData(0);
     if (container->getDataType() != six::DataType::COMPLEX ||

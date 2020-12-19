@@ -19,10 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_NITF_READ_CONTROL_H__
-#define __SIX_NITF_READ_CONTROL_H__
+#pragma once
 
 #include <map>
+#include <memory>
 
 #include "six/NITFImageInfo.h"
 #include "six/ReadControl.h"
@@ -49,25 +49,24 @@ namespace six
  *  This class is not copyable.
  *
  */
-class NITFReadControl : public ReadControl
+struct NITFReadControl : public ReadControl
 {
-public:
-
-    //!  Constructor
     NITFReadControl();
-
-    //!  Destructor
     virtual ~NITFReadControl() noexcept(false)
     {
         reset();
     }
+
+    // NITFReadControl is not copyable
+    NITFReadControl(const NITFReadControl& other) = delete;
+    NITFReadControl& operator=(const NITFReadControl& other) = delete;
 
     /*!
      *  Read whether a file has COMPLEX or DERIVED data
      *  \param fromFile path to file
      *  \return datatype of file contents
      */
-    virtual DataType getDataType(const std::string& fromFile) const;
+    DataType getDataType(const std::string& fromFile) const override;
 
     /*!
     *  Read whether a Record has COMPLEX or DERIVED data
@@ -107,8 +106,7 @@ public:
      *  segment in question at least follows some of the rules
      *  that its supposed to.
      */
-    void validateSegment(nitf::ImageSubheader subheader,
-                         const NITFImageInfo* info);
+    void validateSegment(nitf::ImageSubheader subheader, const NITFImageInfo&);
 
     using ReadControl::load;
 
@@ -119,7 +117,7 @@ public:
      *  \param schemaPaths Directories or files of schema locations
      */
     void load(const std::string& fromFile,
-              const std::vector<std::string>& schemaPaths);
+              const std::vector<std::string>& schemaPaths) override;
 
     /*
      *  \func load
@@ -152,9 +150,9 @@ public:
      * memory is allocated and the region's buffer is updated.  In this case
      * it is up to the caller to delete the memory.
      */
-    virtual UByte* interleaved(Region& region, size_t imageNumber);
+    virtual UByte* interleaved(Region& region, size_t imageNumber) override;
 
-    virtual std::string getFileType() const
+    std::string getFileType() const override
     {
         return "NITF";
     }
@@ -178,7 +176,7 @@ protected:
     //! We keep a ref to the record
     nitf::Record mRecord;
 
-    std::vector<NITFImageInfo*> mInfos;
+    std::vector<std::unique_ptr<NITFImageInfo>> mInfos;
 
     std::map<std::string, void*> mCompressionOptions;
 
@@ -198,8 +196,14 @@ protected:
      *  it is only unique when it's Complex data.
      *
      */
-    std::pair<size_t, size_t>
-    getIndices(nitf::ImageSubheader& subheader) const;
+    struct ImageAndSegment final
+    {
+        size_t image = 0;
+        size_t segment = 0;
+
+    };
+    ImageAndSegment
+    getIndices(const nitf::ImageSubheader& subheader) const;
 
     void addImageClassOptions(nitf::ImageSubheader& s,
             six::Classification& c) const;
@@ -217,28 +221,21 @@ protected:
     //  to be cleaned up elsewhere. There is no access
     //  to deallocation in NITFReadControl directly
     virtual void createCompressionOptions(
-            std::map<std::string, void*>& )
+            std::map<std::string, void*>& ) 
     {
     }
 
 private:
-    // Unimplemented - NITFReadControl is not copyable
-    NITFReadControl(const NITFReadControl& other);
-    NITFReadControl& operator=(const NITFReadControl& other);
-
-private:
     std::unique_ptr<Legend> findLegend(size_t productNum);
 
-    void readLegendPixelData(nitf::ImageSubheader& subheader,
+    void readLegendPixelData(const nitf::ImageSubheader& subheader,
                              size_t imageSeg,
                              Legend& legend);
 
     static
-    bool isLegend(nitf::ImageSubheader& subheader)
+    bool isLegend(const nitf::ImageSubheader& subheader)
     {
-        std::string iCat = subheader.getImageCategory().toString();
-        str::trim(iCat);
-
+        const auto iCat = subheader.imageCategory();
         return (iCat == "LEG");
     }
 
@@ -250,16 +247,15 @@ private:
 };
 
 
-struct NITFReadControlCreator : public ReadControlCreator
+struct NITFReadControlCreator final : public ReadControlCreator
 {
-    six::ReadControl* newReadControl() const;
+    std::unique_ptr<six::ReadControl> newReadControl() const override;
 
-    bool supports(const std::string& filename) const;
+    bool supports(const std::string& filename) const override;
 
 };
 
 
 }
 
-#endif
 

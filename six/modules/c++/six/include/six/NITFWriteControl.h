@@ -19,8 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_NITF_WRITE_CONTROL_H__
-#define __SIX_NITF_WRITE_CONTROL_H__
+#pragma once
 
 #include <map>
 
@@ -68,8 +67,12 @@ public:
                      std::shared_ptr<Container> container,
                      const XMLControlRegistry* xmlRegistry = nullptr);
 
+    //! Noncopyable
+    NITFWriteControl(const NITFWriteControl&) = delete;
+    const NITFWriteControl& operator=(const NITFWriteControl&) = delete;
+
     //!  We are a 'NITF'
-    std::string getFileType() const
+    std::string getFileType() const override
     {
         return "NITF";
     }
@@ -85,7 +88,7 @@ public:
      * as well.
      * \param xmlRegistry XMLControlRegistry to set
      */
-    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
+    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry) override
     {
         setXMLControlRegistryImpl(xmlRegistry);
     }
@@ -141,7 +144,7 @@ public:
     virtual void initialize(const six::Options& options,
                             std::shared_ptr<Container> container);
 
-    virtual void initialize(std::shared_ptr<Container> container);
+    virtual void initialize(std::shared_ptr<Container> container) override;
 
     using WriteControl::save;
 
@@ -163,7 +166,7 @@ public:
      */
     virtual void save(const SourceList& imageData,
                       const std::string& outputFile,
-                      const std::vector<std::string>& schemaPaths);
+                      const std::vector<std::string>& schemaPaths) override;
 
     /*!
      *  Bind an interleaved (IQIQIQIQ) memory buffer
@@ -190,7 +193,7 @@ public:
      */
     virtual void save(const BufferList& imageData,
                       const std::string& outputFile,
-                      const std::vector<std::string>& schemaPaths);
+                      const std::vector<std::string>& schemaPaths) override;
 
     void save(const NonConstBufferList& imageData,
               const std::string& outputFile,
@@ -486,12 +489,5 @@ private:
                        size_t segmentNum,
                        size_t numImageSegments,
                        size_t productNum);
-
-private:
-    //! Noncopyable
-    NITFWriteControl(const NITFWriteControl& );
-    const NITFWriteControl& operator=(const NITFWriteControl& );
 };
 }
-#endif
-

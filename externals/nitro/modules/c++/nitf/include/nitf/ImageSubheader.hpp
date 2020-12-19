@@ -227,6 +227,10 @@ public:
 
     //! Get the imageSecurityClass
     nitf::Field getImageSecurityClass() const;
+    std::string imageSecurityClass() const
+    {
+        return getImageSecurityClass().toString();
+    }
 
     //! Get the securityGroup
     nitf::FileSecurity getSecurityGroup() const;
@@ -276,6 +280,10 @@ public:
 
     //! Get the pixelJustification
     nitf::Field getPixelJustification() const;
+    std::string pixelJustification() const
+    {
+        return getPixelJustification().toString();
+    }
 
     //! Get the imageCoordinateSystem
     nitf::Field getImageCoordinateSystem() const;
@@ -317,6 +325,10 @@ public:
 
     //! Get the imageMode
     nitf::Field getImageMode() const;
+    std::string imageMode() const
+    {
+        return getImageMode().toString();
+    }
 
     //! Get the numBlocksPerRow
     nitf::Field getNumBlocksPerRow() const;
@@ -361,6 +373,10 @@ public:
 
     //! Get the imageLocation
     nitf::Field getImageLocation() const;
+    std::string imageLocation() const
+    {
+        return getImageLocation().toString();
+    }
 
     //! Get the imageMagnification
     nitf::Field getImageMagnification() const;

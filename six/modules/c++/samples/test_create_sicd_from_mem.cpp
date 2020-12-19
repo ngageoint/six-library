@@ -83,8 +83,8 @@ int main(int argc, char** argv)
                 six::sicd::Utilities::createFakeComplexData().release());
         data->setPixelType(six::PixelType::RE32F_IM32F);
 
-        std::shared_ptr<six::Container> container(new six::Container(
-                six::DataType::COMPLEX));
+        auto container(std::make_shared<six::Container>(
+            six::DataType::COMPLEX));
         container->addData(std::move(data));
 
         /*

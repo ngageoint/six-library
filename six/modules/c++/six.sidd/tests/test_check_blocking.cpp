@@ -45,7 +45,7 @@ std::unique_ptr<six::Data> read(const std::string& filename)
 {
     six::NITFReadControl reader;
     reader.load(filename);
-    std::shared_ptr<const six::Container> container = reader.getContainer();
+    const auto container = reader.getContainer();
     std::unique_ptr<six::Data> data(container->getData(0)->clone());
     return data;
 }
@@ -75,7 +75,7 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
     std::unique_ptr<std::byte[]> buffer;
     generateData(*workingData, buffer);
 
-    std::shared_ptr<six::Container> container(new six::Container(
+    auto container(std::make_shared<six::Container>(
             six::DataType::DERIVED));
     container->addData(std::move(workingData));
 
@@ -116,7 +116,7 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     generateData(*firstData, firstBuffer);
     generateData(*secondData, secondBuffer);
 
-    std::shared_ptr<six::Container> container(new six::Container(
+    auto container(std::make_shared<six::Container>(
             six::DataType::DERIVED));
     container->addData(std::move(firstData));
     container->addData(std::move(secondData));

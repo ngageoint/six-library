@@ -34,7 +34,7 @@ NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error);
 }
 
-typedef struct _MemoryWriteHandlerImpl
+struct MemoryWriteHandlerImpl final
 {
     const UByte* buffer;
     size_t firstRow;
@@ -43,7 +43,7 @@ typedef struct _MemoryWriteHandlerImpl
     size_t numChannels;
     size_t pixelSize;
     int doByteSwap;
-} MemoryWriteHandlerImpl;
+};
 
 extern "C" void __six_MemoryWriteHandler_destruct(NITF_DATA * data)
 {
@@ -55,36 +55,26 @@ extern "C" void __six_MemoryWriteHandler_destruct(NITF_DATA * data)
 extern "C" NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
 {
-    size_t rowSize;
-    uint64_t off;
-    UByte* rowCopy;
-    unsigned int i;
+    auto const impl = (const MemoryWriteHandlerImpl *) data;
 
-    MemoryWriteHandlerImpl *impl = (MemoryWriteHandlerImpl *) data;
+    const size_t rowSize = impl->pixelSize * impl->numCols;
+    uint64_t off = impl->firstRow * rowSize;
+    std::vector<std::byte> rowCopy_(rowSize);
+    auto const rowCopy = rowCopy_.data();
 
-    rowSize = impl->pixelSize * impl->numCols;
-    off = impl->firstRow * rowSize;
-    rowCopy = new UByte[rowSize];
-
-    for (i = 0; i < impl->numRows; i++)
+    for (unsigned int i = 0; i < impl->numRows; i++)
     {
-
-        memcpy(rowCopy, (const std::byte*) &impl->buffer[off], rowSize);
+        memcpy(rowCopy, &impl->buffer[off], rowSize);
 
         if (impl->doByteSwap)
-            sys::byteSwap((std::byte*) rowCopy, impl->pixelSize
+            sys::byteSwap(rowCopy, impl->pixelSize
                     / impl->numChannels, impl->numCols * impl->numChannels);
         // And write it back
-        if (!nitf_IOInterface_write(io, (const std::byte*) rowCopy, rowSize,
-                                    error))
-            goto CATCH_ERROR;
+        if (!nitf_IOInterface_write(io, rowCopy, rowSize, error))
+            return NITF_FAILURE;
         off += rowSize;
     }
-    delete[] rowCopy;
     return NITF_SUCCESS;
-
-    CATCH_ERROR: delete[] rowCopy;
-    return NITF_FAILURE;
 }
 
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
@@ -128,7 +118,7 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
 //
 
 
-typedef struct _StreamWriteHandlerImpl
+struct StreamWriteHandlerImpl final
 {
     io::InputStream* inputStream;
     size_t numCols;
@@ -136,7 +126,7 @@ typedef struct _StreamWriteHandlerImpl
     size_t numChannels;
     size_t pixelSize;
     int doByteSwap;
-} StreamWriteHandlerImpl;
+};
 
 extern "C" void __six_StreamWriteHandler_destruct(NITF_DATA * data)
 {
@@ -148,34 +138,26 @@ extern "C" void __six_StreamWriteHandler_destruct(NITF_DATA * data)
 extern "C" NITF_BOOL __six_StreamWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
 {
-    size_t rowSize;
-    UByte* rowCopy;
-    unsigned int i;
+    auto const impl = (const StreamWriteHandlerImpl *) data;
 
-    StreamWriteHandlerImpl *impl = (StreamWriteHandlerImpl *) data;
+    const size_t rowSize = impl->pixelSize * impl->numCols;
+    std::vector<std::byte> rowCopy_(rowSize);
+    auto const rowCopy = rowCopy_.data();
 
-    rowSize = impl->pixelSize * impl->numCols;
-    rowCopy = new UByte[rowSize];
-
-    for (i = 0; i < impl->numRows; i++)
+    for (unsigned int i = 0; i < impl->numRows; i++)
     {
-
-        impl->inputStream->read((std::byte*) rowCopy, rowSize);
+        impl->inputStream->read(rowCopy, rowSize);
 
         if (impl->doByteSwap)
-            sys::byteSwap((std::byte*) rowCopy, impl->pixelSize
+            sys::byteSwap(rowCopy, impl->pixelSize
                     / impl->numChannels, impl->numCols * impl->numChannels);
 
         // And write it back
-        if (!nitf_IOInterface_write(io, (const std::byte*) rowCopy, rowSize,
+        if (!nitf_IOInterface_write(io, rowCopy, rowSize,
                                     error))
-            goto CATCH_ERROR;
+            return NITF_FAILURE;
     }
-    delete[] rowCopy;
     return NITF_SUCCESS;
-
-    CATCH_ERROR: delete[] rowCopy;
-    return NITF_FAILURE;
 }
 
 StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,

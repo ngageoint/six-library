@@ -19,9 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef __CPHD_CPHD_WRITER_H__
-#define __CPHD_CPHD_WRITER_H__
+#pragma once
 
 #include <string>
 #include <vector>
@@ -87,9 +85,8 @@ protected:
  *
  *  For little endian to big endian storage
  */
-class DataWriterLittleEndian : public DataWriter
+struct DataWriterLittleEndian final : public DataWriter
 {
-public:
     /*
      *  \func DataWriterLittleEndian
      *  \brief Constructor
@@ -110,9 +107,9 @@ public:
      *  \param numElements Total number of elements in array
      *  \param elementSize Size of each element
      */
-    virtual void operator()(const std::byte* data,
+    void operator()(const std::byte* data,
                             size_t numElements,
-                            size_t elementSize);
+                            size_t elementSize) override;
 
 private:
     // Size of scratch space
@@ -128,9 +125,8 @@ private:
  *
  *  No byte swap. Already big endian.
  */
-class DataWriterBigEndian : public DataWriter
+struct DataWriterBigEndian final : public DataWriter
 {
-public:
     /*
      *  \func DataWriter
      *  \brief Constructor
@@ -151,9 +147,9 @@ public:
      *  \param numElements Total number of elements in array
      *  \param elementSize Size of each element
      */
-    virtual void operator()(const std::byte* data,
+    void operator()(const std::byte* data,
                             size_t numElements,
-                            size_t elementSize);
+                            size_t elementSize) override;
 };
 
 
@@ -384,4 +380,3 @@ private:
 };
 }
 
-#endif

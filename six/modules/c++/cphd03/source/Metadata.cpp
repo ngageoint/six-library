@@ -46,7 +46,7 @@ size_t Metadata::getNumBytesPerSample() const
 
 std::string Metadata::getDomainTypeString() const
 {
-    return global.domainType.toString();
+    return global.domainType;
 }
 
 cphd::DomainType Metadata::getDomainType() const

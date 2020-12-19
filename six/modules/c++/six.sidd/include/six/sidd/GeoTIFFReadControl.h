@@ -68,11 +68,11 @@ protected:
 
 };
 
-struct GeoTIFFReadControlCreator : public ReadControlCreator
+struct GeoTIFFReadControlCreator final : public ReadControlCreator
 {
-    six::ReadControl* newReadControl() const;
+    std::unique_ptr<six::ReadControl> newReadControl() const override;
 
-    bool supports(const std::string& filename) const;
+    bool supports(const std::string& filename) const override;
 
 };
 

@@ -19,32 +19,30 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include "six/ReadControlFactory.h"
 
 using namespace six;
 
-six::ReadControl* ReadControlRegistry::newReadControl(
+std::unique_ptr<six::ReadControl> ReadControlRegistry::newReadControl(
         const std::string& filename) const
 {
-    for (std::list<ReadControlCreator*>::const_iterator it = mCreators.begin(); it
-            != mCreators.end(); ++it)
+    for (const auto& creator : mCreators)
     {
-        if ((*it)->supports(filename))
-            return (*it)->newReadControl();
+        if (creator->supports(filename))
+            return creator->newReadControl();
     }
     throw except::NotImplementedException(
                                           Ctxt(
                                                "No supported ReadControl for input file"));
 }
 
-ReadControlRegistry::~ReadControlRegistry()
-{
-    while(!mCreators.empty())
-    {
-        ReadControlCreator *creator = mCreators.front();
-        if (creator)
-            delete creator;
-        mCreators.pop_front();
-    }
-}
 
+// https://stackoverflow.com/a/11711991/8877
+// "C++11 removes the need for manual locking.
+// Concurrent execution shall wait if a static local variable is already being initialized."
+six::ReadControlRegistry& six::ReadControlFactory::getInstance()
+{
+    static ReadControlRegistry instance;
+    return instance;
+}

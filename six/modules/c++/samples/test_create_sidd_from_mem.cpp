@@ -2581,8 +2581,8 @@ int main(int argc, char** argv)
         const char smallData[4] = {'a', 'b', 'c', 'd'};
 
         // Create a file container
-        std::shared_ptr<six::Container> container(
-                new six::Container(DataType::DERIVED));
+        auto container(std::make_shared<six::Container>(
+            six::DataType::DERIVED));
 
         std::vector<const UByte*> buffers;
         size_t numImages = options->get<bool>("multipleImages") ? 3 : 1;
