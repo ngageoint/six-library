@@ -265,7 +265,7 @@ std::ostream& DerivedClassification::put(std::ostream& os) const
     putImpl("Exempted Source Date", exemptedSourceDate.get(), os);
 
     os << "Exempt From: " << exemptFrom
-       << "Joint: " << joint.toString() << "\n";
+       << "Joint: " << joint << "\n";
 
     putImpl("Display Only To", displayOnlyTo, os);
 
@@ -275,7 +275,7 @@ std::ostream& DerivedClassification::put(std::ostream& os) const
     putImpl("Notice Date", noticeDate.get(), os);
 
     os << "Unregistered Notice: " << unregisteredNoticeType
-       << "\nExternal Notice: " << externalNotice.toString() << "\n";
+       << "\nExternal Notice: " << externalNotice << "\n";
 
     return os;
 }

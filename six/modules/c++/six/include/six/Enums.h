@@ -129,8 +129,10 @@ namespace details
         // needed for SWIG
         bool operator==(const int& o) const { return value == o; }
         bool operator==(const Enum& o) const { return value == o.value; }
+        bool operator==(const std::string& o) const { return toString() == o; } // for unittests, not SWIG
         bool operator!=(const int& o) const { return value != o; }
         bool operator!=(const Enum& o) const { return value != o.value; }
+        bool operator!=(const std::string& o) const { return !(*this == o); } // for unittests, not SWIG
         bool operator<(const int& o) const { return value < o; }
         bool operator<(const Enum& o) const { return value < o.value; }
         bool operator<=(const int& o) const { return value <= o; }
@@ -148,7 +150,8 @@ namespace details
         os << e.toString();
         return os;
     }
- 
+
+
     #define SIX_Enum_map_entry_(n) { n, #n }
 
     // Generate an enum class derived from details::Enum

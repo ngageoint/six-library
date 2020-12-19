@@ -524,8 +524,8 @@ bool Grid::validateFFTSigns(logging::Logger& log) const
         messageBuilder.str("");
         messageBuilder <<
             "FFT signs in row and column direction should be the same." <<
-            std::endl << "Grid.Row.Sign: " << row->sign.toString() << std::endl
-            << "Grid.Col.Sign: " << col->sign.toString() << std::endl;
+            std::endl << "Grid.Row.Sign: " << row->sign << std::endl
+            << "Grid.Col.Sign: " << col->sign << std::endl;
         log.error(messageBuilder.str());
         valid = false;
     }
@@ -811,7 +811,7 @@ bool Grid::validate(const RMA& rma, const Vector3& scp,
     {
         std::ostringstream messageBuilder;
         messageBuilder << "Given image formation algorithm expects "
-            << defaultGridType(rma).toString() << ".\nFound " << type;
+            << defaultGridType(rma) << ".\nFound " << type;
         log.error(messageBuilder.str());
         valid = false;
     }
@@ -1064,7 +1064,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
     {
         messageBuilder.str("");
         messageBuilder << "PFA image formation should result in a RGAZIM grid."
-            << std::endl << "Grid.Type: " << type.toString();
+            << std::endl << "Grid.Type: " << type;
         log.error(messageBuilder.str());
         valid = false;
     }
@@ -1211,7 +1211,7 @@ bool Grid::validate(const RgAzComp& rgAzComp,
         messageBuilder.str("");
         messageBuilder << 
             "RGAZCOMP image formation should result in a SLANT plane image." 
-            << std::endl << "Grid.ImagePlane: " << imagePlane.toString();
+            << std::endl << "Grid.ImagePlane: " << imagePlane;
         log.error(messageBuilder.str());
         valid = false;
     }
@@ -1222,7 +1222,7 @@ bool Grid::validate(const RgAzComp& rgAzComp,
         messageBuilder.str("");
         messageBuilder <<
             "RGAZCOMP image formation should result in a RGAZIM grid."
-            << std::endl << "Grid.Type: " << type.toString();
+            << std::endl << "Grid.Type: " << type;
         log.error(messageBuilder.str());
         valid = false;
     }
