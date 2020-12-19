@@ -349,7 +349,7 @@ XMLElem DerivedXMLParser100::convertDisplayToXML(
 {
     XMLElem displayElem = newElement("Display", parent);
 
-    createString("PixelType", six::toString(display.pixelType), displayElem);
+    createString("PixelType", display.pixelType, displayElem);
 
     // optional
     if (display.remapInformation.get())
@@ -362,14 +362,14 @@ XMLElem DerivedXMLParser100::convertDisplayToXML(
     if (display.magnificationMethod != MagnificationMethod::NOT_SET)
     {
         createString("MagnificationMethod",
-                     six::toString(display.magnificationMethod), displayElem);
+                     display.magnificationMethod, displayElem);
     }
 
     // optional
     if (display.decimationMethod != DecimationMethod::NOT_SET)
     {
         createString("DecimationMethod",
-                     six::toString(display.decimationMethod), displayElem);
+                     display.decimationMethod, displayElem);
     }
 
     // optional
@@ -638,10 +638,10 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             XMLElem polElem = newElement("Polarization", informationElem);
 
             createString("TxPolarization",
-                six::toString(p->txPolarization),
+                p->txPolarization,
                 polElem);
             createString("RcvPolarization",
-                six::toString(p->rcvPolarization),
+                p->rcvPolarization,
                 polElem);
             // optional
             if (!Init::isUndefined(p->rcvPolarizationOffset))

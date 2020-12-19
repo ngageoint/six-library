@@ -207,6 +207,11 @@ XMLElem CPHDXMLControl::toXML(const Global& global, XMLElem parent)
     return globalXML;
 }
 
+static void set_index_attribute(xml::lite::Element& elem, size_t value)
+{
+    elem.attribute("index") = str::toString(value);
+}
+
 XMLElem CPHDXMLControl::toXML(const Channel& channel, XMLElem parent)
 {
     XMLElem channelXML = newElement("Channel", parent);
@@ -216,7 +221,7 @@ XMLElem CPHDXMLControl::toXML(const Channel& channel, XMLElem parent)
     for (size_t ii = 0; ii < channel.parameters.size(); ++ii)
     {
         XMLElem chanParamsXML = newElement("Parameters", channelXML);
-        chanParamsXML->attribute("index") = str::toString(ii + 1);
+        set_index_attribute(*chanParamsXML, ii + 1);
 
         ChannelParameters cp = channel.parameters[ii];
         createInt("SRP_Index", cp.srpIndex, chanParamsXML);
@@ -262,7 +267,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
         for (size_t ii = 0; ii < srp.srpPT.size(); ++ii)
         {
             XMLElem fixedptXML = newElement("FIXEDPT", srpXML);
-            fixedptXML->attribute("index") = str::toString(ii + 1);
+            set_index_attribute(*fixedptXML, ii + 1);
             mCommon.createVector3D("SRPPT", srp.srpPT[ii], fixedptXML);
         }
 
@@ -325,19 +330,19 @@ XMLElem CPHDXMLControl::toXML(const Antenna& antenna, XMLElem parent)
     for (size_t ii = 0; ii < antenna.tx.size(); ++ii)
     {
          XMLElem txXML = toXML("Tx", antenna.tx[ii], antennaXML);
-         txXML->attribute("index") = str::toString(ii + 1);
+         set_index_attribute(*txXML, ii + 1);
     }
 
     for (size_t ii = 0; ii < antenna.rcv.size(); ++ii)
     {
         XMLElem rcvXML = toXML("Rcv", antenna.rcv[ii], antennaXML);
-        rcvXML->attribute("index") = str::toString(ii + 1);
+        set_index_attribute(*rcvXML, ii + 1);
     }
 
     for (size_t ii = 0; ii < antenna.twoWay.size(); ++ii)
     {
         XMLElem twXML = toXML("TwoWay", antenna.twoWay[ii], antennaXML);
-        twXML->attribute("index") = str::toString(ii + 1);
+        set_index_attribute(*twXML, ii + 1);
     }
 
     return antennaXML;

@@ -169,14 +169,10 @@ void run(std::string inputFile, std::string dataType)
                                            std::vector<std::string>());
 
         // Dump some core info
-        std::cout << "Data Class: " << six::toString(data->getDataType())
-                << std::endl;
-        std::cout << "Pixel Type: " << six::toString(data->getPixelType())
-                << std::endl;
-        std::cout << "Num Rows  : " << six::toString(data->getNumRows())
-                << std::endl;
-        std::cout << "Num Cols  : " << six::toString(data->getNumCols())
-                << std::endl;
+        std::cout << "Data Class: " << data->getDataType() << "\n";
+        std::cout << "Pixel Type: " << six::toString(data->getPixelType()) << "\n";
+        std::cout << "Num Rows  : " << six::toString(data->getNumRows()) << "\n";
+        std::cout << "Num Cols  : " << six::toString(data->getNumCols()) << "\n";
 
         // Generate a KML in this directory
         preview(generateKML(data, outputDir));

@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_UTILITIES_H__
-#define __SIX_UTILITIES_H__
+#pragma once
+
+#include <ostream>
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
@@ -107,6 +108,11 @@ template<> six::DateTime toType<six::DateTime>(const std::string& s);
 template<> std::string toString(const six::DateTime& value);
 
 template<> std::string toString(const six::DataType& value);
+inline std::ostream& operator<<(std::ostream& os, const DataType& value)
+{
+    os << toString(value);
+    return os;
+}
 template<> std::string toString(const six::EarthModelType& value);
 template<> six::OrientationType
         toType<six::OrientationType>(const std::string& s);
@@ -308,4 +314,3 @@ void getErrors(const ErrorStatistics* errorStats,
 std::string findSchemaPath(const std::string& progname);
 }
 
-#endif

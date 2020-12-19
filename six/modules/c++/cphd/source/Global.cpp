@@ -93,13 +93,10 @@ std::ostream& operator<< (std::ostream& os, const Global& d)
 
 std::ostream& operator<< (std::ostream& os, const Timeline& d)
 {
-    os << "Timeline::\n"
-       << "  collectionStart       : "
-       << six::toString(d.collectionStart) << "\n";
+    os << "Timeline::\n"  << "  collectionStart       : " << d.collectionStart << "\n";
     if (!six::Init::isUndefined(d.rcvCollectionStart))
     {
-        os << "  rcvCollectionStart    : "
-           << six::toString(d.rcvCollectionStart) << "\n";
+        os << "  rcvCollectionStart    : " << d.rcvCollectionStart << "\n";
     }
     os << "  txTime1               : " << d.txTime1 << "\n"
        << "  txTime2               : " << d.txTime2 << "\n";

@@ -301,8 +301,8 @@ XMLElem ComplexXMLParser::convertGridToXML(
 {
     XMLElem gridXML = newElement("Grid", parent);
 
-    createString("ImagePlane", six::toString(grid->imagePlane), gridXML);
-    createString("Type", six::toString(grid->type), gridXML);
+    createString("ImagePlane", grid->imagePlane, gridXML);
+    createString("Type", grid->type, gridXML);
     common().createPoly2D("TimeCOAPoly", grid->timeCOAPoly, gridXML);
 
     XMLElem rowDirXML = newElement("Row", gridXML);
@@ -469,8 +469,7 @@ XMLElem ComplexXMLParser::createTxSequence(const RadarCollection* radar,
             }
             if (tx->txPolarization != PolarizationType::NOT_SET)
             {
-                createString("TxPolarization",
-                             six::toString(tx->txPolarization), txStepXML);
+                createString("TxPolarization", tx->txPolarization, txStepXML);
             }
         }
 
@@ -575,8 +574,7 @@ XMLElem ComplexXMLParser::createArea(const RadarCollection* radar,
             if (!plane->segmentList.empty())
             {
                 XMLElem segListXML = newElement("SegmentList", planeXML);
-                setAttribute(segListXML, "size",
-                             str::toString(plane->segmentList.size()));
+                setAttribute(segListXML, "size", plane->segmentList.size());
 
                 for (size_t ii = 0; ii < plane->segmentList.size(); ++ii)
                 {

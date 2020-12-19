@@ -139,7 +139,7 @@ std::string NITFHeaderCreator::getComplexIID(size_t segmentNum,
 {
     // SICD###
     std::ostringstream ostr;
-    ostr << six::toString(DataType(DataType::COMPLEX)) << std::setfill('0')
+    ostr << DataType(DataType::COMPLEX) << std::setfill('0')
          << std::setw(3)
          << ((numImageSegments > 1) ? segmentNum + 1 : segmentNum);
 
@@ -151,7 +151,7 @@ std::string NITFHeaderCreator::getDerivedIID(size_t segmentNum,
 {
     // SIDD######
     std::ostringstream ostr;
-    ostr << six::toString(DataType(DataType::DERIVED)) << std::setfill('0')
+    ostr << DataType(DataType::DERIVED) << std::setfill('0')
          << std::setw(3) << (productNum + 1) << std::setw(3)
          << (segmentNum + 1);
 
