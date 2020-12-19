@@ -167,9 +167,9 @@ int main(int argc, char **argv)
         io.close();
         return 0;
     }
-    catch (except::Throwable & t)
+    catch (const std::exception& ex)
     {
-        std::cerr << "ERROR!: " << t.toString() << std::endl;
+        std::cerr << "ERROR!: " << ex.what() << "\n";
         return 1;
     }
 }

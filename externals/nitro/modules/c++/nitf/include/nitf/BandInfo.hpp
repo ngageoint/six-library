@@ -67,7 +67,7 @@ public:
     nitf::Field getSubcategory() const;
     std::string subcategory() const
     {
-        return getSubcategory().toString();
+        return getSubcategory(); // nitf::Field implicitly converts to std::string
     }
 
     //! Get the imageFilterCondition

@@ -40,12 +40,10 @@ void doRead(const std::string& inFile,
     /*  Set this to the end, so we'll know when we're done!  */
     nitf::List imageList(record.getImages());
     size_t idx(0);
-    for (nitf::ListIterator iter = imageList.begin();
-         iter != imageList.end();
-         ++iter, ++idx)
+    for (nitf::ImageSegment imageSegment : imageList)
     {
+        ++idx;
         std::cout << "Reading image " << idx << "..." << std::endl;
-        nitf::ImageSegment imageSegment(*iter);
         nitf::ImageSubheader subheader(imageSegment.getSubheader());
 
         nitf::SubWindow subWindow;
@@ -125,7 +123,7 @@ int main(int argc, char **argv)
 
         return 0;
     }
-    catch (except::Throwable & t)
+    catch (const except::Throwable & t)
     {
         std::cout << t.getMessage() << std::endl;
     }
