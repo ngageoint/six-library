@@ -68,11 +68,15 @@ public:
     nitf::Field getClassificationSystem() const;
     std::string classificationSystem() const
     {
-        return getClassificationSystem().toString();
+        return getClassificationSystem(); // nitf::Field implicitly converts to std::string
     }
 
     //! Get the codewords
     nitf::Field getCodewords() const;
+    std::string codewords() const
+    {
+        return getCodewords(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the controlAndHandling
     nitf::Field getControlAndHandling() const;

@@ -1427,7 +1427,7 @@ TEST_CASE(test_mt_record)
             thrs_i.join();
         }
     }
-    catch (const except::Exception&)
+    catch (const std::exception&)
     {
         TEST_ASSERT_TRUE(false);
     }

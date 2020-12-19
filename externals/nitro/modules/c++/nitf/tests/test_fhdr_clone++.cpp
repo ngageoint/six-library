@@ -22,29 +22,29 @@
 
 #include <import/nitf.hpp>
 
-#define SHOW(X) std::cout << #X << "=" << X << std::endl
-#define SHOWI(X) std::cout << #X << "=" << X << std::endl
+#define SHOW(X) std::cout << #X << "=" << X.toString() << std::endl
+#define SHOWI(X) std::cout << #X << "=" << static_cast<uint32_t>(X) << std::endl
 #define PRINT_HDR(X) std::cout << #X; printHdr(X)
 
 void printHdr(nitf::FileHeader header)
 {
     uint32_t i;
-    SHOW( header.getFileHeader().toString() );
-    SHOW( header.getFileVersion().toString() );
-    SHOW( header.getComplianceLevel().toString() );
-    SHOW( header.getSystemType().toString() );
-    SHOW( header.getOriginStationID().toString() );
-    SHOW( header.getFileDateTime().toString() );
-    SHOW( header.getFileTitle().toString() );
-    SHOW( header.getClassification().toString() );
-    SHOW( header.getMessageCopyNum().toString() );
-    SHOW( header.getMessageNumCopies().toString() );
-    SHOW( header.getEncrypted().toString() );
-    SHOW( header.getBackgroundColor().toString() );
-    SHOW( header.getOriginatorName().toString() );
-    SHOW( header.getOriginatorPhone().toString() );
-    SHOWI( (uint32_t)header.getFileLength() );
-    SHOWI( (uint32_t)header.getHeaderLength() );
+    SHOW( header.getFileHeader() );
+    SHOW( header.getFileVersion() );
+    SHOW( header.getComplianceLevel() );
+    SHOW( header.getSystemType() );
+    SHOW( header.getOriginStationID() );
+    SHOW( header.getFileDateTime() );
+    SHOW( header.getFileTitle() );
+    SHOW( header.getClassification() );
+    SHOW( header.getMessageCopyNum() );
+    SHOW( header.getMessageNumCopies() );
+    SHOW( header.getEncrypted() );
+    SHOW( header.getBackgroundColor() );
+    SHOW( header.getOriginatorName() );
+    SHOW( header.getOriginatorPhone() );
+    SHOWI( header.getFileLength() );
+    SHOWI( header.getHeaderLength() );
 
     printf("The number of IMAGES contained in this file [%d]\n",
            (int)header.getNumImages());
@@ -134,7 +134,7 @@ int main(int argc, char** argv)
 
         return 0;
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
         std::cout << t.getTrace() << std::endl;
     }

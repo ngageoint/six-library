@@ -79,8 +79,9 @@ TEST_CASE(basicIteration)
     // how many elements there are, so there's nothing to
     // iterate over
     size_t numFields = 0;
-    for (nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
+    for (const auto& unused : tre)
     {
+        (void)unused;
         ++numFields;
     }
     TEST_ASSERT_EQ(numFields, 1);
@@ -89,8 +90,9 @@ TEST_CASE(basicIteration)
     tre.setField("NUMACPO", 2, true);
     tre.setField("NUMPTS[0]", 3);
     tre.setField("NUMPTS[1]", 2);
-    for (nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
+    for (const auto& unused : tre)
     {
+        (void)unused;
         ++numFields;
     }
     TEST_ASSERT_EQ(numFields, 29);

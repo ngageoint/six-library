@@ -42,7 +42,7 @@ int main(int, char**)
         memIO.close();
         return 0;
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
         std::cout << t.getTrace() << std::endl;
     }

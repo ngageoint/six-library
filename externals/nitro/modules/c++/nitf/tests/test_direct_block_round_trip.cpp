@@ -150,11 +150,6 @@ int main(int argc, char **argv)
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
         return 1;
     }
-    catch (const except::Throwable & t)
-    {
-        std::cerr << "Caught throwable: " << t.toString() << std::endl;
-        return 1;
-    }
     catch (...)
     {
         std::cerr << "Caught unknown exception\n";
