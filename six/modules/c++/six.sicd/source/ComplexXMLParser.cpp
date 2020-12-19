@@ -221,7 +221,7 @@ XMLElem ComplexXMLParser::convertImageDataToXML(
 {
     XMLElem imageDataXML = newElement("ImageData", parent);
 
-    createString("PixelType", six::toString(imageData->pixelType), imageDataXML);
+    createString("PixelType", imageData->pixelType, imageDataXML);
     if (imageData->amplitudeTable.get())
     {
         const AmplitudeTable& ampTable = *imageData->amplitudeTable;
@@ -506,8 +506,7 @@ XMLElem ComplexXMLParser::createWaveform(const RadarCollection* radar,
             if (!Init::isUndefined(wf->txFMRate))
                 createDouble("TxFMRate", wf->txFMRate, wfpXML);
             if (wf->rcvDemodType != DemodType::NOT_SET)
-                createString("RcvDemodType", six::toString(wf->rcvDemodType),
-                             wfpXML);
+                createString("RcvDemodType", wf->rcvDemodType, wfpXML);
             if (!Init::isUndefined(wf->rcvWindowLength))
                 createDouble("RcvWindowLength", wf->rcvWindowLength, wfpXML);
             if (!Init::isUndefined(wf->adcSampleRate))
@@ -592,9 +591,7 @@ XMLElem ComplexXMLParser::createArea(const RadarCollection* radar,
 
             if (!Init::isUndefined(plane->orientation))
             {
-                createString("Orientation",
-                             six::toString<OrientationType>(plane->orientation),
-                             planeXML);
+                createString("Orientation", plane->orientation, planeXML);
             }
         }
 
@@ -637,7 +634,7 @@ XMLElem ComplexXMLParser::convertSCPCOAToXML(
     common().createVector3D("ARPPos", scpcoa->arpPos, scpcoaXML);
     common().createVector3D("ARPVel", scpcoa->arpVel, scpcoaXML);
     common().createVector3D("ARPAcc", scpcoa->arpAcc, scpcoaXML);
-    createString("SideOfTrack", six::toString(scpcoa->sideOfTrack), scpcoaXML);
+    createSideOfTrackType("SideOfTrack", scpcoa->sideOfTrack, scpcoaXML);
     createDouble("SlantRange", scpcoa->slantRange, scpcoaXML);
     createDouble("GroundRange", scpcoa->groundRange, scpcoaXML);
     createDouble("DopplerConeAng", scpcoa->dopplerConeAngle, scpcoaXML);

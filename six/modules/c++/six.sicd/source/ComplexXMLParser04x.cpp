@@ -246,8 +246,7 @@ XMLElem ComplexXMLParser04x::convertRMAToXML(
 {
     XMLElem rmaXML = newElement("RMA", parent);
 
-    createString("RMAlgoType", six::toString<six::RMAlgoType>(rma->algoType),
-                 rmaXML);
+    createString("RMAlgoType", rma->algoType, rmaXML);
 
     if (rma->rmcr.get())
     {

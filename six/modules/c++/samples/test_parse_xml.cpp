@@ -161,18 +161,18 @@ void run(std::string inputFile, std::string dataType)
         six::DataType dt = (dataType == "sicd") ? six::DataType::COMPLEX
                                                 : six::DataType::DERIVED;
 
-        std::unique_ptr<logging::Logger> log (new logging::NullLogger());
+        logging::NullLogger log;
         six::XMLControl *control =
-                six::XMLControlFactory::getInstance().newXMLControl(dt, log.get());
+                six::XMLControlFactory::getInstance().newXMLControl(dt, &log);
 
         six::Data *data = control->fromXML(treeBuilder.getDocument(),
                                            std::vector<std::string>());
 
         // Dump some core info
         std::cout << "Data Class: " << data->getDataType() << "\n";
-        std::cout << "Pixel Type: " << six::toString(data->getPixelType()) << "\n";
-        std::cout << "Num Rows  : " << six::toString(data->getNumRows()) << "\n";
-        std::cout << "Num Cols  : " << six::toString(data->getNumCols()) << "\n";
+        std::cout << "Pixel Type: " << data->getPixelType() << "\n";
+        std::cout << "Num Rows  : " << data->getNumRows() << "\n";
+        std::cout << "Num Cols  : " << data->getNumCols() << "\n";
 
         // Generate a KML in this directory
         preview(generateKML(data, outputDir));

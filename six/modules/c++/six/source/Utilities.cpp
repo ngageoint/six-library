@@ -304,11 +304,6 @@ PixelType six::toType<PixelType>(const std::string& s)
 {
     return PixelType::toType(s);
 }
-template <>
-std::string six::toString(const PixelType& type)
-{
-    return type.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 MagnificationMethod six::toType<MagnificationMethod>(const std::string& s)
@@ -317,21 +312,9 @@ MagnificationMethod six::toType<MagnificationMethod>(const std::string& s)
 }
 
 template <>
-std::string six::toString(const MagnificationMethod& method)
-{
-    return method.toString(true /*throw_if_not_set*/);
-}
-
-template <>
 DecimationMethod six::toType<DecimationMethod>(const std::string& s)
 {
     return DecimationMethod::toType(s, DecimationMethod::NOT_SET);
-}
-
-template <>
-std::string six::toString(const DecimationMethod& method)
-{
-    return method.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -361,11 +344,6 @@ OrientationType six::toType<OrientationType>(const std::string& s)
 {
     return OrientationType::toType(s);
 }
-template <>
-std::string six::toString(const OrientationType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 PolarizationSequenceType six::toType<PolarizationSequenceType>(
@@ -373,21 +351,11 @@ PolarizationSequenceType six::toType<PolarizationSequenceType>(
 {
     return PolarizationSequenceType::toType(s);
 }
-template <>
-std::string six::toString(const PolarizationSequenceType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 PolarizationType six::toType<PolarizationType>(const std::string& s)
 {
     return PolarizationType::toType(s);
-}
-template <>
-std::string six::toString(const PolarizationType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -492,21 +460,11 @@ DemodType six::toType<DemodType>(const std::string& s)
 {
     return DemodType::toType(s);
 }
-template <>
-std::string six::toString(const DemodType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 ImageFormationType six::toType<ImageFormationType>(const std::string& s)
 {
     return ImageFormationType::toType(s);
-}
-template <>
-std::string six::toString(const ImageFormationType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -515,11 +473,6 @@ SlowTimeBeamCompensationType six::toType<SlowTimeBeamCompensationType>(
 {
     return SlowTimeBeamCompensationType::toType(s);
 }
-template <>
-std::string six::toString(const SlowTimeBeamCompensationType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 ImageBeamCompensationType six::toType<ImageBeamCompensationType>(
@@ -527,33 +480,17 @@ ImageBeamCompensationType six::toType<ImageBeamCompensationType>(
 {
     return ImageBeamCompensationType::toType(s);
 }
-template <>
-std::string six::toString(const ImageBeamCompensationType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 AutofocusType six::toType<AutofocusType>(const std::string& s)
 {
     return AutofocusType::toType(s);
 }
-template <>
-std::string six::toString(const AutofocusType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 RMAlgoType six::toType<RMAlgoType>(const std::string& s)
 {
     return RMAlgoType::toType(s);
-}
-
-template <>
-std::string six::toString(const RMAlgoType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -588,21 +525,11 @@ ComplexImagePlaneType six::toType<ComplexImagePlaneType>(const std::string& s)
 {
     return ComplexImagePlaneType::toType(s);
 }
-template <>
-std::string six::toString(const ComplexImagePlaneType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 ComplexImageGridType six::toType<ComplexImageGridType>(const std::string& s)
 {
     return ComplexImageGridType::toType(s);
-}
-template <>
-std::string six::toString(const ComplexImageGridType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -684,11 +611,6 @@ template <>
 CollectType six::toType<CollectType>(const std::string& s)
 {
     return CollectType::toType(s);
-}
-template <>
-std::string six::toString(const CollectType& value)
-{
-    return value.toString(true /*throw_if_not_set*/);
 }
 
 template <>
