@@ -66,6 +66,10 @@ public:
 
     //! Get the classificationSystem
     nitf::Field getClassificationSystem() const;
+    std::string classificationSystem() const
+    {
+        return getClassificationSystem().toString();
+    }
 
     //! Get the codewords
     nitf::Field getCodewords() const;

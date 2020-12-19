@@ -377,12 +377,12 @@ XMLElem ComplexXMLParser10x::createRcvChannels(const RadarCollection* radar,
 {
     const size_t numChannels = radar->rcvChannels.size();
     XMLElem rcvChanXML = newElement("RcvChannels", parent);
-    setAttribute(rcvChanXML, "size", str::toString(numChannels));
+    setAttribute(rcvChanXML, "size", numChannels);
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         const ChannelParameters* const cp = radar->rcvChannels[ii].get();
         XMLElem cpXML = newElement("ChanParameters", rcvChanXML);
-        setAttribute(cpXML, "index", str::toString(ii + 1));
+        setAttribute(cpXML, "index", ii + 1);
 
         //! required in 1.0
         createString(

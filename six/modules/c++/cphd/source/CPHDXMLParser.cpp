@@ -139,7 +139,7 @@ XMLElem CPHDXMLParser::toXML(const Global& global, XMLElem parent)
 {
     XMLElem globalXML = newElement("Global", parent);
     createString("DomainType", global.domainType, globalXML);
-    createString("SGN", global.sgn.toString(), globalXML);
+    createString("SGN", global.sgn, globalXML);
 
     //Timeline
     XMLElem timelineXML = newElement("Timeline", globalXML);
@@ -212,11 +212,11 @@ XMLElem CPHDXMLParser::toXML(const SceneCoordinates& sceneCoords, XMLElem parent
     if (!sceneCoords.imageArea.polygon.empty())
     {
         XMLElem polygonXML = newElement("Polygon", imageAreaXML);
-        setAttribute(polygonXML, "size", six::toString(sceneCoords.imageArea.polygon.size()));
+        setAttribute(polygonXML, "size", sceneCoords.imageArea.polygon.size());
         for (size_t ii = 0; ii < sceneCoords.imageArea.polygon.size(); ++ii)
         {
             XMLElem vertexXML = mCommon.createVector2D("Vertex", sceneCoords.imageArea.polygon[ii], polygonXML);
-            setAttribute(vertexXML, "index", six::toString(ii+1));
+            setAttribute(vertexXML, "index", ii+1);
         }
     }
     createLatLonFootprint("ImageAreaCornerPoints", "IACP", sceneCoords.imageAreaCorners, sceneCoordsXML);
@@ -231,11 +231,11 @@ XMLElem CPHDXMLParser::toXML(const SceneCoordinates& sceneCoords, XMLElem parent
         if (!sceneCoords.extendedArea->polygon.empty())
         {
             XMLElem polygonXML = newElement("Polygon", sceneCoordsXML);
-            setAttribute(polygonXML, "size", six::toString(sceneCoords.extendedArea->polygon.size()));
+            setAttribute(polygonXML, "size", sceneCoords.extendedArea->polygon.size());
             for (size_t ii = 0; ii < sceneCoords.extendedArea->polygon.size(); ++ii)
             {
                 XMLElem vertexXML = mCommon.createVector2D("Vertex", sceneCoords.extendedArea->polygon[ii], polygonXML);
-                setAttribute(vertexXML, "index", six::toString(ii+1));
+                setAttribute(vertexXML, "index", ii+1);
             }
         }
     }
@@ -279,11 +279,11 @@ XMLElem CPHDXMLParser::toXML(const SceneCoordinates& sceneCoords, XMLElem parent
                 if (!sceneCoords.imageGrid->segments[ii].polygon.empty())
                 {
                     XMLElem polygonXML = newElement("SegmentPolygon", segmentXML);
-                    setAttribute(polygonXML, "size", six::toString(sceneCoords.imageGrid->segments[ii].polygon.size()));
+                    setAttribute(polygonXML, "size", sceneCoords.imageGrid->segments[ii].polygon.size());
                     for (size_t jj = 0; jj < sceneCoords.imageGrid->segments[ii].polygon.size(); ++jj)
                     {
                         XMLElem svXML = newElement("SV", polygonXML);
-                        setAttribute(svXML, "index", six::toString(sceneCoords.imageGrid->segments[ii].polygon[jj].getIndex()));
+                        setAttribute(svXML, "index", sceneCoords.imageGrid->segments[ii].polygon[jj].getIndex());
                         createDouble("Line", sceneCoords.imageGrid->segments[ii].polygon[jj].line, svXML);
                         createDouble("Sample", sceneCoords.imageGrid->segments[ii].polygon[jj].sample, svXML);
                     }
@@ -352,8 +352,8 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
             createBooleanType("SignalNormal", channel.parameters[ii].signalNormal, parametersXML);
         }
         XMLElem polXML = newElement("Polarization", parametersXML);
-        createString("TxPol", channel.parameters[ii].polarization.txPol.toString(), polXML);
-        createString("RcvPol", channel.parameters[ii].polarization.rcvPol.toString(), polXML);
+        createString("TxPol", channel.parameters[ii].polarization.txPol, polXML);
+        createString("RcvPol", channel.parameters[ii].polarization.rcvPol, polXML);
         createDouble("FxC", channel.parameters[ii].fxC, parametersXML);
         createDouble("FxBW", channel.parameters[ii].fxBW, parametersXML);
         if(!six::Init::isUndefined(channel.parameters[ii].fxBWNoise))
@@ -386,11 +386,11 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
             if(!channel.parameters[ii].imageArea.polygon.empty())
             {
                 XMLElem polygonXML = newElement("Polygon", imageAreaXML);
-                setAttribute(polygonXML, "size", six::toString(channel.parameters[ii].imageArea.polygon.size()));
+                setAttribute(polygonXML, "size", channel.parameters[ii].imageArea.polygon.size());
                 for (size_t jj = 0; jj < channel.parameters[ii].imageArea.polygon.size(); ++jj)
                 {
                     XMLElem vertexXML = mCommon.createVector2D("Vertex", channel.parameters[ii].imageArea.polygon[jj], polygonXML);
-                    setAttribute(vertexXML, "index", six::toString(jj+1));
+                    setAttribute(vertexXML, "index", jj+1);
                 }
             }
         }
@@ -586,7 +586,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         XMLElem monoXML = newElement("Monostatic", refGeoXML);
         mCommon.createVector3D("ARPPos", refGeo.monostatic->arpPos, monoXML);
         mCommon.createVector3D("ARPVel", refGeo.monostatic->arpVel, monoXML);
-        std::string side = refGeo.monostatic->sideOfTrack.toString();
+        std::string side = refGeo.monostatic->sideOfTrack;
         createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), monoXML);
         createDouble("SlantRange", refGeo.monostatic->slantRange, monoXML);
         createDouble("GroundRange", refGeo.monostatic->groundRange, monoXML);
@@ -614,7 +614,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         mCommon.createVector3D("Pos", refGeo.bistatic->txPlatform.pos, txPlatXML);
         mCommon.createVector3D("Vel", refGeo.bistatic->txPlatform.vel, txPlatXML);
 
-        std::string side = refGeo.bistatic->txPlatform.sideOfTrack.toString();
+        std::string side = refGeo.bistatic->txPlatform.sideOfTrack;
         createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), txPlatXML);
         createDouble("SlantRange", refGeo.bistatic->txPlatform.slantRange, txPlatXML);
         createDouble("GroundRange", refGeo.bistatic->txPlatform.groundRange, txPlatXML);
@@ -753,7 +753,7 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
     {
         XMLElem monoXML = newElement("Monostatic", errParamsXML);
         XMLElem posVelErrXML = newElement("PosVelErr", monoXML);
-        createString("Frame", errParams.monostatic->posVelErr.frame.toString(), posVelErrXML);
+        createString("Frame", errParams.monostatic->posVelErr.frame, posVelErrXML);
         createDouble("P1", errParams.monostatic->posVelErr.p1, posVelErrXML);
         createDouble("P2", errParams.monostatic->posVelErr.p2, posVelErrXML);
         createDouble("P3", errParams.monostatic->posVelErr.p3, posVelErrXML);
@@ -917,13 +917,13 @@ XMLElem CPHDXMLParser::toXML(const GeoInfo& geoInfo, XMLElem parent)
     {
         XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
                                          geoInfoXML);
-        setAttribute(linePolyXML, "size", str::toString(numLatLons));
+        setAttribute(linePolyXML, "size", numLatLons);
 
         for (size_t ii = 0; ii < numLatLons; ++ii)
         {
             XMLElem v = mCommon.createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
                          geoInfo.geometryLatLon[ii], linePolyXML);
-            setAttribute(v, "index", str::toString(ii + 1));
+            setAttribute(v, "index", ii + 1);
         }
     }
 
@@ -1939,7 +1939,7 @@ XMLElem CPHDXMLParser::createErrorParamPlatform(
         XMLElem parent) const
 {
     XMLElem posVelErrXML = newElement("PosVelErr", parent);
-    createString("Frame", p.posVelErr.frame.toString(), posVelErrXML);
+    createString("Frame", p.posVelErr.frame, posVelErrXML);
     createDouble("P1", p.posVelErr.p1, posVelErrXML);
     createDouble("P2", p.posVelErr.p2, posVelErrXML);
     createDouble("P3", p.posVelErr.p3, posVelErrXML);

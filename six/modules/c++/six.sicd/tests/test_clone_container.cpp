@@ -41,7 +41,7 @@ int main(int argc, char** argv)
         NITFReadControl* reader = new NITFReadControl();
         reader->load(inputFile);
 
-        std::shared_ptr<Container> container = reader->getContainer();
+        auto container = reader->getContainer();
 
         // test the clone...
         Container dolly = *container;

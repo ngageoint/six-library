@@ -29,6 +29,10 @@
 #include <six/WriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
+#include <six/Utilities.h>
+
+#undef min
+#undef max
 
 namespace
 {
@@ -343,7 +347,7 @@ void NITFHeaderCreator::setSecurity(const six::Classification& classification,
     }
 
     // Now, do some specific overrides
-    if (security.getClassificationSystem().toString().empty())
+    if (security.classificationSystem().empty())
     {
         security.getClassificationSystem().set("US");
     }
@@ -389,7 +393,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
     bool changed = false;
     std::string classOrder = "URCST";
     size_t foundLoc =
-            classOrder.find(record.getHeader().getClassification().toString());
+            classOrder.find(record.getHeader().classification());
     int classIndex =
             foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
 
@@ -400,7 +404,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
         nitf::ImageSubheader subheader =
                 nitf::ImageSegment(record.getImages()[i]).getSubheader();
         foundLoc =
-                classOrder.find(subheader.getImageSecurityClass().toString());
+                classOrder.find(subheader.imageSecurityClass());
         int idx =
                 foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
 
@@ -417,7 +421,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
     {
         nitf::DESubheader subheader =
                 nitf::DESegment(record.getDataExtensions()[i]).getSubheader();
-        foundLoc = classOrder.find(subheader.getSecurityClass().toString());
+        foundLoc = classOrder.find(subheader.securityClass());
         int idx =
                 foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
 
@@ -502,14 +506,14 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     tre["DESSHDT"] = data.getCreationTime().format("%Y-%m-%dT%H:%M:%SZ");
     setField("DESSHRP", mOrganizationId, tre);
 
-    const std::string dataType =
-            (data.getDataType() == DataType::COMPLEX) ? "SICD" : "SIDD";
+    const auto dataType = data.getDataType();
+    const std::string strDataType = six::toString(dataType);
 
-    if (dataType == "SICD")
+    if (dataType == DataType::COMPLEX)
     {
         tre["DESSHSI"] = Constants::SICD_DESSHSI;
     }
-    else
+    else if (dataType == DataType::DERIVED)
     {
         tre["DESSHSI"] = Constants::SIDD_DESSHSI;
     }
@@ -521,7 +525,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     const std::string version(data.getVersion());
     std::string specVers;
     std::string specDT;
-    if (dataType == "SICD")
+    if (dataType == DataType::COMPLEX)
     {
         if (version == "1.0.0" || version == "1.0.1")
         {
@@ -544,7 +548,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
             specDT = "2018-12-13T00:00:00Z";
         }
     }
-    else if (dataType == "SIDD")
+    else if (dataType == DataType::DERIVED)
     {
         if (version == "1.0.0")
         {
@@ -569,7 +573,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     if (specVers.empty())
     {
         throw except::Exception(Ctxt("DESSHSV Failure - Unsupported in " +
-                                     dataType + " version: " + version));
+                                     strDataType + " version: " + version));
     }
     tre["DESSHSV"] = specVers;
 
@@ -577,11 +581,11 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     if (specDT.empty())
     {
         throw except::Exception(Ctxt("DESSHSD Failure - Unsupported in " +
-                                     dataType + " version: " + version));
+            strDataType + " version: " + version));
     }
     tre["DESSHSD"] = specDT;
 
-    tre["DESSHTN"] = "urn:" + dataType + ":" + version;
+    tre["DESSHTN"] = "urn:" + strDataType + ":" + version;
     tre["DESSHLPG"] = toString(data.getImageCorners());
 
     // Spec specifies leaving this blank
@@ -636,9 +640,8 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
      */
     if (container->getDataType() == DataType::COMPLEX)
     {
-        std::shared_ptr<NITFImageInfo> info(new NITFImageInfo(
+        auto info(std::make_shared<NITFImageInfo>(
                 container->getData(0), maxRows, maxSize, true, 0, 0));
-
         mInfos.push_back(info);
     }
     else
@@ -678,8 +681,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
                         std::min(optNumColsPerBlock,
                                  static_cast<uint32_t>(ith->getNumCols()));
 
-                std::shared_ptr<NITFImageInfo> info(
-                        new NITFImageInfo(ith,
+                auto info(std::make_shared<NITFImageInfo>(ith,
                                           maxRows,
                                           maxSize,
                                           true,
@@ -925,8 +927,8 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 
     for (auto desSource : container->getDESSources())
     {
-        std::shared_ptr<nitf::SegmentWriter> desWriter(
-                new nitf::SegmentWriter(desSource));
+        auto desWriter(
+                std::make_shared<nitf::SegmentWriter>(desSource));
         mSegmentWriters.push_back(desWriter);
     }
 
@@ -961,8 +963,8 @@ void NITFHeaderCreator::loadMeshSegment(
     // Add the data and writer for this segment
     nitf::SegmentMemorySource dataSource(
             meshBuffer, 0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> desWriter(
-            new nitf::SegmentWriter(dataSource));
+    auto desWriter(
+        std::make_shared<nitf::SegmentWriter>(dataSource));
     addAdditionalDES(desWriter);
 }
 }

@@ -166,8 +166,8 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    std::shared_ptr<six::Container> container(
-            new six::Container(six::DataType::COMPLEX));
+    auto container(
+            std::make_shared<six::Container>(six::DataType::COMPLEX));
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;

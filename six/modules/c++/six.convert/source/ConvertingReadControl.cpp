@@ -70,10 +70,6 @@ std::string ConvertingReadControl::getFileType() const
 UByte* ConvertingReadControl::interleaved(size_t imageNumber)
 {
     Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
-    region.setNumRows(-1);
-    region.setNumCols(-1);
     return interleaved(region, imageNumber);
 }
 
@@ -114,9 +110,8 @@ UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
     UByte* buffer = region.getBuffer();
     if (buffer == nullptr)
     {
-        buffer = new UByte[region.getNumRows() * region.getNumCols() *
-                data->getNumBytesPerPixel()];
-        region.setBuffer(buffer);
+        buffer = region.setBuffer(region.getNumRows() * region.getNumCols() *
+                data->getNumBytesPerPixel()).release();
     }
 
     const types::RowCol<size_t> startingLocation(region.getStartRow(),

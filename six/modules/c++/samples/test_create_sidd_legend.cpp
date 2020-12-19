@@ -160,8 +160,8 @@ int main(int argc, char** argv)
                 new six::XMLControlCreatorT<
                         six::sidd::DerivedXMLControl>());
 
-        std::shared_ptr<six::Container> container(new six::Container(
-                six::DataType::DERIVED));
+        auto container(std::make_shared<six::Container>(
+            six::DataType::DERIVED));
 
         std::vector<std::byte*> buffers;
 

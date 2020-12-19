@@ -22,6 +22,7 @@
 
 #include <logging/NullLogger.h>
 #include <six/XMLControl.h>
+#include <six/Utilities.h>
 
 #include <sys/Filesystem.h>
 namespace fs = std::filesystem;
@@ -224,21 +225,7 @@ Data* XMLControl::fromXML(const xml::lite::Document* doc,
 
 std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 {
-    std::string str;
-
-    switch (dataType)
-    {
-    case DataType::COMPLEX:
-        str = "SICD";
-        break;
-    case DataType::DERIVED:
-        str = "SIDD";
-        break;
-    default:
-        throw except::Exception(
-                Ctxt("Invalid data type " + str::toString(dataType)));
-    }
-
+    auto str = six::toString(dataType);
     if (appendXML)
     {
         str += "_XML";

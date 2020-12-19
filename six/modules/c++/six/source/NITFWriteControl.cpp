@@ -185,7 +185,7 @@ void NITFWriteControl::save(const SourceList& imageData,
     mWriter.prepareIO(outputFile, record);
     const bool doByteSwap = shouldByteSwap();
 
-    const std::vector<std::shared_ptr<NITFImageInfo>>& infos = getInfos();
+    const auto& infos = getInfos();
     if (infos.size() != imageData.size())
     {
         std::ostringstream ostr;
@@ -212,8 +212,8 @@ void NITFWriteControl::save(const SourceList& imageData,
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            std::shared_ptr<::nitf::WriteHandler> writeHandler(
-                    new StreamWriteHandler(segmentInfo,
+            auto writeHandler(
+                std::make_shared<StreamWriteHandler>(segmentInfo,
                                            imageData[i],
                                            numCols,
                                            numChannels,
@@ -280,9 +280,7 @@ void NITFWriteControl::save(const BufferList& imageData,
                 getRecord().getImages()[info.getStartIndex()];
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
-        const bool isBlocking =
-                static_cast<uint32_t>(subheader.getNumBlocksPerRow()) > 1 ||
-                static_cast<uint32_t>(subheader.getNumBlocksPerCol()) > 1;
+        const bool isBlocking = subheader.numBlocksPerRow() > 1 || subheader.numBlocksPerCol() > 1;
 
         // The SIDD spec requires that a J2K compressed SIDDs be only a
         // single image segment. However this functionality remains untested.
@@ -333,8 +331,8 @@ void NITFWriteControl::save(const BufferList& imageData,
             {
                 const NITFSegmentInfo segmentInfo = imageSegments[jj];
 
-                std::shared_ptr<::nitf::WriteHandler> writeHandler(
-                        new MemoryWriteHandler(segmentInfo,
+                auto writeHandler(
+                        std::make_shared<MemoryWriteHandler>(segmentInfo,
                                                imageData[i],
                                                segmentInfo.firstRow,
                                                numCols,

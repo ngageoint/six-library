@@ -32,6 +32,9 @@
 #include <cphd/Utilities.h>
 #include <cphd/Wideband.h>
 
+#undef min
+#undef max
+
 
 namespace cphd
 {

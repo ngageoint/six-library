@@ -54,8 +54,6 @@ void readSidd(const std::string& pathname,
                                        derivedData->getNumCols());
     widebandData.resize(extent.area() * derivedData->getNumBytesPerPixel());
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
     region.setNumRows(extent.row);
     region.setNumCols(extent.col);
     region.setBuffer(widebandData.data());
@@ -68,8 +66,8 @@ void writeSidd(std::unique_ptr<six::Data>&& derivedData,
                const std::vector<std::string>& schemaPaths,
                const std::string& pathname)
 {
-    std::shared_ptr<six::Container> container(
-            new six::Container(six::DataType::DERIVED));
+    auto container(std::make_shared<six::Container>(
+        six::DataType::DERIVED));
     container->addData(std::move(derivedData));
 
     six::NITFWriteControl writer(container);

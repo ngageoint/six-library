@@ -224,7 +224,7 @@ void DerivedXMLParser::setAttributeIfNonNull(XMLElem element,
 {
     if (value)
     {
-        setAttribute(element, name, toString(*value), uri);
+        setAttribute(element, name, *value, uri);
     }
 }
 
@@ -1154,7 +1154,7 @@ XMLElem DerivedXMLParser::createLUT(const std::string& name, const LUT *lut,
         XMLElem parent) const
 {
     XMLElem lutElement = newElement(name, parent);
-    setAttribute(lutElement, "size", str::toString(lut->numEntries));
+    setAttribute(lutElement, "size", lut->numEntries);
     return createLUTImpl(lut, lutElement);
 }
 

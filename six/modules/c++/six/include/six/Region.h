@@ -19,8 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_H__
-#define __SIX_H__
+#pragma once
+
+#include <assert.h>
+
+#include <memory>
+
+#include <nitf/cstddef.h>
 
 #include "six/Types.h"
 
@@ -44,22 +49,19 @@ namespace six
  *
  *
  */
-class Region
+class Region final
 {
-    UByte* mBuffer;
-    ptrdiff_t startRow;
-    ptrdiff_t numRows;
-    ptrdiff_t startCol;
-    ptrdiff_t numCols;
+    UByte* mBuffer = nullptr;
+    ptrdiff_t startRow = 0;
+    ptrdiff_t numRows = -1;
+    ptrdiff_t startCol = 0;
+    ptrdiff_t numCols = -1;
 public:
     //!  Constructor.  Sets params for full window size, and buffer is nullptr
-    Region() :
-        mBuffer(nullptr), startRow(0), numRows(-1), startCol(0), numCols(-1)
-    {
-    }
+    Region() = default;
 
     //!  Destructor.  Does not deallocate a work buffer, that is up to the user
-    ~Region() {}
+    ~Region() = default;
 
     /*!
      *  Set the start row.  Valid values are between 0 and numRows-1
@@ -161,10 +163,22 @@ public:
      */
     void setBuffer(UByte* buffer)
     {
-        mBuffer = (UByte*) buffer;
+        assert(buffer != nullptr);
+        mBuffer = buffer;
+    }
+
+    /*!
+     *  Create a buffer of the given size, call setBuffer() and return the buffer.
+     */
+    std::unique_ptr<std::byte[]> setBuffer(size_t size)
+    {
+        assert(getBuffer() == nullptr);
+
+        std::unique_ptr<std::byte[]> retval(new std::byte[size]);
+        setBuffer(retval.get());
+        return retval;
     }
 };
 }
 
-#endif
 

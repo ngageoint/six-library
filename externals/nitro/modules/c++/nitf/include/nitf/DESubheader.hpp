@@ -66,6 +66,10 @@ public:
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;
+    std::string filePartType() const
+    {
+        return getFilePartType().toString();
+    }
 
     //! Get the typeID
     nitf::Field getTypeID() const;
@@ -76,9 +80,17 @@ public:
 
     //! Get the version
     nitf::Field getVersion() const;
+    std::string version() const
+    {
+        return getVersion().toString();
+    }
 
     //! Get the securityClass
     nitf::Field getSecurityClass() const;
+    std::string securityClass() const
+    {
+        return getSecurityClass().toString();
+    }
 
     //! Get the securityGroup
     nitf::FileSecurity getSecurityGroup() const;

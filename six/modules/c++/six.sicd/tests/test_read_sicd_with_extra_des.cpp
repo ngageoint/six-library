@@ -74,7 +74,7 @@ std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
             generateBandData(*data));
 
-    std::shared_ptr<six::Container> container(new six::Container(
+    auto container(std::make_shared<six::Container>(
             six::DataType::COMPLEX));
     container->addData(data.release());
 
@@ -91,7 +91,7 @@ std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
     static const char segmentData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sSource(segmentData, strlen(segmentData),
             0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
+    auto segmentWriter(std::make_shared<nitf::SegmentWriter>());
     segmentWriter->attachSource(sSource);
     writer.addAdditionalDES(segmentWriter);
 
@@ -137,7 +137,7 @@ std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
 
     nitf::SegmentMemorySource middleSource(segmentData, strlen(segmentData),
             0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> middleSegmentWriter(new nitf::SegmentWriter);
+    auto middleSegmentWriter(std::make_shared<nitf::SegmentWriter>());
     middleSegmentWriter->attachSource(middleSource);
     writer.addAdditionalDES(middleSegmentWriter);
 
@@ -155,7 +155,7 @@ std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
 
     nitf::SegmentMemorySource shortSource(segmentData, strlen(segmentData),
             0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> shortSegmentWriter(new nitf::SegmentWriter);
+    auto shortSegmentWriter(std::make_shared<nitf::SegmentWriter>());
     shortSegmentWriter->attachSource(shortSource);
     writer.addAdditionalDES(shortSegmentWriter);
 
@@ -188,7 +188,7 @@ int main(int argc, char** argv)
                 std::vector<std::string>(),
                 log);
 
-        std::shared_ptr<const six::Container> container = reader.getContainer();
+        auto container = reader.getContainer();
         // container retains ownership of this pointer
         const six::Data* readData = container->getData(0);
 

@@ -92,6 +92,10 @@ public:
 
     //! Get the classification
     nitf::Field getClassification() const;
+    std::string classification() const
+    {
+        return getClassification().toString();
+    }
 
     //! Get the securityGroup
     nitf::FileSecurity getSecurityGroup() const;

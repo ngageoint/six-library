@@ -113,7 +113,7 @@ void ByteProvider::populateInitArgs(
         size_t& numColsPerBlock)
 {
     // Sanity check the container
-    std::shared_ptr<const Container> container = headerCreator.getContainer();
+   auto container = headerCreator.getContainer();
 
     if (container->getNumData() == 0)
     {

@@ -111,6 +111,7 @@ bool runValidation(const std::unique_ptr<six::Data>& data,
     else
     {
         // Nothing to validate
+        log->info(Ctxt("Nothing done: not a SICD."));
         return true;
     }
 }
@@ -234,8 +235,7 @@ static int main_(int argc, char** argv)
             else
             {
                 reader.load(inputPathname, schemaPaths);
-                std::shared_ptr<six::Container> container =
-                        reader.getContainer();
+                auto container = reader.getContainer();
                 for (size_t jj = 0; jj < container->getNumData(); ++jj)
                 {
                     data.reset(container->getData(jj)->clone());

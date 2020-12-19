@@ -19,8 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_XML_PARSER_H__
-#define __SIX_XML_PARSER_H__
+#pragma once
 
 #include <string>
 
@@ -28,6 +27,7 @@
 #include <logging/Logger.h>
 #include <six/Types.h>
 #include <six/Init.h>
+#include <six/Utilities.h>
 
 namespace six
 {
@@ -114,8 +114,15 @@ protected:
             const std::string& uri, const DateTime& p, XMLElem parent = nullptr) const;
 
     // generic element creation methods, using default URI
-    XMLElem createString(const std::string& name,
-            const std::string& p = "", XMLElem parent = nullptr) const;
+    template<typename T>
+    XMLElem createString(const std::string& name, const T& t,
+            XMLElem parent = nullptr) const {
+        return createString_(name, t.toString(), parent);
+    }
+    XMLElem createString(const std::string& name, const char* p="",
+        XMLElem parent = nullptr) const {
+        return createString_(name, p, parent);
+    }
     XMLElem createInt(const std::string& name, int p = 0,
             XMLElem parent = nullptr) const;
     XMLElem createDouble(const std::string& name, double p = 0,
@@ -163,9 +170,12 @@ protected:
 
     void parseDateTime(XMLElem element, DateTime& value) const;
 
-    static
-    void setAttribute(XMLElem e, const std::string& name,
-                      const std::string& v, const std::string& uri = "");
+    template<typename T>
+    static void setAttribute(XMLElem e, const std::string& name,
+        const T& t, const std::string& uri = "")
+    {
+        setAttribute_(e, name, toString(t), uri);
+    }
 
     static XMLElem getOptional(XMLElem parent, const std::string& tag);
     static XMLElem getFirstAndOnly(XMLElem parent, const std::string& tag);
@@ -178,13 +188,29 @@ protected:
     static XMLElem require(XMLElem element, const std::string& name);
 
 private:
+    XMLElem createString_(const std::string& name,
+        const std::string& p, XMLElem parent) const;
+    static void setAttribute_(XMLElem e, const std::string& name,
+            const std::string& v, const std::string& uri);
+
     const std::string mDefaultURI;
     const bool mAddClassAttributes;
 
     logging::Logger* mLog;
     bool mOwnLog;
 };
+
+ template<> inline XMLParser::XMLElem XMLParser::createString(const std::string& name,
+						      const std::string& p, XMLElem parent) const
+  {
+    return createString_(name, p, parent);
+  }
+
+ template<> inline void XMLParser::setAttribute(XMLElem e, const std::string& name,
+     const std::string& p, const std::string& uri)
+ {
+     setAttribute_(e, name, p, uri);
+ }
 }
 
-#endif
 
