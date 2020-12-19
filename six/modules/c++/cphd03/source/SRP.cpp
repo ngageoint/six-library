@@ -34,7 +34,7 @@ SRP::SRP() :
 std::ostream& operator<< (std::ostream& os, const SRP& d)
 {
     os << "SRP::" << "\n"
-       << "  SRPType : " << d.srpType.toString() << "\n"
+       << "  SRPType : " << d.srpType << "\n"
        << "  NumSRPs : " << d.numSRPs  << "\n";
 
     for (size_t ii = 0; ii < d.srpPT.size(); ++ii)

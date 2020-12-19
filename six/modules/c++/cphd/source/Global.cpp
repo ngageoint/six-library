@@ -75,8 +75,8 @@ bool Global::operator==(const Global& other) const
 std::ostream& operator<< (std::ostream& os, const Global& d)
 {
     os << "Global::\n"
-       << "  domainType       : " << d.domainType.toString() << "\n"
-       << "  SGN              : " << d.sgn.toString() << "\n"
+       << "  domainType       : " << d.domainType << "\n"
+       << "  SGN              : " << d.sgn << "\n"
        << "  timeline         : " << d.timeline << "\n"
        << "  fxBand           : " << d.fxBand << "\n"
        << "  toaSwath         : " << d.toaSwath << "\n";

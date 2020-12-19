@@ -19,10 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SCENE_FRAME_TYPE_H__
-#define __SCENE_FRAME_TYPE_H__
+#pragma once
 
 #include <string>
+#include <ostream>
 
 namespace scene
 {
@@ -75,6 +75,11 @@ struct FrameType
     FrameTypesEnum mValue;
 
 };
+
+inline std::ostream& operator<<(std::ostream& os, const FrameType& e)
+{
+    os << e.toString();
+    return os;
+}
 }
 
-#endif

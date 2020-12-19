@@ -23,6 +23,7 @@
 
 #include <string>
 #include <map>
+#include <ostream>
 
 #include <import/except.h>
 #include <import/str.h>
@@ -141,6 +142,12 @@ namespace details
 
         int value = NOT_SET_VALUE;
     };
+    template<typename T>
+    inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e)
+    {
+        os << e.toString();
+        return os;
+    }
  
     #define SIX_Enum_map_entry_(n) { n, #n }
 
