@@ -170,11 +170,15 @@ protected:
 
     void parseDateTime(XMLElem element, DateTime& value) const;
 
-    template<typename T>
     static void setAttribute(XMLElem e, const std::string& name,
-        const T& t, const std::string& uri = "")
+        const std::string& s, const std::string& uri = "")
     {
-        setAttribute_(e, name, toString(t), uri);
+        setAttribute_(e, name,s, uri);
+    }
+    static void setAttribute(XMLElem e, const std::string& name,
+        size_t i, const std::string& uri = "")
+    {
+        setAttribute_(e, name, toString(i), uri);
     }
 
     static XMLElem getOptional(XMLElem parent, const std::string& tag);
@@ -205,12 +209,6 @@ private:
   {
     return createString_(name, p, parent);
   }
-
- template<> inline void XMLParser::setAttribute(XMLElem e, const std::string& name,
-     const std::string& p, const std::string& uri)
- {
-     setAttribute_(e, name, p, uri);
- }
 }
 
 
