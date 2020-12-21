@@ -425,8 +425,7 @@ XMLElem ComplexXMLParser04x::createRcvChannels(const RadarCollection* radar,
 
         if (cp->txRcvPolarization != DualPolarizationType::NOT_SET)
         {
-            createString("TxRcvPolarization", six::toString<
-                    DualPolarizationType>(cp->txRcvPolarization), cpXML);
+            createString("TxRcvPolarization", six::toString(cp->txRcvPolarization), cpXML);
         }
     }
 

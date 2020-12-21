@@ -40,7 +40,7 @@ TEST_CASE(ToType)
 TEST_CASE(SixToString)
 {
     six::DualPolarizationType pType("UNKNOWN");
-    std::string polarizationString = six::toString<six::DualPolarizationType>(pType);
+    std::string polarizationString = six::toString(pType);
     TEST_ASSERT_EQ("UNKNOWN", polarizationString);
 }
 

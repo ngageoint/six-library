@@ -213,7 +213,7 @@ XMLElem XMLParser::createBooleanType(const std::string& name,
     }
 
     XMLElem const elem =
-            newElement(name, uri, six::toString<BooleanType>(p), parent);
+            newElement(name, uri, six::toString(p), parent);
     if (mAddClassAttributes)
     {
         xml::lite::AttributeNode node;
@@ -257,7 +257,7 @@ XMLElem XMLParser::createDateTime(const std::string& name,
 XMLElem XMLParser::createDateTime(const std::string& name,
         const std::string& uri, const DateTime& p, XMLElem parent) const
 {
-    return createDateTime(name, uri, six::toString<DateTime>(p), parent);
+    return createDateTime(name, uri, six::toString(p), parent);
 }
 
 XMLElem XMLParser::createDateTime(const std::string& name, const DateTime& p,

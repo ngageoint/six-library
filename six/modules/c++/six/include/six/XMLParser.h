@@ -178,7 +178,7 @@ protected:
     static void setAttribute(XMLElem e, const std::string& name,
         size_t i, const std::string& uri = "")
     {
-        setAttribute_(e, name, toString(i), uri);
+        setAttribute_(e, name, std::to_string(i), uri);
     }
 
     static XMLElem getOptional(XMLElem parent, const std::string& tag);

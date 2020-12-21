@@ -384,7 +384,7 @@ XMLElem ComplexXMLParser10x::createRcvChannels(const RadarCollection* radar,
         //! required in 1.0
         createString(
             "TxRcvPolarization",
-            six::toString<DualPolarizationType>(cp->txRcvPolarization),
+            six::toString(cp->txRcvPolarization),
             cpXML);
 
         if (!Init::isUndefined(cp->rcvAPCIndex))

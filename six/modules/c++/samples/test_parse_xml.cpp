@@ -351,8 +351,7 @@ xml::lite::Element* createTimeSnapshot(const six::DateTime& dt)//, int seconds)
                            new xml::lite::Element(
                                                   "when",
                                                   KML_URI,
-                                                  six::toString<six::DateTime>(
-                                                                               dt)));
+                                                  six::toString(dt)));
     return timeSnapshot;
 }
 

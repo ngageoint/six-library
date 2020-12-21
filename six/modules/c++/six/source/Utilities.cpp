@@ -100,8 +100,7 @@ BooleanType six::toType<BooleanType>(const std::string& s)
         return BooleanType::NOT_SET;
 }
 
-template <>
-std::string six::toString<float>(const float& value)
+std::string six::toString(const float& value)
 {
     if (six::Init::isUndefined(value))
     {
@@ -124,8 +123,7 @@ std::string six::toString<float>(const float& value)
     return strValue;
 }
 
-template <>
-std::string six::toString<double>(const double& value)
+std::string six::toString(const double& value)
 {
     if (six::Init::isUndefined(value))
     {
@@ -148,13 +146,11 @@ std::string six::toString<double>(const double& value)
     return strValue;
 }
 
-template <>
-std::string six::toString<BooleanType>(const BooleanType& value)
+std::string six::toString(const BooleanType& value)
 {
     return str::toString<bool>(value == BooleanType::IS_TRUE);
 }
 
-template <>
 std::string six::toString(const six::Vector3& v)
 {
     std::ostringstream os;
@@ -162,7 +158,6 @@ std::string six::toString(const six::Vector3& v)
     return os.str();
 }
 
-template <>
 std::string six::toString(const six::PolyXYZ& p)
 {
     std::ostringstream os;
@@ -231,7 +226,6 @@ DateTime six::toType<DateTime>(const std::string& dateTime)
     return DateTime();
 }
 
-template <>
 std::string six::toString(const DateTime& dateTime)
 {
     char date[256];
@@ -241,7 +235,6 @@ std::string six::toString(const DateTime& dateTime)
     return strDate;
 }
 
-template <>
 std::string six::toString(const RadarModeType& type)
 {
     switch (type)
@@ -285,7 +278,6 @@ DataType six::toType<DataType>(const std::string& s)
 
     throw except::Exception(Ctxt("Unsupported conversion to DataType type '" + s + "'"));
 }
-template <>
 std::string six::toString(const DataType& type)
 {
     switch (type)
@@ -326,8 +318,6 @@ EarthModelType six::toType<EarthModelType>(const std::string& s)
         return EarthModelType::WGS84;
     return EarthModelType::NOT_SET;
 }
-
-template <>
 std::string six::toString(const EarthModelType& t)
 {
     switch (t)
@@ -407,8 +397,6 @@ DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
                      "'"));
     }
 }
-
-template <>
 std::string six::toString(const DualPolarizationType& t)
 {
     switch (t)
@@ -505,8 +493,6 @@ SideOfTrackType six::toType<SideOfTrackType>(const std::string& s)
     else
         throw except::Exception(Ctxt("Unsupported side of track '" + s + "'"));
 }
-
-template <>
 std::string six::toString(const SideOfTrackType& t)
 {
     switch (t)
@@ -558,8 +544,6 @@ FFTSign six::toType<FFTSign>(const std::string& s)
         throw except::Exception(Ctxt("Unsupported fft sign '" + s + "'"));
     }
 }
-
-template <>
 std::string six::toString(const FFTSign& value)
 {
     switch (value)
@@ -589,8 +573,6 @@ AppliedType six::toType<AppliedType>(const std::string& s)
     else
         throw except::Exception(Ctxt("Unsupported applied type '" + s + "'"));
 }
-
-template <>
 std::string six::toString(const AppliedType& value)
 {
     switch (value)
@@ -613,7 +595,6 @@ CollectType six::toType<CollectType>(const std::string& s)
     return CollectType::toType(s);
 }
 
-template <>
 std::string six::toString(const six::FrameType& value)
 {
     switch (value.mValue)
@@ -629,7 +610,6 @@ std::string six::toString(const six::FrameType& value)
         throw except::Exception(Ctxt("Unsupported frame type"));
     }
 }
-
 template <>
 six::FrameType six::toType<six::FrameType>(const std::string& s)
 {
@@ -645,7 +625,6 @@ six::FrameType six::toType<six::FrameType>(const std::string& s)
         throw except::Exception(Ctxt("Unsupported frame type '" + s + "'"));
 }
 
-template <>
 std::string six::toString(const six::LatLonCorners& corners)
 {
     // Print the 4 corners as a 5-point polygon (last point is the first point

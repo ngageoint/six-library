@@ -41,7 +41,7 @@ size_t getNumBytesPerSample(cphd::SampleType sampleType)
     }
 }
 
-template<> std::string toString(const cphd::CollectionInformation& ci)
+std::string toString(const cphd::CollectionInformation& ci)
 {
     std::ostringstream os;
 

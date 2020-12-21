@@ -151,7 +151,7 @@ XMLElem SICommonXMLParser01x::convertRadiometryToXML(
         createString(
             "SigmaZeroSFIncidenceMap",
             defaultURI,
-            six::toString<six::AppliedType>(r->sigmaZeroSFIncidenceMap),
+            six::toString(r->sigmaZeroSFIncidenceMap),
             rXML);
     }
 
@@ -165,7 +165,7 @@ XMLElem SICommonXMLParser01x::convertRadiometryToXML(
         createString(
             "GammaZeroSFIncidenceMap",
             defaultURI,
-            six::toString<six::AppliedType>(r->gammaZeroSFIncidenceMap),
+            six::toString(r->gammaZeroSFIncidenceMap),
             rXML);
     }
     return rXML;
