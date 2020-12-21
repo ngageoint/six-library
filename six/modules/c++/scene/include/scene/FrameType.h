@@ -56,18 +56,25 @@ struct FrameType
     {
         return (mValue == rhs);
     }
-
     bool operator!=(FrameTypesEnum rhs) const
     {
-        return (mValue != rhs);
+        return !(*this == rhs);
     }
 
     bool operator==(const FrameType& rhs) const
     {
         return (mValue == rhs.mValue);
     }
-
     bool operator!=(const FrameType& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
+    bool operator==(const std::string& rhs) const
+    {
+        return toString() == rhs;
+    }
+    bool operator!=(const std::string& rhs) const
     {
         return !(*this == rhs);
     }

@@ -22,6 +22,7 @@
 #include <string.h>
 #include <vector>
 #include <iostream>
+#include <string>
 
 #include <sys/Path.h>
 #include <import/cli.h>
@@ -88,8 +89,8 @@ int main(int argc, char** argv)
             const nitf::Off size = deReader.getSize();
 
             const auto typeID = subheader.typeID();
-            std::string outPathname = basename + "-" + typeID + 
-                                      str::toString(ii) + ".xml";
+            const std::string outPathname = basename + "-" + typeID + 
+                                      std::to_string(ii) + ".xml";
 
             // Read the DES
             xmlVec.resize(size);

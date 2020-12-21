@@ -24,8 +24,10 @@
 // Demonstrates that the raw bytes provided by this class result in equivalent
 // SICDs to the normal writes via NITFWriteControl
 
-#include <iostream>
 #include <stdlib.h>
+
+#include <iostream>
+#include <string>
 
 #include <sys/Bit.h>
 
@@ -100,7 +102,7 @@ private:
         if (mSetMaxProductSize)
         {
             fullPrefix += " (max product size " +
-                    str::toString(mMaxProductSize) + ")";
+                    std::to_string(mMaxProductSize) + ")";
         }
 
         if (!(*mCompareFiles)(fullPrefix, mTestPathname))

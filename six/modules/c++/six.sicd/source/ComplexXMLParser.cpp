@@ -20,6 +20,8 @@
  *
  */
 
+#include <string>
+
 #include <six/sicd/ComplexXMLParser.h>
 #include <six/sicd/ComplexDataBuilder.h>
 #include <six/Utilities.h>
@@ -378,6 +380,11 @@ XMLElem ComplexXMLParser::convertGridToXML(
     return gridXML;
 }
 
+static void set_attribute(xml::lite::Element& elem, const std::string& name, size_t value)
+{
+    elem.attribute(name) = std::to_string(value);
+}
+
 XMLElem ComplexXMLParser::convertTimelineToXML(
     const Timeline *timeline, XMLElem parent) const
 {
@@ -390,13 +397,13 @@ XMLElem ComplexXMLParser::convertTimelineToXML(
     {
         XMLElem ippXML = newElement("IPP", timelineXML);
         size_t setSize = timeline->interPulsePeriod->sets.size();
-        ippXML->attribute("size") = str::toString<size_t>(setSize);
+        set_attribute(*ippXML, "size", setSize);
 
         for (size_t i = 0; i < setSize; ++i)
         {
             const TimelineSet& timelineSet = timeline->interPulsePeriod->sets[i];
             XMLElem setXML = newElement("Set", ippXML);
-            setXML->attribute("index") = str::toString<size_t>(i + 1);
+            set_attribute(*setXML, "index", i + 1);
 
             createDouble("TStart", timelineSet.tStart, setXML);
             createDouble("TEnd", timelineSet.tEnd, setXML);
@@ -941,7 +948,7 @@ void ComplexXMLParser::parseImageDataFromXML(
                 {
                     log()->warn(Ctxt(
                             "Unable to parse ampTable value - invalid index: " +
-                            str::toString(index)));
+                            std::to_string(index)));
                 }
                 else
                 {

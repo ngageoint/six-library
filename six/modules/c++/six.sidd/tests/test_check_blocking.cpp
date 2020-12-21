@@ -60,7 +60,7 @@ std::string computeProductSize(const std::string& blockSizeStr,
             numBytesPerPixel;
     const size_t numBlocksRequired = std::ceil(
             static_cast<double>(totalImageSize) / totalBlockSize);
-    return str::toString(numBlocksRequired * totalBlockSize);
+    return std::to_string(numBlocksRequired * totalBlockSize);
 }
 
 void writeSingleImage(const six::Data& data, const std::string& pathname,

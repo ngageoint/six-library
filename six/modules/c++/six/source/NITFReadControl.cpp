@@ -22,6 +22,7 @@
 
 #include <sstream>
 #include <stdexcept>
+#include <string>
 
 #include <six/NITFReadControl.h>
 #include <six/XMLControlFactory.h>
@@ -326,7 +327,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         {
             throw except::Exception(Ctxt(
                     "SICD file must have exactly 1 SICD DES but got " +
-                    str::toString(mContainer->getNumData())));
+                    std::to_string(mContainer->getNumData())));
         }
 
         mInfos.push_back(std::unique_ptr<NITFImageInfo>(new NITFImageInfo(mContainer->getData(0))));
@@ -370,7 +371,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         if (imageAndSegment.image >= mInfos.size())
         {
             throw except::Exception(Ctxt(
-                    "Image " + str::toString(imageAndSegment.image) +
+                    "Image " + std::to_string(imageAndSegment.image) +
                     " is out of bounds"));
         }
 

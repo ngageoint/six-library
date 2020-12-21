@@ -26,6 +26,7 @@
 #include <memory>
 #include <iostream>
 #include <iomanip>
+#include <string>
 
 #include <import/cli.h>
 #include <sys/Path.h>
@@ -79,7 +80,7 @@ void populateScalarMeshVectors(
 
             for (size_t ii = 0; ii < numScalarsPerCoord; ++ii)
             {
-                const std::string key = str::toString(ii);
+                const auto key = std::to_string(ii);
                 scalars[key].push_back(genRand());
             }
         }

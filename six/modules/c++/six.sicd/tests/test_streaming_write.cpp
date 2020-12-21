@@ -25,6 +25,7 @@
 // writes via NITFWriteControl
 
 #include <iostream>
+#include <string>
 
 #include "TestUtilities.h"
 
@@ -268,7 +269,7 @@ private:
         if (mSetMaxProductSize)
         {
             fullPrefix += " (max product size " +
-                    str::toString(mMaxProductSize) + ")";
+                    std::to_string(mMaxProductSize) + ")";
         }
 
         if (!(*mCompareFiles)(fullPrefix, mTestPathname))

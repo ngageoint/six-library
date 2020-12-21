@@ -20,8 +20,10 @@
  *
  */
 
-#include <sstream>
 #include <string.h>
+
+#include <sstream>
+#include <string>
 
 #include <six/Init.h>
 #include <sys/Bit.h>
@@ -336,9 +338,9 @@ VBM::VBM(size_t numChannels,
     if (numChannels != data.size())
     {
         throw except::Exception(Ctxt(
-                "VBM data contains " + str::toString<size_t>(numChannels) +
+                "VBM data contains " + std::to_string(numChannels) +
                 " channels, but data has information for " +
-                str::toString<size_t>(data.size()) + " channels."));
+                std::to_string(data.size()) + " channels."));
     }
     setupInitialData(numChannels, numVectors);
 
@@ -362,12 +364,12 @@ void VBM::verifyChannelVector(size_t channel, size_t vector) const
     if (channel >= mData.size())
     {
         throw except::Exception(Ctxt(
-                "Invalid channel number: " + str::toString<size_t>(channel)));
+                "Invalid channel number: " + std::to_string(channel)));
     }
     if (vector >= mData[channel].size())
     {
         throw except::Exception(Ctxt(
-                "Invalid vector number: " + str::toString<size_t>(vector)));
+                "Invalid vector number: " + std::to_string(vector)));
     }
 }
 

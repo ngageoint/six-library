@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <string>
+
 #include <six/convert/ConvertingReadControl.h>
 #include <types/RowCol.h>
 
@@ -98,13 +100,13 @@ UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
             static_cast<size_t>(region.getStartRow()) > data->getNumRows())
     {
         throw except::Exception(Ctxt("Too many rows requested [" +
-                str::toString(region.getNumRows()) + "]"));
+                std::to_string(region.getNumRows()) + "]"));
     }
     if (extent.col > data->getNumCols() ||
             static_cast<size_t>(region.getStartCol()) > data->getNumCols())
     {
         throw except::Exception(Ctxt("Too many cols requested [" +
-                str::toString(region.getNumCols()) + "]"));
+                std::to_string(region.getNumCols()) + "]"));
     }
 
     UByte* buffer = region.getBuffer();

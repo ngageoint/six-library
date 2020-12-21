@@ -20,6 +20,8 @@
  *
  */
 
+#include <string>
+
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
 #include <six/ByteProvider.h>
@@ -49,7 +51,7 @@ void ByteProvider::populateOptions(
     {
         throw except::Exception(Ctxt(
                 "Expected data of size 1 in container but got " +
-                str::toString(container->getNumData())));
+                std::to_string(container->getNumData())));
     }
 
     const six::Data* const data = container->getData(0);

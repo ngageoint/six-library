@@ -23,6 +23,7 @@
 #include <limits>
 #include <sstream>
 #include <thread>
+#include <string>
 
 #include <sys/Conf.h>
 #include <sys/Bit.h>
@@ -34,6 +35,9 @@
 #include <six/Init.h>
 #include <cphd/ByteSwap.h>
 #include <cphd/Wideband.h>
+
+#undef min
+#undef max
 
 namespace
 {
@@ -165,7 +169,7 @@ void promote(const void* input,
         break;
     default:
         throw except::Exception(
-                Ctxt("Unexpected element size " + str::toString(elementSize)));
+                Ctxt("Unexpected element size " + std::to_string(elementSize)));
     }
 }
 template <typename InT>
@@ -229,7 +233,7 @@ void scale(const void* input,
         break;
     default:
         throw except::Exception(
-                Ctxt("Unexpected element size " + str::toString(elementSize)));
+                Ctxt("Unexpected element size " + std::to_string(elementSize)));
     }
 }
 }

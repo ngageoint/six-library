@@ -21,6 +21,7 @@
  */
 
 #include <vector>
+#include <string>
 
 #include <import/six.h>
 #include <import/six/sidd.h>
@@ -393,7 +394,7 @@ xml::lite::Element* createLineStyle(std::string styleID, std::string color,
                                                               KML_URI);
     lineStyleXML->addChild(new xml::lite::Element("color", KML_URI, color));
     lineStyleXML->addChild(new xml::lite::Element("width", KML_URI,
-                                                  str::toString<int>(width)));
+                                                  std::to_string(width)));
 
     styleXML->addChild(lineStyleXML);
     return styleXML;

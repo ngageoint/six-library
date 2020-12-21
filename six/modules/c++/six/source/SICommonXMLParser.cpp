@@ -20,6 +20,7 @@
  *
  */
 #include <set>
+#include <string>
 
 #include <str/Convert.h>
 #include <six/Utilities.h>
@@ -175,7 +176,7 @@ void SICommonXMLParser::parsePoly(XMLElem polyXML,
         if (orderIdx > polyXYZ.order())
         {
             throw except::Exception(Ctxt(
-                    "Order " + str::toString(orderIdx) + " is out of bounds"));
+                    "Order " + std::to_string(orderIdx) + " is out of bounds"));
         }
         parseDouble(coeffsXML[ii], polyXYZ[orderIdx][xyzIdx]);
     }

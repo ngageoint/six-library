@@ -1031,7 +1031,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].pathGain, 5.0);
 
     const cphd::ErrorParameters& errorParams = *(metadata->errorParameters);
-    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.frame.toString(), "ECF");
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.frame, "ECF");
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p1, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p2, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.corrCoefs->p1p2, 0.8);

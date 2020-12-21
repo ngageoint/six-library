@@ -20,6 +20,8 @@
  *
  */
 
+#include <string>
+
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/Utilities.h>
@@ -209,7 +211,7 @@ XMLElem CPHDXMLControl::toXML(const Global& global, XMLElem parent)
 
 static void set_index_attribute(xml::lite::Element& elem, size_t value)
 {
-    elem.attribute("index") = str::toString(value);
+    elem.attribute("index") = std::to_string(value);
 }
 
 XMLElem CPHDXMLControl::toXML(const Channel& channel, XMLElem parent)
@@ -282,7 +284,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
         for (size_t ii = 0; ii < srp.srpPVTPoly.size(); ++ii)
         {
             XMLElem pvtpolyXML = newElement("PVTPOLY", srpXML);
-            pvtpolyXML->attribute("index") = str::toString<int>(ii + 1);
+            set_index_attribute(*pvtpolyXML, ii + 1);
             mCommon.createPolyXYZ("SRPPVTPoly", srp.srpPVTPoly[ii], pvtpolyXML);
         }
         break;
@@ -296,7 +298,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
         for (size_t ii = 0; ii < srp.srpPVVPoly.size(); ++ii)
         {
             XMLElem pvvpolyXML = newElement("PVVPOLY", srpXML);
-            pvvpolyXML->attribute("index") = str::toString<int>(ii + 1);
+            set_index_attribute(*pvvpolyXML, ii + 1);
             mCommon.createPolyXYZ("SRPPVVPoly", srp.srpPVVPoly[ii], pvvpolyXML);
         }
         break;

@@ -20,6 +20,8 @@
  *
  */
 
+#include <string>
+
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
@@ -202,7 +204,7 @@ std::byte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     if (mReader.getImageCount() <= imIndex)
     {
         throw except::IndexOutOfRangeException(Ctxt(
-                "Invalid index: " + str::toString(imIndex)));
+                "Invalid index: " + std::to_string(imIndex)));
     }
 
     tiff::ImageReader *imReader = mReader[imIndex];
@@ -229,13 +231,13 @@ std::byte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
     {
         throw except::Exception(Ctxt("Too many rows requested [" +
-                str::toString(numRowsReq) + "]"));
+                std::to_string(numRowsReq) + "]"));
     }
 
     if (extentCols > numColsTotal || startCol > numColsTotal)
     {
         throw except::Exception(Ctxt("Too many cols requested [" +
-                str::toString(numColsReq) + "]"));
+                std::to_string(numColsReq) + "]"));
     }
 
     std::byte* buffer = region.getBuffer();

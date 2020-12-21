@@ -20,10 +20,12 @@
  *
  */
 
+#include <stddef.h>
+
 #include <ostream>
 #include <vector>
-#include <stddef.h>
 #include <typeinfo>
+#include <string>
 
 #include <six/Init.h>
 #include <sys/Conf.h>
@@ -395,12 +397,12 @@ void PVPBlock::verifyChannelVector(size_t channel, size_t vector) const
     if (channel >= mData.size())
     {
         throw except::Exception(Ctxt(
-                "Invalid channel number: " + str::toString<size_t>(channel)));
+                "Invalid channel number: " + std::to_string(channel)));
     }
     if (vector >= mData[channel].size())
     {
         throw except::Exception(Ctxt(
-                "Invalid vector number: " + str::toString<size_t>(vector)));
+                "Invalid vector number: " + std::to_string(vector)));
     }
 }
 
