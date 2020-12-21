@@ -25,13 +25,15 @@
 # In general, if functionality in CPHD is borrowed from six.sicd,
 # refer to six.sicd's test script for more verification
 
+import sys
+
 from pysix.cphd import CPHDXMLControl
 
 from util import get_test_metadata
 
 if __name__ == '__main__':
     xml_parser = CPHDXMLControl()
-    metadata = get_test_metadata(has_support=True, is_compressed=True)
+    metadata = get_test_metadata(has_support_array=True, is_compressed=True)
 
     # For an 'Invalid XML' error below, you can use CPHDXMLControl.toXMLString(cphd_metadata)
     # to write the invalid XML to a string and verify that against the CPHD schemas
@@ -47,3 +49,4 @@ if __name__ == '__main__':
             print('Test failed: XML strings differ')
     except Exception as e:
         print('Test failed with exception:', e)
+        sys.exit(1)

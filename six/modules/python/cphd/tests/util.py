@@ -86,7 +86,7 @@ IMAGE_AREA.polygon.append(Vector2([0.4, 0.2]))
 IMAGE_AREA.polygon.append(Vector2([0.5, 0.9]))
 
 
-def get_test_metadata(has_support, is_compressed):
+def get_test_metadata(has_support_array, is_compressed):
     # Returns a cphd.Metadata object populated with dummy values
 
     metadata = cphd.Metadata()
@@ -229,7 +229,7 @@ def get_test_metadata(has_support, is_compressed):
         },
     ]
 
-    if has_support:
+    if has_support_array:
         # Note that ordering of support arrays is not neccessarily defined
         # when reading in metadata from an XML string. If there are multiple
         # support arrays, they may not be in the same order, which will make

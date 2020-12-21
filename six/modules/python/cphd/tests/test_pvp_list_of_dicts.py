@@ -25,6 +25,8 @@
 # In general, if functionality in CPHD is borrowed from six.sicd,
 # refer to six.sicd's test script for more verification
 
+import sys
+
 import numpy as np
 
 from pysix.cphd import PVPBlock
@@ -34,13 +36,13 @@ from util import get_test_metadata, get_test_pvp_data
 
 if __name__ == '__main__':
 
-    metadata = get_test_metadata(has_support=True, is_compressed=True)
+    metadata = get_test_metadata(has_support_array=True, is_compressed=True)
     pvp_data = get_test_pvp_data(metadata)  # list of dicts
 
     if len(pvp_data) != metadata.getNumChannels():
         print('Test failed: expected {0} channels but received {1} from PVPBlock.fromListOfDicts()'
               .format(metadata.getNumChannels(), len(pvp_data)))
-        exit(1)
+        sys.exit(1)
 
     pvp_block = PVPBlock.fromListOfDicts(pvp_data, metadata)
     pvp_data_from_block = pvp_block.toListOfDicts(metadata)  # list of dicts
@@ -48,16 +50,16 @@ if __name__ == '__main__':
     if len(pvp_data_from_block) != metadata.getNumChannels():
         print('Test failed: expected {0} channels but received {1} from PVPBlock.toListOfDicts()'
               .format(metadata.getNumChannels(), len(pvp_data_from_block)))
-        exit(1)
+        sys.exit(1)
 
     for channel in range(metadata.getNumChannels()):
         if pvp_data[channel].keys() != pvp_data_from_block[channel].keys():
             print('Test failed: list of PVP parameters differs for channel {0}'.format(channel))
-            exit(1)
+            sys.exit(1)
         for param in pvp_data[channel]:
             if not np.array_equal(pvp_data[channel][param], pvp_data_from_block[channel][param]):
                 print('Test failed: PVP data differs for parameter {0}, channel {1}'
                       .format(param, channel))
-                exit(1)
+                sys.exit(1)
 
     print('Test passed')

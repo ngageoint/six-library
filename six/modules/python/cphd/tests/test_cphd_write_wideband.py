@@ -26,6 +26,7 @@
 # refer to six.sicd's test script for more verification
 
 import os
+import sys
 
 import numpy as np
 
@@ -40,7 +41,7 @@ if __name__ == '__main__':
     num_threads = 16
     scratch_space = 128
 
-    metadata = get_test_metadata(has_support=False, is_compressed=False)
+    metadata = get_test_metadata(has_support_array=False, is_compressed=False)
     widebands = get_test_widebands(metadata)
     pvp_block = PVPBlock.fromListOfDicts(get_test_pvp_data(metadata), metadata)
 
@@ -59,14 +60,14 @@ if __name__ == '__main__':
     # Check that we correctly wrote the wideband data
     reader = CPHDReader(cphd_filepath, scratch_space)
     for channel in range(metadata.getNumChannels()):
-        if not (np.array_equal(reader.getWideband().read(channel=channel), widebands[channel])):
+        if not np.array_equal(reader.getWideband().read(channel=channel), widebands[channel]):
             print('Test failed, original wideband and wideband from file differ in channel {0}'
                   .format(channel))
-            exit(1)
+            sys.exit(1)
         if not np.array_equal(reader.getPHD(channel), widebands[channel]):
             print('Test failed, original wideband and PHD from file differ in channel {0}'
                   .format(channel))
-            exit(1)
+            sys.exit(1)
 
     os.remove(cphd_filepath)
     print('Test passed')
