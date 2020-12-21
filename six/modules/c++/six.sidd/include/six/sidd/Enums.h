@@ -88,9 +88,9 @@ struct DownsamplingMethod : public six::details::Enum<DownsamplingMethod>
         NOT_SET = six::NOT_SET_VALUE
     };
 
-    static const std::map<int, std::string>& int_to_string_()
+    static const map_t& string_to_int_()
     {
-        static const std::map<int, std::string> retval
+        static const map_t retval
         {
             SIX_Enum_map_entry_(DECIMATE),
             SIX_Enum_map_entry_(MAX_PIXEL),

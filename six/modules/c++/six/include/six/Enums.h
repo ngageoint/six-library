@@ -41,25 +41,28 @@ namespace details
     template<typename T>
     class Enum
     {
-        static std::map<std::string, int> to_string_to_int(const std::map<int, std::string>& int_to_string)
+    protected:
+        using map_t = std::map<std::string, int>;
+    private:
+        using reverse_map_t = std::map<int, std::string>;
+        static reverse_map_t to_int_to_string(const map_t& string_to_int)
         {
-            std::map<std::string, int> retval;
-            for (const auto& p : int_to_string)
+            reverse_map_t retval;
+            for (const auto& p : string_to_int)
             {
                 retval[p.second] = p.first;
             }
             return retval;
         }
-        static const std::map<int, std::string>& int_to_string()
+        static const map_t& string_to_int()
         {
-            return T::int_to_string_();
+            return T::string_to_int_();
         }
-        static const std::map<std::string, int>& string_to_int()
+        static const reverse_map_t& int_to_string()
         {
-            static const std::map<std::string, int> retval = to_string_to_int(int_to_string());
+            static reverse_map_t retval = to_int_to_string(string_to_int());
             return retval;
         }
-
     protected:
         Enum() = default;
 
@@ -152,7 +155,7 @@ namespace details
     }
 
 
-    #define SIX_Enum_map_entry_(n) { n, #n }
+    #define SIX_Enum_map_entry_(n) { #n, n }
 
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
@@ -160,25 +163,28 @@ namespace details
             name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
             name& operator=(const int& o) { value = o; return *this; } enum {
     #define SIX_Enum_struct_2_ NOT_SET = six::NOT_SET_VALUE }; \
-            static const std::map<int, std::string>& int_to_string_() { \
-	      static const std::map<int, std::string> retval{ 
+            static const map_t& string_to_int_() { \
+	      static const map_t retval{ 
     #define SIX_Enum_struct_3_ SIX_Enum_map_entry_(NOT_SET) }; return retval; } }
 
     #define SIX_Enum_DECLARE_ENUM_1(name, n, v) SIX_Enum_struct_1_(name) \
         n = v, SIX_Enum_struct_2_ \
-        { n, #n }, SIX_Enum_struct_3_
+        SIX_Enum_map_entry_(n), SIX_Enum_struct_3_
     #define SIX_Enum_DECLARE_ENUM_2(name, n1, v1, n2, v2) SIX_Enum_struct_1_(name) \
         n1 = v1, n2 = v2, SIX_Enum_struct_2_ \
-        { n1, #n1 }, {n2, #n2}, SIX_Enum_struct_3_
+        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_struct_3_
     #define SIX_Enum_DECLARE_ENUM_3(name, n1, v1, n2, v2, n3, v3) SIX_Enum_struct_1_(name) \
         n1 = v1, n2 = v2, n3 = v3, SIX_Enum_struct_2_ \
-        { n1, #n1 }, {n2, #n2}, {n3, #n3}, SIX_Enum_struct_3_
+        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_map_entry_(n3), \
+        SIX_Enum_struct_3_
     #define SIX_Enum_DECLARE_ENUM_4(name, n1, v1, n2, v2, n3, v3, n4, v4) SIX_Enum_struct_1_(name) \
         n1 = v1, n2 = v2, n3 = v3, n4 = v4, SIX_Enum_struct_2_ \
-        { n1, #n1 }, {n2, #n2}, {n3, #n3}, {n4, #n4}, SIX_Enum_struct_3_
+        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_map_entry_(n3), SIX_Enum_map_entry_(n4), \
+        SIX_Enum_struct_3_
     #define SIX_Enum_DECLARE_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) SIX_Enum_struct_1_(name) \
         n1 = v1, n2 = v2, n3 = v3, n4 = v4, n5 = v5, SIX_Enum_struct_2_ \
-        { n1, #n1 }, {n2, #n2}, {n3, #n3}, {n4, #n4}, {n5, #n5}, SIX_Enum_struct_3_
+        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_map_entry_(n3), SIX_Enum_map_entry_(n4), SIX_Enum_map_entry_(n5), \
+        SIX_Enum_struct_3_
 } // namespace details
 
 /*!
@@ -333,9 +339,9 @@ struct DualPolarizationType final : public details::Enum<DualPolarizationType>
         NOT_SET = six::NOT_SET_VALUE
     };
 
-    static const std::map<int, std::string>& int_to_string_()
+    static const map_t& string_to_int_()
     {
-        static const std::map<int, std::string> retval
+        static const map_t retval
         {
             SIX_Enum_map_entry_(OTHER),
             SIX_Enum_map_entry_(V_V),
@@ -452,9 +458,9 @@ struct PixelType final : public details::Enum<PixelType>
         NOT_SET = six::NOT_SET_VALUE
     };
 
-    static const std::map<int, std::string>& int_to_string_()
+    static const map_t& string_to_int_()
     {
-        static const std::map<int, std::string> retval
+        static const map_t retval
         {
             SIX_Enum_map_entry_(RE32F_IM32F),
             SIX_Enum_map_entry_(RE16I_IM16I),
@@ -495,9 +501,9 @@ struct PolarizationSequenceType final : public details::Enum<PolarizationSequenc
         NOT_SET = six::NOT_SET_VALUE
     };
 
-    static const std::map<int, std::string>& int_to_string_()
+    static const map_t& string_to_int_()
     {
-        static const std::map<int, std::string> retval
+        static const map_t retval
         {
             SIX_Enum_map_entry_(OTHER),
             SIX_Enum_map_entry_(V),

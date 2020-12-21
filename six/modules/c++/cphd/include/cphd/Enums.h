@@ -66,12 +66,12 @@ struct PhaseSGN final : public six::details::Enum<PhaseSGN>
         NOT_SET = six::NOT_SET_VALUE
     };
 
-    static const std::map<int, std::string>& int_to_string_()
+    static const map_t& string_to_int_()
     {
-        static const std::map<int, std::string> retval
+        static const map_t retval
         {
-            {MINUS_1, "-1"},
-            {PLUS_1, "+1"},
+            {"-1", MINUS_1},
+            {"+1", PLUS_1},
             SIX_Enum_map_entry_(NOT_SET)
         };
         return retval;
@@ -148,9 +148,9 @@ struct PolarizationType final : public six::details::Enum<PolarizationType>
         NOT_SET = six::NOT_SET_VALUE
     };
 
-    static const std::map<int, std::string>& int_to_string_()
+    static const map_t& string_to_int_()
     {
-        static const std::map<int, std::string> retval
+        static const map_t retval
         {
             SIX_Enum_map_entry_(X),
             SIX_Enum_map_entry_(Y),
