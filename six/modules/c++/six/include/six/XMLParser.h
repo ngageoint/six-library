@@ -119,6 +119,11 @@ protected:
             XMLElem parent = nullptr) const {
         return createString_(name, t.toString(), parent);
     }
+    template<typename T>
+    XMLElem createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
+        XMLElem parent = nullptr) const {
+        return createString_(name, toString(t), parent);
+    }
     XMLElem createString(const std::string& name, const char* p="",
         XMLElem parent = nullptr) const {
         return createString_(name, p, parent);

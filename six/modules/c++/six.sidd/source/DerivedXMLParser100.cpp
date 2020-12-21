@@ -653,7 +653,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             // optional
             if (!Init::isUndefined(p->processed))
             {
-                createString("Processed", six::toString(p->processed), polElem);
+                createSixString("Processed", p->processed, polElem);
             }
         }
 

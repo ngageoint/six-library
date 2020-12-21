@@ -1832,7 +1832,7 @@ XMLElem ComplexXMLParser::createSideOfTrackType(const std::string& name,
                                                 const SideOfTrackType& value,
                                                 XMLElem parent) const
 {
-    return createString(name, six::toString(value), parent);
+    return createSixString(name, value, parent);
 }
 
 void ComplexXMLParser::parseSideOfTrackType(XMLElem element,

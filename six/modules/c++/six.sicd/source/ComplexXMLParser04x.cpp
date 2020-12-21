@@ -151,8 +151,8 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
 
     if (imageFormation->txRcvPolarizationProc != DualPolarizationType::NOT_SET)
     {
-        createString("TxRcvPolarizationProc",
-                     six::toString(imageFormation->txRcvPolarizationProc),
+        createSixString("TxRcvPolarizationProc",
+                     imageFormation->txRcvPolarizationProc,
                      imageFormationXML);
     }
 
@@ -425,7 +425,7 @@ XMLElem ComplexXMLParser04x::createRcvChannels(const RadarCollection* radar,
 
         if (cp->txRcvPolarization != DualPolarizationType::NOT_SET)
         {
-            createString("TxRcvPolarization", six::toString(cp->txRcvPolarization), cpXML);
+            createSixString("TxRcvPolarization", cp->txRcvPolarization, cpXML);
         }
     }
 

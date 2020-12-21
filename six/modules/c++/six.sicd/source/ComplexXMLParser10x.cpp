@@ -104,8 +104,8 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
     convertRcvChanProcToXML("1.0", imageFormation->rcvChannelProcessed.get(),
                             imageFormationXML);
 
-    createString("TxRcvPolarizationProc",
-                 six::toString(imageFormation->txRcvPolarizationProc),
+    createSixString("TxRcvPolarizationProc",
+                 imageFormation->txRcvPolarizationProc,
                  imageFormationXML);
 
     createDouble("TStartProc", imageFormation->tStartProc, imageFormationXML);
@@ -382,9 +382,9 @@ XMLElem ComplexXMLParser10x::createRcvChannels(const RadarCollection* radar,
         setAttribute(cpXML, "index", ii + 1);
 
         //! required in 1.0
-        createString(
+        createSixString(
             "TxRcvPolarization",
-            six::toString(cp->txRcvPolarization),
+            cp->txRcvPolarization,
             cpXML);
 
         if (!Init::isUndefined(cp->rcvAPCIndex))

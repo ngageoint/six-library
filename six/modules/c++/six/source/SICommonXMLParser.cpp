@@ -305,7 +305,7 @@ XMLElem SICommonXMLParser::createEarthModelType(const std::string& name,
     const EarthModelType& value,
     XMLElem parent) const
 {
-    return createString(name, six::toString(value), parent);
+    return createSixString(name, value, parent);
 }
 void SICommonXMLParser::parseEarthModelType(XMLElem element,
     EarthModelType& value) const
