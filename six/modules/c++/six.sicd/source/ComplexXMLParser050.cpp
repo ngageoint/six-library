@@ -86,10 +86,10 @@ XMLElem SICommonXMLParser050::convertRadiometryToXML(
 
     if (r->sigmaZeroSFIncidenceMap != six::AppliedType::NOT_SET)
     {
-        createString(
+        createSixString(
             "SigmaZeroSFIncidenceMap",
             defaultURI,
-            six::toString(r->sigmaZeroSFIncidenceMap),
+            r->sigmaZeroSFIncidenceMap,
             rXML);
     }
 
@@ -100,10 +100,10 @@ XMLElem SICommonXMLParser050::convertRadiometryToXML(
 
     if (r->gammaZeroSFIncidenceMap != six::AppliedType::NOT_SET)
     {
-        createString(
+        createSixString(
             "GammaZeroSFIncidenceMap",
             defaultURI,
-            six::toString(r->gammaZeroSFIncidenceMap),
+            r->gammaZeroSFIncidenceMap,
             rXML);
     }
     return rXML;

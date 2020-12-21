@@ -73,6 +73,13 @@ protected:
     XMLElem createString(const std::string& name,
             const std::string& uri, const std::string& p = "",
             XMLElem parent = nullptr) const;
+    template<typename T>
+    XMLElem createSixString(const std::string& name,
+        const std::string& uri, const T& t,
+        XMLElem parent = nullptr) const
+    {
+        return createString(name, uri, toString(t), parent);
+    }
 
     template <typename T>
     XMLElem createStringFromEnum(const std::string& name,

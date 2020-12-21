@@ -587,9 +587,9 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             collection->information.sensorName,
             informationElem);
         XMLElem radarModeElem = newElement("RadarMode", informationElem);
-        createString("ModeType",
+        createSixString("ModeType",
             common().getSICommonURI(),
-            six::toString(collection->information.radarMode),
+            collection->information.radarMode,
             radarModeElem);
         // optional
         if (collection->information.radarModeID

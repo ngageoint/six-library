@@ -796,8 +796,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                                               getSICommonURI(),
                                               componentsXML);
 
-            createString("Frame", getSICommonURI(),
-                         six::toString(posVelError->frame), posVelErrXML);
+            createSixString("Frame", getSICommonURI(), posVelError->frame, posVelErrXML);
             createDouble("P1", getSICommonURI(), posVelError->p1, posVelErrXML);
             createDouble("P2", getSICommonURI(), posVelError->p2, posVelErrXML);
             createDouble("P3", getSICommonURI(), posVelError->p3, posVelErrXML);
@@ -1254,8 +1253,7 @@ XMLElem SICommonXMLParser::convertCollectionInformationToXML(
     }
 
     XMLElem radarModeXML = newElement("RadarMode", si, collInfoXML);
-    createString("ModeType", si, six::toString(collInfo->radarMode),
-                 radarModeXML);
+    createSixString("ModeType", si, collInfo->radarMode, radarModeXML);
     if (!collInfo->radarModeID.empty())
     {
         createString("ModeID", si, collInfo->radarModeID, radarModeXML);
