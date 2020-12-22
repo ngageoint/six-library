@@ -153,7 +153,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
         messageBuilder.str("");
         messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.RcvDemodType: "
-            << rcvDemodType.toString() << std::endl
+            << rcvDemodType << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.RcvFMRate: "
             << rcvFMRate << std::endl;
         log.error(messageBuilder.str());

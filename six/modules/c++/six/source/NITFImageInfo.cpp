@@ -23,6 +23,7 @@
 #include <memory>
 #include <sstream>
 #include <limits>
+#include <string>
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
@@ -196,7 +197,7 @@ std::string NITFImageInfo::generateFieldKey(const std::string& field,
     std::ostringstream s;
     s << prefix << field;
     if (index >= 0)
-        s << "[" << str::toString(index) << "]";
+        s << "[" << std::to_string(index) << "]";
     return s.str();
 }
 }

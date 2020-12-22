@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <algorithm>
+#include <string>
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
@@ -226,7 +227,7 @@ void cropSICD(six::NITFReadControl& reader,
     if (corners.size() != 4)
     {
         throw except::Exception(Ctxt("Expected four corners but got " +
-                str::toString(corners.size())));
+                std::to_string(corners.size())));
     }
 
     // Make sure it's a SICD

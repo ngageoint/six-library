@@ -42,8 +42,7 @@ void testDataType(const std::string& pathname, six::DataType expectedDataType)
     {
         std::ostringstream ostr;
         ostr << "Expected " << pathname << " to be "
-             << expectedDataType.toString() << " but got "
-             << dataType.toString();
+             << expectedDataType << " but got " << dataType;
 
         throw except::Exception(Ctxt(ostr.str()));
     }
@@ -75,11 +74,6 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
         return 1;
     }
     catch (...)

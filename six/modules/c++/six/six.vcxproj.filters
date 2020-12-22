@@ -138,6 +138,9 @@
     <ClInclude Include="include\six\XMLParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\six\Enum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

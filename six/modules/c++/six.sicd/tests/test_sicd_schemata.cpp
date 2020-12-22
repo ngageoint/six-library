@@ -162,7 +162,7 @@ std::string  initImageDataXML(unsigned int version)
         for (unsigned int i=0; i<256; ++i)
         {
             sprintf(amplText, "<Amplitude index=\"%d\">%s</Amplitude>",
-                i, six::toString((double)i).c_str());
+                i, std::to_string((double)i).c_str());
             xmlText += std::string(amplText);
         }
         xmlText +=
@@ -205,7 +205,7 @@ std::string  initImageDataXML(unsigned int version)
         for (unsigned int i=0; i<256; ++i)
         {
             sprintf(amplText, "<Amplitude class=\"xs:double\" index=\"%d\">%s</Amplitude>",
-                i, six::toString((double)i).c_str());
+                i, std::to_string((double)i).c_str());
             xmlText += std::string(amplText);
         }
         xmlText +=
@@ -2593,14 +2593,9 @@ int main(int argc, char** argv)
         MYTEST_CHECK_PARAMS( RoundTrip_XML_0_4_0_RMA_RMAT );
         return 0;
     }
-    catch (except::Exception& ex)
+    catch (const std::exception& ex)
     {
-        std::cerr << ex.toString() << std::endl;
-        return 1;
-    }
-    catch (except::Error& err)
-    {
-        std::cerr << err.toString() << std::endl;
+        std::cerr << ex.what() << std::endl;
         return 1;
     }
 }

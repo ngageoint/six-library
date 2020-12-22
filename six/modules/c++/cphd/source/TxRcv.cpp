@@ -57,7 +57,7 @@ std::ostream& operator<< (std::ostream& os, const ParameterType& p)
     os << "    Identifier     : " << p.identifier << "\n"
         << "    FreqCenter     : " << p.freqCenter << "\n"
         << "    LFMRate        : " << p.lfmRate << "\n"
-        << "    Polarization   : " << p.polarization.toString() << "\n";
+        << "    Polarization   : " << p.polarization << "\n";
     return os;
 }
 

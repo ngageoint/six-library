@@ -20,6 +20,7 @@
  *
  */
 #include <set>
+#include <string>
 
 #include <str/Convert.h>
 #include <six/Utilities.h>
@@ -175,7 +176,7 @@ void SICommonXMLParser::parsePoly(XMLElem polyXML,
         if (orderIdx > polyXYZ.order())
         {
             throw except::Exception(Ctxt(
-                    "Order " + str::toString(orderIdx) + " is out of bounds"));
+                    "Order " + std::to_string(orderIdx) + " is out of bounds"));
         }
         parseDouble(coeffsXML[ii], polyXYZ[orderIdx][xyzIdx]);
     }
@@ -304,7 +305,7 @@ XMLElem SICommonXMLParser::createEarthModelType(const std::string& name,
     const EarthModelType& value,
     XMLElem parent) const
 {
-    return createString(name, six::toString(value), parent);
+    return createSixString(name, value, parent);
 }
 void SICommonXMLParser::parseEarthModelType(XMLElem element,
     EarthModelType& value) const
@@ -795,8 +796,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                                               getSICommonURI(),
                                               componentsXML);
 
-            createString("Frame", getSICommonURI(),
-                         six::toString(posVelError->frame), posVelErrXML);
+            createSixString("Frame", getSICommonURI(), posVelError->frame, posVelErrXML);
             createDouble("P1", getSICommonURI(), posVelError->p1, posVelErrXML);
             createDouble("P2", getSICommonURI(), posVelError->p2, posVelErrXML);
             createDouble("P3", getSICommonURI(), posVelError->p3, posVelErrXML);
@@ -1249,14 +1249,11 @@ XMLElem SICommonXMLParser::convertCollectionInformationToXML(
     createString("CoreName", si, collInfo->coreName, collInfoXML);
     if (!Init::isUndefined(collInfo->collectType))
     {
-        createString("CollectType", si,
-                     six::toString<six::CollectType>(collInfo->collectType),
-                     collInfoXML);
+        createString("CollectType", si, collInfo->collectType, collInfoXML);
     }
 
     XMLElem radarModeXML = newElement("RadarMode", si, collInfoXML);
-    createString("ModeType", si, six::toString(collInfo->radarMode),
-                 radarModeXML);
+    createSixString("ModeType", si, collInfo->radarMode, radarModeXML);
     if (!collInfo->radarModeID.empty())
     {
         createString("ModeID", si, collInfo->radarModeID, radarModeXML);

@@ -119,7 +119,7 @@ XMLElem CPHDXMLParser::toXML(const CollectionInformation& collectionID, XMLElem 
 
     // RadarMode
     XMLElem radarModeXML = newElement("RadarMode", collectionXML);
-    createString("ModeType", six::toString(collectionID.radarMode), radarModeXML);
+    createSixString("ModeType", collectionID.radarMode, radarModeXML);
     if(!six::Init::isUndefined(collectionID.radarModeID))
     {
         createString("ModeID", collectionID.radarModeID, radarModeXML);
@@ -614,8 +614,10 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         mCommon.createVector3D("Pos", refGeo.bistatic->txPlatform.pos, txPlatXML);
         mCommon.createVector3D("Vel", refGeo.bistatic->txPlatform.vel, txPlatXML);
 
-        std::string side = refGeo.bistatic->txPlatform.sideOfTrack;
-        createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), txPlatXML);
+        {
+            const std::string side = refGeo.bistatic->txPlatform.sideOfTrack;
+            createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), txPlatXML);
+        }
         createDouble("SlantRange", refGeo.bistatic->txPlatform.slantRange, txPlatXML);
         createDouble("GroundRange", refGeo.bistatic->txPlatform.groundRange, txPlatXML);
         createDouble("DopplerConeAngle", refGeo.bistatic->txPlatform.dopplerConeAngle, txPlatXML);
@@ -627,8 +629,10 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         mCommon.createVector3D("Pos", refGeo.bistatic->rcvPlatform.pos, rcvPlatXML);
         mCommon.createVector3D("Vel", refGeo.bistatic->rcvPlatform.vel, rcvPlatXML);
 
-        side = refGeo.bistatic->rcvPlatform.sideOfTrack.toString();
-        createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), rcvPlatXML);
+        {
+            const std::string side = refGeo.bistatic->rcvPlatform.sideOfTrack;
+            createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), rcvPlatXML);
+        }
         createDouble("SlantRange", refGeo.bistatic->rcvPlatform.slantRange, rcvPlatXML);
         createDouble("GroundRange", refGeo.bistatic->rcvPlatform.groundRange, rcvPlatXML);
         createDouble("DopplerConeAngle", refGeo.bistatic->rcvPlatform.dopplerConeAngle, rcvPlatXML);

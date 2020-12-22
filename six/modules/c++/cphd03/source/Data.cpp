@@ -75,7 +75,7 @@ size_t Data::getNumBytesPerSample() const
 std::ostream& operator<< (std::ostream& os, const Data& d)
 {
     os << "Data::" << "\n"
-       << "  SampleType     : " << d.sampleType.toString() << "\n"
+       << "  SampleType     : " << d.sampleType << "\n"
        << "  NumCPHDChannels: " << d.numCPHDChannels << "\n"
        << "  NumBytesVBP    : " << d.numBytesVBP << "\n";
 

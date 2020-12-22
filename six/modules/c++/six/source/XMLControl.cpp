@@ -225,7 +225,7 @@ Data* XMLControl::fromXML(const xml::lite::Document* doc,
 
 std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 {
-    auto str = six::toString(dataType);
+    std::string str = dataType;
     if (appendXML)
     {
         str += "_XML";

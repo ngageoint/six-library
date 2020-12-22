@@ -60,7 +60,7 @@ std::string computeProductSize(const std::string& blockSizeStr,
             numBytesPerPixel;
     const size_t numBlocksRequired = std::ceil(
             static_cast<double>(totalImageSize) / totalBlockSize);
-    return str::toString(numBlocksRequired * totalBlockSize);
+    return std::to_string(numBlocksRequired * totalBlockSize);
 }
 
 void writeSingleImage(const six::Data& data, const std::string& pathname,
@@ -233,10 +233,6 @@ int main(int argc, char** argv)
         return compare(twoImageSIDD.pathname(),
                 singleImageBlocked.pathname(),
                 singleImageUnblocked.pathname()) ? 0 : 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

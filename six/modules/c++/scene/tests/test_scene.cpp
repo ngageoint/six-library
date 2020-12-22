@@ -106,8 +106,7 @@ void showInfo(SceneGeometry& sg)
     am = sg.getShadow();
     std::cout << "Shadow Angle, Mag: " << am.angle << ", " << am.magnitude << std::endl;
     
-    std::string sideOfTrack = 
-        str::toString<SideOfTrack>(sg.getSideOfTrack());
+    std::string sideOfTrack = sg.getSideOfTrack();
     
     std::cout << "Side of Track: " << sideOfTrack << std::endl;
 
@@ -147,7 +146,7 @@ int main(int argc, char** argv)
 
 
     }
-    catch (except::Exception& ex)
+    catch (const except::Exception& ex)
     {
 	std::cout << "Exception: " << ex.getMessage() << std::endl;
 	

@@ -21,6 +21,7 @@
  */
 
 #include <limits>
+#include <string>
 
 #include <math/Utilities.h>
 #include "scene/ProjectionModel.h"
@@ -109,8 +110,8 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
     if (std::abs(arpZ) > std::abs(rCOA))
     {
         throw except::Exception(Ctxt(
-                  "No solution: arpZ = " + str::toString(arpZ) + ", rCOA = " +
-                  str::toString(rCOA)));
+                  "No solution: arpZ = " + std::to_string(arpZ) + ", rCOA = " +
+                  std::to_string(rCOA)));
     }
     const double groundRange = sqrt(rCOA * rCOA - arpZ * arpZ);
 
@@ -127,8 +128,8 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
     if (std::abs(vz) >= std::abs(vmag))
     {
         throw except::Exception(Ctxt(
-                  "No solution: vz = " + str::toString(vz) + ", vmag = " +
-                  str::toString(vmag)));
+                  "No solution: vz = " + std::to_string(vz) + ", vmag = " +
+                  std::to_string(vmag)));
     }
     const double vx = sqrt(vmag * vmag - vz * vz);
 
@@ -144,7 +145,7 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
     if (cosAzimuth < -1.0 || cosAzimuth > 1.0)
     {
         throw except::Exception(Ctxt(
-                  "No solution: cosAzimuth = " + str::toString(cosAzimuth)));
+                  "No solution: cosAzimuth = " + std::to_string(cosAzimuth)));
     }
 
     const double sinAzimuth =

@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <string>
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
@@ -128,7 +129,7 @@ XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
     std::string elementValue;
     try
     {
-        elementValue = six::toString<int>(p);
+        elementValue = std::to_string(p);
     }
     catch (const except::Exception& ex)
     {
@@ -176,7 +177,7 @@ XMLElem XMLParser::createDouble(const std::string& name,
     std::string elementValue;
     try
     {
-        elementValue = six::toString<double>(p);
+        elementValue = std::to_string(p);
     }
     catch (const except::Exception& ex)
     {
@@ -212,7 +213,7 @@ XMLElem XMLParser::createBooleanType(const std::string& name,
     }
 
     XMLElem const elem =
-            newElement(name, uri, six::toString<BooleanType>(p), parent);
+            newElement(name, uri, six::toString(p), parent);
     if (mAddClassAttributes)
     {
         xml::lite::AttributeNode node;
@@ -256,7 +257,7 @@ XMLElem XMLParser::createDateTime(const std::string& name,
 XMLElem XMLParser::createDateTime(const std::string& name,
         const std::string& uri, const DateTime& p, XMLElem parent) const
 {
-    return createDateTime(name, uri, six::toString<DateTime>(p), parent);
+    return createDateTime(name, uri, six::toString(p), parent);
 }
 
 XMLElem XMLParser::createDateTime(const std::string& name, const DateTime& p,
@@ -295,7 +296,7 @@ XMLElem XMLParser::getFirstAndOnly(XMLElem parent, const std::string& tag)
     {
         throw except::Exception(Ctxt(
                  "Expected exactly one " + tag + " but got " +
-                    str::toString(children.size())));
+                    std::to_string(children.size())));
     }
     return children[0];
 }

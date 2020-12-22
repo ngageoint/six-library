@@ -24,9 +24,11 @@
 // Demonstrates that the raw bytes provided by this class result in equivalent
 // SIDDs to the normal writes via NITFWriteControl
 
+#include <stdlib.h>
+
+#include <string>
 #include <iostream>
 #include <limits>
-#include <stdlib.h>
 
 #include <io/ReadUtils.h>
 #include <math/Round.h>
@@ -239,9 +241,9 @@ private:
         if (mNumRowsPerBlock != 0 || mNumColsPerBlock != 0)
         {
             suffix += " with blocking of rows/block=" +
-                    str::toString(mNumRowsPerBlock) +
+                    std::to_string(mNumRowsPerBlock) +
                     ", cols/block=" +
-                    str::toString(mNumColsPerBlock);
+                    std::to_string(mNumColsPerBlock);
         }
 
         return suffix;
@@ -253,7 +255,7 @@ private:
         if (mSetMaxProductSize)
         {
             fullPrefix += " (max product size " +
-                    str::toString(mMaxProductSize) + ")";
+                    std::to_string(mMaxProductSize) + ")";
         }
         fullPrefix += getSuffix();
 
@@ -790,12 +792,6 @@ int main(int /*argc*/, char** /*argv*/)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << "Caught except::Exception: " << ex.getMessage()
-                  << std::endl;
         return 1;
     }
     catch (...)

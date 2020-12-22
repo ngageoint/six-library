@@ -25,6 +25,7 @@
 // writes via NITFWriteControl
 
 #include <iostream>
+#include <string>
 
 #include "TestUtilities.h"
 
@@ -268,7 +269,7 @@ private:
         if (mSetMaxProductSize)
         {
             fullPrefix += " (max product size " +
-                    str::toString(mMaxProductSize) + ")";
+                    std::to_string(mMaxProductSize) + ")";
         }
 
         if (!(*mCompareFiles)(fullPrefix, mTestPathname))
@@ -540,12 +541,6 @@ int main(int /*argc*/, char** /*argv*/)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << "Caught except::Exception: " << ex.getMessage()
-                  << std::endl;
         return 1;
     }
     catch (...)

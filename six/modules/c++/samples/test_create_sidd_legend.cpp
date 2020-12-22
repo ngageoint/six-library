@@ -233,7 +233,7 @@ int main(int argc, char** argv)
             six::Options options;
             options.setParameter(
                     six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
-                    str::toString(maxSize));
+                    maxSize);
 
             six::NITFWriteControl writer(options, container, &xmlRegistry);
             writer.save(buffers, outPathnamePrefix + "_unblocked.nitf");
@@ -244,7 +244,7 @@ int main(int argc, char** argv)
             six::Options options;
             options.setParameter(
                     six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
-                    str::toString(maxSize));
+                    maxSize);
 
             const std::string blockSize("23");
             options.setParameter(
@@ -260,11 +260,6 @@ int main(int argc, char** argv)
         }
 
         return 0;
-    }
-    catch (const except::Exception& e)
-    {
-        std::cerr << "Caught exception: " << e.getMessage() << std::endl;
-        return 1;
     }
     catch (const std::exception& e)
     {
