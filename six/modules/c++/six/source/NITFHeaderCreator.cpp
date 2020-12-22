@@ -507,7 +507,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     setField("DESSHRP", mOrganizationId, tre);
 
     const auto dataType = data.getDataType();
-    const std::string strDataType = six::toString(dataType);
+    const std::string strDataType = dataType;
 
     if (dataType == DataType::COMPLEX)
     {
@@ -697,7 +697,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 
     DataType dataType = container->getDataType();
     std::string name = mInfos[0]->getData()->getName();
-    std::string fileTitle = six::toString(dataType) + ": " + name;
+    auto fileTitle = std::string(dataType) + ": " + name;
     fileTitle = fileTitle.substr(0, NITF_FTITLE_SZ);  // truncate past 80
     record.getHeader().getFileTitle().set(fileTitle);
 

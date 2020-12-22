@@ -107,6 +107,7 @@
     <ClInclude Include="include\six\CompressedByteProvider.h" />
     <ClInclude Include="include\six\Container.h" />
     <ClInclude Include="include\six\Data.h" />
+    <ClInclude Include="include\six\Enum.h" />
     <ClInclude Include="include\six\Enums.h" />
     <ClInclude Include="include\six\ErrorStatistics.h" />
     <ClInclude Include="include\six\GeoDataBase.h" />

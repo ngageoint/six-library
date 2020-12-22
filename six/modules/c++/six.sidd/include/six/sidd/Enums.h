@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "six/Enums.h"
+#include "six/Enum.h"
 
 namespace six
 {
@@ -33,7 +33,7 @@ namespace sidd
  *
  *  Enumeration used to represent ARPFlags
  */
-SIX_Enum_DECLARE_ENUM_3(ARPFlag,
+SIX_Enum_ENUM_3(ARPFlag,
     REALTIME, 0,
     PREDICTED, 1,
     POST_PROCESSED, 2
@@ -44,7 +44,7 @@ SIX_Enum_DECLARE_ENUM_3(ARPFlag,
 *
 *  Enumeration used to represent BandEqualizationAlgorithms
 */
-SIX_Enum_DECLARE_ENUM_1(BandEqualizationAlgorithm,
+SIX_Enum_ENUM_1(BandEqualizationAlgorithm,
     LUT_1D, 0
 );
 
@@ -53,7 +53,7 @@ SIX_Enum_DECLARE_ENUM_1(BandEqualizationAlgorithm,
 *
 *  Enumeration used to represent CoordinateSystemTypes
 */
-SIX_Enum_DECLARE_ENUM_2(CoordinateSystemType,
+SIX_Enum_ENUM_2(CoordinateSystemType,
     GCS, 0,
     UTM, 1
 );
@@ -63,7 +63,7 @@ SIX_Enum_DECLARE_ENUM_2(CoordinateSystemType,
 *
 *  Enumeration used to represent DRATypes
 */
-SIX_Enum_DECLARE_ENUM_3(DRAType,
+SIX_Enum_ENUM_3(DRAType,
     AUTO, 0,
     MANUAL, 1,
     NONE, 2
@@ -115,7 +115,7 @@ struct DownsamplingMethod : public six::details::Enum<DownsamplingMethod>
 *
 *  Enumeration used to represent FilterDatabaseNames
 */
-SIX_Enum_DECLARE_ENUM_4(FilterDatabaseName,
+SIX_Enum_ENUM_4(FilterDatabaseName,
     BILINEAR, 0,
     CUBIC, 1,
     LAGRANGE, 2,
@@ -127,7 +127,7 @@ SIX_Enum_DECLARE_ENUM_4(FilterDatabaseName,
 *
 *  Enumeration used to represent FilterOperations
 */
-SIX_Enum_DECLARE_ENUM_2(FilterOperation,
+SIX_Enum_ENUM_2(FilterOperation,
     CONVOLUTION, 0,
     CORRELATION, 1
 );
@@ -137,7 +137,7 @@ SIX_Enum_DECLARE_ENUM_2(FilterOperation,
 *
 *  Enumeration used to represent RenderingIntents
 */
-SIX_Enum_DECLARE_ENUM_4(RenderingIntent,
+SIX_Enum_ENUM_4(RenderingIntent,
     PERCEPTUAL, 0,
     SATURATION, 1,
     RELATIVE_INTENT, 2,
@@ -149,7 +149,7 @@ SIX_Enum_DECLARE_ENUM_4(RenderingIntent,
 *
 *  Enumeration used to represent ShadowDirections
 */
-SIX_Enum_DECLARE_ENUM_5(ShadowDirection,
+SIX_Enum_ENUM_5(ShadowDirection,
     UP, 0,
     DOWN, 1,
     LEFT, 2,

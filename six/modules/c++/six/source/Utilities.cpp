@@ -300,13 +300,13 @@ PixelType six::toType<PixelType>(const std::string& s)
 template <>
 MagnificationMethod six::toType<MagnificationMethod>(const std::string& s)
 {
-    return MagnificationMethod::toType(s, MagnificationMethod::NOT_SET);
+    return MagnificationMethod::toType(s);
 }
 
 template <>
 DecimationMethod six::toType<DecimationMethod>(const std::string& s)
 {
-    return DecimationMethod::toType(s, DecimationMethod::NOT_SET);
+    return DecimationMethod::toType(s);
 }
 
 template <>

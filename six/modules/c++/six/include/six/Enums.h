@@ -30,169 +30,17 @@
 #include <import/sys.h>
 #include <import/scene.h>
 
+#include "Enum.h"
+
 namespace six
 {
-
-const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
-
-namespace details
-{
-    // Base type for all enums; avoids code duplication
-    template<typename T>
-    class Enum
-    {
-    protected:
-        using map_t = std::map<std::string, int>;
-    private:
-        using reverse_map_t = std::map<int, std::string>;
-        static reverse_map_t to_int_to_string(const map_t& string_to_int)
-        {
-            reverse_map_t retval;
-            for (const auto& p : string_to_int)
-            {
-                retval[p.second] = p.first;
-            }
-            return retval;
-        }
-        static const map_t& string_to_int()
-        {
-            return T::string_to_int_();
-        }
-        static const reverse_map_t& int_to_string()
-        {
-            static reverse_map_t retval = to_int_to_string(string_to_int());
-            return retval;
-        }
-    protected:
-        Enum() = default;
-
-        //! string constructor
-        Enum(const std::string& s)
-        {
-            const auto it = string_to_int().find(s);
-            if (it != string_to_int().end())
-            {
-                value = it->second;
-            }
-            else
-                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
-        }
-
-        //! int constructor
-        Enum(int i)
-        {
-            const auto it = int_to_string().find(i);
-            if (it != int_to_string().end())
-            {
-                value = it->first;
-            }
-            else
-                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
-        }
-
-    public:
-        //! Returns string representation of the value
-        std::string toString(bool throw_if_not_set = false) const
-        {
-            if (throw_if_not_set && (value == NOT_SET_VALUE))
-            {
-                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-            }
-
-            const auto it = int_to_string().find(value);
-            if (it != int_to_string().end())
-            {
-                return it->second;
-            }
-
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-        }
-
-        static T toType(const std::string& s, int not_found_value = -1)
-        {
-            std::string type(s);
-            str::trim(type);
-            const auto it = string_to_int().find(type);
-            if (it != string_to_int().end())
-            {
-                return it->second;
-            }
-
-            if (not_found_value == T::NOT_SET)
-            {
-                return not_found_value;
-            }
-            throw except::Exception(Ctxt("Unknown type '" + s + "'"));
-        }
-
-        operator int() const { return value; }
-        operator std::string() const { return toString(); }
-        static size_t size() { return int_to_string().size(); }
-
-        // needed for SWIG
-        bool operator==(const int& o) const { return value == o; }
-        bool operator==(const Enum& o) const { return value == o.value; }
-        bool operator==(const std::string& o) const { return toString() == o; } // for unittests, not SWIG
-        bool operator!=(const int& o) const { return value != o; }
-        bool operator!=(const Enum& o) const { return value != o.value; }
-        bool operator!=(const std::string& o) const { return !(*this == o); } // for unittests, not SWIG
-        bool operator<(const int& o) const { return value < o; }
-        bool operator<(const Enum& o) const { return value < o.value; }
-        bool operator<=(const int& o) const { return value <= o; }
-        bool operator<=(const Enum& o) const { return value <= o.value; }
-        bool operator>(const int& o) const { return value > o; }
-        bool operator>(const Enum& o) const { return value > o.value; }
-        bool operator>=(const int& o) const { return value >= o; }
-        bool operator>=(const Enum& o) const { return value >= o.value; }
-
-        int value = NOT_SET_VALUE;
-    };
-    template<typename T>
-    inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e)
-    {
-        os << e.toString();
-        return os;
-    }
-
-
-    #define SIX_Enum_map_entry_(n) { #n, n }
-
-    // Generate an enum class derived from details::Enum
-    // There are a few examples of expanded code below.
-    #define SIX_Enum_struct_1_(name) struct name final : public six::details::Enum<name> { \
-            name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
-            name& operator=(const int& o) { value = o; return *this; } enum {
-    #define SIX_Enum_struct_2_ NOT_SET = six::NOT_SET_VALUE }; \
-            static const map_t& string_to_int_() { \
-	      static const map_t retval{ 
-    #define SIX_Enum_struct_3_ SIX_Enum_map_entry_(NOT_SET) }; return retval; } }
-
-    #define SIX_Enum_DECLARE_ENUM_1(name, n, v) SIX_Enum_struct_1_(name) \
-        n = v, SIX_Enum_struct_2_ \
-        SIX_Enum_map_entry_(n), SIX_Enum_struct_3_
-    #define SIX_Enum_DECLARE_ENUM_2(name, n1, v1, n2, v2) SIX_Enum_struct_1_(name) \
-        n1 = v1, n2 = v2, SIX_Enum_struct_2_ \
-        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_struct_3_
-    #define SIX_Enum_DECLARE_ENUM_3(name, n1, v1, n2, v2, n3, v3) SIX_Enum_struct_1_(name) \
-        n1 = v1, n2 = v2, n3 = v3, SIX_Enum_struct_2_ \
-        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_map_entry_(n3), \
-        SIX_Enum_struct_3_
-    #define SIX_Enum_DECLARE_ENUM_4(name, n1, v1, n2, v2, n3, v3, n4, v4) SIX_Enum_struct_1_(name) \
-        n1 = v1, n2 = v2, n3 = v3, n4 = v4, SIX_Enum_struct_2_ \
-        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_map_entry_(n3), SIX_Enum_map_entry_(n4), \
-        SIX_Enum_struct_3_
-    #define SIX_Enum_DECLARE_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) SIX_Enum_struct_1_(name) \
-        n1 = v1, n2 = v2, n3 = v3, n4 = v4, n5 = v5, SIX_Enum_struct_2_ \
-        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_map_entry_(n3), SIX_Enum_map_entry_(n4), SIX_Enum_map_entry_(n5), \
-        SIX_Enum_struct_3_
-} // namespace details
 
 /*!
  *  \struct AppliedType
  *
  *  Enumeration used to represent AppliedTypes
  */
-SIX_Enum_DECLARE_ENUM_2(AppliedType,
+SIX_Enum_ENUM_2(AppliedType,
     IS_FALSE, 0,
     IS_TRUE, 1
 );
@@ -202,7 +50,7 @@ SIX_Enum_DECLARE_ENUM_2(AppliedType,
  *
  *  Enumeration used to represent AutofocusTypes
  */
-SIX_Enum_DECLARE_ENUM_3(AutofocusType,
+SIX_Enum_ENUM_3(AutofocusType,
     NO, 0,
     GLOBAL, 1,
     SV, 2
@@ -214,7 +62,7 @@ SIX_Enum_DECLARE_ENUM_3(AutofocusType,
  *
  *  Enumeration used to represent BooleanTypes
  */
-SIX_Enum_DECLARE_ENUM_2(BooleanType,
+SIX_Enum_ENUM_2(BooleanType,
     IS_FALSE, 0,
     IS_TRUE, 1
 );
@@ -224,7 +72,7 @@ SIX_Enum_DECLARE_ENUM_2(BooleanType,
  *
  *  Enumeration used to represent ByteSwappings
  */
-SIX_Enum_DECLARE_ENUM_3(ByteSwapping,
+SIX_Enum_ENUM_3(ByteSwapping,
     SWAP_OFF, 0,
     SWAP_ON, 1,
     SWAP_AUTO, 2
@@ -236,7 +84,7 @@ SIX_Enum_DECLARE_ENUM_3(ByteSwapping,
  *
  *  Enumeration used to represent CollectTypes
  */
-SIX_Enum_DECLARE_ENUM_2(CollectType,
+SIX_Enum_ENUM_2(CollectType,
     MONOSTATIC, 1,
     BISTATIC, 2
 );
@@ -246,7 +94,7 @@ SIX_Enum_DECLARE_ENUM_2(CollectType,
  *
  *  Enumeration used to represent ComplexImageGridTypes
  */
-SIX_Enum_DECLARE_ENUM_5(ComplexImageGridType,
+SIX_Enum_ENUM_5(ComplexImageGridType,
     RGAZIM, 0,
     RGZERO, 1,
     XRGYCR, 2,
@@ -259,7 +107,7 @@ SIX_Enum_DECLARE_ENUM_5(ComplexImageGridType,
  *
  *  Enumeration used to represent ComplexImagePlaneTypes
  */
-SIX_Enum_DECLARE_ENUM_3(ComplexImagePlaneType,
+SIX_Enum_ENUM_3(ComplexImagePlaneType,
     OTHER, 0,
     SLANT, 1,
     GROUND, 2
@@ -271,7 +119,7 @@ SIX_Enum_DECLARE_ENUM_3(ComplexImagePlaneType,
  *
  *  Enumeration used to represent DataTypes
  */
-SIX_Enum_DECLARE_ENUM_2(DataType,
+SIX_Enum_ENUM_2(DataType,
     COMPLEX, 1,
     DERIVED, 2
 );
@@ -281,7 +129,7 @@ SIX_Enum_DECLARE_ENUM_2(DataType,
  *
  *  Enumeration used to represent DecimationMethods
  */
-SIX_Enum_DECLARE_ENUM_4(DecimationMethod,
+SIX_Enum_ENUM_4(DecimationMethod,
     NEAREST_NEIGHBOR, 1,
     BILINEAR, 2,
     BRIGHTEST_PIXEL, 3,
@@ -293,7 +141,7 @@ SIX_Enum_DECLARE_ENUM_4(DecimationMethod,
  *
  *  Enumeration used to represent DemodTypes
  */
-SIX_Enum_DECLARE_ENUM_2(DemodType,
+SIX_Enum_ENUM_2(DemodType,
     STRETCH, 1,
     CHIRP, 2
 );
@@ -303,7 +151,7 @@ SIX_Enum_DECLARE_ENUM_2(DemodType,
  *
  *  Enumeration used to represent DisplayTypes
  */
-SIX_Enum_DECLARE_ENUM_2(DisplayType,
+SIX_Enum_ENUM_2(DisplayType,
     COLOR, 1,
     MONO, 2
 );
@@ -377,7 +225,7 @@ struct DualPolarizationType final : public details::Enum<DualPolarizationType>
  *
  *  Enumeration used to represent EarthModelTypes
  */
-SIX_Enum_DECLARE_ENUM_1(EarthModelType,
+SIX_Enum_ENUM_1(EarthModelType,
     WGS84, 1
 );
 
@@ -386,7 +234,7 @@ SIX_Enum_DECLARE_ENUM_1(EarthModelType,
  *
  *  Enumeration used to represent FFTSigns
  */
-SIX_Enum_DECLARE_ENUM_2(FFTSign,
+SIX_Enum_ENUM_2(FFTSign,
     NEG, -1,
     POS, 1
 );
@@ -396,7 +244,7 @@ SIX_Enum_DECLARE_ENUM_2(FFTSign,
  *
  *  Enumeration used to represent ImageBeamCompensationTypes
  */
-SIX_Enum_DECLARE_ENUM_2(ImageBeamCompensationType,
+SIX_Enum_ENUM_2(ImageBeamCompensationType,
     NO, 0,
     SV, 1
 );
@@ -406,7 +254,7 @@ SIX_Enum_DECLARE_ENUM_2(ImageBeamCompensationType,
  *
  *  Enumeration used to represent ImageFormationTypes
  */
-SIX_Enum_DECLARE_ENUM_4(ImageFormationType,
+SIX_Enum_ENUM_4(ImageFormationType,
     OTHER, 0,
     PFA, 1,
     RMA, 2,
@@ -418,7 +266,7 @@ SIX_Enum_DECLARE_ENUM_4(ImageFormationType,
  *
  *  Enumeration used to represent MagnificationMethods
  */
-SIX_Enum_DECLARE_ENUM_3(MagnificationMethod,
+SIX_Enum_ENUM_3(MagnificationMethod,
     NEAREST_NEIGHBOR, 1,
     BILINEAR, 2,
     LAGRANGE, 3
@@ -429,7 +277,7 @@ SIX_Enum_DECLARE_ENUM_3(MagnificationMethod,
  *
  *  Enumeration used to represent OrientationTypes
  */
-SIX_Enum_DECLARE_ENUM_5(OrientationType,
+SIX_Enum_ENUM_5(OrientationType,
     UP, 1,
     DOWN, 2,
     LEFT, 3,
@@ -529,7 +377,7 @@ struct PolarizationSequenceType final : public details::Enum<PolarizationSequenc
  *
  *  Enumeration used to represent PolarizationTypes
  */
-SIX_Enum_DECLARE_ENUM_5(PolarizationType,
+SIX_Enum_ENUM_5(PolarizationType,
     OTHER, 1,
     V, 2,
     H, 3,
@@ -542,7 +390,7 @@ SIX_Enum_DECLARE_ENUM_5(PolarizationType,
  *
  *  Enumeration used to represent ProjectionTypes
  */
-SIX_Enum_DECLARE_ENUM_4(ProjectionType,
+SIX_Enum_ENUM_4(ProjectionType,
     PLANE, 1,
     GEOGRAPHIC, 2,
     CYLINDRICAL, 3,
@@ -554,7 +402,7 @@ SIX_Enum_DECLARE_ENUM_4(ProjectionType,
  *
  *  Enumeration used to represent RMAlgoTypes
  */
-SIX_Enum_DECLARE_ENUM_3(RMAlgoType,
+SIX_Enum_ENUM_3(RMAlgoType,
     OMEGA_K, 1,
     CSA, 2,
     RG_DOP, 3
@@ -565,7 +413,7 @@ SIX_Enum_DECLARE_ENUM_3(RMAlgoType,
  *
  *  Enumeration used to represent RadarModeTypes
  */
-SIX_Enum_DECLARE_ENUM_4(RadarModeType,
+SIX_Enum_ENUM_4(RadarModeType,
     SPOTLIGHT, 1,
     STRIPMAP, 2,
     DYNAMIC_STRIPMAP, 3,
@@ -577,7 +425,7 @@ SIX_Enum_DECLARE_ENUM_4(RadarModeType,
  *
  *  Enumeration used to represent RegionTypes
  */
-SIX_Enum_DECLARE_ENUM_2(RegionType,
+SIX_Enum_ENUM_2(RegionType,
     SUB_REGION, 1,
     GEOGRAPHIC_INFO, 2
 );
@@ -587,7 +435,7 @@ SIX_Enum_DECLARE_ENUM_2(RegionType,
  *
  *  Enumeration used to represent RowColEnums
  */
-SIX_Enum_DECLARE_ENUM_2(RowColEnum,
+SIX_Enum_ENUM_2(RowColEnum,
     ROW, 0,
     COL, 1
 );
@@ -597,7 +445,7 @@ SIX_Enum_DECLARE_ENUM_2(RowColEnum,
  *
  *  Enumeration used to represent SCPTypes
  */
-SIX_Enum_DECLARE_ENUM_2(SCPType,
+SIX_Enum_ENUM_2(SCPType,
     SCP_ROW_COL, 0,
     SCP_RG_AZ, 1
 );
@@ -607,7 +455,7 @@ SIX_Enum_DECLARE_ENUM_2(SCPType,
  *
  *  Enumeration used to represent SideOfTrackTypes
  */
-SIX_Enum_DECLARE_ENUM_2(SideOfTrackType,
+SIX_Enum_ENUM_2(SideOfTrackType,
     LEFT, scene::TRACK_LEFT,
     RIGHT, scene::TRACK_RIGHT
 );
@@ -617,7 +465,7 @@ SIX_Enum_DECLARE_ENUM_2(SideOfTrackType,
  *
  *  Enumeration used to represent SlowTimeBeamCompensationTypes
  */
-SIX_Enum_DECLARE_ENUM_3(SlowTimeBeamCompensationType,
+SIX_Enum_ENUM_3(SlowTimeBeamCompensationType,
     NO, 0,
     GLOBAL, 1,
     SV, 2
@@ -628,7 +476,7 @@ SIX_Enum_DECLARE_ENUM_3(SlowTimeBeamCompensationType,
  *
  *  Enumeration used to represent XYZEnums
  */
-SIX_Enum_DECLARE_ENUM_3(XYZEnum,
+SIX_Enum_ENUM_3(XYZEnum,
     X, 0,
     Y, 1,
     Z, 2
