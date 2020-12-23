@@ -125,6 +125,11 @@ public:
      */
     virtual void preserveCharacterData(bool preserve);
 
+     /*!
+     * @see MinidomHandler::storeEncoding
+     */
+    virtual void storeEncoding(bool preserve);
+
 protected:
     MinidomHandler mHandler;
     XMLReader mReader;
