@@ -76,6 +76,12 @@ std::string toString(const uint8_t& value);
 template <>
 std::string toString(const int8_t& value);
 
+template <>
+inline std::string toString(const std::nullptr_t&)
+{
+    return "<nullptr>";
+}
+
 template <typename T>
 std::string toString(const T& real, const T& imag)
 {
