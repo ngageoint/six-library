@@ -290,23 +290,12 @@ XMLElem XMLParser::createDate(const std::string& name, const DateTime& p,
 
 XMLElem XMLParser::getFirstAndOnly(XMLElem parent, const std::string& tag)
 {
-    std::vector < XMLElem > children;
-    parent->getElementsByTagName(tag, children);
-    if (children.size() != 1)
-    {
-        throw except::Exception(Ctxt(
-                 "Expected exactly one " + tag + " but got " +
-                    std::to_string(children.size())));
-    }
-    return children[0];
+    auto& retval = parent->getElementByTagName(tag);
+    return &retval;
 }
 XMLElem XMLParser::getOptional(XMLElem parent, const std::string& tag)
 {
-    std::vector < XMLElem > children;
-    parent->getElementsByTagName(tag, children);
-    if (children.size() != 1)
-        return nullptr;
-    return children[0];
+    return parent->getElementByTagName(std::nothrow, tag);
 }
 
 XMLElem XMLParser::require(XMLElem element, const std::string& name)
