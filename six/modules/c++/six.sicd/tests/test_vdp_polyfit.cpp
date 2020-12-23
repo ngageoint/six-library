@@ -103,11 +103,6 @@ int main(int argc, char** argv)
         std::cout << "meanResidualErrorCol:" << meanResidualErrorCol <<
             std::endl;
     }
-    catch (const except::Exception& e)
-    {
-        std::cerr << "Caught exception: " << e.getMessage() << std::endl;
-        return 1;
-    }
     catch (const std::exception& e)
     {
         std::cerr << "Caught exception: " << e.what() << std::endl;

@@ -27,7 +27,7 @@
 TEST_CASE(EnumConstructor)
 {
     six::DualPolarizationType pType("UNKNOWN");
-    TEST_ASSERT_EQ(pType.toString(), "UNKNOWN");
+    TEST_ASSERT_EQ(pType, "UNKNOWN");
 }
 
 TEST_CASE(ToType)
@@ -40,7 +40,7 @@ TEST_CASE(ToType)
 TEST_CASE(SixToString)
 {
     six::DualPolarizationType pType("UNKNOWN");
-    std::string polarizationString = six::toString<six::DualPolarizationType>(pType);
+    const std::string polarizationString = pType;
     TEST_ASSERT_EQ("UNKNOWN", polarizationString);
 }
 

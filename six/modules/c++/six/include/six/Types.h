@@ -19,11 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_TYPES_H__
-#define __SIX_TYPES_H__
+#pragma once
 
 #include <vector>
 #include <limits>
+#include <string>
 
 #include <import/except.h>
 #include <import/mem.h>
@@ -440,7 +440,7 @@ struct Corners
             return lowerLeft;
         default:
             throw except::Exception(Ctxt("Invalid index " +
-                                             str::toString(idx)));
+                                             std::to_string(idx)));
         }
     }
 
@@ -459,7 +459,7 @@ struct Corners
             return lowerLeft;
         default:
             throw except::Exception(Ctxt("Invalid index " +
-                                             str::toString(idx)));
+                                             std::to_string(idx)));
         }
     }
 
@@ -522,4 +522,3 @@ ImageMode getImageMode(RadarModeType radarMode);
 DECLARE_EXCEPTION(MissingRequired)
 }
 
-#endif

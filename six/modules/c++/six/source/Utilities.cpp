@@ -100,8 +100,7 @@ BooleanType six::toType<BooleanType>(const std::string& s)
         return BooleanType::NOT_SET;
 }
 
-template <>
-std::string six::toString<float>(const float& value)
+std::string six::toString(const float& value)
 {
     if (six::Init::isUndefined(value))
     {
@@ -124,8 +123,7 @@ std::string six::toString<float>(const float& value)
     return strValue;
 }
 
-template <>
-std::string six::toString<double>(const double& value)
+std::string six::toString(const double& value)
 {
     if (six::Init::isUndefined(value))
     {
@@ -148,13 +146,11 @@ std::string six::toString<double>(const double& value)
     return strValue;
 }
 
-template <>
-std::string six::toString<BooleanType>(const BooleanType& value)
+std::string six::toString(const BooleanType& value)
 {
     return str::toString<bool>(value == BooleanType::IS_TRUE);
 }
 
-template <>
 std::string six::toString(const six::Vector3& v)
 {
     std::ostringstream os;
@@ -162,7 +158,6 @@ std::string six::toString(const six::Vector3& v)
     return os.str();
 }
 
-template <>
 std::string six::toString(const six::PolyXYZ& p)
 {
     std::ostringstream os;
@@ -231,7 +226,6 @@ DateTime six::toType<DateTime>(const std::string& dateTime)
     return DateTime();
 }
 
-template <>
 std::string six::toString(const DateTime& dateTime)
 {
     char date[256];
@@ -241,7 +235,6 @@ std::string six::toString(const DateTime& dateTime)
     return strDate;
 }
 
-template <>
 std::string six::toString(const RadarModeType& type)
 {
     switch (type)
@@ -285,7 +278,6 @@ DataType six::toType<DataType>(const std::string& s)
 
     throw except::Exception(Ctxt("Unsupported conversion to DataType type '" + s + "'"));
 }
-template <>
 std::string six::toString(const DataType& type)
 {
     switch (type)
@@ -304,34 +296,17 @@ PixelType six::toType<PixelType>(const std::string& s)
 {
     return PixelType::toType(s);
 }
-template <>
-std::string six::toString(const PixelType& type)
-{
-    return type.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 MagnificationMethod six::toType<MagnificationMethod>(const std::string& s)
 {
-    return MagnificationMethod::toType(s, MagnificationMethod::NOT_SET);
-}
-
-template <>
-std::string six::toString(const MagnificationMethod& method)
-{
-    return method.toString(true /*throw_if_not_set*/);
+    return MagnificationMethod::toType(s);
 }
 
 template <>
 DecimationMethod six::toType<DecimationMethod>(const std::string& s)
 {
-    return DecimationMethod::toType(s, DecimationMethod::NOT_SET);
-}
-
-template <>
-std::string six::toString(const DecimationMethod& method)
-{
-    return method.toString(true /*throw_if_not_set*/);
+    return DecimationMethod::toType(s);
 }
 
 template <>
@@ -343,8 +318,6 @@ EarthModelType six::toType<EarthModelType>(const std::string& s)
         return EarthModelType::WGS84;
     return EarthModelType::NOT_SET;
 }
-
-template <>
 std::string six::toString(const EarthModelType& t)
 {
     switch (t)
@@ -361,11 +334,6 @@ OrientationType six::toType<OrientationType>(const std::string& s)
 {
     return OrientationType::toType(s);
 }
-template <>
-std::string six::toString(const OrientationType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 PolarizationSequenceType six::toType<PolarizationSequenceType>(
@@ -373,21 +341,11 @@ PolarizationSequenceType six::toType<PolarizationSequenceType>(
 {
     return PolarizationSequenceType::toType(s);
 }
-template <>
-std::string six::toString(const PolarizationSequenceType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 PolarizationType six::toType<PolarizationType>(const std::string& s)
 {
     return PolarizationType::toType(s);
-}
-template <>
-std::string six::toString(const PolarizationType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -439,8 +397,6 @@ DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
                      "'"));
     }
 }
-
-template <>
 std::string six::toString(const DualPolarizationType& t)
 {
     switch (t)
@@ -492,21 +448,11 @@ DemodType six::toType<DemodType>(const std::string& s)
 {
     return DemodType::toType(s);
 }
-template <>
-std::string six::toString(const DemodType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 ImageFormationType six::toType<ImageFormationType>(const std::string& s)
 {
     return ImageFormationType::toType(s);
-}
-template <>
-std::string six::toString(const ImageFormationType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -515,11 +461,6 @@ SlowTimeBeamCompensationType six::toType<SlowTimeBeamCompensationType>(
 {
     return SlowTimeBeamCompensationType::toType(s);
 }
-template <>
-std::string six::toString(const SlowTimeBeamCompensationType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 ImageBeamCompensationType six::toType<ImageBeamCompensationType>(
@@ -527,33 +468,17 @@ ImageBeamCompensationType six::toType<ImageBeamCompensationType>(
 {
     return ImageBeamCompensationType::toType(s);
 }
-template <>
-std::string six::toString(const ImageBeamCompensationType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 AutofocusType six::toType<AutofocusType>(const std::string& s)
 {
     return AutofocusType::toType(s);
 }
-template <>
-std::string six::toString(const AutofocusType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 RMAlgoType six::toType<RMAlgoType>(const std::string& s)
 {
     return RMAlgoType::toType(s);
-}
-
-template <>
-std::string six::toString(const RMAlgoType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -568,8 +493,6 @@ SideOfTrackType six::toType<SideOfTrackType>(const std::string& s)
     else
         throw except::Exception(Ctxt("Unsupported side of track '" + s + "'"));
 }
-
-template <>
 std::string six::toString(const SideOfTrackType& t)
 {
     switch (t)
@@ -588,21 +511,11 @@ ComplexImagePlaneType six::toType<ComplexImagePlaneType>(const std::string& s)
 {
     return ComplexImagePlaneType::toType(s);
 }
-template <>
-std::string six::toString(const ComplexImagePlaneType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
-}
 
 template <>
 ComplexImageGridType six::toType<ComplexImageGridType>(const std::string& s)
 {
     return ComplexImageGridType::toType(s);
-}
-template <>
-std::string six::toString(const ComplexImageGridType& t)
-{
-    return t.toString(true /*throw_if_not_set*/);
 }
 
 template <>
@@ -631,8 +544,6 @@ FFTSign six::toType<FFTSign>(const std::string& s)
         throw except::Exception(Ctxt("Unsupported fft sign '" + s + "'"));
     }
 }
-
-template <>
 std::string six::toString(const FFTSign& value)
 {
     switch (value)
@@ -662,8 +573,6 @@ AppliedType six::toType<AppliedType>(const std::string& s)
     else
         throw except::Exception(Ctxt("Unsupported applied type '" + s + "'"));
 }
-
-template <>
 std::string six::toString(const AppliedType& value)
 {
     switch (value)
@@ -685,13 +594,7 @@ CollectType six::toType<CollectType>(const std::string& s)
 {
     return CollectType::toType(s);
 }
-template <>
-std::string six::toString(const CollectType& value)
-{
-    return value.toString(true /*throw_if_not_set*/);
-}
 
-template <>
 std::string six::toString(const six::FrameType& value)
 {
     switch (value.mValue)
@@ -707,7 +610,6 @@ std::string six::toString(const six::FrameType& value)
         throw except::Exception(Ctxt("Unsupported frame type"));
     }
 }
-
 template <>
 six::FrameType six::toType<six::FrameType>(const std::string& s)
 {
@@ -723,7 +625,6 @@ six::FrameType six::toType<six::FrameType>(const std::string& s)
         throw except::Exception(Ctxt("Unsupported frame type '" + s + "'"));
 }
 
-template <>
 std::string six::toString(const six::LatLonCorners& corners)
 {
     // Print the 4 corners as a 5-point polygon (last point is the first point

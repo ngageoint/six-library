@@ -25,7 +25,7 @@
 #include <except/Exception.h>
 #include <str/Convert.h>
 
-#include <six/Enums.h>
+#include <six/Enum.h>
 
 namespace cphd
 {
@@ -34,7 +34,7 @@ namespace cphd
  *
  *  Enumeration used to represent SampleTypes
  */
-SIX_Enum_DECLARE_ENUM_3(SampleType,
+SIX_Enum_ENUM_3(SampleType,
     RE32F_IM32F, 1,
     RE16I_IM16I, 2,
     RE08I_IM08I, 3
@@ -45,7 +45,7 @@ SIX_Enum_DECLARE_ENUM_3(SampleType,
  *
  *  Enumeration used to represent DomainTypes
  */
-SIX_Enum_DECLARE_ENUM_3(DomainType,
+SIX_Enum_ENUM_3(DomainType,
     FX, 1,
     TOA, 2,
     RE08I_IM08I, 3
@@ -66,12 +66,12 @@ struct PhaseSGN final : public six::details::Enum<PhaseSGN>
         NOT_SET = six::NOT_SET_VALUE
     };
 
-    static const std::map<int, std::string>& int_to_string_()
+    static const map_t& string_to_int_()
     {
-        static const std::map<int, std::string> retval
+        static const map_t retval
         {
-            {MINUS_1, "-1"},
-            {PLUS_1, "+1"},
+            {"-1", MINUS_1},
+            {"+1", PLUS_1},
             SIX_Enum_map_entry_(NOT_SET)
         };
         return retval;
@@ -89,7 +89,7 @@ struct PhaseSGN final : public six::details::Enum<PhaseSGN>
  *
  *  Enumeration used to represent RefHeights
  */
-SIX_Enum_DECLARE_ENUM_2(RefHeight,
+SIX_Enum_ENUM_2(RefHeight,
     IARP, 1,
     ZERO, 2
 );
@@ -101,7 +101,7 @@ SIX_Enum_DECLARE_ENUM_2(RefHeight,
  *  Distict from SICD's EarthModelType
  *  (underscore vs. no underscore)
  */
-SIX_Enum_DECLARE_ENUM_1(EarthModelType,
+SIX_Enum_ENUM_1(EarthModelType,
     WGS_84, 1
 );
 
@@ -110,7 +110,7 @@ SIX_Enum_DECLARE_ENUM_1(EarthModelType,
  *
  * Enumeration used to represent signal array format
  */
-SIX_Enum_DECLARE_ENUM_3(SignalArrayFormat,
+SIX_Enum_ENUM_3(SignalArrayFormat,
     CI2, 1,
     CI4, 2,
     CF8, 3
@@ -121,7 +121,7 @@ SIX_Enum_DECLARE_ENUM_3(SignalArrayFormat,
  *
  *  Enumeration used to represent SRPTypes
  */
-SIX_Enum_DECLARE_ENUM_4(SRPType,
+SIX_Enum_ENUM_4(SRPType,
     FIXEDPT, 1,
     PVTPOLY, 2,
     PVVPOLY, 3,
@@ -148,9 +148,9 @@ struct PolarizationType final : public six::details::Enum<PolarizationType>
         NOT_SET = six::NOT_SET_VALUE
     };
 
-    static const std::map<int, std::string>& int_to_string_()
+    static const map_t& string_to_int_()
     {
-        static const std::map<int, std::string> retval
+        static const map_t retval
         {
             SIX_Enum_map_entry_(X),
             SIX_Enum_map_entry_(Y),

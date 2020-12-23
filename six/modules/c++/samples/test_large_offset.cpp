@@ -175,8 +175,7 @@ bool checkNITF(const std::string& pathname)
 
 bool runTest(const six::DataType& datatype)
 {
-    std::cout << "Running offset test for datatype " << datatype.toString()
-              << "\n";
+    std::cout << "Running offset test for datatype " << datatype << "\n";
 
     const io::TempFile temp;
     createNITF(temp.pathname(), datatype);
@@ -203,10 +202,6 @@ int main(int argc, char** argv)
         std::cerr << "Not enough memory available to build test NITF. "
                 "Skipping test.\n";
         return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

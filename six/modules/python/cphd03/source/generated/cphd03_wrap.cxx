@@ -6635,7 +6635,7 @@ SWIGINTERN PyObject *Swig_var_NOT_SET_VALUE_get(void) {
   {
     try
     {
-      pyobj = SWIG_From_int(static_cast< int >(cphd::NOT_SET_VALUE));
+      pyobj = SWIG_From_int(static_cast< int >(six::NOT_SET_VALUE));
     } 
     catch (const std::exception& e)
     {

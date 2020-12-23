@@ -353,7 +353,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             {
                 throw except::Exception(Ctxt(
                     "Unexpected element size: " +
-                    str::toString(lut->elementSize)));
+                    std::to_string(lut->elementSize)));
             }
 
             nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
@@ -401,7 +401,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             {
                 throw except::Exception(Ctxt(
                     "Unexpected element size: " +
-                    str::toString(lut->elementSize)));
+                    std::to_string(lut->elementSize)));
             }
 
             nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);

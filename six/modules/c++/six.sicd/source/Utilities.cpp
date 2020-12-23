@@ -20,6 +20,7 @@
  *
  */
 #include <map>
+#include <string>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
@@ -587,8 +588,8 @@ void Utilities::getWidebandData(NITFReadControl& reader,
 
         throw except::Exception(Ctxt("Null buffer provided to getWidebandData" +
                                      std::string(" when a ") +
-                                     str::toString(requiredBufferBytes) +
-                                     std::string(" byte buffer was expected")));
+                                     std::to_string(requiredBufferBytes) +
+                                     " byte buffer was expected"));
     }
 
     if (pixelType == PixelType::RE32F_IM32F)

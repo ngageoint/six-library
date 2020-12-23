@@ -247,7 +247,7 @@ struct TestHelper
 
         std::unique_ptr<six::Legend> rgbLegend(new six::Legend(mRgbLegend));
 
-        const std::unique_ptr<std::byte[]> buffer4(new std::byte[dims4.area()]);
+        std::unique_ptr<std::byte[]> buffer4(new std::byte[dims4.area()]);
         std::fill_n(buffer4.get(), dims4.area(), static_cast<std::byte>(200));
 
         container->addData(std::move(data4), std::move(rgbLegend));
@@ -257,7 +257,7 @@ struct TestHelper
         six::Options options;
         options.setParameter(
                 six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
-                str::toString(maxSize));
+                maxSize);
 
         six::NITFWriteControl writer(options, container, &mXmlRegistry);
         writer.save(buffers, mPathname);

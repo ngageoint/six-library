@@ -224,7 +224,7 @@ void DerivedXMLParser::setAttributeIfNonNull(XMLElem element,
 {
     if (value)
     {
-        setAttribute(element, name, *value, uri);
+        setAttribute(element, name, six::toString(*value), uri);
     }
 }
 

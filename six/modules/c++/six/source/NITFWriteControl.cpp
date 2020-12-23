@@ -22,6 +22,7 @@
 
 #include <iomanip>
 #include <sstream>
+#include <string>
 
 #include <io/ByteStream.h>
 #include <math/Round.h>
@@ -252,8 +253,8 @@ void NITFWriteControl::save(const BufferList& imageData,
 
     if (getInfos().size() != imageData.size())
         throw except::Exception(
-                Ctxt("Require " + str::toString(getInfos().size()) +
-                     " images, received " + str::toString(imageData.size())));
+                Ctxt("Require " + std::to_string(getInfos().size()) +
+                     " images, received " + std::to_string(imageData.size())));
 
     // check to see if J2K compression is enabled
     double j2kCompression = (double)getOptions().getParameter(

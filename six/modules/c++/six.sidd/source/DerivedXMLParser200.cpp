@@ -1429,8 +1429,8 @@ XMLElem DerivedXMLParser200::convertBankToXML(const Filter::Bank& bank,
             {
                 XMLElem coefElem = createDouble("Coef", bank.custom->filterCoef[idx],
                     filterCoef);
-                setAttribute(coefElem, "phasing", str::toString(row));
-                setAttribute(coefElem, "point", str::toString(col));
+                setAttribute(coefElem, "phasing", row);
+                setAttribute(coefElem, "point", col);
             }
         }
     }
@@ -1577,9 +1577,9 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
             collection->information.sensorName,
             informationElem);
         XMLElem radarModeElem = newElement("RadarMode", informationElem);
-        createString("ModeType",
+        createSixString("ModeType",
             common().getSICommonURI(),
-            six::toString(collection->information.radarMode),
+            collection->information.radarMode,
             radarModeElem);
         // optional
         if (collection->information.radarModeID
@@ -1628,10 +1628,10 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
             XMLElem polElem = newElement("Polarization", informationElem);
 
             createString("TxPolarization",
-                six::toString(p->txPolarization),
+                p->txPolarization,
                 polElem);
             createString("RcvPolarization",
-                six::toString(p->rcvPolarization),
+                p->rcvPolarization,
                 polElem);
             // optional
             if (!Init::isUndefined(p->rcvPolarizationOffset))
@@ -1772,7 +1772,7 @@ XMLElem DerivedXMLParser200::convertDisplayToXML(
     //       in SIDD 1.0, so need to confirm it's allocated
     XMLElem displayElem = newElement("Display", parent);
 
-    createString("PixelType", six::toString(display.pixelType), displayElem);
+    createString("PixelType", display.pixelType, displayElem);
 
     createInt("NumBands", display.numBands, displayElem);
     if (six::Init::isDefined(display.defaultBandDisplay))

@@ -102,7 +102,7 @@ std::ostream& operator<< (std::ostream& os, const Monostatic& m)
 {
     os << "Monostatic:: \n"
         << (ImagingType)m << "\n"
-        << "  SideOfTrack      : " << m.sideOfTrack.toString() << "\n"
+        << "  SideOfTrack      : " << m.sideOfTrack << "\n"
         << "  SlantRange       : " << m.slantRange << "\n"
         << "  GroundRange      : " << m.groundRange << "\n"
         << "  DopplerConeAngle : " << m.dopplerConeAngle << "\n"
@@ -120,7 +120,7 @@ std::ostream& operator<< (std::ostream& os, const Monostatic& m)
 
 std::ostream& operator<< (std::ostream& os, const Bistatic::PlatformParams& p)
 {
-    os << "    SideOfTrack    : " << p.sideOfTrack.toString() << "\n"
+    os << "    SideOfTrack    : " << p.sideOfTrack << "\n"
         << "    Time:          : " << p.time << "\n"
         << "    AzimuthAngle   : " << p.azimuthAngle << "\n"
         << "    GrazeAngle     : " << p.grazeAngle << "\n"
