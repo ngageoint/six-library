@@ -369,12 +369,12 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
     }
 
     std::unique_ptr<cli::Results> results(new Results);
-    cli::Results *currentResults = nullptr;
+    cli::Results *currentResults = NULL;
     for (size_t i = 0, s = explodedArgs.size(); i < s; ++i)
     {
         currentResults = results.get(); // set the pointer
         std::string argStr = explodedArgs[i];
-        cli::Argument *arg = nullptr;
+        cli::Argument *arg = NULL;
         std::string optionsStr("");
         if (argStr.size() > 2 && argStr[0] == mPrefixChar && argStr[1]
                 == mPrefixChar)
@@ -443,7 +443,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             }
         }
 
-        if (arg != nullptr)
+        if (arg != NULL)
         {
             std::string argVar = arg->getVariable();
             switch (arg->getAction())
@@ -502,7 +502,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             case cli::STORE_CONST:
             {
                 const Value* constVal = arg->getConst();
-                currentResults->put(argVar, constVal ? constVal->clone() : nullptr);
+                currentResults->put(argVar, constVal ? constVal->clone() : NULL);
                 break;
             }
             case cli::SUB_OPTIONS:
@@ -545,7 +545,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
         else
         {
             // it's a positional argument
-            cli::Value *lastPosVal = nullptr;
+            cli::Value *lastPosVal = NULL;
             for (std::vector<cli::Argument*>::iterator it =
                     positionalArgs.begin(); it != positionalArgs.end(); ++it)
             {
@@ -587,7 +587,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
         if (!results->hasValue(argVar))
         {
             const Value* defaultVal = arg->getDefault();
-            if (defaultVal != nullptr)
+            if (defaultVal != NULL)
                 results->put(argVar, defaultVal->clone());
             else if (arg->getAction() == cli::STORE_FALSE)
                 results->put(argVar, new cli::Value(true));

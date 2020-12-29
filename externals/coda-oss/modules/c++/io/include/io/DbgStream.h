@@ -22,9 +22,11 @@
 
 #ifndef __DBG_STREAM_H__
 #define __DBG_STREAM_H__
+#pragma once
 
 #include "io/OutputStream.h"
 #include <memory>
+#include "mem/SharedPtr.h"
 
 
 /*!
@@ -116,7 +118,7 @@ public:
     }
 protected:
     //!  The bound stream
-    std::unique_ptr<OutputStream> mStream;
+    mem::auto_ptr<OutputStream> mStream;
     //!  On or off??
     bool mOn;
 };

@@ -152,7 +152,7 @@ TEST_CASE(testEnvVariables)
 
 TEST_CASE(testFsExtension)
 {
-    namespace fs = std::filesystem;
+    namespace fs = sys::Filesystem;
 
     // https://en.cppreference.com/w/cpp/filesystem/path/extension
 
@@ -191,6 +191,7 @@ TEST_CASE(testFsExtension)
 
 TEST_CASE(testFsOutput)
 {
+    #if CODA_OSS_cpp17 && __has_include(<filesystem>)  // __has_include is C++17
     {
         namespace fs = std::filesystem;
         const fs::path path("/path/to/file.txt");
@@ -201,6 +202,7 @@ TEST_CASE(testFsOutput)
         const auto actual = ss.str();
         TEST_ASSERT_EQ(expected, actual);
     }
+    #endif
 
     {
         namespace fs = sys::Filesystem;

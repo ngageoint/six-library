@@ -50,10 +50,10 @@ TEST_CASE(testRotate)
 
     sys::OS os;
     {
-        std::unique_ptr<logging::Logger> log(new logging::Logger("test"));
-        std::unique_ptr<logging::Formatter>
+        mem::auto_ptr<logging::Logger> log(new logging::Logger("test"));
+        mem::auto_ptr<logging::Formatter>
                 formatter(new logging::StandardFormatter("%m"));
-        std::unique_ptr<logging::Handler>
+        mem::auto_ptr<logging::Handler>
                 logHandler(new logging::RotatingFileHandler(outFile, 10, maxFiles));
 
         logHandler->setLevel(logging::LogLevel::LOG_DEBUG);
@@ -78,10 +78,10 @@ TEST_CASE(testNeverRotate)
 
     sys::OS os;
     {
-        std::unique_ptr<logging::Logger> log(new logging::Logger("test"));
-        std::unique_ptr<logging::Formatter>
+        mem::auto_ptr<logging::Logger> log(new logging::Logger("test"));
+        mem::auto_ptr<logging::Formatter>
                 formatter(new logging::StandardFormatter("%m"));
-        std::unique_ptr<logging::Handler>
+        mem::auto_ptr<logging::Handler>
                 logHandler(new logging::RotatingFileHandler(outFile));
 
         for(size_t i = 0; i < 1024; ++i)
@@ -102,10 +102,10 @@ TEST_CASE(testRotateReset)
 
     sys::OS os;
     {
-        std::unique_ptr<logging::Logger> log(new logging::Logger("test"));
-        std::unique_ptr<logging::Formatter>
+        mem::auto_ptr<logging::Logger> log(new logging::Logger("test"));
+        mem::auto_ptr<logging::Formatter>
                 formatter(new logging::StandardFormatter("%m"));
-        std::unique_ptr<logging::Handler>
+        mem::auto_ptr<logging::Handler>
                 logHandler(new logging::RotatingFileHandler(outFile, 10));
         log->debug("01234567890");
         TEST_ASSERT(os.exists(outFile));

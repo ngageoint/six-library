@@ -23,6 +23,7 @@
 
 #ifndef __MT_CPU_AFFINITY_INITIALIZER_LINUX_H__
 #define __MT_CPU_AFFINITY_INITIALIZER_LINUX_H__
+#pragma once
 
 #if !defined(__APPLE_CC__)
 #if defined(__linux) || defined(__linux__)
@@ -34,11 +35,13 @@
 #include <mt/AbstractCPUAffinityInitializer.h>
 #include <mt/CPUAffinityThreadInitializerLinux.h>
 
+#include "mem/SharedPtr.h"
+
 namespace mt
 {
 struct AbstractNextCPUProviderLinux
 {
-    virtual std::unique_ptr <const sys::ScopedCPUMaskUnix> nextCPU() = 0;
+    virtual mem::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU() = 0;
 };
 
 /*!
@@ -68,9 +71,9 @@ public:
      * \returns a new CPUAffinityInitializerLinux for the next available
      *          CPU that can be bound to.
      */
-    std::unique_ptr<CPUAffinityThreadInitializerLinux> newThreadInitializer()
+    mem::auto_ptr<CPUAffinityThreadInitializerLinux> newThreadInitializer()
     {
-        return std::unique_ptr<CPUAffinityThreadInitializerLinux>(
+        return mem::auto_ptr<CPUAffinityThreadInitializerLinux>(
                 newThreadInitializerImpl());
     }
 

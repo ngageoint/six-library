@@ -57,7 +57,7 @@ sys::Mutex RunNothing::counterLock;
 
 TEST_CASE(testExceptionLogger)
 {
-    std::unique_ptr<logging::Logger> log(new logging::Logger("test"));
+    mem::auto_ptr<logging::Logger> log(new logging::Logger("test"));
 
     mem::SharedPtr<logging::ExceptionLogger> exLog(new logging::ExceptionLogger(log.get()));
 

@@ -22,10 +22,12 @@
 
 #ifndef __IO_PROXY_STREAMS_H__
 #define __IO_PROXY_STREAMS_H__
+#pragma once
 
 #include "io/InputStream.h"
 #include "io/OutputStream.h"
 #include "io/NullStreams.h"
+#include "mem/SharedPtr.h"
 
 namespace io
 {
@@ -63,7 +65,7 @@ protected:
         return mProxy->read(buffer, len);
     }
 
-    std::unique_ptr<InputStream> mProxy;
+    mem::auto_ptr<InputStream> mProxy;
     bool mOwnPtr;
 };
 
@@ -110,7 +112,7 @@ public:
     }
 
 protected:
-    std::unique_ptr<OutputStream> mProxy;
+    mem::auto_ptr<OutputStream> mProxy;
     bool mOwnPtr;
 };
 
@@ -120,11 +122,11 @@ protected:
 class ToggleOutputStream: public io::ProxyOutputStream
 {
 public:
-    ToggleOutputStream(io::OutputStream *output = nullptr, bool ownPtr = false) :
-        io::ProxyOutputStream(nullptr), mPtr(output),
+    ToggleOutputStream(io::OutputStream *output = NULL, bool ownPtr = false) :
+        io::ProxyOutputStream(NULL), mPtr(output),
                 mNullStream(new io::NullOutputStream), mOwnPtr(ownPtr)
     {
-        setEnabled(mPtr != nullptr);
+        setEnabled(mPtr != NULL);
     }
 
     virtual ~ToggleOutputStream()

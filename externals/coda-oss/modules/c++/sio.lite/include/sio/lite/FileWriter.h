@@ -21,6 +21,7 @@
  */
 #ifndef __SIO_LITE_FILE_WRITER_H__
 #define __SIO_LITE_FILE_WRITER_H__
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -28,6 +29,7 @@
 #include <import/io.h>
 #include "sio/lite/InvalidHeaderException.h"
 #include "sio/lite/FileHeader.h"
+#include "mem/SharedPtr.h"
 
 
 namespace sio
@@ -96,7 +98,7 @@ public:
 
 protected:
     std::string mFileName;
-    std::unique_ptr<io::OutputStream> mStream;
+    mem::auto_ptr<io::OutputStream> mStream;
     bool mAdopt;
 };
 

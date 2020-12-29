@@ -22,10 +22,12 @@
 
 #ifndef __NET_SOCKET_H__
 #define __NET_SOCKET_H__
+#pragma once
 
 #include <sys/SystemException.h>
 #include <except/Exception.h>
 #include <str/Manip.h>
+#include <mem/SharedPtr.h>
 
 #include "net/Sockets.h"
 #include "net/SocketAddress.h"
@@ -247,7 +249,7 @@ public:
      *  \param fromClient Client socket address returned
      *  \return A new socket connection to the client
      */
-    std::unique_ptr<Socket> accept(SocketAddress& fromClient);
+    mem::auto_ptr<Socket> accept(SocketAddress& fromClient);
 
     net::Socket_T getHandle() const
     {

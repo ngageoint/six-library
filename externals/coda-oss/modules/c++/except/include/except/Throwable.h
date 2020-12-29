@@ -48,10 +48,6 @@ namespace except
 class Throwable : public std::exception
 {
 public:
-
-    /*!
-     * Default Constructor
-     */
     Throwable() = default;
 
     /*!
@@ -130,9 +126,9 @@ public:
         return s.str();
     }
 
-    const char* what() const noexcept override final // derived classes override toString()
+    const char* what() const noexcept override final  // derived classes override toString()
     {
-        mWhat = toString(); // call any derived toString()
+        mWhat = toString();  // call any derived toString()
         return mWhat.c_str();
     }
 

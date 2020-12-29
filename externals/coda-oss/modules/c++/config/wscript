@@ -84,6 +84,11 @@ def configure(conf):
 
         conf.define('CODA_EXPORT', conf.env['declspec_decoration'], quote=False)
 
+        # DEPRECATED.
+        # C++11 is required and will always be enabled.
+        # Continuing to define this in case downstream code is looking for it
+        conf.define('__CODA_CPP11', 1)
+
     writeConfig(conf, sys_callback, 'coda_oss',
                 path=os.path.join('include', 'config'),
                 outfile='coda_oss_config.h')

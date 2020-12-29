@@ -29,10 +29,10 @@ using namespace sys;
 using namespace io;
 using namespace except;
 
-std::unique_ptr<Socket> createMulticastSubscriber(const std::string& group,
+std::auto_ptr<Socket> createMulticastSubscriber(const std::string& group,
         const SocketAddress& local)
 {
-    std::unique_ptr<Socket> socket(new Socket(UDP_PROTO));
+    std::auto_ptr<Socket> socket( new Socket(UDP_PROTO) );
 
     struct ip_mreq mreq;
 
@@ -78,7 +78,7 @@ int main(int argc, char** argv)
 
         // Register ourselves with the OS as members of this group
 
-        std::unique_ptr<Socket> socket = createMulticastSubscriber(mcastGroup, here);
+        std::auto_ptr<Socket> socket = createMulticastSubscriber(mcastGroup, here);
         Packet packet;
         SocketAddress whereFrom;
         socket->recvFrom(whereFrom, (char*) &packet, sizeof(packet));

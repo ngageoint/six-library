@@ -32,6 +32,7 @@
 #include <str/Convert.h>
 #include "xml/lite/XMLException.h"
 #include "xml/lite/Attributes.h"
+#include "sys/Conf.h"
 
 /*!
  * \file  Element.h
@@ -414,6 +415,9 @@ public:
      *  \param node the child element to add
      */
     virtual void addChild(std::unique_ptr<Element>&& node);
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    virtual void addChild(std::auto_ptr<Element> node);
+    #endif
 
     /*!
      *  Returns all of the children of this element

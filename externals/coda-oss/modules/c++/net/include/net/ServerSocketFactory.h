@@ -22,7 +22,9 @@
 
 #ifndef __NET_SERVER_SOCKET_FACTORY_H__
 #define __NET_SERVER_SOCKET_FACTORY_H__
+#pragma once
 
+#include "mem/SharedPtr.h"
 #include "net/Socket.h"
 
 /*!
@@ -81,9 +83,9 @@ public:
      *  \param address Address to establish the socket for
      *  \return The created & bound socket
      */
-    virtual std::unique_ptr<Socket> create(const SocketAddress& address) const
+    virtual mem::auto_ptr<Socket> create(const SocketAddress& address)
     {
-        std::unique_ptr<Socket> s(new Socket(mProto));
+        mem::auto_ptr<Socket> s(new Socket(mProto));
 
         // Bind to this address
         s->bind(address);
@@ -126,9 +128,9 @@ public:
      *
      *  \return The produced socket
      */
-    virtual std::unique_ptr<Socket> create(const SocketAddress& address) const override
+    virtual mem::auto_ptr<Socket> create(const SocketAddress& address)
     {
-        std::unique_ptr<Socket> s(new Socket(mProto));
+        mem::auto_ptr<Socket> s(new Socket(mProto));
 
         // Make sure we're set up for broadcasting if necessary
         int on = 1;
@@ -138,6 +140,9 @@ public:
         s->bind(address);
         return s;
     }
+
+
+
 };
 
 /*!
@@ -181,9 +186,9 @@ public:
      *  listen().
      *
      */
-    virtual std::unique_ptr<Socket> create(const SocketAddress& address) const override
+    virtual mem::auto_ptr<Socket> create(const SocketAddress& address)
     {
-        std::unique_ptr<Socket> s(new Socket(mProto));
+        mem::auto_ptr<Socket> s(new Socket(mProto));
 
         // Reuse socket address (important for most TCP apps)
         int on = 1;

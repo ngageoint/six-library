@@ -24,25 +24,33 @@
 #include <net/ssl/SSLExceptions.h>
 #if defined(USE_OPENSSL)
  
-net::ssl::SSLConnection::SSLConnection(std::unique_ptr<net::Socket>&& socket, 
-                                       SSL_CTX * ctx,
+net::ssl::SSLConnection::SSLConnection(std::unique_ptr<net::Socket>&& socket,
+                                       SSL_CTX* ctx,
                                        bool serverAuth,
                                        const std::string& host) :
-    NetConnection(std::move(socket)),
-    mServerAuthentication(serverAuth)
+    NetConnection(std::move(socket)), mServerAuthentication(serverAuth)
 {
     mSSL = NULL;
-    
+
     mBioErr = BIO_new_fp(stderr, BIO_NOCLOSE);
-    
+
     mSSL = SSL_new(ctx);
-    if(mSSL == NULL)
+    if (mSSL == NULL)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("SSL_new failed")));
     }
-    
+
     setupSocket(host);
 }
+#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+net::ssl::SSLConnection::SSLConnection(std::auto_ptr<net::Socket> socket, 
+                                       SSL_CTX * ctx,
+                                       bool serverAuth,
+                                       const std::string& host) :
+    SSLConnection(std::unique_ptr<net::Socket>(socket.release()), ctx, serverAuth, host)
+{
+}
+#endif
 
 net::ssl::SSLConnection::~SSLConnection()
 {
