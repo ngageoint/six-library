@@ -23,12 +23,14 @@
 
 #ifndef __TIFF_IFD_ENTRY_H__
 #define __TIFF_IFD_ENTRY_H__
+#pragma once
 
 #include <memory>
 #include <string>
 #include <vector>
 #include <import/io.h>
 #include "tiff/GenericType.h"
+#include "sys/Conf.h"
 
 namespace tiff
 {
@@ -266,7 +268,12 @@ public:
         ++mCount;
         value.release();
     }
-
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    void addValue(std::auto_ptr<tiff::TypeInterface> value)
+    {
+        addValue(std::unique_ptr<tiff::TypeInterface>(value.release()));
+    }
+    #endif
     /**
      *****************************************************************
      * Adds a double value to the IFD entry.

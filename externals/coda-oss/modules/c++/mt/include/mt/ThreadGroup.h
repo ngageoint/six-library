@@ -22,6 +22,7 @@
 
 #ifndef __MT_THREAD_GROUP_H__
 #define __MT_THREAD_GROUP_H__
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -76,9 +77,12 @@ public:
 
     /*!
     *  Creates and starts a thread from a sys::Runnable.
-    *  \param runnable unique_ptr to sys::Runnable
+    *  \param runnable auto_ptr to sys::Runnable
     */
     void createThread(std::unique_ptr<sys::Runnable>&& runnable);
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    void createThread(std::auto_ptr<sys::Runnable> runnable);
+    #endif
 
     /*!
      * Waits for all threads to complete.
@@ -86,7 +90,7 @@ public:
     void joinAll();
 
     /*!
-     * Checks whether CPU pinning is set (i.e. whether mAffinityInit is nullptr)
+     * Checks whether CPU pinning is set (i.e. whether mAffinityInit is NULL)
      *
      * \return true if CPU pinning is set, false otherwise
      */
@@ -128,9 +132,9 @@ private:
     /*!
      * \returns the next available thread initializer provided by
      *          the internal CPUAffinityInitializer. If no initializer
-     *          was created, will return nullptr.
+     *          was created, will return NULL.
      */
-    std::unique_ptr<CPUAffinityThreadInitializer> getNextInitializer() const;
+    std::unique_ptr<CPUAffinityThreadInitializer> getNextInitializer();
 
     /*!
      * \class ThreadGroupRunnable
@@ -138,8 +142,10 @@ private:
      * \brief Internal runnable class to safeguard against running
      * threads who throw exceptions
      */
-    struct ThreadGroupRunnable final : public sys::Runnable
+    class ThreadGroupRunnable : public sys::Runnable
     {
+    public:
+
         /*!
          * Constructor.
          * \param runnable sys::Runnable object that will be executed by
@@ -148,7 +154,7 @@ private:
          *                          this ThreadGroupRunnable
          * \param threadInit Affinity-based initializer for the thread
          *                   that controls which CPUs the runnable is allowed
-         *                   to execute on. If nullptr, no affinity preferences
+         *                   to execute on. If NULL, no affinity preferences
          *                   will be enforced.
          */
         ThreadGroupRunnable(
@@ -156,11 +162,18 @@ private:
                 mt::ThreadGroup& parentThreadGroup,
                 std::unique_ptr<CPUAffinityThreadInitializer>&& threadInit =
                         std::unique_ptr<CPUAffinityThreadInitializer>(nullptr));
+        #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+        ThreadGroupRunnable(
+                std::auto_ptr<sys::Runnable> runnable,
+                mt::ThreadGroup& parentThreadGroup,
+                std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
+                        std::auto_ptr<CPUAffinityThreadInitializer>(NULL));
+        #endif
 
         /*!
          *  Call run() on the Runnable passed to createThread
          */
-        void run() override;
+        virtual void run();
 
     private:
         std::unique_ptr<sys::Runnable> mRunnable;

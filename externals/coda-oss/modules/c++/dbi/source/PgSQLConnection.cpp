@@ -106,7 +106,7 @@ dbi::Row dbi::PgSQLResultSet::fetchRow()
     int numFields = PQnfields(mResults);
 
     // Create a result set auto pointer and give it to the user
-    //std::unique_ptr< Row > row(new Row);
+    //std::auto_ptr< Row > row(new Row);
     dbi::Row row;
 
     for (int i = 0; i < numFields; i++)

@@ -58,14 +58,8 @@ TEST_CASE(testByteSwap)
 
 TEST_CASE(testEndianness)
 {
-    if (sys::Endian::native == sys::Endian::big)
-    {
-        TEST_ASSERT(std::endian::native == std::endian::big);
-    }
-    else if (sys::Endian::native == sys::Endian::little)
-    {
-        TEST_ASSERT(std::endian::native == std::endian::little);
-    }
+    if (sys::Endian::native == sys::Endian::big) { }
+    else if (sys::Endian::native == sys::Endian::little) { }
     else
     {
         TEST_FAIL("Mixed-endian not supported!");
@@ -73,7 +67,7 @@ TEST_CASE(testEndianness)
 
     const bool isBigEndianSystem = sys::isBigEndianSystem();
 
-    if (std::endian::native == std::endian::big)
+    if (sys::Endian::native == sys::Endian::big)
     {
         TEST_ASSERT(isBigEndianSystem);
     }
@@ -81,7 +75,7 @@ TEST_CASE(testEndianness)
     {
         TEST_ASSERT(!isBigEndianSystem);    
     }
-    if (std::endian::native == std::endian::little)
+    if (sys::Endian::native == sys::Endian::little)
     {
         TEST_ASSERT(!isBigEndianSystem);
     }
@@ -93,11 +87,31 @@ TEST_CASE(testEndianness)
 
     if (isBigEndianSystem)
     {
-        TEST_ASSERT(std::endian::native == std::endian::big);
+        TEST_ASSERT(sys::Endian::native == sys::Endian::big);
     }
     else
     {
-        TEST_ASSERT(std::endian::native == std::endian::little);    
+        TEST_ASSERT(sys::Endian::native == sys::Endian::little);    
+    }
+}
+
+TEST_CASE(testEndianness_std)
+{
+    if (sys::Endian::native == sys::Endian::big)
+    {
+        #if CODA_OSS_cpp20 || CODA_OSS_DEFINE_std_endian_
+        TEST_ASSERT(std::endian::native == std::endian::big);
+        #endif
+    }
+    else if (sys::Endian::native == sys::Endian::little)
+    {
+        #if CODA_OSS_cpp20 || CODA_OSS_DEFINE_std_endian_
+        TEST_ASSERT(std::endian::native == std::endian::little);
+        #endif
+    }
+    else
+    {
+        TEST_FAIL("Mixed-endian not supported!");
     }
 }
 }
@@ -106,5 +120,6 @@ int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(testByteSwap);
     TEST_CHECK(testEndianness);
+    TEST_CHECK(testEndianness_std);
     return 0;
 }

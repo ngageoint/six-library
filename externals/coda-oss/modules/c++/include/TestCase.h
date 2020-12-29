@@ -57,7 +57,6 @@
 #  define TEST_CASE(X) void X(std::string testName)
 
 #define TEST_MAIN(X) int main(int argc, char** argv) {  try { X;  return EXIT_SUCCESS; } \
-catch (const except::Exception& ex) { std::cerr << ex.toString() << std::endl; } \
 catch (const std::exception& e)  { std::cerr << e.what() << std::endl; } \
 catch (...) { std::cerr << "Unknown exception\n"; } \
 return EXIT_FAILURE; }

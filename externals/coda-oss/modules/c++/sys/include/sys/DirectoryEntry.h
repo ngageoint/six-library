@@ -44,7 +44,7 @@ public:
 
         mCurrent = mDir.findFirstFile(path.getPath());
         mFirst.reset(this);
-        mLast.reset(nullptr);
+        mLast.reset(NULL);
 
     }
 
@@ -66,7 +66,7 @@ public:
     {
         mCurrent = mDir.findFirstFile(dirName);
         mFirst.reset(this);
-        mLast.reset(nullptr);
+        mLast.reset(NULL);
     }
     virtual ~DirectoryEntry()
     {}
@@ -86,7 +86,7 @@ public:
     class Iterator
     {
     public:
-        Iterator() : mEntry(nullptr)
+        Iterator() : mEntry(NULL)
         {}
         explicit Iterator(DirectoryEntry* dirEntry) : mEntry(dirEntry)
         {}
@@ -100,7 +100,7 @@ public:
         {
             mEntry->next();
             if (mEntry->mCurrent.empty()) 
-                mEntry = nullptr;
+                mEntry = NULL;
             return *this;
         }
         std::string operator*() const

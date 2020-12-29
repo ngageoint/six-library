@@ -32,8 +32,8 @@ using namespace except;
 template<typename T> class AckMulticastSender
 {
 
-    std::unique_ptr<Socket> mMulticastSender;
-    std::unique_ptr<Socket> mAckChannel;
+    std::auto_ptr<Socket> mMulticastSender;
+    std::auto_ptr<Socket> mAckChannel;
     SocketAddress mMulticastAddr;
     std::vector<std::string> mSubscribers;
     int mRetransmitPort;
@@ -52,18 +52,18 @@ public:
     {
     }
     
-    std::unique_ptr<Socket> createAckChannel(int localAckPort)
+    std::auto_ptr<Socket> createAckChannel(int localAckPort)
     {
         SocketAddress address(localAckPort);
         return UDPServerSocketFactory().create(address);
     }
-    std::unique_ptr<Socket> createSenderSocket(const std::string& mcastGroup, int mcastPort,
+    std::auto_ptr<Socket> createSenderSocket(const std::string& mcastGroup, int mcastPort,
             int loopback)
     {
 
         mMulticastAddr.set(mcastPort, mcastGroup);
 
-        std::unique_ptr<Socket> s(new Socket(UDP_PROTO));
+        std::auto_ptr<Socket> s( new Socket(UDP_PROTO) );
 
         int on = 1;
         s->setOption(SOL_SOCKET, SO_REUSEADDR, on);
@@ -99,7 +99,7 @@ public:
         for (int i = 0; i < needRetransmit.size(); i++)
         {
             SocketAddress sa(needRetransmit[i], mRetransmitPort);
-            std::unique_ptr<Socket> toRetransmit = net::TCPClientSocketFactory().create(sa);
+            std::auto_ptr<Socket> toRetransmit = net::TCPClientSocketFactory().create(sa);
             toRetransmit.send((const char*) &packet, sizeof(packet));
             toRetransmit.close();
         }

@@ -277,16 +277,12 @@ fs::path fs::current_path()
             : std::string("");
 }
 
-bool fs::operator==(const path& lhs, const path& rhs) noexcept
+bool fs::details::Equals(const path& lhs, const path& rhs) noexcept
 {
     return sys::Path::normalizePath(lhs) == sys::Path::normalizePath(rhs);
 }
-bool fs::operator!=(const path& lhs, const path& rhs) noexcept
-{
-    return !(lhs == rhs);
-}
 
-std::ostream& fs::operator<<(std::ostream& os, const path& p)
+std::ostream& fs::details::Ostream(std::ostream& os, const path& p)
 {
     // https://en.cppreference.com/w/cpp/filesystem/path/operator_ltltgtgt
     os << "\"" << p.string() << "\"";

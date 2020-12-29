@@ -41,7 +41,7 @@ namespace mt
 
     public:
 	TiedRequestHandler(RunnableRequestQueue* requestQueue) :
-	    mRequestQueue(requestQueue), mAffinityInit(nullptr) {}
+	    mRequestQueue(requestQueue), mAffinityInit(NULL) {}
 		
 	virtual ~TiedRequestHandler();
 

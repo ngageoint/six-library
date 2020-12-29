@@ -56,7 +56,7 @@ int main(int argc, char** argv)
         int port = atoi(argv[1]);
 
         SocketAddress address(port);
-        std::unique_ptr<Socket> socket = UDPServerSocketFactory().create(address);
+        mem::auto_ptr<Socket> socket = UDPServerSocketFactory().create(address);
 
         my_packet_t packet;
         SocketAddress cliAddr(port);

@@ -34,7 +34,7 @@ namespace mt
 
 
 ThreadGroup::ThreadGroup(bool pinToCPU) :
-    mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : nullptr),
+    mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : NULL),
     mLastJoined(0)
 {
 }
@@ -55,6 +55,7 @@ void ThreadGroup::createThread(sys::Runnable *runnable)
 {
     createThread(std::unique_ptr<sys::Runnable>(runnable));
 }
+
 void ThreadGroup::createThread(std::unique_ptr<sys::Runnable>&& runnable)
 {
     // Note: If getNextInitializer throws, any previously created
@@ -67,6 +68,12 @@ void ThreadGroup::createThread(std::unique_ptr<sys::Runnable>&& runnable)
     mThreads.push_back(thread);
     thread->start();
 }
+#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+void ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
+{
+    createThread(std::unique_ptr<sys::Runnable>(runnable.release()));
+}
+#endif
 
 void ThreadGroup::joinAll()
 {
@@ -111,7 +118,7 @@ void ThreadGroup::addException(const except::Exception& ex)
     }
 }
 
-std::unique_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer() const
+std::unique_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer()
 {
     std::unique_ptr<CPUAffinityThreadInitializer> threadInit(nullptr);
     if (mAffinityInit.get())
@@ -131,6 +138,17 @@ ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
     mCPUInit(std::move(threadInit))
 {
 }
+#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
+        std::auto_ptr<sys::Runnable> runnable,
+        ThreadGroup& parentThreadGroup,
+        std::auto_ptr<CPUAffinityThreadInitializer> threadInit) :
+        mRunnable(runnable.release()),
+        mParentThreadGroup(parentThreadGroup),
+        mCPUInit(threadInit.release())
+{
+}
+#endif
 
 void ThreadGroup::ThreadGroupRunnable::run()
 {
@@ -159,7 +177,7 @@ void ThreadGroup::ThreadGroupRunnable::run()
 
 bool ThreadGroup::isPinToCPUEnabled() const
 {
-    return mAffinityInit.get() != nullptr;
+    return mAffinityInit.get() != NULL;
 }
 
 bool ThreadGroup::getDefaultPinToCPU()

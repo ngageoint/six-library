@@ -33,9 +33,9 @@ using namespace sys;
 using namespace io;
 using namespace except;
 
-std::unique_ptr<Socket> createSenderSocket(SocketAddress& address, int loopback = 1)
+std::auto_ptr<Socket> createSenderSocket(SocketAddress& address, int loopback = 1)
 {
-    std::unique_ptr<Socket> s(new Socket(UDP_PROTO));
+    std::auto_ptr<Socket> s( new Socket(UDP_PROTO) );
 
     int on = 1;
     s->setOption(SOL_SOCKET, SO_REUSEADDR, on);
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
         SocketAddress sa(mcastGroup, port);
 
         // Register ourselves with the OS as members of this group
-        std::unique_ptr<Socket> socket = createSenderSocket(sa);
+        std::auto_ptr<Socket> socket = createSenderSocket(sa);
         Packet packet;
         std::string myMessage = "Hello group!";
         memcpy(packet.what, myMessage.c_str(), myMessage.length());

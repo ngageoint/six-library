@@ -26,11 +26,13 @@
 
 #ifndef __LOGGING_STREAM_HANDLER_H__
 #define __LOGGING_STREAM_HANDLER_H__
+#pragma once
 
 #include <memory>
 #include "logging/LogRecord.h"
 #include "logging/Handler.h"
 #include <import/io.h>
+#include <import/mem.h>
 
 namespace logging
 {
@@ -68,7 +70,7 @@ protected:
     // used for the bulk of the logging for speed
     virtual void emitRecord(const LogRecord* record);
 
-    std::unique_ptr<io::OutputStream> mStream;
+    mem::auto_ptr<io::OutputStream> mStream;
 
 private:
     bool mClosed;
