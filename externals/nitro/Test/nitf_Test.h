@@ -5,3 +5,13 @@
 #define __TEST_CASE_H__ // #include "../nitf/unittests/TestCase.h"
 #endif
 #include "Test.h"
+
+#include <string>
+
+namespace nitf
+{
+	namespace Test
+	{
+		std::string buildPluginsDir();
+	}
+}

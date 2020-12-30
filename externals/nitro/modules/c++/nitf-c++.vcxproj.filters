@@ -4,9 +4,6 @@
     <Filter Include="nitf">
       <UniqueIdentifier>{d2772f86-6762-4804-896c-6405af17f591}</UniqueIdentifier>
     </Filter>
-    <Filter Include="gsl">
-      <UniqueIdentifier>{b218483a-d1e5-4312-92fb-d43f635e94c6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nitf\source\BandInfo.cpp">
@@ -369,12 +366,6 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="nitf\include\nitf\cstddef.h">
       <Filter>nitf</Filter>
-    </ClInclude>
-    <ClInclude Include="nitf\include\gsl\gsl.h">
-      <Filter>gsl</Filter>
-    </ClInclude>
-    <ClInclude Include="nitf\include\gsl\gsl_.h">
-      <Filter>gsl</Filter>
     </ClInclude>
     <ClInclude Include="nitf\include\nitf\span.h">
       <Filter>nitf</Filter>

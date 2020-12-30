@@ -37,6 +37,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XML_DATA_CONTENT", "modules
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "show_nitf++", "modules\c++\nitf\apps\show_nitf++\show_nitf++.vcxproj", "{839FF52C-57D1-45B6-81FD-5C7D72523EE5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AIMIDB", "modules\c\nitf\PTPRAA.vcxproj", "{2BAAACA9-A5A4-412C-AE52-B16C2D107F55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -91,6 +93,10 @@ Global
 		{839FF52C-57D1-45B6-81FD-5C7D72523EE5}.Debug|x64.Build.0 = Debug|x64
 		{839FF52C-57D1-45B6-81FD-5C7D72523EE5}.Release|x64.ActiveCfg = Release|x64
 		{839FF52C-57D1-45B6-81FD-5C7D72523EE5}.Release|x64.Build.0 = Release|x64
+		{2BAAACA9-A5A4-412C-AE52-B16C2D107F55}.Debug|x64.ActiveCfg = Debug|x64
+		{2BAAACA9-A5A4-412C-AE52-B16C2D107F55}.Debug|x64.Build.0 = Debug|x64
+		{2BAAACA9-A5A4-412C-AE52-B16C2D107F55}.Release|x64.ActiveCfg = Release|x64
+		{2BAAACA9-A5A4-412C-AE52-B16C2D107F55}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +109,7 @@ Global
 		{D1D7FCD3-6130-4504-9DA0-9D80506BE55E} = {27A2685A-E869-42A2-956D-92994F60C536}
 		{023DE06D-3967-4406-B1B8-032118BB2552} = {27A2685A-E869-42A2-956D-92994F60C536}
 		{CF5B4F02-364D-4117-9FB9-6C9C7938E412} = {27A2685A-E869-42A2-956D-92994F60C536}
+		{2BAAACA9-A5A4-412C-AE52-B16C2D107F55} = {27A2685A-E869-42A2-956D-92994F60C536}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D7AC542-BBB6-4BAC-8BF1-7E76C714BBA4}
