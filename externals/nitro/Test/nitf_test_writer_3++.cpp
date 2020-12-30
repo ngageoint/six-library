@@ -4,8 +4,8 @@
 
 #include "nitf_Test.h"
 
-struct nitf_test_create_nitf__ : public ::testing::Test {
-	nitf_test_create_nitf__() {
+struct nitf_test_writer_3__ : public ::testing::Test {
+	nitf_test_writer_3__() {
 		// initialization code here
 		//const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
 		sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
@@ -20,12 +20,12 @@ struct nitf_test_create_nitf__ : public ::testing::Test {
 		// ok to through exceptions from here if need be
 	}
 
-	~nitf_test_create_nitf__() {
+	~nitf_test_writer_3__() {
 		// cleanup any pending stuff, but no exceptions allowed
 	}
 
 	// put in any custom data members that you need 
 };
 
-#define TEST_CASE(X) TEST_F(nitf_test_create_nitf__, X)
-#include "nitf/unittests/test_create_nitf++.cpp"
+#define TEST_CASE(X) TEST_F(nitf_test_writer_3__, X)
+#include "nitf/unittests/test_writer_3++.cpp"

@@ -1,5 +1,5 @@
 set(MODULE_NAME nitf)
-set(MODULE_DEPS nitf-c except-c++ io-c++ mt-c++ sys-c++ str-c++)
+set(MODULE_DEPS nitf-c except-c++ io-c++ mt-c++ sys-c++ str-c++ gsl-c++)
 if (MSVC)
     list(APPEND MODULE_DEPS wsock32 ws2_32)
 endif()
