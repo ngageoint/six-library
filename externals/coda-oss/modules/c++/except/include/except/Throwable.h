@@ -45,7 +45,20 @@ namespace except
  *
  * This class provides the base interface for exceptions and errors.
  */
-class Throwable : public std::exception
+
+/*
+ * It can be quite convenient to derive from std::exception as often one less
+ * "catch" will be needed and we'll have standard what().  But doing so could
+ * break existing code as "catch (const std::exception&)" will catch
+ * except::Throwable when it didn't before.
+ */
+#ifndef CODA_OSS_Throwable_isa_std_exception_
+#define CODA_OSS_Throwable_isa_std_exception_ 1
+#endif
+class Throwable
+#if CODA_OSS_Throwable_isa_std_exception_
+    : public std::exception
+#endif
 {
 public:
     Throwable() = default;
@@ -126,9 +139,12 @@ public:
         return s.str();
     }
 
-    const char* what() const noexcept override final  // derived classes override toString()
+    const char* what() const noexcept
+#if CODA_OSS_Throwable_isa_std_exception_
+        override final // derived classes override toString()
+#endif
     {
-        mWhat = toString();  // call any derived toString()
+        mWhat = toString(); // call any derived toString()
         return mWhat.c_str();
     }
 
