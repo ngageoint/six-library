@@ -32,7 +32,6 @@ import numpy as np
 
 from pysix.cphd import PVPBlock, CPHDWriter, CPHDReader
 from coda.coda_types import VectorString
-from coda.math_linear import Vector3
 
 from util import get_test_metadata, get_test_pvp_data, get_test_widebands
 

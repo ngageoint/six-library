@@ -454,7 +454,8 @@ using six::Vector3;
                         getattr(pvpBlock, paramsToSet[paramName])(paramData, channelIndex, vectorIndex)
                     else:
                         # Get and call setter method for the type of this custom parameter
-                        pvpBlock.pvpFormatToAddedPVPMethod('set', cphdMetadata.pvp.addedPVP[paramName].getFormat())(
+                        pvpBlock.pvpFormatToAddedPVPMethod(
+                            'set', cphdMetadata.pvp.addedPVP[paramName].getFormat())(
                             paramData, channelIndex, vectorIndex, paramName)
         return pvpBlock
 %}
@@ -632,12 +633,12 @@ import multiprocessing
 from coda.coda_types import RowColSizeT
 
 def read(self,
-         channel = 0,
-         firstVector = 0,
-         lastVector = Wideband.ALL,
-         firstSample = 0,
-         lastSample = Wideband.ALL,
-         numThreads = multiprocessing.cpu_count()):
+         channel=0,
+         firstVector=0,
+         lastVector=Wideband.ALL,
+         firstSample=0,
+         lastSample=Wideband.ALL,
+         numThreads=multiprocessing.cpu_count()):
 
     dims = self.getBufferDims(channel, firstVector, lastVector, firstSample, lastSample)
     sampleTypeSize = self.getElementSize()
@@ -648,9 +649,16 @@ def read(self,
     else:
         raise Exception('Unknown element type')
 
-    numpyArray = numpy.empty(shape = (dims.row, dims.col), dtype = dtype)
+    numpyArray = numpy.empty(shape=(dims.row, dims.col), dtype=dtype)
     pointer, ro = numpyArray.__array_interface__['data']
-    self.readImpl(channel, firstVector, lastVector, firstSample, lastSample, numThreads, dims, pointer)
+    self.readImpl(channel,
+                  firstVector,
+                  lastVector,
+                  firstSample,
+                  lastSample,
+                  numThreads,
+                  dims,
+                  pointer)
     return numpyArray
 
 Wideband.read = read

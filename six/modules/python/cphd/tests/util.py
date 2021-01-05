@@ -23,17 +23,13 @@
 # In general, if functionality in CPHD is borrowed from six.sicd,
 # refer to six.sicd's test script for more verification
 
-import sys
 import itertools
-import multiprocessing
 
 import numpy as np
 
 from pysix import cphd
 import pysix.six_base as six
-from pysix import six_sicd
 from pysix import scene
-from coda import coda_types
 from coda import math_poly
 from coda.math_linear import Vector2, Vector3
 
@@ -249,8 +245,11 @@ def get_test_metadata(has_support_array, is_compressed):
     data.signalArrayFormat.value = cphd.SignalArrayFormat.CF8
     data.numCPHDChannels = 2
     data.numBytesPVP = 296
+
     # If signalCompressionID is set, then it thinks the data is compressed
-    if is_compressed: data.signalCompressionID = 'Compress'
+    if is_compressed:
+        data.signalCompressionID = 'Compress'
+
     for vals in _channels:
         _chan = cphd.DataChannel(*vals['shape'])
         _chan.identifier = vals['id']
@@ -347,7 +346,8 @@ def get_test_metadata(has_support_array, is_compressed):
     metadata.channel = channel
 
     # PVP block
-    # Note that the params used here correspond to the list-of-dicts PVP data in get_test_pvp_data() below
+    # Note that the params used here correspond to the list-of-dicts PVP
+    # data in get_test_pvp_data() below
     # Any changes that affect the total PVP size will require updating data.numBytesPVP (above)
 
     pvp_data = {
@@ -772,8 +772,9 @@ def get_test_pvp_data(metadata):
             # Custom params
             'customFloatParam': np.random.rand(num_pulses).astype('float32'),  # (1, 'F8')
             'customIntParam': np.zeros((num_pulses,)).astype(int),  # (1, 'I8')
-            'customComplexFloatParam': (np.random.rand(num_pulses) + np.random.rand(num_pulses) * 1j)
-                                        .astype('complex64')  # (1, 'CF8')
+            'customComplexFloatParam': (np.random.rand(num_pulses)
+                                        + np.random.rand(num_pulses) * 1j)
+                                       .astype('complex64')  # (1, 'CF8')
         })
 
     return pvp_data
@@ -783,7 +784,6 @@ def get_test_widebands(metadata):
 
     widebands = []
     for channel in range(metadata.getNumChannels()):
-        num_pulses = metadata.getNumVectors(channel)
         shape = (metadata.getNumVectors(channel), metadata.getNumSamples(channel))
         widebands.append((np.random.rand(*shape) + np.random.rand(*shape) * 1j)
                          .astype('complex64'))
