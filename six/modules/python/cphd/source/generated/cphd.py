@@ -5238,7 +5238,8 @@ class PVPBlock(_object):
                         getattr(pvpBlock, paramsToSet[paramName])(paramData, channelIndex, vectorIndex)
                     else:
     # Get and call setter method for the type of this custom parameter
-                        pvpBlock.pvpFormatToAddedPVPMethod('set', cphdMetadata.pvp.addedPVP[paramName].getFormat())(
+                        pvpBlock.pvpFormatToAddedPVPMethod(
+                            'set', cphdMetadata.pvp.addedPVP[paramName].getFormat())(
                             paramData, channelIndex, vectorIndex, paramName)
         return pvpBlock
 
@@ -5567,21 +5568,16 @@ class CPHDWriter(_object):
         return _cphd.CPHDWriter_close(self)
 
 
-    def write(self, pvpBlock: 'PVPBlock', widebandData: 'std::complex< float > const *', supportData: 'sys::ubyte const *'=None) -> "void":
-        """
-        write(CPHDWriter self, PVPBlock pvpBlock, std::complex< float > const * widebandData, sys::ubyte const * supportData=None)
-        write(CPHDWriter self, PVPBlock pvpBlock, std::complex< float > const * widebandData)
-        """
-        return _cphd.CPHDWriter_write(self, pvpBlock, widebandData, supportData)
-
-
     def __del__(self):
         self.close()
 
 
-    def writeWideband(self, pvpBlock: 'PVPBlock', widebandArray: 'PyObject *', rows: 'size_t', cols: 'size_t') -> "void":
-        """writeWideband(CPHDWriter self, PVPBlock pvpBlock, PyObject * widebandArray, size_t rows, size_t cols)"""
-        return _cphd.CPHDWriter_writeWideband(self, pvpBlock, widebandArray, rows, cols)
+    def writeWideband(self, metadata: 'Metadata', pvpBlock: 'PVPBlock', widebandArrays: 'PyObject *', supportData: 'sys::ubyte const *'=None) -> "void":
+        """
+        writeWideband(CPHDWriter self, Metadata metadata, PVPBlock pvpBlock, PyObject * widebandArrays, sys::ubyte const * supportData=None)
+        writeWideband(CPHDWriter self, Metadata metadata, PVPBlock pvpBlock, PyObject * widebandArrays)
+        """
+        return _cphd.CPHDWriter_writeWideband(self, metadata, pvpBlock, widebandArrays, supportData)
 
     __swig_destroy__ = _cphd.delete_CPHDWriter
     __del__ = lambda self: None
@@ -5776,17 +5772,59 @@ MapStringAPVPType_swigregister = _cphd.MapStringAPVPType_swigregister
 MapStringAPVPType_swigregister(MapStringAPVPType)
 
 
+import os
+import numpy as np
+
+def write_cphd(
+    pathname,
+    metadata,
+    pvp_block,
+    wideband_arrays,
+    schema_paths=[],
+    num_threads=0,
+    scratch_space=(4 * 1024 * 1024),
+):
+    """
+    \brief  Writes CPHD data to a file
+
+    \param  pathname (str)
+    \param  metadata (cphd.Metadata)
+    \param  pvp_block (cphd.PVPBlock)
+    \param  wideband_arrays (sequence of np.arrays)
+            Arrays of wideband data, one per channel
+    \param  schema_paths (list of strs)
+    \param  num_threads (int)
+    \param  scratch_space (int)
+    """
+
+    if not schema_paths and 'SIX_SCHEMA_PATH' in os.environ:
+        schema_paths = [os.environ['SIX_SCHEMA_PATH']]
+
+# Support writing a single channel with a single ndarray
+    if isinstance(wideband_arrays, np.ndarray):
+        wideband_arrays = [wideband_arrays]
+
+    writer = CPHDWriter(
+        metadata,
+        pathname,
+        schema_paths,
+        num_threads,
+        scratch_space
+    )
+    writer.writeWideband(metadata, pvp_block, wideband_arrays)
+
+
 import numpy
 import multiprocessing
 from coda.coda_types import RowColSizeT
 
 def read(self,
-         channel = 0,
-         firstVector = 0,
-         lastVector = Wideband.ALL,
-         firstSample = 0,
-         lastSample = Wideband.ALL,
-         numThreads = multiprocessing.cpu_count()):
+         channel=0,
+         firstVector=0,
+         lastVector=Wideband.ALL,
+         firstSample=0,
+         lastSample=Wideband.ALL,
+         numThreads=multiprocessing.cpu_count()):
 
     dims = self.getBufferDims(channel, firstVector, lastVector, firstSample, lastSample)
     sampleTypeSize = self.getElementSize()
@@ -5797,9 +5835,16 @@ def read(self,
     else:
         raise Exception('Unknown element type')
 
-    numpyArray = numpy.empty(shape = (dims.row, dims.col), dtype = dtype)
+    numpyArray = numpy.empty(shape=(dims.row, dims.col), dtype=dtype)
     pointer, ro = numpyArray.__array_interface__['data']
-    self.readImpl(channel, firstVector, lastVector, firstSample, lastSample, numThreads, dims, pointer)
+    self.readImpl(channel,
+                  firstVector,
+                  lastVector,
+                  firstSample,
+                  lastSample,
+                  numThreads,
+                  dims,
+                  pointer)
     return numpyArray
 
 Wideband.read = read
