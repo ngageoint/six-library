@@ -36,10 +36,10 @@ from coda.math_linear import Vector3
 
 from util import get_test_metadata, get_test_pvp_data, get_test_widebands
 
-if __name__ == '__main__':
+NUM_THREADS = 16
+SCRATCH_SPACE = 4 * 1024 * 1024
 
-    num_threads = 16
-    scratch_space = 128
+if __name__ == '__main__':
 
     metadata = get_test_metadata(has_support_array=False, is_compressed=False)
     widebands = get_test_widebands(metadata)
@@ -49,16 +49,13 @@ if __name__ == '__main__':
     schema_paths.push_back(os.environ['SIX_SCHEMA_PATH'])
 
     cphd_filepath = os.path.join(os.getcwd(), 'test_cphd.nitf')
-    cphd_writer = CPHDWriter(metadata, cphd_filepath, schema_paths, num_threads)
+    cphd_writer = CPHDWriter(metadata, cphd_filepath, schema_paths, NUM_THREADS)
 
-    # writeWideband() requires one contiguous wideband array, vstack() the wideband arrays
-    # for each channel
-    contiguous_widebands = np.vstack(tuple(widebands))
     # writeWideband() writes complete CPHD: XML metadata, PVP data, and wideband data
-    cphd_writer.writeWideband(pvp_block, contiguous_widebands, *contiguous_widebands.shape)
+    cphd_writer.writeWideband(metadata, pvp_block, widebands)
 
     # Check that we correctly wrote the wideband data
-    reader = CPHDReader(cphd_filepath, scratch_space)
+    reader = CPHDReader(cphd_filepath, SCRATCH_SPACE)
     for channel in range(metadata.getNumChannels()):
         if not np.array_equal(reader.getWideband().read(channel=channel), widebands[channel]):
             print('Test failed, original wideband and wideband from file differ in channel {0}'

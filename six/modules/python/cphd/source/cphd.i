@@ -511,45 +511,119 @@ using six::Vector3;
 %extend cphd::CPHDWriter
 {
 
-%template(write) write<std::complex<float>>;
-
 %pythoncode
 %{
     def __del__(self):
         self.close()
 %}
 
-/*! Write NumPy array of wideband data to CPHD file
- * \param PVPBlock (cphd::PVPBlock)
+/*! Write a sequence of NumPy arrays of wideband data to a CPHD file
+ * \param metadata (cphd::Metadata)
+ * \param pvpBlock (cphd::PVPBlock)
  * \param widebandArray
- *        A single, contiguous NumPy array of all wideband data
-          Multiple data channels should be vstack'd together (first channel first)
- * \param rows
- *        Expected number of rows in widebandArray
- * \param cols
- *        Expected number of cols in widebandArray
+ *        A sequence of NumPy arrays of wideband data, one array per channel
+ * \param supportData (sys::ubyte*)
+          Defaults to nullptr
  */
-void writeWideband(PVPBlock pvpBlock, PyObject* widebandArray, size_t rows, size_t cols)
+void writeWideband(const Metadata& metadata,
+                   const PVPBlock& pvpBlock,
+                   PyObject* widebandArrays,
+                   const sys::ubyte* supportData=nullptr)
 {
-    // Verify that widebandArray is a complex64 NumPy array with the expected dimensions
-    numpyutils::verifyArrayType(widebandArray, NPY_COMPLEX64);
-    const types::RowCol<size_t> expectedWidebandDims(rows, cols);
-    const types::RowCol<size_t> actualWidebandDims = numpyutils::getDimensionsRC(widebandArray);
-    if (expectedWidebandDims != actualWidebandDims)
+    const size_t numChannels = static_cast<size_t>(PySequence_Length(widebandArrays));
+    if (numChannels != metadata.data.getNumChannels())
     {
-        throw except::Exception("Wideband array dimensions ("
-                                + std::to_string(actualWidebandDims.row) + ", "
-                                + std::to_string(actualWidebandDims.col)
-                                + ") do not match expected ("
-                                + std::to_string(expectedWidebandDims.row) + ", "
-                                + std::to_string(expectedWidebandDims.col) + ")");
+        std::ostringstream oss;
+        oss << "Number of channels in metadata (" << metadata.data.getNumChannels() << ") "
+            << "does not match number of channels received (" << numChannels << ")";
+        throw except::Exception(Ctxt(oss.str()));
     }
 
-    std::complex<float>* widebandPtr = numpyutils::getBuffer<std::complex<float>>(widebandArray);
-    self->write(pvpBlock, widebandPtr);  // write() is templated for complex<float> above
+    $self->writeMetadata(pvpBlock);
+
+    if (metadata.data.getNumSupportArrays() != 0)
+    {
+        if (supportData == nullptr)
+        {
+            throw except::Exception(Ctxt("SupportData is not provided"));
+        }
+        $self->writeSupportData(supportData);
+    }
+
+    $self->writePVPData(pvpBlock);
+
+    for (size_t ii = 0; ii < numChannels; ++ii)
+    {
+        PyObject* channelWideband = PySequence_GetItem(widebandArrays, ii);
+
+        // Note that different channels could have different dimensions
+        const types::RowCol<size_t> metadataDims(
+            metadata.data.getNumVectors(ii),
+            metadata.data.getNumSamples(ii)
+        );
+        const types::RowCol<size_t> arrayDims = numpyutils::getDimensionsRC(channelWideband);
+        if (metadataDims != arrayDims)
+        {
+            std::ostringstream oss;
+            oss << "For channel " << ii << ", wideband dimensions ("
+                << arrayDims.row << ", " << arrayDims.col << ") "
+                << "do not match dimensions in metadata: ("
+                << metadataDims.row << ", " << metadataDims.col << ")";
+            throw except::Exception(Ctxt(oss.str()));
+        }
+
+        const size_t numElements = arrayDims.row * arrayDims.col;
+        std::complex<float>* widebandPtr = numpyutils::getBuffer<std::complex<float>>(channelWideband);
+        $self->writeCPHDData<std::complex<float>>(widebandPtr, numElements, ii);
+    }
 }
 
 }
+
+%pythoncode
+%{
+    import os
+    import numpy as np
+
+    def write_cphd(
+        pathname,
+        metadata,
+        pvp_block,
+        wideband_arrays,
+        schema_paths=[],
+        num_threads=0,
+        scratch_space=(4 * 1024 * 1024),
+    ):
+        """
+        \brief  Writes CPHD data to a file
+
+        \param  pathname (str)
+        \param  metadata (cphd.Metadata)
+        \param  pvp_block (cphd.PVPBlock)
+        \param  wideband_arrays (sequence of np.arrays)
+                Arrays of wideband data, one per channel
+        \param  schema_paths (list of strs)
+        \param  num_threads (int)
+        \param  scratch_space (int)
+        """
+
+        if not schema_paths and 'SIX_SCHEMA_PATH' in os.environ:
+            schema_paths = [os.environ['SIX_SCHEMA_PATH']]
+
+        # Support writing a single channel with a single ndarray
+        if isinstance(wideband_arrays, np.ndarray):
+            wideband_arrays = [wideband_arrays]
+
+        writer = CPHDWriter(
+            metadata,
+            pathname,
+            schema_paths,
+            num_threads,
+            scratch_space
+        )
+        writer.writeWideband(metadata, pvp_block, wideband_arrays)
+%}
+
 
 %pythoncode
 %{
