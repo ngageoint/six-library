@@ -36,7 +36,7 @@ from util import get_test_metadata, get_test_pvp_data
 
 if __name__ == '__main__':
 
-    metadata = get_test_metadata(has_support_array=True, is_compressed=True)
+    metadata, support_arrays = get_test_metadata(has_support_array=True, is_compressed=True)
     pvp_data = get_test_pvp_data(metadata)  # list of dicts
 
     if len(pvp_data) != metadata.getNumChannels():

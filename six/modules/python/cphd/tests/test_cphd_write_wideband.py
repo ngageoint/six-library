@@ -40,7 +40,7 @@ SCRATCH_SPACE = 4 * 1024 * 1024
 
 if __name__ == '__main__':
 
-    metadata = get_test_metadata(has_support_array=False, is_compressed=False)
+    metadata, support_arrays = get_test_metadata(has_support_array=True, is_compressed=False)
     widebands = get_test_widebands(metadata)
     pvp_block = PVPBlock.fromListOfDicts(get_test_pvp_data(metadata), metadata)
 
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     cphd_writer = CPHDWriter(metadata, cphd_filepath, schema_paths, NUM_THREADS)
 
     # writeWideband() writes complete CPHD: XML metadata, PVP data, and wideband data
-    cphd_writer.writeWideband(metadata, pvp_block, widebands)
+    cphd_writer.writeWideband(metadata, pvp_block, widebands, support_arrays)
 
     # Check that we correctly wrote the wideband data
     reader = CPHDReader(cphd_filepath, SCRATCH_SPACE)

@@ -230,16 +230,18 @@ def get_test_metadata(has_support_array, is_compressed):
         # when reading in metadata from an XML string. If there are multiple
         # support arrays, they may not be in the same order, which will make
         # the XML strings not compare equally
+        shape = (3, 4)
         _support_arrays = [
             {
                 'id': 'AddedSupportArray',
-                'shape': (3, 4),
-                'bytes_per_element': 4,
+                'shape': shape,
+                'bytes_per_element': 8,
                 'offset': 144,
             }
         ]
-    else:  # In case we don't want to provide test support data too
-        _support_arrays = []
+        _support_arrays_data = [np.random.randint(256, size=shape, dtype=np.uint8)]
+    else:  # In case we don't want to provide test support data
+        _support_arrays, _support_arrays_data = [], []
 
     data = cphd.Data()
     data.signalArrayFormat.value = cphd.SignalArrayFormat.CF8
@@ -733,7 +735,7 @@ def get_test_metadata(has_support_array, is_compressed):
 
     # MatchInfo block (TODO)
 
-    return metadata
+    return (metadata, _support_arrays_data) if has_support_array else (metadata)
 
 
 def get_test_pvp_data(metadata):

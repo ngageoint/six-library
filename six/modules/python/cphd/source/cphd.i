@@ -524,12 +524,13 @@ using six::Vector3;
  * \param widebandArray
  *        A sequence of NumPy arrays of wideband data, one array per channel
  * \param supportData (sys::ubyte*)
+          A pointer to a contiguous block of support array data.
           Defaults to nullptr
  */
 void writeWideband(const Metadata& metadata,
                    const PVPBlock& pvpBlock,
                    PyObject* widebandArrays,
-                   const sys::ubyte* supportData=nullptr)
+                   PyObject* supportArrays=nullptr)
 {
     const size_t numChannels = static_cast<size_t>(PySequence_Length(widebandArrays));
     if (numChannels != metadata.data.getNumChannels())
@@ -544,11 +545,11 @@ void writeWideband(const Metadata& metadata,
 
     if (metadata.data.getNumSupportArrays() != 0)
     {
-        if (supportData == nullptr)
+        if (supportArrays == nullptr)
         {
-            throw except::Exception(Ctxt("SupportData is not provided"));
+            throw except::Exception(Ctxt("Support data is not provided"));
         }
-        $self->writeSupportData(supportData);
+        $self->writeSupportData(supportArrays);
     }
 
     $self->writePVPData(pvpBlock);
@@ -591,6 +592,7 @@ void writeWideband(const Metadata& metadata,
         metadata,
         pvp_block,
         wideband_arrays,
+        support_arrays=None,
         schema_paths=[],
         num_threads=0,
         scratch_space=(4 * 1024 * 1024),
@@ -603,6 +605,8 @@ void writeWideband(const Metadata& metadata,
         \param  pvp_block (cphd.PVPBlock)
         \param  wideband_arrays (sequence of np.arrays)
                 Arrays of wideband data, one per channel
+        \param  support_arrays (sequence of np.arrays)
+                Arrays of support array data
         \param  schema_paths (list of strs)
         \param  num_threads (int)
         \param  scratch_space (int)
@@ -615,6 +619,21 @@ void writeWideband(const Metadata& metadata,
         if isinstance(wideband_arrays, np.ndarray):
             wideband_arrays = [wideband_arrays]
 
+        if support_arrays:
+            # Support writing a single support array with a single ndarray
+            if isinstance(support_arrays, np.ndarray):
+                support_arrays = [support_arrays]
+
+            # Flatten (possibly differently-shaped) support arrays into 1D,
+            # stack them, then assert that the data is contiguous in memory
+            support_arrays = [np.ndarray.flatten(support_array)
+                              for support_array in support_arrays]
+            support_arrays = np.stack(support_arrays)
+            if not support_arrays.flags['C_CONTIGUOUS']:
+                support_arrays = np.ascontiguousarray(support_arrays)
+            assert support_arrays.flags['C_CONTIGUOUS'], \
+                   'Could not make support array data contiguous'
+
         writer = CPHDWriter(
             metadata,
             pathname,
@@ -622,9 +641,8 @@ void writeWideband(const Metadata& metadata,
             num_threads,
             scratch_space
         )
-        writer.writeWideband(metadata, pvp_block, wideband_arrays)
+        writer.writeWideband(metadata, pvp_block, wideband_arrays, support_arrays)
 %}
-
 
 %pythoncode
 %{
