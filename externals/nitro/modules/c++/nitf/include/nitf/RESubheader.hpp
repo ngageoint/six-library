@@ -88,10 +88,10 @@ public:
     char * getSubheaderFields() const;
 
     //! Get the dataLength
-    nitf::Uint64 getDataLength() const;
+    uint64_t getDataLength() const;
 
     //! Set the dataLength
-    void setDataLength(nitf::Uint32 value);
+    void setDataLength(uint32_t value);
 
 private:
     nitf_Error error;

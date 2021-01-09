@@ -34,13 +34,13 @@ typedef struct _RowSourceImpl
     void *algorithm;            /* The algorithm object */
     /* Pointer to the next row function */
     NITF_ROW_SOURCE_NEXT_ROW nextRow;
-    nitf_Uint32 band;           /* Associate output band */
-    nitf_Uint32 numRows;        /* Number of rows */
-    nitf_Uint32 rowLength;      /* Length of each row in bytes (single band) */
+    uint32_t band;           /* Associate output band */
+    uint32_t numRows;        /* Number of rows */
+    uint32_t rowLength;      /* Length of each row in bytes (single band) */
 
-    nitf_Uint8 *rowBuffer;      /* The row buffer */
-    nitf_Uint8 *nextPtr;        /* Points to next byte to be transfered */
-    nitf_Uint64 bytesLeft;      /* Bytes left to be processed */
+    uint8_t *rowBuffer;      /* The row buffer */
+    uint8_t *nextPtr;        /* Points to next byte to be transfered */
+    uint64_t bytesLeft;      /* Bytes left to be processed */
 }
 RowSourceImpl;
 
@@ -54,8 +54,8 @@ NITFPRIV(NITF_BOOL) RowSource_read(NITF_DATA * data, void* buf, nitf_Off size,  
                                    nitf_Error * error)  /* For error returns */
 {
     RowSourceImpl *impl;        /* Instance data */
-    nitf_Uint64 xfrCount;       /* Transfer count */
-    nitf_Uint64 remainder;      /* Amount left to transfer */
+    uint64_t xfrCount;       /* Transfer count */
+    uint64_t remainder;      /* Amount left to transfer */
     char *bufPtr;               /* Current location in output buffer */
 
     impl = (RowSourceImpl *) data;
@@ -108,12 +108,17 @@ NITFPRIV(void) RowSource_destruct(NITF_DATA * data)
 
 NITFPRIV(nitf_Off) RowSource_getSize(NITF_DATA * data, nitf_Error *e)
 {
+    (void)e;
+
     RowSourceImpl *impl = (RowSourceImpl *) data;
     return (nitf_Off)impl->numRows * (nitf_Off)impl->rowLength;
 }
 
 NITFPRIV(NITF_BOOL) RowSource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *e)
 {
+    (void)data;
+    (void)size;
+    (void)e;
     return NITF_SUCCESS;
 }
 
@@ -133,9 +138,9 @@ static nitf_IDataSource iRowSource =
 NITFAPI(nitf_BandSource *) nitf_RowSource_construct(void *algorithm,
         NITF_ROW_SOURCE_NEXT_ROW
         nextRow,
-        nitf_Uint32 band,
-        nitf_Uint32 numRows,
-        nitf_Uint32 rowLength,
+        uint32_t band,
+        uint32_t numRows,
+        uint32_t rowLength,
         nitf_Error * error)
 {
     nitf_BandSource *source;    /* The result */

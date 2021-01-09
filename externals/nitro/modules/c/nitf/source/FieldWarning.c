@@ -41,7 +41,6 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(nitf_Off fileOffset,
         error)
 {
     nitf_FieldWarning *result;  /* Return value */
-    size_t strLength;           /* Length of a string in bytes */
 
     /* Get some memory */
     result = (nitf_FieldWarning *) NITF_MALLOC(sizeof(nitf_FieldWarning));
@@ -72,27 +71,8 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(nitf_Off fileOffset,
     /* fileOffset */
     result->fileOffset = fileOffset;
 
-    /* set these to be safe */
-    result->fieldName = NULL;
-    result->expectation = NULL;
-
-    /* field */
-    if (fieldName)
-    {
-        strLength = strlen(fieldName);
-        result->fieldName = (char *) NITF_MALLOC(strLength + 1);
-        strcpy(result->fieldName, fieldName);
-        result->fieldName[strLength] = 0;
-    }
-
-    /* expectation */
-    if (expectation)
-    {
-        strLength = strlen(expectation);
-        result->expectation = (char *) NITF_MALLOC(strLength + 1);
-        strcpy(result->expectation, expectation);
-        result->expectation[strLength] = 0;
-    }
+    result->fieldName = nitf_strdup(fieldName);
+    result->expectation = nitf_strdup(expectation);
 
     return result;
 }
@@ -145,7 +125,6 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *
         nitf_Error * error)
 {
     nitf_FieldWarning *result;  /* Return value */
-    size_t strLength;           /* Length of a string in bytes */
 
     if (!source)
     {
@@ -170,38 +149,22 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *
 
     result->fileOffset = source->fileOffset;
     result->field = NULL;
-    result->fieldName = NULL;
-    result->expectation = NULL;
-
-    /* expectation */
-    if (source->expectation)
-    {
-        strLength = strlen(source->expectation);
-        result->expectation = (char *) NITF_MALLOC(strLength + 1);
-        strcpy(result->expectation, source->expectation);
-        result->expectation[strLength] = 0;
-    }
+    result->expectation = nitf_strdup(source->expectation);
 
     /* fieldName */
-    if (source->fieldName)
+    result->fieldName = nitf_strdup(source->fieldName);
+    if (!result->fieldName)
     {
-        result->fieldName = (char *) NITF_MALLOC(strlen(source->fieldName) + 1);
-        if (!result->fieldName)
-        {
-            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                            NITF_CTXT, NITF_ERR_MEMORY);
-            goto CATCH_ERROR;
-
-        }
-        strcpy(result->fieldName, source->fieldName);
-        result->fieldName[strlen(source->fieldName)] = 0;
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                        NITF_CTXT, NITF_ERR_MEMORY);
+        goto CATCH_ERROR;
     }
 
     /* field */
     result->field = nitf_Field_clone(source->field, error);
 
     return result;
-
+    ;
 CATCH_ERROR:
     nitf_FieldWarning_destruct(&result);
     return NULL;

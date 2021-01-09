@@ -64,7 +64,11 @@ NITF_CXX_GUARD
 /* Control values that are put in the TREDescription data_type field */
 enum
 {
-    NITF_LOOP = NITF_BINARY + 1,    /*!< data_type control loop */
+    NITF_LOOP = 
+#ifdef __cplusplus
+    (int) nitf_FieldType::
+#endif
+    NITF_BINARY + 1,    /*!< data_type control loop */
     NITF_ENDLOOP,                   /*!< data_type control end loop */
     NITF_IF,                        /*!< data_type control if */
     NITF_ENDIF,                     /*!< data_type control endif */
@@ -154,7 +158,7 @@ typedef const char* (*NITF_TRE_ID_GET) (nitf_TRE* tre);
  * \return          NITF_FAILURE if an error occurred, otherwise NITF_SUCCESS
  */
 typedef NITF_BOOL (*NITF_TRE_READER)(nitf_IOInterface* io,
-                                     nitf_Uint32 length,
+                                     uint32_t length,
                                      nitf_TRE *tre,
                                      struct _nitf_Record *record,
                                      nitf_Error *error);

@@ -21,6 +21,7 @@
  */
 #ifndef __NITF_BYTE_PROVIDER_HPP__
 #define __NITF_BYTE_PROVIDER_HPP__
+#pragma once
 
 #include <vector>
 #include <utility>
@@ -33,6 +34,8 @@
 #include <nitf/NITFBufferList.hpp>
 #include <nitf/ImageSegmentComputer.h>
 #include <io/ByteStream.h>
+
+#include "cstddef.h"
 
 namespace nitf
 {
@@ -127,7 +130,7 @@ public:
     }
 
     //! \return The raw file header bytes
-    const std::vector<sys::byte>& getFileHeader() const
+    const std::vector<std::byte>& getFileHeader() const
     {
         return mFileHeader;
     }
@@ -136,7 +139,7 @@ public:
      * \return The raw bytes for each image subheader.  Vector size matches the
      * number of image segments.
      */
-    const std::vector<std::vector<sys::byte> >& getImageSubheaders() const
+    const std::vector<std::vector<std::byte> >& getImageSubheaders() const
     {
         return mImageSubheaders;
     }
@@ -145,7 +148,7 @@ public:
      * \return The raw bytes for each DES (subheader immediately followed by
      * raw DES data).  Vector size matches the number of data extension segments.
      */
-    const std::vector<sys::byte>& getDesSubheaderAndData() const
+    const std::vector<std::byte>& getDesSubheaderAndData() const
     {
         return mDesSubheaderAndData;
     }
@@ -260,7 +263,7 @@ protected:
                     size_t numColsPerBlock = 0);
 
     static void copyFromStreamAndClear(io::ByteStream& stream,
-                                       std::vector<sys::byte>& rawBytes);
+                                       std::vector<std::byte>& rawBytes);
 
     size_t countPadRows(
             size_t seg, size_t numRowsToWrite,
@@ -348,11 +351,11 @@ protected:
 
     std::vector<SegmentInfo> mImageSegmentInfo; // Per segment
 
-    std::vector<sys::byte> mFileHeader;
-    std::vector<std::vector<sys::byte> > mImageSubheaders; // Per segment
+    std::vector<std::byte> mFileHeader;
+    std::vector<std::vector<std::byte> > mImageSubheaders; // Per segment
 
     // All DES subheaders and data together contiguously
-    std::vector<sys::byte> mDesSubheaderAndData;
+    std::vector<std::byte> mDesSubheaderAndData;
 
     std::vector<nitf::Off> mImageSubheaderFileOffsets; // Per segment
     nitf::Off mDesSubheaderFileOffset;

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="nitf\source\BandInfo.cpp" />
+    <ClCompile Include="nitf\source\BandSource.cpp" />
+    <ClCompile Include="nitf\source\BlockingInfo.cpp" />
+    <ClCompile Include="nitf\source\BufferedReader.cpp" />
+    <ClCompile Include="nitf\source\BufferedWriter.cpp" />
+    <ClCompile Include="nitf\source\ByteProvider.cpp" />
+    <ClCompile Include="nitf\source\ComponentInfo.cpp" />
+    <ClCompile Include="nitf\source\CompressedByteProvider.cpp" />
+    <ClCompile Include="nitf\source\CompressionInterface.cpp" />
+    <ClCompile Include="nitf\source\CustomIO.cpp" />
+    <ClCompile Include="nitf\source\DataSource.cpp" />
+    <ClCompile Include="nitf\source\DateTime.cpp" />
+    <ClCompile Include="nitf\source\DecompressionInterface.cpp" />
+    <ClCompile Include="nitf\source\DESegment.cpp" />
+    <ClCompile Include="nitf\source\DESubheader.cpp" />
+    <ClCompile Include="nitf\source\DownSampler.cpp" />
+    <ClCompile Include="nitf\source\FileHeader.cpp" />
+    <ClCompile Include="nitf\source\FileSecurity.cpp" />
+    <ClCompile Include="nitf\source\GraphicSegment.cpp" />
+    <ClCompile Include="nitf\source\GraphicSubheader.cpp" />
+    <ClCompile Include="nitf\source\Handle.cpp" />
+    <ClCompile Include="nitf\source\HashTable.cpp" />
+    <ClCompile Include="nitf\source\ImageBlocker.cpp" />
+    <ClCompile Include="nitf\source\ImageReader.cpp" />
+    <ClCompile Include="nitf\source\ImageSegment.cpp" />
+    <ClCompile Include="nitf\source\ImageSegmentComputer.cpp" />
+    <ClCompile Include="nitf\source\ImageSource.cpp" />
+    <ClCompile Include="nitf\source\ImageSubheader.cpp" />
+    <ClCompile Include="nitf\source\ImageWriter.cpp" />
+    <ClCompile Include="nitf\source\IOHandle.cpp" />
+    <ClCompile Include="nitf\source\IOInterface.cpp" />
+    <ClCompile Include="nitf\source\IOStreamReader.cpp" />
+    <ClCompile Include="nitf\source\IOStreamWriter.cpp" />
+    <ClCompile Include="nitf\source\LabelSegment.cpp" />
+    <ClCompile Include="nitf\source\LabelSubheader.cpp" />
+    <ClCompile Include="nitf\source\List.cpp" />
+    <ClCompile Include="nitf\source\LookupTable.cpp" />
+    <ClCompile Include="nitf\source\MemoryIO.cpp" />
+    <ClCompile Include="nitf\source\NITFBufferList.cpp" />
+    <ClCompile Include="nitf\source\PluginRegistry.cpp" />
+    <ClCompile Include="nitf\source\Reader.cpp" />
+    <ClCompile Include="nitf\source\Record.cpp" />
+    <ClCompile Include="nitf\source\RESegment.cpp" />
+    <ClCompile Include="nitf\source\RESubheader.cpp" />
+    <ClCompile Include="nitf\source\SegmentReader.cpp" />
+    <ClCompile Include="nitf\source\SegmentSource.cpp" />
+    <ClCompile Include="nitf\source\SegmentWriter.cpp" />
+    <ClCompile Include="nitf\source\SubWindow.cpp" />
+    <ClCompile Include="nitf\source\TextSegment.cpp" />
+    <ClCompile Include="nitf\source\TextSubheader.cpp" />
+    <ClCompile Include="nitf\source\TRE.cpp" />
+    <ClCompile Include="nitf\source\Utils.cpp" />
+    <ClCompile Include="nitf\source\WriteHandler.cpp" />
+    <ClCompile Include="nitf\source\Writer.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="nitf\include\import\nitf.hpp" />
+    <ClInclude Include="nitf\include\nitf\BandInfo.hpp" />
+    <ClInclude Include="nitf\include\nitf\BandSource.hpp" />
+    <ClInclude Include="nitf\include\nitf\BlockingInfo.hpp" />
+    <ClInclude Include="nitf\include\nitf\BufferedReader.hpp" />
+    <ClInclude Include="nitf\include\nitf\BufferedWriter.hpp" />
+    <ClInclude Include="nitf\include\nitf\ByteProvider.hpp" />
+    <ClInclude Include="nitf\include\nitf\ComponentInfo.hpp" />
+    <ClInclude Include="nitf\include\nitf\CompressedByteProvider.hpp" />
+    <ClInclude Include="nitf\include\nitf\CompressionInterface.hpp" />
+    <ClInclude Include="nitf\include\nitf\CustomIO.hpp" />
+    <ClInclude Include="nitf\include\nitf\DataSource.hpp" />
+    <ClInclude Include="nitf\include\nitf\DateTime.hpp" />
+    <ClInclude Include="nitf\include\nitf\DecompressionInterface.hpp" />
+    <ClInclude Include="nitf\include\nitf\DESegment.hpp" />
+    <ClInclude Include="nitf\include\nitf\DESubheader.hpp" />
+    <ClInclude Include="nitf\include\nitf\DownSampler.hpp" />
+    <ClInclude Include="nitf\include\nitf\Extensions.hpp" />
+    <ClInclude Include="nitf\include\nitf\Field.hpp" />
+    <ClInclude Include="nitf\include\nitf\FieldWarning.hpp" />
+    <ClInclude Include="nitf\include\nitf\FileHeader.hpp" />
+    <ClInclude Include="nitf\include\nitf\FileSecurity.hpp" />
+    <ClInclude Include="nitf\include\nitf\GraphicSegment.hpp" />
+    <ClInclude Include="nitf\include\nitf\GraphicSubheader.hpp" />
+    <ClInclude Include="nitf\include\nitf\Handle.hpp" />
+    <ClInclude Include="nitf\include\nitf\HandleManager.hpp" />
+    <ClInclude Include="nitf\include\nitf\HashTable.hpp" />
+    <ClInclude Include="nitf\include\nitf\ImageBlocker.hpp" />
+    <ClInclude Include="nitf\include\nitf\ImageReader.hpp" />
+    <ClInclude Include="nitf\include\nitf\ImageSegment.hpp" />
+    <ClInclude Include="nitf\include\nitf\ImageSegmentComputer.h" />
+    <ClInclude Include="nitf\include\nitf\ImageSource.hpp" />
+    <ClInclude Include="nitf\include\nitf\ImageSubheader.hpp" />
+    <ClInclude Include="nitf\include\nitf\ImageWriter.hpp" />
+    <ClInclude Include="nitf\include\nitf\IOHandle.hpp" />
+    <ClInclude Include="nitf\include\nitf\IOInterface.hpp" />
+    <ClInclude Include="nitf\include\nitf\IOStreamReader.hpp" />
+    <ClInclude Include="nitf\include\nitf\IOStreamWriter.hpp" />
+    <ClInclude Include="nitf\include\nitf\LabelSegment.hpp" />
+    <ClInclude Include="nitf\include\nitf\LabelSubheader.hpp" />
+    <ClInclude Include="nitf\include\nitf\List.hpp" />
+    <ClInclude Include="nitf\include\nitf\LookupTable.hpp" />
+    <ClInclude Include="nitf\include\nitf\MemoryIO.hpp" />
+    <ClInclude Include="nitf\include\nitf\NITFBufferList.hpp" />
+    <ClInclude Include="nitf\include\nitf\NITFException.hpp" />
+    <ClInclude Include="nitf\include\nitf\Object.hpp" />
+    <ClInclude Include="nitf\include\nitf\Pair.hpp" />
+    <ClInclude Include="nitf\include\nitf\PluginRegistry.hpp" />
+    <ClInclude Include="nitf\include\nitf\Reader.hpp" />
+    <ClInclude Include="nitf\include\nitf\Record.hpp" />
+    <ClInclude Include="nitf\include\nitf\RESegment.hpp" />
+    <ClInclude Include="nitf\include\nitf\RESubheader.hpp" />
+    <ClInclude Include="nitf\include\nitf\SegmentReader.hpp" />
+    <ClInclude Include="nitf\include\nitf\SegmentSource.hpp" />
+    <ClInclude Include="nitf\include\nitf\SegmentWriter.hpp" />
+    <ClInclude Include="nitf\include\nitf\SubWindow.hpp" />
+    <ClInclude Include="nitf\include\nitf\System.hpp" />
+    <ClInclude Include="nitf\include\nitf\TextSegment.hpp" />
+    <ClInclude Include="nitf\include\nitf\TextSubheader.hpp" />
+    <ClInclude Include="nitf\include\nitf\TRE.hpp" />
+    <ClInclude Include="nitf\include\nitf\Utils.hpp" />
+    <ClInclude Include="nitf\include\nitf\WriteHandler.hpp" />
+    <ClInclude Include="nitf\include\nitf\Writer.hpp" />
+    <ClInclude Include="nitf\include\nitf\WriterOptions.hpp" />
+    <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\c\nitf-c.vcxproj">
+      <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{8F357A19-799E-4971-850E-3F28485C130B}</ProjectGuid>
+    <RootNamespace>nitro</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>nitf-c++</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>nitf.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <EnablePREfast>true</EnablePREfast>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

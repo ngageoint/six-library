@@ -20,11 +20,12 @@
  *
  */
 
-#include <mem/SharedPtr.h>
-#include <sys/Path.h>
-#include <import/nitf.hpp>
 #include <iostream>
 #include <string>
+
+#include <import/nitf.hpp>
+
+namespace fs = std::filesystem;
 
 int main(int argc, char **argv)
 {
@@ -32,7 +33,7 @@ int main(int argc, char **argv)
     {
         if (argc != 3)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <input-file> <output-file>\n\n";
             return 1;
         }

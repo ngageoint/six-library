@@ -22,19 +22,19 @@
 
 #include "j2k/Component.h"
 
-J2KAPI(nrt_Uint32) j2k_Component_getWidth(j2k_Component *component,
+J2KAPI(uint32_t) j2k_Component_getWidth(j2k_Component *component,
                                           nrt_Error *error)
 {
     return component->iface->getWidth(component->data, error);
 }
 
-J2KAPI(nrt_Uint32) j2k_Component_getHeight(j2k_Component *component,
+J2KAPI(uint32_t) j2k_Component_getHeight(j2k_Component *component,
                                            nrt_Error *error)
 {
     return component->iface->getHeight(component->data, error);
 }
 
-J2KAPI(nrt_Uint32) j2k_Component_getPrecision(j2k_Component *component,
+J2KAPI(uint32_t) j2k_Component_getPrecision(j2k_Component *component,
                                               nrt_Error *error)
 {
     return component->iface->getPrecision(component->data, error);
@@ -46,25 +46,25 @@ J2KAPI(NRT_BOOL) j2k_Component_isSigned(j2k_Component *component,
     return component->iface->isSigned(component->data, error);
 }
 
-J2KAPI(nrt_Int32) j2k_Component_getOffsetX(j2k_Component *component,
+J2KAPI(int32_t) j2k_Component_getOffsetX(j2k_Component *component,
                                             nrt_Error *error)
 {
     return component->iface->getOffsetX(component->data, error);
 }
 
-J2KAPI(nrt_Int32) j2k_Component_getOffsetY(j2k_Component *component,
+J2KAPI(int32_t) j2k_Component_getOffsetY(j2k_Component *component,
                                             nrt_Error *error)
 {
     return component->iface->getOffsetY(component->data, error);
 }
 
-J2KAPI(nrt_Uint32) j2k_Component_getSeparationX(j2k_Component *component,
+J2KAPI(uint32_t) j2k_Component_getSeparationX(j2k_Component *component,
                                                 nrt_Error *error)
 {
     return component->iface->getSeparationX(component->data, error);
 }
 
-J2KAPI(nrt_Uint32) j2k_Component_getSeparationY(j2k_Component *component,
+J2KAPI(uint32_t) j2k_Component_getSeparationY(j2k_Component *component,
                                                 nrt_Error *error)
 {
     return component->iface->getSeparationY(component->data, error);

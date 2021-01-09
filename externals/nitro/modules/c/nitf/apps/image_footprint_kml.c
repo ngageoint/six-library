@@ -56,7 +56,8 @@ void writeKML(nitf_ImageSubheader* header,
 
     nitf_CornersType type = nitf_ImageSubheader_getCornersType(header);
     double corners[4][2];
-    char buf[1024];
+#define NITF_MAX_PATH_BUF_SIZE_ NITF_MAX_PATH+8192
+    char buf[NITF_MAX_PATH_BUF_SIZE_];
     char outfile[NITF_MAX_PATH];
     nitf_IOHandle out;
     nitf_Error error;
@@ -83,7 +84,7 @@ void writeKML(nitf_ImageSubheader* header,
                                &error);
 
     /* KML is lon first! */
-    NITF_SNPRINTF(buf, NITF_MAX_PATH, KML_TEMPLATE, outfile, i+1, outfile, i+1,
+    NITF_SNPRINTF(buf, NITF_MAX_PATH_BUF_SIZE_, KML_TEMPLATE, outfile, i+1, outfile, i+1,
                   corners[0][1], corners[0][0],
                   corners[1][1], corners[1][0],
                   corners[2][1], corners[2][0],
@@ -108,8 +109,7 @@ int main(int argc, char** argv)
     nitf_IOHandle io;
     nitf_Error error;
     char file[NITF_MAX_PATH];
-    int i;
-    nitf_Uint32 num;
+    uint32_t num;
 
     if ( argc != 2 )
     {
@@ -162,7 +162,7 @@ int main(int argc, char** argv)
 
     nitf_Utils_baseName(file, argv[1], ".");
 
-    for (i = 0; i < num; i++)
+    for (uint32_t i = 0; i < num; i++)
     {
         nitf_ImageSegment* segment = nitf_List_get(record->images, i, &error);
         if (!segment)

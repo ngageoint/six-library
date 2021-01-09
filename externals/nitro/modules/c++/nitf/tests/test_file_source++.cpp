@@ -56,9 +56,9 @@ std::string prepareIO()
 }
 }
 
-int main(int argc, char **argv)
+int main(int, char **)
 {
-    const int bandSize = MEMSIZE / NUM_BANDS;
+    const size_t bandSize = MEMSIZE / NUM_BANDS;
     const std::string fname = prepareIO();
 
     const int numBytesPerPix = 1;
@@ -71,16 +71,16 @@ int main(int argc, char **argv)
 
     /*  Construct in memory band buffers -- for testing -- 0 terminate strings */
     std::vector<char> band0Vec(bandSize + 1);
-    char* const band0 = &band0Vec[0];
+    char* const band0 = band0Vec.data();
 
     std::vector<char> band1Vec(bandSize + 1);
-    char* const band1 = &band1Vec[0];
+    char* const band1 = band1Vec.data();
 
     std::vector<char> band2Vec(bandSize + 1);
-    char* const band2 = &band2Vec[0];
+    char* const band2 = band2Vec.data();
 
     std::vector<char> allBandsVec(MEMSIZE + 1);
-    char* const allBands = &allBandsVec[0];
+    char* const allBands = allBandsVec.data();
 
     band0[bandSize] = band1[bandSize] = band2[bandSize] = allBands[MEMSIZE] =
             '\0';

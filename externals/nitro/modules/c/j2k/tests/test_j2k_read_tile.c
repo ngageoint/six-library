@@ -23,8 +23,8 @@
 #include <import/nrt.h>
 #include <import/j2k.h>
 
-NRT_BOOL writeFile(j2k_Container *container, nrt_Uint32 tileX,
-                   nrt_Uint32 tileY, nrt_Uint8 *buf, nrt_Uint32 bufSize,
+NRT_BOOL writeFile(j2k_Container *container, uint32_t tileX,
+                   uint32_t tileY, uint8_t *buf, uint64_t bufSize,
                    nrt_Error *error)
 {
     NRT_BOOL rc = NRT_SUCCESS;
@@ -64,15 +64,13 @@ int main(int argc, char **argv)
 {
     int rc = 0;
     nrt_Error error;
-    nrt_IOHandle handle;
     j2k_Reader *reader = NULL;
     j2k_Container *container = NULL;
     int argIt = 0;
     char *fname = NULL;
-    nrt_Uint32 tileX = 0;
-    nrt_Uint32 tileY = 0;
-    nrt_Uint32 bufSize;
-    nrt_Uint8 *buf = NULL;
+    uint32_t tileX = 0;
+    uint32_t tileY = 0;
+    uint8_t *buf = NULL;
 
     for (argIt = 1; argIt < argc; ++argIt)
     {
@@ -100,11 +98,14 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!(reader = j2k_Reader_open(fname, &error)))
+    reader = j2k_Reader_open(fname, &error);
+    if (!reader)
         goto CATCH_ERROR;
-    if (!(container = j2k_Reader_getContainer(reader, &error)))
+    container = j2k_Reader_getContainer(reader, &error);
+    if (!container)
         goto CATCH_ERROR;
 
+    uint64_t bufSize;
     if ((bufSize = j2k_Reader_readTile(reader, tileX, tileY, &buf, &error)) == 0)
     {
         goto CATCH_ERROR;

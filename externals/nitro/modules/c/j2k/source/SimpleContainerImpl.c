@@ -25,26 +25,26 @@
 
 typedef struct _ContainerImpl
 {
-    nrt_Uint32 gridWidth;
-    nrt_Uint32 gridHeight;
-    nrt_Uint32 nComponents;
+    uint32_t gridWidth;
+    uint32_t gridHeight;
+    uint32_t nComponents;
     j2k_Component **components;
-    nrt_Uint32 xTiles;
-    nrt_Uint32 yTiles;
-    nrt_Uint32 tileWidth;
-    nrt_Uint32 tileHeight;
+    uint32_t xTiles;
+    uint32_t yTiles;
+    uint32_t tileWidth;
+    uint32_t tileHeight;
     int imageType;
 } ContainerImpl;
 
 
-J2KPRIV( nrt_Uint32)    Container_getGridWidth(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32)    Container_getGridHeight(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32)    Container_getNumComponents(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( j2k_Component*)Container_getComponent(J2K_USER_DATA *, nrt_Uint32, nrt_Error *);
-J2KPRIV( nrt_Uint32)    Container_getTilesX(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32)    Container_getTilesY(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32)    Container_getTileWidth(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32)    Container_getTileHeight(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t)    Container_getGridWidth(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t)    Container_getGridHeight(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t)    Container_getNumComponents(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( j2k_Component*)Container_getComponent(J2K_USER_DATA *, uint32_t, nrt_Error *);
+J2KPRIV( uint32_t)    Container_getTilesX(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t)    Container_getTilesY(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t)    Container_getTileWidth(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t)    Container_getTileHeight(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( int)           Container_getImageType(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV(void)           Container_destruct(J2K_USER_DATA *);
 
@@ -59,30 +59,38 @@ static j2k_IContainer ContainerInterface = { &Container_getGridWidth,
                                              &Container_getImageType,
                                              &Container_destruct};
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Container_getGridWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->gridWidth;
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Container_getGridHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->gridHeight;
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Container_getNumComponents(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->nComponents;
 }
 
 J2KPRIV( j2k_Component*)
-Container_getComponent(J2K_USER_DATA *data, nrt_Uint32 idx, nrt_Error *error)
+Container_getComponent(J2K_USER_DATA *data, uint32_t idx, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     if (idx >= impl->nComponents)
     {
@@ -93,30 +101,38 @@ Container_getComponent(J2K_USER_DATA *data, nrt_Uint32 idx, nrt_Error *error)
     return impl->components[idx];
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Container_getTilesX(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->xTiles;
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Container_getTilesY(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->yTiles;
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Container_getTileWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->tileWidth;
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Container_getTileHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->tileHeight;
 }
@@ -124,6 +140,8 @@ Container_getTileHeight(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( int)
 Container_getImageType(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ContainerImpl *impl = (ContainerImpl*) data;
     return impl->imageType;
 }
@@ -136,7 +154,7 @@ Container_destruct(J2K_USER_DATA * data)
         ContainerImpl *impl = (ContainerImpl*) data;
         if (impl->components)
         {
-            nrt_Uint32 i = 0;
+            uint32_t i = 0;
             for(; i < impl->nComponents; ++i)
             {
                 j2k_Component *c = impl->components[i];
@@ -151,12 +169,12 @@ Container_destruct(J2K_USER_DATA * data)
 }
 
 
-J2KAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 gridWidth,
-                                               nrt_Uint32 gridHeight,
-                                               nrt_Uint32 numComponents,
+J2KAPI(j2k_Container*) j2k_Container_construct(uint32_t gridWidth,
+                                               uint32_t gridHeight,
+                                               uint32_t numComponents,
                                                j2k_Component** components,
-                                               nrt_Uint32 tileWidth,
-                                               nrt_Uint32 tileHeight,
+                                               uint32_t tileWidth,
+                                               uint32_t tileHeight,
                                                int imageType,
                                                nrt_Error *error)
 {

@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FDEA6187-F4C4-45BC-B793-C0AC0728B776}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <ItemGroup>
+    <ClInclude Include="nitf_Test.h" />
+    <ClInclude Include="nrt_Test.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Test.h" />
+    <ClInclude Include="TestCase.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="nitf_test_create.cpp" />
+    <ClCompile Include="nitf_test_create_nitf++.cpp" />
+    <ClCompile Include="nitf_test_create_nitf.cpp" />
+    <ClCompile Include="nitf_test_field++.cpp" />
+    <ClCompile Include="nitf_test_field.cpp" />
+    <ClCompile Include="nitf_test_geo_utils.cpp" />
+    <ClCompile Include="nitf_test_hash_table_1++.cpp" />
+    <ClCompile Include="nitf_test_image_blocker.cpp" />
+    <ClCompile Include="nitf_test_image_io.cpp" />
+    <ClCompile Include="nitf_test_image_segment_blank_nm_compression.cpp" />
+    <ClCompile Include="nitf_test_image_segment_computer.cpp" />
+    <ClCompile Include="nitf_test_mem_source.cpp" />
+    <ClCompile Include="nitf_test_nitf_buffer_list.cpp" />
+    <ClCompile Include="nitf_test_tre_mods.cpp" />
+    <ClCompile Include="nitf_test_writer_3++.cpp" />
+    <ClCompile Include="nitf_test_zero_field.cpp" />
+    <ClCompile Include="nrt_test_buffer_adapter.cpp" />
+    <ClCompile Include="nrt_test_core_values.cpp" />
+    <ClCompile Include="nrt_test_list.cpp" />
+    <ClCompile Include="nrt_test_nrt_byte_swap.cpp" />
+    <ClCompile Include="nrt_test_nrt_datetime.cpp" />
+    <ClCompile Include="nrt_test_tree.cpp" />
+    <ClCompile Include="nrt_test_utils.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="SetPluginPath.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\modules\c++\nitf-c++.vcxproj">
+      <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\modules\c\nitf\ACCHZB.vcxproj">
+      <Project>{53f9f908-c678-4dee-9309-e71c1d03a45f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\modules\c\nitf\ACCPOB.vcxproj">
+      <Project>{730b1e6e-2469-4f9e-b093-d0c6262453c9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\modules\c\nitf\ACFTA.vcxproj">
+      <Project>{51d7b426-899e-428d-9f69-5ddac9e403fb}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\modules\c\nitf\AIMIDB.vcxproj">
+      <Project>{12aa0752-4ee3-4e0a-85af-0e5deadbf343}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\modules\c\nitf\CSCRNA.vcxproj">
+      <Project>{023de06d-3967-4406-b1b8-032118bb2552}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\modules\c\nitf\JITCID.vcxproj">
+      <Project>{d1d7fcd3-6130-4504-9da0-9d80506be55e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\modules\c\nitf\RPFHDR.vcxproj">
+      <Project>{cf5b4f02-364d-4117-9fb9-6c9c7938e412}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\modules\c\nitf-c.vcxproj">
+      <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemDefinitionGroup />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\Microsoft.googletest.v140.windesktop.msvcstl.dyn.rt-dyn.1.8.1.3\build\native\Microsoft.googletest.v140.windesktop.msvcstl.dyn.rt-dyn.targets" Condition="Exists('..\packages\Microsoft.googletest.v140.windesktop.msvcstl.dyn.rt-dyn.1.8.1.3\build\native\Microsoft.googletest.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" />
+  </ImportGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>X64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories);$(SolutionDir)modules\c\nrt\include\;$(SolutionDir)modules\c\nitf\include\;$(SolutionDir)modules\c\jpeg\include\;$(SolutionDir)modules\c\j2k\include\;$(SolutionDir)modules\c\cgm\include;$(SolutionDir)modules\c\;$(SolutionDir)modules\c++\;$(SolutionDir)modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <SDLCheck>true</SDLCheck>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>X64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories);$(SolutionDir)modules\c\nrt\include\;$(SolutionDir)modules\c\nitf\include\;$(SolutionDir)modules\c\jpeg\include\;$(SolutionDir)modules\c\j2k\include\;$(SolutionDir)modules\c\cgm\include;$(SolutionDir)modules\c\;$(SolutionDir)modules\c++\;$(SolutionDir)modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <SDLCheck>true</SDLCheck>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.googletest.v140.windesktop.msvcstl.dyn.rt-dyn.1.8.1.3\build\native\Microsoft.googletest.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.googletest.v140.windesktop.msvcstl.dyn.rt-dyn.1.8.1.3\build\native\Microsoft.googletest.v140.windesktop.msvcstl.dyn.rt-dyn.targets'))" />
+  </Target>
+</Project>

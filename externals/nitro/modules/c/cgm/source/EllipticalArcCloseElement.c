@@ -116,10 +116,11 @@ NITFAPI(cgm_Element*) cgm_EllipticalArcCloseElement_construct(nitf_Error* error)
         arc->endVectorY = -1;
         arc->closeType = CGM_CLOSE_TYPE_PIE;
         element->data = (NITF_DATA*)arc;
+
+        element->print = &ellipticalArcClosePrint;
+        element->clone = &ellipticalArcCloseClone;
+        element->destroy = &ellipticalArcCloseDestroy;
     }
-    element->print = &ellipticalArcClosePrint;
-    element->clone = &ellipticalArcCloseClone;
-    element->destroy = &ellipticalArcCloseDestroy;
 
     return element;
 }

@@ -187,7 +187,7 @@ JNIEXPORT jobject JNICALL Java_nitf_TRE_find
         jfieldID nameFieldID, fieldFieldID;
         jobject vector, jField, jFieldPair;
         jstring jFieldName;
-        nitf_Uint32 listSize;
+        uint32_t listSize;
         
         vectorClass = (*env)->FindClass(env, "java/util/Vector");
         fieldClass = (*env)->FindClass(env, "nitf/Field");

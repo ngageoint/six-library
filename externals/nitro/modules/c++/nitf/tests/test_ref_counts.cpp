@@ -40,7 +40,7 @@ int main(int argc, char **argv)
             exit( EXIT_FAILURE);
         }
 
-        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN)
         {
             std::cout << "This file does not appear to be a valid NITF"
                     << std::endl;
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 
         return 0;
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
         std::cout << t.getTrace() << std::endl;
         return 1;

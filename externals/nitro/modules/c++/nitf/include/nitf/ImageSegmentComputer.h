@@ -55,7 +55,7 @@ public:
      * Max number of bytes for an image segment's data (per the NITF spec -
      * this is due to the length field only being 10 digits)
      */
-    static const Uint64 NUM_BYTES_MAX;
+    static const uint64_t NUM_BYTES_MAX;
 
     /*!
      * \class Segment
@@ -169,7 +169,7 @@ public:
                          size_t numCols,
                          size_t numBytesPerPixel,
                          size_t maxRows = ILOC_MAX,
-                         Uint64 maxSize = NUM_BYTES_MAX,
+                         uint64_t maxSize = NUM_BYTES_MAX,
                          size_t rowsPerBlock = 0,
                          size_t colsPerBlock = 0);
 
@@ -180,7 +180,7 @@ public:
     }
 
     //! \return Number of total bytes in the image
-    Uint64 getNumBytesTotal() const
+    uint64_t getNumBytesTotal() const
     {
         return mNumBytesTotal;
     }
@@ -192,7 +192,7 @@ public:
     }
 
     //! \return Max number of bytes that each image segment can be
-    Uint64 getMaxNumBytesPerSegment() const
+    uint64_t getMaxNumBytesPerSegment() const
     {
         return mMaxNumBytesPerSegment;
     }
@@ -227,10 +227,10 @@ private:
     const size_t mNumRowsPerBlock;
 
     //! Total size in bytes that each product seg can be
-    const Uint64 mMaxNumBytesPerSegment;
+    const uint64_t mMaxNumBytesPerSegment;
 
     //! Number of bytes in the product
-    const Uint64 mNumBytesTotal;
+    const uint64_t mNumBytesTotal;
 
     //! Segment layout
     std::vector<Segment> mSegments;

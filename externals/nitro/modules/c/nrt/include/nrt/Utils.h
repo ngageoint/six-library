@@ -22,6 +22,7 @@
 
 #ifndef __NRT_UTILS_H__
 #define __NRT_UTILS_H__
+#pragma once
 
 #include "nrt/System.h"
 #include "nrt/List.h"
@@ -83,7 +84,7 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
 NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char* d, double *decimal,
                                               nrt_Error * error);
 
-NRTAPI(double) nrt_Utils_getCurrentTimeMillis();
+NRTAPI(double) nrt_Utils_getCurrentTimeMillis(void);
 
 NRTAPI(int) nrt_Utils_strncasecmp(const char *s1, const char *s2, size_t n);
 
@@ -198,15 +199,15 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
  * Using `__inline` for Windows instead
  */
 NRTPRIV(void)
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 __inline
 #else
 inline
 #endif
-nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
+nrt_Utils_swap(uint8_t* value, size_t indexOne,
         size_t indexTwo)
 {
-    nrt_Uint8 temp;
+    uint8_t temp;
     temp = value[indexOne];
     value[indexOne] = value[indexTwo];
     value[indexTwo] = temp;
@@ -219,7 +220,17 @@ nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
  *  \param value Pointer to value to be swapped
  *  \param size The size, in bytes, of each buffer element
  */
-NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8* value, size_t size);
+NRTAPI(void) nrt_Utils_byteSwap(uint8_t* value, size_t size);
+
+NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src);
+NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars);
+NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src);
+NRTAPI(char*) nrt_strdup(const char* src);
+
+NRTAPI(size_t) nrt_strlen(const char* src); // aka strlen()
+NRTAPI(uint32_t) nrt_strlen32(const char* src);
+NRTAPI(uint16_t) nrt_strlen16(const char* src);
+NRTAPI(uint8_t) nrt_strlen8(const char* src);
 
 NRT_CXX_ENDGUARD
 #endif

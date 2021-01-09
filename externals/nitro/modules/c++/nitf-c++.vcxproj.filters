@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="nitf">
+      <UniqueIdentifier>{d2772f86-6762-4804-896c-6405af17f591}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="nitf\source\BandInfo.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\BandSource.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\BlockingInfo.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\BufferedReader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\BufferedWriter.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ByteProvider.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ComponentInfo.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\CompressedByteProvider.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\CompressionInterface.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\CustomIO.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DataSource.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DateTime.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DecompressionInterface.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DESegment.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DESubheader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DownSampler.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\FileHeader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\FileSecurity.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\GraphicSegment.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\GraphicSubheader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\Handle.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\HashTable.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageBlocker.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageReader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageSegment.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageSegmentComputer.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageSource.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageSubheader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageWriter.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\IOHandle.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\IOInterface.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\IOStreamReader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\IOStreamWriter.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\LabelSegment.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\LabelSubheader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\List.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\LookupTable.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\MemoryIO.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\NITFBufferList.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\PluginRegistry.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\Reader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\Record.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\RESegment.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\RESubheader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\SegmentReader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\SegmentSource.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\SegmentWriter.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\SubWindow.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TextSegment.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TextSubheader.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TRE.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\Utils.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\WriteHandler.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\Writer.cpp">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="nitf\include\import\nitf.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\BandInfo.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\BandSource.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\BlockingInfo.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\BufferedReader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\BufferedWriter.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ByteProvider.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ComponentInfo.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\CompressedByteProvider.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\CompressionInterface.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\CustomIO.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DataSource.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DateTime.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DecompressionInterface.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DESegment.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DESubheader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DownSampler.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Extensions.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Field.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\FieldWarning.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\FileHeader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\FileSecurity.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\GraphicSegment.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\GraphicSubheader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Handle.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\HandleManager.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\HashTable.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageBlocker.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageReader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageSegment.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageSegmentComputer.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageSource.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageSubheader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageWriter.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\IOHandle.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\IOInterface.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\IOStreamReader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\IOStreamWriter.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\LabelSegment.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\LabelSubheader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\List.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\LookupTable.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\MemoryIO.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\NITFBufferList.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\NITFException.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Object.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Pair.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\PluginRegistry.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Reader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Record.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\RESegment.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\RESubheader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\SegmentReader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\SegmentSource.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\SegmentWriter.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\SubWindow.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\System.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TextSegment.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TextSubheader.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TRE.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Utils.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\WriteHandler.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Writer.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\WriterOptions.hpp">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+  </ItemGroup>
+</Project>

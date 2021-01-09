@@ -91,22 +91,22 @@ void GraphicSegment::setSubheader(nitf::GraphicSubheader & value)
     value.setManaged(true);
 }
 
-nitf::Uint64 GraphicSegment::getOffset() const
+uint64_t GraphicSegment::getOffset() const
 {
     return getNativeOrThrow()->offset;
 }
 
-void GraphicSegment::setOffset(nitf::Uint64 value)
+void GraphicSegment::setOffset(uint64_t value)
 {
     getNativeOrThrow()->offset = value;
 }
 
-nitf::Uint64 GraphicSegment::getEnd() const
+uint64_t GraphicSegment::getEnd() const
 {
     return getNativeOrThrow()->end;
 }
 
-void GraphicSegment::setEnd(nitf::Uint64 value)
+void GraphicSegment::setEnd(uint64_t value)
 {
     getNativeOrThrow()->end = value;
 }
