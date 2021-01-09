@@ -30,15 +30,23 @@
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
+#include <mem/SharedPtr.h>
 #include <mt/CPUAffinityThreadInitializerLinux.h>
 
 namespace mt
 {
 CPUAffinityThreadInitializerLinux::CPUAffinityThreadInitializerLinux(
-        std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu) :
-    mCPU(cpu)
+        std::unique_ptr<const sys::ScopedCPUMaskUnix>&& cpu) :
+    mCPU(std::move(cpu))
 {
 }
+#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+CPUAffinityThreadInitializerLinux::CPUAffinityThreadInitializerLinux(
+        std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu) :
+    CPUAffinityThreadInitializerLinux(std::unique_ptr<const sys::ScopedCPUMaskUnix>(cpu.release()))
+{
+}
+#endif
 
 void CPUAffinityThreadInitializerLinux::initialize()
 {

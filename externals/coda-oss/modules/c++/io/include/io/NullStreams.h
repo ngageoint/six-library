@@ -54,7 +54,7 @@ public:
     virtual sys::SSize_T streamTo(OutputStream& soi,
                                   sys::SSize_T numBytes = IS_END)
     {
-        sys::SSize_T toProcess = (numBytes == IS_END) ? numBytes : (mAvailable
+        const sys::SSize_T toProcess = (numBytes == IS_END) ? numBytes : (mAvailable
                 >= numBytes ? numBytes : mAvailable);
         mAvailable -= toProcess;
         for (sys::SSize_T i = 0; i < toProcess; ++i)
@@ -68,7 +68,7 @@ protected:
 
     virtual sys::byte processByte() const
     {
-        return (sys::byte) 0;
+        return 0;
     }
     virtual void processBytes(void* buffer, sys::Size_T len) const
     {
@@ -78,16 +78,16 @@ protected:
 
     virtual sys::SSize_T readImpl(void* buffer, size_t len)
     {
-        size_t numToRead =
+        const auto numToRead =
                 (mAvailable >= (sys::SSize_T) len ? len : (size_t) mAvailable);
 
-        mAvailable -= (sys::SSize_T) numToRead;
+        mAvailable -= numToRead;
 
         if (numToRead == 0)
             throw except::IOException(Ctxt("EOF - no more data to read"));
 
         processBytes(buffer, numToRead);
-        return numToRead;
+        return static_cast <sys::SSize_T>(numToRead);
     }
 };
 
@@ -154,6 +154,7 @@ public:
         case START:
             mOffset = offset;
             break;
+        case CURRENT:
         default:
             mOffset += offset;
             break;

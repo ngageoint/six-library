@@ -90,8 +90,8 @@ TEST_CASE(testNullCopying)
 TEST_CASE(testAutoPtrConstructor)
 {
     int * const rawPtr(new int(89));
-    std::auto_ptr<int> autoPtr(rawPtr);
-    const mem::SharedPtr<int> ptr(autoPtr);
+    mem::auto_ptr<int> autoPtr(rawPtr);
+    const mem::SharedPtr<int> ptr(autoPtr.release());
     TEST_ASSERT_EQ(ptr.get(), rawPtr);
     TEST_ASSERT_EQ(autoPtr.get(), static_cast<int *>(NULL));
     TEST_ASSERT_EQ(ptr.getCount(), 1);
@@ -102,7 +102,7 @@ TEST_CASE(testAutoPtrReset)
     // Similar to the construction test,
     // except using the reset() that takes an auto_ptr
     int* const rawPtr1 = new int(90);
-    std::auto_ptr<int> autoPtr(rawPtr1);
+    mem::auto_ptr<int> autoPtr(rawPtr1);
 
     int* const rawPtr2 = new int(100);
     mem::SharedPtr<int> sharedPtr(rawPtr2);
@@ -110,7 +110,7 @@ TEST_CASE(testAutoPtrReset)
     TEST_ASSERT_EQ(autoPtr.get(), rawPtr1);
     TEST_ASSERT_EQ(sharedPtr.get(), rawPtr2);
 
-    sharedPtr.reset(autoPtr);
+    sharedPtr.reset(autoPtr.release());
     TEST_ASSERT_EQ(sharedPtr.get(), rawPtr1);
     TEST_ASSERT_NULL(autoPtr.get());
     TEST_ASSERT_EQ(sharedPtr.getCount(), 1);
@@ -119,7 +119,7 @@ TEST_CASE(testAutoPtrReset)
 TEST_CASE(testCopying)
 {
     int * const rawPtr(new int(89));
-    std::auto_ptr<mem::SharedPtr<int> > ptr3;
+    mem::auto_ptr<mem::SharedPtr<int>> ptr3;
     {
         mem::SharedPtr<int> ptr1(rawPtr);
         TEST_ASSERT_EQ(ptr1.get(), rawPtr);
@@ -220,8 +220,8 @@ TEST_CASE(testCasting)
     {
         // Test creating SharedPtr of base class from auto pointer of derived
         Bar* const rawBar(new Bar(456));
-        std::auto_ptr<Bar> autoBar(rawBar);
-        const mem::SharedPtr<Foo> fooPtr(autoBar);
+        mem::auto_ptr<Bar> autoBar(rawBar);
+        const mem::SharedPtr<Foo> fooPtr(autoBar.release());
         TEST_ASSERT_EQ(fooPtr.get(), rawBar);
         TEST_ASSERT_EQ(autoBar.get(), static_cast<Bar *>(NULL));
         TEST_ASSERT_EQ(fooPtr.getCount(), 1);

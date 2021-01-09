@@ -23,6 +23,7 @@
 
 #ifndef __IMPORT_SYS_H__
 #define __IMPORT_SYS_H__
+#pragma once
 
 #include "sys/AtomicCounter.h"
 #include "sys/ConditionVar.h"
@@ -48,6 +49,10 @@
 #include "sys/Thread.h"
 #include "sys/UTCDateTime.h"
 //#include "sys/Process.h"
+#include "sys/String.h"
+#include "sys/Filesystem.h"
+#include "sys/Bit.h"
+#include "sys/CStdDef.h"
 
 /*!
 

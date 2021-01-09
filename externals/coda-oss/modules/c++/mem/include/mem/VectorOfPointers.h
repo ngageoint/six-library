@@ -22,12 +22,13 @@
 
 #ifndef __MEM_VECTOR_OF_POINTERS_H__
 #define __MEM_VECTOR_OF_POINTERS_H__
+#pragma once
 
 #include <cstddef>
 #include <vector>
 #include <memory>
 
-#include <mem/SharedPtr.h>
+#include "mem/SharedPtr.h"
 
 namespace mem
 {
@@ -84,17 +85,30 @@ public:
 
     void push_back(T* value)
     {
-        std::auto_ptr<T> scopedValue(value);
-        push_back(scopedValue);
+        std::unique_ptr<T> scopedValue(value);
+        push_back(std::move(scopedValue));
     }
 
     template <typename OtherT>
         void push_back(OtherT* value)
     {
-        std::auto_ptr<OtherT> scopedValue(value);
-        push_back(scopedValue);
+        std::unique_ptr<OtherT> scopedValue(value);
+        push_back(std::move(scopedValue));
     }
 
+    void push_back(std::unique_ptr<T>&& value)
+    {
+        mValues.resize(mValues.size() + 1);
+        mValues.back() = value.release();
+    }
+
+    template <typename OtherT>
+    void push_back(std::unique_ptr<OtherT>&& value)
+    {
+        mValues.resize(mValues.size() + 1);
+        mValues.back() = value.release();
+    }
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     void push_back(std::auto_ptr<T> value)
     {
         mValues.resize(mValues.size() + 1);
@@ -107,6 +121,7 @@ public:
         mValues.resize(mValues.size() + 1);
         mValues.back() = value.release();
     }
+    #endif
 
     typedef typename std::vector<T*>::iterator iterator;
     typedef typename std::vector<T*>::const_iterator const_iterator;
@@ -183,22 +198,29 @@ public:
 
     void push_back(T* value)
     {
-        std::auto_ptr<T> scopedValue(value);
-        push_back(scopedValue);
+        std::unique_ptr<T> scopedValue(value);
+        push_back(std::move(scopedValue));
     }
 
     template <typename OtherT>
         void push_back(OtherT* value)
     {
-        std::auto_ptr<OtherT> scopedValue(value);
-        push_back(scopedValue);
+        std::unique_ptr<OtherT> scopedValue(value);
+        push_back(std::move(scopedValue));
     }
 
+    void push_back(std::unique_ptr<T>&& value)
+    {
+        mValues.resize(mValues.size() + 1);
+        mValues.back().reset(value.release());
+    }
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     void push_back(std::auto_ptr<T> value)
     {
         mValues.resize(mValues.size() + 1);
         mValues.back().reset(value.release());
     }
+    #endif
 
     void push_back(SharedPtr<T> value)
     {
@@ -206,11 +228,19 @@ public:
     }
 
     template <typename OtherT>
+    void push_back(std::unique_ptr<OtherT>&& value)
+    {
+        mValues.resize(mValues.size() + 1);
+        mValues.back().reset(value.release());
+    }
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    template <typename OtherT>
         void push_back(std::auto_ptr<OtherT> value)
     {
         mValues.resize(mValues.size() + 1);
         mValues.back().reset(value.release());
     }
+    #endif
 
     template <typename OtherT>
         void push_back(SharedPtr<OtherT> value)

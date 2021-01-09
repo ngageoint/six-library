@@ -4,7 +4,7 @@ from waflib import Options, Utils
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile, writeConfig
 
-SOURCE         = 'xerces-c-3.1.1'
+SOURCE         = 'xerces-c-3.2.3'
 XERCES_USELIBS = 'THREAD SOCKET'
 
 options = lambda x : None
@@ -51,8 +51,8 @@ def configure(conf):
                 conf.check_cc(header_name="intrin.h", mandatory=False)
                 conf.check_cc(header_name="emmintrin.h", mandatory=False)
                 conf.check_cc(header_name="wchar.h", mandatory=False)
-                conf.check_cc(header_name="stdint.h", mandatory=False)
-                conf.check_cc(header_name="stdio.h", mandatory=False)
+                conf.check_cc(header_name="stdint.h", mandatory=True)
+                conf.check_cc(header_name="stdio.h", mandatory=True)
                 conf.check_cc(header_name="langinfo.h", mandatory=False)
                 conf.check_cc(header_name="iconv.h", mandatory=False)
                 conf.check_cc(header_name="nl_types.h", mandatory=False)
@@ -78,12 +78,12 @@ def configure(conf):
                 conf.check_cc(function_name='wsctombs', header_name="stdlib.h", mandatory=False)
                 conf.check_cc(function_name='wcsrtombs', header_name="stdlib.h", mandatory=False)
                 conf.check_cc(function_name='realpath', header_name="stdlib.h", mandatory=False)
-                conf.check_cc(function_name='strchr', header_name="string.h", mandatory=False)
+                conf.check_cc(function_name='strchr', header_name="string.h", mandatory=True)
                 conf.check_cc(function_name='strdup', header_name="string.h", mandatory=False)
                 conf.check_cc(function_name='stricmp', header_name="string.h", mandatory=False)
                 conf.check_cc(function_name='strnicmp', header_name="string.h", mandatory=False)
                 conf.check_cc(function_name='strrcmp', header_name="string.h", mandatory=False)
-                conf.check_cc(function_name='strstr', header_name="string.h", mandatory=False)
+                conf.check_cc(function_name='strstr', header_name="string.h", mandatory=True)
                 conf.check_cc(function_name='strtol', header_name="string.h", mandatory=False)
                 conf.check_cc(function_name='strtoul', header_name="string.h", mandatory=False)
                 conf.check_cc(function_name='strcasecmp', header_name="strings.h", mandatory=False)
@@ -129,6 +129,15 @@ def configure(conf):
                     conf.define('XERCES_INCLUDE_WCHAR_H', 1)
                 if 'HAVE_EMMINTRIN_H=1' in conf.env['DEFINES'] :
                     conf.define('XERCES_HAVE_SSE2_INTRINSIC', 1)
+                if 'HAVE_STRICMP=1' in conf.env['DEFINES'] :
+                    conf.define('HAVE_STRICMP', 1)
+                else :
+                    conf.define('HAVE_STRICMP', 0)
+                if 'HAVE_STRNICMP=1' in conf.env['DEFINES'] :
+                    conf.define('HAVE_STRNICMP', 1)
+                else :
+                    conf.define('HAVE_STRNICMP', 0)
+
                 if sys.platform == 'win32' :
                     conf.define('XERCES_USE_FILEMGR_WINDOWS', 1)
                     conf.define('XERCES_USE_MUTEXMGR_WINDOWS', 1)
@@ -136,24 +145,6 @@ def configure(conf):
                     conf.define('XERCES_USE_TRANSCODER_WINDOWS', 1)
                     conf.define('XERCES_PATH_DELIMITER_BACKSLASH', 1)
 
-                    conf.define('XERCES_S16BIT_INT', '__int16', quote=False)
-                    conf.define('XERCES_S32BIT_INT', '__int32', quote=False)
-                    conf.define('XERCES_S64BIT_INT', '__int32', quote=False)
-                    conf.define('XERCES_U16BIT_INT', 'unsigned __int16', quote=False)
-                    conf.define('XERCES_U32BIT_INT', 'unsigned __int32', quote=False)
-                    conf.define('XERCES_U64BIT_INT', 'unsigned __int64', quote=False)
-                    conf.define('XERCES_SIZE_T', 'size_t', quote=False)
-                    if 'HAVE_WCHAR_H=1' in conf.env['DEFINES'] :
-                        conf.define('XERCES_XMLCH_T', 'wchar_t', quote=False)
-                    else :
-                        conf.define('XERCES_XMLCH_T', 'unsigned __int16', quote=False)
-                    if 'HAVE_SSIZE_T=1' in conf.env['DEFINES'] :
-                        conf.define('XERCES_SSIZE_T', 'ssize_t', quote=False)
-                    else :
-                        if 'SIZEOF_SIZE_T=8' in conf.env['DEFINES'] :
-                            conf.define('XERCES_SSIZE_T', '__int64', quote=False)
-                        else :
-                            conf.define('XERCES_SSIZE_T', '__int32', quote=False)
 
                 # -- please note -- we diverge from the xerces-c make
                 # system and treat all unix platforms similarly. Solaris
@@ -167,25 +158,35 @@ def configure(conf):
                     conf.define('XERCES_USE_MUTEXMGR_POSIX', 1)
                     conf.define('XERCES_USE_TRANSCODER_ICONV', 1)
 
-                    conf.define('XERCES_S16BIT_INT', 'int16_t', quote=False)
-                    conf.define('XERCES_S32BIT_INT', 'int32_t', quote=False)
-                    conf.define('XERCES_S64BIT_INT', 'int64_t', quote=False)
-                    conf.define('XERCES_U16BIT_INT', 'uint16_t', quote=False)
-                    conf.define('XERCES_U32BIT_INT', 'uint32_t', quote=False)
-                    conf.define('XERCES_U64BIT_INT', 'uint64_t', quote=False)
+                conf.define('XERCES_S16BIT_INT', 'int16_t', quote=False)
+                conf.define('XERCES_S32BIT_INT', 'int32_t', quote=False)
+                conf.define('XERCES_S64BIT_INT', 'int64_t', quote=False)
+                conf.define('XERCES_U16BIT_INT', 'uint16_t', quote=False)
+                conf.define('XERCES_U32BIT_INT', 'uint32_t', quote=False)
+                conf.define('XERCES_U64BIT_INT', 'uint64_t', quote=False)
+                conf.define('XERCES_SIZE_T', 'size_t', quote=False)
+                if 'HAVE_WCHAR_H=1' in conf.env['DEFINES'] :
+                    conf.define('XERCES_XMLCH_T', 'wchar_t', quote=False)
+                else :
                     conf.define('XERCES_XMLCH_T', 'uint16_t', quote=False)
-                    conf.define('XERCES_SIZE_T', 'size_t', quote=False)
+                if 'HAVE_SSIZE_T=1' in conf.env['DEFINES'] :
                     conf.define('XERCES_SSIZE_T', 'ssize_t', quote=False)
+                else :
+                    if 'SIZEOF_SIZE_T=8' in conf.env['DEFINES'] :
+                        conf.define('XERCES_SSIZE_T', 'int64_t', quote=False)
+                    else :
+                        conf.define('XERCES_SSIZE_T', 'int32_t', quote=False)
+                conf.define('XERCES_SIZE_MAX', 'SIZE_MAX', quote=False) 
 
                 conf.define('LT_OBJDIR', '.libs/', quote=False)
                 conf.define('PACKAGE', 'xerces-c', quote=False)
                 conf.define('PACKAGE_BUGREPORT', '', quote=False)
                 conf.define('PACKAGE_NAME', 'xerces-c', quote=False)
-                conf.define('PACKAGE_STRING', 'xerces-c 3.1.1', quote=False)
+                conf.define('PACKAGE_STRING', 'xerces-c 3.2.3', quote=False)
                 conf.define('PACKAGE_TARNAME', 'xerces-c', quote=False)
                 conf.define('PACKAGE_URL', '', quote=False)
-                conf.define('PACKAGE_VERSION', '3.1.1', quote=False)
-                conf.define('VERSION', '3.1.1', quote=False)
+                conf.define('PACKAGE_VERSION', '3.2.3', quote=False)
+                conf.define('VERSION', '3.2.3', quote=False)
 
                 # extra defines for Xerces_autoconf_config.hpp
                 conf.define('XERCES_USE_MSGLOADER_INMEMORY', 1)
@@ -198,6 +199,7 @@ def configure(conf):
                 conf.define('XERCES_AUTOCONF', 1)
                 conf.define('XERCES_PLATFORM_EXPORT', conf.env['declspec_decoration'], quote=False)
                 conf.define('XERCES_PLATFORM_IMPORT', '', quote=False)
+                conf.define('XERCES_TEMPLATE_EXTERN', 'extern', quote=False)
                 conf.define('XERCES_HAS_CPP_NAMESPACE', 1)
                 conf.define('XERCES_STD_NAMESPACE', 1)
                 conf.define('XERCES_NEW_IOSTREAMS', 1)
@@ -348,7 +350,7 @@ def distclean(context):
     # remove the untarred directories
     import shutil
     dirs = filter(lambda x: exists(join(context.path.abspath(), x)),
-                  ['xerces-c-3.1.1'])
+                  ['xerces-c-3.2.3'])
     for d in dirs:
         try:
             shutil.rmtree(join(context.path.abspath(), d), ignore_errors=True)

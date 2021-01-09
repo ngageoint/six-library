@@ -40,7 +40,7 @@ namespace sys
 {
 typedef SemaphoreNSPR Semaphore;
 }
-#    elif defined(WIN32)
+#    elif (defined(WIN32) || defined(_WIN32))
 #        include "sys/SemaphoreWin32.h"
 namespace sys
 {

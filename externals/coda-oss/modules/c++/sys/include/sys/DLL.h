@@ -37,7 +37,7 @@
  *
  */
 
-# if defined(WIN32)
+# if defined(WIN32) || defined(_WIN32)
 #   include "sys/Conf.h"
 #   define DLL_PUBLIC_FUNCTION extern "C" __declspec (dllexport)
 typedef HINSTANCE DYNAMIC_LIBRARY;

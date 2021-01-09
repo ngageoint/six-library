@@ -40,6 +40,7 @@
 #include <import/net.h>
 #include <import/sys.h>
 #include <import/except.h>
+#include <import/mem.h>
 #include "my_packet.h"
 
 using namespace net;
@@ -56,7 +57,7 @@ int main(int argc, char** argv)
         int port = atoi(argv[1]);
 
         SocketAddress address(port);
-        std::auto_ptr<Socket> socket = UDPServerSocketFactory().create(address);
+        mem::auto_ptr<Socket> socket = UDPServerSocketFactory().create(address);
 
         my_packet_t packet;
         SocketAddress cliAddr(port);

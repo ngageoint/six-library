@@ -22,7 +22,7 @@
 
 #include "sys/File.h"
 
-#ifndef WIN32
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include <unistd.h>
 #include <string.h>

@@ -48,7 +48,7 @@
       _Name##Exception(const std::string& msg) : _Base(msg){} \
       _Name##Exception(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
       virtual ~_Name##Exception(){} \
-      virtual std::string getType() const{ return #_Name"Exception"; } \
+      virtual std::string getType() const noexcept { return #_Name"Exception"; } \
   };
 
 #define DECLARE_EXCEPTION(_Name) DECLARE_EXTENDED_EXCEPTION(_Name, except::Exception)
@@ -107,7 +107,7 @@ public:
     {
     }
 
-    virtual std::string getType() const
+    virtual std::string getType() const noexcept override
     {
         return "Exception";
     }

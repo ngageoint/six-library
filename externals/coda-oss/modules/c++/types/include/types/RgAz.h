@@ -207,14 +207,14 @@ template<typename T> struct RgAz
 template <>
 inline bool RgAz<float>::operator==(const RgAz<float>& p) const
 {
-    float eps = std::numeric_limits<float>::epsilon();
+    constexpr auto eps = std::numeric_limits<float>::epsilon();
     return std::abs(rg - p.rg) < eps &&
            std::abs(az - p.az) < eps;
 }
 template <>
 inline bool RgAz<double>::operator==(const RgAz<double>& p) const
 {
-    double eps = std::numeric_limits<double>::epsilon();
+    constexpr auto eps = std::numeric_limits<double>::epsilon();
     return std::abs(rg - p.rg) < eps &&
            std::abs(az - p.az) < eps;
 }

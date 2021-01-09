@@ -240,14 +240,14 @@ inline size_t RowCol<size_t>::area() const
 template <>
 inline bool RowCol<float>::operator==(const RowCol<float>& p) const
 {
-    float eps = std::numeric_limits<float>::epsilon();
+    constexpr auto eps = std::numeric_limits<float>::epsilon();
     return std::abs(row - p.row) < eps &&
            std::abs(col - p.col) < eps;
 }
 template <>
 inline bool RowCol<double>::operator==(const RowCol<double>& p) const
 {
-    double eps = std::numeric_limits<double>::epsilon();
+    constexpr auto eps = std::numeric_limits<double>::epsilon();
     return std::abs(row - p.row) < eps &&
            std::abs(col - p.col) < eps;
 }

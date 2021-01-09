@@ -33,6 +33,7 @@
 
 #include <sys/Path.h>
 #include <sys/LocalDateTime.h>
+#include <mem/SharedPtr.h>
 #include <net/ServerSocketFactory.h>
 
 int main(int argc, char** argv)
@@ -50,10 +51,10 @@ int main(int argc, char** argv)
         const size_t bufferSize = str::toType<size_t>(argv[2]) * 1024 * 1024;
 
         net::SocketAddress address(port);
-        std::auto_ptr<net::Socket> listener =
+        mem::auto_ptr<net::Socket> listener =
                 net::TCPServerSocketFactory().create(address);
         net::SocketAddress clientAddress;
-        std::auto_ptr<net::Socket> client = listener->accept(clientAddress);
+        mem::auto_ptr<net::Socket> client = listener->accept(clientAddress);
 
         // First the client sends the # of bytes they'll be sending
         sys::Uint64_T numBytes;

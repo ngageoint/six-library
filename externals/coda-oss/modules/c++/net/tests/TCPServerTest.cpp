@@ -41,6 +41,7 @@
 #include <import/net.h>
 #include <import/sys.h>
 #include <import/except.h>
+#include <import/mem.h>
 #include "my_packet.h"
 
 using namespace net;
@@ -57,9 +58,9 @@ int main(int argc, char** argv)
         int port = atoi(argv[1]);
 
         SocketAddress address(port);
-        std::auto_ptr<Socket> listener = TCPServerSocketFactory().create(address);
+        mem::auto_ptr<Socket> listener = TCPServerSocketFactory().create(address);
         SocketAddress clientAddress;
-        std::auto_ptr<Socket> client = listener->accept(clientAddress);
+        mem::auto_ptr<Socket> client = listener->accept(clientAddress);
         // Print client address here!!
         my_packet_t packet;
         client->recv(&packet, sizeof(my_packet_t));

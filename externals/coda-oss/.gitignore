@@ -5,8 +5,19 @@ __pycache__/
 # Build artifacts
 
 install/
+install-*/
 target/
 test_package/build/
+
+# CMake
+_deps/
+*.cmake
+CMakeCache.txt
+CMakeFiles/
+*_config.h
+Makefile
+modules/**/Makefile
+out/
 
 # Waf
 .waf-*
@@ -23,13 +34,14 @@ build/waf*/
 # Drivers
 modules/drivers/fftw/fftw-2.1.5/
 modules/drivers/jpeg/jpeg-9/
-modules/drivers/j2k/openjpeg/openjpeg-2.3.0_mod/
+modules/drivers/j2k/openjpeg/openjpeg-2.3.*_mod/
 modules/drivers/pcre/pcre2-10.22/
 modules/drivers/uuid/e2fsprogs-1.40-uuid/
-modules/drivers/xml/xerces/xerces-c-3.1.1/
+modules/drivers/xml/xerces/xerces-c-*/
 modules/drivers/zlib/zlib-1.2.7/
 
 # VS
 .vs/
 project.sln
 .depproj/
+
