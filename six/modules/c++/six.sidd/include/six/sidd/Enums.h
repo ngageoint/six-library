@@ -93,9 +93,9 @@ struct DownsamplingMethod : public six::details::Enum<DownsamplingMethod>
         static const map_t retval
         {
             SIX_Enum_map_entry_(DECIMATE),
-            SIX_Enum_map_entry_(MAX_PIXEL),
+            { "MAX PIXEL", MAX_PIXEL },
             SIX_Enum_map_entry_(AVERAGE),
-            SIX_Enum_map_entry_(NEAREST_NEIGHBOR),
+            { "NEAREST NEIGHBOR", NEAREST_NEIGHBOR },
             SIX_Enum_map_entry_(BILINEAR),
             SIX_Enum_map_entry_(LAGRANGE),
             SIX_Enum_map_entry_(NOT_SET)
