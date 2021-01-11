@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>NITRO Wiki: Best Ways To Protect Your AC</title>
+	<base href="" />
+	<meta name="robots" content="noindex, nofollow, noarchive" />
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="css/wikka.css?1.1.6.4" />
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for ReleaseNotes15 (RSS)" href="wikka.php?wakka=ReleaseNotes15%252Frevisions.xml" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/recentchanges.xml" />
+</head>
+<body  >
+<div class="header">
+	<h2><a id="homepage_link" href="index.html">NITRO Wiki</a> : <a href="wikka.php?wakka=ReleaseNotes15%252Fbacklinks" title="Display a list of pages linking to ReleaseNotes15">ReleaseNotes15</a></h2>
+	<a href="index.html">HomePage</a> ::
+	<a href="wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+<div class="page">
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/diff" id="form_0423aa3078">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="ReleaseNotes15" />
+</fieldset>
+<table border="0" cellspacing="0" cellpadding="1">
+<tr>
+<td><input type="submit" value="Show Differences" /></td><td><input value="1" type="checkbox" checked="checked" name="fastdiff" id="fastdiff" />
+<label for="fastdiff">Simple Diff</label></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="1">
+<tr><td><input type="radio" name="a" value="461513" checked="checked" /></td><td><input type="radio" name="b" value="461513"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2019-08-17+08%3A51%3A13">[461513]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2019-08-17+08%3A51%3A13">2019-08-17 08:51:13</a> by JessicaRobert <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="461512"  /></td><td><input type="radio" name="b" value="461512" checked="checked" /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2019-08-17+08%3A50%3A39">[461512]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2019-08-17+08%3A50%3A39">2019-08-17 08:50:39</a> by JessicaRobert <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="461511"  /></td><td><input type="radio" name="b" value="461511"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2019-08-17+08%3A50%3A17">[461511]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2019-08-17+08%3A50%3A17">2019-08-17 08:50:17</a> by JessicaRobert <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="407"  /></td><td><input type="radio" name="b" value="407"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2010-11-23+11%3A51%3A59">[407]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2010-11-23+11%3A51%3A59">2010-11-23 11:51:59</a> by DianeStampley <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="177"  /></td><td><input type="radio" name="b" value="177"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-04-04+06%3A15%3A29">[177]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-04-04+06%3A15%3A29">2008-04-04 06:15:29</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="137"  /></td><td><input type="radio" name="b" value="137"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-03-12+06%3A58%3A47">[137]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-03-12+06%3A58%3A47">2008-03-12 06:58:47</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="136"  /></td><td><input type="radio" name="b" value="136"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-03-12+06%3A58%3A24">[136]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-03-12+06%3A58%3A24">2008-03-12 06:58:24</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="118"  /></td><td><input type="radio" name="b" value="118"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-03-05+08%3A05%3A01">[118]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-03-05+08%3A05%3A01">2008-03-05 08:05:01</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="117"  /></td><td><input type="radio" name="b" value="117"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-03-05+07%3A38%3A24">[117]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-03-05+07%3A38%3A24">2008-03-05 07:38:24</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="116"  /></td><td><input type="radio" name="b" value="116"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-03-05+07%3A37%3A43">[116]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-03-05+07%3A37%3A43">2008-03-05 07:37:43</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="50"  /></td><td><input type="radio" name="b" value="50"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-02-28+21%3A00%3A23">[50]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15/show&amp;time=2008-02-28+21%3A00%3A23">2008-02-28 21:00:23</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+</table><br />
+<input type="button" value="Return To Node / Cancel" onclick="document.location='http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15';" />
+</form>
+
+</div>
+<div class="footer">
+<form action="wikka.php?wakka=ReleaseNotes15" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch" />
+</fieldset>
+<a href="wikka.php?wakka=ReleaseNotes15%252Fhistory" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="wikka.php?wakka=ReleaseNotes15%252Frevisions" title="Click to view recent revisions list for this page">2019-08-17 08:51:13</a> <a href="wikka.php?wakka=ReleaseNotes15%252Frevisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::
+Owner: <a href="wikka.php?wakka=NitroAdmin">NitroAdmin</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox" />
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world's largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.0201 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+</body>
+</html>

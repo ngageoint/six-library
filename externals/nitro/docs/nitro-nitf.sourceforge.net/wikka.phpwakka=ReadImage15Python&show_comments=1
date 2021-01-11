@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>NITRO Wiki: ReadImage15Python</title>
+	<base href="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="css/wikka.css?1.1.6.4" />
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for ReadImage15Python (RSS)" href="wikka.php?wakka=ReadImage15Python%252Frevisions.xml" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReadImage15Python/recentchanges.xml" />
+</head>
+<body  >
+<div class="header">
+	<h2><a id="homepage_link" href="index.html">NITRO Wiki</a> : <a href="wikka.php?wakka=ReadImage15Python%252Fbacklinks" title="Display a list of pages linking to ReadImage15Python">ReadImage15Python</a></h2>
+	<a href="index.html">HomePage</a> ::
+	<a href="wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+
+<!--starting page content-->
+<div class="page">
+Below is the nitf_extract.py test application that comes with the NITRO software.<br />
+<br />
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;"><span class="kw1">from</span> nitf <span class="kw1">import</span> *<br />
+<span class="kw1">import</span> <span class="kw3">os</span>, <span class="kw3">sys</span>, <span class="kw3">logging</span>, <span class="kw3">glob</span><br />
+<br />
+<span class="kw3">logging</span>.<span class="me1">basicConfig</span><span class="br0">&#40;</span>level=<span class="kw3">logging</span>.<span class="me1">INFO</span>, <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; format=<span class="st0">'%(asctime)s %(levelname)s %(message)s'</span><span class="br0">&#41;</span><br />
+<br />
+<br />
+<span class="kw1">def</span> extract_image<span class="br0">&#40;</span>subheader, index, imageReader, outDir=<span class="kw2">None</span>, baseName=<span class="kw2">None</span><span class="br0">&#41;</span>:<br />
+&nbsp; &nbsp; window = SubWindow<span class="br0">&#40;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; window.<span class="me1">numRows</span> = subheader<span class="br0">&#91;</span><span class="st0">'numRows'</span><span class="br0">&#93;</span>.<span class="me1">intValue</span><span class="br0">&#40;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; window.<span class="me1">numCols</span> = subheader<span class="br0">&#91;</span><span class="st0">'numCols'</span><span class="br0">&#93;</span>.<span class="me1">intValue</span><span class="br0">&#40;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; window.<span class="me1">bandList</span> = <span class="kw2">range</span><span class="br0">&#40;</span>subheader.<span class="me1">getBandCount</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; nbpp = subheader<span class="br0">&#91;</span><span class="st0">'numBitsPerPixel'</span><span class="br0">&#93;</span>.<span class="me1">intValue</span><span class="br0">&#40;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; bandData = imageReader.<span class="me1">read</span><span class="br0">&#40;</span>window<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="kw1">not</span> outDir: outDir = <span class="kw3">os</span>.<span class="me1">getcwd</span><span class="br0">&#40;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="kw1">not</span> baseName: baseName = <span class="kw3">os</span>.<span class="me1">path</span>.<span class="me1">basename</span><span class="br0">&#40;</span><span class="kw3">os</span>.<span class="me1">tempnam</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; outNames = <span class="br0">&#91;</span><span class="br0">&#93;</span><br />
+&nbsp; &nbsp; <span class="kw1">for</span> band, data <span class="kw1">in</span> <span class="kw2">enumerate</span><span class="br0">&#40;</span>bandData<span class="br0">&#41;</span>:<br />
+&nbsp; &nbsp; &nbsp; &nbsp; outName = <span class="st0">'%s_%d__%d_x_%d_%d_band_%d.out'</span> % <span class="br0">&#40;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;baseName, index, window.<span class="me1">numRows</span>, window.<span class="me1">numCols</span>, nbpp, band<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; outName = <span class="kw3">os</span>.<span class="me1">path</span>.<span class="me1">join</span><span class="br0">&#40;</span>outDir, outName<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; f = <span class="kw2">open</span><span class="br0">&#40;</span>outName, <span class="st0">'wb'</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; f.<span class="me1">write</span><span class="br0">&#40;</span>data<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; f.<span class="me1">close</span><span class="br0">&#40;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; outNames.<span class="me1">append</span><span class="br0">&#40;</span>outName<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw3">logging</span>.<span class="me1">info</span><span class="br0">&#40;</span><span class="st0">'Wrote band data to file %s'</span> % outName<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="kw1">return</span> outNames<br />
+<br />
+<br />
+<br />
+<span class="kw1">def</span> extract_images<span class="br0">&#40;</span>fileName, outDir=<span class="kw2">None</span><span class="br0">&#41;</span>:<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="kw1">not</span> outDir: outDir = <span class="kw3">os</span>.<span class="me1">getcwd</span><span class="br0">&#40;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="kw1">not</span> <span class="kw3">os</span>.<span class="me1">path</span>.<span class="me1">exists</span><span class="br0">&#40;</span>outDir<span class="br0">&#41;</span>: <span class="kw3">os</span>.<span class="me1">makedirs</span><span class="br0">&#40;</span>outDir<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; handle = IOHandle<span class="br0">&#40;</span>fileName<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; reader = Reader<span class="br0">&#40;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; record = reader.<span class="me1">read</span><span class="br0">&#40;</span>handle<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="kw3">logging</span>.<span class="me1">info</span><span class="br0">&#40;</span><span class="st0">'Dumping file: %s'</span> % fileName<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="kw1">for</span> i, segment <span class="kw1">in</span> <span class="kw2">enumerate</span><span class="br0">&#40;</span>record.<span class="me1">getImages</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>:<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw3">logging</span>.<span class="me1">info</span><span class="br0">&#40;</span><span class="st0">'--- Image [%d] ---'</span> % i<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; imReader = reader.<span class="me1">newImageReader</span><span class="br0">&#40;</span>i<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; extract_image<span class="br0">&#40;</span>segment.<span class="me1">subheader</span>, i, imReader, outDir, <span class="kw3">os</span>.<span class="me1">path</span>.<span class="me1">basename</span><span class="br0">&#40;</span>fileName<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; handle.<span class="me1">close</span><span class="br0">&#40;</span><span class="br0">&#41;</span><br />
+<br />
+<br />
+<span class="kw1">if</span> __name__ == <span class="st0">'__main__'</span>:<br />
+&nbsp; &nbsp; <span class="kw1">for</span> arg <span class="kw1">in</span> <span class="kw3">sys</span>.<span class="me1">argv</span><span class="br0">&#91;</span><span class="nu0">1</span>:<span class="br0">&#93;</span>:<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="kw3">os</span>.<span class="me1">path</span>.<span class="me1">isfile</span><span class="br0">&#40;</span>arg<span class="br0">&#41;</span>:<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; extract_images<span class="br0">&#40;</span>arg<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">elif</span> <span class="kw3">os</span>.<span class="me1">path</span>.<span class="me1">isdir</span><span class="br0">&#40;</span>arg<span class="br0">&#41;</span>:<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">map</span><span class="br0">&#40;</span>extract_images, <span class="kw3">glob</span>.<span class="kw3">glob</span><span class="br0">&#40;</span><span class="kw3">os</span>.<span class="me1">path</span>.<span class="me1">join</span><span class="br0">&#40;</span>arg, <span class="st0">'*.ntf'</span><span class="br0">&#41;</span><span class="br0">&#41;</span> + <span class="kw3">glob</span>.<span class="kw3">glob</span><span class="br0">&#40;</span><span class="kw3">os</span>.<span class="me1">path</span>.<span class="me1">join</span><span class="br0">&#40;</span>arg, <span class="st0">'*.NTF'</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span></div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReadImage15Python/grabcode" method="post" id="form_61092f4ded">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="ReadImage15Python" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="from+nitf+import+%2A%0Aimport+os%2C+sys%2C+logging%2C+glob%0A%0Alogging.basicConfig%28level%3Dlogging.INFO%2C+%0A%09%09%09%09%09format%3D%27%25%28asctime%29s+%25%28levelname%29s+%25%28message%29s%27%29%0A%0A%0Adef+extract_image%28subheader%2C+index%2C+imageReader%2C+outDir%3DNone%2C+baseName%3DNone%29%3A%0A%09window+%3D+SubWindow%28%29%0A%09window.numRows+%3D+subheader%5B%27numRows%27%5D.intValue%28%29%0A%09window.numCols+%3D+subheader%5B%27numCols%27%5D.intValue%28%29%0A%09window.bandList+%3D+range%28subheader.getBandCount%28%29%29%0A%09nbpp+%3D+subheader%5B%27numBitsPerPixel%27%5D.intValue%28%29%0A%09bandData+%3D+imageReader.read%28window%29%0A%09%0A%09if+not+outDir%3A+outDir+%3D+os.getcwd%28%29%0A%09if+not+baseName%3A+baseName+%3D+os.path.basename%28os.tempnam%28%29%29%0A%09%0A%09outNames+%3D+%5B%5D%0A%09for+band%2C+data+in+enumerate%28bandData%29%3A%0A%09%09outName+%3D+%27%25s_%25d__%25d_x_%25d_%25d_band_%25d.out%27+%25+%28%0A%09%09%09+baseName%2C+index%2C+window.numRows%2C+window.numCols%2C+nbpp%2C+band%29%0A%09%09outName+%3D+os.path.join%28outDir%2C+outName%29%0A%09%09f+%3D+open%28outName%2C+%27wb%27%29%0A%09%09f.write%28data%29%0A%09%09f.close%28%29%0A%09%09outNames.append%28outName%29%0A%09%09logging.info%28%27Wrote+band+data+to+file+%25s%27+%25+outName%29%0A%09return+outNames%0A%0A%0A%0Adef+extract_images%28fileName%2C+outDir%3DNone%29%3A%0A%09if+not+outDir%3A+outDir+%3D+os.getcwd%28%29%0A%09if+not+os.path.exists%28outDir%29%3A+os.makedirs%28outDir%29%0A%09%0A%09handle+%3D+IOHandle%28fileName%29%0A%09reader+%3D+Reader%28%29%0A%09record+%3D+reader.read%28handle%29%0A%09logging.info%28%27Dumping+file%3A+%25s%27+%25+fileName%29%0A%09%0A%09for+i%2C+segment+in+enumerate%28record.getImages%28%29%29%3A%0A%09%09logging.info%28%27---+Image+%5B%25d%5D+---%27+%25+i%29%0A%09%09imReader+%3D+reader.newImageReader%28i%29%0A%09%09extract_image%28segment.subheader%2C+i%2C+imReader%2C+outDir%2C+os.path.basename%28fileName%29%29%0A%09handle.close%28%29%0A%0A%0Aif+__name__+%3D%3D+%27__main__%27%3A%0A%09for+arg+in+sys.argv%5B1%3A%5D%3A%0A%09%09if+os.path.isfile%28arg%29%3A%0A%09%09%09extract_images%28arg%29%0A%09%09elif+os.path.isdir%28arg%29%3A%0A%09%09%09map%28extract_images%2C+glob.glob%28os.path.join%28arg%2C+%27%2A.ntf%27%29%29+%2B+glob.glob%28os.path.join%28arg%2C+%27%2A.NTF%27%29%29%29" /></form>
+</div>
+				<div class="commentsheader">
+				<span id="comments">&nbsp;</span>Comments [<a href="wikka.php?wakka=ReadImage15Python&amp;show_comments=0">Hide comments/form</a>]
+				</div>
+<div class="comment">
+<span id="comment_31500"></span>uah2W5 Great, thanks for sharing this blog. Much obliged.
+	<div class="commentinfo">
+-- vzhost (2012-04-06 22:30:36)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_34608"></span>jJeMgM Awesome blog post.Much thanks again. Much obliged.
+	<div class="commentinfo">
+-- vzhost (2012-04-19 05:56:17)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_34898"></span>nU5cxp I loved your blog article.Thanks Again.
+	<div class="commentinfo">
+-- vzhost (2012-04-19 16:05:30)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_47471"></span>Hmm it appears like your blog ate my first comment (it was extremely long) so I guess I'll just sum it up what I submitted and say, I'm thoroughly enjoying your blog. I too am an aspiring blog writer but I'm still new to everything. Do you have any recommendations for first-time blog writers? I'd certainly appreciate it.<br />
+cheap north face http://glpbveaqvt.blinkweb.com/
+	<div class="commentinfo">
+-- localhost.localdomain (2012-11-07 17:56:07)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReadImage15Python/delcomment" method="post" id="form_cc76d2fcb0">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="ReadImage15Python" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="47471" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_53668"></span>Does your site have a contact page? I'm having a tough time locating it but, I'd like to send you an email. I've got some recommendations for your blog you might be interested in hearing. Either way, great site and I look forward to seeing it develop over time. Louboutin Shoes http://fashionlouboutinshoes.webs.com/
+	<div class="commentinfo">
+-- localhost.localdomain (2013-04-09 15:35:39)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReadImage15Python/delcomment" method="post" id="form_cc76d2fcb0_1">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="ReadImage15Python" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="53668" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="commentform">
+		    			<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReadImage15Python/addcomment" method="post" id="form_160c5c5a54">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="ReadImage15Python" />
+</fieldset>
+					<label for="commentbox">Add a comment to this page:<br />
+					<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
+					<input type="submit" value="Add Comment" accesskey="s" />
+            			</label>
+					</form>
+				</div>
+<div class="footer">
+<form action="wikka.php?wakka=ReadImage15Python" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch" />
+</fieldset>
+<a href="wikka.php?wakka=ReadImage15Python%252Fhistory" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="wikka.php?wakka=ReadImage15Python%252Frevisions" title="Click to view recent revisions list for this page">2008-03-03 19:12:03</a> <a href="wikka.php?wakka=ReadImage15Python%252Frevisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::
+Owner: <a href="wikka.php?wakka=NitroAdmin">NitroAdmin</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox" />
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world's largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.1229 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+</body>
+</html>

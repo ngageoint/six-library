@@ -1,0 +1,572 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>NITRO Wiki:  .: Introducción :.</title>
+	<base href="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="css/wikka.css?1.1.6.4" />
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for TeamMXNCrunching (RSS)" href="wikka.php?wakka=TeamMXNCrunching%252Frevisions.xml" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=TeamMXNCrunching/recentchanges.xml" />
+</head>
+<body  >
+<div class="header">
+	<h2><a id="homepage_link" href="index.html">NITRO Wiki</a> : <a href="wikka.php?wakka=TeamMXNCrunching%252Fbacklinks" title="Display a list of pages linking to TeamMXNCrunching">TeamMXNCrunching</a></h2>
+	<a href="index.html">HomePage</a> ::
+	<a href="wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+
+<!--starting page content-->
+<div class="page">
+<br />
+<br />
+<h1> .: Introducción :.</h1>
+
+BOINC podria ser un programa que Te permite dar su inactividad tiempo de pc para la ciencia viene como <a class="ext" href="http://qcn.stanford.edu/sensor/team_display.php?teamid=8007">Stanford</a><span class="exttail">&#8734;</span>, SETI @ home, Climateprediction.net, Rosetta @ home, World Community Grid, y muchos otros<br />
+<br />
+<br />
+<h2>.: ¿Por qué usar BOINC? :.</h2>
+
+<br />
+Soporte para 'administradores de cuentas' - sitios de Internet que te permiten navegar por BOINC viene , adjuntar / separar, enmienda recursos compartidos y configuraciones, todo con la simplicidad de apuntar y hacer clic. Gerente de Cuentas tambien estan bueno si usted tiene muchas computadoras solo Debería construir cambios una vez.<br />
+<br />
+<br />
+Preferencias generales es anulado por ar a | a neighborhood} file; Los detalles están aquí.<br />
+<br />
+<br />
+BOINC Actualmente te avisa cuando te desea para formar una red afiliación.<br />
+<br />
+<br />
+<br />
+<h2>.: Sistema necesidades :.</h2>
+
+<br />
+Tu ordenador personal debe satisfacer el posterior Necesita ejecutar BOINC. Basado en BOINC viene podría tener promover las necesidades.<br />
+<br />
+Windows sistemas operativos<br />
+<br />
+Windows noventa ocho o mas tarde<br />
+<br />
+<br />
+<br />
+<h2>Hardware mínimo</h2>
+
+<br />
+Pentium 233 tasa (Recomendado: Pentium quinientos tasa o mayor<br />
+<br />
+<br />
+sesenta y cuatro MB de RAM (Recomendado: 128 MB de RAM o más)<br />
+<br />
+<br />
+veinte MB espacio de disco<br />
+<br />
+<br />
+<br />
+Macintosh sistemas operativos<br />
+<br />
+mack OS X diez .3 y después<br />
+<br />
+<br />
+<br />
+<h2>Hardware mínimo</h2>
+
+<br />
+Macintosh PC con AN Intel x86or <a class="missingpage" href="wikka.php?wakka=PowerPC%252Fedit" title="Create this page">PowerPC</a> G3, G4, G5 o procesador<br />
+<br />
+<br />
+128 MB de RAM (Recomendado: 256 MB de RAM o más)<br />
+<br />
+<br />
+doscientos MB espacio de disco<br />
+<br />
+<br />
+<br />
+<h2>Sistema UNIX sistemas operativos</h2>
+
+<br />
+Kernel del sistema UNIX dos .2.14 o superior<br />
+<br />
+<br />
+glibc 2.3.2 o superior<br />
+<br />
+<br />
+<a class="missingpage" href="wikka.php?wakka=XFree86%252Fedit" title="Create this page">XFree86</a>-3.3.6 o superior<br />
+<br />
+<br />
+gtk + 2.0 o superior<br />
+<br />
+<br />
+<br />
+Hardware mínimo<br />
+<br />
+Pentium quinientos tasa o más grande<br />
+<br />
+<br />
+64 MB de RAM<br />
+<br />
+<br />
+cincuenta MB espacio de disco<br />
+<br />
+<br />
+<br />
+<h2>Recomendaciones de Likewhoa</h2>
+
+<br />
+Overclockeado portátil que ruge y es estable<br />
+<br />
+<br />
+<br />
+<h2>.: Descarga de fuentes:.</h2>
+
+<br />
+Página principal que muestra todo fuentes accesibles se encuentra aquí<br />
+<br />
+<h2>Windows transferir</h2>
+
+<br />
+5.8.16 Versión de desarrollo (PUEDE SER INESTABLE - USO solo para PRUEBAS)<br />
+5.4.15 Versión aconsejada (GUI estándar)<br />
+<br />
+<br />
+<br />
+<h2>antílope Sistema UNIX x86 transferir</h2>
+
+<br />
+5.8.17 Versión de desarrollo (PUEDE SER INESTABLE - USO solo para PRUEBAS)<br />
+5.4.11 Versión aconsejada (GUI estándar)<br />
+<br />
+<br />
+<br />
+Si tu eres empleando un Distribución de sistemas UNIX, es decir, "Redhat, Fedora, SUSE, Debian, Ubuntu, Gentoo" que proporciona un gestor de paquetes omitir esto transferir la mitad.<br />
+<br />
+<h2>mack OS X transferir</h2>
+
+<br />
+5.8.16 Versión de desarrollo (PUEDE SER INESTABLE - USO solo para PRUEBAS)<br />
+5.8.16 Versión de desarrollo "línea de comando UNIX"<br />
+5.4.15 Versión aconsejada (GUI estándar)<br />
+<br />
+<br />
+<br />
+<h2>.: Instalación:.</h2>
+
+<br />
+Windows<br />
+<br />
+BOINC es poner en cualquiera de muchos modos:<br />
+<br />
+Instalación de un solo usuario<br />
+<br />
+<br />
+<br />
+este puede ser el Modo aconsejado . BOINC con <a class="ext" href="http://volunteer.cs.und.edu/csg/team_display.php?teamid=189287">CSGRID</a><span class="exttail">&#8734;</span> puede correr mientras que tú poner en usuario) unidad de área registrada. BOINC está listado dentro de Comience el menú de usted, pero no diferentes usuarios El comando 'Mostrar gráficos' dentro de los gestores de BOINC solo para ti El protector de pantalla BOINC muestra gráficos de aplicación. solo para ti (otros usuarios se ejecutará el protector de pantalla sin embargo puede ver importar sólo datos ).<br />
+<br />
+<h2>Instalación compartida</h2>
+
+<br />
+<br />
+<br />
+BOINC se ejecuta siempre que cualquier usuario inicie sesión. BOINC aparece en la lista dentro de Menú de inicio de todos los usuarios. mientras que BOINC se está ejecutando, se ejecuta como un usuario seleccionado el usuario principal para iniciar sesión, o el primario para ejecutar BOINC). El comando 'Mostrar gráficos' Dentro de las obras del gerente de BOINC. sólo para este usuario. El protector de pantalla BOINC muestra gráficos de aplicaciones. solo para este usuario (otros usuarios se ejecutará el protector de pantalla sin embargo puede ver importar sólo datos ).<br />
+<br />
+<br />
+<br />
+BOINC corre todo el tiempo (incluso una vez nadie ha iniciado sesión). BOINC está listado dentro de comenzar el menú de la poner en usuario, sin embargo no diferentes usuarios El comando 'Mostrar gráficos' dentro del gestor de BOINC No funcionará para ningún usuario. El salvapantallas de BOINC puede únicamente mostrar importar datos.<br />
+<br />
+Mac OS X<br />
+<br />
+Si tu navegador aún no lo ha hecho. por lo tanto , ampliar el archivo de nada haciendo doble clic al respecto dentro del buscador.<br />
+<br />
+<br />
+Haga doble clic en BOINC.pkg para ejecutar el instalador, luego siga las indicaciones.<br />
+<br />
+<br />
+cerrar el instalador una vez esta terminado esto puede Lanza mecánicamente el gestor de BOINC.<br />
+<br />
+<br />
+Si deseas que BOINC sea tu patrón , abra Preferencias del Sistema desde el menú de Apple. elige escritorio y elige BOINCSaver.<br />
+<br />
+<br />
+<br />
+Muchas herramientas para sistema Macintosh. directores unidad de área accesible a:<br />
+<br />
+Ejecutar mecánicamente BOINC como servicio de sistema o demonio en el momento del arranque<br />
+<br />
+<br />
+mejorar la seguridad para completar compradores<br />
+<br />
+<br />
+Forestal BOINC Manager desde el lanzamiento mecánicamente una vez usuarios seleccionados cuidadosamente inician sesión.<br />
+<br />
+<br />
+<br />
+<h2>Linux</h2>
+
+BOINC para El sistema UNIX se distribuye como un archivo autoextraíble. este tipo de instalación necesariamente que solo seas consciente de la Interfaz de línea de comandos del sistema operativo .<br />
+<br />
+los los archivos de transferencia tienen nombres como boinc_5.2.13_i686-pc-linux-gnu.sh. una vez descargado el archivo, escriba<br />
+<br />
+<h2>Código:</h2>
+
+<br />
+sh boinc_<br />
+<br />
+donde quiera es que la version boinc que has descargado.<br />
+esto puede producir un directorio BOINC / con los siguientes archivos:<br />
+<br />
+boinc<br />
+El núcleo de BOINC consumidor<br />
+boincmgr<br />
+El gerente de BOINC<br />
+run_client<br />
+Un script que entra en el directorio BOINC y ejecuta el núcleo consumidor.<br />
+run_manager<br />
+Un script que cd's en el directorio BOINC y ejecuta el administrador.<br />
+<br />
+usted desear mecánicamente comienza el núcleo consumidor en el momento del arranque, seré capaz de justificar una forma de lograr esto con completamente diferente Distribuciones de sistemas UNIX pronto.<br />
+<br />
+Instalación abajo antílope gentoo Sistema UNIX<br />
+<br />
+poniendo en fuentes BOINC:<br />
+<br />
+Código:<br />
+<br />
+emerge boinc -av<br />
+<br />
+Archivo de configuración BOINC se encuentra en /etc/conf.d/boinc.<br />
+<br />
+Variables necesarias a tener en cuenta:<br />
+<br />
+ALLOW_REMOTE_RPC<br />
+ajustado a afirmativo si le gustaría acceder a boinc de forma remota. defecto está listo para no<br />
+Nota que vas a Debería editar /var/lib/boinc/gui_rpc_auth.cfg.<br />
+ver Autorización de Servidor abajo Sistema UNIX para un montón de información.<br />
+NICELEVEL<br />
+diecinueve es que el predeterminado y es precio significa que para ejecutar BOINC en baja prioridad. establecido en -19 para la prioridad más alta, mira esto puede ralentizar diferente tarea hacia abajo.<br />
+<br />
+comenzando el servidor BOINC:<br />
+<br />
+Código:<br />
+<br />
+/etc/init.d/boinc empezar<br />
+<br />
+Adjuntando un Proyecto a BOINC: (opcional)<br />
+<br />
+Código:<br />
+<br />
+/etc/init.d/boinc attach<br />
+<br />
+comenzando la interfaz gráfica de usuario BOINC:<br />
+<br />
+Código:<br />
+<br />
+/ usr / bin / boinc_gui &<br />
+<br />
+Instalación abajo antílope debian Sistema UNIX<br />
+<br />
+Código:<br />
+<br />
+apt-get update<br />
+apt-get install boinc-client boinc-manager<br />
+<br />
+comenzando el servidor BOINC:<br />
+<br />
+Código:<br />
+<br />
+/etc/init.d/boinc-client empezar<br />
+<br />
+comenzando la interfaz gráfica de usuario BOINC:<br />
+<br />
+Código:<br />
+<br />
+/ usr / bin / boinc_gui &<br />
+<br />
+Autorización del servidor abajo Sistema UNIX<br />
+<br />
+Por razones de seguridad boinc_cmd no debería ser con licencia adjuntar al demonio ab initio . boinc_client establece un aleatorio secreto (a defender el afiliación al demonio boinc_client) y es resuelto en /var/lib/boinc/gui_rpc_auth.cfg. usted probablemente deseo editar este archivo para que contenga el secreto Usted desea utilizar. tener en cuenta para reiniciar boinc una vez creando cambios en gui_rpc_auth.cfg.<br />
+<br />
+explotación BOINC Si bien no es el gráfico programa<br />
+<br />
+BOINC se mantiene a través del comando , Sin embargo, esto se convierte en un dolor dentro del culo una vez gestionando bastante cinco viene, sin embargo podré mostrar De todas formas eres tú .<br />
+BOINC's herramientas de comando Unidad de área boinc_cmd & boinc_client. seré capaz de justificar que cada de esas herramientas lo hacen.<br />
+<br />
+explotacion boinc_cmd<br />
+<br />
+<br />
+boinc_cmd es que la herramienta visualizar cuidadoso datos en su viene , el set varía boinc opciones como configuración de red, salvapantallas y proxy o administrar y configurar administradores de cuentas.<br />
+<br />
+comandos boinc_cmd accesibles :<br />
+<br />
+uso: boinc_cmd [--host hostname] [--passwd passwd] comando<br />
+<br />
+--get_state muestra el estado completo<br />
+--get_results muestra resultados<br />
+--get_file_transfers muestra transferencias de archivos<br />
+--get_project_status show de pie de todos viene<br />
+--get_disk_usage<br />
+--resultado dirección de computadora result_name abortar<br />
+--proyecto dirección de computadora no más trabajo<br />
+--project_attach auth dirección del equipo<br />
+--transferencia de archivos dirección de computadora nombre del archivo abortar<br />
+--get_run_mode<br />
+--set_run_mode vehiculo automotriz | Nunca}<br />
+--get_network_mode<br />
+--set_network_mode vehiculo automotriz | Nunca}<br />
+--get_proxy_settings<br />
+--set_proxy_settings<br />
+--get_messages seqno mostrar mensajes&gt; seqno<br />
+--get_host_info<br />
+--acct_mgr_rpc nombre de la dirección de la computadora secreto<br />
+--run_benchmarks<br />
+--get_screensaver_mode<br />
+--set_screensaver_mode on | off blank_time<br />
+--get_project_config dirección de computadora<br />
+--get_project_config_poll<br />
+--lookup_account dirección de computadora email passwd<br />
+--lookup_account_poll<br />
+--crear una cuenta dirección de computadora correo electrónico nombre de contraseña<br />
+--create_account_poll<br />
+--dejar<br />
+<br />
+Ejemplos:<br />
+<br />
+Salida HOST información<br />
+<br />
+<br />
+Código:<br />
+<br />
+boinc_cmd --host localhost --passwd<br />
+<br />
+Modo de protector de pantalla de salida<br />
+<br />
+<br />
+Código:<br />
+<br />
+boinc_cmd --host localhost --passwd<br />
+<br />
+Adjuntar al proyecto<br />
+<br />
+<br />
+Código:<br />
+<br />
+boinc_cmd --host localhost --passwd<br />
+<br />
+Desprenderse del proyecto<br />
+<br />
+<br />
+Código:<br />
+<br />
+boinc_cmd --host localhost --passwd<br />
+<br />
+comandos boinc_client accesibles :<br />
+<br />
+Uso: boinc_client [opciones]<br />
+-Ayuda a mostrar elecciones<br />
+versión de la versión de la versión información<br />
+-exit_when_idle Obtener / procesar / informar el trabajo, luego salir<br />
+-show_projects show conectado viene<br />
+-return_results_inmediatamente en contacto con el servidor una vez tener resultados<br />
+-detach_project<br />
+-reset_project<br />
+-attach_project<br />
+-update_prefs<br />
+-run_cpu_benchmarks ejecuta el Puntos de referencia de la CPU<br />
+-check_all_logins para detección de inactividad, verifique los inicios de sesión remotos<br />
+demasiado -allow_remote_gui_rpc habilitar el control remoto Conexiones GUI RPC<br />
+-gui_rpc_port puerto para GUI RPCs<br />
+-redirectio enviar stdout y stderr a los archivos de registro<br />
+-detachar separar de la consola (Windows)<br />
+-dir<br />
+-no_gui_rpc no haga habilitar GUI RPC, no haga construir zócalo<br />
+-daemon se ejecuta como daemon (Unix)<br />
+Ejemplos:<br />
+<br />
+comience BOINC con el inicio de sesión remoto de rpc habilitado.<br />
+<br />
+<br />
+<br />
+Código:<br />
+<br />
+boinc_client -allow_remote_gui_rpc &<br />
+<br />
+Aquellos unidad de área simplemente muchos ejemplos para proporcionarle un concepto de una forma de usar las herramientas boinc_cmd & boinc_client. espero que esto ayude.<br />
+<br />
+Establecer BOINC empezar mecánicamente en Sacar un tema<br />
+<br />
+debajo de Gentoo:<br />
+<br />
+Código:<br />
+<br />
+rc-update add boinc por defecto<br />
+<br />
+debajo de Redhat / Fedora:<br />
+<br />
+transferir este guión y colóquelo en /etc/rc.d/init.d/boinc (haga positivo es ejecutable) Y así se emitieron las órdenes:<br />
+<br />
+Código:<br />
+<br />
+servicio de boinc empezar<br />
+chkconfig --add boinc<br />
+<br />
+debajo de SUSE nueve. :<br />
+<br />
+transferir este guión y colóquelo en /etc/init.d/boinc (haga positivo es ejecutable) Y así se emitieron las órdenes:<br />
+<br />
+Código:<br />
+<br />
+ls -s /etc/init.d/boinc / usr / sbin / rcboinc<br />
+/etc/init.d/boinc empezar<br />
+<br />
+abajo mack OSX:<br />
+<br />
+Nota la mack acostumbrado La instalación de la GUI dispone que BOINC se ejecute en el inicio de sesión del usuario.<br />
+<br />
+A ejecutar BOINC mecánicamente como un servicio de sistema o demonio en el momento del arranque, o detener el lanzamiento de BOINC mecánicamente una vez usuarios seleccionados a mano inician sesión, vea el herramientas de administrador mack .<br />
+<br />
+<br />
+.: Desinstalando BOINC:.<br />
+<br />
+Windows<br />
+dentro de menú de inicio Elija Programas / BOINC / Desinstalar. O dentro de menú de inicio seleccione Configuración / Agregar o programas para llevar<br />
+<br />
+Mac OS X<br />
+A absolutamente quitar (desinstalar) BOINC de su Macintosh:<br />
+<br />
+Movimiento Los siguientes archivos a la papelera:<br />
+<br />
+<br />
+BOINCManager.app (desde su / Aplicaciones / carpeta)<br />
+BOINCSaver.saver (de su / Biblioteca / Protectores de pantalla / carpeta)<br />
+la carpeta de datos BOINC (de su / Biblioteca / Soporte de aplicaciones / carpeta).<br />
+[nombre de usuario] / Biblioteca / Preferencias / Preferencias de BOINC Manager)<br />
+<br />
+<br />
+<br />
+Abre el panel de Cuentas dentro de las Preferencias del Sistema (accesible desde el menú de Apple), y elimine BOINCManager de su lista de inicio de sesión cosas (o Inicio cosas debajo del sistema operativo diez .3.)<br />
+<br />
+<br />
+Abre Preferencias del sistema desde el menú de Apple. elige escritorio y elige un distinto patrón.<br />
+<br />
+<br />
+<br />
+abajo antílope Sistema UNIX<br />
+<br />
+Gentoo Sistema UNIX<br />
+<br />
+/etc/init.d/boinc stop && emerge boinc -C<br />
+Debian Sistema UNIX<br />
+<br />
+Código:<br />
+<br />
+/etc/init.d/boinc-client stop && apt-get llevar boinc-cliente boinc-manager<br />
+<br />
+<br />
+.: Explotación BOINC Estadísticas Account Manager:.<br />
+<br />
+Introdución<br />
+<br />
+BAM te ayuda en Realice y administre sus cuentas de proyecto BOINC y le ayuda a configurar las preferencias, conexión o fabricación grupos , conectando sus ordenadores a viene, y un montón de mucha.<br />
+<br />
+si o no eres un nuevo o UN usuario BOINC existente, BAM puede ayudarle a obtener Lo más destacado de BOINC.<br />
+<br />
+Registro de estadísticas de BAM<br />
+<br />
+Registrar aquí.<br />
+espera el correo de activación, y activa tu cuenta.<br />
+Inicie sesión en <a class="ext" href="http://www.boincstats.com/bam">http://www.boincstats.com/bam</a><span class="exttail">&#8734;</span><br />
+Ir a "Registrarse para viene " dentro del menú BAM y elige los proyectos tú deseas para colocar ("Crear cuenta"), luego haga clic en "Iniciar".<br />
+(Este paso es opcional si ya te has unido a un proyecto)<br />
+Ir a "Recursos" dentro del menú BAM y elige el viene que tu solo deseo todos sus nuevos anfitriones para conectarse a (" conexión predeterminada") y haga clic en "Actualizar".<br />
+comienza tu BOINC consumidor.<br />
+(Este paso es opcional si ya tengo un cinco .4.x instalado por el consumidor )<br />
+<br />
+<br />
+<br />
+Adjuntar estadísticas BAM a tu BOINC consumidor<br />
+Adjuntando a BAM! es simple. Se necesita muchos pasos sencillos , y has terminado<br />
+<br />
+Si esto puede ser La hora principal en que se ejecuta el Administrador de BOINC es un asistente. adjuntar a un proyecto Parece. cerrar este asistente Primero antes de continuar.<br />
+<br />
+comienza el asistente. Sus dentro del menu debajo de las herramientas.<br />
+<br />
+<br />
+simplemente haga clic en 'Siguiente' en La pantalla principal .<br />
+<br />
+<br />
+Introduzca la dirección del administrador: bam.boincstats.com.<br />
+<br />
+<br />
+Ingrese su usuario datos. desea ingresar su nombre de usuario y no su dirección de correo electrónico!<br />
+<br />
+<br />
+una vez que haga clic en 'Siguiente' en la pantalla anterior, consumidor Se puede adjuntar a BAM. pantalla sucesiva parece una vez que tenga éxito.<br />
+<br />
+<br />
+<br />
+los consumidor puede construir 2 conexiones a BAM. va a conectar con todo viene eso unidad de área configurada para adjuntar por defecto.<br />
+¡Hecho! Ahí unidad de área un montón de opciones en BAM para ajustar la configuración y los hosts. Navegar alrededor y navegue por las preguntas frecuentes para más detalles.<br />
+<br />
+<h2>.: renombrado problemas :.</h2>
+
+<br />
+Si usted emplea un servidor proxy, por favor espere la actualización para Actualmente. tenemos una solución dentro de las obras para proxies que usan autenticación NTLM.<br />
+<br />
+<br />
+<br />
+<h3>Windows</h3>
+
+<br />
+Si aplicaciones BOINC unidad de área repetidamente floreciendo en tu pc , es probablemente que tu solo debería actualizar a La última versión de <a class="missingpage" href="wikka.php?wakka=DirectX%252Fedit" title="Create this page">DirectX</a>.<br />
+Tu sistema no es absolutamente estable como tu Tho ' y desea desbloquear una pequeña cantidad.<br />
+Si usted está obtención uno de diez conduce a errores esto puede ser tradicional y una cosa no debes preocuparte respecto a menos usted está perpetuamente Obtención de error en los resultados.<br />
+Si BOINC se ejecuta en un tiempo similar al de Windows XP Protectores de pantalla 3-D , el sistema se vuelve lento y no responde.<br />
+Aplicaciones que fueron diseñado antes Octubre de 2004 no hacer Mostrar gráficos de salvapantallas con el servicio o la instalación compartida. ordenar , o la instalación de un solo usuario ordenar con el secreto defender salvapantallas elección en organización no gubernamental Basadas en su mayoría máquinas.
+</div>
+				<div class="commentsheader">
+				<p>There is one comment on this page. 				[<a href="wikka.php?wakka=TeamMXNCrunching&amp;show_comments=1#comments">Display comment</a>]</p>
+				</div>
+				<div class="footer">
+<form action="wikka.php?wakka=TeamMXNCrunching" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch" />
+</fieldset>
+<a href="wikka.php?wakka=TeamMXNCrunching%252Fhistory" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="wikka.php?wakka=TeamMXNCrunching%252Frevisions" title="Click to view recent revisions list for this page">2019-07-08 16:49:40</a> <a href="wikka.php?wakka=TeamMXNCrunching%252Frevisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::
+Owner: <a href="wikka.php?wakka=TeamMXNCrunching">TeamMXNCrunching</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox" />
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world's largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.0382 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>NITRO Wiki: Writing an Advanced TRE Plugin</title>
+	<base href="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="css/wikka.css?1.1.6.4" />
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for WriteAdvTrePlugin20C (RSS)" href="wikka.php?wakka=WriteAdvTrePlugin20C%252Frevisions.xml" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteAdvTrePlugin20C/recentchanges.xml" />
+</head>
+<body  >
+<div class="header">
+	<h2><a id="homepage_link" href="index.html">NITRO Wiki</a> : <a href="wikka.php?wakka=WriteAdvTrePlugin20C%252Fbacklinks" title="Display a list of pages linking to WriteAdvTrePlugin20C">WriteAdvTrePlugin20C</a></h2>
+	<a href="index.html">HomePage</a> ::
+	<a href="wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+
+<!--starting page content-->
+<div class="page">
+<strong>This API is subject to change</strong><br />
+<h4>Writing an Advanced TRE Plugin</h4>
+
+<br />
+There are several ways that you can put functionality into a TRE that is beyond the basic utility implementation.  Snippets will be posted once 2.0 development has stabilized.  For now, you can see full examples from the repository.<br />
+<br />
+<ul><li> Standard TREs
+<ul><li> <a class="ext" href="https://nitro-nitf.svn.sourceforge.net/svnroot/nitro-nitf/trunk/c/nitf/shared/HISTOA.c">HISTOA Example</a><span class="exttail">&#8734;</span>
+</li><li> <a class="ext" href="https://nitro-nitf.svn.sourceforge.net/svnroot/nitro-nitf/trunk/c/nitf/shared/">All of our currently supported/defined Unclassified TREs </a><span class="exttail">&#8734;</span>
+</li></ul></li></ul><div class="indent"><div class="indent"><br />
+</div></div><ul><li> Extending the TRE using function pointers
+<ul><li> <a class="ext" href="https://nitro-nitf.svn.sourceforge.net/svnroot/nitro-nitf/trunk/c/nitf/shared/RSMECA.c">RSM Example</a><span class="exttail">&#8734;</span>
+</li></ul></li></ul><div class="indent"><br />
+</div><ul><li> Bypassing the TRE description API
+<ul><li> <a class="ext" href="https://nitro-nitf.svn.sourceforge.net/svnroot/nitro-nitf/trunk/external/example-plugins/source/XMLTRE.c">XML Example</a><span class="exttail">&#8734;</span>
+</li><li> ATTPTA Example (coming soon)</li></ul></li></ul>
+<br />
+<br />
+
+</div>
+				<div class="commentsheader">
+				<p>There is one comment on this page. 				[<a href="wikka.php?wakka=WriteAdvTrePlugin20C&amp;show_comments=1#comments">Display comment</a>]</p>
+				</div>
+				<div class="footer">
+<form action="wikka.php?wakka=WriteAdvTrePlugin20C" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch" />
+</fieldset>
+<a href="wikka.php?wakka=WriteAdvTrePlugin20C%252Fhistory" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="wikka.php?wakka=WriteAdvTrePlugin20C%252Frevisions" title="Click to view recent revisions list for this page">2009-05-20 15:12:26</a> <a href="wikka.php?wakka=WriteAdvTrePlugin20C%252Frevisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::
+Owner: <a href="wikka.php?wakka=NitroAdmin">NitroAdmin</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox" />
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world's largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.0218 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+</body>
+</html>

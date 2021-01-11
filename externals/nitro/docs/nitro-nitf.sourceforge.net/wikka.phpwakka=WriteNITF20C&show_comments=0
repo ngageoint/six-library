@@ -1,0 +1,384 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>NITRO Wiki: Writing a NITF file from scratch, in C</title>
+	<base href="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="css/wikka.css?1.1.6.4" />
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for WriteNITF20C (RSS)" href="wikka.php?wakka=WriteNITF20C%252Frevisions.xml" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteNITF20C/recentchanges.xml" />
+</head>
+<body  >
+<div class="header">
+	<h2><a id="homepage_link" href="index.html">NITRO Wiki</a> : <a href="wikka.php?wakka=WriteNITF20C%252Fbacklinks" title="Display a list of pages linking to WriteNITF20C">WriteNITF20C</a></h2>
+	<a href="index.html">HomePage</a> ::
+	<a href="wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+
+<!--starting page content-->
+<div class="page">
+<h4>Writing a NITF file from scratch, in C</h4>
+
+<br />
+When dealing with NITF, an increasingly more common need is the ability to construct one from scratch, and write it to disk. This article details the steps you should follow in order to do this yourself, in C. This article is written mainly to support 2.0 development efforts, but should apply to the 1.5 release as well. There is one work-around you'll need to add if you are using this example with 1.5 development.<br />
+<br />
+<h5>First off, we want to create a <a href="wikka.php?wakka=RecordDef">Record</a>, which is the container of the entire NITF "model".</h5>
+
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; ...<br />
+&nbsp; &nbsp; <span class="coMULTI">/* first, we need to create a new Record */</span><br />
+&nbsp; &nbsp; nitf_Error error;<br />
+&nbsp; &nbsp; nitf_Record *record = nitf_Record_construct<span class="br0">&#40;</span>NITF_VER_21, &amp;error<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!record<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; nitf_Error_print<span class="br0">&#40;</span>&amp;error, stderr, <span class="st0">&quot;While constructing record...&quot;</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="br0">&#125;</span><br />
+&nbsp; &nbsp; ...</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteNITF20C/grabcode" method="post" id="form_61092f4ded">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="WriteNITF20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="%09...%0A%09%2F%2A+first%2C+we+need+to+create+a+new+Record+%2A%2F%0A%09nitf_Error+error%3B%0A%09nitf_Record+%2Arecord+%3D+nitf_Record_construct%28NITF_VER_21%2C+%26error%29%3B%0A%09if+%28%21record%29%0A%09%7B%0A%09%09nitf_Error_print%28%26error%2C+stderr%2C+%22While+constructing+record...%22%29%3B%0A%09%09goto+CATCH_ERROR%3B%0A%09%7D%0A%09..." /></form>
+<br />
+<br />
+<h5>In addition, we'll want to populate the <a href="wikka.php?wakka=FileHeaderDef">FileHeader</a> with some custom field data.</h5>
+
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; nitf_FileHeader *header = record-&gt;header;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="coMULTI">/* populate some fields */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>header-&gt;fileHeader, <span class="st0">&quot;NITF&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>header-&gt;fileVersion, <span class="st0">&quot;02.10&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setUint32<span class="br0">&#40;</span>header-&gt;complianceLevel, <span class="nu0">3</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>header-&gt;systemType, <span class="st0">&quot;BF01&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>header-&gt;originStationID, <span class="st0">&quot;SF.net&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="coMULTI">/* fake the date */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>header-&gt;fileDateTime, <span class="st0">&quot;20080812000000&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>header-&gt;fileTitle, title, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>header-&gt;classification, <span class="st0">&quot;U&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setUint32<span class="br0">&#40;</span>header-&gt;encrypted, <span class="nu0">0</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; ...</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteNITF20C/grabcode" method="post" id="form_61092f4ded_1">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="WriteNITF20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="%09nitf_FileHeader+%2Aheader+%3D+record-%3Eheader%3B%0A%09%0A%09%2F%2A+populate+some+fields+%2A%2F%0A%09if+%28%21nitf_Field_setString%28header-%3EfileHeader%2C+%22NITF%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setString%28header-%3EfileVersion%2C+%2202.10%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setUint32%28header-%3EcomplianceLevel%2C+3%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setString%28header-%3EsystemType%2C+%22BF01%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setString%28header-%3EoriginStationID%2C+%22SF.net%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09%2F%2A+fake+the+date+%2A%2F%0A%09if+%28%21nitf_Field_setString%28header-%3EfileDateTime%2C+%2220080812000000%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setString%28header-%3EfileTitle%2C+title%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setString%28header-%3Eclassification%2C+%22U%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setUint32%28header-%3Eencrypted%2C+0%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09..." /></form>
+<br />
+<br />
+There are other fields to set, (as well as TRE Extension segments), but we'll keep it simple for this example. Also, we could just stop here. A Record with just a <a href="wikka.php?wakka=FileHeaderDef">FileHeader</a> is a valid NITF... but it doesn't really mean much.<br />
+In our next step, let's add an image to the NITF.<br />
+<br />
+<h5>Next, let's add a new <a href="wikka.php?wakka=ImageSegmentDef">ImageSegment</a> to the Record; we'll also update some fields of the <a class="missingpage" href="wikka.php?wakka=ImageSubheaderDef%252Fedit" title="Create this page">subheader</a>.</h5>
+
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; ...<br />
+&nbsp; &nbsp; <span class="me1">nitf_ImageSegment*</span> segment = nitf_Record_newImageSegment<span class="br0">&#40;</span>record, &amp;error<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!segment<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+<br />
+&nbsp; &nbsp; <span class="coMULTI">/* grab the subheader */</span><br />
+&nbsp; &nbsp; nitf_ImageSubheader *imsubheader = segment-&gt;subheader;<br />
+<br />
+&nbsp; &nbsp; <span class="coMULTI">/* populate some fields */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>imsubheader-&gt;filePartType, <span class="st0">&quot;IM&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>imsubheader-&gt;imageId, <span class="st0">&quot;NITRO-TEST&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="coMULTI">/* fake the date */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>imsubheader-&gt;imageDateAndTime, <span class="st0">&quot;20080812000000&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>imsubheader-&gt;imageSecurityClass, <span class="st0">&quot;U&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setUint32<span class="br0">&#40;</span>imsubheader-&gt;encrypted, <span class="nu0">0</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="coMULTI">/* for fun, let's add a comment */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_ImageSubheader_insertImageComment<span class="br0">&#40;</span>imsubheader, <span class="st0">&quot;NITF generated by NITRO&quot;</span>, &nbsp; &nbsp; <span class="nu0">0</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+<br />
+&nbsp; &nbsp; <span class="coMULTI">/* uncompressed image */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>imsubheader-&gt;imageCompression, <span class="st0">&quot;NC&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="coMULTI">/* some more fields... */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setString<span class="br0">&#40;</span>imsubheader-&gt;imageMagnification, <span class="st0">&quot;1.00&quot;</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setUint32<span class="br0">&#40;</span>imsubheader-&gt;imageDisplayLevel, <span class="nu0">1</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setUint32<span class="br0">&#40;</span>imsubheader-&gt;imageAttachmentLevel, <span class="nu0">0</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Field_setUint32<span class="br0">&#40;</span>imsubheader-&gt;imageLocation, <span class="nu0">0</span>, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; ...</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteNITF20C/grabcode" method="post" id="form_61092f4ded_2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="WriteNITF20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="%09...%0A%09nitf_ImageSegment%2A+segment+%3D+nitf_Record_newImageSegment%28record%2C+%26error%29%3B%0A%09if+%28%21segment%29%0A%09%09goto+CATCH_ERROR%3B%0A%0A%09%2F%2A+grab+the+subheader+%2A%2F%0A%09nitf_ImageSubheader+%2Aimsubheader+%3D+segment-%3Esubheader%3B%0A%0A%09%2F%2A+populate+some+fields+%2A%2F%0A%09if+%28%21nitf_Field_setString%28imsubheader-%3EfilePartType%2C+%22IM%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setString%28imsubheader-%3EimageId%2C+%22NITRO-TEST%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09%2F%2A+fake+the+date+%2A%2F%0A%09if+%28%21nitf_Field_setString%28imsubheader-%3EimageDateAndTime%2C+%2220080812000000%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setString%28imsubheader-%3EimageSecurityClass%2C+%22U%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setUint32%28imsubheader-%3Eencrypted%2C+0%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09%0A%09%2F%2A+for+fun%2C+let%27s+add+a+comment+%2A%2F%0A%09if+%28%21nitf_ImageSubheader_insertImageComment%28imsubheader%2C+%22NITF+generated+by+NITRO%22%2C+%090%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%0A%09%2F%2A+uncompressed+image+%2A%2F%0A%09if+%28%21nitf_Field_setString%28imsubheader-%3EimageCompression%2C+%22NC%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09%0A%09%2F%2A+some+more+fields...+%2A%2F%0A%09if+%28%21nitf_Field_setString%28imsubheader-%3EimageMagnification%2C+%221.00%22%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setUint32%28imsubheader-%3EimageDisplayLevel%2C+1%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setUint32%28imsubheader-%3EimageAttachmentLevel%2C+0%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09if+%28%21nitf_Field_setUint32%28imsubheader-%3EimageLocation%2C+0%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09..." /></form>
+<br />
+<br />
+At this point, all we've done is add an <a href="wikka.php?wakka=ImageSegmentDef">ImageSegment</a> to the record, along with fairly uncomplicated subheader data. It is now that we need to decide <em>what</em> we are going to put into this segment.<br />
+In the <a class="ext" href="http://nitro-nitf.svn.sourceforge.net/viewvc/nitro-nitf/trunk/c/nitf/tests/test_create_nitf.c">full example</a><span class="exttail">&#8734;</span> in subversion, I just use an image from a static memory buffer. You can also read your image<br />
+data from file.<br />
+<br />
+So, for this example, assume you have a 3-band RGB image already in memory. The memory is assumed to be in band-interleaved by pixel (so, the data is organized as such: B1P1, B2P1, B3P1, etc.).<br />
+<br />
+<h5>Let's construct the band information, and tell the <a class="missingpage" href="wikka.php?wakka=ImageSubheaderDef%252Fedit" title="Create this page">ImageSubheader</a> how we want the pixel information handled.</h5>
+
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; ...<br />
+&nbsp; &nbsp; <span class="coMULTI">/* somewhere, define what the band representations are.. for this example, RGB */</span><br />
+&nbsp; &nbsp; <span class="kw4">static</span> <span class="kw4">const</span> <span class="kw4">char</span>* RGB<span class="br0">&#91;</span><span class="br0">&#93;</span> = <span class="br0">&#123;</span><span class="st0">&quot;R&quot;</span>, <span class="st0">&quot;G&quot;</span>, <span class="st0">&quot;B&quot;</span><span class="br0">&#125;</span>;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; ...<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="coMULTI">/* create a BandInfo buffer - one for each band */</span><br />
+&nbsp; &nbsp; bands = <span class="br0">&#40;</span>nitf_BandInfo **<span class="br0">&#41;</span> NITF_MALLOC<span class="br0">&#40;</span><span class="kw4">sizeof</span><span class="br0">&#40;</span>nitf_BandInfo *<span class="br0">&#41;</span> * <span class="nu0">3</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>bands == <span class="kw2">NULL</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; nitf_Error_init<span class="br0">&#40;</span>&amp;error, NITF_STRERROR<span class="br0">&#40;</span>NITF_ERRNO<span class="br0">&#41;</span>,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; NITF_CTXT, NITF_ERR_MEMORY<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="br0">&#125;</span><br />
+<br />
+&nbsp; &nbsp; <span class="coMULTI">/* you may not want the number of band hard-coded like this example */</span><br />
+&nbsp; &nbsp; <span class="kw1">for</span> <span class="br0">&#40;</span>i = <span class="nu0">0</span>; i &lt; <span class="nu0">3</span>; ++i<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; bands<span class="br0">&#91;</span>i<span class="br0">&#93;</span> = nitf_BandInfo_construct<span class="br0">&#40;</span>&amp;error<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!bands<span class="br0">&#91;</span>i<span class="br0">&#93;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_BandInfo_init<span class="br0">&#40;</span>bands<span class="br0">&#91;</span>i<span class="br0">&#93;</span>,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RGB<span class="br0">&#91;</span>i<span class="br0">&#93;</span>, &nbsp; <span class="coMULTI">/* The band representation, Nth band */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="st0">&quot; &quot;</span>, &nbsp; &nbsp; &nbsp;<span class="coMULTI">/* The band subcategory */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="st0">&quot;N&quot;</span>, &nbsp; &nbsp; &nbsp;<span class="coMULTI">/* The band filter condition */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="st0">&quot; &nbsp; &quot;</span>, &nbsp; &nbsp;<span class="coMULTI">/* The band standard image filter code */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="nu0">0</span>, &nbsp; &nbsp; &nbsp; &nbsp;<span class="coMULTI">/* The number of look-up tables */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="nu0">0</span>, &nbsp; &nbsp; &nbsp; &nbsp;<span class="coMULTI">/* The number of entries/LUT */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">NULL</span>, &nbsp; &nbsp; <span class="coMULTI">/* The look-up tables */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="br0">&#125;</span><br />
+<br />
+&nbsp; &nbsp; <span class="coMULTI">/* set the pixel information */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_ImageSubheader_setPixelInformation<span class="br0">&#40;</span>header, &nbsp; &nbsp;<span class="coMULTI">/* header */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="st0">&quot;INT&quot;</span>, &nbsp; &nbsp; <span class="coMULTI">/* Pixel value type */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="nu0">8</span>, &nbsp; &nbsp; &nbsp; &nbsp; <span class="coMULTI">/* Number of bits/pixel */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="nu0">8</span>, &nbsp; &nbsp; &nbsp; &nbsp; <span class="coMULTI">/* Actual number of bits/pixel */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="st0">&quot;R&quot;</span>, &nbsp; &nbsp; &nbsp; <span class="coMULTI">/* Pixel justification */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="st0">&quot;RGB&quot;</span>, &nbsp; &nbsp; <span class="coMULTI">/* Image representation */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="st0">&quot;VIS&quot;</span>, &nbsp; &nbsp; <span class="coMULTI">/* Image category */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="nu0">3</span>, &nbsp; &nbsp; &nbsp; &nbsp; <span class="coMULTI">/* Number of bands */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;bands, &nbsp; &nbsp; <span class="coMULTI">/* Band information object list */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; ....</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteNITF20C/grabcode" method="post" id="form_61092f4ded_3">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="WriteNITF20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="%09...%0A%09%2F%2A+somewhere%2C+define+what+the+band+representations+are..+for+this+example%2C+RGB+%2A%2F%0A%09static+const+char%2A+RGB%5B%5D+%3D+%7B%22R%22%2C+%22G%22%2C+%22B%22%7D%3B%0A%09%0A%09...%0A%09%0A%09%2F%2A+create+a+BandInfo+buffer+-+one+for+each+band+%2A%2F%0A%09bands+%3D+%28nitf_BandInfo+%2A%2A%29+NITF_MALLOC%28sizeof%28nitf_BandInfo+%2A%29+%2A+3%29%3B%0A%09if+%28bands+%3D%3D+NULL%29%0A%09%7B%0A%09%09nitf_Error_init%28%26error%2C+NITF_STRERROR%28NITF_ERRNO%29%2C%0A%09%09%09%09%09%09NITF_CTXT%2C+NITF_ERR_MEMORY%29%3B%0A%09%09goto+CATCH_ERROR%3B%0A%09%7D%0A%0A%09%2F%2A+you+may+not+want+the+number+of+band+hard-coded+like+this+example+%2A%2F%0A%09for+%28i+%3D+0%3B+i+%3C+3%3B+%2B%2Bi%29%0A%09%7B%0A%09%09bands%5Bi%5D+%3D+nitf_BandInfo_construct%28%26error%29%3B%0A%09%09if+%28%21bands%5Bi%5D%29%0A%09%09%09goto+CATCH_ERROR%3B%0A%0A%09%09if+%28%21nitf_BandInfo_init%28bands%5Bi%5D%2C%0A%09%09%09%09%09%09%09%09RGB%5Bi%5D%2C+++%2F%2A+The+band+representation%2C+Nth+band+%2A%2F%0A%09%09%09%09%09%09%09%09%22+%22%2C++++++%2F%2A+The+band+subcategory+%2A%2F%0A%09%09%09%09%09%09%09%09%22N%22%2C++++++%2F%2A+The+band+filter+condition+%2A%2F%0A%09%09%09%09%09%09%09%09%22+++%22%2C++++%2F%2A+The+band+standard+image+filter+code+%2A%2F%0A%09%09%09%09%09%09%09%090%2C++++++++%2F%2A+The+number+of+look-up+tables+%2A%2F%0A%09%09%09%09%09%09%09%090%2C++++++++%2F%2A+The+number+of+entries%2FLUT+%2A%2F%0A%09%09%09%09%09%09%09%09NULL%2C+++++%2F%2A+The+look-up+tables+%2A%2F%0A%09%09%09%09%09%09%09%09%26error%29%29%0A%09%09%09goto+CATCH_ERROR%3B%0A%09%7D%0A%0A%09%2F%2A+set+the+pixel+information+%2A%2F%0A%09if+%28%21nitf_ImageSubheader_setPixelInformation%28header%2C++++%2F%2A+header+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09%09%09+%22INT%22%2C+++++%2F%2A+Pixel+value+type+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09%09%09+8%2C+++++++++%2F%2A+Number+of+bits%2Fpixel+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09%09%09+8%2C+++++++++%2F%2A+Actual+number+of+bits%2Fpixel+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09%09%09+%22R%22%2C+++++++%2F%2A+Pixel+justification+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09%09%09+%22RGB%22%2C+++++%2F%2A+Image+representation+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09%09%09+%22VIS%22%2C+++++%2F%2A+Image+category+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09%09%09+3%2C+++++++++%2F%2A+Number+of+bands+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09%09%09+bands%2C+++++%2F%2A+Band+information+object+list+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09%09%09+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09...." /></form>
+<br />
+<br />
+<strong><em><span style="color: red; ">Note:</span></em></strong> There was a known <a class="ext" href="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=2049593&amp;group_id=216949&amp;atid=1037958">bug</a><span class="exttail">&#8734;</span> in 1.5 that has been fixed for 2.0. There is a work-around that you will need to do if developing with version 1.5. For 1.5 users, before calling nitf_ImageSubheader_setPixelInformation, call:<br />
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">nitf_Field_setUint32<span class="br0">&#40;</span>header-&gt;numImageBands, <span class="nu0">1</span>, &amp;error<span class="br0">&#41;</span>;</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteNITF20C/grabcode" method="post" id="form_61092f4ded_4">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="WriteNITF20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="nitf_Field_setUint32%28header-%3EnumImageBands%2C+1%2C+%26error%29%3B" /></form>
+<br />
+<br />
+Getting back to our example, the next step is to set the blocking info. For this example, we'll just create one block, and interleave the data by pixel.<br />
+<br />
+<h5>How to set the blocking info.</h5>
+
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; ...<br />
+&nbsp; &nbsp; <span class="coMULTI">/* set the blocking info */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_ImageSubheader_setBlocking<span class="br0">&#40;</span>header,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;NITRO_IMAGE.<span class="me1">height</span>, <span class="coMULTI">/*!&lt; The number of rows */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;NITRO_IMAGE.<span class="me1">width</span>, &nbsp;<span class="coMULTI">/*!&lt; The number of columns */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;NITRO_IMAGE.<span class="me1">height</span>, <span class="coMULTI">/*!&lt; The number of rows/block */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;NITRO_IMAGE.<span class="me1">width</span>, &nbsp;<span class="coMULTI">/*!&lt; The number of columns/block */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="st0">&quot;P&quot;</span>, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="coMULTI">/*!&lt; Image mode */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; ...</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteNITF20C/grabcode" method="post" id="form_61092f4ded_5">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="WriteNITF20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="%09...%0A%09%2F%2A+set+the+blocking+info+%2A%2F%0A%09if+%28%21nitf_ImageSubheader_setBlocking%28header%2C%0A%09%09%09%09%09%09%09%09%09%09+NITRO_IMAGE.height%2C+%2F%2A%21%3C+The+number+of+rows+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09+NITRO_IMAGE.width%2C++%2F%2A%21%3C+The+number+of+columns+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09+NITRO_IMAGE.height%2C+%2F%2A%21%3C+The+number+of+rows%2Fblock+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09+NITRO_IMAGE.width%2C++%2F%2A%21%3C+The+number+of+columns%2Fblock+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09+%22P%22%2C++++++++++++++++%2F%2A%21%3C+Image+mode+%2A%2F%0A%09%09%09%09%09%09%09%09%09%09+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09..." /></form>
+<br />
+<br />
+Okay, so now you have your <a href="wikka.php?wakka=ImageSegmentDef">ImageSegment</a> all setup how you want it written out. The only thing you have to do now is attach the actual image data and then write it! Let's go ahead and do that.<br />
+<br />
+<h5>Set up a <a href="wikka.php?wakka=WriterDef">Writer</a> and output <a href="wikka.php?wakka=IOHandleDef">IOHandle</a>.</h5>
+
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; ...<br />
+&nbsp; &nbsp; <span class="coMULTI">/* create the IOHandle */</span><br />
+&nbsp; &nbsp; out = nitf_IOHandle_create<span class="br0">&#40;</span>filename, NITF_ACCESS_WRITEONLY,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;NITF_CREATE, &amp;error<span class="br0">&#41;</span>;<br />
+<br />
+&nbsp; &nbsp; <span class="coMULTI">/* make sure it was ok */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>NITF_INVALID_HANDLE<span class="br0">&#40;</span>out<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+<br />
+&nbsp; &nbsp; writer = nitf_Writer_construct<span class="br0">&#40;</span>&amp;error<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!writer<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="coMULTI">/* prepare the writer to write this record */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Writer_prepare<span class="br0">&#40;</span>writer, record, out, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; ...</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteNITF20C/grabcode" method="post" id="form_61092f4ded_6">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="WriteNITF20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="%09...%0A%09%2F%2A+create+the+IOHandle+%2A%2F%0A%09out+%3D+nitf_IOHandle_create%28filename%2C+NITF_ACCESS_WRITEONLY%2C%0A%09%09%09%09%09%09%09+++NITF_CREATE%2C+%26error%29%3B%0A%0A%09%2F%2A+make+sure+it+was+ok+%2A%2F%0A%09if+%28NITF_INVALID_HANDLE%28out%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%0A%09writer+%3D+nitf_Writer_construct%28%26error%29%3B%0A%09if+%28%21writer%29%0A%09%09goto+CATCH_ERROR%3B%0A%09%0A%09%2F%2A+prepare+the+writer+to+write+this+record+%2A%2F%0A%09if+%28%21nitf_Writer_prepare%28writer%2C+record%2C+out%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09..." /></form>
+<br />
+<br />
+Now, for each <a href="wikka.php?wakka=ImageSegmentDef">ImageSegment</a> you have added to the Record, you'll need to create a new <a class="missingpage" href="wikka.php?wakka=ImageWriterDef%252Fedit" title="Create this page">ImageWriter</a>. In this example, we just added 1 image, so this should be easy enough.<br />
+In addition, since this is a 3-band image, we will have to setup 3 <a class="missingpage" href="wikka.php?wakka=BandSourceDef%252Fedit" title="Create this page">BandSources</a>.<br />
+<br />
+<h5>Adding an <a class="missingpage" href="wikka.php?wakka=ImageWriterDef%252Fedit" title="Create this page">ImageWriter</a> and attaching the image data.</h5>
+
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; &nbsp;...<br />
+&nbsp; &nbsp; &nbsp;<span class="coMULTI">/* get a new ImageWriter for the 1st image (index 0) */</span><br />
+&nbsp; &nbsp; imageWriter = nitf_Writer_newImageWriter<span class="br0">&#40;</span>writer, <span class="nu0">0</span>, &amp;error<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!imageWriter<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+<br />
+&nbsp; &nbsp; <span class="coMULTI">/* create an ImageSource for our embedded image */</span><br />
+&nbsp; &nbsp; imageSource = nitf_ImageSource_construct<span class="br0">&#40;</span>&amp;error<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!imageSource<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+<br />
+&nbsp; &nbsp; <span class="coMULTI">/* make one bandSource per band */</span><br />
+&nbsp; &nbsp; <span class="kw1">for</span> <span class="br0">&#40;</span>i = <span class="nu0">0</span>; i &lt; <span class="nu0">3</span>; ++i<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; nitf_BandSource *bandSource = nitf_MemorySource_construct<span class="br0">&#40;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; NITRO_IMAGE.<span class="me1">data</span>, NITRO_IMAGE.<span class="me1">width</span> * NITRO_IMAGE.<span class="me1">height</span>,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; i, <span class="nu0">1</span>, <span class="nu0">2</span>, &amp;error<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!bandSource<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="coMULTI">/* attach the band to the image */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_ImageSource_addBand<span class="br0">&#40;</span>imageSource, bandSource, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="br0">&#125;</span><br />
+&nbsp; &nbsp; &nbsp;...</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteNITF20C/grabcode" method="post" id="form_61092f4ded_7">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="WriteNITF20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="%09+...%0A%09+%2F%2A+get+a+new+ImageWriter+for+the+1st+image+%28index+0%29+%2A%2F%0A%09imageWriter+%3D+nitf_Writer_newImageWriter%28writer%2C+0%2C+%26error%29%3B%0A%09if+%28%21imageWriter%29%0A%09%09goto+CATCH_ERROR%3B%0A%0A%09%2F%2A+create+an+ImageSource+for+our+embedded+image+%2A%2F%0A%09imageSource+%3D+nitf_ImageSource_construct%28%26error%29%3B%0A%09if+%28%21imageSource%29%0A%09%09goto+CATCH_ERROR%3B%0A%0A%09%2F%2A+make+one+bandSource+per+band+%2A%2F%0A%09for+%28i+%3D+0%3B+i+%3C+3%3B+%2B%2Bi%29%0A%09%7B%0A%09%09nitf_BandSource+%2AbandSource+%3D+nitf_MemorySource_construct%28%0A%09%09%09%09NITRO_IMAGE.data%2C+NITRO_IMAGE.width+%2A+NITRO_IMAGE.height%2C%0A%09%09%09%09i%2C+1%2C+2%2C+%26error%29%3B%0A%09%09if+%28%21bandSource%29%0A%09%09%09goto+CATCH_ERROR%3B%0A%0A%09%09%2F%2A+attach+the+band+to+the+image+%2A%2F%0A%09%09if+%28%21nitf_ImageSource_addBand%28imageSource%2C+bandSource%2C+%26error%29%29%0A%09%09%09goto+CATCH_ERROR%3B%0A%09%7D%0A%09+..." /></form>
+<br />
+<br />
+Finally, all you need to do is attach the <a class="missingpage" href="wikka.php?wakka=ImageSourceDef%252Fedit" title="Create this page">ImageSource</a> to the <a class="missingpage" href="wikka.php?wakka=ImageWriterDef%252Fedit" title="Create this page">ImageWriter</a>, and then write it!<br />
+<br />
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; ...<br />
+&nbsp; &nbsp; <span class="coMULTI">/* attach the ImageSource to the writer */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_ImageWriter_attachSource<span class="br0">&#40;</span>imageWriter, imageSource, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+<br />
+&nbsp; &nbsp; <span class="coMULTI">/* finally, write it! */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Writer_write<span class="br0">&#40;</span>writer, &amp;error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; nitf_Error_print<span class="br0">&#40;</span>&amp;error, stderr, <span class="st0">&quot;Error writing up write&quot;</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="br0">&#125;</span><br />
+<br />
+&nbsp; &nbsp; <span class="coMULTI">/* cleanup */</span><br />
+&nbsp; &nbsp; nitf_IOHandle_close<span class="br0">&#40;</span>out<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; nitf_Writer_destruct<span class="br0">&#40;</span>&amp;writer<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; ...</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteNITF20C/grabcode" method="post" id="form_61092f4ded_8">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="WriteNITF20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="%09...%0A%09%2F%2A+attach+the+ImageSource+to+the+writer+%2A%2F%0A%09if+%28%21nitf_ImageWriter_attachSource%28imageWriter%2C+imageSource%2C+%26error%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%0A%09%2F%2A+finally%2C+write+it%21+%2A%2F%0A%09if+%28%21nitf_Writer_write%28writer%2C+%26error%29%29%0A%09%7B%0A%09%09nitf_Error_print%28%26error%2C+stderr%2C+%22Error+writing+up+write%22%29%3B%0A%09%09goto+CATCH_ERROR%3B%0A%09%7D%0A%0A%09%2F%2A+cleanup+%2A%2F%0A%09nitf_IOHandle_close%28out%29%3B%0A%09nitf_Writer_destruct%28%26writer%29%3B%0A%09..." /></form>
+<br />
+<br />
+As always, make sure to do proper cleanup along the way. The only objects that need to be cleaned up by you is the top level Record object, and the "Actor" objects (Reader, Writer).<br />
+<br />
+The full source for this example can be found here: <a class="ext" href="http://nitro-nitf.svn.sourceforge.net/viewvc/nitro-nitf/trunk/c/nitf/tests/test_create_nitf.c">http://nitro-nitf.svn.sourceforge.net/viewvc/nitro-nitf/trunk/c/nitf/tests/test_create_nitf.c</a><span class="exttail">&#8734;</span><br />
+<br />
+Thanks!<br />
+The NITRO Team
+</div>
+				<div class="commentsheader">
+				<p>There are 2759 comments on this page. 				[<a href="wikka.php?wakka=WriteNITF20C&amp;show_comments=1#comments">Display comments</a>]</p>
+				</div>
+				<div class="footer">
+<form action="wikka.php?wakka=WriteNITF20C" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch" />
+</fieldset>
+<a href="wikka.php?wakka=WriteNITF20C%252Fhistory" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="wikka.php?wakka=WriteNITF20C%252Frevisions" title="Click to view recent revisions list for this page">2014-10-30 15:11:15</a> <a href="wikka.php?wakka=WriteNITF20C%252Frevisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::
+Owner: <a href="wikka.php?wakka=NitroAdmin">NitroAdmin</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox" />
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world's largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.2213 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+</body>
+</html>

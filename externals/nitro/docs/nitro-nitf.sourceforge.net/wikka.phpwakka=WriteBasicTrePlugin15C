@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>NITRO Wiki: Writing a basic TRE</title>
+	<base href="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="css/wikka.css?1.1.6.4" />
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for WriteBasicTrePlugin15C (RSS)" href="wikka.php?wakka=WriteBasicTrePlugin15C%252Frevisions.xml" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteBasicTrePlugin15C/recentchanges.xml" />
+</head>
+<body  >
+<div class="header">
+	<h2><a id="homepage_link" href="index.html">NITRO Wiki</a> : <a href="wikka.php?wakka=WriteBasicTrePlugin15C%252Fbacklinks" title="Display a list of pages linking to WriteBasicTrePlugin15C">WriteBasicTrePlugin15C</a></h2>
+	<a href="index.html">HomePage</a> ::
+	<a href="wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+
+<!--starting page content-->
+<div class="page">
+<h4>Writing a basic TRE</h4>
+
+<br />
+TRE parsing, in the NITRO library, is done using plug-ins.  This allows us the same extensibility provided to the NITF specification itself.  When we have a plug-in that can read a TRE, we use it.  When we can't we use a special <a class="missingpage" href="wikka.php?wakka=DefaultTREDef%252Fedit" title="Create this page">default handler</a>.<br />
+ <br />
+Our library was designed to support all types of TREs, but to make it especially easy to handle typical, straight-forward TREs.  In most cases, plug-in writers don't have to write any actually "code" -- they can get away with simply declaring a parsing description as an array of TREDescription objects, followed by a special macro that declares that this code is a plug-in (the macro does a whole lot of work for us).  First, we need to have a plug-in in a separate C file:<br />
+<br />
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;"><span class="coMULTI">/*<br />
+&nbsp;* &nbsp;MYTREA.c - demonstrate creation of a TRE handler for a made up TRE.<br />
+&nbsp;*/</span><br />
+<span class="co2">#include &lt;import/nitf.h&gt;</span><br />
+<br />
+<span class="kw4">static</span> nitf_TREDescription description<span class="br0">&#91;</span><span class="br0">&#93;</span> = <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span> NITF_BCS_A, <span class="nu0">32</span>, <span class="st0">&quot;Creator Name&quot;</span>, <span class="st0">&quot;CREATOR&quot;</span>, NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, <span class="kw2">NULL</span>, <span class="kw2">NULL</span> <span class="br0">&#125;</span>,<br />
+&nbsp; &nbsp; <span class="br0">&#123;</span> NITF_BCS_N, <span class="nu0">4</span>, <span class="st0">&quot;Num Contributors&quot;</span>, <span class="st0">&quot;NCONTRIB&quot;</span>, NITF_VAL_BCS_N_PLUS, NITF_NO_RANGE, <span class="kw2">NULL</span>, <span class="kw2">NULL</span><span class="br0">&#125;</span>,<br />
+&nbsp; &nbsp; <span class="br0">&#123;</span> NITF_LOOP, <span class="nu0">0</span>, <span class="kw2">NULL</span>, <span class="st0">&quot;NCONTRIB&quot;</span> <span class="br0">&#125;</span>, <span class="coMULTI">/* Want to loop NCONTRIB times */</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="br0">&#123;</span> NITF_BCS_A, <span class="nu0">32</span>, <span class="st0">&quot;Contributor Name&quot;</span>, <span class="st0">&quot;CONTRIBUTOR&quot;</span>, NITF_VAL_BCS_A_PLUS, NITF_NO_RANGE, <span class="kw2">NULL</span>, <span class="kw2">NULL</span><span class="br0">&#125;</span>,<br />
+&nbsp; &nbsp; <span class="br0">&#123;</span> NITF_ENDLOOP, <span class="nu0">0</span>, <span class="kw2">NULL</span>, <span class="kw2">NULL</span><span class="br0">&#125;</span>,<br />
+&nbsp; &nbsp; <span class="br0">&#123;</span>NITF_END, <span class="nu0">0</span>, <span class="kw2">NULL</span>, <span class="kw2">NULL</span><span class="br0">&#125;</span><br />
+<span class="br0">&#125;</span><br />
+<br />
+<span class="coMULTI">/*<br />
+&nbsp;* When we want to retrieve this data from our application, we need to get the TREs field named<br />
+&nbsp;* CONTRIBUTOR[0], CONTRIBUTOR[1], ..., CONTRIBUTOR[ncontrib-1]<br />
+&nbsp;*/</span><br />
+<br />
+<span class="coMULTI">/* Expose this plugin */</span><br />
+NITF_DECLARE_SINGLE_PLUGIN<span class="br0">&#40;</span>MYTREA, description<span class="br0">&#41;</span></div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=WriteBasicTrePlugin15C/grabcode" method="post" id="form_61092f4ded">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="WriteBasicTrePlugin15C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="%2F%2A%0A+%2A++MYTREA.c+-+demonstrate+creation+of+a+TRE+handler+for+a+made+up+TRE.%0A+%2A%2F%0A%23include+%3Cimport%2Fnitf.h%3E%0A%0Astatic+nitf_TREDescription+description%5B%5D+%3D+%7B%0A%09%7B+NITF_BCS_A%2C+32%2C+%22Creator+Name%22%2C+%22CREATOR%22%2C+NITF_VAL_BCS_A_PLUS%2C+NITF_NO_RANGE%2C+NULL%2C+NULL+%7D%2C%0A%09%7B+NITF_BCS_N%2C+4%2C+%22Num+Contributors%22%2C+%22NCONTRIB%22%2C+NITF_VAL_BCS_N_PLUS%2C+NITF_NO_RANGE%2C+NULL%2C+NULL%7D%2C%0A%09%7B+NITF_LOOP%2C+0%2C+NULL%2C+%22NCONTRIB%22+%7D%2C+%2F%2A+Want+to+loop+NCONTRIB+times+%2A%2F%0A%09%09%7B+NITF_BCS_A%2C+32%2C+%22Contributor+Name%22%2C+%22CONTRIBUTOR%22%2C+NITF_VAL_BCS_A_PLUS%2C+NITF_NO_RANGE%2C+NULL%2C+NULL%7D%2C%0A%09%7B+NITF_ENDLOOP%2C+0%2C+NULL%2C+NULL%7D%2C%0A%09%7BNITF_END%2C+0%2C+NULL%2C+NULL%7D%0A%7D%0A%0A%2F%2A%0A+%2A+When+we+want+to+retrieve+this+data+from+our+application%2C+we+need+to+get+the+TREs+field+named%0A+%2A+CONTRIBUTOR%5B0%5D%2C+CONTRIBUTOR%5B1%5D%2C+...%2C+CONTRIBUTOR%5Bncontrib-1%5D%0A+%2A%2F%0A%0A%2F%2A+Expose+this+plugin+%2A%2F%0ANITF_DECLARE_SINGLE_PLUGIN%28MYTREA%2C+description%29" /></form>
+<br />
+<br />
+For more examples, check out the shared section of our library.  There are many examples that illustrate the syntax allowed in the TREDescription structures.<br />
+
+</div>
+				<div class="commentsheader">
+				<p>There are 29 comments on this page. 				[<a href="wikka.php?wakka=WriteBasicTrePlugin15C&amp;show_comments=1#comments">Display comments</a>]</p>
+				</div>
+				<div class="footer">
+<form action="wikka.php?wakka=WriteBasicTrePlugin15C" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch" />
+</fieldset>
+<a href="wikka.php?wakka=WriteBasicTrePlugin15C%252Fhistory" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="wikka.php?wakka=WriteBasicTrePlugin15C%252Frevisions" title="Click to view recent revisions list for this page">2008-03-21 09:20:31</a> <a href="wikka.php?wakka=WriteBasicTrePlugin15C%252Frevisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::
+Owner: <a href="wikka.php?wakka=NitroAdmin">NitroAdmin</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox" />
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world's largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.0271 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+</body>
+</html>

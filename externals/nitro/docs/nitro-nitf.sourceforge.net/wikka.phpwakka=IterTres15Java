@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>NITRO Wiki: IterTres15Java</title>
+	<base href="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="css/wikka.css?1.1.6.4" />
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for IterTres15Java (RSS)" href="wikka.php?wakka=IterTres15Java%252Frevisions.xml" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=IterTres15Java/recentchanges.xml" />
+</head>
+<body  >
+<div class="header">
+	<h2><a id="homepage_link" href="index.html">NITRO Wiki</a> : <a href="wikka.php?wakka=IterTres15Java%252Fbacklinks" title="Display a list of pages linking to IterTres15Java">IterTres15Java</a></h2>
+	<a href="index.html">HomePage</a> ::
+	<a href="wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+
+<!--starting page content-->
+<div class="page">
+There isn't a way to get an iterator for the TRE fields in the 1.5 release. However, you can get/set field values. Below is an example that illustrates setting the FILCMT field in a JITCID TRE. (i_3228c.ntf is an example NITF file that contains a JITCID TRE in the <a class="missingpage" href="wikka.php?wakka=FileHeader%252Fedit" title="Create this page">FileHeader</a>).<br />
+<br />
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">Extensions extendedSection = record.<span class="me1">getHeader</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">getExtendedSection</span><span class="br0">&#40;</span><span class="br0">&#41;</span>;<br />
+Iterable&lt;TRE&gt; tres = extendedSection.<span class="me1">getTREsByName</span><span class="br0">&#40;</span><span class="st0">&quot;JITCID&quot;</span><span class="br0">&#41;</span>;<br />
+<span class="kw1">if</span> <span class="br0">&#40;</span>tres.<span class="me1">iterator</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">hasNext</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+<span class="br0">&#123;</span><br />
+&nbsp; &nbsp; <span class="kw2">final</span> TRE tre = tres.<span class="me1">iterator</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">next</span><span class="br0">&#40;</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw2">try</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">final</span> <span class="kw3">Field</span> field = tre.<span class="me1">getField</span><span class="br0">&#40;</span><span class="st0">&quot;FILCMT&quot;</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1">// let's go ahead and just re-set the field</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; field.<span class="me1">setData</span><span class="br0">&#40;</span><span class="st0">&quot;My comment&quot;</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="br0">&#125;</span><br />
+&nbsp; &nbsp; <span class="kw2">catch</span> <span class="br0">&#40;</span><span class="kw3">NoSuchFieldException</span> e<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1">// TODO Auto-generated catch block</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; e.<span class="me1">printStackTrace</span><span class="br0">&#40;</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="br0">&#125;</span><br />
+<span class="br0">&#125;</span></div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=IterTres15Java/grabcode" method="post" id="form_61092f4ded">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="IterTres15Java" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="Extensions+extendedSection+%3D+record.getHeader%28%29.getExtendedSection%28%29%3B%0AIterable%3CTRE%3E+tres+%3D+extendedSection.getTREsByName%28%22JITCID%22%29%3B%0Aif+%28tres.iterator%28%29.hasNext%28%29%29%0A%7B%0A%09final+TRE+tre+%3D+tres.iterator%28%29.next%28%29%3B%0A%09try%0A%09%7B%0A%09%09final+Field+field+%3D+tre.getField%28%22FILCMT%22%29%3B%0A%09%09%2F%2F+let%27s+go+ahead+and+just+re-set+the+field%0A%09%09field.setData%28%22My+comment%22%29%3B%0A%09%7D%0A%09catch+%28NoSuchFieldException+e%29%0A%09%7B%0A%09%09%2F%2F+TODO+Auto-generated+catch+block%0A%09%09e.printStackTrace%28%29%3B%0A%09%7D%0A%7D" /></form>
+</div>
+				<div class="commentsheader">
+				<p>There are 4 comments on this page. 				[<a href="wikka.php?wakka=IterTres15Java&amp;show_comments=1#comments">Display comments</a>]</p>
+				</div>
+				<div class="footer">
+<form action="wikka.php?wakka=IterTres15Java" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch" />
+</fieldset>
+<a href="wikka.php?wakka=IterTres15Java%252Fhistory" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="wikka.php?wakka=IterTres15Java%252Frevisions" title="Click to view recent revisions list for this page">2008-03-03 06:05:00</a> <a href="wikka.php?wakka=IterTres15Java%252Frevisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::
+Owner: <a href="wikka.php?wakka=NitroAdmin">NitroAdmin</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox" />
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world's largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.0354 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>NITRO Wiki:  How do I build NITRO on Windows? </title>
+	<base href="" />
+	<meta name="robots" content="noindex, nofollow, noarchive" />
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="css/wikka.css?1.1.6.4" />
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for BuildingWindows (RSS)" href="wikka.php?wakka=BuildingWindows%252Frevisions.xml" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/recentchanges.xml" />
+</head>
+<body  >
+<div class="header">
+	<h2><a id="homepage_link" href="index.html">NITRO Wiki</a> : <a href="wikka.php?wakka=BuildingWindows%252Fbacklinks" title="Display a list of pages linking to BuildingWindows">BuildingWindows</a></h2>
+	<a href="index.html">HomePage</a> ::
+	<a href="wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+<div class="page">
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/diff" id="form_0423aa3078">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="BuildingWindows" />
+</fieldset>
+<table border="0" cellspacing="0" cellpadding="1">
+<tr>
+<td><input type="submit" value="Show Differences" /></td><td><input value="1" type="checkbox" checked="checked" name="fastdiff" id="fastdiff" />
+<label for="fastdiff">Simple Diff</label></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="1">
+<tr><td><input type="radio" name="a" value="402" checked="checked" /></td><td><input type="radio" name="b" value="402"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2010-09-28+14%3A04%3A04">[402]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2010-09-28+14%3A04%3A04">2010-09-28 14:04:04</a> by NitroDev <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="384"  /></td><td><input type="radio" name="b" value="384" checked="checked" /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2010-02-19+17%3A21%3A30">[384]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2010-02-19+17%3A21%3A30">2010-02-19 17:21:30</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="283"  /></td><td><input type="radio" name="b" value="283"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2009-04-06+18%3A03%3A40">[283]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2009-04-06+18%3A03%3A40">2009-04-06 18:03:40</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="282"  /></td><td><input type="radio" name="b" value="282"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2009-04-06+18%3A03%3A03">[282]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2009-04-06+18%3A03%3A03">2009-04-06 18:03:03</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="276"  /></td><td><input type="radio" name="b" value="276"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2009-04-06+14%3A18%3A55">[276]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2009-04-06+14%3A18%3A55">2009-04-06 14:18:55</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="272"  /></td><td><input type="radio" name="b" value="272"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2009-03-30+04%3A19%3A12">[272]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2009-03-30+04%3A19%3A12">2009-03-30 04:19:12</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="205"  /></td><td><input type="radio" name="b" value="205"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-05-20+04%3A37%3A57">[205]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-05-20+04%3A37%3A57">2008-05-20 04:37:57</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="204"  /></td><td><input type="radio" name="b" value="204"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-05-19+15%3A40%3A07">[204]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-05-19+15%3A40%3A07">2008-05-19 15:40:07</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="203"  /></td><td><input type="radio" name="b" value="203"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-05-19+15%3A39%3A18">[203]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-05-19+15%3A39%3A18">2008-05-19 15:39:18</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="147"  /></td><td><input type="radio" name="b" value="147"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-12+08%3A16%3A28">[147]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-12+08%3A16%3A28">2008-03-12 08:16:28</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="146"  /></td><td><input type="radio" name="b" value="146"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-12+08%3A08%3A46">[146]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-12+08%3A08%3A46">2008-03-12 08:08:46</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="134"  /></td><td><input type="radio" name="b" value="134"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-12+06%3A06%3A16">[134]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-12+06%3A06%3A16">2008-03-12 06:06:16</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="129"  /></td><td><input type="radio" name="b" value="129"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-11+04%3A08%3A16">[129]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-11+04%3A08%3A16">2008-03-11 04:08:16</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="106"  /></td><td><input type="radio" name="b" value="106"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-04+05%3A28%3A51">[106]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-04+05%3A28%3A51">2008-03-04 05:28:51</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+<tr><td><input type="radio" name="a" value="77"  /></td><td><input type="radio" name="b" value="77"  /></td><td><a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-03+05%3A32%3A28">[77]</a> <a class="datetime" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows/show&amp;time=2008-03-03+05%3A32%3A28">2008-03-03 05:32:28</a> by NitroAdmin <span class="pagenote smaller"></span></td></tr>
+</table><br />
+<input type="button" value="Return To Node / Cancel" onclick="document.location='http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingWindows';" />
+</form>
+
+</div>
+<div class="footer">
+<form action="wikka.php?wakka=BuildingWindows" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch" />
+</fieldset>
+<a href="wikka.php?wakka=BuildingWindows%252Fhistory" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="wikka.php?wakka=BuildingWindows%252Frevisions" title="Click to view recent revisions list for this page">2010-09-28 14:04:04</a> <a href="wikka.php?wakka=BuildingWindows%252Frevisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::
+Owner: <a href="wikka.php?wakka=NitroAdmin">NitroAdmin</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox" />
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world's largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.0287 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+</body>
+</html>

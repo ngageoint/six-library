@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+<title>NITRO Wiki - AdminPages</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=AdminPages</link>
+<description>History/revisions of NITRO Wiki/AdminPages</description>
+<language>en-US</language>
+<item>
+<title>Error</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=AdminPages/show</link>
+<description>You're not allowed to access this information.</description>
+</item>
+</channel>
+</rss>

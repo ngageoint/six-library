@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+<title>NITRO Wiki - NitroAPI</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI</link>
+<description>History/revisions of NITRO Wiki/NitroAPI</description>
+<language>en-US</language>
+<item>
+<title>2014-05-20 21:00:09</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2014-05-20+21%3A00%3A09</link>
+<description>Edited by MceMce</description>
+	<pubDate>Tue, 20 May 2014 21:00:09 +0000</pubDate>
+</item>
+<item>
+<title>2014-01-15 07:33:59</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2014-01-15+07%3A33%3A59</link>
+<description>Edited by KristelHeyer</description>
+	<pubDate>Wed, 15 Jan 2014 07:33:59 +0000</pubDate>
+</item>
+<item>
+<title>2012-09-04 14:31:28</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2012-09-04+14%3A31%3A28</link>
+<description>Edited by AliciaTerrysson88</description>
+	<pubDate>Tue, 04 Sep 2012 14:31:28 +0000</pubDate>
+</item>
+<item>
+<title>2012-08-28 14:25:59</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2012-08-28+14%3A25%3A59</link>
+<description>Edited by LindaL</description>
+	<pubDate>Tue, 28 Aug 2012 14:25:59 +0000</pubDate>
+</item>
+<item>
+<title>2012-08-16 13:55:11</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2012-08-16+13%3A55%3A11</link>
+<description>Edited by LindaL - minor edit</description>
+	<pubDate>Thu, 16 Aug 2012 13:55:11 +0000</pubDate>
+</item>
+<item>
+<title>2012-07-16 08:50:52</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2012-07-16+08%3A50%3A52</link>
+<description>Edited by JohnWoods</description>
+	<pubDate>Mon, 16 Jul 2012 08:50:52 +0000</pubDate>
+</item>
+<item>
+<title>2009-12-10 00:41:09</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2009-12-10+00%3A41%3A09</link>
+<description>Edited by NitroAdmin</description>
+	<pubDate>Thu, 10 Dec 2009 00:41:09 +0000</pubDate>
+</item>
+<item>
+<title>2009-12-10 00:36:10</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2009-12-10+00%3A36%3A10</link>
+<description>Edited by NitroAdmin</description>
+	<pubDate>Thu, 10 Dec 2009 00:36:10 +0000</pubDate>
+</item>
+<item>
+<title>2009-12-10 00:26:28</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2009-12-10+00%3A26%3A28</link>
+<description>Edited by NitroAdmin</description>
+	<pubDate>Thu, 10 Dec 2009 00:26:28 +0000</pubDate>
+</item>
+<item>
+<title>2008-08-12 12:53:11</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2008-08-12+12%3A53%3A11</link>
+<description>Edited by NitroAdmin - updated documentation</description>
+	<pubDate>Tue, 12 Aug 2008 12:53:11 +0000</pubDate>
+</item>
+<item>
+<title>2008-03-04 05:58:22</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2008-03-04+05%3A58%3A22</link>
+<description>Edited by NitroAdmin</description>
+	<pubDate>Tue, 04 Mar 2008 05:58:22 +0000</pubDate>
+</item>
+<item>
+<title>2008-03-01 13:56:04</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2008-03-01+13%3A56%3A04</link>
+<description>Edited by NitroAdmin</description>
+	<pubDate>Sat, 01 Mar 2008 13:56:04 +0000</pubDate>
+</item>
+<item>
+<title>2008-03-01 10:48:54</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=NitroAPI/show&amp;time=.2008-03-01+10%3A48%3A54</link>
+<description>Edited by NitroAdmin - added API documentation links</description>
+	<pubDate>Sat, 01 Mar 2008 10:48:54 +0000</pubDate>
+</item>
+</channel>
+</rss>

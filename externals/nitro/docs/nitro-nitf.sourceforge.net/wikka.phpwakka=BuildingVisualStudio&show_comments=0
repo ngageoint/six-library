@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>NITRO Wiki: Building With Visual Studio</title>
+	<base href="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="css/wikka.css?1.1.6.4" />
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for BuildingVisualStudio (RSS)" href="wikka.php?wakka=BuildingVisualStudio%252Frevisions.xml" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=BuildingVisualStudio/recentchanges.xml" />
+</head>
+<body  >
+<div class="header">
+	<h2><a id="homepage_link" href="index.html">NITRO Wiki</a> : <a href="wikka.php?wakka=BuildingVisualStudio%252Fbacklinks" title="Display a list of pages linking to BuildingVisualStudio">BuildingVisualStudio</a></h2>
+	<a href="index.html">HomePage</a> ::
+	<a href="wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+
+<!--starting page content-->
+<div class="page">
+Check <a href="wikka.php?wakka=BuildingWindows">here for full details on building for Windows</a>.<br />
+<br />
+<h3>Building With Visual Studio</h3>
+
+We recommend using <a class="ext" href="http://www.microsoft.com/express/vc/">Visual C++ 2008 Express</a><span class="exttail">&#8734;</span> (which is free). Earlier versions will also work though.<br />
+<br />
+<hr />
+
+<h4>Linking your project with NITRO</h4>
+
+Assuming you already have NITRO built (C and C++ bindings), here are some tips for setting up your project to link against NITRO.<br />
+<br />
+For starters, when I build the test cases in VC, I build the libraries using SCons or <a href="wikka.php?wakka=BuildingWithWaf">Waf</a> first. That way the libraries and plugins get built automatically, and I don't have to make projects for them. From there, I make a new solution that links against NITRO.<br />
+<br />
+<h5>C/C++</h5>
+
+<br />
+<ul><li> Create a new empty C++ console project and add your source file (e.g. <tt>test_dump_record.cpp</tt>)
+</li><li> Add these defines to C/C++-&gt;Preprocessor-&gt;Preprocessor Definitions: <tt>WIN32;_REENTRANT;NITF_MODULE_EXPORTS;</tt>
+<ul><li> If you are using C++, the <tt>_REENTRANT</tt> definition is optional 
+</li></ul></li><li> Remove <tt>_DEBUG</tt> from C/C++-&gt;Preprocessor-&gt;Preprocessor Definitions
+</li><li> C/C++-&gt;General-&gt;Additional Include Directories: e.g. <tt>c:\Program Files\nitro-nitf\nitro-2.0\include</tt>
+</li><li> C/C++-&gt;Code Generation-&gt;Runtime Library: <tt>/MT</tt>
+</li><li> Linker-&gt;Input-&gt;Additional Dependencies: <tt>nitf-c.lib except-c++.lib str-c++.lib sys-c++.lib mt-c++.lib nitf-c++.lib</tt>
+</li><li> Linker-&gt;General-&gt;Additional Library Directories: e.g. <tt>c:\Program Files\nitro-nitf\nitro-2.0\lib</tt>
+</li><li> Linker-&gt;General-&gt;Use UNICODE response files: No
+</li><li> C/C++-&gt;General-&gt;Use UNICODE response files: No
+</li><li> C/C++-&gt;Command Line-&gt;Additional options: <tt>/UUNICODE /U_UNICODE</tt></li></ul>
+<br />
+Once you've completed these steps, you should be ready to build. Note that the libs shipped with the NITRO Windows installers are built non-debug (/O2 optimized).<br />
+<br />
+<hr />
+
+<h4>C</h4>
+
+<ul><li> If you are building version 1.5 of the C library, you need to have the _REENTRANT flag defined (as well as using a multi-thread runtime).
+</li><li> You will also need to define NITF_MODULE_EXPORTS.
+</li><li> You will want to compile as C Code (/TC).
+</li><li> Source code: source/*.c
+</li><li> Includes: include/
+</li><li> Name the library nitf-c.lib</li></ul>
+<br />
+<h5>Plug-Ins</h5>
+
+<ul><li> If you also are building the plug-ins in visual studio (very tedious), you should create a DLL project for each, making them dependent on your C library (which should be in the same solution).
+</li><li> Source code: shared/*.c
+</li><li> This could be a headache to do, so we recommend using the <a href="wikka.php?wakka=BuildingWithWaf">Waf</a> solution for plug-ins and tests.</li></ul>
+<br />
+<h5>Tests</h5>
+
+<ul><li> You will need to create an application project for each test you want to build.
+</li><li> The only real useful tests are test_dump_record.c, test_image_loading.c and test_writer_3.c</li></ul>
+<br />
+<hr />
+
+<h4>C++</h4>
+
+<ul><li> The C++ bindings require 4 modules from <a class="ext" href="https://codaforge.net">CodaForge</a><span class="exttail">&#8734;</span>. These are automatically linked using the svn:externals property in subversion.
+</li><li> You'll need to make a project for each module: except, str, sys, mt and nitf.
+</li><li> The dependency chain: except, str, sys, mt, nitf. Each module listed depends on all previous ones.
+</li><li> We use this naming convention for modules: nitf-c++.lib
+</li><li> In addition, the nitf C++ module requires the C includes (c/nitf/include).
+</li><li> All source is in the respective source/ folders.
+</li><li> All includes are in the respective include/ folders.
+</li><li> If this is too painful, we recommend using the <a href="wikka.php?wakka=BuildingWithWaf">Waf method</a>. If you build debug, you can always link and debug your code in Visual Studio.</li></ul>
+</div>
+				<div class="commentsheader">
+				<p>There are 5878 comments on this page. 				[<a href="wikka.php?wakka=BuildingVisualStudio&amp;show_comments=1#comments">Display comments</a>]</p>
+				</div>
+				<div class="footer">
+<form action="wikka.php?wakka=BuildingVisualStudio" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch" />
+</fieldset>
+<a href="wikka.php?wakka=BuildingVisualStudio%252Fhistory" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="wikka.php?wakka=BuildingVisualStudio%252Frevisions" title="Click to view recent revisions list for this page">2015-02-12 16:40:30</a> <a href="wikka.php?wakka=BuildingVisualStudio%252Frevisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::
+Owner: <a href="wikka.php?wakka=NitroAdmin">NitroAdmin</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox" />
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world's largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.2704 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+</body>
+</html>

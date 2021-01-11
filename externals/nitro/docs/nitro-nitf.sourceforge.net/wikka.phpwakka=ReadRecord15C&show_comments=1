@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>NITRO Wiki: ReadRecord15C</title>
+	<base href="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="css/wikka.css?1.1.6.4" />
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for ReadRecord15C (RSS)" href="wikka.php?wakka=ReadRecord15C%252Frevisions.xml" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReadRecord15C/recentchanges.xml" />
+</head>
+<body  >
+<div class="header">
+	<h2><a id="homepage_link" href="index.html">NITRO Wiki</a> : <a href="wikka.php?wakka=ReadRecord15C%252Fbacklinks" title="Display a list of pages linking to ReadRecord15C">ReadRecord15C</a></h2>
+	<a href="index.html">HomePage</a> ::
+	<a href="wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+
+<!--starting page content-->
+<div class="page">
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;"><span class="kw4">int</span> main<span class="br0">&#40;</span><span class="kw4">int</span> argc, <span class="kw4">char</span> **argv<span class="br0">&#41;</span><br />
+<span class="br0">&#123;</span><br />
+&nbsp; &nbsp; nitf_Error error;<br />
+&nbsp; &nbsp; nitf_Reader *reader = <span class="kw2">null</span>;<br />
+&nbsp; &nbsp; nitf_Record *record = <span class="kw2">null</span>;<br />
+&nbsp; &nbsp; nitf_IOHandle io = NITF_INVALID_HANDLE_VALUE;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>argc != <span class="nu0">2</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span class="kw3">printf</span></a><span class="br0">&#40;</span><span class="st0">&quot;Usage: %s &lt;nitf-file&gt;<span class="es0">\n</span>&quot;</span>, argv<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="br0">&#125;</span><br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="coMULTI">/* first, let's check if its even a NITF/NSIF file */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>nitf_Reader_getNITFVersion<span class="br0">&#40;</span>argv<span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span><span class="br0">&#41;</span> == NITF_VER_UNKNOWN<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span class="kw3">printf</span></a><span class="br0">&#40;</span><span class="st0">&quot;File: %s is not a NITF<span class="es0">\n</span>&quot;</span>, argv<span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <span class="br0">&#125;</span><br />
+<br />
+&nbsp; &nbsp; io = nitf_IOHandle_create<span class="br0">&#40;</span>fileName, NITF_ACCESS_READONLY,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; NITF_OPEN_EXISTING, &amp;error<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="coMULTI">/* make sure the handle is valid */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>NITF_INVALID_HANDLE<span class="br0">&#40;</span>io<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; reader = nitf_Reader_construct<span class="br0">&#40;</span>&amp;error<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!reader<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; record = nitf_Reader_read<span class="br0">&#40;</span>reader, io, &amp;error<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!record<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">goto</span> CATCH_ERROR;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="coMULTI">/* do something with the record now! */</span><br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="coMULTI">/* cleanup */</span><br />
+&nbsp; &nbsp; nitf_IOHandle_close<span class="br0">&#40;</span>io<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; nitf_Record_destruct<span class="br0">&#40;</span>&amp;record<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; nitf_Reader_destruct<span class="br0">&#40;</span>&amp;reader<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="kw1">return</span> <span class="nu0">0</span>;<br />
+<br />
+CATCH_ERROR:<br />
+&nbsp; &nbsp; nitf_Error_print<span class="br0">&#40;</span>&amp;error, stdout, <span class="st0">&quot;Exiting...&quot;</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!NITF_INVALID_HANDLE<span class="br0">&#40;</span>io<span class="br0">&#41;</span><span class="br0">&#41;</span> nitf_IOHandle_close<span class="br0">&#40;</span>io<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>record<span class="br0">&#41;</span> nitf_Record_destruct<span class="br0">&#40;</span>&amp;record<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>reader<span class="br0">&#41;</span> nitf_Reader_destruct<span class="br0">&#40;</span>&amp;reader<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">return</span> EXIT_FAILURE;<br />
+<span class="br0">&#125;</span></div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReadRecord15C/grabcode" method="post" id="form_61092f4ded">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="ReadRecord15C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="int+main%28int+argc%2C+char+%2A%2Aargv%29%0A%7B%0A%09nitf_Error+error%3B%0A%09nitf_Reader+%2Areader+%3D+null%3B%0A%09nitf_Record+%2Arecord+%3D+null%3B%0A%09nitf_IOHandle+io+%3D+NITF_INVALID_HANDLE_VALUE%3B%0A%09%0A%09if+%28argc+%21%3D+2%29%0A%09%7B%0A%09%09printf%28%22Usage%3A+%25s+%3Cnitf-file%3E%5Cn%22%2C+argv%5B0%5D%29%3B%0A%09%09goto+CATCH_ERROR%3B%0A%09%7D%0A%09%0A%09%2F%2A+first%2C+let%27s+check+if+its+even+a+NITF%2FNSIF+file+%2A%2F%0A%09if+%28nitf_Reader_getNITFVersion%28argv%5B1%5D%29+%3D%3D+NITF_VER_UNKNOWN%29%0A%09%7B%0A%09%09printf%28%22File%3A+%25s+is+not+a+NITF%5Cn%22%2C+argv%5B1%5D%29%3B%0A%09%09goto+CATCH_ERROR%3B%0A%09%7D%0A%0A%09io+%3D+nitf_IOHandle_create%28fileName%2C+NITF_ACCESS_READONLY%2C%0A%09%09%09%09%09%09%09++NITF_OPEN_EXISTING%2C+%26error%29%3B%0A%09%0A%09%2F%2A+make+sure+the+handle+is+valid+%2A%2F%0A%09if+%28NITF_INVALID_HANDLE%28io%29%29%0A%09%09goto+CATCH_ERROR%3B%0A%09%0A%09reader+%3D+nitf_Reader_construct%28%26error%29%3B%0A%09if+%28%21reader%29%0A%09%09goto+CATCH_ERROR%3B%0A%09%0A%09record+%3D+nitf_Reader_read%28reader%2C+io%2C+%26error%29%3B%0A%09if+%28%21record%29%0A%09%09goto+CATCH_ERROR%3B%0A%09%0A%09%2F%2A+do+something+with+the+record+now%21+%2A%2F%0A%09%0A%09%2F%2A+cleanup+%2A%2F%0A%09nitf_IOHandle_close%28io%29%3B%0A%09nitf_Record_destruct%28%26record%29%3B%0A%09nitf_Reader_destruct%28%26reader%29%3B%0A%09%0A%09return+0%3B%0A%0ACATCH_ERROR%3A%0A%09nitf_Error_print%28%26error%2C+stdout%2C+%22Exiting...%22%29%3B%0A%09if+%28%21NITF_INVALID_HANDLE%28io%29%29+nitf_IOHandle_close%28io%29%3B%0A%09if+%28record%29+nitf_Record_destruct%28%26record%29%3B%0A%09if+%28reader%29+nitf_Reader_destruct%28%26reader%29%3B%0A%09return+EXIT_FAILURE%3B%0A%7D" /></form>
+</div>
+				<div class="commentsheader">
+				<span id="comments">&nbsp;</span>Comments [<a href="wikka.php?wakka=ReadRecord15C&amp;show_comments=0">Hide comments/form</a>]
+				</div>
+<div class="comment">
+<span id="comment_31475"></span>GhNjCa Thank you ever so for you blog. Great.
+	<div class="commentinfo">
+-- vzhost (2012-04-06 19:45:59)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_31610"></span>Ai5e2D I really liked your blog post.Much thanks again. Cool.
+	<div class="commentinfo">
+-- vzhost (2012-04-07 02:53:55)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_32058"></span>I loved your post. Cool.
+	<div class="commentinfo">
+-- vzhost (2012-04-09 10:59:04)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_34538"></span>JuTIgU Very neat article.Really looking forward to read more.
+	<div class="commentinfo">
+-- vzhost (2012-04-19 03:35:40)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_106871"></span>AdFxTo Nice blog here! Also your web site loads up fast! What host are you using? Can I get your affiliate link to your host? I wish my website loaded up as fast as yours lol
+	<div class="commentinfo">
+-- localhost.localdomain (2018-12-20 20:58:01)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReadRecord15C/delcomment" method="post" id="form_cc76d2fcb0">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="ReadRecord15C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="106871" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="commentform">
+		    			<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReadRecord15C/addcomment" method="post" id="form_160c5c5a54">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="ReadRecord15C" />
+</fieldset>
+					<label for="commentbox">Add a comment to this page:<br />
+					<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
+					<input type="submit" value="Add Comment" accesskey="s" />
+            			</label>
+					</form>
+				</div>
+<div class="footer">
+<form action="wikka.php?wakka=ReadRecord15C" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch" />
+</fieldset>
+<a href="wikka.php?wakka=ReadRecord15C%252Fhistory" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="wikka.php?wakka=ReadRecord15C%252Frevisions" title="Click to view recent revisions list for this page">2008-05-13 19:17:27</a> <a href="wikka.php?wakka=ReadRecord15C%252Frevisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::
+Owner: <a href="wikka.php?wakka=NitroAdmin">NitroAdmin</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox" />
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world's largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.0524 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+</body>
+</html>

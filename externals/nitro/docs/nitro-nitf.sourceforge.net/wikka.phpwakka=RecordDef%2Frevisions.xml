@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+<title>NITRO Wiki - RecordDef</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecordDef</link>
+<description>History/revisions of NITRO Wiki/RecordDef</description>
+<language>en-US</language>
+<item>
+<title>2008-03-03 10:24:36</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecordDef/show&amp;time=.2008-03-03+10%3A24%3A36</link>
+<description>Edited by NitroAdmin</description>
+	<pubDate>Mon, 03 Mar 2008 10:24:36 +0000</pubDate>
+</item>
+<item>
+<title>2008-03-03 10:23:24</title>
+<link>http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecordDef/show&amp;time=.2008-03-03+10%3A23%3A24</link>
+<description>Edited by NitroAdmin</description>
+	<pubDate>Mon, 03 Mar 2008 10:23:24 +0000</pubDate>
+</item>
+</channel>
+</rss>

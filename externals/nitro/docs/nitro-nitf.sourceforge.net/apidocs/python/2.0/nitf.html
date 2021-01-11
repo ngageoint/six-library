@@ -1,0 +1,1102 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: package nitf</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>nitf</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><br></font></td></tr></table>
+    <p><tt>*&nbsp;=========================================================================<br>
+*&nbsp;This&nbsp;file&nbsp;is&nbsp;part&nbsp;of&nbsp;NITRO<br>
+*&nbsp;=========================================================================<br>
+*&nbsp;<br>
+*&nbsp;(C)&nbsp;Copyright&nbsp;2004&nbsp;-&nbsp;2008,&nbsp;General&nbsp;Dynamics&nbsp;-&nbsp;Advanced&nbsp;Information&nbsp;Systems<br>
+*<br>
+*&nbsp;NITRO&nbsp;is&nbsp;free&nbsp;software;&nbsp;you&nbsp;can&nbsp;redistribute&nbsp;it&nbsp;and/or&nbsp;modify<br>
+*&nbsp;it&nbsp;under&nbsp;the&nbsp;terms&nbsp;of&nbsp;the&nbsp;GNU&nbsp;Lesser&nbsp;General&nbsp;Public&nbsp;License&nbsp;as&nbsp;published&nbsp;by<br>
+*&nbsp;the&nbsp;Free&nbsp;Software&nbsp;Foundation;&nbsp;either&nbsp;version&nbsp;3&nbsp;of&nbsp;the&nbsp;License,&nbsp;or<br>
+*&nbsp;(at&nbsp;your&nbsp;option)&nbsp;any&nbsp;later&nbsp;version.<br>
+*<br>
+*&nbsp;This&nbsp;program&nbsp;is&nbsp;distributed&nbsp;in&nbsp;the&nbsp;hope&nbsp;that&nbsp;it&nbsp;will&nbsp;be&nbsp;useful,<br>
+*&nbsp;but&nbsp;WITHOUT&nbsp;ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nbsp;of<br>
+*&nbsp;MERCHANTABILITY&nbsp;or&nbsp;FITNESS&nbsp;FOR&nbsp;A&nbsp;PARTICULAR&nbsp;PURPOSE.&nbsp;&nbsp;See&nbsp;the<br>
+*&nbsp;GNU&nbsp;Lesser&nbsp;General&nbsp;Public&nbsp;License&nbsp;for&nbsp;more&nbsp;details.<br>
+*<br>
+*&nbsp;You&nbsp;should&nbsp;have&nbsp;received&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;GNU&nbsp;Lesser&nbsp;General&nbsp;Public&nbsp;<br>
+*&nbsp;License&nbsp;along&nbsp;with&nbsp;this&nbsp;program;&nbsp;if&nbsp;not,&nbsp;If&nbsp;not,&nbsp;<br>
+*&nbsp;see&nbsp;&lt;<a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.<br>
+*<br>
+*</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Package Contents</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="http://nitro-nitf.sourceforge.net/apidocs/python/2.0/nitf._nitropy.html">_nitropy</a><br>
+</td><td width="25%" valign=top><a href="http://nitro-nitf.sourceforge.net/apidocs/python/2.0/nitf.nitropy.html">nitropy</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="nitf.html#ComponentInfo">ComponentInfo</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#DataSource">DataSource</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nitf.html#BandSource">BandSource</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nitf.html#FileBandSource">FileBandSource</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#MemoryBandSource">MemoryBandSource</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="nitf.html#DownSampler">DownSampler</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nitf.html#MaxDownSampler">MaxDownSampler</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#PixelSkipDownSampler">PixelSkipDownSampler</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="nitf.html#Extensions">Extensions</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#Field">Field</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#FieldHeader">FieldHeader</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nitf.html#FileSecurity">FileSecurity</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#Header">Header</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nitf.html#DESubheader">DESubheader</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#FileHeader">FileHeader</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#GraphicSubheader">GraphicSubheader</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#ImageSubheader">ImageSubheader</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#LabelSubheader">LabelSubheader</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#RESubheader">RESubheader</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#TextSubheader">TextSubheader</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="nitf.html#IOHandle">IOHandle</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#ImageReader">ImageReader</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#ImageSource">ImageSource</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#ImageWriter">ImageWriter</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#PluginRegistry">PluginRegistry</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#Reader">Reader</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#Record">Record</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#RecordSegment">RecordSegment</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nitf.html#DESegment">DESegment</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#GraphicSegment">GraphicSegment</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#ImageSegment">ImageSegment</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#LabelSegment">LabelSegment</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#RESegment">RESegment</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#TextSegment">TextSegment</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="nitf.html#SegmentReader">SegmentReader</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#SegmentSource">SegmentSource</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nitf.html#FileSegmentSource">FileSegmentSource</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#MemorySegmentSource">MemorySegmentSource</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="nitf.html#SegmentWriter">SegmentWriter</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#SubWindow">SubWindow</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#TRE">TRE</a>
+</font></dt><dt><font face="helvetica, arial"><a href="nitf.html#Writer">Writer</a>
+</font></dt></dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BandSource">class <strong>BandSource</strong></a>(<a href="nitf.html#DataSource">DataSource</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;<a href="nitf.html#BandSource">BandSource</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="BandSource-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BandSource-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#DataSource">DataSource</a>:<br>
+<dl><dt><a name="BandSource-read"><strong>read</strong></a>(self, size)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ComponentInfo">class <strong>ComponentInfo</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ComponentInfo-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<dl><dt><a name="ComponentInfo-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ComponentInfo-getDataLength"><strong>getDataLength</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ComponentInfo-getHeaderLength"><strong>getHeaderLength</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="DESegment">class <strong>DESegment</strong></a>(<a href="nitf.html#RecordSegment">RecordSegment</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#DESegment">DESegment</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="DESegment-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#RecordSegment">RecordSegment</a>:<br>
+<dl><dt><a name="DESegment-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+<dl><dt><a name="DESegment-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="DESubheader">class <strong>DESubheader</strong></a>(<a href="nitf.html#Header">Header</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#DESubheader">DESubheader</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="nitf.html#DESubheader">DESubheader</a></dd>
+<dd><a href="nitf.html#Header">Header</a></dd>
+<dd><a href="nitf.html#FieldHeader">FieldHeader</a></dd>
+</dl>
+<hr>
+Methods inherited from <a href="nitf.html#Header">Header</a>:<br>
+<dl><dt><a name="DESubheader-__init__"><strong>__init__</strong></a>(self, ref, field_list<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="DESubheader-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#FieldHeader">FieldHeader</a>:<br>
+<dl><dt><a name="DESubheader-__contains__"><strong>__contains__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="DESubheader-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Provide&nbsp;container&nbsp;get</tt></dd></dl>
+
+<dl><dt><a name="DESubheader-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>Provide&nbsp;the&nbsp;container&nbsp;'set'&nbsp;functionality</tt></dd></dl>
+
+<dl><dt><a name="DESubheader-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="DataSource">class <strong>DataSource</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;<a href="nitf.html#DataSource">DataSource</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="DataSource-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="DataSource-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<dl><dt><a name="DataSource-read"><strong>read</strong></a>(self, size)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="DownSampler">class <strong>DownSampler</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;<a href="nitf.html#DownSampler">DownSampler</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="DownSampler-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="DownSampler-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Extensions">class <strong>Extensions</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="nitf.html#TRE">TRE</a>&nbsp;<a href="nitf.html#Extensions">Extensions</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Extensions-__call__"><strong>__call__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Extensions-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="Extensions-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<dl><dt><a name="Extensions-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Extensions-__len__"><strong>__len__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Extensions-append"><strong>append</strong></a>(self, tre)</dt><dd><tt>appends&nbsp;the&nbsp;given&nbsp;<a href="nitf.html#TRE">TRE</a>&nbsp;to&nbsp;this&nbsp;<a href="nitf.html#Extensions">Extensions</a>&nbsp;object</tt></dd></dl>
+
+<dl><dt><a name="Extensions-removeTREsByName"><strong>removeTREsByName</strong></a>(self, tag)</dt><dd><tt>removes&nbsp;all&nbsp;TREs&nbsp;with&nbsp;the&nbsp;given&nbsp;name</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Field">class <strong>Field</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#Field">Field</a>&nbsp;object<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Field-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<dl><dt><a name="Field-__int__"><strong>__int__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Field-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Field-getLength"><strong>getLength</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Field-getString"><strong>getString</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Field-intValue"><strong>intValue</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Field-setString"><strong>setString</strong></a>(self, data)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FieldHeader">class <strong>FieldHeader</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;class&nbsp;for&nbsp;any&nbsp;<a href="nitf.html#Header">Header</a>&nbsp;that&nbsp;has&nbsp;fields<br>
+&nbsp;<br>
+This&nbsp;provides&nbsp;list-based&nbsp;get&nbsp;access&nbsp;to&nbsp;the&nbsp;fields<br>
+&nbsp;<br>
+e.g.<br>
+&gt;&gt;&gt;&nbsp;numImages&nbsp;=&nbsp;header['numImages']<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="FieldHeader-__contains__"><strong>__contains__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="FieldHeader-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Provide&nbsp;container&nbsp;get</tt></dd></dl>
+
+<dl><dt><a name="FieldHeader-__init__"><strong>__init__</strong></a>(self, ref, field_list<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="FieldHeader-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FieldHeader-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>Provide&nbsp;the&nbsp;container&nbsp;'set'&nbsp;functionality</tt></dd></dl>
+
+<dl><dt><a name="FieldHeader-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FileBandSource">class <strong>FileBandSource</strong></a>(<a href="nitf.html#BandSource">BandSource</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="nitf.html#BandSource">BandSource</a>&nbsp;derived&nbsp;from&nbsp;an&nbsp;<a href="nitf.html#IOHandle">IOHandle</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="nitf.html#FileBandSource">FileBandSource</a></dd>
+<dd><a href="nitf.html#BandSource">BandSource</a></dd>
+<dd><a href="nitf.html#DataSource">DataSource</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="FileBandSource-__init__"><strong>__init__</strong></a>(self, handle, start<font color="#909090">=0</font>, nbpp<font color="#909090">=1</font>, pixelskip<font color="#909090">=0</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#BandSource">BandSource</a>:<br>
+<dl><dt><a name="FileBandSource-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#DataSource">DataSource</a>:<br>
+<dl><dt><a name="FileBandSource-read"><strong>read</strong></a>(self, size)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FileHeader">class <strong>FileHeader</strong></a>(<a href="nitf.html#Header">Header</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;<a href="nitf.html#FileHeader">FileHeader</a>&nbsp;class<br>
+&nbsp;<br>
+Besides&nbsp;having&nbsp;list-based&nbsp;access&nbsp;to&nbsp;its&nbsp;fields,&nbsp;this&nbsp;class<br>
+also&nbsp;provides&nbsp;list-based&nbsp;access&nbsp;to&nbsp;its&nbsp;componentInfos.<br>
+&nbsp;<br>
+Supported&nbsp;keys&nbsp;are&nbsp;(case-insensitive):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;imageInfo,&nbsp;graphicInfo,&nbsp;textInfo,&nbsp;labelInfo,&nbsp;dataExtensionInfo,&nbsp;reservedExtensionInfo<br>
+&nbsp;<br>
+e.g.<br>
+&gt;&gt;&gt;&nbsp;infoList&nbsp;=&nbsp;header['imageinfo']<br>
+&gt;&gt;&gt;&nbsp;#print&nbsp;the&nbsp;first&nbsp;component&nbsp;info&nbsp;object<br>
+&gt;&gt;&gt;&nbsp;print&nbsp;infoList[0]<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="nitf.html#FileHeader">FileHeader</a></dd>
+<dd><a href="nitf.html#Header">Header</a></dd>
+<dd><a href="nitf.html#FieldHeader">FieldHeader</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="FileHeader-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="FileHeader-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<dl><dt><a name="FileHeader-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FileHeader-getComponentInfo"><strong>getComponentInfo</strong></a>(self, type, index)</dt></dl>
+
+<dl><dt><a name="FileHeader-getComponentInfos"><strong>getComponentInfos</strong></a>(self, type)</dt></dl>
+
+<dl><dt><a name="FileHeader-getUDHD"><strong>getUDHD</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FileHeader-getXHD"><strong>getXHD</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#FieldHeader">FieldHeader</a>:<br>
+<dl><dt><a name="FileHeader-__contains__"><strong>__contains__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="FileHeader-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>Provide&nbsp;the&nbsp;container&nbsp;'set'&nbsp;functionality</tt></dd></dl>
+
+<dl><dt><a name="FileHeader-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FileSecurity">class <strong>FileSecurity</strong></a>(<a href="nitf.html#FieldHeader">FieldHeader</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#FileSecurity">FileSecurity</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="FileSecurity-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#FieldHeader">FieldHeader</a>:<br>
+<dl><dt><a name="FileSecurity-__contains__"><strong>__contains__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="FileSecurity-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Provide&nbsp;container&nbsp;get</tt></dd></dl>
+
+<dl><dt><a name="FileSecurity-__init__"><strong>__init__</strong></a>(self, ref, field_list<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="FileSecurity-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>Provide&nbsp;the&nbsp;container&nbsp;'set'&nbsp;functionality</tt></dd></dl>
+
+<dl><dt><a name="FileSecurity-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FileSegmentSource">class <strong>FileSegmentSource</strong></a>(<a href="nitf.html#SegmentSource">SegmentSource</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="nitf.html#SegmentSource">SegmentSource</a>&nbsp;derived&nbsp;from&nbsp;an&nbsp;<a href="nitf.html#IOHandle">IOHandle</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="FileSegmentSource-__init__"><strong>__init__</strong></a>(self, handle, start<font color="#909090">=0</font>, byteSkip<font color="#909090">=0</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#SegmentSource">SegmentSource</a>:<br>
+<dl><dt><a name="FileSegmentSource-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="GraphicSegment">class <strong>GraphicSegment</strong></a>(<a href="nitf.html#RecordSegment">RecordSegment</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#GraphicSegment">GraphicSegment</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="GraphicSegment-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#RecordSegment">RecordSegment</a>:<br>
+<dl><dt><a name="GraphicSegment-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+<dl><dt><a name="GraphicSegment-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="GraphicSubheader">class <strong>GraphicSubheader</strong></a>(<a href="nitf.html#Header">Header</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#GraphicSubheader">GraphicSubheader</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="nitf.html#GraphicSubheader">GraphicSubheader</a></dd>
+<dd><a href="nitf.html#Header">Header</a></dd>
+<dd><a href="nitf.html#FieldHeader">FieldHeader</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="GraphicSubheader-getXHD"><strong>getXHD</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#Header">Header</a>:<br>
+<dl><dt><a name="GraphicSubheader-__init__"><strong>__init__</strong></a>(self, ref, field_list<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="GraphicSubheader-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#FieldHeader">FieldHeader</a>:<br>
+<dl><dt><a name="GraphicSubheader-__contains__"><strong>__contains__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="GraphicSubheader-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Provide&nbsp;container&nbsp;get</tt></dd></dl>
+
+<dl><dt><a name="GraphicSubheader-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>Provide&nbsp;the&nbsp;container&nbsp;'set'&nbsp;functionality</tt></dd></dl>
+
+<dl><dt><a name="GraphicSubheader-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Header">class <strong>Header</strong></a>(<a href="nitf.html#FieldHeader">FieldHeader</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#base&nbsp;class&nbsp;for&nbsp;actual&nbsp;NITF&nbsp;headers<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Header-__init__"><strong>__init__</strong></a>(self, ref, field_list<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="Header-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#FieldHeader">FieldHeader</a>:<br>
+<dl><dt><a name="Header-__contains__"><strong>__contains__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="Header-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Provide&nbsp;container&nbsp;get</tt></dd></dl>
+
+<dl><dt><a name="Header-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>Provide&nbsp;the&nbsp;container&nbsp;'set'&nbsp;functionality</tt></dd></dl>
+
+<dl><dt><a name="Header-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="IOHandle">class <strong>IOHandle</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;<a href="nitf.html#IOHandle">IOHandle</a>&nbsp;class.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="IOHandle-__del__"><strong>__del__</strong></a>(self)</dt><dd><tt>#close&nbsp;the&nbsp;handle</tt></dd></dl>
+
+<dl><dt><a name="IOHandle-__init__"><strong>__init__</strong></a>(self, filename, accessFlags<font color="#909090">=1</font>, createFlags<font color="#909090">=13</font>)</dt></dl>
+
+<dl><dt><a name="IOHandle-close"><strong>close</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="IOHandle-getSize"><strong>getSize</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="IOHandle-read"><strong>read</strong></a>(self, size)</dt></dl>
+
+<dl><dt><a name="IOHandle-seek"><strong>seek</strong></a>(self, offset, whence<font color="#909090">=1</font>)</dt></dl>
+
+<dl><dt><a name="IOHandle-tell"><strong>tell</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="IOHandle-write"><strong>write</strong></a>(self, data, size<font color="#909090">=-1</font>)</dt></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>ACCESS_READONLY</strong> = 1</dl>
+
+<dl><dt><strong>ACCESS_READWRITE</strong> = 3</dl>
+
+<dl><dt><strong>ACCESS_WRITEONLY</strong> = 2</dl>
+
+<dl><dt><strong>CREATE</strong> = 1</dl>
+
+<dl><dt><strong>OPEN_EXISTING</strong> = 13</dl>
+
+<dl><dt><strong>SEEK_CUR</strong> = 1</dl>
+
+<dl><dt><strong>SEEK_END</strong> = 3</dl>
+
+<dl><dt><strong>SEEK_SET</strong> = 2</dl>
+
+<dl><dt><strong>TRUNCATE</strong> = 12</dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ImageReader">class <strong>ImageReader</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;<a href="nitf.html#ImageReader">ImageReader</a>&nbsp;object<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;created&nbsp;by&nbsp;calling&nbsp;<a href="nitf.html#Reader">Reader</a>.newImageReader()<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ImageReader-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ImageReader-__init__"><strong>__init__</strong></a>(self, ref, nbpp)</dt></dl>
+
+<dl><dt><a name="ImageReader-read"><strong>read</strong></a>(self, window, downsampler<font color="#909090">=None</font>)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ImageSegment">class <strong>ImageSegment</strong></a>(<a href="nitf.html#RecordSegment">RecordSegment</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#ImageSegment">ImageSegment</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ImageSegment-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<dl><dt><a name="ImageSegment-addBands"><strong>addBands</strong></a>(self, num<font color="#909090">=1</font>)</dt><dd><tt>adds&nbsp;the&nbsp;specified&nbsp;number&nbsp;of&nbsp;bands&nbsp;to&nbsp;the&nbsp;image</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#RecordSegment">RecordSegment</a>:<br>
+<dl><dt><a name="ImageSegment-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+<dl><dt><a name="ImageSegment-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ImageSource">class <strong>ImageSource</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ImageSource-__call__"><strong>__call__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ImageSource-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ImageSource-__init__"><strong>__init__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ImageSource-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ImageSource-addBand"><strong>addBand</strong></a>(self, band)</dt></dl>
+
+<dl><dt><a name="ImageSource-getBand"><strong>getBand</strong></a>(self, index)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ImageSubheader">class <strong>ImageSubheader</strong></a>(<a href="nitf.html#Header">Header</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#ImageSubheader">ImageSubheader</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="nitf.html#ImageSubheader">ImageSubheader</a></dd>
+<dd><a href="nitf.html#Header">Header</a></dd>
+<dd><a href="nitf.html#FieldHeader">FieldHeader</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="ImageSubheader-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<dl><dt><a name="ImageSubheader-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ImageSubheader-getBandCount"><strong>getBandCount</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ImageSubheader-getComments"><strong>getComments</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ImageSubheader-getUDHD"><strong>getUDHD</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ImageSubheader-getXHD"><strong>getXHD</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ImageSubheader-insertComment"><strong>insertComment</strong></a>(self, comment, index<font color="#909090">=-1</font>)</dt><dd><tt>Inserts&nbsp;a&nbsp;comment.&nbsp;By&nbsp;default,&nbsp;adds&nbsp;it&nbsp;to&nbsp;the&nbsp;end</tt></dd></dl>
+
+<dl><dt><a name="ImageSubheader-removeComment"><strong>removeComment</strong></a>(self, index)</dt><dd><tt>Removes&nbsp;the&nbsp;comment&nbsp;at&nbsp;the&nbsp;specified&nbsp;index.&nbsp;If&nbsp;index&nbsp;is&nbsp;out&nbsp;of&nbsp;bounds,&nbsp;nothing&nbsp;is&nbsp;done</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#FieldHeader">FieldHeader</a>:<br>
+<dl><dt><a name="ImageSubheader-__contains__"><strong>__contains__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="ImageSubheader-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Provide&nbsp;container&nbsp;get</tt></dd></dl>
+
+<dl><dt><a name="ImageSubheader-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>Provide&nbsp;the&nbsp;container&nbsp;'set'&nbsp;functionality</tt></dd></dl>
+
+<dl><dt><a name="ImageSubheader-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ImageWriter">class <strong>ImageWriter</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ImageWriter-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ImageWriter-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<dl><dt><a name="ImageWriter-attachSource"><strong>attachSource</strong></a>(self, imagesource)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="LabelSegment">class <strong>LabelSegment</strong></a>(<a href="nitf.html#RecordSegment">RecordSegment</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#LabelSegment">LabelSegment</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="LabelSegment-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#RecordSegment">RecordSegment</a>:<br>
+<dl><dt><a name="LabelSegment-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+<dl><dt><a name="LabelSegment-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="LabelSubheader">class <strong>LabelSubheader</strong></a>(<a href="nitf.html#Header">Header</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#LabelSubheader">LabelSubheader</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="nitf.html#LabelSubheader">LabelSubheader</a></dd>
+<dd><a href="nitf.html#Header">Header</a></dd>
+<dd><a href="nitf.html#FieldHeader">FieldHeader</a></dd>
+</dl>
+<hr>
+Methods inherited from <a href="nitf.html#Header">Header</a>:<br>
+<dl><dt><a name="LabelSubheader-__init__"><strong>__init__</strong></a>(self, ref, field_list<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="LabelSubheader-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#FieldHeader">FieldHeader</a>:<br>
+<dl><dt><a name="LabelSubheader-__contains__"><strong>__contains__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="LabelSubheader-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Provide&nbsp;container&nbsp;get</tt></dd></dl>
+
+<dl><dt><a name="LabelSubheader-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>Provide&nbsp;the&nbsp;container&nbsp;'set'&nbsp;functionality</tt></dd></dl>
+
+<dl><dt><a name="LabelSubheader-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="MaxDownSampler">class <strong>MaxDownSampler</strong></a>(<a href="nitf.html#DownSampler">DownSampler</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Max&nbsp;<a href="nitf.html#DownSampler">DownSampler</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="MaxDownSampler-__init__"><strong>__init__</strong></a>(self, rowSkip<font color="#909090">=1</font>, colSkip<font color="#909090">=1</font>)</dt><dd><tt>Default&nbsp;row&nbsp;and&nbsp;column&nbsp;skips&nbsp;are&nbsp;1,&nbsp;meaning&nbsp;no&nbsp;downsampling</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#DownSampler">DownSampler</a>:<br>
+<dl><dt><a name="MaxDownSampler-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="MemoryBandSource">class <strong>MemoryBandSource</strong></a>(<a href="nitf.html#BandSource">BandSource</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="nitf.html#BandSource">BandSource</a>&nbsp;derived&nbsp;from&nbsp;memory<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="nitf.html#MemoryBandSource">MemoryBandSource</a></dd>
+<dd><a href="nitf.html#BandSource">BandSource</a></dd>
+<dd><a href="nitf.html#DataSource">DataSource</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="MemoryBandSource-__init__"><strong>__init__</strong></a>(self, data, size<font color="#909090">=-1</font>, start<font color="#909090">=0</font>, nbpp<font color="#909090">=1</font>, pixelskip<font color="#909090">=0</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#BandSource">BandSource</a>:<br>
+<dl><dt><a name="MemoryBandSource-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#DataSource">DataSource</a>:<br>
+<dl><dt><a name="MemoryBandSource-read"><strong>read</strong></a>(self, size)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="MemorySegmentSource">class <strong>MemorySegmentSource</strong></a>(<a href="nitf.html#SegmentSource">SegmentSource</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="nitf.html#SegmentSource">SegmentSource</a>&nbsp;derived&nbsp;from&nbsp;memory<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="MemorySegmentSource-__init__"><strong>__init__</strong></a>(self, data, size<font color="#909090">=-1</font>, start<font color="#909090">=0</font>, byteSkip<font color="#909090">=0</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#SegmentSource">SegmentSource</a>:<br>
+<dl><dt><a name="MemorySegmentSource-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PixelSkipDownSampler">class <strong>PixelSkipDownSampler</strong></a>(<a href="nitf.html#DownSampler">DownSampler</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>PixelSkip&nbsp;<a href="nitf.html#DownSampler">DownSampler</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PixelSkipDownSampler-__init__"><strong>__init__</strong></a>(self, rowSkip<font color="#909090">=1</font>, colSkip<font color="#909090">=1</font>)</dt><dd><tt>Default&nbsp;row&nbsp;and&nbsp;column&nbsp;skips&nbsp;are&nbsp;1,&nbsp;meaning&nbsp;no&nbsp;downsampling</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#DownSampler">DownSampler</a>:<br>
+<dl><dt><a name="PixelSkipDownSampler-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PluginRegistry">class <strong>PluginRegistry</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PluginRegistry-__init__"><strong>__init__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="PluginRegistry-canHandleTRE"><strong>canHandleTRE</strong></a>(self, tre_name)</dt></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="PluginRegistry-instance"><strong>instance</strong></a>()</dt></dl>
+
+<dl><dt><a name="PluginRegistry-loadDir"><strong>loadDir</strong></a>(dirname)</dt><dd><tt>Loads&nbsp;any&nbsp;plugins&nbsp;in&nbsp;the&nbsp;given&nbsp;directory</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="RESegment">class <strong>RESegment</strong></a>(<a href="nitf.html#RecordSegment">RecordSegment</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#RESegment">RESegment</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="RESegment-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#RecordSegment">RecordSegment</a>:<br>
+<dl><dt><a name="RESegment-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+<dl><dt><a name="RESegment-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="RESubheader">class <strong>RESubheader</strong></a>(<a href="nitf.html#Header">Header</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#RESubheader">RESubheader</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="nitf.html#RESubheader">RESubheader</a></dd>
+<dd><a href="nitf.html#Header">Header</a></dd>
+<dd><a href="nitf.html#FieldHeader">FieldHeader</a></dd>
+</dl>
+<hr>
+Methods inherited from <a href="nitf.html#Header">Header</a>:<br>
+<dl><dt><a name="RESubheader-__init__"><strong>__init__</strong></a>(self, ref, field_list<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="RESubheader-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#FieldHeader">FieldHeader</a>:<br>
+<dl><dt><a name="RESubheader-__contains__"><strong>__contains__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="RESubheader-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Provide&nbsp;container&nbsp;get</tt></dd></dl>
+
+<dl><dt><a name="RESubheader-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>Provide&nbsp;the&nbsp;container&nbsp;'set'&nbsp;functionality</tt></dd></dl>
+
+<dl><dt><a name="RESubheader-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Reader">class <strong>Reader</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;<a href="nitf.html#Reader">Reader</a>&nbsp;class.<br>
+&nbsp;<br>
+Construct&nbsp;a&nbsp;<a href="nitf.html#Reader">Reader</a>&nbsp;if&nbsp;you&nbsp;need&nbsp;to&nbsp;read&nbsp;a&nbsp;NITF<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Reader-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Reader-__init__"><strong>__init__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Reader-newGraphicReader"><strong>newGraphicReader</strong></a>(self, num)</dt></dl>
+
+<dl><dt><a name="Reader-newImageReader"><strong>newImageReader</strong></a>(self, num)</dt></dl>
+
+<dl><dt><a name="Reader-read"><strong>read</strong></a>(self, handle)</dt></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="Reader-getNITFVersion"><strong>getNITFVersion</strong></a>(filename)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Record">class <strong>Record</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;<a href="nitf.html#Record">Record</a>&nbsp;class.<br>
+&nbsp;<br>
+The&nbsp;NITF&nbsp;<a href="nitf.html#Record">Record</a>&nbsp;is&nbsp;the&nbsp;top-level&nbsp;container&nbsp;of&nbsp;the&nbsp;NITF&nbsp;contents.<br>
+This&nbsp;object&nbsp;contains&nbsp;all&nbsp;of&nbsp;the&nbsp;sub-components&nbsp;of&nbsp;the&nbsp;NITF.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Record-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Record-__init__"><strong>__init__</strong></a>(self, ref<font color="#909090">=None</font>, version<font color="#909090">=101</font>)</dt></dl>
+
+<dl><dt><a name="Record-getDataExtensions"><strong>getDataExtensions</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Record-getGraphics"><strong>getGraphics</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Record-getImages"><strong>getImages</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Record-getLabels"><strong>getLabels</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Record-getReservedExtensions"><strong>getReservedExtensions</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Record-getTexts"><strong>getTexts</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Record-newGraphicSegment"><strong>newGraphicSegment</strong></a>(self)</dt><dd><tt>Creates&nbsp;a&nbsp;new&nbsp;graphic&nbsp;segment,&nbsp;and&nbsp;updates&nbsp;the&nbsp;numGraphics&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="Record-newImageSegment"><strong>newImageSegment</strong></a>(self)</dt><dd><tt>Creates&nbsp;a&nbsp;new&nbsp;image&nbsp;segment,&nbsp;and&nbsp;updates&nbsp;the&nbsp;numImages&nbsp;value</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="RecordSegment">class <strong>RecordSegment</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Abstract&nbsp;class&nbsp;for&nbsp;Segments<br>
+Not&nbsp;intended&nbsp;to&nbsp;be&nbsp;instantiated&nbsp;itself<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="RecordSegment-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+<dl><dt><a name="RecordSegment-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<dl><dt><a name="RecordSegment-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SegmentReader">class <strong>SegmentReader</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;<a href="nitf.html#SegmentReader">SegmentReader</a>&nbsp;object<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="SegmentReader-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SegmentReader-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<dl><dt><a name="SegmentReader-getSize"><strong>getSize</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SegmentReader-read"><strong>read</strong></a>(self, size)</dt></dl>
+
+<dl><dt><a name="SegmentReader-tell"><strong>tell</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SegmentSource">class <strong>SegmentSource</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;<a href="nitf.html#SegmentSource">SegmentSource</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="SegmentSource-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SegmentSource-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SegmentWriter">class <strong>SegmentWriter</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="SegmentWriter-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SegmentWriter-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<dl><dt><a name="SegmentWriter-attachSource"><strong>attachSource</strong></a>(self, source)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SubWindow">class <strong>SubWindow</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;<a href="nitf.html#SubWindow">SubWindow</a>&nbsp;class<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;used&nbsp;to&nbsp;specify&nbsp;a&nbsp;subwindow&nbsp;into&nbsp;the&nbsp;image<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="SubWindow-__init__"><strong>__init__</strong></a>(self, image_subheader<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="SubWindow-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="TRE">class <strong>TRE</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Tagged&nbsp;<a href="nitf.html#Record">Record</a>&nbsp;Extension<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="TRE-__contains__"><strong>__contains__</strong></a>(self, field)</dt></dl>
+
+<dl><dt><a name="TRE-__getitem__"><strong>__getitem__</strong></a>(self, field)</dt></dl>
+
+<dl><dt><a name="TRE-__init__"><strong>__init__</strong></a>(self, ref, size<font color="#909090">=0</font>)</dt><dd><tt>Create&nbsp;either&nbsp;a&nbsp;new&nbsp;<a href="nitf.html#TRE">TRE</a>&nbsp;or&nbsp;refer&nbsp;to&nbsp;an&nbsp;existing&nbsp;underlying&nbsp;<a href="nitf.html#TRE">TRE</a><br>
+The&nbsp;ref&nbsp;parameter&nbsp;is&nbsp;checked</tt></dd></dl>
+
+<dl><dt><a name="TRE-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="TRE-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="TRE-getCurrentSize"><strong>getCurrentSize</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="TRE-getField"><strong>getField</strong></a>(self, name)</dt></dl>
+
+<dl><dt><a name="TRE-getTag"><strong>getTag</strong></a>(self)</dt></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>DEFAULT_LENGTH</strong> = 0</dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="TextSegment">class <strong>TextSegment</strong></a>(<a href="nitf.html#RecordSegment">RecordSegment</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#TextSegment">TextSegment</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="TextSegment-__init__"><strong>__init__</strong></a>(self, ref)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#RecordSegment">RecordSegment</a>:<br>
+<dl><dt><a name="TextSegment-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+<dl><dt><a name="TextSegment-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Forward&nbsp;to&nbsp;the&nbsp;SubHeader</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="TextSubheader">class <strong>TextSubheader</strong></a>(<a href="nitf.html#Header">Header</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#NITF&nbsp;<a href="nitf.html#TextSubheader">TextSubheader</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="nitf.html#TextSubheader">TextSubheader</a></dd>
+<dd><a href="nitf.html#Header">Header</a></dd>
+<dd><a href="nitf.html#FieldHeader">FieldHeader</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="TextSubheader-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="TextSubheader-getXHD"><strong>getXHD</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#Header">Header</a>:<br>
+<dl><dt><a name="TextSubheader-__init__"><strong>__init__</strong></a>(self, ref, field_list<font color="#909090">=None</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="nitf.html#FieldHeader">FieldHeader</a>:<br>
+<dl><dt><a name="TextSubheader-__contains__"><strong>__contains__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="TextSubheader-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt><dd><tt>Provide&nbsp;container&nbsp;get</tt></dd></dl>
+
+<dl><dt><a name="TextSubheader-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>Provide&nbsp;the&nbsp;container&nbsp;'set'&nbsp;functionality</tt></dd></dl>
+
+<dl><dt><a name="TextSubheader-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Writer">class <strong>Writer</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Writer-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Writer-__init__"><strong>__init__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Writer-newGraphicWriter"><strong>newGraphicWriter</strong></a>(self, num)</dt></dl>
+
+<dl><dt><a name="Writer-newImageWriter"><strong>newImageWriter</strong></a>(self, imagenum)</dt></dl>
+
+<dl><dt><a name="Writer-prepare"><strong>prepare</strong></a>(self, record, handle)</dt></dl>
+
+<dl><dt><a name="Writer-write"><strong>write</strong></a>(self)</dt></dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>FILE_HEADER_FIELDS</strong> = [{'id': 'FHDR', 'name': 'fileHeader'}, {'id': 'FVER', 'name': 'fileVersion'}, {'id': 'CLEVEL', 'name': 'complianceLevel'}, {'id': 'STYPE', 'name': 'systemType'}, {'id': 'OSTAID', 'name': 'originStationID'}, {'id': 'FDT', 'name': 'fileDateTime'}, {'id': 'FTITLE', 'name': 'fileTitle'}, {'id': 'FSCLAS', 'name': 'classification'}, {'id': 'FSCOP', 'name': 'messageCopyNum'}, {'id': 'FSCPYS', 'name': 'messageNumCopies'}, {'id': 'ENCRYP', 'name': 'encrypted'}, {'id': 'FBKGC', 'name': 'backgroundColor'}, {'id': 'ONAME', 'name': 'originatorName'}, {'id': 'OPHONE', 'name': 'originatorPhone'}, {'id': 'FL', 'name': 'fileLength'}, {'id': 'HL', 'name': 'headerLength'}, {'id': 'NUMI', 'name': 'numImages'}, {'id': 'NUMS', 'name': 'numGraphics'}, {'id': 'NUMX', 'name': 'numLabels'}, {'id': 'NUMT', 'name': 'numTexts'}, ...]<br>
+<strong>IMAGE_SUBHEADER_FIELDS</strong> = [{'id': 'IM', 'name': 'filePartType'}, {'id': 'IID1', 'name': 'imageId'}, {'id': 'IDATIM', 'name': 'imageDateAndTime'}, {'id': 'TGTID', 'name': 'targetId'}, {'id': 'IID2', 'name': 'imageTitle'}, {'id': 'ISCLAS', 'name': 'imageSecurityClass'}, {'id': 'ISORCE', 'name': 'imageSource'}, {'id': 'NROWS', 'name': 'numRows'}, {'id': 'NCOLS', 'name': 'numCols'}, {'id': 'PVTYPE', 'name': 'pixelValueType'}, {'id': 'IREP', 'name': 'imageRepresentation'}, {'id': 'ICAT', 'name': 'imageCategory'}, {'id': 'ABPP', 'name': 'actualBitsPerPixel'}, {'id': 'PJUST', 'name': 'pixelJustification'}, {'id': 'ICORDS', 'name': 'imageCoordinateSystem'}, {'id': 'IGEOLO', 'name': 'cornerCoordinates'}, {'id': 'NICOM', 'name': 'numImageComments'}, {'id': 'IC', 'name': 'imageCompression'}, {'id': 'COMRAT', 'name': 'compressionRate'}, {'id': 'NBANDS', 'name': 'numImageBands'}, ...]<br>
+<strong>NITF_VER_20</strong> = 100<br>
+<strong>NITF_VER_21</strong> = 101<br>
+<strong>NITF_VER_UNKNOWN</strong> = 102</td></tr></table>
+</body></html>

@@ -1,0 +1,705 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>NITRO Wiki: Adding a TRE to the record (2.0)</title>
+	<base href="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="css/wikka.css?1.1.6.4" />
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: revisions for AddTreToRecord20C (RSS)" href="wikka.php?wakka=AddTreToRecord20C%252Frevisions.xml" />
+	<link rel="alternate" type="application/rss+xml" title="NITRO Wiki: recently edited pages (RSS)" href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/recentchanges.xml" />
+</head>
+<body  >
+<div class="header">
+	<h2><a id="homepage_link" href="index.html">NITRO Wiki</a> : <a href="wikka.php?wakka=AddTreToRecord20C%252Fbacklinks" title="Display a list of pages linking to AddTreToRecord20C">AddTreToRecord20C</a></h2>
+	<a href="index.html">HomePage</a> ::
+	<a href="wikka.php?wakka=CategoryCategory">Categories</a> :: <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=PageIndex">PageIndex</a> ::  <a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=RecentChanges">RecentChanges</a> :: <a href="wikka.php?wakka=RecentlyCommented">RecentlyCommented</a> :: <a href="wikka.php?wakka=UserSettings">Login/Register</a> 	
+</div>
+
+<!--starting page content-->
+<div class="page">
+<strong>This API is subject to change</strong><br />
+<h4>Adding a TRE to the record (2.0)</h4>
+
+<br />
+TRE construction in version 2.0 of the library is tied to the plug-in that handles the TRE.  When the constructor is called for a TRE, the user provides the string that identifies what type of TRE to create and also, a description that can clarify what version of a specific type of TRE, and how long it must be (these values can be defaulted).<br />
+<br />
+In order to add a new TRE to the record, we must instantiate a TRE.  This is very simple if the TRE handler exists in the plugin path.  For example, to create an ACFTB TRE, I can just instantiate the default TRE constructor:<br />
+<br />
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;"> &nbsp; <span class="coMULTI">/* construct a tre */</span><br />
+&nbsp; &nbsp; nitf_TRE *tre = nitf_TRE_construct<span class="br0">&#40;</span><span class="st0">&quot;ACFTB&quot;</span>, <span class="kw2">NULL</span>, &amp;error<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!tre<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; nitf_Error_print<span class="br0">&#40;</span>&amp;error, stdout, <span class="st0">&quot;Exiting...&quot;</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; exit<span class="br0">&#40;</span>EXIT_FAILURE<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <span class="br0">&#125;</span></div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/grabcode" method="post" id="form_61092f4ded">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="+++%2F%2A+construct+a+tre+%2A%2F%0A%09nitf_TRE+%2Atre+%3D+nitf_TRE_construct%28%22ACFTB%22%2C+NULL%2C+%26error%29%3B%0A%09if+%28%21tre%29%0A%09%7B%0A%09%09nitf_Error_print%28%26error%2C+stdout%2C+%22Exiting...%22%29%3B%0A%09%09exit%28EXIT_FAILURE%29%3B%0A%09%7D" /></form>
+<br />
+<br />
+Now that I created the TRE, I can access its fields using the accessor API.<br />
+<br />
+<strong>Look up a field value using find() </strong><br />
+<br />
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">&nbsp; &nbsp; &nbsp; &nbsp; <span class="coMULTI">/* nitf_ListIterator currentInst, lastInst */</span><br />
+&nbsp; &nbsp; nitf_List* found = nitf_TRE_find<span class="br0">&#40;</span>tre, <span class="st0">&quot;AC_&quot;</span>, &amp;error<span class="br0">&#41;</span>; <span class="coMULTI">/* This will find AC_MSN_ID, AC_TAIL_NO, AC_TO */</span><br />
+&nbsp; &nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span>!found<span class="br0">&#41;</span> <span class="kw1">return</span>;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; currentInst = nitf_List_begin<span class="br0">&#40;</span>found<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; lastInst = nitf_List_end<span class="br0">&#40;</span>found<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <br />
+&nbsp; &nbsp; <span class="kw1">while</span> <span class="br0">&#40;</span>nitf_ListIterator_notEqualTo<span class="br0">&#40;</span>&amp;currentInst, &amp;lastInst<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; <span class="br0">&#123;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; nitf_Pair* pair = nitf_ListIterator_get<span class="br0">&#40;</span>&amp;currentInst<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; nitf_Field* field = <span class="br0">&#40;</span>nitf_Field*<span class="br0">&#41;</span>pair-&gt;data;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span class="kw3">printf</span></a><span class="br0">&#40;</span><span class="st0">&quot;Found: %s [%.*s]<span class="es0">\n</span>&quot;</span>, pair-&gt;key, field-&gt;length, field-&gt;raw<span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; nitf_ListIterator_increment<span class="br0">&#40;</span>&amp;currentInst<span class="br0">&#41;</span>;<br />
+<br />
+&nbsp; &nbsp; <span class="br0">&#125;</span><br />
+&nbsp; &nbsp; nitf_ListIterator_increment<span class="br0">&#40;</span>&amp;current<span class="br0">&#41;</span>;</div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/grabcode" method="post" id="form_61092f4ded_1">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="%09%09%2F%2A+nitf_ListIterator+currentInst%2C+lastInst+%2A%2F%0A%09nitf_List%2A+found+%3D+nitf_TRE_find%28tre%2C+%22AC_%22%2C+%26error%29%3B+%2F%2A+This+will+find+AC_MSN_ID%2C+AC_TAIL_NO%2C+AC_TO+%2A%2F%0A%09if+%28%21found%29+return%3B%0A%09%0A%09currentInst+%3D+nitf_List_begin%28found%29%3B%0A%09lastInst+%3D+nitf_List_end%28found%29%3B%0A%09%0A%09while+%28nitf_ListIterator_notEqualTo%28%26currentInst%2C+%26lastInst%29%29%0A%09%7B%0A%09%09nitf_Pair%2A+pair+%3D+nitf_ListIterator_get%28%26currentInst%29%3B%0A%09%09nitf_Field%2A+field+%3D+%28nitf_Field%2A%29pair-%3Edata%3B%0A%09%09printf%28%22Found%3A+%25s+%5B%25.%2As%5D%5Cn%22%2C+pair-%3Ekey%2C+field-%3Elength%2C+field-%3Eraw%29%3B%0A%09%09nitf_ListIterator_increment%28%26currentInst%29%3B%0A%0A%09%7D%0A%09nitf_ListIterator_increment%28%26current%29%3B" /></form>
+<br />
+<br />
+<strong>Look up a field value using getField() </strong><br />
+<br />
+If I know exactly what Im looking for, I can call getField():<br />
+<br />
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;">nitf_Field* field = nitf_TRE_getField<span class="br0">&#40;</span>tre, <span class="st0">&quot;AC_MSN_ID&quot;</span><span class="br0">&#41;</span>;<br />
+<span class="kw1">if</span> <span class="br0">&#40;</span>!field<span class="br0">&#41;</span><br />
+<span class="br0">&#123;</span><br />
+&nbsp; &nbsp;<a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span class="kw3">printf</span></a><span class="br0">&#40;</span><span class="st0">&quot;No such field exists!<span class="es0">\n</span>&quot;</span><span class="br0">&#41;</span>;<br />
+<span class="br0">&#125;</span></div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/grabcode" method="post" id="form_61092f4ded_2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="nitf_Field%2A+field+%3D+nitf_TRE_getField%28tre%2C+%22AC_MSN_ID%22%29%3B%0Aif+%28%21field%29%0A%7B%0A+++printf%28%22No+such+field+exists%21%5Cn%22%29%3B%0A%7D" /></form>
+<br />
+<br />
+<strong>Setting a field value using setField() </strong><br />
+<br />
+If I want to set the value of an existing TRE, that's easy enough as well:<br />
+<br />
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;"> <span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_TRE_setField<span class="br0">&#40;</span>tre, <span class="st0">&quot;CONTRIBUTOR&quot;</span>, <span class="st0">&quot;DP&quot;</span>, strlen<span class="br0">&#40;</span><span class="st0">&quot;DP&quot;</span><span class="br0">&#41;</span>, error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+<span class="br0">&#123;</span><br />
+&nbsp; &nbsp;<span class="coMULTI">/* Handle error */</span><br />
+<span class="br0">&#125;</span></div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/grabcode" method="post" id="form_61092f4ded_3">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="+if+%28%21nitf_TRE_setField%28tre%2C+%22CONTRIBUTOR%22%2C+%22DP%22%2C+strlen%28%22DP%22%29%2C+error%29%29%0A%7B%0A+++%2F%2A+Handle+error+%2A%2F%0A%7D" /></form>
+<br />
+<br />
+<strong>Note:</strong><br />
+In most TRE specifications, when you are looping, you have a variable that specifies the number of times to loop.  You cannot just set a field in the TRE, if it is inside of a loop (e.g. nitf_TRE_setField(tre, "CONTRIBUTOR[7]", "DP", strlen("DP"), error) ).  First, you must adjust the size of the loop variable to contain this new index (which causes a new field to be added for each internal value that does not already exist).<br />
+<br />
+<strong>Adding your new TRE to the record</strong><br />
+<br />
+To add a TRE to the record, in the file header, for instance:<br />
+<br />
+<!--start GeSHi-->
+<div class="code" style="font-family: monospace;"><span class="kw1">if</span> <span class="br0">&#40;</span>!nitf_Extensions_appendTRE<span class="br0">&#40;</span>record-&gt;fileHeader-&gt;userDefinedSection, tre, error<span class="br0">&#41;</span><span class="br0">&#41;</span><br />
+<span class="br0">&#123;</span><br />
+&nbsp; &nbsp;<span class="coMULTI">/* Handle error */</span><br />
+<span class="br0">&#125;</span></div>
+<!--end GeSHi-->
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/grabcode" method="post" id="form_61092f4ded_4">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+<input type="submit" class="grabcode" name="save" value="Grab" title="Download" /><input type="hidden" name="filename" value="" /><input type="hidden" name="code" value="if+%28%21nitf_Extensions_appendTRE%28record-%3EfileHeader-%3EuserDefinedSection%2C+tre%2C+error%29%29%0A%7B%0A+++%2F%2A+Handle+error+%2A%2F%0A%7D" /></form>
+<br />
+<br />
+<strong>Note</strong><br />
+If you try and make your own extension on the spot that is not in the plugin registry, you will not be able to use the TRE to write!  For almost all purposes TRE descriptions must be defined within a plug-in!<br />
+<br />
+
+</div>
+				<div class="commentsheader">
+				<span id="comments">&nbsp;</span>Comments [<a href="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C&amp;show_comments=0">Hide comments/form</a>]
+				</div>
+<div class="comment">
+<span id="comment_10985"></span>YeX65F  &lt;a href=&quot;http://hjovbkweppam.com/&quot;&gt;hjovbkweppam&lt;/a&gt;, [url=http://zxnqytraoluy.com/]zxnqytraoluy[/url], [link=http://ohgvpepyobqo.com/]ohgvpepyobqo[/link], http://bpkpzkpsxnzf.com/
+	<div class="commentinfo">
+-- email (2011-09-24 20:50:37)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_26382"></span>gzxDL9  &lt;a href=&quot;http://kezdafaydfaa.com/&quot;&gt;kezdafaydfaa&lt;/a&gt;, [url=http://qdkstdaiapge.com/]qdkstdaiapge[/url], [link=http://dwgtuvucmfpd.com/]dwgtuvucmfpd[/link], http://nikqzsbsyidw.com/
+	<div class="commentinfo">
+-- email (2012-03-08 06:10:41)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_26397"></span>GIbqKf  &lt;a href=&quot;http://unwlgkrorffc.com/&quot;&gt;unwlgkrorffc&lt;/a&gt;, [url=http://cbjztuaxliek.com/]cbjztuaxliek[/url], [link=http://tqcgjumzkmqf.com/]tqcgjumzkmqf[/link], http://zfnahmelgrvh.com/
+	<div class="commentinfo">
+-- email (2012-03-08 06:14:40)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_26606"></span>Point of No Return movie to buy, &lt;a href=&quot;http://quizilla.teennick.com/stories/23270865/software-data-recovery-solutions-to-be-ready-to-take-into-account&quot;&gt;corrupted files&lt;/a&gt;, [url=&quot;http://quizilla.teennick.com/stories/23270865/software-data-recovery-solutions-to-be-ready-to-take-into-account&quot;]corrupted files[/url], http://quizilla.teennick.com/stories/23270865/software-data-recovery-solutions-to-be-ready-to-take-into-account corrupted files,  dok, &lt;a href=&quot;http://howtoretrievedeletedfiles605.bloghi.com/2012/02/21/forensic-sim-card-data-recovery.html&quot;&gt;fast hdd&lt;/a&gt;, [url=&quot;http://howtoretrievedeletedfiles605.bloghi.com/2012/02/21/forensic-sim-card-data-recovery.html&quot;]fast hdd[/url], http://howtoretrievedeletedfiles605.bloghi.com/2012/02/21/forensic-sim-card-data-recovery.html fast hdd,  ynx, &lt;a href=&quot;http://franknfurter119.xanga.com/759285409/how-to-un-erase-data-recovery/&quot;&gt;click here&lt;/a&gt;, [url=&quot;http://franknfurter119.xanga.com/759285409/how-to-un-erase-data-recovery/&quot;]click here[/url], http://franknfurter119.xanga.com/759285409/how-to-un-erase-data-recovery/ click here,  scvje,
+	<div class="commentinfo">
+-- email (2012-03-09 07:49:11)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_26647"></span>Thank you SO much, I've searched for this for so long, thank you., &lt;a href=&quot;http://cantzari571.insanejournal.com/933.html&quot;&gt;awesome hard drive&lt;/a&gt;, [url=&quot;http://cantzari571.insanejournal.com/933.html&quot;]awesome hard drive[/url], http://cantzari571.insanejournal.com/933.html awesome hard drive,  8PPP, &lt;a href=&quot;http://freeharddriverecovery36.blinkweb.com/1/2012/02/internal-file-method-errors-plus-mac-data-recovery-remedy-af27/&quot;&gt;visit our site&lt;/a&gt;, [url=&quot;http://freeharddriverecovery36.blinkweb.com/1/2012/02/internal-file-method-errors-plus-mac-data-recovery-remedy-af27/&quot;]visit our site[/url], http://freeharddriverecovery36.blinkweb.com/1/2012/02/internal-file-method-errors-plus-mac-data-recovery-remedy-af27/ visit our site,  613, &lt;a href=&quot;http://bassanio413.insanejournal.com/759.html&quot;&gt;find out more&lt;/a&gt;, [url=&quot;http://bassanio413.insanejournal.com/759.html&quot;]find out more[/url], http://bassanio413.insanejournal.com/759.html find out more,  xyg,
+	<div class="commentinfo">
+-- email (2012-03-09 07:49:14)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_26937"></span>colon cancer systems..., &lt;a href=&quot;http://www.floridinospizzaandpasta.com/realize-the-benefits-of-weight-loss-today/&quot;&gt;Slim Weight Patch Review&lt;/a&gt;, [url=&quot;http://www.floridinospizzaandpasta.com/realize-the-benefits-of-weight-loss-today/&quot;]Slim Weight Patch Review[/url], http://www.floridinospizzaandpasta.com/realize-the-benefits-of-weight-loss-today/ Slim Weight Patch Review,  04923,
+	<div class="commentinfo">
+-- email (2012-03-12 16:16:21)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_26962"></span>i need a car becaus i live in tally and go to school in wakulla and i have doc apartments and i have a new bron nephw i have a job but thas just go on the rent pleas help noone dont have one thats why i need one to go to doc and school plz 850-567-4197, &lt;a href=&quot;http://pinterest.com/dietreviews/fat-burning-diets/&quot;&gt;Phen375&lt;/a&gt;, [url=&quot;http://pinterest.com/dietreviews/fat-burning-diets/&quot;]Phen375[/url], http://pinterest.com/dietreviews/fat-burning-diets/ Phen375,  wdty,
+	<div class="commentinfo">
+-- vzhost (2012-03-12 16:16:26)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27108"></span>I started this diet 10 days ago and i weight 441 pounds and ate maybe 4500 cal. a day. i thought i was going to kill me to do this and the first few days was very tough. Today i had my little lunch and felt so full like i did when i would eat twenty winds. and today day ten I have lost 32 pounds., &lt;a href=&quot;http://smallsolarpanelsblog.com/capsiplex/&quot;&gt;Capsiplex Review&lt;/a&gt;, [url=&quot;http://smallsolarpanelsblog.com/capsiplex/&quot;]Capsiplex Review[/url], http://smallsolarpanelsblog.com/capsiplex/ Capsiplex Review,  :DD,
+	<div class="commentinfo">
+-- email (2012-03-13 20:38:36)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27123"></span>I mix the veggies and have lost over a pound per day, with no gains. Not certain where you're getting your info!&lt;br /&gt;KS, &lt;a href=&quot;http://smallsolarpanelsblog.com/slimweightpatch/&quot;&gt;Slim Weight Patch&lt;/a&gt;, [url=&quot;http://smallsolarpanelsblog.com/slimweightpatch/&quot;]Slim Weight Patch[/url], http://smallsolarpanelsblog.com/slimweightpatch/ Slim Weight Patch,  727447,
+	<div class="commentinfo">
+-- vzhost (2012-03-13 20:38:39)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27214"></span>Ampicillin mechanism of action djocmtiviboyv, Ampicillin for dog, AplRIny., &lt;a href=&quot;http://gargouille964.livejournal.com/3716.html&quot;&gt;dr seuss&lt;/a&gt;, [url=&quot;http://gargouille964.livejournal.com/3716.html&quot;]dr seuss[/url], http://gargouille964.livejournal.com/3716.html dr seuss,  602, &lt;a href=&quot;http://commonsensesecretsinleapyearsomegrowingopportunities610.bloghi.com/2012/03/06/selecting-rational-tactics-in-tornadoes.html&quot;&gt;branson mo&lt;/a&gt;, [url=&quot;http://commonsensesecretsinleapyearsomegrowingopportunities610.bloghi.com/2012/03/06/selecting-rational-tactics-in-tornadoes.html&quot;]branson mo[/url], http://commonsensesecretsinleapyearsomegrowingopportunities610.bloghi.com/2012/03/06/selecting-rational-tactics-in-tornadoes.html branson mo,  yadzg, &lt;a href=&quot;http://lurker838.insanejournal.com/5855.html&quot;&gt;branson mo&lt;/a&gt;, [url=&quot;http://lurker838.insanejournal.com/5855.html&quot;]branson mo[/url], http://lurker838.insanejournal.com/5855.html branson mo,  409,
+	<div class="commentinfo">
+-- vzhost (2012-03-13 22:28:29)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27251"></span>thanks for the comments, i do look f/w to starting this diet tomorrow. As for the lack of protein mentioned here, i plan to add protein powder to shakes, hopefully this will help, but i also agree that 3 or 4 days w/o protein shouldn't cause too much damage., &lt;a href=&quot;http://sewer444.xanga.com/759621819/some-specialist-concepts-on-rudimentary-variables-for-tornadoes/&quot;&gt;franchise tag&lt;/a&gt;, [url=&quot;http://sewer444.xanga.com/759621819/some-specialist-concepts-on-rudimentary-variables-for-tornadoes/&quot;]franchise tag[/url], http://sewer444.xanga.com/759621819/some-specialist-concepts-on-rudimentary-variables-for-tornadoes/ franchise tag,  kpxu, &lt;a href=&quot;http://hozjin503.livejournal.com/2222.html&quot;&gt;netanyahu&lt;/a&gt;, [url=&quot;http://hozjin503.livejournal.com/2222.html&quot;]netanyahu[/url], http://hozjin503.livejournal.com/2222.html netanyahu,  9482, &lt;a href=&quot;http://blanche765.livejournal.com/3500.html&quot;&gt;ben affleck and jennifer garner&lt;/a&gt;, [url=&quot;http://blanche765.livejournal.com/3500.html&quot;]ben affleck and jennifer garner[/url], http://blanche765.livejournal.com/3500.html ben affleck and jennifer garner,  8-OO, &lt;a href=&quot;http://mouskevitz230.livejournal.com/7196.html&quot;&gt;sandra fluke&lt;/a&gt;, [url=&quot;http://mouskevitz230.livejournal.com/7196.html&quot;]sandra fluke[/url], http://mouskevitz230.livejournal.com/7196.html sandra fluke,  748,
+	<div class="commentinfo">
+-- email (2012-03-13 22:28:37)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27376"></span>I will right away grab your rss as I can't find your email subscription link or newsletter service. Do you've any? Please let me recognise in order that I may just subscribe. Thanks., &lt;a href=&quot;http://allthingstiki.com/?p=683&quot;&gt;go to website&lt;/a&gt;, [url=&quot;http://allthingstiki.com/?p=683&quot;]go to website[/url], http://allthingstiki.com/?p=683 go to website,  7039, &lt;a href=&quot;http://buyerremorselaws6665720.towityourself.com/2012/03/making-an-attempt-to-find-automobile-insurance-assist-find-out-about-insurance-coverage-and-lemon-laws/&quot;&gt;go to website&lt;/a&gt;, [url=&quot;http://buyerremorselaws6665720.towityourself.com/2012/03/making-an-attempt-to-find-automobile-insurance-assist-find-out-about-insurance-coverage-and-lemon-laws/&quot;]go to website[/url], http://buyerremorselaws6665720.towityourself.com/2012/03/making-an-attempt-to-find-automobile-insurance-assist-find-out-about-insurance-coverage-and-lemon-laws/ go to website,  737, &lt;a href=&quot;http://buyerremorselaws615823.garyrharmon.com/2012/03/making-an-attempt-to-discover-car-insurance-coverage-help-learn-about-insurance-and-lemon-laws/&quot;&gt;click here&lt;/a&gt;, [url=&quot;http://buyerremorselaws615823.garyrharmon.com/2012/03/making-an-attempt-to-discover-car-insurance-coverage-help-learn-about-insurance-and-lemon-laws/&quot;]click here[/url], http://buyerremorselaws615823.garyrharmon.com/2012/03/making-an-attempt-to-discover-car-insurance-coverage-help-learn-about-insurance-and-lemon-laws/ click here,  957,
+	<div class="commentinfo">
+-- email (2012-03-14 18:16:38)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27433"></span>Hello all,&lt;br /&gt; I am considering buying a bodybugg. Though from what I have read so far, it seems the LARGE amount of money and the technical/buisness buggs, I will wait and hope to buy one in the future. One major comment I have is to say that I find it unacceptable to charge customers who put down $400.00 for a device to continue having to pay a monthly/yearly etc.. subscription to actually use the device especially after only 3 months AND especially considering the bugs involved. I would also like to note that it appears $200 of the $400 is spent on teaching the consumer how to use the device and taking control over how they can use it.. So I do not consider this a sound investment I get the sense that it is a great device but the price is arrogantly set far to high for the average consumer to access. So I will wait and see. Thanks for all the reviews. I hope this was appropriate., &lt;a href=&quot;http://buyerremorselaws588666.wheelsforsales.com/2012/03/trying-to-discover-car-insurance-coverage-aid-find-out-about-insurance-coverage-and-lemon-laws/&quot;&gt;lemon law information&lt;/a&gt;, [url=&quot;http://buyerremorselaws588666.wheelsforsales.com/2012/03/trying-to-discover-car-insurance-coverage-aid-find-out-about-insurance-coverage-and-lemon-laws/&quot;]lemon law information[/url], http://buyerremorselaws588666.wheelsforsales.com/2012/03/trying-to-discover-car-insurance-coverage-aid-find-out-about-insurance-coverage-and-lemon-laws/ lemon law information,  kalg, &lt;a href=&quot;http://buyerremorselaws22513.enlightening-films.com/2012/03/making-an-attempt-to-discover-car-insurance-coverage-support-learn-about-insurance-and-lemon-laws/&quot;&gt;lemon law information&lt;/a&gt;, [url=&quot;http://buyerremorselaws22513.enlightening-films.com/2012/03/making-an-attempt-to-discover-car-insurance-coverage-support-learn-about-insurance-and-lemon-laws/&quot;]lemon law information[/url], http://buyerremorselaws22513.enlightening-films.com/2012/03/making-an-attempt-to-discover-car-insurance-coverage-support-learn-about-insurance-and-lemon-laws/ lemon law information,  :[[,
+	<div class="commentinfo">
+-- email (2012-03-14 18:16:45)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27478"></span>I have had my BodyBugg for 6 weeks. I've lost 15 lbs. in those six weeks. I have not had a single problem. I just know that I can't use my beloved Firefox for full functionality  it works consistently with IE7 or IE8. I wear it 24/7 except when I'm showering. I've really changed my eating habits because I know my coach peeks in on my progress and I'd be really embarrassed if she saw all of the junk I used to eat or I didn't show a deficit for every day. I have added over 100 of my own foods since I eat Nutrisystem food (for the convenience of having variety and controlled portions without having to cook) and it's not in their food database. I still eat my favorite junk  just in controlled portions  which I never thought I could do because I am a mindless overeater. I'm just scared that it only takes seconds to consume more calories than I can burn. So I'm obsessively careful., &lt;a href=&quot;http://omohpc.com/2012/03/10/some-advantages-of-payday-loans/&quot;&gt;online cash advances&lt;/a&gt;, [url=&quot;http://omohpc.com/2012/03/10/some-advantages-of-payday-loans/&quot;]online cash advances[/url], http://omohpc.com/2012/03/10/some-advantages-of-payday-loans/ online cash advances,  tutzr, &lt;a href=&quot;http://acmat-cero.com/?p=214&quot;&gt;quick payday loans&lt;/a&gt;, [url=&quot;http://acmat-cero.com/?p=214&quot;]quick payday loans[/url], http://acmat-cero.com/?p=214 quick payday loans,  :D, &lt;a href=&quot;http://anokaflowers.com/?p=569&quot;&gt;quick cash advances&lt;/a&gt;, [url=&quot;http://anokaflowers.com/?p=569&quot;]quick cash advances[/url], http://anokaflowers.com/?p=569 quick cash advances,  98816,
+	<div class="commentinfo">
+-- vzhost (2012-03-14 19:10:00)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27494"></span>Advice- it works, but slower than they say and hire someone whose staff understands adult work schedules., &lt;a href=&quot;http://4asaferidehome.com/?p=846&quot;&gt;quick cash lenders&lt;/a&gt;, [url=&quot;http://4asaferidehome.com/?p=846&quot;]quick cash lenders[/url], http://4asaferidehome.com/?p=846 quick cash lenders,  47951, &lt;a href=&quot;http://anokaflowers.com/?p=569&quot;&gt;online payday loans&lt;/a&gt;, [url=&quot;http://anokaflowers.com/?p=569&quot;]online payday loans[/url], http://anokaflowers.com/?p=569 online payday loans,  dhax,
+	<div class="commentinfo">
+-- email (2012-03-14 19:10:03)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27517"></span>naturally like your web site however you have to test the spelling on quite a few of your posts. Several of them are rife with spelling issues and I to find it very bothersome to tell the reality then again I will definitely come again again., &lt;a href=&quot;http://infosplat.com/banishtonsilstonesreview.php&quot;&gt;get rid of tonsil stones&lt;/a&gt;, [url=&quot;http://infosplat.com/banishtonsilstonesreview.php&quot;]get rid of tonsil stones[/url], http://infosplat.com/banishtonsilstonesreview.php get rid of tonsil stones,  %[[,
+	<div class="commentinfo">
+-- email (2012-03-15 03:47:02)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27548"></span>Kristi,&lt;br /&gt;Congrats! So far I'm liking your &quot;new&quot; blog. It seems more organized. The only thing I don't like is the google advertising between each category on the Home page. I know that the goal is to have us click on an ad, but when they look like something to click on within your post it can get confusing. I'm looking forward to checking out more of your blog., &lt;a href=&quot;http://infosplat.com/yeastinfectionnomorereview.php|yeast infection no more&quot;&gt;learn more&lt;/a&gt;, [url=&quot;http://infosplat.com/yeastinfectionnomorereview.php|yeast infection no more&quot;]learn more[/url], http://infosplat.com/yeastinfectionnomorereview.php|yeast infection no more learn more,  151,
+	<div class="commentinfo">
+-- email (2012-03-15 03:47:09)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27646"></span>Salam. setuju sangat2. tapi saya guna intense debate comment. takut tak compatible plak..., &lt;a href=&quot;http://buildingmusclestherightway.net&quot;&gt;muscle maximizer review&lt;/a&gt;, [url=&quot;http://buildingmusclestherightway.net&quot;]muscle maximizer review[/url], http://buildingmusclestherightway.net muscle maximizer review,  8-P,
+	<div class="commentinfo">
+-- email (2012-03-16 05:11:24)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27755"></span>A different issue is really that video gaming became one of the all-time main forms of recreation for people spanning various ages. Kids enjoy video games, and adults do, too. The particular XBox 360 is probably the favorite gaming systems for many who love to have a lot of activities available to them, as well as who like to learn live with other individuals all over the world. Many thanks for sharing your thinking opserfd., &lt;a href=&quot;http://naturalremedyreviewsnow.net&quot;&gt;natural remedies reviewed&lt;/a&gt;, [url=&quot;http://naturalremedyreviewsnow.net&quot;]natural remedies reviewed[/url], http://naturalremedyreviewsnow.net natural remedies reviewed,  54328,
+	<div class="commentinfo">
+-- vzhost (2012-03-16 13:40:29)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27833"></span>lengthy logbook you take in, &lt;a href=&quot;http://latestmusclebuildingreviews.net&quot;&gt;anabolic cooking fast&lt;/a&gt;, [url=&quot;http://latestmusclebuildingreviews.net&quot;]anabolic cooking fast[/url], http://latestmusclebuildingreviews.net anabolic cooking fast,  %((,
+	<div class="commentinfo">
+-- email (2012-03-16 23:50:32)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_27997"></span>bhUm3C  &lt;a href=&quot;http://hqkbhewtmfkw.com/&quot;&gt;hqkbhewtmfkw&lt;/a&gt;, [url=http://rdspaftelskw.com/]rdspaftelskw[/url], [link=http://isitnlyswjej.com/]isitnlyswjej[/link], http://fiytsszhlwtm.com/
+	<div class="commentinfo">
+-- email (2012-03-17 09:46:52)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_28239"></span>I have a simple request for you Ross, comment again three months after you've run the Groupon with your hard facts and figures., &lt;a href=&quot;http://capsiplexreviews-blog.info/&quot;&gt;Capsiplex Diet&lt;/a&gt;, [url=&quot;http://capsiplexreviews-blog.info/&quot;]Capsiplex Diet[/url], http://capsiplexreviews-blog.info/ Capsiplex Diet,  3567,
+	<div class="commentinfo">
+-- vzhost (2012-03-19 20:26:46)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_28379"></span>In learning recently about non-hydrogenated coconut oil to help my Dad with his dementia, I have read about how coconut oil has anti-fungal properties  there is a &quot;die-off&quot; which will occur if fungus is present in the body. I was wondering if there has been any study as to whether fungus could be a factor in dementia. If the person had taken anti-biotics and subsequently was vulnerable to fungal infection if nothing was done to prevent it  i.e., taking yogurt with &quot;good&quot; bacteria?&lt;br /&gt;What if when a person is treated for endocarditis and receives antibiotics that it could actually be the fungus that affects the brain, not just the inflammation or infection from the heart? Could various forms of dementia, whether Alzheimer's or other kinds be brought on by some kind of fungus  opportunistically attacking a brain that may already be fighting other battles., &lt;a href=&quot;http://africanmangoaustraliareviews.info/&quot;&gt;african mango diet&lt;/a&gt;, [url=&quot;http://africanmangoaustraliareviews.info/&quot;]african mango diet[/url], http://africanmangoaustraliareviews.info/ african mango diet,  =PP,
+	<div class="commentinfo">
+-- email (2012-03-20 04:36:42)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_28478"></span>Que onda, la verdad, no quiero dejar mi nombre, pero les explicare mi caso, despues de algunos problemas sufri de ansiedad y subi mucho de peso, asi que desde los 7 anios eh sido gordo, despues del tiempo, sin hacer dieta, solamente comiendo sano como la gente normal baje 12 kilos, pesaba 97kg y baje a 85kg midiendo como 1.73 aun me veia gordito pero no tanto, pero despues volvi a caer en deprecion y rebote de estar en 85kg por descuidarme y comer compulsivamente, en ciestion de aproximadamente 3 o 4 meses ya pesaba 115kg bastante! Cerca de 30kg, no lo creia y volvi a comer bien y en cerca de 4 meses guau ya pesaba 105 kg y en 6 meses ya pesaba 102, todo iba perfecto, pero al cambiarme de ciudad, deje de hacer ejercicio y en las vacaciones pesaba 107kg aproximadamente y despues volvi a subir ahora pesando 112kg!! Fatal y terrible!!! Ya que yo soy muy joven ya me esta empezando a afectar, pero empeze la dieta special K hace 5 dias, les puedo decir que si sirve! Ya eh bajado 1kg o un poco mas, pero siguiendo las instrucciones, desayunando solo special K, comiendo bien, carnes frutas y verduras, y cenando special K,y tomando mucha agua, no eh podido hacer ejercicio, pero tratare de empezar de nuevo, no dejare la dieta pues quiero bajar 12 o 20 kilos, bastante no creen?, no quiero bajar hasta mi peso ideal por que no me conviene por el deporte que juego, pero se los digo, hagan esta dieta! Antes de que tengan un sobrepeso como el mio, hagan ejercicio! Y coman bien, mido 1.81 y peso 111kg despues de un mes dire mis resultados, &lt;a href=&quot;http://samtrontbab.over-blog.com/article-hello-101914995.html&quot;&gt;slimweight patch&lt;/a&gt;, [url=&quot;http://samtrontbab.over-blog.com/article-hello-101914995.html&quot;]slimweight patch[/url], http://samtrontbab.over-blog.com/article-hello-101914995.html slimweight patch,  8-))), &lt;a href=&quot;http://www.flukiest.com/media?f_blog_id=566524&quot;&gt;slim weight patch reviews&lt;/a&gt;, [url=&quot;http://www.flukiest.com/media?f_blog_id=566524&quot;]slim weight patch reviews[/url], http://www.flukiest.com/media?f_blog_id=566524 slim weight patch reviews,  %-[[[,
+	<div class="commentinfo">
+-- email (2012-03-20 15:26:43)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_28571"></span>Maybe check out &quot;Astro&quot; in the market? &quot;Back up and restore public applications to the SD card&quot; ASTRO File Manager Android App Review by AndroidTapp.com | Android Tapp. Android App Reviews, &lt;a href=&quot;http://www.savewrt.com/index_files/online_business_help.htm&quot;&gt;Instant Payday Loans Online&lt;/a&gt;, [url=&quot;http://www.savewrt.com/index_files/online_business_help.htm&quot;]Instant Payday Loans Online[/url], http://www.savewrt.com/index_files/online_business_help.htm Instant Payday Loans Online,  %],
+	<div class="commentinfo">
+-- email (2012-03-20 18:59:29)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_28819"></span>Sandy,&lt;br /&gt;Sorry to hear about your friend. I don't have an answer for you and haven't heard about Lupus and wheat. But that doesn't mean there's no connection. Wheat seems to have negative impacts on the immune system so just about anything could possibly be affected by it. Why don't you try some online searches. Also, maybe there is more info at Dr. Davis's website: Wheat Belly Blog.&lt;br /&gt;Good luck!&lt;br /&gt;...Joe..., &lt;a href=&quot;http://smallsolarpanelsblog.com/slimweightpatch/&quot;&gt;Buy Slim Weight Patch&lt;/a&gt;, [url=&quot;http://smallsolarpanelsblog.com/slimweightpatch/&quot;]Buy Slim Weight Patch[/url], http://smallsolarpanelsblog.com/slimweightpatch/ Buy Slim Weight Patch,  8-))),
+	<div class="commentinfo">
+-- email (2012-03-21 22:09:16)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_28890"></span>I have been approached by several of these website coupon groups and have always refused to participate because it seems like such a bad deal for the business. I can understand how a business person could be swayed by these groups if they are economically weak and desperate for new business. I am glad to see that my gut feelings about these operators are correct  a terrible deal for me, and that's why I avoid them like the plague., &lt;a href=&quot;http://thecloudharvester.com/how-does-capsiplex-compare-to-other-weight-loss-pills/&quot;&gt;Capsiplex Information&lt;/a&gt;, [url=&quot;http://thecloudharvester.com/how-does-capsiplex-compare-to-other-weight-loss-pills/&quot;]Capsiplex Information[/url], http://thecloudharvester.com/how-does-capsiplex-compare-to-other-weight-loss-pills/ Capsiplex Information,  urm, &lt;a href=&quot;http://www.myarticlesource.info/2012/03/why-decide-on-capsiplex-more-than-other-supplements/&quot;&gt;Capsiplex Review&lt;/a&gt;, [url=&quot;http://www.myarticlesource.info/2012/03/why-decide-on-capsiplex-more-than-other-supplements/&quot;]Capsiplex Review[/url], http://www.myarticlesource.info/2012/03/why-decide-on-capsiplex-more-than-other-supplements/ Capsiplex Review,  58558,
+	<div class="commentinfo">
+-- vzhost (2012-03-21 23:15:43)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_29141"></span>Having only made one purchase via groupon for a a very low value box of greetings cards my customer experience is extremely poor. it wasn`t clear that on placing the order, providing a delivery address and paying that I had to do anything else but await the delivery of said cards. Did they arrive, no they didn`t. Groupon customer service has just been polite but not helpful. I am just wasting time trying to recover my out going. I would not use the service and would not actively encourage my clients to do so., &lt;a href=&quot;http://www.articles-digest.com/capsiplex-pills-an-efficient-supplement-for-weight-loss/&quot;&gt;Capsiplex Review&lt;/a&gt;, [url=&quot;http://www.articles-digest.com/capsiplex-pills-an-efficient-supplement-for-weight-loss/&quot;]Capsiplex Review[/url], http://www.articles-digest.com/capsiplex-pills-an-efficient-supplement-for-weight-loss/ Capsiplex Review,  761333,
+	<div class="commentinfo">
+-- email (2012-03-22 20:08:29)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_29393"></span>At 73 I am so unhappy with my life. Fat, alone, and just miserable. I try to walk but it hurts when I am so fat. I used to use my above gr. pool. Too fat now. I saw this green drink and I want to live and be healthy so I will try it if NO MATTER WHAT IT TASTES LIKE. I have all the ing. here now so with Gods help.... I will get back with you in a week and let you know how I am doing. I am the only one in my family ALMOST healthy,,, just fat. Sister and Bro. have had heart surgeries, one has pulminary fibrosis, daughter trying to get into Mayo Clinic with serious healthy problems. Wish Me luck God Bless, &lt;a href=&quot;http://makita2012nb.com/&quot;&gt;cool link&lt;/a&gt;, [url=&quot;http://makita2012nb.com/&quot;]cool link[/url], http://makita2012nb.com/ cool link,  187656,
+	<div class="commentinfo">
+-- email (2012-03-23 16:33:45)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_29459"></span>Very good article. Keep up the good work, &lt;a href=&quot;http://magicmeshcurtain.org/the-all-new-magic-mesh-curtain/&quot;&gt;my link&lt;/a&gt;, [url=&quot;http://magicmeshcurtain.org/the-all-new-magic-mesh-curtain/&quot;]my link[/url], http://magicmeshcurtain.org/the-all-new-magic-mesh-curtain/ my link,  662,
+	<div class="commentinfo">
+-- email (2012-03-23 23:04:19)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_29582"></span>I bought the bodybugg in January and it worked for approx 3 months and then I started getting an error message when uploading calories saying the device could not connect to the server. Technical support has been useless. They have not corrected the problem. They don't even know what the problem is and I have a useless device. It has been awful., &lt;a href=&quot;http://www.bestbackgroundchecks.net/83/how-to-conduct-the-best-background-check/&quot;&gt;free background check online&lt;/a&gt;, [url=&quot;http://www.bestbackgroundchecks.net/83/how-to-conduct-the-best-background-check/&quot;]free background check online[/url], http://www.bestbackgroundchecks.net/83/how-to-conduct-the-best-background-check/ free background check online,  472310, &lt;a href=&quot;http://www.backgroundchecksfreeblog.net&quot;&gt;100 free background check&lt;/a&gt;, [url=&quot;http://www.backgroundchecksfreeblog.net&quot;]100 free background check[/url], http://www.backgroundchecksfreeblog.net 100 free background check,  vjea,
+	<div class="commentinfo">
+-- email (2012-03-24 00:11:50)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_30404"></span>All of our content is available to be republished on other online resources as long as our domain is placed in the resource box., &lt;a href=&quot;http://www.1hourpaydayloansonline.com/wonders-1-hour-payday-loans-online/&quot;&gt;top payday loans&lt;/a&gt;, [url=&quot;http://www.1hourpaydayloansonline.com/wonders-1-hour-payday-loans-online/&quot;]top payday loans[/url], http://www.1hourpaydayloansonline.com/wonders-1-hour-payday-loans-online/ top payday loans,  =],
+	<div class="commentinfo">
+-- email (2012-03-27 21:01:58)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_30701"></span>I am 18 and I think I will to start body building. Most of my friends seem to be stronger then myself so I am going to change that. But someone who lifts weights recently had said to me that weightlifting could stunt my growth, so I definitely want to be sure if that is not a lie?, &lt;a href=&quot;http://magicmeshcurtain.org/the-all-new-magic-mesh-curtain/&quot;&gt;where to buy magic mesh&lt;/a&gt;, [url=&quot;http://magicmeshcurtain.org/the-all-new-magic-mesh-curtain/&quot;]where to buy magic mesh[/url], http://magicmeshcurtain.org/the-all-new-magic-mesh-curtain/ where to buy magic mesh,  alxc,
+	<div class="commentinfo">
+-- email (2012-03-28 20:01:37)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_30877"></span>For some reason I wasn't able to subscribe to your feed, the button wasn't working. I did however subscribe to get your email, I hope that is ok for the contest. Great blog!, &lt;a href=&quot;http://latestbyte.com/blog/view/46812/home-repairs-and-improvements-you-should-consider-when-selling-your-home-in-madison-wi&quot;&gt;Middleton Real Estate&lt;/a&gt;, [url=&quot;http://latestbyte.com/blog/view/46812/home-repairs-and-improvements-you-should-consider-when-selling-your-home-in-madison-wi&quot;]Middleton Real Estate[/url], http://latestbyte.com/blog/view/46812/home-repairs-and-improvements-you-should-consider-when-selling-your-home-in-madison-wi Middleton Real Estate,  2760, &lt;a href=&quot;http://inlocaltv.com/blog/view/7150/finding-the-most-reliable-real-estate-broker-to-list-your-current-house&quot;&gt;Real Estate in Madison Wisconsin&lt;/a&gt;, [url=&quot;http://inlocaltv.com/blog/view/7150/finding-the-most-reliable-real-estate-broker-to-list-your-current-house&quot;]Real Estate in Madison Wisconsin[/url], http://inlocaltv.com/blog/view/7150/finding-the-most-reliable-real-estate-broker-to-list-your-current-house Real Estate in Madison Wisconsin,  759143, &lt;a href=&quot;http://latestbyte.com/blog/view/47709/steps-with-regard-to-successful-real-estate-shelling-out-for-beginners&quot;&gt;Madison Wi Condos for Sale&lt;/a&gt;, [url=&quot;http://latestbyte.com/blog/view/47709/steps-with-regard-to-successful-real-estate-shelling-out-for-beginners&quot;]Madison Wi Condos for Sale[/url], http://latestbyte.com/blog/view/47709/steps-with-regard-to-successful-real-estate-shelling-out-for-beginners Madison Wi Condos for Sale,  967032,
+	<div class="commentinfo">
+-- vzhost (2012-03-29 22:34:24)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_31227"></span>Very inspiring story about Jennifer. Weight Watchers is an excellent choice to get started and so is the South Beach program. The main point is to get started!, &lt;a href=&quot;http://articles.businessflips.com/new-post-reveals-the-low-down-on-madison-wi-real-estate&quot;&gt;real estate agency&lt;/a&gt;, [url=&quot;http://articles.businessflips.com/new-post-reveals-the-low-down-on-madison-wi-real-estate&quot;]real estate agency[/url], http://articles.businessflips.com/new-post-reveals-the-low-down-on-madison-wi-real-estate real estate agency,  8-PPP, &lt;a href=&quot;http://gadjetshops.com/the-finest-of-madison-wi-real-estate-agents/&quot;&gt;real estate&lt;/a&gt;, [url=&quot;http://gadjetshops.com/the-finest-of-madison-wi-real-estate-agents/&quot;]real estate[/url], http://gadjetshops.com/the-finest-of-madison-wi-real-estate-agents/ real estate,  teh, &lt;a href=&quot;http://borisdimitrijevic.com/2012/04/04/beyond-downtown-exploring-life-and-real-estate-in-madison-wisconsin/&quot;&gt;real estate broker&lt;/a&gt;, [url=&quot;http://borisdimitrijevic.com/2012/04/04/beyond-downtown-exploring-life-and-real-estate-in-madison-wisconsin/&quot;]real estate broker[/url], http://borisdimitrijevic.com/2012/04/04/beyond-downtown-exploring-life-and-real-estate-in-madison-wisconsin/ real estate broker,  dodw,
+	<div class="commentinfo">
+-- vzhost (2012-04-04 21:15:47)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_31493"></span>5RFFNM Fantastic blog post. Much obliged.
+	<div class="commentinfo">
+-- vzhost (2012-04-06 22:30:18)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_31606"></span>IQi7LM Very informative blog. Will read on...
+	<div class="commentinfo">
+-- vzhost (2012-04-07 02:53:41)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_34204"></span>NIozv5 Really enjoyed this post.Much thanks again. Great.
+	<div class="commentinfo">
+-- vzhost (2012-04-18 16:04:01)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_34339"></span>kDa1k6 I value the post.Much thanks again. Great.
+	<div class="commentinfo">
+-- vzhost (2012-04-18 20:35:12)
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_48387"></span>jbI6xl  &lt;a href=&quot;http://zllpxfldpxho.com/&quot;&gt;zllpxfldpxho&lt;/a&gt;, [url=http://lkbyynevaftq.com/]lkbyynevaftq[/url], [link=http://bcrukpqheidp.com/]bcrukpqheidp[/link], http://fvxniprllxqb.com/
+	<div class="commentinfo">
+-- localhost.localdomain (2013-01-02 16:58:08)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="48387" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93304"></span>Wonderful blog post and certainly will help with becoming familiar with the subject better.<br />
+this page http://cashahij969blog.blog2learn.com/9038757/these-web-based-shopping-ideas-are-the-best-around
+	<div class="commentinfo">
+-- localhost.localdomain (2017-11-28 22:08:45)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_5">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93304" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93412"></span>Good blog, 47bce5c74f589f4867dbd57e9ca9f808, &lt;a href=&quot;http://hdj39dkwoq7h3nma10ikdrn.com&quot;&gt;check&lt;/a&gt;
+	<div class="commentinfo">
+-- localhost.localdomain (2018-04-17 01:26:07)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_6">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93412" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93680"></span>r8OScU https://www.genericpharmacydrug.com
+	<div class="commentinfo">
+-- localhost.localdomain (2018-05-11 21:48:00)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_7">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93680" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93698"></span>MeOPQH  &lt;a href=&quot;http://atbtmaekpdim.com/&quot;&gt;atbtmaekpdim&lt;/a&gt;, [url=http://hoywciedjdqt.com/]hoywciedjdqt[/url], [link=http://aospwjcgfdoq.com/]aospwjcgfdoq[/link], http://feouicurecfx.com/
+	<div class="commentinfo">
+-- localhost.localdomain (2018-05-13 11:34:03)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_8">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93698" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93714"></span>go8KWQ  &lt;a href=&quot;http://zobesnbrgpxk.com/&quot;&gt;zobesnbrgpxk&lt;/a&gt;, [url=http://awswfmmqslkx.com/]awswfmmqslkx[/url], [link=http://udtehkmhiowr.com/]udtehkmhiowr[/link], http://zfhrdesydiyl.com/
+	<div class="commentinfo">
+-- localhost.localdomain (2018-05-13 13:16:36)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_9">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93714" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93731"></span>HGKdUr  &lt;a href=&quot;http://ihtmohsibsdk.com/&quot;&gt;ihtmohsibsdk&lt;/a&gt;, [url=http://zmoccfzxstsx.com/]zmoccfzxstsx[/url], [link=http://pzinihfpsttc.com/]pzinihfpsttc[/link], http://tsnzovpjdhcl.com/
+	<div class="commentinfo">
+-- localhost.localdomain (2018-05-13 14:58:14)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_10">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93731" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93746"></span>sjQ3Mr  &lt;a href=&quot;http://fnrirshgfpkc.com/&quot;&gt;fnrirshgfpkc&lt;/a&gt;, [url=http://jmgbzgcobexi.com/]jmgbzgcobexi[/url], [link=http://biberegyotqn.com/]biberegyotqn[/link], http://iokpzjiomjve.com/
+	<div class="commentinfo">
+-- localhost.localdomain (2018-05-13 16:39:11)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_11">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93746" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93763"></span>dTleSS  &lt;a href=&quot;http://genyvdbyfrdy.com/&quot;&gt;genyvdbyfrdy&lt;/a&gt;, [url=http://moldzdpbpwpg.com/]moldzdpbpwpg[/url], [link=http://vdioqgrdpftl.com/]vdioqgrdpftl[/link], http://bwfppohyhnje.com/
+	<div class="commentinfo">
+-- localhost.localdomain (2018-05-13 17:16:02)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_12">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93763" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93807"></span>TCHYYd  &lt;a href=&quot;http://ictccrxzqzal.com/&quot;&gt;ictccrxzqzal&lt;/a&gt;, [url=http://wpdgolwupqrc.com/]wpdgolwupqrc[/url], [link=http://xvxfsypuiwcm.com/]xvxfsypuiwcm[/link], http://jxusvkashjgu.com/
+	<div class="commentinfo">
+-- localhost.localdomain (2018-05-18 04:45:14)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_13">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93807" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93815"></span>dYdGmS  &lt;a href=&quot;http://ogbeuivaqcpp.com/&quot;&gt;ogbeuivaqcpp&lt;/a&gt;, [url=http://nicctbspjypa.com/]nicctbspjypa[/url], [link=http://weqijffqiwuv.com/]weqijffqiwuv[/link], http://xaaueidnklus.com/
+	<div class="commentinfo">
+-- localhost.localdomain (2018-05-18 07:59:39)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_14">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93815" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93833"></span>5VirtY  &lt;a href=&quot;http://vkiondccjhya.com/&quot;&gt;vkiondccjhya&lt;/a&gt;, [url=http://blsbawihfbbi.com/]blsbawihfbbi[/url], [link=http://lqlpddsoerwh.com/]lqlpddsoerwh[/link], http://vvcgsszmwdbq.com/
+	<div class="commentinfo">
+-- localhost.localdomain (2018-05-18 09:52:57)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_15">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93833" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93895"></span>Other amount &lt;a href=&quot; https://www.drugonsale.com &quot;&gt;cialis&lt;/a&gt;  âMiriam is at the mercy of what people give her,â says Dubbs, a Central Park West resident who is also a client. âAnything you send her, whatever you think sheâs going to do with it, she does something completely different.â
+	<div class="commentinfo">
+-- localhost.localdomain (2018-05-26 12:32:12)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_16">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93895" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93900"></span>Could I order a new chequebook, please? https://www.drugonsale.com purchase medication online<br />  The Department for Culture, Media and Sport (DCMS), said the project would try to benefit as many as possible, but acknowledged on Tuesday that it would, &ldquo;not be able to reach every area currently without mobile coverage.&quot;
+	<div class="commentinfo">
+-- localhost.localdomain (2018-05-26 13:00:01)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_17">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93900" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93927"></span>I don't like pubs &lt;a href=&quot; https://www.drugonsale.com#drown &quot;&gt;kamagra&lt;/a&gt;  Shareholders stand to receive $35 per Cooper share, a premium of more than 40 percent to its price before the acquisition announcement on June 12. Cooper shares rose 3.5 percent to a high of $31.44 after the shareholder meeting on Monday, before closing at $30.80.
+	<div class="commentinfo">
+-- localhost.localdomain (2018-06-08 14:54:26)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_18">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93927" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_93931"></span>A law firm https://www.drugonsale.com purchase medication online<br />  Backed by Norway's Altor, Cercley said Rossignol had abetter chance of elbowing its way into an outdoor clothingmarket crowded by brands such as The North Face, Patagonia,Columbia and, at the high-end, IPO-candidate Moncler.
+	<div class="commentinfo">
+-- localhost.localdomain (2018-06-08 15:23:04)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_19">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="93931" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="comment">
+<span id="comment_107049"></span>jBRD0J I was recommended this website by my cousin. I am not sure whether this post is written by him as no one else know such detailed about my problem. You are incredible! Thanks!
+	<div class="commentinfo">
+-- localhost.localdomain (2018-12-21 10:09:03)
+<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/delcomment" method="post" id="form_cc76d2fcb0_20">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+   <input type="hidden" name="comment_id" value="107049" />
+   <input type="submit" value="Delete Comment" />
+</form>
+
+	</div>
+</div>
+<div class="commentform">
+		    			<form action="http://nitro-nitf.sourceforge.net/wikka.php?wakka=AddTreToRecord20C/addcomment" method="post" id="form_160c5c5a54">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="AddTreToRecord20C" />
+</fieldset>
+					<label for="commentbox">Add a comment to this page:<br />
+					<textarea id="commentbox" name="body" rows="6" cols="78"></textarea><br />
+					<input type="submit" value="Add Comment" accesskey="s" />
+            			</label>
+					</form>
+				</div>
+<div class="footer">
+<form action="wikka.php?wakka=AddTreToRecord20C" id="form_c2b696fff2">
+<fieldset class="hidden">
+	<input type="hidden" name="wakka" value="TextSearch" />
+</fieldset>
+<a href="wikka.php?wakka=AddTreToRecord20C%252Fhistory" title="Click to view recent edits to this page">Page History</a> ::
+<a class="datetime" href="wikka.php?wakka=AddTreToRecord20C%252Frevisions" title="Click to view recent revisions list for this page">2014-11-04 16:26:43</a> <a href="wikka.php?wakka=AddTreToRecord20C%252Frevisions.xml" title="Click to display a feed with the latest revisions to this page."><img src="images/xml.png" class="icon" width="36" height="14" alt="feed icon" /></a> ::
+Owner: <a href="wikka.php?wakka=NitroAdmin">NitroAdmin</a> ::
+
+ 
+Search: <input name="phrase" size="15" class="searchbox" />
+</form>
+</div>
+<div class="smallprint">
+<a class="ext" href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Transitional</a><span class="exttail">&#8734;</span> ::
+<a class="ext" href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a><span class="exttail">&#8734;</span> ::
+Powered by <a class="ext" href="http://wikkawiki.org/">Wikka Wakka Wiki 1.1.6.4</a><span class="exttail">&#8734;</span></div>
+<div style="float:left;">
+<a href="http://sourceforge.net/" target="_blank" title="The world's largest development and download repository of Open Source code and applications"><img style="width: 151px; height: 38px;" src="http://web.sourceforge.com/images/footer/source.gif" alt="SourceForge.net" class="pad28" border="0" height="38" width="151"></a>
+</div>
+<div class="smallprint">Page was generated in 0.0663 seconds</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3779761-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/nitro-nitf/" : "http://apps.sourceforge.net/piwik/nitro-nitf/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/nitro-nitf/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+</body>
+</html>
