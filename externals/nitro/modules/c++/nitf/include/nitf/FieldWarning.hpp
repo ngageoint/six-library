@@ -84,8 +84,6 @@ public:
         setManaged(false);
     }
 
-    ~FieldWarning(){}
-
     //! Get the fileOffset
     nitf::Off getFileOffset() const
     {

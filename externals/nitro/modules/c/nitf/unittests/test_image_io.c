@@ -27,16 +27,16 @@ typedef struct TestSpec
 {
     // Image spec
     const char* imageMode;
-    nitf_Uint32 bitsPerPixel;
+    uint32_t bitsPerPixel;
     char* pixels;
-    nitf_Uint64 imageSize;
-    nitf_Uint32 numBands;
+    uint64_t imageSize;
+    uint32_t numBands;
 
     // Read request
-    nitf_Uint32 startRow;
-    nitf_Uint32 numRows;
-    nitf_Uint32 startCol;
-    nitf_Uint32 numCols;
+    uint32_t startRow;
+    uint32_t numRows;
+    uint32_t startCol;
+    uint32_t numCols;
 
     const char* expectedRead;
 } TestSpec;
@@ -50,8 +50,8 @@ typedef struct TestState
     nitf_ImageIO* imageIO;
     nitf_IOInterface* interface;
     nitf_SubWindow* subwindow;
-    nitf_Uint32 numBands;
-    nitf_Uint32* bandList;
+    uint32_t numBands;
+    uint32_t* bandList;
     nitf_BandInfo** band;
 } TestState;
 
@@ -76,10 +76,16 @@ TestState* constructTestSubheader(TestSpec* spec)
                                     spec->imageMode,
                                     &error);
 
-    state->band = malloc(sizeof(nitf_BandInfo) * spec->numBands);
+    void* band_ = malloc(sizeof(nitf_BandInfo) * spec->numBands);
+    state->band =
+#ifdef __cplusplus
+        static_cast<nitf_BandInfo**>(band_);
+#else
+        band_;
+#endif
     assert(state->band);
 
-    nitf_Uint32 band;
+    uint32_t band;
     for (band = 0; band < spec->numBands; ++band)
     {
         state->band[band] = nitf_BandInfo_construct(&error);
@@ -125,7 +131,13 @@ TestState* constructTestSubheader(TestSpec* spec)
     state->interface = io;
     state->subwindow = subwindow;
     state->numBands = spec->numBands;
-    state->bandList = malloc(state->numBands * sizeof(nitf_Uint32));
+    void* bandList_ = malloc(state->numBands * sizeof(uint32_t));
+    state->bandList =
+#ifdef __cplusplus
+        static_cast<uint32_t*>(bandList_);
+#else
+        bandList_;
+#endif
     for (band = 0; band < state->numBands; ++band)
     {
         state->bandList[band] = band;
@@ -146,7 +158,7 @@ void freeTestState(TestState* state)
     free(state);
 }
 
-void freeBands(nitf_Uint8** bands, size_t numBands)
+void freeBands(uint8_t** bands, size_t numBands)
 {
     size_t bandIndex;
     for (bandIndex = 0; bandIndex < numBands; ++bandIndex)
@@ -159,12 +171,12 @@ void freeBands(nitf_Uint8** bands, size_t numBands)
     free(bands);
 }
 
-static nitf_Uint8** allocateBands(size_t numBands, size_t bytesPerBand)
+static uint8_t** allocateBands(size_t numBands, size_t bytesPerBand)
 {
     size_t bandIndex;
     int success = 1;
 
-    nitf_Uint8** bands = (nitf_Uint8**)calloc(numBands, sizeof(nitf_Uint8 *));
+    uint8_t** bands = (uint8_t**)calloc(numBands, sizeof(uint8_t *));
     if (bands == NULL)
     {
         return NULL;
@@ -172,7 +184,7 @@ static nitf_Uint8** allocateBands(size_t numBands, size_t bytesPerBand)
 
     for (bandIndex = 0; bandIndex < numBands; ++bandIndex)
     {
-        bands[bandIndex] = (nitf_Uint8*)calloc(sizeof(nitf_Uint8), bytesPerBand + 1);
+        bands[bandIndex] = (uint8_t*)calloc(sizeof(uint8_t), bytesPerBand + 1);
         if (bands[bandIndex] == NULL)
         {
             success = 0;
@@ -193,9 +205,9 @@ static NITF_BOOL doReadTest(TestSpec* spec, TestState* test)
 {
     NITF_BOOL result = NITF_SUCCESS;
 
-    const nitf_Uint32 numBands = test->subwindow->numBands;
+    const uint32_t numBands = test->subwindow->numBands;
     const size_t bandSize = strlen(spec->expectedRead) / numBands;
-    nitf_Uint8** bands = allocateBands(numBands, bandSize);
+    uint8_t** bands = allocateBands(numBands, bandSize);
     if (bands == NULL)
     {
         return NITF_FAILURE;
@@ -206,15 +218,21 @@ static NITF_BOOL doReadTest(TestSpec* spec, TestState* test)
     nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
                       bands, &padded, &error);
 
-    char* joinedBands = NULL;
-    joinedBands = malloc(strlen(spec->expectedRead) + 1);
+    const size_t joinedBands_sz = strlen(spec->expectedRead) + 1;
+    void* joinedBands_ = malloc(joinedBands_sz);
+    char* joinedBands =
+#ifdef __cplusplus
+        static_cast<char*>(joinedBands_);
+#else
+        joinedBands_;
+#endif
     if (joinedBands)
     {
-        strcpy(joinedBands, (const char*) bands[0]);
-        nitf_Uint32 bandIdx;
+        nrt_strcpy_s(joinedBands, joinedBands_sz, (const char*) bands[0]);
+        uint32_t bandIdx;
         for (bandIdx = 1; bandIdx < numBands; ++bandIdx)
         {
-            strcat(joinedBands, (const char*) bands[bandIdx]);
+            nrt_strcat_s(joinedBands, joinedBands_sz, (const char*) bands[bandIdx]);
         }
         if (strcmp((char *)joinedBands, spec->expectedRead) != 0)
         {
@@ -235,11 +253,11 @@ static NITF_BOOL roundTripTest(TestSpec* spec, TestState* test, char* pixels)
 {
     NITF_BOOL result = NITF_SUCCESS;
     nitf_Error error;
-    const nitf_Uint32 numBands = test->subwindow->numBands;
+    const uint32_t numBands = test->subwindow->numBands;
     nitf_IOInterface* writeIO = NULL;
 
     const size_t bandSize = strlen(spec->expectedRead) / numBands;
-    nitf_Uint8** bands = allocateBands(numBands, bandSize);
+    uint8_t** bands = allocateBands(numBands, bandSize);
     if (bands == NULL)
     {
         return NITF_FAILURE;
@@ -832,7 +850,7 @@ TEST_CASE(testInvalidReadOrderFailsGracefully)
     test->subwindow->bandList[1] = 0;
 
     int padded;
-    nitf_Uint8* user[2] = { 0, 0 };
+    uint8_t* user[2] = { 0, 0 };
     TEST_ASSERT(!nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
                 user, &padded, &error));
     freeTestState(test);
@@ -908,10 +926,10 @@ TEST_CASE(testPBlock4BytePixels)
     }
 }
 
-int main(int argc, char** argv)
-{
-    (void) argc;
-    (void) argv;
+TEST_MAIN(
+    (void)argc;
+    (void)argv;
+
     CHECK(testPBlockOneBand);
     CHECK(testPBlockTwoBands);
     CHECK(testPBlockOffsetBand);
@@ -919,5 +937,4 @@ int main(int argc, char** argv)
     CHECK(testInvalidReadOrderFailsGracefully);
     CHECK(testPBlock4BytePixels);
     CHECK(testTwoBandRoundTrip);
-    return 0;
-}
+    )

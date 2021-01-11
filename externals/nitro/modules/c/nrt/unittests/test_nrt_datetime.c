@@ -27,6 +27,7 @@
 #define NRT_DATE_FORMAT_21  "%Y%j%m%d%H%M%S"
 #define NRT_FDT_SZ 17
 
+/*
 NRTPRIV(void) printDate(nrt_DateTime * date)
 {
     printf("Year: %d\n", date->year);
@@ -39,6 +40,7 @@ NRTPRIV(void) printDate(nrt_DateTime * date)
     printf("Second: %f\n", date->second);
     printf("Millis: %f\n", date->timeInMillis);
 }
+*/
 
 TEST_CASE(testNow)
 {
@@ -239,13 +241,16 @@ TEST_CASE(testMillis)
     TEST_ASSERT_NULL(date);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN
+(
+    (void)argc;
+    (void)argv;
+
     CHECK(testNow);
     CHECK(testFromMillis);
     CHECK(testRoundTrip);
     CHECK(testSetIdentity);
     CHECK(testMillis);
     CHECK(testParseDayOfYearTimeStr)
-    return 0;
-}
+)
+

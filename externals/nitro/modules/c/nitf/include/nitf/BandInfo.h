@@ -116,8 +116,8 @@ NITFAPI(NITF_BOOL) nitf_BandInfo_init(nitf_BandInfo * bandInfo, /*!< The band in
                                       const char *subcategory,          /*!< The band subcategory */
                                       const char *imageFilterCondition, /*!< The band filter condition */
                                       const char *imageFilterCode,      /*!< The band standard image filter code */
-                                      nitf_Uint32 numLUTs,      /*!< The number of look-up tables */
-                                      nitf_Uint32 bandEntriesPerLUT,    /*!< The number of entries/LUT */
+                                      uint32_t numLUTs,      /*!< The number of look-up tables */
+                                      uint32_t bandEntriesPerLUT,    /*!< The number of entries/LUT */
                                       nitf_LookupTable * lut,   /*!< The look-up tables */
                                       nitf_Error * error        /*!< Error object for error returns */
                                      );

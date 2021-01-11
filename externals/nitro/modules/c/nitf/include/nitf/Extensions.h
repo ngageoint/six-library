@@ -254,7 +254,7 @@ nitf_ExtensionsIterator_notEqualTo(nitf_ExtensionsIterator *it1,
  * \param error The error to populate on failure
  * \return the length
  */
-NITFAPI(nitf_Uint32)
+NITFAPI(uint32_t)
 nitf_Extensions_computeLength(nitf_Extensions * ext,
                               nitf_Version fver,
                               nitf_Error * error);

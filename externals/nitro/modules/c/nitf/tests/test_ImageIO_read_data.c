@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 {
     nitf_ImageIO *nitf;                     /* The parent nitf_ImageIO object */
     char errorBuf[NITF_MAX_EMESSAGE];       /* Error buffer */
-    nitf_Uint8 **user;                      /* User buffer list */
+    uint8_t **user;                      /* User buffer list */
     int padded;                             /* Pad pixel present flag */
     nitf_IOHandle fileHandle;               /* I/O handle for reads */
     int ofd;                                /* File descriptor for writes */
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
 
     subWindowSize = (readArgs->nRows) * (readArgs->nColumns) * (newArgs->nBits / 8);
 
-    user = (nitf_Uint8 **) malloc(sizeof(nitf_Uint8 *) * (readArgs->nBands));
+    user = (uint8_t **) malloc(sizeof(uint8_t *) * (readArgs->nBands));
     if (user == NULL)
     {
         fprintf(stderr, "Error allocating user buffer\n");
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 
     for (i = 0;i < readArgs->nBands;i++)
     {
-        user[i] = (nitf_Uint8 *) malloc(subWindowSize);
+        user[i] = (uint8_t *) malloc(subWindowSize);
         if (user[i] == NULL)
         {
             fprintf(stderr, "Error allocating user buffer\n");

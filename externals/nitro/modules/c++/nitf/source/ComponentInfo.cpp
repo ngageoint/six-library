@@ -42,7 +42,7 @@ ComponentInfo::ComponentInfo(nitf_ComponentInfo * x)
     getNativeOrThrow();
 }
 
-ComponentInfo::ComponentInfo(nitf::Uint32 subHeaderSize, nitf::Uint64 dataSize)
+ComponentInfo::ComponentInfo(uint32_t subHeaderSize, uint64_t dataSize)
 {
     setNative(nitf_ComponentInfo_construct(subHeaderSize, dataSize, &error));
     getNativeOrThrow();

@@ -277,8 +277,8 @@ NRTAPI(NRT_DATA *) nrt_List_remove(nrt_List * chain, nrt_ListIterator * where);
  *  \param newIndex the index where the data item will be moved to
  *  \return NRT_SUCCESS on success, or NRT_FAILURE
  */
-NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, nrt_Uint32 oldIndex,
-                               nrt_Uint32 newIndex, nrt_Error * error);
+NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, uint32_t oldIndex,
+                               uint32_t newIndex, nrt_Error * error);
 
 /*!
  *  Return the size of the list
@@ -286,7 +286,8 @@ NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, nrt_Uint32 oldIndex,
  *  \param list The list to check
  *  \return size of the list
  */
-NRTAPI(nrt_Uint32) nrt_List_size(nrt_List * list);
+NRTAPI(uint32_t) nrt_List_size(nrt_List * list);
+NRTAPI(uint16_t) nrt_List_size16(nrt_List* list);
 
 /*!
  *  Return the element at the specified position in the list

@@ -88,22 +88,22 @@ void RESegment::setSubheader(nitf::RESubheader & value)
     value.setManaged(true);
 }
 
-nitf::Uint64 RESegment::getOffset() const
+uint64_t RESegment::getOffset() const
 {
     return getNativeOrThrow()->offset;
 }
 
-void RESegment::setOffset(nitf::Uint64 value)
+void RESegment::setOffset(uint64_t value)
 {
     getNativeOrThrow()->offset = value;
 }
 
-nitf::Uint64 RESegment::getEnd() const
+uint64_t RESegment::getEnd() const
 {
     return getNativeOrThrow()->end;
 }
 
-void RESegment::setEnd(nitf::Uint64 value)
+void RESegment::setEnd(uint64_t value)
 {
     getNativeOrThrow()->end = value;
 }

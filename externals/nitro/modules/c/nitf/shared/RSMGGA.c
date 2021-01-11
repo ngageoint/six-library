@@ -26,16 +26,18 @@ NITF_CXX_GUARD
 
 static int nxptsXnypts(nitf_TRE* tre, char idx[10][10], int depth, nitf_Error* error)
 {
+    (void)depth;
+
     int nxpts, nypts;
     char fname[64];
     nitf_Field* field;
-    strcpy(fname, "NXPTS");
-    strcat(fname, idx[0]);
+    nrt_strcpy_s(fname, 64, "NXPTS");
+    nrt_strcat_s(fname, 64, idx[0]);
     field = nitf_TRE_getField(tre, fname);
     nitf_Field_get(field, &nxpts, NITF_CONV_INT, sizeof(nxpts), error);
 
-    strcpy(fname, "NYPTS");
-    strcat(fname, idx[0]);
+    nrt_strcpy_s(fname, 64, "NYPTS");
+    nrt_strcat_s(fname, 64, idx[0]);
     field = nitf_TRE_getField(tre, fname);
     nitf_Field_get(field, &nypts, NITF_CONV_INT, sizeof(nypts), error);
 

@@ -1,0 +1,659 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="cgm">
+      <UniqueIdentifier>{4f559b6b-3d7f-4783-8438-562c149a4c27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="j2k">
+      <UniqueIdentifier>{248aed4d-d178-4fc5-97ba-804e7eac3ed5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="jpeg">
+      <UniqueIdentifier>{b5dcbcdb-56ac-44c5-96ae-bd6d323408e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nitf">
+      <UniqueIdentifier>{eceb9f6a-3dd0-439f-90c5-abae80900bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nrt">
+      <UniqueIdentifier>{2e28e7c0-ed75-4c97-84b1-cb70b635b60e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cgm\include\cgm\BasicTypes.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\CircleElement.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\CircularArcCloseElement.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\CircularArcElement.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\Color.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\Element.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\EllipseElement.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\EllipticalArcCloseElement.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\EllipticalArcElement.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\FillAttributes.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\LineAttributes.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\Metafile.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\MetafileReader.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\MetafileWriter.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\NITFWriteHandler.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\Picture.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\PictureBody.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\PolygonElement.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\PolyLineElement.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\PolySetElement.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\Rectangle.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\RectangleElement.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\Text.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\TextAttributes.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\TextElement.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\Vertex.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\cgm\VertexClose.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="cgm\include\import\cgm.h">
+      <Filter>cgm</Filter>
+    </ClInclude>
+    <ClInclude Include="j2k\include\import\j2k.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
+    <ClInclude Include="j2k\include\j2k\Component.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
+    <ClInclude Include="j2k\include\j2k\Container.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
+    <ClInclude Include="j2k\include\j2k\Defines.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\BandInfo.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\BandSource.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ComplexityLevel.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ComponentInfo.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DataSource.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DefaultTRE.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Defines.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DESegment.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DESubheader.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DirectBlockSource.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\DownSampler.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Extensions.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Field.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\FieldWarning.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\FileHeader.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\FileSecurity.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\GraphicSegment.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\GraphicSubheader.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageIO.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageReader.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageSegment.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageSource.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageSubheader.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\ImageWriter.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\LabelSegment.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\LabelSubheader.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\LookupTable.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\PluginIdentifier.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\PluginRegistry.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Record.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\RESegment.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\RESubheader.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\RowSource.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\SegmentReader.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\SegmentSource.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\SegmentWriter.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\StreamIOWriteHandler.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\SubWindow.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\System.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TextSegment.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TextSubheader.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TRE.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TRECursor.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TREDescription.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TREPrivateData.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TREUtils.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Types.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\WriteHandler.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\WriterOptions.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\import\nitf.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\import\nrt.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\DateTime.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Debug.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Defines.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Directory.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\DLL.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Error.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\HashTable.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\IntStack.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\IOHandle.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\IOInterface.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\List.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Memory.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Pair.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Sync.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\System.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Tree.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Types.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Utils.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="j2k\include\j2k\j2k_Reader.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
+    <ClInclude Include="j2k\include\j2k\j2k_Writer.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\NitfReader.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\NitfWriter.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="nrt\include\nrt\Config.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Version.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Config.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Version.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="j2k\include\j2k\Config.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cgm\source\CircleElement.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\CircularArcCloseElement.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\CircularArcElement.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\Color.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\Element.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\EllipseElement.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\EllipticalArcCloseElement.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\EllipticalArcElement.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\FillAttributes.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\LineAttributes.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\Metafile.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\MetafileReader.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\MetafileWriter.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\NITFWriteHandler.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\Picture.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\PictureBody.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\PolygonElement.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\PolyLineElement.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\PolySetElement.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\Rectangle.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\RectangleElement.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\Text.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\TextAttributes.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\TextElement.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\Vertex.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="cgm\source\VertexClose.c">
+      <Filter>cgm</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\Component.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\Container.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\JasPerImpl.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\OpenJPEGImpl.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\SimpleComponentImpl.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\SimpleContainerImpl.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeg\source\LibjpegDecompress.c">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\BandInfo.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\BandSource.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ComplexityLevel.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ComponentInfo.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DataSource.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DefaultTRE.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DESegment.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DESubheader.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DirectBlockSource.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\DownSampler.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\Extensions.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\Field.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\FieldWarning.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\FileHeader.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\FileSecurity.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\GraphicSegment.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\GraphicSubheader.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageIO.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageReader.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageSegment.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageSource.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageSubheader.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\ImageWriter.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\LabelSegment.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\LabelSubheader.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\LookupTable.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\PluginRegistry.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\Record.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\RESegment.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\RESubheader.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\RowSource.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\SegmentReader.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\SegmentSource.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\SegmentWriter.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\StreamIOWriteHandler.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\SubWindow.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TextSegment.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TextSubheader.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TRE.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TRECursor.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TREPrivateData.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TREUtils.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\WriteHandler.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\DateTime.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\Debug.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\DirectoryUnix.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\DirectoryWin32.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\DLLUnix.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\DLLWin32.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\Error.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\HashTable.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\IntStack.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\IOHandleUnix.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\IOHandleWin32.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\IOInterface.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\List.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\Pair.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\SyncIrix.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\SyncUnix.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\SyncWin32.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\System.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\Tree.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nrt\source\Utils.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\j2k_Reader.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\j2k_Writer.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\NitfReader.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\NitfWriter.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.c" />
+    <ClCompile Include="nitf\source\NitfSystem.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

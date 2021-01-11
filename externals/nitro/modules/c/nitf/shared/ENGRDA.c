@@ -72,7 +72,7 @@ NITFPRIV(int) ENGRDA_parse(nitf_TRE * tre,
 {
     int status = 1;
     int iterStatus = NITF_SUCCESS;
-    int offset = 0;
+    size_t offset = 0;
     int length;
     nitf_TRECursor cursor;
     nitf_Field *field = NULL;
@@ -106,7 +106,7 @@ NITFPRIV(int) ENGRDA_parse(nitf_TRE * tre,
             length = cursor.length;
             if (length == NITF_TRE_GOBBLE)
             {
-                length = privData->length - offset;
+                length = (int)(privData->length - offset);
             }
 
             /* no need to call setValue, because we already know
@@ -132,15 +132,15 @@ NITFPRIV(int) ENGRDA_parse(nitf_TRE * tre,
             {
                 if (length == NITF_INT16_SZ)
                 {
-                    nitf_Int16 int16 =
-                        (nitf_Int16)NITF_NTOHS(*((nitf_Int16 *) (bufptr + offset)));
+                    int16_t int16 =
+                        (int16_t)NITF_NTOHS(*((int16_t *) (bufptr + offset)));
                     status = nitf_Field_setRawData(field,
                             (NITF_DATA *) & int16, length, error);
                 }
                 else if (length == NITF_INT32_SZ)
                 {
-                    nitf_Int32 int32 =
-                        (nitf_Int32)NITF_NTOHL(*((nitf_Int32 *) (bufptr + offset)));
+                    int32_t int32 =
+                        (int32_t)NITF_NTOHL(*((int32_t *) (bufptr + offset)));
                     status = nitf_Field_setRawData(field,
                             (NITF_DATA *) & int32, length, error);
                 }
@@ -210,14 +210,15 @@ NITFPRIV(int) ENGRDA_parse(nitf_TRE * tre,
  *       original read function?
  */
 NITFPRIV(NITF_BOOL) ENGRDA_read(nitf_IOInterface* io,
-                                nitf_Uint32 length,
+                                uint32_t length,
                                 nitf_TRE* tre,
                                 struct _nitf_Record* record,
                                 nitf_Error* error)
 {
+    (void)record;
+
     int ok;
     char *data = NULL;
-    nitf_TREDescriptionSet *descriptions = NULL;
     nitf_TREDescriptionInfo *infoPtr = NULL;
 
     if (!tre)
@@ -236,9 +237,8 @@ NITFPRIV(NITF_BOOL) ENGRDA_read(nitf_IOInterface* io,
         return NITF_FAILURE;
     }
 
-    descriptions = (nitf_TREDescriptionSet*)tre->handler->data;
-
-    if (!descriptions)
+    nitf_TREDescriptionSet* treDescriptionSet = (nitf_TREDescriptionSet*)tre->handler->data;
+    if (!treDescriptionSet)
     {
         nitf_Error_init(error, "TRE Description Set is NULL",
                         NITF_CTXT, NITF_ERR_INVALID_OBJECT);
@@ -248,7 +248,7 @@ NITFPRIV(NITF_BOOL) ENGRDA_read(nitf_IOInterface* io,
     }
 
     tre->priv = NULL;
-    infoPtr = descriptions->descriptions;
+    infoPtr = treDescriptionSet->descriptions;
     tre->priv = nitf_TREPrivateData_construct(error);
     ((nitf_TREPrivateData*)tre->priv)->length = length;
 
@@ -306,6 +306,7 @@ NITFAPI(const char**) ENGRDA_init(nitf_Error* error)
 
 NITFAPI(nitf_TREHandler*) ENGRDA_handler(nitf_Error* error)
 {
+    (void)error;
     return &engrdaHandler;
 }
 

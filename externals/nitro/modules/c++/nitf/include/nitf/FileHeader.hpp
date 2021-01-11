@@ -22,6 +22,7 @@
 
 #ifndef __NITF_FILEHEADER_HPP__
 #define __NITF_FILEHEADER_HPP__
+#pragma once
 
 #include "nitf/FileHeader.h"
 #include "nitf/System.hpp"
@@ -70,9 +71,17 @@ public:
 
     //! Get the fileHeader
     nitf::Field getFileHeader();
+    std::string fileHeader()
+    {
+        return getFileHeader();
+    }
 
     //! Get the fileVersion
     nitf::Field getFileVersion();
+    std::string fileVersion()
+    {
+        return getFileVersion();
+    }
 
     //! Get the complianceLevel
     nitf::Field getComplianceLevel();

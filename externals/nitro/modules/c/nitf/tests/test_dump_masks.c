@@ -33,12 +33,12 @@
 #include <import/nitf.h>
 
 NITF_BOOL nitf_ImageIO_getMaskInfo(nitf_ImageIO *nitf,
-                                   nitf_Uint32 *imageDataOffset, nitf_Uint32 *blockRecordLength,
-                                   nitf_Uint32 *padRecordLength, nitf_Uint32 *padPixelValueLength,
-                                   nitf_Uint8 **padValue, nitf_Uint64 **blockMask, nitf_Uint64 **padMask);
+                                   uint32_t *imageDataOffset, uint32_t *blockRecordLength,
+                                   uint32_t *padRecordLength, uint32_t *padPixelValueLength,
+                                   uint8_t **padValue, uint64_t **blockMask, uint64_t **padMask);
 
 void dumpMask(const char* maskType,
-              const nitf_Uint64* mask,
+              const uint64_t* mask,
               size_t numRows,
               size_t numCols)
 {
@@ -94,14 +94,14 @@ int main(int argc, char *argv[])
 
     /*  Mask structure and mask components */
 
-    nitf_Uint32 imageDataOffset;    /* Offset to actual image data past masks */
-    nitf_Uint32 blockRecordLength;  /* Block mask record length */
-    nitf_Uint32 padRecordLength;    /* Pad mask record length */
-    nitf_Uint32 padPixelValueLength; /* Pad pixel value length in bytes */
-    nitf_Uint8 *padValue;           /* Pad value */
-    nitf_Uint64 *blockMask;         /* Block mask array */
-    nitf_Uint64 *padMask;           /* Pad mask array */
-    size_t imgCtr = 0;
+    uint32_t imageDataOffset;    /* Offset to actual image data past masks */
+    uint32_t blockRecordLength;  /* Block mask record length */
+    uint32_t padRecordLength;    /* Pad mask record length */
+    uint32_t padPixelValueLength; /* Pad pixel value length in bytes */
+    uint8_t *padValue;           /* Pad value */
+    uint64_t *blockMask;         /* Block mask array */
+    uint64_t *padMask;           /* Pad mask array */
+    int imgCtr = 0;
     const char* pathname;
 
     error = &errorObj;
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 
         /* Print the blocking information */
 
-        printf("Image %s segment %zu:\n", pathname, imgCtr);
+        printf("Image %s segment %u:\n", pathname, imgCtr);
         printf("  Blocking (mode is %s):\n", imageMode);
         printf("    Block array dimensions (r,c) = %d %d\n",
                blkInfo->numBlocksPerRow, blkInfo->numBlocksPerCol);
@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
                                      &padRecordLength, &padPixelValueLength,
                                      &padValue, &blockMask, &padMask))
         {
-            nitf_Uint32 i;
+            uint32_t i;
 
             printf("  Masked image:\n");
             printf("    Image data offset = %d\n", imageDataOffset);
