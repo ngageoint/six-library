@@ -27,14 +27,14 @@
 
 J2K_CXX_GUARD
 
-typedef nrt_Uint32  (*J2K_ICOMPONENT_GET_WIDTH)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Uint32  (*J2K_ICOMPONENT_GET_HEIGHT)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Uint32  (*J2K_ICOMPONENT_GET_PRECISION)(J2K_USER_DATA*, nrt_Error*);
+typedef uint32_t  (*J2K_ICOMPONENT_GET_WIDTH)(J2K_USER_DATA*, nrt_Error*);
+typedef uint32_t  (*J2K_ICOMPONENT_GET_HEIGHT)(J2K_USER_DATA*, nrt_Error*);
+typedef uint32_t  (*J2K_ICOMPONENT_GET_PRECISION)(J2K_USER_DATA*, nrt_Error*);
 typedef NRT_BOOL    (*J2K_ICOMPONENT_IS_SIGNED)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Int32   (*J2K_ICOMPONENT_GET_OFFSET_X)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Int32   (*J2K_ICOMPONENT_GET_OFFSET_Y)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Uint32  (*J2K_ICOMPONENT_GET_SEPARATION_X)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Uint32  (*J2K_ICOMPONENT_GET_SEPARATION_Y)(J2K_USER_DATA*, nrt_Error*);
+typedef int32_t   (*J2K_ICOMPONENT_GET_OFFSET_X)(J2K_USER_DATA*, nrt_Error*);
+typedef int32_t   (*J2K_ICOMPONENT_GET_OFFSET_Y)(J2K_USER_DATA*, nrt_Error*);
+typedef uint32_t  (*J2K_ICOMPONENT_GET_SEPARATION_X)(J2K_USER_DATA*, nrt_Error*);
+typedef uint32_t  (*J2K_ICOMPONENT_GET_SEPARATION_Y)(J2K_USER_DATA*, nrt_Error*);
 typedef void        (*J2K_ICOMPONENT_DESTRUCT)(J2K_USER_DATA *);
 
 typedef struct _j2k_IComponent
@@ -59,30 +59,30 @@ typedef struct _j2k_Component
 /**
  * Constructs a Component from scratch using the provided metadata
  */
-J2KAPI(j2k_Component*) j2k_Component_construct(nrt_Uint32 width,
-                                               nrt_Uint32 height,
-                                               nrt_Uint32 precision,
+J2KAPI(j2k_Component*) j2k_Component_construct(uint32_t width,
+                                               uint32_t height,
+                                               uint32_t precision,
                                                NRT_BOOL isSigned,
-                                               nrt_Uint32 offsetX,
-                                               nrt_Uint32 offsetY,
-                                               nrt_Uint32 separationX,
-                                               nrt_Uint32 separationY,
+                                               uint32_t offsetX,
+                                               uint32_t offsetY,
+                                               uint32_t separationX,
+                                               uint32_t separationY,
                                                nrt_Error *error);
 
 /**
  * Returns the width of the Component
  */
-J2KAPI(nrt_Uint32) j2k_Component_getWidth(j2k_Component*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Component_getWidth(j2k_Component*, nrt_Error*);
 
 /**
  * Returns the height of the Component
  */
-J2KAPI(nrt_Uint32) j2k_Component_getHeight(j2k_Component*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Component_getHeight(j2k_Component*, nrt_Error*);
 
 /**
  * Returns the number of bits per sample per component
  */
-J2KAPI(nrt_Uint32) j2k_Component_getPrecision(j2k_Component*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Component_getPrecision(j2k_Component*, nrt_Error*);
 
 /**
  * Returns whether the data is signed
@@ -92,22 +92,22 @@ J2KAPI(NRT_BOOL) j2k_Component_isSigned(j2k_Component*, nrt_Error*);
 /**
  * Returns the X offset into the reference grid
  */
-J2KAPI(nrt_Int32) j2k_Component_getOffsetX(j2k_Component*, nrt_Error*);
+J2KAPI(int32_t) j2k_Component_getOffsetX(j2k_Component*, nrt_Error*);
 
 /**
  * Returns the Y offset into the reference grid
  */
-J2KAPI(nrt_Int32) j2k_Component_getOffsetY(j2k_Component*, nrt_Error*);
+J2KAPI(int32_t) j2k_Component_getOffsetY(j2k_Component*, nrt_Error*);
 
 /**
  * Returns the width separation between samples on the reference grid
  */
-J2KAPI(nrt_Uint32) j2k_Component_getSeparationX(j2k_Component*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Component_getSeparationX(j2k_Component*, nrt_Error*);
 
 /**
  * Returns the height separation between samples on the reference grid
  */
-J2KAPI(nrt_Uint32) j2k_Component_getSeparationY(j2k_Component*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Component_getSeparationY(j2k_Component*, nrt_Error*);
 
 /**
  * Destroys the Component

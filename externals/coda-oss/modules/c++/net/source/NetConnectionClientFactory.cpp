@@ -57,10 +57,17 @@ net::NetConnection* net::NetConnectionClientFactory::create(const net::URL& url)
 }
 
 net::NetConnection* net::NetConnectionClientFactory::newConnection(
+        std::unique_ptr<net::Socket>&& toServer)
+{
+    return new net::NetConnection(std::move(toServer));
+}
+#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+net::NetConnection* net::NetConnectionClientFactory::newConnection(
         std::auto_ptr<net::Socket> toServer)
 {
     return new net::NetConnection(toServer);
 }
+#endif
 
 net::NetConnection * net::NetConnectionClientFactory::create(
         const net::SocketAddress& address)

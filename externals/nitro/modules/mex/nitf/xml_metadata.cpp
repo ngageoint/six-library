@@ -297,10 +297,10 @@ void mexFunction(int nlhs, mxArray *plhs[],
 	    nitf::IOHandle io(inputFile);
 	    nitf::Record record = reader.read(io);
             nitf::List des = record.getDataExtensions();
-	    nitf::Uint32 numDES = des.getSize();
+	    uint32_t numDES = des.getSize();
             std::vector<mxArray*> structs;
 
-            for (nitf::Uint32 i = 0; i < numDES; i++)
+            for (uint32_t i = 0; i < numDES; i++)
             {
                 nitf::DESegment seg = des[i];
                 nitf::DESubheader subheader = seg.getSubheader();

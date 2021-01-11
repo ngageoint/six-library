@@ -26,6 +26,7 @@
 #include <vector>
 #include <import/sys.h>
 #include <import/io.h>
+#include <import/mem.h>
 #include "sio/lite/InvalidHeaderException.h"
 #include "sio/lite/FileHeader.h"
 
@@ -96,7 +97,7 @@ public:
 
 protected:
     std::string mFileName;
-    std::auto_ptr<io::OutputStream> mStream;
+    mem::auto_ptr<io::OutputStream> mStream;
     bool mAdopt;
 };
 

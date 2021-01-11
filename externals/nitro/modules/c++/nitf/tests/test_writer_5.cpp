@@ -20,13 +20,14 @@
  *
  */
 
-#include <mem/SharedPtr.h>
-#include <sys/Path.h>
-#include <import/nitf.hpp>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
+
+#include <import/nitf.hpp>
+
+namespace fs = std::filesystem;
 
 int main(int argc, char **argv)
 {
@@ -34,7 +35,7 @@ int main(int argc, char **argv)
     {
         if (argc != 3)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <input-file> <output-file>\n\n";
             return 1;
         }
@@ -45,9 +46,9 @@ int main(int argc, char **argv)
         nitf::Record record = reader.read(input);
 
         //create a Writer and prepare it for the Record
-        nitf::Uint32 numOfBytes = (nitf::Uint32)record.getHeader().getFileLength();
+        uint32_t numOfBytes = (uint32_t)record.getHeader().getFileLength();
         std::vector<char> outBufVec(numOfBytes);
-        char* const outBuf(outBufVec.empty() ? NULL : &outBufVec[0]);
+        char* const outBuf(outBufVec.empty() ? nullptr : outBufVec.data());
         nitf::MemoryIO memOutput(outBuf, numOfBytes, false);
 
         nitf::Writer memWriter;

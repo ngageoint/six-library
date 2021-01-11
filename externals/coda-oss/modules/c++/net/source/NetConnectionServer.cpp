@@ -23,7 +23,7 @@
 #include "net/NetConnectionServer.h"
 
 net::NetConnectionServer::NetConnectionServer() :
-    mPortNumber(0), mBacklog(0), mSocket(NULL), mAllocStrategy(NULL)
+    mPortNumber(0), mBacklog(0), mSocket(nullptr), mAllocStrategy(nullptr)
 {
 }
 
@@ -50,7 +50,7 @@ std::string net::NetConnectionServer::getHostName()
 net::NetConnection* net::NetConnectionServer::accept()
 {
     net::SocketAddress sa;
-    std::auto_ptr<net::NetConnection> tmp (
+    std::unique_ptr<net::NetConnection> tmp (
         new net::NetConnection(mSocket->accept(sa)));
     return tmp.release();
 }
@@ -58,7 +58,7 @@ net::NetConnection* net::NetConnectionServer::accept()
 void net::NetConnectionServer::initialize(net::RequestHandlerFactory* factory,
                                           net::AllocStrategy* newStrategy)
 {
-    std::auto_ptr<net::AllocStrategy> tmp ((newStrategy == NULL) ? 
+    std::unique_ptr<net::AllocStrategy> tmp ((newStrategy == NULL) ? 
         new DefaultAllocStrategy() : newStrategy);
 
     tmp->setRequestHandlerFactory(factory);

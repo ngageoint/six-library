@@ -22,6 +22,7 @@
 
 #ifndef __NET_SSL_CONNECTION_CLIENT_FACTORY_H__
 #define __NET_SSL_CONNECTION_CLIENT_FACTORY_H__
+#pragma once
 
 /*!
  *  \file SSLConnectionClientFactory.h
@@ -31,6 +32,8 @@
 
 #include <net/NetConnectionClientFactory.h>
 #include <net/ssl/SSLConnection.h>
+
+#include "sys/Conf.h"
 
 namespace net
 {
@@ -97,7 +100,10 @@ protected:
      * \param toServer The socket for the new connection
      * \return A new SSLConnection
      */
-    virtual NetConnection * newConnection(std::auto_ptr<net::Socket> toServer);
+    virtual NetConnection* newConnection(std::unique_ptr<net::Socket>&& toServer);
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    virtual NetConnection* newConnection(std::auto_ptr<net::Socket> toServer);
+    #endif
 
 private:
 #   if defined(USE_OPENSSL)

@@ -42,7 +42,7 @@ namespace sys
 {
 typedef ThreadNSPR Thread;
 }
-#    elif defined(WIN32)
+#    elif (defined(WIN32) || defined(_WIN32))
 #        include "sys/ThreadWin32.h"
 namespace sys
 {

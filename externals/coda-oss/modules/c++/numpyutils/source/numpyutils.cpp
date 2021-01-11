@@ -200,7 +200,7 @@ PyObject* toNumpyArray(size_t numColumns, int typenum,
     verifyNewPyObject(list);
     for (size_t ii = 0; ii < numRows; ++ii)
     {
-        npy_intp dimensions[] = { numColumns };
+        npy_intp dimensions[] = {static_cast <npy_intp>(numColumns)};
         PyObject* row =
                 PyArray_SimpleNewFromData(1, dimensions, typenum, data[ii]);
         verifyNewPyObject(row);

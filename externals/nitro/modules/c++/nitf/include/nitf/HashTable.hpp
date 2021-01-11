@@ -22,9 +22,9 @@
 
 #ifndef __NITF_HASHTABLE_HPP__
 #define __NITF_HASHTABLE_HPP__
+#pragma once
 
 #include "nitf/System.hpp"
-#include "nitf/NITFException.hpp"
 #include "nitf/Pair.hpp"
 #include "nitf/List.hpp"
 #include "nitf/Object.hpp"

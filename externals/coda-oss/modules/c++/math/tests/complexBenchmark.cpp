@@ -123,7 +123,7 @@ std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch,
         }
     }
 
-    tmp /= (sze * numLoops);
+    tmp /= static_cast<double>(sze * numLoops);
 
     //stop the watch and record the duration
     duration = wtch.stop();
@@ -179,7 +179,7 @@ std::complex<float> getMeanWDouble(sys::RealTimeStopWatch& wtch,
     duration = wtch.stop();
 
     //return the mean
-    return std::complex<float>(meanI, meanQ);
+    return std::complex<float>(static_cast<float>(meanI), static_cast<float>(meanQ));
 
 }
 
@@ -217,10 +217,10 @@ void loopingBenchmark(size_t size,
     std::vector<std::complex<float> > arr(size);
 
     //fill the vector based on a random number
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(NULL)));
 
-    float real = rand() % 100 + 1;
-    float imag = rand() % 100 + 1;
+    auto real = static_cast<float>(rand() % 100 + 1);
+    auto imag = static_cast<float>(rand() % 100 + 1);
 
     arr[0] = std::complex<float>(real, imag);
     for (size_t i = 0; i < size; ++i)
@@ -278,10 +278,10 @@ void loopingBenchmark(size_t size,
 size_t decideSize(size_t initSize, size_t growthFactor, size_t numGrowths)
 {
     //setup size calculation variables
-    const size_t MAX_SIZE = 10E10 / (sizeof( std::complex<float>));
-    size_t largestPosGrowth =
+    const auto MAX_SIZE = static_cast<size_t>(10E10 / (sizeof( std::complex<float>)));
+    auto largestPosGrowth = static_cast<size_t>(
         initSize * std::pow(static_cast<double>(growthFactor),
-                            static_cast<double>(numGrowths));
+                            static_cast<double>(numGrowths)));
     size_t largestPosSize = std::min(largestPosGrowth, MAX_SIZE);
 
     //if growth is too high, find last growth less than MaxSize
@@ -321,10 +321,10 @@ void singlePassBenchmark(size_t size,
     std::vector<std::complex<float> > arr;
     arr.reserve(endSize);
 
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(NULL)));
 
-    float real =  rand() % 100 + 1;
-    float imag =  rand() % 100 + 1;
+    auto real = static_cast<float>(rand() % 100 + 1);
+    auto imag = static_cast<float>(rand() % 100 + 1);
 
     arr.push_back(std::complex<float>(real, imag));
 

@@ -125,9 +125,9 @@ public:
 
 private:
 
-    std::auto_ptr<xercesc::XMLGrammarPool> mSchemaPool;
-    std::auto_ptr<xml::lite::ValidationErrorHandler> mErrorHandler;
-    std::auto_ptr<xercesc::DOMLSParser> mValidator;
+    std::unique_ptr<xercesc::XMLGrammarPool> mSchemaPool;
+    std::unique_ptr<xml::lite::ValidationErrorHandler> mErrorHandler;
+    std::unique_ptr<xercesc::DOMLSParser> mValidator;
 
 };
 

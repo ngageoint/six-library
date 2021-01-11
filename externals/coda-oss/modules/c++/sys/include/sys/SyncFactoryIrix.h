@@ -24,6 +24,8 @@
 #ifndef __SYS_SYNC_FACTORY_IRIX_H__
 #define __SYS_SYNC_FACTORY_IRIX_H__
 
+#include <mem/SharedPtr.h>
+
 #  if defined(__sgi)
 #include <iostream>
 #include "sys/Dbg.h"
@@ -110,7 +112,7 @@ class SyncImplIrix : public SyncInterface
         ulock_t* mGuard;
     };
 
-    static std::auto_ptr<ulock_t> cs;
+    static mem::auto_ptr<ulock_t> cs;
     static SyncFactoryIrix::SyncImplIrix* createImpl()
     {
 

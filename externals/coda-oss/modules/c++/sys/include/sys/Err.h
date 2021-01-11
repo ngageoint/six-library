@@ -41,7 +41,7 @@
 namespace sys
 {
 //!  The default value for the Err object.  Maps to errno or GetLastError()
-const static int __last_err__ = 0;
+constexpr static int __last_err__ = 0;
 /*!
  *  \class Err
  *  \brief Errno like object

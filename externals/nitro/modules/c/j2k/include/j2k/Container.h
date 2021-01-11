@@ -28,14 +28,14 @@
 
 J2K_CXX_GUARD
 
-typedef nrt_Uint32      (*J2K_ICONTAINER_GET_GRID_WIDTH)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Uint32      (*J2K_ICONTAINER_GET_GRID_HEIGHT)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Uint32      (*J2K_ICONTAINER_GET_NUM_COMPONENTS)(J2K_USER_DATA*, nrt_Error*);
-typedef j2k_Component*  (*J2K_ICONTAINER_GET_COMPONENT)(J2K_USER_DATA*, nrt_Uint32, nrt_Error*);
-typedef nrt_Uint32      (*J2K_ICONTAINER_GET_TILESX)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Uint32      (*J2K_ICONTAINER_GET_TILESY)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Uint32      (*J2K_ICONTAINER_GET_TILE_WIDTH)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Uint32      (*J2K_ICONTAINER_GET_TILE_HEIGHT)(J2K_USER_DATA*, nrt_Error*);
+typedef uint32_t      (*J2K_ICONTAINER_GET_GRID_WIDTH)(J2K_USER_DATA*, nrt_Error*);
+typedef uint32_t      (*J2K_ICONTAINER_GET_GRID_HEIGHT)(J2K_USER_DATA*, nrt_Error*);
+typedef uint32_t      (*J2K_ICONTAINER_GET_NUM_COMPONENTS)(J2K_USER_DATA*, nrt_Error*);
+typedef j2k_Component*  (*J2K_ICONTAINER_GET_COMPONENT)(J2K_USER_DATA*, uint32_t, nrt_Error*);
+typedef uint32_t      (*J2K_ICONTAINER_GET_TILESX)(J2K_USER_DATA*, nrt_Error*);
+typedef uint32_t      (*J2K_ICONTAINER_GET_TILESY)(J2K_USER_DATA*, nrt_Error*);
+typedef uint32_t      (*J2K_ICONTAINER_GET_TILE_WIDTH)(J2K_USER_DATA*, nrt_Error*);
+typedef uint32_t      (*J2K_ICONTAINER_GET_TILE_HEIGHT)(J2K_USER_DATA*, nrt_Error*);
 typedef int             (*J2K_ICONTAINER_GET_IMAGE_TYPE)(J2K_USER_DATA*, nrt_Error*);
 typedef void            (*J2K_ICONTAINER_DESTRUCT)(J2K_USER_DATA *);
 
@@ -64,69 +64,69 @@ typedef struct _j2k_Container
 /**
  * Constructs a Container from scratch using the provided metadata
  */
-J2KAPI(j2k_Container*) j2k_Container_construct(nrt_Uint32 gridWidth,
-                                               nrt_Uint32 gridHeight,
-                                               nrt_Uint32 numComponents,
+J2KAPI(j2k_Container*) j2k_Container_construct(uint32_t gridWidth,
+                                               uint32_t gridHeight,
+                                               uint32_t numComponents,
                                                j2k_Component** components,
-                                               nrt_Uint32 tileWidth,
-                                               nrt_Uint32 tileHeight,
+                                               uint32_t tileWidth,
+                                               uint32_t tileHeight,
                                                int imageType,
                                                nrt_Error *error);
 
 /**
  * Returns the reference grid width
  */
-J2KAPI(nrt_Uint32) j2k_Container_getGridWidth(j2k_Container*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Container_getGridWidth(j2k_Container*, nrt_Error*);
 
 /**
  * Returns the reference grid height
  */
-J2KAPI(nrt_Uint32) j2k_Container_getGridHeight(j2k_Container*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Container_getGridHeight(j2k_Container*, nrt_Error*);
 
 /**
  * Returns the number of components/bands
  */
-J2KAPI(nrt_Uint32) j2k_Container_getNumComponents(j2k_Container*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Container_getNumComponents(j2k_Container*, nrt_Error*);
 
 /**
  * Returns the i'th Component
  */
-J2KAPI(j2k_Component*) j2k_Container_getComponent(j2k_Container*, nrt_Uint32, nrt_Error*);
+J2KAPI(j2k_Component*) j2k_Container_getComponent(j2k_Container*, uint32_t, nrt_Error*);
 
 /**
  * Returns the actual image width (in samples) - i.e. the max component width
  */
-J2KAPI(nrt_Uint32) j2k_Container_getWidth(j2k_Container*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Container_getWidth(j2k_Container*, nrt_Error*);
 
 /**
  * Returns the actual image height (in samples) - i.e. the max component height
  */
-J2KAPI(nrt_Uint32) j2k_Container_getHeight(j2k_Container*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Container_getHeight(j2k_Container*, nrt_Error*);
 
 /**
  * Returns the max component precision
  */
-J2KAPI(nrt_Uint32) j2k_Container_getPrecision(j2k_Container*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Container_getPrecision(j2k_Container*, nrt_Error*);
 
 /**
  * Returns the number of column tiles (X-direction)
  */
-J2KAPI(nrt_Uint32) j2k_Container_getTilesX(j2k_Container*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Container_getTilesX(j2k_Container*, nrt_Error*);
 
 /**
  * Returns the number of row tiles (Y-direction)
  */
-J2KAPI(nrt_Uint32) j2k_Container_getTilesY(j2k_Container*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Container_getTilesY(j2k_Container*, nrt_Error*);
 
 /**
  * Returns the tile width
  */
-J2KAPI(nrt_Uint32) j2k_Container_getTileWidth(j2k_Container*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Container_getTileWidth(j2k_Container*, nrt_Error*);
 
 /**
  * Returns the tile height
  */
-J2KAPI(nrt_Uint32) j2k_Container_getTileHeight(j2k_Container*, nrt_Error*);
+J2KAPI(uint32_t) j2k_Container_getTileHeight(j2k_Container*, nrt_Error*);
 
 /**
  * Returns the image type

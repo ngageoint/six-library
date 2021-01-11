@@ -28,7 +28,7 @@
 #include "nrt/Memory.h"
 #include "nrt/Error.h"
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 /*  Under windows, a dynamic shared object is a DLL  */
 #    define  NRT_DLL_EXTENSION ".dll"
 #elif defined(__APPLE__)

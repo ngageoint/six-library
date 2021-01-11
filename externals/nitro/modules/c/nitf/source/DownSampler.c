@@ -37,23 +37,28 @@ NITFAPI(void) nitf_DownSampler_destruct(nitf_DownSampler ** downsampler)
 NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
                                     NITF_DATA ** inputWindows,
                                     NITF_DATA ** outputWindows,
-                                    nitf_Uint32 numBands,
-                                    nitf_Uint32 numWindowRows,
-                                    nitf_Uint32 numWindowCols,
-                                    nitf_Uint32 numInputCols,
-                                    nitf_Uint32 numCols,
-                                    nitf_Uint32 pixelType,
-                                    nitf_Uint32 pixelSize,
-                                    nitf_Uint32 rowsInLastWindow,
-                                    nitf_Uint32 colsInLastWindow,
+                                    uint32_t numBands,
+                                    uint32_t numWindowRows,
+                                    uint32_t numWindowCols,
+                                    uint32_t numInputCols,
+                                    uint32_t numCols,
+                                    uint32_t pixelType,
+                                    uint32_t pixelSize,
+                                    uint32_t rowsInLastWindow,
+                                    uint32_t colsInLastWindow,
                                     nitf_Error * error)
 {
-    nitf_Uint32 row;            /* Current row */
-    nitf_Uint32 column;         /* Current column */
-    nitf_Uint32 colInc;         /* Column increment */
-    nitf_Uint32 rowInc;         /* Pointer increment for end of row */
-    nitf_Uint32 outRowInc;      /* Output pointer increment for end of row */
-    nitf_Uint32 band;           /* Current band */
+    (void)pixelType;
+    (void)rowsInLastWindow;
+    (void)colsInLastWindow;
+    (void)error;
+
+    uint32_t row;            /* Current row */
+    uint32_t column;         /* Current column */
+    uint32_t colInc;         /* Column increment */
+    uint32_t rowInc;         /* Pointer increment for end of row */
+    uint32_t outRowInc;      /* Output pointer increment for end of row */
+    uint32_t band;           /* Current band */
 
     /*
      *  Note: The output buffer is at down-sampled resolution and the
@@ -72,13 +77,13 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
     {
         case 1:
         {
-            nitf_Uint8 *inp;    /* Pointer into input */
-            nitf_Uint8 *outp;   /* Pointer into output */
+            uint8_t *inp;    /* Pointer into input */
+            uint8_t *outp;   /* Pointer into output */
 
             for (band = 0; band < numBands; band++)
             {
-                inp = (nitf_Uint8 *) inputWindows[band];
-                outp = (nitf_Uint8 *) outputWindows[band];
+                inp = (uint8_t *) inputWindows[band];
+                outp = (uint8_t *) outputWindows[band];
 
                 for (row = 0; row < numWindowRows; row++)
                 {
@@ -95,13 +100,13 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
         break;
         case 2:
         {
-            nitf_Uint16 *inp;   /* Pointer into input */
-            nitf_Uint16 *outp;  /* Pointer into output */
+            uint16_t *inp;   /* Pointer into input */
+            uint16_t *outp;  /* Pointer into output */
 
             for (band = 0; band < numBands; band++)
             {
-                inp = (nitf_Uint16 *) inputWindows[band];
-                outp = (nitf_Uint16 *) outputWindows[band];
+                inp = (uint16_t *) inputWindows[band];
+                outp = (uint16_t *) outputWindows[band];
 
                 for (row = 0; row < numWindowRows; row++)
                 {
@@ -118,13 +123,13 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
         break;
         case 4:
         {
-            nitf_Uint32 *inp;   /* Pointer into input */
-            nitf_Uint32 *outp;  /* Pointer into output */
+            uint32_t *inp;   /* Pointer into input */
+            uint32_t *outp;  /* Pointer into output */
 
             for (band = 0; band < numBands; band++)
             {
-                inp = (nitf_Uint32 *) inputWindows[band];
-                outp = (nitf_Uint32 *) outputWindows[band];
+                inp = (uint32_t *) inputWindows[band];
+                outp = (uint32_t *) outputWindows[band];
                 for (row = 0; row < numWindowRows; row++)
                 {
                     for (column = 0; column < numWindowCols; column++)
@@ -140,13 +145,13 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
         break;
         case 8:
         {
-            nitf_Uint64 *inp;   /* Pointer into input */
-            nitf_Uint64 *outp;  /* Pointer into output */
+            uint64_t *inp;   /* Pointer into input */
+            uint64_t *outp;  /* Pointer into output */
 
             for (band = 0; band < numBands; band++)
             {
-                inp = (nitf_Uint64 *) inputWindows[band];
-                outp = (nitf_Uint64 *) outputWindows[band];
+                inp = (uint64_t *) inputWindows[band];
+                outp = (uint64_t *) outputWindows[band];
 
                 for (row = 0; row < numWindowRows; row++)
                 {
@@ -163,8 +168,8 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
         break;
         case 16:                   /* It's not clear if this case is actually possible */
         {
-            nitf_Uint64 *inp;   /* Pointer into input */
-            nitf_Uint64 *outp;  /* Pointer into output */
+            uint64_t *inp;   /* Pointer into input */
+            uint64_t *outp;  /* Pointer into output */
 
             colInc *= 2;
             rowInc *= 2;
@@ -172,8 +177,8 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
 
             for (band = 0; band < numBands; band++)
             {
-                inp = (nitf_Uint64 *) inputWindows[band];
-                outp = (nitf_Uint64 *) outputWindows[band];
+                inp = (uint64_t *) inputWindows[band];
+                outp = (uint64_t *) outputWindows[band];
 
                 for (row = 0; row < numWindowRows; row++)
                 {
@@ -199,11 +204,12 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
 
 NITFPRIV(void) PixelSkip_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no implementation data */
 }
 
-NITFAPI(nitf_DownSampler *) nitf_PixelSkip_construct(nitf_Uint32 rowSkip,
-        nitf_Uint32 colSkip,
+NITFAPI(nitf_DownSampler *) nitf_PixelSkip_construct(uint32_t rowSkip,
+        uint32_t colSkip,
         nitf_Error * error)
 {
 
@@ -248,17 +254,17 @@ NITFAPI(nitf_DownSampler *) nitf_PixelSkip_construct(nitf_Uint32 rowSkip,
 
 #define MAX_DOWN_SAMPLE(type) \
     { \
-        nitf_Uint32 colSkip;     /* Column skip */ \
-        nitf_Uint32 rowSkip;     /* Row skip */ \
-        nitf_Uint32 colInc;      /* Column increment */ \
-        nitf_Uint32 rowInc;      /* Pointer increment for end of row */ \
-        nitf_Uint32 outRowInc;   /* Output pointer increment for end of row */ \
-        nitf_Uint32 winRowInc;   /* Row increment, current window */ \
-        nitf_Uint32 row;         /* Current row */ \
-        nitf_Uint32 column;      /* Current column */ \
-        nitf_Uint32 winRow;      /* Current row in current window */ \
-        nitf_Uint32 winCol;      /* Current column current window */ \
-        nitf_Uint32 rowWinLimit; /* Number of rows in current window */ \
+        uint32_t colSkip;     /* Column skip */ \
+        uint32_t rowSkip;     /* Row skip */ \
+        uint32_t colInc;      /* Column increment */ \
+        uint32_t rowInc;      /* Pointer increment for end of row */ \
+        uint32_t outRowInc;   /* Output pointer increment for end of row */ \
+        uint32_t winRowInc;   /* Row increment, current window */ \
+        uint32_t row;         /* Current row */ \
+        uint32_t column;      /* Current column */ \
+        uint32_t winRow;      /* Current row in current window */ \
+        uint32_t winCol;      /* Current column current window */ \
+        uint32_t rowWinLimit; /* Number of rows in current window */ \
         type *currentRowPtr;     /* Pointer to the current window row */ \
         type *currentPtr;        /* Pointer to the current window UL corner */ \
         type *pixel;             /* Pointer to the current pixel */ \
@@ -328,17 +334,17 @@ NITFAPI(nitf_DownSampler *) nitf_PixelSkip_construct(nitf_Uint32 rowSkip,
 
 #define MAX_DOWN_SAMPLE_CMPX(type) \
     { \
-        nitf_Uint32 colSkip;     /* Column skip */ \
-        nitf_Uint32 rowSkip;     /* Row skip */ \
-        nitf_Uint32 colInc;      /* Column increment */ \
-        nitf_Uint32 rowInc;      /* Pointer increment for end of row */ \
-        nitf_Uint32 outRowInc;   /* Output pointer increment for end of row */ \
-        nitf_Uint32 winRowInc;   /* Row increment, current window */ \
-        nitf_Uint32 row;         /* Current row */ \
-        nitf_Uint32 column;      /* Current column */ \
-        nitf_Uint32 winRow;      /* Current row in current window */ \
-        nitf_Uint32 winCol;      /* Current column current window */ \
-        nitf_Uint32 rowWinLimit; /* Number of rows in current window */ \
+        uint32_t colSkip;     /* Column skip */ \
+        uint32_t rowSkip;     /* Row skip */ \
+        uint32_t colInc;      /* Column increment */ \
+        uint32_t rowInc;      /* Pointer increment for end of row */ \
+        uint32_t outRowInc;   /* Output pointer increment for end of row */ \
+        uint32_t winRowInc;   /* Row increment, current window */ \
+        uint32_t row;         /* Current row */ \
+        uint32_t column;      /* Current column */ \
+        uint32_t winRow;      /* Current row in current window */ \
+        uint32_t winCol;      /* Current column current window */ \
+        uint32_t rowWinLimit; /* Number of rows in current window */ \
         type *currentRowPtr;     /* Pointer to the current window row */ \
         type *currentPtr;        /* Pointer to the current window UL corner */ \
         type *pixelReal;         /* Pointer to the current pixel */ \
@@ -430,31 +436,31 @@ NITFAPI(nitf_DownSampler *) nitf_PixelSkip_construct(nitf_Uint32 rowSkip,
 NITFPRIV(NITF_BOOL) MaxDownSample_apply(nitf_DownSampler * object,
                                         NITF_DATA ** inputWindows,
                                         NITF_DATA ** outputWindows,
-                                        nitf_Uint32 numBands,
-                                        nitf_Uint32 numWindowRows,
-                                        nitf_Uint32 numWindowCols,
-                                        nitf_Uint32 numInputCols,
-                                        nitf_Uint32 numCols,
-                                        nitf_Uint32 pixelType,
-                                        nitf_Uint32 pixelSize,
-                                        nitf_Uint32 rowsInLastWindow,
-                                        nitf_Uint32 colsInLastWindow,
+                                        uint32_t numBands,
+                                        uint32_t numWindowRows,
+                                        uint32_t numWindowCols,
+                                        uint32_t numInputCols,
+                                        uint32_t numCols,
+                                        uint32_t pixelType,
+                                        uint32_t pixelSize,
+                                        uint32_t rowsInLastWindow,
+                                        uint32_t colsInLastWindow,
                                         nitf_Error * error)
 {
-    nitf_Uint32 band;           /* Current band */
+    uint32_t band;           /* Current band */
 
     if (pixelType == NITF_PIXEL_TYPE_INT)
     {
         switch (pixelSize)
         {
             case 1:
-		MAX_DOWN_SAMPLE(nitf_Uint8)
+		MAX_DOWN_SAMPLE(uint8_t)
             case 2:
-                MAX_DOWN_SAMPLE(nitf_Uint16)
+                MAX_DOWN_SAMPLE(uint16_t)
             case 4:
-                MAX_DOWN_SAMPLE(nitf_Uint32)
+                MAX_DOWN_SAMPLE(uint32_t)
             case 8:
-                MAX_DOWN_SAMPLE(nitf_Uint64)
+                MAX_DOWN_SAMPLE(uint64_t)
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -463,20 +469,20 @@ NITFPRIV(NITF_BOOL) MaxDownSample_apply(nitf_DownSampler * object,
     }
     else if (pixelType == NITF_PIXEL_TYPE_B)
     {
-        MAX_DOWN_SAMPLE(nitf_Uint8)
+        MAX_DOWN_SAMPLE(uint8_t)
     }
     else if (pixelType == NITF_PIXEL_TYPE_SI)
     {
         switch (pixelSize)
         {
             case 1:
-                MAX_DOWN_SAMPLE(nitf_Int8)
+                MAX_DOWN_SAMPLE(int8_t)
             case 2:
-                MAX_DOWN_SAMPLE(nitf_Int16)
+                MAX_DOWN_SAMPLE(int16_t)
             case 4:
-                MAX_DOWN_SAMPLE(nitf_Int32)
+                MAX_DOWN_SAMPLE(int32_t)
             case 8:
-                MAX_DOWN_SAMPLE(nitf_Int64)
+                MAX_DOWN_SAMPLE(int64_t)
 
             default:
                 nitf_Error_init(error, "Invalid pixel type",
@@ -522,12 +528,13 @@ NITFPRIV(NITF_BOOL) MaxDownSample_apply(nitf_DownSampler * object,
 
 NITFPRIV(void) MaxDownSample_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no instance data */
 }
 
-NITFAPI(nitf_DownSampler *) nitf_MaxDownSample_construct(nitf_Uint32
+NITFAPI(nitf_DownSampler *) nitf_MaxDownSample_construct(uint32_t
         rowSkip,
-        nitf_Uint32
+        uint32_t
         colSkip,
         nitf_Error *
         error)
@@ -579,17 +586,17 @@ NITFAPI(nitf_DownSampler *) nitf_MaxDownSample_construct(nitf_Uint32
 
 #define SUM_SQ_2_DOWN_SAMPLE(type) \
     { \
-        nitf_Uint32 colSkip;     /* Column skip */ \
-        nitf_Uint32 rowSkip;     /* Row skip */ \
-        nitf_Uint32 colInc;      /* Column increment */ \
-        nitf_Uint32 rowInc;      /* Pointer increment for end of row */ \
-        nitf_Uint32 outRowInc;   /* Output pointer increment for end of row */ \
-        nitf_Uint32 winRowInc;   /* Row increment, current window */ \
-        nitf_Uint32 row;         /* Current row */ \
-        nitf_Uint32 column;      /* Current column */ \
-        nitf_Uint32 winRow;      /* Current row in current window */ \
-        nitf_Uint32 winCol;      /* Current column current window */ \
-        nitf_Uint32 rowWinLimit; /* Number of rows in current window */ \
+        uint32_t colSkip;     /* Column skip */ \
+        uint32_t rowSkip;     /* Row skip */ \
+        uint32_t colInc;      /* Column increment */ \
+        uint32_t rowInc;      /* Pointer increment for end of row */ \
+        uint32_t outRowInc;   /* Output pointer increment for end of row */ \
+        uint32_t winRowInc;   /* Row increment, current window */ \
+        uint32_t row;         /* Current row */ \
+        uint32_t column;      /* Current column */ \
+        uint32_t winRow;      /* Current row in current window */ \
+        uint32_t winCol;      /* Current column current window */ \
+        uint32_t rowWinLimit; /* Number of rows in current window */ \
         type *outp0;             /* Pointer into output, band 0 */ \
         type *outp1;             /* Pointer into output, band 0 */ \
         type *currentRowPtr0;    /* Pointer to the current window row, band 0 */ \
@@ -683,15 +690,15 @@ NITFAPI(nitf_DownSampler *) nitf_MaxDownSample_construct(nitf_Uint32
     NITFPRIV(NITF_BOOL) SumSq2DownSample_apply(nitf_DownSampler * object,
 NITF_DATA ** inputWindows,
 NITF_DATA ** outputWindows,
-nitf_Uint32 numBands,
-nitf_Uint32 numWindowRows,
-nitf_Uint32 numWindowCols,
-nitf_Uint32 numInputCols,
-nitf_Uint32 numCols,
-nitf_Uint32 pixelType,
-nitf_Uint32 pixelSize,
-nitf_Uint32 rowsInLastWindow,
-nitf_Uint32 colsInLastWindow,
+uint32_t numBands,
+uint32_t numWindowRows,
+uint32_t numWindowCols,
+uint32_t numInputCols,
+uint32_t numCols,
+uint32_t pixelType,
+uint32_t pixelSize,
+uint32_t rowsInLastWindow,
+uint32_t colsInLastWindow,
 nitf_Error * error)
 {
 
@@ -707,13 +714,13 @@ nitf_Error * error)
         switch (pixelSize)
         {
             case 1:
-                SUM_SQ_2_DOWN_SAMPLE(nitf_Uint8)
+                SUM_SQ_2_DOWN_SAMPLE(uint8_t)
             case 2:
-                SUM_SQ_2_DOWN_SAMPLE(nitf_Uint16)
+                SUM_SQ_2_DOWN_SAMPLE(uint16_t)
             case 4:
-                SUM_SQ_2_DOWN_SAMPLE(nitf_Uint32)
+                SUM_SQ_2_DOWN_SAMPLE(uint32_t)
             case 8:
-                SUM_SQ_2_DOWN_SAMPLE(nitf_Uint64)
+                SUM_SQ_2_DOWN_SAMPLE(uint64_t)
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -722,20 +729,20 @@ nitf_Error * error)
     }
     else if (pixelType == NITF_PIXEL_TYPE_B)
     {
-        SUM_SQ_2_DOWN_SAMPLE(nitf_Uint8)
+        SUM_SQ_2_DOWN_SAMPLE(uint8_t)
     }
     else if (pixelType == NITF_PIXEL_TYPE_SI)
     {
         switch (pixelSize)
         {
             case 1:
-                SUM_SQ_2_DOWN_SAMPLE(nitf_Int8)
+                SUM_SQ_2_DOWN_SAMPLE(int8_t)
             case 2:
-                SUM_SQ_2_DOWN_SAMPLE(nitf_Int16)
+                SUM_SQ_2_DOWN_SAMPLE(int16_t)
             case 4:
-                SUM_SQ_2_DOWN_SAMPLE(nitf_Int32)
+                SUM_SQ_2_DOWN_SAMPLE(int32_t)
             case 8:
-                SUM_SQ_2_DOWN_SAMPLE(nitf_Int64)
+                SUM_SQ_2_DOWN_SAMPLE(int64_t)
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -772,12 +779,13 @@ nitf_Error * error)
 
 NITFPRIV(void) SumSq2DownSample_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no instance data */
 }
 
-NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(nitf_Uint32
+NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(uint32_t
         rowSkip,
-        nitf_Uint32
+        uint32_t
         colSkip,
         nitf_Error *
         error)
@@ -830,17 +838,17 @@ NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(nitf_Uint32
 
 #define SELECT_2_DOWN_SAMPLE(type) \
     { \
-        nitf_Uint32 colSkip;     /* Column skip */ \
-        nitf_Uint32 rowSkip;     /* Row skip */ \
-        nitf_Uint32 colInc;      /* Column increment */ \
-        nitf_Uint32 rowInc;      /* Pointer increment for end of row */ \
-        nitf_Uint32 outRowInc;   /* Output pointer increment for end of row */ \
-        nitf_Uint32 winRowInc;   /* Row increment, current window */ \
-        nitf_Uint32 row;         /* Current row */ \
-        nitf_Uint32 column;      /* Current column */ \
-        nitf_Uint32 winRow;      /* Current row in current window */ \
-        nitf_Uint32 winCol;      /* Current column current window */ \
-        nitf_Uint32 rowWinLimit; /* Number of rows in current window */ \
+        uint32_t colSkip;     /* Column skip */ \
+        uint32_t rowSkip;     /* Row skip */ \
+        uint32_t colInc;      /* Column increment */ \
+        uint32_t rowInc;      /* Pointer increment for end of row */ \
+        uint32_t outRowInc;   /* Output pointer increment for end of row */ \
+        uint32_t winRowInc;   /* Row increment, current window */ \
+        uint32_t row;         /* Current row */ \
+        uint32_t column;      /* Current column */ \
+        uint32_t winRow;      /* Current row in current window */ \
+        uint32_t winCol;      /* Current column current window */ \
+        uint32_t rowWinLimit; /* Number of rows in current window */ \
         type *outp0;             /* Pointer into output, band 0 */ \
         type *outp1;             /* Pointer into output, band 0 */ \
         type *currentRowPtr0;    /* Pointer to the current window row, band 0 */ \
@@ -942,15 +950,15 @@ NITFAPI(nitf_DownSampler *) nitf_SumSq2DownSample_construct(nitf_Uint32
     NITFPRIV(NITF_BOOL) Select2DownSample_apply(nitf_DownSampler * object,
 NITF_DATA ** inputWindows,
 NITF_DATA ** outputWindows,
-nitf_Uint32 numBands,
-nitf_Uint32 numWindowRows,
-nitf_Uint32 numWindowCols,
-nitf_Uint32 numInputCols,
-nitf_Uint32 numCols,
-nitf_Uint32 pixelType,
-nitf_Uint32 pixelSize,
-nitf_Uint32 rowsInLastWindow,
-nitf_Uint32 colsInLastWindow,
+uint32_t numBands,
+uint32_t numWindowRows,
+uint32_t numWindowCols,
+uint32_t numInputCols,
+uint32_t numCols,
+uint32_t pixelType,
+uint32_t pixelSize,
+uint32_t rowsInLastWindow,
+uint32_t colsInLastWindow,
 nitf_Error * error)
 {
 
@@ -966,13 +974,13 @@ nitf_Error * error)
         switch (pixelSize)
         {
             case 1:
-                SELECT_2_DOWN_SAMPLE(nitf_Uint8)
+                SELECT_2_DOWN_SAMPLE(uint8_t)
             case 2:
-                SELECT_2_DOWN_SAMPLE(nitf_Uint16)
+                SELECT_2_DOWN_SAMPLE(uint16_t)
             case 4:
-                SELECT_2_DOWN_SAMPLE(nitf_Uint32)
+                SELECT_2_DOWN_SAMPLE(uint32_t)
             case 8:
-                SELECT_2_DOWN_SAMPLE(nitf_Uint64)
+                SELECT_2_DOWN_SAMPLE(uint64_t)
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -981,20 +989,20 @@ nitf_Error * error)
     }
     else if (pixelType == NITF_PIXEL_TYPE_B)
     {
-        SELECT_2_DOWN_SAMPLE(nitf_Uint8)
+        SELECT_2_DOWN_SAMPLE(uint8_t)
     }
     else if (pixelType == NITF_PIXEL_TYPE_SI)
     {
         switch (pixelSize)
         {
             case 1:
-                SELECT_2_DOWN_SAMPLE(nitf_Int8)
+                SELECT_2_DOWN_SAMPLE(int8_t)
             case 2:
-                SELECT_2_DOWN_SAMPLE(nitf_Int16)
+                SELECT_2_DOWN_SAMPLE(int16_t)
             case 4:
-                SELECT_2_DOWN_SAMPLE(nitf_Int32)
+                SELECT_2_DOWN_SAMPLE(int32_t)
             case 8:
-                SELECT_2_DOWN_SAMPLE(nitf_Int64)
+                SELECT_2_DOWN_SAMPLE(int64_t)
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -1031,12 +1039,13 @@ nitf_Error * error)
 
 NITFPRIV(void) Select2DownSample_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no instance data */
 }
 
-NITFAPI(nitf_DownSampler *) nitf_Select2DownSample_construct(nitf_Uint32
+NITFAPI(nitf_DownSampler *) nitf_Select2DownSample_construct(uint32_t
         rowSkip,
-        nitf_Uint32
+        uint32_t
         colSkip,
         nitf_Error *
         error)

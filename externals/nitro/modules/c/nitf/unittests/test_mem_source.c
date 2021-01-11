@@ -27,14 +27,14 @@
 #define BAND1 "AAAAAAAAAAAAAAAA"
 #define BAND2 "BBBBBBBBBBBBBBBB"
 #define BAND3 "CCCCCCCCCCCCCCCC"
-#define MEMSIZE strlen(MEMBUF)
+#define MEMSIZE ((nitf_Off) strlen(MEMBUF))
 #define NUM_BANDS 3
 
 TEST_CASE(testMemorySource)
 {
     /*  Get the error object       */
     nitf_Error error;
-    int bandSize = MEMSIZE / NUM_BANDS;
+    size_t bandSize = (size_t)(MEMSIZE / NUM_BANDS);
     int numBytesPerPix = 1;
     char *band_0 = NULL, *band_1 = NULL, *band_2 = NULL, *all_bands = NULL;
 
@@ -61,7 +61,7 @@ TEST_CASE(testMemorySource)
     band_0 = (char *) NITF_MALLOC(bandSize + 1);
     band_1 = (char *) NITF_MALLOC(bandSize + 1);
     band_2 = (char *) NITF_MALLOC(bandSize + 1);
-    all_bands = (char *) NITF_MALLOC(MEMSIZE + 1);
+    all_bands = (char *) NITF_MALLOC((size_t)(MEMSIZE + 1));
     band_0[bandSize] = 0;
     band_1[bandSize] = 0;
     band_2[bandSize] = 0;
@@ -100,8 +100,8 @@ TEST_CASE(testMemorySource)
     TEST_ASSERT_NULL(bs2);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
+    (void)argc;
+    (void)argv;
     CHECK(testMemorySource);
-    return 0;
-}
+)

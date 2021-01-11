@@ -98,10 +98,10 @@ public:
     void setSubheaderFields(nitf::TRE fields);
 
     //! Get the dataLength
-    nitf::Uint32 getDataLength() const;
+    uint32_t getDataLength() const;
 
     //! Set the dataLength
-    void setDataLength(nitf::Uint32 value);
+    void setDataLength(uint32_t value);
 
     //! Get the userDefinedSection
     nitf::Extensions getUserDefinedSection();

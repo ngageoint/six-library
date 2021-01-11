@@ -90,6 +90,16 @@ XercesLocalString& XercesLocalString::operator=(const XercesLocalString& rhs)
 void XercesContentHandler::characters(const XMLCh* const chars,
                                       const XercesSize_T length)
 {
+    if (mLiteHandler->use_wchar_t())
+    {
+        if (mLiteHandler->characters(chars, length))
+        {
+            return; // processed as wide_char
+        }    
+    }
+
+    // Either use_wchar_t() is false (default, legacy behavior) or
+    // we couldn't process the wide-character (Windows).
     XercesLocalString xstr(chars);
     mLiteHandler->characters(xstr.str().c_str(), (int)length);
 }

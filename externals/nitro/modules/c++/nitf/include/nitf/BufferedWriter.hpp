@@ -43,17 +43,17 @@ public:
 
     void flushBuffer();
 
-    nitf::Uint64 getTotalWritten() const
+    uint64_t getTotalWritten() const
     {
         return mTotalWritten;
     }
 
-    nitf::Uint64 getNumBlocksWritten() const
+    uint64_t getNumBlocksWritten() const
     {
         return mBlocksWritten;
     }
 
-    nitf::Uint64 getNumPartialBlocksWritten() const
+    uint64_t getNumPartialBlocksWritten() const
     {
         return mPartialBlocks;
     }
@@ -87,10 +87,10 @@ private:
     const mem::ScopedArray<char> mScopedBuffer;
     char* const mBuffer;
 
-    nitf::Uint64 mPosition;
-    nitf::Uint64 mTotalWritten;
-    nitf::Uint64 mBlocksWritten;
-    nitf::Uint64 mPartialBlocks;
+    uint64_t mPosition;
+    uint64_t mTotalWritten;
+    uint64_t mBlocksWritten;
+    uint64_t mPartialBlocks;
     double mElapsedTime;
 
     // NOTE: This is at the end to give us a chance to adopt the buffer

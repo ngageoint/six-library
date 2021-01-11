@@ -23,8 +23,10 @@
  
 #ifndef __NET_SSL_CONNECTION_H__
 #define __NET_SSL_CONNECTION_H__
+#pragma once
 
 #include <net/ssl/net_ssl_config.h>
+#include "sys/Conf.h"
 #if defined(USE_OPENSSL)
 #include <net/NetConnection.h>
 #include <openssl/ssl.h>
@@ -63,10 +65,16 @@ public:
      *  \param serverAuth  Flag for server authentication
      *  \param host  The host name in which we are connected
      */
+    SSLConnection(std::unique_ptr<net::Socket>&& socket,
+                  SSL_CTX* ctx,
+                  bool serverAuth = false,
+                  const std::string& host = "");
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     SSLConnection(std::auto_ptr<net::Socket> socket, 
                   SSL_CTX * ctx, 
                   bool serverAuth = false,
                   const std::string& host = "");
+    #endif
 
     /*!  
      *  Destructor

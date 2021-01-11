@@ -26,6 +26,7 @@
 #include "io/InputStream.h"
 #include "io/OutputStream.h"
 #include "io/NullStreams.h"
+#include "mem/SharedPtr.h"
 
 namespace io
 {
@@ -63,7 +64,7 @@ protected:
         return mProxy->read(buffer, len);
     }
 
-    std::auto_ptr<InputStream> mProxy;
+    mem::auto_ptr<InputStream> mProxy;
     bool mOwnPtr;
 };
 
@@ -110,7 +111,7 @@ public:
     }
 
 protected:
-    std::auto_ptr<OutputStream> mProxy;
+    mem::auto_ptr<OutputStream> mProxy;
     bool mOwnPtr;
 };
 

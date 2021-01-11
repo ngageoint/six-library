@@ -57,12 +57,12 @@ sys::Mutex RunNothing::counterLock;
 
 TEST_CASE(testExceptionLogger)
 {
-    std::auto_ptr<logging::Logger> log(new logging::Logger("test"));
+    std::unique_ptr<logging::Logger> log(new logging::Logger("test"));
 
     mem::SharedPtr<logging::ExceptionLogger> exLog(new logging::ExceptionLogger(log.get()));
 
     size_t counter(0);
-    size_t numThreads(2);
+    uint16_t numThreads(2);
  
     std::vector<sys::Runnable*> runs;
    

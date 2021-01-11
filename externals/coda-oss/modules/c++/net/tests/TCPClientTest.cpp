@@ -57,7 +57,7 @@ int main(int argc, char** argv)
         int port = atoi(argv[2]);
 
         SocketAddress sa(host, port);
-        std::auto_ptr<Socket> socket = TCPClientSocketFactory().create(sa);
+        mem::auto_ptr<Socket> socket = TCPClientSocketFactory().create(sa);
         my_packet_t packet;
         packet.packet_no = 1;
         packet.time_stamp = time(NULL);

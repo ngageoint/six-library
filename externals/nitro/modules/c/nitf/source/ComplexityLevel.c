@@ -109,7 +109,7 @@ NITFPRIV(NITF_CLEVEL) checkCCSExtent(nitf_Record* record,
 NITFPRIV(NITF_CLEVEL) checkFileSize(nitf_Record* record,
                                     nitf_Error* error)
 {
-    nitf_Int64 fl;
+    int64_t fl;
     if (!nitf_Field_get(record->header->NITF_FL, &fl, NITF_CONV_INT, 8, error))
         return NITF_CLEVEL_CHECK_FAILED;
 
@@ -244,7 +244,7 @@ NITFPRIV(NITF_CLEVEL) checkBlockSize(nitf_Record* record, nitf_Error* error)
 
 NITFPRIV(NITF_CLEVEL) checkNumImages(nitf_Record* record, nitf_Error* error)
 {
-    nitf_Uint32 numi = nitf_Record_getNumImages(record, error);
+    uint32_t numi = nitf_Record_getNumImages(record, error);
     return (numi > 20) ? NITF_CLEVEL_05 : NITF_CLEVEL_03;
 }
 
@@ -252,7 +252,7 @@ NITFPRIV(NITF_CLEVEL) checkNumDES(nitf_Record* record, nitf_Error* error)
 {
 
     int clevel = NITF_CLEVEL_03;
-    nitf_Uint32 numdes = nitf_Record_getNumDataExtensions(record, error);
+    uint32_t numdes = nitf_Record_getNumDataExtensions(record, error);
 
 
     if (numdes > 10)

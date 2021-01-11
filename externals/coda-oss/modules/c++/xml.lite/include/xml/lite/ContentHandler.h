@@ -22,6 +22,9 @@
 
 #ifndef __XML_LITE_CONTENT_HANDLER_H__
 #define __XML_LITE_CONTENT_HANDLER_H__
+#pragma once
+
+#include <stdint.h>
 
 #include <string>
 #include "xml/lite/Attributes.h"
@@ -90,6 +93,13 @@ public:
      *  \param length The length of the new data
      */
     virtual void characters(const char *data, int length) = 0;
+    virtual bool characters(const wchar_t* const /*data*/, const size_t /*length*/)
+    { return false; /* continue on to existing characters()*/ } /* =0 would break existing code */
+
+    virtual bool use_wchar_t() const // =0 would break existing code
+    {
+        return false; // call characters(const char*)
+    }
 
     /*!
      *  Receive notification of the beginning of an element.

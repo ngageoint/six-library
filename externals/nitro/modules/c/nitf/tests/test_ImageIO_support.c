@@ -39,7 +39,7 @@ NITFAPI(test_nitf_ImageIOConstructArgs *) test_nitf_ImageIOReadConstructArgs(
     test_nitf_ImageIOConstructArgs *args;   /* The result */
     long padValues[8];                      /* Temp for pad value bytes */
     long tmpLong;                           /* Temp for longs */
-    nitf_Uint32 i;
+    uint32_t i;
 
     args = (test_nitf_ImageIOConstructArgs *)
            malloc(sizeof(test_nitf_ImageIOConstructArgs));
@@ -331,7 +331,7 @@ NITFAPI(test_nitf_ImageIOReadArgs *)test_nitf_ImageIOReadReadArgs(
     FILE *file, char **error)
 {
     test_nitf_ImageIOReadArgs *args;   /* The result */
-    nitf_Uint32 band;                  /* Current band */
+    uint32_t band;                  /* Current band */
     long tmpLong;                           /* Temp for longs */
 
     args = (test_nitf_ImageIOReadArgs *)
@@ -513,13 +513,13 @@ NITFAPI(test_nitf_ImageIOReadArgs *)test_nitf_ImageIOReadReadArgs(
 NITFAPI(void *) test_nitf_ImageIO_mkArray(
     test_nitf_ImageIOConstructArgs *args, char **error)
 {
-    nitf_Uint8 ***data;     /* The result */
-    nitf_Uint32 nBands;     /* Actual number of bands */
-    nitf_Uint32 band;       /* The current band */
-    nitf_Uint8 **rows;      /* The row dimension */
-    nitf_Uint32 row;        /* The current row */
-    nitf_Uint32 bytes;      /* Number of bytes per pixel */
-    nitf_Uint8 *cols;       /* The column dimension */
+    uint8_t ***data;     /* The result */
+    uint32_t nBands;     /* Actual number of bands */
+    uint32_t band;       /* The current band */
+    uint8_t **rows;      /* The row dimension */
+    uint32_t row;        /* The current row */
+    uint32_t bytes;      /* Number of bytes per pixel */
+    uint8_t *cols;       /* The column dimension */
 
     nBands = args->nBands;
     if (nBands == 0)
@@ -533,7 +533,7 @@ NITFAPI(void *) test_nitf_ImageIO_mkArray(
 
     /*    Band dimension */
 
-    data = (nitf_Uint8 ***) NITF_MALLOC(nBands * sizeof(nitf_Uint8 **));
+    data = (uint8_t ***) NITF_MALLOC(nBands * sizeof(uint8_t **));
     if (data == NULL)
     {
         snprintf(buffer, TEST_NITF_IMAGE_IO_MAX_STRING,
@@ -544,7 +544,7 @@ NITFAPI(void *) test_nitf_ImageIO_mkArray(
 
     /*    Row dimension */
 
-    rows = (nitf_Uint8 **) NITF_MALLOC(nBands * (args->nRows) * sizeof(nitf_Uint8 *));
+    rows = (uint8_t **) NITF_MALLOC(nBands * (args->nRows) * sizeof(uint8_t *));
     if (rows == NULL)
     {
         NITF_FREE(data);
@@ -562,7 +562,7 @@ NITFAPI(void *) test_nitf_ImageIO_mkArray(
     /*    Column dimension */
 
     bytes = NITF_NBPP_TO_BYTES(args->nBits);
-    cols = (nitf_Uint8 *) NITF_MALLOC(
+    cols = (uint8_t *) NITF_MALLOC(
                nBands * (args->nRows) * (args->nColumns) * bytes);
     if (data == NULL)
     {
@@ -586,7 +586,7 @@ NITFAPI(void *) test_nitf_ImageIO_mkArray(
 
 /*========================= test_nitf_ImageIO_freeArray ======================*/
 
-NITFAPI(void) test_nitf_ImageIO_freeArray(nitf_Uint8 ***data)
+NITFAPI(void) test_nitf_ImageIO_freeArray(uint8_t ***data)
 {
     NITF_FREE(data[0][0]);   /* Columns */
     NITF_FREE(data[0]);      /* Rows */
@@ -599,13 +599,13 @@ NITFAPI(void) test_nitf_ImageIO_freeArray(nitf_Uint8 ***data)
 NITFAPI(void *) test_nitf_ImageIO_brcI4(
     test_nitf_ImageIOConstructArgs *args, char **error)
 {
-    nitf_Uint32 ***data;    /* The result */
-    nitf_Uint32 nBands;     /* Number of bands */
-    nitf_Uint32 band;       /* The current band */
-    nitf_Uint32 row;        /* The current row */
-    nitf_Uint32 col;        /* The current column */
+    uint32_t ***data;    /* The result */
+    uint32_t nBands;     /* Number of bands */
+    uint32_t band;       /* The current band */
+    uint32_t row;        /* The current row */
+    uint32_t col;        /* The current column */
 
-    data = (nitf_Uint32 ***) test_nitf_ImageIO_mkArray(args, error);
+    data = (uint32_t ***) test_nitf_ImageIO_mkArray(args, error);
     if (data == NULL)
         return(NULL);
 
@@ -624,7 +624,7 @@ NITFAPI(void *) test_nitf_ImageIO_brcI4(
             for (col = 0;col < args->nColumns;col++)
                 data[band][row][col] = (band << 16) + (row << 8) + col;
 
-    return((nitf_Uint8 ***) data);
+    return((uint8_t ***) data);
 }
 
 /*========================= test_nitf_ImageIO_brcI4 ==========================*/
@@ -640,9 +640,9 @@ NITFAPI(void *) test_nitf_ImageIO_brcC8(
     double ***data;       /* The result */
     float *fdp;          /* Float pointer to current pixel */
     float nBands;        /* Number of bands */
-    nitf_Uint32 band;    /* The current band */
-    nitf_Uint32 row;     /* The current row */
-    nitf_Uint32 col;     /* The current column */
+    uint32_t band;    /* The current band */
+    uint32_t row;     /* The current row */
+    uint32_t col;     /* The current column */
 
     data = (double ***) test_nitf_ImageIO_mkArray(args, error);
     if (data == NULL)
@@ -667,17 +667,17 @@ NITFAPI(void *) test_nitf_ImageIO_brcC8(
                 *fdp = band * 100.0 + col;
             }
 
-    return((nitf_Uint8 ***) data);
+    return((uint8_t ***) data);
 }
 
 /*========================= test_nitf_ImageIO_bigEndian ======================*/
 
 NITFAPI(int) test_nitf_ImageIO_bigEndian(void)
 {
-    nitf_Uint8 p8[2] = {1, 2};    /* For big-endian test */
-    nitf_Uint16 *p16;            /* For big-endian test */
+    uint8_t p8[2] = {1, 2};    /* For big-endian test */
+    uint16_t *p16;            /* For big-endian test */
 
-    p16 = (nitf_Uint16 *) p8;
+    p16 = (uint16_t *) p8;
     return((*p16 == 0x102) ? 1 : 0); /* 0x102 => big-endian */
 }
 
@@ -750,22 +750,23 @@ char **makeBlockPattern(test_nitf_ImageIOConstructArgs *args,
                         char *spec, char **error)
 {
     char **array;             /* The result */
-    nitf_Uint32 nBlkRows;     /* Number of rows of blocks */
-    nitf_Uint32 nBlkCols;     /* Number of columns of blocks */
+    uint32_t nBlkRows;     /* Number of rows of blocks */
+    uint32_t nBlkCols;     /* Number of columns of blocks */
     size_t specLen;           /* Length of the spec string */
-    nitf_Uint32 i;
+    uint32_t i;
 
     specLen = strlen(spec);
     nBlkRows = args->nBlksPerColumn;
     nBlkCols = args->nBlksPerRow;
 
-    array = NITF_MALLOC(sizeof(char *) * nBlkRows + specLen + 1);
+    const size_t array_sz = sizeof(char*) * nBlkRows + specLen + 1;
+    array = NITF_MALLOC(array_sz);
     if (array == NULL)
     {
         *error = "Error allocating pattern array\n";
         return(NULL);
     }
-    strcpy((char *) (&(array[nBlkRows])), spec);
+    nrt_strcpy_s((char *) (&(array[nBlkRows])), array_sz, spec);
     for (i = 0;i < nBlkRows;i++)
     {
         array[i] = ((char *) & (array[nBlkRows])) + (nBlkCols + 1) * i;
@@ -866,26 +867,26 @@ char **makeBlockPattern(test_nitf_ImageIOConstructArgs *args,
 NITFAPI(void *) test_nitf_ImageIO_block(
     test_nitf_ImageIOConstructArgs *args, char **error)
 {
-    nitf_Uint8 ***data;     /* The result */
+    uint8_t ***data;     /* The result */
     char **pattern;         /* Block mask pattern */
-    nitf_Uint32 nBands;     /* Number of bands */
-    nitf_Uint32 band;       /* The current band */
-    nitf_Uint32 bytes;      /* Number of bytes per pixel */
-    nitf_Uint32 blksPerRow; /* Number of blocks/row */
-    nitf_Uint32 rowsPerBlk; /* Number of rows/block */
-    nitf_Uint32 colsPerBlk; /* Number of columns/block */
-    nitf_Uint32 valueCode;  /* Output pixel value type code */
+    uint32_t nBands;     /* Number of bands */
+    uint32_t band;       /* The current band */
+    uint32_t bytes;      /* Number of bytes per pixel */
+    uint32_t blksPerRow; /* Number of blocks/row */
+    uint32_t rowsPerBlk; /* Number of rows/block */
+    uint32_t colsPerBlk; /* Number of columns/block */
+    uint32_t valueCode;  /* Output pixel value type code */
     char valueTypeStr[4];   /* Value type string from specification */
-    nitf_Uint32 rowsLeft;   /* Number of rows left in this block */
-    nitf_Uint32 colsLeft;   /* Number of columnsleft in this block */
-    nitf_Uint32 blkRow;     /* The current block row */
-    nitf_Uint32 blkCol;     /* The current block column */
+    uint32_t rowsLeft;   /* Number of rows left in this block */
+    uint32_t colsLeft;   /* Number of columnsleft in this block */
+    uint32_t blkRow;     /* The current block row */
+    uint32_t blkCol;     /* The current block column */
     int present;            /* Current block present if true */
     int transient;          /* Current block transient if true */
-    nitf_Uint32 row;        /* The current row */
-    nitf_Uint32 col;        /* The current column */
+    uint32_t row;        /* The current row */
+    uint32_t col;        /* The current column */
 
-    data = (nitf_Uint8 ***) test_nitf_ImageIO_mkArray(args, error);
+    data = (uint8_t ***) test_nitf_ImageIO_mkArray(args, error);
     if (data == NULL)
         return(NULL);
 
@@ -922,13 +923,13 @@ NITFAPI(void *) test_nitf_ImageIO_block(
     }
 
     if (bytes == 1)
-        PATTERN_PROCESS(nitf_Uint8)
+        PATTERN_PROCESS(uint8_t)
         else if (bytes == 2)
-            PATTERN_PROCESS(nitf_Uint16)
+            PATTERN_PROCESS(uint16_t)
             else if (bytes == 4)
-                PATTERN_PROCESS(nitf_Uint32)
+                PATTERN_PROCESS(uint32_t)
                 else if (bytes == 8)
-                    PATTERN_PROCESS(nitf_Uint64)
+                    PATTERN_PROCESS(uint64_t)
                     else
                     {
                         snprintf(buffer, TEST_NITF_IMAGE_IO_MAX_STRING, "Invalid byte count\n");

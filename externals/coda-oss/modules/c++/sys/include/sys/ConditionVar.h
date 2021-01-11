@@ -30,7 +30,7 @@ namespace sys
 {
 typedef ConditionVarNSPR ConditionVar;
 }
-#    elif defined(WIN32)
+#    elif (defined(WIN32) || defined(_WIN32))
 #        include "sys/ConditionVarWin32.h"
 namespace sys
 {

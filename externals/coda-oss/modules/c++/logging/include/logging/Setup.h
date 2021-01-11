@@ -26,6 +26,7 @@
 #include <memory>
 #include <string>
 
+#include "mem/SharedPtr.h"
 #include "logging/Logger.h"
 
 namespace logging
@@ -45,7 +46,7 @@ namespace logging
  *  \param logCount - number of rotating logs to keep (default: 0 no rotation)
  *  \param logBytes - number of bytes per rotating log (default: 0 no rotation)
  */
-std::auto_ptr<logging::Logger> setupLogger(
+mem::auto_ptr<logging::Logger> setupLogger(
     const std::string& program, 
     const std::string& logLevel = "warning", 
     const std::string& logFile = "console",

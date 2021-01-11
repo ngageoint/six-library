@@ -151,7 +151,7 @@ public class NITFReader extends ImageReader
     {
         checkIndex(imageIndex);
 
-        Integer key = new Integer(imageIndex);
+        Integer key = Integer.valueOf(imageIndex);
         try
         {
             if (!imageReaderMap.containsKey(key))
