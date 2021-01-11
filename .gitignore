@@ -3,6 +3,7 @@
 *~
 *.swp
 *venv
+CMakeSettings.json
 
 # Eclipse
 .cproject
@@ -25,6 +26,7 @@ test_package/build/
 out/build/
 out/install/
 test_package/build/
+build/
 *.pyc
 *.swp
 .depproj
