@@ -200,7 +200,7 @@ void Writer::setGraphicWriteHandler(int index,
 }
 
 void Writer::setTextWriteHandler(int index,
-                                 mem::SharedPtr<WriteHandler> writeHandler)
+                                mem::SharedPtr<WriteHandler> writeHandler)
 {
     if (!nitf_Writer_setTextWriteHandler(getNativeOrThrow(), index,
                                          writeHandler->getNative(), &error))
@@ -222,7 +222,7 @@ void Writer::setDEWriteHandler(int index,
 nitf::ImageWriter Writer::newImageWriter(int imageNumber)
 {
     nitf_SegmentWriter * x = nitf_Writer_newImageWriter(getNativeOrThrow(),
-                                                        imageNumber, NULL, &error);
+                                                        imageNumber, nullptr, &error);
     if (!x)
         throw nitf::NITFException(&error);
 
@@ -236,7 +236,7 @@ nitf::ImageWriter Writer::newImageWriter(int imageNumber,
                                          const std::map<std::string, void*>& options)
 {
     nitf::HashTable userOptions;
-    nrt_HashTable* userOptionsNative = NULL;
+    nrt_HashTable* userOptionsNative = nullptr;
 
     if (!options.empty())
     {
@@ -313,7 +313,7 @@ nitf::List Writer::getWarningList()
     return nitf::List(getNativeOrThrow()->warningList);
 }
 
-void Writer::writeHeader(nitf::Off& fileLenOff, nitf::Uint32& hdrLen)
+void Writer::writeHeader(nitf::Off& fileLenOff, uint32_t& hdrLen)
 {
     if (!nitf_Writer_writeHeader(getNativeOrThrow(),
                                  &fileLenOff,
@@ -339,7 +339,7 @@ void Writer::writeImageSubheader(nitf::ImageSubheader subheader,
 }
 
 void Writer::writeDESubheader(nitf::DESubheader subheader,
-                              nitf::Uint32& userSublen,
+                              uint32_t& userSublen,
                               nitf::Version version)
 {
     if (!nitf_Writer_writeDESubheader(getNativeOrThrow(),
@@ -352,10 +352,10 @@ void Writer::writeDESubheader(nitf::DESubheader subheader,
     }
 }
 
-void Writer::writeInt64Field(nitf::Uint64 field,
-                             nitf::Uint32 length,
+void Writer::writeInt64Field(uint64_t field,
+                             uint32_t length,
                              char fill,
-                             nitf::Uint32 fillDir)
+                             uint32_t fillDir)
 {
     if (!nitf_Writer_writeInt64Field(getNativeOrThrow(),
                                      field,

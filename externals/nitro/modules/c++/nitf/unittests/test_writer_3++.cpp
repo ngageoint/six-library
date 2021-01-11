@@ -103,7 +103,7 @@ static void doWrite(const nitf::Record& record_, nitf::Reader& reader, const std
     for (int i = 0; i < num; i++)
     {
         nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
-        std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+        mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
             new nitf::SegmentWriter(readerSource));
         writer.setDEWriteHandler(i, segmentWriter);
     }
