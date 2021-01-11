@@ -27,7 +27,7 @@
 
 namespace nitf
 {
-IOStreamWriter::IOStreamWriter(std::shared_ptr<io::SeekableOutputStream> stream) :
+IOStreamWriter::IOStreamWriter(mem::SharedPtr<io::SeekableOutputStream> stream) :
     mStream(stream)
 {
 }
