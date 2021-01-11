@@ -14,10 +14,10 @@ coda_add_module(
         source/Component.c
         source/JasPerImpl.c
         source/OpenJPEGImpl.c
-        source/j2k_Reader.c
+        source/Reader.c
         source/SimpleComponentImpl.c
         source/SimpleContainerImpl.c
-        source/j2k_Writer.c)
+        source/Writer.c)
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}

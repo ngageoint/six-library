@@ -89,7 +89,6 @@ NITFAPI(const char**) TEST_DES_init(nitf_Error* error)
 }
 NITFAPI(void) TEST_DES_cleanup(void){}
 NITFAPI(nitf_TREHandler*) TEST_DES_handler(nitf_Error* error) {
-    (void)error;
     return &TEST_DESHandler;
 }
 

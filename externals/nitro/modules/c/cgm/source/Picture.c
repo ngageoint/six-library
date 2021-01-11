@@ -32,6 +32,7 @@ NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
                 NITF_CTXT, NITF_ERR_MEMORY);
         return NULL;
     }
+    picture->name = NULL;
     picture->colorSelectionMode = CGM_DIRECT;
     picture->edgeWidthSpec = CGM_ABSOLUTE;
     picture->lineWidthSpec = CGM_ABSOLUTE;
@@ -40,7 +41,11 @@ NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
 
     picture->body = NULL;
 
-    picture->name = nitf_strdup(name);
+    if (name)
+    {
+        picture->name = (char*)NITF_MALLOC( strlen( name ) + 1 );
+        strcpy(picture->name, name);
+    }
 
     return picture;
 }

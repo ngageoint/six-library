@@ -61,7 +61,7 @@ NITFAPI(nitf_Off) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
                                        nitf_Off offset,
                                        int whence, nitf_Error * error)
 {
-    uint64_t baseOffset;     /* Bas offset to the data */
+    nitf_Uint64 baseOffset;     /* Bas offset to the data */
     nitf_Off actualPosition;       /* Real file position (no base offset) */
 
     baseOffset = segmentReader->baseOffset;
@@ -81,7 +81,7 @@ NITFAPI(nitf_Off) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
         case NITF_SEEK_CUR:
             if ((offset + segmentReader->virtualOffset >
                     segmentReader->dataLength)
-                    || ((int64_t)(offset + segmentReader->virtualOffset) < 0))
+                    || (offset + segmentReader->virtualOffset < 0))
             {
                 nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                                  "Seek offset out of bounds\n");
@@ -124,7 +124,6 @@ NITFAPI(nitf_Off) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
 NITFAPI(nitf_Off) nitf_SegmentReader_tell(nitf_SegmentReader * segmentReader,
                                        nitf_Error * error)
 {
-    (void)error;
     return (segmentReader->virtualOffset);
 }
 
@@ -133,7 +132,6 @@ NITFAPI(nitf_Off) nitf_SegmentReader_getSize(nitf_SegmentReader *
         segmentReader,
         nitf_Error * error)
 {
-    (void)error;
     return (segmentReader->dataLength);
 }
 

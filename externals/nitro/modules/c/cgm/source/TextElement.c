@@ -61,26 +61,23 @@ NITFPRIV(cgm_Element*) textClone(NITF_DATA* data, nitf_Error* error)
         return NULL;
     dest = (cgm_TextElement*)element->data;
 
-    if ((dest != NULL) && (source != NULL))
+    if (source->attributes)
     {
-        if (source->attributes)
+        dest->attributes = cgm_TextAttributes_clone(source->attributes, error);
+        if (!dest->attributes)
         {
-            dest->attributes = cgm_TextAttributes_clone(source->attributes, error);
-            if (!dest->attributes)
-            {
-                cgm_Element_destruct(&element);
-                return NULL;
-            }
+            cgm_Element_destruct(&element);
+            return NULL;
         }
-
-        if (source->text)
+    }
+    
+    if (source->text)
+    {
+        dest->text = cgm_Text_clone(source->text, error);
+        if (!dest->text)
         {
-            dest->text = cgm_Text_clone(source->text, error);
-            if (!dest->text)
-            {
-                cgm_Element_destruct(&element);
-                return NULL;
-            }
+            cgm_Element_destruct(&element);
+            return NULL;
         }
     }
 
@@ -103,11 +100,11 @@ NITFAPI(cgm_Element*) cgm_TextElement_construct(nitf_Error* error)
         text->attributes = NULL;
         text->text = NULL;
         element->data = (NITF_DATA*)text;
-
-        element->print = &textPrint;
-        element->clone = &textClone;
-        element->destroy = &textDestroy;
     }
+
+    element->print = &textPrint;
+    element->clone = &textClone;
+    element->destroy = &textDestroy;
 
     return element;
 }

@@ -229,8 +229,3 @@ to make sure NITRO can find them.
 
 * If you wish to use a custom TRE location, you can also specify that
   with `NITF_PLUGIN_PATH`.
-
-Contact
----------
-
-July 2020, Dan.Smith@maxar.com

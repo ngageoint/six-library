@@ -30,10 +30,7 @@
 #include <import/nitf.h>
 #include "Test.h"
 
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4125) // decimal digit terminates octal escape sequence
-#endif
+
 static const struct {
   unsigned int 	 width;
   unsigned int 	 height;
@@ -979,9 +976,6 @@ static const struct {
   "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377"
   "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377",
 };
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 static const char* RGB[] = {"R", "G", "B"};
 
@@ -1063,6 +1057,7 @@ NITF_BOOL addImageSegment(nitf_Record *record, nitf_Error *error)
     nitf_ImageSubheader *header = NULL;
     nitf_BandInfo **bands = NULL;
 
+    double corners[4][2];
     int i;
 
     segment = nitf_Record_newImageSegment(record, error);
@@ -1153,7 +1148,7 @@ NITF_BOOL writeNITF(nitf_Record *record, const char* filename, nitf_Error *error
     nitf_Writer *writer = NULL;
     nitf_ImageWriter *imageWriter = NULL;
     nitf_ImageSource *imageSource;
-    uint32_t i;
+    nitf_Uint32 i;
 
     /* create the IOHandle */
     out = nitf_IOHandle_create(filename, NITF_ACCESS_WRITEONLY,
@@ -1225,8 +1220,7 @@ TEST_CASE_ARGS(testCreate)
     nitf_Error error;
     char* outname = argc > 1 ? argv[1] : "test_create.ntf";
 
-    record = nitf_Record_construct(NITF_VER_21, &error);
-    TEST_ASSERT(record);
+    TEST_ASSERT((record = nitf_Record_construct(NITF_VER_21, &error)));
     TEST_ASSERT(populateFileHeader(record, outname, &error));
     TEST_ASSERT(addImageSegment(record, &error));
     TEST_ASSERT(writeNITF(record, outname, &error));
@@ -1250,10 +1244,10 @@ TEST_CASE_ARGS(testRead)
     nitf_Record_destruct(&record);
 }
 
-TEST_MAIN(
-    (void)argc;
-    (void)argv;
+int main(int argc, char **argv)
+{
     CHECK_ARGS(testCreate);
     CHECK_ARGS(testRead);
-    )
+    return 0;
+}
 

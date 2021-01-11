@@ -34,7 +34,7 @@ NITF_CXX_GUARD
 NITFAPI(int) nitf_TREUtils_computeLength(nitf_TRE * tre);
 
 NITFAPI(NITF_BOOL) nitf_TREUtils_setDescription(nitf_TRE* tre,
-                                                uint32_t length,
+                                                nitf_Uint32 length,
                                                 nitf_Error* error);
 
 NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
@@ -52,7 +52,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_readField(nitf_IOInterface* io,
                                            nitf_Error * error);
 
 NITFAPI(char *) nitf_TREUtils_getRawData(nitf_TRE * tre,
-                                         uint32_t* treLength,
+                                         nitf_Uint32* treLength,
                                          nitf_Error * error);
 
 NITFAPI(NITF_BOOL) nitf_TREUtils_isSane(nitf_TRE * tre);
@@ -88,7 +88,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_basicInit(nitf_TRE * tre,
 NITFAPI(const char*) nitf_TREUtils_basicGetID(nitf_TRE *tre);
 
 NITFAPI(NITF_BOOL) nitf_TREUtils_basicRead(nitf_IOInterface* io,
-                                           uint32_t length,
+                                           nitf_Uint32 length,
                                            nitf_TRE* tre,
                                            struct _nitf_Record* record,
                                            nitf_Error* error);

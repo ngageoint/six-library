@@ -45,15 +45,13 @@
 #include <iostream>
 #include <vector>
 
-namespace fs = std::filesystem;
-
 template <typename T>
 class Foo
 {
 protected:
     virtual void bar() {std::cout << "HERE1" << std::endl;}
 public:
-    Foo() = default;
+    Foo(){}
     virtual ~Foo(){bar();}
 };
 
@@ -64,7 +62,7 @@ class Bar : public Foo<T>
 protected:
     virtual void bar() { std::cout << "HERE2" << std::endl; }
 public:
-    Bar() = default;
+    Bar(){}
     ~Bar(){bar();}
 };
 
@@ -137,9 +135,9 @@ int main(int argc, char** argv)
             nitf::ImageSubheader imageSub;
 
             imageSeg.getSubheader().getImageId() = "Test Image";
-            std::cout << imageSeg.getSubheader().imageId() << std::endl;
-            const std::string imageId = imageSeg.getSubheader().getImageId();
-            std::cout << imageId << std::endl;
+            std::cout << imageSeg.getSubheader().getImageId().toString() << std::endl;
+            nitf::Field f = imageSeg.getSubheader().getImageId();
+            std::cout << f.toString() << std::endl;
 
             nitf::ImageSegment imageSeg2 = imageSeg.clone();
             nitf::ImageSubheader imageSub2(imageSub.clone());
@@ -168,26 +166,28 @@ int main(int argc, char** argv)
 
 
         //open a file
+        sys::OS os;
         std::vector< std::string > files;
         for (int i = 1; i < argc; ++i)
         {
-            if (!fs::exists(argv[i]))
+            if (!os.exists(argv[i]))
                 std::cout << "Error -> File does not exist: " << argv[i] << std::endl;
             else
                 files.push_back(argv[i]);
         }
 
-        for (nitf::IOHandle handle : files)
+        for (std::vector< std::string >::iterator it = files.begin(); it != files.end(); ++it)
         {
+            nitf::IOHandle handle(*it);
             nitf::Reader rdr;
             nitf::Record rec = rdr.read(handle);
 
-            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().codewords() << std::endl;
+            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().getCodewords().toString() << std::endl;
             rec.getHeader().getSecurityGroup().getCodewords() = "TEST";
-            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().codewords() << std::endl;
+            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().getCodewords().toString() << std::endl;
             nitf::FileSecurity security;
             rec.getHeader().setSecurityGroup(security);
-            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().codewords() << std::endl;
+            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().getCodewords().toString() << std::endl;
             std::cout << "Num Images: " << rec.getImages().getSize() << std::endl;
         }
 
@@ -195,7 +195,7 @@ int main(int argc, char** argv)
         nitf_Field_destruct(&cField);
         nitf_BandInfo_destruct(&cBandInfo);
     }
-    catch(const except::Exception& ex)
+    catch(except::Exception& ex)
     {
         std::cerr << "ERROR: " << ex.getMessage() << std::endl;
         return 1;

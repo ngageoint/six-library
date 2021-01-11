@@ -55,7 +55,7 @@ BufferedReader::BufferedReader(const std::string& file,
                                size_t size,
                                bool adopt) :
     mMaxBufferSize(size),
-    mScopedBuffer(adopt ? static_cast<char*>(buffer) : nullptr),
+    mScopedBuffer(adopt ? static_cast<char*>(buffer) : NULL),
     mBuffer(static_cast<char*>(buffer)),
     mPosition(0),
     mBufferSize(0),
@@ -105,7 +105,6 @@ void BufferedReader::readNextBuffer()
     }
 }
 
-#undef min
 void BufferedReader::readImpl(void* buf, size_t size)
 {
     //! Ensure there is enough data to read
@@ -166,7 +165,7 @@ nitf::Off BufferedReader::seekImpl(nitf::Off offset, int whence)
         break;
     default:
         throw except::Exception(Ctxt(
-                "Invalid whence " + std::to_string(whence)));
+                "Invalid whence " + str::toString(whence)));
     }
 
     if (desiredPos >= bufferStart && desiredPos < bufferEnd)

@@ -107,11 +107,10 @@ NITFAPI(cgm_Element*) cgm_EllipticalArcElement_construct(nitf_Error* error)
         arc->startVectorX = -1;
         arc->endVectorY = -1;
         element->data = (NITF_DATA*)arc;
-
-        element->print = &ellipticalArcPrint;
-        element->clone = &ellipticalArcClone;
-        element->destroy = &ellipticalArcDestroy;
     }
+    element->print = &ellipticalArcPrint;
+    element->clone = &ellipticalArcClone;
+    element->destroy = &ellipticalArcDestroy;
 
     return element;
 }

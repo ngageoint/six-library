@@ -22,13 +22,12 @@
 
 #ifndef __NITF_IMAGE_BLOCKER_HPP__
 #define __NITF_IMAGE_BLOCKER_HPP__
-#pragma once
 
 #include <stddef.h>
 #include <string.h>
 #include <vector>
 
-#include "cstddef.h"
+#include <sys/Conf.h>
 
 namespace nitf
 {
@@ -266,11 +265,11 @@ private:
                           size_t& lastBlockWithinLastSeg) const;
 
     void blockImpl(size_t seg,
-                   const std::byte* input,
+                   const sys::byte* input,
                    size_t numValidRowsInBlock,
                    size_t numValidColsInBlock,
                    size_t numBytesPerPixel,
-                   std::byte* output) const
+                   sys::byte* output) const
     {
         block(input, numBytesPerPixel, mNumCols, mNumRowsPerBlock[seg],
               mNumColsPerBlock, numValidRowsInBlock, numValidColsInBlock,
@@ -278,10 +277,10 @@ private:
     }
 
     void blockAcrossRow(size_t seg,
-                        const std::byte*& input,
+                        const sys::byte*& input,
                         size_t numValidRowsInBlock,
                         size_t numBytesPerPixel,
-                        std::byte*& output) const;
+                        sys::byte*& output) const;
 
 private:
     // Vectors all indexed by segment

@@ -25,7 +25,7 @@
 
 #define MAX_DATE_STRING    1024
 
-int main(int, char**)
+int main(int argc, char** argv)
 {
     try
     {
@@ -60,7 +60,7 @@ int main(int, char**)
 
         exit(EXIT_SUCCESS);
     }
-    catch (const except::Throwable & t)
+    catch (except::Throwable & t)
     {
         std::cout << t.getTrace() << std::endl;
     }

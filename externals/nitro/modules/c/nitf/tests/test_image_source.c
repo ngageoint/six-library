@@ -62,7 +62,7 @@ nitf_IOHandle prepare_io()
     return handle;
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
     /*  Get the error object       */
     nitf_Error     error;

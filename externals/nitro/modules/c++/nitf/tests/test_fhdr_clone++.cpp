@@ -22,60 +22,60 @@
 
 #include <import/nitf.hpp>
 
-#define SHOW(X) std::cout << #X << "=" << X.toString() << std::endl
-#define SHOWI(X) std::cout << #X << "=" << static_cast<uint32_t>(X) << std::endl
+#define SHOW(X) std::cout << #X << "=" << X << std::endl
+#define SHOWI(X) std::cout << #X << "=" << X << std::endl
 #define PRINT_HDR(X) std::cout << #X; printHdr(X)
 
 void printHdr(nitf::FileHeader header)
 {
-    uint32_t i;
-    SHOW( header.getFileHeader() );
-    SHOW( header.getFileVersion() );
-    SHOW( header.getComplianceLevel() );
-    SHOW( header.getSystemType() );
-    SHOW( header.getOriginStationID() );
-    SHOW( header.getFileDateTime() );
-    SHOW( header.getFileTitle() );
-    SHOW( header.getClassification() );
-    SHOW( header.getMessageCopyNum() );
-    SHOW( header.getMessageNumCopies() );
-    SHOW( header.getEncrypted() );
-    SHOW( header.getBackgroundColor() );
-    SHOW( header.getOriginatorName() );
-    SHOW( header.getOriginatorPhone() );
-    SHOWI( header.getFileLength() );
-    SHOWI( header.getHeaderLength() );
+    nitf::Uint32 i;
+    SHOW( header.getFileHeader().toString() );
+    SHOW( header.getFileVersion().toString() );
+    SHOW( header.getComplianceLevel().toString() );
+    SHOW( header.getSystemType().toString() );
+    SHOW( header.getOriginStationID().toString() );
+    SHOW( header.getFileDateTime().toString() );
+    SHOW( header.getFileTitle().toString() );
+    SHOW( header.getClassification().toString() );
+    SHOW( header.getMessageCopyNum().toString() );
+    SHOW( header.getMessageNumCopies().toString() );
+    SHOW( header.getEncrypted().toString() );
+    SHOW( header.getBackgroundColor().toString() );
+    SHOW( header.getOriginatorName().toString() );
+    SHOW( header.getOriginatorPhone().toString() );
+    SHOWI( (nitf::Uint32)header.getFileLength() );
+    SHOWI( (nitf::Uint32)header.getHeaderLength() );
 
     printf("The number of IMAGES contained in this file [%d]\n",
            (int)header.getNumImages());
 
-    for (i = 0; i < (uint32_t)header.getNumImages(); i++)
+    for (i = 0; i < (nitf::Uint32)header.getNumImages(); i++)
     {
         printf("\tThe length of IMAGE subheader [%d]: %d bytes\n",
-               i, (uint32_t)header.getImageInfo(i).getLengthSubheader());
+               i, (nitf::Uint32)header.getImageInfo(i).getLengthSubheader());
         printf("\tThe length of the IMAGE data: %d bytes\n",
-               (uint32_t)header.getImageInfo(i).getLengthData());
+               (nitf::Uint32)header.getImageInfo(i).getLengthData());
     }
 
     printf("The number of GRAPHICS contained in this file [%d]\n",
-           (uint32_t)header.getNumGraphics());
+           (nitf::Uint32)header.getNumGraphics());
 
-    for (i = 0; i < (uint32_t)header.getNumGraphics(); i++)
+    for (i = 0; i < (nitf::Uint32)header.getNumGraphics(); i++)
     {
         printf("\tThe length of GRAPHICS subheader [%d]: %d bytes\n",
-               i, (uint32_t)header.getGraphicInfo(i).getLengthSubheader());
+               i, (nitf::Uint32)header.getGraphicInfo(i).getLengthSubheader());
         printf("\tThe length of the GRAPHICS data: %d bytes\n\n",
-               (uint32_t)header.getGraphicInfo(i).getLengthData());
+               (nitf::Uint32)header.getGraphicInfo(i).getLengthData());
     }
     printf("The number of LABELS contained in this file [%d]\n",
-           (uint32_t)header.getNumLabels());
+           (nitf::Uint32)header.getNumLabels());
 
-    assert((uint32_t)header.getNumLabels() == 0);
+    assert((nitf::Uint32)header.getNumLabels() == 0);
 
     printf("The number of TEXTS contained in this file [%d]\n",
-           (uint32_t)header.getNumTexts());
+           (nitf::Uint32)header.getNumTexts());
 
-    for (i = 0; i < (uint32_t)header.getNumTexts(); i++)
+    for (i = 0; i < (nitf::Uint32)header.getNumTexts(); i++)
     {
         printf("\tThe length of TEXT subheader [%d]: %d bytes\n",
                i, (int)header.getTextInfo(i).getLengthSubheader());
@@ -83,31 +83,31 @@ void printHdr(nitf::FileHeader header)
                (int)header.getTextInfo(i).getLengthData());
     }
     printf("The number of DATA EXTENSIONS contained in this file [%d]\n",
-           (uint32_t)header.getNumDataExtensions());
+           (nitf::Uint32)header.getNumDataExtensions());
 
-    for (i = 0; i < (uint32_t)header.getNumDataExtensions(); i++)
+    for (i = 0; i < (nitf::Uint32)header.getNumDataExtensions(); i++)
     {
         printf("\tThe length of DATA EXTENSION subheader [%d]: %d bytes\n",
-               i, (uint32_t)header.getDataExtensionInfo(i).getLengthSubheader());
+               i, (nitf::Uint32)header.getDataExtensionInfo(i).getLengthSubheader());
         printf("\tThe length of the DATA EXTENSION data: %d bytes\n\n",
-               (uint32_t)header.getDataExtensionInfo(i).getLengthData());
+               (nitf::Uint32)header.getDataExtensionInfo(i).getLengthData());
 
     }
     printf("The number of RESERVED EXTENSIONS contained in this file [%d]\n",
-           (uint32_t)header.getNumReservedExtensions());
+           (nitf::Uint32)header.getNumReservedExtensions());
 
-    for (i = 0; i < (uint32_t)header.getNumReservedExtensions(); i++)
+    for (i = 0; i < (nitf::Uint32)header.getNumReservedExtensions(); i++)
     {
         printf("\tThe length of RESERVED EXTENSION subheader [%d]: %d bytes\n",
-               i, (uint32_t)header.getReservedExtensionInfo(i).getLengthSubheader());
+               i, (nitf::Uint32)header.getReservedExtensionInfo(i).getLengthSubheader());
         printf("\tThe length of the RESERVED EXTENSION data: %d bytes\n\n",
-               (uint32_t)header.getReservedExtensionInfo(i).getLengthData());
+               (nitf::Uint32)header.getReservedExtensionInfo(i).getLengthData());
 
     }
 
-    printf("The user-defined header length [%d]\n", (uint32_t)header.getUserDefinedHeaderLength());
+    printf("The user-defined header length [%d]\n", (nitf::Uint32)header.getUserDefinedHeaderLength());
 
-    printf("The extended header length [%d]\n", (uint32_t)header.getExtendedHeaderLength());
+    printf("The extended header length [%d]\n", (nitf::Uint32)header.getExtendedHeaderLength());
 
 }
 
@@ -134,7 +134,7 @@ int main(int argc, char** argv)
 
         return 0;
     }
-    catch (const except::Throwable& t)
+    catch (except::Throwable& t)
     {
         std::cout << t.getTrace() << std::endl;
     }

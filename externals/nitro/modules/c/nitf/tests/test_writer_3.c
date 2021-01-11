@@ -20,8 +20,6 @@
  *
  */
 
-#include <inttypes.h>
-
 #include <import/nitf.h>
 
 
@@ -72,7 +70,7 @@ char *makeBandName(const char *rootFile, const char* segment, int segmentNum, in
             file[pos] = '_';
         }
     }
-    nrt_strcat_s(file, NITF_MAX_PATH, ".man");
+    strcat(file, ".man");
     printf("File: %s\n", file);
     return file;
 }
@@ -89,10 +87,10 @@ void freeBandName(char **rootFile)
 void showFileHeader(nitf_FileHeader * header)
 {
     unsigned int i;
-    uint32_t num;
+    nitf_Uint32 num;
     nitf_Error error;
-    uint32_t len;
-    uint64_t dataLen;
+    nitf_Uint32 len;
+    nitf_Uint64 dataLen;
     NITF_BOOL success;
 
     SHOW_VAL(header->fileHeader);
@@ -141,7 +139,7 @@ void showFileHeader(nitf_FileHeader * header)
         GET_UINT64(header->imageInfo[i]->lengthData, &dataLen, &error);
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
                i, (long)len);
-        printf("\tThe length of the IMAGE data: %" PRIu64 " bytes\n\n", dataLen);
+        printf("\tThe length of the IMAGE data: %llu bytes\n\n", dataLen);
     }
 
     return;
@@ -471,16 +469,16 @@ void writeDEData(nitf_DESegment * segment,
         size_t leftToRead;
         size_t amtToRead;
     */
-    uint64_t toRead = DE_READ_SIZE;
-    uint64_t leftToRead;
-    uint64_t amtToRead;
+    nitf_Uint64 toRead = DE_READ_SIZE;
+    nitf_Uint64 leftToRead;
+    nitf_Uint64 amtToRead;
     char * buf = NULL;
     char * outName = NULL;
 
     nitf_IOHandle file;
 
     leftToRead = (size_t)(segment->end - segment->offset);
-    fprintf(stderr, "XXX Data Ext write %"PRIu64" %"PRIu64" %"PRIu64"\n", leftToRead, segment->end , segment->offset);
+    fprintf(stderr, "XXX Data Ext write %llu %llu %llu\n", leftToRead, segment->end , segment->offset);
 
     buf = (char*)NITF_MALLOC(toRead + 1);
     if (!buf)
@@ -511,14 +509,14 @@ void writeDEData(nitf_DESegment * segment,
         amtToRead = DE_READ_SIZE;
         if (amtToRead > leftToRead)
             amtToRead = leftToRead;
-        fprintf(stderr, "XXX Data Ext C2 %"PRIu64"\n", amtToRead);
+        fprintf(stderr, "XXX Data Ext C2 %llu\n", amtToRead);
         if (nitf_SegmentReader_read(reader, buf, (size_t)amtToRead, error) != NITF_SUCCESS)
         {
             /* TODO populate error */
             goto CATCH_ERROR;
         }
 
-        fprintf(stderr, "XXX Data Ext D %"PRIu64"\n", amtToRead);
+        fprintf(stderr, "XXX Data Ext D %llu\n", amtToRead);
         if (!nitf_IOHandle_write(file, (const char*)buf, (size_t)amtToRead, error))
             goto CATCH_ERROR;
         fprintf(stderr, "XXX Data Ext E\n");
@@ -538,14 +536,14 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
                              int imageNumber, nitf_Error * error)
 {
     char *file;
-    uint32_t nBits, nBands=0, xBands, nRows, nColumns;
+    nitf_Uint32 nBits, nBands, xBands, nRows, nColumns;
     size_t subimageSize;
     nitf_SubWindow *subimage;
     unsigned int i;
     int padded;
-    uint8_t **buffer = NULL;
-    uint32_t band;
-    uint32_t *bandList = NULL;
+    nitf_Uint8 **buffer = NULL;
+    nitf_Uint32 band;
+    nitf_Uint32 *bandList = NULL;
 
     NITF_TRY_GET_UINT32(segment->subheader->numBitsPerPixel, &nBits,
                         error);
@@ -601,9 +599,9 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
            segment->subheader->compressionRate->raw);
 
 
-    buffer = (uint8_t **) malloc(sizeof(uint8_t*) * nBands);
+    buffer = (nitf_Uint8 **) malloc(sizeof(nitf_Uint8*) * nBands);
     band = 0;
-    bandList = (uint32_t *) malloc(sizeof(uint32_t *) * nBands);
+    bandList = (nitf_Uint32 *) malloc(sizeof(nitf_Uint32 *) * nBands);
 
     subimage = nitf_SubWindow_construct(error);
     assert(subimage);
@@ -621,7 +619,7 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
     assert(buffer);
     for (i = 0; i < nBands; i++)
     {
-        buffer[i] = (uint8_t *) malloc(subimageSize);
+        buffer[i] = (nitf_Uint8 *) malloc(subimageSize);
         assert(buffer[i]);
     }
     /*  This should change to returning failures!  */

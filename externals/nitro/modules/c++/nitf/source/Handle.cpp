@@ -21,3 +21,4 @@
  */
 
 #include "nitf/Handle.hpp"
+sys::Mutex nitf::Handle::mutex;

@@ -20,15 +20,13 @@
  *
  */
 
+#include <mem/SharedPtr.h>
+#include <import/nitf.hpp>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <memory>
-
-#include <import/nitf.hpp>
-
-namespace fs = std::filesystem;
 
 // Round-trip a NITF, removing any image segments with an IREP of NODISPLY
 namespace
@@ -42,7 +40,8 @@ void stripImages(nitf::Record& record)
     {
         nitf::ImageSegment image = *iter;
         nitf::ImageSubheader subheader = image.getSubheader();
-        const auto irep = subheader.imageRepresentation();
+        std::string irep = subheader.getImageRepresentation().toString();
+        str::trim(irep);
         if (irep == "NODISPLY")
         {
             invisibleImages.push_back(ii);
@@ -74,7 +73,7 @@ int main(int argc, char** argv)
         //  Check argv and make sure we are happy
         if (argc != 3)
         {
-            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
+            std::cerr << "Usage: " << sys::Path::basename(argv[0])
                     << " <input-file> <output-file>" << std::endl;
             return 1;
         }
@@ -83,7 +82,7 @@ int main(int argc, char** argv)
         const std::string outputPathname(argv[2]);
 
         // Check that we have a valid NITF
-        if (nitf::Reader::getNITFVersion(inputPathname) == nitf::Version::NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(inputPathname) == NITF_VER_UNKNOWN)
         {
             std::cerr << "Invalid NITF: " << inputPathname << std::endl;
             return 1;
@@ -102,6 +101,10 @@ int main(int argc, char** argv)
         writer.write();
 
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& ex)
     {

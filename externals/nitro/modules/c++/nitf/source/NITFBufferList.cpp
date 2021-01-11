@@ -20,9 +20,6 @@
  *
  */
 
-#include <stdlib.h>
-
-#include <sys/Conf.h>
 #include <except/Exception.h>
 #include <nitf/NITFBufferList.hpp>
 
@@ -82,16 +79,13 @@ size_t NITFBufferList::getNumBytesInBlock(
     return numBytes;
 }
 
-template<typename TScratch>
-const void* getBlock(const NITFBufferList& rThis, size_t blockSize,
+const void* NITFBufferList::getBlock(size_t blockSize,
                                      size_t blockIdx,
-                                     std::vector<TScratch>& scratch,
-                                     size_t& numBytes)
+                                     std::vector<sys::byte>& scratch,
+                                     size_t& numBytes) const
 {
-    auto& mBuffers = rThis.mBuffers;
-
     const size_t startByte = blockIdx * blockSize;
-    numBytes = rThis.getNumBytesInBlock(blockSize, blockIdx);
+    numBytes = getNumBytesInBlock(blockSize, blockIdx);
 
     size_t byteCount(0);
     for (size_t ii = 0; ii < mBuffers.size(); ++ii)
@@ -104,8 +98,8 @@ const void* getBlock(const NITFBufferList& rThis, size_t blockSize,
             const size_t numBytesLeftInBuffer =
                     buffer.mNumBytes - numBytesToSkip;
 
-            auto const startPtr =
-                    static_cast<const TScratch*>(buffer.mData) +
+            const sys::byte* const startPtr =
+                    static_cast<const sys::byte*>(buffer.mData) +
                     numBytesToSkip;
             if (numBytesLeftInBuffer >= numBytes)
             {
@@ -148,19 +142,5 @@ const void* getBlock(const NITFBufferList& rThis, size_t blockSize,
 
     // Should not be possible to get here
     return NULL;
-}
-const void* NITFBufferList::getBlock(size_t blockSize,
-    size_t blockIdx,
-    std::vector<sys::byte>& scratch,
-    size_t& numBytes) const
-{
-    return nitf::getBlock(*this, blockSize, blockIdx, scratch, numBytes);
-}
-const void* NITFBufferList::getBlock(size_t blockSize,
-    size_t blockIdx,
-    std::vector<std::byte>& scratch,
-    size_t& numBytes) const
-{
-    return nitf::getBlock(*this, blockSize, blockIdx, scratch, numBytes);
 }
 }

@@ -30,15 +30,15 @@ NITF_CXX_GUARD
 NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader*, nrt_HashTable*, nitf_Error*);
 
 NITFPRIV(NITF_BOOL) implStart(nitf_CompressionControl *control,
-                              uint64_t offset,
-                              uint64_t dataLength,
-                              uint64_t *blockMask,
-                              uint64_t *padMask,
+                              nitf_Uint64 offset,
+                              nitf_Uint64 dataLength,
+                              nitf_Uint64 *blockMask,
+                              nitf_Uint64 *padMask,
                               nitf_Error *error);
 
 NITFPRIV(NITF_BOOL) implWriteBlock(nitf_CompressionControl * control,
                                    nitf_IOInterface *io,
-                                   const uint8_t *data,
+                                   const nitf_Uint8 *data,
                                    NITF_BOOL pad,
                                    NITF_BOOL noData,
                                    nitf_Error *error);
@@ -65,9 +65,9 @@ typedef struct _ImplControl
     nitf_BlockingInfo blockInfo; /* Kept for convenience */
     j2k_Container *container;    /* j2k Container */
     j2k_Writer *writer;          /* j2k Writer */
-    uint64_t offset;
-    uint64_t dataLength;
-    uint32_t curBlock;
+    nitf_Uint64 offset;
+    nitf_Uint64 dataLength;
+    nitf_Uint32 curBlock;
     nitf_Field *comratField;     /* kept so we can update it */
 }ImplControl;
 
@@ -76,7 +76,6 @@ NITF_CXX_ENDGUARD
 
 NITFAPI(const char**) J2KCompress_init(nitf_Error *error)
 {
-    (void)error;
     return ident;
 }
 
@@ -106,18 +105,19 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
                                             nrt_HashTable* userOptions,
                                             nitf_Error *error)
 {
+    ImplControl *implControl = NULL;
+    j2k_Component **components = NULL;
     j2k_WriterOptions options;
-    ImplControl* implControl = NULL;
 
-    uint32_t nRows;
-    uint32_t nCols;
-    uint32_t nBands;
-    uint32_t nbpp;
-    uint32_t abpp;
-    uint32_t nbpr;
-    uint32_t nbpc;
-    uint32_t nppbh;
-    uint32_t nppbv;
+    nitf_Uint32 nRows;
+    nitf_Uint32 nCols;
+    nitf_Uint32 nBands;
+    nitf_Uint32 nbpp;
+    nitf_Uint32 abpp;
+    nitf_Uint32 nbpr;
+    nitf_Uint32 nbpc;
+    nitf_Uint32 nppbh;
+    nitf_Uint32 nppbv;
     char pvtype[NITF_PVTYPE_SZ+1];
     char ic[NITF_IC_SZ+1];
     //char comrat[NITF_COMRAT_SZ+1];
@@ -125,7 +125,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     char irep[NITF_IREP_SZ+1];
     int imageType;
     J2K_BOOL isSigned = 0;
-    uint32_t idx;
+    nrt_Uint32 idx;
 
     /* reset the options */
     memset(&options, 0, sizeof(j2k_WriterOptions));
@@ -136,12 +136,12 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     }
 
     if(!nitf_Field_get(subheader->NITF_NROWS, &nRows,
-                    NITF_CONV_INT, sizeof(uint32_t), error))
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
     {
         goto CATCH_ERROR;
     }
     if(!nitf_Field_get(subheader->NITF_NCOLS, &nCols,
-                    NITF_CONV_INT, sizeof(uint32_t), error))
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
     {
         goto CATCH_ERROR;
     }
@@ -152,32 +152,32 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     }
 
     if(!nitf_Field_get(subheader->NITF_NBPP, &nbpp,
-                    NITF_CONV_INT, sizeof(uint32_t), error))
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
     {
         goto CATCH_ERROR;
     }
     if(!nitf_Field_get(subheader->NITF_ABPP, &abpp,
-                    NITF_CONV_INT, sizeof(uint32_t), error))
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
     {
         goto CATCH_ERROR;
     }
     if(!nitf_Field_get(subheader->NITF_NPPBH, &nppbh,
-                    NITF_CONV_INT, sizeof(uint32_t), error))
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
     {
         goto CATCH_ERROR;
     }
     if(!nitf_Field_get(subheader->NITF_NPPBV, &nppbv,
-                    NITF_CONV_INT, sizeof(uint32_t), error))
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
     {
         goto CATCH_ERROR;
     }
     if(!nitf_Field_get(subheader->NITF_NBPR, &nbpr,
-                    NITF_CONV_INT, sizeof(uint32_t), error))
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
     {
         goto CATCH_ERROR;
     }
     if(!nitf_Field_get(subheader->NITF_NBPC, &nbpc,
-                    NITF_CONV_INT, sizeof(uint32_t), error))
+                    NITF_CONV_INT, sizeof(nitf_Uint32), error))
     {
         goto CATCH_ERROR;
     }
@@ -276,8 +276,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
         imageType = J2K_TYPE_MONO;
     }
 
-    implControl = (ImplControl*)NITF_MALLOC(sizeof(ImplControl));
-    if (!implControl)
+    if (!(implControl = (ImplControl*)NITF_MALLOC(sizeof(ImplControl))))
     {
         nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),
                         NITF_CTXT, NITF_ERR_MEMORY);
@@ -288,9 +287,8 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     implControl->comratField = subheader->NITF_COMRAT;
 
     /* initialize the container */
-    j2k_Component** components = (j2k_Component**)J2K_MALLOC(
-        sizeof(j2k_Component*) * nBands);
-    if (!components)
+    if (!(components = (j2k_Component**)J2K_MALLOC(
+            sizeof(j2k_Component*) * nBands)))
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
                        NRT_ERR_MEMORY);
@@ -299,31 +297,28 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
 
     for(idx = 0; idx < nBands; ++idx)
     {
-        components[idx] = j2k_Component_construct(nCols, nRows, abpp,
+        if (!(components[idx] = j2k_Component_construct(nCols, nRows, abpp,
                                                         isSigned, 0, 0, 1, 1,
-                                                        error);
-        if (!components[idx])
+                                                        error)))
         {
             goto CATCH_ERROR;
         }
     }
 
-    implControl->container = j2k_Container_construct(nCols,
+    if (!(implControl->container = j2k_Container_construct(nCols,
                                                            nRows,
                                                            nBands,
                                                            components,
                                                            nppbh,
                                                            nppbv,
                                                            imageType,
-                                                           error);
-    if (!implControl->container)
+                                                           error)))
     {
         goto CATCH_ERROR;
     }
 
-    implControl->writer = j2k_Writer_construct(implControl->container,
-                                                     &options, error);
-    if (!implControl->writer)
+    if (!(implControl->writer = j2k_Writer_construct(implControl->container,
+                                                     &options, error)))
     {
         goto CATCH_ERROR;
     }
@@ -341,16 +336,12 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
 }
 
 NITFPRIV(NITF_BOOL) implStart(nitf_CompressionControl *control,
-                              uint64_t offset,
-                              uint64_t dataLength,
-                              uint64_t *blockMask,
-                              uint64_t *padMask,
+                              nitf_Uint64 offset,
+                              nitf_Uint64 dataLength,
+                              nitf_Uint64 *blockMask,
+                              nitf_Uint64 *padMask,
                               nitf_Error *error)
 {
-    (void)blockMask;
-    (void)padMask;
-    (void)error;
-
     ImplControl *implControl = (ImplControl*)control;
 
     implControl->offset = offset;
@@ -362,18 +353,14 @@ NITFPRIV(NITF_BOOL) implStart(nitf_CompressionControl *control,
 
 NITFPRIV(NITF_BOOL) implWriteBlock(nitf_CompressionControl * control,
                                    nitf_IOInterface *io,
-                                   const uint8_t *data,
+                                   const nitf_Uint8 *data,
                                    NITF_BOOL pad,
                                    NITF_BOOL noData,
                                    nitf_Error *error)
 {
-    (void)io;
-    (void)pad;
-    (void)noData;
-
     ImplControl *implControl = (ImplControl*)control;
-    uint32_t tileX, tileY, tileWidth, tileHeight, tilesX;
-    uint32_t nComponents, nBytes, bufSize;
+    nitf_Uint32 tileX, tileY, tileWidth, tileHeight, tilesX;
+    nitf_Uint32 nComponents, nBytes, bufSize;
 
     /* TODO this needs to change... won't work on separated images */
     tileWidth = j2k_Container_getTileWidth(implControl->container, error);
@@ -407,9 +394,9 @@ NITFPRIV(NITF_BOOL) implEnd( nitf_CompressionControl * control,
     ImplControl *implControl = (ImplControl*)control;
     nitf_Off offset;
     size_t compressedSize, rawSize;
-    uint32_t comratInt;
+    nitf_Uint32 comratInt;
     float comrat;
-    uint32_t width, height, nComponents, nBytes, nBits;
+    nitf_Uint32 width, height, nComponents, nBytes, nBits;
 
     width = j2k_Container_getWidth(implControl->container, error);
     height = j2k_Container_getHeight(implControl->container, error);
@@ -435,7 +422,7 @@ NITFPRIV(NITF_BOOL) implEnd( nitf_CompressionControl * control,
         digit from the right (i.e. xy.z).
      */
     comrat = (1.0f * compressedSize * nBits) / rawSize;
-    comratInt = (uint32_t)(comrat * 10.0f + 0.5f);
+    comratInt = (nitf_Uint32)(comrat * 10.0f + 0.5f);
 
     /* write the comrat field */
     NITF_SNPRINTF(implControl->comratField->raw,

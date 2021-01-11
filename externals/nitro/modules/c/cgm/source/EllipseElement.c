@@ -100,11 +100,10 @@ NITFAPI(cgm_Element*) cgm_EllipseElement_construct(nitf_Error* error)
         ellipse->end2Y = -1;
         
         element->data = (NITF_DATA*)ellipse;
-
-        element->print = &ellipsePrint;
-        element->clone = &ellipseClone;
-        element->destroy = &ellipseDestroy;
     }
+    element->print = &ellipsePrint;
+    element->clone = &ellipseClone;
+    element->destroy = &ellipseDestroy;
 
     return element;
 }

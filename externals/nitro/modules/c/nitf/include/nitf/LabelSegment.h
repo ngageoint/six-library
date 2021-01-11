@@ -39,8 +39,8 @@ NITF_CXX_GUARD
 typedef struct _nitf_LabelSegment
 {
     nitf_LabelSubheader *subheader;
-    uint64_t offset;
-    uint64_t end;
+    nitf_Uint64 offset;
+    nitf_Uint64 end;
     char *label;
 }
 nitf_LabelSegment;

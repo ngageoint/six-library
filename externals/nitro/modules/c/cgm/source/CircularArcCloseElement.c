@@ -45,25 +45,22 @@ NITFPRIV(cgm_Element*) cloneCircularArcClose(NITF_DATA* data, nitf_Error* error)
         return NULL;
     dest = (cgm_CircularArcCloseElement*)element->data;
     
-    if ((dest != NULL) && (source != NULL))
+    dest->centerX = source->centerX;
+    dest->centerY = source->centerY;
+    dest->startX = source->startX;
+    dest->startY = source->startY;
+    dest->endX = source->endX;
+    dest->endY = source->endY;
+    dest->radius = source->radius;
+    dest->closeType = source->closeType;
+    
+    if (source->attributes)
     {
-        dest->centerX = source->centerX;
-        dest->centerY = source->centerY;
-        dest->startX = source->startX;
-        dest->startY = source->startY;
-        dest->endX = source->endX;
-        dest->endY = source->endY;
-        dest->radius = source->radius;
-        dest->closeType = source->closeType;
-
-        if (source->attributes)
+        dest->attributes = cgm_FillAttributes_clone(source->attributes, error);
+        if (!dest->attributes)
         {
-            dest->attributes = cgm_FillAttributes_clone(source->attributes, error);
-            if (!dest->attributes)
-            {
-                cgm_Element_destruct(&element);
-                return NULL;
-            }
+            cgm_Element_destruct(&element);
+            return NULL;
         }
     }
     
@@ -112,11 +109,10 @@ NITFAPI(cgm_Element*) cgm_CircularArcCloseElement_construct(nitf_Error* error)
         arc->radius = -1;
         arc->closeType = CGM_CLOSE_TYPE_PIE;
         element->data = (NITF_DATA*)arc;
-
-        element->print = &printCircularArcClose;
-        element->destroy = &destroyCircularArcClose;
-        element->clone = &cloneCircularArcClose;
     }
+    element->print = &printCircularArcClose;
+    element->destroy = &destroyCircularArcClose;
+    element->clone = &cloneCircularArcClose;
 
     return element;
 }

@@ -52,42 +52,42 @@ BlockingInfo::BlockingInfo()
 BlockingInfo::~BlockingInfo(){}
 
 
-uint32_t BlockingInfo::getNumBlocksPerRow() const
+nitf::Uint32 BlockingInfo::getNumBlocksPerRow() const
 {
     return getNativeOrThrow()->numBlocksPerRow;
 }
 
-void BlockingInfo::setNumBlocksPerRow(uint32_t value)
+void BlockingInfo::setNumBlocksPerRow(nitf::Uint32 value)
 {
     getNativeOrThrow()->numBlocksPerRow = value;
 }
 
-uint32_t BlockingInfo::getNumBlocksPerCol() const
+nitf::Uint32 BlockingInfo::getNumBlocksPerCol() const
 {
     return getNativeOrThrow()->numBlocksPerCol;
 }
 
-void BlockingInfo::setNumBlocksPerCol(uint32_t value)
+void BlockingInfo::setNumBlocksPerCol(nitf::Uint32 value)
 {
     getNativeOrThrow()->numBlocksPerCol = value;
 }
 
-uint32_t BlockingInfo::getNumRowsPerBlock() const
+nitf::Uint32 BlockingInfo::getNumRowsPerBlock() const
 {
     return getNativeOrThrow()->numRowsPerBlock;
 }
 
-void BlockingInfo::setNumRowsPerBlock(uint32_t value)
+void BlockingInfo::setNumRowsPerBlock(nitf::Uint32 value)
 {
     getNativeOrThrow()->numRowsPerBlock = value;
 }
 
-uint32_t BlockingInfo::getNumColsPerBlock() const
+nitf::Uint32 BlockingInfo::getNumColsPerBlock() const
 {
     return getNativeOrThrow()->numColsPerBlock;
 }
 
-void BlockingInfo::setNumColsPerBlock(uint32_t value)
+void BlockingInfo::setNumColsPerBlock(nitf::Uint32 value)
 {
     getNativeOrThrow()->numColsPerBlock = value;
 }

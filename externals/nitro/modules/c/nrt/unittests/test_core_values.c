@@ -25,24 +25,17 @@
 
 TEST_CASE(testCoreValues)
 {
-    int expected = 1; 
-    TEST_ASSERT_EQ_INT(sizeof(uint8_t), expected);
-    TEST_ASSERT_EQ_INT(sizeof(int8_t), expected);
+    TEST_ASSERT(sizeof(nrt_Uint8) == 1);
+    TEST_ASSERT(sizeof(nrt_Uint16) == 2);
+    TEST_ASSERT(sizeof(nrt_Uint32) == 4);
+    TEST_ASSERT(sizeof(nrt_Uint64) == 8);
 
-    expected = 2;
-    TEST_ASSERT_EQ_INT(sizeof(uint16_t), expected);
-    TEST_ASSERT_EQ_INT(sizeof(int16_t), expected);
+    TEST_ASSERT(sizeof(nrt_Int8) == 1);
+    TEST_ASSERT(sizeof(nrt_Int16) == 2);
+    TEST_ASSERT(sizeof(nrt_Int32) == 4);
+    TEST_ASSERT(sizeof(nrt_Int64) == 8);
 
-    expected = 4;
-    TEST_ASSERT_EQ_INT(sizeof(uint32_t), expected);
-    TEST_ASSERT_EQ_INT(sizeof(int32_t), expected);
-
-    expected = 8;
-    TEST_ASSERT_EQ_INT(sizeof(uint64_t), expected);
-    TEST_ASSERT_EQ_INT(sizeof(int64_t), expected);
-
-    int sizeof_long = sizeof(long);
-    if (sizeof_long == 4)
+    if (sizeof(long) == 4)
     {
         const char *ok = "2147483647";
         const char *bad = "2147483648";
@@ -57,7 +50,7 @@ TEST_CASE(testCoreValues)
         printf("Bad: (str: %s) [%lld]\n", bad, NRT_ATO64(bad));
 
     }
-    else if (sizeof_long == 8)
+    else if (sizeof(long) == 8)
     {
         const char *ok = "9223372036854775807";
         const char *bad = "9223372036854775808";
@@ -71,9 +64,8 @@ TEST_CASE(testCoreValues)
     }
 }
 
-TEST_MAIN(
-    (void)argc;
-    (void)argv;
-
+int main(int argc, char **argv)
+{
     CHECK(testCoreValues);
-)
+    return 0;
+}

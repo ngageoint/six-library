@@ -23,19 +23,18 @@
 #include <import/nrt.h>
 #include <import/j2k.h>
 
-J2K_BOOL readFile(const char* filename, char **buf, uint64_t *bufSize,
+J2K_BOOL readFile(const char* filename, char **buf, nrt_Uint64 *bufSize,
                   nrt_Error *error)
 {
     J2K_BOOL rc = J2K_TRUE;
+    nrt_IOInterface *io = NULL;
 
-    nrt_IOInterface* io = nrt_IOHandleAdapter_open(filename, NRT_ACCESS_READONLY,
-                                        NRT_OPEN_EXISTING, error);
-    if (!io)
+    if (!(io = nrt_IOHandleAdapter_open(filename, NRT_ACCESS_READONLY,
+                                        NRT_OPEN_EXISTING, error)))
         goto CATCH_ERROR;
 
     *bufSize = nrt_IOInterface_getSize(io, error);
-    *buf = (char*)J2K_MALLOC(*bufSize);
-    if (!(*buf))
+    if (!(*buf = (char*)J2K_MALLOC(*bufSize)))
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT, NRT_ERR_MEMORY);
         goto CATCH_ERROR;
@@ -76,9 +75,9 @@ int main(int argc, char **argv)
     j2k_Writer *writer = NULL;
     j2k_WriterOptions options;
     char *buf = NULL;
-    uint64_t bufSize;
+    nrt_Uint64 bufSize;
     nrt_IOInterface *outIO = NULL;
-    uint32_t width, height, precision, tileWidth, tileHeight;
+    nrt_Uint32 width, height, precision, tileWidth, tileHeight;
 
     for (argIt = 1; argIt < argc; ++argIt)
     {
@@ -106,22 +105,20 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    component = j2k_Component_construct(width, height, precision,
-                                              0, 0, 0, 1, 1, &error);
-    if (!component)
+    if (!(component = j2k_Component_construct(width, height, precision,
+                                              0, 0, 0, 1, 1, &error)))
     {
         goto CATCH_ERROR;
     }
 
-    container = j2k_Container_construct(width,
+    if (!(container = j2k_Container_construct(width,
                                               height,
                                               1,
                                               &component,
                                               tileWidth,
                                               tileHeight,
                                               J2K_TYPE_MONO,
-                                              &error);
-    if (!container)
+                                              &error)))
     {
         goto CATCH_ERROR;
     }
@@ -129,8 +126,7 @@ int main(int argc, char **argv)
     memset(&options, 0, sizeof(j2k_WriterOptions));
     /* TODO set some options here */
 
-    writer = j2k_Writer_construct(container, &options, &error);
-    if (!writer)
+    if (!(writer = j2k_Writer_construct(container, &options, &error)))
     {
         goto CATCH_ERROR;
     }
@@ -140,15 +136,14 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!j2k_Writer_setTile(writer, 0, 0, (uint8_t*)buf,
-                            (uint32_t)bufSize, &error))
+    if (!j2k_Writer_setTile(writer, 0, 0, (nrt_Uint8*)buf,
+                            (nrt_Uint32)bufSize, &error))
     {
         goto CATCH_ERROR;
     }
 
-    outIO = nrt_IOHandleAdapter_open(outName, NRT_ACCESS_WRITEONLY,
-                                           NRT_CREATE, &error);
-    if (!outIO)
+    if (!(outIO = nrt_IOHandleAdapter_open(outName, NRT_ACCESS_WRITEONLY,
+                                           NRT_CREATE, &error)))
         goto CATCH_ERROR;
 
     if (!j2k_Writer_write(writer, outIO, &error))

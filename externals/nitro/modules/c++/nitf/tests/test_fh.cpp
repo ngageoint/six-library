@@ -24,7 +24,7 @@
 #include <import/sys.h>
 #include <import/except.h>
 
-int main(int, char**)
+int main(int argc, char** argv)
 {
     try
     {
@@ -55,18 +55,16 @@ int main(int, char**)
         std::cout << "Copied yet another FileHeader" << std::endl;
         //myFileCopy.name = "6";
 
-        {
-            std::unique_ptr<nitf::FileHeader> myNewCopy(new nitf::FileHeader(myFileCopy));
-            std::cout << "New-allocated copy of FileHeader" << std::endl;
-            //myNewCopy->name = "7";
-        }
+        nitf::FileHeader* myNewCopy = new nitf::FileHeader(myFileCopy);
+        std::cout << "New-allocated copy of FileHeader" << std::endl;
+        //myNewCopy->name = "7";
+        delete myNewCopy;
         std::cout << "Deleted new-allocated copy of FileHeader" << std::endl;
 
-        {
-            std::unique_ptr<nitf::FileHeader> myNonCopy(new nitf::FileHeader);
-            std::cout << "New-allocated a FileHeader" << std::endl;
-            //myNonCopy->name = "8";
-        }
+        nitf::FileHeader* myNonCopy = new nitf::FileHeader;
+        std::cout << "New-allocated a FileHeader" << std::endl;
+        //myNonCopy->name = "8";
+        delete myNonCopy;
         std::cout << "Deleted new-allocated FileHeader" << std::endl;
 
         std::cout << "Setting file header" << std::endl;
@@ -86,17 +84,17 @@ int main(int, char**)
         nitf::HashTable hash;
         ext.setHash(hash);
 
-        std::cout << fileHeader.fileHeader() << "\n";
-        std::cout << fileHeader.fileVersion() << "\n";
-        std::cout << two.fileHeader() << "\n";
-        std::cout << two.fileVersion() << "\n";
+        std::cout << fileHeader.getFileHeader().toString() << std::endl;
+        std::cout << fileHeader.getFileVersion().toString() << std::endl;
+        std::cout << two.getFileHeader().toString() << std::endl;
+        std::cout << two.getFileVersion().toString() << std::endl;
 
-        std::cout << myFileHeader.fileHeader() << "\n";
-        std::cout << myFileHeader.fileVersion() << "\n";
+        std::cout << myFileHeader.getFileHeader().toString() << std::endl;
+        std::cout << myFileHeader.getFileVersion().toString() << std::endl;
 
         return 0;
     }
-    catch (const except::Throwable& t)
+    catch (except::Throwable& t)
     {
         std::cout << t.getTrace() << std::endl;
     }

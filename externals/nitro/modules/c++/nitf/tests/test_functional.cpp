@@ -66,7 +66,7 @@ int main(int argc, char **argv)
         io.close();
         return 0;
     }
-    catch (const except::Throwable& t)
+    catch (except::Throwable& t)
     {
         std::cout << "ERROR: " << t.getTrace() << std::endl;
     }

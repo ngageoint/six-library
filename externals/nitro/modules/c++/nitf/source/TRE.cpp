@@ -59,21 +59,21 @@ TRE& TRE::operator=(NITF_DATA* x)
 
 TRE::TRE(const char* tag)
 {
-    setNative(nitf_TRE_construct(tag, nullptr, &error));
+    setNative(nitf_TRE_construct(tag, NULL, &error));
     getNativeOrThrow();
     setManaged(false);
 }
 
 TRE::TRE(const char* tag, const char* id)
 {
-    setNative(nitf_TRE_construct(tag, (::strlen(id) > 0) ? id : nullptr, &error));
+    setNative(nitf_TRE_construct(tag, (::strlen(id) > 0) ? id : NULL, &error));
     getNativeOrThrow();
     setManaged(false);
 }
 
 TRE::TRE(const std::string& tag)
 {
-    setNative(nitf_TRE_construct(tag.c_str(), nullptr, &error));
+    setNative(nitf_TRE_construct(tag.c_str(), NULL, &error));
     getNativeOrThrow();
     setManaged(false);
 }
@@ -81,7 +81,7 @@ TRE::TRE(const std::string& tag)
 TRE::TRE(const std::string& tag, const std::string& id)
 {
     setNative(nitf_TRE_construct(tag.c_str(),
-                                 id.empty() ? nullptr : id.c_str(),
+                                 id.empty() ? NULL : id.c_str(),
                                  &error));
     getNativeOrThrow();
     setManaged(false);
@@ -174,16 +174,6 @@ std::string TRE::getID() const
     return id ? std::string(id) : "";
 }
 
-static bool endsWith(const std::string& s, const std::string& match)
-{
-    const size_t mLen = match.length();
-    const size_t sLen = s.length();
-    for (size_t i = 0; i < sLen && i < mLen; ++i)
-        if (!(s[sLen - i - 1] == match[mLen - i - 1]))
-            return false;
-    return sLen >= mLen;
-}
-
 std::string TRE::truncate(const std::string& value, size_t maxDigits)
 {
     const size_t decimalIndex = value.find('.');
@@ -193,7 +183,7 @@ std::string TRE::truncate(const std::string& value, size_t maxDigits)
     }
 
     const std::string truncated = value.substr(0, maxDigits);
-    if (endsWith(truncated, "."))
+    if (str::endsWith(truncated, "."))
     {
         return truncated.substr(0, truncated.size() - 1);
     }

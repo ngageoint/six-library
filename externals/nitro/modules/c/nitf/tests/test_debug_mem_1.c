@@ -28,7 +28,8 @@ int main(int argc, char **argv)
     char** str = (char**)NITF_MALLOC(sizeof(argc) * sizeof(char*));
     for (i = 0; i < argc; i++)
     {
-        str[i] = nitf_strdup(argv[i]);
+        str[i] = (char*)NITF_MALLOC( strlen(argv[i]) + 1);
+        strcpy( str[i], argv[i]);
         printf("Copied string [%d]: '%s'\n", i, str[i]);
     }
     for (i = 0; i < argc; i++)
