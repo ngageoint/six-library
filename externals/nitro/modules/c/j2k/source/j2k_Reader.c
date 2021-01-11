@@ -30,16 +30,16 @@ J2KAPI(NRT_BOOL) j2k_Reader_canReadTiles(j2k_Reader *reader, nrt_Error *error)
     return NRT_FAILURE;
 }
 
-J2KAPI(nrt_Uint64) j2k_Reader_readTile(j2k_Reader *reader,
-        nrt_Uint32 tileX, nrt_Uint32 tileY,
-        nrt_Uint8 **buf, nrt_Error *error)
+J2KAPI(uint64_t) j2k_Reader_readTile(j2k_Reader *reader,
+        uint32_t tileX, uint32_t tileY,
+        uint8_t **buf, nrt_Error *error)
 {
     return reader->iface->readTile(reader->data, tileX, tileY, buf, error);
 }
 
-J2KAPI(nrt_Uint64) j2k_Reader_readRegion(j2k_Reader *reader,
-        nrt_Uint32 x0, nrt_Uint32 y0, nrt_Uint32 x1, nrt_Uint32 y1,
-        nrt_Uint8 **buf, nrt_Error *error)
+J2KAPI(uint64_t) j2k_Reader_readRegion(j2k_Reader *reader,
+        uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1,
+        uint8_t **buf, nrt_Error *error)
 {
     return reader->iface->readRegion(reader->data, x0, y0, x1, y1, buf, error);
 }

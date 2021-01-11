@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 
     nitf_IOHandle out;               /* Handle for output */
     nitf_Error error;                /* Error object */
-    nitf_Uint8 ***data;              /* Generated data [band][row][col] */
+    uint8_t ***data;              /* Generated data [band][row][col] */
 
     if (argc < 4)
     {
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 
     if (strcmp(newArgs->dataPattern, "brcI4") == 0)
     {
-        data = (nitf_Uint8 ***) test_nitf_ImageIO_brcI4(newArgs, &errorStr);
+        data = (uint8_t ***) test_nitf_ImageIO_brcI4(newArgs, &errorStr);
         if (data == NULL)
         {
             fprintf(stderr, "%s\n", errorStr);
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(newArgs->dataPattern, "brcC8") == 0)
     {
-        data = (nitf_Uint8 ***) test_nitf_ImageIO_brcC8(newArgs, &errorStr);
+        data = (uint8_t ***) test_nitf_ImageIO_brcC8(newArgs, &errorStr);
         if (data == NULL)
         {
             fprintf(stderr, "%s\n", errorStr);
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
     }
     else if (strncmp(newArgs->dataPattern, "blocks_", 7) == 0)
     {
-        data = (nitf_Uint8 ***) test_nitf_ImageIO_block(newArgs, &errorStr);
+        data = (uint8_t ***) test_nitf_ImageIO_block(newArgs, &errorStr);
         if (data == NULL)
         {
             fprintf(stderr, "%s\n", errorStr);
@@ -253,10 +253,10 @@ void setupImageSubheader(
     nitf_Record *record, nitf_ImageSegment *seg)
 {
     nitf_ImageSubheader *subheader;   /* Subheader from segment */
-    nitf_Uint32 nBands;               /* Number of bands */
+    uint32_t nBands;               /* Number of bands */
     nitf_BandInfo **bands;            /* BandInfo array */
     nitf_Error errorObj;              /* Error object argument */
-    nitf_Uint32 i;
+    uint32_t i;
 
     subheader = seg->subheader;
     nitf_Field_setUint32(subheader->numRows, args->nRows, &errorObj);
@@ -342,10 +342,10 @@ nitf_ImageSource *makeImageSource(
     test_nitf_ImageIOConstructArgs *args, char ***data)
 {
     nitf_ImageSource *imgSource;  /* The result */
-    nitf_Uint32 nBands;           /* Number of bands */
+    uint32_t nBands;           /* Number of bands */
     nitf_Off bandSize;               /* Size of individual bands */
     nitf_Error error;             /* Error object argument */
-    nitf_Uint32 i;
+    uint32_t i;
 
     bandSize = (args->nRows) * (args->nColumns) * (NITF_NBPP_TO_BYTES(args->nBits));
 

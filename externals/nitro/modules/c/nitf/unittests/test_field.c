@@ -33,7 +33,7 @@ TEST_CASE( testField)
     nitf_Field *fhdr = NULL, *ubin = NULL, *hl = NULL, *realField = NULL;
 
     nitf_Error error;
-    nitf_Int32 int32 = 16801;
+    int32_t int32 = 16801;
     fhdr = nitf_Field_construct(NITF_FHDR_SZ, NITF_BCS_A, &error);
     ubin = nitf_Field_construct(4, NITF_BINARY, &error);
     hl = nitf_Field_construct(NITF_HL_SZ, NITF_BCS_N, &error);
@@ -98,8 +98,72 @@ TEST_CASE( testField)
     TEST_ASSERT_NULL(realField);
 }
 
-int main(int argc, char **argv)
+TEST_CASE(setReal)
 {
-    CHECK(testField);
-    return 0;
+    const size_t length = 14;
+    nitf_Error errorObj;  /* Error object */
+    nitf_Error* error = &errorObj;    /* Pointer to error object */
+
+    /* Note:
+
+        NITF real fields are usually NITF_BCS_A because of the decimal place
+        or exponent
+     */
+    nitf_Field* field = nitf_Field_construct(length, NITF_BCS_A, error);
+    TEST_ASSERT(field);
+
+    #define BUF_SIZE 256
+    char buffer[BUF_SIZE];
+
+    /*  Test fields */
+    NITF_BOOL ret = nitf_Field_setReal(field, "f", 1, 12.3456, error);
+    TEST_ASSERT(ret);
+    nitf_Field_snprint(buffer, BUF_SIZE, field);
+    TEST_ASSERT_EQ_STR(buffer, "+12.3456000000");
+
+    ret = nitf_Field_setReal(field, "e", 1, 12.3456, error);
+    TEST_ASSERT(ret);
+    nitf_Field_snprint(buffer, BUF_SIZE, field);
+    TEST_ASSERT_EQ_STR(buffer, "+1.2345600e+01");
+
+    ret = nitf_Field_setReal(field, "E", 1, 12.3456, error);
+    TEST_ASSERT(ret);
+    nitf_Field_snprint(buffer, BUF_SIZE, field);
+    TEST_ASSERT_EQ_STR(buffer, "+1.2345600E+01");
+
+
+    ret = nitf_Field_setReal(field, "f", 0, 12.3456, error);
+    TEST_ASSERT(ret);
+    nitf_Field_snprint(buffer, BUF_SIZE, field);
+    TEST_ASSERT_EQ_STR(buffer, "12.34560000000");
+
+    ret = nitf_Field_setReal(field, "e", 0, 12.3456, error);
+    TEST_ASSERT(ret);
+    nitf_Field_snprint(buffer, BUF_SIZE, field);
+    TEST_ASSERT_EQ_STR(buffer, "1.23456000e+01");
+
+    ret = nitf_Field_setReal(field, "E", 0, 12.3456, error);
+    TEST_ASSERT(ret);
+    nitf_Field_snprint(buffer, BUF_SIZE, field);
+    TEST_ASSERT_EQ_STR(buffer, "1.23456000E+01");
+
+
+    field = nitf_Field_construct(8, NITF_BCS_A, error);
+    TEST_ASSERT(field);
+    ret = nitf_Field_setReal(field, "f", 1, 12.3456, error);
+    TEST_ASSERT(ret);
+    nitf_Field_snprint(buffer, BUF_SIZE, field);
+    TEST_ASSERT_EQ_STR(buffer, "+12.3456");
+    ret = nitf_Field_setReal(field, "f", 0, 12.3456, error);
+    TEST_ASSERT(ret);
+    nitf_Field_snprint(buffer, BUF_SIZE, field);
+    TEST_ASSERT_EQ_STR(buffer, "12.34560");
+
 }
+
+TEST_MAIN(
+    (void)argc;
+    (void)argv;
+    CHECK(testField);
+    CHECK(setReal);
+    )

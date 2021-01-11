@@ -25,25 +25,25 @@
 
 typedef struct _ComponentImpl
 {
-    nrt_Uint32 width;
-    nrt_Uint32 height;
-    nrt_Uint32 precision;
+    uint32_t width;
+    uint32_t height;
+    uint32_t precision;
     NRT_BOOL isSigned;
-    nrt_Int32 x0;
-    nrt_Int32 y0;
-    nrt_Uint32 xSeparation;
-    nrt_Uint32 ySeparation;
+    int32_t x0;
+    int32_t y0;
+    uint32_t xSeparation;
+    uint32_t ySeparation;
 
 } ComponentImpl;
 
-J2KPRIV( nrt_Uint32) Component_getWidth(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) Component_getHeight(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) Component_getPrecision(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) Component_getWidth(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) Component_getHeight(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) Component_getPrecision(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV( J2K_BOOL)   Component_isSigned(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Int32)  Component_getOffsetX(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Int32)  Component_getOffsetY(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) Component_getSeparationX(J2K_USER_DATA *, nrt_Error *);
-J2KPRIV( nrt_Uint32) Component_getSeparationY(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( int32_t)  Component_getOffsetX(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( int32_t)  Component_getOffsetY(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) Component_getSeparationX(J2K_USER_DATA *, nrt_Error *);
+J2KPRIV( uint32_t) Component_getSeparationY(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV(void)        Component_destruct(J2K_USER_DATA *);
 
 static j2k_IComponent ComponentInterface = { &Component_getWidth,
@@ -56,23 +56,29 @@ static j2k_IComponent ComponentInterface = { &Component_getWidth,
                                              &Component_getSeparationY,
                                              &Component_destruct};
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Component_getWidth(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->width;
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Component_getHeight(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->height;
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Component_getPrecision(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->precision;
 }
@@ -80,34 +86,44 @@ Component_getPrecision(J2K_USER_DATA *data, nrt_Error *error)
 J2KPRIV( NRT_BOOL)
 Component_isSigned(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->isSigned;
 }
 
-J2KPRIV( nrt_Int32)
+J2KPRIV( int32_t)
 Component_getOffsetX(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->x0;
 }
 
-J2KPRIV( nrt_Int32)
+J2KPRIV( int32_t)
 Component_getOffsetY(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->y0;
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Component_getSeparationX(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->xSeparation;
 }
 
-J2KPRIV( nrt_Uint32)
+J2KPRIV( uint32_t)
 Component_getSeparationY(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     ComponentImpl *impl = (ComponentImpl*) data;
     return impl->ySeparation;
 }
@@ -117,20 +133,19 @@ Component_destruct(J2K_USER_DATA * data)
 {
     if (data)
     {
-        ComponentImpl *impl = (ComponentImpl*) data;
         J2K_FREE(data);
     }
 }
 
 
-J2KAPI(j2k_Component*) j2k_Component_construct(nrt_Uint32 width,
-                                               nrt_Uint32 height,
-                                               nrt_Uint32 precision,
+J2KAPI(j2k_Component*) j2k_Component_construct(uint32_t width,
+                                               uint32_t height,
+                                               uint32_t precision,
                                                NRT_BOOL isSigned,
-                                               nrt_Uint32 offsetX,
-                                               nrt_Uint32 offsetY,
-                                               nrt_Uint32 separationX,
-                                               nrt_Uint32 separationY,
+                                               uint32_t offsetX,
+                                               uint32_t offsetY,
+                                               uint32_t separationX,
+                                               uint32_t separationY,
                                                nrt_Error *error)
 {
     j2k_Component *component = NULL;

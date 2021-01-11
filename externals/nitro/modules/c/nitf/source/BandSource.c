@@ -59,7 +59,7 @@ NITFPRIV(NITF_BOOL) MemorySource_contigRead(
 {
     (void) error; /* Suppresses a warning. Param seems to exist for consistency purposes. Not used. */
     memcpy(buf,
-           (const nitf_Uint8*)memorySource->data + memorySource->mark,
+           (const uint8_t*)memorySource->data + memorySource->mark,
            (size_t)size);
     memorySource->mark += size;
     return NITF_SUCCESS;
@@ -73,8 +73,8 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(
         nitf_Error* error)
 {
     size_t destOffset = 0;
-    const nitf_Uint8* const src = (const nitf_Uint8*)memorySource->data;
-    nitf_Uint8* const dest = (nitf_Uint8*)buf;
+    const uint8_t* const src = (const uint8_t*)memorySource->data;
+    uint8_t* const dest = (uint8_t*)buf;
     (void) error;
 
     while (destOffset < (size_t)size)
@@ -300,15 +300,15 @@ NITFPRIV(NITF_BOOL) IOSource_offsetRead(IOSourceImpl * source,
     /* TODO - this *could* be smaller, but this should be ok for now */
     nitf_Off tsize = size * (source->pixelSkip + 1);
 
-    nitf_Uint8* tbuf;
-    nitf_Uint8* bufPtr = (nitf_Uint8*)buf;
+    uint8_t* tbuf;
+    uint8_t* bufPtr = (uint8_t*)buf;
     nitf_Off lmark = 0;
     int i = 0;
     int j = 0;
     if (tsize + source->mark > source->size)
         tsize = source->size - source->mark;
 
-    tbuf = (nitf_Uint8 *) NITF_MALLOC((size_t)tsize);
+    tbuf = (uint8_t *) NITF_MALLOC((size_t)tsize);
     if (!tbuf)
     {
         nitf_Error_init(error,

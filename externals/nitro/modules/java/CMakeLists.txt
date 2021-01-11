@@ -28,7 +28,7 @@ if (NOT JNI_FOUND)
 elseif(NOT Java_FOUND)
     message(WARNING "Java SDK not found. Skipping Java modules")
 else()
-    set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.5" "-target" "1.5")
+    set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.8" "-target" "1.8" "-Xlint:deprecation" "-Xlint:-options")
 
     set(coda_jars "${CODA-OSS_JARS_DIR}/commons-io-1.3.2.jar"
                   "${CODA-OSS_JARS_DIR}/commons-cli-1.0-beta-2.jar"

@@ -35,7 +35,8 @@ coda_add_module(
         source/PluginRegistry.c
         source/RESegment.c
         source/RESubheader.c
-        source/Reader.c
+        source/NitfReader.c
+        source/NitfSystem.c
         source/Record.c
         source/RowSource.c
         source/SegmentReader.c
@@ -50,7 +51,7 @@ coda_add_module(
         source/TextSegment.c
         source/TextSubheader.c
         source/WriteHandler.c
-        source/Writer.c)
+        source/NitfWriter.c)
 
 target_compile_definitions(nitf-c PRIVATE
                            NITF_DEFAULT_PLUGIN_PATH="${CMAKE_INSTALL_PREFIX}/share/nitf/plugins")
@@ -67,6 +68,7 @@ coda_add_tests(
         test_create.c
         test_create_nitf.c
         test_field.c
+        test_geo_utils.c
         test_image_io.c
         test_mem_source.c
         test_tre_mods.c
@@ -110,14 +112,18 @@ set(tre_srcs  ACCHZB
               GRDPSB
               HISTOA
               ICHIPB
+              IMASDA
               IMGDTA
+              IMRFCA
               IOMAPA
               J2KLRA
               JITCID
               MAPLOB
+              MATESA
               MENSRA
               MENSRB
               MPDSRA
+              MSDIRA
               MSTGTA
               MTIRPA
               MTIRPB
@@ -138,7 +144,9 @@ set(tre_srcs  ACCHZB
               PIATGB
               PIXQLA
               PLTFMA
+              PRADAA
               PRJPSB
+              PTPRAA
               REGPTB
               RPC00B
               RPFDES

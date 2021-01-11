@@ -109,8 +109,8 @@ NITFAPI(NITF_BOOL) nitf_ImageWriter_setDirectBlockWrite
  *  failed
  */
 NITFAPI(NITF_BOOL) nitf_ImageWriter_setPadPixel(nitf_ImageWriter* imageWriter,
-                                                nitf_Uint8* value,
-                                                nitf_Uint32 length,
+                                                uint8_t* value,
+                                                uint32_t length,
                                                 nitf_Error* error);
 
 NITF_CXX_ENDGUARD

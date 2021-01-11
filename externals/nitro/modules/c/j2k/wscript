@@ -20,10 +20,10 @@ def build(bld):
                       'source/Component.c',
                       'source/JasPerImpl.c',
                       'source/OpenJPEGImpl.c',
-                      'source/Reader.c',
+                      'source/j2k_Reader.c',
                       'source/SimpleComponentImpl.c',
                       'source/SimpleContainerImpl.c',
-                      'source/Writer.c')
+                      'source/j2k_Writer.c')
 
         j2kInclude = getDriverIncludes(bld, 'j2k')
         j2kIncludes = ['include', j2kInclude, env['OPENJPEG_INCLUDE']]

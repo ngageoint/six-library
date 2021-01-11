@@ -30,15 +30,15 @@ void writeImage(nitf_ImageSegment* segment,
                 nitf_Error* error)
 {
 
-    nitf_Uint32 nBits, nBands, xBands, nRows, nColumns;
+    uint32_t nBits, nBands, xBands, nRows, nColumns;
     size_t subimageSize;
     nitf_SubWindow *subimage;
     unsigned int i;
 
     int padded;
-    nitf_Uint8** buffer;
-    nitf_Uint32 band;
-    nitf_Uint32 *bandList;
+    uint8_t** buffer;
+    uint32_t band;
+    uint32_t *bandList;
     char file[NITF_MAX_PATH];
 
     nitf_IOHandle toFile;
@@ -101,9 +101,9 @@ void writeImage(nitf_ImageSegment* segment,
         printf("This is a single band test case, but the image is multi-band.  Exiting...\n");
         exit(EXIT_FAILURE);
     }
-    buffer = (nitf_Uint8 **)malloc(sizeof(nitf_Uint8)); // Malloc one dimension
+    buffer = (uint8_t **)malloc(sizeof(uint8_t)); // Malloc one dimension
     band = 0;
-    bandList = (nitf_Uint32 *)malloc(sizeof(nitf_Uint32));
+    bandList = (uint32_t *)malloc(sizeof(uint32_t));
 
     subimage = nitf_SubWindow_construct(&error);
     assert(subimage);
@@ -123,7 +123,7 @@ void writeImage(nitf_ImageSegment* segment,
     subimage->numBands = nBands;
 
     assert(buffer);
-    buffer[0] = (nitf_Uint8*)malloc(subimageSize);
+    buffer[0] = (uint8_t*)malloc(subimageSize);
 
 
     /* find end slash */
@@ -142,7 +142,7 @@ void writeImage(nitf_ImageSegment* segment,
             file[i] = '_';
         }
     }
-    strcat(file, ".out");
+    nrt_strcat_s(file, NITF_MAX_PATH, ".out");
 
     printf("Filename: %s\n", file);
 

@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 {
     int rc = 0;
     int argIt;
-    nrt_Uint32 cmpIt, nComponents;
+    uint32_t cmpIt, nComponents;
     nrt_Error error;
     j2k_Container *container = NULL;
     j2k_Reader *reader = NULL;
@@ -48,10 +48,12 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!(reader = j2k_Reader_open(fname, &error)))
+    reader = j2k_Reader_open(fname, &error);
+    if (!reader)
         goto CATCH_ERROR;
 
-    if (!(container = j2k_Reader_getContainer(reader, &error)))
+    container = j2k_Reader_getContainer(reader, &error);
+    if (!container)
         goto CATCH_ERROR;
 
     printf("grid width:\t%d\n", j2k_Container_getGridWidth(container, &error));

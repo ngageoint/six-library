@@ -54,8 +54,8 @@ nitf_ComponentInfo;
  *  \return Return the newly created object.
  */
 NITFAPI(nitf_ComponentInfo *)
-nitf_ComponentInfo_construct(nitf_Uint32 subheaderFieldWidth,
-                             nitf_Uint32 dataFieldWidth,
+nitf_ComponentInfo_construct(uint32_t subheaderFieldWidth,
+                             uint32_t dataFieldWidth,
                              nitf_Error * error);
 
 /*!

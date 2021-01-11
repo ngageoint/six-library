@@ -55,8 +55,8 @@ NITF_CXX_GUARD
 typedef NITF_BOOL(*NITF_DIRECT_BLOCK_SOURCE_NEXT_BLOCK) (void* algorithm,
                                                          void* buf,
                                                          const void* block,
-                                                         nitf_Uint32 blockNumber,
-                                                         nitf_Uint64 blockSize,
+                                                         uint32_t blockNumber,
+                                                         uint64_t blockSize,
                                                          nitf_Error * error);
 
 /*
@@ -70,7 +70,7 @@ NITFAPI(nitf_BandSource *) nitf_DirectBlockSource_construct(void * algorithm,
                                                             NITF_DIRECT_BLOCK_SOURCE_NEXT_BLOCK
                                                             nextBlock,
                                                             nitf_ImageReader* imageReader,
-                                                            nitf_Uint32 numBands,
+                                                            uint32_t numBands,
                                                             nitf_Error * error);
 
 NITF_CXX_ENDGUARD

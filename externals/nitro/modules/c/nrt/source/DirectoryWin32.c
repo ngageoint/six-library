@@ -22,7 +22,7 @@
 
 #include "nrt/Directory.h"
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 
 NRT_CXX_GUARD typedef struct _DirectoryWin32
 {

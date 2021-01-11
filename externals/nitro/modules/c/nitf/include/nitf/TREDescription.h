@@ -23,7 +23,7 @@
 
 #ifndef __NITF_TRE_DESCRIPTION_H__
 #define __NITF_TRE_DESCRIPTION_H__
-
+#pragma once
 
 /*!
  * The TREDescription structure encapsulates the metadata that describes one

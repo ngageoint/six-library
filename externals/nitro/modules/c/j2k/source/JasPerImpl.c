@@ -20,7 +20,11 @@
  *
  */
 
-#include "j2k/j2k_config.h"
+#include "j2k/Config.h"
+
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(disable: 4206) //	nonstandard extension used : translation unit is empty
+#endif
 
 #ifdef HAVE_JASPER_H
 
@@ -67,12 +71,12 @@ static jas_stream_ops_t IOInterface = {JasPerIO_read, JasPerIO_write,
                                        JasPerIO_seek, JasPerIO_close};
 
 
-J2KPRIV( nrt_Uint64)     JasPerReader_readTile(J2K_USER_DATA *, nrt_Uint32,
-                                               nrt_Uint32, nrt_Uint8 **,
+J2KPRIV( uint64_t)     JasPerReader_readTile(J2K_USER_DATA *, uint32_t,
+                                               uint32_t, uint8_t **,
                                                nrt_Error *);
-J2KPRIV( nrt_Uint64)     JasPerReader_readRegion(J2K_USER_DATA *, nrt_Uint32,
-                                                 nrt_Uint32, nrt_Uint32,
-                                                 nrt_Uint32, nrt_Uint8 **,
+J2KPRIV( uint64_t)     JasPerReader_readRegion(J2K_USER_DATA *, uint32_t,
+                                                 uint32_t, uint32_t,
+                                                 uint32_t, uint8_t **,
                                                  nrt_Error *);
 J2KPRIV( j2k_Container*) JasPerReader_getContainer(J2K_USER_DATA *, nrt_Error *);
 J2KPRIV(void)            JasPerReader_destruct(J2K_USER_DATA *);
@@ -83,8 +87,8 @@ static j2k_IReader ReaderInterface = {NULL, &JasPerReader_readTile,
                                       &JasPerReader_destruct };
 
 J2KPRIV( NRT_BOOL)       JasPerWriter_setTile(J2K_USER_DATA *,
-                                              nrt_Uint32, nrt_Uint32,
-                                              const nrt_Uint8 *, nrt_Uint32,
+                                              uint32_t, uint32_t,
+                                              const uint8_t *, uint32_t,
                                               nrt_Error *);
 J2KPRIV( NRT_BOOL)       JasPerWriter_write(J2K_USER_DATA *, nrt_IOInterface *,
                                             nrt_Error *);
@@ -310,7 +314,7 @@ JasPer_readHeader(JasPerReaderImpl *impl, nrt_Error *error)
     if (!impl->container)
     {
         /* initialize the container */
-        nrt_Uint32 idx, nComponents, width, height;
+        uint32_t idx, nComponents, width, height;
         j2k_Component **components = NULL;
         int imageType;
 
@@ -390,7 +394,7 @@ JasPer_initImage(JasPerWriterImpl *impl, j2k_WriterOptions *writerOps,
     jas_clrspc_t colorSpace;
     jas_image_cmptparm_t *cmptParams = NULL;
     j2k_Component *component = NULL;
-    nrt_Uint32 i, nComponents, height, width, nBits;
+    uint32_t i, nComponents, height, width, nBits;
     int imageType;
     J2K_BOOL isSigned;
 
@@ -472,7 +476,7 @@ JasPer_initImage(JasPerWriterImpl *impl, j2k_WriterOptions *writerOps,
 /******************************************************************************/
 
 #define PRIV_READ_MATRIX(_SZ, _X0, _Y0, _X1, _Y1) { \
-nrt_Uint32 rowIdx, colIdx, rowCt, colCt; \
+uint32_t rowIdx, colIdx, rowCt, colCt; \
 nrt_Uint##_SZ* data##_SZ = (nrt_Uint##_SZ*)bufPtr; \
 jas_matrix_t* matrix##_SZ = NULL; \
 rowCt = _Y1 - _Y0; colCt = _X1 - _X0; \
@@ -491,17 +495,17 @@ for (rowIdx = 0; rowIdx < rowCt; ++rowIdx){ \
 jas_matrix_destroy (matrix##_SZ); }
 
 
-J2KPRIV( nrt_Uint64)
-JasPerReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
-                  nrt_Uint32 x1, nrt_Uint32 y1, nrt_Uint8 **buf,
+J2KPRIV( uint64_t)
+JasPerReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
+                  uint32_t x1, uint32_t y1, uint8_t **buf,
                   nrt_Error *error)
 {
     JasPerReaderImpl *impl = (JasPerReaderImpl*) data;
     jas_stream_t *stream = NULL;
     jas_image_t *image = NULL;
-    nrt_Uint32 i, cmptIdx, nBytes, nComponents;
-    nrt_Uint64 bufSize, componentSize;
-    nrt_Uint8 *bufPtr = NULL;
+    uint32_t i, cmptIdx, nBytes, nComponents;
+    uint64_t bufSize, componentSize;
+    uint8_t *bufPtr = NULL;
 
     if (!JasPer_setup(impl, &stream, &image, error))
     {
@@ -514,13 +518,13 @@ JasPerReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
         y1 = j2k_Container_getHeight(impl->container, error);
 
     nBytes = (j2k_Container_getPrecision(impl->container, error) - 1) / 8 + 1;
-    componentSize = (nrt_Uint64)(x1 - x0) * (y1 - y0) * nBytes;
+    componentSize = (uint64_t)(x1 - x0) * (y1 - y0) * nBytes;
     nComponents = j2k_Container_getNumComponents(impl->container, error);
     bufSize = componentSize * nComponents;
 
     if (buf && !*buf)
     {
-        *buf = (nrt_Uint8*)J2K_MALLOC(bufSize);
+        *buf = (uint8_t*)J2K_MALLOC(bufSize);
         if (!*buf)
         {
             nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
@@ -532,7 +536,7 @@ JasPerReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     bufPtr = *buf;
     for (cmptIdx = 0; cmptIdx < nComponents; ++cmptIdx)
     {
-        nrt_Uint32 nRows, nCols;
+        uint32_t nRows, nCols;
         nRows = jas_image_cmptheight(image, cmptIdx) *
                 jas_image_cmptvstep(image, cmptIdx);
         nCols = jas_image_cmptwidth(image, cmptIdx) *
@@ -583,12 +587,12 @@ JasPerReader_readRegion(J2K_USER_DATA *data, nrt_Uint32 x0, nrt_Uint32 y0,
     return bufSize;
 }
 
-J2KPRIV( nrt_Uint64)
-JasPerReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
-                nrt_Uint8 **buf, nrt_Error *error)
+J2KPRIV( uint64_t)
+JasPerReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
+                uint8_t **buf, nrt_Error *error)
 {
     JasPerReaderImpl *impl = (JasPerReaderImpl*) data;
-    nrt_Uint32 width, height;
+    uint32_t width, height;
 
     width = j2k_Container_getWidth(impl->container, error);
     height = j2k_Container_getHeight(impl->container, error);
@@ -631,7 +635,7 @@ JasPerReader_destruct(J2K_USER_DATA * data)
 /******************************************************************************/
 
 #define PRIV_WRITE_MATRIX(_SZ) { \
-nrt_Uint32 rowIdx, colIdx, cmpIdx; \
+uint32_t rowIdx, colIdx, cmpIdx; \
 nrt_Uint##_SZ* data##_SZ = (nrt_Uint##_SZ*)buf; \
 jas_matrix_t* matrix##_SZ = jas_matrix_create(tileHeight, tileWidth); \
 if (!matrix##_SZ){ \
@@ -658,13 +662,13 @@ jas_matrix_destroy (matrix##_SZ); }
 
 
 J2KPRIV( NRT_BOOL)
-JasPerWriter_setTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
-                     const nrt_Uint8 *buf, nrt_Uint32 tileSize,
+JasPerWriter_setTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
+                     const uint8_t *buf, uint32_t tileSize,
                      nrt_Error *error)
 {
     JasPerWriterImpl *impl = (JasPerWriterImpl*) data;
     NRT_BOOL rc = NRT_SUCCESS;
-    nrt_Uint32 i, nComponents, tileHeight, tileWidth, nBits, nBytes;
+    uint32_t i, nComponents, tileHeight, tileWidth, nBits, nBytes;
 
     nComponents = j2k_Container_getNumComponents(impl->container, error);
     tileWidth = j2k_Container_getTileWidth(impl->container, error);
