@@ -20,49 +20,24 @@
  *
  */
 
-#ifndef __NITF_SYSTEM_HPP__
-#define __NITF_SYSTEM_HPP__
 #pragma once
 
-/*!
- *  \file System.hpp
- */
+// Setup coda-oss for our use
+#define CODA_OSS_AUGMENT_std_namespace 1 // add to std:: namespace
+//#define CODA_OSS_Throwable_isa_std_exception 1 // except::Throwable derives from std::exception
+#include <sys/Conf.h>
+#include <except/Throwable.h>
 
-#include <stdint.h>
+#include <sys/Bit.h> // std::endian
+#include <sys/CStdDef.h> // std::byte
+#include <sys/Filesystem.h> // std::filesystem
 
-#include "nitf/System.h"
-#include "nitf/Field.h"
-#include "nitf/Types.h"
+//--------------------------------------------------------------
+#include <import/except.h>
+#include <import/mt.h>
+#include <import/sys.h>
+#include <import/str.h>
+#include <import/types.h>
+#include <import/io.h>
+#include <import/mem.h>
 
-#include "sys/CStdDef.h"
-#include "sys/Conf.h"
-
-namespace nitf
-{
-	// Keeping these here so that code using "nitf::Uint64" still compiles;
-	// we can't make others change to "uint64_t".
-	using Uint64 = uint64_t;
-	using Uint32 = uint32_t;
-	using Uint16 = uint16_t;
-	using Uint8 = uint8_t;
-	using Int64 = int64_t;
-	using Int32 = int32_t;
-	using Int16 = int16_t;
-	using Int8 = int8_t;
-
-typedef nitf_Off Off;
-typedef nitf_Version Version;
-typedef nitf_ConvType ConvType;
-typedef nitf_FieldType FieldType;
-typedef nitf_AccessFlags AccessFlags;
-typedef nitf_CreationFlags CreationFlags;
-typedef nitf_CornersType CornersType;
-
-#if CODA_OSS_cpp17
-using byte = nitf::byte;
-#else
-using byte = sys::byte;
-#endif
-
-}
-#endif

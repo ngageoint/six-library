@@ -20,7 +20,6 @@
  *
  */
 
-#include <config/coda_oss_config.h>
 #include <nitf/Field.hpp>
 #include "TestCase.h"
 
@@ -33,23 +32,23 @@ TEST_CASE(testCastOperator)
 
     // Test unsigned values
     field.set(123);
-    const nitf::Uint8 valUint8 = field;
+    const uint8_t valUint8 = field;
     TEST_ASSERT_EQ(valUint8, 123);
 
     field.set(12345);
-    const nitf::Uint16 valUint16 = field;
+    const uint16_t valUint16 = field;
     TEST_ASSERT_EQ(valUint16, 12345);
 
     field.set(1234567890);
-    const nitf::Uint32 valUint32 = field;
+    const uint32_t valUint32 = field;
     TEST_ASSERT_EQ(valUint32, 1234567890);
 #if SIZEOF_SIZE_T == 4
     const size_t valSizeT = field;
     TEST_ASSERT_EQ(valSizeT, 1234567890);
 #endif
 
-    field.set(nitf::Uint64(1234567890987));
-    const nitf::Uint64 valUint64 = field;
+    field.set(uint64_t(1234567890987));
+    const uint64_t valUint64 = field;
     TEST_ASSERT_EQ(valUint64, 1234567890987);
 
 #if SIZEOF_SIZE_T == 8
@@ -59,15 +58,15 @@ TEST_CASE(testCastOperator)
 
     // Test signed values
     field.set(-123);
-    const nitf::Int8 valInt8 = field;
+    const int8_t valInt8 = field;
     TEST_ASSERT_EQ(valInt8, -123);
 
     field.set(-12345);
-    const nitf::Int16 valInt16 = field;
+    const int16_t valInt16 = field;
     TEST_ASSERT_EQ(valInt16, -12345);
 
     field.set(-1234567890);
-    const nitf::Int32 valInt32 = field;
+    const int32_t valInt32 = field;
     TEST_ASSERT_EQ(valInt32, -1234567890);
 #if SIZEOF_SIZE_T == 4
     const size_t valSSizeT = field;
@@ -77,7 +76,7 @@ TEST_CASE(testCastOperator)
     // TODO: I think the %lld isn't working, at least in VS, in
     //       nitf_Field_setInt64(), so need to do this via string
     field.set("-1234567890987");
-    const nitf::Int64 valInt64 = field;
+    const int64_t valInt64 = field;
     TEST_ASSERT_EQ(valInt64, -1234567890987);
 #if SIZEOF_SIZE_T == 8
     const size_t valSSizeT = field;
@@ -100,8 +99,8 @@ TEST_CASE(testCastOperator)
 }
 }
 
-int main(int , char** )
-{
+TEST_MAIN(
+    (void)argc;
+    (void)argv;
     TEST_CHECK(testCastOperator);
-    return 0;
-}
+)

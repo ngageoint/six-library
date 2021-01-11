@@ -27,7 +27,7 @@ using namespace nitf;
 ImageWriter::ImageWriter(nitf::ImageSubheader& subheader)
 {
     auto* writer =
-            nitf_ImageWriter_construct(subheader.getNative(), NULL, &error);
+            nitf_ImageWriter_construct(subheader.getNative(), nullptr, &error);
     setNativeOrThrow(writer, &error);
 }
 
@@ -61,7 +61,7 @@ void ImageWriter::setDirectBlockWrite(int enable)
     }
 }
 
-void ImageWriter::setPadPixel(nitf::Uint8* value, nitf::Uint32 length)
+void ImageWriter::setPadPixel(uint8_t* value, uint32_t length)
 {
     if (!nitf_ImageWriter_setPadPixel(
                 getNativeOrThrow(), value, length, &error))

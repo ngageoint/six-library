@@ -88,22 +88,22 @@ void TextSegment::setSubheader(nitf::TextSubheader & value)
     value.setManaged(true);
 }
 
-nitf::Uint64 TextSegment::getOffset() const
+uint64_t TextSegment::getOffset() const
 {
     return getNativeOrThrow()->offset;
 }
 
-void TextSegment::setOffset(nitf::Uint64 value)
+void TextSegment::setOffset(uint64_t value)
 {
     getNativeOrThrow()->offset = value;
 }
 
-nitf::Uint64 TextSegment::getEnd() const
+uint64_t TextSegment::getEnd() const
 {
     return getNativeOrThrow()->end;
 }
 
-void TextSegment::setEnd(nitf::Uint64 value)
+void TextSegment::setEnd(uint64_t value)
 {
     getNativeOrThrow()->end = value;
 }

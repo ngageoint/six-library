@@ -72,7 +72,7 @@ nitf_CompressionInterface* PluginRegistry::retrieveCompressionInterface(
     nitf_Error error;
     nitf_CompressionInterface* const compIface =
             nitf_PluginRegistry_retrieveCompInterface(comp.c_str(), &error);
-    if (compIface == NULL)
+    if (compIface == nullptr)
     {
         throw NITFException(&error);
     }
