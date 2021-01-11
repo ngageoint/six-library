@@ -60,7 +60,7 @@ ByteProvider::~ByteProvider()
 }
 
 void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
-                                          std::vector<nitf::byte>& rawBytes)
+                                          std::vector<sys::byte>& rawBytes)
 {
     rawBytes.resize(stream.getSize());
     if (!rawBytes.empty())
@@ -128,7 +128,7 @@ void ByteProvider::initialize(Record& record,
 void ByteProvider::getFileLayout(nitf::Record& inRecord,
                                  const std::vector<PtrAndLength>& desData)
 {
-    std::shared_ptr<io::ByteStream> byteStream(new io::ByteStream());
+    mem::SharedPtr<io::ByteStream> byteStream(new io::ByteStream());
 
     nitf::IOStreamWriter io(byteStream);
 
@@ -232,7 +232,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     {
         nitf::DESegment deSegment = record.getDataExtensions()[ii];
         nitf::DESubheader subheader = deSegment.getSubheader();
-        uint32_t userSublen;
+        nitf::Uint32 userSublen;
         const size_t prevSize = byteStream->getSize();
         writer.writeDESubheader(subheader, userSublen, record.getVersion());
         desSubheaderLengths[ii] = byteStream->getSize() - prevSize;
@@ -252,7 +252,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     // This initial write won't set a number of the lengths, so we'll seek
     // around to set those ourselves
     nitf_Off fileLenOff;
-    uint32_t hdrLen;
+    nitf_Uint32 hdrLen;
     record.setComplexityLevelIfUnset();
     writer.writeHeader(fileLenOff, hdrLen);
     const nitf::Off fileHeaderNumBytes = byteStream->getSize();
@@ -403,8 +403,8 @@ void ByteProvider::addImageData(
     // Figure out what offset of 'imageData' we're writing from
     const size_t startLocalRowToWrite =
             startGlobalRowToWrite - startRow + numPadRowsSoFar;
-    const auto imageDataPtr =
-            static_cast<const nitf::byte*>(imageData) +
+    const sys::byte* imageDataPtr =
+            static_cast<const sys::byte*>(imageData) +
             startLocalRowToWrite * mNumBytesPerRow;
 
     if (buffers.empty())

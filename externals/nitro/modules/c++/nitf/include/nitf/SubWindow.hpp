@@ -22,14 +22,11 @@
 
 #ifndef __NITF_SUBWINDOW_HPP__
 #define __NITF_SUBWINDOW_HPP__
-#pragma once
-
-#include <vector>
-#include <string>
 
 #include "nitf/SubWindow.h"
 #include "nitf/DownSampler.hpp"
 #include "nitf/Object.hpp"
+#include <string>
 
 /*!
  *  \file SubWindow.hpp
@@ -76,19 +73,19 @@ public:
     //! Destructor
     ~SubWindow();
 
-    uint32_t getStartRow() const;
-    uint32_t getNumRows() const;
-    uint32_t getStartCol() const;
-    uint32_t getNumCols() const;
-    uint32_t getBandList(int i);
-    uint32_t getNumBands() const;
+    nitf::Uint32 getStartRow() const;
+    nitf::Uint32 getNumRows() const;
+    nitf::Uint32 getStartCol() const;
+    nitf::Uint32 getNumCols() const;
+    nitf::Uint32 getBandList(int i);
+    nitf::Uint32 getNumBands() const;
 
-    void setStartRow(uint32_t value);
-    void setNumRows(uint32_t value);
-    void setStartCol(uint32_t value);
-    void setNumCols(uint32_t value);
-    void setBandList(uint32_t * value);
-    void setNumBands(uint32_t value);
+    void setStartRow(nitf::Uint32 value);
+    void setNumRows(nitf::Uint32 value);
+    void setStartCol(nitf::Uint32 value);
+    void setNumCols(nitf::Uint32 value);
+    void setBandList(nitf::Uint32 * value);
+    void setNumBands(nitf::Uint32 value);
 
     /*!
      * Reference a DownSampler within the SubWindow
@@ -96,10 +93,6 @@ public:
      * \param downSampler  The down sampler to reference
      */
     void setDownSampler(nitf::DownSampler* downSampler);
-    void setDownSampler(nitf::DownSampler& downSampler)
-    {
-        setDownSampler(&downSampler);
-    }
 
     /*!
      * Return the DownSampler that is referenced by this SubWindow.
@@ -111,12 +104,6 @@ private:
     nitf::DownSampler* mDownSampler;
     nitf_Error error;
 };
-
-inline void setBands(SubWindow& subWindow, std::vector<uint32_t>& bands)
-{
-    subWindow.setBandList(bands.data());
-    subWindow.setNumBands(static_cast<uint32_t>(bands.size()));
-}
 
 }
 #endif

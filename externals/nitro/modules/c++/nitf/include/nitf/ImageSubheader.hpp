@@ -22,17 +22,16 @@
 
 #ifndef __NITF_IMAGESUBHEADER_HPP__
 #define __NITF_IMAGESUBHEADER_HPP__
-#pragma once
-
-#include <string>
 
 #include "nitf/ImageSubheader.h"
-
-#include "BandInfo.hpp"
-#include "List.hpp"
-#include "FileSecurity.hpp"
-#include "Extensions.hpp"
-#include "System.hpp"
+#include "nitf/Object.hpp"
+#include "nitf/NITFException.hpp"
+#include "nitf/BandInfo.hpp"
+#include "nitf/List.hpp"
+#include "nitf/FileSecurity.hpp"
+#include "nitf/Extensions.hpp"
+#include "nitf/System.hpp"
+#include <string>
 
 /*!
  *  \file ImageSubheader.hpp
@@ -83,8 +82,8 @@ public:
      *  \param bands  Band information object list
      */
     void setPixelInformation(std::string pvtype,
-                             uint32_t nbpp,
-                             uint32_t abpp,
+                             nitf::Uint32 nbpp,
+                             nitf::Uint32 abpp,
                              std::string justification,
                              std::string irep, std::string icat,
                              std::vector<nitf::BandInfo>& bands);
@@ -150,10 +149,10 @@ public:
      * \param numColsPerBlock   The number of columns/block
      * \param imode             Image mode
      */
-    void setBlocking(uint32_t numRows,
-                     uint32_t numCols,
-                     uint32_t numRowsPerBlock,
-                     uint32_t numColsPerBlock,
+    void setBlocking(nitf::Uint32 numRows,
+                     nitf::Uint32 numCols,
+                     nitf::Uint32 numRowsPerBlock,
+                     nitf::Uint32 numColsPerBlock,
                      const std::string& imode);
 
     /*!
@@ -177,12 +176,12 @@ public:
      * \param numBlocksPerRow   The number of columns of blocks
      */
     static
-    void computeBlocking(uint32_t numRows,
-                         uint32_t numCols,
-                         uint32_t& numRowsPerBlock,
-                         uint32_t& numColsPerBlock,
-                         uint32_t& numBlocksPerCol,
-                         uint32_t& numBlocksPerRow);
+    void computeBlocking(nitf::Uint32 numRows,
+                         nitf::Uint32 numCols,
+                         nitf::Uint32& numRowsPerBlock,
+                         nitf::Uint32& numColsPerBlock,
+                         nitf::Uint32& numBlocksPerCol,
+                         nitf::Uint32& numBlocksPerRow);
 
     /*!
      * Set the image dimensions and blocking.
@@ -197,13 +196,13 @@ public:
      * \param numRows           The number of rows
      * \param numCols           The number of columns
      */
-    void setDimensions(uint32_t numRows, uint32_t numCols);
+    void setDimensions(nitf::Uint32 numRows, nitf::Uint32 numCols);
 
     //! Get the number of bands
-    uint32_t getBandCount();
+    nitf::Uint32 getBandCount();
 
     //! Create new bands
-    void createBands(uint32_t numBands);
+    void createBands(nitf::Uint32 numBands);
 
     //! Insert the given comment at the given index (zero-indexed);
     int insertImageComment(std::string comment, int index);
@@ -243,27 +242,15 @@ public:
 
     //! Get the numRows
     nitf::Field getNumRows();
-    size_t numRows()
-    {
-        return getNumRows();
-    }
 
     //! Get the numCols
     nitf::Field getNumCols();
-    size_t numCols()
-    {
-        return getNumCols();
-    }
 
     //! Get the pixelValueType
     nitf::Field getPixelValueType();
 
     //! Get the imageRepresentation
     nitf::Field getImageRepresentation();
-    std::string imageRepresentation()
-    {
-        return getImageRepresentation();
-    }
 
     //! Get the imageCategory
     nitf::Field getImageCategory();
@@ -288,71 +275,39 @@ public:
 
     //! Get the imageCompression
     nitf::Field getImageCompression();
-    std::string imageCompression()
-    {
-        return getImageCompression();
-    }
 
     //! Get the compressionRate
     nitf::Field getCompressionRate();
 
     //! Get the numImageBands
     nitf::Field getNumImageBands();
-    size_t numImageBands()
-    {
-        return getNumImageBands();
-    }
 
     //! Get the numMultispectralImageBands
     nitf::Field getNumMultispectralImageBands();
 
     //! Get the bandInfo
-    nitf::BandInfo getBandInfo(uint32_t band);
+    nitf::BandInfo getBandInfo(nitf::Uint32 band);
 
     //! Get the imageSyncCode
     nitf::Field getImageSyncCode();
 
     //! Get the imageMode
     nitf::Field getImageMode();
-    std::string imageMode()
-    {
-        return getImageMode();
-    }
 
     //! Get the numBlocksPerRow
     nitf::Field getNumBlocksPerRow();
-    size_t numBlocksPerRow()
-    {
-        return getNumBlocksPerRow();
-    }
 
     //! Get the numBlocksPerCol
     nitf::Field getNumBlocksPerCol();
-    size_t numBlocksPerCol()
-    {
-        return getNumBlocksPerCol();
-    }
 
     //! Get the numPixelsPerHorizBlock
     nitf::Field getNumPixelsPerHorizBlock();
-    size_t numPixelsPerHorizBlock()
-    {
-        return getNumPixelsPerHorizBlock();
-    }
 
     //! Get the numPixelsPerVertBlock
     nitf::Field getNumPixelsPerVertBlock();
-    size_t numPixelsPerVertBlock()
-    {
-        return getNumPixelsPerVertBlock();
-    }
 
     //! Get the numBitsPerPixel
     nitf::Field getNumBitsPerPixel();
-    size_t numBitsPerPixel()
-    {
-        return getNumBitsPerPixel();
-    }
 
     //! Get the imageDisplayLevel
     nitf::Field getImageDisplayLevel();

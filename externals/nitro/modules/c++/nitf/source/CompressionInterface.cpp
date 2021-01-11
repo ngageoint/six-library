@@ -26,10 +26,10 @@ using namespace nitf;
 
 NITF_BOOL CompressionInterface::adapterStart(
     nitf_CompressionControl* object,
-    uint64_t offset,
-    uint64_t dataLength,
-    uint64_t* blockMask,
-    uint64_t* padMask, 
+    nitf_Uint64 offset,
+    nitf_Uint64 dataLength,
+    nitf_Uint64* blockMask,
+    nitf_Uint64* padMask, 
     nitf_Error* error)
 {
     try
@@ -63,7 +63,7 @@ NITF_BOOL CompressionInterface::adapterStart(
 NITF_BOOL CompressionInterface::adapterWriteBlock(
     nitf_CompressionControl* object, 
     nitf_IOInterface* io,
-    const uint8_t* data,
+    const nitf_Uint8* data,
     NITF_BOOL pad,
     NITF_BOOL noData,
     nitf_Error* error)
@@ -133,9 +133,9 @@ NITF_BOOL CompressionInterface::adapterEnd(
 void CompressionInterface::adapterDestroy(
     nitf_CompressionControl** object)
 {
-    if (object != nullptr && *object != nullptr)
+    if (object != NULL && *object != NULL)
     {
         delete reinterpret_cast<Compressor*>(*object);
-        *object = nullptr;
+        *object = NULL;
     }
 }

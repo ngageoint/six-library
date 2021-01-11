@@ -125,7 +125,7 @@ nitf::ImageReader Reader::newImageReader(int imageSegmentNumber)
 {
     nitf_ImageReader * x = nitf_Reader_newImageReader(getNativeOrThrow(),
                                                       imageSegmentNumber,
-                                                      nullptr, &error);
+                                                      NULL, &error);
     if (!x)
         throw nitf::NITFException(&error);
 
@@ -140,7 +140,7 @@ nitf::ImageReader Reader::newImageReader(int imageSegmentNumber,
                                          const std::map<std::string, void*>& options)
 {
     nitf::HashTable userOptions;
-    nrt_HashTable* userOptionsNative = nullptr;
+    nrt_HashTable* userOptionsNative = NULL;
 
     if (!options.empty())
     {

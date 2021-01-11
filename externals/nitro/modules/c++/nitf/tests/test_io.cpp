@@ -24,7 +24,7 @@
 #include <import/sys.h>
 #include <import/except.h>
 
-int main(int, char**)
+int main(int argc, char** argv)
 {
     try
     {
@@ -42,7 +42,7 @@ int main(int, char**)
         memIO.close();
         return 0;
     }
-    catch (const except::Throwable& t)
+    catch (except::Throwable& t)
     {
         std::cout << t.getTrace() << std::endl;
     }

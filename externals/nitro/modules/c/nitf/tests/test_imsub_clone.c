@@ -32,10 +32,10 @@
 void showFileHeader(nitf_FileHeader* header)
 {
     unsigned int i;
-    uint32_t num;
+    nitf_Uint32 num;
     nitf_Error error;
-    uint32_t len;
-    uint64_t dataLen;
+    nitf_Uint32 len;
+    nitf_Uint64 dataLen;
 
     SHOW_VAL( header->fileHeader );
     SHOW_VAL( header->fileVersion );
@@ -85,7 +85,7 @@ void showFileHeader(nitf_FileHeader* header)
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
                i, (long)len);
         printf("\tThe length of the IMAGE data: %llu bytes\n\n",
-               (long long unsigned int) dataLen);
+               dataLen);
     }
 
     return;

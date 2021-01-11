@@ -32,17 +32,17 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader * subheader,
                                               nitf_Error * error);
 NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
                               nitf_IOInterface*  io,
-                              uint64_t        offset,
-                              uint64_t        fileLength,
+                              nitf_Uint64        offset,
+                              nitf_Uint64        fileLength,
                               nitf_BlockingInfo* blockInfo,
-                              uint64_t*       blockMask,
+                              nitf_Uint64*       blockMask,
                               nitf_Error*        error);
-NITFPRIV(uint8_t*) implReadBlock(nitf_DecompressionControl *control,
-                                    uint32_t blockNumber,
-                                    uint64_t* blockSize,
+NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
+                                    nitf_Uint32 blockNumber,
+                                    nitf_Uint64* blockSize,
                                     nitf_Error* error);
 NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
-                            uint8_t* block,
+                            nitf_Uint8* block,
                             nitf_Error* error);
 
 NITFPRIV(void) implClose(nitf_DecompressionControl** control);
@@ -63,8 +63,8 @@ typedef struct _ImplControl
 {
     nitf_BlockingInfo blockInfo; /* Kept for convenience */
     j2k_Reader *reader;          /* j2k Reader */
-    uint64_t offset;          /* File offset to data */
-    uint64_t fileLength;      /* Length of compressed data in file */
+    nitf_Uint64 offset;          /* File offset to data */
+    nitf_Uint64 fileLength;      /* Length of compressed data in file */
 }
 ImplControl;
 
@@ -73,7 +73,6 @@ NITF_CXX_ENDGUARD
 
 NITFAPI(const char**) J2KDecompress_init(nitf_Error *error)
 {
-    (void)error;
     return ident;
 }
 
@@ -84,12 +83,9 @@ NITFAPI(void) C8_cleanup(void)
 
 
 NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
-                            uint8_t* block,
+                            nitf_Uint8* block,
                             nitf_Error* error)
 {
-    (void)control;
-    (void)error;
-
     if (block)
         implMemFree((void*)block);
     return 1;
@@ -110,20 +106,20 @@ NITFAPI(void*) C8_construct(char *compressionType,
     return((void *) &interfaceTable);
 }
 
-NITFPRIV(uint8_t*) implReadBlock(nitf_DecompressionControl *control,
-                                    uint32_t blockNumber,
-                                    uint64_t* blockSize,
+NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
+                                    nitf_Uint32 blockNumber,
+                                    nitf_Uint64* blockSize,
                                     nitf_Error* error)
 {
     ImplControl *implControl = (ImplControl*)control;
-    uint8_t *buf = NULL;
-    uint64_t bufSize;
+    nrt_Uint8 *buf = NULL;
+    nrt_Uint64 bufSize;
     j2k_Container* container = NULL;
 
     if (j2k_Reader_canReadTiles(implControl->reader, error))
     {
         /* use j2k_Reader_readTile */
-        uint32_t tileX, tileY;
+        nitf_Uint32 tileX, tileY;
 
         tileY = blockNumber / implControl->blockInfo.numBlocksPerRow;
         tileX = blockNumber % implControl->blockInfo.numBlocksPerRow;
@@ -138,7 +134,7 @@ NITFPRIV(uint8_t*) implReadBlock(nitf_DecompressionControl *control,
     else
     {
         /* use j2k_Reader_readRegion using the block info */
-        uint32_t tileX, tileY, x0, x1, y0, y1, totalRows, totalCols;
+        nitf_Uint32 tileX, tileY, x0, x1, y0, y1, totalRows, totalCols;
 
         tileY = blockNumber / implControl->blockInfo.numBlocksPerRow;
         tileX = blockNumber % implControl->blockInfo.numBlocksPerRow;
@@ -213,11 +209,11 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader * subheader,
                                               nrt_HashTable * options, 
                                               nitf_Error * error)
 {
+    ImplControl *implControl = NULL;
     (void)subheader;
     (void)options;
 
-    ImplControl* implControl = (ImplControl*)implMemAlloc(sizeof(ImplControl), error);
-    if (!implControl)
+    if (!(implControl = (ImplControl*)implMemAlloc(sizeof(ImplControl), error)))
         goto CATCH_ERROR;
 
     return((nitf_DecompressionControl*) implControl);
@@ -231,22 +227,23 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader * subheader,
 
 NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
                               nitf_IOInterface*  io,
-                              uint64_t        offset,
-                              uint64_t        fileLength,
+                              nitf_Uint64        offset,
+                              nitf_Uint64        fileLength,
                               nitf_BlockingInfo* blockInfo,
-                              uint64_t*       blockMask,
+                              nitf_Uint64*       blockMask,
                               nitf_Error*        error)
 {
+    ImplControl *implControl = NULL;
+
     /* TODO: In order to support M8, I think we would update this */
     (void)blockMask;
 
-    ImplControl* implControl = (ImplControl*)control;
+    implControl = (ImplControl*)control;
 
     if (nitf_IOInterface_seek(io, offset, NITF_SEEK_SET, error) < 0)
         goto CATCH_ERROR;
 
-    implControl->reader = j2k_Reader_openIO(io, error);
-    if (!implControl->reader)
+    if (!(implControl->reader = j2k_Reader_openIO(io, error)))
         goto CATCH_ERROR;
 
     implControl->offset     = offset;

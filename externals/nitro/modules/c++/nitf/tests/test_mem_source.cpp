@@ -48,13 +48,13 @@ int main(int argc, char **argv)
         int numBytesPerPix = 1;
 
         /*  Construct the band sources  */
-        std::unique_ptr<nitf::BandSource> bs0 =
+        nitf::BandSource* bs0 =
             new nitf::MemorySource(MEMBUF, MEMSIZE, 0, numBytesPerPix, NUM_BANDS - 1);
-        std::unique_ptr<nitf::BandSource> bs1 =
+        nitf::BandSource* bs1 =
             new nitf::MemorySource(MEMBUF, MEMSIZE, 1, numBytesPerPix, NUM_BANDS - 1);
-        std::unique_ptr<nitf::BandSource> bs2 =
+        nitf::BandSource* bs2 =
             new nitf::MemorySource(MEMBUF, MEMSIZE, 2, numBytesPerPix, NUM_BANDS - 1);
-        std::unique_ptr<nitf::BandSource> all =
+        nitf::BandSource* all =
             new nitf::MemorySource(MEMBUF, MEMSIZE, 0, numBytesPerPix, 0);
 
         /*  Construct in memory band buffers for testing -- 0 terminate strings */
@@ -97,10 +97,12 @@ int main(int argc, char **argv)
         NITF_FREE(band_1);
         NITF_FREE(band_2);
         NITF_FREE(all_bands);
-
+        delete bs0;
+        delete bs1;
+        delete bs2;
         return 0;
     }
-    catch (const except::Throwable & t)
+    catch (except::Throwable & t)
     {
         std::cout << t.getMessage() << std::endl;
     }

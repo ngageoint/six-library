@@ -20,8 +20,6 @@
  *
  */
 
-#include <inttypes.h>
-
 #include <import/nitf.h>
 
 /*
@@ -38,8 +36,6 @@
 #define SHOW_I(X) printf("%s=[%ld]\n", #X, X)
 #define SHOW_LLI(X) printf("%s=[%lld]\n", #X, X)
 #define SHOW_LLU(X) printf("%s=[%llu]\n", #X, X)
-#define SHOW_UINT64(X) printf("%s=[%"PRIu64"]\n", #X, X)
-
 
 #define SHOW_RGB(X) \
     printf("%s(R,G,B)=[0x%x,0x%x,0x%x]\n", #X, (short)(X->raw[0]), (short)(X->raw[1]), (short)(X->raw[2]))
@@ -84,7 +80,7 @@ void measureComplexity(nitf_Record* record)
 void printTRE(nitf_TRE* tre)
 {
     nitf_Error error;
-    uint32_t treLength;
+    nitf_Uint32 treLength;
     nitf_TREEnumerator* it = NULL;
     const char* treID = NULL;
 
@@ -187,11 +183,11 @@ void showSecurityGroup(nitf_FileSecurity* securityGroup)
 void showFileHeader(nitf_Record * record)
 {
     unsigned int i;
-    uint32_t num;
+    nitf_Uint32 num;
     nitf_Error error;
-    uint32_t len;
-    uint64_t dataLen;
-    uint32_t dataLen32;
+    nitf_Uint32 len;
+    nitf_Uint64 dataLen;
+    nitf_Uint32 dataLen32;
     nitf_Version fver;
     nitf_FileHeader *header;
 
@@ -231,7 +227,7 @@ void showFileHeader(nitf_Record * record)
         goto CATCH_ERROR;
 
 
-    printf("The number of images contained in this file [%"PRIu32"]\n", num);
+    printf("The number of images contained in this file [%lu]\n", num);
     for (i = 0; i < num; i++)
     {
 
@@ -244,9 +240,9 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT64_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of image subheader [%"PRIu32"]: %"PRIu32" bytes\n",
+        printf("\tThe length of image subheader [%u]: %lu bytes\n",
                i, len);
-        printf("\tThe length of the image data: %"PRIu64" bytes\n\n", dataLen);
+        printf("\tThe length of the image data: %llu bytes\n\n", dataLen);
     }
 
     if (!nitf_Field_get(header->numGraphics,
@@ -254,7 +250,7 @@ void showFileHeader(nitf_Record * record)
         goto CATCH_ERROR;
 
 
-    printf("The number of graphics contained in this file [%"PRIu32"]\n", num);
+    printf("The number of graphics contained in this file [%ld]\n", num);
     for (i = 0; i < num; i++)
     {
 
@@ -267,9 +263,9 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of graphic subheader [%"PRIu32"]: %"PRIu32" bytes\n",
+        printf("\tThe length of graphic subheader [%u]: %lu bytes\n",
                i, len);
-        printf("\tThe length of the graphic data: %"PRIu32" bytes\n\n",
+        printf("\tThe length of the graphic data: %lu bytes\n\n",
                dataLen32);
     }
 
@@ -277,7 +273,7 @@ void showFileHeader(nitf_Record * record)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of labels contained in this file [%"PRIu32"]\n", num);
+    printf("The number of labels contained in this file [%ld]\n", num);
     for (i = 0; i < num; i++)
     {
 
@@ -289,10 +285,10 @@ void showFileHeader(nitf_Record * record)
                             &dataLen32,
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
-        printf("\tThe length of label subheader [%"PRIu32"]: %"PRIu32" bytes\n",
+        printf("\tThe length of label subheader [%u]: %lu bytes\n",
                i, len);
 
-        printf("\tThe length of the label data: %"PRIu32" bytes\n\n",
+        printf("\tThe length of the label data: %lu bytes\n\n",
                dataLen32);
     }
 
@@ -300,7 +296,7 @@ void showFileHeader(nitf_Record * record)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of text sections contained in this file [%"PRIu32"]\n",
+    printf("The number of text sections contained in this file [%ld]\n",
            num);
 
     for (i = 0; i < num; i++)
@@ -314,10 +310,10 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of text subheader [%"PRIu32"]: %"PRIu32" bytes\n",
+        printf("\tThe length of text subheader [%u]: %lu bytes\n",
                i, len);
 
-        printf("\tThe length of the text data: %"PRIu32" bytes\n\n",
+        printf("\tThe length of the text data: %lu bytes\n\n",
                dataLen32);
     }
 
@@ -325,7 +321,7 @@ void showFileHeader(nitf_Record * record)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of DES contained in this file [%"PRIu32"]\n",
+    printf("The number of DES contained in this file [%ld]\n",
            num);
 
     for (i = 0; i < num; i++)
@@ -339,9 +335,9 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of DES subheader [%"PRIu32"]: %"PRIu32" bytes\n",
+        printf("\tThe length of DES subheader [%u]: %lu bytes\n",
                i, len);
-        printf("\tThe length of the DES data: %"PRIu32" bytes\n\n",
+        printf("\tThe length of the DES data: %lu bytes\n\n",
                dataLen32);
     }
 
@@ -350,7 +346,7 @@ void showFileHeader(nitf_Record * record)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of RES contained in this file [%"PRIu32"]\n",
+    printf("The number of RES contained in this file [%ld]\n",
            num);
 
     for (i = 0; i < num; i++)
@@ -367,10 +363,10 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of RES subheader [%"PRIu32"]: %"PRIu32" bytes\n",
+        printf("\tThe length of RES subheader [%u]: %lu bytes\n",
                i, len);
 
-        printf("\tThe length of the RES data: %"PRIu32" bytes\n\n",
+        printf("\tThe length of the RES data: %lu bytes\n\n",
                dataLen32);
     }
 
@@ -378,7 +374,7 @@ void showFileHeader(nitf_Record * record)
                         NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The user-defined header length [%"PRIu32"]\n", num);
+    printf("The user-defined header length [%ld]\n", num);
 
     if (header->userDefinedSection)
         showExtensions( header->userDefinedSection );
@@ -387,7 +383,7 @@ void showFileHeader(nitf_Record * record)
                         NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The extended header length [%"PRIu32"]\n", num);
+    printf("The extended header length [%ld]\n", num);
 
     if (header->extendedSection)
         showExtensions( header->extendedSection );
@@ -698,7 +694,7 @@ void showDESubheader(nitf_DESubheader * sub)
     if (sub->subheaderFields)
         printTRE(sub->subheaderFields);
 
-    SHOW_UINT64(sub->dataLength);
+    SHOW_LLU(sub->dataLength);
 
     /*
      *  NITRO only populates this object if the DESDATA contains
@@ -729,7 +725,7 @@ void showRESubheader(nitf_RESubheader * sub)
         showSecurityGroup(sub->securityGroup);
 
     SHOW_VAL(sub->subheaderFieldsLength);
-    SHOW_UINT64(sub->dataLength);
+    SHOW_LLU(sub->dataLength);
 }
 
 int main(int argc, char **argv)

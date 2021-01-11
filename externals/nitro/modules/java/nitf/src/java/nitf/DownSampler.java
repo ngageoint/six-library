@@ -202,7 +202,7 @@ public abstract class DownSampler extends DestructibleObject
         DownSampler downSampler = null;
         synchronized (downSamplerMap)
         {
-            final Object o = downSamplerMap.get(Long.valueOf(address));
+            final Object o = downSamplerMap.get(new Long(address));
             if (o != null)
             {
                 downSampler = (DownSampler) o;
@@ -220,7 +220,7 @@ public abstract class DownSampler extends DestructibleObject
     {
         synchronized (downSamplerMap)
         {
-            final Long key = Long.valueOf(downSampler.getAddress());
+            final Long key = new Long(downSampler.getAddress());
             if (!downSamplerMap.containsKey(key))
                 downSamplerMap.put(key, downSampler);
         }

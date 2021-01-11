@@ -20,12 +20,12 @@
  *
  */
 
+#include <mem/SharedPtr.h>
+#include <import/nitf.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <memory>
-
-#include <import/nitf.hpp>
 
 /*
  * This test tests the round-trip process of taking an input NITF
@@ -39,44 +39,60 @@ namespace
 class RowStreamer : public nitf::RowSourceCallback
 {
 public:
-    RowStreamer(uint32_t band,
-                uint32_t numCols,
+    RowStreamer(nitf::Uint32 band,
+                nitf::Uint32 numCols,
                 nitf::ImageReader reader) :
         mReader(reader),
         mBand(band)
     {
+        mWindow.setStartRow(0);
         mWindow.setNumRows(1);
+        mWindow.setStartCol(0);
         mWindow.setNumCols(numCols);
         mWindow.setBandList(&mBand);
         mWindow.setNumBands(1);
     }
 
-    virtual void nextRow(uint32_t /*band*/, void* buffer)
+    virtual void nextRow(nitf::Uint32 band, void* buffer)
     {
         int padded;
-        mReader.read(mWindow, reinterpret_cast<nitf::byte**>(&buffer), &padded);
+        mReader.read(mWindow, (nitf::Uint8**) &buffer, &padded);
         mWindow.setStartRow(mWindow.getStartRow() + 1);
     }
 
 private:
     nitf::ImageReader mReader;
     nitf::SubWindow mWindow;
-    uint32_t mBand;
+    nitf::Uint32 mBand;
 };
 
 // RAII for managing a list of RowStreamer's
-struct RowStreamers final
+class RowStreamers
 {
-    nitf::RowSourceCallback* add(uint32_t band,
-                                 uint32_t numCols,
+public:
+    ~RowStreamers()
+    {
+        for (size_t ii = 0; ii < mStreamers.size(); ++ii)
+        {
+            delete mStreamers[ii];
+        }
+    }
+
+    nitf::RowSourceCallback* add(nitf::Uint32 band,
+                                 nitf::Uint32 numCols,
                                  nitf::ImageReader reader)
     {
-        mStreamers.emplace_back(new RowStreamer(band, numCols, reader));
-        return mStreamers.back().get();
+        std::auto_ptr<RowStreamer>
+            streamer(new RowStreamer(band, numCols, reader));
+        RowStreamer* const streamerPtr(streamer.get());
+
+        mStreamers.push_back(streamerPtr);
+        streamer.release();
+        return streamerPtr;
     }
 
 private:
-    std::vector<std::unique_ptr<RowStreamer>> mStreamers;
+    std::vector<RowStreamer*> mStreamers;
 };
 }
 
@@ -93,7 +109,7 @@ int main(int argc, char **argv)
         }
 
         // Check that wew have a valid NITF
-        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN)
         {
             std::cout << "Invalid NITF: " << argv[1] << std::endl;
             exit( EXIT_FAILURE);
@@ -110,9 +126,9 @@ int main(int argc, char **argv)
         writer.prepare(output, record);
 
         nitf::ListIterator iter = record.getImages().begin();
-        uint32_t num = record.getNumImages();
+        nitf::Uint32 num = record.getNumImages();
         RowStreamers rowStreamers;
-        for (uint32_t i = 0; i < num; i++)
+        for (nitf::Uint32 i = 0; i < num; i++)
         {
             //for the images, we'll use a RowSource for streaming
             nitf::ImageSegment imseg = *iter;
@@ -120,44 +136,44 @@ int main(int argc, char **argv)
             nitf::ImageReader iReader = reader.newImageReader(i);
             nitf::ImageWriter iWriter = writer.newImageWriter(i);
             nitf::ImageSource iSource;
-            uint32_t nBands = imseg.getSubheader().getNumImageBands();
-            uint32_t nRows = imseg.getSubheader().getNumRows();
-            uint32_t nCols = imseg.getSubheader().getNumCols();
-            uint32_t pixelSize = NITF_NBPP_TO_BYTES(
+            nitf::Uint32 nBands = imseg.getSubheader().getNumImageBands();
+            nitf::Uint32 nRows = imseg.getSubheader().getNumRows();
+            nitf::Uint32 nCols = imseg.getSubheader().getNumCols();
+            nitf::Uint32 pixelSize = NITF_NBPP_TO_BYTES(
                     imseg.getSubheader().getNumBitsPerPixel());
 
-            for (uint32_t ii = 0; i < nBands; i++)
+            for (nitf::Uint32 i = 0; i < nBands; i++)
             {
-                nitf::RowSource rowSource(ii, nRows, nCols, pixelSize,
-                                          rowStreamers.add(ii, nCols, iReader));
+                nitf::RowSource rowSource(i, nRows, nCols, pixelSize,
+                                          rowStreamers.add(i, nCols, iReader));
                 iSource.addBand(rowSource);
             }
             iWriter.attachSource(iSource);
         }
 
         num = record.getNumGraphics();
-        for (uint32_t i = 0; i < num; i++)
+        for (nitf::Uint32 i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setGraphicWriteHandler(i, segmentWriter);
         }
 
         num = record.getNumTexts();
-        for (uint32_t i = 0; i < num; i++)
+        for (nitf::Uint32 i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setTextWriteHandler(i, segmentWriter);
         }
 
         num = record.getNumDataExtensions();
-        for (uint32_t i = 0; i < num; i++)
+        for (nitf::Uint32 i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setDEWriteHandler(i, segmentWriter);
         }
@@ -167,9 +183,9 @@ int main(int argc, char **argv)
         io.close();
         return 0;
     }
-    catch (const std::exception& ex)
+    catch (except::Throwable & t)
     {
-        std::cerr << "ERROR!: " << ex.what() << "\n";
+        std::cerr << "ERROR!: " << t.toString() << std::endl;
         return 1;
     }
 }

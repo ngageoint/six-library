@@ -26,11 +26,13 @@
 /*  I hand it NULL!  */
 char* clone_string(char* data, nitf_Error* error)
 {
-    (void)error;
 
+    int data_len = strlen(data);
+    char* new_data = (char*)NITF_MALLOC( data_len + 1);
     printf("Cloning '%s'...\n", data);
-    char* new_data = nitf_strdup(data);
+    new_data[ data_len ] = 0;
     assert(new_data);
+    strcpy(new_data, data);
     return new_data;
 }
 

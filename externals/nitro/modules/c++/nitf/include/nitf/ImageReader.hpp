@@ -22,14 +22,11 @@
 
 #ifndef __NITF_IMAGE_READER_HPP__
 #define __NITF_IMAGE_READER_HPP__
-#pragma once
 
-#include <string>
-
-#include "nitf/coda-oss.hpp"
 #include "nitf/ImageReader.h"
 #include "nitf/Object.hpp"
 #include "nitf/BlockingInfo.hpp"
+#include <string>
 
 /*!
  *  \file ImageReader.hpp
@@ -38,42 +35,6 @@
 
 namespace nitf
 {
-    class BufferList final
-    {
-        std::vector<nitf::byte*> buffer;
-        std::vector<std::unique_ptr<nitf::byte[]>> buffer_;
-
-    public:
-        BufferList(size_t nBands)
-            : buffer(nBands), buffer_(nBands)
-        {
-        }
-
-        void initialize(size_t subWindowSize)
-        {
-            for (size_t i = 0; i < size(); i++)
-            {
-                buffer_[i].reset(new nitf::byte[subWindowSize]);
-                buffer[i] = buffer_[i].get();
-            }
-        }
-
-        size_t size() const noexcept
-        {
-            assert(buffer.size() == buffer_.size());
-            return buffer.size();
-        }
-
-        nitf::byte** data() noexcept
-        {
-            return buffer.data();
-        }
-
-        nitf::byte*& operator[](size_t i)noexcept
-        {
-            return buffer[i];
-        }
-    };
 
 /*!
  *  \class ImageReader
@@ -102,11 +63,7 @@ public:
      *  \param  user  User-defined data buffers for read
      *  \param  padded  Returns TRUE if pad pixels may have been read
      */
-    void read(nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
-    void read(nitf::SubWindow & subWindow, nitf::byte ** user, int* padded)
-    {
-        read(subWindow, reinterpret_cast<uint8_t**>(user), padded);
-    }
+    void read(nitf::SubWindow & subWindow, nitf::Uint8 ** user, int * padded);
 
     /*!
      *  Read a block directly from file
@@ -115,8 +72,8 @@ public:
      *  \return The read block 
      *          (something must be done with buffer before next call)
      */
-    const uint8_t* readBlock(uint32_t blockNumber, 
-                                 uint64_t* blockSize);
+    const nitf::Uint8* readBlock(nitf::Uint32 blockNumber, 
+                                 nitf::Uint64* blockSize);
 
     //!  Set read caching
     void setReadCaching();

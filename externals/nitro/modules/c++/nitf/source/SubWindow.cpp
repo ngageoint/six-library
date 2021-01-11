@@ -42,7 +42,7 @@ SubWindow::SubWindow(nitf_SubWindow * x)
     getNativeOrThrow();
 }
 
-SubWindow::SubWindow() : mDownSampler(nullptr)
+SubWindow::SubWindow() : mDownSampler(NULL)
 {
     setNative(nitf_SubWindow_construct(&error));
     getNativeOrThrow();
@@ -59,62 +59,62 @@ SubWindow::~SubWindow()
     }
 }
 
-uint32_t SubWindow::getStartRow() const
+nitf::Uint32 SubWindow::getStartRow() const
 {
     return getNativeOrThrow()->startRow;
 }
 
-void SubWindow::setStartRow(uint32_t value)
+void SubWindow::setStartRow(nitf::Uint32 value)
 {
     getNativeOrThrow()->startRow = value;
 }
 
-uint32_t SubWindow::getNumRows() const
+nitf::Uint32 SubWindow::getNumRows() const
 {
     return getNativeOrThrow()->numRows;
 }
 
-void SubWindow::setNumRows(uint32_t value)
+void SubWindow::setNumRows(nitf::Uint32 value)
 {
     getNativeOrThrow()->numRows = value;
 }
 
-uint32_t SubWindow::getStartCol() const
+nitf::Uint32 SubWindow::getStartCol() const
 {
     return getNativeOrThrow()->startCol;
 }
 
-void SubWindow::setStartCol(uint32_t value)
+void SubWindow::setStartCol(nitf::Uint32 value)
 {
     getNativeOrThrow()->startCol = value;
 }
 
-uint32_t SubWindow::getNumCols() const
+nitf::Uint32 SubWindow::getNumCols() const
 {
     return getNativeOrThrow()->numCols;
 }
 
-void SubWindow::setNumCols(uint32_t value)
+void SubWindow::setNumCols(nitf::Uint32 value)
 {
     getNativeOrThrow()->numCols = value;
 }
 
-uint32_t SubWindow::getBandList(int i)
+nitf::Uint32 SubWindow::getBandList(int i)
 {
     return getNativeOrThrow()->bandList[i];
 }
 
-void SubWindow::setBandList(uint32_t * value)
+void SubWindow::setBandList(nitf::Uint32 * value)
 {
-    getNativeOrThrow()->bandList = (uint32_t*)value;
+    getNativeOrThrow()->bandList = (nitf_Uint32*)value;
 }
 
-uint32_t SubWindow::getNumBands() const
+nitf::Uint32 SubWindow::getNumBands() const
 {
     return getNativeOrThrow()->numBands;
 }
 
-void SubWindow::setNumBands(uint32_t value)
+void SubWindow::setNumBands(nitf::Uint32 value)
 {
     getNativeOrThrow()->numBands = value;
 }

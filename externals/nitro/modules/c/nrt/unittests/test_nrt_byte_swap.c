@@ -26,42 +26,41 @@
 
 TEST_CASE(testFourBytes)
 {
-    uint32_t value;
-    uint32_t swappedValue;
+    nrt_Uint32 value;
+    nrt_Uint32 swappedValue;
 
     value = 0x12345678;
     swappedValue = 0x78563412;
-    nrt_Utils_byteSwap((uint8_t*)&value, 4);
+    nrt_Utils_byteSwap((nrt_Uint8*)&value, 4);
     TEST_ASSERT(value == swappedValue);
 }
 
 TEST_CASE(testTwoBytes)
 {
-    uint16_t value;
-    uint16_t swappedValue;
+    nrt_Uint16 value;
+    nrt_Uint16 swappedValue;
 
     value = 0x0304;
     swappedValue = 0x0403;
-    nrt_Utils_byteSwap((uint8_t*)&value, 2);
+    nrt_Utils_byteSwap((nrt_Uint8*)&value, 2);
     TEST_ASSERT(value == swappedValue);
 }
 
 TEST_CASE(testEightBytes)
 {
-    uint64_t value;
-    uint64_t swappedValue;
+    nrt_Uint64 value;
+    nrt_Uint64 swappedValue;
 
     value = 0x0123456789ABCDEF;
     swappedValue = 0xEFCDAB8967452301;
-    nrt_Utils_byteSwap((uint8_t*)&value, 8);
+    nrt_Utils_byteSwap((nrt_Uint8*)&value, 8);
     TEST_ASSERT(value == swappedValue);
 }
 
-TEST_MAIN(
-    (void)argc;
-    (void)argv;
+int main(int argc, char **argv)
+{
     CHECK(testFourBytes);
     CHECK(testTwoBytes);
     CHECK(testEightBytes);
-    )
-
+    return 0;
+}

@@ -22,11 +22,9 @@
 
 #ifndef __NITF_IO_STREAM_WRITER_H__
 #define __NITF_IO_STREAM_WRITER_H__
-#pragma once
-
-#include <memory>
 
 #include <nitf/CustomIO.hpp>
+#include <mem/SharedPtr.h>
 #include <io/SeekableStreams.h>
 
 namespace nitf
@@ -45,7 +43,7 @@ public:
      *
      *  \param stream The stream to use for writing
      */
-    IOStreamWriter(std::shared_ptr<io::SeekableOutputStream> stream);
+    IOStreamWriter(mem::SharedPtr<io::SeekableOutputStream> stream);
 
 private:
     void readImpl(void* buffer, size_t size);
@@ -64,7 +62,7 @@ private:
 
     void closeImpl();
 
-    std::shared_ptr<io::SeekableOutputStream> mStream;
+    mem::SharedPtr<io::SeekableOutputStream> mStream;
 };
 }
 

@@ -23,9 +23,10 @@
 #include <vector>
 #include <sstream>
 
-#include <nitf/coda-oss.hpp>
+#include <types/RowCol.h>
 #include <nitf/ImageSegmentComputer.h>
 #include <nitf/ImageBlocker.hpp>
+#include <math/Round.h>
 
 #include "TestCase.h"
 
@@ -152,15 +153,6 @@ TEST_CASE(testOneRowOver)
     TEST_ASSERT_EQ(segments[1].numRows, 1);
 }
 
-static size_t ceilingDivide(size_t numerator, size_t denominator)
-{
-    if (denominator == 0)
-    {
-        throw except::Exception(Ctxt("Attempted division by 0"));
-    }
-    return (numerator / denominator) + (numerator % denominator != 0);
-}
-
 TEST_CASE(testKnownCase)
 {
     // This tests a known case that was segmenting with too many rows
@@ -200,7 +192,8 @@ TEST_CASE(testKnownCase)
                                      blockSize,
                                      blockSize);
 
-    const size_t expectedSize = blockSize * ceilingDivide(dims.col, blockSize) * blockSize;
+    const size_t expectedSize = blockSize *
+            math::ceilingDivide(dims.col, blockSize) * blockSize;
 
     for (size_t row = 0; row < dims.row; row += blockSize)
     {
@@ -217,13 +210,12 @@ TEST_CASE(testKnownCase)
 }
 
 
-TEST_MAIN
-(
-    (void)argc;
-    (void)argv;
-
+int main(int /*argc*/, char** /*argv*/)
+{
     TEST_CHECK(testBlockSizedBoundaries);
     TEST_CHECK(testPerfectSplitting);
     TEST_CHECK(testOneRowOver);
     TEST_CHECK(testKnownCase);
-    )
+
+    return 0;
+}

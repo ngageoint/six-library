@@ -75,16 +75,16 @@ public:
     void setSubheader(nitf::DESubheader & value);
 
     //! Get the offset
-    uint64_t getOffset() const;
+    nitf::Uint64 getOffset() const;
 
     //! Set the offset
-    void setOffset(uint64_t value);
+    void setOffset(nitf::Uint64 value);
 
     //! Get the end
-    uint64_t getEnd() const;
+    nitf::Uint64 getEnd() const;
 
     //! Set the end
-    void setEnd(uint64_t value);
+    void setEnd(nitf::Uint64 value);
 
 private:
     nitf_Error error;

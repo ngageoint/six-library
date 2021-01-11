@@ -27,8 +27,6 @@ J2KAPI(NRT_BOOL) j2k_Writer_setOptions(j2k_WriterOptions* options,
                                        nrt_HashTable* userOptions, 
                                        nrt_Error* error)
 {
-    (void)error;
-
     nrt_Pair* compressionRatio;
     nrt_Pair* numResolutions;
     if(options && userOptions)
@@ -42,7 +40,7 @@ J2KAPI(NRT_BOOL) j2k_Writer_setOptions(j2k_WriterOptions* options,
         }
         if(numResolutions)
         {
-            options->numResolutions = *((uint32_t*)numResolutions->data);
+            options->numResolutions = *((nrt_Uint32*)numResolutions->data);
         }
     }
 
@@ -50,10 +48,10 @@ J2KAPI(NRT_BOOL) j2k_Writer_setOptions(j2k_WriterOptions* options,
 }
 
 J2KAPI(NRT_BOOL) j2k_Writer_setTile(j2k_Writer *writer,
-                                    uint32_t tileX,
-                                    uint32_t tileY,
-                                    const uint8_t *buf,
-                                    uint32_t bufSize,
+                                    nrt_Uint32 tileX,
+                                    nrt_Uint32 tileY,
+                                    const nrt_Uint8 *buf,
+                                    nrt_Uint32 bufSize,
                                     nrt_Error *error)
 {
     return writer->iface->setTile(writer->data, tileX, tileY, buf, bufSize, error);

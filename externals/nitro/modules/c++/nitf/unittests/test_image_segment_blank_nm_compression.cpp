@@ -5,8 +5,8 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
-
-#include <nitf/coda-oss.hpp>
+#include <import/nitf.h>
+#include <import/types.h>
 #include <nitf/ImageSegmentComputer.h>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/Record.hpp>
@@ -15,19 +15,18 @@
 #include <math/Round.h>
 #include <io/FileInputStream.h>
 #include <io/TempFile.h>
-
 #include "TestCase.h"
 
 extern "C"{
    NITF_BOOL nitf_ImageIO_getMaskInfo(nitf_ImageIO* nitf,
-                                      uint32_t* imageDataOffset, uint32_t* blockRecordLength,
-                                      uint32_t* padRecordLength, uint32_t* padPixelValueLength,
-                                      uint8_t** padValue, uint64_t** blockMask, uint64_t** padMask);
+                                      nitf_Uint32* imageDataOffset, nitf_Uint32* blockRecordLength,
+                                      nitf_Uint32* padRecordLength, nitf_Uint32* padPixelValueLength,
+                                      nitf_Uint8** padValue, nitf_Uint64** blockMask, nitf_Uint64** padMask);
                      
 }
-const int64_t BLOCK_LENGTH = 256;
-const int64_t ILOC_MAX = 99999;
-std::string generateILOC(const types::RowCol<int64_t>& offset)
+const nitf::Int64 BLOCK_LENGTH = 256;
+const nitf::Int64 ILOC_MAX = 99999;
+std::string generateILOC(const types::RowCol<nitf::Int64>& offset)
 {
    std::ostringstream oss;
 
@@ -37,11 +36,14 @@ std::string generateILOC(const types::RowCol<int64_t>& offset)
    return oss.str();
 }
 
-static nitf::ImageSubheader setImageSubHeader(
+nitf::ImageSubheader setImageSubHeader(
     nitf::Record&                     record,
-    size_t                       imageIndex,
-    const types::RowCol<int64_t>& segmentDims,
-    const types::RowCol<int64_t>& segmentOffset)
+    nitf::Int64                       imageIndex,
+    const types::RowCol<nitf::Int64>& fullDims,
+    const types::RowCol<nitf::Int64>& segmentDims,
+    const types::RowCol<nitf::Int64>& segmentOffset,
+    const types::RowCol<nitf::Int64>& globalSegmentOffset,
+    bool fileSeparate)
 {
    nitf::ImageSegment   imageSegment = record.newImageSegment();
    nitf::ImageSubheader imgSubHdr = imageSegment.getSubheader();
@@ -54,8 +56,8 @@ static nitf::ImageSubheader setImageSubHeader(
 
    imgSubHdr.getFilePartType().set("IM");
    imgSubHdr.getEncrypted().set(0);
-   imgSubHdr.getNumRows().set((int64_t)segmentDims.row);
-   imgSubHdr.getNumCols().set((int64_t)segmentDims.col);
+   imgSubHdr.getNumRows().set((nitf::Int64)segmentDims.row);
+   imgSubHdr.getNumCols().set((nitf::Int64)segmentDims.col);
    imgSubHdr.getNumImageComments().set(0);
    imgSubHdr.getImageCompression().set(compressionType);
    imgSubHdr.getCompressionRate().set("    ");
@@ -69,8 +71,8 @@ static nitf::ImageSubheader setImageSubHeader(
    bandI.getNumLUTs().set(0);
    bands.push_back(bandI);
    const std::string pixelValueType = "INT";
-   const int64_t numBitsPerPixel = 8;
-   const int64_t actualBitsPerPixel = 8;
+   const nitf::Int64 numBitsPerPixel = 8;
+   const nitf::Int64 actualBitsPerPixel = 8;
    const std::string pixelJustification = "R";
    const std::string imageRepresentation = "MONO";
    const std::string imageCategory = "SOS";
@@ -85,30 +87,30 @@ static nitf::ImageSubheader setImageSubHeader(
       bands);
    imgSubHdr.getImageSyncCode().set("0");
    imgSubHdr.getImageMode().set("B");
-   int64_t blocksPerRow = (segmentDims.col + (BLOCK_LENGTH - 1)) / BLOCK_LENGTH;
-   int64_t blocksPerCol = (segmentDims.row + (BLOCK_LENGTH - 1)) / BLOCK_LENGTH;
+   nitf::Int64 blocksPerRow = (segmentDims.col + (BLOCK_LENGTH - 1)) / BLOCK_LENGTH;
+   nitf::Int64 blocksPerCol = (segmentDims.row + (BLOCK_LENGTH - 1)) / BLOCK_LENGTH;
 
    imgSubHdr.getNumBlocksPerRow().set(blocksPerRow);
    imgSubHdr.getNumPixelsPerHorizBlock().set(BLOCK_LENGTH);
    imgSubHdr.getNumBlocksPerCol().set(blocksPerCol);
    imgSubHdr.getNumPixelsPerVertBlock().set(BLOCK_LENGTH);
 
-   imgSubHdr.getImageDisplayLevel().set((int64_t)imageIndex+1);
-   imgSubHdr.getImageAttachmentLevel().set((int64_t)imageIndex);
+   imgSubHdr.getImageDisplayLevel().set((nitf::Int64)imageIndex+1);
+   imgSubHdr.getImageAttachmentLevel().set((nitf::Int64)imageIndex);
 
    imgSubHdr.getImageLocation().set(generateILOC(segmentOffset));
 
    return imgSubHdr;
 }
 
-int64_t getNumberBlocksPresent(const uint64_t* mask,
-                                   const int64_t  numRows,
-                                   const int64_t  numCols)
+nitf::Int64 getNumberBlocksPresent(const nitf_Uint64* mask,
+                                   const nitf::Int64  numRows,
+                                   const nitf::Int64  numCols)
 {
-   int64_t numBlocksPresent = 0;
-   for (int64_t row = 0, idx = 0; row < numRows; ++row)
+   nitf::Int64 numBlocksPresent = 0;
+   for (nitf::Int64 row = 0, idx = 0; row < numRows; ++row)
    {
-      for (int64_t col = 0; col < numCols; ++col, ++idx)
+      for (nitf::Int64 col = 0; col < numCols; ++col, ++idx)
       {
          if (mask[idx] != 0xFFFFFFFF)
          {
@@ -120,40 +122,40 @@ int64_t getNumberBlocksPresent(const uint64_t* mask,
    return numBlocksPresent;
 }
 
-void createSingleBandBuffer(std::vector<nitf::byte>& buffer,
+void createSingleBandBuffer(std::vector<nitf::Uint8>& buffer,
                             const nitf::ImageSegmentComputer& segmentComputer,
-                            const types::RowCol<int64_t>& fullDims,
-                            const size_t segmentIdxToMakeEmpty)
+                            const types::RowCol<nitf::Int64>& fullDims,
+                            const nitf::Int64 segmentIdxToMakeEmpty)
 {
-   const auto bytes = static_cast<size_t>(fullDims.area());
+   const nitf::Int64 bytes = fullDims.area();
    const std::vector<nitf::ImageSegmentComputer::Segment> &segments = segmentComputer.getSegments();
    /* All segments should be the same size in this test so this is safe */
-   const auto segmentSizeInBytes = segments[segmentIdxToMakeEmpty].numRows * fullDims.col;
+   const nitf::Int64 segmentSizeInBytes = segments[segmentIdxToMakeEmpty].numRows * fullDims.col;
 
    buffer.resize(bytes);
    memset(&buffer.front(), '\0', bytes);
-   for (uint32_t segIdx = 0; segIdx < segments.size(); ++segIdx)
+   for (nitf::Uint32 segIdx = 0; segIdx < segments.size(); ++segIdx)
    {
-      auto segStart = &buffer.front() + (segmentSizeInBytes * segIdx);
+      nitf::Uint8 *segStart = &buffer.front() + (segmentSizeInBytes * segIdx);
       /* Set only the center that way we are surrounded by empty blocks */
       if (segIdx != segmentIdxToMakeEmpty)
       {
-         segStart[segmentSizeInBytes/2] = static_cast<nitf::byte>(0xff);
+         segStart[segmentSizeInBytes/2] = 0xff;
       }
    }
 }
 
-void createBuffers(std::vector<std::vector<nitf::byte> >& buffers,
+void createBuffers(std::vector<std::vector<nitf::Uint8> >& buffers,
                    const nitf::ImageSegmentComputer& imageSegmentComputer,
-                   const types::RowCol<int64_t>& fullDims)
+                   const types::RowCol<nitf::Int64>& fullDims)
 {
-   const auto nSegments = imageSegmentComputer.getSegments().size();
+   const nitf::Int64 nSegments = imageSegmentComputer.getSegments().size();
    /*
    * Create the memory images single band and then make the
    * segment blank for each one at different segments.
    */
    buffers.resize(nSegments);
-   for (size_t idx = 0; idx < nSegments; ++idx)
+   for (nitf::Int64 idx = 0; idx < nSegments; ++idx)
    {
       createSingleBandBuffer(buffers[idx],
                              imageSegmentComputer,
@@ -173,13 +175,16 @@ TEST_CASE(testBlankSegmentsValid)
     *
     * Create 3 segments for testing
     */
-   const int64_t BLOCK_LENGTH_SCALED = BLOCK_LENGTH*4;
-   const int64_t numberLines = BLOCK_LENGTH_SCALED * 3;
-   const int64_t numberElements = BLOCK_LENGTH_SCALED * 2;
-   const int64_t bytesPerSegment = BLOCK_LENGTH_SCALED * BLOCK_LENGTH_SCALED * 2;
-   const int64_t elementSize     = 1;
-   const types::RowCol<int64_t> fullDims(numberLines, numberElements);
-   std::vector<std::vector<nitf::byte> > buffers;
+   const nitf::Int64 BLOCK_LENGTH_SCALED = BLOCK_LENGTH*4;
+   const nitf::Int64 numberLines = BLOCK_LENGTH_SCALED * 3;
+   const nitf::Int64 numberElements = BLOCK_LENGTH_SCALED * 2;
+   const nitf::Int64 bytesPerSegment = BLOCK_LENGTH_SCALED * BLOCK_LENGTH_SCALED * 2;
+   const nitf::Int64 elementSize     = 1;
+   nitf::Int64 numberOfTests         = 0;
+   const types::RowCol<nitf::Int64> fullDims(numberLines, numberElements);
+   nitf::ImageSubheader img;
+   nitf::Writer writer;
+   std::vector<std::vector<nitf::Uint8> > buffers;
    nitf::ImageSegmentComputer imageSegmentComputer(numberLines,
                                                    numberElements,
                                                    elementSize,
@@ -187,18 +192,18 @@ TEST_CASE(testBlankSegmentsValid)
                                                    bytesPerSegment,
                                                    BLOCK_LENGTH);
 
-   const auto numSegments = imageSegmentComputer.getSegments().size();
+   const nitf::Int64 numSegments = imageSegmentComputer.getSegments().size();
    const std::vector<nitf::ImageSegmentComputer::Segment> &segments = imageSegmentComputer.getSegments();
 
-   auto numberOfTests = numSegments;
+   numberOfTests = numSegments;
    TEST_ASSERT_EQ(numSegments, 3);
-   for (size_t testSegmentIdx = 0; testSegmentIdx < numSegments; ++testSegmentIdx)
+   for (nitf::Int64 testSegmentIdx = 0; testSegmentIdx < numSegments; ++testSegmentIdx)
    {
-      const types::RowCol<size_t> dims(segments[testSegmentIdx].numRows, numberElements);
+      types::RowCol<nitf::Int64> dims(segments[testSegmentIdx].numRows, numberElements);
       TEST_ASSERT_EQ(dims.area(), bytesPerSegment);
    }
    createBuffers(buffers, imageSegmentComputer, fullDims);
-   for (size_t testIdx = 0; testIdx < numberOfTests; ++testIdx)
+   for (nitf::Int64 testIdx = 0; testIdx < numberOfTests; ++testIdx)
    {
       nitf::Record record(NITF_VER_21);
       io::TempFile tempNitf;
@@ -207,22 +212,24 @@ TEST_CASE(testBlankSegmentsValid)
       nitf::IOHandle output_io(tempNitf.pathname(),
                                NITF_ACCESS_WRITEONLY,
                                NITF_CREATE);
-      std::vector<types::RowCol<int64_t> > segmentDims(numSegments);
-      std::vector<types::RowCol<int64_t> > segmentOffsets(numSegments);
-      for (size_t ii = 0; ii < numSegments; ++ii)
+      std::vector<types::RowCol<nitf::Int64> > segmentDims(numSegments);
+      std::vector<types::RowCol<nitf::Int64> > segmentOffsets(numSegments);
+      for (nitf::Int64 ii = 0; ii < numSegments; ++ii)
       {
-         const auto numRows = segments[ii].numRows;
-         const types::RowCol<size_t> dims(numRows, numberElements);
-         const types::RowCol<size_t> offset(segments[ii].rowOffset, 0);
-         segmentOffsets[ii] = types::RowCol<size_t>(segments[ii].firstRow, 0);
+         types::RowCol<nitf::Int64> dims;
+         types::RowCol<nitf::Int64> offset;
+         nitf::Int64 numRows = segments[ii].numRows;
+         dims = types::RowCol<nitf::Int64>(numRows, numberElements);
+         offset = types::RowCol<nitf::Int64>(segments[ii].rowOffset, 0);
+         segmentOffsets[ii] = types::RowCol<nitf::Int64>(segments[ii].firstRow, 0);
 
-         img = setImageSubHeader(record, ii, dims, offset);
+         img = setImageSubHeader(record, ii, fullDims, dims, offset, segmentOffsets[ii], false);
       }
       writer.prepare(output_io, record);
 
-      for (int ii = 0; ii < static_cast<int>(numSegments); ++ii)
+      for (nitf::Int64 ii = 0; ii < numSegments; ++ii)
       {
-         auto buf = &buffers[testIdx].front() + (ii * bytesPerSegment);
+         nitf::Uint8 *buf = &buffers[testIdx].front() + (ii * bytesPerSegment);
          nitf::ImageWriter imageWriter = writer.newImageWriter(ii);
          imageWriter.setWriteCaching(1);
          nitf::ImageSource iSource;
@@ -236,19 +243,19 @@ TEST_CASE(testBlankSegmentsValid)
       output_io.close();
 
       {
-         uint32_t imageDataOffset=0;        /* Offset to actual image data past masks */
-         uint32_t blockRecordLength=0;      /* Block mask record length */
-         uint32_t padRecordLength=0;        /* Pad mask record length */
-         uint32_t padPixelValueLength=0;    /* Pad pixel value length in bytes */
-         uint8_t  *padValue = nullptr;         /* Pad value */
-         uint64_t *blockMask= nullptr;          /* Block mask array */
-         uint64_t *padMask= nullptr;            /* Pad mask array */
-         int imgCtr = 0;
+         nitf_Uint32 imageDataOffset=0;        /* Offset to actual image data past masks */
+         nitf_Uint32 blockRecordLength=0;      /* Block mask record length */
+         nitf_Uint32 padRecordLength=0;        /* Pad mask record length */
+         nitf_Uint32 padPixelValueLength=0;    /* Pad pixel value length in bytes */
+         nitf_Uint8  *padValue = NULL;         /* Pad value */
+         nitf_Uint64 *blockMask=NULL;          /* Block mask array */
+         nitf_Uint64 *padMask=NULL;            /* Pad mask array */
+         nitf::Int64 imgCtr = 0;
          nitf::IOHandle input_io(tempNitf.pathname(),
                                  NITF_ACCESS_READONLY,
                                  NITF_OPEN_EXISTING);
          nitf::Reader reader;
-         record = reader.read(input_io);
+         nitf::Record record = reader.read(input_io);
          nitf::List images   = record.getImages();
          for (nitf::ListIterator imageIterator = images.begin();
               imageIterator != images.end();
@@ -263,16 +270,15 @@ TEST_CASE(testBlankSegmentsValid)
                                                       &imageDataOffset, &blockRecordLength,
                                                       &padRecordLength, &padPixelValueLength,
                                                       &padValue, &blockMask, &padMask) != 0);
-            TEST_ASSERT_GREATER(blockRecordLength, 0u);
 
-            const int64_t totalBlocks = blockingInfo.getNumBlocksPerRow()*blockingInfo.getNumBlocksPerCol();
-            TEST_ASSERT_GREATER(totalBlocks, 0);
+            const nitf::Int64 totalBlocks = blockingInfo.getNumBlocksPerRow()*blockingInfo.getNumBlocksPerCol();
+            TEST_ASSERT_GREATER(blockRecordLength, 0);
 
-            const int64_t nBlocksPresent = getNumberBlocksPresent(blockMask,
+            const nitf::Int64 nBlocksPresent = getNumberBlocksPresent(blockMask,
                                                                       blockingInfo.getNumBlocksPerRow(),
                                                                       blockingInfo.getNumBlocksPerCol());
 
-            if (imgCtr == static_cast<int>(testIdx))
+            if (imgCtr == testIdx)
             {
                TEST_ASSERT_EQ(nBlocksPresent, 0);
             }
@@ -286,8 +292,9 @@ TEST_CASE(testBlankSegmentsValid)
    }
 }
 
-TEST_MAIN(
-    (void)argc;
-    (void)argv;
-TEST_CHECK(testBlankSegmentsValid);
-)
+int main(int argc, char* argv[])
+{
+   TEST_CHECK(testBlankSegmentsValid);
+
+   return 0;
+}

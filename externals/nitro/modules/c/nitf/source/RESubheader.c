@@ -76,7 +76,7 @@ CATCH_ERROR:
 NITFAPI(nitf_RESubheader *)
 nitf_RESubheader_clone(nitf_RESubheader * source, nitf_Error * error)
 {
-    uint32_t subLen;
+    nitf_Uint32 subLen;
     nitf_RESubheader *subhdr = NULL;
     if (source)
     {

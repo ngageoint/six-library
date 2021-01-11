@@ -72,15 +72,17 @@ TEST_CASE(testPushPop)
 
 char *cloneString(char *data, nrt_Error * error)
 {
-    (void)error;
-
-    char* new_data = nrt_strdup(data);
+    int data_len = strlen(data);
+    char *new_data = (char *) NRT_MALLOC(data_len + 1);
+    new_data[data_len] = 0;
     assert(new_data);
+    strcpy(new_data, data);
     return new_data;
 }
 
 TEST_CASE(testClone)
 {
+    nrt_Uint32 i;
     nrt_Error e;
     nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
     TEST_ASSERT(l);
@@ -95,7 +97,7 @@ TEST_CASE(testClone)
     TEST_ASSERT(dolly);
     TEST_ASSERT_EQ_INT(nrt_List_size(l), nrt_List_size(dolly));
 
-    int32_t i = 0;
+    i = 0;
     while (!nrt_List_isEmpty(dolly))
     {
         char *p = (char *) nrt_List_popFront(dolly);
@@ -112,9 +114,9 @@ TEST_CASE(testClone)
 
 TEST_CASE(testIterate)
 {
-    int32_t i;
+    nrt_Uint32 i;
     nrt_Error e;
-    nrt_List *l = nrt_List_construct(&e);
+    nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
     nrt_ListIterator it, end;
 
     TEST_ASSERT(l);
@@ -144,7 +146,7 @@ TEST_CASE(testIterate)
 TEST_CASE(testIterateRemove)
 {
     nrt_Error e;
-    nrt_List *l = nrt_List_construct(&e);
+    nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
     nrt_ListIterator it, end;
 
     TEST_ASSERT(l);
@@ -169,13 +171,12 @@ TEST_CASE(testIterateRemove)
     TEST_ASSERT_NULL(l);
 }
 
-TEST_MAIN(
-    (void)argc;
-    (void)argv;
-
+int main(int argc, char **argv)
+{
     CHECK(testCreate);
     CHECK(testPushPop);
     CHECK(testClone);
     CHECK(testIterate);
     CHECK(testIterateRemove);
-)
+    return 0;
+}

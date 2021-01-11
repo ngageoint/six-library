@@ -28,10 +28,10 @@ using namespace nitf;
 NITF_BOOL DecompressionInterface::adapterStart(
     nitf_DecompressionControl* object,
     nitf_IOInterface* io,
-    uint64_t offset,
-    uint64_t fileLength,
+    nitf_Uint64 offset,
+    nitf_Uint64 fileLength,
     nitf_BlockingInfo* blockingDefinition,
-    uint64_t* blockMask, 
+    nitf_Uint64* blockMask, 
     nitf_Error* error)
 {
     try
@@ -67,10 +67,10 @@ NITF_BOOL DecompressionInterface::adapterStart(
     }
 }
 
-uint8_t* DecompressionInterface::adapterReadBlock(
+nitf_Uint8* DecompressionInterface::adapterReadBlock(
     nitf_DecompressionControl* object,
-    uint32_t blockNumber, 
-    uint64_t* blockSize, 
+    nitf_Uint32 blockNumber, 
+    nitf_Uint64* blockSize, 
     nitf_Error* error)
 {
     try
@@ -82,25 +82,25 @@ uint8_t* DecompressionInterface::adapterReadBlock(
     {
         nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return nullptr;
+        return NULL;
     }
     catch (const std::exception& ex)
     {
         nrt_Error_init(error, ex.what(), NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return nullptr;
+        return NULL;
     }
     catch (...)
     {
         nrt_Error_init(error, "Unknown error", NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return nullptr;
+        return NULL;
     }
 }
 
 NITF_BOOL DecompressionInterface::adapterFreeBlock(
     nitf_DecompressionControl* object,
-    uint8_t* block, 
+    nitf_Uint8* block, 
     nitf_Error* error)
 {
     try
@@ -131,10 +131,10 @@ NITF_BOOL DecompressionInterface::adapterFreeBlock(
 void DecompressionInterface::adapterDestroy(
     nitf_DecompressionControl** object)
 {
-    if (object != nullptr && *object != nullptr)
+    if (object != NULL && *object != NULL)
     {
         delete reinterpret_cast<Decompressor*>(*object);
-        *object = nullptr;
+        *object = NULL;
     }
 }
 

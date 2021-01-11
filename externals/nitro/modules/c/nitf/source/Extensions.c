@@ -376,12 +376,10 @@ nitf_ExtensionsIterator_notEqualTo(nitf_ExtensionsIterator * it1,
 }
 
 
-NITFAPI(uint32_t) nitf_Extensions_computeLength
+NITFAPI(nitf_Uint32) nitf_Extensions_computeLength
 (nitf_Extensions * ext, nitf_Version fver, nitf_Error * error)
 {
-    (void)fver;
-
-    uint32_t dataLength = 0;
+    nitf_Uint32 dataLength = 0;
     nitf_ExtensionsIterator iter, end;
     nitf_TRE *tre;
 
@@ -397,7 +395,7 @@ NITFAPI(uint32_t) nitf_Extensions_computeLength
             tre = (nitf_TRE *) nitf_ExtensionsIterator_get(&iter);
 
             /* if unknown length, we need to compute it */
-            dataLength += (uint32_t)tre->handler->getCurrentSize(tre, error);
+            dataLength += (nitf_Uint32)tre->handler->getCurrentSize(tre, error);
             dataLength += NITF_ETAG_SZ + NITF_EL_SZ;
 
             /* increment */
@@ -454,24 +452,23 @@ NITFPRIV(NITF_BOOL) insertToHash( nitf_HashTable* hash, const char* name,
 NITFPRIV(int) eraseIt(nitf_HashTable * ht,
                       nitf_Pair * pair, NITF_DATA* userData, nitf_Error * error)
 {
-    (void)ht;
-    (void)userData;
-    (void)error;
-
     if (!pair)
         return 0;
-
-    nitf_List *list = (nitf_List *) pair->data;
-    nitf_ListIterator iter = nitf_List_begin(list);
-    nitf_ListIterator end = nitf_List_end(list);
-    while (nitf_ListIterator_notEqualTo(&iter, &end))
+    else
     {
 
-        /*  This auto-increments for us  */
-        nitf_TRE *tre = (nitf_TRE *) nitf_List_remove(list, &iter);
-        nitf_TRE_destruct(&tre);
-    }
+        nitf_List *list = (nitf_List *) pair->data;
+        nitf_ListIterator iter = nitf_List_begin(list);
+        nitf_ListIterator end = nitf_List_end(list);
+        while (nitf_ListIterator_notEqualTo(&iter, &end))
+        {
 
-    nitf_List_destruct((nitf_List **) & (pair->data));
-    return 1;
+            /*  This auto-increments for us  */
+            nitf_TRE *tre = (nitf_TRE *) nitf_List_remove(list, &iter);
+            nitf_TRE_destruct(&tre);
+        }
+
+        nitf_List_destruct((nitf_List **) & (pair->data));
+        return 1;
+    }
 }

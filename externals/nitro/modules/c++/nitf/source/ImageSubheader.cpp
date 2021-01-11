@@ -22,8 +22,6 @@
 
 #include <nitf/ImageIO.h>
 #include <nitf/ImageSubheader.hpp>
-#include <nitf/Object.hpp>
-#include <nitf/NITFException.hpp>
 
 namespace nitf
 {
@@ -67,8 +65,8 @@ ImageSubheader::~ImageSubheader(){}
 
 
 void ImageSubheader::setPixelInformation(std::string pvtype,
-                         uint32_t nbpp,
-                         uint32_t abpp,
+                         nitf::Uint32 nbpp,
+                         nitf::Uint32 abpp,
                          std::string justification,
                          std::string irep, std::string icat,
                          std::vector<nitf::BandInfo>& bands)
@@ -90,15 +88,15 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
 
     NITF_BOOL x = nitf_ImageSubheader_setPixelInformation(getNativeOrThrow(),
         pvtype.c_str(), nbpp, abpp, justification.c_str(), irep.c_str(),
-        icat.c_str(), static_cast<uint32_t>(bandCount), bandInfo, &error);
+        icat.c_str(), static_cast<nitf::Uint32>(bandCount), bandInfo, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
 
-void ImageSubheader::setBlocking(uint32_t numRows,
-                     uint32_t numCols,
-                     uint32_t numRowsPerBlock,
-                     uint32_t numColsPerBlock,
+void ImageSubheader::setBlocking(nitf::Uint32 numRows,
+                     nitf::Uint32 numCols,
+                     nitf::Uint32 numRowsPerBlock,
+                     nitf::Uint32 numColsPerBlock,
                      const std::string& imode)
 {
     NITF_BOOL x = nitf_ImageSubheader_setBlocking(getNativeOrThrow(),
@@ -108,12 +106,12 @@ void ImageSubheader::setBlocking(uint32_t numRows,
         throw nitf::NITFException(&error);
 }
 
-void ImageSubheader::computeBlocking(uint32_t numRows,
-                                     uint32_t numCols,
-                                     uint32_t& numRowsPerBlock,
-                                     uint32_t& numColsPerBlock,
-                                     uint32_t& numBlocksPerCol,
-                                     uint32_t& numBlocksPerRow)
+void ImageSubheader::computeBlocking(nitf::Uint32 numRows,
+                                     nitf::Uint32 numCols,
+                                     nitf::Uint32& numRowsPerBlock,
+                                     nitf::Uint32& numColsPerBlock,
+                                     nitf::Uint32& numBlocksPerCol,
+                                     nitf::Uint32& numBlocksPerRow)
 {
     nitf_ImageSubheader_computeBlocking(numRows,
                                         numCols,
@@ -123,7 +121,7 @@ void ImageSubheader::computeBlocking(uint32_t numRows,
                                         &numBlocksPerRow);
 }
 
-void ImageSubheader::setDimensions(uint32_t numRows, uint32_t numCols)
+void ImageSubheader::setDimensions(nitf::Uint32 numRows, nitf::Uint32 numCols)
 {
     NITF_BOOL x = nitf_ImageSubheader_setDimensions(getNativeOrThrow(),
         numRows, numCols, &error);
@@ -131,15 +129,15 @@ void ImageSubheader::setDimensions(uint32_t numRows, uint32_t numCols)
         throw nitf::NITFException(&error);
 }
 
-uint32_t ImageSubheader::getBandCount()
+nitf::Uint32 ImageSubheader::getBandCount()
 {
-    uint32_t x = nitf_ImageSubheader_getBandCount(getNativeOrThrow(), &error);
+    nitf::Uint32 x = nitf_ImageSubheader_getBandCount(getNativeOrThrow(), &error);
     if (x == NITF_INVALID_BAND_COUNT)
         throw nitf::NITFException(&error);
     return x;
 }
 
-void ImageSubheader::createBands(uint32_t numBands)
+void ImageSubheader::createBands(nitf::Uint32 numBands)
 {
     if (!nitf_ImageSubheader_createBands(getNativeOrThrow(), numBands, &error))
         throw nitf::NITFException(&error);
@@ -323,7 +321,7 @@ nitf::Field ImageSubheader::getNumMultispectralImageBands()
     return nitf::Field(getNativeOrThrow()->numMultispectralImageBands);
 }
 
-nitf::BandInfo ImageSubheader::getBandInfo(uint32_t band)
+nitf::BandInfo ImageSubheader::getBandInfo(nitf::Uint32 band)
 {
     return nitf::BandInfo(nitf_ImageSubheader_getBandInfo(
         getNativeOrThrow(), band, &error));

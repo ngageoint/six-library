@@ -22,11 +22,10 @@
 
 #ifndef __NITF_HANDLE_MANAGER_HPP__
 #define __NITF_HANDLE_MANAGER_HPP__
-#pragma once
 
 #include <string>
 #include <map>
-#include <mutex>
+#include <import/sys.h>
 #include <import/mt.h>
 #include "nitf/Handle.hpp"
 
@@ -38,7 +37,7 @@ private:
 typedef void* CAddress;
 
     std::map<CAddress, Handle*> mHandleMap; //! map for storing the handles
-    std::mutex mMutex; //! mutex used for locking the map
+    sys::Mutex mMutex; //! mutex used for locking the map
 
 public:
     HandleManager() {}
@@ -48,7 +47,7 @@ public:
     bool hasHandle(T* object)
     {
         if (!object) return false;
-        std::lock_guard<std::mutex> obtainLock(mMutex);
+        mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
         return mHandleMap.find(object) != mHandleMap.end();
     }
 
@@ -56,15 +55,16 @@ public:
     BoundHandle<T, DestructFunctor_T>* acquireHandle(T* object)
     {
         if (!object) return NULL;
-        BoundHandle<T, DestructFunctor_T>* handle;
+        mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
+        if (mHandleMap.find(object) == mHandleMap.end())
         {
-            std::lock_guard<std::mutex> obtainLock(mMutex);
-            if (mHandleMap.find(object) == mHandleMap.end())
-            {
-                mHandleMap[object] = new BoundHandle<T, DestructFunctor_T>(object);
-            }
-            handle = (BoundHandle<T, DestructFunctor_T>*)mHandleMap[object];
+            BoundHandle<T, DestructFunctor_T>* handle =
+                new BoundHandle<T, DestructFunctor_T>(object);
+            mHandleMap[object] = handle;
         }
+        BoundHandle<T, DestructFunctor_T>* handle =
+            (BoundHandle<T, DestructFunctor_T>*)mHandleMap[object];
+        obtainLock.manualUnlock();
 
         handle->incRef();
         return handle;
@@ -73,25 +73,18 @@ public:
     template <typename T>
     void releaseHandle(T* object)
     {
-        Handle* handle = nullptr;
+        mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
+        std::map<CAddress, Handle*>::iterator it = mHandleMap.find(object);
+        if (it != mHandleMap.end())
         {
-            std::lock_guard<std::mutex> obtainLock(mMutex);
-            std::map<CAddress, Handle*>::iterator it = mHandleMap.find(object);
-            if (it != mHandleMap.end())
+            Handle* handle = (Handle*)it->second;
+            if (handle->decRef() <= 0)
             {
-                handle = (Handle*)it->second;
-                if (handle->decRef() <= 0)
-                {
-                    mHandleMap.erase(it);
-                }
-                else
-                {
-                    handle = nullptr; // don't actually "delete"
-                }
+                mHandleMap.erase(it);
+                obtainLock.manualUnlock();
+                delete handle;
             }
         }
-
-        delete handle;
     }
 };
 

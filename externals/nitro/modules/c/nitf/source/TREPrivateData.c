@@ -149,10 +149,6 @@ NITFPRIV(int) destructHashValue(nitf_HashTable * ht,
                                 NITF_DATA* userData,
                                 nitf_Error * error)
 {
-    (void)ht;
-    (void)userData;
-    (void)error;
-
     if (pair)
         if (pair->data)
             nitf_Field_destruct((nitf_Field **) & pair->data);
@@ -226,13 +222,16 @@ NITFPROT(NITF_BOOL) nitf_TREPrivateData_setDescriptionName(
     }
 
     /* copy the description id */
-    priv->descriptionName = nitf_strdup(name);
-    if (!priv->descriptionName)
+    if (name)
     {
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                NITF_CTXT, NITF_ERR_MEMORY);
-        return NITF_FAILURE;
+        priv->descriptionName = (char*)NITF_MALLOC(strlen(name) + 1);
+        if (!priv->descriptionName)
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                    NITF_CTXT, NITF_ERR_MEMORY);
+            return NITF_FAILURE;
+        }
+        strcpy(priv->descriptionName, name);
     }
-
     return NITF_SUCCESS;
 }

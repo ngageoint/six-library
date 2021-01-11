@@ -23,11 +23,9 @@
 #include <nitf/IOStreamWriter.hpp>
 #include <except/Exception.h>
 
-#include "nitf/cstddef.h"
-
 namespace nitf
 {
-IOStreamWriter::IOStreamWriter(std::shared_ptr<io::SeekableOutputStream> stream) :
+IOStreamWriter::IOStreamWriter(mem::SharedPtr<io::SeekableOutputStream> stream) :
     mStream(stream)
 {
 }
@@ -41,7 +39,7 @@ void IOStreamWriter::readImpl(void* , size_t )
 
 void IOStreamWriter::writeImpl(const void* buffer, size_t size)
 {
-    mStream->write(static_cast<const nitf::byte*>(buffer), size);
+    mStream->write(static_cast<const sys::byte*>(buffer), size);
 }
 
 bool IOStreamWriter::canSeekImpl() const
@@ -68,7 +66,7 @@ nitf::Off IOStreamWriter::seekImpl(nitf::Off offset, int whence)
     default:
         throw except::Exception(
                 Ctxt("Unknown whence value when seeking IOStreamWriter: " +
-                     std::to_string(whence)));
+                     str::toString(whence)));
     }
 
     return mStream->seek(offset, ioWhence);

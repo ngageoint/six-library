@@ -26,13 +26,10 @@ NRTPRIV(NRT_BOOL) preOrder(nrt_TreeNode * node, NRT_TREE_TRAVERSER onNode,
                            NRT_DATA * userData, int depth, nrt_Error * error)
 {
     nrt_ListIterator where, end;
-    nrt_List* list = NULL;
-
+    nrt_List *list;
     assert(node);
-    if (node)
-    {
-        list = node->children;
-    }
+
+    list = node->children;
     where = nrt_List_begin(list);
     end = nrt_List_end(list);
     if (!(*onNode) (node, userData, depth, error))
@@ -78,6 +75,9 @@ NRTAPI(nrt_TreeNode *) nrt_TreeNode_construct(NRT_DATA * data,
                                               nrt_Error * error)
 {
     nrt_TreeNode *node = (nrt_TreeNode *) NRT_MALLOC(sizeof(nrt_TreeNode));
+
+    node->parent = NULL;
+
     if (node == NULL)
     {
         /* Init the error with the string value of errno */
@@ -86,8 +86,6 @@ NRTAPI(nrt_TreeNode *) nrt_TreeNode_construct(NRT_DATA * data,
         /* Return if we have a problem */
         return NULL;
     }
-    node->parent = NULL;
-
     /* printf("Constructed node: %p\n", node); */
     /* This is a reference (see List.c or comments in Tree.h) */
     node->data = data;
@@ -144,27 +142,17 @@ NRTAPI(NRT_BOOL) nrt_TreeNode_addChild(nrt_TreeNode * node,
 {
     assert(node);
     assert(child);
-    if (child != NULL)
-    {
-        child->parent = node;
-    }
+    child->parent = node;
     /* printf("Adding %s to %s\n", (char*)child->data, (char*)node->data); */
 
-    if (node != NULL)
-    {
-        return nrt_List_pushBack(node->children, child, error);
-    }
-    return 0;
+    return nrt_List_pushBack(node->children, child, error);
 }
 
 NRTAPI(NRT_BOOL) nrt_TreeNode_hasChildren(nrt_TreeNode * node)
 {
     assert(node);
-    if (node != NULL)
-    {
-        return nrt_List_isEmpty(node->children);
-    }
-    return 0;
+    return nrt_List_isEmpty(node->children);
+
 }
 
 NRTAPI(NRT_BOOL) nrt_TreeNode_removeChild(nrt_TreeNode * node,
@@ -282,13 +270,10 @@ NRTAPI(NRT_BOOL) nrt_Tree_walk(nrt_Tree * tree, NRT_TREE_TRAVERSER onNode,
 NRTAPI(nrt_Tree *) nrt_Tree_clone(nrt_Tree * source, NRT_DATA_ITEM_CLONE cloner,
                                   nrt_Error * error)
 {
-    nrt_TreeNode* root = NULL;
+    nrt_TreeNode *root;
     assert(source);
-    if (source != NULL)
-    {
-        assert(source->root);
-        root = nrt_TreeNode_clone(source->root, cloner, error);
-    }
+    assert(source->root);
+    root = nrt_TreeNode_clone(source->root, cloner, error);
     if (!root)
         return NULL;
 

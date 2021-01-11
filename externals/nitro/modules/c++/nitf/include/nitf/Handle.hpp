@@ -22,16 +22,15 @@
 
 #ifndef __NITF_HANDLE_HPP__
 #define __NITF_HANDLE_HPP__
-#pragma once
-
-#include <iostream>
-#include <mutex>
 
 /*!
  *  \file Handle.hpp
  *  \brief Contains handle wrapper to manage shared native objects
  */
+
+#include <import/sys.h>
 #include "nitf/System.hpp"
+#include <iostream>
 
 namespace nitf
 {
@@ -40,35 +39,37 @@ namespace nitf
  *  \class Handle
  *  \brief  This class is the base definition of a Handle
  */
-struct Handle
+class Handle
 {
-    Handle() = default;
+public:
+    Handle() : refCount(0) {}
     virtual ~Handle() {}
 
     //! Get the ref count
-    int getRef() const { return refCount; }
+    int getRef() { return refCount; }
 
     //! Increment the ref count
     int incRef()
     {
-        std::lock_guard<std::mutex> lock(mutex);
-        if (refCount < 0) refCount = 0;
+        mutex.lock();
         refCount++;
+        mutex.unlock();
         return refCount;
     }
 
     //! Decrement the ref count
     int decRef()
     {
-        std::lock_guard<std::mutex> lock(mutex);
-        refCount--;
-        if (refCount < 0) refCount = 0;
+        mutex.lock();
+        if (refCount > 0)
+            refCount--;
+        mutex.unlock();
         return refCount;
     }
 
 protected:
-    std::mutex mutex;
-    int refCount{ 0 };
+    static sys::Mutex mutex;
+    int refCount;
 };
 
 

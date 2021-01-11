@@ -73,16 +73,16 @@ public:
     void setSubheader(nitf::ImageSubheader & value);
 
     //! Get the imageOffset
-    uint64_t getImageOffset() const;
+    nitf::Uint64 getImageOffset() const;
 
     //! Set the imageOffset
-    void setImageOffset(uint64_t value);
+    void setImageOffset(nitf::Uint64 value);
 
     //! Get the imageEnd
-    uint64_t getImageEnd() const;
+    nitf::Uint64 getImageEnd() const;
 
     //! Set the imageEnd
-    void setImageEnd(uint64_t value);
+    void setImageEnd(nitf::Uint64 value);
 
 private:
     nitf_Error error;

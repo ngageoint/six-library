@@ -39,12 +39,12 @@ CustomIO::~CustomIO()
     // in turn try to call nitf_IOInterface_close() followed by
     // nitf_IOInterface_destruct().  But at that point CustomIO no longer
     // exists, so the data variable passed into these functions is invalid.
-    // By nullptr'ing it out here, and by supporting a passthrough when data
-    // comes in nullptr in adapterClose() below, we make the close call safe.
+    // By NULL'ing it out here, and by supporting a passthrough when data
+    // comes in NULL in adapterClose() below, we make the close call safe.
     // Additionally, the nitf_IOInterface_destruct call would try to free our
     // 'data' member via NRT_FREE() if we didn't do this - that would also
     // be exceptionally bad.
-    mHandle->get()->data = nullptr;
+    mHandle->get()->data = NULL;
 }
 
 nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
@@ -63,9 +63,9 @@ nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
 
     nitf_IOInterface* const impl =
             (nitf_IOInterface *)NITF_MALLOC(sizeof(nitf_IOInterface));
-    if (impl == nullptr)
+    if (impl == NULL)
     {
-        return nullptr;
+        return NULL;
     }
     memset(impl, 0, sizeof(nitf_IOInterface));
 
@@ -304,7 +304,7 @@ NRT_BOOL CustomIO::adapterClose(NRT_DATA* data,
     else
     {
         // See destructor for why this is needed
-        nrt_Error_init(error, "Handle is nullptr", NRT_CTXT,
+        nrt_Error_init(error, "Handle is NULL", NRT_CTXT,
                        NRT_ERR_INVALID_OBJECT);
         return NRT_FAILURE;
     }

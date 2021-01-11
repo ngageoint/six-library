@@ -108,51 +108,51 @@ struct RowSourceCallback
     {
     }
 
-    virtual void nextRow(uint32_t band, void* buf) = 0;
+    virtual void nextRow(nitf::Uint32 band, void* buf) = 0;
 };
 
 class RowSource : public BandSource
 {
 public:
-    RowSource(uint32_t band, uint32_t numRows, uint32_t numCols,
-            uint32_t pixelSize, RowSourceCallback *callback);
+    RowSource(nitf::Uint32 band, nitf::Uint32 numRows, nitf::Uint32 numCols,
+            nitf::Uint32 pixelSize, RowSourceCallback *callback);
 
 private:
     static
     NITF_BOOL nextRow(void* algorithm,
-                      uint32_t band,
+                      nitf_Uint32 band,
                       NITF_DATA* buffer,
                       nitf_Error* error);
 
 private:
-    uint32_t mBand, mNumRows, mNumCols, mPixelSize;
+    nitf::Uint32 mBand, mNumRows, mNumCols, mPixelSize;
 };
 
 class DirectBlockSource : public BandSource
 {
 public:
     DirectBlockSource(nitf::ImageReader& imageReader,
-                      uint32_t numBands);
+                      nitf::Uint32 numBands);
 
 protected:
     virtual void nextBlock(void* buf,
                            const void* block,
-                           uint32_t blockNumber,
-                           uint64_t blockSize) = 0;
+                           nitf::Uint32 blockNumber,
+                           nitf::Uint64 blockSize) = 0;
 private:
     static
     NITF_BOOL nextBlock(void *algorithm,
                         void* buf,
                         const void* block,
-                        uint32_t blockNumber,
-                        uint64_t blockSize,
+                        nitf_Uint32 blockNumber,
+                        nitf_Uint64 blockSize,
                         nitf_Error * error);
 };
 
 class CopyBlockSource: public ::nitf::DirectBlockSource
 {
 public:
-    CopyBlockSource(nitf::ImageReader& imageReader, uint32_t numBands) :
+    CopyBlockSource(nitf::ImageReader& imageReader, nitf::Uint32 numBands) :
         nitf::DirectBlockSource(imageReader, numBands)
     {}
 
@@ -161,8 +161,8 @@ public:
 protected:
     virtual void nextBlock(void* buf,
                            const void* block,
-                           uint32_t /*blockNumber*/,
-                           uint64_t blockSize)
+                           nitf::Uint32 /*blockNumber*/,
+                           nitf::Uint64 blockSize)
     {
         memcpy(buf, block, blockSize);
     }

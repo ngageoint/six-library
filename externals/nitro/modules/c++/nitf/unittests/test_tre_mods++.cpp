@@ -20,10 +20,8 @@
  *
  */
 
+#include <import/nitf.hpp>
 #include <iostream>
-
-#include <nitf/TRE.hpp>
-
 #include "TestCase.h"
 
 namespace
@@ -79,9 +77,8 @@ TEST_CASE(basicIteration)
     // how many elements there are, so there's nothing to
     // iterate over
     size_t numFields = 0;
-    for (const auto& unused : tre)
+    for (nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
     {
-        (void)unused;
         ++numFields;
     }
     TEST_ASSERT_EQ(numFields, 1);
@@ -90,9 +87,8 @@ TEST_CASE(basicIteration)
     tre.setField("NUMACPO", 2, true);
     tre.setField("NUMPTS[0]", 3);
     tre.setField("NUMPTS[1]", 2);
-    for (const auto& unused : tre)
+    for (nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
     {
-        (void)unused;
         ++numFields;
     }
     TEST_ASSERT_EQ(numFields, 29);
@@ -149,12 +145,13 @@ TEST_CASE(overflowingNumericFields)
 }
 }
 
-TEST_MAIN(
+int main(int /*argc*/, char** /*argv*/)
+{
     TEST_CHECK(setFields);
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
     TEST_CHECK(populateWhileIterating);
     TEST_CHECK(overflowingNumericFields);
-    )
-
+    return 0;
+}

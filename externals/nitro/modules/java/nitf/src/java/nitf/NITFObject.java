@@ -131,6 +131,7 @@ public abstract class NITFObject
     @Override
     protected void finalize() throws Throwable
     {
+        super.finalize();
         address = INVALID_ADDRESS;
     }
 }

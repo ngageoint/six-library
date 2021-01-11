@@ -42,6 +42,7 @@ int main(int argc, char **argv)
 
     /*  The IO handle  */
     nitf_IOHandle io;
+    int num;
 
     /*  Check argv and make sure we are happy  */
     if ( argc != 2 )

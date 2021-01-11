@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 
         exit(EXIT_SUCCESS);
     }
-    catch (const except::Throwable & t)
+    catch (except::Throwable & t)
     {
         std::cout << t.getTrace() << std::endl;
     }
