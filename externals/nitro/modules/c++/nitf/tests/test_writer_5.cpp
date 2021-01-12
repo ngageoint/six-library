@@ -20,15 +20,13 @@
  *
  */
 
-#include <mem/SharedPtr.h>
-#include <sys/Path.h>
-#include <import/nitf.hpp>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 
-#include <sys/Filesystem.h>
+#include <import/nitf.hpp>
+
 namespace fs = std::filesystem;
 
 int main(int argc, char **argv)

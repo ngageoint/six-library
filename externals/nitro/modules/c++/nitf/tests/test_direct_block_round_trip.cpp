@@ -20,12 +20,12 @@
  *
  */
 
+#include <string.h>
+
 #include <iostream>
 #include <string>
 #include <vector>
-#include <string.h>
 
-#include <mem/SharedPtr.h>
 #include <import/nitf.hpp>
 
 class TestDirectBlockSource: public nitf::DirectBlockSource

@@ -42,12 +42,7 @@
 #include <string>
 #include <ios>
 
-
-#  include <direct.h>
-#  include <io.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-#include <sys/Filesystem.h>
+#include "nitf/coda-oss.hpp"
 
 #pragma warning(push)
 #pragma warning(disable: 4388) // '...': signed / unsigned mismatch

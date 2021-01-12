@@ -5,8 +5,8 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
-#include <import/nitf.h>
-#include <import/types.h>
+
+#include <nitf/coda-oss.hpp>
 #include <nitf/ImageSegmentComputer.h>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/Record.hpp>
@@ -15,7 +15,6 @@
 #include <math/Round.h>
 #include <io/FileInputStream.h>
 #include <io/TempFile.h>
-#include <gsl/gsl.h>
 
 #include "TestCase.h"
 

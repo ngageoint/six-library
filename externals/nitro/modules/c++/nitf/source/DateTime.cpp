@@ -20,7 +20,6 @@
  *
  */
 
-#include "sys/Conf.h"
 #include "nitf/DateTime.hpp"
 
 nitf::DateTime::DateTime()

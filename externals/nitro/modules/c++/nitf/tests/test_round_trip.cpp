@@ -20,12 +20,12 @@
  *
  */
 
-#include <mem/SharedPtr.h>
-#include <import/nitf.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <memory>
+
+#include <import/nitf.hpp>
 
 /*
  * This test tests the round-trip process of taking an input NITF

@@ -22,9 +22,9 @@
 
 #ifndef __NITF_BUFFERED_WRITER_HPP__
 #define __NITF_BUFFERED_WRITER_HPP__
+#pragma once
 
-#include <sys/File.h>
-#include <mem/ScopedArray.h>
+#include <nitf/coda-oss.hpp>
 #include <nitf/CustomIO.hpp>
 
 namespace nitf

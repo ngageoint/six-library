@@ -20,10 +20,8 @@
  *
  */
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/IOStreamReader.hpp>
-#include <except/Exception.h>
-
-#include "nitf/cstddef.h"
 
 namespace nitf
 {

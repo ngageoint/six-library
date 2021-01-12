@@ -24,8 +24,6 @@
 #include <iostream>
 #include <string>
 
-#include <sys/Filesystem.h>
-
 #include <import/nitf.hpp>
 #include <gsl/gsl.h>
 

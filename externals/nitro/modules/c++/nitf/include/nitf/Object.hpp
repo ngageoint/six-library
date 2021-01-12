@@ -24,6 +24,7 @@
 #define __NITF_OBJECT_HPP__
 #pragma once
 
+#include "nitf/coda-oss.hpp"
 #include "nitf/Handle.hpp"
 #include "nitf/HandleManager.hpp"
 #include "nitf/NITFException.hpp"

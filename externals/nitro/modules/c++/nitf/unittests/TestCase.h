@@ -29,8 +29,8 @@
 #  include <cmath>
 #  include <limits>
 #  include <exception>
-#  include <import/sys.h>
-#  include <import/str.h>
+
+#include "nitf/coda-oss.hpp"
 
 #  define IS_NAN(X) X != X
 #  define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED" << std::endl; } catch(const std::exception& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.what()); }

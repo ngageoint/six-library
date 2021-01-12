@@ -26,6 +26,7 @@
 
 #include <string>
 
+#include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
 

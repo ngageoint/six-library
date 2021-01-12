@@ -37,8 +37,6 @@
 #include <array>
 #include <memory>
 
-#include <io/FileOutputStream.h>
-
 #include <import/nitf.hpp>
 #include <nitf/CompressedByteProvider.hpp>
 #include <gsl/gsl.h>

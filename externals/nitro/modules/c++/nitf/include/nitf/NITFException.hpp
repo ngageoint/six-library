@@ -22,8 +22,9 @@
 
 #ifndef __NITF_EXCEPTION_HPP__
 #define __NITF_EXCEPTION_HPP__
+#pragma once
 
-#include <import/except.h>
+#include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 
 /*!
@@ -36,7 +37,7 @@ namespace nitf
  *  \class NITFException
  *  \brief  The C++ wrapper for the nitf_Error
  */
-class NITFException : public except::Exception
+class NITFException final : public except::Exception
 {
     static except::Context make_Context_(const nitf_Error* error, const std::string& message)
     {
