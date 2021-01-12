@@ -147,7 +147,7 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::
     }
     if (pvpBlock.hasSignal())
     {
-        signal.reset(new double());
+        signal.reset(new sys::Int64_T());
         ::setData(input + p.signal.getByteOffset(), *signal);
     }
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
@@ -660,7 +660,7 @@ double PVPBlock::getTdIonoSRP(size_t channel, size_t set) const
                     "Parameter was not set"));
 }
 
-double PVPBlock::getSignal(size_t channel, size_t set) const
+sys::Int64_T PVPBlock::getSignal(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].signal.get())
@@ -845,12 +845,12 @@ void PVPBlock::setTdIonoSRP(double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPBlock::setSignal(double value, size_t channel, size_t vector)
+void PVPBlock::setSignal(sys::Int64_T value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     if (hasSignal())
     {
-        mData[channel][vector].signal.reset(new double(value));
+        mData[channel][vector].signal.reset(new sys::Int64_T(value));
         return;
     }
     throw except::Exception(Ctxt(

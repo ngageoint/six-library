@@ -175,7 +175,7 @@ struct PVPBlock
     double getTOAE1(size_t channel, size_t set) const;
     double getTOAE2(size_t channel, size_t set) const;
     double getTdIonoSRP(size_t channel, size_t set) const;
-    double getSignal(size_t channel, size_t set) const;
+    sys::Int64_T getSignal(size_t channel, size_t set) const;
 
     template<typename T>
     T getAddedPVP(size_t channel, size_t set, const std::string& name) const
@@ -215,7 +215,7 @@ struct PVPBlock
     void setTOAE1(double value, size_t channel, size_t set);
     void setTOAE2(double value, size_t channel, size_t set);
     void setTdIonoSRP(double value, size_t channel, size_t set);
-    void setSignal(double value, size_t channel, size_t set);
+    void setSignal(sys::Int64_T value, size_t channel, size_t set);
 
     template<typename T>
     void setAddedPVP(T value, size_t channel, size_t set, const std::string& name)
@@ -433,7 +433,7 @@ protected:
         mem::ScopedCopyablePtr<double> toaE1;
         mem::ScopedCopyablePtr<double> toaE2;
         mem::ScopedCopyablePtr<double> tdIonoSRP;
-        mem::ScopedCopyablePtr<double> signal;
+        mem::ScopedCopyablePtr<sys::Int64_T> signal;
 
         //! (Optional) Additional parameters
         std::unordered_map<std::string,six::Parameter> addedPVP;

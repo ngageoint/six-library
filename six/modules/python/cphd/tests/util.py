@@ -767,7 +767,7 @@ def get_test_pvp_data(metadata):
             'ampSF': np.random.rand(num_pulses),  # (1, 'F8')
             'fxN1': np.random.rand(num_pulses),  # (1, 'F8')
             'fxN2': np.random.rand(num_pulses),  # (1, 'F8')
-            'signal': np.ones(num_pulses),  # (1, 'I8')
+            'signal': np.ones(num_pulses, dtype=np.int8),  # (1, 'I8')
             'tdIonoSRP': np.random.rand(num_pulses),  # (1, 'F8')
             'toaE1': np.random.rand(num_pulses),  # (1, 'F8')
             'toaE2': np.random.rand(num_pulses),  # (1, 'F8')

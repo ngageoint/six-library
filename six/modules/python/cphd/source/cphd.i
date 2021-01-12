@@ -25,6 +25,7 @@
 %feature("autodoc", "1");
 %feature("flatnested");
 
+%include "stdint.i"
 %include <std_string.i>
 %include <std_vector.i>
 
