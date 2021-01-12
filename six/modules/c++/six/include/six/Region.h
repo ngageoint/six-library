@@ -25,7 +25,7 @@
 
 #include <memory>
 
-#include <nitf/cstddef.h>
+#include <nitf/coda-oss.hpp>
 
 #include "six/Types.h"
 

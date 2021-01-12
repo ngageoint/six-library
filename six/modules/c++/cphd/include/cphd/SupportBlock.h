@@ -28,12 +28,11 @@
 #include <complex>
 #include <unordered_map>
 
+#include <nitf/coda-oss.hpp>
 #include <sys/Conf.h>
 #include <io/SeekableStreams.h>
 #include <types/RowCol.h>
 #include <mem/ScopedArray.h>
-
-#include <nitf/span.h>
 
 #include <cphd/Data.h>
 #include <cphd/Utilities.h>
@@ -109,7 +108,7 @@ public:
      */
     void read(const std::string& id,
               size_t numThreads,
-              std::span<std::byte> data) const;
+              gsl::span<std::byte> data) const;
 
     /*
      *  \func read

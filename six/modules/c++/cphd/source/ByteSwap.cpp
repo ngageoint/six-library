@@ -24,7 +24,7 @@
 #include <sys/Conf.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
-#include <nitf/cstddef.h>
+#include <nitf/coda-oss.hpp>
 #include <cphd/ByteSwap.h>
 
 namespace

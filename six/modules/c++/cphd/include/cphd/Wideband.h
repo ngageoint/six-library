@@ -29,12 +29,12 @@
 #include <cphd/MetadataBase.h>
 #include <cphd/Utilities.h>
 
+#include <nitf/coda-oss.hpp>
 #include <io/SeekableStreams.h>
 #include <mem/ScopedArray.h>
 #include <sys/Conf.h>
+#include <gsl/gsl.h>
 #include <types/RowCol.h>
-
-#include <nitf/span.h>
 
 namespace cphd
 {
@@ -146,7 +146,7 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              std::span<std::byte> data) const;
+              gsl::span<std::byte> data) const;
 
     /*!
      *  \func read
@@ -161,7 +161,7 @@ public:
      *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel, std::span<std::byte> data) const;
+    void read(size_t channel, gsl::span<std::byte> data) const;
 
     /*!
      *  \func read
@@ -247,8 +247,8 @@ public:
               size_t lastSample,
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
-              std::span<std::byte> scratch,
-              std::span<std::complex<float>> data) const;
+              gsl::span<std::byte> scratch,
+              gsl::span<std::complex<float>> data) const;
 
     /*!
      *  \func read
@@ -283,7 +283,7 @@ public:
               const types::RowCol<size_t>& dims,
               void* data) const
     {
-        std::span<std::byte> buffer(static_cast<std::byte*>(data),
+        gsl::span<std::byte> buffer(static_cast<std::byte*>(data),
                                                  dims.area() * mElementSize);
         read(channel,
              firstVector,
