@@ -81,6 +81,7 @@
     <ClInclude Include="nitf\include\nitf\ComponentInfo.hpp" />
     <ClInclude Include="nitf\include\nitf\CompressedByteProvider.hpp" />
     <ClInclude Include="nitf\include\nitf\CompressionInterface.hpp" />
+    <ClInclude Include="nitf\include\nitf\cstddef.h" />
     <ClInclude Include="nitf\include\nitf\CustomIO.hpp" />
     <ClInclude Include="nitf\include\nitf\DataSource.hpp" />
     <ClInclude Include="nitf\include\nitf\DateTime.hpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="nitf\include\nitf\SegmentReader.hpp" />
     <ClInclude Include="nitf\include\nitf\SegmentSource.hpp" />
     <ClInclude Include="nitf\include\nitf\SegmentWriter.hpp" />
+    <ClInclude Include="nitf\include\nitf\span.h" />
     <ClInclude Include="nitf\include\nitf\SubWindow.hpp" />
     <ClInclude Include="nitf\include\nitf\System.hpp" />
     <ClInclude Include="nitf\include\nitf\TextSegment.hpp" />
@@ -193,12 +195,14 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <TreatWarningAsError>true</TreatWarningAsError>
       <EnablePREfast>true</EnablePREfast>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -226,6 +230,7 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>

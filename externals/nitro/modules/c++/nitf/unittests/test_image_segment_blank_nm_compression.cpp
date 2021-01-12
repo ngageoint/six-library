@@ -5,8 +5,8 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
-
-#include <nitf/coda-oss.hpp>
+#include <import/nitf.h>
+#include <import/types.h>
 #include <nitf/ImageSegmentComputer.h>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/Record.hpp>
@@ -15,6 +15,7 @@
 #include <math/Round.h>
 #include <io/FileInputStream.h>
 #include <io/TempFile.h>
+#include <gsl/gsl.h>
 
 #include "TestCase.h"
 
@@ -120,12 +121,12 @@ int64_t getNumberBlocksPresent(const uint64_t* mask,
    return numBlocksPresent;
 }
 
-void createSingleBandBuffer(std::vector<nitf::byte>& buffer,
+void createSingleBandBuffer(std::vector<std::byte>& buffer,
                             const nitf::ImageSegmentComputer& segmentComputer,
                             const types::RowCol<int64_t>& fullDims,
                             const size_t segmentIdxToMakeEmpty)
 {
-   const auto bytes = static_cast<size_t>(fullDims.area());
+   const auto bytes = gsl::narrow<size_t>(fullDims.area());
    const std::vector<nitf::ImageSegmentComputer::Segment> &segments = segmentComputer.getSegments();
    /* All segments should be the same size in this test so this is safe */
    const auto segmentSizeInBytes = segments[segmentIdxToMakeEmpty].numRows * fullDims.col;
@@ -138,12 +139,12 @@ void createSingleBandBuffer(std::vector<nitf::byte>& buffer,
       /* Set only the center that way we are surrounded by empty blocks */
       if (segIdx != segmentIdxToMakeEmpty)
       {
-         segStart[segmentSizeInBytes/2] = static_cast<nitf::byte>(0xff);
+         segStart[segmentSizeInBytes/2] = static_cast<std::byte>(0xff);
       }
    }
 }
 
-void createBuffers(std::vector<std::vector<nitf::byte> >& buffers,
+void createBuffers(std::vector<std::vector<std::byte> >& buffers,
                    const nitf::ImageSegmentComputer& imageSegmentComputer,
                    const types::RowCol<int64_t>& fullDims)
 {
@@ -179,7 +180,7 @@ TEST_CASE(testBlankSegmentsValid)
    const int64_t bytesPerSegment = BLOCK_LENGTH_SCALED * BLOCK_LENGTH_SCALED * 2;
    const int64_t elementSize     = 1;
    const types::RowCol<int64_t> fullDims(numberLines, numberElements);
-   std::vector<std::vector<nitf::byte> > buffers;
+   std::vector<std::vector<std::byte> > buffers;
    nitf::ImageSegmentComputer imageSegmentComputer(numberLines,
                                                    numberElements,
                                                    elementSize,
@@ -220,7 +221,7 @@ TEST_CASE(testBlankSegmentsValid)
       }
       writer.prepare(output_io, record);
 
-      for (int ii = 0; ii < static_cast<int>(numSegments); ++ii)
+      for (int ii = 0; ii < gsl::narrow<int>(numSegments); ++ii)
       {
          auto buf = &buffers[testIdx].front() + (ii * bytesPerSegment);
          nitf::ImageWriter imageWriter = writer.newImageWriter(ii);
@@ -272,7 +273,7 @@ TEST_CASE(testBlankSegmentsValid)
                                                                       blockingInfo.getNumBlocksPerRow(),
                                                                       blockingInfo.getNumBlocksPerCol());
 
-            if (imgCtr == static_cast<int>(testIdx))
+            if (imgCtr == gsl::narrow<int>(testIdx))
             {
                TEST_ASSERT_EQ(nBlocksPresent, 0);
             }

@@ -23,9 +23,11 @@
 
 #ifndef __MT_ABSTRACT_CPU_AFFINITY_INITIALIZER_H__
 #define __MT_ABSTRACT_CPU_AFFINITY_INITIALIZER_H__
+#pragma once
 
-#include <mem/SharedPtr.h>
 #include <mt/AbstractCPUAffinityThreadInitializer.h>
+#include "mem/SharedPtr.h"
+
 
 namespace mt
 {

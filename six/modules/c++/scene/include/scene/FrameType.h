@@ -19,10 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SCENE_FRAME_TYPE_H__
-#define __SCENE_FRAME_TYPE_H__
+#pragma once
 
 #include <string>
+#include <ostream>
 
 namespace scene
 {
@@ -56,18 +56,25 @@ struct FrameType
     {
         return (mValue == rhs);
     }
-
     bool operator!=(FrameTypesEnum rhs) const
     {
-        return (mValue != rhs);
+        return !(*this == rhs);
     }
 
     bool operator==(const FrameType& rhs) const
     {
         return (mValue == rhs.mValue);
     }
-
     bool operator!=(const FrameType& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
+    bool operator==(const std::string& rhs) const
+    {
+        return toString() == rhs;
+    }
+    bool operator!=(const std::string& rhs) const
     {
         return !(*this == rhs);
     }
@@ -75,6 +82,11 @@ struct FrameType
     FrameTypesEnum mValue;
 
 };
+
+inline std::ostream& operator<<(std::ostream& os, const FrameType& e)
+{
+    os << e.toString();
+    return os;
+}
 }
 
-#endif

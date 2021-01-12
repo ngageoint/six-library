@@ -23,7 +23,9 @@
 #include <vector>
 #include <sstream>
 
-#include <nitf/coda-oss.hpp>
+#include <types/RowCol.h>
+#include <sys/Conf.h>
+#include <import/except.h>
 #include <nitf/ImageSegmentComputer.h>
 #include <nitf/ImageBlocker.hpp>
 

@@ -27,6 +27,8 @@
 #include <memory>
 #include <stdexcept>
 
+#include <sys/Filesystem.h>
+
 #include <import/nitf.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/ImageWriter.hpp>
@@ -91,7 +93,7 @@ static fs::path buildFileDir(const fs::path& relativePath)
 
 static void doChangeFileHeader(const std::string& inputPathname, const std::string& outputPathname)
 {
-    if (nitf::Reader::getNITFVersion(inputPathname) == nitf::Version::NITF_VER_UNKNOWN)
+    if (nitf::Reader::getNITFVersion(inputPathname) == NITF_VER_UNKNOWN)
     {
         throw std::invalid_argument("Invalid NITF: " + inputPathname);
     }

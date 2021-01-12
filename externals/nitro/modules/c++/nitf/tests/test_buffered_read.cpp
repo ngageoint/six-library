@@ -35,7 +35,7 @@ void doRead(const std::string& inFile,
     nitf::Reader reader;
     nitf::BufferedReader io(inFile, bufferSize);
     nitf::Record record = reader.readIO(io);
-    std::vector<nitf::byte> image;
+    std::vector<std::byte> image;
 
     /*  Set this to the end, so we'll know when we're done!  */
     nitf::List imageList(record.getImages());
@@ -69,8 +69,8 @@ void doRead(const std::string& inFile,
 
         if (!image.empty())
         {
-            std::vector<nitf::byte*> imagePtrs;
-            nitf::byte*imagePtr(image.data());
+            std::vector<std::byte*> imagePtrs;
+            std::byte*imagePtr(image.data());
             for (size_t ii = 0;
                     ii < subWindow.getNumBands();
                     ++ii, imagePtr += numBytesPerBand)
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
             blockSize = std::stoi(argv[2]);
 
         // Check that wew have a valid NITF
-        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN )
+        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN )
         {
             std::cout << "Invalid NITF: " << argv[1] << std::endl;
             exit(EXIT_FAILURE);

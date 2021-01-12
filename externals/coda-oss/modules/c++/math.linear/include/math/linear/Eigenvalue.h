@@ -88,10 +88,10 @@ public:
      * \param A Square matrix
      */
     Eigenvalue(const Matrix2D<RealT>& A) :
-        mN_(static_cast<int>(A.cols())),
-        mD(mN_),
-        mE(mN_),
-        mV(mN_, mN_)
+        mN(A.cols()),
+        mD(mN),
+        mE(mN),
+        mV(mN, mN)
     {
         if (A.rows() != A.cols())
         {
@@ -113,8 +113,8 @@ public:
         }
         else
         {
-            mH = Matrix2D<RealT>(mN_, mN_);
-            mOrt = Vector<RealT>(mN_);
+            mH = Matrix2D<RealT>(mN, mN);
+            mOrt = Vector<RealT>(mN);
 
             mH = A;
 
@@ -178,8 +178,8 @@ public:
      */
     void getD(Matrix2D<RealT>& D) const
     {
-        D = Matrix2D<RealT>(mN_, mN_, static_cast<RealT>(0));
-        for (int i = 0; i < mN_; i++)
+        D = Matrix2D<RealT>(mN, mN, static_cast<RealT>(0));
+        for (int i = 0; i < mN; i++)
         {
             D[i][i] = mD[i];
             if (mE[i] > 0)
@@ -202,14 +202,14 @@ private:
         //  Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
         //  Fortran subroutine in EISPACK.
 
-        for (int j = 0; j < mN_; j++)
+        for (int j = 0; j < mN; j++)
         {
-            mD[j] = mV[mN_ - 1][j];
+            mD[j] = mV[mN - 1][j];
         }
 
         // Householder reduction to tridiagonal form.
 
-        for (int i = mN_ - 1; i > 0; i--)
+        for (int i = mN - 1; i > 0; i--)
         {
 
             // Scale to avoid under/overflow.
@@ -296,9 +296,9 @@ private:
 
         // Accumulate transformations.
 
-        for (int i = 0; i < mN_ - 1; i++)
+        for (int i = 0; i < mN - 1; i++)
         {
-            mV[mN_ - 1][i] = mV[i][i];
+            mV[mN - 1][i] = mV[i][i];
             mV[i][i] = RealT(1.0);
             RealT h = mD[i + 1];
             if (h != RealT(0.0))
@@ -325,12 +325,12 @@ private:
                 mV[k][i + 1] = RealT(0.0);
             }
         }
-        for (int j = 0; j < mN_; j++)
+        for (int j = 0; j < mN; j++)
         {
-            mD[j] = mV[mN_ - 1][j];
-            mV[mN_ - 1][j] = RealT(0.0);
+            mD[j] = mV[mN - 1][j];
+            mV[mN - 1][j] = RealT(0.0);
         }
-        mV[mN_ - 1][mN_ - 1] = RealT(1.0);
+        mV[mN - 1][mN - 1] = RealT(1.0);
         mE[0] = RealT(0.0);
     }
 
@@ -344,16 +344,16 @@ private:
         //  Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
         //  Fortran subroutine in EISPACK.
 
-        for (int i = 1; i < mN_; i++)
+        for (int i = 1; i < mN; i++)
         {
             mE[i - 1] = mE[i];
         }
-        mE[mN_ - 1] = RealT(0.0);
+        mE[mN - 1] = RealT(0.0);
 
         RealT f = RealT(0.0);
         RealT tst1 = RealT(0.0);
         RealT eps = pow(2.0, -52.0);
-        for (int l = 0; l < mN_; l++)
+        for (int l = 0; l < mN; l++)
         {
 
             // Find small subdiagonal element
@@ -362,7 +362,7 @@ private:
             int m = l;
 
             // Original while-loop from Java code
-            while (m < mN_)
+            while (m < mN)
             {
                 if (std::abs(mE[m]) <= eps * tst1)
                 {
@@ -394,7 +394,7 @@ private:
                     mD[l + 1] = mE[l] * (p + r);
                     RealT dl1 = mD[l + 1];
                     RealT h = g - mD[l];
-                    for (int i = l + 2; i < mN_; i++)
+                    for (int i = l + 2; i < mN; i++)
                     {
                         mD[i] -= h;
                     }
@@ -425,7 +425,7 @@ private:
 
                         // Accumulate transformation.
 
-                        for (int k = 0; k < mN_; k++)
+                        for (int k = 0; k < mN; k++)
                         {
                             h = mV[k][i + 1];
                             mV[k][i + 1] = s * mV[k][i] + c * h;
@@ -447,11 +447,11 @@ private:
 
         // Sort eigenvalues and corresponding vectors.
 
-        for (int i = 0; i < mN_ - 1; i++)
+        for (int i = 0; i < mN - 1; i++)
         {
             int k = i;
             RealT p = mD[i];
-            for (int j = i + 1; j < mN_; j++)
+            for (int j = i + 1; j < mN; j++)
             {
                 if (mD[j] < p)
                 {
@@ -463,7 +463,7 @@ private:
             {
                 mD[k] = mD[i];
                 mD[i] = p;
-                for (int j = 0; j < mN_; j++)
+                for (int j = 0; j < mN; j++)
                 {
                     p = mV[j][i];
                     mV[j][i] = mV[j][k];
@@ -484,7 +484,7 @@ private:
         //  Fortran subroutines in EISPACK.
 
         int low = 0;
-        int high = mN_ - 1;
+        int high = mN - 1;
 
         for (int m = low + 1; m <= high - 1; m++)
         {
@@ -518,7 +518,7 @@ private:
                 // Apply Householder similarity transformation
                 // mH = (I-u*u'/h)*mH*(I-u*u')/h)
 
-                for (int j = m; j < mN_; j++)
+                for (int j = m; j < mN; j++)
                 {
                     RealT f = RealT(0.0);
                     for (int i = high; i >= m; i--)
@@ -552,9 +552,9 @@ private:
 
         // Accumulate transformations (Algol's ortran).
 
-        for (int i = 0; i < mN_; i++)
+        for (int i = 0; i < mN; i++)
         {
-            for (int j = 0; j < mN_; j++)
+            for (int j = 0; j < mN; j++)
             {
                 mV[i][j] = (i == j ? RealT(1.0) : RealT(0.0));
             }
@@ -624,7 +624,7 @@ private:
 
         // Initialize
 
-        int nn = this->mN_;
+        int nn = this->mN;
         int mN = nn - 1;
         int low = 0;
         int high = nn - 1;
@@ -1197,7 +1197,7 @@ private:
 
 private:
     // Row and column dimension (square matrix).
-    const int mN_;
+    const int mN;
 
     // Arrays for internal storage of eigenvalues.
     Vector<RealT> mD; // real part

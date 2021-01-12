@@ -78,7 +78,7 @@ TEST_CASE(testConvexHull)
 }
 }
 
-int main(int, char**)
+int main(int argc, char** argv)
 {
     TEST_CHECK(testConvexHull);
     return 0;

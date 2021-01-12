@@ -41,7 +41,7 @@ namespace sidd
 class DerivedXMLControl : public XMLControl
 {
 public:
-    DerivedXMLControl(logging::Logger* log = NULL, bool ownLog = false);
+    DerivedXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
 
 protected:
     /*!
@@ -55,7 +55,7 @@ protected:
     virtual Data* fromXMLImpl(const xml::lite::Document* doc);
 
 private:
-    std::auto_ptr<DerivedXMLParser>
+    std::unique_ptr<DerivedXMLParser>
     getParser(const std::string& version) const;
 };
 }

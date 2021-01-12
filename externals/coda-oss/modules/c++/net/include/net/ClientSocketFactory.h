@@ -22,8 +22,10 @@
 
 #ifndef __NET_CLIENT_SOCKET_FACTORY_H__
 #define __NET_CLIENT_SOCKET_FACTORY_H__
+#pragma once
 
 #include "net/Socket.h"
+
 #include "mem/SharedPtr.h"
 
 /*!

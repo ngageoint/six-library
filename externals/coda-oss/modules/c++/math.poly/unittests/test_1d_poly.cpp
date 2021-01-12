@@ -81,7 +81,7 @@ TEST_CASE(testTruncateTo)
     math::poly::OneD<double> poly(5);
     for (size_t ii = 0, coeff = 10; ii <= poly.order(); ++ii, coeff += 10)
     {
-        poly[ii] = static_cast<double>(coeff);
+        poly[ii] = coeff;
     }
 
     const math::poly::OneD<double> truncatedPoly = poly.truncateTo(2);
@@ -96,17 +96,15 @@ TEST_CASE(testTruncateToNonZeros)
     math::poly::OneD<double> poly(5);
     for (size_t ii = 0, coeff = 10; ii <= poly.order(); ++ii, coeff += 10)
     {
-        poly[ii] = static_cast<double>(coeff);
+        poly[ii] = coeff;
     }
 
     // Shouldn't truncate anything
+    math::poly::OneD<double> truncatedPoly = poly.truncateToNonZeros(0.0);
+    TEST_ASSERT_EQ(truncatedPoly.order(), poly.order());
+    for (size_t ii = 0; ii <= poly.order(); ++ii)
     {
-        math::poly::OneD<double> truncatedPoly = poly.truncateToNonZeros(0.0);
-        TEST_ASSERT_EQ(truncatedPoly.order(), poly.order());
-        for (size_t ii = 0; ii <= poly.order(); ++ii)
-        {
-            TEST_ASSERT_EQ(truncatedPoly[ii], poly[ii]);
-        }
+        TEST_ASSERT_EQ(truncatedPoly[ii], poly[ii]);
     }
 
     // Truncate one piece at a time
@@ -120,6 +118,7 @@ TEST_CASE(testTruncateToNonZeros)
             TEST_ASSERT_EQ(truncatedPoly[jj], poly[jj]);
         }
     }
+
 }
 
 TEST_CASE(testTransformInput)

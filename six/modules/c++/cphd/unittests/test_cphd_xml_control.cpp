@@ -922,10 +922,10 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(global.fxBand.fxMax, 1.7);
     TEST_ASSERT_EQ(global.toaSwath.toaMin, 3.4);
     TEST_ASSERT_EQ(global.toaSwath.toaMax, 6.1);
-    TEST_ASSERT_TRUE(global.tropoParameters.get());
+    TEST_ASSERT_TRUE(global.tropoParameters.get() != nullptr);
     TEST_ASSERT_EQ(global.tropoParameters->n0, 65.2);
     TEST_ASSERT_EQ(global.tropoParameters->refHeight, cphd::RefHeight::IARP);
-    TEST_ASSERT_TRUE(global.ionoParameters.get());
+    TEST_ASSERT_TRUE(global.ionoParameters.get() != nullptr);
     TEST_ASSERT_EQ(global.ionoParameters->tecv, 5.8);
     TEST_ASSERT_EQ(global.ionoParameters->f2Height, 3);
 
@@ -940,16 +940,16 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(scene.iarp.llh.getLon(), -102);
     TEST_ASSERT_EQ(scene.iarp.llh.getAlt(), 3.4);
 
-    TEST_ASSERT_TRUE(scene.referenceSurface.hae.get());
+    TEST_ASSERT_TRUE(scene.referenceSurface.hae.get() != nullptr);
     TEST_ASSERT_EQ(scene.referenceSurface.hae->uIax.getLat(), 12);
     TEST_ASSERT_EQ(scene.referenceSurface.hae->uIax.getLon(), 24);
     TEST_ASSERT_EQ(scene.referenceSurface.hae->uIay.getLat(), 36);
     TEST_ASSERT_EQ(scene.referenceSurface.hae->uIay.getLon(), 48);
 
-    TEST_ASSERT_EQ(scene.imageArea.x1y1[0], 3.5)
-    TEST_ASSERT_EQ(scene.imageArea.x1y1[1], 5.3)
-    TEST_ASSERT_EQ(scene.imageArea.x2y2[0], 5.3)
-    TEST_ASSERT_EQ(scene.imageArea.x2y2[1], 3.5)
+    TEST_ASSERT_EQ(scene.imageArea.x1y1[0], 3.5);
+    TEST_ASSERT_EQ(scene.imageArea.x1y1[1], 5.3);
+    TEST_ASSERT_EQ(scene.imageArea.x2y2[0], 5.3);
+    TEST_ASSERT_EQ(scene.imageArea.x2y2[1], 3.5);
     TEST_ASSERT_EQ(scene.imageArea.polygon.size(), 3);
     TEST_ASSERT_EQ(scene.imageArea.polygon[0][0], .1);
     TEST_ASSERT_EQ(scene.imageArea.polygon[0][1], .3);
@@ -970,7 +970,7 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(scene.imageAreaCorners.lowerLeft.getLat(), 40);
     TEST_ASSERT_EQ(scene.imageAreaCorners.lowerLeft.getLon(), 41);
 
-    TEST_ASSERT_TRUE(scene.imageGrid.get());
+    TEST_ASSERT_TRUE(scene.imageGrid.get() != nullptr);
     TEST_ASSERT_EQ(scene.imageGrid->identifier, "Grid");
     TEST_ASSERT_EQ(scene.imageGrid->iarpLocation.line, 1.23);
     TEST_ASSERT_EQ(scene.imageGrid->iarpLocation.sample, 3.21);
@@ -1130,7 +1130,7 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(ref.monostatic->arpVel[0], 10);
     TEST_ASSERT_EQ(ref.monostatic->arpVel[1], 10);
     TEST_ASSERT_EQ(ref.monostatic->arpVel[2], 10);
-    TEST_ASSERT_EQ(ref.monostatic->sideOfTrack.toString(), "LEFT");
+    TEST_ASSERT_EQ(ref.monostatic->sideOfTrack, "LEFT");
     TEST_ASSERT_EQ(ref.monostatic->azimuthAngle, 30.0);
     TEST_ASSERT_EQ(ref.monostatic->grazeAngle, 30.0);
     TEST_ASSERT_EQ(ref.monostatic->twistAngle, 30.0);
@@ -1139,25 +1139,7 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(ref.monostatic->dopplerConeAngle, 30.0);
 }
 
-int main(int /*argc*/, char** /*argv*/)
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testReadXML);
         // TEST_CHECK(testValidation);
-        return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-    }
-    return 1;
-}
+)

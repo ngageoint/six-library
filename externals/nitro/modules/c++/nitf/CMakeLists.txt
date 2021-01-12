@@ -1,5 +1,5 @@
 set(MODULE_NAME nitf)
-set(MODULE_DEPS nitf-c except-c++ io-c++ mt-c++ sys-c++ str-c++)
+set(MODULE_DEPS nitf-c except-c++ io-c++ mt-c++ sys-c++ str-c++ gsl-c++)
 if (MSVC)
     list(APPEND MODULE_DEPS wsock32 ws2_32)
 endif()
@@ -81,9 +81,9 @@ coda_add_tests(
     DIRECTORY "unittests"
     UNITTEST
     SOURCES
+	test_create_nitf++.cpp
         test_field++.cpp
         test_image_blocker.cpp
         test_image_segment_blank_nm_compression.cpp
         test_image_segment_computer.cpp
-        test_nitf_buffer_list.cpp
-        test_tre_mods++.cpp)
+        test_nitf_buffer_list.cpp)

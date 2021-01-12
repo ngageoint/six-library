@@ -91,23 +91,23 @@ void writeSupportData(const std::string& outPathname, size_t numThreads,
     writer.writePVPData(pvpBlock);
 }
 
-std::vector<sys::ubyte> checkSupportData(
+std::vector<std::byte> checkSupportData(
         const std::string& pathname,
-        size_t size,
+        size_t /*size*/,
         size_t numThreads)
 {
     cphd::CPHDReader reader(pathname, numThreads);
     const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
 
-    mem::ScopedArray<sys::ubyte> readPtr;
+    std::unique_ptr<std::byte[]> readPtr;
     supportBlock.readAll(numThreads, readPtr);
 
-    std::vector<sys::ubyte> readData(readPtr.get(), readPtr.get() + reader.getMetadata().data.getAllSupportSize());
+    std::vector<std::byte> readData(readPtr.get(), readPtr.get() + reader.getMetadata().data.getAllSupportSize());
     return readData;
 }
 
 template<typename T>
-bool compareVectors(const std::vector<sys::ubyte>& readData,
+bool compareVectors(const std::vector<std::byte>& readData,
                     const T* writeData,
                     size_t writeDataSize)
 {
@@ -117,13 +117,13 @@ bool compareVectors(const std::vector<sys::ubyte>& readData,
                   << "ReadData size: " << readData.size() << "\n";
         return false;
     }
-    const sys::ubyte* ptr = reinterpret_cast<const sys::ubyte*>(writeData);
+    const std::byte* ptr = reinterpret_cast<const std::byte*>(writeData);
     for (size_t ii = 0; ii < readData.size(); ++ii, ++ptr)
     {
         if (*ptr != readData[ii])
         {
             std::cerr << "Value mismatch at index " << ii << std::endl;
-            std::cerr << "readData: " << readData[ii] << " " << "writeData: " << *ptr << "\n";
+            std::cerr << "readData: " << static_cast<char>(readData[ii]) << " " << "writeData: " << static_cast<char>(*ptr) << "\n";
             return false;
         }
     }
@@ -141,7 +141,7 @@ bool runTest(const std::vector<T>& writeData)
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     writeSupportData(tempfile.pathname(), numThreads, writeData, meta, pvpBlock);
-    const std::vector<sys::ubyte> readData =
+    const std::vector<std::byte> readData =
             checkSupportData(tempfile.pathname(), NUM_SUPPORT*NUM_ROWS*NUM_COLS*sizeof(T), numThreads);
 
     return compareVectors(readData, writeData.data(), writeData.size());
@@ -164,28 +164,7 @@ TEST_CASE(testSupportsDouble)
 }
 }
 
-int main(int argc, char** argv)
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testSupportsInt);
         TEST_CHECK(testSupportsDouble);
-        return 0;
-    }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-        return 1;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-        return 1;
-    }
-}
-
+        )

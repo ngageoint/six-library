@@ -74,14 +74,14 @@ public:
 
     //!  Constructor.  Null-sets the Container
     WriteControl() :
-        mContainer(NULL), mLog(NULL), mOwnLog(false), mXMLRegistry(NULL)
+        mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
-        setLogger(NULL);
-        setXMLControlRegistry(NULL);
+        setLogger(nullptr);
+        setXMLControlRegistry(nullptr);
     }
 
     //!  Destructor.  Does not release any memory
-    virtual ~WriteControl()
+    virtual ~WriteControl() noexcept(false)
     {
         if (mLog && mOwnLog)
             delete mLog;
@@ -95,7 +95,7 @@ public:
      *
      *  \param container Container to bind to
      */
-    virtual void initialize(mem::SharedPtr<Container> container) = 0;
+    virtual void initialize(std::shared_ptr<Container> container) = 0;
 
     /*!
      *  Save a list of InputStream sources.  This should always be
@@ -178,7 +178,7 @@ public:
     /*!
      * shared pointer to Container
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -186,7 +186,7 @@ public:
     /*!
      *  shared const pointer to Container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
         return mContainer;
     }
@@ -258,7 +258,7 @@ protected:
         if (!mXMLRegistry)
             mXMLRegistry = &XMLControlFactory::getInstance();
     }
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;

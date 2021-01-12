@@ -368,7 +368,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
         }
     }
 
-    auto results = mem::make::unique<cli::Results>();
+    std::unique_ptr<cli::Results> results(new Results);
     cli::Results *currentResults = NULL;
     for (size_t i = 0, s = explodedArgs.size(); i < s; ++i)
     {

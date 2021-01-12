@@ -162,15 +162,22 @@ typedef int nrt_CreationFlags;
 #define NRT_TRUE     (1)
 #define NRT_FALSE    (0)
 
-typedef enum _nrt_CornersType
-{
+
+#if defined(__cplusplus) && !defined(SWIGPYTHON)
+// "enum class" for C++ w/o SWIG
+#define NRT_DECLARE_ENUM(name, ...) enum class name { __VA_ARGS__ }
+#else
+#define NRT_DECLARE_ENUM(name, ...) typedef enum _ ## name { __VA_ARGS__ } name
+#endif
+
+NRT_DECLARE_ENUM(nrt_CornersType,
     NRT_CORNERS_UNKNOWN = -1,
     NRT_CORNERS_UTM,
     NRT_CORNERS_UTM_UPS_S,
     NRT_CORNERS_UTM_UPS_N,
     NRT_CORNERS_GEO,
     NRT_CORNERS_DECIMAL
-} nrt_CornersType;
+);
 
 /*
  *  Finally, we determine what kind of system you

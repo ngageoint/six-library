@@ -31,7 +31,7 @@ scene::CoordinateTransform::CoordinateTransform(
 {
     model = new EllipsoidModel();
 
-    if(initVals != NULL)
+    if(initVals != nullptr)
     {
         setEllipsoidModel(*initVals);
     }
@@ -39,7 +39,7 @@ scene::CoordinateTransform::CoordinateTransform(
 
 scene::CoordinateTransform::~CoordinateTransform()
 {
-    if(model != NULL)
+    if(model != nullptr)
     {
         delete model;
     }

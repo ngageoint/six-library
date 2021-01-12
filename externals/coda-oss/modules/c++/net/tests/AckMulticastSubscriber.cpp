@@ -23,7 +23,6 @@
 #include <import/net.h>
 #include <import/sys.h>
 #include <import/io.h>
-#include <import/mem.h>
 #include "net/SingleThreadedAllocStrategy.h"
 #include "net/NetConnectionServer.h"
 
@@ -53,8 +52,8 @@ public:
 
 template<typename T> class AckMulticastSubscriber
 {
-    mem::auto_ptr<Socket> mAckChannel;
-    mem::auto_ptr<Socket> mMulticastSubscriber;
+    std::auto_ptr<Socket> mAckChannel;
+    std::auto_ptr<Socket> mMulticastSubscriber;
 public:
     AckMulticastSubscriber(const std::string& mcastGroup, int mcastLocalPort,
             const std::string& replyTo, int replyToPort)
@@ -68,10 +67,10 @@ public:
     {
     }
 
-    mem::auto_ptr<Socket> createMulticastSubscriber(const std::string& group, int port)
+    std::auto_ptr<Socket> createMulticastSubscriber(const std::string& group, int port)
     {
         SocketAddress here(port);
-        mem::auto_ptr<Socket> socket(new Socket(UDP_PROTO));
+        std::auto_ptr<Socket> socket( new Socket(UDP_PROTO) );
         socket->bind(here);
         struct ip_mreq mreq;
 
@@ -86,10 +85,10 @@ public:
         return socket;
     }
 
-    mem::auto_ptr<Socket> createSocketForAck(const std::string& senderHost, int senderPort)
+    std::auto_ptr<Socket> createSocketForAck(const std::string& senderHost, int senderPort)
     {
         SocketAddress toSender(senderHost, senderPort);
-        mem::auto_ptr<Socket> s = UDPClientSocketFactory().create(toSender);
+        std::auto_ptr<Socket> s = UDPClientSocketFactory().create(toSender);
         // This socket is already 'connect()'ed by now, so we use send()
         return s;
     }

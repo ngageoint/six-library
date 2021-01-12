@@ -28,7 +28,7 @@ namespace sidd
 bool PolynomialProjection::equalTo(const Projection& rhs) const
 {
     PolynomialProjection const* projection = dynamic_cast<PolynomialProjection const*>(&rhs);
-    if (projection != NULL)
+    if (projection != nullptr)
     {
         return (rowColToLat == projection->rowColToLat &&
             rowColToLon == projection->rowColToLon &&
@@ -52,7 +52,7 @@ bool MeasurableProjection::operator==(const MeasurableProjection& rhs) const
 bool MeasurableProjection::equalTo(const Projection& rhs) const
 {
     const MeasurableProjection* projection = dynamic_cast<const MeasurableProjection*>(&rhs);
-    if (projection != NULL)
+    if (projection != nullptr)
     {
         return *this == *projection;
     }
@@ -62,7 +62,7 @@ bool MeasurableProjection::equalTo(const Projection& rhs) const
 bool GeographicProjection::equalTo(const Projection& rhs) const
 {
     const GeographicProjection* projection = dynamic_cast<const GeographicProjection*>(&rhs);
-    if (projection != NULL)
+    if (projection != nullptr)
     {
         return *this == *projection;
     }
@@ -79,7 +79,7 @@ bool CylindricalProjection::operator==(const CylindricalProjection& rhs) const
 bool CylindricalProjection::equalTo(const Projection& rhs) const
 {
     const CylindricalProjection* projection = dynamic_cast<const CylindricalProjection*>(&rhs);
-    if (projection != NULL)
+    if (projection != nullptr)
     {
         return *this == *projection;
     }
@@ -94,7 +94,7 @@ bool PlaneProjection::operator==(const PlaneProjection& rhs) const
 bool PlaneProjection::equalTo(const Projection& rhs) const
 {
     const PlaneProjection* projection = dynamic_cast<const PlaneProjection*>(&rhs);
-    if (projection != NULL)
+    if (projection != nullptr)
     {
         return *this == *projection;
     }

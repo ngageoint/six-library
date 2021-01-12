@@ -20,15 +20,15 @@
  *
  */
 
-#ifndef __NITF_BANDINFO_HPP__
-#define __NITF_BANDINFO_HPP__
+#pragma once
+
+#include <string>
 
 #include "nitf/BandInfo.h"
 #include "nitf/System.hpp"
 #include "nitf/LookupTable.hpp"
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file BandInfo.hpp
@@ -55,31 +55,35 @@ public:
     BandInfo(nitf_BandInfo * x);
 
     //! Constructor
-    BandInfo();
+    BandInfo() noexcept(false);
 
     //! Destructor
     ~BandInfo();
 
     //! Get the representation
-    nitf::Field getRepresentation();
+    nitf::Field getRepresentation() const;
 
     //! Get the subcategory
-    nitf::Field getSubcategory();
+    nitf::Field getSubcategory() const;
+    std::string subcategory() const
+    {
+        return getSubcategory(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the imageFilterCondition
-    nitf::Field getImageFilterCondition();
+    nitf::Field getImageFilterCondition() const;
 
     //! Get the imageFilterCode
-    nitf::Field getImageFilterCode();
+    nitf::Field getImageFilterCode() const;
 
     //! Get the numLUTs
-    nitf::Field getNumLUTs();
+    nitf::Field getNumLUTs() const;
 
     //! Get the bandEntriesPerLUT
-    nitf::Field getBandEntriesPerLUT();
+    nitf::Field getBandEntriesPerLUT() const;
 
     //! Get the LookUpTable associated with this BandInfo
-    nitf::LookupTable getLookupTable();
+    nitf::LookupTable getLookupTable() const;
 
     /*!
      * Initialize the BandInfo with the given data
@@ -115,8 +119,8 @@ public:
               const std::string& imageFilterCode);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }
-#endif
+

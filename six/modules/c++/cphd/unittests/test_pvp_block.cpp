@@ -21,6 +21,7 @@
  */
 
 #include <complex>
+#include <thread>
 
 #include <cphd/PVP.h>
 #include <cphd/PVPBlock.h>
@@ -336,13 +337,17 @@ TEST_CASE(testLoadPVPBlockFromMemory)
 }
 }
 
-int main(int , char** )
+static void* call_srand()
 {
     ::srand(174);
+    return nullptr;
+}
+static const auto unused_ = call_srand();
+
+TEST_MAIN(
     TEST_CHECK(testPvpRequired);
     TEST_CHECK(testPvpOptional);
     TEST_CHECK(testPvpThrow);
     TEST_CHECK(testPvpEquality);
     TEST_CHECK(testLoadPVPBlockFromMemory);
-    return 0;
-}
+    )

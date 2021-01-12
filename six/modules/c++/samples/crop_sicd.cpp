@@ -33,6 +33,9 @@
 #include <six/XMLControlFactory.h>
 #include "utils.h"
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
 namespace
 {
 void parseECEF(cli::Results& options, std::vector<scene::Vector3>& ecef)
@@ -47,7 +50,7 @@ void parseECEF(cli::Results& options, std::vector<scene::Vector3>& ecef)
         if (values.size() != 3)
         {
             throw except::Exception(Ctxt("Expected 3 values but got " +
-                    str::toString(values.size())));
+                    std::to_string(values.size())));
         }
 
         scene::Vector3& ecefCur(ecef[ii]);
@@ -70,7 +73,7 @@ void parseLatLon(cli::Results& options, std::vector<scene::LatLonAlt>& latLon)
         if (values.size() != 2 && values.size() != 3)
         {
             throw except::Exception(Ctxt("Expected 2 or 3 values but got " +
-                    str::toString(values.size())));
+                    std::to_string(values.size())));
         }
 
         scene::LatLonAlt& latLonCur(latLon[ii]);
@@ -88,16 +91,11 @@ int main(int argc, char** argv)
 {
     try
     {
-        sys::OS os;
-        const sys::Path::StringPair splitName(sys::Path::splitPath(
-                os.getCurrentExecutable(argv[0])));
-        const sys::Path progDirname(splitName.first);
-        const sys::Path installPath(progDirname.join("..").getAbsolutePath());
-
-        const sys::Path nitroDir(
-            installPath.join("share").join("nitf").join("plugins"));
-        const sys::Path schemaDir(
-            installPath.join("conf").join("schema").join("six"));
+        const fs::path argv0(argv[0]);
+        const auto progDirname = argv0.parent_path();
+        const auto installPath = fs::absolute(progDirname.parent_path());
+        const auto nitroDir = installPath / "share" / "nitf" / "plugins";
+        const auto schemaDir = installPath / "conf" / "schema" / "six";
 
         // Parse the command line
         cli::ArgumentParser parser;
@@ -125,7 +123,7 @@ int main(int argc, char** argv)
                            "Specify a schema or directory of schemas "
                            "(or set SIX_SCHEMA_PATH). Use \"\" as value to "
                            "skip schema validation.",
-                           cli::STORE)->setDefault(schemaDir);
+                           cli::STORE)->setDefault(schemaDir.string());
         parser.addArgument("--require-aoi-in-bounds",
                            "When the AOI is specified in ECEF or lat/lon, by "
                            "default it will be trimmed to be within the "
@@ -140,7 +138,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output SICD pathname", cli::STORE,
                            "output", "<output SICD pathname>", 1, 1);
 
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string inPathname(options->get<std::string> ("input"));
         const std::string outPathname(options->get<std::string> ("output"));
         const bool trimCornersIfNeeded =
@@ -194,11 +192,6 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
         return 1;
     }
     catch (...)

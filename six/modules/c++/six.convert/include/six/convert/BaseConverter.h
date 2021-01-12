@@ -47,10 +47,10 @@ public:
      *
      * \return ComplexData corresponding to given file
      */
-    virtual std::auto_ptr<six::sicd::ComplexData> convert() const = 0;
+    virtual std::unique_ptr<six::sicd::ComplexData> convert() const = 0;
 
 protected:
-    static std::auto_ptr<xml::lite::Document>
+    static std::unique_ptr<xml::lite::Document>
             readXML(const std::string& xmlPathname);
 
     XMLElem findUniqueElement(const XMLElem root,

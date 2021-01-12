@@ -52,12 +52,11 @@ namespace except
  * break existing code as "catch (const std::exception&)" will catch
  * except::Throwable when it didn't before.
  */
-#ifndef CODA_OSS_Throwable_isa_std_exception
-#define CODA_OSS_Throwable_isa_std_exception 0  // preserve existing behavior
-//#define CODA_OSS_Throwable_isa_std_exception 1
+#ifndef CODA_OSS_Throwable_isa_std_exception_
+#define CODA_OSS_Throwable_isa_std_exception_ 1
 #endif
 class Throwable
-#if CODA_OSS_Throwable_isa_std_exception
+#if CODA_OSS_Throwable_isa_std_exception_
     : public std::exception
 #endif
 {
@@ -141,7 +140,7 @@ public:
     }
 
     const char* what() const noexcept
-#if CODA_OSS_Throwable_isa_std_exception
+#if CODA_OSS_Throwable_isa_std_exception_
         override final // derived classes override toString()
 #endif
     {

@@ -421,7 +421,7 @@ struct Area
      */
     Area();
 
-    //!  Clone the object, including the plane if non-NULL
+    //!  Clone the object, including the plane if non-nullptr
     Area* clone() const;
 
     /*!
@@ -462,7 +462,7 @@ struct RadarCollection
 
     /*!
      *  The SICD Res parameter (called resolution here) is optional, and
-     *  therefore is set to NULL, as is Area
+     *  therefore is set to nullptr, as is Area
      */
     RadarCollection() :
         refFrequencyIndex(Init::undefined<int>()),
@@ -472,7 +472,7 @@ struct RadarCollection
     {
     }
 
-    //!  Clone.  Makes a deep copy of resolution if non-NULL
+    //!  Clone.  Makes a deep copy of resolution if non-nullptr
     RadarCollection* clone() const;
 
     //! Indicates the RF freq values expressed as offsets from a ref freq

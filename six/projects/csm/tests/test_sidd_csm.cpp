@@ -30,6 +30,9 @@
 #include <six/sidd/Utilities.h>
 #include <scene/ECEFToLLATransform.h>
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
 // CSM includes
 #include <RasterGM.h>
 #include <Plugin.h>
@@ -56,10 +59,9 @@ public:
 
         mReader.setXMLControlRegistry(&mXmlRegistry);
 
-        const std::string schemaDir =
-                sys::Path(confDir).join("schema").join("six");
+        const std::string schemaDir =  (fs::path(confDir) / "schema" / "six");
         mReader.load(mSiddPathname, std::vector<std::string>(1, schemaDir));
-        mem::SharedPtr<six::Container> container(mReader.getContainer());
+        auto container(mReader.getContainer());
         mDerivedData.reset(reinterpret_cast<six::sidd::DerivedData*>(
                 container->getData(0)->clone()));
     }
@@ -71,7 +73,7 @@ public:
 
     bool testNitfISD()
     {
-        std::auto_ptr<csm::Nitf21Isd> nitfIsd = constructIsd(mSiddPathname,
+        std::unique_ptr<csm::Nitf21Isd> nitfIsd = constructIsd(mSiddPathname,
                 mReader, mDerivedData.get(), mXmlRegistry);
         return testISD(*nitfIsd);
     }
@@ -113,7 +115,7 @@ private:
             throw except::Exception(Ctxt("Can't construct ISD"));
         }
 
-        std::auto_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
+        std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
                 mPlugin.constructModelFromISD(isd, MODEL_NAME)));
 
         if (!mDerivedData->measurement->projection->isMeasurable())
@@ -210,7 +212,7 @@ private:
 
     six::XMLControlRegistry mXmlRegistry;
     six::NITFReadControl mReader;
-    std::auto_ptr<six::sidd::DerivedData> mDerivedData;
+    std::unique_ptr<six::sidd::DerivedData> mDerivedData;
 };
 
 const char Test::MODEL_NAME[] = "SIDD_SENSOR_MODEL";
@@ -223,7 +225,7 @@ int main(int argc, char** argv)
         // Parse the command line
         if (argc != 2)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <SIDD pathname>\n\n";
             return 1;
         }

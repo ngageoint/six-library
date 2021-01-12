@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __NITF_DESUBHEADER_HPP__
-#define __NITF_DESUBHEADER_HPP__
+#pragma once
+
+#include <string>
 
 #include "nitf/DESubheader.h"
 #include "nitf/Object.hpp"
@@ -29,7 +30,6 @@
 #include "nitf/FileSecurity.hpp"
 #include "nitf/Extensions.hpp"
 #include "nitf/TRE.hpp"
-#include <string>
 
 /*!
  *  \file DESubheader.hpp
@@ -57,42 +57,58 @@ public:
     DESubheader(nitf_DESubheader * x);
 
     //! Constructor
-    DESubheader();
+    DESubheader() noexcept(false);
 
     //! Clone
-    nitf::DESubheader clone();
+    nitf::DESubheader clone() const;
 
-    ~DESubheader();
+    ~DESubheader() = default;
 
     //! Get the filePartType
-    nitf::Field getFilePartType();
+    nitf::Field getFilePartType() const;
+    std::string filePartType() const
+    {
+        return getFilePartType(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the typeID
-    nitf::Field getTypeID();
+    nitf::Field getTypeID() const;
+    std::string typeID() const
+    {
+        return getTypeID().toTrimString();
+    }
 
     //! Get the version
-    nitf::Field getVersion();
+    nitf::Field getVersion() const;
+    std::string version() const
+    {
+        return getVersion(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the securityClass
-    nitf::Field getSecurityClass();
+    nitf::Field getSecurityClass() const;
+    std::string securityClass() const
+    {
+        return getSecurityClass(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the securityGroup
-    nitf::FileSecurity getSecurityGroup();
+    nitf::FileSecurity getSecurityGroup() const;
 
     //! Set the securityGroup
     void setSecurityGroup(nitf::FileSecurity value);
 
     //! Get the overflowedHeaderType
-    nitf::Field getOverflowedHeaderType();
+    nitf::Field getOverflowedHeaderType() const;
 
     //! Get the dataItemOverflowed
-    nitf::Field getDataItemOverflowed();
+    nitf::Field getDataItemOverflowed() const;
 
     //! Get the subheaderFieldsLength
-    nitf::Field getSubheaderFieldsLength();
+    nitf::Field getSubheaderFieldsLength() const;
 
     //! Get the subheaderFields
-    nitf::TRE getSubheaderFields();
+    nitf::TRE getSubheaderFields() const;
 
     //! Set the subheaderFields
     void setSubheaderFields(nitf::TRE fields);
@@ -104,14 +120,14 @@ public:
     void setDataLength(uint32_t value);
 
     //! Get the userDefinedSection
-    nitf::Extensions getUserDefinedSection();
+    nitf::Extensions getUserDefinedSection() const;
 
     //! Set the userDefinedSection
     void setUserDefinedSection(nitf::Extensions value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }
-#endif
+

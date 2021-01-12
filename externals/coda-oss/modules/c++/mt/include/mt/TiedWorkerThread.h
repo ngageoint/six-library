@@ -23,9 +23,10 @@
 
 #ifndef __MT_TIED_WORKER_THREAD_H__
 #define __MT_TIED_WORKER_THREAD_H__
+#pragma once
 
 #include "mt/CPUAffinityThreadInitializer.h"
-#include "mem/SharedPtr.h"
+#include "sys/Conf.h"
 
 
 namespace mt
@@ -41,20 +42,21 @@ public:
     TiedWorkerThread(
             mt::RequestQueue<Request_T>* requestQueue,
             std::unique_ptr<CPUAffinityThreadInitializer>&& cpuAffinityInit =
-                    std::unique_ptr<CPUAffinityThreadInitializer>(NULL)) :
+                    std::unique_ptr<CPUAffinityThreadInitializer>(nullptr)) :
         mt::WorkerThread<Request_T>(requestQueue),
-        mCPUAffinityInit(std::move(cpuAffinityInit))
+        mCPUAffinityInit(cpuAffinityInit)
     {
     }
-#if !CODA_OSS_cpp17
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     TiedWorkerThread(
             mt::RequestQueue<Request_T>* requestQueue,
             std::auto_ptr<CPUAffinityThreadInitializer> cpuAffinityInit =
                     std::auto_ptr<CPUAffinityThreadInitializer>(NULL)) :
-        TiedWorkerThread(requestQueue, std::unique_ptr<CPUAffinityThreadInitializer>(cpuAffinityInit.release()))
+        mt::WorkerThread<Request_T>(requestQueue),
+        mCPUAffinityInit(cpuAffinityInit)
     {
     }
-#endif
+    #endif
 
     virtual void initialize()
     {

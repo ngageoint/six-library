@@ -26,7 +26,7 @@ using namespace nitf;
 
 TextSubheader::TextSubheader(const TextSubheader & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 TextSubheader & TextSubheader::operator=(const TextSubheader & x)
@@ -49,46 +49,44 @@ TextSubheader::TextSubheader()
     setManaged(false);
 }
 
-nitf::TextSubheader TextSubheader::clone()
+nitf::TextSubheader TextSubheader::clone() const
 {
     nitf::TextSubheader dolly(nitf_TextSubheader_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
     return dolly;
 }
 
-TextSubheader::~TextSubheader(){}
-
-nitf::Field TextSubheader::getFilePartType()
+nitf::Field TextSubheader::getFilePartType() const
 {
     return nitf::Field(getNativeOrThrow()->filePartType);
 }
 
-nitf::Field TextSubheader::getTextID()
+nitf::Field TextSubheader::getTextID() const
 {
     return nitf::Field(getNativeOrThrow()->textID);
 }
 
-nitf::Field TextSubheader::getAttachmentLevel()
+nitf::Field TextSubheader::getAttachmentLevel() const
 {
     return nitf::Field(getNativeOrThrow()->attachmentLevel);
 }
 
-nitf::Field TextSubheader::getDateTime()
+nitf::Field TextSubheader::getDateTime() const
 {
     return nitf::Field(getNativeOrThrow()->dateTime);
 }
 
-nitf::Field TextSubheader::getTitle()
+nitf::Field TextSubheader::getTitle() const
 {
     return nitf::Field(getNativeOrThrow()->title);
 }
 
-nitf::Field TextSubheader::getSecurityClass()
+nitf::Field TextSubheader::getSecurityClass() const
 {
     return nitf::Field(getNativeOrThrow()->securityClass);
 }
 
-nitf::FileSecurity TextSubheader::getSecurityGroup()
+nitf::FileSecurity TextSubheader::getSecurityGroup() const
 {
     return nitf::FileSecurity(getNativeOrThrow()->securityGroup);
 }
@@ -104,27 +102,27 @@ void TextSubheader::setSecurityGroup(nitf::FileSecurity value)
     value.setManaged(true);
 }
 
-nitf::Field TextSubheader::getEncrypted()
+nitf::Field TextSubheader::getEncrypted() const
 {
     return nitf::Field(getNativeOrThrow()->encrypted);
 }
 
-nitf::Field TextSubheader::getFormat()
+nitf::Field TextSubheader::getFormat() const
 {
     return nitf::Field(getNativeOrThrow()->format);
 }
 
-nitf::Field TextSubheader::getExtendedHeaderLength()
+nitf::Field TextSubheader::getExtendedHeaderLength() const
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderLength);
 }
 
-nitf::Field TextSubheader::getExtendedHeaderOverflow()
+nitf::Field TextSubheader::getExtendedHeaderOverflow() const
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderOverflow);
 }
 
-nitf::Extensions TextSubheader::getExtendedSection()
+nitf::Extensions TextSubheader::getExtendedSection() const
 {
     return nitf::Extensions(getNativeOrThrow()->extendedSection);
 }

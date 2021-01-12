@@ -22,13 +22,17 @@
 
 #include <iomanip>
 #include <sstream>
+#include <string>
 
 #include <io/ByteStream.h>
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
+#include <sys/Bit.h>
+
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
+
 
 namespace six
 {
@@ -37,13 +41,13 @@ NITFWriteControl::NITFWriteControl()
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator());
 }
 
-NITFWriteControl::NITFWriteControl(mem::SharedPtr<Container> container)
+NITFWriteControl::NITFWriteControl(std::shared_ptr<Container> container)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(container));
 }
 
 NITFWriteControl::NITFWriteControl(const six::Options& options,
-                                   mem::SharedPtr<Container> container,
+                                   std::shared_ptr<Container> container,
                                    const XMLControlRegistry* xmlRegistry)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(options, container));
@@ -62,18 +66,18 @@ void NITFWriteControl::setXMLControlRegistryImpl(
 }
 
 void NITFWriteControl::initialize(const six::Options& options,
-                                  mem::SharedPtr<Container> container)
+                                  std::shared_ptr<Container> container)
 {
     mNITFHeaderCreator->initialize(options, container);
 }
 
-void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
+void NITFWriteControl::initialize(std::shared_ptr<Container> container)
 {
     mNITFHeaderCreator->initialize(container);
 }
 
 void NITFWriteControl::setNITFHeaderCreator(
-        std::auto_ptr<six::NITFHeaderCreator> headerCreator)
+        std::unique_ptr<six::NITFHeaderCreator>&& headerCreator)
 {
     mNITFHeaderCreator.reset(headerCreator.release());
 }
@@ -162,7 +166,7 @@ bool NITFWriteControl::shouldByteSwap() const
     if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {
         // Have to if it's not a BE machine
-        doByteSwap = !sys::isBigEndianSystem();
+        doByteSwap = (std::endian::native == std::endian::little);
     }
     else
     {
@@ -182,7 +186,7 @@ void NITFWriteControl::save(const SourceList& imageData,
     mWriter.prepareIO(outputFile, record);
     const bool doByteSwap = shouldByteSwap();
 
-    const std::vector<mem::SharedPtr<NITFImageInfo>>& infos = getInfos();
+    const auto& infos = getInfos();
     if (infos.size() != imageData.size())
     {
         std::ostringstream ostr;
@@ -209,8 +213,8 @@ void NITFWriteControl::save(const SourceList& imageData,
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            mem::SharedPtr<::nitf::WriteHandler> writeHandler(
-                    new StreamWriteHandler(segmentInfo,
+            auto writeHandler(
+                std::make_shared<StreamWriteHandler>(segmentInfo,
                                            imageData[i],
                                            numCols,
                                            numChannels,
@@ -249,8 +253,8 @@ void NITFWriteControl::save(const BufferList& imageData,
 
     if (getInfos().size() != imageData.size())
         throw except::Exception(
-                Ctxt("Require " + str::toString(getInfos().size()) +
-                     " images, received " + str::toString(imageData.size())));
+                Ctxt("Require " + std::to_string(getInfos().size()) +
+                     " images, received " + std::to_string(imageData.size())));
 
     // check to see if J2K compression is enabled
     double j2kCompression = (double)getOptions().getParameter(
@@ -277,9 +281,7 @@ void NITFWriteControl::save(const BufferList& imageData,
                 getRecord().getImages()[info.getStartIndex()];
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
-        const bool isBlocking =
-                static_cast<nitf::Uint32>(subheader.getNumBlocksPerRow()) > 1 ||
-                static_cast<nitf::Uint32>(subheader.getNumBlocksPerCol()) > 1;
+        const bool isBlocking = subheader.numBlocksPerRow() > 1 || subheader.numBlocksPerCol() > 1;
 
         // The SIDD spec requires that a J2K compressed SIDDs be only a
         // single image segment. However this functionality remains untested.
@@ -330,8 +332,8 @@ void NITFWriteControl::save(const BufferList& imageData,
             {
                 const NITFSegmentInfo segmentInfo = imageSegments[jj];
 
-                mem::SharedPtr<::nitf::WriteHandler> writeHandler(
-                        new MemoryWriteHandler(segmentInfo,
+                auto writeHandler(
+                        std::make_shared<MemoryWriteHandler>(segmentInfo,
                                                imageData[i],
                                                segmentInfo.firstRow,
                                                numCols,
@@ -360,10 +362,10 @@ void NITFWriteControl::save(const BufferList& imageData,
 
             nitf::ImageSource iSource;
 
-            nitf::MemorySource memSource(&legend->mImage[0],
+            nitf::MemorySource memSource(legend->mImage.data(),
                                          legend->mImage.size(),
                                          0,
-                                         sizeof(sys::ubyte),
+                                         sizeof(std::byte),
                                          0);
 
             iSource.addBand(memSource);
@@ -385,7 +387,7 @@ void NITFWriteControl::addDataAndWrite(
 
     // These must stick around until mWriter.write() is called since the
     // SegmentMemorySource's will be pointing to them
-    const mem::ScopedArray<std::string> desStrs(new std::string[numDES]);
+    const std::unique_ptr<std::string[]> desStrs(new std::string[numDES]);
 
     for (size_t ii = 0; ii < getContainer()->getNumData(); ++ii)
     {
@@ -395,8 +397,7 @@ void NITFWriteControl::addDataAndWrite(
         desStr = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
         nitf::SegmentWriter deWriter =
                 mWriter.newDEWriter(static_cast<int>(ii));
-        nitf::SegmentMemorySource segSource(
-                desStr.c_str(), desStr.length(), 0, 0, false);
+        nitf::SegmentMemorySource segSource(desStr, 0, 0, false);
         deWriter.attachSource(segSource);
     }
 
@@ -441,7 +442,7 @@ void NITFWriteControl::addUserDefinedSubheader(
 }
 
 void NITFWriteControl::addAdditionalDES(
-        mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
+        std::shared_ptr<nitf::SegmentWriter> segmentWriter)
 {
     mNITFHeaderCreator->addAdditionalDES(segmentWriter);
 }

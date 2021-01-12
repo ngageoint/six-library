@@ -21,7 +21,6 @@
  */
 #include <string>
 #include <import/except.h>
-#include <import/mem.h>
 #include "tiff/ImageWriter.h"
 #include "tiff/FileWriter.h"
 
@@ -95,7 +94,8 @@ tiff::ImageWriter *tiff::FileWriter::addImage()
     if (!mImages.empty())
         mIFDOffset = mImages.back()->getNextIFDOffset();
 
-    auto image = mem::make::unique<tiff::ImageWriter>(&mOutput, mIFDOffset);
+    std::unique_ptr<tiff::ImageWriter>
+        image(new tiff::ImageWriter(&mOutput, mIFDOffset));
     mImages.push_back(image.get());
     tiff::ImageWriter* const writer = image.release();
 

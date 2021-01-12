@@ -37,8 +37,11 @@
 #include <array>
 #include <memory>
 
+#include <io/FileOutputStream.h>
+
 #include <import/nitf.hpp>
 #include <nitf/CompressedByteProvider.hpp>
+#include <gsl/gsl.h>
 
 #include "TestCase.h"
 
@@ -1134,7 +1137,7 @@ namespace test_create_nitf_with_byte_provider
         for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
         {
             outputStream.write(
-                static_cast<const nitf::byte*>(buffers.mBuffers[ii].mData),
+                static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
                 buffers.mBuffers[ii].mNumBytes);
         }
     }
@@ -1155,7 +1158,7 @@ namespace test_create_nitf_with_byte_provider
         nitf::Reader reader;
         nitf::Record record = reader.read(handle);
 
-        for (int ii = 0; ii < static_cast<int>(record.getNumImages()); ++ii)
+        for (int ii = 0; ii < gsl::narrow<int>(record.getNumImages()); ++ii)
         {
             nitf::ImageReader imageReader = reader.newImageReader(ii);
             uint64_t blockSize;
@@ -1209,7 +1212,7 @@ namespace test_create_nitf
         /* Set the geo-corners to Ann Arbor, MI */
         setCornersFromDMSBox(header);
 
-        const auto NUM_BANDS = static_cast<size_t>(isMono ? 1 : 3);
+        const auto NUM_BANDS = gsl::narrow<size_t>(isMono ? 1 : 3);
         std::vector<nitf::BandInfo> bands(NUM_BANDS, nitf::BandInfo());
         for (size_t ii = 0; ii < bands.size(); ++ii)
         {
@@ -1291,7 +1294,7 @@ namespace test_create_nitf
         nitf::Reader reader;
         nitf::Record record = reader.read(handle);
 
-        for (int ii = 0; ii < static_cast<int>(record.getNumImages()); ++ii)
+        for (int ii = 0; ii < gsl::narrow<int>(record.getNumImages()); ++ii)
         {
             nitf::ImageReader imageReader = reader.newImageReader(ii);
             uint64_t blockSize;

@@ -35,8 +35,8 @@ namespace
 {
 void readSidd(const std::string& pathname,
               std::vector<std::string> schemaPaths,
-              std::auto_ptr<six::sidd::DerivedData>& derivedData,
-              std::vector<six::UByte>& widebandData)
+              std::unique_ptr<six::sidd::DerivedData>& derivedData,
+              std::vector<std::byte>& widebandData)
 {
     logging::NullLogger log;
 
@@ -54,8 +54,6 @@ void readSidd(const std::string& pathname,
                                        derivedData->getNumCols());
     widebandData.resize(extent.area() * derivedData->getNumBytesPerPixel());
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
     region.setNumRows(extent.row);
     region.setNumCols(extent.col);
     region.setBuffer(widebandData.data());
@@ -63,19 +61,19 @@ void readSidd(const std::string& pathname,
     reader.interleaved(region, 0);
 }
 
-void writeSidd(std::auto_ptr<six::Data> derivedData,
-               const std::vector<six::UByte>& widebandData,
+void writeSidd(std::unique_ptr<six::Data>&& derivedData,
+               const std::vector<std::byte>& widebandData,
                const std::vector<std::string>& schemaPaths,
                const std::string& pathname)
 {
-    mem::SharedPtr<six::Container> container(
-            new six::Container(six::DataType::DERIVED));
-    container->addData(derivedData);
+    auto container(std::make_shared<six::Container>(
+        six::DataType::DERIVED));
+    container->addData(std::move(derivedData));
 
     six::NITFWriteControl writer(container);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<const six::UByte*>(widebandData.data()));
+    buffers.push_back(reinterpret_cast<const std::byte*>(widebandData.data()));
     writer.save(buffers, pathname, schemaPaths);
 }
 }
@@ -130,23 +128,19 @@ int main(int argc, char** argv)
                 six::DataType::DERIVED,
                 new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
-        std::auto_ptr<six::sidd::DerivedData> derivedData;
-        std::vector<six::UByte> widebandData;
+        std::unique_ptr<six::sidd::DerivedData> derivedData;
+        std::vector<std::byte> widebandData;
         readSidd(pathname, schemaPaths, derivedData, widebandData);
 
         logging::DefaultLogger log("SIDD Update");
         six::sidd::SIDDVersionUpdater(*derivedData, version, log).update();
 
-        std::auto_ptr<six::Data> data(derivedData.release());
-        writeSidd(data,
+        std::unique_ptr<six::Data> data(derivedData.release());
+        writeSidd(std::move(data),
                   widebandData,
                   schemaPaths,
                   options->get<std::string>("output"));
         return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << "\n";
     }
     catch (const std::exception& ex)
     {

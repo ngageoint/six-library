@@ -37,7 +37,7 @@ int main()
     std::cout << A << std::endl;
 
     //_Cf cf12(1.2);
-    _V3 v3 = mx::constantVector<3, _Cf>(1.2f);
+    _V3 v3 = mx::constantVector<3, _Cf>(1.2);
 
     //_Cf cf2(2);
     v3[2] = 2; //cf2;

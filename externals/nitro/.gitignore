@@ -9,9 +9,12 @@ _deps/
 CMakeFiles/
 *.cmake
 CMakeCache.txt
+CMakeSettings.json
+build/
 
 externals/coda-oss/modules/c++/**/Makefile
 modules/**/Makefile
+*_config.h
 
 # Build artifacts
 target/
@@ -33,6 +36,8 @@ packages/
 modules/c/j2k/external/openjpeg/openjpeg-2.0.0/
 modules/c/j2k/external/jasper/jasper-1.900.1-mod/
 
-# unit tests
+# unittest output
 outputPathname.ntf
-sicd_*_nitf__*_band_*.man
+*__*_band_*.man
+test_writer_3++.nitf
+*__*_band_*.out

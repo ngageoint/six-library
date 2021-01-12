@@ -116,28 +116,8 @@ TEST_CASE(testEquality)
 }
 }
 
-int main(int /*argc*/, char** /*argv*/)
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testDerivativeCODValid);
         TEST_CHECK(testDerivativeDwellValid);
         TEST_CHECK(testEquality);
-
-        return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-    }
-    return 1;
-}
-
+        )

@@ -38,7 +38,7 @@ SICDWriteControl::SICDWriteControl(const std::string& outputPathname,
 
 void SICDWriteControl::initialize(const ComplexData& data)
 {
-    mem::SharedPtr<Container> container(new Container(DataType::COMPLEX));
+    auto container(std::make_shared<Container>(DataType::COMPLEX));
 
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it. After calling
@@ -47,11 +47,11 @@ void SICDWriteControl::initialize(const ComplexData& data)
     initialize(container);
 }
 
-void SICDWriteControl::write(const std::vector<sys::byte>& data)
+void SICDWriteControl::write(const std::vector<std::byte>& data)
 {
     if (!data.empty())
     {
-        mIO->write(&data[0], data.size());
+        mIO->write(data.data(), data.size());
     }
 }
 
@@ -66,7 +66,7 @@ void SICDWriteControl::writeHeaders()
     write(byteProvider.getFileHeader());
 
     // Write image subheaders
-    const std::vector<std::vector<sys::byte> >& imageSubheaders =
+    const std::vector<std::vector<std::byte> >& imageSubheaders =
             byteProvider.getImageSubheaders();
     const std::vector<nitf::Off>& imageSubheaderFileOffsets =
             byteProvider.getImageSubheaderFileOffsets();
@@ -89,7 +89,7 @@ void SICDWriteControl::save(void* imageData,
                             const types::RowCol<size_t>& dims,
                             bool restoreData)
 {
-    if (getContainer().get() == NULL)
+    if (getContainer().get() == nullptr)
     {
         throw except::Exception(Ctxt(
                 "initialize() must be called prior to calling save()"));
@@ -132,8 +132,8 @@ void SICDWriteControl::save(void* imageData,
             const size_t startLocalRowToWrite =
                     startGlobalRowToWrite - offset.row;
             const size_t numBytesPerRow = dims.col * numBytesPerPixel * NUM_BANDS;
-            const sys::ubyte* imageDataPtr =
-                    static_cast<sys::ubyte*>(imageData) +
+            const std::byte* imageDataPtr =
+                    static_cast<std::byte*>(imageData) +
                     startLocalRowToWrite * numBytesPerRow;
 
             // Now figure out our offset into the segment

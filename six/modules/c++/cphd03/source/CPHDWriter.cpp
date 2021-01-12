@@ -20,7 +20,9 @@
  *
  */
 
+#include <sys/Bit.h>
 #include <except/Exception.h>
+
 #include <cphd03/CPHDWriter.h>
 #include <cphd03/CPHDXMLControl.h>
 #include <cphd03/Utilities.h>
@@ -43,7 +45,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 {
     //! Get the correct dataWriter.
     //  The CPHD file needs to be big endian.
-    if (sys::isBigEndianSystem())
+    if (std::endian::native == std::endian::big)
     {
         mDataWriter.reset(new cphd::DataWriterBigEndian(mStream, mNumThreads));
     }
@@ -70,7 +72,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 
     //! Get the correct dataWriter.
     //  The CPHD file needs to be big endian.
-    if (sys::isBigEndianSystem())
+    if (std::endian::native == std::endian::big)
     {
         mDataWriter.reset(new cphd::DataWriterBigEndian(mStream, mNumThreads));
     }
@@ -84,7 +86,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 template <typename T>
 void CPHDWriter::addImage(const T* image,
                           const types::RowCol<size_t>& dims,
-                          const sys::ubyte* vbmData)
+                          const std::byte* vbmData)
 {
     if (mElementSize != sizeof(T))
     {
@@ -101,7 +103,7 @@ void CPHDWriter::addImage(const T* image,
     }
 
     mVBMData.push_back(vbmData);
-    mCPHDData.push_back(reinterpret_cast<const sys::ubyte*>(image));
+    mCPHDData.push_back(reinterpret_cast<const std::byte*>(image));
 
     mCPHDSize += dims.area() * mElementSize;
     mVBMSize += dims.row * mMetadata.data.getNumBytesVBP();
@@ -111,22 +113,22 @@ void CPHDWriter::addImage(const T* image,
 }
 
 template
-void CPHDWriter::addImage<std::complex<sys::Int8_T> >(
-        const std::complex<sys::Int8_T>* image,
+void CPHDWriter::addImage<std::complex<int8_t> >(
+        const std::complex<int8_t>* image,
         const types::RowCol<size_t>& dims,
-        const sys::ubyte* vbmData);
+        const std::byte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<sys::Int16_T> >(
-        const std::complex<sys::Int16_T>* image,
+void CPHDWriter::addImage<std::complex<int16_t> >(
+        const std::complex<int16_t>* image,
         const types::RowCol<size_t>& dims,
-        const sys::ubyte* vbmData);
+        const std::byte* vbmData);
 
 template
 void CPHDWriter::addImage<std::complex<float> >(
         const std::complex<float>* image,
         const types::RowCol<size_t>& dims,
-        const sys::ubyte* vbmData);
+        const std::byte* vbmData);
 
 void CPHDWriter::writeMetadata(size_t vbmSize,
                                size_t cphd03Size,
@@ -154,13 +156,13 @@ void CPHDWriter::writeMetadata(size_t vbmSize,
 
     // Pad bytes
     char zero = 0;
-    for (sys::Off_T ii = 0; ii < header.getPadBytes(); ++ii)
+    for (int64_t ii = 0; ii < header.getPadBytes(); ++ii)
     {
         mStream->write(&zero, 1);
     }
 }
 
-void CPHDWriter::writeVBMData(const sys::ubyte* vbm,
+void CPHDWriter::writeVBMData(const std::byte* vbm,
                               size_t index)
 {
     const size_t size = (mMetadata.data.arraySize[index].numVectors *
@@ -170,7 +172,7 @@ void CPHDWriter::writeVBMData(const sys::ubyte* vbm,
     (*mDataWriter)(vbm, size, 8);
 }
 
-void CPHDWriter::writeCPHDDataImpl(const sys::ubyte* data,
+void CPHDWriter::writeCPHDDataImpl(const std::byte* data,
                                    size_t size)
 {
     //! We have to pass in the data as though it was not complex
@@ -198,13 +200,13 @@ void CPHDWriter::writeMetadata(const VBM& vbm,
 
     writeMetadata(totalVBMSize, totalCPHDSize, classification, releaseInfo);
 
-    std::vector<sys::ubyte> vbmData;
+    std::vector<std::byte> vbmData;
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         vbm.getVBMdata(ii, vbmData);
         if (!vbmData.empty())
         {
-            writeVBMData(&vbmData[0], ii);
+            writeVBMData(vbmData.data(), ii);
         }
     }
 }
@@ -218,17 +220,17 @@ void CPHDWriter::writeCPHDData(const T* data,
         throw except::Exception(Ctxt(
                 "Incorrect buffer data type used for metadata!"));
     }
-    writeCPHDDataImpl(reinterpret_cast<const sys::ubyte*>(data), numElements);
+    writeCPHDDataImpl(reinterpret_cast<const std::byte*>(data), numElements);
 }
 
 template
-void CPHDWriter::writeCPHDData<std::complex<sys::Int8_T> >(
-        const std::complex<sys::Int8_T>* data,
+void CPHDWriter::writeCPHDData<std::complex<int8_t> >(
+        const std::complex<int8_t>* data,
         size_t numElements);
 
 template
-void CPHDWriter::writeCPHDData<std::complex<sys::Int16_T> >(
-        const std::complex<sys::Int16_T>* data,
+void CPHDWriter::writeCPHDData<std::complex<int16_t> >(
+        const std::complex<int16_t>* data,
         size_t numElements);
 
 template

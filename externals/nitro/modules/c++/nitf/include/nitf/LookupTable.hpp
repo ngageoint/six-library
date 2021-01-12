@@ -78,7 +78,7 @@ public:
                   size_t numEntries);
 
 private:
-    nitf_Error error;
+    nitf_Error error{};
 
 };
 

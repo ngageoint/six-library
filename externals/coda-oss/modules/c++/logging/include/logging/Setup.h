@@ -22,12 +22,13 @@
  
 #ifndef __LOGGING_SETUP_H__
 #define __LOGGING_SETUP_H__
+#pragma once
 
 #include <memory>
 #include <string>
 
-#include "mem/SharedPtr.h"
 #include "logging/Logger.h"
+#include "mem/SharedPtr.h"
 
 namespace logging
 {

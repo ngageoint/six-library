@@ -26,6 +26,8 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
+#include <thread>
+
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 #include <io/TempFile.h>
@@ -74,7 +76,7 @@ std::vector<double> generateScaleFactors(size_t length, bool scale)
 }
 
 template<typename T>
-void writeCPHD(const std::string& outPathname, size_t numThreads,
+void writeCPHD(const std::string& outPathname, size_t /*numThreads*/,
         const types::RowCol<size_t> dims,
         const std::vector<std::complex<T> >& writeData,
         cphd::Metadata& metadata,
@@ -110,9 +112,9 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
     std::vector<std::complex<float> > readData(dims.area());
 
     size_t sizeInBytes = readData.size() * sizeof(readData[0]);
-    mem::ScopedArray<sys::ubyte> scratchData(new sys::ubyte[sizeInBytes]);
-    mem::BufferView<sys::ubyte> scratch(scratchData.get(), sizeInBytes);
-    mem::BufferView<std::complex<float> > data(&readData[0], readData.size());
+    std::unique_ptr<std::byte[]> scratchData(new std::byte[sizeInBytes]);
+    auto scratch = gsl::make_span(scratchData.get(), sizeInBytes);
+    auto data = gsl::make_span(readData.data(), readData.size());
 
     wideband.read(0, 0, cphd::Wideband::ALL, 0, cphd::Wideband::ALL,
                   scaleFactors, numThreads, scratch, data);
@@ -148,7 +150,7 @@ template<typename T>
 bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
 {
     io::TempFile tempfile;
-    const size_t numThreads = sys::OS().getNumCPUs();
+    const size_t numThreads = std::thread::hardware_concurrency();
     const types::RowCol<size_t> dims(128, 128);
     const std::vector<double> scaleFactors =
             generateScaleFactors(dims.row, scale);
@@ -168,37 +170,37 @@ bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
 TEST_CASE(testUnscaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<sys::Int8_T> > writeData =
-            generateData<sys::Int8_T>(dims.area());
+    const std::vector<std::complex<int8_t> > writeData =
+            generateData<int8_t>(dims.area());
     const bool scale = false;
-    TEST_ASSERT_TRUE(runTest(scale, writeData))
+    TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
 
 TEST_CASE(testScaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<sys::Int8_T> > writeData =
-            generateData<sys::Int8_T>(dims.area());
+    const std::vector<std::complex<int8_t> > writeData =
+            generateData<int8_t>(dims.area());
     const bool scale = true;
-    TEST_ASSERT_TRUE(runTest(scale, writeData))
+    TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
 
 TEST_CASE(testUnscaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<sys::Int16_T> > writeData =
-            generateData<sys::Int16_T>(dims.area());
+    const std::vector<std::complex<int16_t> > writeData =
+            generateData<int16_t>(dims.area());
     const bool scale = false;
-    TEST_ASSERT_TRUE(runTest(scale, writeData))
+    TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
 
 TEST_CASE(testScaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<sys::Int16_T> > writeData =
-            generateData<sys::Int16_T>(dims.area());
+    const std::vector<std::complex<int16_t> > writeData =
+            generateData<int16_t>(dims.area());
     const bool scale = true;
-    TEST_ASSERT_TRUE(runTest(scale, writeData))
+    TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
 
 TEST_CASE(testUnscaledFloat)
@@ -207,7 +209,7 @@ TEST_CASE(testUnscaledFloat)
     const std::vector<std::complex<float> > writeData =
             generateData<float>(dims.area());
     const bool scale = false;
-    TEST_ASSERT_TRUE(runTest(scale, writeData))
+    TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
 
 TEST_CASE(testScaledFloat)
@@ -216,36 +218,15 @@ TEST_CASE(testScaledFloat)
     const std::vector<std::complex<float> > writeData =
             generateData<float>(dims.area());
     const bool scale = true;
-    TEST_ASSERT_TRUE(runTest(scale, writeData))
+    TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
 }
 
-int main(int argc, char** argv)
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testUnscaledInt8);
         TEST_CHECK(testScaledInt8);
         TEST_CHECK(testUnscaledInt16);
         TEST_CHECK(testScaledInt16);
         TEST_CHECK(testUnscaledFloat);
         TEST_CHECK(testScaledFloat);
-        return 0;
-    }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-        return 1;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-        return 1;
-    }
-}
-
+        )

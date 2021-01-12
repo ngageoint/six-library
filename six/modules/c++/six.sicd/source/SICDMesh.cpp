@@ -21,6 +21,8 @@
  */
 #include <numeric>
 
+#include <sys/Bit.h>
+
 #include <six/sicd/SICDMesh.h>
 #include <six/Serialize.h>
 
@@ -34,7 +36,7 @@ const char SICDMeshes::NOISE_MESH_ID[] = "Noise_Mesh";
 const char SICDMeshes::SCALAR_MESH_ID[] = "Scalar Mesh";
 
 PlanarCoordinateMesh::PlanarCoordinateMesh(const std::string& name):
-    mSwapBytes(!sys::isBigEndianSystem()),
+    mSwapBytes(std::endian::native == std::endian::little),
     mName(name)
 {
 }
@@ -44,7 +46,7 @@ PlanarCoordinateMesh::PlanarCoordinateMesh(
     const types::RowCol<size_t>& meshDims,
     const std::vector<double>& x,
     const std::vector<double>& y):
-    mSwapBytes(!sys::isBigEndianSystem()),
+    mSwapBytes(std::endian::native == std::endian::little),
     mName(name),
     mMeshDims(meshDims),
     mX(x),
@@ -68,7 +70,7 @@ std::vector<Mesh::Field> PlanarCoordinateMesh::getFields() const
     return fields;
 }
 
-void PlanarCoordinateMesh::serialize(std::vector<sys::byte>& values) const
+void PlanarCoordinateMesh::serialize(std::vector<std::byte>& values) const
 {
     six::serialize(mMeshDims.row, mSwapBytes, values);
     six::serialize(mMeshDims.col, mSwapBytes, values);
@@ -76,7 +78,7 @@ void PlanarCoordinateMesh::serialize(std::vector<sys::byte>& values) const
     six::serialize(mY, mSwapBytes, values);
 }
 
-void PlanarCoordinateMesh::deserialize(const sys::byte*& values)
+void PlanarCoordinateMesh::deserialize(const std::byte*& values)
 {
     six::deserialize(values, mSwapBytes, mMeshDims.row);
     six::deserialize(values, mSwapBytes, mMeshDims.col);
@@ -130,7 +132,7 @@ std::vector<Mesh::Field> ScalarMesh::getFields() const
     return fields;
 }
 
-void ScalarMesh::serialize(std::vector<sys::byte>& values) const
+void ScalarMesh::serialize(std::vector<std::byte>& values) const
 {
     PlanarCoordinateMesh::serialize(values);
 
@@ -146,7 +148,7 @@ void ScalarMesh::serialize(std::vector<sys::byte>& values) const
     }
 }
 
-void ScalarMesh::deserialize(const sys::byte*& values)
+void ScalarMesh::deserialize(const std::byte*& values)
 {
     PlanarCoordinateMesh::deserialize(values);
 
@@ -203,7 +205,7 @@ NoiseMesh::NoiseMesh(const std::string& name,
 {
 }
 
-void NoiseMesh::serialize(std::vector<sys::byte>& values) const
+void NoiseMesh::serialize(std::vector<std::byte>& values) const
 {
     PlanarCoordinateMesh::serialize(values);
 
@@ -212,7 +214,7 @@ void NoiseMesh::serialize(std::vector<sys::byte>& values) const
     six::serialize(mCombinedNoise, mSwapBytes, values);
 }
 
-void NoiseMesh::deserialize(const sys::byte*& values)
+void NoiseMesh::deserialize(const std::byte*& values)
 {
     PlanarCoordinateMesh::deserialize(values);
 

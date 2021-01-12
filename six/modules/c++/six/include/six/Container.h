@@ -86,13 +86,13 @@ public:
      *  \param data Pointer to the data to add
      *
      */
-    void addData(std::auto_ptr<Data> data);
+    void addData(std::unique_ptr<Data>&& data);
 
     /*!
      * Same as above but also supports passing in a legend.  Only valid for
      * derived data.
      */
-    void addData(std::auto_ptr<Data> data, std::auto_ptr<Legend> legend);
+    void addData(std::unique_ptr<Data>&& data, std::unique_ptr<Legend>&& legend);
 
     /*!
      *  Set the data item at location i.  If there is an item in the
@@ -175,10 +175,10 @@ private:
     static
     mem::ScopedCopyablePtr<Legend> nullLegend()
     {
-        return mem::ScopedCopyablePtr<Legend>(NULL);
+        return mem::ScopedCopyablePtr<Legend>(nullptr);
     }
 
-    void addData(std::auto_ptr<Data> data,
+    void addData(std::unique_ptr<Data>&& data,
                  mem::ScopedCopyablePtr<Legend> legend);
 };
 }

@@ -37,7 +37,6 @@ static const std::string strXml2_ = R"(</a><b/><b/>
         <int>314</int>
         <double>3.14</double>
         <string>abc</string>
-        <bool>yes</bool>
         <empty></empty>
     </doc>
 </root>)";
@@ -201,18 +200,6 @@ TEST_CASE(test_getValue)
         TEST_ASSERT_EQ("abc", value);
     }
     {
-        const auto& e = root->getElementByTagName("bool", true /*recurse*/);
-        auto toType = [](const std::string& value) { return value == "yes"; };
-        bool value;
-        auto result = getValue(e, value, toType);
-        TEST_ASSERT_TRUE(result);
-        TEST_ASSERT_EQ(true, value);
-        std::string strValue;
-        result = getValue(e, strValue);
-        TEST_ASSERT_TRUE(result);
-        TEST_ASSERT_EQ("yes", strValue);
-    }
-    {
         const auto& e = root->getElementByTagName("empty", true /*recurse*/);
         std::string value;
         auto result = getValue(e, value);
@@ -270,22 +257,6 @@ TEST_CASE(test_setValue)
         const auto result = getValue(e, value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ("xyz", value);
-    }
-    {
-        auto& e = root->getElementByTagName("bool", true /*recurse*/);
-        
-        auto toString = [](const bool& value) { return value ? "yes" : "no"; };
-        setValue(e, true, toString);
-        
-        auto toType = [](const std::string& value) { return value == "yes"; };
-        bool value;
-        auto result = getValue(e, value, toType);
-        TEST_ASSERT_TRUE(result);
-        TEST_ASSERT_EQ(true, value);
-        std::string strValue;
-        result = getValue(e, strValue);
-        TEST_ASSERT_TRUE(result);
-        TEST_ASSERT_EQ("yes", strValue);
     }
 }
 

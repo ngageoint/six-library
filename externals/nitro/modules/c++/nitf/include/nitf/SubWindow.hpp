@@ -20,16 +20,14 @@
  *
  */
 
-#ifndef __NITF_SUBWINDOW_HPP__
-#define __NITF_SUBWINDOW_HPP__
 #pragma once
 
-#include <vector>
 #include <string>
 
 #include "nitf/SubWindow.h"
 #include "nitf/DownSampler.hpp"
 #include "nitf/Object.hpp"
+#include "gsl/gsl.h"
 
 /*!
  *  \file SubWindow.hpp
@@ -71,10 +69,10 @@ public:
     SubWindow(nitf_SubWindow * x);
 
     //! Constructor
-    SubWindow();
+    SubWindow() noexcept(false);
 
     //! Destructor
-    ~SubWindow();
+    ~SubWindow() noexcept(false);
 
     uint32_t getStartRow() const;
     uint32_t getNumRows() const;
@@ -90,13 +88,14 @@ public:
     void setBandList(uint32_t * value);
     void setNumBands(uint32_t value);
 
+
     /*!
      * Reference a DownSampler within the SubWindow
      * The SubWindow does NOT own the DownSampler
      * \param downSampler  The down sampler to reference
      */
     void setDownSampler(nitf::DownSampler* downSampler);
-    void setDownSampler(nitf::DownSampler& downSampler)
+    void setDownSampler(nitf::DownSampler& downSampler) // make it clear that ownership isn't transferred.
     {
         setDownSampler(&downSampler);
     }
@@ -105,18 +104,22 @@ public:
      * Return the DownSampler that is referenced by this SubWindow.
      * If no DownSampler is referenced, a NITFException is thrown.
      */
-    nitf::DownSampler* getDownSampler();
+    nitf::DownSampler* getDownSampler() noexcept;
 
 private:
     nitf::DownSampler* mDownSampler;
-    nitf_Error error;
+    nitf_Error error{};
 };
 
-inline void setBands(SubWindow& subWindow, std::vector<uint32_t>& bands)
+// This template<template> syntax allows an arbitary TContainer<uint32_t> to be passed
+// rather than requiring that it be std::vector<uint32_t>.  Note that the container
+// must support data() and size().
+template<template<typename, typename...> typename TContainer, typename ...TAlloc>
+inline void setBands(SubWindow& subWindow,
+    TContainer<uint32_t, TAlloc...>& bandList) // std::vector<T> really has another template parameter
 {
-    subWindow.setBandList(bands.data());
-    subWindow.setNumBands(static_cast<uint32_t>(bands.size()));
+    subWindow.setBandList(bandList.data());
+    subWindow.setNumBands(gsl::narrow<uint32_t>(bandList.size()));
 }
 
 }
-#endif

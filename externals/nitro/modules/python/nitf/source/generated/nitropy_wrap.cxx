@@ -4051,17 +4051,16 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
     }
 
 
-
     nitf_ComponentInfo* py_FileHeader_getComponentInfo(nitf_FileHeader* header, int index, char* type, nitf_Error* error)
     {
-        uint32_t num;
+        int32_t num;
 
         if (!type)
         	goto CATCH_ERROR;
 
         if (strcmp(type, "image") == 0)
         {
-        	NITF_TRY_GET_UINT32(header->numImages, &num, error);
+            NITF_TRY_GET_UINT32(header->numImages, &num, error);
         	if (index >= num) goto CATCH_ERROR;
         	return (nitf_ComponentInfo*)header->imageInfo[index];
         }
@@ -4136,7 +4135,6 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
      */
     nitf_SubWindow* py_SubWindow_construct(int startRow, int startCol, int numRows, int numCols, PyObject* bandList, nitf_DownSampler* downSampler, nitf_Error *error)
     {
-        int i;
         nitf_SubWindow* window = nitf_SubWindow_construct(error);
         /* TODO check for error */
         window->startRow = startRow;
@@ -4159,7 +4157,7 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
             return NULL;
         }
 
-      for (i = 0; i < window->numBands; i++) {
+      for (decltype(window->numBands) i = 0; i < window->numBands; i++) {
         PyObject *o = PySequence_GetItem(bandList,i);
         if (PyNumber_Check(o)) {
           window->bandList[i] = (int) PyInt_AsLong(o);
@@ -5186,7 +5184,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_IOHandle_read(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_IOHandle arg1 ;
+  nrt_IOHandle arg1 = 0;
   void *arg2 = (void *) 0 ;
   size_t arg3 ;
   nrt_Error *arg4 = (nrt_Error *) 0 ;
@@ -5236,7 +5234,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_IOHandle_write(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_IOHandle arg1 ;
+  nrt_IOHandle arg1 = 0;
   void *arg2 = (void *) 0 ;
   size_t arg3 ;
   nrt_Error *arg4 = (nrt_Error *) 0 ;
@@ -5286,7 +5284,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_IOHandle arg1 ;
+  nrt_IOHandle arg1 = 0;
   nrt_Off arg2 ;
   int arg3 ;
   nrt_Error *arg4 = (nrt_Error *) 0 ;
@@ -5346,7 +5344,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_IOHandle_tell(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_IOHandle arg1 ;
+  nrt_IOHandle arg1 = 0;
   nrt_Error *arg2 = (nrt_Error *) 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
@@ -5380,7 +5378,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_IOHandle_getSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_IOHandle arg1 ;
+  nrt_IOHandle arg1 = 0;
   nrt_Error *arg2 = (nrt_Error *) 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
@@ -5414,7 +5412,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_IOHandle_close(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_IOHandle arg1 ;
+  nrt_IOHandle arg1 = 0;
   PyObject * obj0 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nrt_IOHandle_close",&obj0)) SWIG_fail;
@@ -6408,7 +6406,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_IOHandleAdapter_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_IOHandle arg1 ;
+  nrt_IOHandle arg1 = 0;
   int arg2 ;
   nrt_Error *arg3 = (nrt_Error *) 0 ;
   int val2 ;
@@ -7479,7 +7477,7 @@ SWIGINTERN PyObject *_wrap_nitf_Reader_warningList_get(PyObject *SWIGUNUSEDPARM(
   arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
   result = (nitf_List *) ((arg1)->warningList);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_FieldWarning *thisObj=                  (nitf_FieldWarning *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p_nitf_FieldWarning, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -7722,7 +7720,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Reader_read(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Reader *arg1 = (nitf_Reader *) 0 ;
-  nitf_IOHandle arg2 ;
+  nitf_IOHandle arg2 = 0;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -8064,7 +8062,7 @@ SWIGINTERN PyObject *_wrap_nitf_Writer_warningList_get(PyObject *SWIGUNUSEDPARM(
   arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
   result = (nitf_List *) ((arg1)->warningList);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+     nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_FieldWarning *thisObj=                  (nitf_FieldWarning *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p_nitf_FieldWarning, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -8724,7 +8722,7 @@ SWIGINTERN PyObject *_wrap_nitf_Writer_prepare(PyObject *SWIGUNUSEDPARM(self), P
   PyObject *resultobj = 0;
   nitf_Writer *arg1 = (nitf_Writer *) 0 ;
   nitf_Record *arg2 = (nitf_Record *) 0 ;
-  nitf_IOHandle arg3 ;
+  nitf_IOHandle arg3 = 0;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -9547,7 +9545,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_images_get(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< _nitf_Record * >(argp1);
   result = (nitf_List *) ((arg1)->images);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_FieldWarning *thisObj=                  (nitf_FieldWarning *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p_nitf_FieldWarning, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -9605,7 +9603,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_graphics_get(PyObject *SWIGUNUSEDPARM(sel
   arg1 = reinterpret_cast< _nitf_Record * >(argp1);
   result = (nitf_List *) ((arg1)->graphics);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_FieldWarning *thisObj=                  (nitf_FieldWarning *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p_nitf_FieldWarning, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -9663,7 +9661,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_labels_get(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< _nitf_Record * >(argp1);
   result = (nitf_List *) ((arg1)->labels);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+        nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_FieldWarning *thisObj=                  (nitf_FieldWarning *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p_nitf_FieldWarning, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -9721,7 +9719,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_texts_get(PyObject *SWIGUNUSEDPARM(self),
   arg1 = reinterpret_cast< _nitf_Record * >(argp1);
   result = (nitf_List *) ((arg1)->texts);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+        nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_FieldWarning *thisObj=                  (nitf_FieldWarning *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p_nitf_FieldWarning, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -9779,7 +9777,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_dataExtensions_get(PyObject *SWIGUNUSEDPA
   arg1 = reinterpret_cast< _nitf_Record * >(argp1);
   result = (nitf_List *) ((arg1)->dataExtensions);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_FieldWarning *thisObj=                  (nitf_FieldWarning *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p_nitf_FieldWarning, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -9837,7 +9835,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_reservedExtensions_get(PyObject *SWIGUNUS
   arg1 = reinterpret_cast< _nitf_Record * >(argp1);
   result = (nitf_List *) ((arg1)->reservedExtensions);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+     nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_FieldWarning *thisObj=                  (nitf_FieldWarning *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p_nitf_FieldWarning, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -14023,7 +14021,7 @@ SWIGINTERN PyObject *_wrap_nitf_TRE_find(PyObject *SWIGUNUSEDPARM(self), PyObjec
   arg3 = reinterpret_cast< nitf_Error * >(argp3);
   result = (nitf_List *)nitf_TRE_find(arg1,(char const *)arg2,arg3);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_FieldWarning *thisObj=                  (nitf_FieldWarning *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p_nitf_FieldWarning, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -14253,7 +14251,7 @@ SWIGINTERN PyObject *_wrap_nitf_Extensions_ref_get(PyObject *SWIGUNUSEDPARM(self
   arg1 = reinterpret_cast< _nitf_Extensions * >(argp1);
   result = (nitf_List *) ((arg1)->ref);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+       nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_TRE *thisObj=                  (nitf_TRE *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p__nitf_TRE, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -14521,7 +14519,7 @@ SWIGINTERN PyObject *_wrap_nitf_Extensions_getTREsByName(PyObject *SWIGUNUSEDPAR
   arg2 = reinterpret_cast< char * >(buf2);
   result = (nitf_List *)nitf_Extensions_getTREsByName(arg1,(char const *)arg2);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+     nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_TRE *thisObj=                  (nitf_TRE *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p__nitf_TRE, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -16117,7 +16115,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSource_bandSources_get(PyObject *SWIGUNUSED
   arg1 = reinterpret_cast< _nitf_ImageSource * >(argp1);
   result = (nitf_List *) ((arg1)->bandSources);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_BandSource *thisObj=                  (nitf_BandSource *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p__nitf_DataSource, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -16776,7 +16774,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nitf_FileSource_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nitf_IOHandle arg1 ;
+  nitf_IOHandle arg1 = 0;
   nitf_Off arg2 ;
   int arg3 ;
   int arg4 ;
@@ -20368,7 +20366,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_imageComments_get(PyObject *SWIGU
   arg1 = reinterpret_cast< _nitf_ImageSubheader * >(argp1);
   result = (nitf_List *) ((arg1)->imageComments);
   {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+    nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
       iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
         nitf_Field *thisObj=                  (nitf_Field *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p__nitf_Field, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
       }      
@@ -30323,7 +30321,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nitf_SegmentFileSource_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nitf_IOHandle arg1 ;
+  nitf_IOHandle arg1 = 0;
   nitf_Off arg2 ;
   int arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
@@ -31069,7 +31067,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_py_IOHandle_write(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nitf_IOHandle arg1 ;
+  nitf_IOHandle arg1 = 0;
   long long arg2 ;
   size_t arg3 ;
   nrt_Error *arg4 = (nrt_Error *) 0 ;
@@ -31121,7 +31119,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_py_IOHandle_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nitf_IOHandle arg1 ;
+  nitf_IOHandle arg1 = 0;
   nitf_Off arg2 ;
   int arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
@@ -32317,7 +32315,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_py_IOHandle_read(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nitf_IOHandle arg1 ;
+  nitf_IOHandle arg1 = 0;
   size_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   size_t val2 ;

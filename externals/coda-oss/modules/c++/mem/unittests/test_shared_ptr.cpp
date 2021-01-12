@@ -91,7 +91,11 @@ TEST_CASE(testAutoPtrConstructor)
 {
     int * const rawPtr(new int(89));
     mem::auto_ptr<int> autoPtr(rawPtr);
-    const mem::SharedPtr<int> ptr(autoPtr.release());
+    #if !CODA_OSS_CPP17
+    const mem::SharedPtr<int> ptr(std::move(autoPtr));
+    #else
+    const mem::SharedPtr<int> ptr(autoPtr);
+    #endif
     TEST_ASSERT_EQ(ptr.get(), rawPtr);
     TEST_ASSERT_EQ(autoPtr.get(), static_cast<int *>(NULL));
     TEST_ASSERT_EQ(ptr.getCount(), 1);
@@ -110,7 +114,11 @@ TEST_CASE(testAutoPtrReset)
     TEST_ASSERT_EQ(autoPtr.get(), rawPtr1);
     TEST_ASSERT_EQ(sharedPtr.get(), rawPtr2);
 
-    sharedPtr.reset(autoPtr.release());
+    #if !CODA_OSS_CPP17
+    sharedPtr.reset(std::move(autoPtr));
+    #else
+    sharedPtr.reset(autoPtr);
+    #endif
     TEST_ASSERT_EQ(sharedPtr.get(), rawPtr1);
     TEST_ASSERT_NULL(autoPtr.get());
     TEST_ASSERT_EQ(sharedPtr.getCount(), 1);
@@ -220,8 +228,13 @@ TEST_CASE(testCasting)
     {
         // Test creating SharedPtr of base class from auto pointer of derived
         Bar* const rawBar(new Bar(456));
-        mem::auto_ptr<Bar> autoBar(rawBar);
-        const mem::SharedPtr<Foo> fooPtr(autoBar.release());
+        #if !CODA_OSS_CPP17
+        std::unique_ptr<Bar> autoBar(rawBar);
+        const mem::SharedPtr<Foo> fooPtr(std::move(autoBar));
+        #else
+        std::auto_ptr<Bar> autoBar(rawBar);
+        const mem::SharedPtr<Foo> fooPtr(autoBar);
+        #endif
         TEST_ASSERT_EQ(fooPtr.get(), rawBar);
         TEST_ASSERT_EQ(autoBar.get(), static_cast<Bar *>(NULL));
         TEST_ASSERT_EQ(fooPtr.getCount(), 1);

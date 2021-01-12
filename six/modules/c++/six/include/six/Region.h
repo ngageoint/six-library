@@ -19,8 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_H__
-#define __SIX_H__
+#pragma once
+
+#include <assert.h>
+
+#include <memory>
+
+#include <nitf/cstddef.h>
 
 #include "six/Types.h"
 
@@ -34,9 +39,9 @@ namespace six
  *  used for both complex and derived products.  When you initialize
  *  this object, you can set your own malloc'ed work buffer.  When you
  *  request a read from ReadControl, we check your mBuffer value to
- *  see if you set it to a non-NULL address.  If so, we assume that you
+ *  see if you set it to a non-nullptr address.  If so, we assume that you
  *  have created a properly sized buffer, and we will use that buffer
- *  for the request.  If you leave it NULL (the path of least resistance),
+ *  for the request.  If you leave it nullptr (the path of least resistance),
  *  we assume that you intend for us to allocate a properly sized rectangle
  *  before the buffer is filled with pixel data.
  *
@@ -44,22 +49,19 @@ namespace six
  *
  *
  */
-class Region
+class Region final
 {
-    UByte* mBuffer;
-    sys::SSize_T startRow;
-    sys::SSize_T numRows;
-    sys::SSize_T startCol;
-    sys::SSize_T numCols;
+    UByte* mBuffer = nullptr;
+    ptrdiff_t startRow = 0;
+    ptrdiff_t numRows = -1;
+    ptrdiff_t startCol = 0;
+    ptrdiff_t numCols = -1;
 public:
-    //!  Constructor.  Sets params for full window size, and buffer is NULL
-    Region() :
-        mBuffer(NULL), startRow(0), numRows(-1), startCol(0), numCols(-1)
-    {
-    }
+    //!  Constructor.  Sets params for full window size, and buffer is nullptr
+    Region() = default;
 
     //!  Destructor.  Does not deallocate a work buffer, that is up to the user
-    ~Region() {}
+    ~Region() = default;
 
     /*!
      *  Set the start row.  Valid values are between 0 and numRows-1
@@ -67,7 +69,7 @@ public:
      *  this until read time.
      *
      */
-    void setStartRow(sys::SSize_T row)
+    void setStartRow(ptrdiff_t row)
     {
         startRow = row;
     }
@@ -78,7 +80,7 @@ public:
      *
      */
 
-    void setStartCol(sys::SSize_T col)
+    void setStartCol(ptrdiff_t col)
     {
         startCol = col;
     }
@@ -88,7 +90,7 @@ public:
      *  numRows, or -1 to request numRows without querying the
      *  actual rows
      */
-    void setNumRows(sys::SSize_T rows)
+    void setNumRows(ptrdiff_t rows)
     {
         numRows = rows;
     }
@@ -98,7 +100,7 @@ public:
      *  numRows, or -1 to request numRows without querying the
      *  actual rows
      */
-    void setNumCols(sys::SSize_T cols)
+    void setNumCols(ptrdiff_t cols)
     {
         numCols = cols;
     }
@@ -106,7 +108,7 @@ public:
     /*!
      *  Get the start row
      */
-    sys::SSize_T getStartRow() const
+    ptrdiff_t getStartRow() const
     {
         return startRow;
     }
@@ -114,7 +116,7 @@ public:
     /*!
      *  Get the start col
      */
-    sys::SSize_T getStartCol() const
+    ptrdiff_t getStartCol() const
     {
         return startCol;
     }
@@ -125,7 +127,7 @@ public:
      *  should not be used before a read has been done, except to verify
      *  the number of requested rows.
      */
-    sys::SSize_T getNumRows() const
+    ptrdiff_t getNumRows() const
     {
         return numRows;
     }
@@ -136,16 +138,16 @@ public:
      *  should not be used before a read has been done, except to verify
      *  the number of requested cols.
      */
-    sys::SSize_T getNumCols() const
+    ptrdiff_t getNumCols() const
     {
         return numCols;
     }
 
     /*!
-     *  Get the buffer.  Before a read has been done, this may be NULL,
+     *  Get the buffer.  Before a read has been done, this may be nullptr,
      *  depending on if the user has initialized the buffer using the
      *  setBuffer() function.  After a read has been done, this value
-     *  should be non-NULL.  The work buffer must be deallocated by the
+     *  should be non-nullptr.  The work buffer must be deallocated by the
      *  program, since the Region does not currently do so.
      */
     UByte* getBuffer()
@@ -161,10 +163,22 @@ public:
      */
     void setBuffer(UByte* buffer)
     {
-        mBuffer = (UByte*) buffer;
+        assert(buffer != nullptr);
+        mBuffer = buffer;
+    }
+
+    /*!
+     *  Create a buffer of the given size, call setBuffer() and return the buffer.
+     */
+    std::unique_ptr<std::byte[]> setBuffer(size_t size)
+    {
+        assert(getBuffer() == nullptr);
+
+        std::unique_ptr<std::byte[]> retval(new std::byte[size]);
+        setBuffer(retval.get());
+        return retval;
     }
 };
 }
 
-#endif
 

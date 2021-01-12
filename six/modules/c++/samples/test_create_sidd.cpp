@@ -27,7 +27,12 @@
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <import/xml/lite.h>
+#include <sys/Bit.h>
 #include "utils.h"
+
+
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
 
 /*!
  *  This file takes in an SIO and turns it in to a SICD.
@@ -95,10 +100,10 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
     }
 
     if (!fileHeader->getNumUserDataFields())
-        return NULL;
+        return nullptr;
 
     // Otherwise
-    six::LUT* lut = NULL;
+    six::LUT* lut = nullptr;
 
     sio::lite::UserDataDictionary dict = fileHeader->getUserDataSection();
     for (sio::lite::UserDataDictionary::Iterator p = dict.begin(); p
@@ -108,7 +113,7 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
         {
             pixelType = six::PixelType::RGB8LU;
             // Switch the mode, and dont forget to slurp the colormap
-            lut = new six::LUT((unsigned char*) &(p->second)[0], 256, 3);
+            lut = new six::LUT((unsigned char*) p->second.data(), 256, 3);
             break;
         }
 
@@ -120,12 +125,12 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
 six::WriteControl* getWriteControl(std::string outputName)
 {
 
-    sys::Path::StringPair p = sys::Path::splitExt(outputName);
-    str::lower(p.second);
+    std::string extension = fs::path(outputName).extension();
+    str::lower(extension);
 
-    six::WriteControl* writer = NULL;
+    six::WriteControl* writer = nullptr;
 
-    if (p.second == ".nitf" || p.second == ".ntf")
+    if (extension == ".nitf" || extension == ".ntf")
     {
         writer = new six::NITFWriteControl();
         std::cout << "Selecting NITF write control" << std::endl;
@@ -224,7 +229,7 @@ int main(int argc, char** argv)
         xml::lite::MinidomParser parser;
         parser.parse(fis);
 
-        std::auto_ptr<logging::Logger> log (new logging::NullLogger());
+        std::unique_ptr<logging::Logger> log (new logging::NullLogger());
         six::Data* complexData =
             six::XMLControlFactory::getInstance().newXMLControl(
                 six::DataType::COMPLEX,
@@ -232,8 +237,8 @@ int main(int argc, char** argv)
                                     std::vector<std::string>());
 
         // Create a file container
-        mem::SharedPtr<six::Container> container(new six::Container(
-                six::DataType::DERIVED));
+        auto container(std::make_shared<six::Container>(
+            six::DataType::DERIVED));
 
         // We have a source for each image
         std::vector<io::InputStream*> sources;
@@ -252,7 +257,7 @@ int main(int argc, char** argv)
              * Yeah, this is getting set over and over, but that way its
              * easy to make this test case into a program with multiple images
              */
-            needsByteSwap = sys::isBigEndianSystem()
+            needsByteSwap = (std::endian::native == std::endian::big)
                     && fileHeader->isDifferentByteOrdering();
 
             six::PixelType pixelType;
@@ -365,7 +370,7 @@ int main(int argc, char** argv)
 
         // Override auto-byte swap
         writer->getOptions().setParameter(six::WriteControl::OPT_BYTE_SWAP,
-                six::Parameter((sys::Uint16_T) needsByteSwap));
+                six::Parameter((uint16_t) needsByteSwap));
 
         // Init the container
         writer->initialize(container);
@@ -379,9 +384,9 @@ int main(int argc, char** argv)
             delete sources[i];
         }
     }
-    catch (except::Exception& ex)
+    catch (const std::exception& ex)
     {
-        std::cout << ex.toString() << std::endl;
+        std::cout << ex.what() << std::endl;
     }
 
     delete writer;

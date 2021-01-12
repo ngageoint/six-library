@@ -23,7 +23,6 @@
 #include <import/net.h>
 #include <import/sys.h>
 #include <import/io.h>
-#include <import/mem.h>
 
 using namespace net;
 using namespace sys;
@@ -33,8 +32,8 @@ using namespace except;
 template<typename T> class AckMulticastSender
 {
 
-    mem::auto_ptr<Socket> mMulticastSender;
-    mem::auto_ptr<Socket> mAckChannel;
+    std::auto_ptr<Socket> mMulticastSender;
+    std::auto_ptr<Socket> mAckChannel;
     SocketAddress mMulticastAddr;
     std::vector<std::string> mSubscribers;
     int mRetransmitPort;
@@ -53,18 +52,18 @@ public:
     {
     }
     
-    mem::auto_ptr<Socket> createAckChannel(int localAckPort)
+    std::auto_ptr<Socket> createAckChannel(int localAckPort)
     {
         SocketAddress address(localAckPort);
         return UDPServerSocketFactory().create(address);
     }
-    mem::auto_ptr<Socket> createSenderSocket(const std::string& mcastGroup, int mcastPort,
+    std::auto_ptr<Socket> createSenderSocket(const std::string& mcastGroup, int mcastPort,
             int loopback)
     {
 
         mMulticastAddr.set(mcastPort, mcastGroup);
 
-        mem::auto_ptr<Socket> s(new Socket(UDP_PROTO));
+        std::auto_ptr<Socket> s( new Socket(UDP_PROTO) );
 
         int on = 1;
         s->setOption(SOL_SOCKET, SO_REUSEADDR, on);
@@ -100,7 +99,7 @@ public:
         for (int i = 0; i < needRetransmit.size(); i++)
         {
             SocketAddress sa(needRetransmit[i], mRetransmitPort);
-            mem::auto_ptr<Socket> toRetransmit = net::TCPClientSocketFactory().create(sa);
+            std::auto_ptr<Socket> toRetransmit = net::TCPClientSocketFactory().create(sa);
             toRetransmit.send((const char*) &packet, sizeof(packet));
             toRetransmit.close();
         }

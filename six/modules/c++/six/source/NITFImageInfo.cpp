@@ -23,6 +23,7 @@
 #include <memory>
 #include <sstream>
 #include <limits>
+#include <string>
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
@@ -53,40 +54,40 @@ private:
 namespace six
 {
 //!  File security classification system
-const char NITFImageInfo::CLSY[] = "CLSY";
+const std::string NITFImageInfo::CLSY = "CLSY";
 //!  File security codewords
-const char NITFImageInfo::CODE[] = "CODE";
+const std::string NITFImageInfo::CODE = "CODE";
 //!  File control and handling
-const char NITFImageInfo::CTLH[] = "CTLH";
+const std::string NITFImageInfo::CTLH = "CTLH";
 //!  File releasing instructions
-const char NITFImageInfo::REL[] = "REL";
+const std::string NITFImageInfo::REL = "REL";
 //!  File security declassification type
-const char NITFImageInfo::DCTP[] = "DCTP";
+const std::string NITFImageInfo::DCTP = "DCTP";
 //!  File security declassification date
-const char NITFImageInfo::DCDT[] = "DCDT";
+const std::string NITFImageInfo::DCDT = "DCDT";
 //!  File security declassification exemption
-const char NITFImageInfo::DCXM[] = "DCXM";
+const std::string NITFImageInfo::DCXM = "DCXM";
 //!  File security downgrade
-const char NITFImageInfo::DG[] = "DG";
+const std::string NITFImageInfo::DG = "DG";
 //!  File security downgrade date
-const char NITFImageInfo::DGDT[] = "DGDT";
+const std::string NITFImageInfo::DGDT = "DGDT";
 //!  File security classification text
-const char NITFImageInfo::CLTX[] = "CLTX";
+const std::string NITFImageInfo::CLTX = "CLTX";
 //!  File security classification Authority type
-const char NITFImageInfo::CATP[] = "CATP";
+const std::string NITFImageInfo::CATP = "CATP";
 //!  File security classification Authority
-const char NITFImageInfo::CAUT[] = "CAUT";
+const std::string NITFImageInfo::CAUT = "CAUT";
 //!  File security reason
-const char NITFImageInfo::CRSN[] = "CRSN";
+const std::string NITFImageInfo::CRSN = "CRSN";
 //!  File security source date
-const char NITFImageInfo::SRDT[] = "SRDT";
+const std::string NITFImageInfo::SRDT = "SRDT";
 //!  File security control number
-const char NITFImageInfo::CTLN[] = "CTLN";
+const std::string NITFImageInfo::CTLN = "CTLN";
 
 
 NITFImageInfo::NITFImageInfo(Data* data,
                              size_t maxRows,
-                             sys::Uint64_T maxSize,
+                             uint64_t maxSize,
                              bool computeSegments,
                              size_t rowsPerBlock,
                              size_t colsPerBlock) :
@@ -196,7 +197,7 @@ std::string NITFImageInfo::generateFieldKey(const std::string& field,
     std::ostringstream s;
     s << prefix << field;
     if (index >= 0)
-        s << "[" << str::toString(index) << "]";
+        s << "[" << std::to_string(index) << "]";
     return s.str();
 }
 }

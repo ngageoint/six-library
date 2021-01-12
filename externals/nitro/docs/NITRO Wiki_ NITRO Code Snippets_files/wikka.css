@@ -1,0 +1,842 @@
+/*
+-----------------------------------------------
+Wikka Default Stylesheet (screen)
+----------------------------------------------- */
+
+/* global styling */
+
+p, td, li, input, select, textarea {
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	line-height: 20px;
+	font-size: 13px;
+}
+
+form, h1, h2, h3, h4, h5 {
+	margin: 0px;
+	padding: 0px;
+}
+
+/* page layout */
+
+body {
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;	font-size: 13px;
+/*	text-align: justify; */			/* comment out this line if you really need justified text */
+	line-height: 20px;
+	color: #000000;
+	background-color: #F8F8F8;
+}
+
+.header {
+	padding: 10px;
+	padding-top: 0px;
+}
+
+.page {
+	color: #000;
+	font-size: 13px;
+	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	background-color: white;
+	padding: 15px;
+	border: 1px solid #CCC;
+	border-bottom: none;
+	height: 100%;
+}
+
+.footer {
+	clear: both;
+	background-color: #DDD;
+	padding: 5px 10px;
+	border: 1px solid #CCC;
+	border-top: none;
+	border-top: 1px solid #CCC;
+}
+
+/* comments */
+
+.commentsheader {
+	clear: both;
+	background-color: #DDD;
+	padding: 2px 10px;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-top: 1px solid #CCC;
+}
+
+.comment {
+	background-color: #EEE;
+	padding: 10px;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #EEE;
+}
+
+.commentinfo {
+	color: #AAA;
+}
+
+.commentform {
+	background-color: #EEE;
+	padding: 10px;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-top: 1px solid #CCC;
+}
+
+/* links */
+
+a {
+	color: #339;
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	color: #933;
+}
+
+a:active {
+	text-decoration: none;
+}
+
+a.ext {
+	color: #339;
+}
+
+a.ext:hover {
+	color: #933;
+}
+
+.exttail {
+	color: #999;
+	vertical-align: super;
+}
+
+.header a:hover {
+	color: #933;
+	background: transparent;
+	border-bottom: 0px;
+}
+
+a#homepage_link {
+	color: #000;
+}
+
+.page a {
+	text-decoration: none;
+}
+
+.page a:hover {
+	color: #933;
+	text-decoration: underline;
+}
+
+/* lists */
+
+ul, ol {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+ul.thread {
+	list-style-type: none;
+	border-left: 2px #666 solid;
+	padding-left: 10px;
+	margin: 5px 0px;
+}
+
+ul.thread li {
+	color: #333;
+	font-size: 11px;
+}
+
+/* images */
+
+img {
+	border: 0px;
+}
+
+img.centre {
+	display: block; 
+	text-align: center; 
+	margin: 5px auto;
+}
+
+img.center {
+	display: block; 
+	text-align: center; 
+	margin: 5px auto;
+}
+
+img.left {
+	margin: 5px 5px 5px -5px;
+	float: left;
+}
+
+img.right {
+	margin: 5px -5px 5px 5px; 
+	float: right;
+}
+
+img.icon {
+	border: 0px;
+	vertical-align: middle;
+}
+
+/* floats */
+
+.floatl {
+	float: left;
+	text-align: left;
+	width: 46%;
+	margin-right: 15px;
+	padding: 4px;
+	background: #EEE;
+	border: 1px solid #CCC; 		
+}
+
+.floatr {
+	float: right;
+	text-align: left;
+	width: 46%;
+	margin-left: 15px;
+	padding: 4px;
+	background: #EEE;
+	border: 1px solid #CCC; 		
+}
+
+.clear {clear:both;}
+
+/* text formatting */
+
+h5 {
+	font-size: 10pt;
+}
+
+h4 {
+	font-size: 12pt;
+}
+
+h3 {
+	font-size: 14pt;
+}
+
+h2 {
+	font-size: 16pt;
+}
+
+h1 {
+	font-size: 18pt;
+}
+
+tt {
+	color: #666;
+}
+
+.hidden {
+	display: none;
+}
+
+.highlight {color: red; background: #FFFFD0;}
+
+.strikethrough {color: #888; text-decoration: line-through;}
+
+.underline {text-decoration: underline;}
+
+.indent {
+	margin-left: 40px;
+}
+
+.notes {
+	color: #880;
+}
+
+.centre {text-align: center;}
+
+.center, .center p {text-align: center;}
+
+.keys {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color:#FFF;
+	font-weight: bold;
+	background-color: #33A;
+	border-top: 2px solid #FFF;
+	border-left: 2px solid #FFF;
+	border-right: 2px solid #336;
+	border-bottom: 2px solid #336;
+	text-align: center;
+	padding: 0.1em 0.3em;
+	line-height: 1.6em;
+	vertical-align: top;
+}
+
+.keys:hover {
+	background-color: #66C;
+	border-right: 2px solid #668;
+	border-bottom: 2px solid #668;
+}
+
+acronym {
+	border-bottom: 1px dotted #333;
+	cursor: help;
+}
+
+abbr {
+	border-bottom: 1px dotted #333;
+	cursor: help;
+}
+
+blockquote {
+	font-size: 90%;
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid #EEE;
+}
+
+.disabled {
+	color: #AAA;
+}
+
+/* code blocks */
+
+
+.code_header {
+	color: #FFF;
+	background: #33A;
+	border-top: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-left: 1px solid #CCC;
+	border-bottom: none;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	padding: 0 3px;
+	width: 95%;
+	margin: 5px auto 0 auto;
+	text-align: left;
+	line-height: 15px;
+}
+
+.code {
+	color: black;
+	background: #ffffee;
+	border: 1px solid #CCC;
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+	width: 95%;
+	margin: auto;
+	padding: 6px 3px 13px 3px;	/* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
+	text-align: left;			/* override justify on body */
+	overflow: auto;				/* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
+	white-space: nowrap;		/* prevent line wrapping */
+}
+
+.code pre {
+	margin-top: 6px;
+	margin-bottom: 6px;			/* prevent vertical scroll bar in case of overflow */
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+/* form elements */
+
+fieldset {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #CCC;	
+}
+
+fieldset legend {
+	font-size: 115%;
+	color: #666;
+	padding:2px;
+}
+
+textarea {
+	border: 1px solid #CCC;	
+}
+
+textarea:hover {
+	background-color: #F3F3F3;
+}
+
+textarea:focus {
+	background-color: #E6E6FF;
+}
+
+input {
+	border: 1px solid #CCC;	
+}
+
+input:hover {
+	background-color: #F3F3F3;
+}
+
+input:focus {
+	background-color: #E6E6FF;
+}
+
+input[type=hidden] {
+	display: none;
+}
+
+input[type=submit], input[type=button] {
+	color: #666;
+	background-color: #EEE;
+	font: normal 95% Verdana, sans-serif;
+	text-align: center;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+	padding: .1em .2em;
+}
+
+input[type=submit]:hover, input[type=button]:hover {
+	color: #333;
+	background-color: #DDD;
+	border-top: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+}
+
+/* editor textarea decorations */
+/* (decorations can't be in "textarea#body" declaration, else the "width:100%" won't work) */
+#textarea_container {
+	border: 1px solid #CCC;
+	padding: 2px;
+	margin-bottom: 2px;
+}
+
+textarea#body{
+	width: 100%;
+	height: 500px;
+	/* padding and border must be 0 for the "width:100%" to work */
+	padding: 0;
+	border: 0;
+}
+
+.searchbox {
+	/* border: none; */
+	border: 1px solid #CCA;
+	padding: 0px;
+	margin: 0px;
+}
+
+input.grabcode {
+	float: right;
+	margin-top: 0px;
+	font-size: 90%;
+}
+
+input.highlight {
+	font-weight: normal;
+	background-color: #FCC;
+	color: #000;
+}
+
+/* system information */
+
+.datetime {
+	color: #666;
+	font-size: 80%;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+.missingpage {
+	/* background: #ccffff; */
+	text-decoration: none;
+	border-bottom-width: 1px;
+	border-bottom-color: #933;
+	border-bottom-style: dashed;
+}
+
+em.error {
+	color: #A33; 
+	font-style: normal;
+	font-weight: bold;
+	font-size: 95%;
+}
+
+em.success {
+	color: #3A3; 
+	font-style: normal;
+	font-weight: bold;
+	font-size: 95%;
+}
+
+.comments {display: none;}
+
+.revisioninfo {
+	color: #AAA;
+	padding-bottom: 20px;
+}
+
+.copyright {
+	font-size: 11px;
+	color: #AAA;
+	text-align: right;
+}
+
+.copyright a {
+	color: #AAA;
+}
+
+.previewhead {
+	margin: auto;
+	z-index:20;
+	position:fixed;
+	top: 40px;
+	left: 10px;
+	color: red;
+	font-size: xx-large;
+	font-weight: bold;
+	padding: 5px;
+}
+
+.additions {background-color: #ccffcc;}
+
+.deletions {color: #876; background-color: #FC9;}
+
+.recentchanges {font-size: 0.9em;}
+
+.pagenote {color: #888;}
+
+.smaller {font-size: smaller;}
+
+.smallprint {font-size: 0.8em; color: #777; padding-right: 0.5%; text-align: right;}
+
+.smallprint a {
+	color: #987;
+}
+
+/* sort order information in sortable lists and tables*/
+.sortorder {
+	font-size: 70%;
+	text-transform: uppercase;	
+	letter-spacing: 1px;
+}
+
+/* Tables */
+table.data {
+	border: 2px solid #CCC;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table.data caption {
+	border: 1px solid #CCC;
+	font-size: 95%;
+	color: #666;
+	margin:5px 0;
+	padding:2px;
+}
+
+table.data thead {
+	background-color: #DDD;
+}
+
+table.data tfoot {
+	background-color: #DDD;
+}
+
+table.data th {
+	border: 1px solid #CCC;
+	padding: .1em .25em;
+}
+
+table.data thead th {
+	background-color: #DDD;
+}
+
+table.data tfoot th {
+	background-color: #DDD;
+}
+
+table.data tbody th {
+	background-color: #EEE;
+}
+
+table.data tbody tr:hover {
+	background-color: #E9E9F9;
+}
+
+table.data tbody tr.alt:hover {
+	background-color: #E9E9F9;
+}
+
+table.data td {
+	border: 1px solid #CCC;
+	padding: .1em .25em;
+}
+
+table.data td.number {
+	text-align: right;
+}
+
+table.data td.datetime {
+	text-align: right;
+	white-space: nowrap;
+}
+
+/* --- alternate row & column color --- */
+
+table.data tr.alt {
+	background-color: #EEE;
+}
+
+table.data th.c1 {
+	background-color: #CDD;
+}
+
+table.data th.c2 {
+	background-color: #DCC;
+}
+
+table.data th.c3 {
+	background-color: #DDC;
+}
+
+table.data th.c4 {
+	background-color: #CDC;
+}
+
+table.data th.c5 {
+	background-color: #CCD;
+}
+
+table.data th.c6 {
+	background-color: #DCD;
+}
+
+table.data td.c1 {
+	background-color: #EFF;
+}
+
+table.data td.c2 {
+	background-color: #FEE;
+}
+
+table.data td.c3 {
+	background-color: #FFE;
+}
+
+table.data td.c4 {
+	background-color: #EFE;
+}
+
+table.data td.c5 {
+	background-color: #EEF;
+}
+
+table.data td.c6 {
+	background-color: #FEF;
+}
+
+table.data tr.alt td.c1 {
+	background-color: #DEE;
+}
+
+table.data tr.alt td.c2 {
+	background-color: #EDD;
+}
+
+table.data tr.alt td.c3 {
+	background-color: #EED;
+}
+
+table.data tr.alt td.c4 {
+	background-color: #DED;
+}
+
+table.data tr.alt td.c5 {
+	background-color: #DDE;
+}
+
+table.data tr.alt td.c6 {
+	background-color: #EDE;
+}
+
+/* Action-related styling */
+
+/* Adminpages action */
+
+table#adminpages {
+	border: 1px solid #CCC;
+	width: 100%;
+}
+
+form#form_page_admin_panel fieldset {
+	line-height: 2em;	
+}
+
+/* Adminuser action */
+
+table#adminusers {
+	border: 1px solid #CCC;
+	width: 100%;
+}
+
+form#form_user_admin_panel fieldset {
+	line-height: 2em;	
+}
+
+/* Lastedit action */
+.lastedit {
+	border:dotted 1px;
+	padding:3pt;
+	margin:8pt; color:#888;
+	font-size:8pt;
+	width:30%;
+}
+
+.lastedit_notes {
+	color: #880;
+}
+
+/* TextSearch & TextSearchExpanded Actions*/
+.tse_keywords {
+	font-weight: bold;
+	color: green;
+	background-color: #FAEBD7;
+}
+
+/* Calendar Action */
+
+/* general styling */
+table.calendar {
+	color: #000;
+	background-color: #CCC;				/* comment out to have space between cells same color as page background */
+	/*border-collapse: collapse;*/			/* would make single-width borders, ignoring cell-spacing */
+}
+table.calendar caption {
+	background-color: #CCC;
+	font-weight: bold;
+	line-height: 1.6em;
+}
+table.calendar thead {
+	background-color: #CCC;
+}
+table.calendar tbody.face {
+	background-color: #CCC;
+}
+table.calendar tbody.calnav {
+	background-color: #CCC;
+}
+/* styling for some specific elements */
+table.calendar thead th {
+	/*border: 1px solid #000;*/			/* uncomment to have border around day name headers (will be page background if table background is undefined) */
+	padding: 1px;
+	text-align: center;
+	font-size: 85%;
+	width: 26px;
+}
+table.calendar tbody.face td {
+	border: 1px solid #000;
+	text-align: right;
+}
+table.calendar td.currentday {
+	color: #933;
+	background-color: #AAA;
+	font-weight: bold;
+}
+/* styling of calendar navigation */
+table.calendar tbody.calnav {
+	font-weight: bold;
+}
+table.calendar td.prevmonth {
+	text-align: left;
+	font-size: 85%;
+}
+table.calendar td.curmonth {
+	text-align: center;
+}
+table.calendar td.nextmonth {
+	text-align: right;
+	font-size: 85%;
+}
+table.calendar a:link {
+	color: #933;
+	text-decoration: none;
+}
+table.calendar a:visited {
+	color: #933;
+	text-decoration: none;
+}
+table.calendar a:hover {
+	color: #933;
+}
+table.calendar a:active {
+	color: #933;
+	text-decoration: none;
+}
+
+/* Usersettings action */
+table.usersettings {
+}
+
+/* Handler-related styling */
+
+/* Acls handler */
+table.acls {
+}
+
+/* 3rdparty-code related styling */
+
+/* syntax highlighting code - GeSHi */
+.code ol {
+	margin-top: 6px;
+	margin-bottom: 6px;			/* prevent vertical scroll bar in case of overflow */
+}
+.code li {
+	font-size: 11px;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+.code .br0	{ color: #6C6; }
+.code .co1	{ color: #808080; font-style: italic; }
+.code .co2	{ color: #808080; font-style: italic; }
+.code .coMULTI	{ color: #808080; font-style: italic; }
+.code .es0	{ color: #009; font-weight: bold; }
+.code .kw1	{ color: #b1b100; }
+.code .kw2	{ color: #000; font-weight: bold; }
+.code .kw3	{ color: #006; }
+.code .kw4	{ color: #933; }
+.code .kw5	{ color: #00F; }
+.code .me0	{ color: #060; }
+.code .nu0	{ color: #C6C; }
+.code .re0	{ color: #00F; }
+.code .re1	{ color: #00F; }
+.code .re2	{ color: #00F; }
+.code .re4	{ color: #099; }
+.code .sc0	{ color: #0BD; }
+.code .sc1	{ color: #DB0; }
+.code .sc2	{ color: #090; }
+.code .st0	{ color: #F00; }
+
+/* wikiedit */
+
+.toolbar tr { background: ButtonFace; }
+.toolbar .btn-, .toolbar  .btn-hover,  .toolbar .btn-active,
+.toolbar .btn-pressed {
+	background: ButtonFace;
+	color: ButtonText;
+	border: 1px solid ButtonFace;
+	padding: 1px;
+	margin: 0px;
+	cursor: pointer;
+}
+.toolbar .btn- img  { width: 20px; height: 20px; }
+.toolbar .btn-hover { border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; }
+.toolbar .btn-active,
+.toolbar .btn-pressed { border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow; }
+.toolbar .btn-pressed { background: ButtonHighlight; }
+.editornamecss { background-color:#CCCCFF; font-size: 18px; padding: 0 10px; }

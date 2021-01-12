@@ -1,6 +1,7 @@
 NAME            = 'mem'
+MAINTAINER      = 'asylvest@users.sourceforge.net'
 VERSION         = '1.0'
-MODULE_DEPS     = 'sys gsl'
+MODULE_DEPS     = 'sys'
 TEST_DEPS       = 'cli'
 
 options = configure = distclean = lambda p: None

@@ -23,6 +23,7 @@
 
 #ifndef __MT_CPU_AFFINITY_INITIALIZER_LINUX_H__
 #define __MT_CPU_AFFINITY_INITIALIZER_LINUX_H__
+#pragma once
 
 #if !defined(__APPLE_CC__)
 #if defined(__linux) || defined(__linux__)
@@ -33,7 +34,8 @@
 #include <sys/ScopedCPUAffinityUnix.h>
 #include <mt/AbstractCPUAffinityInitializer.h>
 #include <mt/CPUAffinityThreadInitializerLinux.h>
-#include <mem/SharedPtr.h>
+
+#include "mem/SharedPtr.h"
 
 namespace mt
 {

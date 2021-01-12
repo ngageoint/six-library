@@ -52,26 +52,25 @@ public:
     NITFImageInputStream(nitf::ImageSubheader subheader,
             nitf::ImageReader imageReader);
 
-    //!  Destructor
-    virtual ~NITFImageInputStream() {}
+    virtual ~NITFImageInputStream() noexcept {}
 
     //!  How many bytes in the image
-    sys::Off_T available();
+    int64_t available();
 
     //!  Read N bytes from a NITF file
-    sys::SSize_T read(sys::byte* b, sys::Size_T len);
+    ptrdiff_t read(std::byte* b, size_t len);
 
 protected:
 
-    sys::SSize_T readRow();
+    ptrdiff_t readRow();
 
     nitf::ImageSubheader mSubheader;
     nitf::ImageReader mReader;
-    sys::Off_T mAvailable;
-    sys::Size_T mRowBufferRemaining, mRowSize, mRowOffset;
-    mem::ScopedArray<sys::ubyte> mRowBuffer;
+    int64_t mAvailable;
+    size_t mRowBufferRemaining, mRowSize, mRowOffset;
+    std::unique_ptr<std::byte[]> mRowBuffer;
     nitf::SubWindow mWindow;
-    mem::ScopedArray<nitf::Uint32> mBandList;
+    std::unique_ptr<uint32_t[]> mBandList;
 };
 
 }

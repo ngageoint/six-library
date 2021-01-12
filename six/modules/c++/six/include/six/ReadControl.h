@@ -56,14 +56,14 @@ public:
 
     //!  Constructor.  Null-set the current container reference
     ReadControl() :
-        mContainer(NULL), mLog(NULL), mOwnLog(false), mXMLRegistry(NULL)
+        mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
-        setLogger(NULL);
-        setXMLControlRegistry(NULL);
+        setLogger(nullptr);
+        setXMLControlRegistry(nullptr);
     }
 
     //!  Destructor doesnt release anything
-    virtual ~ReadControl()
+    virtual ~ReadControl() noexcept(false)
     {
         if (mLog && mOwnLog)
             delete mLog;
@@ -92,7 +92,7 @@ public:
     /*!
      *  Get a const shared pointer to the current container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
         return mContainer;
     }
@@ -100,7 +100,7 @@ public:
     /*!
      *  Get a non-const pointer to the current container.
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -145,7 +145,7 @@ public:
      */
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
-            mem::ScopedArray<T>& buffer)
+           std::unique_ptr<T[]>& buffer)
     {
         buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
         return buffer.get();
@@ -195,7 +195,7 @@ public:
     }
 
 protected:
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;

@@ -23,6 +23,22 @@
 
 using namespace six;
 
+bool six::Classification::isUnclassified() const
+{
+    const std::string level(getLevel());
+    if (!level.empty() && (::toupper(level[0]) == 'U'))
+    {
+        return true;
+    }
+
+    // There could be French text first: "NON CLASSIFIÉ / UNCLASSIFIED"
+    if (level.find("UNCLASS") != std::string::npos)
+    {
+        return true;
+    }
+    return level.find("Unclass") != std::string::npos;
+}
+
 std::ostream& operator<<(std::ostream& os, const Classification& c)
 {
     os << "Classification: " << std::endl;

@@ -56,9 +56,9 @@ TEST_CASE(BalancedRunnable1DTestWorkDone)
         TEST_ASSERT_EQ(workVec.size(), numElements);
 
         const size_t targetValue = 1;
-        for (size_t jj = 0; jj < numElements; ++jj)
+        for (size_t ii = 0; ii < numElements; ++ii)
         {
-            const size_t value = workVec[jj];
+            const size_t value = workVec[ii];
             TEST_ASSERT_EQ(value, targetValue);
         }
     }

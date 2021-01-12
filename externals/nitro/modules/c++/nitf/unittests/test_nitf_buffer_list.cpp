@@ -47,18 +47,18 @@ TEST_CASE(testGetNumBlocks)
 TEST_CASE(testGetBlock)
 {
     // 100 total bytes
-    std::vector<nitf::byte> buffer(100);
+    std::vector<std::byte> buffer(100);
     for (size_t ii = 0; ii < buffer.size(); ++ii)
     {
-        buffer[ii] = static_cast<nitf::byte>(rand() % 256);
+        buffer[ii] = static_cast<std::byte>(rand() % 256);
     }
 
     // Break this into a few pieces
-    std::vector<nitf::byte> buffer1(buffer.begin(), buffer.begin() + 10);
-    std::vector<nitf::byte> buffer2(buffer.begin() + 10, buffer.begin() + 20);
-    std::vector<nitf::byte> buffer3(buffer.begin() + 20, buffer.begin() + 35);
-    std::vector<nitf::byte> buffer4(buffer.begin() + 35, buffer.begin() + 57);
-    std::vector<nitf::byte> buffer5(buffer.begin() + 57, buffer.end());
+    std::vector<std::byte> buffer1(buffer.begin(), buffer.begin() + 10);
+    std::vector<std::byte> buffer2(buffer.begin() + 10, buffer.begin() + 20);
+    std::vector<std::byte> buffer3(buffer.begin() + 20, buffer.begin() + 35);
+    std::vector<std::byte> buffer4(buffer.begin() + 35, buffer.begin() + 57);
+    std::vector<std::byte> buffer5(buffer.begin() + 57, buffer.end());
 
     // Add them all on
     nitf::NITFBufferList bufferList;
@@ -82,9 +82,9 @@ TEST_CASE(testGetBlock)
         TEST_ASSERT_EQ(numTotalBytes, buffer.size());
 
         // Extract all the bytes
-        std::vector<nitf::byte> extracted(numTotalBytes);
-        nitf::byte* ptr = extracted.data();
-        std::vector<nitf::byte> scratch;
+        std::vector<std::byte> extracted(numTotalBytes);
+        std::byte* ptr = extracted.data();
+        std::vector<std::byte> scratch;
 
         size_t numBytesInBlock;
         for (size_t block = 0; block < numBlocks; ++block)

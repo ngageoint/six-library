@@ -1008,7 +1008,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].rfBandwidth, 2.3);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].lfmRate, 1.0);
-    TEST_ASSERT_EQ(txRcv.txWFParameters[0].polarization.toString(), "LHC");
+    TEST_ASSERT_EQ(txRcv.txWFParameters[0].polarization, "LHC");
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].power, 5.0);
 
     TEST_ASSERT_EQ(txRcv.rcvParameters.size(), 2);
@@ -1018,7 +1018,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].ifFilterBW, 2.3);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].lfmRate, 1.0);
-    TEST_ASSERT_EQ(txRcv.rcvParameters[0].polarization.toString(), "LHC");
+    TEST_ASSERT_EQ(txRcv.rcvParameters[0].polarization, "LHC");
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].pathGain, 5.0);
 
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].identifier, "RcvParam2");
@@ -1027,11 +1027,11 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].ifFilterBW, 2.3);
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].lfmRate, 1.0);
-    TEST_ASSERT_EQ(txRcv.rcvParameters[1].polarization.toString(), "LHC");
+    TEST_ASSERT_EQ(txRcv.rcvParameters[1].polarization, "LHC");
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].pathGain, 5.0);
 
     const cphd::ErrorParameters& errorParams = *(metadata->errorParameters);
-    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.frame.toString(), "ECF");
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.frame, "ECF");
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p1, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p2, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.corrCoefs->p1p2, 0.8);
@@ -1117,24 +1117,6 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(matchInfo.types[1].matchCollects[0].parameters[0].getName(), "param1");
 }
 
-int main()
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testOptional);
-        return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-    }
-    return 1;
-}
+)

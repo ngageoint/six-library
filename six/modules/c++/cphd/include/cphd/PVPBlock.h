@@ -245,7 +245,7 @@ struct PVPBlock
      *  be resized and zeroed internally.
      */
     void getPVPdata(size_t channel,
-                    std::vector<sys::ubyte>& data) const;
+                    std::vector<std::byte>& data) const;
 
     /*
      *  \func getPVPdata
@@ -322,9 +322,9 @@ struct PVPBlock
      */
     // startPVP = cphd header keyword "PVP_BYTE_OFFSET" contains PVP block starting offset
     // sizePVP = cphd header keyword "PVP_DATA_SIZE" contains PVP block size
-    sys::Off_T load(io::SeekableInputStream& inStream,
-                    sys::Off_T startPVP,
-                    sys::Off_T sizePVP,
+    int64_t load(io::SeekableInputStream& inStream,
+                    int64_t startPVP,
+                    int64_t sizePVP,
                     size_t numThreads);
 
     //! Equality operators
@@ -370,7 +370,7 @@ protected:
          *  \param input A pointer to an array of bytes that contains the
          *  parameter data to write into the pvp set
          */
-        void write(const PVPBlock& pvpBlock, const Pvp& pvp, const sys::byte* input);
+        void write(const PVPBlock& pvpBlock, const Pvp& pvp, const std::byte* input);
 
         /*
          *  \func read
@@ -383,7 +383,7 @@ protected:
          *  \param[out] output A pointer to an array of allocated bytes that
          *  will be written to
          */
-        void read(const Pvp& pvp, sys::ubyte* output) const;
+        void read(const Pvp& pvp, std::byte* output) const;
 
         //! Equality operators
         bool operator==(const PVPSet& other) const

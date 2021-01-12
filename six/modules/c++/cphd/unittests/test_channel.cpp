@@ -80,28 +80,9 @@ TEST_CASE(TxRcvMultIds)
 }
 }
 
-int main(int /*argc*/, char** /*argv*/)
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(EmptyChannel);
         TEST_CHECK(TestPolygonInvalid);
         TEST_CHECK(TxRcvMultIds);
-
-        return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-    }
-    return 1;
-}
+        )
 

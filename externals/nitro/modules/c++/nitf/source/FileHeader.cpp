@@ -26,7 +26,7 @@ using namespace nitf;
 
 FileHeader::FileHeader(const FileHeader & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 FileHeader & FileHeader::operator=(const FileHeader & x)
@@ -50,56 +50,54 @@ FileHeader::FileHeader()
 }
 
 
-nitf::FileHeader FileHeader::clone()
+nitf::FileHeader FileHeader::clone() const
 {
     nitf::FileHeader dolly(nitf_FileHeader_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
     return dolly;
 }
 
-FileHeader::~FileHeader(){}
-
-nitf::Field FileHeader::getFileHeader()
+nitf::Field FileHeader::getFileHeader() const
 {
     return nitf::Field(getNativeOrThrow()->fileHeader);
 }
 
-nitf::Field FileHeader::getFileVersion()
+nitf::Field FileHeader::getFileVersion() const
 {
     return nitf::Field(getNativeOrThrow()->fileVersion);
 }
 
-nitf::Field FileHeader::getComplianceLevel()
+nitf::Field FileHeader::getComplianceLevel() const
 {
     return nitf::Field(getNativeOrThrow()->complianceLevel);
 }
 
-nitf::Field FileHeader::getSystemType()
+nitf::Field FileHeader::getSystemType() const
 {
     return nitf::Field(getNativeOrThrow()->systemType);
 }
 
-nitf::Field FileHeader::getOriginStationID()
+nitf::Field FileHeader::getOriginStationID() const
 {
     return nitf::Field(getNativeOrThrow()->originStationID);
 }
 
-nitf::Field FileHeader::getFileDateTime()
+nitf::Field FileHeader::getFileDateTime() const
 {
     return nitf::Field(getNativeOrThrow()->fileDateTime);
 }
 
-nitf::Field FileHeader::getFileTitle()
+nitf::Field FileHeader::getFileTitle() const
 {
     return nitf::Field(getNativeOrThrow()->fileTitle);
 }
 
-nitf::Field FileHeader::getClassification()
+nitf::Field FileHeader::getClassification() const
 {
     return nitf::Field(getNativeOrThrow()->classification);
 }
 
-nitf::FileSecurity FileHeader::getSecurityGroup()
+nitf::FileSecurity FileHeader::getSecurityGroup() const
 {
     return nitf::FileSecurity(getNativeOrThrow()->securityGroup);
 }
@@ -115,151 +113,160 @@ void FileHeader::setSecurityGroup(nitf::FileSecurity value)
     value.setManaged(true);
 }
 
-nitf::Field FileHeader::getMessageCopyNum()
+nitf::Field FileHeader::getMessageCopyNum() const
 {
     return nitf::Field(getNativeOrThrow()->messageCopyNum);
 }
 
-nitf::Field FileHeader::getMessageNumCopies()
+nitf::Field FileHeader::getMessageNumCopies() const
 {
     return nitf::Field(getNativeOrThrow()->messageNumCopies);
 }
 
-nitf::Field FileHeader::getEncrypted()
+nitf::Field FileHeader::getEncrypted() const
 {
     return nitf::Field(getNativeOrThrow()->encrypted);
 }
 
-nitf::Field FileHeader::getBackgroundColor()
+nitf::Field FileHeader::getBackgroundColor() const
 {
     return nitf::Field(getNativeOrThrow()->backgroundColor);
 }
 
-nitf::Field FileHeader::getOriginatorName()
+nitf::Field FileHeader::getOriginatorName() const
 {
     return nitf::Field(getNativeOrThrow()->originatorName);
 }
 
-nitf::Field FileHeader::getOriginatorPhone()
+nitf::Field FileHeader::getOriginatorPhone() const
 {
     return nitf::Field(getNativeOrThrow()->originatorPhone);
 }
 
-nitf::Field FileHeader::getFileLength()
+nitf::Field FileHeader::getFileLength() const
 {
     return nitf::Field(getNativeOrThrow()->fileLength);
 }
 
-nitf::Field FileHeader::getHeaderLength()
+nitf::Field FileHeader::getHeaderLength() const
 {
     return nitf::Field(getNativeOrThrow()->headerLength);
 }
 
-nitf::Field FileHeader::getNumImages()
+nitf::Field FileHeader::getNumImages() const
 {
     return nitf::Field(getNativeOrThrow()->numImages);
 }
 
-nitf::Field FileHeader::getNumGraphics()
+nitf::Field FileHeader::getNumGraphics() const
 {
     return nitf::Field(getNativeOrThrow()->numGraphics);
 }
 
-nitf::Field FileHeader::getNumLabels()
+nitf::Field FileHeader::getNumLabels() const
 {
     return nitf::Field(getNativeOrThrow()->numLabels);
 }
 
-nitf::Field FileHeader::getNumTexts()
+nitf::Field FileHeader::getNumTexts() const
 {
     return nitf::Field(getNativeOrThrow()->numTexts);
 }
 
-nitf::Field FileHeader::getNumDataExtensions()
+nitf::Field FileHeader::getNumDataExtensions() const
 {
     return nitf::Field(getNativeOrThrow()->numDataExtensions);
 }
 
-nitf::Field FileHeader::getNumReservedExtensions()
+nitf::Field FileHeader::getNumReservedExtensions() const
 {
     return nitf::Field(getNativeOrThrow()->numReservedExtensions);
 }
 
-nitf::ComponentInfo FileHeader::getImageInfo(int i)
+static nitf::ComponentInfo make_ComponentInfo(nitf_ComponentInfo** pComponentInfo, int i)
+{
+    if (pComponentInfo == nullptr)
+    {
+        throw except::NullPointerReference(Ctxt("FileHeader"));
+    }
+    return nitf::ComponentInfo(pComponentInfo[i]);
+}
+
+nitf::ComponentInfo FileHeader::getImageInfo(int i) const
 {
     int num = getNumImages();
     if (i < 0 || i >= num)
         throw except::IndexOutOfRangeException(Ctxt(FmtX(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
-    return nitf::ComponentInfo(getNativeOrThrow()->imageInfo[i]);
+    return make_ComponentInfo(getNativeOrThrow()->imageInfo, i);
 }
 
-nitf::ComponentInfo FileHeader::getGraphicInfo(int i)
+nitf::ComponentInfo FileHeader::getGraphicInfo(int i) const
 {
     int num = getNumGraphics();
     if (i < 0 || i >= num)
         throw except::IndexOutOfRangeException(Ctxt(FmtX(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
-    return nitf::ComponentInfo(getNativeOrThrow()->graphicInfo[i]);
+    return make_ComponentInfo(getNativeOrThrow()->graphicInfo, i);
 }
 
-nitf::ComponentInfo FileHeader::getLabelInfo(int i)
+nitf::ComponentInfo FileHeader::getLabelInfo(int i) const
 {
     int num = getNumLabels();
     if (i < 0 || i >= num)
         throw except::IndexOutOfRangeException(Ctxt(FmtX(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
-    return nitf::ComponentInfo(getNativeOrThrow()->labelInfo[i]);
+    return make_ComponentInfo(getNativeOrThrow()->labelInfo, i);
 }
 
-nitf::ComponentInfo FileHeader::getTextInfo(int i)
+nitf::ComponentInfo FileHeader::getTextInfo(int i) const
 {
     int num = getNumTexts();
     if (i < 0 || i >= num)
         throw except::IndexOutOfRangeException(Ctxt(FmtX(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
-    return nitf::ComponentInfo(getNativeOrThrow()->textInfo[i]);
+    return make_ComponentInfo(getNativeOrThrow()->textInfo, i);
 }
 
-nitf::ComponentInfo FileHeader::getDataExtensionInfo(int i)
+nitf::ComponentInfo FileHeader::getDataExtensionInfo(int i) const
 {
     int num = getNumDataExtensions();
     if (i < 0 || i >= num)
         throw except::IndexOutOfRangeException(Ctxt(FmtX(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
-    return nitf::ComponentInfo(getNativeOrThrow()->dataExtensionInfo[i]);
+    return make_ComponentInfo(getNativeOrThrow()->dataExtensionInfo, i);
 }
 
-nitf::ComponentInfo FileHeader::getReservedExtensionInfo(int i)
+nitf::ComponentInfo FileHeader::getReservedExtensionInfo(int i) const
 {
     int num = getNumReservedExtensions();
     if (i < 0 || i >= num)
         throw except::IndexOutOfRangeException(Ctxt(FmtX(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
-    return nitf::ComponentInfo(getNativeOrThrow()->reservedExtensionInfo[i]);
+    return make_ComponentInfo(getNativeOrThrow()->reservedExtensionInfo, i);
 }
 
-nitf::Field FileHeader::getUserDefinedHeaderLength()
+nitf::Field FileHeader::getUserDefinedHeaderLength() const
 {
     return nitf::Field(getNativeOrThrow()->userDefinedHeaderLength);
 }
 
-nitf::Field FileHeader::getUserDefinedOverflow()
+nitf::Field FileHeader::getUserDefinedOverflow() const
 {
     return nitf::Field(getNativeOrThrow()->userDefinedOverflow);
 }
 
-nitf::Field FileHeader::getExtendedHeaderLength()
+nitf::Field FileHeader::getExtendedHeaderLength() const
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderLength);
 }
 
-nitf::Field FileHeader::getExtendedHeaderOverflow()
+nitf::Field FileHeader::getExtendedHeaderOverflow() const
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderOverflow);
 }
 
-nitf::Extensions FileHeader::getUserDefinedSection()
+nitf::Extensions FileHeader::getUserDefinedSection() const
 {
     return nitf::Extensions(getNativeOrThrow()->userDefinedSection);
 }
@@ -281,7 +288,7 @@ void FileHeader::setUserDefinedSection(nitf::Extensions value)
 }
 
 
-nitf::Extensions FileHeader::getExtendedSection()
+nitf::Extensions FileHeader::getExtendedSection() const
 {
     return nitf::Extensions(getNativeOrThrow()->extendedSection);
 }

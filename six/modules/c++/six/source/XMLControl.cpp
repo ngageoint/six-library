@@ -22,11 +22,15 @@
 
 #include <logging/NullLogger.h>
 #include <six/XMLControl.h>
+#include <six/Utilities.h>
+
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
 
 namespace six
 {
 XMLControl::XMLControl(logging::Logger* log, bool ownLog) :
-    mLog(NULL),
+    mLog(nullptr),
     mOwnLog(false)
 {
     setLogger(log, ownLog);
@@ -45,6 +49,16 @@ void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
     if (schemaPaths.empty())
     {
         const sys::OS os;
+
+#ifndef DEFAULT_SCHEMA_PATH
+// Don't want to set a dummy schema path to a directory that exists as that causes
+// the code to check for valid schemas and validate.
+#if defined(_WIN32)
+#define DEFAULT_SCHEMA_PATH "C:\\some\\path" // just to compile ...
+#else
+#define DEFAULT_SCHEMA_PATH "/some/path" // just to compile ...
+#endif
+#endif
 
         std::string envPath;
         os.getEnvIfSet(six::SCHEMA_PATH, envPath);
@@ -80,11 +94,10 @@ void XMLControl::validate(const xml::lite::Document* doc,
         log->warn(oss.str());
     }
 
-    sys::OS os;
     // If the paths we have don't exist, throw
     for (size_t ii = 0; ii < paths.size(); ++ii)
     {
-        if (!os.exists(paths[ii]))
+        if (!fs::exists(paths[ii]))
         {
             std::ostringstream msg;
             msg << paths[ii] << " does not exist!";
@@ -108,7 +121,7 @@ void XMLControl::validate(const xml::lite::Document* doc,
 
         // Pretty-print so that lines numbers are useful
         io::StringStream xmlStream;
-        doc->getRootElement()->prettyPrint(xmlStream);
+        doc->getRootElement()->prettyPrint(xmlStream, xml::lite::string_encoding::utf_8);
 
         validator.validate(xmlStream, doc->getRootElement()->getUri(), errors);
 
@@ -140,7 +153,7 @@ void XMLControl::setLogger(logging::Logger* log, bool own)
     if (mLog && mOwnLog && log != mLog)
     {
         delete mLog;
-        mLog = NULL;
+        mLog = nullptr;
     }
 
     if (log)
@@ -212,21 +225,7 @@ Data* XMLControl::fromXML(const xml::lite::Document* doc,
 
 std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 {
-    std::string str;
-
-    switch (dataType)
-    {
-    case DataType::COMPLEX:
-        str = "SICD";
-        break;
-    case DataType::DERIVED:
-        str = "SIDD";
-        break;
-    default:
-        throw except::Exception(
-                Ctxt("Invalid data type " + str::toString(dataType)));
-    }
-
+    std::string str = dataType;
     if (appendXML)
     {
         str += "_XML";

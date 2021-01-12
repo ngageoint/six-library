@@ -19,9 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef __CPHD_CPHD_WRITER_H__
-#define __CPHD_CPHD_WRITER_H__
+#pragma once
 
 #include <string>
 #include <vector>
@@ -69,7 +67,7 @@ public:
      *  \param numElements Total number of elements in array
      *  \param elementSize Size of each element
      */
-    virtual void operator()(const sys::ubyte* data,
+    virtual void operator()(const std::byte* data,
                             size_t numElements,
                             size_t elementSize) = 0;
 
@@ -87,9 +85,8 @@ protected:
  *
  *  For little endian to big endian storage
  */
-class DataWriterLittleEndian : public DataWriter
+struct DataWriterLittleEndian final : public DataWriter
 {
-public:
     /*
      *  \func DataWriterLittleEndian
      *  \brief Constructor
@@ -110,15 +107,15 @@ public:
      *  \param numElements Total number of elements in array
      *  \param elementSize Size of each element
      */
-    virtual void operator()(const sys::ubyte* data,
+    void operator()(const std::byte* data,
                             size_t numElements,
-                            size_t elementSize);
+                            size_t elementSize) override;
 
 private:
     // Size of scratch space
     const size_t mScratchSize;
     // Scratch space buffer
-    const mem::ScopedArray<sys::byte> mScratch;
+    const std::unique_ptr<std::byte[]> mScratch;
 };
 
 /*
@@ -128,9 +125,8 @@ private:
  *
  *  No byte swap. Already big endian.
  */
-class DataWriterBigEndian : public DataWriter
+struct DataWriterBigEndian final : public DataWriter
 {
-public:
     /*
      *  \func DataWriter
      *  \brief Constructor
@@ -151,9 +147,9 @@ public:
      *  \param numElements Total number of elements in array
      *  \param elementSize Size of each element
      */
-    virtual void operator()(const sys::ubyte* data,
+    void operator()(const std::byte* data,
                             size_t numElements,
-                            size_t elementSize);
+                            size_t elementSize) override;
 };
 
 
@@ -171,7 +167,7 @@ public:
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
      *
-     *  The default argument for numThreads should be sys::OS().getNumCPUs().
+     *  The default argument for numThreads should be std::thread::hardware_concurrency().
      *  However, SWIG doesn't seem to like that.
      *  As a workaround, we pass in 0 for the default, and the ctor sets the
      *  number of threads to the number of CPUs if this happens.
@@ -197,7 +193,7 @@ public:
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
      *
-     *  The default argument for numThreads should be sys::OS().getNumCPUs().
+     *  The default argument for numThreads should be std::thread::hardware_concurrency().
      *  However, SWIG doesn't seem to like that.
      *  As a workaround, we pass in 0 for the default, and the ctor sets the
      *  number of threads to the number of CPUs if this happens.
@@ -226,8 +222,8 @@ public:
      *  This only works with valid CPHDWriter data types:
      *      std:: ubyte*  (for compressed data)
      *      std::complex<float>
-     *      std::complex<sys::Int16_T>
-     *      std::complex<sys::Int8_T>
+     *      std::complex<int16_t>
+     *      std::complex<int8_t>
      *
      *  \param pvpBlock The vector based metadata to write.
      *  \param widebandData .The wideband data to write to disk
@@ -237,7 +233,7 @@ public:
     void write(
             const PVPBlock& pvpBlock,
             const T* widebandData,
-            const sys::ubyte* supportData = nullptr);
+            const std::byte* supportData = nullptr);
 
     /*
      *  \func writeMetadata
@@ -264,7 +260,7 @@ public:
     void writeSupportData(const T* data,
                           const std::string& id)
     {
-        writeSupportDataImpl(reinterpret_cast<const sys::ubyte*>(data),
+        writeSupportDataImpl(reinterpret_cast<const std::byte*>(data),
                              mMetadata.data.getSupportArrayById(id).numRows * mMetadata.data.getSupportArrayById(id).numCols,
                              mMetadata.data.getSupportArrayById(id).bytesPerElement);
     }
@@ -280,7 +276,7 @@ public:
     template <typename T>
     void writeSupportData(const T* data)
     {
-        const sys::ubyte* dataPtr = reinterpret_cast<const sys::ubyte*>(data);
+        const std::byte* dataPtr = reinterpret_cast<const std::byte*>(data);
         for (auto it = mMetadata.data.supportArrayMap.begin(); it != mMetadata.data.supportArrayMap.end(); ++it)
         {
             // Move inputstream head to offset of particular support array
@@ -311,8 +307,8 @@ public:
      *  valid CPHDWriter data types:
      *      std:: ubyte*  (for compressed data)
      *      std::complex<float>
-     *      std::complex<sys::Int16_T>
-     *      std::complex<sys::Int8_T>
+     *      std::complex<int16_t>
+     *      std::complex<int8_t>
      *
      *  \param data The data to write to disk.
      *  \param numElements The number of elements in data. Treat the data
@@ -342,25 +338,25 @@ private:
     /*
      *  Write pvp helper
      */
-    void writePVPData(const sys::ubyte* pvpBlock,
+    void writePVPData(const std::byte* pvpBlock,
                       size_t index);
 
     /*
      *  Implementation of write wideband
      */
-    void writeCPHDDataImpl(const sys::ubyte* data,
+    void writeCPHDDataImpl(const std::byte* data,
                            size_t size);
 
     /*
      *  Implementation of write compressed wideband
      */
-    void writeCompressedCPHDDataImpl(const sys::ubyte* data,
+    void writeCompressedCPHDDataImpl(const std::byte* data,
                                      size_t channel);
 
     /*
      *  Implementation of write support data
      */
-    void writeSupportDataImpl(const sys::ubyte* data,
+    void writeSupportDataImpl(const std::byte* data,
                               size_t numElements, size_t elementSize);
 
     //! DataWriter object
@@ -384,4 +380,3 @@ private:
 };
 }
 
-#endif

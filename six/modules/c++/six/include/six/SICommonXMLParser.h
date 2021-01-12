@@ -41,7 +41,7 @@ public:
     SICommonXMLParser(const std::string& defaultURI,
                       bool addClassAttributes,
                       const std::string& siCommonURI,
-                      logging::Logger* log = NULL,
+                      logging::Logger* log = nullptr,
                       bool ownLog = false);
 
     std::string getSICommonURI() const
@@ -50,78 +50,78 @@ public:
     }
 
     XMLElem createComplex(const std::string& name, std::complex<double> c,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createVector2D(const std::string& name, const std::string& uri,
             Vector2 p = 0.0, XMLElem parent = nullptr) const;
     XMLElem createVector2D(const std::string& name, Vector2 p = 0.0,
             XMLElem parent = nullptr) const;
     XMLElem createVector3D(const std::string& name, const std::string& uri,
-            Vector3 p = 0.0, XMLElem parent = NULL) const;
+            Vector3 p = 0.0, XMLElem parent = nullptr) const;
     XMLElem createVector3D(const std::string& name, Vector3 p = 0.0,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createRowCol(const std::string& name, const std::string& uri,
             const std::string& rowName, const std::string& colName,
-            const RowColInt& value, XMLElem parent = NULL) const;
+            const RowColInt& value, XMLElem parent = nullptr) const;
     XMLElem createRowCol(const std::string& name, const std::string& rowName,
             const std::string& colName, const RowColInt& value,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createRowCol(const std::string& name, const std::string& uri,
             const std::string& rowName, const std::string& colName,
-            const RowColDouble& value, XMLElem parent = NULL) const;
+            const RowColDouble& value, XMLElem parent = nullptr) const;
     XMLElem createRowCol(const std::string& name, const std::string& rowName,
             const std::string& colName, const RowColDouble& value,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createRowCol(const std::string& name, const std::string& uri,
-            const RowColInt& value, XMLElem parent = NULL) const;
+            const RowColInt& value, XMLElem parent = nullptr) const;
     XMLElem createRowCol(const std::string& name, const RowColInt& value,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createRowCol(const std::string& name, const std::string& uri,
-            const RowColDouble& value, XMLElem parent = NULL) const;
+            const RowColDouble& value, XMLElem parent = nullptr) const;
     XMLElem createRowCol(const std::string& name, const RowColDouble& value,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createRowCol(const std::string&, const RowColLatLon& value,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createRangeAzimuth(const std::string& name,
-            const types::RgAz<double>& value, XMLElem parent = NULL) const;
+            const types::RgAz<double>& value, XMLElem parent = nullptr) const;
     XMLElem createLatLon(const std::string& name, const LatLon& value,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createLatLon(const std::string& name, const std::string& uri,
-            const LatLon& value, XMLElem parent = NULL) const;
+            const LatLon& value, XMLElem parent = nullptr) const;
     XMLElem createLatLonAlt(const std::string& name, const LatLonAlt& value,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
 
     XMLElem createPoly1D(const std::string& name, const std::string& uri,
-            const Poly1D& poly1D, XMLElem parent = NULL) const;
+            const Poly1D& poly1D, XMLElem parent = nullptr) const;
     XMLElem createPoly2D(const std::string& name, const std::string& uri,
-            const Poly2D& poly2D, XMLElem parent = NULL) const;
+            const Poly2D& poly2D, XMLElem parent = nullptr) const;
     XMLElem createPoly1D(const std::string& name, const Poly1D& poly1D,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createPoly2D(const std::string& name, const Poly2D& poly2D,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createPolyXYZ(const std::string& name, const PolyXYZ& polyXYZ,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createParameter(const std::string& name, const std::string& uri,
-            const Parameter& value, XMLElem parent = NULL) const;
+            const Parameter& value, XMLElem parent = nullptr) const;
     void addParameters(const std::string& name, const std::string& uri,
-            const ParameterCollection& props, XMLElem parent = NULL) const;
+            const ParameterCollection& props, XMLElem parent = nullptr) const;
     XMLElem createParameter(const std::string& name, const Parameter& value,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     void addParameters(const std::string& name,
-            const ParameterCollection& props, XMLElem parent = NULL) const;
+            const ParameterCollection& props, XMLElem parent = nullptr) const;
     void addDecorrType(const std::string& name, const std::string& uri,
             DecorrType dt, XMLElem p) const;
 
     // TODO: Can make this virtual if we ever need it
     //       This is the implementation for SICD 1.x / SIDD 2.0+
     XMLElem convertGeoInfoToXML(const GeoInfo& geoInfo,
-            bool hasSIPrefix, XMLElem parent = NULL) const;
+            bool hasSIPrefix, XMLElem parent = nullptr) const;
     void parseGeoInfoFromXML(const XMLElem geoInfoXML, GeoInfo* geoInfo) const;
 
     void parseEarthModelType(XMLElem element, EarthModelType& value) const;
 
     XMLElem createEarthModelType(const std::string& name,
             const EarthModelType& value,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
 
     XMLElem createLatLonFootprint(const std::string& name,
                                   const std::string& cornerName,
@@ -166,7 +166,7 @@ public:
 
     XMLElem convertErrorStatisticsToXML(
         const ErrorStatistics* errorStatistics,
-        XMLElem parent = NULL) const;
+        XMLElem parent = nullptr) const;
 
     void parseErrorStatisticsFromXML(
         const XMLElem errorStatsXML,
@@ -182,7 +182,7 @@ public:
 
     virtual XMLElem convertRadiometryToXML(
         const Radiometric *obj,
-        XMLElem parent = NULL) const = 0;
+        XMLElem parent = nullptr) const = 0;
 
     virtual void parseRadiometryFromXML(
         const XMLElem radiometricXML,
@@ -199,7 +199,7 @@ public:
 protected:
     virtual XMLElem convertCompositeSCPToXML(
         const ErrorStatistics* errorStatistics,
-        XMLElem parent = NULL) const = 0;
+        XMLElem parent = nullptr) const = 0;
 
     virtual void parseCompositeSCPFromXML(
         const XMLElem errorStatsXML,

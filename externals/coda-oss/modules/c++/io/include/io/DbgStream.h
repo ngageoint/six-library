@@ -22,10 +22,10 @@
 
 #ifndef __DBG_STREAM_H__
 #define __DBG_STREAM_H__
-
-#include <memory>
+#pragma once
 
 #include "io/OutputStream.h"
+#include <memory>
 #include "mem/SharedPtr.h"
 
 

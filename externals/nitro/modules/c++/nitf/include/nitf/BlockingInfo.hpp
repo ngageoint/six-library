@@ -63,10 +63,9 @@ public:
     BlockingInfo(nitf_BlockingInfo * x);
 
     //! Constructor
-    BlockingInfo();
+    BlockingInfo() noexcept(false);
 
-    //! Destructor
-    ~BlockingInfo();
+    ~BlockingInfo() = default;
 
     //! Get the number of blocks per row
     uint32_t getNumBlocksPerRow() const;
@@ -102,7 +101,7 @@ public:
     void print(FILE *file);
 
 private:
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 }

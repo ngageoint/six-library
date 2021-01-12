@@ -26,7 +26,7 @@ using namespace nitf;
 
 SubWindow::SubWindow(const SubWindow & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 SubWindow & SubWindow::operator=(const SubWindow & x)
@@ -47,9 +47,12 @@ SubWindow::SubWindow() : mDownSampler(nullptr)
     setNative(nitf_SubWindow_construct(&error));
     getNativeOrThrow();
     setManaged(false);
+
+    setStartCol(0);
+    setStartRow(0);
 }
 
-SubWindow::~SubWindow()
+SubWindow::~SubWindow() noexcept(false)
 {
     if (isValid() && getNative()->downsampler)
     {
@@ -106,7 +109,7 @@ uint32_t SubWindow::getBandList(int i)
 
 void SubWindow::setBandList(uint32_t * value)
 {
-    getNativeOrThrow()->bandList = (uint32_t*)value;
+    getNativeOrThrow()->bandList = value;
 }
 
 uint32_t SubWindow::getNumBands() const
@@ -128,14 +131,17 @@ void SubWindow::setDownSampler(nitf::DownSampler* downSampler)
         ds.decRef();
     }
 
-    //increment the reference for this DownSampler
-    getNativeOrThrow()->downsampler = downSampler->getNative();
-    downSampler->incRef();
+    if (downSampler != nullptr)
+    {
+        //increment the reference for this DownSampler
+        getNativeOrThrow()->downsampler = downSampler->getNative();
+        downSampler->incRef();
+    }
     mDownSampler = downSampler;
 }
 
 
-nitf::DownSampler* SubWindow::getDownSampler()
+nitf::DownSampler* SubWindow::getDownSampler() noexcept
 {
     return mDownSampler;
 }

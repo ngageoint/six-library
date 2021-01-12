@@ -24,7 +24,9 @@
 #include <string>
 
 #include <import/nitf.hpp>
+#include <import/except.h>
 
+#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 #include "TestCase.h"

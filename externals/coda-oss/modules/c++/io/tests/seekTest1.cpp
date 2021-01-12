@@ -30,7 +30,7 @@ void testSeekCurrent(io::StringStream& oss)
     char buffer[ LENGTH_STR + 1 ];
     buffer[ LENGTH_STR ] = 0;
     // Simple scan through....
-    sys::SSize_T readVal = 0;
+    int readVal = 0;
     oss.seek(0, io::StringStream::START);
     
 
@@ -63,7 +63,7 @@ int main()
 	char buffer[ LENGTH_STR + 1 ];
 	buffer[ LENGTH_STR ] = 0;
 	// Simple scan through....
-	sys::SSize_T readVal = 0;
+	int readVal = 0;
 	oss.seek(0, io::StringStream::START);
 		
 	for (int i = 0; readVal != io::StringStream::IS_END ; i++)
@@ -82,7 +82,7 @@ int main()
 	memset(buffer, 0, LENGTH_STR + 1);
 	
 	io::FileInputStream fis("anything.txt");
-	sys::Off_T avail = fis.available();
+	int avail = (int)fis.available();
 	fis.seek(0, io::FileInputStream::END);
 	readVal = 0;
 
@@ -104,9 +104,9 @@ int main()
 	
 	memset(buffer, 0, LENGTH_STR + 1);
 
-	for (sys::Off_T i = avail; i > 0; --i)
+	for (int i = avail; i > 0; --i)
 	{
-	    auto d = avail - i;
+	    int d = avail - i;
 	    bwd.seek(i - 1, io::StringStream::START);
 	    bwd.read(&buffer[d], 1);
 	    //std::cout << "At: " << d << ": " << buffer[d] << std::endl;

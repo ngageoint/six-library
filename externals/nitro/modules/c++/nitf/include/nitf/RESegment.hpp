@@ -53,19 +53,19 @@ public:
     RESegment(nitf_RESegment * x);
 
     //! Default Constructor
-    RESegment();
+    RESegment() noexcept(false);
 
     RESegment(NITF_DATA * x);
 
     RESegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::RESegment clone();
+    nitf::RESegment clone() const;
 
-    ~RESegment();
+    ~RESegment() = default;
 
     //! Get the subheader
-    nitf::RESubheader getSubheader();
+    nitf::RESubheader getSubheader() const;
 
     //! Set the subheader
     void setSubheader(nitf::RESubheader & value);
@@ -83,7 +83,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

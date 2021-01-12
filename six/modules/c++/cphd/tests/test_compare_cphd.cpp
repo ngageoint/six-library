@@ -23,6 +23,8 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <thread>
+
 #include <logging/NullLogger.h>
 #include <cli/Value.h>
 #include <cli/ArgumentParser.h>
@@ -39,8 +41,8 @@
  */
 
 template <typename T>
-bool compareCPHDData(const sys::ubyte* data1,
-                     const sys::ubyte* data2,
+bool compareCPHDData(const std::byte* data1,
+                     const std::byte* data2,
                      size_t size,
                      size_t channel)
 {
@@ -60,8 +62,8 @@ bool compareCPHDData(const sys::ubyte* data1,
     return true;
 }
 
-bool compareSupportData(const mem::ScopedArray<sys::ubyte>& data1,
-                     const mem::ScopedArray<sys::ubyte>& data2,
+bool compareSupportData(const std::unique_ptr<std::byte[]>& data1,
+                     const std::unique_ptr<std::byte[]>& data2,
                      size_t size)
 {
     for (size_t ii = 0; ii < size; ++ii)
@@ -86,8 +88,8 @@ bool compareWideband(cphd::CPHDReader& reader1,
     const cphd::Wideband& wideband1 = reader1.getWideband();
     const cphd::Wideband& wideband2 = reader2.getWideband();
 
-    mem::ScopedArray<sys::ubyte> cphdData1;
-    mem::ScopedArray<sys::ubyte> cphdData2;
+    std::unique_ptr<std::byte[]> cphdData1;
+    std::unique_ptr<std::byte[]> cphdData2;
 
     for (size_t ii = 0; ii < channelsToProcess; ++ii)
     {
@@ -113,7 +115,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
             switch (reader1.getMetadata().data.getSampleType())
             {
             case cphd::SampleType::RE08I_IM08I:
-                if (!compareCPHDData<std::complex<sys::Int8_T> >(
+                if (!compareCPHDData<std::complex<int8_t> >(
                         cphdData1.get(),
                         cphdData2.get(),
                         dims1.area(),
@@ -123,7 +125,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
                 }
                 break;
             case cphd::SampleType::RE16I_IM16I:
-                if (!compareCPHDData<std::complex<sys::Int16_T> >(
+                if (!compareCPHDData<std::complex<int16_t> >(
                         cphdData1.get(),
                         cphdData2.get(),
                         dims1.area(),
@@ -175,9 +177,9 @@ bool checkCPHD(const std::string& pathname1, const std::string& pathname2, size_
     }
 
     // Check support block
-    mem::ScopedArray<sys::ubyte> readPtr1;
+    std::unique_ptr<std::byte[]> readPtr1;
     reader1.getSupportBlock().readAll(numThreads, readPtr1);
-    mem::ScopedArray<sys::ubyte> readPtr2;
+    std::unique_ptr<std::byte[]> readPtr2;
     reader2.getSupportBlock().readAll(numThreads, readPtr2);
     if (!compareSupportData(readPtr1, readPtr2, reader1.getMetadata().data.getAllSupportSize()))
     {
@@ -230,7 +232,7 @@ int main(int argc, char** argv)
                            "Specify the number of threads to use",
                            cli::STORE,
                            "threads",
-                           "NUM")->setDefault(sys::OS().getNumCPUs());
+                           "NUM")->setDefault(std::thread::hardware_concurrency());
         parser.addArgument("file1", "First pathname", cli::STORE, "file1",
                            "CPHD", 1, 1);
         parser.addArgument("file2", "Second pathname", cli::STORE, "file2",
@@ -257,10 +259,6 @@ int main(int argc, char** argv)
         }
         std::cout << "CPHD Files match \n";
         return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

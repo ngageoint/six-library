@@ -105,7 +105,7 @@ TEST_CASE(testTruncateTo)
     {
         for (size_t jj = 0; jj <= poly.orderY(); ++jj, coeff += 10)
         {
-            poly[ii][jj] = static_cast<double>(coeff);
+            poly[ii][jj] = coeff;
         }
     }
 
@@ -127,7 +127,7 @@ TEST_CASE(testTruncateToNonZeros)
     {
         for (size_t jj = 0; jj <= poly.orderY(); ++jj, coeff += 10)
         {
-            poly[ii][jj] = static_cast<double>(coeff);
+            poly[ii][jj] = coeff;
         }
     }
 
@@ -260,7 +260,7 @@ TEST_CASE(testOperators)
     {
         for (size_t jj = 0; jj <= p1.orderY(); ++jj)
         {
-            p1[ii][jj] = static_cast<double>(ii * p1.orderY() + jj);
+            p1[ii][jj] = ii * p1.orderY() + jj;
         }
     }
 
@@ -270,7 +270,7 @@ TEST_CASE(testOperators)
     {
         for (size_t jj = 0; jj <= p2.orderY(); ++jj)
         {
-            p2[ii][jj] = static_cast<double>(ii * p2.orderY() + jj);
+            p2[ii][jj] = ii * p2.orderY() + jj;
         }
     }
 
@@ -431,7 +431,7 @@ TEST_CASE(testIsScalar)
     {
         for (size_t jj = 0; jj <= p1.orderY(); ++jj)
         {
-            p1[ii][jj] = static_cast<double>(ii * p1.orderY() + jj);
+            p1[ii][jj] = ii * p1.orderY() + jj;
         }
     }
 

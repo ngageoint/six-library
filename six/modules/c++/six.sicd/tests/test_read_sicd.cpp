@@ -33,6 +33,9 @@
 #include <six/sicd/Utilities.h>
 #include <six/sicd/ComplexData.h>
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
 int main(int argc, char** argv)
 {
     try
@@ -41,7 +44,7 @@ int main(int argc, char** argv)
         const std::string progname(argv[0]);
         if (argc != 2 && argc != 3)
         {
-            std::cerr << "Usage: " << sys::Path::basename(progname)
+            std::cerr << "Usage: " << fs::path(progname).filename().string()
                       << " <SICD pathname> [<schema dirname>]\n\n";
             return 1;
         }
@@ -58,7 +61,7 @@ int main(int argc, char** argv)
             schemaPaths.push_back(six::findSchemaPath(progname));
         }
 
-        std::auto_ptr<six::sicd::ComplexData> complexData;
+        std::unique_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float> > widebandData;
         six::sicd::Utilities::readSicd(sicdPathname, schemaPaths,
                 complexData, widebandData);
@@ -82,11 +85,6 @@ int main(int argc, char** argv)
         std::cout << "Average pixel phase: " << sumPhase / (nl*ne) << std::endl;
 
         return 0;
-    }
-    catch (const except::Exception& e)
-    {
-        std::cerr << e.getMessage() << std::endl;
-        return 1;
     }
     catch (const std::exception& e)
     {

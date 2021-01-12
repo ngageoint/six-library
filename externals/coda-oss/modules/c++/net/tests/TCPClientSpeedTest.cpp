@@ -33,7 +33,6 @@
 
 #include <sys/Path.h>
 #include <sys/LocalDateTime.h>
-#include <mem/SharedPtr.h>
 #include <net/ClientSocketFactory.h>
 
 int main(int argc, char** argv)

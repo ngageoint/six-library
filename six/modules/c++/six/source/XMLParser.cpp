@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <string>
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
@@ -40,7 +41,7 @@ XMLParser::XMLParser(const std::string& defaultURI,
                      bool ownLog) :
     mDefaultURI(defaultURI),
     mAddClassAttributes(addClassAttributes),
-    mLog(NULL),
+    mLog(nullptr),
     mOwnLog(false)
 {
     setLogger(log, ownLog);
@@ -59,7 +60,7 @@ void XMLParser::setLogger(logging::Logger* log, bool own)
     if (mLog && mOwnLog && log != mLog)
     {
         delete mLog;
-        mLog = NULL;
+        mLog = nullptr;
     }
 
     if (log)
@@ -89,7 +90,12 @@ XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, const std::string& characterData,
         XMLElem parent)
 {
-    XMLElem elem = new xml::lite::Element(name, uri, characterData);
+#ifdef _WIN32
+    static const auto encoding = xml::lite::string_encoding::windows_1252;
+#else
+    static const auto encoding = xml::lite::string_encoding::utf_8;
+#endif
+    XMLElem elem = new xml::lite::Element(name, uri, characterData, &encoding);
     if (parent)
         parent->addChild(elem);
     return elem;
@@ -111,7 +117,7 @@ XMLElem XMLParser::createString(const std::string& name,
     return elem;
 }
 
-XMLElem XMLParser::createString(const std::string& name,
+XMLElem XMLParser::createString_(const std::string& name,
         const std::string& p, XMLElem parent) const
 {
     return createString(name, mDefaultURI, p, parent);
@@ -123,7 +129,7 @@ XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
     std::string elementValue;
     try
     {
-        elementValue = six::toString<int>(p);
+        elementValue = std::to_string(p);
     }
     catch (const except::Exception& ex)
     {
@@ -171,7 +177,7 @@ XMLElem XMLParser::createDouble(const std::string& name,
     std::string elementValue;
     try
     {
-        elementValue = six::toString<double>(p);
+        elementValue = std::to_string(p);
     }
     catch (const except::Exception& ex)
     {
@@ -203,11 +209,11 @@ XMLElem XMLParser::createBooleanType(const std::string& name,
 {
     if (p == six::BooleanType::NOT_SET)
     {
-        return NULL;
+        return nullptr;
     }
 
     XMLElem const elem =
-            newElement(name, uri, six::toString<BooleanType>(p), parent);
+            newElement(name, uri, six::toString(p), parent);
     if (mAddClassAttributes)
     {
         xml::lite::AttributeNode node;
@@ -251,7 +257,7 @@ XMLElem XMLParser::createDateTime(const std::string& name,
 XMLElem XMLParser::createDateTime(const std::string& name,
         const std::string& uri, const DateTime& p, XMLElem parent) const
 {
-    return createDateTime(name, uri, six::toString<DateTime>(p), parent);
+    return createDateTime(name, uri, six::toString(p), parent);
 }
 
 XMLElem XMLParser::createDateTime(const std::string& name, const DateTime& p,
@@ -290,7 +296,7 @@ XMLElem XMLParser::getFirstAndOnly(XMLElem parent, const std::string& tag)
     {
         throw except::Exception(Ctxt(
                  "Expected exactly one " + tag + " but got " +
-                    str::toString(children.size())));
+                    std::to_string(children.size())));
     }
     return children[0];
 }
@@ -299,7 +305,7 @@ XMLElem XMLParser::getOptional(XMLElem parent, const std::string& tag)
     std::vector < XMLElem > children;
     parent->getElementsByTagName(tag, children);
     if (children.size() != 1)
-        return NULL;
+        return nullptr;
     return children[0];
 }
 
@@ -313,7 +319,7 @@ XMLElem XMLParser::require(XMLElem element, const std::string& name)
     return element;
 }
 
-void XMLParser::setAttribute(XMLElem e, const std::string& name,
+void XMLParser::setAttribute_(XMLElem e, const std::string& name,
                              const std::string& v, const std::string& uri)
 {
     xml::lite::AttributeNode node;

@@ -22,15 +22,10 @@
 
 #ifndef __NET_SOCKETS_WIN32_H__
 #define __NET_SOCKETS_WIN32_H__
-#pragma once
 
-#undef BIGENDIAN // #define'd in <winsock2.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <import/sys.h>
-#ifndef BIGENDIAN
-#error BIGENDIAN should be #defined!
-#endif
 
 /*!
  *  \file

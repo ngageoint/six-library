@@ -528,8 +528,8 @@ SWIG_TypePrettyName(const swig_type_info *type) {
      type, separated by vertical-bar characters.  We choose
      to print the last name, as it is often (?) the most
      specific. */
-  if (!type) return NULL;
-  if (type->str != NULL) {
+  if (!type) return nullptr;
+  if (type->str != nullptr) {
     const char *last_name = type->str;
     const char *s;
     for (s = type->str; *s; s++)
@@ -705,7 +705,7 @@ SWIG_PackVoidPtr(char *buff, void *ptr, const char *name, size_t bsz) {
 SWIGRUNTIME const char *
 SWIG_UnpackVoidPtr(const char *c, void **ptr, const char *name) {
   if (*c != '_') {
-    if (strcmp(c,"NULL") == 0) {
+    if (strcmp(c,"nullptr") == 0) {
       *ptr = (void *) 0;
       return name;
     } else {
@@ -733,7 +733,7 @@ SWIG_PackDataName(char *buff, void *ptr, size_t sz, const char *name, size_t bsz
 SWIGRUNTIME const char *
 SWIG_UnpackDataName(const char *c, void *ptr, size_t sz, const char *name) {
   if (*c != '_') {
-    if (strcmp(c,"NULL") == 0) {
+    if (strcmp(c,"nullptr") == 0) {
       memset(ptr,0,sz);
       return name;
     } else {
@@ -1157,7 +1157,7 @@ SWIGRUNTIME PyObject* SWIG_PyInstanceMethod_New(PyObject *SWIGUNUSEDPARM(self), 
 #else
 SWIGRUNTIME PyObject* SWIG_PyInstanceMethod_New(PyObject *SWIGUNUSEDPARM(self), PyObject *SWIGUNUSEDPARM(func))
 {
-  return NULL;
+  return nullptr;
 }
 #endif
 
@@ -1185,10 +1185,10 @@ SWIGRUNTIME PyObject* SWIG_PyInstanceMethod_New(PyObject *SWIGUNUSEDPARM(self), 
 #ifdef SWIGPYTHON_BUILTIN
 #define SWIG_NewPointerObj(ptr, type, flags)            SWIG_Python_NewPointerObj(self, ptr, type, flags)
 #else
-#define SWIG_NewPointerObj(ptr, type, flags)            SWIG_Python_NewPointerObj(NULL, ptr, type, flags)
+#define SWIG_NewPointerObj(ptr, type, flags)            SWIG_Python_NewPointerObj(nullptr, ptr, type, flags)
 #endif
 
-#define SWIG_InternalNewPointerObj(ptr, type, flags)	SWIG_Python_NewPointerObj(NULL, ptr, type, flags)
+#define SWIG_InternalNewPointerObj(ptr, type, flags)	SWIG_Python_NewPointerObj(nullptr, ptr, type, flags)
 
 #define SWIG_CheckImplicit(ty)                          SWIG_Python_CheckImplicit(ty) 
 #define SWIG_AcquirePtr(ptr, src)                       SWIG_Python_AcquirePtr(ptr, src)
@@ -1204,7 +1204,7 @@ SWIGRUNTIME PyObject* SWIG_PyInstanceMethod_New(PyObject *SWIGUNUSEDPARM(self), 
 
 /* for C or C++ function pointers */
 #define SWIG_ConvertFunctionPtr(obj, pptr, type)        SWIG_Python_ConvertFunctionPtr(obj, pptr, type)
-#define SWIG_NewFunctionPtrObj(ptr, type)               SWIG_Python_NewPointerObj(NULL, ptr, type, 0)
+#define SWIG_NewFunctionPtrObj(ptr, type)               SWIG_Python_NewPointerObj(nullptr, ptr, type, 0)
 
 /* for C++ member pointers, ie, member methods */
 #define SWIG_ConvertMember(obj, ptr, sz, ty)            SWIG_Python_ConvertPacked(obj, ptr, sz, ty)
@@ -1377,7 +1377,7 @@ SWIG_Python_UnpackTuple(PyObject *args, const char *name, Py_ssize_t min, Py_ssi
 
 /* A functor is a function object with one single object argument */
 #if PY_VERSION_HEX >= 0x02020000
-#define SWIG_Python_CallFunctor(functor, obj)	        PyObject_CallFunctionObjArgs(functor, obj, NULL);
+#define SWIG_Python_CallFunctor(functor, obj)	        PyObject_CallFunctionObjArgs(functor, obj, nullptr);
 #else
 #define SWIG_Python_CallFunctor(functor, obj)	        PyObject_CallFunction(functor, "O", obj);
 #endif
@@ -1575,7 +1575,7 @@ SwigPyObject_long(SwigPyObject *v)
 SWIGRUNTIME PyObject *
 SwigPyObject_format(const char* fmt, SwigPyObject *v)
 {
-  PyObject *res = NULL;
+  PyObject *res = nullptr;
   PyObject *args = PyTuple_New(1);
   if (args) {
     if (PyTuple_SetItem(args, 0, SwigPyObject_long(v)) == 0) {
@@ -1712,7 +1712,7 @@ SwigPyObject_dealloc(PyObject *v)
          remain true upon return from SwigPyObject_dealloc.  So save
          and restore. */
       
-      PyObject *val = NULL, *type = NULL, *tb = NULL;
+      PyObject *val = nullptr, *type = nullptr, *tb = nullptr;
       PyErr_Fetch(&val, &type, &tb);
 
       if (data->delargs) {
@@ -1749,12 +1749,12 @@ SwigPyObject_append(PyObject* v, PyObject* next)
   SwigPyObject *sobj = (SwigPyObject *) v;
 #ifndef METH_O
   PyObject *tmp = 0;
-  if (!PyArg_ParseTuple(next,(char *)"O:append", &tmp)) return NULL;
+  if (!PyArg_ParseTuple(next,(char *)"O:append", &tmp)) return nullptr;
   next = tmp;
 #endif
   if (!SwigPyObject_Check(next)) {
     PyErr_SetString(PyExc_TypeError, "Attempt to append a non SwigPyObject");
-    return NULL;
+    return nullptr;
   }
   sobj->next = next;
   Py_INCREF(next);
@@ -1813,7 +1813,7 @@ SwigPyObject_own(PyObject *v, PyObject *args)
   if (!PyArg_UnpackTuple(args, "own", 0, 1, &val)) 
 #endif
     {
-      return NULL;
+      return nullptr;
     } 
   else
     {
@@ -1927,9 +1927,9 @@ SwigPyObject_TypeOnce(void) {
   if (!type_init) {
     const PyTypeObject tmp = {
 #if PY_VERSION_HEX >= 0x03000000
-      PyVarObject_HEAD_INIT(NULL, 0)
+      PyVarObject_HEAD_INIT(nullptr, 0)
 #else
-      PyObject_HEAD_INIT(NULL)
+      PyObject_HEAD_INIT(nullptr)
       0,                                    /* ob_size */
 #endif
       (char *)"SwigPyObject",               /* tp_name */
@@ -2011,7 +2011,7 @@ SwigPyObject_TypeOnce(void) {
     swigpyobject_type.ob_type = &PyType_Type;
 #else
     if (PyType_Ready(&swigpyobject_type) < 0)
-      return NULL;
+      return nullptr;
 #endif
   }
   return &swigpyobject_type;
@@ -2118,9 +2118,9 @@ SwigPyPacked_TypeOnce(void) {
   if (!type_init) {
     const PyTypeObject tmp = {
 #if PY_VERSION_HEX>=0x03000000
-      PyVarObject_HEAD_INIT(NULL, 0)
+      PyVarObject_HEAD_INIT(nullptr, 0)
 #else
-      PyObject_HEAD_INIT(NULL)
+      PyObject_HEAD_INIT(nullptr)
       0,                                    /* ob_size */
 #endif
       (char *)"SwigPyPacked",               /* tp_name */
@@ -2198,7 +2198,7 @@ SwigPyPacked_TypeOnce(void) {
     swigpypacked_type.ob_type = &PyType_Type;
 #else
     if (PyType_Ready(&swigpypacked_type) < 0)
-      return NULL;
+      return nullptr;
 #endif
   }
   return &swigpypacked_type;
@@ -2246,12 +2246,12 @@ _SWIG_This(void)
     return SWIG_Python_str_FromChar("this");
 }
 
-static PyObject *swig_this = NULL;
+static PyObject *swig_this = nullptr;
 
 SWIGRUNTIME PyObject *
 SWIG_This(void)
 {
-  if (swig_this == NULL)
+  if (swig_this == nullptr)
     swig_this = _SWIG_This();
   return swig_this;
 }
@@ -2280,7 +2280,7 @@ SWIG_Python_GetSwigThis(PyObject *pyobj)
       return (SwigPyObject*) pyobj;
   }
 # endif
-  return NULL;
+  return nullptr;
 #else
 
   obj = 0;
@@ -2290,7 +2290,7 @@ SWIG_Python_GetSwigThis(PyObject *pyobj)
     obj = _PyInstance_Lookup(pyobj, SWIG_This());      
   } else {
     PyObject **dictptr = _PyObject_GetDictPtr(pyobj);
-    if (dictptr != NULL) {
+    if (dictptr != nullptr) {
       PyObject *dict = *dictptr;
       obj = dict ? PyDict_GetItem(dict, SWIG_This()) : 0;
     } else {
@@ -2511,13 +2511,13 @@ SWIG_Python_NewShadowInstance(SwigPyClientData *data, PyObject *swig_this)
   PyObject *inst = 0;
   PyObject *newraw = data->newraw;
   if (newraw) {
-    inst = PyObject_Call(newraw, data->newargs, NULL);
+    inst = PyObject_Call(newraw, data->newargs, nullptr);
     if (inst) {
 #if !defined(SWIG_PYTHON_SLOW_GETSET_THIS)
       PyObject **dictptr = _PyObject_GetDictPtr(inst);
-      if (dictptr != NULL) {
+      if (dictptr != nullptr) {
 	PyObject *dict = *dictptr;
-	if (dict == NULL) {
+	if (dict == nullptr) {
 	  dict = PyDict_New();
 	  *dictptr = dict;
 	  PyDict_SetItem(dict, SWIG_This(), swig_this);
@@ -2557,18 +2557,18 @@ SWIG_Python_NewShadowInstance(SwigPyClientData *data, PyObject *swig_this)
   return (PyObject *) inst;
 #else
   PyInstanceObject *inst = PyObject_NEW(PyInstanceObject, &PyInstance_Type);
-  if (inst == NULL) {
-    return NULL;
+  if (inst == nullptr) {
+    return nullptr;
   }
   inst->in_class = (PyClassObject *)data->newargs;
   Py_INCREF(inst->in_class);
   inst->in_dict = PyDict_New();
-  if (inst->in_dict == NULL) {
+  if (inst->in_dict == nullptr) {
     Py_DECREF(inst);
-    return NULL;
+    return nullptr;
   }
 #ifdef Py_TPFLAGS_HAVE_WEAKREFS
-  inst->in_weakreflist = NULL;
+  inst->in_weakreflist = nullptr;
 #endif
 #ifdef Py_TPFLAGS_GC
   PyObject_GC_Init(inst);
@@ -2585,9 +2585,9 @@ SWIG_Python_SetSwigThis(PyObject *inst, PyObject *swig_this)
  PyObject *dict;
 #if (PY_VERSION_HEX >= 0x02020000) && !defined(SWIG_PYTHON_SLOW_GETSET_THIS)
  PyObject **dictptr = _PyObject_GetDictPtr(inst);
- if (dictptr != NULL) {
+ if (dictptr != nullptr) {
    dict = *dictptr;
-   if (dict == NULL) {
+   if (dict == nullptr) {
      dict = PyDict_New();
      *dictptr = dict;
    }
@@ -2605,7 +2605,7 @@ SWIGINTERN PyObject *
 SWIG_Python_InitShadowInstance(PyObject *args) {
   PyObject *obj[2];
   if (!SWIG_Python_UnpackTuple(args, "swiginit", 2, 2, obj)) {
-    return NULL;
+    return nullptr;
   } else {
     SwigPyObject *sthis = SWIG_Python_GetSwigThis(obj[0]);
     if (sthis) {
@@ -2721,12 +2721,12 @@ PyModule_AddObject(PyObject *m, char *name, PyObject *o)
     return SWIG_ERROR;
   }
   if (!o) {
-    PyErr_SetString(PyExc_TypeError, "PyModule_AddObject() needs non-NULL value");
+    PyErr_SetString(PyExc_TypeError, "PyModule_AddObject() needs non-nullptr value");
     return SWIG_ERROR;
   }
   
   dict = PyModule_GetDict(m);
-  if (dict == NULL) {
+  if (dict == nullptr) {
     /* Internal error -- modules must have a dict! */
     PyErr_Format(PyExc_SystemError, "module '%s' has no __dict__",
 		 PyModule_GetName(m));
@@ -2761,7 +2761,7 @@ SWIG_Python_DestroyModule(void *vptr)
     }
   }
   Py_DECREF(SWIG_This());
-  swig_this = NULL;
+  swig_this = nullptr;
 }
 
 SWIGRUNTIME void
@@ -2770,7 +2770,7 @@ SWIG_Python_SetModule(swig_module_info *swig_module) {
  /* Add a dummy module object into sys.modules */
   PyObject *module = PyImport_AddModule((char*)"swig_runtime_data" SWIG_RUNTIME_VERSION);
 #else
-  static PyMethodDef swig_empty_runtime_method_table[] = { {NULL, NULL, 0, NULL} }; /* Sentinel */
+  static PyMethodDef swig_empty_runtime_method_table[] = { {nullptr, nullptr, 0, nullptr} }; /* Sentinel */
   PyObject *module = Py_InitModule((char*)"swig_runtime_data" SWIG_RUNTIME_VERSION, swig_empty_runtime_method_table);
 #endif
 #ifdef SWIGPY_USE_CAPSULE
@@ -2806,7 +2806,7 @@ SWIG_Python_TypeQuery(const char *type)
   swig_type_info *descriptor;
   if (obj) {
 #ifdef SWIGPY_USE_CAPSULE
-    descriptor = (swig_type_info *) PyCapsule_GetPointer(obj, NULL);
+    descriptor = (swig_type_info *) PyCapsule_GetPointer(obj, nullptr);
 #else
     descriptor = (swig_type_info *) PyCObject_AsVoidPtr(obj);
 #endif
@@ -2815,9 +2815,9 @@ SWIG_Python_TypeQuery(const char *type)
     descriptor = SWIG_TypeQueryModule(swig_module, swig_module, type);
     if (descriptor) {
 #ifdef SWIGPY_USE_CAPSULE
-      obj = PyCapsule_New((void*) descriptor, NULL, NULL);
+      obj = PyCapsule_New((void*) descriptor, nullptr, nullptr);
 #else
-      obj = PyCObject_FromVoidPtr(descriptor, NULL);
+      obj = PyCObject_FromVoidPtr(descriptor, nullptr);
 #endif
       PyDict_SetItem(cache, key, obj);
       Py_DECREF(obj);
@@ -2947,7 +2947,7 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 
 # ifdef Py_USING_UNICODE
   if (PyString_Check(name)) {
-    name = PyUnicode_Decode(PyString_AsString(name), PyString_Size(name), NULL, NULL);
+    name = PyUnicode_Decode(PyString_AsString(name), PyString_Size(name), nullptr, nullptr);
     if (!name)
       return -1;
   } else if (!PyUnicode_Check(name))
@@ -2967,8 +2967,8 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
   }
 
   descr = _PyType_Lookup(tp, name);
-  f = NULL;
-  if (descr != NULL)
+  f = nullptr;
+  if (descr != nullptr)
     f = descr->ob_type->tp_descr_set;
   if (!f) {
     if (PyString_Check(name)) {
@@ -4974,18 +4974,18 @@ SWIGINTERN PyObject *scene_ProjectionModel_imageToScene__SWIG_8(scene::Projectio
     if (!PySequence_Check(row_seq))
     {
       PyErr_SetString(PyExc_TypeError,"Expecting a sequence of row indices.");
-      return NULL;
+      return nullptr;
     }
     if (!PySequence_Check(col_seq))
     {
       PyErr_SetString(PyExc_TypeError,"Expecting a sequence of column indices.");
-      return NULL;
+      return nullptr;
     }
     Py_ssize_t N = PyObject_Length(row_seq);
     if (N != PyObject_Length(col_seq))
     {
       PyErr_SetString(PyExc_ValueError,"Input row and column sequences must have same length.");
-      return NULL;
+      return nullptr;
     }
     math::linear::VectorN<3,double>* vec_ptr;
     PyObject* pyresult = PyList_New(N);
@@ -5026,7 +5026,7 @@ SWIGINTERN PyObject *_wrap_delete_SwigPyIterator(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5058,7 +5058,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_value(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = result;
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5099,7 +5099,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_incr__SWIG_0(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5131,7 +5131,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_incr__SWIG_1(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5163,7 +5163,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_incr(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -5218,7 +5218,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_decr__SWIG_0(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5250,7 +5250,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_decr__SWIG_1(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5282,7 +5282,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_decr(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -5336,7 +5336,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_distance(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_ptrdiff_t(static_cast< ptrdiff_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5376,7 +5376,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_equal(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5398,7 +5398,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_copy(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5430,7 +5430,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_next(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = result;
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5462,7 +5462,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___next__(PyObject *SWIGUNUSEDPARM(self
   resultobj = result;
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5494,7 +5494,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_previous(PyObject *SWIGUNUSEDPARM(self
   resultobj = result;
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5535,7 +5535,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_advance(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5569,7 +5569,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___eq__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5603,7 +5603,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___ne__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5644,7 +5644,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___iadd__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5685,7 +5685,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___isub__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5726,7 +5726,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___add__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5767,7 +5767,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___sub____SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5801,7 +5801,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___sub____SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_ptrdiff_t(static_cast< ptrdiff_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5837,7 +5837,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___sub__(PyObject *self, PyObject *args
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -5854,7 +5854,7 @@ fail:
 
 SWIGINTERN PyObject *SwigPyIterator_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_swig__SwigPyIterator, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -5916,7 +5916,7 @@ SWIGINTERN PyObject *_wrap_new_AngleMagnitude__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__AngleMagnitude, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5968,7 +5968,7 @@ SWIGINTERN PyObject *_wrap_new_AngleMagnitude__SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__AngleMagnitude, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6011,7 +6011,7 @@ SWIGINTERN PyObject *_wrap_new_AngleMagnitude__SWIG_2(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__AngleMagnitude, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6033,7 +6033,7 @@ SWIGINTERN PyObject *_wrap_new_AngleMagnitude(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -6043,12 +6043,12 @@ SWIGINTERN PyObject *_wrap_new_AngleMagnitude(PyObject *self, PyObject *args) {
   if (argc == 2) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_double(argv[1], NULL);
+        int res = SWIG_AsVal_double(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -6123,7 +6123,7 @@ SWIGINTERN PyObject *_wrap_AngleMagnitude_angle_set(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6175,7 +6175,7 @@ SWIGINTERN PyObject *_wrap_AngleMagnitude_angle_get(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6235,7 +6235,7 @@ SWIGINTERN PyObject *_wrap_AngleMagnitude_magnitude_set(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6287,7 +6287,7 @@ SWIGINTERN PyObject *_wrap_AngleMagnitude_magnitude_get(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6356,7 +6356,7 @@ SWIGINTERN PyObject *_wrap_AngleMagnitude___eq__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6425,7 +6425,7 @@ SWIGINTERN PyObject *_wrap_AngleMagnitude___ne__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6476,13 +6476,13 @@ SWIGINTERN PyObject *_wrap_delete_AngleMagnitude(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *AngleMagnitude_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__AngleMagnitude, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -6535,7 +6535,7 @@ SWIGINTERN PyObject *_wrap_new_LatLon__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLon, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6578,7 +6578,7 @@ SWIGINTERN PyObject *_wrap_new_LatLon__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLon, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6639,7 +6639,7 @@ SWIGINTERN PyObject *_wrap_new_LatLon__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLon, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6694,7 +6694,7 @@ SWIGINTERN PyObject *_wrap_new_LatLon__SWIG_3(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLon, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6724,7 +6724,7 @@ SWIGINTERN PyObject *_wrap_new_LatLon(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -6734,12 +6734,12 @@ SWIGINTERN PyObject *_wrap_new_LatLon(PyObject *self, PyObject *args) {
   if (argc == 2) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_double(argv[1], NULL);
+        int res = SWIG_AsVal_double(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -6807,7 +6807,7 @@ SWIGINTERN PyObject *_wrap_LatLon_getLat(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6859,7 +6859,7 @@ SWIGINTERN PyObject *_wrap_LatLon_getLon(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6911,7 +6911,7 @@ SWIGINTERN PyObject *_wrap_LatLon_getLatRadians(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6963,7 +6963,7 @@ SWIGINTERN PyObject *_wrap_LatLon_getLonRadians(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7023,7 +7023,7 @@ SWIGINTERN PyObject *_wrap_LatLon_setLat(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7083,7 +7083,7 @@ SWIGINTERN PyObject *_wrap_LatLon_setLon(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7143,7 +7143,7 @@ SWIGINTERN PyObject *_wrap_LatLon_setLatRadians(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7203,7 +7203,7 @@ SWIGINTERN PyObject *_wrap_LatLon_setLonRadians(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7267,7 +7267,7 @@ SWIGINTERN PyObject *_wrap_LatLon___eq__(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7331,7 +7331,7 @@ SWIGINTERN PyObject *_wrap_LatLon___ne__(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7382,13 +7382,13 @@ SWIGINTERN PyObject *_wrap_delete_LatLon(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *LatLon_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__LatLon, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -7441,7 +7441,7 @@ SWIGINTERN PyObject *_wrap_new_LatLonAlt__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7484,7 +7484,7 @@ SWIGINTERN PyObject *_wrap_new_LatLonAlt__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7554,7 +7554,7 @@ SWIGINTERN PyObject *_wrap_new_LatLonAlt__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7615,7 +7615,7 @@ SWIGINTERN PyObject *_wrap_new_LatLonAlt__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7670,7 +7670,7 @@ SWIGINTERN PyObject *_wrap_new_LatLonAlt__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7700,7 +7700,7 @@ SWIGINTERN PyObject *_wrap_new_LatLonAlt(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -7710,12 +7710,12 @@ SWIGINTERN PyObject *_wrap_new_LatLonAlt(PyObject *self, PyObject *args) {
   if (argc == 2) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_double(argv[1], NULL);
+        int res = SWIG_AsVal_double(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -7726,17 +7726,17 @@ SWIGINTERN PyObject *_wrap_new_LatLonAlt(PyObject *self, PyObject *args) {
   if (argc == 3) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_double(argv[1], NULL);
+        int res = SWIG_AsVal_double(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -7806,7 +7806,7 @@ SWIGINTERN PyObject *_wrap_LatLonAlt_getLat(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7858,7 +7858,7 @@ SWIGINTERN PyObject *_wrap_LatLonAlt_getLon(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7910,7 +7910,7 @@ SWIGINTERN PyObject *_wrap_LatLonAlt_getLatRadians(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7962,7 +7962,7 @@ SWIGINTERN PyObject *_wrap_LatLonAlt_getLonRadians(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8022,7 +8022,7 @@ SWIGINTERN PyObject *_wrap_LatLonAlt_setLat(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8082,7 +8082,7 @@ SWIGINTERN PyObject *_wrap_LatLonAlt_setLon(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8142,7 +8142,7 @@ SWIGINTERN PyObject *_wrap_LatLonAlt_setLatRadians(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8202,7 +8202,7 @@ SWIGINTERN PyObject *_wrap_LatLonAlt_setLonRadians(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8254,7 +8254,7 @@ SWIGINTERN PyObject *_wrap_LatLonAlt_getAlt(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8314,7 +8314,7 @@ SWIGINTERN PyObject *_wrap_LatLonAlt_setAlt(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8378,7 +8378,7 @@ SWIGINTERN PyObject *_wrap_LatLonAlt___eq__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8429,13 +8429,13 @@ SWIGINTERN PyObject *_wrap_delete_LatLonAlt(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *LatLonAlt_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__LatLonAlt, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -8479,7 +8479,7 @@ SWIGINTERN PyObject *_wrap_new_EllipsoidModel__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__EllipsoidModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8534,7 +8534,7 @@ SWIGINTERN PyObject *_wrap_new_EllipsoidModel__SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__EllipsoidModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8613,7 +8613,7 @@ SWIGINTERN PyObject *_wrap_new_EllipsoidModel__SWIG_2(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__EllipsoidModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8643,22 +8643,22 @@ SWIGINTERN PyObject *_wrap_new_EllipsoidModel(PyObject *self, PyObject *args) {
   if (argc == 4) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_double(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -8726,7 +8726,7 @@ SWIGINTERN PyObject *_wrap_delete_EllipsoidModel(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8778,7 +8778,7 @@ SWIGINTERN PyObject *_wrap_EllipsoidModel_getUnits(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8830,7 +8830,7 @@ SWIGINTERN PyObject *_wrap_EllipsoidModel_getAngularUnits(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8882,7 +8882,7 @@ SWIGINTERN PyObject *_wrap_EllipsoidModel_getEquatorialRadius(PyObject *SWIGUNUS
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8934,7 +8934,7 @@ SWIGINTERN PyObject *_wrap_EllipsoidModel_getPolarRadius(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8986,7 +8986,7 @@ SWIGINTERN PyObject *_wrap_EllipsoidModel_calculateFlattening(PyObject *SWIGUNUS
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9038,7 +9038,7 @@ SWIGINTERN PyObject *_wrap_EllipsoidModel_calculateEccentricity(PyObject *SWIGUN
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9098,7 +9098,7 @@ SWIGINTERN PyObject *_wrap_EllipsoidModel_setUnits(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9158,7 +9158,7 @@ SWIGINTERN PyObject *_wrap_EllipsoidModel_setAngularUnits(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9218,7 +9218,7 @@ SWIGINTERN PyObject *_wrap_EllipsoidModel_setEquatorialRadius(PyObject *SWIGUNUS
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9278,13 +9278,13 @@ SWIGINTERN PyObject *_wrap_EllipsoidModel_setPolarRadius(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *EllipsoidModel_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__EllipsoidModel, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -9331,7 +9331,7 @@ SWIGINTERN PyObject *Swig_var_WGS84EllipsoidModel_EQUATORIAL_RADIUS_METERS_get(v
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9377,7 +9377,7 @@ SWIGINTERN PyObject *Swig_var_WGS84EllipsoidModel_POLAR_RADIUS_METERS_get(void) 
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9420,7 +9420,7 @@ SWIGINTERN PyObject *_wrap_new_WGS84EllipsoidModel__SWIG_0(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__WGS84EllipsoidModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9481,7 +9481,7 @@ SWIGINTERN PyObject *_wrap_new_WGS84EllipsoidModel__SWIG_1(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__WGS84EllipsoidModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9536,7 +9536,7 @@ SWIGINTERN PyObject *_wrap_new_WGS84EllipsoidModel__SWIG_2(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__WGS84EllipsoidModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9566,12 +9566,12 @@ SWIGINTERN PyObject *_wrap_new_WGS84EllipsoidModel(PyObject *self, PyObject *arg
   if (argc == 2) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -9637,7 +9637,7 @@ SWIGINTERN PyObject *_wrap_delete_WGS84EllipsoidModel(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9688,7 +9688,7 @@ SWIGINTERN PyObject *_wrap_WGS84EllipsoidModel_initRadiusValues(PyObject *SWIGUN
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9748,7 +9748,7 @@ SWIGINTERN PyObject *_wrap_WGS84EllipsoidModel_setEquatorialRadius(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9808,7 +9808,7 @@ SWIGINTERN PyObject *_wrap_WGS84EllipsoidModel_setPolarRadius(PyObject *SWIGUNUS
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9872,13 +9872,13 @@ SWIGINTERN PyObject *_wrap_WGS84EllipsoidModel_getNormalVector(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *WGS84EllipsoidModel_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__WGS84EllipsoidModel, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -9939,7 +9939,7 @@ SWIGINTERN PyObject *_wrap_Utilities_latLonToECEF__SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9999,7 +9999,7 @@ SWIGINTERN PyObject *_wrap_Utilities_latLonToECEF__SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10097,7 +10097,7 @@ SWIGINTERN PyObject *_wrap_Utilities_ecefToLatLon(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj((new scene::LatLonAlt(static_cast< const scene::LatLonAlt& >(result))), SWIGTYPE_p_scene__LatLonAlt, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10149,7 +10149,7 @@ SWIGINTERN PyObject *_wrap_Utilities_remapZeroTo360(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10192,7 +10192,7 @@ SWIGINTERN PyObject *_wrap_new_Utilities(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__Utilities, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10243,13 +10243,13 @@ SWIGINTERN PyObject *_wrap_delete_Utilities(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *Utilities_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__Utilities, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -10293,7 +10293,7 @@ SWIGINTERN PyObject *_wrap_new_CoordinateTransform__SWIG_0(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__CoordinateTransform, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10345,7 +10345,7 @@ SWIGINTERN PyObject *_wrap_new_CoordinateTransform__SWIG_1(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__CoordinateTransform, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10430,7 +10430,7 @@ SWIGINTERN PyObject *_wrap_delete_CoordinateTransform(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10493,7 +10493,7 @@ SWIGINTERN PyObject *_wrap_CoordinateTransform_setEllipsoidModel(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10545,7 +10545,7 @@ SWIGINTERN PyObject *_wrap_CoordinateTransform_getEllipsoidModel__SWIG_0(PyObjec
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__EllipsoidModel, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10597,7 +10597,7 @@ SWIGINTERN PyObject *_wrap_CoordinateTransform_getEllipsoidModel__SWIG_1(PyObjec
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__EllipsoidModel, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10689,13 +10689,13 @@ SWIGINTERN PyObject *_wrap_CoordinateTransform_clone(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__CoordinateTransform, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *CoordinateTransform_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__CoordinateTransform, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -10739,7 +10739,7 @@ SWIGINTERN PyObject *_wrap_new_ECEFToLLATransform__SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__ECEFToLLATransform, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10791,7 +10791,7 @@ SWIGINTERN PyObject *_wrap_new_ECEFToLLATransform__SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__ECEFToLLATransform, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10876,7 +10876,7 @@ SWIGINTERN PyObject *_wrap_delete_ECEFToLLATransform(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10928,7 +10928,7 @@ SWIGINTERN PyObject *_wrap_ECEFToLLATransform_clone(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__ECEFToLLATransform, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10992,13 +10992,13 @@ SWIGINTERN PyObject *_wrap_ECEFToLLATransform_transform(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new scene::LatLonAlt(static_cast< const scene::LatLonAlt& >(result))), SWIGTYPE_p_scene__LatLonAlt, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ECEFToLLATransform_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__ECEFToLLATransform, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -11042,7 +11042,7 @@ SWIGINTERN PyObject *_wrap_new_LLAToECEFTransform__SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LLAToECEFTransform, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11094,7 +11094,7 @@ SWIGINTERN PyObject *_wrap_new_LLAToECEFTransform__SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LLAToECEFTransform, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11179,7 +11179,7 @@ SWIGINTERN PyObject *_wrap_delete_LLAToECEFTransform(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11231,7 +11231,7 @@ SWIGINTERN PyObject *_wrap_LLAToECEFTransform_clone(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LLAToECEFTransform, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11295,13 +11295,13 @@ SWIGINTERN PyObject *_wrap_LLAToECEFTransform_transform(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *LLAToECEFTransform_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__LLAToECEFTransform, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -11357,7 +11357,7 @@ SWIGINTERN PyObject *_wrap_new_LocalCoordinateTransform(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LocalCoordinateTransform, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11408,7 +11408,7 @@ SWIGINTERN PyObject *_wrap_delete_LocalCoordinateTransform(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11477,7 +11477,7 @@ SWIGINTERN PyObject *_wrap_LocalCoordinateTransform_toECEFPoint(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11546,7 +11546,7 @@ SWIGINTERN PyObject *_wrap_LocalCoordinateTransform_toLocalPoint(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11598,7 +11598,7 @@ SWIGINTERN PyObject *_wrap_LocalCoordinateTransform_getTransformMatrix(PyObject 
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,3,double >(static_cast< const math::linear::MatrixMxN< 3,3,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11650,7 +11650,7 @@ SWIGINTERN PyObject *_wrap_LocalCoordinateTransform_getUnitVectorX(PyObject *SWI
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11702,7 +11702,7 @@ SWIGINTERN PyObject *_wrap_LocalCoordinateTransform_getUnitVectorY(PyObject *SWI
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11754,7 +11754,7 @@ SWIGINTERN PyObject *_wrap_LocalCoordinateTransform_getUnitVectorZ(PyObject *SWI
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11805,13 +11805,13 @@ SWIGINTERN PyObject *_wrap_LocalCoordinateTransform_rotate90(PyObject *SWIGUNUSE
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *LocalCoordinateTransform_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__LocalCoordinateTransform, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -11867,7 +11867,7 @@ SWIGINTERN PyObject *_wrap_new_ENUCoordinateTransform(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__ENUCoordinateTransform, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11918,13 +11918,13 @@ SWIGINTERN PyObject *_wrap_delete_ENUCoordinateTransform(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ENUCoordinateTransform_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__ENUCoordinateTransform, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -11980,7 +11980,7 @@ SWIGINTERN PyObject *_wrap_new_NEDCoordinateTransform(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__NEDCoordinateTransform, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12031,13 +12031,13 @@ SWIGINTERN PyObject *_wrap_delete_NEDCoordinateTransform(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *NEDCoordinateTransform_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__NEDCoordinateTransform, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -12117,7 +12117,7 @@ SWIGINTERN PyObject *_wrap_new_SceneGeometry__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__SceneGeometry, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12220,7 +12220,7 @@ SWIGINTERN PyObject *_wrap_new_SceneGeometry__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__SceneGeometry, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12347,7 +12347,7 @@ SWIGINTERN PyObject *_wrap_new_SceneGeometry__SWIG_2(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__SceneGeometry, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12517,7 +12517,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_setImageVectors(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12592,7 +12592,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_setOutputPlaneVectors(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12644,7 +12644,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getImageRowVector(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12696,7 +12696,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getImageColVector(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12748,7 +12748,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPXVector(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12800,7 +12800,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPYVector(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12852,7 +12852,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPZVector(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12904,7 +12904,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getARPPosition(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12956,7 +12956,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getARPVelocity(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13008,7 +13008,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getReferencePosition(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13072,7 +13072,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getGroundTrack(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13124,7 +13124,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getETPGroundTrack(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13176,7 +13176,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPGroundTrack(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13228,7 +13228,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getGroundRange(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13280,7 +13280,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getSideOfTrack(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13344,7 +13344,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getImageAngle(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13396,7 +13396,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getSlantPlaneX(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13448,7 +13448,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getSlantPlaneY(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13500,7 +13500,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getSlantPlaneZ(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13552,7 +13552,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getGroundPlaneNormal(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13616,7 +13616,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getGrazingAngle(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13668,7 +13668,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getETPGrazingAngle(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13720,7 +13720,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPGrazingAngle(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13784,7 +13784,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getTiltAngle(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13836,7 +13836,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getETPTiltAngle(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13888,7 +13888,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPTiltAngle(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13940,7 +13940,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getDopplerConeAngle(PyObject *SWIGUNUSE
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13992,7 +13992,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getSquintAngle(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14056,7 +14056,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getSlopeAngle(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14108,7 +14108,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getETPSlopeAngle(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14160,7 +14160,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPSlopeAngle(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14212,7 +14212,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getAzimuthAngle(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14264,7 +14264,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getRotationAngle(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14328,7 +14328,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getMultiPathVector__SWIG_0(PyObject *SW
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14380,7 +14380,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getMultiPathVector__SWIG_1(PyObject *SW
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14476,7 +14476,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getMultiPathAngle(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14528,7 +14528,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPGroundTrackAngle(PyObject *SWIGUNU
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14592,7 +14592,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPAngle(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14644,7 +14644,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPNorthAngle(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14696,7 +14696,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPLayoverAngle(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14748,7 +14748,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getOPShadowAngle(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14800,7 +14800,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getNorthVector(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14852,7 +14852,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getSceneCenterNorthVector(PyObject *SWI
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14904,7 +14904,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getNorthAngle(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14956,7 +14956,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getHeadingAngle(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15020,7 +15020,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getLayoverVector__SWIG_0(PyObject *SWIG
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15072,7 +15072,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getLayoverVector__SWIG_1(PyObject *SWIG
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15168,7 +15168,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getLayover(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj((new scene::AngleMagnitude(static_cast< const scene::AngleMagnitude& >(result))), SWIGTYPE_p_scene__AngleMagnitude, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15220,7 +15220,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getETPLayoverAngle(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15272,7 +15272,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getShadowVector(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15324,7 +15324,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getShadow(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj((new scene::AngleMagnitude(static_cast< const scene::AngleMagnitude& >(result))), SWIGTYPE_p_scene__AngleMagnitude, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15388,7 +15388,7 @@ SWIGINTERN PyObject *_wrap_SceneGeometry_getGroundResolution(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj((new types::RowCol< double >(static_cast< const types::RowCol< double >& >(result))), SWIGTYPE_p_types__RowColT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15439,13 +15439,13 @@ SWIGINTERN PyObject *_wrap_delete_SceneGeometry(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *SceneGeometry_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__SceneGeometry, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -15498,7 +15498,7 @@ SWIGINTERN PyObject *_wrap_new_FrameType__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__FrameType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15541,7 +15541,7 @@ SWIGINTERN PyObject *_wrap_new_FrameType__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__FrameType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15600,7 +15600,7 @@ SWIGINTERN PyObject *_wrap_new_FrameType__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15622,7 +15622,7 @@ SWIGINTERN PyObject *_wrap_new_FrameType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -15696,7 +15696,7 @@ SWIGINTERN PyObject *_wrap_FrameType_toString(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15755,7 +15755,7 @@ SWIGINTERN PyObject *_wrap_FrameType_fromString(PyObject *SWIGUNUSEDPARM(self), 
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15816,7 +15816,7 @@ SWIGINTERN PyObject *_wrap_FrameType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15877,7 +15877,7 @@ SWIGINTERN PyObject *_wrap_FrameType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15941,7 +15941,7 @@ SWIGINTERN PyObject *_wrap_FrameType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15977,7 +15977,7 @@ SWIGINTERN PyObject *_wrap_FrameType___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -16052,7 +16052,7 @@ SWIGINTERN PyObject *_wrap_FrameType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16088,7 +16088,7 @@ SWIGINTERN PyObject *_wrap_FrameType___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -16159,7 +16159,7 @@ SWIGINTERN PyObject *_wrap_FrameType_mValue_set(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16211,7 +16211,7 @@ SWIGINTERN PyObject *_wrap_FrameType_mValue_get(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16262,13 +16262,13 @@ SWIGINTERN PyObject *_wrap_delete_FrameType(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *FrameType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__FrameType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -16312,7 +16312,7 @@ SWIGINTERN PyObject *_wrap_new_Errors(PyObject *SWIGUNUSEDPARM(self), PyObject *
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__Errors, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16363,7 +16363,7 @@ SWIGINTERN PyObject *_wrap_Errors_clear(PyObject *SWIGUNUSEDPARM(self), PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16423,7 +16423,7 @@ SWIGINTERN PyObject *_wrap_Errors_mFrameType_set(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16475,7 +16475,7 @@ SWIGINTERN PyObject *_wrap_Errors_mFrameType_get(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__FrameType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16535,7 +16535,7 @@ SWIGINTERN PyObject *_wrap_Errors_mSensorErrorCovar_set(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16587,7 +16587,7 @@ SWIGINTERN PyObject *_wrap_Errors_mSensorErrorCovar_get(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__MatrixMxNT_7_7_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16647,7 +16647,7 @@ SWIGINTERN PyObject *_wrap_Errors_mUnmodeledErrorCovar_set(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16699,7 +16699,7 @@ SWIGINTERN PyObject *_wrap_Errors_mUnmodeledErrorCovar_get(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__MatrixMxNT_2_2_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16759,7 +16759,7 @@ SWIGINTERN PyObject *_wrap_Errors_mIonoErrorCovar_set(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16811,7 +16811,7 @@ SWIGINTERN PyObject *_wrap_Errors_mIonoErrorCovar_get(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__MatrixMxNT_2_2_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16871,7 +16871,7 @@ SWIGINTERN PyObject *_wrap_Errors_mTropoErrorCovar_set(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16923,7 +16923,7 @@ SWIGINTERN PyObject *_wrap_Errors_mTropoErrorCovar_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__MatrixMxNT_1_1_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16983,7 +16983,7 @@ SWIGINTERN PyObject *_wrap_Errors_mPositionCorrCoefZero_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17035,7 +17035,7 @@ SWIGINTERN PyObject *_wrap_Errors_mPositionCorrCoefZero_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17095,7 +17095,7 @@ SWIGINTERN PyObject *_wrap_Errors_mPositionDecorrRate_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17147,7 +17147,7 @@ SWIGINTERN PyObject *_wrap_Errors_mPositionDecorrRate_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17207,7 +17207,7 @@ SWIGINTERN PyObject *_wrap_Errors_mRangeCorrCoefZero_set(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17259,7 +17259,7 @@ SWIGINTERN PyObject *_wrap_Errors_mRangeCorrCoefZero_get(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17319,7 +17319,7 @@ SWIGINTERN PyObject *_wrap_Errors_mRangeDecorrRate_set(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17371,7 +17371,7 @@ SWIGINTERN PyObject *_wrap_Errors_mRangeDecorrRate_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17422,13 +17422,13 @@ SWIGINTERN PyObject *_wrap_delete_Errors(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *Errors_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__Errors, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -17472,7 +17472,7 @@ SWIGINTERN PyObject *_wrap_new_AdjustableParams(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__AdjustableParams, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17524,7 +17524,7 @@ SWIGINTERN PyObject *_wrap_AdjustableParams_name(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17576,7 +17576,7 @@ SWIGINTERN PyObject *_wrap_AdjustableParams_units(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17628,7 +17628,7 @@ SWIGINTERN PyObject *_wrap_AdjustableParams_group(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17680,7 +17680,7 @@ SWIGINTERN PyObject *_wrap_AdjustableParams_getARPVector(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17732,7 +17732,7 @@ SWIGINTERN PyObject *_wrap_AdjustableParams_getARPVelocityVector(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17799,7 +17799,7 @@ SWIGINTERN PyObject *_wrap_AdjustableParams_mParams_set(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17851,7 +17851,7 @@ SWIGINTERN PyObject *_wrap_AdjustableParams_mParams_get(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_double, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17912,7 +17912,7 @@ SWIGINTERN PyObject *_wrap_AdjustableParams___getitem__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17981,7 +17981,7 @@ SWIGINTERN PyObject *_wrap_AdjustableParams___setitem__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18032,13 +18032,13 @@ SWIGINTERN PyObject *_wrap_delete_AdjustableParams(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *AdjustableParams_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__AdjustableParams, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -18090,7 +18090,7 @@ SWIGINTERN PyObject *_wrap_delete_ProjectionModel(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18159,7 +18159,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_computeImageTime(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18220,7 +18220,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_computeARPPosition(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18281,7 +18281,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_computeARPVelocity(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18345,7 +18345,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_computeImageCoordinates(PyObject *SWI
   resultobj = SWIG_NewPointerObj((new types::RowCol< double >(static_cast< const types::RowCol< double >& >(result))), SWIGTYPE_p_types__RowColT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18414,7 +18414,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageGridToECEF(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18528,7 +18528,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_computeContour(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18646,7 +18646,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_contourToGroundPlane(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18731,7 +18731,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImage__SWIG_0(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new types::RowCol< double >(static_cast< const types::RowCol< double >& >(result))), SWIGTYPE_p_types__RowColT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18807,7 +18807,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImage__SWIG_1(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new types::RowCol< double >(static_cast< const types::RowCol< double >& >(result))), SWIGTYPE_p_types__RowColT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18880,7 +18880,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImage__SWIG_2(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new types::RowCol< double >(static_cast< const types::RowCol< double >& >(result))), SWIGTYPE_p_types__RowColT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18944,7 +18944,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImage__SWIG_3(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new types::RowCol< double >(static_cast< const types::RowCol< double >& >(result))), SWIGTYPE_p_types__RowColT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19147,7 +19147,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene__SWIG_0(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19247,7 +19247,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene__SWIG_1(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19344,7 +19344,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene__SWIG_2(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19432,7 +19432,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene__SWIG_3(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19535,7 +19535,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene__SWIG_4(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19629,7 +19629,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene__SWIG_5(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19714,7 +19714,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene__SWIG_6(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19787,7 +19787,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene__SWIG_7(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19860,7 +19860,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_slantToImagePartials__SWIG_0(PyObject
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 2,2,double >(static_cast< const math::linear::MatrixMxN< 2,2,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_2_2_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19924,7 +19924,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_slantToImagePartials__SWIG_1(PyObject
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 2,2,double >(static_cast< const math::linear::MatrixMxN< 2,2,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_2_2_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19963,7 +19963,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_slantToImagePartials(PyObject *self, 
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -20072,7 +20072,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials__SWIG_0(Py
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,7,double >(static_cast< const math::linear::MatrixMxN< 3,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20157,7 +20157,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials__SWIG_1(Py
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,7,double >(static_cast< const math::linear::MatrixMxN< 3,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20239,7 +20239,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials__SWIG_2(Py
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,7,double >(static_cast< const math::linear::MatrixMxN< 3,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20312,7 +20312,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials__SWIG_3(Py
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,7,double >(static_cast< const math::linear::MatrixMxN< 3,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20338,7 +20338,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials(PyObject *
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -20357,7 +20357,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials(PyObject *
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -20380,12 +20380,12 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials(PyObject *
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_double(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -20405,7 +20405,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials(PyObject *
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -20413,7 +20413,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneSensorPartials(PyObject *
           _v = SWIG_CheckState(res);
           if (_v) {
             {
-              int res = SWIG_AsVal_double(argv[4], NULL);
+              int res = SWIG_AsVal_double(argv[4], nullptr);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -20526,7 +20526,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials__SWIG_0(PyObject
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,2,double >(static_cast< const math::linear::MatrixMxN< 3,2,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_2_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20611,7 +20611,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials__SWIG_1(PyObject
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,2,double >(static_cast< const math::linear::MatrixMxN< 3,2,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_2_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20693,7 +20693,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials__SWIG_2(PyObject
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,2,double >(static_cast< const math::linear::MatrixMxN< 3,2,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_2_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20766,7 +20766,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials__SWIG_3(PyObject
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,2,double >(static_cast< const math::linear::MatrixMxN< 3,2,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_2_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20792,7 +20792,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials(PyObject *self, 
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -20811,7 +20811,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials(PyObject *self, 
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -20834,12 +20834,12 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials(PyObject *self, 
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_double(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -20859,7 +20859,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials(PyObject *self, 
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -20867,7 +20867,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScenePartials(PyObject *self, 
           _v = SWIG_CheckState(res);
           if (_v) {
             {
-              int res = SWIG_AsVal_double(argv[4], NULL);
+              int res = SWIG_AsVal_double(argv[4], nullptr);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -20980,7 +20980,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneHeightPartial__SWIG_0(PyO
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,1,double >(static_cast< const math::linear::MatrixMxN< 3,1,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21065,7 +21065,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneHeightPartial__SWIG_1(PyO
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,1,double >(static_cast< const math::linear::MatrixMxN< 3,1,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21147,7 +21147,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneHeightPartial__SWIG_2(PyO
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,1,double >(static_cast< const math::linear::MatrixMxN< 3,1,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21220,7 +21220,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneHeightPartial__SWIG_3(PyO
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,1,double >(static_cast< const math::linear::MatrixMxN< 3,1,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21246,7 +21246,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneHeightPartial(PyObject *s
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -21265,7 +21265,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneHeightPartial(PyObject *s
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -21288,12 +21288,12 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneHeightPartial(PyObject *s
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_double(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -21313,7 +21313,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneHeightPartial(PyObject *s
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -21321,7 +21321,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToSceneHeightPartial(PyObject *s
           _v = SWIG_CheckState(res);
           if (_v) {
             {
-              int res = SWIG_AsVal_double(argv[4], NULL);
+              int res = SWIG_AsVal_double(argv[4], nullptr);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -21425,7 +21425,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImageSensorPartials__SWIG_0(Py
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 2,7,double >(static_cast< const math::linear::MatrixMxN< 2,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_2_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21501,7 +21501,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImageSensorPartials__SWIG_1(Py
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 2,7,double >(static_cast< const math::linear::MatrixMxN< 2,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_2_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21574,7 +21574,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImageSensorPartials__SWIG_2(Py
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 2,7,double >(static_cast< const math::linear::MatrixMxN< 2,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_2_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21638,7 +21638,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImageSensorPartials__SWIG_3(Py
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 2,7,double >(static_cast< const math::linear::MatrixMxN< 2,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_2_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21694,7 +21694,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImageSensorPartials(PyObject *
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -21716,7 +21716,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImageSensorPartials(PyObject *
         _v = SWIG_CheckState(res);
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_double(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -21819,7 +21819,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImagePartials__SWIG_0(PyObject
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 2,3,double >(static_cast< const math::linear::MatrixMxN< 2,3,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_2_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21895,7 +21895,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImagePartials__SWIG_1(PyObject
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 2,3,double >(static_cast< const math::linear::MatrixMxN< 2,3,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_2_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21968,7 +21968,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImagePartials__SWIG_2(PyObject
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 2,3,double >(static_cast< const math::linear::MatrixMxN< 2,3,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_2_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22032,7 +22032,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImagePartials__SWIG_3(PyObject
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 2,3,double >(static_cast< const math::linear::MatrixMxN< 2,3,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_2_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22088,7 +22088,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImagePartials(PyObject *self, 
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -22110,7 +22110,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_sceneToImagePartials(PyObject *self, 
         _v = SWIG_CheckState(res);
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_double(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -22201,7 +22201,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getErrorCovariance__SWIG_0(PyObject *
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 7,7,double >(static_cast< const math::linear::MatrixMxN< 7,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_7_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22277,7 +22277,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getErrorCovariance__SWIG_1(PyObject *
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 7,7,double >(static_cast< const math::linear::MatrixMxN< 7,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_7_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22341,7 +22341,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getErrorCovariance__SWIG_2(PyObject *
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 7,7,double >(static_cast< const math::linear::MatrixMxN< 7,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_7_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22393,7 +22393,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getErrorCovariance__SWIG_3(PyObject *
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 7,7,double >(static_cast< const math::linear::MatrixMxN< 7,7,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_7_7_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22458,7 +22458,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getErrorCovariance(PyObject *self, Py
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -22539,7 +22539,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getUnmodeledErrorCovariance(PyObject 
   resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 2,2,double >(static_cast< const math::linear::MatrixMxN< 2,2,double >& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_2_2_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22591,7 +22591,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getAdjustableParams__SWIG_0(PyObject 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__AdjustableParams, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22643,7 +22643,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getAdjustableParams__SWIG_1(PyObject 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__AdjustableParams, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22735,7 +22735,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getErrors__SWIG_0(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__Errors, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22787,7 +22787,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_getErrors__SWIG_1(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__Errors, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22919,7 +22919,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene__SWIG_8(PyObject *SWIGUN
   resultobj = result;
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22945,7 +22945,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene(PyObject *self, PyObject
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -22985,7 +22985,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene(PyObject *self, PyObject
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -23059,7 +23059,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene(PyObject *self, PyObject
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -23067,7 +23067,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene(PyObject *self, PyObject
           _v = SWIG_CheckState(res);
           if (_v) {
             {
-              int res = SWIG_AsVal_double(argv[4], NULL);
+              int res = SWIG_AsVal_double(argv[4], nullptr);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -23141,7 +23141,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene(PyObject *self, PyObject
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -23149,12 +23149,12 @@ SWIGINTERN PyObject *_wrap_ProjectionModel_imageToScene(PyObject *self, PyObject
           _v = SWIG_CheckState(res);
           if (_v) {
             {
-              int res = SWIG_AsVal_double(argv[4], NULL);
+              int res = SWIG_AsVal_double(argv[4], nullptr);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
               {
-                int res = SWIG_AsVal_size_t(argv[5], NULL);
+                int res = SWIG_AsVal_size_t(argv[5], nullptr);
                 _v = SWIG_CheckState(res);
               }
               if (_v) {
@@ -23185,7 +23185,7 @@ fail:
 
 SWIGINTERN PyObject *ProjectionModel_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__ProjectionModel, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -23250,7 +23250,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModelWithImageVectors_computeImageCoordinat
   resultobj = SWIG_NewPointerObj((new types::RowCol< double >(static_cast< const types::RowCol< double >& >(result))), SWIGTYPE_p_types__RowColT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23319,7 +23319,7 @@ SWIGINTERN PyObject *_wrap_ProjectionModelWithImageVectors_imageGridToECEF(PyObj
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23370,13 +23370,13 @@ SWIGINTERN PyObject *_wrap_delete_ProjectionModelWithImageVectors(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ProjectionModelWithImageVectors_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__ProjectionModelWithImageVectors, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -23537,7 +23537,7 @@ SWIGINTERN PyObject *_wrap_new_RangeAzimProjectionModel__SWIG_0(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__RangeAzimProjectionModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23685,7 +23685,7 @@ SWIGINTERN PyObject *_wrap_new_RangeAzimProjectionModel__SWIG_1(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__RangeAzimProjectionModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23728,7 +23728,7 @@ SWIGINTERN PyObject *_wrap_new_RangeAzimProjectionModel(PyObject *self, PyObject
                   _v = SWIG_CheckState(res);
                   if (_v) {
                     {
-                      int res = SWIG_AsVal_int(argv[8], NULL);
+                      int res = SWIG_AsVal_int(argv[8], nullptr);
                       _v = SWIG_CheckState(res);
                     }
                     if (_v) {
@@ -23770,7 +23770,7 @@ SWIGINTERN PyObject *_wrap_new_RangeAzimProjectionModel(PyObject *self, PyObject
                   _v = SWIG_CheckState(res);
                   if (_v) {
                     {
-                      int res = SWIG_AsVal_int(argv[8], NULL);
+                      int res = SWIG_AsVal_int(argv[8], nullptr);
                       _v = SWIG_CheckState(res);
                     }
                     if (_v) {
@@ -23909,7 +23909,7 @@ SWIGINTERN PyObject *_wrap_RangeAzimProjectionModel_computeContour(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23960,13 +23960,13 @@ SWIGINTERN PyObject *_wrap_delete_RangeAzimProjectionModel(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *RangeAzimProjectionModel_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__RangeAzimProjectionModel, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -24136,7 +24136,7 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel__SWIG_0(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__RangeZeroProjectionModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24293,7 +24293,7 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel__SWIG_1(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__RangeZeroProjectionModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24318,7 +24318,7 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel(PyObject *self, PyObject
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -24341,7 +24341,7 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel(PyObject *self, PyObject
                     _v = SWIG_CheckState(res);
                     if (_v) {
                       {
-                        int res = SWIG_AsVal_int(argv[9], NULL);
+                        int res = SWIG_AsVal_int(argv[9], nullptr);
                         _v = SWIG_CheckState(res);
                       }
                       if (_v) {
@@ -24366,7 +24366,7 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel(PyObject *self, PyObject
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -24389,7 +24389,7 @@ SWIGINTERN PyObject *_wrap_new_RangeZeroProjectionModel(PyObject *self, PyObject
                     _v = SWIG_CheckState(res);
                     if (_v) {
                       {
-                        int res = SWIG_AsVal_int(argv[9], NULL);
+                        int res = SWIG_AsVal_int(argv[9], nullptr);
                         _v = SWIG_CheckState(res);
                       }
                       if (_v) {
@@ -24529,7 +24529,7 @@ SWIGINTERN PyObject *_wrap_RangeZeroProjectionModel_computeContour(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24580,13 +24580,13 @@ SWIGINTERN PyObject *_wrap_delete_RangeZeroProjectionModel(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *RangeZeroProjectionModel_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__RangeZeroProjectionModel, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -24723,7 +24723,7 @@ SWIGINTERN PyObject *_wrap_new_PlaneProjectionModel__SWIG_0(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__PlaneProjectionModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24847,7 +24847,7 @@ SWIGINTERN PyObject *_wrap_new_PlaneProjectionModel__SWIG_1(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__PlaneProjectionModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24884,7 +24884,7 @@ SWIGINTERN PyObject *_wrap_new_PlaneProjectionModel(PyObject *self, PyObject *ar
               _v = SWIG_CheckState(res);
               if (_v) {
                 {
-                  int res = SWIG_AsVal_int(argv[6], NULL);
+                  int res = SWIG_AsVal_int(argv[6], nullptr);
                   _v = SWIG_CheckState(res);
                 }
                 if (_v) {
@@ -24918,7 +24918,7 @@ SWIGINTERN PyObject *_wrap_new_PlaneProjectionModel(PyObject *self, PyObject *ar
               _v = SWIG_CheckState(res);
               if (_v) {
                 {
-                  int res = SWIG_AsVal_int(argv[6], NULL);
+                  int res = SWIG_AsVal_int(argv[6], nullptr);
                   _v = SWIG_CheckState(res);
                 }
                 if (_v) {
@@ -25055,7 +25055,7 @@ SWIGINTERN PyObject *_wrap_PlaneProjectionModel_computeContour(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25106,13 +25106,13 @@ SWIGINTERN PyObject *_wrap_delete_PlaneProjectionModel(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *PlaneProjectionModel_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__PlaneProjectionModel, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -25225,7 +25225,7 @@ SWIGINTERN PyObject *_wrap_new_GeodeticProjectionModel__SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__GeodeticProjectionModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25325,7 +25325,7 @@ SWIGINTERN PyObject *_wrap_new_GeodeticProjectionModel__SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__GeodeticProjectionModel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25356,7 +25356,7 @@ SWIGINTERN PyObject *_wrap_new_GeodeticProjectionModel(PyObject *self, PyObject 
           _v = SWIG_CheckState(res);
           if (_v) {
             {
-              int res = SWIG_AsVal_int(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], nullptr);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -25382,7 +25382,7 @@ SWIGINTERN PyObject *_wrap_new_GeodeticProjectionModel(PyObject *self, PyObject 
           _v = SWIG_CheckState(res);
           if (_v) {
             {
-              int res = SWIG_AsVal_int(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], nullptr);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -25467,7 +25467,7 @@ SWIGINTERN PyObject *_wrap_GeodeticProjectionModel_computeImageCoordinates(PyObj
   resultobj = SWIG_NewPointerObj((new types::RowCol< double >(static_cast< const types::RowCol< double >& >(result))), SWIGTYPE_p_types__RowColT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25581,7 +25581,7 @@ SWIGINTERN PyObject *_wrap_GeodeticProjectionModel_computeContour(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25650,7 +25650,7 @@ SWIGINTERN PyObject *_wrap_GeodeticProjectionModel_imageGridToECEF(PyObject *SWI
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25701,13 +25701,13 @@ SWIGINTERN PyObject *_wrap_delete_GeodeticProjectionModel(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *GeodeticProjectionModel_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__GeodeticProjectionModel, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -25759,7 +25759,7 @@ SWIGINTERN PyObject *_wrap_delete_GridGeometry(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25832,7 +25832,7 @@ SWIGINTERN PyObject *_wrap_GridGeometry_gridToScene(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25896,13 +25896,13 @@ SWIGINTERN PyObject *_wrap_GridGeometry_sceneToGrid(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *GridGeometry_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__GridGeometry, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -26006,7 +26006,7 @@ SWIGINTERN PyObject *_wrap_new_PlanarGridGeometry(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__PlanarGridGeometry, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26079,7 +26079,7 @@ SWIGINTERN PyObject *_wrap_PlanarGridGeometry_gridToScene(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26143,7 +26143,7 @@ SWIGINTERN PyObject *_wrap_PlanarGridGeometry_sceneToGrid(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj((new scene::Vector3(static_cast< const scene::Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26194,19 +26194,19 @@ SWIGINTERN PyObject *_wrap_delete_PlanarGridGeometry(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *PlanarGridGeometry_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_scene__PlanarGridGeometry, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
+	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, nullptr},
 	 { (char *)"delete_SwigPyIterator", _wrap_delete_SwigPyIterator, METH_VARARGS, (char *)"delete_SwigPyIterator(SwigPyIterator self)"},
 	 { (char *)"SwigPyIterator_value", _wrap_SwigPyIterator_value, METH_VARARGS, (char *)"SwigPyIterator_value(SwigPyIterator self) -> PyObject *"},
 	 { (char *)"SwigPyIterator_incr", _wrap_SwigPyIterator_incr, METH_VARARGS, (char *)"\n"
@@ -26233,7 +26233,7 @@ static PyMethodDef SwigMethods[] = {
 		"__sub__(ptrdiff_t n) -> SwigPyIterator\n"
 		"SwigPyIterator___sub__(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t\n"
 		""},
-	 { (char *)"SwigPyIterator_swigregister", SwigPyIterator_swigregister, METH_VARARGS, NULL},
+	 { (char *)"SwigPyIterator_swigregister", SwigPyIterator_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_AngleMagnitude", _wrap_new_AngleMagnitude, METH_VARARGS, (char *)"\n"
 		"AngleMagnitude(double _angle=0, double _magnitude=0)\n"
 		"AngleMagnitude(double _angle=0)\n"
@@ -26246,7 +26246,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AngleMagnitude___eq__", _wrap_AngleMagnitude___eq__, METH_VARARGS, (char *)"AngleMagnitude___eq__(AngleMagnitude self, AngleMagnitude am) -> bool"},
 	 { (char *)"AngleMagnitude___ne__", _wrap_AngleMagnitude___ne__, METH_VARARGS, (char *)"AngleMagnitude___ne__(AngleMagnitude self, AngleMagnitude am) -> bool"},
 	 { (char *)"delete_AngleMagnitude", _wrap_delete_AngleMagnitude, METH_VARARGS, (char *)"delete_AngleMagnitude(AngleMagnitude self)"},
-	 { (char *)"AngleMagnitude_swigregister", AngleMagnitude_swigregister, METH_VARARGS, NULL},
+	 { (char *)"AngleMagnitude_swigregister", AngleMagnitude_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_LatLon", _wrap_new_LatLon, METH_VARARGS, (char *)"\n"
 		"LatLon(double scalar=0.0)\n"
 		"LatLon()\n"
@@ -26264,7 +26264,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LatLon___eq__", _wrap_LatLon___eq__, METH_VARARGS, (char *)"LatLon___eq__(LatLon self, LatLon x) -> bool"},
 	 { (char *)"LatLon___ne__", _wrap_LatLon___ne__, METH_VARARGS, (char *)"LatLon___ne__(LatLon self, LatLon x) -> bool"},
 	 { (char *)"delete_LatLon", _wrap_delete_LatLon, METH_VARARGS, (char *)"delete_LatLon(LatLon self)"},
-	 { (char *)"LatLon_swigregister", LatLon_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LatLon_swigregister", LatLon_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_LatLonAlt", _wrap_new_LatLonAlt, METH_VARARGS, (char *)"\n"
 		"LatLonAlt(double scalar=0.0)\n"
 		"LatLonAlt()\n"
@@ -26284,7 +26284,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LatLonAlt_setAlt", _wrap_LatLonAlt_setAlt, METH_VARARGS, (char *)"LatLonAlt_setAlt(LatLonAlt self, double alt)"},
 	 { (char *)"LatLonAlt___eq__", _wrap_LatLonAlt___eq__, METH_VARARGS, (char *)"LatLonAlt___eq__(LatLonAlt self, LatLonAlt x) -> bool"},
 	 { (char *)"delete_LatLonAlt", _wrap_delete_LatLonAlt, METH_VARARGS, (char *)"delete_LatLonAlt(LatLonAlt self)"},
-	 { (char *)"LatLonAlt_swigregister", LatLonAlt_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LatLonAlt_swigregister", LatLonAlt_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_EllipsoidModel", _wrap_new_EllipsoidModel, METH_VARARGS, (char *)"\n"
 		"EllipsoidModel()\n"
 		"EllipsoidModel(EllipsoidModel m)\n"
@@ -26301,7 +26301,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"EllipsoidModel_setAngularUnits", _wrap_EllipsoidModel_setAngularUnits, METH_VARARGS, (char *)"EllipsoidModel_setAngularUnits(EllipsoidModel self, scene::AngularUnits val)"},
 	 { (char *)"EllipsoidModel_setEquatorialRadius", _wrap_EllipsoidModel_setEquatorialRadius, METH_VARARGS, (char *)"EllipsoidModel_setEquatorialRadius(EllipsoidModel self, double val)"},
 	 { (char *)"EllipsoidModel_setPolarRadius", _wrap_EllipsoidModel_setPolarRadius, METH_VARARGS, (char *)"EllipsoidModel_setPolarRadius(EllipsoidModel self, double val)"},
-	 { (char *)"EllipsoidModel_swigregister", EllipsoidModel_swigregister, METH_VARARGS, NULL},
+	 { (char *)"EllipsoidModel_swigregister", EllipsoidModel_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_WGS84EllipsoidModel", _wrap_new_WGS84EllipsoidModel, METH_VARARGS, (char *)"\n"
 		"WGS84EllipsoidModel()\n"
 		"WGS84EllipsoidModel(scene::Units unitsVal, scene::AngularUnits angularUnitsVal)\n"
@@ -26312,7 +26312,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"WGS84EllipsoidModel_setEquatorialRadius", _wrap_WGS84EllipsoidModel_setEquatorialRadius, METH_VARARGS, (char *)"WGS84EllipsoidModel_setEquatorialRadius(WGS84EllipsoidModel self, double val)"},
 	 { (char *)"WGS84EllipsoidModel_setPolarRadius", _wrap_WGS84EllipsoidModel_setPolarRadius, METH_VARARGS, (char *)"WGS84EllipsoidModel_setPolarRadius(WGS84EllipsoidModel self, double val)"},
 	 { (char *)"WGS84EllipsoidModel_getNormalVector", _wrap_WGS84EllipsoidModel_getNormalVector, METH_VARARGS, (char *)"WGS84EllipsoidModel_getNormalVector(WGS84EllipsoidModel self, Vector3 point) -> Vector3"},
-	 { (char *)"WGS84EllipsoidModel_swigregister", WGS84EllipsoidModel_swigregister, METH_VARARGS, NULL},
+	 { (char *)"WGS84EllipsoidModel_swigregister", WGS84EllipsoidModel_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"Utilities_latLonToECEF", _wrap_Utilities_latLonToECEF, METH_VARARGS, (char *)"\n"
 		"latLonToECEF(LatLonAlt latLon) -> Vector3\n"
 		"Utilities_latLonToECEF(LatLon latLon) -> Vector3\n"
@@ -26321,7 +26321,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Utilities_remapZeroTo360", _wrap_Utilities_remapZeroTo360, METH_VARARGS, (char *)"Utilities_remapZeroTo360(double degree) -> double"},
 	 { (char *)"new_Utilities", _wrap_new_Utilities, METH_VARARGS, (char *)"new_Utilities() -> Utilities"},
 	 { (char *)"delete_Utilities", _wrap_delete_Utilities, METH_VARARGS, (char *)"delete_Utilities(Utilities self)"},
-	 { (char *)"Utilities_swigregister", Utilities_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Utilities_swigregister", Utilities_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_CoordinateTransform", _wrap_new_CoordinateTransform, METH_VARARGS, (char *)"\n"
 		"CoordinateTransform()\n"
 		"new_CoordinateTransform(EllipsoidModel initVals) -> CoordinateTransform\n"
@@ -26333,7 +26333,7 @@ static PyMethodDef SwigMethods[] = {
 		"CoordinateTransform_getEllipsoidModel(CoordinateTransform self) -> EllipsoidModel\n"
 		""},
 	 { (char *)"CoordinateTransform_clone", _wrap_CoordinateTransform_clone, METH_VARARGS, (char *)"CoordinateTransform_clone(CoordinateTransform self) -> CoordinateTransform"},
-	 { (char *)"CoordinateTransform_swigregister", CoordinateTransform_swigregister, METH_VARARGS, NULL},
+	 { (char *)"CoordinateTransform_swigregister", CoordinateTransform_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ECEFToLLATransform", _wrap_new_ECEFToLLATransform, METH_VARARGS, (char *)"\n"
 		"ECEFToLLATransform()\n"
 		"new_ECEFToLLATransform(EllipsoidModel initVals) -> ECEFToLLATransform\n"
@@ -26341,7 +26341,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_ECEFToLLATransform", _wrap_delete_ECEFToLLATransform, METH_VARARGS, (char *)"delete_ECEFToLLATransform(ECEFToLLATransform self)"},
 	 { (char *)"ECEFToLLATransform_clone", _wrap_ECEFToLLATransform_clone, METH_VARARGS, (char *)"ECEFToLLATransform_clone(ECEFToLLATransform self) -> ECEFToLLATransform"},
 	 { (char *)"ECEFToLLATransform_transform", _wrap_ECEFToLLATransform_transform, METH_VARARGS, (char *)"ECEFToLLATransform_transform(ECEFToLLATransform self, Vector3 ecef) -> LatLonAlt"},
-	 { (char *)"ECEFToLLATransform_swigregister", ECEFToLLATransform_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ECEFToLLATransform_swigregister", ECEFToLLATransform_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_LLAToECEFTransform", _wrap_new_LLAToECEFTransform, METH_VARARGS, (char *)"\n"
 		"LLAToECEFTransform()\n"
 		"new_LLAToECEFTransform(EllipsoidModel initVals) -> LLAToECEFTransform\n"
@@ -26349,7 +26349,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_LLAToECEFTransform", _wrap_delete_LLAToECEFTransform, METH_VARARGS, (char *)"delete_LLAToECEFTransform(LLAToECEFTransform self)"},
 	 { (char *)"LLAToECEFTransform_clone", _wrap_LLAToECEFTransform_clone, METH_VARARGS, (char *)"LLAToECEFTransform_clone(LLAToECEFTransform self) -> LLAToECEFTransform"},
 	 { (char *)"LLAToECEFTransform_transform", _wrap_LLAToECEFTransform_transform, METH_VARARGS, (char *)"LLAToECEFTransform_transform(LLAToECEFTransform self, LatLonAlt lla) -> Vector3"},
-	 { (char *)"LLAToECEFTransform_swigregister", LLAToECEFTransform_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LLAToECEFTransform_swigregister", LLAToECEFTransform_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_LocalCoordinateTransform", _wrap_new_LocalCoordinateTransform, METH_VARARGS, (char *)"new_LocalCoordinateTransform(LatLonAlt refPt) -> LocalCoordinateTransform"},
 	 { (char *)"delete_LocalCoordinateTransform", _wrap_delete_LocalCoordinateTransform, METH_VARARGS, (char *)"delete_LocalCoordinateTransform(LocalCoordinateTransform self)"},
 	 { (char *)"LocalCoordinateTransform_toECEFPoint", _wrap_LocalCoordinateTransform_toECEFPoint, METH_VARARGS, (char *)"LocalCoordinateTransform_toECEFPoint(LocalCoordinateTransform self, Vector3 localPoint) -> Vector3"},
@@ -26359,13 +26359,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LocalCoordinateTransform_getUnitVectorY", _wrap_LocalCoordinateTransform_getUnitVectorY, METH_VARARGS, (char *)"LocalCoordinateTransform_getUnitVectorY(LocalCoordinateTransform self) -> Vector3"},
 	 { (char *)"LocalCoordinateTransform_getUnitVectorZ", _wrap_LocalCoordinateTransform_getUnitVectorZ, METH_VARARGS, (char *)"LocalCoordinateTransform_getUnitVectorZ(LocalCoordinateTransform self) -> Vector3"},
 	 { (char *)"LocalCoordinateTransform_rotate90", _wrap_LocalCoordinateTransform_rotate90, METH_VARARGS, (char *)"LocalCoordinateTransform_rotate90(LocalCoordinateTransform self)"},
-	 { (char *)"LocalCoordinateTransform_swigregister", LocalCoordinateTransform_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LocalCoordinateTransform_swigregister", LocalCoordinateTransform_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ENUCoordinateTransform", _wrap_new_ENUCoordinateTransform, METH_VARARGS, (char *)"new_ENUCoordinateTransform(LatLonAlt refPt) -> ENUCoordinateTransform"},
 	 { (char *)"delete_ENUCoordinateTransform", _wrap_delete_ENUCoordinateTransform, METH_VARARGS, (char *)"delete_ENUCoordinateTransform(ENUCoordinateTransform self)"},
-	 { (char *)"ENUCoordinateTransform_swigregister", ENUCoordinateTransform_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ENUCoordinateTransform_swigregister", ENUCoordinateTransform_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_NEDCoordinateTransform", _wrap_new_NEDCoordinateTransform, METH_VARARGS, (char *)"new_NEDCoordinateTransform(LatLonAlt refPt) -> NEDCoordinateTransform"},
 	 { (char *)"delete_NEDCoordinateTransform", _wrap_delete_NEDCoordinateTransform, METH_VARARGS, (char *)"delete_NEDCoordinateTransform(NEDCoordinateTransform self)"},
-	 { (char *)"NEDCoordinateTransform_swigregister", NEDCoordinateTransform_swigregister, METH_VARARGS, NULL},
+	 { (char *)"NEDCoordinateTransform_swigregister", NEDCoordinateTransform_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_SceneGeometry", _wrap_new_SceneGeometry, METH_VARARGS, (char *)"\n"
 		"SceneGeometry(Vector3 arpVel, Vector3 arpPos, Vector3 refPos)\n"
 		"SceneGeometry(Vector3 arpVel, Vector3 arpPos, Vector3 refPos, Vector3 imageRow, Vector3 imageCol)\n"
@@ -26428,7 +26428,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SceneGeometry_getShadow", _wrap_SceneGeometry_getShadow, METH_VARARGS, (char *)"SceneGeometry_getShadow(SceneGeometry self) -> AngleMagnitude"},
 	 { (char *)"SceneGeometry_getGroundResolution", _wrap_SceneGeometry_getGroundResolution, METH_VARARGS, (char *)"SceneGeometry_getGroundResolution(SceneGeometry self, RgAzDouble res) -> RowColDouble"},
 	 { (char *)"delete_SceneGeometry", _wrap_delete_SceneGeometry, METH_VARARGS, (char *)"delete_SceneGeometry(SceneGeometry self)"},
-	 { (char *)"SceneGeometry_swigregister", SceneGeometry_swigregister, METH_VARARGS, NULL},
+	 { (char *)"SceneGeometry_swigregister", SceneGeometry_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_FrameType", _wrap_new_FrameType, METH_VARARGS, (char *)"\n"
 		"FrameType(scene::FrameType::FrameTypesEnum value)\n"
 		"FrameType()\n"
@@ -26447,7 +26447,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FrameType_mValue_set", _wrap_FrameType_mValue_set, METH_VARARGS, (char *)"FrameType_mValue_set(FrameType self, scene::FrameType::FrameTypesEnum mValue)"},
 	 { (char *)"FrameType_mValue_get", _wrap_FrameType_mValue_get, METH_VARARGS, (char *)"FrameType_mValue_get(FrameType self) -> scene::FrameType::FrameTypesEnum"},
 	 { (char *)"delete_FrameType", _wrap_delete_FrameType, METH_VARARGS, (char *)"delete_FrameType(FrameType self)"},
-	 { (char *)"FrameType_swigregister", FrameType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"FrameType_swigregister", FrameType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_Errors", _wrap_new_Errors, METH_VARARGS, (char *)"new_Errors() -> Errors"},
 	 { (char *)"Errors_clear", _wrap_Errors_clear, METH_VARARGS, (char *)"Errors_clear(Errors self)"},
 	 { (char *)"Errors_mFrameType_set", _wrap_Errors_mFrameType_set, METH_VARARGS, (char *)"Errors_mFrameType_set(Errors self, FrameType mFrameType)"},
@@ -26469,7 +26469,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Errors_mRangeDecorrRate_set", _wrap_Errors_mRangeDecorrRate_set, METH_VARARGS, (char *)"Errors_mRangeDecorrRate_set(Errors self, double mRangeDecorrRate)"},
 	 { (char *)"Errors_mRangeDecorrRate_get", _wrap_Errors_mRangeDecorrRate_get, METH_VARARGS, (char *)"Errors_mRangeDecorrRate_get(Errors self) -> double"},
 	 { (char *)"delete_Errors", _wrap_delete_Errors, METH_VARARGS, (char *)"delete_Errors(Errors self)"},
-	 { (char *)"Errors_swigregister", Errors_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Errors_swigregister", Errors_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_AdjustableParams", _wrap_new_AdjustableParams, METH_VARARGS, (char *)"new_AdjustableParams() -> AdjustableParams"},
 	 { (char *)"AdjustableParams_name", _wrap_AdjustableParams_name, METH_VARARGS, (char *)"AdjustableParams_name(scene::AdjustableParams::ParamsEnum param) -> std::string"},
 	 { (char *)"AdjustableParams_units", _wrap_AdjustableParams_units, METH_VARARGS, (char *)"AdjustableParams_units(scene::AdjustableParams::ParamsEnum param) -> std::string"},
@@ -26481,7 +26481,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AdjustableParams___getitem__", _wrap_AdjustableParams___getitem__, METH_VARARGS, (char *)"AdjustableParams___getitem__(AdjustableParams self, std::ptrdiff_t idx) -> double"},
 	 { (char *)"AdjustableParams___setitem__", _wrap_AdjustableParams___setitem__, METH_VARARGS, (char *)"AdjustableParams___setitem__(AdjustableParams self, std::ptrdiff_t idx, double val)"},
 	 { (char *)"delete_AdjustableParams", _wrap_delete_AdjustableParams, METH_VARARGS, (char *)"delete_AdjustableParams(AdjustableParams self)"},
-	 { (char *)"AdjustableParams_swigregister", AdjustableParams_swigregister, METH_VARARGS, NULL},
+	 { (char *)"AdjustableParams_swigregister", AdjustableParams_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"delete_ProjectionModel", _wrap_delete_ProjectionModel, METH_VARARGS, (char *)"delete_ProjectionModel(ProjectionModel self)"},
 	 { (char *)"ProjectionModel_computeImageTime", _wrap_ProjectionModel_computeImageTime, METH_VARARGS, (char *)"ProjectionModel_computeImageTime(ProjectionModel self, RowColDouble pixel) -> double"},
 	 { (char *)"ProjectionModel_computeARPPosition", _wrap_ProjectionModel_computeARPPosition, METH_VARARGS, (char *)"ProjectionModel_computeARPPosition(ProjectionModel self, double const time) -> Vector3"},
@@ -26556,32 +26556,32 @@ static PyMethodDef SwigMethods[] = {
 		"imageToScene(RowColDouble imageGridPoint, double height) -> Vector3\n"
 		"ProjectionModel_imageToScene(ProjectionModel self, PyObject * row_seq, PyObject * col_seq, Vector3 ground_ref_point, Vector3 ground_plane_normal) -> PyObject *\n"
 		""},
-	 { (char *)"ProjectionModel_swigregister", ProjectionModel_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ProjectionModel_swigregister", ProjectionModel_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"ProjectionModelWithImageVectors_computeImageCoordinates", _wrap_ProjectionModelWithImageVectors_computeImageCoordinates, METH_VARARGS, (char *)"ProjectionModelWithImageVectors_computeImageCoordinates(ProjectionModelWithImageVectors self, Vector3 imagePlanePoint) -> RowColDouble"},
 	 { (char *)"ProjectionModelWithImageVectors_imageGridToECEF", _wrap_ProjectionModelWithImageVectors_imageGridToECEF, METH_VARARGS, (char *)"ProjectionModelWithImageVectors_imageGridToECEF(ProjectionModelWithImageVectors self, RowColDouble gridPt) -> Vector3"},
 	 { (char *)"delete_ProjectionModelWithImageVectors", _wrap_delete_ProjectionModelWithImageVectors, METH_VARARGS, (char *)"delete_ProjectionModelWithImageVectors(ProjectionModelWithImageVectors self)"},
-	 { (char *)"ProjectionModelWithImageVectors_swigregister", ProjectionModelWithImageVectors_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ProjectionModelWithImageVectors_swigregister", ProjectionModelWithImageVectors_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_RangeAzimProjectionModel", _wrap_new_RangeAzimProjectionModel, METH_VARARGS, (char *)"\n"
 		"RangeAzimProjectionModel(Poly1D polarAnglePoly, Poly1D ksfPoly, Vector3 slantPlaneNormal, Vector3 imagePlaneRowVector, Vector3 imagePlaneColVector, Vector3 scp, PolyVector3 arpPoly, Poly2D timeCOAPoly, int lookDir, Errors errors)\n"
 		"new_RangeAzimProjectionModel(Poly1D polarAnglePoly, Poly1D ksfPoly, Vector3 slantPlaneNormal, Vector3 imagePlaneRowVector, Vector3 imagePlaneColVector, Vector3 scp, PolyVector3 arpPoly, Poly2D timeCOAPoly, int lookDir) -> RangeAzimProjectionModel\n"
 		""},
 	 { (char *)"RangeAzimProjectionModel_computeContour", _wrap_RangeAzimProjectionModel_computeContour, METH_VARARGS, (char *)"RangeAzimProjectionModel_computeContour(RangeAzimProjectionModel self, Vector3 arpCOA, Vector3 velCOA, double timeCOA, RowColDouble imageGridPoint, double * r, double * rDot)"},
 	 { (char *)"delete_RangeAzimProjectionModel", _wrap_delete_RangeAzimProjectionModel, METH_VARARGS, (char *)"delete_RangeAzimProjectionModel(RangeAzimProjectionModel self)"},
-	 { (char *)"RangeAzimProjectionModel_swigregister", RangeAzimProjectionModel_swigregister, METH_VARARGS, NULL},
+	 { (char *)"RangeAzimProjectionModel_swigregister", RangeAzimProjectionModel_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_RangeZeroProjectionModel", _wrap_new_RangeZeroProjectionModel, METH_VARARGS, (char *)"\n"
 		"RangeZeroProjectionModel(Poly1D timeCAPoly, Poly2D dsrfPoly, double rangeCA, Vector3 slantPlaneNormal, Vector3 imagePlaneRowVector, Vector3 imagePlaneColVector, Vector3 scp, PolyVector3 arpPoly, Poly2D timeCOAPoly, int lookDir, Errors errors)\n"
 		"new_RangeZeroProjectionModel(Poly1D timeCAPoly, Poly2D dsrfPoly, double rangeCA, Vector3 slantPlaneNormal, Vector3 imagePlaneRowVector, Vector3 imagePlaneColVector, Vector3 scp, PolyVector3 arpPoly, Poly2D timeCOAPoly, int lookDir) -> RangeZeroProjectionModel\n"
 		""},
 	 { (char *)"RangeZeroProjectionModel_computeContour", _wrap_RangeZeroProjectionModel_computeContour, METH_VARARGS, (char *)"RangeZeroProjectionModel_computeContour(RangeZeroProjectionModel self, Vector3 arpCOA, Vector3 velCOA, double timeCOA, RowColDouble imageGridPoint, double * r, double * rDot)"},
 	 { (char *)"delete_RangeZeroProjectionModel", _wrap_delete_RangeZeroProjectionModel, METH_VARARGS, (char *)"delete_RangeZeroProjectionModel(RangeZeroProjectionModel self)"},
-	 { (char *)"RangeZeroProjectionModel_swigregister", RangeZeroProjectionModel_swigregister, METH_VARARGS, NULL},
+	 { (char *)"RangeZeroProjectionModel_swigregister", RangeZeroProjectionModel_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_PlaneProjectionModel", _wrap_new_PlaneProjectionModel, METH_VARARGS, (char *)"\n"
 		"PlaneProjectionModel(Vector3 slantPlaneNormal, Vector3 imagePlaneRowVector, Vector3 imagePlaneColVector, Vector3 scp, PolyVector3 arpPoly, Poly2D timeCOAPoly, int lookDir, Errors errors)\n"
 		"new_PlaneProjectionModel(Vector3 slantPlaneNormal, Vector3 imagePlaneRowVector, Vector3 imagePlaneColVector, Vector3 scp, PolyVector3 arpPoly, Poly2D timeCOAPoly, int lookDir) -> PlaneProjectionModel\n"
 		""},
 	 { (char *)"PlaneProjectionModel_computeContour", _wrap_PlaneProjectionModel_computeContour, METH_VARARGS, (char *)"PlaneProjectionModel_computeContour(PlaneProjectionModel self, Vector3 arpCOA, Vector3 velCOA, double timeCOA, RowColDouble imageGridPoint, double * r, double * rDot)"},
 	 { (char *)"delete_PlaneProjectionModel", _wrap_delete_PlaneProjectionModel, METH_VARARGS, (char *)"delete_PlaneProjectionModel(PlaneProjectionModel self)"},
-	 { (char *)"PlaneProjectionModel_swigregister", PlaneProjectionModel_swigregister, METH_VARARGS, NULL},
+	 { (char *)"PlaneProjectionModel_swigregister", PlaneProjectionModel_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_GeodeticProjectionModel", _wrap_new_GeodeticProjectionModel, METH_VARARGS, (char *)"\n"
 		"GeodeticProjectionModel(Vector3 slantPlaneNormal, Vector3 scp, PolyVector3 arpPoly, Poly2D timeCOAPoly, int lookDir, Errors errors)\n"
 		"new_GeodeticProjectionModel(Vector3 slantPlaneNormal, Vector3 scp, PolyVector3 arpPoly, Poly2D timeCOAPoly, int lookDir) -> GeodeticProjectionModel\n"
@@ -26590,17 +26590,17 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GeodeticProjectionModel_computeContour", _wrap_GeodeticProjectionModel_computeContour, METH_VARARGS, (char *)"GeodeticProjectionModel_computeContour(GeodeticProjectionModel self, Vector3 arpCOA, Vector3 velCOA, double timeCOA, RowColDouble imageGridPoint, double * r, double * rDot)"},
 	 { (char *)"GeodeticProjectionModel_imageGridToECEF", _wrap_GeodeticProjectionModel_imageGridToECEF, METH_VARARGS, (char *)"GeodeticProjectionModel_imageGridToECEF(GeodeticProjectionModel self, RowColDouble gridPt) -> Vector3"},
 	 { (char *)"delete_GeodeticProjectionModel", _wrap_delete_GeodeticProjectionModel, METH_VARARGS, (char *)"delete_GeodeticProjectionModel(GeodeticProjectionModel self)"},
-	 { (char *)"GeodeticProjectionModel_swigregister", GeodeticProjectionModel_swigregister, METH_VARARGS, NULL},
+	 { (char *)"GeodeticProjectionModel_swigregister", GeodeticProjectionModel_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"delete_GridGeometry", _wrap_delete_GridGeometry, METH_VARARGS, (char *)"delete_GridGeometry(GridGeometry self)"},
 	 { (char *)"GridGeometry_gridToScene", _wrap_GridGeometry_gridToScene, METH_VARARGS, (char *)"GridGeometry_gridToScene(GridGeometry self, Vector3 gridPt, double height) -> Vector3"},
 	 { (char *)"GridGeometry_sceneToGrid", _wrap_GridGeometry_sceneToGrid, METH_VARARGS, (char *)"GridGeometry_sceneToGrid(GridGeometry self, Vector3 groundPt) -> Vector3"},
-	 { (char *)"GridGeometry_swigregister", GridGeometry_swigregister, METH_VARARGS, NULL},
+	 { (char *)"GridGeometry_swigregister", GridGeometry_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_PlanarGridGeometry", _wrap_new_PlanarGridGeometry, METH_VARARGS, (char *)"new_PlanarGridGeometry(Vector3 row, Vector3 col, Vector3 refPt, PolyVector3 arpPoly, Poly2D timeCOAPoly) -> PlanarGridGeometry"},
 	 { (char *)"PlanarGridGeometry_gridToScene", _wrap_PlanarGridGeometry_gridToScene, METH_VARARGS, (char *)"PlanarGridGeometry_gridToScene(PlanarGridGeometry self, Vector3 gridPt, double height) -> Vector3"},
 	 { (char *)"PlanarGridGeometry_sceneToGrid", _wrap_PlanarGridGeometry_sceneToGrid, METH_VARARGS, (char *)"PlanarGridGeometry_sceneToGrid(PlanarGridGeometry self, Vector3 groundPt) -> Vector3"},
 	 { (char *)"delete_PlanarGridGeometry", _wrap_delete_PlanarGridGeometry, METH_VARARGS, (char *)"delete_PlanarGridGeometry(PlanarGridGeometry self)"},
-	 { (char *)"PlanarGridGeometry_swigregister", PlanarGridGeometry_swigregister, METH_VARARGS, NULL},
-	 { NULL, NULL, 0, NULL }
+	 { (char *)"PlanarGridGeometry_swigregister", PlanarGridGeometry_swigregister, METH_VARARGS, nullptr},
+	 { nullptr, nullptr, 0, nullptr }
 };
 
 
@@ -26653,15 +26653,15 @@ static void *_p_scene__WGS84EllipsoidModelTo_p_scene__EllipsoidModel(void *x, in
 }
 static swig_type_info _swigt__p_Like_T = {"_p_Like_T", "Like_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_char = {"_p_char", "char *|std::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_except__NullPointerReferenceException", "except::NullPointerReferenceException *|except::NullPointerReference *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *|sys::Handle_T *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "sys::Int16_T *|int16_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "sys::Int32_T *|int32_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|int64_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "sys::Int8_T *|int8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "int16_t *|int16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "int32_t *|int32_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "int64_t *|int64_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "int8_t *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_1_1_double_t = {"_p_math__linear__MatrixMxNT_1_1_double_t", "math::linear::MatrixMxN< 1,1,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_2_2_double_t = {"_p_math__linear__MatrixMxNT_2_2_double_t", "math::linear::MatrixMxN< 2,2,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__MatrixMxNT_2_3_double_t = {"_p_math__linear__MatrixMxNT_2_3_double_t", "math::linear::MatrixMxN< 2,3,double > *", 0, 0, (void*)0, 0};
@@ -26677,7 +26677,7 @@ static swig_type_info _swigt__p_math__linear__VectorT_double_t = {"_p_math__line
 static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__OneDT_double_t", "math::poly::OneD< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "math::poly::OneD< math::linear::VectorN< 3,double > > *|math::poly::OneD< scene::Vector3 > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|int64_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_pid_t = {"_p_pid_t", "sys::Pid_T *|pid_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__AdjustableParams = {"_p_scene__AdjustableParams", "scene::AdjustableParams *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__AngleMagnitude = {"_p_scene__AngleMagnitude", "scene::AngleMagnitude *", 0, 0, (void*)0, 0};
@@ -26703,18 +26703,18 @@ static swig_type_info _swigt__p_scene__RangeZeroProjectionModel = {"_p_scene__Ra
 static swig_type_info _swigt__p_scene__SceneGeometry = {"_p_scene__SceneGeometry", "scene::SceneGeometry *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__Utilities = {"_p_scene__Utilities", "scene::Utilities *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__WGS84EllipsoidModel = {"_p_scene__WGS84EllipsoidModel", "scene::WGS84EllipsoidModel *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_size_t = {"_p_size_t", "size_t *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "ptrdiff_t *|ssize_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RgAzT_double_t = {"_p_types__RgAzT_double_t", "types::RgAz< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RowColT_double_t = {"_p_types__RowColT_double_t", "types::RowCol< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "sys::Uint16_T *|uint16_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "sys::Uint32_T *|uint32_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "sys::Uint64_T *|uint64_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "sys::Uint8_T *|uint8_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|sys::ubyte *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "uint16_t *|uint16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "uint32_t *|uint32_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "uint64_t *|uint64_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "uint8_t *|uint8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|std::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -27257,7 +27257,7 @@ extern "C" {
   
   SWIGINTERN PyObject *
   swig_varlink_getattr(swig_varlinkobject *v, char *n) {
-    PyObject *res = NULL;
+    PyObject *res = nullptr;
     swig_globalvar *var = v->vars;
     while (var) {
       if (strcmp(var->name,n) == 0) {
@@ -27266,7 +27266,7 @@ extern "C" {
       }
       var = var->next;
     }
-    if (res == NULL && !PyErr_Occurred()) {
+    if (res == nullptr && !PyErr_Occurred()) {
       PyErr_Format(PyExc_AttributeError, "Unknown C global variable '%s'", n);
     }
     return res;
@@ -27297,9 +27297,9 @@ extern "C" {
     if (!type_init) {
       const PyTypeObject tmp = {
 #if PY_VERSION_HEX >= 0x03000000
-        PyVarObject_HEAD_INIT(NULL, 0)
+        PyVarObject_HEAD_INIT(nullptr, 0)
 #else
-        PyObject_HEAD_INIT(NULL)
+        PyObject_HEAD_INIT(nullptr)
         0,                                  /* ob_size */
 #endif
         (char *)"swigvarlink",              /* tp_name */
@@ -27354,7 +27354,7 @@ extern "C" {
       varlink_type.ob_type = &PyType_Type;
 #else
       if (PyType_Ready(&varlink_type) < 0)
-      return NULL;
+      return nullptr;
 #endif
     }
     return &varlink_type;
@@ -27496,20 +27496,20 @@ SWIG_init(void) {
     PyModuleDef_HEAD_INIT,
 # else
     {
-      PyObject_HEAD_INIT(NULL)
-      NULL, /* m_init */
+      PyObject_HEAD_INIT(nullptr)
+      nullptr, /* m_init */
       0,    /* m_index */
-      NULL, /* m_copy */
+      nullptr, /* m_copy */
     },
 # endif
     (char *) SWIG_name,
-    NULL,
+    nullptr,
     -1,
     SwigMethods,
-    NULL,
-    NULL,
-    NULL,
-    NULL
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
   };
 #endif
   
@@ -27518,14 +27518,14 @@ SWIG_init(void) {
     0, 0, 0, 0, 0, 0, 0
   };
   static PyGetSetDef this_getset_def = {
-    (char *)"this", &SwigPyBuiltin_ThisClosure, NULL, NULL, NULL
+    (char *)"this", &SwigPyBuiltin_ThisClosure, nullptr, nullptr, nullptr
   };
   static SwigPyGetSet thisown_getset_closure = {
     (PyCFunction) SwigPyObject_own,
     (PyCFunction) SwigPyObject_own
   };
   static PyGetSetDef thisown_getset_def = {
-    (char *)"thisown", SwigPyBuiltin_GetterClosure, SwigPyBuiltin_SetterClosure, NULL, &thisown_getset_closure
+    (char *)"thisown", SwigPyBuiltin_GetterClosure, SwigPyBuiltin_SetterClosure, nullptr, &thisown_getset_closure
   };
   PyTypeObject *builtin_pytype;
   int builtin_base_count;
@@ -27579,7 +27579,7 @@ SWIG_init(void) {
   } else if (swigpyobject->tp_basicsize != cd->pytype->tp_basicsize) {
     PyErr_SetString(PyExc_RuntimeError, "Import error: attempted to load two incompatible swig-generated modules.");
 # if PY_VERSION_HEX >= 0x03000000
-    return NULL;
+    return nullptr;
 # else
     return;
 # endif
@@ -27599,7 +27599,7 @@ SWIG_init(void) {
   
   PyDict_SetItemString(md, "__all__", public_interface);
   Py_DECREF(public_interface);
-  for (i = 0; SwigMethods[i].ml_name != NULL; ++i)
+  for (i = 0; SwigMethods[i].ml_name != nullptr; ++i)
   SwigPyBuiltin_AddPublicSymbol(public_interface, SwigMethods[i].ml_name);
   for (i = 0; swig_const_table[i].name != 0; ++i)
   SwigPyBuiltin_AddPublicSymbol(public_interface, swig_const_table[i].name);

@@ -23,12 +23,14 @@
 
 #ifndef __MT_CPU_AFFINITY_INITIALIZER_WIN32_H__
 #define __MT_CPU_AFFINITY_INITIALIZER_WIN32_H__
+#pragma once
 
 #if defined(WIN32) || defined(_WIN32)
 
 #include <mt/AbstractCPUAffinityInitializer.h>
 #include <mt/CPUAffinityThreadInitializerWin32.h>
-#include <mem/SharedPtr.h>
+
+#include "mem/SharedPtr.h"
 
 namespace mt
 {

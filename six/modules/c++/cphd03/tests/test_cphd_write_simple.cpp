@@ -24,6 +24,7 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
+#include <thread>
 
 #include <cphd03/CPHDWriter.h>
 #include <types/RowCol.h>
@@ -40,7 +41,7 @@ int main(int argc, char** argv)
                            "Specify the number of threads to use",
                            cli::STORE,
                            "threads",
-                           "NUM")->setDefault(sys::OS().getNumCPUs());
+                           "NUM")->setDefault(std::thread::hardware_concurrency());
         parser.addArgument("-c --channels",
                            "Specify the number of channels to write",
                            cli::STORE,
@@ -62,7 +63,7 @@ int main(int argc, char** argv)
                            str::split("FX TOA"))->setDefault("FX");
         parser.addArgument("output", "Output pathname", cli::STORE, "output",
                            "CPHD", 1, 1);
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const size_t numChannels = options->get<size_t>("channels");
         const types::RowCol<size_t> dims(options->get<size_t>("rows"),
@@ -131,7 +132,7 @@ int main(int argc, char** argv)
         writer.writeMetadata(vbm);
         for (size_t ii = 0; ii < numChannels; ++ii)
         {
-            writer.writeCPHDData(&data[0], dims.area());
+            writer.writeCPHDData(data.data(), dims.area());
         }
 
         std::cout << "Successfully wrote CPHD file: " << outPathname << "\n";
@@ -141,11 +142,6 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
         return 1;
     }
     catch (...)

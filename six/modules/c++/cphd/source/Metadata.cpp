@@ -35,14 +35,14 @@ size_t Metadata::getNumChannels() const
     return data.getNumChannels();
 }
 
-size_t Metadata::getNumVectors(size_t channel) const
+size_t Metadata::getNumVectors(size_t channel_) const
 {
-    return data.getNumVectors(channel);
+    return data.getNumVectors(channel_);
 }
 
-size_t Metadata::getNumSamples(size_t channel) const
+size_t Metadata::getNumSamples(size_t channel_) const
 {
-    return data.getNumSamples(channel);
+    return data.getNumSamples(channel_);
 }
 
 size_t Metadata::getNumBytesPerSample() const
@@ -50,9 +50,9 @@ size_t Metadata::getNumBytesPerSample() const
     return data.getNumBytesPerSample();
 }
 
-size_t Metadata::getCompressedSignalSize(size_t channel) const
+size_t Metadata::getCompressedSignalSize(size_t channel_) const
 {
-    return data.getCompressedSignalSize(channel);
+    return data.getCompressedSignalSize(channel_);
 }
 
 bool Metadata::isCompressed() const

@@ -128,7 +128,7 @@ int main(int argc, char** argv)
         parser.addArgument("-v", "Enable verbose output",
                            cli::STORE_TRUE, "verbose")->setDefault(false);
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const double tol = options->get<double>("tol");
         const types::RowCol<size_t> slantMeshDims(
             options->get<size_t>("slantMeshRows"),
@@ -287,11 +287,6 @@ int main(int argc, char** argv)
         }
 
         return (pass ? 0 : 1);
-    }
-    catch(except::Exception& e)
-    {
-        std::cerr << e.getMessage() << std::endl;
-        return 1;
     }
     catch (const std::exception& e)
     {

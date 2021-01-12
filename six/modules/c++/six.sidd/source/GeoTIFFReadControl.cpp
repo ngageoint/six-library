@@ -20,6 +20,8 @@
  *
  */
 
+#include <string>
+
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
@@ -28,7 +30,7 @@
 namespace
 {
 // This entry should contain XML entries as strings.  Each separate entry is
-// NULL-terminated, so we split on this.
+// nullptr-terminated, so we split on this.
 void parseXMLEntry(const tiff::IFDEntry *entry,
                    std::vector<std::string> &entries)
 {
@@ -69,7 +71,7 @@ void parseXMLEntry(const tiff::IFDEntry *entry,
         }
 
         // TODO: Should we treat this as an error instead?  We expect the
-        //       string to be NULL-terminated according to the TIFF spec.
+        //       string to be nullptr-terminated according to the TIFF spec.
         str::trim(curStr);
         if (!curStr.empty())
         {
@@ -140,8 +142,8 @@ void six::sidd::GeoTIFFReadControl::load(
 
     mContainer.reset(new six::Container(six::DataType::DERIVED));
 
-    std::auto_ptr<six::XMLControl> siddXMLControl;
-    std::auto_ptr<six::XMLControl> sicdXMLControl;
+    std::unique_ptr<six::XMLControl> siddXMLControl;
+    std::unique_ptr<six::XMLControl> sicdXMLControl;
 
     for (size_t ii = 0; ii < xmlStrs.size(); ++ii)
     {
@@ -159,7 +161,7 @@ void six::sidd::GeoTIFFReadControl::load(
         six::XMLControl *xmlControl;
         if (rootName == "SIDD")
         {
-            if (siddXMLControl.get() == NULL)
+            if (siddXMLControl.get() == nullptr)
             {
                 siddXMLControl.reset(
                     mXMLRegistry->newXMLControl(DataType::DERIVED, mLog));
@@ -168,7 +170,7 @@ void six::sidd::GeoTIFFReadControl::load(
         }
         else if (rootName == "SICD")
         {
-            if (sicdXMLControl.get() == NULL)
+            if (sicdXMLControl.get() == nullptr)
             {
                 sicdXMLControl.reset(
                     mXMLRegistry->newXMLControl(DataType::COMPLEX, mLog));
@@ -178,12 +180,12 @@ void six::sidd::GeoTIFFReadControl::load(
         else
         {
             // If it's something we don't know about, just skip it
-            xmlControl = NULL;
+            xmlControl = nullptr;
         }
 
         if (xmlControl)
         {
-            std::auto_ptr<six::Data> data(xmlControl->fromXML(doc,
+            std::unique_ptr<six::Data> data(xmlControl->fromXML(doc,
                                                               schemaPaths));
 
             if (!data.get())
@@ -191,18 +193,18 @@ void six::sidd::GeoTIFFReadControl::load(
                 throw except::Exception(Ctxt(
                           "Unable to transform " + rootName + " XML"));
             }
-            mContainer->addData(data);
+            mContainer->addData(std::move(data));
         }
     }
 }
 
-six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
+std::byte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
                                                        size_t imIndex)
 {
     if (mReader.getImageCount() <= imIndex)
     {
         throw except::IndexOutOfRangeException(Ctxt(
-                "Invalid index: " + str::toString(imIndex)));
+                "Invalid index: " + std::to_string(imIndex)));
     }
 
     tiff::ImageReader *imReader = mReader[imIndex];
@@ -229,33 +231,32 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
     {
         throw except::Exception(Ctxt("Too many rows requested [" +
-                str::toString(numRowsReq) + "]"));
+                std::to_string(numRowsReq) + "]"));
     }
 
     if (extentCols > numColsTotal || startCol > numColsTotal)
     {
         throw except::Exception(Ctxt("Too many cols requested [" +
-                str::toString(numColsReq) + "]"));
+                std::to_string(numColsReq) + "]"));
     }
 
-    six::UByte* buffer = region.getBuffer();
+    std::byte* buffer = region.getBuffer();
 
-    if (buffer == NULL)
+    if (buffer == nullptr)
     {
-        buffer = new six::UByte[numRowsReq * numColsReq * elemSize];
-        region.setBuffer(buffer);
+        buffer = region.setBuffer(numRowsReq * numColsReq * elemSize).release();
     }
 
     if (numRowsReq == numRowsTotal && numColsReq == numColsTotal)
     {
         // one read
-        imReader->getData(buffer, numRowsReq * numColsReq);
+        imReader->getData(reinterpret_cast<unsigned char*>(buffer), numRowsReq * numColsReq);
     }
     else
     {
-        const mem::ScopedArray<six::UByte>
-            scopedRowBuf(new six::UByte[numColsTotal * elemSize]);
-        six::UByte* const rowBuf(scopedRowBuf.get());
+        const std::unique_ptr<std::byte[]>
+            scopedRowBuf(new std::byte[numColsTotal * elemSize]);
+        std::byte* const rowBuf(scopedRowBuf.get());
 
         //        // skip past rows
         //        for (size_t i = 0; i < startRow; ++i)
@@ -265,23 +266,24 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
         // this is not the most efficient, but it works
         for (size_t i = 0; i < numRowsReq; ++i)
         {
+            auto rowBuf_ = reinterpret_cast<unsigned char*>(rowBuf);
             // possibly skip past some cols
             if (startCol > 0)
-                imReader->getData(rowBuf, startCol);
-            imReader->getData(rowBuf, numColsReq);
+                imReader->getData(rowBuf_, startCol);
+            imReader->getData(rowBuf_, numColsReq);
             memcpy(buffer + offset, rowBuf, numColsReq * elemSize);
             offset += numColsReq * elemSize;
             // more skipping..
             if (extentCols < numColsTotal)
-                imReader->getData(rowBuf, numColsTotal - extentCols);
+                imReader->getData(rowBuf_, numColsTotal - extentCols);
         }
     }
     return buffer;
 }
 
-six::ReadControl* six::sidd::GeoTIFFReadControlCreator::newReadControl() const
+std::unique_ptr<six::ReadControl> six::sidd::GeoTIFFReadControlCreator::newReadControl() const
 {
-    return new six::sidd::GeoTIFFReadControl();
+    return std::unique_ptr<six::ReadControl>(new six::sidd::GeoTIFFReadControl());
 }
 
 bool six::sidd::GeoTIFFReadControlCreator::supports(const std::string& filename) const
@@ -291,7 +293,7 @@ bool six::sidd::GeoTIFFReadControlCreator::supports(const std::string& filename)
         six::sidd::GeoTIFFReadControl control;
         return control.getDataType(filename) != DataType::NOT_SET;
     }
-    catch (except::Exception&)
+    catch (const except::Exception&)
     {
         return false;
     }

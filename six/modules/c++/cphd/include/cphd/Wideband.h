@@ -21,6 +21,7 @@
  */
 #ifndef __CPHD_WIDEBAND_H__
 #define __CPHD_WIDEBAND_H__
+#pragma once
 
 #include <complex>
 #include <string>
@@ -29,10 +30,11 @@
 #include <cphd/Utilities.h>
 
 #include <io/SeekableStreams.h>
-#include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
+
+#include <nitf/span.h>
 
 namespace cphd
 {
@@ -59,8 +61,8 @@ public:
      */
     Wideband(const std::string& pathname,
              const cphd::MetadataBase& metadata,
-             sys::Off_T startWB,
-             sys::Off_T sizeWB);
+             int64_t startWB,
+             int64_t sizeWB);
 
     /*!
      *  \func Wideband
@@ -74,8 +76,8 @@ public:
      */
     Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
              const cphd::MetadataBase& metadata,
-             sys::Off_T startWB,
-             sys::Off_T sizeWB);
+             int64_t startWB,
+             int64_t sizeWB);
 
     /*!
      *  \func getFileOffset
@@ -93,7 +95,7 @@ public:
     // first channel is 0!
     // 0-based vector in channel
     // 0-based sample in channel
-    sys::Off_T getFileOffset(size_t channel,
+    int64_t getFileOffset(size_t channel,
                              size_t vector,
                              size_t sample) const;
 
@@ -112,7 +114,7 @@ public:
     // first channel is 0!
     // 0-based vector in channel
     // 0-based sample in channel
-    sys::Off_T getFileOffset(size_t channel) const;
+    int64_t getFileOffset(size_t channel) const;
 
     /*!
      *  \func read
@@ -130,7 +132,7 @@ public:
      *  read all samples
      *  \param numThreads Number of threads to use for endian swapping if
      *  necessary
-     *  \param[in,out] data A pre allocated mem::BufferView that will hold the
+     *  \param[in,out] data A pre allocated std::span that will hold the
      * data read from the file.
      *
      *  \throw except::Exception If invalid channel, firstVector, lastVector,
@@ -144,7 +146,7 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              const mem::BufferView<sys::ubyte>& data) const;
+              std::span<std::byte> data) const;
 
     /*!
      *  \func read
@@ -152,14 +154,14 @@ public:
      *  \brief Read the specified channel's compressed signal block
      *
      *  \param channel 0-based channel
-     *  \param[in,out] data A pre allocated mem::BufferView that will hold the
+     *  \param[in,out] data A pre allocated std::span that will hold the
      * data read from the file.
      *
      *  \throw except::Exception If invalid channel
      *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel, const mem::BufferView<sys::ubyte>& data) const;
+    void read(size_t channel, std::span<std::byte> data) const;
 
     /*!
      *  \func read
@@ -177,7 +179,7 @@ public:
      *  read all samples
      *  \param numThreads Number of threads to use for endian swapping if
      *  necessary
-     *  \param[out] data An empty mem::ScopedArray that will hold the data
+     *  \param[out] data An empty std::unique_ptr<[]> that will hold the data
      *   read from the file.
      *
      *  \throw except::Exception If invalid channel, firstVector, lastVector,
@@ -191,7 +193,7 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              mem::ScopedArray<sys::ubyte>& data) const;
+              std::unique_ptr<std::byte[]>& data) const;
 
     /*!
      *  \func read
@@ -199,14 +201,14 @@ public:
      *  \brief Read the specified channel's compressed signal block
      *
      *  \param channel 0-based channel
-     *  \param[out] data An empty mem::ScopedArray that will hold the data
+     *  \param[out] data An empty std::unique_ptr<[]> that will hold the data
      *   read from the file.
      *
      *  \throw except::Exception If invalid channel
      *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel, mem::ScopedArray<sys::ubyte>& data) const;
+    void read(size_t channel, std::unique_ptr<std::byte[]>& data) const;
 
     /*!
      *  \func read
@@ -225,9 +227,9 @@ public:
      *  \param vectorScaleFactors A vector of scaleFactors to scale signal
      * samples \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param scratch A pre allocated mem::BufferView for scratch space for
+     *  \param scratch A pre allocated std::span for scratch space for
      * scaling, promoting and/or byte swapping \param[out] data A pre allocated
-     * mem::BufferView that will hold the data read from the file.
+     *std::span that will hold the data read from the file.
      *
      *  \throw except::Exception If invalid channel, firstVector, lastVector,
      *   firstSample or lastSample
@@ -245,8 +247,8 @@ public:
               size_t lastSample,
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
-              const mem::BufferView<sys::ubyte>& scratch,
-              const mem::BufferView<std::complex<float>>& data) const;
+              std::span<std::byte> scratch,
+              std::span<std::complex<float>> data) const;
 
     /*!
      *  \func read
@@ -281,7 +283,7 @@ public:
               const types::RowCol<size_t>& dims,
               void* data) const
     {
-        const mem::BufferView<sys::ubyte> buffer(static_cast<sys::ubyte*>(data),
+        std::span<std::byte> buffer(static_cast<std::byte*>(data),
                                                  dims.area() * mElementSize);
         read(channel,
              firstVector,
@@ -411,11 +413,11 @@ private:
 private:
     const std::shared_ptr<io::SeekableInputStream> mInStream;
     const cphd::MetadataBase& mMetadata;  // pointer to data metadata
-    const sys::Off_T mWBOffset;  // offset in bytes to start of wideband
+    const int64_t mWBOffset;  // offset in bytes to start of wideband
     const size_t mWBSize;  // total size in bytes of wideband
     const size_t mElementSize;  // element size (bytes / complex sample)
 
-    std::vector<sys::Off_T> mOffsets;  // Offset to start of each channel
+    std::vector<int64_t> mOffsets;  // Offset to start of each channel
 
     friend std::ostream& operator<<(std::ostream& os, const Wideband& d);
 };

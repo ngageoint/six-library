@@ -55,7 +55,7 @@ bool MonochromeDisplayRemap::equalTo(const Remap& rhs) const
 {
     const MonochromeDisplayRemap* remap =
             dynamic_cast<const MonochromeDisplayRemap*>(&rhs);
-    if (remap != NULL)
+    if (remap != nullptr)
     {
         return *this == *remap;
     }
@@ -72,7 +72,7 @@ bool ColorDisplayRemap::equalTo(const Remap& rhs) const
 {
     ColorDisplayRemap const* remap =
             dynamic_cast<ColorDisplayRemap const*>(&rhs);
-    if (remap != NULL)
+    if (remap != nullptr)
     {
         return *this == *remap;
     }
@@ -176,8 +176,8 @@ Display::Display() :
     pixelType(PixelType::NOT_SET),
     magnificationMethod(MagnificationMethod::NOT_SET),
     decimationMethod(DecimationMethod::NOT_SET),
-    histogramOverrides(NULL),
-    monitorCompensationApplied(NULL),
+    histogramOverrides(nullptr),
+    monitorCompensationApplied(nullptr),
     defaultBandDisplay(six::Init::undefined<size_t>())
 {
 }

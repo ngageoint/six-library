@@ -37,7 +37,11 @@ void nitf::DataSource::read(void* buf, nitf::Off size)
 nitf::Off nitf::DataSource::getSize() const
 {
     nitf_DataSource *ds = getNativeOrThrow();
-    nitf::Off size = ds->iface->getSize(ds->data, &error);
+    if (ds == nullptr)
+    {
+        throw except::NullPointerReference(Ctxt("DataSource"));
+    }
+    const nitf::Off size = ds->iface->getSize(ds->data, &error);
     if (size < 0)
         throw nitf::NITFException(&error);
     return size;
@@ -46,6 +50,9 @@ nitf::Off nitf::DataSource::getSize() const
 void nitf::DataSource::setSize(nitf::Off size)
 {
     nitf_DataSource *ds = getNativeOrThrow();
-    if (!ds->iface->setSize(ds->data, size, &error))
-        throw nitf::NITFException(&error);
+    if (ds != nullptr)
+    {
+        if (!ds->iface->setSize(ds->data, size, &error))
+            throw nitf::NITFException(&error);
+    }
 }

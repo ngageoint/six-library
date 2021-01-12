@@ -24,17 +24,22 @@
 // Demonstrates that the raw bytes provided by this class result in equivalent
 // SIDDs to the normal writes via NITFWriteControl
 
+#include <stdlib.h>
+
+#include <string>
 #include <iostream>
 #include <limits>
-#include <stdlib.h>
 
 #include <io/ReadUtils.h>
 #include <math/Round.h>
+#include <sys/Bit.h>
+
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/sidd/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/SIDDByteProvider.h>
+
 
 namespace
 {
@@ -45,7 +50,7 @@ struct GetPixelType
 };
 
 template <>
-struct GetPixelType<sys::Uint8_T>
+struct GetPixelType<uint8_t>
 {
     static six::PixelType getPixelType()
     {
@@ -54,7 +59,7 @@ struct GetPixelType<sys::Uint8_T>
 };
 
 template <>
-struct GetPixelType<sys::Uint16_T>
+struct GetPixelType<uint16_t>
 {
     static six::PixelType getPixelType()
     {
@@ -64,10 +69,10 @@ struct GetPixelType<sys::Uint16_T>
 
 // Create dummy SIDD data
 template <typename DataTypeT>
-std::auto_ptr<six::sidd::DerivedData>
+std::unique_ptr<six::sidd::DerivedData>
 createData(const types::RowCol<size_t>& dims)
 {
-    std::auto_ptr<six::sidd::DerivedData> data =
+    std::unique_ptr<six::sidd::DerivedData> data =
             six::sidd::Utilities::createFakeDerivedData();
     data->setNumRows(dims.row);
     data->setNumCols(dims.col);
@@ -202,9 +207,9 @@ public:
         }
 
         mBigEndianImage = mImage;
-        if (!sys::isBigEndianSystem())
+        if (std::endian::native == std::endian::little)
         {
-            sys::byteSwap(&mBigEndianImage[0],
+            sys::byteSwap(mBigEndianImage.data(),
                           sizeof(DataTypeT),
                           mBigEndianImage.size());
         }
@@ -236,9 +241,9 @@ private:
         if (mNumRowsPerBlock != 0 || mNumColsPerBlock != 0)
         {
             suffix += " with blocking of rows/block=" +
-                    str::toString(mNumRowsPerBlock) +
+                    std::to_string(mNumRowsPerBlock) +
                     ", cols/block=" +
-                    str::toString(mNumColsPerBlock);
+                    std::to_string(mNumColsPerBlock);
         }
 
         return suffix;
@@ -250,7 +255,7 @@ private:
         if (mSetMaxProductSize)
         {
             fullPrefix += " (max product size " +
-                    str::toString(mMaxProductSize) + ")";
+                    std::to_string(mMaxProductSize) + ")";
         }
         fullPrefix += getSuffix();
 
@@ -295,7 +300,7 @@ private:
         for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
         {
             outStream.write(
-                    static_cast<const sys::byte*>(buffers.mBuffers[ii].mData),
+                    static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
                     buffers.mBuffers[ii].mNumBytes);
 
             numBytes += buffers.mBuffers[ii].mNumBytes;
@@ -318,23 +323,23 @@ private:
         const DataTypeT* retImage;
         if (mNumRowsPerBlock != 0 || mNumColsPerBlock != 0)
         {
-            std::auto_ptr<const nitf::ImageBlocker> imageBlocker =
+            std::unique_ptr<const nitf::ImageBlocker> imageBlocker =
                     siddByteProvider.getImageBlocker();
 
             const size_t numBlockedPixels =
                     imageBlocker->getNumBytesRequired(0, mDims.row, 1);
             blockedImage.resize(numBlockedPixels);
 
-            imageBlocker->block(&mBigEndianImage[0],
+            imageBlocker->block(mBigEndianImage.data(),
                                 0,
                                 mDims.row,
-                                &blockedImage[0]);
+                                blockedImage.data());
 
-            retImage = &blockedImage[0];
+            retImage = blockedImage.data();
         }
         else
         {
-            retImage = &mBigEndianImage[0];
+            retImage = mBigEndianImage.data();
         }
 
         return retImage;
@@ -345,11 +350,11 @@ private:
     const EnsureFileCleanup mNormalFileCleanup;
 
     const types::RowCol<size_t> mDims;
-    std::auto_ptr<six::sidd::DerivedData> mData;
+    std::unique_ptr<six::sidd::DerivedData> mData;
     std::vector<DataTypeT> mImage;
     std::vector<DataTypeT> mBigEndianImage;
 
-    std::auto_ptr<const CompareFiles> mCompareFiles;
+    std::unique_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
     const std::vector<std::string> mSchemaPaths;
 
@@ -364,8 +369,8 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    mem::SharedPtr<six::Container> container(
-            new six::Container(six::DataType::DERIVED));
+    auto container(
+            std::make_shared<six::Container>(six::DataType::DERIVED));
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;
@@ -378,7 +383,7 @@ void Tester<DataTypeT>::normalWrite()
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<six::UByte*>(&mImage[0]));
+    buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
@@ -423,7 +428,7 @@ void Tester<DataTypeT>::testMultipleWrites()
             mNumColsPerBlock,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
-    const DataTypeT* const inImage = &mBigEndianImage[0];
+    const DataTypeT* const inImage = mBigEndianImage.data();
 
     // Rows [40, 60)
     nitf::Off fileOffset;
@@ -546,7 +551,7 @@ void Tester<DataTypeT>::testMultipleWritesBlocked(size_t blocksPerWrite)
             mSetMaxProductSize ? mMaxProductSize : 0);
 
     // Write the blocks in reverse order
-    std::auto_ptr<const nitf::ImageBlocker> imageBlocker =
+    std::unique_ptr<const nitf::ImageBlocker> imageBlocker =
             siddByteProvider.getImageBlocker();
 
     const size_t numSegs(imageBlocker->getNumSegments());
@@ -605,11 +610,11 @@ void Tester<DataTypeT>::testMultipleWritesBlocked(size_t blocksPerWrite)
         imageBlocker->block(&mBigEndianImage[iter->startRow * 456],
                             iter->startRow,
                             iter->numRows,
-                            &blockData[0]);
+                            blockData.data());
 
         nitf::Off fileOffset;
         nitf::NITFBufferList buffers;
-        siddByteProvider.getBytes(&blockData[0],
+        siddByteProvider.getBytes(blockData.data(),
                                   iter->startRow,
                                   iter->numRows,
                                   fileOffset,
@@ -714,25 +719,25 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
                           size_t numRowsPerSeg = 0)
 {
     bool success = true;
-    if (!doTests<sys::Uint8_T>(schemaPaths, false,
+    if (!doTests<uint8_t>(schemaPaths, false,
                                setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<sys::Uint8_T>(schemaPaths, true,
+    if (!doTests<uint8_t>(schemaPaths, true,
                                setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<sys::Uint16_T>(schemaPaths, false,
+    if (!doTests<uint16_t>(schemaPaths, false,
                                 setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<sys::Uint16_T>(schemaPaths, true,
+    if (!doTests<uint16_t>(schemaPaths, true,
                                 setMaxProductSize, numRowsPerSeg))
     {
         success = false;
@@ -787,12 +792,6 @@ int main(int /*argc*/, char** /*argv*/)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << "Caught except::Exception: " << ex.getMessage()
-                  << std::endl;
         return 1;
     }
     catch (...)

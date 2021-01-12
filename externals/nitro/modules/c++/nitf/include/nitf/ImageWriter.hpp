@@ -78,7 +78,7 @@ public:
     void setPadPixel(uint8_t* value, uint32_t length);
 
 private:
-    nitf_Error error;
+    nitf_Error error{};
 //    bool mAdopt;
 //    nitf::ImageSource* mImageSource;
 };

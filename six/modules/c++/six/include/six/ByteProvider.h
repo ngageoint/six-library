@@ -60,7 +60,7 @@ public:
      *  Extension Segment (DES) buffers and their lengths. This data
      *  will be stored in the DES portion of the NITF
      */
-    ByteProvider(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    ByteProvider(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
                  const std::vector<std::string>& schemaPaths,
                  const std::vector<PtrAndLength>& desBuffers);
 
@@ -75,7 +75,7 @@ public:
      * \param[out] options Options to populate
      */
     static void populateOptions(
-            mem::SharedPtr<Container> container,
+            std::shared_ptr<Container> container,
             size_t maxProductSize,
             size_t numRowsPerBlock,
             size_t numColsPerBlock,
@@ -136,7 +136,7 @@ public:
      *  Extension Segment (DES) buffers and their lengths. This data
      *  will be stored in the DES portion of the NITF
      */
-    void initialize(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    void initialize(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<PtrAndLength>& desBuffers);
 protected:
@@ -159,7 +159,7 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Only applies
      * for SIDD.  Defaults to no blocking.
      */
-    void initialize(mem::SharedPtr<Container> container,
+    void initialize(std::shared_ptr<Container> container,
                     const XMLControlRegistry& xmlRegistry,
                     const std::vector<std::string>& schemaPaths,
                     size_t maxProductSize,

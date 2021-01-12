@@ -483,8 +483,8 @@ protected:
  *  \param value the charater data as T
  *  \return whether or not there was a value of type T
  */
-template <typename T, typename ToType>
-inline bool getValue(const Element& element, T& value, ToType toType)
+template<typename T>
+inline bool getValue(const Element& element, T& value)
 {
     const auto characterData = element.getCharacterData();
     if (characterData.empty())
@@ -493,7 +493,7 @@ inline bool getValue(const Element& element, T& value, ToType toType)
     }
     try
     {
-        value = toType(characterData);
+        value = str::toType<T>(characterData);
     }
     catch (const except::BadCastException&)
     {
@@ -501,25 +501,16 @@ inline bool getValue(const Element& element, T& value, ToType toType)
     }
     return true;
 }
-template <typename T>
-inline bool getValue(const Element& element, T& value)
-{
-    return getValue(element, value, details::toType<T>);
-}
+
 
 /*!
  *  Sets the character data for this element by calling str::toString() on the value.
  *  \param value The data to add to this element
  */
-template <typename T, typename ToString>
-inline void setValue(Element& element, const T& value, ToString toString)
-{
-    element.setCharacterData(toString(value));
-}
 template <typename T>
 inline void setValue(Element& element, const T& value)
 {
-    setValue(element, value, details::toString<T>);
+    element.setCharacterData(str::toString(value));
 }
 
 }

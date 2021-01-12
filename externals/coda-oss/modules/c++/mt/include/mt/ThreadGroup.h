@@ -22,12 +22,12 @@
 
 #ifndef __MT_THREAD_GROUP_H__
 #define __MT_THREAD_GROUP_H__
+#pragma once
 
 #include <vector>
 #include <memory>
 #include <exception>
 
-#include <sys/Conf.h>
 #include <except/Error.h>
 #include <sys/Runnable.h>
 #include <sys/Thread.h>
@@ -80,7 +80,7 @@ public:
     *  \param runnable auto_ptr to sys::Runnable
     */
     void createThread(std::unique_ptr<sys::Runnable>&& runnable);
-    #if !CODA_OSS_cpp17
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     void createThread(std::auto_ptr<sys::Runnable> runnable);
     #endif
 
@@ -134,7 +134,7 @@ private:
      *          the internal CPUAffinityInitializer. If no initializer
      *          was created, will return NULL.
      */
-    mem::auto_ptr<CPUAffinityThreadInitializer> getNextInitializer();
+    std::unique_ptr<CPUAffinityThreadInitializer> getNextInitializer();
 
     /*!
      * \class ThreadGroupRunnable
@@ -162,7 +162,7 @@ private:
                 mt::ThreadGroup& parentThreadGroup,
                 std::unique_ptr<CPUAffinityThreadInitializer>&& threadInit =
                         std::unique_ptr<CPUAffinityThreadInitializer>(nullptr));
-        #if !CODA_OSS_cpp17
+        #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
         ThreadGroupRunnable(
                 std::auto_ptr<sys::Runnable> runnable,
                 mt::ThreadGroup& parentThreadGroup,

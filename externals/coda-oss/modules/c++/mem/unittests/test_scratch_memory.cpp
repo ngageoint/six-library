@@ -588,7 +588,7 @@ TEST_CASE(testScratchMemory)
 
         // trying to get buffer index out of range should throw
         TEST_EXCEPTION(scratch.get<sys::ubyte>("buf0", 1));
-        TEST_EXCEPTION(scratch.get<sys::ubyte>("buf0", static_cast<size_t>(-1)));
+        TEST_EXCEPTION(scratch.get<sys::ubyte>("buf0", -1));
         TEST_EXCEPTION(scratch.get<sys::ubyte>("buf2", 3));
 
         // verify alignment

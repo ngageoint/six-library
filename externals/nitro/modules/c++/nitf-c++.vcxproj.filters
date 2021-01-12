@@ -364,5 +364,11 @@
       <Filter>nitf</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="nitf\include\nitf\cstddef.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\span.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

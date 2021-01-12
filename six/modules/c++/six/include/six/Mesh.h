@@ -77,7 +77,7 @@ public:
      * deserialize() for more information
      * \param[out] values The serialized data.
      */
-    virtual void serialize(std::vector<sys::byte>& values) const = 0;
+    virtual void serialize(std::vector<std::byte>& values) const = 0;
 
     /*!
      * Deserializes an array of byte data to populate a Mesh. This is
@@ -89,10 +89,10 @@ public:
      * following code snippet demonstrates the symmetry of the
      * operations:
      *    DerivedMesh mesh(...); // Populated at construction
-     *    std::vector<sys::byte> serializedData;
+     *    std::vector<std::byte> serializedData;
      *    mesh.serialize(buffer);
      *    DerivedMesh meshCopy;  // Not populated
-     *    const sys::byte* buffer = &serializedData[0];
+     *    const std::byte* buffer = serializedData.data();
      *    meshCopy.deserialize(buffer); // meshCopy == mesh
      * Any implementation of serialize() and deserialize() must
      * satisfy this property.
@@ -119,7 +119,7 @@ public:
      *  the serialized storage size of Mesh after calling this
      *  function.
      */
-    virtual void deserialize(const sys::byte*& values) = 0;
+    virtual void deserialize(const std::byte*& values) = 0;
 };
 }
 #endif

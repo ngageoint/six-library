@@ -33,7 +33,7 @@
 
 namespace
 {
-void writeSicd(std::auto_ptr<six::Data> complexData,
+void writeSicd(std::unique_ptr<six::Data>&& complexData,
                const std::vector<std::complex<float>>& widebandData,
                const std::vector<std::string>& schemaPaths,
                const std::string& pathname)
@@ -42,14 +42,14 @@ void writeSicd(std::auto_ptr<six::Data> complexData,
             six::DataType::COMPLEX,
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-    mem::SharedPtr<six::Container> container(new six::Container(
-            six::DataType::COMPLEX));
-    container->addData(complexData);
+    auto container(std::make_shared<six::Container>(
+        six::DataType::COMPLEX));
+    container->addData(std::move(complexData));
 
     six::NITFWriteControl writer(container);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<const six::UByte*>(widebandData.data()));
+    buffers.push_back(reinterpret_cast<const std::byte*>(widebandData.data()));
     writer.save(buffers, pathname, schemaPaths);
 }
 }
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
             schemaPaths.push_back(options->get<std::string>("schema"));
         }
 
-        std::auto_ptr<six::sicd::ComplexData> complexData;
+        std::unique_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float>> widebandData;
         six::sicd::Utilities::readSicd(pathname, schemaPaths,
                                        complexData, widebandData);
@@ -92,14 +92,10 @@ int main(int argc, char **argv)
         logging::DefaultLogger log("SICD Update");
         six::sicd::SICDVersionUpdater(*complexData, version, log).update();
 
-        std::auto_ptr<six::Data> data(complexData.release());
-        writeSicd(data, widebandData, schemaPaths,
+        std::unique_ptr<six::Data> data(complexData.release());
+        writeSicd(std::move(data), widebandData, schemaPaths,
                   options->get<std::string>("output"));
         return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << "\n";
     }
     catch (const std::exception& ex)
     {

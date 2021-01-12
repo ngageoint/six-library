@@ -21,14 +21,15 @@
  */
 #ifndef __SIO_LITE_FILE_WRITER_H__
 #define __SIO_LITE_FILE_WRITER_H__
+#pragma once
 
 #include <memory>
 #include <vector>
 #include <import/sys.h>
 #include <import/io.h>
-#include <import/mem.h>
 #include "sio/lite/InvalidHeaderException.h"
 #include "sio/lite/FileHeader.h"
+#include "mem/SharedPtr.h"
 
 
 namespace sio

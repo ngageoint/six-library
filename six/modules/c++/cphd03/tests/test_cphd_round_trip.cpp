@@ -24,6 +24,7 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
+#include <thread>
 
 #include <cphd03/CPHDWriter.h>
 #include <cphd03/CPHDReader.h>
@@ -42,12 +43,12 @@ int main(int argc, char** argv)
                            "Specify the number of threads to use",
                            cli::STORE,
                            "threads",
-                           "NUM")->setDefault(sys::OS().getNumCPUs());
+                           "NUM")->setDefault(std::thread::hardware_concurrency());
         parser.addArgument("input", "Input pathname", cli::STORE, "input",
                            "CPHD", 1, 1);
         parser.addArgument("output", "Output pathname", cli::STORE, "output",
                            "CPHD", 1, 1);
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string inPathname(options->get<std::string>("input"));
         const std::string outPathname(options->get<std::string>("output"));
         const size_t numThreads(options->get<size_t>("threads"));
@@ -71,7 +72,7 @@ int main(int argc, char** argv)
         {
             const types::RowCol<size_t> dims(reader.getNumVectors(channel),
                                              reader.getNumSamples(channel));
-            mem::ScopedArray<sys::ubyte> data;
+            std::unique_ptr<std::byte[]> data;
 
             wideband.read(channel,
                           0, cphd::Wideband::ALL,
@@ -81,13 +82,13 @@ int main(int argc, char** argv)
             switch (sampleType)
             {
             case cphd::SampleType::RE08I_IM08I:
-                writer.writeCPHDData<std::complex<sys::Int8_T> >(
-                    reinterpret_cast<const std::complex<sys::Int8_T>* >(data.get()),
+                writer.writeCPHDData<std::complex<int8_t> >(
+                    reinterpret_cast<const std::complex<int8_t>* >(data.get()),
                     dims.area());
                 break;
             case cphd::SampleType::RE16I_IM16I:
-                writer.writeCPHDData<std::complex<sys::Int16_T> >(
-                    reinterpret_cast<const std::complex<sys::Int16_T>* >(data.get()),
+                writer.writeCPHDData<std::complex<int16_t> >(
+                    reinterpret_cast<const std::complex<int16_t>* >(data.get()),
                     dims.area());
                 break;
             case cphd::SampleType::RE32F_IM32F:
@@ -103,11 +104,6 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
         return 1;
     }
     catch (...)

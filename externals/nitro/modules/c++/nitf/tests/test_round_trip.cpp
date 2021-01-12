@@ -20,12 +20,12 @@
  *
  */
 
+#include <mem/SharedPtr.h>
+#include <import/nitf.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <memory>
-
-#include <import/nitf.hpp>
 
 /*
  * This test tests the round-trip process of taking an input NITF
@@ -54,7 +54,7 @@ public:
     virtual void nextRow(uint32_t /*band*/, void* buffer)
     {
         int padded;
-        mReader.read(mWindow, reinterpret_cast<nitf::byte**>(&buffer), &padded);
+        mReader.read(mWindow, reinterpret_cast<std::byte**>(&buffer), &padded);
         mWindow.setStartRow(mWindow.getStartRow() + 1);
     }
 
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
         }
 
         // Check that wew have a valid NITF
-        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN)
         {
             std::cout << "Invalid NITF: " << argv[1] << std::endl;
             exit( EXIT_FAILURE);
@@ -139,7 +139,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setGraphicWriteHandler(i, segmentWriter);
         }
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setTextWriteHandler(i, segmentWriter);
         }
@@ -157,7 +157,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setDEWriteHandler(i, segmentWriter);
         }

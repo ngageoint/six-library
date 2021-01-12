@@ -22,10 +22,12 @@
 
 #ifndef __NITF_LIST_HPP__
 #define __NITF_LIST_HPP__
+#pragma once
+
+#include <string>
 
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file List.hpp
@@ -47,10 +49,10 @@ DECLARE_CLASS(ListNode)
 {
 public:
     //! Constructor
-    ListNode() {}
+    ListNode() = default;
 
     //! Copy constructor
-    ListNode(const ListNode & x) { setNative(x.getNative()); }
+    ListNode(const ListNode& x) { *this = x; }
 
     //! Assignment Operator
     ListNode & operator=(const ListNode & x);
@@ -77,9 +79,9 @@ public:
 
 private:
     friend class List;
-    friend class ListIterator;
+    friend struct ListIterator;
 
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 /*!
@@ -88,17 +90,13 @@ private:
  *
  *  Iterates a linked list.
  */
-class ListIterator
+struct ListIterator final
 {
-public:
-    //! Constructor
-    ListIterator() {}
-
-    //! Destructor
-    ~ListIterator() {}
+    ListIterator() = default;
+    ~ListIterator() = default;
 
     //! Copy constructor
-    ListIterator(const ListIterator & x) { handle = x.handle; }
+    ListIterator(const ListIterator & x) noexcept { handle = x.handle; }
 
     //! Assignment Operator
     ListIterator & operator=(const ListIterator & x);
@@ -107,17 +105,18 @@ public:
     ListIterator(nitf_ListIterator x);
 
     //! Get native object
-    nitf_ListIterator & getHandle();
+    nitf_ListIterator & getHandle() noexcept;
+    nitf_ListIterator& getHandle() const noexcept;
 
     //! Checks to see if two iterators are equal
-    bool equals(nitf::ListIterator& it2);
+    bool equals(const nitf::ListIterator& it2) const noexcept;
 
     //! Checks to see if two iterators are not equal
-    bool notEqualTo(nitf::ListIterator& it2);
+    bool notEqualTo(const nitf::ListIterator& it2) const noexcept;
 
-    bool operator==(const nitf::ListIterator& it2);
+    bool operator==(const nitf::ListIterator& it2) const noexcept;
 
-    bool operator!=(const nitf::ListIterator& it2);
+    bool operator!=(const nitf::ListIterator& it2) const noexcept;
 
     //! Increment the iterator
     void increment();
@@ -134,16 +133,16 @@ public:
     void operator++() { increment(); }
 
     //! Get the data
-    NITF_DATA* operator*() { return get(); }
+    NITF_DATA* operator*() noexcept { return get(); }
 
     //! Get the data
-    NITF_DATA* get() { return nitf_ListIterator_get(&handle); }
+    NITF_DATA* get() noexcept { return nitf_ListIterator_get(&handle); }
 
     //! Get the current
-    nitf::ListNode & getCurrent() { return mCurrent; }
+    nitf::ListNode & getCurrent() noexcept { return mCurrent; }
 
 private:
-    nitf_ListIterator handle;
+    mutable nitf_ListIterator handle{ };
     nitf::ListNode mCurrent;
 
     //! Set native object
@@ -185,7 +184,7 @@ public:
      *  Is our chain empty?
      *  \return True if so, False otherwise
      */
-    bool isEmpty();
+    bool isEmpty() const;
 
     /*!
      *  Push something onto the front of our chain.  Note, as
@@ -230,25 +229,24 @@ public:
     NITF_DATA* popBack();
 
     //! Constructor
-    List();
+    List() noexcept(false);
 
     //! Clone
-    nitf::List clone(NITF_DATA_ITEM_CLONE cloner);
+    nitf::List clone(NITF_DATA_ITEM_CLONE cloner) const;
 
-    //! Destructor
-    ~List();
+    ~List() = default;
 
     /*!
      *  Get the begin iterator
      *  \return  The iterator pointing to the first item in the list
      */
-    nitf::ListIterator begin();
+    nitf::ListIterator begin() const;
 
     /*!
      *  Get the end iterator
      *  \return  The iterator pointing to PAST the last item in the list (null);
      */
-    nitf::ListIterator end();
+    nitf::ListIterator end() const;
 
     /*!
      *  Insert data into the chain BEFORE the iterator, and make
@@ -284,19 +282,19 @@ public:
     NITF_DATA* remove(nitf::ListIterator & where);
 
     //! Get the first
-    nitf::ListNode getFirst();
+    nitf::ListNode getFirst() const;
 
     //! Get the last
-    nitf::ListNode getLast();
+    nitf::ListNode getLast() const;
 
     //! Returns the size of the list
-    size_t getSize();
+    size_t getSize() const;
 
     //! Returns the data at the given index
     NITF_DATA* operator[] (size_t index);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

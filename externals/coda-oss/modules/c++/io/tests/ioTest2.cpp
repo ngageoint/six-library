@@ -33,7 +33,7 @@ public:
     {
         FileInputStream in(src);
         FileOutputStream out(dest);
-        sys::SSize_T c;
+        int c;
         unsigned char buf[25] = "";
 
         while ((c = in.read((sys::byte*) buf, 25)) != FileInputStream::IS_EOF)

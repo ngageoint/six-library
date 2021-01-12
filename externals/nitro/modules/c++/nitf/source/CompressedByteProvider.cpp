@@ -20,6 +20,8 @@
  *
  */
 
+#include "nitf/CompressedByteProvider.hpp"
+
 #include <string.h>
 #include <sstream>
 #include <algorithm>
@@ -27,10 +29,10 @@
 
 #include <except/Exception.h>
 #include <nitf/Writer.hpp>
-#include <nitf/CompressedByteProvider.hpp>
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
+#include "gsl/gsl.h"
 
 namespace nitf
 {
@@ -50,7 +52,7 @@ CompressedByteProvider::CompressedByteProvider(Record& record,
                numRowsPerBlock, numColsPerBlock);
 }
 
-void CompressedByteProvider::initialize(Record& record,
+void CompressedByteProvider::initialize(const Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
         const std::vector<PtrAndLength>& desData,
         size_t numRowsPerBlock,
@@ -148,7 +150,7 @@ size_t CompressedByteProvider::addImageData(
         size_t seg,
         size_t startRow,
         size_t numRowsToWrite,
-        const nitf::byte* imageData,
+        const std::byte* imageData,
         nitf::Off& fileOffset,
         NITFBufferList& buffers) const
 {
@@ -156,7 +158,7 @@ size_t CompressedByteProvider::addImageData(
     // We just need to figure out -which- blocks we're writing, and then grab
     // that from the member vector
     const std::vector<size_t>& bytesPerBlock = mBytesInEachBlock[seg];
-    types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
+    const types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
 
     // If the file offset hasn't been set yet,
     // advance it to our starting position
@@ -170,7 +172,7 @@ size_t CompressedByteProvider::addImageData(
             throw except::Exception(Ctxt(error.str()));
         }
 
-        fileOffset = mImageSubheaderFileOffsets[seg] + mImageSubheaders[seg].size();
+        fileOffset = mImageSubheaderFileOffsets[seg] + gsl::narrow<nitf::Off>(mImageSubheaders[seg].size());
         for (size_t block = 0; block < blockRange.mStartElement; ++block)
         {
             fileOffset += mBytesInEachBlock[seg][block];
@@ -180,9 +182,8 @@ size_t CompressedByteProvider::addImageData(
     // Copy the image data into the buffer
     // Since we have it in contiguous memory, this can be added as one buffer
     size_t numBufferBytes(0);
-    for (size_t ii = blockRange.mStartElement, end = blockRange.endElement();
-         ii < end;
-         ++ii)
+    const size_t end = blockRange.endElement();
+    for (size_t ii = blockRange.mStartElement; ii < end; ++ii)
     {
         numBufferBytes += bytesPerBlock[ii];
     }
@@ -226,7 +227,7 @@ void CompressedByteProvider::getBytes(
         nitf::Off& fileOffset,
         NITFBufferList& buffers) const
 {
-    auto imageDataPtr = static_cast<const nitf::byte*>(imageData);
+    const std::byte* imageDataPtr = static_cast<const std::byte*>(imageData);
     fileOffset = std::numeric_limits<nitf::Off>::max();
     buffers.clear();
 

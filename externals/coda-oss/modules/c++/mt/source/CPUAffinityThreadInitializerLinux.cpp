@@ -30,7 +30,6 @@
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
-#include <mem/SharedPtr.h>
 #include <mt/CPUAffinityThreadInitializerLinux.h>
 
 namespace mt

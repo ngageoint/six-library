@@ -37,7 +37,7 @@ XMLControlRegistry::~XMLControlRegistry()
 }
 
 void XMLControlRegistry::addCreator(const std::string& identifier,
-                                    std::auto_ptr<XMLControlCreator> creator)
+                                    std::unique_ptr<XMLControlCreator>&& creator)
 {
     const RegistryMap::iterator iter(mRegistry.lower_bound(identifier));
     if (iter == mRegistry.end() || iter->first != identifier)
@@ -73,7 +73,7 @@ XMLControlRegistry::newXMLControl(const std::string& identifier,
 std::string six::toXMLString(const Data* data,
                              const six::XMLControlRegistry *xmlRegistry)
 {
-    std::auto_ptr<logging::Logger> log (new logging::NullLogger());
+    std::unique_ptr<logging::Logger> log (new logging::NullLogger());
     return toValidXMLString(data, std::vector<std::string>(),
                             log.get(), xmlRegistry);
 }
@@ -88,15 +88,15 @@ std::string six::toValidXMLString(const Data* data,
         xmlRegistry = &XMLControlFactory::getInstance();
     }
 
-    const std::auto_ptr<XMLControl>
+    const std::unique_ptr<XMLControl>
         xmlControl(xmlRegistry->newXMLControl(data->getDataType(), log));
 
     // this will validate if SIX_SCHEMA_PATH EnvVar is set
-    const std::auto_ptr<xml::lite::Document> doc(
+    const std::unique_ptr<xml::lite::Document> doc(
         xmlControl->toXML(data, schemaPaths));
 
     io::StringStream oss;
-    doc->getRootElement()->print(oss);
+    doc->getRootElement()->print(oss, xml::lite::string_encoding::utf_8);
 
     return oss.stream().str();
 }
