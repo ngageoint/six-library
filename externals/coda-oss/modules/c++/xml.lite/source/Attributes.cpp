@@ -41,7 +41,8 @@ xml::lite::AttributeNode::operator=(const xml::lite::AttributeNode& node)
 
 int xml::lite::Attributes::getIndex(int i) const
 {
-    if ((i >= 0) && (i < mAttributes.size()))
+    const size_t i_ = i;
+    if ((i >= 0) && (i_ < mAttributes.size()))
     {
         return i;
     }
@@ -76,7 +77,8 @@ std::string xml::lite::Attributes::getValue(int i) const
 }
 bool xml::lite::Attributes::getValue(int i, std::string& result) const
 {
-    if ((i >= 0) && (i < mAttributes.size()))
+    const size_t i_ = i;
+    if ((i >= 0) && (i_ < mAttributes.size()))
     {
         result = mAttributes[i].getValue();
         return true; // index in range

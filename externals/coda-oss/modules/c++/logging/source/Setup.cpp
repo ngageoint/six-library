@@ -48,7 +48,7 @@ logging::setupLogger(const std::string& program,
                                               logging::LogLevel(lev);
 
     // setup logging formatter
-    mem::auto_ptr<logging::Formatter> formatter;
+    std::unique_ptr <logging::Formatter> formatter;
     std::string file = logFile;
     str::lower(file);
     if (str::endsWith(file, ".xml"))
@@ -62,7 +62,7 @@ logging::setupLogger(const std::string& program,
     }
     
     // setup logging handler
-    mem::auto_ptr<logging::Handler> logHandler;
+    std::unique_ptr<logging::Handler> logHandler;
     if (file.empty() || file == "console")
         logHandler.reset(new logging::StreamHandler());
     else
@@ -73,8 +73,8 @@ logging::setupLogger(const std::string& program,
         if (logBytes > 0)
         {
             logHandler.reset(new logging::RotatingFileHandler(logFile,
-                                                              logBytes,
-                                                              logCount));
+                                                              static_cast<long>(logBytes),
+                                                              static_cast<int>(logCount)));
         }
         // create regular logging to one file
         else

@@ -26,13 +26,12 @@
 
 #ifndef __LOGGING_STREAM_HANDLER_H__
 #define __LOGGING_STREAM_HANDLER_H__
-#pragma once
 
 #include <memory>
 #include "logging/LogRecord.h"
 #include "logging/Handler.h"
 #include <import/io.h>
-#include <import/mem.h>
+#include <mem/SharedPtr.h>
 
 namespace logging
 {

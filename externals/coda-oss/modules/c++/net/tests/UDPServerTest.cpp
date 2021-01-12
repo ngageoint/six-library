@@ -40,6 +40,7 @@
 #include <import/net.h>
 #include <import/sys.h>
 #include <import/except.h>
+#include <import/mem.h>
 #include "my_packet.h"
 
 using namespace net;

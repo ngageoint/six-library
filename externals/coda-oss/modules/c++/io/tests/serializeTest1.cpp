@@ -119,9 +119,9 @@ int main(int, char**)
     A a;
     a.serialize(out);
     float f3v[3];
-    f3v[0] = -2.0;
-    f3v[1] = 1.2;
-    f3v[2] = 8.6;
+    f3v[0] = -2.0f;
+    f3v[1] = 1.2f;
+    f3v[2] = 8.6f;
     a.setVector(f3v);
 
     FileOutputStream fos("A.save");
