@@ -1,0 +1,15 @@
+from waflib import Options
+from javatool import java_module
+
+NAME            = 'nitf.imagej'
+MAINTAINER      = 'asylvest@users.sourceforge.net'
+MODULE_DEPS     = 'nitf nitf.imageio'
+CLASSPATH       = 'ij-1.42.jar'
+COMPAT          = '1.5'
+
+configure = options = distclean = lambda x: None
+
+def build(bld):
+    modArgs = globals()
+    modArgs['VERSION'] = bld.env['VERSION']
+    java_module(bld, **modArgs)
