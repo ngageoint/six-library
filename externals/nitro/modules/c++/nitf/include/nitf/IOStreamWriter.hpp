@@ -22,9 +22,11 @@
 
 #ifndef __NITF_IO_STREAM_WRITER_H__
 #define __NITF_IO_STREAM_WRITER_H__
+#pragma once
+
+#include <memory>
 
 #include <nitf/CustomIO.hpp>
-#include <mem/SharedPtr.h>
 #include <io/SeekableStreams.h>
 
 namespace nitf
