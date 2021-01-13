@@ -25,17 +25,15 @@
 #include <string>
 #include <limits>
 
-#include <import/str.h>
-
 #include <nitf/Field.h>
+
+#include <nitf/coda-oss.hpp>
 #include <nitf/System.hpp>
 #include <nitf/HashTable.hpp>
 #include <nitf/List.hpp>
 #include <nitf/DateTime.hpp>
 #include <nitf/Object.hpp>
 #include <nitf/NITFException.hpp>
-
-#include "gsl/gsl.h"
 
 /*!
  *  \file Field.hpp

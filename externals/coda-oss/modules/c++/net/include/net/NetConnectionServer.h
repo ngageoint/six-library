@@ -22,7 +22,6 @@
 
 #ifndef __NET_CONNECTION_SERVER_H__
 #define __NET_CONNECTION_SERVER_H__
-#pragma once
 
 #include "net/NetConnection.h"
 #include "net/Sockets.h"

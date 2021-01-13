@@ -57,7 +57,7 @@
 #  define TEST_CASE(X) void X(std::string testName)
 
 #define TEST_MAIN_catch_std_exception_ catch (const std::exception& e)  { std::cerr << e.what() << std::endl; }
-#if CODA_OSS_Throwable_isa_std_exception_
+#if CODA_OSS_Throwable_isa_std_exception
 #define TEST_MAIN_catch_ TEST_MAIN_catch_std_exception_
 #else
 #define TEST_MAIN_catch_ catch (const except::Exception& ex) { std::cerr << ex.toString() << std::endl; } \

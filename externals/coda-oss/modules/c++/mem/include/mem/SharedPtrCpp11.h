@@ -25,6 +25,7 @@
 #pragma once
 
 #include <memory>
+#include <type_traits>
 
 #include "sys/Conf.h"
 
@@ -59,7 +60,6 @@ public:
     {
     }
 
-    // The base class only handles auto_ptr<T>&&
     template <typename OtherT>
     explicit SharedPtr(std::unique_ptr<OtherT>&& ptr) :
         std::shared_ptr<T>(ptr.release())
@@ -109,7 +109,42 @@ template <typename T>
 using auto_ptr = std::unique_ptr<T>;
 #endif
 
+// C++11 inadvertently ommitted make_unique; provide it here. (Swiped from <memory>.)
+namespace make
+{
+// Using a nested namespace in case somebody does both
+// "using namespace std" and "using namespace mem".
 
+template <typename T, typename... TArgs, typename std::enable_if<!std::is_array<T>::value, int>::type = 0>
+std::unique_ptr<T> unique(TArgs&&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<TArgs>(args)...));
 }
+
+template <typename T, typename std::enable_if<std::is_array<T>::value &&  std::extent<T>::value == 0, int>::type = 0>
+std::unique_ptr<T> unique(size_t size)
+{
+    using element_t = typename std::remove_extent<T>::type;
+    return std::unique_ptr<T>(new element_t[size]());
+}
+
+template <typename T, typename... TArgs, typename std::enable_if<std::extent<T>::value != 0, int>::type = 0>
+void unique(TArgs&&...) = delete;
+}  // namespace make
+} // namespace mem
+
+#if CODA_OSS_AUGMENT_std_namespace
+#if !CODA_OSS_cpp14 // C++14 has std::make_unique
+namespace std
+{
+template <typename T, typename... TArgs>
+std::unique_ptr<T> make_unique(TArgs&&... args)
+{
+    // let mem::make::unique to all the template magic
+    return mem::make::unique<T>(std::forward<TArgs>(args)...);
+}
+}
+#endif //CODA_OSS_cpp14
+#endif
 
 #endif

@@ -22,7 +22,6 @@
 
 #ifndef __NET_SOCKET_H__
 #define __NET_SOCKET_H__
-#pragma once
 
 #include <sys/SystemException.h>
 #include <except/Exception.h>

@@ -28,11 +28,10 @@
 #include <string>
 #include <memory>
 
+#include "nitf/coda-oss.hpp"
 #include "nitf/ImageReader.h"
 #include "nitf/Object.hpp"
 #include "nitf/BlockingInfo.hpp"
-
-#include "cstddef.h"
 
 /*!
  *  \file ImageReader.hpp

@@ -24,8 +24,6 @@
 #include <numeric>
 #include <limits>
 
-#include <sys/Conf.h>
-#include <except/Exception.h>
 #include <nitf/ImageBlocker.hpp>
 
 #undef min

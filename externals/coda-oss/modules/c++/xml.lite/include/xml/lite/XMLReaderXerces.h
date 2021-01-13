@@ -62,7 +62,7 @@ private:
     XercesContext mCtxt;    //! this must be the first member listed
     std::unique_ptr<SAX2XMLReader>        mNative;
     std::unique_ptr<XercesContentHandler> mDriverContentHandler;
-    std::unique_ptr<XercesErrorHandler> mErrorHandler;
+    std::unique_ptr<XercesErrorHandler>   mErrorHandler;
 
 public:
 

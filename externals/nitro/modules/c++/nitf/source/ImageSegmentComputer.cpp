@@ -20,16 +20,14 @@
  *
  */
 
+#include "nitf/ImageSegmentComputer.h"
+
 #include <sstream>
 #include <limits>
 #include <cmath>
 #include <algorithm>
 
-#include <sys/Conf.h>
-#include <except/Exception.h>
-#include <nitf/ImageSegmentComputer.h>
-
-#include "gsl/gsl.h"
+#include "nitf/coda-oss.hpp"
 
 #undef min
 #undef max

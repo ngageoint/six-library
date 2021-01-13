@@ -27,11 +27,11 @@
 #include <string>
 #include <vector>
 
+#include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Pair.hpp"
 #include "nitf/List.hpp"
 #include "nitf/Object.hpp"
-#include <import/except.h>
 
 /*!
  *  \file HashTable.hpp

@@ -22,7 +22,6 @@
 
 #ifndef __IO_PROXY_STREAMS_H__
 #define __IO_PROXY_STREAMS_H__
-#pragma once
 
 #include "io/InputStream.h"
 #include "io/OutputStream.h"

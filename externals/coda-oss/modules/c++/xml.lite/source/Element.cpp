@@ -24,6 +24,7 @@
 
 #include "xml/lite/Element.h"
 #include <import/str.h>
+#include <import/mem.h>
 
 xml::lite::Element::Element(const xml::lite::Element& node)
 {
@@ -345,7 +346,6 @@ void xml::lite::Element::addChild(xml::lite::Element * node)
 
 void xml::lite::Element::addChild(std::unique_ptr<xml::lite::Element>&& node)
 {
-    // Always take ownership
     addChild(node.release());
 }
 #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17

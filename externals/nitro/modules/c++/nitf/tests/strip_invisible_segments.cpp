@@ -20,15 +20,14 @@
  *
  */
 
-#include <mem/SharedPtr.h>
-#include <import/nitf.hpp>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <memory>
 
-#include <sys/Filesystem.h>
+#include <import/nitf.hpp>
+
 namespace fs = std::filesystem;
 
 // Round-trip a NITF, removing any image segments with an IREP of NODISPLY

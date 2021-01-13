@@ -31,7 +31,7 @@ static const std::string strXml = R"(
 <root>
     <doc name="doc">
         <a a="a">TEXT</a>
-        <values int="314" double="3.14" string="abc" empty=""/>
+        <values int="314" double="3.14" string="abc" bool="yes" empty=""/>
     </doc>
 </root>)";
 
@@ -127,7 +127,18 @@ TEST_CASE(test_getAttributeValue)
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ("abc", value);
     }
+    {
+        auto toType = [](const std::string& value) { return value == "yes"; };
+        bool value;
+        auto result = getValue(attributes, "bool", value, toType);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(true, value);
 
+        std::string strValue;
+        result = getValue(attributes, "bool", strValue);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ("yes", strValue);
+    }
     {
         std::string value;
         const auto result = getValue(attributes, "not_found", value);
@@ -229,6 +240,21 @@ TEST_CASE(test_setAttributeValue)
         result = getValue(attributes, "string", value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ("xyz", value);
+    }
+    {
+        auto toString = [](const bool& value) { return value ? "yes" : "no"; };
+        auto result = setValue(attributes, "bool", true, toString);
+        TEST_ASSERT_TRUE(result);
+
+        auto toType = [](const std::string& value) { return value == "yes"; };
+        bool value;
+        result = getValue(attributes, "bool", value, toType);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(true, value);
+        std::string strValue;
+        result = getValue(attributes, "bool", strValue);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ("yes", strValue);
     }
 
     {

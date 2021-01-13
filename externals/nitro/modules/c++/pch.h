@@ -84,26 +84,10 @@
 #include <atomic>
 #include <future>
 
-#include <sys/File.h>
-
-#include <import/except.h>
-#include <import/types.h>
-#pragma warning(push)
-#pragma warning(disable: 26493) // Don't use C-style casts (type.4).
-#pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
-#include <import/sys.h>
-#include <import/io.h>
+#include "nitf/coda-oss.hpp"
 #pragma warning(pop)
-
-#include <import/mt.h>
-
-#include "gsl/gsl.h"
-
-#pragma warning(pop)
-
 
 #include "import/nitf.h"
-
 #include "nitf/ImageIO.h"
 #include "nitf/System.h"
 #include "nitf/Field.h"

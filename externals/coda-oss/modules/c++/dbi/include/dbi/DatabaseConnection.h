@@ -23,7 +23,6 @@
 
 #ifndef __DBI_DATABASECONNECTION_H__
 #define __DBI_DATABASECONNECTION_H__
-#pragma once
 
 #include <vector>
 #include <map>
@@ -261,7 +260,7 @@ protected:
     std::vector< Field > mData;
 };
 
-//typedef std::auto_ptr< Row > pRow;
+//typedef mem::auto_ptr< Row > pRow;
 
 /*!
  *  \class ResultSet

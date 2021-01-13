@@ -38,13 +38,13 @@ nitf::SegmentMemorySource::SegmentMemorySource(const std::string& data,
 {
 }
 template<>
-nitf::SegmentMemorySource::SegmentMemorySource(const std::span<const std::byte>& data, nitf::Off start,
+nitf::SegmentMemorySource::SegmentMemorySource(const gsl::span<const std::byte>& data, nitf::Off start,
     int byteSkip, bool copyData)
     : SegmentMemorySource(reinterpret_cast<const char*>(data.data()), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
 {
 }
 
-inline std::span<const std::byte> make_span(const std::vector<std::byte>& data)
+inline gsl::span<const std::byte> make_span(const std::vector<std::byte>& data)
 {
   return gsl::make_span(data);
 }

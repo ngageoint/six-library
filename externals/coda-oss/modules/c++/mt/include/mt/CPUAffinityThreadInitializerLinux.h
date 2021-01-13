@@ -23,7 +23,6 @@
 
 #ifndef __MT_CPU_AFFINITY_THREAD_INITIALIZER_LINUX_H__
 #define __MT_CPU_AFFINITY_THREAD_INITIALIZER_LINUX_H__
-#pragma once
 
 #if !defined(__APPLE_CC__)
 #if defined(__linux) || defined(__linux__)
@@ -32,7 +31,6 @@
 
 #include <sys/ScopedCPUAffinityUnix.h>
 #include <mt/AbstractCPUAffinityThreadInitializer.h>
-#include "sys/Conf.h"
 
 namespace mt
 {
@@ -54,10 +52,10 @@ public:
      */
     CPUAffinityThreadInitializerLinux(
             std::unique_ptr<const sys::ScopedCPUMaskUnix>&& cpu);
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     CPUAffinityThreadInitializerLinux(
             std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu);
-    #endif
+#endif
 
     /*!
      * Attempt to bind to the affinity mask given during construction

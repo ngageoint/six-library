@@ -24,9 +24,11 @@
 #define __NITF_PAIR_HPP__
 #pragma once
 
+#include <string>
+
+#include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file Pair.hpp

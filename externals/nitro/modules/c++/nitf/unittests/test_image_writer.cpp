@@ -27,8 +27,6 @@
 #include <memory>
 #include <stdexcept>
 
-#include <sys/Filesystem.h>
-
 #include <import/nitf.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/ImageWriter.hpp>

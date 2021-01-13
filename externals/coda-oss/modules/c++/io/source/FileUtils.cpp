@@ -68,6 +68,9 @@ void copyPermissions(const std::string& src,
         throw except::Exception(Ctxt(
             "Copy Failed: Could not set the ownership of the output"));
     }
+#else
+    UNREFERENCED_PARAMETER(src);
+    UNREFERENCED_PARAMETER(dest);
 #endif
 }
 

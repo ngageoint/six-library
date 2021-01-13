@@ -22,10 +22,7 @@
 
 #include <stdlib.h>
 
-#include <sys/Conf.h>
-#include <except/Exception.h>
-#include <nitf/NITFBufferList.hpp>
-#include <sys/Conf.h>
+#include "nitf/NITFBufferList.hpp"
 
 #undef min
 #undef max
