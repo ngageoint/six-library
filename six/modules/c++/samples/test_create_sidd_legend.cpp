@@ -37,6 +37,7 @@
 #include <iostream>
 #include <memory>
 
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <mem/ScopedArray.h>
 #include <sys/Path.h>

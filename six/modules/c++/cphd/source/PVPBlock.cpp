@@ -31,7 +31,7 @@
 #include <sys/Conf.h>
 #include <sys/Bit.h>
 
-#include <nitf/cstddef.h>
+#include <nitf/coda-oss.hpp>
 
 #include <cphd/Types.h>
 #include <cphd/PVPBlock.h>

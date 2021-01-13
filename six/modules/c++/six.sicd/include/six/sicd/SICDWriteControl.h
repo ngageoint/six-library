@@ -31,7 +31,7 @@
 #include <six/NITFWriteControl.h>
 #include <six/sicd/ComplexData.h>
 
-#include <nitf/cstddef.h>
+#include <nitf/coda-oss.hpp>
 
 namespace six
 {
