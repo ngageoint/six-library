@@ -41,7 +41,6 @@
 #include <except/Exception.h>
 #include <mem/ScopedArray.h>
 #include <sys/Path.h>
-#include <nitf/cstddef.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedDataBuilder.h>
