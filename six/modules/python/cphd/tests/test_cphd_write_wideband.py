@@ -44,7 +44,7 @@ SCRATCH_SPACE = 4 * 1024 * 1024
 def main():
     metadata, support_arrays = get_test_metadata(has_support_array=True, is_compressed=False)
     widebands = get_test_widebands(metadata)
-    pvp_block = PVPBlock.fromListOfDicts(get_test_pvp_data(metadata), metadata)
+    pvp_block = PVPBlock.from_list_of_dicts(get_test_pvp_data(metadata), metadata)
 
     schema_paths = VectorString()
     schema_paths.push_back(os.environ['SIX_SCHEMA_PATH'])
@@ -68,6 +68,7 @@ def main():
                 print('Test failed, original wideband and PHD from file differ in channel {0}'
                       .format(channel))
                 sys.exit(1)
+            # TODO: Compare PVP data
 
         print('Test passed')
 

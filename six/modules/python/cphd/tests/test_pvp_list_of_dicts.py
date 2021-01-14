@@ -39,20 +39,15 @@ def main():
     pvp_data = get_test_pvp_data(metadata)  # list of dicts
 
     if len(pvp_data) != metadata.getNumChannels():
-        print('Test failed: expected {0} channels but received {1} from PVPBlock.fromListOfDicts()'
+        print('Test failed: expected {0} channels but received {1} from PVPBlock.from_list_of_dicts()'
               .format(metadata.getNumChannels(), len(pvp_data)))
         sys.exit(1)
 
-    pvp_block = PVPBlock.fromListOfDicts(pvp_data, metadata)
-    pvp_data_from_block = pvp_block.toListOfDicts(metadata)  # list of dicts
-
-    # for c in range(len(pvp_data_from_block)):
-    #     for key in pvp_data_from_block[c]:
-    #         print(key, pvp_data[c][key] - pvp_data_from_block[c][key])
-    # import pdb; pdb.set_trace()
+    pvp_block = PVPBlock.from_list_of_dicts(pvp_data, metadata)
+    pvp_data_from_block = pvp_block.to_list_of_dicts(metadata)  # list of dicts
 
     if len(pvp_data_from_block) != metadata.getNumChannels():
-        print('Test failed: expected {0} channels but received {1} from PVPBlock.toListOfDicts()'
+        print('Test failed: expected {0} channels but received {1} from PVPBlock.to_list_of_dicts()'
               .format(metadata.getNumChannels(), len(pvp_data_from_block)))
         sys.exit(1)
 

@@ -202,70 +202,70 @@ using six::Vector3;
     }
 
     @staticmethod
-    def _validateMultiplePVPFormatStr(pvpFormatStr):
-        paramTypes = [param[param.index('=') + 1:] for param in pvpFormatStr.split(';') if param]
+    def validate_multiple_pvp_format_str(pvp_format_str):
+        param_types = [param[param.index('=') + 1:] for param in pvp_format_str.split(';') if param]
         # TODO: support multiple different parameter types ('A=U2;B=I2;')
-        if not len(set(paramTypes)) == 1:
+        if not len(set(param_types)) == 1:
             raise ValueError('Multiple parameters with different data types are not yet supported')
-        return paramTypes[0]
+        return param_types[0]
 
     @staticmethod
-    def _format_to_dtype(pvpFormatStr):
-        if '=' in pvpFormatStr and ';' in pvpFormatStr:
+    def _format_to_dtype(pvp_format_str):
+        if '=' in pvp_format_str and ';' in pvp_format_str:
             # This string has multiple parameters, assert that they are all the same data type
-            pvpFormatStr = PVPBlock._validateMultiplePVPFormatStr(pvpFormatStr)
+            pvp_format_str = PVPBlock.validate_multiple_pvp_format_str(pvp_format_str)
 
-        first = pvpFormatStr[0]
+        first = pvp_format_str[0]
         if first in ['U', 'I', 'F']:  # Unsigned int, signed int, float
-            return numpy.dtype(pvpFormatStr.lower())
+            return numpy.dtype(pvp_format_str.lower())
         elif first == 'C':  # Complex float ('CF') or complex int ('CI')
             # This uses complex floats for both, which works but will take more space
             # TODO define a custom dtype for complex ints?
-            return numpy.dtype('c' + pvpFormatStr[2:])
+            return numpy.dtype('c' + pvp_format_str[2:])
         elif first == 'S':  # String
             # TODO official format is “S[1-9][0-9]*”:
             #   Is the '*' literal or indicating that these can be however long?
-            return numpy.dtype('U' + pvpFormatStr[1:])
+            return numpy.dtype('U' + pvp_format_str[1:])
 
-        raise ValueError('Unknown or unsupported format string: \'{0}\''.format(pvpFormatStr))
+        raise ValueError('Unknown or unsupported format string: \'{0}\''.format(pvp_format_str))
 
-    def pvpFormatToAddedPVPMethod(self, getOrSet, pvpFormatStr):
-        if '=' in pvpFormatStr and ';' in pvpFormatStr:
+    def pvp_format_to_added_pvp_method(self, get_or_set, pvp_format_str):
+        if '=' in pvp_format_str and ';' in pvp_format_str:
             # This string has multiple parameters, assert that they are all the same data type
-            pvpFormatStr = PVPBlock._validateMultiplePVPFormatStr(pvpFormatStr)
+            pvp_format_str = PVPBlock.validate_multiple_pvp_format_str(pvp_format_str)
 
-        if getOrSet not in ['get', 'set']:
-            raise ValueError('getOrSet should be only \'get\' or \'set\', not {}'.format(getOrSet))
+        if get_or_set not in ['get', 'set']:
+            raise ValueError('getOrSet should be only \'get\' or \'set\', not {}'.format(get_or_set))
 
-        methodName = None
-        if pvpFormatStr.startswith('U'):
-            methodName = 'UnsignedIntAddedPVP'
-        elif pvpFormatStr.startswith('I'):
-            methodName = 'IntAddedPVP'
-        elif pvpFormatStr.startswith('F'):
-            methodName = 'FloatAddedPVP'
-        elif pvpFormatStr.startswith('CI'):
-            methodName = 'ComplexSignedIntAddedPVP'
-        elif pvpFormatStr.startswith('CF'):
-            methodName = 'ComplexFloatAddedPVP'
-        elif pvpFormatStr.startswith('S'):
-            methodName = 'StringAddedPVP'
+        method_name = None
+        if pvp_format_str.startswith('U'):
+            method_name = 'UnsignedIntAddedPVP'
+        elif pvp_format_str.startswith('I'):
+            method_name = 'IntAddedPVP'
+        elif pvp_format_str.startswith('F'):
+            method_name = 'FloatAddedPVP'
+        elif pvp_format_str.startswith('CI'):
+            method_name = 'ComplexSignedIntAddedPVP'
+        elif pvp_format_str.startswith('CF'):
+            method_name = 'ComplexFloatAddedPVP'
+        elif pvp_format_str.startswith('S'):
+            method_name = 'StringAddedPVP'
 
-        return getattr(self, getOrSet + methodName)
+        return getattr(self, get_or_set + method_name)
 
-    def getDefaultParametersInUse(self):
+    def _get_default_parameters_in_use(self):
         # Return a dict mapping PVPBlock field names for the default PVP
         # parameters in this block to the names used in their get/set methods.
         # Method names will need to have 'get' or 'set' prepended
 
         # Determine which (non-custom) params need to be set
-        usedParams = dict(self.PVP_PARAM_METHODS)  # Copy all required PVP params
-        for optionalParam in self.OPTIONAL_PVP_PARAMS:
+        used_params = dict(self.PVP_PARAM_METHODS)  # Copy all required PVP params
+        for optional_param in self.OPTIONAL_PVP_PARAMS:
             # Call boolean `has[param]` method of PVPBlock to check if this PVPBlock has this param
-            if getattr(self, self.OPTIONAL_PVP_PARAMS[optionalParam][0])():
-                # Copy `get[param]` method name into usedParams
-                usedParams[optionalParam] = self.OPTIONAL_PVP_PARAMS[optionalParam][1]
-        return usedParams
+            if getattr(self, self.OPTIONAL_PVP_PARAMS[optional_param][0])():
+                # Copy `get[param]` method name into used_params
+                used_params[optional_param] = self.OPTIONAL_PVP_PARAMS[optional_param][1]
+        return used_params
 
     @staticmethod
     def _common_format(formats):
@@ -286,7 +286,7 @@ using six::Vector3;
             return result
         return {'': fmt}
 
-    def toListOfDicts(self, metadata):
+    def to_list_of_dicts(self, metadata):
         """Turn this PVPBlock into a list of Python dicts of NumPy arrays.
 
         Parameters
@@ -393,56 +393,56 @@ using six::Vector3;
         return pvp_data
 
     @staticmethod
-    def fromListOfDicts(pvpData, cphdMetadata):
+    def from_list_of_dicts(pvp_data, metadata):
         """Initialize and populate a PVPBlock from a list of Python dicts.
 
         Parameters
         ----------
-        pvpData: list of Python dicts
+        pvp_data: list of Python dicts
             List of Python dicts (one for each channel) mapping parameter names
             to NumPy arrays of data.  See PVPBlock.toListOfDicts() for more information
             on the structure expected here
-        cphdMetadata: cphd.Metadata
-            The metadata used to create this PVPBlock
+        metadata: cphd.Metadata
+            Metadata used to create this PVPBlock
         """
-        pvpBlock = PVPBlock(cphdMetadata.pvp, cphdMetadata.data)  # Call other PVPBlock constructor
+        pvp_block = PVPBlock(metadata.pvp, metadata.data)  # Call other PVPBlock constructor
 
-        paramsToSet = {paramName: 'set' + paramMethodName for
-                       paramName, paramMethodName in pvpBlock.getDefaultParametersInUse().items()}
+        params_to_set = {param_name: 'set' + param_method_name for
+                         param_name, param_method_name in pvp_block._get_default_parameters_in_use().items()}
 
         # For each parameter, check that all actual data sizes equal metadata size
-        expectedParamSizes = {**{paramName: getattr(cphdMetadata.pvp, paramName).getSize()
-                                 for paramName in paramsToSet},
-                              **{paramName: paramObj.getSize()
-                                 for paramName, paramObj in cphdMetadata.pvp.addedPVP.items()}}
+        expected_param_sizes = {**{param_name: getattr(metadata.pvp, param_name).getSize()
+                                 for param_name in params_to_set},
+                              **{param_name: param_obj.getSize()
+                                 for param_name, param_obj in metadata.pvp.addedPVP.items()}}
 
-        # Populate PVPBlock object from pvpData
-        for channelIndex, channelData in enumerate(pvpData):
-            for vectorIndex in range(cphdMetadata.getNumVectors(channelIndex)):
-                for paramName, data in channelData.items():
-                    paramData = data[vectorIndex]
-                    if isinstance(paramData, numpy.ndarray):
+        # Populate PVPBlock object from pvp_data
+        for channel_index, channel_data in enumerate(pvp_data):
+            for vector_index in range(metadata.getNumVectors(channel_index)):
+                for param_name, data in channel_data.items():
+                    param_data = data[vector_index]
+                    if isinstance(param_data, numpy.ndarray):
                         # Could use Vector2 here, but there aren't any size 2 default parameters
-                        if len(paramData) == 3:
-                            paramData = coda.math_linear.Vector3(paramData)
+                        if len(param_data) == 3:
+                            param_data = coda.math_linear.Vector3(param_data)
                         else:
                             raise ValueError(('Only PVP parameters of size 1 or 3 are supported, '
                                               '\'{0}\' has size {1}')
-                                              .format(paramName, len(paramData)))
-                    if 'numpy' in type(paramData).__module__:
+                                              .format(param_name, len(param_data)))
+                    if 'numpy' in type(param_data).__module__:
                         # Change 1D arrays to scalars AND convert NumPy types (e.g. np.int64)
                         # to Python dtypes that SWIG can understand
-                        paramData = paramData.item()
-                    if paramName not in cphdMetadata.pvp.addedPVP:
+                        param_data = param_data.item()
+                    if param_name not in metadata.pvp.addedPVP:
                         # Get the setter method for this parameter, then call it with indices and
                         # data to set for this parameter
-                        getattr(pvpBlock, paramsToSet[paramName])(paramData, channelIndex, vectorIndex)
+                        getattr(pvp_block, params_to_set[param_name])(param_data, channel_index, vector_index)
                     else:
                         # Get and call setter method for the type of this custom parameter
-                        pvpBlock.pvpFormatToAddedPVPMethod(
-                            'set', cphdMetadata.pvp.addedPVP[paramName].getFormat())(
-                            paramData, channelIndex, vectorIndex, paramName)
-        return pvpBlock
+                        pvp_block.pvp_format_to_added_pvp_method(
+                            'set', metadata.pvp.addedPVP[param_name].getFormat())(
+                            param_data, channel_index, vector_index, param_name)
+        return pvp_block
 %}
 }
 
@@ -644,46 +644,46 @@ from coda.coda_types import RowColSizeT
 
 def read(self,
          channel=0,
-         firstVector=0,
-         lastVector=Wideband.ALL,
-         firstSample=0,
-         lastSample=Wideband.ALL,
-         numThreads=multiprocessing.cpu_count()):
+         first_vector=0,
+         last_vector=Wideband.ALL,
+         first_sample=0,
+         last_sample=Wideband.ALL,
+         num_threads=multiprocessing.cpu_count()):
     """Write Wideband data to a NumPy array.
 
     Parameters
     ----------
     channel: int
-    firstVector: int
-    lastVector: int
-    firstSample: int
-    lastSample: int
-    numThreads: int
+    first_vector: int
+    last_vector: int
+    first_sample: int
+    last_sample: int
+    num_threads: int
 
     Returns
     -------
     wideband: np.array
     """
-    dims = self.getBufferDims(channel, firstVector, lastVector, firstSample, lastSample)
-    sampleTypeSize = self.getElementSize()
+    dims = self.getBufferDims(channel, first_vector, last_vector, first_sample, last_sample)
+    sample_type_size = self.getElementSize()
 
     # RF32F_IM32F
-    if sampleTypeSize == 8:
+    if sample_type_size == 8:
         dtype = 'complex64'
     else:
         raise Exception('Unknown element type')
 
-    numpyArray = numpy.empty(shape=(dims.row, dims.col), dtype=dtype)
-    pointer, ro = numpyArray.__array_interface__['data']
+    wideband = numpy.empty(shape=(dims.row, dims.col), dtype=dtype)
+    pointer, ro = wideband.__array_interface__['data']
     self.readImpl(channel,
-                  firstVector,
-                  lastVector,
-                  firstSample,
-                  lastSample,
-                  numThreads,
+                  first_vector,
+                  last_vector,
+                  first_sample,
+                  last_sample,
+                  num_threads,
                   dims,
                   pointer)
-    return numpyArray
+    return wideband
 
 Wideband.read = read
 %}
