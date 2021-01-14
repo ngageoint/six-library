@@ -211,14 +211,14 @@ def get_test_metadata(has_support_array, is_compressed):
     _channels = [
         {
             'id': 'Channel',
-            'shape': (2, 3),
+            'shape': (2, 2),
             'byte_offset': 0,
             'pvp_byte_offset': 0,
             'comp_sig_size': 8,
         },
         {
             'id': 'Channel',
-            'shape': (2, 3),
+            'shape': (3, 4),
             'byte_offset': 0,
             'pvp_byte_offset': 0,
             'comp_sig_size': 8,
@@ -245,8 +245,8 @@ def get_test_metadata(has_support_array, is_compressed):
 
     data = cphd.Data()
     data.signalArrayFormat.value = cphd.SignalArrayFormat.CF8
-    data.numCPHDChannels = 2
-    data.numBytesPVP = 296
+    data.numCPHDChannels = len(_channels)
+    data.numBytesPVP = 376
 
     # If signalCompressionID is set, then it thinks the data is compressed
     if is_compressed:
@@ -349,8 +349,8 @@ def get_test_metadata(has_support_array, is_compressed):
 
     # PVP block
     # Note that the params used here correspond to the list-of-dicts PVP
-    # data in get_test_pvp_data() below
-    # Any changes that affect the total PVP size will require updating data.numBytesPVP (above)
+    # data in get_test_pvp_data() below. Any changes that affect the total PVP
+    # size will require updating data.numBytesPVP (above)
 
     pvp_data = {
         # Name: (offset, size, format)
@@ -383,9 +383,22 @@ def get_test_metadata(has_support_array, is_compressed):
 
     added_pvp_data = [
         # size, offset, fmt, name
-        (1, 34, 'F8', 'customFloatParam'),
-        (1, 35, 'I8', 'customIntParam'),
-        (1, 36, 'CF8', 'customComplexFloatParam'),
+        (1, 34, 'F4', 'customF4Param'),
+        (1, 35, 'F8', 'customF8Param'),
+        (1, 36, 'U1', 'customU1Param'),
+        (1, 37, 'U2', 'customU2Param'),
+        (1, 38, 'U4', 'customU4Param'),
+        (1, 39, 'U8', 'customU8Param'),
+        (1, 40, 'I1', 'customI1Param'),
+        (1, 41, 'I2', 'customI2Param'),
+        (1, 42, 'I4', 'customI4Param'),
+        (1, 43, 'I8', 'customI8Param'),
+        # (1, 44, 'CI2', 'customCI2Param'),
+        # (1, 45, 'CI4', 'customCI4Param'),
+        # (1, 46, 'CI8', 'customCI8Param'),
+        # (1, 47, 'CI16', 'customCI16Param'),
+        (1, 44, 'CF8', 'customCF8Param'),
+        (2, 45, 'CF16', 'customCF16Param')
     ]
 
     pvp = cphd.Pvp()
@@ -742,6 +755,11 @@ def get_test_pvp_data(metadata):
 
     # Note that the params used here correspond to the PVP in get_test_metadata() above
 
+    # ci2_dtype = np.dtype([('re', np.int8), ('im', np.int8)])
+    # ci4_dtype = np.dtype([('re', np.int16), ('im', np.int16)])
+    # ci8_dtype = np.dtype([('re', np.int32), ('im', np.int32)])
+    # ci16_dtype = np.dtype([('re', np.int64), ('im', np.int64)])
+
     pvp_data = []
     for channel in range(metadata.getNumChannels()):
         num_pulses = metadata.getNumVectors(channel)
@@ -772,22 +790,48 @@ def get_test_pvp_data(metadata):
             'toaE1': np.random.rand(num_pulses),  # (1, 'F8')
             'toaE2': np.random.rand(num_pulses),  # (1, 'F8')
             # Custom params
-            'customFloatParam': np.random.rand(num_pulses).astype('float32'),  # (1, 'F8')
-            'customIntParam': np.zeros((num_pulses,)).astype(int),  # (1, 'I8')
-            'customComplexFloatParam': (np.random.rand(num_pulses)
-                                        + np.random.rand(num_pulses) * 1j)
-                                       .astype('complex64')  # (1, 'CF8')
+            'customF4Param': np.random.rand(num_pulses).astype(np.float32),  # (1, 'F4')
+            'customF8Param': np.random.rand(num_pulses).astype(np.float64),  # (1, 'F8')
+            'customU1Param': np.random.randint(127, size=num_pulses, dtype=np.uint8),  # (1, 'U1')
+            'customU2Param': np.random.randint(127, size=num_pulses, dtype=np.uint16),  # (1, 'U2')
+            'customU4Param': np.random.randint(127, size=num_pulses, dtype=np.uint32),  # (1, 'U4')
+            'customU8Param': np.random.randint(127, size=num_pulses, dtype=np.uint64),  # (1, 'U8')
+            'customI1Param': np.random.randint(127, size=num_pulses, dtype=np.int8),  # (1, 'I1')
+            'customI2Param': np.random.randint(127, size=num_pulses, dtype=np.int16),  # (1, 'I2')
+            'customI4Param': np.random.randint(127, size=num_pulses, dtype=np.int32),  # (1, 'I4')
+            'customI8Param': np.random.randint(127, size=num_pulses, dtype=np.int64),  # (1, 'I8')
+            # NumPy has no complex int type
+            # 'customCI2Param': np.array([*zip(
+            #                        np.random.randint(127, size=num_pulses, dtype=np.int8),
+            #                        np.random.randint(127, size=num_pulses, dtype=np.int8))
+            #                    ], dtype=ci2_dtype),  # (1, 'CI2')
+            # 'customCI4Param': np.array([*zip(
+            #                        np.random.randint(127, size=num_pulses, dtype=np.int16),
+            #                        np.random.randint(127, size=num_pulses, dtype=np.int16))
+            #                    ], dtype=ci4_dtype),  # (1, 'CI4')
+            # 'customCI8Param': np.array([*zip(
+            #                        np.random.randint(127, size=num_pulses, dtype=np.int32),
+            #                        np.random.randint(127, size=num_pulses, dtype=np.int32))
+            #                    ], dtype=ci8_dtype),  # (1, 'CI8')
+            # 'customCI16Param': np.array([*zip(
+            #                        np.random.randint(127, size=num_pulses, dtype=np.int64),
+            #                        np.random.randint(127, size=num_pulses, dtype=np.int64))
+            #                    ], dtype=ci16_dtype),  # (1, 'CI16')
+            'customCF8Param': (np.random.rand(num_pulses)
+                               + np.random.rand(num_pulses) * 1j)
+                               .astype('complex64'),  # (1, 'CF8')
+            'customCF16Param': (np.random.rand(num_pulses)
+                               + np.random.rand(num_pulses) * 1j)
+                               .astype('complex128')  # (1, 'CF16')
         })
 
     return pvp_data
 
 
 def get_test_widebands(metadata):
-
     widebands = []
     for channel in range(metadata.getNumChannels()):
         shape = (metadata.getNumVectors(channel), metadata.getNumSamples(channel))
         widebands.append((np.random.rand(*shape) + np.random.rand(*shape) * 1j)
                          .astype('complex64'))
-
     return widebands

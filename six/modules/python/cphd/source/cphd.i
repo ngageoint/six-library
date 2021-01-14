@@ -228,7 +228,7 @@ using six::Vector3;
         return paramTypes[0]
 
     @staticmethod
-    def _pvpFormatToNPdtype(pvpFormatStr):
+    def _format_to_dtype(pvpFormatStr):
         """
         \brief  Maps valid PVP format strings (CPHD Spec Table 10-2) to NumPy dtypes
                 Note that both CPHD and NumPy types are in terms of bytes
@@ -316,12 +316,31 @@ using six::Vector3;
                 usedParams[optionalParam] = self.OPTIONAL_PVP_PARAMS[optionalParam][1]
         return usedParams
 
-    def toListOfDicts(self, cphdMetadata):
+    @staticmethod
+    def _common_format(formats):
+        # Split parameters into a format dict with keys equal to
+        # param suffixes. Single parameters have entry suffix
+        # Example: 'F8' --> {'': 'F8'}
+        # Example: 'A=F8;B=I4' --> {'A': 'F8', 'B': 'I4'}
+        return len(set(formats)) == 1
+
+    @staticmethod
+    def _split_multi_format(fmt):
+        if ';' in fmt:
+            result = {}
+            for _fmt in fmt.split(';')[:fmt.count(';')]:
+                assert '=' in _fmt
+                name, __fmt = _fmt.split('=')
+                result[name] = __fmt
+            return result
+        return {'': fmt}
+
+    def toListOfDicts(self, metadata):
         """
         \brief  Turns this PVPBlock object in a list of Python dictionaries with NumPy arrays
                 of PVP data
 
-        \param  cphdMetadata (SWIG-wrapped CPHD Metadata object)
+        \param  metadata (SWIG-wrapped CPHD Metadata object)
                 The metadata used to create this PVPBlock
 
         \return List of Python dictionaries containing NumPy arrays of PVP data.
@@ -330,67 +349,96 @@ using six::Vector3;
                     (specifically, the names of the attributes used to store them in a CPHD PVP
                     object, e.g. 'rcvTime').
                 The dictionary values are NumPy arrays of shape
-                    (cphdMetadata.getNumVectors(channel), cphdMetadata.getNumSamples(channel))
-                    (with an extra dimension of size cphdMetadata.pvp.[param].getSize() if the
+                    (metadata.getNumVectors(channel), metadata.getNumSamples(channel))
+                    (with an extra dimension of size metadata.pvp.[param].getSize() if the
                     parameter size != 1).
                 The data types of these arrays are set based on the PVP format string,
-                    cphdMetadata.pvp.[param].getFormat(), using PVPBlock._pvpFormatToNPdtype()
-                Any added PVP parameters should also have been added to cphdMetadata.pvp.addedPVP
+                    metadata.pvp.[param].getFormat(), using PVPBlock._pvpFormatToNPdtype()
+                Any added PVP parameters should also have been added to metadata.pvp.addedPVP
         """
 
-        # getDefaultParametersInUse() maps all string param names to the names used in their
-        # get/set methods. Call it and reorganize a little: prepend 'get' and wrap the string
-        # method names in tuples
-        paramsToCopy = {paramName: ('get' + paramMethodName,)
-                        for paramName, paramMethodName in self.getDefaultParametersInUse().items()}
+        pvp_info = {}
 
-        for paramName in paramsToCopy:
-            # Append PVPType object to tuple inside paramsToCopy
-            paramsToCopy[paramName] += (getattr(cphdMetadata.pvp, paramName),)
-        # Add custom PVP objects, which don't have getters
-        # (APVPType ("AddedPVPType") derives from PVPType)
-        paramsToCopy.update({paramName: (None, paramObj)
-                             for paramName, paramObj in cphdMetadata.pvp.addedPVP.items()})
+        # Gather methods to check if optional PVP param is set
+        # Using .lower() here since name capitalization is not 100% consistent
+        has_optional_param_methods = {name.lower(): getattr(self, name)
+                                      for name in dir(self)
+                                      if name.startswith('has')}
 
-        # Now paramsToCopy consists of:
-        # {'param1Name': ('getParam1', cphd.PVPType object for param1)}
-        # for all default and custom PVP parameters used in this PVPBlock
+        # Set required and optional PVP parameters
+        for name in dir(metadata.pvp):
+            try:
+                attr = getattr(metadata.pvp, name)
+            except AttributeError:
+                continue
+            if not isinstance(attr, pysix.cphd.PVPType):
+                continue
+            if attr.getSize() == 0:
+                continue
+            # Is this an optional parameter that is not set?
+            if ('has' + name.lower()) in has_optional_param_methods \
+                    and not has_optional_param_methods['has' + name.lower()]():
+                continue
+            pvp_info[name] = (attr.getSize(), attr.getOffset(), attr.getFormat())
+        # Set any added PVP parameters
+        for name, added_pvp in metadata.pvp.addedPVP.items():
+            if added_pvp.getSize() == 0:
+                continue
+            pvp_info[name] = (added_pvp.getSize(), added_pvp.getOffset(), added_pvp.getFormat())
 
-        pvpData = []
+        # Sort pvp_info by offset
+        from collections import OrderedDict  # SWIG won't import this above
+        sorted_pvp_info = OrderedDict(sorted(pvp_info.items(), key=lambda item: item[1][1]))
+
+        pvp_data = []
         # Read data from each channel of this PVPBlock into list-of-dicts
-        for channel in range(cphdMetadata.getNumChannels()):
-            # Initialize dict of parameters for this channel
-            # Doing this for each channel in case they have different numbers of vectors/samples
-            channelPVP = {}
-            for paramName, (paramGetter, paramObj) in paramsToCopy.items():
-                paramSize = paramObj.getSize()
-                paramShape = (cphdMetadata.getNumVectors(channel),)
-                if paramSize != 1:
-                    # If data is a vector, add another dimension to the array
-                    paramShape += (paramSize,)
-                paramDtype = self._pvpFormatToNPdtype(paramObj.getFormat())
-                channelPVP[paramName] = numpy.empty(shape=paramShape, dtype=paramDtype)
+        for channel in range(metadata.getNumChannels()):
+            channel_pvp = {}
 
-            # Copy PVP data for this channel by vector
-            for vector in range(cphdMetadata.getNumVectors(channel)):
-                for paramName, (paramGetter, paramObj) in paramsToCopy.items():
-                    # Get, then call, the PVPBlock.get[param]() method object for
-                    # current channel and vector (or use PVPBlock.getAddedPVP() if
-                    # this is a custom parameter)
-                    pulseVector = (getattr(self, paramGetter)(channel, vector)
-                                   if paramName not in cphdMetadata.pvp.addedPVP else
-                                   self.pvpFormatToAddedPVPMethod('get', paramObj.getFormat())(
-                                        channel, vector, paramName))
-                    paramSize = paramObj.getSize()
-                    if paramSize == 1:
-                        channelPVP[paramName][vector] = pulseVector
-                    else:
-                        for i in range(paramSize):
-                            channelPVP[paramName][vector][i] = pulseVector[i]
+            num_vectors = metadata.getNumVectors(channel)
+            pvp_size = metadata.pvp.sizeInBytes()
 
-            pvpData.append(channelPVP)
+            channel_data = np.empty(shape=num_vectors * pvp_size, dtype=np.bytes_)
+            # import pdb; pdb.set_trace()
+            self.getPVPdata(channel, channel_data.__array_interface__['data'][0])
+            channel_data = channel_data.reshape(num_vectors, pvp_size)
 
-        return pvpData
+            pvp_offset = 0
+            for name, (size, offset, fmt) in sorted_pvp_info.items():
+                suffix_to_format = PVPBlock._split_multi_format(fmt)
+
+                # Number of values in this parameter, not necessarily equal to
+                # _size (e.g. 'CF16' uses 2 8-byte words for 1 value)
+                # Store this in case suffix_to_format changes below
+                num_values = len(suffix_to_format)
+
+                # If a PVP has multiple parameters but all have the same
+                # format, collapse them into a single PVP. This is intended
+                # to simplify things like 'txPos', where it's more convenient
+                # to have an (N,3)-shape array than three length-N arrays
+                # for 'txPosX', 'txPosY', and 'txPosZ' separately.
+                _size = 1
+                formats = list(suffix_to_format.values())
+                if PVPBlock._common_format(formats):
+                    suffix_to_format = {'': formats[0]}
+                    _size = size
+
+                for suffix, _fmt in suffix_to_format.items():
+                    _name = name + suffix
+                    dtype = PVPBlock._format_to_dtype(_fmt)
+                    length = dtype.itemsize * num_values
+
+                    # For every vector (first index of channel_data), slice
+                    # the range with values for this parameter (second index)
+                    vals = channel_data[
+                        :, pvp_offset:(pvp_offset + length)
+                    ].copy().view(dtype)
+                    channel_pvp[_name] = vals.reshape(num_vectors, num_values).squeeze()
+                    pvp_offset += 8 * _size  # 8-byte words
+
+            pvp_data.append(channel_pvp)
+
+        return pvp_data
 
     @staticmethod
     def fromListOfDicts(pvpData, cphdMetadata):
@@ -416,21 +464,6 @@ using six::Vector3;
                                  for paramName in paramsToSet},
                               **{paramName: paramObj.getSize()
                                  for paramName, paramObj in cphdMetadata.pvp.addedPVP.items()}}
-        mismatchedParams = []  # Parameters for which actual size doesn't match size in metadata
-        for paramName in (list(paramsToSet.keys()) + list(cphdMetadata.pvp.addedPVP.keys())):
-            for channelIndex, channelData in enumerate(pvpData):
-                actualSize = 1 if len(channelData[paramName].shape) == 1 \
-                               else channelData[paramName].shape[1]
-                if actualSize != expectedParamSizes[paramName]:
-                    mismatchedParams.append(
-                        (paramName, channelIndex, actualSize, expectedParamSizes[paramName]))
-        if mismatchedParams:
-            raise Exception('For the following parameters, actual data size does not match size '
-                            + 'in metadata object:\n'
-                            + '\n'.join(
-                                ['Parameter: {0}  Channel: {1}  Actual: {2}  Expected: {3}'
-                                 .format(param, channel, actual, expected)
-                                 for (param, channel, actual, expected) in mismatchedParams]))
 
         # Populate PVPBlock object from pvpData
         for channelIndex, channelData in enumerate(pvpData):
@@ -443,10 +476,10 @@ using six::Vector3;
                             paramData = coda.math_linear.Vector3(paramData)
                         else:
                             raise Exception(('Only PVP parameters of size 1 or 3 are supported, '
-                                             + '\'{0}\' has size {1}'
-                                             .format(paramName, len(paramData))))
+                                             '\'{0}\' has size {1}')
+                                             .format(paramName, len(paramData)))
                     if 'numpy' in type(paramData).__module__:
-                        # Change 1D arrays to scalars AND convert NumPy types (e.g. numpy.int64)
+                        # Change 1D arrays to scalars AND convert NumPy types (e.g. np.int64)
                         # to Python dtypes that SWIG can understand
                         paramData = paramData.item()
                     if paramName not in cphdMetadata.pvp.addedPVP:
