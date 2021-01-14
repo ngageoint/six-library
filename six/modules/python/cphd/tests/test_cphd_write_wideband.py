@@ -59,6 +59,14 @@ def main():
 
         # Check that we correctly wrote the wideband data
         reader = CPHDReader(cphd_filepath, SCRATCH_SPACE)
+
+        if reader.getMetadata() != metadata:
+            print('Test failed, original metadata and metadata from file differ')
+            sys.exit(1)
+        if reader.getPVPBlock() != pvp_block:
+            print('Test failed, original PVP block and PVP block from file differ')
+            sys.exit(1)
+
         for channel in range(metadata.getNumChannels()):
             if not np.array_equal(reader.getWideband().read(channel=channel), widebands[channel]):
                 print('Test failed, original wideband and wideband from file differ in channel {0}'
@@ -68,7 +76,6 @@ def main():
                 print('Test failed, original wideband and PHD from file differ in channel {0}'
                       .format(channel))
                 sys.exit(1)
-            # TODO: Compare PVP data
 
         print('Test passed')
 
