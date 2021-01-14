@@ -31,7 +31,8 @@ from pysix.cphd import CPHDXMLControl
 
 from util import get_test_metadata
 
-if __name__ == '__main__':
+
+def main():
     xml_parser = CPHDXMLControl()
     metadata, support_arrays = get_test_metadata(has_support_array=True, is_compressed=True)
 
@@ -50,3 +51,7 @@ if __name__ == '__main__':
     except Exception as e:
         print('Test failed with exception:', e)
         sys.exit(1)
+
+
+if __name__ == '__main__':
+    main()

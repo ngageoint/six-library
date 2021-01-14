@@ -169,10 +169,9 @@ using six::Vector3;
 {
 %pythoncode
 %{
-    # Map PVPBlock field names to how they're used in the get/set methods for each PVP parameter
-    # in a CPHD PVPBlock object.  We could generate these programmatically, but the
-    # upper/lowercasing of the method names is not 100% consistent (TOAE, TdIonoSRP)
-    # and this is very explicit
+
+    import numpy  # 'as np' doesn't work unless the import is within each function
+
     PVP_PARAM_METHODS = {
         'txTime': 'TxTime',
         'txPos': 'TxPos',
@@ -202,45 +201,16 @@ using six::Vector3;
         'toaE2': ('hasToaE2', 'TOAE2')
     }
 
-    import numpy  # 'as np' doesn't work unless the import is within each function
-
     @staticmethod
     def _validateMultiplePVPFormatStr(pvpFormatStr):
-        """
-        \brief  Confirms that a valid PVP format string (CPHD Spec Table 10-2) with multiple
-                parameters (e.g. 'X=U2;Y=U2;') uses the same data type for all parameters.
-                Returns the data type if it is the same for all parameters, raises an exception
-                otherwise
-
-        \param  pvpFormatStr (str)
-                CPHD PVP format string, with multiple parameters e.g. 'X=U1;Y=U1;'
-                See CPHD Spec Table 10-2
-
-        \return Data type if it is the same for all parameters, raises an exception otherwise
-        """
-
         paramTypes = [param[param.index('=') + 1:] for param in pvpFormatStr.split(';') if param]
-
-        # TODO support multiple different parameter types ('A=U2;B=I2;')
-        if not all(paramType == paramTypes[0] for paramType in paramTypes[1:]):
-            raise Exception('Multiple parameters with different data types are not yet supported')
-
+        # TODO: support multiple different parameter types ('A=U2;B=I2;')
+        if not len(set(paramTypes)) == 1:
+            raise ValueError('Multiple parameters with different data types are not yet supported')
         return paramTypes[0]
 
     @staticmethod
     def _format_to_dtype(pvpFormatStr):
-        """
-        \brief  Maps valid PVP format strings (CPHD Spec Table 10-2) to NumPy dtypes
-                Note that both CPHD and NumPy types are in terms of bytes
-                Currently doesn't support multiple parameters with different types,
-                e.g. 'X=U2;Y=F4;'
-
-        \param  pvpFormatStr (str)
-                CPHD PVP format string, e.g. 'U1' or 'CI2'. See CPHD Spec Table 10-2
-
-        \return NumPy dtype corresponding to pvpFormatStr
-        """
-
         if '=' in pvpFormatStr and ';' in pvpFormatStr:
             # This string has multiple parameters, assert that they are all the same data type
             pvpFormatStr = PVPBlock._validateMultiplePVPFormatStr(pvpFormatStr)
@@ -257,29 +227,15 @@ using six::Vector3;
             #   Is the '*' literal or indicating that these can be however long?
             return numpy.dtype('U' + pvpFormatStr[1:])
 
-        raise Exception('Unknown or unsupported format string: \'{0}\''.format(pvpFormatStr))
+        raise ValueError('Unknown or unsupported format string: \'{0}\''.format(pvpFormatStr))
 
     def pvpFormatToAddedPVPMethod(self, getOrSet, pvpFormatStr):
-        """
-        \brief  Returns a callable method object to get or set an added PVP. PVPBlock.getAddedPVP()
-                is templated based on the type of the parameter it returns, so we need to get the
-                correct method name for the type of the parameter
-
-        \param  getOrSet (str)
-                'get' or 'set', depending on whether we want the getter or setter method for this
-                type of PVP
-        \param  pvpFormatStr (str)
-                CPHD PVP format string, e.g. 'U1' or 'CI2'. See CPHD Spec Table 10-2
-
-        \return Callable method object to get or set an added PVP for this PVPBlock
-        """
-
         if '=' in pvpFormatStr and ';' in pvpFormatStr:
             # This string has multiple parameters, assert that they are all the same data type
             pvpFormatStr = PVPBlock._validateMultiplePVPFormatStr(pvpFormatStr)
 
         if getOrSet not in ['get', 'set']:
-            raise Exception('getOrSet should be only \'get\' or \'set\', not {}'.format(getOrSet))
+            raise ValueError('getOrSet should be only \'get\' or \'set\', not {}'.format(getOrSet))
 
         methodName = None
         if pvpFormatStr.startswith('U'):
@@ -298,14 +254,9 @@ using six::Vector3;
         return getattr(self, getOrSet + methodName)
 
     def getDefaultParametersInUse(self):
-        """
-        \brief  Returns a dict mapping PVPBlock field names for the default PVP parameters
-                in this block to the names used in their get/set methods. Method names will
-                need to have 'get' or 'set' prepended
-
-        \return A dict mapping field names for the default PVP parameters used in this block
-                to the names used in their get/set methods
-        """
+        # Return a dict mapping PVPBlock field names for the default PVP
+        # parameters in this block to the names used in their get/set methods.
+        # Method names will need to have 'get' or 'set' prepended
 
         # Determine which (non-custom) params need to be set
         usedParams = dict(self.PVP_PARAM_METHODS)  # Copy all required PVP params
@@ -336,27 +287,28 @@ using six::Vector3;
         return {'': fmt}
 
     def toListOfDicts(self, metadata):
+        """Turn this PVPBlock into a list of Python dicts of NumPy arrays.
+
+        Parameters
+        ----------
+        metadata: cphd.Metadata
+            The metadata used to create this PVPBlock
+
+        Returns
+        -------
+        list_of_dicts: list of dicts of NumPy arrays
+            Each dictionary in the list corresponds to a CPHD data channel.
+            The dictionary keys are string names of the PVP parameters in this PVPBlock
+                (specifically, the names of the attributes used to store them in a CPHD PVP
+                object, e.g. 'rcvTime').
+            The dictionary values are NumPy arrays of shape
+                (metadata.getNumVectors(channel), metadata.getNumSamples(channel))
+                (with an extra dimension of size metadata.pvp.[param].getSize() if the
+                parameter size != 1).
+            The data types of these arrays are set based on the PVP format string,
+                metadata.pvp.[param].getFormat(), using PVPBlock._pvpFormatToNPdtype()
+            Any added PVP parameters should also have been added to metadata.pvp.addedPVP
         """
-        \brief  Turns this PVPBlock object in a list of Python dictionaries with NumPy arrays
-                of PVP data
-
-        \param  metadata (SWIG-wrapped CPHD Metadata object)
-                The metadata used to create this PVPBlock
-
-        \return List of Python dictionaries containing NumPy arrays of PVP data.
-                Each dictionary in the list corresponds to a CPHD data channel.
-                The dictionary keys are string names of the PVP parameters in this PVPBlock
-                    (specifically, the names of the attributes used to store them in a CPHD PVP
-                    object, e.g. 'rcvTime').
-                The dictionary values are NumPy arrays of shape
-                    (metadata.getNumVectors(channel), metadata.getNumSamples(channel))
-                    (with an extra dimension of size metadata.pvp.[param].getSize() if the
-                    parameter size != 1).
-                The data types of these arrays are set based on the PVP format string,
-                    metadata.pvp.[param].getFormat(), using PVPBlock._pvpFormatToNPdtype()
-                Any added PVP parameters should also have been added to metadata.pvp.addedPVP
-        """
-
         pvp_info = {}
 
         # Gather methods to check if optional PVP param is set
@@ -442,18 +394,17 @@ using six::Vector3;
 
     @staticmethod
     def fromListOfDicts(pvpData, cphdMetadata):
-        """
-        \brief  Initializes a PVPBlock using provided CPHD metadata and populates it from a list
-                of Python dicts
+        """Initialize and populate a PVPBlock from a list of Python dicts.
 
-        \param  pvpData (list of Python dicts)
-                List of Python dicts (one for each channel) mapping parameter names
-                to NumPy arrays of data.  See PVPBlock.toListOfDicts() for more information
-                on the structure expected here
-        \param  cphdMetadata (SWIG-wrapped CPHD Metadata object)
-                The metadata used to create this PVPBlock
+        Parameters
+        ----------
+        pvpData: list of Python dicts
+            List of Python dicts (one for each channel) mapping parameter names
+            to NumPy arrays of data.  See PVPBlock.toListOfDicts() for more information
+            on the structure expected here
+        cphdMetadata: cphd.Metadata
+            The metadata used to create this PVPBlock
         """
-
         pvpBlock = PVPBlock(cphdMetadata.pvp, cphdMetadata.data)  # Call other PVPBlock constructor
 
         paramsToSet = {paramName: 'set' + paramMethodName for
@@ -475,9 +426,9 @@ using six::Vector3;
                         if len(paramData) == 3:
                             paramData = coda.math_linear.Vector3(paramData)
                         else:
-                            raise Exception(('Only PVP parameters of size 1 or 3 are supported, '
-                                             '\'{0}\' has size {1}')
-                                             .format(paramName, len(paramData)))
+                            raise ValueError(('Only PVP parameters of size 1 or 3 are supported, '
+                                              '\'{0}\' has size {1}')
+                                              .format(paramName, len(paramData)))
                     if 'numpy' in type(paramData).__module__:
                         # Change 1D arrays to scalars AND convert NumPy types (e.g. np.int64)
                         # to Python dtypes that SWIG can understand
@@ -622,32 +573,39 @@ void writeWideband(const Metadata& metadata,
     import numpy as np
 
     def write_cphd(
-        pathname,
-        metadata,
-        pvp_block,
-        wideband_arrays,
-        support_arrays=None,
-        schema_paths=[],
-        num_threads=0,
-        scratch_space=(4 * 1024 * 1024),
-    ):
-        """
-        \brief  Writes CPHD data to a file
+            pathname,
+            metadata,
+            pvp_block,
+            wideband_arrays,
+            support_arrays=None,
+            schema_paths=None,
+            num_threads=None,
+            scratch_space=None):
+        """Write CPHD data to a file.
 
-        \param  pathname (str)
-        \param  metadata (cphd.Metadata)
-        \param  pvp_block (cphd.PVPBlock)
-        \param  wideband_arrays (sequence of np.arrays)
-                Arrays of wideband data, one per channel
-        \param  support_arrays (sequence of np.arrays)
-                Arrays of support array data
-        \param  schema_paths (list of strs)
-        \param  num_threads (int)
-        \param  scratch_space (int)
+        Parameters
+        ----------
+        pathname: str
+        metadata: cphd.Metadata
+        pvp_block: cphd.PVPBlock
+        wideband_arrays: sequence of np.arrays
+            Arrays of wideband data, one per channel
+        support_arrays (sequence of np.arrays)
+            Arrays of support array data
+        schema_paths: list of strs
+        num_threads: int
+        scratch_space: int
         """
+        if schema_paths is None:
+            if 'SIX_SCHEMA_PATH' in os.environ:
+                schema_paths = [os.environ['SIX_SCHEMA_PATH']]
+            else:
+                schema_paths = []
+        if num_threads is None:
+            num_threads = 0
+        if scratch_space is None:
+            scratch_space = 4 * 1024 * 1024
 
-        if not schema_paths and 'SIX_SCHEMA_PATH' in os.environ:
-            schema_paths = [os.environ['SIX_SCHEMA_PATH']]
 
         # Support writing a single channel with a single ndarray
         if isinstance(wideband_arrays, np.ndarray):
@@ -691,7 +649,21 @@ def read(self,
          firstSample=0,
          lastSample=Wideband.ALL,
          numThreads=multiprocessing.cpu_count()):
+    """Write Wideband data to a NumPy array.
 
+    Parameters
+    ----------
+    channel: int
+    firstVector: int
+    lastVector: int
+    firstSample: int
+    lastSample: int
+    numThreads: int
+
+    Returns
+    -------
+    wideband: np.array
+    """
     dims = self.getBufferDims(channel, firstVector, lastVector, firstSample, lastSample)
     sampleTypeSize = self.getElementSize()
 

@@ -34,8 +34,7 @@ from pysix.cphd import PVPBlock
 from util import get_test_metadata, get_test_pvp_data
 
 
-if __name__ == '__main__':
-
+def main():
     metadata, support_arrays = get_test_metadata(has_support_array=True, is_compressed=True)
     pvp_data = get_test_pvp_data(metadata)  # list of dicts
 
@@ -46,6 +45,11 @@ if __name__ == '__main__':
 
     pvp_block = PVPBlock.fromListOfDicts(pvp_data, metadata)
     pvp_data_from_block = pvp_block.toListOfDicts(metadata)  # list of dicts
+
+    # for c in range(len(pvp_data_from_block)):
+    #     for key in pvp_data_from_block[c]:
+    #         print(key, pvp_data[c][key] - pvp_data_from_block[c][key])
+    # import pdb; pdb.set_trace()
 
     if len(pvp_data_from_block) != metadata.getNumChannels():
         print('Test failed: expected {0} channels but received {1} from PVPBlock.toListOfDicts()'
@@ -63,3 +67,7 @@ if __name__ == '__main__':
                 sys.exit(1)
 
     print('Test passed')
+
+
+if __name__ == '__main__':
+    main()

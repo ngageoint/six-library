@@ -25,8 +25,10 @@
 # In general, if functionality in CPHD is borrowed from six.sicd,
 # refer to six.sicd's test script for more verification
 
+import multiprocessing
 import os
 import sys
+import tempfile
 
 import numpy as np
 
@@ -35,11 +37,11 @@ from coda.coda_types import VectorString
 
 from util import get_test_metadata, get_test_pvp_data, get_test_widebands
 
-NUM_THREADS = 16
+NUM_THREADS = multiprocessing.cpu_count() // 2
 SCRATCH_SPACE = 4 * 1024 * 1024
 
-if __name__ == '__main__':
 
+def main():
     metadata, support_arrays = get_test_metadata(has_support_array=True, is_compressed=False)
     widebands = get_test_widebands(metadata)
     pvp_block = PVPBlock.fromListOfDicts(get_test_pvp_data(metadata), metadata)
@@ -47,23 +49,28 @@ if __name__ == '__main__':
     schema_paths = VectorString()
     schema_paths.push_back(os.environ['SIX_SCHEMA_PATH'])
 
-    cphd_filepath = os.path.join(os.getcwd(), 'test_cphd.nitf')
-    cphd_writer = CPHDWriter(metadata, cphd_filepath, schema_paths, NUM_THREADS)
+    with tempfile.NamedTemporaryFile() as temp_file:
+        cphd_filepath = temp_file.name
 
-    # writeWideband() writes complete CPHD: XML metadata, PVP data, and wideband data
-    cphd_writer.writeWideband(metadata, pvp_block, widebands, support_arrays)
+        cphd_writer = CPHDWriter(metadata, cphd_filepath, schema_paths, NUM_THREADS)
 
-    # Check that we correctly wrote the wideband data
-    reader = CPHDReader(cphd_filepath, SCRATCH_SPACE)
-    for channel in range(metadata.getNumChannels()):
-        if not np.array_equal(reader.getWideband().read(channel=channel), widebands[channel]):
-            print('Test failed, original wideband and wideband from file differ in channel {0}'
-                  .format(channel))
-            sys.exit(1)
-        if not np.array_equal(reader.getPHD(channel), widebands[channel]):
-            print('Test failed, original wideband and PHD from file differ in channel {0}'
-                  .format(channel))
-            sys.exit(1)
+        # writeWideband() writes complete CPHD: XML metadata, PVP data, and wideband data
+        cphd_writer.writeWideband(metadata, pvp_block, widebands, support_arrays)
 
-    os.remove(cphd_filepath)
-    print('Test passed')
+        # Check that we correctly wrote the wideband data
+        reader = CPHDReader(cphd_filepath, SCRATCH_SPACE)
+        for channel in range(metadata.getNumChannels()):
+            if not np.array_equal(reader.getWideband().read(channel=channel), widebands[channel]):
+                print('Test failed, original wideband and wideband from file differ in channel {0}'
+                      .format(channel))
+                sys.exit(1)
+            if not np.array_equal(reader.getPHD(channel), widebands[channel]):
+                print('Test failed, original wideband and PHD from file differ in channel {0}'
+                      .format(channel))
+                sys.exit(1)
+
+        print('Test passed')
+
+
+if __name__ == '__main__':
+    main()

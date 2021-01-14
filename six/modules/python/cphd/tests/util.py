@@ -30,26 +30,8 @@ import numpy as np
 from pysix import cphd
 import pysix.six_base as six
 from pysix import scene
-from coda import math_poly
+from coda.math_poly import Poly1D, Poly2D, PolyVector3
 from coda.math_linear import Vector2, Vector3
-
-
-def get_poly_1d(coeffs):
-    num = len(coeffs)
-    order = num - 1
-    poly = math_poly.Poly1D(order)
-    for ii in range(num):
-        poly[ii] = coeffs[ii]
-    return poly
-
-
-def get_poly_2d(coeffs):
-    num_x = len(coeffs)
-    num_y = len(coeffs[0])
-    poly = math_poly.Poly2D(num_x - 1, num_y - 1)
-    for ii, jj in itertools.product(range(num_x), range(num_y)):
-        poly[ii, jj] = coeffs[ii][jj]
-    return poly
 
 
 def get_poly_vector(coeffs):
@@ -57,7 +39,7 @@ def get_poly_vector(coeffs):
     num_y = len(coeffs[0])
     order = num_x - 1
     assert num_y == 3
-    poly = math_poly.PolyVector3(order)
+    poly = PolyVector3(order)
     for ii in range(num_x):
         poly[ii] = Vector3(coeffs[ii])
     return poly
@@ -468,12 +450,12 @@ def get_test_metadata(has_support_array, is_compressed):
 
     cod = cphd.COD()
     cod.identifier = 'codPolynomial1'
-    cod.codTimePoly = get_poly_2d(cod_coeffs)
+    cod.codTimePoly = Poly2D(cod_coeffs)
     dwell.cod.append(cod)
 
     dtime = cphd.DwellTime()
     dtime.identifier = 'dwellPolynomial1'
-    dtime.dwellTimePoly = get_poly_2d(dwell_time_coeffs)
+    dtime.dwellTimePoly = Poly2D(dwell_time_coeffs)
     dwell.dtime.append(dtime)
 
     metadata.dwell = dwell
@@ -601,13 +583,13 @@ def get_test_metadata(has_support_array, is_compressed):
         ap.gainZero = ap_data['g0']
         ap.ebFreqShift.value = get_boolean(ap_data['eb_freq_shift'])
         ap.mlFreqDilation.value = get_boolean(ap_data['ml_freq_dilation'])
-        ap.gainBSPoly = get_poly_1d(ap_data['gain_bs'])
-        ap.eb.dcxPoly = get_poly_1d(ap_data['dcx'])
-        ap.eb.dcyPoly = get_poly_1d(ap_data['dcy'])
-        ap.array.gainPoly = get_poly_2d(ap_data['gain_array'])
-        ap.array.phasePoly = get_poly_2d(ap_data['phase_array'])
-        ap.element.gainPoly = get_poly_2d(ap_data['gain_element'])
-        ap.element.phasePoly = get_poly_2d(ap_data['phase_element'])
+        ap.gainBSPoly = Poly1D(ap_data['gain_bs'])
+        ap.eb.dcxPoly = Poly1D(ap_data['dcx'])
+        ap.eb.dcyPoly = Poly1D(ap_data['dcy'])
+        ap.array.gainPoly = Poly2D(ap_data['gain_array'])
+        ap.array.phasePoly = Poly2D(ap_data['phase_array'])
+        ap.element.gainPoly = Poly2D(ap_data['gain_element'])
+        ap.element.phasePoly = Poly2D(ap_data['phase_element'])
         for gpa_data in ap_data['gain_phase_array']:
             gpa = cphd.GainPhaseArray()
             gpa.freq = gpa_data['freq']
