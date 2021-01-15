@@ -174,85 +174,42 @@ using six::Vector3;
 %pythoncode
 %{
 
-    import numpy  # 'as np' doesn't work unless the import is within each function
-
-    PVP_PARAM_METHODS = {
-        'txTime': 'TxTime',
-        'txPos': 'TxPos',
-        'txVel': 'TxVel',
-        'rcvTime': 'RcvTime',
-        'rcvPos': 'RcvPos',
-        'rcvVel': 'RcvVel',
-        'srpPos': 'SRPPos',
-        'aFDOP': 'aFDOP',
-        'aFRR1': 'aFRR1',
-        'aFRR2': 'aFRR2',
-        'fx1': 'Fx1',
-        'fx2': 'Fx2',
-        'toa1': 'TOA1',
-        'toa2': 'TOA2',
-        'tdTropoSRP': 'TdTropoSRP',
-        'sc0': 'SC0',
-        'scss': 'SCSS'
-    }
-    OPTIONAL_PVP_PARAMS = {
-        'ampSF': ('hasAmpSF', 'AmpSF'),
-        'fxN1': ('hasFxN1', 'FxN1'),
-        'fxN2': ('hasFxN2', 'FxN2'),
-        'signal': ('hasSignal', 'Signal'),
-        'tdIonoSRP': ('hasTDIonoSRP', 'TdIonoSRP'),
-        'toaE1': ('hasToaE1', 'TOAE1'),
-        'toaE2': ('hasToaE2', 'TOAE2')
-    }
+    import numpy  # 'as np' doesn't work unless the import is in each method
 
     @staticmethod
-    def validate_multiple_pvp_format_str(pvp_format_str):
-        param_types = [param[param.index('=') + 1:] for param in pvp_format_str.split(';') if param]
-        # TODO: support multiple different parameter types ('A=U2;B=I2;')
-        if not len(set(param_types)) == 1:
-            raise ValueError('Multiple parameters with different data types are not yet supported')
-        return param_types[0]
+    def _validate_pvp_format(format_str):
+        if format_str.startswith('CI'):
+            # NumPy has no complex int type, need to use a structured array
+            # TODO: Support complex int PVP types
+            raise NotImplementedError('Complex int PVPs are not supported')
+
+        if '=' in format_str and ';' in format_str:
+            # Multiple values in parameter
+            param_types = [param[param.index('=') + 1:]
+                           for param in format_str.split(';') if param]
+            if not len(set(param_types)) == 1:
+                # TODO: support multiple different parameter types e.g.
+                #       ('A=U2;B=I2;') using NumPy structured arrays
+                raise ValueError('PVPs with different types are not supported')
+            return param_types[0]
+        return format_str
 
     @staticmethod
-    def _format_to_dtype(pvp_format_str):
-        if '=' in pvp_format_str and ';' in pvp_format_str:
-            # This string has multiple parameters, assert that they are all the same data type
-            pvp_format_str = PVPBlock.validate_multiple_pvp_format_str(pvp_format_str)
+    def _format_to_dtype(format_str):
+        format_str = PVPBlock._validate_pvp_format(format_str)
 
-        first = pvp_format_str[0]
+        first = format_str[0]
         if first in ['U', 'I', 'F']:  # Unsigned int, signed int, float
-            return numpy.dtype(pvp_format_str.lower())
+            return numpy.dtype(format_str.lower())
         elif first == 'C':  # Complex float ('CF') or complex int ('CI')
-            if pvp_format_str[1] == 'I':  # Complex int
-                # NumPy has no complex int type, need to use a structured array
-                # TODO: Support complex int PVP types
-                raise NotImplementedError('Complex integer PVP types are not supported')
-            return numpy.dtype('c' + pvp_format_str[2:])
+            if format_str[1] == 'I':  # Complex int
+                raise NotImplementedError('Complex int PVPs are not supported')
+            return numpy.dtype('c' + format_str[2:])
         elif first == 'S':  # String
-            return numpy.dtype('U' + pvp_format_str[1:])
+            return numpy.dtype('U' + format_str[1:])
 
-        raise ValueError('Unknown or unsupported format string: \'{0}\''.format(pvp_format_str))
-
-    def _pvp_format_to_added_pvp_method(self, pvp_format_str):
-        if '=' in pvp_format_str and ';' in pvp_format_str:
-            # This string has multiple parameters, assert that they are all the same data type
-            pvp_format_str = PVPBlock.validate_multiple_pvp_format_str(pvp_format_str)
-
-        return getattr(self, 'set' + pvp_format_str + 'AddedPVP')
-
-    def _get_default_parameters_in_use(self):
-        # Return a dict mapping PVPBlock field names for the default PVP
-        # parameters in this block to the names used in their get/set methods.
-        # Method names will need to have 'get' or 'set' prepended
-
-        # Determine which (non-custom) params need to be set
-        used_params = dict(self.PVP_PARAM_METHODS)  # Copy all required PVP params
-        for optional_param in self.OPTIONAL_PVP_PARAMS:
-            # Call boolean `has[param]` method of PVPBlock to check if this PVPBlock has this param
-            if getattr(self, self.OPTIONAL_PVP_PARAMS[optional_param][0])():
-                # Copy `get[param]` method name into used_params
-                used_params[optional_param] = self.OPTIONAL_PVP_PARAMS[optional_param][1]
-        return used_params
+        raise ValueError('Unknown or unsupported format string: {0}'
+                         .format(format_str))
 
     @staticmethod
     def _common_format(formats):
@@ -285,16 +242,11 @@ using six::Vector3;
         -------
         list_of_dicts: list of dicts of NumPy arrays
             Each dictionary in the list corresponds to a CPHD data channel.
-            The dictionary keys are string names of the PVP parameters in this PVPBlock
-                (specifically, the names of the attributes used to store them in a CPHD PVP
-                object, e.g. 'rcvTime').
+            The dictionary keys are string names of PVP parameters
             The dictionary values are NumPy arrays of shape
-                (metadata.getNumVectors(channel), metadata.getNumSamples(channel))
-                (with an extra dimension of size metadata.pvp.[param].getSize() if the
-                parameter size != 1).
-            The data types of these arrays are set based on the PVP format string,
-                metadata.pvp.[param].getFormat(), using PVPBlock._pvpFormatToNPdtype()
-            Any added PVP parameters should also have been added to metadata.pvp.addedPVP
+              (metadata.getNumVectors(channel),metadata.getNumSamples(channel))
+            Any added PVP parameters should also have been added to
+              metadata.pvp.addedPVP
         """
         pvp_info = {}
 
@@ -318,16 +270,23 @@ using six::Vector3;
             if ('has' + name.lower()) in has_optional_param_methods \
                     and not has_optional_param_methods['has' + name.lower()]():
                 continue
-            pvp_info[name] = (attr.getSize(), attr.getOffset(), attr.getFormat())
+            pvp_info[name] = (
+                attr.getSize(), attr.getOffset(), attr.getFormat()
+            )
         # Set any added PVP parameters
         for name, added_pvp in metadata.pvp.addedPVP.items():
             if added_pvp.getSize() == 0:
                 continue
-            pvp_info[name] = (added_pvp.getSize(), added_pvp.getOffset(), added_pvp.getFormat())
+            PVPBlock._validate_pvp_format(added_pvp.getFormat())
+            pvp_info[name] = (added_pvp.getSize(),
+                              added_pvp.getOffset(),
+                              added_pvp.getFormat())
 
         # Sort pvp_info by offset
         from collections import OrderedDict  # SWIG won't import this above
-        sorted_pvp_info = OrderedDict(sorted(pvp_info.items(), key=lambda item: item[1][1]))
+        sorted_pvp_info = OrderedDict(
+            sorted(pvp_info.items(), key=lambda item: item[1][1])
+        )
 
         pvp_data = []
         # Read data from each channel of this PVPBlock into list-of-dicts
@@ -337,9 +296,12 @@ using six::Vector3;
             num_vectors = metadata.getNumVectors(channel)
             pvp_size = metadata.pvp.sizeInBytes()
 
-            channel_data = np.empty(shape=num_vectors * pvp_size, dtype=np.bytes_)
-            # import pdb; pdb.set_trace()
-            self.getPVPdata(channel, channel_data.__array_interface__['data'][0])
+            channel_data = np.empty(
+                shape=num_vectors * pvp_size, dtype=np.bytes_
+            )
+            self.getPVPdata(
+                channel,channel_data.__array_interface__['data'][0]
+            )
             channel_data = channel_data.reshape(num_vectors, pvp_size)
 
             pvp_offset = 0
@@ -389,15 +351,47 @@ using six::Vector3;
         ----------
         pvp_data: list of Python dicts
             List of Python dicts (one for each channel) mapping parameter names
-            to NumPy arrays of data.  See PVPBlock.toListOfDicts() for more information
+            to NumPy arrays of data. See PVPBlock.toListOfDicts() for more info
             on the structure expected here
         metadata: cphd.Metadata
             Metadata used to create this PVPBlock
         """
-        pvp_block = PVPBlock(metadata.pvp, metadata.data)  # Call other PVPBlock constructor
+        pvp_block = PVPBlock(metadata.pvp, metadata.data)
 
-        params_to_set = {param_name: 'set' + param_method_name for
-                         param_name, param_method_name in pvp_block._get_default_parameters_in_use().items()}
+        # Methods to check if an optional PVP param is set
+        # Using .lower() since name capitalization is not 100% consistent
+        has_optional_param_methods = {name.lower(): getattr(pvp_block, name)
+                                      for name in dir(pvp_block)
+                                      if name.startswith('has')}
+
+        pvp_info = {}
+
+        # Set required and optional PVP parameters
+        for name in dir(metadata.pvp):
+            try:
+                attr = getattr(metadata.pvp, name)
+            except AttributeError:
+                continue
+            if not isinstance(attr, pysix.cphd.PVPType):
+                continue
+            if attr.getSize() == 0:
+                continue
+            # Is this an optional parameter that is not set?
+            if ('has' + name.lower()) in has_optional_param_methods \
+                    and not has_optional_param_methods['has' + name.lower()]():
+                continue
+            pvp_info[name] = (
+                attr.getSize(), attr.getOffset(), attr.getFormat()
+            )
+
+        # Using .lower() since name capitalization is not 100% consistent
+        default_params_in_use = [name.lower() for name in pvp_info]
+        default_param_setters = {
+            name[3:].lower(): getattr(pvp_block, name)
+            for name in dir(pvp_block)
+            if name.startswith('set')
+            and name[3:].lower() in default_params_in_use
+        }
 
         # Populate PVPBlock object from pvp_data
         for channel_index, channel_data in enumerate(pvp_data):
@@ -405,33 +399,29 @@ using six::Vector3;
                 for name, data in channel_data.items():
                     vector_data = data[vector_index]
                     if isinstance(vector_data, numpy.ndarray):
-                        # Could use Vector2 here, but there aren't any size 2 default parameters
                         if len(vector_data) == 3:
                             vector_data = coda.math_linear.Vector3(vector_data)
                         else:
-                            raise ValueError(('Only PVP parameters of size 1 or 3 are supported, '
-                                              '\'{0}\' has size {1}')
-                                              .format(name, len(vector_data)))
+                            raise ValueError(
+                                ('Only PVP parameters of size 1 or 3 are '
+                                 'supported, {0} has size {1}')
+                                .format(name, len(vector_data))
+                            )
                     if 'numpy' in type(vector_data).__module__:
-                        # Change 1D arrays to scalars AND convert NumPy types (e.g. np.int64)
-                        # to Python dtypes that SWIG can understand
+                        # Change 1D arrays to scalars AND convert NumPy types
+                        # (e.g. np.int64) to Python types that SWIG understands
                         vector_data = vector_data.item()
                     if name not in metadata.pvp.addedPVP:
-                        # Get the setter method for this parameter, then call it with indices and
-                        # data to set for this parameter
-                        getattr(pvp_block, params_to_set[name])(
+                        # Get and call the setter method for this parameter
+                        # Use .lower() since capitalization isn't 100% the same
+                        default_param_setters[name.lower()](
                             vector_data, channel_index, vector_index)
                     else:
                         param_format = metadata.pvp.addedPVP[name].getFormat()
-                        if param_format.startswith('CI'):
-                            # NumPy has no complex int type, need to use a structured array
-                            # TODO: Support complex int PVP types
-                            raise NotImplementedError(
-                                'Complex integer PVP types are not supported'
-                            )
+                        PVPBlock._validate_pvp_format(param_format)
 
-                        # Get and call setter method for the type of this custom parameter
-                        pvp_block._pvp_format_to_added_pvp_method(param_format)(
+                        # Get and call setter method for the parameter type
+                        getattr(pvp_block, 'set' + param_format + 'AddedPVP')(
                             vector_data, channel_index, vector_index, name)
         return pvp_block
 %}
@@ -508,12 +498,16 @@ void writeWideband(const Metadata& metadata,
                    PyObject* widebandArrays,
                    PyObject* supportArrays=nullptr)
 {
-    const size_t numChannels = static_cast<size_t>(PySequence_Length(widebandArrays));
+    const size_t numChannels = static_cast<size_t>(
+        PySequence_Length(widebandArrays)
+    );
     if (numChannels != metadata.data.getNumChannels())
     {
         std::ostringstream oss;
-        oss << "Number of channels in metadata (" << metadata.data.getNumChannels() << ") "
-            << "does not match number of channels received (" << numChannels << ")";
+        oss << "Number of channels in metadata ("
+            << metadata.data.getNumChannels() << ") "
+            << "does not match number of channels received ("
+            << numChannels << ")";
         throw except::Exception(Ctxt(oss.str()));
     }
 
@@ -525,6 +519,7 @@ void writeWideband(const Metadata& metadata,
         {
             throw except::Exception(Ctxt("Support data is not provided"));
         }
+        // TODO: This has not been tested by reading support arrays back in
         $self->writeSupportData(supportArrays);
     }
 
@@ -539,7 +534,8 @@ void writeWideband(const Metadata& metadata,
             metadata.data.getNumVectors(ii),
             metadata.data.getNumSamples(ii)
         );
-        const types::RowCol<size_t> arrayDims = numpyutils::getDimensionsRC(channelWideband);
+        const types::RowCol<size_t> arrayDims = \
+            numpyutils::getDimensionsRC(channelWideband);
         if (metadataDims != arrayDims)
         {
             std::ostringstream oss;
@@ -551,8 +547,11 @@ void writeWideband(const Metadata& metadata,
         }
 
         const size_t numElements = arrayDims.row * arrayDims.col;
-        std::complex<float>* widebandPtr = numpyutils::getBuffer<std::complex<float>>(channelWideband);
-        $self->writeCPHDData<std::complex<float>>(widebandPtr, numElements, ii);
+        std::complex<float>* widebandPtr = \
+            numpyutils::getBuffer<std::complex<float>>(channelWideband);
+        $self->writeCPHDData<std::complex<float>>(
+            widebandPtr, numElements, ii
+        );
     }
 }
 
@@ -618,13 +617,11 @@ void writeWideband(const Metadata& metadata,
                    'Could not make support array data contiguous'
 
         writer = CPHDWriter(
-            metadata,
-            pathname,
-            schema_paths,
-            num_threads,
-            scratch_space
+            metadata, pathname, schema_paths, num_threads, scratch_space
         )
-        writer.writeWideband(metadata, pvp_block, wideband_arrays, support_arrays)
+        writer.writeWideband(
+            metadata, pvp_block, wideband_arrays, support_arrays
+        )
 %}
 
 %pythoncode
@@ -655,7 +652,9 @@ def read(self,
     -------
     wideband: np.array
     """
-    dims = self.getBufferDims(channel, first_vector, last_vector, first_sample, last_sample)
+    dims = self.getBufferDims(
+        channel, first_vector, last_vector, first_sample, last_sample
+    )
     sample_type_size = self.getElementSize()
 
     # RF32F_IM32F

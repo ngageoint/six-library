@@ -229,7 +229,9 @@ def get_test_metadata(has_support_array, is_compressed):
                 'offset': 144,
             }
         ]
-        _support_arrays_data = [np.random.randint(256, size=shape, dtype=np.uint8)]
+        _support_arrays_data = [
+            np.random.randint(256, size=shape, dtype=np.int64)
+        ]
     else:  # In case we don't want to provide test support data
         _support_arrays, _support_arrays_data = [], []
 
@@ -738,12 +740,17 @@ def get_test_metadata(has_support_array, is_compressed):
 
     # MatchInfo block (TODO)
 
-    return (metadata, _support_arrays_data) if has_support_array else (metadata)
+    return (
+        (metadata, _support_arrays_data)
+        if has_support_array
+        else (metadata)
+    )
 
 
 def get_test_pvp_data(metadata):
 
-    # Note that the params used here correspond to the PVP in get_test_metadata() above
+    # Note that the params used here correspond to the PVP in
+    # get_test_metadata() above
 
     # ci2_dtype = np.dtype([('re', np.int8), ('im', np.int8)])
     # ci4_dtype = np.dtype([('re', np.int16), ('im', np.int16)])
@@ -813,7 +820,7 @@ def get_test_pvp_data(metadata):
             'customCF16Param': (np.random.rand(num_pulses)
                                + np.random.rand(num_pulses) * 1j)
                                .astype('complex128')  # (1, 'CF16')
-            # TODO: Custom string param test
+            # TODO: Test a custom string param
         })
 
     return pvp_data
