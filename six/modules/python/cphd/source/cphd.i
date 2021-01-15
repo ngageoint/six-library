@@ -150,18 +150,22 @@ using six::Vector3;
 %extend cphd::PVPBlock
 {
 // Types from Table 10-2 of the CPHD spec
-%template(getUnsignedIntAddedPVP) getAddedPVP<unsigned>;
-%template(getIntAddedPVP) getAddedPVP<int>;
-%template(getFloatAddedPVP) getAddedPVP<float>;
-%template(getComplexSignedIntAddedPVP) getAddedPVP<std::complex<int> >;
-%template(getComplexFloatAddedPVP) getAddedPVP<std::complex<float> >;
-%template(getStringAddedPVP) getAddedPVP<std::string>;
-
-%template(setUnsignedIntAddedPVP) setAddedPVP<unsigned>;
-%template(setIntAddedPVP) setAddedPVP<int>;
-%template(setFloatAddedPVP) setAddedPVP<float>;
-%template(setComplexSignedIntAddedPVP) setAddedPVP<std::complex<int> >;
-%template(setComplexFloatAddedPVP) setAddedPVP<std::complex<float> >;
+%template(setF4AddedPVP) setAddedPVP<float>;
+%template(setF8AddedPVP) setAddedPVP<double>;
+%template(setU1AddedPVP) setAddedPVP<sys::Uint8_T>;
+%template(setU2AddedPVP) setAddedPVP<sys::Uint16_T>;
+%template(setU4AddedPVP) setAddedPVP<sys::Uint32_T>;
+%template(setU8AddedPVP) setAddedPVP<sys::Uint64_T>;
+%template(setI1AddedPVP) setAddedPVP<sys::Int8_T>;
+%template(setI2AddedPVP) setAddedPVP<sys::Int16_T>;
+%template(setI4AddedPVP) setAddedPVP<sys::Int32_T>;
+%template(setI8AddedPVP) setAddedPVP<sys::Int64_T>;
+%template(setCI2AddedPVP) setAddedPVP<std::complex<sys::Int8_T> >;
+%template(setCI4AddedPVP) setAddedPVP<std::complex<sys::Int16_T> >;
+%template(setCI8AddedPVP) setAddedPVP<std::complex<sys::Int32_T> >;
+%template(setCI16AddedPVP) setAddedPVP<std::complex<sys::Int64_T> >;
+%template(setCF8AddedPVP) setAddedPVP<std::complex<float> >;
+%template(setCF16AddedPVP) setAddedPVP<std::complex<double> >;
 %template(setStringAddedPVP) setAddedPVP<std::string>;
 }
 
@@ -220,38 +224,19 @@ using six::Vector3;
             return numpy.dtype(pvp_format_str.lower())
         elif first == 'C':  # Complex float ('CF') or complex int ('CI')
             # This uses complex floats for both, which works but will take more space
-            # TODO define a custom dtype for complex ints?
+            # TODO: define a custom dtype for complex ints
             return numpy.dtype('c' + pvp_format_str[2:])
         elif first == 'S':  # String
-            # TODO official format is “S[1-9][0-9]*”:
-            #   Is the '*' literal or indicating that these can be however long?
             return numpy.dtype('U' + pvp_format_str[1:])
 
         raise ValueError('Unknown or unsupported format string: \'{0}\''.format(pvp_format_str))
 
-    def pvp_format_to_added_pvp_method(self, get_or_set, pvp_format_str):
+    def _pvp_format_to_added_pvp_method(self, pvp_format_str):
         if '=' in pvp_format_str and ';' in pvp_format_str:
             # This string has multiple parameters, assert that they are all the same data type
             pvp_format_str = PVPBlock.validate_multiple_pvp_format_str(pvp_format_str)
 
-        if get_or_set not in ['get', 'set']:
-            raise ValueError('getOrSet should be only \'get\' or \'set\', not {}'.format(get_or_set))
-
-        method_name = None
-        if pvp_format_str.startswith('U'):
-            method_name = 'UnsignedIntAddedPVP'
-        elif pvp_format_str.startswith('I'):
-            method_name = 'IntAddedPVP'
-        elif pvp_format_str.startswith('F'):
-            method_name = 'FloatAddedPVP'
-        elif pvp_format_str.startswith('CI'):
-            method_name = 'ComplexSignedIntAddedPVP'
-        elif pvp_format_str.startswith('CF'):
-            method_name = 'ComplexFloatAddedPVP'
-        elif pvp_format_str.startswith('S'):
-            method_name = 'StringAddedPVP'
-
-        return getattr(self, get_or_set + method_name)
+        return getattr(self, 'set' + pvp_format_str + 'AddedPVP')
 
     def _get_default_parameters_in_use(self):
         # Return a dict mapping PVPBlock field names for the default PVP
@@ -311,8 +296,8 @@ using six::Vector3;
         """
         pvp_info = {}
 
-        # Gather methods to check if optional PVP param is set
-        # Using .lower() here since name capitalization is not 100% consistent
+        # Methods to check if an optional PVP param is set
+        # Using .lower() since name capitalization is not 100% consistent
         has_optional_param_methods = {name.lower(): getattr(self, name)
                                       for name in dir(self)
                                       if name.startswith('has')}
@@ -386,7 +371,7 @@ using six::Vector3;
                         :, pvp_offset:(pvp_offset + length)
                     ].copy().view(dtype)
                     channel_pvp[_name] = vals.reshape(num_vectors, num_values).squeeze()
-                    pvp_offset += 8 * _size  # 8-byte words
+                    pvp_offset += 8 * _size  # Move to next 8-byte word
 
             pvp_data.append(channel_pvp)
 
@@ -436,11 +421,12 @@ using six::Vector3;
                     if param_name not in metadata.pvp.addedPVP:
                         # Get the setter method for this parameter, then call it with indices and
                         # data to set for this parameter
-                        getattr(pvp_block, params_to_set[param_name])(param_data, channel_index, vector_index)
+                        getattr(pvp_block, params_to_set[param_name])(
+                            param_data, channel_index, vector_index)
                     else:
                         # Get and call setter method for the type of this custom parameter
-                        pvp_block.pvp_format_to_added_pvp_method(
-                            'set', metadata.pvp.addedPVP[param_name].getFormat())(
+                        pvp_block._pvp_format_to_added_pvp_method(
+                            metadata.pvp.addedPVP[param_name].getFormat())(
                             param_data, channel_index, vector_index, param_name)
         return pvp_block
 %}

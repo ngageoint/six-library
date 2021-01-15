@@ -790,7 +790,7 @@ def get_test_pvp_data(metadata):
             'customI2Param': np.random.randint(127, size=num_pulses, dtype=np.int16),  # (1, 'I2')
             'customI4Param': np.random.randint(127, size=num_pulses, dtype=np.int32),  # (1, 'I4')
             'customI8Param': np.random.randint(127, size=num_pulses, dtype=np.int64),  # (1, 'I8')
-            # NumPy has no complex int type
+            # TODO: NumPy has no complex int type, use a structured array
             # 'customCI2Param': np.array([*zip(
             #                        np.random.randint(127, size=num_pulses, dtype=np.int8),
             #                        np.random.randint(127, size=num_pulses, dtype=np.int8))
@@ -813,6 +813,7 @@ def get_test_pvp_data(metadata):
             'customCF16Param': (np.random.rand(num_pulses)
                                + np.random.rand(num_pulses) * 1j)
                                .astype('complex128')  # (1, 'CF16')
+            # TODO: Custom string param test
         })
 
     return pvp_data
