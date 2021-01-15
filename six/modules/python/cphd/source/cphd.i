@@ -223,8 +223,10 @@ using six::Vector3;
         if first in ['U', 'I', 'F']:  # Unsigned int, signed int, float
             return numpy.dtype(pvp_format_str.lower())
         elif first == 'C':  # Complex float ('CF') or complex int ('CI')
-            # This uses complex floats for both, which works but will take more space
-            # TODO: define a custom dtype for complex ints
+            if pvp_format_str[1] == 'I':  # Complex int
+                # NumPy has no complex int type, need to use a structured array
+                # TODO: Support complex int PVP types
+                raise NotImplementedError('Complex integer PVP types are not supported')
             return numpy.dtype('c' + pvp_format_str[2:])
         elif first == 'S':  # String
             return numpy.dtype('U' + pvp_format_str[1:])
@@ -370,7 +372,9 @@ using six::Vector3;
                     vals = channel_data[
                         :, pvp_offset:(pvp_offset + length)
                     ].copy().view(dtype)
-                    channel_pvp[_name] = vals.reshape(num_vectors, num_values).squeeze()
+                    channel_pvp[_name] = vals.reshape(
+                        num_vectors, num_values
+                    ).squeeze()
                     pvp_offset += 8 * _size  # Move to next 8-byte word
 
             pvp_data.append(channel_pvp)
@@ -395,39 +399,40 @@ using six::Vector3;
         params_to_set = {param_name: 'set' + param_method_name for
                          param_name, param_method_name in pvp_block._get_default_parameters_in_use().items()}
 
-        # For each parameter, check that all actual data sizes equal metadata size
-        expected_param_sizes = {**{param_name: getattr(metadata.pvp, param_name).getSize()
-                                 for param_name in params_to_set},
-                              **{param_name: param_obj.getSize()
-                                 for param_name, param_obj in metadata.pvp.addedPVP.items()}}
-
         # Populate PVPBlock object from pvp_data
         for channel_index, channel_data in enumerate(pvp_data):
             for vector_index in range(metadata.getNumVectors(channel_index)):
-                for param_name, data in channel_data.items():
-                    param_data = data[vector_index]
-                    if isinstance(param_data, numpy.ndarray):
+                for name, data in channel_data.items():
+                    vector_data = data[vector_index]
+                    if isinstance(vector_data, numpy.ndarray):
                         # Could use Vector2 here, but there aren't any size 2 default parameters
-                        if len(param_data) == 3:
-                            param_data = coda.math_linear.Vector3(param_data)
+                        if len(vector_data) == 3:
+                            vector_data = coda.math_linear.Vector3(vector_data)
                         else:
                             raise ValueError(('Only PVP parameters of size 1 or 3 are supported, '
                                               '\'{0}\' has size {1}')
-                                              .format(param_name, len(param_data)))
-                    if 'numpy' in type(param_data).__module__:
+                                              .format(name, len(vector_data)))
+                    if 'numpy' in type(vector_data).__module__:
                         # Change 1D arrays to scalars AND convert NumPy types (e.g. np.int64)
                         # to Python dtypes that SWIG can understand
-                        param_data = param_data.item()
-                    if param_name not in metadata.pvp.addedPVP:
+                        vector_data = vector_data.item()
+                    if name not in metadata.pvp.addedPVP:
                         # Get the setter method for this parameter, then call it with indices and
                         # data to set for this parameter
-                        getattr(pvp_block, params_to_set[param_name])(
-                            param_data, channel_index, vector_index)
+                        getattr(pvp_block, params_to_set[name])(
+                            vector_data, channel_index, vector_index)
                     else:
+                        param_format = metadata.pvp.addedPVP[name].getFormat()
+                        if param_format.startswith('CI'):
+                            # NumPy has no complex int type, need to use a structured array
+                            # TODO: Support complex int PVP types
+                            raise NotImplementedError(
+                                'Complex integer PVP types are not supported'
+                            )
+
                         # Get and call setter method for the type of this custom parameter
-                        pvp_block._pvp_format_to_added_pvp_method(
-                            metadata.pvp.addedPVP[param_name].getFormat())(
-                            param_data, channel_index, vector_index, param_name)
+                        pvp_block._pvp_format_to_added_pvp_method(param_format)(
+                            vector_data, channel_index, vector_index, name)
         return pvp_block
 %}
 }
