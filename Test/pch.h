@@ -77,6 +77,9 @@
 #include <import/cphd03.h>
 
 #pragma comment(lib, "ws2_32")
+#pragma comment(lib, "mt-c++")
+#pragma comment(lib, "sys-c++")
+#pragma comment(lib, "except-c++")
 
 #pragma warning(push)
 #pragma warning(disable: 4800) // Implicit conversion from '...' to bool.Possible information loss
