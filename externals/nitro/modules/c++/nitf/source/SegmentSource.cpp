@@ -22,7 +22,9 @@
 
 #include "nitf/SegmentSource.hpp"
 
-#include "gsl/gsl.h"
+#include <gsl/gsl.h>
+
+#include "nitf/System.hpp"
 
 nitf::SegmentMemorySource::SegmentMemorySource(const char* data, nitf::Off size,
         nitf::Off start, int byteSkip, bool copyData)
@@ -38,6 +40,12 @@ nitf::SegmentMemorySource::SegmentMemorySource(const std::string& data,
 {
 }
 template<>
+nitf::SegmentMemorySource::SegmentMemorySource(const gsl::span<const sys::byte>& data, nitf::Off start,
+    int byteSkip, bool copyData)
+    : SegmentMemorySource(reinterpret_cast<const char*>(data.data()), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
+{
+}
+template<>
 nitf::SegmentMemorySource::SegmentMemorySource(const gsl::span<const std::byte>& data, nitf::Off start,
     int byteSkip, bool copyData)
     : SegmentMemorySource(reinterpret_cast<const char*>(data.data()), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
@@ -46,10 +54,21 @@ nitf::SegmentMemorySource::SegmentMemorySource(const gsl::span<const std::byte>&
 
 inline gsl::span<const std::byte> make_span(const std::vector<std::byte>& data)
 {
-  return gsl::make_span(data);
+    return gsl::make_span(data);
 }
 template<>
 nitf::SegmentMemorySource::SegmentMemorySource(const std::vector<std::byte>& data,
+    nitf::Off start, int byteSkip, bool copyData)
+    : SegmentMemorySource(make_span(data), start, byteSkip, copyData)
+{
+}
+
+inline gsl::span<const sys::byte> make_span(const std::vector<sys::byte>& data)
+{
+  return gsl::make_span(data);
+}
+template<>
+nitf::SegmentMemorySource::SegmentMemorySource(const std::vector<sys::byte>& data,
     nitf::Off start, int byteSkip, bool copyData)
     : SegmentMemorySource(make_span(data), start, byteSkip, copyData)
 {

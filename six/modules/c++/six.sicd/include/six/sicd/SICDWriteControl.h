@@ -112,6 +112,7 @@ public:
 private:
     void writeHeaders();
 
+    void write(const std::vector<sys::byte>& data);
     void write(const std::vector<std::byte>& data);
 
 private:

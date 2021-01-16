@@ -20,6 +20,8 @@
  *
  */
 
+#ifndef __NITF_DESUBHEADER_HPP__
+#define __NITF_DESUBHEADER_HPP__
 #pragma once
 
 #include <string>
@@ -57,7 +59,7 @@ public:
     DESubheader(nitf_DESubheader * x);
 
     //! Constructor
-    DESubheader() noexcept(false);
+    DESubheader();
 
     //! Clone
     nitf::DESubheader clone() const;
@@ -130,4 +132,4 @@ private:
 };
 
 }
-
+#endif

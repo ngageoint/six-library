@@ -52,7 +52,7 @@ SubWindow::SubWindow() : mDownSampler(nullptr)
     setStartRow(0);
 }
 
-SubWindow::~SubWindow() noexcept(false)
+SubWindow::~SubWindow()
 {
     if (isValid() && getNative()->downsampler)
     {

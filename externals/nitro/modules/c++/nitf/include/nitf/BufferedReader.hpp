@@ -94,15 +94,15 @@ protected:
 
     void writeImpl(const void* buf, size_t size) override;
 
-    bool canSeekImpl() const noexcept override;
+    bool canSeekImpl() const override;
 
     nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
     nitf::Off tellImpl() const override;
 
-    nitf::Off getSizeImpl() const noexcept override;
+    nitf::Off getSizeImpl() const override;
 
-    int getModeImpl() const noexcept override;
+    int getModeImpl() const override;
 
     void closeImpl() override;
 

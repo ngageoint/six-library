@@ -67,7 +67,7 @@ NITF_BOOL DecompressionInterface::adapterStart(
     }
 }
 
-std::byte* DecompressionInterface::adapterReadBlock(
+uint8_t* DecompressionInterface::adapterReadBlock(
     nitf_DecompressionControl* object,
     uint32_t blockNumber, 
     uint64_t* blockSize, 

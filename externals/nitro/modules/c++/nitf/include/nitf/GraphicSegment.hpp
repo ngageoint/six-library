@@ -55,7 +55,7 @@ public:
     GraphicSegment(nitf_GraphicSegment * x);
 
     //! Constructor
-    GraphicSegment() noexcept(false);
+    GraphicSegment();
 
     GraphicSegment(NITF_DATA * x);
 

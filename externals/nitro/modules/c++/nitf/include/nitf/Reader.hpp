@@ -63,7 +63,7 @@ public:
     Reader(nitf_Reader * x);
 
     //! Default Constructor
-    Reader() noexcept(false);
+    Reader();
 
     ~Reader() = default;
 

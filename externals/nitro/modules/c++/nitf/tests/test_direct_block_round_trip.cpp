@@ -91,7 +91,7 @@ int main(int argc, char **argv)
         std::vector<nitf::ImageReader> imageReaders;
         std::vector<nitf::ImageWriter> imageWriters;
         std::map<std::string, void*> writerOptions;
-        std::vector<std::shared_ptr<nitf::DirectBlockSource> > bandSources;
+        std::vector<mem::SharedPtr<nitf::DirectBlockSource> > bandSources;
 
         //uint32_t numRes = 1;
         //writerOptions[C8_NUM_RESOLUTIONS_KEY] = &numRes;
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
             imageWriters.push_back(writer.newImageWriter(i, writerOptions));
             nitf::ImageSource iSource;
 
-            bandSources.push_back(std::shared_ptr<nitf::DirectBlockSource>(
+            bandSources.push_back(mem::SharedPtr<nitf::DirectBlockSource>(
                                       new TestDirectBlockSource(imageReaders[i], 1)));
             iSource.addBand(*bandSources[bandSources.size()-1]);
 
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setGraphicWriteHandler(i, segmentWriter);
         }
@@ -126,7 +126,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setTextWriteHandler(i, segmentWriter);
         }
@@ -135,7 +135,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setDEWriteHandler(i, segmentWriter);
         }

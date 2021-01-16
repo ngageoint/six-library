@@ -39,7 +39,7 @@ namespace nitf
 struct IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
 {
     ~IOInterfaceDestructor() = default;
-    void operator()(nitf_IOInterface *io) noexcept override;
+    void operator()(nitf_IOInterface *io) override;
 };
 
 /*!

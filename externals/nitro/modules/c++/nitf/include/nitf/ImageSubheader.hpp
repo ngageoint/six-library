@@ -20,6 +20,8 @@
  *
  */
 
+#ifndef __NITF_IMAGESUBHEADER_HPP__
+#define __NITF_IMAGESUBHEADER_HPP__
 #pragma once
 
 #include <string>
@@ -58,7 +60,7 @@ public:
     ImageSubheader(nitf_ImageSubheader * x);
 
     //! Constructor
-    ImageSubheader() noexcept(false);
+    ImageSubheader();
 
 
     //! Clone
@@ -440,4 +442,4 @@ private:
 };
 
 }
-
+#endif

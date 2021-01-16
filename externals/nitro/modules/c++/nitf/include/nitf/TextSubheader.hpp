@@ -57,7 +57,7 @@ public:
     TextSubheader(nitf_TextSubheader * x);
 
     //! Default Constructor
-    TextSubheader() noexcept(false);
+    TextSubheader();
 
     //! Clone
     nitf::TextSubheader clone() const;

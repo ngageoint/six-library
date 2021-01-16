@@ -25,7 +25,6 @@
 #include <string>
 
 #include <import/nitf.hpp>
-#include <gsl/gsl.h>
 
 #include "TestCase.h"
 
@@ -81,9 +80,11 @@ static nitf::ImageSource setupBands(int nbands, int imageNum, const std::string&
     return iSource;
 }
 
-static void doWrite(const nitf::Record& record, nitf::Reader& reader, const std::string& inRootFile,
+static void doWrite(const nitf::Record& record_, nitf::Reader& reader, const std::string& inRootFile,
     nitf::Writer& writer)
 {
+    auto& record = const_cast<nitf::Record&>(record_); // TODO: remove when API is const-correct
+
     int numImages = record.getHeader().getNumImages();
     nitf::ListIterator end = record.getImages().end();
     nitf::ListIterator iter = record.getImages().begin();
@@ -92,17 +93,17 @@ static void doWrite(const nitf::Record& record, nitf::Reader& reader, const std:
     {
         nitf::ImageSegment imseg;
         imseg = *iter;
-        const auto nbands = gsl::narrow<int>(imseg.getSubheader().numImageBands());
+        const auto nbands = static_cast<int>(imseg.getSubheader().numImageBands());
         nitf::ImageWriter iWriter = writer.newImageWriter(i);
         nitf::ImageSource iSource = setupBands(nbands, i, inRootFile);
         iWriter.attachSource(iSource);
     }
 
-    const auto num = gsl::narrow<int>(record.getNumDataExtensions());
+    const auto num = static_cast<int>(record.getNumDataExtensions());
     for (int i = 0; i < num; i++)
     {
         nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
-        std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+        mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
             new nitf::SegmentWriter(readerSource));
         writer.setDEWriteHandler(i, segmentWriter);
     }
@@ -128,7 +129,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     const auto nColumns = subheader.numCols();
 
     //one row at a time
-    const auto subWindowSize = gsl::narrow<size_t>(nColumns * NITF_NBPP_TO_BYTES(nBits));
+    const auto subWindowSize = static_cast<size_t>(nColumns * NITF_NBPP_TO_BYTES(nBits));
 
     TEST_ASSERT_EQ(2, nBands);
     TEST_ASSERT_EQ(0, xBands);
@@ -146,7 +147,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     TEST_ASSERT_EQ("NC", subheader.imageCompression());
     TEST_ASSERT_EQ("    ", subheader.getCompressionRate().toString());
 
-    nitf::BufferList buffer(nBands);
+    nitf::BufferList<std::byte> buffer(nBands);
     std::vector<uint32_t> bandList(nBands);
 
     for (uint32_t band = 0; band < nBands; band++)
@@ -154,10 +155,10 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
 
     nitf::SubWindow subWindow;
     subWindow.setNumRows(1);
-    subWindow.setNumCols(gsl::narrow<uint32_t>(nColumns));
+    subWindow.setNumCols(static_cast<uint32_t>(nColumns));
 
     // necessary ?
-    nitf::PixelSkip pixelSkip(1, 1);
+    nitf::DownSampler* pixelSkip = new nitf::PixelSkip(1, 1);
     subWindow.setDownSampler(pixelSkip);
     setBands(subWindow, bandList);
 
@@ -165,7 +166,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
 
     std::vector<nitf::IOHandle> handles;
     //make the files
-    for (int i = 0; i < gsl::narrow<int>(nBands); i++)
+    for (int i = 0; i < static_cast<int>(nBands); i++)
     {
         std::string name = makeBandName(imageName, imageNumber, i);
         nitf::IOHandle toFile(name, NITF_ACCESS_WRITEONLY, NITF_CREATE);

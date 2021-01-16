@@ -20,6 +20,8 @@
  *
  */
 
+#ifndef __NITF_IMAGE_READER_HPP__
+#define __NITF_IMAGE_READER_HPP__
 #pragma once
 
 #include <assert.h>
@@ -32,6 +34,7 @@
 #include "nitf/ImageReader.h"
 #include "nitf/Object.hpp"
 #include "nitf/BlockingInfo.hpp"
+#include "nitf/System.hpp"
 
 /*!
  *  \file ImageReader.hpp
@@ -40,10 +43,11 @@
 
 namespace nitf
 {
+    template<typename T>
     class BufferList final
     {
-        std::vector<std::byte*> buffer;
-        std::vector<std::unique_ptr<std::byte[]>> buffer_;
+        std::vector<T*> buffer;
+        std::vector<std::unique_ptr<T[]>> buffer_;
 
     public:
         BufferList(size_t nBands)
@@ -55,7 +59,7 @@ namespace nitf
         {
             for (size_t i = 0; i < size(); i++)
             {
-                buffer_[i].reset(new std::byte[subWindowSize]);
+                buffer_[i].reset(new T[subWindowSize]);
                 buffer[i] = buffer_[i].get();
             }
         }
@@ -66,12 +70,12 @@ namespace nitf
             return buffer.size();
         }
 
-        std::byte** data() noexcept
+        T** data() noexcept
         {
             return buffer.data();
         }
 
-        std::byte*& operator[](size_t i)noexcept
+        T*& operator[](size_t i)noexcept
         {
             return buffer[i];
         }
@@ -104,7 +108,15 @@ public:
      *  \param  user  User-defined data buffers for read
      *  \param  padded  Returns TRUE if pad pixels may have been read
      */
-    void read(const nitf::SubWindow & subWindow, std::byte ** user, int * padded);
+    void read(const nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
+    void read(const nitf::SubWindow & subWindow, sys::byte** user, int * padded)
+    {
+        read(subWindow, reinterpret_cast<uint8_t**>(user), padded);
+    }
+    void read(const nitf::SubWindow& subWindow, std::byte** user, int* padded)
+    {
+        read(subWindow, reinterpret_cast<uint8_t**>(user), padded);
+    }
 
     /*!
      *  Read a block directly from file
@@ -113,7 +125,7 @@ public:
      *  \return The read block 
      *          (something must be done with buffer before next call)
      */
-    const std::byte* readBlock(uint32_t blockNumber,
+    const uint8_t* readBlock(uint32_t blockNumber, 
                                  uint64_t* blockSize);
 
     //!  Set read caching
@@ -125,4 +137,4 @@ private:
 };
 
 }
-
+#endif
