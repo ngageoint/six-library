@@ -19,6 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <thread>
+
 #include <TestCase.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDWriter.h>
@@ -155,14 +158,14 @@ bool checkData(const std::string& pathname,
 }
 
 template <typename T>
-bool runTest(bool scale,
+bool runTest(bool /*scale*/,
              const std::vector<std::complex<T>>& writeData,
              cphd::Metadata& meta,
              cphd::PVPBlock& pvpBlock,
              const types::RowCol<size_t> dims)
 {
     io::TempFile tempfile;
-    const size_t numThreads = sys::OS().getNumCPUs();
+    const size_t numThreads = std::thread::hardware_concurrency();
     writeCPHD(tempfile.pathname(), numThreads, dims, writeData, meta, pvpBlock);
     return checkData(tempfile.pathname(), numThreads, meta, pvpBlock);
 }
@@ -170,8 +173,8 @@ bool runTest(bool scale,
 TEST_CASE(testPVPBlockSimple)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int16_T>> writeData =
-            generateComplexData<sys::Int16_T>(dims.area());
+    const std::vector<std::complex<int16_t>> writeData =
+            generateComplexData<int16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
@@ -194,8 +197,8 @@ TEST_CASE(testPVPBlockSimple)
 TEST_CASE(testPVPBlockOptional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int16_T>> writeData =
-            generateComplexData<sys::Int16_T>(dims.area());
+    const std::vector<std::complex<int16_t>> writeData =
+            generateComplexData<int16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
@@ -221,8 +224,8 @@ TEST_CASE(testPVPBlockOptional)
 TEST_CASE(testPVPBlockAdditional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<sys::Int16_T>> writeData =
-            generateComplexData<sys::Int16_T>(dims.area());
+    const std::vector<std::complex<int16_t>> writeData =
+            generateComplexData<int16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
@@ -248,28 +251,8 @@ TEST_CASE(testPVPBlockAdditional)
 }
 }
 
-int main(int argc, char** argv)
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testPVPBlockSimple);
         TEST_CHECK(testPVPBlockOptional);
         TEST_CHECK(testPVPBlockAdditional);
-        return 0;
-    }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-        return 1;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-        return 1;
-    }
-}
+        )

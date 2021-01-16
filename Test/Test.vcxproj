@@ -50,28 +50,18 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="cphd_test_channel.cpp" />
-    <ClCompile Include="cphd_test_compressed_signal_block_round.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="cphd_test_compressed_signal_block_round.cpp" />
     <ClCompile Include="cphd_test_cphd_xml_control.cpp" />
     <ClCompile Include="cphd_test_cphd_xml_optional.cpp" />
     <ClCompile Include="cphd_test_dwell.cpp" />
     <ClCompile Include="cphd_test_file_header.cpp" />
     <ClCompile Include="cphd_test_pvp.cpp" />
     <ClCompile Include="cphd_test_pvp_block.cpp" />
-    <ClCompile Include="cphd_test_pvp_block_round.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cphd_test_read_wideband.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="cphd_test_pvp_block_round.cpp" />
+    <ClCompile Include="cphd_test_read_wideband.cpp" />
     <ClCompile Include="cphd_test_reference_geometry.cpp" />
-    <ClCompile Include="cphd_test_signal_block_round.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cphd_test_support_block_round.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="cphd_test_signal_block_round.cpp" />
+    <ClCompile Include="cphd_test_support_block_round.cpp" />
     <ClCompile Include="six.sicd_test_area_plane.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>

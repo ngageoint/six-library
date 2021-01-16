@@ -26,6 +26,8 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
+#include <thread>
+
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 #include <io/TempFile.h>
@@ -47,13 +49,13 @@
  */
 namespace
 {
-std::vector<sys::ubyte> generateCompressedData(size_t length)
+    std::vector<sys::ubyte> generateCompressedData(size_t length)
 {
     std::vector<sys::ubyte> data(length);
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
-        data[ii] = rand() % 16;
+        data[ii] = static_cast<sys::ubyte>(rand() % 16);
     }
     return data;
 }
@@ -121,7 +123,7 @@ bool compareVectors(const std::vector<sys::ubyte>& readData,
 bool runTest(const std::vector<sys::ubyte>& writeData)
 {
     io::TempFile tempfile;
-    const size_t numThreads = sys::OS().getNumCPUs();
+    const size_t numThreads = std::thread::hardware_concurrency();
     const types::RowCol<size_t> dims(128, 256);
     cphd::Metadata meta = cphd::Metadata();
     meta.data.signalCompressionID = "Huffman";
@@ -145,27 +147,7 @@ TEST_CASE(testCompressed)
 }
 }
 
-int main(int argc, char** argv)
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testCompressed);
-        return 0;
-    }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-        return 1;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-        return 1;
-    }
-}
+)
 
