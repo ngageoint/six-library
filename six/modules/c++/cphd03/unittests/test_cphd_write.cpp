@@ -20,18 +20,24 @@
  *
  */
 
+#include <string>
+
 #include <cphd03/CPHDWriter.h>
 #include <cphd03/CPHDReader.h>
 #include <cphd/Wideband.h>
 #include <types/RowCol.h>
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
 
 #include "TestCase.h"
+
+static std::string testName;
 
 namespace
 {
 static const size_t MAX_SIZE_T = 1000000;
 static const double MAX_DOUBLE = 1000000.0;
-static const sys::Off_T MAX_OFF_T = 1000000;
+static const int64_t MAX_OFF_T = 1000000;
 static const std::string FILE_NAME("temp.cphd03");
 static const size_t NUM_IMAGES(3);
 static const size_t NUM_THREADS(13);
@@ -76,8 +82,8 @@ size_t getRandomInt(size_t min = 0, size_t max = MAX_SIZE_T)
     return min + rand() % (max - min + 1);
 }
 
-sys::Off_T getRandomOffT(sys::Off_T min = -MAX_OFF_T,
-                         sys::Off_T max = MAX_OFF_T)
+int64_t getRandomOffT(int64_t min = -MAX_OFF_T,
+                         int64_t max = MAX_OFF_T)
 {
     return min + rand() % (max - min + 1);
 }
@@ -343,14 +349,15 @@ void writeCPHD(
                     getRandomReal(), getRandomReal());
         }
 
-        writer.writeCPHDData(&data[ii][0], data[ii].size());
+        writer.writeCPHDData(data[ii].data(), data[ii].size());
     }
 }
 
 
-void runCPHDTest(const std::string& testName,
+void runCPHDTest(const std::string& testName_,
                  cphd03::Metadata& metadata)
 {
+    testName = testName_;
 
     metadata.data.numCPHDChannels = NUM_IMAGES;
 
@@ -391,7 +398,7 @@ void runCPHDTest(const std::string& testName,
         }
     }
 
-    //std::vector<std::vector<sys::ubyte> >vbm(NUM_IMAGES);
+    //std::vector<std::vector<std::byte> >vbm(NUM_IMAGES);
     std::vector<std::vector<std::complex<float> > >data(NUM_IMAGES);
     std::vector<types::RowCol<size_t> > dims(NUM_IMAGES);
 
@@ -428,6 +435,8 @@ void runCPHDTest(const std::string& testName,
 
 TEST_CASE(testWriteFXOneWay)
 {
+    testName = "testWriteFXOneWay";
+
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
     addFXParams(metadata);
@@ -438,6 +447,8 @@ TEST_CASE(testWriteFXOneWay)
 
 TEST_CASE(testWriteFXTwoWay)
 {
+    testName = "testWriteFXTwoWay";
+
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
     addFXParams(metadata);
@@ -448,6 +459,8 @@ TEST_CASE(testWriteFXTwoWay)
 
 TEST_CASE(testWriteTOAOneWay)
 {
+    testName = "testWriteTOAOneWay";
+
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
     addTOAParams(metadata);
@@ -458,6 +471,8 @@ TEST_CASE(testWriteTOAOneWay)
 
 TEST_CASE(testWriteTOATwoWay)
 {
+    testName = "testWriteTOATwoWay";
+
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
     addTOAParams(metadata);
@@ -467,14 +482,19 @@ TEST_CASE(testWriteTOATwoWay)
 }
 }
 
-int main(int , char** )
+static int call_srand()
 {
-    ::srand(334);
+    const auto seed = 334;
+    ::srand(seed);
+    return seed;
+}
+static int unused_ = call_srand();
+
+TEST_MAIN(
     TEST_CHECK(testWriteFXOneWay);
     TEST_CHECK(testWriteFXTwoWay);
     TEST_CHECK(testWriteTOAOneWay);
     TEST_CHECK(testWriteTOATwoWay);
-    sys::OS().remove(FILE_NAME);
-    return 0;
-}
+    fs::remove(FILE_NAME);
+    )
 

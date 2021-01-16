@@ -40,15 +40,9 @@
     <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cphd03_test_cphd_read_unscaled_int.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cphd03_test_cphd_write.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cphd03_test_vbm.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="cphd03_test_cphd_read_unscaled_int.cpp" />
+    <ClCompile Include="cphd03_test_cphd_write.cpp" />
+    <ClCompile Include="cphd03_test_vbm.cpp" />
     <ClCompile Include="cphd_test_channel.cpp" />
     <ClCompile Include="cphd_test_compressed_signal_block_round.cpp" />
     <ClCompile Include="cphd_test_cphd_xml_control.cpp" />
