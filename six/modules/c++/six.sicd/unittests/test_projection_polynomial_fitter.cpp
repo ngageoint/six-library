@@ -50,7 +50,7 @@ loadPolynomialFitter(const fs::path& exePath)
     }
 
     std::vector<std::string> schemaPaths;
-    std::unique_ptr<six::sicd::ComplexData> complexData;
+    mem::auto_ptr<six::sicd::ComplexData> complexData;
     std::vector<std::complex<float> > buffer;
     six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData, buffer);
     return six::sicd::Utilities::getPolynomialFitter(*complexData);
