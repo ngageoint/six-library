@@ -319,8 +319,7 @@ TEST_CASE(DefaultFromPFA)
     TEST_ASSERT_ALMOST_EQ(grid.col->kCenter, 0);
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(DerivedDeltaKsNoImageData);
     TEST_CHECK(DerivedDeltaKsWithImageData);
     TEST_CHECK(IdentityWeightFunction);
@@ -334,6 +333,5 @@ int main(int, char**)
     TEST_CHECK(DefaultFromRMAT);
     TEST_CHECK(DefaultFromRMCR);
     TEST_CHECK(DefaultFromPFA);
-    return 0;
-}
+    )
 

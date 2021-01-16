@@ -8,27 +8,32 @@
 #include "six/sicd/ComplexData.h"
 #include "six/sicd/Utilities.h"
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
+std::string argv0;
+
 namespace
 {
-std::string findSixHome(const sys::Path& exePath)
+fs::path findSixHome(const fs::path& exePath)
 {
-    sys::Path sixHome = exePath.join("..");
+    auto sixHome = exePath.parent_path();
     do
     {
-        const sys::Path croppedNitfs = sixHome.join("croppedNitfs");
-        if (sys::OS().isDirectory(croppedNitfs.getAbsolutePath()))
+        const auto croppedNitfs = sixHome / "croppedNitfs";
+        if (fs::is_directory(fs::absolute(croppedNitfs)))
         {
             return sixHome;
         }
-        sixHome = sixHome.join("..");
-    } while (sixHome.getAbsolutePath() != sixHome.join("..").getAbsolutePath());
+        sixHome = sixHome.parent_path();
+    } while (fs::absolute(sixHome) != fs::absolute(sixHome.parent_path()));
     return "";
 }
 
-std::auto_ptr<scene::ProjectionPolynomialFitter>
-loadPolynomialFitter(const sys::Path& exePath)
+std::unique_ptr<scene::ProjectionPolynomialFitter>
+loadPolynomialFitter(const fs::path& exePath)
 {
-    const std::string sixHome = findSixHome(exePath);
+    const auto sixHome = findSixHome(exePath);
     if (sixHome.empty())
     {
         std::ostringstream oss;
@@ -36,12 +41,8 @@ loadPolynomialFitter(const sys::Path& exePath)
         throw except::Exception(Ctxt(oss.str()));
     }
 
-    const sys::Path sicdPathname = sys::Path(sixHome).
-        join("croppedNitfs").
-        join("SICD").
-        join("cropped_sicd_110.nitf").getAbsolutePath();
-
-    if (!sicdPathname.isFile())
+    const auto sicdPathname = fs::absolute(sixHome / "croppedNitfs" / "SICD"/ "cropped_sicd_110.nitf");
+    if (!fs::is_regular_file(sicdPathname))
     {
         std::ostringstream oss;
         oss << "Environment error: Cannot find SICD file: " << sicdPathname;
@@ -49,13 +50,14 @@ loadPolynomialFitter(const sys::Path& exePath)
     }
 
     std::vector<std::string> schemaPaths;
-    std::auto_ptr<six::sicd::ComplexData> complexData;
+    std::unique_ptr<six::sicd::ComplexData> complexData;
     std::vector<std::complex<float> > buffer;
     six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData, buffer);
     return six::sicd::Utilities::getPolynomialFitter(*complexData);
 }
 
-std::auto_ptr<scene::ProjectionPolynomialFitter> globalFitter;
+// Making this global so we don't have to re-read the file every test
+std::unique_ptr<scene::ProjectionPolynomialFitter> globalFitter;
 
 static const size_t NUM_POINTS = 9;
 static const double SLANT_PLANE_POINTS[NUM_POINTS][2] =
@@ -86,6 +88,11 @@ static const double OUTPUT_PLANE_POINTS[NUM_POINTS][2] =
 
 TEST_CASE(testProjectOutputToSlant)
 {
+    if (globalFitter == nullptr)
+    {
+        globalFitter = loadPolynomialFitter(argv0);
+    }
+
     math::poly::TwoD<double> outputToSlantRow;
     math::poly::TwoD<double> outputToSlantCol;
     globalFitter->fitOutputToSlantPolynomials(
@@ -112,6 +119,11 @@ TEST_CASE(testProjectOutputToSlant)
 
 TEST_CASE(testProjectSlantToOutput)
 {
+    if (globalFitter == nullptr)
+    {
+        globalFitter = loadPolynomialFitter(argv0);
+    }
+
     math::poly::TwoD<double> slantToOutputRow;
     math::poly::TwoD<double> slantToOutputCol;
     globalFitter->fitSlantToOutputPolynomials(
@@ -137,26 +149,9 @@ TEST_CASE(testProjectSlantToOutput)
 }
 }
 
-int main(int argc, char** argv)
-{
-    if (argc == 0)
-    {
-        std::cerr << "This test makes assumptions about the directory structure."
-            << " Make sure to call with the executable name as argv[0] so "
-            << " we can find the necessary files.\n";
-        return 1;
-    }
-    // Making this global so we don't have to re-read the file every test
-    try
-    {
-        globalFitter = loadPolynomialFitter(std::string(argv[0]));
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << "\n";
-        return 1;
-    }
+TEST_MAIN(
+     argv0 = argv[0];
+
     TEST_CHECK(testProjectOutputToSlant);
     TEST_CHECK(testProjectSlantToOutput);
-    return 0;
-}
+    )

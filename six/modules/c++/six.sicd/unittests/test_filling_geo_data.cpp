@@ -112,9 +112,7 @@ TEST_CASE(ecfFromLlh)
 }
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(ecfFromLlh);
     TEST_CHECK(fillValidData);
-    return 0;
-}
+    )

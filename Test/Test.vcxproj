@@ -56,50 +56,26 @@
     <ClCompile Include="cphd_test_reference_geometry.cpp" />
     <ClCompile Include="cphd_test_signal_block_round.cpp" />
     <ClCompile Include="cphd_test_support_block_round.cpp" />
-    <ClCompile Include="six.sicd_test_area_plane.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="six.sicd_test_area_plane.cpp" />
     <ClCompile Include="six.sicd_test_CollectionInfo.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_geo_data.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_grid.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_pfa.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_position.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_rgazcomp.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_rma.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_scpcoa.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_get_segment.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_projection_polynomial_fitter.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_radar_collection.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_update_sicd_version.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_utilities.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="six.sicd_test_filling_geo_data.cpp" />
+    <ClCompile Include="six.sicd_test_filling_grid.cpp" />
+    <ClCompile Include="six.sicd_test_filling_pfa.cpp" />
+    <ClCompile Include="six.sicd_test_filling_position.cpp" />
+    <ClCompile Include="six.sicd_test_filling_rgazcomp.cpp" />
+    <ClCompile Include="six.sicd_test_filling_rma.cpp" />
+    <ClCompile Include="six.sicd_test_filling_scpcoa.cpp" />
+    <ClCompile Include="six.sicd_test_get_segment.cpp" />
+    <ClCompile Include="six.sicd_test_projection_polynomial_fitter.cpp" />
+    <ClCompile Include="six.sicd_test_radar_collection.cpp" />
+    <ClCompile Include="six.sicd_test_update_sicd_version.cpp" />
+    <ClCompile Include="six.sicd_test_utilities.cpp" />
     <ClCompile Include="six.sicd_test_valid_six.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="six.sidd_test_annotations_equality.cpp" />
     <ClCompile Include="six.sidd_test_geometric_chip.cpp" />

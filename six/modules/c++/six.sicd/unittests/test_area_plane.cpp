@@ -17,7 +17,7 @@ void setupData(six::sicd::ComplexData& data)
 
 TEST_CASE(testAreaPlane)
 {
-    std::auto_ptr<six::sicd::ComplexData> data =
+    std::unique_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::createFakeComplexData();
     setupData(*data);
     six::sicd::AreaPlaneUtility::setAreaPlane(*data);
@@ -56,7 +56,7 @@ TEST_CASE(testAreaPlane)
 
 TEST_CASE(testBothMethodsGiveSamePlane)
 {
-    std::auto_ptr<six::sicd::ComplexData> data =
+    std::unique_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::createFakeComplexData();
     setupData(*data);
 
@@ -65,7 +65,7 @@ TEST_CASE(testBothMethodsGiveSamePlane)
     six::sicd::AreaPlane& areaPlane = *data->radarCollection->area->plane;
     six::sicd::AreaPlaneUtility::deriveAreaPlane(*data, areaPlane, false);
 
-    std::auto_ptr<six::sicd::ComplexData> secondData =
+    std::unique_ptr<six::sicd::ComplexData> secondData =
             six::sicd::Utilities::createFakeComplexData();
     setupData(*secondData);
 
@@ -194,7 +194,7 @@ TEST_CASE(testCanRotateFourTimes)
     plane.xDirection->elements = 20;
     plane.referencePoint.rowCol = six::RowColDouble(1, 2);
 
-    std::auto_ptr<six::sicd::AreaPlane> originalPlane(plane.clone());
+    std::unique_ptr<six::sicd::AreaPlane> originalPlane(plane.clone());
     plane.rotateCCW();
     plane.rotateCCW();
     plane.rotateCCW();
@@ -203,27 +203,10 @@ TEST_CASE(testCanRotateFourTimes)
 }
 }
 
-int main(int /*argc*/, char** /*argv*/)
-{
-    try
-    {
-        TEST_CHECK(testAreaPlane);
-        TEST_CHECK(testBothMethodsGiveSamePlane);
-        TEST_CHECK(testRotatePlane);
-        TEST_CHECK(testCanRotateFourTimes);
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-    }
-    return 0;
-}
+TEST_MAIN(
+    TEST_CHECK(testAreaPlane);
+    TEST_CHECK(testBothMethodsGiveSamePlane);
+    TEST_CHECK(testRotatePlane);
+    TEST_CHECK(testCanRotateFourTimes);
+    )
 

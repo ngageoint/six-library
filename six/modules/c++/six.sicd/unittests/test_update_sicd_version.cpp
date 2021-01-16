@@ -121,8 +121,7 @@ TEST_CASE(testWarningParameters)
     TEST_ASSERT_FALSE(parameters.empty());
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     // These tests should suffice to cover all of the "tricky"
     // logic in the implementation.  Any remaining bugs would
     // most likely be due to misreading the standards.
@@ -131,5 +130,4 @@ int main(int, char**)
     TEST_CHECK(testTransitiveUpdate);
     TEST_CHECK(testUpdateDistRefLinePoly);
     TEST_CHECK(testWarningParameters);
-    return 0;
-}
+    )

@@ -79,9 +79,6 @@ TEST_CASE(DerivedSCPCOA)
     TEST_ASSERT_ALMOST_EQ(scpcoa.layoverAngle, 201.9977459);
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(DerivedSCPCOA);
-    return 0;
-}
-
+)
