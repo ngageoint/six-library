@@ -60,9 +60,7 @@ TEST_CASE(testGeometricChip)
 }
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testGeometricChip);
-    return 0;
-}
+)
 
