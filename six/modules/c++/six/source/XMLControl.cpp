@@ -40,7 +40,13 @@ XMLControl::~XMLControl()
     }
 }
 
-#ifndef DEFAULT_SCHEMA_PATH
+void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
+{
+    if (schemaPaths.empty())
+    {
+        const sys::OS os;
+
+ #ifndef DEFAULT_SCHEMA_PATH
 // Don't want to set a dummy schema path to a directory that exists as that causes
 // the code to check for valid schemas and validate.
 #if defined(_WIN32)
@@ -49,12 +55,6 @@ XMLControl::~XMLControl()
 #define DEFAULT_SCHEMA_PATH "/some/path" // just to compile ...
 #endif
 #endif
-
-void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
-{
-    if (schemaPaths.empty())
-    {
-        const sys::OS os;
 
         std::string envPath;
         os.getEnvIfSet(six::SCHEMA_PATH, envPath);
