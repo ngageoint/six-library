@@ -93,7 +93,7 @@ int main(int argc, char **argv)
         }
 
         // Check that wew have a valid NITF
-        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN)
         {
             std::cout << "Invalid NITF: " << argv[1] << std::endl;
             exit( EXIT_FAILURE);
@@ -139,7 +139,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setGraphicWriteHandler(i, segmentWriter);
         }
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setTextWriteHandler(i, segmentWriter);
         }
@@ -157,7 +157,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setDEWriteHandler(i, segmentWriter);
         }

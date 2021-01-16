@@ -83,7 +83,7 @@ int main(int argc, char** argv)
         const std::string outputPathname(argv[2]);
 
         // Check that we have a valid NITF
-        if (nitf::Reader::getNITFVersion(inputPathname) == NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(inputPathname) == nitf::Version::NITF_VER_UNKNOWN)
         {
             std::cerr << "Invalid NITF: " << inputPathname << std::endl;
             return 1;

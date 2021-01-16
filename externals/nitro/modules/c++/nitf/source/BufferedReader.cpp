@@ -146,7 +146,7 @@ void BufferedReader::writeImpl(const void* , size_t )
         Ctxt("We cannot do writes on a read-only handle"));
 }
 
-bool BufferedReader::canSeekImpl() const noexcept
+bool BufferedReader::canSeekImpl() const
 {
     return true;
 }
@@ -194,12 +194,12 @@ nitf::Off BufferedReader::tellImpl() const
     return (mFile.getCurrentOffset() - mBufferSize + mPosition);
 }
 
-nitf::Off BufferedReader::getSizeImpl() const noexcept
+nitf::Off BufferedReader::getSizeImpl() const
 {
     return mFileLen;
 }
 
-int BufferedReader::getModeImpl() const noexcept
+int BufferedReader::getModeImpl() const
 {
     return NITF_ACCESS_READONLY;
 }

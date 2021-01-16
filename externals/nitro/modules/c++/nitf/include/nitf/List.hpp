@@ -230,7 +230,7 @@ public:
     NITF_DATA* popBack();
 
     //! Constructor
-    List() noexcept(false);
+    List();
 
     //! Clone
     nitf::List clone(NITF_DATA_ITEM_CLONE cloner) const;

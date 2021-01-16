@@ -53,7 +53,7 @@ public:
     LabelSegment(nitf_LabelSegment * x);
 
     //! Constructor
-    LabelSegment() noexcept(false);
+    LabelSegment();
 
     LabelSegment(NITF_DATA * x);
 

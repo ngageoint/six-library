@@ -125,7 +125,7 @@ void createSingleBandBuffer(std::vector<std::byte>& buffer,
                             const types::RowCol<int64_t>& fullDims,
                             const size_t segmentIdxToMakeEmpty)
 {
-   const auto bytes = gsl::narrow<size_t>(fullDims.area());
+   const auto bytes = static_cast<size_t>(fullDims.area());
    const std::vector<nitf::ImageSegmentComputer::Segment> &segments = segmentComputer.getSegments();
    /* All segments should be the same size in this test so this is safe */
    const auto segmentSizeInBytes = segments[segmentIdxToMakeEmpty].numRows * fullDims.col;
@@ -220,7 +220,7 @@ TEST_CASE(testBlankSegmentsValid)
       }
       writer.prepare(output_io, record);
 
-      for (int ii = 0; ii < gsl::narrow<int>(numSegments); ++ii)
+      for (int ii = 0; ii < static_cast<int>(numSegments); ++ii)
       {
          auto buf = &buffers[testIdx].front() + (ii * bytesPerSegment);
          nitf::ImageWriter imageWriter = writer.newImageWriter(ii);
@@ -272,7 +272,7 @@ TEST_CASE(testBlankSegmentsValid)
                                                                       blockingInfo.getNumBlocksPerRow(),
                                                                       blockingInfo.getNumBlocksPerCol());
 
-            if (imgCtr == gsl::narrow<int>(testIdx))
+            if (imgCtr == static_cast<int>(testIdx))
             {
                TEST_ASSERT_EQ(nBlocksPresent, 0);
             }

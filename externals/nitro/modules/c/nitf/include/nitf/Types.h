@@ -27,11 +27,12 @@
 #define NITF_DECLARE_ENUM(name, ...) NRT_DECLARE_ENUM(name,  __VA_ARGS__)
 
 /* Enum for the supported version types */
-NITF_DECLARE_ENUM(nitf_Version,
+typedef enum _nitf_Version
+{
     NITF_VER_20 = 100,
     NITF_VER_21,
     NITF_VER_UNKNOWN
-);
+} nitf_Version;
 
 /* These macros check the NITF Version */
 #define IS_NITF20(V) ((V) == NITF_VER_20)

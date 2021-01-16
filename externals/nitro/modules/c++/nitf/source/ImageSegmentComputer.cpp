@@ -27,6 +27,8 @@
 #include <cmath>
 #include <algorithm>
 
+#include <gsl/gsl.h>
+
 #include "nitf/coda-oss.hpp"
 
 #undef min

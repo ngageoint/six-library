@@ -96,7 +96,7 @@ protected:
 public:
 
     //! Destructor
-    virtual ~Object() noexcept(false) { releaseHandle(); }
+    virtual ~Object() { releaseHandle(); }
 
     //! Is the object valid (native object not null)?
     virtual bool isValid() const noexcept

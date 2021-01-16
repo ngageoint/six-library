@@ -20,6 +20,8 @@
  *
  */
 
+#ifndef __NITF_FIELD_HPP__
+#define __NITF_FIELD_HPP__
 #pragma once
 
 #include <string>
@@ -390,4 +392,4 @@ private:
 };
 
 }
-
+#endif

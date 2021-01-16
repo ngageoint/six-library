@@ -77,13 +77,14 @@ size_t NITFBufferList::getNumBytesInBlock(
     return numBytes;
 }
 
-const void* NITFBufferList::getBlock(size_t blockSize,
+template<typename T>
+const void* getBlock_(const std::vector<NITFBuffer>& mBuffers,
+                                     size_t blockSize,
                                      size_t blockIdx,
-                                     std::vector<std::byte>& scratch,
-                                     size_t& numBytes) const
+                                     std::vector<T>& scratch,
+                                     const size_t numBytes)
 {
     const size_t startByte = blockIdx * blockSize;
-    numBytes = getNumBytesInBlock(blockSize, blockIdx);
 
     size_t byteCount(0);
     for (size_t ii = 0; ii < mBuffers.size(); ++ii)
@@ -96,8 +97,8 @@ const void* NITFBufferList::getBlock(size_t blockSize,
             const size_t numBytesLeftInBuffer =
                     buffer.mNumBytes - numBytesToSkip;
 
-            const std::byte* const startPtr =
-                    static_cast<const std::byte*>(buffer.mData) +
+            const auto startPtr =
+                    static_cast<const T*>(buffer.mData) +
                     numBytesToSkip;
             if (numBytesLeftInBuffer >= numBytes)
             {
@@ -140,5 +141,23 @@ const void* NITFBufferList::getBlock(size_t blockSize,
 
     // Should not be possible to get here
     return nullptr;
+}
+const void* NITFBufferList::getBlock(size_t blockSize,
+                                     size_t blockIdx,
+                                     std::vector<sys::byte>& scratch,
+                                     size_t& numBytes) const
+{
+    numBytes = getNumBytesInBlock(blockSize, blockIdx);
+    return getBlock_(mBuffers,
+        blockSize, blockIdx, scratch, numBytes);
+}
+const void* NITFBufferList::getBlock(size_t blockSize,
+                                     size_t blockIdx,
+                                     std::vector<std::byte>& scratch,
+                                     size_t& numBytes) const
+{
+    numBytes = getNumBytesInBlock(blockSize, blockIdx);
+    return getBlock_(mBuffers,
+        blockSize, blockIdx, scratch, numBytes);
 }
 }
