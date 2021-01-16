@@ -27,7 +27,8 @@
 #include <stddef.h>
 #include <vector>
 
-#include "nitf/cstddef.h"
+#include "nitf/coda-oss.hpp"
+#include "nitf/System.hpp"
 
 namespace nitf
 {
@@ -40,7 +41,7 @@ struct NITFBuffer
     /*!
      * Initializes to an empty buffer
      */
-    NITFBuffer();
+    NITFBuffer() = default;
 
     /*!
      * Initializes to the specified pointer and size.  No copy is made and
@@ -50,10 +51,10 @@ struct NITFBuffer
      * \param numBytes The number of bytes of contiguous data this
      * represents
      */
-    NITFBuffer(const void* data, size_t numBytes);
+    NITFBuffer(const void* data, size_t numBytes) noexcept;
 
-    const void* mData;
-    size_t mNumBytes;
+    const void* mData = nullptr;
+    size_t mNumBytes = 0;
 };
 
 /*!
@@ -69,12 +70,12 @@ struct NITFBufferList
     /*!
      * \return The total number of bytes across all the buffers
      */
-    size_t getTotalNumBytes() const;
+    size_t getTotalNumBytes() const noexcept;
 
     /*!
      * \return Whether or not the buffer list is empty
      */
-    bool empty() const
+    bool empty() const noexcept
     {
         return mBuffers.empty();
     }
@@ -82,7 +83,7 @@ struct NITFBufferList
     /*!
      * Clear the buffers
      */
-    void clear()
+    void clear() noexcept
     {
         mBuffers.clear();
     }
@@ -108,7 +109,7 @@ struct NITFBufferList
     template <typename DataT>
     void pushBack(const std::vector<DataT>& data)
     {
-        pushBack(data.empty() ? NULL : &data[0],
+        pushBack(data.empty() ? nullptr : data.data(),
                  data.size() * sizeof(DataT));
     }
 

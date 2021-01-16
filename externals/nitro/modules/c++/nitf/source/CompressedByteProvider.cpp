@@ -20,6 +20,8 @@
  *
  */
 
+#include "nitf/CompressedByteProvider.hpp"
+
 #include <string.h>
 #include <sstream>
 #include <algorithm>
@@ -27,10 +29,10 @@
 
 #include <except/Exception.h>
 #include <nitf/Writer.hpp>
-#include <nitf/CompressedByteProvider.hpp>
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
+#include "gsl/gsl.h"
 
 namespace nitf
 {
@@ -50,7 +52,7 @@ CompressedByteProvider::CompressedByteProvider(Record& record,
                numRowsPerBlock, numColsPerBlock);
 }
 
-void CompressedByteProvider::initialize(Record& record,
+void CompressedByteProvider::initialize(const Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
         const std::vector<PtrAndLength>& desData,
         size_t numRowsPerBlock,
@@ -144,19 +146,20 @@ types::Range CompressedByteProvider::findBlocksToWrite(
 }
 
 #undef max
-size_t CompressedByteProvider::addImageData(
+template<typename T>
+static size_t addImageData_(const std::vector<std::vector<size_t> > mBytesInEachBlock,
+    const std::vector<std::vector<sys::byte> >& mImageSubheaders,
+    const std::vector<nitf::Off>& mImageSubheaderFileOffsets,
+    const types::Range& blockRange,
         size_t seg,
-        size_t startRow,
-        size_t numRowsToWrite,
-        const nitf::byte* imageData,
+        const T* imageData,
         nitf::Off& fileOffset,
-        NITFBufferList& buffers) const
+        NITFBufferList& buffers)
 {
     // If we've already compressed, we don't care about padding.
     // We just need to figure out -which- blocks we're writing, and then grab
     // that from the member vector
     const std::vector<size_t>& bytesPerBlock = mBytesInEachBlock[seg];
-    types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
 
     // If the file offset hasn't been set yet,
     // advance it to our starting position
@@ -170,7 +173,7 @@ size_t CompressedByteProvider::addImageData(
             throw except::Exception(Ctxt(error.str()));
         }
 
-        fileOffset = mImageSubheaderFileOffsets[seg] + mImageSubheaders[seg].size();
+        fileOffset = mImageSubheaderFileOffsets[seg] + gsl::narrow<nitf::Off>(mImageSubheaders[seg].size());
         for (size_t block = 0; block < blockRange.mStartElement; ++block)
         {
             fileOffset += mBytesInEachBlock[seg][block];
@@ -180,15 +183,40 @@ size_t CompressedByteProvider::addImageData(
     // Copy the image data into the buffer
     // Since we have it in contiguous memory, this can be added as one buffer
     size_t numBufferBytes(0);
-    for (size_t ii = blockRange.mStartElement, end = blockRange.endElement();
-         ii < end;
-         ++ii)
+    const size_t end = blockRange.endElement();
+    for (size_t ii = blockRange.mStartElement; ii < end; ++ii)
     {
         numBufferBytes += bytesPerBlock[ii];
     }
     buffers.pushBack(imageData, numBufferBytes);
 
     return numBufferBytes;
+}
+size_t CompressedByteProvider::addImageData(
+        size_t seg,
+        size_t startRow,
+        size_t numRowsToWrite,
+        const sys::byte* imageData,
+        nitf::Off& fileOffset,
+        NITFBufferList& buffers) const
+{
+    const types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
+    return addImageData_(mBytesInEachBlock, mImageSubheaders, mImageSubheaderFileOffsets,
+        blockRange,
+        seg, imageData, fileOffset, buffers);
+}
+size_t CompressedByteProvider::addImageData(
+        size_t seg,
+        size_t startRow,
+        size_t numRowsToWrite,
+        const std::byte* imageData,
+        nitf::Off& fileOffset,
+        NITFBufferList& buffers) const
+{
+    const types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
+    return addImageData_(mBytesInEachBlock, mImageSubheaders, mImageSubheaderFileOffsets,
+        blockRange,
+        seg, imageData, fileOffset, buffers);
 }
 
 nitf::Off CompressedByteProvider::getNumBytes(size_t startRow, size_t numRows) const
@@ -226,7 +254,7 @@ void CompressedByteProvider::getBytes(
         nitf::Off& fileOffset,
         NITFBufferList& buffers) const
 {
-    auto imageDataPtr = static_cast<const nitf::byte*>(imageData);
+    auto imageDataPtr = static_cast<const std::byte*>(imageData);
     fileOffset = std::numeric_limits<nitf::Off>::max();
     buffers.clear();
 

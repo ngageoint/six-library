@@ -22,8 +22,9 @@
 
 #ifndef __NITF_EXCEPTION_HPP__
 #define __NITF_EXCEPTION_HPP__
+#pragma once
 
-#include <import/except.h>
+#include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 
 /*!
@@ -36,38 +37,42 @@ namespace nitf
  *  \class NITFException
  *  \brief  The C++ wrapper for the nitf_Error
  */
-class NITFException : public except::Exception
+class NITFException final : public except::Exception
 {
+    static except::Context make_Context_(const nitf_Error* error, const std::string& message)
+    {
+        return except::Context(error->file, error->line, error->func, "", message);
+    }
+    static except::Context make_Context(const nitf_Error* error)
+    {
+        return make_Context_(error, error->message);
+    }
+    static except::Context make_Context(const nitf_Error* error, const std::string& message)
+    {
+        return make_Context_(error, message + " (" + std::string(error->message) + ")");
+    }
+
+    NITFException(const except::Context& context, nullptr_t)
+    {
+        mMessage = context.getMessage();
+        mTrace.pushContext(context);
+    }
+
 public:
     /*!
      *  Construct from native object
      *  \param error  The native nitf_Error object
      */
-    NITFException(const nitf_Error* error)
+    NITFException(const nitf_Error* error) : NITFException(make_Context(error), nullptr)
     {
-        const except::Context context(std::string(error->file),
-                                      error->line,
-                                      std::string(error->func),
-                                      std::string(""),
-                                      std::string(error->message));
-        mMessage = context.getMessage();
-        mTrace.pushContext( context );
     }
     /*!
      *  Construct from native object with message
      *  \param error  The native nitf_Error object
      *  \param message  Additional error message
      */
-    NITFException(const nitf_Error* error, const std::string& message)
+    NITFException(const nitf_Error* error, const std::string& message) : NITFException(make_Context(error, message), nullptr)
     {
-        const except::Context context(
-                std::string(error->file),
-                error->line,
-                std::string(error->func),
-                std::string(""),
-                message + " (" + std::string(error->message) + ")");
-        mMessage = context.getMessage();
-        mTrace.pushContext( context );
     }
     /*!
      *  Construct from Context
@@ -88,10 +93,6 @@ public:
      */
     NITFException(const except::Throwable& t, const except::Context& c) :
             except::Exception(t, c){}
-
-    //! Destructor
-    virtual ~NITFException(){}
-
 }
 ;
 }

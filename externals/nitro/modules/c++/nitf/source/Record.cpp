@@ -31,6 +31,8 @@
 #include "nitf/RESegment.hpp"
 #include "nitf/LabelSegment.hpp"
 
+#include "gsl/gsl.h"
+
 namespace nitf
 {
 Record::Record(const Record & x)
@@ -65,16 +67,12 @@ nitf::Record Record::clone() const
     return dolly;
 }
 
-Record::~Record()
-{
-}
-
 nitf::Version Record::getVersion() const
 {
     return nitf_Record_getVersion(getNativeOrThrow());
 }
 
-nitf::FileHeader Record::getHeader()
+nitf::FileHeader Record::getHeader() const
 {
     return nitf::FileHeader(getNativeOrThrow()->header);
 }
@@ -90,11 +88,16 @@ void Record::setHeader(nitf::FileHeader & value)
     value.setManaged(true);
 }
 
+constexpr inline bool INVALID_NUM_SEGMENTS(uint32_t num)
+{
+    return NITF_INVALID_NUM_SEGMENTS(gsl::narrow<int>(num));
+}
+
 uint32_t Record::getNumImages() const
 {
-    uint32_t num = nitf_Record_getNumImages(getNativeOrThrow(), &error);
+    const uint32_t num = nitf_Record_getNumImages(getNativeOrThrow(), &error);
     
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
     
     return num;
@@ -102,10 +105,9 @@ uint32_t Record::getNumImages() const
     
 uint32_t Record::getNumGraphics() const
 {
+    const uint32_t num = nitf_Record_getNumGraphics(getNativeOrThrow(), &error);
 
-    uint32_t num = nitf_Record_getNumGraphics(getNativeOrThrow(), &error);
-
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
 
     return num;
@@ -113,10 +115,9 @@ uint32_t Record::getNumGraphics() const
 
 uint32_t Record::getNumLabels() const
 {
+    const uint32_t num = nitf_Record_getNumLabels(getNativeOrThrow(), &error);
 
-    uint32_t num = nitf_Record_getNumLabels(getNativeOrThrow(), &error);
-
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
 
     return num;
@@ -124,9 +125,9 @@ uint32_t Record::getNumLabels() const
 
 uint32_t Record::getNumTexts() const
 {
-    uint32_t num = nitf_Record_getNumTexts(getNativeOrThrow(), &error);
+    const uint32_t num = nitf_Record_getNumTexts(getNativeOrThrow(), &error);
 
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
 
     return num;
@@ -134,10 +135,10 @@ uint32_t Record::getNumTexts() const
 
 uint32_t Record::getNumDataExtensions() const
 {
-    uint32_t num = nitf_Record_getNumDataExtensions(getNativeOrThrow(), 
+    const uint32_t num = nitf_Record_getNumDataExtensions(getNativeOrThrow(), 
                                                         &error);
 
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
 
     return num;
@@ -145,42 +146,42 @@ uint32_t Record::getNumDataExtensions() const
 
 uint32_t Record::getNumReservedExtensions() const
 {
-    uint32_t num = nitf_Record_getNumReservedExtensions(getNativeOrThrow(), 
+    const uint32_t num = nitf_Record_getNumReservedExtensions(getNativeOrThrow(), 
                                                             &error);
 
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
 
     return num;
 }
 
 
-nitf::List Record::getImages()
+nitf::List Record::getImages() const
 {
     return nitf::List(getNativeOrThrow()->images);
 }
 
-nitf::List Record::getGraphics()
+nitf::List Record::getGraphics() const
 {
     return nitf::List(getNativeOrThrow()->graphics);
 }
 
-nitf::List Record::getLabels()
+nitf::List Record::getLabels() const
 {
     return nitf::List(getNativeOrThrow()->labels);
 }
 
-nitf::List Record::getTexts()
+nitf::List Record::getTexts() const
 {
     return nitf::List(getNativeOrThrow()->texts);
 }
 
-nitf::List Record::getDataExtensions()
+nitf::List Record::getDataExtensions() const
 {
     return nitf::List(getNativeOrThrow()->dataExtensions);
 }
 
-nitf::List Record::getReservedExtensions()
+nitf::List Record::getReservedExtensions() const
 {
     return nitf::List(getNativeOrThrow()->reservedExtensions);
 }
@@ -191,7 +192,7 @@ nitf::ImageSegment Record::newImageSegment(int index)
     if (!x)
         throw nitf::NITFException(&error);
     if (index >= 0) //move it, if we need to
-        moveImageSegment(getImages().getSize() - 1, index);
+        moveImageSegment(gsl::narrow<uint32_t>(getImages().getSize() - 1), index);
     return nitf::ImageSegment(x);
 }
 
@@ -201,7 +202,7 @@ nitf::GraphicSegment Record::newGraphicSegment(int index)
     if (!x)
         throw nitf::NITFException(&error);
     if (index >= 0) //move it, if we need to
-        moveGraphicSegment(getGraphics().getSize() - 1, index);
+        moveGraphicSegment(gsl::narrow<uint32_t>(getGraphics().getSize() - 1), index);
     return nitf::GraphicSegment(x);
 }
 
@@ -211,7 +212,7 @@ nitf::TextSegment Record::newTextSegment(int index)
     if (!x)
         throw nitf::NITFException(&error);
     if (index >= 0) //move it, if we need to
-        moveTextSegment(getTexts().getSize() - 1, index);
+        moveTextSegment(gsl::narrow<uint32_t>(getTexts().getSize() - 1), index);
     return nitf::TextSegment(x);
 }
 
@@ -221,7 +222,7 @@ nitf::DESegment Record::newDataExtensionSegment(int index)
     if (!x)
         throw nitf::NITFException(&error);
     if (index >= 0) //move it, if we need to
-        moveDataExtensionSegment(getDataExtensions().getSize() - 1, index);
+        moveDataExtensionSegment(gsl::narrow<uint32_t>(getDataExtensions().getSize() - 1), index);
     return nitf::DESegment(x);
 }
 
@@ -264,42 +265,42 @@ void Record::removeReservedExtensionSegment(uint32_t segmentNumber)
 void Record::moveImageSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveImageSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 
 void Record::moveTextSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveTextSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 
 void Record::moveGraphicSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveGraphicSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 
 void Record::moveDataExtensionSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveDataExtensionSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 
 void Record::moveLabelSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveLabelSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 
 void Record::moveReservedExtensionSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveReservedExtensionSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 

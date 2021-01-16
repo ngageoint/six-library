@@ -57,60 +57,68 @@ public:
     FileSecurity(nitf_FileSecurity * x);
 
     //! Constructor
-    FileSecurity();
+    FileSecurity() noexcept(false);
 
     //! Clone
-    nitf::FileSecurity clone();
+    nitf::FileSecurity clone() const;
 
-    ~FileSecurity();
+    ~FileSecurity() = default;
 
     //! Get the classificationSystem
-    nitf::Field getClassificationSystem();
+    nitf::Field getClassificationSystem() const;
+    std::string classificationSystem() const
+    {
+        return getClassificationSystem(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the codewords
-    nitf::Field getCodewords();
+    nitf::Field getCodewords() const;
+    std::string codewords() const
+    {
+        return getCodewords(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the controlAndHandling
-    nitf::Field getControlAndHandling();
+    nitf::Field getControlAndHandling() const;
 
     //! Get the releasingInstructions
-    nitf::Field getReleasingInstructions();
+    nitf::Field getReleasingInstructions() const;
 
     //! Get the declassificationType
-    nitf::Field getDeclassificationType();
+    nitf::Field getDeclassificationType() const;
 
     //! Get the declassificationDate
-    nitf::Field getDeclassificationDate();
+    nitf::Field getDeclassificationDate() const;
 
     //! Get the declassificationExemption
-    nitf::Field getDeclassificationExemption();
+    nitf::Field getDeclassificationExemption() const;
 
     //! Get the downgrade
-    nitf::Field getDowngrade();
+    nitf::Field getDowngrade() const;
 
     //! Get the downgradeDateTime
-    nitf::Field getDowngradeDateTime();
+    nitf::Field getDowngradeDateTime() const;
 
     //! Get the classificationText
-    nitf::Field getClassificationText();
+    nitf::Field getClassificationText() const;
 
     //! Get the classificationAuthorityType
-    nitf::Field getClassificationAuthorityType();
+    nitf::Field getClassificationAuthorityType() const;
 
     //! Get the classificationAuthority
-    nitf::Field getClassificationAuthority();
+    nitf::Field getClassificationAuthority() const;
 
     //! Get the classificationReason
-    nitf::Field getClassificationReason();
+    nitf::Field getClassificationReason() const;
 
     //! Get the securitySourceDate
-    nitf::Field getSecuritySourceDate();
+    nitf::Field getSecuritySourceDate() const;
 
     //! Get the securityControlNumber
-    nitf::Field getSecurityControlNumber();
+    nitf::Field getSecurityControlNumber() const;
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

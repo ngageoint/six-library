@@ -50,7 +50,7 @@ RESubheader::RESubheader()
 }
 
 
-nitf::RESubheader RESubheader::clone()
+nitf::RESubheader RESubheader::clone() const
 {
     nitf::RESubheader dolly(
         nitf_RESubheader_clone(getNativeOrThrow(), &error));
@@ -58,30 +58,27 @@ nitf::RESubheader RESubheader::clone()
     return dolly;
 }
 
-RESubheader::~RESubheader(){}
-
-
-nitf::Field RESubheader::getFilePartType()
+nitf::Field RESubheader::getFilePartType() const
 {
     return nitf::Field(getNativeOrThrow()->filePartType);
 }
 
-nitf::Field RESubheader::getTypeID()
+nitf::Field RESubheader::getTypeID() const
 {
     return nitf::Field(getNativeOrThrow()->typeID);
 }
 
-nitf::Field RESubheader::getVersion()
+nitf::Field RESubheader::getVersion() const
 {
     return nitf::Field(getNativeOrThrow()->version);
 }
 
-nitf::Field RESubheader::getSecurityClass()
+nitf::Field RESubheader::getSecurityClass() const
 {
     return nitf::Field(getNativeOrThrow()->securityClass);
 }
 
-nitf::FileSecurity RESubheader::getSecurityGroup()
+nitf::FileSecurity RESubheader::getSecurityGroup() const
 {
     return nitf::FileSecurity(getNativeOrThrow()->securityGroup);
 }
@@ -97,7 +94,7 @@ void RESubheader::setSecurityGroup(nitf::FileSecurity value)
     value.setManaged(true);
 }
 
-nitf::Field RESubheader::getSubheaderFieldsLength()
+nitf::Field RESubheader::getSubheaderFieldsLength() const
 {
     return nitf::Field(getNativeOrThrow()->subheaderFieldsLength);
 }

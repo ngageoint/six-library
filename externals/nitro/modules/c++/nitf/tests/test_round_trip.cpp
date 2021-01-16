@@ -54,7 +54,7 @@ public:
     virtual void nextRow(uint32_t /*band*/, void* buffer)
     {
         int padded;
-        mReader.read(mWindow, reinterpret_cast<nitf::byte**>(&buffer), &padded);
+        mReader.read(mWindow, reinterpret_cast<std::byte**>(&buffer), &padded);
         mWindow.setStartRow(mWindow.getStartRow() + 1);
     }
 

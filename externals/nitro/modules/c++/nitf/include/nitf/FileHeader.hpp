@@ -65,134 +65,138 @@ public:
     FileHeader();
 
     //! Clone
-    nitf::FileHeader clone();
+    nitf::FileHeader clone() const;
 
-    ~FileHeader();
+    ~FileHeader() = default;
 
     //! Get the fileHeader
-    nitf::Field getFileHeader();
-    std::string fileHeader()
+    nitf::Field getFileHeader() const;
+    std::string fileHeader() const
     {
-        return getFileHeader();
+        return getFileHeader(); // nitf::Field implicitly converts to std::string
     }
 
     //! Get the fileVersion
-    nitf::Field getFileVersion();
-    std::string fileVersion()
+    nitf::Field getFileVersion() const;
+    std::string fileVersion() const
     {
-        return getFileVersion();
+        return getFileVersion(); // nitf::Field implicitly converts to std::string
     }
 
     //! Get the complianceLevel
-    nitf::Field getComplianceLevel();
+    nitf::Field getComplianceLevel() const;
 
     //! Get the systemType
-    nitf::Field getSystemType();
+    nitf::Field getSystemType() const;
 
     //! Get the originStationID
-    nitf::Field getOriginStationID();
+    nitf::Field getOriginStationID() const;
 
     //! Get the fileDateTime
-    nitf::Field getFileDateTime();
+    nitf::Field getFileDateTime() const;
 
     //! Get the fileTitle
-    nitf::Field getFileTitle();
+    nitf::Field getFileTitle() const;
 
     //! Get the classification
-    nitf::Field getClassification();
+    nitf::Field getClassification() const;
+    std::string classification() const
+    {
+        return getClassification(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the securityGroup
-    nitf::FileSecurity getSecurityGroup();
+    nitf::FileSecurity getSecurityGroup() const;
 
     //! Set the securityGroup
     void setSecurityGroup(nitf::FileSecurity value);
 
     //! Get the messageCopyNum
-    nitf::Field getMessageCopyNum();
+    nitf::Field getMessageCopyNum() const;
 
     //! Get the messageNumCopies
-    nitf::Field getMessageNumCopies();
+    nitf::Field getMessageNumCopies() const;
 
     //! Get the encrypted
-    nitf::Field getEncrypted();
+    nitf::Field getEncrypted() const;
 
     //! Get the backgroundColor
-    nitf::Field getBackgroundColor();
+    nitf::Field getBackgroundColor() const;
 
     //! Get the originatorName
-    nitf::Field getOriginatorName();
+    nitf::Field getOriginatorName() const;
 
     //! Get the originatorPhone
-    nitf::Field getOriginatorPhone();
+    nitf::Field getOriginatorPhone() const;
 
     //! Get the fileLength
-    nitf::Field getFileLength();
+    nitf::Field getFileLength() const;
 
     //! Get the headerLength
-    nitf::Field getHeaderLength();
+    nitf::Field getHeaderLength() const;
 
     //! Get the numImages
-    nitf::Field getNumImages();
+    nitf::Field getNumImages() const;
 
     //! Get the numGraphics
-    nitf::Field getNumGraphics();
+    nitf::Field getNumGraphics() const;
 
     //! Get the numLabels
-    nitf::Field getNumLabels();
+    nitf::Field getNumLabels() const;
 
     //! Get the numTexts
-    nitf::Field getNumTexts();
+    nitf::Field getNumTexts() const;
 
     //! Get the numDataExtensions
-    nitf::Field getNumDataExtensions();
+    nitf::Field getNumDataExtensions() const;
 
     //! Get the numReservedExtensions
-    nitf::Field getNumReservedExtensions();
+    nitf::Field getNumReservedExtensions() const;
 
     //! Get the imageInfo
-    nitf::ComponentInfo getImageInfo(int i);
+    nitf::ComponentInfo getImageInfo(int i) const;
 
     //! Get the graphicInfo
-    nitf::ComponentInfo getGraphicInfo(int i);
+    nitf::ComponentInfo getGraphicInfo(int i) const;
 
     //! Get the labelInfo
-    nitf::ComponentInfo getLabelInfo(int i);
+    nitf::ComponentInfo getLabelInfo(int i) const;
 
     //! Get the textInfo
-    nitf::ComponentInfo getTextInfo(int i);
+    nitf::ComponentInfo getTextInfo(int i) const;
 
     //! Get the dataExtensionInfo
-    nitf::ComponentInfo getDataExtensionInfo(int i);
+    nitf::ComponentInfo getDataExtensionInfo(int i) const;
 
     //! Get the reservedExtensionInfo
-    nitf::ComponentInfo getReservedExtensionInfo(int i);
+    nitf::ComponentInfo getReservedExtensionInfo(int i) const;
 
     //! Get the userDefinedHeaderLength
-    nitf::Field getUserDefinedHeaderLength();
+    nitf::Field getUserDefinedHeaderLength() const;
 
     //! Get the userDefinedOverflow
-    nitf::Field getUserDefinedOverflow();
+    nitf::Field getUserDefinedOverflow() const;
 
     //! Get the extendedHeaderLength
-    nitf::Field getExtendedHeaderLength();
+    nitf::Field getExtendedHeaderLength() const;
 
     //! Get the extendedHeaderOverflow
-    nitf::Field getExtendedHeaderOverflow();
+    nitf::Field getExtendedHeaderOverflow() const;
 
     //! Get the userDefinedSection
-    nitf::Extensions getUserDefinedSection();
+    nitf::Extensions getUserDefinedSection() const;
 
     //! Set the userDefinedSection
     void setUserDefinedSection(nitf::Extensions value);
 
     //! Get the extendedSection
-    nitf::Extensions getExtendedSection();
+    nitf::Extensions getExtendedSection() const;
 
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

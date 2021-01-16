@@ -147,7 +147,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     TEST_ASSERT_EQ("NC", subheader.imageCompression());
     TEST_ASSERT_EQ("    ", subheader.getCompressionRate().toString());
 
-    nitf::BufferList buffer(nBands);
+    nitf::BufferList<std::byte> buffer(nBands);
     std::vector<uint32_t> bandList(nBands);
 
     for (uint32_t band = 0; band < nBands; band++)

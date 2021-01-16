@@ -50,7 +50,7 @@ LabelSubheader::LabelSubheader()
 }
 
 
-LabelSubheader LabelSubheader::clone()
+LabelSubheader LabelSubheader::clone() const
 {
     nitf::LabelSubheader dolly(
         nitf_LabelSubheader_clone(getNativeOrThrow(), &error));
@@ -58,25 +58,22 @@ LabelSubheader LabelSubheader::clone()
     return dolly;
 }
 
-LabelSubheader::~LabelSubheader(){}
-
-
-nitf::Field LabelSubheader::getFilePartType()
+nitf::Field LabelSubheader::getFilePartType() const
 {
     return nitf::Field(getNativeOrThrow()->filePartType);
 }
 
-nitf::Field LabelSubheader::getLabelID()
+nitf::Field LabelSubheader::getLabelID() const
 {
     return nitf::Field(getNativeOrThrow()->labelID);
 }
 
-nitf::Field LabelSubheader::getSecurityClass()
+nitf::Field LabelSubheader::getSecurityClass() const
 {
     return nitf::Field(getNativeOrThrow()->securityClass);
 }
 
-nitf::FileSecurity LabelSubheader::getSecurityGroup()
+nitf::FileSecurity LabelSubheader::getSecurityGroup() const
 {
     return nitf::FileSecurity(getNativeOrThrow()->securityGroup);
 }
@@ -92,67 +89,67 @@ void LabelSubheader::setSecurityGroup(nitf::FileSecurity value)
     value.setManaged(true);
 }
 
-nitf::Field LabelSubheader::getEncrypted()
+nitf::Field LabelSubheader::getEncrypted() const
 {
     return nitf::Field(getNativeOrThrow()->encrypted);
 }
 
-nitf::Field LabelSubheader::getFontStyle()
+nitf::Field LabelSubheader::getFontStyle() const
 {
     return nitf::Field(getNativeOrThrow()->fontStyle);
 }
 
-nitf::Field LabelSubheader::getCellWidth()
+nitf::Field LabelSubheader::getCellWidth() const
 {
     return nitf::Field(getNativeOrThrow()->cellWidth);
 }
 
-nitf::Field LabelSubheader::getCellHeight()
+nitf::Field LabelSubheader::getCellHeight() const
 {
     return nitf::Field(getNativeOrThrow()->cellHeight);
 }
 
-nitf::Field LabelSubheader::getDisplayLevel()
+nitf::Field LabelSubheader::getDisplayLevel() const
 {
     return nitf::Field(getNativeOrThrow()->displayLevel);
 }
 
-nitf::Field LabelSubheader::getAttachmentLevel()
+nitf::Field LabelSubheader::getAttachmentLevel() const
 {
     return nitf::Field(getNativeOrThrow()->attachmentLevel);
 }
 
-nitf::Field LabelSubheader::getLocationRow()
-{
+nitf::Field LabelSubheader::getLocationRow() const
+{ 
     return nitf::Field(getNativeOrThrow()->locationRow);
 }
 
-nitf::Field LabelSubheader::getLocationColumn()
+nitf::Field LabelSubheader::getLocationColumn() const
 {
     return nitf::Field(getNativeOrThrow()->locationColumn);
 }
 
-nitf::Field LabelSubheader::getTextColor()
+nitf::Field LabelSubheader::getTextColor() const
 {
     return nitf::Field(getNativeOrThrow()->textColor);
 }
 
-nitf::Field LabelSubheader::getBackgroundColor()
+nitf::Field LabelSubheader::getBackgroundColor() const
 {
     return nitf::Field(getNativeOrThrow()->backgroundColor);
 }
 
-nitf::Field LabelSubheader::getExtendedHeaderLength()
+nitf::Field LabelSubheader::getExtendedHeaderLength() const
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderLength);
 }
 
-nitf::Field LabelSubheader::getExtendedHeaderOverflow()
+nitf::Field LabelSubheader::getExtendedHeaderOverflow() const
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderOverflow);
 }
 
-nitf::Extensions LabelSubheader::getExtendedSection()
+nitf::Extensions LabelSubheader::getExtendedSection() const
 {
     return nitf::Extensions(getNativeOrThrow()->extendedSection);
 }

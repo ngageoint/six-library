@@ -25,28 +25,28 @@
 
 using namespace nitf;
 
-bool Utils::isNumeric(const std::string& str)
+bool Utils::isNumeric(const std::string& str) noexcept
 {
     return nitf_Utils_isNumeric(str.c_str()) ? true : false;
 }
 
-bool Utils::isAlpha(const std::string& str)
+bool Utils::isAlpha(const std::string& str) noexcept
 {
     return nitf_Utils_isNumeric(str.c_str()) ? true : false;
 }
 
 void Utils::decimalToGeographic(double decimal, int* degrees, int* minutes,
-                                double* seconds)
+                                double* seconds) noexcept
 {
     nitf_Utils_decimalToGeographic(decimal, degrees, minutes, seconds);
 }
 
-double Utils::geographicToDecimal(int degrees, int minutes, double seconds)
+double Utils::geographicToDecimal(int degrees, int minutes, double seconds) noexcept
 {
     return nitf_Utils_geographicToDecimal(degrees, minutes, seconds);
 }
 
-char Utils::cornersTypeAsCoordRep(nitf::CornersType type)
+char Utils::cornersTypeAsCoordRep(nitf::CornersType type) noexcept
 {
     return nitf_Utils_cornersTypeAsCoordRep(type);
 }

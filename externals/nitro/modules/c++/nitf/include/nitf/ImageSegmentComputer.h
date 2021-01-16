@@ -42,9 +42,11 @@ namespace nitf
  *
  * Currently only supports segmenting in the row direction.
  */
-class ImageSegmentComputer
+struct ImageSegmentComputer final
 {
-public:
+    ImageSegmentComputer(const ImageSegmentComputer&) = delete;
+    ImageSegmentComputer& operator=(const ImageSegmentComputer&) = delete;
+
     /*!
      * Max number of rows that can fit in an image segment and still be
      * representable in the following image segment via the ILOC field
@@ -80,7 +82,7 @@ public:
         size_t numRows;
 
         //! \return The end row (exclusive) of the image segment
-        size_t endRow() const
+        size_t endRow() const noexcept
         {
             return firstRow + numRows;
         }
@@ -112,7 +114,7 @@ public:
         bool isInRange(size_t rangeStartRow,
                        size_t rangeNumRows,
                        size_t& firstGlobalRowInThisSegment,
-                       size_t& numRowsInThisSegment) const;
+                       size_t& numRowsInThisSegment) const noexcept;
 
         /*!
          * Convenience static implementation
@@ -140,7 +142,7 @@ public:
                        size_t rangeStartRow,
                        size_t rangeNumRows,
                        size_t& firstGlobalRowInThisSegment,
-                       size_t& numRowsInThisSegment);
+                       size_t& numRowsInThisSegment) noexcept;
     };
 
     /*!
@@ -174,25 +176,25 @@ public:
                          size_t colsPerBlock = 0);
 
     //! \return Segment layout
-    const std::vector<Segment>& getSegments() const
+    const std::vector<Segment>& getSegments() const noexcept
     {
         return mSegments;
     }
 
     //! \return Number of total bytes in the image
-    uint64_t getNumBytesTotal() const
+    uint64_t getNumBytesTotal() const noexcept
     {
         return mNumBytesTotal;
     }
 
     //! \return Total number of rows we can have in a NITF segment
-    size_t getNumRowsLimit() const
+    size_t getNumRowsLimit() const noexcept
     {
         return mNumRowsLimit;
     }
 
     //! \return Max number of bytes that each image segment can be
-    uint64_t getMaxNumBytesPerSegment() const
+    uint64_t getMaxNumBytesPerSegment() const noexcept
     {
         return mMaxNumBytesPerSegment;
     }
@@ -201,7 +203,7 @@ private:
     // This is the actual size of a dimension (row or column)
     // taking into account the possible blocking (pixels)
     static
-    size_t getActualDim(size_t dim, size_t numDimsPerBlock);
+    size_t getActualDim(size_t dim, size_t numDimsPerBlock) noexcept;
 
     void computeImageInfo();
 

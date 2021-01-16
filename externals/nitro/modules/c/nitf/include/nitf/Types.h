@@ -22,6 +22,9 @@
 
 #ifndef __NITF_TYPES_H__
 #define __NITF_TYPES_H__
+#pragma once
+
+#define NITF_DECLARE_ENUM(name, ...) NRT_DECLARE_ENUM(name,  __VA_ARGS__)
 
 /* Enum for the supported version types */
 typedef enum _nitf_Version

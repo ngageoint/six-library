@@ -22,6 +22,7 @@
 
 #ifndef __NITF_COMPONENTINFO_HPP__
 #define __NITF_COMPONENTINFO_HPP__
+#pragma once
 
 #include "nitf/ComponentInfo.h"
 #include "nitf/System.hpp"
@@ -62,15 +63,17 @@ public:
     ComponentInfo(nitf_ComponentInfo * x);
 
     //! Clone
-    nitf::ComponentInfo clone();
+    nitf::ComponentInfo clone() const;
 
-    ~ComponentInfo();
+    ~ComponentInfo() = default;
+    ComponentInfo(ComponentInfo&&) = default;
+    ComponentInfo& operator=(ComponentInfo&&) = default;
 
     //! Get the lengthSubheader
-    nitf::Field getLengthSubheader();
+    nitf::Field getLengthSubheader() const;
 
     //! Get the lengthData
-    nitf::Field getLengthData();
+    nitf::Field getLengthData() const;
 
 protected:
     /*!
@@ -81,7 +84,7 @@ protected:
     ComponentInfo(uint32_t subHeaderSize = 0, uint64_t dataSize = 0);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

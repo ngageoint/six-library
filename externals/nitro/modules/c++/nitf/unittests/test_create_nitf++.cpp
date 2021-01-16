@@ -1134,7 +1134,7 @@ namespace test_create_nitf_with_byte_provider
         for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
         {
             outputStream.write(
-                static_cast<const nitf::byte*>(buffers.mBuffers[ii].mData),
+                static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
                 buffers.mBuffers[ii].mNumBytes);
         }
     }

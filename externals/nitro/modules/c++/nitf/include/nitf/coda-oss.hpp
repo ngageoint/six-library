@@ -40,4 +40,5 @@
 #include <import/types.h>
 #include <import/io.h>
 #include <import/mem.h>
+#include <gsl/gsl.h>
 

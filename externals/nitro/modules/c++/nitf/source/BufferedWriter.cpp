@@ -20,12 +20,12 @@
  *
  */
 
+#include "nitf/BufferedWriter.hpp"
 
 #include <stdio.h>
-
 #include <chrono>
 
-#include "nitf/BufferedWriter.hpp"
+#include "gsl/gsl.h"
 
 namespace nitf
 {
@@ -37,7 +37,6 @@ BufferedWriter::BufferedWriter(const std::string& file, size_t bufferSize) :
     mTotalWritten(0),
     mBlocksWritten(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE | sys::File::TRUNCATE)
 {
     if (mBufferSize == 0)
@@ -58,7 +57,6 @@ BufferedWriter::BufferedWriter(const std::string& file,
     mTotalWritten(0),
     mBlocksWritten(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE)
 {
     if (mBufferSize == 0)
@@ -97,17 +95,18 @@ void BufferedWriter::flushBuffer(const char* buf)
 {
     if (mPosition > 0)
     {
+        const auto mPosition_ = gsl::narrow<size_t>(mPosition);
         const auto start = std::chrono::steady_clock::now();
-        mFile.writeFrom(buf, mPosition);
+        mFile.writeFrom(buf, mPosition_);
         const auto end = std::chrono::steady_clock::now();
-        std::chrono::duration<double> diff = end - start; // in seconds
+        const std::chrono::duration<double> diff = end - start; // in seconds
         mElapsedTime += diff.count();
 
         mTotalWritten += mPosition;
 
         ++mBlocksWritten;
 
-        if (mPosition != mBufferSize)
+        if (mPosition_ != mBufferSize)
         {
             ++mPartialBlocks;
         }
@@ -149,7 +148,7 @@ void BufferedWriter::writeImpl(const void* buf, size_t size)
             from += bytes;
 
             // check the internal buffer
-            if (mPosition == mBufferSize)
+            if (gsl::narrow<size_t>(mPosition) == mBufferSize)
             {
                 flushBuffer();
             }
@@ -208,7 +207,7 @@ void BufferedWriter::closeImpl()
     const auto start = std::chrono::steady_clock::now();
     mFile.flush();
     const auto end = std::chrono::steady_clock::now();
-    std::chrono::duration<double> diff = end - start; // in seconds
+    const std::chrono::duration<double> diff = end - start; // in seconds
     mElapsedTime += diff.count();
 
     mFile.close();

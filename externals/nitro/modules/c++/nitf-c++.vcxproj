@@ -71,13 +71,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="nitf\include\import\nitf.hpp" />
     <ClInclude Include="nitf\include\nitf\BandInfo.hpp" />
     <ClInclude Include="nitf\include\nitf\BandSource.hpp" />
     <ClInclude Include="nitf\include\nitf\BlockingInfo.hpp" />
     <ClInclude Include="nitf\include\nitf\BufferedReader.hpp" />
     <ClInclude Include="nitf\include\nitf\BufferedWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\ByteProvider.hpp" />
+    <ClInclude Include="nitf\include\nitf\coda-oss.hpp" />
     <ClInclude Include="nitf\include\nitf\ComponentInfo.hpp" />
     <ClInclude Include="nitf\include\nitf\CompressedByteProvider.hpp" />
     <ClInclude Include="nitf\include\nitf\CompressionInterface.hpp" />

@@ -22,7 +22,9 @@
 
 #ifndef __NITF_COMPRESSION_INTERFACE_HPP__
 #define __NITF_COMPRESSION_INTERFACE_HPP__
+#pragma once
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/IOInterface.hpp>
 #include <nitf/ImageIO.h>
@@ -103,12 +105,18 @@ public:
                                        NITF_BOOL pad,
                                        NITF_BOOL noData,
                                        nitf_Error* error);
+    static NITF_BOOL adapterWriteBlock(nitf_CompressionControl* object,
+                                       nitf_IOInterface* io,
+                                       const std::byte* data,
+                                       NITF_BOOL pad,
+                                       NITF_BOOL noData,
+                                       nitf_Error* error);
 
     static NITF_BOOL adapterEnd(nitf_CompressionControl* object,
                                 nitf_IOInterface* io,
                                 nitf_Error* error);
 
-    static void adapterDestroy(nitf_CompressionControl** object);
+    static void adapterDestroy(nitf_CompressionControl** object) noexcept;
 
 };
 
@@ -116,10 +124,9 @@ public:
  *  \class Compressor
  *  \brief This is the c++ interface for nitf_CompressionControl
  */
-class Compressor
+struct Compressor
 {
-public:
-    Compressor() {}
+    Compressor() = default;
     virtual ~Compressor() {}
 
     virtual void start(uint64_t offset,
@@ -131,6 +138,13 @@ public:
                             const uint8_t* data,
                             bool pad,
                             bool noData) = 0;
+    virtual void writeBlock(nitf::IOInterface& io,
+                            const std::byte* data,
+                            bool pad,
+                            bool noData)
+    {
+        writeBlock(io, reinterpret_cast<const uint8_t*>(data), pad, noData);
+    }
 
     virtual void end(nitf::IOInterface& io) = 0;
 };
