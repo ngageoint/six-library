@@ -20,10 +20,8 @@
  *
  */
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/IOStreamReader.hpp>
-#include <except/Exception.h>
-
-#include "nitf/cstddef.h"
 
 namespace nitf
 {
@@ -34,7 +32,7 @@ IOStreamReader::IOStreamReader(io::SeekableInputStream& stream) :
 
 void IOStreamReader::readImpl(void* buffer, size_t size)
 {
-    mStream.read(static_cast<nitf::byte*>(buffer), size);
+    mStream.read(static_cast<std::byte*>(buffer), size);
 }
 
 void IOStreamReader::writeImpl(const void* , size_t)
@@ -53,7 +51,7 @@ nitf::Off IOStreamReader::seekImpl(nitf::Off offset, int whence)
 {
     // This whence does not match io::Seekable::Whence
     // We need to perform a mapping to the correct values.
-    io::Seekable::Whence ioWhence;
+    io::Seekable::Whence ioWhence = io::Seekable::START;
     switch (whence)
     {
     case SEEK_SET:

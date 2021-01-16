@@ -22,9 +22,9 @@
 
 #ifndef __NITF_BUFFERED_READER_HPP__
 #define __NITF_BUFFERED_READER_HPP__
+#pragma once
 
-#include <sys/File.h>
-#include <mem/ScopedArray.h>
+#include <nitf/coda-oss.hpp>
 #include <nitf/CustomIO.hpp>
 
 namespace nitf
@@ -62,62 +62,65 @@ public:
                    size_t size,
                    bool adopt = false);
 
-    virtual ~BufferedReader();
+    ~BufferedReader() = default;
 
-    size_t getTotalRead() const
+    BufferedReader(const BufferedReader&) = delete;
+    BufferedReader& operator=(const BufferedReader&) = delete;
+
+    size_t getTotalRead() const noexcept
     {
         return mTotalRead;
     }
 
-    size_t getNumBlocksRead() const
+    size_t getNumBlocksRead() const noexcept
     {
         return mBlocksRead;
     }
 
-    size_t getNumPartialBlocksRead() const
+    size_t getNumPartialBlocksRead() const noexcept
     {
         return mPartialBlocks;
     }
 
     //! Time spent reading
-    double getTotalWriteTime()
+    double getTotalWriteTime() const noexcept
     {
         return mElapsedTime;
     }
 
 protected:
 
-    virtual void readImpl(void* buf, size_t size);
+    void readImpl(void* buf, size_t size) override;
 
-    virtual void writeImpl(const void* buf, size_t size);
+    void writeImpl(const void* buf, size_t size) override;
 
-    virtual bool canSeekImpl() const;
+    bool canSeekImpl() const override;
 
-    virtual nitf::Off seekImpl(nitf::Off offset, int whence);
+    nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
-    virtual nitf::Off tellImpl() const;
+    nitf::Off tellImpl() const override;
 
-    virtual nitf::Off getSizeImpl() const;
+    nitf::Off getSizeImpl() const override;
 
-    virtual int getModeImpl() const;
+    int getModeImpl() const override;
 
-    virtual void closeImpl();
+    void closeImpl() override;
 
 private:
     void readNextBuffer();
 
-    const size_t mMaxBufferSize;
-    const mem::ScopedArray<char> mScopedBuffer;
+    const nitf::Off mMaxBufferSize;
+    const std::shared_ptr<char[]> mScopedBuffer;
     char* const mBuffer;
 
-    size_t mPosition;
-    size_t mBufferSize;
+    nitf::Off mPosition;
+    nitf::Off mBufferSize;
     size_t mTotalRead;
     size_t mBlocksRead;
     size_t mPartialBlocks;
     double mElapsedTime;
     mutable sys::File mFile;
-    const sys::Off_T mFileLen;
+    const int64_t mFileLen;
 };
 
 }

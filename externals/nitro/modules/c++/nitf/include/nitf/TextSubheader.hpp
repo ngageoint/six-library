@@ -22,6 +22,7 @@
 
 #ifndef __NITF_TEXTSUBHEADER_HPP__
 #define __NITF_TEXTSUBHEADER_HPP__
+#pragma once
 
 #include "nitf/TextSubheader.h"
 #include "nitf/NITFException.hpp"
@@ -59,54 +60,54 @@ public:
     TextSubheader();
 
     //! Clone
-    nitf::TextSubheader clone();
+    nitf::TextSubheader clone() const;
 
-    ~TextSubheader();
+    ~TextSubheader() = default;
 
     //! Get the filePartType
-    nitf::Field getFilePartType();
+    nitf::Field getFilePartType() const;
 
     //! Get the textID
-    nitf::Field getTextID();
+    nitf::Field getTextID() const;
 
     //! Get the attachmentLevel
-    nitf::Field getAttachmentLevel();
+    nitf::Field getAttachmentLevel() const;
 
     //! Get the dateTime
-    nitf::Field getDateTime();
+    nitf::Field getDateTime() const;
 
     //! Get the title
-    nitf::Field getTitle();
+    nitf::Field getTitle() const;
 
     //! Get the securityClass
-    nitf::Field getSecurityClass();
+    nitf::Field getSecurityClass() const;
 
     //! Get the securityGroup
-    nitf::FileSecurity getSecurityGroup();
+    nitf::FileSecurity getSecurityGroup() const;
 
     //! Set the securityGroup
     void setSecurityGroup(nitf::FileSecurity value);
 
     //! Get the encrypted
-    nitf::Field getEncrypted();
+    nitf::Field getEncrypted() const;
 
     //! Get the format
-    nitf::Field getFormat();
+    nitf::Field getFormat() const;
 
     //! Get the extendedHeaderLength
-    nitf::Field getExtendedHeaderLength();
+    nitf::Field getExtendedHeaderLength() const;
 
     //! Get the extendedHeaderOverflow
-    nitf::Field getExtendedHeaderOverflow();
+    nitf::Field getExtendedHeaderOverflow() const;
 
     //! Get the extendedSection
-    nitf::Extensions getExtendedSection();
+    nitf::Extensions getExtendedSection() const;
 
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

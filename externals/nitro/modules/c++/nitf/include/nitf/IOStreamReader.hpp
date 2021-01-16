@@ -33,9 +33,8 @@ namespace nitf
  *  \brief Adapter class that takes in any io::SeekableInputStream and creates
  *         an interface that usable by NITRO.
  */
-class IOStreamReader : public CustomIO
+struct IOStreamReader final : public CustomIO
 {
-public:
     /*
      *  \func Constructor
      *  \brief Sets up the stream reader from a seekable input stream.
@@ -45,22 +44,25 @@ public:
      */
     IOStreamReader(io::SeekableInputStream& stream);
 
+    IOStreamReader(const IOStreamReader&) = delete;
+    IOStreamReader& operator=(const IOStreamReader&) = delete;
+
 private:
-    void readImpl(void* buffer, size_t size);
+    void readImpl(void* buffer, size_t size) override;
 
-    void writeImpl(const void* buffer, size_t size);
+    void writeImpl(const void* buffer, size_t size) override;
 
-    bool canSeekImpl() const;
+    bool canSeekImpl() const override;
 
-    nitf::Off seekImpl(nitf::Off offset, int whence);
+    nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
-    nitf::Off tellImpl() const;
+    nitf::Off tellImpl() const override;
 
-    nitf::Off getSizeImpl() const;
+    nitf::Off getSizeImpl() const override;
 
-    int getModeImpl() const;
+    int getModeImpl() const override;
 
-    void closeImpl();
+    void closeImpl() override;
 
     io::SeekableInputStream& mStream;
 };

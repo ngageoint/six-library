@@ -22,6 +22,9 @@
 
 #ifndef __IMPORT_NITF_HPP__
 #define __IMPORT_NITF_HPP__
+#pragma once
+
+#include "nitf/coda-oss.hpp"
 
 #include "nitf/BandInfo.hpp"
 #include "nitf/BandSource.hpp"

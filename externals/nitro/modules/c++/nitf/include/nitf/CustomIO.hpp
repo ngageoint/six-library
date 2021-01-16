@@ -27,12 +27,10 @@
 
 namespace nitf
 {
-class CustomIO : public IOInterface
+struct CustomIO : public IOInterface
 {
-public:
     CustomIO();
-
-    virtual ~CustomIO();
+    ~CustomIO();
 
 protected:
     virtual void readImpl(void* buf, size_t size) = 0;
@@ -53,7 +51,7 @@ protected:
 
 private:
     static
-    nitf_IOInterface* createInterface(CustomIO* me);
+    nitf_IOInterface* createInterface(CustomIO* me) noexcept;
 
     static
     NRT_BOOL adapterRead(NRT_DATA* data, void* buf, size_t size, nrt_Error* error);
@@ -80,7 +78,7 @@ private:
     NRT_BOOL adapterClose(NRT_DATA* data, nrt_Error* error);
 
     static
-    void adapterDestruct(NRT_DATA* data);
+    void adapterDestruct(NRT_DATA* data) noexcept;
 };
 }
 

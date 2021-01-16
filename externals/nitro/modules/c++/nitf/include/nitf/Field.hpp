@@ -28,6 +28,8 @@
 #include <limits>
 
 #include <nitf/Field.h>
+
+#include <nitf/coda-oss.hpp>
 #include <nitf/System.hpp>
 #include <nitf/HashTable.hpp>
 #include <nitf/List.hpp>
@@ -80,15 +82,31 @@ struct GetConvType<false, IsSignedT>
  *  The Field is a generic type object that allows storage
  *  and casting of data amongst disparate data types.
  */
-class Field : public nitf::Object<nitf_Field>
+class Field final : public nitf::Object<nitf_Field>
 {
-public:
-enum FieldType
+    void setU_(uint32_t data)
     {
-        BCS_A = NITF_BCS_A,
-        BCS_N = NITF_BCS_N,
-        BINARY = NITF_BINARY
-    };
+        const NITF_BOOL x = nitf_Field_setUint32(getNativeOrThrow(), data, &error);
+        if (!x)
+            throw nitf::NITFException(&error);
+    }
+    void set_(int32_t data)
+    {
+        if (!nitf_Field_setInt32(getNativeOrThrow(), data, &error))
+            throw nitf::NITFException(&error);
+    }
+    void set_(double data)
+    {
+        if (!nitf_Field_setReal(getNativeOrThrow(),
+            "f", false, data, &error))
+            throw nitf::NITFException(&error);
+    }
+
+public:
+    using FieldType = nitf::FieldType;
+    static const auto BCS_A = FieldType::NITF_BCS_A;
+    static const auto BCS_N = FieldType::NITF_BCS_N;
+    static const auto BINARY = FieldType::NITF_BINARY;
 
     Field & operator=(const char * value)
     {
@@ -185,103 +203,73 @@ enum FieldType
 
     Field(NITF_DATA * x)
     {
-        setNative((nitf_Field*)x);
-        getNativeOrThrow();
+        *this = x;
     }
 
     Field & operator=(NITF_DATA * x)
     {
-        setNative((nitf_Field*)x);
+        setNative(static_cast<nitf_Field*>(x));
         getNativeOrThrow();
         return *this;
     }
 
-    //! Destructor
-    ~Field() {}
+    ~Field() = default;
 
     void set(uint8_t data)
     {
-        if (!nitf_Field_setUint32(getNativeOrThrow(),
-                                  uint32_t(data), &error))
-            throw nitf::NITFException(&error);
+        setU_(data);
     }
-
     void set(uint16_t data)
     {
-        if (!nitf_Field_setUint32(getNativeOrThrow(),
-                                  uint32_t(data), &error))
-            throw nitf::NITFException(&error);
+        setU_(data);
     }
-
     void set(uint32_t data)
     {
-        NITF_BOOL x = nitf_Field_setUint32(getNativeOrThrow(), data, &error);
-        if (!x)
-            throw nitf::NITFException(&error);
+        setU_(data);
     }
-
     void set(uint64_t data)
     {
-        NITF_BOOL x = nitf_Field_setUint64(getNativeOrThrow(), data, &error);
+        const NITF_BOOL x = nitf_Field_setUint64(getNativeOrThrow(), data, &error);
         if (!x)
             throw nitf::NITFException(&error);
     }
 
     void set(int8_t data)
     {
-        if (!nitf_Field_setInt32(getNativeOrThrow(),
-                                 uint32_t(data), &error))
-            throw nitf::NITFException(&error);
+        set_(data);
     }
-
     void set(int16_t data)
     {
-        if (!nitf_Field_setInt32(getNativeOrThrow(),
-                                 uint32_t(data), &error))
-            throw nitf::NITFException(&error);
+        set_(data);
     }
-
     void set(int32_t data)
     {
-        if (!nitf_Field_setInt32(getNativeOrThrow(),
-                                 uint32_t(data), &error))
-            throw nitf::NITFException(&error);
+        set_(data);
     }
-
     void set(int64_t data)
     {
-        if (!nitf_Field_setInt64(getNativeOrThrow(),
-                                 uint32_t(data), &error))
+        if (!nitf_Field_setInt64(getNativeOrThrow(), data, &error))
             throw nitf::NITFException(&error);
     }
 
     void set(float data)
     {
-        if (!nitf_Field_setReal(getNativeOrThrow(),
-                                "f", false, double(data), &error))
-            throw nitf::NITFException(&error);
+        set_(data);
     }
-
     void set(double data)
     {
-        if (!nitf_Field_setReal(getNativeOrThrow(),
-                                "f", false, data, &error))
-            throw nitf::NITFException(&error);
+        set_(data);
     }
 
     void set(const char * data)
     {
-        NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), (char*)data, &error);
+        const NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), data, &error);
         if (!x)
             throw nitf::NITFException(&error);
     }
-
     void set(const std::string& data)
     {
-        const NITF_BOOL x =
-                nitf_Field_setString(getNativeOrThrow(), data.c_str(), &error);
-        if (!x)
-            throw nitf::NITFException(&error);
+        set(data.c_str());
     }
 
     void set(const nitf::DateTime& dateTime,
@@ -308,13 +296,13 @@ enum FieldType
     //! Get the type
     FieldType getType() const
     {
-        return (FieldType)getNativeOrThrow()->type;
+        return static_cast<FieldType>(getNativeOrThrow()->type);
     }
 
     //! Set the type
     void setType(FieldType type)
     {
-        getNativeOrThrow()->type = (nitf_FieldType)type;
+        getNativeOrThrow()->type = static_cast<nitf_FieldType>(type);
     }
 
     //! Get the data
@@ -342,7 +330,7 @@ enum FieldType
     void resize(size_t length)
     {
         nitf_Field *field = getNativeOrThrow();
-        NITF_BOOL resizable = field->resizable;
+        const NITF_BOOL resizable = field->resizable;
         field->resizable = 1;
 
         if (!nitf_Field_resizeField(field, length, &error))
@@ -354,34 +342,40 @@ enum FieldType
     template <typename T>
     operator T() const
     {
-        T data;
-        get(&data,
+        T retval;
+        get(&retval,
             detail::GetConvType<std::numeric_limits<T>::is_integer,
                                 std::numeric_limits<T>::is_signed>::CONV_TYPE,
             sizeof(T));
-        return data;
+        return retval;
     }
 
     //! Returns the field as a string
     operator std::string() const
     {
-        return toString();
+        return std::string(getNativeOrThrow()->raw,
+            getNativeOrThrow()->length);
     }
-
     std::string toString() const
     {
-        return std::string(getNativeOrThrow()->raw,
-                           getNativeOrThrow()->length );
+        return *this;
+    }
+    std::string toTrimString() const
+    {
+        std::string retval = *this; // implicitly converted to std::string
+        str::trim(retval);
+        return retval;
     }
 
-private:
-    Field(){} //private -- does not make sense to construct a Field from scratch
+    Field() = delete; // does not make sense to construct a Field from scratch
+    operator char* () const = delete; // Don't allow this cast ever.
 
+private:
     //! get the value
     void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const
     {
         nitf_Error e;
-        NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &e);
+        const NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &e);
         if (!x)
             throw nitf::NITFException(&e);
     }
@@ -389,16 +383,13 @@ private:
     //! set the value
     void set(NITF_DATA* inval, size_t length)
     {
-        NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length, &error);
+        const NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length, &error);
         if (!x)
             throw nitf::NITFException(&error);
     }
 
-    nitf_Error error;
-
-    operator char*() const; // Don't allow this cast ever.
+    nitf_Error error{};
 };
 
 }
-
 #endif

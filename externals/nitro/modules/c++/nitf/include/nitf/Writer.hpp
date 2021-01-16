@@ -47,10 +47,7 @@ namespace nitf
 
 struct WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
 {
-    ~WriterDestructor()
-    {
-    }
-    void operator()(nitf_Writer *writer);
+    void operator()(nitf_Writer *writer) override;
 };
 
 /*!
@@ -73,6 +70,8 @@ public:
     Writer();
 
     ~Writer();
+    Writer(Writer&&) = default;
+    Writer& operator=(Writer&&) = default;
 
     //! Write the record to disk
     void write();
@@ -96,35 +95,35 @@ public:
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for images
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setImageWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for graphics
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setGraphicWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for texts
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setTextWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for DEs
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setDEWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setDEWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Sets the WriteHandler for the Image at the given index.
@@ -249,7 +248,7 @@ public:
                          uint32_t fillDir);
 
 private:
-    nitf_Error error;
+    nitf_Error  error{};
 
     //! c++ write handlers need to be kept in scope
     std::vector<mem::SharedPtr<nitf::WriteHandler> > mWriteHandlers;

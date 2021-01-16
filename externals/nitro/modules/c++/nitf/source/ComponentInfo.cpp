@@ -22,11 +22,13 @@
 
 #include "nitf/ComponentInfo.hpp"
 
+#include <gsl/gsl.h>
+
 using namespace nitf;
 
 ComponentInfo::ComponentInfo(const ComponentInfo & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 ComponentInfo & ComponentInfo::operator=(const ComponentInfo & x)
@@ -42,28 +44,26 @@ ComponentInfo::ComponentInfo(nitf_ComponentInfo * x)
     getNativeOrThrow();
 }
 
-ComponentInfo::ComponentInfo(uint32_t subHeaderSize, uint64_t dataSize)
+ComponentInfo::ComponentInfo(uint32_t subHeaderSize, uint64_t dataSize) 
+    : ComponentInfo(nitf_ComponentInfo_construct(subHeaderSize, gsl::narrow<uint32_t>(dataSize), &error))
 {
-    setNative(nitf_ComponentInfo_construct(subHeaderSize, dataSize, &error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
-ComponentInfo ComponentInfo::clone()
+ComponentInfo ComponentInfo::clone() const
 {
     nitf::ComponentInfo dolly(nitf_ComponentInfo_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
     return dolly;
 }
 
-ComponentInfo::~ComponentInfo(){}
 
-nitf::Field ComponentInfo::getLengthSubheader()
+nitf::Field ComponentInfo::getLengthSubheader() const
 {
     return nitf::Field(getNativeOrThrow()->lengthSubheader);
 }
 
-nitf::Field ComponentInfo::getLengthData()
+nitf::Field ComponentInfo::getLengthData() const
 {
     return nitf::Field(getNativeOrThrow()->lengthData);
 }

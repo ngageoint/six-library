@@ -58,72 +58,72 @@ public:
     GraphicSubheader();
 
     //! Clone
-    nitf::GraphicSubheader clone();
+    nitf::GraphicSubheader clone() const;
 
-    ~GraphicSubheader();
+    ~GraphicSubheader() = default;
 
     //! Get the filePartType
-    nitf::Field getFilePartType();
+    nitf::Field getFilePartType() const;
 
     //! Get the graphicID
-    nitf::Field getGraphicID();
+    nitf::Field getGraphicID() const;
 
     //! Get the name
-    nitf::Field getName();
+    nitf::Field getName() const;
 
     //! Get the securityClass
-    nitf::Field getSecurityClass();
+    nitf::Field getSecurityClass() const;
 
     //! Get the securityGroup
-    nitf::FileSecurity getSecurityGroup();
+    nitf::FileSecurity getSecurityGroup() const;
 
     //! Set the securityGroup
     void setSecurityGroup(nitf::FileSecurity value);
 
     //! Get the encrypted
-    nitf::Field getEncrypted();
+    nitf::Field getEncrypted() const;
 
     //! Get the stype
-    nitf::Field getStype();
+    nitf::Field getStype() const;
 
     //! Get the res1
-    nitf::Field getRes1();
+    nitf::Field getRes1() const;
 
     //! Get the displayLevel
-    nitf::Field getDisplayLevel();
+    nitf::Field getDisplayLevel() const;
 
     //! Get the attachmentLevel
-    nitf::Field getAttachmentLevel();
+    nitf::Field getAttachmentLevel() const;
 
     //! Get the location
-    nitf::Field getLocation();
+    nitf::Field getLocation() const;
 
     //! Get the bound1Loc
-    nitf::Field getBound1Loc();
+    nitf::Field getBound1Loc() const;
 
     //! Get the color
-    nitf::Field getColor();
+    nitf::Field getColor() const;
 
     //! Get the bound2Loc
-    nitf::Field getBound2Loc();
+    nitf::Field getBound2Loc() const;
 
     //! Get the res2
-    nitf::Field getRes2();
+    nitf::Field getRes2() const;
 
     //! Get the extendedHeaderLength
-    nitf::Field getExtendedHeaderLength();
+    nitf::Field getExtendedHeaderLength() const;
 
     //! Get the extendedHeaderOverflow
-    nitf::Field getExtendedHeaderOverflow();
+    nitf::Field getExtendedHeaderOverflow() const;
 
     //! Get the extendedSection
-    nitf::Extensions getExtendedSection();
+    nitf::Extensions getExtendedSection() const;
 
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

@@ -60,12 +60,12 @@ public:
     LabelSegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::LabelSegment clone();
+    nitf::LabelSegment clone() const;
 
-    ~LabelSegment();
+    ~LabelSegment() = default;
 
     //! Get the subheader
-    nitf::LabelSubheader getSubheader();
+    nitf::LabelSubheader getSubheader() const;
 
     //! Set the subheader
     void setSubheader(nitf::LabelSubheader & value);
@@ -83,7 +83,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

@@ -69,16 +69,12 @@ Reader::Reader()
     setManaged(false);
 }
 
-Reader::~Reader()
-{
-}
-
-nitf::Version Reader::getNITFVersion(const std::string& fileName)
+nitf::Version Reader::getNITFVersion(const std::string& fileName) noexcept
 {
     return nitf_Reader_getNITFVersion(fileName.c_str());
 }
 
-nitf::Version Reader::getNITFVersion(IOInterface& io)
+nitf::Version Reader::getNITFVersion(const IOInterface& io)
 {
     return nitf_Reader_getNITFVersionIO(io.getNativeOrThrow());
 }
