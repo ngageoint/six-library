@@ -56,11 +56,7 @@ public:
     // SICD spells this out, SIDD does not
     virtual std::string getLevel() const = 0;
 
-    bool isUnclassified() const
-    {
-        const std::string level(getLevel());
-        return (!level.empty() && ::toupper(level[0]) == 'U');
-    }
+    bool isUnclassified() const;
 
     virtual void setSecurity(const std::string& /*prefix*/,
                              logging::Logger& /*log*/,

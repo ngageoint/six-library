@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_NITF_WRITE_CONTROL_H__
 #define __SIX_NITF_WRITE_CONTROL_H__
 
@@ -66,10 +67,14 @@ public:
      */
     NITFWriteControl(const six::Options& options,
                      mem::SharedPtr<Container> container,
-                     const XMLControlRegistry* xmlRegistry = NULL);
+                     const XMLControlRegistry* xmlRegistry = nullptr);
+
+    //! Noncopyable
+    NITFWriteControl(const NITFWriteControl&) = delete;
+    const NITFWriteControl& operator=(const NITFWriteControl&) = delete;
 
     //!  We are a 'NITF'
-    std::string getFileType() const
+    std::string getFileType() const override
     {
         return "NITF";
     }
@@ -85,7 +90,7 @@ public:
      * as well.
      * \param xmlRegistry XMLControlRegistry to set
      */
-    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
+    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry) override
     {
         setXMLControlRegistryImpl(xmlRegistry);
     }
@@ -136,12 +141,15 @@ public:
      * Set the internal NITF header creator
      * \param headerCreator Populated NITF header creator
      */
+    void setNITFHeaderCreator(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator);
+#if !CODA_OSS_cpp17
     void setNITFHeaderCreator(std::auto_ptr<six::NITFHeaderCreator> headerCreator);
+#endif
 
     virtual void initialize(const six::Options& options,
                             mem::SharedPtr<Container> container);
 
-    virtual void initialize(mem::SharedPtr<Container> container);
+    virtual void initialize(mem::SharedPtr<Container> container) override;
 
     using WriteControl::save;
 
@@ -163,7 +171,7 @@ public:
      */
     virtual void save(const SourceList& imageData,
                       const std::string& outputFile,
-                      const std::vector<std::string>& schemaPaths);
+                      const std::vector<std::string>& schemaPaths) override;
 
     /*!
      *  Bind an interleaved (IQIQIQIQ) memory buffer
@@ -190,7 +198,7 @@ public:
      */
     virtual void save(const BufferList& imageData,
                       const std::string& outputFile,
-                      const std::vector<std::string>& schemaPaths);
+                      const std::vector<std::string>& schemaPaths) override;
 
     void save(const NonConstBufferList& imageData,
               const std::string& outputFile,
@@ -283,7 +291,7 @@ public:
 protected:
     nitf::Writer mWriter;
     std::map<std::string, void*> mCompressionOptions;
-    std::auto_ptr<six::NITFHeaderCreator> mNITFHeaderCreator;
+    mem::auto_ptr<six::NITFHeaderCreator> mNITFHeaderCreator;
 
     void writeNITF(nitf::IOInterface& os);
 
@@ -486,11 +494,6 @@ private:
                        size_t segmentNum,
                        size_t numImageSegments,
                        size_t productNum);
-
-private:
-    //! Noncopyable
-    NITFWriteControl(const NITFWriteControl& );
-    const NITFWriteControl& operator=(const NITFWriteControl& );
 };
 }
 #endif

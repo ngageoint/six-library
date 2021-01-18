@@ -21,8 +21,9 @@
  */
 #ifndef __SIX_READ_CONTROL_FACTORY_H__
 #define __SIX_READ_CONTROL_FACTORY_H__
+#pragma once
 
-#include <import/mt.h>
+#include <memory>
 
 #include "six/ReadControl.h"
 
@@ -31,43 +32,56 @@ namespace six
 
 struct ReadControlCreator
 {
-    ReadControlCreator() {}
-
-    virtual ~ReadControlCreator() {}
+    virtual ~ReadControlCreator() = default;
 
     virtual six::ReadControl* newReadControl() const = 0;
+    virtual void newReadControl(std::unique_ptr<six::ReadControl>& result) const
+    {
+        result.reset(newReadControl());
+    }
 
     virtual bool supports(const std::string& filename) const = 0;
 
+protected:
+    ReadControlCreator() = default;
 };
-
 
 class ReadControlRegistry
 {
-    std::list<ReadControlCreator*> mCreators;
+    std::list<std::unique_ptr<ReadControlCreator>> mCreators;
 public:
-    ReadControlRegistry()
-    {
-    }
-
-    virtual ~ReadControlRegistry();
+    ReadControlRegistry() = default;
+    virtual ~ReadControlRegistry() = default;
 
     /**
      * Add a known creator to the registry. The registry takes ownership.
      */
+    inline void addCreator(std::unique_ptr<ReadControlCreator>&& creator)
+    {
+        mCreators.push_back(std::move(creator));
+    }
     inline void addCreator(ReadControlCreator* creator)
     {
-        mCreators.push_back(creator);
+        addCreator(std::unique_ptr<ReadControlCreator>(creator));
     }
 
     virtual six::ReadControl* newReadControl(const std::string& filename) const;
+    virtual void newReadControl(const std::string& filename, std::unique_ptr<six::ReadControl>& result) const;
 
 };
 
-//!  Singleton declaration of our ReadControlRegistry
-typedef mt::Singleton<ReadControlRegistry, true> ReadControlFactory;
+struct ReadControlFactory final
+{
+    ReadControlFactory() = delete;
+    ~ReadControlFactory() = delete;
+    ReadControlFactory(const ReadControlFactory&) = delete;
+    ReadControlFactory(ReadControlFactory&&) = delete;
+    ReadControlFactory& operator=(const ReadControlFactory&) = delete;
+    ReadControlFactory& operator=(ReadControlFactory&&) = delete;
+
+    static ReadControlRegistry& getInstance();
+};
 
 }
 
 #endif
-

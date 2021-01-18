@@ -100,8 +100,8 @@ const size_t NITFHeaderCreator::DEFAULT_BUFFER_SIZE = 8 * 1024 * 1024;
 
 NITFHeaderCreator::NITFHeaderCreator() :
     mRecord(NITF_VER_21),
-    mXMLRegistry(NULL),
-    mLog(NULL),
+    mXMLRegistry(nullptr),
+    mLog(nullptr),
     mOwnLog(false)
 {
     // Make sure that if we use XML_DATA_CONTENT that we've loaded it into the
@@ -111,8 +111,8 @@ NITFHeaderCreator::NITFHeaderCreator() :
 
 NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
     mRecord(NITF_VER_21),
-    mXMLRegistry(NULL),
-    mLog(NULL),
+    mXMLRegistry(nullptr),
+    mLog(nullptr),
     mOwnLog(false)
 {
     loadXmlDataContentHandler();
@@ -122,8 +122,8 @@ NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
 NITFHeaderCreator::NITFHeaderCreator(const six::Options& options,
                                      mem::SharedPtr<Container> container) :
     mRecord(NITF_VER_21),
-    mXMLRegistry(NULL),
-    mLog(NULL),
+    mXMLRegistry(nullptr),
+    mLog(nullptr),
     mOwnLog(false)
 {
     loadXmlDataContentHandler();
@@ -940,9 +940,10 @@ void NITFHeaderCreator::initialize(const six::Options& options,
     initialize(container);
 }
 
-void NITFHeaderCreator::loadMeshSegment(
+template<typename T>
+void NITFHeaderCreator::loadMeshSegment_(
         const std::string& meshName,
-        const std::vector<sys::byte>& meshBuffer,
+        const std::vector<T>& meshBuffer,
         const six::Classification& classification)
 {
     nitf::Record& record = getRecord();
@@ -959,10 +960,25 @@ void NITFHeaderCreator::loadMeshSegment(
     subheader.setSecurityGroup(security.clone());
 
     // Add the data and writer for this segment
+    auto data = reinterpret_cast<const sys::byte*>(meshBuffer.data());
     nitf::SegmentMemorySource dataSource(
-            meshBuffer.data(), meshBuffer.size(), 0, 0, true);
+            data, meshBuffer.size(), 0, 0, true);
     mem::SharedPtr<nitf::SegmentWriter> desWriter(
             new nitf::SegmentWriter(dataSource));
     addAdditionalDES(desWriter);
+}
+void NITFHeaderCreator::loadMeshSegment(
+        const std::string& meshName,
+        const std::vector<sys::byte>& meshBuffer,
+        const six::Classification& classification)
+{
+    loadMeshSegment_(meshName, meshBuffer, classification);
+}
+void NITFHeaderCreator::loadMeshSegment(
+        const std::string& meshName,
+        const std::vector<std::byte>& meshBuffer,
+        const six::Classification& classification)
+{
+    loadMeshSegment_(meshName, meshBuffer, classification);
 }
 }

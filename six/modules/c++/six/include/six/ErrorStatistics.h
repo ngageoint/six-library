@@ -78,7 +78,7 @@ struct CorrCoefs
  */
 struct PosVelError
 {
-    //!  CorrCoefs are NULL, since optional
+    //!  CorrCoefs are nullptr, since optional
     PosVelError() :
         positionDecorr(Init::undefined<DecorrType>())
     {

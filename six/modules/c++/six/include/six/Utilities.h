@@ -22,6 +22,7 @@
 #ifndef __SIX_UTILITIES_H__
 #define __SIX_UTILITIES_H__
 
+#include <nitf/coda-oss.hpp>
 #include <sys/Conf.h>
 #include <except/Exception.h>
 #include "six/Types.h"
@@ -190,7 +191,7 @@ void loadXmlDataContentHandler();
  *
  * \return Data representation of 'xmlStream'
  */
-std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg, 
+mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg, 
                               ::io::InputStream& xmlStream, 
                               DataType dataType,
                               const std::vector<std::string>& schemaPaths,
@@ -208,7 +209,7 @@ std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
  * \return Data representation of 'xmlStream'
  */
 inline
-std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
+mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               ::io::InputStream& xmlStream,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log)
@@ -228,7 +229,7 @@ std::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of the contents of 'pathname'
  */
-std::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
+mem::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
@@ -246,7 +247,7 @@ std::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
  * \return Data representation of the contents of 'pathname'
  */
 inline
-std::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
+mem::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
@@ -267,7 +268,7 @@ std::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of 'xmlStr'
  */
-std::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
@@ -285,7 +286,7 @@ std::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
  * \return Data representation of 'xmlStr'
  */
 inline
-std::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)

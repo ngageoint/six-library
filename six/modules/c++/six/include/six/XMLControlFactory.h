@@ -24,6 +24,7 @@
 
 #include <memory>
 
+#include <nitf/coda-oss.hpp>
 #include <import/mt.h>
 
 #include "six/XMLControl.h"
@@ -97,7 +98,11 @@ public:
     virtual ~XMLControlRegistry();
 
     void addCreator(const std::string& identifier,
+                    std::unique_ptr<XMLControlCreator>&& creator);
+#if !CODA_OSS_cpp17
+    void addCreator(const std::string& identifier,
                     std::auto_ptr<XMLControlCreator> creator);
+#endif
 
     /*!
      * Takes ownership of creator
@@ -105,23 +110,30 @@ public:
     void addCreator(const std::string& identifier,
                     XMLControlCreator* creator)
     {
-        std::auto_ptr<XMLControlCreator> scopedCreator(creator);
-        addCreator(identifier, scopedCreator);
+        std::unique_ptr<XMLControlCreator> scopedCreator(creator);
+        addCreator(identifier, std::move(scopedCreator));
     }
 
+    void addCreator(DataType dataType,
+                    std::unique_ptr<XMLControlCreator>&& creator)
+    {
+        addCreator(dataType.toString(), std::move(creator));
+    }
+#if !CODA_OSS_cpp17
     void addCreator(DataType dataType,
                     std::auto_ptr<XMLControlCreator> creator)
     {
         addCreator(dataType.toString(), creator);
     }
+#endif
 
     /*!
      * Takes ownership of creator
      */
     void addCreator(DataType dataType, XMLControlCreator* creator)
     {
-        std::auto_ptr<XMLControlCreator> scopedCreator(creator);
-        addCreator(dataType, scopedCreator);
+        std::unique_ptr<XMLControlCreator> scopedCreator(creator);
+        addCreator(dataType, std::move(scopedCreator));
     }
 
     /*!
@@ -155,7 +167,7 @@ private:
  *
  */
 std::string toXMLString(const Data* data,
-                        const XMLControlRegistry *xmlRegistry = NULL);
+                        const XMLControlRegistry *xmlRegistry = nullptr);
 
 /*!
  *  Additionally performs schema validation --
@@ -165,7 +177,7 @@ std::string toValidXMLString(
         const Data* data,
         const std::vector<std::string>& schemaPaths,
         logging::Logger* log,
-        const XMLControlRegistry *xmlRegistry = NULL);
+        const XMLControlRegistry *xmlRegistry = nullptr);
 
 
 //!  Singleton declaration of our XMLControlRegistry

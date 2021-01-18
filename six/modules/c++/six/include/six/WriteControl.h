@@ -74,10 +74,10 @@ public:
 
     //!  Constructor.  Null-sets the Container
     WriteControl() :
-        mContainer(NULL), mLog(NULL), mOwnLog(false), mXMLRegistry(NULL)
+        mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
-        setLogger(NULL);
-        setXMLControlRegistry(NULL);
+        setLogger(nullptr);
+        setXMLControlRegistry(nullptr);
     }
 
     //!  Destructor.  Does not release any memory

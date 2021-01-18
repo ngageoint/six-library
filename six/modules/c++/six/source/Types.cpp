@@ -41,21 +41,21 @@ std::ostream& operator<<(std::ostream& os, const Corners& corners)
 
 namespace six
 {
-const sys::Uint64_T Constants::IS_SIZE_MAX =
+const uint64_t Constants::IS_SIZE_MAX =
         nitf::ImageSegmentComputer::NUM_BYTES_MAX;
-const sys::Uint64_T Constants::GT_SIZE_MAX = 4294967296LL;
+const uint64_t Constants::GT_SIZE_MAX = 4294967296LL;
 const size_t Constants::ILOC_MAX = nitf::ImageSegmentComputer::ILOC_MAX;
 const unsigned short Constants::GT_XML_KEY = 50909;
 const char Constants::GT_XML_TAG[] = "XMLTag";
 
 // TODO  SIDD spec says to mark the DES version as "01" in the NITF but
 //       IC-ISM.xsd says the DESVersion attribute is fixed at 4
-const sys::Int32_T Constants::DES_VERSION = 4;
+const int32_t Constants::DES_VERSION = 4;
 const char Constants::DES_VERSION_STR[] = "01";
 
 const char Constants::DES_USER_DEFINED_SUBHEADER_TAG[] = "XML_DATA_CONTENT";
 const char Constants::DES_USER_DEFINED_SUBHEADER_ID[] = "XML_DATA_CONTENT_773";
-const sys::Uint64_T Constants::DES_USER_DEFINED_SUBHEADER_LENGTH = 773;
+const uint64_t Constants::DES_USER_DEFINED_SUBHEADER_LENGTH = 773;
 
 const char Constants::SICD_DESSHSI[] =
         "SICD Volume 1 Design & Implementation Description Document";

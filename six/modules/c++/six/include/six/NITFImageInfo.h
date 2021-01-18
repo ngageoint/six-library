@@ -21,6 +21,9 @@
  */
 #ifndef __SIX_NITF_IMAGE_INFO_H__
 #define __SIX_NITF_IMAGE_INFO_H__
+#pragma once
+
+#include <string>
 
 #include <six/Types.h>
 #include <six/Data.h>
@@ -70,7 +73,7 @@ public:
      */
     NITFImageInfo(Data* data,
                   size_t maxRows = Constants::ILOC_MAX,
-                  sys::Uint64_T maxSize = Constants::IS_SIZE_MAX,
+                  uint64_t maxSize = Constants::IS_SIZE_MAX,
                   bool computeSegments = false,
                   size_t rowsPerBlock = 0,
                   size_t colsPerBlock = 0);
@@ -176,7 +179,7 @@ public:
     }
 
     //! \return Number of total bytes in the image
-    sys::Uint64_T getNumBytesTotal() const
+    uint64_t getNumBytesTotal() const
     {
         return mSegmentComputer.getNumBytesTotal();
     }
@@ -188,7 +191,7 @@ public:
     }
 
     //! \return Max number of bytes that each image segment can be
-    sys::Uint64_T getMaxNumBytesPerSegment() const
+    uint64_t getMaxNumBytesPerSegment() const
     {
         return mSegmentComputer.getMaxNumBytesPerSegment();
     }
@@ -205,35 +208,35 @@ public:
                     const GetDisplayLutT& getDisplayLUT);
 
     //!  File security classification system
-    static const char CLSY[];
+    static const std::string CLSY;
     //!  File security codewords
-    static const char CODE[];
+    static const std::string CODE;
     //!  File control and handling
-    static const char CTLH[];
+    static const std::string CTLH;
     //!  File releasing instructions
-    static const char REL[];
+    static const std::string REL;
     //!  File security declassification type
-    static const char DCTP[];
+    static const std::string DCTP;
     //!  File security declassification date
-    static const char DCDT[];
+    static const std::string DCDT;
     //!  File security declassification exemption
-    static const char DCXM[];
+    static const std::string DCXM;
     //!  File security downgrade
-    static const char DG[];
+    static const std::string DG;
     //!  File security downgrade date
-    static const char DGDT[];
+    static const std::string DGDT;
     //!  File security classification text
-    static const char CLTX[];
+    static const std::string CLTX;
     //!  File security classification Authority type
-    static const char CATP[];
+    static const std::string CATP;
     //!  File security classification Authority
-    static const char CAUT[];
+    static const std::string CAUT;
     //!  File security reason
-    static const char CRSN[];
+    static const std::string CRSN;
     //!  File security source date
-    static const char SRDT[];
+    static const std::string SRDT;
     //!  File security control number
-    static const char CTLN[];
+    static const std::string CTLN;
 
     //! Utility that generates a key for the given field, with optional prefix and index
     static std::string generateFieldKey(const std::string& field,
@@ -329,11 +332,10 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 
     case PixelType::MONO8LU:
     {
-        nitf::BandInfo band1;
         const LUT* lutPtr = getDisplayLUT();
-        //If LUT is NULL, we have a predefined LookupTable.
+        //If LUT is nullptr, we have a predefined LookupTable.
         //No LUT to write into NITF, so setting to MONO
-        if (lutPtr == NULL)
+        if (lutPtr == nullptr)
         {
             nitf::BandInfo band1;
             band1.getRepresentation().set("M");
@@ -344,8 +346,8 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             // TODO: Why do we need to byte swap here?  If it is required, could
             //       we avoid the clone and byte swap and instead index into
             //       the LUT in the opposite order?
-            std::auto_ptr<LUT> lut(lutPtr->clone());
-            sys::byteSwap(reinterpret_cast<sys::byte*>(lut->getTable()),
+            std::unique_ptr<LUT> lut(lutPtr->clone());
+            sys::byteSwap(reinterpret_cast<std::byte*>(lut->getTable()),
                           static_cast<unsigned short>(lut->elementSize),
                           lut->numEntries);
 
@@ -353,7 +355,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             {
                 throw except::Exception(Ctxt(
                     "Unexpected element size: " +
-                    str::toString(lut->elementSize)));
+                    std::to_string(lut->elementSize)));
             }
 
             nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
@@ -373,9 +375,10 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             //band1.getRepresentation().set("LU");
             //band1.getLookupTable().setTable(table, 2, lut.numEntries);
 
+            nitf::BandInfo band1;
             band1.init("LU", "", "", "",
-                static_cast<nitf::Uint32>(lut->elementSize),
-                static_cast<nitf::Uint32>(lut->numEntries),
+                static_cast<uint32_t>(lut->elementSize),
+                static_cast<uint32_t>(lut->numEntries),
                 lookupTable);
             bands.push_back(band1);
         }
@@ -384,13 +387,11 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 
     case PixelType::RGB8LU:
     {
-        nitf::BandInfo band1;
-
         const LUT* const lut = getDisplayLUT();
 
-        if (lut == NULL)
+        if (lut == nullptr)
         {
-            //If LUT is NULL, we have a predefined LookupTable.
+            //If LUT is nullptr, we have a predefined LookupTable.
             //No LUT to write into NITF, so setting to MONO
             nitf::BandInfo band1;
             band1.getRepresentation().set("M");
@@ -402,7 +403,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             {
                 throw except::Exception(Ctxt(
                     "Unexpected element size: " +
-                    str::toString(lut->elementSize)));
+                    std::to_string(lut->elementSize)));
             }
 
             nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
@@ -420,10 +421,11 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             //Using the init function instead.
             //band1.getRepresentation().set("LU");
             //band1.getLookupTable().setTable(table, 3, lut->numEntries);
-
+            
+            nitf::BandInfo band1;
             band1.init("LU", "", "", "",
-                static_cast<nitf::Uint32>(lut->elementSize),
-                static_cast<nitf::Uint32>(lut->numEntries),
+                static_cast<uint32_t>(lut->elementSize),
+                static_cast<uint32_t>(lut->numEntries),
                 lookupTable);
             bands.push_back(band1);
         }
@@ -443,4 +445,3 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 }
 
 #endif
-

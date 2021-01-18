@@ -22,6 +22,7 @@
 #ifndef __SIX_NITF_IMAGE_INPUT_STREAM_H__
 #define __SIX_NITF_IMAGE_INPUT_STREAM_H__
 
+#include <nitf/coda-oss.hpp>
 #include <import/six.h>
 #include <import/nitf.hpp>
 #include <import/io.h>
@@ -56,22 +57,24 @@ public:
     virtual ~NITFImageInputStream() {}
 
     //!  How many bytes in the image
-    sys::Off_T available();
+    int64_t available();
 
     //!  Read N bytes from a NITF file
-    sys::SSize_T read(sys::byte* b, sys::Size_T len);
+    ptrdiff_t read(std::byte* b, size_t len);
+    ptrdiff_t read(sys::byte* b, size_t len);
+    ptrdiff_t read(gsl::span<sys::byte>);
 
 protected:
 
-    sys::SSize_T readRow();
+    ptrdiff_t readRow();
 
     nitf::ImageSubheader mSubheader;
     nitf::ImageReader mReader;
-    sys::Off_T mAvailable;
-    sys::Size_T mRowBufferRemaining, mRowSize, mRowOffset;
+    int64_t mAvailable;
+    size_t mRowBufferRemaining, mRowSize, mRowOffset;
     mem::ScopedArray<sys::ubyte> mRowBuffer;
     nitf::SubWindow mWindow;
-    mem::ScopedArray<nitf::Uint32> mBandList;
+    mem::ScopedArray<uint32_t> mBandList;
 };
 
 }
