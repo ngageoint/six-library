@@ -609,8 +609,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 
     if (buffer == nullptr)
     {
-        buffer = new uint8_t[subWindowSize];
-        region.setBuffer(buffer);
+        buffer = region.setBuffer(subWindowSize).release();
     }
 
     // Do segmenting here
@@ -755,9 +754,9 @@ void NITFReadControl::reset()
 }
 
 
-void NITFReadControlCreator::newReadControl(std::unique_ptr<six::ReadControl>& p) const
+void NITFReadControlCreator::newReadControl(std::unique_ptr<six::ReadControl>& result) const
 {
-    p.reset(new NITFReadControl());
+    result.reset(new NITFReadControl());
 }
 
 bool NITFReadControlCreator::supports(const std::string& filename) const
