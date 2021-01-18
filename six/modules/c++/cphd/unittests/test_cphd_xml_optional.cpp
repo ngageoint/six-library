@@ -1117,24 +1117,6 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(matchInfo.types[1].matchCollects[0].parameters[0].getName(), "param1");
 }
 
-int main()
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testOptional);
-        return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-    }
-    return 1;
-}
+)

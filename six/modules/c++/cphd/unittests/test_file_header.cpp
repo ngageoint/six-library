@@ -156,26 +156,8 @@ TEST_CASE(testRoundTripHeader)
 }
 }
 
-int main(int /*argc*/, char** /*argv*/)
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testReadVersion);
         TEST_CHECK(testCanReadHeaderWithoutBreaking);
         TEST_CHECK(testRoundTripHeader);
-        return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-    }
-    return 1;
-}
+        )

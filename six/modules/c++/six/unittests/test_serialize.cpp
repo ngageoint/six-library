@@ -64,7 +64,7 @@ bool testScalar(bool byteSwap)
     const T val = getRandomScalar<T>();
     std::vector<sys::byte> serializedData;
     six::serialize<T>(val, byteSwap, serializedData);
-    const sys::byte* buffer = &serializedData[0];
+    const sys::byte* buffer = serializedData.data();
     T valCopy;
     six::deserialize<T>(buffer, byteSwap, valCopy);
     return val == valCopy;
@@ -76,7 +76,7 @@ bool testVector(size_t length, bool byteSwap)
     const std::vector<T> val = getRandomVector<T>(length);
     std::vector<sys::byte> serializedData;
     six::serialize<std::vector<T> >(val, byteSwap, serializedData);
-    const sys::byte* buffer = &serializedData[0];
+    const sys::byte* buffer = serializedData.data();
     std::vector<T> valCopy;
     six::deserialize<std::vector<T> >(buffer, byteSwap, valCopy);
     return val == valCopy;
@@ -87,7 +87,7 @@ bool testString(const std::string& str, bool byteSwap)
     std::vector<sys::byte> serializedData;
     six::serialize<std::string>(str, byteSwap, serializedData);
 
-    const sys::byte* buffer = &serializedData[0];
+    const sys::byte* buffer = serializedData.data();
     std::string strCopy;
     six::deserialize<std::string>(buffer, byteSwap, strCopy);
     return str == strCopy;
@@ -139,10 +139,9 @@ TEST_CASE(VectorSerialize)
     TEST_ASSERT_TRUE(testVector<double>(length, true));
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     srand(time(NULL));
     TEST_CHECK(ScalarSerialize);
     TEST_CHECK(VectorSerialize);
     TEST_CHECK(StringSerialize);
-}
+    )

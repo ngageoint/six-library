@@ -117,13 +117,13 @@ bool compareVectors(const std::vector<sys::ubyte>& readData,
                   << "ReadData size: " << readData.size() << "\n";
         return false;
     }
-    const sys::ubyte* ptr = reinterpret_cast<const sys::ubyte*>(writeData);
+    auto ptr = reinterpret_cast<const sys::ubyte*>(writeData);
     for (size_t ii = 0; ii < readData.size(); ++ii, ++ptr)
     {
         if (*ptr != readData[ii])
         {
             std::cerr << "Value mismatch at index " << ii << std::endl;
-            std::cerr << "readData: " << readData[ii] << " " << "writeData: " << *ptr << "\n";
+            std::cerr << "readData: " << static_cast<char>(readData[ii]) << " " << "writeData: " << static_cast<char>(*ptr) << "\n";
             return false;
         }
     }
@@ -141,8 +141,8 @@ bool runTest(const std::vector<T>& writeData)
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     writeSupportData(tempfile.pathname(), numThreads, writeData, meta, pvpBlock);
-    const std::vector<sys::ubyte> readData =
-            checkSupportData(tempfile.pathname(), NUM_SUPPORT*NUM_ROWS*NUM_COLS*sizeof(T), numThreads);
+    const auto readData =
+        checkSupportData(tempfile.pathname(), NUM_SUPPORT * NUM_ROWS * NUM_COLS * sizeof(T), numThreads);
 
     return compareVectors(readData, writeData.data(), writeData.size());
 }
@@ -164,28 +164,7 @@ TEST_CASE(testSupportsDouble)
 }
 }
 
-int main(int argc, char** argv)
-{
-    try
-    {
+TEST_MAIN(
         TEST_CHECK(testSupportsInt);
         TEST_CHECK(testSupportsDouble);
-        return 0;
-    }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
-        return 1;
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception\n";
-        return 1;
-    }
-}
-
+        )
