@@ -51,6 +51,7 @@ std::string AdjustableParams::name(ParamsEnum param)
         return "Velocity Cross-Track";
     case RANGE_BIAS:
         return "Range Bias";
+    case NUM_PARAMS:
     default:
         throw except::InvalidFormatException(Ctxt("Invalid enum value"));
     }
@@ -69,6 +70,7 @@ std::string AdjustableParams::units(ParamsEnum param)
     case ARP_VEL_IN_TRACK:
     case ARP_VEL_CROSS_TRACK:
         return "m/s";
+    case NUM_PARAMS:
     default:
         throw except::InvalidFormatException(Ctxt("Invalid enum value"));
     }
@@ -87,6 +89,7 @@ int AdjustableParams::group(ParamsEnum param)
         return 0;
     case RANGE_BIAS:
         return 1;
+    case NUM_PARAMS:
     default:
         return -1;
     }

@@ -20,6 +20,8 @@
  *
  */
 
+#include <string>
+
 #include <sys/Conf.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
@@ -56,7 +58,7 @@ double Utilities::remapZeroTo360(double degree)
         if (degree == delta)
         {
             throw except::Exception(Ctxt(
-                "Value [" + str::toString(degree) +
+                "Value [" + std::to_string(degree) +
                 "] is too small to remap into the [0:360] range"));
         }
     }
@@ -66,7 +68,7 @@ double Utilities::remapZeroTo360(double degree)
         if (degree == delta)
         {
             throw except::Exception(Ctxt(
-                "Value [" + str::toString(degree) +
+                "Value [" + std::to_string(degree) +
                 "] is too large to remap into the [0:360] range"));
         }
     }

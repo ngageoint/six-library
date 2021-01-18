@@ -93,7 +93,7 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
         const GridECEFTransform& gridTransform,
         const types::RowCol<size_t>& fullExtent,
         const types::RowCol<double>& outPixelStart,
-        const types::RowCol<size_t>& outExtent,
+        const types::RowCol<size_t>& /*outExtent*/,
         const std::vector<types::RowCol<double> >& polygon,
         size_t numPoints1D) :
     mNumPoints1D(numPoints1D),
