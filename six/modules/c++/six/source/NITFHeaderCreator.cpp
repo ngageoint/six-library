@@ -940,9 +940,10 @@ void NITFHeaderCreator::initialize(const six::Options& options,
     initialize(container);
 }
 
-void NITFHeaderCreator::loadMeshSegment(
+template<typename T>
+void NITFHeaderCreator::loadMeshSegment_(
         const std::string& meshName,
-        const std::vector<sys::byte>& meshBuffer,
+        const std::vector<T>& meshBuffer,
         const six::Classification& classification)
 {
     nitf::Record& record = getRecord();
@@ -959,10 +960,25 @@ void NITFHeaderCreator::loadMeshSegment(
     subheader.setSecurityGroup(security.clone());
 
     // Add the data and writer for this segment
+    auto data = reinterpret_cast<const sys::byte*>(meshBuffer.data());
     nitf::SegmentMemorySource dataSource(
-            meshBuffer.data(), meshBuffer.size(), 0, 0, true);
+            data, meshBuffer.size(), 0, 0, true);
     mem::SharedPtr<nitf::SegmentWriter> desWriter(
             new nitf::SegmentWriter(dataSource));
     addAdditionalDES(desWriter);
+}
+void NITFHeaderCreator::loadMeshSegment(
+        const std::string& meshName,
+        const std::vector<sys::byte>& meshBuffer,
+        const six::Classification& classification)
+{
+    loadMeshSegment_(meshName, meshBuffer, classification);
+}
+void NITFHeaderCreator::loadMeshSegment(
+        const std::string& meshName,
+        const std::vector<std::byte>& meshBuffer,
+        const six::Classification& classification)
+{
+    loadMeshSegment_(meshName, meshBuffer, classification);
 }
 }
