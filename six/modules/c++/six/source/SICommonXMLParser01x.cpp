@@ -74,7 +74,7 @@ XMLElem SICommonXMLParser01x::convertCompositeSCPToXML(
         }
         return scpXML;
     }
-    return NULL;
+    return nullptr;
 }
 
 void SICommonXMLParser01x::parseCompositeSCPFromXML(
@@ -148,10 +148,10 @@ XMLElem SICommonXMLParser01x::convertRadiometryToXML(
 
     if (r->sigmaZeroSFIncidenceMap != AppliedType::NOT_SET)
     {
-        createString(
+        createSixString(
             "SigmaZeroSFIncidenceMap",
             defaultURI,
-            six::toString<six::AppliedType>(r->sigmaZeroSFIncidenceMap),
+            r->sigmaZeroSFIncidenceMap,
             rXML);
     }
 
@@ -162,10 +162,10 @@ XMLElem SICommonXMLParser01x::convertRadiometryToXML(
 
     if (r->gammaZeroSFIncidenceMap != AppliedType::NOT_SET)
     {
-        createString(
+        createSixString(
             "GammaZeroSFIncidenceMap",
             defaultURI,
-            six::toString<six::AppliedType>(r->gammaZeroSFIncidenceMap),
+            r->gammaZeroSFIncidenceMap,
             rXML);
     }
     return rXML;
@@ -175,7 +175,7 @@ void SICommonXMLParser01x::parseRadiometryFromXML(
     const XMLElem radiometricXML, 
     Radiometric* radiometric) const
 {
-    XMLElem tmpElem = NULL;
+    XMLElem tmpElem = nullptr;
 
     tmpElem = getOptional(radiometricXML, "NoisePoly");
     if (tmpElem)
@@ -240,7 +240,7 @@ XMLElem SICommonXMLParser01x::convertMatchInformationToXML(
     {
         const MatchType& mt = matchInfo.types[i];
         XMLElem mtXML = newElement("Collect", matchInfoXML);
-        setAttribute(mtXML, "index", str::toString(i + 1));
+        setAttribute(mtXML, "index", i + 1);
 
         createString("CollectorName", mt.collectorName, mtXML);
         if (!mt.illuminatorName.empty())

@@ -19,8 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_XML_PARSER_H__
-#define __SIX_XML_PARSER_H__
+#pragma once
 
 #include <string>
 
@@ -28,6 +27,7 @@
 #include <logging/Logger.h>
 #include <six/Types.h>
 #include <six/Init.h>
+#include <six/Utilities.h>
 
 namespace six
 {
@@ -37,7 +37,7 @@ public:
     //!  Constructor
     XMLParser(const std::string& defaultURI,
               bool addClassAttributes,
-              logging::Logger* log = NULL,
+              logging::Logger* log = nullptr,
               bool ownLog = false);
 
     //!  Destructor
@@ -59,20 +59,27 @@ protected:
         return mDefaultURI;
     }
 
-    XMLElem newElement(const std::string& name, XMLElem prnt = NULL) const;
+    XMLElem newElement(const std::string& name, XMLElem prnt = nullptr) const;
 
     static
     XMLElem newElement(const std::string& name, const std::string& uri,
-            XMLElem prnt = NULL);
+            XMLElem prnt = nullptr);
 
     static
     XMLElem newElement(const std::string& name, const std::string& uri,
-            const std::string& characterData, XMLElem parent = NULL);
+            const std::string& characterData, XMLElem parent = nullptr);
 
     // generic element creation methods, w/URI
     XMLElem createString(const std::string& name,
             const std::string& uri, const std::string& p = "",
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
+    template<typename T>
+    XMLElem createSixString(const std::string& name,
+        const std::string& uri, const T& t,
+        XMLElem parent = nullptr) const
+    {
+        return createString(name, uri, toString(t), parent);
+    }
 
     template <typename T>
     XMLElem createStringFromEnum(const std::string& name,
@@ -91,43 +98,55 @@ protected:
     }
 
     XMLElem createInt(const std::string& name, const std::string& uri,
-           int p = 0, XMLElem parent = NULL) const;
+           int p = 0, XMLElem parent = nullptr) const;
 
     XMLElem createInt(const std::string& name,
             const std::string& uri, const std::string& p = "",
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
 
     XMLElem createDouble(const std::string& name,
-            const std::string& uri, double p = 0, XMLElem parent = NULL) const;
+            const std::string& uri, double p = 0, XMLElem parent = nullptr) const;
 
     XMLElem createBooleanType(const std::string& name,
-           const std::string& uri, BooleanType b, XMLElem parent = NULL) const;
+           const std::string& uri, BooleanType b, XMLElem parent = nullptr) const;
 
     XMLElem createDateTime(const std::string& name,
-            const std::string& uri, const DateTime& p, XMLElem parent = NULL) const;
+            const std::string& uri, const DateTime& p, XMLElem parent = nullptr) const;
 
     XMLElem createDateTime(const std::string& name,
             const std::string& uri, const std::string& s,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
 
     XMLElem createDate(const std::string& name,
-            const std::string& uri, const DateTime& p, XMLElem parent = NULL) const;
+            const std::string& uri, const DateTime& p, XMLElem parent = nullptr) const;
 
     // generic element creation methods, using default URI
-    XMLElem createString(const std::string& name,
-            const std::string& p = "", XMLElem parent = NULL) const;
+    template<typename T>
+    XMLElem createString(const std::string& name, const T& t,
+            XMLElem parent = nullptr) const {
+        return createString_(name, t.toString(), parent);
+    }
+    template<typename T>
+    XMLElem createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
+        XMLElem parent = nullptr) const {
+        return createString_(name, toString(t), parent);
+    }
+    XMLElem createString(const std::string& name, const char* p="",
+        XMLElem parent = nullptr) const {
+        return createString_(name, p, parent);
+    }
     XMLElem createInt(const std::string& name, int p = 0,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createDouble(const std::string& name, double p = 0,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createBooleanType(const std::string& name, BooleanType b,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createDateTime(const std::string& name, const DateTime& p,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem createDateTime(const std::string& name,
-            const std::string& s, XMLElem parent = NULL) const;
+            const std::string& s, XMLElem parent = nullptr) const;
     XMLElem createDate(const std::string& name, const DateTime& p,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
 
     template <typename T>
     void parseInt(XMLElem element, T& value) const
@@ -163,28 +182,45 @@ protected:
 
     void parseDateTime(XMLElem element, DateTime& value) const;
 
-    static
-    void setAttribute(XMLElem e, const std::string& name,
-                      const std::string& v, const std::string& uri = "");
+    static void setAttribute(XMLElem e, const std::string& name,
+        const std::string& s, const std::string& uri = "")
+    {
+        setAttribute_(e, name,s, uri);
+    }
+    static void setAttribute(XMLElem e, const std::string& name,
+        size_t i, const std::string& uri = "")
+    {
+        setAttribute_(e, name, std::to_string(i), uri);
+    }
 
     static XMLElem getOptional(XMLElem parent, const std::string& tag);
     static XMLElem getFirstAndOnly(XMLElem parent, const std::string& tag);
 
     /*!
-     * Require an element to be not NULL
-     * @throw throws an Exception if the element is NULL
+     * Require an element to be not nullptr
+     * @throw throws an Exception if the element is nullptr
      * @return returns the input Element
      */
     static XMLElem require(XMLElem element, const std::string& name);
 
 private:
+    XMLElem createString_(const std::string& name,
+        const std::string& p, XMLElem parent) const;
+    static void setAttribute_(XMLElem e, const std::string& name,
+            const std::string& v, const std::string& uri);
+
     const std::string mDefaultURI;
     const bool mAddClassAttributes;
 
     logging::Logger* mLog;
     bool mOwnLog;
 };
+
+ template<> inline XMLParser::XMLElem XMLParser::createString(const std::string& name,
+						      const std::string& p, XMLElem parent) const
+  {
+    return createString_(name, p, parent);
+  }
 }
 
-#endif
 
