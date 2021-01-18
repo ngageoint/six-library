@@ -27,6 +27,9 @@
 #include <except/Exception.h>
 #include <six/NITFReadControl.h>
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
 namespace
 {
 void testDataType(const std::string& pathname, six::DataType expectedDataType)
@@ -39,8 +42,7 @@ void testDataType(const std::string& pathname, six::DataType expectedDataType)
     {
         std::ostringstream ostr;
         ostr << "Expected " << pathname << " to be "
-             << expectedDataType.toString() << " but got "
-             << dataType.toString();
+             << expectedDataType << " but got " << dataType;
 
         throw except::Exception(Ctxt(ostr.str()));
     }
@@ -54,23 +56,16 @@ int main(int argc, char** argv)
         // Parse the command line
         if (argc != 2)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <samples/nitf directory>\n\n";
             return 1;
         }
-        const std::string samplesDir(argv[1]);
+        const fs::path samplesDir(argv[1]);
 
-        testDataType(sys::Path::joinPaths(samplesDir, "sicd_0.4.1.nitf"),
-                     six::DataType::COMPLEX);
-
-        testDataType(sys::Path::joinPaths(samplesDir, "sicd_1.1.0.nitf"),
-                     six::DataType::COMPLEX);
-
-        testDataType(sys::Path::joinPaths(samplesDir, "sidd_1.0.0.nitf"),
-                     six::DataType::DERIVED);
-
-        testDataType(sys::Path::joinPaths(samplesDir, "empty_file"),
-                     six::DataType::NOT_SET);
+        testDataType(samplesDir / "sicd_0.4.1.nitf", six::DataType::COMPLEX);
+        testDataType(samplesDir / "sicd_1.1.0.nitf", six::DataType::COMPLEX);
+        testDataType(samplesDir / "sidd_1.0.0.nitf", six::DataType::DERIVED);
+        testDataType(samplesDir / "empty_file", six::DataType::NOT_SET);
 
         std::cout << "All data types matched expected values" << std::endl;
 

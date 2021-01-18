@@ -78,6 +78,15 @@ public:
      * \param[out] values The serialized data.
      */
     virtual void serialize(std::vector<sys::byte>& values) const = 0;
+    virtual void serialize(std::vector<std::byte>& values) const
+    {
+        std::vector<sys::byte> values_;
+        serialize(values_);
+        auto begin = reinterpret_cast<std::byte*>(values_.data());
+        auto end = begin + values_.size();
+        values.insert(values.end(), begin, end);
+    }
+
 
     /*!
      * Deserializes an array of byte data to populate a Mesh. This is
@@ -122,7 +131,7 @@ public:
     virtual void deserialize(const sys::byte*& values) = 0;
     virtual void deserialize(const std::byte*& values)
     {
-        auto& values_ = reinterpret_cast<const std::byte*&>(values);
+        auto& values_ = reinterpret_cast<const sys::byte*&>(values);
         deserialize(values_);
     }
 };

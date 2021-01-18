@@ -41,14 +41,7 @@ namespace six
  */
 struct Legend
 {
-public:
-    //! Construct, initializing to invalid values
-    Legend() :
-        mType(PixelType::NOT_SET),
-        mLocation(0, 0),
-        mDims(0, 0)
-    {
-    }
+    Legend() = default;
 
     //! Convenience method to resize the image to match the dimensions
     void setDims(const types::RowCol<size_t>& dims)
@@ -59,14 +52,14 @@ public:
 
     //! Pixel type of legend image data.
     //  TODO: For now, only MONO8I and RGB8LU are supported
-    PixelType mType;
+    PixelType mType = PixelType::NOT_SET;
 
     //! Location of the legend with respect to the upper-left corner of the
     //  image segment it's attached to
-    types::RowCol<size_t> mLocation;
+    types::RowCol<size_t> mLocation{ 0, 0 };
 
     //! Dimensions of the legend image pixels
-    types::RowCol<size_t> mDims;
+    types::RowCol<size_t> mDims{ 0, 0 };
 
     //! Image legend pixels.  These are either pixel values or LUT indices
     //  depending on of the pixel type is MONO8I or RGB8LU, respectively.
