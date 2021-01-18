@@ -23,6 +23,7 @@
 #ifndef __SIX_BYTE_PROVIDER_H__
 #define __SIX_BYTE_PROVIDER_H__
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/ByteProvider.hpp>
 #include <mem/SharedPtr.h>
 #include <six/Container.h>
@@ -60,9 +61,14 @@ public:
      *  Extension Segment (DES) buffers and their lengths. This data
      *  will be stored in the DES portion of the NITF
      */
+    ByteProvider(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
+                 const std::vector<std::string>& schemaPaths,
+                 const std::vector<PtrAndLength>& desBuffers);
+#if !CODA_OSS_cpp17
     ByteProvider(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
                  const std::vector<std::string>& schemaPaths,
                  const std::vector<PtrAndLength>& desBuffers);
+#endif
 
     /*!
      * Populates the writer Options from given parameters
@@ -136,9 +142,14 @@ public:
      *  Extension Segment (DES) buffers and their lengths. This data
      *  will be stored in the DES portion of the NITF
      */
+    void initialize(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
+                    const std::vector<std::string>& schemaPaths,
+                    const std::vector<PtrAndLength>& desBuffers);
+#if !CODA_OSS_cpp17
     void initialize(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<PtrAndLength>& desBuffers);
+#endif
 protected:
     /*!
      * Default constructor. Client code must call initialize() to
