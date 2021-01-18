@@ -21,11 +21,13 @@
  */
 #ifndef __SIX_SERIALIZE_H__
 #define __SIX_SERIALIZE_H__
+#pragma once
 
 #include <vector>
 #include <algorithm>
 #include <iterator>
 
+#include <nitf/coda-oss.hpp>
 #include <sys/Conf.h>
 
 namespace six
@@ -50,7 +52,7 @@ struct Serializer
                               std::vector<sys::byte>& buffer)
     {
         const size_t length = sizeof(T);
-        const sys::byte* data = reinterpret_cast<const sys::byte*>(&val);
+        auto data = reinterpret_cast<const sys::byte*>(&val);
 
         if (swapBytes)
         {
@@ -77,7 +79,7 @@ struct Serializer
     static void deserializeImpl(const sys::byte*& buffer, bool swapBytes, T& val)
     {
         const size_t length = sizeof(T);
-        sys::byte* data = reinterpret_cast<sys::byte*>(&val);
+        auto data = reinterpret_cast<sys::byte*>(&val);
         std::copy(buffer, buffer + length, data);
         if (swapBytes)
         {
@@ -161,7 +163,9 @@ struct Serializer<std::string>
     {
         const size_t length = val.size();
         Serializer<size_t>::serializeImpl(length, swapBytes, buffer);
-        std::copy(val.begin(), val.end(), std::back_inserter(buffer));
+        const auto begin = reinterpret_cast<const sys::byte*>(val.c_str());
+        const auto end = begin + val.size();
+        std::copy(begin, end, std::back_inserter(buffer));
     }
 
     /*!
