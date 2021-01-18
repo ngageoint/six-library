@@ -35,9 +35,9 @@ struct ReadControlCreator
     virtual ~ReadControlCreator() = default;
 
     virtual six::ReadControl* newReadControl() const = 0;
-    virtual void newReadControl(std::unique_ptr<six::ReadControl>& p) const
+    virtual void newReadControl(std::unique_ptr<six::ReadControl>& result) const
     {
-        p.reset(newReadControl());
+        result.reset(newReadControl());
     }
 
     virtual bool supports(const std::string& filename) const = 0;
@@ -66,6 +66,7 @@ public:
     }
 
     virtual six::ReadControl* newReadControl(const std::string& filename) const;
+    virtual void newReadControl(const std::string& filename, std::unique_ptr<six::ReadControl>& result) const;
 
 };
 

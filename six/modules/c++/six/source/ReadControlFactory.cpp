@@ -36,6 +36,11 @@ six::ReadControl* ReadControlRegistry::newReadControl(
                                           Ctxt(
                                                "No supported ReadControl for input file"));
 }
+void ReadControlRegistry::newReadControl(
+    const std::string& filename, std::unique_ptr<six::ReadControl>& result) const
+{
+    result.reset(newReadControl(filename));
+}
 
 
 // https://stackoverflow.com/a/11711991/8877
