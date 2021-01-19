@@ -33,35 +33,26 @@
 
 namespace
 {
-class Buffers
+struct Buffers final
 {
-public:
-    Buffers()
-    {
+    std::byte* add(size_t numBytes)
+    {        
+        mBuffers.push_back(std::unique_ptr<std::byte[]>(new std::byte[numBytes]));
+        return mBuffers.back().get();
     }
 
-    ~Buffers()
+    std::vector<std::byte*> get() const
     {
-        for (size_t ii = 0; ii < mBuffers.size(); ++ii)
+        std::vector<std::byte*> retval;
+        for (auto& buffer : mBuffers)
         {
-            delete[] mBuffers[ii];
+            retval.push_back(buffer.get());
         }
-    }
-
-    sys::ubyte* add(size_t numBytes)
-    {
-        mem::ScopedArray<sys::ubyte> buffer(new sys::ubyte[numBytes]);
-        mBuffers.push_back(buffer.get());
-        return buffer.release();
-    }
-
-    std::vector<sys::ubyte*> get() const
-    {
-        return mBuffers;
+        return retval;
     }
 
 private:
-    std::vector<sys::ubyte*> mBuffers;
+    std::vector<std::unique_ptr<std::byte[]>> mBuffers;
 };
 
 class ChipCoordinateToFullImageCoordinate
@@ -97,7 +88,7 @@ public:
     }
 
 private:
-    std::auto_ptr<const six::sidd::GeometricChip> mChip;
+    std::unique_ptr<const six::sidd::GeometricChip> mChip;
 };
 
 class PixelToLatLon
@@ -120,7 +111,7 @@ public:
     }
 
 private:
-    const std::auto_ptr<scene::GridECEFTransform> mGridTransform;
+    const std::unique_ptr<scene::GridECEFTransform> mGridTransform;
     const types::RowCol<double> mRefPoint;
     const ChipCoordinateToFullImageCoordinate mChipToFull;
 };
@@ -139,7 +130,7 @@ void cropSIDD(const std::string& inPathname,
     // Make sure it's a SIDD
     six::NITFReadControl reader;
     reader.load(inPathname, schemaPaths);
-    mem::SharedPtr<six::Container> container(reader.getContainer());
+    auto container(reader.getContainer());
 
     if (container->getDataType() != six::DataType::DERIVED)
     {
@@ -153,7 +144,7 @@ void cropSIDD(const std::string& inPathname,
         if (dataPtr->getDataType() == six::DataType::DERIVED)
         {
             six::sidd::DerivedData* const data =
-                    reinterpret_cast<six::sidd::DerivedData*>(dataPtr);
+                static_cast<six::sidd::DerivedData*>(dataPtr);
 
             // Make sure the AOI is in bounds
             const types::RowCol<size_t> origDims(data->getNumRows(),
@@ -174,7 +165,7 @@ void cropSIDD(const std::string& inPathname,
             const size_t numBytesPerPixel(data->getNumBytesPerPixel());
             const size_t numBytes =
                     origDims.row * origDims.col * numBytesPerPixel;
-            sys::ubyte* const buffer = buffers.add(numBytes);
+            std::byte* const buffer = buffers.add(numBytes);
 
             six::Region region;
             region.setStartRow(aoiOffset.row);
@@ -212,12 +203,12 @@ void cropSIDD(const std::string& inPathname,
             chip.originalLowerLeftCoordinate =
                     chipToFull(lastRow, aoiOffset.col);
 
-            if (data->downstreamReprocessing.get() == NULL)
+            if (data->downstreamReprocessing.get() == nullptr)
             {
                 data->downstreamReprocessing.reset(
                         new six::sidd::DownstreamReprocessing());
             }
-            if (data->downstreamReprocessing->geometricChip.get() == NULL)
+            if (data->downstreamReprocessing->geometricChip.get() == nullptr)
             {
                 data->downstreamReprocessing->geometricChip.reset(
                         new six::sidd::GeometricChip());

@@ -168,6 +168,11 @@ public:
         assert(buffer != nullptr);
         mBuffer = buffer;
     }
+    void setBuffer(std::byte* buffer)
+    {
+        assert(buffer != nullptr);
+        mBuffer = reinterpret_cast<UByte*>(buffer);
+    }
 
     /*!
      *  Create a buffer of the given size, call setBuffer() and return the buffer.

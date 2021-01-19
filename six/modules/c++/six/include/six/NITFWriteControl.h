@@ -196,7 +196,14 @@ public:
      *  \param outputFile  Output path to write
      *  \param schemaPaths Directories or files of schema locations
      */
+    template<typename TBufferList>
+    void save_(const TBufferList& list,
+                      const std::string& outputFile,
+                      const std::vector<std::string>& schemaPaths);
     virtual void save(const BufferList& imageData,
+                      const std::string& outputFile,
+                      const std::vector<std::string>& schemaPaths) override;
+    virtual void save(const buffer_list& imageData,
                       const std::string& outputFile,
                       const std::vector<std::string>& schemaPaths) override;
 
@@ -206,7 +213,12 @@ public:
     {
         save(convertBufferList(imageData), outputFile, schemaPaths);
     }
-
+    void save(const buffer_list_mutable& imageData,
+              const std::string& outputFile,
+              const std::vector<std::string>& schemaPaths)
+    {
+        save(convertBufferList(imageData), outputFile, schemaPaths);
+    }
     /*!
      *  Bind an interleaved (IQIQIQIQ) input stream
      *  to this record and write out a SICD/SIDD.  We do
@@ -237,7 +249,14 @@ public:
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
+    template<typename TBufferList>
+    void save_(const TBufferList& list,
+                      nitf::IOInterface& outputFile,
+                      const std::vector<std::string>& schemaPaths);
     virtual void save(const BufferList& list,
+                      nitf::IOInterface& outputFile,
+                      const std::vector<std::string>& schemaPaths);
+    virtual void save(const buffer_list& list,
                       nitf::IOInterface& outputFile,
                       const std::vector<std::string>& schemaPaths);
 
@@ -247,7 +266,12 @@ public:
     {
         save(convertBufferList(list), outputFile, schemaPaths);
     }
-
+    void save(const buffer_list_mutable& list,
+              nitf::IOInterface& outputFile,
+              const std::vector<std::string>& schemaPaths)
+    {
+        save(convertBufferList(list), outputFile, schemaPaths);
+    }
     /*!
      *  This function sets the organization ID (the 40 character DESSHRP field
      *  in the DES's user-defined subheader).

@@ -237,7 +237,8 @@ void NITFWriteControl::save(const SourceList& imageData,
     addDataAndWrite(schemaPaths);
 }
 
-void NITFWriteControl::save(const BufferList& imageData,
+template<typename TBufferList>
+void NITFWriteControl::save_(const TBufferList& imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
@@ -249,8 +250,21 @@ void NITFWriteControl::save(const BufferList& imageData,
     save(imageData, bufferedIO, schemaPaths);
     bufferedIO.close();
 }
-
 void NITFWriteControl::save(const BufferList& imageData,
+                            const std::string& outputFile,
+                            const std::vector<std::string>& schemaPaths)
+{
+    save_(imageData, outputFile, schemaPaths);
+}
+void NITFWriteControl::save(const buffer_list& imageData,
+                            const std::string& outputFile,
+                            const std::vector<std::string>& schemaPaths)
+{
+    save_(imageData, outputFile, schemaPaths);
+}
+
+template<typename TBufferList>
+void NITFWriteControl::save_(const TBufferList& imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
@@ -385,6 +399,18 @@ void NITFWriteControl::save(const BufferList& imageData,
     }
 
     addDataAndWrite(schemaPaths);
+}
+void NITFWriteControl::save(const BufferList& imageData,
+                            nitf::IOInterface& outputFile,
+                            const std::vector<std::string>& schemaPaths)
+{
+    save_(imageData, outputFile, schemaPaths);
+}
+void NITFWriteControl::save(const buffer_list& imageData,
+    nitf::IOInterface& outputFile,
+    const std::vector<std::string>& schemaPaths)
+{
+    save_(imageData, outputFile, schemaPaths);
 }
 
 void NITFWriteControl::addDataAndWrite(
