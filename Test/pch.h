@@ -44,11 +44,10 @@
 
 #include "six/modules/c++/cpp_pch.h"
 
-#include <sys/File.h>
+#include <nitf/coda-oss.hpp>
 
 #pragma warning(pop)
 
-#include <sys/Conf.h>
 #include <import/except.h>
 #include <import/types.h>
 #pragma warning(push)
