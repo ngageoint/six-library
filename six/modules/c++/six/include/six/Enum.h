@@ -151,6 +151,7 @@ namespace details
 
 
     #define SIX_Enum_map_entry_(n) { #n, n }
+   #define SIX_Enum_map_entry_NOT_SET { "NOT SET", NOT_SET }
 
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
@@ -160,7 +161,7 @@ namespace details
     #define SIX_Enum_struct_2_ NOT_SET = six::NOT_SET_VALUE }; \
             static const map_t& string_to_int_() { \
 	      static const map_t retval{ 
-    #define SIX_Enum_struct_3_ SIX_Enum_map_entry_(NOT_SET) }; return retval; } }
+    #define SIX_Enum_struct_3_ SIX_Enum_map_entry_NOT_SET }; return retval; } }
 
 
     #define SIX_Enum_ENUM_STR_1(name, n, s, v) SIX_Enum_struct_1_(name) \
