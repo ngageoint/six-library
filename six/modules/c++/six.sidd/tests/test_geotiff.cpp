@@ -96,8 +96,8 @@ std::unique_ptr<six::sidd::DerivedData> createData()
 
 void write(const int16_t* data)
 {
-    auto container(std::make_shared<six::Container>(
-            six::DataType::DERIVED));
+    mem::SharedPtr<six::Container> container(new six::Container(
+        six::DataType::DERIVED));
     container->addData(createData().release());
 
     six::sidd::GeoTIFFWriteControl writer;

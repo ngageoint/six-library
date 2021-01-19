@@ -114,8 +114,8 @@ void makeMultiBandSIDD(const std::string& inputPathname,
     std::unique_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
     data->setPixelType(six::PixelType::MONO16I);
     data->setNumRows(data->getNumRows() / 2);
-    auto container(
-            std::make_shared<six::Container>(six::DataType::DERIVED));
+    mem::SharedPtr<six::Container> container(new six::Container(
+        six::DataType::DERIVED));
     container->addData(std::move(data));
 
     six::NITFWriteControl writer;
