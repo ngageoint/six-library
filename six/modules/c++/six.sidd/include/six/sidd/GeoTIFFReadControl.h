@@ -55,7 +55,8 @@ public:
                       const std::vector<std::string>& schemaPaths);
 
     using ReadControl::interleaved;
-    virtual UByte* interleaved(Region& region, size_t imageNumber);
+    virtual UByte* interleaved(Region& region, size_t imageNumber) override;
+    virtual void interleaved(Region& region, size_t imageNumber, std::byte* &result) override;
 
     virtual std::string getFileType() const
     {

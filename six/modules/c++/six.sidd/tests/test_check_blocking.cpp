@@ -75,11 +75,11 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
     std::unique_ptr<std::byte[]> buffer;
     generateData(*workingData, buffer);
 
-    auto container(std::make_shared<six::Container>(
+    mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
     container->addData(std::move(workingData));
 
-    six::BufferList buffers(1);
+    six::buffer_list buffers(1);
     buffers[0] = buffer.get();
 
     six::Options options;
@@ -116,12 +116,12 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     generateData(*firstData, firstBuffer);
     generateData(*secondData, secondBuffer);
 
-    auto container(std::make_shared<six::Container>(
-            six::DataType::DERIVED));
+    mem::SharedPtr<six::Container> container(new six::Container(
+        six::DataType::DERIVED));
     container->addData(std::move(firstData));
     container->addData(std::move(secondData));
 
-    six::BufferList buffers(2);
+    six::buffer_list buffers(2);
     buffers[0] = firstBuffer.get();
     buffers[1] = secondBuffer.get();
 
@@ -137,7 +137,7 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     writer.save(buffers, pathname, std::vector<std::string>());
 }
 
-void assignBuffer(std::unique_ptr<std::byte[]>& buffer, size_t& bufferSize,
+void assignBuffer(std::unique_ptr<six::UByte[]>& buffer, size_t& bufferSize,
         size_t index, six::NITFReadControl& reader)
 {
     six::Region region;
@@ -152,7 +152,7 @@ bool compare(const std::string& twoImageSidd,
     six::NITFReadControl firstReader;
     firstReader.load(twoImageSidd);
 
-    std::unique_ptr<std::byte[]> firstBuffers[2];
+    std::unique_ptr<six::UByte[]> firstBuffers[2];
     size_t firstBufferSizes[2];
     assignBuffer(firstBuffers[0], firstBufferSizes[0], 0, firstReader);
     assignBuffer(firstBuffers[1], firstBufferSizes[1], 1, firstReader);
@@ -162,7 +162,7 @@ bool compare(const std::string& twoImageSidd,
     six::NITFReadControl thirdReader;
     thirdReader.load(secondImage);
 
-    std::unique_ptr<std::byte[]> secondBuffers[2];
+    std::unique_ptr<six::UByte[]> secondBuffers[2];
     size_t secondBufferSizes[2];
     assignBuffer(secondBuffers[0], secondBufferSizes[0], 0, secondReader);
     assignBuffer(secondBuffers[1], secondBufferSizes[1], 0, thirdReader);

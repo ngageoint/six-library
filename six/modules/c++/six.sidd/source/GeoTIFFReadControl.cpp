@@ -280,6 +280,11 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     }
     return buffer;
 }
+void six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
+                                                       size_t imIndex, std::byte* &result)
+{
+    result = reinterpret_cast<std::byte*>(interleaved(region, imIndex));
+}
 
 six::ReadControl* six::sidd::GeoTIFFReadControlCreator::newReadControl() const
 {

@@ -129,6 +129,10 @@ public:
     {
         save(sources, toFile, std::vector<std::string>());
     }
+    void save(const buffer_list& sources, const std::string& toFile)
+    {
+        save(convertBufferList(sources), toFile);
+    }
 
     virtual void save(const BufferList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
@@ -141,6 +145,10 @@ public:
     // For convenience since the compiler can't implicitly convert
     // std::vector<T*> to std::vector<const T*>
     void save(const NonConstBufferList& sources, const std::string& toFile)
+    {
+        save(convertBufferList(sources), toFile);
+    }
+    void save(const buffer_list_mutable& sources, const std::string& toFile)
     {
         save(convertBufferList(sources), toFile);
     }
@@ -180,12 +188,21 @@ public:
     {
         save(buffer, toFile, std::vector<std::string>());
     }
+    void save(const std::byte* buffer, const std::string& toFile)
+    {
+        save(reinterpret_cast<const UByte*>(buffer), toFile);
+    }
     void save(const UByte* buffer, const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
         BufferList sources;
         sources.push_back(buffer);
         save(sources, toFile, schemaPaths);
+    }
+    void save(const std::byte* buffer, const std::string& toFile,
+              const std::vector<std::string>& schemaPaths)
+    {
+        save(reinterpret_cast<const UByte*>(buffer), toFile, schemaPaths);
     }
 
     /*!

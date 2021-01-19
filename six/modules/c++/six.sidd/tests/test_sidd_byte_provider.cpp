@@ -382,7 +382,7 @@ void Tester<DataTypeT>::normalWrite()
     setWriterOptions(options);
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
-    six::BufferList buffers;
+    six::buffer_list buffers;
     buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
