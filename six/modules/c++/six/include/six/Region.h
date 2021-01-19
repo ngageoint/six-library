@@ -168,16 +168,21 @@ public:
         assert(buffer != nullptr);
         mBuffer = buffer;
     }
+    void setBuffer(std::byte* buffer)
+    {
+        assert(buffer != nullptr);
+        mBuffer = reinterpret_cast<UByte*>(buffer);
+    }
 
     /*!
      *  Create a buffer of the given size, call setBuffer() and return the buffer.
      */
-    std::unique_ptr<std::byte[]> setBuffer(size_t size)
+    std::unique_ptr<UByte[]> setBuffer(size_t size)
     {
         assert(getBuffer() == nullptr);
 
-        std::unique_ptr<std::byte[]> retval(new std::byte[size]);
-        setBuffer(reinterpret_cast<UByte*>(retval.get()));
+        std::unique_ptr<UByte[]> retval(new UByte[size]);
+        setBuffer(retval.get());
         return retval;
     }
 };

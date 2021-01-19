@@ -39,7 +39,7 @@ SIDDByteProvider::SIDDByteProvider(
                            new six::XMLControlCreatorT<DerivedXMLControl>());
 
     mem::SharedPtr<Container> container(new Container(
-            DataType::DERIVED));
+        DataType::DERIVED));
 
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it

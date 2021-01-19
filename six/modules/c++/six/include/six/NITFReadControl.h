@@ -262,7 +262,7 @@ struct NITFReadControlCreator final : public ReadControlCreator
         newReadControl(retval);
         return retval.release();
     }
-    void newReadControl(std::unique_ptr<six::ReadControl>& p) const override;
+    void newReadControl(std::unique_ptr<six::ReadControl>& result) const override;
 
     bool supports(const std::string& filename) const override;
 

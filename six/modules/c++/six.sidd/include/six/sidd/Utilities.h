@@ -39,13 +39,13 @@ public:
     //       for all projection types
     static scene::SideOfTrack getSideOfTrack(const DerivedData* derived);
 
-    static std::auto_ptr<scene::SceneGeometry>
+    static mem::auto_ptr<scene::SceneGeometry>
     getSceneGeometry(const DerivedData* derived);
 
-    static std::auto_ptr<scene::GridGeometry>
+    static mem::auto_ptr<scene::GridGeometry>
     getGridGeometry(const DerivedData* derived);
 
-    static std::auto_ptr<scene::GridECEFTransform>
+    static mem::auto_ptr<scene::GridECEFTransform>
     getGridECEFTransform(const DerivedData* derived);
 
     static void setProductValues(Poly2D timeCOAPoly, PolyXYZ arpPoly,
@@ -67,7 +67,7 @@ public:
     static std::pair<six::PolarizationType, six::PolarizationType>
             convertDualPolarization(six::DualPolarizationType pol);
 
-    static std::auto_ptr<scene::ProjectionModel>
+    static mem::auto_ptr<scene::ProjectionModel>
     getProjectionModel(const DerivedData* data);
 
 
@@ -77,7 +77,7 @@ public:
      *
      * \return mock DerivedData object
      */
-    static std::auto_ptr<DerivedData> createFakeDerivedData();
+    static mem::auto_ptr<DerivedData> createFakeDerivedData();
 
 
     /*
@@ -90,7 +90,7 @@ public:
     *
     * \return Data representation of 'xmlStr'
     */
-    static std::auto_ptr<DerivedData> parseData(
+    static mem::auto_ptr<DerivedData> parseData(
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
@@ -105,7 +105,7 @@ public:
     *
     * \return Data representation of the contents of 'pathname'
     */
-    static std::auto_ptr<DerivedData> parseDataFromFile(
+    static mem::auto_ptr<DerivedData> parseDataFromFile(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
@@ -119,7 +119,7 @@ public:
     *
     * \return Data representation of 'xmlStr'
     */
-    static std::auto_ptr<DerivedData> parseDataFromString(
+    static mem::auto_ptr<DerivedData> parseDataFromString(
         const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
@@ -130,7 +130,7 @@ public:
      * \param data Representation of SIDD data
      * \param schemaPaths Schema paths.  If empty, the SIX_SCHEMA_PATH
      *  environment variable will be used.
-     * \param logger Logger.  If NULL, no logger will be used.
+     * \param logger Logger.  If nullptr, no logger will be used.
      *
      * \return XML string representation of
      *'data'

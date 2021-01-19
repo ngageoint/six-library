@@ -38,10 +38,12 @@ typedef std::vector<io::InputStream*> SourceList;
 
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
+using buffer_list = std::vector<const std::byte*>;
 
 //!  Same as above but used in overloadings to help the compiler out when
 //   it's convenient for the caller to put non-const pointers in the vector
 typedef std::vector<UByte*> NonConstBufferList;
+using buffer_list_mutable = std::vector<std::byte*>;
 
 /*!
  *  \class WriteControl
@@ -127,9 +129,18 @@ public:
     {
         save(sources, toFile, std::vector<std::string>());
     }
+    void save(const buffer_list& sources, const std::string& toFile)
+    {
+        save(convertBufferList(sources), toFile);
+    }
 
     virtual void save(const BufferList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
+    virtual void save(const buffer_list& sources, const std::string& toFile,
+                      const std::vector<std::string>& schemaPaths)
+    {
+        save(convertBufferList(sources), toFile, schemaPaths);
+    }
 
     // For convenience since the compiler can't implicitly convert
     // std::vector<T*> to std::vector<const T*>
@@ -137,8 +148,18 @@ public:
     {
         save(convertBufferList(sources), toFile);
     }
+    void save(const buffer_list_mutable& sources, const std::string& toFile)
+    {
+        save(convertBufferList(sources), toFile);
+    }
 
     void save(const NonConstBufferList& sources,
+              const std::string& toFile,
+              const std::vector<std::string>& schemaPaths)
+    {
+        save(convertBufferList(sources), toFile, schemaPaths);
+    }
+    void save(const buffer_list_mutable& sources,
               const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
@@ -167,12 +188,21 @@ public:
     {
         save(buffer, toFile, std::vector<std::string>());
     }
+    void save(const std::byte* buffer, const std::string& toFile)
+    {
+        save(reinterpret_cast<const UByte*>(buffer), toFile);
+    }
     void save(const UByte* buffer, const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
         BufferList sources;
         sources.push_back(buffer);
         save(sources, toFile, schemaPaths);
+    }
+    void save(const std::byte* buffer, const std::string& toFile,
+              const std::vector<std::string>& schemaPaths)
+    {
+        save(reinterpret_cast<const UByte*>(buffer), toFile, schemaPaths);
     }
 
     /*!
@@ -238,17 +268,16 @@ public:
         return mXMLRegistry;
     }
 
-    static
-    inline
-    BufferList convertBufferList(const NonConstBufferList& buffers)
+    template<typename TBufferList>
+    static inline
+    BufferList convertBufferList(const TBufferList& buffers)
     {
-        BufferList constBuffers(buffers.size());
-        for (size_t ii = 0; ii < buffers.size(); ++ii)
+        BufferList retval;
+        for (const auto& buffer : buffers)
         {
-            constBuffers[ii] = buffers[ii];
+            retval.push_back(reinterpret_cast<BufferList::value_type>(buffer));
         }
-
-        return constBuffers;
+        return retval;
     }
 
 protected:

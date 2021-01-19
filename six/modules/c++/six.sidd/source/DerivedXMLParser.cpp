@@ -43,11 +43,19 @@ const char DerivedXMLParser::SFA_URI[] = "urn:SFA:1.2.0";
 
 DerivedXMLParser::DerivedXMLParser(
         const std::string& version,
-        std::auto_ptr<six::SICommonXMLParser> comParser,
+        std::unique_ptr<six::SICommonXMLParser>&& comParser,
         logging::Logger* log,
         bool ownLog) :
     XMLParser(versionToURI(version), false, log, ownLog),
-    mCommon(comParser)
+    mCommon(std::move(comParser))
+{
+}
+DerivedXMLParser::DerivedXMLParser(
+        const std::string& version,
+        std::auto_ptr<six::SICommonXMLParser> comParser,
+        logging::Logger* log,
+        bool ownLog) :
+    DerivedXMLParser(version, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)
 {
 }
 
@@ -92,15 +100,15 @@ void DerivedXMLParser::getAttributeIfExists(
 void DerivedXMLParser::getAttributeIfExists(
     const xml::lite::Attributes& attributes,
     const std::string& attributeName,
-    sys::SSize_T& value)
+    ptrdiff_t& value)
 {
     if (attributes.contains(attributeName))
     {
-        value = str::toType<sys::SSize_T>(attributes.getValue(attributeName));
+        value = str::toType<ptrdiff_t>(attributes.getValue(attributeName));
     }
     else
     {
-        value = six::Init::undefined<sys::SSize_T>();
+        value = six::Init::undefined<ptrdiff_t>();
     }
 }
 
@@ -224,7 +232,7 @@ void DerivedXMLParser::setAttributeIfNonNull(XMLElem element,
 {
     if (value)
     {
-        setAttribute(element, name, toString(*value), uri);
+        setAttribute(element, name, six::toString(*value), uri);
     }
 }
 
@@ -289,7 +297,7 @@ void DerivedXMLParser::parseDerivedClassificationFromXML(
 
     //! from ism:ISMRootNodeAttributeGroup
     // Could do
-    // toType<sys::Int32_T>(
+    // toType<int32_t>(
     //        classificationAttributes.getValue("ism:DESVersion"));
     // here if we needed to verify this for any reason
 
@@ -395,7 +403,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
             // xs:list is space delimited
             std::string lutStr = remapLUTElem->getCharacterData();
             std::vector<std::string> lutVals = str::split(lutStr, " ");
-            std::auto_ptr<LUT> remapLUT(new LUT(size, 3));
+            std::unique_ptr<LUT> remapLUT(new LUT(size, 3));
 
             // TripleType is comma delimited
             size_t k = 0;
@@ -411,11 +419,11 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
                             "LUT vals expected to be in [0, 255]."));
                     }
 
-                    sys::ubyte val = static_cast<sys::ubyte>(
+                    auto val = static_cast<std::byte>(
                             intermediateVal);
 
                     ::memcpy(&(remapLUT->getTable()[k++]), &val,
-                             sizeof(sys::ubyte));
+                             sizeof(std::byte));
                 }
             }
             return new ColorDisplayRemap(remapLUT.release());
@@ -425,14 +433,14 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
             std::string remapType = "";
             parseString(getFirstAndOnly(monoRemapElem, "RemapType"), remapType);
 
-            std::auto_ptr<LUT> remapLUT;
+            std::unique_ptr<LUT> remapLUT;
             XMLElem remapLUTElem = getOptional(monoRemapElem, "RemapLUT");
             if (remapLUTElem)
             {
                 remapLUT = parseSingleLUT(remapLUTElem);
             }
 
-            std::auto_ptr<MonochromeDisplayRemap> monoRemap(
+            std::unique_ptr<MonochromeDisplayRemap> monoRemap(
                     new MonochromeDisplayRemap(remapType, remapLUT.release()));
 
             // optional
@@ -443,7 +451,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
         }
         else if (!colorRemapElem && !monoRemapElem)
         {
-            return NULL;
+            return nullptr;
         }
         else
         {
@@ -454,11 +462,11 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
-std::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
+mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
 {
     //get size attribute
     int size = str::toType<int>(elem->attribute("size"));
@@ -466,7 +474,7 @@ std::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
     std::string lutStr = "";
     parseString(elem, lutStr);
     std::vector<std::string> lutVals = str::split(lutStr, " ");
-    std::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
+    mem::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
 
     for (size_t ii = 0; ii < lutVals.size(); ++ii)
     {
@@ -634,7 +642,7 @@ void DerivedXMLParser::parseMeasurementFromXML(
         const XMLElem measurementElem,
         Measurement* measurement) const
 {
-    XMLElem projElem = NULL;
+    XMLElem projElem = nullptr;
     //  choice: ProjectionType --
     //  this is first parsed in fromXML()
     if (measurement->projection->projectionType == ProjectionType::POLYNOMIAL)
@@ -689,7 +697,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
     {
         XMLElem collectionElem = collectionsElem[i];
 
-        // At least one was created at construction, so check for NULL
+        // At least one was created at construction, so check for nullptr
         if (!exploitationFeatures->collections[i].get())
             exploitationFeatures->collections[i].reset(new Collection());
         Collection* coll = exploitationFeatures->collections[i].get();
@@ -935,7 +943,7 @@ void DerivedXMLParser::convertRemapToXML(const Remap& remap,
                                       parent);
         // a little risky, but let's assume the displayType is correct
         const MonochromeDisplayRemap& mdr =
-                reinterpret_cast<const MonochromeDisplayRemap&>(remap);
+                static_cast<const MonochromeDisplayRemap&>(remap);
         createString("RemapType", mdr.remapType, remapElem);
     /* TODO: Where does this actually go??
     XMLElem geographicAndTargetXML = newElement("GeographicAndTarget", parent);
@@ -1154,7 +1162,7 @@ XMLElem DerivedXMLParser::createLUT(const std::string& name, const LUT *lut,
         XMLElem parent) const
 {
     XMLElem lutElement = newElement(name, parent);
-    setAttribute(lutElement, "size", str::toString(lut->numEntries));
+    setAttribute(lutElement, "size", lut->numEntries);
     return createLUTImpl(lut, lutElement);
 }
 
@@ -1875,7 +1883,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
         const SFAGeometry* g,
         XMLElem parent) const
 {
-    XMLElem geoElem = NULL;
+    XMLElem geoElem = nullptr;
 
     std::string geoType = g->getType();
     if (geoType == SFAPoint::TYPE_NAME)

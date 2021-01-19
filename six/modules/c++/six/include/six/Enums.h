@@ -211,7 +211,7 @@ struct DualPolarizationType final : public details::Enum<DualPolarizationType>
             SIX_Enum_map_entry_(LHC_V),
             SIX_Enum_map_entry_(LHC_H),
             SIX_Enum_map_entry_(UNKNOWN),
-            SIX_Enum_map_entry_(NOT_SET)
+            SIX_Enum_map_entry_NOT_SET
         };
         return retval;
     }
@@ -320,7 +320,7 @@ struct PixelType final : public details::Enum<PixelType>
             SIX_Enum_map_entry_(MONO16I),
             SIX_Enum_map_entry_(RGB8LU),
             SIX_Enum_map_entry_(RGB24I),
-            SIX_Enum_map_entry_(NOT_SET)
+            SIX_Enum_map_entry_NOT_SET
         };
         return retval;
     }
@@ -362,7 +362,7 @@ struct PolarizationSequenceType final : public details::Enum<PolarizationSequenc
             SIX_Enum_map_entry_(LHC),
             SIX_Enum_map_entry_(UNKNOWN),
             SIX_Enum_map_entry_(SEQUENCE),
-            SIX_Enum_map_entry_(NOT_SET)
+            SIX_Enum_map_entry_NOT_SET
         };
         return retval;
     }
