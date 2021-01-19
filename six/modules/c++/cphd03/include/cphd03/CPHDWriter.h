@@ -63,7 +63,7 @@ public:
      *         Default is 4 MB
      */
     CPHDWriter(const Metadata& metadata,
-               mem::SharedPtr<io::SeekableOutputStream> stream,
+               std::shared_ptr<io::SeekableOutputStream> stream,
                size_t numThreads = 0,
                size_t scratchSpaceSize = 4 * 1024 * 1024);
 
@@ -186,7 +186,7 @@ private:
     const size_t mScratchSpaceSize;
     const size_t mNumThreads;
 
-    mem::SharedPtr<io::SeekableOutputStream> mStream;
+    std::shared_ptr<io::SeekableOutputStream> mStream;
 
     std::vector<const std::byte*> mCPHDData;
     std::vector<const std::byte*> mVBMData;

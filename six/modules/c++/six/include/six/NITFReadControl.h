@@ -129,8 +129,8 @@ struct NITFReadControl : public ReadControl
     void load(io::SeekableInputStream& ioStream,
               const std::vector<std::string>& schemaPaths);
 
-    void load(mem::SharedPtr<nitf::IOInterface> ioInterface);
-    void load(mem::SharedPtr<nitf::IOInterface> ioInterface,
+    void load(std::shared_ptr<nitf::IOInterface> ioInterface);
+    void load(std::shared_ptr<nitf::IOInterface> ioInterface,
               const std::vector<std::string>& schemaPaths);
 
 
@@ -243,7 +243,7 @@ private:
     // to prevent data from being deleted prematurely
     // The issue occurs from the explicit destructor of
     // IOControl
-    mem::SharedPtr<nitf::IOInterface> mInterface;
+    std::shared_ptr<nitf::IOInterface> mInterface;
 };
 
 

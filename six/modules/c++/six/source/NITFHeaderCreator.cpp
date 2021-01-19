@@ -113,7 +113,7 @@ NITFHeaderCreator::NITFHeaderCreator() :
     loadXmlDataContentHandler();
 }
 
-NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
+NITFHeaderCreator::NITFHeaderCreator(std::shared_ptr<Container> container) :
     mRecord(NITF_VER_21),
     mXMLRegistry(nullptr),
     mLog(nullptr),
@@ -124,7 +124,7 @@ NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
 }
 
 NITFHeaderCreator::NITFHeaderCreator(const six::Options& options,
-                                     mem::SharedPtr<Container> container) :
+                                     std::shared_ptr<Container> container) :
     mRecord(NITF_VER_21),
     mXMLRegistry(nullptr),
     mLog(nullptr),
@@ -599,7 +599,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
 }
 
 void NITFHeaderCreator::addAdditionalDES(
-        mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
+        std::shared_ptr<nitf::SegmentWriter> segmentWriter)
 {
     if (segmentWriter.get() == nullptr)
     {
@@ -609,7 +609,7 @@ void NITFHeaderCreator::addAdditionalDES(
     mSegmentWriters.push_back(segmentWriter);
 }
 
-void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
+void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 {
     mContainer = container;
 
@@ -936,7 +936,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
 }
 
 void NITFHeaderCreator::initialize(const six::Options& options,
-                                   mem::SharedPtr<Container> container)
+                                   std::shared_ptr<Container> container)
 {
     mOptions = options;
     initialize(container);

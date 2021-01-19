@@ -244,12 +244,12 @@ void NITFReadControl::load(io::SeekableInputStream& stream,
     load(handle, schemaPaths);
 }
 
-void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface)
+void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface)
 {
     load(ioInterface, std::vector<std::string>());
 }
 
-void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
+void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
                            const std::vector<std::string>& schemaPaths)
 {
     reset();

@@ -2160,7 +2160,7 @@ class Wideband(_object):
     def __init__(self, *args):
         """
         __init__(cphd::Wideband self, std::string const & pathname, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
-        __init__(cphd::Wideband self, mem::SharedPtr< io::SeekableInputStream > inStream, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
+        __init__(cphd::Wideband self, std::shared_ptr< io::SeekableInputStream > inStream, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
         """
         this = _cphd03.new_Wideband(*args)
         try:
@@ -2227,9 +2227,9 @@ class CPHDReader(_object):
 
     def __init__(self, *args):
         """
-        __init__(cphd03::CPHDReader self, mem::SharedPtr< io::SeekableInputStream > inStream, size_t numThreads, mem::SharedPtr< logging::Logger > logger) -> CPHDReader
-        __init__(cphd03::CPHDReader self, mem::SharedPtr< io::SeekableInputStream > inStream, size_t numThreads) -> CPHDReader
-        __init__(cphd03::CPHDReader self, std::string const & fromFile, size_t numThreads, mem::SharedPtr< logging::Logger > logger) -> CPHDReader
+        __init__(cphd03::CPHDReader self, std::shared_ptr< io::SeekableInputStream > inStream, size_t numThreads, std::shared_ptr< logging::Logger > logger) -> CPHDReader
+        __init__(cphd03::CPHDReader self, std::shared_ptr< io::SeekableInputStream > inStream, size_t numThreads) -> CPHDReader
+        __init__(cphd03::CPHDReader self, std::string const & fromFile, size_t numThreads, std::shared_ptr< logging::Logger > logger) -> CPHDReader
         __init__(cphd03::CPHDReader self, std::string const & fromFile, size_t numThreads) -> CPHDReader
         """
         this = _cphd03.new_CPHDReader(*args)
@@ -2318,9 +2318,9 @@ class CPHDWriter(_object):
 
     def __init__(self, *args):
         """
-        __init__(cphd03::CPHDWriter self, Metadata metadata, mem::SharedPtr< io::SeekableOutputStream > stream, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
-        __init__(cphd03::CPHDWriter self, Metadata metadata, mem::SharedPtr< io::SeekableOutputStream > stream, size_t numThreads=0) -> CPHDWriter
-        __init__(cphd03::CPHDWriter self, Metadata metadata, mem::SharedPtr< io::SeekableOutputStream > stream) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0) -> CPHDWriter
+        __init__(cphd03::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream) -> CPHDWriter
         __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
         __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname, size_t numThreads=0) -> CPHDWriter
         __init__(cphd03::CPHDWriter self, Metadata metadata, std::string const & pathname) -> CPHDWriter

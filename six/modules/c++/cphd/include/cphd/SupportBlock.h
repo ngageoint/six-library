@@ -74,7 +74,7 @@ public:
      *  \param startSupport CPHD header keyword "SUPPORT_BLOCK_BYTE_OFFSET"
      *  \param sizeSupport CPHD header keyword "SUPPORT_BLOCK_SIZE"
      */
-    SupportBlock(mem::SharedPtr<io::SeekableInputStream> inStream,
+    SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
                  const cphd::Data& data,
                  int64_t startSupport,
                  int64_t sizeSupport);
@@ -153,7 +153,7 @@ private:
     const SupportBlock& operator=(const SupportBlock& ) = delete;
 
 private:
-    const mem::SharedPtr<io::SeekableInputStream> mInStream;
+    const std::shared_ptr<io::SeekableInputStream> mInStream;
     cphd::Data mData;
     const int64_t mSupportOffset;       // offset in bytes to start of SupportBlock
     const size_t mSupportSize;             // total size in bytes of SupportBlock

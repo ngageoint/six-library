@@ -52,7 +52,7 @@ public:
      * Constructor. Calls initialize.
      * \param container The data container
      */
-    NITFHeaderCreator(mem::SharedPtr<Container> container);
+    NITFHeaderCreator(std::shared_ptr<Container> container);
 
     /*!
      * Constructor. Calls initialize.
@@ -60,7 +60,7 @@ public:
      * \param container The data container
      */
     NITFHeaderCreator(const six::Options& options,
-                      mem::SharedPtr<Container> container);
+                      std::shared_ptr<Container> container);
 
     //!  Destructor.
     virtual ~NITFHeaderCreator()
@@ -141,7 +141,7 @@ public:
      *
      * \param writer A SegmentWriter with loaded, attached SegmentSource
      */
-    void addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> writer);
+    void addAdditionalDES(std::shared_ptr<nitf::SegmentWriter> writer);
 
     /*!
      * Convert classification level to NITF classification
@@ -164,19 +164,19 @@ public:
     }
 
     //! Get the infos.
-    std::vector<mem::SharedPtr<NITFImageInfo> > getInfos() const
+    std::vector<std::shared_ptr<NITFImageInfo> > getInfos() const
     {
         return mInfos;
     }
 
     //! Get the container.
-    mem::SharedPtr<six::Container> getContainer()
+    std::shared_ptr<six::Container> getContainer()
     {
         return mContainer;
     }
 
     //! Get the container.
-    mem::SharedPtr<const six::Container> getContainer() const
+    std::shared_ptr<const six::Container> getContainer() const
     {
         return mContainer;
     }
@@ -194,7 +194,7 @@ public:
     }
 
     // Get the record that was generated during initialization
-    std::vector<mem::SharedPtr<nitf::SegmentWriter> > getSegmentWriters() const
+    std::vector<std::shared_ptr<nitf::SegmentWriter> > getSegmentWriters() const
     {
         return mSegmentWriters;
     }
@@ -371,7 +371,7 @@ public:
      * Initialize the NITFHeaderCreator object.
      * \param The container.
      */
-    void initialize(mem::SharedPtr<Container> container);
+    void initialize(std::shared_ptr<Container> container);
 
     /*!
      * Initialize the NITFHeaderCreator object.
@@ -379,13 +379,13 @@ public:
      * \param The container.
      */
     void initialize(const six::Options& options,
-                    mem::SharedPtr<Container> container);
+                    std::shared_ptr<Container> container);
 
 protected:
     nitf::Record mRecord;
-    std::vector<mem::SharedPtr<NITFImageInfo> > mInfos;
-    std::vector<mem::SharedPtr<nitf::SegmentWriter> > mSegmentWriters;
-    mem::SharedPtr<six::Container> mContainer;
+    std::vector<std::shared_ptr<NITFImageInfo> > mInfos;
+    std::vector<std::shared_ptr<nitf::SegmentWriter> > mSegmentWriters;
+    std::shared_ptr<six::Container> mContainer;
     six::Options mOptions;
     const XMLControlRegistry* mXMLRegistry;
 

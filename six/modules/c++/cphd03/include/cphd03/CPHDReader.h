@@ -38,15 +38,15 @@ class CPHDReader
 public:
     //!  Constructor
     // Provides access to wideband but doesn't read it
-    CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
+    CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
                size_t numThreads,
-               mem::SharedPtr<logging::Logger> logger =
-                       mem::SharedPtr<logging::Logger>());
+               std::shared_ptr<logging::Logger> logger =
+                       std::shared_ptr<logging::Logger>());
 
     CPHDReader(const std::string& fromFile,
                size_t numThreads,
-               mem::SharedPtr<logging::Logger> logger =
-                       mem::SharedPtr<logging::Logger>());
+               std::shared_ptr<logging::Logger> logger =
+                       std::shared_ptr<logging::Logger>());
 
     size_t getNumChannels() const
     {
@@ -130,9 +130,9 @@ private:
     std::unique_ptr<VBM> mVBM;
     std::unique_ptr<cphd::Wideband> mWideband;
 
-    void initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
+    void initialize(std::shared_ptr<io::SeekableInputStream> inStream,
                     size_t numThreads,
-                    mem::SharedPtr<logging::Logger> logger);
+                    std::shared_ptr<logging::Logger> logger);
 
 };
 }

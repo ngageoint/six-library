@@ -49,7 +49,7 @@ SupportBlock::SupportBlock(const std::string& pathname,
     initialize();
 }
 
-SupportBlock::SupportBlock(mem::SharedPtr<io::SeekableInputStream> inStream,
+SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
                            const cphd::Data& data,
                            int64_t startSupport,
                            int64_t sizeSupport) :

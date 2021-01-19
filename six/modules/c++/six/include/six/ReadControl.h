@@ -92,7 +92,7 @@ public:
     /*!
      *  Get a const shared pointer to the current container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
         return mContainer;
     }
@@ -100,7 +100,7 @@ public:
     /*!
      *  Get a non-const pointer to the current container.
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -195,7 +195,7 @@ public:
     }
 
 protected:
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;
