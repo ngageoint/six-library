@@ -87,7 +87,7 @@ void DerivedClassification::setSecurity(const std::string& prefix,
         // By default, mark as exempt from automatic declassification
         std::string declassType("X");
 
-        if (declassDate.get() != NULL)
+        if (declassDate.get() != nullptr)
         {
             std::string declassDateStr;
             declassDate->format("%Y%m%d", declassDateStr);
@@ -265,7 +265,7 @@ std::ostream& DerivedClassification::put(std::ostream& os) const
     putImpl("Exempted Source Date", exemptedSourceDate.get(), os);
 
     os << "Exempt From: " << exemptFrom
-       << "Joint: " << joint.toString() << "\n";
+       << "Joint: " << joint << "\n";
 
     putImpl("Display Only To", displayOnlyTo, os);
 
@@ -275,7 +275,7 @@ std::ostream& DerivedClassification::put(std::ostream& os) const
     putImpl("Notice Date", noticeDate.get(), os);
 
     os << "Unregistered Notice: " << unregisteredNoticeType
-       << "\nExternal Notice: " << externalNotice.toString() << "\n";
+       << "\nExternal Notice: " << externalNotice << "\n";
 
     return os;
 }
@@ -312,7 +312,7 @@ bool DerivedClassification::operator==(const DerivedClassification& rhs) const
 bool DerivedClassification::equalTo(const Classification& rhs) const
 {
     const DerivedClassification* derivedClassification = dynamic_cast<const DerivedClassification*>(&rhs);
-    if (derivedClassification != NULL)
+    if (derivedClassification != nullptr)
     {
         return *this == *derivedClassification;
     }

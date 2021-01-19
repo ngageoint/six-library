@@ -40,7 +40,7 @@ CompressedSIDDByteProvider::CompressedSIDDByteProvider(
     xmlRegistry.addCreator(six::DataType::DERIVED,
                            new six::XMLControlCreatorT<DerivedXMLControl>());
 
-    mem::SharedPtr<Container> container(new Container(
+    auto container(std::make_shared<Container>(
             DataType::DERIVED));
 
     // The container wants to take ownership of the data
