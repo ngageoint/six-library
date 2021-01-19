@@ -26,10 +26,10 @@
 #include <string>
 #include <vector>
 
+#include <nitf/coda-oss.hpp>
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
-#include <sys/Conf.h>
 #include <cphd/FileHeader.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>

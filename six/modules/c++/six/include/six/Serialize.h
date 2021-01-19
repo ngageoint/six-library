@@ -27,7 +27,6 @@
 #include <algorithm>
 #include <iterator>
 
-#include <sys/Conf.h>
 #include <nitf/coda-oss.hpp>
 
 namespace six

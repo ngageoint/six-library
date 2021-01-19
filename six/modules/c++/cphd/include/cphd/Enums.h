@@ -22,7 +22,7 @@
 #ifndef __CPHD_ENUMS_H__
 #define __CPHD_ENUMS_H__
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <str/Convert.h>
 

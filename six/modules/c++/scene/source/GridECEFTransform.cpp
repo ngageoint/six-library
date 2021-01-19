@@ -19,11 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <scene/GridECEFTransform.h>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <scene/Utilities.h>
-#include <scene/GridECEFTransform.h>
 
 namespace scene
 {

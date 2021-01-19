@@ -19,12 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <scene/AdjustableParams.h>
 
 #include <algorithm>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
-#include <scene/AdjustableParams.h>
 
 namespace scene
 {

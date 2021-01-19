@@ -23,7 +23,6 @@
 #define __SIX_UTILITIES_H__
 
 #include <nitf/coda-oss.hpp>
-#include <sys/Conf.h>
 #include <except/Exception.h>
 #include "six/Types.h"
 #include "six/Data.h"

@@ -26,7 +26,7 @@
 
 #include <ostream>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <mem/ScopedCopyablePtr.h>
 #include <six/Init.h>
 

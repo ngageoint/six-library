@@ -26,7 +26,7 @@
 #include <iomanip>
 #include <string>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <six/Parameter.h>
 #include <types/RowCol.h>
 

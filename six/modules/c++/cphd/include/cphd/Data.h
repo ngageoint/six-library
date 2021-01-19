@@ -30,8 +30,10 @@
 #include <assert.h>
 #include <stddef.h>
 
+#include <nitf/coda-oss.hpp>
+
 #include <six/Init.h>
-#include <sys/Conf.h>
+
 #include <cphd/Enums.h>
 #include <cphd/Utilities.h>
 

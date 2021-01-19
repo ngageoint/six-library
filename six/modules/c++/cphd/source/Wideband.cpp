@@ -23,14 +23,15 @@
 #include <limits>
 #include <sstream>
 
-#include <cphd/ByteSwap.h>
-#include <cphd/Wideband.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <io/FileInputStream.h>
 #include <mt/ThreadGroup.h>
 #include <mt/ThreadPlanner.h>
 #include <six/Init.h>
-#include <sys/Conf.h>
+
+#include <cphd/ByteSwap.h>
+#include <cphd/Wideband.h>
 
 namespace
 {

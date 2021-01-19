@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
 #include <cphd/ByteSwap.h>

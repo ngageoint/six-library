@@ -19,10 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#include <sys/Conf.h>
-#include <except/Exception.h>
 #include <scene/FrameType.h>
+
+#include <nitf/coda-oss.hpp>
+#include <except/Exception.h>
 
 namespace scene
 {

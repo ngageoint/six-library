@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 
 #include <cphd/Metadata.h>
 #include <cphd/FileHeader.h>

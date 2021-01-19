@@ -28,7 +28,7 @@
 #include <memory>
 #include <thread>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <types/RowCol.h>
 #include <io/TempFile.h>
 #include <io/FileInputStream.h>

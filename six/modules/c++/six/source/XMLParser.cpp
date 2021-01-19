@@ -19,13 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/XMLParser.h>
+
 #include <string>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
-#include <six/XMLParser.h>
 #include <six/Utilities.h>
 
 namespace

@@ -28,13 +28,15 @@
 #include <complex>
 #include <stddef.h>
 #include <unordered_map>
-#include <sys/Conf.h>
+
+#include <nitf/coda-oss.hpp>
+#include <six/Parameter.h>
+
 #include <cphd/Types.h>
 #include <cphd/Data.h>
 #include <cphd/PVP.h>
 #include <cphd/Metadata.h>
 #include <cphd/ByteSwap.h>
-#include <six/Parameter.h>
 
 namespace cphd
 {

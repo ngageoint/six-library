@@ -19,12 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <scene/GridGeometry.h>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <scene/Utilities.h>
 #include <scene/LocalCoordinateTransform.h>
-#include <scene/GridGeometry.h>
 
 namespace scene
 {

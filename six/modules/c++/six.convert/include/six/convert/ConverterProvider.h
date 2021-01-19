@@ -25,9 +25,10 @@
 #include <string>
 #include <vector>
 
-#include <six/sicd/ComplexData.h>
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <types/RowCol.h>
+
+#include <six/sicd/ComplexData.h>
 
 namespace six
 {
