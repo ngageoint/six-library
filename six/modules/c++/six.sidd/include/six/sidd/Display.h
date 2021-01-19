@@ -43,12 +43,12 @@ namespace sidd
  *
  *  Base class for remaps.  Contains LUT, display type, and
  *  clone() function so that objects can be created easily.
- *  This class does not auto-create any LUT, it defaults to NULL.
+ *  This class does not auto-create any LUT, it defaults to nullptr.
  *  Neither do the derived classes.
  */
 struct Remap
 {
-    Remap(LUT* lut = NULL) :
+    Remap(LUT* lut = nullptr) :
         remapLUT(lut)
     {
     }
@@ -58,7 +58,7 @@ struct Remap
     }
 
     DisplayType displayType;
-    mem::ScopedCopyablePtr<LUT> remapLUT; // MonoLUT or ColorLUT or NULL
+    mem::ScopedCopyablePtr<LUT> remapLUT; // MonoLUT or ColorLUT or nullptr
 
     virtual Remap* clone() const = 0;
 
@@ -90,7 +90,7 @@ struct MonochromeDisplayRemap : public Remap
      *  Create a remap object, but does not set up a LUT.  LUT
      *  remains uninitialized
      */
-    MonochromeDisplayRemap(std::string _remapType, LUT* lut = NULL) :
+    MonochromeDisplayRemap(std::string _remapType, LUT* lut = nullptr) :
         Remap(lut), remapType(_remapType)
     {
         this->displayType = DisplayType::MONO;
@@ -117,7 +117,7 @@ struct MonochromeDisplayRemap : public Remap
 
 /*!
  *  \struct ColorDisplayRemap
- *  \brief Color remap object, leaves remap as NULL
+ *  \brief Color remap object, leaves remap as nullptr
  *
  *  A color display remap contains clipping information, and possibly
  *  also contains a remap LUT.
@@ -125,7 +125,7 @@ struct MonochromeDisplayRemap : public Remap
 struct ColorDisplayRemap : public Remap
 {
     //!  Constructor
-    ColorDisplayRemap(LUT* lut = NULL) :
+    ColorDisplayRemap(LUT* lut = nullptr) :
         Remap(lut)
     {
         this->displayType = DisplayType::COLOR;
