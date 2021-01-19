@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __SCENE_FRAME_TYPE_H__
+#define __SCENE_FRAME_TYPE_H__
 #pragma once
 
 #include <string>
@@ -56,6 +58,7 @@ struct FrameType final
     {
         return (mValue == rhs);
     }
+
     bool operator!=(FrameTypesEnum rhs) const
     {
         return !(*this == rhs);
@@ -65,6 +68,7 @@ struct FrameType final
     {
         return (mValue == rhs.mValue);
     }
+
     bool operator!=(const FrameType& rhs) const
     {
         return !(*this == rhs);
@@ -74,6 +78,7 @@ struct FrameType final
     {
         return toString() == rhs;
     }
+
     bool operator!=(const std::string& rhs) const
     {
         return !(*this == rhs);
@@ -89,4 +94,4 @@ inline std::ostream& operator<<(std::ostream& os, const FrameType& e)
     return os;
 }
 }
-
+#endif
