@@ -30,9 +30,6 @@
 #include "six/NITFWriteControl.h"
 #include "six/Types.h"
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 namespace
 {
 class TempFileWithExtension
@@ -75,14 +72,15 @@ private:
 std::string getProgramPathname(const std::string& installPathname,
         const std::string& programName)
 {
-    std::string testPathname = fs::path(installPathname) / "bin" / programName;
+    std::string testPathname = str::toString(sys::Path(installPathname).
+        join("bin").join(programName));
 
-    if (!fs::exists(testPathname))
+    if (!sys::OS().exists(testPathname))
     {
         testPathname += ".exe";
     }
 
-    if (!fs::exists(testPathname))
+    if (!sys::OS().exists(testPathname))
     {
         throw except::Exception(Ctxt("Unable to find " + testPathname));
     }
@@ -111,16 +109,18 @@ void makeMultiBandSIDD(const std::string& inputPathname,
 {
     six::NITFReadControl reader;
     reader.load(inputPathname);
-    std::unique_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
+    std::auto_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
     data->setPixelType(six::PixelType::MONO16I);
     data->setNumRows(data->getNumRows() / 2);
-    auto container(
-            std::make_shared<six::Container>(six::DataType::DERIVED));
-    container->addData(std::move(data));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::DERIVED));
+    container->addData(data);
 
     six::NITFWriteControl writer;
     writer.initialize(container);
     six::Region region;
+    region.setStartRow(0);
+    region.setStartCol(0);
     writer.save(reader.interleaved(region, 0), outputPathname,
             std::vector<std::string>());
 }
@@ -145,10 +145,16 @@ bool checkBlocking(const std::string& originalPathname,
     six::NITFReadControl convertedReader;
     convertedReader.load(convertedPathname);
 
-    auto originalContainer = originalReader.getContainer();
+    mem::SharedPtr<six::Container> originalContainer =
+            originalReader.getContainer();
 
     six::Region originalRegion;
+    originalRegion.setStartRow(0);
+    originalRegion.setStartCol(0);
+
     six::Region convertedRegion;
+    convertedRegion.setStartRow(0);
+    convertedRegion.setStartCol(0);
 
     const size_t numRows = originalContainer->getData(0)->getNumRows();
     const size_t numCols = originalContainer->getData(0)->getNumCols();
@@ -156,9 +162,9 @@ bool checkBlocking(const std::string& originalPathname,
             originalContainer->getData(0)->getNumBytesPerPixel();
     const size_t bufferSize = numRows * numCols * bytesPerPixel;
 
-    std::unique_ptr<std::byte[]> originalBuffer(
+    mem::ScopedArray<six::UByte> originalBuffer(
             originalReader.interleaved(originalRegion, 0));
-    std::unique_ptr<std::byte[]> convertedBuffer(
+    mem::ScopedArray<six::UByte> convertedBuffer(
             convertedReader.interleaved(convertedRegion, 0));
     for (size_t jj = 0; jj < bufferSize; ++jj)
     {

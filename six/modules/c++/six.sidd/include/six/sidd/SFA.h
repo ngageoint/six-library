@@ -124,7 +124,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAPoint* point = dynamic_cast<const SFAPoint*>(&rhs);
-        if (point != nullptr)
+        if (point != NULL)
         {
             return *this == *point;
         }
@@ -167,7 +167,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFALineString* lineString = dynamic_cast<const SFALineString*>(&rhs);
-        if (lineString != nullptr)
+        if (lineString != NULL)
         {
             return *this == *lineString;
         }
@@ -197,7 +197,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFALine* line = dynamic_cast<const SFALine*>(&rhs);
-        if (line != nullptr)
+        if (line != NULL)
         {
             return *this == *line;
         }
@@ -227,7 +227,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFALinearRing* linearRing = dynamic_cast<const SFALinearRing*>(&rhs);
-        if (linearRing != nullptr)
+        if (linearRing != NULL)
         {
             return *this == *linearRing;
         }
@@ -269,7 +269,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAPolygon* polygon = dynamic_cast<const SFAPolygon*>(&rhs);
-        if (polygon != nullptr)
+        if (polygon != NULL)
         {
             return *this == *polygon;
         }
@@ -301,7 +301,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFATriangle* triangle = dynamic_cast<const SFATriangle*>(&rhs);
-        if (triangle != nullptr)
+        if (triangle != NULL)
         {
             return *this == *triangle;
         }
@@ -333,7 +333,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAPolyhedralSurface* surface = dynamic_cast<const SFAPolyhedralSurface*>(&rhs);
-        if (surface != nullptr)
+        if (surface != NULL)
         {
             return *this == *surface;
         }
@@ -367,7 +367,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFATriangulatedIrregularNetwork* network = dynamic_cast<const SFATriangulatedIrregularNetwork*>(&rhs);
-        if (network != nullptr)
+        if (network != NULL)
         {
             return *this == *network;
         }
@@ -407,7 +407,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAMultiPoint* multiPoint = dynamic_cast<const SFAMultiPoint*>(&rhs);
-        if (multiPoint != nullptr)
+        if (multiPoint != NULL)
         {
             return *this == *multiPoint;
         }
@@ -450,7 +450,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAMultiLineString* string = dynamic_cast<const SFAMultiLineString*>(&rhs);
-        if (string != nullptr)
+        if (string != NULL)
         {
             return *this == *string;
         }
@@ -492,7 +492,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAMultiPolygon* polygon = dynamic_cast<const SFAMultiPolygon*>(&rhs);
-        if (polygon != nullptr)
+        if (polygon != NULL)
         {
             return *this == *polygon;
         }
@@ -621,7 +621,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAGeocentricCoordinateSystem* system = dynamic_cast<const SFAGeocentricCoordinateSystem*>(&rhs);
-        if (system != nullptr)
+        if (system != NULL)
         {
             return *this == *system;
         }
@@ -660,7 +660,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAGeographicCoordinateSystem* system = dynamic_cast<const SFAGeographicCoordinateSystem*>(&rhs);
-        if (system != nullptr)
+        if (system != NULL)
         {
             return *this == *system;
         }
@@ -698,7 +698,7 @@ private:
     virtual bool equalTo(const SFATyped& rhs) const
     {
         const SFAProjectedCoordinateSystem* system = dynamic_cast<const SFAProjectedCoordinateSystem*>(&rhs);
-        if (system != nullptr)
+        if (system != NULL)
         {
             return *this == *system;
         }
@@ -721,8 +721,6 @@ struct SFAReferenceSystem
     {
         return !(*this == rhs);
     }
-
-    virtual ~SFAReferenceSystem() = default;
 };
 
 }

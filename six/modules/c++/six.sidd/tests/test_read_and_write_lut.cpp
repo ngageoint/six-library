@@ -23,16 +23,13 @@
 #include <import/six/sidd.h>
 #include <import/nitf.hpp>
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 namespace
 {
 void validateArguments(int argc, char** argv)
 {
     if (argc != 2)
     {
-        std::string message = "Usage: " + fs::path(argv[0]).filename().string()
+        std::string message = "Usage: " + sys::Path::basename(argv[0])
             + " <SIDD pathname>";
         throw except::Exception(Ctxt(message));
     }
@@ -45,26 +42,35 @@ void validateArguments(int argc, char** argv)
     }
 }
 
-struct Buffers final
+class Buffers
 {
-    std::byte* add(size_t numBytes)
+public:
+    Buffers()
     {
-        mBuffers.push_back(std::unique_ptr<std::byte[]>(new std::byte[numBytes]));
-        return mBuffers.back().get();
     }
 
-    std::vector<std::byte*> get() const
+    ~Buffers()
     {
-        std::vector<std::byte*> retval;
-        for (auto& buffer : mBuffers)
+        for (size_t ii = 0; ii < mBuffers.size(); ++ii)
         {
-            retval.push_back(buffer.get());
+            delete[] mBuffers[ii];
         }
-        return retval;
+    }
+
+    sys::ubyte* add(size_t numBytes)
+    {
+        mem::ScopedArray<sys::ubyte> buffer(new sys::ubyte[numBytes]);
+        mBuffers.push_back(buffer.get());
+        return buffer.release();
+    }
+
+    std::vector<sys::ubyte*> get() const
+    {
+        return mBuffers;
     }
 
 private:
-    std::vector<std::unique_ptr<std::byte[]>> mBuffers;
+    std::vector<sys::ubyte*> mBuffers;
 };
 
 std::string doRoundTrip(const std::string& siddPathname)
@@ -79,9 +85,11 @@ std::string doRoundTrip(const std::string& siddPathname)
     reader.setXMLControlRegistry(&xmlRegistry);
 
     reader.load(siddPathname);
-    auto container = reader.getContainer();
+    mem::SharedPtr<six::Container> container = reader.getContainer();
 
     six::Region region;
+    region.setStartRow(0);
+    region.setStartCol(0);
 
     Buffers buffers;
     for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)
@@ -97,7 +105,7 @@ std::string doRoundTrip(const std::string& siddPathname)
 
             size_t numBytesPerPixel = data->getNumBytesPerPixel();
 
-            std::byte* buffer =
+            sys::ubyte* buffer =
                 buffers.add(numPixels * numBytesPerPixel);
 
             region.setNumRows(extent.row);
@@ -141,8 +149,8 @@ nitf::LookupTable readLookupTable(const std::string& pathname)
 
 bool operator==(const nitf::LookupTable& lhs, const nitf::LookupTable& rhs)
 {
-    if ((lhs.getTable() == nullptr && rhs.getTable() != nullptr) ||
-            (lhs.getTable() != nullptr && rhs.getTable() == nullptr))
+    if ((lhs.getTable() == NULL && rhs.getTable() != NULL) ||
+            (lhs.getTable() != NULL && rhs.getTable() == NULL))
     {
         return false;
     }
@@ -150,7 +158,7 @@ bool operator==(const nitf::LookupTable& lhs, const nitf::LookupTable& rhs)
     bool isEqual = (lhs.getTables() == rhs.getTables() &&
         lhs.getEntries() == rhs.getEntries());
 
-    if (lhs.getTable() == nullptr && rhs.getTable() == nullptr)
+    if (lhs.getTable() == NULL && rhs.getTable() == NULL)
     {
         isEqual = isEqual && true;
     }
@@ -181,10 +189,10 @@ mem::ScopedCopyablePtr<six::LUT> readLUT(const std::string& pathname)
     reader.setXMLControlRegistry(&xmlRegistry);
 
     reader.load(pathname);
-    auto container = reader.getContainer();
+    mem::SharedPtr<six::Container> container = reader.getContainer();
     six::Data* const data = container->getData(0);
     mem::ScopedCopyablePtr<six::LUT> lut = data->getDisplayLUT();
-    if (lut.get() == nullptr)
+    if (lut.get() == NULL)
     {
         return mem::ScopedCopyablePtr<six::LUT>();
     }
@@ -227,14 +235,14 @@ int main(int argc, char** argv)
         std::cout << "Round-trip succeeded\n";
         return 0;
     }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-        return 1;
-    }
     catch (const except::Exception& e)
     {
         std::cerr << e.getMessage() << std::endl;
+        return 1;
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
         return 1;
     }
     catch (...)
