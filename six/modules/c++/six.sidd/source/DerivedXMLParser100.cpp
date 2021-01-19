@@ -41,7 +41,7 @@ const char DerivedXMLParser100::ISM_URI[] = "urn:us:gov:ic:ism";
 DerivedXMLParser100::DerivedXMLParser100(logging::Logger* log,
                                          bool ownLog) :
     DerivedXMLParser(VERSION,
-                     std::auto_ptr<six::SICommonXMLParser>(
+                     std::unique_ptr<six::SICommonXMLParser>(
                          new six::SICommonXMLParser01x(versionToURI(VERSION),
                                                        false,
                                                        SI_COMMON_URI,
@@ -349,7 +349,7 @@ XMLElem DerivedXMLParser100::convertDisplayToXML(
 {
     XMLElem displayElem = newElement("Display", parent);
 
-    createString("PixelType", six::toString(display.pixelType), displayElem);
+    createString("PixelType", display.pixelType, displayElem);
 
     // optional
     if (display.remapInformation.get())
@@ -362,14 +362,14 @@ XMLElem DerivedXMLParser100::convertDisplayToXML(
     if (display.magnificationMethod != MagnificationMethod::NOT_SET)
     {
         createString("MagnificationMethod",
-                     six::toString(display.magnificationMethod), displayElem);
+                     display.magnificationMethod, displayElem);
     }
 
     // optional
     if (display.decimationMethod != DecimationMethod::NOT_SET)
     {
         createString("DecimationMethod",
-                     six::toString(display.decimationMethod), displayElem);
+                     display.decimationMethod, displayElem);
     }
 
     // optional
@@ -401,7 +401,7 @@ XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
 {
     XMLElem geographicAndTargetElem = newElement("GeographicAndTarget", parent);
 
-    if (geographicAndTarget.geographicCoverage.get() == NULL)
+    if (geographicAndTarget.geographicCoverage.get() == nullptr)
     {
         throw except::Exception(Ctxt("geographicCoverage is required"));
     }
@@ -587,9 +587,9 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             collection->information.sensorName,
             informationElem);
         XMLElem radarModeElem = newElement("RadarMode", informationElem);
-        createString("ModeType",
+        createSixString("ModeType",
             common().getSICommonURI(),
-            six::toString(collection->information.radarMode),
+            collection->information.radarMode,
             radarModeElem);
         // optional
         if (collection->information.radarModeID
@@ -638,10 +638,10 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             XMLElem polElem = newElement("Polarization", informationElem);
 
             createString("TxPolarization",
-                six::toString(p->txPolarization),
+                p->txPolarization,
                 polElem);
             createString("RcvPolarization",
-                six::toString(p->rcvPolarization),
+                p->rcvPolarization,
                 polElem);
             // optional
             if (!Init::isUndefined(p->rcvPolarizationOffset))
@@ -653,13 +653,13 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             // optional
             if (!Init::isUndefined(p->processed))
             {
-                createString("Processed", six::toString(p->processed), polElem);
+                createSixString("Processed", p->processed, polElem);
             }
         }
 
         // create Geometry -- optional
         Geometry* geom = collection->geometry.get();
-        if (geom != NULL)
+        if (geom != nullptr)
         {
             XMLElem geometryElem = newElement("Geometry", collectionElem);
 
@@ -685,7 +685,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
 
         // create Phenomenology -- optional
         Phenomenology* phenom = collection->phenomenology.get();
-        if (phenom != NULL)
+        if (phenom != nullptr)
         {
             XMLElem phenomenologyElem = newElement("Phenomenology",
                 collectionElem);

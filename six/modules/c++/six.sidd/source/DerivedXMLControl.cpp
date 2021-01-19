@@ -61,14 +61,14 @@ xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
         throw except::Exception(Ctxt("Data must be SIDD"));
     }
 
-    const DerivedData* const sidd(reinterpret_cast<const DerivedData*>(data));
+    const DerivedData* const sidd(static_cast<const DerivedData*>(data));
     return getParser(data->getVersion())->toXML(sidd);
 }
 
-std::auto_ptr<DerivedXMLParser>
+std::unique_ptr<DerivedXMLParser>
 DerivedXMLControl::getParser(const std::string& version) const
 {
-    std::auto_ptr<DerivedXMLParser> parser;
+    std::unique_ptr<DerivedXMLParser> parser;
 
     const std::string normalizedVersion = normalizeVersion(version);
 
