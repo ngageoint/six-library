@@ -75,7 +75,7 @@ public:
      * \param[out] options Options to populate
      */
     static void populateOptions(
-            std::shared_ptr<Container> container,
+            mem::SharedPtr<Container> container,
             size_t maxProductSize,
             size_t numRowsPerBlock,
             size_t numColsPerBlock,
@@ -159,7 +159,7 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Only applies
      * for SIDD.  Defaults to no blocking.
      */
-    void initialize(std::shared_ptr<Container> container,
+    void initialize(mem::SharedPtr<Container> container,
                     const XMLControlRegistry& xmlRegistry,
                     const std::vector<std::string>& schemaPaths,
                     size_t maxProductSize,

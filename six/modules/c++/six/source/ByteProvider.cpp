@@ -41,7 +41,7 @@ ByteProvider::ByteProvider(std::unique_ptr<six::NITFHeaderCreator>&& headerCreat
 }
 
 void ByteProvider::populateOptions(
-        std::shared_ptr<Container> container,
+        mem::SharedPtr<Container> container,
         size_t maxProductSize,
         size_t numRowsPerBlock,
         size_t numColsPerBlock,
@@ -175,7 +175,7 @@ void ByteProvider::populateInitArgs(
                                  zero));
 }
 
-void ByteProvider::initialize(std::shared_ptr<Container> container,
+void ByteProvider::initialize(mem::SharedPtr<Container> container,
                               const XMLControlRegistry& xmlRegistry,
                               const std::vector<std::string>& schemaPaths,
                               size_t maxProductSize,

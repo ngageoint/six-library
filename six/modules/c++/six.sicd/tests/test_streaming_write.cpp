@@ -291,7 +291,7 @@ private:
     const std::string mNormalPathname;
     const EnsureFileCleanup mNormalFileCleanup;
 
-    std::shared_ptr<six::Container> mContainer;
+    mem::SharedPtr<six::Container> mContainer;
     const types::RowCol<size_t> mDims;
     std::vector<std::complex<DataTypeT> > mImage;
     std::complex<DataTypeT>* const mImagePtr;

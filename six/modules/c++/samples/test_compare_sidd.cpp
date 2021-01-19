@@ -42,10 +42,10 @@
 
 namespace
 {
-std::shared_ptr<six::Data> readMetadata(const six::NITFReadControl& reader)
+mem::SharedPtr<six::Data> readMetadata(const six::NITFReadControl& reader)
 {
     const six::Data* data = reader.getContainer()->getData(0);
-    return std::shared_ptr<six::Data>(data->clone());
+    return mem::SharedPtr<six::Data>(data->clone());
 }
 
 void readWideband(six::NITFReadControl& reader,

@@ -34724,7 +34724,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  SwigValueWrapper< std::shared_ptr< io::SeekableInputStream > > arg1 ;
+  SwigValueWrapper< mem::SharedPtr< io::SeekableInputStream > > arg1 ;
   cphd::MetadataBase *arg2 = 0 ;
   int64_t arg3 ;
   int64_t arg4 ;
@@ -34742,12 +34742,12 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   {
     res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_io__SeekableInputStream_t,  0  | 0);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Wideband" "', argument " "1"" of type '" "std::shared_ptr< io::SeekableInputStream >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Wideband" "', argument " "1"" of type '" "mem::SharedPtr< io::SeekableInputStream >""'"); 
     }  
     if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "1"" of type '" "std::shared_ptr< io::SeekableInputStream >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Wideband" "', argument " "1"" of type '" "mem::SharedPtr< io::SeekableInputStream >""'");
     } else {
-      std::shared_ptr< io::SeekableInputStream > * temp = reinterpret_cast< std::shared_ptr< io::SeekableInputStream > * >(argp1);
+      mem::SharedPtr< io::SeekableInputStream > * temp = reinterpret_cast< mem::SharedPtr< io::SeekableInputStream > * >(argp1);
       arg1 = *temp;
       if (SWIG_IsNewObj(res1)) delete temp;
     }
@@ -34889,7 +34889,7 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Wideband'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    cphd::Wideband::Wideband(std::string const &,cphd::MetadataBase const &,int64_t,int64_t)\n"
-    "    cphd::Wideband::Wideband(std::shared_ptr< io::SeekableInputStream >,cphd::MetadataBase const &,int64_t,int64_t)\n");
+    "    cphd::Wideband::Wideband(mem::SharedPtr< io::SeekableInputStream >,cphd::MetadataBase const &,int64_t,int64_t)\n");
   return 0;
 }
 
@@ -36601,9 +36601,9 @@ SWIGINTERN PyObject *Wideband_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObj
 
 SWIGINTERN PyObject *_wrap_new_CPHDReader__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  SwigValueWrapper< std::shared_ptr< io::SeekableInputStream > > arg1 ;
+  SwigValueWrapper< mem::SharedPtr< io::SeekableInputStream > > arg1 ;
   size_t arg2 ;
-  std::shared_ptr< logging::Logger > arg3 ;
+  mem::SharedPtr< logging::Logger > arg3 ;
   void *argp1 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -36619,12 +36619,12 @@ SWIGINTERN PyObject *_wrap_new_CPHDReader__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   {
     res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_io__SeekableInputStream_t,  0  | 0);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_CPHDReader" "', argument " "1"" of type '" "std::shared_ptr< io::SeekableInputStream >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_CPHDReader" "', argument " "1"" of type '" "mem::SharedPtr< io::SeekableInputStream >""'"); 
     }  
     if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDReader" "', argument " "1"" of type '" "std::shared_ptr< io::SeekableInputStream >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDReader" "', argument " "1"" of type '" "mem::SharedPtr< io::SeekableInputStream >""'");
     } else {
-      std::shared_ptr< io::SeekableInputStream > * temp = reinterpret_cast< std::shared_ptr< io::SeekableInputStream > * >(argp1);
+      mem::SharedPtr< io::SeekableInputStream > * temp = reinterpret_cast< mem::SharedPtr< io::SeekableInputStream > * >(argp1);
       arg1 = *temp;
       if (SWIG_IsNewObj(res1)) delete temp;
     }
@@ -36637,12 +36637,12 @@ SWIGINTERN PyObject *_wrap_new_CPHDReader__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   {
     res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__shared_ptrT_logging__Logger_t,  0  | 0);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_CPHDReader" "', argument " "3"" of type '" "std::shared_ptr< logging::Logger >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_CPHDReader" "', argument " "3"" of type '" "mem::SharedPtr< logging::Logger >""'"); 
     }  
     if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDReader" "', argument " "3"" of type '" "std::shared_ptr< logging::Logger >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDReader" "', argument " "3"" of type '" "mem::SharedPtr< logging::Logger >""'");
     } else {
-      std::shared_ptr< logging::Logger > * temp = reinterpret_cast< std::shared_ptr< logging::Logger > * >(argp3);
+      mem::SharedPtr< logging::Logger > * temp = reinterpret_cast< mem::SharedPtr< logging::Logger > * >(argp3);
       arg3 = *temp;
       if (SWIG_IsNewObj(res3)) delete temp;
     }
@@ -36687,7 +36687,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_CPHDReader__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  SwigValueWrapper< std::shared_ptr< io::SeekableInputStream > > arg1 ;
+  SwigValueWrapper< mem::SharedPtr< io::SeekableInputStream > > arg1 ;
   size_t arg2 ;
   void *argp1 ;
   int res1 = 0 ;
@@ -36701,12 +36701,12 @@ SWIGINTERN PyObject *_wrap_new_CPHDReader__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   {
     res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_io__SeekableInputStream_t,  0  | 0);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_CPHDReader" "', argument " "1"" of type '" "std::shared_ptr< io::SeekableInputStream >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_CPHDReader" "', argument " "1"" of type '" "mem::SharedPtr< io::SeekableInputStream >""'"); 
     }  
     if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDReader" "', argument " "1"" of type '" "std::shared_ptr< io::SeekableInputStream >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDReader" "', argument " "1"" of type '" "mem::SharedPtr< io::SeekableInputStream >""'");
     } else {
-      std::shared_ptr< io::SeekableInputStream > * temp = reinterpret_cast< std::shared_ptr< io::SeekableInputStream > * >(argp1);
+      mem::SharedPtr< io::SeekableInputStream > * temp = reinterpret_cast< mem::SharedPtr< io::SeekableInputStream > * >(argp1);
       arg1 = *temp;
       if (SWIG_IsNewObj(res1)) delete temp;
     }
@@ -36758,7 +36758,7 @@ SWIGINTERN PyObject *_wrap_new_CPHDReader__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   std::string *arg1 = 0 ;
   size_t arg2 ;
-  std::shared_ptr< logging::Logger > arg3 ;
+  mem::SharedPtr< logging::Logger > arg3 ;
   int res1 = SWIG_OLDOBJ ;
   size_t val2 ;
   int ecode2 = 0 ;
@@ -36789,12 +36789,12 @@ SWIGINTERN PyObject *_wrap_new_CPHDReader__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
   {
     res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__shared_ptrT_logging__Logger_t,  0  | 0);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_CPHDReader" "', argument " "3"" of type '" "std::shared_ptr< logging::Logger >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_CPHDReader" "', argument " "3"" of type '" "mem::SharedPtr< logging::Logger >""'"); 
     }  
     if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDReader" "', argument " "3"" of type '" "std::shared_ptr< logging::Logger >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDReader" "', argument " "3"" of type '" "mem::SharedPtr< logging::Logger >""'");
     } else {
-      std::shared_ptr< logging::Logger > * temp = reinterpret_cast< std::shared_ptr< logging::Logger > * >(argp3);
+      mem::SharedPtr< logging::Logger > * temp = reinterpret_cast< mem::SharedPtr< logging::Logger > * >(argp3);
       arg3 = *temp;
       if (SWIG_IsNewObj(res3)) delete temp;
     }
@@ -36987,9 +36987,9 @@ SWIGINTERN PyObject *_wrap_new_CPHDReader(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_CPHDReader'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    cphd03::CPHDReader::CPHDReader(std::shared_ptr< io::SeekableInputStream >,size_t,std::shared_ptr< logging::Logger >)\n"
-    "    cphd03::CPHDReader::CPHDReader(std::shared_ptr< io::SeekableInputStream >,size_t)\n"
-    "    cphd03::CPHDReader::CPHDReader(std::string const &,size_t,std::shared_ptr< logging::Logger >)\n"
+    "    cphd03::CPHDReader::CPHDReader(mem::SharedPtr< io::SeekableInputStream >,size_t,mem::SharedPtr< logging::Logger >)\n"
+    "    cphd03::CPHDReader::CPHDReader(mem::SharedPtr< io::SeekableInputStream >,size_t)\n"
+    "    cphd03::CPHDReader::CPHDReader(std::string const &,size_t,mem::SharedPtr< logging::Logger >)\n"
     "    cphd03::CPHDReader::CPHDReader(std::string const &,size_t)\n");
   return 0;
 }
@@ -37783,7 +37783,7 @@ SWIGINTERN PyObject *CPHDReader_swigregister(PyObject *SWIGUNUSEDPARM(self), PyO
 SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::Metadata *arg1 = 0 ;
-  SwigValueWrapper< std::shared_ptr< io::SeekableOutputStream > > arg2 ;
+  SwigValueWrapper< mem::SharedPtr< io::SeekableOutputStream > > arg2 ;
   size_t arg3 ;
   size_t arg4 ;
   void *argp1 = 0 ;
@@ -37812,12 +37812,12 @@ SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "mem::SharedPtr< io::SeekableOutputStream >""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "mem::SharedPtr< io::SeekableOutputStream >""'");
     } else {
-      std::shared_ptr< io::SeekableOutputStream > * temp = reinterpret_cast< std::shared_ptr< io::SeekableOutputStream > * >(argp2);
+      mem::SharedPtr< io::SeekableOutputStream > * temp = reinterpret_cast< mem::SharedPtr< io::SeekableOutputStream > * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -37873,7 +37873,7 @@ fail:
 SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::Metadata *arg1 = 0 ;
-  SwigValueWrapper< std::shared_ptr< io::SeekableOutputStream > > arg2 ;
+  SwigValueWrapper< mem::SharedPtr< io::SeekableOutputStream > > arg2 ;
   size_t arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -37898,12 +37898,12 @@ SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "mem::SharedPtr< io::SeekableOutputStream >""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "mem::SharedPtr< io::SeekableOutputStream >""'");
     } else {
-      std::shared_ptr< io::SeekableOutputStream > * temp = reinterpret_cast< std::shared_ptr< io::SeekableOutputStream > * >(argp2);
+      mem::SharedPtr< io::SeekableOutputStream > * temp = reinterpret_cast< mem::SharedPtr< io::SeekableOutputStream > * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -37954,7 +37954,7 @@ fail:
 SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::Metadata *arg1 = 0 ;
-  SwigValueWrapper< std::shared_ptr< io::SeekableOutputStream > > arg2 ;
+  SwigValueWrapper< mem::SharedPtr< io::SeekableOutputStream > > arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -37975,12 +37975,12 @@ SWIGINTERN PyObject *_wrap_new_CPHDWriter__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_io__SeekableOutputStream_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "mem::SharedPtr< io::SeekableOutputStream >""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "std::shared_ptr< io::SeekableOutputStream >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_CPHDWriter" "', argument " "2"" of type '" "mem::SharedPtr< io::SeekableOutputStream >""'");
     } else {
-      std::shared_ptr< io::SeekableOutputStream > * temp = reinterpret_cast< std::shared_ptr< io::SeekableOutputStream > * >(argp2);
+      mem::SharedPtr< io::SeekableOutputStream > * temp = reinterpret_cast< mem::SharedPtr< io::SeekableOutputStream > * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -38387,9 +38387,9 @@ SWIGINTERN PyObject *_wrap_new_CPHDWriter(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_CPHDWriter'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::shared_ptr< io::SeekableOutputStream >,size_t,size_t)\n"
-    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::shared_ptr< io::SeekableOutputStream >,size_t)\n"
-    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::shared_ptr< io::SeekableOutputStream >)\n"
+    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,mem::SharedPtr< io::SeekableOutputStream >,size_t,size_t)\n"
+    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,mem::SharedPtr< io::SeekableOutputStream >,size_t)\n"
+    "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,mem::SharedPtr< io::SeekableOutputStream >)\n"
     "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::string const &,size_t,size_t)\n"
     "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::string const &,size_t)\n"
     "    cphd03::CPHDWriter::CPHDWriter(cphd03::Metadata const &,std::string const &)\n");
@@ -59014,7 +59014,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CPHDXMLControl_swigregister", CPHDXMLControl_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_Wideband", _wrap_new_Wideband, METH_VARARGS, (char *)"\n"
 		"Wideband(std::string const & pathname, MetadataBase metadata, int64_t startWB, int64_t sizeWB)\n"
-		"new_Wideband(std::shared_ptr< io::SeekableInputStream > inStream, MetadataBase metadata, int64_t startWB, int64_t sizeWB) -> Wideband\n"
+		"new_Wideband(mem::SharedPtr< io::SeekableInputStream > inStream, MetadataBase metadata, int64_t startWB, int64_t sizeWB) -> Wideband\n"
 		""},
 	 { (char *)"Wideband_getFileOffset", _wrap_Wideband_getFileOffset, METH_VARARGS, (char *)"\n"
 		"getFileOffset(size_t channel, size_t vector, size_t sample) -> int64_t\n"
@@ -59038,9 +59038,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_Wideband", _wrap_delete_Wideband, METH_VARARGS, (char *)"delete_Wideband(Wideband self)"},
 	 { (char *)"Wideband_swigregister", Wideband_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_CPHDReader", _wrap_new_CPHDReader, METH_VARARGS, (char *)"\n"
-		"CPHDReader(std::shared_ptr< io::SeekableInputStream > inStream, size_t numThreads, std::shared_ptr< logging::Logger > logger)\n"
-		"CPHDReader(std::shared_ptr< io::SeekableInputStream > inStream, size_t numThreads)\n"
-		"CPHDReader(std::string const & fromFile, size_t numThreads, std::shared_ptr< logging::Logger > logger)\n"
+		"CPHDReader(mem::SharedPtr< io::SeekableInputStream > inStream, size_t numThreads, mem::SharedPtr< logging::Logger > logger)\n"
+		"CPHDReader(mem::SharedPtr< io::SeekableInputStream > inStream, size_t numThreads)\n"
+		"CPHDReader(std::string const & fromFile, size_t numThreads, mem::SharedPtr< logging::Logger > logger)\n"
 		"new_CPHDReader(std::string const & fromFile, size_t numThreads) -> CPHDReader\n"
 		""},
 	 { (char *)"CPHDReader_getNumChannels", _wrap_CPHDReader_getNumChannels, METH_VARARGS, (char *)"CPHDReader_getNumChannels(CPHDReader self) -> size_t"},
@@ -59059,9 +59059,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_CPHDReader", _wrap_delete_CPHDReader, METH_VARARGS, (char *)"delete_CPHDReader(CPHDReader self)"},
 	 { (char *)"CPHDReader_swigregister", CPHDReader_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_CPHDWriter", _wrap_new_CPHDWriter, METH_VARARGS, (char *)"\n"
-		"CPHDWriter(Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0, size_t scratchSpaceSize=4)\n"
-		"CPHDWriter(Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads=0)\n"
-		"CPHDWriter(Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream)\n"
+		"CPHDWriter(Metadata metadata, mem::SharedPtr< io::SeekableOutputStream > stream, size_t numThreads=0, size_t scratchSpaceSize=4)\n"
+		"CPHDWriter(Metadata metadata, mem::SharedPtr< io::SeekableOutputStream > stream, size_t numThreads=0)\n"
+		"CPHDWriter(Metadata metadata, mem::SharedPtr< io::SeekableOutputStream > stream)\n"
 		"CPHDWriter(Metadata metadata, std::string const & pathname, size_t numThreads=0, size_t scratchSpaceSize=4)\n"
 		"CPHDWriter(Metadata metadata, std::string const & pathname, size_t numThreads=0)\n"
 		"new_CPHDWriter(Metadata metadata, std::string const & pathname) -> CPHDWriter\n"
@@ -59602,9 +59602,9 @@ static swig_type_info _swigt__p_std__auto_ptrT_cphd03__FxParameters_t = {"_p_std
 static swig_type_info _swigt__p_std__auto_ptrT_cphd03__TOAParameters_t = {"_p_std__auto_ptrT_cphd03__TOAParameters_t", "std::auto_ptr< cphd03::TOAParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__shared_ptrT_io__SeekableInputStream_t = {"_p_std__shared_ptrT_io__SeekableInputStream_t", "std::shared_ptr< io::SeekableInputStream > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__shared_ptrT_io__SeekableOutputStream_t = {"_p_std__shared_ptrT_io__SeekableOutputStream_t", "std::shared_ptr< io::SeekableOutputStream > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__shared_ptrT_logging__Logger_t = {"_p_std__shared_ptrT_logging__Logger_t", "std::shared_ptr< logging::Logger > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__shared_ptrT_io__SeekableInputStream_t = {"_p_std__shared_ptrT_io__SeekableInputStream_t", "mem::SharedPtr< io::SeekableInputStream > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__shared_ptrT_io__SeekableOutputStream_t = {"_p_std__shared_ptrT_io__SeekableOutputStream_t", "mem::SharedPtr< io::SeekableOutputStream > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__shared_ptrT_logging__Logger_t = {"_p_std__shared_ptrT_logging__Logger_t", "mem::SharedPtr< logging::Logger > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t = {"_p_std__vectorT_cphd03__ArraySize_std__allocatorT_cphd03__ArraySize_t_t", "std::vector< cphd03::ArraySize,std::allocator< cphd03::ArraySize > > *|std::vector< cphd03::ArraySize > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t = {"_p_std__vectorT_cphd03__ChannelParameters_std__allocatorT_cphd03__ChannelParameters_t_t", "std::vector< cphd03::ChannelParameters > *|std::vector< cphd03::ChannelParameters,std::allocator< cphd03::ChannelParameters > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t = {"_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t", "std::vector< math::linear::VectorN< 3,double > > *|std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *|std::vector< cphd::Vector3,std::allocator< cphd::Vector3 > > *", 0, 0, (void*)0, 0};

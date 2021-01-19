@@ -74,7 +74,7 @@ public:
      *  \param startWB CPHD header keyword "cphd_BYTE_OFFSET"
      *  \param sizeWB CPHD header keyword "cphd_DATA_SIZE"
      */
-    Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
+    Wideband(mem::SharedPtr<io::SeekableInputStream> inStream,
              const cphd::MetadataBase& metadata,
              int64_t startWB,
              int64_t sizeWB);
@@ -411,7 +411,7 @@ private:
     const Wideband& operator=(const Wideband&) = delete;
 
 private:
-    const std::shared_ptr<io::SeekableInputStream> mInStream;
+    const mem::SharedPtr<io::SeekableInputStream> mInStream;
     const cphd::MetadataBase& mMetadata;  // pointer to data metadata
     const int64_t mWBOffset;  // offset in bytes to start of wideband
     const size_t mWBSize;  // total size in bytes of wideband

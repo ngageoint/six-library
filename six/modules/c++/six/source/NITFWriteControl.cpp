@@ -41,13 +41,13 @@ NITFWriteControl::NITFWriteControl()
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator());
 }
 
-NITFWriteControl::NITFWriteControl(std::shared_ptr<Container> container)
+NITFWriteControl::NITFWriteControl(mem::SharedPtr<Container> container)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(container));
 }
 
 NITFWriteControl::NITFWriteControl(const six::Options& options,
-                                   std::shared_ptr<Container> container,
+                                   mem::SharedPtr<Container> container,
                                    const XMLControlRegistry* xmlRegistry)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(options, container));
@@ -66,12 +66,12 @@ void NITFWriteControl::setXMLControlRegistryImpl(
 }
 
 void NITFWriteControl::initialize(const six::Options& options,
-                                  std::shared_ptr<Container> container)
+                                  mem::SharedPtr<Container> container)
 {
     mNITFHeaderCreator->initialize(options, container);
 }
 
-void NITFWriteControl::initialize(std::shared_ptr<Container> container)
+void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
 {
     mNITFHeaderCreator->initialize(container);
 }
@@ -442,7 +442,7 @@ void NITFWriteControl::addUserDefinedSubheader(
 }
 
 void NITFWriteControl::addAdditionalDES(
-        std::shared_ptr<nitf::SegmentWriter> segmentWriter)
+        mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
 {
     mNITFHeaderCreator->addAdditionalDES(segmentWriter);
 }

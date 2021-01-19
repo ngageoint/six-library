@@ -55,7 +55,7 @@ public:
      * Constructor. Calls initialize.
      * \param container The data container
      */
-    NITFWriteControl(std::shared_ptr<Container> container);
+    NITFWriteControl(mem::SharedPtr<Container> container);
 
     /*!
      * Constructor. Calls initialize.
@@ -64,7 +64,7 @@ public:
      * \param xmlRegistry Optional XMLControlRegistry
      */
     NITFWriteControl(const six::Options& options,
-                     std::shared_ptr<Container> container,
+                     mem::SharedPtr<Container> container,
                      const XMLControlRegistry* xmlRegistry = nullptr);
 
     //! Noncopyable
@@ -100,19 +100,19 @@ public:
     }
 
     //! \return Collection of NITF image info pointers
-    std::vector<std::shared_ptr<NITFImageInfo> > getInfos()
+    std::vector<mem::SharedPtr<NITFImageInfo> > getInfos()
     {
         return mNITFHeaderCreator->getInfos();
     }
 
     //! \return Mutable data container
-    std::shared_ptr<Container> getContainer()
+    mem::SharedPtr<Container> getContainer()
     {
         return mNITFHeaderCreator->getContainer();
     }
 
     //! \return Const data container
-    std::shared_ptr<const Container> getContainer() const
+    mem::SharedPtr<const Container> getContainer() const
     {
         return mNITFHeaderCreator->getContainer();
     }
@@ -124,7 +124,7 @@ public:
     }
 
     //! \return Collection of NITF segment writers
-    std::vector<std::shared_ptr<nitf::SegmentWriter> > getSegmentWriters()
+    std::vector<mem::SharedPtr<nitf::SegmentWriter> > getSegmentWriters()
     {
         return mNITFHeaderCreator->getSegmentWriters();
     }
@@ -142,9 +142,9 @@ public:
     void setNITFHeaderCreator(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator);
 
     virtual void initialize(const six::Options& options,
-                            std::shared_ptr<Container> container);
+                            mem::SharedPtr<Container> container);
 
-    virtual void initialize(std::shared_ptr<Container> container) override;
+    virtual void initialize(mem::SharedPtr<Container> container) override;
 
     using WriteControl::save;
 
@@ -275,7 +275,7 @@ public:
      *
      * \param writer A SegmentWriter with loaded, attached SegmentSource
      */
-    void addAdditionalDES(std::shared_ptr<nitf::SegmentWriter> writer);
+    void addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> writer);
 
     /*!
      *  Takes in a string representing the classification level

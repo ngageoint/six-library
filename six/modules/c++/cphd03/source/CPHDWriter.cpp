@@ -32,7 +32,7 @@
 namespace cphd03
 {
 CPHDWriter::CPHDWriter(const Metadata& metadata,
-                       std::shared_ptr<io::SeekableOutputStream> stream,
+                       mem::SharedPtr<io::SeekableOutputStream> stream,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
     mMetadata(metadata),

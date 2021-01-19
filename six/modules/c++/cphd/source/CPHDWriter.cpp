@@ -38,7 +38,7 @@
 
 namespace cphd
 {
-DataWriter::DataWriter(std::shared_ptr<io::SeekableOutputStream> stream,
+DataWriter::DataWriter(mem::SharedPtr<io::SeekableOutputStream> stream,
                        size_t numThreads) :
     mStream(stream),
     mNumThreads(numThreads == 0 ? std::thread::hardware_concurrency() : numThreads)
@@ -50,7 +50,7 @@ DataWriter::~DataWriter()
 }
 
 DataWriterLittleEndian::DataWriterLittleEndian(
-        std::shared_ptr<io::SeekableOutputStream> stream,
+        mem::SharedPtr<io::SeekableOutputStream> stream,
         size_t numThreads,
         size_t scratchSize) :
     DataWriter(stream, numThreads),
@@ -84,7 +84,7 @@ void DataWriterLittleEndian::operator()(const std::byte* data,
 }
 
 DataWriterBigEndian::DataWriterBigEndian(
-        std::shared_ptr<io::SeekableOutputStream> stream, size_t numThreads) :
+        mem::SharedPtr<io::SeekableOutputStream> stream, size_t numThreads) :
     DataWriter(stream, numThreads)
 {
 }
@@ -98,7 +98,7 @@ void DataWriterBigEndian::operator()(const std::byte* data,
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
-                       std::shared_ptr<io::SeekableOutputStream> outStream,
+                       mem::SharedPtr<io::SeekableOutputStream> outStream,
                        const std::vector<std::string>& schemaPaths,
                        size_t numThreads,
                        size_t scratchSpaceSize) :

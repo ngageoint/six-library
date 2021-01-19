@@ -2667,7 +2667,7 @@ class SupportBlock(_object):
     def __init__(self, *args):
         """
         __init__(cphd::SupportBlock self, std::string const & pathname, Data data, sys::Off_T startSupport, sys::Off_T sizeSupport) -> SupportBlock
-        __init__(cphd::SupportBlock self, std::shared_ptr< io::SeekableInputStream > inStream, Data data, sys::Off_T startSupport, sys::Off_T sizeSupport) -> SupportBlock
+        __init__(cphd::SupportBlock self, mem::SharedPtr< io::SeekableInputStream > inStream, Data data, sys::Off_T startSupport, sys::Off_T sizeSupport) -> SupportBlock
         """
         this = _cphd.new_SupportBlock(*args)
         try:
@@ -4955,7 +4955,7 @@ class Wideband(_object):
     def __init__(self, *args):
         """
         __init__(cphd::Wideband self, std::string const & pathname, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
-        __init__(cphd::Wideband self, std::shared_ptr< io::SeekableInputStream > inStream, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
+        __init__(cphd::Wideband self, mem::SharedPtr< io::SeekableInputStream > inStream, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband
         """
         this = _cphd.new_Wideband(*args)
         try:
@@ -5022,10 +5022,10 @@ class CPHDReader(_object):
 
     def __init__(self, *args):
         """
-        __init__(cphd::CPHDReader self, std::shared_ptr< io::SeekableInputStream > inStream, size_t numThreads, VectorString schemaPaths, std::shared_ptr< logging::Logger > logger) -> CPHDReader
-        __init__(cphd::CPHDReader self, std::shared_ptr< io::SeekableInputStream > inStream, size_t numThreads, VectorString schemaPaths) -> CPHDReader
-        __init__(cphd::CPHDReader self, std::shared_ptr< io::SeekableInputStream > inStream, size_t numThreads) -> CPHDReader
-        __init__(cphd::CPHDReader self, std::string const & fromFile, size_t numThreads, VectorString schemaPaths, std::shared_ptr< logging::Logger > logger) -> CPHDReader
+        __init__(cphd::CPHDReader self, mem::SharedPtr< io::SeekableInputStream > inStream, size_t numThreads, VectorString schemaPaths, mem::SharedPtr< logging::Logger > logger) -> CPHDReader
+        __init__(cphd::CPHDReader self, mem::SharedPtr< io::SeekableInputStream > inStream, size_t numThreads, VectorString schemaPaths) -> CPHDReader
+        __init__(cphd::CPHDReader self, mem::SharedPtr< io::SeekableInputStream > inStream, size_t numThreads) -> CPHDReader
+        __init__(cphd::CPHDReader self, std::string const & fromFile, size_t numThreads, VectorString schemaPaths, mem::SharedPtr< logging::Logger > logger) -> CPHDReader
         __init__(cphd::CPHDReader self, std::string const & fromFile, size_t numThreads, VectorString schemaPaths) -> CPHDReader
         __init__(cphd::CPHDReader self, std::string const & fromFile, size_t numThreads) -> CPHDReader
         """
@@ -5128,8 +5128,8 @@ class DataWriterLittleEndian(DataWriter):
     __getattr__ = lambda self, name: _swig_getattr(self, DataWriterLittleEndian, name)
     __repr__ = _swig_repr
 
-    def __init__(self, stream: 'std::shared_ptr< io::SeekableOutputStream >', numThreads: 'size_t', scratchSize: 'size_t'):
-        """__init__(cphd::DataWriterLittleEndian self, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads, size_t scratchSize) -> DataWriterLittleEndian"""
+    def __init__(self, stream: 'mem::SharedPtr< io::SeekableOutputStream >', numThreads: 'size_t', scratchSize: 'size_t'):
+        """__init__(cphd::DataWriterLittleEndian self, mem::SharedPtr< io::SeekableOutputStream > stream, size_t numThreads, size_t scratchSize) -> DataWriterLittleEndian"""
         this = _cphd.new_DataWriterLittleEndian(stream, numThreads, scratchSize)
         try:
             self.this.append(this)
@@ -5158,8 +5158,8 @@ class DataWriterBigEndian(DataWriter):
     __getattr__ = lambda self, name: _swig_getattr(self, DataWriterBigEndian, name)
     __repr__ = _swig_repr
 
-    def __init__(self, stream: 'std::shared_ptr< io::SeekableOutputStream >', numThreads: 'size_t'):
-        """__init__(cphd::DataWriterBigEndian self, std::shared_ptr< io::SeekableOutputStream > stream, size_t numThreads) -> DataWriterBigEndian"""
+    def __init__(self, stream: 'mem::SharedPtr< io::SeekableOutputStream >', numThreads: 'size_t'):
+        """__init__(cphd::DataWriterBigEndian self, mem::SharedPtr< io::SeekableOutputStream > stream, size_t numThreads) -> DataWriterBigEndian"""
         this = _cphd.new_DataWriterBigEndian(stream, numThreads)
         try:
             self.this.append(this)
@@ -5186,10 +5186,10 @@ class CPHDWriter(_object):
 
     def __init__(self, *args):
         """
-        __init__(cphd::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, VectorString schemaPaths, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
-        __init__(cphd::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, VectorString schemaPaths, size_t numThreads=0) -> CPHDWriter
-        __init__(cphd::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream, VectorString schemaPaths) -> CPHDWriter
-        __init__(cphd::CPHDWriter self, Metadata metadata, std::shared_ptr< io::SeekableOutputStream > stream) -> CPHDWriter
+        __init__(cphd::CPHDWriter self, Metadata metadata, mem::SharedPtr< io::SeekableOutputStream > stream, VectorString schemaPaths, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
+        __init__(cphd::CPHDWriter self, Metadata metadata, mem::SharedPtr< io::SeekableOutputStream > stream, VectorString schemaPaths, size_t numThreads=0) -> CPHDWriter
+        __init__(cphd::CPHDWriter self, Metadata metadata, mem::SharedPtr< io::SeekableOutputStream > stream, VectorString schemaPaths) -> CPHDWriter
+        __init__(cphd::CPHDWriter self, Metadata metadata, mem::SharedPtr< io::SeekableOutputStream > stream) -> CPHDWriter
         __init__(cphd::CPHDWriter self, Metadata metadata, std::string const & pathname, VectorString schemaPaths, size_t numThreads=0, size_t scratchSpaceSize=4) -> CPHDWriter
         __init__(cphd::CPHDWriter self, Metadata metadata, std::string const & pathname, VectorString schemaPaths, size_t numThreads=0) -> CPHDWriter
         __init__(cphd::CPHDWriter self, Metadata metadata, std::string const & pathname, VectorString schemaPaths) -> CPHDWriter

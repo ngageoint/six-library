@@ -32,24 +32,24 @@
 
 namespace cphd03
 {
-CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
+CPHDReader::CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
                        size_t numThreads,
-                       std::shared_ptr<logging::Logger> logger)
+                       mem::SharedPtr<logging::Logger> logger)
 {
     initialize(inStream, numThreads, logger);
 }
 
 CPHDReader::CPHDReader(const std::string& fromFile,
                        size_t numThreads,
-                       std::shared_ptr<logging::Logger> logger)
+                       mem::SharedPtr<logging::Logger> logger)
 {
     initialize(std::make_shared<io::FileInputStream>(fromFile),
         numThreads, logger);
 }
 
-void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
+void CPHDReader::initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
                             size_t numThreads,
-                            std::shared_ptr<logging::Logger> logger)
+                            mem::SharedPtr<logging::Logger> logger)
 {
     mFileHeader.read(*inStream);
 

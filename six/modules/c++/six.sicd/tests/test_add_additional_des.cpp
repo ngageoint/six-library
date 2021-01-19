@@ -79,7 +79,7 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
     six::NITFWriteControl writer;
     writer.initialize(container);
 
-    std::shared_ptr<nitf::SegmentWriter> segmentWriter;
+    mem::SharedPtr<nitf::SegmentWriter> segmentWriter;
     try
     {
         writer.addAdditionalDES(segmentWriter);

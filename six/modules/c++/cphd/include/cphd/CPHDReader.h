@@ -54,12 +54,12 @@ public:
      *  \param logger (Optional) Provide custom log
      */
     // Provides access to wideband but doesn't read it
-    CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
+    CPHDReader(mem::SharedPtr<io::SeekableInputStream> inStream,
                size_t numThreads,
                const std::vector<std::string>& schemaPaths =
                        std::vector<std::string>(),
-               std::shared_ptr<logging::Logger> logger =
-                       std::shared_ptr<logging::Logger>());
+               mem::SharedPtr<logging::Logger> logger =
+                       mem::SharedPtr<logging::Logger>());
 
     /*
      *  \func CPHDReader constructor
@@ -75,8 +75,8 @@ public:
                size_t numThreads,
                const std::vector<std::string>& schemaPaths =
                        std::vector<std::string>(),
-               std::shared_ptr<logging::Logger> logger =
-                       std::shared_ptr<logging::Logger>());
+               mem::SharedPtr<logging::Logger> logger =
+                       mem::SharedPtr<logging::Logger>());
 
     //! Get parameter functions
     size_t getNumChannels() const
@@ -156,9 +156,9 @@ private:
     /*
      *  Read in header, metadata, supportblock, pvpblock and wideband
      */
-    void initialize(std::shared_ptr<io::SeekableInputStream> inStream,
+    void initialize(mem::SharedPtr<io::SeekableInputStream> inStream,
                     size_t numThreads,
-                    std::shared_ptr<logging::Logger> logger,
+                    mem::SharedPtr<logging::Logger> logger,
                     const std::vector<std::string>& schemaPaths);
 };
 }
