@@ -22,8 +22,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <nitf/coda-oss.hpp>
 #include <sys/DLL.h>
-#include <sys/Conf.h>
 #include <except/Exception.h>
 #include <six/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
