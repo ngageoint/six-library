@@ -25,7 +25,6 @@
 // writes via NITFWriteControl
 
 #include <iostream>
-#include <string>
 
 #include "TestUtilities.h"
 
@@ -94,7 +93,7 @@ struct GetPixelType<float>
 };
 
 template <>
-struct GetPixelType<int16_t>
+struct GetPixelType<sys::Int16_T>
 {
     static six::PixelType getPixelType()
     {
@@ -104,11 +103,11 @@ struct GetPixelType<int16_t>
 
 // Create dummy SICD data
 template <typename DataTypeT>
-std::unique_ptr<six::Data>
+std::auto_ptr<six::Data>
 createData(const types::RowCol<size_t>& dims)
 {
     six::sicd::ComplexData* data(new six::sicd::ComplexData());
-    std::unique_ptr<six::Data> scopedData(data);
+    std::auto_ptr<six::Data> scopedData(data);
     data->setPixelType(GetPixelType<DataTypeT>::getPixelType());
     data->setNumRows(dims.row);
     data->setNumCols(dims.col);
@@ -206,7 +205,7 @@ void subsetData(const T* orig,
 {
     output.resize(dims.area());
     const T* origPtr = orig + offset.row * origNumCols + offset.col;
-    auto outputPtr = output.data();
+    T* outputPtr = &output[0];
     for (size_t row = 0;
          row < dims.row;
          ++row, origPtr += origNumCols, outputPtr += dims.col)
@@ -228,7 +227,7 @@ public:
         mContainer(new six::Container(six::DataType::COMPLEX)),
         mDims(123, 456),
         mImage(mDims.area()),
-        mImagePtr(mImage.data()),
+        mImagePtr(&mImage[0]),
         mTestPathname("streaming_write.nitf"),
         mSchemaPaths(schemaPaths),
         mSetMaxProductSize(setMaxProductSize),
@@ -269,7 +268,7 @@ private:
         if (mSetMaxProductSize)
         {
             fullPrefix += " (max product size " +
-                    std::to_string(mMaxProductSize) + ")";
+                    str::toString(mMaxProductSize) + ")";
         }
 
         if (!(*mCompareFiles)(fullPrefix, mTestPathname))
@@ -291,12 +290,12 @@ private:
     const std::string mNormalPathname;
     const EnsureFileCleanup mNormalFileCleanup;
 
-    std::shared_ptr<six::Container> mContainer;
+    mem::SharedPtr<six::Container> mContainer;
     const types::RowCol<size_t> mDims;
     std::vector<std::complex<DataTypeT> > mImage;
     std::complex<DataTypeT>* const mImagePtr;
 
-    std::unique_ptr<const CompareFiles> mCompareFiles;
+    std::auto_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
     const std::vector<std::string> mSchemaPaths;
 
@@ -316,7 +315,7 @@ void Tester<DataTypeT>::normalWrite()
     six::NITFWriteControl writer(options, mContainer);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(mImagePtr));
+    buffers.push_back(reinterpret_cast<six::UByte*>(mImagePtr));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
@@ -406,7 +405,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     std::vector<std::complex<DataTypeT> > subset;
     types::RowCol<size_t> subsetDims(20, 56);
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
-    sicdWriter.save(subset.data(), offset, subsetDims);
+    sicdWriter.save(&subset[0], offset, subsetDims);
 
     // Rows [60, 123)
     offset.row = 60;
@@ -414,7 +413,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     subsetDims.row = 63;
     subsetDims.col = mDims.col;
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
-    sicdWriter.save(subset.data(), offset, subsetDims);
+    sicdWriter.save(&subset[0], offset, subsetDims);
 
     // Rows [40, 60)
     // Cols [150, 400)
@@ -423,7 +422,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     subsetDims.row = 20;
     subsetDims.col = 250;
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
-    sicdWriter.save(subset.data(), offset, subsetDims);
+    sicdWriter.save(&subset[0], offset, subsetDims);
 
     // Rows [0, 40)
     offset.row = 0;
@@ -431,7 +430,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     subsetDims.row = 40;
     subsetDims.col = mDims.col;
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
-    sicdWriter.save(subset.data(), offset, subsetDims);
+    sicdWriter.save(&subset[0], offset, subsetDims);
 
     // Rows [40, 60)
     // Cols [0, 150)
@@ -440,7 +439,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     subsetDims.row = 20;
     subsetDims.col = 150;
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
-    sicdWriter.save(subset.data(), offset, subsetDims);
+    sicdWriter.save(&subset[0], offset, subsetDims);
 
     sicdWriter.close();
 
@@ -480,7 +479,7 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
         success = false;
     }
 
-    if (!doTests<int16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<sys::Int16_T>(schemaPaths, setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
@@ -541,6 +540,12 @@ int main(int /*argc*/, char** /*argv*/)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << "Caught except::Exception: " << ex.getMessage()
+                  << std::endl;
         return 1;
     }
     catch (...)

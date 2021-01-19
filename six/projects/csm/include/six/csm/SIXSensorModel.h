@@ -251,8 +251,8 @@ public: // GeometricModel methods
             int index,
             const csm::EcefCoord& groundPt,
             double desiredPrecision = 0.001,
-            double* achievedPrecision = nullptr,
-            csm::WarningList* warnings = nullptr) const;
+            double* achievedPrecision = NULL,
+            csm::WarningList* warnings = NULL) const;
 
     /**
      * This method returns the partial derivatives of line and sample
@@ -275,8 +275,8 @@ public: // GeometricModel methods
             const csm::ImageCoord& imagePt,
             const csm::EcefCoord& groundPt,
             double desiredPrecision = 0.001,
-            double* achievedPrecision = nullptr,
-            csm::WarningList* warnings = nullptr) const;
+            double* achievedPrecision = NULL,
+            csm::WarningList* warnings = NULL) const;
 
     /**
      * This method returns the partial derivatives of line and sample
@@ -298,8 +298,8 @@ public: // GeometricModel methods
             const csm::EcefCoord& groundPt,
             csm::param::Set pSet = csm::param::VALID,
             double desiredPrecision = 0.001,
-            double* achievedPrecision = nullptr,
-            csm::WarningList* warnings = nullptr) const;
+            double* achievedPrecision = NULL,
+            csm::WarningList* warnings = NULL) const;
 
     /**
      * This method returns the partial derivatives of line and sample
@@ -325,8 +325,8 @@ public: // GeometricModel methods
             const csm::EcefCoord& groundPt,
             csm::param::Set pSet = csm::param::VALID,
             double desiredPrecision = 0.001,
-            double* achievedPrecision = nullptr,
-            csm::WarningList* warnings = nullptr) const;
+            double* achievedPrecision = NULL,
+            csm::WarningList* warnings = NULL) const;
 
     /**
      * Returns coordinates in meters to indicate the general location of the
@@ -369,7 +369,7 @@ public: // RasterGM methods
      *     calculation. Currently this parameter is ignored.
      * \param[out] achievedPrecision  Precision in pixels to which the
      *     calculation is achieved (currently this is just set to
-     *     desiredPrecision if non-nullptr).
+     *     desiredPrecision if non-NULL).
      * \param[out] warnings Unused
      *
      * \return Image coordinate in pixels
@@ -389,7 +389,7 @@ public: // RasterGM methods
      *     calculation. Currently this parameter is ignored.
      * \param[out] achievedPrecision  Precision in pixels to which the
      *     calculation is achieved (currently this is just set to
-     *     desiredPrecision if non-nullptr).
+     *     desiredPrecision if non-NULL).
      * \param[out] warnings Unused
      *
      * \return Image coordinate in pixels and corresponding 2x2 covariance in
@@ -412,7 +412,7 @@ public: // RasterGM methods
      *     calculation. Currently this parameter is ignored.
      * \param[out] achievedPrecision  Precision in pixels to which the
      *     calculation is achieved (currently this is just set to
-     *     desiredPrecision if non-nullptr).
+     *     desiredPrecision if non-NULL).
      * \param[out] warnings Unused
      *
      * \return Ground coordinate in meters
@@ -438,7 +438,7 @@ public: // RasterGM methods
      *     calculation. Currently this parameter is ignored.
      * \param[out] achievedPrecision  Precision in pixels to which the
      *     calculation is achieved (currently this is just set to
-     *     desiredPrecision if non-nullptr).
+     *     desiredPrecision if non-NULL).
      * \param[out] warnings Unused
      *
      * \return Ground coordinate with covariance (x, y, z in ECEF meters
@@ -544,7 +544,7 @@ public: // RasterGM methods
      *     calculation. Currently this parameter is ignored.
      * \param[out] achievedPrecision  Precision in pixels to which the
      *     calculation is achieved (currently this is just set to
-     *     desiredPrecision if non-nullptr).
+     *     desiredPrecision if non-NULL).
      * \param[out] warnings Unused
      */
     virtual csm::EcefLocus imageToProximateImagingLocus(
@@ -680,8 +680,8 @@ protected:
     const csm::NoCorrelationModel mCorrelationModel;
     std::vector<std::string> mSchemaDirs;
     std::string mSensorModelState;
-    std::unique_ptr<const scene::SceneGeometry> mGeometry;
-    std::unique_ptr<scene::ProjectionModel> mProjection;
+    std::auto_ptr<const scene::SceneGeometry> mGeometry;
+    std::auto_ptr<scene::ProjectionModel> mProjection;
     csm::param::Type mAdjustableTypes[scene::AdjustableParams::NUM_PARAMS];
 
     // NOTE: This is computed just at the SCP once each time a new SICD is

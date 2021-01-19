@@ -162,7 +162,7 @@ std::string  initImageDataXML(unsigned int version)
         for (unsigned int i=0; i<256; ++i)
         {
             sprintf(amplText, "<Amplitude index=\"%d\">%s</Amplitude>",
-                i, std::to_string((double)i).c_str());
+                i, six::toString((double)i).c_str());
             xmlText += std::string(amplText);
         }
         xmlText +=
@@ -205,7 +205,7 @@ std::string  initImageDataXML(unsigned int version)
         for (unsigned int i=0; i<256; ++i)
         {
             sprintf(amplText, "<Amplitude class=\"xs:double\" index=\"%d\">%s</Amplitude>",
-                i, std::to_string((double)i).c_str());
+                i, six::toString((double)i).c_str());
             xmlText += std::string(amplText);
         }
         xmlText +=
@@ -2430,16 +2430,16 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
         doc->getRootElement()->print(oss);
         std::string preRTxml(oss.stream().str());
 
-        std::unique_ptr<logging::Logger> log(new logging::NullLogger());
+        std::auto_ptr<logging::Logger> log(new logging::NullLogger());
 
         // translate XML into Complex Data structure
-        const std::unique_ptr<six::XMLControl> xmlControl(
+        const std::auto_ptr<six::XMLControl> xmlControl(
             six::XMLControlFactory::getInstance().newXMLControl(six::DataType::COMPLEX, log.get()));
         six::sicd::ComplexData* data = (
             six::sicd::ComplexData*)xmlControl->fromXML(doc, std::vector<std::string>());
 
         // translate data structure to XML string
-        const std::unique_ptr<xml::lite::Document> rtDoc(
+        const std::auto_ptr<xml::lite::Document> rtDoc(
             xmlControl->toXML((six::sicd::ComplexData*)data, std::vector<std::string>()));
         oss.reset();
         rtDoc->getRootElement()->print(oss);
@@ -2453,18 +2453,18 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
         if (!xmlPath.empty())
         {
             std::string  baseName = xmlPath + std::string("\\") + data->getVersion();
-            if (data->pfa.get() != nullptr)
+            if (data->pfa.get() != NULL)
                 baseName += "_PFA";
-            else if (data->rma.get() != nullptr)
+            else if (data->rma.get() != NULL)
             {
-                if (data->rma->inca.get() != nullptr)
+                if (data->rma->inca.get() != NULL)
                     baseName += "_RMA_INCA";
-                else if (data->rma->rmat.get() != nullptr)
+                else if (data->rma->rmat.get() != NULL)
                     baseName += "_RMA_RMAT";
-                else if (data->rma->rmcr.get() != nullptr)
+                else if (data->rma->rmcr.get() != NULL)
                     baseName += "_RMA_RMCR";
             }
-            else if (data->rgAzComp.get() != nullptr)
+            else if (data->rgAzComp.get() != NULL)
                 baseName += "_RgAzComp";
 
             if (verbose) std::cout << std::endl;
@@ -2593,9 +2593,14 @@ int main(int argc, char** argv)
         MYTEST_CHECK_PARAMS( RoundTrip_XML_0_4_0_RMA_RMAT );
         return 0;
     }
-    catch (const std::exception& ex)
+    catch (except::Exception& ex)
     {
-        std::cerr << ex.what() << std::endl;
+        std::cerr << ex.toString() << std::endl;
+        return 1;
+    }
+    catch (except::Error& err)
+    {
+        std::cerr << err.toString() << std::endl;
         return 1;
     }
 }

@@ -54,71 +54,71 @@ public:
     // Add in padding to modulo 8 also.
     // Returns size of the header
     size_t set();
-    size_t set(int64_t xmlSize, int64_t vbmSize, int64_t cphd03Size);
+    size_t set(sys::Off_T xmlSize, sys::Off_T vbmSize, sys::Off_T cphd03Size);
 
     // Required elements
-    void setXMLsize(int64_t size)
+    void setXMLsize(sys::Off_T size)
     {
         mXmlDataSize = size;
     }
 
-    void setVBMsize(int64_t size)
+    void setVBMsize(sys::Off_T size)
     {
         mVbDataSize = size;
     }
 
-    void setCPHDsize(int64_t size)
+    void setCPHDsize(sys::Off_T size)
     {
         mCphdDataSize = size;
     }
 
-    void setXMLoffset(int64_t offset)
+    void setXMLoffset(sys::Off_T offset)
     {
         mXmlByteOffset = offset;
     }
 
-    void setVBMoffset(int64_t offset)
+    void setVBMoffset(sys::Off_T offset)
     {
         mVbByteOffset = offset;
     }
 
-    void setCPHDoffset(int64_t offset)
+    void setCPHDoffset(sys::Off_T offset)
     {
         mCphdByteOffset = offset;
     }
 
-    int64_t getXMLsize() const
+    sys::Off_T getXMLsize() const
     {
         return mXmlDataSize;
     }
 
-    int64_t getVBMsize() const
+    sys::Off_T getVBMsize() const
     {
         return mVbDataSize;
     }
 
-    int64_t getCPHDsize() const
+    sys::Off_T getCPHDsize() const
     {
         return mCphdDataSize;
     }
 
-    int64_t getXMLoffset() const
+    sys::Off_T getXMLoffset() const
     {
         return mXmlByteOffset;
     }
 
-    int64_t getVBMoffset() const
+    sys::Off_T getVBMoffset() const
     {
         return mVbByteOffset;
     }
 
-    int64_t getCPHDoffset() const
+    sys::Off_T getCPHDoffset() const
     {
         return mCphdByteOffset;
     }
 
     // Pad bytes don't include the Section terminator
-    int64_t getPadBytes() const
+    sys::Off_T getPadBytes() const
     {
         return (getVBMoffset() - (getXMLoffset() + getXMLsize() + 2));
     }
@@ -152,12 +152,12 @@ private:
     std::string mVersion;
 
     // Required key-value pairs
-    int64_t mXmlDataSize;
-    int64_t mXmlByteOffset;
-    int64_t mVbDataSize;
-    int64_t mVbByteOffset;
-    int64_t mCphdDataSize;
-    int64_t mCphdByteOffset;
+    sys::Off_T mXmlDataSize;
+    sys::Off_T mXmlByteOffset;
+    sys::Off_T mVbDataSize;
+    sys::Off_T mVbByteOffset;
+    sys::Off_T mCphdDataSize;
+    sys::Off_T mCphdByteOffset;
 
     // Optional key-value pairs
     std::string mClassification;

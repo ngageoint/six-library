@@ -20,8 +20,6 @@
  *
  */
 
-#include <string>
-
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/Utilities.h>
@@ -63,7 +61,7 @@ std::string CPHDXMLControl::getSICommonURI() const
 
 std::string CPHDXMLControl::toXMLString(const Metadata& metadata)
 {
-    std::unique_ptr<xml::lite::Document> doc(toXML( metadata));
+    std::auto_ptr<xml::lite::Document> doc(toXML(metadata));
     io::StringStream ss;
     doc->getRootElement()->print(ss);
 
@@ -75,9 +73,9 @@ size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)
     return toXMLString(metadata).size();
 }
 
-std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
+std::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
 {
-    std::unique_ptr<xml::lite::Document> doc(new xml::lite::Document());
+    std::auto_ptr<xml::lite::Document> doc(new xml::lite::Document());
 
     XMLElem root = newElement("CPHD");
     doc->setRootElement(root);
@@ -129,7 +127,7 @@ XMLElem CPHDXMLControl::toXML(const Data& data, XMLElem parent)
 {
     XMLElem dataXML = newElement("Data", parent);
 
-    createString("SampleType", data.sampleType, dataXML);
+    createString("SampleType", data.sampleType.toString(), dataXML);
 
     createInt("NumCPHDChannels", data.numCPHDChannels, dataXML);
     createInt("NumBytesVBP", data.numBytesVBP, dataXML);
@@ -138,7 +136,7 @@ XMLElem CPHDXMLControl::toXML(const Data& data, XMLElem parent)
         XMLElem arrsizeXML = newElement("ArraySize", dataXML);
         createInt("NumVectors", data.arraySize.at(ii).numVectors, arrsizeXML);
         createInt("NumSamples", data.arraySize.at(ii).numSamples, arrsizeXML);
-        setAttribute(arrsizeXML, "index", ii + 1);
+        setAttribute(arrsizeXML, "index", str::toString(ii + 1));
     }
 
     return dataXML;
@@ -148,8 +146,8 @@ XMLElem CPHDXMLControl::toXML(const Global& global, XMLElem parent)
 {
     XMLElem globalXML = newElement("Global", parent);
 
-    createString("DomainType", global.domainType, globalXML);
-    createString("PhaseSGN", global.phaseSGN, globalXML);
+    createString("DomainType", global.domainType.toString(), globalXML);
+    createString("PhaseSGN", global.phaseSGN.toString(), globalXML);
 
     if (!six::Init::isUndefined(global.refFrequencyIndex))
     {
@@ -209,11 +207,6 @@ XMLElem CPHDXMLControl::toXML(const Global& global, XMLElem parent)
     return globalXML;
 }
 
-static void set_index_attribute(xml::lite::Element& elem, size_t value)
-{
-    elem.attribute("index") = std::to_string(value);
-}
-
 XMLElem CPHDXMLControl::toXML(const Channel& channel, XMLElem parent)
 {
     XMLElem channelXML = newElement("Channel", parent);
@@ -223,7 +216,7 @@ XMLElem CPHDXMLControl::toXML(const Channel& channel, XMLElem parent)
     for (size_t ii = 0; ii < channel.parameters.size(); ++ii)
     {
         XMLElem chanParamsXML = newElement("Parameters", channelXML);
-        set_index_attribute(*chanParamsXML, ii + 1);
+        chanParamsXML->attribute("index") = str::toString(ii + 1);
 
         ChannelParameters cp = channel.parameters[ii];
         createInt("SRP_Index", cp.srpIndex, chanParamsXML);
@@ -255,7 +248,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
 {
     XMLElem srpXML = newElement("SRP", parent);
 
-    createString("SRPType", srp.srpType, srpXML);
+    createString("SRPType", srp.srpType.toString(), srpXML);
     createInt("NumSRPs", srp.numSRPs, srpXML);
 
     switch ((int)srp.srpType)
@@ -269,7 +262,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
         for (size_t ii = 0; ii < srp.srpPT.size(); ++ii)
         {
             XMLElem fixedptXML = newElement("FIXEDPT", srpXML);
-            set_index_attribute(*fixedptXML, ii + 1);
+            fixedptXML->attribute("index") = str::toString(ii + 1);
             mCommon.createVector3D("SRPPT", srp.srpPT[ii], fixedptXML);
         }
 
@@ -284,7 +277,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
         for (size_t ii = 0; ii < srp.srpPVTPoly.size(); ++ii)
         {
             XMLElem pvtpolyXML = newElement("PVTPOLY", srpXML);
-            set_index_attribute(*pvtpolyXML, ii + 1);
+            pvtpolyXML->attribute("index") = str::toString<int>(ii + 1);
             mCommon.createPolyXYZ("SRPPVTPoly", srp.srpPVTPoly[ii], pvtpolyXML);
         }
         break;
@@ -298,7 +291,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
         for (size_t ii = 0; ii < srp.srpPVVPoly.size(); ++ii)
         {
             XMLElem pvvpolyXML = newElement("PVVPOLY", srpXML);
-            set_index_attribute(*pvvpolyXML, ii + 1);
+            pvvpolyXML->attribute("index") = str::toString<int>(ii + 1);
             mCommon.createPolyXYZ("SRPPVVPoly", srp.srpPVVPoly[ii], pvvpolyXML);
         }
         break;
@@ -332,19 +325,19 @@ XMLElem CPHDXMLControl::toXML(const Antenna& antenna, XMLElem parent)
     for (size_t ii = 0; ii < antenna.tx.size(); ++ii)
     {
          XMLElem txXML = toXML("Tx", antenna.tx[ii], antennaXML);
-         set_index_attribute(*txXML, ii + 1);
+         txXML->attribute("index") = str::toString(ii + 1);
     }
 
     for (size_t ii = 0; ii < antenna.rcv.size(); ++ii)
     {
         XMLElem rcvXML = toXML("Rcv", antenna.rcv[ii], antennaXML);
-        set_index_attribute(*rcvXML, ii + 1);
+        rcvXML->attribute("index") = str::toString(ii + 1);
     }
 
     for (size_t ii = 0; ii < antenna.twoWay.size(); ++ii)
     {
         XMLElem twXML = toXML("TwoWay", antenna.twoWay[ii], antennaXML);
-        set_index_attribute(*twXML, ii + 1);
+        twXML->attribute("index") = str::toString(ii + 1);
     }
 
     return antennaXML;
@@ -425,21 +418,21 @@ XMLElem CPHDXMLControl::toXML(const VectorParameters& vp, XMLElem parent)
     }
 
     // Error check the conditional elements
-    if (vp.fxParameters.get() == nullptr && vp.toaParameters.get() == nullptr)
+    if (vp.fxParameters.get() == NULL && vp.toaParameters.get() == NULL)
     {
         throw except::Exception(Ctxt(
                 "VectorParameters: either FxParameters or TOAParameters must "
                 "be present"));
     }
 
-    if (vp.fxParameters.get() != nullptr  && vp.toaParameters .get()!= nullptr)
+    if (vp.fxParameters.get() != NULL  && vp.toaParameters .get()!= NULL)
     {
         throw except::Exception(Ctxt(
                 "VectorParameters: FxParameters and TOAParameters cannot both "
                 "be present"));
     }
 
-    if (vp.fxParameters.get() != nullptr)
+    if (vp.fxParameters.get() != NULL)
     {
         XMLElem fxParametersXML = newElement("FxParameters", vectorParametersXML);
         createInt("Fx0", vp.fxParameters->Fx0, fxParametersXML);
@@ -448,7 +441,7 @@ XMLElem CPHDXMLControl::toXML(const VectorParameters& vp, XMLElem parent)
         createInt("Fx2", vp.fxParameters->Fx2, fxParametersXML);
     }
 
-    if (vp.toaParameters.get() != nullptr)
+    if (vp.toaParameters.get() != NULL)
     {
         XMLElem toaParametersXML = newElement("TOAParameters", vectorParametersXML);
         createInt("DeltaTOA0", vp.toaParameters->deltaTOA0, toaParametersXML);
@@ -484,7 +477,7 @@ XMLElem CPHDXMLControl::areaSampleDirectionParametersToXML(
     return adpXML;
 }
 
-std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
+std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
 {
     io::StringStream stringStream;
     stringStream.write(xmlString.c_str(), xmlString.size());
@@ -493,9 +486,9 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
     return fromXML(parser.getDocument());
 }
 
-std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
+std::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 {
-    std::unique_ptr<Metadata> cphd03(new Metadata());
+    std::auto_ptr<Metadata> cphd03(new Metadata());
 
     XMLElem root = doc->getRootElement();
 
@@ -515,7 +508,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc
     fromXML(channelXML, cphd03->channel);
     fromXML(srpXML, cphd03->srp);
 
-    if (antennaXML != nullptr)
+    if (antennaXML != NULL)
     {
         cphd03->antenna.reset(new Antenna());
         fromXML(antennaXML, *cphd03->antenna);
@@ -554,7 +547,7 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
 
 void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
 {
-    XMLElem tmpElem = nullptr;
+    XMLElem tmpElem = NULL;
 
     global.domainType = cphd::DomainType(getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
     global.phaseSGN   = cphd::PhaseSGN(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
@@ -886,21 +879,21 @@ void CPHDXMLControl::fromXML(const XMLElem vectorParametersXML,
     XMLElem FxParametersXML = getOptional(vectorParametersXML, "FxParameters");
     XMLElem TOAParametersXML = getOptional(vectorParametersXML, "TOAParameters");
 
-    if (FxParametersXML == nullptr  && TOAParametersXML == nullptr)
+    if (FxParametersXML == NULL  && TOAParametersXML == NULL)
     {
         throw except::Exception(Ctxt(
                 "VectorParameters: either FxParameters or TOAParameters must "
                 "be present"));
     }
 
-    if (FxParametersXML != nullptr  && TOAParametersXML != nullptr)
+    if (FxParametersXML != NULL  && TOAParametersXML != NULL)
     {
         throw except::Exception(Ctxt(
                 "VectorParameters: FxParameters and TOAParameters cannot both "
                 "be present"));
     }
 
-    if (FxParametersXML != nullptr)
+    if (FxParametersXML != NULL)
     {
         vp.fxParameters.reset(new FxParameters());
         parseInt(getFirstAndOnly(FxParametersXML, "Fx0"), vp.fxParameters->Fx0);
@@ -909,7 +902,7 @@ void CPHDXMLControl::fromXML(const XMLElem vectorParametersXML,
         parseInt(getFirstAndOnly(FxParametersXML, "Fx2"), vp.fxParameters->Fx2);
     }
 
-    if (TOAParametersXML != nullptr)
+    if (TOAParametersXML != NULL)
     {
         vp.toaParameters.reset(new TOAParameters());
         parseInt(getFirstAndOnly(TOAParametersXML, "DeltaTOA0"), vp.toaParameters->deltaTOA0);

@@ -135,7 +135,7 @@ bool ComplexData::operator==(const ComplexData& rhs) const
 bool ComplexData::equalTo(const Data& rhs) const
 {
     const ComplexData* data = dynamic_cast<const ComplexData*>(&rhs);
-    if (data != nullptr)
+    if (data != NULL)
     {
         return *this == *data;
     }
@@ -182,7 +182,7 @@ bool ComplexData::validate(logging::Logger& log) const
             messageBuilder.str("");
             messageBuilder <<
                 "RgAzComp specified in imageFormation.imageFormationAlgorithm,"
-                << " but member pointer is nullptr.";
+                << " but member pointer is NULL.";
             log.error(messageBuilder.str());
             valid = false;
         }
@@ -199,7 +199,7 @@ bool ComplexData::validate(logging::Logger& log) const
             messageBuilder.str("");
             messageBuilder <<
                 "PFA specified in imageFormation.imageFormationAlgorithm,"
-                << " but member pointer is nullptr.";
+                << " but member pointer is NULL.";
             log.error(messageBuilder.str());
             valid = false;
         }
@@ -217,7 +217,7 @@ bool ComplexData::validate(logging::Logger& log) const
             messageBuilder.str("");
             messageBuilder <<
                 "RMA specified in imageFormation.imageFormationAlgorithm,"
-                << " but member pointer is nullptr.";
+                << " but member pointer is NULL.";
             log.error(messageBuilder.str());
             valid = false;
         }

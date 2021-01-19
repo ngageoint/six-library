@@ -42,20 +42,23 @@
 
 namespace
 {
-std::shared_ptr<six::Data> readMetadata(const six::NITFReadControl& reader)
+mem::SharedPtr<six::Data> readMetadata(const six::NITFReadControl& reader)
 {
     const six::Data* data = reader.getContainer()->getData(0);
-    return std::shared_ptr<six::Data>(data->clone());
+    mem::SharedPtr<six::Data> retv(data->clone());
+    return retv;
 }
 
 void readWideband(six::NITFReadControl& reader,
         const six::Data& data,
-        mem::ScopedAlignedArray<std::byte>& buffer)
+        mem::ScopedAlignedArray<six::UByte>& buffer)
 {
     buffer.reset(data.getNumRows() *
                  data.getNumCols() *
                  data.getNumBytesPerPixel());
     six::Region region;
+    region.setStartRow(0);
+    region.setStartCol(0);
     region.setNumRows(data.getNumRows());
     region.setNumCols(data.getNumCols());
     region.setBuffer(buffer.get());
@@ -79,15 +82,15 @@ bool siddsMatch(const std::string& sidd1Path,
     reader.setXMLControlRegistry(&xmlRegistry);
 
     reader.load(sidd1Path);
-    auto sidd1Metadata = readMetadata(reader);
-    mem::ScopedAlignedArray<std::byte> sidd1Buffer;
+    mem::SharedPtr<six::Data> sidd1Metadata = readMetadata(reader);
+    mem::ScopedAlignedArray<six::UByte> sidd1Buffer;
     readWideband(reader,
             *sidd1Metadata,
             sidd1Buffer);
 
     reader.load(sidd2Path);
-    auto sidd2Metadata = readMetadata(reader);
-    mem::ScopedAlignedArray<std::byte> sidd2Buffer;
+    mem::SharedPtr<six::Data> sidd2Metadata = readMetadata(reader);
+    mem::ScopedAlignedArray<six::UByte> sidd2Buffer;
     readWideband(reader,
             *sidd2Metadata,
             sidd2Buffer);
@@ -207,7 +210,7 @@ int main(int argc, char* argv[])
         parser.addArgument("sidd2", "Input SIDD path",
                 cli::STORE, "SIDD2", "SIDD2", 1, 1, true);
 
-        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const bool ignoreMetadata(options->get<bool>("ignoreMetadata"));
         const bool ignoreDate(options->get<bool>("ignoreDate"));
@@ -226,6 +229,11 @@ int main(int argc, char* argv[])
     catch (const std::exception& exception)
     {
         std::cerr << exception.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Throwable& exception)
+    {
+        std::cerr << exception.toString() << std::endl;
         return 1;
     }
     catch (...)

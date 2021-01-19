@@ -21,18 +21,18 @@
  */
 #ifndef __CPHD_SUPPORT_BLOCK_H__
 #define __CPHD_SUPPORT_BLOCK_H__
-#pragma once
 
 #include <iostream>
 #include <string>
 #include <complex>
 #include <unordered_map>
 
-#include <nitf/coda-oss.hpp>
 #include <sys/Conf.h>
 #include <io/SeekableStreams.h>
 #include <types/RowCol.h>
+
 #include <mem/ScopedArray.h>
+#include <mem/BufferView.h>
 
 #include <cphd/Data.h>
 #include <cphd/Utilities.h>
@@ -61,8 +61,8 @@ public:
      */
     SupportBlock(const std::string& pathname,
                  const cphd::Data& data,
-                 int64_t startSupport,
-                 int64_t sizeSupport);
+                 sys::Off_T startSupport,
+                 sys::Off_T sizeSupport);
 
     /*
      *  \func SupportBlock
@@ -76,8 +76,8 @@ public:
      */
     SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
                  const cphd::Data& data,
-                 int64_t startSupport,
-                 int64_t sizeSupport);
+                 sys::Off_T startSupport,
+                 sys::Off_T sizeSupport);
 
     /*
      *  \func getFileOffset
@@ -88,7 +88,7 @@ public:
      *
      *  \return Returns offset from start of CPHD file
      */
-    int64_t getFileOffset(const std::string& id) const;
+    sys::Off_T getFileOffset(const std::string& id) const;
 
     /*
      *  \func read
@@ -100,7 +100,7 @@ public:
      *  \param id unique identifier of support array
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param[in,out] data A pre allocated std::span that will hold the data
+     *  \param[in,out] data A pre allocated mem::BufferView that will hold the data
      *   read from the file.
      *
      *  \throws except::Exception Throws if buffer has not been allocated to a sufficient size
@@ -108,7 +108,7 @@ public:
      */
     void read(const std::string& id,
               size_t numThreads,
-              gsl::span<std::byte> data) const;
+              const mem::BufferView<sys::ubyte>& data) const;
 
     /*
      *  \func read
@@ -120,12 +120,12 @@ public:
      *  \param id unique identifier of support array
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param[out] data std::unique_ptr<[]> that will hold the data read from the file.
+     *  \param[out] data mem::ScopedArray that will hold the data read from the file.
      */
     // Same as above but allocates the memory
     void read(const std::string& id,
               size_t numThreads,
-              std::unique_ptr<std::byte[]>& data) const;
+              mem::ScopedArray<sys::ubyte>& data) const;
 
     /*
      *  \func readAll
@@ -136,11 +136,11 @@ public:
      *
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param[out] data std::unique_ptr<[]> that will hold the data read from the file.
+     *  \param[out] data mem::ScopedArray that will hold the data read from the file.
      *
      */
     void readAll(size_t numThreads,
-                 std::unique_ptr<std::byte[]>& data) const;
+                 mem::ScopedArray<sys::ubyte>& data) const;
 
 private:
     //! Initialize mOffsets for each array
@@ -155,9 +155,9 @@ private:
 private:
     const std::shared_ptr<io::SeekableInputStream> mInStream;
     cphd::Data mData;
-    const int64_t mSupportOffset;       // offset in bytes to start of SupportBlock
+    const sys::Off_T mSupportOffset;       // offset in bytes to start of SupportBlock
     const size_t mSupportSize;             // total size in bytes of SupportBlock
-    std::unordered_map<std::string,int64_t> mOffsets; // Offset to start of each support array
+    std::unordered_map<std::string,sys::Off_T> mOffsets; // Offset to start of each support array
 
     friend std::ostream& operator<< (std::ostream& os, const SupportBlock& d);
 };

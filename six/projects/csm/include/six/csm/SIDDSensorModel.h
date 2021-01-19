@@ -181,7 +181,7 @@ private:
     virtual types::RowCol<double> getSampleSpacing() const;
 
 private:
-    std::unique_ptr<six::sidd::DerivedData> mData;
+    std::auto_ptr<six::sidd::DerivedData> mData;
 };
 }
 }

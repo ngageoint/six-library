@@ -19,8 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <string>
-
 #include <six/convert/ConvertingReadControl.h>
 #include <types/RowCol.h>
 
@@ -51,7 +49,7 @@ void ConvertingReadControl::load(const std::string& pathname,
 {
     mContainer.reset(new Container(getDataType(pathname)));
     mConverter = mRegistry.loadAndFind(mPluginPathnames, pathname);
-    if (mConverter == nullptr)
+    if (mConverter == NULL)
     {
         throw except::Exception(Ctxt("Unable to load " + pathname));
     }
@@ -61,7 +59,7 @@ void ConvertingReadControl::load(const std::string& pathname,
 
 std::string ConvertingReadControl::getFileType() const
 {
-    if (mConverter == nullptr)
+    if (mConverter == NULL)
     {
         throw except::Exception(Ctxt("Please load ConvertingReadControl "
                 "before calling getFileType()"));
@@ -72,12 +70,16 @@ std::string ConvertingReadControl::getFileType() const
 UByte* ConvertingReadControl::interleaved(size_t imageNumber)
 {
     Region region;
+    region.setStartRow(0);
+    region.setStartCol(0);
+    region.setNumRows(-1);
+    region.setNumCols(-1);
     return interleaved(region, imageNumber);
 }
 
 UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
 {
-    if (mConverter == nullptr)
+    if (mConverter == NULL)
     {
         throw except::Exception(Ctxt("Please load ConvertingReadControl "
                 "before calling interleaved()"));
@@ -100,20 +102,21 @@ UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
             static_cast<size_t>(region.getStartRow()) > data->getNumRows())
     {
         throw except::Exception(Ctxt("Too many rows requested [" +
-                std::to_string(region.getNumRows()) + "]"));
+                str::toString(region.getNumRows()) + "]"));
     }
     if (extent.col > data->getNumCols() ||
             static_cast<size_t>(region.getStartCol()) > data->getNumCols())
     {
         throw except::Exception(Ctxt("Too many cols requested [" +
-                std::to_string(region.getNumCols()) + "]"));
+                str::toString(region.getNumCols()) + "]"));
     }
 
     UByte* buffer = region.getBuffer();
-    if (buffer == nullptr)
+    if (buffer == NULL)
     {
-        buffer = region.setBuffer(region.getNumRows() * region.getNumCols() *
-                data->getNumBytesPerPixel()).release();
+        buffer = new UByte[region.getNumRows() * region.getNumCols() *
+                data->getNumBytesPerPixel()];
+        region.setBuffer(buffer);
     }
 
     const types::RowCol<size_t> startingLocation(region.getStartRow(),

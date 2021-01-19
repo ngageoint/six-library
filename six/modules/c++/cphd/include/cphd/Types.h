@@ -19,15 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
-
-#include <ostream>
+#ifndef __CPHD_TYPES_H__
+#define __CPHD_TYPES_H__
 
 #include <six/Types.h>
 #include <six/Enums.h>
 #include <six/CollectionInformation.h>
 #include <six/MatchInformation.h>
-#include <six/Utilities.h>
 #include <six/sicd/GeoData.h>
 
 namespace cphd
@@ -39,24 +37,14 @@ typedef six::Vector2 Vector2;
 typedef six::Vector3 Vector3;
 
 typedef six::DateTime DateTime;
-inline std::ostream& operator<<(std::ostream& os, const DateTime& value)
-{
-    os << six::toString(value);
-    return os;
-}
 
-typedef std::byte UByte;
+typedef six::UByte UByte;
 
 typedef six::Poly1D Poly1D;
 
 typedef six::Poly2D Poly2D;
 
 typedef six::PolyXYZ PolyXYZ;
-inline std::ostream& operator<<(std::ostream& os, const PolyXYZ& value)
-{
-    os << six::toString(value);
-    return os;
-}
 
 typedef six::LatLon LatLon;
 
@@ -83,3 +71,5 @@ typedef six::GeoInfo GeoInfo;
 typedef six::MatchInformation MatchInformation;
 }
 
+
+#endif

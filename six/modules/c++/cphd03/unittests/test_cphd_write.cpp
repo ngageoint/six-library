@@ -410,10 +410,10 @@ void runCPHDTest(const std::string& testName_,
     TEST_ASSERT_EQ(metadata, reader.getMetadata());
     TEST_ASSERT_EQ(vbm, reader.getVBM());
 
-    std::vector<std::byte> readVBM;
+    std::vector<sys::ubyte> readVBM;
     for (size_t ii = 0; ii < NUM_IMAGES; ++ii)
     {
-        std::unique_ptr<std::byte[]> readData;
+        mem::ScopedArray<sys::ubyte> readData;
         TEST_ASSERT_EQ(reader.getNumVectors(ii), dims[ii].row);
         TEST_ASSERT_EQ(reader.getNumSamples(ii), dims[ii].col);
 

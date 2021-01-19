@@ -75,8 +75,8 @@ bool Global::operator==(const Global& other) const
 std::ostream& operator<< (std::ostream& os, const Global& d)
 {
     os << "Global::\n"
-       << "  domainType       : " << d.domainType << "\n"
-       << "  SGN              : " << d.sgn << "\n"
+       << "  domainType       : " << d.domainType.toString() << "\n"
+       << "  SGN              : " << d.sgn.toString() << "\n"
        << "  timeline         : " << d.timeline << "\n"
        << "  fxBand           : " << d.fxBand << "\n"
        << "  toaSwath         : " << d.toaSwath << "\n";
@@ -93,10 +93,13 @@ std::ostream& operator<< (std::ostream& os, const Global& d)
 
 std::ostream& operator<< (std::ostream& os, const Timeline& d)
 {
-    os << "Timeline::\n"  << "  collectionStart       : " << d.collectionStart << "\n";
+    os << "Timeline::\n"
+       << "  collectionStart       : "
+       << six::toString(d.collectionStart) << "\n";
     if (!six::Init::isUndefined(d.rcvCollectionStart))
     {
-        os << "  rcvCollectionStart    : " << d.rcvCollectionStart << "\n";
+        os << "  rcvCollectionStart    : "
+           << six::toString(d.rcvCollectionStart) << "\n";
     }
     os << "  txTime1               : " << d.txTime1 << "\n"
        << "  txTime2               : " << d.txTime2 << "\n";

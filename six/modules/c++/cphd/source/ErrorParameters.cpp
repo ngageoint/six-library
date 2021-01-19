@@ -42,7 +42,7 @@ ErrorParameters::Bistatic::RadarSensor::RadarSensor() :
 std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
 {
     os << "    PosVelError:: \n"
-        << "    Frame          : " << p.frame << "\n"
+        << "    Frame          : " << p.frame.toString() << "\n"
         << "    P1             : " << p.p1 << "\n"
         << "    P2             : " << p.p2 << "\n"
         << "    P3             : " << p.p3 << "\n"

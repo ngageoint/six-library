@@ -182,7 +182,7 @@ private:
     void reinitialize();
 
 private:
-    std::unique_ptr<six::sicd::ComplexData> mData;
+    std::auto_ptr<six::sicd::ComplexData> mData;
 };
 }
 }

@@ -31,9 +31,6 @@
 #include <six/sicd/ComplexData.h>
 #include <import/cli.h>
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 int main(int argc, char** argv)
 {
     try
@@ -46,25 +43,25 @@ int main(int argc, char** argv)
             "sicdPath")->setDefault(""); 
 
         // Parse the command line.
-        std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
+        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
         const std::string sicdPath = options->get<std::string>("sicdPath");
         const bool useVDP = options->get<bool>("useVDP");
         
         const std::string progname(argv[0]);
         if (sicdPath.empty())
         {
-            std::cerr << "Usage: " << fs::path(progname).filename().string()
+            std::cerr << "Usage: " << sys::Path::basename(progname)
                       << " <SICD pathname> [--vdp]\n\n";
             return 1;
         }
 
         std::vector<std::string> schemaPaths; 
-        std::unique_ptr<six::sicd::ComplexData> complexData(
+        std::auto_ptr<six::sicd::ComplexData> complexData(
             six::sicd::Utilities::getComplexData(sicdPath, schemaPaths));
 
         const size_t numPoints1D =
             scene::ProjectionPolynomialFitter::DEFAULTS_POINTS_1D;
-        std::unique_ptr<scene::ProjectionPolynomialFitter> polyfitter(
+        std::auto_ptr<scene::ProjectionPolynomialFitter> polyfitter(
             six::sicd::Utilities::getPolynomialFitter(
                 *complexData,
                 numPoints1D,
@@ -102,6 +99,11 @@ int main(int argc, char** argv)
             std::endl;
         std::cout << "meanResidualErrorCol:" << meanResidualErrorCol <<
             std::endl;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << "Caught exception: " << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

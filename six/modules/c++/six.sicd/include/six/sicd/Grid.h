@@ -148,7 +148,7 @@ struct DirectionParameters
     void fillDerivedFields(const RgAzComp& rgAzComp, double offset = 0);
 
 private:
-    std::unique_ptr<Functor> calculateWeightFunction() const;
+    std::auto_ptr<Functor> calculateWeightFunction() const;
 
     bool validateWeights(const Functor& weightFunction,
             logging::Logger& log) const;

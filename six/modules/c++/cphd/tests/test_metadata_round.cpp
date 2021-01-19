@@ -22,7 +22,6 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
-#include <thread>
 
 #include <cli/Value.h>
 #include <cli/ArgumentParser.h>
@@ -105,7 +104,7 @@ int main(int argc, char** argv)
                            "Specify the number of threads to use",
                            cli::STORE,
                            "threads",
-                           "NUM")->setDefault(std::thread::hardware_concurrency());
+                           "NUM")->setDefault(sys::OS().getNumCPUs());
         parser.addArgument("input", "Input pathname", cli::STORE, "input",
                            "XML", 1, 1);
         parser.addArgument("schema", "Schema pathname", cli::STORE, "schema",
@@ -123,6 +122,10 @@ int main(int argc, char** argv)
 
         runTests(inPathname, numThreads, schemaPathnames);
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

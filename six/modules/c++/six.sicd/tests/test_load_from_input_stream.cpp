@@ -34,9 +34,6 @@
 #include <six/sicd/ComplexData.h>
 #include <nitf/IOStreamReader.hpp>
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 int main(int argc, char** argv)
 {
     try
@@ -45,7 +42,7 @@ int main(int argc, char** argv)
         const std::string progname(argv[0]);
         if (argc != 2 && argc != 3)
         {
-            std::cerr << "Usage: " << fs::path(progname).filename().string()
+            std::cerr << "Usage: " << sys::Path::basename(progname)
                 << " <SICD pathname> [<schema dirname>]\n\n";
             return 1;
         }
@@ -62,12 +59,12 @@ int main(int argc, char** argv)
             schemaPaths.push_back(six::findSchemaPath(progname));
         }
 
-        std::unique_ptr<six::sicd::ComplexData> fileComplexData;
+        std::auto_ptr<six::sicd::ComplexData> fileComplexData;
         std::vector<std::complex<float> > fileWidebandData;
         six::sicd::Utilities::readSicd(sicdPathname, schemaPaths,
             fileComplexData, fileWidebandData);
 
-        std::unique_ptr<six::sicd::ComplexData> streamComplexData;
+        std::auto_ptr<six::sicd::ComplexData> streamComplexData;
         std::vector<std::complex<float> > streamWidebandData;
         io::FileInputStream stream(sicdPathname);
 
@@ -96,6 +93,11 @@ int main(int argc, char** argv)
         }
         std::cout << "Test passed!" << std::endl;
         return 0;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

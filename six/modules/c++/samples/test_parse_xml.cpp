@@ -19,18 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#include <vector>
-#include <string>
-
 #include <import/six.h>
 #include <import/six/sidd.h>
 #include <import/six/sicd.h>
 #include <import/xml/lite.h>
 #include <import/io.h>
-
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
 
 /*
  *  Generate a KML file for a SICD XML to help with
@@ -38,19 +31,19 @@ namespace fs = std::filesystem;
  *
  */
 
-std::string generateKML(six::Data* data, const fs::path& outputDir);
+std::string generateKML(six::Data* data, const sys::Path& outputDir);
 
 /*
  *  Open the round trip product in whatever you use to view XML files
  *  (e.g., Altova XMLSpy).  This only works currently on windows
  *
  */
-#if (defined(WIN32) || defined(_WIN32)) && defined(PREVIEW)
+#if defined(WIN32) && defined(PREVIEW)
 #   include <shellapi.h>
 void preview(std::string outputFile)
 {
     // ShellExecute might get assigned to ShellExecuteW if we arent careful
-    ShellExecuteA(nullptr, "open", outputFile.c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
+    ShellExecuteA(NULL, "open", outputFile.c_str(), NULL, NULL, SW_SHOWDEFAULT);
 }
 #   else
 // TODO Could open this using EDITOR or html view
@@ -83,17 +76,17 @@ void registerHandlers()
  *
  */
 std::vector<std::string> extractXML(std::string inputFile,
-                                    const fs::path& outputDir)
+                                    const sys::Path& outputDir)
 {
     std::vector<std::string> allFiles;
-    const std::string prefix = fs::path(inputFile).stem();
+    std::string prefix = sys::Path::basename(inputFile, true);
 
     nitf::Reader reader;
     nitf::IOHandle io(inputFile);
     nitf::Record record = reader.read(io);
 
-    uint32_t numDES = record.getNumDataExtensions();
-    for (uint32_t i = 0; i < numDES; ++i)
+    nitf::Uint32 numDES = record.getNumDataExtensions();
+    for (nitf::Uint32 i = 0; i < numDES; ++i)
     {
         nitf::DESegment segment = record.getDataExtensions()[i];
         nitf::DESubheader subheader = segment.getSubheader();
@@ -101,26 +94,27 @@ std::vector<std::string> extractXML(std::string inputFile,
         nitf::SegmentReader deReader = reader.newDEReader(i);
         nitf::Off size = deReader.getSize();
 
-        const auto typeID = subheader.typeID();
-        const std::string outputFile = FmtX("%s-%s%d.xml", prefix.c_str(), typeID.c_str(), i);
-        const auto fileName = outputDir / outputFile;
-        {
-            std::vector<char> xml(size);
-            deReader.read(xml.data(), size);
+        std::string typeID = subheader.getTypeID().toString();
+        str::trim(typeID);
+        sys::Path fileName(outputDir, FmtX("%s-%s%d.xml", prefix.c_str(),
+                                           typeID.c_str(), i));
 
-            io::StringStream oss;
-            oss.write(xml.data(), size);
+        char* xml = new char[size];
+        deReader.read(xml, size);
 
-            xml::lite::MinidomParser parser;
-            parser.parse(oss);
+        io::StringStream oss;
+        oss.write(xml, size);
 
-            xml::lite::Document* doc = parser.getDocument();
+        xml::lite::MinidomParser parser;
+        parser.parse(oss);
 
-            io::FileOutputStream fos(fileName);
-            doc->getRootElement()->prettyPrint(fos);
-            fos.close();
-        }
-        allFiles.push_back(fileName);
+        xml::lite::Document* doc = parser.getDocument();
+
+        io::FileOutputStream fos(fileName.getPath());
+        doc->getRootElement()->prettyPrint(fos);
+        fos.close();
+        delete[] xml;
+        allFiles.push_back(fileName.getPath());
     }
     io.close();
     return allFiles;
@@ -131,9 +125,9 @@ void run(std::string inputFile, std::string dataType)
     try
     {
         // Create an output directory if it doesnt already exist
-        const auto outputDir(fs::path(inputFile).stem());
-        if (!fs::exists(outputDir))
-            fs::create_directory(outputDir);
+        sys::Path outputDir(sys::Path::basename(inputFile, true));
+        if (!outputDir.exists())
+            outputDir.makeDirectory();
 
         std::string xmlFile = inputFile;
 
@@ -162,40 +156,44 @@ void run(std::string inputFile, std::string dataType)
         six::DataType dt = (dataType == "sicd") ? six::DataType::COMPLEX
                                                 : six::DataType::DERIVED;
 
-        logging::NullLogger log;
+        std::auto_ptr<logging::Logger> log (new logging::NullLogger());
         six::XMLControl *control =
-                six::XMLControlFactory::getInstance().newXMLControl(dt, &log);
+                six::XMLControlFactory::getInstance().newXMLControl(dt, log.get());
 
         six::Data *data = control->fromXML(treeBuilder.getDocument(),
                                            std::vector<std::string>());
 
         // Dump some core info
-        std::cout << "Data Class: " << data->getDataType() << "\n";
-        std::cout << "Pixel Type: " << data->getPixelType() << "\n";
-        std::cout << "Num Rows  : " << data->getNumRows() << "\n";
-        std::cout << "Num Cols  : " << data->getNumCols() << "\n";
+        std::cout << "Data Class: " << six::toString(data->getDataType())
+                << std::endl;
+        std::cout << "Pixel Type: " << six::toString(data->getPixelType())
+                << std::endl;
+        std::cout << "Num Rows  : " << six::toString(data->getNumRows())
+                << std::endl;
+        std::cout << "Num Cols  : " << six::toString(data->getNumCols())
+                << std::endl;
 
         // Generate a KML in this directory
         preview(generateKML(data, outputDir));
 
         // Generate a Round-Trip file
-        const auto outputFile = outputDir / "round-trip.xml";
+        sys::Path outputFile(outputDir, "round-trip.xml");
         xml::lite::Document* outDom = 
             control->toXML(data, std::vector<std::string>());
-        io::FileOutputStream outXML(outputFile);
+        io::FileOutputStream outXML(outputFile.getPath());
         outDom->getRootElement()->prettyPrint(outXML);
         outXML.close();
         delete outDom;
 
         // Now show the output file if PREVIEW
-        preview(outputFile);
+        preview(outputFile.getPath());
 
         delete control;
         delete data;
     }
-    catch (const std::exception& ex)
+    catch (except::Exception& ex)
     {
-        std::cout << "ERROR!: " << ex.what() << std::endl;
+        std::cout << "ERROR!: " << ex.getMessage() << std::endl;
     }
 }
 
@@ -221,21 +219,19 @@ int main(int argc, char** argv)
     registerHandlers();
 
     // The input file (an XML or a NITF file)
-    const fs::path inputFile(argv[1]);
-    std::vector<fs::path > paths;
+    sys::Path inputFile(argv[1]);
+    std::vector<sys::Path> paths;
 
-    if (fs::is_directory(inputFile))
+    if (inputFile.isDirectory())
     {
-        const auto listing = sys::Path(inputFile).list();
-        for (const auto& listing_i : listing)
+        std::vector<std::string> listing = inputFile.list();
+        for (unsigned int i = 0; i < listing.size(); ++i)
         {
-            auto listing_i_ = listing_i;
-            str::lower(listing_i_);
-            if (str::endsWith(listing_i_, "ntf")
-                || str::endsWith(listing_i_, "nitf")
-                || str::endsWith(listing_i_, "xml"))
+            if (str::endsWith(listing[i], "ntf") || str::endsWith(listing[i],
+                                                                  "nitf")
+                    || str::endsWith(listing[i], "xml"))
             {
-                paths.push_back(inputFile / listing_i);
+                paths.push_back(sys::Path(inputFile, listing[i]));
             }
         }
     }
@@ -245,8 +241,8 @@ int main(int argc, char** argv)
     }
     for (unsigned int i = 0; i < paths.size(); ++i)
     {
-        std::cout << "Parsing file: " << paths[i] << std::endl;
-        run(paths[i], dataType);
+        std::cout << "Parsing file: " << paths[i].getPath() << std::endl;
+        run(paths[i].getPath(), dataType);
     }
     return 0;
 }
@@ -351,7 +347,8 @@ xml::lite::Element* createTimeSnapshot(const six::DateTime& dt)//, int seconds)
                            new xml::lite::Element(
                                                   "when",
                                                   KML_URI,
-                                                  six::toString(dt)));
+                                                  six::toString<six::DateTime>(
+                                                                               dt)));
     return timeSnapshot;
 }
 
@@ -393,18 +390,18 @@ xml::lite::Element* createLineStyle(std::string styleID, std::string color,
                                                               KML_URI);
     lineStyleXML->addChild(new xml::lite::Element("color", KML_URI, color));
     lineStyleXML->addChild(new xml::lite::Element("width", KML_URI,
-                                                  std::to_string(width)));
+                                                  str::toString<int>(width)));
 
     styleXML->addChild(lineStyleXML);
     return styleXML;
 }
 
-std::string generateKML(six::Data* data, const fs::path& outputDir)
+std::string generateKML(six::Data* data, const sys::Path& outputDir)
 {
-    const std::string kmlFile = "visualization.kml";
-    const auto kmlPath = outputDir / kmlFile;
+    std::string kmlFile = "visualization.kml";
+    sys::Path kmlPath(outputDir, kmlFile);
 
-    io::FileOutputStream fos(kmlPath);
+    io::FileOutputStream fos(kmlPath.getPath());
     xml::lite::Element* root = new xml::lite::Element("kml", KML_URI);
 
     xml::lite::Element* docXML = new xml::lite::Element("Document", KML_URI);
@@ -430,5 +427,5 @@ std::string generateKML(six::Data* data, const fs::path& outputDir)
     root->prettyPrint(fos);
     delete root;
     fos.close();
-    return kmlPath;
+    return kmlPath.getPath();
 }

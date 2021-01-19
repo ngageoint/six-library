@@ -42,7 +42,7 @@ public:
 
     virtual XMLElem convertRadiometryToXML(
         const six::Radiometric *obj,
-        XMLElem parent = nullptr) const;
+        XMLElem parent = NULL) const;
 
     virtual void parseRadiometryFromXML(
         const XMLElem radiometricXML,
@@ -86,10 +86,10 @@ XMLElem SICommonXMLParser050::convertRadiometryToXML(
 
     if (r->sigmaZeroSFIncidenceMap != six::AppliedType::NOT_SET)
     {
-        createSixString(
+        createString(
             "SigmaZeroSFIncidenceMap",
             defaultURI,
-            r->sigmaZeroSFIncidenceMap,
+            six::toString<six::AppliedType>(r->sigmaZeroSFIncidenceMap),
             rXML);
     }
 
@@ -100,10 +100,10 @@ XMLElem SICommonXMLParser050::convertRadiometryToXML(
 
     if (r->gammaZeroSFIncidenceMap != six::AppliedType::NOT_SET)
     {
-        createSixString(
+        createString(
             "GammaZeroSFIncidenceMap",
             defaultURI,
-            r->gammaZeroSFIncidenceMap,
+            six::toString<six::AppliedType>(r->gammaZeroSFIncidenceMap),
             rXML);
     }
     return rXML;
@@ -113,7 +113,7 @@ void SICommonXMLParser050::parseRadiometryFromXML(
     const XMLElem radiometricXML,
     six::Radiometric* radiometric) const
 {
-    XMLElem tmpElem = nullptr;
+    XMLElem tmpElem = NULL;
 
     tmpElem = getOptional(radiometricXML, "NoisePoly");
     if (tmpElem)
@@ -182,7 +182,7 @@ namespace sicd
 ComplexXMLParser050::ComplexXMLParser050(const std::string& version,
                                          logging::Logger* log,
                                          bool ownLog) :
-    ComplexXMLParser041(version, false, std::unique_ptr<six::SICommonXMLParser>(
+    ComplexXMLParser041(version, false, std::auto_ptr<six::SICommonXMLParser>(
                            new ::SICommonXMLParser050(
                                versionToURI(version), log)),
                         log, ownLog)
@@ -223,8 +223,8 @@ XMLElem ComplexXMLParser050::convertImageFormationAlgoToXML(
     else if (!pfa && !rma)
     {
         //! This will occur when set to OTHER. We do not want to include
-        //  a specialized image formation algorithm so we return nullptr.
-        return nullptr;
+        //  a specialized image formation algorithm so we return NULL.
+        return NULL;
     }
     else
     {
@@ -261,7 +261,7 @@ XMLElem ComplexXMLParser050::convertMatchInformationToXML(
     {
         const MatchType& mt = matchInfo.types[i];
         XMLElem mtXML = newElement("Collect", matchInfoXML);
-        setAttribute(mtXML, "index", i + 1);
+        setAttribute(mtXML, "index", str::toString(i + 1));
 
         createString("CollectorName", mt.collectorName, mtXML);
         if (!mt.illuminatorName.empty())
@@ -277,7 +277,7 @@ XMLElem ComplexXMLParser050::convertMatchInformationToXML(
     }
 
     // This is the one difference between SICD 0.4 and 0.5
-    setAttribute(matchInfoXML, "size", matchInfo.types.size());
+    setAttribute(matchInfoXML, "size", str::toString(matchInfo.types.size()));
 
     return matchInfoXML;
 }

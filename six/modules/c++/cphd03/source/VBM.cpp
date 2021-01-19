@@ -20,27 +20,23 @@
  *
  */
 
+#include <sstream>
 #include <string.h>
 
-#include <sstream>
-#include <string>
-
 #include <six/Init.h>
-#include <sys/Bit.h>
-
 #include <cphd/ByteSwap.h>
 #include <cphd03/VBM.h>
 
 namespace
 {
-inline void setData(const std::byte*& data,
+inline void setData(const sys::byte*& data,
                     double& dest)
 {
     memcpy(&dest, data, sizeof(double));
     data += sizeof(double);
 }
 
-inline void setData(const std::byte*& data,
+inline void setData(const sys::byte*& data,
                     cphd::Vector3& dest)
 {
     setData(data, dest[0]);
@@ -49,14 +45,14 @@ inline void setData(const std::byte*& data,
 }
 
 inline void getData(double value,
-                    std::byte*& dest)
+                    sys::ubyte*& dest)
 {
     memcpy(dest, &value, sizeof(double));
     dest += sizeof(double);
 }
 
 inline void getData(const cphd::Vector3& value,
-                    std::byte*& dest)
+                    sys::ubyte*& dest)
 {
     getData(value[0], dest);
     getData(value[1], dest);
@@ -94,9 +90,9 @@ VBM::VectorBasedParameters::VectorBasedParameters(
     tropoSrp(tropoSrpEnabled ? 0.0 : six::Init::undefined<double>()),
     ampSF(ampSFEnabled ? 0.0 : six::Init::undefined<double>()),
     frequencyParameters(domainType == cphd::DomainType::FX ?
-            new FrequencyParameters() : nullptr),
+            new FrequencyParameters() : NULL),
     toaParameters(domainType == cphd::DomainType::TOA ?
-            new TOAParameters() : nullptr)
+            new TOAParameters() : NULL)
 {
 }
 
@@ -127,7 +123,7 @@ size_t VBM::VectorBasedParameters::getNumBytes() const
     return ret;
 }
 
-void VBM::VectorBasedParameters::getData(std::byte* data) const
+void VBM::VectorBasedParameters::getData(sys::ubyte* data) const
 {
     //! This uses memcpy's here because on Sun these addresses may not be
     //  8 byte aligned. So trying to derefence data as a double results in
@@ -163,7 +159,7 @@ void VBM::VectorBasedParameters::getData(std::byte* data) const
     }
 }
 
-void VBM::VectorBasedParameters::setData(const std::byte* data)
+void VBM::VectorBasedParameters::setData(const sys::byte* data)
 {
     //! This uses memcpy's here because on Sun these addresses may not be
     //  8 byte aligned. So trying to derefence data as a double results in
@@ -338,16 +334,16 @@ VBM::VBM(size_t numChannels,
     if (numChannels != data.size())
     {
         throw except::Exception(Ctxt(
-                "VBM data contains " + std::to_string(numChannels) +
+                "VBM data contains " + str::toString<size_t>(numChannels) +
                 " channels, but data has information for " +
-                std::to_string(data.size()) + " channels."));
+                str::toString<size_t>(data.size()) + " channels."));
     }
     setupInitialData(numChannels, numVectors);
 
     //! For each channel
     for (size_t ii = 0; ii < mData.size(); ++ii)
     {
-        const std::byte* ptr = static_cast<const std::byte*>(data[ii]);
+        const sys::byte* ptr = static_cast<const sys::byte*>(data[ii]);
 
         //! For each vector
         for (size_t jj = 0;
@@ -364,12 +360,12 @@ void VBM::verifyChannelVector(size_t channel, size_t vector) const
     if (channel >= mData.size())
     {
         throw except::Exception(Ctxt(
-                "Invalid channel number: " + std::to_string(channel)));
+                "Invalid channel number: " + str::toString<size_t>(channel)));
     }
     if (vector >= mData[channel].size())
     {
         throw except::Exception(Ctxt(
-                "Invalid vector number: " + std::to_string(vector)));
+                "Invalid vector number: " + str::toString<size_t>(vector)));
     }
 }
 
@@ -656,13 +652,13 @@ void VBM::clearAmpSF()
 }
 
 void VBM::getVBMdata(size_t channel,
-                     std::vector<std::byte>& data) const
+                     std::vector<sys::ubyte>& data) const
 {
     verifyChannelVector(channel, 0);
     data.resize(getVBMsize(channel));
-    std::fill(data.begin(), data.end(), static_cast<std::byte>(0));
+    std::fill(data.begin(), data.end(), 0);
 
-    getVBMdata(channel, data.data());
+    getVBMdata(channel, &data[0]);
 }
 
 void VBM::getVBMdata(size_t channel,
@@ -670,7 +666,7 @@ void VBM::getVBMdata(size_t channel,
 {
     verifyChannelVector(channel, 0);
     const size_t numBytes = getNumBytesVBP();
-    std::byte* ptr = static_cast<std::byte*>(data);
+    sys::ubyte* ptr = static_cast<sys::ubyte*>(data);
 
     for (size_t ii = 0;
          ii < mData[channel].size();
@@ -699,12 +695,12 @@ void VBM::updateVectorParameters(VectorParameters& vp) const
     vp.rcvTime = doubleSize;
     vp.rcvPos = vector3Size;
     vp.srpTime = mSRPTimeEnabled ? doubleSize :
-                                   six::Init::undefined<int64_t>();
+                                   six::Init::undefined<sys::Off_T>();
     vp.srpPos = vector3Size;
     vp.tropoSRP = mTropoSRPEnabled ? doubleSize :
-                                     six::Init::undefined<int64_t>();
+                                     six::Init::undefined<sys::Off_T>();
     vp.ampSF = mAmpSFEnabled ? doubleSize :
-                               six::Init::undefined<int64_t>();
+                               six::Init::undefined<sys::Off_T>();
     if (mDomainType == cphd::DomainType::FX)
     {
         vp.toaParameters.reset();
@@ -723,9 +719,9 @@ void VBM::updateVectorParameters(VectorParameters& vp) const
     }
 }
 
-int64_t VBM::load(io::SeekableInputStream& inStream,
-                     int64_t startVBM,
-                     int64_t sizeVBM,
+sys::Off_T VBM::load(io::SeekableInputStream& inStream,
+                     sys::Off_T startVBM,
+                     sys::Off_T sizeVBM,
                      size_t numThreads)
 {
     // Allocate the buffers
@@ -745,23 +741,23 @@ int64_t VBM::load(io::SeekableInputStream& inStream,
         throw except::Exception(Ctxt(oss.str()));
     }
 
-    const bool swapToLittleEndian = (std::endian::native == std::endian::little);
+    const bool swapToLittleEndian = !(sys::isBigEndianSystem());
 
     // Seek to start of VBM
     size_t totalBytesRead(0);
     inStream.seek(startVBM, io::Seekable::START);
-    std::vector<std::byte> data;
+    std::vector<sys::ubyte> data;
     const size_t numBytesPerVector = getNumBytesVBP();
 
     // Read the data for each channel
     for (size_t ii = 0; ii < mData.size(); ++ii)
     {
         data.resize(getVBMsize(ii));
-        //std::vector<std::byte>& data(mVBMdata[ii]);
+        //std::vector<sys::ubyte>& data(mVBMdata[ii]);
         if (!data.empty())
         {
-            auto const buf = reinterpret_cast<std::byte*>(data.data());
-            ptrdiff_t bytesThisRead = inStream.read(buf, data.size());
+            sys::byte* const buf = reinterpret_cast<sys::byte*>(&data[0]);
+            sys::SSize_T bytesThisRead = inStream.read(buf, data.size());
             if (bytesThisRead == io::InputStream::IS_EOF)
             {
                 std::ostringstream oss;
@@ -780,7 +776,7 @@ int64_t VBM::load(io::SeekableInputStream& inStream,
                          numThreads);
             }
 
-            std::byte* ptr = buf;
+            sys::byte* ptr = buf;
             for (size_t jj = 0; jj < mData[ii].size(); ++jj, ptr += numBytesPerVector)
             {
                 mData[ii][jj].setData(ptr);

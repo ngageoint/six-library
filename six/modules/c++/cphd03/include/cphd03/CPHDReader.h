@@ -75,7 +75,7 @@ public:
     // first channel is 0!
     // 0-based vector in channel
     // 0-based sample in channel
-    int64_t getFileOffset(size_t channel, size_t vector, size_t sample) const
+    sys::Off_T getFileOffset(size_t channel, size_t vector, size_t sample) const
     {
         return mWideband->getFileOffset(channel, vector, sample);
     }
@@ -126,9 +126,9 @@ public:
 private:
     // Keep info about the CPHD collection
     FileHeader mFileHeader;
-    std::unique_ptr<Metadata> mMetadata;
-    std::unique_ptr<VBM> mVBM;
-    std::unique_ptr<cphd::Wideband> mWideband;
+    std::auto_ptr<Metadata> mMetadata;
+    std::auto_ptr<VBM> mVBM;
+    std::auto_ptr<cphd::Wideband> mWideband;
 
     void initialize(std::shared_ptr<io::SeekableInputStream> inStream,
                     size_t numThreads,

@@ -49,8 +49,8 @@ void byteSwap(void* buffer,
  *  \brief Threaded byte-swapping and promote input to complex<floats>
  *
  *  Valid input types:
- *     int8_t
- *     int16_t
+ *     sys::Int8_T
+ *     sys::Int16_T
  *     sys::float
  *
  *  \param input Input to swap and promote
@@ -72,8 +72,8 @@ void byteSwapAndPromote(const void* input,
  *  \brief Threaded byte-swapping and promote input to complex<floats>
  *
  *  Valid input types:
- *     int8_t
- *     int16_t
+ *     sys::Int8_T
+ *     sys::Int16_T
  *     sys::float
  *
  *  \param input Input to swap, promote and scale

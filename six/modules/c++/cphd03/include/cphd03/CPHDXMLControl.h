@@ -52,15 +52,15 @@ public:
      *  This function takes in a Metadata object and converts
      *  it to a new-allocated XML DOM.
      */
-    std::unique_ptr<xml::lite::Document> toXML(const Metadata& metadata);
+    std::auto_ptr<xml::lite::Document> toXML(const Metadata& metadata);
 
     /*!
      *  Function takes a DOM Document* node and creates a new-allocated
      *  CPHDData* populated by the DOM.
      */
-    std::unique_ptr<Metadata> fromXML(const xml::lite::Document* doc);
+    std::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
 
-    std::unique_ptr<Metadata> fromXML(const std::string& xmlString);
+    std::auto_ptr<Metadata> fromXML(const std::string& xmlString);
 
     std::string toXMLString(const Metadata& metadata);
     size_t getXMLsize(const Metadata& metadata);
@@ -72,7 +72,7 @@ private:
     XMLElem createLatLonAltFootprint(const std::string& name,
                                      const std::string& cornerName,
                                      const cphd::LatLonAltCorners& corners,
-                                     XMLElem parent = nullptr) const;
+                                     XMLElem parent = NULL) const;
 
 private:
     static const char CPHD03_URI[];
@@ -84,21 +84,21 @@ private:
     std::string getSICommonURI() const;
 
     // Write functions
-    XMLElem toXML(const Data& obj, XMLElem parent = nullptr);
-    XMLElem toXML(const Global& obj, XMLElem parent = nullptr);
-    XMLElem toXML(const Channel& obj, XMLElem parent = nullptr);
-    XMLElem toXML(const SRP& obj, XMLElem parent = nullptr);
-    XMLElem toXML(const Antenna& obj, XMLElem parent = nullptr);
+    XMLElem toXML(const Data& obj, XMLElem parent = NULL);
+    XMLElem toXML(const Global& obj, XMLElem parent = NULL);
+    XMLElem toXML(const Channel& obj, XMLElem parent = NULL);
+    XMLElem toXML(const SRP& obj, XMLElem parent = NULL);
+    XMLElem toXML(const Antenna& obj, XMLElem parent = NULL);
     XMLElem toXML(const std::string& name, const AntennaParameters &ap,
-            XMLElem parent = nullptr);
-    XMLElem toXML(const VectorParameters& obj, XMLElem parent = nullptr);
+            XMLElem parent = NULL);
+    XMLElem toXML(const VectorParameters& obj, XMLElem parent = NULL);
 
     XMLElem areaLineDirectionParametersToXML(const std::string& name,
             const AreaDirectionParameters& obj,
-            XMLElem parent = nullptr);
+            XMLElem parent = NULL);
     XMLElem areaSampleDirectionParametersToXML(const std::string& name,
             const AreaDirectionParameters& obj,
-            XMLElem parent = nullptr);
+            XMLElem parent = NULL);
 
     // Read functions
     void fromXML(const XMLElem dataXML, Data& obj);

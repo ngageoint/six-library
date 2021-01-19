@@ -60,7 +60,7 @@ void createNITF(const std::string& outputPathname,
                     six::sidd::DerivedXMLControl>());
     const std::vector<std::string> schemaPaths;
 
-    std::unique_ptr<six::Data> data;
+    std::auto_ptr<six::Data> data;
     if (datatype == six::DataType::COMPLEX)
     {
         data = six::sicd::Utilities::createFakeComplexData();
@@ -79,15 +79,15 @@ void createNITF(const std::string& outputPathname,
     const size_t elementsInImage = data->getNumRows() * data->getNumCols();
     const size_t imageSize = elementsInImage * data->getNumBytesPerPixel();
 
-    auto container(std::make_shared<six::Container>(
-        data->getDataType()));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(data->getDataType()));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
     writer.setXMLControlRegistry(&registry);
     writer.initialize(container);
 
-    std::unique_ptr<std::byte[]> imageData(new std::byte[imageSize]);
+    mem::ScopedArray<six::UByte> imageData(new six::UByte[imageSize]);
     if (container->getDataType() == six::DataType::COMPLEX)
     {
         std::complex<float>* complexData =
@@ -100,13 +100,13 @@ void createNITF(const std::string& outputPathname,
                     static_cast<float>(ii) * -1);
         }
     }
-    else if (container->getDataType() == six::DataType::DERIVED)
+    else
     {
-        uint16_t* derivedData =
-                reinterpret_cast<uint16_t*>(imageData.get());
+        sys::Uint16_T* derivedData =
+                reinterpret_cast<sys::Uint16_T*>(imageData.get());
         for (size_t ii = 0; ii < elementsInImage; ++ii)
         {
-            derivedData[ii] = static_cast<uint16_t>(ii);
+            derivedData[ii] = static_cast<sys::Uint16_T>(ii);
         }
     }
     writer.save(imageData.get(), outputPathname);
@@ -126,15 +126,16 @@ bool checkNITF(const std::string& pathname)
     reader.setXMLControlRegistry(&registry);
     const std::vector<std::string> schemaPaths;
     reader.load(pathname, schemaPaths);
-    std::unique_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
+    std::auto_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
     const size_t ROWS_TO_SKIP = data->getDataType() ==
             six::DataType::COMPLEX ? SICD_ROWS_TO_SKIP : SIDD_ROWS_TO_SKIP;
 
     six::Region region;
     region.setStartRow(ROWS_TO_SKIP);
     region.setNumRows(data->getNumRows() - ROWS_TO_SKIP);
+    region.setStartCol(0);
     reader.interleaved(region, 0);
-    std::byte* buffer = region.getBuffer();
+    six::UByte* buffer = region.getBuffer();
 
     const size_t elementsPerRow = data->getNumCols();
     const size_t skipSize = ROWS_TO_SKIP * elementsPerRow;
@@ -160,11 +161,11 @@ bool checkNITF(const std::string& pathname)
     }
     else
     {
-        uint16_t* derivedBuffer =
-                reinterpret_cast<uint16_t*>(buffer);
+        sys::Uint16_T* derivedBuffer =
+                reinterpret_cast<sys::Uint16_T*>(buffer);
         for (size_t ii = skipSize; ii < imageSize; ++ii)
         {
-            if (derivedBuffer[ii - skipSize] != static_cast<uint16_t>(ii))
+            if (derivedBuffer[ii - skipSize] != static_cast<sys::Uint16_T>(ii))
             {
                 return false;
             }
@@ -175,7 +176,8 @@ bool checkNITF(const std::string& pathname)
 
 bool runTest(const six::DataType& datatype)
 {
-    std::cout << "Running offset test for datatype " << datatype << "\n";
+    std::cout << "Running offset test for datatype " << datatype.toString()
+              << "\n";
 
     const io::TempFile temp;
     createNITF(temp.pathname(), datatype);
@@ -202,6 +204,10 @@ int main(int argc, char** argv)
         std::cerr << "Not enough memory available to build test NITF. "
                 "Skipping test.\n";
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

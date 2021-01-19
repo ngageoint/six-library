@@ -26,7 +26,6 @@
 #include <memory>
 #include <iostream>
 #include <iomanip>
-#include <string>
 
 #include <import/cli.h>
 #include <sys/Path.h>
@@ -80,7 +79,7 @@ void populateScalarMeshVectors(
 
             for (size_t ii = 0; ii < numScalarsPerCoord; ++ii)
             {
-                const auto key = std::to_string(ii);
+                const std::string key = str::toString(ii);
                 scalars[key].push_back(genRand());
             }
         }
@@ -339,7 +338,7 @@ bool roundTripPlanarMesh(const types::RowCol<size_t>& meshDims,
         name, meshDims, x, y);
 
     // Serialize the mesh.
-    std::vector<std::byte> serializedValues;
+    std::vector<sys::byte> serializedValues;
     serializedMesh.serialize(serializedValues);
 
     // Deserialize the mesh.
@@ -347,7 +346,7 @@ bool roundTripPlanarMesh(const types::RowCol<size_t>& meshDims,
     y.clear();
 
     six::sicd::PlanarCoordinateMesh deserializedMesh(name);
-    const std::byte* serializedValuesBuffer = &serializedValues[0];
+    const sys::byte* serializedValuesBuffer = &serializedValues[0];
     deserializedMesh.deserialize(serializedValuesBuffer);
 
     // Compare meshes.
@@ -384,12 +383,12 @@ bool roundTripScalarMesh(const types::RowCol<size_t>& meshDims,
             numScalarsPerCoord,
             scalars);
 
-    std::vector<std::byte> serializedValues;
+    std::vector<sys::byte> serializedValues;
     serializedScalarMesh.serialize(serializedValues);
 
     six::sicd::ScalarMesh deserializedScalarMesh(meshName);
 
-    const std::byte* serializedValuesBuffer = serializedValues.data();
+    const sys::byte* serializedValuesBuffer = serializedValues.data();
     deserializedScalarMesh.deserialize(serializedValuesBuffer);
 
     return compareScalarMesh(
@@ -416,13 +415,13 @@ bool roundTripNoiseMesh(const types::RowCol<size_t>& meshDims,
         azimuthAmbiguityNoise, combinedNoise);
 
     // Serialize the mesh.
-    std::vector<std::byte> serializedValues;
+    std::vector<sys::byte> serializedValues;
     serializedNoiseMesh.serialize(serializedValues);
 
     // Deserialize the mesh.
     six::sicd::NoiseMesh deserializedNoiseMesh(name);
 
-    const std::byte* serializedValuesBuffer = &serializedValues[0];
+    const sys::byte* serializedValuesBuffer = &serializedValues[0];
     deserializedNoiseMesh.deserialize(serializedValuesBuffer);
 
     // Compare meshes.
@@ -450,7 +449,7 @@ int main(int argc, char** argv)
                            cli::STORE_TRUE, "verbose",
                            "verbose")->setDefault(false);
 
-        std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
+        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
         const types::RowCol<size_t> meshDims(
             options->get<size_t>("numRows"),
             options->get<size_t>("numCols"));
@@ -470,6 +469,11 @@ int main(int argc, char** argv)
         success &= roundTripScalarMesh(meshDims, 4, verbose);
 
         return (success ? 0 : 1);
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

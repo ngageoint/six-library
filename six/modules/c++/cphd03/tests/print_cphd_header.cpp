@@ -28,15 +28,12 @@
 #include <logging/Setup.h>
 #include <cphd03/CPHDReader.h>
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 int main(int argc, char** argv)
 {
     try
     {
         // Parse the command line
-        const std::string progname(fs::path(argv[0]).filename());
+        const std::string progname(sys::Path::basename(argv[0]));
         if (argc != 2)
         {
             std::cerr << "Usage: " << progname << " <CPHD pathname>\n\n";
@@ -61,6 +58,11 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
         return 1;
     }
     catch (...)

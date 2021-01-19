@@ -109,13 +109,13 @@ public:
      * Serializes the mesh to binary
      * \param[out] values The serialized data.
      */
-    virtual void serialize(std::vector<std::byte>& values) const;
+    virtual void serialize(std::vector<sys::byte>& values) const;
 
     /*!
      * Deserializes from binary to a mesh. 
      * \param values Data to deserialize.
      */
-    virtual void deserialize(const std::byte*& values);
+    virtual void deserialize(const sys::byte*& values);
 
 protected:
     const bool mSwapBytes;
@@ -193,14 +193,14 @@ public:
      *
      * \param[out] values The serialized data.
      */
-    virtual void serialize(std::vector<std::byte>& values) const;
+    virtual void serialize(std::vector<sys::byte>& values) const;
 
     /*!
      * Deserializes from binary to a mesh.
      *
      * \param values Data to deserialize.
      */
-    virtual void deserialize(const std::byte*& values);
+    virtual void deserialize(const sys::byte*& values);
 
 private:
     //! The number of scalars per x,y coordinate.
@@ -273,13 +273,13 @@ public:
      * Serializes the mesh to binary
      * \param[out] values The serialized data.
      */
-    virtual void serialize(std::vector<std::byte>& values) const;
+    virtual void serialize(std::vector<sys::byte>& values) const;
 
     /*!
      * Deserializes from binary to a mesh. 
      * \param values Data to deserialize.
      */
-    virtual void deserialize(const std::byte*& values);
+    virtual void deserialize(const sys::byte*& values);
 
 protected:
     std::vector<double> mMainBeamNoise;

@@ -33,13 +33,13 @@ BaseConverter::BaseConverter() :
 {
 }
 
-std::unique_ptr<xml::lite::Document>
+std::auto_ptr<xml::lite::Document>
 BaseConverter::readXML(const std::string& xmlPathname)
 {
     xml::lite::MinidomParser parser;
     io::FileInputStream xmlInputStream(xmlPathname);
     parser.parse(xmlInputStream);
-    return std::unique_ptr<xml::lite::Document>(
+    return std::auto_ptr<xml::lite::Document>(
             parser.getDocument(true));
 }
 

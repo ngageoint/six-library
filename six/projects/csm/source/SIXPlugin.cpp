@@ -278,7 +278,7 @@ std::string SIXPlugin::convertISDToModelState(
        const std::string& modelName,
        csm::WarningList* warnings) const
 {
-    std::unique_ptr<const csm::Model>
+    std::auto_ptr<const csm::Model>
             model(constructModelFromISD(imageSupportData, modelName, warnings));
     return model->getModelState();
 }

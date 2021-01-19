@@ -42,7 +42,7 @@ GeoTIFFWriteControl::GeoTIFFWriteControl()
                                                     tiff::Const::Type::ASCII,
                                                     Constants::GT_XML_TAG);
 }
-void GeoTIFFWriteControl::initialize(std::shared_ptr<Container> container)
+void GeoTIFFWriteControl::initialize(mem::SharedPtr<Container> container)
 {
 
     if (container->getDataType() != DataType::DERIVED)

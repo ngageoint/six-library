@@ -46,7 +46,7 @@ size_t Metadata::getNumBytesPerSample() const
 
 std::string Metadata::getDomainTypeString() const
 {
-    return global.domainType;
+    return global.domainType.toString();
 }
 
 cphd::DomainType Metadata::getDomainType() const
@@ -83,7 +83,7 @@ bool Metadata::operator==(const Metadata& other) const
 std::ostream& operator<< (std::ostream& os, const Metadata& d)
 {
     os << "Metadata::" << "\n"
-       <<  "  " << d.collectionInformation << "\n"
+       <<  "  " << cphd03::toString(d.collectionInformation) << "\n"
        <<  "  " << d.data << "\n"
        <<  "  " << d.global << "\n"
        <<  "  " << d.channel << "\n"

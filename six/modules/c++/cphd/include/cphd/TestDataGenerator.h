@@ -101,25 +101,6 @@ void setUpMetadata(Metadata& metadata);
  *
  *  \throws except::Exception if wideband data is not an accepted type or size
  */
-inline cphd::SignalArrayFormat getSignalArrayFormat(size_t writeDataSize)
-{
-    if (writeDataSize == 2)
-    {
-        return cphd::SignalArrayFormat::CI2;
-    }
-    if (writeDataSize == 4)
-    {
-        return cphd::SignalArrayFormat::CI4;
-    }
-    if (writeDataSize == 8)
-    {
-        return cphd::SignalArrayFormat::CF8;
-    }
-    
-    throw except::Exception(Ctxt("Signal format is incorrect size or type"));
-}
-
-
 template<typename T>
 void setUpData(Metadata& metadata,
                const types::RowCol<size_t>& dims,
@@ -147,7 +128,22 @@ void setUpData(Metadata& metadata,
         // Must set the sample type
         else
         {
-            metadata.data.signalArrayFormat = getSignalArrayFormat(sizeof(writeData[0]));
+            if (sizeof(writeData[0]) == 2)
+            {
+                metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CI2;
+            }
+            else if (sizeof(writeData[0]) == 4)
+            {
+                metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CI4;
+            }
+            else if (sizeof(writeData[0]) == 8)
+            {
+                metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CF8;
+            }
+            else
+            {
+                throw except::Exception(Ctxt("Signal format is incorrect size or type"));
+            }
         }
     }
     else

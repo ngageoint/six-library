@@ -6,9 +6,6 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 int main(int argc, char** argv)
 {
     try
@@ -16,7 +13,7 @@ int main(int argc, char** argv)
         const std::string progname(argv[0]);
         if (argc != 2)
         {
-            std::cerr << "Usage: " << fs::path(progname).filename().string()
+            std::cerr << "Usage: " << sys::Path::basename(progname)
                       << " <SICD pathname>\n\n";
             return 1;
         }
@@ -25,12 +22,12 @@ int main(int argc, char** argv)
         std::vector<std::string> schemaPaths;
         const size_t orderX(4);
         const size_t orderY(4);
-        std::unique_ptr<six::sicd::ComplexData> complexData;
+        std::auto_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float> > widebandData;
         six::Poly2D outputRowColToSlantRow;
         six::Poly2D outputRowColToSlantCol;
-        std::unique_ptr<six::sicd::NoiseMesh> noiseMesh;
-        std::unique_ptr<six::sicd::ScalarMesh> scalarMesh;
+        std::auto_ptr<six::sicd::NoiseMesh> noiseMesh;
+        std::auto_ptr<six::sicd::ScalarMesh> scalarMesh;
 
         std::cout << "Read SICD: " << sicdPathname << std::endl;
         six::sicd::Utilities::readSicd(sicdPathname,
@@ -300,6 +297,11 @@ int main(int argc, char** argv)
             }
         }
     }   
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
+    }
     catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;

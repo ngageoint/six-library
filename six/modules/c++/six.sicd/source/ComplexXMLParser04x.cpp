@@ -35,10 +35,10 @@ namespace sicd
 ComplexXMLParser04x::ComplexXMLParser04x(
     const std::string& version,
     bool addClassAttributes,
-    std::unique_ptr<SICommonXMLParser>&& comParser,
+    std::auto_ptr<SICommonXMLParser> comParser,
     logging::Logger* log,
     bool ownLog) :
-    ComplexXMLParser(version, addClassAttributes, std::move(comParser), log, ownLog)
+    ComplexXMLParser(version, addClassAttributes, comParser, log, ownLog)
 {
 }
 
@@ -67,13 +67,13 @@ XMLElem ComplexXMLParser04x::convertGeoInfoToXML(
     {
         XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
                                          geoInfoXML);
-        setAttribute(linePolyXML, "size", numLatLons);
+        setAttribute(linePolyXML, "size", str::toString(numLatLons));
 
         for (size_t ii = 0; ii < numLatLons; ++ii)
         {
             XMLElem v = common().createLatLon(numLatLons == 2 ? "Endpoint" : "Vertex",
                          geoInfo->geometryLatLon[ii], linePolyXML);
-            setAttribute(v, "index", ii + 1);
+            setAttribute(v, "index", str::toString(ii + 1));
         }
     }
     return geoInfoXML;
@@ -104,7 +104,7 @@ XMLElem ComplexXMLParser04x::convertRadarCollectionToXML(
         // In SICD 0.4, this is not allowed to contain UNKNOWN or SEQUENCE
         createString(
                 "TxPolarization",
-                PolarizationType(radar->txPolarization.value),
+                six::toString(PolarizationType(radar->txPolarization.value)),
                 radarXML);
     }
 
@@ -133,8 +133,8 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
     //! a lot of the variables has been updated
     XMLElem imageFormationXML = newElement("ImageFormation", parent);
 
-    if (radarCollection.area.get() != nullptr &&
-        radarCollection.area->plane.get() != nullptr &&
+    if (radarCollection.area.get() != NULL &&
+        radarCollection.area->plane.get() != NULL &&
         !radarCollection.area->plane->segmentList.empty() &&
         imageFormation->segmentIdentifier.empty())
     {
@@ -151,13 +151,13 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
 
     if (imageFormation->txRcvPolarizationProc != DualPolarizationType::NOT_SET)
     {
-        createSixString("TxRcvPolarizationProc",
-                     imageFormation->txRcvPolarizationProc,
+        createString("TxRcvPolarizationProc",
+                     six::toString(imageFormation->txRcvPolarizationProc),
                      imageFormationXML);
     }
 
     createString("ImageFormAlgo",
-                 imageFormation->imageFormationAlgorithm,
+                 six::toString(imageFormation->imageFormationAlgorithm),
                  imageFormationXML);
 
     createDouble("TStartProc", imageFormation->tStartProc, imageFormationXML);
@@ -168,15 +168,15 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
     createDouble("MaxProc", imageFormation->txFrequencyProcMax, txFreqXML);
 
     createString("STBeamComp",
-                 imageFormation->slowTimeBeamCompensation,
+                 six::toString(imageFormation->slowTimeBeamCompensation),
                  imageFormationXML);
     createString("ImageBeamComp",
-                 imageFormation->imageBeamCompensation,
+                 six::toString(imageFormation->imageBeamCompensation),
                  imageFormationXML);
     createString("AzAutofocus",
-                 imageFormation->azimuthAutofocus,
+                 six::toString(imageFormation->azimuthAutofocus),
                  imageFormationXML);
-    createString("RgAutofocus", imageFormation->rangeAutofocus,
+    createString("RgAutofocus", six::toString(imageFormation->rangeAutofocus),
                  imageFormationXML);
 
     for (size_t i = 0; i < imageFormation->processing.size(); ++i)
@@ -246,7 +246,8 @@ XMLElem ComplexXMLParser04x::convertRMAToXML(
 {
     XMLElem rmaXML = newElement("RMA", parent);
 
-    createString("RMAlgoType", rma->algoType, rmaXML);
+    createString("RMAlgoType", six::toString<six::RMAlgoType>(rma->algoType),
+                 rmaXML);
 
     if (rma->rmcr.get())
     {
@@ -305,7 +306,7 @@ XMLElem ComplexXMLParser04x::convertHPBWToXML(
     }
     else
     {
-        return nullptr;
+        return NULL;
     }
 }
 
@@ -324,7 +325,7 @@ XMLElem ComplexXMLParser04x::convertAntennaParamArrayToXML(
     }
     else
     {
-        return nullptr;
+        return NULL;
     }
 }
 
@@ -413,19 +414,20 @@ XMLElem ComplexXMLParser04x::createRcvChannels(const RadarCollection* radar,
 {
     const size_t numChannels = radar->rcvChannels.size();
     XMLElem rcvChanXML = newElement("RcvChannels", parent);
-    setAttribute(rcvChanXML, "size", numChannels);
+    setAttribute(rcvChanXML, "size", str::toString(numChannels));
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         const ChannelParameters* const cp = radar->rcvChannels[ii].get();
         XMLElem cpXML = newElement("ChanParameters", rcvChanXML);
-        setAttribute(cpXML, "index", ii + 1);
+        setAttribute(cpXML, "index", str::toString(ii + 1));
 
         if (!Init::isUndefined(cp->rcvAPCIndex))
             createInt("RcvAPCIndex", cp->rcvAPCIndex, cpXML);
 
         if (cp->txRcvPolarization != DualPolarizationType::NOT_SET)
         {
-            createSixString("TxRcvPolarization", cp->txRcvPolarization, cpXML);
+            createString("TxRcvPolarization", six::toString<
+                    DualPolarizationType>(cp->txRcvPolarization), cpXML);
         }
     }
 

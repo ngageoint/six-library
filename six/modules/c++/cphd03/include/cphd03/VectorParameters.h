@@ -84,24 +84,24 @@ struct VectorParameters
 
     // These functions return the offset, in bytes, to the parameter requested
     // -1 is returned if the parameter is not in the vector
-    int64_t txTimeOffset() const;
-    int64_t txPosOffset() const;
-    int64_t rcvTimeOffset() const;
-    int64_t rcvPosOffset() const;
-    int64_t srpTimeOffset() const;
-    int64_t srpPosOffset() const;
-    int64_t tropoSRPOffset() const;
-    int64_t ampSFOffset() const;
-    int64_t Fx0Offset() const;
-    int64_t FxSSOffset() const;
-    int64_t Fx1Offset() const;
-    int64_t Fx2Offset() const;
-    int64_t deltaTOA0Offset() const;
-    int64_t toaSSOffset() const;
+    sys::Off_T txTimeOffset() const;
+    sys::Off_T txPosOffset() const;
+    sys::Off_T rcvTimeOffset() const;
+    sys::Off_T rcvPosOffset() const;
+    sys::Off_T srpTimeOffset() const;
+    sys::Off_T srpPosOffset() const;
+    sys::Off_T tropoSRPOffset() const;
+    sys::Off_T ampSFOffset() const;
+    sys::Off_T Fx0Offset() const;
+    sys::Off_T FxSSOffset() const;
+    sys::Off_T Fx1Offset() const;
+    sys::Off_T Fx2Offset() const;
+    sys::Off_T deltaTOA0Offset() const;
+    sys::Off_T toaSSOffset() const;
 
     void clearAmpSF()
     {
-        ampSF = six::Init::undefined<int64_t>();
+        ampSF = six::Init::undefined<sys::Off_T>();
     }
 
     bool operator==(const VectorParameters& other) const;
@@ -112,14 +112,14 @@ struct VectorParameters
     }
 
     // Size, in bytes, of each of the fields in the binary VBM
-    int64_t txTime;
-    int64_t txPos;
-    int64_t rcvTime;
-    int64_t rcvPos;
-    int64_t srpTime;        // Optional
-    int64_t srpPos;
-    int64_t tropoSRP;       // Optional   TropoSRP appears before AmpSF in the binary data
-    int64_t ampSF;          // Optional
+    sys::Off_T txTime;
+    sys::Off_T txPos;
+    sys::Off_T rcvTime;
+    sys::Off_T rcvPos;
+    sys::Off_T srpTime;        // Optional
+    sys::Off_T srpPos;
+    sys::Off_T tropoSRP;       // Optional   TropoSRP appears before AmpSF in the binary data
+    sys::Off_T ampSF;          // Optional
 
 
     mem::ScopedCopyablePtr<FxParameters> fxParameters;

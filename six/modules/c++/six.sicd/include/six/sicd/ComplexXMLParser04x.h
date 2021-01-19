@@ -33,39 +33,39 @@ class ComplexXMLParser04x : public ComplexXMLParser
 public:
     ComplexXMLParser04x(const std::string& version,
                         bool addClassAttributes,
-                        std::unique_ptr<SICommonXMLParser>&& comParser,
-                        logging::Logger* log = nullptr,
+                        std::auto_ptr<SICommonXMLParser> comParser,
+                        logging::Logger* log = NULL,
                         bool ownLog = false);
 
 protected:
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, 
-                                     XMLElem parent = nullptr) const = 0;
+                                     XMLElem parent = NULL) const = 0;
     virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const = 0;
 
 protected:
 
     virtual XMLElem convertGeoInfoToXML(const GeoInfo *obj,
-                                        XMLElem parent = nullptr) const;
+                                        XMLElem parent = NULL) const;
     virtual XMLElem convertWeightTypeToXML(const WeightType& obj, 
-                                           XMLElem parent = nullptr) const;
+                                           XMLElem parent = NULL) const;
     virtual XMLElem convertRadarCollectionToXML(const RadarCollection *radar,
                                                 XMLElem parent) const;
     virtual XMLElem convertImageFormationToXML(const ImageFormation *obj,
                                        const RadarCollection& radarCollection,
-                                       XMLElem parent = nullptr) const;
+                                       XMLElem parent = NULL) const;
     virtual XMLElem convertImageFormationAlgoToXML(
         const PFA* pfa, const RMA* rma, 
         const RgAzComp* rgAzComp, 
-        XMLElem parent = nullptr) const;
+        XMLElem parent = NULL) const;
     virtual XMLElem convertRMAToXML(const RMA *obj, 
-                                    XMLElem parent = nullptr) const;
+                                    XMLElem parent = NULL) const;
     virtual XMLElem convertHPBWToXML(const HalfPowerBeamwidths* obj, 
-                                     XMLElem parent = nullptr) const;
+                                     XMLElem parent = NULL) const;
     virtual XMLElem convertAntennaParamArrayToXML(
         const std::string& name,
         const GainAndPhasePolys* obj, 
-        XMLElem parent = nullptr) const;
+        XMLElem parent = NULL) const;
 
     virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
         mem::ScopedCopyablePtr<WeightType>& obj) const;
@@ -83,7 +83,7 @@ protected:
 
 private:
     XMLElem createRcvChannels(const RadarCollection* radar,
-                              XMLElem parent = nullptr) const;
+                              XMLElem parent = NULL) const;
 };
 }
 }

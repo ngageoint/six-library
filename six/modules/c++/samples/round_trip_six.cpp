@@ -30,9 +30,6 @@
 #include <import/six/sidd.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 namespace
 {
 float round(float num)
@@ -50,12 +47,12 @@ public:
     {
     }
 
-    inline int16_t operator()(float value) const
+    inline sys::Int16_T operator()(float value) const
     {
         const float ret(round((((value - mMin) / mDiff) *
-                std::numeric_limits<uint16_t>::max()) +
-                        std::numeric_limits<int16_t>::min()));
-        return static_cast<int16_t>(ret);
+                std::numeric_limits<sys::Uint16_T>::max()) +
+                        std::numeric_limits<sys::Int16_T>::min()));
+        return static_cast<sys::Int16_T>(ret);
     }
 
 private:
@@ -63,31 +60,40 @@ private:
     const float mDiff;
 };
 
-struct Buffers final
+class Buffers
 {
-    std::byte* add(size_t numBytes)
+public:
+    Buffers()
     {
-        mBuffers.push_back(std::unique_ptr<std::byte[]>(new std::byte[numBytes]));
-        return mBuffers.back().get();
     }
 
-    std::vector<std::byte*> get() const
+    ~Buffers()
     {
-        std::vector<std::byte*> retval;
-        for (auto& buffer : mBuffers)
+        for (size_t ii = 0; ii < mBuffers.size(); ++ii)
         {
-            retval.push_back(buffer.get());
+            delete[] mBuffers[ii];
         }
-        return retval;
+    }
+
+    sys::ubyte* add(size_t numBytes)
+    {
+        mem::ScopedArray<sys::ubyte> buffer(new sys::ubyte[numBytes]);
+        mBuffers.push_back(buffer.get());
+        return buffer.release();
+    }
+
+    std::vector<sys::ubyte*> get() const
+    {
+        return mBuffers;
     }
 
 private:
-    std::vector<std::unique_ptr<std::byte[]>> mBuffers;
+    std::vector<sys::ubyte*> mBuffers;
 };
 
 // We've stored the complex<short> in the second half of the buffer
 // We'll expand to complex<float> starting in the first half of the buffer
-void expandComplex(size_t numPixels, std::byte* buffer)
+void expandComplex(size_t numPixels, sys::ubyte* buffer)
 {
     const std::complex<short>* const input =
             reinterpret_cast<std::complex<short>*>(
@@ -110,7 +116,7 @@ void expandComplex(size_t numPixels, std::byte* buffer)
 // Since our buffer could be in the range of [-1.0f, 1.0f] we cannot simply
 // cast to a 16 bit int. Instead we expand the values so they always go from
 // [-32K, 32K].
-void compressInteger(size_t numPixels, std::byte* buffer)
+void compressInteger(size_t numPixels, sys::ubyte* buffer)
 {
     const float* const floatValues = reinterpret_cast<float*>(buffer);
 
@@ -132,8 +138,8 @@ void compressInteger(size_t numPixels, std::byte* buffer)
     const std::complex<float>* const input =
             reinterpret_cast<std::complex<float>*>(buffer);
 
-    std::complex<int16_t>* const output =
-            reinterpret_cast<std::complex<int16_t>*>(buffer);
+    std::complex<sys::Int16_T>* const output =
+            reinterpret_cast<std::complex<sys::Int16_T>*>(buffer);
     const float diff = max - min;
 
     // If diff ends up being zero, we will get a division by 0 error.
@@ -141,14 +147,14 @@ void compressInteger(size_t numPixels, std::byte* buffer)
     // fill it with 0s.
     if (diff == 0.0f)
     {
-        std::fill_n(output, numPixels, std::complex<int16_t>(0, 0));
+        std::fill_n(output, numPixels, std::complex<sys::Int16_T>(0, 0));
         return;
     }
 
     const CompressFloat compressFloat(min, diff);
     for (size_t ii = 0; ii < numPixels; ++ii)
     {
-        output[ii] = std::complex<int16_t>(
+        output[ii] = std::complex<sys::Int16_T>(
                 compressFloat(input[ii].real()),
                 compressFloat(input[ii].imag()));
     }
@@ -200,7 +206,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
                            "OUTPUT", 1, 1);
 
-        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const std::string inputFile(options->get<std::string> ("input"));
         const std::string outputFile(options->get<std::string> ("output"));
@@ -269,9 +275,8 @@ int main(int argc, char** argv)
         else
             log.addHandler(new logging::FileHandler(logFile, logLevel), true);
 
-        std::unique_ptr<six::ReadControl> reader;
-        std::string extension = fs::path(inputFile).extension();
-        str::lower(extension);
+        std::auto_ptr<six::ReadControl> reader;
+        const std::string extension = sys::Path::splitExt(inputFile).second;
         if (extension == ".nitf" || extension == ".ntf")
         {
             reader.reset(new six::NITFReadControl());
@@ -285,7 +290,7 @@ int main(int argc, char** argv)
         reader->setXMLControlRegistry(&xmlRegistry);
 
         reader->load(inputFile, schemaPaths);
-        auto container(reader->getContainer());
+        mem::SharedPtr<six::Container> container(reader->getContainer());
 
         // Update the XML to reflect the creation time as right now
         if (!retainDateTime)
@@ -302,6 +307,8 @@ int main(int argc, char** argv)
         // DES's with SICD XML in them.  So here we want to read every image
         // that's present.
         six::Region region;
+        region.setStartRow(0);
+        region.setStartCol(0);
 
         Buffers buffers;
         for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)
@@ -332,7 +339,7 @@ int main(int argc, char** argv)
                     numBytesPerPixel *= 2;
                 }
 
-                std::byte* buffer =
+                sys::ubyte* buffer =
                         buffers.add(numPixels * numBytesPerPixel);
 
                 region.setNumRows(extent.row);
@@ -392,6 +399,11 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
         return 1;
     }
     catch (...)

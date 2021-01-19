@@ -36,7 +36,7 @@ namespace sicd
 ComplexXMLParser10x::ComplexXMLParser10x(const std::string& version,
                                          logging::Logger* log,
                                          bool ownLog) :
-    ComplexXMLParser(version, false, std::unique_ptr<six::SICommonXMLParser>(
+    ComplexXMLParser(version, false, std::auto_ptr<six::SICommonXMLParser>(
                      new six::SICommonXMLParser10x(
                         versionToURI(version), false,
                         versionToURI(version), log)),
@@ -82,7 +82,8 @@ XMLElem ComplexXMLParser10x::convertRadarCollectionToXML(
     createWaveform(radar, radarXML);
 
     //! required in 1.0
-    createString("TxPolarization", radar->txPolarization, radarXML);
+    createString("TxPolarization", six::toString(radar->txPolarization),
+                 radarXML);
 
     createTxSequence(radar, radarXML);
     createRcvChannels(radar, radarXML);
@@ -104,8 +105,8 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
     convertRcvChanProcToXML("1.0", imageFormation->rcvChannelProcessed.get(),
                             imageFormationXML);
 
-    createSixString("TxRcvPolarizationProc",
-                 imageFormation->txRcvPolarizationProc,
+    createString("TxRcvPolarizationProc",
+                 six::toString(imageFormation->txRcvPolarizationProc),
                  imageFormationXML);
 
     createDouble("TStartProc", imageFormation->tStartProc, imageFormationXML);
@@ -115,8 +116,8 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
     createDouble("MinProc", imageFormation->txFrequencyProcMin, txFreqXML);
     createDouble("MaxProc", imageFormation->txFrequencyProcMax, txFreqXML);
 
-    if (radarCollection.area.get() != nullptr &&
-        radarCollection.area->plane.get() != nullptr &&
+    if (radarCollection.area.get() != NULL &&
+        radarCollection.area->plane.get() != NULL &&
         !radarCollection.area->plane->segmentList.empty() &&
         imageFormation->segmentIdentifier.empty())
     {
@@ -131,19 +132,20 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
                      imageFormationXML);
 
     createString("ImageFormAlgo",
-                 imageFormation->imageFormationAlgorithm,
+                 six::toString(imageFormation->imageFormationAlgorithm),
                  imageFormationXML);
 
     createString("STBeamComp",
-                 imageFormation->slowTimeBeamCompensation,
+                 six::toString(imageFormation->slowTimeBeamCompensation),
                  imageFormationXML);
     createString("ImageBeamComp",
-                 imageFormation->imageBeamCompensation,
+                 six::toString(imageFormation->imageBeamCompensation),
                  imageFormationXML);
     createString("AzAutofocus",
-                 imageFormation->azimuthAutofocus,
+                 six::toString(imageFormation->azimuthAutofocus),
                  imageFormationXML);
-    createString("RgAutofocus", imageFormation->rangeAutofocus, imageFormationXML);
+    createString("RgAutofocus", six::toString(imageFormation->rangeAutofocus),
+                 imageFormationXML);
 
     for (unsigned int i = 0; i < imageFormation->processing.size(); ++i)
     {
@@ -193,8 +195,8 @@ XMLElem ComplexXMLParser10x::convertImageFormationAlgoToXML(
     else if (!pfa && !rma && !rgAzComp)
     {
         //! This will occur when set to OTHER. We do not want to include
-        //  a specialized image formation algorithm so we return nullptr.
-        return nullptr;
+        //  a specialized image formation algorithm so we return NULL.
+        return NULL;
     }
     else
     {
@@ -221,7 +223,8 @@ XMLElem ComplexXMLParser10x::convertRMAToXML(
 {
     XMLElem rmaXML = newElement("RMA", parent);
 
-    createString("RMAlgoType", rma->algoType, rmaXML);
+    createString("RMAlgoType", six::toString<six::RMAlgoType>(rma->algoType),
+                 rmaXML);
 
     if (rma->rmat.get() && !rma->rmcr.get() && !rma->inca.get())
     {
@@ -265,7 +268,7 @@ XMLElem ComplexXMLParser10x::convertHPBWToXML(
     XMLElem) const
 {
     //! this field was deprecated in 1.0.0
-    return nullptr;
+    return NULL;
 }
 
 XMLElem ComplexXMLParser10x::convertAntennaParamArrayToXML(
@@ -374,17 +377,17 @@ XMLElem ComplexXMLParser10x::createRcvChannels(const RadarCollection* radar,
 {
     const size_t numChannels = radar->rcvChannels.size();
     XMLElem rcvChanXML = newElement("RcvChannels", parent);
-    setAttribute(rcvChanXML, "size", numChannels);
+    setAttribute(rcvChanXML, "size", str::toString(numChannels));
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         const ChannelParameters* const cp = radar->rcvChannels[ii].get();
         XMLElem cpXML = newElement("ChanParameters", rcvChanXML);
-        setAttribute(cpXML, "index", ii + 1);
+        setAttribute(cpXML, "index", str::toString(ii + 1));
 
         //! required in 1.0
-        createSixString(
+        createString(
             "TxRcvPolarization",
-            cp->txRcvPolarization,
+            six::toString<DualPolarizationType>(cp->txRcvPolarization),
             cpXML);
 
         if (!Init::isUndefined(cp->rcvAPCIndex))

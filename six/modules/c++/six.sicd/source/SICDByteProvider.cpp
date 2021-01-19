@@ -36,7 +36,7 @@ SICDByteProvider::SICDByteProvider(
     xmlRegistry.addCreator(six::DataType::COMPLEX,
                            new six::XMLControlCreatorT<ComplexXMLControl>());
 
-    auto container(std::make_shared<Container>(
+    mem::SharedPtr<Container> container(new Container(
             DataType::COMPLEX));
 
     // The container wants to take ownership of the data

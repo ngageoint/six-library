@@ -48,7 +48,7 @@ public:
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
      *
-     *  The default argument for numThreads should be std::thread::hardware_concurrency().
+     *  The default argument for numThreads should be sys::OS().getNumCPUs().
      *  However, SWIG doesn't seem to like that.
      *  As a workaround, we pass in 0 for the default, and the ctor sets the
      *  number of threads to the number of CPUs if this happens.
@@ -71,7 +71,7 @@ public:
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
      *
-     *  The default argument for numThreads should be std::thread::hardware_concurrency().
+     *  The default argument for numThreads should be sys::OS().getNumCPUs().
      *  However, SWIG doesn't seem to like that.
      *  As a workaround, we pass in 0 for the default, and the ctor sets the
      *  number of threads to the number of CPUs if this happens.
@@ -95,8 +95,8 @@ public:
      *  \brief Pushes a new image to the file for writing. This only works with
      *         valid CPHDWriter data types:
      *              std::complex<float>
-     *              std::complex<int16_t>
-     *              std::complex<int8_t>
+     *              std::complex<sys::Int16_T>
+     *              std::complex<sys::Int8_T>
      *
      *  \param image The image to be added. This should be sized to match the
      *         dims parameter.
@@ -107,7 +107,7 @@ public:
     template <typename T>
     void addImage(const T* image,
                   const types::RowCol<size_t>& dims,
-                  const std::byte* vbmData);
+                  const sys::ubyte* vbmData);
 
     /*
      *  \func writeMetadata
@@ -134,8 +134,8 @@ public:
      *         you may instead use addImage and write. This only works with
      *         valid CPHDWriter data types:
      *              std::complex<float>
-     *              std::complex<int16_t>
-     *              std::complex<int8_t>
+     *              std::complex<sys::Int16_T>
+     *              std::complex<sys::Int8_T>
      *
      *  \param data The data to write to disk.
      *  \param numElements The number of elements in data. Treat the data
@@ -173,13 +173,13 @@ private:
                        const std::string& classification = "",
                        const std::string& releaseInfo = "");
 
-    void writeVBMData(const std::byte* vbm,
+    void writeVBMData(const sys::ubyte* vbm,
                       size_t index);
 
-    void writeCPHDDataImpl(const std::byte* data,
+    void writeCPHDDataImpl(const sys::ubyte* data,
                            size_t size);
 
-    std::unique_ptr<cphd::DataWriter> mDataWriter;
+    std::auto_ptr<cphd::DataWriter> mDataWriter;
 
     Metadata mMetadata;
     const size_t mElementSize;
@@ -188,8 +188,8 @@ private:
 
     std::shared_ptr<io::SeekableOutputStream> mStream;
 
-    std::vector<const std::byte*> mCPHDData;
-    std::vector<const std::byte*> mVBMData;
+    std::vector<const sys::ubyte*> mCPHDData;
+    std::vector<const sys::ubyte*> mVBMData;
 
     size_t mCPHDSize;
     size_t mVBMSize;

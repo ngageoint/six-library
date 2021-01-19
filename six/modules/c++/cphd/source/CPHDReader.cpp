@@ -44,8 +44,8 @@ CPHDReader::CPHDReader(const std::string& fromFile,
                        const std::vector<std::string>& schemaPaths,
                        std::shared_ptr<logging::Logger> logger)
 {
-    initialize(std::make_shared<io::FileInputStream>(fromFile),
-        numThreads, logger, schemaPaths);
+    initialize(std::shared_ptr<io::SeekableInputStream>(
+        new io::FileInputStream(fromFile)), numThreads, logger, schemaPaths);
 }
 
 void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
@@ -62,7 +62,7 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(*inStream, mFileHeader.getXMLBlockSize());
 
-    if (logger.get() == nullptr)
+    if (logger.get() == NULL)
     {
         logger.reset(new logging::NullLogger());
     }

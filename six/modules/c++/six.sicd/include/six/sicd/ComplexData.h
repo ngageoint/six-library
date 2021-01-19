@@ -116,15 +116,15 @@ public:
     mem::ScopedCopyablePtr<MatchInformation> matchInformation;
 
     //!  (Optional/Choice) Polar Format Algorithm params -- if this is set,
-    //          rma should remain nullptr.
+    //          rma should remain NULL.
     mem::ScopedCopyablePtr<PFA> pfa;
 
     //!  (Optional/Choice) Range Migration Algorithm params -- if this is
-    //          set, pfa should remain nullptr.
+    //          set, pfa should remain NULL.
     mem::ScopedCopyablePtr<RMA> rma;
 
     //!  (Optional/Choice) Simple Range Doppler Compression params --
-    //   if this is set, pfa & rma should remain nullptr.
+    //   if this is set, pfa & rma should remain NULL.
     mem::ScopedCopyablePtr<RgAzComp> rgAzComp;
 
     ComplexData();

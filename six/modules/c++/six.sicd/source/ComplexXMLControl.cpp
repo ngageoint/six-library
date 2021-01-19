@@ -49,14 +49,14 @@ xml::lite::Document* ComplexXMLControl::toXMLImpl(const Data* data)
         throw except::Exception(Ctxt("Data must be SICD"));
     }
 
-    const ComplexData* const sicd(static_cast<const ComplexData*>(data));
+    const ComplexData* const sicd(reinterpret_cast<const ComplexData*>(data));
     return getParser(data->getVersion())->toXML(sicd);
 }
 
-std::unique_ptr<ComplexXMLParser>
+std::auto_ptr<ComplexXMLParser>
 ComplexXMLControl::getParser(const std::string& version) const
 {
-    std::unique_ptr<ComplexXMLParser> parser;
+    std::auto_ptr<ComplexXMLParser> parser;
 
     std::vector<std::string> versionParts;
     splitVersion(version, versionParts);
@@ -134,7 +134,7 @@ ComplexXMLControl::getParser(const std::string& version) const
     }
 
     // Validation check that we found a suitable Parser
-    if (parser.get() == nullptr)
+    if (parser.get() == NULL)
     {
         throw except::Exception(
             Ctxt("Unsupported SICD Version: " + version));

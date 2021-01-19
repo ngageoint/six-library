@@ -24,12 +24,8 @@
 // Demonstrates that the raw bytes provided by this class result in equivalent
 // SICDs to the normal writes via NITFWriteControl
 
-#include <stdlib.h>
-
 #include <iostream>
-#include <string>
-
-#include <sys/Bit.h>
+#include <stdlib.h>
 
 #include "TestUtilities.h"
 
@@ -37,7 +33,6 @@
 #include <six/XMLControlFactory.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDByteProvider.h>
-
 
 namespace
 {
@@ -70,9 +65,9 @@ public:
         }
 
         mBigEndianImage = mImage;
-        if (std::endian::native == std::endian::little)
+        if (!sys::isBigEndianSystem())
         {
-            sys::byteSwap(mBigEndianImage.data(),
+            sys::byteSwap(&mBigEndianImage[0],
                           sizeof(DataTypeT),
                           mBigEndianImage.size() * 2);
         }
@@ -102,7 +97,7 @@ private:
         if (mSetMaxProductSize)
         {
             fullPrefix += " (max product size " +
-                    std::to_string(mMaxProductSize) + ")";
+                    str::toString(mMaxProductSize) + ")";
         }
 
         if (!(*mCompareFiles)(fullPrefix, mTestPathname))
@@ -131,7 +126,7 @@ private:
         for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
         {
             outStream.write(
-                    static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
+                    static_cast<const sys::byte*>(buffers.mBuffers[ii].mData),
                     buffers.mBuffers[ii].mNumBytes);
 
             numBytes += buffers.mBuffers[ii].mNumBytes;
@@ -151,11 +146,11 @@ private:
     const EnsureFileCleanup mNormalFileCleanup;
 
     const types::RowCol<size_t> mDims;
-    std::unique_ptr<six::sicd::ComplexData> mData;
+    std::auto_ptr<six::sicd::ComplexData> mData;
     std::vector<std::complex<DataTypeT> > mImage;
     std::vector<std::complex<DataTypeT> > mBigEndianImage;
 
-    std::unique_ptr<const CompareFiles> mCompareFiles;
+    std::auto_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
     const std::vector<std::string> mSchemaPaths;
 
@@ -168,8 +163,8 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    auto container(
-            std::make_shared<six::Container>(six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;
@@ -182,7 +177,7 @@ void Tester<DataTypeT>::normalWrite()
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
     six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
+    buffers.push_back(reinterpret_cast<six::UByte*>(&mImage[0]));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
@@ -200,7 +195,7 @@ void Tester<DataTypeT>::testSingleWrite()
 
     nitf::NITFBufferList buffers;
     nitf::Off fileOffset;
-    sicdByteProvider.getBytes(mBigEndianImage.data(), 0, mDims.row,
+    sicdByteProvider.getBytes(&mBigEndianImage[0], 0, mDims.row,
                               fileOffset, buffers);
     const nitf::Off numBytes = sicdByteProvider.getNumBytes(0, mDims.row);
 
@@ -361,7 +356,7 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
         success = false;
     }
 
-    if (!doTests<int16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<sys::Int16_T>(schemaPaths, setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
@@ -417,6 +412,12 @@ int main(int /*argc*/, char** /*argv*/)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << "Caught except::Exception: " << ex.getMessage()
+                  << std::endl;
         return 1;
     }
     catch (...)

@@ -32,13 +32,13 @@ class ComplexXMLParser101 : public ComplexXMLParser10x
 {
 public:
     ComplexXMLParser101(const std::string& version,
-                        logging::Logger* log = nullptr,
+                        logging::Logger* log = NULL,
                         bool ownLog = false);
 
 protected:
 
     virtual XMLElem convertGeoInfoToXML(const GeoInfo *obj,
-                                        XMLElem parent = nullptr) const;
+                                        XMLElem parent = NULL) const;
 
 };
 }

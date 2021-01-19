@@ -34,7 +34,7 @@ void roundTripNITF(const std::string& sicdPathname,
         const six::XMLControlRegistry& registry,
         const std::vector<std::string>& schemaPaths)
 {
-    std::unique_ptr<six::sicd::ComplexData> complexData;
+    std::auto_ptr<six::sicd::ComplexData> complexData;
     std::vector<std::complex<float> > buffer;
     six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData,
             buffer);
@@ -44,12 +44,12 @@ void roundTripNITF(const std::string& sicdPathname,
         six::sicd::AreaPlaneUtility::setAreaPlane(*complexData);
     }
 
-    std::vector<std::byte*> bufferList(1);
-    bufferList[0] = reinterpret_cast<std::byte*>(buffer.data());
+    std::vector<six::UByte*> bufferList(1);
+    bufferList[0] = reinterpret_cast<six::UByte*>(&buffer[0]);
 
     six::NITFWriteControl writer;
-    auto container(
-            std::make_shared<six::Container>(six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(complexData->clone());
 
     writer.initialize(container);
@@ -62,7 +62,7 @@ void roundTripXML(const std::string& sicdPathname,
         const six::XMLControlRegistry& registry,
         const std::vector<std::string>& schemaPaths)
 {
-    std::unique_ptr<six::sicd::ComplexData> complexData =
+    std::auto_ptr<six::sicd::ComplexData> complexData =
         six::sicd::Utilities::getComplexData(sicdPathname, schemaPaths);
 
     if (!six::sicd::AreaPlaneUtility::hasAreaPlane(*complexData))
@@ -71,9 +71,9 @@ void roundTripXML(const std::string& sicdPathname,
     }
 
     logging::NullLogger log;
-    std::unique_ptr<six::XMLControl> xmlControl(
+    std::auto_ptr<six::XMLControl> xmlControl(
             registry.newXMLControl(six::DataType::COMPLEX, &log));
-    std::unique_ptr<xml::lite::Document> document(
+    std::auto_ptr<xml::lite::Document> document(
             xmlControl->toXML(complexData.get(), schemaPaths));
     io::FileOutputStream xmlStream(outputPathname);
     document->getRootElement()->prettyPrint(xmlStream);
@@ -109,6 +109,10 @@ int main(int argc, char** argv)
             roundTripXML(sicdPathname, outputPathname, registry, schemaPaths);
         }
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& ex)
     {

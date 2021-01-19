@@ -49,9 +49,6 @@
 #include <import/six/sidd.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 using namespace six;
 
 namespace
@@ -1717,14 +1714,14 @@ static const struct
  *  Data will be RBG24I
  */
 
-std::unique_ptr<six::WriteControl> getWriteControl(std::string outputName)
+std::auto_ptr<six::WriteControl> getWriteControl(std::string outputName)
 {
-    std::string extension = fs::path(outputName).extension();
-    str::lower(extension);
+    sys::Path::StringPair p = sys::Path::splitExt(outputName);
+    str::lower(p.second);
 
-    std::unique_ptr<six::WriteControl> writer;
+    std::auto_ptr<six::WriteControl> writer;
 
-    if (extension == ".nitf" || extension == ".ntf")
+    if (p.second == ".nitf" || p.second == ".ntf")
     {
         writer.reset(new six::NITFWriteControl());
         std::cout << "Selecting NITF write control" << std::endl;
@@ -1762,9 +1759,9 @@ void createPredefinedFilter(six::sidd::Filter& filter)
     filter.operation = six::sidd::FilterOperation::CONVOLUTION;
 }
 
-std::unique_ptr<six::sidd::Filter> createPredefinedFilter()
+std::auto_ptr<six::sidd::Filter> createPredefinedFilter()
 {
-    std::unique_ptr<six::sidd::Filter> filter(new six::sidd::Filter());
+    std::auto_ptr<six::sidd::Filter> filter(new six::sidd::Filter());
     createPredefinedFilter(*filter);
     return filter;
 }
@@ -1787,9 +1784,9 @@ void createCustomFilter(six::sidd::Filter& filter)
     filter.operation = six::sidd::FilterOperation::CORRELATION;
 }
 
-std::unique_ptr<six::sidd::Filter> createCustomFilter()
+std::auto_ptr<six::sidd::Filter> createCustomFilter()
 {
-    std::unique_ptr<six::sidd::Filter> filter(new six::sidd::Filter());
+    std::auto_ptr<six::sidd::Filter> filter(new six::sidd::Filter());
     createCustomFilter(*filter);
     return filter;
 }
@@ -1817,7 +1814,7 @@ void initDED(mem::ScopedCopyablePtr<six::sidd::DigitalElevationData>& ded)
     ded->nullValue = -32768;
 }
 
-std::unique_ptr<six::sidd::DerivedData> initData(const std::string& lutType)
+std::auto_ptr<six::sidd::DerivedData> initData(const std::string& lutType)
 {
     //-----------------------------------------------------------
     // Make the object.  You could do this directly, but this way
@@ -1860,7 +1857,7 @@ std::unique_ptr<six::sidd::DerivedData> initData(const std::string& lutType)
     // want it to, but it won't try to release it when it goes
     // out of scope if you steal() it.
     //---------------------------------------------------------
-    return std::unique_ptr<six::sidd::DerivedData>(siddBuilder.steal());
+    return std::auto_ptr<six::sidd::DerivedData>(siddBuilder.steal());
 }
 
 void initProductCreation(six::sidd::ProductCreation& productCreation,
@@ -2511,7 +2508,7 @@ int main(int argc, char** argv)
 
     try
     {
-        std::unique_ptr<cli::Results> options(argParser.parse(argc, argv));
+        std::auto_ptr<cli::Results> options(argParser.parse(argc, argv));
         if (options->get<bool>("smallImage") &&
             options->get<bool>("multipleSegments"))
         {
@@ -2533,7 +2530,7 @@ int main(int argc, char** argv)
         std::string outputName(options->get<std::string>("output"));
 
         //  Get a NITF or GeoTIFF writer
-        std::unique_ptr<six::WriteControl> writer(getWriteControl(outputName));
+        std::auto_ptr<six::WriteControl> writer(getWriteControl(outputName));
         if (writer->getFileType() == "NITF" &&
             options->get<bool>("multipleSegments"))
         {
@@ -2555,7 +2552,7 @@ int main(int argc, char** argv)
         // in the container, if it was provided
         //---------------------------------------------------------
 
-        std::unique_ptr<six::sicd::ComplexData> sicdData;
+        std::auto_ptr<six::sicd::ComplexData> sicdData;
 
         if (options->hasValue("sicdXML"))
         {
@@ -2570,7 +2567,7 @@ int main(int argc, char** argv)
             // probably need information from the sicdData, in which
             // case you will need the derived class
             //------------------------------------------------------
-            std::unique_ptr<logging::Logger> log(new logging::NullLogger());
+            std::auto_ptr<logging::Logger> log(new logging::NullLogger());
             sicdData.reset(reinterpret_cast<six::sicd::ComplexData*>(
                     six::XMLControlFactory::getInstance()
                             .newXMLControl(six::DataType::COMPLEX, log.get())
@@ -2581,8 +2578,8 @@ int main(int argc, char** argv)
         const char smallData[4] = {'a', 'b', 'c', 'd'};
 
         // Create a file container
-        auto container(std::make_shared<six::Container>(
-            six::DataType::DERIVED));
+        mem::SharedPtr<six::Container> container(
+                new six::Container(DataType::DERIVED));
 
         std::vector<const UByte*> buffers;
         size_t numImages = options->get<bool>("multipleImages") ? 3 : 1;
@@ -2595,7 +2592,7 @@ int main(int argc, char** argv)
                 lutType = options->get<std::string>("lut");
             }
 
-            std::unique_ptr<six::sidd::DerivedData> siddData = initData(lutType);
+            std::auto_ptr<six::sidd::DerivedData> siddData = initData(lutType);
 
             populateData(*siddData, lutType, smallImage, version);
             container->addData(siddData->clone());
@@ -2625,6 +2622,11 @@ int main(int argc, char** argv)
 
         // Save the file
         writer->save(buffers, outputName);
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

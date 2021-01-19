@@ -20,15 +20,13 @@
  *
  */
 
-#include <sys/Filesystem.h>
-
 #include <six/Utilities.h>
 #include <NitfIsd.h>
 
 /**
  * Write FileSecurity as string so CSM can use it
  */
-inline std::string toString(const nitf::FileSecurity& security)
+std::string toString(nitf::FileSecurity security)
 {
     const std::string str = security.getClassificationSystem().toString() +
             security.getCodewords().toString() +
@@ -52,15 +50,15 @@ inline std::string toString(const nitf::FileSecurity& security)
 /**
  * Write a DESubheader as a string so CSM can use it
  */
-inline std::string toString(const nitf::DESubheader& subheader)
+std::string toString(nitf::DESubheader subheader)
 {
-    const uint32_t subheaderFieldsLen(subheader.getSubheaderFieldsLength());
+    const nitf::Uint32 subheaderFieldsLen(subheader.getSubheaderFieldsLength());
 
     std::ostringstream ostr;
-    ostr << subheader.filePartType()
-         << subheader.typeID()
-         << subheader.version()
-         << subheader.securityClass()
+    ostr << subheader.getFilePartType().toString()
+         << subheader.getTypeID().toString()
+         << subheader.getVersion().toString()
+         << subheader.getSecurityClass().toString()
          << toString(subheader.getSecurityGroup())
          << std::setw(4) << std::setfill('0') << subheaderFieldsLen;
 
@@ -83,19 +81,21 @@ inline std::string toString(const nitf::DESubheader& subheader)
  * \param installPathname Directory where SIX is installed
  * \return path to CSM DLL
  */
-inline std::string findDllPathname(const std::string& installPathname)
+std::string findDllPathname(const std::string& installPathname)
 {
-    namespace fs = std::filesystem;
-    const auto csmPluginPathname = fs::path(installPathname) / "share" / "CSM" / "plugins";
+    const std::string csmPluginPathname =
+            sys::Path(installPathname).join("share").join("CSM").join("plugins");
 
-    const std::vector<std::string> csmPluginContents = sys::Path::list(csmPluginPathname);
+    const std::vector<std::string> csmPluginContents =
+            sys::Path::list(csmPluginPathname);
 
     // Get rid of contents like '.' and '..'
     std::vector<std::string> csmPlugins;
     for (size_t ii = 0; ii < csmPluginContents.size(); ++ii)
     {
-        const std::string pathname = csmPluginPathname / csmPluginContents[ii];
-        if (fs::is_regular_file(pathname))
+        const std::string pathname = sys::Path::joinPaths(csmPluginPathname,
+                csmPluginContents[ii]);
+        if (sys::Path(pathname).isFile())
         {
             csmPlugins.push_back(pathname);
         }
@@ -104,7 +104,7 @@ inline std::string findDllPathname(const std::string& installPathname)
     if (csmPlugins.size() != 1)
     {
         throw except::Exception(Ctxt("Expected exactly one plugin in "
-                + csmPluginPathname.string()));
+                + csmPluginPathname));
     }
 
     return csmPlugins[0];
@@ -119,11 +119,11 @@ inline std::string findDllPathname(const std::string& installPathname)
  *
  * \return A Nitf21ISD object
  */
-inline std::unique_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
+std::auto_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
         const six::NITFReadControl& loadedReadControl, const six::Data* data,
         const six::XMLControlRegistry& registry)
 {
-    std::unique_ptr<csm::Nitf21Isd> nitfIsd(new csm::Nitf21Isd(pathname));
+    std::auto_ptr<csm::Nitf21Isd> nitfIsd(new csm::Nitf21Isd(pathname));
     csm::Des des;
 
     // NITRO parsed the subheader into a nice structure - need to grab all
@@ -145,7 +145,7 @@ inline std::unique_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
  * Return the absolute value of the difference between each element of a
  * Vector3
  */
-inline six::Vector3 absoluteDifference(const six::Vector3& lhs, const six::Vector3& rhs)
+six::Vector3 absoluteDifference(const six::Vector3& lhs, const six::Vector3& rhs)
 {
     six::Vector3 difference = lhs - rhs;
     for (size_t ii = 0; ii < 3; ++ii)
@@ -160,7 +160,7 @@ inline six::Vector3 absoluteDifference(const six::Vector3& lhs, const six::Vecto
  * Return the absolute value of the difference between each element of a
  * RowColDouble
  */
-inline six::RowColDouble absoluteDifference(const six::RowColDouble& lhs,
+six::RowColDouble absoluteDifference(const six::RowColDouble& lhs,
         const six::RowColDouble& rhs)
 {
     six::RowColDouble difference = lhs - rhs;

@@ -34,7 +34,7 @@ SRP::SRP() :
 std::ostream& operator<< (std::ostream& os, const SRP& d)
 {
     os << "SRP::" << "\n"
-       << "  SRPType : " << d.srpType << "\n"
+       << "  SRPType : " << d.srpType.toString() << "\n"
        << "  NumSRPs : " << d.numSRPs  << "\n";
 
     for (size_t ii = 0; ii < d.srpPT.size(); ++ii)
@@ -45,14 +45,14 @@ std::ostream& operator<< (std::ostream& os, const SRP& d)
 
     for (size_t ii = 0; ii < d.srpPVTPoly.size(); ++ii)
     {
-        os << "  [" << (ii + 1) << "] SRPPVTPoly :\n" 
-           << d.srpPVTPoly[ii] << "\n";
+        os << "  [" << (ii + 1) << "] SRPPVTPoly :\n"
+           << six::toString(d.srpPVTPoly[ii]) << "\n";
     }
 
     for (size_t ii = 0; ii < d.srpPVVPoly.size(); ++ii)
     {
         os << "  [" << (ii + 1) << "] SRPPVVPoly :\n"
-           << d.srpPVVPoly[ii] << "\n";
+           << six::toString(d.srpPVVPoly[ii]) << "\n";
     }
     return os;
 }

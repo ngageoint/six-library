@@ -22,16 +22,12 @@
 #include <string.h>
 #include <vector>
 #include <iostream>
-#include <string>
 
 #include <sys/Path.h>
 #include <import/cli.h>
 #include <import/nitf.hpp>
 #include <import/xml/lite.h>
 #include <import/io.h>
-
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
 
 /*!
  *  This extracts raw XML from each NITF DES, just using nitf,
@@ -53,7 +49,7 @@ int main(int argc, char** argv)
                            "", 1, 1, true);
 
         // Parse!
-        const std::unique_ptr<cli::Results>
+        const std::auto_ptr<cli::Results>
             options(parser.parse(argc, (const char**) argv));
 
         const bool prettyPrint = options->get<bool>("prettyPrint");
@@ -71,16 +67,16 @@ int main(int argc, char** argv)
         //! Fill out basename if not user specified
         if (basename.empty())
         {
-            basename = fs::path(inputFile).stem();
+            basename = sys::Path::basename(inputFile, true);
         }
 
         nitf::Reader reader;
         nitf::IOHandle io(inputFile);
         nitf::Record record = reader.read(io);
 
-        const uint32_t numDES = record.getNumDataExtensions();
+        const nitf::Uint32 numDES = record.getNumDataExtensions();
         std::vector<char> xmlVec;
-        for (uint32_t ii = 0; ii < numDES; ++ii)
+        for (nitf::Uint32 ii = 0; ii < numDES; ++ii)
         {
             nitf::DESegment segment = record.getDataExtensions()[ii];
             nitf::DESubheader subheader = segment.getSubheader();
@@ -88,13 +84,15 @@ int main(int argc, char** argv)
             nitf::SegmentReader deReader = reader.newDEReader(ii);
             const nitf::Off size = deReader.getSize();
 
-            const auto typeID = subheader.typeID();
-            const std::string outPathname = basename + "-" + typeID + 
-                                      std::to_string(ii) + ".xml";
+            std::string typeID = subheader.getTypeID().toString();
+            str::trim(typeID);
+
+            std::string outPathname = basename + "-" + typeID + 
+                                      str::toString(ii) + ".xml";
 
             // Read the DES
             xmlVec.resize(size);
-            char* const xml = xmlVec.empty() ? nullptr : xmlVec.data();
+            char* const xml = xmlVec.empty() ? NULL : &xmlVec[0];
             deReader.read(xml, size);
 
             // Parse it with xml::lite
@@ -106,7 +104,7 @@ int main(int argc, char** argv)
             xml::lite::MinidomParser xmlParser;
             xmlParser.parse(oss);
 
-            std::unique_ptr<io::OutputStream> os;
+            std::auto_ptr<io::OutputStream> os;
             if (toConsole)
             {
                 os.reset(new io::StandardOutStream());
@@ -124,13 +122,18 @@ int main(int argc, char** argv)
             else
             {
                 // Just dump out the raw contents
-                os->write(reinterpret_cast<std::byte*>(xml), size);
+                os->write(reinterpret_cast<sys::byte*>(xml), size);
             }
             os->close();
         }
         io.close();
 
         return 0;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

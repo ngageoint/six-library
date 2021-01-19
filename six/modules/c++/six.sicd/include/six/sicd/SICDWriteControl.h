@@ -22,16 +22,12 @@
 
 #ifndef __SIX_SICD_WRITE_CONTROL_H__
 #define __SIX_SICD_WRITE_CONTROL_H__
-#pragma once
 
 #include <vector>
-#include <cstddef>
 
 #include <types/RowCol.h>
 #include <six/NITFWriteControl.h>
 #include <six/sicd/ComplexData.h>
-
-#include <nitf/coda-oss.hpp>
 
 namespace six
 {
@@ -113,10 +109,9 @@ private:
     void writeHeaders();
 
     void write(const std::vector<sys::byte>& data);
-    void write(const std::vector<std::byte>& data);
 
 private:
-    std::unique_ptr<nitf::IOInterface> mIO;
+    std::auto_ptr<nitf::IOInterface> mIO;
     const std::vector<std::string> mSchemaPaths;
 
     std::vector<nitf::Off> mImageDataStart;

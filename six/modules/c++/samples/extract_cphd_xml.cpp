@@ -22,16 +22,12 @@
 #include <string.h>
 #include <vector>
 #include <iostream>
-#include <thread>
 
 #include <sys/Path.h>
 #include <import/cli.h>
 #include <import/io.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDXMLControl.h>
-
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
 
 /*!
  *  This extracts raw XML from a CPHD file using the CPHD module
@@ -54,7 +50,7 @@ int main(int argc, char** argv)
                            "", 1, 1, false)->setDefault("");
 
         // Parse!
-        const std::unique_ptr<cli::Results>
+        const std::auto_ptr<cli::Results>
             options(parser.parse(argc, (const char**) argv));
 
         const bool prettyPrint = options->get<bool>("prettyPrint");
@@ -73,7 +69,7 @@ int main(int argc, char** argv)
         // Fill out basename if not user specified
         if (basename.empty())
         {
-            basename = fs::path(inputFile).stem();
+            basename = sys::Path::basename(inputFile, true);
         }
         std::string outPathname = basename  + ".xml";
 
@@ -84,7 +80,7 @@ int main(int argc, char** argv)
         }
 
         // Reads in CPHD and verifies XML using schema
-        cphd::CPHDReader reader(inputFile, std::thread::hardware_concurrency());
+        cphd::CPHDReader reader(inputFile, sys::OS().getNumCPUs());
         cphd::CPHDXMLControl xmlControl;
         std::string xml = xmlControl.toXMLString(reader.getMetadata(), schemaPathnames, prettyPrint);
 
@@ -100,6 +96,11 @@ int main(int argc, char** argv)
         os->write(xml);
         os->close();
         return 0;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

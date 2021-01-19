@@ -51,7 +51,7 @@ class ComplexXMLControl : public XMLControl
 
 public:
     //!  Constructor
-    ComplexXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+    ComplexXMLControl(logging::Logger* log = NULL, bool ownLog = false);
 
 protected:
     /*!
@@ -72,7 +72,7 @@ protected:
     virtual Data* fromXMLImpl(const xml::lite::Document* doc);
 
 private:
-    std::unique_ptr<ComplexXMLParser>
+    std::auto_ptr<ComplexXMLParser>
     getParser(const std::string& version) const;
 };
 }

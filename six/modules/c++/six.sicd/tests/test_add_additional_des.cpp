@@ -28,9 +28,6 @@
 #include <six/sicd/Utilities.h>
 #include <io/TempFile.h>
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 namespace
 {
 
@@ -38,7 +35,7 @@ void validateArguments(int argc, char** argv)
 {
     if (argc != 2)
     {
-        std::string message = "Usage: " + fs::path(argv[0]).filename().string()
+        std::string message = "Usage: " + sys::Path::basename(argv[0])
                 + " <XML pathname>";
         throw except::Exception(Ctxt(message));
     }
@@ -50,14 +47,14 @@ void validateArguments(int argc, char** argv)
     }
 }
 
-std::vector<std::byte> generateBandData(const six::sicd::ComplexData& data)
+std::vector<six::UByte> generateBandData(const six::sicd::ComplexData& data)
 {
-    std::vector<std::byte> bandData(data.getNumRows() * data.getNumCols()
+    std::vector<six::UByte> bandData(data.getNumRows() * data.getNumCols()
             * data.getNumBytesPerPixel());
 
     for (size_t ii = 0; ii < bandData.size(); ++ii)
     {
-        bandData[ii] = static_cast<std::byte>(ii);
+        bandData[ii] = static_cast<six::UByte>(ii);
     }
 
     return bandData;
@@ -67,19 +64,19 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingNullSegmentWriterShouldThrow\n";
     logging::Logger log;
-    std::unique_ptr<six::sicd::ComplexData> data =
+    std::auto_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
 
-    auto container(std::make_shared<six::Container>(
+    mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
     writer.initialize(container);
 
-    std::shared_ptr<nitf::SegmentWriter> segmentWriter;
+    mem::SharedPtr<nitf::SegmentWriter> segmentWriter;
     try
     {
         writer.addAdditionalDES(segmentWriter);
@@ -99,14 +96,14 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
 {
     std::cout << "Running addingUnLoadedSegmentWriterShouldThrow\n";
     logging::Logger log;
-    std::unique_ptr<six::sicd::ComplexData> data =
+    std::auto_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
-    std::vector<std::byte> bandData(
+    std::vector<six::UByte> bandData(
         generateBandData(*data));
 
-    auto container(std::make_shared<six::Container>(
+    mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
     container->addData(data.release());
 
@@ -120,12 +117,13 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     des.getSubheader().getVersion().set("01");
     des.getSubheader().getSecurityClass().set("U");
 
-    writer.addAdditionalDES(std::make_shared<nitf::SegmentWriter>());
+    mem::SharedPtr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
+    writer.addAdditionalDES(segmentWriter);
 
     io::TempFile temp;
     try
     {
-        writer.save(bandData.data(), temp.pathname());
+        writer.save(&bandData[0], temp.pathname());
         std::cerr << "Test failed" << std::endl;
         return false;
     }
@@ -140,15 +138,15 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
 {
     std::cout << "Running canAddProperlyLoadedSegmentWriter\n";
     logging::Logger log;
-    std::unique_ptr<six::sicd::ComplexData> data =
+    std::auto_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
 
-    std::vector<std::byte> bandData(
+    std::vector<six::UByte> bandData(
         generateBandData(*data));
 
-    auto container(std::make_shared<six::Container>(
+    mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
     container->addData(dynamic_cast<six::Data*>(data.release()));
 
@@ -165,14 +163,14 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     static const char segmentData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sSource(segmentData, strlen(segmentData),
         0, 0, true);
-    auto segmentWriter(std::make_shared<nitf::SegmentWriter>());
+    mem::SharedPtr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
     segmentWriter->attachSource(sSource);
     writer.addAdditionalDES(segmentWriter);
 
     io::TempFile temp;
     try
     {
-        writer.save(bandData.data(), temp.pathname());
+        writer.save(&bandData[0], temp.pathname());
         std::cout << "Test passed" << std::endl;
         return true;
     }
@@ -188,14 +186,14 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
 {
     std::cout << "Running canAddTwoSegmentWriters\n";
     logging::Logger log;
-    std::unique_ptr<six::sicd::ComplexData> data =
+    std::auto_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::parseDataFromFile(xmlPathname,
             std::vector<std::string>(),
             log);
-    std::vector<std::byte> bandData(
+    std::vector<six::UByte> bandData(
         generateBandData(*data));
 
-    auto container(std::make_shared<six::Container>(
+    mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
     container->addData(data.release());
 
@@ -212,7 +210,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     static const char segmentOneData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sOneSource(segmentOneData, strlen(segmentOneData),
         0, 0, true);
-    auto segmentOneWriter(std::make_shared<nitf::SegmentWriter>());
+    mem::SharedPtr<nitf::SegmentWriter> segmentOneWriter(new nitf::SegmentWriter);
     segmentOneWriter->attachSource(sOneSource);
     writer.addAdditionalDES(segmentOneWriter);
 
@@ -225,14 +223,14 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     static const char segmentTwoData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sTwoSource(segmentTwoData, strlen(segmentTwoData),
         0, 0, true);
-    auto segmentTwoWriter(std::make_shared<nitf::SegmentWriter>());
+    mem::SharedPtr<nitf::SegmentWriter> segmentTwoWriter(new nitf::SegmentWriter);
     segmentTwoWriter->attachSource(sTwoSource);
     writer.addAdditionalDES(segmentTwoWriter);
 
     io::TempFile temp;
     try
     {
-        writer.save(bandData.data(), temp.pathname());
+        writer.save(&bandData[0], temp.pathname());
         std::cout << "Test passed" << std::endl;
         return true;
     }
@@ -263,6 +261,11 @@ int main(int argc, char** argv)
         allPassed = canAddTwoSegmentWriters(xmlPathname) && allPassed;
 
         return allPassed ? 0 : 1;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

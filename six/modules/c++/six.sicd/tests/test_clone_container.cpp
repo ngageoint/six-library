@@ -41,7 +41,7 @@ int main(int argc, char** argv)
         NITFReadControl* reader = new NITFReadControl();
         reader->load(inputFile);
 
-        auto container = reader->getContainer();
+        mem::SharedPtr<Container> container = reader->getContainer();
 
         // test the clone...
         Container dolly = *container;
@@ -49,9 +49,9 @@ int main(int argc, char** argv)
         delete reader;
         return 0;
     }
-    catch (const std::exception& e)
+    catch (except::Exception& e)
     {
-        std::cout << e.what() << std::endl;
+        std::cout << e.getMessage() << std::endl;
     }
 }
 

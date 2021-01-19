@@ -20,19 +20,13 @@
  *
  */
 
-#include <stddef.h>
-
 #include <ostream>
 #include <vector>
+#include <stddef.h>
 #include <typeinfo>
-#include <string>
 
 #include <six/Init.h>
 #include <sys/Conf.h>
-#include <sys/Bit.h>
-
-#include <nitf/coda-oss.hpp>
-
 #include <cphd/Types.h>
 #include <cphd/PVPBlock.h>
 #include <cphd/Metadata.h>
@@ -41,18 +35,13 @@
 namespace
 {
 // Set data from data block into data struct
-template <typename T> inline void setData(const unsigned char* data,
+template <typename T> inline void setData(const sys::byte* data,
                     T& dest)
 {
     memcpy(&dest, data, sizeof(T));
 }
-template <typename T> inline void setData(const std::byte* data,
-    T& dest)
-{
-    setData(reinterpret_cast<const unsigned char*>(data), dest);
-}
 
-inline void setData(const std::byte* data,
+inline void setData(const sys::byte* data,
                     cphd::Vector3& dest)
 {
     setData(data, dest[0]);
@@ -61,19 +50,19 @@ inline void setData(const std::byte* data,
 }
 
 // Get data from data struct and put into data block
-template <typename T> inline void getData(std::byte* dest,
+template <typename T> inline void getData(sys::ubyte* dest,
                     T value)
 {
     memcpy(dest, &value, sizeof(T));
 }
 
-template <typename T> inline void getData(std::byte* dest,
+template <typename T> inline void getData(sys::ubyte* dest,
                     T* value, size_t size)
 {
     memcpy(dest, value, size);
 }
 
-inline void getData(std::byte* dest,
+inline void getData(sys::ubyte* dest,
                     const cphd::Vector3& value)
 {
     getData(dest, value[0]);
@@ -106,7 +95,7 @@ PVPBlock::PVPSet::PVPSet() :
 {
 }
 
-void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const std::byte* input)
+void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::byte* input)
 {
     ::setData(input + p.txTime.getByteOffset(), txTime);
     ::setData(input + p.txPos.getByteOffset(), txPos);
@@ -203,16 +192,15 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const std::
         }
         else
         {
-            const auto pVal = input + it->second.getByteOffset();
             std::string val;
-            val.assign(reinterpret_cast<const char*>(pVal), it->second.getByteSize());
+            val.assign(input + it->second.getByteOffset(), it->second.getByteSize());
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
     }
 }
 
-void PVPBlock::PVPSet::read(const Pvp& p, std::byte* dest) const
+void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest) const
 {
     ::getData(dest + p.txTime.getByteOffset(), txTime);
     ::getData(dest + p.txPos.getByteOffset(), txPos);
@@ -377,7 +365,7 @@ PVPBlock::PVPBlock(size_t numChannels,
 
     for (size_t channel = 0; channel < numChannels; ++channel)
     {
-        const std::byte* buf = static_cast<const std::byte*>(data[channel]);
+        const sys::byte* buf = static_cast<const sys::byte*>(data[channel]);
 
         for (size_t vector = 0; vector < numVectors[channel]; ++vector)
         {
@@ -397,12 +385,12 @@ void PVPBlock::verifyChannelVector(size_t channel, size_t vector) const
     if (channel >= mData.size())
     {
         throw except::Exception(Ctxt(
-                "Invalid channel number: " + std::to_string(channel)));
+                "Invalid channel number: " + str::toString<size_t>(channel)));
     }
     if (vector >= mData[channel].size())
     {
         throw except::Exception(Ctxt(
-                "Invalid vector number: " + std::to_string(vector)));
+                "Invalid vector number: " + str::toString<size_t>(vector)));
     }
 }
 
@@ -413,13 +401,13 @@ size_t PVPBlock::getPVPsize(size_t channel) const
 }
 
 void PVPBlock::getPVPdata(size_t channel,
-                          std::vector<std::byte>& data) const
+                          std::vector<sys::ubyte>& data) const
 {
     verifyChannelVector(channel, 0);
     data.resize(getPVPsize(channel));
-    std::fill(data.begin(), data.end(), static_cast<std::byte>(0));
+    std::fill(data.begin(), data.end(), 0);
 
-    getPVPdata(channel, data.data());
+    getPVPdata(channel, &data[0]);
 }
 
 void PVPBlock::getPVPdata(size_t channel,
@@ -427,7 +415,7 @@ void PVPBlock::getPVPdata(size_t channel,
 {
     verifyChannelVector(channel, 0);
     const size_t numBytes = getNumBytesPVPSet();
-    std::byte* ptr = static_cast<std::byte*>(data);
+    sys::ubyte* ptr = static_cast<sys::ubyte*>(data);
 
     for (size_t ii = 0;
          ii < mData[channel].size();
@@ -437,9 +425,9 @@ void PVPBlock::getPVPdata(size_t channel,
     }
 }
 
-int64_t PVPBlock::load(io::SeekableInputStream& inStream,
-                     int64_t startPVP,
-                     int64_t sizePVP,
+sys::Off_T PVPBlock::load(io::SeekableInputStream& inStream,
+                     sys::Off_T startPVP,
+                     sys::Off_T sizePVP,
                      size_t numThreads)
 {
     // Allocate the buffers
@@ -460,12 +448,12 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
         throw except::Exception(Ctxt(oss.str()));
     }
 
-    const bool swapToLittleEndian = std::endian::native == std::endian::little;
+    const bool swapToLittleEndian = !(sys::isBigEndianSystem());
 
     // Seek to start of PVPBlock
     size_t totalBytesRead(0);
     inStream.seek(startPVP, io::Seekable::START);
-    std::vector<std::byte> readBuf;
+    std::vector<sys::ubyte> readBuf;
     const size_t numBytesPerVector = getNumBytesPVPSet();
 
     // Read the data for each channel
@@ -474,8 +462,8 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
         readBuf.resize(getPVPsize(ii));
         if (!readBuf.empty())
         {
-            auto const buf = readBuf.data();
-            ptrdiff_t bytesThisRead = inStream.read(buf, readBuf.size());
+            sys::byte* const buf = reinterpret_cast<sys::byte*>(&readBuf[0]);
+            sys::SSize_T bytesThisRead = inStream.read(buf, readBuf.size());
             if (bytesThisRead == io::InputStream::IS_EOF)
             {
                 std::ostringstream oss;
@@ -494,7 +482,7 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
                          numThreads);
             }
 
-            std::byte* ptr = buf;
+            sys::byte* ptr = buf;
             for (size_t jj = 0; jj < mData[ii].size(); ++jj, ptr += numBytesPerVector)
             {
                 mData[ii][jj].write(*this, mPvp, ptr);

@@ -177,13 +177,13 @@ std::ostream& operator<< (std::ostream& os, const AntennaParameters& d)
     if (!six::Init::isUndefined(d.electricalBoresightFrequencyShift))
     {
         os << "  electricalBoresightFrequencyShift: "
-                << d.electricalBoresightFrequencyShift << "\n";
+                << d.electricalBoresightFrequencyShift.toString() << "\n";
     }
 
     if (!six::Init::isUndefined(d.mainlobeFrequencyDilation))
     {
         os << "  mainlobeFrequencyDilation        : "
-           << d.mainlobeFrequencyDilation << "\n";
+           << d.mainlobeFrequencyDilation.toString() << "\n";
     }
      return os;
 }

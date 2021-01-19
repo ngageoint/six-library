@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <algorithm>
-#include <string>
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
@@ -32,9 +31,6 @@
 #include <six/sicd/CropUtils.h>
 #include <six/sicd/Utilities.h>
 #include <six/sicd/SlantPlanePixelTransformer.h>
-
-#undef min
-#undef max
 
 namespace
 {
@@ -59,7 +55,7 @@ six::sicd::ComplexData* const updateMetadata(
         const types::RowCol<size_t>& aoiDims)
 {
     six::sicd::ComplexData* const aoiData(
-               static_cast<six::sicd::ComplexData*>(data.clone()));
+               reinterpret_cast<six::sicd::ComplexData*>(data.clone()));
 
     aoiData->imageData->firstRow += aoiOffset.row;
     aoiData->imageData->firstCol += aoiOffset.col;
@@ -113,24 +109,25 @@ void cropSICD(six::NITFReadControl& reader,
     // Read in the AOI
     const size_t numBytesPerPixel(data.getNumBytesPerPixel());
     const size_t numBytes(origDims.row * origDims.col * numBytesPerPixel);
+    const mem::ScopedArray<sys::ubyte> buffer(new sys::ubyte[numBytes]);
 
     six::Region region;
     region.setStartRow(aoiOffset.row);
     region.setStartCol(aoiOffset.col);
     region.setNumRows(aoiDims.row);
     region.setNumCols(aoiDims.col);
-    const std::unique_ptr<std::byte[]> buffer = region.setBuffer(numBytes);
+    region.setBuffer(buffer.get());
     reader.interleaved(region, 0);
 
     six::sicd::ComplexData* const aoiData = updateMetadata(
             data, geom,  projection,
             aoiOffset, aoiDims);
-    std::unique_ptr<six::Data> scopedData(aoiData);
+    std::auto_ptr<six::Data> scopedData(aoiData);
 
     // Write the AOI SICD out
-    auto container(std::make_shared<six::Container>(
+    mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
-    container->addData(std::move(scopedData));
+    container->addData(scopedData);
     six::NITFWriteControl writer(container);
     six::BufferList images(1, buffer.get());
     writer.save(images, outPathname, schemaPaths);
@@ -143,16 +140,16 @@ namespace six
 namespace sicd
 {
 
-std::unique_ptr<six::sicd::ComplexData> cropMetaData(
+std::auto_ptr<six::sicd::ComplexData> cropMetaData(
         const six::sicd::ComplexData& complexData,
         const types::RowCol<size_t>& aoiOffset,
         const types::RowCol<size_t>& aoiDims)
 {
     // Build up the geometry info
-    std::unique_ptr<const scene::SceneGeometry> geom(
+    std::auto_ptr<const scene::SceneGeometry> geom(
             six::sicd::Utilities::getSceneGeometry(&complexData));
 
-    std::unique_ptr<const scene::ProjectionModel> projection(
+    std::auto_ptr<const scene::ProjectionModel> projection(
             six::sicd::Utilities::getProjectionModel(&complexData, geom.get()));
 
     six::sicd::ComplexData* const aoiData = updateMetadata(
@@ -162,7 +159,7 @@ std::unique_ptr<six::sicd::ComplexData> cropMetaData(
             aoiOffset,
             aoiDims);
 
-    return std::unique_ptr<six::sicd::ComplexData>(aoiData);
+    return std::auto_ptr<six::sicd::ComplexData>(aoiData);
 }
 
 void cropSICD(const std::string& inPathname,
@@ -183,7 +180,7 @@ void cropSICD(six::NITFReadControl& reader,
               const std::string& outPathname)
 {
     // Make sure it's a SICD
-    const auto container = reader.getContainer();
+    const mem::SharedPtr<const six::Container> container = reader.getContainer();
 
     const six::Data* const dataPtr = container->getData(0);
     if (container->getDataType() != six::DataType::COMPLEX ||
@@ -193,13 +190,13 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     const ComplexData* const data =
-        static_cast<const ComplexData*>(dataPtr);
+            reinterpret_cast<const ComplexData*>(dataPtr);
 
     // Build up the geometry info
-    std::unique_ptr<const scene::SceneGeometry> geom(
+    std::auto_ptr<const scene::SceneGeometry> geom(
             six::sicd::Utilities::getSceneGeometry(data));
 
-    std::unique_ptr<const scene::ProjectionModel> projection(
+    std::auto_ptr<const scene::ProjectionModel> projection(
             six::sicd::Utilities::getProjectionModel(data, geom.get()));
 
     // Actually do the cropping
@@ -227,11 +224,11 @@ void cropSICD(six::NITFReadControl& reader,
     if (corners.size() != 4)
     {
         throw except::Exception(Ctxt("Expected four corners but got " +
-                std::to_string(corners.size())));
+                str::toString(corners.size())));
     }
 
     // Make sure it's a SICD
-    const auto container = reader.getContainer();
+    const mem::SharedPtr<const six::Container> container = reader.getContainer();
 
     const six::Data* const dataPtr = container->getData(0);
     if (container->getDataType() != six::DataType::COMPLEX ||
@@ -241,7 +238,7 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     const six::sicd::ComplexData* const data =
-        static_cast<const six::sicd::ComplexData*>(dataPtr);
+            reinterpret_cast<const six::sicd::ComplexData*>(dataPtr);
 
     // Convert ECEF corners to slant pixel pixels
     const ImageData& imageData(*data->imageData);
@@ -252,10 +249,10 @@ void cropSICD(six::NITFReadControl& reader,
             imageData.scpPixel.row - aoiOffset.row,
             imageData.scpPixel.col - aoiOffset.col);
 
-    std::unique_ptr<const scene::SceneGeometry> geom(
+    std::auto_ptr<const scene::SceneGeometry> geom(
             six::sicd::Utilities::getSceneGeometry(data));
 
-    std::unique_ptr<const scene::ProjectionModel> projection(
+    std::auto_ptr<const scene::ProjectionModel> projection(
             six::sicd::Utilities::getProjectionModel(data, geom.get()));
 
     types::RowCol<double> minPixel(static_cast<double>(data->getNumRows()),
@@ -264,7 +261,7 @@ void cropSICD(six::NITFReadControl& reader,
     for (size_t ii = 0; ii < corners.size(); ++ii)
     {
         const types::RowCol<double> imagePt =
-                projection->sceneToImage(corners[ii], nullptr);
+                projection->sceneToImage(corners[ii], NULL);
 
         const types::RowCol<double> spPixel(
                 (imagePt.row / data->grid->row->sampleSpacing) + offset.row,

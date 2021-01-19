@@ -63,7 +63,7 @@ public:
     }
 
     //!  Destructor doesnt release anything
-    virtual ~ReadControl() noexcept(false)
+    virtual ~ReadControl()
     {
         if (mLog && mOwnLog)
             delete mLog;
@@ -92,7 +92,7 @@ public:
     /*!
      *  Get a const shared pointer to the current container.
      */
-    std::shared_ptr<const Container> getContainer() const
+    mem::SharedPtr<const Container> getContainer() const
     {
         return mContainer;
     }
@@ -100,7 +100,7 @@ public:
     /*!
      *  Get a non-const pointer to the current container.
      */
-    std::shared_ptr<Container> getContainer()
+    mem::SharedPtr<Container> getContainer()
     {
         return mContainer;
     }
@@ -149,7 +149,7 @@ public:
      */
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
-           std::unique_ptr<T[]>& buffer)
+            mem::ScopedArray<T>& buffer)
     {
         buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
         return buffer.get();
@@ -206,7 +206,7 @@ public:
     }
 
 protected:
-    std::shared_ptr<Container> mContainer;
+    mem::SharedPtr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;

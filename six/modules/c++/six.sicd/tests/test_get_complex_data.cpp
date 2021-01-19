@@ -29,9 +29,6 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 int main(int argc, char** argv)
 {
     try
@@ -40,7 +37,7 @@ int main(int argc, char** argv)
         const std::string progname(argv[0]);
         if (argc != 2 && argc != 3)
         {
-            std::cerr << "Usage: " << fs::path(progname).filename().string()
+            std::cerr << "Usage: " << sys::Path::basename(progname)
                       << " <SICD pathname> [<schema dirname>]\n\n";
             return 1;
         }
@@ -55,13 +52,15 @@ int main(int argc, char** argv)
         else
         {
             // In a normal installation, we can infer the path
-            const auto progDirname = fs::path(progname).parent_path();
-            const fs::path schemaPath = progDirname.parent_path().parent_path() / "conf" / "schema" / "six";
-            schemaPaths.push_back(fs::absolute(schemaPath));
+            const sys::Path progDirname =
+                    sys::Path::splitPath(progname).first;
+            const sys::Path schemaPath = progDirname.join("..").join("..").
+                    join("conf").join("schema").join("six");
+            schemaPaths.push_back(sys::Path::absolutePath(schemaPath));
         }
 
         // Parse out the XML into a C++ structure
-        std::unique_ptr<six::sicd::ComplexData> data =
+        std::auto_ptr<six::sicd::ComplexData> data =
                 six::sicd::Utilities::getComplexData(sicdPathname,
                                                      schemaPaths);
 
@@ -69,13 +68,18 @@ int main(int argc, char** argv)
         // point let's convert it back to XML and print it out just to show
         // we really parsed it
         six::sicd::ComplexXMLControl xmlControl;
-        std::unique_ptr<xml::lite::Document>
+        std::auto_ptr<xml::lite::Document>
                 xmlDoc(xmlControl.toXML(data.get(), schemaPaths));
 
         io::StandardOutStream oss;
         xmlDoc->getRootElement()->prettyPrint(oss);
 
         return 0;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

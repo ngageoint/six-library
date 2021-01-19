@@ -27,10 +27,6 @@
 #include <six/NITFReadControl.h>
 #include <six/csm/SIXSensorModel.h>
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
-
 namespace
 {
 inline
@@ -973,8 +969,9 @@ void SIXSensorModel::setSchemaDir(const std::string& dataDir)
     }
     else
     {
-        const std::string schemaDir = fs::path(dataDir) / "schema" / "six";
-        if (!fs::exists(schemaDir))
+        const std::string schemaDir =
+                sys::Path(dataDir).join("schema").join("six");
+        if (!os.exists(schemaDir))
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                     "Schema directory '" + schemaDir + "' does not exist",

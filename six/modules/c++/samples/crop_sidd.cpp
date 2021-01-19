@@ -57,7 +57,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output SIDD pathname", cli::STORE,
                            "output", "<output SIDD pathname>", 1, 1);
 
-        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
         const types::RowCol<size_t> aoiOffset(options->get<size_t>("sRow"),
                                               options->get<size_t>("sCol"));
         const types::RowCol<size_t> aoiDims(options->get<size_t>("numRows"),
@@ -82,6 +82,11 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
         return 1;
     }
     catch (...)
