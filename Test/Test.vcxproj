@@ -57,7 +57,10 @@
     <ClCompile Include="cphd_test_signal_block_round.cpp" />
     <ClCompile Include="cphd_test_support_block_round.cpp" />
     <ClCompile Include="six.sicd_test_area_plane.cpp" />
-    <ClCompile Include="six.sicd_test_CollectionInfo.cpp" />
+    <ClCompile Include="six.sicd_test_CollectionInfo.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="six.sicd_test_filling_geo_data.cpp" />
     <ClCompile Include="six.sicd_test_filling_grid.cpp" />
     <ClCompile Include="six.sicd_test_filling_pfa.cpp" />
@@ -70,7 +73,10 @@
     <ClCompile Include="six.sicd_test_radar_collection.cpp" />
     <ClCompile Include="six.sicd_test_update_sicd_version.cpp" />
     <ClCompile Include="six.sicd_test_utilities.cpp" />
-    <ClCompile Include="six.sicd_test_valid_six.cpp" />
+    <ClCompile Include="six.sicd_test_valid_six.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="six.sidd_test_annotations_equality.cpp" />
     <ClCompile Include="six.sidd_test_geometric_chip.cpp" />
     <ClCompile Include="six.sidd_test_read_sidd_legend.cpp" />
@@ -116,7 +122,6 @@
       <PreprocessorDefinitions>X64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)six\modules\c++\scene\include\;$(SolutionDir)six\modules\c++\six\include\;$(SolutionDir)six\modules\c++\six.sidd\include\;$(SolutionDir)six\modules\c++\six.sicd\include\;$(SolutionDir)six\modules\c++\cphd\include\;$(SolutionDir)six\modules\c++\cphd03\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
@@ -125,7 +130,7 @@
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

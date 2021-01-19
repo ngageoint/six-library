@@ -54,7 +54,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
                         "Only 1 band images (and special-case RGB) are currently supported"));
     }
 
-    mRowBuffer.reset(new std::byte[mRowSize]);
+    mRowBuffer.reset(new sys::ubyte[mRowSize]);
     mAvailable = mRowSize * subheader.numRows();
 
     mBandList.reset(new uint32_t[nBands]);
@@ -103,6 +103,14 @@ ptrdiff_t six::NITFImageInputStream::read(std::byte* b, size_t len)
     }
     mAvailable -= len;
     return len;
+}
+ptrdiff_t six::NITFImageInputStream::read(sys::byte* b, size_t len)
+{
+    return read(reinterpret_cast<std::byte*>(b), len);
+}
+ptrdiff_t six::NITFImageInputStream::read(gsl::span<sys::byte> b)
+{
+    return read(b.data(), b.size());
 }
 
 ptrdiff_t six::NITFImageInputStream::readRow()

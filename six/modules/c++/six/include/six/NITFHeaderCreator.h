@@ -252,6 +252,13 @@ public:
      * \param meshBuffer The vector of byte-serialized mesh buffers.
      * \param classification The classification of the information.
      */
+    template<typename T>
+    void loadMeshSegment_(const std::string& meshName,
+                         const std::vector<T>& meshBuffer,
+                         const six::Classification& classification);
+    void loadMeshSegment(const std::string& meshName,
+                         const std::vector<std::byte>& meshBuffer,
+                         const six::Classification& classification);
     void loadMeshSegment(const std::string& meshName,
                          const std::vector<std::byte>& meshBuffer,
                          const six::Classification& classification);

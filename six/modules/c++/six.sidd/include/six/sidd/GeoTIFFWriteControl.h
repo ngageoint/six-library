@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __SIX_GEO_TIFF_WRITE_CONTROL_H__
+#define __SIX_GEO_TIFF_WRITE_CONTROL_H__
 #pragma once
 
 #if !defined(SIX_TIFF_DISABLED)
@@ -62,7 +64,7 @@ public:
     /*!
      *  Init the GeoTIFF writer.  Throws if we are a SICD container
      */
-    virtual void initialize(std::shared_ptr<Container> container) override;
+    virtual void initialize(mem::SharedPtr<Container> container) override;
 
     using WriteControl::save;
 
@@ -120,4 +122,4 @@ private:
 }
 #endif //if SIX_TIFF_ENABLED
 
-
+#endif

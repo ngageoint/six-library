@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __SIX_NITF_IMAGE_INFO_H__
+#define __SIX_NITF_IMAGE_INFO_H__
 #pragma once
 
 #include <string>
@@ -442,4 +444,4 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 }
 }
 
-
+#endif

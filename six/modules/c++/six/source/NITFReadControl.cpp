@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -191,6 +193,12 @@ DataType NITFReadControl::getDataType(const std::string& fromFile) const
 }
 
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
+                                      const NITFImageInfo* info)
+{
+    assert(info != nullptr);
+    validateSegment(subheader, *info);
+}
+void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
                                       const NITFImageInfo& info)
 {
     const size_t numBandsSeg = subheader.numImageBands();
@@ -244,12 +252,12 @@ void NITFReadControl::load(io::SeekableInputStream& stream,
     load(handle, schemaPaths);
 }
 
-void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface)
+void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface)
 {
     load(ioInterface, std::vector<std::string>());
 }
 
-void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
+void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
                            const std::vector<std::string>& schemaPaths)
 {
     reset();
@@ -330,7 +338,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
                     std::to_string(mContainer->getNumData())));
         }
 
-        mInfos.push_back(std::unique_ptr<NITFImageInfo>(new NITFImageInfo(mContainer->getData(0))));
+        mInfos.push_back(new NITFImageInfo(mContainer->getData(0)));
     }
     else
     {
@@ -341,7 +349,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
             Data* const data = mContainer->getData(ii);
             if (data->getDataType() == DataType::DERIVED)
             {
-                mInfos.push_back(std::unique_ptr<NITFImageInfo>(new NITFImageInfo(data)));
+                mInfos.push_back(new NITFImageInfo(data));
             }
         }
     }
@@ -367,7 +375,8 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         size_t numRowsSeg = subheader.numRows();
 
         // This function should throw if the data does not exist
-        const auto imageAndSegment = getIndices(subheader);
+        ImageAndSegment imageAndSegment;
+        getIndices(subheader, imageAndSegment);
         if (imageAndSegment.image >= mInfos.size())
         {
             throw except::Exception(Ctxt(
@@ -494,15 +503,20 @@ void NITFReadControl::addSecurityOptions(nitf::FileSecurity security,
     addSecurityOption(security.getSecurityControlNumber(), NITFImageInfo::CTLN);
 }
 
-NITFReadControl::ImageAndSegment
+std::pair<size_t, size_t>
 NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
+{
+    ImageAndSegment result;
+    getIndices(subheader, result);
+    return std::make_pair(result.image, result.segment);
+}
+void NITFReadControl::getIndices(const nitf::ImageSubheader& subheader, ImageAndSegment& result) const
 {
     const auto imageID = subheader.imageId();
 
     // There is definitely something in here
-    ImageAndSegment retval;
-    auto& image = retval.image;
-    auto& segment = retval.segment;
+    auto& image = result.image;
+    auto& segment = result.segment;
 
     const auto digit_pos = imageID.find_first_of("0123456789");
     if (digit_pos == std::string::npos)
@@ -519,7 +533,8 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
     const auto dataType = mContainer->getDataType();
     if (dataType == DataType::COMPLEX)
     {
-        // We need to find the SICD data here, and there is only one
+        // We need to find the SICD data here, and there is
+        // only one
         if (iid != 0)
         {
             segment = iid - 1;
@@ -549,8 +564,6 @@ NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
     {
         throw except::Exception(Ctxt("Unknown 'DataType' value: " + dataType.toString()));
     }
-
-    return retval;
 }
 
 UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
@@ -606,7 +619,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     sw.setNumBands(1);
     sw.setBandList(&bandList);
 
-    std::vector < NITFSegmentInfo > imageSegments = thisImage.getImageSegments();
+    std::vector < NITFSegmentInfo > imageSegments
+            = thisImage.getImageSegments();
     size_t numIS = imageSegments.size();
     size_t startOff = 0;
 
@@ -677,7 +691,7 @@ std::unique_ptr<Legend> NITFReadControl::findLegend(size_t productNum)
         nitf::ImageSegment segment = (nitf::ImageSegment) *imageIter;
         nitf::ImageSubheader subheader = segment.getSubheader();
 
-        if (productNum == getIndices(subheader).image && isLegend(subheader))
+        if (productNum == getIndices(subheader).first && isLegend(subheader))
         {
             // It's an image segment associated with the product we care
             // about and it's a legend (for simplicity right now we're going
@@ -731,14 +745,18 @@ void NITFReadControl::readLegendPixelData(const nitf::ImageSubheader& subheader,
 
 void NITFReadControl::reset()
 {
+    for (size_t ii = 0; ii < mInfos.size(); ++ii)
+    {
+        delete mInfos[ii];
+    }
     mInfos.clear();
     mInterface.reset();
 }
 
 
-std::unique_ptr<six::ReadControl> NITFReadControlCreator::newReadControl() const
+void NITFReadControlCreator::newReadControl(std::unique_ptr<six::ReadControl>& result) const
 {
-    return std::unique_ptr<six::ReadControl>(new NITFReadControl());
+    result.reset(new NITFReadControl());
 }
 
 bool NITFReadControlCreator::supports(const std::string& filename) const

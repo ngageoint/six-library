@@ -198,7 +198,7 @@ void six::sidd::GeoTIFFReadControl::load(
     }
 }
 
-std::byte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
+six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
                                                        size_t imIndex)
 {
     if (mReader.getImageCount() <= imIndex)
@@ -240,7 +240,7 @@ std::byte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
                 std::to_string(numColsReq) + "]"));
     }
 
-    std::byte* buffer = region.getBuffer();
+    auto buffer = region.getBuffer();
 
     if (buffer == nullptr)
     {
@@ -280,11 +280,23 @@ std::byte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     }
     return buffer;
 }
-
-std::unique_ptr<six::ReadControl> six::sidd::GeoTIFFReadControlCreator::newReadControl() const
+void six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
+                                                       size_t imIndex, std::byte* &result)
 {
-    return std::unique_ptr<six::ReadControl>(new six::sidd::GeoTIFFReadControl());
+    result = reinterpret_cast<std::byte*>(interleaved(region, imIndex));
 }
+
+six::ReadControl* six::sidd::GeoTIFFReadControlCreator::newReadControl() const
+{
+    std::unique_ptr<six::ReadControl> retval;
+    newReadControl(retval);
+    return retval.release();
+}
+void six::sidd::GeoTIFFReadControlCreator::newReadControl(std::unique_ptr<six::ReadControl>& result) const
+{
+    result = std::unique_ptr<six::ReadControl>(new six::sidd::GeoTIFFReadControl());
+}
+
 
 bool six::sidd::GeoTIFFReadControlCreator::supports(const std::string& filename) const
 {

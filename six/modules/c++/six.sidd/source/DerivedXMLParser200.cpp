@@ -2070,13 +2070,13 @@ void DerivedXMLParser200::parseDigitalElevationDataFromXML(
     parseDouble(getFirstAndOnly(pointElem, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }
 
-std::unique_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const XMLElem elem,
+mem::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const XMLElem elem,
         size_t size) const
 {
     std::string lutStr = "";
     parseString(elem, lutStr);
     std::vector<std::string> lutVals = str::split(lutStr, " ");
-    std::unique_ptr<LUT> lut(new LUT(size, sizeof(short)));
+    mem::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
 
     for (size_t ii = 0; ii < lutVals.size(); ++ii)
     {

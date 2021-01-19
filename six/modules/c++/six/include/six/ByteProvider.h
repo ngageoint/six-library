@@ -23,6 +23,7 @@
 #ifndef __SIX_BYTE_PROVIDER_H__
 #define __SIX_BYTE_PROVIDER_H__
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/ByteProvider.hpp>
 #include <mem/SharedPtr.h>
 #include <six/Container.h>
@@ -63,6 +64,11 @@ public:
     ByteProvider(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
                  const std::vector<std::string>& schemaPaths,
                  const std::vector<PtrAndLength>& desBuffers);
+#if !CODA_OSS_cpp17
+    ByteProvider(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+                 const std::vector<std::string>& schemaPaths,
+                 const std::vector<PtrAndLength>& desBuffers);
+#endif
 
     /*!
      * Populates the writer Options from given parameters
@@ -75,7 +81,7 @@ public:
      * \param[out] options Options to populate
      */
     static void populateOptions(
-            std::shared_ptr<Container> container,
+            mem::SharedPtr<Container> container,
             size_t maxProductSize,
             size_t numRowsPerBlock,
             size_t numColsPerBlock,
@@ -139,6 +145,11 @@ public:
     void initialize(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<PtrAndLength>& desBuffers);
+#if !CODA_OSS_cpp17
+    void initialize(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+                    const std::vector<std::string>& schemaPaths,
+                    const std::vector<PtrAndLength>& desBuffers);
+#endif
 protected:
     /*!
      * Default constructor. Client code must call initialize() to
@@ -159,7 +170,7 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Only applies
      * for SIDD.  Defaults to no blocking.
      */
-    void initialize(std::shared_ptr<Container> container,
+    void initialize(mem::SharedPtr<Container> container,
                     const XMLControlRegistry& xmlRegistry,
                     const std::vector<std::string>& schemaPaths,
                     size_t maxProductSize,

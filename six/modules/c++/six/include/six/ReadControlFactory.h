@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __SIX_READ_CONTROL_FACTORY_H__
+#define __SIX_READ_CONTROL_FACTORY_H__
 #pragma once
 
 #include <memory>
@@ -32,7 +34,11 @@ struct ReadControlCreator
 {
     virtual ~ReadControlCreator() = default;
 
-    virtual std::unique_ptr<six::ReadControl> newReadControl() const = 0;
+    virtual six::ReadControl* newReadControl() const = 0;
+    virtual void newReadControl(std::unique_ptr<six::ReadControl>& result) const
+    {
+        result.reset(newReadControl());
+    }
 
     virtual bool supports(const std::string& filename) const = 0;
 
@@ -54,12 +60,13 @@ public:
     {
         mCreators.push_back(std::move(creator));
     }
-    inline void addCreator(ReadControlCreator* creator) // preserve existing client code
+    inline void addCreator(ReadControlCreator* creator)
     {
         addCreator(std::unique_ptr<ReadControlCreator>(creator));
     }
 
-    virtual std::unique_ptr<six::ReadControl> newReadControl(const std::string& filename) const;
+    virtual six::ReadControl* newReadControl(const std::string& filename) const;
+    virtual void newReadControl(const std::string& filename, std::unique_ptr<six::ReadControl>& result) const;
 
 };
 
@@ -77,3 +84,4 @@ struct ReadControlFactory final
 
 }
 
+#endif

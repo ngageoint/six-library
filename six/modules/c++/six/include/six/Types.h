@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __SIX_TYPES_H__
+#define __SIX_TYPES_H__
 #pragma once
 
 #include <vector>
@@ -55,7 +57,7 @@ typedef math::linear::VectorN<2> Vector2;
 //! Date type
 typedef nitf::DateTime DateTime;
 
-using UByte = std::byte;
+using UByte = unsigned char;
 
 //! POLY type
 typedef math::poly::OneD<double> Poly1D;
@@ -522,3 +524,4 @@ ImageMode getImageMode(RadarModeType radarMode);
 DECLARE_EXCEPTION(MissingRequired)
 }
 
+#endif
