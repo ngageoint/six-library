@@ -72,14 +72,14 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
             std::vector<std::string>(),
             log);
 
-    auto container(std::make_shared<six::Container>(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
     writer.initialize(container);
 
-    std::shared_ptr<nitf::SegmentWriter> segmentWriter;
+    mem::SharedPtr<nitf::SegmentWriter> segmentWriter;
     try
     {
         writer.addAdditionalDES(segmentWriter);
@@ -106,8 +106,8 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    auto container(std::make_shared<six::Container>(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
@@ -148,8 +148,8 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    auto container(std::make_shared<six::Container>(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(dynamic_cast<six::Data*>(data.release()));
 
     six::NITFWriteControl writer;
@@ -195,8 +195,8 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    auto container(std::make_shared<six::Container>(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;

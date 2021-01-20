@@ -74,8 +74,9 @@ std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
             generateBandData(*data));
 
-    auto container(std::make_shared<six::Container>(
-            six::DataType::COMPLEX));
+
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
