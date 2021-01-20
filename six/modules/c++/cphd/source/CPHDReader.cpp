@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <nitf/coda-oss.hpp>
+#include <sys/Conf.h>
 #include <except/Exception.h>
 #include <io/StringStream.h>
 #include <io/FileInputStream.h>
@@ -44,8 +44,8 @@ CPHDReader::CPHDReader(const std::string& fromFile,
                        const std::vector<std::string>& schemaPaths,
                        std::shared_ptr<logging::Logger> logger)
 {
-    initialize(std::shared_ptr<io::SeekableInputStream>(
-        new io::FileInputStream(fromFile)), numThreads, logger, schemaPaths);
+    initialize(std::make_shared<io::FileInputStream>(fromFile),
+        numThreads, logger, schemaPaths);
 }
 
 void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
@@ -62,7 +62,7 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(*inStream, mFileHeader.getXMLBlockSize());
 
-    if (logger.get() == NULL)
+    if (logger.get() == nullptr)
     {
         logger.reset(new logging::NullLogger());
     }

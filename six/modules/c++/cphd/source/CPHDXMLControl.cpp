@@ -39,7 +39,7 @@ namespace cphd
 {
 
 CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog) :
-    mLog(NULL),
+    mLog(nullptr),
     mOwnLog(false)
 {
     setLogger(log, ownLog);
@@ -58,7 +58,7 @@ void CPHDXMLControl::setLogger(logging::Logger* log, bool own)
     if (mLog && mOwnLog && log != mLog)
     {
         delete mLog;
-        mLog = NULL;
+        mLog = nullptr;
     }
 
     if (log)
@@ -87,11 +87,11 @@ std::string CPHDXMLControl::toXMLString(
     return ss.stream().str();
 }
 
-std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
+mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
         const Metadata& metadata,
         const std::vector<std::string>& schemaPaths)
 {
-    std::unique_ptr<xml::lite::Document> doc = toXMLImpl(metadata);
+    mem::auto_ptr<xml::lite::Document> doc(toXMLImpl(metadata).release());
     if(!schemaPaths.empty())
     {
         six::XMLControl::validate(doc.get(), schemaPaths, mLog);
@@ -112,7 +112,7 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& m
     const auto versionUriMap = getVersionUriMap();
     if (versionUriMap.find(metadata.getVersion()) != versionUriMap.end())
     {
-        return getParser(versionUriMap.find(metadata.getVersion())->second)->toXML(metadata);
+      return getParser(versionUriMap.find(metadata.getVersion())->second)->toXML(metadata);
     }
     std::ostringstream ostr;
     ostr << "The version " << metadata.getVersion() << " is invalid. "
@@ -146,7 +146,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
-    return getParser(doc->getRootElement()->getUri())->fromXML(doc);
+  return getParser(doc->getRootElement()->getUri())->fromXML(doc);
 }
 
 std::unique_ptr<CPHDXMLParser>
