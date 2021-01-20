@@ -19,8 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sicd/Utilities.h>
+
 #include <map>
 
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <io/StringStream.h>
 #include <math/Utilities.h>
@@ -30,9 +33,7 @@
 #include <six/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDMesh.h>
-#include <six/sicd/Utilities.h>
 #include <str/Manip.h>
-#include <sys/Conf.h>
 #include <types/RowCol.h>
 
 namespace

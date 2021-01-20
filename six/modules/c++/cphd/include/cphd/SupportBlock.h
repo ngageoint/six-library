@@ -27,10 +27,9 @@
 #include <complex>
 #include <unordered_map>
 
-#include <sys/Conf.h>
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <types/RowCol.h>
-
 #include <mem/ScopedArray.h>
 #include <mem/BufferView.h>
 

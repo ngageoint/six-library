@@ -25,14 +25,14 @@
 #include <complex>
 #include <string>
 
-#include <cphd/MetadataBase.h>
-#include <cphd/Utilities.h>
-
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
-#include <sys/Conf.h>
 #include <types/RowCol.h>
+
+#include <cphd/MetadataBase.h>
+#include <cphd/Utilities.h>
 
 namespace cphd
 {

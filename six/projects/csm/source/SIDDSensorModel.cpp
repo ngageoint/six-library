@@ -20,10 +20,11 @@
 *
 */
 
+#include <six/csm/SIDDSensorModel.h>
+
 #include "Error.h"
 #include <sys/OS.h>
 #include <sys/Path.h>
-#include <six/csm/SIDDSensorModel.h>
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/XMLControlFactory.h>

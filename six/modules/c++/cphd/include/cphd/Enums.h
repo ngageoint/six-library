@@ -22,7 +22,7 @@
 #ifndef __CPHD_ENUMS_H__
 #define __CPHD_ENUMS_H__
 
-#include <sys/Conf.h>
+#include <scene/sys_Conf.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
 

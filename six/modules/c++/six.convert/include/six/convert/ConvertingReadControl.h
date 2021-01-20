@@ -23,6 +23,7 @@
 #define __SIX_CONVERTING_READ_CONTROL_H__
 
 #include <string>
+
 #include <six/Enums.h>
 #include <six/ReadControl.h>
 #include <six/convert/ConverterProvider.h>

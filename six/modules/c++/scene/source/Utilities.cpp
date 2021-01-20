@@ -19,13 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <scene/Utilities.h>
 
 #include <string>
 
-#include <sys/Conf.h>
+#include <scene/sys_Conf.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
-#include <scene/Utilities.h>
+
 #include <scene/LLAToECEFTransform.h>
 #include <scene/ECEFToLLATransform.h>
 

@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <io/StringStream.h>
 #include <io/FileInputStream.h>

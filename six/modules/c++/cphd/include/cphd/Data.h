@@ -30,8 +30,10 @@
 #include <assert.h>
 #include <stddef.h>
 
+#include <scene/sys_Conf.h>
+
 #include <six/Init.h>
-#include <sys/Conf.h>
+
 #include <cphd/Enums.h>
 #include <cphd/Utilities.h>
 

@@ -19,12 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef SIX_SIX_Enum_h_INCLUDED_
+#define SIX_SIX_Enum_h_INCLUDED_
 #pragma once
 
 #include <string>
 #include <map>
 #include <ostream>
 
+#include <six/sys_Conf.h>
 #include <import/except.h>
 #include <import/str.h>
 #include <import/sys.h>
@@ -187,3 +190,5 @@ namespace details
         SIX_Enum_struct_3_
 } // namespace details
 }
+
+#endif // SIX_SIX_Enum_h_INCLUDED_

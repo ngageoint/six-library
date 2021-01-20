@@ -19,15 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd03/CPHDReader.h>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <io/StringStream.h>
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <mem/ScopedArray.h>
 #include <xml/lite/MinidomParser.h>
-#include <cphd03/CPHDReader.h>
+
 #include <cphd03/CPHDXMLControl.h>
 
 namespace cphd03

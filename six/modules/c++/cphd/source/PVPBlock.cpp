@@ -25,8 +25,9 @@
 #include <stddef.h>
 #include <typeinfo>
 
+#include <nitf/coda-oss.hpp>
 #include <six/Init.h>
-#include <sys/Conf.h>
+
 #include <cphd/Types.h>
 #include <cphd/PVPBlock.h>
 #include <cphd/Metadata.h>
