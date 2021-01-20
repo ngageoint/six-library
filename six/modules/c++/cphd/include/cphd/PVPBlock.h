@@ -29,7 +29,7 @@
 #include <stddef.h>
 #include <unordered_map>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <six/Parameter.h>
 
 #include <cphd/Types.h>

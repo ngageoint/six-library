@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <types/RowCol.h>
 
 #include <six/sicd/ComplexData.h>

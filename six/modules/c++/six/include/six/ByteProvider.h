@@ -23,7 +23,7 @@
 #ifndef __SIX_BYTE_PROVIDER_H__
 #define __SIX_BYTE_PROVIDER_H__
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <nitf/ByteProvider.hpp>
 #include <mem/SharedPtr.h>
 #include <six/Container.h>

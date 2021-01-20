@@ -22,7 +22,7 @@
 #ifndef __SIX_UTILITIES_H__
 #define __SIX_UTILITIES_H__
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <except/Exception.h>
 #include "six/Types.h"
 #include "six/Data.h"

@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <sys/OS.h>
 #include <types/RowCol.h>

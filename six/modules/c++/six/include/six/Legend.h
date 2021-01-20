@@ -25,7 +25,7 @@
 
 #include <vector>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <types/RowCol.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <six/Types.h>

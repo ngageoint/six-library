@@ -26,7 +26,7 @@
 #include <vector>
 #include <utility>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <mem/ScopedCloneablePtr.h>
 #include <six/Legend.h>
 #include <six/Data.h>

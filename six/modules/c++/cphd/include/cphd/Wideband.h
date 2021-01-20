@@ -25,7 +25,7 @@
 #include <complex>
 #include <string>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>

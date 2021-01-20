@@ -30,7 +30,7 @@
 #include <assert.h>
 #include <stddef.h>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 
 #include <six/Init.h>
 

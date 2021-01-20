@@ -25,7 +25,7 @@
 
 #include <memory>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 
 #include <cphd03/Metadata.h>
 #include <cphd03/FileHeader.h>

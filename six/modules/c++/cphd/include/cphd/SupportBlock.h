@@ -27,7 +27,7 @@
 #include <complex>
 #include <unordered_map>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <types/RowCol.h>
 #include <mem/ScopedArray.h>

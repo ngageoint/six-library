@@ -25,7 +25,7 @@
 
 #include <vector>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <cphd/Types.h>
