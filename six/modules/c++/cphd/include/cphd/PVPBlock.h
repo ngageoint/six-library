@@ -373,10 +373,10 @@ protected:
          *  \param input A pointer to an array of bytes that contains the
          *  parameter data to write into the pvp set
          */
-        void write(const PVPBlock& pvpBlock, const Pvp& pvp, const sys::ubyte* input);
+        void write(const PVPBlock& pvpBlock, const Pvp& pvp, const sys::byte* input);
         void write(const PVPBlock& pvpBlock, const Pvp& pvp, const std::byte* input)
         {
-            write(pvpBlock, pvp, reinterpret_cast<const sys::ubyte*>(input));
+            write(pvpBlock, pvp, reinterpret_cast<const sys::byte*>(input));
         }
 
         /*

@@ -110,7 +110,7 @@ PVPBlock::PVPSet::PVPSet() :
 {
 }
 
-void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::ubyte* input)
+void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::byte* input)
 {
     ::setData(input + p.txTime.getByteOffset(), txTime);
     ::setData(input + p.txPos.getByteOffset(), txPos);
