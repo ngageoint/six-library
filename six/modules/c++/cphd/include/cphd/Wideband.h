@@ -24,6 +24,7 @@
 
 #include <complex>
 #include <string>
+#include <memory>
 
 #include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
@@ -192,6 +193,18 @@ public:
               size_t lastSample,
               size_t numThreads,
               mem::ScopedArray<sys::ubyte>& data) const;
+    void read(size_t channel,
+              size_t firstVector,
+              size_t lastVector,
+              size_t firstSample,
+              size_t lastSample,
+              size_t numThreads,
+              std::unique_ptr<std::byte[]>& data) const
+    {
+        mem::ScopedArray<sys::ubyte> data_;
+        read(channel, firstVector, lastVector, firstSample, lastSample, numThreads, data_);
+        data.reset(reinterpret_cast<std::byte*>(data_.release()));
+    }
 
     /*!
      *  \func read
@@ -247,6 +260,22 @@ public:
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& scratch,
               const mem::BufferView<std::complex<float>>& data) const;
+    void read(size_t channel,
+              size_t firstVector,
+              size_t lastVector,
+              size_t firstSample,
+              size_t lastSample,
+              const std::vector<double>& vectorScaleFactors,
+              size_t numThreads,
+              std::span<std::byte> scratch,
+              std::span<std::complex<float>> data) const
+    {
+        mem::BufferView<sys::ubyte> scratch_(reinterpret_cast<sys::ubyte*>(scratch.data()), scratch.size());
+        mem::BufferView<std::complex<float>> data_(data.data(), data.size());
+        read(channel, firstVector, lastVector, firstSample, lastSample, vectorScaleFactors, numThreads,
+            scratch_, data_);
+    }
+
 
     /*!
      *  \func read
