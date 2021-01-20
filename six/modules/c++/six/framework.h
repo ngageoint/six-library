@@ -44,10 +44,9 @@
 #pragma warning(disable: 26493) // Don't use C-style casts (type.4).
 #pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
 
-#include "gsl/gsl.h"
+#include <nitf/coda-oss.hpp>
 
 #include <sys/File.h>
-#include <sys/Conf.h>
 #include <import/except.h>
 #include <import/types.h>
 

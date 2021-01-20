@@ -62,7 +62,7 @@ public:
     //!  Read N bytes from a NITF file
     ptrdiff_t read(std::byte* b, size_t len);
     ptrdiff_t read(sys::byte* b, size_t len);
-    ptrdiff_t read(gsl::span<sys::byte>);
+    ptrdiff_t read(std::span<sys::byte>);
 
 protected:
 

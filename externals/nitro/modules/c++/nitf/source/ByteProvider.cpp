@@ -570,18 +570,18 @@ void ByteProvider::getBytes(const void* imageData,
 }
 }
 
-static gsl::span<const std::byte> make_span(const std::vector<sys::byte>& v)
+static std::span<const std::byte> make_span(const std::vector<sys::byte>& v)
 {
     auto pData = reinterpret_cast<const std::byte*>(v.data());
     return gsl::make_span(pData, v.size());
 }
 
-void nitf::ByteProvider::getFileHeader(gsl::span<const std::byte>& result) const
+void nitf::ByteProvider::getFileHeader(std::span<const std::byte>& result) const
 {
     result = make_span(getFileHeader());
 }
 
-void nitf::ByteProvider::getImageSubheaders(std::vector<gsl::span<const std::byte>>& result) const
+void nitf::ByteProvider::getImageSubheaders(std::vector<std::span<const std::byte>>& result) const
 {
     auto& headers = getImageSubheaders();
     for (auto& header : headers)
@@ -590,7 +590,7 @@ void nitf::ByteProvider::getImageSubheaders(std::vector<gsl::span<const std::byt
     }
 }
 
-void nitf::ByteProvider::getDesSubheaderAndData(gsl::span<const std::byte>& result) const
+void nitf::ByteProvider::getDesSubheaderAndData(std::span<const std::byte>& result) const
 {
     result = make_span(getDesSubheaderAndData());
 }
