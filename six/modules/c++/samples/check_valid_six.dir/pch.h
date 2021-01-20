@@ -52,7 +52,6 @@
 #pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
 #include <import/sys.h>
 #include <import/io.h>
-#include <import/mt.h>
 #pragma warning(pop)
 #include <import/str.h>
 #include <import/logging.h>

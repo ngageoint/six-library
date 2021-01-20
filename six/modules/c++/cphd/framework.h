@@ -29,6 +29,7 @@
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 #pragma warning(disable: 4127) // conditional expression is constant
+#pragma warning(disable: 5039) // '...' : pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).

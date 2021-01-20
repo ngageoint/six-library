@@ -1068,6 +1068,7 @@ std::string six::toString(const six::FrameType& value)
         return "RIC_ECF";
     case FrameType::RIC_ECI:
         return "RIC_ECI";
+    case FrameType::NOT_SET:
     default:
         throw except::Exception(Ctxt("Unsupported frame type"));
     }
