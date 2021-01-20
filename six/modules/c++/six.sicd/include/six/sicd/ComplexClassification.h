@@ -59,7 +59,7 @@ private:
     virtual bool equalTo(const Classification& rhs) const
     {
         const ComplexClassification* classification = dynamic_cast<const ComplexClassification*>(&rhs);
-        if (classification != NULL)
+        if (classification != nullptr)
         {
             return *this == *classification;
         }

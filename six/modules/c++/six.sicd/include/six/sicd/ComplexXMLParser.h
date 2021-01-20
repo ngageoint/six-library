@@ -38,9 +38,16 @@ class ComplexXMLParser : public XMLParser
 public:
     ComplexXMLParser(const std::string& version,
                      bool addClassAttributes,
-                     std::auto_ptr<SICommonXMLParser> comParser,
-                     logging::Logger* log = NULL,
+                     std::unique_ptr<SICommonXMLParser>&& comParser,
+                     logging::Logger* log = nullptr,
                      bool ownLog = false);
+#if !CODA_OSS_cpp17
+        ComplexXMLParser(const std::string& version,
+                     bool addClassAttributes,
+                     std::auto_ptr<SICommonXMLParser> comParser,
+                     logging::Logger* log = nullptr,
+                     bool ownLog = false);
+#endif
 
     xml::lite::Document* toXML(const ComplexData* data) const;
 
@@ -49,33 +56,33 @@ public:
 protected:
 
     virtual XMLElem convertGeoInfoToXML(const GeoInfo *obj,
-                                        XMLElem parent = NULL) const = 0;
+                                        XMLElem parent = nullptr) const = 0;
 
     virtual XMLElem convertWeightTypeToXML(const WeightType& obj,
-                          XMLElem parent = NULL) const = 0;
+                          XMLElem parent = nullptr) const = 0;
 
     virtual XMLElem convertRadarCollectionToXML(const RadarCollection *radar,
                                                 XMLElem parent) const = 0;
 
     virtual XMLElem convertImageFormationToXML(const ImageFormation *obj,
                                        const RadarCollection& radarCollection,
-                                       XMLElem parent = NULL) const = 0;
+                                       XMLElem parent = nullptr) const = 0;
 
     virtual XMLElem convertImageFormationAlgoToXML(const PFA* pfa, const RMA* rma,
                                                    const RgAzComp* rgAzComp,
-                                                   XMLElem parent = NULL) const = 0;
+                                                   XMLElem parent = nullptr) const = 0;
 
-    virtual XMLElem convertRMAToXML(const RMA* obj, XMLElem parent = NULL) const = 0;
+    virtual XMLElem convertRMAToXML(const RMA* obj, XMLElem parent = nullptr) const = 0;
 
-    virtual XMLElem convertRMATToXML(const RMAT* obj, XMLElem parent = NULL) const = 0;
+    virtual XMLElem convertRMATToXML(const RMAT* obj, XMLElem parent = nullptr) const = 0;
 
     virtual XMLElem convertHPBWToXML(const HalfPowerBeamwidths* obj,
-                                     XMLElem parent = NULL) const = 0;
+                                     XMLElem parent = nullptr) const = 0;
 
     virtual XMLElem convertAntennaParamArrayToXML(
         const std::string& name,
         const GainAndPhasePolys* obj,
-        XMLElem parent = NULL) const = 0;
+        XMLElem parent = nullptr) const = 0;
 
     virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
                         mem::ScopedCopyablePtr<WeightType>& obj) const = 0;
@@ -104,34 +111,34 @@ protected:
     }
 
     XMLElem createTxFrequency(const RadarCollection* radar,
-                              XMLElem parent = NULL) const;
+                              XMLElem parent = nullptr) const;
 
     XMLElem createTxSequence(const RadarCollection* radar,
-                             XMLElem parent = NULL) const;
+                             XMLElem parent = nullptr) const;
 
     XMLElem createWaveform(const RadarCollection* radar,
-                           XMLElem parent = NULL) const;
+                           XMLElem parent = nullptr) const;
 
     XMLElem createArea(const RadarCollection* radar,
-                       XMLElem parent = NULL) const;
+                       XMLElem parent = nullptr) const;
 
-    XMLElem convertPFAToXML(const PFA *obj, XMLElem parent = NULL) const;
-    XMLElem convertRgAzCompToXML(const RgAzComp *obj, XMLElem parent = NULL) const; //! added in 1.0.0
-    XMLElem convertRMCRToXML(const RMCR* obj, XMLElem parent = NULL) const; //! added in 1.0.0
-    XMLElem convertINCAToXML(const INCA* obj, XMLElem parent = NULL) const;
+    XMLElem convertPFAToXML(const PFA *obj, XMLElem parent = nullptr) const;
+    XMLElem convertRgAzCompToXML(const RgAzComp *obj, XMLElem parent = nullptr) const; //! added in 1.0.0
+    XMLElem convertRMCRToXML(const RMCR* obj, XMLElem parent = nullptr) const; //! added in 1.0.0
+    XMLElem convertINCAToXML(const INCA* obj, XMLElem parent = nullptr) const;
     XMLElem convertRcvChanProcToXML(const std::string& version,
                                     const RcvChannelProcessed* obj,
-                                    XMLElem parent = NULL) const;
+                                    XMLElem parent = nullptr) const;
     XMLElem convertDistortionToXML(const std::string& version,
                                    const Distortion* obj,
-                                   XMLElem parent = NULL) const;
+                                   XMLElem parent = nullptr) const;
 
     virtual XMLElem convertSCPCOAToXML(const SCPCOA *obj,
-                                       XMLElem parent = NULL) const;
+                                       XMLElem parent = nullptr) const;
     virtual void convertDRateSFPolyToXML(const INCA* inca, XMLElem incaElem) const;
 
     virtual XMLElem convertMatchInformationToXML(const MatchInformation& obj,
-                                                 XMLElem parent = NULL) const;
+                                                 XMLElem parent = nullptr) const;
 
     virtual void parseSCPCOAFromXML(const XMLElem scpcoaXML, SCPCOA *obj) const;
     virtual void parseDRateSFPolyFromXML(const XMLElem incaElem, INCA* inca) const;
@@ -163,29 +170,29 @@ protected:
 
 private:
     XMLElem convertImageCreationToXML(const ImageCreation *obj,
-                                      XMLElem parent = NULL) const;
+                                      XMLElem parent = nullptr) const;
     XMLElem convertImageDataToXML(const ImageData *obj,
-                                  XMLElem parent = NULL) const;
+                                  XMLElem parent = nullptr) const;
     XMLElem convertGeoDataToXML(const GeoData *obj,
-                                XMLElem parent = NULL) const;
+                                XMLElem parent = nullptr) const;
     XMLElem convertGridToXML(const Grid *obj,
-                             XMLElem parent = NULL) const;
+                             XMLElem parent = nullptr) const;
     XMLElem convertTimelineToXML(const Timeline *obj,
-                                 XMLElem parent = NULL) const;
+                                 XMLElem parent = nullptr) const;
     XMLElem convertPositionToXML(const Position *obj,
-                                 XMLElem parent = NULL) const;
+                                 XMLElem parent = nullptr) const;
     XMLElem convertAntennaToXML(const Antenna *obj,
-                                XMLElem parent = NULL) const;
+                                XMLElem parent = nullptr) const;
     XMLElem convertAntennaParametersToXML(const std::string& name,
                                           AntennaParameters *ap,
-                                          XMLElem parent = NULL) const;
+                                          XMLElem parent = nullptr) const;
 
     XMLElem areaLineDirectionParametersToXML(const std::string& name,
             const AreaDirectionParameters *obj,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
     XMLElem areaSampleDirectionParametersToXML(const std::string& name,
             const AreaDirectionParameters *obj,
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
 
     void parseImageCreationFromXML(const XMLElem imageCreationXML,
                                    ImageCreation *obj) const;
@@ -209,24 +216,24 @@ private:
     void parseSideOfTrackType(const XMLElem element, SideOfTrackType& value) const;
 
     XMLElem createFFTSign(const std::string& name, six::FFTSign sign,
-                          XMLElem parent = NULL) const;
+                          XMLElem parent = nullptr) const;
 
     XMLElem createLatLonFootprint(const std::string& name,
                                   const std::string& cornerName,
                                   const LatLonCorners& corners,
-                                  XMLElem parent = NULL) const;
+                                  XMLElem parent = nullptr) const;
 
     XMLElem createLatLonAltFootprint(const std::string& name,
                                      const std::string& cornerName,
                                      const LatLonAltCorners& corners,
-                                     XMLElem parent = NULL) const;
+                                     XMLElem parent = nullptr) const;
 
     XMLElem createSideOfTrackType(const std::string& name,
                                   const SideOfTrackType& value, XMLElem parent =
-                                          NULL) const;
+                                          nullptr) const;
 
 private:
-    std::auto_ptr<SICommonXMLParser> mCommon;
+    std::unique_ptr<SICommonXMLParser> mCommon;
 };
 
 }

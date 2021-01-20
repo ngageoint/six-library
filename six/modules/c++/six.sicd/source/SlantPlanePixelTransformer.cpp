@@ -29,6 +29,7 @@
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
 
+
 namespace six
 {
 namespace sicd

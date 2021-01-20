@@ -32,24 +32,31 @@ class ComplexXMLParser041 : public ComplexXMLParser04x
 {
 public:
     ComplexXMLParser041(const std::string& version,
-                        logging::Logger* log = NULL,
+                        logging::Logger* log = nullptr,
                         bool ownLog = false);
 
 protected:
     ComplexXMLParser041(const std::string& version,
                         bool addClassAttributes,
-                        std::auto_ptr<SICommonXMLParser> comParser,
-                        logging::Logger* log = NULL,
+                        std::unique_ptr<SICommonXMLParser>&& comParser,
+                        logging::Logger* log = nullptr,
                         bool ownLog = false);
+#if !CODA_OSS_cpp17
+    ComplexXMLParser041(const std::string& version,
+                        bool addClassAttributes,
+                        std::auto_ptr<SICommonXMLParser> comParser,
+                        logging::Logger* log = nullptr,
+                        bool ownLog = false);
+#endif
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, 
-                                     XMLElem parent = NULL) const;
+                                     XMLElem parent = nullptr) const;
     virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const;
 
     virtual XMLElem convertImageFormationAlgoToXML(
             const PFA* pfa, const RMA* rma, 
             const RgAzComp* rgAzComp, 
-            XMLElem parent = NULL) const;
+            XMLElem parent = nullptr) const;
 };
 }
 }
