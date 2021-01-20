@@ -115,6 +115,24 @@ void CPHDWriter::addImage(const T* image,
 
 template
 void CPHDWriter::addImage<std::complex<int8_t> >(
+    const std::complex<int8_t>* image,
+    const types::RowCol<size_t>& dims,
+    const sys::ubyte* vbmData);
+
+template
+void CPHDWriter::addImage<std::complex<int16_t> >(
+    const std::complex<int16_t>* image,
+    const types::RowCol<size_t>& dims,
+    const sys::ubyte* vbmData);
+
+template
+void CPHDWriter::addImage<std::complex<float> >(
+    const std::complex<float>* image,
+    const types::RowCol<size_t>& dims,
+    const sys::ubyte* vbmData);
+
+template
+void CPHDWriter::addImage<std::complex<int8_t> >(
         const std::complex<int8_t>* image,
         const types::RowCol<size_t>& dims,
         const std::byte* vbmData);
