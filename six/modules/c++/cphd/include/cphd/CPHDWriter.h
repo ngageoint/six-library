@@ -72,6 +72,12 @@ public:
     virtual void operator()(const sys::ubyte* data,
                             size_t numElements,
                             size_t elementSize) = 0;
+    virtual void operator()(const std::byte* data,
+                            size_t numElements,
+                            size_t elementSize)
+    {
+        (*this)(reinterpret_cast<const sys::ubyte*>(data), numElements, elementSize);
+    }
 
 protected:
     //! Output stream of CPHD

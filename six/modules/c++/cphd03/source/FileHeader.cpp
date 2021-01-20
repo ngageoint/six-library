@@ -24,7 +24,7 @@
 #include <string.h>
 #include <sstream>
 
-#include <nitf/coda-oss.hpp>
+#include <sys/Conf.h>
 #include <mem/ScopedArray.h>
 #include <except/Exception.h>
 #include <str/Manip.h>
@@ -69,27 +69,27 @@ void FileHeader::read(io::SeekableInputStream& inStream)
             tokenize(headerLines[ii], KVP_DELIMITER, headerEntry);
             if (headerEntry.first == "XML_DATA_SIZE")
             {
-                mXmlDataSize = str::toType<sys::Off_T>(headerEntry.second);
+                mXmlDataSize = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "XML_BYTE_OFFSET")
             {
-                mXmlByteOffset = str::toType<sys::Off_T>(headerEntry.second);
+                mXmlByteOffset = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "VB_DATA_SIZE")
             {
-               mVbDataSize = str::toType<sys::Off_T>(headerEntry.second);
+               mVbDataSize = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "VB_BYTE_OFFSET")
             {
-               mVbByteOffset = str::toType<sys::Off_T>(headerEntry.second);
+               mVbByteOffset = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "CPHD_DATA_SIZE")
             {
-               mCphdDataSize = str::toType<sys::Off_T>(headerEntry.second);
+               mCphdDataSize = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "CPHD_BYTE_OFFSET")
             {
-               mCphdByteOffset = str::toType<sys::Off_T>(headerEntry.second);
+               mCphdByteOffset = str::toType<int64_t>(headerEntry.second);
             }
             else if (headerEntry.first == "CLASSIFICATION")
             {
@@ -155,9 +155,9 @@ std::string FileHeader::toString() const
     return os.str();
 }
 
-size_t FileHeader::set(sys::Off_T xmlSize,
-                       sys::Off_T vbmSize,
-                       sys::Off_T cphd03Size)
+size_t FileHeader::set(int64_t xmlSize,
+                       int64_t vbmSize,
+                       int64_t cphd03Size)
 {
     // Resolve all of the offsets based on known sizes.
     setXMLsize(xmlSize);
@@ -180,10 +180,10 @@ size_t FileHeader::set()
         setXMLoffset(initialHeaderSize + 2);
 
         // Add two for the XML section terminator
-        sys::Off_T vbmOffs = getXMLoffset() + getXMLsize() + 2;
+        int64_t vbmOffs = getXMLoffset() + getXMLsize() + 2;
 
         // Add padding (VBMs are doubles)
-        const sys::Off_T remainder = vbmOffs % sizeof(double);
+        const int64_t remainder = vbmOffs % sizeof(double);
         if (remainder != 0)
         {
             vbmOffs += sizeof(double) - remainder;

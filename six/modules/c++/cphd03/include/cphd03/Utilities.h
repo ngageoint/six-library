@@ -23,6 +23,9 @@
 
 #ifndef __CPHD03_UTILITIES_H__
 #define __CPHD03_UTILITIES_H__
+#pragma once
+
+#include <string>
 
 #include <str/Manip.h>
 #include <cphd/Enums.h>
@@ -33,12 +36,8 @@ namespace cphd03
 // Return bytes/sample, either 2, 4, or 8 (or 0 if not initialized)
 size_t getNumBytesPerSample(cphd::SampleType sampleType);
 
-template<typename T> std::string toString(const T& value)
-{
-    return str::toString<T>(value);
-}
 
-template<> std::string toString(const cphd::CollectionInformation& ci);
+std::string toString(const cphd::CollectionInformation& ci);
 }
 
 #endif
