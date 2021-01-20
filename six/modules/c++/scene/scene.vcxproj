@@ -112,6 +112,7 @@
     <ClInclude Include="include\scene\ProjectionModel.h" />
     <ClInclude Include="include\scene\ProjectionPolynomialFitter.h" />
     <ClInclude Include="include\scene\SceneGeometry.h" />
+    <ClInclude Include="include\scene\sys_Conf.h" />
     <ClInclude Include="include\scene\Types.h" />
     <ClInclude Include="include\scene\Utilities.h" />
     <ClInclude Include="pch.h" />

@@ -23,7 +23,7 @@
 
 #include <string>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
 

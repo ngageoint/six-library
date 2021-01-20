@@ -21,7 +21,7 @@
  */
 #include <scene/GridECEFTransform.h>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <except/Exception.h>
 #include <scene/Utilities.h>
 
