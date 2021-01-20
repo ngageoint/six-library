@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/CPHDWriter.h>
 
 #include <thread>
 
@@ -26,7 +27,6 @@
 #include <sys/Bit.h>
 
 #include <cphd/ByteSwap.h>
-#include <cphd/CPHDWriter.h>
 #include <cphd/CPHDXMLControl.h>
 #include <cphd/FileHeader.h>
 #include <cphd/Utilities.h>
