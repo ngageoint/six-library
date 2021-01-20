@@ -109,7 +109,7 @@ public:
      *
      *  \return offset of signal sample in file
      */
-    sys::Off_T getFileOffset(size_t channel, size_t vector, size_t sample) const
+    int64_t getFileOffset(size_t channel, size_t vector, size_t sample) const
     {
         return mWideband->getFileOffset(channel, vector, sample);
     }

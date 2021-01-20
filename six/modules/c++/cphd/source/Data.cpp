@@ -101,7 +101,7 @@ Data::SupportArray Data::getSupportArrayById(const std::string& id) const
 
 void Data::setSupportArray(const std::string& id, size_t numRows,
                            size_t numCols, size_t numBytes,
-                           sys::Off_T offset)
+                           int64_t offset)
 {
     if (supportArrayMap.count(id))
     {
@@ -118,12 +118,12 @@ void Data::setSupportArray(const std::string& id, size_t numRows,
     }
 
     // Add to ordered map
-    mOffsetMap.insert(std::pair<sys::Off_T,size_t>(offset,numBytes));
+    mOffsetMap.insert(std::pair<int64_t,size_t>(offset,numBytes));
 
     // Validate offset and size
     if (mOffsetMap.find(offset) != mOffsetMap.begin())
     {
-        if (offset < (sys::Off_T)((--mOffsetMap.find(offset))->first + (--mOffsetMap.find(offset))->second))
+        if (offset < (int64_t)((--mOffsetMap.find(offset))->first + (--mOffsetMap.find(offset))->second))
         {
             std::ostringstream ostr;
             ostr << "Invalid size or offset of support array given for id: " << id;
@@ -132,7 +132,7 @@ void Data::setSupportArray(const std::string& id, size_t numRows,
     }
     if (mOffsetMap.upper_bound(offset) != mOffsetMap.end())
     {
-        if ((sys::Off_T)(offset + (numRows * numCols * numBytes)) > mOffsetMap.upper_bound(offset)->first)
+        if ((int64_t)(offset + (numRows * numCols * numBytes)) > mOffsetMap.upper_bound(offset)->first)
         {
             std::ostringstream ostr;
             ostr << "Invalid size or offset of support array given for id: " << id;

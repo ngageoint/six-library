@@ -21,6 +21,7 @@
  */
 #ifndef __CPHD_SUPPORT_BLOCK_H__
 #define __CPHD_SUPPORT_BLOCK_H__
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -32,6 +33,7 @@
 #include <types/RowCol.h>
 #include <mem/ScopedArray.h>
 #include <mem/BufferView.h>
+#include <sys/CStdDef.h>
 
 #include <cphd/Data.h>
 #include <cphd/Utilities.h>
@@ -60,8 +62,8 @@ public:
      */
     SupportBlock(const std::string& pathname,
                  const cphd::Data& data,
-                 sys::Off_T startSupport,
-                 sys::Off_T sizeSupport);
+                 int64_t startSupport,
+                 int64_t sizeSupport);
 
     /*
      *  \func SupportBlock
@@ -75,8 +77,12 @@ public:
      */
     SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
                  const cphd::Data& data,
-                 sys::Off_T startSupport,
-                 sys::Off_T sizeSupport);
+                 int64_t startSupport,
+                 int64_t sizeSupport);
+
+    // Noncopyable
+    SupportBlock(const SupportBlock&) = delete;
+    const SupportBlock& operator=(const SupportBlock&) = delete;
 
     /*
      *  \func getFileOffset
@@ -87,7 +93,7 @@ public:
      *
      *  \return Returns offset from start of CPHD file
      */
-    sys::Off_T getFileOffset(const std::string& id) const;
+    int64_t getFileOffset(const std::string& id) const;
 
     /*
      *  \func read
@@ -99,7 +105,7 @@ public:
      *  \param id unique identifier of support array
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param[in,out] data A pre allocated mem::BufferView that will hold the data
+     *  \param[in,out] data A pre allocated std::span that will hold the data
      *   read from the file.
      *
      *  \throws except::Exception Throws if buffer has not been allocated to a sufficient size
@@ -108,6 +114,13 @@ public:
     void read(const std::string& id,
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& data) const;
+    void read(const std::string& id,
+              size_t numThreads,
+              std::span<std::byte> data) const
+    {
+        mem::BufferView<sys::ubyte> data_(reinterpret_cast<sys::ubyte*>(data.data()), data.size());
+        read(id, numThreads, data_);
+    }
 
     /*
      *  \func read
@@ -119,12 +132,20 @@ public:
      *  \param id unique identifier of support array
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param[out] data mem::ScopedArray that will hold the data read from the file.
+     *  \param[out] data std::unique_ptr<[]> that will hold the data read from the file.
      */
     // Same as above but allocates the memory
     void read(const std::string& id,
               size_t numThreads,
               mem::ScopedArray<sys::ubyte>& data) const;
+    void read(const std::string& id,
+              size_t numThreads,
+              std::unique_ptr<std::byte[]>& data) const
+    {
+        mem::ScopedArray<sys::ubyte> data_;
+        read(id, numThreads, data_);
+        data.reset(reinterpret_cast<std::byte*>(data_.release()));
+    }
 
     /*
      *  \func readAll
@@ -135,28 +156,30 @@ public:
      *
      *  \param numThreads Number of threads to use for endian swapping if
      *   necessary
-     *  \param[out] data mem::ScopedArray that will hold the data read from the file.
+     *  \param[out] data std::unique_ptr<[]> that will hold the data read from the file.
      *
      */
     void readAll(size_t numThreads,
                  mem::ScopedArray<sys::ubyte>& data) const;
+    void readAll(size_t numThreads,
+                 std::unique_ptr<std::byte[]>& data) const
+    {
+        mem::ScopedArray<sys::ubyte> data_;
+        readAll(numThreads, data_);
+        data.reset(reinterpret_cast<std::byte*>(data_.release()));
+    }
+
 
 private:
     //! Initialize mOffsets for each array
     // both for uncompressed and compressed data
     void initialize();
 
-private:
-    // Noncopyable
-    SupportBlock(const SupportBlock& ) = delete;
-    const SupportBlock& operator=(const SupportBlock& ) = delete;
-
-private:
     const std::shared_ptr<io::SeekableInputStream> mInStream;
     cphd::Data mData;
-    const sys::Off_T mSupportOffset;       // offset in bytes to start of SupportBlock
+    const int64_t mSupportOffset;       // offset in bytes to start of SupportBlock
     const size_t mSupportSize;             // total size in bytes of SupportBlock
-    std::unordered_map<std::string,sys::Off_T> mOffsets; // Offset to start of each support array
+    std::unordered_map<std::string,int64_t> mOffsets; // Offset to start of each support array
 
     friend std::ostream& operator<< (std::ostream& os, const SupportBlock& d);
 };
