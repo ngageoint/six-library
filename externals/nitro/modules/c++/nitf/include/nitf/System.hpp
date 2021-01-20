@@ -30,12 +30,11 @@
 
 #include <stdint.h>
 
-#include <sys/CStdDef.h>
-#include <sys/Conf.h>
-
 #include "nitf/System.h"
 #include "nitf/Field.h"
 #include "nitf/Types.h"
+
+#include "nitf/coda-oss.hpp"
 
 namespace nitf
 {

@@ -19,12 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <scene/GridGeometry.h>
 
-#include <sys/Conf.h>
+#include <scene/sys_Conf.h>
 #include <except/Exception.h>
 #include <scene/Utilities.h>
 #include <scene/LocalCoordinateTransform.h>
-#include <scene/GridGeometry.h>
 
 namespace scene
 {

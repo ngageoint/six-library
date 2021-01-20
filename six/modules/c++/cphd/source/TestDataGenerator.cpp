@@ -26,7 +26,8 @@
 #include <vector>
 #include <map>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
+
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
 #include <cphd/PVP.h>

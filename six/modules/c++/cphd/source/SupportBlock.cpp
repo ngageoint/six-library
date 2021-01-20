@@ -19,18 +19,20 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/SupportBlock.h>
 
 #include <limits>
 #include <sstream>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <mt/ThreadGroup.h>
 #include <mt/ThreadPlanner.h>
 #include <except/Exception.h>
 #include <io/FileInputStream.h>
-#include <cphd/ByteSwap.h>
-#include <cphd/SupportBlock.h>
+
 #include <six/Init.h>
+
+#include <cphd/ByteSwap.h>
 
 namespace cphd
 {

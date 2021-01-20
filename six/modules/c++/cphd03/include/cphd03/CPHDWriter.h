@@ -26,9 +26,9 @@
 #include <string>
 #include <vector>
 
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <sys/OS.h>
-#include <sys/Conf.h>
 #include <types/RowCol.h>
 #include <cphd03/Metadata.h>
 #include <cphd03/VBM.h>

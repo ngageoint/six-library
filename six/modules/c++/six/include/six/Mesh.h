@@ -26,7 +26,7 @@
 #include <iomanip>
 #include <string>
 
-#include <sys/Conf.h>
+#include <scene/sys_Conf.h>
 #include <six/Parameter.h>
 #include <types/RowCol.h>
 

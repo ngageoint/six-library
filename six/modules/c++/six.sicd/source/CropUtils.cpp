@@ -19,16 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sicd/CropUtils.h>
 
 #include <memory>
 #include <algorithm>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
 #include <six/NITFWriteControl.h>
-#include <six/sicd/CropUtils.h>
 #include <six/sicd/Utilities.h>
 #include <six/sicd/SlantPlanePixelTransformer.h>
 

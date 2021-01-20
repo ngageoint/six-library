@@ -22,9 +22,7 @@
 #ifndef __SIX_COMPLEX_DATA_H__
 #define __SIX_COMPLEX_DATA_H__
 
-#include <mem/ScopedCloneablePtr.h>
-#include <mem/ScopedCopyablePtr.h>
-#include <types/RowCol.h>
+#include <memory>
 
 #include "six/CollectionInformation.h"
 #include "six/Data.h"

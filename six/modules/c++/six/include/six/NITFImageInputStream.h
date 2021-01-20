@@ -22,7 +22,7 @@
 #ifndef __SIX_NITF_IMAGE_INPUT_STREAM_H__
 #define __SIX_NITF_IMAGE_INPUT_STREAM_H__
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 #include <import/six.h>
 #include <import/nitf.hpp>
 #include <import/io.h>
@@ -62,7 +62,7 @@ public:
     //!  Read N bytes from a NITF file
     ptrdiff_t read(std::byte* b, size_t len);
     ptrdiff_t read(sys::byte* b, size_t len);
-    ptrdiff_t read(gsl::span<sys::byte>);
+    ptrdiff_t read(std::span<sys::byte>);
 
 protected:
 

@@ -20,9 +20,8 @@
  *
  */
 
+#include <nitf/coda-oss.hpp>
 #include <cli/ArgumentParser.h>
-#include <sys/Conf.h>
-
 #include <mem/SharedPtr.h>
 #include <mem/ScopedAlignedArray.h>
 #include <except/Exception.h>

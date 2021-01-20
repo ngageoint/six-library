@@ -21,8 +21,10 @@
  */
 
 #include <complex>
-#include <sys/Conf.h>
+
+#include <nitf/coda-oss.hpp>
 #include <six/Init.h>
+
 #include <cphd/PVP.h>
 #include <cphd/Utilities.h>
 

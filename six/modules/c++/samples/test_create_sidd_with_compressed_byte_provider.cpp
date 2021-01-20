@@ -31,6 +31,10 @@
  * of what will change with a compressor.
  */
 
+#include <string>
+
+#include <six/sidd/CompressedSIDDByteProvider.h>
+
 #include <import/cli.h>
 #include <import/nitf.hpp>
 #include <io/FileOutputStream.h>
@@ -39,12 +43,9 @@
 #include <nitf/Reader.hpp>
 #include <nitf/Record.hpp>
 #include <six/Types.h>
-#include <six/sidd/CompressedSIDDByteProvider.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
-#include <types/RowCol.h>
-#include <string>
 
 
 static const struct {

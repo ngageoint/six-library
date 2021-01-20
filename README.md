@@ -26,3 +26,6 @@ The master is considered stable, but official [releases](https://github.com/ngag
 All pull request contributions to this project will be released under the LGPL 3.0 license.
 
 Software source code previously released under an open source license and then modified by NGA staff is considered a "joint work" (see 17 USC 101); it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.
+
+### Contact
+July 2020, Dan.Smith@maxar.com

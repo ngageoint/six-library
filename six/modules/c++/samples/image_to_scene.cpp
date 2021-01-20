@@ -24,7 +24,7 @@
 #include <stdexcept>
 #include <memory>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
