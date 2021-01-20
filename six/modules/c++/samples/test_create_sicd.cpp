@@ -21,11 +21,14 @@
  */
 #include <iostream>
 
+#define CODA_OSS_AUGMENT_std_namespace 1
+#include <sys/Conf.h>
 #include <import/cli.h>
 #include <import/six.h>
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <logging/Setup.h>
+
 #include <scene/Utilities.h>
 #include "utils.h"
 

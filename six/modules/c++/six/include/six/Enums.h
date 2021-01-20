@@ -23,15 +23,6 @@
 #define __SIX_ENUMS_H__
 #pragma once
 
-#include <string>
-#include <map>
-#include <ostream>
-
-#include <import/except.h>
-#include <import/str.h>
-#include <import/sys.h>
-#include <import/scene.h>
-
 #include "Enum.h"
 
 namespace six

@@ -23,9 +23,11 @@
 #include <vector>
 #include <iostream>
 
+#define CODA_OSS_AUGMENT_std_namespace 1
 #include <sys/Path.h>
 #include <import/cli.h>
 #include <import/io.h>
+
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDXMLControl.h>
 

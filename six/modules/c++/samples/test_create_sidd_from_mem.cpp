@@ -41,12 +41,13 @@
  *
  */
 
+#include <import/six/sidd.h>
+
 #include <import/cli.h>
 #include <import/io.h>
 #include <import/nitf.h>
 #include <import/six.h>
 #include <import/six/sicd.h>
-#include <import/six/sidd.h>
 #include "utils.h"
 
 using namespace six;

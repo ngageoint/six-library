@@ -24,11 +24,12 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <six/sicd/CropUtils.h>
+
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <str/Manip.h>
-#include <six/sicd/CropUtils.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/XMLControlFactory.h>
 #include "utils.h"

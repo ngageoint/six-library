@@ -3802,14 +3802,12 @@ SWIG_AsVal_ptrdiff_t (PyObject * obj, ptrdiff_t *val)
 
 
 
-#include "import/mem.h"
 #include <memory>
 #include <vector>
 #include <cstddef>
 using std::ptrdiff_t;
 
 #include "import/six.h"
-
 #include "import/nitf.hpp"
 #include "Python.h"
 #include "datetime.h"

@@ -26,7 +26,6 @@
 #include <string>
 #include <vector>
 
-#include <types/RowCol.h>
 #include <scene/Types.h>
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexData.h>
