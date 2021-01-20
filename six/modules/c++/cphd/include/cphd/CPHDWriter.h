@@ -288,7 +288,7 @@ struct CPHDWriter
     void writeSupportData(const T* data,
                           const std::string& id)
     {
-        writeSupportDataImpl(reinterpret_cast<const sys::ubyte*>(data),
+        writeSupportDataImpl(reinterpret_cast<const std::byte*>(data),
                              mMetadata.data.getSupportArrayById(id).numRows * mMetadata.data.getSupportArrayById(id).numCols,
                              mMetadata.data.getSupportArrayById(id).bytesPerElement);
     }

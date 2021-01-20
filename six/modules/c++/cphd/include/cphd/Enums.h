@@ -31,6 +31,8 @@
 
 namespace cphd
 {
+    constexpr auto NOT_SET_VALUE = six::NOT_SET_VALUE;
+
 /*!
  *  \struct SampleType
  *
