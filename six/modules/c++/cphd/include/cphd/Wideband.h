@@ -292,8 +292,8 @@ public:
               size_t lastSample,
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
-              gsl::span<std::byte> scratch,
-              gsl::span<std::complex<float>> data) const
+              std::span<std::byte> scratch,
+              std::span<std::complex<float>> data) const
     {
         mem::BufferView<sys::ubyte> scratch_(reinterpret_cast<sys::ubyte*>(scratch.data()), scratch.size());
         mem::BufferView<std::complex<float>> data_(data.data(), data.size());
