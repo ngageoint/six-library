@@ -48,8 +48,8 @@ void roundTripNITF(const std::string& sicdPathname,
     bufferList[0] = reinterpret_cast<std::byte*>(buffer.data());
 
     six::NITFWriteControl writer;
-    mem::SharedPtr<six::Container> container(
-            new six::Container(six::DataType::COMPLEX));
+    auto container(
+            std::make_shared<six::Container>(six::DataType::COMPLEX));
     container->addData(complexData->clone());
 
     writer.initialize(container);
@@ -109,10 +109,6 @@ int main(int argc, char** argv)
             roundTripXML(sicdPathname, outputPathname, registry, schemaPaths);
         }
         return 0;
-    }
-    catch (const except::Exception& ex)
-    {
-        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& ex)
     {

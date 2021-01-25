@@ -76,7 +76,7 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
-    std::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
+    std::unique_ptr<logging::Logger> logger(logging::setupLogger("out"));
 
     container->addData(data.clone());
 
@@ -209,14 +209,14 @@ nitf::Record _readRecord(const std::string& pathname)
 %import "io.i"
 %import "mem.i"
 
-// This allows functions that return auto_ptrs to work properly
-%auto_ptr(six::sicd::ComplexData);
-%auto_ptr(scene::ProjectionPolynomialFitter);
-%auto_ptr(six::sicd::NoiseMesh);
-%auto_ptr(six::sicd::ScalarMesh);
+// This allows functions that return unique_ptrs to work properly
+%unique_ptr(six::sicd::ComplexData);
+%unique_ptr(scene::ProjectionPolynomialFitter);
+%unique_ptr(six::sicd::NoiseMesh);
+%unique_ptr(six::sicd::ScalarMesh);
 
-%typemap(out) nitf::Uint32, nitf::Int32{$result = PyInt_FromLong($1);}
-%typemap(in) nitf::Uint32{$1 = (nitf::Uint32)PyInt_AsLong($input);}
+%typemap(out) uint32_t, int32_t{$result = PyInt_FromLong($1);}
+%typemap(in) uint32_t{$1 = (uint32_t)PyInt_AsLong($input);}
 %typemap(out) nitf::Off{$result = PyLong_FromLong($1);}
 %typemap(in) nitf::Off{$1 = (nitf::Off)PyLong_AsLong($input);}
 
@@ -238,7 +238,7 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
 
-std::auto_ptr<six::sicd::ComplexData> cropMetaData(
+std::unique_ptr<six::sicd::ComplexData> cropMetaData(
         const six::sicd::ComplexData& complexData,
 	    const types::RowCol<size_t>& aoiOffset,
 	    const types::RowCol<size_t>& aoiDims);

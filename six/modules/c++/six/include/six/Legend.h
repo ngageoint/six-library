@@ -63,7 +63,7 @@ struct Legend
 
     //! Image legend pixels.  These are either pixel values or LUT indices
     //  depending on of the pixel type is MONO8I or RGB8LU, respectively.
-    std::vector<sys::ubyte> mImage;
+    std::vector<std::byte> mImage;
 
     //! LUT associated with image pixels.  Must be present if pixel type is
     //  RGB8LU.

@@ -83,7 +83,7 @@ public:
     }
 
     //!  Destructor.  Does not release any memory
-    virtual ~WriteControl()
+    virtual ~WriteControl() noexcept(false)
     {
         if (mLog && mOwnLog)
             delete mLog;
@@ -208,7 +208,7 @@ public:
     /*!
      * shared pointer to Container
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -216,7 +216,7 @@ public:
     /*!
      *  shared const pointer to Container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
         return mContainer;
     }
@@ -287,7 +287,7 @@ protected:
         if (!mXMLRegistry)
             mXMLRegistry = &XMLControlFactory::getInstance();
     }
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;

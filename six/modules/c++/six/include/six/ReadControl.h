@@ -61,7 +61,7 @@ struct ReadControl
     }
 
     //!  Destructor doesnt release anything
-    virtual ~ReadControl()
+    virtual ~ReadControl() noexcept(false)
     {
         if (mLog && mOwnLog)
             delete mLog;
@@ -90,7 +90,7 @@ struct ReadControl
     /*!
      *  Get a const shared pointer to the current container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
         return mContainer;
     }
@@ -98,7 +98,7 @@ struct ReadControl
     /*!
      *  Get a non-const pointer to the current container.
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -145,9 +145,18 @@ struct ReadControl
      * \return Buffer of image data.  This is simply equal to buffer.get() and
      * is provided as a convenience.
      */
+#if !CODA_OSS_cpp17
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
-            mem::ScopedArray<T>& buffer)
+           std::auto_ptr<T[]>& buffer)
+    {
+        buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
+        return buffer.get();
+    }
+#endif
+    template<typename T>
+    T* interleaved(Region& region, size_t imageNumber,
+        mem::ScopedArray<T>& buffer)
     {
         buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
         return buffer.get();
@@ -204,7 +213,7 @@ struct ReadControl
     }
 
 protected:
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;
