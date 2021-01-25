@@ -25,7 +25,7 @@
 
 #include <ostream>
 #include <vector>
-#include <unordered_map>
+#include <map>
 #include <stddef.h>
 #include <six/Types.h>
 #include <six/Init.h>
@@ -364,7 +364,7 @@ struct Pvp
     /*
      *  (Optional) User defined PV parameters
      */
-    std::unordered_map<std::string,APVPType> addedPVP;
+    std::map<std::string, APVPType> addedPVP;
 
     /*
      *  \func Constructor
