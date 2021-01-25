@@ -29,6 +29,7 @@
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
 
+
 namespace six
 {
 namespace sicd
@@ -40,7 +41,7 @@ SlantPlanePixelTransformer::SlantPlanePixelTransformer(
     const scene::ProjectionModel& projection) :
     mGeom(geom),
     mProjection(projection),
-    mSicdData(*reinterpret_cast<six::sicd::ComplexData*>(data.clone())),
+    mSicdData(*static_cast<six::sicd::ComplexData*>(data.clone())),
     mGroundPlaneNormal(mGeom.getReferencePosition())
 {
     mGroundPlaneNormal.normalize();

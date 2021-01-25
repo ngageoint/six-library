@@ -155,7 +155,7 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              gsl::span<std::byte> data) const
+              std::span<std::byte> data) const
     {
         mem::BufferView<sys::ubyte> data_(reinterpret_cast<sys::ubyte*>(data.data()), data.size());
         read(channel, firstVector, lastVector, firstSample, lastSample, numThreads, data_);
@@ -175,7 +175,7 @@ public:
      */
     // Same as above for compressed Signal Array
     void read(size_t channel, const mem::BufferView<sys::ubyte>& data) const;
-    void read(size_t channel, gsl::span<std::byte> data) const
+    void read(size_t channel, std::span<std::byte> data) const
     {
         mem::BufferView<sys::ubyte> data_(reinterpret_cast<sys::ubyte*>(data.data()), data.size());
         read(channel, data_);
@@ -292,8 +292,8 @@ public:
               size_t lastSample,
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
-              gsl::span<std::byte> scratch,
-              gsl::span<std::complex<float>> data) const
+              std::span<std::byte> scratch,
+              std::span<std::complex<float>> data) const
     {
         mem::BufferView<sys::ubyte> scratch_(reinterpret_cast<sys::ubyte*>(scratch.data()), scratch.size());
         mem::BufferView<std::complex<float>> data_(data.data(), data.size());

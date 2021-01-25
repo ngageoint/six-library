@@ -18,20 +18,20 @@ std::vector<RowColDouble > AreaPlaneUtility::computeCornersPix(
     //  If it's a cropped product, use the full extent. Here we assume the
     //  cropped region is in the valid region, and do not perform a check.
     if (data.imageData->validData.size() >= 3 &&
-        (static_cast<sys::SSize_T>(data.imageData->numRows) ==
+        (static_cast<ptrdiff_t>(data.imageData->numRows) ==
         data.imageData->fullImage.row) &&
-        (static_cast<sys::SSize_T>(data.imageData->numCols) ==
+        (static_cast<ptrdiff_t>(data.imageData->numCols) ==
         data.imageData->fullImage.col))
     {
-        std::vector<types::RowCol<sys::SSize_T> > validPixelRegion(
+        std::vector<types::RowCol<ptrdiff_t> > validPixelRegion(
                 data.imageData->validData.size());
         for (size_t ii = 0; ii < validPixelRegion.size(); ++ii)
         {
             validPixelRegion[ii] = data.imageData->validData[ii];
         }
 
-        std::vector<types::RowCol<sys::SSize_T> > hullPoints;
-        math::ConvexHull<sys::SSize_T> convexHull(validPixelRegion, hullPoints);
+        std::vector<types::RowCol<ptrdiff_t> > hullPoints;
+        math::ConvexHull<ptrdiff_t> convexHull(validPixelRegion, hullPoints);
 
         // ConvexHull makes a copy of the first vertex into the last,  so pop
         // off the last entry
@@ -59,7 +59,7 @@ std::vector<RowColDouble > AreaPlaneUtility::computeCornersPix(
 types::RowCol<Vector3> AreaPlaneUtility::deriveUnitVectors(
         const ComplexData& data)
 {
-    std::auto_ptr<scene::SceneGeometry> geometry(
+    std::unique_ptr<scene::SceneGeometry> geometry(
             Utilities::getSceneGeometry(&data));
 
     types::RowCol<Vector3> unitVectors;
@@ -78,7 +78,7 @@ RowColDouble AreaPlaneUtility::deriveSpacing(
         const types::RowCol<Vector3>& unitVectors,
         double sampleDensity)
 {
-    std::auto_ptr<scene::SceneGeometry> geometry(
+    std::unique_ptr<scene::SceneGeometry> geometry(
             Utilities::getSceneGeometry(&data));
     geometry->setImageVectors(unitVectors.row, unitVectors.col);
     geometry->setOutputPlaneVectors(unitVectors.row, unitVectors.col);
@@ -106,11 +106,11 @@ std::vector<Vector3> AreaPlaneUtility::computeInPlaneCorners(
         const ComplexData& data,
         const types::RowCol<Vector3>& unitVectors)
 {
-    std::auto_ptr<scene::SceneGeometry> geometry(
+    std::unique_ptr<scene::SceneGeometry> geometry(
             Utilities::getSceneGeometry(&data));
     geometry->setImageVectors(unitVectors.row, unitVectors.col);
     geometry->setOutputPlaneVectors(unitVectors.row, unitVectors.col);
-    std::auto_ptr<scene::ProjectionModel> projection(
+    std::unique_ptr<scene::ProjectionModel> projection(
             Utilities::getProjectionModel(&data, geometry.get()));
 
     std::vector<RowColDouble > cornersPix = computeCornersPix(data);
@@ -229,9 +229,9 @@ void AreaPlaneUtility::setAreaPlane(ComplexData& data,
         LatLonAltCorners& acpCorners =
                 data.radarCollection->area->acpCorners;
 
-        std::auto_ptr<scene::SceneGeometry> geometry(
+        std::unique_ptr<scene::SceneGeometry> geometry(
                 Utilities::getSceneGeometry(&data));
-        std::auto_ptr<scene::ProjectionModel> projectionModel(
+        std::unique_ptr<scene::ProjectionModel> projectionModel(
                 Utilities::getProjectionModel(&data, geometry.get()));
         const Vector3 groundPlaneNormal = Utilities::getGroundPlaneNormal(data);
         for (size_t ii = 0; ii < imageCorners.size(); ++ii)
