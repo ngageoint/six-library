@@ -50,10 +50,8 @@ namespace six
  *  to know that the NITF is split due to technical complications.
  *
  */
-class ReadControl
+struct ReadControl
 {
-public:
-
     //!  Constructor.  Null-set the current container reference
     ReadControl() :
         mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
