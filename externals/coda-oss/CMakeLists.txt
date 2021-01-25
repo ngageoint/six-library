@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.14)
 
 project(coda-oss)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # this is the top level project
