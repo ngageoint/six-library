@@ -217,9 +217,8 @@ void subsetData(const T* orig,
 
 // Main test class
 template <typename DataTypeT>
-class Tester
+struct Tester final
 {
-public:
     Tester(const std::vector<std::string>& schemaPaths,
            bool setMaxProductSize,
            size_t maxProductSize = 0) :
@@ -291,7 +290,7 @@ private:
     const std::string mNormalPathname;
     const EnsureFileCleanup mNormalFileCleanup;
 
-    std::shared_ptr<six::Container> mContainer;
+    mem::SharedPtr<six::Container> mContainer;
     const types::RowCol<size_t> mDims;
     std::vector<std::complex<DataTypeT> > mImage;
     std::complex<DataTypeT>* const mImagePtr;

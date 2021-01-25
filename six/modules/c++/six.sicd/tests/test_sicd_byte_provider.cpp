@@ -43,9 +43,8 @@ namespace
 {
 // Main test class
 template <typename DataTypeT>
-class Tester
+struct Tester final
 {
-public:
     Tester(const std::vector<std::string>& schemaPaths,
            bool setMaxProductSize,
            size_t maxProductSize = 0) :
@@ -95,7 +94,6 @@ public:
 private:
     void normalWrite();
 
-private:
     void compare(const std::string& prefix)
     {
         std::string fullPrefix = prefix;
@@ -168,8 +166,8 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    auto container(
-            std::make_shared<six::Container>(six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;
