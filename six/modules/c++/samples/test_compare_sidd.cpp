@@ -20,8 +20,9 @@
  *
  */
 
-#include <nitf/coda-oss.hpp>
 #include <cli/ArgumentParser.h>
+#include <sys/Conf.h>
+
 #include <mem/SharedPtr.h>
 #include <mem/ScopedAlignedArray.h>
 #include <except/Exception.h>
@@ -41,23 +42,20 @@
 
 namespace
 {
-mem::SharedPtr<six::Data> readMetadata(const six::NITFReadControl& reader)
+std::shared_ptr<six::Data> readMetadata(const six::NITFReadControl& reader)
 {
     const six::Data* data = reader.getContainer()->getData(0);
-    mem::SharedPtr<six::Data> retv(data->clone());
-    return retv;
+    return std::shared_ptr<six::Data>(data->clone());
 }
 
 void readWideband(six::NITFReadControl& reader,
         const six::Data& data,
-        mem::ScopedAlignedArray<six::UByte>& buffer)
+        mem::ScopedAlignedArray<std::byte>& buffer)
 {
     buffer.reset(data.getNumRows() *
                  data.getNumCols() *
                  data.getNumBytesPerPixel());
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
     region.setNumRows(data.getNumRows());
     region.setNumCols(data.getNumCols());
     region.setBuffer(buffer.get());
@@ -81,15 +79,15 @@ bool siddsMatch(const std::string& sidd1Path,
     reader.setXMLControlRegistry(&xmlRegistry);
 
     reader.load(sidd1Path);
-    mem::SharedPtr<six::Data> sidd1Metadata = readMetadata(reader);
-    mem::ScopedAlignedArray<six::UByte> sidd1Buffer;
+    auto sidd1Metadata = readMetadata(reader);
+    mem::ScopedAlignedArray<std::byte> sidd1Buffer;
     readWideband(reader,
             *sidd1Metadata,
             sidd1Buffer);
 
     reader.load(sidd2Path);
-    mem::SharedPtr<six::Data> sidd2Metadata = readMetadata(reader);
-    mem::ScopedAlignedArray<six::UByte> sidd2Buffer;
+    auto sidd2Metadata = readMetadata(reader);
+    mem::ScopedAlignedArray<std::byte> sidd2Buffer;
     readWideband(reader,
             *sidd2Metadata,
             sidd2Buffer);
@@ -209,7 +207,7 @@ int main(int argc, char* argv[])
         parser.addArgument("sidd2", "Input SIDD path",
                 cli::STORE, "SIDD2", "SIDD2", 1, 1, true);
 
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const bool ignoreMetadata(options->get<bool>("ignoreMetadata"));
         const bool ignoreDate(options->get<bool>("ignoreDate"));

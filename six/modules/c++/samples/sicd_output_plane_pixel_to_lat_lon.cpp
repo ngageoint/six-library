@@ -39,6 +39,8 @@
 #include <six/sicd/Utilities.h>
 #include "utils.h"
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
 
 int main(int argc, char** argv)
 {
@@ -59,10 +61,10 @@ int main(int argc, char** argv)
                            "ROW", 1, 1);
         parser.addArgument("col", "Pixel col location", cli::STORE, "col",
                            "COL", 1, 1);
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const std::string sicdPathname(options->get<std::string>("input"));
-        if (!sys::OS().exists(sicdPathname))
+        if (!fs::exists(sicdPathname))
         {
             std::cerr << sicdPathname << " does not exist.\n";
             return 1;
@@ -75,7 +77,7 @@ int main(int argc, char** argv)
                                        options->get<double>("col"));
 
 
-        std::auto_ptr<six::sicd::ComplexData> complexData;
+        std::unique_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float> > widebandData;
         six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData,
                 widebandData);
@@ -88,7 +90,7 @@ int main(int argc, char** argv)
             << "Altitude: " << lla.getAlt() << "\n";
         return 0;
     }
-    catch(const except::Exception& ex)
+    catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
     }

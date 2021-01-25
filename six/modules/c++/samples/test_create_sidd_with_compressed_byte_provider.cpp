@@ -31,10 +31,6 @@
  * of what will change with a compressor.
  */
 
-#include <string>
-
-#include <six/sidd/CompressedSIDDByteProvider.h>
-
 #include <import/cli.h>
 #include <import/nitf.hpp>
 #include <io/FileOutputStream.h>
@@ -43,10 +39,17 @@
 #include <nitf/Reader.hpp>
 #include <nitf/Record.hpp>
 #include <six/Types.h>
+#include <six/sidd/CompressedSIDDByteProvider.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
+#include <types/RowCol.h>
+#include <string>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4125) // decimal digit terminates octal escape sequence
+#endif
 
 static const struct {
   size_t   width;
@@ -994,11 +997,15 @@ static const struct {
   "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377",
 };
 
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 // Create dummy SIDD data
-std::auto_ptr<six::sidd::DerivedData>
+std::unique_ptr<six::sidd::DerivedData>
 createData(const types::RowCol<size_t>& dims)
 {
-    std::auto_ptr<six::sidd::DerivedData> data =
+    std::unique_ptr<six::sidd::DerivedData> data =
             six::sidd::Utilities::createFakeDerivedData();
     data->setNumRows(dims.row);
     data->setNumCols(dims.col);
@@ -1006,7 +1013,7 @@ createData(const types::RowCol<size_t>& dims)
     return data;
 }
 
-void writeSIDD(const std::string& filename, bool shouldCompress)
+void writeSIDD(const std::string& filename, bool /*shouldCompress*/)
 {
     const size_t NUM_BANDS = 1;
     /*
@@ -1027,7 +1034,7 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
     std::vector<std::vector<size_t> > bytesPerBlock(1);
     std::vector<std::string> schemaPaths;
     bytesPerBlock[0].push_back(NITRO_IMAGE.width * NITRO_IMAGE.height * NUM_BANDS);
-    std::auto_ptr<six::sidd::DerivedData> data = createData(
+    std::unique_ptr<six::sidd::DerivedData> data = createData(
             types::RowCol<size_t>(NITRO_IMAGE.height, NITRO_IMAGE.width));
 
     // The ByteProvider can do all the NITFWriteControl setup for you.
@@ -1041,8 +1048,8 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
 
     six::NITFWriteControl writer;
     writer.setXMLControlRegistry(&xmlRegistry);
-    mem::SharedPtr<six::Container> container(
-            new six::Container(six::DataType::DERIVED));
+    auto container(std::make_shared<six::Container>(
+        six::DataType::DERIVED));
     container->addData(data.release());
     writer.initialize(container);
 
@@ -1053,11 +1060,9 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
     byteProvider.getBytes(NITRO_IMAGE.data, 0, NITRO_IMAGE.height,
             fileOffset, buffers);
     io::FileOutputStream outputStream(filename);
-    for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
+    for (const auto& buffer : buffers.mBuffers)
     {
-        outputStream.write(
-                static_cast<const sys::byte*>(buffers.mBuffers[ii].mData),
-                buffers.mBuffers[ii].mNumBytes);
+        outputStream.write(buffer.mData, buffer.mNumBytes);
     }
 }
 
@@ -1071,15 +1076,15 @@ bool testRead(const std::string& pathname)
     for (size_t ii = 0; ii < record.getNumImages(); ++ii)
     {
         nitf::ImageReader imageReader = reader.newImageReader(ii);
-        nitf::Uint64 blockSize;
+        uint64_t blockSize;
         // Read one block. It should match the first blockSize points of the
         // image. If it does, we got the blocking mode right.
-        const nitf::Uint8 *block = imageReader.readBlock(0, &blockSize);
+        auto block = imageReader.readBlock(0, &blockSize);
         const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
 
         for (size_t jj = 0; jj < imageLength * NUM_BANDS; ++jj)
         {
-            if (block[jj] != NITRO_IMAGE.data[jj])
+            if (static_cast<const unsigned char>(block[jj]) != NITRO_IMAGE.data[jj])
             {
                 std::cerr << "Image data doesn't match" << std::endl;
                 return false;
@@ -1101,7 +1106,7 @@ int main(int argc, char **argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
             "OUTPUT", 1, 1, true)->setDefault("test_create.nitf");
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         // We can't actually compress. This is just for illustration.
         const bool shouldCompress(options->get<bool>("shouldCompress"));
         if (shouldCompress)
@@ -1123,7 +1128,7 @@ int main(int argc, char **argv)
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
         return 1;
     }
-    catch (const except::Throwable & t)
+    catch (const except::Throwable& t)
     {
         std::cerr << "Caught throwable: " << t.toString() << std::endl;
         return 1;

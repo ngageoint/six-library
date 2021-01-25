@@ -36,6 +36,9 @@
 #include <six/sidd/Utilities.h>
 #include <scene/ECEFToLLATransform.h>
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
 namespace
 {
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& lla)
@@ -51,7 +54,7 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        const std::string progname(sys::Path::basename(argv[0]));
+        const std::string progname(fs::path(argv[0]).filename());
         if (argc != 4 && argc != 5)
         {
             std::cerr << "Usage: " << progname
@@ -73,15 +76,15 @@ int main(int argc, char** argv)
         xmlRegistry->addCreator(six::DataType::DERIVED,
                             new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
-        std::auto_ptr<logging::Logger> logger(logging::setupLogger(progname));
+        std::unique_ptr<logging::Logger> logger(logging::setupLogger(progname));
         six::NITFReadControl reader;
         reader.setLogger(logger.get());
         reader.setXMLControlRegistry(xmlRegistry);
         reader.load(sixPathname);
         // Check to see if it's a SICD
-        mem::SharedPtr<six::Container> container = reader.getContainer();
-        std::auto_ptr<scene::ProjectionModel> projection;
-        std::auto_ptr<scene::SceneGeometry> geom;
+        auto container = reader.getContainer();
+        std::unique_ptr<scene::ProjectionModel> projection;
+        std::unique_ptr<scene::SceneGeometry> geom;
         scene::Vector3 groundPlaneNormal;
         types::RowCol<double> imagePt;
         if (container->getDataType() == six::DataType::COMPLEX)

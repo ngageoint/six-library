@@ -32,6 +32,9 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/NITFHeaderCreator.h>
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
 #include "utils.h"
 
 int main(int argc, char** argv)
@@ -58,7 +61,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
                            "OUTPUT", 1, 1);
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const types::RowCol<size_t> dims(options->get<size_t>("numRows"),
                                          options->get<size_t>("numCols"));
@@ -67,8 +70,8 @@ int main(int argc, char** argv)
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
-        std::auto_ptr<logging::Logger> logger(
-                logging::setupLogger(sys::Path::basename(argv[0])));
+        std::unique_ptr<logging::Logger> logger(
+                logging::setupLogger(fs::path(argv[0]).filename()));
 
         six::XMLControlFactory::getInstance().addCreator(
                 six::DataType::COMPLEX,
@@ -76,13 +79,13 @@ int main(int argc, char** argv)
 
         std::vector<std::complex<float> > image(dims.row * dims.col);
 
-        std::auto_ptr<six::Data> data(
+        std::unique_ptr<six::Data> data(
                 six::sicd::Utilities::createFakeComplexData().release());
         data->setPixelType(six::PixelType::RE32F_IM32F);
 
-        mem::SharedPtr<six::Container> container(new six::Container(
-                six::DataType::COMPLEX));
-        container->addData(data);
+        auto container(std::make_shared<six::Container>(
+            six::DataType::COMPLEX));
+        container->addData(std::move(data));
 
         /*
          *  Under normal circumstances, the library uses the
@@ -117,8 +120,8 @@ int main(int argc, char** argv)
         six::NITFWriteControl writer(writerOptions, container);
         writer.setLogger(logger.get());
 
-        six::BufferList buffers;
-        buffers.push_back(reinterpret_cast<six::UByte*>(&image[0]));
+        six::buffer_list buffers;
+        buffers.push_back(reinterpret_cast<std::byte*>(image.data()));
         writer.save(buffers, outputName, schemaPaths);
 
         return 0;
@@ -130,7 +133,7 @@ int main(int argc, char** argv)
     catch (const except::Exception& ex)
     {
         std::cerr << "Caught except::Exception: " << ex.getMessage()
-                  << std::endl;
+            << std::endl;
     }
     catch (...)
     {

@@ -47,7 +47,7 @@ six::LatLonCorners makeUpCornersFromDMS()
 
 inline
 void getSchemaPaths(const cli::Results& options,
-                    const std::string& commandLineArg,
+                    const std::string& /*commandLineArg*/,
                     const std::string& cliArgName,
                     std::vector<std::string>& schemaPaths)
 {
