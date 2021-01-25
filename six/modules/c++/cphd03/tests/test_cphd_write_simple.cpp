@@ -144,6 +144,11 @@ int main(int argc, char** argv)
         std::cerr << ex.what() << std::endl;
         return 1;
     }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
+        return 1;
+    }
     catch (...)
     {
         std::cerr << "Unknown exception\n";

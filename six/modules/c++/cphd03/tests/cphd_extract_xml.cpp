@@ -70,6 +70,7 @@ int main(int argc, char** argv)
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
+        return 1;
     }
     catch (...)
     {
