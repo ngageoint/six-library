@@ -71,11 +71,16 @@ public:
  protected:
     virtual mt::TiedWorkerThread<Request_T>*
     newTiedWorker(mt::RequestQueue<Request_T>* q,
+#if CODA_OSS_cpp17
                   std::unique_ptr<CPUAffinityThreadInitializer>&& init) = 0;
-#if !CODA_OSS_cpp17
+#else
+                  std::auto_ptr<CPUAffinityThreadInitializer> init) = 0;
     virtual mt::TiedWorkerThread<Request_T>*
     newTiedWorker(mt::RequestQueue<Request_T>* q,
-                  std::auto_ptr<CPUAffinityThreadInitializer> init) = 0;
+                  std::unique_ptr<CPUAffinityThreadInitializer>&& init) {
+        std::auto_ptr<CPUAffinityThreadInitializer> init_(init.release());
+        return newTiedWorker(q, init_);
+    }
 #endif
 
 

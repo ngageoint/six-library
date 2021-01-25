@@ -49,4 +49,22 @@
 
 #endif
 
+#ifndef CODA_OSS_DEFINE_std_span_
+    #if CODA_OSS_cpp20 && __has_include(<span>)  // __has_include is C++17
+        #define CODA_OSS_DEFINE_std_span_ -1  // OK to #include <>, below
+    #else
+        #define CODA_OSS_DEFINE_std_span_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
+    #endif // CODA_OSS_cpp20
+#endif  // CODA_OSS_DEFINE_std_span_
+
+#if CODA_OSS_DEFINE_std_span_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        template<typename T>
+        using span = gsl::span<T>;
+    }
+#elif CODA_OSS_DEFINE_std_span_ == -1  // set above
+    #include <span>
+#endif // CODA_OSS_DEFINE_std_span_
+
 #endif  // CODA_OSS_gsl_h_INCLUDED_
