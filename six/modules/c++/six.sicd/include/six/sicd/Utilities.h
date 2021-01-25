@@ -60,10 +60,17 @@ public:
     /*!
      * Get information in or deriveable from the ComplexData.
      */
+#if !CODA_OSS_cpp17
     static void getModelComponents(
         const ComplexData& complexData,
         std::auto_ptr<scene::SceneGeometry>& geometry,
         std::auto_ptr<scene::ProjectionModel>& projectionModel,
+        six::sicd::AreaPlane& areaPlane);
+#endif
+    static void getModelComponents(
+        const ComplexData& complexData,
+        std::unique_ptr<scene::SceneGeometry>& geometry,
+        std::unique_ptr<scene::ProjectionModel>& projectionModel,
         six::sicd::AreaPlane& areaPlane);
 
     /*!
@@ -109,9 +116,15 @@ public:
      *           six::sicd::Utilities::getWidebandData
      *
      */
+#if !CODA_OSS_cpp17
     static void readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          std::auto_ptr<ComplexData>& complexData,
+                         std::vector<std::complex<float> >& widebandData);
+#endif
+    static void readSicd(const std::string& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         std::unique_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float> >& widebandData);
 
     /*
@@ -143,6 +156,7 @@ public:
      *           six::sicd::Utilities::getWidebandData
      *
      */
+#if !CODA_OSS_cpp17
     static void readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          size_t orderX,
@@ -153,6 +167,17 @@ public:
                          six::Poly2D& outputRowColToSlantCol,
                          std::auto_ptr<NoiseMesh>& noiseMesh,
                          std::auto_ptr<ScalarMesh>& scalarMesh);
+#endif
+    static void readSicd(const std::string& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         size_t orderX,
+                         size_t orderY,
+                         std::unique_ptr<ComplexData>& complexData,
+                         std::vector<std::complex<float> >& widebandData,
+                         six::Poly2D& outputRowColToSlantRow,
+                         six::Poly2D& outputRowColToSlantCol,
+                         std::unique_ptr<NoiseMesh>& noiseMesh,
+                         std::unique_ptr<ScalarMesh>& scalarMesh);
 
     /*
      * Given a SICD pathname and list of schemas, provides a representation
@@ -456,11 +481,20 @@ public:
      * \throws except::Exception if the provided reader is not a SICD or
      *  projection polynomials can't be computed.
      */
+#if !CODA_OSS_cpp17
     static void getProjectionPolys(
         NITFReadControl& reader,
         size_t orderX,
         size_t orderY,
         std::auto_ptr<ComplexData>& complexData,
+        six::Poly2D& outputRowColToSlantRow,
+        six::Poly2D& outputRowColToSlantCol);
+#endif
+    static void getProjectionPolys(
+        NITFReadControl& reader,
+        size_t orderX,
+        size_t orderY,
+        std::unique_ptr<ComplexData>& complexData,
         six::Poly2D& outputRowColToSlantRow,
         six::Poly2D& outputRowColToSlantCol);
 

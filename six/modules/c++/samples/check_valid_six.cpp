@@ -88,8 +88,8 @@ std::vector<std::string> getPathnames(const std::string& dirname)
                                    false);
 }
 
-bool runValidation(const std::auto_ptr<six::Data>& data,
-        std::auto_ptr<logging::Logger>& log)
+bool runValidation(const mem::auto_ptr<six::Data>& data,
+        mem::auto_ptr<logging::Logger>& log)
 {
     if (data->getDataType() == six::DataType::COMPLEX)
     {
@@ -154,10 +154,10 @@ int main(int argc, char** argv)
                                new six::XMLControlCreatorT<
                                        six::sidd::DerivedXMLControl>());
 
-        str::upper(level);
-        str::trim(level);
-        std::auto_ptr<logging::Logger> log =
-            logging::setupLogger(sys::Path::basename(argv[0]), level, logFile);
+    str::upper(level);
+    str::trim(level);
+    std::unique_ptr<logging::Logger> log =
+        logging::setupLogger(fs::path(argv[0]).filename().string(), level, logFile);
 
         // this validates the DES of the input against the
         // best available schema
