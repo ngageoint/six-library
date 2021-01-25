@@ -41,7 +41,7 @@ size_t getNumBytesPerSample(cphd::SampleType sampleType)
     }
 }
 
-template<> std::string toString(const cphd::CollectionInformation& ci)
+std::string toString(const cphd::CollectionInformation& ci)
 {
     std::ostringstream os;
 
@@ -57,10 +57,10 @@ template<> std::string toString(const cphd::CollectionInformation& ci)
 
     if (ci.collectType != cphd::CollectType::NOT_SET )
     {
-        os << "  collectType    : " << ci.collectType.toString() << "\n";
+        os << "  collectType    : " << ci.collectType << "\n";
     }
 
-    os << "  radarMode      : " << ci.radarMode.toString() << "\n";
+    os << "  radarMode      : " << ci.radarMode << "\n";
 
     if (!six::Init::isUndefined(ci.radarModeID))
     {

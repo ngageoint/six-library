@@ -24,6 +24,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <scene/sys_Conf.h>
 #include <types/RowCol.h>
@@ -50,7 +51,7 @@ public:
     virtual void load(const std::string& pathname) = 0;
 
     //! Parse loaded file and return a ComplexData object
-    virtual std::auto_ptr<six::sicd::ComplexData> convert() = 0;
+    virtual mem::auto_ptr<six::sicd::ComplexData> convert() = 0;
 
     /*!
      * Read given region from image

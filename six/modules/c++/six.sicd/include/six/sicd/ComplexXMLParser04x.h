@@ -28,44 +28,50 @@ namespace six
 {
 namespace sicd
 {
-class ComplexXMLParser04x : public ComplexXMLParser
+struct ComplexXMLParser04x : public ComplexXMLParser
 {
-public:
+    ComplexXMLParser04x(const std::string& version,
+                        bool addClassAttributes,
+                        std::unique_ptr<SICommonXMLParser>&& comParser,
+                        logging::Logger* log = nullptr,
+                        bool ownLog = false);
+#if !CODA_OSS_cpp17
     ComplexXMLParser04x(const std::string& version,
                         bool addClassAttributes,
                         std::auto_ptr<SICommonXMLParser> comParser,
-                        logging::Logger* log = NULL,
+                        logging::Logger* log = nullptr,
                         bool ownLog = false);
+#endif
 
 protected:
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, 
-                                     XMLElem parent = NULL) const = 0;
+                                     XMLElem parent = nullptr) const = 0;
     virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const = 0;
 
 protected:
 
     virtual XMLElem convertGeoInfoToXML(const GeoInfo *obj,
-                                        XMLElem parent = NULL) const;
+                                        XMLElem parent = nullptr) const;
     virtual XMLElem convertWeightTypeToXML(const WeightType& obj, 
-                                           XMLElem parent = NULL) const;
+                                           XMLElem parent = nullptr) const;
     virtual XMLElem convertRadarCollectionToXML(const RadarCollection *radar,
                                                 XMLElem parent) const;
     virtual XMLElem convertImageFormationToXML(const ImageFormation *obj,
                                        const RadarCollection& radarCollection,
-                                       XMLElem parent = NULL) const;
+                                       XMLElem parent = nullptr) const;
     virtual XMLElem convertImageFormationAlgoToXML(
         const PFA* pfa, const RMA* rma, 
         const RgAzComp* rgAzComp, 
-        XMLElem parent = NULL) const;
+        XMLElem parent = nullptr) const;
     virtual XMLElem convertRMAToXML(const RMA *obj, 
-                                    XMLElem parent = NULL) const;
+                                    XMLElem parent = nullptr) const;
     virtual XMLElem convertHPBWToXML(const HalfPowerBeamwidths* obj, 
-                                     XMLElem parent = NULL) const;
+                                     XMLElem parent = nullptr) const;
     virtual XMLElem convertAntennaParamArrayToXML(
         const std::string& name,
         const GainAndPhasePolys* obj, 
-        XMLElem parent = NULL) const;
+        XMLElem parent = nullptr) const;
 
     virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
         mem::ScopedCopyablePtr<WeightType>& obj) const;
@@ -83,7 +89,7 @@ protected:
 
 private:
     XMLElem createRcvChannels(const RadarCollection* radar,
-                              XMLElem parent = NULL) const;
+                              XMLElem parent = nullptr) const;
 };
 }
 }

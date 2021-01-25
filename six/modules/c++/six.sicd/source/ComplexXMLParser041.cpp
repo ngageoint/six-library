@@ -36,7 +36,7 @@ namespace sicd
 ComplexXMLParser041::ComplexXMLParser041(const std::string& version,
                                          logging::Logger* log,
                                          bool ownLog) :
-    ComplexXMLParser04x(version, true, std::auto_ptr<six::SICommonXMLParser>(
+    ComplexXMLParser04x(version, true, std::unique_ptr<six::SICommonXMLParser>(
                            new six::SICommonXMLParser01x(
                                versionToURI(version), true,
                                versionToURI(version), log)),
@@ -47,12 +47,23 @@ ComplexXMLParser041::ComplexXMLParser041(const std::string& version,
 ComplexXMLParser041::ComplexXMLParser041(
     const std::string& version,
     bool addClassAttributes,
+    std::unique_ptr<SICommonXMLParser>&& comParser,
+    logging::Logger* log,
+    bool ownLog) :
+    ComplexXMLParser04x(version, addClassAttributes, std::move(comParser), log, ownLog)
+{
+}
+#if !CODA_OSS_cpp17
+ComplexXMLParser041::ComplexXMLParser041(
+    const std::string& version,
+    bool addClassAttributes,
     std::auto_ptr<SICommonXMLParser> comParser,
     logging::Logger* log,
     bool ownLog) :
-    ComplexXMLParser04x(version, addClassAttributes, comParser, log, ownLog)
+    ComplexXMLParser041(version, addClassAttributes, std::unique_ptr<SICommonXMLParser>(comParser.release()), log, ownLog)
 {
 }
+#endif
 
 XMLElem ComplexXMLParser041::convertRMATToXML(
     const RMAT* rmat, 
@@ -101,8 +112,8 @@ XMLElem ComplexXMLParser041::convertImageFormationAlgoToXML(
     if (!pfa && !rma && !rgAzComp)
     {
         //! This will occur when set to OTHER. We do not want to include
-        //  a specialized image formation algorithm so we return NULL.
-        return NULL;
+        //  a specialized image formation algorithm so we return nullptr.
+        return nullptr;
     }
 
     return ComplexXMLParser04x::convertImageFormationAlgoToXML(

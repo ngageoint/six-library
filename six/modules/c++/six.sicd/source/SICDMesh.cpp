@@ -21,6 +21,9 @@
  */
 #include <numeric>
 
+#include <six/sys_Conf.h>
+#include <sys/Bit.h>
+
 #include <six/sicd/SICDMesh.h>
 #include <six/Serialize.h>
 
@@ -34,7 +37,7 @@ const char SICDMeshes::NOISE_MESH_ID[] = "Noise_Mesh";
 const char SICDMeshes::SCALAR_MESH_ID[] = "Scalar Mesh";
 
 PlanarCoordinateMesh::PlanarCoordinateMesh(const std::string& name):
-    mSwapBytes(!sys::isBigEndianSystem()),
+    mSwapBytes(std::endian::native == std::endian::little),
     mName(name)
 {
 }
@@ -44,7 +47,7 @@ PlanarCoordinateMesh::PlanarCoordinateMesh(
     const types::RowCol<size_t>& meshDims,
     const std::vector<double>& x,
     const std::vector<double>& y):
-    mSwapBytes(!sys::isBigEndianSystem()),
+    mSwapBytes(std::endian::native == std::endian::little),
     mName(name),
     mMeshDims(meshDims),
     mX(x),

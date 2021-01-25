@@ -51,7 +51,14 @@ void SICDWriteControl::write(const std::vector<sys::byte>& data)
 {
     if (!data.empty())
     {
-        mIO->write(&data[0], data.size());
+        mIO->write(data.data(), data.size());
+    }
+}
+void SICDWriteControl::write(const std::vector<std::byte>& data)
+{
+    if (!data.empty())
+    {
+        mIO->write(data.data(), data.size());
     }
 }
 
@@ -66,9 +73,9 @@ void SICDWriteControl::writeHeaders()
     write(byteProvider.getFileHeader());
 
     // Write image subheaders
-    const std::vector<std::vector<sys::byte> >& imageSubheaders =
+    auto& imageSubheaders =
             byteProvider.getImageSubheaders();
-    const std::vector<nitf::Off>& imageSubheaderFileOffsets =
+    auto& imageSubheaderFileOffsets =
             byteProvider.getImageSubheaderFileOffsets();
 
     mImageDataStart.resize(imageSubheaders.size());
@@ -89,7 +96,7 @@ void SICDWriteControl::save(void* imageData,
                             const types::RowCol<size_t>& dims,
                             bool restoreData)
 {
-    if (getContainer().get() == NULL)
+    if (getContainer().get() == nullptr)
     {
         throw except::Exception(Ctxt(
                 "initialize() must be called prior to calling save()"));
@@ -132,8 +139,8 @@ void SICDWriteControl::save(void* imageData,
             const size_t startLocalRowToWrite =
                     startGlobalRowToWrite - offset.row;
             const size_t numBytesPerRow = dims.col * numBytesPerPixel * NUM_BANDS;
-            const sys::ubyte* imageDataPtr =
-                    static_cast<sys::ubyte*>(imageData) +
+            const std::byte* imageDataPtr =
+                    static_cast<std::byte*>(imageData) +
                     startLocalRowToWrite * numBytesPerRow;
 
             // Now figure out our offset into the segment
