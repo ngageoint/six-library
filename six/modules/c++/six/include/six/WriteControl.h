@@ -97,7 +97,7 @@ public:
      *
      *  \param container Container to bind to
      */
-    virtual void initialize(std::shared_ptr<Container> container) = 0;
+    virtual void initialize(mem::SharedPtr<Container> container) = 0;
 
     /*!
      *  Save a list of InputStream sources.  This should always be

@@ -52,7 +52,7 @@ public:
      * Constructor. Calls initialize.
      * \param container The data container
      */
-    NITFHeaderCreator(std::shared_ptr<Container> container);
+    NITFHeaderCreator(mem::SharedPtr<Container> container);
 
     /*!
      * Constructor. Calls initialize.
@@ -60,7 +60,7 @@ public:
      * \param container The data container
      */
     NITFHeaderCreator(const six::Options& options,
-                      std::shared_ptr<Container> container);
+                      mem::SharedPtr<Container> container);
 
     //!  Destructor.
     virtual ~NITFHeaderCreator()
@@ -141,7 +141,7 @@ public:
      *
      * \param writer A SegmentWriter with loaded, attached SegmentSource
      */
-    void addAdditionalDES(std::shared_ptr<nitf::SegmentWriter> writer);
+    void addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> writer);
 
     /*!
      * Convert classification level to NITF classification
@@ -164,19 +164,19 @@ public:
     }
 
     //! Get the infos.
-    std::vector<std::shared_ptr<NITFImageInfo> > getInfos() const
+    std::vector<mem::SharedPtr<NITFImageInfo> > getInfos() const
     {
         return mInfos;
     }
 
     //! Get the container.
-    std::shared_ptr<six::Container> getContainer()
+    mem::SharedPtr<six::Container> getContainer()
     {
         return mContainer;
     }
 
     //! Get the container.
-    std::shared_ptr<const six::Container> getContainer() const
+    mem::SharedPtr<const six::Container> getContainer() const
     {
         return mContainer;
     }
@@ -194,7 +194,7 @@ public:
     }
 
     // Get the record that was generated during initialization
-    std::vector<std::shared_ptr<nitf::SegmentWriter> > getSegmentWriters() const
+    std::vector<mem::SharedPtr<nitf::SegmentWriter> > getSegmentWriters() const
     {
         return mSegmentWriters;
     }
@@ -257,7 +257,7 @@ public:
                          const std::vector<T>& meshBuffer,
                          const six::Classification& classification);
     void loadMeshSegment(const std::string& meshName,
-                         const std::vector<std::byte>& meshBuffer,
+                         const std::vector<sys::byte>& meshBuffer,
                          const six::Classification& classification);
     void loadMeshSegment(const std::string& meshName,
                          const std::vector<std::byte>& meshBuffer,
@@ -378,7 +378,7 @@ public:
      * Initialize the NITFHeaderCreator object.
      * \param The container.
      */
-    void initialize(std::shared_ptr<Container> container);
+    void initialize(mem::SharedPtr<Container> container);
 
     /*!
      * Initialize the NITFHeaderCreator object.
@@ -386,13 +386,13 @@ public:
      * \param The container.
      */
     void initialize(const six::Options& options,
-                    std::shared_ptr<Container> container);
+                    mem::SharedPtr<Container> container);
 
 protected:
     nitf::Record mRecord;
-    std::vector<std::shared_ptr<NITFImageInfo> > mInfos;
-    std::vector<std::shared_ptr<nitf::SegmentWriter> > mSegmentWriters;
-    std::shared_ptr<six::Container> mContainer;
+    std::vector<mem::SharedPtr<NITFImageInfo> > mInfos;
+    std::vector<mem::SharedPtr<nitf::SegmentWriter> > mSegmentWriters;
+    mem::SharedPtr<six::Container> mContainer;
     six::Options mOptions;
     const XMLControlRegistry* mXMLRegistry;
 

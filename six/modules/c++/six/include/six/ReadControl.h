@@ -147,14 +147,7 @@ struct ReadControl
      */
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
-           std::unique_ptr<T[]>& buffer)
-    {
-        buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
-        return buffer.get();
-    }
-    template<typename T>
-    T* interleaved(Region& region, size_t imageNumber,
-        std::unique_ptr<T[]>& buffer)
+           mem::auto_ptr<T[]>& buffer)
     {
         buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
         return buffer.get();
