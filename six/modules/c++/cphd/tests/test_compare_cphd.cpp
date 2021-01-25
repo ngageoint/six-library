@@ -17,8 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
- *
- */
+ **/
 
 #include <iostream>
 #include <fstream>
@@ -259,6 +258,10 @@ int main(int argc, char** argv)
         }
         std::cout << "CPHD Files match \n";
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

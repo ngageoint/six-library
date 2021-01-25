@@ -98,7 +98,7 @@ public:
      *
      *  \return pointer to metadata object
      */
-    virtual std::unique_ptr<Metadata> fromXML(
+    virtual mem::auto_ptr<Metadata> fromXML(
             const std::string& xmlString,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -112,7 +112,7 @@ public:
      *
      *  \return pointer to metadata object
      */
-    virtual std::unique_ptr<Metadata> fromXML(
+    virtual mem::auto_ptr<Metadata> fromXML(
             const xml::lite::Document* doc,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -147,7 +147,8 @@ private:
      *
      *  \param uri A string specifying CPHD uri
      */
-    std::unique_ptr<CPHDXMLParser> getParser(const std::string& uri) const;
+    std::unique_ptr<CPHDXMLParser>
+    getParser(const std::string& uri) const;
 
     // Given the URI get associated version
     std::string uriToVersion(const std::string& uri) const;
