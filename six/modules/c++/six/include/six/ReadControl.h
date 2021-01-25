@@ -90,7 +90,7 @@ struct ReadControl
     /*!
      *  Get a const shared pointer to the current container.
      */
-    std::shared_ptr<const Container> getContainer() const
+    mem::SharedPtr<const Container> getContainer() const
     {
         return mContainer;
     }
@@ -98,7 +98,7 @@ struct ReadControl
     /*!
      *  Get a non-const pointer to the current container.
      */
-    std::shared_ptr<Container> getContainer()
+    mem::SharedPtr<Container> getContainer()
     {
         return mContainer;
     }
@@ -213,7 +213,7 @@ struct ReadControl
     }
 
 protected:
-    std::shared_ptr<Container> mContainer;
+    mem::SharedPtr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;
