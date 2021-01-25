@@ -241,8 +241,8 @@ int main(int argc, char** argv)
         data->imageFormation->txFrequencyProcMin = 0;
         data->imageFormation->txFrequencyProcMax = 0;
 
-        auto container(std::make_shared<six::Container>(
-                six::DataType::COMPLEX));
+	mem::SharedPtr<six::Container> container(new six::Container(
+		six::DataType::COMPLEX));
         container->addData(std::move(scopedData));
 
         six::Options writerOptions;
