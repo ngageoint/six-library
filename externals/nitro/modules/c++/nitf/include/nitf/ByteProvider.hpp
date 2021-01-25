@@ -131,7 +131,7 @@ public:
     {
         return mFileHeader;
     }
-    void getFileHeader(gsl::span<const std::byte>&) const;
+    void getFileHeader(std::span<const std::byte>&) const;
 
     /*!
      * \return The raw bytes for each image subheader.  Vector size matches the
@@ -141,7 +141,7 @@ public:
     {
         return mImageSubheaders;
     }
-    void getImageSubheaders(std::vector<gsl::span<const std::byte>>&) const;
+    void getImageSubheaders(std::vector<std::span<const std::byte>>&) const;
 
     /*!
      * \return The raw bytes for each DES (subheader immediately followed by
@@ -151,7 +151,7 @@ public:
     {
         return mDesSubheaderAndData;
     }
-    void getDesSubheaderAndData(gsl::span<const std::byte>&) const;
+    void getDesSubheaderAndData(std::span<const std::byte>&) const;
 
     /*!
      * \return The file offset for each image subheader.  Vector size matches
