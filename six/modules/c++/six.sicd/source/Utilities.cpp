@@ -294,6 +294,7 @@ static void getModelComponents_(const ComplexData& complexData,
         AreaPlaneUtility::deriveAreaPlane(complexData, areaPlane);
     }
 }
+#if !CODA_OSS_cpp17
 void Utilities::getModelComponents(const ComplexData& complexData,
         std::auto_ptr<scene::SceneGeometry>& geometry,
         std::auto_ptr<scene::ProjectionModel>& projectionModel,
@@ -301,6 +302,7 @@ void Utilities::getModelComponents(const ComplexData& complexData,
 {
     getModelComponents_(complexData, geometry, projectionModel, areaPlane);
 }
+#endif
 void Utilities::getModelComponents(const ComplexData& complexData,
         std::unique_ptr<scene::SceneGeometry>& geometry,
         std::unique_ptr<scene::ProjectionModel>& projectionModel,
@@ -500,6 +502,7 @@ static void readSicd_(const std::string& sicdPathname,
     // own an XMLControlRegistry
     reader.setXMLControlRegistry(nullptr);
 }
+#if !CODA_OSS_cpp17
 void Utilities::readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          std::auto_ptr<ComplexData>& complexData,
@@ -507,6 +510,7 @@ void Utilities::readSicd(const std::string& sicdPathname,
 {
     readSicd_(sicdPathname, schemaPaths, complexData, widebandData);
 }
+#endif
 void Utilities::readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
@@ -551,6 +555,7 @@ static void readSicd_(const std::string& sicdPathname,
     // own an XMLControlRegistry
     reader.setXMLControlRegistry(nullptr);
 }
+#if !CODA_OSS_cpp17
 void Utilities::readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          size_t orderX,
@@ -565,6 +570,7 @@ void Utilities::readSicd(const std::string& sicdPathname,
     readSicd_(sicdPathname, schemaPaths, orderX, orderY, complexData, widebandData,
         outputRowColToSlantRow, outputRowColToSlantCol, noiseMesh, scalarMesh);
 }
+#endif
 void Utilities::readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          size_t orderX,
@@ -1112,6 +1118,7 @@ static void getProjectionPolys_(NITFReadControl& reader,
                                outputRowColToSlantRow,
                                outputRowColToSlantCol);
 }
+#if !CODA_OSS_cpp17
 void Utilities::getProjectionPolys(NITFReadControl& reader,
                                    size_t orderX,
                                    size_t orderY,
@@ -1121,6 +1128,7 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
 {
     getProjectionPolys_(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol);
 }
+#endif
 void Utilities::getProjectionPolys(NITFReadControl& reader,
                                    size_t orderX,
                                    size_t orderY,
