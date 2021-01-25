@@ -39,9 +39,8 @@ namespace convert
  *
  * Once constructed, it is used just like NITFReadControl
  */
-class ConvertingReadControl : public ReadControl
+struct ConvertingReadControl : public ReadControl
 {
-public:
     /*!
      * Construct ConvertingReadControl
      * \param pluginPathname Path to converter plugins
@@ -94,7 +93,11 @@ public:
      * \return pointer to image data
      */
 
-    virtual UByte* interleaved(Region& region, size_t imageNumber);
+    virtual UByte* interleaved(Region& region, size_t imageNumber) override;
+    virtual void interleaved(Region& region, size_t imageNumber, std::byte*& result) override
+    {
+        result = reinterpret_cast<std::byte*>(interleaved(region, imageNumber));
+    }
 
     /*!
      * Convenience method to allow reading entire image with no setup
