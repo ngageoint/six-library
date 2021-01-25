@@ -98,7 +98,7 @@ public:
      *
      *  \return pointer to metadata object
      */
-    virtual mem::auto_ptr<Metadata> fromXML(
+    virtual std::unique_ptr<Metadata> fromXML(
             const std::string& xmlString,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -112,7 +112,7 @@ public:
      *
      *  \return pointer to metadata object
      */
-    virtual mem::auto_ptr<Metadata> fromXML(
+    virtual std::unique_ptr<Metadata> fromXML(
             const xml::lite::Document* doc,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
