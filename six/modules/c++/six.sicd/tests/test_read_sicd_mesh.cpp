@@ -299,7 +299,7 @@ int main(int argc, char** argv)
                 std::cout  << "\n";
             }
         }
-    }   
+    }
     catch (const except::Exception& e)
     {
         std::cerr << e.getMessage() << std::endl;
