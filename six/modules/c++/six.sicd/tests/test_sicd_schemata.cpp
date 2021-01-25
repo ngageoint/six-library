@@ -2593,9 +2593,14 @@ int main(int argc, char** argv)
         MYTEST_CHECK_PARAMS( RoundTrip_XML_0_4_0_RMA_RMAT );
         return 0;
     }
-    catch (const std::exception& ex)
+    catch (const except::Exception& ex)
     {
-        std::cerr << ex.what() << std::endl;
+        std::cerr << ex.toString() << std::endl;
+        return 1;
+    }
+    catch (const except::Error& err)
+    {
+        std::cerr << err.toString() << std::endl;
         return 1;
     }
 }

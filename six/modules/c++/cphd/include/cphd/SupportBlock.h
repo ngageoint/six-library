@@ -28,11 +28,12 @@
 #include <complex>
 #include <unordered_map>
 
-#include <nitf/coda-oss.hpp>
-#include <sys/Conf.h>
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <types/RowCol.h>
 #include <mem/ScopedArray.h>
+#include <mem/BufferView.h>
+#include <sys/CStdDef.h>
 
 #include <cphd/Data.h>
 #include <cphd/Utilities.h>
@@ -79,6 +80,10 @@ public:
                  int64_t startSupport,
                  int64_t sizeSupport);
 
+    // Noncopyable
+    SupportBlock(const SupportBlock&) = delete;
+    const SupportBlock& operator=(const SupportBlock&) = delete;
+
     /*
      *  \func getFileOffset
      *
@@ -108,7 +113,14 @@ public:
      */
     void read(const std::string& id,
               size_t numThreads,
-              gsl::span<std::byte> data) const;
+              const mem::BufferView<sys::ubyte>& data) const;
+    void read(const std::string& id,
+              size_t numThreads,
+              std::span<std::byte> data) const
+    {
+        mem::BufferView<sys::ubyte> data_(reinterpret_cast<sys::ubyte*>(data.data()), data.size());
+        read(id, numThreads, data_);
+    }
 
     /*
      *  \func read
@@ -125,7 +137,15 @@ public:
     // Same as above but allocates the memory
     void read(const std::string& id,
               size_t numThreads,
-              std::unique_ptr<std::byte[]>& data) const;
+              mem::ScopedArray<sys::ubyte>& data) const;
+    void read(const std::string& id,
+              size_t numThreads,
+              std::unique_ptr<std::byte[]>& data) const
+    {
+        mem::ScopedArray<sys::ubyte> data_;
+        read(id, numThreads, data_);
+        data.reset(reinterpret_cast<std::byte*>(data_.release()));
+    }
 
     /*
      *  \func readAll
@@ -140,19 +160,21 @@ public:
      *
      */
     void readAll(size_t numThreads,
-                 std::unique_ptr<std::byte[]>& data) const;
+                 mem::ScopedArray<sys::ubyte>& data) const;
+    void readAll(size_t numThreads,
+                 std::unique_ptr<std::byte[]>& data) const
+    {
+        mem::ScopedArray<sys::ubyte> data_;
+        readAll(numThreads, data_);
+        data.reset(reinterpret_cast<std::byte*>(data_.release()));
+    }
+
 
 private:
     //! Initialize mOffsets for each array
     // both for uncompressed and compressed data
     void initialize();
 
-private:
-    // Noncopyable
-    SupportBlock(const SupportBlock& ) = delete;
-    const SupportBlock& operator=(const SupportBlock& ) = delete;
-
-private:
     const std::shared_ptr<io::SeekableInputStream> mInStream;
     cphd::Data mData;
     const int64_t mSupportOffset;       // offset in bytes to start of SupportBlock

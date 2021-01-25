@@ -19,12 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <scene/AdjustableParams.h>
 
 #include <algorithm>
 
-#include <sys/Conf.h>
+#include <scene/sys_Conf.h>
 #include <except/Exception.h>
-#include <scene/AdjustableParams.h>
 
 namespace scene
 {

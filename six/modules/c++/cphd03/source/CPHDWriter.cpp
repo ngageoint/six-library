@@ -19,11 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd03/CPHDWriter.h>
 
+#include <scene/sys_Conf.h>
 #include <sys/Bit.h>
 #include <except/Exception.h>
 
-#include <cphd03/CPHDWriter.h>
 #include <cphd03/CPHDXMLControl.h>
 #include <cphd03/Utilities.h>
 #include <cphd03/FileHeader.h>
@@ -86,7 +87,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 template <typename T>
 void CPHDWriter::addImage(const T* image,
                           const types::RowCol<size_t>& dims,
-                          const std::byte* vbmData)
+                          const sys::ubyte* vbmData)
 {
     if (mElementSize != sizeof(T))
     {
@@ -102,7 +103,7 @@ void CPHDWriter::addImage(const T* image,
         mMetadata.data.numCPHDChannels = 0;
     }
 
-    mVBMData.push_back(vbmData);
+    mVBMData.push_back(reinterpret_cast<const std::byte*>(vbmData));
     mCPHDData.push_back(reinterpret_cast<const std::byte*>(image));
 
     mCPHDSize += dims.area() * mElementSize;
@@ -111,6 +112,24 @@ void CPHDWriter::addImage(const T* image,
     mMetadata.data.numCPHDChannels += 1;
     mMetadata.data.arraySize.push_back(ArraySize(dims.row, dims.col));
 }
+
+template
+void CPHDWriter::addImage<std::complex<int8_t> >(
+    const std::complex<int8_t>* image,
+    const types::RowCol<size_t>& dims,
+    const sys::ubyte* vbmData);
+
+template
+void CPHDWriter::addImage<std::complex<int16_t> >(
+    const std::complex<int16_t>* image,
+    const types::RowCol<size_t>& dims,
+    const sys::ubyte* vbmData);
+
+template
+void CPHDWriter::addImage<std::complex<float> >(
+    const std::complex<float>* image,
+    const types::RowCol<size_t>& dims,
+    const sys::ubyte* vbmData);
 
 template
 void CPHDWriter::addImage<std::complex<int8_t> >(

@@ -41,6 +41,7 @@ _deps/
 CMakeFiles/
 *.cmake
 CMakeCache.txt
+CMakeSettings.json
 # cmake generates these Makefiles
 externals/*/Makefile
 externals/coda-oss/modules/c++/**/Makefile

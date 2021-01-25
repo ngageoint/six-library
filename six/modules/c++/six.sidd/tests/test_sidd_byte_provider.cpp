@@ -369,8 +369,8 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    auto container(
-            std::make_shared<six::Container>(six::DataType::DERIVED));
+    mem::SharedPtr<six::Container> container(new six::Container(
+        six::DataType::DERIVED));
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;
@@ -382,7 +382,7 @@ void Tester<DataTypeT>::normalWrite()
     setWriterOptions(options);
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
-    six::BufferList buffers;
+    six::buffer_list buffers;
     buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
@@ -792,6 +792,12 @@ int main(int /*argc*/, char** /*argv*/)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << "Caught except::Exception: " << ex.getMessage()
+                  << std::endl;
         return 1;
     }
     catch (...)

@@ -39,9 +39,17 @@ ByteProvider::ByteProvider(std::unique_ptr<six::NITFHeaderCreator>&& headerCreat
 {
     initialize(std::move(headerCreator), schemaPaths, desBuffers);
 }
+#if !CODA_OSS_cpp17
+ByteProvider::ByteProvider(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    const std::vector<std::string>& schemaPaths,
+    const std::vector<PtrAndLength>& desBuffers)
+    : ByteProvider(std::unique_ptr<six::NITFHeaderCreator>(headerCreator.release()), schemaPaths, desBuffers)
+{
+}
+#endif
 
 void ByteProvider::populateOptions(
-        std::shared_ptr<Container> container,
+        mem::SharedPtr<Container> container,
         size_t maxProductSize,
         size_t numRowsPerBlock,
         size_t numColsPerBlock,
@@ -175,7 +183,7 @@ void ByteProvider::populateInitArgs(
                                  zero));
 }
 
-void ByteProvider::initialize(std::shared_ptr<Container> container,
+void ByteProvider::initialize(mem::SharedPtr<Container> container,
                               const XMLControlRegistry& xmlRegistry,
                               const std::vector<std::string>& schemaPaths,
                               size_t maxProductSize,
@@ -255,5 +263,13 @@ void ByteProvider::initialize(std::unique_ptr<six::NITFHeaderCreator>&& headerCr
                                    numRowsPerBlock,
                                    numColsPerBlock);
 }
+#if !CODA_OSS_cpp17
+void ByteProvider::initialize(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    const std::vector<std::string>& schemaPaths,
+    const std::vector<PtrAndLength>& desBuffers)
+{
+    initialize(std::unique_ptr<six::NITFHeaderCreator>(headerCreator.release()), schemaPaths, desBuffers);
+}
+#endif
 
 }

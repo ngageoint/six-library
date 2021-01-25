@@ -44,11 +44,24 @@ void Container::addData(std::unique_ptr<Data>&& data,
     mem::ScopedCloneablePtr<Data> cloneableData(data.release());
     mData.push_back(DataPair(cloneableData, legend));
 }
+#if !CODA_OSS_cpp17
+void Container::addData(std::auto_ptr<Data> data,
+                        mem::ScopedCopyablePtr<Legend> legend)
+{
+    addData(std::unique_ptr<Data>(data.release()), legend);
+}
+#endif
 
 void Container::addData(std::unique_ptr<Data>&& data)
 {
     addData(std::move(data), nullLegend());
 }
+#if !CODA_OSS_cpp17
+void Container::addData(std::auto_ptr<Data> data)
+{
+    addData(std::unique_ptr<Data>(data.release()));
+}
+#endif
 
 void Container::addData(std::unique_ptr<Data>&& data, std::unique_ptr<Legend>&& legend)
 {
@@ -61,6 +74,12 @@ void Container::addData(std::unique_ptr<Data>&& data, std::unique_ptr<Legend>&& 
     mem::ScopedCopyablePtr<Legend> copyableLegend(legend.release());
     addData(std::move(data), copyableLegend);
 }
+#if !CODA_OSS_cpp17
+void Container::addData(std::auto_ptr<Data> data, std::auto_ptr<Legend> legend)
+{
+    addData(std::unique_ptr<Data>(data.release()), std::unique_ptr<Legend>(legend.release()));
+}
+#endif
 
 void Container::setData(size_t i, Data* data)
 {

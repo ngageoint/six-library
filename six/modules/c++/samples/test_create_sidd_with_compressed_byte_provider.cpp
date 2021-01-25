@@ -1013,7 +1013,7 @@ createData(const types::RowCol<size_t>& dims)
     return data;
 }
 
-void writeSIDD(const std::string& filename, bool shouldCompress)
+void writeSIDD(const std::string& filename, bool /*shouldCompress*/)
 {
     const size_t NUM_BANDS = 1;
     /*
@@ -1048,7 +1048,7 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
 
     six::NITFWriteControl writer;
     writer.setXMLControlRegistry(&xmlRegistry);
-    auto container(std::make_shared<six::Container>(
+    mem::SharedPtr<six::Container> container(new six::Container(
         six::DataType::DERIVED));
     container->addData(data.release());
     writer.initialize(container);
@@ -1126,6 +1126,11 @@ int main(int argc, char **argv)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Throwable& t)
+    {
+        std::cerr << "Caught throwable: " << t.toString() << std::endl;
         return 1;
     }
     catch (...)

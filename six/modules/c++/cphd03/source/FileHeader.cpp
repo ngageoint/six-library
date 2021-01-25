@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd03/FileHeader.h>
 
 #include <string.h>
 #include <sstream>
@@ -27,7 +28,6 @@
 #include <mem/ScopedArray.h>
 #include <except/Exception.h>
 #include <str/Manip.h>
-#include <cphd03/FileHeader.h>
 
 namespace cphd03
 {

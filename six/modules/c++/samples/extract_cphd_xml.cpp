@@ -24,7 +24,7 @@
 #include <iostream>
 #include <thread>
 
-#include <sys/Path.h>
+#include <nitf/coda-oss.hpp>
 #include <import/cli.h>
 #include <import/io.h>
 #include <cphd/CPHDReader.h>

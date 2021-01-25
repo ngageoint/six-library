@@ -19,11 +19,11 @@
 * see <http://www.gnu.org/licenses/>.
 *
 */
+#include <six/csm/SICDSensorModel.h>
 
 #include "Error.h"
 #include <sys/OS.h>
 #include <sys/Path.h>
-#include <six/csm/SICDSensorModel.h>
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/XMLControlFactory.h>

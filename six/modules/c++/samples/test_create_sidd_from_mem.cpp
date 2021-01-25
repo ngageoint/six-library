@@ -2581,8 +2581,8 @@ int main(int argc, char** argv)
         const char smallData[4] = {'a', 'b', 'c', 'd'};
 
         // Create a file container
-        auto container(std::make_shared<six::Container>(
-            six::DataType::DERIVED));
+        mem::SharedPtr<six::Container> container(
+            new six::Container(DataType::DERIVED));
 
         std::vector<const UByte*> buffers;
         size_t numImages = options->get<bool>("multipleImages") ? 3 : 1;
@@ -2625,6 +2625,11 @@ int main(int argc, char** argv)
 
         // Save the file
         writer->save(buffers, outputName);
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

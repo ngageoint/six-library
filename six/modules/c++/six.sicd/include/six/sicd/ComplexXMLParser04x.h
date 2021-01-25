@@ -28,14 +28,20 @@ namespace six
 {
 namespace sicd
 {
-class ComplexXMLParser04x : public ComplexXMLParser
+struct ComplexXMLParser04x : public ComplexXMLParser
 {
-public:
     ComplexXMLParser04x(const std::string& version,
                         bool addClassAttributes,
                         std::unique_ptr<SICommonXMLParser>&& comParser,
                         logging::Logger* log = nullptr,
                         bool ownLog = false);
+#if !CODA_OSS_cpp17
+    ComplexXMLParser04x(const std::string& version,
+                        bool addClassAttributes,
+                        std::auto_ptr<SICommonXMLParser> comParser,
+                        logging::Logger* log = nullptr,
+                        bool ownLog = false);
+#endif
 
 protected:
 

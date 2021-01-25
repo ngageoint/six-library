@@ -29,10 +29,6 @@
 #include <six/WriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
-#include <six/Utilities.h>
-
-#undef min
-#undef max
 
 namespace
 {
@@ -113,7 +109,7 @@ NITFHeaderCreator::NITFHeaderCreator() :
     loadXmlDataContentHandler();
 }
 
-NITFHeaderCreator::NITFHeaderCreator(std::shared_ptr<Container> container) :
+NITFHeaderCreator::NITFHeaderCreator(mem::SharedPtr<Container> container) :
     mRecord(NITF_VER_21),
     mXMLRegistry(nullptr),
     mLog(nullptr),
@@ -124,7 +120,7 @@ NITFHeaderCreator::NITFHeaderCreator(std::shared_ptr<Container> container) :
 }
 
 NITFHeaderCreator::NITFHeaderCreator(const six::Options& options,
-                                     std::shared_ptr<Container> container) :
+                                     mem::SharedPtr<Container> container) :
     mRecord(NITF_VER_21),
     mXMLRegistry(nullptr),
     mLog(nullptr),
@@ -139,7 +135,7 @@ std::string NITFHeaderCreator::getComplexIID(size_t segmentNum,
 {
     // SICD###
     std::ostringstream ostr;
-    ostr << DataType(DataType::COMPLEX) << std::setfill('0')
+    ostr << six::toString(DataType(DataType::COMPLEX)) << std::setfill('0')
          << std::setw(3)
          << ((numImageSegments > 1) ? segmentNum + 1 : segmentNum);
 
@@ -151,7 +147,7 @@ std::string NITFHeaderCreator::getDerivedIID(size_t segmentNum,
 {
     // SIDD######
     std::ostringstream ostr;
-    ostr << DataType(DataType::DERIVED) << std::setfill('0')
+    ostr << six::toString(DataType(DataType::DERIVED)) << std::setfill('0')
          << std::setw(3) << (productNum + 1) << std::setw(3)
          << (segmentNum + 1);
 
@@ -179,7 +175,7 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
 {
     const bool isSICD = (mContainer->getDataType() == DataType::COMPLEX);
 
-    uint32_t numRowsPerBlock;
+    nitf::Uint32 numRowsPerBlock;
     if (mOptions.hasParameter(OPT_NUM_ROWS_PER_BLOCK))
     {
         if (isSICD)
@@ -190,7 +186,7 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
         const size_t optNumRowsPerBlock = static_cast<size_t>(
                 mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
 
-        numRowsPerBlock = static_cast<uint32_t>(
+        numRowsPerBlock = static_cast<sys::Uint32_T>(
                 std::min(optNumRowsPerBlock, segmentDims.row));
     }
     else
@@ -198,10 +194,10 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
         // Unblocked (per 2500C, if > 8192, should be set to 0)
         numRowsPerBlock = (segmentDims.row > 8192)
                 ? 0
-                : static_cast<uint32_t>(segmentDims.row);
+                : static_cast<nitf::Uint32>(segmentDims.row);
     }
 
-    uint32_t numColsPerBlock;
+    nitf::Uint32 numColsPerBlock;
     if (mOptions.hasParameter(OPT_NUM_COLS_PER_BLOCK))
     {
         if (isSICD)
@@ -212,7 +208,7 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
         const size_t optNumColsPerBlock = static_cast<size_t>(
                 mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
 
-        numColsPerBlock = static_cast<uint32_t>(
+        numColsPerBlock = static_cast<sys::Uint32_T>(
                 std::min(optNumColsPerBlock, segmentDims.col));
     }
     else
@@ -220,11 +216,11 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
         // Unblocked (per 2500C, if > 8192, should be set to 0)
         numColsPerBlock = (segmentDims.col > 8192)
                 ? 0
-                : static_cast<uint32_t>(segmentDims.col);
+                : static_cast<nitf::Uint32>(segmentDims.col);
     }
 
-    subheader.setBlocking(static_cast<uint32_t>(segmentDims.row),
-                          static_cast<uint32_t>(segmentDims.col),
+    subheader.setBlocking(static_cast<nitf::Uint32>(segmentDims.row),
+                          static_cast<nitf::Uint32>(segmentDims.col),
                           numRowsPerBlock,
                           numColsPerBlock,
                           imode);
@@ -347,12 +343,12 @@ void NITFHeaderCreator::setSecurity(const six::Classification& classification,
     }
 
     // Now, do some specific overrides
-    if (security.classificationSystem().empty())
+    if (security.getClassificationSystem().toString().empty())
     {
         security.getClassificationSystem().set("US");
     }
 
-    if (mLog != nullptr)
+    if (mLog != NULL)
     {
         classification.setSecurity(prefix, *mLog, security);
     }
@@ -393,7 +389,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
     bool changed = false;
     std::string classOrder = "URCST";
     size_t foundLoc =
-            classOrder.find(record.getHeader().classification());
+            classOrder.find(record.getHeader().getClassification().toString());
     int classIndex =
             foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
 
@@ -404,7 +400,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
         nitf::ImageSubheader subheader =
                 nitf::ImageSegment(record.getImages()[i]).getSubheader();
         foundLoc =
-                classOrder.find(subheader.imageSecurityClass());
+                classOrder.find(subheader.getImageSecurityClass().toString());
         int idx =
                 foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
 
@@ -421,7 +417,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
     {
         nitf::DESubheader subheader =
                 nitf::DESegment(record.getDataExtensions()[i]).getSubheader();
-        foundLoc = classOrder.find(subheader.securityClass());
+        foundLoc = classOrder.find(subheader.getSecurityClass().toString());
         int idx =
                 foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
 
@@ -506,14 +502,14 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     tre["DESSHDT"] = data.getCreationTime().format("%Y-%m-%dT%H:%M:%SZ");
     setField("DESSHRP", mOrganizationId, tre);
 
-    const auto dataType = data.getDataType();
-    const std::string strDataType = dataType;
+    const std::string dataType =
+            (data.getDataType() == DataType::COMPLEX) ? "SICD" : "SIDD";
 
-    if (dataType == DataType::COMPLEX)
+    if (dataType == "SICD")
     {
         tre["DESSHSI"] = Constants::SICD_DESSHSI;
     }
-    else if (dataType == DataType::DERIVED)
+    else
     {
         tre["DESSHSI"] = Constants::SIDD_DESSHSI;
     }
@@ -525,7 +521,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     const std::string version(data.getVersion());
     std::string specVers;
     std::string specDT;
-    if (dataType == DataType::COMPLEX)
+    if (dataType == "SICD")
     {
         if (version == "1.0.0" || version == "1.0.1")
         {
@@ -548,7 +544,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
             specDT = "2018-12-13T00:00:00Z";
         }
     }
-    else if (dataType == DataType::DERIVED)
+    else if (dataType == "SIDD")
     {
         if (version == "1.0.0")
         {
@@ -573,7 +569,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     if (specVers.empty())
     {
         throw except::Exception(Ctxt("DESSHSV Failure - Unsupported in " +
-                                     strDataType + " version: " + version));
+                                     dataType + " version: " + version));
     }
     tre["DESSHSV"] = specVers;
 
@@ -581,11 +577,11 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     if (specDT.empty())
     {
         throw except::Exception(Ctxt("DESSHSD Failure - Unsupported in " +
-            strDataType + " version: " + version));
+                                     dataType + " version: " + version));
     }
     tre["DESSHSD"] = specDT;
 
-    tre["DESSHTN"] = "urn:" + strDataType + ":" + version;
+    tre["DESSHTN"] = "urn:" + dataType + ":" + version;
     tre["DESSHLPG"] = toString(data.getImageCorners());
 
     // Spec specifies leaving this blank
@@ -599,17 +595,17 @@ void NITFHeaderCreator::addUserDefinedSubheader(
 }
 
 void NITFHeaderCreator::addAdditionalDES(
-        std::shared_ptr<nitf::SegmentWriter> segmentWriter)
+        mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
 {
-    if (segmentWriter.get() == nullptr)
+    if (segmentWriter.get() == NULL)
     {
-        throw except::Exception(Ctxt("segmentWriter is nullptr"));
+        throw except::Exception(Ctxt("segmentWriter is NULL"));
     }
 
     mSegmentWriters.push_back(segmentWriter);
 }
 
-void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
+void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
 {
     mContainer = container;
 
@@ -621,11 +617,11 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
     // Clean up
     mInfos.clear();
 
-    uint32_t ilocMax = Constants::ILOC_MAX;
-    uint32_t maxRows =
+    sys::Uint32_T ilocMax = Constants::ILOC_MAX;
+    sys::Uint32_T maxRows =
             mOptions.getParameter(OPT_MAX_ILOC_ROWS, Parameter(ilocMax));
 
-    uint64_t maxSize = (uint64_t)mOptions.getParameter(
+    sys::Uint64_T maxSize = (sys::Uint64_T)mOptions.getParameter(
             OPT_MAX_PRODUCT_SIZE, Parameter(six::Constants::IS_SIZE_MAX));
 
     double j2kCompression = 0;
@@ -640,8 +636,9 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
      */
     if (container->getDataType() == DataType::COMPLEX)
     {
-        auto info(std::make_shared<NITFImageInfo>(
+        mem::SharedPtr<NITFImageInfo> info(new NITFImageInfo(
                 container->getData(0), maxRows, maxSize, true, 0, 0));
+
         mInfos.push_back(info);
     }
     else
@@ -653,18 +650,18 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
         enableJ2K = (j2kCompression <= 1.0) && j2kCompression > 0.0001;
 
         // get row blocking parameters
-        uint32_t optNumRowsPerBlock = 0;
+        nitf::Uint32 optNumRowsPerBlock = 0;
         if (mOptions.hasParameter(OPT_NUM_ROWS_PER_BLOCK))
         {
-            optNumRowsPerBlock = static_cast<uint32_t>(
+            optNumRowsPerBlock = static_cast<nitf::Uint32>(
                     mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
         }
 
         // get column blocking parameters
-        uint32_t optNumColsPerBlock = 0;
+        nitf::Uint32 optNumColsPerBlock = 0;
         if (mOptions.hasParameter(OPT_NUM_COLS_PER_BLOCK))
         {
-            optNumColsPerBlock = static_cast<uint32_t>(
+            optNumColsPerBlock = static_cast<nitf::Uint32>(
                     mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
         }
 
@@ -673,15 +670,16 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
             Data* const ith = container->getData(ii);
             if (ith->getDataType() == DataType::DERIVED)
             {
-                const uint32_t numRowsPerBlock =
+                const nitf::Uint32 numRowsPerBlock =
                         std::min(optNumRowsPerBlock,
-                                 static_cast<uint32_t>(ith->getNumRows()));
+                                 static_cast<nitf::Uint32>(ith->getNumRows()));
 
-                const uint32_t numColsPerBlock =
+                const nitf::Uint32 numColsPerBlock =
                         std::min(optNumColsPerBlock,
-                                 static_cast<uint32_t>(ith->getNumCols()));
+                                 static_cast<nitf::Uint32>(ith->getNumCols()));
 
-                auto info(std::make_shared<NITFImageInfo>(ith,
+                mem::SharedPtr<NITFImageInfo> info(
+                        new NITFImageInfo(ith,
                                           maxRows,
                                           maxSize,
                                           true,
@@ -697,7 +695,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 
     DataType dataType = container->getDataType();
     std::string name = mInfos[0]->getData()->getName();
-    auto fileTitle = std::string(dataType) + ": " + name;
+    std::string fileTitle = six::toString(dataType) + ": " + name;
     fileTitle = fileTitle.substr(0, NITF_FTITLE_SZ);  // truncate past 80
     record.getHeader().getFileTitle().set(fileTitle);
 
@@ -715,8 +713,8 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
                 info.getImageSegments();
 
         size_t numIS = imageSegments.size();
-        uint32_t nbpp =
-                static_cast<uint32_t>(info.getNumBitsPerPixel());
+        nitf::Uint32 nbpp =
+                static_cast<nitf::Uint32>(info.getNumBitsPerPixel());
         size_t numCols = info.getData()->getNumCols();
         std::string irep = info.getRepresentation();
         std::string imode = info.getMode();
@@ -798,7 +796,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
             {
                 // Need to attach to last segment
                 subheader.getImageAttachmentLevel().set(
-                        (uint16_t)(info.getStartIndex() + jj));
+                        (nitf::Uint16)(info.getStartIndex() + jj));
             }
 
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
@@ -847,7 +845,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
             subheader.getImageLocation().set(generateILOC(legend->mLocation));
 
             // Set NBPP and sanity check if LUT is set appropriately
-            uint32_t legendNbpp;
+            nitf::Uint32 legendNbpp;
             switch (legend->mType)
             {
             case PixelType::MONO8I:
@@ -862,7 +860,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 
             case PixelType::RGB8LU:
                 // We should have a legend
-                if (legend->mLUT.get() == nullptr)
+                if (legend->mLUT.get() == NULL)
                 {
                     throw except::Exception(Ctxt(
                             "LUT should be present for indexed RGB legend"));
@@ -887,8 +885,8 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
                     "LEG",
                     bandInfo);
 
-            subheader.setBlocking(static_cast<uint32_t>(legend->mDims.row),
-                                  static_cast<uint32_t>(legend->mDims.col),
+            subheader.setBlocking(static_cast<nitf::Uint32>(legend->mDims.row),
+                                  static_cast<nitf::Uint32>(legend->mDims.col),
                                   0,
                                   0,
                                   NITFImageInfo::getMode(legend->mType));
@@ -899,7 +897,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
             // to (which is the first image segment for this product which is
             // conveniently at info.getStartIndex()... but IDLVL is 1-based).
             subheader.getImageAttachmentLevel().set(
-                    static_cast<uint16_t>(info.getStartIndex() + 1));
+                    static_cast<nitf::Uint16>(info.getStartIndex() + 1));
 
             setImageSecurity(info.getData()->getClassification(), subheader);
 
@@ -927,8 +925,8 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 
     for (auto desSource : container->getDESSources())
     {
-        auto desWriter(
-                std::make_shared<nitf::SegmentWriter>(desSource));
+        mem::SharedPtr<nitf::SegmentWriter> desWriter(
+                new nitf::SegmentWriter(desSource));
         mSegmentWriters.push_back(desWriter);
     }
 
@@ -936,15 +934,16 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 }
 
 void NITFHeaderCreator::initialize(const six::Options& options,
-                                   std::shared_ptr<Container> container)
+                                   mem::SharedPtr<Container> container)
 {
     mOptions = options;
     initialize(container);
 }
 
-void NITFHeaderCreator::loadMeshSegment(
+template<typename T>
+void NITFHeaderCreator::loadMeshSegment_(
         const std::string& meshName,
-        const std::vector<std::byte>& meshBuffer,
+        const std::vector<T>& meshBuffer,
         const six::Classification& classification)
 {
     nitf::Record& record = getRecord();
@@ -961,10 +960,25 @@ void NITFHeaderCreator::loadMeshSegment(
     subheader.setSecurityGroup(security.clone());
 
     // Add the data and writer for this segment
+    auto data = reinterpret_cast<const sys::byte*>(meshBuffer.data());
     nitf::SegmentMemorySource dataSource(
-            meshBuffer, 0, 0, true);
-    auto desWriter(
-        std::make_shared<nitf::SegmentWriter>(dataSource));
+            data, meshBuffer.size(), 0, 0, true);
+    mem::SharedPtr<nitf::SegmentWriter> desWriter(
+            new nitf::SegmentWriter(dataSource));
     addAdditionalDES(desWriter);
+}
+void NITFHeaderCreator::loadMeshSegment(
+        const std::string& meshName,
+        const std::vector<sys::byte>& meshBuffer,
+        const six::Classification& classification)
+{
+    loadMeshSegment_(meshName, meshBuffer, classification);
+}
+void NITFHeaderCreator::loadMeshSegment(
+        const std::string& meshName,
+        const std::vector<std::byte>& meshBuffer,
+        const six::Classification& classification)
+{
+    loadMeshSegment_(meshName, meshBuffer, classification);
 }
 }

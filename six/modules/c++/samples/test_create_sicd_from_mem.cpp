@@ -83,7 +83,7 @@ int main(int argc, char** argv)
                 six::sicd::Utilities::createFakeComplexData().release());
         data->setPixelType(six::PixelType::RE32F_IM32F);
 
-        auto container(std::make_shared<six::Container>(
+	mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
         container->addData(std::move(data));
 
@@ -120,7 +120,7 @@ int main(int argc, char** argv)
         six::NITFWriteControl writer(writerOptions, container);
         writer.setLogger(logger.get());
 
-        six::BufferList buffers;
+        six::buffer_list buffers;
         buffers.push_back(reinterpret_cast<std::byte*>(image.data()));
         writer.save(buffers, outputName, schemaPaths);
 
@@ -129,6 +129,11 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << "Caught except::Exception: " << ex.getMessage()
+            << std::endl;
     }
     catch (...)
     {

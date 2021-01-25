@@ -25,12 +25,14 @@
 
 #include <complex>
 #include <string>
+#include <memory>
 
+#include <scene/sys_Conf.h>
 #include <cphd/MetadataBase.h>
 #include <cphd/Utilities.h>
 
-#include <nitf/coda-oss.hpp>
 #include <io/SeekableStreams.h>
+#include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
 #include <sys/Conf.h>
 #include <gsl/gsl.h>
@@ -146,7 +148,18 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              gsl::span<std::byte> data) const;
+              const mem::BufferView<sys::ubyte>& data) const;
+    void read(size_t channel,
+              size_t firstVector,
+              size_t lastVector,
+              size_t firstSample,
+              size_t lastSample,
+              size_t numThreads,
+              std::span<std::byte> data) const
+    {
+        mem::BufferView<sys::ubyte> data_(reinterpret_cast<sys::ubyte*>(data.data()), data.size());
+        read(channel, firstVector, lastVector, firstSample, lastSample, numThreads, data_);
+    }
 
     /*!
      *  \func read
@@ -161,7 +174,12 @@ public:
      *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel, gsl::span<std::byte> data) const;
+    void read(size_t channel, const mem::BufferView<sys::ubyte>& data) const;
+    void read(size_t channel, std::span<std::byte> data) const
+    {
+        mem::BufferView<sys::ubyte> data_(reinterpret_cast<sys::ubyte*>(data.data()), data.size());
+        read(channel, data_);
+    }
 
     /*!
      *  \func read
@@ -193,7 +211,19 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              std::unique_ptr<std::byte[]>& data) const;
+              mem::ScopedArray<sys::ubyte>& data) const;
+    void read(size_t channel,
+              size_t firstVector,
+              size_t lastVector,
+              size_t firstSample,
+              size_t lastSample,
+              size_t numThreads,
+              std::unique_ptr<std::byte[]>& data) const
+    {
+        mem::ScopedArray<sys::ubyte> data_;
+        read(channel, firstVector, lastVector, firstSample, lastSample, numThreads, data_);
+        data.reset(reinterpret_cast<std::byte*>(data_.release()));
+    }
 
     /*!
      *  \func read
@@ -208,7 +238,13 @@ public:
      *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel, std::unique_ptr<std::byte[]>& data) const;
+    void read(size_t channel, mem::ScopedArray<sys::ubyte>& data) const;
+    void read(size_t channel, std::unique_ptr<std::byte[]>& data) const
+    {
+        mem::ScopedArray<sys::ubyte> data_;
+        read(channel, data_);
+        data.reset(reinterpret_cast<std::byte*>(data_.release()));
+    }
 
     /*!
      *  \func read
@@ -247,8 +283,23 @@ public:
               size_t lastSample,
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
-              gsl::span<std::byte> scratch,
-              gsl::span<std::complex<float>> data) const;
+              const mem::BufferView<sys::ubyte>& scratch,
+              const mem::BufferView<std::complex<float>>& data) const;
+    void read(size_t channel,
+              size_t firstVector,
+              size_t lastVector,
+              size_t firstSample,
+              size_t lastSample,
+              const std::vector<double>& vectorScaleFactors,
+              size_t numThreads,
+              std::span<std::byte> scratch,
+              std::span<std::complex<float>> data) const
+    {
+        mem::BufferView<sys::ubyte> scratch_(reinterpret_cast<sys::ubyte*>(scratch.data()), scratch.size());
+        mem::BufferView<std::complex<float>> data_(data.data(), data.size());
+        read(channel, firstVector, lastVector, firstSample, lastSample, vectorScaleFactors, numThreads,
+            scratch_, data_);
+    }
 
     /*!
      *  \func read
@@ -283,7 +334,7 @@ public:
               const types::RowCol<size_t>& dims,
               void* data) const
     {
-        gsl::span<std::byte> buffer(static_cast<std::byte*>(data),
+        std::span<std::byte> buffer(static_cast<std::byte*>(data),
                                                  dims.area() * mElementSize);
         read(channel,
              firstVector,
@@ -406,7 +457,6 @@ private:
 
     bool shouldByteSwap() const;
 
-private:
     Wideband(const Wideband&) = delete;
     const Wideband& operator=(const Wideband&) = delete;
 

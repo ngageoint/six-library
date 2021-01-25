@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sidd/CropUtils.h>
 
 #include <memory>
 #include <iostream>
@@ -27,7 +28,6 @@
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
-#include <six/sidd/CropUtils.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/XMLControlFactory.h>
 #include "utils.h"

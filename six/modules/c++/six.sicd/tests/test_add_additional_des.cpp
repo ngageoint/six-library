@@ -72,14 +72,14 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
             std::vector<std::string>(),
             log);
 
-    auto container(std::make_shared<six::Container>(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
     writer.initialize(container);
 
-    std::shared_ptr<nitf::SegmentWriter> segmentWriter;
+    mem::SharedPtr<nitf::SegmentWriter> segmentWriter;
     try
     {
         writer.addAdditionalDES(segmentWriter);
@@ -106,8 +106,8 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    auto container(std::make_shared<six::Container>(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
@@ -120,7 +120,7 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     des.getSubheader().getVersion().set("01");
     des.getSubheader().getSecurityClass().set("U");
 
-    writer.addAdditionalDES(std::make_shared<nitf::SegmentWriter>());
+    writer.addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter>(new nitf::SegmentWriter));
 
     io::TempFile temp;
     try
@@ -148,8 +148,8 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    auto container(std::make_shared<six::Container>(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(dynamic_cast<six::Data*>(data.release()));
 
     six::NITFWriteControl writer;
@@ -165,7 +165,7 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     static const char segmentData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sSource(segmentData, strlen(segmentData),
         0, 0, true);
-    auto segmentWriter(std::make_shared<nitf::SegmentWriter>());
+    mem::SharedPtr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
     segmentWriter->attachSource(sSource);
     writer.addAdditionalDES(segmentWriter);
 
@@ -195,8 +195,8 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    auto container(std::make_shared<six::Container>(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
@@ -212,7 +212,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     static const char segmentOneData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sOneSource(segmentOneData, strlen(segmentOneData),
         0, 0, true);
-    auto segmentOneWriter(std::make_shared<nitf::SegmentWriter>());
+    mem::SharedPtr<nitf::SegmentWriter> segmentOneWriter(new nitf::SegmentWriter);
     segmentOneWriter->attachSource(sOneSource);
     writer.addAdditionalDES(segmentOneWriter);
 
@@ -225,7 +225,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     static const char segmentTwoData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sTwoSource(segmentTwoData, strlen(segmentTwoData),
         0, 0, true);
-    auto segmentTwoWriter(std::make_shared<nitf::SegmentWriter>());
+    mem::SharedPtr<nitf::SegmentWriter> segmentTwoWriter(new nitf::SegmentWriter);
     segmentTwoWriter->attachSource(sTwoSource);
     writer.addAdditionalDES(segmentTwoWriter);
 
@@ -263,6 +263,11 @@ int main(int argc, char** argv)
         allPassed = canAddTwoSegmentWriters(xmlPathname) && allPassed;
 
         return allPassed ? 0 : 1;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

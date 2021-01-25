@@ -160,7 +160,7 @@ int main(int argc, char** argv)
                 new six::XMLControlCreatorT<
                         six::sidd::DerivedXMLControl>());
 
-        auto container(std::make_shared<six::Container>(
+        mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
 
         std::vector<std::byte*> buffers;
@@ -260,6 +260,11 @@ int main(int argc, char** argv)
         }
 
         return 0;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << "Caught exception: " << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

@@ -19,15 +19,18 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef __CPHD_CPHD_WRITER_H__
+#define __CPHD_CPHD_WRITER_H__
 #pragma once
 
 #include <string>
 #include <vector>
 
+#include <scene/sys_Conf.h>
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
-#include <sys/Conf.h>
 #include <cphd/FileHeader.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>
@@ -41,9 +44,8 @@ namespace cphd
  *
  *  \brief Class to handle writing to file and byte swapping
  */
-class DataWriter
+struct DataWriter
 {
-public:
     /*
      *  \func DataWriter
      *  \brief Constructor
@@ -67,9 +69,15 @@ public:
      *  \param numElements Total number of elements in array
      *  \param elementSize Size of each element
      */
-    virtual void operator()(const std::byte* data,
+    virtual void operator()(const sys::ubyte* data,
                             size_t numElements,
                             size_t elementSize) = 0;
+    virtual void operator()(const std::byte* data,
+                            size_t numElements,
+                            size_t elementSize)
+    {
+        (*this)(reinterpret_cast<const sys::ubyte*>(data), numElements, elementSize);
+    }
 
 protected:
     //! Output stream of CPHD
@@ -107,9 +115,16 @@ struct DataWriterLittleEndian final : public DataWriter
      *  \param numElements Total number of elements in array
      *  \param elementSize Size of each element
      */
-    void operator()(const std::byte* data,
+    void operator()(const sys::ubyte* data,
                             size_t numElements,
                             size_t elementSize) override;
+    void operator()(const std::byte* data,
+                            size_t numElements,
+                            size_t elementSize) override
+    {
+        (*this)(reinterpret_cast<const sys::ubyte*>(data), numElements, elementSize);
+    }
+
 
 private:
     // Size of scratch space
@@ -147,9 +162,15 @@ struct DataWriterBigEndian final : public DataWriter
      *  \param numElements Total number of elements in array
      *  \param elementSize Size of each element
      */
-    void operator()(const std::byte* data,
+    void operator()(const sys::ubyte* data,
                             size_t numElements,
                             size_t elementSize) override;
+    void operator()(const std::byte* data,
+                            size_t numElements,
+                            size_t elementSize) override
+    {
+        (*this)(reinterpret_cast<const sys::ubyte*>(data), numElements, elementSize);
+    }
 };
 
 
@@ -160,9 +181,8 @@ struct DataWriterBigEndian final : public DataWriter
  *  Used to write a CPHD file. You must be able to provide the
  *  appropriate metadata and vector based metadata.
  */
-class CPHDWriter
+struct CPHDWriter
 {
-public:
     /*
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
@@ -233,7 +253,15 @@ public:
     void write(
             const PVPBlock& pvpBlock,
             const T* widebandData,
-            const std::byte* supportData = nullptr);
+            const sys::ubyte* supportData = nullptr);
+    template<typename T>
+    void write(
+            const PVPBlock& pvpBlock,
+            const T* widebandData,
+            const std::byte* supportData = nullptr)
+    {
+        write(pvpBlock, widebandData, reinterpret_cast<const sys::ubyte*>(supportData));
+    }
 
     /*
      *  \func writeMetadata
@@ -276,7 +304,7 @@ public:
     template <typename T>
     void writeSupportData(const T* data)
     {
-        const std::byte* dataPtr = reinterpret_cast<const std::byte*>(data);
+        auto dataPtr = reinterpret_cast<const std::byte*>(data);
         for (auto it = mMetadata.data.supportArrayMap.begin(); it != mMetadata.data.supportArrayMap.end(); ++it)
         {
             // Move inputstream head to offset of particular support array
@@ -380,3 +408,4 @@ private:
 };
 }
 
+#endif

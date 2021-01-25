@@ -211,8 +211,7 @@ int main(int argc, char** argv)
             {
                 region.setNumRows(numRows);
                 size_t totalBytes = nbpp * numCols * numRows;
-                const std::unique_ptr<std::byte[]>
-                    workBuffer = region.setBuffer(totalBytes);
+                const auto workBuffer = region.setBuffer(totalBytes);
 
                 reader->interleaved(region, ii);
                 outputStream.write((const std::byte*) workBuffer.get(),
@@ -224,15 +223,15 @@ int main(int argc, char** argv)
                 const size_t nbpr = nbpp * numCols;
 
                 // allocate this so we can reuse it for each row
-                const std::unique_ptr<std::byte[]> workBuffer = region.setBuffer(nbpr);
+                const auto workBuffer = region.setBuffer(nbpr);
 
                 for (size_t jj = startRow;
                      jj < numRows + startRow;
                      ++jj)
                 {
                     region.setStartRow(jj);
-                    std::byte* line = reader->interleaved(region, ii);
-                    outputStream.write((const std::byte*) line, nbpr);
+                    auto line = reader->interleaved(region, ii);
+                    outputStream.write(line, nbpr);
                 }
             }
             outputStream.close();
@@ -240,6 +239,11 @@ int main(int argc, char** argv)
         }
 
         return 0;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.toString() << std::endl;
+        return 1;
     }
     catch (const std::exception& cppE)
     {

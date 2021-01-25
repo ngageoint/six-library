@@ -87,11 +87,11 @@ std::string CPHDXMLControl::toXMLString(
     return ss.stream().str();
 }
 
-std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
+mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
         const Metadata& metadata,
         const std::vector<std::string>& schemaPaths)
 {
-    std::unique_ptr<xml::lite::Document> doc = toXMLImpl(metadata);
+    mem::auto_ptr<xml::lite::Document> doc(toXMLImpl(metadata).release());
     if(!schemaPaths.empty())
     {
         six::XMLControl::validate(doc.get(), schemaPaths, mLog);

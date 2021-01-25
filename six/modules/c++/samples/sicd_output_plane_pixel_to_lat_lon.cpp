@@ -90,6 +90,10 @@ int main(int argc, char** argv)
             << "Altitude: " << lla.getAlt() << "\n";
         return 0;
     }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
+    }
     catch(const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;

@@ -24,7 +24,7 @@
 #include <stdexcept>
 #include <memory>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
@@ -51,9 +51,8 @@ void usage(const std::string& progname, std::ostream& ostr)
          << "-image_to_ground must be specified\n\n";
 }
 
-class Converter
+struct Converter final
 {
-public:
     Converter(const std::string& pathname);
 
     void groundToImage(const scene::Vector3& groundPt) const;

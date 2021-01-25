@@ -118,6 +118,10 @@ public:
      *  For safety, prefer the overload below.
      */
     virtual UByte* interleaved(Region& region, size_t imageNumber) = 0;
+    virtual void  interleaved(Region& region, size_t imageNumber, std::byte*& result)
+    {
+        result = reinterpret_cast<std::byte*>(interleaved(region, imageNumber));
+    }
 
     /*!
      *  This function reads in the image area specified by the region.
@@ -146,6 +150,13 @@ public:
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
            std::unique_ptr<T[]>& buffer)
+    {
+        buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
+        return buffer.get();
+    }
+    template<typename T>
+    T* interleaved(Region& region, size_t imageNumber,
+        std::unique_ptr<T[]>& buffer)
     {
         buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
         return buffer.get();

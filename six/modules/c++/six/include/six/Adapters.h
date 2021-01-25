@@ -124,6 +124,13 @@ public:
                        size_t numChannels,
                        size_t pixelSize,
                        bool doByteSwap);
+    MemoryWriteHandler(const NITFSegmentInfo& info, 
+                       const std::byte* buffer,
+                       size_t firstRow,
+                       size_t numCols,
+                       size_t numChannels,
+                       size_t pixelSize,
+                       bool doByteSwap);
 };
 
 /*!

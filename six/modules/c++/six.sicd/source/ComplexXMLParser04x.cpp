@@ -41,6 +41,17 @@ ComplexXMLParser04x::ComplexXMLParser04x(
     ComplexXMLParser(version, addClassAttributes, std::move(comParser), log, ownLog)
 {
 }
+#if !CODA_OSS_cpp17
+ComplexXMLParser04x::ComplexXMLParser04x(
+    const std::string& version,
+    bool addClassAttributes,
+    std::auto_ptr<SICommonXMLParser> comParser,
+    logging::Logger* log,
+    bool ownLog) :
+    ComplexXMLParser04x(version, addClassAttributes, std::unique_ptr<SICommonXMLParser>(comParser.release()), log, ownLog)
+{
+}
+#endif
 
 XMLElem ComplexXMLParser04x::convertGeoInfoToXML(
     const GeoInfo *geoInfo,

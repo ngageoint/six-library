@@ -176,7 +176,7 @@ private:
     void parseLookupTableFromXML(const XMLElem lookupElem,
           LookupTable& lookupTable) const;
 
-    std::unique_ptr<LUT> parseSingleLUT(const XMLElem elem,
+    mem::auto_ptr<LUT> parseSingleLUT(const XMLElem elem,
             size_t size) const;
 };
 }

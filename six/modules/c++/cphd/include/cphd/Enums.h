@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __CPHD_ENUMS_H__
+#define __CPHD_ENUMS_H__
 #pragma once
 
 #include <sys/Conf.h>
@@ -29,6 +31,8 @@
 
 namespace cphd
 {
+    constexpr auto NOT_SET_VALUE = six::NOT_SET_VALUE;
+
 /*!
  *  \struct SampleType
  *
@@ -72,7 +76,7 @@ struct PhaseSGN final : public six::details::Enum<PhaseSGN>
         {
             {"-1", MINUS_1},
             {"+1", PLUS_1},
-            SIX_Enum_map_entry_(NOT_SET)
+            SIX_Enum_map_entry_NOT_SET
         };
         return retval;
     }
@@ -159,7 +163,7 @@ struct PolarizationType final : public six::details::Enum<PolarizationType>
             SIX_Enum_map_entry_(RHC),
             SIX_Enum_map_entry_(LHC),
             SIX_Enum_map_entry_(UNSPECIFIED),
-            SIX_Enum_map_entry_(NOT_SET)
+            SIX_Enum_map_entry_NOT_SET
         };
         return retval;
     }
@@ -170,3 +174,4 @@ struct PolarizationType final : public six::details::Enum<PolarizationType>
     PolarizationType& operator=(const int& o) { value = o; return *this; }
 };
 }
+#endif

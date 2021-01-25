@@ -19,15 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sidd/DerivedXMLParser.h>
 
 #include <string.h>
 #include <sstream>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <str/Manip.h>
 #include <except/Exception.h>
 #include <six/sidd/DerivedDataBuilder.h>
-#include <six/sidd/DerivedXMLParser.h>
 
 namespace
 {
@@ -48,6 +48,14 @@ DerivedXMLParser::DerivedXMLParser(
         bool ownLog) :
     XMLParser(versionToURI(version), false, log, ownLog),
     mCommon(std::move(comParser))
+{
+}
+DerivedXMLParser::DerivedXMLParser(
+        const std::string& version,
+        std::auto_ptr<six::SICommonXMLParser> comParser,
+        logging::Logger* log,
+        bool ownLog) :
+    DerivedXMLParser(version, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)
 {
 }
 
@@ -411,7 +419,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
                             "LUT vals expected to be in [0, 255]."));
                     }
 
-                    std::byte val = static_cast<std::byte>(
+                    auto val = static_cast<std::byte>(
                             intermediateVal);
 
                     ::memcpy(&(remapLUT->getTable()[k++]), &val,
@@ -458,7 +466,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
     }
 }
 
-std::unique_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
+mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
 {
     //get size attribute
     int size = str::toType<int>(elem->attribute("size"));
@@ -466,7 +474,7 @@ std::unique_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
     std::string lutStr = "";
     parseString(elem, lutStr);
     std::vector<std::string> lutVals = str::split(lutStr, " ");
-    std::unique_ptr<LUT> lut(new LUT(size, sizeof(short)));
+    mem::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
 
     for (size_t ii = 0; ii < lutVals.size(); ++ii)
     {

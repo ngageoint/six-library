@@ -40,11 +40,10 @@
 #pragma warning(disable: 4464) // relative include path contains '..'
 #include "../../cpp_pch.h"
 
-#include <sys/File.h>
+#include <nitf/coda-oss.hpp>
 
 #pragma warning(pop)
 
-#include <sys/Conf.h>
 #include <import/except.h>
 #include <import/types.h>
 #pragma warning(push)
@@ -53,7 +52,6 @@
 #pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
 #include <import/sys.h>
 #include <import/io.h>
-#include <import/mt.h>
 #pragma warning(pop)
 #include <import/str.h>
 #include <import/logging.h>

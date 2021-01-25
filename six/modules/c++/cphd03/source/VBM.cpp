@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd03/VBM.h>
 
 #include <string.h>
 
@@ -29,7 +30,6 @@
 #include <sys/Bit.h>
 
 #include <cphd/ByteSwap.h>
-#include <cphd03/VBM.h>
 
 namespace
 {
@@ -347,7 +347,7 @@ VBM::VBM(size_t numChannels,
     //! For each channel
     for (size_t ii = 0; ii < mData.size(); ++ii)
     {
-        const std::byte* ptr = static_cast<const std::byte*>(data[ii]);
+        auto ptr = static_cast<const std::byte*>(data[ii]);
 
         //! For each vector
         for (size_t jj = 0;
@@ -670,7 +670,7 @@ void VBM::getVBMdata(size_t channel,
 {
     verifyChannelVector(channel, 0);
     const size_t numBytes = getNumBytesVBP();
-    std::byte* ptr = static_cast<std::byte*>(data);
+    auto ptr = static_cast<std::byte*>(data);
 
     for (size_t ii = 0;
          ii < mData[channel].size();

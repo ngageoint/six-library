@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/CPHDWriter.h>
 
 #include <thread>
 
@@ -26,7 +27,6 @@
 #include <sys/Bit.h>
 
 #include <cphd/ByteSwap.h>
-#include <cphd/CPHDWriter.h>
 #include <cphd/CPHDXMLControl.h>
 #include <cphd/FileHeader.h>
 #include <cphd/Utilities.h>
@@ -59,7 +59,7 @@ DataWriterLittleEndian::DataWriterLittleEndian(
 {
 }
 
-void DataWriterLittleEndian::operator()(const std::byte* data,
+void DataWriterLittleEndian::operator()(const sys::ubyte* data,
                                         size_t numElements,
                                         size_t elementSize)
 {
@@ -89,11 +89,11 @@ DataWriterBigEndian::DataWriterBigEndian(
 {
 }
 
-void DataWriterBigEndian::operator()(const std::byte* data,
+void DataWriterBigEndian::operator()(const sys::ubyte* data,
                                      size_t numElements,
                                      size_t elementSize)
 {
-    mStream->write(reinterpret_cast<const std::byte*>(data),
+    mStream->write(data,
                    numElements * elementSize);
 }
 
@@ -218,7 +218,7 @@ void CPHDWriter::writeSupportDataImpl(const std::byte* data,
 template <typename T>
 void CPHDWriter::write(const PVPBlock& pvpBlock,
                        const T* widebandData,
-                       const std::byte* supportData)
+                       const sys::ubyte* supportData)
 {
     // Write File header and metadata to file
     // Padding is added in writeMetadata
@@ -251,9 +251,27 @@ void CPHDWriter::write(const PVPBlock& pvpBlock,
 }
 
 // For compressed data
+template void CPHDWriter::write<sys::ubyte>(const PVPBlock& pvpBlock,
+                                            const sys::ubyte* widebandData,
+                                            const sys::ubyte* supportData);
 template void CPHDWriter::write<std::byte>(const PVPBlock& pvpBlock,
                                             const std::byte* widebandData,
                                             const std::byte* supportData);
+
+template void CPHDWriter::write<std::complex<int8_t>>(
+    const PVPBlock& pvpBlock,
+    const std::complex<int8_t>* widebandData,
+    const sys::ubyte* supportData);
+
+template void CPHDWriter::write<std::complex<int16_t>>(
+    const PVPBlock& pvpBlock,
+    const std::complex<int16_t>* widebandData,
+    const sys::ubyte* supportData);
+
+template void CPHDWriter::write<std::complex<float>>(
+    const PVPBlock& pvpBlock,
+    const std::complex<float>* widebandData,
+    const sys::ubyte* supportData);
 
 template void CPHDWriter::write<std::complex<int8_t>>(
         const PVPBlock& pvpBlock,
@@ -353,6 +371,9 @@ void CPHDWriter::writeCPHDData(const T* data,
 }
 
 // For compressed data
+template void CPHDWriter::writeCPHDData(const sys::ubyte* data,
+                                        size_t numElements,
+                                        size_t channel);
 template void CPHDWriter::writeCPHDData(const std::byte* data,
                                         size_t numElements,
                                         size_t channel);

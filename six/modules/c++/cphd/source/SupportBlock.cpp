@@ -19,21 +19,20 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/SupportBlock.h>
 
 #include <limits>
 #include <sstream>
 
-#include <sys/Conf.h>
-#include <sys/Bit.h>
+#include <nitf/coda-oss.hpp>
 #include <mt/ThreadGroup.h>
 #include <mt/ThreadPlanner.h>
 #include <except/Exception.h>
 #include <io/FileInputStream.h>
 
-#include <cphd/ByteSwap.h>
-#include <cphd/SupportBlock.h>
 #include <six/Init.h>
 
+#include <cphd/ByteSwap.h>
 
 namespace cphd
 {
@@ -81,22 +80,22 @@ int64_t SupportBlock::getFileOffset(const std::string& id) const
 
 void SupportBlock::read(const std::string& id,
                         size_t numThreads,
-                        gsl::span<std::byte> data) const
+                        const mem::BufferView<sys::ubyte>& data) const
 {
     const size_t minSize = mData.getSupportArrayById(id).getSize();
 
-    if (data.size() < minSize)
+    if (data.size < minSize)
     {
         std::ostringstream ostr;
         ostr << "Need at least " << minSize << " bytes but only got "
-             << data.size();
+             << data.size;
         throw except::Exception(Ctxt(ostr.str()));
     }
     // Perform the read
     // Compute the byte offset into this SupportArray in the CPHD file
     // First to the start of the first support array we're going to read
     int64_t inOffset = getFileOffset(id);
-    auto dataPtr = data.data();
+    auto dataPtr = data.data;
     mInStream->seek(inOffset, io::FileInputStream::START);
     size_t size = mData.getSupportArrayById(id).getSize();
     mInStream->read(dataPtr, size);
@@ -111,24 +110,23 @@ void SupportBlock::read(const std::string& id,
 }
 
 void SupportBlock::readAll(size_t numThreads,
-                           std::unique_ptr<std::byte[]>& data) const
+                           mem::ScopedArray<sys::ubyte>& data) const
 {
-    data.reset(new std::byte[mSupportSize]);
+    data.reset(new sys::ubyte[mSupportSize]);
     for (auto& supportArrayMapPair : mData.supportArrayMap)
     {
-        auto& supportArray = supportArrayMapPair.second;
-        auto span = gsl::make_span(&data[supportArray.arrayByteOffset], supportArray.getSize());
-        read(supportArrayMapPair.first, numThreads, span);
+        const size_t bufSize = supportArrayMapPair.second.getSize();
+        read(supportArrayMapPair.first, numThreads, mem::BufferView<sys::ubyte>(&data[supportArrayMapPair.second.arrayByteOffset], bufSize));
     }
 }
 
 void SupportBlock::read(const std::string& id,
                         size_t numThreads,
-                        std::unique_ptr<std::byte[]>& data) const
+                        mem::ScopedArray<sys::ubyte>& data) const
 {
     const size_t bufSize = mData.getSupportArrayById(id).getSize();
-    data.reset(new std::byte[bufSize]);
-    read(id, numThreads, gsl::make_span(data.get(), bufSize));
+    data.reset(new sys::ubyte[bufSize]);
+    read(id, numThreads, mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }
 
 std::ostream& operator<< (std::ostream& os, const SupportBlock& d)

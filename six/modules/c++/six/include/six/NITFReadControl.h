@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __SIX_NITF_READ_CONTROL_H__
+#define __SIX_NITF_READ_CONTROL_H__
 #pragma once
 
 #include <map>
@@ -51,8 +53,11 @@ namespace six
  */
 struct NITFReadControl : public ReadControl
 {
+    //!  Constructor
     NITFReadControl();
-    virtual ~NITFReadControl() noexcept(false)
+
+    //!  Destructor
+    virtual ~NITFReadControl()
     {
         reset();
     }
@@ -106,6 +111,8 @@ struct NITFReadControl : public ReadControl
      *  segment in question at least follows some of the rules
      *  that its supposed to.
      */
+    void validateSegment(nitf::ImageSubheader subheader,
+                         const NITFImageInfo* info);
     void validateSegment(nitf::ImageSubheader subheader, const NITFImageInfo&);
 
     using ReadControl::load;
@@ -129,8 +136,8 @@ struct NITFReadControl : public ReadControl
     void load(io::SeekableInputStream& ioStream,
               const std::vector<std::string>& schemaPaths);
 
-    void load(std::shared_ptr<nitf::IOInterface> ioInterface);
-    void load(std::shared_ptr<nitf::IOInterface> ioInterface,
+    void load(mem::SharedPtr<nitf::IOInterface> ioInterface);
+    void load(mem::SharedPtr<nitf::IOInterface> ioInterface,
               const std::vector<std::string>& schemaPaths);
 
 
@@ -176,7 +183,7 @@ protected:
     //! We keep a ref to the record
     nitf::Record mRecord;
 
-    std::vector<std::unique_ptr<NITFImageInfo>> mInfos;
+    std::vector<NITFImageInfo*> mInfos;
 
     std::map<std::string, void*> mCompressionOptions;
 
@@ -196,14 +203,14 @@ protected:
      *  it is only unique when it's Complex data.
      *
      */
+    std::pair<size_t, size_t>
+    getIndices(const nitf::ImageSubheader& subheader) const;
     struct ImageAndSegment final
     {
         size_t image = 0;
         size_t segment = 0;
-
     };
-    ImageAndSegment
-    getIndices(const nitf::ImageSubheader& subheader) const;
+    void getIndices(const nitf::ImageSubheader& subheader, ImageAndSegment&) const;
 
     void addImageClassOptions(nitf::ImageSubheader& s,
             six::Classification& c) const;
@@ -221,7 +228,7 @@ protected:
     //  to be cleaned up elsewhere. There is no access
     //  to deallocation in NITFReadControl directly
     virtual void createCompressionOptions(
-            std::map<std::string, void*>& ) 
+            std::map<std::string, void*>& )
     {
     }
 
@@ -243,13 +250,19 @@ private:
     // to prevent data from being deleted prematurely
     // The issue occurs from the explicit destructor of
     // IOControl
-    std::shared_ptr<nitf::IOInterface> mInterface;
+    mem::SharedPtr<nitf::IOInterface> mInterface;
 };
 
 
 struct NITFReadControlCreator final : public ReadControlCreator
 {
-    std::unique_ptr<six::ReadControl> newReadControl() const override;
+    six::ReadControl* newReadControl() const override
+    {
+        std::unique_ptr<six::ReadControl> retval;
+        newReadControl(retval);
+        return retval.release();
+    }
+    void newReadControl(std::unique_ptr<six::ReadControl>& result) const override;
 
     bool supports(const std::string& filename) const override;
 
@@ -258,4 +271,5 @@ struct NITFReadControlCreator final : public ReadControlCreator
 
 }
 
+#endif
 

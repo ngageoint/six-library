@@ -19,17 +19,17 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sicd/CropUtils.h>
 
 #include <memory>
 #include <algorithm>
 #include <string>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
 #include <six/NITFWriteControl.h>
-#include <six/sicd/CropUtils.h>
 #include <six/sicd/Utilities.h>
 #include <six/sicd/SlantPlanePixelTransformer.h>
 
@@ -119,7 +119,7 @@ void cropSICD(six::NITFReadControl& reader,
     region.setStartCol(aoiOffset.col);
     region.setNumRows(aoiDims.row);
     region.setNumCols(aoiDims.col);
-    const std::unique_ptr<std::byte[]> buffer = region.setBuffer(numBytes);
+    const auto buffer = region.setBuffer(numBytes);
     reader.interleaved(region, 0);
 
     six::sicd::ComplexData* const aoiData = updateMetadata(
@@ -128,7 +128,7 @@ void cropSICD(six::NITFReadControl& reader,
     std::unique_ptr<six::Data> scopedData(aoiData);
 
     // Write the AOI SICD out
-    auto container(std::make_shared<six::Container>(
+    mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
     container->addData(std::move(scopedData));
     six::NITFWriteControl writer(container);
@@ -143,7 +143,7 @@ namespace six
 namespace sicd
 {
 
-std::unique_ptr<six::sicd::ComplexData> cropMetaData(
+mem::auto_ptr<six::sicd::ComplexData> cropMetaData(
         const six::sicd::ComplexData& complexData,
         const types::RowCol<size_t>& aoiOffset,
         const types::RowCol<size_t>& aoiDims)
@@ -162,7 +162,7 @@ std::unique_ptr<six::sicd::ComplexData> cropMetaData(
             aoiOffset,
             aoiDims);
 
-    return std::unique_ptr<six::sicd::ComplexData>(aoiData);
+    return mem::auto_ptr<six::sicd::ComplexData>(aoiData);
 }
 
 void cropSICD(const std::string& inPathname,
