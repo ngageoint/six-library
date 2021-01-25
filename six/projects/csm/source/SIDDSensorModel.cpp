@@ -19,7 +19,6 @@
 * see <http://www.gnu.org/licenses/>.
 *
 */
-
 #include <six/csm/SIDDSensorModel.h>
 
 #include "Error.h"
@@ -117,7 +116,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         // For multi-image SIDDs, all the SIDD DESs will appear first (in the
         // case where SICD DESs are also present), so we just have to grab out
         // the Nth Data object
-        const mem::SharedPtr<six::Container> container = reader.getContainer();
+        const auto container = reader.getContainer();
         if (container->getDataType() != six::DataType::DERIVED ||
             container->getNumData() < imageIndex + 1)
         {
@@ -158,7 +157,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         // Check for the SIDD DES associated with imageIndex and parse it
         // DES's are always in the same order as the images, so we just have to
         // find the Nth DES
-        xml::lite::Document* siddXML = NULL;
+        xml::lite::Document* siddXML = nullptr;
         xml::lite::MinidomParser domParser;
 
         size_t numSIDD = 0;
@@ -201,7 +200,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
             }
         }
 
-        if (siddXML == NULL)
+        if (siddXML == nullptr)
         {
             const std::string message = (numSIDD == 0) ? "Not a SIDD" :
                     "Found " + str::toString(numSIDD) +
@@ -223,7 +222,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
                 new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
         logging::NullLogger logger;
-        std::auto_ptr<six::XMLControl> control(
+        std::unique_ptr<six::XMLControl> control(
                 xmlRegistry.newXMLControl(six::DataType::DERIVED, &logger));
 
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
@@ -420,7 +419,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
                 new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
         logging::NullLogger logger;
-        std::auto_ptr<six::XMLControl> control(xmlRegistry.newXMLControl(
+        std::unique_ptr<six::XMLControl> control(xmlRegistry.newXMLControl(
                 six::DataType::DERIVED, &logger));
 
         // get xml as string for sensor model state

@@ -19,12 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sidd/CropUtils.h>
 
 #include <memory>
 #include <iostream>
 #include <stdexcept>
-
-#include <six/sidd/CropUtils.h>
 
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
@@ -58,7 +57,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output SIDD pathname", cli::STORE,
                            "output", "<output SIDD pathname>", 1, 1);
 
-        const std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
         const types::RowCol<size_t> aoiOffset(options->get<size_t>("sRow"),
                                               options->get<size_t>("sCol"));
         const types::RowCol<size_t> aoiDims(options->get<size_t>("numRows"),

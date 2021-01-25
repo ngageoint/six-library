@@ -36,6 +36,9 @@
 #include <io/FileInputStream.h>
 #include <logging/StreamHandler.h>
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
 namespace
 {
 class XMLVerifier
@@ -59,8 +62,6 @@ private:
 XMLVerifier::XMLVerifier()
 {
     // Verify schema path is set
-    sys::OS os;
-
     six::XMLControl::loadSchemaPaths(mSchemaPaths);
 
     mXmlRegistry.addCreator(six::DataType::COMPLEX,
@@ -86,8 +87,8 @@ void XMLVerifier::readFile(const std::string& pathname,
     }
     else
     {
-        inFile.readInto(&mScratch[0], mScratch.size());
-        contents.assign(&mScratch[0], mScratch.size());
+        inFile.readInto(mScratch.data(), mScratch.size());
+        contents.assign(mScratch.data(), mScratch.size());
     }
 }
 
@@ -102,18 +103,18 @@ void XMLVerifier::verify(const std::string& pathname) const
     // Parse the XML - this verifies both that the XML validates against
     // the schema and that our parser reads it without errors
     io::StringStream inStream;
-    inStream.write(reinterpret_cast<const sys::byte*>(inStr.c_str()),
+    inStream.write(reinterpret_cast<const std::byte*>(inStr.c_str()),
                    inStr.length());
 
-    std::auto_ptr<six::Data> data(six::parseDataFromFile(mXmlRegistry,
+    std::unique_ptr<six::Data> data(six::parseDataFromFile(mXmlRegistry,
                                                          pathname,
                                                          mSchemaPaths,
                                                          mLog));
 
     // Write it back out - this verifies both that the XML we write validates
     // against the schema and that our parser writes it without errors
-    std::auto_ptr<six::XMLControl> xmlControl(mXmlRegistry.newXMLControl(data->getDataType(), &mLog));
-    std::auto_ptr<xml::lite::Document> xmlDoc(xmlControl->toXML(data.get(),
+    std::unique_ptr<six::XMLControl> xmlControl(mXmlRegistry.newXMLControl(data->getDataType(), &mLog));
+    std::unique_ptr<xml::lite::Document> xmlDoc(xmlControl->toXML(data.get(),
                                               mSchemaPaths));
 
     const sys::Path::StringPair splitPath = sys::Path::splitExt(pathname);
@@ -126,12 +127,12 @@ void XMLVerifier::verify(const std::string& pathname) const
 
     // Now re-read the output and make sure the Data objects
     // are equal.
-    std::auto_ptr<six::Data> readData(six::parseDataFromFile(mXmlRegistry,
+    std::unique_ptr<six::Data> readData(six::parseDataFromFile(mXmlRegistry,
         roundTrippedPath,
         mSchemaPaths,
         mLog));
 
-    if (data.get() == NULL || readData.get() == NULL || *data != *readData)
+    if (data.get() == nullptr || readData.get() == nullptr || *data != *readData)
     {
         throw except::Exception(Ctxt(
             "Round-tripped Data does not match for '" + pathname + "'"));
@@ -148,7 +149,7 @@ int main(int argc, char** argv)
         // Parse the command line
         if (argc < 2)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <SICD or SIDD XML pathname #1>"
                       << " <SICD or SIDD XML pathname #2> ...\n";
             return 1;
@@ -170,7 +171,7 @@ int main(int argc, char** argv)
     catch (const except::Exception& ex)
     {
         std::cerr << "Caught except::exception: " << ex.getMessage()
-                  << std::endl;
+            << std::endl;
         return 1;
     }
     catch (...)
