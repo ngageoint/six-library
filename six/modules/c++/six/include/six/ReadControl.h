@@ -61,7 +61,7 @@ struct ReadControl
     }
 
     //!  Destructor doesnt release anything
-    virtual ~ReadControl() noexcept(false)
+    virtual ~ReadControl()
     {
         if (mLog && mOwnLog)
             delete mLog;
