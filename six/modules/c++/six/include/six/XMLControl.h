@@ -22,10 +22,13 @@
 #ifndef __SIX_XML_CONTROL_H__
 #define __SIX_XML_CONTROL_H__
 
+#include <six/sys_Conf.h>
+
 #include <logging/Logger.h>
-#include <six/Data.h>
 #include <xml/lite/Document.h>
 #include <xml/lite/Validator.h>
+
+#include <six/Data.h>
 
 namespace six
 {

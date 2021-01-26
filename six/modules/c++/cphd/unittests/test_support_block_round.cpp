@@ -26,7 +26,8 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
-#include <sys/Conf.h>
+
+#include <nitf/coda-oss.hpp>
 #include <types/RowCol.h>
 #include <io/TempFile.h>
 #include <io/FileInputStream.h>
@@ -91,23 +92,23 @@ void writeSupportData(const std::string& outPathname, size_t numThreads,
     writer.writePVPData(pvpBlock);
 }
 
-std::vector<sys::ubyte> checkSupportData(
+std::vector<std::byte> checkSupportData(
         const std::string& pathname,
-        size_t size,
+        size_t /*size*/,
         size_t numThreads)
 {
     cphd::CPHDReader reader(pathname, numThreads);
     const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
 
-    mem::ScopedArray<sys::ubyte> readPtr;
+    std::unique_ptr<std::byte[]> readPtr;
     supportBlock.readAll(numThreads, readPtr);
 
-    std::vector<sys::ubyte> readData(readPtr.get(), readPtr.get() + reader.getMetadata().data.getAllSupportSize());
+    std::vector<std::byte> readData(readPtr.get(), readPtr.get() + reader.getMetadata().data.getAllSupportSize());
     return readData;
 }
 
 template<typename T>
-bool compareVectors(const std::vector<sys::ubyte>& readData,
+bool compareVectors(const std::vector<std::byte>& readData,
                     const T* writeData,
                     size_t writeDataSize)
 {
@@ -117,7 +118,7 @@ bool compareVectors(const std::vector<sys::ubyte>& readData,
                   << "ReadData size: " << readData.size() << "\n";
         return false;
     }
-    auto ptr = reinterpret_cast<const sys::ubyte*>(writeData);
+    const std::byte* ptr = reinterpret_cast<const std::byte*>(writeData);
     for (size_t ii = 0; ii < readData.size(); ++ii, ++ptr)
     {
         if (*ptr != readData[ii])
@@ -141,8 +142,8 @@ bool runTest(const std::vector<T>& writeData)
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     writeSupportData(tempfile.pathname(), numThreads, writeData, meta, pvpBlock);
-    const auto readData =
-        checkSupportData(tempfile.pathname(), NUM_SUPPORT * NUM_ROWS * NUM_COLS * sizeof(T), numThreads);
+    const std::vector<std::byte> readData =
+            checkSupportData(tempfile.pathname(), NUM_SUPPORT*NUM_ROWS*NUM_COLS*sizeof(T), numThreads);
 
     return compareVectors(readData, writeData.data(), writeData.size());
 }

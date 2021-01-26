@@ -24,8 +24,7 @@
 
 #include <memory>
 
-#include <nitf/coda-oss.hpp>
-#include <import/mt.h>
+#include <scene/sys_Conf.h>
 
 #include "six/XMLControl.h"
 

@@ -50,10 +50,8 @@ namespace six
  *  to know that the NITF is split due to technical complications.
  *
  */
-class ReadControl
+struct ReadControl
 {
-public:
-
     //!  Constructor.  Null-set the current container reference
     ReadControl() :
         mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
@@ -147,9 +145,18 @@ public:
      * \return Buffer of image data.  This is simply equal to buffer.get() and
      * is provided as a convenience.
      */
+#if !CODA_OSS_cpp17
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
-            mem::ScopedArray<T>& buffer)
+           std::auto_ptr<T[]>& buffer)
+    {
+        buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
+        return buffer.get();
+    }
+#endif
+    template<typename T>
+    T* interleaved(Region& region, size_t imageNumber,
+        mem::ScopedArray<T>& buffer)
     {
         buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
         return buffer.get();

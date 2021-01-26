@@ -22,13 +22,16 @@
 #include <iostream>
 #include <sstream>
 
+#include <nitf/coda-oss.hpp>
 #include <sys/DLL.h>
-#include <sys/Conf.h>
 #include <except/Exception.h>
 #include <six/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 #include "utilities.h"
+
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
 
 // CSM includes
 #include <RasterGM.h>
@@ -53,8 +56,7 @@ public:
 
         mReader.setXMLControlRegistry(&mXmlRegistry);
 
-        const std::string schemaDir =
-                sys::Path(confDir).join("schema").join("six");
+        const std::string schemaDir = fs::path(confDir) / "schema" / "six";
         mReader.load(mSicdPathname, std::vector<std::string>(1, schemaDir));
         mComplexData = six::sicd::Utilities::getComplexData(mReader);
     }
@@ -107,7 +109,7 @@ private:
             throw except::Exception(Ctxt("Can't construct ISD"));
         }
 
-        std::auto_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
+        std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
                 mPlugin.constructModelFromISD(isd, MODEL_NAME)));
 
         const six::RowColInt scpPixel = mComplexData->imageData->scpPixel;
@@ -187,7 +189,7 @@ private:
 
     six::XMLControlRegistry mXmlRegistry;
     six::NITFReadControl mReader;
-    std::auto_ptr<six::sicd::ComplexData> mComplexData;
+    std::unique_ptr<six::sicd::ComplexData> mComplexData;
 };
 
 const char Test::MODEL_NAME[] = "SICD_SENSOR_MODEL";
@@ -200,7 +202,7 @@ int main(int argc, char** argv)
         // Parse the command line
         if (argc != 2)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <SICD pathname>\n\n";
             return 1;
         }

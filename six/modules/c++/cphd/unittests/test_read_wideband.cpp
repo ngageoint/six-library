@@ -80,7 +80,7 @@ TEST_CASE(testReadCompressedChannel)
 
     cphd::Wideband wideband(input, metadata, 0, 4);
 
-    mem::ScopedArray<sys::ubyte> readData;
+    std::unique_ptr<std::byte[]> readData;
     wideband.read(0, readData);
 
     TEST_ASSERT_EQ(wideband.getBytesRequiredForRead(0), 4);
@@ -106,7 +106,7 @@ TEST_CASE(testReadUncompressedChannel)
 
     cphd::Wideband wideband(input, metadata, 0, 4);
 
-    mem::ScopedArray<sys::ubyte> readData;
+    std::unique_ptr<std::byte[]> readData;
     wideband.read(0, readData);
 
     TEST_ASSERT_EQ(wideband.getBytesRequiredForRead(0), 8);
@@ -132,7 +132,7 @@ TEST_CASE(testReadChannelSubset)
     input->seek(0, io::Seekable::START);
 
     cphd::Wideband wideband(input, metadata, 0, 32);
-    mem::ScopedArray<sys::ubyte> readData;
+    std::unique_ptr<std::byte[]> readData;
 
     // Single pixel reads
     wideband.read(0, 0, 0, 0, 0, 1, readData);
@@ -197,7 +197,7 @@ TEST_CASE(testCannotDoPartialReadOfCompressedChannel)
 
     cphd::Wideband wideband(input, metadata, 0, 4);
 
-    mem::ScopedArray<sys::ubyte> readData;
+    std::unique_ptr<std::byte[]> readData;
     TEST_EXCEPTION(wideband.read(0, 0, 0, 1, 1, 1, readData));
     TEST_EXCEPTION(wideband.getBytesRequiredForRead(0, 0, 0, 1, 1));
 }

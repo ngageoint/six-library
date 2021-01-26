@@ -19,9 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <string>
+
 #include <sys/Conf.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
+#include <nitf/coda-oss.hpp>
 #include <cphd/ByteSwap.h>
 
 namespace
@@ -36,8 +39,8 @@ template <typename T>
 inline
 void byteSwap(const void* in, T& out)
 {
-    const sys::ubyte* const inPtr = static_cast<const sys::ubyte*>(in);
-    sys::ubyte* const outPtr = reinterpret_cast<sys::ubyte*>(&out);
+    const std::byte* const inPtr = static_cast<const std::byte*>(in);
+    std::byte* const outPtr = reinterpret_cast<std::byte*>(&out);
 
     for (size_t ii = 0, jj = sizeof(T) - 1; ii < jj; ++ii, --jj)
     {
@@ -53,7 +56,7 @@ public:
                      size_t elemSize,
                      size_t startElement,
                      size_t numElements) :
-        mBuffer(static_cast<sys::byte*>(buffer) + startElement * elemSize),
+        mBuffer(static_cast<std::byte*>(buffer) + startElement * elemSize),
         mElemSize(static_cast<unsigned short>(elemSize)),
         mNumElements(numElements)
     {
@@ -65,7 +68,7 @@ public:
     }
 
 private:
-    sys::byte* const mBuffer;
+    std::byte* const mBuffer;
     const unsigned short mElemSize;
     const size_t mNumElements;
 };
@@ -79,7 +82,7 @@ public:
                              size_t numRows,
                              size_t numCols,
                              std::complex<float>* output) :
-        mInput(static_cast<const sys::ubyte*>(input) +
+        mInput(static_cast<const std::byte*>(input) +
                        startRow * numCols * sizeof(std::complex<InT>)),
         mDims(numRows, numCols),
         mOutput(output + startRow * numCols)
@@ -100,7 +103,7 @@ public:
                 // Have to be careful here - can't treat mInput as a
                 // std::complex<InT> directly in case InT is a float (see
                 // explanation in byteSwap() comments)
-                const sys::ubyte* const input = mInput + inIdx;
+                const std::byte* const input = mInput + inIdx;
                 byteSwap(input, real);
                 byteSwap(input + sizeof(InT), imag);
 
@@ -111,7 +114,7 @@ public:
     }
 
 private:
-    const sys::ubyte* const mInput;
+    const std::byte* const mInput;
     const types::RowCol<size_t> mDims;
     std::complex<float>* const mOutput;
 };
@@ -127,7 +130,7 @@ public:
                              size_t numCols,
                              const double* scaleFactors,
                              std::complex<float>* output) :
-        mInput(static_cast<const sys::ubyte*>(input) +
+        mInput(static_cast<const std::byte*>(input) +
                        startRow * numCols * sizeof(std::complex<InT>)),
         mDims(numRows, numCols),
         mScaleFactors(scaleFactors + startRow),
@@ -151,7 +154,7 @@ public:
                 // Have to be careful here - can't treat mInput as a
                 // std::complex<InT> directly in case InT is a float (see
                 // explanation in byteSwap() comments)
-                const sys::ubyte* const input = mInput + inIdx;
+                const std::byte* const input = mInput + inIdx;
                 byteSwap(input, real);
                 byteSwap(input + sizeof(InT), imag);
 
@@ -163,7 +166,7 @@ public:
     }
 
 private:
-    const sys::ubyte* const mInput;
+    const std::byte* const mInput;
     const types::RowCol<size_t> mDims;
     const double* const mScaleFactors;
     std::complex<float>* const mOutput;
@@ -191,14 +194,14 @@ void byteSwapAndPromote(const void* input,
                                      startRow,
                                      numRowsThisThread))
         {
-            std::auto_ptr<sys::Runnable> scaler(
+            std::unique_ptr<sys::Runnable> scaler(
                 new ByteSwapAndPromoteRunnable<InT>(
                     input,
                     startRow,
                     numRowsThisThread,
                     dims.col,
                     output));
-            threads.createThread(scaler);
+            threads.createThread(std::move(scaler));
         }
 
         threads.joinAll();
@@ -229,14 +232,14 @@ void byteSwapAndScale(const void* input,
                                      startRow,
                                      numRowsThisThread))
         {
-            std::auto_ptr<sys::Runnable> scaler(new ByteSwapAndScaleRunnable<InT>(
+            std::unique_ptr<sys::Runnable> scaler(new ByteSwapAndScaleRunnable<InT>(
                     input,
                     startRow,
                     numRowsThisThread,
                     dims.col,
                     scaleFactors,
                     output));
-            threads.createThread(scaler);
+            threads.createThread(std::move(scaler));
         }
 
         threads.joinAll();
@@ -269,13 +272,13 @@ void byteSwap(void* buffer,
                                      startElement,
                                      numElementsThisThread))
         {
-            std::auto_ptr<sys::Runnable> thread(new ByteSwapRunnable(
+            std::unique_ptr<sys::Runnable> thread(new ByteSwapRunnable(
                     buffer,
                     elemSize,
                     startElement,
                     numElementsThisThread));
 
-            threads.createThread(thread);
+            threads.createThread(std::move(thread));
         }
         threads.joinAll();
     }
@@ -290,17 +293,17 @@ void byteSwapAndPromote(const void* input,
     switch (elementSize)
     {
     case 2:
-        ::byteSwapAndPromote<sys::Int8_T>(input, dims, numThreads, output);
+        ::byteSwapAndPromote<int8_t>(input, dims, numThreads, output);
         break;
     case 4:
-        ::byteSwapAndPromote<sys::Int16_T>(input, dims, numThreads, output);
+        ::byteSwapAndPromote<int16_t>(input, dims, numThreads, output);
         break;
     case 8:
         ::byteSwapAndPromote<float>(input, dims, numThreads, output);
         break;
     default:
         throw except::Exception(Ctxt(
-                "Unexpected element size " + str::toString(elementSize)));
+                "Unexpected element size " + std::to_string(elementSize)));
     }
 }
 
@@ -314,11 +317,11 @@ void byteSwapAndScale(const void* input,
     switch (elementSize)
     {
     case 2:
-        ::byteSwapAndScale<sys::Int8_T>(input, dims, scaleFactors, numThreads,
+        ::byteSwapAndScale<int8_t>(input, dims, scaleFactors, numThreads,
                                         output);
         break;
     case 4:
-        ::byteSwapAndScale<sys::Int16_T>(input, dims, scaleFactors, numThreads,
+        ::byteSwapAndScale<int16_t>(input, dims, scaleFactors, numThreads,
                                          output);
         break;
     case 8:
@@ -327,7 +330,7 @@ void byteSwapAndScale(const void* input,
         break;
     default:
         throw except::Exception(Ctxt(
-                "Unexpected element size " + str::toString(elementSize)));
+                "Unexpected element size " + std::to_string(elementSize)));
     }
 }
 }

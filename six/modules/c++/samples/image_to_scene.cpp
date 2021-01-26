@@ -24,7 +24,7 @@
 #include <stdexcept>
 #include <memory>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
@@ -35,6 +35,9 @@
 #include <six/sicd/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sidd/DerivedXMLControl.h>
+
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -48,9 +51,8 @@ void usage(const std::string& progname, std::ostream& ostr)
          << "-image_to_ground must be specified\n\n";
 }
 
-class Converter
+struct Converter final
 {
-public:
     Converter(const std::string& pathname);
 
     void groundToImage(const scene::Vector3& groundPt) const;
@@ -63,8 +65,8 @@ public:
     void imageToGround(double row, double col) const;
 
 private:
-    std::auto_ptr<const scene::SceneGeometry> mGeometry;
-    std::auto_ptr<const scene::ProjectionModel> mProjModel;
+    std::unique_ptr<const scene::SceneGeometry> mGeometry;
+    std::unique_ptr<const scene::ProjectionModel> mProjModel;
     scene::Vector3 mGroundPlaneNormal;
 
     types::RowCol<double> mSampleSpacing;
@@ -89,7 +91,7 @@ Converter::Converter(const std::string& pathname)
     reader.load(pathname);
 
     // Verify it's a SICD
-    mem::SharedPtr<const six::Container> container(reader.getContainer());
+    auto container(reader.getContainer());
     if (container->getDataType() != six::DataType::COMPLEX)
     {
         throw except::InvalidFormatException(Ctxt("Expected a SICD NITF"));
@@ -164,7 +166,7 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        const std::string progname(sys::Path::basename(argv[0]));
+        const std::string progname(fs::path(argv[0]).filename());
         if (argc < 2)
         {
             usage(progname, std::cerr);

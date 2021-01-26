@@ -30,6 +30,9 @@
 #include <import/sio/lite.h>
 #include "utils.h"
 
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
 namespace
 {
 void writeSIOFileHeader(size_t numRows,
@@ -47,15 +50,15 @@ void writeSIOFileHeader(size_t numRows,
         elementType = sio::lite::FileHeader::COMPLEX_FLOAT;
         break;
     case six::PixelType::RE16I_IM16I:
-        elementSize = sizeof(std::complex<sys::Int16_T>);
+        elementSize = sizeof(std::complex<int16_t>);
         elementType = sio::lite::FileHeader::COMPLEX_SIGNED;
         break;
     case six::PixelType::MONO8I:
-        elementSize = sizeof(sys::Int8_T);
+        elementSize = sizeof(int8_t);
         elementType = sio::lite::FileHeader::SIGNED;
         break;
     case six::PixelType::MONO16I:
-        elementSize = sizeof(sys::Int16_T);
+        elementSize = sizeof(int16_t);
         elementType = sio::lite::FileHeader::SIGNED;
         break;
     default:
@@ -97,7 +100,7 @@ int main(int argc, char** argv)
         parser.addArgument("file", "SICD/SIDD input file", cli::STORE, "file",
                            "FILE", 1, 1);
 
-        const std::auto_ptr<cli::Results>
+        const std::unique_ptr<cli::Results>
             options(parser.parse(argc, argv));
 
         size_t startRow(options->get<size_t>("startRow"));
@@ -124,16 +127,15 @@ int main(int argc, char** argv)
         readerRegistry.addCreator(new six::sidd::GeoTIFFReadControlCreator());
 
         // get the correct ReadControl for the given file
-        const std::auto_ptr<six::ReadControl>
-            reader(readerRegistry.newReadControl(inputFile));
+        auto reader(readerRegistry.newReadControl(inputFile));
         // set the optional registry, since we have one
         reader->setXMLControlRegistry(&xmlRegistry);
 
         // load the file
         reader->load(inputFile, schemaPaths);
 
-        mem::SharedPtr<six::Container> container = reader->getContainer();
-        std::string base = sys::Path::basename(inputFile, true);
+        auto container = reader->getContainer();
+        std::string base = fs::path(inputFile).stem();
         size_t numImages = 0;
 
         if (container->getDataType() == six::DataType::COMPLEX
@@ -151,16 +153,15 @@ int main(int argc, char** argv)
 
         std::cout << "Found: " << numImages << " image(s)" << std::endl;
 
-        sys::OS os;
-        if (!os.exists(outputDir))
-            os.makeDirectory(outputDir);
+        if (!fs::exists(outputDir))
+            fs::create_directory(outputDir);
 
         // first, write out the XMLs
         for (size_t i = 0, total = container->getNumData(); i < total; ++i)
         {
             const six::Data* data = container->getData(i);
             std::string filename = FmtX("%s_DES_%d.xml", base.c_str(), i);
-            std::string xmlFile = sys::Path::joinPaths(outputDir, filename);
+            std::string xmlFile = fs::path(outputDir) / filename;
             io::FileOutputStream xmlStream(xmlFile);
 
             std::string xmlData = six::toXMLString(data, &xmlRegistry);
@@ -190,8 +191,7 @@ int main(int argc, char** argv)
                      << ii
                      << (isSIO ? "sio" : "raw");
 
-            const std::string outputFile =
-                sys::Path::joinPaths(outputDir, filename.str());
+            const std::string outputFile = fs::path(outputDir) / filename.str();
             io::FileOutputStream outputStream(outputFile);
 
             if (isSIO)
@@ -211,12 +211,10 @@ int main(int argc, char** argv)
             {
                 region.setNumRows(numRows);
                 size_t totalBytes = nbpp * numCols * numRows;
-                const mem::ScopedArray<six::UByte>
-                    workBuffer(new six::UByte[totalBytes]);
-                region.setBuffer(workBuffer.get());
+                const auto workBuffer = region.setBuffer(totalBytes);
 
                 reader->interleaved(region, ii);
-                outputStream.write((const sys::byte*) workBuffer.get(),
+                outputStream.write((const std::byte*) workBuffer.get(),
                                    totalBytes);
             }
             else
@@ -225,16 +223,15 @@ int main(int argc, char** argv)
                 const size_t nbpr = nbpp * numCols;
 
                 // allocate this so we can reuse it for each row
-                const mem::ScopedArray<six::UByte> workBuffer(new six::UByte[nbpr]);
-                region.setBuffer(workBuffer.get());
+                const auto workBuffer = region.setBuffer(nbpr);
 
                 for (size_t jj = startRow;
                      jj < numRows + startRow;
                      ++jj)
                 {
                     region.setStartRow(jj);
-                    six::UByte* line = reader->interleaved(region, ii);
-                    outputStream.write((const sys::byte*) line, nbpr);
+                    auto line = reader->interleaved(region, ii);
+                    outputStream.write(line, nbpr);
                 }
             }
             outputStream.close();

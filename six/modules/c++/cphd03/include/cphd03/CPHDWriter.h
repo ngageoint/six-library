@@ -25,10 +25,11 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <sys/OS.h>
-#include <sys/Conf.h>
 #include <types/RowCol.h>
 #include <cphd03/Metadata.h>
 #include <cphd03/VBM.h>
@@ -48,7 +49,7 @@ public:
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
      *
-     *  The default argument for numThreads should be sys::OS().getNumCPUs().
+     *  The default argument for numThreads should be std::thread::hardware_concurrency().
      *  However, SWIG doesn't seem to like that.
      *  As a workaround, we pass in 0 for the default, and the ctor sets the
      *  number of threads to the number of CPUs if this happens.
@@ -71,7 +72,7 @@ public:
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
      *
-     *  The default argument for numThreads should be sys::OS().getNumCPUs().
+     *  The default argument for numThreads should be std::thread::hardware_concurrency().
      *  However, SWIG doesn't seem to like that.
      *  As a workaround, we pass in 0 for the default, and the ctor sets the
      *  number of threads to the number of CPUs if this happens.
@@ -95,8 +96,8 @@ public:
      *  \brief Pushes a new image to the file for writing. This only works with
      *         valid CPHDWriter data types:
      *              std::complex<float>
-     *              std::complex<sys::Int16_T>
-     *              std::complex<sys::Int8_T>
+     *              std::complex<int16_t>
+     *              std::complex<int8_t>
      *
      *  \param image The image to be added. This should be sized to match the
      *         dims parameter.
@@ -108,6 +109,13 @@ public:
     void addImage(const T* image,
                   const types::RowCol<size_t>& dims,
                   const sys::ubyte* vbmData);
+    template <typename T>
+    void addImage(const T* image,
+                  const types::RowCol<size_t>& dims,
+                  const std::byte* vbmData)
+    {
+        addImage(image, dims, reinterpret_cast<const sys::ubyte*>(vbmData));
+    }
 
     /*
      *  \func writeMetadata
@@ -134,8 +142,8 @@ public:
      *         you may instead use addImage and write. This only works with
      *         valid CPHDWriter data types:
      *              std::complex<float>
-     *              std::complex<sys::Int16_T>
-     *              std::complex<sys::Int8_T>
+     *              std::complex<int16_t>
+     *              std::complex<int8_t>
      *
      *  \param data The data to write to disk.
      *  \param numElements The number of elements in data. Treat the data
@@ -173,13 +181,13 @@ private:
                        const std::string& classification = "",
                        const std::string& releaseInfo = "");
 
-    void writeVBMData(const sys::ubyte* vbm,
+    void writeVBMData(const std::byte* vbm,
                       size_t index);
 
-    void writeCPHDDataImpl(const sys::ubyte* data,
+    void writeCPHDDataImpl(const std::byte* data,
                            size_t size);
 
-    std::auto_ptr<cphd::DataWriter> mDataWriter;
+    std::unique_ptr<cphd::DataWriter> mDataWriter;
 
     Metadata mMetadata;
     const size_t mElementSize;
@@ -188,8 +196,8 @@ private:
 
     std::shared_ptr<io::SeekableOutputStream> mStream;
 
-    std::vector<const sys::ubyte*> mCPHDData;
-    std::vector<const sys::ubyte*> mVBMData;
+    std::vector<const std::byte*> mCPHDData;
+    std::vector<const std::byte*> mVBMData;
 
     size_t mCPHDSize;
     size_t mVBMSize;

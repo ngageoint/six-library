@@ -22,9 +22,7 @@
 #ifndef __SIX_COMPLEX_DATA_H__
 #define __SIX_COMPLEX_DATA_H__
 
-#include <mem/ScopedCloneablePtr.h>
-#include <mem/ScopedCopyablePtr.h>
-#include <types/RowCol.h>
+#include <memory>
 
 #include "six/CollectionInformation.h"
 #include "six/Data.h"
@@ -116,15 +114,15 @@ public:
     mem::ScopedCopyablePtr<MatchInformation> matchInformation;
 
     //!  (Optional/Choice) Polar Format Algorithm params -- if this is set,
-    //          rma should remain NULL.
+    //          rma should remain nullptr.
     mem::ScopedCopyablePtr<PFA> pfa;
 
     //!  (Optional/Choice) Range Migration Algorithm params -- if this is
-    //          set, pfa should remain NULL.
+    //          set, pfa should remain nullptr.
     mem::ScopedCopyablePtr<RMA> rma;
 
     //!  (Optional/Choice) Simple Range Doppler Compression params --
-    //   if this is set, pfa & rma should remain NULL.
+    //   if this is set, pfa & rma should remain nullptr.
     mem::ScopedCopyablePtr<RgAzComp> rgAzComp;
 
     ComplexData();

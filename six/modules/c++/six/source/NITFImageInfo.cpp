@@ -19,16 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/NITFImageInfo.h>
 
 #include <memory>
 #include <sstream>
 #include <limits>
 #include <string>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <str/Convert.h>
-#include <six/NITFImageInfo.h>
 #include <scene/Utilities.h>
 
 namespace

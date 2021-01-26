@@ -475,7 +475,7 @@ void NITFWriteControl::addUserDefinedSubheader(
 }
 
 void NITFWriteControl::addAdditionalDES(
-        mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
+       mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
 {
     mNITFHeaderCreator->addAdditionalDES(segmentWriter);
 }

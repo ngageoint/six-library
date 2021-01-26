@@ -27,7 +27,7 @@
 
 #include <memory>
 
-#include <nitf/coda-oss.hpp>
+#include <scene/sys_Conf.h>
 
 #include "six/Types.h"
 

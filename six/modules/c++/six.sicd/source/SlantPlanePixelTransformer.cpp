@@ -19,15 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sicd/SlantPlanePixelTransformer.h>
 
 #include <memory>
 #include <algorithm>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
-#include <six/sicd/SlantPlanePixelTransformer.h>
+
 
 namespace six
 {
@@ -40,7 +41,7 @@ SlantPlanePixelTransformer::SlantPlanePixelTransformer(
     const scene::ProjectionModel& projection) :
     mGeom(geom),
     mProjection(projection),
-    mSicdData(*reinterpret_cast<six::sicd::ComplexData*>(data.clone())),
+    mSicdData(*static_cast<six::sicd::ComplexData*>(data.clone())),
     mGroundPlaneNormal(mGeom.getReferencePosition())
 {
     mGroundPlaneNormal.normalize();

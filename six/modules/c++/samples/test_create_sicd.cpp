@@ -26,8 +26,15 @@
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <logging/Setup.h>
+#include <sys/Bit.h>
+
 #include <scene/Utilities.h>
 #include "utils.h"
+
+#include <sys/Filesystem.h>
+namespace fs = std::filesystem;
+
+
 
 // For SICD implementation
 #include <import/six/sicd.h>
@@ -96,7 +103,7 @@ int main(int argc, char** argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
                            "OUTPUT", 1, 1);
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
 
         std::string inputName(options->get<std::string> ("sio"));
         std::string outputName(options->get<std::string> ("output"));
@@ -106,8 +113,8 @@ int main(int argc, char** argv)
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
-        std::auto_ptr<logging::Logger> logger(
-                logging::setupLogger(sys::Path::basename(argv[0])));
+        std::unique_ptr<logging::Logger> logger(
+            logging::setupLogger(fs::path(argv[0]).filename()));
 
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the
@@ -144,7 +151,7 @@ int main(int argc, char** argv)
         // Create the Data
         // TODO: Use a ComplexDataBuilder?
         six::sicd::ComplexData* data(new six::sicd::ComplexData());
-        std::auto_ptr<six::Data> scopedData(data);
+        std::unique_ptr<six::Data> scopedData(data);
 
         if (options->hasValue("version"))
         {
@@ -234,9 +241,9 @@ int main(int argc, char** argv)
         data->imageFormation->txFrequencyProcMin = 0;
         data->imageFormation->txFrequencyProcMax = 0;
 
-        mem::SharedPtr<six::Container> container(new six::Container(
-                six::DataType::COMPLEX));
-        container->addData(scopedData);
+	mem::SharedPtr<six::Container> container(new six::Container(
+		six::DataType::COMPLEX));
+        container->addData(std::move(scopedData));
 
         six::Options writerOptions;
         /*
@@ -266,12 +273,12 @@ int main(int argc, char** argv)
 
         // NITF data is always big endian, so check if we need to swap
         const bool needsByteSwap =
-            (sys::isBigEndianSystem() && fileHeader->isDifferentByteOrdering())
-         || (!sys::isBigEndianSystem() && !fileHeader->isDifferentByteOrdering());
+            ((std::endian::native == std::endian::big) && fileHeader->isDifferentByteOrdering())
+         || ((std::endian::native == std::endian::little) && !fileHeader->isDifferentByteOrdering());
 
         writerOptions.setParameter(
                 six::WriteControl::OPT_BYTE_SWAP,
-                six::Parameter((sys::Uint16_T) needsByteSwap));
+                six::Parameter((uint16_t) needsByteSwap));
 
         six::NITFWriteControl writer(writerOptions, container);
         writer.setLogger(logger.get());
@@ -290,7 +297,7 @@ int main(int argc, char** argv)
     catch (const except::Exception& ex)
     {
         std::cerr << "Caught except::Exception: " << ex.getMessage()
-                  << std::endl;
+            << std::endl;
         return 1;
     }
     catch (...)

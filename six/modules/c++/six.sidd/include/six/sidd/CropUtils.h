@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 
+#include "six/sidd/sys_Conf.h"
 #include <types/RowCol.h>
 
 namespace six

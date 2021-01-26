@@ -134,8 +134,8 @@ Global::Global() :
 std::ostream& operator<< (std::ostream& os, const Global& d)
 {
     os << "Global::\n"
-       << "  domainType       : " << d.domainType.toString() << "\n"
-       << "  phaseSGN         : " << d.phaseSGN.toString() << "\n";
+       << "  domainType       : " << d.domainType << "\n"
+       << "  phaseSGN         : " << d.phaseSGN << "\n";
 
     if (!six::Init::isUndefined(d.refFrequencyIndex))
     {

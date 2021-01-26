@@ -19,15 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sidd/DerivedXMLParser.h>
 
 #include <string.h>
 #include <sstream>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <str/Manip.h>
 #include <except/Exception.h>
 #include <six/sidd/DerivedDataBuilder.h>
-#include <six/sidd/DerivedXMLParser.h>
 
 namespace
 {
@@ -50,6 +50,7 @@ DerivedXMLParser::DerivedXMLParser(
     mCommon(std::move(comParser))
 {
 }
+#if !CODA_OSS_cpp17
 DerivedXMLParser::DerivedXMLParser(
         const std::string& version,
         std::auto_ptr<six::SICommonXMLParser> comParser,
@@ -58,6 +59,7 @@ DerivedXMLParser::DerivedXMLParser(
     DerivedXMLParser(version, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)
 {
 }
+#endif
 
 void DerivedXMLParser::getAttributeList(
         const xml::lite::Attributes& attributes,
