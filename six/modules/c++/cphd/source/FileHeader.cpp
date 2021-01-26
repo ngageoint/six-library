@@ -22,7 +22,7 @@
 #include <string.h>
 #include <sstream>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <mem/ScopedArray.h>
 #include <except/Exception.h>
 #include <str/Manip.h>

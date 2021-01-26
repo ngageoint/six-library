@@ -24,9 +24,10 @@
 #include <iostream>
 #include <string>
 
+#include <import/nitf.hpp>
+
 #include <sys/Path.h>
 #include <import/cli.h>
-#include <import/nitf.hpp>
 #include <import/xml/lite.h>
 #include <import/io.h>
 
