@@ -25,6 +25,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <six/sidd/CropUtils.h>
+
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
 #include <str/Convert.h>

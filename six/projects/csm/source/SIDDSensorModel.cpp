@@ -21,6 +21,8 @@
 */
 #include <six/csm/SIDDSensorModel.h>
 
+#include <six/csm/SIDDSensorModel.h>
+
 #include "Error.h"
 #include <sys/OS.h>
 #include <sys/Path.h>
