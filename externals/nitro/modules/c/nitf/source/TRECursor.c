@@ -115,8 +115,11 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
         }
         tre_cursor.end_ptr = dptr;
         memset(tre_cursor.tag_str, 0, TAG_BUF_LEN);
-		NITF_SNPRINTF(tre_cursor.tag_str, TAG_BUF_LEN, "%s",
-		        ((nitf_TREPrivateData*)tre->priv)->description->tag);
+        nitf_TREDescription* description = ((nitf_TREPrivateData*)tre->priv)->description;
+        if (description != NULL)
+        {
+            NITF_SNPRINTF(tre_cursor.tag_str, TAG_BUF_LEN, "%s", description->tag);
+        }
         tre_cursor.tre = tre;
     }
 
