@@ -135,7 +135,7 @@ int main(int argc, char** argv)
         reader->load(inputFile, schemaPaths);
 
         auto container = reader->getContainer();
-        std::string base = fs::path(inputFile).stem();
+        const auto base = fs::path(inputFile).stem();
         size_t numImages = 0;
 
         if (container->getDataType() == six::DataType::COMPLEX
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
         {
             const six::Data* data = container->getData(i);
             std::string filename = FmtX("%s_DES_%d.xml", base.c_str(), i);
-            std::string xmlFile = fs::path(outputDir) / filename;
+            const auto xmlFile = fs::path(outputDir) / filename;
             io::FileOutputStream xmlStream(xmlFile);
 
             std::string xmlData = six::toXMLString(data, &xmlRegistry);

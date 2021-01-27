@@ -27,9 +27,6 @@
 #include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
-#include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
-
 namespace six
 {
 XMLControl::XMLControl(logging::Logger* log, bool ownLog) :

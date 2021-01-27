@@ -27,6 +27,8 @@
 #include <vector>
 #include <utility>
 
+#include <sys/Filesystem.h>
+
 #include <scene/SceneGeometry.h>
 #include <scene/ProjectionModel.h>
 #include <six/sicd/ComplexData.h>
@@ -123,6 +125,10 @@ public:
                          std::vector<std::complex<float> >& widebandData);
 #endif
     static void readSicd(const std::string& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         std::unique_ptr<ComplexData>& complexData,
+                         std::vector<std::complex<float> >& widebandData);
+    static void readSicd(const std::filesystem::path& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float> >& widebandData);
