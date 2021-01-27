@@ -71,13 +71,8 @@ static void testOptional_(const std::string& testName, const TOptional& opt)
 
     TEST_ASSERT_TRUE(opt.has_value());
     TEST_ASSERT_EQ(opt, opt);
-    TEST_ASSERT_NOT_EQ(null, opt);
     TEST_ASSERT_EQ(314, opt);
-    TEST_ASSERT_GREATER(opt, null);
-    TEST_ASSERT_GREATER_EQ(opt, null);
     TEST_ASSERT_GREATER_EQ(opt, opt);
-    TEST_ASSERT_LESSER(null, opt);
-    TEST_ASSERT_LESSER_EQ(null, opt);
     TEST_ASSERT_LESSER_EQ(opt, opt);
 
     TEST_ASSERT_GREATER(opt, 313);
