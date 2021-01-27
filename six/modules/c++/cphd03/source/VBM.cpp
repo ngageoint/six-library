@@ -31,6 +31,12 @@
 
 #include <cphd/ByteSwap.h>
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace
 {
 inline void setData(const std::byte*& data,

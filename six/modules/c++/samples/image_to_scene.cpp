@@ -24,7 +24,7 @@
 #include <stdexcept>
 #include <memory>
 
-#include <nitf/coda-oss.hpp>
+#include <sys/Conf.h>
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
@@ -37,7 +37,7 @@
 #include <six/sidd/DerivedXMLControl.h>
 
 #include <sys/Filesystem.h>
-namespace fs = std::filesystem;
+namespace fs = sys::Filesystem;
 
 namespace
 {
@@ -51,8 +51,9 @@ void usage(const std::string& progname, std::ostream& ostr)
          << "-image_to_ground must be specified\n\n";
 }
 
-struct Converter final
+class Converter
 {
+public:
     Converter(const std::string& pathname);
 
     void groundToImage(const scene::Vector3& groundPt) const;
@@ -91,7 +92,7 @@ Converter::Converter(const std::string& pathname)
     reader.load(pathname);
 
     // Verify it's a SICD
-    auto container(reader.getContainer());
+    std::shared_ptr<const six::Container> container(reader.getContainer());
     if (container->getDataType() != six::DataType::COMPLEX)
     {
         throw except::InvalidFormatException(Ctxt("Expected a SICD NITF"));
@@ -166,7 +167,7 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        const std::string progname(fs::path(argv[0]).filename());
+        const std::string progname(fs::path(argv[0]).filename().string());
         if (argc < 2)
         {
             usage(progname, std::cerr);
