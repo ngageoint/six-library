@@ -56,10 +56,15 @@
 #  define TEST_SPECIFIC_EXCEPTION(X,Y) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch(Y&) { }  catch (except::Throwable&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);}
 #  define TEST_CASE(X) void X(std::string testName)
 
+#define TEST_MAIN_catch_std_exception_ catch (const std::exception& e)  { std::cerr << e.what() << std::endl; }
+#if CODA_OSS_Throwable_isa_std_exception
+#define TEST_MAIN_catch_ TEST_MAIN_catch_std_exception_
+#else
+#define TEST_MAIN_catch_ catch (const except::Exception& ex) { std::cerr << ex.toString() << std::endl; } \
+    TEST_MAIN_catch_std_exception_
+#endif
 #define TEST_MAIN(X) int main(int argc, char** argv) {  try { X;  return EXIT_SUCCESS; } \
-catch (const except::Exception& ex) { std::cerr << ex.toString() << std::endl; } \
-catch (const std::exception& e)  { std::cerr << e.what() << std::endl; } \
-catch (...) { std::cerr << "Unknown exception\n"; } \
+TEST_MAIN_catch_ catch (...) { std::cerr << "Unknown exception\n"; } \
 return EXIT_FAILURE; }
 
 #else /* C only */

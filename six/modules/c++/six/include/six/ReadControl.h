@@ -50,10 +50,8 @@ namespace six
  *  to know that the NITF is split due to technical complications.
  *
  */
-class ReadControl
+struct ReadControl
 {
-public:
-
     //!  Constructor.  Null-set the current container reference
     ReadControl() :
         mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
@@ -63,7 +61,7 @@ public:
     }
 
     //!  Destructor doesnt release anything
-    virtual ~ReadControl() noexcept(false)
+    virtual ~ReadControl()
     {
         if (mLog && mOwnLog)
             delete mLog;
@@ -92,7 +90,7 @@ public:
     /*!
      *  Get a const shared pointer to the current container.
      */
-    std::shared_ptr<const Container> getContainer() const
+    mem::SharedPtr<const Container> getContainer() const
     {
         return mContainer;
     }
@@ -100,7 +98,7 @@ public:
     /*!
      *  Get a non-const pointer to the current container.
      */
-    std::shared_ptr<Container> getContainer()
+    mem::SharedPtr<Container> getContainer()
     {
         return mContainer;
     }
@@ -118,6 +116,10 @@ public:
      *  For safety, prefer the overload below.
      */
     virtual UByte* interleaved(Region& region, size_t imageNumber) = 0;
+    virtual void  interleaved(Region& region, size_t imageNumber, std::byte*& result)
+    {
+        result = reinterpret_cast<std::byte*>(interleaved(region, imageNumber));
+    }
 
     /*!
      *  This function reads in the image area specified by the region.
@@ -143,9 +145,25 @@ public:
      * \return Buffer of image data.  This is simply equal to buffer.get() and
      * is provided as a convenience.
      */
+#if !CODA_OSS_cpp17
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
-           std::unique_ptr<T[]>& buffer)
+           std::auto_ptr<T[]>& buffer)
+    {
+        buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
+        return buffer.get();
+    }
+#endif
+    template<typename T>
+    T* interleaved(Region& region, size_t imageNumber,
+        mem::ScopedArray<T>& buffer)
+    {
+        buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
+        return buffer.get();
+    }
+    template<typename T>
+    T* interleaved(Region& region, size_t imageNumber,
+        std::unique_ptr<T[]>& buffer)
     {
         buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
         return buffer.get();
@@ -195,7 +213,7 @@ public:
     }
 
 protected:
-    std::shared_ptr<Container> mContainer;
+    mem::SharedPtr<Container> mContainer;
     Options mOptions;
     logging::Logger *mLog;
     bool mOwnLog;

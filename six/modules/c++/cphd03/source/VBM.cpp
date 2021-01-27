@@ -19,13 +19,17 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd03/VBM.h>
 
-#include <sstream>
 #include <string.h>
 
+#include <sstream>
+#include <string>
+
 #include <six/Init.h>
+#include <sys/Bit.h>
+
 #include <cphd/ByteSwap.h>
-#include <cphd03/VBM.h>
 
 #include <sys/Bit.h>
 namespace std
@@ -340,16 +344,16 @@ VBM::VBM(size_t numChannels,
     if (numChannels != data.size())
     {
         throw except::Exception(Ctxt(
-                "VBM data contains " + str::toString<size_t>(numChannels) +
+                "VBM data contains " + std::to_string(numChannels) +
                 " channels, but data has information for " +
-                str::toString<size_t>(data.size()) + " channels."));
+                std::to_string(data.size()) + " channels."));
     }
     setupInitialData(numChannels, numVectors);
 
     //! For each channel
     for (size_t ii = 0; ii < mData.size(); ++ii)
     {
-        const std::byte* ptr = static_cast<const std::byte*>(data[ii]);
+        auto ptr = static_cast<const std::byte*>(data[ii]);
 
         //! For each vector
         for (size_t jj = 0;
@@ -366,12 +370,12 @@ void VBM::verifyChannelVector(size_t channel, size_t vector) const
     if (channel >= mData.size())
     {
         throw except::Exception(Ctxt(
-                "Invalid channel number: " + str::toString<size_t>(channel)));
+                "Invalid channel number: " + std::to_string(channel)));
     }
     if (vector >= mData[channel].size())
     {
         throw except::Exception(Ctxt(
-                "Invalid vector number: " + str::toString<size_t>(vector)));
+                "Invalid vector number: " + std::to_string(vector)));
     }
 }
 
@@ -664,7 +668,7 @@ void VBM::getVBMdata(size_t channel,
     data.resize(getVBMsize(channel));
     std::fill(data.begin(), data.end(), static_cast<std::byte>(0));
 
-    getVBMdata(channel, &data[0]);
+    getVBMdata(channel, data.data());
 }
 
 void VBM::getVBMdata(size_t channel,
@@ -672,7 +676,7 @@ void VBM::getVBMdata(size_t channel,
 {
     verifyChannelVector(channel, 0);
     const size_t numBytes = getNumBytesVBP();
-    std::byte* ptr = static_cast<std::byte*>(data);
+    auto ptr = static_cast<std::byte*>(data);
 
     for (size_t ii = 0;
          ii < mData[channel].size();
@@ -762,7 +766,7 @@ int64_t VBM::load(io::SeekableInputStream& inStream,
         //std::vector<std::byte>& data(mVBMdata[ii]);
         if (!data.empty())
         {
-            std::byte* const buf = reinterpret_cast<std::byte*>(&data[0]);
+            auto const buf = reinterpret_cast<std::byte*>(data.data());
             ptrdiff_t bytesThisRead = inStream.read(buf, data.size());
             if (bytesThisRead == io::InputStream::IS_EOF)
             {

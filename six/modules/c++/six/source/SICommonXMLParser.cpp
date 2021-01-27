@@ -20,6 +20,7 @@
  *
  */
 #include <set>
+#include <string>
 
 #include <str/Convert.h>
 #include <six/Utilities.h>
@@ -116,13 +117,13 @@ XMLElem SICommonXMLParser::createPoly1D(const std::string& name,
 {
     size_t order = poly1D.order();
     XMLElem poly1DXML = newElement(name, uri, parent);
-    setAttribute(poly1DXML, "order1", six::toString(order));
+    setAttribute(poly1DXML, "order1", order);
 
     for (size_t ii = 0; ii <= order; ++ii)
     {
         XMLElem coefXML = createDouble("Coef", getSICommonURI(), poly1D[ii],
                                        poly1DXML);
-        setAttribute(coefXML, "exponent1", six::toString(ii));
+        setAttribute(coefXML, "exponent1", ii);
     }
     return poly1DXML;
 }
@@ -175,7 +176,7 @@ void SICommonXMLParser::parsePoly(XMLElem polyXML,
         if (orderIdx > polyXYZ.order())
         {
             throw except::Exception(Ctxt(
-                    "Order " + str::toString(orderIdx) + " is out of bounds"));
+                    "Order " + std::to_string(orderIdx) + " is out of bounds"));
         }
         parseDouble(coeffsXML[ii], polyXYZ[orderIdx][xyzIdx]);
     }
@@ -191,9 +192,9 @@ XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
     XMLElem yXML = newElement("Y", getSICommonURI(), polyXML);
     XMLElem zXML = newElement("Z", getSICommonURI(), polyXML);
 
-    setAttribute(xXML, "order1", six::toString(order));
-    setAttribute(yXML, "order1", six::toString(order));
-    setAttribute(zXML, "order1", six::toString(order));
+    setAttribute(xXML, "order1", order);
+    setAttribute(yXML, "order1", order);
+    setAttribute(zXML, "order1", order);
 
     for (size_t ii = 0; ii <= order; ++ii)
     {
@@ -202,9 +203,9 @@ XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
         XMLElem yCoefXML = createDouble("Coef", getSICommonURI(), v3[1], yXML);
         XMLElem zCoefXML = createDouble("Coef", getSICommonURI(), v3[2], zXML);
 
-        setAttribute(xCoefXML, "exponent1", six::toString(ii));
-        setAttribute(yCoefXML, "exponent1", six::toString(ii));
-        setAttribute(zCoefXML, "exponent1", six::toString(ii));
+        setAttribute(xCoefXML, "exponent1", ii);
+        setAttribute(yCoefXML, "exponent1", ii);
+        setAttribute(zCoefXML, "exponent1", ii);
     }
     return polyXML;
 }
@@ -230,7 +231,7 @@ XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
         XMLElem linePolyXML = newElement(numLatLons == 2 ? "Line" : "Polygon",
                                          uri, geoInfoXML);
 
-        setAttribute(linePolyXML, "size", str::toString(numLatLons));
+        setAttribute(linePolyXML, "size", numLatLons);
 
         for (size_t ii = 0; ii < numLatLons; ++ii)
         {
@@ -240,7 +241,7 @@ XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
                     geoInfo.geometryLatLon[ii],
                     linePolyXML);
 
-            setAttribute(v, "index", str::toString(ii + 1));
+            setAttribute(v, "index", ii + 1);
         }
     }
 
@@ -304,7 +305,7 @@ XMLElem SICommonXMLParser::createEarthModelType(const std::string& name,
     const EarthModelType& value,
     XMLElem parent) const
 {
-    return createString(name, six::toString(value), parent);
+    return createSixString(name, value, parent);
 }
 void SICommonXMLParser::parseEarthModelType(XMLElem element,
     EarthModelType& value) const
@@ -378,8 +379,8 @@ XMLElem SICommonXMLParser::createPoly2D(const std::string& name,
 {
     xml::lite::AttributeNode node;
     XMLElem poly2DXML = newElement(name, uri, parent);
-    setAttribute(poly2DXML, "order1", six::toString(poly2D.orderX()));
-    setAttribute(poly2DXML, "order2", six::toString(poly2D.orderY()));
+    setAttribute(poly2DXML, "order1", poly2D.orderX());
+    setAttribute(poly2DXML, "order2", poly2D.orderY());
 
     for (size_t ii = 0; ii <= poly2D.orderX(); ii++)
     {
@@ -387,8 +388,8 @@ XMLElem SICommonXMLParser::createPoly2D(const std::string& name,
         {
             XMLElem coefXML = createDouble("Coef", getSICommonURI(),
                                            poly2D[ii][jj], poly2DXML);
-            setAttribute(coefXML, "exponent1", six::toString(ii));
-            setAttribute(coefXML, "exponent2", six::toString(jj));
+            setAttribute(coefXML, "exponent1", ii);
+            setAttribute(coefXML, "exponent2", jj);
         }
     }
 
@@ -795,8 +796,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                                               getSICommonURI(),
                                               componentsXML);
 
-            createString("Frame", getSICommonURI(),
-                         six::toString(posVelError->frame), posVelErrXML);
+            createSixString("Frame", getSICommonURI(), posVelError->frame, posVelErrXML);
             createDouble("P1", getSICommonURI(), posVelError->p1, posVelErrXML);
             createDouble("P2", getSICommonURI(), posVelError->p2, posVelErrXML);
             createDouble("P3", getSICommonURI(), posVelError->p3, posVelErrXML);
@@ -1249,14 +1249,11 @@ XMLElem SICommonXMLParser::convertCollectionInformationToXML(
     createString("CoreName", si, collInfo->coreName, collInfoXML);
     if (!Init::isUndefined(collInfo->collectType))
     {
-        createString("CollectType", si,
-                     six::toString<six::CollectType>(collInfo->collectType),
-                     collInfoXML);
+        createString("CollectType", si, collInfo->collectType, collInfoXML);
     }
 
     XMLElem radarModeXML = newElement("RadarMode", si, collInfoXML);
-    createString("ModeType", si, six::toString(collInfo->radarMode),
-                 radarModeXML);
+    createSixString("ModeType", si, collInfo->radarMode, radarModeXML);
     if (!collInfo->radarModeID.empty())
     {
         createString("ModeID", si, collInfo->radarModeID, radarModeXML);

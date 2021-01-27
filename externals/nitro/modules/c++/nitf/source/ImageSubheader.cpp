@@ -476,7 +476,7 @@ size_t ImageSubheader::getActualImageDim(size_t dim, size_t numDimsPerBlock) noe
     }
 }
 
-size_t ImageSubheader::getNumBytesPerPixel_() const
+size_t ImageSubheader::numBytesPerPixel() const
 {
     const size_t numBitsPerPixel =
             nitf::Field(getNativeOrThrow()->numBitsPerPixel);
@@ -485,8 +485,8 @@ size_t ImageSubheader::getNumBytesPerPixel_() const
 
 size_t ImageSubheader::getNumBytesOfImageData() const
 {
-    const size_t numBytes = getActualNumRows_() * getActualNumCols_() *
-            getNumImageBands_() * getNumBytesPerPixel_();
+    const size_t numBytes = actualNumRows() * actualNumCols() *
+            numImageBands() * numBytesPerPixel();
     return numBytes;
 }
 }

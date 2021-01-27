@@ -28,7 +28,7 @@
 #include <six/NITFReadControl.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -42,8 +42,7 @@ void testDataType(const std::string& pathname, six::DataType expectedDataType)
     {
         std::ostringstream ostr;
         ostr << "Expected " << pathname << " to be "
-             << expectedDataType.toString() << " but got "
-             << dataType.toString();
+             << expectedDataType << " but got " << dataType;
 
         throw except::Exception(Ctxt(ostr.str()));
     }

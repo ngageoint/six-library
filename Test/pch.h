@@ -31,6 +31,7 @@
 #pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed / unsigned mismatch
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
+#pragma warning(disable: 5039) // '...' : pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
@@ -44,11 +45,10 @@
 
 #include "six/modules/c++/cpp_pch.h"
 
-#include <sys/File.h>
+#include <nitf/coda-oss.hpp>
 
 #pragma warning(pop)
 
-#include <sys/Conf.h>
 #include <import/except.h>
 #include <import/types.h>
 #pragma warning(push)
@@ -77,6 +77,9 @@
 #include <import/cphd03.h>
 
 #pragma comment(lib, "ws2_32")
+#pragma comment(lib, "mt-c++")
+#pragma comment(lib, "sys-c++")
+#pragma comment(lib, "except-c++")
 
 #pragma warning(push)
 #pragma warning(disable: 4800) // Implicit conversion from '...' to bool.Possible information loss

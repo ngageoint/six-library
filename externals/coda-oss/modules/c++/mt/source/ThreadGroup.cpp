@@ -34,7 +34,7 @@ namespace mt
 
 
 ThreadGroup::ThreadGroup(bool pinToCPU) :
-    mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : nullptr),
+    mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : NULL),
     mLastJoined(0)
 {
 }
@@ -55,18 +55,28 @@ void ThreadGroup::createThread(sys::Runnable *runnable)
 {
     createThread(std::unique_ptr<sys::Runnable>(runnable));
 }
+
 void ThreadGroup::createThread(std::unique_ptr<sys::Runnable>&& runnable)
 {
     // Note: If getNextInitializer throws, any previously created
     //       threads may never finish if cross-thread communication is used.
     std::unique_ptr<sys::Runnable> internalRunnable(
-            new ThreadGroupRunnable(std::move(runnable), *this, getNextInitializer()));
+            new ThreadGroupRunnable(
+                    std::move(runnable),
+                    *this,
+                    getNextInitializer()));
 
     mem::SharedPtr<sys::Thread> thread(new sys::Thread(internalRunnable.get()));
     internalRunnable.release();
     mThreads.push_back(thread);
     thread->start();
 }
+#if !CODA_OSS_cpp17
+void ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
+{
+    createThread(std::unique_ptr<sys::Runnable>(runnable.release()));
+}
+#endif
 
 void ThreadGroup::joinAll()
 {
@@ -111,9 +121,9 @@ void ThreadGroup::addException(const except::Exception& ex)
     }
 }
 
-std::unique_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer() const
+mem::auto_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer()
 {
-    std::unique_ptr<CPUAffinityThreadInitializer> threadInit(nullptr);
+    mem::auto_ptr<CPUAffinityThreadInitializer> threadInit;
     if (mAffinityInit.get())
     {
         threadInit = mAffinityInit->newThreadInitializer();
@@ -126,11 +136,22 @@ ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
         std::unique_ptr<sys::Runnable>&& runnable,
         ThreadGroup& parentThreadGroup,
         std::unique_ptr<CPUAffinityThreadInitializer>&& threadInit) :
-    mRunnable(std::move(runnable)),
-    mParentThreadGroup(parentThreadGroup),
-    mCPUInit(std::move(threadInit))
+        mRunnable(std::move(runnable)),
+        mParentThreadGroup(parentThreadGroup),
+        mCPUInit(std::move(threadInit))
 {
 }
+#if !CODA_OSS_cpp17
+ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
+        std::auto_ptr<sys::Runnable> runnable,
+        ThreadGroup& parentThreadGroup,
+        std::auto_ptr<CPUAffinityThreadInitializer> threadInit) :
+        ThreadGroupRunnable(std::unique_ptr<sys::Runnable>(runnable.release()),
+        parentThreadGroup,
+         std::unique_ptr<CPUAffinityThreadInitializer>(threadInit.release()))
+{
+}
+#endif
 
 void ThreadGroup::ThreadGroupRunnable::run()
 {
@@ -159,7 +180,7 @@ void ThreadGroup::ThreadGroupRunnable::run()
 
 bool ThreadGroup::isPinToCPUEnabled() const
 {
-    return mAffinityInit.get() != nullptr;
+    return mAffinityInit.get() != NULL;
 }
 
 bool ThreadGroup::getDefaultPinToCPU()

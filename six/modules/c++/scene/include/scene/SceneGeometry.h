@@ -22,6 +22,7 @@
 #ifndef __SCENE_SCENE_GEOMETRY_H__
 #define __SCENE_SCENE_GEOMETRY_H__
 
+#include <scene/sys_Conf.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <scene/Types.h>
 #include <types/RgAz.h>

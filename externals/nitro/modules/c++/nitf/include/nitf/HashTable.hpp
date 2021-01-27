@@ -27,11 +27,11 @@
 #include <string>
 #include <vector>
 
+#include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Pair.hpp"
 #include "nitf/List.hpp"
 #include "nitf/Object.hpp"
-#include <import/except.h>
 
 /*!
  *  \file HashTable.hpp
@@ -139,7 +139,7 @@ public:
      *  Constructor
      *  \param nbuckets  The size of the hash
      */
-    HashTable(int nbuckets = 5) noexcept(false);
+    HashTable(int nbuckets = 5);
 
     //! Clone
     nitf::HashTable clone(NITF_DATA_ITEM_CLONE cloner);
@@ -189,7 +189,7 @@ public:
      *  For each item in the hash table, do something (slow);
      *  \param fn  The function to perform
      */
-    void forEach(HashIterator& fun, NITF_DATA* userData = NULL);
+    void forEach(HashIterator& fun, NITF_DATA* userData = nullptr);
 
     /*!
      *  Insert this key/data pair into the hash table

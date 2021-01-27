@@ -22,19 +22,17 @@
 
 #include <iomanip>
 #include <sstream>
+#include <string>
 
 #include <io/ByteStream.h>
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
+#include <sys/Bit.h>
+
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace six
 {
@@ -43,13 +41,13 @@ NITFWriteControl::NITFWriteControl()
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator());
 }
 
-NITFWriteControl::NITFWriteControl(std::shared_ptr<Container> container)
+NITFWriteControl::NITFWriteControl(mem::SharedPtr<Container> container)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(container));
 }
 
 NITFWriteControl::NITFWriteControl(const six::Options& options,
-                                   std::shared_ptr<Container> container,
+                                   mem::SharedPtr<Container> container,
                                    const XMLControlRegistry* xmlRegistry)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(options, container));
@@ -68,12 +66,12 @@ void NITFWriteControl::setXMLControlRegistryImpl(
 }
 
 void NITFWriteControl::initialize(const six::Options& options,
-                                  std::shared_ptr<Container> container)
+                                  mem::SharedPtr<Container> container)
 {
     mNITFHeaderCreator->initialize(options, container);
 }
 
-void NITFWriteControl::initialize(std::shared_ptr<Container> container)
+void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
 {
     mNITFHeaderCreator->initialize(container);
 }
@@ -83,6 +81,13 @@ void NITFWriteControl::setNITFHeaderCreator(
 {
     mNITFHeaderCreator.reset(headerCreator.release());
 }
+#if !CODA_OSS_cpp17
+void NITFWriteControl::setNITFHeaderCreator(
+        std::auto_ptr<six::NITFHeaderCreator> headerCreator)
+{
+    setNITFHeaderCreator(std::unique_ptr<six::NITFHeaderCreator>(headerCreator.release()));
+}
+#endif
 
 std::string NITFWriteControl::getComplexIID(size_t segmentNum,
                                             size_t numImageSegments)
@@ -188,7 +193,7 @@ void NITFWriteControl::save(const SourceList& imageData,
     mWriter.prepareIO(outputFile, record);
     const bool doByteSwap = shouldByteSwap();
 
-    const std::vector<std::shared_ptr<NITFImageInfo>>& infos = getInfos();
+    const auto& infos = getInfos();
     if (infos.size() != imageData.size())
     {
         std::ostringstream ostr;
@@ -215,8 +220,8 @@ void NITFWriteControl::save(const SourceList& imageData,
         {
             NITFSegmentInfo segmentInfo = imageSegments[j];
 
-            std::shared_ptr<::nitf::WriteHandler> writeHandler(
-                    new StreamWriteHandler(segmentInfo,
+            auto writeHandler(
+                std::make_shared<StreamWriteHandler>(segmentInfo,
                                            imageData[i],
                                            numCols,
                                            numChannels,
@@ -232,7 +237,8 @@ void NITFWriteControl::save(const SourceList& imageData,
     addDataAndWrite(schemaPaths);
 }
 
-void NITFWriteControl::save(const BufferList& imageData,
+template<typename TBufferList>
+void NITFWriteControl::save_(const TBufferList& imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
@@ -244,8 +250,21 @@ void NITFWriteControl::save(const BufferList& imageData,
     save(imageData, bufferedIO, schemaPaths);
     bufferedIO.close();
 }
-
 void NITFWriteControl::save(const BufferList& imageData,
+                            const std::string& outputFile,
+                            const std::vector<std::string>& schemaPaths)
+{
+    save_(imageData, outputFile, schemaPaths);
+}
+void NITFWriteControl::save(const buffer_list& imageData,
+                            const std::string& outputFile,
+                            const std::vector<std::string>& schemaPaths)
+{
+    save_(imageData, outputFile, schemaPaths);
+}
+
+template<typename TBufferList>
+void NITFWriteControl::save_(const TBufferList& imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
@@ -255,8 +274,8 @@ void NITFWriteControl::save(const BufferList& imageData,
 
     if (getInfos().size() != imageData.size())
         throw except::Exception(
-                Ctxt("Require " + str::toString(getInfos().size()) +
-                     " images, received " + str::toString(imageData.size())));
+                Ctxt("Require " + std::to_string(getInfos().size()) +
+                     " images, received " + std::to_string(imageData.size())));
 
     // check to see if J2K compression is enabled
     double j2kCompression = (double)getOptions().getParameter(
@@ -283,9 +302,7 @@ void NITFWriteControl::save(const BufferList& imageData,
                 getRecord().getImages()[info.getStartIndex()];
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
-        const bool isBlocking =
-                static_cast<uint32_t>(subheader.getNumBlocksPerRow()) > 1 ||
-                static_cast<uint32_t>(subheader.getNumBlocksPerCol()) > 1;
+        const bool isBlocking = subheader.numBlocksPerRow() > 1 || subheader.numBlocksPerCol() > 1;
 
         // The SIDD spec requires that a J2K compressed SIDDs be only a
         // single image segment. However this functionality remains untested.
@@ -336,8 +353,8 @@ void NITFWriteControl::save(const BufferList& imageData,
             {
                 const NITFSegmentInfo segmentInfo = imageSegments[jj];
 
-                std::shared_ptr<::nitf::WriteHandler> writeHandler(
-                        new MemoryWriteHandler(segmentInfo,
+                auto writeHandler(
+                        std::make_shared<MemoryWriteHandler>(segmentInfo,
                                                imageData[i],
                                                segmentInfo.firstRow,
                                                numCols,
@@ -366,7 +383,7 @@ void NITFWriteControl::save(const BufferList& imageData,
 
             nitf::ImageSource iSource;
 
-            nitf::MemorySource memSource(&legend->mImage[0],
+            nitf::MemorySource memSource(legend->mImage.data(),
                                          legend->mImage.size(),
                                          0,
                                          sizeof(std::byte),
@@ -382,6 +399,18 @@ void NITFWriteControl::save(const BufferList& imageData,
     }
 
     addDataAndWrite(schemaPaths);
+}
+void NITFWriteControl::save(const BufferList& imageData,
+                            nitf::IOInterface& outputFile,
+                            const std::vector<std::string>& schemaPaths)
+{
+    save_(imageData, outputFile, schemaPaths);
+}
+void NITFWriteControl::save(const buffer_list& imageData,
+    nitf::IOInterface& outputFile,
+    const std::vector<std::string>& schemaPaths)
+{
+    save_(imageData, outputFile, schemaPaths);
 }
 
 void NITFWriteControl::addDataAndWrite(
@@ -446,7 +475,7 @@ void NITFWriteControl::addUserDefinedSubheader(
 }
 
 void NITFWriteControl::addAdditionalDES(
-        std::shared_ptr<nitf::SegmentWriter> segmentWriter)
+       mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
 {
     mNITFHeaderCreator->addAdditionalDES(segmentWriter);
 }

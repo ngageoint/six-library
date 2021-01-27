@@ -27,7 +27,8 @@
 #include <string>
 #include <map>
 #include <mutex>
-#include <import/mt.h>
+
+#include "nitf/coda-oss.hpp"
 #include "nitf/Handle.hpp"
 
 namespace nitf
@@ -53,7 +54,7 @@ class HandleManager
     }
 
 public:
-    HandleManager() noexcept(false) {};
+    HandleManager() {};
     virtual ~HandleManager() {}
 
     HandleManager(const HandleManager&) = delete;

@@ -91,7 +91,7 @@ bool xml::lite::MinidomHandler::characters(const wchar_t* const value_, const si
 {
     #ifndef _WIN32
     // As on Windows, this comes to us already encoded ... but UTF-32
-    const auto value = reinterpret_cast<const std::u32string::value_type*>(value_);
+    const auto value = reinterpret_cast<std::u32string::const_pointer>(value_);
     const std::u32string strValue(value, length_);
     std::string utf8Value;
     str::toUtf8(strValue, utf8Value);

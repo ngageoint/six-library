@@ -22,8 +22,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <nitf/coda-oss.hpp>
 #include <sys/DLL.h>
-#include <sys/Conf.h>
 #include <except/Exception.h>
 #include <six/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
@@ -31,7 +31,7 @@
 #include <scene/ECEFToLLATransform.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 // CSM includes
 #include <RasterGM.h>
@@ -61,7 +61,7 @@ public:
 
         const std::string schemaDir =  (fs::path(confDir) / "schema" / "six");
         mReader.load(mSiddPathname, std::vector<std::string>(1, schemaDir));
-        std::shared_ptr<six::Container> container(mReader.getContainer());
+        auto container(mReader.getContainer());
         mDerivedData.reset(reinterpret_cast<six::sidd::DerivedData*>(
                 container->getData(0)->clone()));
     }

@@ -22,9 +22,9 @@
 
 #ifndef __NITF_BUFFERED_WRITER_HPP__
 #define __NITF_BUFFERED_WRITER_HPP__
+#pragma once
 
-#include <sys/File.h>
-#include <mem/ScopedArray.h>
+#include <nitf/coda-oss.hpp>
 #include <nitf/CustomIO.hpp>
 
 namespace nitf
@@ -73,7 +73,7 @@ protected:
 
     void writeImpl(const void* buf, size_t size) override;
 
-    bool canSeekImpl() const noexcept override;
+    bool canSeekImpl() const override;
 
     nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
@@ -81,7 +81,7 @@ protected:
 
     nitf::Off getSizeImpl() const override;
 
-    int getModeImpl() const noexcept override;
+    int getModeImpl() const override;
 
     void closeImpl() override;
 

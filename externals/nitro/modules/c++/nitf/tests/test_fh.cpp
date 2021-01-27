@@ -55,16 +55,18 @@ int main(int, char**)
         std::cout << "Copied yet another FileHeader" << std::endl;
         //myFileCopy.name = "6";
 
-        nitf::FileHeader* myNewCopy = new nitf::FileHeader(myFileCopy);
-        std::cout << "New-allocated copy of FileHeader" << std::endl;
-        //myNewCopy->name = "7";
-        delete myNewCopy;
+        {
+            std::unique_ptr<nitf::FileHeader> myNewCopy(new nitf::FileHeader(myFileCopy));
+            std::cout << "New-allocated copy of FileHeader" << std::endl;
+            //myNewCopy->name = "7";
+        }
         std::cout << "Deleted new-allocated copy of FileHeader" << std::endl;
 
-        nitf::FileHeader* myNonCopy = new nitf::FileHeader;
-        std::cout << "New-allocated a FileHeader" << std::endl;
-        //myNonCopy->name = "8";
-        delete myNonCopy;
+        {
+            std::unique_ptr<nitf::FileHeader> myNonCopy(new nitf::FileHeader);
+            std::cout << "New-allocated a FileHeader" << std::endl;
+            //myNonCopy->name = "8";
+        }
         std::cout << "Deleted new-allocated FileHeader" << std::endl;
 
         std::cout << "Setting file header" << std::endl;
@@ -84,17 +86,17 @@ int main(int, char**)
         nitf::HashTable hash;
         ext.setHash(hash);
 
-        std::cout << fileHeader.getFileHeader().toString() << std::endl;
-        std::cout << fileHeader.getFileVersion().toString() << std::endl;
-        std::cout << two.getFileHeader().toString() << std::endl;
-        std::cout << two.getFileVersion().toString() << std::endl;
+        std::cout << fileHeader.fileHeader() << "\n";
+        std::cout << fileHeader.fileVersion() << "\n";
+        std::cout << two.fileHeader() << "\n";
+        std::cout << two.fileVersion() << "\n";
 
-        std::cout << myFileHeader.getFileHeader().toString() << std::endl;
-        std::cout << myFileHeader.getFileVersion().toString() << std::endl;
+        std::cout << myFileHeader.fileHeader() << "\n";
+        std::cout << myFileHeader.fileVersion() << "\n";
 
         return 0;
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
         std::cout << t.getTrace() << std::endl;
     }

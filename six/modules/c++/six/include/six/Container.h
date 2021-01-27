@@ -26,6 +26,7 @@
 #include <vector>
 #include <utility>
 
+#include <scene/sys_Conf.h>
 #include <mem/ScopedCloneablePtr.h>
 #include <six/Legend.h>
 #include <six/Data.h>
@@ -87,12 +88,19 @@ public:
      *
      */
     void addData(std::unique_ptr<Data>&& data);
+#if !CODA_OSS_cpp17    
+    void addData(std::auto_ptr<Data> data);
+#endif
+
 
     /*!
      * Same as above but also supports passing in a legend.  Only valid for
      * derived data.
      */
     void addData(std::unique_ptr<Data>&& data, std::unique_ptr<Legend>&& legend);
+#if !CODA_OSS_cpp17
+    void addData(std::auto_ptr<Data> data, std::auto_ptr<Legend> legend);
+#endif
 
     /*!
      *  Set the data item at location i.  If there is an item in the
@@ -180,6 +188,10 @@ private:
 
     void addData(std::unique_ptr<Data>&& data,
                  mem::ScopedCopyablePtr<Legend> legend);
+#if !CODA_OSS_cpp17
+    void addData(std::auto_ptr<Data> data,
+                 mem::ScopedCopyablePtr<Legend> legend);
+#endif
 };
 }
 

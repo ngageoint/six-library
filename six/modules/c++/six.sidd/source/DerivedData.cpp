@@ -19,9 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <sys/Conf.h>
-#include <except/Exception.h>
 #include <six/sidd/DerivedData.h>
+
+#include <nitf/coda-oss.hpp>
+#include <except/Exception.h>
 
 namespace six
 {

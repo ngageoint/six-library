@@ -95,7 +95,7 @@ public:
     */
     ExecPipe(const std::string& cmd) : 
         Exec(cmd),
-        mOutStream(nullptr)
+        mOutStream(NULL)
     {
     }
 
@@ -103,7 +103,7 @@ public:
     virtual void run() 
     {
         mOutStream = openPipe(mCmd, "r");
-        if (mOutStream == nullptr)
+        if (mOutStream == NULL)
         {
             sys::Err err;
             throw except::IOException(

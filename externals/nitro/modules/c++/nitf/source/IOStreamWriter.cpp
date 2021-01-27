@@ -20,14 +20,12 @@
  *
  */
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/IOStreamWriter.hpp>
-#include <except/Exception.h>
-
-#include "nitf/cstddef.h"
 
 namespace nitf
 {
-IOStreamWriter::IOStreamWriter(std::shared_ptr<io::SeekableOutputStream> stream) :
+IOStreamWriter::IOStreamWriter(mem::SharedPtr<io::SeekableOutputStream> stream) :
     mStream(stream)
 {
 }
@@ -44,7 +42,7 @@ void IOStreamWriter::writeImpl(const void* buffer, size_t size)
     mStream->write(static_cast<const std::byte*>(buffer), size);
 }
 
-bool IOStreamWriter::canSeekImpl() const noexcept
+bool IOStreamWriter::canSeekImpl() const
 {
     return true;
 }
@@ -88,12 +86,12 @@ nitf::Off IOStreamWriter::getSizeImpl() const
     return size;
 }
 
-int IOStreamWriter::getModeImpl() const noexcept
+int IOStreamWriter::getModeImpl() const
 {
     return NITF_ACCESS_WRITEONLY;
 }
 
-void IOStreamWriter::closeImpl() noexcept
+void IOStreamWriter::closeImpl()
 {
 }
 }

@@ -187,8 +187,8 @@ the C and C++ layers get the most support.
 
 The Python layer gets some use for scripting convenience.
 
-The MATLAB and JAVA layers have not been touched in years; they are
-no longer built, code remains in the **archive** directory.
+The MATLAB and JAVA layers have not been touched in years.
+Use at your own risk.
 
 TREs need to be coded in C (only).
 

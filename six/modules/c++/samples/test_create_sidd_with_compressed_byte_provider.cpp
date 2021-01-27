@@ -31,6 +31,10 @@
  * of what will change with a compressor.
  */
 
+#include <string>
+
+#include <six/sidd/CompressedSIDDByteProvider.h>
+
 #include <import/cli.h>
 #include <import/nitf.hpp>
 #include <io/FileOutputStream.h>
@@ -39,13 +43,14 @@
 #include <nitf/Reader.hpp>
 #include <nitf/Record.hpp>
 #include <six/Types.h>
-#include <six/sidd/CompressedSIDDByteProvider.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
-#include <types/RowCol.h>
-#include <string>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4125) // decimal digit terminates octal escape sequence
+#endif
 
 static const struct {
   size_t   width;
@@ -993,6 +998,10 @@ static const struct {
   "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377",
 };
 
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 // Create dummy SIDD data
 std::unique_ptr<six::sidd::DerivedData>
 createData(const types::RowCol<size_t>& dims)
@@ -1005,7 +1014,7 @@ createData(const types::RowCol<size_t>& dims)
     return data;
 }
 
-void writeSIDD(const std::string& filename, bool shouldCompress)
+void writeSIDD(const std::string& filename, bool /*shouldCompress*/)
 {
     const size_t NUM_BANDS = 1;
     /*
@@ -1040,8 +1049,8 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
 
     six::NITFWriteControl writer;
     writer.setXMLControlRegistry(&xmlRegistry);
-    std::shared_ptr<six::Container> container(
-            new six::Container(six::DataType::DERIVED));
+    mem::SharedPtr<six::Container> container(new six::Container(
+        six::DataType::DERIVED));
     container->addData(data.release());
     writer.initialize(container);
 
@@ -1052,11 +1061,9 @@ void writeSIDD(const std::string& filename, bool shouldCompress)
     byteProvider.getBytes(NITRO_IMAGE.data, 0, NITRO_IMAGE.height,
             fileOffset, buffers);
     io::FileOutputStream outputStream(filename);
-    for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
+    for (const auto& buffer : buffers.mBuffers)
     {
-        outputStream.write(
-                static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
-                buffers.mBuffers[ii].mNumBytes);
+        outputStream.write(buffer.mData, buffer.mNumBytes);
     }
 }
 
@@ -1073,12 +1080,12 @@ bool testRead(const std::string& pathname)
         uint64_t blockSize;
         // Read one block. It should match the first blockSize points of the
         // image. If it does, we got the blocking mode right.
-        const uint8_t *block = imageReader.readBlock(0, &blockSize);
+        auto block = imageReader.readBlock(0, &blockSize);
         const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
 
         for (size_t jj = 0; jj < imageLength * NUM_BANDS; ++jj)
         {
-            if (block[jj] != NITRO_IMAGE.data[jj])
+            if (static_cast<const unsigned char>(block[jj]) != NITRO_IMAGE.data[jj])
             {
                 std::cerr << "Image data doesn't match" << std::endl;
                 return false;
@@ -1122,7 +1129,7 @@ int main(int argc, char **argv)
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
         return 1;
     }
-    catch (const except::Throwable & t)
+    catch (const except::Throwable& t)
     {
         std::cerr << "Caught throwable: " << t.toString() << std::endl;
         return 1;

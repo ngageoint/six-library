@@ -43,7 +43,7 @@ namespace nitf
 struct Handle
 {
     Handle() = default;
-    virtual ~Handle() noexcept(false) {}
+    virtual ~Handle() {}
 
     Handle(const Handle&) = delete;
     Handle& operator=(const Handle&) = delete;
@@ -104,9 +104,9 @@ private:
 public:
     //! Create handle from native object
     BoundHandle() = default;
-    BoundHandle(Class_T* h) noexcept : handle(h) {}
+    BoundHandle(Class_T* h) : handle(h) {}
 
-    ~BoundHandle() noexcept(false)
+    ~BoundHandle()
     {
         //call the destructor, to destroy the object
         if(handle && managed <= 0)

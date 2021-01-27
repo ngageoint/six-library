@@ -29,7 +29,7 @@ MemoryHandler::MemoryHandler(LogLevel level) : Handler(level)
 {
     //might as well setup the map -- we could let emit take care of it,
     //but this would allow for less chance of an exception getting thrown
-    for (size_t logLevel = 0; logLevel <= LogLevel::LOG_CRITICAL; ++logLevel)
+    for (int logLevel = 0; logLevel <= LogLevel::LOG_CRITICAL; ++logLevel)
     {
         mLogMap[logLevel];
     }

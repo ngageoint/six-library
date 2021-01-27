@@ -31,6 +31,7 @@
 #include "logging/LogRecord.h"
 #include "logging/Handler.h"
 #include <import/io.h>
+#include <mem/SharedPtr.h>
 
 namespace logging
 {
@@ -68,7 +69,7 @@ protected:
     // used for the bulk of the logging for speed
     virtual void emitRecord(const LogRecord* record);
 
-    std::unique_ptr<io::OutputStream> mStream;
+    mem::auto_ptr<io::OutputStream> mStream;
 
 private:
     bool mClosed;

@@ -34,6 +34,9 @@
 
 #include "gsl/gsl.h"
 
+#undef min
+#undef max
+
 namespace nitf
 {
 
@@ -54,8 +57,9 @@ ByteProvider::~ByteProvider()
 {
 }
 
-void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
-                                          std::vector<std::byte>& rawBytes)
+template<typename T>
+static void copyFromStreamAndClear_(io::ByteStream& stream,
+                                          std::vector<T>& rawBytes)
 {
     rawBytes.resize(stream.getSize());
     if (!rawBytes.empty())
@@ -64,6 +68,16 @@ void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
     }
 
     stream.clear();
+}
+void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
+                                          std::vector<sys::byte>& rawBytes)
+{
+    copyFromStreamAndClear_(stream, rawBytes);
+}
+void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
+                                          std::vector<std::byte>& rawBytes)
+{
+    copyFromStreamAndClear_(stream, rawBytes);
 }
 
 void ByteProvider::initializeImpl(const Record& record,
@@ -304,7 +318,7 @@ void ByteProvider::getFileLayout(const nitf::Record& inRecord,
     mDesSubheaderFileOffset = offset;
 }
 
-std::unique_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
+mem::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
 {
     std::vector<size_t> numRowsPerSegment(mImageSegmentInfo.size());
     for (size_t ii = 0; ii < mImageSegmentInfo.size(); ++ii)
@@ -312,7 +326,7 @@ std::unique_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
         numRowsPerSegment[ii] = mImageSegmentInfo[ii].numRows;
     }
 
-    std::unique_ptr<const ImageBlocker> blocker(new ImageBlocker(
+    mem::auto_ptr<const ImageBlocker> blocker(new ImageBlocker(
             numRowsPerSegment,
             mNumCols,
             mOverallNumRowsPerBlock,
@@ -398,8 +412,8 @@ void ByteProvider::addImageData(
     // Figure out what offset of 'imageData' we're writing from
     const size_t startLocalRowToWrite =
             startGlobalRowToWrite - startRow + numPadRowsSoFar;
-    const std::byte* imageDataPtr =
-            static_cast<const std::byte*>(imageData) +
+    const auto imageDataPtr =
+            static_cast<const sys::byte*>(imageData) +
             startLocalRowToWrite * mNumBytesPerRow;
 
     if (buffers.empty())
@@ -554,4 +568,29 @@ void ByteProvider::getBytes(const void* imageData,
         }
     }
 }
+}
+
+static std::span<const std::byte> make_span(const std::vector<sys::byte>& v)
+{
+    auto pData = reinterpret_cast<const std::byte*>(v.data());
+    return gsl::make_span(pData, v.size());
+}
+
+void nitf::ByteProvider::getFileHeader(std::span<const std::byte>& result) const
+{
+    result = make_span(getFileHeader());
+}
+
+void nitf::ByteProvider::getImageSubheaders(std::vector<std::span<const std::byte>>& result) const
+{
+    auto& headers = getImageSubheaders();
+    for (auto& header : headers)
+    {
+        result.emplace_back(make_span(header));
+    }
+}
+
+void nitf::ByteProvider::getDesSubheaderAndData(std::span<const std::byte>& result) const
+{
+    result = make_span(getDesSubheaderAndData());
 }

@@ -24,23 +24,22 @@
 // Demonstrates that the raw bytes provided by this class result in equivalent
 // SIDDs to the normal writes via NITFWriteControl
 
+#include <stdlib.h>
+
+#include <string>
 #include <iostream>
 #include <limits>
-#include <stdlib.h>
 
 #include <io/ReadUtils.h>
 #include <math/Round.h>
+#include <sys/Bit.h>
+
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/sidd/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/SIDDByteProvider.h>
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace
 {
@@ -210,7 +209,7 @@ public:
         mBigEndianImage = mImage;
         if (std::endian::native == std::endian::little)
         {
-            sys::byteSwap(&mBigEndianImage[0],
+            sys::byteSwap(mBigEndianImage.data(),
                           sizeof(DataTypeT),
                           mBigEndianImage.size());
         }
@@ -242,9 +241,9 @@ private:
         if (mNumRowsPerBlock != 0 || mNumColsPerBlock != 0)
         {
             suffix += " with blocking of rows/block=" +
-                    str::toString(mNumRowsPerBlock) +
+                    std::to_string(mNumRowsPerBlock) +
                     ", cols/block=" +
-                    str::toString(mNumColsPerBlock);
+                    std::to_string(mNumColsPerBlock);
         }
 
         return suffix;
@@ -256,7 +255,7 @@ private:
         if (mSetMaxProductSize)
         {
             fullPrefix += " (max product size " +
-                    str::toString(mMaxProductSize) + ")";
+                    std::to_string(mMaxProductSize) + ")";
         }
         fullPrefix += getSuffix();
 
@@ -370,8 +369,8 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    std::shared_ptr<six::Container> container(
-            new six::Container(six::DataType::DERIVED));
+    mem::SharedPtr<six::Container> container(new six::Container(
+        six::DataType::DERIVED));
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;
@@ -383,8 +382,8 @@ void Tester<DataTypeT>::normalWrite()
     setWriterOptions(options);
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
-    six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(&mImage[0]));
+    six::buffer_list buffers;
+    buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
@@ -429,7 +428,7 @@ void Tester<DataTypeT>::testMultipleWrites()
             mNumColsPerBlock,
             mSetMaxProductSize ? mMaxProductSize : 0);
 
-    const DataTypeT* const inImage = &mBigEndianImage[0];
+    const DataTypeT* const inImage = mBigEndianImage.data();
 
     // Rows [40, 60)
     nitf::Off fileOffset;
@@ -611,11 +610,11 @@ void Tester<DataTypeT>::testMultipleWritesBlocked(size_t blocksPerWrite)
         imageBlocker->block(&mBigEndianImage[iter->startRow * 456],
                             iter->startRow,
                             iter->numRows,
-                            &blockData[0]);
+                            blockData.data());
 
         nitf::Off fileOffset;
         nitf::NITFBufferList buffers;
-        siddByteProvider.getBytes(&blockData[0],
+        siddByteProvider.getBytes(blockData.data(),
                                   iter->startRow,
                                   iter->numRows,
                                   fileOffset,

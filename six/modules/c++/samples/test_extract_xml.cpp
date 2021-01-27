@@ -22,15 +22,17 @@
 #include <string.h>
 #include <vector>
 #include <iostream>
+#include <string>
+
+#include <import/nitf.hpp>
 
 #include <sys/Path.h>
 #include <import/cli.h>
-#include <import/nitf.hpp>
 #include <import/xml/lite.h>
 #include <import/io.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 /*!
  *  This extracts raw XML from each NITF DES, just using nitf,
@@ -70,7 +72,7 @@ int main(int argc, char** argv)
         //! Fill out basename if not user specified
         if (basename.empty())
         {
-            basename = fs::path(inputFile).stem().string();
+            basename = fs::path(inputFile).stem();
         }
 
         nitf::Reader reader;
@@ -87,11 +89,9 @@ int main(int argc, char** argv)
             nitf::SegmentReader deReader = reader.newDEReader(ii);
             const nitf::Off size = deReader.getSize();
 
-            std::string typeID = subheader.getTypeID().toString();
-            str::trim(typeID);
-
-            std::string outPathname = basename + "-" + typeID + 
-                                      str::toString(ii) + ".xml";
+            const auto typeID = subheader.typeID();
+            const std::string outPathname = basename + "-" + typeID + 
+                                      std::to_string(ii) + ".xml";
 
             // Read the DES
             xmlVec.resize(size);

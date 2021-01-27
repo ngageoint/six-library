@@ -27,12 +27,10 @@
 #include <iostream>
 #include <string>
 
-#include <sys/Path.h>
-#include <except/Exception.h>
+#include <nitf/coda-oss.hpp>
 #include <nitf/Writer.hpp>
 
-#include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 int main(int argc, char** argv)
 {
@@ -67,15 +65,15 @@ int main(int argc, char** argv)
 
         return 0;
     }
-    catch (const std::exception& ex)
-    {
-        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
-        return 1;
-    }
     catch (const except::Exception& ex)
     {
         std::cerr << "Caught except::exception: " << ex.getMessage()
                   << std::endl;
+        return 1;
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
         return 1;
     }
     catch (...)

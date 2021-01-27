@@ -22,6 +22,7 @@
 #ifndef __SIX_NITF_IMAGE_INPUT_STREAM_H__
 #define __SIX_NITF_IMAGE_INPUT_STREAM_H__
 
+#include <scene/sys_Conf.h>
 #include <import/six.h>
 #include <import/nitf.hpp>
 #include <import/io.h>
@@ -52,13 +53,16 @@ public:
     NITFImageInputStream(nitf::ImageSubheader subheader,
             nitf::ImageReader imageReader);
 
-    virtual ~NITFImageInputStream() noexcept {}
+    //!  Destructor
+    virtual ~NITFImageInputStream() {}
 
     //!  How many bytes in the image
     int64_t available();
 
     //!  Read N bytes from a NITF file
     ptrdiff_t read(std::byte* b, size_t len);
+    ptrdiff_t read(sys::byte* b, size_t len);
+    ptrdiff_t read(std::span<sys::byte>);
 
 protected:
 
@@ -68,9 +72,9 @@ protected:
     nitf::ImageReader mReader;
     int64_t mAvailable;
     size_t mRowBufferRemaining, mRowSize, mRowOffset;
-    std::unique_ptr<std::byte[]> mRowBuffer;
+    mem::ScopedArray<sys::ubyte> mRowBuffer;
     nitf::SubWindow mWindow;
-    std::unique_ptr<uint32_t[]> mBandList;
+    mem::ScopedArray<uint32_t> mBandList;
 };
 
 }

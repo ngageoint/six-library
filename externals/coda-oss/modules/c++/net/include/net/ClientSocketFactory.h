@@ -24,6 +24,7 @@
 #define __NET_CLIENT_SOCKET_FACTORY_H__
 
 #include "net/Socket.h"
+#include "mem/SharedPtr.h"
 
 /*!
  *  \file
@@ -80,9 +81,9 @@ public:
      *
      *  \return A socket
      */
-    std::unique_ptr<Socket> create(const SocketAddress& address)
+    mem::auto_ptr<Socket> create(const SocketAddress& address)
     {
-        std::unique_ptr<Socket> s(new Socket(mProto));
+        mem::auto_ptr<Socket> s(new Socket(mProto));
 
         setOptions(*s);
 

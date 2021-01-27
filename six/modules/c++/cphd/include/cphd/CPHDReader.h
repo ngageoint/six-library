@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include <sys/Conf.h>
+#include <scene/sys_Conf.h>
 
 #include <cphd/Metadata.h>
 #include <cphd/FileHeader.h>

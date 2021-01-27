@@ -31,7 +31,7 @@
 #include <six/NITFWriteControl.h>
 #include <six/sicd/ComplexData.h>
 
-#include <nitf/cstddef.h>
+#include <nitf/coda-oss.hpp>
 
 namespace six
 {
@@ -112,6 +112,7 @@ public:
 private:
     void writeHeaders();
 
+    void write(const std::vector<sys::byte>& data);
     void write(const std::vector<std::byte>& data);
 
 private:

@@ -104,7 +104,7 @@ public:
 
 struct RowSourceCallback
 {
-    virtual ~RowSourceCallback() noexcept(false)
+    virtual ~RowSourceCallback()
     {
     }
 
@@ -162,7 +162,7 @@ protected:
     void nextBlock(void* buf,
                            const void* block,
                            uint32_t /*blockNumber*/,
-                           uint64_t blockSize) noexcept override
+                           uint64_t blockSize) override
     {
         memcpy(buf, block, blockSize);
     }

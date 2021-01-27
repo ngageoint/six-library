@@ -31,7 +31,7 @@
 #include "TestCase.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 static fs::path argv0;
 static const fs::path file = __FILE__;
@@ -105,7 +105,7 @@ static fs::path nitfPluginRelativelPath()
 static void setNitfPluginPath()
 {
     const auto path = buildRootDir() / nitfPluginRelativelPath();
-    //std::clog << "NITF_PLUGIN_PATH=" << path.string() << "\n";
+    //std::clog << "NITF_PLUGIN_PATH=" << path << "\n";
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
 
@@ -127,7 +127,7 @@ TEST_CASE(valid_six_50x50)
 
     std::vector<std::string> schemaPaths;
     reader.load(inputPathname, schemaPaths);
-    std::shared_ptr<six::Container> container = reader.getContainer();
+    auto container = reader.getContainer();
     TEST_ASSERT_EQ(container->getNumData(), 1);
     for (size_t jj = 0; jj < container->getNumData(); ++jj)
     {

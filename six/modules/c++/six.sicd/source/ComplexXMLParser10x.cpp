@@ -82,8 +82,7 @@ XMLElem ComplexXMLParser10x::convertRadarCollectionToXML(
     createWaveform(radar, radarXML);
 
     //! required in 1.0
-    createString("TxPolarization", six::toString(radar->txPolarization),
-                 radarXML);
+    createString("TxPolarization", radar->txPolarization, radarXML);
 
     createTxSequence(radar, radarXML);
     createRcvChannels(radar, radarXML);
@@ -105,8 +104,8 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
     convertRcvChanProcToXML("1.0", imageFormation->rcvChannelProcessed.get(),
                             imageFormationXML);
 
-    createString("TxRcvPolarizationProc",
-                 six::toString(imageFormation->txRcvPolarizationProc),
+    createSixString("TxRcvPolarizationProc",
+                 imageFormation->txRcvPolarizationProc,
                  imageFormationXML);
 
     createDouble("TStartProc", imageFormation->tStartProc, imageFormationXML);
@@ -132,20 +131,19 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
                      imageFormationXML);
 
     createString("ImageFormAlgo",
-                 six::toString(imageFormation->imageFormationAlgorithm),
+                 imageFormation->imageFormationAlgorithm,
                  imageFormationXML);
 
     createString("STBeamComp",
-                 six::toString(imageFormation->slowTimeBeamCompensation),
+                 imageFormation->slowTimeBeamCompensation,
                  imageFormationXML);
     createString("ImageBeamComp",
-                 six::toString(imageFormation->imageBeamCompensation),
+                 imageFormation->imageBeamCompensation,
                  imageFormationXML);
     createString("AzAutofocus",
-                 six::toString(imageFormation->azimuthAutofocus),
+                 imageFormation->azimuthAutofocus,
                  imageFormationXML);
-    createString("RgAutofocus", six::toString(imageFormation->rangeAutofocus),
-                 imageFormationXML);
+    createString("RgAutofocus", imageFormation->rangeAutofocus, imageFormationXML);
 
     for (unsigned int i = 0; i < imageFormation->processing.size(); ++i)
     {
@@ -223,8 +221,7 @@ XMLElem ComplexXMLParser10x::convertRMAToXML(
 {
     XMLElem rmaXML = newElement("RMA", parent);
 
-    createString("RMAlgoType", six::toString<six::RMAlgoType>(rma->algoType),
-                 rmaXML);
+    createString("RMAlgoType", rma->algoType, rmaXML);
 
     if (rma->rmat.get() && !rma->rmcr.get() && !rma->inca.get())
     {
@@ -377,17 +374,17 @@ XMLElem ComplexXMLParser10x::createRcvChannels(const RadarCollection* radar,
 {
     const size_t numChannels = radar->rcvChannels.size();
     XMLElem rcvChanXML = newElement("RcvChannels", parent);
-    setAttribute(rcvChanXML, "size", str::toString(numChannels));
+    setAttribute(rcvChanXML, "size", numChannels);
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         const ChannelParameters* const cp = radar->rcvChannels[ii].get();
         XMLElem cpXML = newElement("ChanParameters", rcvChanXML);
-        setAttribute(cpXML, "index", str::toString(ii + 1));
+        setAttribute(cpXML, "index", ii + 1);
 
         //! required in 1.0
-        createString(
+        createSixString(
             "TxRcvPolarization",
-            six::toString<DualPolarizationType>(cp->txRcvPolarization),
+            cp->txRcvPolarization,
             cpXML);
 
         if (!Init::isUndefined(cp->rcvAPCIndex))

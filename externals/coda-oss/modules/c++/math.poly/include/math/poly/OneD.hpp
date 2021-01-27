@@ -49,7 +49,7 @@ template<typename _T>
 _T
 OneD<_T>::integrate(double start, double end) const
 {
-   _T ret(0.0);
+    double ret(0.0);
    double endAtPwr = end;
    double startAtPwr = start;
    double div = 0;
@@ -63,7 +63,7 @@ OneD<_T>::integrate(double start, double end) const
       endAtPwr *= end;
       startAtPwr *= start;
    }
-   return ret;
+   return static_cast<_T>(ret);
 }
 
 template<>
@@ -183,10 +183,9 @@ template<typename _T>
 _T
 OneD<_T>::operator [] (size_t i) const
 {
-   _T ret(0.0);
    if (i < mCoef.size())
    {
-      ret = mCoef[i];
+      return mCoef[i];
    }
    else
    {
@@ -195,7 +194,6 @@ OneD<_T>::operator [] (size_t i) const
       std::string msg(str.str());
       throw except::IndexOutOfRangeException(Ctxt(msg));
    }
-   return ret;
 }
 
 template<typename _T>

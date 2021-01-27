@@ -19,16 +19,17 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sicd/CropUtils.h>
 
 #include <memory>
 #include <algorithm>
+#include <string>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
 #include <six/NITFWriteControl.h>
-#include <six/sicd/CropUtils.h>
 #include <six/sicd/Utilities.h>
 #include <six/sicd/SlantPlanePixelTransformer.h>
 
@@ -112,14 +113,13 @@ void cropSICD(six::NITFReadControl& reader,
     // Read in the AOI
     const size_t numBytesPerPixel(data.getNumBytesPerPixel());
     const size_t numBytes(origDims.row * origDims.col * numBytesPerPixel);
-    const std::unique_ptr<std::byte[]> buffer(new std::byte[numBytes]);
 
     six::Region region;
     region.setStartRow(aoiOffset.row);
     region.setStartCol(aoiOffset.col);
     region.setNumRows(aoiDims.row);
     region.setNumCols(aoiDims.col);
-    region.setBuffer(buffer.get());
+    const auto buffer = region.setBuffer(numBytes);
     reader.interleaved(region, 0);
 
     six::sicd::ComplexData* const aoiData = updateMetadata(
@@ -128,7 +128,7 @@ void cropSICD(six::NITFReadControl& reader,
     std::unique_ptr<six::Data> scopedData(aoiData);
 
     // Write the AOI SICD out
-    std::shared_ptr<six::Container> container(new six::Container(
+    mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
     container->addData(std::move(scopedData));
     six::NITFWriteControl writer(container);
@@ -143,7 +143,7 @@ namespace six
 namespace sicd
 {
 
-std::unique_ptr<six::sicd::ComplexData> cropMetaData(
+mem::auto_ptr<six::sicd::ComplexData> cropMetaData(
         const six::sicd::ComplexData& complexData,
         const types::RowCol<size_t>& aoiOffset,
         const types::RowCol<size_t>& aoiDims)
@@ -162,7 +162,7 @@ std::unique_ptr<six::sicd::ComplexData> cropMetaData(
             aoiOffset,
             aoiDims);
 
-    return std::unique_ptr<six::sicd::ComplexData>(aoiData);
+    return mem::auto_ptr<six::sicd::ComplexData>(aoiData);
 }
 
 void cropSICD(const std::string& inPathname,
@@ -183,7 +183,7 @@ void cropSICD(six::NITFReadControl& reader,
               const std::string& outPathname)
 {
     // Make sure it's a SICD
-    const std::shared_ptr<const six::Container> container = reader.getContainer();
+    const auto container = reader.getContainer();
 
     const six::Data* const dataPtr = container->getData(0);
     if (container->getDataType() != six::DataType::COMPLEX ||
@@ -227,11 +227,11 @@ void cropSICD(six::NITFReadControl& reader,
     if (corners.size() != 4)
     {
         throw except::Exception(Ctxt("Expected four corners but got " +
-                str::toString(corners.size())));
+                std::to_string(corners.size())));
     }
 
     // Make sure it's a SICD
-    const std::shared_ptr<const six::Container> container = reader.getContainer();
+    const auto container = reader.getContainer();
 
     const six::Data* const dataPtr = container->getData(0);
     if (container->getDataType() != six::DataType::COMPLEX ||

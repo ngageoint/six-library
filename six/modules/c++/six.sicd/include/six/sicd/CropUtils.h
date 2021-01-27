@@ -26,7 +26,6 @@
 #include <string>
 #include <vector>
 
-#include <types/RowCol.h>
 #include <scene/Types.h>
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexData.h>
@@ -127,8 +126,8 @@ void cropSICD(six::NITFReadControl& reader,
  * \returns A cloned complex data object where the 
  * meta data has been updated to reflect the cropped aoi.
  */
- std::unique_ptr<six::sicd::ComplexData> cropMetaData(
-             const six::sicd::ComplexData& complexData,
+mem::auto_ptr<six::sicd::ComplexData>
+cropMetaData(const six::sicd::ComplexData& complexData,
              const types::RowCol<size_t>& aoiOffset,
              const types::RowCol<size_t>& aoiDims);
 }

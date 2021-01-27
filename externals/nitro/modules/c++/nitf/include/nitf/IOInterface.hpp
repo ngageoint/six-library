@@ -22,10 +22,13 @@
 
 #ifndef __NITF_IO_INTERFACE_HPP__
 #define __NITF_IO_INTERFACE_HPP__
+#pragma once
 
+#include <string>
+
+#include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file IOInterface.hpp
@@ -36,7 +39,7 @@ namespace nitf
 struct IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
 {
     ~IOInterfaceDestructor() = default;
-    void operator()(nitf_IOInterface *io) noexcept override;
+    void operator()(nitf_IOInterface *io) override;
 };
 
 /*!

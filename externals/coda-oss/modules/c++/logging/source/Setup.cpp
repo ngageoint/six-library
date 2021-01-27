@@ -30,37 +30,37 @@
 
 #include "logging/Setup.h"
 
-std::unique_ptr<logging::Logger> logging::setupLogger(const std::string& program,
-        const std::string& logLevel,
-        const std::string& logFile,
-        const std::string& logFormat,
-        size_t logCount,
-        size_t logBytes)
+mem::auto_ptr<logging::Logger>
+logging::setupLogger(const std::string& program, 
+                     const std::string& logLevel, 
+                     const std::string& logFile,
+                     const std::string& logFormat,
+                     size_t logCount,
+                     size_t logBytes)
 {
-    std::unique_ptr<logging::Logger> log(new logging::Logger(program));
+    mem::auto_ptr<logging::Logger> log(new logging::Logger(program));
 
     // setup logging level
     std::string lev = logLevel;
     str::upper(lev);
     str::trim(lev);
-    logging::LogLevel level = (lev.empty()) ? logging::LogLevel::LOG_WARNING
-                                            : logging::LogLevel(lev);
+    logging::LogLevel level = (lev.empty()) ? logging::LogLevel::LOG_WARNING :
+                                              logging::LogLevel(lev);
 
     // setup logging formatter
-    std::unique_ptr<logging::Formatter> formatter;
+    std::unique_ptr <logging::Formatter> formatter;
     std::string file = logFile;
     str::lower(file);
     if (str::endsWith(file, ".xml"))
     {
         formatter.reset(
-                new logging::XMLFormatter("",
-                                          "<Log image=\"" + program + "\">"));
+            new logging::XMLFormatter("", "<Log image=\"" + program + "\">"));
     }
     else
     {
         formatter.reset(new logging::StandardFormatter(logFormat));
     }
-
+    
     // setup logging handler
     std::unique_ptr<logging::Handler> logHandler;
     if (file.empty() || file == "console")
@@ -73,8 +73,8 @@ std::unique_ptr<logging::Logger> logging::setupLogger(const std::string& program
         if (logBytes > 0)
         {
             logHandler.reset(new logging::RotatingFileHandler(logFile,
-                                                              logBytes,
-                                                              logCount));
+                                                              static_cast<long>(logBytes),
+                                                              static_cast<int>(logCount)));
         }
         // create regular logging to one file
         else
@@ -82,10 +82,11 @@ std::unique_ptr<logging::Logger> logging::setupLogger(const std::string& program
             logHandler.reset(new logging::FileHandler(logFile));
         }
     }
-
+	
     logHandler->setLevel(level);
     logHandler->setFormatter(formatter.release());
     log->addHandler(logHandler.release(), true);
 
     return log;
 }
+

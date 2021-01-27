@@ -24,6 +24,7 @@
 #include <clocale>
 
 #include "io/StringStream.h"
+#include "str/Convert.h"
 #include <TestCase.h>
 
 #include "xml/lite/MinidomParser.h"
@@ -89,7 +90,7 @@ TEST_CASE(testXmlPreserveCharacterData)
     TEST_ASSERT_TRUE(true);
 }
 
-static const xml::lite::Element& testXmlUtf8_(xml::lite::MinidomParser& xmlParser)
+static xml::lite::Element& testXmlUtf8_(xml::lite::MinidomParser& xmlParser)
 {
     io::StringStream stream;
     stream.stream() << strUtf8Xml;
@@ -97,9 +98,9 @@ static const xml::lite::Element& testXmlUtf8_(xml::lite::MinidomParser& xmlParse
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(stream);
 
-    const auto aElements =
+    auto aElements =
         xmlParser.getDocument()->getRootElement()->getElementsByTagName("a", true /*recurse*/);
-    const auto& a = *(aElements[0]);
+    auto& a = *(aElements[0]);
     return a;
 }
 
@@ -109,7 +110,7 @@ TEST_CASE(testXmlUtf8Legacy)
     const auto& a = testXmlUtf8_(xmlParser);
 
     // This is LEGACY behavior, it is INCORRECT on Linux!
-    auto actual = a.getCharacterData();
+    const auto actual = a.getCharacterData();
     #ifdef _WIN32
     TEST_ASSERT_EQ(actual, iso88591Text);
     #else
@@ -120,21 +121,64 @@ TEST_CASE(testXmlUtf8Legacy)
     TEST_ASSERT_NULL(pEncoding);
 }
 
+TEST_CASE(testXmlUtf8_u8string)
+{
+    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
+    const auto& a = testXmlUtf8_(xmlParser);
+
+    sys::U8string actual_;
+    a.getCharacterData(actual_);
+    const std::string actual = str::toString(actual_);
+    TEST_ASSERT_EQ(actual, utf8Text);
+}
+
 TEST_CASE(testXmlUtf8)
 {
     xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
     const auto& a = testXmlUtf8_(xmlParser);
 
-    const auto actual = a.getCharacterData();
-    const auto pEncoding = a.getEncoding();
+    {
+        const auto actual = a.getCharacterData();
+        const auto pEncoding = a.getEncoding();
+        TEST_ASSERT(pEncoding != nullptr);
+        #ifdef _WIN32
+        TEST_ASSERT_EQ(actual, iso88591Text);
+        TEST_ASSERT(*pEncoding == xml::lite::string_encoding::windows_1252);
+        #else
+        TEST_ASSERT_EQ(actual, utf8Text);
+        TEST_ASSERT(*pEncoding == xml::lite::string_encoding::utf_8);
+        #endif
+    }
+    {
+        std::string actual;
+        const auto pEncoding = a.getCharacterData(actual);
+        TEST_ASSERT(pEncoding != nullptr);
+        #ifdef _WIN32
+        TEST_ASSERT_EQ(actual, iso88591Text);
+        TEST_ASSERT(*pEncoding == xml::lite::string_encoding::windows_1252);
+        #else
+        TEST_ASSERT_EQ(actual, utf8Text);
+        TEST_ASSERT(*pEncoding == xml::lite::string_encoding::utf_8);
+        #endif
+    }
+}
+
+TEST_CASE(testXml_setCharacterData)
+{
+    xml::lite::MinidomParser xmlParser;
+    auto& a = testXmlUtf8_(xmlParser);
+
+    const sys::U8string characters = str::castToU8string(utf8Text);
+    a.setCharacterData(characters);
+    auto pEncoding = a.getEncoding();
     TEST_ASSERT(pEncoding != nullptr);
-#ifdef _WIN32
-    TEST_ASSERT_EQ(actual, iso88591Text);
-    TEST_ASSERT(*pEncoding == xml::lite::string_encoding::windows_1252);
-#else
-    TEST_ASSERT_EQ(actual, utf8Text);
     TEST_ASSERT(*pEncoding == xml::lite::string_encoding::utf_8);
-#endif
+
+    std::string actual;
+    pEncoding = a.getCharacterData(actual);
+    TEST_ASSERT(pEncoding != nullptr);
+    TEST_ASSERT(*pEncoding == xml::lite::string_encoding::utf_8);
+    TEST_ASSERT_EQ(actual, utf8Text);
 }
 
 static std::string testXmlPrint_(std::string& expected, const std::string& characterData)
@@ -200,6 +244,9 @@ int main(int, char**)
     TEST_CHECK(testXmlPreserveCharacterData);
     TEST_CHECK(testXmlUtf8Legacy);
     TEST_CHECK(testXmlUtf8);
+    TEST_CHECK(testXmlUtf8_u8string);    
+    TEST_CHECK(testXml_setCharacterData);    
+
     TEST_CHECK(testXmlPrintSimple);
     TEST_CHECK(testXmlPrintLegacy);
     TEST_CHECK(testXmlParseAndPrintUtf8);

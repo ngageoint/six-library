@@ -24,14 +24,14 @@
 #include <iostream>
 #include <thread>
 
-#include <sys/Path.h>
+#include <nitf/coda-oss.hpp>
 #include <import/cli.h>
 #include <import/io.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDXMLControl.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 /*!
  *  This extracts raw XML from a CPHD file using the CPHD module
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
         // Fill out basename if not user specified
         if (basename.empty())
         {
-            basename = fs::path(inputFile).stem().string();
+            basename = fs::path(inputFile).stem();
         }
         std::string outPathname = basename  + ".xml";
 

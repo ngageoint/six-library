@@ -29,7 +29,7 @@ namespace nitf
 {
 struct CustomIO : public IOInterface
 {
-    CustomIO() noexcept(false);
+    CustomIO();
     ~CustomIO();
 
 protected:

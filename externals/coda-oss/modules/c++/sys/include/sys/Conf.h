@@ -22,6 +22,7 @@
 
 #ifndef __SYS_CONF_H__
 #define __SYS_CONF_H__
+#pragma once
 
 #include <config/coda_oss_config.h>
 #include <str/Convert.h>
@@ -33,6 +34,7 @@
 #include <assert.h>
 #include <iostream>
 #include <stdio.h>
+#include <stdint.h>
 #include <algorithm>
 
 #if defined(__sgi) || defined(__sgi__)
@@ -77,6 +79,20 @@
 #endif
 
 
+namespace sys
+{
+    typedef char              byte;
+    typedef unsigned char     ubyte;
+    typedef uint8_t            Uint8_T;
+    typedef uint16_t           Uint16_T;
+    typedef uint32_t           Uint32_T;
+    typedef uint64_t           Uint64_T;
+    typedef size_t             Size_T;
+    typedef int8_t             Int8_T;
+    typedef int16_t            Int16_T;
+    typedef int32_t            Int32_T;
+    typedef int64_t            Int64_T;
+}
 
 #if defined(WIN32) || defined(_WIN32)
 #  include <malloc.h>
@@ -86,24 +102,13 @@
 
 namespace sys
 {
-    typedef char              byte;
-    typedef unsigned char     ubyte;
     typedef HANDLE            Handle_T;
-    typedef unsigned char     Uint8_T;
-    typedef unsigned __int16  Uint16_T;
-    typedef unsigned __int32  Uint32_T;
-    typedef unsigned __int64  Uint64_T;
-    typedef signed char       Int8_T;
-    typedef __int16           Int16_T;
-    typedef __int32           Int32_T;
-    typedef __int64           Int64_T;
     typedef Int64_T           Off_T;
     typedef DWORD             Pid_T;
-    typedef size_t            Size_T;
 #   if SIZEOF_SIZE_T == 8
-        typedef __int64   SSize_T;
+        typedef Int64_T   SSize_T;
 #   elif SIZEOF_SIZE_T == 4
-        typedef __int32   SSize_T;
+        typedef Int32_T   SSize_T;
 #   else
         #error SIZEOF_SIZE_T must be set at configure time
 #   endif
@@ -141,19 +146,8 @@ namespace sys
 
 namespace sys
 {
-    typedef char               byte;
-    typedef unsigned char      ubyte;
-    typedef uint8_t            Uint8_T;
-    typedef uint16_t           Uint16_T;
-    typedef uint32_t           Uint32_T;
-    typedef uint64_t           Uint64_T;
-    typedef size_t             Size_T;
     typedef ssize_t            SSize_T;
     typedef off_t              Off_T;
-    typedef int8_t             Int8_T;
-    typedef int16_t            Int16_T;
-    typedef int32_t            Int32_T;
-    typedef int64_t            Int64_T;
     typedef int                Handle_T;
     // Should we remove this?
     typedef pid_t              Pid_T;
@@ -322,10 +316,10 @@ namespace sys
 #if defined(WIN32) || defined(_WIN32)
         void* p = _aligned_malloc(size, alignment);
 #elif defined(HAVE_POSIX_MEMALIGN)
-        void* p = NULL;
+        void* p = nullptr;
         if (posix_memalign(&p, alignment, size) != 0)
         {
-            p = NULL;
+            p = nullptr;
         }
 #elif defined(HAVE_MEMALIGN)
         void* const p = memalign(alignment, size);
@@ -358,4 +352,49 @@ namespace sys
 
 }
 
+#define CODA_OSS_cplusplus __cplusplus
+#if CODA_OSS_cplusplus < 201103L  // We need at least C++11
+    #undef CODA_OSS_cplusplus  // oops...try to fix
+
+    // MSVC only sets __cplusplus >199711L with the /Zc:__cplusplus command-line option.
+    // https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
+    #if defined(_MSVC_LANG)
+    // https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160
+    // "Defined as an integer literal that specifies the C++ language standard targeted by the compiler."
+    #define CODA_OSS_cplusplus _MSVC_LANG
+    #endif // _MSVC_LANG
+
+    #if defined(__GNUC__)
+    // ... similar things needed for other compilers ... ?
+    #endif // __GNUC__
+
+#endif // CODA_OSS_cplusplus
+static_assert(CODA_OSS_cplusplus >= 201103L, "Must compile with C++11 or greater.");
+
+// Define a few macros as that's less verbose than testing against a version number
+#if CODA_OSS_cplusplus >= 201103L
+    #define CODA_OSS_cpp11 1
 #endif
+#if CODA_OSS_cplusplus >= 201402L
+    #define CODA_OSS_cpp14 1
+#endif
+#if CODA_OSS_cplusplus >= 201703L
+    #define CODA_OSS_cpp17 1
+#endif
+#if CODA_OSS_cplusplus >= 202002L
+    #define CODA_OSS_cpp20 1
+#endif
+
+// We've got various "replacements" (to a degree) for C++ library functionality
+// only available in later releases.  Adding these names to "std" is technically
+// forbidden, but it makes for fewer (eventual) changes in client code.
+#ifndef CODA_OSS_AUGMENT_std_namespace
+    #if CODA_OSS_cpp20
+        #define CODA_OSS_AUGMENT_std_namespace 0  // nothing to add if we're at C++20
+    #else
+        //#define CODA_OSS_AUGMENT_std_namespace 0
+        #define CODA_OSS_AUGMENT_std_namespace 1
+    #endif
+#endif
+
+#endif // __SYS_CONF_H__

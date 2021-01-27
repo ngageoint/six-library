@@ -22,15 +22,13 @@
 
 #include <iostream>
 #include <iterator>
+
+#include <sys/Bit.h>
+
 #include <import/six/sidd.h>
 #include "six/NITFWriteControl.h"
 #include "six/Types.h"
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace
 {
@@ -111,7 +109,7 @@ std::unique_ptr<six::sidd::DerivedData> createData()
 
 void write(const int16_t* data, bool useStream, bool byteSwap)
 {
-    std::shared_ptr<six::Container> container(new six::Container(
+    mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
     container->addData(createData().release());
 

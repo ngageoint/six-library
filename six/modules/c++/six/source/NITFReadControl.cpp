@@ -20,7 +20,11 @@
  *
  */
 
+#include <assert.h>
+
 #include <sstream>
+#include <stdexcept>
+#include <string>
 
 #include <six/NITFReadControl.h>
 #include <six/XMLControlFactory.h>
@@ -60,9 +64,7 @@ void assignLUT(nitf::ImageSubheader& subheader, six::Legend& legend)
 
 six::PixelType getPixelType(nitf::ImageSubheader& subheader)
 {
-    std::string iRep = subheader.getImageRepresentation().toString();
-    str::trim(iRep);
-
+    const auto iRep = subheader.imageRepresentation();
     if (iRep == "MONO")
     {
         return six::PixelType::MONO8I;
@@ -150,8 +152,7 @@ DataType NITFReadControl::getDataType(nitf::DESegment& segment)
     //       DESID for really old versions and the DESSHSI from
     //       XML_DATA_CONTENT for newer versions.
     nitf::DESubheader subheader = segment.getSubheader();
-    std::string desid = subheader.getTypeID().toString();
-    str::trim(desid);
+    const auto desid = subheader.typeID();
 
     // Note that we need to check the subheader
     // length first rather than calling tre.getCurrentSize() in
@@ -168,8 +169,7 @@ DataType NITFReadControl::getDataType(nitf::DESegment& segment)
 
         if (tre.exists("DESSHSI"))
         {
-            desshsiField = tre.getField("DESSHSI").toString();
-            str::trim(desshsiField);
+            desshsiField = tre.getField("DESSHSI").toTrimString();
         }
     }
 
@@ -195,10 +195,15 @@ DataType NITFReadControl::getDataType(const std::string& fromFile) const
 void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
                                       const NITFImageInfo* info)
 {
-    const size_t numBandsSeg =
-            static_cast<uint32_t>(subheader.getNumImageBands());
+    assert(info != nullptr);
+    validateSegment(subheader, *info);
+}
+void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
+                                      const NITFImageInfo& info)
+{
+    const size_t numBandsSeg = subheader.numImageBands();
 
-    const std::string pjust = subheader.getPixelJustification().toString();
+    const std::string pjust = subheader.pixelJustification();
     // TODO: More validation in here!
     if (pjust != "R")
     {
@@ -208,12 +213,11 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
     // The number of bytes per pixel, which we count to be 3 in the
     // case of 24-bit true color and 8 in the case of complex float
     // and 1 in the case of most SIDD data
-    const size_t numBitsPerPixel =
-            static_cast<uint32_t>(subheader.getNumBitsPerPixel());
+    const size_t numBitsPerPixel = subheader.numBitsPerPixel();
     const size_t numBytesPerPixel = (numBitsPerPixel + 7) / 8;
     const size_t numBytesSeg = numBytesPerPixel * numBandsSeg;
 
-    const size_t nbpp = info->getData()->getNumBytesPerPixel();
+    const size_t nbpp = info.getData()->getNumBytesPerPixel();
     if (numBytesSeg != nbpp)
     {
         std::ostringstream ostr;
@@ -222,9 +226,8 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    const size_t numCols = info->getData()->getNumCols();
-    const size_t numColsSubheader =
-            static_cast<uint32_t>(subheader.getNumCols());
+    const size_t numCols = info.getData()->getNumCols();
+    const size_t numColsSubheader = subheader.numCols();
 
     if (numColsSubheader != numCols)
     {
@@ -233,29 +236,28 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
              << "], got [" << numColsSubheader << "]";
         throw except::Exception(Ctxt(ostr.str()));
     }
-
 }
 
 void NITFReadControl::load(const std::string& fromFile,
                            const std::vector<std::string>& schemaPaths)
 {
-    std::shared_ptr<nitf::IOInterface> handle(new nitf::IOHandle(fromFile));
+    auto handle(std::make_shared<nitf::IOHandle>(fromFile));
     load(handle, schemaPaths);
 }
 
 void NITFReadControl::load(io::SeekableInputStream& stream,
                            const std::vector<std::string>& schemaPaths)
 {
-    std::shared_ptr<nitf::IOInterface> handle(new nitf::IOStreamReader(stream));
+    auto handle(std::make_shared<nitf::IOStreamReader>(stream));
     load(handle, schemaPaths);
 }
 
-void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface)
+void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface)
 {
     load(ioInterface, std::vector<std::string>());
 }
 
-void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
+void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
                            const std::vector<std::string>& schemaPaths)
 {
     reset();
@@ -300,9 +302,13 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
             {
                 mContainer->addData(std::move(data), findLegend(productNum));
             }
-            else
+            else if (data->getDataType() == six::DataType::COMPLEX)
             {
                 mContainer->addData(std::move(data));
+            }
+            else
+            {
+                throw except::Exception(Ctxt("Unknown 'getDataType()' value."));
             }
 
             ++productNum;
@@ -329,7 +335,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         {
             throw except::Exception(Ctxt(
                     "SICD file must have exactly 1 SICD DES but got " +
-                    str::toString(mContainer->getNumData())));
+                    std::to_string(mContainer->getNumData())));
         }
 
         mInfos.push_back(new NITFImageInfo(mContainer->getData(0)));
@@ -366,31 +372,29 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         nitf::ImageSubheader subheader = segment.getSubheader();
 
         // The number of rows in the segment (actual)
-        size_t numRowsSeg = (uint32_t) subheader.getNumRows();
+        size_t numRowsSeg = subheader.numRows();
 
         // This function should throw if the data does not exist
-        const std::pair<size_t, size_t> imageAndSegment =
-                getIndices(subheader);
-        if (imageAndSegment.first >= mInfos.size())
+        ImageAndSegment imageAndSegment;
+        getIndices(subheader, imageAndSegment);
+        if (imageAndSegment.image >= mInfos.size())
         {
             throw except::Exception(Ctxt(
-                    "Image " + str::toString(imageAndSegment.first) +
+                    "Image " + std::to_string(imageAndSegment.image) +
                     " is out of bounds"));
         }
 
-        NITFImageInfo* const currentInfo = mInfos[imageAndSegment.first];
-
-        const size_t productSegmentIdx = imageAndSegment.second;
+        const auto& currentInfo = mInfos[imageAndSegment.image];
+        const size_t productSegmentIdx = imageAndSegment.segment;
 
         // We have to enforce a number of rules, namely that the #
         // columns match, and the pixel type, etc.
         // But, we don't do this for legends since their size has nothing to
         // do with the size of the pixel data
         const bool segIsLegend = isLegend(subheader);
-
         if (!segIsLegend)
         {
-            validateSegment(subheader, currentInfo);
+            validateSegment(subheader, *currentInfo);
         }
 
         // We are propagating the last segment's
@@ -447,7 +451,7 @@ void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
 {
 
     Parameter p;
-    p = subheader.getImageSecurityClass().toString();
+    p = subheader.imageSecurityClass();
     c.fileOptions.setParameter("ISCLAS", p);
     addSecurityOptions(subheader.getSecurityGroup(), "IS", c.fileOptions);
 }
@@ -456,155 +460,118 @@ void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
         six::Classification& c) const
 {
     Parameter p;
-    p = subheader.getSecurityClass().toString();
+    p = subheader.securityClass();
     c.fileOptions.setParameter("DECLAS", p);
     addSecurityOptions(subheader.getSecurityGroup(), "DES", c.fileOptions);
 }
 
+struct AddSecurityOption final
+{
+    const std::string& prefix;
+    six::Options& options;
+    logging::Logger& log;
+    void operator()(const nitf::Field& parameter, const std::string& field)
+    {
+        Parameter p = parameter.toString();
+        const auto k = NITFImageInfo::generateFieldKey(field, prefix);
+        options.setParameter(k, p);
+        log.debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
+            static_cast<const char*>(p))));
+    }
+    AddSecurityOption() = delete;
+};
+
 void NITFReadControl::addSecurityOptions(nitf::FileSecurity security,
         const std::string& prefix, six::Options& options) const
 {
-    Parameter p;
-    std::string k;
+    AddSecurityOption addSecurityOption{ prefix, options, *mLog };
 
-    p = security.getClassificationSystem().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CLSY, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getCodewords().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CODE, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getControlAndHandling().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CTLH, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getReleasingInstructions().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::REL, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getDeclassificationType().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCTP, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getDeclassificationDate().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCDT, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getDeclassificationExemption().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCXM, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getDowngrade().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DG, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getDowngradeDateTime().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DGDT, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getClassificationText().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CLTX, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getClassificationAuthorityType().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CATP, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getClassificationAuthority().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CAUT, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getClassificationReason().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CRSN, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getSecuritySourceDate().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::SRDT, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
-
-    p = security.getSecurityControlNumber().toString();
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CTLN, prefix);
-    options.setParameter(k, p);
-    mLog->debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
-                          (const char*) p)));
+    addSecurityOption(security.getClassificationSystem(), NITFImageInfo::CLSY);
+    addSecurityOption(security.getCodewords(), NITFImageInfo::CODE);
+    addSecurityOption(security.getControlAndHandling(), NITFImageInfo::CTLH);
+    addSecurityOption(security.getReleasingInstructions(), NITFImageInfo::REL);
+    addSecurityOption(security.getDeclassificationType(), NITFImageInfo::DCTP);
+    addSecurityOption(security.getDeclassificationDate(), NITFImageInfo::DCDT);
+    addSecurityOption(security.getDeclassificationExemption(), NITFImageInfo::DCXM);
+    addSecurityOption(security.getDowngrade(), NITFImageInfo::DG);
+    addSecurityOption(security.getDowngradeDateTime(), NITFImageInfo::DGDT);
+    addSecurityOption(security.getClassificationText(), NITFImageInfo::CLTX);
+    addSecurityOption(security.getClassificationAuthorityType(), NITFImageInfo::CATP);
+    addSecurityOption(security.getClassificationAuthority(), NITFImageInfo::CAUT);
+    addSecurityOption(security.getClassificationReason(), NITFImageInfo::CRSN);
+    addSecurityOption(security.getSecuritySourceDate(), NITFImageInfo::SRDT);
+    addSecurityOption(security.getSecurityControlNumber(), NITFImageInfo::CTLN);
 }
 
 std::pair<size_t, size_t>
-NITFReadControl::getIndices(nitf::ImageSubheader& subheader) const
+NITFReadControl::getIndices(const nitf::ImageSubheader& subheader) const
 {
-    std::string imageID = subheader.getImageId().toString();
-    str::trim(imageID);
+    ImageAndSegment result;
+    getIndices(subheader, result);
+    return std::make_pair(result.image, result.segment);
+}
+void NITFReadControl::getIndices(const nitf::ImageSubheader& subheader, ImageAndSegment& result) const
+{
+    const auto imageID = subheader.imageId();
 
     // There is definitely something in here
-    std::pair<size_t, size_t> imageAndSegment;
-    imageAndSegment.first = 0;
-    imageAndSegment.second = 0;
+    auto& image = result.image;
+    auto& segment = result.segment;
 
-    const size_t iid = str::toType<size_t>(imageID.substr(4, 3));
+    const auto digit_pos = imageID.find_first_of("0123456789");
+    if (digit_pos == std::string::npos)
+    {
+        throw except::Exception(Ctxt("Can't parse 'iid' from '" + imageID + "'"));
+    }
+    const auto str_image = imageID.substr(digit_pos, 3);
+    const size_t iid = str::toType<size_t>(str_image);
 
     /*
      *  Always first = 0, second = N - 1 (where N is numSegments)
      *
      */
-    if (mContainer->getDataType() == DataType::COMPLEX)
+    const auto dataType = mContainer->getDataType();
+    if (dataType == DataType::COMPLEX)
     {
         // We need to find the SICD data here, and there is
         // only one
         if (iid != 0)
         {
-            imageAndSegment.second = iid - 1;
+            segment = iid - 1;
         }
     }
     /*
      *  First is always iid - 1
      *  Second is always str::toType<int>(substr(7)) - 1
      */
+    else if (dataType == DataType::DERIVED)
+    {
+        // If it's SIDD, we need to check the first three digits within the IID
+        image = iid - 1;
+        const auto segment_pos = digit_pos + 3;
+        if (segment_pos < imageID.length())
+        {
+            const auto str_segment = imageID.substr(segment_pos);
+            segment = str::toType<size_t>(str_segment) - 1;
+        }
+        else
+        {
+            // 'imageID' might also be "DED001"
+            throw except::Exception(Ctxt("Can't extract segment # from: " + imageID));
+        }
+    }
     else
     {
-        // If it's SIDD, we need to check the first three
-        // digits within the IID
-        imageAndSegment.first = iid - 1;
-        imageAndSegment.second = str::toType<size_t>(imageID.substr(7)) - 1;
+        throw except::Exception(Ctxt("Unknown 'DataType' value: " + dataType.toString()));
     }
-
-    return imageAndSegment;
 }
 
 UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
-    NITFImageInfo* thisImage = mInfos[imageNumber];
+    const NITFImageInfo& thisImage = *(mInfos[imageNumber]);
 
-    size_t numRowsTotal = thisImage->getData()->getNumRows();
-    size_t numColsTotal = thisImage->getData()->getNumCols();
+    size_t numRowsTotal = thisImage.getData()->getNumRows();
+    size_t numColsTotal = thisImage.getData()->getNumCols();
 
     if (region.getNumRows() == -1)
     {
@@ -638,12 +605,11 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     auto buffer = region.getBuffer();
 
     size_t subWindowSize = numRowsReq * numColsReq
-            * thisImage->getData()->getNumBytesPerPixel();
+            * thisImage.getData()->getNumBytesPerPixel();
 
     if (buffer == nullptr)
     {
-        buffer = new std::byte[subWindowSize];
-        region.setBuffer(buffer);
+        buffer = region.setBuffer(subWindowSize).release();
     }
 
     // Do segmenting here
@@ -654,7 +620,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     sw.setBandList(&bandList);
 
     std::vector < NITFSegmentInfo > imageSegments
-            = thisImage->getImageSegments();
+            = thisImage.getImageSegments();
     size_t numIS = imageSegments.size();
     size_t startOff = 0;
 
@@ -685,8 +651,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     << " i: " << i << std::endl;
 #endif
 
-    size_t nbpp = thisImage->getData()->getNumBytesPerPixel();
-    size_t startIndex = thisImage->getStartIndex();
+    size_t nbpp = thisImage.getData()->getNumBytesPerPixel();
+    size_t startIndex = thisImage.getStartIndex();
     createCompressionOptions(mCompressionOptions);
     for (; i < numIS && totalRead < subWindowSize; i++)
     {
@@ -699,7 +665,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
                 static_cast<int>(startIndex + i),
                 mCompressionOptions);
 
-        auto bufferPtr = reinterpret_cast<uint8_t*>(buffer + totalRead);
+        auto bufferPtr = buffer + totalRead;
 
         int padded;
         imageReader.read(sw, &bufferPtr, &padded);
@@ -735,9 +701,7 @@ std::unique_ptr<Legend> NITFReadControl::findLegend(size_t productNum)
             legend.reset(new Legend());
             legend->mType = getPixelType(subheader);
 
-            legend->mLocation =
-                    parseILOC(subheader.getImageLocation().toString());
-
+            legend->mLocation = parseILOC(subheader.imageLocation());
             if (legend->mType == PixelType::RGB8LU)
             {
                 assignLUT(subheader, *legend);
@@ -752,20 +716,18 @@ std::unique_ptr<Legend> NITFReadControl::findLegend(size_t productNum)
     return legend;
 }
 
-void NITFReadControl::readLegendPixelData(nitf::ImageSubheader& subheader,
+void NITFReadControl::readLegendPixelData(const nitf::ImageSubheader& subheader,
                                           size_t imageSeg,
                                           Legend& legend)
 {
     const types::RowCol<uint32_t> dims(
-            static_cast<uint32_t>(subheader.getNumRows()),
-            static_cast<uint32_t>(subheader.getNumCols()));
+            static_cast<uint32_t>(subheader.numRows()),
+            static_cast<uint32_t>(subheader.numCols()));
 
     legend.setDims(dims);
 
     uint32_t bandList(0);
     nitf::SubWindow sw;
-    sw.setStartRow(0);
-    sw.setStartCol(0);
     sw.setNumRows(dims.row);
     sw.setNumCols(dims.col);
     sw.setNumBands(1);
@@ -774,7 +736,7 @@ void NITFReadControl::readLegendPixelData(nitf::ImageSubheader& subheader,
     if (!legend.mImage.empty())
     {
         int padded;
-        auto bufferPtr = reinterpret_cast<uint8_t*>(legend.mImage.data());
+        auto bufferPtr = legend.mImage.data();
         nitf::ImageReader imageReader = mReader.newImageReader(
                 static_cast<int>(imageSeg));
         imageReader.read(sw, &bufferPtr, &padded);
@@ -792,9 +754,9 @@ void NITFReadControl::reset()
 }
 
 
-six::ReadControl* NITFReadControlCreator::newReadControl() const
+void NITFReadControlCreator::newReadControl(std::unique_ptr<six::ReadControl>& result) const
 {
-    return new NITFReadControl();
+    result.reset(new NITFReadControl());
 }
 
 bool NITFReadControlCreator::supports(const std::string& filename) const
@@ -804,7 +766,7 @@ bool NITFReadControlCreator::supports(const std::string& filename) const
         NITFReadControl control;
         return control.getDataType(filename) != DataType::NOT_SET;
     }
-    catch(except::Exception&)
+    catch(const except::Exception&)
     {
         return false;
     }

@@ -1,8 +1,7 @@
 from os.path import join, split, basename, splitext
 
 NAME            = 'nitf'
-MAINTAINER      = 'asylvest@users.sourceforge.net'
-MODULE_DEPS     = 'math mt sys mem io'
+MODULE_DEPS     = 'math mt sys mem io gsl'
 TEST_DEPS       = 'cli'
 USELIB          = 'THREAD DL'
 USELIB_LOCAL    = 'nitf-c'

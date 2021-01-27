@@ -21,6 +21,7 @@
  */
 
 #include <import/cli.h>
+#include <sys/OS.h>
 #include <io/FileInputStream.h>
 #include <import/six.h>
 #include <import/six/sicd.h>
@@ -28,7 +29,7 @@
 #include "utils.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -110,6 +111,7 @@ bool runValidation(const std::unique_ptr<six::Data>& data,
     else
     {
         // Nothing to validate
+        log->info(Ctxt("Nothing done: not a SICD."));
         return true;
     }
 }
@@ -118,7 +120,7 @@ bool runValidation(const std::unique_ptr<six::Data>& data,
 // make it a little easier to use from MSVC
 #if defined(_DEBUG) && defined(_MSC_VER)
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 static fs::path getNitfPath()
 {
@@ -141,8 +143,7 @@ static void setNitfPluginPath()
     const std::string platform = "x64";
 
     const auto path = root_dir / "externals" / "nitro" / platform / configuration / "share" / "nitf" / "plugins";
-    const std::string putenv_ = "NITF_PLUGIN_PATH=" + path.string();
-    _putenv(putenv_.c_str());
+    sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
 #endif
 
@@ -155,7 +156,7 @@ static int main_(int argc, char** argv)
         setNitfPluginPath();
 
         // ./six/modules/c++/six/tests/nitf/sidd_1.0.0.nitf
-        static const auto nitf_path = getNitfPath().string();
+        static const std::string nitf_path = getNitfPath().string();
         argc = 2;
         auto argv_ = static_cast<char**>(malloc(argc * sizeof(char*)));
         argv_[0] = argv[0];
@@ -234,8 +235,7 @@ static int main_(int argc, char** argv)
             else
             {
                 reader.load(inputPathname, schemaPaths);
-                std::shared_ptr<six::Container> container =
-                        reader.getContainer();
+                auto container = reader.getContainer();
                 for (size_t jj = 0; jj < container->getNumData(); ++jj)
                 {
                     data.reset(container->getData(jj)->clone());
@@ -273,6 +273,7 @@ int main(int argc, char** argv)
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
+        return 1;
     }
     catch (...)
     {

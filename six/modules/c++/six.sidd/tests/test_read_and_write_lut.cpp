@@ -24,7 +24,7 @@
 #include <import/nitf.hpp>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -45,35 +45,26 @@ void validateArguments(int argc, char** argv)
     }
 }
 
-class Buffers
+struct Buffers final
 {
-public:
-    Buffers()
-    {
-    }
-
-    ~Buffers()
-    {
-        for (size_t ii = 0; ii < mBuffers.size(); ++ii)
-        {
-            delete[] mBuffers[ii];
-        }
-    }
-
     std::byte* add(size_t numBytes)
     {
-        std::unique_ptr<std::byte[]> buffer(new std::byte[numBytes]);
-        mBuffers.push_back(buffer.get());
-        return buffer.release();
+        mBuffers.push_back(std::unique_ptr<std::byte[]>(new std::byte[numBytes]));
+        return mBuffers.back().get();
     }
 
     std::vector<std::byte*> get() const
     {
-        return mBuffers;
+        std::vector<std::byte*> retval;
+        for (auto& buffer : mBuffers)
+        {
+            retval.push_back(buffer.get());
+        }
+        return retval;
     }
 
 private:
-    std::vector<std::byte*> mBuffers;
+    std::vector<std::unique_ptr<std::byte[]>> mBuffers;
 };
 
 std::string doRoundTrip(const std::string& siddPathname)
@@ -88,11 +79,9 @@ std::string doRoundTrip(const std::string& siddPathname)
     reader.setXMLControlRegistry(&xmlRegistry);
 
     reader.load(siddPathname);
-    std::shared_ptr<six::Container> container = reader.getContainer();
+    auto container = reader.getContainer();
 
     six::Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
 
     Buffers buffers;
     for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)
@@ -192,7 +181,7 @@ mem::ScopedCopyablePtr<six::LUT> readLUT(const std::string& pathname)
     reader.setXMLControlRegistry(&xmlRegistry);
 
     reader.load(pathname);
-    std::shared_ptr<six::Container> container = reader.getContainer();
+    auto container = reader.getContainer();
     six::Data* const data = container->getData(0);
     mem::ScopedCopyablePtr<six::LUT> lut = data->getDisplayLUT();
     if (lut.get() == nullptr)
@@ -238,14 +227,14 @@ int main(int argc, char** argv)
         std::cout << "Round-trip succeeded\n";
         return 0;
     }
-    catch (const except::Exception& e)
-    {
-        std::cerr << e.getMessage() << std::endl;
-        return 1;
-    }
     catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
         return 1;
     }
     catch (...)

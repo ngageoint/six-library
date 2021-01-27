@@ -22,9 +22,9 @@
 
 #ifndef __NITF_BUFFERED_READER_HPP__
 #define __NITF_BUFFERED_READER_HPP__
+#pragma once
 
-#include <sys/File.h>
-#include <mem/ScopedArray.h>
+#include <nitf/coda-oss.hpp>
 #include <nitf/CustomIO.hpp>
 
 namespace nitf
@@ -94,15 +94,15 @@ protected:
 
     void writeImpl(const void* buf, size_t size) override;
 
-    bool canSeekImpl() const noexcept override;
+    bool canSeekImpl() const override;
 
     nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
     nitf::Off tellImpl() const override;
 
-    nitf::Off getSizeImpl() const noexcept override;
+    nitf::Off getSizeImpl() const override;
 
-    int getModeImpl() const noexcept override;
+    int getModeImpl() const override;
 
     void closeImpl() override;
 
@@ -120,7 +120,7 @@ private:
     size_t mPartialBlocks;
     double mElapsedTime;
     mutable sys::File mFile;
-    const sys::Off_T mFileLen;
+    const int64_t mFileLen;
 };
 
 }

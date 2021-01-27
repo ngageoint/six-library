@@ -1254,7 +1254,7 @@ template<size_t _ND, typename _T> MatrixMxN<_ND, _ND, _T>
     {
         for (size_t j = 0; j < _ND; j++)
         {
-            mx(i, j) = (i == j) ? 1: 0;
+            mx(i, j) = (i == j) ? _T(1): _T(0);
         }
     }
     return mx;

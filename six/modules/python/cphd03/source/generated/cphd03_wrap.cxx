@@ -5273,7 +5273,7 @@ SWIGINTERN void cphd03_VBM_getVBMdata__SWIG_2(cphd03::VBM *self,size_t channel,s
     }
 SWIGINTERN cphd03::Metadata cphd03_CPHDXMLControl_fromXMLString(cphd03::CPHDXMLControl *self,std::string const &xmlString){
     cphd03::Metadata retv;
-    auto apMetadata = self->fromXML(xmlString);
+    std::auto_ptr<cphd03::Metadata> apMetadata = self->fromXML(xmlString);
     retv = *apMetadata;
     return retv;
   }
@@ -5320,7 +5320,7 @@ SWIGINTERN void cphd_Wideband_readImpl(cphd::Wideband *self,size_t channel,size_
 SWIGINTERN void cphd03_CPHDWriter_addImageImpl(cphd03::CPHDWriter *self,long long image,types::RowCol< size_t > const &dims,long long vbm){
         self->addImage(reinterpret_cast<std::complex<float>*>(image),
                 dims,
-                reinterpret_cast<std::byte*>(vbm));
+                reinterpret_cast<sys::ubyte*>(vbm));
     }
 
   namespace swig {
@@ -15724,9 +15724,9 @@ fail:
 SWIGINTERN PyObject *_wrap_FileHeader_set__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::FileHeader *arg1 = (cphd03::FileHeader *) 0 ;
-  int64_t arg2 ;
-  int64_t arg3 ;
-  int64_t arg4 ;
+  sys::Off_T arg2 ;
+  sys::Off_T arg3 ;
+  sys::Off_T arg4 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -15862,7 +15862,7 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'FileHeader_set'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    cphd03::FileHeader::set()\n"
-    "    cphd03::FileHeader::set(int64_t,int64_t,int64_t)\n");
+    "    cphd03::FileHeader::set(sys::Off_T,sys::Off_T,sys::Off_T)\n");
   return 0;
 }
 
@@ -15870,7 +15870,7 @@ fail:
 SWIGINTERN PyObject *_wrap_FileHeader_setXMLsize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::FileHeader *arg1 = (cphd03::FileHeader *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -15930,7 +15930,7 @@ fail:
 SWIGINTERN PyObject *_wrap_FileHeader_setVBMsize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::FileHeader *arg1 = (cphd03::FileHeader *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -15990,7 +15990,7 @@ fail:
 SWIGINTERN PyObject *_wrap_FileHeader_setCPHDsize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::FileHeader *arg1 = (cphd03::FileHeader *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -16050,7 +16050,7 @@ fail:
 SWIGINTERN PyObject *_wrap_FileHeader_setXMLoffset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::FileHeader *arg1 = (cphd03::FileHeader *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -16110,7 +16110,7 @@ fail:
 SWIGINTERN PyObject *_wrap_FileHeader_setVBMoffset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::FileHeader *arg1 = (cphd03::FileHeader *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -16170,7 +16170,7 @@ fail:
 SWIGINTERN PyObject *_wrap_FileHeader_setCPHDoffset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::FileHeader *arg1 = (cphd03::FileHeader *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -16233,7 +16233,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getXMLsize(PyObject *SWIGUNUSEDPARM(self),
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:FileHeader_getXMLsize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__FileHeader, 0 |  0 );
@@ -16291,7 +16291,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getVBMsize(PyObject *SWIGUNUSEDPARM(self),
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:FileHeader_getVBMsize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__FileHeader, 0 |  0 );
@@ -16349,7 +16349,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getCPHDsize(PyObject *SWIGUNUSEDPARM(self)
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:FileHeader_getCPHDsize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__FileHeader, 0 |  0 );
@@ -16407,7 +16407,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getXMLoffset(PyObject *SWIGUNUSEDPARM(self
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:FileHeader_getXMLoffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__FileHeader, 0 |  0 );
@@ -16465,7 +16465,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getVBMoffset(PyObject *SWIGUNUSEDPARM(self
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:FileHeader_getVBMoffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__FileHeader, 0 |  0 );
@@ -16523,7 +16523,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getCPHDoffset(PyObject *SWIGUNUSEDPARM(sel
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:FileHeader_getCPHDoffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__FileHeader, 0 |  0 );
@@ -16581,7 +16581,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getPadBytes(PyObject *SWIGUNUSEDPARM(self)
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:FileHeader_getPadBytes",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__FileHeader, 0 |  0 );
@@ -24643,7 +24643,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txTimeOffset(PyObject *SWIGUNUSEDPAR
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_txTimeOffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -24701,7 +24701,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txPosOffset(PyObject *SWIGUNUSEDPARM
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_txPosOffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -24759,7 +24759,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvTimeOffset(PyObject *SWIGUNUSEDPA
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_rcvTimeOffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -24817,7 +24817,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvPosOffset(PyObject *SWIGUNUSEDPAR
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_rcvPosOffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -24875,7 +24875,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpTimeOffset(PyObject *SWIGUNUSEDPA
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_srpTimeOffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -24933,7 +24933,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpPosOffset(PyObject *SWIGUNUSEDPAR
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_srpPosOffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -24991,7 +24991,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_tropoSRPOffset(PyObject *SWIGUNUSEDP
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_tropoSRPOffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -25049,7 +25049,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_ampSFOffset(PyObject *SWIGUNUSEDPARM
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_ampSFOffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -25107,7 +25107,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_Fx0Offset(PyObject *SWIGUNUSEDPARM(s
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_Fx0Offset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -25165,7 +25165,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_FxSSOffset(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_FxSSOffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -25223,7 +25223,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_Fx1Offset(PyObject *SWIGUNUSEDPARM(s
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_Fx1Offset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -25281,7 +25281,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_Fx2Offset(PyObject *SWIGUNUSEDPARM(s
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_Fx2Offset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -25339,7 +25339,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_deltaTOA0Offset(PyObject *SWIGUNUSED
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_deltaTOA0Offset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -25397,7 +25397,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_toaSSOffset(PyObject *SWIGUNUSEDPARM
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_toaSSOffset",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -25631,7 +25631,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorParameters_txTime_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::VectorParameters *arg1 = (cphd03::VectorParameters *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -25694,7 +25694,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txTime_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_txTime_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -25749,7 +25749,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorParameters_txPos_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::VectorParameters *arg1 = (cphd03::VectorParameters *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -25812,7 +25812,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_txPos_get(PyObject *SWIGUNUSEDPARM(s
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_txPos_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -25867,7 +25867,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorParameters_rcvTime_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::VectorParameters *arg1 = (cphd03::VectorParameters *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -25930,7 +25930,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvTime_get(PyObject *SWIGUNUSEDPARM
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_rcvTime_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -25985,7 +25985,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorParameters_rcvPos_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::VectorParameters *arg1 = (cphd03::VectorParameters *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -26048,7 +26048,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_rcvPos_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_rcvPos_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -26103,7 +26103,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorParameters_srpTime_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::VectorParameters *arg1 = (cphd03::VectorParameters *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -26166,7 +26166,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpTime_get(PyObject *SWIGUNUSEDPARM
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_srpTime_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -26221,7 +26221,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorParameters_srpPos_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::VectorParameters *arg1 = (cphd03::VectorParameters *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -26284,7 +26284,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_srpPos_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_srpPos_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -26339,7 +26339,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorParameters_tropoSRP_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::VectorParameters *arg1 = (cphd03::VectorParameters *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -26402,7 +26402,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_tropoSRP_get(PyObject *SWIGUNUSEDPAR
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_tropoSRP_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -26457,7 +26457,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorParameters_ampSF_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cphd03::VectorParameters *arg1 = (cphd03::VectorParameters *) 0 ;
-  int64_t arg2 ;
+  sys::Off_T arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -26520,7 +26520,7 @@ SWIGINTERN PyObject *_wrap_VectorParameters_ampSF_get(PyObject *SWIGUNUSEDPARM(s
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:VectorParameters_ampSF_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VectorParameters, 0 |  0 );
@@ -33443,8 +33443,8 @@ SWIGINTERN PyObject *_wrap_VBM_load(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
   PyObject *resultobj = 0;
   cphd03::VBM *arg1 = (cphd03::VBM *) 0 ;
   io::SeekableInputStream *arg2 = 0 ;
-  int64_t arg3 ;
-  int64_t arg4 ;
+  sys::Off_T arg3 ;
+  sys::Off_T arg4 ;
   size_t arg5 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -33457,7 +33457,7 @@ SWIGINTERN PyObject *_wrap_VBM_load(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOO:VBM_load",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__VBM, 0 |  0 );
@@ -33540,7 +33540,7 @@ SWIGINTERN PyObject *_wrap_VBM_getVBMdata__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   cphd03::VBM *arg1 = (cphd03::VBM *) 0 ;
   size_t arg2 ;
-  std::vector< std::byte,std::allocator< std::byte > > *arg3 = 0 ;
+  std::vector< sys::ubyte,std::allocator< sys::ubyte > > *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -33564,12 +33564,12 @@ SWIGINTERN PyObject *_wrap_VBM_getVBMdata__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg2 = static_cast< size_t >(val2);
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t,  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VBM_getVBMdata" "', argument " "3"" of type '" "std::vector< std::byte,std::allocator< std::byte > > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VBM_getVBMdata" "', argument " "3"" of type '" "std::vector< sys::ubyte,std::allocator< sys::ubyte > > &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VBM_getVBMdata" "', argument " "3"" of type '" "std::vector< std::byte,std::allocator< std::byte > > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VBM_getVBMdata" "', argument " "3"" of type '" "std::vector< sys::ubyte,std::allocator< sys::ubyte > > &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< std::byte,std::allocator< std::byte > > * >(argp3);
+  arg3 = reinterpret_cast< std::vector< sys::ubyte,std::allocator< sys::ubyte > > * >(argp3);
   {
     try
     {
@@ -34062,7 +34062,7 @@ SWIGINTERN PyObject *_wrap_VBM_getVBMdata(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'VBM_getVBMdata'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    cphd03::VBM::getVBMdata(size_t,std::vector< std::byte,std::allocator< std::byte > > &) const\n"
+    "    cphd03::VBM::getVBMdata(size_t,std::vector< sys::ubyte,std::allocator< sys::ubyte > > &) const\n"
     "    cphd03::VBM::getVBMdata(size_t,void *) const\n"
     "    cphd03::VBM::getVBMdata(size_t,size_t)\n");
   return 0;
@@ -34637,8 +34637,8 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   PyObject *resultobj = 0;
   std::string *arg1 = 0 ;
   cphd::MetadataBase *arg2 = 0 ;
-  int64_t arg3 ;
-  int64_t arg4 ;
+  sys::Off_T arg3 ;
+  sys::Off_T arg4 ;
   int res1 = SWIG_OLDOBJ ;
   void *argp2 = 0 ;
   int res2 = 0 ;
@@ -34726,8 +34726,8 @@ SWIGINTERN PyObject *_wrap_new_Wideband__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   PyObject *resultobj = 0;
   SwigValueWrapper< std::shared_ptr< io::SeekableInputStream > > arg1 ;
   cphd::MetadataBase *arg2 = 0 ;
-  int64_t arg3 ;
-  int64_t arg4 ;
+  sys::Off_T arg3 ;
+  sys::Off_T arg4 ;
   void *argp1 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -34888,8 +34888,8 @@ SWIGINTERN PyObject *_wrap_new_Wideband(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Wideband'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    cphd::Wideband::Wideband(std::string const &,cphd::MetadataBase const &,int64_t,int64_t)\n"
-    "    cphd::Wideband::Wideband(std::shared_ptr< io::SeekableInputStream >,cphd::MetadataBase const &,int64_t,int64_t)\n");
+    "    cphd::Wideband::Wideband(std::string const &,cphd::MetadataBase const &,sys::Off_T,sys::Off_T)\n"
+    "    cphd::Wideband::Wideband(std::shared_ptr< io::SeekableInputStream >,cphd::MetadataBase const &,sys::Off_T,sys::Off_T)\n");
   return 0;
 }
 
@@ -34912,7 +34912,7 @@ SWIGINTERN PyObject *_wrap_Wideband_getFileOffset__SWIG_0(PyObject *SWIGUNUSEDPA
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:Wideband_getFileOffset",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
@@ -34989,7 +34989,7 @@ SWIGINTERN PyObject *_wrap_Wideband_getFileOffset__SWIG_1(PyObject *SWIGUNUSEDPA
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:Wideband_getFileOffset",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd__Wideband, 0 |  0 );
@@ -35119,7 +35119,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   size_t arg5 ;
   size_t arg6 ;
   size_t arg7 ;
-  mem::BufferView< std::byte > *arg8 = 0 ;
+  mem::BufferView< sys::ubyte > *arg8 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -35183,16 +35183,16 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   arg7 = static_cast< size_t >(val7);
   res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_mem__BufferViewT_unsigned_char_t,  0  | 0);
   if (!SWIG_IsOK(res8)) {
-    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "Wideband_read" "', argument " "8"" of type '" "mem::BufferView< std::byte > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "Wideband_read" "', argument " "8"" of type '" "mem::BufferView< sys::ubyte > const &""'"); 
   }
   if (!argp8) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "8"" of type '" "mem::BufferView< std::byte > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "8"" of type '" "mem::BufferView< sys::ubyte > const &""'"); 
   }
-  arg8 = reinterpret_cast< mem::BufferView< std::byte > * >(argp8);
+  arg8 = reinterpret_cast< mem::BufferView< sys::ubyte > * >(argp8);
   {
     try
     {
-      ((cphd::Wideband const *)arg1)->read(arg2,arg3,arg4,arg5,arg6,arg7,(mem::BufferView< std::byte > const &)*arg8);
+      ((cphd::Wideband const *)arg1)->read(arg2,arg3,arg4,arg5,arg6,arg7,(mem::BufferView< sys::ubyte > const &)*arg8);
     } 
     catch (const std::exception& e)
     {
@@ -35231,7 +35231,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   PyObject *resultobj = 0;
   cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
   size_t arg2 ;
-  mem::BufferView< std::byte > *arg3 = 0 ;
+  mem::BufferView< sys::ubyte > *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -35255,16 +35255,16 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   arg2 = static_cast< size_t >(val2);
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__BufferViewT_unsigned_char_t,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Wideband_read" "', argument " "3"" of type '" "mem::BufferView< std::byte > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Wideband_read" "', argument " "3"" of type '" "mem::BufferView< sys::ubyte > const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "3"" of type '" "mem::BufferView< std::byte > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "3"" of type '" "mem::BufferView< sys::ubyte > const &""'"); 
   }
-  arg3 = reinterpret_cast< mem::BufferView< std::byte > * >(argp3);
+  arg3 = reinterpret_cast< mem::BufferView< sys::ubyte > * >(argp3);
   {
     try
     {
-      ((cphd::Wideband const *)arg1)->read(arg2,(mem::BufferView< std::byte > const &)*arg3);
+      ((cphd::Wideband const *)arg1)->read(arg2,(mem::BufferView< sys::ubyte > const &)*arg3);
     } 
     catch (const std::exception& e)
     {
@@ -35308,7 +35308,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
   size_t arg5 ;
   size_t arg6 ;
   size_t arg7 ;
-  std::unique_ptr< std::byte[] > *arg8 = 0 ;
+  mem::ScopedArray< sys::ubyte > *arg8 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -35372,12 +35372,12 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
   arg7 = static_cast< size_t >(val7);
   res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t,  0 );
   if (!SWIG_IsOK(res8)) {
-    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "Wideband_read" "', argument " "8"" of type '" "std::unique_ptr< std::byte[] > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "Wideband_read" "', argument " "8"" of type '" "mem::ScopedArray< sys::ubyte > &""'"); 
   }
   if (!argp8) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "8"" of type '" "std::unique_ptr< std::byte[] > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "8"" of type '" "mem::ScopedArray< sys::ubyte > &""'"); 
   }
-  arg8 = reinterpret_cast< std::unique_ptr< std::byte[] > * >(argp8);
+  arg8 = reinterpret_cast< mem::ScopedArray< sys::ubyte > * >(argp8);
   {
     try
     {
@@ -35420,7 +35420,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
   PyObject *resultobj = 0;
   cphd::Wideband *arg1 = (cphd::Wideband *) 0 ;
   size_t arg2 ;
-  std::unique_ptr< std::byte[] > *arg3 = 0 ;
+  mem::ScopedArray< sys::ubyte > *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -35444,12 +35444,12 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
   arg2 = static_cast< size_t >(val2);
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_mem__ScopedArrayT_unsigned_char_t,  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Wideband_read" "', argument " "3"" of type '" "std::unique_ptr< std::byte[] > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Wideband_read" "', argument " "3"" of type '" "mem::ScopedArray< sys::ubyte > &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "3"" of type '" "std::unique_ptr< std::byte[] > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "3"" of type '" "mem::ScopedArray< sys::ubyte > &""'"); 
   }
-  arg3 = reinterpret_cast< std::unique_ptr< std::byte[] > * >(argp3);
+  arg3 = reinterpret_cast< mem::ScopedArray< sys::ubyte > * >(argp3);
   {
     try
     {
@@ -35498,7 +35498,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
   size_t arg6 ;
   std::vector< double,std::allocator< double > > *arg7 = 0 ;
   size_t arg8 ;
-  mem::BufferView< std::byte > *arg9 = 0 ;
+  mem::BufferView< sys::ubyte > *arg9 = 0 ;
   mem::BufferView< std::complex< float > > *arg10 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -35579,12 +35579,12 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
   arg8 = static_cast< size_t >(val8);
   res9 = SWIG_ConvertPtr(obj8, &argp9, SWIGTYPE_p_mem__BufferViewT_unsigned_char_t,  0  | 0);
   if (!SWIG_IsOK(res9)) {
-    SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "Wideband_read" "', argument " "9"" of type '" "mem::BufferView< std::byte > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "Wideband_read" "', argument " "9"" of type '" "mem::BufferView< sys::ubyte > const &""'"); 
   }
   if (!argp9) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "9"" of type '" "mem::BufferView< std::byte > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Wideband_read" "', argument " "9"" of type '" "mem::BufferView< sys::ubyte > const &""'"); 
   }
-  arg9 = reinterpret_cast< mem::BufferView< std::byte > * >(argp9);
+  arg9 = reinterpret_cast< mem::BufferView< sys::ubyte > * >(argp9);
   res10 = SWIG_ConvertPtr(obj9, &argp10, SWIGTYPE_p_mem__BufferViewT_std__complexT_float_t_t,  0  | 0);
   if (!SWIG_IsOK(res10)) {
     SWIG_exception_fail(SWIG_ArgError(res10), "in method '" "Wideband_read" "', argument " "10"" of type '" "mem::BufferView< std::complex< float > > const &""'"); 
@@ -35596,7 +35596,7 @@ SWIGINTERN PyObject *_wrap_Wideband_read__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
   {
     try
     {
-      ((cphd::Wideband const *)arg1)->read(arg2,arg3,arg4,arg5,arg6,(std::vector< double,std::allocator< double > > const &)*arg7,arg8,(mem::BufferView< std::byte > const &)*arg9,(mem::BufferView< std::complex< float > > const &)*arg10);
+      ((cphd::Wideband const *)arg1)->read(arg2,arg3,arg4,arg5,arg6,(std::vector< double,std::allocator< double > > const &)*arg7,arg8,(mem::BufferView< sys::ubyte > const &)*arg9,(mem::BufferView< std::complex< float > > const &)*arg10);
     } 
     catch (const std::exception& e)
     {
@@ -36022,11 +36022,11 @@ SWIGINTERN PyObject *_wrap_Wideband_read(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Wideband_read'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,mem::BufferView< std::byte > const &) const\n"
-    "    cphd::Wideband::read(size_t,mem::BufferView< std::byte > const &) const\n"
-    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,std::unique_ptr< std::byte[] > &) const\n"
-    "    cphd::Wideband::read(size_t,std::unique_ptr< std::byte[] > &) const\n"
-    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,std::vector< double,std::allocator< double > > const &,size_t,mem::BufferView< std::byte > const &,mem::BufferView< std::complex< float > > const &) const\n"
+    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,mem::BufferView< sys::ubyte > const &) const\n"
+    "    cphd::Wideband::read(size_t,mem::BufferView< sys::ubyte > const &) const\n"
+    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,mem::ScopedArray< sys::ubyte > &) const\n"
+    "    cphd::Wideband::read(size_t,mem::ScopedArray< sys::ubyte > &) const\n"
+    "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,std::vector< double,std::allocator< double > > const &,size_t,mem::BufferView< sys::ubyte > const &,mem::BufferView< std::complex< float > > const &) const\n"
     "    cphd::Wideband::read(size_t,size_t,size_t,size_t,size_t,size_t,types::RowCol< size_t > const &,void *) const\n");
   return 0;
 }
@@ -37239,7 +37239,7 @@ SWIGINTERN PyObject *_wrap_CPHDReader_getFileOffset(PyObject *SWIGUNUSEDPARM(sel
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  int64_t result;
+  sys::Off_T result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:CPHDReader_getFileOffset",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_cphd03__CPHDReader, 0 |  0 );
@@ -52107,13 +52107,13 @@ SWIGINTERN PyObject *VectorAntennaParameters_swigregister(PyObject *SWIGUNUSEDPA
 
 SWIGINTERN PyObject *_wrap_new_StdAutoDwellTimeParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::unique_ptr< cphd03::DwellTimeParameters > *result = 0 ;
+  std::auto_ptr< cphd03::DwellTimeParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoDwellTimeParameters")) SWIG_fail;
   {
     try
     {
-      result = new std::unique_ptr< cphd03::DwellTimeParameters >();
+      result = (std::auto_ptr< cphd03::DwellTimeParameters > *)new std::auto_ptr< cphd03::DwellTimeParameters >();
     } 
     catch (const std::exception& e)
     {
@@ -52150,7 +52150,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoDwellTimeParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::unique_ptr< cphd03::DwellTimeParameters > *arg1 = (std::unique_ptr< cphd03::DwellTimeParameters > *) 0 ;
+  std::auto_ptr< cphd03::DwellTimeParameters > *arg1 = (std::auto_ptr< cphd03::DwellTimeParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -52160,7 +52160,7 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoDwellTimeParameters(PyObject *SWIGUNUSE
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoDwellTimeParameters" "', argument " "1"" of type '" "std::auto_ptr< cphd03::DwellTimeParameters > *""'"); 
   }
-  arg1 = reinterpret_cast< std::unique_ptr< cphd03::DwellTimeParameters > * >(argp1);
+  arg1 = reinterpret_cast< std::auto_ptr< cphd03::DwellTimeParameters > * >(argp1);
   {
     try
     {
@@ -54452,13 +54452,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoFxParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::unique_ptr< cphd03::FxParameters > *result = 0 ;
+  std::auto_ptr< cphd03::FxParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoFxParameters")) SWIG_fail;
   {
     try
     {
-      result = (std::unique_ptr< cphd03::FxParameters > *)new std::unique_ptr< cphd03::FxParameters >();
+      result = (std::auto_ptr< cphd03::FxParameters > *)new std::auto_ptr< cphd03::FxParameters >();
     } 
     catch (const std::exception& e)
     {
@@ -54495,7 +54495,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoFxParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::unique_ptr< cphd03::FxParameters > *arg1 = (std::unique_ptr< cphd03::FxParameters > *) 0 ;
+  std::auto_ptr< cphd03::FxParameters > *arg1 = (std::auto_ptr< cphd03::FxParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -54505,7 +54505,7 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoFxParameters(PyObject *SWIGUNUSEDPARM(s
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoFxParameters" "', argument " "1"" of type '" "std::auto_ptr< cphd03::FxParameters > *""'"); 
   }
-  arg1 = reinterpret_cast< std::unique_ptr< cphd03::FxParameters > * >(argp1);
+  arg1 = reinterpret_cast< std::auto_ptr< cphd03::FxParameters > * >(argp1);
   {
     try
     {
@@ -55787,13 +55787,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoTOAParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::unique_ptr< cphd03::TOAParameters > *result = 0 ;
+  std::auto_ptr< cphd03::TOAParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoTOAParameters")) SWIG_fail;
   {
     try
     {
-      result = (std::unique_ptr< cphd03::TOAParameters > *)new std::unique_ptr< cphd03::TOAParameters >();
+      result = (std::auto_ptr< cphd03::TOAParameters > *)new std::auto_ptr< cphd03::TOAParameters >();
     } 
     catch (const std::exception& e)
     {
@@ -55830,7 +55830,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoTOAParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::unique_ptr< cphd03::TOAParameters > *arg1 = (std::unique_ptr< cphd03::TOAParameters > *) 0 ;
+  std::auto_ptr< cphd03::TOAParameters > *arg1 = (std::auto_ptr< cphd03::TOAParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -55840,7 +55840,7 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoTOAParameters(PyObject *SWIGUNUSEDPARM(
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoTOAParameters" "', argument " "1"" of type '" "std::auto_ptr< cphd03::TOAParameters > *""'"); 
   }
-  arg1 = reinterpret_cast< std::unique_ptr< cphd03::TOAParameters > * >(argp1);
+  arg1 = reinterpret_cast< std::auto_ptr< cphd03::TOAParameters > * >(argp1);
   {
     try
     {
@@ -56898,13 +56898,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoCphdAntenna(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::unique_ptr< cphd03::Antenna > *result = 0 ;
+  std::auto_ptr< cphd03::Antenna > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCphdAntenna")) SWIG_fail;
   {
     try
     {
-      result = (std::unique_ptr< cphd03::Antenna > *)new std::unique_ptr< cphd03::Antenna >();
+      result = (std::auto_ptr< cphd03::Antenna > *)new std::auto_ptr< cphd03::Antenna >();
     } 
     catch (const std::exception& e)
     {
@@ -56941,7 +56941,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoCphdAntenna(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::unique_ptr< cphd03::Antenna > *arg1 = (std::unique_ptr< cphd03::Antenna > *) 0 ;
+  std::auto_ptr< cphd03::Antenna > *arg1 = (std::auto_ptr< cphd03::Antenna > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -56951,7 +56951,7 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCphdAntenna(PyObject *SWIGUNUSEDPARM(se
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCphdAntenna" "', argument " "1"" of type '" "std::auto_ptr< cphd03::Antenna > *""'"); 
   }
-  arg1 = reinterpret_cast< std::unique_ptr< cphd03::Antenna > * >(argp1);
+  arg1 = reinterpret_cast< std::auto_ptr< cphd03::Antenna > * >(argp1);
   {
     try
     {
@@ -58677,21 +58677,21 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FileHeader_toString", _wrap_FileHeader_toString, METH_VARARGS, (char *)"FileHeader_toString(FileHeader self) -> std::string"},
 	 { (char *)"FileHeader_set", _wrap_FileHeader_set, METH_VARARGS, (char *)"\n"
 		"set() -> size_t\n"
-		"FileHeader_set(FileHeader self, int64_t xmlSize, int64_t vbmSize, int64_t cphd03Size) -> size_t\n"
+		"FileHeader_set(FileHeader self, sys::Off_T xmlSize, sys::Off_T vbmSize, sys::Off_T cphd03Size) -> size_t\n"
 		""},
-	 { (char *)"FileHeader_setXMLsize", _wrap_FileHeader_setXMLsize, METH_VARARGS, (char *)"FileHeader_setXMLsize(FileHeader self, int64_t size)"},
-	 { (char *)"FileHeader_setVBMsize", _wrap_FileHeader_setVBMsize, METH_VARARGS, (char *)"FileHeader_setVBMsize(FileHeader self, int64_t size)"},
-	 { (char *)"FileHeader_setCPHDsize", _wrap_FileHeader_setCPHDsize, METH_VARARGS, (char *)"FileHeader_setCPHDsize(FileHeader self, int64_t size)"},
-	 { (char *)"FileHeader_setXMLoffset", _wrap_FileHeader_setXMLoffset, METH_VARARGS, (char *)"FileHeader_setXMLoffset(FileHeader self, int64_t offset)"},
-	 { (char *)"FileHeader_setVBMoffset", _wrap_FileHeader_setVBMoffset, METH_VARARGS, (char *)"FileHeader_setVBMoffset(FileHeader self, int64_t offset)"},
-	 { (char *)"FileHeader_setCPHDoffset", _wrap_FileHeader_setCPHDoffset, METH_VARARGS, (char *)"FileHeader_setCPHDoffset(FileHeader self, int64_t offset)"},
-	 { (char *)"FileHeader_getXMLsize", _wrap_FileHeader_getXMLsize, METH_VARARGS, (char *)"FileHeader_getXMLsize(FileHeader self) -> int64_t"},
-	 { (char *)"FileHeader_getVBMsize", _wrap_FileHeader_getVBMsize, METH_VARARGS, (char *)"FileHeader_getVBMsize(FileHeader self) -> int64_t"},
-	 { (char *)"FileHeader_getCPHDsize", _wrap_FileHeader_getCPHDsize, METH_VARARGS, (char *)"FileHeader_getCPHDsize(FileHeader self) -> int64_t"},
-	 { (char *)"FileHeader_getXMLoffset", _wrap_FileHeader_getXMLoffset, METH_VARARGS, (char *)"FileHeader_getXMLoffset(FileHeader self) -> int64_t"},
-	 { (char *)"FileHeader_getVBMoffset", _wrap_FileHeader_getVBMoffset, METH_VARARGS, (char *)"FileHeader_getVBMoffset(FileHeader self) -> int64_t"},
-	 { (char *)"FileHeader_getCPHDoffset", _wrap_FileHeader_getCPHDoffset, METH_VARARGS, (char *)"FileHeader_getCPHDoffset(FileHeader self) -> int64_t"},
-	 { (char *)"FileHeader_getPadBytes", _wrap_FileHeader_getPadBytes, METH_VARARGS, (char *)"FileHeader_getPadBytes(FileHeader self) -> int64_t"},
+	 { (char *)"FileHeader_setXMLsize", _wrap_FileHeader_setXMLsize, METH_VARARGS, (char *)"FileHeader_setXMLsize(FileHeader self, sys::Off_T size)"},
+	 { (char *)"FileHeader_setVBMsize", _wrap_FileHeader_setVBMsize, METH_VARARGS, (char *)"FileHeader_setVBMsize(FileHeader self, sys::Off_T size)"},
+	 { (char *)"FileHeader_setCPHDsize", _wrap_FileHeader_setCPHDsize, METH_VARARGS, (char *)"FileHeader_setCPHDsize(FileHeader self, sys::Off_T size)"},
+	 { (char *)"FileHeader_setXMLoffset", _wrap_FileHeader_setXMLoffset, METH_VARARGS, (char *)"FileHeader_setXMLoffset(FileHeader self, sys::Off_T offset)"},
+	 { (char *)"FileHeader_setVBMoffset", _wrap_FileHeader_setVBMoffset, METH_VARARGS, (char *)"FileHeader_setVBMoffset(FileHeader self, sys::Off_T offset)"},
+	 { (char *)"FileHeader_setCPHDoffset", _wrap_FileHeader_setCPHDoffset, METH_VARARGS, (char *)"FileHeader_setCPHDoffset(FileHeader self, sys::Off_T offset)"},
+	 { (char *)"FileHeader_getXMLsize", _wrap_FileHeader_getXMLsize, METH_VARARGS, (char *)"FileHeader_getXMLsize(FileHeader self) -> sys::Off_T"},
+	 { (char *)"FileHeader_getVBMsize", _wrap_FileHeader_getVBMsize, METH_VARARGS, (char *)"FileHeader_getVBMsize(FileHeader self) -> sys::Off_T"},
+	 { (char *)"FileHeader_getCPHDsize", _wrap_FileHeader_getCPHDsize, METH_VARARGS, (char *)"FileHeader_getCPHDsize(FileHeader self) -> sys::Off_T"},
+	 { (char *)"FileHeader_getXMLoffset", _wrap_FileHeader_getXMLoffset, METH_VARARGS, (char *)"FileHeader_getXMLoffset(FileHeader self) -> sys::Off_T"},
+	 { (char *)"FileHeader_getVBMoffset", _wrap_FileHeader_getVBMoffset, METH_VARARGS, (char *)"FileHeader_getVBMoffset(FileHeader self) -> sys::Off_T"},
+	 { (char *)"FileHeader_getCPHDoffset", _wrap_FileHeader_getCPHDoffset, METH_VARARGS, (char *)"FileHeader_getCPHDoffset(FileHeader self) -> sys::Off_T"},
+	 { (char *)"FileHeader_getPadBytes", _wrap_FileHeader_getPadBytes, METH_VARARGS, (char *)"FileHeader_getPadBytes(FileHeader self) -> sys::Off_T"},
 	 { (char *)"FileHeader_setClassification", _wrap_FileHeader_setClassification, METH_VARARGS, (char *)"FileHeader_setClassification(FileHeader self, std::string const & str)"},
 	 { (char *)"FileHeader_setReleaseInfo", _wrap_FileHeader_setReleaseInfo, METH_VARARGS, (char *)"FileHeader_setReleaseInfo(FileHeader self, std::string const & str)"},
 	 { (char *)"FileHeader_getClassification", _wrap_FileHeader_getClassification, METH_VARARGS, (char *)"FileHeader_getClassification(FileHeader self) -> std::string"},
@@ -58833,39 +58833,39 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_TOAParameters", _wrap_delete_TOAParameters, METH_VARARGS, (char *)"delete_TOAParameters(TOAParameters self)"},
 	 { (char *)"TOAParameters_swigregister", TOAParameters_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_VectorParameters", _wrap_new_VectorParameters, METH_VARARGS, (char *)"new_VectorParameters() -> VectorParameters"},
-	 { (char *)"VectorParameters_txTimeOffset", _wrap_VectorParameters_txTimeOffset, METH_VARARGS, (char *)"VectorParameters_txTimeOffset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_txPosOffset", _wrap_VectorParameters_txPosOffset, METH_VARARGS, (char *)"VectorParameters_txPosOffset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_rcvTimeOffset", _wrap_VectorParameters_rcvTimeOffset, METH_VARARGS, (char *)"VectorParameters_rcvTimeOffset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_rcvPosOffset", _wrap_VectorParameters_rcvPosOffset, METH_VARARGS, (char *)"VectorParameters_rcvPosOffset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_srpTimeOffset", _wrap_VectorParameters_srpTimeOffset, METH_VARARGS, (char *)"VectorParameters_srpTimeOffset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_srpPosOffset", _wrap_VectorParameters_srpPosOffset, METH_VARARGS, (char *)"VectorParameters_srpPosOffset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_tropoSRPOffset", _wrap_VectorParameters_tropoSRPOffset, METH_VARARGS, (char *)"VectorParameters_tropoSRPOffset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_ampSFOffset", _wrap_VectorParameters_ampSFOffset, METH_VARARGS, (char *)"VectorParameters_ampSFOffset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_Fx0Offset", _wrap_VectorParameters_Fx0Offset, METH_VARARGS, (char *)"VectorParameters_Fx0Offset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_FxSSOffset", _wrap_VectorParameters_FxSSOffset, METH_VARARGS, (char *)"VectorParameters_FxSSOffset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_Fx1Offset", _wrap_VectorParameters_Fx1Offset, METH_VARARGS, (char *)"VectorParameters_Fx1Offset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_Fx2Offset", _wrap_VectorParameters_Fx2Offset, METH_VARARGS, (char *)"VectorParameters_Fx2Offset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_deltaTOA0Offset", _wrap_VectorParameters_deltaTOA0Offset, METH_VARARGS, (char *)"VectorParameters_deltaTOA0Offset(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_toaSSOffset", _wrap_VectorParameters_toaSSOffset, METH_VARARGS, (char *)"VectorParameters_toaSSOffset(VectorParameters self) -> int64_t"},
+	 { (char *)"VectorParameters_txTimeOffset", _wrap_VectorParameters_txTimeOffset, METH_VARARGS, (char *)"VectorParameters_txTimeOffset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_txPosOffset", _wrap_VectorParameters_txPosOffset, METH_VARARGS, (char *)"VectorParameters_txPosOffset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_rcvTimeOffset", _wrap_VectorParameters_rcvTimeOffset, METH_VARARGS, (char *)"VectorParameters_rcvTimeOffset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_rcvPosOffset", _wrap_VectorParameters_rcvPosOffset, METH_VARARGS, (char *)"VectorParameters_rcvPosOffset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_srpTimeOffset", _wrap_VectorParameters_srpTimeOffset, METH_VARARGS, (char *)"VectorParameters_srpTimeOffset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_srpPosOffset", _wrap_VectorParameters_srpPosOffset, METH_VARARGS, (char *)"VectorParameters_srpPosOffset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_tropoSRPOffset", _wrap_VectorParameters_tropoSRPOffset, METH_VARARGS, (char *)"VectorParameters_tropoSRPOffset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_ampSFOffset", _wrap_VectorParameters_ampSFOffset, METH_VARARGS, (char *)"VectorParameters_ampSFOffset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_Fx0Offset", _wrap_VectorParameters_Fx0Offset, METH_VARARGS, (char *)"VectorParameters_Fx0Offset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_FxSSOffset", _wrap_VectorParameters_FxSSOffset, METH_VARARGS, (char *)"VectorParameters_FxSSOffset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_Fx1Offset", _wrap_VectorParameters_Fx1Offset, METH_VARARGS, (char *)"VectorParameters_Fx1Offset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_Fx2Offset", _wrap_VectorParameters_Fx2Offset, METH_VARARGS, (char *)"VectorParameters_Fx2Offset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_deltaTOA0Offset", _wrap_VectorParameters_deltaTOA0Offset, METH_VARARGS, (char *)"VectorParameters_deltaTOA0Offset(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_toaSSOffset", _wrap_VectorParameters_toaSSOffset, METH_VARARGS, (char *)"VectorParameters_toaSSOffset(VectorParameters self) -> sys::Off_T"},
 	 { (char *)"VectorParameters_clearAmpSF", _wrap_VectorParameters_clearAmpSF, METH_VARARGS, (char *)"VectorParameters_clearAmpSF(VectorParameters self)"},
 	 { (char *)"VectorParameters___eq__", _wrap_VectorParameters___eq__, METH_VARARGS, (char *)"VectorParameters___eq__(VectorParameters self, VectorParameters other) -> bool"},
 	 { (char *)"VectorParameters___ne__", _wrap_VectorParameters___ne__, METH_VARARGS, (char *)"VectorParameters___ne__(VectorParameters self, VectorParameters other) -> bool"},
-	 { (char *)"VectorParameters_txTime_set", _wrap_VectorParameters_txTime_set, METH_VARARGS, (char *)"VectorParameters_txTime_set(VectorParameters self, int64_t txTime)"},
-	 { (char *)"VectorParameters_txTime_get", _wrap_VectorParameters_txTime_get, METH_VARARGS, (char *)"VectorParameters_txTime_get(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_txPos_set", _wrap_VectorParameters_txPos_set, METH_VARARGS, (char *)"VectorParameters_txPos_set(VectorParameters self, int64_t txPos)"},
-	 { (char *)"VectorParameters_txPos_get", _wrap_VectorParameters_txPos_get, METH_VARARGS, (char *)"VectorParameters_txPos_get(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_rcvTime_set", _wrap_VectorParameters_rcvTime_set, METH_VARARGS, (char *)"VectorParameters_rcvTime_set(VectorParameters self, int64_t rcvTime)"},
-	 { (char *)"VectorParameters_rcvTime_get", _wrap_VectorParameters_rcvTime_get, METH_VARARGS, (char *)"VectorParameters_rcvTime_get(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_rcvPos_set", _wrap_VectorParameters_rcvPos_set, METH_VARARGS, (char *)"VectorParameters_rcvPos_set(VectorParameters self, int64_t rcvPos)"},
-	 { (char *)"VectorParameters_rcvPos_get", _wrap_VectorParameters_rcvPos_get, METH_VARARGS, (char *)"VectorParameters_rcvPos_get(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_srpTime_set", _wrap_VectorParameters_srpTime_set, METH_VARARGS, (char *)"VectorParameters_srpTime_set(VectorParameters self, int64_t srpTime)"},
-	 { (char *)"VectorParameters_srpTime_get", _wrap_VectorParameters_srpTime_get, METH_VARARGS, (char *)"VectorParameters_srpTime_get(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_srpPos_set", _wrap_VectorParameters_srpPos_set, METH_VARARGS, (char *)"VectorParameters_srpPos_set(VectorParameters self, int64_t srpPos)"},
-	 { (char *)"VectorParameters_srpPos_get", _wrap_VectorParameters_srpPos_get, METH_VARARGS, (char *)"VectorParameters_srpPos_get(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_tropoSRP_set", _wrap_VectorParameters_tropoSRP_set, METH_VARARGS, (char *)"VectorParameters_tropoSRP_set(VectorParameters self, int64_t tropoSRP)"},
-	 { (char *)"VectorParameters_tropoSRP_get", _wrap_VectorParameters_tropoSRP_get, METH_VARARGS, (char *)"VectorParameters_tropoSRP_get(VectorParameters self) -> int64_t"},
-	 { (char *)"VectorParameters_ampSF_set", _wrap_VectorParameters_ampSF_set, METH_VARARGS, (char *)"VectorParameters_ampSF_set(VectorParameters self, int64_t ampSF)"},
-	 { (char *)"VectorParameters_ampSF_get", _wrap_VectorParameters_ampSF_get, METH_VARARGS, (char *)"VectorParameters_ampSF_get(VectorParameters self) -> int64_t"},
+	 { (char *)"VectorParameters_txTime_set", _wrap_VectorParameters_txTime_set, METH_VARARGS, (char *)"VectorParameters_txTime_set(VectorParameters self, sys::Off_T txTime)"},
+	 { (char *)"VectorParameters_txTime_get", _wrap_VectorParameters_txTime_get, METH_VARARGS, (char *)"VectorParameters_txTime_get(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_txPos_set", _wrap_VectorParameters_txPos_set, METH_VARARGS, (char *)"VectorParameters_txPos_set(VectorParameters self, sys::Off_T txPos)"},
+	 { (char *)"VectorParameters_txPos_get", _wrap_VectorParameters_txPos_get, METH_VARARGS, (char *)"VectorParameters_txPos_get(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_rcvTime_set", _wrap_VectorParameters_rcvTime_set, METH_VARARGS, (char *)"VectorParameters_rcvTime_set(VectorParameters self, sys::Off_T rcvTime)"},
+	 { (char *)"VectorParameters_rcvTime_get", _wrap_VectorParameters_rcvTime_get, METH_VARARGS, (char *)"VectorParameters_rcvTime_get(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_rcvPos_set", _wrap_VectorParameters_rcvPos_set, METH_VARARGS, (char *)"VectorParameters_rcvPos_set(VectorParameters self, sys::Off_T rcvPos)"},
+	 { (char *)"VectorParameters_rcvPos_get", _wrap_VectorParameters_rcvPos_get, METH_VARARGS, (char *)"VectorParameters_rcvPos_get(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_srpTime_set", _wrap_VectorParameters_srpTime_set, METH_VARARGS, (char *)"VectorParameters_srpTime_set(VectorParameters self, sys::Off_T srpTime)"},
+	 { (char *)"VectorParameters_srpTime_get", _wrap_VectorParameters_srpTime_get, METH_VARARGS, (char *)"VectorParameters_srpTime_get(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_srpPos_set", _wrap_VectorParameters_srpPos_set, METH_VARARGS, (char *)"VectorParameters_srpPos_set(VectorParameters self, sys::Off_T srpPos)"},
+	 { (char *)"VectorParameters_srpPos_get", _wrap_VectorParameters_srpPos_get, METH_VARARGS, (char *)"VectorParameters_srpPos_get(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_tropoSRP_set", _wrap_VectorParameters_tropoSRP_set, METH_VARARGS, (char *)"VectorParameters_tropoSRP_set(VectorParameters self, sys::Off_T tropoSRP)"},
+	 { (char *)"VectorParameters_tropoSRP_get", _wrap_VectorParameters_tropoSRP_get, METH_VARARGS, (char *)"VectorParameters_tropoSRP_get(VectorParameters self) -> sys::Off_T"},
+	 { (char *)"VectorParameters_ampSF_set", _wrap_VectorParameters_ampSF_set, METH_VARARGS, (char *)"VectorParameters_ampSF_set(VectorParameters self, sys::Off_T ampSF)"},
+	 { (char *)"VectorParameters_ampSF_get", _wrap_VectorParameters_ampSF_get, METH_VARARGS, (char *)"VectorParameters_ampSF_get(VectorParameters self) -> sys::Off_T"},
 	 { (char *)"VectorParameters_fxParameters_set", _wrap_VectorParameters_fxParameters_set, METH_VARARGS, (char *)"VectorParameters_fxParameters_set(VectorParameters self, ScopedCopyableFxParameters fxParameters)"},
 	 { (char *)"VectorParameters_fxParameters_get", _wrap_VectorParameters_fxParameters_get, METH_VARARGS, (char *)"VectorParameters_fxParameters_get(VectorParameters self) -> ScopedCopyableFxParameters"},
 	 { (char *)"VectorParameters_toaParameters_set", _wrap_VectorParameters_toaParameters_set, METH_VARARGS, (char *)"VectorParameters_toaParameters_set(VectorParameters self, ScopedCopyableTOAParameters toaParameters)"},
@@ -58990,13 +58990,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VBM_haveTropoSRP", _wrap_VBM_haveTropoSRP, METH_VARARGS, (char *)"VBM_haveTropoSRP(VBM self) -> bool"},
 	 { (char *)"VBM_haveAmpSF", _wrap_VBM_haveAmpSF, METH_VARARGS, (char *)"VBM_haveAmpSF(VBM self) -> bool"},
 	 { (char *)"VBM_updateVectorParameters", _wrap_VBM_updateVectorParameters, METH_VARARGS, (char *)"VBM_updateVectorParameters(VBM self, VectorParameters vp)"},
-	 { (char *)"VBM_load", _wrap_VBM_load, METH_VARARGS, (char *)"VBM_load(VBM self, SeekableInputStream inStream, int64_t startVBM, int64_t sizeVBM, size_t numThreads) -> int64_t"},
+	 { (char *)"VBM_load", _wrap_VBM_load, METH_VARARGS, (char *)"VBM_load(VBM self, SeekableInputStream inStream, sys::Off_T startVBM, sys::Off_T sizeVBM, size_t numThreads) -> sys::Off_T"},
 	 { (char *)"VBM_getVBMsize", _wrap_VBM_getVBMsize, METH_VARARGS, (char *)"VBM_getVBMsize(VBM self, size_t channel) -> size_t"},
 	 { (char *)"VBM___eq__", _wrap_VBM___eq__, METH_VARARGS, (char *)"VBM___eq__(VBM self, VBM other) -> bool"},
 	 { (char *)"VBM___ne__", _wrap_VBM___ne__, METH_VARARGS, (char *)"VBM___ne__(VBM self, VBM vbm) -> bool"},
 	 { (char *)"VBM___str__", _wrap_VBM___str__, METH_VARARGS, (char *)"VBM___str__(VBM self) -> std::string"},
 	 { (char *)"VBM_getVBMdata", _wrap_VBM_getVBMdata, METH_VARARGS, (char *)"\n"
-		"getVBMdata(size_t channel, std::vector< std::byte,std::allocator< std::byte > > & data)\n"
+		"getVBMdata(size_t channel, std::vector< sys::ubyte,std::allocator< sys::ubyte > > & data)\n"
 		"getVBMdata(size_t channel, void * data)\n"
 		"VBM_getVBMdata(VBM self, size_t channel, size_t data)\n"
 		""},
@@ -59013,19 +59013,19 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_CPHDXMLControl", _wrap_delete_CPHDXMLControl, METH_VARARGS, (char *)"delete_CPHDXMLControl(CPHDXMLControl self)"},
 	 { (char *)"CPHDXMLControl_swigregister", CPHDXMLControl_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_Wideband", _wrap_new_Wideband, METH_VARARGS, (char *)"\n"
-		"Wideband(std::string const & pathname, MetadataBase metadata, int64_t startWB, int64_t sizeWB)\n"
-		"new_Wideband(std::shared_ptr< io::SeekableInputStream > inStream, MetadataBase metadata, int64_t startWB, int64_t sizeWB) -> Wideband\n"
+		"Wideband(std::string const & pathname, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB)\n"
+		"new_Wideband(std::shared_ptr< io::SeekableInputStream > inStream, MetadataBase metadata, sys::Off_T startWB, sys::Off_T sizeWB) -> Wideband\n"
 		""},
 	 { (char *)"Wideband_getFileOffset", _wrap_Wideband_getFileOffset, METH_VARARGS, (char *)"\n"
-		"getFileOffset(size_t channel, size_t vector, size_t sample) -> int64_t\n"
-		"Wideband_getFileOffset(Wideband self, size_t channel) -> int64_t\n"
+		"getFileOffset(size_t channel, size_t vector, size_t sample) -> sys::Off_T\n"
+		"Wideband_getFileOffset(Wideband self, size_t channel) -> sys::Off_T\n"
 		""},
 	 { (char *)"Wideband_read", _wrap_Wideband_read, METH_VARARGS, (char *)"\n"
-		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::BufferView< std::byte > const & data)\n"
-		"read(size_t channel, mem::BufferView< std::byte > const & data)\n"
-		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, std::unique_ptr< std::byte[] > & data)\n"
-		"read(size_t channel, std::unique_ptr< std::byte[] > & data)\n"
-		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, std_vector_double vectorScaleFactors, size_t numThreads, mem::BufferView< std::byte > const & scratch, mem::BufferView< std::complex< float > > const & data)\n"
+		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::BufferView< sys::ubyte > const & data)\n"
+		"read(size_t channel, mem::BufferView< sys::ubyte > const & data)\n"
+		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, mem::ScopedArray< sys::ubyte > & data)\n"
+		"read(size_t channel, mem::ScopedArray< sys::ubyte > & data)\n"
+		"read(size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, std_vector_double vectorScaleFactors, size_t numThreads, mem::BufferView< sys::ubyte > const & scratch, mem::BufferView< std::complex< float > > const & data)\n"
 		"Wideband_read(Wideband self, size_t channel, size_t firstVector, size_t lastVector, size_t firstSample, size_t lastSample, size_t numThreads, RowColSizeT dims, void * data)\n"
 		""},
 	 { (char *)"Wideband_getBytesRequiredForRead", _wrap_Wideband_getBytesRequiredForRead, METH_VARARGS, (char *)"\n"
@@ -59047,7 +59047,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CPHDReader_getNumVectors", _wrap_CPHDReader_getNumVectors, METH_VARARGS, (char *)"CPHDReader_getNumVectors(CPHDReader self, size_t channel) -> size_t"},
 	 { (char *)"CPHDReader_getNumSamples", _wrap_CPHDReader_getNumSamples, METH_VARARGS, (char *)"CPHDReader_getNumSamples(CPHDReader self, size_t channel) -> size_t"},
 	 { (char *)"CPHDReader_getNumBytesPerSample", _wrap_CPHDReader_getNumBytesPerSample, METH_VARARGS, (char *)"CPHDReader_getNumBytesPerSample(CPHDReader self) -> size_t"},
-	 { (char *)"CPHDReader_getFileOffset", _wrap_CPHDReader_getFileOffset, METH_VARARGS, (char *)"CPHDReader_getFileOffset(CPHDReader self, size_t channel, size_t vector, size_t sample) -> int64_t"},
+	 { (char *)"CPHDReader_getFileOffset", _wrap_CPHDReader_getFileOffset, METH_VARARGS, (char *)"CPHDReader_getFileOffset(CPHDReader self, size_t channel, size_t vector, size_t sample) -> sys::Off_T"},
 	 { (char *)"CPHDReader_isFX", _wrap_CPHDReader_isFX, METH_VARARGS, (char *)"CPHDReader_isFX(CPHDReader self) -> bool"},
 	 { (char *)"CPHDReader_isTOA", _wrap_CPHDReader_isTOA, METH_VARARGS, (char *)"CPHDReader_isTOA(CPHDReader self) -> bool"},
 	 { (char *)"CPHDReader_getDomainTypeString", _wrap_CPHDReader_getDomainTypeString, METH_VARARGS, (char *)"CPHDReader_getDomainTypeString(CPHDReader self) -> std::string"},
@@ -59488,7 +59488,7 @@ static swig_type_info _swigt__p_ParameterIter = {"_p_ParameterIter", "ParameterI
 static swig_type_info _swigt__p_ParameterMap = {"_p_ParameterMap", "ParameterMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__nitf_Version = {"_p__nitf_Version", "enum _nitf_Version *|nitf::Version *|nitf_Version *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_char = {"_p_char", "char *|std::byte *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd03__Antenna = {"_p_cphd03__Antenna", "cphd03::Antenna *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd03__AreaPlane = {"_p_cphd03__AreaPlane", "cphd03::AreaPlane *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cphd03__ArraySize = {"_p_cphd03__ArraySize", "std::vector< cphd03::ArraySize >::value_type *|cphd03::ArraySize *", 0, 0, (void*)0, 0};
@@ -59522,10 +59522,10 @@ static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "differ
 static swig_type_info _swigt__p_except__Context = {"_p_except__Context", "except::Context *|six::ValidationContext *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_except__NullPointerReferenceException", "except::NullPointerReferenceException *|except::NullPointerReference *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *|sys::Handle_T *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "int16_t *|int16_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "int32_t *|int32_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "int64_t *|int64_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "int8_t *|int8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "sys::Int16_T *|int16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "sys::Int32_T *|int32_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|int64_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "sys::Int8_T *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__SeekableInputStream = {"_p_io__SeekableInputStream", "io::SeekableInputStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__FileInputStreamOS = {"_p_io__FileInputStreamOS", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_logging__Logger = {"_p_logging__Logger", "logging::Logger *", 0, 0, (void*)0, 0};
@@ -59536,8 +59536,8 @@ static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__On
 static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "six::PolyXYZ *|cphd::PolyXYZ *|math::poly::OneD< math::linear::VectorN< 3,double > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "six::Poly2D *|cphd::Poly2D *|math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__BufferViewT_std__complexT_float_t_t = {"_p_mem__BufferViewT_std__complexT_float_t_t", "mem::BufferView< std::complex< float > > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_mem__BufferViewT_unsigned_char_t = {"_p_mem__BufferViewT_unsigned_char_t", "mem::BufferView< std::byte > *|mem::BufferView< unsigned char > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_mem__ScopedArrayT_unsigned_char_t = {"_p_mem__ScopedArrayT_unsigned_char_t", "std::unique_ptr< std::byte[] > *|std::unique_ptr< unsigned char[] > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__BufferViewT_unsigned_char_t = {"_p_mem__BufferViewT_unsigned_char_t", "mem::BufferView< sys::ubyte > *|mem::BufferView< unsigned char > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_mem__ScopedArrayT_unsigned_char_t = {"_p_mem__ScopedArrayT_unsigned_char_t", "mem::ScopedArray< sys::ubyte > *|mem::ScopedArray< unsigned char > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd03__Antenna_t = {"_p_mem__ScopedCopyablePtrT_cphd03__Antenna_t", "mem::ScopedCopyablePtr< cphd03::Antenna > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd03__AreaPlane_t = {"_p_mem__ScopedCopyablePtrT_cphd03__AreaPlane_t", "mem::ScopedCopyablePtr< cphd03::AreaPlane > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mem__ScopedCopyablePtrT_cphd03__DwellTimeParameters_t = {"_p_mem__ScopedCopyablePtrT_cphd03__DwellTimeParameters_t", "mem::ScopedCopyablePtr< cphd03::DwellTimeParameters > *", 0, 0, (void*)0, 0};
@@ -59549,17 +59549,17 @@ static swig_type_info _swigt__p_nitf_ConvType = {"_p_nitf_ConvType", "nitf_ConvT
 static swig_type_info _swigt__p_nitf_CornersType = {"_p_nitf_CornersType", "nitf_CornersType *|nitf::CornersType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_CreationFlags = {"_p_nitf_CreationFlags", "nitf_CreationFlags *|nitf::CreationFlags *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_FieldType = {"_p_nitf_FieldType", "nitf_FieldType *|nitf::FieldType *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_nitf_Int16 = {"_p_nitf_Int16", "nitf_Int16 *|int16_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_nitf_Int32 = {"_p_nitf_Int32", "nitf_Int32 *|int32_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_nitf_Int64 = {"_p_nitf_Int64", "nitf_Int64 *|int64_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_nitf_Int8 = {"_p_nitf_Int8", "int8_t *|int8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Int16 = {"_p_nitf_Int16", "nitf_Int16 *|nitf::Int16 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Int32 = {"_p_nitf_Int32", "nitf_Int32 *|nitf::Int32 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Int64 = {"_p_nitf_Int64", "nitf_Int64 *|nitf::Int64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Int8 = {"_p_nitf_Int8", "nitf::Int8 *|nitf_Int8 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_Off = {"_p_nitf_Off", "nitf_Off *|nitf::Off *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_nitf_Uint16 = {"_p_nitf_Uint16", "nitf_Uint16 *|uint16_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_nitf_Uint32 = {"_p_nitf_Uint32", "nitf_Uint32 *|uint32_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_nitf_Uint64 = {"_p_nitf_Uint64", "nitf_Uint64 *|uint64_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_nitf_Uint8 = {"_p_nitf_Uint8", "nitf_Uint8 *|uint8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Uint16 = {"_p_nitf_Uint16", "nitf_Uint16 *|nitf::Uint16 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Uint32 = {"_p_nitf_Uint32", "nitf_Uint32 *|nitf::Uint32 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Uint64 = {"_p_nitf_Uint64", "nitf_Uint64 *|nitf::Uint64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_nitf_Uint8 = {"_p_nitf_Uint8", "nitf_Uint8 *|nitf::Uint8 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf__DateTime = {"_p_nitf__DateTime", "nitf::DateTime *|six::DateTime *|cphd::DateTime *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|int64_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_pid_t = {"_p_pid_t", "sys::Pid_T *|pid_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scene__AngleMagnitude = {"_p_scene__AngleMagnitude", "scene::AngleMagnitude *|six::AngleMagnitude *", 0, 0, (void*)0, 0};
@@ -59589,9 +59589,9 @@ static swig_type_info _swigt__p_six__sicd__GainAndPhasePolys = {"_p_six__sicd__G
 static swig_type_info _swigt__p_six__sicd__HalfPowerBeamwidths = {"_p_six__sicd__HalfPowerBeamwidths", "six::sicd::HalfPowerBeamwidths *|cphd03::HalfPowerBeamwidths *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__NoiseMesh = {"_p_six__sicd__NoiseMesh", "six::sicd::NoiseMesh *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_six__sicd__ScalarMesh = {"_p_six__sicd__ScalarMesh", "six::sicd::ScalarMesh *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_size_t = {"_p_size_t", "size_t *|size_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "ptrdiff_t *|ssize_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_cphd03__ArraySize_t = {"_p_std__allocatorT_cphd03__ArraySize_t", "std::vector< cphd03::ArraySize >::allocator_type *|std::allocator< cphd03::ArraySize > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_cphd03__ChannelParameters_t = {"_p_std__allocatorT_cphd03__ChannelParameters_t", "std::vector< cphd03::ChannelParameters >::allocator_type *|std::allocator< cphd03::ChannelParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_math__linear__VectorNT_3_double_t_t = {"_p_std__allocatorT_math__linear__VectorNT_3_double_t_t", "std::vector< math::linear::VectorN< 3,double > >::allocator_type *|std::allocator< math::linear::VectorN< 3,double > > *", 0, 0, (void*)0, 0};
@@ -59610,7 +59610,7 @@ static swig_type_info _swigt__p_std__vectorT_cphd03__ChannelParameters_std__allo
 static swig_type_info _swigt__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t = {"_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t", "std::vector< math::linear::VectorN< 3,double > > *|std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *|std::vector< cphd::Vector3,std::allocator< cphd::Vector3 > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t = {"_p_std__vectorT_math__poly__OneDT_Vector3_t_std__allocatorT_math__poly__OneDT_Vector3_t_t_t", "std::vector< math::poly::OneD< Vector3 >,std::allocator< math::poly::OneD< Vector3 > > > *|std::vector< cphd::PolyXYZ,std::allocator< cphd::PolyXYZ > > *|std::vector< math::poly::OneD< math::linear::VectorN< 3,double > >,std::allocator< math::poly::OneD< math::linear::VectorN< 3,double > > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t = {"_p_std__vectorT_six__sicd__AntennaParameters_std__allocatorT_six__sicd__AntennaParameters_t_t", "std::vector< six::sicd::AntennaParameters > *|std::vector< six::sicd::AntennaParameters,std::allocator< six::sicd::AntennaParameters > > *|std::vector< cphd03::AntennaParameters,std::allocator< cphd03::AntennaParameters > > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t = {"_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t", "std::vector< unsigned char,std::allocator< unsigned char > > *|std::vector< std::byte,std::allocator< std::byte > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t = {"_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t", "std::vector< unsigned char,std::allocator< unsigned char > > *|std::vector< sys::ubyte,std::allocator< sys::ubyte > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t = {"_p_std__vectorT_void_const_p_std__allocatorT_void_const_p_t_t", "std::vector< void const *,std::allocator< void const * > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RowColT_double_t = {"_p_types__RowColT_double_t", "six::RowColDouble *|types::RowCol< double > *", 0, 0, (void*)0, 0};
@@ -59618,11 +59618,11 @@ static swig_type_info _swigt__p_types__RowColT_math__poly__TwoDT_double_t_t = {"
 static swig_type_info _swigt__p_types__RowColT_scene__LatLon_t = {"_p_types__RowColT_scene__LatLon_t", "six::RowColLatLon *|types::RowCol< scene::LatLon > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RowColT_size_t_t = {"_p_types__RowColT_size_t_t", "types::RowCol< size_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RowColT_ssize_t_t = {"_p_types__RowColT_ssize_t_t", "six::RowColInt *|types::RowCol< ssize_t > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "uint16_t *|uint16_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "uint32_t *|uint32_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "uint64_t *|uint64_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "uint8_t *|uint8_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|std::byte *|std::byte *|cphd::UByte *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "sys::Uint16_T *|uint16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "sys::Uint32_T *|uint32_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "sys::Uint64_T *|uint64_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "sys::Uint8_T *|uint8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|sys::ubyte *|six::UByte *|cphd::UByte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_void = {"_p_void", "NITF_DATA *|void *", 0, 0, (void*)0, 0};
 

@@ -33,7 +33,7 @@
 #include <six/NITFHeaderCreator.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 #include "utils.h"
 
@@ -71,7 +71,7 @@ int main(int argc, char** argv)
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         std::unique_ptr<logging::Logger> logger(
-                logging::setupLogger(fs::path(argv[0]).filename().string()));
+                logging::setupLogger(fs::path(argv[0]).filename()));
 
         six::XMLControlFactory::getInstance().addCreator(
                 six::DataType::COMPLEX,
@@ -83,8 +83,8 @@ int main(int argc, char** argv)
                 six::sicd::Utilities::createFakeComplexData().release());
         data->setPixelType(six::PixelType::RE32F_IM32F);
 
-        std::shared_ptr<six::Container> container(new six::Container(
-                six::DataType::COMPLEX));
+	mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
         container->addData(std::move(data));
 
         /*
@@ -120,8 +120,8 @@ int main(int argc, char** argv)
         six::NITFWriteControl writer(writerOptions, container);
         writer.setLogger(logger.get());
 
-        six::BufferList buffers;
-        buffers.push_back(reinterpret_cast<std::byte*>(&image[0]));
+        six::buffer_list buffers;
+        buffers.push_back(reinterpret_cast<std::byte*>(image.data()));
         writer.save(buffers, outputName, schemaPaths);
 
         return 0;
@@ -133,7 +133,7 @@ int main(int argc, char** argv)
     catch (const except::Exception& ex)
     {
         std::cerr << "Caught except::Exception: " << ex.getMessage()
-                  << std::endl;
+            << std::endl;
     }
     catch (...)
     {

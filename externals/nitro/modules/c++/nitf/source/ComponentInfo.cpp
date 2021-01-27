@@ -22,6 +22,8 @@
 
 #include "nitf/ComponentInfo.hpp"
 
+#include <gsl/gsl.h>
+
 using namespace nitf;
 
 ComponentInfo::ComponentInfo(const ComponentInfo & x)

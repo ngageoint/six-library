@@ -21,10 +21,13 @@
  */
 #ifndef __SIX_TYPES_H__
 #define __SIX_TYPES_H__
+#pragma once
 
 #include <vector>
 #include <limits>
+#include <string>
 
+#include <six/sys_Conf.h>
 #include <import/except.h>
 #include <import/mem.h>
 #include <import/str.h>
@@ -55,7 +58,7 @@ typedef math::linear::VectorN<2> Vector2;
 //! Date type
 typedef nitf::DateTime DateTime;
 
-using UByte = std::byte;
+using UByte = unsigned char;
 
 //! POLY type
 typedef math::poly::OneD<double> Poly1D;
@@ -440,7 +443,7 @@ struct Corners
             return lowerLeft;
         default:
             throw except::Exception(Ctxt("Invalid index " +
-                                             str::toString(idx)));
+                                             std::to_string(idx)));
         }
     }
 
@@ -459,7 +462,7 @@ struct Corners
             return lowerLeft;
         default:
             throw except::Exception(Ctxt("Invalid index " +
-                                             str::toString(idx)));
+                                             std::to_string(idx)));
         }
     }
 

@@ -28,7 +28,7 @@
 #include <memory>
 #include <thread>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <types/RowCol.h>
 #include <io/TempFile.h>
 #include <io/FileInputStream.h>
@@ -98,7 +98,7 @@ std::vector<std::byte> checkCompressedData(const std::string& pathname,
     const cphd::Wideband& wideband = reader.getWideband();
     std::vector<std::byte> readData(dims.area());
 
-    mem::BufferView<std::byte> data(readData.data(), readData.size());
+    auto data = gsl::make_span(readData.data(), readData.size());
     for (size_t ii = 0; ii < reader.getMetadata().data.getNumChannels(); ++ii)
     {
         wideband.read(ii, data);

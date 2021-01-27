@@ -27,8 +27,6 @@
 #include <memory>
 #include <stdexcept>
 
-#include <sys/Filesystem.h>
-
 #include <import/nitf.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/ImageWriter.hpp>
@@ -36,7 +34,7 @@
 
 #include "TestCase.h"
 
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 static fs::path argv0;
 static const fs::path file = __FILE__;
@@ -93,7 +91,7 @@ static fs::path buildFileDir(const fs::path& relativePath)
 
 static void doChangeFileHeader(const std::string& inputPathname, const std::string& outputPathname)
 {
-    if (nitf::Reader::getNITFVersion(inputPathname) == NITF_VER_UNKNOWN)
+    if (nitf::Reader::getNITFVersion(inputPathname) == nitf::Version::NITF_VER_UNKNOWN)
     {
         throw std::invalid_argument("Invalid NITF: " + inputPathname);
     }
@@ -105,7 +103,7 @@ static void doChangeFileHeader(const std::string& inputPathname, const std::stri
     nitf::FileHeader fileHeader = record.getHeader();
 
     auto fileTitle = fileHeader.getFileTitle();
-    auto strFileTitle = fileTitle.toString();
+    std::string strFileTitle = fileTitle;
     str::replaceAll(strFileTitle, " ", "*"); // field is fixed length
     fileTitle.set(strFileTitle);
 
@@ -152,7 +150,7 @@ TEST_CASE(changeFileHeader)
     nitf::Record record = reader.read(io);
     nitf::FileHeader fileHeader = record.getHeader();
 
-    const auto fileTitle = fileHeader.getFileTitle().toString();
+    const std::string fileTitle = fileHeader.getFileTitle();
     auto npos = fileTitle.find(" ");
     TEST_ASSERT_EQ(npos, std::string::npos);
     npos = fileTitle.find("*");

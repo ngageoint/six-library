@@ -20,6 +20,8 @@
  *
  */
 
+#include <string>
+
 #include <six/sicd/ComplexXMLParser.h>
 #include <six/sicd/ComplexDataBuilder.h>
 #include <six/Utilities.h>
@@ -43,6 +45,16 @@ ComplexXMLParser::ComplexXMLParser(const std::string& version,
     mCommon(comParser.release())
 {
 }
+#if !CODA_OSS_cpp17
+ComplexXMLParser::ComplexXMLParser(const std::string& version,
+                                   bool addClassAttributes,
+                                   std::auto_ptr<six::SICommonXMLParser> comParser,
+                                   logging::Logger* log,
+                                   bool ownLog) :
+    ComplexXMLParser(version, addClassAttributes, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)
+{
+}
+#endif
 
 ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
 {
@@ -221,17 +233,17 @@ XMLElem ComplexXMLParser::convertImageDataToXML(
 {
     XMLElem imageDataXML = newElement("ImageData", parent);
 
-    createString("PixelType", six::toString(imageData->pixelType), imageDataXML);
+    createString("PixelType", imageData->pixelType, imageDataXML);
     if (imageData->amplitudeTable.get())
     {
         const AmplitudeTable& ampTable = *imageData->amplitudeTable;
         XMLElem ampTableXML = newElement("AmpTable", imageDataXML);
-        setAttribute(ampTableXML, "size", str::toString(ampTable.numEntries));
+        setAttribute(ampTableXML, "size", ampTable.numEntries);
         for (size_t i = 0; i < ampTable.numEntries; ++i)
         {
             XMLElem ampXML = createDouble("Amplitude", *(double*) ampTable[i],
                                           ampTableXML);
-            setAttribute(ampXML, "index", str::toString(i));
+            setAttribute(ampXML, "index", i);
         }
     }
     createInt("NumRows", static_cast<int>(imageData->numRows), imageDataXML);
@@ -248,13 +260,13 @@ XMLElem ComplexXMLParser::convertImageDataToXML(
     if (numVertices >= 3)
     {
         XMLElem vXML = newElement("ValidData", imageDataXML);
-        setAttribute(vXML, "size", str::toString(numVertices));
+        setAttribute(vXML, "size", numVertices);
 
         for (size_t ii = 0; ii < numVertices; ++ii)
         {
             XMLElem vertexXML = common().createRowCol("Vertex", imageData->validData[ii],
                                                       vXML);
-            setAttribute(vertexXML, "index", str::toString(ii + 1));
+            setAttribute(vertexXML, "index", ii + 1);
         }
     }
     return imageDataXML;
@@ -278,13 +290,13 @@ XMLElem ComplexXMLParser::convertGeoDataToXML(
     if (numVertices >= 3)
     {
         XMLElem vXML = newElement("ValidData", geoDataXML);
-        setAttribute(vXML, "size", str::toString(numVertices));
+        setAttribute(vXML, "size", numVertices);
 
         for (size_t ii = 0; ii < numVertices; ++ii)
         {
             XMLElem vertexXML = common().createLatLon("Vertex", geoData->validData[ii],
                                                       vXML);
-            setAttribute(vertexXML, "index", str::toString(ii + 1));
+            setAttribute(vertexXML, "index", ii + 1);
         }
     }
 
@@ -301,8 +313,8 @@ XMLElem ComplexXMLParser::convertGridToXML(
 {
     XMLElem gridXML = newElement("Grid", parent);
 
-    createString("ImagePlane", six::toString(grid->imagePlane), gridXML);
-    createString("Type", six::toString(grid->type), gridXML);
+    createString("ImagePlane", grid->imagePlane, gridXML);
+    createString("Type", grid->type, gridXML);
     common().createPoly2D("TimeCOAPoly", grid->timeCOAPoly, gridXML);
 
     XMLElem rowDirXML = newElement("Row", gridXML);
@@ -330,13 +342,13 @@ XMLElem ComplexXMLParser::convertGridToXML(
     if (numWeights > 0)
     {
         XMLElem wgtFuncXML = newElement("WgtFunct", rowDirXML);
-        setAttribute(wgtFuncXML, "size", str::toString(numWeights));
+        setAttribute(wgtFuncXML, "size", numWeights);
 
         for (size_t i = 1; i <= numWeights; ++i)
         {
             XMLElem wgtXML = createDouble("Wgt", grid->row->weights[i - 1],
                                           wgtFuncXML);
-            setAttribute(wgtXML, "index", str::toString(i));
+            setAttribute(wgtXML, "index", i);
         }
     }
 
@@ -365,17 +377,22 @@ XMLElem ComplexXMLParser::convertGridToXML(
     if (numWeights > 0)
     {
         XMLElem wgtFuncXML = newElement("WgtFunct", colDirXML);
-        setAttribute(wgtFuncXML, "size", str::toString(numWeights));
+        setAttribute(wgtFuncXML, "size", numWeights);
 
         for (size_t i = 1; i <= numWeights; ++i)
         {
             XMLElem wgtXML = createDouble("Wgt", grid->col->weights[i - 1],
                                           wgtFuncXML);
-            setAttribute(wgtXML, "index", str::toString(i));
+            setAttribute(wgtXML, "index", i);
         }
     }
 
     return gridXML;
+}
+
+static void set_attribute(xml::lite::Element& elem, const std::string& name, size_t value)
+{
+    elem.attribute(name) = std::to_string(value);
 }
 
 XMLElem ComplexXMLParser::convertTimelineToXML(
@@ -390,13 +407,13 @@ XMLElem ComplexXMLParser::convertTimelineToXML(
     {
         XMLElem ippXML = newElement("IPP", timelineXML);
         size_t setSize = timeline->interPulsePeriod->sets.size();
-        ippXML->attribute("size") = str::toString<size_t>(setSize);
+        set_attribute(*ippXML, "size", setSize);
 
         for (size_t i = 0; i < setSize; ++i)
         {
             const TimelineSet& timelineSet = timeline->interPulsePeriod->sets[i];
             XMLElem setXML = newElement("Set", ippXML);
-            setXML->attribute("index") = str::toString<size_t>(i + 1);
+            set_attribute(*setXML, "index", i + 1);
 
             createDouble("TStart", timelineSet.tStart, setXML);
             createDouble("TEnd", timelineSet.tEnd, setXML);
@@ -423,13 +440,13 @@ XMLElem ComplexXMLParser::convertPositionToXML(
     {
         size_t numPolys = position->rcvAPC->rcvAPCPolys.size();
         XMLElem rcvXML = newElement("RcvAPC", positionXML);
-        setAttribute(rcvXML, "size", str::toString(numPolys));
+        setAttribute(rcvXML, "size", numPolys);
 
         for (size_t i = 0; i < numPolys; ++i)
         {
             PolyXYZ xyz = position->rcvAPC->rcvAPCPolys[i];
             XMLElem xyzXML = common().createPolyXYZ("RcvAPCPoly", xyz, rcvXML);
-            setAttribute(xyzXML, "index", str::toString(i + 1));
+            setAttribute(xyzXML, "index", i + 1);
         }
     }
     return positionXML;
@@ -454,14 +471,14 @@ XMLElem ComplexXMLParser::createTxSequence(const RadarCollection* radar,
     else
     {
         XMLElem txSeqXML = newElement("TxSequence", parent);
-        setAttribute(txSeqXML, "size", str::toString(radar->txSequence.size()));
+        setAttribute(txSeqXML, "size", radar->txSequence.size());
 
         for (size_t ii = 0; ii < radar->txSequence.size(); ++ii)
         {
             const TxStep* const tx = radar->txSequence[ii].get();
 
             XMLElem txStepXML = newElement("TxStep", txSeqXML);
-            setAttribute(txStepXML, "index", str::toString(ii + 1));
+            setAttribute(txStepXML, "index", ii + 1);
 
             if (!Init::isUndefined(tx->waveformIndex))
             {
@@ -469,8 +486,7 @@ XMLElem ComplexXMLParser::createTxSequence(const RadarCollection* radar,
             }
             if (tx->txPolarization != PolarizationType::NOT_SET)
             {
-                createString("TxPolarization",
-                             six::toString(tx->txPolarization), txStepXML);
+                createString("TxPolarization", tx->txPolarization, txStepXML);
             }
         }
 
@@ -489,14 +505,14 @@ XMLElem ComplexXMLParser::createWaveform(const RadarCollection* radar,
     {
         const size_t numWaveforms = radar->waveform.size();
         XMLElem wfXML = newElement("Waveform", parent);
-        setAttribute(wfXML, "size", str::toString(numWaveforms));
+        setAttribute(wfXML, "size", numWaveforms);
 
         for (size_t ii = 0; ii < numWaveforms; ++ii)
         {
             const WaveformParameters* const wf = radar->waveform[ii].get();
 
             XMLElem wfpXML = newElement("WFParameters", wfXML);
-            setAttribute(wfpXML, "index", str::toString(ii + 1));
+            setAttribute(wfpXML, "index", ii + 1);
 
             if (!Init::isUndefined(wf->txPulseLength))
                 createDouble("TxPulseLength", wf->txPulseLength, wfpXML);
@@ -507,8 +523,7 @@ XMLElem ComplexXMLParser::createWaveform(const RadarCollection* radar,
             if (!Init::isUndefined(wf->txFMRate))
                 createDouble("TxFMRate", wf->txFMRate, wfpXML);
             if (wf->rcvDemodType != DemodType::NOT_SET)
-                createString("RcvDemodType", six::toString(wf->rcvDemodType),
-                             wfpXML);
+                createString("RcvDemodType", wf->rcvDemodType, wfpXML);
             if (!Init::isUndefined(wf->rcvWindowLength))
                 createDouble("RcvWindowLength", wf->rcvWindowLength, wfpXML);
             if (!Init::isUndefined(wf->adcSampleRate))
@@ -575,14 +590,13 @@ XMLElem ComplexXMLParser::createArea(const RadarCollection* radar,
             if (!plane->segmentList.empty())
             {
                 XMLElem segListXML = newElement("SegmentList", planeXML);
-                setAttribute(segListXML, "size",
-                             str::toString(plane->segmentList.size()));
+                setAttribute(segListXML, "size", plane->segmentList.size());
 
                 for (size_t ii = 0; ii < plane->segmentList.size(); ++ii)
                 {
                     const Segment* const segment = plane->segmentList[ii].get();
                     XMLElem segXML = newElement("Segment", segListXML);
-                    setAttribute(segXML, "index", str::toString(ii + 1));
+                    setAttribute(segXML, "index", ii + 1);
 
                     createInt("StartLine", segment->startLine, segXML);
                     createInt("StartSample", segment->startSample, segXML);
@@ -594,9 +608,7 @@ XMLElem ComplexXMLParser::createArea(const RadarCollection* radar,
 
             if (!Init::isUndefined(plane->orientation))
             {
-                createString("Orientation",
-                             six::toString<OrientationType>(plane->orientation),
-                             planeXML);
+                createString("Orientation", plane->orientation, planeXML);
             }
         }
 
@@ -639,7 +651,7 @@ XMLElem ComplexXMLParser::convertSCPCOAToXML(
     common().createVector3D("ARPPos", scpcoa->arpPos, scpcoaXML);
     common().createVector3D("ARPVel", scpcoa->arpVel, scpcoaXML);
     common().createVector3D("ARPAcc", scpcoa->arpAcc, scpcoaXML);
-    createString("SideOfTrack", six::toString(scpcoa->sideOfTrack), scpcoaXML);
+    createSideOfTrackType("SideOfTrack", scpcoa->sideOfTrack, scpcoaXML);
     createDouble("SlantRange", scpcoa->slantRange, scpcoaXML);
     createDouble("GroundRange", scpcoa->groundRange, scpcoaXML);
     createDouble("DopplerConeAng", scpcoa->dopplerConeAngle, scpcoaXML);
@@ -946,7 +958,7 @@ void ComplexXMLParser::parseImageDataFromXML(
                 {
                     log()->warn(Ctxt(
                             "Unable to parse ampTable value - invalid index: " +
-                            str::toString(index)));
+                            std::to_string(index)));
                 }
                 else
                 {
@@ -1830,7 +1842,7 @@ XMLElem ComplexXMLParser::createSideOfTrackType(const std::string& name,
                                                 const SideOfTrackType& value,
                                                 XMLElem parent) const
 {
-    return createString(name, six::toString(value), parent);
+    return createSixString(name, value, parent);
 }
 
 void ComplexXMLParser::parseSideOfTrackType(XMLElem element,

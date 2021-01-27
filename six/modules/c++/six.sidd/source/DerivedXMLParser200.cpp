@@ -1079,14 +1079,13 @@ XMLElem DerivedXMLParser200::convertLookupTableToXML(
 
         XMLElem customElem = newElement("Custom", lookupElem);
         XMLElem lutInfoElem = newElement("LUTInfo", customElem);
-        setAttribute(lutInfoElem, "numLuts", str::toString(lutValues.size()));
-        setAttribute(lutInfoElem, "size",
-                     str::toString(lutValues[0].table.size()));
+        setAttribute(lutInfoElem, "numLuts", lutValues.size());
+        setAttribute(lutInfoElem, "size", lutValues[0].table.size());
 
         for (size_t ii = 0; ii < lutValues.size(); ++ii)
         {
             XMLElem lutElem = createLUT("LUTValues", &lutValues[ii], lutInfoElem);
-            setAttribute(lutElem, "lut", str::toString(ii + 1));
+            setAttribute(lutElem, "lut", ii + 1);
         }
     }
     if (!ok)
@@ -1131,7 +1130,7 @@ XMLElem DerivedXMLParser200::convertNonInteractiveProcessingToXML(
         bandEqElem->getElementsByTagName("BandLUT", LUTElems);
         for (size_t ii = 0; ii < LUTElems.size(); ++ii)
         {
-            setAttribute(LUTElems[ii], "k", str::toString(ii+1));
+            setAttribute(LUTElems[ii], "k", ii+1);
         }
     }
 
@@ -1368,8 +1367,8 @@ XMLElem DerivedXMLParser200::convertKernelToXML(
         }
 
         XMLElem filterCoef = newElement("FilterCoefficients", customElem);
-        setAttribute(filterCoef, "numRows", str::toString(kernel.custom->size.row));
-        setAttribute(filterCoef, "numCols", str::toString(kernel.custom->size.col));
+        setAttribute(filterCoef, "numRows", kernel.custom->size.row);
+        setAttribute(filterCoef, "numCols", kernel.custom->size.col);
 
         for (ptrdiff_t row = 0, idx = 0; row < kernel.custom->size.row; ++row)
         {
@@ -1377,8 +1376,8 @@ XMLElem DerivedXMLParser200::convertKernelToXML(
             {
                 XMLElem coefElem = createDouble("Coef", kernel.custom->filterCoef[idx],
                     filterCoef);
-                setAttribute(coefElem, "row", str::toString(row));
-                setAttribute(coefElem, "col", str::toString(col));
+                setAttribute(coefElem, "row", row);
+                setAttribute(coefElem, "col", col);
             }
         }
     }
@@ -1421,8 +1420,8 @@ XMLElem DerivedXMLParser200::convertBankToXML(const Filter::Bank& bank,
         }
 
         XMLElem filterCoef = newElement("FilterCoefficients", customElem);
-        setAttribute(filterCoef, "numPhasings", str::toString(bank.custom->numPhasings));
-        setAttribute(filterCoef, "numPoints", str::toString(bank.custom->numPoints));
+        setAttribute(filterCoef, "numPhasings", bank.custom->numPhasings);
+        setAttribute(filterCoef, "numPoints", bank.custom->numPoints);
 
         for (size_t row = 0, idx = 0; row < bank.custom->numPhasings; ++row)
         {
@@ -1430,8 +1429,8 @@ XMLElem DerivedXMLParser200::convertBankToXML(const Filter::Bank& bank,
             {
                 XMLElem coefElem = createDouble("Coef", bank.custom->filterCoef[idx],
                     filterCoef);
-                setAttribute(coefElem, "phasing", str::toString(row));
-                setAttribute(coefElem, "point", str::toString(col));
+                setAttribute(coefElem, "phasing", row);
+                setAttribute(coefElem, "point", col);
             }
         }
     }
@@ -1503,12 +1502,12 @@ void DerivedXMLParser200::convertJ2KToXML(const J2KCompression& j2k,
 
     size_t numLayers = j2k.layerInfo.size();
     XMLElem layerInfoElem = newElement("LayerInfo", parent);
-    setAttribute(layerInfoElem, "numLayers", toString(numLayers));
+    setAttribute(layerInfoElem, "numLayers", numLayers);
 
     for (size_t ii = 0; ii < numLayers; ++ii)
     {
         XMLElem layerElem = newElement("Layer", layerInfoElem);
-        setAttribute(layerElem, "index", toString(ii + 1));
+        setAttribute(layerElem, "index", ii + 1);
         createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerElem);
     }
 }
@@ -1532,13 +1531,13 @@ XMLElem DerivedXMLParser200::convertMeasurementToXML(const Measurement* measurem
     if (numVertices >= 3)
     {
         XMLElem vElem = newElement("ValidData", measurementElem);
-        setAttribute(vElem, "size", str::toString(numVertices));
+        setAttribute(vElem, "size", numVertices);
 
         for (size_t ii = 0; ii < numVertices; ++ii)
         {
             XMLElem vertexElem = common().createRowCol(
                 "Vertex", measurement->validData[ii], vElem);
-            setAttribute(vertexElem, "index", str::toString(ii + 1));
+            setAttribute(vertexElem, "index", ii + 1);
         }
     }
     else
@@ -1578,9 +1577,9 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
             collection->information.sensorName,
             informationElem);
         XMLElem radarModeElem = newElement("RadarMode", informationElem);
-        createString("ModeType",
+        createSixString("ModeType",
             common().getSICommonURI(),
-            six::toString(collection->information.radarMode),
+            collection->information.radarMode,
             radarModeElem);
         // optional
         if (collection->information.radarModeID
@@ -1629,10 +1628,10 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
             XMLElem polElem = newElement("Polarization", informationElem);
 
             createString("TxPolarization",
-                six::toString(p->txPolarization),
+                p->txPolarization,
                 polElem);
             createString("RcvPolarization",
-                six::toString(p->rcvPolarization),
+                p->rcvPolarization,
                 polElem);
             // optional
             if (!Init::isUndefined(p->rcvPolarizationOffset))
@@ -1773,7 +1772,7 @@ XMLElem DerivedXMLParser200::convertDisplayToXML(
     //       in SIDD 1.0, so need to confirm it's allocated
     XMLElem displayElem = newElement("Display", parent);
 
-    createString("PixelType", six::toString(display.pixelType), displayElem);
+    createString("PixelType", display.pixelType, displayElem);
 
     createInt("NumBands", display.numBands, displayElem);
     if (six::Init::isDefined(display.defaultBandDisplay))
@@ -1789,7 +1788,7 @@ XMLElem DerivedXMLParser200::convertDisplayToXML(
         XMLElem temp = convertNonInteractiveProcessingToXML(
                 *display.nonInteractiveProcessing[ii],
                 displayElem);
-        setAttribute(temp, "band", str::toString(ii + 1));
+        setAttribute(temp, "band", ii + 1);
     }
 
     for (size_t ii = 0; ii < display.interactiveProcessing.size(); ++ii)
@@ -1800,7 +1799,7 @@ XMLElem DerivedXMLParser200::convertDisplayToXML(
         XMLElem temp = convertInteractiveProcessingToXML(
                 *display.interactiveProcessing[ii],
                 displayElem);
-        setAttribute(temp, "band", str::toString(ii + 1));
+        setAttribute(temp, "band", ii + 1);
     }
 
     // optional to unbounded
@@ -1824,13 +1823,13 @@ XMLElem DerivedXMLParser200::convertGeoDataToXML(
     if (numVertices >= 3)
     {
         XMLElem vXML = newElement("ValidData", geoDataXML);
-        setAttribute(vXML, "size", str::toString(numVertices));
+        setAttribute(vXML, "size", numVertices);
 
         for (size_t ii = 0; ii < numVertices; ++ii)
         {
             XMLElem vertexXML = common().createLatLon("Vertex", geoData->validData[ii],
                                                       vXML);
-            setAttribute(vertexXML, "index", str::toString(ii + 1));
+            setAttribute(vertexXML, "index", ii + 1);
         }
     }
 
@@ -2071,13 +2070,13 @@ void DerivedXMLParser200::parseDigitalElevationDataFromXML(
     parseDouble(getFirstAndOnly(pointElem, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }
 
-std::unique_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const XMLElem elem,
+mem::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const XMLElem elem,
         size_t size) const
 {
     std::string lutStr = "";
     parseString(elem, lutStr);
     std::vector<std::string> lutVals = str::split(lutStr, " ");
-    std::unique_ptr<LUT> lut(new LUT(size, sizeof(short)));
+    mem::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
 
     for (size_t ii = 0; ii < lutVals.size(); ++ii)
     {

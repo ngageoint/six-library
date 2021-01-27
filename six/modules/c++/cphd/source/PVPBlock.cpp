@@ -20,14 +20,17 @@
  *
  */
 
+#include <stddef.h>
+
 #include <ostream>
 #include <vector>
-#include <stddef.h>
 #include <typeinfo>
+#include <string>
 
+#include <nitf/coda-oss.hpp>
 #include <six/Init.h>
 #include <sys/Conf.h>
-#include <nitf/cstddef.h>
+#include <sys/Bit.h>
 
 #include <cphd/Types.h>
 #include <cphd/PVPBlock.h>
@@ -49,6 +52,11 @@ template <typename T> inline void setData(const unsigned char* data,
     memcpy(&dest, data, sizeof(T));
 }
 template <typename T> inline void setData(const std::byte* data,
+    T& dest)
+{
+    setData(reinterpret_cast<const unsigned char*>(data), dest);
+}
+template <typename T> inline void setData(const sys::byte* data,
     T& dest)
 {
     setData(reinterpret_cast<const unsigned char*>(data), dest);
@@ -108,7 +116,7 @@ PVPBlock::PVPSet::PVPSet() :
 {
 }
 
-void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const std::byte* input)
+void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::byte* input)
 {
     ::setData(input + p.txTime.getByteOffset(), txTime);
     ::setData(input + p.txPos.getByteOffset(), txPos);
@@ -214,8 +222,9 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const std::
     }
 }
 
-void PVPBlock::PVPSet::read(const Pvp& p, std::byte* dest) const
+void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest_) const
 {
+    auto dest = reinterpret_cast<std::byte*>(dest_);
     ::getData(dest + p.txTime.getByteOffset(), txTime);
     ::getData(dest + p.txPos.getByteOffset(), txPos);
     ::getData(dest + p.txVel.getByteOffset(), txVel);
@@ -399,12 +408,12 @@ void PVPBlock::verifyChannelVector(size_t channel, size_t vector) const
     if (channel >= mData.size())
     {
         throw except::Exception(Ctxt(
-                "Invalid channel number: " + str::toString<size_t>(channel)));
+                "Invalid channel number: " + std::to_string(channel)));
     }
     if (vector >= mData[channel].size())
     {
         throw except::Exception(Ctxt(
-                "Invalid vector number: " + str::toString<size_t>(vector)));
+                "Invalid vector number: " + std::to_string(vector)));
     }
 }
 
@@ -429,7 +438,7 @@ void PVPBlock::getPVPdata(size_t channel,
 {
     verifyChannelVector(channel, 0);
     const size_t numBytes = getNumBytesPVPSet();
-    std::byte* ptr = static_cast<std::byte*>(data);
+    auto ptr = static_cast<std::byte*>(data);
 
     for (size_t ii = 0;
          ii < mData[channel].size();

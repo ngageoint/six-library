@@ -19,15 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd03/CPHDReader.h>
 
-#include <sys/Conf.h>
+#include <scene/sys_Conf.h>
 #include <except/Exception.h>
 #include <io/StringStream.h>
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <mem/ScopedArray.h>
 #include <xml/lite/MinidomParser.h>
-#include <cphd03/CPHDReader.h>
 #include <cphd03/CPHDXMLControl.h>
 
 namespace cphd03
@@ -43,8 +43,8 @@ CPHDReader::CPHDReader(const std::string& fromFile,
                        size_t numThreads,
                        std::shared_ptr<logging::Logger> logger)
 {
-    initialize(std::shared_ptr<io::SeekableInputStream>(
-        new io::FileInputStream(fromFile)), numThreads, logger);
+    initialize(std::make_shared<io::FileInputStream>(fromFile),
+        numThreads, logger);
 }
 
 void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,

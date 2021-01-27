@@ -81,7 +81,7 @@ protected:
      *  \param subHeaderSize  The size of the subheader
      *  \param dataSize  The size of the data
      */
-    ComponentInfo(uint32_t subHeaderSize = 0, uint64_t dataSize = 0) noexcept(false);
+    ComponentInfo(uint32_t subHeaderSize = 0, uint64_t dataSize = 0);
 
 private:
     mutable nitf_Error error{};

@@ -56,6 +56,13 @@ void XMLControlRegistry::addCreator(const std::string& identifier,
     // At this point we've taken ownership
     creator.release();
 }
+#if !CODA_OSS_cpp17
+void XMLControlRegistry::addCreator(const std::string& identifier,
+                                    std::auto_ptr<XMLControlCreator> creator)
+{
+    addCreator(identifier, std::unique_ptr<XMLControlCreator>(creator.release()));
+}
+#endif
 
 XMLControl*
 XMLControlRegistry::newXMLControl(const std::string& identifier,

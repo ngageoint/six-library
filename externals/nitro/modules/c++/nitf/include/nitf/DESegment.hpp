@@ -58,7 +58,7 @@ public:
     DESegment(nitf_DESegment * x);
 
     //! Constructor
-    DESegment() noexcept(false);
+    DESegment();
 
     DESegment(NITF_DATA * x);
 

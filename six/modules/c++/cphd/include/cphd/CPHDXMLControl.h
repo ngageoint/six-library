@@ -84,7 +84,7 @@ public:
      *  \param schemaPaths Vector of XML Schema for validation
      *  \return pointer to xml Document object
      */
-    virtual std::unique_ptr<xml::lite::Document> toXML(
+    virtual mem::auto_ptr<xml::lite::Document> toXML(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -147,7 +147,8 @@ private:
      *
      *  \param uri A string specifying CPHD uri
      */
-    std::unique_ptr<CPHDXMLParser> getParser(const std::string& uri) const;
+    std::unique_ptr<CPHDXMLParser>
+    getParser(const std::string& uri) const;
 
     // Given the URI get associated version
     std::string uriToVersion(const std::string& uri) const;

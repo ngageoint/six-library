@@ -21,8 +21,10 @@
  */
 #ifndef __SIX_NITF_READ_CONTROL_H__
 #define __SIX_NITF_READ_CONTROL_H__
+#pragma once
 
 #include <map>
+#include <memory>
 
 #include "six/NITFImageInfo.h"
 #include "six/ReadControl.h"
@@ -49,25 +51,27 @@ namespace six
  *  This class is not copyable.
  *
  */
-class NITFReadControl : public ReadControl
+struct NITFReadControl : public ReadControl
 {
-public:
-
     //!  Constructor
     NITFReadControl();
 
     //!  Destructor
-    virtual ~NITFReadControl() noexcept(false)
+    virtual ~NITFReadControl()
     {
         reset();
     }
+
+    // NITFReadControl is not copyable
+    NITFReadControl(const NITFReadControl& other) = delete;
+    NITFReadControl& operator=(const NITFReadControl& other) = delete;
 
     /*!
      *  Read whether a file has COMPLEX or DERIVED data
      *  \param fromFile path to file
      *  \return datatype of file contents
      */
-    virtual DataType getDataType(const std::string& fromFile) const;
+    DataType getDataType(const std::string& fromFile) const override;
 
     /*!
     *  Read whether a Record has COMPLEX or DERIVED data
@@ -109,6 +113,7 @@ public:
      */
     void validateSegment(nitf::ImageSubheader subheader,
                          const NITFImageInfo* info);
+    void validateSegment(nitf::ImageSubheader subheader, const NITFImageInfo&);
 
     using ReadControl::load;
 
@@ -119,7 +124,7 @@ public:
      *  \param schemaPaths Directories or files of schema locations
      */
     void load(const std::string& fromFile,
-              const std::vector<std::string>& schemaPaths);
+              const std::vector<std::string>& schemaPaths) override;
 
     /*
      *  \func load
@@ -131,8 +136,8 @@ public:
     void load(io::SeekableInputStream& ioStream,
               const std::vector<std::string>& schemaPaths);
 
-    void load(std::shared_ptr<nitf::IOInterface> ioInterface);
-    void load(std::shared_ptr<nitf::IOInterface> ioInterface,
+    void load(mem::SharedPtr<nitf::IOInterface> ioInterface);
+    void load(mem::SharedPtr<nitf::IOInterface> ioInterface,
               const std::vector<std::string>& schemaPaths);
 
 
@@ -152,9 +157,9 @@ public:
      * memory is allocated and the region's buffer is updated.  In this case
      * it is up to the caller to delete the memory.
      */
-    virtual UByte* interleaved(Region& region, size_t imageNumber);
+    virtual UByte* interleaved(Region& region, size_t imageNumber) override;
 
-    virtual std::string getFileType() const
+    std::string getFileType() const override
     {
         return "NITF";
     }
@@ -199,7 +204,13 @@ protected:
      *
      */
     std::pair<size_t, size_t>
-    getIndices(nitf::ImageSubheader& subheader) const;
+    getIndices(const nitf::ImageSubheader& subheader) const;
+    struct ImageAndSegment final
+    {
+        size_t image = 0;
+        size_t segment = 0;
+    };
+    void getIndices(const nitf::ImageSubheader& subheader, ImageAndSegment&) const;
 
     void addImageClassOptions(nitf::ImageSubheader& s,
             six::Classification& c) const;
@@ -222,23 +233,16 @@ protected:
     }
 
 private:
-    // Unimplemented - NITFReadControl is not copyable
-    NITFReadControl(const NITFReadControl& other);
-    NITFReadControl& operator=(const NITFReadControl& other);
-
-private:
     std::unique_ptr<Legend> findLegend(size_t productNum);
 
-    void readLegendPixelData(nitf::ImageSubheader& subheader,
+    void readLegendPixelData(const nitf::ImageSubheader& subheader,
                              size_t imageSeg,
                              Legend& legend);
 
     static
-    bool isLegend(nitf::ImageSubheader& subheader)
+    bool isLegend(const nitf::ImageSubheader& subheader)
     {
-        std::string iCat = subheader.getImageCategory().toString();
-        str::trim(iCat);
-
+        const auto iCat = subheader.imageCategory();
         return (iCat == "LEG");
     }
 
@@ -246,15 +250,21 @@ private:
     // to prevent data from being deleted prematurely
     // The issue occurs from the explicit destructor of
     // IOControl
-    std::shared_ptr<nitf::IOInterface> mInterface;
+    mem::SharedPtr<nitf::IOInterface> mInterface;
 };
 
 
-struct NITFReadControlCreator : public ReadControlCreator
+struct NITFReadControlCreator final : public ReadControlCreator
 {
-    six::ReadControl* newReadControl() const;
+    six::ReadControl* newReadControl() const override
+    {
+        std::unique_ptr<six::ReadControl> retval;
+        newReadControl(retval);
+        return retval.release();
+    }
+    void newReadControl(std::unique_ptr<six::ReadControl>& result) const override;
 
-    bool supports(const std::string& filename) const;
+    bool supports(const std::string& filename) const override;
 
 };
 

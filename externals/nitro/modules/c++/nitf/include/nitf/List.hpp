@@ -26,6 +26,7 @@
 
 #include <string>
 
+#include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
 
@@ -229,7 +230,7 @@ public:
     NITF_DATA* popBack();
 
     //! Constructor
-    List() noexcept(false);
+    List();
 
     //! Clone
     nitf::List clone(NITF_DATA_ITEM_CLONE cloner) const;

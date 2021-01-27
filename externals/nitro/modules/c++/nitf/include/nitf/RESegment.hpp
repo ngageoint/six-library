@@ -53,7 +53,7 @@ public:
     RESegment(nitf_RESegment * x);
 
     //! Default Constructor
-    RESegment() noexcept(false);
+    RESegment();
 
     RESegment(NITF_DATA * x);
 

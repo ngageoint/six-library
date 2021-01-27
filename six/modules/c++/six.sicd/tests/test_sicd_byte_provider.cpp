@@ -24,8 +24,12 @@
 // Demonstrates that the raw bytes provided by this class result in equivalent
 // SICDs to the normal writes via NITFWriteControl
 
-#include <iostream>
 #include <stdlib.h>
+
+#include <iostream>
+#include <string>
+
+#include <sys/Bit.h>
 
 #include "TestUtilities.h"
 
@@ -34,19 +38,13 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDByteProvider.h>
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace
 {
 // Main test class
 template <typename DataTypeT>
-class Tester
+struct Tester final
 {
-public:
     Tester(const std::vector<std::string>& schemaPaths,
            bool setMaxProductSize,
            size_t maxProductSize = 0) :
@@ -73,7 +71,7 @@ public:
         mBigEndianImage = mImage;
         if (std::endian::native == std::endian::little)
         {
-            sys::byteSwap(&mBigEndianImage[0],
+            sys::byteSwap(mBigEndianImage.data(),
                           sizeof(DataTypeT),
                           mBigEndianImage.size() * 2);
         }
@@ -96,14 +94,13 @@ public:
 private:
     void normalWrite();
 
-private:
     void compare(const std::string& prefix)
     {
         std::string fullPrefix = prefix;
         if (mSetMaxProductSize)
         {
             fullPrefix += " (max product size " +
-                    str::toString(mMaxProductSize) + ")";
+                    std::to_string(mMaxProductSize) + ")";
         }
 
         if (!(*mCompareFiles)(fullPrefix, mTestPathname))
@@ -169,7 +166,7 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    std::shared_ptr<six::Container> container(
+    mem::SharedPtr<six::Container> container(
             new six::Container(six::DataType::COMPLEX));
     container->addData(mData->clone());
 
@@ -182,8 +179,8 @@ void Tester<DataTypeT>::normalWrite()
     setMaxProductSize(options);
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
-    six::BufferList buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(&mImage[0]));
+    six::buffer_list buffers;
+    buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
@@ -201,7 +198,7 @@ void Tester<DataTypeT>::testSingleWrite()
 
     nitf::NITFBufferList buffers;
     nitf::Off fileOffset;
-    sicdByteProvider.getBytes(&mBigEndianImage[0], 0, mDims.row,
+    sicdByteProvider.getBytes(mBigEndianImage.data(), 0, mDims.row,
                               fileOffset, buffers);
     const nitf::Off numBytes = sicdByteProvider.getNumBytes(0, mDims.row);
 

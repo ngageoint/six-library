@@ -62,7 +62,7 @@ TEST_CASE(testExceptionLogger)
     mem::SharedPtr<logging::ExceptionLogger> exLog(new logging::ExceptionLogger(log.get()));
 
     size_t counter(0);
-    size_t numThreads(2);
+    uint16_t numThreads(2);
  
     std::vector<sys::Runnable*> runs;
    

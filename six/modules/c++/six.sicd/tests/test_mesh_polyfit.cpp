@@ -288,7 +288,7 @@ int main(int argc, char** argv)
 
         return (pass ? 0 : 1);
     }
-    catch(except::Exception& e)
+    catch (const except::Exception& e)
     {
         std::cerr << e.getMessage() << std::endl;
         return 1;

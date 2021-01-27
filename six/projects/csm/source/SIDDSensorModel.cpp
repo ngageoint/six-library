@@ -19,11 +19,13 @@
 * see <http://www.gnu.org/licenses/>.
 *
 */
+#include <six/csm/SIDDSensorModel.h>
+
+#include <six/csm/SIDDSensorModel.h>
 
 #include "Error.h"
 #include <sys/OS.h>
 #include <sys/Path.h>
-#include <six/csm/SIDDSensorModel.h>
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/XMLControlFactory.h>
@@ -116,7 +118,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         // For multi-image SIDDs, all the SIDD DESs will appear first (in the
         // case where SICD DESs are also present), so we just have to grab out
         // the Nth Data object
-        const std::shared_ptr<six::Container> container = reader.getContainer();
+        const auto container = reader.getContainer();
         if (container->getDataType() != six::DataType::DERIVED ||
             container->getNumData() < imageIndex + 1)
         {

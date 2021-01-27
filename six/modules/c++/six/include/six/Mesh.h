@@ -26,7 +26,7 @@
 #include <iomanip>
 #include <string>
 
-#include <sys/Conf.h>
+#include <scene/sys_Conf.h>
 #include <six/Parameter.h>
 #include <types/RowCol.h>
 
@@ -77,7 +77,16 @@ public:
      * deserialize() for more information
      * \param[out] values The serialized data.
      */
-    virtual void serialize(std::vector<std::byte>& values) const = 0;
+    virtual void serialize(std::vector<sys::byte>& values) const = 0;
+    virtual void serialize(std::vector<std::byte>& values) const
+    {
+        std::vector<sys::byte> values_;
+        serialize(values_);
+        auto begin = reinterpret_cast<std::byte*>(values_.data());
+        auto end = begin + values_.size();
+        values.insert(values.end(), begin, end);
+    }
+
 
     /*!
      * Deserializes an array of byte data to populate a Mesh. This is
@@ -92,7 +101,7 @@ public:
      *    std::vector<std::byte> serializedData;
      *    mesh.serialize(buffer);
      *    DerivedMesh meshCopy;  // Not populated
-     *    const std::byte* buffer = &serializedData[0];
+     *    const std::byte* buffer = serializedData.data();
      *    meshCopy.deserialize(buffer); // meshCopy == mesh
      * Any implementation of serialize() and deserialize() must
      * satisfy this property.
@@ -119,7 +128,12 @@ public:
      *  the serialized storage size of Mesh after calling this
      *  function.
      */
-    virtual void deserialize(const std::byte*& values) = 0;
+    virtual void deserialize(const sys::byte*& values) = 0;
+    virtual void deserialize(const std::byte*& values)
+    {
+        auto& values_ = reinterpret_cast<const sys::byte*&>(values);
+        deserialize(values_);
+    }
 };
 }
 #endif

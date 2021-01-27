@@ -31,7 +31,7 @@
 #include "utils.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -63,35 +63,26 @@ private:
     const float mDiff;
 };
 
-class Buffers
+struct Buffers final
 {
-public:
-    Buffers()
-    {
-    }
-
-    ~Buffers()
-    {
-        for (size_t ii = 0; ii < mBuffers.size(); ++ii)
-        {
-            delete[] mBuffers[ii];
-        }
-    }
-
     std::byte* add(size_t numBytes)
     {
-        std::unique_ptr<std::byte[]> buffer(new std::byte[numBytes]);
-        mBuffers.push_back(buffer.get());
-        return buffer.release();
+        mBuffers.push_back(std::unique_ptr<std::byte[]>(new std::byte[numBytes]));
+        return mBuffers.back().get();
     }
 
     std::vector<std::byte*> get() const
     {
-        return mBuffers;
+        std::vector<std::byte*> retval;
+        for (auto& buffer : mBuffers)
+        {
+            retval.push_back(buffer.get());
+        }
+        return retval;
     }
 
 private:
-    std::vector<std::byte*> mBuffers;
+    std::vector<std::unique_ptr<std::byte[]>> mBuffers;
 };
 
 // We've stored the complex<short> in the second half of the buffer
@@ -279,7 +270,7 @@ int main(int argc, char** argv)
             log.addHandler(new logging::FileHandler(logFile, logLevel), true);
 
         std::unique_ptr<six::ReadControl> reader;
-        std::string extension = fs::path(inputFile).extension().string();
+        std::string extension = fs::path(inputFile).extension();
         str::lower(extension);
         if (extension == ".nitf" || extension == ".ntf")
         {
@@ -294,7 +285,7 @@ int main(int argc, char** argv)
         reader->setXMLControlRegistry(&xmlRegistry);
 
         reader->load(inputFile, schemaPaths);
-        std::shared_ptr<six::Container> container(reader->getContainer());
+        auto container(reader->getContainer());
 
         // Update the XML to reflect the creation time as right now
         if (!retainDateTime)
@@ -311,8 +302,6 @@ int main(int argc, char** argv)
         // DES's with SICD XML in them.  So here we want to read every image
         // that's present.
         six::Region region;
-        region.setStartRow(0);
-        region.setStartCol(0);
 
         Buffers buffers;
         for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)

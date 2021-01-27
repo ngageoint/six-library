@@ -59,3 +59,8 @@ void xml::lite::MinidomParser::preserveCharacterData(bool preserve)
 {
     mHandler.preserveCharacterData(preserve);
 }
+
+void xml::lite::MinidomParser::storeEncoding(bool preserve)
+{
+    mHandler.storeEncoding(preserve);
+}

@@ -19,22 +19,24 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sicd/CropUtils.h>
 
 #include <memory>
 #include <iostream>
 #include <stdexcept>
 
+#include <six/sicd/CropUtils.h>
+
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <str/Manip.h>
-#include <six/sicd/CropUtils.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/XMLControlFactory.h>
 #include "utils.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -50,7 +52,7 @@ void parseECEF(cli::Results& options, std::vector<scene::Vector3>& ecef)
         if (values.size() != 3)
         {
             throw except::Exception(Ctxt("Expected 3 values but got " +
-                    str::toString(values.size())));
+                    std::to_string(values.size())));
         }
 
         scene::Vector3& ecefCur(ecef[ii]);
@@ -73,7 +75,7 @@ void parseLatLon(cli::Results& options, std::vector<scene::LatLonAlt>& latLon)
         if (values.size() != 2 && values.size() != 3)
         {
             throw except::Exception(Ctxt("Expected 2 or 3 values but got " +
-                    str::toString(values.size())));
+                    std::to_string(values.size())));
         }
 
         scene::LatLonAlt& latLonCur(latLon[ii]);

@@ -100,7 +100,7 @@ uint8_t* DecompressionInterface::adapterReadBlock(
 
 NITF_BOOL DecompressionInterface::adapterFreeBlock(
     nitf_DecompressionControl* object,
-    uint8_t* block, 
+    std::byte* block,
     nitf_Error* error)
 {
     try

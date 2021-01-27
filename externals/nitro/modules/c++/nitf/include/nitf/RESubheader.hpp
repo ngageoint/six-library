@@ -57,7 +57,7 @@ public:
     RESubheader(nitf_RESubheader * x);
 
      //! Constructor
-    RESubheader() noexcept(false);
+    RESubheader();
 
     //! Clone
     nitf::RESubheader clone() const;

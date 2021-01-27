@@ -43,7 +43,7 @@ namespace nitf
 class SegmentWriter : public WriteHandler
 {
 public:
-    SegmentWriter() noexcept(false);
+    SegmentWriter();
 
     SegmentWriter(nitf::SegmentSource segmentSource);
 

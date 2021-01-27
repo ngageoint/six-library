@@ -62,7 +62,7 @@ public:
     FileHeader(nitf_FileHeader * x);
 
     //! Constructor
-    FileHeader() noexcept(false);
+    FileHeader();
 
     //! Clone
     nitf::FileHeader clone() const;
@@ -71,9 +71,17 @@ public:
 
     //! Get the fileHeader
     nitf::Field getFileHeader() const;
+    std::string fileHeader() const
+    {
+        return getFileHeader(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the fileVersion
     nitf::Field getFileVersion() const;
+    std::string fileVersion() const
+    {
+        return getFileVersion(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the complianceLevel
     nitf::Field getComplianceLevel() const;
@@ -92,6 +100,10 @@ public:
 
     //! Get the classification
     nitf::Field getClassification() const;
+    std::string classification() const
+    {
+        return getClassification(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the securityGroup
     nitf::FileSecurity getSecurityGroup() const;

@@ -27,7 +27,7 @@
 #include <cphd/Wideband.h>
 #include <types/RowCol.h>
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 #include "TestCase.h"
 
@@ -349,7 +349,7 @@ void writeCPHD(
                     getRandomReal(), getRandomReal());
         }
 
-        writer.writeCPHDData(&data[ii][0], data[ii].size());
+        writer.writeCPHDData(data[ii].data(), data[ii].size());
     }
 }
 

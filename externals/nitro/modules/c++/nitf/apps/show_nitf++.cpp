@@ -74,11 +74,9 @@ inline void show(const std::string& x_, const T& x)
     }
     std::cout << "\n";
 }
-#define SHOW(X) show(#X, X)
-//#define SHOW(X) std::cout << #X << " = [" << X << "]\n"
+#define SHOW(X) show(#X, X.toString())
 
-#define SHOWI(X) show(#X, (int)X)
-//#define SHOWI(X) std::cout << #X << "=[" << (int)X << "]\n"
+#define SHOWI(X) show(#X, static_cast<int>(X))
 #define SHOWRGB(X) printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, \
        (unsigned char) X[0], (unsigned char) X[1], (unsigned char) X[2])
 
@@ -92,7 +90,7 @@ inline void show(const std::string& x_, const T& x)
 
 static void printTREField(const nitf::Field& field)
 {
-    const std::string strField = field.toString();
+    const std::string strField = field;
 
     if (!format_as_xml)
     {
@@ -220,11 +218,8 @@ void showExtensions(const nitf::Extensions& extensions)
         std::cout << "\n";
     }
 
-    for (nitf::ExtensionsIterator it = extensions.begin();
-         it != extensions.end(); ++it)
+    for (const auto& tre : extensions)
     {
-        nitf::TRE tre = *it;
-
         std::string treID = tre.getID();
         printTRE(tre);
     }
@@ -391,58 +386,58 @@ void showImageSubheader(const nitf::ImageSubheader& imsub)
 {
     unsigned int i;
     std::cout << "image subheader" << std::endl;
-    SHOW( imsub.getFilePartType().toString() );
-    SHOW( imsub.getImageId().toString() );
-    SHOW( imsub.getImageDateAndTime().toString() );
-    SHOW( imsub.getTargetId().toString() );
-    SHOW( imsub.getImageTitle().toString() );
-    SHOW( imsub.getImageSecurityClass().toString() );
-    SHOW( imsub.getEncrypted().toString() );
-    SHOW( imsub.getImageSource().toString() );
-    SHOW( imsub.getNumRows().toString() );
-    SHOW( imsub.getNumCols().toString() );
-    SHOW( imsub.getPixelValueType().toString() );
-    SHOW( imsub.getImageRepresentation().toString() );
-    SHOW( imsub.getImageCategory().toString() );
-    SHOW( imsub.getActualBitsPerPixel().toString() );
-    SHOW( imsub.getPixelJustification().toString() );
-    SHOW( imsub.getImageCoordinateSystem().toString() );
-    SHOW( imsub.getCornerCoordinates().toString() );
+    SHOW( imsub.getFilePartType() );
+    SHOW( imsub.getImageId() );
+    SHOW( imsub.getImageDateAndTime() );
+    SHOW( imsub.getTargetId() );
+    SHOW( imsub.getImageTitle() );
+    SHOW( imsub.getImageSecurityClass() );
+    SHOW( imsub.getEncrypted() );
+    SHOW( imsub.getImageSource() );
+    SHOW( imsub.getNumRows() );
+    SHOW( imsub.getNumCols() );
+    SHOW( imsub.getPixelValueType() );
+    SHOW( imsub.getImageRepresentation() );
+    SHOW( imsub.getImageCategory() );
+    SHOW( imsub.getActualBitsPerPixel() );
+    SHOW( imsub.getPixelJustification() );
+    SHOW( imsub.getImageCoordinateSystem() );
+    SHOW( imsub.getCornerCoordinates() );
 
-    SHOW( (uint32_t)imsub.getNumImageComments() );
+    SHOWI( imsub.getNumImageComments() );
     const nitf::List comments = imsub.getImageComments();
-    for (nitf::ListIterator it = comments.begin(); it != comments.end(); ++it)
-        SHOW(((nitf::Field)*it).toString());
+    for (const auto& comment : comments)
+        SHOW(((nitf::Field)comment));
 
-    SHOW( imsub.getImageCompression().toString() );
-    SHOW( imsub.getCompressionRate().toString() );
+    SHOW( imsub.getImageCompression() );
+    SHOW( imsub.getCompressionRate() );
 
-    SHOW( imsub.getNumImageBands().toString() );
-    SHOW( (uint32_t)imsub.getNumMultispectralImageBands() );
+    SHOW( imsub.getNumImageBands() );
+    SHOWI( imsub.getNumMultispectralImageBands() );
 
     for (i = 0; i < (unsigned int)imsub.getNumImageBands(); i++)
     {
-        SHOW( imsub.getBandInfo(i).getRepresentation().toString());
-        SHOW( imsub.getBandInfo(i).getSubcategory().toString() );
-        SHOW( imsub.getBandInfo(i).getImageFilterCondition().toString() );
-        SHOW( imsub.getBandInfo(i).getImageFilterCode().toString() );
-        SHOW( (uint32_t)imsub.getBandInfo(i).getNumLUTs() );
-        SHOW( (uint32_t)imsub.getBandInfo(i).getBandEntriesPerLUT() );
+        SHOW( imsub.getBandInfo(i).getRepresentation() );
+        SHOW( imsub.getBandInfo(i).getSubcategory() );
+        SHOW( imsub.getBandInfo(i).getImageFilterCondition() );
+        SHOW( imsub.getBandInfo(i).getImageFilterCode() );
+        SHOWI( imsub.getBandInfo(i).getNumLUTs() );
+        SHOWI( imsub.getBandInfo(i).getBandEntriesPerLUT() );
     }
 
-    SHOW( imsub.getImageSyncCode().toString() );
-    SHOW( imsub.getImageMode().toString() );
-    SHOW( (uint32_t)imsub.getNumBlocksPerRow() );
-    SHOW( (uint32_t)imsub.getNumBlocksPerCol() );
-    SHOW( (uint32_t)imsub.getNumPixelsPerHorizBlock() );
-    SHOW( (uint32_t)imsub.getNumPixelsPerVertBlock() );
-    SHOW( (uint32_t)imsub.getNumBitsPerPixel() );
-    SHOW( imsub.getImageDisplayLevel().toString() );
-    SHOW( imsub.getImageAttachmentLevel().toString() );
-    SHOW( imsub.getImageLocation().toString() );
-    SHOW( imsub.getImageMagnification().toString() );
-    SHOW( imsub.getUserDefinedImageDataLength().toString() );
-    SHOW( imsub.getUserDefinedOverflow().toString() );
+    SHOW( imsub.getImageSyncCode() );
+    SHOW( imsub.getImageMode() );
+    SHOWI( imsub.getNumBlocksPerRow() );
+    SHOWI( imsub.getNumBlocksPerCol() );
+    SHOWI( imsub.getNumPixelsPerHorizBlock() );
+    SHOWI( imsub.getNumPixelsPerVertBlock() );
+    SHOWI( imsub.getNumBitsPerPixel() );
+    SHOW( imsub.getImageDisplayLevel() );
+    SHOW( imsub.getImageAttachmentLevel() );
+    SHOW( imsub.getImageLocation() );
+    SHOW( imsub.getImageMagnification() );
+    SHOW( imsub.getUserDefinedImageDataLength() );
+    SHOW( imsub.getUserDefinedOverflow() );
 
     //the hash functor
     //    ShowTREFunctor showTRE;
@@ -451,8 +446,8 @@ void showImageSubheader(const nitf::ImageSubheader& imsub)
     // nitf::HashTable htUd = udExts.getHash();
     //    htUd.forEach(showTRE);
 
-    SHOW( (uint32_t)imsub.getExtendedHeaderLength() );
-    SHOW( imsub.getExtendedHeaderOverflow().toString() );
+    SHOWI( imsub.getExtendedHeaderLength() );
+    SHOW( imsub.getExtendedHeaderOverflow() );
 
     nitf::Extensions exExts = imsub.getExtendedSection();
     showExtensions(exExts);
@@ -473,10 +468,8 @@ void showImages(const nitf::Record& record)
         const nitf::List images = record.getImages();
 
         //  Walk each image and show
-        for (nitf::ListIterator iter = images.begin();
-            iter != images.end(); ++iter)
+        for (nitf::ImageSegment segment : images)
         {
-            nitf::ImageSegment segment = *iter;
             showImageSubheader(segment.getSubheader());
         }
     }
@@ -497,21 +490,21 @@ void showSecurityGroup(const nitf::FileSecurity& securityGroup)
         return; // don't need XML output right now
     }
 
-    SHOW(securityGroup.getClassificationSystem().toString());
-    SHOW(securityGroup.getCodewords().toString());
-    SHOW(securityGroup.getControlAndHandling().toString());
-    SHOW(securityGroup.getReleasingInstructions().toString());
-    SHOW(securityGroup.getDeclassificationType().toString());
-    SHOW(securityGroup.getDeclassificationDate().toString());
-    SHOW(securityGroup.getDeclassificationExemption().toString());
-    SHOW(securityGroup.getDowngrade().toString());
-    SHOW(securityGroup.getDowngradeDateTime().toString());
-    SHOW(securityGroup.getClassificationText().toString());
-    SHOW(securityGroup.getClassificationAuthorityType().toString());
-    SHOW(securityGroup.getClassificationAuthority().toString());
-    SHOW(securityGroup.getClassificationReason().toString());
-    SHOW(securityGroup.getSecuritySourceDate().toString());
-    SHOW(securityGroup.getSecurityControlNumber().toString());
+    SHOW(securityGroup.getClassificationSystem());
+    SHOW(securityGroup.getCodewords());
+    SHOW(securityGroup.getControlAndHandling());
+    SHOW(securityGroup.getReleasingInstructions());
+    SHOW(securityGroup.getDeclassificationType());
+    SHOW(securityGroup.getDeclassificationDate());
+    SHOW(securityGroup.getDeclassificationExemption());
+    SHOW(securityGroup.getDowngrade());
+    SHOW(securityGroup.getDowngradeDateTime());
+    SHOW(securityGroup.getClassificationText());
+    SHOW(securityGroup.getClassificationAuthorityType());
+    SHOW(securityGroup.getClassificationAuthority());
+    SHOW(securityGroup.getClassificationReason());
+    SHOW(securityGroup.getSecuritySourceDate());
+    SHOW(securityGroup.getSecurityControlNumber());
 }
 
 /*
@@ -529,26 +522,26 @@ void showGraphicSubheader(const nitf::GraphicSubheader& sub)
 
     std::cout << "graphic subheader" << std::endl;
 
-    SHOW(sub.getFilePartType().toString());
-    SHOW(sub.getGraphicID().toString());
-    SHOW(sub.getName().toString());
-    SHOW(sub.getSecurityClass().toString());
+    SHOW(sub.getFilePartType());
+    SHOW(sub.getGraphicID());
+    SHOW(sub.getName());
+    SHOW(sub.getSecurityClass());
 
     if (*(sub.getSecurityClass().getRawData()) != 'U')
         showSecurityGroup(sub.getSecurityGroup());
 
-    SHOW(sub.getEncrypted().toString());
-    SHOW(sub.getStype().toString());
-    SHOW(sub.getRes1().toString());
-    SHOW(sub.getDisplayLevel().toString());
-    SHOW(sub.getAttachmentLevel().toString());
-    SHOW(sub.getLocation().toString());
-    SHOW(sub.getBound1Loc().toString());
-    SHOW(sub.getColor().toString());
-    SHOW(sub.getBound2Loc().toString());
-    SHOW(sub.getRes2().toString());
-    SHOW(sub.getExtendedHeaderLength().toString());
-    SHOW(sub.getExtendedHeaderOverflow().toString());
+    SHOW(sub.getEncrypted());
+    SHOW(sub.getStype());
+    SHOW(sub.getRes1());
+    SHOW(sub.getDisplayLevel());
+    SHOW(sub.getAttachmentLevel());
+    SHOW(sub.getLocation());
+    SHOW(sub.getBound1Loc());
+    SHOW(sub.getColor());
+    SHOW(sub.getBound2Loc());
+    SHOW(sub.getRes2());
+    SHOW(sub.getExtendedHeaderLength());
+    SHOW(sub.getExtendedHeaderOverflow());
 
     nitf::Extensions exts = sub.getExtendedSection();
     showExtensions(exts);
@@ -568,10 +561,8 @@ void showGraphics(const nitf::Record& record)
         const nitf::List graphics = record.getGraphics();
 
         //  Walk each graphic and show
-        for (nitf::ListIterator iter = graphics.begin();
-            iter != graphics.end(); ++iter)
+        for (nitf::GraphicSegment segment : graphics)
         {
-            nitf::GraphicSegment segment = *iter;
             showGraphicSubheader(segment.getSubheader());
         }
     }
@@ -585,25 +576,25 @@ void showLabelSubheader(const nitf::LabelSubheader& sub)
 {
     printf("label subheader");
 
-    SHOW(sub.getFilePartType().toString());
-    SHOW(sub.getLabelID().toString());
-    SHOW(sub.getSecurityClass().toString());
+    SHOW(sub.getFilePartType());
+    SHOW(sub.getLabelID());
+    SHOW(sub.getSecurityClass());
 
     if (*(sub.getSecurityClass().getRawData()) != 'U')
         showSecurityGroup(sub.getSecurityGroup());
 
-    SHOW(sub.getEncrypted().toString());
-    SHOW(sub.getFontStyle().toString());
-    SHOW(sub.getCellWidth().toString());
-    SHOW(sub.getCellHeight().toString());
-    SHOW(sub.getDisplayLevel().toString());
-    SHOW(sub.getAttachmentLevel().toString());
-    SHOW(sub.getLocationRow().toString());
-    SHOW(sub.getLocationColumn().toString());
+    SHOW(sub.getEncrypted());
+    SHOW(sub.getFontStyle());
+    SHOW(sub.getCellWidth());
+    SHOW(sub.getCellHeight());
+    SHOW(sub.getDisplayLevel());
+    SHOW(sub.getAttachmentLevel());
+    SHOW(sub.getLocationRow());
+    SHOW(sub.getLocationColumn());
     SHOWRGB(sub.getTextColor().getRawData());
     SHOWRGB(sub.getBackgroundColor().getRawData());
-    SHOW(sub.getExtendedHeaderLength().toString());
-    SHOW(sub.getExtendedHeaderOverflow().toString());
+    SHOW(sub.getExtendedHeaderLength());
+    SHOW(sub.getExtendedHeaderOverflow());
 
     nitf::Extensions exts = sub.getExtendedSection();
     showExtensions(exts);
@@ -622,10 +613,8 @@ void showLabels(const nitf::Record& record)
         const nitf::List labels = record.getLabels();
 
         //  Walk each label and show
-        for (nitf::ListIterator iter = labels.begin();
-            iter != labels.end(); ++iter)
+        for (nitf::LabelSegment segment : labels)
         {
-            nitf::LabelSegment segment = *iter;
             showLabelSubheader(segment.getSubheader());
         }
     }
@@ -646,20 +635,20 @@ void showLabels(const nitf::Record& record)
 void showTextSubheader(const nitf::TextSubheader& sub)
 {
     std::cout << "text subheader" << std::endl;
-    SHOW(sub.getFilePartType().toString());
-    SHOW(sub.getTextID().toString());
-    SHOW(sub.getAttachmentLevel().toString());
-    SHOW(sub.getDateTime().toString());
-    SHOW(sub.getTitle().toString());
-    SHOW(sub.getSecurityClass().toString());
+    SHOW(sub.getFilePartType());
+    SHOW(sub.getTextID());
+    SHOW(sub.getAttachmentLevel());
+    SHOW(sub.getDateTime());
+    SHOW(sub.getTitle());
+    SHOW(sub.getSecurityClass());
 
     if (*(sub.getSecurityClass().getRawData()) != 'U')
         showSecurityGroup(sub.getSecurityGroup());
 
-    SHOW(sub.getEncrypted().toString());
-    SHOW(sub.getFormat().toString());
-    SHOW(sub.getExtendedHeaderLength().toString());
-    SHOW(sub.getExtendedHeaderOverflow().toString());
+    SHOW(sub.getEncrypted());
+    SHOW(sub.getFormat());
+    SHOW(sub.getExtendedHeaderLength());
+    SHOW(sub.getExtendedHeaderOverflow());
 
     nitf::Extensions exts = sub.getExtendedSection();
     showExtensions(exts);
@@ -679,10 +668,8 @@ void showTexts(const nitf::Record& record)
         const nitf::List texts = record.getTexts();
 
         //  Walk each label and show
-        for (nitf::ListIterator iter = texts.begin();
-            iter != texts.end(); ++iter)
+        for (nitf::TextSegment segment : texts)
         {
-            nitf::TextSegment segment = *iter;
             showTextSubheader(segment.getSubheader());
         }
     }
@@ -809,10 +796,8 @@ void showDataExtensions(const nitf::Record& record)
         const nitf::List des = record.getDataExtensions();
 
         //  Walk each label and show
-        for (nitf::ListIterator iter = des.begin();
-            iter != des.end(); ++iter)
+        for (nitf::DESegment segment : des)
         {
-            const nitf::DESegment segment = *iter;
             showDESubheader(segment.getSubheader());
         }
 
@@ -837,15 +822,15 @@ void showRESubheader(const nitf::RESubheader& sub)
 {
     std::cout << "RES subheader\n" << std::endl;
 
-    SHOW(sub.getFilePartType().toString());
-    SHOW(sub.getTypeID().toString());
-    SHOW(sub.getVersion().toString());
-    SHOW(sub.getSecurityClass().toString());
+    SHOW(sub.getFilePartType());
+    SHOW(sub.getTypeID());
+    SHOW(sub.getVersion());
+    SHOW(sub.getSecurityClass());
 
     if (*(sub.getSecurityClass().getRawData()) != 'U')
         showSecurityGroup(sub.getSecurityGroup());
 
-    SHOW(sub.getSubheaderFieldsLength().toString());
+    SHOW(sub.getSubheaderFieldsLength());
 
     SHOWI(sub.getDataLength());
 }
@@ -862,10 +847,8 @@ void showReservedExtensions(const nitf::Record& record)
         const nitf::List res = record.getReservedExtensions();
 
         //  Walk each label and show
-        for (nitf::ListIterator iter = res.begin();
-            iter != res.end(); ++iter)
+        for (nitf::RESegment segment : res)
         {
-            nitf::RESegment segment = *iter;
             showRESubheader(segment.getSubheader());
         }
     }
@@ -901,7 +884,7 @@ void showWarnings(const nitf::Reader& reader)
             char* p = (char*)*iter;
 
             //  Make sure
-            assert(p != NULL);
+            assert(p != nullptr);
 
             //  Show the data
             std::cout << "\tFound problem: [" << p << "]\n" << std::endl;

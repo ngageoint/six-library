@@ -38,6 +38,12 @@ public:
                      std::unique_ptr<six::SICommonXMLParser>&& comParser,
                      logging::Logger* log = nullptr,
                      bool ownLog = false);
+#if !CODA_OSS_cpp17
+    DerivedXMLParser(const std::string& version,
+                     std::auto_ptr<six::SICommonXMLParser> comParser,
+                     logging::Logger* log = nullptr,
+                     bool ownLog = false);
+#endif
 
     virtual xml::lite::Document* toXML(const DerivedData* data) const = 0;
 
@@ -192,7 +198,7 @@ protected:
     void parseDownstreamReprocessingFromXML(const XMLElem elem,
                                             DownstreamReprocessing* downstreamReproc) const;
     Remap* parseRemapChoiceFromXML(const XMLElem remapInformationElem) const;
-    std::unique_ptr<LUT> parseSingleLUT(const XMLElem elem) const;
+    mem::auto_ptr<LUT> parseSingleLUT(const XMLElem elem) const;
     void parseDisplayFromXML(const XMLElem displayElem, Display* display) const;
     virtual void parseMeasurementFromXML(const XMLElem measurementElem,
                                  Measurement* measurement) const;

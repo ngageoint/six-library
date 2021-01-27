@@ -109,13 +109,26 @@ public:
      * Serializes the mesh to binary
      * \param[out] values The serialized data.
      */
-    virtual void serialize(std::vector<std::byte>& values) const;
+    virtual void serialize(std::vector<sys::byte>& values) const;
+    void serialize(std::vector<std::byte>& values) const override
+    {
+        std::vector<sys::byte> values_;
+        serialize(values_);
+        auto begin = reinterpret_cast<std::byte*>(values_.data());
+        auto end = begin + values_.size();
+        values.insert(values.end(), begin, end);
+    }
 
     /*!
      * Deserializes from binary to a mesh. 
      * \param values Data to deserialize.
      */
-    virtual void deserialize(const std::byte*& values);
+    virtual void deserialize(const sys::byte*& values);
+    void deserialize(const std::byte*& values) override
+    {
+        auto& values_ = reinterpret_cast<const sys::byte*&>(values);
+        deserialize(values_);
+    }
 
 protected:
     const bool mSwapBytes;
@@ -193,14 +206,27 @@ public:
      *
      * \param[out] values The serialized data.
      */
-    virtual void serialize(std::vector<std::byte>& values) const;
+    virtual void serialize(std::vector<sys::byte>& values) const;
+    void serialize(std::vector<std::byte>& values) const override
+    {
+        std::vector<sys::byte> values_;
+        serialize(values_);
+        auto begin = reinterpret_cast<std::byte*>(values_.data());
+        auto end = begin + values_.size();
+        values.insert(values.end(), begin, end);
+    }
 
     /*!
      * Deserializes from binary to a mesh.
      *
      * \param values Data to deserialize.
      */
-    virtual void deserialize(const std::byte*& values);
+    virtual void deserialize(const sys::byte*& values);
+    void deserialize(const std::byte*& values) override
+    {
+        auto& values_ = reinterpret_cast<const sys::byte*&>(values);
+        deserialize(values_);
+    }
 
 private:
     //! The number of scalars per x,y coordinate.
@@ -273,13 +299,26 @@ public:
      * Serializes the mesh to binary
      * \param[out] values The serialized data.
      */
-    virtual void serialize(std::vector<std::byte>& values) const;
+    virtual void serialize(std::vector<sys::byte>& values) const;
+    void serialize(std::vector<std::byte>& values) const override
+    {
+        std::vector<sys::byte> values_;
+        serialize(values_);
+        auto begin = reinterpret_cast<std::byte*>(values_.data());
+        auto end = begin + values_.size();
+        values.insert(values.end(), begin, end);
+    }
 
     /*!
      * Deserializes from binary to a mesh. 
      * \param values Data to deserialize.
      */
-    virtual void deserialize(const std::byte*& values);
+    virtual void deserialize(const sys::byte*& values);
+    void deserialize(const std::byte*& values) override
+    {
+        auto& values_ = reinterpret_cast<const sys::byte*&>(values);
+        deserialize(values_);
+    }
 
 protected:
     std::vector<double> mMainBeamNoise;

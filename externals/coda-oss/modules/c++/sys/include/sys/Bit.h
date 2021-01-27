@@ -2,7 +2,7 @@
  * This file is part of sys-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2020, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,16 +15,14 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
- * see <http://www.gnu.org/licenses/>.
+ * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
-
+#ifndef CODA_OSS_sys_Bit_h_INCLUDED_
+#define CODA_OSS_sys_Bit_h_INCLUDED_
 #pragma once
 
-#if __cplusplus >= 202002L // C++20
-#include <bit>
-#endif
+#include "Conf.h"
 
 namespace sys
 {
@@ -42,3 +40,22 @@ namespace sys
     #endif
     };
 }
+
+#ifndef CODA_OSS_DEFINE_std_endian_
+    #if CODA_OSS_cpp20 && __has_include(<bit>)  // __has_include is C++17
+        #define CODA_OSS_DEFINE_std_endian_ -1  // OK to #include <>, below
+    #else
+        #define CODA_OSS_DEFINE_std_endian_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+    #endif  // CODA_OSS_cpp20
+#endif  // CODA_OSS_DEFINE_std_endian_
+
+#if CODA_OSS_DEFINE_std_endian_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        using endian = sys::Endian;
+    }
+#elif CODA_OSS_DEFINE_std_endian_ == -1  // set above
+    #include <bit>
+#endif // CODA_OSS_DEFINE_std_endian_
+
+#endif  // CODA_OSS_sys_Bit_h_INCLUDED_

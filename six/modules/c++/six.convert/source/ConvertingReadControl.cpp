@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <string>
+
 #include <six/convert/ConvertingReadControl.h>
 #include <types/RowCol.h>
 
@@ -70,10 +72,6 @@ std::string ConvertingReadControl::getFileType() const
 UByte* ConvertingReadControl::interleaved(size_t imageNumber)
 {
     Region region;
-    region.setStartRow(0);
-    region.setStartCol(0);
-    region.setNumRows(-1);
-    region.setNumCols(-1);
     return interleaved(region, imageNumber);
 }
 
@@ -102,21 +100,20 @@ UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
             static_cast<size_t>(region.getStartRow()) > data->getNumRows())
     {
         throw except::Exception(Ctxt("Too many rows requested [" +
-                str::toString(region.getNumRows()) + "]"));
+                std::to_string(region.getNumRows()) + "]"));
     }
     if (extent.col > data->getNumCols() ||
             static_cast<size_t>(region.getStartCol()) > data->getNumCols())
     {
         throw except::Exception(Ctxt("Too many cols requested [" +
-                str::toString(region.getNumCols()) + "]"));
+                std::to_string(region.getNumCols()) + "]"));
     }
 
     UByte* buffer = region.getBuffer();
     if (buffer == nullptr)
     {
-        buffer = new UByte[region.getNumRows() * region.getNumCols() *
-                data->getNumBytesPerPixel()];
-        region.setBuffer(buffer);
+        buffer = region.setBuffer(region.getNumRows() * region.getNumCols() *
+                data->getNumBytesPerPixel()).release();
     }
 
     const types::RowCol<size_t> startingLocation(region.getStartRow(),

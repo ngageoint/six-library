@@ -185,7 +185,7 @@ TEST_CASE(test2DPolyfitLarge)
     Matrix2D<double> x(gridSize, gridSize);
     for (size_t i = 0; i < gridSize; i++)
     {
-        double xidx = xOffset + i * xSpacing;
+        auto xidx = static_cast<double>(xOffset + i * xSpacing);
         for (size_t j = 0; j < gridSize; j++)
         {
             x(i, j) = xidx;
@@ -195,7 +195,7 @@ TEST_CASE(test2DPolyfitLarge)
     Matrix2D<double> y(gridSize, gridSize);
     for (size_t j = 0; j < gridSize; j++)
     {
-        double yidx = yOffset + j * ySpacing;
+        auto yidx = static_cast<double>(yOffset + j * ySpacing);
         for (size_t i = 0; i < gridSize; i++)
         {
             y(i, j) = yidx;
@@ -207,7 +207,7 @@ TEST_CASE(test2DPolyfitLarge)
     {
         for (size_t j = 0; j < gridSize; j++)
         {
-            z(i, j) = truth(i, j);
+            z(i, j) = truth(static_cast<double>(i), static_cast<double>(j));
         }
     }
 

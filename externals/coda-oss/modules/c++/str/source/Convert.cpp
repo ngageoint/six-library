@@ -107,12 +107,12 @@ template<> int str::getPrecision(const long double& )
 
 // Convert a single Windows-1252 character to UTF-8
 // https://en.wikipedia.org/wiki/ISO/IEC_8859-1
-static constexpr sys::u8string::value_type cast(uint8_t ch)
+static constexpr sys::U8string::value_type cast(uint8_t ch)
 {
-    static_assert(sizeof(decltype(ch)) == sizeof(sys::u8string::value_type), "sizeof(uint8_t) != sizeof(Char8_t)");
-    return static_cast<sys::u8string::value_type>(ch);
+    static_assert(sizeof(decltype(ch)) == sizeof(sys::U8string::value_type), "sizeof(uint8_t) != sizeof(Char8_t)");
+    return static_cast<sys::U8string::value_type>(ch);
 }
-static sys::u8string fromWindows1252(std::string::value_type ch_)
+static sys::U8string fromWindows1252(std::string::value_type ch_)
 {
     const auto ch = static_cast<uint8_t>(ch_);
 
@@ -126,8 +126,8 @@ static sys::u8string fromWindows1252(std::string::value_type ch_)
         const std::u32string s{static_cast<std::u32string::value_type>(ch)};
         return str::toUtf8(s);
     };
-    static const sys::u8string replacement_character = utf8(0xfffd);
-    static const std::map<uint32_t, sys::u8string> x80_x9F_to_u8string
+    static const sys::U8string replacement_character = utf8(0xfffd);
+    static const std::map<uint32_t, sys::U8string> x80_x9F_to_u8string
     {
         {0x80, utf8(0x20AC) } // EURO SIGN
         , {0x81, replacement_character } // UNDEFINED
@@ -173,20 +173,33 @@ static sys::u8string fromWindows1252(std::string::value_type ch_)
     assert((ch < 0x80) || (ch > 0x9F));
     if (ch < 0x80)
     {
-        return sys::u8string{cast(ch)}; // ASCII
+        return sys::U8string{cast(ch)};  // ASCII
     }
     // *out++=0xc2+(*in>0xbf), *out++=(*in++&0x3f)+0x80;
-    return sys::u8string{cast(0xc2 + (ch > 0xbf)), cast((ch & 0x3f) + 0x80)}; // ISO8859-1
+    return sys::U8string{cast(0xc2 + (ch > 0xbf)), cast((ch & 0x3f) + 0x80)}; // ISO8859-1
 }
-sys::u8string str::fromWindows1252(const std::string& str)
+void str::fromWindows1252(const std::string& str, sys::U8string& result)
 {
-    sys::u8string retval;
     // Assume the input string is Windows-1252 (western European) and convert to UTF-8
     for (const auto& ch : str)
     {
-        retval += ::fromWindows1252(ch);
+        result += ::fromWindows1252(ch);
     }
+}
+sys::U8string str::fromWindows1252(const std::string& str)
+{
+    sys::U8string retval;
+    fromWindows1252(str, retval);
     return retval;
+}
+void str::fromWindows1252(const std::string& str, std::string& result)
+{
+    // Assume the input string is Windows-1252 (western European) and convert to UTF-8
+    for (const auto& ch : str)
+    {
+        const auto utf8 = ::fromWindows1252(ch);
+        result += toString(utf8);
+    }
 }
 
 void str::toUtf8(const std::u16string& str, std::string& result)
@@ -210,35 +223,37 @@ void str::toUtf8(const std::u32string& str, std::string& result)
 
 struct back_inserter final
 { 
-    sys::u8string* container = nullptr;
-    explicit back_inserter(sys::u8string& s) noexcept : container(&s) { }
+    sys::U8string* container = nullptr; // pointer instead of reference for copy
+    explicit back_inserter(sys::U8string& s) noexcept : container(&s) { }
 
     back_inserter& operator=(uint8_t v)
     {
-        container->push_back(static_cast<sys::u8string::value_type>(v));
+        container->push_back(static_cast<sys::U8string::value_type>(v));
         return *this;
     }
     back_inserter& operator*() noexcept { return *this; }
     back_inserter operator++(int) noexcept { return *this; }
 };
-sys::u8string str::toUtf8(const std::u16string& str)
+void str::toUtf8(const std::u16string& str, sys::U8string& result)
 {
-    sys::u8string retval;
-    utf8::utf16to8(str.begin(), str.end(), back_inserter(retval));
+    utf8::utf16to8(str.begin(), str.end(), back_inserter(result));
+}
+void str::toUtf8(const std::u32string& str, sys::U8string& result)
+{
+    utf8::utf32to8(str.begin(), str.end(), back_inserter(result));
+}
+
+sys::U8string str::toUtf8(const std::u16string& str)
+{
+    sys::U8string retval;
+    toUtf8(str, retval);
     return retval;
 }
-sys::u8string str::toUtf8(const std::u32string& str)
+sys::U8string str::toUtf8(const std::u32string& str)
 {
-    sys::u8string retval;
-    utf8::utf32to8(str.begin(), str.end(), back_inserter(retval));
+    sys::U8string retval;
+    toUtf8(str, retval);
     return retval;
 }
 
-void str::toUtf8(const std::u16string& str, sys::u8string& result)
-{
-    result = toUtf8(str);
-}
-void str::toUtf8(const std::u32string& str, sys::u8string& result)
-{
-    result = toUtf8(str);
-}
+

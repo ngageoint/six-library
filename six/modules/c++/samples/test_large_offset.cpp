@@ -79,8 +79,8 @@ void createNITF(const std::string& outputPathname,
     const size_t elementsInImage = data->getNumRows() * data->getNumCols();
     const size_t imageSize = elementsInImage * data->getNumBytesPerPixel();
 
-    std::shared_ptr<six::Container> container(
-            new six::Container(data->getDataType()));
+    mem::SharedPtr<six::Container> container(
+        new six::Container(data->getDataType()));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
@@ -100,7 +100,7 @@ void createNITF(const std::string& outputPathname,
                     static_cast<float>(ii) * -1);
         }
     }
-    else
+    else if (container->getDataType() == six::DataType::DERIVED)
     {
         uint16_t* derivedData =
                 reinterpret_cast<uint16_t*>(imageData.get());
@@ -133,9 +133,8 @@ bool checkNITF(const std::string& pathname)
     six::Region region;
     region.setStartRow(ROWS_TO_SKIP);
     region.setNumRows(data->getNumRows() - ROWS_TO_SKIP);
-    region.setStartCol(0);
     reader.interleaved(region, 0);
-    std::byte* buffer = region.getBuffer();
+    auto buffer = region.getBuffer();
 
     const size_t elementsPerRow = data->getNumCols();
     const size_t skipSize = ROWS_TO_SKIP * elementsPerRow;
@@ -143,8 +142,7 @@ bool checkNITF(const std::string& pathname)
 
     if (data->getDataType() == six::DataType::COMPLEX)
     {
-        std::complex<float>* complexBuffer =
-                reinterpret_cast<std::complex<float>* >(buffer);
+        auto complexBuffer = reinterpret_cast<std::complex<float>* >(buffer);
         for (size_t ii = skipSize; ii < imageSize; ++ii)
         {
             const std::complex<float> currentElement =
@@ -176,8 +174,7 @@ bool checkNITF(const std::string& pathname)
 
 bool runTest(const six::DataType& datatype)
 {
-    std::cout << "Running offset test for datatype " << datatype.toString()
-              << "\n";
+    std::cout << "Running offset test for datatype " << datatype << "\n";
 
     const io::TempFile temp;
     createNITF(temp.pathname(), datatype);

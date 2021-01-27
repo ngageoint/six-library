@@ -37,7 +37,7 @@
 #include <logging/StreamHandler.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -87,8 +87,8 @@ void XMLVerifier::readFile(const std::string& pathname,
     }
     else
     {
-        inFile.readInto(&mScratch[0], mScratch.size());
-        contents.assign(&mScratch[0], mScratch.size());
+        inFile.readInto(mScratch.data(), mScratch.size());
+        contents.assign(mScratch.data(), mScratch.size());
     }
 }
 
@@ -171,7 +171,7 @@ int main(int argc, char** argv)
     catch (const except::Exception& ex)
     {
         std::cerr << "Caught except::exception: " << ex.getMessage()
-                  << std::endl;
+            << std::endl;
         return 1;
     }
     catch (...)

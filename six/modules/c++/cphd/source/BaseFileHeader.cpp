@@ -22,7 +22,7 @@
 #include <mem/ScopedArray.h>
 #include <io/SeekableStreams.h>
 #include <str/Manip.h>
-#include <nitf/cstddef.h>
+#include <nitf/coda-oss.hpp>
 #include <cphd/BaseFileHeader.h>
 
 namespace cphd

@@ -40,7 +40,7 @@
 #include "utils.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 int main(int argc, char** argv)
 {
@@ -90,7 +90,7 @@ int main(int argc, char** argv)
             << "Altitude: " << lla.getAlt() << "\n";
         return 0;
     }
-    catch(const except::Exception& ex)
+    catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
     }

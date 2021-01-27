@@ -99,7 +99,7 @@ Segment::Segment() :
 std::ostream& operator<< (std::ostream& os, const SceneCoordinates& d)
 {
     os << "SceneCoordinates::\n"
-       << "  EarthModel       : " << d.earthModel.toString() << "\n"
+       << "  EarthModel       : " << d.earthModel << "\n"
        << "  " << d.iarp << "\n"
        << "  " << d.referenceSurface << "\n"
        << "  AreaType        : " << d.imageArea << "\n"

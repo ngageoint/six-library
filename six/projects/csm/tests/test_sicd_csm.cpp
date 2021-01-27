@@ -22,8 +22,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <nitf/coda-oss.hpp>
 #include <sys/DLL.h>
-#include <sys/Conf.h>
 #include <except/Exception.h>
 #include <six/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
@@ -31,7 +31,7 @@
 #include "utilities.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 // CSM includes
 #include <RasterGM.h>
@@ -56,8 +56,7 @@ public:
 
         mReader.setXMLControlRegistry(&mXmlRegistry);
 
-        const std::string schemaDir =
-                sys::Path(confDir).join("schema").join("six");
+        const std::string schemaDir = fs::path(confDir) / "schema" / "six";
         mReader.load(mSicdPathname, std::vector<std::string>(1, schemaDir));
         mComplexData = six::sicd::Utilities::getComplexData(mReader);
     }

@@ -24,6 +24,7 @@
 #define __NITF_OBJECT_HPP__
 #pragma once
 
+#include "nitf/coda-oss.hpp"
 #include "nitf/Handle.hpp"
 #include "nitf/HandleManager.hpp"
 #include "nitf/NITFException.hpp"
@@ -95,7 +96,7 @@ protected:
 public:
 
     //! Destructor
-    virtual ~Object() noexcept(false) { releaseHandle(); }
+    virtual ~Object() { releaseHandle(); }
 
     //! Is the object valid (native object not null)?
     virtual bool isValid() const noexcept

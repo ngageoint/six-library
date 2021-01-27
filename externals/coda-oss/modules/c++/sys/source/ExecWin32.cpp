@@ -21,7 +21,7 @@
  */
 
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 #include <sys/Exec.h>
 #include <str/Manip.h>

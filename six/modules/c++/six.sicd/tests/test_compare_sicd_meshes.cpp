@@ -22,7 +22,7 @@
 #include <iostream>
 #include <vector>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <cli/ArgumentParser.h>
 #include <six/sicd/Utilities.h>
 

@@ -22,9 +22,11 @@
 
 #ifndef __EXCEPT_THROWABLE_H__
 #define __EXCEPT_THROWABLE_H__
+#pragma once
 
 #include <string>
 #include <sstream>
+#include <exception>
 #include "except/Trace.h"
 
 /*!
@@ -43,17 +45,24 @@ namespace except
  *
  * This class provides the base interface for exceptions and errors.
  */
+
+/*
+ * It can be quite convenient to derive from std::exception as often one less
+ * "catch" will be needed and we'll have standard what().  But doing so could
+ * break existing code as "catch (const std::exception&)" will catch
+ * except::Throwable when it didn't before.
+ */
+#ifndef CODA_OSS_Throwable_isa_std_exception
+#define CODA_OSS_Throwable_isa_std_exception 0  // preserve existing behavior
+//#define CODA_OSS_Throwable_isa_std_exception 1
+#endif
 class Throwable
+#if CODA_OSS_Throwable_isa_std_exception
+    : public std::exception
+#endif
 {
 public:
-
-    /*!
-     * Default Constructor
-     */
-    Throwable() :
-        mMessage("")
-    {
-    }
+    Throwable() = default;
 
     /*!
      * Constructor.  Takes a message
@@ -131,11 +140,23 @@ public:
         return s.str();
     }
 
+    const char* what() const noexcept
+#if CODA_OSS_Throwable_isa_std_exception
+        override final // derived classes override toString()
+#endif
+    {
+        mWhat = toString(); // call any derived toString()
+        return mWhat.c_str();
+    }
+
 protected:
     //! The name of exception trace
     Trace mTrace;
     //! The name of the message the exception was thrown
     std::string mMessage;
+
+private:
+    mutable std::string mWhat;
 };
 }
 

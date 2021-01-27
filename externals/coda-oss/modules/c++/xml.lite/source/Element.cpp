@@ -24,6 +24,7 @@
 
 #include "xml/lite/Element.h"
 #include <import/str.h>
+#include <import/mem.h>
 
 xml::lite::Element::Element(const xml::lite::Element& node)
 {
@@ -62,8 +63,7 @@ void xml::lite::Element::clone(const xml::lite::Element& node)
     }
 }
 
-bool xml::lite::Element::hasElement(const std::string& uri,
-                                    const std::string& localName) const
+bool xml::lite::Element::hasElement(const std::string& uri, const std::string& localName) const
 {
 
     for (unsigned int i = 0; i < mChildren.size(); i++)
@@ -86,8 +86,7 @@ bool xml::lite::Element::hasElement(const std::string& localName) const
     return false;
 }
 
-void xml::lite::Element::getElementsByTagName(const std::string& uri,
-                                              const std::string& localName,
+void xml::lite::Element::getElementsByTagName(const std::string& uri, const std::string& localName,
                                               std::vector<Element*>& elements,
                                               bool recurse) const
 {
@@ -99,6 +98,32 @@ void xml::lite::Element::getElementsByTagName(const std::string& uri,
         if (recurse)
             mChildren[i]->getElementsByTagName(uri, localName, elements, recurse);
     }
+}
+
+template <typename TGetElements>
+xml::lite::Element* getElement(TGetElements getElements, const except::Context& ctxt)
+{
+    auto elements = getElements();
+    if (elements.empty())
+    {
+        return nullptr;
+    }
+    if (elements.size() > 1)
+    {
+        // Yes, this is "nothrow" ... that's for found/non-found status.  We
+        // asked for an ELEMENT, not "elements".
+        throw xml::lite::XMLException(ctxt);
+    }
+    return elements[0];
+}
+
+xml::lite::Element* xml::lite::Element::getElementByTagName(std::nothrow_t,
+    const std::string& uri, const std::string& localName,
+    bool recurse) const
+{
+    auto getElements = [&]() { return getElementsByTagName(uri, localName, recurse); };
+    const auto ctxt(Ctxt("Multiple elements returned for '" + localName + "' (uri=" + uri + ")."));
+    return getElement(getElements, ctxt);
 }
 
 void xml::lite::Element::getElementsByTagName(const std::string& localName,
@@ -114,6 +139,14 @@ void xml::lite::Element::getElementsByTagName(const std::string& localName,
     }
 }
 
+xml::lite::Element* xml::lite::Element::getElementByTagName(std::nothrow_t,
+    const std::string& localName, bool recurse) const
+{
+    auto getElements = [&]() { return getElementsByTagName(localName, recurse); };
+    const auto ctxt(Ctxt("Multiple elements returned for '" + localName + "'."));
+    return getElement(getElements, ctxt);
+}
+
 void xml::lite::Element::getElementsByTagNameNS(const std::string& qname,
                                                 std::vector<Element*>& elements,
                                                 bool recurse) const
@@ -125,6 +158,14 @@ void xml::lite::Element::getElementsByTagNameNS(const std::string& qname,
         if (recurse)
             mChildren[i]->getElementsByTagNameNS(qname, elements, recurse);
     }
+}
+
+xml::lite::Element* xml::lite::Element::getElementByTagNameNS(std::nothrow_t,
+    const std::string& qname, bool recurse) const
+{
+    auto getElements = [&]() { return getElementsByTagNameNS(qname, recurse); };
+    const auto ctxt(Ctxt("Multiple elements returned for '" + qname + "'."));
+    return getElement(getElements, ctxt);
 }
 
 void xml::lite::Element::destroyChildren()
@@ -163,44 +204,84 @@ void xml::lite::Element::prettyPrint(io::OutputStream& stream, string_encoding e
     stream.writeln("");
 }
 
-static void writeCharacterData(io::OutputStream& stream,
-    const std::string& characterData, const xml::lite::string_encoding* pCharacterEncoding)
+static xml::lite::string_encoding getEncoding(const xml::lite::string_encoding* pEncoding)
 {
-    const std::string* pStringToWrite = &characterData; // already in UTF-8
-
-    sys::u8string u8CharacterData; // keep result in-scope
-    if (*pCharacterEncoding != xml::lite::string_encoding::utf_8)
+    if (pEncoding == nullptr)
     {
-        u8CharacterData = str::fromWindows1252(characterData);
-        pStringToWrite = reinterpret_cast<std::string*>(&u8CharacterData);
+        // don't know the encoding ... assume a default based on the platform
+        #ifdef _WIN32
+        static const auto defaultEncoding = xml::lite::string_encoding::windows_1252;
+        #else
+        static const auto defaultEncoding = xml::lite::string_encoding::utf_8;
+        #endif
+        pEncoding = &defaultEncoding;
     }
+    else
+    {
+        if (*pEncoding == xml::lite::string_encoding::utf_8) { }
+        else if (*pEncoding == xml::lite::string_encoding::windows_1252) { }
+        else
+        {
+            throw std::logic_error("Unknown encoding.");
+        }    
+    }
+    return *pEncoding;
+}
 
-    stream.write(*pStringToWrite);
+void xml::lite::Element::getCharacterData(sys::U8string& result) const
+{
+    const auto encoding = ::getEncoding(this->getEncoding());
+
+    if (encoding == xml::lite::string_encoding::utf_8)
+    {
+        // already in UTF-8, no converstion necessary
+        result = str::castToU8string(mCharacterData);
+    }
+    else if (encoding == xml::lite::string_encoding::windows_1252)
+    {
+        str::fromWindows1252(mCharacterData, result);
+    }
+}
+
+static void writeCharacterData(io::OutputStream& stream,
+    const std::string& characterData, const xml::lite::string_encoding* pEncoding)
+{
+    if (getEncoding(pEncoding) != xml::lite::string_encoding::utf_8)
+    {
+        std::string utf8; // need to convert before writing
+        str::fromWindows1252(characterData, utf8);
+        stream.write(utf8);
+    }
+    else
+    {
+        // already UTF-8
+        stream.write(characterData);    
+    }
 }
 
 void xml::lite::Element::depthPrint(io::OutputStream& stream,
                                     int depth,
                                     const std::string& formatter) const
 {
-    depthPrint(stream, nullptr /*pEncoding*/, depth, formatter);
+    // XML must be stored in UTF-8 (or UTF-16/32), in particular, not
+    // Windows-1252. However, existing code did this, so preserve current behavior.
+    depthPrint(stream, false /*utf8*/, depth, formatter);
 }
 void xml::lite::Element::depthPrint(io::OutputStream& stream, string_encoding encoding,
                                     int depth,
                                     const std::string& formatter) const
 {
-    depthPrint(stream, &encoding, depth, formatter);
-}
-void xml::lite::Element::depthPrint(io::OutputStream& stream, const string_encoding* pEncoding,
-                                    int depth,
-                                    const std::string& formatter) const
-{
-    // XML must be stored in UTF-8 (or UTF-16/32), in particular, not Windows-1252.
-    // However, existing code did this, so preserve current behavior.
-    if ((pEncoding != nullptr) && (*pEncoding != string_encoding::utf_8))
+    if (encoding != string_encoding::utf_8)
     {
         throw std::invalid_argument("'encoding' must be UTF-8");
     }
-
+    // THIS IS CORRECT, but may break existing code; so it must be explicitly requested.
+    depthPrint(stream, true /*utf8*/, depth, formatter);
+}
+void xml::lite::Element::depthPrint(io::OutputStream& stream, bool utf8,
+                                    int depth,
+                                    const std::string& formatter) const
+{
     std::string prefix = "";
     for (int i = 0; i < depth; ++i)
         prefix += formatter;
@@ -228,8 +309,9 @@ void xml::lite::Element::depthPrint(io::OutputStream& stream, const string_encod
     else
     {
         stream.write(acc + rBrack);
-        if (pEncoding != nullptr)
+        if (utf8)
         {
+            // Correct behavior, but may break existing code.
             writeCharacterData(stream, mCharacterData, getEncoding());
         }
         else
@@ -243,7 +325,7 @@ void xml::lite::Element::depthPrint(io::OutputStream& stream, const string_encod
         {
             if (!formatter.empty())
                 stream.write("\n");
-            mChildren[i]->depthPrint(stream, pEncoding, depth + 1, formatter);
+            mChildren[i]->depthPrint(stream, utf8, depth + 1, formatter);
         }
 
         if (!mChildren.empty() && !formatter.empty())
@@ -264,9 +346,14 @@ void xml::lite::Element::addChild(xml::lite::Element * node)
 
 void xml::lite::Element::addChild(std::unique_ptr<xml::lite::Element>&& node)
 {
-    // Always take ownership
     addChild(node.release());
 }
+#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+void xml::lite::Element::addChild(std::auto_ptr<xml::lite::Element> node)
+{
+    addChild(std::unique_ptr<xml::lite::Element>(node.release()));
+}
+#endif
 
 void xml::lite::Element::changePrefix(Element* element,
     const std::string& prefix, const std::string& uri)

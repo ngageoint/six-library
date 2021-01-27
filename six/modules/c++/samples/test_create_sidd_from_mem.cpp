@@ -41,16 +41,17 @@
  *
  */
 
+#include <import/six/sidd.h>
+
 #include <import/cli.h>
 #include <import/io.h>
 #include <import/nitf.h>
 #include <import/six.h>
 #include <import/six/sicd.h>
-#include <import/six/sidd.h>
 #include "utils.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 using namespace six;
 
@@ -1719,7 +1720,7 @@ static const struct
 
 std::unique_ptr<six::WriteControl> getWriteControl(std::string outputName)
 {
-    std::string extension = fs::path(outputName).extension().string();
+    std::string extension = fs::path(outputName).extension();
     str::lower(extension);
 
     std::unique_ptr<six::WriteControl> writer;
@@ -2581,8 +2582,8 @@ int main(int argc, char** argv)
         const char smallData[4] = {'a', 'b', 'c', 'd'};
 
         // Create a file container
-        std::shared_ptr<six::Container> container(
-                new six::Container(DataType::DERIVED));
+        mem::SharedPtr<six::Container> container(
+            new six::Container(DataType::DERIVED));
 
         std::vector<const UByte*> buffers;
         size_t numImages = options->get<bool>("multipleImages") ? 3 : 1;

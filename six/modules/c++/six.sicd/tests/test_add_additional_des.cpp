@@ -29,7 +29,7 @@
 #include <io/TempFile.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -72,14 +72,14 @@ bool addingNullSegmentWriterShouldThrow(const std::string& xmlPathname)
             std::vector<std::string>(),
             log);
 
-    std::shared_ptr<six::Container> container(new six::Container(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
     writer.initialize(container);
 
-    std::shared_ptr<nitf::SegmentWriter> segmentWriter;
+    mem::SharedPtr<nitf::SegmentWriter> segmentWriter;
     try
     {
         writer.addAdditionalDES(segmentWriter);
@@ -106,8 +106,8 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    std::shared_ptr<six::Container> container(new six::Container(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
@@ -120,13 +120,12 @@ bool addingUnloadedSegmentWriterShouldThrow(const std::string& xmlPathname)
     des.getSubheader().getVersion().set("01");
     des.getSubheader().getSecurityClass().set("U");
 
-    std::shared_ptr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
-    writer.addAdditionalDES(segmentWriter);
+    writer.addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter>(new nitf::SegmentWriter));
 
     io::TempFile temp;
     try
     {
-        writer.save(&bandData[0], temp.pathname());
+        writer.save(bandData.data(), temp.pathname());
         std::cerr << "Test failed" << std::endl;
         return false;
     }
@@ -149,8 +148,8 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    std::shared_ptr<six::Container> container(new six::Container(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(dynamic_cast<six::Data*>(data.release()));
 
     six::NITFWriteControl writer;
@@ -166,14 +165,14 @@ bool canAddProperlyLoadedSegmentWriter(const std::string& xmlPathname)
     static const char segmentData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sSource(segmentData, strlen(segmentData),
         0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
+    mem::SharedPtr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
     segmentWriter->attachSource(sSource);
     writer.addAdditionalDES(segmentWriter);
 
     io::TempFile temp;
     try
     {
-        writer.save(&bandData[0], temp.pathname());
+        writer.save(bandData.data(), temp.pathname());
         std::cout << "Test passed" << std::endl;
         return true;
     }
@@ -196,8 +195,8 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
         generateBandData(*data));
 
-    std::shared_ptr<six::Container> container(new six::Container(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
@@ -213,7 +212,7 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     static const char segmentOneData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sOneSource(segmentOneData, strlen(segmentOneData),
         0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> segmentOneWriter(new nitf::SegmentWriter);
+    mem::SharedPtr<nitf::SegmentWriter> segmentOneWriter(new nitf::SegmentWriter);
     segmentOneWriter->attachSource(sOneSource);
     writer.addAdditionalDES(segmentOneWriter);
 
@@ -226,14 +225,14 @@ bool canAddTwoSegmentWriters(const std::string& xmlPathname)
     static const char segmentTwoData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sTwoSource(segmentTwoData, strlen(segmentTwoData),
         0, 0, true);
-    std::shared_ptr<nitf::SegmentWriter> segmentTwoWriter(new nitf::SegmentWriter);
+    mem::SharedPtr<nitf::SegmentWriter> segmentTwoWriter(new nitf::SegmentWriter);
     segmentTwoWriter->attachSource(sTwoSource);
     writer.addAdditionalDES(segmentTwoWriter);
 
     io::TempFile temp;
     try
     {
-        writer.save(&bandData[0], temp.pathname());
+        writer.save(bandData.data(), temp.pathname());
         std::cout << "Test passed" << std::endl;
         return true;
     }

@@ -31,14 +31,14 @@
 #include <cphd03/FileHeader.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 int main(int argc, char** argv)
 {
     try
     {
         // Parse the command line
-        const std::string progname(fs::path(argv[0]).filename().string());
+        const std::string progname(fs::path(argv[0]).filename());
         if (argc != 2)
         {
             std::cerr << "Usage: " << progname << " <CPHD pathname>\n\n";

@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_NITF_WRITE_CONTROL_H__
 #define __SIX_NITF_WRITE_CONTROL_H__
 
@@ -56,7 +57,7 @@ public:
      * Constructor. Calls initialize.
      * \param container The data container
      */
-    NITFWriteControl(std::shared_ptr<Container> container);
+    NITFWriteControl(mem::SharedPtr<Container> container);
 
     /*!
      * Constructor. Calls initialize.
@@ -65,11 +66,15 @@ public:
      * \param xmlRegistry Optional XMLControlRegistry
      */
     NITFWriteControl(const six::Options& options,
-                     std::shared_ptr<Container> container,
+                     mem::SharedPtr<Container> container,
                      const XMLControlRegistry* xmlRegistry = nullptr);
 
+    //! Noncopyable
+    NITFWriteControl(const NITFWriteControl&) = delete;
+    const NITFWriteControl& operator=(const NITFWriteControl&) = delete;
+
     //!  We are a 'NITF'
-    std::string getFileType() const
+    std::string getFileType() const override
     {
         return "NITF";
     }
@@ -85,7 +90,7 @@ public:
      * as well.
      * \param xmlRegistry XMLControlRegistry to set
      */
-    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
+    virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry) override
     {
         setXMLControlRegistryImpl(xmlRegistry);
     }
@@ -97,19 +102,19 @@ public:
     }
 
     //! \return Collection of NITF image info pointers
-    std::vector<std::shared_ptr<NITFImageInfo> > getInfos()
+    std::vector<mem::SharedPtr<NITFImageInfo> > getInfos()
     {
         return mNITFHeaderCreator->getInfos();
     }
 
     //! \return Mutable data container
-    std::shared_ptr<Container> getContainer()
+    mem::SharedPtr<Container> getContainer()
     {
         return mNITFHeaderCreator->getContainer();
     }
 
     //! \return Const data container
-    std::shared_ptr<const Container> getContainer() const
+    mem::SharedPtr<const Container> getContainer() const
     {
         return mNITFHeaderCreator->getContainer();
     }
@@ -121,7 +126,7 @@ public:
     }
 
     //! \return Collection of NITF segment writers
-    std::vector<std::shared_ptr<nitf::SegmentWriter> > getSegmentWriters()
+    std::vector<mem::SharedPtr<nitf::SegmentWriter> > getSegmentWriters()
     {
         return mNITFHeaderCreator->getSegmentWriters();
     }
@@ -137,11 +142,14 @@ public:
      * \param headerCreator Populated NITF header creator
      */
     void setNITFHeaderCreator(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator);
+#if !CODA_OSS_cpp17
+    void setNITFHeaderCreator(std::auto_ptr<six::NITFHeaderCreator> headerCreator);
+#endif
 
     virtual void initialize(const six::Options& options,
-                            std::shared_ptr<Container> container);
+                            mem::SharedPtr<Container> container);
 
-    virtual void initialize(std::shared_ptr<Container> container);
+    virtual void initialize(mem::SharedPtr<Container> container) override;
 
     using WriteControl::save;
 
@@ -163,7 +171,7 @@ public:
      */
     virtual void save(const SourceList& imageData,
                       const std::string& outputFile,
-                      const std::vector<std::string>& schemaPaths);
+                      const std::vector<std::string>& schemaPaths) override;
 
     /*!
      *  Bind an interleaved (IQIQIQIQ) memory buffer
@@ -188,9 +196,16 @@ public:
      *  \param outputFile  Output path to write
      *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void save(const BufferList& imageData,
+    template<typename TBufferList>
+    void save_(const TBufferList& list,
                       const std::string& outputFile,
                       const std::vector<std::string>& schemaPaths);
+    virtual void save(const BufferList& imageData,
+                      const std::string& outputFile,
+                      const std::vector<std::string>& schemaPaths) override;
+    virtual void save(const buffer_list& imageData,
+                      const std::string& outputFile,
+                      const std::vector<std::string>& schemaPaths) override;
 
     void save(const NonConstBufferList& imageData,
               const std::string& outputFile,
@@ -198,7 +213,12 @@ public:
     {
         save(convertBufferList(imageData), outputFile, schemaPaths);
     }
-
+    void save(const buffer_list_mutable& imageData,
+              const std::string& outputFile,
+              const std::vector<std::string>& schemaPaths)
+    {
+        save(convertBufferList(imageData), outputFile, schemaPaths);
+    }
     /*!
      *  Bind an interleaved (IQIQIQIQ) input stream
      *  to this record and write out a SICD/SIDD.  We do
@@ -229,7 +249,14 @@ public:
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
+    template<typename TBufferList>
+    void save_(const TBufferList& list,
+                      nitf::IOInterface& outputFile,
+                      const std::vector<std::string>& schemaPaths);
     virtual void save(const BufferList& list,
+                      nitf::IOInterface& outputFile,
+                      const std::vector<std::string>& schemaPaths);
+    virtual void save(const buffer_list& list,
                       nitf::IOInterface& outputFile,
                       const std::vector<std::string>& schemaPaths);
 
@@ -239,7 +266,12 @@ public:
     {
         save(convertBufferList(list), outputFile, schemaPaths);
     }
-
+    void save(const buffer_list_mutable& list,
+              nitf::IOInterface& outputFile,
+              const std::vector<std::string>& schemaPaths)
+    {
+        save(convertBufferList(list), outputFile, schemaPaths);
+    }
     /*!
      *  This function sets the organization ID (the 40 character DESSHRP field
      *  in the DES's user-defined subheader).
@@ -272,7 +304,7 @@ public:
      *
      * \param writer A SegmentWriter with loaded, attached SegmentSource
      */
-    void addAdditionalDES(std::shared_ptr<nitf::SegmentWriter> writer);
+    void addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> writer);
 
     /*!
      *  Takes in a string representing the classification level
@@ -283,7 +315,7 @@ public:
 protected:
     nitf::Writer mWriter;
     std::map<std::string, void*> mCompressionOptions;
-    std::unique_ptr<six::NITFHeaderCreator> mNITFHeaderCreator;
+    mem::auto_ptr<six::NITFHeaderCreator> mNITFHeaderCreator;
 
     void writeNITF(nitf::IOInterface& os);
 
@@ -486,11 +518,6 @@ private:
                        size_t segmentNum,
                        size_t numImageSegments,
                        size_t productNum);
-
-private:
-    //! Noncopyable
-    NITFWriteControl(const NITFWriteControl& );
-    const NITFWriteControl& operator=(const NITFWriteControl& );
 };
 }
 #endif

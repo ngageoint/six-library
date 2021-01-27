@@ -37,10 +37,10 @@
 #include <iostream>
 #include <memory>
 
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <mem/ScopedArray.h>
 #include <sys/Path.h>
-#include <nitf/cstddef.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedDataBuilder.h>
@@ -48,7 +48,7 @@
 #include "utils.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 
 namespace
@@ -160,8 +160,8 @@ int main(int argc, char** argv)
                 new six::XMLControlCreatorT<
                         six::sidd::DerivedXMLControl>());
 
-        std::shared_ptr<six::Container> container(new six::Container(
-                six::DataType::DERIVED));
+        mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::DERIVED));
 
         std::vector<std::byte*> buffers;
 
@@ -233,7 +233,7 @@ int main(int argc, char** argv)
             six::Options options;
             options.setParameter(
                     six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
-                    str::toString(maxSize));
+                    maxSize);
 
             six::NITFWriteControl writer(options, container, &xmlRegistry);
             writer.save(buffers, outPathnamePrefix + "_unblocked.nitf");
@@ -244,7 +244,7 @@ int main(int argc, char** argv)
             six::Options options;
             options.setParameter(
                     six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE,
-                    str::toString(maxSize));
+                    maxSize);
 
             const std::string blockSize("23");
             options.setParameter(

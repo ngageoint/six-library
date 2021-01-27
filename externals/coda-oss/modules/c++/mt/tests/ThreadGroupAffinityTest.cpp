@@ -25,6 +25,7 @@
 
 #include <import/sys.h>
 #include <import/mt.h>
+#include <import/mem.h>
 #include <cli/ArgumentParser.h>
 #include <sys/ScopedCPUAffinityUnix.h>
 using namespace sys;
@@ -116,7 +117,7 @@ int main(int argc, char** argv)
                            "Enable CPU pinning",
                            cli::STORE_TRUE,
                            "pinToCPU")->setDefault(false);
-        const std::unique_ptr<cli::Results> options(parser.parse(argc, argv));
+        const mem::auto_ptr<cli::Results> options(parser.parse(argc, argv));
 
         const bool pinToCPU = options->get<bool>("pinToCPU");
         const size_t numThreads = options->get<size_t>("threads");

@@ -7,7 +7,7 @@
 #include <six/sicd/Utilities.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 int main(int argc, char** argv)
 {
@@ -299,7 +299,7 @@ int main(int argc, char** argv)
                 std::cout  << "\n";
             }
         }
-    }   
+    }
     catch (const except::Exception& e)
     {
         std::cerr << e.getMessage() << std::endl;

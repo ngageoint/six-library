@@ -19,49 +19,40 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sidd/CropUtils.h>
 
 #include <memory>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <mem/ScopedArray.h>
 #include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
 #include <six/sidd/Utilities.h>
-#include <six/sidd/CropUtils.h>
 #include <six/sidd/DerivedData.h>
 
 namespace
 {
-class Buffers
+struct Buffers final
 {
-public:
-    Buffers()
-    {
-    }
-
-    ~Buffers()
-    {
-        for (size_t ii = 0; ii < mBuffers.size(); ++ii)
-        {
-            delete[] mBuffers[ii];
-        }
-    }
-
     std::byte* add(size_t numBytes)
-    {
-        std::unique_ptr<std::byte[]> buffer(new std::byte[numBytes]);
-        mBuffers.push_back(buffer.get());
-        return buffer.release();
+    {        
+        mBuffers.push_back(std::unique_ptr<std::byte[]>(new std::byte[numBytes]));
+        return mBuffers.back().get();
     }
 
     std::vector<std::byte*> get() const
     {
-        return mBuffers;
+        std::vector<std::byte*> retval;
+        for (auto& buffer : mBuffers)
+        {
+            retval.push_back(buffer.get());
+        }
+        return retval;
     }
 
 private:
-    std::vector<std::byte*> mBuffers;
+    std::vector<std::unique_ptr<std::byte[]>> mBuffers;
 };
 
 class ChipCoordinateToFullImageCoordinate
@@ -139,7 +130,7 @@ void cropSIDD(const std::string& inPathname,
     // Make sure it's a SIDD
     six::NITFReadControl reader;
     reader.load(inPathname, schemaPaths);
-    std::shared_ptr<six::Container> container(reader.getContainer());
+    auto container(reader.getContainer());
 
     if (container->getDataType() != six::DataType::DERIVED)
     {

@@ -20,6 +20,8 @@
  *
  */
 
+#include <string>
+
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
 #include <six/ByteProvider.h>
@@ -37,9 +39,17 @@ ByteProvider::ByteProvider(std::unique_ptr<six::NITFHeaderCreator>&& headerCreat
 {
     initialize(std::move(headerCreator), schemaPaths, desBuffers);
 }
+#if !CODA_OSS_cpp17
+ByteProvider::ByteProvider(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    const std::vector<std::string>& schemaPaths,
+    const std::vector<PtrAndLength>& desBuffers)
+    : ByteProvider(std::unique_ptr<six::NITFHeaderCreator>(headerCreator.release()), schemaPaths, desBuffers)
+{
+}
+#endif
 
 void ByteProvider::populateOptions(
-        std::shared_ptr<Container> container,
+        mem::SharedPtr<Container> container,
         size_t maxProductSize,
         size_t numRowsPerBlock,
         size_t numColsPerBlock,
@@ -49,7 +59,7 @@ void ByteProvider::populateOptions(
     {
         throw except::Exception(Ctxt(
                 "Expected data of size 1 in container but got " +
-                str::toString(container->getNumData())));
+                std::to_string(container->getNumData())));
     }
 
     const six::Data* const data = container->getData(0);
@@ -113,7 +123,7 @@ void ByteProvider::populateInitArgs(
         size_t& numColsPerBlock)
 {
     // Sanity check the container
-    std::shared_ptr<const Container> container = headerCreator.getContainer();
+   auto container = headerCreator.getContainer();
 
     if (container->getNumData() == 0)
     {
@@ -173,7 +183,7 @@ void ByteProvider::populateInitArgs(
                                  zero));
 }
 
-void ByteProvider::initialize(std::shared_ptr<Container> container,
+void ByteProvider::initialize(mem::SharedPtr<Container> container,
                               const XMLControlRegistry& xmlRegistry,
                               const std::vector<std::string>& schemaPaths,
                               size_t maxProductSize,
@@ -253,5 +263,13 @@ void ByteProvider::initialize(std::unique_ptr<six::NITFHeaderCreator>&& headerCr
                                    numRowsPerBlock,
                                    numColsPerBlock);
 }
+#if !CODA_OSS_cpp17
+void ByteProvider::initialize(std::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    const std::vector<std::string>& schemaPaths,
+    const std::vector<PtrAndLength>& desBuffers)
+{
+    initialize(std::unique_ptr<six::NITFHeaderCreator>(headerCreator.release()), schemaPaths, desBuffers);
+}
+#endif
 
 }

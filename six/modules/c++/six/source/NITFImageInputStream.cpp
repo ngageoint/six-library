@@ -27,22 +27,19 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
             mRowOffset(0)
 {
     int bytesPerPixel = NITF_NBPP_TO_BYTES(subheader.getNumBitsPerPixel());
-    mRowSize = (uint32_t) subheader.getNumCols() * bytesPerPixel;
+    mRowSize = subheader.numCols() * bytesPerPixel;
 
     uint32_t nBands = subheader.getBandCount();
-    std::string imageMode = subheader.getImageMode().toString();
-    std::string irep = subheader.getImageRepresentation().toString();
-    std::string ic = subheader.getImageCompression().toString();
-
-    str::trim(irep);
-    str::trim(ic);
+    const auto imageMode = subheader.imageMode();
+    const auto irep = subheader.imageRepresentation();
+    const auto ic = subheader.imageCompression();
 
     //Check for optimization cases - RGB and IQ
     if ((nBands == 3 && imageMode[0] == 'P' && irep == "RGB" && bytesPerPixel
             == 1 && (ic == "NC" || ic == "NM")) || (nBands == 2 && imageMode[0]
             == 'P' && bytesPerPixel == 4 && (ic == "NC" || ic == "NM")
-            && subheader.getBandInfo(0).getSubcategory().toString()[0] == 'I'
-            && subheader.getBandInfo(1).getSubcategory().toString()[0] == 'Q'))
+            && subheader.getBandInfo(0).subcategory()[0] == 'I'
+            && subheader.getBandInfo(1).subcategory()[0] == 'Q'))
     {
         //using special interleaved shortcut
         std::cout << "Using optimized pre pixel-interleaved image" << std::endl;
@@ -57,17 +54,16 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
                         "Only 1 band images (and special-case RGB) are currently supported"));
     }
 
-    mRowBuffer.reset(new std::byte[mRowSize]);
-    mAvailable = mRowSize * (uint32_t) subheader.getNumRows();
+    mRowBuffer.reset(new sys::ubyte[mRowSize]);
+    mAvailable = mRowSize * subheader.numRows();
 
     mBandList.reset(new uint32_t[nBands]);
     for (uint32_t band = 0; band < nBands; ++band)
         mBandList.get()[band] = band;
 
     //setup the window
-    mWindow.setStartCol(0);
     mWindow.setNumRows(1);
-    mWindow.setNumCols((uint32_t) subheader.getNumCols());
+    mWindow.setNumCols(subheader.numCols());
     mWindow.setBandList(mBandList.get());
     mWindow.setNumBands(nBands);
 }
@@ -108,12 +104,20 @@ ptrdiff_t six::NITFImageInputStream::read(std::byte* b, size_t len)
     mAvailable -= len;
     return len;
 }
+ptrdiff_t six::NITFImageInputStream::read(sys::byte* b, size_t len)
+{
+    return read(reinterpret_cast<std::byte*>(b), len);
+}
+ptrdiff_t six::NITFImageInputStream::read(std::span<sys::byte> b)
+{
+    return read(b.data(), b.size());
+}
 
 ptrdiff_t six::NITFImageInputStream::readRow()
 {
     mWindow.setStartRow(static_cast<uint32_t>(mRowOffset++));
     int padded;
-    auto buffer = reinterpret_cast<uint8_t*>(mRowBuffer.get());
+    auto buffer = mRowBuffer.get();
     mReader.read(mWindow, &buffer, &padded);
     mRowBufferRemaining = mRowSize;
     return (ptrdiff_t)mRowSize;

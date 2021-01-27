@@ -79,10 +79,10 @@ BufferedReader::BufferedReader(const std::string& file,
 
 void BufferedReader::readNextBuffer()
 {
-    const sys::Off_T currentOffset = mFile.getCurrentOffset();
+    const int64_t currentOffset = mFile.getCurrentOffset();
 
-    const sys::Off_T endOffsetIfPerformMaxRead =
-            currentOffset + gsl::narrow<sys::Off_T>(mMaxBufferSize);
+    const int64_t endOffsetIfPerformMaxRead =
+            currentOffset + gsl::narrow<int64_t>(mMaxBufferSize);
 
     const nitf::Off bufferSize = (endOffsetIfPerformMaxRead > mFileLen) ?
             mFileLen - currentOffset : mMaxBufferSize;
@@ -146,7 +146,7 @@ void BufferedReader::writeImpl(const void* , size_t )
         Ctxt("We cannot do writes on a read-only handle"));
 }
 
-bool BufferedReader::canSeekImpl() const noexcept
+bool BufferedReader::canSeekImpl() const
 {
     return true;
 }
@@ -183,7 +183,7 @@ nitf::Off BufferedReader::seekImpl(nitf::Off offset, int whence)
     else
     {
         // Need to do a legit read
-        const sys::Off_T newOffset = mFile.seekTo(offset, whence);
+        const int64_t newOffset = mFile.seekTo(offset, whence);
         readNextBuffer();
         return newOffset;
     }
@@ -194,12 +194,12 @@ nitf::Off BufferedReader::tellImpl() const
     return (mFile.getCurrentOffset() - mBufferSize + mPosition);
 }
 
-nitf::Off BufferedReader::getSizeImpl() const noexcept
+nitf::Off BufferedReader::getSizeImpl() const
 {
     return mFileLen;
 }
 
-int BufferedReader::getModeImpl() const noexcept
+int BufferedReader::getModeImpl() const
 {
     return NITF_ACCESS_READONLY;
 }

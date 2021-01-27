@@ -86,10 +86,10 @@ XMLElem SICommonXMLParser050::convertRadiometryToXML(
 
     if (r->sigmaZeroSFIncidenceMap != six::AppliedType::NOT_SET)
     {
-        createString(
+        createSixString(
             "SigmaZeroSFIncidenceMap",
             defaultURI,
-            six::toString<six::AppliedType>(r->sigmaZeroSFIncidenceMap),
+            r->sigmaZeroSFIncidenceMap,
             rXML);
     }
 
@@ -100,10 +100,10 @@ XMLElem SICommonXMLParser050::convertRadiometryToXML(
 
     if (r->gammaZeroSFIncidenceMap != six::AppliedType::NOT_SET)
     {
-        createString(
+        createSixString(
             "GammaZeroSFIncidenceMap",
             defaultURI,
-            six::toString<six::AppliedType>(r->gammaZeroSFIncidenceMap),
+            r->gammaZeroSFIncidenceMap,
             rXML);
     }
     return rXML;
@@ -261,7 +261,7 @@ XMLElem ComplexXMLParser050::convertMatchInformationToXML(
     {
         const MatchType& mt = matchInfo.types[i];
         XMLElem mtXML = newElement("Collect", matchInfoXML);
-        setAttribute(mtXML, "index", str::toString(i + 1));
+        setAttribute(mtXML, "index", i + 1);
 
         createString("CollectorName", mt.collectorName, mtXML);
         if (!mt.illuminatorName.empty())
@@ -277,7 +277,7 @@ XMLElem ComplexXMLParser050::convertMatchInformationToXML(
     }
 
     // This is the one difference between SICD 0.4 and 0.5
-    setAttribute(matchInfoXML, "size", str::toString(matchInfo.types.size()));
+    setAttribute(matchInfoXML, "size", matchInfo.types.size());
 
     return matchInfoXML;
 }

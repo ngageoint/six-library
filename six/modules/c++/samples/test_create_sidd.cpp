@@ -27,16 +27,12 @@
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <import/xml/lite.h>
+#include <sys/Bit.h>
 #include "utils.h"
 
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 /*!
  *  This file takes in an SIO and turns it in to a SICD.
@@ -117,7 +113,7 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
         {
             pixelType = six::PixelType::RGB8LU;
             // Switch the mode, and dont forget to slurp the colormap
-            lut = new six::LUT((unsigned char*) &(p->second)[0], 256, 3);
+            lut = new six::LUT((unsigned char*) p->second.data(), 256, 3);
             break;
         }
 
@@ -129,7 +125,7 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
 six::WriteControl* getWriteControl(std::string outputName)
 {
 
-    auto extension = fs::path(outputName).extension().string();
+    std::string extension = fs::path(outputName).extension();
     str::lower(extension);
 
     six::WriteControl* writer = nullptr;
@@ -241,8 +237,8 @@ int main(int argc, char** argv)
                                     std::vector<std::string>());
 
         // Create a file container
-        std::shared_ptr<six::Container> container(new six::Container(
-                six::DataType::DERIVED));
+	mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::DERIVED));
 
         // We have a source for each image
         std::vector<io::InputStream*> sources;
@@ -388,7 +384,7 @@ int main(int argc, char** argv)
             delete sources[i];
         }
     }
-    catch (except::Exception& ex)
+    catch (const except::Exception& ex)
     {
         std::cout << ex.toString() << std::endl;
     }

@@ -37,7 +37,7 @@
 #include <scene/ECEFToLLATransform.h>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        const std::string progname(fs::path(argv[0]).filename().string());
+        const std::string progname(fs::path(argv[0]).filename());
         if (argc != 4 && argc != 5)
         {
             std::cerr << "Usage: " << progname
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
         reader.setXMLControlRegistry(xmlRegistry);
         reader.load(sixPathname);
         // Check to see if it's a SICD
-        std::shared_ptr<six::Container> container = reader.getContainer();
+        auto container = reader.getContainer();
         std::unique_ptr<scene::ProjectionModel> projection;
         std::unique_ptr<scene::SceneGeometry> geom;
         scene::Vector3 groundPlaneNormal;

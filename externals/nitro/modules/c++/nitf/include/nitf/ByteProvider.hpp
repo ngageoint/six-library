@@ -27,15 +27,12 @@
 #include <utility>
 #include <memory>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <nitf/System.hpp>
 #include <nitf/Record.hpp>
 #include <nitf/ImageBlocker.hpp>
 #include <nitf/NITFBufferList.hpp>
 #include <nitf/ImageSegmentComputer.h>
-#include <io/ByteStream.h>
-
-#include "cstddef.h"
 
 namespace nitf
 {
@@ -130,28 +127,31 @@ public:
     }
 
     //! \return The raw file header bytes
-    const std::vector<std::byte>& getFileHeader() const noexcept
+    const std::vector<sys::byte>& getFileHeader() const noexcept
     {
         return mFileHeader;
     }
+    void getFileHeader(std::span<const std::byte>&) const;
 
     /*!
      * \return The raw bytes for each image subheader.  Vector size matches the
      * number of image segments.
      */
-    const std::vector<std::vector<std::byte> >& getImageSubheaders() const noexcept
+    const std::vector<std::vector<sys::byte> >& getImageSubheaders() const noexcept
     {
         return mImageSubheaders;
     }
+    void getImageSubheaders(std::vector<std::span<const std::byte>>&) const;
 
     /*!
      * \return The raw bytes for each DES (subheader immediately followed by
      * raw DES data).  Vector size matches the number of data extension segments.
      */
-    const std::vector<std::byte>& getDesSubheaderAndData() const noexcept
+    const std::vector<sys::byte>& getDesSubheaderAndData() const noexcept
     {
         return mDesSubheaderAndData;
     }
+    void getDesSubheaderAndData(std::span<const std::byte>&) const;
 
     /*!
      * \return The file offset for each image subheader.  Vector size matches
@@ -236,7 +236,7 @@ public:
      * \return ImageBlocker with settings in sync with how the image will be
      * blocked in the NITF
      */
-    std::unique_ptr<const ImageBlocker> getImageBlocker() const;
+    mem::auto_ptr<const ImageBlocker> getImageBlocker() const;
 
 protected:
     /*!
@@ -262,6 +262,8 @@ protected:
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
 
+    static void copyFromStreamAndClear(io::ByteStream& stream,
+                                       std::vector<sys::byte>& rawBytes);
     static void copyFromStreamAndClear(io::ByteStream& stream,
                                        std::vector<std::byte>& rawBytes);
 
@@ -347,11 +349,11 @@ protected:
 
     std::vector<SegmentInfo> mImageSegmentInfo; // Per segment
 
-    std::vector<std::byte> mFileHeader;
-    std::vector<std::vector<std::byte> > mImageSubheaders; // Per segment
+    std::vector<sys::byte> mFileHeader;
+    std::vector<std::vector<sys::byte> > mImageSubheaders; // Per segment
 
     // All DES subheaders and data together contiguously
-    std::vector<std::byte> mDesSubheaderAndData;
+    std::vector<sys::byte> mDesSubheaderAndData;
 
     std::vector<nitf::Off> mImageSubheaderFileOffsets; // Per segment
     nitf::Off mDesSubheaderFileOffset = 0;

@@ -29,7 +29,7 @@
 #include "six/sidd/GeoTIFFWriteControl.h"
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 #if !defined(SIX_TIFF_DISABLED)
 
@@ -42,7 +42,7 @@ GeoTIFFWriteControl::GeoTIFFWriteControl()
                                                     tiff::Const::Type::ASCII,
                                                     Constants::GT_XML_TAG);
 }
-void GeoTIFFWriteControl::initialize(std::shared_ptr<Container> container)
+void GeoTIFFWriteControl::initialize(mem::SharedPtr<Container> container)
 {
 
     if (container->getDataType() != DataType::DERIVED)
@@ -107,8 +107,8 @@ void GeoTIFFWriteControl::save(const SourceList& sources,
 
         for (size_t row = 0; row < numRows; ++row)
         {
-            sources[ii]->read((std::byte*)&buf[0], oneRow);
-            imageWriter->putData(&buf[0], numCols);
+            sources[ii]->read((std::byte*)buf.data(), oneRow);
+            imageWriter->putData(buf.data(), numCols);
         }
         imageWriter->writeIFD();
     }

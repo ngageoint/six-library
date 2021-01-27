@@ -21,6 +21,9 @@
  */
 #ifndef __SIX_NITF_IMAGE_INFO_H__
 #define __SIX_NITF_IMAGE_INFO_H__
+#pragma once
+
+#include <string>
 
 #include <six/Types.h>
 #include <six/Data.h>
@@ -205,35 +208,35 @@ public:
                     const GetDisplayLutT& getDisplayLUT);
 
     //!  File security classification system
-    static const char CLSY[];
+    static const std::string CLSY;
     //!  File security codewords
-    static const char CODE[];
+    static const std::string CODE;
     //!  File control and handling
-    static const char CTLH[];
+    static const std::string CTLH;
     //!  File releasing instructions
-    static const char REL[];
+    static const std::string REL;
     //!  File security declassification type
-    static const char DCTP[];
+    static const std::string DCTP;
     //!  File security declassification date
-    static const char DCDT[];
+    static const std::string DCDT;
     //!  File security declassification exemption
-    static const char DCXM[];
+    static const std::string DCXM;
     //!  File security downgrade
-    static const char DG[];
+    static const std::string DG;
     //!  File security downgrade date
-    static const char DGDT[];
+    static const std::string DGDT;
     //!  File security classification text
-    static const char CLTX[];
+    static const std::string CLTX;
     //!  File security classification Authority type
-    static const char CATP[];
+    static const std::string CATP;
     //!  File security classification Authority
-    static const char CAUT[];
+    static const std::string CAUT;
     //!  File security reason
-    static const char CRSN[];
+    static const std::string CRSN;
     //!  File security source date
-    static const char SRDT[];
+    static const std::string SRDT;
     //!  File security control number
-    static const char CTLN[];
+    static const std::string CTLN;
 
     //! Utility that generates a key for the given field, with optional prefix and index
     static std::string generateFieldKey(const std::string& field,
@@ -352,7 +355,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             {
                 throw except::Exception(Ctxt(
                     "Unexpected element size: " +
-                    str::toString(lut->elementSize)));
+                    std::to_string(lut->elementSize)));
             }
 
             nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
@@ -400,7 +403,7 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             {
                 throw except::Exception(Ctxt(
                     "Unexpected element size: " +
-                    str::toString(lut->elementSize)));
+                    std::to_string(lut->elementSize)));
             }
 
             nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
@@ -442,4 +445,3 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
 }
 
 #endif
-

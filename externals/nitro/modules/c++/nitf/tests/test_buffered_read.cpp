@@ -35,31 +35,26 @@ void doRead(const std::string& inFile,
     nitf::Reader reader;
     nitf::BufferedReader io(inFile, bufferSize);
     nitf::Record record = reader.readIO(io);
-    std::vector<uint8_t> image;
+    std::vector<std::byte> image;
 
     /*  Set this to the end, so we'll know when we're done!  */
     nitf::List imageList(record.getImages());
     size_t idx(0);
-    for (nitf::ListIterator iter = imageList.begin();
-         iter != imageList.end();
-         ++iter, ++idx)
+    for (nitf::ImageSegment imageSegment : imageList)
     {
+        ++idx;
         std::cout << "Reading image " << idx << "..." << std::endl;
-        nitf::ImageSegment imageSegment(*iter);
         nitf::ImageSubheader subheader(imageSegment.getSubheader());
 
         nitf::SubWindow subWindow;
-        subWindow.setStartRow(0);
-        subWindow.setStartCol(0);
         subWindow.setNumRows(subheader.getNumRows());
         subWindow.setNumCols(subheader.getNumCols());
-        subWindow.setNumBands(subheader.getBandCount());
         std::vector<uint32_t> bandList;
         for (size_t ii = 0; ii < subWindow.getNumBands(); ++ii)
         {
             bandList.push_back(ii);
         }
-        subWindow.setBandList(&bandList[0]);
+        setBands(subWindow, bandList);
 
         // Read in the image
         const size_t numBitsPerPixel(static_cast<uint64_t>(subheader.getActualBitsPerPixel()));
@@ -74,8 +69,8 @@ void doRead(const std::string& inFile,
 
         if (!image.empty())
         {
-            std::vector<uint8_t *> imagePtrs;
-            uint8_t *imagePtr(&image[0]);
+            std::vector<std::byte*> imagePtrs;
+            auto imagePtr(image.data());
             for (size_t ii = 0;
                     ii < subWindow.getNumBands();
                     ++ii, imagePtr += numBytesPerBand)
@@ -86,7 +81,7 @@ void doRead(const std::string& inFile,
             nitf::ImageReader imageReader(reader.newImageReader(idx));
 
             int padded(0);
-            imageReader.read(subWindow, &imagePtrs[0], &padded);
+            imageReader.read(subWindow, imagePtrs.data(), &padded);
         }
 
         std::cout << "done.\n" << std::endl;
@@ -115,10 +110,10 @@ int main(int argc, char **argv)
 
         size_t blockSize = 8192;
         if (argc == 3)
-            blockSize = str::toType<int>(argv[2]);
+            blockSize = std::stoi(argv[2]);
 
         // Check that wew have a valid NITF
-        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN )
+        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN )
         {
             std::cout << "Invalid NITF: " << argv[1] << std::endl;
             exit(EXIT_FAILURE);
@@ -128,7 +123,7 @@ int main(int argc, char **argv)
 
         return 0;
     }
-    catch (except::Throwable & t)
+    catch (const except::Throwable & t)
     {
         std::cout << t.getMessage() << std::endl;
     }

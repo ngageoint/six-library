@@ -42,13 +42,13 @@ void writeSicd(std::unique_ptr<six::Data>&& complexData,
             six::DataType::COMPLEX,
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-    std::shared_ptr<six::Container> container(new six::Container(
-            six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(new six::Container(
+        six::DataType::COMPLEX));
     container->addData(std::move(complexData));
 
     six::NITFWriteControl writer(container);
 
-    six::BufferList buffers;
+    six::buffer_list buffers;
     buffers.push_back(reinterpret_cast<const std::byte*>(widebandData.data()));
     writer.save(buffers, pathname, schemaPaths);
 }

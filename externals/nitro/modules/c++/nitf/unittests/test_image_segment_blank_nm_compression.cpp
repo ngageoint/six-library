@@ -5,8 +5,8 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
-#include <import/nitf.h>
-#include <import/types.h>
+
+#include <nitf/coda-oss.hpp>
 #include <nitf/ImageSegmentComputer.h>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/Record.hpp>
@@ -15,7 +15,6 @@
 #include <math/Round.h>
 #include <io/FileInputStream.h>
 #include <io/TempFile.h>
-#include <gsl/gsl.h>
 
 #include "TestCase.h"
 
@@ -121,12 +120,12 @@ int64_t getNumberBlocksPresent(const uint64_t* mask,
    return numBlocksPresent;
 }
 
-void createSingleBandBuffer(std::vector<uint8_t>& buffer,
+void createSingleBandBuffer(std::vector<std::byte>& buffer,
                             const nitf::ImageSegmentComputer& segmentComputer,
                             const types::RowCol<int64_t>& fullDims,
                             const size_t segmentIdxToMakeEmpty)
 {
-   const auto bytes = gsl::narrow<size_t>(fullDims.area());
+   const auto bytes = static_cast<size_t>(fullDims.area());
    const std::vector<nitf::ImageSegmentComputer::Segment> &segments = segmentComputer.getSegments();
    /* All segments should be the same size in this test so this is safe */
    const auto segmentSizeInBytes = segments[segmentIdxToMakeEmpty].numRows * fullDims.col;
@@ -135,16 +134,16 @@ void createSingleBandBuffer(std::vector<uint8_t>& buffer,
    memset(&buffer.front(), '\0', bytes);
    for (uint32_t segIdx = 0; segIdx < segments.size(); ++segIdx)
    {
-      uint8_t *segStart = &buffer.front() + (segmentSizeInBytes * segIdx);
+      auto segStart = &buffer.front() + (segmentSizeInBytes * segIdx);
       /* Set only the center that way we are surrounded by empty blocks */
       if (segIdx != segmentIdxToMakeEmpty)
       {
-         segStart[segmentSizeInBytes/2] = 0xff;
+         segStart[segmentSizeInBytes/2] = static_cast<std::byte>(0xff);
       }
    }
 }
 
-void createBuffers(std::vector<std::vector<uint8_t> >& buffers,
+void createBuffers(std::vector<std::vector<std::byte> >& buffers,
                    const nitf::ImageSegmentComputer& imageSegmentComputer,
                    const types::RowCol<int64_t>& fullDims)
 {
@@ -180,7 +179,7 @@ TEST_CASE(testBlankSegmentsValid)
    const int64_t bytesPerSegment = BLOCK_LENGTH_SCALED * BLOCK_LENGTH_SCALED * 2;
    const int64_t elementSize     = 1;
    const types::RowCol<int64_t> fullDims(numberLines, numberElements);
-   std::vector<std::vector<uint8_t> > buffers;
+   std::vector<std::vector<std::byte> > buffers;
    nitf::ImageSegmentComputer imageSegmentComputer(numberLines,
                                                    numberElements,
                                                    elementSize,
@@ -221,9 +220,9 @@ TEST_CASE(testBlankSegmentsValid)
       }
       writer.prepare(output_io, record);
 
-      for (int ii = 0; ii < gsl::narrow<int>(numSegments); ++ii)
+      for (int ii = 0; ii < static_cast<int>(numSegments); ++ii)
       {
-         uint8_t *buf = &buffers[testIdx].front() + (ii * bytesPerSegment);
+         auto buf = &buffers[testIdx].front() + (ii * bytesPerSegment);
          nitf::ImageWriter imageWriter = writer.newImageWriter(ii);
          imageWriter.setWriteCaching(1);
          nitf::ImageSource iSource;
@@ -241,9 +240,9 @@ TEST_CASE(testBlankSegmentsValid)
          uint32_t blockRecordLength=0;      /* Block mask record length */
          uint32_t padRecordLength=0;        /* Pad mask record length */
          uint32_t padPixelValueLength=0;    /* Pad pixel value length in bytes */
-         uint8_t  *padValue = NULL;         /* Pad value */
-         uint64_t *blockMask=NULL;          /* Block mask array */
-         uint64_t *padMask=NULL;            /* Pad mask array */
+         uint8_t  *padValue = nullptr;         /* Pad value */
+         uint64_t *blockMask= nullptr;          /* Block mask array */
+         uint64_t *padMask= nullptr;            /* Pad mask array */
          int imgCtr = 0;
          nitf::IOHandle input_io(tempNitf.pathname(),
                                  NITF_ACCESS_READONLY,
@@ -273,7 +272,7 @@ TEST_CASE(testBlankSegmentsValid)
                                                                       blockingInfo.getNumBlocksPerRow(),
                                                                       blockingInfo.getNumBlocksPerCol());
 
-            if (imgCtr == gsl::narrow<int>(testIdx))
+            if (imgCtr == static_cast<int>(testIdx))
             {
                TEST_ASSERT_EQ(nBlocksPresent, 0);
             }

@@ -19,10 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <string>
+
 #include <sys/Conf.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
-#include <nitf/cstddef.h>
+#include <nitf/coda-oss.hpp>
 #include <cphd/ByteSwap.h>
 
 namespace
@@ -301,7 +303,7 @@ void byteSwapAndPromote(const void* input,
         break;
     default:
         throw except::Exception(Ctxt(
-                "Unexpected element size " + str::toString(elementSize)));
+                "Unexpected element size " + std::to_string(elementSize)));
     }
 }
 
@@ -328,7 +330,7 @@ void byteSwapAndScale(const void* input,
         break;
     default:
         throw except::Exception(Ctxt(
-                "Unexpected element size " + str::toString(elementSize)));
+                "Unexpected element size " + std::to_string(elementSize)));
     }
 }
 }

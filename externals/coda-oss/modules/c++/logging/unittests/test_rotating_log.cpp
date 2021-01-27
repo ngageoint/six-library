@@ -21,6 +21,7 @@
  */
 
 #include <import/logging.h>
+#include <import/mem.h>
 #include "TestCase.h"
 
 void cleanupFiles(std::string base)
@@ -44,17 +45,15 @@ void cleanupFiles(std::string base)
 TEST_CASE(testRotate)
 {
     std::string outFile = "test_rotate.txt";
-    size_t maxFiles = 1;
+    int maxFiles = 1;
 
     cleanupFiles( outFile);
 
     sys::OS os;
     {
-        std::unique_ptr<logging::Logger> log(new logging::Logger("test"));
-        std::unique_ptr<logging::Formatter>
-                formatter(new logging::StandardFormatter("%m"));
-        std::unique_ptr<logging::Handler>
-                logHandler(new logging::RotatingFileHandler(outFile, 10, maxFiles));
+        auto log = mem::make::unique<logging::Logger>("test");
+        auto formatter = mem::make::unique<logging::StandardFormatter>("%m");
+        auto logHandler = mem::make::unique<logging::RotatingFileHandler>(outFile, 10, maxFiles);
 
         logHandler->setLevel(logging::LogLevel::LOG_DEBUG);
         logHandler->setFormatter(formatter.release());
@@ -78,11 +77,9 @@ TEST_CASE(testNeverRotate)
 
     sys::OS os;
     {
-        std::unique_ptr<logging::Logger> log(new logging::Logger("test"));
-        std::unique_ptr<logging::Formatter>
-                formatter(new logging::StandardFormatter("%m"));
-        std::unique_ptr<logging::Handler>
-                logHandler(new logging::RotatingFileHandler(outFile));
+        auto log = mem::make::unique<logging::Logger>("test");
+        auto formatter = mem::make::unique<logging::StandardFormatter>("%m");
+        auto logHandler = mem::make::unique<logging::RotatingFileHandler>(outFile);
 
         for(size_t i = 0; i < 1024; ++i)
         {
@@ -102,11 +99,9 @@ TEST_CASE(testRotateReset)
 
     sys::OS os;
     {
-        std::unique_ptr<logging::Logger> log(new logging::Logger("test"));
-        std::unique_ptr<logging::Formatter>
-                formatter(new logging::StandardFormatter("%m"));
-        std::unique_ptr<logging::Handler>
-                logHandler(new logging::RotatingFileHandler(outFile, 10));
+        auto log = mem::make::unique<logging::Logger>("test");
+        auto formatter = mem::make::unique<logging::StandardFormatter>("%m");
+        auto logHandler = mem::make::unique<logging::RotatingFileHandler>(outFile, 10);
         log->debug("01234567890");
         TEST_ASSERT(os.exists(outFile));
         TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));

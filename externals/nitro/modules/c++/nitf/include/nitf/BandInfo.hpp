@@ -57,7 +57,7 @@ public:
     BandInfo(nitf_BandInfo * x);
 
     //! Constructor
-    BandInfo() noexcept(false);
+    BandInfo();
 
     //! Destructor
     ~BandInfo();
@@ -67,6 +67,10 @@ public:
 
     //! Get the subcategory
     nitf::Field getSubcategory() const;
+    std::string subcategory() const
+    {
+        return getSubcategory(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the imageFilterCondition
     nitf::Field getImageFilterCondition() const;
