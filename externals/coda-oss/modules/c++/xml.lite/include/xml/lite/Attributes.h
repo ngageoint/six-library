@@ -307,7 +307,7 @@ public:
         return getNode(i);
     }
 
-    std::string& operator[](std::string s)
+    std::string& operator[](const std::string& s)
     {
         int idx = getIndex(s);
         if (idx < 0)

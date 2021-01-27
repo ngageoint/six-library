@@ -64,20 +64,18 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
     uint8_t **user = NULL;
     uint8_t *userContig = NULL;
     uint32_t row, band, block;
-    size_t rowSize, blockSize, numBlocks;
-    uint32_t numImageBands = 0;
-    nitf_Off offset;
+    size_t blockSize, numBlocks;
     nitf_BandSource *bandSrc = NULL;
     nitf_BlockingInfo* blockInfo = NULL;
     nitf_ImageIO* imageIO = NULL;
     ImageWriterImpl *impl = (ImageWriterImpl *) data;
     NITF_BOOL rc = NITF_SUCCESS;
 
-    numImageBands = impl->numImageBands + impl->numMultispectralImageBands;
-    rowSize = impl->numCols * NITF_NBPP_TO_BYTES(impl->numBitsPerPixel);
+    const uint32_t numImageBands = impl->numImageBands + impl->numMultispectralImageBands;
+    const size_t rowSize = impl->numCols * NITF_NBPP_TO_BYTES(impl->numBitsPerPixel);
 
 
-    offset = nitf_IOInterface_tell(output, error);
+    const nitf_Off offset = nitf_IOInterface_tell(output, error);
     if (!NITF_IO_SUCCESS(offset))
         goto CATCH_ERROR;
 

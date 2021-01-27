@@ -242,7 +242,7 @@ public:
     TwoD<_T> power(size_t toThe) const;
 
     template<typename _TT>
-        friend std::ostream& operator << (std::ostream& out, const TwoD<_TT> p);
+        friend std::ostream& operator << (std::ostream& out, const TwoD<_TT>& p);
 
     /*!
      *  serialize out to a boost stream

@@ -9,6 +9,7 @@ _deps/
 CMakeFiles/
 *.cmake
 CMakeCache.txt
+CMakeSettings.json
 
 externals/coda-oss/modules/c++/**/Makefile
 modules/**/Makefile
@@ -36,4 +37,3 @@ modules/c/j2k/external/jasper/jasper-1.900.1-mod/
 # unit tests
 outputPathname.ntf
 sicd_*_nitf__*_band_*.man
-CMakeSettings.json

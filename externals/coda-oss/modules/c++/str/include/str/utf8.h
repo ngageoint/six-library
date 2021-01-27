@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __STR_UTF8_H__
-#define __STR_UTF8_H__
+#ifndef CODA_OSS_str_utf8_h_INCLUDED_
+#define CODA_OSS_str_utf8_h_INCLUDED_
 #pragma once
 
 #include <stdint.h>
@@ -667,15 +667,31 @@ u32bit_iterator utf8to32(octet_iterator start,
     return result;
 }
 
+// warning C4996: '...': warning STL4015: The std::iterator class template (used as a base class to provide typedefs)
+// is deprecated in C++17. (The <iterator> header is NOT deprecated.) The C++ Standard has never required
+// user-defined iterators to derive from std::iterator. To fix this warning, stop deriving from std::iterator and
+// start providing publicly accessible typedefs named iterator_category, value_type, difference_type, pointer, and reference.
+// Note that value_type is required to be non-const, even for constant iterators. You can define
+// _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING or
+// _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS to acknowledge that you have received this warning.
+//
+// http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0174r2.html#2.1
+
 // The iterator class
 template <typename octet_iterator>
-class iterator : public std::iterator<std::bidirectional_iterator_tag, uint32_t>
+class iterator
 {
     octet_iterator it;
     octet_iterator range_start;
     octet_iterator range_end;
 
 public:
+    using iterator_category = std::bidirectional_iterator_tag;
+    using value_type = uint32_t;
+    using difference_type = ptrdiff_t;
+    using pointer = value_type*;
+    using reference = value_type&;
+
     iterator()
     {
     }
@@ -738,5 +754,4 @@ public:
 //*************************************************************************
 //*************************************************************************
 
-#endif
-
+#endif  // CODA_OSS_str_utf8_h_INCLUDED_
