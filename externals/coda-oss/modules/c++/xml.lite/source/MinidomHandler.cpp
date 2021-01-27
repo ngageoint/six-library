@@ -168,7 +168,7 @@ void xml::lite::MinidomHandler::endElement(const std::string & /*uri*/,
     xml::lite::Element * current = nodeStack.top();
     nodeStack.pop();
 
-    current->setCharacterData(adjustCharacterData(), mpEncoding.get());
+    current->setCharacterData_(adjustCharacterData(), mpEncoding.get());
 
     // Remove corresponding int on bytes stack
     bytesForElement.pop();

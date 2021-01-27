@@ -86,7 +86,13 @@ public:
      */
     virtual Element *createElement(const std::string & qname,
                                    const std::string & uri,
-                                   std::string characterData = "", const string_encoding* pEncoding = nullptr);
+                                   std::string characterData = "");
+    virtual Element *createElement(const std::string & qname,
+                                   const std::string & uri,
+                                   const std::string& characterData, string_encoding);
+    virtual Element* createElement(const std::string& qname,
+                                   const std::string& uri,
+                                   const sys::U8string& characterData);
 
     /*!
      * Blanket destructor.  This thing deletes everything
