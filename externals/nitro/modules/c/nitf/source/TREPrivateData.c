@@ -189,7 +189,12 @@ NITFAPI(void) nitf_TREPrivateData_destruct(nitf_TREPrivateData **priv)
 NITFPROT(NITF_BOOL) nitf_TREPrivateData_flush(nitf_TREPrivateData *priv,
                                          nitf_Error * error)
 {
-    if (priv && priv->hash)
+    if (!priv)
+    {
+        return NITF_FAILURE;
+    }
+
+    if (priv->hash)
     {
         /* destruct each field in the hash */
         nitf_HashTable_foreach(priv->hash,
