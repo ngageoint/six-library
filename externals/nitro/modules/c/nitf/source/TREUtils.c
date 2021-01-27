@@ -44,12 +44,17 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE* tre, char* bufptr, nitf_Error* error)
     }
 
     privData = (nitf_TREPrivateData*)tre->priv;
+    if (!privData)
+    {
+        nitf_Error_init(error,
+            "invalid tre->priv object",
+            NITF_CTXT,
+            NITF_ERR_INVALID_PARAMETER);
+        return NITF_FAILURE;
+    }
 
     /* flush the hash first, to protect from duplicate entries */
-    if (privData)
-    {
-        nitf_TREPrivateData_flush(privData, error);
-    }
+   nitf_TREPrivateData_flush(privData, error);
 
     cursor = nitf_TRECursor_begin(tre);
     while (offset < privData->length && status)
