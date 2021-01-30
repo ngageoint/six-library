@@ -161,13 +161,13 @@ namespace details
     #define SIX_Enum_constructors_(name) name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
             name& operator=(const int& o) { value = o; return *this; }
     #define SIX_Enum_BEGIN_enum enum {
-    #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { SIX_Enum_constructors_(name);
-    #define SIX_Enum_END_DEFINE(name)  }
+    #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
+    #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
     #define SIX_Enum_BEGIN_string_to_int static const map_t& string_to_int_() { static const map_t retval {
     #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
     #define SIX_Enum_END_string_to_int SIX_Enum_map_entry_NOT_SET }; return retval; }
 
-    #define SIX_Enum_ENUM_begin_(name) SIX_Enum_BEGIN_DEFINE(name) SIX_Enum_BEGIN_enum
+    #define SIX_Enum_ENUM_begin_(name) SIX_Enum_BEGIN_DEFINE(name) SIX_Enum_constructors_(name); SIX_Enum_BEGIN_enum
     #define SIX_Enum_ENUM_1_ SIX_Enum_END_enum SIX_Enum_BEGIN_string_to_int
     #define SIX_Enum_ENUM_end_ SIX_Enum_END_string_to_int }
 

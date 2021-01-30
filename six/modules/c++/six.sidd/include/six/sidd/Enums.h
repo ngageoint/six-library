@@ -33,65 +33,36 @@ namespace sidd
  *
  *  Enumeration used to represent ARPFlags
  */
-struct ARPFlag final : public six::details::Enum<ARPFlag>
-{
+SIX_Enum_BEGIN_DEFINE(ARPFlag)
     //! The enumerations allowed
-    enum
-    {
+    SIX_Enum_BEGIN_enum
         REALTIME = 0,
         PREDICTED = 1,
         POST_PROCESSED = 2,
-        NOT_SET = six::NOT_SET_VALUE
-    };
+    SIX_Enum_END_enum
 
-    static const map_t& string_to_int_()
-    {
-        static const map_t retval
-        {
+    SIX_Enum_BEGIN_string_to_int
             SIX_Enum_map_entry_(REALTIME),
             SIX_Enum_map_entry_(PREDICTED),
             {"POST PROCESSED", POST_PROCESSED },
-            SIX_Enum_map_entry_NOT_SET
-        };
-        return retval;
-    }
-
-    ARPFlag() = default;
-    ARPFlag(const std::string& s) : Enum(s) {}
-    ARPFlag(int i) : Enum(i) {}
-    ARPFlag& operator=(const int& o) { value = o; return *this; }
-};
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(ARPFlag);
 
 /*!
 *  \struct BandEqualizationAlgorithm
 *
 *  Enumeration used to represent BandEqualizationAlgorithms
 */
-struct BandEqualizationAlgorithm final : public six::details::Enum<BandEqualizationAlgorithm>
-{
+SIX_Enum_BEGIN_DEFINE(BandEqualizationAlgorithm)
     //! The enumerations allowed
-    enum
-    {
+    SIX_Enum_BEGIN_enum
         LUT_1D = 0,
-        NOT_SET = six::NOT_SET_VALUE
-    };
+    SIX_Enum_END_enum
 
-    static const map_t& string_to_int_()
-    {
-        static const map_t retval
-        {
+    SIX_Enum_BEGIN_string_to_int
             {"LUT 1D", LUT_1D },
-            SIX_Enum_map_entry_NOT_SET
-        };
-        return retval;
-    }
-
-    BandEqualizationAlgorithm() = default;
-    BandEqualizationAlgorithm(const std::string& s) : Enum(s) {}
-    BandEqualizationAlgorithm(int i) : Enum(i) {}
-    BandEqualizationAlgorithm& operator=(const int& o) { value = o; return *this; }
-};
-
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(BandEqualizationAlgorithm);
 
 /*!
 *  \struct CoordinateSystemType
@@ -119,40 +90,26 @@ SIX_Enum_ENUM_3(DRAType,
 *
 *  Enumeration used to represent DownsamplingMethods
 */
-struct DownsamplingMethod final : public six::details::Enum<DownsamplingMethod>
-{
+SIX_Enum_BEGIN_DEFINE(DownsamplingMethod)
     //! The enumerations allowed
-    enum
-    {
+    SIX_Enum_BEGIN_enum
         DECIMATE = 0,
         MAX_PIXEL = 1,
         AVERAGE = 2,
         NEAREST_NEIGHBOR = 3,
         BILINEAR = 4,
         LAGRANGE = 5,
-        NOT_SET = six::NOT_SET_VALUE
-    };
+    SIX_Enum_END_enum
 
-    static const map_t& string_to_int_()
-    {
-        static const map_t retval
-        {
+    SIX_Enum_BEGIN_string_to_int
             SIX_Enum_map_entry_(DECIMATE),
             { "MAX PIXEL", MAX_PIXEL },
             SIX_Enum_map_entry_(AVERAGE),
             { "NEAREST NEIGHBOR", NEAREST_NEIGHBOR },
             SIX_Enum_map_entry_(BILINEAR),
             SIX_Enum_map_entry_(LAGRANGE),
-            SIX_Enum_map_entry_NOT_SET
-        };
-        return retval;
-    }
-
-    DownsamplingMethod() = default;
-    DownsamplingMethod(const std::string & s) : Enum(s) {}
-    DownsamplingMethod(int i) : Enum(i) {}
-    DownsamplingMethod& operator=(const int& o) { value = o; return *this; }
-};
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(DownsamplingMethod);
 
 
 /*!
@@ -160,36 +117,22 @@ struct DownsamplingMethod final : public six::details::Enum<DownsamplingMethod>
 *
 *  Enumeration used to represent FilterDatabaseNames
 */
-struct FilterDatabaseName final : public six::details::Enum<FilterDatabaseName>
-{
+SIX_Enum_BEGIN_DEFINE(FilterDatabaseName)
     //! The enumerations allowed
-    enum
-    {
+    SIX_Enum_BEGIN_enum
         BILINEAR = 0,
         CUBIC = 1,
         LAGRANGE = 2,
         NEAREST_NEIGHBOR = 3,
-        NOT_SET = six::NOT_SET_VALUE
-    };
+    SIX_Enum_END_enum
 
-    static const map_t& string_to_int_()
-    {
-        static const map_t retval
-        {
+    SIX_Enum_BEGIN_string_to_int
             SIX_Enum_map_entry_(BILINEAR),
             SIX_Enum_map_entry_(CUBIC),
             SIX_Enum_map_entry_(LAGRANGE),
             { "NEAREST NEIGHBOR", NEAREST_NEIGHBOR },
-            SIX_Enum_map_entry_NOT_SET
-        };
-        return retval;
-    }
-
-    FilterDatabaseName() = default;
-    FilterDatabaseName(const std::string& s) : Enum(s) {}
-    FilterDatabaseName(int i) : Enum(i) {}
-    FilterDatabaseName& operator=(const int& o) { value = o; return *this; }
-};
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(FilterDatabaseName);
 
 /*!
 *  \struct FilterOperation
@@ -206,36 +149,22 @@ SIX_Enum_ENUM_2(FilterOperation,
 *
 *  Enumeration used to represent RenderingIntents
 */
-struct RenderingIntent final : public six::details::Enum<RenderingIntent>
-{
+SIX_Enum_BEGIN_DEFINE(RenderingIntent)
     //! The enumerations allowed
-    enum
-    {
+    SIX_Enum_BEGIN_enum
         PERCEPTUAL = 0,
         SATURATION = 1,
         RELATIVE_INTENT = 2,
         ABSOLUTE_INTENT = 3,
-        NOT_SET = six::NOT_SET_VALUE
-    };
+    SIX_Enum_END_enum
 
-    static const map_t& string_to_int_()
-    {
-        static const map_t retval
-        {
+    SIX_Enum_BEGIN_string_to_int
             SIX_Enum_map_entry_(PERCEPTUAL),
             SIX_Enum_map_entry_(SATURATION),
             { "RELATIVE INTENT", RELATIVE_INTENT },
             { "ABSOLUTE INTENT", ABSOLUTE_INTENT },
-            SIX_Enum_map_entry_NOT_SET
-        };
-        return retval;
-    }
-
-    RenderingIntent() = default;
-    RenderingIntent(const std::string& s) : Enum(s) {}
-    RenderingIntent(int i) : Enum(i) {}
-    RenderingIntent& operator=(const int& o) { value = o; return *this; }
-};
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(RenderingIntent);
 
 /*!
 *  \struct ShadowDirection
