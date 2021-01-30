@@ -32,6 +32,7 @@
 #include "logging/LogRecord.h"
 #include "logging/StreamHandler.h"
 #include <import/io.h>
+#include <import/sys.h>
 
 namespace logging
 {
@@ -43,7 +44,7 @@ class FileHandler : public StreamHandler
 {
 
 public:
-    FileHandler(const std::string& fname, LogLevel level = LogLevel::LOG_NOTSET,
+    FileHandler(const coda_oss::filesystem::path& fname, LogLevel level = LogLevel::LOG_NOTSET,
                 int creationFlags = sys::File::CREATE | sys::File::TRUNCATE) :
         StreamHandler(new io::FileOutputStream(fname, creationFlags), level)
     {
