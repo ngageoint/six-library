@@ -154,7 +154,7 @@ namespace details
 
 
     #define SIX_Enum_map_entry_(n) { #n, n }
-    #define SIX_Enum_map_entry_NOT_SET { "NOT SET", NOT_SET }
+    #define SIX_Enum_map_entry_NOT_SET SIX_Enum_map_entry_(NOT_SET), { "NOT SET", NOT_SET }
 
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
