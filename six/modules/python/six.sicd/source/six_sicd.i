@@ -76,7 +76,7 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
-    std::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
+    mem::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
 
     container->addData(data.clone());
 
@@ -238,7 +238,7 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths);
 
-std::auto_ptr<six::sicd::ComplexData> cropMetaData(
+mem::auto_ptr<six::sicd::ComplexData> cropMetaData(
         const six::sicd::ComplexData& complexData,
 	    const types::RowCol<size_t>& aoiOffset,
 	    const types::RowCol<size_t>& aoiDims);

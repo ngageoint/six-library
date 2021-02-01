@@ -48,10 +48,6 @@ void testDataType(const fs::path& pathname_, six::DataType expectedDataType)
         throw except::Exception(Ctxt(ostr.str()));
     }
 }
-void testDataType(const fs::path& pathname, six::DataType expectedDataType)
-{
-    testDataType(pathname.string(), expectedDataType);
-}
 }
 
 int main(int argc, char** argv)
