@@ -26,10 +26,12 @@
 #include <cmath>
 #include "sys/File.h"
 
-void sys::File::create(const std::string& str,
+void sys::File::create(const coda_oss::filesystem::path& str_,
                        int accessFlags,
                        int creationFlags)
 {
+    const auto str = str_.string();
+
     // If the truncate bit is on AND the file does exist,
     // we need to set the mode to TRUNCATE_EXISTING
     if ((creationFlags & sys::File::TRUNCATE) && sys::OS().exists(str) )

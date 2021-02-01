@@ -2,7 +2,7 @@
  * This file is part of gsl-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * gsl-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,34 +19,39 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef CODA_OSS_gsl_gsl_h_INCLUDED_
-#define CODA_OSS_gsl_gsl_h_INCLUDED_
-
+#ifndef CODA_OSS_gsl_gsl_span__h_INCLUDED_
+#define CODA_OSS_gsl_gsl_span__h_INCLUDED_
 #pragma once
 
 #include "sys/CPlusPlus.h"
+#include "mem/Span_.h"
 
 // Need a fairly decent C++ compiler to use the real GSL
 #if CODA_OSS_cpp14
-#define CODA_OSS_use_gsl_ 1
-#endif
-
-#if !CODA_OSS_use_gsl_
-
-#include "gsl/Gsl_.h" // our own "fake" GSL
-
-#else
-
-#include "gsl/gsl_algorithm"	// copy
-#include "gsl/gsl_assert"		// Ensures/Expects
-#include "gsl/gsl_byte"			// byte
-#include "gsl/gsl_util"			// finally()/narrow()/narrow_cast()...
-#include "gsl/multi_span"		// multi_span, strided_span...
-#include "gsl/pointers"			// owner, not_null
 #include "gsl/span"				// span
-#include "gsl/string_span"		// zstring, string_span, zstring_builder...
+#else
+ namespace gsl
+ {
+     template <typename T>
+     using span = mem::Span<T>;
 
-#endif
+     template <typename T>
+     inline span<T> make_span(T* d, size_t sz)
+     {
+         return mem::make_Span<T>(d, sz);
+     }
 
-#endif  // CODA_OSS_gsl_gsl_h_INCLUDED_
+     template <typename TContainer>
+     inline span<typename TContainer::value_type> make_span(TContainer& c)
+     {
+         return mem::make_Span(c);
+     }
+     template <typename TContainer>
+     inline span<typename TContainer::value_type> make_span(const TContainer& c)
+     {
+         return make_span(const_cast<TContainer&>(c));
+     }
+ }
+#endif // CODA_OSS_cpp14
+
+#endif  // CODA_OSS_gsl_gsl_span__h_INCLUDED_

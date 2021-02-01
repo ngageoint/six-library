@@ -60,33 +60,18 @@ SIX_Enum_ENUM_3(DomainType,
  *
  *  Enumeration used to represent PhaseSGNs
  */
-struct PhaseSGN final : public six::details::Enum<PhaseSGN>
-{
+SIX_Enum_BEGIN_DEFINE(PhaseSGN)
     //! The enumerations allowed
-    enum
-    {
+    SIX_Enum_BEGIN_enum
         MINUS_1 = -1,
         PLUS_1 = 1,
-        NOT_SET = six::NOT_SET_VALUE
-    };
+    SIX_Enum_END_enum
 
-    static const map_t& string_to_int_()
-    {
-        static const map_t retval
-        {
-            {"-1", MINUS_1},
-            {"+1", PLUS_1},
-            SIX_Enum_map_entry_NOT_SET
-        };
-        return retval;
-    }
-
-    PhaseSGN() = default;
-    PhaseSGN(const std::string& s) : Enum(s) {}
-    PhaseSGN(int i) : Enum(i) {}
-    PhaseSGN& operator=(const int& o) { value = o; return *this; }
-};
-
+    SIX_Enum_BEGIN_string_to_int
+    { "-1", MINUS_1 },
+    { "+1", PLUS_1 },
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(PhaseSGN);
 
 /*!
  *  \struct RefHeight
@@ -137,11 +122,9 @@ SIX_Enum_ENUM_4(SRPType,
  *
  *  Enumeration used to represent PolarizationTypes
  */
-struct PolarizationType final : public six::details::Enum<PolarizationType>
-{
+SIX_Enum_BEGIN_DEFINE(PolarizationType)
     //! The enumerations allowed
-    enum
-    {
+    SIX_Enum_BEGIN_enum
         X = 1,
         Y = 2,
         V = 3,
@@ -149,29 +132,17 @@ struct PolarizationType final : public six::details::Enum<PolarizationType>
         RHC = 5,
         LHC = 6,
         UNSPECIFIED = 7,
-        NOT_SET = six::NOT_SET_VALUE
-    };
+    SIX_Enum_END_enum
 
-    static const map_t& string_to_int_()
-    {
-        static const map_t retval
-        {
-            SIX_Enum_map_entry_(X),
-            SIX_Enum_map_entry_(Y),
-            SIX_Enum_map_entry_(V),
-            SIX_Enum_map_entry_(H),
-            SIX_Enum_map_entry_(RHC),
-            SIX_Enum_map_entry_(LHC),
-            SIX_Enum_map_entry_(UNSPECIFIED),
-            SIX_Enum_map_entry_NOT_SET
-        };
-        return retval;
-    }
-
-    PolarizationType() = default;
-    PolarizationType(const std::string & s) : Enum(s) {}
-    PolarizationType(int i) : Enum(i) {}
-    PolarizationType& operator=(const int& o) { value = o; return *this; }
-};
+    SIX_Enum_BEGIN_string_to_int
+        SIX_Enum_map_entry_(X),
+        SIX_Enum_map_entry_(Y),
+        SIX_Enum_map_entry_(V),
+        SIX_Enum_map_entry_(H),
+        SIX_Enum_map_entry_(RHC),
+        SIX_Enum_map_entry_(LHC),
+        SIX_Enum_map_entry_(UNSPECIFIED),
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(PolarizationType);
 }
 #endif

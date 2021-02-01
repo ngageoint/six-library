@@ -112,7 +112,7 @@ static fs::path findInputFile(const std::string& name)
 TEST_CASE(test_nitf_Record_unmergeTREs_crash)
 {
     ::testName = testName;
-    const std::string input_file = findInputFile("bug2_crash.ntf");
+    const auto input_file = findInputFile("bug2_crash.ntf").string();
 
     nitf_Error error;
     nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,
@@ -151,7 +151,7 @@ TEST_CASE(test_nitf_Record_unmergeTREs_crash)
 TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
 {
     ::testName = testName;
-    const std::string input_file = findInputFile("bug6_hangs.ntf");
+    const auto input_file = findInputFile("bug6_hangs.ntf").string();
 
     nitf_Error error;
     nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,
@@ -190,7 +190,7 @@ TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
 TEST_CASE(test_defaultRead_crash)
 {
     ::testName = testName;
-    const std::string input_file = findInputFile("bug3_crash.ntf");
+    const auto input_file = findInputFile("bug3_crash.ntf").string();
 
     nitf_Error error;
     nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,
@@ -213,7 +213,7 @@ TEST_CASE(test_defaultRead_crash)
 TEST_CASE(test_readBandInfo_crash)
 {
     ::testName = testName;
-    const std::string input_file = findInputFile("bug4_crash.ntf");
+    const auto input_file = findInputFile("bug4_crash.ntf").string();
 
     nitf_Error error;
     nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,
@@ -235,7 +235,7 @@ TEST_CASE(test_readBandInfo_crash)
 TEST_CASE(test_readRESubheader_crash)
 {
     ::testName = testName;
-    const std::string input_file = findInputFile("bug5_crash.ntf");
+    const auto input_file = findInputFile("bug5_crash.ntf").string();
 
     nitf_Error error;
     nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,

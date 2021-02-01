@@ -32,8 +32,9 @@ namespace fs = std::filesystem;
 
 namespace
 {
-void testDataType(const std::string& pathname, six::DataType expectedDataType)
+void testDataType(const fs::path& pathname_, six::DataType expectedDataType)
 {
+    const auto pathname = pathname_.string();
     six::NITFReadControl readControl;
 
     const six::DataType dataType = readControl.getDataType(pathname);

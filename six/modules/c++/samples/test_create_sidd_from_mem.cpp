@@ -1720,7 +1720,7 @@ static const struct
 
 std::unique_ptr<six::WriteControl> getWriteControl(std::string outputName)
 {
-    std::string extension = fs::path(outputName).extension();
+    auto extension = fs::path(outputName).extension().string();
     str::lower(extension);
 
     std::unique_ptr<six::WriteControl> writer;
