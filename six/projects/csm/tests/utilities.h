@@ -21,6 +21,7 @@
  */
 
 #include <sys/Filesystem.h>
+namespace fs = std::filesystem;
 
 #include <six/Utilities.h>
 #include <NitfIsd.h>
@@ -88,16 +89,16 @@ inline std::string findDllPathname(const std::string& installPathname)
     namespace fs = std::filesystem;
     const auto csmPluginPathname = fs::path(installPathname) / "share" / "CSM" / "plugins";
 
-    const std::vector<std::string> csmPluginContents = sys::Path::list(csmPluginPathname);
+    const std::vector<std::string> csmPluginContents = sys::Path::list(csmPluginPathname.string());
 
     // Get rid of contents like '.' and '..'
     std::vector<std::string> csmPlugins;
     for (size_t ii = 0; ii < csmPluginContents.size(); ++ii)
     {
-        const std::string pathname = csmPluginPathname / csmPluginContents[ii];
+        const auto pathname = csmPluginPathname / csmPluginContents[ii];
         if (fs::is_regular_file(pathname))
         {
-            csmPlugins.push_back(pathname);
+            csmPlugins.push_back(pathname.string());
         }
     }
 

@@ -56,8 +56,8 @@ public:
 
         mReader.setXMLControlRegistry(&mXmlRegistry);
 
-        const std::string schemaDir = fs::path(confDir) / "schema" / "six";
-        mReader.load(mSicdPathname, std::vector<std::string>(1, schemaDir));
+        const auto schemaDir = fs::path(confDir) / "schema" / "six";
+        mReader.load(mSicdPathname, std::vector<std::string>(1, schemaDir.string()));
         mComplexData = six::sicd::Utilities::getComplexData(mReader);
     }
 

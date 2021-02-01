@@ -102,33 +102,39 @@ TEST_CASE(testEndianness)
     }
 }
 
-TEST_CASE(testEndianness_std)
+template<typename TEndian>
+static void testEndianness_std_(const std::string& testName)
 {
-    /*const*/ auto native = sys::Endian::native; // "const" causes "conditional expression is constant."
-    if (native == sys::Endian::big)
+    /*const*/ auto native = TEndian::native; // "const" causes "conditional expression is constant."
+    if (native == TEndian::big)
     {
-        #if CODA_OSS_cpp20 || CODA_OSS_DEFINE_std_endian_
-        TEST_ASSERT(std::endian::native == std::endian::big);
-        #endif
+        TEST_ASSERT(coda_oss::endian::native == coda_oss::endian::big);
     }
-    else if (native == sys::Endian::little)
+    else if (native == TEndian::little)
     {
-        #if CODA_OSS_cpp20 || CODA_OSS_DEFINE_std_endian_
-        TEST_ASSERT(std::endian::native == std::endian::little);
-        #endif
+        TEST_ASSERT(coda_oss::endian::native == coda_oss::endian::little);
     }
     else
     {
         TEST_FAIL("Mixed-endian not supported!");
     }
 }
-
-TEST_CASE(testSysByte)
+TEST_CASE(testEndianness_std)
 {
-    std::array<sys::Byte, 256> bytes;
+    testEndianness_std_<sys::Endian>(testName);
+    testEndianness_std_<coda_oss::endian>(testName);
+    #if CODA_OSS_lib_endian
+    testEndianness_std_<std::endian>(testName);
+    #endif
+}
+
+template <typename TByte>
+static void test_byte_(const std::string& testName)
+{
+    std::array<TByte, 256> bytes;
     for (size_t i = 0; i < bytes.size(); i++)
     {
-        auto value = static_cast<sys::Byte>(i);
+        auto value = static_cast<TByte>(i);
         bytes[i] = value;
     }
 
@@ -140,6 +146,15 @@ TEST_CASE(testSysByte)
         TEST_ASSERT_EQ(i, actual);
     }
 }
+TEST_CASE(testByte)
+{
+    test_byte_<sys::Byte>(testName);
+    test_byte_<coda_oss::byte>(testName);
+    #if CODA_OSS_lib_byte
+    test_byte_<std::byte>(testName);
+    #endif
+}
+    
 }
 
 int main(int /*argc*/, char** /*argv*/)
@@ -147,6 +162,6 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(testByteSwap);
     TEST_CHECK(testEndianness);
     TEST_CHECK(testEndianness_std);
-    TEST_CHECK(testSysByte);
+    TEST_CHECK(testByte);
     return 0;
 }

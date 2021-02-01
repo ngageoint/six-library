@@ -270,7 +270,7 @@ int main(int argc, char** argv)
             log.addHandler(new logging::FileHandler(logFile, logLevel), true);
 
         std::unique_ptr<six::ReadControl> reader;
-        std::string extension = fs::path(inputFile).extension();
+        std::string extension = fs::path(inputFile).extension().string();
         str::lower(extension);
         if (extension == ".nitf" || extension == ".ntf")
         {

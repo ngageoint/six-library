@@ -19,10 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef CODA_OSS_Gsl__h_INCLUDED_
-#define CODA_OSS_Gsl__h_INCLUDED_
-
+#ifndef CODA_OSS_gsl_Gsl__h_INCLUDED_
+#define CODA_OSS_gsl_Gsl__h_INCLUDED_
 #pragma once
 
 // Can't compile all of GSL with older versions of GCC
@@ -33,7 +31,7 @@
 #include <type_traits>
 #include <utility>  
 
-#include <mem/Span.h>
+#include "gsl/gsl_span_.h"
 
 namespace Gsl
 {
@@ -102,27 +100,6 @@ namespace gsl
     {
         return Gsl::narrow<T>(u);
     }
-
-
-    template <typename T>
-    using span = mem::Span<T>;
-
-    template <typename T>
-    inline span<T> make_span(T* d, size_t sz)
-    {
-        return mem::make_Span<T>(d, sz);
-    }
-
-    template <typename TContainer>
-    inline span<typename TContainer::value_type> make_span(TContainer& c)
-    {
-        return mem::make_Span(c);
-    }
-    template <typename TContainer>
-    inline span<typename TContainer::value_type> make_span(const TContainer& c)
-    {
-        return make_span(const_cast<TContainer&>(c));
-    }
  }
 
-#endif  // CODA_OSS_Gsl__h_INCLUDED_
+#endif  // CODA_OSS_gsl_Gsl__h_INCLUDED_

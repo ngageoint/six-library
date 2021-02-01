@@ -54,7 +54,7 @@ void preview(std::string outputFile)
 }
 #   else
 // TODO Could open this using EDITOR or html view
-void preview(std::string outputFile)
+void preview(const fs::path& outputFile)
 {
     std::cerr << "Preview unavailable for: " << outputFile << std::endl;
 }
@@ -86,7 +86,7 @@ std::vector<std::string> extractXML(std::string inputFile,
                                     const fs::path& outputDir)
 {
     std::vector<std::string> allFiles;
-    const std::string prefix = fs::path(inputFile).stem();
+    const auto prefix = fs::path(inputFile).stem().string();
 
     nitf::Reader reader;
     nitf::IOHandle io(inputFile);
@@ -120,14 +120,15 @@ std::vector<std::string> extractXML(std::string inputFile,
             doc->getRootElement()->prettyPrint(fos);
             fos.close();
         }
-        allFiles.push_back(fileName);
+        allFiles.push_back(fileName.string());
     }
     io.close();
     return allFiles;
 }
 
-void run(std::string inputFile, std::string dataType)
+void run(const fs::path& inputFile_, std::string dataType)
 {
+    const auto inputFile = inputFile_.string();
     try
     {
         // Create an output directory if it doesnt already exist
@@ -135,7 +136,7 @@ void run(std::string inputFile, std::string dataType)
         if (!fs::exists(outputDir))
             fs::create_directory(outputDir);
 
-        std::string xmlFile = inputFile;
+        auto xmlFile = inputFile;
 
         // Check if the file is a NITF - if so, extract all the parts into our outputDir
         if (nitf::Reader::getNITFVersion(inputFile) != NITF_VER_UNKNOWN)
@@ -226,7 +227,7 @@ int main(int argc, char** argv)
 
     if (fs::is_directory(inputFile))
     {
-        const auto listing = sys::Path(inputFile).list();
+        const auto listing = sys::Path(inputFile.string()).list();
         for (const auto& listing_i : listing)
         {
             auto listing_i_ = listing_i;
@@ -430,5 +431,5 @@ std::string generateKML(six::Data* data, const fs::path& outputDir)
     root->prettyPrint(fos);
     delete root;
     fos.close();
-    return kmlPath;
+    return kmlPath.string();
 }

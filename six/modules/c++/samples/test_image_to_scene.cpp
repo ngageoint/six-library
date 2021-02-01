@@ -54,7 +54,7 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        const std::string progname(fs::path(argv[0]).filename());
+        const auto progname(fs::path(argv[0]).filename());
         if (argc != 4 && argc != 5)
         {
             std::cerr << "Usage: " << progname

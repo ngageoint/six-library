@@ -26,6 +26,7 @@
 #include "sys/Conf.h"
 #include "sys/SystemException.h"
 #include "sys/Path.h"
+#include "sys/Filesystem.h"
 
 #if defined(WIN32) || defined(_WIN32)
 #    define _SYS_SEEK_CUR FILE_CURRENT
@@ -116,7 +117,12 @@ public:
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    File(std::string str, int accessFlags = READ_ONLY, 
+    File(const coda_oss::filesystem::path& str, int accessFlags = READ_ONLY, 
+         int creationFlags = EXISTING)
+    {
+        create(str, accessFlags, creationFlags);
+    }
+    explicit File(const std::string& str, int accessFlags = READ_ONLY, 
          int creationFlags = EXISTING)
     {
         create(str, accessFlags, creationFlags);
@@ -165,7 +171,7 @@ public:
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    void create(const std::string& str, int accessFlags, 
+    void create(const coda_oss::filesystem::path& str, int accessFlags, 
                 int creationFlags);
 
     /*!

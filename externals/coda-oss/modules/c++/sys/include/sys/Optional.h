@@ -155,6 +155,7 @@ public:
     }
 };
 
+// https://en.cppreference.com/w/cpp/utility/optional/make_optional
 template <typename T, typename... TArgs>
 inline Optional<T> make_Optional(TArgs&&... args)
 {
@@ -321,7 +322,13 @@ inline bool operator>=(const Optional<T>& opt, const U& value)
 }
 
 #ifndef CODA_OSS_DEFINE_std_optional_
-    #if CODA_OSS_cpp17 && __has_include(<optional>)  // __has_include is C++17
+    #if CODA_OSS_cpp17
+        #if !__has_include(<optional>)
+            #error "Missing <optional>."
+        #endif
+        #if defined(__cpp_lib_optional) && (__cpp_lib_optional < 201606)
+            #error "Wrong value for __cpp_lib_optional."
+        #endif
         #define CODA_OSS_DEFINE_std_optional_ -1  // OK to #include <>, below
     #else
         #define CODA_OSS_DEFINE_std_optional_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
@@ -333,9 +340,37 @@ inline bool operator>=(const Optional<T>& opt, const U& value)
     {
         template<typename T>
         using optional = sys::Optional<T>;
+        template <typename T, typename... TArgs>
+        inline optional<T> make_optional(TArgs && ... args)
+        {
+            return sys::make_Optional<T>(std::forward<TArgs>(args)...);
+        }
     }
+    #define CODA_OSS_lib_optional 1
 #elif CODA_OSS_DEFINE_std_optional_ == -1  // set above
     #include <optional>
-#endif // CODA_OSS_DEFINE_std_optional_
+    #define CODA_OSS_lib_optional 1
+#endif  // CODA_OSS_DEFINE_std_optional_
+
+namespace coda_oss
+{
+    #if CODA_OSS_lib_optional
+    template <typename T>
+    using optional = std::optional<T>;
+    template <typename T, typename... TArgs>
+    inline optional<T> make_optional(TArgs && ... args)
+    {
+        return std::make_optional<T>(std::forward<TArgs>(args)...);
+    }
+    #else
+    template <typename T>
+    using optional = sys::Optional<T>;
+    template <typename T, typename... TArgs>
+    inline optional<T> make_optional(TArgs && ... args)
+    {
+        return sys::make_Optional<T>(std::forward<TArgs>(args)...);
+    }
+    #endif
+}
 
 #endif  // CODA_OSS_sys_Optional_h_INCLUDED_
