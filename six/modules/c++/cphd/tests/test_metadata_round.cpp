@@ -24,6 +24,7 @@
 #include <memory>
 #include <thread>
 
+#include <six/sys_Conf.h>
 #include <cli/Value.h>
 #include <cli/ArgumentParser.h>
 #include <io/TempFile.h>

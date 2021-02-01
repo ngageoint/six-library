@@ -22,6 +22,7 @@
 #include <iostream>
 #include <memory>
 
+#include <six/sys_Conf.h>
 #include <xml/lite/MinidomParser.h>
 #include <six/Init.h>
 #include <cphd/Enums.h>

@@ -23,6 +23,7 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <six/sys_Conf.h>
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <mem/ScopedArray.h>
