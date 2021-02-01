@@ -973,16 +973,16 @@ void SIXSensorModel::setSchemaDir(const std::string& dataDir)
     }
     else
     {
-        const std::string schemaDir = fs::path(dataDir) / "schema" / "six";
+        const auto schemaDir = fs::path(dataDir) / "schema" / "six";
         if (!fs::exists(schemaDir))
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    "Schema directory '" + schemaDir + "' does not exist",
+                    "Schema directory '" + schemaDir.string() + "' does not exist",
                     "SIXSensorModel::setSchemaDir");
         }
 
         mSchemaDirs.resize(1);
-        mSchemaDirs[0] = schemaDir;
+        mSchemaDirs[0] = schemaDir.string();
     }
 }
 

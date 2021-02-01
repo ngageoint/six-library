@@ -41,7 +41,7 @@ namespace fs = std::filesystem;
 
 namespace
 {
-void usage(const std::string& progname, std::ostream& ostr)
+void usage(const fs::path& progname, std::ostream& ostr)
 {
     ostr << progname << " -h\n"
          << progname
@@ -53,7 +53,7 @@ void usage(const std::string& progname, std::ostream& ostr)
 
 struct Converter final
 {
-    Converter(const std::string& pathname);
+    Converter(const fs::path& pathname);
 
     void groundToImage(const scene::Vector3& groundPt) const;
 
@@ -74,7 +74,7 @@ private:
     types::RowCol<double> mAOIOffset;
 };
 
-Converter::Converter(const std::string& pathname)
+Converter::Converter(const fs::path& pathname)
 {
     // Read in the SICD
     six::NITFReadControl reader;
@@ -88,7 +88,7 @@ Converter::Converter(const std::string& pathname)
         new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
     reader.setXMLControlRegistry(&xmlRegistry);
-    reader.load(pathname);
+    reader.load(pathname.string());
 
     // Verify it's a SICD
     auto container(reader.getContainer());
@@ -166,7 +166,7 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        const std::string progname(fs::path(argv[0]).filename());
+        const auto progname(fs::path(argv[0]).filename());
         if (argc < 2)
         {
             usage(progname, std::cerr);

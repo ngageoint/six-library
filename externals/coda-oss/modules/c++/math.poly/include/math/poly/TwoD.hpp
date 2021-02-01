@@ -349,7 +349,7 @@ TwoD<_T>::operator/(double cv) const
 
 template<typename _T>
 std::ostream&
-operator << (std::ostream& out, const TwoD<_T> p)
+operator << (std::ostream& out, const TwoD<_T>& p)
 {
     for (size_t i = 0 ; i < p.mCoef.size() ; i++)
     {

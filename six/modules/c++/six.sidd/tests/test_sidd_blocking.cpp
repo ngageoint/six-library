@@ -75,7 +75,8 @@ private:
 std::string getProgramPathname(const std::string& installPathname,
         const std::string& programName)
 {
-    std::string testPathname = fs::path(installPathname) / "bin" / programName;
+    const auto testPathname_ = fs::path(installPathname) / "bin" / programName;
+    auto testPathname = testPathname_.string();
 
     if (!fs::exists(testPathname))
     {

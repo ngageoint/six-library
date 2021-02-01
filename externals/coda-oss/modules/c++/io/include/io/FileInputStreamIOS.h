@@ -29,6 +29,7 @@
 #include <iostream>
 #include <fstream>
 #include "except/Exception.h"
+#include "sys/Filesystem.h"
 #include "io/InputStream.h"
 #include "io/SeekableStreams.h"
 
@@ -64,7 +65,7 @@ public:
      *  \param inputFile The file name
      *  \param mode The mode to open the file in
      */
-    FileInputStreamIOS(const std::string& inputFile,
+    FileInputStreamIOS(const coda_oss::filesystem::path& inputFile,
                        std::ios::openmode mode = std::ios::in);
 
 

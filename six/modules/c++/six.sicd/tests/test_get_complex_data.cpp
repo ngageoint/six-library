@@ -57,7 +57,7 @@ int main(int argc, char** argv)
             // In a normal installation, we can infer the path
             const auto progDirname = fs::path(progname).parent_path();
             const fs::path schemaPath = progDirname.parent_path().parent_path() / "conf" / "schema" / "six";
-            schemaPaths.push_back(fs::absolute(schemaPath));
+            schemaPaths.push_back(fs::absolute(schemaPath).string());
         }
 
         // Parse out the XML into a C++ structure

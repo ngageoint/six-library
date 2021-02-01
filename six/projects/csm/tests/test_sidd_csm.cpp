@@ -59,7 +59,7 @@ public:
 
         mReader.setXMLControlRegistry(&mXmlRegistry);
 
-        const std::string schemaDir =  (fs::path(confDir) / "schema" / "six");
+        const auto schemaDir =  (fs::path(confDir) / "schema" / "six").string();
         mReader.load(mSiddPathname, std::vector<std::string>(1, schemaDir));
         auto container(mReader.getContainer());
         mDerivedData.reset(reinterpret_cast<six::sidd::DerivedData*>(

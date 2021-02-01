@@ -25,6 +25,7 @@
 #pragma once
 
 #include <config/coda_oss_config.h>
+#include <sys/CPlusPlus.h>
 #include <str/Convert.h>
 
 #if defined (__APPLE_CC__)
@@ -351,50 +352,5 @@ namespace sys
 
 
 }
-
-#define CODA_OSS_cplusplus __cplusplus
-#if CODA_OSS_cplusplus < 201103L  // We need at least C++11
-    #undef CODA_OSS_cplusplus  // oops...try to fix
-
-    // MSVC only sets __cplusplus >199711L with the /Zc:__cplusplus command-line option.
-    // https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
-    #if defined(_MSVC_LANG)
-    // https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160
-    // "Defined as an integer literal that specifies the C++ language standard targeted by the compiler."
-    #define CODA_OSS_cplusplus _MSVC_LANG
-    #endif // _MSVC_LANG
-
-    #if defined(__GNUC__)
-    // ... similar things needed for other compilers ... ?
-    #endif // __GNUC__
-
-#endif // CODA_OSS_cplusplus
-static_assert(CODA_OSS_cplusplus >= 201103L, "Must compile with C++11 or greater.");
-
-// Define a few macros as that's less verbose than testing against a version number
-#if CODA_OSS_cplusplus >= 201103L
-    #define CODA_OSS_cpp11 1
-#endif
-#if CODA_OSS_cplusplus >= 201402L
-    #define CODA_OSS_cpp14 1
-#endif
-#if CODA_OSS_cplusplus >= 201703L
-    #define CODA_OSS_cpp17 1
-#endif
-#if CODA_OSS_cplusplus >= 202002L
-    #define CODA_OSS_cpp20 1
-#endif
-
-// We've got various "replacements" (to a degree) for C++ library functionality
-// only available in later releases.  Adding these names to "std" is technically
-// forbidden, but it makes for fewer (eventual) changes in client code.
-#ifndef CODA_OSS_AUGMENT_std_namespace
-    #if CODA_OSS_cpp20
-        #define CODA_OSS_AUGMENT_std_namespace 0  // nothing to add if we're at C++20
-    #else
-        //#define CODA_OSS_AUGMENT_std_namespace 0
-        #define CODA_OSS_AUGMENT_std_namespace 1
-    #endif
-#endif
 
 #endif // __SYS_CONF_H__

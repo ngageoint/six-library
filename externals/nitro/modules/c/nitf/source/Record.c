@@ -1355,6 +1355,11 @@ nitf_Record_removeImageSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
+        if (!infoArray)
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY);
+            goto CATCH_ERROR;
+        }
 
         /* Iterate over current infos */
         for (i = 0; i < segmentNumber; ++i)
@@ -1429,6 +1434,11 @@ nitf_Record_removeGraphicSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
+        if (!infoArray)
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY);
+            goto CATCH_ERROR;
+        }
 
         /* Iterate over current infos */
         for (i = 0; i < segmentNumber; ++i)
@@ -1502,7 +1512,11 @@ nitf_Record_removeLabelSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
-
+        if (!infoArray)
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY);
+            goto CATCH_ERROR;
+        }
         /* Iterate over current infos */
         for (i = 0; i < segmentNumber; ++i)
         {
@@ -1573,7 +1587,11 @@ nitf_Record_removeTextSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
-
+        if (!infoArray)
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY);
+            goto CATCH_ERROR;
+        }
         /* Iterate over current infos */
         for (i = 0; i < segmentNumber; ++i)
             infoArray[i] = record->header->textInfo[i];
@@ -1642,7 +1660,11 @@ nitf_Record_removeDataExtensionSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
-
+        if (!infoArray)
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY);
+            goto CATCH_ERROR;
+        }
         /* Iterate over current infos */
         for (i = 0; i < segmentNumber; ++i)
         {
@@ -1719,7 +1741,11 @@ nitf_Record_removeReservedExtensionSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
-
+        if (!infoArray)
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY);
+            goto CATCH_ERROR;
+        }
         /* Iterate over current infos */
         for (i = 0; i < segmentNumber; ++i)
         {
@@ -2041,7 +2067,7 @@ CATCH_ERROR:
                 return NITF_FAILURE;                                           \
             }                                                                  \
         }                                                                      \
-        if (!moveTREs(section,                                                 \
+        if ((overflow == NULL) || !moveTREs(section,                                                 \
                       overflow->subheader->userDefinedSection,                 \
                       maxLength,                                               \
                       error))                                                  \
@@ -2201,6 +2227,7 @@ nitf_Record_unmergeTREs(nitf_Record* record, nitf_Error* error)
                         LXSHD);
 
         segIndex += 1;
+        nitf_ListIterator_increment(&segIter);
     }
 
     /* Text segments */

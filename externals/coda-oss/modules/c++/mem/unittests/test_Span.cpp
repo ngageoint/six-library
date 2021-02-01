@@ -25,6 +25,7 @@
 #include <vector>
 #include <string>
 
+#include <mem/Span.h>
 #include <gsl/gsl.h>
 
 #include "TestCase.h"
@@ -32,11 +33,11 @@
 namespace
 {
 
-TEST_CASE(testSpanBuffer)
-{
-    std::vector<int> ints{1, 2, 3, 4, 5};
-    auto span = gsl::make_span(ints.data(), ints.size());
 
+ template<typename TContainer, typename TSpan>
+ static void testSpanBuffer_(const std::string& testName,
+     const TContainer& ints, const TSpan& span)
+{
     TEST_ASSERT_EQ(ints.size(), span.size());
     TEST_ASSERT_EQ(ints.data(), span.data());
 
@@ -46,17 +47,43 @@ TEST_CASE(testSpanBuffer)
     span[0] = span[4];
     TEST_ASSERT_EQ(5, span[0]);
 }
-
-TEST_CASE(testSpanVector)
+TEST_CASE(testSpanBuffer)
 {
-    const std::vector<int> ints{1, 2, 3, 4, 5};
-    const auto span = gsl::make_span(ints);
+    {
+        std::vector<int> ints{1, 2, 3, 4, 5};
+        auto span = mem::make_Span(ints.data(), ints.size());
+        testSpanBuffer_(testName, ints, span);
+    }
+    {
+        std::vector<int> ints{1, 2, 3, 4, 5};
+        auto span = gsl::make_span(ints.data(), ints.size());
+        testSpanBuffer_(testName, ints, span);
+    }
+}
 
+ template <typename TContainer, typename TSpan>
+static void testSpanVector_(const std::string& testName,
+                            const TContainer& ints,
+                            const TSpan& span)
+{
     TEST_ASSERT_EQ(ints.size(), span.size());
     TEST_ASSERT_EQ(ints.data(), span.data());
 
     TEST_ASSERT_EQ(1, span[0]);
     TEST_ASSERT_EQ(5, span[4]);
+}
+TEST_CASE(testSpanVector)
+{
+    {
+        std::vector<int> ints{1, 2, 3, 4, 5};
+        const auto span = mem::make_Span(ints);
+        testSpanVector_(testName, ints, span);
+    }
+    {
+        std::vector<int> ints{1, 2, 3, 4, 5};
+        const auto span = gsl::make_span(ints);
+        testSpanVector_(testName, ints, span);
+    }
 }
 
 TEST_CASE(testGslNarrow)
