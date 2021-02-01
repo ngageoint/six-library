@@ -1965,8 +1965,8 @@ def readNITF(pathname: 'std::string const &', schemaPaths: 'VectorString') -> "D
     """readNITF(std::string const & pathname, VectorString schemaPaths) -> Data *"""
     return _six_sicd.readNITF(pathname, schemaPaths)
 
-def cropMetaData(complexData: 'ComplexData', aoiOffset: 'RowColSizeT', aoiDims: 'RowColSizeT') -> "std::auto_ptr< six::sicd::ComplexData >":
-    """cropMetaData(ComplexData complexData, RowColSizeT aoiOffset, RowColSizeT aoiDims) -> std::auto_ptr< six::sicd::ComplexData >"""
+def cropMetaData(complexData: 'ComplexData', aoiOffset: 'RowColSizeT', aoiDims: 'RowColSizeT') -> "mem::auto_ptr< six::sicd::ComplexData >":
+    """cropMetaData(ComplexData complexData, RowColSizeT aoiOffset, RowColSizeT aoiDims) -> mem::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.cropMetaData(complexData, aoiOffset, aoiDims)
 
 def _readRecord(pathname: 'std::string const &') -> "nitf::Record":
@@ -4748,17 +4748,17 @@ class SixSicdUtilities(_object):
 
     getProjectionModel = staticmethod(getProjectionModel)
 
-    def getModelComponents(complexData: 'ComplexData', geometry: 'std::auto_ptr< scene::SceneGeometry > &', projectionModel: 'std::auto_ptr< scene::ProjectionModel > &', areaPlane: 'AreaPlane') -> "void":
-        """getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
+    def getModelComponents(complexData: 'ComplexData', geometry: 'mem::auto_ptr< scene::SceneGeometry > &', projectionModel: 'mem::auto_ptr< scene::ProjectionModel > &', areaPlane: 'AreaPlane') -> "void":
+        """getModelComponents(ComplexData complexData, mem::auto_ptr< scene::SceneGeometry > & geometry, mem::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
         return _six_sicd.SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
 
     getModelComponents = staticmethod(getModelComponents)
 
-    def getPolynomialFitter(*args) -> "std::auto_ptr< scene::ProjectionPolynomialFitter >":
+    def getPolynomialFitter(*args) -> "mem::auto_ptr< scene::ProjectionPolynomialFitter >":
         """
-        getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
-        getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
-        getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+        getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> mem::auto_ptr< scene::ProjectionPolynomialFitter >
+        getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> mem::auto_ptr< scene::ProjectionPolynomialFitter >
+        getPolynomialFitter(ComplexData complexData) -> mem::auto_ptr< scene::ProjectionPolynomialFitter >
         """
         return _six_sicd.SixSicdUtilities_getPolynomialFitter(*args)
 
@@ -4772,17 +4772,17 @@ class SixSicdUtilities(_object):
 
     def readSicd(*args) -> "void":
         """
-        readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
-        readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh, std::auto_ptr< six::sicd::ScalarMesh > & scalarMesh)
+        readSicd(std::string const & sicdPathname, VectorString schemaPaths, mem::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
+        readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, mem::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, mem::auto_ptr< six::sicd::NoiseMesh > & noiseMesh, mem::auto_ptr< six::sicd::ScalarMesh > & scalarMesh)
         """
         return _six_sicd.SixSicdUtilities_readSicd(*args)
 
     readSicd = staticmethod(readSicd)
 
-    def getComplexData(*args) -> "std::auto_ptr< six::sicd::ComplexData >":
+    def getComplexData(*args) -> "mem::auto_ptr< six::sicd::ComplexData >":
         """
-        getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
-        getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+        getComplexData(std::string const & pathname, VectorString schemaPaths) -> mem::auto_ptr< six::sicd::ComplexData >
+        getComplexData(NITFReadControl & reader) -> mem::auto_ptr< six::sicd::ComplexData >
         """
         return _six_sicd.SixSicdUtilities_getComplexData(*args)
 
@@ -4822,20 +4822,20 @@ class SixSicdUtilities(_object):
 
     isClockwise = staticmethod(isClockwise)
 
-    def parseData(xmlStream: 'InputStream', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
-        """parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    def parseData(xmlStream: 'InputStream', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "mem::auto_ptr< six::sicd::ComplexData >":
+        """parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
 
     parseData = staticmethod(parseData)
 
-    def parseDataFromFile(pathname: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
-        """parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    def parseDataFromFile(pathname: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "mem::auto_ptr< six::sicd::ComplexData >":
+        """parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
 
     parseDataFromFile = staticmethod(parseDataFromFile)
 
-    def parseDataFromString(xmlStr: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
-        """parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+    def parseDataFromString(xmlStr: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "mem::auto_ptr< six::sicd::ComplexData >":
+        """parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
 
     parseDataFromString = staticmethod(parseDataFromString)
@@ -4850,26 +4850,26 @@ class SixSicdUtilities(_object):
 
     toXMLString = staticmethod(toXMLString)
 
-    def createFakeComplexData() -> "std::auto_ptr< six::sicd::ComplexData >":
-        """createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
+    def createFakeComplexData() -> "mem::auto_ptr< six::sicd::ComplexData >":
+        """createFakeComplexData() -> mem::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_createFakeComplexData()
 
     createFakeComplexData = staticmethod(createFakeComplexData)
 
-    def getNoiseMesh(reader: 'NITFReadControl &') -> "std::auto_ptr< six::sicd::NoiseMesh >":
-        """getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
+    def getNoiseMesh(reader: 'NITFReadControl &') -> "mem::auto_ptr< six::sicd::NoiseMesh >":
+        """getNoiseMesh(NITFReadControl & reader) -> mem::auto_ptr< six::sicd::NoiseMesh >"""
         return _six_sicd.SixSicdUtilities_getNoiseMesh(reader)
 
     getNoiseMesh = staticmethod(getNoiseMesh)
 
-    def getScalarMesh(reader: 'NITFReadControl &') -> "std::auto_ptr< six::sicd::ScalarMesh >":
-        """getScalarMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ScalarMesh >"""
+    def getScalarMesh(reader: 'NITFReadControl &') -> "mem::auto_ptr< six::sicd::ScalarMesh >":
+        """getScalarMesh(NITFReadControl & reader) -> mem::auto_ptr< six::sicd::ScalarMesh >"""
         return _six_sicd.SixSicdUtilities_getScalarMesh(reader)
 
     getScalarMesh = staticmethod(getScalarMesh)
 
-    def getProjectionPolys(reader: 'NITFReadControl &', orderX: 'size_t', orderY: 'size_t', complexData: 'std::auto_ptr< six::sicd::ComplexData > &', outputRowColToSlantRow: 'Poly2D', outputRowColToSlantCol: 'Poly2D') -> "void":
-        """getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+    def getProjectionPolys(reader: 'NITFReadControl &', orderX: 'size_t', orderY: 'size_t', complexData: 'mem::auto_ptr< six::sicd::ComplexData > &', outputRowColToSlantRow: 'Poly2D', outputRowColToSlantCol: 'Poly2D') -> "void":
+        """getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, mem::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
         return _six_sicd.SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
 
     getProjectionPolys = staticmethod(getProjectionPolys)
@@ -4930,15 +4930,15 @@ def SixSicdUtilities_getProjectionModel(data: 'ComplexData', geom: 'SceneGeometr
     """SixSicdUtilities_getProjectionModel(ComplexData data, SceneGeometry geom) -> ProjectionModel"""
     return _six_sicd.SixSicdUtilities_getProjectionModel(data, geom)
 
-def SixSicdUtilities_getModelComponents(complexData: 'ComplexData', geometry: 'std::auto_ptr< scene::SceneGeometry > &', projectionModel: 'std::auto_ptr< scene::ProjectionModel > &', areaPlane: 'AreaPlane') -> "void":
-    """SixSicdUtilities_getModelComponents(ComplexData complexData, std::auto_ptr< scene::SceneGeometry > & geometry, std::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
+def SixSicdUtilities_getModelComponents(complexData: 'ComplexData', geometry: 'mem::auto_ptr< scene::SceneGeometry > &', projectionModel: 'mem::auto_ptr< scene::ProjectionModel > &', areaPlane: 'AreaPlane') -> "void":
+    """SixSicdUtilities_getModelComponents(ComplexData complexData, mem::auto_ptr< scene::SceneGeometry > & geometry, mem::auto_ptr< scene::ProjectionModel > & projectionModel, AreaPlane areaPlane)"""
     return _six_sicd.SixSicdUtilities_getModelComponents(complexData, geometry, projectionModel, areaPlane)
 
-def SixSicdUtilities_getPolynomialFitter(*args) -> "std::auto_ptr< scene::ProjectionPolynomialFitter >":
+def SixSicdUtilities_getPolynomialFitter(*args) -> "mem::auto_ptr< scene::ProjectionPolynomialFitter >":
     """
-    getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
-    getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
-    SixSicdUtilities_getPolynomialFitter(ComplexData complexData) -> std::auto_ptr< scene::ProjectionPolynomialFitter >
+    getPolynomialFitter(ComplexData complexData, size_t numPoints1D, bool sampleWithinValidDataPolygon=False) -> mem::auto_ptr< scene::ProjectionPolynomialFitter >
+    getPolynomialFitter(ComplexData complexData, size_t numPoints1D) -> mem::auto_ptr< scene::ProjectionPolynomialFitter >
+    SixSicdUtilities_getPolynomialFitter(ComplexData complexData) -> mem::auto_ptr< scene::ProjectionPolynomialFitter >
     """
     return _six_sicd.SixSicdUtilities_getPolynomialFitter(*args)
 
@@ -4948,15 +4948,15 @@ def SixSicdUtilities_getValidDataPolygon(sicdData: 'ComplexData', projection: 'P
 
 def SixSicdUtilities_readSicd(*args) -> "void":
     """
-    readSicd(std::string const & sicdPathname, VectorString schemaPaths, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
-    SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, std::auto_ptr< six::sicd::NoiseMesh > & noiseMesh, std::auto_ptr< six::sicd::ScalarMesh > & scalarMesh)
+    readSicd(std::string const & sicdPathname, VectorString schemaPaths, mem::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData)
+    SixSicdUtilities_readSicd(std::string const & sicdPathname, VectorString schemaPaths, size_t orderX, size_t orderY, mem::auto_ptr< six::sicd::ComplexData > & complexData, std::vector< std::complex< float >,std::allocator< std::complex< float > > > & widebandData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol, mem::auto_ptr< six::sicd::NoiseMesh > & noiseMesh, mem::auto_ptr< six::sicd::ScalarMesh > & scalarMesh)
     """
     return _six_sicd.SixSicdUtilities_readSicd(*args)
 
-def SixSicdUtilities_getComplexData(*args) -> "std::auto_ptr< six::sicd::ComplexData >":
+def SixSicdUtilities_getComplexData(*args) -> "mem::auto_ptr< six::sicd::ComplexData >":
     """
-    getComplexData(std::string const & pathname, VectorString schemaPaths) -> std::auto_ptr< six::sicd::ComplexData >
-    SixSicdUtilities_getComplexData(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ComplexData >
+    getComplexData(std::string const & pathname, VectorString schemaPaths) -> mem::auto_ptr< six::sicd::ComplexData >
+    SixSicdUtilities_getComplexData(NITFReadControl & reader) -> mem::auto_ptr< six::sicd::ComplexData >
     """
     return _six_sicd.SixSicdUtilities_getComplexData(*args)
 
@@ -4986,16 +4986,16 @@ def SixSicdUtilities_isClockwise(vertices: 'VectorRowColInt', isUpPositive: 'boo
     """
     return _six_sicd.SixSicdUtilities_isClockwise(vertices, isUpPositive)
 
-def SixSicdUtilities_parseData(xmlStream: 'InputStream', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
-    """SixSicdUtilities_parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+def SixSicdUtilities_parseData(xmlStream: 'InputStream', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "mem::auto_ptr< six::sicd::ComplexData >":
+    """SixSicdUtilities_parseData(InputStream xmlStream, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_parseData(xmlStream, schemaPaths, log)
 
-def SixSicdUtilities_parseDataFromFile(pathname: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
-    """SixSicdUtilities_parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+def SixSicdUtilities_parseDataFromFile(pathname: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "mem::auto_ptr< six::sicd::ComplexData >":
+    """SixSicdUtilities_parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
 
-def SixSicdUtilities_parseDataFromString(xmlStr: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "std::auto_ptr< six::sicd::ComplexData >":
-    """SixSicdUtilities_parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::sicd::ComplexData >"""
+def SixSicdUtilities_parseDataFromString(xmlStr: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "mem::auto_ptr< six::sicd::ComplexData >":
+    """SixSicdUtilities_parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
 
 def SixSicdUtilities_toXMLString(*args) -> "std::string":
@@ -5006,20 +5006,20 @@ def SixSicdUtilities_toXMLString(*args) -> "std::string":
     """
     return _six_sicd.SixSicdUtilities_toXMLString(*args)
 
-def SixSicdUtilities_createFakeComplexData() -> "std::auto_ptr< six::sicd::ComplexData >":
-    """SixSicdUtilities_createFakeComplexData() -> std::auto_ptr< six::sicd::ComplexData >"""
+def SixSicdUtilities_createFakeComplexData() -> "mem::auto_ptr< six::sicd::ComplexData >":
+    """SixSicdUtilities_createFakeComplexData() -> mem::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_createFakeComplexData()
 
-def SixSicdUtilities_getNoiseMesh(reader: 'NITFReadControl &') -> "std::auto_ptr< six::sicd::NoiseMesh >":
-    """SixSicdUtilities_getNoiseMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::NoiseMesh >"""
+def SixSicdUtilities_getNoiseMesh(reader: 'NITFReadControl &') -> "mem::auto_ptr< six::sicd::NoiseMesh >":
+    """SixSicdUtilities_getNoiseMesh(NITFReadControl & reader) -> mem::auto_ptr< six::sicd::NoiseMesh >"""
     return _six_sicd.SixSicdUtilities_getNoiseMesh(reader)
 
-def SixSicdUtilities_getScalarMesh(reader: 'NITFReadControl &') -> "std::auto_ptr< six::sicd::ScalarMesh >":
-    """SixSicdUtilities_getScalarMesh(NITFReadControl & reader) -> std::auto_ptr< six::sicd::ScalarMesh >"""
+def SixSicdUtilities_getScalarMesh(reader: 'NITFReadControl &') -> "mem::auto_ptr< six::sicd::ScalarMesh >":
+    """SixSicdUtilities_getScalarMesh(NITFReadControl & reader) -> mem::auto_ptr< six::sicd::ScalarMesh >"""
     return _six_sicd.SixSicdUtilities_getScalarMesh(reader)
 
-def SixSicdUtilities_getProjectionPolys(reader: 'NITFReadControl &', orderX: 'size_t', orderY: 'size_t', complexData: 'std::auto_ptr< six::sicd::ComplexData > &', outputRowColToSlantRow: 'Poly2D', outputRowColToSlantCol: 'Poly2D') -> "void":
-    """SixSicdUtilities_getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, std::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
+def SixSicdUtilities_getProjectionPolys(reader: 'NITFReadControl &', orderX: 'size_t', orderY: 'size_t', complexData: 'mem::auto_ptr< six::sicd::ComplexData > &', outputRowColToSlantRow: 'Poly2D', outputRowColToSlantCol: 'Poly2D') -> "void":
+    """SixSicdUtilities_getProjectionPolys(NITFReadControl & reader, size_t orderX, size_t orderY, mem::auto_ptr< six::sicd::ComplexData > & complexData, Poly2D outputRowColToSlantRow, Poly2D outputRowColToSlantCol)"""
     return _six_sicd.SixSicdUtilities_getProjectionPolys(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol)
 
 def SixSicdUtilities_transformXYPolyToRowColPoly(polyXY: 'Poly2D', outSampleSpacing: 'RowColDouble', outCenter: 'RowColDouble', polyScaleFactor: 'double', polyShift: 'double') -> "six::Poly2D":
@@ -5144,7 +5144,7 @@ GeoLocator_swigregister = _six_sicd.GeoLocator_swigregister
 GeoLocator_swigregister(GeoLocator)
 
 class StdAutoGeoData(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::GeoData)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::GeoData)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGeoData, name, value)
@@ -5153,7 +5153,7 @@ class StdAutoGeoData(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::GeoData)> self) -> StdAutoGeoData"""
+        """__init__(mem::auto_ptr<(six::sicd::GeoData)> self) -> StdAutoGeoData"""
         this = _six_sicd.new_StdAutoGeoData()
         try:
             self.this.append(this)
@@ -5263,7 +5263,7 @@ def makeScopedCopyableGeoData() -> "mem::ScopedCopyablePtr< six::sicd::GeoData >
     """makeScopedCopyableGeoData() -> ScopedCopyableGeoData"""
     return _six_sicd.makeScopedCopyableGeoData()
 class StdAutoImageCreation(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::ImageCreation)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::ImageCreation)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoImageCreation, name, value)
@@ -5272,7 +5272,7 @@ class StdAutoImageCreation(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::ImageCreation)> self) -> StdAutoImageCreation"""
+        """__init__(mem::auto_ptr<(six::sicd::ImageCreation)> self) -> StdAutoImageCreation"""
         this = _six_sicd.new_StdAutoImageCreation()
         try:
             self.this.append(this)
@@ -5367,7 +5367,7 @@ def makeScopedCloneableImageCreation() -> "mem::ScopedCloneablePtr< six::sicd::I
     """makeScopedCloneableImageCreation() -> ScopedCloneableImageCreation"""
     return _six_sicd.makeScopedCloneableImageCreation()
 class StdAutoImageData(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::ImageData)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::ImageData)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoImageData, name, value)
@@ -5376,7 +5376,7 @@ class StdAutoImageData(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::ImageData)> self) -> StdAutoImageData"""
+        """__init__(mem::auto_ptr<(six::sicd::ImageData)> self) -> StdAutoImageData"""
         this = _six_sicd.new_StdAutoImageData()
         try:
             self.this.append(this)
@@ -5497,7 +5497,7 @@ def makeScopedCopyableImageData() -> "mem::ScopedCopyablePtr< six::sicd::ImageDa
     """makeScopedCopyableImageData() -> ScopedCopyableImageData"""
     return _six_sicd.makeScopedCopyableImageData()
 class StdAutoGrid(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::Grid)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::Grid)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGrid, name, value)
@@ -5506,7 +5506,7 @@ class StdAutoGrid(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::Grid)> self) -> StdAutoGrid"""
+        """__init__(mem::auto_ptr<(six::sicd::Grid)> self) -> StdAutoGrid"""
         this = _six_sicd.new_StdAutoGrid()
         try:
             self.this.append(this)
@@ -5632,7 +5632,7 @@ def makeScopedCloneableGrid() -> "mem::ScopedCloneablePtr< six::sicd::Grid >":
     """makeScopedCloneableGrid() -> ScopedCloneableGrid"""
     return _six_sicd.makeScopedCloneableGrid()
 class StdAutoTimeline(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::Timeline)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::Timeline)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoTimeline, name, value)
@@ -5641,7 +5641,7 @@ class StdAutoTimeline(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::Timeline)> self) -> StdAutoTimeline"""
+        """__init__(mem::auto_ptr<(six::sicd::Timeline)> self) -> StdAutoTimeline"""
         this = _six_sicd.new_StdAutoTimeline()
         try:
             self.this.append(this)
@@ -5733,7 +5733,7 @@ def makeScopedCopyableTimeline() -> "mem::ScopedCopyablePtr< six::sicd::Timeline
     """makeScopedCopyableTimeline() -> ScopedCopyableTimeline"""
     return _six_sicd.makeScopedCopyableTimeline()
 class StdAutoPosition(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::Position)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::Position)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoPosition, name, value)
@@ -5742,7 +5742,7 @@ class StdAutoPosition(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::Position)> self) -> StdAutoPosition"""
+        """__init__(mem::auto_ptr<(six::sicd::Position)> self) -> StdAutoPosition"""
         this = _six_sicd.new_StdAutoPosition()
         try:
             self.this.append(this)
@@ -5848,7 +5848,7 @@ def makeScopedCopyablePosition() -> "mem::ScopedCopyablePtr< six::sicd::Position
     """makeScopedCopyablePosition() -> ScopedCopyablePosition"""
     return _six_sicd.makeScopedCopyablePosition()
 class StdAutoRcvAPC(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::RcvAPC)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::RcvAPC)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRcvAPC, name, value)
@@ -5857,7 +5857,7 @@ class StdAutoRcvAPC(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::RcvAPC)> self) -> StdAutoRcvAPC"""
+        """__init__(mem::auto_ptr<(six::sicd::RcvAPC)> self) -> StdAutoRcvAPC"""
         this = _six_sicd.new_StdAutoRcvAPC()
         try:
             self.this.append(this)
@@ -5941,7 +5941,7 @@ def makeScopedCopyableRcvAPC() -> "mem::ScopedCopyablePtr< six::sicd::RcvAPC >":
     """makeScopedCopyableRcvAPC() -> ScopedCopyableRcvAPC"""
     return _six_sicd.makeScopedCopyableRcvAPC()
 class StdAutoRadarCollection(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::RadarCollection)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::RadarCollection)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRadarCollection, name, value)
@@ -5950,7 +5950,7 @@ class StdAutoRadarCollection(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::RadarCollection)> self) -> StdAutoRadarCollection"""
+        """__init__(mem::auto_ptr<(six::sicd::RadarCollection)> self) -> StdAutoRadarCollection"""
         this = _six_sicd.new_StdAutoRadarCollection()
         try:
             self.this.append(this)
@@ -6079,7 +6079,7 @@ def makeScopedCloneableRadarCollection() -> "mem::ScopedCloneablePtr< six::sicd:
     """makeScopedCloneableRadarCollection() -> ScopedCloneableRadarCollection"""
     return _six_sicd.makeScopedCloneableRadarCollection()
 class StdAutoImageFormation(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::ImageFormation)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::ImageFormation)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoImageFormation, name, value)
@@ -6088,7 +6088,7 @@ class StdAutoImageFormation(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::ImageFormation)> self) -> StdAutoImageFormation"""
+        """__init__(mem::auto_ptr<(six::sicd::ImageFormation)> self) -> StdAutoImageFormation"""
         this = _six_sicd.new_StdAutoImageFormation()
         try:
             self.this.append(this)
@@ -6229,7 +6229,7 @@ def makeScopedCopyableImageFormation() -> "mem::ScopedCopyablePtr< six::sicd::Im
     """makeScopedCopyableImageFormation() -> ScopedCopyableImageFormation"""
     return _six_sicd.makeScopedCopyableImageFormation()
 class StdAutoSCPCOA(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::SCPCOA)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::SCPCOA)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoSCPCOA, name, value)
@@ -6238,7 +6238,7 @@ class StdAutoSCPCOA(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::SCPCOA)> self) -> StdAutoSCPCOA"""
+        """__init__(mem::auto_ptr<(six::sicd::SCPCOA)> self) -> StdAutoSCPCOA"""
         this = _six_sicd.new_StdAutoSCPCOA()
         try:
             self.this.append(this)
@@ -6404,7 +6404,7 @@ def makeScopedCopyableSCPCOA() -> "mem::ScopedCopyablePtr< six::sicd::SCPCOA >":
     """makeScopedCopyableSCPCOA() -> ScopedCopyableSCPCOA"""
     return _six_sicd.makeScopedCopyableSCPCOA()
 class StdAutoAntenna(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::Antenna)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::Antenna)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoAntenna, name, value)
@@ -6413,7 +6413,7 @@ class StdAutoAntenna(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::Antenna)> self) -> StdAutoAntenna"""
+        """__init__(mem::auto_ptr<(six::sicd::Antenna)> self) -> StdAutoAntenna"""
         this = _six_sicd.new_StdAutoAntenna()
         try:
             self.this.append(this)
@@ -6505,7 +6505,7 @@ def makeScopedCopyableAntenna() -> "mem::ScopedCopyablePtr< six::sicd::Antenna >
     """makeScopedCopyableAntenna() -> ScopedCopyableAntenna"""
     return _six_sicd.makeScopedCopyableAntenna()
 class StdAutoSlowTimeDeskew(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::SlowTimeDeskew)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::SlowTimeDeskew)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoSlowTimeDeskew, name, value)
@@ -6514,7 +6514,7 @@ class StdAutoSlowTimeDeskew(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::SlowTimeDeskew)> self) -> StdAutoSlowTimeDeskew"""
+        """__init__(mem::auto_ptr<(six::sicd::SlowTimeDeskew)> self) -> StdAutoSlowTimeDeskew"""
         this = _six_sicd.new_StdAutoSlowTimeDeskew()
         try:
             self.this.append(this)
@@ -6602,7 +6602,7 @@ def makeScopedCopyableSlowTimeDeskew() -> "mem::ScopedCopyablePtr< six::sicd::Sl
     """makeScopedCopyableSlowTimeDeskew() -> ScopedCopyableSlowTimeDeskew"""
     return _six_sicd.makeScopedCopyableSlowTimeDeskew()
 class StdAutoPFA(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::PFA)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::PFA)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoPFA, name, value)
@@ -6611,7 +6611,7 @@ class StdAutoPFA(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::PFA)> self) -> StdAutoPFA"""
+        """__init__(mem::auto_ptr<(six::sicd::PFA)> self) -> StdAutoPFA"""
         this = _six_sicd.new_StdAutoPFA()
         try:
             self.this.append(this)
@@ -6746,7 +6746,7 @@ def makeScopedCopyablePFA() -> "mem::ScopedCopyablePtr< six::sicd::PFA >":
     """makeScopedCopyablePFA() -> ScopedCopyablePFA"""
     return _six_sicd.makeScopedCopyablePFA()
 class StdAutoRMA(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::RMA)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::RMA)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRMA, name, value)
@@ -6755,7 +6755,7 @@ class StdAutoRMA(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::RMA)> self) -> StdAutoRMA"""
+        """__init__(mem::auto_ptr<(six::sicd::RMA)> self) -> StdAutoRMA"""
         this = _six_sicd.new_StdAutoRMA()
         try:
             self.this.append(this)
@@ -6866,7 +6866,7 @@ def makeScopedCopyableRMA() -> "mem::ScopedCopyablePtr< six::sicd::RMA >":
     """makeScopedCopyableRMA() -> ScopedCopyableRMA"""
     return _six_sicd.makeScopedCopyableRMA()
 class StdAutoRgAzComp(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::RgAzComp)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::RgAzComp)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRgAzComp, name, value)
@@ -6875,7 +6875,7 @@ class StdAutoRgAzComp(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::RgAzComp)> self) -> StdAutoRgAzComp"""
+        """__init__(mem::auto_ptr<(six::sicd::RgAzComp)> self) -> StdAutoRgAzComp"""
         this = _six_sicd.new_StdAutoRgAzComp()
         try:
             self.this.append(this)
@@ -7189,7 +7189,7 @@ VectorLatLon_swigregister = _six_sicd.VectorLatLon_swigregister
 VectorLatLon_swigregister(VectorLatLon)
 
 class StdAutoAntennaParameters(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::AntennaParameters)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::AntennaParameters)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoAntennaParameters, name, value)
@@ -7198,7 +7198,7 @@ class StdAutoAntennaParameters(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::AntennaParameters)> self) -> StdAutoAntennaParameters"""
+        """__init__(mem::auto_ptr<(six::sicd::AntennaParameters)> self) -> StdAutoAntennaParameters"""
         this = _six_sicd.new_StdAutoAntennaParameters()
         try:
             self.this.append(this)
@@ -7318,7 +7318,7 @@ def makeScopedCopyableAntennaParameters() -> "mem::ScopedCopyablePtr< six::sicd:
     """makeScopedCopyableAntennaParameters() -> ScopedCopyableAntennaParameters"""
     return _six_sicd.makeScopedCopyableAntennaParameters()
 class StdAutoElectricalBoresight(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::ElectricalBoresight)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::ElectricalBoresight)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoElectricalBoresight, name, value)
@@ -7327,7 +7327,7 @@ class StdAutoElectricalBoresight(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::ElectricalBoresight)> self) -> StdAutoElectricalBoresight"""
+        """__init__(mem::auto_ptr<(six::sicd::ElectricalBoresight)> self) -> StdAutoElectricalBoresight"""
         this = _six_sicd.new_StdAutoElectricalBoresight()
         try:
             self.this.append(this)
@@ -7415,7 +7415,7 @@ def makeScopedCopyableElectricalBoresight() -> "mem::ScopedCopyablePtr< six::sic
     """makeScopedCopyableElectricalBoresight() -> ScopedCopyableElectricalBoresight"""
     return _six_sicd.makeScopedCopyableElectricalBoresight()
 class StdAutoHalfPowerBeamwidths(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::HalfPowerBeamwidths)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::HalfPowerBeamwidths)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoHalfPowerBeamwidths, name, value)
@@ -7424,7 +7424,7 @@ class StdAutoHalfPowerBeamwidths(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::HalfPowerBeamwidths)> self) -> StdAutoHalfPowerBeamwidths"""
+        """__init__(mem::auto_ptr<(six::sicd::HalfPowerBeamwidths)> self) -> StdAutoHalfPowerBeamwidths"""
         this = _six_sicd.new_StdAutoHalfPowerBeamwidths()
         try:
             self.this.append(this)
@@ -7512,7 +7512,7 @@ def makeScopedCopyableHalfPowerBeamwidths() -> "mem::ScopedCopyablePtr< six::sic
     """makeScopedCopyableHalfPowerBeamwidths() -> ScopedCopyableHalfPowerBeamwidths"""
     return _six_sicd.makeScopedCopyableHalfPowerBeamwidths()
 class StdAutoGainAndPhasePolys(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::GainAndPhasePolys)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::GainAndPhasePolys)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGainAndPhasePolys, name, value)
@@ -7521,7 +7521,7 @@ class StdAutoGainAndPhasePolys(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::GainAndPhasePolys)> self) -> StdAutoGainAndPhasePolys"""
+        """__init__(mem::auto_ptr<(six::sicd::GainAndPhasePolys)> self) -> StdAutoGainAndPhasePolys"""
         this = _six_sicd.new_StdAutoGainAndPhasePolys()
         try:
             self.this.append(this)
@@ -7609,7 +7609,7 @@ def makeScopedCopyableGainAndPhasePolys() -> "mem::ScopedCopyablePtr< six::sicd:
     """makeScopedCopyableGainAndPhasePolys() -> ScopedCopyableGainAndPhasePolys"""
     return _six_sicd.makeScopedCopyableGainAndPhasePolys()
 class StdAutoWeightType(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::WeightType)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::WeightType)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoWeightType, name, value)
@@ -7618,7 +7618,7 @@ class StdAutoWeightType(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::WeightType)> self) -> StdAutoWeightType"""
+        """__init__(mem::auto_ptr<(six::sicd::WeightType)> self) -> StdAutoWeightType"""
         this = _six_sicd.new_StdAutoWeightType()
         try:
             self.this.append(this)
@@ -7922,7 +7922,7 @@ VectorPolyXYZ_swigregister = _six_sicd.VectorPolyXYZ_swigregister
 VectorPolyXYZ_swigregister(VectorPolyXYZ)
 
 class StdAutoDirectionParameters(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::DirectionParameters)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::DirectionParameters)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoDirectionParameters, name, value)
@@ -7931,7 +7931,7 @@ class StdAutoDirectionParameters(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::DirectionParameters)> self) -> StdAutoDirectionParameters"""
+        """__init__(mem::auto_ptr<(six::sicd::DirectionParameters)> self) -> StdAutoDirectionParameters"""
         this = _six_sicd.new_StdAutoDirectionParameters()
         try:
             self.this.append(this)
@@ -8072,7 +8072,7 @@ def makeScopedCloneableDirectionParameters() -> "mem::ScopedCloneablePtr< six::s
     """makeScopedCloneableDirectionParameters() -> ScopedCloneableDirectionParameters"""
     return _six_sicd.makeScopedCloneableDirectionParameters()
 class StdAutoAreaPlane(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::AreaPlane)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::AreaPlane)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoAreaPlane, name, value)
@@ -8081,7 +8081,7 @@ class StdAutoAreaPlane(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::AreaPlane)> self) -> StdAutoAreaPlane"""
+        """__init__(mem::auto_ptr<(six::sicd::AreaPlane)> self) -> StdAutoAreaPlane"""
         this = _six_sicd.new_StdAutoAreaPlane()
         try:
             self.this.append(this)
@@ -8200,7 +8200,7 @@ def makeScopedCloneableAreaPlane() -> "mem::ScopedCloneablePtr< six::sicd::AreaP
     """makeScopedCloneableAreaPlane() -> ScopedCloneableAreaPlane"""
     return _six_sicd.makeScopedCloneableAreaPlane()
 class StdAutoAreaDirectionParameters(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::AreaDirectionParameters)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::AreaDirectionParameters)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoAreaDirectionParameters, name, value)
@@ -8209,7 +8209,7 @@ class StdAutoAreaDirectionParameters(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::AreaDirectionParameters)> self) -> StdAutoAreaDirectionParameters"""
+        """__init__(mem::auto_ptr<(six::sicd::AreaDirectionParameters)> self) -> StdAutoAreaDirectionParameters"""
         this = _six_sicd.new_StdAutoAreaDirectionParameters()
         try:
             self.this.append(this)
@@ -8309,7 +8309,7 @@ def makeScopedCloneableAreaDirectionParameters() -> "mem::ScopedCloneablePtr< si
     """makeScopedCloneableAreaDirectionParameters() -> ScopedCloneableAreaDirectionParameters"""
     return _six_sicd.makeScopedCloneableAreaDirectionParameters()
 class StdAutoSegment(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::Segment)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::Segment)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoSegment, name, value)
@@ -8318,7 +8318,7 @@ class StdAutoSegment(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::Segment)> self) -> StdAutoSegment"""
+        """__init__(mem::auto_ptr<(six::sicd::Segment)> self) -> StdAutoSegment"""
         this = _six_sicd.new_StdAutoSegment()
         try:
             self.this.append(this)
@@ -8432,7 +8432,7 @@ def makeScopedCloneableSegment() -> "mem::ScopedCloneablePtr< six::sicd::Segment
     """makeScopedCloneableSegment() -> ScopedCloneableSegment"""
     return _six_sicd.makeScopedCloneableSegment()
 class StdAutoTxStep(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::TxStep)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::TxStep)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoTxStep, name, value)
@@ -8441,7 +8441,7 @@ class StdAutoTxStep(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::TxStep)> self) -> StdAutoTxStep"""
+        """__init__(mem::auto_ptr<(six::sicd::TxStep)> self) -> StdAutoTxStep"""
         this = _six_sicd.new_StdAutoTxStep()
         try:
             self.this.append(this)
@@ -8528,7 +8528,7 @@ def makeScopedCloneableTxStep() -> "mem::ScopedCloneablePtr< six::sicd::TxStep >
     """makeScopedCloneableTxStep() -> ScopedCloneableTxStep"""
     return _six_sicd.makeScopedCloneableTxStep()
 class StdAutoWaveformParameters(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::WaveformParameters)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::WaveformParameters)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoWaveformParameters, name, value)
@@ -8537,7 +8537,7 @@ class StdAutoWaveformParameters(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::WaveformParameters)> self) -> StdAutoWaveformParameters"""
+        """__init__(mem::auto_ptr<(six::sicd::WaveformParameters)> self) -> StdAutoWaveformParameters"""
         this = _six_sicd.new_StdAutoWaveformParameters()
         try:
             self.this.append(this)
@@ -8666,7 +8666,7 @@ def makeScopedCloneableWaveformParameters() -> "mem::ScopedCloneablePtr< six::si
     """makeScopedCloneableWaveformParameters() -> ScopedCloneableWaveformParameters"""
     return _six_sicd.makeScopedCloneableWaveformParameters()
 class StdAutoArea(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::Area)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::Area)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoArea, name, value)
@@ -8675,7 +8675,7 @@ class StdAutoArea(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::Area)> self) -> StdAutoArea"""
+        """__init__(mem::auto_ptr<(six::sicd::Area)> self) -> StdAutoArea"""
         this = _six_sicd.new_StdAutoArea()
         try:
             self.this.append(this)
@@ -8762,7 +8762,7 @@ def makeScopedCloneableArea() -> "mem::ScopedCloneablePtr< six::sicd::Area >":
     """makeScopedCloneableArea() -> ScopedCloneableArea"""
     return _six_sicd.makeScopedCloneableArea()
 class StdAutoChannelParameters(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::ChannelParameters)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::ChannelParameters)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoChannelParameters, name, value)
@@ -8771,7 +8771,7 @@ class StdAutoChannelParameters(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::ChannelParameters)> self) -> StdAutoChannelParameters"""
+        """__init__(mem::auto_ptr<(six::sicd::ChannelParameters)> self) -> StdAutoChannelParameters"""
         this = _six_sicd.new_StdAutoChannelParameters()
         try:
             self.this.append(this)
@@ -9938,7 +9938,7 @@ VectorInt_swigregister = _six_sicd.VectorInt_swigregister
 VectorInt_swigregister(VectorInt)
 
 class StdAutoRcvChannelProcessed(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::RcvChannelProcessed)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::RcvChannelProcessed)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRcvChannelProcessed, name, value)
@@ -9947,7 +9947,7 @@ class StdAutoRcvChannelProcessed(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::RcvChannelProcessed)> self) -> StdAutoRcvChannelProcessed"""
+        """__init__(mem::auto_ptr<(six::sicd::RcvChannelProcessed)> self) -> StdAutoRcvChannelProcessed"""
         this = _six_sicd.new_StdAutoRcvChannelProcessed()
         try:
             self.this.append(this)
@@ -10255,7 +10255,7 @@ VectorProcessing_swigregister = _six_sicd.VectorProcessing_swigregister
 VectorProcessing_swigregister(VectorProcessing)
 
 class StdAutoPolarizationCalibration(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::PolarizationCalibration)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::PolarizationCalibration)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoPolarizationCalibration, name, value)
@@ -10264,7 +10264,7 @@ class StdAutoPolarizationCalibration(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::PolarizationCalibration)> self) -> StdAutoPolarizationCalibration"""
+        """__init__(mem::auto_ptr<(six::sicd::PolarizationCalibration)> self) -> StdAutoPolarizationCalibration"""
         this = _six_sicd.new_StdAutoPolarizationCalibration()
         try:
             self.this.append(this)
@@ -10356,7 +10356,7 @@ def makeScopedCopyablePolarizationCalibration() -> "mem::ScopedCopyablePtr< six:
     """makeScopedCopyablePolarizationCalibration() -> ScopedCopyablePolarizationCalibration"""
     return _six_sicd.makeScopedCopyablePolarizationCalibration()
 class StdAutoDistortion(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::Distortion)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::Distortion)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoDistortion, name, value)
@@ -10365,7 +10365,7 @@ class StdAutoDistortion(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::Distortion)> self) -> StdAutoDistortion"""
+        """__init__(mem::auto_ptr<(six::sicd::Distortion)> self) -> StdAutoDistortion"""
         this = _six_sicd.new_StdAutoDistortion()
         try:
             self.this.append(this)
@@ -10497,7 +10497,7 @@ def makeScopedCopyableDistortion() -> "mem::ScopedCopyablePtr< six::sicd::Distor
     """makeScopedCopyableDistortion() -> ScopedCopyableDistortion"""
     return _six_sicd.makeScopedCopyableDistortion()
 class StdAutoRMAT(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::RMAT)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::RMAT)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRMAT, name, value)
@@ -10506,7 +10506,7 @@ class StdAutoRMAT(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::RMAT)> self) -> StdAutoRMAT"""
+        """__init__(mem::auto_ptr<(six::sicd::RMAT)> self) -> StdAutoRMAT"""
         this = _six_sicd.new_StdAutoRMAT()
         try:
             self.this.append(this)
@@ -10666,7 +10666,7 @@ def makeScopedCopyableRMAT() -> "mem::ScopedCopyablePtr< six::sicd::RMAT >":
     """makeScopedCopyableRMAT() -> ScopedCopyableRMAT"""
     return _six_sicd.makeScopedCopyableRMAT()
 class StdAutoRMCR(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::RMCR)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::RMCR)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRMCR, name, value)
@@ -10675,7 +10675,7 @@ class StdAutoRMCR(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::RMCR)> self) -> StdAutoRMCR"""
+        """__init__(mem::auto_ptr<(six::sicd::RMCR)> self) -> StdAutoRMCR"""
         this = _six_sicd.new_StdAutoRMCR()
         try:
             self.this.append(this)
@@ -10802,7 +10802,7 @@ def makeScopedCopyableRMCR() -> "mem::ScopedCopyablePtr< six::sicd::RMCR >":
     """makeScopedCopyableRMCR() -> ScopedCopyableRMCR"""
     return _six_sicd.makeScopedCopyableRMCR()
 class StdAutoINCA(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::INCA)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::INCA)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoINCA, name, value)
@@ -10811,7 +10811,7 @@ class StdAutoINCA(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::INCA)> self) -> StdAutoINCA"""
+        """__init__(mem::auto_ptr<(six::sicd::INCA)> self) -> StdAutoINCA"""
         this = _six_sicd.new_StdAutoINCA()
         try:
             self.this.append(this)
@@ -10965,7 +10965,7 @@ def makeScopedCopyableINCA() -> "mem::ScopedCopyablePtr< six::sicd::INCA >":
     """makeScopedCopyableINCA() -> ScopedCopyableINCA"""
     return _six_sicd.makeScopedCopyableINCA()
 class StdAutoInterPulsePeriod(_object):
-    """Proxy of C++ std::auto_ptr<(six::sicd::InterPulsePeriod)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::sicd::InterPulsePeriod)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoInterPulsePeriod, name, value)
@@ -10974,7 +10974,7 @@ class StdAutoInterPulsePeriod(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::sicd::InterPulsePeriod)> self) -> StdAutoInterPulsePeriod"""
+        """__init__(mem::auto_ptr<(six::sicd::InterPulsePeriod)> self) -> StdAutoInterPulsePeriod"""
         this = _six_sicd.new_StdAutoInterPulsePeriod()
         try:
             self.this.append(this)
