@@ -348,7 +348,7 @@ void NITFHeaderCreator::setSecurity(const six::Classification& classification,
         security.getClassificationSystem().set("US");
     }
 
-    if (mLog != NULL)
+    if (mLog != nullptr)
     {
         classification.setSecurity(prefix, *mLog, security);
     }
@@ -597,9 +597,9 @@ void NITFHeaderCreator::addUserDefinedSubheader(
 void NITFHeaderCreator::addAdditionalDES(
         mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
 {
-    if (segmentWriter.get() == NULL)
+    if (segmentWriter.get() == nullptr)
     {
-        throw except::Exception(Ctxt("segmentWriter is NULL"));
+        throw except::Exception(Ctxt("segmentWriter is nullptr"));
     }
 
     mSegmentWriters.push_back(segmentWriter);
@@ -860,7 +860,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
 
             case PixelType::RGB8LU:
                 // We should have a legend
-                if (legend->mLUT.get() == NULL)
+                if (legend->mLUT.get() == nullptr)
                 {
                     throw except::Exception(Ctxt(
                             "LUT should be present for indexed RGB legend"));
