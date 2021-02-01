@@ -36,8 +36,6 @@
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 
-
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
@@ -517,6 +515,13 @@ void Utilities::readSicd(const std::string& sicdPathname,
                          std::vector<std::complex<float>>& widebandData)
 {
     readSicd_(sicdPathname, schemaPaths, complexData, widebandData);
+}
+void Utilities::readSicd(const fs::path& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         std::unique_ptr<ComplexData>& complexData,
+                         std::vector<std::complex<float>>& widebandData)
+{
+    readSicd(sicdPathname.string(), schemaPaths, complexData, widebandData);
 }
 
 template<typename TComplexDataPtr, typename TNoiseMeshPtr, typename TScalarMeshPtr>

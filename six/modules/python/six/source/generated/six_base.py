@@ -4459,24 +4459,24 @@ def loadXmlDataContentHandler() -> "void":
     """loadXmlDataContentHandler()"""
     return _six_base.loadXmlDataContentHandler()
 
-def parseData(*args) -> "std::auto_ptr< six::Data >":
+def parseData(*args) -> "mem::auto_ptr< six::Data >":
     """
-    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
-    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >
+    parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >
     """
     return _six_base.parseData(*args)
 
-def parseDataFromFile(*args) -> "std::auto_ptr< six::Data >":
+def parseDataFromFile(*args) -> "mem::auto_ptr< six::Data >":
     """
-    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
-    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >
+    parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >
     """
     return _six_base.parseDataFromFile(*args)
 
-def parseDataFromString(*args) -> "std::auto_ptr< six::Data >":
+def parseDataFromString(*args) -> "mem::auto_ptr< six::Data >":
     """
-    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
-    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >
+    parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >
     """
     return _six_base.parseDataFromString(*args)
 
@@ -4588,9 +4588,9 @@ class XMLControlRegistry(_object):
 
     def addCreator(self, *args) -> "void":
         """
-        addCreator(XMLControlRegistry self, std::string const & identifier, std::auto_ptr< six::XMLControlCreator > creator)
+        addCreator(XMLControlRegistry self, std::string const & identifier, mem::auto_ptr< six::XMLControlCreator > creator)
         addCreator(XMLControlRegistry self, std::string const & identifier, XMLControlCreator creator)
-        addCreator(XMLControlRegistry self, DataType dataType, std::auto_ptr< six::XMLControlCreator > creator)
+        addCreator(XMLControlRegistry self, DataType dataType, mem::auto_ptr< six::XMLControlCreator > creator)
         addCreator(XMLControlRegistry self, DataType dataType, XMLControlCreator creator)
         """
         return _six_base.XMLControlRegistry_addCreator(self, *args)
@@ -5711,7 +5711,7 @@ VectorScopedCopyableGeoInfo_swigregister = _six_base.VectorScopedCopyableGeoInfo
 VectorScopedCopyableGeoInfo_swigregister(VectorScopedCopyableGeoInfo)
 
 class StdAutoRadiometric(_object):
-    """Proxy of C++ std::auto_ptr<(six::Radiometric)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::Radiometric)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRadiometric, name, value)
@@ -5720,7 +5720,7 @@ class StdAutoRadiometric(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::Radiometric)> self) -> StdAutoRadiometric"""
+        """__init__(mem::auto_ptr<(six::Radiometric)> self) -> StdAutoRadiometric"""
         this = _six_base.new_StdAutoRadiometric()
         try:
             self.this.append(this)
@@ -5834,7 +5834,7 @@ def makeScopedCopyableRadiometric() -> "mem::ScopedCopyablePtr< six::Radiometric
     """makeScopedCopyableRadiometric() -> ScopedCopyableRadiometric"""
     return _six_base.makeScopedCopyableRadiometric()
 class StdAutoErrorStatistics(_object):
-    """Proxy of C++ std::auto_ptr<(six::ErrorStatistics)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::ErrorStatistics)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoErrorStatistics, name, value)
@@ -5843,7 +5843,7 @@ class StdAutoErrorStatistics(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::ErrorStatistics)> self) -> StdAutoErrorStatistics"""
+        """__init__(mem::auto_ptr<(six::ErrorStatistics)> self) -> StdAutoErrorStatistics"""
         this = _six_base.new_StdAutoErrorStatistics()
         try:
             self.this.append(this)
@@ -5935,7 +5935,7 @@ def makeScopedCopyableErrorStatistics() -> "mem::ScopedCopyablePtr< six::ErrorSt
     """makeScopedCopyableErrorStatistics() -> ScopedCopyableErrorStatistics"""
     return _six_base.makeScopedCopyableErrorStatistics()
 class StdAutoComponents(_object):
-    """Proxy of C++ std::auto_ptr<(six::Components)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::Components)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoComponents, name, value)
@@ -5944,7 +5944,7 @@ class StdAutoComponents(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::Components)> self) -> StdAutoComponents"""
+        """__init__(mem::auto_ptr<(six::Components)> self) -> StdAutoComponents"""
         this = _six_base.new_StdAutoComponents()
         try:
             self.this.append(this)
@@ -6040,7 +6040,7 @@ def makeScopedCopyableComponents() -> "mem::ScopedCopyablePtr< six::Components >
     """makeScopedCopyableComponents() -> ScopedCopyableComponents"""
     return _six_base.makeScopedCopyableComponents()
 class StdAutoCorrCoefs(_object):
-    """Proxy of C++ std::auto_ptr<(six::CorrCoefs)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::CorrCoefs)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCorrCoefs, name, value)
@@ -6049,7 +6049,7 @@ class StdAutoCorrCoefs(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::CorrCoefs)> self) -> StdAutoCorrCoefs"""
+        """__init__(mem::auto_ptr<(six::CorrCoefs)> self) -> StdAutoCorrCoefs"""
         this = _six_base.new_StdAutoCorrCoefs()
         try:
             self.this.append(this)
@@ -6189,7 +6189,7 @@ def makeScopedCopyableCorrCoefs() -> "mem::ScopedCopyablePtr< six::CorrCoefs >":
     """makeScopedCopyableCorrCoefs() -> ScopedCopyableCorrCoefs"""
     return _six_base.makeScopedCopyableCorrCoefs()
 class StdAutoPosVelError(_object):
-    """Proxy of C++ std::auto_ptr<(six::PosVelError)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::PosVelError)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoPosVelError, name, value)
@@ -6198,7 +6198,7 @@ class StdAutoPosVelError(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::PosVelError)> self) -> StdAutoPosVelError"""
+        """__init__(mem::auto_ptr<(six::PosVelError)> self) -> StdAutoPosVelError"""
         this = _six_base.new_StdAutoPosVelError()
         try:
             self.this.append(this)
@@ -6314,7 +6314,7 @@ def makeScopedCopyablePosVelError() -> "mem::ScopedCopyablePtr< six::PosVelError
     """makeScopedCopyablePosVelError() -> ScopedCopyablePosVelError"""
     return _six_base.makeScopedCopyablePosVelError()
 class StdAutoGeoInfo(_object):
-    """Proxy of C++ std::auto_ptr<(six::GeoInfo)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::GeoInfo)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoGeoInfo, name, value)
@@ -6323,7 +6323,7 @@ class StdAutoGeoInfo(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::GeoInfo)> self) -> StdAutoGeoInfo"""
+        """__init__(mem::auto_ptr<(six::GeoInfo)> self) -> StdAutoGeoInfo"""
         this = _six_base.new_StdAutoGeoInfo()
         try:
             self.this.append(this)
@@ -6419,7 +6419,7 @@ def makeScopedCopyableGeoInfo() -> "mem::ScopedCopyablePtr< six::GeoInfo >":
     """makeScopedCopyableGeoInfo() -> ScopedCopyableGeoInfo"""
     return _six_base.makeScopedCopyableGeoInfo()
 class StdAutoRadarSensor(_object):
-    """Proxy of C++ std::auto_ptr<(six::RadarSensor)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::RadarSensor)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoRadarSensor, name, value)
@@ -6428,7 +6428,7 @@ class StdAutoRadarSensor(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::RadarSensor)> self) -> StdAutoRadarSensor"""
+        """__init__(mem::auto_ptr<(six::RadarSensor)> self) -> StdAutoRadarSensor"""
         this = _six_base.new_StdAutoRadarSensor()
         try:
             self.this.append(this)
@@ -6524,7 +6524,7 @@ def makeScopedCopyableRadarSensor() -> "mem::ScopedCopyablePtr< six::RadarSensor
     """makeScopedCopyableRadarSensor() -> ScopedCopyableRadarSensor"""
     return _six_base.makeScopedCopyableRadarSensor()
 class StdAutoTropoError(_object):
-    """Proxy of C++ std::auto_ptr<(six::TropoError)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::TropoError)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoTropoError, name, value)
@@ -6533,7 +6533,7 @@ class StdAutoTropoError(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::TropoError)> self) -> StdAutoTropoError"""
+        """__init__(mem::auto_ptr<(six::TropoError)> self) -> StdAutoTropoError"""
         this = _six_base.new_StdAutoTropoError()
         try:
             self.this.append(this)
@@ -6625,7 +6625,7 @@ def makeScopedCopyableTropoError() -> "mem::ScopedCopyablePtr< six::TropoError >
     """makeScopedCopyableTropoError() -> ScopedCopyableTropoError"""
     return _six_base.makeScopedCopyableTropoError()
 class StdAutoIonoError(_object):
-    """Proxy of C++ std::auto_ptr<(six::IonoError)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::IonoError)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoIonoError, name, value)
@@ -6634,7 +6634,7 @@ class StdAutoIonoError(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::IonoError)> self) -> StdAutoIonoError"""
+        """__init__(mem::auto_ptr<(six::IonoError)> self) -> StdAutoIonoError"""
         this = _six_base.new_StdAutoIonoError()
         try:
             self.this.append(this)
@@ -6730,7 +6730,7 @@ def makeScopedCopyableIonoError() -> "mem::ScopedCopyablePtr< six::IonoError >":
     """makeScopedCopyableIonoError() -> ScopedCopyableIonoError"""
     return _six_base.makeScopedCopyableIonoError()
 class StdAutoCompositeSCP(_object):
-    """Proxy of C++ std::auto_ptr<(six::CompositeSCP)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::CompositeSCP)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCompositeSCP, name, value)
@@ -6739,7 +6739,7 @@ class StdAutoCompositeSCP(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::CompositeSCP)> self) -> StdAutoCompositeSCP"""
+        """__init__(mem::auto_ptr<(six::CompositeSCP)> self) -> StdAutoCompositeSCP"""
         this = _six_base.new_StdAutoCompositeSCP()
         try:
             self.this.append(this)
@@ -6835,7 +6835,7 @@ def makeScopedCopyableCompositeSCP() -> "mem::ScopedCopyablePtr< six::CompositeS
     """makeScopedCopyableCompositeSCP() -> ScopedCopyableCompositeSCP"""
     return _six_base.makeScopedCopyableCompositeSCP()
 class StdAutoMatchInformation(_object):
-    """Proxy of C++ std::auto_ptr<(six::MatchInformation)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::MatchInformation)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoMatchInformation, name, value)
@@ -6844,7 +6844,7 @@ class StdAutoMatchInformation(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::MatchInformation)> self) -> StdAutoMatchInformation"""
+        """__init__(mem::auto_ptr<(six::MatchInformation)> self) -> StdAutoMatchInformation"""
         this = _six_base.new_StdAutoMatchInformation()
         try:
             self.this.append(this)
@@ -6928,7 +6928,7 @@ def makeScopedCopyableMatchInformation() -> "mem::ScopedCopyablePtr< six::MatchI
     """makeScopedCopyableMatchInformation() -> ScopedCopyableMatchInformation"""
     return _six_base.makeScopedCopyableMatchInformation()
 class StdAutoMatchType(_object):
-    """Proxy of C++ std::auto_ptr<(six::MatchType)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::MatchType)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoMatchType, name, value)
@@ -6937,7 +6937,7 @@ class StdAutoMatchType(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::MatchType)> self) -> StdAutoMatchType"""
+        """__init__(mem::auto_ptr<(six::MatchType)> self) -> StdAutoMatchType"""
         this = _six_base.new_StdAutoMatchType()
         try:
             self.this.append(this)
@@ -7041,7 +7041,7 @@ def makeScopedCopyableMatchType() -> "mem::ScopedCopyablePtr< six::MatchType >":
     """makeScopedCopyableMatchType() -> ScopedCopyableMatchType"""
     return _six_base.makeScopedCopyableMatchType()
 class StdAutoAmplitudeTable(_object):
-    """Proxy of C++ std::auto_ptr<(six::AmplitudeTable)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::AmplitudeTable)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoAmplitudeTable, name, value)
@@ -7050,7 +7050,7 @@ class StdAutoAmplitudeTable(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::AmplitudeTable)> self) -> StdAutoAmplitudeTable"""
+        """__init__(mem::auto_ptr<(six::AmplitudeTable)> self) -> StdAutoAmplitudeTable"""
         this = _six_base.new_StdAutoAmplitudeTable()
         try:
             self.this.append(this)
@@ -7159,7 +7159,7 @@ def makeScopedCloneableAmplitudeTable() -> "mem::ScopedCloneablePtr< six::Amplit
     """makeScopedCloneableAmplitudeTable() -> ScopedCloneableAmplitudeTable"""
     return _six_base.makeScopedCloneableAmplitudeTable()
 class StdAutoCollectionInformation(_object):
-    """Proxy of C++ std::auto_ptr<(six::CollectionInformation)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::CollectionInformation)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCollectionInformation, name, value)
@@ -7168,7 +7168,7 @@ class StdAutoCollectionInformation(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::CollectionInformation)> self) -> StdAutoCollectionInformation"""
+        """__init__(mem::auto_ptr<(six::CollectionInformation)> self) -> StdAutoCollectionInformation"""
         this = _six_base.new_StdAutoCollectionInformation()
         try:
             self.this.append(this)
