@@ -37,21 +37,7 @@
 #include <typeinfo>
 
 // This is a fairly low-level file, so don't #include a lot of our other files
-//#include "sys/String.h"
-#if !defined(CODA_OSS_sys_U8string_DEFINED_)
-#define CODA_OSS_sys_U8string_DEFINED_ 1
-namespace sys
-{
-    // Char8_T for UTF-8 characters
-    #if __cplusplus >= 202002L  // C++20
-    using Char8_T = char8_t;
-    using U8string = std::u8string;
-    #else
-    enum Char8_T : unsigned char { }; // https://en.cppreference.com/w/cpp/language/types
-    using U8string = std::basic_string<Char8_T>; // https://en.cppreference.com/w/cpp/string
-    #endif  // __cplusplus
-}
-#endif  // CODA_OSS_sys_U8string_DEFINED_
+#include "str/String_.h"
 
 namespace str
 {

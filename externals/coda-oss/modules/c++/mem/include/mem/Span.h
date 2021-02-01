@@ -19,99 +19,59 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef CODA_OSS_mem_Span_INCLUDED_
-#define CODA_OSS_mem_Span_INCLUDED_
+#ifndef CODA_OSS_mem_Span_h_INCLUDED_
+#define CODA_OSS_mem_Span_h_INCLUDED_
 #pragma once
 
-#include <stddef.h>
-#include <assert.h>
+#include "sys/CPlusPlus.h"
+#include "gsl/gsl_span_.h"
 
-namespace mem
-{
-// super-simple version of std::span
-// https://en.cppreference.com/w/cpp/container/span
-template <typename T>
-struct Span final
-{
-    using size_type = size_t;
-    using element_type = T;
-    using pointer = T*;
-    using reference = T&;
+#ifndef CODA_OSS_DEFINE_std_span_
+    #if CODA_OSS_cpp20
+        #if !__has_include(<span>)
+            #error "Missing <span>."
+        #endif
+        #if defined(__cpp_lib_span) && (__cpp_lib_span < 202002)
+            #error "Wrong value for __cpp_lib_span."
+        #endif
+        #define CODA_OSS_DEFINE_std_span_ -1  // OK to #include <>, below
+    #else
+        #define CODA_OSS_DEFINE_std_span_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+    #endif  // CODA_OSS_cpp20
+#endif // CODA_OSS_DEFINE_std_span_
 
-    Span() noexcept = default;
-    Span(pointer p, size_type sz) noexcept : p_(p), sz_(sz)
+#if CODA_OSS_DEFINE_std_span_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
-        assert(p != nullptr);
+        template<typename T>
+        using span = gsl::span<T>;
     }
-    Span(const Span&) noexcept = default;
-
-    template <typename TContainer>
-    Span(TContainer& c) : Span(c.data(), c.size()) { }
-    template <typename TContainer>
-    Span(const TContainer& c) : Span(const_cast<TContainer&>(c)) { }
-
-    // https://en.cppreference.com/w/cpp/container/span/data
-    constexpr pointer data() const noexcept
-    {
-        return p_;
-    }
-
-    // https://en.cppreference.com/w/cpp/container/span/operator_at
-    /*constexpr*/ reference operator[](size_type idx) const
-    {
-        assert(idx < size()); // prevents "constexpr" in C++11
-        return data()[idx];
-    }
-
-    // https://en.cppreference.com/w/cpp/container/span/size
-    constexpr size_type size() const noexcept
-    {
-        return sz_;
-    }
-    
-    // https://en.cppreference.com/w/cpp/container/span/size_bytes
-    constexpr size_type size_bytes() const noexcept
-    {
-        return sz_ * sizeof(element_type);
-    }
-    
-    // https://en.cppreference.com/w/cpp/container/span/empty
-    constexpr bool empty() const noexcept
-    {
-        return size() == 0;
-    }
-
-private:
-    pointer p_ = nullptr;
-    size_type sz_ = 0;
-};
-
+    #define CODA_OSS_lib_span 1
+#elif CODA_OSS_DEFINE_std_span_ == -1  // set above
+    #include <span>
+    #define CODA_OSS_lib_span 1
+#endif  // CODA_OSS_DEFINE_std_span_
 
 // Note that C++20 doesn't need "make_" helpers anymore!
 //
 // Since that's the easiest way to use span<> pre-C++20, and since we can't
 // add the nice C++20 way of using span<> w/o actuallly having C++20,
 // don't provide the option to add mem::Span to std.  When clients can build
-// with C++20, they'll want to get rid of make_Span and use std::span directly.
-
-template <typename T>
-inline Span<T> make_Span(T* d, size_t sz)
+// with C++20, they'll want to get rid of make_Span and use std::span
+// directly.
+//
+// Also note that pre-C++20 routines such std::make_optional and
+// std::make_unique ARE still available since std::optional and
+// std::unique_ptr existed before C++20.
+namespace coda_oss
 {
-    return Span<T>(d, sz);
-}
-
-template <typename TContainer>
-inline Span<typename TContainer::value_type> make_Span(TContainer& c)
-{
-    using value_type = typename TContainer::value_type;
-    return Span<value_type>(c);
-}
-template <typename TContainer>
-inline Span<typename TContainer::value_type> make_Span(const TContainer& c)
-{
-    return make_Span(const_cast<TContainer&>(c));
-}
+    #if CODA_OSS_lib_span
+     template <typename T>
+     using span = std::span<T>;
+    #else
+     template <typename T>
+     using span = gsl::span<T>;
+    #endif
 }
 
-#endif  // CODA_OSS_mem_Span_INCLUDED_
+#endif  // CODA_OSS_mem_Span_h_INCLUDED_

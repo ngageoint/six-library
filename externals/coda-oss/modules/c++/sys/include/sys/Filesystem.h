@@ -129,7 +129,10 @@ bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exi
 #ifndef CODA_OSS_DEFINE_std_filesystem_
     #if CODA_OSS_cpp17
         // Some versions of G++ say they're C++17 but don't have <filesystem>
-        #if __has_include(<filesystem>) || (__cpp_lib_filesystem >= 201703)
+        #if __has_include(<filesystem>)
+            #if defined(__cpp_lib_filesystem) && (__cpp_lib_filesystem < 201703)
+                #error "Wrong value for __cpp_lib_filesystem."
+            #endif
             #define CODA_OSS_DEFINE_std_filesystem_ -1  // OK to #include <>, below
         #else
             #define CODA_OSS_DEFINE_std_filesystem_ 1 // must have std::filesystem w/C++17
