@@ -87,6 +87,14 @@ XMLElem XMLParser::newElement(const std::string& name,
     return newElement(name, uri, "", parent);
 }
 
+void XMLParser::addClassAttributes(xml::lite::Element& elem, const std::string& type) const
+{
+    if (mAddClassAttributes)
+    {
+        setAttribute_(&elem, "class", type, getDefaultURI());
+    }
+}
+
 XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, const std::string& characterData,
         XMLElem parent)
@@ -107,14 +115,7 @@ XMLElem XMLParser::createString(const std::string& name,
         const std::string& uri, const std::string& p, XMLElem parent) const
 {
     XMLElem const elem = newElement(name, uri, p, parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:string");
-        elem->getAttributes().add(node);
-    }
+    addClassAttributes(*elem, "xs:string");
 
     return elem;
 }
@@ -131,7 +132,7 @@ XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
     std::string elementValue;
     try
     {
-        elementValue = std::to_string(p);
+        elementValue = str::toString(p);
     }
     catch (const except::Exception& ex)
     {
@@ -140,14 +141,7 @@ XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
         throw except::Exception(Ctxt(message));
     }
     XMLElem const elem = newElement(name, uri, elementValue, parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:int");
-        elem->getAttributes().add(node);
-    }
+    addClassAttributes(*elem, "xs:int");
 
     return elem;
 }
@@ -156,15 +150,7 @@ XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
         const std::string& p, XMLElem parent) const
 {
     XMLElem const elem = newElement(name, uri, p, parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:int");
-        elem->getAttributes().add(node);
-    }
-
+    addClassAttributes(*elem, "xs:int");
     return elem;
 }
 
@@ -179,7 +165,7 @@ XMLElem XMLParser::createDouble(const std::string& name,
     std::string elementValue;
     try
     {
-        elementValue = std::to_string(p);
+        elementValue = str::toString(p);
     }
     catch (const except::Exception& ex)
     {
@@ -188,14 +174,7 @@ XMLElem XMLParser::createDouble(const std::string& name,
         throw except::Exception(Ctxt(message));
     }
     XMLElem elem = newElement(name, uri, elementValue, parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:double");
-        elem->getAttributes().add(node);
-    }
+    addClassAttributes(*elem, "xs:double");
 
     return elem;
 }
@@ -216,14 +195,7 @@ XMLElem XMLParser::createBooleanType(const std::string& name,
 
     XMLElem const elem =
             newElement(name, uri, six::toString(p), parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:boolean");
-        elem->getAttributes().add(node);
-    }
+    addClassAttributes(*elem, "xs:boolean");
 
     return elem;
 }
@@ -238,14 +210,7 @@ XMLElem XMLParser::createDateTime(const std::string& name,
         const std::string& uri, const std::string& s, XMLElem parent) const
 {
     XMLElem elem = newElement(name, uri, s, parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:dateTime");
-        elem->getAttributes().add(node);
-    }
+    addClassAttributes(*elem, "xs:dateTime");
 
     return elem;
 }
@@ -272,15 +237,7 @@ XMLElem XMLParser::createDate(const std::string& name,
         const std::string& uri, const DateTime& p, XMLElem parent) const
 {
     XMLElem const elem = newElement(name, uri, p.format("%Y-%m-%d"), parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:date");
-        elem->getAttributes().add(node);
-    }
-
+    addClassAttributes(*elem, "xs:date");
     return elem;
 }
 
@@ -292,23 +249,12 @@ XMLElem XMLParser::createDate(const std::string& name, const DateTime& p,
 
 XMLElem XMLParser::getFirstAndOnly(XMLElem parent, const std::string& tag)
 {
-    std::vector < XMLElem > children;
-    parent->getElementsByTagName(tag, children);
-    if (children.size() != 1)
-    {
-        throw except::Exception(Ctxt(
-                 "Expected exactly one " + tag + " but got " +
-                    std::to_string(children.size())));
-    }
-    return children[0];
+    auto& element = parent->getElementByTagName(tag);
+    return &element; // OK, element is a reference
 }
 XMLElem XMLParser::getOptional(XMLElem parent, const std::string& tag)
 {
-    std::vector < XMLElem > children;
-    parent->getElementsByTagName(tag, children);
-    if (children.size() != 1)
-        return nullptr;
-    return children[0];
+    return parent->getElementByTagName(std::nothrow, tag);
 }
 
 XMLElem XMLParser::require(XMLElem element, const std::string& name)
@@ -335,7 +281,7 @@ void XMLParser::parseDouble(XMLElem element, double& value) const
 {
     try
     {
-        value = str::toType<double>(element->getCharacterData());
+        value = xml::lite::getValue<double>(*element);
     }
     catch (const except::BadCastException& ex)
     {

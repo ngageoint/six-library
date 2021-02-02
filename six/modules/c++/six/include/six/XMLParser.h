@@ -208,6 +208,7 @@ private:
         const std::string& p, XMLElem parent) const;
     static void setAttribute_(XMLElem e, const std::string& name,
             const std::string& v, const std::string& uri);
+    void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;
 
     const std::string mDefaultURI;
     const bool mAddClassAttributes;
