@@ -19,15 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/ReferenceGeometry.h>
+
 #include <iostream>
 #include <memory>
 
-#include <six/sys_Conf.h>
 #include <xml/lite/MinidomParser.h>
 #include <six/Init.h>
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
-#include <cphd/ReferenceGeometry.h>
 
 #include "TestCase.h"
 

@@ -22,6 +22,7 @@
 #ifndef __SIX_ADAPTERS_H__
 #define __SIX_ADAPTERS_H__
 
+#include <scene/sys_Conf.h>
 #include <import/io.h>
 #include <import/nitf.hpp>
 #include <import/sys.h>

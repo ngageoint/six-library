@@ -23,13 +23,13 @@
 #include <iostream>
 #include <stdexcept>
 
-#include <six/sys_Conf.h>
+#include <cphd03/FileHeader.h>
+
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <mem/ScopedArray.h>
 #include <io/FileInputStream.h>
 #include <xml/lite/MinidomParser.h>
-#include <cphd03/FileHeader.h>
 
 #include <sys/Filesystem.h>
 namespace fs = std::filesystem;

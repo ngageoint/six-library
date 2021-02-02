@@ -21,10 +21,12 @@
  */
 
 #include <cmath>
+
+#include <import/six.h>
+
 #include <import/cli.h>
 #include <import/io.h>
 #include <import/mem.h>
-#include <import/six.h>
 #include <import/six/convert.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>

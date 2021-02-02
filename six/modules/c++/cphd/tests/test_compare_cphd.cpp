@@ -25,7 +25,7 @@
 #include <memory>
 #include <thread>
 
-#include <six/sys_Conf.h>
+#include <scene/sys_Conf.h>
 #include <logging/NullLogger.h>
 #include <cli/Value.h>
 #include <cli/ArgumentParser.h>
