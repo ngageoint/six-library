@@ -22,7 +22,6 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
-#include <logging/NullLogger.h>
 
 #include <cphd/CPHDXMLControl.h>
 #include <cphd/Global.h>
@@ -30,6 +29,8 @@
 #include <cphd/SceneCoordinates.h>
 #include <io/FileInputStream.h>
 #include <xml/lite/MinidomParser.h>
+#include <logging/NullLogger.h>
+
 #include "TestCase.h"
 
 static const char XML[] =

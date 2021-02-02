@@ -23,11 +23,11 @@
 
 #include <string>
 
-#include <xml/lite/Element.h>
-#include <logging/Logger.h>
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Utilities.h>
+#include <xml/lite/Element.h>
+#include <logging/Logger.h>
 
 namespace six
 {

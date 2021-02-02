@@ -19,11 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/CompressedByteProvider.h>
 
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
 #include <six/ByteProvider.h>
-#include <six/CompressedByteProvider.h>
 
 namespace
 {
