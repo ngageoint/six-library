@@ -22,7 +22,7 @@
 #ifndef __SIX_XML_CONTROL_H__
 #define __SIX_XML_CONTROL_H__
 
-#include <six/sys_Conf.h>
+#include <scene/sys_Conf.h>
 
 #include <logging/Logger.h>
 #include <xml/lite/Document.h>

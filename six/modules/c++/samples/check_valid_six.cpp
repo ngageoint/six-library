@@ -20,10 +20,11 @@
  *
  */
 
+#include <import/six.h>
+
 #include <import/cli.h>
 #include <sys/OS.h>
 #include <io/FileInputStream.h>
-#include <import/six.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
 #include "utils.h"

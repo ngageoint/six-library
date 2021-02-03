@@ -20,13 +20,14 @@
  *
  */
 
+#include <cphd03/CPHDReader.h>
+
 #include <iostream>
 #include <stdexcept>
 
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <logging/Setup.h>
-#include <cphd03/CPHDReader.h>
 
 #include <sys/Filesystem.h>
 namespace fs = std::filesystem;

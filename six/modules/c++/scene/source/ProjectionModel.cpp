@@ -19,12 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "scene/ProjectionModel.h"
 
 #include <limits>
 #include <string>
 
 #include <math/Utilities.h>
-#include "scene/ProjectionModel.h"
 #include "scene/ECEFToLLATransform.h"
 #include "scene/Utilities.h"
 

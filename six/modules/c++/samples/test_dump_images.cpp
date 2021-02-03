@@ -22,9 +22,10 @@
 #include <sstream>
 #include <limits>
 
+#include <import/six.h>
+
 #include <mem/ScopedArray.h>
 #include <import/cli.h>
-#include <import/six.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
 #include <import/sio/lite.h>

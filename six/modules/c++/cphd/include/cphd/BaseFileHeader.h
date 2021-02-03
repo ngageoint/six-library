@@ -27,6 +27,7 @@
 #include <ostream>
 #include <utility>
 
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 
 namespace cphd

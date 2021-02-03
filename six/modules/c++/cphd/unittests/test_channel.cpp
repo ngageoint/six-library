@@ -19,13 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/Channel.h>
+
 #include <memory>
 
 #include <xml/lite/MinidomParser.h>
 #include <six/Init.h>
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
-#include <cphd/Channel.h>
 
 #include "TestCase.h"
 

@@ -21,6 +21,7 @@
  */
 
 #include <stdexcept>
+#include <tuple>
 
 #include "xml/lite/Element.h"
 #include <import/str.h>
@@ -99,20 +100,26 @@ void xml::lite::Element::getElementsByTagName(const std::string& uri, const std:
 }
 
 template <typename TGetElements>
-xml::lite::Element* getElement(TGetElements getElements, const except::Context& ctxt)
+std::tuple<xml::lite::Element*, std::string> getElement(TGetElements getElements)
 {
     auto elements = getElements();
-    if (elements.empty())
+    if (elements.size() == 1)
     {
-        return nullptr;
+        return std::make_tuple(elements[0], "");
     }
-    if (elements.size() > 1)
+    return std::make_tuple(nullptr, std::to_string(elements.size()));
+}
+template <typename TGetElements, typename TMakeContext>
+xml::lite::Element& getElement(TGetElements getElements, TMakeContext makeContext)
+{
+    auto result = getElement(getElements);
+    auto pElement = std::get<0>(result);
+    if (pElement  == nullptr)
     {
-        // Yes, this is "nothrow" ... that's for found/non-found status.  We
-        // asked for an ELEMENT, not "elements".
+        const auto ctxt = makeContext(std::get<1>(result));
         throw xml::lite::XMLException(ctxt);
     }
-    return elements[0];
+    return *pElement;
 }
 
 xml::lite::Element* xml::lite::Element::getElementByTagName(std::nothrow_t,
@@ -120,8 +127,16 @@ xml::lite::Element* xml::lite::Element::getElementByTagName(std::nothrow_t,
     bool recurse) const
 {
     auto getElements = [&]() { return getElementsByTagName(uri, localName, recurse); };
-    const auto ctxt(Ctxt("Multiple elements returned for '" + localName + "' (uri=" + uri + ")."));
-    return getElement(getElements, ctxt);
+    return std::get<0>(getElement(getElements));
+}
+xml::lite::Element& xml::lite::Element::getElementByTagName(
+    const std::string& uri, const std::string& localName,
+    bool recurse) const
+{
+    auto getElements = [&]() { return getElementsByTagName(uri, localName, recurse); };
+    auto makeContext = [&](const std::string& sz) {
+       return Ctxt("Expected exactly one '" + localName + "' (uri=" + uri + "); but got " + sz); };
+    return getElement(getElements, makeContext);
 }
 
 void xml::lite::Element::getElementsByTagName(const std::string& localName,
@@ -141,9 +156,17 @@ xml::lite::Element* xml::lite::Element::getElementByTagName(std::nothrow_t,
     const std::string& localName, bool recurse) const
 {
     auto getElements = [&]() { return getElementsByTagName(localName, recurse); };
-    const auto ctxt(Ctxt("Multiple elements returned for '" + localName + "'."));
-    return getElement(getElements, ctxt);
+    return std::get<0>(getElement(getElements));
 }
+xml::lite::Element& xml::lite::Element::getElementByTagName(
+    const std::string& localName, bool recurse) const
+{
+    auto getElements = [&]() { return getElementsByTagName(localName, recurse); };
+    auto makeContext = [&](const std::string& sz) {
+       return Ctxt("Expected exactly one '" + localName + "'; but got " + sz); };
+    return getElement(getElements, makeContext);
+}
+
 
 void xml::lite::Element::getElementsByTagNameNS(const std::string& qname,
                                                 std::vector<Element*>& elements,
@@ -162,9 +185,17 @@ xml::lite::Element* xml::lite::Element::getElementByTagNameNS(std::nothrow_t,
     const std::string& qname, bool recurse) const
 {
     auto getElements = [&]() { return getElementsByTagNameNS(qname, recurse); };
-    const auto ctxt(Ctxt("Multiple elements returned for '" + qname + "'."));
-    return getElement(getElements, ctxt);
+    return std::get<0>(getElement(getElements));
 }
+xml::lite::Element& xml::lite::Element::getElementByTagNameNS(
+    const std::string& qname, bool recurse) const
+{
+    auto getElements = [&]() { return getElementsByTagNameNS(qname, recurse); };
+    auto makeContext = [&](const std::string& sz) {
+        return Ctxt("Expected exactly one '" + qname + "'; but got " + sz); };
+    return getElement(getElements, makeContext);
+}
+
 
 void xml::lite::Element::destroyChildren()
 {

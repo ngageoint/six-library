@@ -25,13 +25,14 @@
 
 #include <map>
 
-#include <mem/SharedPtr.h>
 #include "six/Types.h"
 #include "six/Container.h"
 #include "six/WriteControl.h"
 #include "six/NITFImageInfo.h"
 #include "six/Adapters.h"
-#include <six/NITFHeaderCreator.h>
+#include "six/NITFHeaderCreator.h"
+
+#include <mem/SharedPtr.h>
 
 namespace six
 {

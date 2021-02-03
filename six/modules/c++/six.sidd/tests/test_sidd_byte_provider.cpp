@@ -30,6 +30,8 @@
 #include <iostream>
 #include <limits>
 
+#include <six/sidd/SIDDByteProvider.h>
+
 #include <io/ReadUtils.h>
 #include <math/Round.h>
 #include <sys/Bit.h>
@@ -38,7 +40,6 @@
 #include <six/XMLControlFactory.h>
 #include <six/sidd/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
-#include <six/sidd/SIDDByteProvider.h>
 
 
 namespace
