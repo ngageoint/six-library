@@ -22,9 +22,9 @@
 #ifndef __SIX_CLASSIFICATION_H__
 #define __SIX_CLASSIFICATION_H__
 
+#include "six/Types.h"
 #include "logging/Logger.h"
 #include "nitf/FileSecurity.h"
-#include "six/Types.h"
 #include "six/Options.h"
 
 namespace six

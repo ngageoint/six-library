@@ -32,7 +32,7 @@ static const std::string strXml1_ = R"(
 <root>
     <doc name="doc">
         <a a="a">)";
-static const std::string strXml2_ = R"(</a><b/><b/>
+static const std::string strXml2_ = R"(</a><duplicate/><duplicate/>
         <values int="314" double="3.14" string="abc"/>
         <int>314</int>
         <double>3.14</double>
@@ -166,17 +166,17 @@ TEST_CASE(test_getElementsByTagName)
     }
 }
 
-TEST_CASE(test_getElementsByTagName_b)
+TEST_CASE(test_getElementsByTagName_duplicate)
 {
     test_MinidomParser xmlParser;
     const auto root = xmlParser.getRootElement();
 
     {
-        const auto bElements = root->getElementsByTagName("b", true /*recurse*/);
-        TEST_ASSERT_EQ(bElements.size(), 2);
-        const auto& b = *(bElements[0]);
+        const auto duplicateElements = root->getElementsByTagName("duplicate", true /*recurse*/);
+        TEST_ASSERT_EQ(duplicateElements.size(), 2);
+        const auto& duplicate = *(duplicateElements[0]);
 
-        const auto characterData = b.getCharacterData();
+        const auto characterData = duplicate.getCharacterData();
         TEST_ASSERT_TRUE(characterData.empty());
     }
 
@@ -184,11 +184,11 @@ TEST_CASE(test_getElementsByTagName_b)
     TEST_ASSERT_FALSE(docElements.empty());
     TEST_ASSERT_EQ(docElements.size(), 1);
     {
-        const auto bElements = docElements[0]->getElementsByTagName("b");
-        TEST_ASSERT_EQ(bElements.size(), 2);
-        const auto& b = *(bElements[0]);
+        const auto duplicateElements = docElements[0]->getElementsByTagName("duplicate");
+        TEST_ASSERT_EQ(duplicateElements.size(), 2);
+        const auto& duplicate = *(duplicateElements[0]);
 
-        const auto characterData = b.getCharacterData();
+        const auto characterData = duplicate.getCharacterData();
         TEST_ASSERT_TRUE(characterData.empty());
     }
 }
@@ -220,24 +220,30 @@ TEST_CASE(test_getElementByTagName_nothrow)
     {
         const auto pNotFound = root->getElementByTagName(std::nothrow, "not_found", true /*recurse*/);
         TEST_ASSERT_NULL(pNotFound);
+        const auto pDuplicate = root->getElementByTagName(std::nothrow, "duplicate", true /*recurse*/);
+        TEST_ASSERT_NULL(pDuplicate);
     }
 
     const auto& doc = root->getElementByTagName("doc");
     {
         const auto pNotFound = doc.getElementByTagName(std::nothrow, "not_found");
         TEST_ASSERT_NULL(pNotFound);
+        const auto pDuplicate = doc.getElementByTagName(std::nothrow, "duplicate");
+        TEST_ASSERT_NULL(pDuplicate);
     }
 }
 
-TEST_CASE(test_getElementByTagName_b)
+TEST_CASE(test_getElementByTagName_throw)
 {
     test_MinidomParser xmlParser;
     const auto root = xmlParser.getRootElement();
     
-    TEST_SPECIFIC_EXCEPTION(root->getElementByTagName("b", true /*recurse*/), xml::lite::XMLException);
+    TEST_SPECIFIC_EXCEPTION(root->getElementByTagName("not_found", true /*recurse*/), xml::lite::XMLException);
+    TEST_SPECIFIC_EXCEPTION(root->getElementByTagName("duplicate", true /*recurse*/), xml::lite::XMLException);
 
     const auto& doc = root->getElementByTagName("doc");
-    TEST_SPECIFIC_EXCEPTION(doc.getElementByTagName("b"), xml::lite::XMLException);
+    TEST_SPECIFIC_EXCEPTION(doc.getElementByTagName("not_found"), xml::lite::XMLException);
+    TEST_SPECIFIC_EXCEPTION(doc.getElementByTagName("duplicate"), xml::lite::XMLException);
 }
 
 TEST_CASE(test_getValue)
@@ -245,11 +251,15 @@ TEST_CASE(test_getValue)
     test_MinidomParser xmlParser;
     const auto root = xmlParser.getRootElement();
 
+     using namespace xml::lite;
     {
         const auto& e = root->getElementByTagName("int", true /*recurse*/);
         int value;
         const auto result = getValue(e, value);
         TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(314, value);
+
+        value = getValue<int>(e);
         TEST_ASSERT_EQ(314, value);
     }
     {
@@ -258,6 +268,9 @@ TEST_CASE(test_getValue)
         const auto result = getValue(e, value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(3.14, value);
+
+        value = getValue<double>(e);
+        TEST_ASSERT_EQ(3.14, value);
     }
     {
         const auto& e = root->getElementByTagName("string", true /*recurse*/);
@@ -265,17 +278,26 @@ TEST_CASE(test_getValue)
         const auto result = getValue(e, value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ("abc", value);
+
+        value = getValue<std::string>(e);
+        TEST_ASSERT_EQ("abc", value);
     }
     {
         const auto& e = root->getElementByTagName("bool", true /*recurse*/);
         auto toType = [](const std::string& value) { return value == "yes"; };
+
         bool value;
-        auto result = getValue(e, value, toType);
+        auto result = castValue(e, value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);
+        value = castValue(e, toType);
+        TEST_ASSERT_EQ(true, value);
+
         std::string strValue;
         result = getValue(e, strValue);
         TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ("yes", strValue);
+        strValue = getValue<std::string>(e);
         TEST_ASSERT_EQ("yes", strValue);
     }
     {
@@ -305,6 +327,28 @@ TEST_CASE(test_getValueFailure)
         double value;
         const auto result = getValue(e, value);
         TEST_ASSERT_FALSE(result);
+    }
+    {
+        const auto& e = root->getElementByTagName("empty", true /*recurse*/);
+        std::string value;
+        const auto result = getValue(e, value);
+        TEST_ASSERT_FALSE(result);
+    }
+}
+
+TEST_CASE(test_getValueThrows)
+{
+    test_MinidomParser xmlParser;
+    const auto root = xmlParser.getRootElement();
+
+     using namespace xml::lite;
+    {
+        const auto& e = root->getElementByTagName("string", true /*recurse*/);
+        TEST_SPECIFIC_EXCEPTION(getValue<int>(e), except::BadCastException);
+    }
+    {
+        const auto& e = root->getElementByTagName("empty", true /*recurse*/);
+        TEST_SPECIFIC_EXCEPTION(getValue<std::string>(e), except::BadCastException);
     }
 }
 
@@ -345,7 +389,7 @@ TEST_CASE(test_setValue)
         
         auto toType = [](const std::string& value) { return value == "yes"; };
         bool value;
-        auto result = getValue(e, value, toType);
+        auto result = castValue(e, value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);
         std::string strValue;
@@ -362,12 +406,13 @@ int main(int, char**)
 
     TEST_CHECK(test_getRootElement);
     TEST_CHECK(test_getElementsByTagName);
-    TEST_CHECK(test_getElementsByTagName_b);
+    TEST_CHECK(test_getElementsByTagName_duplicate);
     TEST_CHECK(test_getElementByTagName);
-    TEST_CHECK(test_getElementByTagName_nothrow);
-    TEST_CHECK(test_getElementByTagName_b);
+    TEST_CHECK(test_getElementByTagName_nothrow);    
+    TEST_CHECK(test_getElementByTagName_throw);
 
     TEST_CHECK(test_getValue);
     TEST_CHECK(test_getValueFailure);
+    TEST_CHECK(test_getValueThrows);
     TEST_CHECK(test_setValue);
 }

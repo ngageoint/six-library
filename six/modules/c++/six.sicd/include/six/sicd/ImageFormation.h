@@ -22,13 +22,13 @@
 #ifndef __SIX_IMAGE_FORMATION_H__
 #define __SIX_IMAGE_FORMATION_H__
 
-#include <mem/ScopedCopyablePtr.h>
-#include <mem/ScopedCloneablePtr.h>
-
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/ParameterCollection.h"
 #include "six/sicd/RadarCollection.h"
+
+#include <mem/ScopedCopyablePtr.h>
+#include <mem/ScopedCloneablePtr.h>
 
 namespace six
 {

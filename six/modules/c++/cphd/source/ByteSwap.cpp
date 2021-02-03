@@ -19,13 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/ByteSwap.h>
+
 #include <string>
 
 #include <sys/Conf.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
 #include <nitf/coda-oss.hpp>
-#include <cphd/ByteSwap.h>
 
 namespace
 {

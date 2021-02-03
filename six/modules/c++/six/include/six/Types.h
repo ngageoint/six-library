@@ -27,7 +27,7 @@
 #include <limits>
 #include <string>
 
-#include <six/sys_Conf.h>
+#include <scene/sys_Conf.h>
 #include <import/except.h>
 #include <import/mem.h>
 #include <import/str.h>
