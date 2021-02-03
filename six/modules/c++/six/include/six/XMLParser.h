@@ -68,11 +68,20 @@ protected:
     static
     XMLElem newElement(const std::string& name, const std::string& uri,
             const std::string& characterData, XMLElem parent = nullptr);
+    #if CODA_OSS_lib_char8_t
+    static XMLElem newElement(const std::string& name, const std::string& uri,
+            const std::u8string& characterData, XMLElem parent = nullptr);
+    #endif
 
     // generic element creation methods, w/URI
     XMLElem createString(const std::string& name,
             const std::string& uri, const std::string& p = "",
             XMLElem parent = nullptr) const;
+    #if CODA_OSS_lib_char8_t
+    XMLElem createString(const std::string& name,
+        const std::string& uri, const std::u8string& p,
+        XMLElem parent = nullptr) const;
+    #endif
     template<typename T>
     XMLElem createSixString(const std::string& name,
         const std::string& uri, const T& t,

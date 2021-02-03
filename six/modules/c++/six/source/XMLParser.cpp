@@ -110,6 +110,17 @@ XMLElem XMLParser::newElement(const std::string& name,
         parent->addChild(elem);
     return elem;
 }
+#if CODA_OSS_lib_char8_t
+XMLElem XMLParser::newElement(const std::string& name,
+    const std::string& uri, const std::u8string& characterData,
+    XMLElem parent)
+{
+    XMLElem elem = new xml::lite::Element(name, uri, characterData);
+    if (parent)
+        parent->addChild(elem);
+    return elem;
+}
+#endif
 
 XMLElem XMLParser::createString(const std::string& name,
         const std::string& uri, const std::string& p, XMLElem parent) const
@@ -119,6 +130,17 @@ XMLElem XMLParser::createString(const std::string& name,
 
     return elem;
 }
+
+#if CODA_OSS_lib_char8_t
+XMLElem XMLParser::createString(const std::string& name,
+    const std::string& uri, const std::u8string& p, XMLElem parent) const
+{
+    XMLElem const elem = newElement(name, uri, p, parent);
+    addClassAttributes(*elem, "xs:string");
+
+    return elem;
+}
+#endif
 
 XMLElem XMLParser::createString_(const std::string& name,
         const std::string& p, XMLElem parent) const
