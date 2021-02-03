@@ -21,6 +21,7 @@
  */
 
 #include "xml/lite/Attributes.h"
+#include "gsl/gsl.h"
 
 xml::lite::AttributeNode::AttributeNode(const xml::lite::AttributeNode& node)
 {
@@ -54,7 +55,7 @@ int xml::lite::Attributes::getIndex(const std::string& qname) const
     for (size_t i = 0; i < mAttributes.size(); i++)
     {
         if (qname == mAttributes[i].getQName())
-            return i;
+            return gsl::narrow<int>(i);
     }
     return -1;
 }
@@ -66,14 +67,21 @@ int xml::lite::Attributes::getIndex(const std::string& uri,
     {
         if ((uri == mAttributes[i].getUri()) && (localName
                 == mAttributes[i].getLocalName()))
-            return i;
+            return gsl::narrow<int>(i);
     }
     return -1;
 }
 
 std::string xml::lite::Attributes::getValue(int i) const
 {
-    return mAttributes.at(i).getValue();
+    try
+    {
+        return mAttributes.at(i).getValue();
+    }
+    catch (const std::out_of_range& ex)
+    {
+        throw except::NoSuchKeyException(Ctxt(FmtX("attributes[%d] not found, %s", i, ex.what())));
+    }
 }
 bool xml::lite::Attributes::getValue(int i, std::string& result) const
 {

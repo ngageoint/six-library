@@ -25,6 +25,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <new> // std::nothrow_t
 
 #include <io/InputStream.h>
@@ -475,8 +476,9 @@ protected:
  *  \param value the charater data as T
  *  \return whether or not there was a value of type T
  */
-template <typename T, typename ToType>
-inline T getValue(const Element& element, ToType toType)
+template <typename ToType>
+inline auto castValue(const Element& element, ToType toType)  // getValue() conflicts with below
+   -> decltype(toType(std::string()))
 {
     const auto characterData = element.getCharacterData();
     if (characterData.empty())
@@ -488,15 +490,15 @@ inline T getValue(const Element& element, ToType toType)
 template <typename T>
 inline T getValue(const Element& element)
 {
-    return getValue<T>(element, details::toType<T>);
+    return castValue(element, details::toType<T>);
 }
 
 template <typename T, typename ToType>
-inline bool getValue(const Element& element, T& value, ToType toType)
+inline bool castValue(const Element& element, T& value, ToType toType)
 {
     try
     {
-        value = getValue<T>(element, toType);
+        value = castValue(element, toType);
     }
     catch (const except::BadCastException&)
     {
@@ -507,7 +509,7 @@ inline bool getValue(const Element& element, T& value, ToType toType)
 template <typename T>
 inline bool getValue(const Element& element, T& value)
 {
-    return getValue(element, value, details::toType<T>);
+    return castValue(element, value, details::toType<T>);
 }
 
 /*!

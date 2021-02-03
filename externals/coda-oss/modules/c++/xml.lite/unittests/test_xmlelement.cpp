@@ -251,11 +251,15 @@ TEST_CASE(test_getValue)
     test_MinidomParser xmlParser;
     const auto root = xmlParser.getRootElement();
 
+     using namespace xml::lite;
     {
         const auto& e = root->getElementByTagName("int", true /*recurse*/);
         int value;
         const auto result = getValue(e, value);
         TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(314, value);
+
+        value = getValue<int>(e);
         TEST_ASSERT_EQ(314, value);
     }
     {
@@ -264,6 +268,9 @@ TEST_CASE(test_getValue)
         const auto result = getValue(e, value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(3.14, value);
+
+        value = getValue<double>(e);
+        TEST_ASSERT_EQ(3.14, value);
     }
     {
         const auto& e = root->getElementByTagName("string", true /*recurse*/);
@@ -271,17 +278,26 @@ TEST_CASE(test_getValue)
         const auto result = getValue(e, value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ("abc", value);
+
+        value = getValue<std::string>(e);
+        TEST_ASSERT_EQ("abc", value);
     }
     {
         const auto& e = root->getElementByTagName("bool", true /*recurse*/);
         auto toType = [](const std::string& value) { return value == "yes"; };
+
         bool value;
-        auto result = getValue(e, value, toType);
+        auto result = castValue(e, value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);
+        value = castValue(e, toType);
+        TEST_ASSERT_EQ(true, value);
+
         std::string strValue;
         result = getValue(e, strValue);
         TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ("yes", strValue);
+        strValue = getValue<std::string>(e);
         TEST_ASSERT_EQ("yes", strValue);
     }
     {
@@ -311,6 +327,28 @@ TEST_CASE(test_getValueFailure)
         double value;
         const auto result = getValue(e, value);
         TEST_ASSERT_FALSE(result);
+    }
+    {
+        const auto& e = root->getElementByTagName("empty", true /*recurse*/);
+        std::string value;
+        const auto result = getValue(e, value);
+        TEST_ASSERT_FALSE(result);
+    }
+}
+
+TEST_CASE(test_getValueThrows)
+{
+    test_MinidomParser xmlParser;
+    const auto root = xmlParser.getRootElement();
+
+     using namespace xml::lite;
+    {
+        const auto& e = root->getElementByTagName("string", true /*recurse*/);
+        TEST_SPECIFIC_EXCEPTION(getValue<int>(e), except::BadCastException);
+    }
+    {
+        const auto& e = root->getElementByTagName("empty", true /*recurse*/);
+        TEST_SPECIFIC_EXCEPTION(getValue<std::string>(e), except::BadCastException);
     }
 }
 
@@ -351,7 +389,7 @@ TEST_CASE(test_setValue)
         
         auto toType = [](const std::string& value) { return value == "yes"; };
         bool value;
-        auto result = getValue(e, value, toType);
+        auto result = castValue(e, value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);
         std::string strValue;
@@ -375,5 +413,6 @@ int main(int, char**)
 
     TEST_CHECK(test_getValue);
     TEST_CHECK(test_getValueFailure);
+    TEST_CHECK(test_getValueThrows);
     TEST_CHECK(test_setValue);
 }
