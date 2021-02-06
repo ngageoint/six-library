@@ -87,6 +87,14 @@ XMLElem XMLParser::newElement(const std::string& name,
     return newElement(name, uri, "", parent);
 }
 
+void XMLParser::addClassAttributes(xml::lite::Element& elem, const std::string& type) const
+{
+    if (mAddClassAttributes)
+    {
+        setAttribute_(&elem, "class", type, getDefaultURI());
+    }
+}
+
 XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, const std::string& characterData,
         XMLElem parent)
@@ -102,22 +110,37 @@ XMLElem XMLParser::newElement(const std::string& name,
         parent->addChild(elem);
     return elem;
 }
+#if CODA_OSS_lib_char8_t
+XMLElem XMLParser::newElement(const std::string& name,
+    const std::string& uri, const std::u8string& characterData,
+    XMLElem parent)
+{
+    XMLElem elem = new xml::lite::Element(name, uri, characterData);
+    if (parent)
+        parent->addChild(elem);
+    return elem;
+}
+#endif
 
 XMLElem XMLParser::createString(const std::string& name,
         const std::string& uri, const std::string& p, XMLElem parent) const
 {
     XMLElem const elem = newElement(name, uri, p, parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:string");
-        elem->getAttributes().add(node);
-    }
+    addClassAttributes(*elem, "xs:string");
 
     return elem;
 }
+
+#if CODA_OSS_lib_char8_t
+XMLElem XMLParser::createString(const std::string& name,
+    const std::string& uri, const std::u8string& p, XMLElem parent) const
+{
+    XMLElem const elem = newElement(name, uri, p, parent);
+    addClassAttributes(*elem, "xs:string");
+
+    return elem;
+}
+#endif
 
 XMLElem XMLParser::createString_(const std::string& name,
         const std::string& p, XMLElem parent) const
@@ -125,13 +148,12 @@ XMLElem XMLParser::createString_(const std::string& name,
     return createString(name, mDefaultURI, p, parent);
 }
 
-XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
-        int p, XMLElem parent) const
+template<typename T>
+static std::string toString(const std::string& name, T p, XMLElem parent)
 {
-    std::string elementValue;
     try
     {
-        elementValue = std::to_string(p);
+        return str::toString(p);
     }
     catch (const except::Exception& ex)
     {
@@ -139,32 +161,20 @@ XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
                 + parent->getLocalName() + ": " + ex.getMessage());
         throw except::Exception(Ctxt(message));
     }
-    XMLElem const elem = newElement(name, uri, elementValue, parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:int");
-        elem->getAttributes().add(node);
-    }
+}
 
-    return elem;
+XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
+        int p, XMLElem parent) const
+{
+    const auto elementValue = toString(name, p, parent);
+    return createInt(name, uri, elementValue, parent);
 }
 
 XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
         const std::string& p, XMLElem parent) const
 {
     XMLElem const elem = newElement(name, uri, p, parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:int");
-        elem->getAttributes().add(node);
-    }
-
+    addClassAttributes(*elem, "xs:int");
     return elem;
 }
 
@@ -176,26 +186,9 @@ XMLElem XMLParser::createInt(const std::string& name, int p, XMLElem parent) con
 XMLElem XMLParser::createDouble(const std::string& name,
         const std::string& uri, double p, XMLElem parent) const
 {
-    std::string elementValue;
-    try
-    {
-        elementValue = std::to_string(p);
-    }
-    catch (const except::Exception& ex)
-    {
-        std::string message("Unable to create " + name + " in element "
-                + parent->getLocalName() + ": " + ex.getMessage());
-        throw except::Exception(Ctxt(message));
-    }
+    const auto elementValue = toString(name, p, parent);
     XMLElem elem = newElement(name, uri, elementValue, parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:double");
-        elem->getAttributes().add(node);
-    }
+    addClassAttributes(*elem, "xs:double");
 
     return elem;
 }
@@ -216,14 +209,7 @@ XMLElem XMLParser::createBooleanType(const std::string& name,
 
     XMLElem const elem =
             newElement(name, uri, six::toString(p), parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:boolean");
-        elem->getAttributes().add(node);
-    }
+    addClassAttributes(*elem, "xs:boolean");
 
     return elem;
 }
@@ -238,14 +224,7 @@ XMLElem XMLParser::createDateTime(const std::string& name,
         const std::string& uri, const std::string& s, XMLElem parent) const
 {
     XMLElem elem = newElement(name, uri, s, parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:dateTime");
-        elem->getAttributes().add(node);
-    }
+    addClassAttributes(*elem, "xs:dateTime");
 
     return elem;
 }
@@ -272,15 +251,7 @@ XMLElem XMLParser::createDate(const std::string& name,
         const std::string& uri, const DateTime& p, XMLElem parent) const
 {
     XMLElem const elem = newElement(name, uri, p.format("%Y-%m-%d"), parent);
-    if (mAddClassAttributes)
-    {
-        xml::lite::AttributeNode node;
-        node.setQName("class");
-        node.setUri(getDefaultURI());
-        node.setValue("xs:date");
-        elem->getAttributes().add(node);
-    }
-
+    addClassAttributes(*elem, "xs:date");
     return elem;
 }
 
@@ -292,23 +263,12 @@ XMLElem XMLParser::createDate(const std::string& name, const DateTime& p,
 
 XMLElem XMLParser::getFirstAndOnly(XMLElem parent, const std::string& tag)
 {
-    std::vector < XMLElem > children;
-    parent->getElementsByTagName(tag, children);
-    if (children.size() != 1)
-    {
-        throw except::Exception(Ctxt(
-                 "Expected exactly one " + tag + " but got " +
-                    std::to_string(children.size())));
-    }
-    return children[0];
+    auto& element = parent->getElementByTagName(tag);
+    return &element; // OK, element is a reference
 }
 XMLElem XMLParser::getOptional(XMLElem parent, const std::string& tag)
 {
-    std::vector < XMLElem > children;
-    parent->getElementsByTagName(tag, children);
-    if (children.size() != 1)
-        return nullptr;
-    return children[0];
+    return parent->getElementByTagName(std::nothrow, tag);
 }
 
 XMLElem XMLParser::require(XMLElem element, const std::string& name)
@@ -331,16 +291,24 @@ void XMLParser::setAttribute_(XMLElem e, const std::string& name,
     e->getAttributes().add(node);
 }
 
-void XMLParser::parseDouble(XMLElem element, double& value) const
+template<typename TGetValue>
+static void parseValue(logging::Logger& log, TGetValue getValue)
 {
     try
     {
-        value = str::toType<double>(element->getCharacterData());
+        getValue();
     }
     catch (const except::BadCastException& ex)
     {
-        mLog->warn(Ctxt("Unable to parse: " + ex.toString()));
+        log.warn(Ctxt("Unable to parse: " + ex.toString()));
     }
+}
+
+void XMLParser::parseDouble(XMLElem element, double& value) const
+{
+    parseValue(*mLog, [&]() {
+        value = xml::lite::getValue<double>(*element);
+        });
 }
 
 void XMLParser::parseComplex(XMLElem element, std::complex<double>& value) const
@@ -360,18 +328,13 @@ void XMLParser::parseString(XMLElem element, std::string& value) const
 
 void XMLParser::parseBooleanType(XMLElem element, BooleanType& value) const
 {
-    try
-    {
-        value = six::toType<BooleanType>(element->getCharacterData());
-    }
-    catch (const except::BadCastException& ex)
-    {
-        mLog->warn(Ctxt("Unable to parse: " + ex.toString()));
-    }
+    parseValue(*mLog, [&]() {
+        value = castValue(*element, six::toType<BooleanType>);
+        });
 }
 
 void XMLParser::parseDateTime(XMLElem element, DateTime& value) const
 {
-    value = six::toType<DateTime>(element->getCharacterData());
+    value = castValue(*element, six::toType<DateTime>);
 }
 }

@@ -19,6 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sidd/SIDDVersionUpdater.h>
+
+#include <iostream>
 
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
@@ -27,9 +30,7 @@
 #include <six/NITFWriteControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLControl.h>
-#include <six/sidd/SIDDVersionUpdater.h>
 #include <six/sidd/Utilities.h>
-#include <iostream>
 
 namespace
 {

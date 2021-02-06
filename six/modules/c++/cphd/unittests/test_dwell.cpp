@@ -22,11 +22,11 @@
 #include <iostream>
 #include <memory>
 
+#include <cphd/Dwell.h>
 #include <xml/lite/MinidomParser.h>
 #include <six/Init.h>
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
-#include <cphd/Dwell.h>
 
 #include "TestCase.h"
 

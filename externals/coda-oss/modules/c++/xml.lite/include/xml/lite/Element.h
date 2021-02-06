@@ -25,6 +25,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <new> // std::nothrow_t
 
 #include <io/InputStream.h>
@@ -193,15 +194,7 @@ public:
      *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
      */
     Element* getElementByTagNameNS(std::nothrow_t, const std::string& qname, bool recurse = false) const;
-    Element& getElementByTagNameNS(const std::string& qname, bool recurse = false) const
-    {
-        auto pElement = getElementByTagNameNS(std::nothrow, qname, recurse);
-        if (pElement == nullptr)
-        {
-            throw XMLException(Ctxt("Element '" + qname + "' was not found."));
-        }
-        return *pElement;
-    }
+    Element& getElementByTagNameNS(const std::string& qname, bool recurse = false) const;
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -227,15 +220,7 @@ public:
      *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
      */
     Element* getElementByTagName(std::nothrow_t, const std::string& localName, bool recurse = false) const;
-    Element& getElementByTagName(const std::string& localName, bool recurse = false) const
-    {
-        auto pElement = getElementByTagName(std::nothrow, localName, recurse);
-        if (pElement == nullptr)
-        {
-            throw XMLException(Ctxt("Element '" + localName + "' was not found."));
-        }
-        return *pElement;
-    }
+    Element& getElementByTagName(const std::string& localName, bool recurse = false) const;
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -263,15 +248,7 @@ public:
     Element* getElementByTagName(std::nothrow_t, const std::string& uri, const std::string& localName,
                                  bool recurse = false) const;
     Element& getElementByTagName(const std::string& uri, const std::string& localName,
-                                 bool recurse = false) const
-    {
-        auto pElement = getElementByTagName(std::nothrow, uri, localName, recurse);
-        if (pElement == nullptr)
-        {
-            throw XMLException(Ctxt("Element '" + localName + "' was not found (uri=" + uri + ")."));
-        }
-        return *pElement;
-    }
+                                 bool recurse = false) const;
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -499,17 +476,29 @@ protected:
  *  \param value the charater data as T
  *  \return whether or not there was a value of type T
  */
-template <typename T, typename ToType>
-inline bool getValue(const Element& element, T& value, ToType toType)
+template <typename ToType>
+inline auto castValue(const Element& element, ToType toType)  // getValue() conflicts with below
+   -> decltype(toType(std::string()))
 {
     const auto characterData = element.getCharacterData();
     if (characterData.empty())
     {
-        return false; // call getCharacterData() to get an empty string
+        throw except::BadCastException(Ctxt("call getCharacterData() to get an empty string"));
     }
+    return toType(characterData);
+}
+template <typename T>
+inline T getValue(const Element& element)
+{
+    return castValue(element, details::toType<T>);
+}
+
+template <typename T, typename ToType>
+inline bool castValue(const Element& element, T& value, ToType toType)
+{
     try
     {
-        value = toType(characterData);
+        value = castValue(element, toType);
     }
     catch (const except::BadCastException&)
     {
@@ -520,7 +509,7 @@ inline bool getValue(const Element& element, T& value, ToType toType)
 template <typename T>
 inline bool getValue(const Element& element, T& value)
 {
-    return getValue(element, value, details::toType<T>);
+    return castValue(element, value, details::toType<T>);
 }
 
 /*!

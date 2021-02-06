@@ -24,11 +24,13 @@
 #define __SIX_COMPRESSED_BYTE_PROVIDER_H__
 
 #include <nitf/CompressedByteProvider.hpp>
-#include <mem/SharedPtr.h>
+
 #include <six/Container.h>
 #include <six/NITFWriteControl.h>
 #include <six/NITFSegmentInfo.h>
 #include <six/XMLControlFactory.h>
+
+#include <mem/SharedPtr.h>
 
 namespace six
 {

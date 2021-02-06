@@ -23,6 +23,7 @@
 #include <memory>
 #include <stdexcept>
 
+#include <six/NITFHeaderCreator.h>
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <logging/Setup.h>
@@ -30,7 +31,6 @@
 #include <six/sicd/Utilities.h>
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/ComplexXMLControl.h>
-#include <six/NITFHeaderCreator.h>
 
 #include <sys/Filesystem.h>
 namespace fs = std::filesystem;

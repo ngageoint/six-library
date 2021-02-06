@@ -26,6 +26,7 @@
 #include <stddef.h>
 #include <complex>
 
+#include <scene/sys_Conf.h>
 #include <types/RowCol.h>
 
 namespace cphd
