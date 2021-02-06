@@ -392,7 +392,10 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         // But, we don't do this for legends since their size has nothing to
         // do with the size of the pixel data
         const bool segIsLegend = isLegend(subheader);
-        if (!segIsLegend)
+        const bool segIsDed = isDed(subheader);
+
+        //if (!segIsLegend)
+        if (!segIsLegend && !segIsDed)
         {
             validateSegment(subheader, *currentInfo);
         }
@@ -423,7 +426,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         }
 
         // Legends don't set lat/lons
-        if (!segIsLegend)
+        if (!segIsLegend && !segIsDed)
         {
             subheader.getCornersAsLatLons(corners);
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
@@ -548,17 +551,19 @@ void NITFReadControl::getIndices(const nitf::ImageSubheader& subheader, ImageAnd
     {
         // If it's SIDD, we need to check the first three digits within the IID
         image = iid - 1;
+        std::string str_segment;
         const auto segment_pos = digit_pos + 3;
         if (segment_pos < imageID.length())
         {
-            const auto str_segment = imageID.substr(segment_pos);
-            segment = str::toType<size_t>(str_segment) - 1;
+            str_segment = imageID.substr(segment_pos);
         }
         else
         {
             // 'imageID' might also be "DED001"
-            throw except::Exception(Ctxt("Can't extract segment # from: " + imageID));
+            str_segment = imageID.substr(digit_pos);
+            //throw except::Exception(Ctxt("Can't extract segment # from: " + imageID));
         }
+        segment = str::toType<size_t>(str_segment) - 1;
     }
     else
     {
