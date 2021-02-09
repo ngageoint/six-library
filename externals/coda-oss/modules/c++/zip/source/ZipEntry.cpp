@@ -40,9 +40,9 @@ void ZipEntry::inflate(sys::ubyte* out, sys::Size_T outLen, sys::ubyte* in,
     zstream.zfree = Z_NULL;
     zstream.opaque = Z_NULL;
     zstream.next_in = in;
-    zstream.avail_in = inLen;
+    zstream.avail_in = static_cast <uInt>(inLen);
     zstream.next_out = (Bytef*) out;
-    zstream.avail_out = outLen;
+    zstream.avail_out = static_cast <uInt>(outLen);
     zstream.data_type = Z_UNKNOWN;
 
     int zerr = inflateInit2(&zstream, -MAX_WBITS);

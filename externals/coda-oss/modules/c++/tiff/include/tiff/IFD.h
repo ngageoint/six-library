@@ -52,16 +52,13 @@ public:
     typedef std::map<unsigned short, tiff::IFDEntry *> IFDType;
 
     //! Constructor
-    IFD() :
-        mNextIFDOffsetPosition(0)
-    {
-    }
+    IFD() = default;
 
     //! Deconstructor
     ~IFD()
     {
-        for (sys::Uint32_T i = 0; i < mIFD.size(); ++i)
-            delete mIFD[i];
+        for (auto& kv : mIFD)
+            delete kv.second;
     }
 
     /**
@@ -223,7 +220,7 @@ public:
      *****************************************************************/
     sys::Uint32_T size()
     {
-        return mIFD.size();
+        return static_cast<sys::Uint32_T>(mIFD.size());
     }
 
     /**
@@ -303,7 +300,7 @@ private:
     IFDType mIFD;
 
     //! Offset where the next IFD offset can be written to
-    sys::Uint32_T mNextIFDOffsetPosition;
+    sys::Uint32_T mNextIFDOffsetPosition = 0;
 };
 
 } // End namespace.

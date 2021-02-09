@@ -116,21 +116,30 @@ static sys::U8string fromWindows1252(std::string::value_type ch_)
 {
     const auto ch = static_cast<uint8_t>(ch_);
 
+    // ASCII is the same in UTF-8
+    if (ch < 0x80)
+    {
+        return sys::U8string{cast(ch)};  // ASCII
+    }
+
+    // ISO8859-1 can be converted to UTF-8 with bit-twiddling
+    if (ch > 0x9F)
+    {
+        // https://stackoverflow.com/questions/4059775/convert-iso-8859-1-strings-to-utf-8-in-c-c
+        // *out++=0xc2+(*in>0xbf), *out++=(*in++&0x3f)+0x80;
+        return sys::U8string{cast(0xc2 + (ch > 0xbf)), cast((ch & 0x3f) + 0x80)}; // ISO8859-1
+    }
+
     // Need to look up characters from \x80 (EURO SIGN) to \x9F (LATIN CAPITAL LETTER Y WITH DIAERESIS)
     // in a map: http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
-    //
-    // If the input text contains a character that isn't defined in Windows-1252;
-    // return a "replacment character."  Yes, this will **corrupt** the input data as information is lost:
-    // https://en.wikipedia.org/wiki/Specials_(Unicode_block)#Replacement_character
     static const auto utf8 = [](uint32_t ch) {
         const std::u32string s{static_cast<std::u32string::value_type>(ch)};
         return str::toUtf8(s);
     };
-    static const sys::U8string replacement_character = utf8(0xfffd);
     static const std::map<uint32_t, sys::U8string> x80_x9F_to_u8string
     {
         {0x80, utf8(0x20AC) } // EURO SIGN
-        , {0x81, replacement_character } // UNDEFINED
+        // , {0x81, replacement_character } // UNDEFINED
         , {0x82, utf8(0x201A) } // SINGLE LOW-9 QUOTATION MARK
         , {0x83, utf8(0x0192)  } // LATIN SMALL LETTER F WITH HOOK
         , {0x84, utf8(0x201E)  } // DOUBLE LOW-9 QUOTATION MARK
@@ -142,10 +151,10 @@ static sys::U8string fromWindows1252(std::string::value_type ch_)
         , {0x8A, utf8(0x0160)  } // LATIN CAPITAL LETTER S WITH CARON
         , {0x8B, utf8(0x2039)  } // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
         , {0x8C, utf8(0x0152)  } // LATIN CAPITAL LIGATURE OE
-        , {0x8D, replacement_character } // UNDEFINED
+        //, {0x8D, replacement_character } // UNDEFINED
         , {0x8E, utf8(0x017D)  } // LATIN CAPITAL LETTER Z WITH CARON
-        , {0x8F, replacement_character } // UNDEFINED
-        , {0x90, replacement_character } // UNDEFINED
+        //, {0x8F, replacement_character } // UNDEFINED
+        //, {0x90, replacement_character } // UNDEFINED
         , {0x91, utf8(0x017D)  } // LEFT SINGLE QUOTATION MARK
         , {0x92, utf8(0x2018)  } // RIGHT SINGLE QUOTATION MARK
         , {0x93, utf8(0x2019)  } // LEFT DOUBLE QUOTATION MARK
@@ -158,7 +167,7 @@ static sys::U8string fromWindows1252(std::string::value_type ch_)
         , {0x9A, utf8(0x0161)  } // LATIN SMALL LETTER S WITH CARON
         , {0x9B, utf8(0x203A)  } // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
         , {0x9C, utf8(0x0153)  } // LATIN SMALL LIGATURE OE
-        , {0x9D, replacement_character } // UNDEFINED
+        //, {0x9D, replacement_character } // UNDEFINED
         , {0x9E, utf8(0x017E)  } // LATIN SMALL LETTER Z WITH CARON
         , {0x9F, utf8(0x0178)  } // LATIN CAPITAL LETTER Y WITH DIAERESIS
     };
@@ -168,15 +177,11 @@ static sys::U8string fromWindows1252(std::string::value_type ch_)
         return it->second;
     }
 
-    // If it's not in the map, convert to UTF-8
-    // https://stackoverflow.com/questions/4059775/convert-iso-8859-1-strings-to-utf-8-in-c-c
-    assert((ch < 0x80) || (ch > 0x9F));
-    if (ch < 0x80)
-    {
-        return sys::U8string{cast(ch)};  // ASCII
-    }
-    // *out++=0xc2+(*in>0xbf), *out++=(*in++&0x3f)+0x80;
-    return sys::U8string{cast(0xc2 + (ch > 0xbf)), cast((ch & 0x3f) + 0x80)}; // ISO8859-1
+    // If the input text contains a character that isn't defined in Windows-1252;
+    // return a "replacment character."  Yes, this will **corrupt** the input data as information is lost:
+    // https://en.wikipedia.org/wiki/Specials_(Unicode_block)#Replacement_character
+    static const sys::U8string replacement_character = utf8(0xfffd);
+    return replacement_character;
 }
 void str::fromWindows1252(const std::string& str, sys::U8string& result)
 {

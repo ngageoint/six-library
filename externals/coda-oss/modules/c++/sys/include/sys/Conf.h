@@ -290,7 +290,7 @@ namespace sys
 
         unsigned char* cOut = reinterpret_cast<unsigned char*>(&out);
         unsigned char* cIn = reinterpret_cast<unsigned char*>(&val);
-        for (int i = 0, j = size - 1; i < j; ++i, --j)
+        for (size_t i = 0, j = size - 1; i < j; ++i, --j)
         {
             cOut[i] = cIn[j];
             cOut[j] = cIn[i];

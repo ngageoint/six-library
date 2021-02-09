@@ -107,6 +107,6 @@ void tiff::FileWriter::writeHeader()
     mHeader.serialize(mOutput);
 
     // Have to rewind a few bytes to write out the actual IFD offset.
-    mIFDOffset = mOutput.tell();
+    mIFDOffset = static_cast <sys::Uint32_T>(mOutput.tell());
     mIFDOffset -= (int)sizeof(sys::Uint32_T);
 }

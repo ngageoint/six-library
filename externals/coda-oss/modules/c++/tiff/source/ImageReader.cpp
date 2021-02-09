@@ -86,7 +86,7 @@ void tiff::ImageReader::getStripData(unsigned char *buffer,
     
     //figure out how far we are in the current strip
     sys::Uint32_T stripOffset = 0;
-    for (size_t i = 0; i < mStripIndex; ++i)
+    for (sys::Uint32_T i = 0; i < mStripIndex; ++i)
         stripOffset += *(tiff::GenericType<sys::Uint32_T> *)(*mStripByteCounts)[i];
     sys::Uint32_T stripPosition = mBytePosition - stripOffset;
     
