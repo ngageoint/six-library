@@ -166,7 +166,7 @@ template<typename T> void writeSIO(const T* image, size_t rows, size_t cols,
 
     io::FileOutputStream imageStream(imageFile);
 
-    FileHeader fhdr(rows, cols, es, et);
+    FileHeader fhdr(static_cast<int>(rows), static_cast<int>(cols), es, et);
     fhdr.to(1, imageStream);
 
     imageStream.write(reinterpret_cast<const sys::byte*>(image),

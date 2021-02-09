@@ -19,12 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sicd/SICDMesh.h>
+
 #include <numeric>
 
-#include <six/sys_Conf.h>
 #include <sys/Bit.h>
 
-#include <six/sicd/SICDMesh.h>
 #include <six/Serialize.h>
 
 #include <sys/Bit.h>

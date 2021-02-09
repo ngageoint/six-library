@@ -35,10 +35,10 @@ namespace
 const size_t numBytes(16384);
 
 bool
-testAlignedAlloc(const size_t numBytes, const size_t alignment)
+testAlignedAlloc(const size_t numBytes_, const size_t alignment)
 {
     // Allocate an aligned buffer
-    void* const ptr = sys::alignedAlloc(numBytes, alignment);
+    void* const ptr = sys::alignedAlloc(numBytes_, alignment);
 
     // Confirm it's a multiple of alignment
     bool const isAligned(reinterpret_cast<size_t>(ptr) % alignment == 0);

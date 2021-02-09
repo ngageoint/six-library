@@ -27,13 +27,17 @@
 
 #include "xml/lite/MinidomParser.h"
 
-static const std::string strXml = R"(
+static const std::string uri = "urn:example.com";
+static const std::string strXml_1_ = R"(
 <root>
     <doc name="doc">
         <a a="a">TEXT</a>
         <values int="314" double="3.14" string="abc" bool="yes" empty=""/>
+        <ns_values xmlns:ns=")";
+static const std::string strXml_2_ = R"(" ns:int="314" />
     </doc>
 </root>)";
+static const auto strXml = strXml_1_ + uri + strXml_2_;
 
 struct test_MinidomParser final
 {
@@ -64,6 +68,39 @@ TEST_CASE(test_getAttribute)
     const auto result = attributes.getValue("a", value);
     TEST_ASSERT_TRUE(result);
     TEST_ASSERT_EQ("a", value);
+}
+
+TEST_CASE(test_getAttributeByNS)
+{
+    test_MinidomParser xmlParser;
+    const auto root = xmlParser.getRootElement();
+
+    const auto& e = root->getElementByTagName("ns_values", true /*recurse*/);
+    const auto& attributes = e.getAttributes();
+
+    using namespace xml::lite;
+
+    std::string strValue;
+    strValue = attributes.getValue(uri, "int");
+    TEST_ASSERT_EQ("314", strValue);
+    strValue = getValue<std::string>(attributes, uri, "int");
+    TEST_ASSERT_EQ("314", strValue);
+    const auto key = std::make_tuple(uri, "int");
+    strValue = getValue<std::string>(attributes, key);
+    TEST_ASSERT_EQ("314", strValue);
+
+    int value;
+    auto result = getValue<int>(attributes, uri, "int", value);
+    TEST_ASSERT_TRUE(result);
+    TEST_ASSERT_EQ(314, value);
+    value = getValue<int>(attributes, uri, "int");
+    TEST_ASSERT_EQ(314, value);
+
+    result = getValue<int>(attributes, key, value);
+    TEST_ASSERT_TRUE(result);
+    TEST_ASSERT_EQ(314, value);
+    value = getValue<int>(attributes, key);
+    TEST_ASSERT_EQ(314, value);
 }
 
 TEST_CASE(test_getAttributeByIndex)
@@ -109,10 +146,14 @@ TEST_CASE(test_getAttributeValue)
     const auto& values = root->getElementByTagName("values", true /*recurse*/);
     const auto& attributes = values.getAttributes();
 
+    using namespace xml::lite;
     {
         int value;
         const auto result = getValue(attributes, "int", value);
         TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(314, value);
+
+        value = getValue<int>(attributes, "int");
         TEST_ASSERT_EQ(314, value);
     }
     {
@@ -120,23 +161,40 @@ TEST_CASE(test_getAttributeValue)
         const auto result = getValue(attributes, "double", value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(3.14, value);
+
+        value = getValue<double>(attributes, "double");
+        TEST_ASSERT_EQ(3.14, value);
     }
     {
         std::string value;
         const auto result = getValue(attributes, "string", value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ("abc", value);
+
+        value = getValue<std::string>(attributes, "string");
+        TEST_ASSERT_EQ("abc", value);
+    }
+    {
+        std::string value;
+        const auto result = getValue(attributes, "empty", value);
+        TEST_ASSERT_FALSE(result);
     }
     {
         auto toType = [](const std::string& value) { return value == "yes"; };
         bool value;
-        auto result = getValue(attributes, "bool", value, toType);
+        auto result = castValue(attributes, "bool", value, toType);
         TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(true, value);
+
+        value = castValue(attributes, "bool", toType);
         TEST_ASSERT_EQ(true, value);
 
         std::string strValue;
         result = getValue(attributes, "bool", strValue);
         TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ("yes", strValue);
+
+        strValue = getValue<std::string>(attributes, "bool");
         TEST_ASSERT_EQ("yes", strValue);
     }
     {
@@ -173,6 +231,22 @@ TEST_CASE(test_getAttributeValueFailure)
     }
 }
 
+TEST_CASE(test_getAttributeValueThrows)
+{
+    test_MinidomParser xmlParser;
+    const auto root = xmlParser.getRootElement();
+
+    const auto& values = root->getElementByTagName("values", true /*recurse*/);
+    const auto& attributes = values.getAttributes();
+
+    using namespace xml::lite;
+    TEST_SPECIFIC_EXCEPTION(getValue<int>(attributes, "string"), except::BadCastException);
+    TEST_SPECIFIC_EXCEPTION(getValue<double>(attributes, "string"), except::BadCastException);
+    TEST_SPECIFIC_EXCEPTION(getValue<std::string>(attributes, "empty"), except::BadCastException);
+
+    TEST_SPECIFIC_EXCEPTION(getValue<std::string>(attributes, "not_found"), except::NoSuchKeyException);
+}
+
 TEST_CASE(test_getAttributeValueByIndex)
 {
     test_MinidomParser xmlParser;
@@ -181,10 +255,14 @@ TEST_CASE(test_getAttributeValueByIndex)
     const auto& values = root->getElementByTagName("values", true /*recurse*/);
     const auto& attributes = values.getAttributes();
 
+    using namespace xml::lite;
     {
         int value;
         const auto result = getValue(attributes, 0, value);
         TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(314, value);
+
+        value = getValue<int>(attributes, 0);
         TEST_ASSERT_EQ(314, value);
     }
     {
@@ -192,20 +270,28 @@ TEST_CASE(test_getAttributeValueByIndex)
         const auto result = getValue(attributes, 1, value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(3.14, value);
+        
+        value = getValue<double>(attributes, 1);
+        TEST_ASSERT_EQ(3.14, value);
     }
     {
         std::string value;
         const auto result = getValue(attributes, 2, value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ("abc", value);
+
+        value = getValue<std::string>(attributes, 2);
+        TEST_ASSERT_EQ("abc", value);
     }
     {
         std::string value;
         auto result = getValue(attributes, -1, value);
         TEST_ASSERT_FALSE(result);
+        TEST_SPECIFIC_EXCEPTION(getValue<std::string>(attributes, -1), except::NoSuchKeyException);
+
         result = getValue(attributes, 999, value);
         TEST_ASSERT_FALSE(result);
-
+        TEST_SPECIFIC_EXCEPTION(getValue<std::string>(attributes, 999), except::NoSuchKeyException);
     }
 }
 
@@ -248,7 +334,7 @@ TEST_CASE(test_setAttributeValue)
 
         auto toType = [](const std::string& value) { return value == "yes"; };
         bool value;
-        result = getValue(attributes, "bool", value, toType);
+        result = castValue(attributes, "bool", value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);
         std::string strValue;
@@ -307,9 +393,11 @@ int main(int, char**)
 {
     TEST_CHECK(test_getAttribute);
     TEST_CHECK(test_getAttributeByIndex);
+    TEST_CHECK(test_getAttributeByNS);
     TEST_CHECK(test_getAttributeNotFound);
     TEST_CHECK(test_getAttributeValue);
     TEST_CHECK(test_getAttributeValueFailure);
+    TEST_CHECK(test_getAttributeValueThrows);
     TEST_CHECK(test_getAttributeValueByIndex);
     TEST_CHECK(test_setAttributeValue);
     TEST_CHECK(test_setAttributeValueByIndex);

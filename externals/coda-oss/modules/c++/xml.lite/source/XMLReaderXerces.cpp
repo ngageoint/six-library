@@ -35,7 +35,7 @@ void xml::lite::XMLReaderXerces::parse(io::InputStream & is, int size)
     io::StringStream oss;
     is.streamTo(oss, size);
 
-    off_t available = oss.available();
+    const auto available = oss.available();
     if ( available <= 0 )
     {
         throw xml::lite::XMLParseException(Ctxt("No stream available"));

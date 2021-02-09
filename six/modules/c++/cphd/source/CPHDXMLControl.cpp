@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/CPHDXMLControl.h>
+
 #include <set>
 #include <unordered_map>
 #include <io/StringStream.h>
@@ -26,7 +28,6 @@
 #include <xml/lite/MinidomParser.h>
 
 #include <six/XMLControl.h>
-#include <cphd/CPHDXMLControl.h>
 #include <cphd/CPHDXMLParser.h>
 #include <cphd/Enums.h>
 #include <cphd/Metadata.h>

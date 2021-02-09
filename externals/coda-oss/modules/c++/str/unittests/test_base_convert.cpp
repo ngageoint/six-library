@@ -119,7 +119,8 @@ TEST_CASE(testCharToString)
     TEST_ASSERT_EQ(str::toString<char>(65), "A");
 }
 
-static constexpr sys::U8string::value_type cast(char ch)
+template<typename T>
+static constexpr sys::U8string::value_type cast(T ch)
 {
     static_assert(sizeof(sys::U8string::value_type) == sizeof(char), "sizeof(Char8_T) != sizeof(char)");
     return static_cast<sys::U8string::value_type>(ch);

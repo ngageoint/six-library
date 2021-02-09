@@ -27,7 +27,7 @@
 #include <map>
 #include <ostream>
 
-#include <six/sys_Conf.h>
+#include <scene/sys_Conf.h>
 #include <import/except.h>
 #include <import/str.h>
 #include <import/sys.h>

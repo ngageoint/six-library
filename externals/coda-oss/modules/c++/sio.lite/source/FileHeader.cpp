@@ -63,7 +63,7 @@ std::string sio::lite::FileHeader::getElementTypeAsString() const
 
 long sio::lite::FileHeader::getLength() const
 {
-    long length = SIO_HEADER_LENGTH;
+    size_t length = SIO_HEADER_LENGTH;
 
     if (userData.size() > 0)
         length += 4; //num fields int
@@ -77,7 +77,7 @@ long sio::lite::FileHeader::getLength() const
         length += 4; //data size
         length += it->second.size(); //num bytes of data
     }
-    return length;
+    return static_cast<long>(length);
 }
 
 
@@ -115,12 +115,12 @@ void sio::lite::FileHeader::to(size_t numBands, io::OutputStream& os)
         if (elementType == sio::lite::FileHeader::UNSIGNED)
         {
             elementType = sio::lite::FileHeader::N_BYTE_UNSIGNED;
-            elementSize *= numBands;
+            elementSize *= static_cast<int>(numBands);
         }
         else if (elementType == sio::lite::FileHeader::SIGNED)
         {
             elementType = sio::lite::FileHeader::N_BYTE_SIGNED;
-            elementSize *= numBands;
+            elementSize *= static_cast<int>(numBands);
         }
         /*!
          *  To really handle this properly, we need to know
@@ -131,7 +131,7 @@ void sio::lite::FileHeader::to(size_t numBands, io::OutputStream& os)
          *  For now, we punt...
          */
         else
-            nl *= numBands;
+            nl *= static_cast<int>(numBands);
     }
 
     if (elementType != sio::lite::FileHeader::UNSIGNED && elementType != sio::lite::FileHeader::SIGNED &&
@@ -158,7 +158,7 @@ void sio::lite::FileHeader::to(size_t numBands, io::OutputStream& os)
 
 void sio::lite::FileHeader::writeUserData(io::OutputStream& os)
 {
-    int numFields = userData.size();
+    const auto numFields = static_cast<int32_t>(userData.size());
     os.write((const sys::byte*)&numFields, 4);
 
     for(sio::lite::UserDataDictionary::Iterator it = userData.begin();
@@ -166,12 +166,12 @@ void sio::lite::FileHeader::writeUserData(io::OutputStream& os)
     {
         std::string key = it->first;
         //add 1 for null-byte termination
-        int keySize = key.length() + 1;
+        const auto keySize = static_cast<int32_t>(key.length() + 1);
         os.write((const sys::byte*)&keySize, 4);
         os.write((const sys::byte*)key.c_str(), keySize);
 
         std::vector<sys::byte>& uData = it->second;
-        int udSize = uData.size();
+        const auto udSize =  static_cast<int32_t>(uData.size());
         os.write((const sys::byte*)&udSize, 4);
 
         //Do we need to check for endian-ness and possibly byteswap???

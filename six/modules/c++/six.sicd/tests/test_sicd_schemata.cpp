@@ -24,12 +24,13 @@
 #include <sstream>
 #include <stdio.h>
 
+ // For SICD implementation
+#include <import/six/sicd.h>
+
 #include <import/cli.h>
 #include <import/six.h>
 #include <import/io.h>
 
-// For SICD implementation
-#include <import/six/sicd.h>
 #include "TestCase.h"
 
 #define  MYTEST_ASSERT_EQ(X1, X2) \

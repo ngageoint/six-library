@@ -38,6 +38,10 @@ std::string tiff::RationalPrintStrategy::toString(const sys::Uint32_T data)
 
     return tempStream.str();
 }
+std::string tiff::RationalPrintStrategy::toString(const sys::Uint64_T data)
+{
+    return toString(static_cast<sys::Uint32_T>(data));
+}
 
 template<typename T>
 static inline void memcpy_(T* pDest, const void* pSrc)

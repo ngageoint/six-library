@@ -24,9 +24,10 @@
 
 #include <map>
 
+#include "six/Container.h"
+
 #include <mem/SharedPtr.h>
 #include "six/Types.h"
-#include "six/Container.h"
 #include "six/NITFImageInfo.h"
 #include "six/Adapters.h"
 #include <import/logging.h>

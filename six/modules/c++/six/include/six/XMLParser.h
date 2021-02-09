@@ -23,11 +23,11 @@
 
 #include <string>
 
-#include <xml/lite/Element.h>
-#include <logging/Logger.h>
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Utilities.h>
+#include <xml/lite/Element.h>
+#include <logging/Logger.h>
 
 namespace six
 {
@@ -68,11 +68,20 @@ protected:
     static
     XMLElem newElement(const std::string& name, const std::string& uri,
             const std::string& characterData, XMLElem parent = nullptr);
+    #if CODA_OSS_lib_char8_t
+    static XMLElem newElement(const std::string& name, const std::string& uri,
+            const std::u8string& characterData, XMLElem parent = nullptr);
+    #endif
 
     // generic element creation methods, w/URI
     XMLElem createString(const std::string& name,
             const std::string& uri, const std::string& p = "",
             XMLElem parent = nullptr) const;
+    #if CODA_OSS_lib_char8_t
+    XMLElem createString(const std::string& name,
+        const std::string& uri, const std::u8string& p,
+        XMLElem parent = nullptr) const;
+    #endif
     template<typename T>
     XMLElem createSixString(const std::string& name,
         const std::string& uri, const T& t,
@@ -208,6 +217,7 @@ private:
         const std::string& p, XMLElem parent) const;
     static void setAttribute_(XMLElem e, const std::string& name,
             const std::string& v, const std::string& uri);
+    void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;
 
     const std::string mDefaultURI;
     const bool mAddClassAttributes;

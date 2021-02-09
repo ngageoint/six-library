@@ -21,6 +21,7 @@
  */
 #include <iostream>
 
+#include <scene/sys_Conf.h>
 #include <import/cli.h>
 #include <import/six.h>
 #include <import/sio/lite.h>

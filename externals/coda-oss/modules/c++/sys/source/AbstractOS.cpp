@@ -125,7 +125,7 @@ std::string AbstractOS::getCurrentExecutable(
         return argvPathname;
     }
 
-    const std::string candidatePathname = sys::Path::joinPaths(
+    std::string candidatePathname = sys::Path::joinPaths(
             getCurrentWorkingDirectory(), argvPathname);
     if (exists(candidatePathname))
     {
@@ -137,7 +137,7 @@ std::string AbstractOS::getCurrentExecutable(
             str::split(getEnv("PATH"), sys::Path::separator());
     for (size_t ii = 0; ii < pathDirs.size(); ++ii)
     {
-        const std::string candidatePathname = sys::Path::joinPaths(
+        candidatePathname = sys::Path::joinPaths(
                 sys::Path::absolutePath(pathDirs[ii]), argvPathname);
         if (exists(candidatePathname))
         {

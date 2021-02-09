@@ -28,6 +28,7 @@
 #include <exception>
 #include <iostream>
 
+#include <scene/sys_Conf.h>
 #include <cli/ArgumentParser.h>
 #include <cli/Results.h>
 #include <six/XMLControl.h>

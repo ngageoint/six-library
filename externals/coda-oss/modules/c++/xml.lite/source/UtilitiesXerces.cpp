@@ -174,8 +174,8 @@ error(const SAXParseException &exception)
 {
     XercesLocalString m(exception.getMessage());
     throw(XMLParseException(m.str(),
-                                       exception.getLineNumber(),
-                                       exception.getColumnNumber()));
+                                       static_cast<int>(exception.getLineNumber()),
+                                       static_cast<int>(exception.getColumnNumber())));
 }
 
 void XercesErrorHandler::
@@ -183,8 +183,8 @@ fatalError(const SAXParseException &exception)
 {
     XercesLocalString m(exception.getMessage());
     XMLParseException xex(m.str(),
-                                     exception.getLineNumber(),
-                                     exception.getColumnNumber());
+                                     static_cast<int>(exception.getLineNumber()),
+                                     static_cast<int>(exception.getColumnNumber()));
 
     throw except::Error(Ctxt(xex.getMessage()));
 }
