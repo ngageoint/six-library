@@ -380,6 +380,9 @@ private:
     Attributes_T mAttributes;
 };
 
+#ifndef SWIG
+// The (old) version of SWIG we're using doesn't like certain C++11 features.
+
 /*!
  * Look up an attribute's value by an arbitrary key.
  * \param key  The key for the attribute we want
@@ -581,6 +584,7 @@ inline bool setValue(Attributes& attributes, const std::string & uri, const std:
 {
     return setValue(attributes, uri, localName, value, details::toString<T>);
 }
+#endif // SWIG
 
 }
 }

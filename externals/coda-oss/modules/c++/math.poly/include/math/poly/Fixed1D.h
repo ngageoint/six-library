@@ -180,15 +180,21 @@ public:
      */
     Fixed1D<_Order-1, _T> derivative() const
     {
-        Fixed1D<_Order-1, _T> dv;
-        if (_Order)
+        auto order = _Order; // "conditional expression is constant"
+        if (order > 0)  // 0-1 is SIZE_MAX because _Order is size_t
         {
+            Fixed1D<_Order-1, _T> dv;
             for (size_t i = 0; i <= _Order-1; i++)
             {
                 dv[i] = mCoef[i+1] * (i+1);
             }
+            return dv;
         }
-        return dv;
+        else
+        {
+            // don't want to return Fixed1D<SIZE_MAX>
+            return Fixed1D<0, _T>();
+        }
     }
     /*!
      *
@@ -278,7 +284,8 @@ public:
         operator+(const Fixed1D<_OtherOrder, _T>& p) const
     {
         Fixed1D<_Order+_OtherOrder, _T> newPoly;
-        if (_Order > _OtherOrder)
+        auto order = _Order;  // "conditional expression is constant"
+        if (order > _OtherOrder)
         {
             newPoly = *this;
             for (size_t i = 0; i <= _OtherOrder; i++)
