@@ -1,4 +1,10 @@
 set(TARGET_LANGUAGE c++)
+# turn on warnings as errors
+if (MSVC)
+    add_compile_options(/WX)
+elseif (UNIX)
+    add_compile_options(-Werror)
+endif()
 
 # bes sure we're really using C++17
 if (MSVC)

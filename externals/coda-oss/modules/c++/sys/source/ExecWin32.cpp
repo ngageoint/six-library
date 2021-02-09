@@ -41,7 +41,7 @@ namespace sys
 FILE* ExecPipe::openPipe(const std::string& command,
                          const std::string& type)
 {
-    FILE* ioFile;
+    FILE* ioFile = nullptr;
     HANDLE outIO[2] = {NULL, NULL};
 
     //! inherit the pipe handles
@@ -121,12 +121,10 @@ int ExecPipe::closePipe()
     }
 
     // in case it fails
-    FILE* tmp = mOutStream;
     mOutStream = NULL;
 
     DWORD dwMillisec = INFINITE;
-    DWORD dwWaitStatus = 
-        WaitForSingleObject(mProcessInfo.hProcess, dwMillisec);
+    (void) WaitForSingleObject(mProcessInfo.hProcess, dwMillisec);
 
     //! get the exit code
     DWORD exitCode = NULL;

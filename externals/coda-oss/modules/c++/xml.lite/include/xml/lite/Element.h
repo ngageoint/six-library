@@ -471,6 +471,9 @@ protected:
                 const std::string& formatter) const;
 };
 
+#ifndef SWIG
+// The (old) version of SWIG we're using doesn't like certain C++11 features.
+
 /*!
  *  Returns the character data of this element converted to the specified type.
  *  \param value the charater data as T
@@ -526,6 +529,7 @@ inline void setValue(Element& element, const T& value)
 {
     setValue(element, value, details::toString<T>);
 }
+#endif // SWIG
 
 }
 }

@@ -146,7 +146,7 @@ public:
 
     unsigned long getNumEntries() const
     {
-        return mEntries.size();
+        return static_cast<unsigned long>(mEntries.size());
     }
 
 };

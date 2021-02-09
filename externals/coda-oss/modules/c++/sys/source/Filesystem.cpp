@@ -48,7 +48,7 @@ fs::path::string_type fs::path::to_native(const std::string& s_)
 {
 #ifdef _WIN32
     const _bstr_t s(s_.c_str());  // convert to wchar_t
-    return s;
+    return static_cast<wchar_t*>(s);
 #else
     return s_;
 #endif
@@ -105,7 +105,7 @@ std::string fs::path::string() const
 {
 #ifdef _WIN32
     const _bstr_t p(c_str());
-    return p;
+    return static_cast<const char*>(p);
 #else
     return native();
 #endif

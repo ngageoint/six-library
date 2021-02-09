@@ -53,7 +53,7 @@ int main(int argc, char **argv)
         // Send a block
 
 
-        unsigned int length = SEND_THIS.length();
+        const auto length = static_cast<uint32_t>(SEND_THIS.length());
         toServer->write((const char*) &length, 4);
         toServer->write(SEND_THIS.c_str(), length);
 

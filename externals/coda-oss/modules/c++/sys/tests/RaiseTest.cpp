@@ -73,7 +73,7 @@ int main(int argc, char **argv)
         if (v.size() < 2)
         {
 
-            NotAddableError nae(v.size());
+            NotAddableError nae(static_cast<int>(v.size()));
             throw(nae);
         }
         int acc = 0;
