@@ -528,8 +528,8 @@ SWIG_TypePrettyName(const swig_type_info *type) {
      type, separated by vertical-bar characters.  We choose
      to print the last name, as it is often (?) the most
      specific. */
-  if (!type) return NULL;
-  if (type->str != NULL) {
+  if (!type) return nullptr;
+  if (type->str != nullptr) {
     const char *last_name = type->str;
     const char *s;
     for (s = type->str; *s; s++)
@@ -705,7 +705,7 @@ SWIG_PackVoidPtr(char *buff, void *ptr, const char *name, size_t bsz) {
 SWIGRUNTIME const char *
 SWIG_UnpackVoidPtr(const char *c, void **ptr, const char *name) {
   if (*c != '_') {
-    if (strcmp(c,"NULL") == 0) {
+    if (strcmp(c,"nullptr") == 0) {
       *ptr = (void *) 0;
       return name;
     } else {
@@ -733,7 +733,7 @@ SWIG_PackDataName(char *buff, void *ptr, size_t sz, const char *name, size_t bsz
 SWIGRUNTIME const char *
 SWIG_UnpackDataName(const char *c, void *ptr, size_t sz, const char *name) {
   if (*c != '_') {
-    if (strcmp(c,"NULL") == 0) {
+    if (strcmp(c,"nullptr") == 0) {
       memset(ptr,0,sz);
       return name;
     } else {
@@ -1157,7 +1157,7 @@ SWIGRUNTIME PyObject* SWIG_PyInstanceMethod_New(PyObject *SWIGUNUSEDPARM(self), 
 #else
 SWIGRUNTIME PyObject* SWIG_PyInstanceMethod_New(PyObject *SWIGUNUSEDPARM(self), PyObject *SWIGUNUSEDPARM(func))
 {
-  return NULL;
+  return nullptr;
 }
 #endif
 
@@ -1185,10 +1185,10 @@ SWIGRUNTIME PyObject* SWIG_PyInstanceMethod_New(PyObject *SWIGUNUSEDPARM(self), 
 #ifdef SWIGPYTHON_BUILTIN
 #define SWIG_NewPointerObj(ptr, type, flags)            SWIG_Python_NewPointerObj(self, ptr, type, flags)
 #else
-#define SWIG_NewPointerObj(ptr, type, flags)            SWIG_Python_NewPointerObj(NULL, ptr, type, flags)
+#define SWIG_NewPointerObj(ptr, type, flags)            SWIG_Python_NewPointerObj(nullptr, ptr, type, flags)
 #endif
 
-#define SWIG_InternalNewPointerObj(ptr, type, flags)	SWIG_Python_NewPointerObj(NULL, ptr, type, flags)
+#define SWIG_InternalNewPointerObj(ptr, type, flags)	SWIG_Python_NewPointerObj(nullptr, ptr, type, flags)
 
 #define SWIG_CheckImplicit(ty)                          SWIG_Python_CheckImplicit(ty) 
 #define SWIG_AcquirePtr(ptr, src)                       SWIG_Python_AcquirePtr(ptr, src)
@@ -1204,7 +1204,7 @@ SWIGRUNTIME PyObject* SWIG_PyInstanceMethod_New(PyObject *SWIGUNUSEDPARM(self), 
 
 /* for C or C++ function pointers */
 #define SWIG_ConvertFunctionPtr(obj, pptr, type)        SWIG_Python_ConvertFunctionPtr(obj, pptr, type)
-#define SWIG_NewFunctionPtrObj(ptr, type)               SWIG_Python_NewPointerObj(NULL, ptr, type, 0)
+#define SWIG_NewFunctionPtrObj(ptr, type)               SWIG_Python_NewPointerObj(nullptr, ptr, type, 0)
 
 /* for C++ member pointers, ie, member methods */
 #define SWIG_ConvertMember(obj, ptr, sz, ty)            SWIG_Python_ConvertPacked(obj, ptr, sz, ty)
@@ -1377,7 +1377,7 @@ SWIG_Python_UnpackTuple(PyObject *args, const char *name, Py_ssize_t min, Py_ssi
 
 /* A functor is a function object with one single object argument */
 #if PY_VERSION_HEX >= 0x02020000
-#define SWIG_Python_CallFunctor(functor, obj)	        PyObject_CallFunctionObjArgs(functor, obj, NULL);
+#define SWIG_Python_CallFunctor(functor, obj)	        PyObject_CallFunctionObjArgs(functor, obj, nullptr);
 #else
 #define SWIG_Python_CallFunctor(functor, obj)	        PyObject_CallFunction(functor, "O", obj);
 #endif
@@ -1575,7 +1575,7 @@ SwigPyObject_long(SwigPyObject *v)
 SWIGRUNTIME PyObject *
 SwigPyObject_format(const char* fmt, SwigPyObject *v)
 {
-  PyObject *res = NULL;
+  PyObject *res = nullptr;
   PyObject *args = PyTuple_New(1);
   if (args) {
     if (PyTuple_SetItem(args, 0, SwigPyObject_long(v)) == 0) {
@@ -1712,7 +1712,7 @@ SwigPyObject_dealloc(PyObject *v)
          remain true upon return from SwigPyObject_dealloc.  So save
          and restore. */
       
-      PyObject *val = NULL, *type = NULL, *tb = NULL;
+      PyObject *val = nullptr, *type = nullptr, *tb = nullptr;
       PyErr_Fetch(&val, &type, &tb);
 
       if (data->delargs) {
@@ -1749,12 +1749,12 @@ SwigPyObject_append(PyObject* v, PyObject* next)
   SwigPyObject *sobj = (SwigPyObject *) v;
 #ifndef METH_O
   PyObject *tmp = 0;
-  if (!PyArg_ParseTuple(next,(char *)"O:append", &tmp)) return NULL;
+  if (!PyArg_ParseTuple(next,(char *)"O:append", &tmp)) return nullptr;
   next = tmp;
 #endif
   if (!SwigPyObject_Check(next)) {
     PyErr_SetString(PyExc_TypeError, "Attempt to append a non SwigPyObject");
-    return NULL;
+    return nullptr;
   }
   sobj->next = next;
   Py_INCREF(next);
@@ -1813,7 +1813,7 @@ SwigPyObject_own(PyObject *v, PyObject *args)
   if (!PyArg_UnpackTuple(args, "own", 0, 1, &val)) 
 #endif
     {
-      return NULL;
+      return nullptr;
     } 
   else
     {
@@ -1927,9 +1927,9 @@ SwigPyObject_TypeOnce(void) {
   if (!type_init) {
     const PyTypeObject tmp = {
 #if PY_VERSION_HEX >= 0x03000000
-      PyVarObject_HEAD_INIT(NULL, 0)
+      PyVarObject_HEAD_INIT(nullptr, 0)
 #else
-      PyObject_HEAD_INIT(NULL)
+      PyObject_HEAD_INIT(nullptr)
       0,                                    /* ob_size */
 #endif
       (char *)"SwigPyObject",               /* tp_name */
@@ -2011,7 +2011,7 @@ SwigPyObject_TypeOnce(void) {
     swigpyobject_type.ob_type = &PyType_Type;
 #else
     if (PyType_Ready(&swigpyobject_type) < 0)
-      return NULL;
+      return nullptr;
 #endif
   }
   return &swigpyobject_type;
@@ -2118,9 +2118,9 @@ SwigPyPacked_TypeOnce(void) {
   if (!type_init) {
     const PyTypeObject tmp = {
 #if PY_VERSION_HEX>=0x03000000
-      PyVarObject_HEAD_INIT(NULL, 0)
+      PyVarObject_HEAD_INIT(nullptr, 0)
 #else
-      PyObject_HEAD_INIT(NULL)
+      PyObject_HEAD_INIT(nullptr)
       0,                                    /* ob_size */
 #endif
       (char *)"SwigPyPacked",               /* tp_name */
@@ -2198,7 +2198,7 @@ SwigPyPacked_TypeOnce(void) {
     swigpypacked_type.ob_type = &PyType_Type;
 #else
     if (PyType_Ready(&swigpypacked_type) < 0)
-      return NULL;
+      return nullptr;
 #endif
   }
   return &swigpypacked_type;
@@ -2246,12 +2246,12 @@ _SWIG_This(void)
     return SWIG_Python_str_FromChar("this");
 }
 
-static PyObject *swig_this = NULL;
+static PyObject *swig_this = nullptr;
 
 SWIGRUNTIME PyObject *
 SWIG_This(void)
 {
-  if (swig_this == NULL)
+  if (swig_this == nullptr)
     swig_this = _SWIG_This();
   return swig_this;
 }
@@ -2280,7 +2280,7 @@ SWIG_Python_GetSwigThis(PyObject *pyobj)
       return (SwigPyObject*) pyobj;
   }
 # endif
-  return NULL;
+  return nullptr;
 #else
 
   obj = 0;
@@ -2290,7 +2290,7 @@ SWIG_Python_GetSwigThis(PyObject *pyobj)
     obj = _PyInstance_Lookup(pyobj, SWIG_This());      
   } else {
     PyObject **dictptr = _PyObject_GetDictPtr(pyobj);
-    if (dictptr != NULL) {
+    if (dictptr != nullptr) {
       PyObject *dict = *dictptr;
       obj = dict ? PyDict_GetItem(dict, SWIG_This()) : 0;
     } else {
@@ -2511,13 +2511,13 @@ SWIG_Python_NewShadowInstance(SwigPyClientData *data, PyObject *swig_this)
   PyObject *inst = 0;
   PyObject *newraw = data->newraw;
   if (newraw) {
-    inst = PyObject_Call(newraw, data->newargs, NULL);
+    inst = PyObject_Call(newraw, data->newargs, nullptr);
     if (inst) {
 #if !defined(SWIG_PYTHON_SLOW_GETSET_THIS)
       PyObject **dictptr = _PyObject_GetDictPtr(inst);
-      if (dictptr != NULL) {
+      if (dictptr != nullptr) {
 	PyObject *dict = *dictptr;
-	if (dict == NULL) {
+	if (dict == nullptr) {
 	  dict = PyDict_New();
 	  *dictptr = dict;
 	  PyDict_SetItem(dict, SWIG_This(), swig_this);
@@ -2557,18 +2557,18 @@ SWIG_Python_NewShadowInstance(SwigPyClientData *data, PyObject *swig_this)
   return (PyObject *) inst;
 #else
   PyInstanceObject *inst = PyObject_NEW(PyInstanceObject, &PyInstance_Type);
-  if (inst == NULL) {
-    return NULL;
+  if (inst == nullptr) {
+    return nullptr;
   }
   inst->in_class = (PyClassObject *)data->newargs;
   Py_INCREF(inst->in_class);
   inst->in_dict = PyDict_New();
-  if (inst->in_dict == NULL) {
+  if (inst->in_dict == nullptr) {
     Py_DECREF(inst);
-    return NULL;
+    return nullptr;
   }
 #ifdef Py_TPFLAGS_HAVE_WEAKREFS
-  inst->in_weakreflist = NULL;
+  inst->in_weakreflist = nullptr;
 #endif
 #ifdef Py_TPFLAGS_GC
   PyObject_GC_Init(inst);
@@ -2585,9 +2585,9 @@ SWIG_Python_SetSwigThis(PyObject *inst, PyObject *swig_this)
  PyObject *dict;
 #if (PY_VERSION_HEX >= 0x02020000) && !defined(SWIG_PYTHON_SLOW_GETSET_THIS)
  PyObject **dictptr = _PyObject_GetDictPtr(inst);
- if (dictptr != NULL) {
+ if (dictptr != nullptr) {
    dict = *dictptr;
-   if (dict == NULL) {
+   if (dict == nullptr) {
      dict = PyDict_New();
      *dictptr = dict;
    }
@@ -2605,7 +2605,7 @@ SWIGINTERN PyObject *
 SWIG_Python_InitShadowInstance(PyObject *args) {
   PyObject *obj[2];
   if (!SWIG_Python_UnpackTuple(args, "swiginit", 2, 2, obj)) {
-    return NULL;
+    return nullptr;
   } else {
     SwigPyObject *sthis = SWIG_Python_GetSwigThis(obj[0]);
     if (sthis) {
@@ -2721,12 +2721,12 @@ PyModule_AddObject(PyObject *m, char *name, PyObject *o)
     return SWIG_ERROR;
   }
   if (!o) {
-    PyErr_SetString(PyExc_TypeError, "PyModule_AddObject() needs non-NULL value");
+    PyErr_SetString(PyExc_TypeError, "PyModule_AddObject() needs non-nullptr value");
     return SWIG_ERROR;
   }
   
   dict = PyModule_GetDict(m);
-  if (dict == NULL) {
+  if (dict == nullptr) {
     /* Internal error -- modules must have a dict! */
     PyErr_Format(PyExc_SystemError, "module '%s' has no __dict__",
 		 PyModule_GetName(m));
@@ -2761,7 +2761,7 @@ SWIG_Python_DestroyModule(void *vptr)
     }
   }
   Py_DECREF(SWIG_This());
-  swig_this = NULL;
+  swig_this = nullptr;
 }
 
 SWIGRUNTIME void
@@ -2770,7 +2770,7 @@ SWIG_Python_SetModule(swig_module_info *swig_module) {
  /* Add a dummy module object into sys.modules */
   PyObject *module = PyImport_AddModule((char*)"swig_runtime_data" SWIG_RUNTIME_VERSION);
 #else
-  static PyMethodDef swig_empty_runtime_method_table[] = { {NULL, NULL, 0, NULL} }; /* Sentinel */
+  static PyMethodDef swig_empty_runtime_method_table[] = { {nullptr, nullptr, 0, nullptr} }; /* Sentinel */
   PyObject *module = Py_InitModule((char*)"swig_runtime_data" SWIG_RUNTIME_VERSION, swig_empty_runtime_method_table);
 #endif
 #ifdef SWIGPY_USE_CAPSULE
@@ -2806,7 +2806,7 @@ SWIG_Python_TypeQuery(const char *type)
   swig_type_info *descriptor;
   if (obj) {
 #ifdef SWIGPY_USE_CAPSULE
-    descriptor = (swig_type_info *) PyCapsule_GetPointer(obj, NULL);
+    descriptor = (swig_type_info *) PyCapsule_GetPointer(obj, nullptr);
 #else
     descriptor = (swig_type_info *) PyCObject_AsVoidPtr(obj);
 #endif
@@ -2815,9 +2815,9 @@ SWIG_Python_TypeQuery(const char *type)
     descriptor = SWIG_TypeQueryModule(swig_module, swig_module, type);
     if (descriptor) {
 #ifdef SWIGPY_USE_CAPSULE
-      obj = PyCapsule_New((void*) descriptor, NULL, NULL);
+      obj = PyCapsule_New((void*) descriptor, nullptr, nullptr);
 #else
-      obj = PyCObject_FromVoidPtr(descriptor, NULL);
+      obj = PyCObject_FromVoidPtr(descriptor, nullptr);
 #endif
       PyDict_SetItem(cache, key, obj);
       Py_DECREF(obj);
@@ -2947,7 +2947,7 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 
 # ifdef Py_USING_UNICODE
   if (PyString_Check(name)) {
-    name = PyUnicode_Decode(PyString_AsString(name), PyString_Size(name), NULL, NULL);
+    name = PyUnicode_Decode(PyString_AsString(name), PyString_Size(name), nullptr, nullptr);
     if (!name)
       return -1;
   } else if (!PyUnicode_Check(name))
@@ -2967,8 +2967,8 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
   }
 
   descr = _PyType_Lookup(tp, name);
-  f = NULL;
-  if (descr != NULL)
+  f = nullptr;
+  if (descr != nullptr)
     f = descr->ob_type->tp_descr_set;
   if (!f) {
     if (PyString_Check(name)) {
@@ -5071,7 +5071,7 @@ SWIGINTERNINLINE PyObject*
   #define SWIG_From_double   PyFloat_FromDouble 
 
 SWIGINTERN PyObject *nitf_DateTime_toPythonDateTime(nitf::DateTime *self){
-        PyObject* nitfDateTime = NULL;
+        PyObject* nitfDateTime = nullptr;
         int year = self->getYear();
         int month = self->getMonth();
         int day = self->getDayOfMonth();
@@ -5261,7 +5261,7 @@ namespace swig {
 	return obj;
       } else {
 	PyErr_SetString(PyExc_OverflowError,"sequence size not valid in python");
-	return NULL;
+	return nullptr;
       }
     }
   };
@@ -5364,7 +5364,7 @@ SWIGINTERN std::vector< six::MatchCollect,std::allocator< six::MatchCollect > > 
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
-        return NULL;
+        return nullptr;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
       std::vector< six::MatchCollect,std::allocator< six::MatchCollect > >::difference_type id = i;
@@ -5473,7 +5473,7 @@ SWIGINTERN std::vector< six::MatchType,std::allocator< six::MatchType > > *std_v
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
-        return NULL;
+        return nullptr;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
       std::vector< six::MatchType,std::allocator< six::MatchType > >::difference_type id = i;
@@ -5582,7 +5582,7 @@ SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator<
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
-        return NULL;
+        return nullptr;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
       std::vector< mem::ScopedCopyablePtr< six::MatchType >,std::allocator< mem::ScopedCopyablePtr< six::MatchType > > >::difference_type id = i;
@@ -5691,7 +5691,7 @@ SWIGINTERN std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< m
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
-        return NULL;
+        return nullptr;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
       std::vector< mem::ScopedCopyablePtr< six::GeoInfo >,std::allocator< mem::ScopedCopyablePtr< six::GeoInfo > > >::difference_type id = i;
@@ -5862,7 +5862,7 @@ SWIGINTERN PyObject *_wrap_delete_SwigPyIterator(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5894,7 +5894,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_value(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = result;
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5935,7 +5935,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_incr__SWIG_0(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5967,7 +5967,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_incr__SWIG_1(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -5999,7 +5999,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_incr(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -6054,7 +6054,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_decr__SWIG_0(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6086,7 +6086,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_decr__SWIG_1(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6118,7 +6118,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_decr(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -6172,7 +6172,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_distance(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_ptrdiff_t(static_cast< ptrdiff_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6212,7 +6212,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_equal(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6234,7 +6234,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_copy(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6266,7 +6266,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_next(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = result;
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6298,7 +6298,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___next__(PyObject *SWIGUNUSEDPARM(self
   resultobj = result;
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6330,7 +6330,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_previous(PyObject *SWIGUNUSEDPARM(self
   resultobj = result;
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6371,7 +6371,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_advance(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6405,7 +6405,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___eq__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6439,7 +6439,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___ne__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6480,7 +6480,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___iadd__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6521,7 +6521,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___isub__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6562,7 +6562,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___add__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6603,7 +6603,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___sub____SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6637,7 +6637,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___sub____SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_ptrdiff_t(static_cast< ptrdiff_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6673,7 +6673,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___sub__(PyObject *self, PyObject *args
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -6690,7 +6690,7 @@ fail:
 
 SWIGINTERN PyObject *SwigPyIterator_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_swig__SwigPyIterator, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -6734,7 +6734,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf__DateTime, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6786,7 +6786,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf__DateTime, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6838,7 +6838,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_2(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf__DateTime, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -6913,7 +6913,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_3(PyObject *SWIGUNUSEDPARM(self), 
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7010,7 +7010,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_4(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf__DateTime, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7098,7 +7098,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_5(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf__DateTime, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7177,7 +7177,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_6(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf__DateTime, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7247,7 +7247,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_7(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf__DateTime, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7298,7 +7298,7 @@ SWIGINTERN PyObject *_wrap_delete_DateTime(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7353,7 +7353,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime__SWIG_8(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf__DateTime, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7392,7 +7392,7 @@ SWIGINTERN PyObject *_wrap_new_DateTime(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -7414,17 +7414,17 @@ SWIGINTERN PyObject *_wrap_new_DateTime(PyObject *self, PyObject *args) {
   if (argc == 3) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_int(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -7436,22 +7436,22 @@ SWIGINTERN PyObject *_wrap_new_DateTime(PyObject *self, PyObject *args) {
   if (argc == 4) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_int(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_int(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -7464,27 +7464,27 @@ SWIGINTERN PyObject *_wrap_new_DateTime(PyObject *self, PyObject *args) {
   if (argc == 5) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_int(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_int(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_int(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], nullptr);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -7498,32 +7498,32 @@ SWIGINTERN PyObject *_wrap_new_DateTime(PyObject *self, PyObject *args) {
   if (argc == 6) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_int(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_int(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_int(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], nullptr);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
               {
-                int res = SWIG_AsVal_double(argv[5], NULL);
+                int res = SWIG_AsVal_double(argv[5], nullptr);
                 _v = SWIG_CheckState(res);
               }
               if (_v) {
@@ -7612,7 +7612,7 @@ SWIGINTERN PyObject *_wrap_DateTime___lt__(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7676,7 +7676,7 @@ SWIGINTERN PyObject *_wrap_DateTime___le__(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7740,7 +7740,7 @@ SWIGINTERN PyObject *_wrap_DateTime___gt__(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7804,7 +7804,7 @@ SWIGINTERN PyObject *_wrap_DateTime___ge__(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7868,7 +7868,7 @@ SWIGINTERN PyObject *_wrap_DateTime___eq__(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7932,7 +7932,7 @@ SWIGINTERN PyObject *_wrap_DateTime___ne__(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -7984,7 +7984,7 @@ SWIGINTERN PyObject *_wrap_DateTime_getNative__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_DateTime, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8036,7 +8036,7 @@ SWIGINTERN PyObject *_wrap_DateTime_getNative__SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_DateTime, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8116,7 +8116,7 @@ SWIGINTERN PyObject *_wrap_DateTime_format__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     }
     arg2 = ptr;
   }
-  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
+  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, nullptr, &alloc3);
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "DateTime_format" "', argument " "3"" of type '" "char *""'");
   }
@@ -8164,7 +8164,7 @@ SWIGINTERN PyObject *_wrap_DateTime_format__SWIG_0(PyObject *SWIGUNUSEDPARM(self
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8243,7 +8243,7 @@ SWIGINTERN PyObject *_wrap_DateTime_format__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8311,7 +8311,7 @@ SWIGINTERN PyObject *_wrap_DateTime_format__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8367,11 +8367,11 @@ SWIGINTERN PyObject *_wrap_DateTime_format(PyObject *self, PyObject *args) {
       int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_AsCharPtrAndSize(argv[2], 0, NULL, 0);
+        int res = SWIG_AsCharPtrAndSize(argv[2], 0, nullptr, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           {
-            int res = SWIG_AsVal_size_t(argv[3], NULL);
+            int res = SWIG_AsVal_size_t(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -8440,7 +8440,7 @@ SWIGINTERN PyObject *_wrap_DateTime_getYear(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8492,7 +8492,7 @@ SWIGINTERN PyObject *_wrap_DateTime_getMonth(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8544,7 +8544,7 @@ SWIGINTERN PyObject *_wrap_DateTime_getDayOfMonth(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8596,7 +8596,7 @@ SWIGINTERN PyObject *_wrap_DateTime_getDayOfWeek(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8648,7 +8648,7 @@ SWIGINTERN PyObject *_wrap_DateTime_getDayOfYear(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8700,7 +8700,7 @@ SWIGINTERN PyObject *_wrap_DateTime_getHour(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8752,7 +8752,7 @@ SWIGINTERN PyObject *_wrap_DateTime_getMinute(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8804,7 +8804,7 @@ SWIGINTERN PyObject *_wrap_DateTime_getSecond(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8856,7 +8856,7 @@ SWIGINTERN PyObject *_wrap_DateTime_getTimeInMillis(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8916,7 +8916,7 @@ SWIGINTERN PyObject *_wrap_DateTime_setYear(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -8976,7 +8976,7 @@ SWIGINTERN PyObject *_wrap_DateTime_setMonth(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9036,7 +9036,7 @@ SWIGINTERN PyObject *_wrap_DateTime_setDayOfMonth(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9096,7 +9096,7 @@ SWIGINTERN PyObject *_wrap_DateTime_setHour(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9156,7 +9156,7 @@ SWIGINTERN PyObject *_wrap_DateTime_setMinute(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9216,7 +9216,7 @@ SWIGINTERN PyObject *_wrap_DateTime_setSecond(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9276,7 +9276,7 @@ SWIGINTERN PyObject *_wrap_DateTime_setTimeInMillis(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9328,13 +9328,13 @@ SWIGINTERN PyObject *_wrap_DateTime_toPythonDateTime(PyObject *SWIGUNUSEDPARM(se
   resultobj = result;
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *DateTime_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_nitf__DateTime, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -9381,7 +9381,7 @@ SWIGINTERN PyObject *Swig_var_NOT_SET_VALUE_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9424,7 +9424,7 @@ SWIGINTERN PyObject *_wrap_new_AppliedType__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AppliedType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9478,7 +9478,7 @@ SWIGINTERN PyObject *_wrap_new_AppliedType__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AppliedType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9530,7 +9530,7 @@ SWIGINTERN PyObject *_wrap_new_AppliedType__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AppliedType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9552,7 +9552,7 @@ SWIGINTERN PyObject *_wrap_new_AppliedType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -9625,7 +9625,7 @@ SWIGINTERN PyObject *_wrap_delete_AppliedType(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9677,7 +9677,7 @@ SWIGINTERN PyObject *_wrap_AppliedType_toString(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9741,7 +9741,7 @@ SWIGINTERN PyObject *_wrap_AppliedType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9805,7 +9805,7 @@ SWIGINTERN PyObject *_wrap_AppliedType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9868,7 +9868,7 @@ SWIGINTERN PyObject *_wrap_AppliedType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -9904,7 +9904,7 @@ SWIGINTERN PyObject *_wrap_AppliedType___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -9978,7 +9978,7 @@ SWIGINTERN PyObject *_wrap_AppliedType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10014,7 +10014,7 @@ SWIGINTERN PyObject *_wrap_AppliedType___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -10089,7 +10089,7 @@ SWIGINTERN PyObject *_wrap_AppliedType___lt__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10153,7 +10153,7 @@ SWIGINTERN PyObject *_wrap_AppliedType___gt__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10217,7 +10217,7 @@ SWIGINTERN PyObject *_wrap_AppliedType___le__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10281,7 +10281,7 @@ SWIGINTERN PyObject *_wrap_AppliedType___ge__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10324,7 +10324,7 @@ SWIGINTERN PyObject *_wrap_AppliedType_size(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10384,7 +10384,7 @@ SWIGINTERN PyObject *_wrap_AppliedType_value_set(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10436,13 +10436,13 @@ SWIGINTERN PyObject *_wrap_AppliedType_value_get(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *AppliedType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__AppliedType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -10486,7 +10486,7 @@ SWIGINTERN PyObject *_wrap_new_AutofocusType__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AutofocusType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10540,7 +10540,7 @@ SWIGINTERN PyObject *_wrap_new_AutofocusType__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AutofocusType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10592,7 +10592,7 @@ SWIGINTERN PyObject *_wrap_new_AutofocusType__SWIG_2(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AutofocusType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10614,7 +10614,7 @@ SWIGINTERN PyObject *_wrap_new_AutofocusType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -10687,7 +10687,7 @@ SWIGINTERN PyObject *_wrap_delete_AutofocusType(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10739,7 +10739,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType_toString(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10803,7 +10803,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10867,7 +10867,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10930,7 +10930,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -10966,7 +10966,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType___eq__(PyObject *self, PyObject *args) 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -11040,7 +11040,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11076,7 +11076,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType___ne__(PyObject *self, PyObject *args) 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -11151,7 +11151,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType___lt__(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11215,7 +11215,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType___gt__(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11279,7 +11279,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType___le__(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11343,7 +11343,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType___ge__(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11386,7 +11386,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType_size(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11446,7 +11446,7 @@ SWIGINTERN PyObject *_wrap_AutofocusType_value_set(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11498,13 +11498,13 @@ SWIGINTERN PyObject *_wrap_AutofocusType_value_get(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *AutofocusType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__AutofocusType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -11548,7 +11548,7 @@ SWIGINTERN PyObject *_wrap_new_BooleanType__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__BooleanType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11602,7 +11602,7 @@ SWIGINTERN PyObject *_wrap_new_BooleanType__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__BooleanType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11654,7 +11654,7 @@ SWIGINTERN PyObject *_wrap_new_BooleanType__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__BooleanType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11676,7 +11676,7 @@ SWIGINTERN PyObject *_wrap_new_BooleanType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -11749,7 +11749,7 @@ SWIGINTERN PyObject *_wrap_delete_BooleanType(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11801,7 +11801,7 @@ SWIGINTERN PyObject *_wrap_BooleanType_toString(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11865,7 +11865,7 @@ SWIGINTERN PyObject *_wrap_BooleanType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11929,7 +11929,7 @@ SWIGINTERN PyObject *_wrap_BooleanType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -11992,7 +11992,7 @@ SWIGINTERN PyObject *_wrap_BooleanType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12028,7 +12028,7 @@ SWIGINTERN PyObject *_wrap_BooleanType___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -12102,7 +12102,7 @@ SWIGINTERN PyObject *_wrap_BooleanType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12138,7 +12138,7 @@ SWIGINTERN PyObject *_wrap_BooleanType___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -12213,7 +12213,7 @@ SWIGINTERN PyObject *_wrap_BooleanType___lt__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12277,7 +12277,7 @@ SWIGINTERN PyObject *_wrap_BooleanType___gt__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12341,7 +12341,7 @@ SWIGINTERN PyObject *_wrap_BooleanType___le__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12405,7 +12405,7 @@ SWIGINTERN PyObject *_wrap_BooleanType___ge__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12448,7 +12448,7 @@ SWIGINTERN PyObject *_wrap_BooleanType_size(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12508,7 +12508,7 @@ SWIGINTERN PyObject *_wrap_BooleanType_value_set(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12560,13 +12560,13 @@ SWIGINTERN PyObject *_wrap_BooleanType_value_get(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *BooleanType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__BooleanType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -12610,7 +12610,7 @@ SWIGINTERN PyObject *_wrap_new_ByteSwapping__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ByteSwapping, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12664,7 +12664,7 @@ SWIGINTERN PyObject *_wrap_new_ByteSwapping__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ByteSwapping, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12716,7 +12716,7 @@ SWIGINTERN PyObject *_wrap_new_ByteSwapping__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ByteSwapping, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12738,7 +12738,7 @@ SWIGINTERN PyObject *_wrap_new_ByteSwapping(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -12811,7 +12811,7 @@ SWIGINTERN PyObject *_wrap_delete_ByteSwapping(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12863,7 +12863,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping_toString(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12927,7 +12927,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -12991,7 +12991,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13054,7 +13054,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13090,7 +13090,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -13164,7 +13164,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13200,7 +13200,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -13275,7 +13275,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping___lt__(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13339,7 +13339,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping___gt__(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13403,7 +13403,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping___le__(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13467,7 +13467,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping___ge__(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13510,7 +13510,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping_size(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13570,7 +13570,7 @@ SWIGINTERN PyObject *_wrap_ByteSwapping_value_set(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13622,13 +13622,13 @@ SWIGINTERN PyObject *_wrap_ByteSwapping_value_get(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ByteSwapping_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__ByteSwapping, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -13672,7 +13672,7 @@ SWIGINTERN PyObject *_wrap_new_CollectType__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13726,7 +13726,7 @@ SWIGINTERN PyObject *_wrap_new_CollectType__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13778,7 +13778,7 @@ SWIGINTERN PyObject *_wrap_new_CollectType__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13800,7 +13800,7 @@ SWIGINTERN PyObject *_wrap_new_CollectType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -13873,7 +13873,7 @@ SWIGINTERN PyObject *_wrap_delete_CollectType(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13925,7 +13925,7 @@ SWIGINTERN PyObject *_wrap_CollectType_toString(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -13989,7 +13989,7 @@ SWIGINTERN PyObject *_wrap_CollectType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14053,7 +14053,7 @@ SWIGINTERN PyObject *_wrap_CollectType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14116,7 +14116,7 @@ SWIGINTERN PyObject *_wrap_CollectType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14152,7 +14152,7 @@ SWIGINTERN PyObject *_wrap_CollectType___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -14226,7 +14226,7 @@ SWIGINTERN PyObject *_wrap_CollectType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14262,7 +14262,7 @@ SWIGINTERN PyObject *_wrap_CollectType___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -14337,7 +14337,7 @@ SWIGINTERN PyObject *_wrap_CollectType___lt__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14401,7 +14401,7 @@ SWIGINTERN PyObject *_wrap_CollectType___gt__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14465,7 +14465,7 @@ SWIGINTERN PyObject *_wrap_CollectType___le__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14529,7 +14529,7 @@ SWIGINTERN PyObject *_wrap_CollectType___ge__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14572,7 +14572,7 @@ SWIGINTERN PyObject *_wrap_CollectType_size(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14632,7 +14632,7 @@ SWIGINTERN PyObject *_wrap_CollectType_value_set(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14684,13 +14684,13 @@ SWIGINTERN PyObject *_wrap_CollectType_value_get(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *CollectType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__CollectType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -14734,7 +14734,7 @@ SWIGINTERN PyObject *_wrap_new_ComplexImageGridType__SWIG_0(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ComplexImageGridType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14788,7 +14788,7 @@ SWIGINTERN PyObject *_wrap_new_ComplexImageGridType__SWIG_1(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ComplexImageGridType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14840,7 +14840,7 @@ SWIGINTERN PyObject *_wrap_new_ComplexImageGridType__SWIG_2(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ComplexImageGridType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14862,7 +14862,7 @@ SWIGINTERN PyObject *_wrap_new_ComplexImageGridType(PyObject *self, PyObject *ar
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -14935,7 +14935,7 @@ SWIGINTERN PyObject *_wrap_delete_ComplexImageGridType(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -14987,7 +14987,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType_toString(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15051,7 +15051,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType___eq____SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15115,7 +15115,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType___ne____SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15178,7 +15178,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType___eq____SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15214,7 +15214,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType___eq__(PyObject *self, PyObject 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -15288,7 +15288,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType___ne____SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15324,7 +15324,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType___ne__(PyObject *self, PyObject 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -15399,7 +15399,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType___lt__(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15463,7 +15463,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType___gt__(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15527,7 +15527,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType___le__(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15591,7 +15591,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType___ge__(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15634,7 +15634,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType_size(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15694,7 +15694,7 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType_value_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15746,13 +15746,13 @@ SWIGINTERN PyObject *_wrap_ComplexImageGridType_value_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ComplexImageGridType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__ComplexImageGridType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -15796,7 +15796,7 @@ SWIGINTERN PyObject *_wrap_new_ComplexImagePlaneType__SWIG_0(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ComplexImagePlaneType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15850,7 +15850,7 @@ SWIGINTERN PyObject *_wrap_new_ComplexImagePlaneType__SWIG_1(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ComplexImagePlaneType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15902,7 +15902,7 @@ SWIGINTERN PyObject *_wrap_new_ComplexImagePlaneType__SWIG_2(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ComplexImagePlaneType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -15924,7 +15924,7 @@ SWIGINTERN PyObject *_wrap_new_ComplexImagePlaneType(PyObject *self, PyObject *a
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -15997,7 +15997,7 @@ SWIGINTERN PyObject *_wrap_delete_ComplexImagePlaneType(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16049,7 +16049,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType_toString(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16113,7 +16113,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType___eq____SWIG_0(PyObject *SWIGUN
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16177,7 +16177,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType___ne____SWIG_0(PyObject *SWIGUN
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16240,7 +16240,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType___eq____SWIG_1(PyObject *SWIGUN
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16276,7 +16276,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType___eq__(PyObject *self, PyObject
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -16350,7 +16350,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType___ne____SWIG_1(PyObject *SWIGUN
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16386,7 +16386,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType___ne__(PyObject *self, PyObject
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -16461,7 +16461,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType___lt__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16525,7 +16525,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType___gt__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16589,7 +16589,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType___le__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16653,7 +16653,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType___ge__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16696,7 +16696,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType_size(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16756,7 +16756,7 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType_value_set(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16808,13 +16808,13 @@ SWIGINTERN PyObject *_wrap_ComplexImagePlaneType_value_get(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ComplexImagePlaneType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__ComplexImagePlaneType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -16858,7 +16858,7 @@ SWIGINTERN PyObject *_wrap_new_DataType__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DataType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16912,7 +16912,7 @@ SWIGINTERN PyObject *_wrap_new_DataType__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DataType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16964,7 +16964,7 @@ SWIGINTERN PyObject *_wrap_new_DataType__SWIG_2(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DataType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -16986,7 +16986,7 @@ SWIGINTERN PyObject *_wrap_new_DataType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -17059,7 +17059,7 @@ SWIGINTERN PyObject *_wrap_delete_DataType(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17111,7 +17111,7 @@ SWIGINTERN PyObject *_wrap_DataType_toString(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17175,7 +17175,7 @@ SWIGINTERN PyObject *_wrap_DataType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17239,7 +17239,7 @@ SWIGINTERN PyObject *_wrap_DataType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17302,7 +17302,7 @@ SWIGINTERN PyObject *_wrap_DataType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17338,7 +17338,7 @@ SWIGINTERN PyObject *_wrap_DataType___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -17412,7 +17412,7 @@ SWIGINTERN PyObject *_wrap_DataType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17448,7 +17448,7 @@ SWIGINTERN PyObject *_wrap_DataType___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -17523,7 +17523,7 @@ SWIGINTERN PyObject *_wrap_DataType___lt__(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17587,7 +17587,7 @@ SWIGINTERN PyObject *_wrap_DataType___gt__(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17651,7 +17651,7 @@ SWIGINTERN PyObject *_wrap_DataType___le__(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17715,7 +17715,7 @@ SWIGINTERN PyObject *_wrap_DataType___ge__(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17758,7 +17758,7 @@ SWIGINTERN PyObject *_wrap_DataType_size(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17818,7 +17818,7 @@ SWIGINTERN PyObject *_wrap_DataType_value_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17870,13 +17870,13 @@ SWIGINTERN PyObject *_wrap_DataType_value_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *DataType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__DataType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -17920,7 +17920,7 @@ SWIGINTERN PyObject *_wrap_new_DecimationMethod__SWIG_0(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecimationMethod, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -17974,7 +17974,7 @@ SWIGINTERN PyObject *_wrap_new_DecimationMethod__SWIG_1(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecimationMethod, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18026,7 +18026,7 @@ SWIGINTERN PyObject *_wrap_new_DecimationMethod__SWIG_2(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecimationMethod, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18048,7 +18048,7 @@ SWIGINTERN PyObject *_wrap_new_DecimationMethod(PyObject *self, PyObject *args) 
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -18121,7 +18121,7 @@ SWIGINTERN PyObject *_wrap_delete_DecimationMethod(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18173,7 +18173,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod_toString(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18237,7 +18237,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod___eq____SWIG_0(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18301,7 +18301,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod___ne____SWIG_0(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18364,7 +18364,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod___eq____SWIG_1(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18400,7 +18400,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod___eq__(PyObject *self, PyObject *arg
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -18474,7 +18474,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod___ne____SWIG_1(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18510,7 +18510,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod___ne__(PyObject *self, PyObject *arg
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -18585,7 +18585,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod___lt__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18649,7 +18649,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod___gt__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18713,7 +18713,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod___le__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18777,7 +18777,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod___ge__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18820,7 +18820,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod_size(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18880,7 +18880,7 @@ SWIGINTERN PyObject *_wrap_DecimationMethod_value_set(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -18932,13 +18932,13 @@ SWIGINTERN PyObject *_wrap_DecimationMethod_value_get(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *DecimationMethod_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__DecimationMethod, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -18982,7 +18982,7 @@ SWIGINTERN PyObject *_wrap_new_DemodType__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DemodType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19036,7 +19036,7 @@ SWIGINTERN PyObject *_wrap_new_DemodType__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DemodType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19088,7 +19088,7 @@ SWIGINTERN PyObject *_wrap_new_DemodType__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DemodType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19110,7 +19110,7 @@ SWIGINTERN PyObject *_wrap_new_DemodType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -19183,7 +19183,7 @@ SWIGINTERN PyObject *_wrap_delete_DemodType(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19235,7 +19235,7 @@ SWIGINTERN PyObject *_wrap_DemodType_toString(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19299,7 +19299,7 @@ SWIGINTERN PyObject *_wrap_DemodType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19363,7 +19363,7 @@ SWIGINTERN PyObject *_wrap_DemodType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19426,7 +19426,7 @@ SWIGINTERN PyObject *_wrap_DemodType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19462,7 +19462,7 @@ SWIGINTERN PyObject *_wrap_DemodType___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -19536,7 +19536,7 @@ SWIGINTERN PyObject *_wrap_DemodType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19572,7 +19572,7 @@ SWIGINTERN PyObject *_wrap_DemodType___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -19647,7 +19647,7 @@ SWIGINTERN PyObject *_wrap_DemodType___lt__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19711,7 +19711,7 @@ SWIGINTERN PyObject *_wrap_DemodType___gt__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19775,7 +19775,7 @@ SWIGINTERN PyObject *_wrap_DemodType___le__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19839,7 +19839,7 @@ SWIGINTERN PyObject *_wrap_DemodType___ge__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19882,7 +19882,7 @@ SWIGINTERN PyObject *_wrap_DemodType_size(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19942,7 +19942,7 @@ SWIGINTERN PyObject *_wrap_DemodType_value_set(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -19994,13 +19994,13 @@ SWIGINTERN PyObject *_wrap_DemodType_value_get(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *DemodType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__DemodType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -20044,7 +20044,7 @@ SWIGINTERN PyObject *_wrap_new_DisplayType__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DisplayType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20098,7 +20098,7 @@ SWIGINTERN PyObject *_wrap_new_DisplayType__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DisplayType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20150,7 +20150,7 @@ SWIGINTERN PyObject *_wrap_new_DisplayType__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DisplayType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20172,7 +20172,7 @@ SWIGINTERN PyObject *_wrap_new_DisplayType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -20245,7 +20245,7 @@ SWIGINTERN PyObject *_wrap_delete_DisplayType(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20297,7 +20297,7 @@ SWIGINTERN PyObject *_wrap_DisplayType_toString(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20361,7 +20361,7 @@ SWIGINTERN PyObject *_wrap_DisplayType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20425,7 +20425,7 @@ SWIGINTERN PyObject *_wrap_DisplayType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20488,7 +20488,7 @@ SWIGINTERN PyObject *_wrap_DisplayType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20524,7 +20524,7 @@ SWIGINTERN PyObject *_wrap_DisplayType___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -20598,7 +20598,7 @@ SWIGINTERN PyObject *_wrap_DisplayType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20634,7 +20634,7 @@ SWIGINTERN PyObject *_wrap_DisplayType___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -20709,7 +20709,7 @@ SWIGINTERN PyObject *_wrap_DisplayType___lt__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20773,7 +20773,7 @@ SWIGINTERN PyObject *_wrap_DisplayType___gt__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20837,7 +20837,7 @@ SWIGINTERN PyObject *_wrap_DisplayType___le__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20901,7 +20901,7 @@ SWIGINTERN PyObject *_wrap_DisplayType___ge__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -20944,7 +20944,7 @@ SWIGINTERN PyObject *_wrap_DisplayType_size(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21004,7 +21004,7 @@ SWIGINTERN PyObject *_wrap_DisplayType_value_set(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21056,13 +21056,13 @@ SWIGINTERN PyObject *_wrap_DisplayType_value_get(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *DisplayType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__DisplayType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -21106,7 +21106,7 @@ SWIGINTERN PyObject *_wrap_new_DualPolarizationType__SWIG_0(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DualPolarizationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21160,7 +21160,7 @@ SWIGINTERN PyObject *_wrap_new_DualPolarizationType__SWIG_1(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DualPolarizationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21212,7 +21212,7 @@ SWIGINTERN PyObject *_wrap_new_DualPolarizationType__SWIG_2(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DualPolarizationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21234,7 +21234,7 @@ SWIGINTERN PyObject *_wrap_new_DualPolarizationType(PyObject *self, PyObject *ar
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -21307,7 +21307,7 @@ SWIGINTERN PyObject *_wrap_delete_DualPolarizationType(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21359,7 +21359,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType_toString(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21423,7 +21423,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType___eq____SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21487,7 +21487,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType___ne____SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21550,7 +21550,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType___eq____SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21586,7 +21586,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType___eq__(PyObject *self, PyObject 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -21660,7 +21660,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType___ne____SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21696,7 +21696,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType___ne__(PyObject *self, PyObject 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -21771,7 +21771,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType___lt__(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21835,7 +21835,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType___gt__(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21899,7 +21899,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType___le__(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -21963,7 +21963,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType___ge__(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22006,7 +22006,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType_size(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22066,7 +22066,7 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType_value_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22118,13 +22118,13 @@ SWIGINTERN PyObject *_wrap_DualPolarizationType_value_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *DualPolarizationType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__DualPolarizationType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -22168,7 +22168,7 @@ SWIGINTERN PyObject *_wrap_new_EarthModelType__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__EarthModelType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22222,7 +22222,7 @@ SWIGINTERN PyObject *_wrap_new_EarthModelType__SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__EarthModelType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22274,7 +22274,7 @@ SWIGINTERN PyObject *_wrap_new_EarthModelType__SWIG_2(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__EarthModelType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22296,7 +22296,7 @@ SWIGINTERN PyObject *_wrap_new_EarthModelType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -22369,7 +22369,7 @@ SWIGINTERN PyObject *_wrap_delete_EarthModelType(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22421,7 +22421,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType_toString(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22485,7 +22485,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType___eq____SWIG_0(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22549,7 +22549,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType___ne____SWIG_0(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22612,7 +22612,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType___eq____SWIG_1(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22648,7 +22648,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType___eq__(PyObject *self, PyObject *args)
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -22722,7 +22722,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType___ne____SWIG_1(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22758,7 +22758,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType___ne__(PyObject *self, PyObject *args)
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -22833,7 +22833,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType___lt__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22897,7 +22897,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType___gt__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -22961,7 +22961,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType___le__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23025,7 +23025,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType___ge__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23068,7 +23068,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType_size(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23128,7 +23128,7 @@ SWIGINTERN PyObject *_wrap_EarthModelType_value_set(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23180,13 +23180,13 @@ SWIGINTERN PyObject *_wrap_EarthModelType_value_get(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *EarthModelType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__EarthModelType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -23230,7 +23230,7 @@ SWIGINTERN PyObject *_wrap_new_FFTSign__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__FFTSign, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23284,7 +23284,7 @@ SWIGINTERN PyObject *_wrap_new_FFTSign__SWIG_1(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__FFTSign, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23336,7 +23336,7 @@ SWIGINTERN PyObject *_wrap_new_FFTSign__SWIG_2(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__FFTSign, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23358,7 +23358,7 @@ SWIGINTERN PyObject *_wrap_new_FFTSign(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -23431,7 +23431,7 @@ SWIGINTERN PyObject *_wrap_delete_FFTSign(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23483,7 +23483,7 @@ SWIGINTERN PyObject *_wrap_FFTSign_toString(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23547,7 +23547,7 @@ SWIGINTERN PyObject *_wrap_FFTSign___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23611,7 +23611,7 @@ SWIGINTERN PyObject *_wrap_FFTSign___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23674,7 +23674,7 @@ SWIGINTERN PyObject *_wrap_FFTSign___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23710,7 +23710,7 @@ SWIGINTERN PyObject *_wrap_FFTSign___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -23784,7 +23784,7 @@ SWIGINTERN PyObject *_wrap_FFTSign___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23820,7 +23820,7 @@ SWIGINTERN PyObject *_wrap_FFTSign___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -23895,7 +23895,7 @@ SWIGINTERN PyObject *_wrap_FFTSign___lt__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -23959,7 +23959,7 @@ SWIGINTERN PyObject *_wrap_FFTSign___gt__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24023,7 +24023,7 @@ SWIGINTERN PyObject *_wrap_FFTSign___le__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24087,7 +24087,7 @@ SWIGINTERN PyObject *_wrap_FFTSign___ge__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24130,7 +24130,7 @@ SWIGINTERN PyObject *_wrap_FFTSign_size(PyObject *SWIGUNUSEDPARM(self), PyObject
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24190,7 +24190,7 @@ SWIGINTERN PyObject *_wrap_FFTSign_value_set(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24242,13 +24242,13 @@ SWIGINTERN PyObject *_wrap_FFTSign_value_get(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *FFTSign_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__FFTSign, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -24292,7 +24292,7 @@ SWIGINTERN PyObject *_wrap_new_ImageBeamCompensationType__SWIG_0(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ImageBeamCompensationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24346,7 +24346,7 @@ SWIGINTERN PyObject *_wrap_new_ImageBeamCompensationType__SWIG_1(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ImageBeamCompensationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24398,7 +24398,7 @@ SWIGINTERN PyObject *_wrap_new_ImageBeamCompensationType__SWIG_2(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ImageBeamCompensationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24420,7 +24420,7 @@ SWIGINTERN PyObject *_wrap_new_ImageBeamCompensationType(PyObject *self, PyObjec
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -24493,7 +24493,7 @@ SWIGINTERN PyObject *_wrap_delete_ImageBeamCompensationType(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24545,7 +24545,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType_toString(PyObject *SWIGUNUS
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24609,7 +24609,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType___eq____SWIG_0(PyObject *SW
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24673,7 +24673,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType___ne____SWIG_0(PyObject *SW
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24736,7 +24736,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType___eq____SWIG_1(PyObject *SW
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24772,7 +24772,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType___eq__(PyObject *self, PyOb
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -24846,7 +24846,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType___ne____SWIG_1(PyObject *SW
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -24882,7 +24882,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType___ne__(PyObject *self, PyOb
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -24957,7 +24957,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType___lt__(PyObject *SWIGUNUSED
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25021,7 +25021,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType___gt__(PyObject *SWIGUNUSED
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25085,7 +25085,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType___le__(PyObject *SWIGUNUSED
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25149,7 +25149,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType___ge__(PyObject *SWIGUNUSED
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25192,7 +25192,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType_size(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25252,7 +25252,7 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType_value_set(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25304,13 +25304,13 @@ SWIGINTERN PyObject *_wrap_ImageBeamCompensationType_value_get(PyObject *SWIGUNU
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ImageBeamCompensationType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__ImageBeamCompensationType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -25354,7 +25354,7 @@ SWIGINTERN PyObject *_wrap_new_ImageFormationType__SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ImageFormationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25408,7 +25408,7 @@ SWIGINTERN PyObject *_wrap_new_ImageFormationType__SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ImageFormationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25460,7 +25460,7 @@ SWIGINTERN PyObject *_wrap_new_ImageFormationType__SWIG_2(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ImageFormationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25482,7 +25482,7 @@ SWIGINTERN PyObject *_wrap_new_ImageFormationType(PyObject *self, PyObject *args
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -25555,7 +25555,7 @@ SWIGINTERN PyObject *_wrap_delete_ImageFormationType(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25607,7 +25607,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType_toString(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25671,7 +25671,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType___eq____SWIG_0(PyObject *SWIGUNUSE
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25735,7 +25735,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType___ne____SWIG_0(PyObject *SWIGUNUSE
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25798,7 +25798,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType___eq____SWIG_1(PyObject *SWIGUNUSE
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25834,7 +25834,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType___eq__(PyObject *self, PyObject *a
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -25908,7 +25908,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType___ne____SWIG_1(PyObject *SWIGUNUSE
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -25944,7 +25944,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType___ne__(PyObject *self, PyObject *a
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -26019,7 +26019,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType___lt__(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26083,7 +26083,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType___gt__(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26147,7 +26147,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType___le__(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26211,7 +26211,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType___ge__(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26254,7 +26254,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType_size(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26314,7 +26314,7 @@ SWIGINTERN PyObject *_wrap_ImageFormationType_value_set(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26366,13 +26366,13 @@ SWIGINTERN PyObject *_wrap_ImageFormationType_value_get(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ImageFormationType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__ImageFormationType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -26416,7 +26416,7 @@ SWIGINTERN PyObject *_wrap_new_MagnificationMethod__SWIG_0(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MagnificationMethod, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26470,7 +26470,7 @@ SWIGINTERN PyObject *_wrap_new_MagnificationMethod__SWIG_1(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MagnificationMethod, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26522,7 +26522,7 @@ SWIGINTERN PyObject *_wrap_new_MagnificationMethod__SWIG_2(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MagnificationMethod, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26544,7 +26544,7 @@ SWIGINTERN PyObject *_wrap_new_MagnificationMethod(PyObject *self, PyObject *arg
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -26617,7 +26617,7 @@ SWIGINTERN PyObject *_wrap_delete_MagnificationMethod(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26669,7 +26669,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod_toString(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26733,7 +26733,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod___eq____SWIG_0(PyObject *SWIGUNUS
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26797,7 +26797,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod___ne____SWIG_0(PyObject *SWIGUNUS
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26860,7 +26860,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod___eq____SWIG_1(PyObject *SWIGUNUS
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -26896,7 +26896,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod___eq__(PyObject *self, PyObject *
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -26970,7 +26970,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod___ne____SWIG_1(PyObject *SWIGUNUS
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27006,7 +27006,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod___ne__(PyObject *self, PyObject *
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -27081,7 +27081,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod___lt__(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27145,7 +27145,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod___gt__(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27209,7 +27209,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod___le__(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27273,7 +27273,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod___ge__(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27316,7 +27316,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod_size(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27376,7 +27376,7 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod_value_set(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27428,13 +27428,13 @@ SWIGINTERN PyObject *_wrap_MagnificationMethod_value_get(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *MagnificationMethod_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__MagnificationMethod, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -27478,7 +27478,7 @@ SWIGINTERN PyObject *_wrap_new_OrientationType__SWIG_0(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__OrientationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27532,7 +27532,7 @@ SWIGINTERN PyObject *_wrap_new_OrientationType__SWIG_1(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__OrientationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27584,7 +27584,7 @@ SWIGINTERN PyObject *_wrap_new_OrientationType__SWIG_2(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__OrientationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27606,7 +27606,7 @@ SWIGINTERN PyObject *_wrap_new_OrientationType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -27679,7 +27679,7 @@ SWIGINTERN PyObject *_wrap_delete_OrientationType(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27731,7 +27731,7 @@ SWIGINTERN PyObject *_wrap_OrientationType_toString(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27795,7 +27795,7 @@ SWIGINTERN PyObject *_wrap_OrientationType___eq____SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27859,7 +27859,7 @@ SWIGINTERN PyObject *_wrap_OrientationType___ne____SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27922,7 +27922,7 @@ SWIGINTERN PyObject *_wrap_OrientationType___eq____SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -27958,7 +27958,7 @@ SWIGINTERN PyObject *_wrap_OrientationType___eq__(PyObject *self, PyObject *args
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -28032,7 +28032,7 @@ SWIGINTERN PyObject *_wrap_OrientationType___ne____SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28068,7 +28068,7 @@ SWIGINTERN PyObject *_wrap_OrientationType___ne__(PyObject *self, PyObject *args
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -28143,7 +28143,7 @@ SWIGINTERN PyObject *_wrap_OrientationType___lt__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28207,7 +28207,7 @@ SWIGINTERN PyObject *_wrap_OrientationType___gt__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28271,7 +28271,7 @@ SWIGINTERN PyObject *_wrap_OrientationType___le__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28335,7 +28335,7 @@ SWIGINTERN PyObject *_wrap_OrientationType___ge__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28378,7 +28378,7 @@ SWIGINTERN PyObject *_wrap_OrientationType_size(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28438,7 +28438,7 @@ SWIGINTERN PyObject *_wrap_OrientationType_value_set(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28490,13 +28490,13 @@ SWIGINTERN PyObject *_wrap_OrientationType_value_get(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *OrientationType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__OrientationType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -28540,7 +28540,7 @@ SWIGINTERN PyObject *_wrap_new_PixelType__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PixelType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28594,7 +28594,7 @@ SWIGINTERN PyObject *_wrap_new_PixelType__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PixelType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28646,7 +28646,7 @@ SWIGINTERN PyObject *_wrap_new_PixelType__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PixelType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28668,7 +28668,7 @@ SWIGINTERN PyObject *_wrap_new_PixelType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -28741,7 +28741,7 @@ SWIGINTERN PyObject *_wrap_delete_PixelType(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28793,7 +28793,7 @@ SWIGINTERN PyObject *_wrap_PixelType_toString(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28857,7 +28857,7 @@ SWIGINTERN PyObject *_wrap_PixelType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28921,7 +28921,7 @@ SWIGINTERN PyObject *_wrap_PixelType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -28984,7 +28984,7 @@ SWIGINTERN PyObject *_wrap_PixelType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29020,7 +29020,7 @@ SWIGINTERN PyObject *_wrap_PixelType___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -29094,7 +29094,7 @@ SWIGINTERN PyObject *_wrap_PixelType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29130,7 +29130,7 @@ SWIGINTERN PyObject *_wrap_PixelType___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -29205,7 +29205,7 @@ SWIGINTERN PyObject *_wrap_PixelType___lt__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29269,7 +29269,7 @@ SWIGINTERN PyObject *_wrap_PixelType___gt__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29333,7 +29333,7 @@ SWIGINTERN PyObject *_wrap_PixelType___le__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29397,7 +29397,7 @@ SWIGINTERN PyObject *_wrap_PixelType___ge__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29440,7 +29440,7 @@ SWIGINTERN PyObject *_wrap_PixelType_size(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29500,7 +29500,7 @@ SWIGINTERN PyObject *_wrap_PixelType_value_set(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29552,13 +29552,13 @@ SWIGINTERN PyObject *_wrap_PixelType_value_get(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *PixelType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__PixelType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -29602,7 +29602,7 @@ SWIGINTERN PyObject *_wrap_new_PolarizationSequenceType__SWIG_0(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PolarizationSequenceType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29656,7 +29656,7 @@ SWIGINTERN PyObject *_wrap_new_PolarizationSequenceType__SWIG_1(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PolarizationSequenceType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29708,7 +29708,7 @@ SWIGINTERN PyObject *_wrap_new_PolarizationSequenceType__SWIG_2(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PolarizationSequenceType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29730,7 +29730,7 @@ SWIGINTERN PyObject *_wrap_new_PolarizationSequenceType(PyObject *self, PyObject
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -29803,7 +29803,7 @@ SWIGINTERN PyObject *_wrap_delete_PolarizationSequenceType(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29855,7 +29855,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType_toString(PyObject *SWIGUNUSE
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29919,7 +29919,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType___eq____SWIG_0(PyObject *SWI
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -29983,7 +29983,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType___ne____SWIG_0(PyObject *SWI
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30046,7 +30046,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType___eq____SWIG_1(PyObject *SWI
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30082,7 +30082,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType___eq__(PyObject *self, PyObj
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -30156,7 +30156,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType___ne____SWIG_1(PyObject *SWI
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30192,7 +30192,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType___ne__(PyObject *self, PyObj
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -30267,7 +30267,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType___lt__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30331,7 +30331,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType___gt__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30395,7 +30395,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType___le__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30459,7 +30459,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType___ge__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30502,7 +30502,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType_size(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30562,7 +30562,7 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType_value_set(PyObject *SWIGUNUS
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30614,13 +30614,13 @@ SWIGINTERN PyObject *_wrap_PolarizationSequenceType_value_get(PyObject *SWIGUNUS
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *PolarizationSequenceType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__PolarizationSequenceType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -30664,7 +30664,7 @@ SWIGINTERN PyObject *_wrap_new_PolarizationType__SWIG_0(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PolarizationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30718,7 +30718,7 @@ SWIGINTERN PyObject *_wrap_new_PolarizationType__SWIG_1(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PolarizationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30770,7 +30770,7 @@ SWIGINTERN PyObject *_wrap_new_PolarizationType__SWIG_2(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PolarizationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30792,7 +30792,7 @@ SWIGINTERN PyObject *_wrap_new_PolarizationType(PyObject *self, PyObject *args) 
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -30865,7 +30865,7 @@ SWIGINTERN PyObject *_wrap_delete_PolarizationType(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30917,7 +30917,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType_toString(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -30981,7 +30981,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType___eq____SWIG_0(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31045,7 +31045,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType___ne____SWIG_0(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31108,7 +31108,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType___eq____SWIG_1(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31144,7 +31144,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType___eq__(PyObject *self, PyObject *arg
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -31218,7 +31218,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType___ne____SWIG_1(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31254,7 +31254,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType___ne__(PyObject *self, PyObject *arg
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -31329,7 +31329,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType___lt__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31393,7 +31393,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType___gt__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31457,7 +31457,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType___le__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31521,7 +31521,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType___ge__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31564,7 +31564,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType_size(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31624,7 +31624,7 @@ SWIGINTERN PyObject *_wrap_PolarizationType_value_set(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31676,13 +31676,13 @@ SWIGINTERN PyObject *_wrap_PolarizationType_value_get(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *PolarizationType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__PolarizationType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -31726,7 +31726,7 @@ SWIGINTERN PyObject *_wrap_new_ProjectionType__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ProjectionType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31780,7 +31780,7 @@ SWIGINTERN PyObject *_wrap_new_ProjectionType__SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ProjectionType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31832,7 +31832,7 @@ SWIGINTERN PyObject *_wrap_new_ProjectionType__SWIG_2(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ProjectionType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31854,7 +31854,7 @@ SWIGINTERN PyObject *_wrap_new_ProjectionType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -31927,7 +31927,7 @@ SWIGINTERN PyObject *_wrap_delete_ProjectionType(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -31979,7 +31979,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType_toString(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32043,7 +32043,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType___eq____SWIG_0(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32107,7 +32107,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType___ne____SWIG_0(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32170,7 +32170,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType___eq____SWIG_1(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32206,7 +32206,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType___eq__(PyObject *self, PyObject *args)
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -32280,7 +32280,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType___ne____SWIG_1(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32316,7 +32316,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType___ne__(PyObject *self, PyObject *args)
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -32391,7 +32391,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType___lt__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32455,7 +32455,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType___gt__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32519,7 +32519,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType___le__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32583,7 +32583,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType___ge__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32626,7 +32626,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType_size(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32686,7 +32686,7 @@ SWIGINTERN PyObject *_wrap_ProjectionType_value_set(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32738,13 +32738,13 @@ SWIGINTERN PyObject *_wrap_ProjectionType_value_get(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ProjectionType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__ProjectionType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -32788,7 +32788,7 @@ SWIGINTERN PyObject *_wrap_new_RMAlgoType__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RMAlgoType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32842,7 +32842,7 @@ SWIGINTERN PyObject *_wrap_new_RMAlgoType__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RMAlgoType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32894,7 +32894,7 @@ SWIGINTERN PyObject *_wrap_new_RMAlgoType__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RMAlgoType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -32916,7 +32916,7 @@ SWIGINTERN PyObject *_wrap_new_RMAlgoType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -32989,7 +32989,7 @@ SWIGINTERN PyObject *_wrap_delete_RMAlgoType(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33041,7 +33041,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType_toString(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33105,7 +33105,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33169,7 +33169,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33232,7 +33232,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33268,7 +33268,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -33342,7 +33342,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33378,7 +33378,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -33453,7 +33453,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType___lt__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33517,7 +33517,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType___gt__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33581,7 +33581,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType___le__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33645,7 +33645,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType___ge__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33688,7 +33688,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType_size(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33748,7 +33748,7 @@ SWIGINTERN PyObject *_wrap_RMAlgoType_value_set(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33800,13 +33800,13 @@ SWIGINTERN PyObject *_wrap_RMAlgoType_value_get(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *RMAlgoType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__RMAlgoType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -33850,7 +33850,7 @@ SWIGINTERN PyObject *_wrap_new_RadarModeType__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarModeType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33904,7 +33904,7 @@ SWIGINTERN PyObject *_wrap_new_RadarModeType__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarModeType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33956,7 +33956,7 @@ SWIGINTERN PyObject *_wrap_new_RadarModeType__SWIG_2(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarModeType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -33978,7 +33978,7 @@ SWIGINTERN PyObject *_wrap_new_RadarModeType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -34051,7 +34051,7 @@ SWIGINTERN PyObject *_wrap_delete_RadarModeType(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34103,7 +34103,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType_toString(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34167,7 +34167,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34231,7 +34231,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34294,7 +34294,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34330,7 +34330,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType___eq__(PyObject *self, PyObject *args) 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -34404,7 +34404,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34440,7 +34440,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType___ne__(PyObject *self, PyObject *args) 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -34515,7 +34515,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType___lt__(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34579,7 +34579,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType___gt__(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34643,7 +34643,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType___le__(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34707,7 +34707,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType___ge__(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34750,7 +34750,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType_size(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34810,7 +34810,7 @@ SWIGINTERN PyObject *_wrap_RadarModeType_value_set(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34862,13 +34862,13 @@ SWIGINTERN PyObject *_wrap_RadarModeType_value_get(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *RadarModeType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__RadarModeType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -34912,7 +34912,7 @@ SWIGINTERN PyObject *_wrap_new_RegionType__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RegionType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -34966,7 +34966,7 @@ SWIGINTERN PyObject *_wrap_new_RegionType__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RegionType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35018,7 +35018,7 @@ SWIGINTERN PyObject *_wrap_new_RegionType__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RegionType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35040,7 +35040,7 @@ SWIGINTERN PyObject *_wrap_new_RegionType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -35113,7 +35113,7 @@ SWIGINTERN PyObject *_wrap_delete_RegionType(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35165,7 +35165,7 @@ SWIGINTERN PyObject *_wrap_RegionType_toString(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35229,7 +35229,7 @@ SWIGINTERN PyObject *_wrap_RegionType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35293,7 +35293,7 @@ SWIGINTERN PyObject *_wrap_RegionType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35356,7 +35356,7 @@ SWIGINTERN PyObject *_wrap_RegionType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35392,7 +35392,7 @@ SWIGINTERN PyObject *_wrap_RegionType___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -35466,7 +35466,7 @@ SWIGINTERN PyObject *_wrap_RegionType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35502,7 +35502,7 @@ SWIGINTERN PyObject *_wrap_RegionType___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -35577,7 +35577,7 @@ SWIGINTERN PyObject *_wrap_RegionType___lt__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35641,7 +35641,7 @@ SWIGINTERN PyObject *_wrap_RegionType___gt__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35705,7 +35705,7 @@ SWIGINTERN PyObject *_wrap_RegionType___le__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35769,7 +35769,7 @@ SWIGINTERN PyObject *_wrap_RegionType___ge__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35812,7 +35812,7 @@ SWIGINTERN PyObject *_wrap_RegionType_size(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35872,7 +35872,7 @@ SWIGINTERN PyObject *_wrap_RegionType_value_set(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -35924,13 +35924,13 @@ SWIGINTERN PyObject *_wrap_RegionType_value_get(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *RegionType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__RegionType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -35974,7 +35974,7 @@ SWIGINTERN PyObject *_wrap_new_RowColEnum__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RowColEnum, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36028,7 +36028,7 @@ SWIGINTERN PyObject *_wrap_new_RowColEnum__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RowColEnum, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36080,7 +36080,7 @@ SWIGINTERN PyObject *_wrap_new_RowColEnum__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RowColEnum, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36102,7 +36102,7 @@ SWIGINTERN PyObject *_wrap_new_RowColEnum(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -36175,7 +36175,7 @@ SWIGINTERN PyObject *_wrap_delete_RowColEnum(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36227,7 +36227,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum_toString(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36291,7 +36291,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36355,7 +36355,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36418,7 +36418,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36454,7 +36454,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -36528,7 +36528,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36564,7 +36564,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -36639,7 +36639,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum___lt__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36703,7 +36703,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum___gt__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36767,7 +36767,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum___le__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36831,7 +36831,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum___ge__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36874,7 +36874,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum_size(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36934,7 +36934,7 @@ SWIGINTERN PyObject *_wrap_RowColEnum_value_set(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -36986,13 +36986,13 @@ SWIGINTERN PyObject *_wrap_RowColEnum_value_get(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *RowColEnum_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__RowColEnum, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -37036,7 +37036,7 @@ SWIGINTERN PyObject *_wrap_new_SCPType__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__SCPType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37090,7 +37090,7 @@ SWIGINTERN PyObject *_wrap_new_SCPType__SWIG_1(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__SCPType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37142,7 +37142,7 @@ SWIGINTERN PyObject *_wrap_new_SCPType__SWIG_2(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__SCPType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37164,7 +37164,7 @@ SWIGINTERN PyObject *_wrap_new_SCPType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -37237,7 +37237,7 @@ SWIGINTERN PyObject *_wrap_delete_SCPType(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37289,7 +37289,7 @@ SWIGINTERN PyObject *_wrap_SCPType_toString(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37353,7 +37353,7 @@ SWIGINTERN PyObject *_wrap_SCPType___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37417,7 +37417,7 @@ SWIGINTERN PyObject *_wrap_SCPType___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37480,7 +37480,7 @@ SWIGINTERN PyObject *_wrap_SCPType___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37516,7 +37516,7 @@ SWIGINTERN PyObject *_wrap_SCPType___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -37590,7 +37590,7 @@ SWIGINTERN PyObject *_wrap_SCPType___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37626,7 +37626,7 @@ SWIGINTERN PyObject *_wrap_SCPType___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -37701,7 +37701,7 @@ SWIGINTERN PyObject *_wrap_SCPType___lt__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37765,7 +37765,7 @@ SWIGINTERN PyObject *_wrap_SCPType___gt__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37829,7 +37829,7 @@ SWIGINTERN PyObject *_wrap_SCPType___le__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37893,7 +37893,7 @@ SWIGINTERN PyObject *_wrap_SCPType___ge__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37936,7 +37936,7 @@ SWIGINTERN PyObject *_wrap_SCPType_size(PyObject *SWIGUNUSEDPARM(self), PyObject
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -37996,7 +37996,7 @@ SWIGINTERN PyObject *_wrap_SCPType_value_set(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38048,13 +38048,13 @@ SWIGINTERN PyObject *_wrap_SCPType_value_get(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *SCPType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__SCPType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -38098,7 +38098,7 @@ SWIGINTERN PyObject *_wrap_new_SideOfTrackType__SWIG_0(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__SideOfTrackType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38152,7 +38152,7 @@ SWIGINTERN PyObject *_wrap_new_SideOfTrackType__SWIG_1(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__SideOfTrackType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38204,7 +38204,7 @@ SWIGINTERN PyObject *_wrap_new_SideOfTrackType__SWIG_2(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__SideOfTrackType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38226,7 +38226,7 @@ SWIGINTERN PyObject *_wrap_new_SideOfTrackType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -38299,7 +38299,7 @@ SWIGINTERN PyObject *_wrap_delete_SideOfTrackType(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38351,7 +38351,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType_toString(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38415,7 +38415,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType___eq____SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38479,7 +38479,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType___ne____SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38542,7 +38542,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType___eq____SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38578,7 +38578,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType___eq__(PyObject *self, PyObject *args
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -38652,7 +38652,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType___ne____SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38688,7 +38688,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType___ne__(PyObject *self, PyObject *args
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -38763,7 +38763,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType___lt__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38827,7 +38827,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType___gt__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38891,7 +38891,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType___le__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38955,7 +38955,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType___ge__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -38998,7 +38998,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType_size(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39058,7 +39058,7 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType_value_set(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39110,13 +39110,13 @@ SWIGINTERN PyObject *_wrap_SideOfTrackType_value_get(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *SideOfTrackType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__SideOfTrackType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -39160,7 +39160,7 @@ SWIGINTERN PyObject *_wrap_new_SlowTimeBeamCompensationType__SWIG_0(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__SlowTimeBeamCompensationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39214,7 +39214,7 @@ SWIGINTERN PyObject *_wrap_new_SlowTimeBeamCompensationType__SWIG_1(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__SlowTimeBeamCompensationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39266,7 +39266,7 @@ SWIGINTERN PyObject *_wrap_new_SlowTimeBeamCompensationType__SWIG_2(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__SlowTimeBeamCompensationType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39288,7 +39288,7 @@ SWIGINTERN PyObject *_wrap_new_SlowTimeBeamCompensationType(PyObject *self, PyOb
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -39361,7 +39361,7 @@ SWIGINTERN PyObject *_wrap_delete_SlowTimeBeamCompensationType(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39413,7 +39413,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType_toString(PyObject *SWIGU
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39477,7 +39477,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType___eq____SWIG_0(PyObject 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39541,7 +39541,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType___ne____SWIG_0(PyObject 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39604,7 +39604,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType___eq____SWIG_1(PyObject 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39640,7 +39640,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType___eq__(PyObject *self, P
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -39714,7 +39714,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType___ne____SWIG_1(PyObject 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39750,7 +39750,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType___ne__(PyObject *self, P
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -39825,7 +39825,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType___lt__(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39889,7 +39889,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType___gt__(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -39953,7 +39953,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType___le__(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40017,7 +40017,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType___ge__(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40060,7 +40060,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType_size(PyObject *SWIGUNUSE
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40120,7 +40120,7 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType_value_set(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40172,13 +40172,13 @@ SWIGINTERN PyObject *_wrap_SlowTimeBeamCompensationType_value_get(PyObject *SWIG
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *SlowTimeBeamCompensationType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__SlowTimeBeamCompensationType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -40222,7 +40222,7 @@ SWIGINTERN PyObject *_wrap_new_XYZEnum__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__XYZEnum, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40276,7 +40276,7 @@ SWIGINTERN PyObject *_wrap_new_XYZEnum__SWIG_1(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__XYZEnum, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40328,7 +40328,7 @@ SWIGINTERN PyObject *_wrap_new_XYZEnum__SWIG_2(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__XYZEnum, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40350,7 +40350,7 @@ SWIGINTERN PyObject *_wrap_new_XYZEnum(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -40423,7 +40423,7 @@ SWIGINTERN PyObject *_wrap_delete_XYZEnum(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40475,7 +40475,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum_toString(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40539,7 +40539,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum___eq____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40603,7 +40603,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum___ne____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40666,7 +40666,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum___eq____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40702,7 +40702,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum___eq__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -40776,7 +40776,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum___ne____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40812,7 +40812,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum___ne__(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -40887,7 +40887,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum___lt__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -40951,7 +40951,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum___gt__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41015,7 +41015,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum___le__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41079,7 +41079,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum___ge__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41122,7 +41122,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum_size(PyObject *SWIGUNUSEDPARM(self), PyObject
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41182,7 +41182,7 @@ SWIGINTERN PyObject *_wrap_XYZEnum_value_set(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41234,13 +41234,13 @@ SWIGINTERN PyObject *_wrap_XYZEnum_value_get(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *XYZEnum_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__XYZEnum, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -41287,7 +41287,7 @@ SWIGINTERN PyObject *Swig_var_SCHEMA_PATH_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41330,7 +41330,7 @@ SWIGINTERN PyObject *_wrap_new_DESValidationException__SWIG_0(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DESValidationException, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41385,7 +41385,7 @@ SWIGINTERN PyObject *_wrap_new_DESValidationException__SWIG_1(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DESValidationException, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41444,7 +41444,7 @@ SWIGINTERN PyObject *_wrap_new_DESValidationException__SWIG_2(PyObject *SWIGUNUS
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41511,7 +41511,7 @@ SWIGINTERN PyObject *_wrap_new_DESValidationException__SWIG_3(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DESValidationException, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41617,7 +41617,7 @@ SWIGINTERN PyObject *_wrap_delete_DESValidationException(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41669,13 +41669,13 @@ SWIGINTERN PyObject *_wrap_DESValidationException_getType(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *DESValidationException_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__DESValidationException, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -41737,7 +41737,7 @@ SWIGINTERN PyObject *_wrap_new_DecorrType__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41789,7 +41789,7 @@ SWIGINTERN PyObject *_wrap_new_DecorrType__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41832,7 +41832,7 @@ SWIGINTERN PyObject *_wrap_new_DecorrType__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41887,7 +41887,7 @@ SWIGINTERN PyObject *_wrap_new_DecorrType__SWIG_3(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -41917,7 +41917,7 @@ SWIGINTERN PyObject *_wrap_new_DecorrType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -41927,12 +41927,12 @@ SWIGINTERN PyObject *_wrap_new_DecorrType(PyObject *self, PyObject *args) {
   if (argc == 2) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_double(argv[1], NULL);
+        int res = SWIG_AsVal_double(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -42012,7 +42012,7 @@ SWIGINTERN PyObject *_wrap_DecorrType___eq__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42072,7 +42072,7 @@ SWIGINTERN PyObject *_wrap_DecorrType_corrCoefZero_set(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42124,7 +42124,7 @@ SWIGINTERN PyObject *_wrap_DecorrType_corrCoefZero_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42184,7 +42184,7 @@ SWIGINTERN PyObject *_wrap_DecorrType_decorrRate_set(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42236,7 +42236,7 @@ SWIGINTERN PyObject *_wrap_DecorrType_decorrRate_get(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42287,13 +42287,13 @@ SWIGINTERN PyObject *_wrap_delete_DecorrType(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *DecorrType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__DecorrType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -42340,7 +42340,7 @@ SWIGINTERN PyObject *Swig_var_Constants_IS_SIZE_MAX_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42386,7 +42386,7 @@ SWIGINTERN PyObject *Swig_var_Constants_GT_SIZE_MAX_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42432,7 +42432,7 @@ SWIGINTERN PyObject *Swig_var_Constants_ILOC_MAX_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42478,7 +42478,7 @@ SWIGINTERN PyObject *Swig_var_Constants_GT_XML_KEY_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42524,7 +42524,7 @@ SWIGINTERN PyObject *Swig_var_Constants_GT_XML_TAG_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42570,7 +42570,7 @@ SWIGINTERN PyObject *Swig_var_Constants_DES_VERSION_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42616,7 +42616,7 @@ SWIGINTERN PyObject *Swig_var_Constants_DES_VERSION_STR_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42662,7 +42662,7 @@ SWIGINTERN PyObject *Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_TAG_get(void)
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42708,7 +42708,7 @@ SWIGINTERN PyObject *Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_ID_get(void) 
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42754,7 +42754,7 @@ SWIGINTERN PyObject *Swig_var_Constants_DES_USER_DEFINED_SUBHEADER_LENGTH_get(vo
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42800,7 +42800,7 @@ SWIGINTERN PyObject *Swig_var_Constants_SICD_DESSHSI_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42846,7 +42846,7 @@ SWIGINTERN PyObject *Swig_var_Constants_SIDD_DESSHSI_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42892,7 +42892,7 @@ SWIGINTERN PyObject *Swig_var_Constants_EXCESS_BANDWIDTH_FACTOR_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42952,7 +42952,7 @@ SWIGINTERN PyObject *_wrap_Constants_getNumBytesPerPixel(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -42995,7 +42995,7 @@ SWIGINTERN PyObject *_wrap_new_Constants(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Constants, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43046,13 +43046,13 @@ SWIGINTERN PyObject *_wrap_delete_Constants(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *Constants_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__Constants, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -43113,7 +43113,7 @@ SWIGINTERN PyObject *_wrap_ReferencePoint_ecef_set(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43165,7 +43165,7 @@ SWIGINTERN PyObject *_wrap_ReferencePoint_ecef_get(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43225,7 +43225,7 @@ SWIGINTERN PyObject *_wrap_ReferencePoint_rowCol_set(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43277,7 +43277,7 @@ SWIGINTERN PyObject *_wrap_ReferencePoint_rowCol_get(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43344,7 +43344,7 @@ SWIGINTERN PyObject *_wrap_ReferencePoint_name_set(PyObject *SWIGUNUSEDPARM(self
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43396,7 +43396,7 @@ SWIGINTERN PyObject *_wrap_ReferencePoint_name_get(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43484,7 +43484,7 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ReferencePoint, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43563,7 +43563,7 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint__SWIG_1(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ReferencePoint, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43633,7 +43633,7 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint__SWIG_2(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ReferencePoint, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43694,7 +43694,7 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint__SWIG_3(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ReferencePoint, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43746,7 +43746,7 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint__SWIG_4(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ReferencePoint, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43789,7 +43789,7 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint__SWIG_5(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ReferencePoint, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43866,7 +43866,7 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint__SWIG_6(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ReferencePoint, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -43888,7 +43888,7 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -43910,12 +43910,12 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint(PyObject *self, PyObject *args) {
   if (argc == 2) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_double(argv[1], NULL);
+        int res = SWIG_AsVal_double(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -43926,17 +43926,17 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint(PyObject *self, PyObject *args) {
   if (argc == 3) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_double(argv[1], NULL);
+        int res = SWIG_AsVal_double(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -43948,22 +43948,22 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint(PyObject *self, PyObject *args) {
   if (argc == 4) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_double(argv[1], NULL);
+        int res = SWIG_AsVal_double(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_double(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -43976,27 +43976,27 @@ SWIGINTERN PyObject *_wrap_new_ReferencePoint(PyObject *self, PyObject *args) {
   if (argc == 5) {
     int _v;
     {
-      int res = SWIG_AsVal_double(argv[0], NULL);
+      int res = SWIG_AsVal_double(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_double(argv[1], NULL);
+        int res = SWIG_AsVal_double(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_double(argv[2], NULL);
+          int res = SWIG_AsVal_double(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_double(argv[3], nullptr);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_double(argv[4], NULL);
+              int res = SWIG_AsVal_double(argv[4], nullptr);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -44082,7 +44082,7 @@ SWIGINTERN PyObject *_wrap_ReferencePoint___eq__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44146,7 +44146,7 @@ SWIGINTERN PyObject *_wrap_ReferencePoint___ne__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44197,13 +44197,13 @@ SWIGINTERN PyObject *_wrap_delete_ReferencePoint(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ReferencePoint_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__ReferencePoint, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -44247,7 +44247,7 @@ SWIGINTERN PyObject *_wrap_new_SCP(PyObject *SWIGUNUSEDPARM(self), PyObject *arg
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__SCP, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44307,7 +44307,7 @@ SWIGINTERN PyObject *_wrap_SCP_ecf_set(PyObject *SWIGUNUSEDPARM(self), PyObject 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44359,7 +44359,7 @@ SWIGINTERN PyObject *_wrap_SCP_ecf_get(PyObject *SWIGUNUSEDPARM(self), PyObject 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44419,7 +44419,7 @@ SWIGINTERN PyObject *_wrap_SCP_llh_set(PyObject *SWIGUNUSEDPARM(self), PyObject 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44471,7 +44471,7 @@ SWIGINTERN PyObject *_wrap_SCP_llh_get(PyObject *SWIGUNUSEDPARM(self), PyObject 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44535,7 +44535,7 @@ SWIGINTERN PyObject *_wrap_SCP___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44599,7 +44599,7 @@ SWIGINTERN PyObject *_wrap_SCP___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44650,13 +44650,13 @@ SWIGINTERN PyObject *_wrap_delete_SCP(PyObject *SWIGUNUSEDPARM(self), PyObject *
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *SCP_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__SCP, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -44700,7 +44700,7 @@ SWIGINTERN PyObject *_wrap_new_AmplitudeTable(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AmplitudeTable, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44764,7 +44764,7 @@ SWIGINTERN PyObject *_wrap_AmplitudeTable___eq__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44828,7 +44828,7 @@ SWIGINTERN PyObject *_wrap_AmplitudeTable___ne__(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44880,7 +44880,7 @@ SWIGINTERN PyObject *_wrap_AmplitudeTable_clone(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -44931,13 +44931,13 @@ SWIGINTERN PyObject *_wrap_delete_AmplitudeTable(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *AmplitudeTable_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__AmplitudeTable, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -44998,7 +44998,7 @@ SWIGINTERN PyObject *_wrap_getImageMode(PyObject *SWIGUNUSEDPARM(self), PyObject
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45041,7 +45041,7 @@ SWIGINTERN PyObject *_wrap_new_MissingRequiredException__SWIG_0(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MissingRequiredException, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45096,7 +45096,7 @@ SWIGINTERN PyObject *_wrap_new_MissingRequiredException__SWIG_1(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MissingRequiredException, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45155,7 +45155,7 @@ SWIGINTERN PyObject *_wrap_new_MissingRequiredException__SWIG_2(PyObject *SWIGUN
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45222,7 +45222,7 @@ SWIGINTERN PyObject *_wrap_new_MissingRequiredException__SWIG_3(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MissingRequiredException, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45328,7 +45328,7 @@ SWIGINTERN PyObject *_wrap_delete_MissingRequiredException(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45380,13 +45380,13 @@ SWIGINTERN PyObject *_wrap_MissingRequiredException_getType(PyObject *SWIGUNUSED
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *MissingRequiredException_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__MissingRequiredException, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -45430,7 +45430,7 @@ SWIGINTERN PyObject *_wrap_new_UninitializedValueException__SWIG_0(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__UninitializedValueException, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45485,7 +45485,7 @@ SWIGINTERN PyObject *_wrap_new_UninitializedValueException__SWIG_1(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__UninitializedValueException, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45544,7 +45544,7 @@ SWIGINTERN PyObject *_wrap_new_UninitializedValueException__SWIG_2(PyObject *SWI
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45611,7 +45611,7 @@ SWIGINTERN PyObject *_wrap_new_UninitializedValueException__SWIG_3(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__UninitializedValueException, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45717,7 +45717,7 @@ SWIGINTERN PyObject *_wrap_delete_UninitializedValueException(PyObject *SWIGUNUS
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45769,13 +45769,13 @@ SWIGINTERN PyObject *_wrap_UninitializedValueException_getType(PyObject *SWIGUNU
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *UninitializedValueException_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__UninitializedValueException, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -45819,7 +45819,7 @@ SWIGINTERN PyObject *_wrap_new_Init(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Init, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45870,13 +45870,13 @@ SWIGINTERN PyObject *_wrap_delete_Init(PyObject *SWIGUNUSEDPARM(self), PyObject 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *Init_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__Init, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -45920,7 +45920,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Parameter, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -45971,7 +45971,7 @@ SWIGINTERN PyObject *_wrap_delete_Parameter(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46026,7 +46026,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Parameter, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46111,7 +46111,7 @@ SWIGINTERN PyObject *_wrap_Parameter_str(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46163,7 +46163,7 @@ SWIGINTERN PyObject *_wrap_Parameter_getName(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46225,7 +46225,7 @@ SWIGINTERN PyObject *_wrap_Parameter_setName(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46289,7 +46289,7 @@ SWIGINTERN PyObject *_wrap_Parameter___eq__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46353,7 +46353,7 @@ SWIGINTERN PyObject *_wrap_Parameter___ne__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46420,7 +46420,7 @@ SWIGINTERN PyObject *_wrap_Parameter_setValue(PyObject *SWIGUNUSEDPARM(self), Py
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46472,7 +46472,7 @@ SWIGINTERN PyObject *_wrap_Parameter___str__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46524,7 +46524,7 @@ SWIGINTERN PyObject *_wrap_Parameter___int__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_long(static_cast< long >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46576,13 +46576,13 @@ SWIGINTERN PyObject *_wrap_Parameter___float__(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *Parameter_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__Parameter, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -46651,7 +46651,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_findParameterIndex(PyObject *SWIG
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46719,7 +46719,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_findParameter(PyObject *SWIGUNUSE
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46787,7 +46787,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_containsParameter(PyObject *SWIGU
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46848,7 +46848,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_at__SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Parameter, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46909,7 +46909,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_at__SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Parameter, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -46932,7 +46932,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_at(PyObject *self, PyObject *args
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -46947,7 +46947,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_at(PyObject *self, PyObject *args
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -47024,7 +47024,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_push_back(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47076,7 +47076,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_size(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47128,7 +47128,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_empty(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47180,7 +47180,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_front__SWIG_0(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Parameter, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47232,7 +47232,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_back__SWIG_0(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Parameter, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47284,7 +47284,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_front__SWIG_1(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Parameter, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47376,7 +47376,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection_back__SWIG_1(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Parameter, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47480,7 +47480,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection___eq__(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47544,7 +47544,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection___ne__(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47605,7 +47605,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection___getitem__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Parameter, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47677,7 +47677,7 @@ SWIGINTERN PyObject *_wrap_ParameterCollection___setitem__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47720,7 +47720,7 @@ SWIGINTERN PyObject *_wrap_new_ParameterCollection(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47771,13 +47771,13 @@ SWIGINTERN PyObject *_wrap_delete_ParameterCollection(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ParameterCollection_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__ParameterCollection, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -47845,7 +47845,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_collectorName_set(PyObject *SWI
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47897,7 +47897,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_collectorName_get(PyObject *SWI
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -47964,7 +47964,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_illuminatorName_set(PyObject *S
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48016,7 +48016,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_illuminatorName_get(PyObject *S
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48083,7 +48083,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_coreName_set(PyObject *SWIGUNUS
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48135,7 +48135,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_coreName_get(PyObject *SWIGUNUS
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48195,7 +48195,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_collectType_set(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48247,7 +48247,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_collectType_get(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48307,7 +48307,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_radarMode_set(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48359,7 +48359,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_radarMode_get(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarModeType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48426,7 +48426,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_radarModeID_set(PyObject *SWIGU
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48478,7 +48478,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_radarModeID_get(PyObject *SWIGU
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48545,7 +48545,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_releaseInfo_set(PyObject *SWIGU
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48597,7 +48597,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_releaseInfo_get(PyObject *SWIGU
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48657,7 +48657,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_countryCodes_set(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48709,7 +48709,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_countryCodes_get(PyObject *SWIG
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48769,7 +48769,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_parameters_set(PyObject *SWIGUN
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48821,7 +48821,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_parameters_get(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48864,7 +48864,7 @@ SWIGINTERN PyObject *_wrap_new_CollectionInformation(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48915,7 +48915,7 @@ SWIGINTERN PyObject *_wrap_delete_CollectionInformation(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -48967,7 +48967,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_clone(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49031,7 +49031,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation___eq__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49095,7 +49095,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation___ne__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49147,7 +49147,7 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_getClassificationLevel(PyObject
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49214,13 +49214,13 @@ SWIGINTERN PyObject *_wrap_CollectionInformation_setClassificationLevel(PyObject
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *CollectionInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__CollectionInformation, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -49272,7 +49272,7 @@ SWIGINTERN PyObject *_wrap_delete_Classification(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49324,7 +49324,7 @@ SWIGINTERN PyObject *_wrap_Classification_getLevel(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49376,7 +49376,7 @@ SWIGINTERN PyObject *_wrap_Classification_isUnclassified(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49472,7 +49472,7 @@ SWIGINTERN PyObject *_wrap_Classification_setSecurity(PyObject *SWIGUNUSEDPARM(s
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49536,7 +49536,7 @@ SWIGINTERN PyObject *_wrap_Classification_put(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__ostream, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49604,7 +49604,7 @@ SWIGINTERN PyObject *_wrap_Classification_fileOptions_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49656,13 +49656,13 @@ SWIGINTERN PyObject *_wrap_Classification_fileOptions_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj((new Options(static_cast< const Options& >(result))), SWIGTYPE_p_Options, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *Classification_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__Classification, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -49706,7 +49706,7 @@ SWIGINTERN PyObject *_wrap_new_CorrCoefs(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CorrCoefs, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49766,7 +49766,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p1p2_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49818,7 +49818,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p1p2_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49878,7 +49878,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p1p3_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49930,7 +49930,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p1p3_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -49990,7 +49990,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p1v1_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50042,7 +50042,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p1v1_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50102,7 +50102,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p1v2_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50154,7 +50154,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p1v2_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50214,7 +50214,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p1v3_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50266,7 +50266,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p1v3_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50326,7 +50326,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p2p3_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50378,7 +50378,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p2p3_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50438,7 +50438,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p2v1_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50490,7 +50490,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p2v1_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50550,7 +50550,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p2v2_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50602,7 +50602,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p2v2_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50662,7 +50662,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p2v3_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50714,7 +50714,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p2v3_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50774,7 +50774,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p3v1_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50826,7 +50826,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p3v1_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50886,7 +50886,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p3v2_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50938,7 +50938,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p3v2_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -50998,7 +50998,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p3v3_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51050,7 +51050,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_p3v3_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51110,7 +51110,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_v1v2_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51162,7 +51162,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_v1v2_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51222,7 +51222,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_v1v3_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51274,7 +51274,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_v1v3_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51334,7 +51334,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_v2v3_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51386,7 +51386,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs_v2v3_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51450,7 +51450,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs___eq__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51514,7 +51514,7 @@ SWIGINTERN PyObject *_wrap_CorrCoefs___ne__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51565,13 +51565,13 @@ SWIGINTERN PyObject *_wrap_delete_CorrCoefs(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *CorrCoefs_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__CorrCoefs, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -51615,7 +51615,7 @@ SWIGINTERN PyObject *_wrap_new_PosVelError(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PosVelError, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51675,7 +51675,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_frame_set(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51727,7 +51727,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_frame_get(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__FrameType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51787,7 +51787,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_p1_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51839,7 +51839,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_p1_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51899,7 +51899,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_p2_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -51951,7 +51951,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_p2_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52011,7 +52011,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_p3_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52063,7 +52063,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_p3_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52123,7 +52123,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_v1_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52175,7 +52175,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_v1_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52235,7 +52235,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_v2_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52287,7 +52287,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_v2_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52347,7 +52347,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_v3_set(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52399,7 +52399,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_v3_get(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52459,7 +52459,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_corrCoefs_set(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52511,7 +52511,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_corrCoefs_get(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52571,7 +52571,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_positionDecorr_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52623,7 +52623,7 @@ SWIGINTERN PyObject *_wrap_PosVelError_positionDecorr_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52687,7 +52687,7 @@ SWIGINTERN PyObject *_wrap_PosVelError___eq__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52751,7 +52751,7 @@ SWIGINTERN PyObject *_wrap_PosVelError___ne__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52802,13 +52802,13 @@ SWIGINTERN PyObject *_wrap_delete_PosVelError(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *PosVelError_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__PosVelError, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -52869,7 +52869,7 @@ SWIGINTERN PyObject *_wrap_RadarSensor_rangeBias_set(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52921,7 +52921,7 @@ SWIGINTERN PyObject *_wrap_RadarSensor_rangeBias_get(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -52981,7 +52981,7 @@ SWIGINTERN PyObject *_wrap_RadarSensor_clockFreqSF_set(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53033,7 +53033,7 @@ SWIGINTERN PyObject *_wrap_RadarSensor_clockFreqSF_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53093,7 +53093,7 @@ SWIGINTERN PyObject *_wrap_RadarSensor_transmitFreqSF_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53145,7 +53145,7 @@ SWIGINTERN PyObject *_wrap_RadarSensor_transmitFreqSF_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53205,7 +53205,7 @@ SWIGINTERN PyObject *_wrap_RadarSensor_rangeBiasDecorr_set(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53257,7 +53257,7 @@ SWIGINTERN PyObject *_wrap_RadarSensor_rangeBiasDecorr_get(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53300,7 +53300,7 @@ SWIGINTERN PyObject *_wrap_new_RadarSensor(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarSensor, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53364,7 +53364,7 @@ SWIGINTERN PyObject *_wrap_RadarSensor___eq__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53428,7 +53428,7 @@ SWIGINTERN PyObject *_wrap_RadarSensor___ne__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53479,13 +53479,13 @@ SWIGINTERN PyObject *_wrap_delete_RadarSensor(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *RadarSensor_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__RadarSensor, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -53546,7 +53546,7 @@ SWIGINTERN PyObject *_wrap_TropoError_tropoRangeVertical_set(PyObject *SWIGUNUSE
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53598,7 +53598,7 @@ SWIGINTERN PyObject *_wrap_TropoError_tropoRangeVertical_get(PyObject *SWIGUNUSE
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53658,7 +53658,7 @@ SWIGINTERN PyObject *_wrap_TropoError_tropoRangeSlant_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53710,7 +53710,7 @@ SWIGINTERN PyObject *_wrap_TropoError_tropoRangeSlant_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53770,7 +53770,7 @@ SWIGINTERN PyObject *_wrap_TropoError_tropoRangeDecorr_set(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53822,7 +53822,7 @@ SWIGINTERN PyObject *_wrap_TropoError_tropoRangeDecorr_get(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53865,7 +53865,7 @@ SWIGINTERN PyObject *_wrap_new_TropoError(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__TropoError, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53929,7 +53929,7 @@ SWIGINTERN PyObject *_wrap_TropoError___eq__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -53993,7 +53993,7 @@ SWIGINTERN PyObject *_wrap_TropoError___ne__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54044,13 +54044,13 @@ SWIGINTERN PyObject *_wrap_delete_TropoError(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *TropoError_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__TropoError, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -54111,7 +54111,7 @@ SWIGINTERN PyObject *_wrap_IonoError_ionoRangeVertical_set(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54163,7 +54163,7 @@ SWIGINTERN PyObject *_wrap_IonoError_ionoRangeVertical_get(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54223,7 +54223,7 @@ SWIGINTERN PyObject *_wrap_IonoError_ionoRangeRateVertical_set(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54275,7 +54275,7 @@ SWIGINTERN PyObject *_wrap_IonoError_ionoRangeRateVertical_get(PyObject *SWIGUNU
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54335,7 +54335,7 @@ SWIGINTERN PyObject *_wrap_IonoError_ionoRgRgRateCC_set(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54387,7 +54387,7 @@ SWIGINTERN PyObject *_wrap_IonoError_ionoRgRgRateCC_get(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54447,7 +54447,7 @@ SWIGINTERN PyObject *_wrap_IonoError_ionoRangeVertDecorr_set(PyObject *SWIGUNUSE
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54499,7 +54499,7 @@ SWIGINTERN PyObject *_wrap_IonoError_ionoRangeVertDecorr_get(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54542,7 +54542,7 @@ SWIGINTERN PyObject *_wrap_new_IonoError(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__IonoError, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54606,7 +54606,7 @@ SWIGINTERN PyObject *_wrap_IonoError___eq__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54670,7 +54670,7 @@ SWIGINTERN PyObject *_wrap_IonoError___ne__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54721,13 +54721,13 @@ SWIGINTERN PyObject *_wrap_delete_IonoError(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *IonoError_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__IonoError, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -54771,7 +54771,7 @@ SWIGINTERN PyObject *_wrap_new_Components(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Components, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54831,7 +54831,7 @@ SWIGINTERN PyObject *_wrap_Components_posVelError_set(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54883,7 +54883,7 @@ SWIGINTERN PyObject *_wrap_Components_posVelError_get(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54943,7 +54943,7 @@ SWIGINTERN PyObject *_wrap_Components_radarSensor_set(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -54995,7 +54995,7 @@ SWIGINTERN PyObject *_wrap_Components_radarSensor_get(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55055,7 +55055,7 @@ SWIGINTERN PyObject *_wrap_Components_tropoError_set(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55107,7 +55107,7 @@ SWIGINTERN PyObject *_wrap_Components_tropoError_get(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55167,7 +55167,7 @@ SWIGINTERN PyObject *_wrap_Components_ionoError_set(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55219,7 +55219,7 @@ SWIGINTERN PyObject *_wrap_Components_ionoError_get(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55283,7 +55283,7 @@ SWIGINTERN PyObject *_wrap_Components___eq__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55347,7 +55347,7 @@ SWIGINTERN PyObject *_wrap_Components___ne__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55398,13 +55398,13 @@ SWIGINTERN PyObject *_wrap_delete_Components(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *Components_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__Components, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -55457,7 +55457,7 @@ SWIGINTERN PyObject *_wrap_new_CompositeSCP__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CompositeSCP, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55500,7 +55500,7 @@ SWIGINTERN PyObject *_wrap_new_CompositeSCP__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CompositeSCP, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55522,7 +55522,7 @@ SWIGINTERN PyObject *_wrap_new_CompositeSCP(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -55595,7 +55595,7 @@ SWIGINTERN PyObject *_wrap_CompositeSCP_scpType_set(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55647,7 +55647,7 @@ SWIGINTERN PyObject *_wrap_CompositeSCP_scpType_get(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55707,7 +55707,7 @@ SWIGINTERN PyObject *_wrap_CompositeSCP_xErr_set(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55759,7 +55759,7 @@ SWIGINTERN PyObject *_wrap_CompositeSCP_xErr_get(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55819,7 +55819,7 @@ SWIGINTERN PyObject *_wrap_CompositeSCP_yErr_set(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55871,7 +55871,7 @@ SWIGINTERN PyObject *_wrap_CompositeSCP_yErr_get(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55931,7 +55931,7 @@ SWIGINTERN PyObject *_wrap_CompositeSCP_xyErr_set(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -55983,7 +55983,7 @@ SWIGINTERN PyObject *_wrap_CompositeSCP_xyErr_get(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56047,7 +56047,7 @@ SWIGINTERN PyObject *_wrap_CompositeSCP___eq__(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56111,7 +56111,7 @@ SWIGINTERN PyObject *_wrap_CompositeSCP___ne__(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56162,13 +56162,13 @@ SWIGINTERN PyObject *_wrap_delete_CompositeSCP(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *CompositeSCP_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__CompositeSCP, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -56229,7 +56229,7 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics_compositeSCP_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56281,7 +56281,7 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics_compositeSCP_get(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56341,7 +56341,7 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics_components_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56393,7 +56393,7 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics_components_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56453,7 +56453,7 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics_additionalParameters_set(PyObject *SW
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56505,7 +56505,7 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics_additionalParameters_get(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56548,7 +56548,7 @@ SWIGINTERN PyObject *_wrap_new_ErrorStatistics(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ErrorStatistics, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56612,7 +56612,7 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics___eq__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56676,7 +56676,7 @@ SWIGINTERN PyObject *_wrap_ErrorStatistics___ne__(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56727,13 +56727,13 @@ SWIGINTERN PyObject *_wrap_delete_ErrorStatistics(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ErrorStatistics_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__ErrorStatistics, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -56777,7 +56777,7 @@ SWIGINTERN PyObject *_wrap_new_MatchCollect(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchCollect, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56844,7 +56844,7 @@ SWIGINTERN PyObject *_wrap_MatchCollect_coreName_set(PyObject *SWIGUNUSEDPARM(se
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56896,7 +56896,7 @@ SWIGINTERN PyObject *_wrap_MatchCollect_coreName_get(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -56956,7 +56956,7 @@ SWIGINTERN PyObject *_wrap_MatchCollect_matchIndex_set(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57008,7 +57008,7 @@ SWIGINTERN PyObject *_wrap_MatchCollect_matchIndex_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57068,7 +57068,7 @@ SWIGINTERN PyObject *_wrap_MatchCollect_parameters_set(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57120,7 +57120,7 @@ SWIGINTERN PyObject *_wrap_MatchCollect_parameters_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57184,7 +57184,7 @@ SWIGINTERN PyObject *_wrap_MatchCollect___eq__(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57248,7 +57248,7 @@ SWIGINTERN PyObject *_wrap_MatchCollect___ne__(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57299,13 +57299,13 @@ SWIGINTERN PyObject *_wrap_delete_MatchCollect(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *MatchCollect_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__MatchCollect, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -57349,7 +57349,7 @@ SWIGINTERN PyObject *_wrap_new_MatchType(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchType, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57416,7 +57416,7 @@ SWIGINTERN PyObject *_wrap_MatchType_collectorName_set(PyObject *SWIGUNUSEDPARM(
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57468,7 +57468,7 @@ SWIGINTERN PyObject *_wrap_MatchType_collectorName_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57535,7 +57535,7 @@ SWIGINTERN PyObject *_wrap_MatchType_illuminatorName_set(PyObject *SWIGUNUSEDPAR
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57587,7 +57587,7 @@ SWIGINTERN PyObject *_wrap_MatchType_illuminatorName_get(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57647,7 +57647,7 @@ SWIGINTERN PyObject *_wrap_MatchType_matchType_set(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57699,7 +57699,7 @@ SWIGINTERN PyObject *_wrap_MatchType_matchType_get(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57766,7 +57766,7 @@ SWIGINTERN PyObject *_wrap_MatchType_typeID_set(PyObject *SWIGUNUSEDPARM(self), 
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57818,7 +57818,7 @@ SWIGINTERN PyObject *_wrap_MatchType_typeID_get(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57878,7 +57878,7 @@ SWIGINTERN PyObject *_wrap_MatchType_currentIndex_set(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57930,7 +57930,7 @@ SWIGINTERN PyObject *_wrap_MatchType_currentIndex_get(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -57990,7 +57990,7 @@ SWIGINTERN PyObject *_wrap_MatchType_matchCollects_set(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58042,7 +58042,7 @@ SWIGINTERN PyObject *_wrap_MatchType_matchCollects_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58106,7 +58106,7 @@ SWIGINTERN PyObject *_wrap_MatchType___eq__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58170,7 +58170,7 @@ SWIGINTERN PyObject *_wrap_MatchType___ne__(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58221,13 +58221,13 @@ SWIGINTERN PyObject *_wrap_delete_MatchType(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *MatchType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__MatchType, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -58271,7 +58271,7 @@ SWIGINTERN PyObject *_wrap_new_MatchInformation(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchInformation, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58331,7 +58331,7 @@ SWIGINTERN PyObject *_wrap_MatchInformation_types_set(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58383,7 +58383,7 @@ SWIGINTERN PyObject *_wrap_MatchInformation_types_get(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58447,7 +58447,7 @@ SWIGINTERN PyObject *_wrap_MatchInformation___eq__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58511,7 +58511,7 @@ SWIGINTERN PyObject *_wrap_MatchInformation___ne__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58562,13 +58562,13 @@ SWIGINTERN PyObject *_wrap_delete_MatchInformation(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *MatchInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__MatchInformation, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -58612,7 +58612,7 @@ SWIGINTERN PyObject *_wrap_new_NoiseLevel(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__NoiseLevel, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58679,7 +58679,7 @@ SWIGINTERN PyObject *_wrap_NoiseLevel_noiseType_set(PyObject *SWIGUNUSEDPARM(sel
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58731,7 +58731,7 @@ SWIGINTERN PyObject *_wrap_NoiseLevel_noiseType_get(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58791,7 +58791,7 @@ SWIGINTERN PyObject *_wrap_NoiseLevel_noisePoly_set(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58843,7 +58843,7 @@ SWIGINTERN PyObject *_wrap_NoiseLevel_noisePoly_get(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58907,7 +58907,7 @@ SWIGINTERN PyObject *_wrap_NoiseLevel___eq__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -58971,7 +58971,7 @@ SWIGINTERN PyObject *_wrap_NoiseLevel___ne__(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59022,13 +59022,13 @@ SWIGINTERN PyObject *_wrap_delete_NoiseLevel(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *NoiseLevel_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__NoiseLevel, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -59075,7 +59075,7 @@ SWIGINTERN PyObject *Swig_var_Radiometric_NL_ABSOLUTE_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59121,7 +59121,7 @@ SWIGINTERN PyObject *Swig_var_Radiometric_NL_RELATIVE_get(void) {
   }
   return pyobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59164,7 +59164,7 @@ SWIGINTERN PyObject *_wrap_new_Radiometric(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Radiometric, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59224,7 +59224,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_noiseLevel_set(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59276,7 +59276,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_noiseLevel_get(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59336,7 +59336,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_rcsSFPoly_set(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59388,7 +59388,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_rcsSFPoly_get(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59448,7 +59448,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_betaZeroSFPoly_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59500,7 +59500,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_betaZeroSFPoly_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59560,7 +59560,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFPoly_set(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59612,7 +59612,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFPoly_get(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59672,7 +59672,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFIncidenceMap_set(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59724,7 +59724,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_sigmaZeroSFIncidenceMap_get(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AppliedType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59784,7 +59784,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFPoly_set(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59836,7 +59836,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFPoly_get(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59896,7 +59896,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFIncidenceMap_set(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -59948,7 +59948,7 @@ SWIGINTERN PyObject *_wrap_Radiometric_gammaZeroSFIncidenceMap_get(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AppliedType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60012,7 +60012,7 @@ SWIGINTERN PyObject *_wrap_Radiometric___eq__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60076,7 +60076,7 @@ SWIGINTERN PyObject *_wrap_Radiometric___ne__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60127,13 +60127,13 @@ SWIGINTERN PyObject *_wrap_delete_Radiometric(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *Radiometric_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__Radiometric, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -60185,7 +60185,7 @@ SWIGINTERN PyObject *_wrap_delete_Data(PyObject *SWIGUNUSEDPARM(self), PyObject 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60237,7 +60237,7 @@ SWIGINTERN PyObject *_wrap_Data_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Data, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60289,7 +60289,7 @@ SWIGINTERN PyObject *_wrap_Data_getDataType(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_NewPointerObj((new six::DataType(static_cast< const six::DataType& >(result))), SWIGTYPE_p_six__DataType, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60341,7 +60341,7 @@ SWIGINTERN PyObject *_wrap_Data_getPixelType(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_NewPointerObj((new six::PixelType(static_cast< const six::PixelType& >(result))), SWIGTYPE_p_six__PixelType, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60409,7 +60409,7 @@ SWIGINTERN PyObject *_wrap_Data_setPixelType(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60461,7 +60461,7 @@ SWIGINTERN PyObject *_wrap_Data_getNumRows(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60521,7 +60521,7 @@ SWIGINTERN PyObject *_wrap_Data_setNumRows(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60573,7 +60573,7 @@ SWIGINTERN PyObject *_wrap_Data_getNumCols(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60633,7 +60633,7 @@ SWIGINTERN PyObject *_wrap_Data_setNumCols(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60685,7 +60685,7 @@ SWIGINTERN PyObject *_wrap_Data_getImageCorners(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj((new six::LatLonCorners(static_cast< const six::LatLonCorners& >(result))), SWIGTYPE_p_six__CornersT_scene__LatLon_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60748,7 +60748,7 @@ SWIGINTERN PyObject *_wrap_Data_setImageCorners(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60800,7 +60800,7 @@ SWIGINTERN PyObject *_wrap_Data_getName(PyObject *SWIGUNUSEDPARM(self), PyObject
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60862,7 +60862,7 @@ SWIGINTERN PyObject *_wrap_Data_setName(PyObject *SWIGUNUSEDPARM(self), PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60914,7 +60914,7 @@ SWIGINTERN PyObject *_wrap_Data_getSource(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -60976,7 +60976,7 @@ SWIGINTERN PyObject *_wrap_Data_setSource(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61028,7 +61028,7 @@ SWIGINTERN PyObject *_wrap_Data_getCreationTime(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj((new six::DateTime(static_cast< const six::DateTime& >(result))), SWIGTYPE_p_nitf__DateTime, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61096,7 +61096,7 @@ SWIGINTERN PyObject *_wrap_Data_setCreationTime(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61148,7 +61148,7 @@ SWIGINTERN PyObject *_wrap_Data_getCollectionStartDateTime(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj((new six::DateTime(static_cast< const six::DateTime& >(result))), SWIGTYPE_p_nitf__DateTime, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61200,7 +61200,7 @@ SWIGINTERN PyObject *_wrap_Data_getNumBytesPerPixel(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61252,7 +61252,7 @@ SWIGINTERN PyObject *_wrap_Data_getNumChannels(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61304,7 +61304,7 @@ SWIGINTERN PyObject *_wrap_Data_getClassification__SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Classification, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61356,7 +61356,7 @@ SWIGINTERN PyObject *_wrap_Data_getClassification__SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Classification, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61448,7 +61448,7 @@ SWIGINTERN PyObject *_wrap_Data_getDisplayLUT(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__LUT_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61500,7 +61500,7 @@ SWIGINTERN PyObject *_wrap_Data_getVendorID(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61552,7 +61552,7 @@ SWIGINTERN PyObject *_wrap_Data_getVersion(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61619,13 +61619,13 @@ SWIGINTERN PyObject *_wrap_Data_setVersion(PyObject *SWIGUNUSEDPARM(self), PyObj
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *Data_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__Data, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -61677,7 +61677,7 @@ SWIGINTERN PyObject *_wrap_delete_XMLControl(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61746,7 +61746,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_setLogger__SWIG_0(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61806,7 +61806,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_setLogger__SWIG_1(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61847,7 +61847,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_setLogger(PyObject *self, PyObject *args) 
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_bool(argv[2], NULL);
+          int res = SWIG_AsVal_bool(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -61938,7 +61938,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_validate(PyObject *SWIGUNUSEDPARM(self), P
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -61992,7 +61992,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_loadSchemaPaths(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -62069,7 +62069,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_toXML(PyObject *SWIGUNUSEDPARM(self), PyOb
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -62146,7 +62146,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_fromXML(PyObject *SWIGUNUSEDPARM(self), Py
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -62215,7 +62215,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_dataTypeToString__SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -62275,7 +62275,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_dataTypeToString__SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -62305,7 +62305,7 @@ SWIGINTERN PyObject *_wrap_XMLControl_dataTypeToString(PyObject *self, PyObject 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_bool(argv[1], NULL);
+        int res = SWIG_AsVal_bool(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -62389,13 +62389,13 @@ SWIGINTERN PyObject *_wrap_XMLControl_splitVersion(PyObject *SWIGUNUSEDPARM(self
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *XMLControl_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__XMLControl, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -62448,7 +62448,7 @@ SWIGINTERN PyObject *_wrap_remapZeroTo360(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -62506,7 +62506,7 @@ SWIGINTERN PyObject *_wrap_loadPluginDir(PyObject *SWIGUNUSEDPARM(self), PyObjec
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -62548,7 +62548,7 @@ SWIGINTERN PyObject *_wrap_loadXmlDataContentHandler(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -62573,7 +62573,7 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
-  std::auto_ptr< six::Data > result;
+  mem::auto_ptr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOO:parseData",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -62662,7 +62662,7 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyO
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res4)) delete arg4;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -62683,7 +62683,7 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  std::auto_ptr< six::Data > result;
+  mem::auto_ptr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:parseData",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -62759,7 +62759,7 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyO
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -62853,7 +62853,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
-  std::auto_ptr< six::Data > result;
+  mem::auto_ptr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOO:parseDataFromFile",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -62947,7 +62947,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_0(PyObject *SWIGUNUSEDPARM(se
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res4)) delete arg4;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -62967,7 +62967,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  std::auto_ptr< six::Data > result;
+  mem::auto_ptr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:parseDataFromFile",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -63048,7 +63048,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_1(PyObject *SWIGUNUSEDPARM(se
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -63140,7 +63140,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_0(PyObject *SWIGUNUSEDPARM(
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
-  std::auto_ptr< six::Data > result;
+  mem::auto_ptr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOO:parseDataFromString",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -63234,7 +63234,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_0(PyObject *SWIGUNUSEDPARM(
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res4)) delete arg4;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -63254,7 +63254,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_1(PyObject *SWIGUNUSEDPARM(
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  std::auto_ptr< six::Data > result;
+  mem::auto_ptr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:parseDataFromString",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -63335,7 +63335,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_1(PyObject *SWIGUNUSEDPARM(
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -63478,7 +63478,7 @@ SWIGINTERN PyObject *_wrap_getErrors(PyObject *SWIGUNUSEDPARM(self), PyObject *a
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -63537,7 +63537,7 @@ SWIGINTERN PyObject *_wrap_findSchemaPath(PyObject *SWIGUNUSEDPARM(self), PyObje
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -63588,7 +63588,7 @@ SWIGINTERN PyObject *_wrap_delete_Options(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -63656,7 +63656,7 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_0(PyObject *SWIGUNUSEDPARM
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -63741,7 +63741,7 @@ SWIGINTERN PyObject *_wrap_Options_getParameter__SWIG_1(PyObject *SWIGUNUSEDPARM
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -63877,7 +63877,7 @@ SWIGINTERN PyObject *_wrap_Options_setParameter(PyObject *SWIGUNUSEDPARM(self), 
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -63945,7 +63945,7 @@ SWIGINTERN PyObject *_wrap_Options_hasParameter(PyObject *SWIGUNUSEDPARM(self), 
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -63997,7 +63997,7 @@ SWIGINTERN PyObject *_wrap_Options_begin(PyObject *SWIGUNUSEDPARM(self), PyObjec
   resultobj = SWIG_NewPointerObj((new six::Options::ParameterIter(static_cast< const six::Options::ParameterIter& >(result))), SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -64049,7 +64049,7 @@ SWIGINTERN PyObject *_wrap_Options_end(PyObject *SWIGUNUSEDPARM(self), PyObject 
   resultobj = SWIG_NewPointerObj((new six::Options::ParameterIter(static_cast< const six::Options::ParameterIter& >(result))), SWIGTYPE_p_std__mapT_std__string_six__Parameter_t__const_iterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -64113,7 +64113,7 @@ SWIGINTERN PyObject *_wrap_Options___eq__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -64177,7 +64177,7 @@ SWIGINTERN PyObject *_wrap_Options___ne__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -64220,13 +64220,13 @@ SWIGINTERN PyObject *_wrap_new_Options(PyObject *SWIGUNUSEDPARM(self), PyObject 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Options, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *Options_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__Options, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -64278,7 +64278,7 @@ SWIGINTERN PyObject *_wrap_delete_XMLControlCreator(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -64339,13 +64339,13 @@ SWIGINTERN PyObject *_wrap_XMLControlCreator_newXMLControl(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__XMLControl, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *XMLControlCreator_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__XMLControlCreator, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -64389,7 +64389,7 @@ SWIGINTERN PyObject *_wrap_new_XMLControlRegistry(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__XMLControlRegistry, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -64440,7 +64440,7 @@ SWIGINTERN PyObject *_wrap_delete_XMLControlRegistry(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -64448,7 +64448,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_0(PyObject *SWIGU
   PyObject *resultobj = 0;
   six::XMLControlRegistry *arg1 = (six::XMLControlRegistry *) 0 ;
   std::string *arg2 = 0 ;
-  std::auto_ptr< six::XMLControlCreator > arg3 ;
+  mem::auto_ptr< six::XMLControlCreator > arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -64478,12 +64478,12 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_0(PyObject *SWIGU
   {
     res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t,  0  | 0);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "std::auto_ptr< six::XMLControlCreator >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::auto_ptr< six::XMLControlCreator >""'"); 
     }  
     if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "std::auto_ptr< six::XMLControlCreator >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::auto_ptr< six::XMLControlCreator >""'");
     } else {
-      std::auto_ptr< six::XMLControlCreator > * temp = reinterpret_cast< std::auto_ptr< six::XMLControlCreator > * >(argp3);
+      mem::auto_ptr< six::XMLControlCreator > * temp = reinterpret_cast< mem::auto_ptr< six::XMLControlCreator > * >(argp3);
       arg3 = *temp;
       if (SWIG_IsNewObj(res3)) delete temp;
     }
@@ -64524,7 +64524,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_0(PyObject *SWIGU
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -64600,7 +64600,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_1(PyObject *SWIGU
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -64608,7 +64608,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_2(PyObject *SWIGU
   PyObject *resultobj = 0;
   six::XMLControlRegistry *arg1 = (six::XMLControlRegistry *) 0 ;
   six::DataType arg2 ;
-  std::auto_ptr< six::XMLControlCreator > arg3 ;
+  mem::auto_ptr< six::XMLControlCreator > arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -64641,12 +64641,12 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_2(PyObject *SWIGU
   {
     res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t,  0  | 0);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "std::auto_ptr< six::XMLControlCreator >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::auto_ptr< six::XMLControlCreator >""'"); 
     }  
     if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "std::auto_ptr< six::XMLControlCreator >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::auto_ptr< six::XMLControlCreator >""'");
     } else {
-      std::auto_ptr< six::XMLControlCreator > * temp = reinterpret_cast< std::auto_ptr< six::XMLControlCreator > * >(argp3);
+      mem::auto_ptr< six::XMLControlCreator > * temp = reinterpret_cast< mem::auto_ptr< six::XMLControlCreator > * >(argp3);
       arg3 = *temp;
       if (SWIG_IsNewObj(res3)) delete temp;
     }
@@ -64685,7 +64685,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_2(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -64762,7 +64762,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_3(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -64852,9 +64852,9 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator(PyObject *self, PyObjec
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'XMLControlRegistry_addCreator'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    six::XMLControlRegistry::addCreator(std::string const &,std::auto_ptr< six::XMLControlCreator >)\n"
+    "    six::XMLControlRegistry::addCreator(std::string const &,mem::auto_ptr< six::XMLControlCreator >)\n"
     "    six::XMLControlRegistry::addCreator(std::string const &,six::XMLControlCreator *)\n"
-    "    six::XMLControlRegistry::addCreator(six::DataType,std::auto_ptr< six::XMLControlCreator >)\n"
+    "    six::XMLControlRegistry::addCreator(six::DataType,mem::auto_ptr< six::XMLControlCreator >)\n"
     "    six::XMLControlRegistry::addCreator(six::DataType,six::XMLControlCreator *)\n");
   return 0;
 }
@@ -64933,7 +64933,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_newXMLControl__SWIG_0(PyObject *SW
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65011,7 +65011,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_newXMLControl__SWIG_1(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__XMLControl, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65075,7 +65075,7 @@ fail:
 
 SWIGINTERN PyObject *XMLControlRegistry_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__XMLControlRegistry, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -65137,7 +65137,7 @@ SWIGINTERN PyObject *_wrap_toXMLString__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65189,7 +65189,7 @@ SWIGINTERN PyObject *_wrap_toXMLString__SWIG_1(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65320,7 +65320,7 @@ SWIGINTERN PyObject *_wrap_toValidXMLString__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65397,7 +65397,7 @@ SWIGINTERN PyObject *_wrap_toValidXMLString__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65503,7 +65503,7 @@ SWIGINTERN PyObject *_wrap_new_GeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__GeoInfo, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65554,7 +65554,7 @@ SWIGINTERN PyObject *_wrap_delete_GeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65621,7 +65621,7 @@ SWIGINTERN PyObject *_wrap_GeoInfo_name_set(PyObject *SWIGUNUSEDPARM(self), PyOb
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65673,7 +65673,7 @@ SWIGINTERN PyObject *_wrap_GeoInfo_name_get(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65733,7 +65733,7 @@ SWIGINTERN PyObject *_wrap_GeoInfo_geoInfos_set(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65785,7 +65785,7 @@ SWIGINTERN PyObject *_wrap_GeoInfo_geoInfos_get(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65845,7 +65845,7 @@ SWIGINTERN PyObject *_wrap_GeoInfo_desc_set(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65897,7 +65897,7 @@ SWIGINTERN PyObject *_wrap_GeoInfo_desc_get(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -65957,7 +65957,7 @@ SWIGINTERN PyObject *_wrap_GeoInfo_geometryLatLon_set(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66009,7 +66009,7 @@ SWIGINTERN PyObject *_wrap_GeoInfo_geometryLatLon_get(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66073,7 +66073,7 @@ SWIGINTERN PyObject *_wrap_GeoInfo___eq__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66137,13 +66137,13 @@ SWIGINTERN PyObject *_wrap_GeoInfo___ne__(PyObject *SWIGUNUSEDPARM(self), PyObje
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *GeoInfo_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__GeoInfo, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -66211,7 +66211,7 @@ SWIGINTERN PyObject *_wrap___lshift__(PyObject *SWIGUNUSEDPARM(self), PyObject *
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__ostream, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66254,7 +66254,7 @@ SWIGINTERN PyObject *_wrap_new_GeoDataBase(PyObject *SWIGUNUSEDPARM(self), PyObj
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__GeoDataBase, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66314,7 +66314,7 @@ SWIGINTERN PyObject *_wrap_GeoDataBase_earthModel_set(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66366,7 +66366,7 @@ SWIGINTERN PyObject *_wrap_GeoDataBase_earthModel_get(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__EarthModelType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66426,7 +66426,7 @@ SWIGINTERN PyObject *_wrap_GeoDataBase_imageCorners_set(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66478,7 +66478,7 @@ SWIGINTERN PyObject *_wrap_GeoDataBase_imageCorners_get(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CornersT_scene__LatLon_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66538,7 +66538,7 @@ SWIGINTERN PyObject *_wrap_GeoDataBase_validData_set(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66590,7 +66590,7 @@ SWIGINTERN PyObject *_wrap_GeoDataBase_validData_get(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66650,7 +66650,7 @@ SWIGINTERN PyObject *_wrap_GeoDataBase_geoInfos_set(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66702,7 +66702,7 @@ SWIGINTERN PyObject *_wrap_GeoDataBase_geoInfos_get(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66766,7 +66766,7 @@ SWIGINTERN PyObject *_wrap_GeoDataBase___eq__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66830,7 +66830,7 @@ SWIGINTERN PyObject *_wrap_GeoDataBase___ne__(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66881,13 +66881,13 @@ SWIGINTERN PyObject *_wrap_delete_GeoDataBase(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *GeoDataBase_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__GeoDataBase, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -66931,7 +66931,7 @@ SWIGINTERN PyObject *_wrap_new_LatLonCorners(PyObject *SWIGUNUSEDPARM(self), PyO
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CornersT_scene__LatLon_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -66992,7 +66992,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_getCorner__SWIG_0(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLon, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67053,7 +67053,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_getCorner__SWIG_1(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLon, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67076,7 +67076,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_getCorner(PyObject *self, PyObject *arg
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -67091,7 +67091,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_getCorner(PyObject *self, PyObject *arg
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -67169,7 +67169,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners___eq__(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67233,7 +67233,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners___ne__(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67293,7 +67293,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_upperLeft_set(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67345,7 +67345,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_upperLeft_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLon, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67405,7 +67405,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_upperRight_set(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67457,7 +67457,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_upperRight_get(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLon, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67517,7 +67517,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_lowerRight_set(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67569,7 +67569,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_lowerRight_get(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLon, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67629,7 +67629,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_lowerLeft_set(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67681,7 +67681,7 @@ SWIGINTERN PyObject *_wrap_LatLonCorners_lowerLeft_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLon, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67732,13 +67732,13 @@ SWIGINTERN PyObject *_wrap_delete_LatLonCorners(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *LatLonCorners_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__CornersT_scene__LatLon_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -67782,7 +67782,7 @@ SWIGINTERN PyObject *_wrap_new_LatLonAltCorners(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67843,7 +67843,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_getCorner__SWIG_0(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67904,7 +67904,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_getCorner__SWIG_1(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -67927,7 +67927,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_getCorner(PyObject *self, PyObject *
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -67942,7 +67942,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_getCorner(PyObject *self, PyObject *
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -68020,7 +68020,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners___eq__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68084,7 +68084,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners___ne__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68144,7 +68144,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_upperLeft_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68196,7 +68196,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_upperLeft_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68256,7 +68256,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_upperRight_set(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68308,7 +68308,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_upperRight_get(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68368,7 +68368,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_lowerRight_set(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68420,7 +68420,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_lowerRight_get(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68480,7 +68480,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_lowerLeft_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68532,7 +68532,7 @@ SWIGINTERN PyObject *_wrap_LatLonAltCorners_lowerLeft_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__LatLonAlt, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68583,13 +68583,13 @@ SWIGINTERN PyObject *_wrap_delete_LatLonAltCorners(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *LatLonAltCorners_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_six__CornersT_scene__LatLonAlt_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -68644,7 +68644,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_iterator(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68696,7 +68696,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___nonzero__(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68748,7 +68748,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___bool__(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68800,7 +68800,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___len__(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68879,7 +68879,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___getslice__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -68957,7 +68957,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___setslice____SWIG_0(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -69051,7 +69051,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___setslice____SWIG_1(PyObject *SWI
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res4)) delete arg4;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -69073,12 +69073,12 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___setslice__(PyObject *self, PyObj
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -69093,12 +69093,12 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___setslice__(PyObject *self, PyObj
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -69195,7 +69195,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___delslice__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -69264,7 +69264,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___delitem____SWIG_0(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -69333,7 +69333,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___getitem____SWIG_0(PyObject *SWIG
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -69417,7 +69417,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___setitem____SWIG_0(PyObject *SWIG
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -69485,7 +69485,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___setitem____SWIG_1(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -69553,7 +69553,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___delitem____SWIG_1(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -69588,7 +69588,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___delitem__(PyObject *self, PyObje
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -69669,7 +69669,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___getitem____SWIG_1(PyObject *SWIG
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchCollect, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -69704,7 +69704,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___getitem__(PyObject *self, PyObje
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -69796,7 +69796,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___setitem____SWIG_2(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -69848,7 +69848,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect___setitem__(PyObject *self, PyObje
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -69925,7 +69925,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_pop(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj((new std::vector< six::MatchCollect >::value_type(static_cast< const std::vector< six::MatchCollect >::value_type& >(result))), SWIGTYPE_p_six__MatchCollect, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -69988,7 +69988,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_append(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70031,7 +70031,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchCollect__SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70090,7 +70090,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchCollect__SWIG_1(PyObject *SWIGUNUSEDPA
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70142,7 +70142,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_empty(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70194,7 +70194,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_size(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70257,7 +70257,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_swap(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70310,7 +70310,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_begin(PyObject *SWIGUNUSEDPARM(sel
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70363,7 +70363,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_end(PyObject *SWIGUNUSEDPARM(self)
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70416,7 +70416,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_rbegin(PyObject *SWIGUNUSEDPARM(se
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70469,7 +70469,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_rend(PyObject *SWIGUNUSEDPARM(self
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70520,7 +70520,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_clear(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70572,7 +70572,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_get_allocator(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj((new std::vector< six::MatchCollect >::allocator_type(static_cast< const std::vector< six::MatchCollect >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_six__MatchCollect_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70624,7 +70624,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchCollect__SWIG_2(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70675,7 +70675,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_pop_back(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70735,7 +70735,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_resize__SWIG_0(PyObject *SWIGUNUSE
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70803,7 +70803,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_erase__SWIG_0(PyObject *SWIGUNUSED
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -70886,7 +70886,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_erase__SWIG_1(PyObject *SWIGUNUSED
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71003,7 +71003,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchCollect__SWIG_3(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71025,7 +71025,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchCollect(PyObject *self, PyObject *args
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      int res = SWIG_AsVal_size_t(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -71043,7 +71043,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchCollect(PyObject *self, PyObject *args
   if (argc == 2) {
     int _v;
     {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      int res = SWIG_AsVal_size_t(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -71125,7 +71125,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_push_back(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71177,7 +71177,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_front(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchCollect, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71229,7 +71229,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_back(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchCollect, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71301,7 +71301,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_assign(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71373,7 +71373,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_resize__SWIG_1(PyObject *SWIGUNUSE
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71395,7 +71395,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_resize(PyObject *self, PyObject *a
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -71409,7 +71409,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_resize(PyObject *self, PyObject *a
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -71507,7 +71507,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_insert__SWIG_0(PyObject *SWIGUNUSE
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71594,7 +71594,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_insert__SWIG_1(PyObject *SWIGUNUSE
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71637,7 +71637,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_insert(PyObject *self, PyObject *a
       _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchCollect >::iterator > *>(iter) != 0));
       if (_v) {
         {
-          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          int res = SWIG_AsVal_size_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -71716,7 +71716,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_reserve(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71768,7 +71768,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchCollect_capacity(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71819,13 +71819,13 @@ SWIGINTERN PyObject *_wrap_delete_VectorMatchCollect(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *VectorMatchCollect_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -71880,7 +71880,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_iterator(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71932,7 +71932,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___nonzero__(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -71984,7 +71984,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___bool__(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72036,7 +72036,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___len__(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72115,7 +72115,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___getslice__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72193,7 +72193,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___setslice____SWIG_0(PyObject *SWIGUN
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72287,7 +72287,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___setslice____SWIG_1(PyObject *SWIGUN
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res4)) delete arg4;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72309,12 +72309,12 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___setslice__(PyObject *self, PyObject
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -72329,12 +72329,12 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___setslice__(PyObject *self, PyObject
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -72431,7 +72431,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___delslice__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72500,7 +72500,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___delitem____SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72569,7 +72569,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___getitem____SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72653,7 +72653,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___setitem____SWIG_0(PyObject *SWIGUNU
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72721,7 +72721,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___setitem____SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72789,7 +72789,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___delitem____SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72824,7 +72824,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___delitem__(PyObject *self, PyObject 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -72905,7 +72905,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___getitem____SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -72940,7 +72940,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___getitem__(PyObject *self, PyObject 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -73032,7 +73032,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___setitem____SWIG_2(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73084,7 +73084,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType___setitem__(PyObject *self, PyObject 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -73161,7 +73161,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_pop(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj((new std::vector< six::MatchType >::value_type(static_cast< const std::vector< six::MatchType >::value_type& >(result))), SWIGTYPE_p_six__MatchType, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73224,7 +73224,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_append(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73267,7 +73267,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchType__SWIG_0(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73326,7 +73326,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchType__SWIG_1(PyObject *SWIGUNUSEDPARM(
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73378,7 +73378,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_empty(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73430,7 +73430,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_size(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73493,7 +73493,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_swap(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73546,7 +73546,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_begin(PyObject *SWIGUNUSEDPARM(self),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73599,7 +73599,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_end(PyObject *SWIGUNUSEDPARM(self), P
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73652,7 +73652,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_rbegin(PyObject *SWIGUNUSEDPARM(self)
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73705,7 +73705,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_rend(PyObject *SWIGUNUSEDPARM(self), 
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73756,7 +73756,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_clear(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73808,7 +73808,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_get_allocator(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_NewPointerObj((new std::vector< six::MatchType >::allocator_type(static_cast< const std::vector< six::MatchType >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_six__MatchType_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73860,7 +73860,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchType__SWIG_2(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73911,7 +73911,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_pop_back(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -73971,7 +73971,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_resize__SWIG_0(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -74039,7 +74039,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_erase__SWIG_0(PyObject *SWIGUNUSEDPAR
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -74122,7 +74122,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_erase__SWIG_1(PyObject *SWIGUNUSEDPAR
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -74239,7 +74239,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchType__SWIG_3(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -74261,7 +74261,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchType(PyObject *self, PyObject *args) {
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      int res = SWIG_AsVal_size_t(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -74279,7 +74279,7 @@ SWIGINTERN PyObject *_wrap_new_VectorMatchType(PyObject *self, PyObject *args) {
   if (argc == 2) {
     int _v;
     {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      int res = SWIG_AsVal_size_t(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -74361,7 +74361,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_push_back(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -74413,7 +74413,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_front(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -74465,7 +74465,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_back(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -74537,7 +74537,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_assign(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -74609,7 +74609,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_resize__SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -74631,7 +74631,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_resize(PyObject *self, PyObject *args
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -74645,7 +74645,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_resize(PyObject *self, PyObject *args
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -74743,7 +74743,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_insert__SWIG_0(PyObject *SWIGUNUSEDPA
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -74830,7 +74830,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_insert__SWIG_1(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -74873,7 +74873,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_insert(PyObject *self, PyObject *args
       _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< six::MatchType >::iterator > *>(iter) != 0));
       if (_v) {
         {
-          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          int res = SWIG_AsVal_size_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -74952,7 +74952,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_reserve(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75004,7 +75004,7 @@ SWIGINTERN PyObject *_wrap_VectorMatchType_capacity(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75055,13 +75055,13 @@ SWIGINTERN PyObject *_wrap_delete_VectorMatchType(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *VectorMatchType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -75116,7 +75116,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_iterator(PyObject *SWIG
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75168,7 +75168,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___nonzero__(PyObject *S
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75220,7 +75220,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___bool__(PyObject *SWIG
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75272,7 +75272,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___len__(PyObject *SWIGU
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75351,7 +75351,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___getslice__(PyObject *
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75429,7 +75429,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setslice____SWIG_0(Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75523,7 +75523,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setslice____SWIG_1(Py
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res4)) delete arg4;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75545,12 +75545,12 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setslice__(PyObject *
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -75565,12 +75565,12 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setslice__(PyObject *
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -75667,7 +75667,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___delslice__(PyObject *
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75736,7 +75736,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___delitem____SWIG_0(PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75805,7 +75805,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___getitem____SWIG_0(PyO
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75889,7 +75889,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setitem____SWIG_0(PyO
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -75957,7 +75957,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setitem____SWIG_1(PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76025,7 +76025,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___delitem____SWIG_1(PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76060,7 +76060,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___delitem__(PyObject *s
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -76141,7 +76141,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___getitem____SWIG_1(PyO
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76176,7 +76176,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___getitem__(PyObject *s
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -76268,7 +76268,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setitem____SWIG_2(PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76320,7 +76320,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType___setitem__(PyObject *s
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -76397,7 +76397,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_pop(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj((new std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type(static_cast< const std::vector< mem::ScopedCopyablePtr< six::MatchType > >::value_type& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76460,7 +76460,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_append(PyObject *SWIGUN
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76503,7 +76503,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableMatchType__SWIG_0(PyObject *S
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76562,7 +76562,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableMatchType__SWIG_1(PyObject *S
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76614,7 +76614,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_empty(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76666,7 +76666,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_size(PyObject *SWIGUNUS
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76729,7 +76729,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_swap(PyObject *SWIGUNUS
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76782,7 +76782,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_begin(PyObject *SWIGUNU
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76835,7 +76835,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_end(PyObject *SWIGUNUSE
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76888,7 +76888,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_rbegin(PyObject *SWIGUN
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76941,7 +76941,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_rend(PyObject *SWIGUNUS
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -76992,7 +76992,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_clear(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77044,7 +77044,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_get_allocator(PyObject 
   resultobj = SWIG_NewPointerObj((new std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type(static_cast< const std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77096,7 +77096,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableMatchType__SWIG_2(PyObject *S
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77147,7 +77147,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_pop_back(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77207,7 +77207,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_resize__SWIG_0(PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77275,7 +77275,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_erase__SWIG_0(PyObject 
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77358,7 +77358,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_erase__SWIG_1(PyObject 
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77475,7 +77475,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableMatchType__SWIG_3(PyObject *S
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77497,7 +77497,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableMatchType(PyObject *self, PyO
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      int res = SWIG_AsVal_size_t(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -77515,7 +77515,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableMatchType(PyObject *self, PyO
   if (argc == 2) {
     int _v;
     {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      int res = SWIG_AsVal_size_t(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -77597,7 +77597,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_push_back(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77649,7 +77649,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_front(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77701,7 +77701,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_back(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77773,7 +77773,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_assign(PyObject *SWIGUN
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77845,7 +77845,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_resize__SWIG_1(PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -77867,7 +77867,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_resize(PyObject *self, 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -77881,7 +77881,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_resize(PyObject *self, 
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -77979,7 +77979,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_insert__SWIG_0(PyObject
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78066,7 +78066,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_insert__SWIG_1(PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78109,7 +78109,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_insert(PyObject *self, 
       _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::MatchType > >::iterator > *>(iter) != 0));
       if (_v) {
         {
-          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          int res = SWIG_AsVal_size_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -78188,7 +78188,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_reserve(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78240,7 +78240,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableMatchType_capacity(PyObject *SWIG
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78291,13 +78291,13 @@ SWIGINTERN PyObject *_wrap_delete_VectorScopedCopyableMatchType(PyObject *SWIGUN
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *VectorScopedCopyableMatchType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__MatchType_t_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -78352,7 +78352,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_iterator(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78404,7 +78404,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___nonzero__(PyObject *SWI
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78456,7 +78456,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___bool__(PyObject *SWIGUN
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78508,7 +78508,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___len__(PyObject *SWIGUNU
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78587,7 +78587,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___getslice__(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78665,7 +78665,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setslice____SWIG_0(PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78759,7 +78759,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setslice____SWIG_1(PyOb
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res4)) delete arg4;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78781,12 +78781,12 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setslice__(PyObject *se
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -78801,12 +78801,12 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setslice__(PyObject *se
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -78903,7 +78903,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___delslice__(PyObject *SW
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -78972,7 +78972,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___delitem____SWIG_0(PyObj
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79041,7 +79041,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___getitem____SWIG_0(PyObj
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79125,7 +79125,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setitem____SWIG_0(PyObj
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79193,7 +79193,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setitem____SWIG_1(PyObj
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79261,7 +79261,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___delitem____SWIG_1(PyObj
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79296,7 +79296,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___delitem__(PyObject *sel
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -79377,7 +79377,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___getitem____SWIG_1(PyObj
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79412,7 +79412,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___getitem__(PyObject *sel
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -79504,7 +79504,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setitem____SWIG_2(PyObj
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79556,7 +79556,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo___setitem__(PyObject *sel
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -79633,7 +79633,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_pop(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj((new std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type(static_cast< const std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::value_type& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79696,7 +79696,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_append(PyObject *SWIGUNUS
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79739,7 +79739,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableGeoInfo__SWIG_0(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79798,7 +79798,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableGeoInfo__SWIG_1(PyObject *SWI
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79850,7 +79850,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_empty(PyObject *SWIGUNUSE
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79902,7 +79902,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_size(PyObject *SWIGUNUSED
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -79965,7 +79965,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_swap(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80018,7 +80018,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_begin(PyObject *SWIGUNUSE
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80071,7 +80071,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_end(PyObject *SWIGUNUSEDP
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80124,7 +80124,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_rbegin(PyObject *SWIGUNUS
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80177,7 +80177,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_rend(PyObject *SWIGUNUSED
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80228,7 +80228,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_clear(PyObject *SWIGUNUSE
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80280,7 +80280,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_get_allocator(PyObject *S
   resultobj = SWIG_NewPointerObj((new std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type(static_cast< const std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80332,7 +80332,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableGeoInfo__SWIG_2(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80383,7 +80383,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_pop_back(PyObject *SWIGUN
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80443,7 +80443,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_resize__SWIG_0(PyObject *
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80511,7 +80511,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_erase__SWIG_0(PyObject *S
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80594,7 +80594,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_erase__SWIG_1(PyObject *S
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80711,7 +80711,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableGeoInfo__SWIG_3(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80733,7 +80733,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableGeoInfo(PyObject *self, PyObj
   if (argc == 1) {
     int _v;
     {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      int res = SWIG_AsVal_size_t(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -80751,7 +80751,7 @@ SWIGINTERN PyObject *_wrap_new_VectorScopedCopyableGeoInfo(PyObject *self, PyObj
   if (argc == 2) {
     int _v;
     {
-      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      int res = SWIG_AsVal_size_t(argv[0], nullptr);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -80833,7 +80833,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_push_back(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80885,7 +80885,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_front(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -80937,7 +80937,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_back(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81009,7 +81009,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_assign(PyObject *SWIGUNUS
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81081,7 +81081,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_resize__SWIG_1(PyObject *
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81103,7 +81103,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_resize(PyObject *self, Py
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -81117,7 +81117,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_resize(PyObject *self, Py
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        int res = SWIG_AsVal_size_t(argv[1], nullptr);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
@@ -81215,7 +81215,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_insert__SWIG_0(PyObject *
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81302,7 +81302,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_insert__SWIG_1(PyObject *
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81345,7 +81345,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_insert(PyObject *self, Py
       _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::iterator > *>(iter) != 0));
       if (_v) {
         {
-          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          int res = SWIG_AsVal_size_t(argv[2], nullptr);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -81424,7 +81424,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_reserve(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81476,7 +81476,7 @@ SWIGINTERN PyObject *_wrap_VectorScopedCopyableGeoInfo_capacity(PyObject *SWIGUN
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81527,26 +81527,26 @@ SWIGINTERN PyObject *_wrap_delete_VectorScopedCopyableGeoInfo(PyObject *SWIGUNUS
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *VectorScopedCopyableGeoInfo_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
 SWIGINTERN PyObject *_wrap_new_StdAutoRadiometric(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::Radiometric > *result = 0 ;
+  mem::auto_ptr< six::Radiometric > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoRadiometric")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::Radiometric > *)new std::auto_ptr< six::Radiometric >();
+      result = (mem::auto_ptr< six::Radiometric > *)new mem::auto_ptr< six::Radiometric >();
     } 
     catch (const std::exception& e)
     {
@@ -81577,13 +81577,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoRadiometric(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoRadiometric(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::Radiometric > *arg1 = (std::auto_ptr< six::Radiometric > *) 0 ;
+  mem::auto_ptr< six::Radiometric > *arg1 = (mem::auto_ptr< six::Radiometric > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -81591,9 +81591,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoRadiometric(PyObject *SWIGUNUSEDPARM(se
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoRadiometric",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoRadiometric" "', argument " "1"" of type '" "std::auto_ptr< six::Radiometric > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoRadiometric" "', argument " "1"" of type '" "mem::auto_ptr< six::Radiometric > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::Radiometric > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::Radiometric > * >(argp1);
   {
     try
     {
@@ -81628,13 +81628,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoRadiometric(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoRadiometric_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -81687,7 +81687,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableRadiometric__SWIG_0(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81730,7 +81730,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableRadiometric__SWIG_1(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81785,7 +81785,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableRadiometric__SWIG_2(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81880,7 +81880,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric___nonzero__(PyObject *SWIGU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81932,7 +81932,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_get(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Radiometric, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -81984,7 +81984,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric___ref__(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Radiometric, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82036,7 +82036,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric___deref__(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Radiometric, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82096,7 +82096,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_reset__SWIG_0(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82147,7 +82147,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_reset__SWIG_1(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82243,7 +82243,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyableRadiometric(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82295,7 +82295,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_NL_ABSOLUTE_get(PyObject *S
   resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82347,7 +82347,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_NL_RELATIVE_get(PyObject *S
   resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82407,7 +82407,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_noiseLevel_set(PyObject *SW
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82459,7 +82459,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_noiseLevel_get(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__NoiseLevel, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82519,7 +82519,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_rcsSFPoly_set(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82571,7 +82571,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_rcsSFPoly_get(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82631,7 +82631,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_betaZeroSFPoly_set(PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82683,7 +82683,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_betaZeroSFPoly_get(PyObject
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82743,7 +82743,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_sigmaZeroSFPoly_set(PyObjec
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82795,7 +82795,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_sigmaZeroSFPoly_get(PyObjec
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82855,7 +82855,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_set
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82907,7 +82907,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_sigmaZeroSFIncidenceMap_get
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AppliedType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -82967,7 +82967,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_gammaZeroSFPoly_set(PyObjec
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83019,7 +83019,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_gammaZeroSFPoly_get(PyObjec
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83079,7 +83079,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_set
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83131,7 +83131,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AppliedType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83195,7 +83195,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric___eq__(PyObject *SWIGUNUSED
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83259,13 +83259,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadiometric___ne__(PyObject *SWIGUNUSED
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyableRadiometric_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -83309,19 +83309,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyableRadiometric(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::Radiometric >(static_cast< const mem::ScopedCopyablePtr< six::Radiometric >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Radiometric_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoErrorStatistics(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::ErrorStatistics > *result = 0 ;
+  mem::auto_ptr< six::ErrorStatistics > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoErrorStatistics")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::ErrorStatistics > *)new std::auto_ptr< six::ErrorStatistics >();
+      result = (mem::auto_ptr< six::ErrorStatistics > *)new mem::auto_ptr< six::ErrorStatistics >();
     } 
     catch (const std::exception& e)
     {
@@ -83352,13 +83352,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoErrorStatistics(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoErrorStatistics(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::ErrorStatistics > *arg1 = (std::auto_ptr< six::ErrorStatistics > *) 0 ;
+  mem::auto_ptr< six::ErrorStatistics > *arg1 = (mem::auto_ptr< six::ErrorStatistics > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -83366,9 +83366,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoErrorStatistics(PyObject *SWIGUNUSEDPAR
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoErrorStatistics",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoErrorStatistics" "', argument " "1"" of type '" "std::auto_ptr< six::ErrorStatistics > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoErrorStatistics" "', argument " "1"" of type '" "mem::auto_ptr< six::ErrorStatistics > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::ErrorStatistics > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::ErrorStatistics > * >(argp1);
   {
     try
     {
@@ -83403,13 +83403,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoErrorStatistics(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoErrorStatistics_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -83462,7 +83462,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableErrorStatistics__SWIG_0(PyObject *S
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83505,7 +83505,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableErrorStatistics__SWIG_1(PyObject *S
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83560,7 +83560,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableErrorStatistics__SWIG_2(PyObject *S
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83655,7 +83655,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics___nonzero__(PyObject *S
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83707,7 +83707,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics_get(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ErrorStatistics, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83759,7 +83759,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics___ref__(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ErrorStatistics, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83811,7 +83811,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics___deref__(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ErrorStatistics, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83871,7 +83871,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics_reset__SWIG_0(PyObject 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -83922,7 +83922,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics_reset__SWIG_1(PyObject 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84018,7 +84018,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyableErrorStatistics(PyObject *SWIGUN
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84078,7 +84078,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics_compositeSCP_set(PyObje
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84130,7 +84130,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics_compositeSCP_get(PyObje
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84190,7 +84190,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics_components_set(PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84242,7 +84242,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics_components_get(PyObject
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84302,7 +84302,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics_additionalParameters_se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84354,7 +84354,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics_additionalParameters_ge
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84418,7 +84418,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics___eq__(PyObject *SWIGUN
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84482,13 +84482,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableErrorStatistics___ne__(PyObject *SWIGUN
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyableErrorStatistics_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -84532,19 +84532,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyableErrorStatistics(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::ErrorStatistics >(static_cast< const mem::ScopedCopyablePtr< six::ErrorStatistics >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__ErrorStatistics_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoComponents(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::Components > *result = 0 ;
+  mem::auto_ptr< six::Components > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoComponents")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::Components > *)new std::auto_ptr< six::Components >();
+      result = (mem::auto_ptr< six::Components > *)new mem::auto_ptr< six::Components >();
     } 
     catch (const std::exception& e)
     {
@@ -84575,13 +84575,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoComponents(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__Components_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoComponents(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::Components > *arg1 = (std::auto_ptr< six::Components > *) 0 ;
+  mem::auto_ptr< six::Components > *arg1 = (mem::auto_ptr< six::Components > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -84589,9 +84589,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoComponents(PyObject *SWIGUNUSEDPARM(sel
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoComponents",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__Components_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoComponents" "', argument " "1"" of type '" "std::auto_ptr< six::Components > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoComponents" "', argument " "1"" of type '" "mem::auto_ptr< six::Components > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::Components > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::Components > * >(argp1);
   {
     try
     {
@@ -84626,13 +84626,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoComponents(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoComponents_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__Components_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -84685,7 +84685,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableComponents__SWIG_0(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84728,7 +84728,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableComponents__SWIG_1(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84783,7 +84783,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableComponents__SWIG_2(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84878,7 +84878,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents___nonzero__(PyObject *SWIGUN
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84930,7 +84930,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents_get(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Components, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -84982,7 +84982,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents___ref__(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Components, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85034,7 +85034,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents___deref__(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Components, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85094,7 +85094,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents_reset__SWIG_0(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85145,7 +85145,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents_reset__SWIG_1(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85241,7 +85241,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyableComponents(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85301,7 +85301,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents_posVelError_set(PyObject *SW
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85353,7 +85353,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents_posVelError_get(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85413,7 +85413,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents_radarSensor_set(PyObject *SW
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85465,7 +85465,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents_radarSensor_get(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85525,7 +85525,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents_tropoError_set(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85577,7 +85577,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents_tropoError_get(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85637,7 +85637,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents_ionoError_set(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85689,7 +85689,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents_ionoError_get(PyObject *SWIG
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85753,7 +85753,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents___eq__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -85817,13 +85817,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableComponents___ne__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyableComponents_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -85867,19 +85867,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyableComponents(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::Components >(static_cast< const mem::ScopedCopyablePtr< six::Components >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__Components_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoCorrCoefs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::CorrCoefs > *result = 0 ;
+  mem::auto_ptr< six::CorrCoefs > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCorrCoefs")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::CorrCoefs > *)new std::auto_ptr< six::CorrCoefs >();
+      result = (mem::auto_ptr< six::CorrCoefs > *)new mem::auto_ptr< six::CorrCoefs >();
     } 
     catch (const std::exception& e)
     {
@@ -85910,13 +85910,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoCorrCoefs(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoCorrCoefs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::CorrCoefs > *arg1 = (std::auto_ptr< six::CorrCoefs > *) 0 ;
+  mem::auto_ptr< six::CorrCoefs > *arg1 = (mem::auto_ptr< six::CorrCoefs > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -85924,9 +85924,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCorrCoefs(PyObject *SWIGUNUSEDPARM(self
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoCorrCoefs",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCorrCoefs" "', argument " "1"" of type '" "std::auto_ptr< six::CorrCoefs > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCorrCoefs" "', argument " "1"" of type '" "mem::auto_ptr< six::CorrCoefs > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::CorrCoefs > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::CorrCoefs > * >(argp1);
   {
     try
     {
@@ -85961,13 +85961,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCorrCoefs(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoCorrCoefs_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -86020,7 +86020,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableCorrCoefs__SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86063,7 +86063,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableCorrCoefs__SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86118,7 +86118,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableCorrCoefs__SWIG_2(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86213,7 +86213,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs___nonzero__(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86265,7 +86265,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CorrCoefs, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86317,7 +86317,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs___ref__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CorrCoefs, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86369,7 +86369,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs___deref__(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CorrCoefs, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86429,7 +86429,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_reset__SWIG_0(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86480,7 +86480,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_reset__SWIG_1(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86576,7 +86576,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyableCorrCoefs(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86636,7 +86636,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p1p2_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86688,7 +86688,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p1p2_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86748,7 +86748,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p1p3_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86800,7 +86800,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p1p3_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86860,7 +86860,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p1v1_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86912,7 +86912,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p1v1_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -86972,7 +86972,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p1v2_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87024,7 +87024,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p1v2_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87084,7 +87084,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p1v3_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87136,7 +87136,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p1v3_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87196,7 +87196,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p2p3_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87248,7 +87248,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p2p3_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87308,7 +87308,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p2v1_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87360,7 +87360,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p2v1_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87420,7 +87420,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p2v2_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87472,7 +87472,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p2v2_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87532,7 +87532,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p2v3_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87584,7 +87584,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p2v3_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87644,7 +87644,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p3v1_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87696,7 +87696,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p3v1_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87756,7 +87756,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p3v2_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87808,7 +87808,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p3v2_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87868,7 +87868,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p3v3_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87920,7 +87920,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_p3v3_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -87980,7 +87980,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_v1v2_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88032,7 +88032,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_v1v2_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88092,7 +88092,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_v1v3_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88144,7 +88144,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_v1v3_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88204,7 +88204,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_v2v3_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88256,7 +88256,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs_v2v3_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88320,7 +88320,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs___eq__(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88384,13 +88384,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCorrCoefs___ne__(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyableCorrCoefs_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -88434,19 +88434,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyableCorrCoefs(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::CorrCoefs >(static_cast< const mem::ScopedCopyablePtr< six::CorrCoefs >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoPosVelError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::PosVelError > *result = 0 ;
+  mem::auto_ptr< six::PosVelError > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoPosVelError")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::PosVelError > *)new std::auto_ptr< six::PosVelError >();
+      result = (mem::auto_ptr< six::PosVelError > *)new mem::auto_ptr< six::PosVelError >();
     } 
     catch (const std::exception& e)
     {
@@ -88477,13 +88477,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoPosVelError(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoPosVelError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::PosVelError > *arg1 = (std::auto_ptr< six::PosVelError > *) 0 ;
+  mem::auto_ptr< six::PosVelError > *arg1 = (mem::auto_ptr< six::PosVelError > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -88491,9 +88491,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoPosVelError(PyObject *SWIGUNUSEDPARM(se
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoPosVelError",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoPosVelError" "', argument " "1"" of type '" "std::auto_ptr< six::PosVelError > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoPosVelError" "', argument " "1"" of type '" "mem::auto_ptr< six::PosVelError > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::PosVelError > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::PosVelError > * >(argp1);
   {
     try
     {
@@ -88528,13 +88528,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoPosVelError(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoPosVelError_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -88587,7 +88587,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyablePosVelError__SWIG_0(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88630,7 +88630,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyablePosVelError__SWIG_1(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88685,7 +88685,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyablePosVelError__SWIG_2(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88780,7 +88780,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError___nonzero__(PyObject *SWIGU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88832,7 +88832,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_get(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PosVelError, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88884,7 +88884,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError___ref__(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PosVelError, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88936,7 +88936,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError___deref__(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__PosVelError, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -88996,7 +88996,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_reset__SWIG_0(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89047,7 +89047,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_reset__SWIG_1(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89143,7 +89143,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyablePosVelError(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89203,7 +89203,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_frame_set(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89255,7 +89255,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_frame_get(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scene__FrameType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89315,7 +89315,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_p1_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89367,7 +89367,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_p1_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89427,7 +89427,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_p2_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89479,7 +89479,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_p2_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89539,7 +89539,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_p3_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89591,7 +89591,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_p3_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89651,7 +89651,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_v1_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89703,7 +89703,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_v1_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89763,7 +89763,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_v2_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89815,7 +89815,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_v2_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89875,7 +89875,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_v3_set(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89927,7 +89927,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_v3_get(PyObject *SWIGUNUSED
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -89987,7 +89987,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_corrCoefs_set(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90039,7 +90039,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_corrCoefs_get(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CorrCoefs_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90099,7 +90099,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_positionDecorr_set(PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90151,7 +90151,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError_positionDecorr_get(PyObject
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90215,7 +90215,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError___eq__(PyObject *SWIGUNUSED
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90279,13 +90279,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyablePosVelError___ne__(PyObject *SWIGUNUSED
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyablePosVelError_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -90329,19 +90329,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyablePosVelError(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::PosVelError >(static_cast< const mem::ScopedCopyablePtr< six::PosVelError >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__PosVelError_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoGeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::GeoInfo > *result = 0 ;
+  mem::auto_ptr< six::GeoInfo > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoGeoInfo")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::GeoInfo > *)new std::auto_ptr< six::GeoInfo >();
+      result = (mem::auto_ptr< six::GeoInfo > *)new mem::auto_ptr< six::GeoInfo >();
     } 
     catch (const std::exception& e)
     {
@@ -90372,13 +90372,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoGeoInfo(PyObject *SWIGUNUSEDPARM(self), Py
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__GeoInfo_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoGeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::GeoInfo > *arg1 = (std::auto_ptr< six::GeoInfo > *) 0 ;
+  mem::auto_ptr< six::GeoInfo > *arg1 = (mem::auto_ptr< six::GeoInfo > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -90386,9 +90386,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoGeoInfo(PyObject *SWIGUNUSEDPARM(self),
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoGeoInfo",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__GeoInfo_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoGeoInfo" "', argument " "1"" of type '" "std::auto_ptr< six::GeoInfo > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoGeoInfo" "', argument " "1"" of type '" "mem::auto_ptr< six::GeoInfo > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::GeoInfo > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::GeoInfo > * >(argp1);
   {
     try
     {
@@ -90423,13 +90423,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoGeoInfo(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoGeoInfo_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__GeoInfo_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -90482,7 +90482,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableGeoInfo__SWIG_0(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90525,7 +90525,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableGeoInfo__SWIG_1(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90580,7 +90580,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableGeoInfo__SWIG_2(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90675,7 +90675,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo___nonzero__(PyObject *SWIGUNUSE
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90727,7 +90727,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_get(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__GeoInfo, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90779,7 +90779,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo___ref__(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__GeoInfo, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90831,7 +90831,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo___deref__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__GeoInfo, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90891,7 +90891,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_reset__SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -90942,7 +90942,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_reset__SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91038,7 +91038,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyableGeoInfo(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91105,7 +91105,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_name_set(PyObject *SWIGUNUSEDPA
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91157,7 +91157,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_name_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91217,7 +91217,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_geoInfos_set(PyObject *SWIGUNUS
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91269,7 +91269,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_geoInfos_get(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_std__allocatorT_mem__ScopedCopyablePtrT_six__GeoInfo_t_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91329,7 +91329,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_desc_set(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91381,7 +91381,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_desc_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91441,7 +91441,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_geometryLatLon_set(PyObject *SW
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91493,7 +91493,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo_geometryLatLon_get(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_scene__LatLon_std__allocatorT_scene__LatLon_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91557,7 +91557,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo___eq__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91621,13 +91621,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableGeoInfo___ne__(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyableGeoInfo_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -91671,19 +91671,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyableGeoInfo(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::GeoInfo >(static_cast< const mem::ScopedCopyablePtr< six::GeoInfo >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__GeoInfo_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoRadarSensor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::RadarSensor > *result = 0 ;
+  mem::auto_ptr< six::RadarSensor > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoRadarSensor")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::RadarSensor > *)new std::auto_ptr< six::RadarSensor >();
+      result = (mem::auto_ptr< six::RadarSensor > *)new mem::auto_ptr< six::RadarSensor >();
     } 
     catch (const std::exception& e)
     {
@@ -91714,13 +91714,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoRadarSensor(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoRadarSensor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::RadarSensor > *arg1 = (std::auto_ptr< six::RadarSensor > *) 0 ;
+  mem::auto_ptr< six::RadarSensor > *arg1 = (mem::auto_ptr< six::RadarSensor > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -91728,9 +91728,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoRadarSensor(PyObject *SWIGUNUSEDPARM(se
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoRadarSensor",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoRadarSensor" "', argument " "1"" of type '" "std::auto_ptr< six::RadarSensor > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoRadarSensor" "', argument " "1"" of type '" "mem::auto_ptr< six::RadarSensor > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::RadarSensor > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::RadarSensor > * >(argp1);
   {
     try
     {
@@ -91765,13 +91765,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoRadarSensor(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoRadarSensor_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -91824,7 +91824,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableRadarSensor__SWIG_0(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91867,7 +91867,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableRadarSensor__SWIG_1(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -91922,7 +91922,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableRadarSensor__SWIG_2(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92017,7 +92017,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor___nonzero__(PyObject *SWIGU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92069,7 +92069,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_get(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarSensor, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92121,7 +92121,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor___ref__(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarSensor, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92173,7 +92173,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor___deref__(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarSensor, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92233,7 +92233,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_reset__SWIG_0(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92284,7 +92284,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_reset__SWIG_1(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92380,7 +92380,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyableRadarSensor(PyObject *SWIGUNUSED
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92440,7 +92440,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_rangeBias_set(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92492,7 +92492,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_rangeBias_get(PyObject *SWI
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92552,7 +92552,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_clockFreqSF_set(PyObject *S
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92604,7 +92604,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_clockFreqSF_get(PyObject *S
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92664,7 +92664,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_transmitFreqSF_set(PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92716,7 +92716,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_transmitFreqSF_get(PyObject
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92776,7 +92776,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_rangeBiasDecorr_set(PyObjec
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92828,7 +92828,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor_rangeBiasDecorr_get(PyObjec
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92892,7 +92892,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor___eq__(PyObject *SWIGUNUSED
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -92956,13 +92956,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableRadarSensor___ne__(PyObject *SWIGUNUSED
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyableRadarSensor_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -93006,19 +93006,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyableRadarSensor(PyObject *SWIGUNUSEDPAR
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::RadarSensor >(static_cast< const mem::ScopedCopyablePtr< six::RadarSensor >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__RadarSensor_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoTropoError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::TropoError > *result = 0 ;
+  mem::auto_ptr< six::TropoError > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoTropoError")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::TropoError > *)new std::auto_ptr< six::TropoError >();
+      result = (mem::auto_ptr< six::TropoError > *)new mem::auto_ptr< six::TropoError >();
     } 
     catch (const std::exception& e)
     {
@@ -93049,13 +93049,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoTropoError(PyObject *SWIGUNUSEDPARM(self),
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__TropoError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoTropoError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::TropoError > *arg1 = (std::auto_ptr< six::TropoError > *) 0 ;
+  mem::auto_ptr< six::TropoError > *arg1 = (mem::auto_ptr< six::TropoError > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -93063,9 +93063,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoTropoError(PyObject *SWIGUNUSEDPARM(sel
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoTropoError",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__TropoError_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoTropoError" "', argument " "1"" of type '" "std::auto_ptr< six::TropoError > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoTropoError" "', argument " "1"" of type '" "mem::auto_ptr< six::TropoError > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::TropoError > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::TropoError > * >(argp1);
   {
     try
     {
@@ -93100,13 +93100,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoTropoError(PyObject *SWIGUNUSEDPARM(sel
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoTropoError_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__TropoError_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -93159,7 +93159,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableTropoError__SWIG_0(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93202,7 +93202,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableTropoError__SWIG_1(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93257,7 +93257,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableTropoError__SWIG_2(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93352,7 +93352,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError___nonzero__(PyObject *SWIGUN
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93404,7 +93404,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError_get(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__TropoError, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93456,7 +93456,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError___ref__(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__TropoError, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93508,7 +93508,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError___deref__(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__TropoError, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93568,7 +93568,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError_reset__SWIG_0(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93619,7 +93619,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError_reset__SWIG_1(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93715,7 +93715,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyableTropoError(PyObject *SWIGUNUSEDP
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93775,7 +93775,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError_tropoRangeVertical_set(PyObj
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93827,7 +93827,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError_tropoRangeVertical_get(PyObj
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93887,7 +93887,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError_tropoRangeSlant_set(PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93939,7 +93939,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError_tropoRangeSlant_get(PyObject
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -93999,7 +93999,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError_tropoRangeDecorr_set(PyObjec
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94051,7 +94051,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError_tropoRangeDecorr_get(PyObjec
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94115,7 +94115,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError___eq__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94179,13 +94179,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableTropoError___ne__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyableTropoError_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -94229,19 +94229,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyableTropoError(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::TropoError >(static_cast< const mem::ScopedCopyablePtr< six::TropoError >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__TropoError_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoIonoError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::IonoError > *result = 0 ;
+  mem::auto_ptr< six::IonoError > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoIonoError")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::IonoError > *)new std::auto_ptr< six::IonoError >();
+      result = (mem::auto_ptr< six::IonoError > *)new mem::auto_ptr< six::IonoError >();
     } 
     catch (const std::exception& e)
     {
@@ -94272,13 +94272,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoIonoError(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__IonoError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoIonoError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::IonoError > *arg1 = (std::auto_ptr< six::IonoError > *) 0 ;
+  mem::auto_ptr< six::IonoError > *arg1 = (mem::auto_ptr< six::IonoError > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -94286,9 +94286,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoIonoError(PyObject *SWIGUNUSEDPARM(self
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoIonoError",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__IonoError_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoIonoError" "', argument " "1"" of type '" "std::auto_ptr< six::IonoError > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoIonoError" "', argument " "1"" of type '" "mem::auto_ptr< six::IonoError > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::IonoError > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::IonoError > * >(argp1);
   {
     try
     {
@@ -94323,13 +94323,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoIonoError(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoIonoError_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__IonoError_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -94382,7 +94382,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableIonoError__SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94425,7 +94425,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableIonoError__SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94480,7 +94480,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableIonoError__SWIG_2(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94575,7 +94575,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError___nonzero__(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94627,7 +94627,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__IonoError, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94679,7 +94679,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError___ref__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__IonoError, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94731,7 +94731,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError___deref__(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__IonoError, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94791,7 +94791,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError_reset__SWIG_0(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94842,7 +94842,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError_reset__SWIG_1(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94938,7 +94938,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyableIonoError(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -94998,7 +94998,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError_ionoRangeVertical_set(PyObjec
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95050,7 +95050,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError_ionoRangeVertical_get(PyObjec
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95110,7 +95110,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError_ionoRangeRateVertical_set(PyO
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95162,7 +95162,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError_ionoRangeRateVertical_get(PyO
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95222,7 +95222,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError_ionoRgRgRateCC_set(PyObject *
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95274,7 +95274,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError_ionoRgRgRateCC_get(PyObject *
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95334,7 +95334,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError_ionoRangeVertDecorr_set(PyObj
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95386,7 +95386,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError_ionoRangeVertDecorr_get(PyObj
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__DecorrType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95450,7 +95450,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError___eq__(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95514,13 +95514,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableIonoError___ne__(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyableIonoError_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -95564,19 +95564,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyableIonoError(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::IonoError >(static_cast< const mem::ScopedCopyablePtr< six::IonoError >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__IonoError_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoCompositeSCP(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::CompositeSCP > *result = 0 ;
+  mem::auto_ptr< six::CompositeSCP > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCompositeSCP")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::CompositeSCP > *)new std::auto_ptr< six::CompositeSCP >();
+      result = (mem::auto_ptr< six::CompositeSCP > *)new mem::auto_ptr< six::CompositeSCP >();
     } 
     catch (const std::exception& e)
     {
@@ -95607,13 +95607,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoCompositeSCP(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoCompositeSCP(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::CompositeSCP > *arg1 = (std::auto_ptr< six::CompositeSCP > *) 0 ;
+  mem::auto_ptr< six::CompositeSCP > *arg1 = (mem::auto_ptr< six::CompositeSCP > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -95621,9 +95621,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCompositeSCP(PyObject *SWIGUNUSEDPARM(s
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoCompositeSCP",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCompositeSCP" "', argument " "1"" of type '" "std::auto_ptr< six::CompositeSCP > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCompositeSCP" "', argument " "1"" of type '" "mem::auto_ptr< six::CompositeSCP > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::CompositeSCP > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::CompositeSCP > * >(argp1);
   {
     try
     {
@@ -95658,13 +95658,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCompositeSCP(PyObject *SWIGUNUSEDPARM(s
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoCompositeSCP_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -95717,7 +95717,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableCompositeSCP__SWIG_0(PyObject *SWIG
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95760,7 +95760,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableCompositeSCP__SWIG_1(PyObject *SWIG
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95815,7 +95815,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableCompositeSCP__SWIG_2(PyObject *SWIG
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95910,7 +95910,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP___nonzero__(PyObject *SWIG
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -95962,7 +95962,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_get(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CompositeSCP, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96014,7 +96014,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP___ref__(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CompositeSCP, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96066,7 +96066,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP___deref__(PyObject *SWIGUN
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CompositeSCP, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96126,7 +96126,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_reset__SWIG_0(PyObject *SW
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96177,7 +96177,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_reset__SWIG_1(PyObject *SW
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96273,7 +96273,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyableCompositeSCP(PyObject *SWIGUNUSE
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96333,7 +96333,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_scpType_set(PyObject *SWIG
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96385,7 +96385,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_scpType_get(PyObject *SWIG
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96445,7 +96445,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_xErr_set(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96497,7 +96497,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_xErr_get(PyObject *SWIGUNU
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96557,7 +96557,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_yErr_set(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96609,7 +96609,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_yErr_get(PyObject *SWIGUNU
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96669,7 +96669,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_xyErr_set(PyObject *SWIGUN
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96721,7 +96721,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP_xyErr_get(PyObject *SWIGUN
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96785,7 +96785,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP___eq__(PyObject *SWIGUNUSE
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -96849,13 +96849,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableCompositeSCP___ne__(PyObject *SWIGUNUSE
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyableCompositeSCP_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -96899,19 +96899,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyableCompositeSCP(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::CompositeSCP >(static_cast< const mem::ScopedCopyablePtr< six::CompositeSCP >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__CompositeSCP_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoMatchInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::MatchInformation > *result = 0 ;
+  mem::auto_ptr< six::MatchInformation > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoMatchInformation")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::MatchInformation > *)new std::auto_ptr< six::MatchInformation >();
+      result = (mem::auto_ptr< six::MatchInformation > *)new mem::auto_ptr< six::MatchInformation >();
     } 
     catch (const std::exception& e)
     {
@@ -96942,13 +96942,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoMatchInformation(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoMatchInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::MatchInformation > *arg1 = (std::auto_ptr< six::MatchInformation > *) 0 ;
+  mem::auto_ptr< six::MatchInformation > *arg1 = (mem::auto_ptr< six::MatchInformation > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -96956,9 +96956,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoMatchInformation(PyObject *SWIGUNUSEDPA
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoMatchInformation",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoMatchInformation" "', argument " "1"" of type '" "std::auto_ptr< six::MatchInformation > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoMatchInformation" "', argument " "1"" of type '" "mem::auto_ptr< six::MatchInformation > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::MatchInformation > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::MatchInformation > * >(argp1);
   {
     try
     {
@@ -96993,13 +96993,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoMatchInformation(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoMatchInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -97052,7 +97052,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableMatchInformation__SWIG_0(PyObject *
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97095,7 +97095,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableMatchInformation__SWIG_1(PyObject *
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97150,7 +97150,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableMatchInformation__SWIG_2(PyObject *
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97245,7 +97245,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation___nonzero__(PyObject *
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97297,7 +97297,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_get(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchInformation, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97349,7 +97349,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation___ref__(PyObject *SWIG
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchInformation, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97401,7 +97401,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation___deref__(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchInformation, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97461,7 +97461,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_reset__SWIG_0(PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97512,7 +97512,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_reset__SWIG_1(PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97608,7 +97608,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyableMatchInformation(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97668,7 +97668,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_types_set(PyObject *SW
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97720,7 +97720,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation_types_get(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchType_std__allocatorT_six__MatchType_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97784,7 +97784,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation___eq__(PyObject *SWIGU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -97848,13 +97848,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchInformation___ne__(PyObject *SWIGU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyableMatchInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -97898,19 +97898,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyableMatchInformation(PyObject *SWIGUNUS
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::MatchInformation >(static_cast< const mem::ScopedCopyablePtr< six::MatchInformation >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchInformation_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoMatchType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::MatchType > *result = 0 ;
+  mem::auto_ptr< six::MatchType > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoMatchType")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::MatchType > *)new std::auto_ptr< six::MatchType >();
+      result = (mem::auto_ptr< six::MatchType > *)new mem::auto_ptr< six::MatchType >();
     } 
     catch (const std::exception& e)
     {
@@ -97941,13 +97941,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoMatchType(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__MatchType_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoMatchType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::MatchType > *arg1 = (std::auto_ptr< six::MatchType > *) 0 ;
+  mem::auto_ptr< six::MatchType > *arg1 = (mem::auto_ptr< six::MatchType > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -97955,9 +97955,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoMatchType(PyObject *SWIGUNUSEDPARM(self
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoMatchType",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__MatchType_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoMatchType" "', argument " "1"" of type '" "std::auto_ptr< six::MatchType > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoMatchType" "', argument " "1"" of type '" "mem::auto_ptr< six::MatchType > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::MatchType > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::MatchType > * >(argp1);
   {
     try
     {
@@ -97992,13 +97992,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoMatchType(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoMatchType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__MatchType_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -98051,7 +98051,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableMatchType__SWIG_0(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98094,7 +98094,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableMatchType__SWIG_1(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98149,7 +98149,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCopyableMatchType__SWIG_2(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98244,7 +98244,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType___nonzero__(PyObject *SWIGUNU
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98296,7 +98296,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_get(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98348,7 +98348,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType___ref__(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98400,7 +98400,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType___deref__(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__MatchType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98460,7 +98460,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_reset__SWIG_0(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98511,7 +98511,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_reset__SWIG_1(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98607,7 +98607,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCopyableMatchType(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98674,7 +98674,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_collectorName_set(PyObject *S
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98726,7 +98726,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_collectorName_get(PyObject *S
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98793,7 +98793,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_illuminatorName_set(PyObject 
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98845,7 +98845,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_illuminatorName_get(PyObject 
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98905,7 +98905,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_matchType_set(PyObject *SWIGU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -98957,7 +98957,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_matchType_get(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99024,7 +99024,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_typeID_set(PyObject *SWIGUNUS
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99076,7 +99076,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_typeID_get(PyObject *SWIGUNUS
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99136,7 +99136,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_currentIndex_set(PyObject *SW
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99188,7 +99188,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_currentIndex_get(PyObject *SW
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99248,7 +99248,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_matchCollects_set(PyObject *S
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99300,7 +99300,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType_matchCollects_get(PyObject *S
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_six__MatchCollect_std__allocatorT_six__MatchCollect_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99364,7 +99364,7 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType___eq__(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99428,13 +99428,13 @@ SWIGINTERN PyObject *_wrap_ScopedCopyableMatchType___ne__(PyObject *SWIGUNUSEDPA
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCopyableMatchType_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -99478,19 +99478,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCopyableMatchType(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_NewPointerObj((new mem::ScopedCopyablePtr< six::MatchType >(static_cast< const mem::ScopedCopyablePtr< six::MatchType >& >(result))), SWIGTYPE_p_mem__ScopedCopyablePtrT_six__MatchType_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoAmplitudeTable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::AmplitudeTable > *result = 0 ;
+  mem::auto_ptr< six::AmplitudeTable > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoAmplitudeTable")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::AmplitudeTable > *)new std::auto_ptr< six::AmplitudeTable >();
+      result = (mem::auto_ptr< six::AmplitudeTable > *)new mem::auto_ptr< six::AmplitudeTable >();
     } 
     catch (const std::exception& e)
     {
@@ -99521,13 +99521,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoAmplitudeTable(PyObject *SWIGUNUSEDPARM(se
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoAmplitudeTable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::AmplitudeTable > *arg1 = (std::auto_ptr< six::AmplitudeTable > *) 0 ;
+  mem::auto_ptr< six::AmplitudeTable > *arg1 = (mem::auto_ptr< six::AmplitudeTable > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -99535,9 +99535,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoAmplitudeTable(PyObject *SWIGUNUSEDPARM
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoAmplitudeTable",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoAmplitudeTable" "', argument " "1"" of type '" "std::auto_ptr< six::AmplitudeTable > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoAmplitudeTable" "', argument " "1"" of type '" "mem::auto_ptr< six::AmplitudeTable > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::AmplitudeTable > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::AmplitudeTable > * >(argp1);
   {
     try
     {
@@ -99572,13 +99572,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoAmplitudeTable(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoAmplitudeTable_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -99631,7 +99631,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCloneableAmplitudeTable__SWIG_0(PyObject *S
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99674,7 +99674,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCloneableAmplitudeTable__SWIG_1(PyObject *S
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99729,7 +99729,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCloneableAmplitudeTable__SWIG_2(PyObject *S
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99824,7 +99824,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_get(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99876,7 +99876,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___ref__(PyObject *SWIGU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99928,7 +99928,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___deref__(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -99988,7 +99988,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_reset__SWIG_0(PyObject 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100039,7 +100039,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_reset__SWIG_1(PyObject 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100145,7 +100145,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___getitem__(PyObject *S
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100214,7 +100214,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___setitem__(PyObject *S
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100265,7 +100265,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCloneableAmplitudeTable(PyObject *SWIGUN
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100329,7 +100329,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___eq__(PyObject *SWIGUN
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100393,7 +100393,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable___ne__(PyObject *SWIGUN
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100445,7 +100445,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_clone(PyObject *SWIGUNU
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__AmplitudeTable, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100505,7 +100505,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_table_set(PyObject *SWI
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100557,7 +100557,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_table_get(PyObject *SWI
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_unsigned_char_std__allocatorT_unsigned_char_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100617,7 +100617,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_numEntries_set(PyObject
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100669,7 +100669,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_numEntries_get(PyObject
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100729,7 +100729,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_elementSize_set(PyObjec
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100781,7 +100781,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_elementSize_get(PyObjec
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100833,7 +100833,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_getTable__SWIG_0(PyObje
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100885,7 +100885,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableAmplitudeTable_getTable__SWIG_1(PyObje
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_char, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -100931,7 +100931,7 @@ fail:
 
 SWIGINTERN PyObject *ScopedCloneableAmplitudeTable_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -100975,19 +100975,19 @@ SWIGINTERN PyObject *_wrap_makeScopedCloneableAmplitudeTable(PyObject *SWIGUNUSE
   resultobj = SWIG_NewPointerObj((new mem::ScopedCloneablePtr< six::AmplitudeTable >(static_cast< const mem::ScopedCloneablePtr< six::AmplitudeTable >& >(result))), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__AmplitudeTable_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_StdAutoCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::CollectionInformation > *result = 0 ;
+  mem::auto_ptr< six::CollectionInformation > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCollectionInformation")) SWIG_fail;
   {
     try
     {
-      result = (std::auto_ptr< six::CollectionInformation > *)new std::auto_ptr< six::CollectionInformation >();
+      result = (mem::auto_ptr< six::CollectionInformation > *)new mem::auto_ptr< six::CollectionInformation >();
     } 
     catch (const std::exception& e)
     {
@@ -101018,13 +101018,13 @@ SWIGINTERN PyObject *_wrap_new_StdAutoCollectionInformation(PyObject *SWIGUNUSED
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::auto_ptr< six::CollectionInformation > *arg1 = (std::auto_ptr< six::CollectionInformation > *) 0 ;
+  mem::auto_ptr< six::CollectionInformation > *arg1 = (mem::auto_ptr< six::CollectionInformation > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -101032,9 +101032,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCollectionInformation(PyObject *SWIGUNU
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoCollectionInformation",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCollectionInformation" "', argument " "1"" of type '" "std::auto_ptr< six::CollectionInformation > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCollectionInformation" "', argument " "1"" of type '" "mem::auto_ptr< six::CollectionInformation > *""'"); 
   }
-  arg1 = reinterpret_cast< std::auto_ptr< six::CollectionInformation > * >(argp1);
+  arg1 = reinterpret_cast< mem::auto_ptr< six::CollectionInformation > * >(argp1);
   {
     try
     {
@@ -101069,13 +101069,13 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCollectionInformation(PyObject *SWIGUNU
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *StdAutoCollectionInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -101128,7 +101128,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCloneableCollectionInformation__SWIG_0(PyOb
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101171,7 +101171,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCloneableCollectionInformation__SWIG_1(PyOb
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101226,7 +101226,7 @@ SWIGINTERN PyObject *_wrap_new_ScopedCloneableCollectionInformation__SWIG_2(PyOb
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101321,7 +101321,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_get(PyObject *SW
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101373,7 +101373,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___ref__(PyObject
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101425,7 +101425,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___deref__(PyObje
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101485,7 +101485,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_reset__SWIG_0(Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101536,7 +101536,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_reset__SWIG_1(Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101632,7 +101632,7 @@ SWIGINTERN PyObject *_wrap_delete_ScopedCloneableCollectionInformation(PyObject 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101699,7 +101699,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectorName_se
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101751,7 +101751,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectorName_ge
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101818,7 +101818,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_illuminatorName_
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101870,7 +101870,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_illuminatorName_
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101937,7 +101937,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_coreName_set(PyO
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -101989,7 +101989,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_coreName_get(PyO
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102049,7 +102049,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectType_set(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102101,7 +102101,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_collectType_get(
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102161,7 +102161,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarMode_set(Py
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102213,7 +102213,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarMode_get(Py
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__RadarModeType, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102280,7 +102280,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarModeID_set(
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102332,7 +102332,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_radarModeID_get(
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102399,7 +102399,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_releaseInfo_set(
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102451,7 +102451,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_releaseInfo_get(
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102511,7 +102511,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_countryCodes_set
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102563,7 +102563,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_countryCodes_get
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102623,7 +102623,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_parameters_set(P
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102675,7 +102675,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_parameters_get(P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__ParameterCollection, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102727,7 +102727,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_clone(PyObject *
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__CollectionInformation, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102791,7 +102791,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___eq__(PyObject 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102855,7 +102855,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation___ne__(PyObject 
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102907,7 +102907,7 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_getClassificatio
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
@@ -102974,13 +102974,13 @@ SWIGINTERN PyObject *_wrap_ScopedCloneableCollectionInformation_setClassificatio
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
+  return nullptr;
 }
 
 
 SWIGINTERN PyObject *ScopedCloneableCollectionInformation_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return nullptr;
   SWIG_TypeNewClientData(SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
@@ -103024,12 +103024,12 @@ SWIGINTERN PyObject *_wrap_makeScopedCloneableCollectionInformation(PyObject *SW
   resultobj = SWIG_NewPointerObj((new mem::ScopedCloneablePtr< six::CollectionInformation >(static_cast< const mem::ScopedCloneablePtr< six::CollectionInformation >& >(result))), SWIGTYPE_p_mem__ScopedCloneablePtrT_six__CollectionInformation_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
-  return NULL;
+  return nullptr;
 }
 
 
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
+	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, nullptr},
 	 { (char *)"delete_SwigPyIterator", _wrap_delete_SwigPyIterator, METH_VARARGS, (char *)"delete_SwigPyIterator(SwigPyIterator self)"},
 	 { (char *)"SwigPyIterator_value", _wrap_SwigPyIterator_value, METH_VARARGS, (char *)"SwigPyIterator_value(SwigPyIterator self) -> PyObject *"},
 	 { (char *)"SwigPyIterator_incr", _wrap_SwigPyIterator_incr, METH_VARARGS, (char *)"\n"
@@ -103056,7 +103056,7 @@ static PyMethodDef SwigMethods[] = {
 		"__sub__(ptrdiff_t n) -> SwigPyIterator\n"
 		"SwigPyIterator___sub__(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t\n"
 		""},
-	 { (char *)"SwigPyIterator_swigregister", SwigPyIterator_swigregister, METH_VARARGS, NULL},
+	 { (char *)"SwigPyIterator_swigregister", SwigPyIterator_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"delete_DateTime", _wrap_delete_DateTime, METH_VARARGS, (char *)"delete_DateTime(DateTime self)"},
 	 { (char *)"new_DateTime", _wrap_new_DateTime, METH_VARARGS, (char *)"\n"
 		"DateTime()\n"
@@ -103101,7 +103101,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DateTime_setSecond", _wrap_DateTime_setSecond, METH_VARARGS, (char *)"DateTime_setSecond(DateTime self, double second)"},
 	 { (char *)"DateTime_setTimeInMillis", _wrap_DateTime_setTimeInMillis, METH_VARARGS, (char *)"DateTime_setTimeInMillis(DateTime self, double timeInMillis)"},
 	 { (char *)"DateTime_toPythonDateTime", _wrap_DateTime_toPythonDateTime, METH_VARARGS, (char *)"DateTime_toPythonDateTime(DateTime self) -> PyObject *"},
-	 { (char *)"DateTime_swigregister", DateTime_swigregister, METH_VARARGS, NULL},
+	 { (char *)"DateTime_swigregister", DateTime_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_AppliedType", _wrap_new_AppliedType, METH_VARARGS, (char *)"\n"
 		"AppliedType()\n"
 		"AppliedType(std::string s)\n"
@@ -103124,7 +103124,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AppliedType_size", _wrap_AppliedType_size, METH_VARARGS, (char *)"AppliedType_size() -> size_t"},
 	 { (char *)"AppliedType_value_set", _wrap_AppliedType_value_set, METH_VARARGS, (char *)"AppliedType_value_set(AppliedType self, int value)"},
 	 { (char *)"AppliedType_value_get", _wrap_AppliedType_value_get, METH_VARARGS, (char *)"AppliedType_value_get(AppliedType self) -> int"},
-	 { (char *)"AppliedType_swigregister", AppliedType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"AppliedType_swigregister", AppliedType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_AutofocusType", _wrap_new_AutofocusType, METH_VARARGS, (char *)"\n"
 		"AutofocusType()\n"
 		"AutofocusType(std::string s)\n"
@@ -103147,7 +103147,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AutofocusType_size", _wrap_AutofocusType_size, METH_VARARGS, (char *)"AutofocusType_size() -> size_t"},
 	 { (char *)"AutofocusType_value_set", _wrap_AutofocusType_value_set, METH_VARARGS, (char *)"AutofocusType_value_set(AutofocusType self, int value)"},
 	 { (char *)"AutofocusType_value_get", _wrap_AutofocusType_value_get, METH_VARARGS, (char *)"AutofocusType_value_get(AutofocusType self) -> int"},
-	 { (char *)"AutofocusType_swigregister", AutofocusType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"AutofocusType_swigregister", AutofocusType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_BooleanType", _wrap_new_BooleanType, METH_VARARGS, (char *)"\n"
 		"BooleanType()\n"
 		"BooleanType(std::string s)\n"
@@ -103170,7 +103170,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"BooleanType_size", _wrap_BooleanType_size, METH_VARARGS, (char *)"BooleanType_size() -> size_t"},
 	 { (char *)"BooleanType_value_set", _wrap_BooleanType_value_set, METH_VARARGS, (char *)"BooleanType_value_set(BooleanType self, int value)"},
 	 { (char *)"BooleanType_value_get", _wrap_BooleanType_value_get, METH_VARARGS, (char *)"BooleanType_value_get(BooleanType self) -> int"},
-	 { (char *)"BooleanType_swigregister", BooleanType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"BooleanType_swigregister", BooleanType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ByteSwapping", _wrap_new_ByteSwapping, METH_VARARGS, (char *)"\n"
 		"ByteSwapping()\n"
 		"ByteSwapping(std::string s)\n"
@@ -103193,7 +103193,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ByteSwapping_size", _wrap_ByteSwapping_size, METH_VARARGS, (char *)"ByteSwapping_size() -> size_t"},
 	 { (char *)"ByteSwapping_value_set", _wrap_ByteSwapping_value_set, METH_VARARGS, (char *)"ByteSwapping_value_set(ByteSwapping self, int value)"},
 	 { (char *)"ByteSwapping_value_get", _wrap_ByteSwapping_value_get, METH_VARARGS, (char *)"ByteSwapping_value_get(ByteSwapping self) -> int"},
-	 { (char *)"ByteSwapping_swigregister", ByteSwapping_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ByteSwapping_swigregister", ByteSwapping_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_CollectType", _wrap_new_CollectType, METH_VARARGS, (char *)"\n"
 		"CollectType()\n"
 		"CollectType(std::string s)\n"
@@ -103216,7 +103216,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CollectType_size", _wrap_CollectType_size, METH_VARARGS, (char *)"CollectType_size() -> size_t"},
 	 { (char *)"CollectType_value_set", _wrap_CollectType_value_set, METH_VARARGS, (char *)"CollectType_value_set(CollectType self, int value)"},
 	 { (char *)"CollectType_value_get", _wrap_CollectType_value_get, METH_VARARGS, (char *)"CollectType_value_get(CollectType self) -> int"},
-	 { (char *)"CollectType_swigregister", CollectType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"CollectType_swigregister", CollectType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ComplexImageGridType", _wrap_new_ComplexImageGridType, METH_VARARGS, (char *)"\n"
 		"ComplexImageGridType()\n"
 		"ComplexImageGridType(std::string s)\n"
@@ -103239,7 +103239,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComplexImageGridType_size", _wrap_ComplexImageGridType_size, METH_VARARGS, (char *)"ComplexImageGridType_size() -> size_t"},
 	 { (char *)"ComplexImageGridType_value_set", _wrap_ComplexImageGridType_value_set, METH_VARARGS, (char *)"ComplexImageGridType_value_set(ComplexImageGridType self, int value)"},
 	 { (char *)"ComplexImageGridType_value_get", _wrap_ComplexImageGridType_value_get, METH_VARARGS, (char *)"ComplexImageGridType_value_get(ComplexImageGridType self) -> int"},
-	 { (char *)"ComplexImageGridType_swigregister", ComplexImageGridType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ComplexImageGridType_swigregister", ComplexImageGridType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ComplexImagePlaneType", _wrap_new_ComplexImagePlaneType, METH_VARARGS, (char *)"\n"
 		"ComplexImagePlaneType()\n"
 		"ComplexImagePlaneType(std::string s)\n"
@@ -103262,7 +103262,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComplexImagePlaneType_size", _wrap_ComplexImagePlaneType_size, METH_VARARGS, (char *)"ComplexImagePlaneType_size() -> size_t"},
 	 { (char *)"ComplexImagePlaneType_value_set", _wrap_ComplexImagePlaneType_value_set, METH_VARARGS, (char *)"ComplexImagePlaneType_value_set(ComplexImagePlaneType self, int value)"},
 	 { (char *)"ComplexImagePlaneType_value_get", _wrap_ComplexImagePlaneType_value_get, METH_VARARGS, (char *)"ComplexImagePlaneType_value_get(ComplexImagePlaneType self) -> int"},
-	 { (char *)"ComplexImagePlaneType_swigregister", ComplexImagePlaneType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ComplexImagePlaneType_swigregister", ComplexImagePlaneType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_DataType", _wrap_new_DataType, METH_VARARGS, (char *)"\n"
 		"DataType()\n"
 		"DataType(std::string s)\n"
@@ -103285,7 +103285,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DataType_size", _wrap_DataType_size, METH_VARARGS, (char *)"DataType_size() -> size_t"},
 	 { (char *)"DataType_value_set", _wrap_DataType_value_set, METH_VARARGS, (char *)"DataType_value_set(DataType self, int value)"},
 	 { (char *)"DataType_value_get", _wrap_DataType_value_get, METH_VARARGS, (char *)"DataType_value_get(DataType self) -> int"},
-	 { (char *)"DataType_swigregister", DataType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"DataType_swigregister", DataType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_DecimationMethod", _wrap_new_DecimationMethod, METH_VARARGS, (char *)"\n"
 		"DecimationMethod()\n"
 		"DecimationMethod(std::string s)\n"
@@ -103308,7 +103308,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DecimationMethod_size", _wrap_DecimationMethod_size, METH_VARARGS, (char *)"DecimationMethod_size() -> size_t"},
 	 { (char *)"DecimationMethod_value_set", _wrap_DecimationMethod_value_set, METH_VARARGS, (char *)"DecimationMethod_value_set(DecimationMethod self, int value)"},
 	 { (char *)"DecimationMethod_value_get", _wrap_DecimationMethod_value_get, METH_VARARGS, (char *)"DecimationMethod_value_get(DecimationMethod self) -> int"},
-	 { (char *)"DecimationMethod_swigregister", DecimationMethod_swigregister, METH_VARARGS, NULL},
+	 { (char *)"DecimationMethod_swigregister", DecimationMethod_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_DemodType", _wrap_new_DemodType, METH_VARARGS, (char *)"\n"
 		"DemodType()\n"
 		"DemodType(std::string s)\n"
@@ -103331,7 +103331,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DemodType_size", _wrap_DemodType_size, METH_VARARGS, (char *)"DemodType_size() -> size_t"},
 	 { (char *)"DemodType_value_set", _wrap_DemodType_value_set, METH_VARARGS, (char *)"DemodType_value_set(DemodType self, int value)"},
 	 { (char *)"DemodType_value_get", _wrap_DemodType_value_get, METH_VARARGS, (char *)"DemodType_value_get(DemodType self) -> int"},
-	 { (char *)"DemodType_swigregister", DemodType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"DemodType_swigregister", DemodType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_DisplayType", _wrap_new_DisplayType, METH_VARARGS, (char *)"\n"
 		"DisplayType()\n"
 		"DisplayType(std::string s)\n"
@@ -103354,7 +103354,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DisplayType_size", _wrap_DisplayType_size, METH_VARARGS, (char *)"DisplayType_size() -> size_t"},
 	 { (char *)"DisplayType_value_set", _wrap_DisplayType_value_set, METH_VARARGS, (char *)"DisplayType_value_set(DisplayType self, int value)"},
 	 { (char *)"DisplayType_value_get", _wrap_DisplayType_value_get, METH_VARARGS, (char *)"DisplayType_value_get(DisplayType self) -> int"},
-	 { (char *)"DisplayType_swigregister", DisplayType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"DisplayType_swigregister", DisplayType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_DualPolarizationType", _wrap_new_DualPolarizationType, METH_VARARGS, (char *)"\n"
 		"DualPolarizationType()\n"
 		"DualPolarizationType(std::string s)\n"
@@ -103377,7 +103377,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DualPolarizationType_size", _wrap_DualPolarizationType_size, METH_VARARGS, (char *)"DualPolarizationType_size() -> size_t"},
 	 { (char *)"DualPolarizationType_value_set", _wrap_DualPolarizationType_value_set, METH_VARARGS, (char *)"DualPolarizationType_value_set(DualPolarizationType self, int value)"},
 	 { (char *)"DualPolarizationType_value_get", _wrap_DualPolarizationType_value_get, METH_VARARGS, (char *)"DualPolarizationType_value_get(DualPolarizationType self) -> int"},
-	 { (char *)"DualPolarizationType_swigregister", DualPolarizationType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"DualPolarizationType_swigregister", DualPolarizationType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_EarthModelType", _wrap_new_EarthModelType, METH_VARARGS, (char *)"\n"
 		"EarthModelType()\n"
 		"EarthModelType(std::string s)\n"
@@ -103400,7 +103400,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"EarthModelType_size", _wrap_EarthModelType_size, METH_VARARGS, (char *)"EarthModelType_size() -> size_t"},
 	 { (char *)"EarthModelType_value_set", _wrap_EarthModelType_value_set, METH_VARARGS, (char *)"EarthModelType_value_set(EarthModelType self, int value)"},
 	 { (char *)"EarthModelType_value_get", _wrap_EarthModelType_value_get, METH_VARARGS, (char *)"EarthModelType_value_get(EarthModelType self) -> int"},
-	 { (char *)"EarthModelType_swigregister", EarthModelType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"EarthModelType_swigregister", EarthModelType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_FFTSign", _wrap_new_FFTSign, METH_VARARGS, (char *)"\n"
 		"FFTSign()\n"
 		"FFTSign(std::string s)\n"
@@ -103423,7 +103423,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FFTSign_size", _wrap_FFTSign_size, METH_VARARGS, (char *)"FFTSign_size() -> size_t"},
 	 { (char *)"FFTSign_value_set", _wrap_FFTSign_value_set, METH_VARARGS, (char *)"FFTSign_value_set(FFTSign self, int value)"},
 	 { (char *)"FFTSign_value_get", _wrap_FFTSign_value_get, METH_VARARGS, (char *)"FFTSign_value_get(FFTSign self) -> int"},
-	 { (char *)"FFTSign_swigregister", FFTSign_swigregister, METH_VARARGS, NULL},
+	 { (char *)"FFTSign_swigregister", FFTSign_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ImageBeamCompensationType", _wrap_new_ImageBeamCompensationType, METH_VARARGS, (char *)"\n"
 		"ImageBeamCompensationType()\n"
 		"ImageBeamCompensationType(std::string s)\n"
@@ -103446,7 +103446,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ImageBeamCompensationType_size", _wrap_ImageBeamCompensationType_size, METH_VARARGS, (char *)"ImageBeamCompensationType_size() -> size_t"},
 	 { (char *)"ImageBeamCompensationType_value_set", _wrap_ImageBeamCompensationType_value_set, METH_VARARGS, (char *)"ImageBeamCompensationType_value_set(ImageBeamCompensationType self, int value)"},
 	 { (char *)"ImageBeamCompensationType_value_get", _wrap_ImageBeamCompensationType_value_get, METH_VARARGS, (char *)"ImageBeamCompensationType_value_get(ImageBeamCompensationType self) -> int"},
-	 { (char *)"ImageBeamCompensationType_swigregister", ImageBeamCompensationType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ImageBeamCompensationType_swigregister", ImageBeamCompensationType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ImageFormationType", _wrap_new_ImageFormationType, METH_VARARGS, (char *)"\n"
 		"ImageFormationType()\n"
 		"ImageFormationType(std::string s)\n"
@@ -103469,7 +103469,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ImageFormationType_size", _wrap_ImageFormationType_size, METH_VARARGS, (char *)"ImageFormationType_size() -> size_t"},
 	 { (char *)"ImageFormationType_value_set", _wrap_ImageFormationType_value_set, METH_VARARGS, (char *)"ImageFormationType_value_set(ImageFormationType self, int value)"},
 	 { (char *)"ImageFormationType_value_get", _wrap_ImageFormationType_value_get, METH_VARARGS, (char *)"ImageFormationType_value_get(ImageFormationType self) -> int"},
-	 { (char *)"ImageFormationType_swigregister", ImageFormationType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ImageFormationType_swigregister", ImageFormationType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_MagnificationMethod", _wrap_new_MagnificationMethod, METH_VARARGS, (char *)"\n"
 		"MagnificationMethod()\n"
 		"MagnificationMethod(std::string s)\n"
@@ -103492,7 +103492,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MagnificationMethod_size", _wrap_MagnificationMethod_size, METH_VARARGS, (char *)"MagnificationMethod_size() -> size_t"},
 	 { (char *)"MagnificationMethod_value_set", _wrap_MagnificationMethod_value_set, METH_VARARGS, (char *)"MagnificationMethod_value_set(MagnificationMethod self, int value)"},
 	 { (char *)"MagnificationMethod_value_get", _wrap_MagnificationMethod_value_get, METH_VARARGS, (char *)"MagnificationMethod_value_get(MagnificationMethod self) -> int"},
-	 { (char *)"MagnificationMethod_swigregister", MagnificationMethod_swigregister, METH_VARARGS, NULL},
+	 { (char *)"MagnificationMethod_swigregister", MagnificationMethod_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_OrientationType", _wrap_new_OrientationType, METH_VARARGS, (char *)"\n"
 		"OrientationType()\n"
 		"OrientationType(std::string s)\n"
@@ -103515,7 +103515,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"OrientationType_size", _wrap_OrientationType_size, METH_VARARGS, (char *)"OrientationType_size() -> size_t"},
 	 { (char *)"OrientationType_value_set", _wrap_OrientationType_value_set, METH_VARARGS, (char *)"OrientationType_value_set(OrientationType self, int value)"},
 	 { (char *)"OrientationType_value_get", _wrap_OrientationType_value_get, METH_VARARGS, (char *)"OrientationType_value_get(OrientationType self) -> int"},
-	 { (char *)"OrientationType_swigregister", OrientationType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"OrientationType_swigregister", OrientationType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_PixelType", _wrap_new_PixelType, METH_VARARGS, (char *)"\n"
 		"PixelType()\n"
 		"PixelType(std::string s)\n"
@@ -103538,7 +103538,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PixelType_size", _wrap_PixelType_size, METH_VARARGS, (char *)"PixelType_size() -> size_t"},
 	 { (char *)"PixelType_value_set", _wrap_PixelType_value_set, METH_VARARGS, (char *)"PixelType_value_set(PixelType self, int value)"},
 	 { (char *)"PixelType_value_get", _wrap_PixelType_value_get, METH_VARARGS, (char *)"PixelType_value_get(PixelType self) -> int"},
-	 { (char *)"PixelType_swigregister", PixelType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"PixelType_swigregister", PixelType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_PolarizationSequenceType", _wrap_new_PolarizationSequenceType, METH_VARARGS, (char *)"\n"
 		"PolarizationSequenceType()\n"
 		"PolarizationSequenceType(std::string s)\n"
@@ -103561,7 +103561,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PolarizationSequenceType_size", _wrap_PolarizationSequenceType_size, METH_VARARGS, (char *)"PolarizationSequenceType_size() -> size_t"},
 	 { (char *)"PolarizationSequenceType_value_set", _wrap_PolarizationSequenceType_value_set, METH_VARARGS, (char *)"PolarizationSequenceType_value_set(PolarizationSequenceType self, int value)"},
 	 { (char *)"PolarizationSequenceType_value_get", _wrap_PolarizationSequenceType_value_get, METH_VARARGS, (char *)"PolarizationSequenceType_value_get(PolarizationSequenceType self) -> int"},
-	 { (char *)"PolarizationSequenceType_swigregister", PolarizationSequenceType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"PolarizationSequenceType_swigregister", PolarizationSequenceType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_PolarizationType", _wrap_new_PolarizationType, METH_VARARGS, (char *)"\n"
 		"PolarizationType()\n"
 		"PolarizationType(std::string s)\n"
@@ -103584,7 +103584,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PolarizationType_size", _wrap_PolarizationType_size, METH_VARARGS, (char *)"PolarizationType_size() -> size_t"},
 	 { (char *)"PolarizationType_value_set", _wrap_PolarizationType_value_set, METH_VARARGS, (char *)"PolarizationType_value_set(PolarizationType self, int value)"},
 	 { (char *)"PolarizationType_value_get", _wrap_PolarizationType_value_get, METH_VARARGS, (char *)"PolarizationType_value_get(PolarizationType self) -> int"},
-	 { (char *)"PolarizationType_swigregister", PolarizationType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"PolarizationType_swigregister", PolarizationType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ProjectionType", _wrap_new_ProjectionType, METH_VARARGS, (char *)"\n"
 		"ProjectionType()\n"
 		"ProjectionType(std::string s)\n"
@@ -103607,7 +103607,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ProjectionType_size", _wrap_ProjectionType_size, METH_VARARGS, (char *)"ProjectionType_size() -> size_t"},
 	 { (char *)"ProjectionType_value_set", _wrap_ProjectionType_value_set, METH_VARARGS, (char *)"ProjectionType_value_set(ProjectionType self, int value)"},
 	 { (char *)"ProjectionType_value_get", _wrap_ProjectionType_value_get, METH_VARARGS, (char *)"ProjectionType_value_get(ProjectionType self) -> int"},
-	 { (char *)"ProjectionType_swigregister", ProjectionType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ProjectionType_swigregister", ProjectionType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_RMAlgoType", _wrap_new_RMAlgoType, METH_VARARGS, (char *)"\n"
 		"RMAlgoType()\n"
 		"RMAlgoType(std::string s)\n"
@@ -103630,7 +103630,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RMAlgoType_size", _wrap_RMAlgoType_size, METH_VARARGS, (char *)"RMAlgoType_size() -> size_t"},
 	 { (char *)"RMAlgoType_value_set", _wrap_RMAlgoType_value_set, METH_VARARGS, (char *)"RMAlgoType_value_set(RMAlgoType self, int value)"},
 	 { (char *)"RMAlgoType_value_get", _wrap_RMAlgoType_value_get, METH_VARARGS, (char *)"RMAlgoType_value_get(RMAlgoType self) -> int"},
-	 { (char *)"RMAlgoType_swigregister", RMAlgoType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"RMAlgoType_swigregister", RMAlgoType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_RadarModeType", _wrap_new_RadarModeType, METH_VARARGS, (char *)"\n"
 		"RadarModeType()\n"
 		"RadarModeType(std::string s)\n"
@@ -103653,7 +103653,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RadarModeType_size", _wrap_RadarModeType_size, METH_VARARGS, (char *)"RadarModeType_size() -> size_t"},
 	 { (char *)"RadarModeType_value_set", _wrap_RadarModeType_value_set, METH_VARARGS, (char *)"RadarModeType_value_set(RadarModeType self, int value)"},
 	 { (char *)"RadarModeType_value_get", _wrap_RadarModeType_value_get, METH_VARARGS, (char *)"RadarModeType_value_get(RadarModeType self) -> int"},
-	 { (char *)"RadarModeType_swigregister", RadarModeType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"RadarModeType_swigregister", RadarModeType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_RegionType", _wrap_new_RegionType, METH_VARARGS, (char *)"\n"
 		"RegionType()\n"
 		"RegionType(std::string s)\n"
@@ -103676,7 +103676,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RegionType_size", _wrap_RegionType_size, METH_VARARGS, (char *)"RegionType_size() -> size_t"},
 	 { (char *)"RegionType_value_set", _wrap_RegionType_value_set, METH_VARARGS, (char *)"RegionType_value_set(RegionType self, int value)"},
 	 { (char *)"RegionType_value_get", _wrap_RegionType_value_get, METH_VARARGS, (char *)"RegionType_value_get(RegionType self) -> int"},
-	 { (char *)"RegionType_swigregister", RegionType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"RegionType_swigregister", RegionType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_RowColEnum", _wrap_new_RowColEnum, METH_VARARGS, (char *)"\n"
 		"RowColEnum()\n"
 		"RowColEnum(std::string s)\n"
@@ -103699,7 +103699,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RowColEnum_size", _wrap_RowColEnum_size, METH_VARARGS, (char *)"RowColEnum_size() -> size_t"},
 	 { (char *)"RowColEnum_value_set", _wrap_RowColEnum_value_set, METH_VARARGS, (char *)"RowColEnum_value_set(RowColEnum self, int value)"},
 	 { (char *)"RowColEnum_value_get", _wrap_RowColEnum_value_get, METH_VARARGS, (char *)"RowColEnum_value_get(RowColEnum self) -> int"},
-	 { (char *)"RowColEnum_swigregister", RowColEnum_swigregister, METH_VARARGS, NULL},
+	 { (char *)"RowColEnum_swigregister", RowColEnum_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_SCPType", _wrap_new_SCPType, METH_VARARGS, (char *)"\n"
 		"SCPType()\n"
 		"SCPType(std::string s)\n"
@@ -103722,7 +103722,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SCPType_size", _wrap_SCPType_size, METH_VARARGS, (char *)"SCPType_size() -> size_t"},
 	 { (char *)"SCPType_value_set", _wrap_SCPType_value_set, METH_VARARGS, (char *)"SCPType_value_set(SCPType self, int value)"},
 	 { (char *)"SCPType_value_get", _wrap_SCPType_value_get, METH_VARARGS, (char *)"SCPType_value_get(SCPType self) -> int"},
-	 { (char *)"SCPType_swigregister", SCPType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"SCPType_swigregister", SCPType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_SideOfTrackType", _wrap_new_SideOfTrackType, METH_VARARGS, (char *)"\n"
 		"SideOfTrackType()\n"
 		"SideOfTrackType(std::string s)\n"
@@ -103745,7 +103745,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SideOfTrackType_size", _wrap_SideOfTrackType_size, METH_VARARGS, (char *)"SideOfTrackType_size() -> size_t"},
 	 { (char *)"SideOfTrackType_value_set", _wrap_SideOfTrackType_value_set, METH_VARARGS, (char *)"SideOfTrackType_value_set(SideOfTrackType self, int value)"},
 	 { (char *)"SideOfTrackType_value_get", _wrap_SideOfTrackType_value_get, METH_VARARGS, (char *)"SideOfTrackType_value_get(SideOfTrackType self) -> int"},
-	 { (char *)"SideOfTrackType_swigregister", SideOfTrackType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"SideOfTrackType_swigregister", SideOfTrackType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_SlowTimeBeamCompensationType", _wrap_new_SlowTimeBeamCompensationType, METH_VARARGS, (char *)"\n"
 		"SlowTimeBeamCompensationType()\n"
 		"SlowTimeBeamCompensationType(std::string s)\n"
@@ -103768,7 +103768,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SlowTimeBeamCompensationType_size", _wrap_SlowTimeBeamCompensationType_size, METH_VARARGS, (char *)"SlowTimeBeamCompensationType_size() -> size_t"},
 	 { (char *)"SlowTimeBeamCompensationType_value_set", _wrap_SlowTimeBeamCompensationType_value_set, METH_VARARGS, (char *)"SlowTimeBeamCompensationType_value_set(SlowTimeBeamCompensationType self, int value)"},
 	 { (char *)"SlowTimeBeamCompensationType_value_get", _wrap_SlowTimeBeamCompensationType_value_get, METH_VARARGS, (char *)"SlowTimeBeamCompensationType_value_get(SlowTimeBeamCompensationType self) -> int"},
-	 { (char *)"SlowTimeBeamCompensationType_swigregister", SlowTimeBeamCompensationType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"SlowTimeBeamCompensationType_swigregister", SlowTimeBeamCompensationType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_XYZEnum", _wrap_new_XYZEnum, METH_VARARGS, (char *)"\n"
 		"XYZEnum()\n"
 		"XYZEnum(std::string s)\n"
@@ -103791,7 +103791,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XYZEnum_size", _wrap_XYZEnum_size, METH_VARARGS, (char *)"XYZEnum_size() -> size_t"},
 	 { (char *)"XYZEnum_value_set", _wrap_XYZEnum_value_set, METH_VARARGS, (char *)"XYZEnum_value_set(XYZEnum self, int value)"},
 	 { (char *)"XYZEnum_value_get", _wrap_XYZEnum_value_get, METH_VARARGS, (char *)"XYZEnum_value_get(XYZEnum self) -> int"},
-	 { (char *)"XYZEnum_swigregister", XYZEnum_swigregister, METH_VARARGS, NULL},
+	 { (char *)"XYZEnum_swigregister", XYZEnum_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_DESValidationException", _wrap_new_DESValidationException, METH_VARARGS, (char *)"\n"
 		"DESValidationException()\n"
 		"DESValidationException(Context c)\n"
@@ -103800,7 +103800,7 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"delete_DESValidationException", _wrap_delete_DESValidationException, METH_VARARGS, (char *)"delete_DESValidationException(DESValidationException self)"},
 	 { (char *)"DESValidationException_getType", _wrap_DESValidationException_getType, METH_VARARGS, (char *)"DESValidationException_getType(DESValidationException self) -> std::string"},
-	 { (char *)"DESValidationException_swigregister", DESValidationException_swigregister, METH_VARARGS, NULL},
+	 { (char *)"DESValidationException_swigregister", DESValidationException_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_DecorrType", _wrap_new_DecorrType, METH_VARARGS, (char *)"\n"
 		"DecorrType(double ccz=0, double dr=0)\n"
 		"DecorrType(double ccz=0)\n"
@@ -103813,11 +103813,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DecorrType_decorrRate_set", _wrap_DecorrType_decorrRate_set, METH_VARARGS, (char *)"DecorrType_decorrRate_set(DecorrType self, double decorrRate)"},
 	 { (char *)"DecorrType_decorrRate_get", _wrap_DecorrType_decorrRate_get, METH_VARARGS, (char *)"DecorrType_decorrRate_get(DecorrType self) -> double"},
 	 { (char *)"delete_DecorrType", _wrap_delete_DecorrType, METH_VARARGS, (char *)"delete_DecorrType(DecorrType self)"},
-	 { (char *)"DecorrType_swigregister", DecorrType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"DecorrType_swigregister", DecorrType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"Constants_getNumBytesPerPixel", _wrap_Constants_getNumBytesPerPixel, METH_VARARGS, (char *)"Constants_getNumBytesPerPixel(PixelType type) -> int"},
 	 { (char *)"new_Constants", _wrap_new_Constants, METH_VARARGS, (char *)"new_Constants() -> Constants"},
 	 { (char *)"delete_Constants", _wrap_delete_Constants, METH_VARARGS, (char *)"delete_Constants(Constants self)"},
-	 { (char *)"Constants_swigregister", Constants_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Constants_swigregister", Constants_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"ReferencePoint_ecef_set", _wrap_ReferencePoint_ecef_set, METH_VARARGS, (char *)"ReferencePoint_ecef_set(ReferencePoint self, Vector3 ecef)"},
 	 { (char *)"ReferencePoint_ecef_get", _wrap_ReferencePoint_ecef_get, METH_VARARGS, (char *)"ReferencePoint_ecef_get(ReferencePoint self) -> Vector3"},
 	 { (char *)"ReferencePoint_rowCol_set", _wrap_ReferencePoint_rowCol_set, METH_VARARGS, (char *)"ReferencePoint_rowCol_set(ReferencePoint self, RowColDouble rowCol)"},
@@ -103836,7 +103836,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ReferencePoint___eq__", _wrap_ReferencePoint___eq__, METH_VARARGS, (char *)"ReferencePoint___eq__(ReferencePoint self, ReferencePoint x) -> bool"},
 	 { (char *)"ReferencePoint___ne__", _wrap_ReferencePoint___ne__, METH_VARARGS, (char *)"ReferencePoint___ne__(ReferencePoint self, ReferencePoint x) -> bool"},
 	 { (char *)"delete_ReferencePoint", _wrap_delete_ReferencePoint, METH_VARARGS, (char *)"delete_ReferencePoint(ReferencePoint self)"},
-	 { (char *)"ReferencePoint_swigregister", ReferencePoint_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ReferencePoint_swigregister", ReferencePoint_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_SCP", _wrap_new_SCP, METH_VARARGS, (char *)"new_SCP() -> SCP"},
 	 { (char *)"SCP_ecf_set", _wrap_SCP_ecf_set, METH_VARARGS, (char *)"SCP_ecf_set(SCP self, Vector3 ecf)"},
 	 { (char *)"SCP_ecf_get", _wrap_SCP_ecf_get, METH_VARARGS, (char *)"SCP_ecf_get(SCP self) -> Vector3"},
@@ -103845,13 +103845,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SCP___eq__", _wrap_SCP___eq__, METH_VARARGS, (char *)"SCP___eq__(SCP self, SCP rhs) -> bool"},
 	 { (char *)"SCP___ne__", _wrap_SCP___ne__, METH_VARARGS, (char *)"SCP___ne__(SCP self, SCP rhs) -> bool"},
 	 { (char *)"delete_SCP", _wrap_delete_SCP, METH_VARARGS, (char *)"delete_SCP(SCP self)"},
-	 { (char *)"SCP_swigregister", SCP_swigregister, METH_VARARGS, NULL},
+	 { (char *)"SCP_swigregister", SCP_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_AmplitudeTable", _wrap_new_AmplitudeTable, METH_VARARGS, (char *)"new_AmplitudeTable() -> AmplitudeTable"},
 	 { (char *)"AmplitudeTable___eq__", _wrap_AmplitudeTable___eq__, METH_VARARGS, (char *)"AmplitudeTable___eq__(AmplitudeTable self, AmplitudeTable rhs) -> bool"},
 	 { (char *)"AmplitudeTable___ne__", _wrap_AmplitudeTable___ne__, METH_VARARGS, (char *)"AmplitudeTable___ne__(AmplitudeTable self, AmplitudeTable rhs) -> bool"},
 	 { (char *)"AmplitudeTable_clone", _wrap_AmplitudeTable_clone, METH_VARARGS, (char *)"AmplitudeTable_clone(AmplitudeTable self) -> AmplitudeTable"},
 	 { (char *)"delete_AmplitudeTable", _wrap_delete_AmplitudeTable, METH_VARARGS, (char *)"delete_AmplitudeTable(AmplitudeTable self)"},
-	 { (char *)"AmplitudeTable_swigregister", AmplitudeTable_swigregister, METH_VARARGS, NULL},
+	 { (char *)"AmplitudeTable_swigregister", AmplitudeTable_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"getImageMode", _wrap_getImageMode, METH_VARARGS, (char *)"getImageMode(RadarModeType radarMode) -> six::ImageMode"},
 	 { (char *)"new_MissingRequiredException", _wrap_new_MissingRequiredException, METH_VARARGS, (char *)"\n"
 		"MissingRequiredException()\n"
@@ -103861,7 +103861,7 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"delete_MissingRequiredException", _wrap_delete_MissingRequiredException, METH_VARARGS, (char *)"delete_MissingRequiredException(MissingRequiredException self)"},
 	 { (char *)"MissingRequiredException_getType", _wrap_MissingRequiredException_getType, METH_VARARGS, (char *)"MissingRequiredException_getType(MissingRequiredException self) -> std::string"},
-	 { (char *)"MissingRequiredException_swigregister", MissingRequiredException_swigregister, METH_VARARGS, NULL},
+	 { (char *)"MissingRequiredException_swigregister", MissingRequiredException_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_UninitializedValueException", _wrap_new_UninitializedValueException, METH_VARARGS, (char *)"\n"
 		"UninitializedValueException()\n"
 		"UninitializedValueException(Context c)\n"
@@ -103870,10 +103870,10 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"delete_UninitializedValueException", _wrap_delete_UninitializedValueException, METH_VARARGS, (char *)"delete_UninitializedValueException(UninitializedValueException self)"},
 	 { (char *)"UninitializedValueException_getType", _wrap_UninitializedValueException_getType, METH_VARARGS, (char *)"UninitializedValueException_getType(UninitializedValueException self) -> std::string"},
-	 { (char *)"UninitializedValueException_swigregister", UninitializedValueException_swigregister, METH_VARARGS, NULL},
+	 { (char *)"UninitializedValueException_swigregister", UninitializedValueException_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_Init", _wrap_new_Init, METH_VARARGS, (char *)"new_Init() -> Init"},
 	 { (char *)"delete_Init", _wrap_delete_Init, METH_VARARGS, (char *)"delete_Init(Init self)"},
-	 { (char *)"Init_swigregister", Init_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Init_swigregister", Init_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"delete_Parameter", _wrap_delete_Parameter, METH_VARARGS, (char *)"delete_Parameter(Parameter self)"},
 	 { (char *)"new_Parameter", _wrap_new_Parameter, METH_VARARGS, (char *)"\n"
 		"Parameter()\n"
@@ -103888,7 +103888,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Parameter___str__", _wrap_Parameter___str__, METH_VARARGS, (char *)"Parameter___str__(Parameter self) -> std::string"},
 	 { (char *)"Parameter___int__", _wrap_Parameter___int__, METH_VARARGS, (char *)"Parameter___int__(Parameter self) -> long"},
 	 { (char *)"Parameter___float__", _wrap_Parameter___float__, METH_VARARGS, (char *)"Parameter___float__(Parameter self) -> double"},
-	 { (char *)"Parameter_swigregister", Parameter_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Parameter_swigregister", Parameter_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"ParameterCollection_findParameterIndex", _wrap_ParameterCollection_findParameterIndex, METH_VARARGS, (char *)"ParameterCollection_findParameterIndex(ParameterCollection self, std::string const & paramName) -> size_t"},
 	 { (char *)"ParameterCollection_findParameter", _wrap_ParameterCollection_findParameter, METH_VARARGS, (char *)"ParameterCollection_findParameter(ParameterCollection self, std::string const & paramName) -> Parameter"},
 	 { (char *)"ParameterCollection_containsParameter", _wrap_ParameterCollection_containsParameter, METH_VARARGS, (char *)"ParameterCollection_containsParameter(ParameterCollection self, std::string const & paramName) -> bool"},
@@ -103913,7 +103913,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ParameterCollection___setitem__", _wrap_ParameterCollection___setitem__, METH_VARARGS, (char *)"ParameterCollection___setitem__(ParameterCollection self, size_t i, Parameter v)"},
 	 { (char *)"new_ParameterCollection", _wrap_new_ParameterCollection, METH_VARARGS, (char *)"new_ParameterCollection() -> ParameterCollection"},
 	 { (char *)"delete_ParameterCollection", _wrap_delete_ParameterCollection, METH_VARARGS, (char *)"delete_ParameterCollection(ParameterCollection self)"},
-	 { (char *)"ParameterCollection_swigregister", ParameterCollection_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ParameterCollection_swigregister", ParameterCollection_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"CollectionInformation_collectorName_set", _wrap_CollectionInformation_collectorName_set, METH_VARARGS, (char *)"CollectionInformation_collectorName_set(CollectionInformation self, std::string const & collectorName)"},
 	 { (char *)"CollectionInformation_collectorName_get", _wrap_CollectionInformation_collectorName_get, METH_VARARGS, (char *)"CollectionInformation_collectorName_get(CollectionInformation self) -> std::string const &"},
 	 { (char *)"CollectionInformation_illuminatorName_set", _wrap_CollectionInformation_illuminatorName_set, METH_VARARGS, (char *)"CollectionInformation_illuminatorName_set(CollectionInformation self, std::string const & illuminatorName)"},
@@ -103939,7 +103939,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CollectionInformation___ne__", _wrap_CollectionInformation___ne__, METH_VARARGS, (char *)"CollectionInformation___ne__(CollectionInformation self, CollectionInformation other) -> bool"},
 	 { (char *)"CollectionInformation_getClassificationLevel", _wrap_CollectionInformation_getClassificationLevel, METH_VARARGS, (char *)"CollectionInformation_getClassificationLevel(CollectionInformation self) -> std::string"},
 	 { (char *)"CollectionInformation_setClassificationLevel", _wrap_CollectionInformation_setClassificationLevel, METH_VARARGS, (char *)"CollectionInformation_setClassificationLevel(CollectionInformation self, std::string const & classification)"},
-	 { (char *)"CollectionInformation_swigregister", CollectionInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"CollectionInformation_swigregister", CollectionInformation_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"delete_Classification", _wrap_delete_Classification, METH_VARARGS, (char *)"delete_Classification(Classification self)"},
 	 { (char *)"Classification_getLevel", _wrap_Classification_getLevel, METH_VARARGS, (char *)"Classification_getLevel(Classification self) -> std::string"},
 	 { (char *)"Classification_isUnclassified", _wrap_Classification_isUnclassified, METH_VARARGS, (char *)"Classification_isUnclassified(Classification self) -> bool"},
@@ -103947,7 +103947,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Classification_put", _wrap_Classification_put, METH_VARARGS, (char *)"Classification_put(Classification self, std::ostream & os) -> std::ostream &"},
 	 { (char *)"Classification_fileOptions_set", _wrap_Classification_fileOptions_set, METH_VARARGS, (char *)"Classification_fileOptions_set(Classification self, Options fileOptions)"},
 	 { (char *)"Classification_fileOptions_get", _wrap_Classification_fileOptions_get, METH_VARARGS, (char *)"Classification_fileOptions_get(Classification self) -> Options"},
-	 { (char *)"Classification_swigregister", Classification_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Classification_swigregister", Classification_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_CorrCoefs", _wrap_new_CorrCoefs, METH_VARARGS, (char *)"new_CorrCoefs() -> CorrCoefs"},
 	 { (char *)"CorrCoefs_p1p2_set", _wrap_CorrCoefs_p1p2_set, METH_VARARGS, (char *)"CorrCoefs_p1p2_set(CorrCoefs self, double p1p2)"},
 	 { (char *)"CorrCoefs_p1p2_get", _wrap_CorrCoefs_p1p2_get, METH_VARARGS, (char *)"CorrCoefs_p1p2_get(CorrCoefs self) -> double"},
@@ -103982,7 +103982,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CorrCoefs___eq__", _wrap_CorrCoefs___eq__, METH_VARARGS, (char *)"CorrCoefs___eq__(CorrCoefs self, CorrCoefs rhs) -> bool"},
 	 { (char *)"CorrCoefs___ne__", _wrap_CorrCoefs___ne__, METH_VARARGS, (char *)"CorrCoefs___ne__(CorrCoefs self, CorrCoefs rhs) -> bool"},
 	 { (char *)"delete_CorrCoefs", _wrap_delete_CorrCoefs, METH_VARARGS, (char *)"delete_CorrCoefs(CorrCoefs self)"},
-	 { (char *)"CorrCoefs_swigregister", CorrCoefs_swigregister, METH_VARARGS, NULL},
+	 { (char *)"CorrCoefs_swigregister", CorrCoefs_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_PosVelError", _wrap_new_PosVelError, METH_VARARGS, (char *)"new_PosVelError() -> PosVelError"},
 	 { (char *)"PosVelError_frame_set", _wrap_PosVelError_frame_set, METH_VARARGS, (char *)"PosVelError_frame_set(PosVelError self, FrameType frame)"},
 	 { (char *)"PosVelError_frame_get", _wrap_PosVelError_frame_get, METH_VARARGS, (char *)"PosVelError_frame_get(PosVelError self) -> FrameType"},
@@ -104005,7 +104005,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PosVelError___eq__", _wrap_PosVelError___eq__, METH_VARARGS, (char *)"PosVelError___eq__(PosVelError self, PosVelError rhs) -> bool"},
 	 { (char *)"PosVelError___ne__", _wrap_PosVelError___ne__, METH_VARARGS, (char *)"PosVelError___ne__(PosVelError self, PosVelError rhs) -> bool"},
 	 { (char *)"delete_PosVelError", _wrap_delete_PosVelError, METH_VARARGS, (char *)"delete_PosVelError(PosVelError self)"},
-	 { (char *)"PosVelError_swigregister", PosVelError_swigregister, METH_VARARGS, NULL},
+	 { (char *)"PosVelError_swigregister", PosVelError_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"RadarSensor_rangeBias_set", _wrap_RadarSensor_rangeBias_set, METH_VARARGS, (char *)"RadarSensor_rangeBias_set(RadarSensor self, double rangeBias)"},
 	 { (char *)"RadarSensor_rangeBias_get", _wrap_RadarSensor_rangeBias_get, METH_VARARGS, (char *)"RadarSensor_rangeBias_get(RadarSensor self) -> double"},
 	 { (char *)"RadarSensor_clockFreqSF_set", _wrap_RadarSensor_clockFreqSF_set, METH_VARARGS, (char *)"RadarSensor_clockFreqSF_set(RadarSensor self, double clockFreqSF)"},
@@ -104018,7 +104018,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RadarSensor___eq__", _wrap_RadarSensor___eq__, METH_VARARGS, (char *)"RadarSensor___eq__(RadarSensor self, RadarSensor rhs) -> bool"},
 	 { (char *)"RadarSensor___ne__", _wrap_RadarSensor___ne__, METH_VARARGS, (char *)"RadarSensor___ne__(RadarSensor self, RadarSensor rhs) -> bool"},
 	 { (char *)"delete_RadarSensor", _wrap_delete_RadarSensor, METH_VARARGS, (char *)"delete_RadarSensor(RadarSensor self)"},
-	 { (char *)"RadarSensor_swigregister", RadarSensor_swigregister, METH_VARARGS, NULL},
+	 { (char *)"RadarSensor_swigregister", RadarSensor_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"TropoError_tropoRangeVertical_set", _wrap_TropoError_tropoRangeVertical_set, METH_VARARGS, (char *)"TropoError_tropoRangeVertical_set(TropoError self, double tropoRangeVertical)"},
 	 { (char *)"TropoError_tropoRangeVertical_get", _wrap_TropoError_tropoRangeVertical_get, METH_VARARGS, (char *)"TropoError_tropoRangeVertical_get(TropoError self) -> double"},
 	 { (char *)"TropoError_tropoRangeSlant_set", _wrap_TropoError_tropoRangeSlant_set, METH_VARARGS, (char *)"TropoError_tropoRangeSlant_set(TropoError self, double tropoRangeSlant)"},
@@ -104029,7 +104029,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TropoError___eq__", _wrap_TropoError___eq__, METH_VARARGS, (char *)"TropoError___eq__(TropoError self, TropoError rhs) -> bool"},
 	 { (char *)"TropoError___ne__", _wrap_TropoError___ne__, METH_VARARGS, (char *)"TropoError___ne__(TropoError self, TropoError rhs) -> bool"},
 	 { (char *)"delete_TropoError", _wrap_delete_TropoError, METH_VARARGS, (char *)"delete_TropoError(TropoError self)"},
-	 { (char *)"TropoError_swigregister", TropoError_swigregister, METH_VARARGS, NULL},
+	 { (char *)"TropoError_swigregister", TropoError_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"IonoError_ionoRangeVertical_set", _wrap_IonoError_ionoRangeVertical_set, METH_VARARGS, (char *)"IonoError_ionoRangeVertical_set(IonoError self, double ionoRangeVertical)"},
 	 { (char *)"IonoError_ionoRangeVertical_get", _wrap_IonoError_ionoRangeVertical_get, METH_VARARGS, (char *)"IonoError_ionoRangeVertical_get(IonoError self) -> double"},
 	 { (char *)"IonoError_ionoRangeRateVertical_set", _wrap_IonoError_ionoRangeRateVertical_set, METH_VARARGS, (char *)"IonoError_ionoRangeRateVertical_set(IonoError self, double ionoRangeRateVertical)"},
@@ -104042,7 +104042,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"IonoError___eq__", _wrap_IonoError___eq__, METH_VARARGS, (char *)"IonoError___eq__(IonoError self, IonoError rhs) -> bool"},
 	 { (char *)"IonoError___ne__", _wrap_IonoError___ne__, METH_VARARGS, (char *)"IonoError___ne__(IonoError self, IonoError rhs) -> bool"},
 	 { (char *)"delete_IonoError", _wrap_delete_IonoError, METH_VARARGS, (char *)"delete_IonoError(IonoError self)"},
-	 { (char *)"IonoError_swigregister", IonoError_swigregister, METH_VARARGS, NULL},
+	 { (char *)"IonoError_swigregister", IonoError_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_Components", _wrap_new_Components, METH_VARARGS, (char *)"new_Components() -> Components"},
 	 { (char *)"Components_posVelError_set", _wrap_Components_posVelError_set, METH_VARARGS, (char *)"Components_posVelError_set(Components self, ScopedCopyablePosVelError posVelError)"},
 	 { (char *)"Components_posVelError_get", _wrap_Components_posVelError_get, METH_VARARGS, (char *)"Components_posVelError_get(Components self) -> ScopedCopyablePosVelError"},
@@ -104055,7 +104055,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Components___eq__", _wrap_Components___eq__, METH_VARARGS, (char *)"Components___eq__(Components self, Components rhs) -> bool"},
 	 { (char *)"Components___ne__", _wrap_Components___ne__, METH_VARARGS, (char *)"Components___ne__(Components self, Components rhs) -> bool"},
 	 { (char *)"delete_Components", _wrap_delete_Components, METH_VARARGS, (char *)"delete_Components(Components self)"},
-	 { (char *)"Components_swigregister", Components_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Components_swigregister", Components_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_CompositeSCP", _wrap_new_CompositeSCP, METH_VARARGS, (char *)"\n"
 		"CompositeSCP(six::CompositeSCP::SCPType scpTypeIn)\n"
 		"new_CompositeSCP() -> CompositeSCP\n"
@@ -104071,7 +104071,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CompositeSCP___eq__", _wrap_CompositeSCP___eq__, METH_VARARGS, (char *)"CompositeSCP___eq__(CompositeSCP self, CompositeSCP rhs) -> bool"},
 	 { (char *)"CompositeSCP___ne__", _wrap_CompositeSCP___ne__, METH_VARARGS, (char *)"CompositeSCP___ne__(CompositeSCP self, CompositeSCP rhs) -> bool"},
 	 { (char *)"delete_CompositeSCP", _wrap_delete_CompositeSCP, METH_VARARGS, (char *)"delete_CompositeSCP(CompositeSCP self)"},
-	 { (char *)"CompositeSCP_swigregister", CompositeSCP_swigregister, METH_VARARGS, NULL},
+	 { (char *)"CompositeSCP_swigregister", CompositeSCP_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"ErrorStatistics_compositeSCP_set", _wrap_ErrorStatistics_compositeSCP_set, METH_VARARGS, (char *)"ErrorStatistics_compositeSCP_set(ErrorStatistics self, ScopedCopyableCompositeSCP compositeSCP)"},
 	 { (char *)"ErrorStatistics_compositeSCP_get", _wrap_ErrorStatistics_compositeSCP_get, METH_VARARGS, (char *)"ErrorStatistics_compositeSCP_get(ErrorStatistics self) -> ScopedCopyableCompositeSCP"},
 	 { (char *)"ErrorStatistics_components_set", _wrap_ErrorStatistics_components_set, METH_VARARGS, (char *)"ErrorStatistics_components_set(ErrorStatistics self, ScopedCopyableComponents components)"},
@@ -104082,7 +104082,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ErrorStatistics___eq__", _wrap_ErrorStatistics___eq__, METH_VARARGS, (char *)"ErrorStatistics___eq__(ErrorStatistics self, ErrorStatistics rhs) -> bool"},
 	 { (char *)"ErrorStatistics___ne__", _wrap_ErrorStatistics___ne__, METH_VARARGS, (char *)"ErrorStatistics___ne__(ErrorStatistics self, ErrorStatistics rhs) -> bool"},
 	 { (char *)"delete_ErrorStatistics", _wrap_delete_ErrorStatistics, METH_VARARGS, (char *)"delete_ErrorStatistics(ErrorStatistics self)"},
-	 { (char *)"ErrorStatistics_swigregister", ErrorStatistics_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ErrorStatistics_swigregister", ErrorStatistics_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_MatchCollect", _wrap_new_MatchCollect, METH_VARARGS, (char *)"new_MatchCollect() -> MatchCollect"},
 	 { (char *)"MatchCollect_coreName_set", _wrap_MatchCollect_coreName_set, METH_VARARGS, (char *)"MatchCollect_coreName_set(MatchCollect self, std::string const & coreName)"},
 	 { (char *)"MatchCollect_coreName_get", _wrap_MatchCollect_coreName_get, METH_VARARGS, (char *)"MatchCollect_coreName_get(MatchCollect self) -> std::string const &"},
@@ -104093,7 +104093,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MatchCollect___eq__", _wrap_MatchCollect___eq__, METH_VARARGS, (char *)"MatchCollect___eq__(MatchCollect self, MatchCollect rhs) -> bool"},
 	 { (char *)"MatchCollect___ne__", _wrap_MatchCollect___ne__, METH_VARARGS, (char *)"MatchCollect___ne__(MatchCollect self, MatchCollect rhs) -> bool"},
 	 { (char *)"delete_MatchCollect", _wrap_delete_MatchCollect, METH_VARARGS, (char *)"delete_MatchCollect(MatchCollect self)"},
-	 { (char *)"MatchCollect_swigregister", MatchCollect_swigregister, METH_VARARGS, NULL},
+	 { (char *)"MatchCollect_swigregister", MatchCollect_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_MatchType", _wrap_new_MatchType, METH_VARARGS, (char *)"new_MatchType() -> MatchType"},
 	 { (char *)"MatchType_collectorName_set", _wrap_MatchType_collectorName_set, METH_VARARGS, (char *)"MatchType_collectorName_set(MatchType self, std::string const & collectorName)"},
 	 { (char *)"MatchType_collectorName_get", _wrap_MatchType_collectorName_get, METH_VARARGS, (char *)"MatchType_collectorName_get(MatchType self) -> std::string const &"},
@@ -104110,14 +104110,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MatchType___eq__", _wrap_MatchType___eq__, METH_VARARGS, (char *)"MatchType___eq__(MatchType self, MatchType rhs) -> bool"},
 	 { (char *)"MatchType___ne__", _wrap_MatchType___ne__, METH_VARARGS, (char *)"MatchType___ne__(MatchType self, MatchType rhs) -> bool"},
 	 { (char *)"delete_MatchType", _wrap_delete_MatchType, METH_VARARGS, (char *)"delete_MatchType(MatchType self)"},
-	 { (char *)"MatchType_swigregister", MatchType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"MatchType_swigregister", MatchType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_MatchInformation", _wrap_new_MatchInformation, METH_VARARGS, (char *)"new_MatchInformation() -> MatchInformation"},
 	 { (char *)"MatchInformation_types_set", _wrap_MatchInformation_types_set, METH_VARARGS, (char *)"MatchInformation_types_set(MatchInformation self, VectorMatchType types)"},
 	 { (char *)"MatchInformation_types_get", _wrap_MatchInformation_types_get, METH_VARARGS, (char *)"MatchInformation_types_get(MatchInformation self) -> VectorMatchType"},
 	 { (char *)"MatchInformation___eq__", _wrap_MatchInformation___eq__, METH_VARARGS, (char *)"MatchInformation___eq__(MatchInformation self, MatchInformation rhs) -> bool"},
 	 { (char *)"MatchInformation___ne__", _wrap_MatchInformation___ne__, METH_VARARGS, (char *)"MatchInformation___ne__(MatchInformation self, MatchInformation rhs) -> bool"},
 	 { (char *)"delete_MatchInformation", _wrap_delete_MatchInformation, METH_VARARGS, (char *)"delete_MatchInformation(MatchInformation self)"},
-	 { (char *)"MatchInformation_swigregister", MatchInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"MatchInformation_swigregister", MatchInformation_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_NoiseLevel", _wrap_new_NoiseLevel, METH_VARARGS, (char *)"new_NoiseLevel() -> NoiseLevel"},
 	 { (char *)"NoiseLevel_noiseType_set", _wrap_NoiseLevel_noiseType_set, METH_VARARGS, (char *)"NoiseLevel_noiseType_set(NoiseLevel self, std::string const & noiseType)"},
 	 { (char *)"NoiseLevel_noiseType_get", _wrap_NoiseLevel_noiseType_get, METH_VARARGS, (char *)"NoiseLevel_noiseType_get(NoiseLevel self) -> std::string const &"},
@@ -104126,7 +104126,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"NoiseLevel___eq__", _wrap_NoiseLevel___eq__, METH_VARARGS, (char *)"NoiseLevel___eq__(NoiseLevel self, NoiseLevel rhs) -> bool"},
 	 { (char *)"NoiseLevel___ne__", _wrap_NoiseLevel___ne__, METH_VARARGS, (char *)"NoiseLevel___ne__(NoiseLevel self, NoiseLevel rhs) -> bool"},
 	 { (char *)"delete_NoiseLevel", _wrap_delete_NoiseLevel, METH_VARARGS, (char *)"delete_NoiseLevel(NoiseLevel self)"},
-	 { (char *)"NoiseLevel_swigregister", NoiseLevel_swigregister, METH_VARARGS, NULL},
+	 { (char *)"NoiseLevel_swigregister", NoiseLevel_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_Radiometric", _wrap_new_Radiometric, METH_VARARGS, (char *)"new_Radiometric() -> Radiometric"},
 	 { (char *)"Radiometric_noiseLevel_set", _wrap_Radiometric_noiseLevel_set, METH_VARARGS, (char *)"Radiometric_noiseLevel_set(Radiometric self, NoiseLevel noiseLevel)"},
 	 { (char *)"Radiometric_noiseLevel_get", _wrap_Radiometric_noiseLevel_get, METH_VARARGS, (char *)"Radiometric_noiseLevel_get(Radiometric self) -> NoiseLevel"},
@@ -104145,7 +104145,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Radiometric___eq__", _wrap_Radiometric___eq__, METH_VARARGS, (char *)"Radiometric___eq__(Radiometric self, Radiometric rhs) -> bool"},
 	 { (char *)"Radiometric___ne__", _wrap_Radiometric___ne__, METH_VARARGS, (char *)"Radiometric___ne__(Radiometric self, Radiometric rhs) -> bool"},
 	 { (char *)"delete_Radiometric", _wrap_delete_Radiometric, METH_VARARGS, (char *)"delete_Radiometric(Radiometric self)"},
-	 { (char *)"Radiometric_swigregister", Radiometric_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Radiometric_swigregister", Radiometric_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"delete_Data", _wrap_delete_Data, METH_VARARGS, (char *)"delete_Data(Data self)"},
 	 { (char *)"Data_clone", _wrap_Data_clone, METH_VARARGS, (char *)"Data_clone(Data self) -> Data"},
 	 { (char *)"Data_getDataType", _wrap_Data_getDataType, METH_VARARGS, (char *)"Data_getDataType(Data self) -> DataType"},
@@ -104174,7 +104174,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Data_getVendorID", _wrap_Data_getVendorID, METH_VARARGS, (char *)"Data_getVendorID(Data self) -> std::string"},
 	 { (char *)"Data_getVersion", _wrap_Data_getVersion, METH_VARARGS, (char *)"Data_getVersion(Data self) -> std::string"},
 	 { (char *)"Data_setVersion", _wrap_Data_setVersion, METH_VARARGS, (char *)"Data_setVersion(Data self, std::string const & version)"},
-	 { (char *)"Data_swigregister", Data_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Data_swigregister", Data_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"delete_XMLControl", _wrap_delete_XMLControl, METH_VARARGS, (char *)"delete_XMLControl(XMLControl self)"},
 	 { (char *)"XMLControl_setLogger", _wrap_XMLControl_setLogger, METH_VARARGS, (char *)"\n"
 		"setLogger(logging::Logger * log, bool ownLog=False)\n"
@@ -104189,21 +104189,21 @@ static PyMethodDef SwigMethods[] = {
 		"XMLControl_dataTypeToString(DataType dataType) -> std::string\n"
 		""},
 	 { (char *)"XMLControl_splitVersion", _wrap_XMLControl_splitVersion, METH_VARARGS, (char *)"XMLControl_splitVersion(std::string const & versionStr, VectorString version)"},
-	 { (char *)"XMLControl_swigregister", XMLControl_swigregister, METH_VARARGS, NULL},
+	 { (char *)"XMLControl_swigregister", XMLControl_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"remapZeroTo360", _wrap_remapZeroTo360, METH_VARARGS, (char *)"remapZeroTo360(double degree) -> double"},
 	 { (char *)"loadPluginDir", _wrap_loadPluginDir, METH_VARARGS, (char *)"loadPluginDir(std::string const & pluginDir)"},
 	 { (char *)"loadXmlDataContentHandler", _wrap_loadXmlDataContentHandler, METH_VARARGS, (char *)"loadXmlDataContentHandler()"},
 	 { (char *)"parseData", _wrap_parseData, METH_VARARGS, (char *)"\n"
-		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
-		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
+		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
+		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
 		""},
 	 { (char *)"parseDataFromFile", _wrap_parseDataFromFile, METH_VARARGS, (char *)"\n"
-		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
-		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
+		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
+		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
 		""},
 	 { (char *)"parseDataFromString", _wrap_parseDataFromString, METH_VARARGS, (char *)"\n"
-		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
-		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> std::auto_ptr< six::Data >\n"
+		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
+		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
 		""},
 	 { (char *)"getErrors", _wrap_getErrors, METH_VARARGS, (char *)"getErrors(ErrorStatistics errorStats, RgAzDouble sampleSpacing, Errors errors)"},
 	 { (char *)"findSchemaPath", _wrap_findSchemaPath, METH_VARARGS, (char *)"findSchemaPath(std::string const & progname) -> std::string"},
@@ -104219,23 +104219,23 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Options___eq__", _wrap_Options___eq__, METH_VARARGS, (char *)"Options___eq__(Options self, Options rhs) -> bool"},
 	 { (char *)"Options___ne__", _wrap_Options___ne__, METH_VARARGS, (char *)"Options___ne__(Options self, Options rhs) -> bool"},
 	 { (char *)"new_Options", _wrap_new_Options, METH_VARARGS, (char *)"new_Options() -> Options"},
-	 { (char *)"Options_swigregister", Options_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Options_swigregister", Options_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"delete_XMLControlCreator", _wrap_delete_XMLControlCreator, METH_VARARGS, (char *)"delete_XMLControlCreator(XMLControlCreator self)"},
 	 { (char *)"XMLControlCreator_newXMLControl", _wrap_XMLControlCreator_newXMLControl, METH_VARARGS, (char *)"XMLControlCreator_newXMLControl(XMLControlCreator self, logging::Logger * log) -> XMLControl"},
-	 { (char *)"XMLControlCreator_swigregister", XMLControlCreator_swigregister, METH_VARARGS, NULL},
+	 { (char *)"XMLControlCreator_swigregister", XMLControlCreator_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_XMLControlRegistry", _wrap_new_XMLControlRegistry, METH_VARARGS, (char *)"new_XMLControlRegistry() -> XMLControlRegistry"},
 	 { (char *)"delete_XMLControlRegistry", _wrap_delete_XMLControlRegistry, METH_VARARGS, (char *)"delete_XMLControlRegistry(XMLControlRegistry self)"},
 	 { (char *)"XMLControlRegistry_addCreator", _wrap_XMLControlRegistry_addCreator, METH_VARARGS, (char *)"\n"
-		"addCreator(std::string const & identifier, std::auto_ptr< six::XMLControlCreator > creator)\n"
+		"addCreator(std::string const & identifier, mem::auto_ptr< six::XMLControlCreator > creator)\n"
 		"addCreator(std::string const & identifier, XMLControlCreator creator)\n"
-		"addCreator(DataType dataType, std::auto_ptr< six::XMLControlCreator > creator)\n"
+		"addCreator(DataType dataType, mem::auto_ptr< six::XMLControlCreator > creator)\n"
 		"XMLControlRegistry_addCreator(XMLControlRegistry self, DataType dataType, XMLControlCreator creator)\n"
 		""},
 	 { (char *)"XMLControlRegistry_newXMLControl", _wrap_XMLControlRegistry_newXMLControl, METH_VARARGS, (char *)"\n"
 		"newXMLControl(std::string const & identifier, logging::Logger * log) -> XMLControl\n"
 		"XMLControlRegistry_newXMLControl(XMLControlRegistry self, DataType dataType, logging::Logger * log) -> XMLControl\n"
 		""},
-	 { (char *)"XMLControlRegistry_swigregister", XMLControlRegistry_swigregister, METH_VARARGS, NULL},
+	 { (char *)"XMLControlRegistry_swigregister", XMLControlRegistry_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"toXMLString", _wrap_toXMLString, METH_VARARGS, (char *)"\n"
 		"toXMLString(Data data, XMLControlRegistry xmlRegistry=None) -> std::string\n"
 		"toXMLString(Data data) -> std::string\n"
@@ -104256,7 +104256,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GeoInfo_geometryLatLon_get", _wrap_GeoInfo_geometryLatLon_get, METH_VARARGS, (char *)"GeoInfo_geometryLatLon_get(GeoInfo self) -> std::vector< six::LatLon,std::allocator< six::LatLon > > *"},
 	 { (char *)"GeoInfo___eq__", _wrap_GeoInfo___eq__, METH_VARARGS, (char *)"GeoInfo___eq__(GeoInfo self, GeoInfo rhs) -> bool"},
 	 { (char *)"GeoInfo___ne__", _wrap_GeoInfo___ne__, METH_VARARGS, (char *)"GeoInfo___ne__(GeoInfo self, GeoInfo rhs) -> bool"},
-	 { (char *)"GeoInfo_swigregister", GeoInfo_swigregister, METH_VARARGS, NULL},
+	 { (char *)"GeoInfo_swigregister", GeoInfo_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"__lshift__", _wrap___lshift__, METH_VARARGS, (char *)"__lshift__(std::ostream & os, GeoInfo g) -> std::ostream &"},
 	 { (char *)"new_GeoDataBase", _wrap_new_GeoDataBase, METH_VARARGS, (char *)"new_GeoDataBase() -> GeoDataBase"},
 	 { (char *)"GeoDataBase_earthModel_set", _wrap_GeoDataBase_earthModel_set, METH_VARARGS, (char *)"GeoDataBase_earthModel_set(GeoDataBase self, EarthModelType earthModel)"},
@@ -104270,7 +104270,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GeoDataBase___eq__", _wrap_GeoDataBase___eq__, METH_VARARGS, (char *)"GeoDataBase___eq__(GeoDataBase self, GeoDataBase rhs) -> bool"},
 	 { (char *)"GeoDataBase___ne__", _wrap_GeoDataBase___ne__, METH_VARARGS, (char *)"GeoDataBase___ne__(GeoDataBase self, GeoDataBase rhs) -> bool"},
 	 { (char *)"delete_GeoDataBase", _wrap_delete_GeoDataBase, METH_VARARGS, (char *)"delete_GeoDataBase(GeoDataBase self)"},
-	 { (char *)"GeoDataBase_swigregister", GeoDataBase_swigregister, METH_VARARGS, NULL},
+	 { (char *)"GeoDataBase_swigregister", GeoDataBase_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_LatLonCorners", _wrap_new_LatLonCorners, METH_VARARGS, (char *)"new_LatLonCorners() -> LatLonCorners"},
 	 { (char *)"LatLonCorners_getCorner", _wrap_LatLonCorners_getCorner, METH_VARARGS, (char *)"\n"
 		"getCorner(size_t idx) -> LatLon\n"
@@ -104287,7 +104287,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LatLonCorners_lowerLeft_set", _wrap_LatLonCorners_lowerLeft_set, METH_VARARGS, (char *)"LatLonCorners_lowerLeft_set(LatLonCorners self, LatLon lowerLeft)"},
 	 { (char *)"LatLonCorners_lowerLeft_get", _wrap_LatLonCorners_lowerLeft_get, METH_VARARGS, (char *)"LatLonCorners_lowerLeft_get(LatLonCorners self) -> LatLon"},
 	 { (char *)"delete_LatLonCorners", _wrap_delete_LatLonCorners, METH_VARARGS, (char *)"delete_LatLonCorners(LatLonCorners self)"},
-	 { (char *)"LatLonCorners_swigregister", LatLonCorners_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LatLonCorners_swigregister", LatLonCorners_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_LatLonAltCorners", _wrap_new_LatLonAltCorners, METH_VARARGS, (char *)"new_LatLonAltCorners() -> LatLonAltCorners"},
 	 { (char *)"LatLonAltCorners_getCorner", _wrap_LatLonAltCorners_getCorner, METH_VARARGS, (char *)"\n"
 		"getCorner(size_t idx) -> LatLonAlt\n"
@@ -104304,7 +104304,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LatLonAltCorners_lowerLeft_set", _wrap_LatLonAltCorners_lowerLeft_set, METH_VARARGS, (char *)"LatLonAltCorners_lowerLeft_set(LatLonAltCorners self, LatLonAlt lowerLeft)"},
 	 { (char *)"LatLonAltCorners_lowerLeft_get", _wrap_LatLonAltCorners_lowerLeft_get, METH_VARARGS, (char *)"LatLonAltCorners_lowerLeft_get(LatLonAltCorners self) -> LatLonAlt"},
 	 { (char *)"delete_LatLonAltCorners", _wrap_delete_LatLonAltCorners, METH_VARARGS, (char *)"delete_LatLonAltCorners(LatLonAltCorners self)"},
-	 { (char *)"LatLonAltCorners_swigregister", LatLonAltCorners_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LatLonAltCorners_swigregister", LatLonAltCorners_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"VectorMatchCollect_iterator", _wrap_VectorMatchCollect_iterator, METH_VARARGS, (char *)"VectorMatchCollect_iterator(VectorMatchCollect self) -> SwigPyIterator"},
 	 { (char *)"VectorMatchCollect___nonzero__", _wrap_VectorMatchCollect___nonzero__, METH_VARARGS, (char *)"VectorMatchCollect___nonzero__(VectorMatchCollect self) -> bool"},
 	 { (char *)"VectorMatchCollect___bool__", _wrap_VectorMatchCollect___bool__, METH_VARARGS, (char *)"VectorMatchCollect___bool__(VectorMatchCollect self) -> bool"},
@@ -104365,7 +104365,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorMatchCollect_reserve", _wrap_VectorMatchCollect_reserve, METH_VARARGS, (char *)"VectorMatchCollect_reserve(VectorMatchCollect self, std::vector< six::MatchCollect >::size_type n)"},
 	 { (char *)"VectorMatchCollect_capacity", _wrap_VectorMatchCollect_capacity, METH_VARARGS, (char *)"VectorMatchCollect_capacity(VectorMatchCollect self) -> std::vector< six::MatchCollect >::size_type"},
 	 { (char *)"delete_VectorMatchCollect", _wrap_delete_VectorMatchCollect, METH_VARARGS, (char *)"delete_VectorMatchCollect(VectorMatchCollect self)"},
-	 { (char *)"VectorMatchCollect_swigregister", VectorMatchCollect_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VectorMatchCollect_swigregister", VectorMatchCollect_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"VectorMatchType_iterator", _wrap_VectorMatchType_iterator, METH_VARARGS, (char *)"VectorMatchType_iterator(VectorMatchType self) -> SwigPyIterator"},
 	 { (char *)"VectorMatchType___nonzero__", _wrap_VectorMatchType___nonzero__, METH_VARARGS, (char *)"VectorMatchType___nonzero__(VectorMatchType self) -> bool"},
 	 { (char *)"VectorMatchType___bool__", _wrap_VectorMatchType___bool__, METH_VARARGS, (char *)"VectorMatchType___bool__(VectorMatchType self) -> bool"},
@@ -104426,7 +104426,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorMatchType_reserve", _wrap_VectorMatchType_reserve, METH_VARARGS, (char *)"VectorMatchType_reserve(VectorMatchType self, std::vector< six::MatchType >::size_type n)"},
 	 { (char *)"VectorMatchType_capacity", _wrap_VectorMatchType_capacity, METH_VARARGS, (char *)"VectorMatchType_capacity(VectorMatchType self) -> std::vector< six::MatchType >::size_type"},
 	 { (char *)"delete_VectorMatchType", _wrap_delete_VectorMatchType, METH_VARARGS, (char *)"delete_VectorMatchType(VectorMatchType self)"},
-	 { (char *)"VectorMatchType_swigregister", VectorMatchType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VectorMatchType_swigregister", VectorMatchType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"VectorScopedCopyableMatchType_iterator", _wrap_VectorScopedCopyableMatchType_iterator, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_iterator(VectorScopedCopyableMatchType self) -> SwigPyIterator"},
 	 { (char *)"VectorScopedCopyableMatchType___nonzero__", _wrap_VectorScopedCopyableMatchType___nonzero__, METH_VARARGS, (char *)"VectorScopedCopyableMatchType___nonzero__(VectorScopedCopyableMatchType self) -> bool"},
 	 { (char *)"VectorScopedCopyableMatchType___bool__", _wrap_VectorScopedCopyableMatchType___bool__, METH_VARARGS, (char *)"VectorScopedCopyableMatchType___bool__(VectorScopedCopyableMatchType self) -> bool"},
@@ -104487,7 +104487,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorScopedCopyableMatchType_reserve", _wrap_VectorScopedCopyableMatchType_reserve, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_reserve(VectorScopedCopyableMatchType self, std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type n)"},
 	 { (char *)"VectorScopedCopyableMatchType_capacity", _wrap_VectorScopedCopyableMatchType_capacity, METH_VARARGS, (char *)"VectorScopedCopyableMatchType_capacity(VectorScopedCopyableMatchType self) -> std::vector< mem::ScopedCopyablePtr< six::MatchType > >::size_type"},
 	 { (char *)"delete_VectorScopedCopyableMatchType", _wrap_delete_VectorScopedCopyableMatchType, METH_VARARGS, (char *)"delete_VectorScopedCopyableMatchType(VectorScopedCopyableMatchType self)"},
-	 { (char *)"VectorScopedCopyableMatchType_swigregister", VectorScopedCopyableMatchType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VectorScopedCopyableMatchType_swigregister", VectorScopedCopyableMatchType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"VectorScopedCopyableGeoInfo_iterator", _wrap_VectorScopedCopyableGeoInfo_iterator, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_iterator(VectorScopedCopyableGeoInfo self) -> SwigPyIterator"},
 	 { (char *)"VectorScopedCopyableGeoInfo___nonzero__", _wrap_VectorScopedCopyableGeoInfo___nonzero__, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo___nonzero__(VectorScopedCopyableGeoInfo self) -> bool"},
 	 { (char *)"VectorScopedCopyableGeoInfo___bool__", _wrap_VectorScopedCopyableGeoInfo___bool__, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo___bool__(VectorScopedCopyableGeoInfo self) -> bool"},
@@ -104548,10 +104548,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VectorScopedCopyableGeoInfo_reserve", _wrap_VectorScopedCopyableGeoInfo_reserve, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_reserve(VectorScopedCopyableGeoInfo self, std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type n)"},
 	 { (char *)"VectorScopedCopyableGeoInfo_capacity", _wrap_VectorScopedCopyableGeoInfo_capacity, METH_VARARGS, (char *)"VectorScopedCopyableGeoInfo_capacity(VectorScopedCopyableGeoInfo self) -> std::vector< mem::ScopedCopyablePtr< six::GeoInfo > >::size_type"},
 	 { (char *)"delete_VectorScopedCopyableGeoInfo", _wrap_delete_VectorScopedCopyableGeoInfo, METH_VARARGS, (char *)"delete_VectorScopedCopyableGeoInfo(VectorScopedCopyableGeoInfo self)"},
-	 { (char *)"VectorScopedCopyableGeoInfo_swigregister", VectorScopedCopyableGeoInfo_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VectorScopedCopyableGeoInfo_swigregister", VectorScopedCopyableGeoInfo_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_StdAutoRadiometric", _wrap_new_StdAutoRadiometric, METH_VARARGS, (char *)"new_StdAutoRadiometric() -> StdAutoRadiometric"},
 	 { (char *)"delete_StdAutoRadiometric", _wrap_delete_StdAutoRadiometric, METH_VARARGS, (char *)"delete_StdAutoRadiometric(StdAutoRadiometric self)"},
-	 { (char *)"StdAutoRadiometric_swigregister", StdAutoRadiometric_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoRadiometric_swigregister", StdAutoRadiometric_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyableRadiometric", _wrap_new_ScopedCopyableRadiometric, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableRadiometric(Radiometric ptr=None)\n"
 		"ScopedCopyableRadiometric()\n"
@@ -104584,11 +104584,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get", _wrap_ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get, METH_VARARGS, (char *)"ScopedCopyableRadiometric_gammaZeroSFIncidenceMap_get(ScopedCopyableRadiometric self) -> AppliedType"},
 	 { (char *)"ScopedCopyableRadiometric___eq__", _wrap_ScopedCopyableRadiometric___eq__, METH_VARARGS, (char *)"ScopedCopyableRadiometric___eq__(ScopedCopyableRadiometric self, Radiometric rhs) -> bool"},
 	 { (char *)"ScopedCopyableRadiometric___ne__", _wrap_ScopedCopyableRadiometric___ne__, METH_VARARGS, (char *)"ScopedCopyableRadiometric___ne__(ScopedCopyableRadiometric self, Radiometric rhs) -> bool"},
-	 { (char *)"ScopedCopyableRadiometric_swigregister", ScopedCopyableRadiometric_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyableRadiometric_swigregister", ScopedCopyableRadiometric_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyableRadiometric", _wrap_makeScopedCopyableRadiometric, METH_VARARGS, (char *)"makeScopedCopyableRadiometric() -> ScopedCopyableRadiometric"},
 	 { (char *)"new_StdAutoErrorStatistics", _wrap_new_StdAutoErrorStatistics, METH_VARARGS, (char *)"new_StdAutoErrorStatistics() -> StdAutoErrorStatistics"},
 	 { (char *)"delete_StdAutoErrorStatistics", _wrap_delete_StdAutoErrorStatistics, METH_VARARGS, (char *)"delete_StdAutoErrorStatistics(StdAutoErrorStatistics self)"},
-	 { (char *)"StdAutoErrorStatistics_swigregister", StdAutoErrorStatistics_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoErrorStatistics_swigregister", StdAutoErrorStatistics_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyableErrorStatistics", _wrap_new_ScopedCopyableErrorStatistics, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableErrorStatistics(ErrorStatistics ptr=None)\n"
 		"ScopedCopyableErrorStatistics()\n"
@@ -104611,11 +104611,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableErrorStatistics_additionalParameters_get", _wrap_ScopedCopyableErrorStatistics_additionalParameters_get, METH_VARARGS, (char *)"ScopedCopyableErrorStatistics_additionalParameters_get(ScopedCopyableErrorStatistics self) -> ParameterCollection"},
 	 { (char *)"ScopedCopyableErrorStatistics___eq__", _wrap_ScopedCopyableErrorStatistics___eq__, METH_VARARGS, (char *)"ScopedCopyableErrorStatistics___eq__(ScopedCopyableErrorStatistics self, ErrorStatistics rhs) -> bool"},
 	 { (char *)"ScopedCopyableErrorStatistics___ne__", _wrap_ScopedCopyableErrorStatistics___ne__, METH_VARARGS, (char *)"ScopedCopyableErrorStatistics___ne__(ScopedCopyableErrorStatistics self, ErrorStatistics rhs) -> bool"},
-	 { (char *)"ScopedCopyableErrorStatistics_swigregister", ScopedCopyableErrorStatistics_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyableErrorStatistics_swigregister", ScopedCopyableErrorStatistics_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyableErrorStatistics", _wrap_makeScopedCopyableErrorStatistics, METH_VARARGS, (char *)"makeScopedCopyableErrorStatistics() -> ScopedCopyableErrorStatistics"},
 	 { (char *)"new_StdAutoComponents", _wrap_new_StdAutoComponents, METH_VARARGS, (char *)"new_StdAutoComponents() -> StdAutoComponents"},
 	 { (char *)"delete_StdAutoComponents", _wrap_delete_StdAutoComponents, METH_VARARGS, (char *)"delete_StdAutoComponents(StdAutoComponents self)"},
-	 { (char *)"StdAutoComponents_swigregister", StdAutoComponents_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoComponents_swigregister", StdAutoComponents_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyableComponents", _wrap_new_ScopedCopyableComponents, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableComponents(Components ptr=None)\n"
 		"ScopedCopyableComponents()\n"
@@ -104640,11 +104640,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableComponents_ionoError_get", _wrap_ScopedCopyableComponents_ionoError_get, METH_VARARGS, (char *)"ScopedCopyableComponents_ionoError_get(ScopedCopyableComponents self) -> ScopedCopyableIonoError"},
 	 { (char *)"ScopedCopyableComponents___eq__", _wrap_ScopedCopyableComponents___eq__, METH_VARARGS, (char *)"ScopedCopyableComponents___eq__(ScopedCopyableComponents self, Components rhs) -> bool"},
 	 { (char *)"ScopedCopyableComponents___ne__", _wrap_ScopedCopyableComponents___ne__, METH_VARARGS, (char *)"ScopedCopyableComponents___ne__(ScopedCopyableComponents self, Components rhs) -> bool"},
-	 { (char *)"ScopedCopyableComponents_swigregister", ScopedCopyableComponents_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyableComponents_swigregister", ScopedCopyableComponents_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyableComponents", _wrap_makeScopedCopyableComponents, METH_VARARGS, (char *)"makeScopedCopyableComponents() -> ScopedCopyableComponents"},
 	 { (char *)"new_StdAutoCorrCoefs", _wrap_new_StdAutoCorrCoefs, METH_VARARGS, (char *)"new_StdAutoCorrCoefs() -> StdAutoCorrCoefs"},
 	 { (char *)"delete_StdAutoCorrCoefs", _wrap_delete_StdAutoCorrCoefs, METH_VARARGS, (char *)"delete_StdAutoCorrCoefs(StdAutoCorrCoefs self)"},
-	 { (char *)"StdAutoCorrCoefs_swigregister", StdAutoCorrCoefs_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoCorrCoefs_swigregister", StdAutoCorrCoefs_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyableCorrCoefs", _wrap_new_ScopedCopyableCorrCoefs, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableCorrCoefs(CorrCoefs ptr=None)\n"
 		"ScopedCopyableCorrCoefs()\n"
@@ -104691,11 +104691,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableCorrCoefs_v2v3_get", _wrap_ScopedCopyableCorrCoefs_v2v3_get, METH_VARARGS, (char *)"ScopedCopyableCorrCoefs_v2v3_get(ScopedCopyableCorrCoefs self) -> double"},
 	 { (char *)"ScopedCopyableCorrCoefs___eq__", _wrap_ScopedCopyableCorrCoefs___eq__, METH_VARARGS, (char *)"ScopedCopyableCorrCoefs___eq__(ScopedCopyableCorrCoefs self, CorrCoefs rhs) -> bool"},
 	 { (char *)"ScopedCopyableCorrCoefs___ne__", _wrap_ScopedCopyableCorrCoefs___ne__, METH_VARARGS, (char *)"ScopedCopyableCorrCoefs___ne__(ScopedCopyableCorrCoefs self, CorrCoefs rhs) -> bool"},
-	 { (char *)"ScopedCopyableCorrCoefs_swigregister", ScopedCopyableCorrCoefs_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyableCorrCoefs_swigregister", ScopedCopyableCorrCoefs_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyableCorrCoefs", _wrap_makeScopedCopyableCorrCoefs, METH_VARARGS, (char *)"makeScopedCopyableCorrCoefs() -> ScopedCopyableCorrCoefs"},
 	 { (char *)"new_StdAutoPosVelError", _wrap_new_StdAutoPosVelError, METH_VARARGS, (char *)"new_StdAutoPosVelError() -> StdAutoPosVelError"},
 	 { (char *)"delete_StdAutoPosVelError", _wrap_delete_StdAutoPosVelError, METH_VARARGS, (char *)"delete_StdAutoPosVelError(StdAutoPosVelError self)"},
-	 { (char *)"StdAutoPosVelError_swigregister", StdAutoPosVelError_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoPosVelError_swigregister", StdAutoPosVelError_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyablePosVelError", _wrap_new_ScopedCopyablePosVelError, METH_VARARGS, (char *)"\n"
 		"ScopedCopyablePosVelError(PosVelError ptr=None)\n"
 		"ScopedCopyablePosVelError()\n"
@@ -104730,11 +104730,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyablePosVelError_positionDecorr_get", _wrap_ScopedCopyablePosVelError_positionDecorr_get, METH_VARARGS, (char *)"ScopedCopyablePosVelError_positionDecorr_get(ScopedCopyablePosVelError self) -> DecorrType"},
 	 { (char *)"ScopedCopyablePosVelError___eq__", _wrap_ScopedCopyablePosVelError___eq__, METH_VARARGS, (char *)"ScopedCopyablePosVelError___eq__(ScopedCopyablePosVelError self, PosVelError rhs) -> bool"},
 	 { (char *)"ScopedCopyablePosVelError___ne__", _wrap_ScopedCopyablePosVelError___ne__, METH_VARARGS, (char *)"ScopedCopyablePosVelError___ne__(ScopedCopyablePosVelError self, PosVelError rhs) -> bool"},
-	 { (char *)"ScopedCopyablePosVelError_swigregister", ScopedCopyablePosVelError_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyablePosVelError_swigregister", ScopedCopyablePosVelError_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyablePosVelError", _wrap_makeScopedCopyablePosVelError, METH_VARARGS, (char *)"makeScopedCopyablePosVelError() -> ScopedCopyablePosVelError"},
 	 { (char *)"new_StdAutoGeoInfo", _wrap_new_StdAutoGeoInfo, METH_VARARGS, (char *)"new_StdAutoGeoInfo() -> StdAutoGeoInfo"},
 	 { (char *)"delete_StdAutoGeoInfo", _wrap_delete_StdAutoGeoInfo, METH_VARARGS, (char *)"delete_StdAutoGeoInfo(StdAutoGeoInfo self)"},
-	 { (char *)"StdAutoGeoInfo_swigregister", StdAutoGeoInfo_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoGeoInfo_swigregister", StdAutoGeoInfo_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyableGeoInfo", _wrap_new_ScopedCopyableGeoInfo, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableGeoInfo(GeoInfo ptr=None)\n"
 		"ScopedCopyableGeoInfo()\n"
@@ -104759,11 +104759,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableGeoInfo_geometryLatLon_get", _wrap_ScopedCopyableGeoInfo_geometryLatLon_get, METH_VARARGS, (char *)"ScopedCopyableGeoInfo_geometryLatLon_get(ScopedCopyableGeoInfo self) -> std::vector< six::LatLon,std::allocator< six::LatLon > > *"},
 	 { (char *)"ScopedCopyableGeoInfo___eq__", _wrap_ScopedCopyableGeoInfo___eq__, METH_VARARGS, (char *)"ScopedCopyableGeoInfo___eq__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"},
 	 { (char *)"ScopedCopyableGeoInfo___ne__", _wrap_ScopedCopyableGeoInfo___ne__, METH_VARARGS, (char *)"ScopedCopyableGeoInfo___ne__(ScopedCopyableGeoInfo self, GeoInfo rhs) -> bool"},
-	 { (char *)"ScopedCopyableGeoInfo_swigregister", ScopedCopyableGeoInfo_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyableGeoInfo_swigregister", ScopedCopyableGeoInfo_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyableGeoInfo", _wrap_makeScopedCopyableGeoInfo, METH_VARARGS, (char *)"makeScopedCopyableGeoInfo() -> ScopedCopyableGeoInfo"},
 	 { (char *)"new_StdAutoRadarSensor", _wrap_new_StdAutoRadarSensor, METH_VARARGS, (char *)"new_StdAutoRadarSensor() -> StdAutoRadarSensor"},
 	 { (char *)"delete_StdAutoRadarSensor", _wrap_delete_StdAutoRadarSensor, METH_VARARGS, (char *)"delete_StdAutoRadarSensor(StdAutoRadarSensor self)"},
-	 { (char *)"StdAutoRadarSensor_swigregister", StdAutoRadarSensor_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoRadarSensor_swigregister", StdAutoRadarSensor_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyableRadarSensor", _wrap_new_ScopedCopyableRadarSensor, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableRadarSensor(RadarSensor ptr=None)\n"
 		"ScopedCopyableRadarSensor()\n"
@@ -104788,11 +104788,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableRadarSensor_rangeBiasDecorr_get", _wrap_ScopedCopyableRadarSensor_rangeBiasDecorr_get, METH_VARARGS, (char *)"ScopedCopyableRadarSensor_rangeBiasDecorr_get(ScopedCopyableRadarSensor self) -> DecorrType"},
 	 { (char *)"ScopedCopyableRadarSensor___eq__", _wrap_ScopedCopyableRadarSensor___eq__, METH_VARARGS, (char *)"ScopedCopyableRadarSensor___eq__(ScopedCopyableRadarSensor self, RadarSensor rhs) -> bool"},
 	 { (char *)"ScopedCopyableRadarSensor___ne__", _wrap_ScopedCopyableRadarSensor___ne__, METH_VARARGS, (char *)"ScopedCopyableRadarSensor___ne__(ScopedCopyableRadarSensor self, RadarSensor rhs) -> bool"},
-	 { (char *)"ScopedCopyableRadarSensor_swigregister", ScopedCopyableRadarSensor_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyableRadarSensor_swigregister", ScopedCopyableRadarSensor_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyableRadarSensor", _wrap_makeScopedCopyableRadarSensor, METH_VARARGS, (char *)"makeScopedCopyableRadarSensor() -> ScopedCopyableRadarSensor"},
 	 { (char *)"new_StdAutoTropoError", _wrap_new_StdAutoTropoError, METH_VARARGS, (char *)"new_StdAutoTropoError() -> StdAutoTropoError"},
 	 { (char *)"delete_StdAutoTropoError", _wrap_delete_StdAutoTropoError, METH_VARARGS, (char *)"delete_StdAutoTropoError(StdAutoTropoError self)"},
-	 { (char *)"StdAutoTropoError_swigregister", StdAutoTropoError_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoTropoError_swigregister", StdAutoTropoError_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyableTropoError", _wrap_new_ScopedCopyableTropoError, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableTropoError(TropoError ptr=None)\n"
 		"ScopedCopyableTropoError()\n"
@@ -104815,11 +104815,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableTropoError_tropoRangeDecorr_get", _wrap_ScopedCopyableTropoError_tropoRangeDecorr_get, METH_VARARGS, (char *)"ScopedCopyableTropoError_tropoRangeDecorr_get(ScopedCopyableTropoError self) -> DecorrType"},
 	 { (char *)"ScopedCopyableTropoError___eq__", _wrap_ScopedCopyableTropoError___eq__, METH_VARARGS, (char *)"ScopedCopyableTropoError___eq__(ScopedCopyableTropoError self, TropoError rhs) -> bool"},
 	 { (char *)"ScopedCopyableTropoError___ne__", _wrap_ScopedCopyableTropoError___ne__, METH_VARARGS, (char *)"ScopedCopyableTropoError___ne__(ScopedCopyableTropoError self, TropoError rhs) -> bool"},
-	 { (char *)"ScopedCopyableTropoError_swigregister", ScopedCopyableTropoError_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyableTropoError_swigregister", ScopedCopyableTropoError_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyableTropoError", _wrap_makeScopedCopyableTropoError, METH_VARARGS, (char *)"makeScopedCopyableTropoError() -> ScopedCopyableTropoError"},
 	 { (char *)"new_StdAutoIonoError", _wrap_new_StdAutoIonoError, METH_VARARGS, (char *)"new_StdAutoIonoError() -> StdAutoIonoError"},
 	 { (char *)"delete_StdAutoIonoError", _wrap_delete_StdAutoIonoError, METH_VARARGS, (char *)"delete_StdAutoIonoError(StdAutoIonoError self)"},
-	 { (char *)"StdAutoIonoError_swigregister", StdAutoIonoError_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoIonoError_swigregister", StdAutoIonoError_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyableIonoError", _wrap_new_ScopedCopyableIonoError, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableIonoError(IonoError ptr=None)\n"
 		"ScopedCopyableIonoError()\n"
@@ -104844,11 +104844,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableIonoError_ionoRangeVertDecorr_get", _wrap_ScopedCopyableIonoError_ionoRangeVertDecorr_get, METH_VARARGS, (char *)"ScopedCopyableIonoError_ionoRangeVertDecorr_get(ScopedCopyableIonoError self) -> DecorrType"},
 	 { (char *)"ScopedCopyableIonoError___eq__", _wrap_ScopedCopyableIonoError___eq__, METH_VARARGS, (char *)"ScopedCopyableIonoError___eq__(ScopedCopyableIonoError self, IonoError rhs) -> bool"},
 	 { (char *)"ScopedCopyableIonoError___ne__", _wrap_ScopedCopyableIonoError___ne__, METH_VARARGS, (char *)"ScopedCopyableIonoError___ne__(ScopedCopyableIonoError self, IonoError rhs) -> bool"},
-	 { (char *)"ScopedCopyableIonoError_swigregister", ScopedCopyableIonoError_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyableIonoError_swigregister", ScopedCopyableIonoError_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyableIonoError", _wrap_makeScopedCopyableIonoError, METH_VARARGS, (char *)"makeScopedCopyableIonoError() -> ScopedCopyableIonoError"},
 	 { (char *)"new_StdAutoCompositeSCP", _wrap_new_StdAutoCompositeSCP, METH_VARARGS, (char *)"new_StdAutoCompositeSCP() -> StdAutoCompositeSCP"},
 	 { (char *)"delete_StdAutoCompositeSCP", _wrap_delete_StdAutoCompositeSCP, METH_VARARGS, (char *)"delete_StdAutoCompositeSCP(StdAutoCompositeSCP self)"},
-	 { (char *)"StdAutoCompositeSCP_swigregister", StdAutoCompositeSCP_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoCompositeSCP_swigregister", StdAutoCompositeSCP_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyableCompositeSCP", _wrap_new_ScopedCopyableCompositeSCP, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableCompositeSCP(CompositeSCP ptr=None)\n"
 		"ScopedCopyableCompositeSCP()\n"
@@ -104873,11 +104873,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableCompositeSCP_xyErr_get", _wrap_ScopedCopyableCompositeSCP_xyErr_get, METH_VARARGS, (char *)"ScopedCopyableCompositeSCP_xyErr_get(ScopedCopyableCompositeSCP self) -> double"},
 	 { (char *)"ScopedCopyableCompositeSCP___eq__", _wrap_ScopedCopyableCompositeSCP___eq__, METH_VARARGS, (char *)"ScopedCopyableCompositeSCP___eq__(ScopedCopyableCompositeSCP self, CompositeSCP rhs) -> bool"},
 	 { (char *)"ScopedCopyableCompositeSCP___ne__", _wrap_ScopedCopyableCompositeSCP___ne__, METH_VARARGS, (char *)"ScopedCopyableCompositeSCP___ne__(ScopedCopyableCompositeSCP self, CompositeSCP rhs) -> bool"},
-	 { (char *)"ScopedCopyableCompositeSCP_swigregister", ScopedCopyableCompositeSCP_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyableCompositeSCP_swigregister", ScopedCopyableCompositeSCP_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyableCompositeSCP", _wrap_makeScopedCopyableCompositeSCP, METH_VARARGS, (char *)"makeScopedCopyableCompositeSCP() -> ScopedCopyableCompositeSCP"},
 	 { (char *)"new_StdAutoMatchInformation", _wrap_new_StdAutoMatchInformation, METH_VARARGS, (char *)"new_StdAutoMatchInformation() -> StdAutoMatchInformation"},
 	 { (char *)"delete_StdAutoMatchInformation", _wrap_delete_StdAutoMatchInformation, METH_VARARGS, (char *)"delete_StdAutoMatchInformation(StdAutoMatchInformation self)"},
-	 { (char *)"StdAutoMatchInformation_swigregister", StdAutoMatchInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoMatchInformation_swigregister", StdAutoMatchInformation_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyableMatchInformation", _wrap_new_ScopedCopyableMatchInformation, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableMatchInformation(MatchInformation ptr=None)\n"
 		"ScopedCopyableMatchInformation()\n"
@@ -104896,11 +104896,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableMatchInformation_types_get", _wrap_ScopedCopyableMatchInformation_types_get, METH_VARARGS, (char *)"ScopedCopyableMatchInformation_types_get(ScopedCopyableMatchInformation self) -> VectorMatchType"},
 	 { (char *)"ScopedCopyableMatchInformation___eq__", _wrap_ScopedCopyableMatchInformation___eq__, METH_VARARGS, (char *)"ScopedCopyableMatchInformation___eq__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"},
 	 { (char *)"ScopedCopyableMatchInformation___ne__", _wrap_ScopedCopyableMatchInformation___ne__, METH_VARARGS, (char *)"ScopedCopyableMatchInformation___ne__(ScopedCopyableMatchInformation self, MatchInformation rhs) -> bool"},
-	 { (char *)"ScopedCopyableMatchInformation_swigregister", ScopedCopyableMatchInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyableMatchInformation_swigregister", ScopedCopyableMatchInformation_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyableMatchInformation", _wrap_makeScopedCopyableMatchInformation, METH_VARARGS, (char *)"makeScopedCopyableMatchInformation() -> ScopedCopyableMatchInformation"},
 	 { (char *)"new_StdAutoMatchType", _wrap_new_StdAutoMatchType, METH_VARARGS, (char *)"new_StdAutoMatchType() -> StdAutoMatchType"},
 	 { (char *)"delete_StdAutoMatchType", _wrap_delete_StdAutoMatchType, METH_VARARGS, (char *)"delete_StdAutoMatchType(StdAutoMatchType self)"},
-	 { (char *)"StdAutoMatchType_swigregister", StdAutoMatchType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoMatchType_swigregister", StdAutoMatchType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCopyableMatchType", _wrap_new_ScopedCopyableMatchType, METH_VARARGS, (char *)"\n"
 		"ScopedCopyableMatchType(MatchType ptr=None)\n"
 		"ScopedCopyableMatchType()\n"
@@ -104929,11 +104929,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCopyableMatchType_matchCollects_get", _wrap_ScopedCopyableMatchType_matchCollects_get, METH_VARARGS, (char *)"ScopedCopyableMatchType_matchCollects_get(ScopedCopyableMatchType self) -> VectorMatchCollect"},
 	 { (char *)"ScopedCopyableMatchType___eq__", _wrap_ScopedCopyableMatchType___eq__, METH_VARARGS, (char *)"ScopedCopyableMatchType___eq__(ScopedCopyableMatchType self, MatchType rhs) -> bool"},
 	 { (char *)"ScopedCopyableMatchType___ne__", _wrap_ScopedCopyableMatchType___ne__, METH_VARARGS, (char *)"ScopedCopyableMatchType___ne__(ScopedCopyableMatchType self, MatchType rhs) -> bool"},
-	 { (char *)"ScopedCopyableMatchType_swigregister", ScopedCopyableMatchType_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCopyableMatchType_swigregister", ScopedCopyableMatchType_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCopyableMatchType", _wrap_makeScopedCopyableMatchType, METH_VARARGS, (char *)"makeScopedCopyableMatchType() -> ScopedCopyableMatchType"},
 	 { (char *)"new_StdAutoAmplitudeTable", _wrap_new_StdAutoAmplitudeTable, METH_VARARGS, (char *)"new_StdAutoAmplitudeTable() -> StdAutoAmplitudeTable"},
 	 { (char *)"delete_StdAutoAmplitudeTable", _wrap_delete_StdAutoAmplitudeTable, METH_VARARGS, (char *)"delete_StdAutoAmplitudeTable(StdAutoAmplitudeTable self)"},
-	 { (char *)"StdAutoAmplitudeTable_swigregister", StdAutoAmplitudeTable_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoAmplitudeTable_swigregister", StdAutoAmplitudeTable_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCloneableAmplitudeTable", _wrap_new_ScopedCloneableAmplitudeTable, METH_VARARGS, (char *)"\n"
 		"ScopedCloneableAmplitudeTable(AmplitudeTable ptr=None)\n"
 		"ScopedCloneableAmplitudeTable()\n"
@@ -104962,11 +104962,11 @@ static PyMethodDef SwigMethods[] = {
 		"getTable() -> unsigned char\n"
 		"ScopedCloneableAmplitudeTable_getTable(ScopedCloneableAmplitudeTable self) -> unsigned char const *\n"
 		""},
-	 { (char *)"ScopedCloneableAmplitudeTable_swigregister", ScopedCloneableAmplitudeTable_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCloneableAmplitudeTable_swigregister", ScopedCloneableAmplitudeTable_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCloneableAmplitudeTable", _wrap_makeScopedCloneableAmplitudeTable, METH_VARARGS, (char *)"makeScopedCloneableAmplitudeTable() -> ScopedCloneableAmplitudeTable"},
 	 { (char *)"new_StdAutoCollectionInformation", _wrap_new_StdAutoCollectionInformation, METH_VARARGS, (char *)"new_StdAutoCollectionInformation() -> StdAutoCollectionInformation"},
 	 { (char *)"delete_StdAutoCollectionInformation", _wrap_delete_StdAutoCollectionInformation, METH_VARARGS, (char *)"delete_StdAutoCollectionInformation(StdAutoCollectionInformation self)"},
-	 { (char *)"StdAutoCollectionInformation_swigregister", StdAutoCollectionInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"StdAutoCollectionInformation_swigregister", StdAutoCollectionInformation_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"new_ScopedCloneableCollectionInformation", _wrap_new_ScopedCloneableCollectionInformation, METH_VARARGS, (char *)"\n"
 		"ScopedCloneableCollectionInformation(CollectionInformation ptr=None)\n"
 		"ScopedCloneableCollectionInformation()\n"
@@ -105003,9 +105003,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScopedCloneableCollectionInformation___ne__", _wrap_ScopedCloneableCollectionInformation___ne__, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation___ne__(ScopedCloneableCollectionInformation self, CollectionInformation other) -> bool"},
 	 { (char *)"ScopedCloneableCollectionInformation_getClassificationLevel", _wrap_ScopedCloneableCollectionInformation_getClassificationLevel, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_getClassificationLevel(ScopedCloneableCollectionInformation self) -> std::string"},
 	 { (char *)"ScopedCloneableCollectionInformation_setClassificationLevel", _wrap_ScopedCloneableCollectionInformation_setClassificationLevel, METH_VARARGS, (char *)"ScopedCloneableCollectionInformation_setClassificationLevel(ScopedCloneableCollectionInformation self, std::string const & classification)"},
-	 { (char *)"ScopedCloneableCollectionInformation_swigregister", ScopedCloneableCollectionInformation_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ScopedCloneableCollectionInformation_swigregister", ScopedCloneableCollectionInformation_swigregister, METH_VARARGS, nullptr},
 	 { (char *)"makeScopedCloneableCollectionInformation", _wrap_makeScopedCloneableCollectionInformation, METH_VARARGS, (char *)"makeScopedCloneableCollectionInformation() -> ScopedCloneableCollectionInformation"},
-	 { NULL, NULL, 0, NULL }
+	 { nullptr, nullptr, 0, nullptr }
 };
 
 
@@ -105263,21 +105263,21 @@ static swig_type_info _swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__Geo
 static swig_type_info _swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t = {"_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t", "std::allocator< mem::ScopedCopyablePtr< six::MatchType > > *|std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_six__MatchCollect_t = {"_p_std__allocatorT_six__MatchCollect_t", "std::vector< six::MatchCollect >::allocator_type *|std::allocator< six::MatchCollect > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_six__MatchType_t = {"_p_std__allocatorT_six__MatchType_t", "std::vector< six::MatchType >::allocator_type *|std::allocator< six::MatchType > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__AmplitudeTable_t = {"_p_std__auto_ptrT_six__AmplitudeTable_t", "std::auto_ptr< six::AmplitudeTable > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__CollectionInformation_t = {"_p_std__auto_ptrT_six__CollectionInformation_t", "std::auto_ptr< six::CollectionInformation > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__Components_t = {"_p_std__auto_ptrT_six__Components_t", "std::auto_ptr< six::Components > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__CompositeSCP_t = {"_p_std__auto_ptrT_six__CompositeSCP_t", "std::auto_ptr< six::CompositeSCP > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__CorrCoefs_t = {"_p_std__auto_ptrT_six__CorrCoefs_t", "std::auto_ptr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__ErrorStatistics_t = {"_p_std__auto_ptrT_six__ErrorStatistics_t", "std::auto_ptr< six::ErrorStatistics > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__GeoInfo_t = {"_p_std__auto_ptrT_six__GeoInfo_t", "std::auto_ptr< six::GeoInfo > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__IonoError_t = {"_p_std__auto_ptrT_six__IonoError_t", "std::auto_ptr< six::IonoError > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__MatchInformation_t = {"_p_std__auto_ptrT_six__MatchInformation_t", "std::auto_ptr< six::MatchInformation > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__MatchType_t = {"_p_std__auto_ptrT_six__MatchType_t", "std::auto_ptr< six::MatchType > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__PosVelError_t = {"_p_std__auto_ptrT_six__PosVelError_t", "std::auto_ptr< six::PosVelError > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__RadarSensor_t = {"_p_std__auto_ptrT_six__RadarSensor_t", "std::auto_ptr< six::RadarSensor > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__Radiometric_t = {"_p_std__auto_ptrT_six__Radiometric_t", "std::auto_ptr< six::Radiometric > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__TropoError_t = {"_p_std__auto_ptrT_six__TropoError_t", "std::auto_ptr< six::TropoError > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__XMLControlCreator_t = {"_p_std__auto_ptrT_six__XMLControlCreator_t", "std::auto_ptr< six::XMLControlCreator > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__AmplitudeTable_t = {"_p_std__auto_ptrT_six__AmplitudeTable_t", "mem::auto_ptr< six::AmplitudeTable > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__CollectionInformation_t = {"_p_std__auto_ptrT_six__CollectionInformation_t", "mem::auto_ptr< six::CollectionInformation > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__Components_t = {"_p_std__auto_ptrT_six__Components_t", "mem::auto_ptr< six::Components > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__CompositeSCP_t = {"_p_std__auto_ptrT_six__CompositeSCP_t", "mem::auto_ptr< six::CompositeSCP > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__CorrCoefs_t = {"_p_std__auto_ptrT_six__CorrCoefs_t", "mem::auto_ptr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__ErrorStatistics_t = {"_p_std__auto_ptrT_six__ErrorStatistics_t", "mem::auto_ptr< six::ErrorStatistics > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__GeoInfo_t = {"_p_std__auto_ptrT_six__GeoInfo_t", "mem::auto_ptr< six::GeoInfo > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__IonoError_t = {"_p_std__auto_ptrT_six__IonoError_t", "mem::auto_ptr< six::IonoError > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__MatchInformation_t = {"_p_std__auto_ptrT_six__MatchInformation_t", "mem::auto_ptr< six::MatchInformation > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__MatchType_t = {"_p_std__auto_ptrT_six__MatchType_t", "mem::auto_ptr< six::MatchType > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__PosVelError_t = {"_p_std__auto_ptrT_six__PosVelError_t", "mem::auto_ptr< six::PosVelError > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__RadarSensor_t = {"_p_std__auto_ptrT_six__RadarSensor_t", "mem::auto_ptr< six::RadarSensor > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__Radiometric_t = {"_p_std__auto_ptrT_six__Radiometric_t", "mem::auto_ptr< six::Radiometric > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__TropoError_t = {"_p_std__auto_ptrT_six__TropoError_t", "mem::auto_ptr< six::TropoError > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__XMLControlCreator_t = {"_p_std__auto_ptrT_six__XMLControlCreator_t", "mem::auto_ptr< six::XMLControlCreator > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator = {"_p_std__mapT_std__string_six__Parameter_t__const_iterator", "std::map< std::string,six::Parameter >::const_iterator *|six::Options::ParameterIter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
@@ -106188,7 +106188,7 @@ extern "C" {
   
   SWIGINTERN PyObject *
   swig_varlink_getattr(swig_varlinkobject *v, char *n) {
-    PyObject *res = NULL;
+    PyObject *res = nullptr;
     swig_globalvar *var = v->vars;
     while (var) {
       if (strcmp(var->name,n) == 0) {
@@ -106197,7 +106197,7 @@ extern "C" {
       }
       var = var->next;
     }
-    if (res == NULL && !PyErr_Occurred()) {
+    if (res == nullptr && !PyErr_Occurred()) {
       PyErr_Format(PyExc_AttributeError, "Unknown C global variable '%s'", n);
     }
     return res;
@@ -106228,9 +106228,9 @@ extern "C" {
     if (!type_init) {
       const PyTypeObject tmp = {
 #if PY_VERSION_HEX >= 0x03000000
-        PyVarObject_HEAD_INIT(NULL, 0)
+        PyVarObject_HEAD_INIT(nullptr, 0)
 #else
-        PyObject_HEAD_INIT(NULL)
+        PyObject_HEAD_INIT(nullptr)
         0,                                  /* ob_size */
 #endif
         (char *)"swigvarlink",              /* tp_name */
@@ -106285,7 +106285,7 @@ extern "C" {
       varlink_type.ob_type = &PyType_Type;
 #else
       if (PyType_Ready(&varlink_type) < 0)
-      return NULL;
+      return nullptr;
 #endif
     }
     return &varlink_type;
@@ -106427,20 +106427,20 @@ SWIG_init(void) {
     PyModuleDef_HEAD_INIT,
 # else
     {
-      PyObject_HEAD_INIT(NULL)
-      NULL, /* m_init */
+      PyObject_HEAD_INIT(nullptr)
+      nullptr, /* m_init */
       0,    /* m_index */
-      NULL, /* m_copy */
+      nullptr, /* m_copy */
     },
 # endif
     (char *) SWIG_name,
-    NULL,
+    nullptr,
     -1,
     SwigMethods,
-    NULL,
-    NULL,
-    NULL,
-    NULL
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
   };
 #endif
   
@@ -106449,14 +106449,14 @@ SWIG_init(void) {
     0, 0, 0, 0, 0, 0, 0
   };
   static PyGetSetDef this_getset_def = {
-    (char *)"this", &SwigPyBuiltin_ThisClosure, NULL, NULL, NULL
+    (char *)"this", &SwigPyBuiltin_ThisClosure, nullptr, nullptr, nullptr
   };
   static SwigPyGetSet thisown_getset_closure = {
     (PyCFunction) SwigPyObject_own,
     (PyCFunction) SwigPyObject_own
   };
   static PyGetSetDef thisown_getset_def = {
-    (char *)"thisown", SwigPyBuiltin_GetterClosure, SwigPyBuiltin_SetterClosure, NULL, &thisown_getset_closure
+    (char *)"thisown", SwigPyBuiltin_GetterClosure, SwigPyBuiltin_SetterClosure, nullptr, &thisown_getset_closure
   };
   PyTypeObject *builtin_pytype;
   int builtin_base_count;
@@ -106510,7 +106510,7 @@ SWIG_init(void) {
   } else if (swigpyobject->tp_basicsize != cd->pytype->tp_basicsize) {
     PyErr_SetString(PyExc_RuntimeError, "Import error: attempted to load two incompatible swig-generated modules.");
 # if PY_VERSION_HEX >= 0x03000000
-    return NULL;
+    return nullptr;
 # else
     return;
 # endif
@@ -106530,7 +106530,7 @@ SWIG_init(void) {
   
   PyDict_SetItemString(md, "__all__", public_interface);
   Py_DECREF(public_interface);
-  for (i = 0; SwigMethods[i].ml_name != NULL; ++i)
+  for (i = 0; SwigMethods[i].ml_name != nullptr; ++i)
   SwigPyBuiltin_AddPublicSymbol(public_interface, SwigMethods[i].ml_name);
   for (i = 0; swig_const_table[i].name != 0; ++i)
   SwigPyBuiltin_AddPublicSymbol(public_interface, swig_const_table[i].name);

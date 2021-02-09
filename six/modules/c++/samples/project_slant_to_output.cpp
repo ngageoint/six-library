@@ -30,11 +30,12 @@
  * imagesc(img, [0, mean(img(:))]);
  */
 
+#include <scene/ProjectionPolynomialFitter.h>
+
 #include <cli/ArgumentParser.h>
 #include <cli/Results.h>
 #include <math/Round.h>
 #include <sio/lite/FileWriter.h>
-#include <scene/ProjectionPolynomialFitter.h>
 #include <six/XMLControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/sicd/AreaPlaneUtility.h>

@@ -19,15 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sicd/SICDVersionUpdater.h>
 
 #include <iostream>
+
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
 #include <six/Data.h>
 #include <six/NITFWriteControl.h>
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/ComplexXMLControl.h>
-#include <six/sicd/SICDVersionUpdater.h>
 #include <six/sicd/Utilities.h>
 #include <logging/Logger.h>
 

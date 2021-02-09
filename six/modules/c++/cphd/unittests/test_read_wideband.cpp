@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/Wideband.h>
 
 #include <cphd/Metadata.h>
-#include <cphd/Wideband.h>
 #include <io/ByteStream.h>
 #include "TestCase.h"
 

@@ -30,6 +30,12 @@
 #include <cphd03/FileHeader.h>
 #include <cphd/ByteSwap.h>
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace cphd03
 {
 CPHDWriter::CPHDWriter(const Metadata& metadata,

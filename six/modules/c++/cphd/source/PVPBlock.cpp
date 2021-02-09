@@ -37,6 +37,12 @@
 #include <cphd/Metadata.h>
 #include <cphd/Utilities.h>
 
+#include <sys/Bit.h>
+namespace std
+{
+    using endian = sys::Endian;
+}
+
 namespace
 {
 // Set data from data block into data struct

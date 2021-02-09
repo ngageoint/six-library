@@ -3294,7 +3294,7 @@ VectorAntennaParameters_swigregister = _cphd03.VectorAntennaParameters_swigregis
 VectorAntennaParameters_swigregister(VectorAntennaParameters)
 
 class StdAutoDwellTimeParameters(_object):
-    """Proxy of C++ std::auto_ptr<(cphd03::DwellTimeParameters)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd03::DwellTimeParameters)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoDwellTimeParameters, name, value)
@@ -3303,7 +3303,7 @@ class StdAutoDwellTimeParameters(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd03::DwellTimeParameters)> self) -> StdAutoDwellTimeParameters"""
+        """__init__(mem::auto_ptr<(cphd03::DwellTimeParameters)> self) -> StdAutoDwellTimeParameters"""
         this = _cphd03.new_StdAutoDwellTimeParameters()
         try:
             self.this.append(this)
@@ -3475,7 +3475,7 @@ def makeScopedCopyableAreaPlane() -> "mem::ScopedCopyablePtr< cphd03::AreaPlane 
     """makeScopedCopyableAreaPlane() -> ScopedCopyableAreaPlane"""
     return _cphd03.makeScopedCopyableAreaPlane()
 class StdAutoFxParameters(_object):
-    """Proxy of C++ std::auto_ptr<(cphd03::FxParameters)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd03::FxParameters)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoFxParameters, name, value)
@@ -3484,7 +3484,7 @@ class StdAutoFxParameters(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd03::FxParameters)> self) -> StdAutoFxParameters"""
+        """__init__(mem::auto_ptr<(cphd03::FxParameters)> self) -> StdAutoFxParameters"""
         this = _cphd03.new_StdAutoFxParameters()
         try:
             self.this.append(this)
@@ -3580,7 +3580,7 @@ def makeScopedCopyableFxParameters() -> "mem::ScopedCopyablePtr< cphd03::FxParam
     """makeScopedCopyableFxParameters() -> ScopedCopyableFxParameters"""
     return _cphd03.makeScopedCopyableFxParameters()
 class StdAutoTOAParameters(_object):
-    """Proxy of C++ std::auto_ptr<(cphd03::TOAParameters)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd03::TOAParameters)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoTOAParameters, name, value)
@@ -3589,7 +3589,7 @@ class StdAutoTOAParameters(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd03::TOAParameters)> self) -> StdAutoTOAParameters"""
+        """__init__(mem::auto_ptr<(cphd03::TOAParameters)> self) -> StdAutoTOAParameters"""
         this = _cphd03.new_StdAutoTOAParameters()
         try:
             self.this.append(this)
@@ -3677,7 +3677,7 @@ def makeScopedCopyableTOAParameters() -> "mem::ScopedCopyablePtr< cphd03::TOAPar
     """makeScopedCopyableTOAParameters() -> ScopedCopyableTOAParameters"""
     return _cphd03.makeScopedCopyableTOAParameters()
 class StdAutoCphdAntenna(_object):
-    """Proxy of C++ std::auto_ptr<(cphd03::Antenna)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd03::Antenna)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCphdAntenna, name, value)
@@ -3686,7 +3686,7 @@ class StdAutoCphdAntenna(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd03::Antenna)> self) -> StdAutoCphdAntenna"""
+        """__init__(mem::auto_ptr<(cphd03::Antenna)> self) -> StdAutoCphdAntenna"""
         this = _cphd03.new_StdAutoCphdAntenna()
         try:
             self.this.append(this)

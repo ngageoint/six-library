@@ -29,15 +29,12 @@
 #include <iostream>
 #include <string>
 
-#include <sys/Bit.h>
-
-#include "TestUtilities.h"
-
+#include <six/sicd/SICDByteProvider.h>
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/sicd/ComplexXMLControl.h>
-#include <six/sicd/SICDByteProvider.h>
 
+#include "TestUtilities.h"
 
 namespace
 {
