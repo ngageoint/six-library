@@ -113,10 +113,10 @@ void tiff::IFD::serialize(io::OutputStream& output)
     // Makes sure all data offsets are defined for each entry.
     // Keep the offset just past the end of the IFD.  This offset
     // is where the next potential image could be written.
-    sys::Uint32_T endOffset = finalize(seekable->tell());
+    const auto endOffset = finalize(static_cast<sys::Uint32_T>(seekable->tell()));
 
     // Write out IFD entry count.
-    unsigned short ifdEntryCount = mIFD.size();
+    const auto ifdEntryCount = static_cast<uint16_t>(mIFD.size());
     output.write((sys::byte *)&ifdEntryCount, sizeof(ifdEntryCount));
 
     // Write out each IFD entry.
@@ -128,7 +128,7 @@ void tiff::IFD::serialize(io::OutputStream& output)
 
     // Remember the current position in case there is another IFD after
     // this one.
-    mNextIFDOffsetPosition = seekable->tell();
+    mNextIFDOffsetPosition = static_cast<sys::Uint32_T>(seekable->tell());
 
     // Write out the default next IFD location.
     sys::Uint32_T nextOffset = 0;
@@ -196,7 +196,7 @@ unsigned short tiff::IFD::getNumBands()
     if (samplesPerPixel)
         numBands = *(::tiff::GenericType<unsigned short> *)(*samplesPerPixel)[0];
     else if (bitsPerSample)
-        numBands = bitsPerSample->getCount();
+        numBands = static_cast<unsigned short>(bitsPerSample->getCount());
     
     return numBands;
 }
@@ -216,8 +216,8 @@ sys::Uint32_T tiff::IFD::finalize(const sys::Uint32_T offset)
     // the size of an IFD entry multiplied by the number of entries, plus
     // 4 bytes to hold the offset to the next IFD, and 2 bytes to hold the
     // IFD entry count.
-    sys::Uint32_T dataOffset = offset + sizeof(short) + (mIFD.size()
-            * tiff::IFDEntry::sizeOf()) + sizeof(sys::Uint32_T);
+    auto dataOffset = static_cast<sys::Uint32_T>(offset + sizeof(short) + (mIFD.size()
+            * tiff::IFDEntry::sizeOf()) + sizeof(sys::Uint32_T));
 
     for (IFDType::iterator i = mIFD.begin(); i != mIFD.end(); ++i)
     {

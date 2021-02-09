@@ -194,7 +194,7 @@ void runWorkSharingBalanced1D(size_t numElements,
 
             threadPoolCounters.push_back(
                     mem::SharedPtr<sys::AtomicCounter>(
-                            new sys::AtomicCounter(startElement)));
+                            new sys::AtomicCounter(static_cast<sys::AtomicCounter::ValueType>(startElement))));
 
             threadPoolEndElements.push_back(
                     startElement + numElementsThisThread);

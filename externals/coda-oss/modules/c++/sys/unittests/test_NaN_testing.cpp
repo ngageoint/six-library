@@ -54,7 +54,8 @@ TEST_CASE(testNaNIsNotAlmostEqualToNumber)
 TEST_CASE(testIsNaN)
 {
     TEST_ASSERT_TRUE(IS_NAN(std::numeric_limits<float>::quiet_NaN()));
-    TEST_ASSERT_FALSE(IS_NAN(5));
+    int five = 5; // "conditional expression is constant"
+    TEST_ASSERT_FALSE(IS_NAN(five));
     TEST_ASSERT_FALSE(IS_NAN(std::string("test string")));
 }
 }

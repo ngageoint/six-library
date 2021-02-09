@@ -56,9 +56,8 @@ TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDone)
         TEST_ASSERT_EQ(workVec.size(), numElements);
 
         const size_t targetValue = 1;
-        for (size_t ii = 0; ii < numElements; ++ii)
+        for (const auto& value : workVec)
         {
-            const size_t value = workVec[ii];
             TEST_ASSERT_EQ(value, targetValue);
         }
     }
@@ -79,9 +78,8 @@ TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDoneLessWorkThanThreads)
         TEST_ASSERT_EQ(workVec.size(), numElements);
 
         const size_t targetValue = 1;
-        for (size_t ii = 0; ii < numElements; ++ii)
+        for (const auto& value : workVec)
         {
-            const size_t value = workVec[ii];
             TEST_ASSERT_EQ(value, targetValue);
         }
     }
