@@ -11,12 +11,13 @@ set(CMAKE_CXX_STANDARD 17)
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # this is the top level project
 
-    # set up warnings
+    # set up warnings & C++17
     if (MSVC)
         # set warning level to /W3
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
         add_compile_options(/W3 /wd4290 /wd4512)
+        add_compile_options(/std:c++17)
         add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
     elseif (UNIX)
         add_compile_options(
@@ -24,6 +25,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
             -Wno-unused-value
             -Wno-unused-but-set-variable
         )
+        add_compile_options(-std=c++17)
     endif()
 
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

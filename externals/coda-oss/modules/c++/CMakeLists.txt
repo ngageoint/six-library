@@ -6,13 +6,6 @@ elseif (UNIX)
     add_compile_options(-Werror)
 endif()
 
-# bes sure we're really using C++17
-if (MSVC)
-    add_compile_options(/std:c++17)
-elseif (UNIX)
-    add_compile_options(-std=c++17)
-endif()
-
 # add an interface library for unittests
 add_library(TestCase INTERFACE)
 target_link_libraries(TestCase INTERFACE sys-c++ str-c++)
