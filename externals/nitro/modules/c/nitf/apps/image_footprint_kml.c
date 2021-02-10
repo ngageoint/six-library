@@ -162,7 +162,8 @@ int main(int argc, char** argv)
 
     nitf_Utils_baseName(file, argv[1], ".");
 
-    for (uint32_t i = 0; i < num; i++)
+    uint32_t i;
+    for (i = 0; i < num; i++)
     {
         nitf_ImageSegment* segment = nitf_List_get(record->images, i, &error);
         if (!segment)

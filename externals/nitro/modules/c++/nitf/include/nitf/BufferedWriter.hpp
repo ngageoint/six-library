@@ -24,6 +24,8 @@
 #define __NITF_BUFFERED_WRITER_HPP__
 #pragma once
 
+#include <memory>
+
 #include <nitf/coda-oss.hpp>
 #include <nitf/CustomIO.hpp>
 
@@ -87,7 +89,7 @@ protected:
 
 private:
     const size_t mBufferSize;
-    const std::shared_ptr<char[]> mScopedBuffer;
+    const std::unique_ptr<char[]> mScopedBuffer;
     char* const mBuffer;
 
     nitf::Off mPosition;
