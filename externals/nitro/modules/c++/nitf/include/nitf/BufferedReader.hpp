@@ -24,6 +24,8 @@
 #define __NITF_BUFFERED_READER_HPP__
 #pragma once
 
+#include <memory>
+
 #include <nitf/coda-oss.hpp>
 #include <nitf/CustomIO.hpp>
 
@@ -110,7 +112,7 @@ private:
     void readNextBuffer();
 
     const nitf::Off mMaxBufferSize;
-    const std::shared_ptr<char[]> mScopedBuffer;
+    const std::unique_ptr<char[]> mScopedBuffer;
     char* const mBuffer;
 
     nitf::Off mPosition;
