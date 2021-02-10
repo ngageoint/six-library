@@ -24,43 +24,10 @@
 #include <string>
 #include <iterator>
 
-#if defined(_MSC_VER)
-#define CODA_OSS_have_codecvt_ 1
-#elif (__GNUC__ >= 7) && (__GNUC_MINOR__ >= 2) 
-// not available in older versions of GCC, even with --std=c++11
-#define CODA_OSS_have_codecvt_ 1
-#endif
-#ifdef CODA_OSS_have_codecvt_
-#include <codecvt>
-#else
-#error "You've got an old C++ compiler, no <codecvt> header."
-#endif
-
-
 #include <import/str.h>
 #include <str/utf8.h>
 
 #include "TestCase.h"
-
-#ifdef CODA_OSS_have_codecvt_ 
-// https://en.cppreference.com/w/cpp/locale/codecvt_utf8
-template <typename T>
-static void codecvt_toUtf8_(const T& str, std::string& result)
-{
-    // This is deprecated in C++17 ... but there is no standard replacement.
-
-    // https:en.cppreference.com/w/cpp/locale/codecvt
-    using value_type = typename T::value_type;
-    std::wstring_convert<std::codecvt_utf8<value_type>, value_type> conv;
-
-    // https://en.cppreference.com/w/cpp/locale/wstring_convert/to_bytes
-    result = conv.to_bytes(str);
-}
-static void codecvt_toUtf8(const std::u32string& str, std::string& result)
-{
-    return codecvt_toUtf8_(str, result);
-}
-#endif
 
 static void test_assert_eq(const std::string& testName,
                            const sys::U8string& actual, const sys::U8string& expected)
@@ -78,13 +45,6 @@ static void test_assert_eq(const std::string& testName,
     const auto expected = str::castToU8string(result);
 
     test_assert_eq(testName, actual, expected);
-    
-#ifdef CODA_OSS_have_codecvt_ 
-    std::string codecvt_expected;
-    codecvt_toUtf8(expected_, codecvt_expected);
-    TEST_ASSERT_EQ(str::toString(actual), codecvt_expected);
-    TEST_ASSERT_EQ(str::toString(expected), codecvt_expected);
-#endif
 }
 
 TEST_CASE(testConvert)
