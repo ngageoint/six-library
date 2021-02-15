@@ -2058,8 +2058,10 @@ void DerivedXMLParser200::parseDigitalElevationDataFromXML(
     parseString(getFirstAndOnly(posElem, "CoordinateSystemType"), coordSystemType);
     ded.geopositioning.coordinateSystemType = CoordinateSystemType(coordSystemType);
     parseUInt(getFirstAndOnly(posElem, "FalseOrigin"), ded.geopositioning.falseOrigin);
-    parseInt(getFirstAndOnly(posElem, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
-
+    if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
+    {
+        parseInt(getFirstAndOnly(posElem, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
+    }
     XMLElem posAccuracyElem = getFirstAndOnly(elem, "PositionalAccuracy");
     parseUInt(getFirstAndOnly(posAccuracyElem, "NumRegions"), ded.positionalAccuracy.numRegions);
     XMLElem absoluteElem = getFirstAndOnly(posAccuracyElem, "AbsoluteAccuracy");

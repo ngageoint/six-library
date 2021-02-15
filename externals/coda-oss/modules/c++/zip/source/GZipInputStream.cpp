@@ -42,7 +42,7 @@ void GZipInputStream::close()
 
 sys::SSize_T GZipInputStream::readImpl(void* buffer, size_t len)
 {
-    int rv = gzread(mFile, buffer, len);
+    auto rv = gzread(mFile, buffer, static_cast<unsigned int>(len));
     if (rv == -1)
     {
         const std::string err(gzerror(mFile, &rv));

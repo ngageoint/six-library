@@ -31,30 +31,30 @@
 
 namespace
 {
-int transformCheck(int c, int (*transform)(int))
+char transformCheck(int c, int (*transform)(int))
 {
     // Ensure the character can be represented
     // as an unsigned char or is 'EOF', as the
     // behavior for all other characters is undefined
     if ((c >= 0 && c <= UCHAR_MAX) || c == EOF)
     {
-        return transform(c);
+        return static_cast<char>(transform(c));
     }
     else
     {
         // Invalid char for transform: no-op
-        return c;
+        return static_cast<char>(c);
     }
 }
 
-int tolowerCheck(int c)
+char tolowerCheck(char c)
 {
-    return transformCheck(c, (int(*)(int)) tolower);
+    return transformCheck(c, tolower);
 }
 
-int toupperCheck(int c)
+char toupperCheck(char c)
 {
-    return transformCheck(c, (int(*)(int)) toupper);
+    return transformCheck(c, toupper);
 }
 }
 
@@ -234,14 +234,13 @@ std::vector<std::string> split(const std::string& s,
         const std::string& splitter, size_t maxSplit)
 {
     std::vector < std::string > vec;
-    int str_l = (int) s.length();
-    int split_l = (int) splitter.length();
-    int pos = 0;
-    int nextPos;
+    const auto str_l = s.length();
+    const auto split_l = splitter.length();
+    size_t pos = 0;
     while (pos < str_l && maxSplit != 1)
     {
-        nextPos = (int) s.find(splitter, pos);
-        if (nextPos == (int)std::string::npos)
+        auto nextPos = s.find(splitter, pos);
+        if (nextPos == std::string::npos)
             nextPos = str_l;
         if (nextPos != pos)
             vec.push_back(s.substr(pos, nextPos - pos));
@@ -258,12 +257,12 @@ std::vector<std::string> split(const std::string& s,
 
 void lower(std::string& s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolowerCheck);
+    std::transform(s.begin(), s.end(), s.begin(), tolowerCheck);
 }
 
 void upper(std::string& s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) toupperCheck);
+    std::transform(s.begin(), s.end(), s.begin(), toupperCheck);
 }
 
 void escapeForXML(std::string& str)

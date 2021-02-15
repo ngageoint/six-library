@@ -22,9 +22,10 @@
 #ifndef __SCENE_GRID_GEOMETRY_H__
 #define __SCENE_GRID_GEOMETRY_H__
 
+#include "scene/Types.h"
+
 #include <math/poly/OneD.h>
 #include <math/poly/TwoD.h>
-#include <scene/Types.h>
 
 namespace scene
 {

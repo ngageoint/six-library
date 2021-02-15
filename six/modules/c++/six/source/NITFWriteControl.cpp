@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/NITFWriteControl.h>
 
 #include <iomanip>
 #include <sstream>
@@ -29,7 +30,6 @@
 #include <mem/ScopedArray.h>
 #include <sys/Bit.h>
 
-#include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
 

@@ -21,6 +21,10 @@
  */
 
 #include <string.h>
+
+#ifdef _WIN32
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#endif
 #include "net/NetConnectionClientFactory.h"
 
 namespace

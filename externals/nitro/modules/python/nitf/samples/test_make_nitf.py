@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python -O 
 # -*- coding: utf-8 -*-
 
 """
@@ -93,9 +93,9 @@ class TestCreator(unittest.TestCase):
         """ makes a nitf, with artificial image data """
         record = Record()
         if 'header' in self.fieldmap:
-            for field, value in list(self.fieldmap['header'].items()):
+            for field, value in self.fieldmap['header'].items():
                 if field in record.header:
-                    record.header[field] = str(value)
+                    record.header[field] = value
 
         #create a random pattern size
         csize = random.randint(0, 255)
@@ -109,10 +109,10 @@ class TestCreator(unittest.TestCase):
         #add an image segment
         segment = record.newImageSegment()
         if 'image' in self.fieldmap:
-            for field, value in list(self.fieldmap['image'].items()):
+            for field, value in self.fieldmap['image'].items():
                 if field in segment.subheader:
-                    segment.subheader[field] = str(value)
-
+                    segment.subheader[field] = value
+        
         #for now, I just put in these as defaults
         #obviously, too large of an image will cause problems with the block-size...
         segment.addBands(numBands)
@@ -136,6 +136,28 @@ class TestCreator(unittest.TestCase):
         segment.subheader['numPixelsPerVertBlock'] = height
 
         alldata = numpy.ascontiguousarray(alldata, dtype="int16")
+
+        pixmta = TRE('PIXMTA')
+        pixmta.setField('NUMAIS', '001')
+        pixmta.setField('AISDLVL[0]', '001')
+        pixmta.setField('ORIGIN_X', '+0.0000000E+00')
+        pixmta.setField('ORIGIN_Y', '+0.0000000E+00')
+        pixmta.setField('SCALE_X', '+1.0000000E+00')
+        pixmta.setField('SCALE_Y', '+1.0000000E+00')
+        pixmta.setField('SAMPLE_MODE', '1')
+        pixmta.setField('NUMMETRICS', '00002')
+        pixmta.setField('PERBAND', 'P')
+        pixmta.setField('DESCRIPTION[0]', 'SPECTRAL BAND-SPECIFIC SMEAR MAGNITUDE')
+        pixmta.setField('UNIT[0]', 'Pixels')
+        pixmta.setField('FITTYPE[0]', 'D')
+        pixmta.setField('DESCRIPTION[1]', 'SPECTRAL BAND-SPECIFIC SMEAR DIRECTION')
+        pixmta.setField('UNIT[1]', 'deg')
+        pixmta.setField('FITTYPE[1]', 'D')
+        pixmta.setField('RESERVED_LEN', '00000')
+
+        xhd = segment.subheader.getXHD()
+        xhd.append(pixmta)
+
         #setup image source
         imagesource = ImageSource()
         for i in range(numBands):
@@ -178,6 +200,10 @@ class TestCreator(unittest.TestCase):
             assert (readData == alldata).all()
 
             handle.close()
+
+            import subprocess
+            subprocess.run(['show_nitf', outfile])
+
             os.unlink(outfile)
 
 

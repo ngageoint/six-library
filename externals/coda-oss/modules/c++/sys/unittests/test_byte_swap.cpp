@@ -106,13 +106,14 @@ template<typename TEndian>
 static void testEndianness_std_(const std::string& testName)
 {
     /*const*/ auto native = TEndian::native; // "const" causes "conditional expression is constant."
+    auto endianness = coda_oss::endian::native;  // "conditional expression is constant"
     if (native == TEndian::big)
     {
-        TEST_ASSERT(coda_oss::endian::native == coda_oss::endian::big);
+        TEST_ASSERT(endianness == coda_oss::endian::big);
     }
     else if (native == TEndian::little)
     {
-        TEST_ASSERT(coda_oss::endian::native == coda_oss::endian::little);
+        TEST_ASSERT(endianness == coda_oss::endian::little);
     }
     else
     {

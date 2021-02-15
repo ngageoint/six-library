@@ -20,6 +20,9 @@
  *
  */
 
+#ifdef _WIN32
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#endif
 #include "net/SocketAddress.h"
 
 using namespace net;
@@ -51,7 +54,7 @@ void SocketAddress::clear()
 
 void SocketAddress::setPort(int port)
 {
-    mAddress.sin_port = htons(port);
+    mAddress.sin_port = htons(static_cast<u_short>(port));
 }
 
 void SocketAddress::setHost(const std::string& host)
@@ -66,7 +69,7 @@ void SocketAddress::setHost(const std::string& host)
         struct sockaddr saddr;
         int slen = sizeof(saddr);
         struct sockaddr_in *paddr = (struct sockaddr_in *)&saddr;
-        int ok = WSAStringToAddress((LPSTR)host.c_str(), AF_INET, NULL, &saddr, &slen);
+        (void) WSAStringToAddress((LPSTR)host.c_str(), AF_INET, NULL, &saddr, &slen);
         mAddress.sin_addr = paddr->sin_addr;
 #else
         ::inet_pton(AF_INET, host.c_str(), &mAddress.sin_addr);

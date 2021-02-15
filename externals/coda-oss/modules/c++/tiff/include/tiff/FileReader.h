@@ -128,7 +128,7 @@ public:
      *****************************************************************/
     sys::Uint32_T getImageCount() const
     {
-        return mImages.size();
+        return static_cast <sys::Uint32_T>(mImages.size());
     }
 
     

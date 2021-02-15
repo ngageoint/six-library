@@ -28,6 +28,7 @@
 #include <import/io.h>
 
 #include <mem/ScopedArray.h>
+#include <mem/Span.h>
 
 namespace six
 {

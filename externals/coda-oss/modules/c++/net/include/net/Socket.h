@@ -266,7 +266,8 @@ protected:
         if (mNative == INVALID_SOCKET)
         {
             // we got a proto so we need to create the socket
-            mNative = ::socket(AF_INET, socket, 0);
+            const auto type = static_cast<int>(socket);
+            mNative = ::socket(AF_INET, type, 0);
             if (mNative == INVALID_SOCKET)
             {
                 throw sys::SocketException(Ctxt("Socket initialization failed"));
