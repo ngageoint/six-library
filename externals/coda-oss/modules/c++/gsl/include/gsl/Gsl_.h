@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * gsl-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,14 +24,13 @@
 #define CODA_OSS_gsl_Gsl__h_INCLUDED_
 #pragma once
 
-// Can't compile all of GSL with older versions of GCC
-
 #include <assert.h>
 
 #include <exception>
 #include <type_traits>
 #include <utility>  
 
+#include "gsl/use_gsl.h" // Can't compile all of GSL with older versions of GCC/MSVC
 #include "gsl/gsl_span_.h"
 
 namespace Gsl
@@ -87,6 +87,8 @@ namespace Gsl
     }
 }
 
+#if !CODA_OSS_use_real_gsl
+// Add to "gsl" if we're not using the real thing
 namespace gsl
 {
     template <class T, class U>
@@ -101,5 +103,6 @@ namespace gsl
         return Gsl::narrow<T>(u);
     }
  }
+#endif // CODA_OSS_use_real_gsl
 
 #endif  // CODA_OSS_gsl_Gsl__h_INCLUDED_
