@@ -46,13 +46,13 @@ class Optional  // no "final" as SWIG doesn't like it
 public:
     using value_type = T;
 
-    constexpr Optional() noexcept
+    Optional() noexcept
     {
     }
-    constexpr Optional(const value_type& v) : value_(v), has_value_(true)
+    Optional(const value_type& v) : value_(v), has_value_(true)
     {
     }
-    constexpr Optional(const Optional& other) :
+    Optional(const Optional& other) :
         value_(other.value_), has_value_(other.has_value_)
     {
     }
