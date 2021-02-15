@@ -2,6 +2,7 @@
  * This file is part of gsl-c++
  * =========================================================================
  *
+ * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * gsl-c++ is free software; you can redistribute it and/or modify
@@ -23,11 +24,12 @@
 #define CODA_OSS_gsl_gsl_span__h_INCLUDED_
 #pragma once
 
-#include "sys/CPlusPlus.h"
 #include "mem/Span_.h"
 
 // Need a fairly decent C++ compiler to use the real GSL
-#if CODA_OSS_cpp14
+#include "gsl/use_gsl.h"
+
+#if CODA_OSS_use_real_gsl
 #include "gsl/span"				// span
 #else
  namespace gsl
@@ -52,6 +54,6 @@
          return make_span(const_cast<TContainer&>(c));
      }
  }
-#endif // CODA_OSS_cpp14
+#endif // CODA_OSS_use_real_gsl
 
 #endif  // CODA_OSS_gsl_gsl_span__h_INCLUDED_
