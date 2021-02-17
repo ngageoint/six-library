@@ -27,16 +27,9 @@
 namespace scene
 {
 
-class EllipsoidModel
+struct EllipsoidModel
 {
-public:
-
-    /**
-     * Default constructor
-     */
-    EllipsoidModel() :
-        units(INVALID_UNITS),
-        angularUnits(INVALID_ANGULAR_UNITS) {}
+    EllipsoidModel() = default;
 
     /**
      * This constructor initializes the EllipsoidModel object with
@@ -149,11 +142,10 @@ public:
     virtual EllipsoidModel & operator=(const EllipsoidModel & m);
 
 protected:
-    Units units;
-    AngularUnits angularUnits;
+    Units units = INVALID_UNITS;
+    AngularUnits angularUnits = INVALID_ANGULAR_UNITS;
     double equatorialRadius;
     double polarRadius;
-
 };
 
 class WGS84EllipsoidModel : public EllipsoidModel
