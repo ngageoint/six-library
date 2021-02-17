@@ -9,16 +9,17 @@
 #pragma warning(disable: 26495) // Variable '...' is uninitialized.Always initialize a member variable(type.6).
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 #pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
+#pragma warning(disable: 26490) // Don't use reinterpret_cast (type.1).
 #include <nitf/coda-oss.hpp>
 #include <import/sys.h>
 #include <import/io.h>
 #include <import/mt.h>
-#pragma warning(pop)
 #include <import/str.h>
 #include <import/logging.h>
 #include <math/Utilities.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Validator.h>
+#pragma warning(pop)
 
 #pragma warning(push)
 #pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).

@@ -290,7 +290,8 @@ void NITFWriteControl::save_(const TBufferList& imageData,
     createCompressionOptions(mCompressionOptions);
     for (size_t i = 0; i < numImages; ++i)
     {
-        const NITFImageInfo& info = *(getInfos()[i]);
+        const auto pInfo = getInfo(i);
+        const NITFImageInfo& info = *pInfo;
         std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
         const size_t numIS = imageSegments.size();
         const int pixelSize =
