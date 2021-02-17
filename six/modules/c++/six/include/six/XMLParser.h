@@ -110,6 +110,12 @@ protected:
 
     XMLElem createInt(const std::string& name, const std::string& uri,
            int p = 0, XMLElem parent = nullptr) const;
+    template<typename T>
+    XMLElem createInt(const std::string& name, const std::string& uri,
+           const std::optional<T>& p, XMLElem parent = nullptr) const
+    {
+        return createInt(name, uri, p.value(), parent);
+    }
 
     XMLElem createInt(const std::string& name,
             const std::string& uri, const std::string& p = "",
@@ -150,6 +156,12 @@ protected:
     }
     XMLElem createInt(const std::string& name, int p = 0,
             XMLElem parent = nullptr) const;
+    template<typename T>
+    XMLElem createInt(const std::string& name, const std::optional<T>& p,
+        XMLElem parent = nullptr) const
+    {
+        return createInt(name, p.value(), parent);
+    }
     XMLElem createDouble(const std::string& name, double p = 0,
             XMLElem parent = nullptr) const;
     XMLElem createDouble(const std::string& name, const std::optional<double>& p,
@@ -164,7 +176,7 @@ protected:
             XMLElem parent = nullptr) const;
 
     template <typename T>
-    void parseInt(XMLElem element, T& value) const
+    void parseInt(XMLElem element, std::optional<T>& value) const
     {
         try
         {
@@ -173,6 +185,16 @@ protected:
         catch (const except::BadCastException& ex)
         {
             mLog->warn(Ctxt("Unable to parse: " + ex.toString()));
+        }
+    }
+    template <typename T>
+    void parseInt(XMLElem element, T& value) const
+    {
+        std::optional<T> result;
+        parseInt(element, result);
+        if (result.has_value())
+        {
+            value = result.value();
         }
     }
 
@@ -190,7 +212,6 @@ protected:
         enumVal = T(name);
     }
 
-    double parseDouble(XMLElem element) const;
     void parseDouble(XMLElem element, double& value) const;
     void parseDouble(XMLElem element, std::optional<double>& value) const;
     void parseComplex(XMLElem element, std::complex<double>& value) const;

@@ -314,21 +314,20 @@ static void parseValue(logging::Logger& log, TGetValue getValue)
     }
 }
 
-void XMLParser::parseDouble(XMLElem element, double& value) const
+void XMLParser::parseDouble(XMLElem element, std::optional<double>& value) const
 {
     parseValue(*mLog, [&]() {
         value = xml::lite::getValue<double>(*element);
         });
 }
-double XMLParser::parseDouble(XMLElem element) const
+void XMLParser::parseDouble(XMLElem element, double& value) const
 {
-    double retval;
-    parseDouble(element, retval);
-    return retval;
-}
-void XMLParser::parseDouble(XMLElem element, std::optional<double>& value) const
-{
-    value = parseDouble(element);
+    std::optional<double> result;
+    parseDouble(element, result);
+    if (result.has_value())
+    {
+        value = result.value();
+    }
 }
 
 void XMLParser::parseComplex(XMLElem element, std::complex<double>& value) const

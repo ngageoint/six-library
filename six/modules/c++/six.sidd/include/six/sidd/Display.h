@@ -22,8 +22,10 @@
 #ifndef __SIX_DISPLAY_H__
 #define __SIX_DISPLAY_H__
 
+#include <sys/Optional.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
+
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Parameter.h>
@@ -350,11 +352,11 @@ struct DynamicRangeAdjustment
     {
         DRAParameters();
 
-        double pMin; //! DRA clip low point
-        double pMax; //! DRA clip high point
+        std::optional<double> pMin; //! DRA clip low point
+        std::optional<double> pMax; //! DRA clip high point
 
-        double eMinModifier; //! eMin modifier
-        double eMaxModifier; //! eMax modifier
+        std::optional<double> eMinModifier; //! eMin modifier
+        std::optional<double> eMaxModifier; //! eMax modifier
 
         bool operator==(const DRAParameters& rhs) const;
         bool operator!=(const DRAParameters& rhs) const
@@ -367,8 +369,8 @@ struct DynamicRangeAdjustment
     {
         DRAOverrides();
 
-        double subtractor; //! Subtractor value used to reduce haze in the image
-        double multiplier; //! Multiplier value used to brighten the image data
+        std::optional<double> subtractor; //! Subtractor value used to reduce haze in the image
+        std::optional<double> multiplier; //! Multiplier value used to brighten the image data
 
         bool operator==(const DRAOverrides& rhs) const;
         bool operator!=(const DRAOverrides& rhs) const
@@ -378,7 +380,7 @@ struct DynamicRangeAdjustment
     };
 
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
-    size_t bandStatsSource; //! Indicates which band to use for DRA stats
+    std::optional<size_t> bandStatsSource; //! Indicates which band to use for DRA stats
 
     // In SIDD 1.0, must include exactly one of draParameters or draOverrides
     // In SIDD 2.0, include draParameters if algorithmType == AUTO,
