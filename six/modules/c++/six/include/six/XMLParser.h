@@ -199,9 +199,19 @@ protected:
     }
 
     template <typename T>
-    void parseUInt(XMLElem element, T& value) const
+    void parseUInt(XMLElem element, std::optional<T>& value) const
     {
         parseInt<T>(element, value);
+    }
+    template <typename T>
+    void parseUInt(XMLElem element, T& value) const
+    {
+        std::optional<T> result;
+        parseUInt(element, result);
+        if (result.has_value())
+        {
+            value = result.value();
+        }
     }
 
     template <typename T>
