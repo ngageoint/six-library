@@ -27,7 +27,7 @@
 #include <stdexcept>
 #include <utility>
 
-#include "Conf.h"
+#include "CPlusPlus.h"
 
 // Simple version of std::Optional since that doesn't exist until C++17.
 //
@@ -400,6 +400,16 @@ namespace coda_oss
         return sys::make_Optional<T>(std::forward<TArgs>(args)...);
     }
     #endif
+}
+
+#include "str/Convert.h"
+namespace str
+{
+template <typename T>
+std::string toString(const sys::Optional<T>& value)
+{
+    return toString(value.value());
+}
 }
 
 #endif  // CODA_OSS_sys_Optional_h_INCLUDED_
