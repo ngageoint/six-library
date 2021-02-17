@@ -32,48 +32,18 @@
 #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
 
 #pragma warning(push)
-#pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
-#pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
-
 #pragma warning(disable: 4464) // relative include path contains '..'
-#include "../../cpp_pch.h"
+#include "../../nitro_pch.h"
+#pragma warning(pop)
 
-#pragma warning(disable: 4514) // '...': unreferenced inline function has been removed
-#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
-#pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
+#pragma warning(push)
 #pragma warning(disable: 26493) // Don't use C-style casts (type.4).
 #pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
-
-#include <nitf/coda-oss.hpp>
-
-#include <sys/File.h>
-#include <import/except.h>
-#include <import/types.h>
-
-#include <import/sys.h>
-#include <import/io.h>
-#include <import/math/poly.h>
-#include <import/mt.h>
-#include <import/logging.h>
-#include <import/str.h>
-#include <import/mem.h>
-#include <math/Utilities.h>
-#include <xml/lite/Element.h>
-#include <xml/lite/Validator.h>
-
-#include <import/nitf.hpp>
-#include <import/nitf.h>
-#include <import/nrt.h>
 
 #include <import/scene.h>
 #pragma warning(pop)
 
-#pragma comment(lib, "io-c++")
-#pragma comment(lib, "except-c++")
-#pragma comment(lib, "sys-c++")
-#pragma comment(lib, "str-c++")
 #pragma comment(lib, "logging-c++")
 #pragma comment(lib, "xml.lite-c++.lib")
 #pragma comment(lib, "xerces-c")
 
-#pragma comment(lib, "ws2_32")
