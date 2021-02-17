@@ -468,26 +468,28 @@ void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
     addSecurityOptions(subheader.getSecurityGroup(), "DES", c.fileOptions);
 }
 
-struct AddSecurityOption final
+class AddSecurityOption final
 {
-    const std::string& prefix;
-    six::Options& options;
-    logging::Logger& log;
+    const std::string& prefix_;
+    six::Options& options_;
+    logging::Logger& log_;
+public:
+    AddSecurityOption(const std::string& prefix, six::Options& options, logging::Logger& log)
+        : prefix_(prefix), options_(options), log_(log) {}
     void operator()(const nitf::Field& parameter, const std::string& field)
     {
         Parameter p = parameter.toString();
-        const auto k = NITFImageInfo::generateFieldKey(field, prefix);
-        options.setParameter(k, p);
-        log.debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
+        const auto k = NITFImageInfo::generateFieldKey(field, prefix_);
+        options_.setParameter(k, p);
+        log_.debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
             static_cast<const char*>(p))));
     }
-    AddSecurityOption() = delete;
 };
 
 void NITFReadControl::addSecurityOptions(nitf::FileSecurity security,
         const std::string& prefix, six::Options& options) const
 {
-    AddSecurityOption addSecurityOption{ prefix, options, *mLog };
+    AddSecurityOption addSecurityOption(prefix, options, *mLog);
 
     addSecurityOption(security.getClassificationSystem(), NITFImageInfo::CLSY);
     addSecurityOption(security.getCodewords(), NITFImageInfo::CODE);

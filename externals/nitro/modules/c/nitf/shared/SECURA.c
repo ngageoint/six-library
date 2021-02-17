@@ -1,11 +1,10 @@
 /* =========================================================================
- * This file is part of gsl-c++
+ * This file is part of NITRO
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
- * (C) Copyright 2021, Maxar Technologies, Inc.
  *
- * gsl-c++ is free software; you can redistribute it and/or modify
+ * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -16,22 +15,27 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef CODA_OSS_gsl_gsl_h_INCLUDED_
-#define CODA_OSS_gsl_gsl_h_INCLUDED_
-#pragma once
 
-// Need a fairly decent C++ compiler to use the real GSL
-#include "gsl/use_gsl.h"
 
-// always compile Gsl (not "gsl") code--our own simple implementation
-#include "gsl/Gsl_.h"  // our own "fake" GSL
+#include <import/nitf.h>
 
-#if CODA_OSS_use_real_gsl
-	#include "gsl/gsl"
-#endif
+NITF_CXX_GUARD
 
-#endif  // CODA_OSS_gsl_gsl_h_INCLUDED_
+static nitf_TREDescription description[] = {
+    {NITF_BCS_A, 14, "NITF Date Time", "FDATTIM"},
+    {NITF_BCS_A, 9, "NITF Version Flag", "NITFVER"},
+    {NITF_BCS_A, 207, "NITF Security Fields", "NFSECFLDS"},
+    {NITF_BCS_A, 8, "Security Standard", "SECSTD"},
+    {NITF_BCS_A, 8, "Security Field Compression", "SECCOMP"},
+    {NITF_BCS_N, 5, "Security Length", "SECLEN"},
+    {NITF_BINARY, NITF_TRE_CONDITIONAL_LENGTH, "Security Data", "SECURITY", "SECLEN"},
+    {NITF_END, 0, NULL, NULL}
+};
+
+NITF_DECLARE_SINGLE_PLUGIN(SECURA, description)
+
+NITF_CXX_ENDGUARD
