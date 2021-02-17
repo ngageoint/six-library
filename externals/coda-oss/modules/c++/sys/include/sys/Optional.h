@@ -37,11 +37,27 @@
 // http://en.cppreference.com/w/cpp/utility/Optional
 namespace sys
 {
+namespace details
+{
+    inline void throw_bad_optional_access()
+    {
+        throw std::logic_error("No value for Optional<>.");  // TODO: std::bad_optional_access
+    }
+}
+
 template <typename T>
 class Optional  // no "final" as SWIG doesn't like it
 {
     T value_;
     bool has_value_ = false;
+
+    inline void check_has_value() const
+    {
+        if (!has_value())
+        {
+            details::throw_bad_optional_access();
+        }
+    }
 
 public:
     using value_type = T;
@@ -59,10 +75,20 @@ public:
     Optional(const value_type& v) : value_(v), has_value_(true)
     {
     }
-    Optional(const Optional& other) :
-        value_(other.value_), has_value_(other.has_value_)
+    #if defined(_MSC_VER) && _PREFAST_ // Visual Studio /analyze
+    __pragma(warning(push))
+    __pragma(warning(disable: 26495)) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
+    #endif
+    Optional(const Optional& other) : has_value_(other.has_value_)
     {
+        if (has_value())
+        {
+            value_ = other.value_;
+        }
     }
+    #if defined(_MSC_VER) && _PREFAST_
+    __pragma(warning(pop))
+    #endif
 
     template <typename... Args>  // https://en.cppreference.com/w/cpp/utility/Optional/emplace
     T& emplace(Args&&... args)
@@ -97,34 +123,22 @@ public:
     // https://en.cppreference.com/w/cpp/utility/optional/value
     T& value() &
     {
-        if (!has_value())
-        {
-            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
-        }
+        check_has_value();
         return value_;
     }
     const T& value() const&
     {
-        if (!has_value())
-        {
-            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
-        }
+        check_has_value();
         return value_;
     }
     T&& value() &&
     {
-        if (!has_value())
-        {
-            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
-        }
+        check_has_value();
         return value_;
     }
     const T&& value() const&&
     {
-        if (!has_value())
-        {
-            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
-        }
+        check_has_value();
         return value_;
     }
 
