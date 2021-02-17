@@ -22,6 +22,8 @@
 #ifndef __SIX_ERROR_STATISTICS_H__
 #define __SIX_ERROR_STATISTICS_H__
 
+#include <sys/Optional.h>
+
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -44,21 +46,21 @@ struct CorrCoefs
     {
     }
 
-    double p1p2;
-    double p1p3;
-    double p1v1;
-    double p1v2;
-    double p1v3;
-    double p2p3;
-    double p2v1;
-    double p2v2;
-    double p2v3;
-    double p3v1;
-    double p3v2;
-    double p3v3;
-    double v1v2;
-    double v1v3;
-    double v2v3;
+    std::optional<double> p1p2;
+    std::optional<double> p1p3;
+    std::optional<double> p1v1;
+    std::optional<double> p1v2;
+    std::optional<double> p1v3;
+    std::optional<double> p2p3;
+    std::optional<double> p2v1;
+    std::optional<double> p2v2;
+    std::optional<double> p2v3;
+    std::optional<double> p3v1;
+    std::optional<double> p3v2;
+    std::optional<double> p3v3;
+    std::optional<double> v1v2;
+    std::optional<double> v1v3;
+    std::optional<double> v2v3;
 
     //! Equality operators
     bool operator==(const CorrCoefs& rhs) const;
@@ -87,12 +89,12 @@ struct PosVelError
     //! Coordinate frame used for expressing P,V error statistics
     FrameType frame;
 
-    double p1;
-    double p2;
-    double p3;
-    double v1;
-    double v2;
-    double v3;
+    std::optional<double> p1;
+    std::optional<double> p2;
+    std::optional<double> p3;
+    std::optional<double> v1;
+    std::optional<double> v2;
+    std::optional<double> v3;
 
     //! Optional
     mem::ScopedCopyablePtr<CorrCoefs> corrCoefs;
@@ -314,13 +316,13 @@ struct CompositeSCP
     SCPType scpType;
 
     //!  SICD/SIDD Rg or Row, depending on scpType
-    double xErr;
+    std::optional<double> xErr;
 
     //!  SICD/SIDD Az or Col, depending on scpType
-    double yErr;
+    std::optional<double> yErr;
 
     //!  SICD/SIDD RowCol or RgAz depending on scpType
-    double xyErr;
+    std::optional<double> xyErr;
 
     //! Equality operators
     bool operator==(const CompositeSCP& rhs) const
