@@ -584,6 +584,15 @@ void SICommonXMLParser::addDecorrType(const std::string& name,
         createDouble("DecorrRate", uri, decorrType.decorrRate, decorrXML);
     }
 }
+void SICommonXMLParser::addDecorrType(const std::string& name,
+        const std::string& uri, const std::optional<DecorrType>& decorrType, XMLElem parent) const
+{
+    //only adds it if it needs to
+    if (decorrType.has_value())
+    {
+        addDecorrType(name, uri, decorrType.value(), parent);
+    }
+}
 
 void SICommonXMLParser::parseDecorrType(XMLElem decorrXML,
                                         DecorrType& decorrType) const
@@ -592,6 +601,13 @@ void SICommonXMLParser::parseDecorrType(XMLElem decorrXML,
                 decorrType.corrCoefZero);
     parseDouble(getFirstAndOnly(decorrXML, "DecorrRate"),
                 decorrType.decorrRate);
+}
+void SICommonXMLParser::parseDecorrType(XMLElem decorrXML,
+                                        std::optional<DecorrType>& decorrType) const
+{
+    DecorrType result;
+    parseDecorrType(decorrXML, result);
+    decorrType = result;
 }
 
 void SICommonXMLParser::parseLatLon(XMLElem parent, LatLon& ll) const

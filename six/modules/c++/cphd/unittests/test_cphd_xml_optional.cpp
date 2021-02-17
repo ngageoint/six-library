@@ -1046,13 +1046,15 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.rangeBiasDecorr->decorrRate, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeVertical, 5.0);
     TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeSlant, 5.0);
-    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeDecorr.corrCoefZero, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeDecorr.decorrRate, 1.0);
+    const auto& tropoRangeDecorr = errorParams.monostatic->tropoError->tropoRangeDecorr;
+    TEST_ASSERT_EQ(tropoRangeDecorr.corrCoefZero, 0.5);
+    TEST_ASSERT_EQ(tropoRangeDecorr.decorrRate, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertical, 5.0);
     TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeRateVertical, 5.0);
     TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRgRgRateCC, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertDecorr.corrCoefZero, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertDecorr.decorrRate, 1.0);
+    const auto& ionoRangeVertDecorr = errorParams.monostatic->ionoError->ionoRangeVertDecorr;
+    TEST_ASSERT_EQ(ionoRangeVertDecorr.corrCoefZero, 0.5);
+    TEST_ASSERT_EQ(ionoRangeVertDecorr.decorrRate, 1.0);
 
     const cphd::ProductInfo& productInfo = *(metadata->productInfo);
     TEST_ASSERT_EQ(productInfo.profile, "Profile");
