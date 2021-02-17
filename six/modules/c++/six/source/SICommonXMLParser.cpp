@@ -866,7 +866,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                              radarSensor->transmitFreqSF, radarSensorXML);
             }
             addDecorrType("RangeBiasDecorr", getSICommonURI(),
-                          radarSensor->rangeBiasDecorr, radarSensorXML);
+                          radarSensor->rangeBiasDecorr_, radarSensorXML);
         }
         if (tropoError)
         {
@@ -886,7 +886,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
             }
 
             addDecorrType("TropoRangeDecorr", getSICommonURI(),
-                          tropoError->tropoRangeDecorr, tropoErrXML);
+                          tropoError->tropoRangeDecorr_, tropoErrXML);
         }
         if (ionoError)
         {
@@ -909,7 +909,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                          ionoError->ionoRgRgRateCC, ionoErrXML);
 
             addDecorrType("IonoRangeVertDecorr", getSICommonURI(),
-                          ionoError->ionoRangeVertDecorr, ionoErrXML);
+                          ionoError->ionoRangeVertDecorr_, ionoErrXML);
         }
     }
 
@@ -1065,7 +1065,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         if (tmpElem)
         {
             parseDecorrType(tmpElem,
-                errorStatistics->components->radarSensor->rangeBiasDecorr);
+                errorStatistics->components->radarSensor->rangeBiasDecorr_);
         }
     }
 
@@ -1091,7 +1091,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         if (tmpElem)
         {
             parseDecorrType(tmpElem,
-                errorStatistics->components->tropoError->tropoRangeDecorr);
+                errorStatistics->components->tropoError->tropoRangeDecorr_);
         }
     }
 
@@ -1120,7 +1120,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         if (tmpElem)
         {
             parseDecorrType(tmpElem,
-                errorStatistics->components->ionoError->ionoRangeVertDecorr);
+                errorStatistics->components->ionoError->ionoRangeVertDecorr_);
         }
     }
 

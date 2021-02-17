@@ -65,6 +65,10 @@ static const struct
     unsigned char data[128 * 128 * 3 + 1];
 }
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4125) // decimal digit terminates octal escape sequence
+#endif // _MSC_VER
 // clang-format off
         IMAGE = {
                   128,
@@ -1713,6 +1717,9 @@ static const struct
                       "3Lz2P\212>Y\216@X\2069Q\216=R\246Ve\261ju\251hu\221Obs,Fb\35>]\23" "5c\31"
                       ":t+I\230@S\261EP", };
 // clang-format on
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif // _MSC_VER
 
 /*
  *  Data will be RBG24I
@@ -2260,21 +2267,18 @@ void initErrorStatistics(six::ErrorStatistics& err)
     err.components->radarSensor->rangeBias = 43.5;
     err.components->radarSensor->clockFreqSF = 1111.1;
     err.components->radarSensor->transmitFreqSF = 85;
-    err.components->radarSensor->rangeBiasDecorr.corrCoefZero = 123;
-    err.components->radarSensor->rangeBiasDecorr.decorrRate = .03;
+    err.components->radarSensor->rangeBiasDecorr_ = six::DecorrType(123, .03);
 
     err.components->tropoError.reset(new six::TropoError());
     err.components->tropoError->tropoRangeVertical = .00289;
     err.components->tropoError->tropoRangeSlant = 777;
-    err.components->tropoError->tropoRangeDecorr.corrCoefZero = 0;
-    err.components->tropoError->tropoRangeDecorr.decorrRate = 98.7;
+    err.components->tropoError->tropoRangeDecorr_ = six::DecorrType(0, 98.7);
 
     err.components->ionoError.reset(new six::IonoError());
     err.components->ionoError->ionoRangeVertical = 1.2;
     err.components->ionoError->ionoRangeRateVertical = 77632;
     err.components->ionoError->ionoRgRgRateCC = .072;
-    err.components->ionoError->ionoRangeVertDecorr.corrCoefZero = 48.16;
-    err.components->ionoError->ionoRangeVertDecorr.decorrRate = 113.964;
+    err.components->ionoError->ionoRangeVertDecorr_ = six::DecorrType(48.16, 113.964);
 
     six::Parameter param;
     param.setName("ErrorStatisticsParameterName");

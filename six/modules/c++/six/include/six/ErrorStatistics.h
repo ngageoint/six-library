@@ -123,32 +123,35 @@ struct RadarSensor
      *  Range bias error standard deviation. 
      *  Range bias at zero range
      */
-    double rangeBias;
+    std::optional<double> rangeBias;
 
     /*!
      *  (Optional) Payload clock frequency scale factor
      *  standard deviation.
      */
-    double clockFreqSF;
+    std::optional<double> clockFreqSF;
     /*!
      * (Optional) Transmit frequency scale factor
      *  standard deviation.
      */
-    double transmitFreqSF;
+    std::optional<double> transmitFreqSF;
     /*!
      *  (Optional) Range bias decorrelated rate
      *
      */
-    DecorrType rangeBiasDecorr;
+    std::optional<DecorrType> rangeBiasDecorr_;
+    const DecorrType& rangeBiasDecorr() const
+    {
+        return rangeBiasDecorr_.value();
+    }
 
-    //!  Constructor
-    RadarSensor();
+    RadarSensor() = default;
 
     //! Equality operator
     bool operator==(const RadarSensor& rhs) const
     {
         return (rangeBias == rhs.rangeBias && clockFreqSF == rhs.clockFreqSF &&
-            transmitFreqSF == rhs.transmitFreqSF && rangeBiasDecorr == rhs.rangeBiasDecorr);
+            transmitFreqSF == rhs.transmitFreqSF && rangeBiasDecorr_ == rhs.rangeBiasDecorr_);
     }
 
     bool operator!=(const RadarSensor& rhs) const
@@ -170,28 +173,31 @@ struct TropoError
      *  incidence standard deviation.  Expressed as a
      *  two-range error
      */
-    double tropoRangeVertical;
+    std::optional<double> tropoRangeVertical;
 
     /*!
      *  (Optional) Troposphere two-way delay error for SCP COA
      *  incidence angle standard deviation.  Expressed
      *  as a two-way range error
      */
-    double tropoRangeSlant;
+    std::optional<double> tropoRangeSlant;
 
     /*!
      *  (Optional)
      *
      */
-    DecorrType tropoRangeDecorr;
+    std::optional<DecorrType> tropoRangeDecorr_;
+    const DecorrType& tropoRangeDecorr() const
+    {
+        return tropoRangeDecorr_.value();
+    }
 
-    //!  Constructor
-    TropoError();
+    TropoError() = default;
 
     bool operator==(const TropoError& rhs) const
     {
         return (tropoRangeVertical == rhs.tropoRangeVertical && tropoRangeSlant == rhs.tropoRangeSlant &&
-            tropoRangeDecorr == rhs.tropoRangeDecorr);
+            tropoRangeDecorr_ == rhs.tropoRangeDecorr_);
     }
 
     bool operator!=(const TropoError& rhs) const
@@ -213,35 +219,38 @@ struct IonoError
      *  incidence standard deviation.  Expressed as a
      *  two-way range error
      */
-    double ionoRangeVertical;
+    std::optional<double> ionoRangeVertical;
 
     /*!
      *  (Optional) Ionosphere two-way delay rate of change
      *  error for normal incidence standard deviation.
      *  Expressed as a two-way range error
      */
-    double ionoRangeRateVertical;
+    std::optional<double> ionoRangeRateVertical;
 
     /*!
      *  Ionosphere range error and range rate error correlation
      *  coefficient.
      *
      */
-    double ionoRgRgRateCC;
+    std::optional<double> ionoRgRgRateCC;
     
     /*!
      *  Ionosphere range error decorrelation ratio
      */
-    DecorrType ionoRangeVertDecorr;
+    std::optional<DecorrType> ionoRangeVertDecorr_;
+    const DecorrType& ionoRangeVertDecorr() const
+    {
+        return ionoRangeVertDecorr_.value();
+    }
 
-    //!  Constructor
-    IonoError();
+    IonoError() = default;
 
     //! Equality operator
     bool operator==(const IonoError& rhs) const
     {
         return (ionoRangeRateVertical == rhs.ionoRangeRateVertical && ionoRangeVertical == ionoRangeVertical &&
-            ionoRgRgRateCC == rhs.ionoRgRgRateCC && ionoRangeVertDecorr == rhs.ionoRangeVertDecorr);
+            ionoRgRgRateCC == rhs.ionoRgRgRateCC && ionoRangeVertDecorr_ == rhs.ionoRangeVertDecorr_);
     }
 
     bool operator!=(const IonoError& rhs) const

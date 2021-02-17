@@ -1263,14 +1263,13 @@ void six::getErrors(const ErrorStatistics* errorStats,
             {
                 const RadarSensor& radarSensor(*components->radarSensor);
 
-                if (!six::Init::isUndefined(radarSensor.rangeBiasDecorr))
+                if (!six::Init::isUndefined(radarSensor.rangeBiasDecorr_))
                 {
-                    const auto& rangeBiasDecorr = radarSensor.rangeBiasDecorr;
-                    errors.mRangeCorrCoefZero = rangeBiasDecorr.corrCoefZero;
-                    errors.mRangeDecorrRate = rangeBiasDecorr.decorrRate;
+                    errors.mRangeCorrCoefZero = radarSensor.rangeBiasDecorr().corrCoefZero;
+                    errors.mRangeDecorrRate = radarSensor.rangeBiasDecorr().decorrRate;
                 }
 
-                rangeBias = radarSensor.rangeBias;
+                rangeBias = radarSensor.rangeBias.value();
             }
             else
             {
