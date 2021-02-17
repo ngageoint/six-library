@@ -97,7 +97,7 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     impl->buffer = buffer;
     impl->firstRow = firstRow;
     impl->numCols = numCols;
-    impl->numRows = info.numRows;
+    impl->numRows = info.numRows();
     impl->numChannels = numChannels;
     impl->pixelSize = pixelSize;
     impl->doByteSwap = doByteSwap;
@@ -188,7 +188,7 @@ StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
 
     impl->inputStream = is;
     impl->numCols = numCols;
-    impl->numRows = info.numRows;
+    impl->numRows = info.numRows();
     impl->numChannels = numChannels;
     impl->pixelSize = pixelSize;
     impl->doByteSwap = doByteSwap;

@@ -29,6 +29,14 @@
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
 
+namespace math // in coda-oss
+{
+    inline double square(const std::optional<double>& val)
+    {
+        return val.value() * val.value();
+    }
+}
+
 namespace
 {
 NITF_TRE_STATIC_HANDLER_REF(XML_DATA_CONTENT);
@@ -39,6 +47,15 @@ void assign(math::linear::MatrixMxN<7, 7>& sensorCovar,
             double val)
 {
     sensorCovar(row, col) = sensorCovar(col, row) = val;
+}
+
+static inline double operator*(double lhs, const std::optional<double>& rhs)
+{
+    return lhs * rhs.value();
+}
+static inline double operator*(const std::optional<double>& lhs, const std::optional<double>& rhs)
+{
+    return lhs.value() * rhs.value();
 }
 
 void getSensorCovariance(const six::PosVelError& error,

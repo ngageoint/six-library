@@ -39,6 +39,12 @@ ErrorParameters::Bistatic::RadarSensor::RadarSensor() :
 {
 }
 
+static inline std::ostream& operator<< (std::ostream& os, const std::optional<double>& value)
+{
+    os << value.value();
+    return os;
+}
+
 std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
 {
     os << "    PosVelError:: \n"

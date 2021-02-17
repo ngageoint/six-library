@@ -329,13 +329,13 @@ void NITFWriteControl::save_(const TBufferList& imageData,
                 nitf::ImageSource iSource;
                 const NITFSegmentInfo segmentInfo = imageSegments[jj];
                 const size_t bandSize =
-                        pixelSize * numCols * segmentInfo.numRows;
+                        pixelSize * numCols * segmentInfo.numRows();
 
                 for (size_t chan = 0; chan < numChannels; ++chan)
                 {
                     nitf::MemorySource ms(imageData[i] +
                                                   pixelSize *
-                                                          segmentInfo.firstRow *
+                                                          segmentInfo.firstRow() *
                                                           numCols,
                                           bandSize,
                                           bandSize * chan,
@@ -357,7 +357,7 @@ void NITFWriteControl::save_(const TBufferList& imageData,
                 auto writeHandler(
                         std::make_shared<MemoryWriteHandler>(segmentInfo,
                                                imageData[i],
-                                               segmentInfo.firstRow,
+                                               segmentInfo.firstRow(),
                                                numCols,
                                                numChannels,
                                                pixelSize,

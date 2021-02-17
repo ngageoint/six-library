@@ -34,7 +34,7 @@ bool NITFSegmentInfo::isInRange(size_t rangeStartRow,
                                 size_t& numRowsInThisSegment) const
 {
     return nitf::ImageSegmentComputer::Segment::isInRange(
-            firstRow, endRow(), rangeStartRow, rangeNumRows,
+            firstRow(), endRow(), rangeStartRow, rangeNumRows,
             firstGlobalRowInThisSegment, numRowsInThisSegment);
 }
 }

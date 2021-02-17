@@ -120,9 +120,9 @@ void NITFImageInfo::computeSegmentInfo()
         const nitf::ImageSegmentComputer::Segment& segment(segments[ii]);
         NITFSegmentInfo& imageSegment(mImageSegments[ii]);
 
-        imageSegment.firstRow = segment.firstRow;
-        imageSegment.rowOffset = segment.rowOffset;
-        imageSegment.numRows = segment.numRows;
+        imageSegment.firstRow_ = segment.firstRow;
+        imageSegment.rowOffset_ = segment.rowOffset;
+        imageSegment.numRows_ = segment.numRows;
     }
 
     computeSegmentCorners();
@@ -148,7 +148,7 @@ void NITFImageInfo::computeSegmentCorners()
     size_t i;
     for (i = 0; i < numIS; i++)
     {
-        size_t firstRow = mImageSegments[i].firstRow;
+        const auto firstRow = mImageSegments[i].firstRow();
         double wgt1 = (total - firstRow) / total;
         double wgt2 = firstRow / total;
 

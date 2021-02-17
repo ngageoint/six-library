@@ -192,11 +192,21 @@ XMLElem XMLParser::createDouble(const std::string& name,
 
     return elem;
 }
+XMLElem XMLParser::createDouble(const std::string& name,
+        const std::string& uri, const std::optional<double>& p, XMLElem parent) const
+{
+    return createDouble(name, uri, p.value(), parent);
+}
 
 XMLElem XMLParser::createDouble(const std::string& name, double p,
         XMLElem parent) const
 {
     return createDouble(name, mDefaultURI, p, parent);
+}
+XMLElem XMLParser::createDouble(const std::string& name, const std::optional<double>& p,
+    XMLElem parent) const
+{
+    return createDouble(name, p.value(), parent);
 }
 
 XMLElem XMLParser::createBooleanType(const std::string& name,
@@ -309,6 +319,16 @@ void XMLParser::parseDouble(XMLElem element, double& value) const
     parseValue(*mLog, [&]() {
         value = xml::lite::getValue<double>(*element);
         });
+}
+double XMLParser::parseDouble(XMLElem element) const
+{
+    double retval;
+    parseDouble(element, retval);
+    return retval;
+}
+void XMLParser::parseDouble(XMLElem element, std::optional<double>& value) const
+{
+    value = parseDouble(element);
 }
 
 void XMLParser::parseComplex(XMLElem element, std::complex<double>& value) const
