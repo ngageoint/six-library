@@ -25,7 +25,10 @@
 
 #include <ostream>
 #include <vector>
+
+#include <sys/Optional.h>
 #include <mem/ScopedCopyablePtr.h>
+
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
 
@@ -222,7 +225,7 @@ struct LineSample
      */
     size_t getIndex()
     {
-        return mIndex;
+        return mIndex.value();
     }
 
     /*!
@@ -234,14 +237,14 @@ struct LineSample
     }
 
     //! Line
-    double line;
+    std::optional<double> line;
 
     //! Sample
-    double sample;
+    std::optional<double> sample;
 
 private:
     // Stores index of LineSample
-    size_t mIndex;
+    std::optional<size_t> mIndex;
 };
 
 /*!

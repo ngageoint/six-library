@@ -29,6 +29,8 @@
 #include <stddef.h>
 #include <unordered_map>
 
+#include <sys/Optional.h>
+
 #include <scene/sys_Conf.h>
 #include <cphd/Types.h>
 #include <cphd/Data.h>
@@ -81,15 +83,7 @@ struct AddedPVP<std::string>
  */
 struct PVPBlock
 {
-    /*
-     *  \func PVPBlock
-     *
-     *  \brief Default Constructor
-     */
-    PVPBlock() :
-        mNumBytesPerVector(0)
-    {
-    }
+    PVPBlock() = default;
 
     /*
      *  \func PVPBlock
@@ -282,31 +276,31 @@ struct PVPBlock
     //! Get optional parameter flags
     bool hasAmpSF() const
     {
-        return mAmpSFEnabled;
+        return mAmpSFEnabled.value();
     }
     bool hasFxN1() const
     {
-        return mFxN1Enabled;
+        return mFxN1Enabled.value();
     }
     bool hasFxN2() const
     {
-        return mFxN2Enabled;
+        return mFxN2Enabled.value();
     }
     bool hasToaE1() const
     {
-        return mToaE1Enabled;
+        return mToaE1Enabled.value();
     }
     bool hasToaE2() const
     {
-        return mToaE2Enabled;
+        return mToaE2Enabled.value();
     }
     bool hasTDIonoSRP() const
     {
-        return mTDIonoSRPEnabled;
+        return mTDIonoSRPEnabled.value();
     }
     bool hasSignal() const
     {
-        return mSignalEnabled;
+        return mSignalEnabled.value();
     }
 
     /*
@@ -455,20 +449,20 @@ private:
     //! The PVP Block [Num Channles][Num Parameters]
     std::vector<std::vector<PVPSet> > mData;
     //! Number of bytes per PVP vector
-    size_t mNumBytesPerVector;
+    size_t mNumBytesPerVector = 0;
     //! PVP block metadata
     Pvp mPvp;
 
     /*
      *  Optional parameter flags
      */
-    bool mAmpSFEnabled;
-    bool mFxN1Enabled;
-    bool mFxN2Enabled;
-    bool mToaE1Enabled;
-    bool mToaE2Enabled;
-    bool mTDIonoSRPEnabled;
-    bool mSignalEnabled;
+    std::optional<bool> mAmpSFEnabled;
+    std::optional<bool> mFxN1Enabled;
+    std::optional<bool> mFxN2Enabled;
+    std::optional<bool> mToaE1Enabled;
+    std::optional<bool> mToaE2Enabled;
+    std::optional<bool> mTDIonoSRPEnabled;
+    std::optional<bool> mSignalEnabled;
 
     //! Ostream operator
     friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);

@@ -225,7 +225,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
 {
     bool valid = true;
     std::ostringstream messageBuilder;
-    const double epsilon = std::numeric_limits<double>::epsilon();
+    constexpr auto epsilon = std::numeric_limits<double>::epsilon();
     //2.3.1, 2.3.5
     if (deltaK2 <= deltaK1)
     {
