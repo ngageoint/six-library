@@ -84,6 +84,13 @@ static void testOptional_(const std::string& testName, const TOptional& opt)
 
     const auto other = opt;
     TEST_ASSERT_EQ(opt, other);
+
+    // assignment
+    TOptional another;
+    another = opt;
+    TEST_ASSERT_EQ(opt, another);
+    another = 314;
+    TEST_ASSERT_EQ(314, another);
 }
 
 TEST_CASE(test_sys_Optional)

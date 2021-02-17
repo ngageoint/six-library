@@ -46,9 +46,16 @@ class Optional  // no "final" as SWIG doesn't like it
 public:
     using value_type = T;
 
+    #if defined(_MSC_VER) && _PREFAST_ // Visual Studio /analyze
+    __pragma(warning(push))
+    __pragma(warning(disable: 26495)) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
+    #endif
     Optional() noexcept
     {
     }
+    #if defined(_MSC_VER) && _PREFAST_
+    __pragma(warning(pop))
+    #endif
     Optional(const value_type& v) : value_(v), has_value_(true)
     {
     }
@@ -63,6 +70,14 @@ public:
         value_ = value_type(std::forward<Args>(args)...);
         has_value_ = true;
         return value_;
+    }
+
+    template<typename U = T> // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    Optional& operator=(U&& value)
+    {
+        value_ = std::forward<U>(value);
+        has_value_ = true;
+        return *this;
     }
 
     bool has_value() const noexcept
