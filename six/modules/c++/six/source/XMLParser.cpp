@@ -197,6 +197,15 @@ XMLElem XMLParser::createDouble(const std::string& name,
 {
     return createDouble(name, uri, p.value(), parent);
 }
+XMLElem XMLParser::createOptionalDouble(const std::string& name,
+        const std::string& uri, const std::optional<double>& p, XMLElem parent) const
+{
+    if (p.has_value())
+    {
+        return createDouble(name, uri, p.value(), parent);
+    }
+    return nullptr;
+}
 
 XMLElem XMLParser::createDouble(const std::string& name, double p,
         XMLElem parent) const
@@ -207,6 +216,15 @@ XMLElem XMLParser::createDouble(const std::string& name, const std::optional<dou
     XMLElem parent) const
 {
     return createDouble(name, p.value(), parent);
+}
+XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::optional<double>& p,
+    XMLElem parent) const
+{
+    if (p.has_value())
+    {
+        return createDouble(name, p.value(), parent);
+    }
+    return nullptr;
 }
 
 XMLElem XMLParser::createBooleanType(const std::string& name,

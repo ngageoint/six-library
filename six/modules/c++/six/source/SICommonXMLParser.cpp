@@ -855,16 +855,12 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
             createDouble("RangeBias", getSICommonURI(), radarSensor->rangeBias,
                          radarSensorXML);
 
-            if (!Init::isUndefined<double>(radarSensor->clockFreqSF))
-            {
-                createDouble("ClockFreqSF", getSICommonURI(),
-                             radarSensor->clockFreqSF, radarSensorXML);
-            }
-            if (!Init::isUndefined<double>(radarSensor->transmitFreqSF))
-            {
-                createDouble("TransmitFreqSF", getSICommonURI(),
-                             radarSensor->transmitFreqSF, radarSensorXML);
-            }
+            createOptionalDouble("ClockFreqSF", getSICommonURI(),
+                            radarSensor->clockFreqSF, radarSensorXML);
+
+            createOptionalDouble("TransmitFreqSF", getSICommonURI(),
+                            radarSensor->transmitFreqSF, radarSensorXML);
+           
             addDecorrType("RangeBiasDecorr", getSICommonURI(),
                           radarSensor->rangeBiasDecorr_, radarSensorXML);
         }
@@ -874,16 +870,11 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                                              getSICommonURI(),
                                              componentsXML);
 
-            if (!Init::isUndefined<double>(tropoError->tropoRangeVertical))
-            {
-                createDouble("TropoRangeVertical", getSICommonURI(),
+                createOptionalDouble("TropoRangeVertical", getSICommonURI(),
                              tropoError->tropoRangeVertical, tropoErrXML);
-            }
-            if (!Init::isUndefined<double>(tropoError->tropoRangeSlant))
-            {
-                createDouble("TropoRangeSlant", getSICommonURI(),
+
+                createOptionalDouble("TropoRangeSlant", getSICommonURI(),
                              tropoError->tropoRangeSlant, tropoErrXML);
-            }
 
             addDecorrType("TropoRangeDecorr", getSICommonURI(),
                           tropoError->tropoRangeDecorr_, tropoErrXML);
@@ -894,16 +885,11 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                                             getSICommonURI(),
                                             componentsXML);
 
-            if (!Init::isUndefined<double>(ionoError->ionoRangeVertical))
-            {
-                createDouble("IonoRangeVertical", getSICommonURI(),
-                             ionoError->ionoRangeVertical, ionoErrXML);
-            }
-            if (!Init::isUndefined<double>(ionoError->ionoRangeRateVertical))
-            {
-                createDouble("IonoRangeRateVertical", getSICommonURI(),
-                             ionoError->ionoRangeRateVertical, ionoErrXML);
-            }
+            createOptionalDouble("IonoRangeVertical", getSICommonURI(),
+                            ionoError->ionoRangeVertical, ionoErrXML);
+
+            createOptionalDouble("IonoRangeRateVertical", getSICommonURI(),
+                            ionoError->ionoRangeRateVertical, ionoErrXML);
 
             createDouble("IonoRgRgRateCC", getSICommonURI(),
                          ionoError->ionoRgRgRateCC, ionoErrXML);

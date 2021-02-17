@@ -51,18 +51,15 @@ struct Init
     {
         return (value == Init::undefined<T>());
     }
-    template<typename T> static bool isUndefined(const std::optional<T>& value)
-    {
-        return !value.has_value();
-    }
 
     template<typename T> static bool isDefined(T value)
     {
         return !isUndefined<T>(value);
     }
-    template<typename T> static bool isDefined(const std::optional<T>& value)
+
+    template<typename T> static bool hasValue(const std::optional<T>& value)
     {
-        return !isUndefined<T>(value);
+        return value.has_value();
     }
 
     template<typename T> static T undefined()
