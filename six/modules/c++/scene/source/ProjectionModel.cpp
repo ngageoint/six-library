@@ -181,7 +181,7 @@ ProjectionModel::sceneToImage(const Vector3& scenePoint,
         Vector3 diff(mSCP - groundPlanePoint);
 
         // Dist contains the projection difference
-        double dist = diff.dot(mImagePlaneNormal) * mScaleFactor;
+        double dist = diff.dot(mImagePlaneNormal) * mScaleFactor.value();
 
         Vector3 imagePlanePoint =
             groundPlanePoint + mSlantPlaneNormal * dist;

@@ -22,6 +22,8 @@
 #ifndef __SCENE_ELLIPSOID_MODEL_H__
 #define __SCENE_ELLIPSOID_MODEL_H__
 
+#include <sys/Optional.h>
+
 #include "scene/Types.h"
 
 namespace scene
@@ -144,8 +146,8 @@ struct EllipsoidModel
 protected:
     Units units = INVALID_UNITS;
     AngularUnits angularUnits = INVALID_ANGULAR_UNITS;
-    double equatorialRadius;
-    double polarRadius;
+    std::optional<double> equatorialRadius_;
+    std::optional<double> polarRadius_;
 };
 
 class WGS84EllipsoidModel : public EllipsoidModel

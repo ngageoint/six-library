@@ -22,12 +22,14 @@
 #ifndef __SCENE_PROJECTION_MODEL_H__
 #define __SCENE_PROJECTION_MODEL_H__
 
+#include <sys/Optional.h>
+#include <math/poly/OneD.h>
+#include <math/poly/TwoD.h>
+
 #include <scene/Types.h>
 #include <scene/GridECEFTransform.h>
 #include <scene/AdjustableParams.h>
 #include <scene/Errors.h>
-#include <math/poly/OneD.h>
-#include <math/poly/TwoD.h>
 
 namespace scene
 {
@@ -355,7 +357,7 @@ protected:
     Vector3 mSlantPlaneNormal;
     Vector3 mImagePlaneNormal;
     Vector3 mSCP;
-    double mScaleFactor;
+    std::optional<double> mScaleFactor;
     math::poly::OneD<Vector3> mARPPoly;
     math::poly::OneD<Vector3> mARPVelPoly;
     math::poly::TwoD<double> mTimeCOAPoly;
