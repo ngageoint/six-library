@@ -187,10 +187,10 @@ struct TropoError
      *  incidence standard deviation.  Expressed as a
      *  two-range error
      */
-    double tropoRangeVertical_ = Init::undefined<double>();
+    double tropoRangeVertical = Init::undefined<double>();
     InitRef<double> TropoRangeVertical() const
     {
-        return make_InitRef(tropoRangeVertical_);
+        return make_InitRef(tropoRangeVertical);
     }
 
     /*!
@@ -198,10 +198,10 @@ struct TropoError
      *  incidence angle standard deviation.  Expressed
      *  as a two-way range error
      */
-    double tropoRangeSlant_ = Init::undefined<double>();
+    double tropoRangeSlant = Init::undefined<double>();
     InitRef<double> TropoRangeSlant() const
     {
-        return make_InitRef(tropoRangeSlant_);
+        return make_InitRef(tropoRangeSlant);
     }
 
     /*!
@@ -242,6 +242,10 @@ struct IonoError
      *  two-way range error
      */
     double ionoRangeVertical = Init::undefined<double>();
+    InitRef<double> IonoRangeVertical() const
+    {
+        return make_InitRef(ionoRangeVertical);
+    }
 
     /*!
      *  (Optional) Ionosphere two-way delay rate of change
@@ -249,6 +253,10 @@ struct IonoError
      *  Expressed as a two-way range error
      */
     double ionoRangeRateVertical = Init::undefined<double>();
+    InitRef<double> IonoRangeRateVertical() const
+    {
+        return make_InitRef(ionoRangeRateVertical);
+    }
 
     /*!
      *  Ionosphere range error and range rate error correlation
@@ -256,6 +264,10 @@ struct IonoError
      *
      */
     double ionoRgRgRateCC = Init::undefined<double>();
+    InitRef<double> IonoRgRgRateCC() const
+    {
+        return make_InitRef(ionoRgRgRateCC);
+    }
     
     /*!
      *  Ionosphere range error decorrelation ratio
@@ -271,8 +283,8 @@ struct IonoError
     //! Equality operator
     bool operator==(const IonoError& rhs) const
     {
-        return (ionoRangeRateVertical == rhs.ionoRangeRateVertical && ionoRangeVertical == ionoRangeVertical &&
-            ionoRgRgRateCC == rhs.ionoRgRgRateCC && IonoRangeVertDecorr().get() == rhs.IonoRangeVertDecorr().get());
+        return (IonoRangeRateVertical().get() == rhs.IonoRangeRateVertical().get() && IonoRangeVertical().get() == IonoRangeVertical().get() &&
+            IonoRgRgRateCC().get() == rhs.IonoRgRgRateCC().get() && IonoRangeVertDecorr().get() == rhs.IonoRangeVertDecorr().get());
     }
 
     bool operator!=(const IonoError& rhs) const

@@ -1049,9 +1049,9 @@ TEST_CASE(testOptional)
     const auto& tropoRangeDecorr = errorParams.monostatic->tropoError->TropoRangeDecorr().get();
     TEST_ASSERT_EQ(tropoRangeDecorr.corrCoefZero, 0.5);
     TEST_ASSERT_EQ(tropoRangeDecorr.decorrRate, 1.0);
-    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertical, 5.0);
-    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeRateVertical, 5.0);
-    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRgRgRateCC, 0.5);
+    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->IonoRangeVertical().get(), 5.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->IonoRangeRateVertical().get(), 5.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->ionoError->IonoRgRgRateCC().get(), 0.5);
     const auto& ionoRangeVertDecorr = errorParams.monostatic->ionoError->IonoRangeVertDecorr().get();
     TEST_ASSERT_EQ(ionoRangeVertDecorr.corrCoefZero, 0.5);
     TEST_ASSERT_EQ(ionoRangeVertDecorr.decorrRate, 1.0);

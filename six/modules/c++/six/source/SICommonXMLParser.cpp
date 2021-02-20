@@ -897,14 +897,20 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                                             getSICommonURI(),
                                             componentsXML);
 
-            createOptionalDouble("IonoRangeVertical", getSICommonURI(),
-                            ionoError->ionoRangeVertical, ionoErrXML);
+            if (ionoError->IonoRangeVertical().has())
+            {
+                createDouble("IonoRangeVertical", getSICommonURI(),
+                    ionoError->IonoRangeVertical().get(), ionoErrXML);
+            }
 
-            createOptionalDouble("IonoRangeRateVertical", getSICommonURI(),
-                            ionoError->ionoRangeRateVertical, ionoErrXML);
+            if (ionoError->IonoRangeRateVertical().has())
+            {
+                createDouble("IonoRangeRateVertical", getSICommonURI(),
+                    ionoError->IonoRangeRateVertical().get(), ionoErrXML);
+            }
 
             createDouble("IonoRgRgRateCC", getSICommonURI(),
-                         ionoError->ionoRgRgRateCC, ionoErrXML);
+                         ionoError->IonoRgRgRateCC().get(), ionoErrXML);
 
             addDecorrType("IonoRangeVertDecorr", getSICommonURI(),
                           ionoError->IonoRangeVertDecorr().get(), ionoErrXML);
@@ -1109,23 +1115,28 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
     if (ionoErrorXML != nullptr)
     {
         tmpElem = getOptional(ionoErrorXML, "IonoRangeVertical");
+        double value;
         if (tmpElem)
         {
             //optional
-            parseDouble(tmpElem,
-                errorStatistics->getComponents()->getIonoError()->ionoRangeVertical);
+            if (parseDouble(tmpElem, value))
+            {
+                errorStatistics->getComponents()->getIonoError()->IonoRangeVertical().set(value);
+            }
         }
 
         tmpElem = getOptional(ionoErrorXML, "IonoRangeRateVertical");
         if (tmpElem)
         {
             //optional
-            parseDouble(tmpElem,
-                errorStatistics->getComponents()->getIonoError()->ionoRangeRateVertical);
+            if (parseDouble(tmpElem, value))
+            {
+                errorStatistics->getComponents()->getIonoError()->IonoRangeRateVertical().set(value);
+            }
         }
 
-        parseDouble(getFirstAndOnly(ionoErrorXML, "IonoRgRgRateCC"),
-                    errorStatistics->getComponents()->getIonoError()->ionoRgRgRateCC);
+        parseDouble(getFirstAndOnly(ionoErrorXML, "IonoRgRgRateCC"), value);
+        errorStatistics->getComponents()->getIonoError()->IonoRgRgRateCC().set(value);
 
         tmpElem = getOptional(ionoErrorXML, "IonoRangeVertDecorr");
         if (tmpElem)

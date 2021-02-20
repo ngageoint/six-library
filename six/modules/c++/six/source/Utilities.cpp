@@ -1298,13 +1298,13 @@ void six::getErrors(const ErrorStatistics* errorStats,
             {
                 const six::IonoError& ionoError(*components->getIonoError());
                 errors.mIonoErrorCovar(0, 0) =
-                        math::square(ionoError.ionoRangeVertical);
+                        math::square(ionoError.IonoRangeVertical().get());
                 errors.mIonoErrorCovar(1, 1) =
-                        math::square(ionoError.ionoRangeRateVertical);
+                        math::square(ionoError.IonoRangeRateVertical().get());
                 errors.mIonoErrorCovar(0, 1) = errors.mIonoErrorCovar(1, 0) =
-                        ionoError.ionoRangeVertical *
-                        ionoError.ionoRangeRateVertical *
-                        ionoError.ionoRgRgRateCC;
+                        ionoError.IonoRangeVertical().get() *
+                        ionoError.IonoRangeRateVertical().get() *
+                        ionoError.IonoRgRgRateCC().get();
             }
 
             if (components->getTropoError())

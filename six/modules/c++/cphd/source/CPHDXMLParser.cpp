@@ -828,14 +828,14 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
         if (errParams.monostatic->ionoError.get())
         {
             XMLElem ionoXML = newElement("IonoError", monoXML);
-            createDouble("IonoRangeVertical", errParams.monostatic->ionoError->ionoRangeVertical, ionoXML);
-            if (!six::Init::isUndefined(errParams.monostatic->ionoError->ionoRangeRateVertical))
+            createDouble("IonoRangeVertical", errParams.monostatic->ionoError->IonoRangeVertical().get(), ionoXML);
+            if (errParams.monostatic->ionoError->IonoRangeRateVertical().has())
             {
-                createDouble("IonoRangeRateVertical", errParams.monostatic->ionoError->ionoRangeRateVertical, ionoXML);
+                createDouble("IonoRangeRateVertical", errParams.monostatic->ionoError->IonoRangeRateVertical().get(), ionoXML);
             }
-            if (!six::Init::isUndefined(errParams.monostatic->ionoError->ionoRgRgRateCC))
+            if (errParams.monostatic->ionoError->IonoRgRgRateCC().has())
             {
-                createDouble("IonoRgRgRateCC", errParams.monostatic->ionoError->ionoRgRgRateCC, ionoXML);
+                createDouble("IonoRgRgRateCC", errParams.monostatic->ionoError->IonoRgRgRateCC().get(), ionoXML);
             }
             if (errParams.monostatic->ionoError->IonoRangeVertDecorr().has())
             {
@@ -1782,17 +1782,25 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
         if(ionoErrorXML)
         {
             errParam.monostatic->ionoError.reset(new six::IonoError());
-            parseDouble(getFirstAndOnly(ionoErrorXML, "IonoRangeVertical"), errParam.monostatic->ionoError->ionoRangeVertical);
+            double value;
+            parseDouble(getFirstAndOnly(ionoErrorXML, "IonoRangeVertical"), value);
+            errParam.monostatic->ionoError->IonoRangeVertical().set(value);
 
             XMLElem rateVerticalXML = getOptional(ionoErrorXML, "IonoRangeRateVertical");
             if(rateVerticalXML)
             {
-                parseDouble(rateVerticalXML, errParam.monostatic->ionoError->ionoRangeRateVertical);
+                if (parseDouble(rateVerticalXML, value))
+                {
+                    errParam.monostatic->ionoError->IonoRangeRateVertical().set(value);
+                }
             }
             XMLElem rgrgRateCCXML = getOptional(ionoErrorXML, "IonoRgRgRateCC");
             if(rgrgRateCCXML)
             {
-                parseDouble(rgrgRateCCXML, errParam.monostatic->ionoError->ionoRgRgRateCC);
+                if (parseDouble(rgrgRateCCXML, value))
+                {
+                    errParam.monostatic->ionoError->IonoRgRgRateCC().set(value);
+                }
             }
             XMLElem decorrXML = getOptional(ionoErrorXML, "IonoRangeVertDecorr");
             if(decorrXML)

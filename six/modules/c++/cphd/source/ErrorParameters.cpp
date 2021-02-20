@@ -124,15 +124,15 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         if (e.monostatic->ionoError.get())
         {
             os << "    IonoError:: \n";
-            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeVertical))
+            if (e.monostatic->ionoError->IonoRangeVertical().has())
             {
-                os << "    IonoRangeVertical : " << e.monostatic->ionoError->ionoRangeVertical << "\n";
+                os << "    IonoRangeVertical : " << e.monostatic->ionoError->IonoRangeVertical().get() << "\n";
             }
-            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeRateVertical))
+            if (e.monostatic->ionoError->IonoRangeRateVertical().has())
             {
-                os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->ionoRangeRateVertical << "\n";
+                os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->IonoRangeRateVertical().get() << "\n";
             }
-            os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->ionoRgRgRateCC << "\n";
+            os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->IonoRgRgRateCC().get() << "\n";
             if (e.monostatic->ionoError->IonoRangeVertDecorr().has())
             {
             os << "    IonoRangeDecorr:: \n"
