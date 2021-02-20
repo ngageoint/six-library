@@ -2270,8 +2270,8 @@ void initErrorStatistics(six::ErrorStatistics& err)
     err.getComponents()->getRadarSensor()->RangeBiasDecorr().set(six::DecorrType(123, .03));
 
     err.getComponents()->reset(new six::TropoError());
-    err.getComponents()->getTropoError()->tropoRangeVertical = .00289;
-    err.getComponents()->getTropoError()->tropoRangeSlant = 777;
+    err.getComponents()->getTropoError()->TropoRangeVertical().set(.00289);
+    err.getComponents()->getTropoError()->TropoRangeSlant().set(777);
     err.getComponents()->getTropoError()->TropoRangeDecorr().set(six::DecorrType(0, 98.7));
 
     err.getComponents()->reset(new six::IonoError());

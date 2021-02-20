@@ -1044,8 +1044,8 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.collectionStartTime, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.rangeBiasDecorr->corrCoefZero, 0.5);
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.rangeBiasDecorr->decorrRate, 1.0);
-    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeVertical, 5.0);
-    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeSlant, 5.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->TropoRangeVertical().get(), 5.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->tropoError->TropoRangeSlant().get(), 5.0);
     const auto& tropoRangeDecorr = errorParams.monostatic->tropoError->TropoRangeDecorr().get();
     TEST_ASSERT_EQ(tropoRangeDecorr.corrCoefZero, 0.5);
     TEST_ASSERT_EQ(tropoRangeDecorr.decorrRate, 1.0);

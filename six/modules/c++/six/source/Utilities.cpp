@@ -1310,7 +1310,7 @@ void six::getErrors(const ErrorStatistics* errorStats,
             if (components->getTropoError())
             {
                 errors.mTropoErrorCovar(0, 0) = math::square(
-                        components->getTropoError()->tropoRangeVertical);
+                        components->getTropoError()->TropoRangeVertical().get());
             }
         }
 

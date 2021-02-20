@@ -876,11 +876,17 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                                              getSICommonURI(),
                                              componentsXML);
 
+            if (tropoError->TropoRangeVertical().has())
+            {
                 createOptionalDouble("TropoRangeVertical", getSICommonURI(),
-                             tropoError->tropoRangeVertical, tropoErrXML);
+                             tropoError->TropoRangeVertical().get(), tropoErrXML);
+            }
 
+            if (tropoError->TropoRangeSlant().has())
+            {
                 createOptionalDouble("TropoRangeSlant", getSICommonURI(),
-                             tropoError->tropoRangeSlant, tropoErrXML);
+                             tropoError->TropoRangeSlant().get(), tropoErrXML);
+            }
 
             addDecorrType("TropoRangeDecorr", getSICommonURI(),
                           tropoError->TropoRangeDecorr().get(), tropoErrXML);
@@ -1070,20 +1076,25 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
 
     if (tropoErrorXML != nullptr)
     {
+        double value;
         tmpElem = getOptional(tropoErrorXML, "TropoRangeVertical");
         if (tmpElem)
         {
             //optional
-            parseDouble(tmpElem,
-                errorStatistics->getComponents()->getTropoError()->tropoRangeVertical);
+            if (parseDouble(tmpElem, value))
+            {
+                errorStatistics->getComponents()->getTropoError()->TropoRangeVertical().set(value);
+            }
         }
 
         tmpElem = getOptional(tropoErrorXML, "TropoRangeSlant");
         if (tmpElem)
         {
             //optional
-            parseDouble(tmpElem,
-                errorStatistics->getComponents()->getTropoError()->tropoRangeSlant);
+            if (parseDouble(tmpElem, value))
+            {
+                errorStatistics->getComponents()->getTropoError()->TropoRangeSlant().set(value);
+            }
         }
 
         tmpElem = getOptional(tropoErrorXML, "TropoRangeDecorr");

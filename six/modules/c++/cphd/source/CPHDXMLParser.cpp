@@ -810,13 +810,13 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
         if (errParams.monostatic->tropoError.get())
         {
             XMLElem tropoXML = newElement("TropoError", monoXML);
-            if (!six::Init::isUndefined(errParams.monostatic->tropoError->tropoRangeVertical))
+            if (errParams.monostatic->tropoError->TropoRangeVertical().has())
             {
-                createDouble("TropoRangeVertical", errParams.monostatic->tropoError->tropoRangeVertical, tropoXML);
+                createDouble("TropoRangeVertical", errParams.monostatic->tropoError->TropoRangeVertical().get(), tropoXML);
             }
-            if (!six::Init::isUndefined(errParams.monostatic->tropoError->tropoRangeSlant))
+            if (errParams.monostatic->tropoError->TropoRangeSlant().has())
             {
-                createDouble("TropoRangeSlant", errParams.monostatic->tropoError->tropoRangeSlant, tropoXML);
+                createDouble("TropoRangeSlant", errParams.monostatic->tropoError->TropoRangeSlant().get(), tropoXML);
             }
             if (errParams.monostatic->tropoError->TropoRangeDecorr().has())
             {
@@ -1753,14 +1753,21 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
         {
             errParam.monostatic->tropoError.reset(new six::TropoError());
             XMLElem verticalXML = getOptional(tropoErrorXML, "TropoRangeVertical");
+            double value;
             if(verticalXML)
             {
-                parseDouble(verticalXML, errParam.monostatic->tropoError->tropoRangeVertical);
+                if (parseDouble(verticalXML, value))
+                {
+                    errParam.monostatic->tropoError->TropoRangeVertical().set(value);
+                }
             }
             XMLElem slantXML = getOptional(tropoErrorXML, "TropoRangeSlant");
             if(slantXML)
             {
-                parseDouble(slantXML, errParam.monostatic->tropoError->tropoRangeSlant);
+                if (parseDouble(slantXML, value))
+                {
+                    errParam.monostatic->tropoError->TropoRangeSlant().set(value);
+                }
             }
             XMLElem decorrXML = getOptional(tropoErrorXML, "TropoRangeDecorr");
             if(decorrXML)

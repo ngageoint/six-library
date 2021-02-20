@@ -106,13 +106,13 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         if (e.monostatic->tropoError.get())
         {
             os << "    TropoError:: \n";
-            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeVertical))
+            if (e.monostatic->tropoError->TropoRangeVertical().has())
             {
-                os << "    TropoRangeVertical : " << e.monostatic->tropoError->tropoRangeVertical << "\n";
+                os << "    TropoRangeVertical : " << e.monostatic->tropoError->TropoRangeVertical().get() << "\n";
             }
-            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeSlant))
+            if (e.monostatic->tropoError->TropoRangeSlant().has())
             {
-                os << "    TropoRangeSlant  : " << e.monostatic->tropoError->tropoRangeSlant << "\n";
+                os << "    TropoRangeSlant  : " << e.monostatic->tropoError->TropoRangeSlant().get() << "\n";
             }
             if (e.monostatic->tropoError->TropoRangeDecorr().has())
             {

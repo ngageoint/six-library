@@ -187,14 +187,22 @@ struct TropoError
      *  incidence standard deviation.  Expressed as a
      *  two-range error
      */
-    double tropoRangeVertical = Init::undefined<double>();
+    double tropoRangeVertical_ = Init::undefined<double>();
+    InitRef<double> TropoRangeVertical() const
+    {
+        return make_InitRef(tropoRangeVertical_);
+    }
 
     /*!
      *  (Optional) Troposphere two-way delay error for SCP COA
      *  incidence angle standard deviation.  Expressed
      *  as a two-way range error
      */
-    double tropoRangeSlant = Init::undefined<double>();
+    double tropoRangeSlant_ = Init::undefined<double>();
+    InitRef<double> TropoRangeSlant() const
+    {
+        return make_InitRef(tropoRangeSlant_);
+    }
 
     /*!
      *  (Optional)
@@ -210,7 +218,7 @@ struct TropoError
 
     bool operator==(const TropoError& rhs) const
     {
-        return (tropoRangeVertical == rhs.tropoRangeVertical && tropoRangeSlant == rhs.tropoRangeSlant &&
+        return (TropoRangeVertical().get() == rhs.TropoRangeVertical().get() && TropoRangeSlant().get() == rhs.TropoRangeSlant().get() &&
             TropoRangeDecorr().get() == rhs.TropoRangeDecorr().get());
     }
 
