@@ -42,9 +42,7 @@ namespace six
  */
 struct CorrCoefs
 {
-    CorrCoefs()
-    {
-    }
+    CorrCoefs() = default;
 
     double p1p2;
     double p1p3;
@@ -132,18 +130,18 @@ struct RadarSensor
      *  Range bias error standard deviation. 
      *  Range bias at zero range
      */
-    double rangeBias;
+    double rangeBias = Init::undefined<double>();
 
     /*!
      *  (Optional) Payload clock frequency scale factor
      *  standard deviation.
      */
-    double clockFreqSF;
+    double clockFreqSF = Init::undefined<double>();
     /*!
      * (Optional) Transmit frequency scale factor
      *  standard deviation.
      */
-    double transmitFreqSF;
+    double transmitFreqSF = Init::undefined<double>();
     /*!
      *  (Optional) Range bias decorrelated rate
      *
@@ -190,14 +188,14 @@ struct TropoError
      *  incidence standard deviation.  Expressed as a
      *  two-range error
      */
-    double tropoRangeVertical;
+    double tropoRangeVertical = Init::undefined<double>();
 
     /*!
      *  (Optional) Troposphere two-way delay error for SCP COA
      *  incidence angle standard deviation.  Expressed
      *  as a two-way range error
      */
-    double tropoRangeSlant;
+    double tropoRangeSlant = Init::undefined<double>();
 
     /*!
      *  (Optional)
@@ -244,21 +242,21 @@ struct IonoError
      *  incidence standard deviation.  Expressed as a
      *  two-way range error
      */
-    double ionoRangeVertical;
+    double ionoRangeVertical = Init::undefined<double>();
 
     /*!
      *  (Optional) Ionosphere two-way delay rate of change
      *  error for normal incidence standard deviation.
      *  Expressed as a two-way range error
      */
-    double ionoRangeRateVertical;
+    double ionoRangeRateVertical = Init::undefined<double>();
 
     /*!
      *  Ionosphere range error and range rate error correlation
      *  coefficient.
      *
      */
-    double ionoRgRgRateCC;
+    double ionoRgRgRateCC = Init::undefined<double>();
     
     /*!
      *  Ionosphere range error decorrelation ratio

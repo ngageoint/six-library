@@ -94,14 +94,13 @@ typedef scene::FrameType FrameType;
  */
 struct DecorrType
 {
-    DecorrType() = default;
-    DecorrType(double ccz, double dr = 0.0) :
+    DecorrType(double ccz = 0.0, double dr = 0.0) :
         corrCoefZero(ccz), decorrRate(dr)
     {
     }
 
-    DecorrType(const DecorrType& dt) :
-        corrCoefZero(dt.corrCoefZero), decorrRate(dt.decorrRate)
+    DecorrType(const DecorrType& dt) : 
+        DecorrType(dt.corrCoefZero, dt.decorrRate)
     {
     }
 
