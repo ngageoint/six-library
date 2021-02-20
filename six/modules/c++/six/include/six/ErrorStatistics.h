@@ -133,57 +133,57 @@ struct RadarSensor
      *  Range bias error standard deviation. 
      *  Range bias at zero range
      */
-    double rangeBias_ = Init::undefined<double>();
+    double rangeBias = Init::undefined<double>();
     double getRangeBias() const
     {
         assert(hasRangeBias());
-        return rangeBias_;
+        return rangeBias;
     }
     void setRangeBias(double v)
     {
-        rangeBias_ = v;
+        rangeBias = v;
     }
     double hasRangeBias() const
     {
-        return Init::isDefined(rangeBias_);
+        return Init::isDefined(rangeBias);
     }
 
     /*!
      *  (Optional) Payload clock frequency scale factor
      *  standard deviation.
      */
-    double clockFreqSF_ = Init::undefined<double>();
+    double clockFreqSF = Init::undefined<double>();
     double getClockFreqSF() const
     {
         assert(hasClockFreqSF());
-        return clockFreqSF_;
+        return clockFreqSF;
     }
     void setClockFreqSF(double v)
     {
-        clockFreqSF_ = v;
+        clockFreqSF = v;
     }
     double hasClockFreqSF() const
     {
-        return Init::isDefined(clockFreqSF_);
+        return Init::isDefined(clockFreqSF);
     }
 
     /*!
      * (Optional) Transmit frequency scale factor
      *  standard deviation.
      */
-    double transmitFreqSF_ = Init::undefined<double>();
+    double transmitFreqSF = Init::undefined<double>();
     double getTransmitFreqSF() const
     {
         assert(hasTransmitFreqSF());
-        return transmitFreqSF_;
+        return transmitFreqSF;
     }
     void setTransmitFreqSF(double v)
     {
-        transmitFreqSF_ = v;
+        transmitFreqSF = v;
     }
     double hasTransmitFreqSF() const
     {
-        return Init::isDefined(transmitFreqSF_);
+        return Init::isDefined(transmitFreqSF);
     }
 
     /*!

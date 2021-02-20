@@ -145,28 +145,34 @@ public:
     // https://en.cppreference.com/w/cpp/utility/optional/operator*
     const T* operator->() const
     {
+        assert(has_value());
         return &value_; // "This operator does not check whether the optional contains a value!"
     }
     T* operator->()
     {
-        return &value_; // "This operator does not check whether the optional contains a value!"
+        assert(has_value());
+        return &value_;  // "This operator does not check whether the optional contains a value!"
     }
 
     const T& operator*() const&
     {
-        return value_; // "This operator does not check whether the optional contains a value!"
+        assert(has_value());
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
     T& operator*() &
     {
-        return value_; // "This operator does not check whether the optional contains a value!"
+        assert(has_value());
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
     const T&& operator*() const&&
     {
-        return value_; // "This operator does not check whether the optional contains a value!"
+        assert(has_value());
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
     T&& operator*() &&
     {
-        return value_; // "This operator does not check whether the optional contains a value!"
+        assert(has_value());
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
 
     // https://en.cppreference.com/w/cpp/utility/optional/value_or
