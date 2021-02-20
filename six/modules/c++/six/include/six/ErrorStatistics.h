@@ -101,6 +101,10 @@ struct PosVelError
 
     //! Can be none, make sure to set this undefined()
     DecorrType positionDecorr;
+    const DecorrType& getPositionDecorr() const
+    {
+        return positionDecorr;
+    }
 
     //! Equality operators
     bool operator==(const PosVelError& rhs) const;
@@ -139,10 +143,10 @@ struct RadarSensor
      *  (Optional) Range bias decorrelated rate
      *
      */
-    std::optional<DecorrType> rangeBiasDecorr_;
-    const DecorrType& rangeBiasDecorr() const
+    DecorrType rangeBiasDecorr;
+    const DecorrType& getRangeBiasDecorr() const
     {
-        return rangeBiasDecorr_.value();
+        return rangeBiasDecorr;
     }
 
     RadarSensor() = default;
@@ -151,7 +155,7 @@ struct RadarSensor
     bool operator==(const RadarSensor& rhs) const
     {
         return (rangeBias == rhs.rangeBias && clockFreqSF == rhs.clockFreqSF &&
-            transmitFreqSF == rhs.transmitFreqSF && rangeBiasDecorr_ == rhs.rangeBiasDecorr_);
+            transmitFreqSF == rhs.transmitFreqSF && getRangeBiasDecorr() == rhs.getRangeBiasDecorr());
     }
 
     bool operator!=(const RadarSensor& rhs) const
@@ -186,10 +190,10 @@ struct TropoError
      *  (Optional)
      *
      */
-    std::optional<DecorrType> tropoRangeDecorr_;
-    const DecorrType& tropoRangeDecorr() const
+    DecorrType tropoRangeDecorr;
+    const DecorrType& getTropoRangeDecorr() const
     {
-        return tropoRangeDecorr_.value();
+        return tropoRangeDecorr;
     }
 
     TropoError() = default;
@@ -197,7 +201,7 @@ struct TropoError
     bool operator==(const TropoError& rhs) const
     {
         return (tropoRangeVertical == rhs.tropoRangeVertical && tropoRangeSlant == rhs.tropoRangeSlant &&
-            tropoRangeDecorr_ == rhs.tropoRangeDecorr_);
+            getTropoRangeDecorr() == rhs.getTropoRangeDecorr());
     }
 
     bool operator!=(const TropoError& rhs) const
@@ -238,10 +242,10 @@ struct IonoError
     /*!
      *  Ionosphere range error decorrelation ratio
      */
-    std::optional<DecorrType> ionoRangeVertDecorr_;
-    const DecorrType& ionoRangeVertDecorr() const
+    DecorrType ionoRangeVertDecorr;
+    const DecorrType& getIonoRangeVertDecorr() const
     {
-        return ionoRangeVertDecorr_.value();
+        return ionoRangeVertDecorr;
     }
 
     IonoError() = default;
@@ -250,7 +254,7 @@ struct IonoError
     bool operator==(const IonoError& rhs) const
     {
         return (ionoRangeRateVertical == rhs.ionoRangeRateVertical && ionoRangeVertical == ionoRangeVertical &&
-            ionoRgRgRateCC == rhs.ionoRgRgRateCC && ionoRangeVertDecorr_ == rhs.ionoRangeVertDecorr_);
+            ionoRgRgRateCC == rhs.ionoRgRgRateCC && getIonoRangeVertDecorr() == rhs.getIonoRangeVertDecorr());
     }
 
     bool operator!=(const IonoError& rhs) const

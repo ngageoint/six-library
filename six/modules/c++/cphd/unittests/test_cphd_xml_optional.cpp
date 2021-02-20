@@ -1037,8 +1037,8 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p2, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.corrCoefs->p1p2, 0.8);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.corrCoefs->v2v3, 0.8);
-    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.positionDecorr.corrCoefZero, 0.5);
-    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.positionDecorr.decorrRate, 1.0);
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.getPositionDecorr().corrCoefZero, 0.5);
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.getPositionDecorr().decorrRate, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.rangeBias, 0.5);
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.clockFreqSF, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.collectionStartTime, 1.0);
@@ -1046,13 +1046,13 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(errorParams.monostatic->radarSensor.rangeBiasDecorr->decorrRate, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeVertical, 5.0);
     TEST_ASSERT_EQ(errorParams.monostatic->tropoError->tropoRangeSlant, 5.0);
-    const auto& tropoRangeDecorr = errorParams.monostatic->tropoError->tropoRangeDecorr();
+    const auto& tropoRangeDecorr = errorParams.monostatic->tropoError->getTropoRangeDecorr();
     TEST_ASSERT_EQ(tropoRangeDecorr.corrCoefZero, 0.5);
     TEST_ASSERT_EQ(tropoRangeDecorr.decorrRate, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeVertical, 5.0);
     TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRangeRateVertical, 5.0);
     TEST_ASSERT_EQ(errorParams.monostatic->ionoError->ionoRgRgRateCC, 0.5);
-    const auto& ionoRangeVertDecorr = errorParams.monostatic->ionoError->ionoRangeVertDecorr();
+    const auto& ionoRangeVertDecorr = errorParams.monostatic->ionoError->getIonoRangeVertDecorr();
     TEST_ASSERT_EQ(ionoRangeVertDecorr.corrCoefZero, 0.5);
     TEST_ASSERT_EQ(ionoRangeVertDecorr.decorrRate, 1.0);
 

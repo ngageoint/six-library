@@ -845,7 +845,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
             }
 
             addDecorrType("PositionDecorr", getSICommonURI(),
-                          posVelError->positionDecorr, posVelErrXML);
+                          posVelError->getPositionDecorr(), posVelErrXML);
         }
         if (radarSensor)
         {
@@ -862,7 +862,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                             radarSensor->transmitFreqSF, radarSensorXML);
            
             addDecorrType("RangeBiasDecorr", getSICommonURI(),
-                          radarSensor->rangeBiasDecorr_, radarSensorXML);
+                          radarSensor->getRangeBiasDecorr(), radarSensorXML);
         }
         if (tropoError)
         {
@@ -877,7 +877,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                              tropoError->tropoRangeSlant, tropoErrXML);
 
             addDecorrType("TropoRangeDecorr", getSICommonURI(),
-                          tropoError->tropoRangeDecorr_, tropoErrXML);
+                          tropoError->getTropoRangeDecorr(), tropoErrXML);
         }
         if (ionoError)
         {
@@ -895,7 +895,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                          ionoError->ionoRgRgRateCC, ionoErrXML);
 
             addDecorrType("IonoRangeVertDecorr", getSICommonURI(),
-                          ionoError->ionoRangeVertDecorr_, ionoErrXML);
+                          ionoError->getIonoRangeVertDecorr(), ionoErrXML);
         }
     }
 
@@ -1051,7 +1051,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         if (tmpElem)
         {
             parseDecorrType(tmpElem,
-                errorStatistics->components->radarSensor->rangeBiasDecorr_);
+                errorStatistics->components->radarSensor->rangeBiasDecorr);
         }
     }
 
@@ -1077,7 +1077,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         if (tmpElem)
         {
             parseDecorrType(tmpElem,
-                errorStatistics->components->tropoError->tropoRangeDecorr_);
+                errorStatistics->components->tropoError->tropoRangeDecorr);
         }
     }
 
@@ -1106,7 +1106,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         if (tmpElem)
         {
             parseDecorrType(tmpElem,
-                errorStatistics->components->ionoError->ionoRangeVertDecorr_);
+                errorStatistics->components->ionoError->ionoRangeVertDecorr);
         }
     }
 

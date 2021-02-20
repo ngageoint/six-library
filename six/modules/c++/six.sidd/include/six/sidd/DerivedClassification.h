@@ -62,7 +62,7 @@ public:
     //! The version number of the DES. Should there be multiple specified in
     //  an instance document the one at the root node is the one that will
     //  apply to the entire document.
-    std::optional<int32_t>                     desVersion;
+    int32_t                     desVersion;
 
     //! Used to designate what date the document was produced on. This is the
     //  date that will be used by various constraint rules to determine if the
