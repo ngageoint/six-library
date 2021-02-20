@@ -852,23 +852,23 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
             XMLElem radarSensorXML = newElement("RadarSensor", getSICommonURI(),
                                                 componentsXML);
 
-            createDouble("RangeBias", getSICommonURI(), radarSensor->getRangeBias(),
+            createDouble("RangeBias", getSICommonURI(), radarSensor->RangeBias().get(),
                          radarSensorXML);
 
-            if (radarSensor->hasClockFreqSF())
+            if (radarSensor->ClockFreqSF().has())
             {
                 createDouble("ClockFreqSF", getSICommonURI(),
-                    radarSensor->getClockFreqSF(), radarSensorXML);
+                    radarSensor->ClockFreqSF().get(), radarSensorXML);
             }
 
-            if (radarSensor->hasTransmitFreqSF())
+            if (radarSensor->TransmitFreqSF().has())
             {
                 createDouble("TransmitFreqSF", getSICommonURI(),
-                    radarSensor->getTransmitFreqSF(), radarSensorXML);
+                    radarSensor->TransmitFreqSF().get(), radarSensorXML);
             }
            
             addDecorrType("RangeBiasDecorr", getSICommonURI(),
-                          radarSensor->getRangeBiasDecorr(), radarSensorXML);
+                          radarSensor->RangeBiasDecorr().get(), radarSensorXML);
         }
         if (tropoError)
         {
@@ -1037,7 +1037,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
     {
         double value;
         parseDouble(getFirstAndOnly(radarSensorXML, "RangeBias"), value);
-        errorStatistics->getComponents()->getRadarSensor()->setRangeBias(value);
+        errorStatistics->getComponents()->getRadarSensor()->RangeBias().set(value);
 
         tmpElem = getOptional(radarSensorXML, "ClockFreqSF");
         if (tmpElem)
@@ -1045,7 +1045,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
             //optional
             if (parseDouble(tmpElem, value))
             {
-                errorStatistics->getComponents()->getRadarSensor()->setClockFreqSF(value);
+                errorStatistics->getComponents()->getRadarSensor()->ClockFreqSF().set(value);
             }
         }
 
@@ -1055,7 +1055,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
             //optional
             if (parseDouble(tmpElem, value))
             {
-                errorStatistics->getComponents()->getRadarSensor()->setTransmitFreqSF(value);
+                errorStatistics->getComponents()->getRadarSensor()->TransmitFreqSF().set(value);
             }
         }
 
@@ -1064,7 +1064,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         {
             DecorrType rangeBiasDecorr;
             parseDecorrType(tmpElem, rangeBiasDecorr);
-            errorStatistics->getComponents()->getRadarSensor()->setRangeBiasDecorr(rangeBiasDecorr);
+            errorStatistics->getComponents()->getRadarSensor()->RangeBiasDecorr().set(rangeBiasDecorr);
         }
     }
 

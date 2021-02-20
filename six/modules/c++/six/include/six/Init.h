@@ -121,8 +121,35 @@ template<> SideOfTrackType Init::undefined<SideOfTrackType>();
 template<> SlowTimeBeamCompensationType Init::undefined<SlowTimeBeamCompensationType>();
 template<> XYZEnum Init::undefined<XYZEnum>();
 
-
-
+// Manipulate a member variable like:
+//    double rangeBias = Init::undefined<double>();
+// WITHOUT changing the name of the member variable; doing so could break clients.
+template<typename T>
+class InitRef final
+{
+    T& value;
+public:
+    InitRef(T& v) : value(v) {}
+    InitRef(const T& v) : value(const_cast<T&>(v)) {}
+    bool has() const
+    {
+        return Init::isDefined(value);
+    }
+    const T& get() const
+    {
+        assert(has());
+        return value;
+    }
+    void set(const T& v)
+    {
+        value = v;
+    }
+};
+template<typename T>
+inline InitRef<T> make_InitRef(const T& v)
+{
+    return InitRef<T>(v);
+}
 
 }
 

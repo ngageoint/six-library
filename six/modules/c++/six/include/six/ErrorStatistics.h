@@ -134,18 +134,9 @@ struct RadarSensor
      *  Range bias at zero range
      */
     double rangeBias = Init::undefined<double>();
-    double getRangeBias() const
+    InitRef<double> RangeBias() const
     {
-        assert(hasRangeBias());
-        return rangeBias;
-    }
-    void setRangeBias(double v)
-    {
-        rangeBias = v;
-    }
-    double hasRangeBias() const
-    {
-        return Init::isDefined(rangeBias);
+        return make_InitRef(rangeBias);
     }
 
     /*!
@@ -153,18 +144,9 @@ struct RadarSensor
      *  standard deviation.
      */
     double clockFreqSF = Init::undefined<double>();
-    double getClockFreqSF() const
+    InitRef<double> ClockFreqSF() const
     {
-        assert(hasClockFreqSF());
-        return clockFreqSF;
-    }
-    void setClockFreqSF(double v)
-    {
-        clockFreqSF = v;
-    }
-    double hasClockFreqSF() const
-    {
-        return Init::isDefined(clockFreqSF);
+        return make_InitRef(clockFreqSF);
     }
 
     /*!
@@ -172,18 +154,9 @@ struct RadarSensor
      *  standard deviation.
      */
     double transmitFreqSF = Init::undefined<double>();
-    double getTransmitFreqSF() const
+    InitRef<double> TransmitFreqSF() const
     {
-        assert(hasTransmitFreqSF());
-        return transmitFreqSF;
-    }
-    void setTransmitFreqSF(double v)
-    {
-        transmitFreqSF = v;
-    }
-    double hasTransmitFreqSF() const
-    {
-        return Init::isDefined(transmitFreqSF);
+        return make_InitRef(clockFreqSF);
     }
 
     /*!
@@ -191,18 +164,9 @@ struct RadarSensor
      *
      */
     DecorrType rangeBiasDecorr = Init::undefined<DecorrType>();
-    const DecorrType& getRangeBiasDecorr() const
+    InitRef<DecorrType> RangeBiasDecorr() const
     {
-        assert(hasRangeBiasDecorr());
-        return rangeBiasDecorr;
-    }
-    void setRangeBiasDecorr(const DecorrType& value)
-    {
-        rangeBiasDecorr = value;
-    }
-    bool hasRangeBiasDecorr() const
-    {
-        return six::Init::isDefined(rangeBiasDecorr);
+        return make_InitRef(rangeBiasDecorr);
     }
 
     RadarSensor() = default;
@@ -210,8 +174,8 @@ struct RadarSensor
     //! Equality operator
     bool operator==(const RadarSensor& rhs) const
     {
-        return (getRangeBias() == rhs.getRangeBias() && getClockFreqSF() == rhs.getClockFreqSF() &&
-            getTransmitFreqSF() == rhs.getTransmitFreqSF() && getRangeBiasDecorr() == rhs.getRangeBiasDecorr());
+        return (RangeBias().get() == rhs.RangeBias().get() && ClockFreqSF().get() == rhs.ClockFreqSF().get() &&
+            TransmitFreqSF().get() == rhs.TransmitFreqSF().get() && RangeBiasDecorr().get() == rhs.RangeBiasDecorr().get());
     }
     bool operator!=(const RadarSensor& rhs) const
     {
