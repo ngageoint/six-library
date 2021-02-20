@@ -1269,7 +1269,7 @@ void six::getErrors(const ErrorStatistics* errorStats,
                     errors.mRangeDecorrRate = radarSensor.getRangeBiasDecorr().decorrRate;
                 }
 
-                rangeBias = radarSensor.rangeBias;
+                rangeBias = radarSensor.getRangeBias();
             }
             else
             {

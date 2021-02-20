@@ -2264,9 +2264,9 @@ void initErrorStatistics(six::ErrorStatistics& err)
     err.getComponents()->getPosVelError()->positionDecorr.decorrRate = 113.965;
 
     err.getComponents()->reset(new six::RadarSensor());
-    err.getComponents()->getRadarSensor()->rangeBias = 43.5;
-    err.getComponents()->getRadarSensor()->clockFreqSF = 1111.1;
-    err.getComponents()->getRadarSensor()->transmitFreqSF = 85;
+    err.getComponents()->getRadarSensor()->setRangeBias(43.5);
+    err.getComponents()->getRadarSensor()->setClockFreqSF(1111.1);
+    err.getComponents()->getRadarSensor()->setTransmitFreqSF(85);
     err.getComponents()->getRadarSensor()->setRangeBiasDecorr(six::DecorrType(123, .03));
 
     err.getComponents()->reset(new six::TropoError());

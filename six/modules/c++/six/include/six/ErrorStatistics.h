@@ -22,6 +22,8 @@
 #ifndef __SIX_ERROR_STATISTICS_H__
 #define __SIX_ERROR_STATISTICS_H__
 
+#include <assert.h>
+
 #include <sys/Optional.h>
 
 #include "six/Types.h"
@@ -98,6 +100,7 @@ struct PosVelError
     DecorrType positionDecorr = Init::undefined<DecorrType>();
     const DecorrType& getPositionDecorr() const
     {
+        assert(hasPositionDecorr());
         return positionDecorr;
     }
     void setPositionDecorr(const DecorrType& value)
@@ -130,18 +133,59 @@ struct RadarSensor
      *  Range bias error standard deviation. 
      *  Range bias at zero range
      */
-    double rangeBias = Init::undefined<double>();
+    double rangeBias_ = Init::undefined<double>();
+    double getRangeBias() const
+    {
+        assert(hasRangeBias());
+        return rangeBias_;
+    }
+    void setRangeBias(double v)
+    {
+        rangeBias_ = v;
+    }
+    double hasRangeBias() const
+    {
+        return Init::isDefined(rangeBias_);
+    }
 
     /*!
      *  (Optional) Payload clock frequency scale factor
      *  standard deviation.
      */
-    double clockFreqSF = Init::undefined<double>();
+    double clockFreqSF_ = Init::undefined<double>();
+    double getClockFreqSF() const
+    {
+        assert(hasClockFreqSF());
+        return clockFreqSF_;
+    }
+    void setClockFreqSF(double v)
+    {
+        clockFreqSF_ = v;
+    }
+    double hasClockFreqSF() const
+    {
+        return Init::isDefined(clockFreqSF_);
+    }
+
     /*!
      * (Optional) Transmit frequency scale factor
      *  standard deviation.
      */
-    double transmitFreqSF = Init::undefined<double>();
+    double transmitFreqSF_ = Init::undefined<double>();
+    double getTransmitFreqSF() const
+    {
+        assert(hasTransmitFreqSF());
+        return transmitFreqSF_;
+    }
+    void setTransmitFreqSF(double v)
+    {
+        transmitFreqSF_ = v;
+    }
+    double hasTransmitFreqSF() const
+    {
+        return Init::isDefined(transmitFreqSF_);
+    }
+
     /*!
      *  (Optional) Range bias decorrelated rate
      *
@@ -149,6 +193,7 @@ struct RadarSensor
     DecorrType rangeBiasDecorr = Init::undefined<DecorrType>();
     const DecorrType& getRangeBiasDecorr() const
     {
+        assert(hasRangeBiasDecorr());
         return rangeBiasDecorr;
     }
     void setRangeBiasDecorr(const DecorrType& value)
@@ -165,10 +210,9 @@ struct RadarSensor
     //! Equality operator
     bool operator==(const RadarSensor& rhs) const
     {
-        return (rangeBias == rhs.rangeBias && clockFreqSF == rhs.clockFreqSF &&
-            transmitFreqSF == rhs.transmitFreqSF && getRangeBiasDecorr() == rhs.getRangeBiasDecorr());
+        return (getRangeBias() == rhs.getRangeBias() && getClockFreqSF() == rhs.getClockFreqSF() &&
+            getTransmitFreqSF() == rhs.getTransmitFreqSF() && getRangeBiasDecorr() == rhs.getRangeBiasDecorr());
     }
-
     bool operator!=(const RadarSensor& rhs) const
     {
         return !(*this == rhs);
@@ -204,6 +248,7 @@ struct TropoError
     DecorrType tropoRangeDecorr = Init::undefined<DecorrType>();
     const DecorrType& getTropoRangeDecorr() const
     {
+        assert(hasTropoRangeDecorr());
         return tropoRangeDecorr;
     }
     void setTropoRangeDecorr(const DecorrType& value)
@@ -264,6 +309,7 @@ struct IonoError
     DecorrType ionoRangeVertDecorr = Init::undefined<DecorrType>();
     const DecorrType& getIonoRangeVertDecorr() const
     {
+        assert(hasIonoRangeVertDecorr());
         return ionoRangeVertDecorr;
     }
     void setIonoRangeVertDecorr(const DecorrType& value)
@@ -363,7 +409,6 @@ struct Components
         return (posVelError == rhs.posVelError && radarSensor == rhs.radarSensor &&
             tropoError == rhs.tropoError && ionoError == rhs.ionoError);
     }
-
     bool operator!=(const Components& rhs) const
     {
         return !(*this == rhs);
@@ -418,7 +463,6 @@ struct CompositeSCP
         return (xErr == rhs.xErr && yErr == rhs.yErr &&
             xyErr == rhs.xyErr && scpType == rhs.scpType);
     }
-
     bool operator!=(const CompositeSCP& rhs) const
     {
         return !(*this == rhs);
@@ -476,9 +520,7 @@ struct ErrorStatistics
      */
     ParameterCollection additionalParameters;
 
-    ErrorStatistics()
-    {
-    }
+    ErrorStatistics() = default;
 
     //! Equality operators
     bool operator==(const ErrorStatistics& rhs) const

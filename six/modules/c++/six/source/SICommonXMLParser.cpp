@@ -852,14 +852,20 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
             XMLElem radarSensorXML = newElement("RadarSensor", getSICommonURI(),
                                                 componentsXML);
 
-            createDouble("RangeBias", getSICommonURI(), radarSensor->rangeBias,
+            createDouble("RangeBias", getSICommonURI(), radarSensor->getRangeBias(),
                          radarSensorXML);
 
-            createOptionalDouble("ClockFreqSF", getSICommonURI(),
-                            radarSensor->clockFreqSF, radarSensorXML);
+            if (radarSensor->hasClockFreqSF())
+            {
+                createDouble("ClockFreqSF", getSICommonURI(),
+                    radarSensor->getClockFreqSF(), radarSensorXML);
+            }
 
-            createOptionalDouble("TransmitFreqSF", getSICommonURI(),
-                           radarSensor->transmitFreqSF, radarSensorXML);
+            if (radarSensor->hasTransmitFreqSF())
+            {
+                createDouble("TransmitFreqSF", getSICommonURI(),
+                    radarSensor->getTransmitFreqSF(), radarSensorXML);
+            }
            
             addDecorrType("RangeBiasDecorr", getSICommonURI(),
                           radarSensor->getRangeBiasDecorr(), radarSensorXML);
@@ -1029,23 +1035,28 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
 
     if (radarSensorXML != nullptr)
     {
-        parseDouble(getFirstAndOnly(radarSensorXML, "RangeBias"),
-                    errorStatistics->getComponents()->getRadarSensor()->rangeBias);
+        double value;
+        parseDouble(getFirstAndOnly(radarSensorXML, "RangeBias"), value);
+        errorStatistics->getComponents()->getRadarSensor()->setRangeBias(value);
 
         tmpElem = getOptional(radarSensorXML, "ClockFreqSF");
         if (tmpElem)
         {
             //optional
-            parseDouble(tmpElem,
-                errorStatistics->getComponents()->getRadarSensor()->clockFreqSF);
+            if (parseDouble(tmpElem, value))
+            {
+                errorStatistics->getComponents()->getRadarSensor()->setClockFreqSF(value);
+            }
         }
 
         tmpElem = getOptional(radarSensorXML, "TransmitFreqSF");
         if (tmpElem)
         {
             //optional
-            parseDouble(tmpElem,
-                errorStatistics->getComponents()->getRadarSensor()->transmitFreqSF);
+            if (parseDouble(tmpElem, value))
+            {
+                errorStatistics->getComponents()->getRadarSensor()->setTransmitFreqSF(value);
+            }
         }
 
         tmpElem = getOptional(radarSensorXML, "RangeBiasDecorr");

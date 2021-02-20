@@ -21,6 +21,7 @@
  */
 #include <six/XMLParser.h>
 
+#include <assert.h>
 #include <string>
 
 #include <nitf/coda-oss.hpp>
@@ -186,6 +187,8 @@ XMLElem XMLParser::createInt(const std::string& name, int p, XMLElem parent) con
 XMLElem XMLParser::createDouble(const std::string& name,
         const std::string& uri, double p, XMLElem parent) const
 {
+    assert(six::Init::isDefined(p));
+
     const auto elementValue = toString(name, p, parent);
     XMLElem elem = newElement(name, uri, elementValue, parent);
     addClassAttributes(*elem, "xs:double");
@@ -338,7 +341,7 @@ void XMLParser::parseDouble(XMLElem element, std::optional<double>& value) const
         value = xml::lite::getValue<double>(*element);
         });
 }
-void XMLParser::parseDouble(XMLElem element, double& value) const
+bool XMLParser::parseDouble(XMLElem element, double& value) const
 {
     std::optional<double> result;
     parseDouble(element, result);
@@ -346,6 +349,7 @@ void XMLParser::parseDouble(XMLElem element, double& value) const
     {
         value = result.value();
     }
+    return result.has_value();
 }
 
 void XMLParser::parseComplex(XMLElem element, std::complex<double>& value) const

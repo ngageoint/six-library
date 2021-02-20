@@ -226,7 +226,7 @@ protected:
         enumVal = T(name);
     }
 
-    void parseDouble(XMLElem element, double& value) const;
+    bool parseDouble(XMLElem element, double& value) const;
     void parseDouble(XMLElem element, std::optional<double>& value) const;
     void parseComplex(XMLElem element, std::complex<double>& value) const;
     void parseString(XMLElem element, std::string& value) const;
