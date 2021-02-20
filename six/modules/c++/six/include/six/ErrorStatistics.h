@@ -44,22 +44,21 @@ struct CorrCoefs
 {
     CorrCoefs() = default;
 
-    // From Bill: "Volume 3: States if correlation coefficients omitted then set to 0."
-    double p1p2 = 0.0;
-    double p1p3 = 0.0;
-    double p1v1 = 0.0;
-    double p1v2 = 0.0;
-    double p1v3 = 0.0;
-    double p2p3 = 0.0;
-    double p2v1 = 0.0;
-    double p2v2 = 0.0;
-    double p2v3 = 0.0;
-    double p3v1 = 0.0;
-    double p3v2 = 0.0;
-    double p3v3 = 0.0;
-    double v1v2 = 0.0;
-    double v1v3 = 0.0;
-    double v2v3 = 0.0;
+    double p1p2;
+    double p1p3;
+    double p1v1;
+    double p1v2;
+    double p1v3;
+    double p2p3;
+    double p2v1;
+    double p2v2;
+    double p2v3;
+    double p3v1;
+    double p3v2;
+    double p3v3;
+    double v1v2;
+    double v1v3;
+    double v2v3;
 
     //! Equality operators
     bool operator==(const CorrCoefs& rhs) const;
@@ -137,16 +136,12 @@ struct RadarSensor
      *  (Optional) Payload clock frequency scale factor
      *  standard deviation.
      */
-     // From Bill: "Volume 3: States if ClockFreqSF is omitted then set to 0."
-    double clockFreqSF = 0.0;
-
+    double clockFreqSF = Init::undefined<double>();
     /*!
      * (Optional) Transmit frequency scale factor
      *  standard deviation.
      */
-     // From Bill: "No mention of the TransmitFreqSF in volume 3 ... would still recommend setting to 0."
-    double transmitFreqSF = 0.0;
-
+    double transmitFreqSF = Init::undefined<double>();
     /*!
      *  (Optional) Range bias decorrelated rate
      *
@@ -481,7 +476,9 @@ struct ErrorStatistics
      */
     ParameterCollection additionalParameters;
 
-    ErrorStatistics() = default;
+    ErrorStatistics()
+    {
+    }
 
     //! Equality operators
     bool operator==(const ErrorStatistics& rhs) const
