@@ -146,8 +146,8 @@ struct EllipsoidModel
 protected:
     Units units = INVALID_UNITS;
     AngularUnits angularUnits = INVALID_ANGULAR_UNITS;
-    std::optional<double> equatorialRadius_;
-    std::optional<double> polarRadius_;
+    double equatorialRadius;
+    double polarRadius;
 };
 
 class WGS84EllipsoidModel : public EllipsoidModel

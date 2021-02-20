@@ -68,12 +68,12 @@ AngularUnits EllipsoidModel::getAngularUnits() const
 
 double EllipsoidModel::getEquatorialRadius() const
 {
-    return equatorialRadius_.value();
+    return equatorialRadius;
 }
 
 double EllipsoidModel::getPolarRadius() const
 {
-    return polarRadius_.value();
+    return polarRadius;
 }
 
 double EllipsoidModel::calculateFlattening() const
@@ -102,24 +102,17 @@ void EllipsoidModel::setUnits(Units val)
         }
         units = val;
 
-        // more initialization done in initRadiusValues()
-        if (equatorialRadius_.has_value() && polarRadius_.has_value())
+        if (val == METERS)
         {
-            auto& equatorialRadius = equatorialRadius_.value();
-            auto& polarRadius = polarRadius_.value();
-
-            if (val == METERS)
-            {
-                //do feet to meters
-                equatorialRadius *= math::Constants::FEET_TO_METERS;
-                polarRadius *= math::Constants::FEET_TO_METERS;
-            }
-            else if (val == FEET)
-            {
-                //do meters to feet
-                equatorialRadius *= math::Constants::METERS_TO_FEET;
-                polarRadius *= math::Constants::METERS_TO_FEET;
-            }
+            //do feet to meters
+            equatorialRadius *= math::Constants::FEET_TO_METERS;
+            polarRadius *= math::Constants::FEET_TO_METERS;
+        }
+        else if (val == FEET)
+        {
+            //do meters to feet
+            equatorialRadius *= math::Constants::METERS_TO_FEET;
+            polarRadius *= math::Constants::METERS_TO_FEET;
         }
     }
 }
@@ -143,7 +136,7 @@ void EllipsoidModel::setEquatorialRadius(double val)
 {
     if(val > 0)
     {
-        equatorialRadius_ = val;
+        equatorialRadius = val;
     }
     else
     {
@@ -155,7 +148,7 @@ void EllipsoidModel::setPolarRadius(double val)
 {
     if(val > 0)
     {
-        polarRadius_ = val;
+        polarRadius = val;
     }
     else
     {
@@ -193,8 +186,6 @@ void WGS84EllipsoidModel::initRadiusValues()
     // If units are feet, update the values
     if (getUnits() == FEET)
     {
-        auto& equatorialRadius = equatorialRadius_.value();
-        auto& polarRadius = polarRadius_.value();
         //do meters to feet
         equatorialRadius *= math::Constants::METERS_TO_FEET;
         polarRadius *= math::Constants::METERS_TO_FEET;
