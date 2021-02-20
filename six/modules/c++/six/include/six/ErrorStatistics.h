@@ -98,18 +98,9 @@ struct PosVelError
 
     //! Can be none, make sure to set this undefined()
     DecorrType positionDecorr = Init::undefined<DecorrType>();
-    const DecorrType& getPositionDecorr() const
+    InitRef<DecorrType> PositionDecorr() const
     {
-        assert(hasPositionDecorr());
-        return positionDecorr;
-    }
-    void setPositionDecorr(const DecorrType& value)
-    {
-        positionDecorr = value;
-    }
-    bool hasPositionDecorr() const
-    {
-        return six::Init::isDefined(positionDecorr);
+        return make_InitRef(positionDecorr);
     }
 
     //! Equality operators
@@ -210,18 +201,9 @@ struct TropoError
      *
      */
     DecorrType tropoRangeDecorr = Init::undefined<DecorrType>();
-    const DecorrType& getTropoRangeDecorr() const
+    InitRef<DecorrType> TropoRangeDecorr() const
     {
-        assert(hasTropoRangeDecorr());
-        return tropoRangeDecorr;
-    }
-    void setTropoRangeDecorr(const DecorrType& value)
-    {
-        tropoRangeDecorr = value;
-    }
-    bool hasTropoRangeDecorr() const
-    {
-        return six::Init::isDefined(tropoRangeDecorr);
+        return make_InitRef(tropoRangeDecorr);
     }
 
     TropoError() = default;
@@ -229,7 +211,7 @@ struct TropoError
     bool operator==(const TropoError& rhs) const
     {
         return (tropoRangeVertical == rhs.tropoRangeVertical && tropoRangeSlant == rhs.tropoRangeSlant &&
-            getTropoRangeDecorr() == rhs.getTropoRangeDecorr());
+            TropoRangeDecorr().get() == rhs.TropoRangeDecorr().get());
     }
 
     bool operator!=(const TropoError& rhs) const
@@ -271,18 +253,9 @@ struct IonoError
      *  Ionosphere range error decorrelation ratio
      */
     DecorrType ionoRangeVertDecorr = Init::undefined<DecorrType>();
-    const DecorrType& getIonoRangeVertDecorr() const
+    InitRef<DecorrType> IonoRangeVertDecorr() const
     {
-        assert(hasIonoRangeVertDecorr());
-        return ionoRangeVertDecorr;
-    }
-    void setIonoRangeVertDecorr(const DecorrType& value)
-    {
-        ionoRangeVertDecorr = value;
-    }
-    bool hasIonoRangeVertDecorr() const
-    {
-        return six::Init::isDefined(ionoRangeVertDecorr);
+        return make_InitRef(ionoRangeVertDecorr);
     }
 
     IonoError() = default;
@@ -291,7 +264,7 @@ struct IonoError
     bool operator==(const IonoError& rhs) const
     {
         return (ionoRangeRateVertical == rhs.ionoRangeRateVertical && ionoRangeVertical == ionoRangeVertical &&
-            ionoRgRgRateCC == rhs.ionoRgRgRateCC && getIonoRangeVertDecorr() == rhs.getIonoRangeVertDecorr());
+            ionoRgRgRateCC == rhs.ionoRgRgRateCC && IonoRangeVertDecorr().get() == rhs.IonoRangeVertDecorr().get());
     }
 
     bool operator!=(const IonoError& rhs) const

@@ -1285,12 +1285,12 @@ void six::getErrors(const ErrorStatistics* errorStats,
                                     rangeBias,
                                     errors.mSensorErrorCovar);
 
-                if (posVelError.hasPositionDecorr())
+                if (posVelError.PositionDecorr().has())
                 {
                     errors.mPositionCorrCoefZero =
-                            posVelError.getPositionDecorr().corrCoefZero;
+                            posVelError.PositionDecorr().get().corrCoefZero;
                     errors.mPositionDecorrRate =
-                            posVelError.getPositionDecorr().decorrRate;
+                            posVelError.PositionDecorr().get().decorrRate;
                 }
             }
 

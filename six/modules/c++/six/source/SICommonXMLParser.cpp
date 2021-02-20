@@ -845,7 +845,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
             }
 
             addDecorrType("PositionDecorr", getSICommonURI(),
-                          posVelError->getPositionDecorr(), posVelErrXML);
+                          posVelError->PositionDecorr().get(), posVelErrXML);
         }
         if (radarSensor)
         {
@@ -883,7 +883,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                              tropoError->tropoRangeSlant, tropoErrXML);
 
             addDecorrType("TropoRangeDecorr", getSICommonURI(),
-                          tropoError->getTropoRangeDecorr(), tropoErrXML);
+                          tropoError->TropoRangeDecorr().get(), tropoErrXML);
         }
         if (ionoError)
         {
@@ -901,7 +901,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                          ionoError->ionoRgRgRateCC, ionoErrXML);
 
             addDecorrType("IonoRangeVertDecorr", getSICommonURI(),
-                          ionoError->getIonoRangeVertDecorr(), ionoErrXML);
+                          ionoError->IonoRangeVertDecorr().get(), ionoErrXML);
         }
     }
 
@@ -1029,7 +1029,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
             //optional
             DecorrType positionDecorr;
             parseDecorrType(tmpElem, positionDecorr);
-            errorStatistics->getComponents()->getPosVelError()->setPositionDecorr(positionDecorr);
+            errorStatistics->getComponents()->getPosVelError()->PositionDecorr().set(positionDecorr);
         }
     }
 
@@ -1091,7 +1091,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         {
             DecorrType tropoRangeDecorr;
             parseDecorrType(tmpElem, tropoRangeDecorr);
-            errorStatistics->getComponents()->getTropoError()->setTropoRangeDecorr(tropoRangeDecorr);
+            errorStatistics->getComponents()->getTropoError()->TropoRangeDecorr().set(tropoRangeDecorr);
         }
     }
 
@@ -1121,7 +1121,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         {
             DecorrType ionoRangeVertDecorr;
             parseDecorrType(tmpElem, ionoRangeVertDecorr);
-            errorStatistics->getComponents()->getIonoError()->setIonoRangeVertDecorr(ionoRangeVertDecorr);
+            errorStatistics->getComponents()->getIonoError()->IonoRangeVertDecorr().set(ionoRangeVertDecorr);
         }
     }
 

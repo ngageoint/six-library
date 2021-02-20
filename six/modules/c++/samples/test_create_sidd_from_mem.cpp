@@ -2272,13 +2272,13 @@ void initErrorStatistics(six::ErrorStatistics& err)
     err.getComponents()->reset(new six::TropoError());
     err.getComponents()->getTropoError()->tropoRangeVertical = .00289;
     err.getComponents()->getTropoError()->tropoRangeSlant = 777;
-    err.getComponents()->getTropoError()->setTropoRangeDecorr(six::DecorrType(0, 98.7));
+    err.getComponents()->getTropoError()->TropoRangeDecorr().set(six::DecorrType(0, 98.7));
 
     err.getComponents()->reset(new six::IonoError());
     err.getComponents()->getIonoError()->ionoRangeVertical = 1.2;
     err.getComponents()->getIonoError()->ionoRangeRateVertical = 77632;
     err.getComponents()->getIonoError()->ionoRgRgRateCC = .072;
-    err.getComponents()->getIonoError()->setIonoRangeVertDecorr(six::DecorrType(48.16, 113.964));
+    err.getComponents()->getIonoError()->IonoRangeVertDecorr().set(six::DecorrType(48.16, 113.964));
 
     six::Parameter param;
     param.setName("ErrorStatisticsParameterName");

@@ -75,8 +75,8 @@ std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
                 << "    v2v3          : " << p.corrCoefs->v2v3 << "\n";
         }
         os << "    Decorr:: \n"
-            << "    CorrCoefZero   : " << p.getPositionDecorr().corrCoefZero << "\n"
-            << "    DecorrRate     : " << p.getPositionDecorr().decorrRate << "\n";
+            << "    CorrCoefZero   : " << p.PositionDecorr().get().corrCoefZero << "\n"
+            << "    DecorrRate     : " << p.PositionDecorr().get().decorrRate << "\n";
     return os;
 }
 
@@ -114,11 +114,11 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
             {
                 os << "    TropoRangeSlant  : " << e.monostatic->tropoError->tropoRangeSlant << "\n";
             }
-            if (e.monostatic->tropoError->hasTropoRangeDecorr())
+            if (e.monostatic->tropoError->TropoRangeDecorr().has())
             {
             os << "    TropoRangeDecorr:: \n"
-                << "      CorrCoefZero  : " << e.monostatic->tropoError->getTropoRangeDecorr().corrCoefZero << "\n"
-                << "      DecorrRate  : " << e.monostatic->tropoError->getTropoRangeDecorr().decorrRate << "\n";
+                << "      CorrCoefZero  : " << e.monostatic->tropoError->TropoRangeDecorr().get().corrCoefZero << "\n"
+                << "      DecorrRate  : " << e.monostatic->tropoError->TropoRangeDecorr().get().decorrRate << "\n";
             }
         }
         if (e.monostatic->ionoError.get())
@@ -133,11 +133,11 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
                 os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->ionoRangeRateVertical << "\n";
             }
             os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->ionoRgRgRateCC << "\n";
-            if (e.monostatic->ionoError->hasIonoRangeVertDecorr())
+            if (e.monostatic->ionoError->IonoRangeVertDecorr().has())
             {
             os << "    IonoRangeDecorr:: \n"
-                << "      CorrCoefZero  : " << e.monostatic->ionoError->getIonoRangeVertDecorr().corrCoefZero << "\n"
-                << "      DecorrRate  : " << e.monostatic->ionoError->getIonoRangeVertDecorr().decorrRate << "\n";
+                << "      CorrCoefZero  : " << e.monostatic->ionoError->IonoRangeVertDecorr().get().corrCoefZero << "\n"
+                << "      DecorrRate  : " << e.monostatic->ionoError->IonoRangeVertDecorr().get().decorrRate << "\n";
             }
         }
         for (size_t ii = 0; ii < e.monostatic->parameter.size(); ++ii)
