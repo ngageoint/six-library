@@ -22,6 +22,8 @@
 #ifndef __SIX_ERROR_STATISTICS_H__
 #define __SIX_ERROR_STATISTICS_H__
 
+#include <sys/Optional.h>
+
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -40,9 +42,7 @@ namespace six
  */
 struct CorrCoefs
 {
-    CorrCoefs()
-    {
-    }
+    CorrCoefs() = default;
 
     double p1p2;
     double p1p3;
@@ -79,10 +79,7 @@ struct CorrCoefs
 struct PosVelError
 {
     //!  CorrCoefs are nullptr, since optional
-    PosVelError() :
-        positionDecorr(Init::undefined<DecorrType>())
-    {
-    }
+    PosVelError() = default;
 
     //! Coordinate frame used for expressing P,V error statistics
     FrameType frame;
@@ -98,7 +95,19 @@ struct PosVelError
     mem::ScopedCopyablePtr<CorrCoefs> corrCoefs;
 
     //! Can be none, make sure to set this undefined()
-    DecorrType positionDecorr;
+    DecorrType positionDecorr = Init::undefined<DecorrType>();
+    const DecorrType& getPositionDecorr() const
+    {
+        return positionDecorr;
+    }
+    void setPositionDecorr(const DecorrType& value)
+    {
+        positionDecorr = value;
+    }
+    bool hasPositionDecorr() const
+    {
+        return six::Init::isDefined(positionDecorr);
+    }
 
     //! Equality operators
     bool operator==(const PosVelError& rhs) const;
@@ -121,32 +130,43 @@ struct RadarSensor
      *  Range bias error standard deviation. 
      *  Range bias at zero range
      */
-    double rangeBias;
+    double rangeBias = Init::undefined<double>();
 
     /*!
      *  (Optional) Payload clock frequency scale factor
      *  standard deviation.
      */
-    double clockFreqSF;
+    double clockFreqSF = Init::undefined<double>();
     /*!
      * (Optional) Transmit frequency scale factor
      *  standard deviation.
      */
-    double transmitFreqSF;
+    double transmitFreqSF = Init::undefined<double>();
     /*!
      *  (Optional) Range bias decorrelated rate
      *
      */
-    DecorrType rangeBiasDecorr;
+    DecorrType rangeBiasDecorr = Init::undefined<DecorrType>();
+    const DecorrType& getRangeBiasDecorr() const
+    {
+        return rangeBiasDecorr;
+    }
+    void setRangeBiasDecorr(const DecorrType& value)
+    {
+        rangeBiasDecorr = value;
+    }
+    bool hasRangeBiasDecorr() const
+    {
+        return six::Init::isDefined(rangeBiasDecorr);
+    }
 
-    //!  Constructor
-    RadarSensor();
+    RadarSensor() = default;
 
     //! Equality operator
     bool operator==(const RadarSensor& rhs) const
     {
         return (rangeBias == rhs.rangeBias && clockFreqSF == rhs.clockFreqSF &&
-            transmitFreqSF == rhs.transmitFreqSF && rangeBiasDecorr == rhs.rangeBiasDecorr);
+            transmitFreqSF == rhs.transmitFreqSF && getRangeBiasDecorr() == rhs.getRangeBiasDecorr());
     }
 
     bool operator!=(const RadarSensor& rhs) const
@@ -168,28 +188,39 @@ struct TropoError
      *  incidence standard deviation.  Expressed as a
      *  two-range error
      */
-    double tropoRangeVertical;
+    double tropoRangeVertical = Init::undefined<double>();
 
     /*!
      *  (Optional) Troposphere two-way delay error for SCP COA
      *  incidence angle standard deviation.  Expressed
      *  as a two-way range error
      */
-    double tropoRangeSlant;
+    double tropoRangeSlant = Init::undefined<double>();
 
     /*!
      *  (Optional)
      *
      */
-    DecorrType tropoRangeDecorr;
+    DecorrType tropoRangeDecorr = Init::undefined<DecorrType>();
+    const DecorrType& getTropoRangeDecorr() const
+    {
+        return tropoRangeDecorr;
+    }
+    void setTropoRangeDecorr(const DecorrType& value)
+    {
+        tropoRangeDecorr = value;
+    }
+    bool hasTropoRangeDecorr() const
+    {
+        return six::Init::isDefined(tropoRangeDecorr);
+    }
 
-    //!  Constructor
-    TropoError();
+    TropoError() = default;
 
     bool operator==(const TropoError& rhs) const
     {
         return (tropoRangeVertical == rhs.tropoRangeVertical && tropoRangeSlant == rhs.tropoRangeSlant &&
-            tropoRangeDecorr == rhs.tropoRangeDecorr);
+            getTropoRangeDecorr() == rhs.getTropoRangeDecorr());
     }
 
     bool operator!=(const TropoError& rhs) const
@@ -211,35 +242,46 @@ struct IonoError
      *  incidence standard deviation.  Expressed as a
      *  two-way range error
      */
-    double ionoRangeVertical;
+    double ionoRangeVertical = Init::undefined<double>();
 
     /*!
      *  (Optional) Ionosphere two-way delay rate of change
      *  error for normal incidence standard deviation.
      *  Expressed as a two-way range error
      */
-    double ionoRangeRateVertical;
+    double ionoRangeRateVertical = Init::undefined<double>();
 
     /*!
      *  Ionosphere range error and range rate error correlation
      *  coefficient.
      *
      */
-    double ionoRgRgRateCC;
+    double ionoRgRgRateCC = Init::undefined<double>();
     
     /*!
      *  Ionosphere range error decorrelation ratio
      */
-    DecorrType ionoRangeVertDecorr;
+    DecorrType ionoRangeVertDecorr = Init::undefined<DecorrType>();
+    const DecorrType& getIonoRangeVertDecorr() const
+    {
+        return ionoRangeVertDecorr;
+    }
+    void setIonoRangeVertDecorr(const DecorrType& value)
+    {
+        ionoRangeVertDecorr = value;
+    }
+    bool hasIonoRangeVertDecorr() const
+    {
+        return six::Init::isDefined(ionoRangeVertDecorr);
+    }
 
-    //!  Constructor
-    IonoError();
+    IonoError() = default;
 
     //! Equality operator
     bool operator==(const IonoError& rhs) const
     {
         return (ionoRangeRateVertical == rhs.ionoRangeRateVertical && ionoRangeVertical == ionoRangeVertical &&
-            ionoRgRgRateCC == rhs.ionoRgRgRateCC && ionoRangeVertDecorr == rhs.ionoRangeVertDecorr);
+            ionoRgRgRateCC == rhs.ionoRgRgRateCC && getIonoRangeVertDecorr() == rhs.getIonoRangeVertDecorr());
     }
 
     bool operator!=(const IonoError& rhs) const

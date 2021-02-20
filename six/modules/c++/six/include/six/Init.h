@@ -24,6 +24,8 @@
 
 #include <limits>
 
+#include <sys/Optional.h>
+
 #include <six/Parameter.h>
 #include <types/RgAz.h>
 #include <import/except.h>

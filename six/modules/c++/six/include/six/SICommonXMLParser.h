@@ -23,6 +23,8 @@
 #ifndef __SIX_SI_COMMON_XML_PARSER_H__
 #define __SIX_SI_COMMON_XML_PARSER_H__
 
+#include <sys/Optional.h>
+
 #include <six/CollectionInformation.h>
 #include <six/MatchInformation.h>
 #include <six/XMLParser.h>
@@ -110,6 +112,8 @@ public:
             const ParameterCollection& props, XMLElem parent = nullptr) const;
     void addDecorrType(const std::string& name, const std::string& uri,
             DecorrType dt, XMLElem p) const;
+    void addDecorrType(const std::string& name, const std::string& uri,
+            const std::optional<DecorrType>& dt, XMLElem p) const;
 
     // TODO: Can make this virtual if we ever need it
     //       This is the implementation for SICD 1.x / SIDD 2.0+
@@ -157,6 +161,7 @@ public:
             ParameterCollection& props) const;
 
     void parseDecorrType(XMLElem decorrXML, DecorrType& decorrType) const;
+    void parseDecorrType(XMLElem decorrXML, std::optional<DecorrType>& decorrType) const;
 
     void parseFootprint(XMLElem footprint,
             const std::string& cornerName, LatLonCorners& corners) const;

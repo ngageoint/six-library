@@ -107,6 +107,10 @@ public:
     {
         return mNITFHeaderCreator->getInfos();
     }
+    mem::SharedPtr<NITFImageInfo> getInfo(size_t i)
+    {
+        return getInfos()[i];
+    }
 
     //! \return Mutable data container
     mem::SharedPtr<Container> getContainer()
