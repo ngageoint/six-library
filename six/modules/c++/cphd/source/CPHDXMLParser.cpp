@@ -1765,7 +1765,9 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
             XMLElem decorrXML = getOptional(tropoErrorXML, "TropoRangeDecorr");
             if(decorrXML)
             {
-                mCommon.parseDecorrType(decorrXML, errParam.monostatic->tropoError->tropoRangeDecorr);
+                six::DecorrType tropoRangeDecorr;
+                mCommon.parseDecorrType(decorrXML, tropoRangeDecorr);
+                errParam.monostatic->tropoError->setTropoRangeDecorr(tropoRangeDecorr);
             }
         }
 
@@ -1788,7 +1790,9 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
             XMLElem decorrXML = getOptional(ionoErrorXML, "IonoRangeVertDecorr");
             if(decorrXML)
             {
-                mCommon.parseDecorrType(decorrXML, errParam.monostatic->ionoError->ionoRangeVertDecorr);
+                six::DecorrType ionoRangeVertDecorr;
+                mCommon.parseDecorrType(decorrXML, ionoRangeVertDecorr);
+                errParam.monostatic->ionoError->setIonoRangeVertDecorr(ionoRangeVertDecorr);
             }
         }
         mCommon.parseParameters(monostaticXML, "Parameter", errParam.monostatic->parameter);
@@ -2278,11 +2282,12 @@ void CPHDXMLParser::parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError&
     }
 
     XMLElem posDecorrXML = getOptional(posVelErrXML, "PositionDecorr");
-
     if(posDecorrXML)
     {
         // posVelErr.positionDecorr.reset(new six::DecorrType());
-        mCommon.parseDecorrType(posDecorrXML, posVelErr.positionDecorr);
+        six::DecorrType positionDecorr;
+        mCommon.parseDecorrType(posDecorrXML, positionDecorr);
+        posVelErr.setPositionDecorr(positionDecorr);
     }
 }
 

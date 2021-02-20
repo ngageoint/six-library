@@ -81,10 +81,7 @@ struct CorrCoefs
 struct PosVelError
 {
     //!  CorrCoefs are nullptr, since optional
-    PosVelError() :
-        positionDecorr(Init::undefined<DecorrType>())
-    {
-    }
+    PosVelError() = default;
 
     //! Coordinate frame used for expressing P,V error statistics
     FrameType frame;
@@ -100,10 +97,14 @@ struct PosVelError
     mem::ScopedCopyablePtr<CorrCoefs> corrCoefs;
 
     //! Can be none, make sure to set this undefined()
-    DecorrType positionDecorr;
+    DecorrType positionDecorr = Init::undefined<DecorrType>();
     const DecorrType& getPositionDecorr() const
     {
         return positionDecorr;
+    }
+    void setPositionDecorr(const DecorrType& value)
+    {
+        positionDecorr = value;
     }
     bool hasPositionDecorr() const
     {
@@ -147,10 +148,14 @@ struct RadarSensor
      *  (Optional) Range bias decorrelated rate
      *
      */
-    DecorrType rangeBiasDecorr;
+    DecorrType rangeBiasDecorr = Init::undefined<DecorrType>();
     const DecorrType& getRangeBiasDecorr() const
     {
         return rangeBiasDecorr;
+    }
+    void setRangeBiasDecorr(const DecorrType& value)
+    {
+        rangeBiasDecorr = value;
     }
     bool hasRangeBiasDecorr() const
     {
@@ -198,10 +203,14 @@ struct TropoError
      *  (Optional)
      *
      */
-    DecorrType tropoRangeDecorr;
+    DecorrType tropoRangeDecorr = Init::undefined<DecorrType>();
     const DecorrType& getTropoRangeDecorr() const
     {
         return tropoRangeDecorr;
+    }
+    void setTropoRangeDecorr(const DecorrType& value)
+    {
+        tropoRangeDecorr = value;
     }
     bool hasTropoRangeDecorr() const
     {
@@ -254,10 +263,14 @@ struct IonoError
     /*!
      *  Ionosphere range error decorrelation ratio
      */
-    DecorrType ionoRangeVertDecorr;
+    DecorrType ionoRangeVertDecorr = Init::undefined<DecorrType>();
     const DecorrType& getIonoRangeVertDecorr() const
     {
         return ionoRangeVertDecorr;
+    }
+    void setIonoRangeVertDecorr(const DecorrType& value)
+    {
+        ionoRangeVertDecorr = value;
     }
     bool hasIonoRangeVertDecorr() const
     {
