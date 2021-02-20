@@ -464,7 +464,7 @@ struct Display
     //Required
     size_t numBands;
     //Optional
-    size_t defaultBandDisplay;
+    size_t defaultBandDisplay = six::Init::undefined<size_t>();
 
     //Required
     std::vector<mem::ScopedCopyablePtr<NonInteractiveProcessing> >

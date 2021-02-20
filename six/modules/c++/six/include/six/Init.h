@@ -57,11 +57,6 @@ struct Init
         return !isUndefined<T>(value);
     }
 
-    template<typename T> static bool hasValue(const std::optional<T>& value)
-    {
-        return value.has_value();
-    }
-
     template<typename T> static T undefined()
     {
         // This will handle integer types

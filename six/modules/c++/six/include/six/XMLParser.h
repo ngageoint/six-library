@@ -126,7 +126,7 @@ protected:
     XMLElem createDouble(const std::string& name,
         const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
     XMLElem createOptionalDouble(const std::string& name,
-        const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
+        const std::string& uri, double p, XMLElem parent = nullptr) const;
 
     XMLElem createBooleanType(const std::string& name,
            const std::string& uri, BooleanType b, XMLElem parent = nullptr) const;
@@ -168,7 +168,7 @@ protected:
             XMLElem parent = nullptr) const;
     XMLElem createDouble(const std::string& name, const std::optional<double>& p,
             XMLElem parent = nullptr) const;
-    XMLElem createOptionalDouble(const std::string& name, const std::optional<double>& p,
+    XMLElem createOptionalDouble(const std::string& name, double p,
             XMLElem parent = nullptr) const;
     XMLElem createBooleanType(const std::string& name, BooleanType b,
             XMLElem parent = nullptr) const;
