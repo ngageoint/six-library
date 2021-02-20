@@ -192,8 +192,8 @@ std::ostream& operator<< (std::ostream& os, const ImageGrid& d)
 
 std::ostream& operator<< (std::ostream& os, const LineSample& d)
 {
-    os << "  Line            : " << d.line.value() << "\n"
-       << "  Sample          : " << d.sample.value() << "\n";
+    os << "  Line            : " << d.line << "\n"
+       << "  Sample          : " << d.sample << "\n";
 
     return os;
 }

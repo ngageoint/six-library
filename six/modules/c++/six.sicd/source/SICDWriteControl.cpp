@@ -144,7 +144,7 @@ void SICDWriteControl::save(void* imageData,
                     startLocalRowToWrite * numBytesPerRow;
 
             // Now figure out our offset into the segment
-            const auto segStartRow = imageSegmentInfo.firstRow();
+            const auto segStartRow = imageSegmentInfo.getFirstRow();
             const size_t startRowInSegToWrite =
                     startGlobalRowToWrite - segStartRow;
             const size_t pixelOffset =

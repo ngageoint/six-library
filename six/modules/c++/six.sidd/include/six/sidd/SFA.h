@@ -518,7 +518,7 @@ protected:
 struct SFAPrimeMeridian
 {
     std::string name;
-    std::optional<double> longitude;
+    double longitude;
 
     bool operator==(const SFAPrimeMeridian& rhs) const
     {
@@ -533,8 +533,8 @@ struct SFAPrimeMeridian
 struct SFASpheroid
 {
     std::string name;
-    std::optional<double> semiMajorAxis;
-    std::optional<double> inverseFlattening;
+    double semiMajorAxis;
+    double inverseFlattening;
 
     bool operator==(const SFASpheroid& rhs) const
     {
@@ -551,7 +551,7 @@ struct SFASpheroid
 struct SFAParameter
 {
     std::string name;
-    std::optional<double> value;
+    double value;
 
     bool operator==(const SFAParameter& rhs) const
     {

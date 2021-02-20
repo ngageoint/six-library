@@ -762,18 +762,18 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
             subheader.getImageSource().set(imageSource);
 
             // Fill out ILOC with the row offset, making sure it's in range
-            if (segmentInfo.rowOffset() > maxRows)
+            if (segmentInfo.getRowOffset() > maxRows)
             {
                 std::ostringstream ostr;
                 ostr << "Row offset cannot exceed " << maxRows
                      << ", but for image segment " << jj << " it is "
-                     << segmentInfo.firstRow();
+                     << segmentInfo.getFirstRow();
 
                 throw except::Exception(Ctxt(ostr.str()));
             }
 
             subheader.getImageLocation().set(
-                    generateILOC(segmentInfo.rowOffset(), 0));
+                    generateILOC(segmentInfo.getRowOffset(), 0));
 
             subheader.getTargetId().set(targetId);
 
@@ -783,7 +783,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
                     pvtype, nbpp, nbpp, "R", irep, "SAR", bandInfo);
 
             setBlocking(imode,
-                        types::RowCol<size_t>(segmentInfo.numRows(), numCols),
+                        types::RowCol<size_t>(segmentInfo.getNumRows(), numCols),
                         subheader);
 
             subheader.getImageSyncCode().set(0);

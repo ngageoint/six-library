@@ -225,7 +225,7 @@ struct LineSample
      */
     size_t getIndex()
     {
-        return mIndex.value();
+        return mIndex;
     }
 
     /*!
@@ -237,14 +237,14 @@ struct LineSample
     }
 
     //! Line
-    std::optional<double> line;
+    double line;
 
     //! Sample
-    std::optional<double> sample;
+    double sample;
 
 private:
     // Stores index of LineSample
-    std::optional<size_t> mIndex;
+    size_t mIndex;
 };
 
 /*!

@@ -404,22 +404,22 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
                              currentInfo->getData()->getClassification());
 
         NITFSegmentInfo si;
-        si.numRows_ = numRowsSeg;
+        si.numRows = numRowsSeg;
 
         std::vector < NITFSegmentInfo > imageSegments
                 = currentInfo->getImageSegments();
 
         if (productSegmentIdx == 0)
         {
-            si.rowOffset_ = 0;
-            si.firstRow_ = 0;
+            si.rowOffset = 0;
+            si.firstRow = 0;
             currentInfo->setStartIndex(nitfSegmentIdx);
         }
         else
         {
-            si.rowOffset_ = imageSegments[productSegmentIdx - 1].numRows();
-            si.firstRow_ = imageSegments[productSegmentIdx - 1].firstRow() +
-                    si.rowOffset();
+            si.rowOffset = imageSegments[productSegmentIdx - 1].getNumRows();
+            si.firstRow = imageSegments[productSegmentIdx - 1].getFirstRow() +
+                    si.getRowOffset();
         }
 
         // Legends don't set lat/lons
@@ -629,7 +629,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     size_t i;
     for (i = 0; i < numIS; i++)
     {
-        const auto firstRowSeg = imageSegments[i].firstRow();
+        const auto firstRowSeg = imageSegments[i].getFirstRow();
 
         if (firstRowSeg <= startRow)
         {
@@ -659,7 +659,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     for (; i < numIS && totalRead < subWindowSize; i++)
     {
         size_t numRowsReqSeg =
-                std::min<size_t>(numRowsLeft, imageSegments[i].numRows()
+                std::min<size_t>(numRowsLeft, imageSegments[i].getNumRows()
                         - sw.getStartRow());
 
         sw.setNumRows(static_cast<uint32_t>(numRowsReqSeg));

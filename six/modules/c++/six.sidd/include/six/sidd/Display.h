@@ -352,11 +352,11 @@ struct DynamicRangeAdjustment
     {
         DRAParameters();
 
-        std::optional<double> pMin; //! DRA clip low point
-        std::optional<double> pMax; //! DRA clip high point
+        double pMin; //! DRA clip low point
+        double pMax; //! DRA clip high point
 
-        std::optional<double> eMinModifier; //! eMin modifier
-        std::optional<double> eMaxModifier; //! eMax modifier
+        double eMinModifier; //! eMin modifier
+        double eMaxModifier; //! eMax modifier
 
         bool operator==(const DRAParameters& rhs) const;
         bool operator!=(const DRAParameters& rhs) const
@@ -369,8 +369,8 @@ struct DynamicRangeAdjustment
     {
         DRAOverrides();
 
-        std::optional<double> subtractor; //! Subtractor value used to reduce haze in the image
-        std::optional<double> multiplier; //! Multiplier value used to brighten the image data
+        double subtractor; //! Subtractor value used to reduce haze in the image
+        double multiplier; //! Multiplier value used to brighten the image data
 
         bool operator==(const DRAOverrides& rhs) const;
         bool operator!=(const DRAOverrides& rhs) const
@@ -380,7 +380,7 @@ struct DynamicRangeAdjustment
     };
 
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
-    std::optional<size_t> bandStatsSource; //! Indicates which band to use for DRA stats
+    size_t bandStatsSource; //! Indicates which band to use for DRA stats
 
     // In SIDD 1.0, must include exactly one of draParameters or draOverrides
     // In SIDD 2.0, include draParameters if algorithmType == AUTO,
@@ -462,9 +462,9 @@ struct Display
     // Beginning of SIDD 2.0-only section
 
     //Required
-    std::optional<size_t> numBands;
+    size_t numBands;
     //Optional
-    std::optional<size_t> defaultBandDisplay;
+    size_t defaultBandDisplay;
 
     //Required
     std::vector<mem::ScopedCopyablePtr<NonInteractiveProcessing> >

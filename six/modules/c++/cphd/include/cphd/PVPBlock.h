@@ -276,31 +276,31 @@ struct PVPBlock
     //! Get optional parameter flags
     bool hasAmpSF() const
     {
-        return mAmpSFEnabled.value();
+        return mAmpSFEnabled;
     }
     bool hasFxN1() const
     {
-        return mFxN1Enabled.value();
+        return mFxN1Enabled;
     }
     bool hasFxN2() const
     {
-        return mFxN2Enabled.value();
+        return mFxN2Enabled;
     }
     bool hasToaE1() const
     {
-        return mToaE1Enabled.value();
+        return mToaE1Enabled;
     }
     bool hasToaE2() const
     {
-        return mToaE2Enabled.value();
+        return mToaE2Enabled;
     }
     bool hasTDIonoSRP() const
     {
-        return mTDIonoSRPEnabled.value();
+        return mTDIonoSRPEnabled;
     }
     bool hasSignal() const
     {
-        return mSignalEnabled.value();
+        return mSignalEnabled;
     }
 
     /*
@@ -456,13 +456,13 @@ private:
     /*
      *  Optional parameter flags
      */
-    std::optional<bool> mAmpSFEnabled;
-    std::optional<bool> mFxN1Enabled;
-    std::optional<bool> mFxN2Enabled;
-    std::optional<bool> mToaE1Enabled;
-    std::optional<bool> mToaE2Enabled;
-    std::optional<bool> mTDIonoSRPEnabled;
-    std::optional<bool> mSignalEnabled;
+    bool mAmpSFEnabled;
+    bool mFxN1Enabled;
+    bool mFxN2Enabled;
+    bool mToaE1Enabled;
+    bool mToaE2Enabled;
+    bool mTDIonoSRPEnabled;
+    bool mSignalEnabled;
 
     //! Ostream operator
     friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);

@@ -46,21 +46,21 @@ struct CorrCoefs
     {
     }
 
-    std::optional<double> p1p2;
-    std::optional<double> p1p3;
-    std::optional<double> p1v1;
-    std::optional<double> p1v2;
-    std::optional<double> p1v3;
-    std::optional<double> p2p3;
-    std::optional<double> p2v1;
-    std::optional<double> p2v2;
-    std::optional<double> p2v3;
-    std::optional<double> p3v1;
-    std::optional<double> p3v2;
-    std::optional<double> p3v3;
-    std::optional<double> v1v2;
-    std::optional<double> v1v3;
-    std::optional<double> v2v3;
+    double p1p2;
+    double p1p3;
+    double p1v1;
+    double p1v2;
+    double p1v3;
+    double p2p3;
+    double p2v1;
+    double p2v2;
+    double p2v3;
+    double p3v1;
+    double p3v2;
+    double p3v3;
+    double v1v2;
+    double v1v3;
+    double v2v3;
 
     //! Equality operators
     bool operator==(const CorrCoefs& rhs) const;
@@ -89,12 +89,12 @@ struct PosVelError
     //! Coordinate frame used for expressing P,V error statistics
     FrameType frame;
 
-    std::optional<double> p1;
-    std::optional<double> p2;
-    std::optional<double> p3;
-    std::optional<double> v1;
-    std::optional<double> v2;
-    std::optional<double> v3;
+    double p1;
+    double p2;
+    double p3;
+    double v1;
+    double v2;
+    double v3;
 
     //! Optional
     mem::ScopedCopyablePtr<CorrCoefs> corrCoefs;
@@ -123,18 +123,18 @@ struct RadarSensor
      *  Range bias error standard deviation. 
      *  Range bias at zero range
      */
-    std::optional<double> rangeBias;
+    double rangeBias;
 
     /*!
      *  (Optional) Payload clock frequency scale factor
      *  standard deviation.
      */
-    std::optional<double> clockFreqSF;
+    double clockFreqSF;
     /*!
      * (Optional) Transmit frequency scale factor
      *  standard deviation.
      */
-    std::optional<double> transmitFreqSF;
+    double transmitFreqSF;
     /*!
      *  (Optional) Range bias decorrelated rate
      *
@@ -173,14 +173,14 @@ struct TropoError
      *  incidence standard deviation.  Expressed as a
      *  two-range error
      */
-    std::optional<double> tropoRangeVertical;
+    double tropoRangeVertical;
 
     /*!
      *  (Optional) Troposphere two-way delay error for SCP COA
      *  incidence angle standard deviation.  Expressed
      *  as a two-way range error
      */
-    std::optional<double> tropoRangeSlant;
+    double tropoRangeSlant;
 
     /*!
      *  (Optional)
@@ -219,21 +219,21 @@ struct IonoError
      *  incidence standard deviation.  Expressed as a
      *  two-way range error
      */
-    std::optional<double> ionoRangeVertical;
+    double ionoRangeVertical;
 
     /*!
      *  (Optional) Ionosphere two-way delay rate of change
      *  error for normal incidence standard deviation.
      *  Expressed as a two-way range error
      */
-    std::optional<double> ionoRangeRateVertical;
+    double ionoRangeRateVertical;
 
     /*!
      *  Ionosphere range error and range rate error correlation
      *  coefficient.
      *
      */
-    std::optional<double> ionoRgRgRateCC;
+    double ionoRgRgRateCC;
     
     /*!
      *  Ionosphere range error decorrelation ratio
@@ -325,13 +325,13 @@ struct CompositeSCP
     SCPType scpType;
 
     //!  SICD/SIDD Rg or Row, depending on scpType
-    std::optional<double> xErr;
+    double xErr;
 
     //!  SICD/SIDD Az or Col, depending on scpType
-    std::optional<double> yErr;
+    double yErr;
 
     //!  SICD/SIDD RowCol or RgAz depending on scpType
-    std::optional<double> xyErr;
+    double xyErr;
 
     //! Equality operators
     bool operator==(const CompositeSCP& rhs) const
