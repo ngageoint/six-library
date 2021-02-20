@@ -1259,9 +1259,9 @@ void six::getErrors(const ErrorStatistics* errorStats,
         if (components)
         {
             double rangeBias;
-            if (components->radarSensor.get())
+            if (components->getRadarSensor())
             {
-                const RadarSensor& radarSensor(*components->radarSensor);
+                const RadarSensor& radarSensor(*components->getRadarSensor());
 
                 if (radarSensor.hasRangeBiasDecorr())
                 {
@@ -1276,9 +1276,9 @@ void six::getErrors(const ErrorStatistics* errorStats,
                 rangeBias = 0.0;
             }
 
-            if (components->posVelError.get())
+            if (components->getPosVelError())
             {
-                const PosVelError& posVelError(*components->posVelError);
+                const PosVelError& posVelError(*components->getPosVelError());
                 errors.mFrameType = posVelError.frame;
 
                 getSensorCovariance(posVelError,
@@ -1294,9 +1294,9 @@ void six::getErrors(const ErrorStatistics* errorStats,
                 }
             }
 
-            if (components->ionoError.get())
+            if (components->getIonoError())
             {
-                const six::IonoError& ionoError(*components->ionoError);
+                const six::IonoError& ionoError(*components->getIonoError());
                 errors.mIonoErrorCovar(0, 0) =
                         math::square(ionoError.ionoRangeVertical);
                 errors.mIonoErrorCovar(1, 1) =
@@ -1307,10 +1307,10 @@ void six::getErrors(const ErrorStatistics* errorStats,
                         ionoError.ionoRgRgRateCC;
             }
 
-            if (components->tropoError.get())
+            if (components->getTropoError())
             {
                 errors.mTropoErrorCovar(0, 0) = math::square(
-                        components->tropoError->tropoRangeVertical);
+                        components->getTropoError()->tropoRangeVertical);
             }
         }
 

@@ -304,15 +304,63 @@ struct IonoError
  */
 struct Components
 {
-    //!  Constructor
-    Components()
-    {
-    }
+    Components() = default;
 
     mem::ScopedCopyablePtr<PosVelError> posVelError;
+    void reset(PosVelError* value)
+    {
+        posVelError.reset(value);
+    }
+    const PosVelError* getPosVelError() const
+    {
+        return posVelError.get();
+    }
+    PosVelError* getPosVelError()
+    {
+        return posVelError.get();
+    }
+
     mem::ScopedCopyablePtr<RadarSensor> radarSensor;
+    void reset(RadarSensor* value)
+    {
+        radarSensor.reset(value);
+    }
+    const RadarSensor* getRadarSensor() const
+    {
+        return radarSensor.get();
+    }
+    RadarSensor* getRadarSensor()
+    {
+        return radarSensor.get();
+    }
+
     mem::ScopedCopyablePtr<TropoError> tropoError;
+    void reset(TropoError* value)
+    {
+        tropoError.reset(value);
+    }
+    const TropoError* getTropoError() const
+    {
+        return tropoError.get();
+    }
+    TropoError* getTropoError()
+    {
+        return tropoError.get();
+    }
+
     mem::ScopedCopyablePtr<IonoError> ionoError;
+    void reset(IonoError* value)
+    {
+        ionoError.reset(value);
+    }
+    const IonoError* getIonoError() const
+    {
+        return ionoError.get();
+    }
+    IonoError* getIonoError()
+    {
+        return ionoError.get();
+    }
 
     //! Equality operator
     bool operator==(const Components& rhs) const
@@ -358,7 +406,7 @@ struct CompositeSCP
     {
     }
 
-    SCPType scpType;
+    SCPType scpType = RG_AZ;
 
     //!  SICD/SIDD Rg or Row, depending on scpType
     double xErr;
