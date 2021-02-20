@@ -1254,7 +1254,7 @@ void six::getErrors(const ErrorStatistics* errorStats,
 
     if (errorStats)
     {
-        const six::Components* const components(errorStats->components.get());
+        const six::Components* const components(errorStats->getComponents());
 
         if (components)
         {
@@ -1314,12 +1314,12 @@ void six::getErrors(const ErrorStatistics* errorStats,
             }
         }
 
-        if (errorStats->compositeSCP.get() &&
-            errorStats->compositeSCP->scpType == CompositeSCP::RG_AZ)
+        if (errorStats->getCompositeSCP() &&
+            errorStats->getCompositeSCP()->scpType == CompositeSCP::RG_AZ)
         {
-            const types::RgAz<double> composite(errorStats->compositeSCP->xErr,
-                                                errorStats->compositeSCP->yErr);
-            const double corr = errorStats->compositeSCP->xyErr;
+            const types::RgAz<double> composite(errorStats->getCompositeSCP()->xErr,
+                                                errorStats->getCompositeSCP()->yErr);
+            const double corr = errorStats->getCompositeSCP()->xyErr;
 
             errors.mUnmodeledErrorCovar(0, 0) = math::square(composite.rg);
             errors.mUnmodeledErrorCovar(1, 1) = math::square(composite.az);

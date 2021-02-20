@@ -396,12 +396,36 @@ struct ErrorStatistics
      *  center point
      */
     mem::ScopedCopyablePtr<CompositeSCP> compositeSCP;
+    void reset(CompositeSCP* pValue)
+    {
+        compositeSCP.reset(pValue);
+    }
+    const CompositeSCP* getCompositeSCP() const
+    {
+        return compositeSCP.get();
+    }
+    CompositeSCP* getCompositeSCP()
+    {
+        return compositeSCP.get();
+    }
 
     /*!
      *  (Optional) error statistics components
      *
      */
     mem::ScopedCopyablePtr<Components> components;
+    void reset(Components* pValue)
+    {
+        components.reset(pValue);
+    }
+    const Components* getComponents() const
+    {
+        return components.get();
+    }
+    Components* getComponents()
+    {
+        return components.get();
+    }
 
     /*!
      *  Additional parameters
@@ -417,7 +441,6 @@ struct ErrorStatistics
         return (compositeSCP == rhs.compositeSCP && components == rhs.components &&
             additionalParameters == rhs.additionalParameters);
     }
-
     bool operator!=(const ErrorStatistics& rhs) const
     {
         return !(*this == rhs);
