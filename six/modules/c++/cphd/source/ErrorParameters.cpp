@@ -114,7 +114,7 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
             {
                 os << "    TropoRangeSlant  : " << e.monostatic->tropoError->tropoRangeSlant << "\n";
             }
-            if (!six::Init::isUndefined(e.monostatic->tropoError->getTropoRangeDecorr()))
+            if (e.monostatic->tropoError->hasTropoRangeDecorr())
             {
             os << "    TropoRangeDecorr:: \n"
                 << "      CorrCoefZero  : " << e.monostatic->tropoError->getTropoRangeDecorr().corrCoefZero << "\n"
@@ -133,7 +133,7 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
                 os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->ionoRangeRateVertical << "\n";
             }
             os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->ionoRgRgRateCC << "\n";
-            if (!six::Init::isUndefined(e.monostatic->ionoError->getIonoRangeVertDecorr()))
+            if (e.monostatic->ionoError->hasIonoRangeVertDecorr())
             {
             os << "    IonoRangeDecorr:: \n"
                 << "      CorrCoefZero  : " << e.monostatic->ionoError->getIonoRangeVertDecorr().corrCoefZero << "\n"

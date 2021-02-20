@@ -783,7 +783,7 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
             createDouble("V1V3", errParams.monostatic->posVelErr.corrCoefs->v1v3, corrCoefsXML);
             createDouble("V2V3", errParams.monostatic->posVelErr.corrCoefs->v2v3, corrCoefsXML);
         }
-        if(!six::Init::isUndefined(errParams.monostatic->posVelErr.getPositionDecorr()))
+        if(errParams.monostatic->posVelErr.hasPositionDecorr())
         {
             XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
             createDouble("CorrCoefZero", errParams.monostatic->posVelErr.getPositionDecorr().corrCoefZero, positionDecorrXML);
@@ -818,7 +818,7 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
             {
                 createDouble("TropoRangeSlant", errParams.monostatic->tropoError->tropoRangeSlant, tropoXML);
             }
-            if (!six::Init::isUndefined(errParams.monostatic->tropoError->getTropoRangeDecorr()))
+            if (errParams.monostatic->tropoError->hasTropoRangeDecorr())
             {
                 XMLElem tropoDecorrXML = newElement("TropoRangeDecorr", tropoXML);
                 createDouble("CorrCoefZero", errParams.monostatic->tropoError->getTropoRangeDecorr().corrCoefZero, tropoDecorrXML);
@@ -837,7 +837,7 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
             {
                 createDouble("IonoRgRgRateCC", errParams.monostatic->ionoError->ionoRgRgRateCC, ionoXML);
             }
-            if (!six::Init::isUndefined(errParams.monostatic->ionoError->getIonoRangeVertDecorr()))
+            if (errParams.monostatic->ionoError->hasIonoRangeVertDecorr())
             {
                 XMLElem ionoDecorrXML = newElement("IonoRangeVertDecorr", ionoXML);
                 createDouble("CorrCoefZero", errParams.monostatic->ionoError->getIonoRangeVertDecorr().corrCoefZero, ionoDecorrXML);
@@ -1969,7 +1969,7 @@ XMLElem CPHDXMLParser::createErrorParamPlatform(
         createDouble("V1V3", p.posVelErr.corrCoefs->v1v3, corrCoefsXML);
         createDouble("V2V3", p.posVelErr.corrCoefs->v2v3, corrCoefsXML);
     }
-    if(!six::Init::isUndefined(p.posVelErr.getPositionDecorr()))
+    if(p.posVelErr.hasPositionDecorr())
     {
         XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
         createDouble("CorrCoefZero", p.posVelErr.getPositionDecorr().corrCoefZero, positionDecorrXML);

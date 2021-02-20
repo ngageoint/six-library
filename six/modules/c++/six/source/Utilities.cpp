@@ -1263,7 +1263,7 @@ void six::getErrors(const ErrorStatistics* errorStats,
             {
                 const RadarSensor& radarSensor(*components->radarSensor);
 
-                if (!six::Init::isUndefined(radarSensor.getRangeBiasDecorr()))
+                if (radarSensor.hasRangeBiasDecorr())
                 {
                     errors.mRangeCorrCoefZero = radarSensor.getRangeBiasDecorr().corrCoefZero;
                     errors.mRangeDecorrRate = radarSensor.getRangeBiasDecorr().decorrRate;
@@ -1285,7 +1285,7 @@ void six::getErrors(const ErrorStatistics* errorStats,
                                     rangeBias,
                                     errors.mSensorErrorCovar);
 
-                if (!six::Init::isUndefined(posVelError.getPositionDecorr()))
+                if (posVelError.hasPositionDecorr())
                 {
                     errors.mPositionCorrCoefZero =
                             posVelError.getPositionDecorr().corrCoefZero;

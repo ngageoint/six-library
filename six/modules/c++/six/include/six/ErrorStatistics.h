@@ -105,6 +105,10 @@ struct PosVelError
     {
         return positionDecorr;
     }
+    bool hasPositionDecorr() const
+    {
+        return six::Init::isDefined(positionDecorr);
+    }
 
     //! Equality operators
     bool operator==(const PosVelError& rhs) const;
@@ -147,6 +151,10 @@ struct RadarSensor
     const DecorrType& getRangeBiasDecorr() const
     {
         return rangeBiasDecorr;
+    }
+    bool hasRangeBiasDecorr() const
+    {
+        return six::Init::isDefined(rangeBiasDecorr);
     }
 
     RadarSensor() = default;
@@ -194,6 +202,10 @@ struct TropoError
     const DecorrType& getTropoRangeDecorr() const
     {
         return tropoRangeDecorr;
+    }
+    bool hasTropoRangeDecorr() const
+    {
+        return six::Init::isDefined(tropoRangeDecorr);
     }
 
     TropoError() = default;
@@ -246,6 +258,10 @@ struct IonoError
     const DecorrType& getIonoRangeVertDecorr() const
     {
         return ionoRangeVertDecorr;
+    }
+    bool hasIonoRangeVertDecorr() const
+    {
+        return six::Init::isDefined(ionoRangeVertDecorr);
     }
 
     IonoError() = default;
