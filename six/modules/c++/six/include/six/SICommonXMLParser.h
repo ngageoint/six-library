@@ -112,8 +112,6 @@ public:
             const ParameterCollection& props, XMLElem parent = nullptr) const;
     void addDecorrType(const std::string& name, const std::string& uri,
             DecorrType dt, XMLElem p) const;
-    void addDecorrType(const std::string& name, const std::string& uri,
-            const std::optional<DecorrType>& dt, XMLElem p) const;
 
     // TODO: Can make this virtual if we ever need it
     //       This is the implementation for SICD 1.x / SIDD 2.0+
