@@ -127,7 +127,7 @@ template<> XYZEnum Init::undefined<XYZEnum>();
 template<typename T>
 class InitRef final
 {
-    const T& value_;
+    T& value_;
 public:
     InitRef(T& value, const std::optional<T>& set) : value_(value)
     {
@@ -145,6 +145,12 @@ public:
     {
         assert(has_value());
         return value_;
+    }
+    void emplace(const T& v)
+    {
+        assert(Init::isDefined(v));
+        value_ = v;
+        assert(has_value());
     }
 };
 template<typename T>

@@ -51,6 +51,10 @@ public:
         return mSICommonURI;
     }
 
+    // XMLParser::createDouble() and parseDouble() are "protected"
+    void createDouble_(const std::string& name, double p, XMLElem parent) const;
+    void parseDouble_(XMLElem element, std::optional<double>& value) const;
+
     XMLElem createComplex(const std::string& name, std::complex<double> c,
             XMLElem parent = nullptr) const;
     XMLElem createVector2D(const std::string& name, const std::string& uri,
@@ -159,7 +163,6 @@ public:
             ParameterCollection& props) const;
 
     void parseDecorrType(XMLElem decorrXML, DecorrType& decorrType) const;
-    void parseDecorrType(XMLElem decorrXML, std::optional<DecorrType>& decorrType) const;
 
     void parseFootprint(XMLElem footprint,
             const std::string& cornerName, LatLonCorners& corners) const;
