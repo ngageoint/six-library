@@ -127,10 +127,16 @@ template<> XYZEnum Init::undefined<XYZEnum>();
 template<typename T>
 class InitRef final
 {
-    T& value_;
+    const T& value_;
 public:
-    InitRef(T& v) : value_(v) {}
-    InitRef(const T& v) : value_(const_cast<T&>(v)) {}
+    InitRef(T& value, const std::optional<T>& set) : value_(value)
+    {
+        if (set.has_value())
+        {
+            value = set.value();
+        }
+    }
+
     bool has_value() const
     {
         return Init::isDefined(value_);
@@ -140,15 +146,11 @@ public:
         assert(has_value());
         return value_;
     }
-    void emplace(const T& v)
-    {
-        value_ = v;
-    }
 };
 template<typename T>
-inline InitRef<T> make_InitRef(const T& v)
+inline InitRef<T> make_InitRef(const T& v, const std::optional<T>& set = std::optional<T>())
 {
-    return InitRef<T>(v);
+    return InitRef<T>(const_cast<T&>(v), set);
 }
 
 }
