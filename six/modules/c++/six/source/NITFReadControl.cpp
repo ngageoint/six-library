@@ -30,6 +30,15 @@
 #include <six/XMLControlFactory.h>
 #include <six/Utilities.h>
 
+#ifndef SIX_ENABLE_DED
+    // set to 1 for DEM support
+    #define SIX_ENABLE_DED 0
+#endif
+namespace six
+{
+    constexpr auto enable_ded = SIX_ENABLE_DED ? true : false;
+}
+
 namespace
 {
 types::RowCol<size_t> parseILOC(const std::string& str)
@@ -394,8 +403,8 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         const bool segIsLegend = isLegend(subheader);
         const bool segIsDed = isDed(subheader);
 
-        //if (!segIsLegend)
-        if (!segIsLegend && !segIsDed)
+        const auto do_validateSegment = six::enable_ded ? !segIsLegend && !segIsDed : !segIsLegend;
+        if (do_validateSegment)
         {
             validateSegment(subheader, *currentInfo);
         }
@@ -426,7 +435,8 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         }
 
         // Legends don't set lat/lons
-        if (!segIsLegend && !segIsDed)
+        const auto do_setLatLon = six::enable_ded ? !segIsLegend && !segIsDed : !segIsLegend;
+        if (do_setLatLon)
         {
             subheader.getCornersAsLatLons(corners);
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
@@ -562,8 +572,14 @@ void NITFReadControl::getIndices(const nitf::ImageSubheader& subheader, ImageAnd
         else
         {
             // 'imageID' might also be "DED001"
-            str_segment = imageID.substr(digit_pos);
-            //throw except::Exception(Ctxt("Can't extract segment # from: " + imageID));
+            if (six::enable_ded)
+            {
+                str_segment = imageID.substr(digit_pos);
+            }
+            else
+            {
+                throw except::Exception(Ctxt("Can't extract segment # from: " + imageID));
+            }
         }
         segment = str::toType<size_t>(str_segment) - 1;
     }
