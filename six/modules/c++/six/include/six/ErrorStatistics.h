@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +20,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_ERROR_STATISTICS_H__
-#define __SIX_ERROR_STATISTICS_H__
+#ifndef SIX_six_ErrorStatistics_h_INCLUDED_
+#define SIX_six_ErrorStatistics_h_INCLUDED_
+#pragma once
 
 #include <assert.h>
 
@@ -34,13 +36,11 @@
 
 namespace six
 {
-
 /*!
  *  \struct CorrCoefs
  *  \brief CorrCoefs
  *
- *  Correlation coefficient parameters.  This object is shared
- *  between SICD and SIDD
+ *  Correlation coefficient parameters.  This object is shared between SICD and SIDD
  */
 struct CorrCoefs
 {
@@ -63,7 +63,6 @@ struct CorrCoefs
     double v1v3 = 0.0;
     double v2v3 = 0.0;
 
-    //! Equality operators
     bool operator==(const CorrCoefs& rhs) const;
     bool operator!=(const CorrCoefs& rhs) const
     {
@@ -75,17 +74,14 @@ struct CorrCoefs
  *  \struct PosVelError
  *  \brief SICD/SIDD PosVelErr
  *
- *
- *  Position and velocity error statistics for the
- *  radar platform.  Name is altered to match API conventions
+ *  Position and velocity error statistics for the radar platform.
+ *  Name is altered to match API conventions
  */
 struct PosVelError
 {
-    //!  CorrCoefs are nullptr, since optional
-    PosVelError() = default;
+    PosVelError() = default; //!  CorrCoefs are nullptr, since optional
 
-    //! Coordinate frame used for expressing P,V error statistics
-    FrameType frame;
+    FrameType frame; //! Coordinate frame used for expressing P,V error statistics
 
     double p1;
     double p2;
@@ -94,8 +90,7 @@ struct PosVelError
     double v2;
     double v3;
 
-    //! Optional
-    mem::ScopedCopyablePtr<CorrCoefs> corrCoefs;
+    mem::ScopedCopyablePtr<CorrCoefs> corrCoefs; //! Optional
 
     //! Can be none, make sure to set this undefined()
     DecorrType positionDecorr = Init::undefined<DecorrType>();
@@ -104,7 +99,6 @@ struct PosVelError
         return make_InitRef(positionDecorr);
     }
 
-    //! Equality operators
     bool operator==(const PosVelError& rhs) const;
     bool operator!=(const PosVelError& rhs) const
     {
@@ -116,14 +110,12 @@ struct PosVelError
  *  \struct RadarSensor
  *  \brief (Optional) RadarSensor parameter
  *
- *
  *  Radar sensor error statistics.
  */
 struct RadarSensor
 {
     /*!
-     *  Range bias error standard deviation. 
-     *  Range bias at zero range
+     *  Range bias error standard deviation.  Range bias at zero range
      */
     double rangeBias = Init::undefined<double>();
     InitRef<double> RangeBias() const
@@ -132,8 +124,7 @@ struct RadarSensor
     }
 
     /*!
-     *  (Optional) Payload clock frequency scale factor
-     *  standard deviation.
+     *  (Optional) Payload clock frequency scale factor standard deviation.
      */
     double clockFreqSF = 0.0; // From Bill: "Volume 3: States if ClockFreqSF is omitted then set to 0."
     InitRef<double> ClockFreqSF() const
@@ -142,8 +133,7 @@ struct RadarSensor
     }
 
     /*!
-     * (Optional) Transmit frequency scale factor
-     *  standard deviation.
+     * (Optional) Transmit frequency scale factor standard deviation.
      */
     double transmitFreqSF = 0.0; // From Bill: "No mention of the TransmitFreqSF in volume 3 ... would still recommend setting to 0."
     InitRef<double> TransmitFreqSF() const
@@ -153,7 +143,6 @@ struct RadarSensor
 
     /*!
      *  (Optional) Range bias decorrelated rate
-     *
      */
     DecorrType rangeBiasDecorr = Init::undefined<DecorrType>();
     InitRef<DecorrType> RangeBiasDecorr() const
@@ -163,7 +152,6 @@ struct RadarSensor
 
     RadarSensor() = default;
 
-    //! Equality operator
     bool operator==(const RadarSensor& rhs) const
     {
         return (RangeBias().get() == rhs.RangeBias().get() && ClockFreqSF().get() == rhs.ClockFreqSF().get() &&
@@ -184,9 +172,8 @@ struct RadarSensor
 struct TropoError
 {
     /*!
-     *  (Optional) Troposphere two-way delay error for normal
-     *  incidence standard deviation.  Expressed as a
-     *  two-range error
+     *  (Optional) Troposphere two-way delay error for normal incidence standard deviation.
+     *  Expressed as a two-range error
      */
     double tropoRangeVertical = Init::undefined<double>();
     InitRef<double> TropoRangeVertical() const
@@ -195,9 +182,8 @@ struct TropoError
     }
 
     /*!
-     *  (Optional) Troposphere two-way delay error for SCP COA
-     *  incidence angle standard deviation.  Expressed
-     *  as a two-way range error
+     *  (Optional) Troposphere two-way delay error for SCP COA incidence angle standard deviation.
+     *  Expressed as a two-way range error
      */
     double tropoRangeSlant = Init::undefined<double>();
     InitRef<double> TropoRangeSlant() const
@@ -205,11 +191,7 @@ struct TropoError
         return make_InitRef(tropoRangeSlant);
     }
 
-    /*!
-     *  (Optional)
-     *
-     */
-    DecorrType tropoRangeDecorr = Init::undefined<DecorrType>();
+    DecorrType tropoRangeDecorr = Init::undefined<DecorrType>(); // (Optional)
     InitRef<DecorrType> TropoRangeDecorr() const
     {
         return make_InitRef(tropoRangeDecorr);
@@ -222,7 +204,6 @@ struct TropoError
         return (TropoRangeVertical().get() == rhs.TropoRangeVertical().get() && TropoRangeSlant().get() == rhs.TropoRangeSlant().get() &&
             TropoRangeDecorr().get() == rhs.TropoRangeDecorr().get());
     }
-
     bool operator!=(const TropoError& rhs) const
     {
         return !(*this == rhs);
@@ -238,9 +219,8 @@ struct TropoError
 struct IonoError
 {
     /*!
-     *  (Optional) Ionosphere two-way delay error for normal
-     *  incidence standard deviation.  Expressed as a
-     *  two-way range error
+     *  (Optional) Ionosphere two-way delay error for normal incidence standard deviation.
+     *  Expressed as a two-way range error
      */
     double ionoRangeVertical = Init::undefined<double>();
     InitRef<double> IonoRangeVertical() const
@@ -249,8 +229,7 @@ struct IonoError
     }
 
     /*!
-     *  (Optional) Ionosphere two-way delay rate of change
-     *  error for normal incidence standard deviation.
+     *  (Optional) Ionosphere two-way delay rate of change error for normal incidence standard deviation.
      *  Expressed as a two-way range error
      */
     double ionoRangeRateVertical = Init::undefined<double>();
@@ -260,9 +239,7 @@ struct IonoError
     }
 
     /*!
-     *  Ionosphere range error and range rate error correlation
-     *  coefficient.
-     *
+     *  Ionosphere range error and range rate error correlation coefficient.
      */
     double ionoRgRgRateCC = Init::undefined<double>();
     InitRef<double> IonoRgRgRateCC() const
@@ -281,13 +258,11 @@ struct IonoError
 
     IonoError() = default;
 
-    //! Equality operator
     bool operator==(const IonoError& rhs) const
     {
         return (IonoRangeRateVertical().get() == rhs.IonoRangeRateVertical().get() && IonoRangeVertical().get() == IonoRangeVertical().get() &&
             IonoRgRgRateCC().get() == rhs.IonoRgRgRateCC().get() && IonoRangeVertDecorr().get() == rhs.IonoRangeVertDecorr().get());
     }
-
     bool operator!=(const IonoError& rhs) const
     {
         return !(*this == rhs);
@@ -361,7 +336,6 @@ struct Components
         return ionoError.get();
     }
 
-    //! Equality operator
     bool operator==(const Components& rhs) const
     {
         return (posVelError == rhs.posVelError && radarSensor == rhs.radarSensor &&
@@ -380,46 +354,32 @@ struct Components
  *  Composite error statistics estimated at the scene center point
  *  Choose SCP type ROW_COL or RG_AZ
  *
- *  This object takes a shortcut.  Instead of providing two mutually
- *  exclusive sub-structures, one for RgAzErr and one for RowColErr,
- *  it provides one generalized alternative.  In the case where
- *  the data is defined as row/col, the values are written appropriately
- *  as RowColErr/Row, RowColErr/Col and RowColErr/RowCol.  In the case
- *  where they represent RgAz, we get RgAzErr/Rg RgAzErr/Az and RgAzErr/RgAz
- *  This only applies for SICD 0.4 and 0.5 - with SICD 1.0, this is always
- *  RG_AZ.
- *
+ *  This object takes a shortcut.  Instead of providing two mutually exclusive sub-structures,
+ *  one for RgAzErr and one for RowColErr, it provides one generalized alternative.  In the case
+ *  where the data is defined as row/col, the values are written appropriately as RowColErr/Row,
+ *  RowColErr/Col and RowColErr/RowCol.  In the case where they represent RgAz, we get
+ *  RgAzErr/Rg RgAzErr/Az and RgAzErr/RgAz This only applies for SICD 0.4 and 0.5 - with SICD 1.0,
+ *  this is always RG_AZ.
  */
 struct CompositeSCP
 {
-    //!  Types
-    enum SCPType
+    enum SCPType //!  Types
     {
         ROW_COL, RG_AZ
     };
 
     //!  Constructor
-    CompositeSCP(SCPType scpTypeIn = RG_AZ) :
-        scpType(scpTypeIn)
-    {
-    }
+    CompositeSCP(SCPType scpTypeIn = RG_AZ) :  scpType(scpTypeIn) {  }
 
     SCPType scpType = RG_AZ;
 
-    //!  SICD/SIDD Rg or Row, depending on scpType
-    double xErr;
+    double xErr; //!  SICD/SIDD Rg or Row, depending on scpType
+    double yErr; //!  SICD/SIDD Az or Col, depending on scpType
+    double xyErr; //!  SICD/SIDD RowCol or RgAz depending on scpType
 
-    //!  SICD/SIDD Az or Col, depending on scpType
-    double yErr;
-
-    //!  SICD/SIDD RowCol or RgAz depending on scpType
-    double xyErr;
-
-    //! Equality operators
     bool operator==(const CompositeSCP& rhs) const
     {
-        return (xErr == rhs.xErr && yErr == rhs.yErr &&
-            xyErr == rhs.xyErr && scpType == rhs.scpType);
+        return (xErr == rhs.xErr && yErr == rhs.yErr && xyErr == rhs.xyErr && scpType == rhs.scpType);
     }
     bool operator!=(const CompositeSCP& rhs) const
     {
@@ -432,13 +392,11 @@ struct CompositeSCP
  *  \param SICD/SIDD ErrorStatistics block
  *
  *  Parameters needed for computing error statistics.
- *
  */
 struct ErrorStatistics
 {
     /*!
-     *  (Optional) Composite error statistics estimated at the scene
-     *  center point
+     *  (Optional) Composite error statistics estimated at the scene center point
      */
     mem::ScopedCopyablePtr<CompositeSCP> compositeSCP;
     void reset(CompositeSCP* pValue)
@@ -456,7 +414,6 @@ struct ErrorStatistics
 
     /*!
      *  (Optional) error statistics components
-     *
      */
     mem::ScopedCopyablePtr<Components> components;
     void reset(Components* pValue)
@@ -473,14 +430,12 @@ struct ErrorStatistics
     }
 
     /*!
-     *  Additional parameters
-     *  Note, this is Parms in SICD, but we want a consistent API
+     *  Additional parameters.  Note, this is Parms in SICD, but we want a consistent API
      */
     ParameterCollection additionalParameters;
 
     ErrorStatistics() = default;
 
-    //! Equality operators
     bool operator==(const ErrorStatistics& rhs) const
     {
         return (compositeSCP == rhs.compositeSCP && components == rhs.components &&
@@ -493,5 +448,4 @@ struct ErrorStatistics
 };
 }
 
-#endif
-
+#endif // SIX_six_ErrorStatistics_h_INCLUDED_
