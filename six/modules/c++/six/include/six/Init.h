@@ -127,22 +127,22 @@ template<> XYZEnum Init::undefined<XYZEnum>();
 template<typename T>
 class InitRef final
 {
-    T& value;
+    T& value_;
 public:
-    InitRef(T& v) : value(v) {}
-    InitRef(const T& v) : value(const_cast<T&>(v)) {}
-    bool has() const
+    InitRef(T& v) : value_(v) {}
+    InitRef(const T& v) : value_(const_cast<T&>(v)) {}
+    bool has_value() const
     {
-        return Init::isDefined(value);
+        return Init::isDefined(value_);
     }
-    const T& get() const
+    const T& value() const
     {
-        assert(has());
-        return value;
+        assert(has_value());
+        return value_;
     }
-    void set(const T& v)
+    void emplace(const T& v)
     {
-        value = v;
+        value_ = v;
     }
 };
 template<typename T>

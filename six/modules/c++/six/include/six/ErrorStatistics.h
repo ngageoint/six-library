@@ -166,8 +166,8 @@ struct RadarSensor
     //! Equality operator
     bool operator==(const RadarSensor& rhs) const
     {
-        return (RangeBias().get() == rhs.RangeBias().get() && ClockFreqSF().get() == rhs.ClockFreqSF().get() &&
-            TransmitFreqSF().get() == rhs.TransmitFreqSF().get() && RangeBiasDecorr().get() == rhs.RangeBiasDecorr().get());
+        return (rangeBias == rhs.rangeBias && clockFreqSF == rhs.clockFreqSF &&
+            transmitFreqSF == rhs.transmitFreqSF && rangeBiasDecorr == rhs.rangeBiasDecorr);
     }
     bool operator!=(const RadarSensor& rhs) const
     {
@@ -219,8 +219,8 @@ struct TropoError
 
     bool operator==(const TropoError& rhs) const
     {
-        return (TropoRangeVertical().get() == rhs.TropoRangeVertical().get() && TropoRangeSlant().get() == rhs.TropoRangeSlant().get() &&
-            TropoRangeDecorr().get() == rhs.TropoRangeDecorr().get());
+        return (tropoRangeVertical == rhs.tropoRangeVertical && tropoRangeSlant == rhs.tropoRangeSlant &&
+            tropoRangeDecorr == rhs.tropoRangeDecorr);
     }
 
     bool operator!=(const TropoError& rhs) const
@@ -284,8 +284,8 @@ struct IonoError
     //! Equality operator
     bool operator==(const IonoError& rhs) const
     {
-        return (IonoRangeRateVertical().get() == rhs.IonoRangeRateVertical().get() && IonoRangeVertical().get() == IonoRangeVertical().get() &&
-            IonoRgRgRateCC().get() == rhs.IonoRgRgRateCC().get() && IonoRangeVertDecorr().get() == rhs.IonoRangeVertDecorr().get());
+        return (ionoRangeRateVertical == rhs.ionoRangeRateVertical && ionoRangeVertical == ionoRangeVertical &&
+            ionoRgRgRateCC == rhs.ionoRgRgRateCC && ionoRangeVertDecorr == rhs.ionoRangeVertDecorr);
     }
 
     bool operator!=(const IonoError& rhs) const

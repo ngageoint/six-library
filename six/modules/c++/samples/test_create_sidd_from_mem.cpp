@@ -2264,21 +2264,21 @@ void initErrorStatistics(six::ErrorStatistics& err)
     err.getComponents()->getPosVelError()->positionDecorr.decorrRate = 113.965;
 
     err.getComponents()->reset(new six::RadarSensor());
-    err.getComponents()->getRadarSensor()->RangeBias().set(43.5);
-    err.getComponents()->getRadarSensor()->ClockFreqSF().set(1111.1);
-    err.getComponents()->getRadarSensor()->TransmitFreqSF().set(85);
-    err.getComponents()->getRadarSensor()->RangeBiasDecorr().set(six::DecorrType(123, .03));
+    err.getComponents()->getRadarSensor()->RangeBias().emplace(43.5);
+    err.getComponents()->getRadarSensor()->ClockFreqSF().emplace(1111.1);
+    err.getComponents()->getRadarSensor()->TransmitFreqSF().emplace(85);
+    err.getComponents()->getRadarSensor()->RangeBiasDecorr().emplace(six::DecorrType(123, .03));
 
     err.getComponents()->reset(new six::TropoError());
-    err.getComponents()->getTropoError()->TropoRangeVertical().set(.00289);
-    err.getComponents()->getTropoError()->TropoRangeSlant().set(777);
-    err.getComponents()->getTropoError()->TropoRangeDecorr().set(six::DecorrType(0, 98.7));
+    err.getComponents()->getTropoError()->TropoRangeVertical().emplace(.00289);
+    err.getComponents()->getTropoError()->TropoRangeSlant().emplace(777);
+    err.getComponents()->getTropoError()->TropoRangeDecorr().emplace(six::DecorrType(0, 98.7));
 
     err.getComponents()->reset(new six::IonoError());
-    err.getComponents()->getIonoError()->IonoRangeVertical().set(1.2);
-    err.getComponents()->getIonoError()->IonoRangeRateVertical().set(77632);
-    err.getComponents()->getIonoError()->IonoRgRgRateCC().set(.072);
-    err.getComponents()->getIonoError()->IonoRangeVertDecorr().set(six::DecorrType(48.16, 113.964));
+    err.getComponents()->getIonoError()->IonoRangeVertical().emplace(1.2);
+    err.getComponents()->getIonoError()->IonoRangeRateVertical().emplace(77632);
+    err.getComponents()->getIonoError()->IonoRgRgRateCC().emplace(.072);
+    err.getComponents()->getIonoError()->IonoRangeVertDecorr().emplace(six::DecorrType(48.16, 113.964));
 
     six::Parameter param;
     param.setName("ErrorStatisticsParameterName");

@@ -75,8 +75,8 @@ std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
                 << "    v2v3          : " << p.corrCoefs->v2v3 << "\n";
         }
         os << "    Decorr:: \n"
-            << "    CorrCoefZero   : " << p.PositionDecorr().get().corrCoefZero << "\n"
-            << "    DecorrRate     : " << p.PositionDecorr().get().decorrRate << "\n";
+            << "    CorrCoefZero   : " << p.PositionDecorr().value().corrCoefZero << "\n"
+            << "    DecorrRate     : " << p.PositionDecorr().value().decorrRate << "\n";
     return os;
 }
 
@@ -106,38 +106,38 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         if (e.monostatic->tropoError.get())
         {
             os << "    TropoError:: \n";
-            if (e.monostatic->tropoError->TropoRangeVertical().has())
+            if (e.monostatic->tropoError->TropoRangeVertical().has_value())
             {
-                os << "    TropoRangeVertical : " << e.monostatic->tropoError->TropoRangeVertical().get() << "\n";
+                os << "    TropoRangeVertical : " << e.monostatic->tropoError->TropoRangeVertical().value() << "\n";
             }
-            if (e.monostatic->tropoError->TropoRangeSlant().has())
+            if (e.monostatic->tropoError->TropoRangeSlant().has_value())
             {
-                os << "    TropoRangeSlant  : " << e.monostatic->tropoError->TropoRangeSlant().get() << "\n";
+                os << "    TropoRangeSlant  : " << e.monostatic->tropoError->TropoRangeSlant().value() << "\n";
             }
-            if (e.monostatic->tropoError->TropoRangeDecorr().has())
+            if (e.monostatic->tropoError->TropoRangeDecorr().has_value())
             {
             os << "    TropoRangeDecorr:: \n"
-                << "      CorrCoefZero  : " << e.monostatic->tropoError->TropoRangeDecorr().get().corrCoefZero << "\n"
-                << "      DecorrRate  : " << e.monostatic->tropoError->TropoRangeDecorr().get().decorrRate << "\n";
+                << "      CorrCoefZero  : " << e.monostatic->tropoError->TropoRangeDecorr().value().corrCoefZero << "\n"
+                << "      DecorrRate  : " << e.monostatic->tropoError->TropoRangeDecorr().value().decorrRate << "\n";
             }
         }
         if (e.monostatic->ionoError.get())
         {
             os << "    IonoError:: \n";
-            if (e.monostatic->ionoError->IonoRangeVertical().has())
+            if (e.monostatic->ionoError->IonoRangeVertical().has_value())
             {
-                os << "    IonoRangeVertical : " << e.monostatic->ionoError->IonoRangeVertical().get() << "\n";
+                os << "    IonoRangeVertical : " << e.monostatic->ionoError->IonoRangeVertical().value() << "\n";
             }
-            if (e.monostatic->ionoError->IonoRangeRateVertical().has())
+            if (e.monostatic->ionoError->IonoRangeRateVertical().has_value())
             {
-                os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->IonoRangeRateVertical().get() << "\n";
+                os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->IonoRangeRateVertical().value() << "\n";
             }
-            os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->IonoRgRgRateCC().get() << "\n";
-            if (e.monostatic->ionoError->IonoRangeVertDecorr().has())
+            os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->IonoRgRgRateCC().value() << "\n";
+            if (e.monostatic->ionoError->IonoRangeVertDecorr().has_value())
             {
             os << "    IonoRangeDecorr:: \n"
-                << "      CorrCoefZero  : " << e.monostatic->ionoError->IonoRangeVertDecorr().get().corrCoefZero << "\n"
-                << "      DecorrRate  : " << e.monostatic->ionoError->IonoRangeVertDecorr().get().decorrRate << "\n";
+                << "      CorrCoefZero  : " << e.monostatic->ionoError->IonoRangeVertDecorr().value().corrCoefZero << "\n"
+                << "      DecorrRate  : " << e.monostatic->ionoError->IonoRangeVertDecorr().value().decorrRate << "\n";
             }
         }
         for (size_t ii = 0; ii < e.monostatic->parameter.size(); ++ii)

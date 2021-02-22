@@ -26,12 +26,17 @@
 #include <logging/NullLogger.h>
 #include <math/Utilities.h>
 #include <nitf/PluginRegistry.hpp>
+#include "six/Init.h"
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
 
 namespace math // in coda-oss
 {
     inline double square(const std::optional<double>& val)
+    {
+        return val.value() * val.value();
+    }
+    inline double square(const six::InitRef<double>& val)
     {
         return val.value() * val.value();
     }
@@ -54,6 +59,15 @@ static inline double operator*(double lhs, const std::optional<double>& rhs)
     return lhs * rhs.value();
 }
 static inline double operator*(const std::optional<double>& lhs, const std::optional<double>& rhs)
+{
+    return lhs.value() * rhs.value();
+}
+
+static inline double operator*(double lhs, const six::InitRef<double>& rhs)
+{
+    return lhs * rhs.value();
+}
+static inline double operator*(const six::InitRef<double>& lhs, const six::InitRef<double>& rhs)
 {
     return lhs.value() * rhs.value();
 }
@@ -1263,13 +1277,13 @@ void six::getErrors(const ErrorStatistics* errorStats,
             {
                 const RadarSensor& radarSensor(*components->getRadarSensor());
 
-                if (radarSensor.RangeBiasDecorr().has())
+                if (radarSensor.RangeBiasDecorr().has_value())
                 {
-                    errors.mRangeCorrCoefZero = radarSensor.RangeBiasDecorr().get().corrCoefZero;
-                    errors.mRangeDecorrRate = radarSensor.RangeBiasDecorr().get().decorrRate;
+                    errors.mRangeCorrCoefZero = radarSensor.RangeBiasDecorr().value().corrCoefZero;
+                    errors.mRangeDecorrRate = radarSensor.RangeBiasDecorr().value().decorrRate;
                 }
 
-                rangeBias = radarSensor.RangeBias().get();
+                rangeBias = radarSensor.RangeBias().value();
             }
             else
             {
@@ -1285,12 +1299,12 @@ void six::getErrors(const ErrorStatistics* errorStats,
                                     rangeBias,
                                     errors.mSensorErrorCovar);
 
-                if (posVelError.PositionDecorr().has())
+                if (posVelError.PositionDecorr().has_value())
                 {
                     errors.mPositionCorrCoefZero =
-                            posVelError.PositionDecorr().get().corrCoefZero;
+                            posVelError.PositionDecorr().value().corrCoefZero;
                     errors.mPositionDecorrRate =
-                            posVelError.PositionDecorr().get().decorrRate;
+                            posVelError.PositionDecorr().value().decorrRate;
                 }
             }
 
@@ -1298,19 +1312,19 @@ void six::getErrors(const ErrorStatistics* errorStats,
             {
                 const six::IonoError& ionoError(*components->getIonoError());
                 errors.mIonoErrorCovar(0, 0) =
-                        math::square(ionoError.IonoRangeVertical().get());
+                        math::square(ionoError.IonoRangeVertical());
                 errors.mIonoErrorCovar(1, 1) =
-                        math::square(ionoError.IonoRangeRateVertical().get());
+                        math::square(ionoError.IonoRangeRateVertical());
                 errors.mIonoErrorCovar(0, 1) = errors.mIonoErrorCovar(1, 0) =
-                        ionoError.IonoRangeVertical().get() *
-                        ionoError.IonoRangeRateVertical().get() *
-                        ionoError.IonoRgRgRateCC().get();
+                        ionoError.IonoRangeVertical() *
+                        ionoError.IonoRangeRateVertical() *
+                        ionoError.IonoRgRgRateCC();
             }
 
             if (components->getTropoError())
             {
                 errors.mTropoErrorCovar(0, 0) = math::square(
-                        components->getTropoError()->TropoRangeVertical().get());
+                        components->getTropoError()->TropoRangeVertical());
             }
         }
 
