@@ -39,6 +39,12 @@ ErrorParameters::Bistatic::RadarSensor::RadarSensor() :
 {
 }
 
+static inline std::ostream& operator<< (std::ostream& os, const std::optional<double>& value)
+{
+    os << value.value();
+    return os;
+}
+
 std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
 {
     os << "    PosVelError:: \n"
@@ -69,8 +75,8 @@ std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
                 << "    v2v3          : " << p.corrCoefs->v2v3 << "\n";
         }
         os << "    Decorr:: \n"
-            << "    CorrCoefZero   : " << p.positionDecorr.corrCoefZero << "\n"
-            << "    DecorrRate     : " << p.positionDecorr.decorrRate << "\n";
+            << "    CorrCoefZero   : " << p.PositionDecorr().get().corrCoefZero << "\n"
+            << "    DecorrRate     : " << p.PositionDecorr().get().decorrRate << "\n";
     return os;
 }
 
@@ -100,38 +106,38 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         if (e.monostatic->tropoError.get())
         {
             os << "    TropoError:: \n";
-            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeVertical))
+            if (e.monostatic->tropoError->TropoRangeVertical().has())
             {
-                os << "    TropoRangeVertical : " << e.monostatic->tropoError->tropoRangeVertical << "\n";
+                os << "    TropoRangeVertical : " << e.monostatic->tropoError->TropoRangeVertical().get() << "\n";
             }
-            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeSlant))
+            if (e.monostatic->tropoError->TropoRangeSlant().has())
             {
-                os << "    TropoRangeSlant  : " << e.monostatic->tropoError->tropoRangeSlant << "\n";
+                os << "    TropoRangeSlant  : " << e.monostatic->tropoError->TropoRangeSlant().get() << "\n";
             }
-            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeDecorr))
+            if (e.monostatic->tropoError->TropoRangeDecorr().has())
             {
             os << "    TropoRangeDecorr:: \n"
-                << "      CorrCoefZero  : " << e.monostatic->tropoError->tropoRangeDecorr.corrCoefZero << "\n"
-                << "      DecorrRate  : " << e.monostatic->tropoError->tropoRangeDecorr.decorrRate << "\n";
+                << "      CorrCoefZero  : " << e.monostatic->tropoError->TropoRangeDecorr().get().corrCoefZero << "\n"
+                << "      DecorrRate  : " << e.monostatic->tropoError->TropoRangeDecorr().get().decorrRate << "\n";
             }
         }
         if (e.monostatic->ionoError.get())
         {
             os << "    IonoError:: \n";
-            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeVertical))
+            if (e.monostatic->ionoError->IonoRangeVertical().has())
             {
-                os << "    IonoRangeVertical : " << e.monostatic->ionoError->ionoRangeVertical << "\n";
+                os << "    IonoRangeVertical : " << e.monostatic->ionoError->IonoRangeVertical().get() << "\n";
             }
-            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeRateVertical))
+            if (e.monostatic->ionoError->IonoRangeRateVertical().has())
             {
-                os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->ionoRangeRateVertical << "\n";
+                os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->IonoRangeRateVertical().get() << "\n";
             }
-            os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->ionoRgRgRateCC << "\n";
-            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeVertDecorr))
+            os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->IonoRgRgRateCC().get() << "\n";
+            if (e.monostatic->ionoError->IonoRangeVertDecorr().has())
             {
             os << "    IonoRangeDecorr:: \n"
-                << "      CorrCoefZero  : " << e.monostatic->ionoError->ionoRangeVertDecorr.corrCoefZero << "\n"
-                << "      DecorrRate  : " << e.monostatic->ionoError->ionoRangeVertDecorr.decorrRate << "\n";
+                << "      CorrCoefZero  : " << e.monostatic->ionoError->IonoRangeVertDecorr().get().corrCoefZero << "\n"
+                << "      DecorrRate  : " << e.monostatic->ionoError->IonoRangeVertDecorr().get().decorrRate << "\n";
             }
         }
         for (size_t ii = 0; ii < e.monostatic->parameter.size(); ++ii)

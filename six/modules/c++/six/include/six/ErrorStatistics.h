@@ -22,6 +22,10 @@
 #ifndef __SIX_ERROR_STATISTICS_H__
 #define __SIX_ERROR_STATISTICS_H__
 
+#include <assert.h>
+
+#include <sys/Optional.h>
+
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -40,9 +44,7 @@ namespace six
  */
 struct CorrCoefs
 {
-    CorrCoefs()
-    {
-    }
+    CorrCoefs() = default;
 
     double p1p2;
     double p1p3;
@@ -79,10 +81,7 @@ struct CorrCoefs
 struct PosVelError
 {
     //!  CorrCoefs are nullptr, since optional
-    PosVelError() :
-        positionDecorr(Init::undefined<DecorrType>())
-    {
-    }
+    PosVelError() = default;
 
     //! Coordinate frame used for expressing P,V error statistics
     FrameType frame;
@@ -98,7 +97,11 @@ struct PosVelError
     mem::ScopedCopyablePtr<CorrCoefs> corrCoefs;
 
     //! Can be none, make sure to set this undefined()
-    DecorrType positionDecorr;
+    DecorrType positionDecorr = Init::undefined<DecorrType>();
+    InitRef<DecorrType> PositionDecorr() const
+    {
+        return make_InitRef(positionDecorr);
+    }
 
     //! Equality operators
     bool operator==(const PosVelError& rhs) const;
@@ -121,34 +124,50 @@ struct RadarSensor
      *  Range bias error standard deviation. 
      *  Range bias at zero range
      */
-    double rangeBias;
+    double rangeBias = Init::undefined<double>();
+    InitRef<double> RangeBias() const
+    {
+        return make_InitRef(rangeBias);
+    }
 
     /*!
      *  (Optional) Payload clock frequency scale factor
      *  standard deviation.
      */
-    double clockFreqSF;
+    double clockFreqSF = Init::undefined<double>();
+    InitRef<double> ClockFreqSF() const
+    {
+        return make_InitRef(clockFreqSF);
+    }
+
     /*!
      * (Optional) Transmit frequency scale factor
      *  standard deviation.
      */
-    double transmitFreqSF;
+    double transmitFreqSF = Init::undefined<double>();
+    InitRef<double> TransmitFreqSF() const
+    {
+        return make_InitRef(clockFreqSF);
+    }
+
     /*!
      *  (Optional) Range bias decorrelated rate
      *
      */
-    DecorrType rangeBiasDecorr;
+    DecorrType rangeBiasDecorr = Init::undefined<DecorrType>();
+    InitRef<DecorrType> RangeBiasDecorr() const
+    {
+        return make_InitRef(rangeBiasDecorr);
+    }
 
-    //!  Constructor
-    RadarSensor();
+    RadarSensor() = default;
 
     //! Equality operator
     bool operator==(const RadarSensor& rhs) const
     {
-        return (rangeBias == rhs.rangeBias && clockFreqSF == rhs.clockFreqSF &&
-            transmitFreqSF == rhs.transmitFreqSF && rangeBiasDecorr == rhs.rangeBiasDecorr);
+        return (RangeBias().get() == rhs.RangeBias().get() && ClockFreqSF().get() == rhs.ClockFreqSF().get() &&
+            TransmitFreqSF().get() == rhs.TransmitFreqSF().get() && RangeBiasDecorr().get() == rhs.RangeBiasDecorr().get());
     }
-
     bool operator!=(const RadarSensor& rhs) const
     {
         return !(*this == rhs);
@@ -168,28 +187,39 @@ struct TropoError
      *  incidence standard deviation.  Expressed as a
      *  two-range error
      */
-    double tropoRangeVertical;
+    double tropoRangeVertical = Init::undefined<double>();
+    InitRef<double> TropoRangeVertical() const
+    {
+        return make_InitRef(tropoRangeVertical);
+    }
 
     /*!
      *  (Optional) Troposphere two-way delay error for SCP COA
      *  incidence angle standard deviation.  Expressed
      *  as a two-way range error
      */
-    double tropoRangeSlant;
+    double tropoRangeSlant = Init::undefined<double>();
+    InitRef<double> TropoRangeSlant() const
+    {
+        return make_InitRef(tropoRangeSlant);
+    }
 
     /*!
      *  (Optional)
      *
      */
-    DecorrType tropoRangeDecorr;
+    DecorrType tropoRangeDecorr = Init::undefined<DecorrType>();
+    InitRef<DecorrType> TropoRangeDecorr() const
+    {
+        return make_InitRef(tropoRangeDecorr);
+    }
 
-    //!  Constructor
-    TropoError();
+    TropoError() = default;
 
     bool operator==(const TropoError& rhs) const
     {
-        return (tropoRangeVertical == rhs.tropoRangeVertical && tropoRangeSlant == rhs.tropoRangeSlant &&
-            tropoRangeDecorr == rhs.tropoRangeDecorr);
+        return (TropoRangeVertical().get() == rhs.TropoRangeVertical().get() && TropoRangeSlant().get() == rhs.TropoRangeSlant().get() &&
+            TropoRangeDecorr().get() == rhs.TropoRangeDecorr().get());
     }
 
     bool operator!=(const TropoError& rhs) const
@@ -211,35 +241,50 @@ struct IonoError
      *  incidence standard deviation.  Expressed as a
      *  two-way range error
      */
-    double ionoRangeVertical;
+    double ionoRangeVertical = Init::undefined<double>();
+    InitRef<double> IonoRangeVertical() const
+    {
+        return make_InitRef(ionoRangeVertical);
+    }
 
     /*!
      *  (Optional) Ionosphere two-way delay rate of change
      *  error for normal incidence standard deviation.
      *  Expressed as a two-way range error
      */
-    double ionoRangeRateVertical;
+    double ionoRangeRateVertical = Init::undefined<double>();
+    InitRef<double> IonoRangeRateVertical() const
+    {
+        return make_InitRef(ionoRangeRateVertical);
+    }
 
     /*!
      *  Ionosphere range error and range rate error correlation
      *  coefficient.
      *
      */
-    double ionoRgRgRateCC;
+    double ionoRgRgRateCC = Init::undefined<double>();
+    InitRef<double> IonoRgRgRateCC() const
+    {
+        return make_InitRef(ionoRgRgRateCC);
+    }
     
     /*!
      *  Ionosphere range error decorrelation ratio
      */
-    DecorrType ionoRangeVertDecorr;
+    DecorrType ionoRangeVertDecorr = Init::undefined<DecorrType>();
+    InitRef<DecorrType> IonoRangeVertDecorr() const
+    {
+        return make_InitRef(ionoRangeVertDecorr);
+    }
 
-    //!  Constructor
-    IonoError();
+    IonoError() = default;
 
     //! Equality operator
     bool operator==(const IonoError& rhs) const
     {
-        return (ionoRangeRateVertical == rhs.ionoRangeRateVertical && ionoRangeVertical == ionoRangeVertical &&
-            ionoRgRgRateCC == rhs.ionoRgRgRateCC && ionoRangeVertDecorr == rhs.ionoRangeVertDecorr);
+        return (IonoRangeRateVertical().get() == rhs.IonoRangeRateVertical().get() && IonoRangeVertical().get() == IonoRangeVertical().get() &&
+            IonoRgRgRateCC().get() == rhs.IonoRgRgRateCC().get() && IonoRangeVertDecorr().get() == rhs.IonoRangeVertDecorr().get());
     }
 
     bool operator!=(const IonoError& rhs) const
@@ -257,15 +302,63 @@ struct IonoError
  */
 struct Components
 {
-    //!  Constructor
-    Components()
-    {
-    }
+    Components() = default;
 
     mem::ScopedCopyablePtr<PosVelError> posVelError;
+    void reset(PosVelError* value)
+    {
+        posVelError.reset(value);
+    }
+    const PosVelError* getPosVelError() const
+    {
+        return posVelError.get();
+    }
+    PosVelError* getPosVelError()
+    {
+        return posVelError.get();
+    }
+
     mem::ScopedCopyablePtr<RadarSensor> radarSensor;
+    void reset(RadarSensor* value)
+    {
+        radarSensor.reset(value);
+    }
+    const RadarSensor* getRadarSensor() const
+    {
+        return radarSensor.get();
+    }
+    RadarSensor* getRadarSensor()
+    {
+        return radarSensor.get();
+    }
+
     mem::ScopedCopyablePtr<TropoError> tropoError;
+    void reset(TropoError* value)
+    {
+        tropoError.reset(value);
+    }
+    const TropoError* getTropoError() const
+    {
+        return tropoError.get();
+    }
+    TropoError* getTropoError()
+    {
+        return tropoError.get();
+    }
+
     mem::ScopedCopyablePtr<IonoError> ionoError;
+    void reset(IonoError* value)
+    {
+        ionoError.reset(value);
+    }
+    const IonoError* getIonoError() const
+    {
+        return ionoError.get();
+    }
+    IonoError* getIonoError()
+    {
+        return ionoError.get();
+    }
 
     //! Equality operator
     bool operator==(const Components& rhs) const
@@ -273,7 +366,6 @@ struct Components
         return (posVelError == rhs.posVelError && radarSensor == rhs.radarSensor &&
             tropoError == rhs.tropoError && ionoError == rhs.ionoError);
     }
-
     bool operator!=(const Components& rhs) const
     {
         return !(*this == rhs);
@@ -311,7 +403,7 @@ struct CompositeSCP
     {
     }
 
-    SCPType scpType;
+    SCPType scpType = RG_AZ;
 
     //!  SICD/SIDD Rg or Row, depending on scpType
     double xErr;
@@ -328,7 +420,6 @@ struct CompositeSCP
         return (xErr == rhs.xErr && yErr == rhs.yErr &&
             xyErr == rhs.xyErr && scpType == rhs.scpType);
     }
-
     bool operator!=(const CompositeSCP& rhs) const
     {
         return !(*this == rhs);
@@ -349,12 +440,36 @@ struct ErrorStatistics
      *  center point
      */
     mem::ScopedCopyablePtr<CompositeSCP> compositeSCP;
+    void reset(CompositeSCP* pValue)
+    {
+        compositeSCP.reset(pValue);
+    }
+    const CompositeSCP* getCompositeSCP() const
+    {
+        return compositeSCP.get();
+    }
+    CompositeSCP* getCompositeSCP()
+    {
+        return compositeSCP.get();
+    }
 
     /*!
      *  (Optional) error statistics components
      *
      */
     mem::ScopedCopyablePtr<Components> components;
+    void reset(Components* pValue)
+    {
+        components.reset(pValue);
+    }
+    const Components* getComponents() const
+    {
+        return components.get();
+    }
+    Components* getComponents()
+    {
+        return components.get();
+    }
 
     /*!
      *  Additional parameters
@@ -362,9 +477,7 @@ struct ErrorStatistics
      */
     ParameterCollection additionalParameters;
 
-    ErrorStatistics()
-    {
-    }
+    ErrorStatistics() = default;
 
     //! Equality operators
     bool operator==(const ErrorStatistics& rhs) const
@@ -372,7 +485,6 @@ struct ErrorStatistics
         return (compositeSCP == rhs.compositeSCP && components == rhs.components &&
             additionalParameters == rhs.additionalParameters);
     }
-
     bool operator!=(const ErrorStatistics& rhs) const
     {
         return !(*this == rhs);

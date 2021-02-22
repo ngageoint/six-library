@@ -148,7 +148,7 @@ void NITFImageInfo::computeSegmentCorners()
     size_t i;
     for (i = 0; i < numIS; i++)
     {
-        size_t firstRow = mImageSegments[i].firstRow;
+        const auto firstRow = mImageSegments[i].getFirstRow();
         double wgt1 = (total - firstRow) / total;
         double wgt2 = firstRow / total;
 

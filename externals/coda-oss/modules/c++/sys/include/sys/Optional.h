@@ -27,7 +27,7 @@
 #include <stdexcept>
 #include <utility>
 
-#include "Conf.h"
+#include "CPlusPlus.h"
 
 // Simple version of std::Optional since that doesn't exist until C++17.
 //
@@ -37,25 +37,58 @@
 // http://en.cppreference.com/w/cpp/utility/Optional
 namespace sys
 {
+namespace details
+{
+    inline void throw_bad_optional_access()
+    {
+        throw std::logic_error("No value for Optional<>.");  // TODO: std::bad_optional_access
+    }
+}
+
 template <typename T>
 class Optional  // no "final" as SWIG doesn't like it
 {
     T value_;
     bool has_value_ = false;
 
+    inline void check_has_value() const
+    {
+        if (!has_value())
+        {
+            details::throw_bad_optional_access();
+        }
+    }
+
 public:
     using value_type = T;
 
+    #if defined(_MSC_VER) && _PREFAST_ // Visual Studio /analyze
+    __pragma(warning(push))
+    __pragma(warning(disable: 26495)) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
+    #endif
     Optional() noexcept
     {
     }
+    #if defined(_MSC_VER) && _PREFAST_
+    __pragma(warning(pop))
+    #endif
     Optional(const value_type& v) : value_(v), has_value_(true)
     {
     }
-    Optional(const Optional& other) :
-        value_(other.value_), has_value_(other.has_value_)
+    #if defined(_MSC_VER) && _PREFAST_ // Visual Studio /analyze
+    __pragma(warning(push))
+    __pragma(warning(disable: 26495)) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
+    #endif
+    Optional(const Optional& other) : has_value_(other.has_value_)
     {
+        if (has_value())
+        {
+            value_ = other.value_;
+        }
     }
+    #if defined(_MSC_VER) && _PREFAST_
+    __pragma(warning(pop))
+    #endif
 
     template <typename... Args>  // https://en.cppreference.com/w/cpp/utility/Optional/emplace
     T& emplace(Args&&... args)
@@ -63,6 +96,14 @@ public:
         value_ = value_type(std::forward<Args>(args)...);
         has_value_ = true;
         return value_;
+    }
+
+    template<typename U = T> // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    Optional& operator=(U&& value)
+    {
+        value_ = std::forward<U>(value);
+        has_value_ = true;
+        return *this;
     }
 
     bool has_value() const noexcept
@@ -82,62 +123,56 @@ public:
     // https://en.cppreference.com/w/cpp/utility/optional/value
     T& value() &
     {
-        if (!has_value())
-        {
-            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
-        }
+        check_has_value();
         return value_;
     }
     const T& value() const&
     {
-        if (!has_value())
-        {
-            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
-        }
+        check_has_value();
         return value_;
     }
     T&& value() &&
     {
-        if (!has_value())
-        {
-            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
-        }
+        check_has_value();
         return value_;
     }
     const T&& value() const&&
     {
-        if (!has_value())
-        {
-            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
-        }
+        check_has_value();
         return value_;
     }
 
     // https://en.cppreference.com/w/cpp/utility/optional/operator*
     const T* operator->() const
     {
+        assert(has_value());
         return &value_; // "This operator does not check whether the optional contains a value!"
     }
     T* operator->()
     {
-        return &value_; // "This operator does not check whether the optional contains a value!"
+        assert(has_value());
+        return &value_;  // "This operator does not check whether the optional contains a value!"
     }
 
     const T& operator*() const&
     {
-        return value_; // "This operator does not check whether the optional contains a value!"
+        assert(has_value());
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
     T& operator*() &
     {
-        return value_; // "This operator does not check whether the optional contains a value!"
+        assert(has_value());
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
     const T&& operator*() const&&
     {
-        return value_; // "This operator does not check whether the optional contains a value!"
+        assert(has_value());
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
     T&& operator*() &&
     {
-        return value_; // "This operator does not check whether the optional contains a value!"
+        assert(has_value());
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
 
     // https://en.cppreference.com/w/cpp/utility/optional/value_or
@@ -371,6 +406,16 @@ namespace coda_oss
         return sys::make_Optional<T>(std::forward<TArgs>(args)...);
     }
     #endif
+}
+
+#include "str/Convert.h"
+namespace str
+{
+template <typename T>
+std::string toString(const sys::Optional<T>& value)
+{
+    return toString(value.value());
+}
 }
 
 #endif  // CODA_OSS_sys_Optional_h_INCLUDED_

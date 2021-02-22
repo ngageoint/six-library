@@ -22,8 +22,10 @@
 #ifndef __SIX_DISPLAY_H__
 #define __SIX_DISPLAY_H__
 
+#include <sys/Optional.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
+
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Parameter.h>
@@ -418,13 +420,13 @@ struct InteractiveProcessing
  */
 struct Display
 {
-    Display();
+    Display() = default;
 
     /*!
      *  Defines the pixel type, based on enumeration and definition in
      *  D&E
      */
-    PixelType pixelType;
+    PixelType pixelType = PixelType::NOT_SET;
 
     // Beginning of SIDD 1.0-only section
 
@@ -437,12 +439,12 @@ struct Display
     /*!
      *  (Optional) Recommended ELT magnification method for this data.
      */
-    MagnificationMethod magnificationMethod;
+    MagnificationMethod magnificationMethod = MagnificationMethod::NOT_SET;
 
     /*!
      *  (Optional) Recommended ELT decimation method for this data.
      */
-    DecimationMethod decimationMethod;
+    DecimationMethod decimationMethod = DecimationMethod::NOT_SET;
 
     /*!
      * (Optional) Recommended ELT DRA overrides.
@@ -462,7 +464,7 @@ struct Display
     //Required
     size_t numBands;
     //Optional
-    size_t defaultBandDisplay;
+    size_t defaultBandDisplay = six::Init::undefined<size_t>();
 
     //Required
     std::vector<mem::ScopedCopyablePtr<NonInteractiveProcessing> >

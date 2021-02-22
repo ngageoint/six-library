@@ -53,29 +53,6 @@ bool PosVelError::operator==(const PosVelError& rhs) const
         v2 == rhs.v2 &&
         v3 == rhs.v3 &&
         corrCoefs == rhs.corrCoefs &&
-        positionDecorr == rhs.positionDecorr);
-}
-
-RadarSensor::RadarSensor() :
-    rangeBias(Init::undefined<double>()),
-    clockFreqSF(Init::undefined<double>()),
-    transmitFreqSF(Init::undefined<double>()),
-    rangeBiasDecorr(Init::undefined<DecorrType>())
-{
-}
-
-TropoError::TropoError() :
-    tropoRangeVertical(Init::undefined<double>()),
-    tropoRangeSlant(Init::undefined<double>()),
-    tropoRangeDecorr(Init::undefined<DecorrType>())
-{
-}
-
-IonoError::IonoError() :
-    ionoRangeVertical(Init::undefined<double>()),
-    ionoRangeRateVertical(Init::undefined<double>()),
-    ionoRgRgRateCC(Init::undefined<double>()),
-    ionoRangeVertDecorr(Init::undefined<DecorrType>())
-{
+        PositionDecorr().get() == rhs.PositionDecorr().get());
 }
 }

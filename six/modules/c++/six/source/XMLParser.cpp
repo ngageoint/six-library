@@ -21,6 +21,7 @@
  */
 #include <six/XMLParser.h>
 
+#include <assert.h>
 #include <string>
 
 #include <nitf/coda-oss.hpp>
@@ -186,17 +187,47 @@ XMLElem XMLParser::createInt(const std::string& name, int p, XMLElem parent) con
 XMLElem XMLParser::createDouble(const std::string& name,
         const std::string& uri, double p, XMLElem parent) const
 {
+    assert(six::Init::isDefined(p));
+
     const auto elementValue = toString(name, p, parent);
     XMLElem elem = newElement(name, uri, elementValue, parent);
     addClassAttributes(*elem, "xs:double");
 
     return elem;
 }
+XMLElem XMLParser::createDouble(const std::string& name,
+        const std::string& uri, const std::optional<double>& p, XMLElem parent) const
+{
+    return createDouble(name, uri, p.value(), parent);
+}
+XMLElem XMLParser::createOptionalDouble(const std::string& name,
+        const std::string& uri, double p, XMLElem parent) const
+{
+    if (six::Init::isDefined(p))
+    {
+        return createDouble(name, uri, p, parent);
+    }
+    return nullptr;
+}
 
 XMLElem XMLParser::createDouble(const std::string& name, double p,
         XMLElem parent) const
 {
     return createDouble(name, mDefaultURI, p, parent);
+}
+XMLElem XMLParser::createDouble(const std::string& name, const std::optional<double>& p,
+    XMLElem parent) const
+{
+    return createDouble(name, p.value(), parent);
+}
+XMLElem XMLParser::createOptionalDouble(const std::string& name, double p,
+    XMLElem parent) const
+{
+    if (six::Init::isDefined(p))
+    {
+        return createDouble(name, p, parent);
+    }
+    return nullptr;
 }
 
 XMLElem XMLParser::createBooleanType(const std::string& name,
@@ -304,11 +335,21 @@ static void parseValue(logging::Logger& log, TGetValue getValue)
     }
 }
 
-void XMLParser::parseDouble(XMLElem element, double& value) const
+void XMLParser::parseDouble(XMLElem element, std::optional<double>& value) const
 {
     parseValue(*mLog, [&]() {
         value = xml::lite::getValue<double>(*element);
         });
+}
+bool XMLParser::parseDouble(XMLElem element, double& value) const
+{
+    std::optional<double> result;
+    parseDouble(element, result);
+    if (result.has_value())
+    {
+        value = result.value();
+    }
+    return result.has_value();
 }
 
 void XMLParser::parseComplex(XMLElem element, std::complex<double>& value) const
