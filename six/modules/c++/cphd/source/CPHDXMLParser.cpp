@@ -1567,8 +1567,7 @@ void CPHDXMLParser::fromXML(const XMLElem antennaXML, Antenna& antenna)
     {
         parseString(getFirstAndOnly(antPatternXMLVec[ii], "Identifier"), antenna.antPattern[ii].identifier);
         parseDouble(getFirstAndOnly(antPatternXMLVec[ii], "FreqZero"), antenna.antPattern[ii].freqZero);
-        XMLElem gainZeroXML = getOptional(antPatternXMLVec[ii], "GainZero");
-        parseOptionalDouble(gainZeroXML, antenna.antPattern[ii].gainZero);
+        parseOptionalDouble(antPatternXMLVec[ii], "GainZero", antenna.antPattern[ii].gainZero);
         XMLElem ebFreqShiftXML = getOptional(antPatternXMLVec[ii], "EBFreqShift");
         if(ebFreqShiftXML)
         {
@@ -1639,8 +1638,7 @@ void CPHDXMLParser::fromXML(const XMLElem txRcvXML, TxRcv& txRcv)
         parseTxRcvParameter(txWFXMLVec[ii], txRcv.txWFParameters[ii]);
         parseDouble(getFirstAndOnly(txWFXMLVec[ii], "PulseLength"), txRcv.txWFParameters[ii].pulseLength);
         parseDouble(getFirstAndOnly(txWFXMLVec[ii], "RFBandwidth"), txRcv.txWFParameters[ii].rfBandwidth);
-        XMLElem powerXML = getOptional(txWFXMLVec[ii], "Power");
-        parseOptionalDouble(powerXML, txRcv.txWFParameters[ii].power);
+        parseOptionalDouble(txWFXMLVec[ii], "Power", txRcv.txWFParameters[ii].power);
     }
 
     std::vector<XMLElem> rcvXMLVec;
@@ -1656,8 +1654,7 @@ void CPHDXMLParser::fromXML(const XMLElem txRcvXML, TxRcv& txRcv)
         parseDouble(getFirstAndOnly(rcvXMLVec[ii], "WindowLength"), txRcv.rcvParameters[ii].windowLength);
         parseDouble(getFirstAndOnly(rcvXMLVec[ii], "SampleRate"), txRcv.rcvParameters[ii].sampleRate);
         parseDouble(getFirstAndOnly(rcvXMLVec[ii], "IFFilterBW"), txRcv.rcvParameters[ii].ifFilterBW);
-        XMLElem pathGainXML = getOptional(rcvXMLVec[ii], "PathGain");
-        parseOptionalDouble(pathGainXML, txRcv.rcvParameters[ii].pathGain);
+        parseOptionalDouble(rcvXMLVec[ii], "PathGain", txRcv.rcvParameters[ii].pathGain);
     }
 
 }
@@ -1675,11 +1672,8 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
         XMLElem radarSensorXML = getFirstAndOnly(monostaticXML, "RadarSensor");
         parseDouble(getFirstAndOnly(radarSensorXML, "RangeBias"), errParam.monostatic->radarSensor.rangeBias);
 
-        XMLElem clockFreqSFXML = getOptional(radarSensorXML, "ClockFreqSF");
-        parseOptionalDouble(clockFreqSFXML, errParam.monostatic->radarSensor.clockFreqSF);
-
-        XMLElem collectionStartTimeXML = getOptional(radarSensorXML, "CollectionStartTime");
-        parseOptionalDouble(collectionStartTimeXML, errParam.monostatic->radarSensor.collectionStartTime);
+        parseOptionalDouble(radarSensorXML, "ClockFreqSF", errParam.monostatic->radarSensor.clockFreqSF);
+        parseOptionalDouble(radarSensorXML, "CollectionStartTime", errParam.monostatic->radarSensor.collectionStartTime);
 
         XMLElem rangeBiasDecorrXML = getOptional(radarSensorXML, "RangeBiasDecorr");
         if(rangeBiasDecorrXML)
@@ -1692,12 +1686,9 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
         if(tropoErrorXML)
         {
             errParam.monostatic->tropoError.reset(new six::TropoError());
-            XMLElem verticalXML = getOptional(tropoErrorXML, "TropoRangeVertical");
-            parseOptionalDouble(verticalXML, errParam.monostatic->tropoError->tropoRangeVertical);
-            XMLElem slantXML = getOptional(tropoErrorXML, "TropoRangeSlant");
-            parseOptionalDouble(slantXML, errParam.monostatic->tropoError->tropoRangeSlant);
-            XMLElem decorrXML = getOptional(tropoErrorXML, "TropoRangeDecorr");
-            mCommon.parseOptionalDecorrType(decorrXML, errParam.monostatic->tropoError->tropoRangeDecorr);
+            parseOptionalDouble(tropoErrorXML, "TropoRangeVertical", errParam.monostatic->tropoError->tropoRangeVertical);
+            parseOptionalDouble(tropoErrorXML, "TropoRangeSlant", errParam.monostatic->tropoError->tropoRangeSlant);
+            mCommon.parseOptionalDecorrType(tropoErrorXML, "TropoRangeDecorr", errParam.monostatic->tropoError->tropoRangeDecorr);
         }
 
         XMLElem ionoErrorXML = getFirstAndOnly(monostaticXML, "IonoError");
@@ -1706,12 +1697,9 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
             errParam.monostatic->ionoError.reset(new six::IonoError());
             parseDouble(getFirstAndOnly(ionoErrorXML, "IonoRangeVertical"), errParam.monostatic->ionoError->ionoRangeVertical);
 
-            XMLElem rateVerticalXML = getOptional(ionoErrorXML, "IonoRangeRateVertical");
-            parseOptionalDouble(rateVerticalXML, errParam.monostatic->ionoError->ionoRangeRateVertical);
-            XMLElem rgrgRateCCXML = getOptional(ionoErrorXML, "IonoRgRgRateCC");
-            parseOptionalDouble(rgrgRateCCXML, errParam.monostatic->ionoError->ionoRgRgRateCC);
-            XMLElem decorrXML = getOptional(ionoErrorXML, "IonoRangeVertDecorr");
-            mCommon.parseOptionalDecorrType(decorrXML, errParam.monostatic->ionoError->ionoRangeVertDecorr);
+            parseOptionalDouble(ionoErrorXML, "IonoRangeRateVertical", errParam.monostatic->ionoError->ionoRangeRateVertical);
+            parseOptionalDouble(ionoErrorXML, "IonoRgRgRateCC", errParam.monostatic->ionoError->ionoRgRgRateCC);
+            mCommon.parseOptionalDecorrType(ionoErrorXML, "IonoRangeVertDecorr", errParam.monostatic->ionoError->ionoRangeVertDecorr);
         }
         mCommon.parseParameters(monostaticXML, "Parameter", errParam.monostatic->parameter);
     }
@@ -1972,8 +1960,7 @@ void CPHDXMLParser::parseChannelParameters(
 
     parseDouble(getFirstAndOnly(paramXML, "FxC"), param.fxC);
     parseDouble(getFirstAndOnly(paramXML, "FxBW"), param.fxBW);
-    XMLElem FxBWNoiseXML = getOptional(paramXML, "FxBWNoise");
-    parseOptionalDouble(FxBWNoiseXML, param.fxBWNoise);
+    parseOptionalDouble(paramXML, "FxBWNoise", param.fxBWNoise);
     parseDouble(getFirstAndOnly(paramXML, "TOASaved"), param.toaSaved);
 
     XMLElem toaExtendedXML = getOptional(paramXML, "TOAExtended");
@@ -2196,17 +2183,15 @@ void CPHDXMLParser::parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError&
         parseDouble(getFirstAndOnly(corrCoefsXML, "V2V3"), posVelErr.corrCoefs->v2v3);
     }
 
-    XMLElem posDecorrXML = getOptional(posVelErrXML, "PositionDecorr");
     // posVelErr.positionDecorr.reset(new six::DecorrType());
-    mCommon.parseOptionalDecorrType(posDecorrXML, posVelErr.positionDecorr);
+    mCommon.parseOptionalDecorrType(posVelErrXML, "PositionDecorr", posVelErr.positionDecorr);
 }
 
 void CPHDXMLParser::parsePlatform(XMLElem platXML, ErrorParameters::Bistatic::Platform& plat) const
 {
     parsePosVelErr(getFirstAndOnly(platXML, "PosVelErr"), plat.posVelErr);
     XMLElem radarSensorXML = getFirstAndOnly(platXML, "RadarSensor");
-    XMLElem clockFreqSFXML = getOptional(radarSensorXML, "ClockFreqSF");
-    parseOptionalDouble(clockFreqSFXML, plat.radarSensor.clockFreqSF);
+    parseOptionalDouble(radarSensorXML, "ClockFreqSF", plat.radarSensor.clockFreqSF);
     parseDouble(getFirstAndOnly(radarSensorXML, "CollectionStartTime"), plat.radarSensor.collectionStartTime);
 }
 
@@ -2229,8 +2214,7 @@ void CPHDXMLParser::parseTxRcvParameter(const XMLElem paramXML, ParameterType& p
 {
     parseString(getFirstAndOnly(paramXML, "Identifier"), param.identifier);
     parseDouble(getFirstAndOnly(paramXML, "FreqCenter"), param.freqCenter);
-    XMLElem lfmRateXML = getOptional(paramXML, "LFMRate");
-    parseOptionalDouble(lfmRateXML, param.lfmRate);
+    parseOptionalDouble(paramXML, "LFMRate", param.lfmRate);
     param.polarization = PolarizationType(getFirstAndOnly(paramXML, "Polarization")->getCharacterData());
 }
 }

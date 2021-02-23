@@ -189,7 +189,7 @@ protected:
     }
 
     void parseDouble(XMLElem element, double& value) const;
-    void parseOptionalDouble(XMLElem element, double& value) const;
+    void parseOptionalDouble(XMLElem parent, const std::string& tag, double& value) const;
     void parseComplex(XMLElem element, std::complex<double>& value) const;
     void parseString(XMLElem element, std::string& value) const;
     void parseBooleanType(XMLElem element, BooleanType& value) const;

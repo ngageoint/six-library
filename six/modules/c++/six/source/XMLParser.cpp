@@ -327,14 +327,15 @@ void XMLParser::parseDouble(XMLElem element, double& value) const
         });
 }
 
-void XMLParser::parseOptionalDouble(XMLElem element, double& value) const
+void XMLParser::parseOptionalDouble(XMLElem parent, const std::string& tag, double& value) const
 {
+    auto element = getOptional(parent, tag);
     if (element)
     {
-        //optional
         parseDouble(element, value);
     }
 }
+
 
 void XMLParser::parseComplex(XMLElem element, std::complex<double>& value) const
 {

@@ -157,7 +157,7 @@ public:
             ParameterCollection& props) const;
 
     void parseDecorrType(XMLElem decorrXML, DecorrType& decorrType) const;
-    void parseOptionalDecorrType(XMLElem decorrXML, DecorrType& decorrType) const;
+    void parseOptionalDecorrType(XMLElem parent, const std::string& tag, DecorrType& decorrType) const;
 
     void parseFootprint(XMLElem footprint,
             const std::string& cornerName, LatLonCorners& corners) const;
