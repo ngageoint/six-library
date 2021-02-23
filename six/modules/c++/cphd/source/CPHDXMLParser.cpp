@@ -762,12 +762,8 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
             createDouble("V1V3", errParams.monostatic->posVelErr.corrCoefs->v1v3, corrCoefsXML);
             createDouble("V2V3", errParams.monostatic->posVelErr.corrCoefs->v2v3, corrCoefsXML);
         }
-        if(!six::Init::isUndefined(errParams.monostatic->posVelErr.positionDecorr))
-        {
-            XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
-            createDouble("CorrCoefZero", errParams.monostatic->posVelErr.positionDecorr.corrCoefZero, positionDecorrXML);
-            createDouble("DecorrRate", errParams.monostatic->posVelErr.positionDecorr.decorrRate, positionDecorrXML);
-        }
+        createDecorrType("PositionDecorr", errParams.monostatic->posVelErr.positionDecorr, posVelErrXML);
+
         // RadarSensor
         XMLElem radarXML = newElement("RadarSensor", monoXML);
         createDouble("RangeBias", errParams.monostatic->radarSensor.rangeBias, radarXML);
@@ -785,12 +781,7 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
             XMLElem tropoXML = newElement("TropoError", monoXML);
             createOptionalDouble("TropoRangeVertical", errParams.monostatic->tropoError->tropoRangeVertical, tropoXML);
             createOptionalDouble("TropoRangeSlant", errParams.monostatic->tropoError->tropoRangeSlant, tropoXML);
-            if (!six::Init::isUndefined(errParams.monostatic->tropoError->tropoRangeDecorr))
-            {
-                XMLElem tropoDecorrXML = newElement("TropoRangeDecorr", tropoXML);
-                createDouble("CorrCoefZero", errParams.monostatic->tropoError->tropoRangeDecorr.corrCoefZero, tropoDecorrXML);
-                createDouble("DecorrRate", errParams.monostatic->tropoError->tropoRangeDecorr.decorrRate, tropoDecorrXML);
-            }
+            createDecorrType("TropoRangeDecorr", errParams.monostatic->tropoError->tropoRangeDecorr, tropoXML);
         }
         if (errParams.monostatic->ionoError.get())
         {
@@ -798,12 +789,7 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
             createDouble("IonoRangeVertical", errParams.monostatic->ionoError->ionoRangeVertical, ionoXML);
             createOptionalDouble("IonoRangeRateVertical", errParams.monostatic->ionoError->ionoRangeRateVertical, ionoXML);
             createOptionalDouble("IonoRgRgRateCC", errParams.monostatic->ionoError->ionoRgRgRateCC, ionoXML);
-            if (!six::Init::isUndefined(errParams.monostatic->ionoError->ionoRangeVertDecorr))
-            {
-                XMLElem ionoDecorrXML = newElement("IonoRangeVertDecorr", ionoXML);
-                createDouble("CorrCoefZero", errParams.monostatic->ionoError->ionoRangeVertDecorr.corrCoefZero, ionoDecorrXML);
-                createDouble("DecorrRate", errParams.monostatic->ionoError->ionoRangeVertDecorr.decorrRate, ionoDecorrXML);
-            }
+            createDecorrType("IonoRangeVertDecorr", errParams.monostatic->tropoError->tropoRangeDecorr, ionoXML);
         }
         if (errParams.monostatic->parameter.size() > 0)
         {
@@ -1879,13 +1865,21 @@ XMLElem CPHDXMLParser::createErrorParamPlatform(
         createDouble("V1V3", p.posVelErr.corrCoefs->v1v3, corrCoefsXML);
         createDouble("V2V3", p.posVelErr.corrCoefs->v2v3, corrCoefsXML);
     }
-    if(!six::Init::isUndefined(p.posVelErr.positionDecorr))
-    {
-        XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
-        createDouble("CorrCoefZero", p.posVelErr.positionDecorr.corrCoefZero, positionDecorrXML);
-        createDouble("DecorrRate", p.posVelErr.positionDecorr.decorrRate, positionDecorrXML);
-    }
+    createDecorrType("PositionDecorr", p.posVelErr.positionDecorr, posVelErrXML);
     return posVelErrXML;
+}
+
+XMLElem CPHDXMLParser::createDecorrType(const std::string& name, const six::DecorrType& dt,
+    XMLElem parent) const
+{
+    if (six::Init::isDefined(dt))
+    {
+        XMLElem element = newElement(name, parent);
+        createDouble("CorrCoefZero", dt.corrCoefZero, element);
+        createDouble("DecorrRate", dt.decorrRate, element);
+        return element;
+    }
+    return nullptr;
 }
 
 /*
