@@ -37,7 +37,7 @@ namespace nitf
  *  \class NITFException
  *  \brief  The C++ wrapper for the nitf_Error
  */
-class NITFException final : public except::Exception
+class NITFException  /*final*/ : public except::Exception // no "final", SWIG doesn't like it
 {
     static except::Context make_Context_(const nitf_Error* error, const std::string& message)
     {

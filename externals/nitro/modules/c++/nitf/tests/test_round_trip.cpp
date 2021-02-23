@@ -65,7 +65,7 @@ private:
 };
 
 // RAII for managing a list of RowStreamer's
-struct RowStreamers final
+struct RowStreamers /*final*/   // no "final", SWIG doesn't like it
 {
     nitf::RowSourceCallback* add(uint32_t band,
                                  uint32_t numCols,

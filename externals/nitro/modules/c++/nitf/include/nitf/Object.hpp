@@ -213,8 +213,9 @@ void operator()(Package_##_##Name_ * nativeObject) override \
     DECLARE_CLASS_IN_operator_function_(Name_, Package_)
 #endif
 
+// SWIG doesn't like "final"
 #define DECLARE_CLASS_IN(_Name, _Package) \
-    struct _Name##Destructor final : public nitf::MemoryDestructor<_Package##_##_Name> \
+    struct _Name##Destructor /*final*/ : public nitf::MemoryDestructor<_Package##_##_Name> \
     { DECLARE_CLASS_IN_operator_function(_Name, _Package) }; \
     class _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
 
