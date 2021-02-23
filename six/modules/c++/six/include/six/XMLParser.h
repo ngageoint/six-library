@@ -110,12 +110,6 @@ protected:
 
     XMLElem createInt(const std::string& name, const std::string& uri,
            int p = 0, XMLElem parent = nullptr) const;
-    template<typename T>
-    XMLElem createInt(const std::string& name, const std::string& uri,
-           const std::optional<T>& p, XMLElem parent = nullptr) const
-    {
-        return createInt(name, uri, p.value(), parent);
-    }
 
     XMLElem createInt(const std::string& name,
             const std::string& uri, const std::string& p = "",
@@ -126,7 +120,9 @@ protected:
     XMLElem createDouble(const std::string& name,
         const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
     XMLElem createOptionalDouble(const std::string& name,
-        const std::string& uri, double p, XMLElem parent = nullptr) const;
+        const std::string& uri, const double& p, XMLElem parent = nullptr) const;
+    XMLElem createOptionalDouble(const std::string& name,
+        const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
 
     XMLElem createBooleanType(const std::string& name,
            const std::string& uri, BooleanType b, XMLElem parent = nullptr) const;
@@ -158,18 +154,14 @@ protected:
     }
     XMLElem createInt(const std::string& name, int p = 0,
             XMLElem parent = nullptr) const;
-    template<typename T>
-    XMLElem createInt(const std::string& name, const std::optional<T>& p,
-        XMLElem parent = nullptr) const
-    {
-        return createInt(name, p.value(), parent);
-    }
     XMLElem createDouble(const std::string& name, double p = 0,
             XMLElem parent = nullptr) const;
     XMLElem createDouble(const std::string& name, const std::optional<double>& p,
+        XMLElem parent = nullptr) const;
+    XMLElem createOptionalDouble(const std::string& name, const double& p,
             XMLElem parent = nullptr) const;
-    XMLElem createOptionalDouble(const std::string& name, double p,
-            XMLElem parent = nullptr) const;
+    XMLElem createOptionalDouble(const std::string& name, const std::optional<double>& p,
+        XMLElem parent = nullptr) const;
     XMLElem createBooleanType(const std::string& name, BooleanType b,
             XMLElem parent = nullptr) const;
     XMLElem createDateTime(const std::string& name, const DateTime& p,
@@ -180,7 +172,7 @@ protected:
             XMLElem parent = nullptr) const;
 
     template <typename T>
-    void parseInt(XMLElem element, std::optional<T>& value) const
+    void parseInt(XMLElem element, T& value) const
     {
         try
         {
@@ -191,31 +183,11 @@ protected:
             mLog->warn(Ctxt("Unable to parse: " + ex.toString()));
         }
     }
-    template <typename T>
-    void parseInt(XMLElem element, T& value) const
-    {
-        std::optional<T> result;
-        parseInt(element, result);
-        if (result.has_value())
-        {
-            value = result.value();
-        }
-    }
 
-    template <typename T>
-    void parseUInt(XMLElem element, std::optional<T>& value) const
-    {
-        parseInt<T>(element, value);
-    }
     template <typename T>
     void parseUInt(XMLElem element, T& value) const
     {
-        std::optional<T> result;
-        parseUInt(element, result);
-        if (result.has_value())
-        {
-            value = result.value();
-        }
+        parseInt<T>(element, value);
     }
 
     template <typename T>
@@ -228,6 +200,8 @@ protected:
 
     bool parseDouble(XMLElem element, double& value) const;
     void parseDouble(XMLElem element, std::optional<double>& value) const;
+    void parseOptionalDouble(XMLElem parent, const std::string& tag, double& value) const;
+    void parseOptionalDouble(XMLElem parent, const std::string& tag, std::optional<double>& value) const;
     void parseComplex(XMLElem element, std::complex<double>& value) const;
     void parseString(XMLElem element, std::string& value) const;
     void parseBooleanType(XMLElem element, BooleanType& value) const;
