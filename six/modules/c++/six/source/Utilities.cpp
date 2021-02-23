@@ -1249,8 +1249,9 @@ void six::getErrors(const ErrorStatistics* errorStats,
 
                 if (has_value(radarSensor.rangeBiasDecorr))
                 {
-                    errors.mRangeCorrCoefZero = radarSensor.rangeBiasDecorr.corrCoefZero;
-                    errors.mRangeDecorrRate = radarSensor.rangeBiasDecorr.decorrRate;
+                    const auto& rangeBiasDecorr = value(radarSensor.rangeBiasDecorr);
+                    errors.mRangeCorrCoefZero = rangeBiasDecorr.corrCoefZero;
+                    errors.mRangeDecorrRate = rangeBiasDecorr.decorrRate;
                 }
 
                 rangeBias = value(radarSensor.rangeBias);
@@ -1271,10 +1272,9 @@ void six::getErrors(const ErrorStatistics* errorStats,
 
                 if (has_value(posVelError.positionDecorr))
                 {
-                    errors.mPositionCorrCoefZero =
-                            posVelError.positionDecorr.corrCoefZero;
-                    errors.mPositionDecorrRate =
-                            posVelError.positionDecorr.decorrRate;
+                    const auto& positionDecorr = value(posVelError.positionDecorr);
+                    errors.mPositionCorrCoefZero = positionDecorr.corrCoefZero;
+                    errors.mPositionDecorrRate = positionDecorr.decorrRate;
                 }
             }
 

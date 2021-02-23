@@ -146,6 +146,8 @@ private:
                                      XMLElem parent) const;
     XMLElem createDecorrType(const std::string& name, const six::DecorrType& dt,
         XMLElem parent) const;
+    XMLElem createDecorrType(const std::string& name, const std::optional<six::DecorrType>& dt,
+        XMLElem parent) const;
 
     //! Parse helper functions
     void parseAreaType(const XMLElem areaXML, AreaType& area) const;

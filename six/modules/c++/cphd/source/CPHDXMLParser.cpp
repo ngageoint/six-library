@@ -1881,6 +1881,15 @@ XMLElem CPHDXMLParser::createDecorrType(const std::string& name, const six::Deco
     }
     return nullptr;
 }
+XMLElem CPHDXMLParser::createDecorrType(const std::string& name, const std::optional<six::DecorrType>& dt,
+    XMLElem parent) const
+{
+    if (dt.has_value())
+    {
+        return createDecorrType(name, *dt, parent);
+    }
+    return nullptr;
+}
 
 /*
  * Parser helper functions
