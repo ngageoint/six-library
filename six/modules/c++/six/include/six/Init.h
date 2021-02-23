@@ -159,13 +159,6 @@ inline const T& value(const std::optional<T>& v)
     return value(v.value());
 }
 
-template<typename T, typename U>
-inline void assign(T& t, const U& u)
-{
-    assert(has_value(u));
-    t = u;
-}
-
 }
 
 #endif // SIX_six_Init_h_INCLUDED_
