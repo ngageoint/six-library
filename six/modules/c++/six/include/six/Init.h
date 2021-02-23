@@ -128,12 +128,18 @@ inline bool has_value(const T& v)
 {
     return Init::isDefined(v);
 }
+template<typename T>
+inline bool has_value(const std::optional<T>& v)
+{
+    return v.has_value();
+}
+
 
 namespace details
 {
     inline void throw_undefined_value()
     {
-        throw std::logic_error("Attempt to access uninitiazlized value.");
+        sys::details::throw_bad_optional_access();
     }
 }
 
@@ -146,6 +152,12 @@ inline const T& value(const T& v)
     }
     return v;
 }
+template<typename T>
+inline const T& value(const std::optional<T>& v)
+{
+    return v.value();
+}
+
 
 template<typename T, typename U>
 inline void assign(T& t, const U& u)

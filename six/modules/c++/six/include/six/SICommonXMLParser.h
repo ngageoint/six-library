@@ -110,6 +110,8 @@ public:
             const ParameterCollection& props, XMLElem parent = nullptr) const;
     void addDecorrType(const std::string& name, const std::string& uri,
             DecorrType dt, XMLElem p) const;
+    void addDecorrType(const std::string& name, const std::string& uri,
+        const std::optional<DecorrType>& dt, XMLElem p) const;
 
     // TODO: Can make this virtual if we ever need it
     //       This is the implementation for SICD 1.x / SIDD 2.0+
@@ -158,6 +160,7 @@ public:
 
     void parseDecorrType(XMLElem decorrXML, DecorrType& decorrType) const;
     void parseOptionalDecorrType(XMLElem parent, const std::string& tag, DecorrType& decorrType) const;
+    void parseOptionalDecorrType(XMLElem parent, const std::string& tag, std::optional<DecorrType>& decorrType) const;
 
     void parseFootprint(XMLElem footprint,
             const std::string& cornerName, LatLonCorners& corners) const;

@@ -102,7 +102,7 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
             os << "    TropoError:: \n";
             if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeVertical))
             {
-                os << "    TropoRangeVertical : " << e.monostatic->tropoError->tropoRangeVertical << "\n";
+                os << "    TropoRangeVertical : " << six::value(e.monostatic->tropoError->tropoRangeVertical) << "\n";
             }
             if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeSlant))
             {
@@ -111,7 +111,7 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
             if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeDecorr))
             {
             os << "    TropoRangeDecorr:: \n"
-                << "      CorrCoefZero  : " << e.monostatic->tropoError->tropoRangeDecorr.corrCoefZero << "\n"
+                << "      CorrCoefZero  : " <<  e.monostatic->tropoError->tropoRangeDecorr.corrCoefZero << "\n"
                 << "      DecorrRate  : " << e.monostatic->tropoError->tropoRangeDecorr.decorrRate << "\n";
             }
         }

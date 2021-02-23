@@ -577,11 +577,25 @@ void SICommonXMLParser::addParameters(const std::string& name,
 void SICommonXMLParser::addDecorrType(const std::string& name,
         const std::string& uri, DecorrType decorrType, XMLElem parent) const
 {
-    assert(Init::isDefined(decorrType));
+    decorrType = value(decorrType);
 
     //only adds it if it needs to
     if (!Init::isUndefined<double>(decorrType.corrCoefZero)
             && !Init::isUndefined<double>(decorrType.decorrRate))
+    {
+        XMLElem decorrXML = newElement(name, uri, parent);
+        createDouble("CorrCoefZero", uri, decorrType.corrCoefZero, decorrXML);
+        createDouble("DecorrRate", uri, decorrType.decorrRate, decorrXML);
+    }
+}
+void SICommonXMLParser::addDecorrType(const std::string& name,
+    const std::string& uri, const std::optional<DecorrType>& decorrType_, XMLElem parent) const
+{
+    auto decorrType = value(decorrType_);
+
+    //only adds it if it needs to
+    if (!Init::isUndefined<double>(decorrType.corrCoefZero)
+        && !Init::isUndefined<double>(decorrType.decorrRate))
     {
         XMLElem decorrXML = newElement(name, uri, parent);
         createDouble("CorrCoefZero", uri, decorrType.corrCoefZero, decorrXML);
@@ -604,6 +618,17 @@ void SICommonXMLParser::parseOptionalDecorrType(XMLElem parent, const std::strin
     if (decorrXML)
     {
         parseDecorrType(decorrXML, decorrType);
+    }
+}
+void SICommonXMLParser::parseOptionalDecorrType(XMLElem parent, const std::string& tag,
+    std::optional<DecorrType>& decorrType) const
+{
+    auto decorrXML = getOptional(parent, tag);
+    if (decorrXML)
+    {
+        DecorrType result;
+        parseDecorrType(decorrXML, result);
+        decorrType = result;
     }
 }
 
