@@ -30,6 +30,15 @@
 #include <six/XMLControlFactory.h>
 #include <six/Utilities.h>
 
+#ifndef SIX_ENABLE_DED
+    // set to 1 for DEM support
+    #define SIX_ENABLE_DED 0
+#endif
+namespace six
+{
+    constexpr auto enable_ded = SIX_ENABLE_DED ? true : false;
+}
+
 namespace
 {
 types::RowCol<size_t> parseILOC(const std::string& str)
@@ -392,7 +401,10 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         // But, we don't do this for legends since their size has nothing to
         // do with the size of the pixel data
         const bool segIsLegend = isLegend(subheader);
-        if (!segIsLegend)
+        const bool segIsDed = isDed(subheader);
+
+        const auto do_validateSegment = six::enable_ded ? !segIsLegend && !segIsDed : !segIsLegend;
+        if (do_validateSegment)
         {
             validateSegment(subheader, *currentInfo);
         }
@@ -417,13 +429,14 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         }
         else
         {
-            si.rowOffset = imageSegments[productSegmentIdx - 1].numRows;
-            si.firstRow = imageSegments[productSegmentIdx - 1].firstRow +
-                    si.rowOffset;
+            si.rowOffset = imageSegments[productSegmentIdx - 1].getNumRows();
+            si.firstRow = imageSegments[productSegmentIdx - 1].getFirstRow() +
+                    si.getRowOffset();
         }
 
         // Legends don't set lat/lons
-        if (!segIsLegend)
+        const auto do_setLatLon = six::enable_ded ? !segIsLegend && !segIsDed : !segIsLegend;
+        if (do_setLatLon)
         {
             subheader.getCornersAsLatLons(corners);
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
@@ -550,17 +563,25 @@ void NITFReadControl::getIndices(const nitf::ImageSubheader& subheader, ImageAnd
     {
         // If it's SIDD, we need to check the first three digits within the IID
         image = iid - 1;
+        std::string str_segment;
         const auto segment_pos = digit_pos + 3;
         if (segment_pos < imageID.length())
         {
-            const auto str_segment = imageID.substr(segment_pos);
-            segment = str::toType<size_t>(str_segment) - 1;
+            str_segment = imageID.substr(segment_pos);
         }
         else
         {
             // 'imageID' might also be "DED001"
-            throw except::Exception(Ctxt("Can't extract segment # from: " + imageID));
+            if (six::enable_ded)
+            {
+                str_segment = imageID.substr(digit_pos);
+            }
+            else
+            {
+                throw except::Exception(Ctxt("Can't extract segment # from: " + imageID));
+            }
         }
+        segment = str::toType<size_t>(str_segment) - 1;
     }
     else
     {
@@ -629,7 +650,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     size_t i;
     for (i = 0; i < numIS; i++)
     {
-        size_t firstRowSeg = imageSegments[i].firstRow;
+        const auto firstRowSeg = imageSegments[i].getFirstRow();
 
         if (firstRowSeg <= startRow)
         {
@@ -659,7 +680,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     for (; i < numIS && totalRead < subWindowSize; i++)
     {
         size_t numRowsReqSeg =
-                std::min<size_t>(numRowsLeft, imageSegments[i].numRows
+                std::min<size_t>(numRowsLeft, imageSegments[i].getNumRows()
                         - sw.getStartRow());
 
         sw.setNumRows(static_cast<uint32_t>(numRowsReqSeg));

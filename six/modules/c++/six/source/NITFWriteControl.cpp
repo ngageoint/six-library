@@ -290,7 +290,8 @@ void NITFWriteControl::save_(const TBufferList& imageData,
     createCompressionOptions(mCompressionOptions);
     for (size_t i = 0; i < numImages; ++i)
     {
-        const NITFImageInfo& info = *(getInfos()[i]);
+        const auto pInfo = getInfo(i);
+        const NITFImageInfo& info = *pInfo;
         std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
         const size_t numIS = imageSegments.size();
         const int pixelSize =
@@ -328,13 +329,13 @@ void NITFWriteControl::save_(const TBufferList& imageData,
                 nitf::ImageSource iSource;
                 const NITFSegmentInfo segmentInfo = imageSegments[jj];
                 const size_t bandSize =
-                        pixelSize * numCols * segmentInfo.numRows;
+                        pixelSize * numCols * segmentInfo.getNumRows();
 
                 for (size_t chan = 0; chan < numChannels; ++chan)
                 {
                     nitf::MemorySource ms(imageData[i] +
                                                   pixelSize *
-                                                          segmentInfo.firstRow *
+                                                          segmentInfo.getFirstRow() *
                                                           numCols,
                                           bandSize,
                                           bandSize * chan,
@@ -356,7 +357,7 @@ void NITFWriteControl::save_(const TBufferList& imageData,
                 auto writeHandler(
                         std::make_shared<MemoryWriteHandler>(segmentInfo,
                                                imageData[i],
-                                               segmentInfo.firstRow,
+                                               segmentInfo.getFirstRow(),
                                                numCols,
                                                numChannels,
                                                pixelSize,

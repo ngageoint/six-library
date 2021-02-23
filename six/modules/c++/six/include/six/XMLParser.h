@@ -23,6 +23,8 @@
 
 #include <string>
 
+#include <sys/Optional.h>
+
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Utilities.h>
@@ -115,6 +117,12 @@ protected:
 
     XMLElem createDouble(const std::string& name,
             const std::string& uri, double p = 0, XMLElem parent = nullptr) const;
+    XMLElem createDouble(const std::string& name,
+        const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
+    XMLElem createOptionalDouble(const std::string& name,
+        const std::string& uri, const double& p, XMLElem parent = nullptr) const;
+    XMLElem createOptionalDouble(const std::string& name,
+        const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
 
     XMLElem createBooleanType(const std::string& name,
            const std::string& uri, BooleanType b, XMLElem parent = nullptr) const;
@@ -148,6 +156,12 @@ protected:
             XMLElem parent = nullptr) const;
     XMLElem createDouble(const std::string& name, double p = 0,
             XMLElem parent = nullptr) const;
+    XMLElem createDouble(const std::string& name, const std::optional<double>& p,
+        XMLElem parent = nullptr) const;
+    XMLElem createOptionalDouble(const std::string& name, const double& p,
+            XMLElem parent = nullptr) const;
+    XMLElem createOptionalDouble(const std::string& name, const std::optional<double>& p,
+        XMLElem parent = nullptr) const;
     XMLElem createBooleanType(const std::string& name, BooleanType b,
             XMLElem parent = nullptr) const;
     XMLElem createDateTime(const std::string& name, const DateTime& p,
@@ -184,7 +198,10 @@ protected:
         enumVal = T(name);
     }
 
-    void parseDouble(XMLElem element, double& value) const;
+    bool parseDouble(XMLElem element, double& value) const;
+    void parseDouble(XMLElem element, std::optional<double>& value) const;
+    void parseOptionalDouble(XMLElem parent, const std::string& tag, double& value) const;
+    void parseOptionalDouble(XMLElem parent, const std::string& tag, std::optional<double>& value) const;
     void parseComplex(XMLElem element, std::complex<double>& value) const;
     void parseString(XMLElem element, std::string& value) const;
     void parseBooleanType(XMLElem element, BooleanType& value) const;

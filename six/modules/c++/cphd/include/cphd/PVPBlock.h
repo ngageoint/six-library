@@ -29,6 +29,8 @@
 #include <stddef.h>
 #include <unordered_map>
 
+#include <sys/Optional.h>
+
 #include <scene/sys_Conf.h>
 #include <cphd/Types.h>
 #include <cphd/Data.h>
@@ -81,15 +83,7 @@ struct AddedPVP<std::string>
  */
 struct PVPBlock
 {
-    /*
-     *  \func PVPBlock
-     *
-     *  \brief Default Constructor
-     */
-    PVPBlock() :
-        mNumBytesPerVector(0)
-    {
-    }
+    PVPBlock() = default;
 
     /*
      *  \func PVPBlock
@@ -455,7 +449,7 @@ private:
     //! The PVP Block [Num Channles][Num Parameters]
     std::vector<std::vector<PVPSet> > mData;
     //! Number of bytes per PVP vector
-    size_t mNumBytesPerVector;
+    size_t mNumBytesPerVector = 0;
     //! PVP block metadata
     Pvp mPvp;
 

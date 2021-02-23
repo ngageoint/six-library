@@ -19,10 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SET_H__
-#define __SIX_SET_H__
+#ifndef SIX_six_Init_h_INCLUDED_
+#define SIX_six_Init_h_INCLUDED_
+#pragma once
+
+#include <assert.h>
 
 #include <limits>
+#include <stdexcept>
+
+#include <sys/Optional.h>
 
 #include <six/Parameter.h>
 #include <types/RgAz.h>
@@ -119,10 +125,47 @@ template<> SideOfTrackType Init::undefined<SideOfTrackType>();
 template<> SlowTimeBeamCompensationType Init::undefined<SlowTimeBeamCompensationType>();
 template<> XYZEnum Init::undefined<XYZEnum>();
 
+template<typename T>
+inline bool has_value(const T& v)
+{
+    return Init::isDefined(v);
+}
+template<typename T>
+inline bool has_value(const std::optional<T>& v)
+{
+    return v.has_value() && has_value(*v);
+}
 
+namespace details
+{
+    inline void throw_undefined_value()
+    {
+        sys::details::throw_bad_optional_access();
+    }
+}
 
+template<typename T>
+inline const T& value(const T& v)
+{
+    if (!has_value(v))
+    {
+        details::throw_undefined_value();
+    }
+    return v;
+}
+template<typename T>
+inline const T& value(const std::optional<T>& v)
+{
+    return value(v.value());
+}
+
+template<typename T, typename U>
+inline void assign(T& t, const U& u)
+{
+    assert(has_value(u));
+    t = u;
+}
 
 }
 
-#endif
-
+#endif // SIX_six_Init_h_INCLUDED_

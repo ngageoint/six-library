@@ -246,6 +246,13 @@ private:
         return (iCat == "LEG");
     }
 
+    static
+    bool isDed(const nitf::ImageSubheader& subheader)
+    {
+        const auto iCat = subheader.imageCategory();
+        return (iCat == "DED");
+    }
+
     // We need this for one of the load overloadings
     // to prevent data from being deleted prematurely
     // The issue occurs from the explicit destructor of
