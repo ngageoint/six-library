@@ -19,18 +19,19 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_ERROR_STATISTICS_H__
-#define __SIX_ERROR_STATISTICS_H__
+#ifndef SIX_six_ErrorStatistics_h_INCLUDED_
+#define SIX_six_ErrorStatistics_h_INCLUDED_
+#pragma once
 
 #include <assert.h>
 
 #include <sys/Optional.h>
+#include <mem/ScopedCopyablePtr.h>
 
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
-#include <mem/ScopedCopyablePtr.h>
 
 namespace six
 {
@@ -258,60 +259,9 @@ struct Components
     Components() = default;
 
     mem::ScopedCopyablePtr<PosVelError> posVelError;
-    void reset(PosVelError* value)
-    {
-        posVelError.reset(value);
-    }
-    const PosVelError* getPosVelError() const
-    {
-        return posVelError.get();
-    }
-    PosVelError* getPosVelError()
-    {
-        return posVelError.get();
-    }
-
     mem::ScopedCopyablePtr<RadarSensor> radarSensor;
-    void reset(RadarSensor* value)
-    {
-        radarSensor.reset(value);
-    }
-    const RadarSensor* getRadarSensor() const
-    {
-        return radarSensor.get();
-    }
-    RadarSensor* getRadarSensor()
-    {
-        return radarSensor.get();
-    }
-
     mem::ScopedCopyablePtr<TropoError> tropoError;
-    void reset(TropoError* value)
-    {
-        tropoError.reset(value);
-    }
-    const TropoError* getTropoError() const
-    {
-        return tropoError.get();
-    }
-    TropoError* getTropoError()
-    {
-        return tropoError.get();
-    }
-
     mem::ScopedCopyablePtr<IonoError> ionoError;
-    void reset(IonoError* value)
-    {
-        ionoError.reset(value);
-    }
-    const IonoError* getIonoError() const
-    {
-        return ionoError.get();
-    }
-    IonoError* getIonoError()
-    {
-        return ionoError.get();
-    }
 
     //! Equality operator
     bool operator==(const Components& rhs) const
@@ -393,36 +343,12 @@ struct ErrorStatistics
      *  center point
      */
     mem::ScopedCopyablePtr<CompositeSCP> compositeSCP;
-    void reset(CompositeSCP* pValue)
-    {
-        compositeSCP.reset(pValue);
-    }
-    const CompositeSCP* getCompositeSCP() const
-    {
-        return compositeSCP.get();
-    }
-    CompositeSCP* getCompositeSCP()
-    {
-        return compositeSCP.get();
-    }
 
     /*!
      *  (Optional) error statistics components
      *
      */
     mem::ScopedCopyablePtr<Components> components;
-    void reset(Components* pValue)
-    {
-        components.reset(pValue);
-    }
-    const Components* getComponents() const
-    {
-        return components.get();
-    }
-    Components* getComponents()
-    {
-        return components.get();
-    }
 
     /*!
      *  Additional parameters
@@ -445,5 +371,4 @@ struct ErrorStatistics
 };
 }
 
-#endif
-
+#endif // SIX_six_ErrorStatistics_h_INCLUDED_

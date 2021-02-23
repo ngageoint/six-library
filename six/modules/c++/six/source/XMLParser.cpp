@@ -22,6 +22,7 @@
 #include <six/XMLParser.h>
 
 #include <assert.h>
+
 #include <string>
 
 #include <nitf/coda-oss.hpp>
@@ -29,6 +30,7 @@
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
 #include <six/Utilities.h>
+#include <six/Init.h>
 
 namespace
 {
@@ -187,7 +189,7 @@ XMLElem XMLParser::createInt(const std::string& name, int p, XMLElem parent) con
 XMLElem XMLParser::createDouble(const std::string& name,
         const std::string& uri, double p, XMLElem parent) const
 {
-    assert(six::Init::isDefined(p));
+    p = value(p); // be sure this is initialized; throws if not 
 
     const auto elementValue = toString(name, p, parent);
     XMLElem elem = newElement(name, uri, elementValue, parent);
@@ -195,39 +197,21 @@ XMLElem XMLParser::createDouble(const std::string& name,
 
     return elem;
 }
-XMLElem XMLParser::createDouble(const std::string& name,
-        const std::string& uri, const std::optional<double>& p, XMLElem parent) const
-{
-    return createDouble(name, uri, p.value(), parent);
-}
-XMLElem XMLParser::createOptionalDouble(const std::string& name,
-        const std::string& uri, double p, XMLElem parent) const
-{
-    if (six::Init::isDefined(p))
-    {
-        return createDouble(name, uri, p, parent);
-    }
-    return nullptr;
-}
-
 XMLElem XMLParser::createDouble(const std::string& name, double p,
         XMLElem parent) const
 {
     return createDouble(name, mDefaultURI, p, parent);
 }
-XMLElem XMLParser::createDouble(const std::string& name, const std::optional<double>& p,
-    XMLElem parent) const
+
+XMLElem XMLParser::createOptionalDouble(const std::string& name,
+    const std::string& uri, const double& p, XMLElem parent) const
 {
-    return createDouble(name, p.value(), parent);
+    return Init::isDefined(p) ? createDouble(name, uri, p, parent) : nullptr;
 }
-XMLElem XMLParser::createOptionalDouble(const std::string& name, double p,
-    XMLElem parent) const
+XMLElem XMLParser::createOptionalDouble(const std::string& name, const double& p,
+        XMLElem parent) const
 {
-    if (six::Init::isDefined(p))
-    {
-        return createDouble(name, p, parent);
-    }
-    return nullptr;
+    return Init::isDefined(p) ? createDouble(name, p, parent) : nullptr;
 }
 
 XMLElem XMLParser::createBooleanType(const std::string& name,
@@ -335,21 +319,21 @@ static void parseValue(logging::Logger& log, TGetValue getValue)
     }
 }
 
-void XMLParser::parseDouble(XMLElem element, std::optional<double>& value) const
+void XMLParser::parseDouble(XMLElem element, double& value) const
 {
     parseValue(*mLog, [&]() {
         value = xml::lite::getValue<double>(*element);
+        assert(Init::isDefined(value));
         });
 }
-bool XMLParser::parseDouble(XMLElem element, double& value) const
+
+void XMLParser::parseOptionalDouble(XMLElem element, double& value) const
 {
-    std::optional<double> result;
-    parseDouble(element, result);
-    if (result.has_value())
+    if (element)
     {
-        value = result.value();
+        //optional
+        parseDouble(element, value);
     }
-    return result.has_value();
 }
 
 void XMLParser::parseComplex(XMLElem element, std::complex<double>& value) const

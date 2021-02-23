@@ -1238,14 +1238,14 @@ void six::getErrors(const ErrorStatistics* errorStats,
 
     if (errorStats)
     {
-        const six::Components* const components(errorStats->getComponents());
+        const six::Components* const components(errorStats->components.get());
 
         if (components)
         {
             double rangeBias;
-            if (components->getRadarSensor())
+            if (components->radarSensor)
             {
-                const RadarSensor& radarSensor(*components->getRadarSensor());
+                const RadarSensor& radarSensor(*components->radarSensor);
 
                 if (has_value(radarSensor.rangeBiasDecorr))
                 {
@@ -1260,9 +1260,9 @@ void six::getErrors(const ErrorStatistics* errorStats,
                 rangeBias = 0.0;
             }
 
-            if (components->getPosVelError())
+            if (components->posVelError)
             {
-                const PosVelError& posVelError(*components->getPosVelError());
+                const PosVelError& posVelError(*components->posVelError);
                 errors.mFrameType = posVelError.frame;
 
                 getSensorCovariance(posVelError,
@@ -1278,9 +1278,9 @@ void six::getErrors(const ErrorStatistics* errorStats,
                 }
             }
 
-            if (components->getIonoError())
+            if (components->ionoError)
             {
-                const six::IonoError& ionoError(*components->getIonoError());
+                const six::IonoError& ionoError(*components->ionoError);
                 errors.mIonoErrorCovar(0, 0) =
                         math::square(value(ionoError.ionoRangeVertical));
                 errors.mIonoErrorCovar(1, 1) =
@@ -1291,19 +1291,19 @@ void six::getErrors(const ErrorStatistics* errorStats,
                         value(ionoError.ionoRgRgRateCC);
             }
 
-            if (components->getTropoError())
+            if (components->tropoError)
             {
                 errors.mTropoErrorCovar(0, 0) = math::square(
-                        value(components->getTropoError()->tropoRangeVertical));
+                        value(components->tropoError->tropoRangeVertical));
             }
         }
 
-        if (errorStats->getCompositeSCP() &&
-            errorStats->getCompositeSCP()->scpType == CompositeSCP::RG_AZ)
+        if (errorStats->compositeSCP &&
+            errorStats->compositeSCP->scpType == CompositeSCP::RG_AZ)
         {
-            const types::RgAz<double> composite(errorStats->getCompositeSCP()->xErr,
-                                                errorStats->getCompositeSCP()->yErr);
-            const double corr = errorStats->getCompositeSCP()->xyErr;
+            const types::RgAz<double> composite(errorStats->compositeSCP->xErr,
+                                                errorStats->compositeSCP->yErr);
+            const double corr = errorStats->compositeSCP->xyErr;
 
             errors.mUnmodeledErrorCovar(0, 0) = math::square(composite.rg);
             errors.mUnmodeledErrorCovar(1, 1) = math::square(composite.az);

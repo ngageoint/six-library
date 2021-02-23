@@ -23,8 +23,6 @@
 #ifndef __SIX_SI_COMMON_XML_PARSER_H__
 #define __SIX_SI_COMMON_XML_PARSER_H__
 
-#include <sys/Optional.h>
-
 #include <six/CollectionInformation.h>
 #include <six/MatchInformation.h>
 #include <six/XMLParser.h>
@@ -50,10 +48,6 @@ public:
     {
         return mSICommonURI;
     }
-
-    // XMLParser::createDouble() and parseDouble() are "protected"
-    void createDouble_(const std::string& name, double p, XMLElem parent) const;
-    void parseDouble_(XMLElem element, std::optional<double>& value) const;
 
     XMLElem createComplex(const std::string& name, std::complex<double> c,
             XMLElem parent = nullptr) const;
@@ -163,6 +157,7 @@ public:
             ParameterCollection& props) const;
 
     void parseDecorrType(XMLElem decorrXML, DecorrType& decorrType) const;
+    void parseOptionalDecorrType(XMLElem decorrXML, DecorrType& decorrType) const;
 
     void parseFootprint(XMLElem footprint,
             const std::string& cornerName, LatLonCorners& corners) const;

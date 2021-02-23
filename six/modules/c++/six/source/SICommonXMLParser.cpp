@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <assert.h>
+
 #include <set>
 #include <string>
 
@@ -33,29 +35,6 @@ namespace
 typedef xml::lite::Element* XMLElem;
 }
 
-static void createOptionalDouble(const six::SICommonXMLParser& parser,
-    const std::string& name, const double& p, XMLElem parent)
-{
-    if (six::has_value(p))
-    {
-        parser.createDouble_(name, p, parent);
-    }
-}
-
-static void parseOptionalDouble(const six::SICommonXMLParser& parser, XMLElem tmpElem, double& v)
-{
-    if (tmpElem)
-    {
-        //optional
-        std::optional<double> value;
-        parser.parseDouble_(tmpElem, value);
-        if (value.has_value())
-        {
-            six::assign(v, value.value());
-        }
-    }
-}
-
 namespace six
 {
 SICommonXMLParser::SICommonXMLParser(const std::string& defaultURI,
@@ -66,16 +45,6 @@ SICommonXMLParser::SICommonXMLParser(const std::string& defaultURI,
     XMLParser(defaultURI, addClassAttributes, log, ownLog),
     mSICommonURI(siCommonURI)
 {
-}
-
-void SICommonXMLParser::createDouble_(const std::string& name, double p, XMLElem parent) const
-{
-    createDouble(name, getSICommonURI(), p, parent);
-}
-
-void SICommonXMLParser::parseDouble_(XMLElem element, std::optional<double>& value) const
-{
-    parseDouble(element, value);
 }
 
 void SICommonXMLParser::parseVector2D(XMLElem vecXML, Vector2& vec) const
@@ -608,6 +577,8 @@ void SICommonXMLParser::addParameters(const std::string& name,
 void SICommonXMLParser::addDecorrType(const std::string& name,
         const std::string& uri, DecorrType decorrType, XMLElem parent) const
 {
+    assert(Init::isDefined(decorrType));
+
     //only adds it if it needs to
     if (!Init::isUndefined<double>(decorrType.corrCoefZero)
             && !Init::isUndefined<double>(decorrType.decorrRate))
@@ -618,17 +589,6 @@ void SICommonXMLParser::addDecorrType(const std::string& name,
     }
 }
 
-static void addDecorrType_(const SICommonXMLParser& parser,
-    const std::string& name,
-    const std::string& uri, const DecorrType& decorrType, XMLElem parent)
-{
-    //only adds it if it needs to
-    if (has_value(decorrType))
-    {
-        parser.addDecorrType(name, uri, value(decorrType), parent);
-    }
-}
-
 void SICommonXMLParser::parseDecorrType(XMLElem decorrXML,
                                         DecorrType& decorrType) const
 {
@@ -636,6 +596,14 @@ void SICommonXMLParser::parseDecorrType(XMLElem decorrXML,
                 decorrType.corrCoefZero);
     parseDouble(getFirstAndOnly(decorrXML, "DecorrRate"),
                 decorrType.decorrRate);
+}
+void SICommonXMLParser::parseOptionalDecorrType(XMLElem decorrXML,
+    DecorrType& decorrType) const
+{
+    if (decorrXML)
+    {
+        parseDecorrType(decorrXML, decorrType);
+    }
 }
 
 void SICommonXMLParser::parseLatLon(XMLElem parent, LatLon& ll) const
@@ -822,17 +790,17 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
     //! version specific implementation
     convertCompositeSCPToXML(errorStatistics, errorStatsXML);
 
-    const Components* const components = errorStatistics->getComponents();
+    const Components* const components = errorStatistics->components.get();
     if (components)
     {
         XMLElem componentsXML = newElement("Components",
                                            getSICommonURI(),
                                            errorStatsXML);
 
-        const PosVelError* const posVelError = components->getPosVelError();
-        const RadarSensor* const radarSensor = components->getRadarSensor();
-        const TropoError* const tropoError = components->getTropoError();
-        const IonoError* const ionoError = components->getIonoError();
+        const PosVelError* const posVelError = components->posVelError.get();
+        const RadarSensor* const radarSensor = components->radarSensor.get();
+        const TropoError* const tropoError = components->tropoError.get();
+        const IonoError* const ionoError = components->ionoError.get();
 
         if (posVelError)
         {
@@ -872,7 +840,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                 createDouble("V2V3", getSICommonURI(), coefs->v2v3, coefsXML);
             }
 
-            addDecorrType_(*this, "PositionDecorr", getSICommonURI(),
+            addDecorrType("PositionDecorr", getSICommonURI(),
                           posVelError->positionDecorr, posVelErrXML);
         }
         if (radarSensor)
@@ -880,13 +848,15 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
             XMLElem radarSensorXML = newElement("RadarSensor", getSICommonURI(),
                                                 componentsXML);
 
-            createDouble("RangeBias", getSICommonURI(), value(radarSensor->rangeBias),
+            createDouble("RangeBias", getSICommonURI(), radarSensor->rangeBias,
                          radarSensorXML);
 
-            ::createOptionalDouble(*this, "ClockFreqSF", radarSensor->clockFreqSF, radarSensorXML);
-            ::createOptionalDouble(*this, "TransmitFreqSF", radarSensor->transmitFreqSF, radarSensorXML);
-           
-            addDecorrType_(*this, "RangeBiasDecorr", getSICommonURI(),
+            createOptionalDouble("ClockFreqSF", getSICommonURI(),
+                            radarSensor->clockFreqSF, radarSensorXML);
+            createOptionalDouble("TransmitFreqSF", getSICommonURI(),
+                            radarSensor->transmitFreqSF, radarSensorXML);
+
+            addDecorrType("RangeBiasDecorr", getSICommonURI(),
                           radarSensor->rangeBiasDecorr, radarSensorXML);
         }
         if (tropoError)
@@ -895,10 +865,12 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                                              getSICommonURI(),
                                              componentsXML);
 
-            ::createOptionalDouble(*this, "TropoRangeVertical", tropoError->tropoRangeVertical, tropoErrXML);
-            ::createOptionalDouble(*this, "TropoRangeSlant", tropoError->tropoRangeSlant, tropoErrXML);
+            createOptionalDouble("TropoRangeVertical", getSICommonURI(),
+                            tropoError->tropoRangeVertical, tropoErrXML);
+            createOptionalDouble("TropoRangeSlant", getSICommonURI(),
+                            tropoError->tropoRangeSlant, tropoErrXML);
 
-            addDecorrType_(*this, "TropoRangeDecorr", getSICommonURI(),
+            addDecorrType("TropoRangeDecorr", getSICommonURI(),
                           tropoError->tropoRangeDecorr, tropoErrXML);
         }
         if (ionoError)
@@ -907,13 +879,15 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
                                             getSICommonURI(),
                                             componentsXML);
 
-            ::createOptionalDouble(*this, "IonoRangeVertical", ionoError->ionoRangeVertical, ionoErrXML);
-            ::createOptionalDouble(*this, "IonoRangeRateVertical", ionoError->ionoRangeRateVertical, ionoErrXML);
+            createOptionalDouble("IonoRangeVertical", getSICommonURI(),
+                            ionoError->ionoRangeVertical, ionoErrXML);
+            createOptionalDouble("IonoRangeRateVertical", getSICommonURI(),
+                            ionoError->ionoRangeRateVertical, ionoErrXML);
 
             createDouble("IonoRgRgRateCC", getSICommonURI(),
-                         value(ionoError->ionoRgRgRateCC), ionoErrXML);
+                         ionoError->ionoRgRgRateCC, ionoErrXML);
 
-            addDecorrType_(*this, "IonoRangeVertDecorr", getSICommonURI(),
+            addDecorrType("IonoRangeVertDecorr", getSICommonURI(),
                           ionoError->ionoRangeVertDecorr, ionoErrXML);
         }
     }
@@ -949,157 +923,147 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
     if (tmpElem)
     {
         //optional
-        errorStatistics->reset(new Components());
+        errorStatistics->components.reset(new Components());
 
         posVelErrXML = getOptional(tmpElem, "PosVelErr");
         if (posVelErrXML)
         {
             //optional
-            errorStatistics->getComponents()->reset(new PosVelError());
+            errorStatistics->components->posVelError.reset(new PosVelError());
         }
 
         radarSensorXML = getOptional(tmpElem, "RadarSensor");
         if (radarSensorXML)
         {
             //optional
-            errorStatistics->getComponents()->reset(new RadarSensor());
+            errorStatistics->components->radarSensor.reset(new RadarSensor());
         }
 
         tropoErrorXML = getOptional(tmpElem, "TropoError");
         if (tropoErrorXML)
         {
             //optional
-            errorStatistics->getComponents()->reset(new TropoError());
+            errorStatistics->components->tropoError.reset(new TropoError());
         }
 
         ionoErrorXML = getOptional(tmpElem, "IonoError");
         if (ionoErrorXML)
         {
             //optional
-            errorStatistics->getComponents()->reset(new IonoError());
+            errorStatistics->components->ionoError.reset(new IonoError());
         }
     }
 
     if (posVelErrXML != nullptr)
     {
-        errorStatistics->getComponents()->getPosVelError()->frame
+        errorStatistics->components->posVelError->frame
                 = six::toType<FrameType>(getFirstAndOnly(
                         posVelErrXML, "Frame")->getCharacterData());
         parseDouble(getFirstAndOnly(posVelErrXML, "P1"),
-                    errorStatistics->getComponents()->getPosVelError()->p1);
+                    errorStatistics->components->posVelError->p1);
         parseDouble(getFirstAndOnly(posVelErrXML, "P2"),
-                    errorStatistics->getComponents()->getPosVelError()->p2);
+                    errorStatistics->components->posVelError->p2);
         parseDouble(getFirstAndOnly(posVelErrXML, "P3"),
-                    errorStatistics->getComponents()->getPosVelError()->p3);
+                    errorStatistics->components->posVelError->p3);
         parseDouble(getFirstAndOnly(posVelErrXML, "V1"),
-                    errorStatistics->getComponents()->getPosVelError()->v1);
+                    errorStatistics->components->posVelError->v1);
         parseDouble(getFirstAndOnly(posVelErrXML, "V2"),
-                    errorStatistics->getComponents()->getPosVelError()->v2);
+                    errorStatistics->components->posVelError->v2);
         parseDouble(getFirstAndOnly(posVelErrXML, "V3"),
-                    errorStatistics->getComponents()->getPosVelError()->v3);
+                    errorStatistics->components->posVelError->v3);
 
         tmpElem = getOptional(posVelErrXML, "CorrCoefs");
         if (tmpElem)
         {
             //optional
-            errorStatistics->getComponents()->getPosVelError()->corrCoefs.reset(
+            errorStatistics->components->posVelError->corrCoefs.reset(
                 new CorrCoefs());
             parseDouble(getFirstAndOnly(tmpElem, "P1P2"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p1p2);
+                        errorStatistics->components->posVelError->corrCoefs->p1p2);
             parseDouble(getFirstAndOnly(tmpElem, "P1P3"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p1p3);
+                        errorStatistics->components->posVelError->corrCoefs->p1p3);
             parseDouble(getFirstAndOnly(tmpElem, "P1V1"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p1v1);
+                        errorStatistics->components->posVelError->corrCoefs->p1v1);
             parseDouble(getFirstAndOnly(tmpElem, "P1V2"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p1v2);
+                        errorStatistics->components->posVelError->corrCoefs->p1v2);
             parseDouble(getFirstAndOnly(tmpElem, "P1V3"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p1v3);
+                        errorStatistics->components->posVelError->corrCoefs->p1v3);
             parseDouble(getFirstAndOnly(tmpElem, "P2P3"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p2p3);
+                        errorStatistics->components->posVelError->corrCoefs->p2p3);
             parseDouble(getFirstAndOnly(tmpElem, "P2V1"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p2v1);
+                        errorStatistics->components->posVelError->corrCoefs->p2v1);
             parseDouble(getFirstAndOnly(tmpElem, "P2V2"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p2v2);
+                        errorStatistics->components->posVelError->corrCoefs->p2v2);
             parseDouble(getFirstAndOnly(tmpElem, "P2V3"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p2v3);
+                        errorStatistics->components->posVelError->corrCoefs->p2v3);
             parseDouble(getFirstAndOnly(tmpElem, "P3V1"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p3v1);
+                        errorStatistics->components->posVelError->corrCoefs->p3v1);
             parseDouble(getFirstAndOnly(tmpElem, "P3V2"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p3v2);
+                        errorStatistics->components->posVelError->corrCoefs->p3v2);
             parseDouble(getFirstAndOnly(tmpElem, "P3V3"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->p3v3);
+                        errorStatistics->components->posVelError->corrCoefs->p3v3);
             parseDouble(getFirstAndOnly(tmpElem, "V1V2"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->v1v2);
+                        errorStatistics->components->posVelError->corrCoefs->v1v2);
             parseDouble(getFirstAndOnly(tmpElem, "V1V3"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->v1v3);
+                        errorStatistics->components->posVelError->corrCoefs->v1v3);
             parseDouble(getFirstAndOnly(tmpElem, "V2V3"),
-                        errorStatistics->getComponents()->getPosVelError()->corrCoefs->v2v3);
+                        errorStatistics->components->posVelError->corrCoefs->v2v3);
         }
 
         tmpElem = getOptional(posVelErrXML, "PositionDecorr");
-        if (tmpElem)
-        {
-            //optional
-            DecorrType positionDecorr;
-            parseDecorrType(tmpElem, positionDecorr);
-            assign(errorStatistics->getComponents()->getPosVelError()->positionDecorr, positionDecorr);
-        }
+        parseOptionalDecorrType(tmpElem,
+            errorStatistics->components->posVelError->positionDecorr);
     }
 
     if (radarSensorXML != nullptr)
     {
-        double value;
-        parseDouble(getFirstAndOnly(radarSensorXML, "RangeBias"), value);
-        assign(errorStatistics->getComponents()->getRadarSensor()->rangeBias, value);
+        parseDouble(getFirstAndOnly(radarSensorXML, "RangeBias"),
+                    errorStatistics->components->radarSensor->rangeBias);
 
-        ::parseOptionalDouble(*this, getOptional(radarSensorXML, "ClockFreqSF"),
-            errorStatistics->getComponents()->getRadarSensor()->clockFreqSF);
-        ::parseOptionalDouble(*this, getOptional(radarSensorXML, "TransmitFreqSF"),
-            errorStatistics->getComponents()->getRadarSensor()->transmitFreqSF);
+        tmpElem = getOptional(radarSensorXML, "ClockFreqSF");
+        parseOptionalDouble(tmpElem,
+            errorStatistics->components->radarSensor->clockFreqSF);
+
+        tmpElem = getOptional(radarSensorXML, "TransmitFreqSF");
+        parseOptionalDouble(tmpElem,
+            errorStatistics->components->radarSensor->transmitFreqSF);
 
         tmpElem = getOptional(radarSensorXML, "RangeBiasDecorr");
-        if (tmpElem)
-        {
-            DecorrType rangeBiasDecorr;
-            parseDecorrType(tmpElem, rangeBiasDecorr);
-            assign(errorStatistics->getComponents()->getRadarSensor()->rangeBiasDecorr, rangeBiasDecorr);
-        }
+        parseOptionalDecorrType(tmpElem,
+            errorStatistics->components->radarSensor->rangeBiasDecorr);
     }
 
     if (tropoErrorXML != nullptr)
     {
-        ::parseOptionalDouble(*this, getOptional(tropoErrorXML, "TropoRangeVertical"),
-            errorStatistics->getComponents()->getTropoError()->tropoRangeVertical);
-        ::parseOptionalDouble(*this, getOptional(tropoErrorXML, "TropoRangeSlant"),
-            errorStatistics->getComponents()->getTropoError()->tropoRangeSlant);
+        tmpElem = getOptional(tropoErrorXML, "TropoRangeVertical");
+        parseOptionalDouble(tmpElem,
+            errorStatistics->components->tropoError ->tropoRangeVertical);
+
+        tmpElem = getOptional(tropoErrorXML, "TropoRangeSlant");
+        parseOptionalDouble(tmpElem,
+            errorStatistics->components->tropoError->tropoRangeSlant);
 
         tmpElem = getOptional(tropoErrorXML, "TropoRangeDecorr");
-        if (tmpElem)
-        {
-            DecorrType tropoRangeDecorr;
-            parseDecorrType(tmpElem, tropoRangeDecorr);
-            assign(errorStatistics->getComponents()->getTropoError()->tropoRangeDecorr, tropoRangeDecorr);
-        }
+        parseOptionalDecorrType(tmpElem,
+            errorStatistics->components->tropoError->tropoRangeDecorr);
     }
 
     if (ionoErrorXML != nullptr)
     {
-        ::parseOptionalDouble(*this, getOptional(ionoErrorXML, "IonoRangeVertical"),
-            errorStatistics->getComponents()->getIonoError()->ionoRangeVertical);
-        ::parseOptionalDouble(*this, getOptional(ionoErrorXML, "IonoRangeRateVertical"),
-            errorStatistics->getComponents()->getIonoError()->ionoRangeRateVertical);
+        tmpElem = getOptional(ionoErrorXML, "IonoRangeVertical");
+        parseOptionalDouble(tmpElem,
+            errorStatistics->components->ionoError->ionoRangeVertical);
 
-        double value;
-        parseDouble(getFirstAndOnly(ionoErrorXML, "IonoRgRgRateCC"), value);
-        assign(errorStatistics->getComponents()->getIonoError()->ionoRgRgRateCC, value);
+        tmpElem = getOptional(ionoErrorXML, "IonoRangeRateVertical");
+        parseOptionalDouble(tmpElem,
+            errorStatistics->components->ionoError ->ionoRangeRateVertical);
+
+        parseDouble(getFirstAndOnly(ionoErrorXML, "IonoRgRgRateCC"),
+                    errorStatistics->components->ionoError->ionoRgRgRateCC);
 
         tmpElem = getOptional(ionoErrorXML, "IonoRangeVertDecorr");
-        if (tmpElem)
-        {
-            DecorrType ionoRangeVertDecorr;
-            parseDecorrType(tmpElem, ionoRangeVertDecorr);
-            assign(errorStatistics->getComponents()->getIonoError()->ionoRangeVertDecorr, ionoRangeVertDecorr);
-        }
+        parseOptionalDecorrType(tmpElem,
+            errorStatistics->components->ionoError->ionoRangeVertDecorr);
     }
 
     tmpElem = getOptional(errorStatsXML, "AdditionalParms");

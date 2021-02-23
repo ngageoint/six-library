@@ -39,12 +39,6 @@ ErrorParameters::Bistatic::RadarSensor::RadarSensor() :
 {
 }
 
-static inline std::ostream& operator<< (std::ostream& os, const std::optional<double>& value)
-{
-    os << value.value();
-    return os;
-}
-
 std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
 {
     os << "    PosVelError:: \n"
@@ -106,15 +100,15 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         if (e.monostatic->tropoError.get())
         {
             os << "    TropoError:: \n";
-            if (six::has_value(e.monostatic->tropoError->tropoRangeVertical))
+            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeVertical))
             {
                 os << "    TropoRangeVertical : " << e.monostatic->tropoError->tropoRangeVertical << "\n";
             }
-            if (six::has_value(e.monostatic->tropoError->tropoRangeSlant))
+            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeSlant))
             {
                 os << "    TropoRangeSlant  : " << e.monostatic->tropoError->tropoRangeSlant << "\n";
             }
-            if (six::has_value(e.monostatic->tropoError->tropoRangeDecorr))
+            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeDecorr))
             {
             os << "    TropoRangeDecorr:: \n"
                 << "      CorrCoefZero  : " << e.monostatic->tropoError->tropoRangeDecorr.corrCoefZero << "\n"
@@ -124,16 +118,16 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         if (e.monostatic->ionoError.get())
         {
             os << "    IonoError:: \n";
-            if (six::has_value(e.monostatic->ionoError->ionoRangeVertical))
+            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeVertical))
             {
                 os << "    IonoRangeVertical : " << e.monostatic->ionoError->ionoRangeVertical << "\n";
             }
-            if (six::has_value(e.monostatic->ionoError->ionoRangeRateVertical))
+            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeRateVertical))
             {
                 os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->ionoRangeRateVertical << "\n";
             }
-            os << "    IonoRgRgRateCC    : " << six::value(e.monostatic->ionoError->ionoRgRgRateCC) << "\n";
-            if (six::has_value(e.monostatic->ionoError->ionoRangeVertDecorr))
+            os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->ionoRgRgRateCC << "\n";
+            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeVertDecorr))
             {
             os << "    IonoRangeDecorr:: \n"
                 << "      CorrCoefZero  : " << e.monostatic->ionoError->ionoRangeVertDecorr.corrCoefZero << "\n"

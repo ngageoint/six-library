@@ -2228,57 +2228,57 @@ void initDownstreamReprocessing(six::sidd::DownstreamReprocessing& reprocess)
 
 void initErrorStatistics(six::ErrorStatistics& err)
 {
-    err.reset(new six::CompositeSCP());
-    err.getCompositeSCP()->xErr = 0.12;
-    err.getCompositeSCP()->yErr = 0.73;
-    err.getCompositeSCP()->xyErr = 9.84;
+    err.compositeSCP.reset(new six::CompositeSCP());
+    err.compositeSCP->xErr = 0.12;
+    err.compositeSCP->yErr = 0.73;
+    err.compositeSCP->xyErr = 9.84;
 
-    err.reset(new six::Components());
-    err.getComponents()->reset(new six::PosVelError());
-    err.getComponents()->getPosVelError()->frame = six::FrameType("ECF");
-    err.getComponents()->getPosVelError()->p1 = 1.1;
-    err.getComponents()->getPosVelError()->p2 = 1.1;
-    err.getComponents()->getPosVelError()->p3 = 1.1;
-    err.getComponents()->getPosVelError()->v1 = 1.1;
-    err.getComponents()->getPosVelError()->v2 = 1.1;
-    err.getComponents()->getPosVelError()->v3 = 1.1;
+    err.components.reset(new six::Components());
+    err.components->posVelError.reset(new six::PosVelError());
+    err.components->posVelError->frame = six::FrameType("ECF");
+    err.components->posVelError->p1 = 1.1;
+    err.components->posVelError->p2 = 1.1;
+    err.components->posVelError->p3 = 1.1;
+    err.components->posVelError->v1 = 1.1;
+    err.components->posVelError->v2 = 1.1;
+    err.components->posVelError->v3 = 1.1;
 
-    err.getComponents()->getPosVelError()->corrCoefs.reset(new six::CorrCoefs());
-    err.getComponents()->getPosVelError()->corrCoefs->p1p2 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->p1p3 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->p1v1 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->p1v2 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->p1v3 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->p2p3 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->p2v1 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->p2v2 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->p2v3 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->p3v1 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->p3v2 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->p3v3 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->v1v2 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->v1v3 = 6.2;
-    err.getComponents()->getPosVelError()->corrCoefs->v2v3 = 6.2;
+    err.components->posVelError->corrCoefs.reset(new six::CorrCoefs());
+    err.components->posVelError->corrCoefs->p1p2 = 6.2;
+    err.components->posVelError->corrCoefs->p1p3 = 6.2;
+    err.components->posVelError->corrCoefs->p1v1 = 6.2;
+    err.components->posVelError->corrCoefs->p1v2 = 6.2;
+    err.components->posVelError->corrCoefs->p1v3 = 6.2;
+    err.components->posVelError->corrCoefs->p2p3 = 6.2;
+    err.components->posVelError->corrCoefs->p2v1 = 6.2;
+    err.components->posVelError->corrCoefs->p2v2 = 6.2;
+    err.components->posVelError->corrCoefs->p2v3 = 6.2;
+    err.components->posVelError->corrCoefs->p3v1 = 6.2;
+    err.components->posVelError->corrCoefs->p3v2 = 6.2;
+    err.components->posVelError->corrCoefs->p3v3 = 6.2;
+    err.components->posVelError->corrCoefs->v1v2 = 6.2;
+    err.components->posVelError->corrCoefs->v1v3 = 6.2;
+    err.components->posVelError->corrCoefs->v2v3 = 6.2;
 
-    err.getComponents()->getPosVelError()->positionDecorr.corrCoefZero = 48.17;
-    err.getComponents()->getPosVelError()->positionDecorr.decorrRate = 113.965;
+    err.components->posVelError->positionDecorr.corrCoefZero = 48.17;
+    err.components->posVelError->positionDecorr.decorrRate = 113.965;
 
-    err.getComponents()->reset(new six::RadarSensor());
-    assign(err.getComponents()->getRadarSensor()->rangeBias, 43.5);
-    assign(err.getComponents()->getRadarSensor()->clockFreqSF, 1111.1);
-    assign(err.getComponents()->getRadarSensor()->transmitFreqSF, 85);
-    assign(err.getComponents()->getRadarSensor()->rangeBiasDecorr, six::DecorrType(123, .03));
+    err.components->radarSensor.reset(new six::RadarSensor());
+    err.components->radarSensor->rangeBias = 43.5;
+    err.components->radarSensor->clockFreqSF = 1111.1;
+    err.components->radarSensor->transmitFreqSF= 85;
+    err.components->radarSensor->rangeBiasDecorr = six::DecorrType(123, .03);
 
-    err.getComponents()->reset(new six::TropoError());
-    assign(err.getComponents()->getTropoError()->tropoRangeVertical, .00289);
-    assign(err.getComponents()->getTropoError()->tropoRangeSlant, 777);
-    assign(err.getComponents()->getTropoError()->tropoRangeDecorr, six::DecorrType(0, 98.7));
+    err.components->tropoError.reset(new six::TropoError());
+    err.components->tropoError->tropoRangeVertical = .00289;
+    err.components->tropoError->tropoRangeSlant = 777;
+    err.components->tropoError->tropoRangeDecorr = six::DecorrType(0, 98.7);
 
-    err.getComponents()->reset(new six::IonoError());
-    assign(err.getComponents()->getIonoError()->ionoRangeVertical, 1.2);
-    assign(err.getComponents()->getIonoError()->ionoRangeRateVertical, 77632);
-    assign(err.getComponents()->getIonoError()->ionoRgRgRateCC, .072);
-    assign(err.getComponents()->getIonoError()->ionoRangeVertDecorr, six::DecorrType(48.16, 113.964));
+    err.components->ionoError.reset(new six::IonoError());
+    err.components->ionoError->ionoRangeVertical = 1.2;
+    err.components->ionoError->ionoRangeRateVertical = 77632;
+    err.components->ionoError->ionoRgRgRateCC = .072;
+    err.components->ionoError->ionoRangeVertDecorr = six::DecorrType(48.16, 113.964);
 
     six::Parameter param;
     param.setName("ErrorStatisticsParameterName");
