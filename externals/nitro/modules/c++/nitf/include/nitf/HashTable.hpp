@@ -61,7 +61,7 @@ public:
  *
  *  Iterates a hash table, unordered.
  */
-struct HashTableIterator final
+struct HashTableIterator /*final*/   // no "final", SWIG doesn't like it
 {
     HashTableIterator() = default;
     ~HashTableIterator() = default;

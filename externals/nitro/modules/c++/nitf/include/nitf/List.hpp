@@ -91,7 +91,7 @@ private:
  *
  *  Iterates a linked list.
  */
-struct ListIterator final
+struct ListIterator /*final*/   // no "final", SWIG doesn't like it
 {
     ListIterator() = default;
     ~ListIterator() = default;

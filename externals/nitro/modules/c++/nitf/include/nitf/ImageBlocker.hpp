@@ -43,7 +43,7 @@ namespace nitf
  * means for multi-segment cases, there may be a different num rows / block in
  * each segment).
  */
-struct ImageBlocker final
+struct ImageBlocker /*final*/   // no "final", SWIG doesn't like it
 {
     ImageBlocker(const ImageBlocker&) = delete;
     ImageBlocker& operator=(const ImageBlocker&) = delete;

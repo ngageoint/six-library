@@ -42,7 +42,7 @@ namespace nitf
  *
  * Currently only supports segmenting in the row direction.
  */
-struct ImageSegmentComputer final
+struct ImageSegmentComputer /*final*/   // no "final", SWIG doesn't like it
 {
     ImageSegmentComputer(const ImageSegmentComputer&) = delete;
     ImageSegmentComputer& operator=(const ImageSegmentComputer&) = delete;
