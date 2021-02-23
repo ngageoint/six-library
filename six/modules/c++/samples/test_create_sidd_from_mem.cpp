@@ -2264,21 +2264,21 @@ void initErrorStatistics(six::ErrorStatistics& err)
     err.getComponents()->getPosVelError()->positionDecorr.decorrRate = 113.965;
 
     err.getComponents()->reset(new six::RadarSensor());
-    err.getComponents()->getRadarSensor()->RangeBias(43.5);
-    err.getComponents()->getRadarSensor()->ClockFreqSF(1111.1);
-    err.getComponents()->getRadarSensor()->TransmitFreqSF(85);
-    err.getComponents()->getRadarSensor()->RangeBiasDecorr(six::DecorrType(123, .03));
+    assign(err.getComponents()->getRadarSensor()->rangeBias, 43.5);
+    assign(err.getComponents()->getRadarSensor()->clockFreqSF, 1111.1);
+    assign(err.getComponents()->getRadarSensor()->transmitFreqSF, 85);
+    assign(err.getComponents()->getRadarSensor()->rangeBiasDecorr, six::DecorrType(123, .03));
 
     err.getComponents()->reset(new six::TropoError());
-    err.getComponents()->getTropoError()->TropoRangeVertical(.00289);
-    err.getComponents()->getTropoError()->TropoRangeSlant(777);
-    err.getComponents()->getTropoError()->TropoRangeDecorr(six::DecorrType(0, 98.7));
+    assign(err.getComponents()->getTropoError()->tropoRangeVertical, .00289);
+    assign(err.getComponents()->getTropoError()->tropoRangeSlant, 777);
+    assign(err.getComponents()->getTropoError()->tropoRangeDecorr, six::DecorrType(0, 98.7));
 
     err.getComponents()->reset(new six::IonoError());
-    err.getComponents()->getIonoError()->IonoRangeVertical(1.2);
-    err.getComponents()->getIonoError()->IonoRangeRateVertical(77632);
-    err.getComponents()->getIonoError()->IonoRgRgRateCC(.072);
-    err.getComponents()->getIonoError()->IonoRangeVertDecorr(six::DecorrType(48.16, 113.964));
+    assign(err.getComponents()->getIonoError()->ionoRangeVertical, 1.2);
+    assign(err.getComponents()->getIonoError()->ionoRangeRateVertical, 77632);
+    assign(err.getComponents()->getIonoError()->ionoRgRgRateCC, .072);
+    assign(err.getComponents()->getIonoError()->ionoRangeVertDecorr, six::DecorrType(48.16, 113.964));
 
     six::Parameter param;
     param.setName("ErrorStatisticsParameterName");

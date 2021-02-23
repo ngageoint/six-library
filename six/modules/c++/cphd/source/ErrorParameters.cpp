@@ -75,8 +75,8 @@ std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
                 << "    v2v3          : " << p.corrCoefs->v2v3 << "\n";
         }
         os << "    Decorr:: \n"
-            << "    CorrCoefZero   : " << p.PositionDecorr().value().corrCoefZero << "\n"
-            << "    DecorrRate     : " << p.PositionDecorr().value().decorrRate << "\n";
+            << "    CorrCoefZero   : " << p.positionDecorr.corrCoefZero << "\n"
+            << "    DecorrRate     : " << p.positionDecorr.decorrRate << "\n";
     return os;
 }
 
@@ -106,38 +106,38 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         if (e.monostatic->tropoError.get())
         {
             os << "    TropoError:: \n";
-            if (e.monostatic->tropoError->TropoRangeVertical().has_value())
+            if (six::has_value(e.monostatic->tropoError->tropoRangeVertical))
             {
-                os << "    TropoRangeVertical : " << e.monostatic->tropoError->TropoRangeVertical().value() << "\n";
+                os << "    TropoRangeVertical : " << e.monostatic->tropoError->tropoRangeVertical << "\n";
             }
-            if (e.monostatic->tropoError->TropoRangeSlant().has_value())
+            if (six::has_value(e.monostatic->tropoError->tropoRangeSlant))
             {
-                os << "    TropoRangeSlant  : " << e.monostatic->tropoError->TropoRangeSlant().value() << "\n";
+                os << "    TropoRangeSlant  : " << e.monostatic->tropoError->tropoRangeSlant << "\n";
             }
-            if (e.monostatic->tropoError->TropoRangeDecorr().has_value())
+            if (six::has_value(e.monostatic->tropoError->tropoRangeDecorr))
             {
             os << "    TropoRangeDecorr:: \n"
-                << "      CorrCoefZero  : " << e.monostatic->tropoError->TropoRangeDecorr().value().corrCoefZero << "\n"
-                << "      DecorrRate  : " << e.monostatic->tropoError->TropoRangeDecorr().value().decorrRate << "\n";
+                << "      CorrCoefZero  : " << e.monostatic->tropoError->tropoRangeDecorr.corrCoefZero << "\n"
+                << "      DecorrRate  : " << e.monostatic->tropoError->tropoRangeDecorr.decorrRate << "\n";
             }
         }
         if (e.monostatic->ionoError.get())
         {
             os << "    IonoError:: \n";
-            if (e.monostatic->ionoError->IonoRangeVertical().has_value())
+            if (six::has_value(e.monostatic->ionoError->ionoRangeVertical))
             {
-                os << "    IonoRangeVertical : " << e.monostatic->ionoError->IonoRangeVertical().value() << "\n";
+                os << "    IonoRangeVertical : " << e.monostatic->ionoError->ionoRangeVertical << "\n";
             }
-            if (e.monostatic->ionoError->IonoRangeRateVertical().has_value())
+            if (six::has_value(e.monostatic->ionoError->ionoRangeRateVertical))
             {
-                os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->IonoRangeRateVertical().value() << "\n";
+                os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->ionoRangeRateVertical << "\n";
             }
-            os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->IonoRgRgRateCC().value() << "\n";
-            if (e.monostatic->ionoError->IonoRangeVertDecorr().has_value())
+            os << "    IonoRgRgRateCC    : " << six::value(e.monostatic->ionoError->ionoRgRgRateCC) << "\n";
+            if (six::has_value(e.monostatic->ionoError->ionoRangeVertDecorr))
             {
             os << "    IonoRangeDecorr:: \n"
-                << "      CorrCoefZero  : " << e.monostatic->ionoError->IonoRangeVertDecorr().value().corrCoefZero << "\n"
-                << "      DecorrRate  : " << e.monostatic->ionoError->IonoRangeVertDecorr().value().decorrRate << "\n";
+                << "      CorrCoefZero  : " << e.monostatic->ionoError->ionoRangeVertDecorr.corrCoefZero << "\n"
+                << "      DecorrRate  : " << e.monostatic->ionoError->ionoRangeVertDecorr.decorrRate << "\n";
             }
         }
         for (size_t ii = 0; ii < e.monostatic->parameter.size(); ++ii)

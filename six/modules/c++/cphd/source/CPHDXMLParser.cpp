@@ -783,11 +783,11 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
             createDouble("V1V3", errParams.monostatic->posVelErr.corrCoefs->v1v3, corrCoefsXML);
             createDouble("V2V3", errParams.monostatic->posVelErr.corrCoefs->v2v3, corrCoefsXML);
         }
-        if(errParams.monostatic->posVelErr.PositionDecorr().has_value())
+        if(six::has_value(errParams.monostatic->posVelErr.positionDecorr))
         {
             XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
-            createDouble("CorrCoefZero", errParams.monostatic->posVelErr.PositionDecorr().value().corrCoefZero, positionDecorrXML);
-            createDouble("DecorrRate", errParams.monostatic->posVelErr.PositionDecorr().value().decorrRate, positionDecorrXML);
+            createDouble("CorrCoefZero", errParams.monostatic->posVelErr.positionDecorr.corrCoefZero, positionDecorrXML);
+            createDouble("DecorrRate", errParams.monostatic->posVelErr.positionDecorr.decorrRate, positionDecorrXML);
         }
         // RadarSensor
         XMLElem radarXML = newElement("RadarSensor", monoXML);
@@ -810,38 +810,38 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
         if (errParams.monostatic->tropoError.get())
         {
             XMLElem tropoXML = newElement("TropoError", monoXML);
-            if (errParams.monostatic->tropoError->TropoRangeVertical().has_value())
+            if (six::has_value(errParams.monostatic->tropoError->tropoRangeVertical))
             {
-                createDouble("TropoRangeVertical", errParams.monostatic->tropoError->TropoRangeVertical().value(), tropoXML);
+                createDouble("TropoRangeVertical", errParams.monostatic->tropoError->tropoRangeVertical, tropoXML);
             }
-            if (errParams.monostatic->tropoError->TropoRangeSlant().has_value())
+            if (six::has_value(errParams.monostatic->tropoError->tropoRangeSlant))
             {
-                createDouble("TropoRangeSlant", errParams.monostatic->tropoError->TropoRangeSlant().value(), tropoXML);
+                createDouble("TropoRangeSlant", errParams.monostatic->tropoError->tropoRangeSlant, tropoXML);
             }
-            if (errParams.monostatic->tropoError->TropoRangeDecorr().has_value())
+            if (six::has_value(errParams.monostatic->tropoError->tropoRangeDecorr))
             {
                 XMLElem tropoDecorrXML = newElement("TropoRangeDecorr", tropoXML);
-                createDouble("CorrCoefZero", errParams.monostatic->tropoError->TropoRangeDecorr().value().corrCoefZero, tropoDecorrXML);
-                createDouble("DecorrRate", errParams.monostatic->tropoError->TropoRangeDecorr().value().decorrRate, tropoDecorrXML);
+                createDouble("CorrCoefZero", errParams.monostatic->tropoError->tropoRangeDecorr.corrCoefZero, tropoDecorrXML);
+                createDouble("DecorrRate", errParams.monostatic->tropoError->tropoRangeDecorr.decorrRate, tropoDecorrXML);
             }
         }
         if (errParams.monostatic->ionoError.get())
         {
             XMLElem ionoXML = newElement("IonoError", monoXML);
-            createDouble("IonoRangeVertical", errParams.monostatic->ionoError->IonoRangeVertical().value(), ionoXML);
-            if (errParams.monostatic->ionoError->IonoRangeRateVertical().has_value())
+            createDouble("IonoRangeVertical", six::value(errParams.monostatic->ionoError->ionoRangeVertical), ionoXML);
+            if (six::has_value(errParams.monostatic->ionoError->ionoRangeRateVertical))
             {
-                createDouble("IonoRangeRateVertical", errParams.monostatic->ionoError->IonoRangeRateVertical().value(), ionoXML);
+                createDouble("IonoRangeRateVertical", errParams.monostatic->ionoError->ionoRangeRateVertical, ionoXML);
             }
-            if (errParams.monostatic->ionoError->IonoRgRgRateCC().has_value())
+            if (six::has_value(errParams.monostatic->ionoError->ionoRgRgRateCC))
             {
-                createDouble("IonoRgRgRateCC", errParams.monostatic->ionoError->IonoRgRgRateCC().value(), ionoXML);
+                createDouble("IonoRgRgRateCC", errParams.monostatic->ionoError->ionoRgRgRateCC, ionoXML);
             }
-            if (errParams.monostatic->ionoError->IonoRangeVertDecorr().has_value())
+            if (six::has_value(errParams.monostatic->ionoError->ionoRangeVertDecorr))
             {
                 XMLElem ionoDecorrXML = newElement("IonoRangeVertDecorr", ionoXML);
-                createDouble("CorrCoefZero", errParams.monostatic->ionoError->IonoRangeVertDecorr().value().corrCoefZero, ionoDecorrXML);
-                createDouble("DecorrRate", errParams.monostatic->ionoError->IonoRangeVertDecorr().value().decorrRate, ionoDecorrXML);
+                createDouble("CorrCoefZero", errParams.monostatic->ionoError->ionoRangeVertDecorr.corrCoefZero, ionoDecorrXML);
+                createDouble("DecorrRate", errParams.monostatic->ionoError->ionoRangeVertDecorr.decorrRate, ionoDecorrXML);
             }
         }
         if (errParams.monostatic->parameter.size() > 0)
@@ -1758,7 +1758,7 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
             {
                 if (parseDouble(verticalXML, value))
                 {
-                    errParam.monostatic->tropoError->TropoRangeVertical(value);
+                    six::assign(errParam.monostatic->tropoError->tropoRangeVertical, value);
                 }
             }
             XMLElem slantXML = getOptional(tropoErrorXML, "TropoRangeSlant");
@@ -1766,7 +1766,7 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
             {
                 if (parseDouble(slantXML, value))
                 {
-                    errParam.monostatic->tropoError->TropoRangeSlant(value);
+                    six::assign(errParam.monostatic->tropoError->tropoRangeSlant, value);
                 }
             }
             XMLElem decorrXML = getOptional(tropoErrorXML, "TropoRangeDecorr");
@@ -1774,7 +1774,7 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
             {
                 six::DecorrType tropoRangeDecorr;
                 mCommon.parseDecorrType(decorrXML, tropoRangeDecorr);
-                errParam.monostatic->tropoError->TropoRangeDecorr(tropoRangeDecorr);
+                six::assign(errParam.monostatic->tropoError->tropoRangeDecorr, tropoRangeDecorr);
             }
         }
 
@@ -1784,14 +1784,14 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
             errParam.monostatic->ionoError.reset(new six::IonoError());
             double value;
             parseDouble(getFirstAndOnly(ionoErrorXML, "IonoRangeVertical"), value);
-            errParam.monostatic->ionoError->IonoRangeVertical(value);
+            six::assign(errParam.monostatic->ionoError->ionoRangeVertical, value);
 
             XMLElem rateVerticalXML = getOptional(ionoErrorXML, "IonoRangeRateVertical");
             if(rateVerticalXML)
             {
                 if (parseDouble(rateVerticalXML, value))
                 {
-                    errParam.monostatic->ionoError->IonoRangeRateVertical(value);
+                    six::assign(errParam.monostatic->ionoError->ionoRangeRateVertical, value);
                 }
             }
             XMLElem rgrgRateCCXML = getOptional(ionoErrorXML, "IonoRgRgRateCC");
@@ -1799,7 +1799,7 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
             {
                 if (parseDouble(rgrgRateCCXML, value))
                 {
-                    errParam.monostatic->ionoError->IonoRgRgRateCC(value);
+                    six::assign(errParam.monostatic->ionoError->ionoRgRgRateCC, value);
                 }
             }
             XMLElem decorrXML = getOptional(ionoErrorXML, "IonoRangeVertDecorr");
@@ -1807,7 +1807,7 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
             {
                 six::DecorrType ionoRangeVertDecorr;
                 mCommon.parseDecorrType(decorrXML, ionoRangeVertDecorr);
-                errParam.monostatic->ionoError->IonoRangeVertDecorr(ionoRangeVertDecorr);
+                six::assign(errParam.monostatic->ionoError->ionoRangeVertDecorr, ionoRangeVertDecorr);
             }
         }
         mCommon.parseParameters(monostaticXML, "Parameter", errParam.monostatic->parameter);
@@ -1988,11 +1988,11 @@ XMLElem CPHDXMLParser::createErrorParamPlatform(
         createDouble("V1V3", p.posVelErr.corrCoefs->v1v3, corrCoefsXML);
         createDouble("V2V3", p.posVelErr.corrCoefs->v2v3, corrCoefsXML);
     }
-    if(p.posVelErr.PositionDecorr().has_value())
+    if(six::has_value(p.posVelErr.positionDecorr))
     {
         XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
-        createDouble("CorrCoefZero", p.posVelErr.PositionDecorr().value().corrCoefZero, positionDecorrXML);
-        createDouble("DecorrRate", p.posVelErr.PositionDecorr().value().decorrRate, positionDecorrXML);
+        createDouble("CorrCoefZero", p.posVelErr.positionDecorr.corrCoefZero, positionDecorrXML);
+        createDouble("DecorrRate", p.posVelErr.positionDecorr.decorrRate, positionDecorrXML);
     }
     return posVelErrXML;
 }
@@ -2302,7 +2302,7 @@ void CPHDXMLParser::parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError&
         // posVelErr.positionDecorr.reset(new six::DecorrType());
         six::DecorrType positionDecorr;
         mCommon.parseDecorrType(posDecorrXML, positionDecorr);
-        posVelErr.PositionDecorr(positionDecorr);
+        six::assign(posVelErr.positionDecorr, positionDecorr);
     }
 }
 

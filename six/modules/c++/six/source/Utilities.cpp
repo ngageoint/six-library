@@ -30,18 +30,6 @@
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
 
-namespace math // in coda-oss
-{
-    inline double square(const std::optional<double>& val)
-    {
-        return val.value() * val.value();
-    }
-    inline double square(const six::InitRef<double>& val)
-    {
-        return val.value() * val.value();
-    }
-}
-
 namespace
 {
 NITF_TRE_STATIC_HANDLER_REF(XML_DATA_CONTENT);
@@ -52,24 +40,6 @@ void assign(math::linear::MatrixMxN<7, 7>& sensorCovar,
             double val)
 {
     sensorCovar(row, col) = sensorCovar(col, row) = val;
-}
-
-static inline double operator*(double lhs, const std::optional<double>& rhs)
-{
-    return lhs * rhs.value();
-}
-static inline double operator*(const std::optional<double>& lhs, const std::optional<double>& rhs)
-{
-    return lhs.value() * rhs.value();
-}
-
-static inline double operator*(double lhs, const six::InitRef<double>& rhs)
-{
-    return lhs * rhs.value();
-}
-static inline double operator*(const six::InitRef<double>& lhs, const six::InitRef<double>& rhs)
-{
-    return lhs.value() * rhs.value();
 }
 
 void getSensorCovariance(const six::PosVelError& error,
@@ -1277,13 +1247,13 @@ void six::getErrors(const ErrorStatistics* errorStats,
             {
                 const RadarSensor& radarSensor(*components->getRadarSensor());
 
-                if (radarSensor.RangeBiasDecorr().has_value())
+                if (has_value(radarSensor.rangeBiasDecorr))
                 {
-                    errors.mRangeCorrCoefZero = radarSensor.RangeBiasDecorr().value().corrCoefZero;
-                    errors.mRangeDecorrRate = radarSensor.RangeBiasDecorr().value().decorrRate;
+                    errors.mRangeCorrCoefZero = radarSensor.rangeBiasDecorr.corrCoefZero;
+                    errors.mRangeDecorrRate = radarSensor.rangeBiasDecorr.decorrRate;
                 }
 
-                rangeBias = radarSensor.RangeBias().value();
+                rangeBias = value(radarSensor.rangeBias);
             }
             else
             {
@@ -1299,12 +1269,12 @@ void six::getErrors(const ErrorStatistics* errorStats,
                                     rangeBias,
                                     errors.mSensorErrorCovar);
 
-                if (posVelError.PositionDecorr().has_value())
+                if (has_value(posVelError.positionDecorr))
                 {
                     errors.mPositionCorrCoefZero =
-                            posVelError.PositionDecorr().value().corrCoefZero;
+                            posVelError.positionDecorr.corrCoefZero;
                     errors.mPositionDecorrRate =
-                            posVelError.PositionDecorr().value().decorrRate;
+                            posVelError.positionDecorr.decorrRate;
                 }
             }
 
@@ -1312,19 +1282,19 @@ void six::getErrors(const ErrorStatistics* errorStats,
             {
                 const six::IonoError& ionoError(*components->getIonoError());
                 errors.mIonoErrorCovar(0, 0) =
-                        math::square(ionoError.IonoRangeVertical());
+                        math::square(value(ionoError.ionoRangeVertical));
                 errors.mIonoErrorCovar(1, 1) =
-                        math::square(ionoError.IonoRangeRateVertical());
+                        math::square(value(ionoError.ionoRangeRateVertical));
                 errors.mIonoErrorCovar(0, 1) = errors.mIonoErrorCovar(1, 0) =
-                        ionoError.IonoRangeVertical() *
-                        ionoError.IonoRangeRateVertical() *
-                        ionoError.IonoRgRgRateCC();
+                        value(ionoError.ionoRangeVertical) *
+                        value(ionoError.ionoRangeRateVertical) *
+                        value(ionoError.ionoRgRgRateCC);
             }
 
             if (components->getTropoError())
             {
                 errors.mTropoErrorCovar(0, 0) = math::square(
-                        components->getTropoError()->TropoRangeVertical());
+                        value(components->getTropoError()->tropoRangeVertical));
             }
         }
 

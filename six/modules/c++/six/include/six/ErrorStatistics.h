@@ -99,10 +99,6 @@ struct PosVelError
 
     //! Can be none, make sure to set this undefined()
     DecorrType positionDecorr = Init::undefined<DecorrType>();
-    InitRef<DecorrType> PositionDecorr(const std::optional<DecorrType>& v = std::optional<DecorrType>()) const
-    {
-        return make_InitRef(positionDecorr, v);
-    }
 
     //! Equality operators
     bool operator==(const PosVelError& rhs) const;
@@ -126,40 +122,24 @@ struct RadarSensor
      *  Range bias at zero range
      */
     double rangeBias = Init::undefined<double>();
-    InitRef<double> RangeBias(const std::optional<double>& v = std::optional<double>()) const
-    {
-        return make_InitRef(rangeBias, v);
-    }
 
     /*!
      *  (Optional) Payload clock frequency scale factor
      *  standard deviation.
      */
     double clockFreqSF = 0.0; // From Bill: "Volume 3: States if ClockFreqSF is omitted then set to 0."
-    InitRef<double> ClockFreqSF(const std::optional<double>& v = std::optional<double>()) const
-    {
-        return make_InitRef(clockFreqSF, v);
-    }
 
     /*!
      * (Optional) Transmit frequency scale factor
      *  standard deviation.
      */
     double transmitFreqSF = 0.0; // From Bill: "No mention of the TransmitFreqSF in volume 3 ... would still recommend setting to 0."
-    InitRef<double> TransmitFreqSF(const std::optional<double>& v = std::optional<double>()) const
-    {
-        return make_InitRef(clockFreqSF, v);
-    }
 
     /*!
      *  (Optional) Range bias decorrelated rate
      *
      */
     DecorrType rangeBiasDecorr = Init::undefined<DecorrType>();
-    InitRef<DecorrType> RangeBiasDecorr(const std::optional<DecorrType>& v = std::optional<DecorrType>()) const
-    {
-        return make_InitRef(rangeBiasDecorr, v);
-    }
 
     RadarSensor() = default;
 
@@ -189,10 +169,6 @@ struct TropoError
      *  two-range error
      */
     double tropoRangeVertical = Init::undefined<double>();
-    InitRef<double> TropoRangeVertical(const std::optional<double>& v = std::optional<double>()) const
-    {
-        return make_InitRef(tropoRangeVertical, v);
-    }
 
     /*!
      *  (Optional) Troposphere two-way delay error for SCP COA
@@ -200,20 +176,12 @@ struct TropoError
      *  as a two-way range error
      */
     double tropoRangeSlant = Init::undefined<double>();
-    InitRef<double> TropoRangeSlant(const std::optional<double>& v = std::optional<double>()) const
-    {
-        return make_InitRef(tropoRangeSlant, v);
-    }
 
     /*!
      *  (Optional)
      *
      */
     DecorrType tropoRangeDecorr = Init::undefined<DecorrType>();
-    InitRef<DecorrType> TropoRangeDecorr(const std::optional<DecorrType>& v = std::optional<DecorrType>()) const
-    {
-        return make_InitRef(tropoRangeDecorr, v);
-    }
 
     TropoError() = default;
 
@@ -243,10 +211,6 @@ struct IonoError
      *  two-way range error
      */
     double ionoRangeVertical = Init::undefined<double>();
-    InitRef<double> IonoRangeVertical(const std::optional<double>& v = std::optional<double>()) const
-    {
-        return make_InitRef(ionoRangeVertical, v);
-    }
 
     /*!
      *  (Optional) Ionosphere two-way delay rate of change
@@ -254,10 +218,6 @@ struct IonoError
      *  Expressed as a two-way range error
      */
     double ionoRangeRateVertical = Init::undefined<double>();
-    InitRef<double> IonoRangeRateVertical(const std::optional<double>& v = std::optional<double>()) const
-    {
-        return make_InitRef(ionoRangeRateVertical, v);
-    }
 
     /*!
      *  Ionosphere range error and range rate error correlation
@@ -265,19 +225,11 @@ struct IonoError
      *
      */
     double ionoRgRgRateCC = Init::undefined<double>();
-    InitRef<double> IonoRgRgRateCC(const std::optional<double>& v = std::optional<double>()) const
-    {
-        return make_InitRef(ionoRgRgRateCC, v);
-    }
     
     /*!
      *  Ionosphere range error decorrelation ratio
      */
     DecorrType ionoRangeVertDecorr = Init::undefined<DecorrType>();
-    InitRef<DecorrType> IonoRangeVertDecorr(const std::optional<DecorrType>& v = std::optional<DecorrType>()) const
-    {
-        return make_InitRef(ionoRangeVertDecorr, v);
-    }
 
     IonoError() = default;
 
