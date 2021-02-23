@@ -197,10 +197,20 @@ XMLElem XMLParser::createDouble(const std::string& name,
 
     return elem;
 }
+XMLElem XMLParser::createDouble(const std::string& name,
+    const std::string& uri, const std::optional<double>& p, XMLElem parent) const
+{
+    return createDouble(name, uri, p.value(), parent);
+}
 XMLElem XMLParser::createDouble(const std::string& name, double p,
         XMLElem parent) const
 {
     return createDouble(name, mDefaultURI, p, parent);
+}
+XMLElem XMLParser::createDouble(const std::string& name, const std::optional<double>& p,
+    XMLElem parent) const
+{
+    return createDouble(name, p.value(), parent);
 }
 
 XMLElem XMLParser::createOptionalDouble(const std::string& name,
@@ -317,24 +327,37 @@ void XMLParser::setAttribute_(XMLElem e, const std::string& name,
 }
 
 template<typename TGetValue>
-static void parseValue(logging::Logger& log, TGetValue getValue)
+static bool parseValue(logging::Logger& log, TGetValue getValue)
 {
     try
     {
         getValue();
+        return true;
     }
     catch (const except::BadCastException& ex)
     {
         log.warn(Ctxt("Unable to parse: " + ex.toString()));
     }
+    return false;
 }
 
-void XMLParser::parseDouble(XMLElem element, double& value) const
+bool XMLParser::parseDouble(XMLElem element, double& value) const
 {
-    parseValue(*mLog, [&]() {
+    value = Init::undefined<double>();
+    return parseValue(*mLog, [&]() {
         value = xml::lite::getValue<double>(*element);
         assert(Init::isDefined(value));
         });
+}
+void XMLParser::parseDouble(XMLElem element, std::optional<double>& value) const
+{
+    value.reset(); // be sure callers can determine success/failure
+
+    double result;
+    if (parseDouble(element, result))
+    {
+        value = result;
+    }
 }
 
 void XMLParser::parseOptionalDouble(XMLElem parent, const std::string& tag, double& value) const
@@ -350,9 +373,7 @@ void XMLParser::parseOptionalDouble(XMLElem parent, const std::string& tag, std:
     auto element = getOptional(parent, tag);
     if (element)
     {
-        double result;
-        parseDouble(element, result);
-        value = result;
+        parseDouble(element, value);
     }
 }
 

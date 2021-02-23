@@ -2259,9 +2259,7 @@ void initErrorStatistics(six::ErrorStatistics& err)
     err.components->posVelError->corrCoefs->v1v2 = 6.2;
     err.components->posVelError->corrCoefs->v1v3 = 6.2;
     err.components->posVelError->corrCoefs->v2v3 = 6.2;
-
-    err.components->posVelError->positionDecorr.corrCoefZero = 48.17;
-    err.components->posVelError->positionDecorr.decorrRate = 113.965;
+    err.components->posVelError->positionDecorr = six::DecorrType(48.17, 113.965);
 
     err.components->radarSensor.reset(new six::RadarSensor());
     err.components->radarSensor->rangeBias = 43.5;

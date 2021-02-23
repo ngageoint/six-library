@@ -65,6 +65,20 @@ std::ostream& checked(std::ostream& os, const std::string& s, const std::optiona
     return decorr.has_value() ? checked(os, s, *decorr) : os;
 }
 
+
+static std::ostream& checked(std::ostream& os, const std::string& s, const double& v)
+{
+    if (six::Init::isDefined(v))
+    {
+        os << s << v << "\n";
+    }
+    return os;
+}
+std::ostream& checked(std::ostream& os, const std::string& s, const std::optional<double>& v)
+{
+    return v.has_value() ? checked(os, s, *v) : os;
+}
+
 std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
 {
     os << "    PosVelError:: \n"
@@ -124,28 +138,16 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         if (e.monostatic->tropoError.get())
         {
             os << "    TropoError:: \n";
-            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeVertical))
-            {
-                os << "    TropoRangeVertical : " << six::value(e.monostatic->tropoError->tropoRangeVertical) << "\n";
-            }
-            if (!six::Init::isUndefined(e.monostatic->tropoError->tropoRangeSlant))
-            {
-                os << "    TropoRangeSlant  : " << e.monostatic->tropoError->tropoRangeSlant << "\n";
-            }
+            checked(os, "    TropoRangeVertical : ", e.monostatic->tropoError->tropoRangeVertical);
+            checked(os, "    TropoRangeSlant  : ", e.monostatic->tropoError->tropoRangeSlant);
             checked(os, "    TropoRangeDecorr:: \n", e.monostatic->tropoError->tropoRangeDecorr);
         }
         if (e.monostatic->ionoError.get())
         {
             os << "    IonoError:: \n";
-            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeVertical))
-            {
-                os << "    IonoRangeVertical : " << e.monostatic->ionoError->ionoRangeVertical << "\n";
-            }
-            if (!six::Init::isUndefined(e.monostatic->ionoError->ionoRangeRateVertical))
-            {
-                os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->ionoRangeRateVertical << "\n";
-            }
-            os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->ionoRgRgRateCC << "\n";
+            checked(os, "    IonoRangeVertical : ", e.monostatic->ionoError->ionoRangeVertical);
+            checked(os, "    IonoRangeRateVertical  : ", e.monostatic->ionoError->ionoRangeRateVertical);
+            os << "    IonoRgRgRateCC    : " << six::value(e.monostatic->ionoError->ionoRgRgRateCC) << "\n";
             checked(os, "    IonoRangeDecorr:: \n", e.monostatic->ionoError->ionoRangeVertDecorr);
         }
         for (size_t ii = 0; ii < e.monostatic->parameter.size(); ++ii)

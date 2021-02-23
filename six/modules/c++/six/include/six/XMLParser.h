@@ -117,6 +117,8 @@ protected:
 
     XMLElem createDouble(const std::string& name,
             const std::string& uri, double p = 0, XMLElem parent = nullptr) const;
+    XMLElem createDouble(const std::string& name,
+        const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
     XMLElem createOptionalDouble(const std::string& name,
         const std::string& uri, const double& p, XMLElem parent = nullptr) const;
     XMLElem createOptionalDouble(const std::string& name,
@@ -154,6 +156,8 @@ protected:
             XMLElem parent = nullptr) const;
     XMLElem createDouble(const std::string& name, double p = 0,
             XMLElem parent = nullptr) const;
+    XMLElem createDouble(const std::string& name, const std::optional<double>& p,
+        XMLElem parent = nullptr) const;
     XMLElem createOptionalDouble(const std::string& name, const double& p,
             XMLElem parent = nullptr) const;
     XMLElem createOptionalDouble(const std::string& name, const std::optional<double>& p,
@@ -194,7 +198,8 @@ protected:
         enumVal = T(name);
     }
 
-    void parseDouble(XMLElem element, double& value) const;
+    bool parseDouble(XMLElem element, double& value) const;
+    void parseDouble(XMLElem element, std::optional<double>& value) const;
     void parseOptionalDouble(XMLElem parent, const std::string& tag, double& value) const;
     void parseOptionalDouble(XMLElem parent, const std::string& tag, std::optional<double>& value) const;
     void parseComplex(XMLElem element, std::complex<double>& value) const;

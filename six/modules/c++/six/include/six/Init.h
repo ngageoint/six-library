@@ -23,6 +23,8 @@
 #define SIX_six_Init_h_INCLUDED_
 #pragma once
 
+#include <assert.h>
+
 #include <limits>
 #include <stdexcept>
 
@@ -131,9 +133,8 @@ inline bool has_value(const T& v)
 template<typename T>
 inline bool has_value(const std::optional<T>& v)
 {
-    return v.has_value();
+    return v.has_value() && has_value(*v);
 }
-
 
 namespace details
 {
@@ -155,9 +156,8 @@ inline const T& value(const T& v)
 template<typename T>
 inline const T& value(const std::optional<T>& v)
 {
-    return v.value();
+    return value(v.value());
 }
-
 
 template<typename T, typename U>
 inline void assign(T& t, const U& u)
