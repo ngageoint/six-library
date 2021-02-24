@@ -47,15 +47,15 @@ XMLElem SICommonXMLParser10x::convertCompositeSCPToXML(
 {
     //! optional field
     std::string defaultURI = getSICommonURI();
-    if (errorStatistics->getCompositeSCP())
+    if (errorStatistics->compositeSCP.get())
     {
         XMLElem scpXML = newElement("CompositeSCP", defaultURI, errorStatsXML);
 
-        createDouble("Rg", defaultURI, errorStatistics->getCompositeSCP()->xErr,
+        createDouble("Rg", defaultURI, errorStatistics->compositeSCP->xErr,
                      scpXML);
-        createDouble("Az", defaultURI, errorStatistics->getCompositeSCP()->yErr,
+        createDouble("Az", defaultURI, errorStatistics->compositeSCP->yErr,
                      scpXML);
-        createDouble("RgAz", defaultURI, errorStatistics->getCompositeSCP()->xyErr,
+        createDouble("RgAz", defaultURI, errorStatistics->compositeSCP->xyErr,
                      scpXML);
         return scpXML;
     }
@@ -71,15 +71,15 @@ void SICommonXMLParser10x::parseCompositeSCPFromXML(
     //optional
     if (compositeSCPXML)
     {
-        errorStatistics->reset(
-            new six::CompositeSCP(CompositeSCP::RG_AZ));
+        errorStatistics->compositeSCP.reset(
+                new six::CompositeSCP(CompositeSCP::RG_AZ));
 
         parseDouble(getFirstAndOnly(compositeSCPXML, "Rg"),
-                    errorStatistics->getCompositeSCP()->xErr);
+                    errorStatistics->compositeSCP->xErr);
         parseDouble(getFirstAndOnly(compositeSCPXML, "Az"),
-                    errorStatistics->getCompositeSCP()->yErr);
+                    errorStatistics->compositeSCP->yErr);
         parseDouble(getFirstAndOnly(compositeSCPXML, "RgAz"),
-                    errorStatistics->getCompositeSCP()->xyErr);
+                    errorStatistics->compositeSCP->xyErr);
     }
 }
 

@@ -39,10 +39,44 @@ ErrorParameters::Bistatic::RadarSensor::RadarSensor() :
 {
 }
 
-static inline std::ostream& operator<< (std::ostream& os, const std::optional<double>& value)
+static std::ostream& unchecked(std::ostream& os, const six::DecorrType& decorr_)
 {
-    os << value.value();
+    const auto decorr = six::value(decorr_);
+    os << "    CorrCoefZero   : " << decorr.corrCoefZero << "\n"
+        << "    DecorrRate     : " << decorr.decorrRate << "\n";
     return os;
+}
+std::ostream& unchecked(std::ostream& os, const std::optional<six::DecorrType>& decorr)
+{
+    return unchecked(os, decorr.value());
+}
+
+static std::ostream& checked(std::ostream& os, const std::string& s, const six::DecorrType& decorr)
+{
+    if (six::Init::isDefined(decorr))
+    {
+        os << s; 
+        return unchecked(os, decorr);
+    }
+    return os;
+}
+std::ostream& checked(std::ostream& os, const std::string& s, const std::optional<six::DecorrType>& decorr)
+{
+    return decorr.has_value() ? checked(os, s, *decorr) : os;
+}
+
+
+static std::ostream& checked(std::ostream& os, const std::string& s, const double& v)
+{
+    if (six::Init::isDefined(v))
+    {
+        os << s << v << "\n";
+    }
+    return os;
+}
+std::ostream& checked(std::ostream& os, const std::string& s, const std::optional<double>& v)
+{
+    return v.has_value() ? checked(os, s, *v) : os;
 }
 
 std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
@@ -74,10 +108,8 @@ std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
                 << "    v1v3          : " << p.corrCoefs->v1v3 << "\n"
                 << "    v2v3          : " << p.corrCoefs->v2v3 << "\n";
         }
-        os << "    Decorr:: \n"
-            << "    CorrCoefZero   : " << p.PositionDecorr().get().corrCoefZero << "\n"
-            << "    DecorrRate     : " << p.PositionDecorr().get().decorrRate << "\n";
-    return os;
+        os << "    Decorr:: \n";
+        return unchecked(os, p.positionDecorr);
 }
 
 std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
@@ -106,39 +138,17 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         if (e.monostatic->tropoError.get())
         {
             os << "    TropoError:: \n";
-            if (e.monostatic->tropoError->TropoRangeVertical().has())
-            {
-                os << "    TropoRangeVertical : " << e.monostatic->tropoError->TropoRangeVertical().get() << "\n";
-            }
-            if (e.monostatic->tropoError->TropoRangeSlant().has())
-            {
-                os << "    TropoRangeSlant  : " << e.monostatic->tropoError->TropoRangeSlant().get() << "\n";
-            }
-            if (e.monostatic->tropoError->TropoRangeDecorr().has())
-            {
-            os << "    TropoRangeDecorr:: \n"
-                << "      CorrCoefZero  : " << e.monostatic->tropoError->TropoRangeDecorr().get().corrCoefZero << "\n"
-                << "      DecorrRate  : " << e.monostatic->tropoError->TropoRangeDecorr().get().decorrRate << "\n";
-            }
+            checked(os, "    TropoRangeVertical : ", e.monostatic->tropoError->tropoRangeVertical);
+            checked(os, "    TropoRangeSlant  : ", e.monostatic->tropoError->tropoRangeSlant);
+            checked(os, "    TropoRangeDecorr:: \n", e.monostatic->tropoError->tropoRangeDecorr);
         }
         if (e.monostatic->ionoError.get())
         {
             os << "    IonoError:: \n";
-            if (e.monostatic->ionoError->IonoRangeVertical().has())
-            {
-                os << "    IonoRangeVertical : " << e.monostatic->ionoError->IonoRangeVertical().get() << "\n";
-            }
-            if (e.monostatic->ionoError->IonoRangeRateVertical().has())
-            {
-                os << "    IonoRangeRateVertical  : " << e.monostatic->ionoError->IonoRangeRateVertical().get() << "\n";
-            }
-            os << "    IonoRgRgRateCC    : " << e.monostatic->ionoError->IonoRgRgRateCC().get() << "\n";
-            if (e.monostatic->ionoError->IonoRangeVertDecorr().has())
-            {
-            os << "    IonoRangeDecorr:: \n"
-                << "      CorrCoefZero  : " << e.monostatic->ionoError->IonoRangeVertDecorr().get().corrCoefZero << "\n"
-                << "      DecorrRate  : " << e.monostatic->ionoError->IonoRangeVertDecorr().get().decorrRate << "\n";
-            }
+            checked(os, "    IonoRangeVertical : ", e.monostatic->ionoError->ionoRangeVertical);
+            checked(os, "    IonoRangeRateVertical  : ", e.monostatic->ionoError->ionoRangeRateVertical);
+            os << "    IonoRgRgRateCC    : " << six::value(e.monostatic->ionoError->ionoRgRgRateCC) << "\n";
+            checked(os, "    IonoRangeDecorr:: \n", e.monostatic->ionoError->ionoRangeVertDecorr);
         }
         for (size_t ii = 0; ii < e.monostatic->parameter.size(); ++ii)
         {

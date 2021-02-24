@@ -50,26 +50,26 @@ XMLElem SICommonXMLParser01x::convertCompositeSCPToXML(
     std::string defaultURI = getSICommonURI();
 
     //TODO compositeSCP needs to be reworked
-    if (errorStatistics->getCompositeSCP())
+    if (errorStatistics->compositeSCP.get())
     {
         XMLElem scpXML = newElement("CompositeSCP", defaultURI, errorStatsXML);
 
-        if (errorStatistics->getCompositeSCP()->scpType == CompositeSCP::RG_AZ)
+        if (errorStatistics->compositeSCP->scpType == CompositeSCP::RG_AZ)
         {
             XMLElem rgAzXML = newElement("RgAzErr", defaultURI, scpXML);
-            createDouble("Rg", defaultURI, errorStatistics->getCompositeSCP()->xErr, rgAzXML);
-            createDouble("Az", defaultURI, errorStatistics->getCompositeSCP()->yErr, rgAzXML);
-            createDouble("RgAz", defaultURI, errorStatistics->getCompositeSCP()->xyErr,
+            createDouble("Rg", defaultURI, errorStatistics->compositeSCP->xErr, rgAzXML);
+            createDouble("Az", defaultURI, errorStatistics->compositeSCP->yErr, rgAzXML);
+            createDouble("RgAz", defaultURI, errorStatistics->compositeSCP->xyErr,
                          rgAzXML);
         }
         else
         {
             XMLElem rgAzXML = newElement("RowColErr", defaultURI, scpXML);
-            createDouble("Row", defaultURI, errorStatistics->getCompositeSCP()->xErr,
+            createDouble("Row", defaultURI, errorStatistics->compositeSCP->xErr,
                          rgAzXML);
-            createDouble("Col", defaultURI, errorStatistics->getCompositeSCP()->yErr,
+            createDouble("Col", defaultURI, errorStatistics->compositeSCP->yErr,
                          rgAzXML);
-            createDouble("RowCol", defaultURI, errorStatistics->getCompositeSCP()->xyErr,
+            createDouble("RowCol", defaultURI, errorStatistics->compositeSCP->xyErr,
                          rgAzXML);
         }
         return scpXML;
@@ -88,30 +88,30 @@ void SICommonXMLParser01x::parseCompositeSCPFromXML(
     //optional
     if (compositeSCPXML)
     {
-        errorStatistics->reset(new CompositeSCP());
+        errorStatistics->compositeSCP.reset(new CompositeSCP());
         XMLElem rgAzErrXML = getOptional(compositeSCPXML, "RgAzErr");
         if (rgAzErrXML)
         {
-            errorStatistics->getCompositeSCP()->scpType = CompositeSCP::RG_AZ;
+            errorStatistics->compositeSCP->scpType = CompositeSCP::RG_AZ;
             parseDouble(getFirstAndOnly(rgAzErrXML, "Rg"),
-                        errorStatistics->getCompositeSCP()->xErr);
+                        errorStatistics->compositeSCP->xErr);
             parseDouble(getFirstAndOnly(rgAzErrXML, "Az"),
-                        errorStatistics->getCompositeSCP()->yErr);
+                        errorStatistics->compositeSCP->yErr);
             parseDouble(getFirstAndOnly(rgAzErrXML, "RgAz"),
-                        errorStatistics->getCompositeSCP()->xyErr);
+                        errorStatistics->compositeSCP->xyErr);
         }
         else
         {
             XMLElem rowColErrXML = getOptional(compositeSCPXML, "RowColErr");
             if (rowColErrXML)
             {
-                errorStatistics->getCompositeSCP()->scpType = CompositeSCP::ROW_COL;
+                errorStatistics->compositeSCP->scpType = CompositeSCP::ROW_COL;
                 parseDouble(getFirstAndOnly(rowColErrXML, "Row"),
-                            errorStatistics->getCompositeSCP()->xErr);
+                            errorStatistics->compositeSCP->xErr);
                 parseDouble(getFirstAndOnly(rowColErrXML, "Col"),
-                            errorStatistics->getCompositeSCP()->yErr);
+                            errorStatistics->compositeSCP->yErr);
                 parseDouble(getFirstAndOnly(rowColErrXML, "RowCol"),
-                            errorStatistics->getCompositeSCP()->xyErr);
+                            errorStatistics->compositeSCP->xyErr);
             }
         }
     }

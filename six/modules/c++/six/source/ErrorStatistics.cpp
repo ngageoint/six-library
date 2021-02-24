@@ -53,6 +53,6 @@ bool PosVelError::operator==(const PosVelError& rhs) const
         v2 == rhs.v2 &&
         v3 == rhs.v3 &&
         corrCoefs == rhs.corrCoefs &&
-        PositionDecorr().get() == rhs.PositionDecorr().get());
+        positionDecorr == rhs.positionDecorr);
 }
 }

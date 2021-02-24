@@ -26,16 +26,9 @@
 #include <logging/NullLogger.h>
 #include <math/Utilities.h>
 #include <nitf/PluginRegistry.hpp>
+#include "six/Init.h"
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
-
-namespace math // in coda-oss
-{
-    inline double square(const std::optional<double>& val)
-    {
-        return val.value() * val.value();
-    }
-}
 
 namespace
 {
@@ -47,15 +40,6 @@ void assign(math::linear::MatrixMxN<7, 7>& sensorCovar,
             double val)
 {
     sensorCovar(row, col) = sensorCovar(col, row) = val;
-}
-
-static inline double operator*(double lhs, const std::optional<double>& rhs)
-{
-    return lhs * rhs.value();
-}
-static inline double operator*(const std::optional<double>& lhs, const std::optional<double>& rhs)
-{
-    return lhs.value() * rhs.value();
 }
 
 void getSensorCovariance(const six::PosVelError& error,
@@ -1254,72 +1238,72 @@ void six::getErrors(const ErrorStatistics* errorStats,
 
     if (errorStats)
     {
-        const six::Components* const components(errorStats->getComponents());
+        const six::Components* const components(errorStats->components.get());
 
         if (components)
         {
             double rangeBias;
-            if (components->getRadarSensor())
+            if (components->radarSensor)
             {
-                const RadarSensor& radarSensor(*components->getRadarSensor());
+                const RadarSensor& radarSensor(*components->radarSensor);
 
-                if (radarSensor.RangeBiasDecorr().has())
+                if (has_value(radarSensor.rangeBiasDecorr))
                 {
-                    errors.mRangeCorrCoefZero = radarSensor.RangeBiasDecorr().get().corrCoefZero;
-                    errors.mRangeDecorrRate = radarSensor.RangeBiasDecorr().get().decorrRate;
+                    const auto& rangeBiasDecorr = value(radarSensor.rangeBiasDecorr);
+                    errors.mRangeCorrCoefZero = rangeBiasDecorr.corrCoefZero;
+                    errors.mRangeDecorrRate = rangeBiasDecorr.decorrRate;
                 }
 
-                rangeBias = radarSensor.RangeBias().get();
+                rangeBias = value(radarSensor.rangeBias);
             }
             else
             {
                 rangeBias = 0.0;
             }
 
-            if (components->getPosVelError())
+            if (components->posVelError)
             {
-                const PosVelError& posVelError(*components->getPosVelError());
+                const PosVelError& posVelError(*components->posVelError);
                 errors.mFrameType = posVelError.frame;
 
                 getSensorCovariance(posVelError,
                                     rangeBias,
                                     errors.mSensorErrorCovar);
 
-                if (posVelError.PositionDecorr().has())
+                if (has_value(posVelError.positionDecorr))
                 {
-                    errors.mPositionCorrCoefZero =
-                            posVelError.PositionDecorr().get().corrCoefZero;
-                    errors.mPositionDecorrRate =
-                            posVelError.PositionDecorr().get().decorrRate;
+                    const auto& positionDecorr = value(posVelError.positionDecorr);
+                    errors.mPositionCorrCoefZero = positionDecorr.corrCoefZero;
+                    errors.mPositionDecorrRate = positionDecorr.decorrRate;
                 }
             }
 
-            if (components->getIonoError())
+            if (components->ionoError)
             {
-                const six::IonoError& ionoError(*components->getIonoError());
+                const six::IonoError& ionoError(*components->ionoError);
                 errors.mIonoErrorCovar(0, 0) =
-                        math::square(ionoError.IonoRangeVertical().get());
+                        math::square(value(ionoError.ionoRangeVertical));
                 errors.mIonoErrorCovar(1, 1) =
-                        math::square(ionoError.IonoRangeRateVertical().get());
+                        math::square(value(ionoError.ionoRangeRateVertical));
                 errors.mIonoErrorCovar(0, 1) = errors.mIonoErrorCovar(1, 0) =
-                        ionoError.IonoRangeVertical().get() *
-                        ionoError.IonoRangeRateVertical().get() *
-                        ionoError.IonoRgRgRateCC().get();
+                        value(ionoError.ionoRangeVertical) *
+                        value(ionoError.ionoRangeRateVertical) *
+                        value(ionoError.ionoRgRgRateCC);
             }
 
-            if (components->getTropoError())
+            if (components->tropoError)
             {
                 errors.mTropoErrorCovar(0, 0) = math::square(
-                        components->getTropoError()->TropoRangeVertical().get());
+                        value(components->tropoError->tropoRangeVertical));
             }
         }
 
-        if (errorStats->getCompositeSCP() &&
-            errorStats->getCompositeSCP()->scpType == CompositeSCP::RG_AZ)
+        if (errorStats->compositeSCP &&
+            errorStats->compositeSCP->scpType == CompositeSCP::RG_AZ)
         {
-            const types::RgAz<double> composite(errorStats->getCompositeSCP()->xErr,
-                                                errorStats->getCompositeSCP()->yErr);
-            const double corr = errorStats->getCompositeSCP()->xyErr;
+            const types::RgAz<double> composite(errorStats->compositeSCP->xErr,
+                                                errorStats->compositeSCP->yErr);
+            const double corr = errorStats->compositeSCP->xyErr;
 
             errors.mUnmodeledErrorCovar(0, 0) = math::square(composite.rg);
             errors.mUnmodeledErrorCovar(1, 1) = math::square(composite.az);
