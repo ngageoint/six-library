@@ -122,7 +122,7 @@ struct RadarSensor
      *  Range bias error standard deviation. 
      *  Range bias at zero range
      */
-    double rangeBias = Init::undefined<double>();
+    double rangeBias = 0.0; // From Bill: "... all of those values can be safely set to 0."
 
     /*!
      *  (Optional) Payload clock frequency scale factor
@@ -169,14 +169,14 @@ struct TropoError
      *  incidence standard deviation.  Expressed as a
      *  two-range error
      */
-    double tropoRangeVertical = Init::undefined<double>();
+    double tropoRangeVertical = 0.0; // From Bill: "... all of those values can be safely set to 0."
 
     /*!
      *  (Optional) Troposphere two-way delay error for SCP COA
      *  incidence angle standard deviation.  Expressed
      *  as a two-way range error
      */
-    double tropoRangeSlant = Init::undefined<double>();
+    double tropoRangeSlant = 0.0; // From Bill: "... all of those values can be safely set to 0."
 
     /*!
      *  (Optional)
@@ -211,21 +211,21 @@ struct IonoError
      *  incidence standard deviation.  Expressed as a
      *  two-way range error
      */
-    double ionoRangeVertical = Init::undefined<double>();
+    double ionoRangeVertical = 0.0; // From Bill: "... all of those values can be safely set to 0."
 
     /*!
      *  (Optional) Ionosphere two-way delay rate of change
      *  error for normal incidence standard deviation.
      *  Expressed as a two-way range error
      */
-    double ionoRangeRateVertical = Init::undefined<double>();
+    double ionoRangeRateVertical = 0.0; // From Bill: "... all of those values can be safely set to 0."
 
     /*!
      *  Ionosphere range error and range rate error correlation
      *  coefficient.
      *
      */
-    double ionoRgRgRateCC = Init::undefined<double>();
+    double ionoRgRgRateCC = 0.0; // From Bill: "... all of those values can be safely set to 0."
     
     /*!
      *  Ionosphere range error decorrelation ratio
