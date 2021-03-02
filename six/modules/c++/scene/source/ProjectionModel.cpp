@@ -28,6 +28,9 @@
 #include "scene/ECEFToLLATransform.h"
 #include "scene/Utilities.h"
 
+#undef min
+#undef max
+
 namespace
 {
 const double EARTH_ROTATION_RATE = 0.000072921150; // Radians / sec

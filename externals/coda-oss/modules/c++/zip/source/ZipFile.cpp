@@ -121,10 +121,10 @@ void ZipFile::readCentralDir()
     readCentralDirValues(eocd, (mCompressed + mCompressedLength) - eocd);
 
     p = mCompressed + mCentralDirOffset;
-    sys::SSize_T len = (mCompressed + mCompressedLength) - p;
-    for (size_t i = 0; i < mEntries.size(); ++i)
+    const sys::SSize_T len = (mCompressed + mCompressedLength) - p;
+    for (auto& entry : mEntries)
     {
-        mEntries[i] = newCentralDirEntry(&p, len);
+        entry = newCentralDirEntry(&p, len);
     }
 
 }

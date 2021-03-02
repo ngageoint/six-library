@@ -22,9 +22,12 @@
 #ifndef __SIX_DERIVED_CLASSIFICATION_H__
 #define __SIX_DERIVED_CLASSIFICATION_H__
 
-#include "mem/ScopedCopyablePtr.h"
+#include <sys/Optional.h>
+#include <mem/ScopedCopyablePtr.h>
+
 #include "six/Classification.h"
 #include "six/ParameterCollection.h"
+
 namespace six
 {
 namespace sidd

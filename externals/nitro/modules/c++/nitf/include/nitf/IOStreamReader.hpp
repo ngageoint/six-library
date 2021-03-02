@@ -33,7 +33,7 @@ namespace nitf
  *  \brief Adapter class that takes in any io::SeekableInputStream and creates
  *         an interface that usable by NITRO.
  */
-struct IOStreamReader final : public CustomIO
+struct IOStreamReader /*final*/ : public CustomIO // no "final", SWIG doesn't like it
 {
     /*
      *  \func Constructor

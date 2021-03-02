@@ -40,7 +40,7 @@ namespace nitf
  *  \class FieldIterator
  *  \brief  The C++ wrapper for the nitf_TREEnumerator
  */
-struct TREFieldIterator final : public nitf::Object<nitf_TREEnumerator>
+struct TREFieldIterator : public nitf::Object<nitf_TREEnumerator> // no "final", SWIG doesn't like it
 {
     TREFieldIterator() noexcept(false)
     {

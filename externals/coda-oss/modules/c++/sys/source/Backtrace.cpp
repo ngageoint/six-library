@@ -22,23 +22,38 @@
 
 #include <sys/Backtrace.h>
 
-#include <config/coda_oss_config.h>
+#include <cstdlib>
 #include <sstream>
 
-static const size_t MAX_STACK_ENTRIES = 62;
+#include <str/Format.h>
 
-#ifdef HAVE_EXECINFO_H
+#if !CODA_OSS_sys_Backtrace
+
+static std::string getBacktrace(bool* pSupported, std::vector<std::string>*)
+{
+    if (pSupported != nullptr)
+    {
+        *pSupported = false;
+    }
+    return "sys::getBacktrace() is not supported "
+           "on the current platform and/or libc";
+}
+
+#else
+
+#if defined(__GNUC__)
+// https://man7.org/linux/man-pages/man3/backtrace.3.html
+// "These functions are GNU extensions."
 
 #include <execinfo.h>
-#include <cstdlib>
+
+constexpr size_t MAX_STACK_ENTRIES = 62;
 
 namespace
 {
-
 //! RAII wrapper for stack symbols
-class BacktraceHelper
+struct BacktraceHelper final
 {
-public:
     BacktraceHelper(char** stackSymbols)
         : mStackSymbols(stackSymbols)
     {}
@@ -48,18 +63,22 @@ public:
         std::free(mStackSymbols);
     }
 
-    std::string operator[](size_t idx)
+    std::string operator[](size_t idx) const
     {
         return mStackSymbols[idx];
     }
 private:
     char** mStackSymbols;
 };
-
 }
 
-std::string sys::getBacktrace()
+static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
 {
+    if (pSupported != nullptr)
+    {
+        *pSupported = true;
+    }
+
     void* stackBuffer[MAX_STACK_ENTRIES];
     int currentStackSize = backtrace(stackBuffer, MAX_STACK_ENTRIES);
     BacktraceHelper stackSymbols(backtrace_symbols(stackBuffer,
@@ -68,18 +87,83 @@ std::string sys::getBacktrace()
     std::stringstream ss;
     for (int ii = 0; ii < currentStackSize; ++ii)
     {
-        ss << stackSymbols[ii] << std::endl;
+        auto stackSymbol = stackSymbols[ii] + "\n"; 
+        ss << stackSymbol;
+        if (pFrames != nullptr)
+        {
+            pFrames->push_back(std::move(stackSymbol));
+        }
     }
 
     return ss.str();
 }
 
-#else
+#elif _WIN32
+#include <windows.h>
+#include <dbghelp.h>
+#pragma comment(lib, "dbghelp")
 
-std::string sys::getBacktrace()
+static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
 {
-    return "sys::getBacktrace() is not supported "
-        "on the current platform and/or libc";
+    if (pSupported != nullptr)
+    {
+        *pSupported = true;
+    }
+
+    // https://stackoverflow.com/a/5699483/8877
+    HANDLE process = GetCurrentProcess();
+    auto result = SymInitialize(process, NULL, TRUE) == TRUE ? true : false; // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
+    if (!result)
+    {
+        return "sys::getBacktrace(): SymInitialize() failed";
+    }
+
+     PVOID stack[100];
+     auto frames = CaptureStackBackTrace(0, 100, stack, NULL);
+     auto symbol = reinterpret_cast<PSYMBOL_INFO>(calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1));
+     if (symbol == nullptr)
+     {
+         return "sys::getBacktrace(): calloc() failed";
+     }
+    symbol->MaxNameLen = 255;
+    symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+
+    std::string retval;
+    for (unsigned int i = 0; i < frames; i++)
+    {
+        const auto address = reinterpret_cast<DWORD64>(stack[i]);
+        result = SymFromAddr(process, address, 0, symbol) == TRUE ? true : false;
+        if (!result)
+        {
+            continue;
+        }
+        auto frame = str::format("%i: %s - 0x%0X\n",
+            frames - i - 1,
+            symbol->Name,
+            symbol->Address);
+        retval += frame;
+        if (pFrames != nullptr)
+        {
+            pFrames->push_back(std::move(frame));
+        }
+    }
+
+    free(symbol);
+    return retval;
 }
 
+#else
+
+#error "CODA_OSS_sys_Backtrace inconsistency."
+
 #endif
+#endif // CODA_OSS_sys_Backtrace
+
+std::string sys::getBacktrace(bool* pSupported)
+{
+    return ::getBacktrace(pSupported, nullptr /*frames*/);
+}
+std::string sys::getBacktrace(bool& supported, std::vector<std::string>& frames)
+{
+    return ::getBacktrace(&supported, &frames);
+}

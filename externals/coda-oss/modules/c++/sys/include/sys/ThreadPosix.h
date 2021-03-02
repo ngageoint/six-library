@@ -24,9 +24,9 @@
 #ifndef __SYS_THREAD_PTHREAD_THREAD_H__
 #define __SYS_THREAD_PTHREAD_THREAD_H__
 
-#include <config/coda_oss_config.h>
+#include <sys/Conf.h>
 
-#if defined(HAVE_PTHREAD_H)
+#if CODA_OSS_POSIX_SOURCE
 
 #include <sched.h>
 #include <pthread.h>

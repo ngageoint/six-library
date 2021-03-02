@@ -19,21 +19,34 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef CONFIG_COMPILER_EXTENSIONS
-#define CONFIG_COMPILER_EXTENSIONS
+#ifndef CODA_OSS_config_compiler_extentions_h_INCLUDED_
+#define CODA_OSS_config_compiler_extentions_h_INCLUDED_
+#pragma once
 
 #include <config/coda_oss_config.h>
 
-#ifdef HAVE_ATTRIBUTE_NOINLINE
-#define ATTRIBUTE_NOINLINE __attribute__((noinline))
-#else
-#define ATTRIBUTE_NOINLINE
-#endif
+#ifndef CODA_OSS_attribute_noinline_DEFINED_
+	#define CODA_OSS_attribute_noinline_DEFINED_ 1
 
-#ifdef HAVE_ATTRIBUTE_ALIGNED
-#define ATTRIBUTE_ALIGNED(x) __attribute__((aligned (x)))
-#else
-#define ATTRIBUTE_ALIGNED(X)
-#endif
+	// https://stackoverflow.com/a/49468469/8877
+	#if defined(__GNUC__)
+	#define ATTRIBUTE_NOINLINE __attribute__((noinline))
+	#elif defined(_MSC_VER)
+	#define ATTRIBUTE_NOINLINE __declspec(noinline)
+	#else
+	#define ATTRIBUTE_NOINLINE
+	#endif
+#endif // CODA_OSS_attribute_noinline_DEFINED_
 
-#endif
+#ifndef CODA_OSS_attribute_aligned_DEFINED_
+	#define CODA_OSS_attribute_aligned_DEFINED_ 1
+
+	#if defined(__GNUC__)
+	// https://gcc.gnu.org/onlinedocs/gcc-3.2/gcc/Variable-Attributes.html
+	#define ATTRIBUTE_ALIGNED(x) __attribute__((aligned(x)))
+	#else
+	#define ATTRIBUTE_ALIGNED(X)
+	#endif
+#endif // CODA_OSS_attribute_aligned_DEFINED_
+
+#endif // CODA_OSS_config_compiler_extentions_h_INCLUDED_

@@ -29,9 +29,8 @@
 namespace sys
 {
 // Implemented from boost/smart_ptr/detail/atomic_count_win32.hpp
-class AtomicCounterImpl
+struct AtomicCounterImpl
 {
-public:
     typedef long ValueType;
 
     explicit
@@ -55,10 +54,8 @@ public:
         return static_cast<const volatile long&>(mValue);
     }
 
-private:
-    // Noncopyable
-    AtomicCounterImpl(const AtomicCounterImpl& );
-    const AtomicCounterImpl& operator=(const AtomicCounterImpl& );
+    AtomicCounterImpl(const AtomicCounterImpl&) = delete;
+    AtomicCounterImpl& operator=(const AtomicCounterImpl&) = delete;
 
 private:
     ValueType mValue;

@@ -25,7 +25,10 @@
 
 #include <ostream>
 #include <vector>
+
+#include <sys/Optional.h>
 #include <mem/ScopedCopyablePtr.h>
+
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
 

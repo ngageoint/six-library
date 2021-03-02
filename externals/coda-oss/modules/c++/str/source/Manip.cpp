@@ -19,15 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <str/Manip.h>
+
+#include <limits.h>
+#include <stdio.h>
+#include <wctype.h>
 
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-#include <climits>
-#include <cstdio>
-#include <cwctype>
-
-#include <str/Manip.h>
+#include <stdexcept>
 
 namespace
 {

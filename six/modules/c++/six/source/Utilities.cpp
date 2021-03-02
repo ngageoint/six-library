@@ -26,6 +26,7 @@
 #include <logging/NullLogger.h>
 #include <math/Utilities.h>
 #include <nitf/PluginRegistry.hpp>
+#include "six/Init.h"
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
 
@@ -1242,26 +1243,25 @@ void six::getErrors(const ErrorStatistics* errorStats,
         if (components)
         {
             double rangeBias;
-            if (components->radarSensor.get())
+            if (components->radarSensor)
             {
                 const RadarSensor& radarSensor(*components->radarSensor);
 
-                if (!six::Init::isUndefined(radarSensor.rangeBiasDecorr))
+                if (has_value(radarSensor.rangeBiasDecorr))
                 {
-                    errors.mRangeCorrCoefZero =
-                            radarSensor.rangeBiasDecorr.corrCoefZero;
-                    errors.mRangeDecorrRate =
-                            radarSensor.rangeBiasDecorr.decorrRate;
+                    const auto& rangeBiasDecorr = value(radarSensor.rangeBiasDecorr);
+                    errors.mRangeCorrCoefZero = rangeBiasDecorr.corrCoefZero;
+                    errors.mRangeDecorrRate = rangeBiasDecorr.decorrRate;
                 }
 
-                rangeBias = radarSensor.rangeBias;
+                rangeBias = value(radarSensor.rangeBias);
             }
             else
             {
                 rangeBias = 0.0;
             }
 
-            if (components->posVelError.get())
+            if (components->posVelError)
             {
                 const PosVelError& posVelError(*components->posVelError);
                 errors.mFrameType = posVelError.frame;
@@ -1270,36 +1270,35 @@ void six::getErrors(const ErrorStatistics* errorStats,
                                     rangeBias,
                                     errors.mSensorErrorCovar);
 
-                if (!six::Init::isUndefined(posVelError.positionDecorr))
+                if (has_value(posVelError.positionDecorr))
                 {
-                    errors.mPositionCorrCoefZero =
-                            posVelError.positionDecorr.corrCoefZero;
-                    errors.mPositionDecorrRate =
-                            posVelError.positionDecorr.decorrRate;
+                    const auto& positionDecorr = value(posVelError.positionDecorr);
+                    errors.mPositionCorrCoefZero = positionDecorr.corrCoefZero;
+                    errors.mPositionDecorrRate = positionDecorr.decorrRate;
                 }
             }
 
-            if (components->ionoError.get())
+            if (components->ionoError)
             {
                 const six::IonoError& ionoError(*components->ionoError);
                 errors.mIonoErrorCovar(0, 0) =
-                        math::square(ionoError.ionoRangeVertical);
+                        math::square(value(ionoError.ionoRangeVertical));
                 errors.mIonoErrorCovar(1, 1) =
-                        math::square(ionoError.ionoRangeRateVertical);
+                        math::square(value(ionoError.ionoRangeRateVertical));
                 errors.mIonoErrorCovar(0, 1) = errors.mIonoErrorCovar(1, 0) =
-                        ionoError.ionoRangeVertical *
-                        ionoError.ionoRangeRateVertical *
-                        ionoError.ionoRgRgRateCC;
+                        value(ionoError.ionoRangeVertical) *
+                        value(ionoError.ionoRangeRateVertical) *
+                        value(ionoError.ionoRgRgRateCC);
             }
 
-            if (components->tropoError.get())
+            if (components->tropoError)
             {
                 errors.mTropoErrorCovar(0, 0) = math::square(
-                        components->tropoError->tropoRangeVertical);
+                        value(components->tropoError->tropoRangeVertical));
             }
         }
 
-        if (errorStats->compositeSCP.get() &&
+        if (errorStats->compositeSCP &&
             errorStats->compositeSCP->scpType == CompositeSCP::RG_AZ)
         {
             const types::RgAz<double> composite(errorStats->compositeSCP->xErr,

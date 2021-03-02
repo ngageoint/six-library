@@ -1,5 +1,12 @@
 set(MODULE_NAME cgm)
 
+if (BUILD_SHARED)
+    set(BUILD_SHARED_LIBS ON)
+    add_definitions(
+        -DNITF_MODULE_EXPORTS
+    )
+endif()
+
 coda_add_module(
     ${MODULE_NAME}
     DEPS nitf-c

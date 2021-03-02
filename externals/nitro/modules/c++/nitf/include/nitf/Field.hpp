@@ -82,7 +82,7 @@ struct GetConvType<false, IsSignedT>
  *  The Field is a generic type object that allows storage
  *  and casting of data amongst disparate data types.
  */
-class Field final : public nitf::Object<nitf_Field>
+class Field /*final*/ : public nitf::Object<nitf_Field> // no "final", SWIG doesn't like it
 {
     void setU_(uint32_t data)
     {

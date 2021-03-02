@@ -21,6 +21,8 @@
  */
 #include <six/XMLParser.h>
 
+#include <assert.h>
+
 #include <string>
 
 #include <nitf/coda-oss.hpp>
@@ -28,6 +30,7 @@
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
 #include <six/Utilities.h>
+#include <six/Init.h>
 
 namespace
 {
@@ -186,17 +189,49 @@ XMLElem XMLParser::createInt(const std::string& name, int p, XMLElem parent) con
 XMLElem XMLParser::createDouble(const std::string& name,
         const std::string& uri, double p, XMLElem parent) const
 {
+    p = value(p); // be sure this is initialized; throws if not 
+
     const auto elementValue = toString(name, p, parent);
     XMLElem elem = newElement(name, uri, elementValue, parent);
     addClassAttributes(*elem, "xs:double");
 
     return elem;
 }
-
+XMLElem XMLParser::createDouble(const std::string& name,
+    const std::string& uri, const std::optional<double>& p, XMLElem parent) const
+{
+    return createDouble(name, uri, p.value(), parent);
+}
 XMLElem XMLParser::createDouble(const std::string& name, double p,
         XMLElem parent) const
 {
     return createDouble(name, mDefaultURI, p, parent);
+}
+XMLElem XMLParser::createDouble(const std::string& name, const std::optional<double>& p,
+    XMLElem parent) const
+{
+    return createDouble(name, p.value(), parent);
+}
+
+XMLElem XMLParser::createOptionalDouble(const std::string& name,
+    const std::string& uri, const double& p, XMLElem parent) const
+{
+    return Init::isDefined(p) ? createDouble(name, uri, p, parent) : nullptr;
+}
+XMLElem XMLParser::createOptionalDouble(const std::string& name,
+    const std::string& uri, const std::optional<double>& p, XMLElem parent) const
+{
+    return p.has_value() ? createDouble(name, uri, *p, parent) : nullptr;
+}
+XMLElem XMLParser::createOptionalDouble(const std::string& name, const double& p,
+        XMLElem parent) const
+{
+    return Init::isDefined(p) ? createDouble(name, p, parent) : nullptr;
+}
+XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::optional<double>& p,
+    XMLElem parent) const
+{
+    return p.has_value() ? createDouble(name, *p, parent) : nullptr;
 }
 
 XMLElem XMLParser::createBooleanType(const std::string& name,
@@ -292,24 +327,56 @@ void XMLParser::setAttribute_(XMLElem e, const std::string& name,
 }
 
 template<typename TGetValue>
-static void parseValue(logging::Logger& log, TGetValue getValue)
+static bool parseValue(logging::Logger& log, TGetValue getValue)
 {
     try
     {
         getValue();
+        return true;
     }
     catch (const except::BadCastException& ex)
     {
         log.warn(Ctxt("Unable to parse: " + ex.toString()));
     }
+    return false;
 }
 
-void XMLParser::parseDouble(XMLElem element, double& value) const
+bool XMLParser::parseDouble(XMLElem element, double& value) const
 {
-    parseValue(*mLog, [&]() {
+    value = Init::undefined<double>();
+    return parseValue(*mLog, [&]() {
         value = xml::lite::getValue<double>(*element);
+        assert(Init::isDefined(value));
         });
 }
+void XMLParser::parseDouble(XMLElem element, std::optional<double>& value) const
+{
+    value.reset(); // be sure callers can determine success/failure
+
+    double result;
+    if (parseDouble(element, result))
+    {
+        value = result;
+    }
+}
+
+void XMLParser::parseOptionalDouble(XMLElem parent, const std::string& tag, double& value) const
+{
+    auto element = getOptional(parent, tag);
+    if (element)
+    {
+        parseDouble(element, value);
+    }
+}
+void XMLParser::parseOptionalDouble(XMLElem parent, const std::string& tag, std::optional<double>& value) const
+{
+    auto element = getOptional(parent, tag);
+    if (element)
+    {
+        parseDouble(element, value);
+    }
+}
+
 
 void XMLParser::parseComplex(XMLElem element, std::complex<double>& value) const
 {
