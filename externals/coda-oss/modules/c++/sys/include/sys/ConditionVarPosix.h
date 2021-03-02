@@ -24,9 +24,9 @@
 #ifndef __SYS_THREAD_PTHREAD_CONDITION_VARIABLE_H__
 #define __SYS_THREAD_PTHREAD_CONDITION_VARIABLE_H__
 
-#include <config/coda_oss_config.h>
+#include <sys/Conf.h>
 
-#if defined(HAVE_PTHREAD_H)
+#if CODA_OSS_POSIX_SOURCE
 
 #include "sys/MutexPosix.h"
 #include "sys/ConditionVarInterface.h"

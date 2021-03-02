@@ -24,9 +24,9 @@
 #ifndef __SYS_SEMAPHORE_POSIX_H__
 #define __SYS_SEMAPHORE_POSIX_H__
 
-#include <config/coda_oss_config.h>
+#include <sys/Conf.h>
 
-#if defined(HAVE_PTHREAD_H) && !defined(__APPLE_CC__)
+#if CODA_OSS_POSIX_SOURCE &&!defined(__APPLE_CC__)
 
 #include "sys/SemaphoreInterface.h"
 

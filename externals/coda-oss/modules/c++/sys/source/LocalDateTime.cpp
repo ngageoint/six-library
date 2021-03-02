@@ -19,11 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#include <errno.h>
-
-#include <config/coda_oss_config.h>
-
 #include <sys/LocalDateTime.h>
 
 #include <sys/Conf.h>
@@ -59,33 +54,7 @@ void LocalDateTime::toMillis()
 
 void LocalDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
 {
-    // Would like to use the reentrant version.  If we don't have one, cross
-    // our fingers and hope the regular function actually is reentrant
-    // (supposedly this is the case on Windows).
-#ifdef _WIN32
-    const auto errnum = ::localtime_s(&t, &numSecondsSinceEpoch);
-    if (errnum != 0)
-    {
-        throw except::Exception(Ctxt("localtime_s() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-#elif defined(HAVE_LOCALTIME_R)
-    if (::localtime_r(&numSecondsSinceEpoch, &t) == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("localtime_r() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-#else
-    tm const * const localTimePtr = ::localtime(&numSecondsSinceEpoch);
-    if (localTimePtr == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("localtime failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-    t = *localTimePtr;
-#endif
+    DateTime::localtime(numSecondsSinceEpoch, t);
 }
 
 LocalDateTime::LocalDateTime() :

@@ -22,7 +22,7 @@
 
 #include <sys/ConditionVarPosix.h>
 
-#if defined(HAVE_PTHREAD_H)
+#if CODA_OSS_POSIX_SOURCE
 
 #include <pthread.h>
 

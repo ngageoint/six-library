@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,8 +22,8 @@
  */
 
 
-#ifndef __DBG_H__
-#define __DBG_H__
+#ifndef CODA_OSS_sys_Dbg_h_INCLUDED_
+#define CODA_OSS_sys_Dbg_h_INCLUDED_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +35,52 @@
 #else
 #   include <cstdarg>
 #endif
+
+// A "debug" build has debugging symbols, detailed call stacks, minimal optimization, STL validation, etc.
+// A "release" build is likely to "run fast" and be "shipped;" it might lack much of what is in a "debug" build.
+#ifndef CODA_OSS_DEBUG
+#if defined(_MSC_VER)
+    // https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160
+    #if _DEBUG // "Defined as 1 ... . Otherwise, undefined."
+        #ifdef NDEBUG
+            #error "NDEBUG #define'd with _DEBUG"
+        #endif
+        #define CODA_OSS_DEBUG 1
+    #endif // _DEBUG
+#elif defined(__GNUC__)
+    // https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html#Common-Predefined-Macros
+    #if __OPTIMIZE__ // "... is defined ... . If they are defined, their value is 1."
+        #ifndef NDEBUG
+            //#error "NDEBUG should be #define'd with __OPTIMIZE__"
+        #endif
+        #define CODA_OSS_DEBUG 0
+    #endif  // __OPTIMIZE__
+#else	
+    #error "Can't #define CODA_OSS_DEBUG for this compiler."
+#endif  
+#endif // CODA_OSS_DEBUG
+#ifndef CODA_OSS_DEBUG // not set above, check NDEBUG
+    #ifdef NDEBUG // https://en.cppreference.com/w/c/error/assert
+        #define CODA_OSS_DEBUG 0 // NDEBUG = "No DEBUG"
+    #else
+        #define CODA_OSS_DEBUG 1
+    #endif  // NDEBUG
+#endif
+#ifndef CODA_OSS_DEBUG
+    #error "Unable to #define CODA_OSS_DEBUG"
+#endif
+
+// Be sure NDEBUG and CODA_OSS_DEBUG are in-sync
+// GCC doesn't set NDEBUG w/__OPTIMIZE__ (see above), so we can't be too rigorous
+#if CODA_OSS_DEBUG && defined(NDEBUG)
+   #error "Both CODA_OSS_DEBUG and NDEBUG are set."
+#endif
+
+namespace sys
+{
+constexpr auto debug_build = CODA_OSS_DEBUG ? true : false;
+constexpr auto release_build = !debug_build;
+}
 
 #ifndef DEBUG_STREAM
 #define DEBUG_STREAM stderr
@@ -79,6 +126,23 @@
  *  open emacs, for instance, with the file in question at the line number
  *  in question.
  */
+// Keep __DEBUG for existing code/scripts; but shouldn't be used.
+#ifndef CODA_OSS_debugging
+    #ifdef __DEBUG
+        #define CODA_OSS_debugging 1
+        // or ... use the value of CODA_OSS_DEBUG ?
+        //#define CODA_OSS_debugging CODA_OSS_DEBUG
+    #else
+        // or here ... ?
+        //#define CODA_OSS_debugging CODA_OSS_DEBUG
+        #define CODA_OSS_debugging 0
+    #endif
+#endif // CODA_OSS_debugging
+
+namespace sys
+{
+constexpr bool debugging = CODA_OSS_debugging ? true : false;
+}
 
 namespace sys
 {
@@ -101,7 +165,7 @@ void diePrintf(const char *format, ...);
 #define die_printf sys::diePrintf
 #define dbg_ln(STR) dbg_printf("[%s, %d]: '%s'\n", __FILE__, __LINE__, STR)
 
-#ifdef __DEBUG
+#if CODA_OSS_debugging
 
 #ifndef __DEBUG_SHORTEN_EVAL
  #define EVAL(X) std::cout << '(' << __FILE__ << ',' <<__LINE__ << ") <EVAL> "#X"=" << X << std::endl
@@ -121,4 +185,4 @@ void diePrintf(const char *format, ...);
  #define ASSERT_OR(A, E) 1
 #endif
 
-#endif // __DBG_H__
+#endif // CODA_OSS_sys_Dbg_h_INCLUDED_

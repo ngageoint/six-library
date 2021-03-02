@@ -834,6 +834,13 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer* writer,
                             NITF_ERR_MEMORY);
             return NITF_FAILURE;
         }
+
+        /* first, set the writer to NULL */
+        for (i = 0; i < numImages; i++)
+        {
+            writer->imageWriters[i] = NULL;
+        }
+
         writer->numImageWriters = numImages;
         for (i = 0; i < numImages; i++)
         {
@@ -841,9 +848,6 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer* writer,
             nitf_ImageSubheader *subheader = NULL;
             uint32_t nbpp, nbands, xbands, nrows, ncols;
             uint64_t length;
-
-            /* first, set the writer to NULL */
-            writer->imageWriters[i] = NULL;
 
             /* guard against an overflowing data length */
             iter = nitf_List_at(record->images, i);

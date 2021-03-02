@@ -68,9 +68,8 @@ namespace sys
  *
  */
 
-class ThreadInterface : public Runnable
+struct ThreadInterface : public Runnable
 {
-public:
     enum { DEFAULT_LEVEL, KERNEL_LEVEL, USER_LEVEL };
     enum { MINIMUM_PRIORITY, NORMAL_PRIORITY, MAXIMUM_PRIORITY };
 
@@ -242,6 +241,10 @@ public:
         mIsRunning = isRunning;
     }
 
+        
+    ThreadInterface(const ThreadInterface&) = delete;
+    ThreadInterface& operator=(const ThreadInterface&) = delete;
+
 private:
     bool mIsSelf;
 
@@ -272,10 +275,6 @@ private:
     //!  The level at which this thread runs
     int mLevel;
     bool mIsRunning;
-    
-    // Noncopyable
-    ThreadInterface(const ThreadInterface& );
-    const ThreadInterface& operator=(const ThreadInterface& );
 };
 }
 

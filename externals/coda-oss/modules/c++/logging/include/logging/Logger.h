@@ -43,10 +43,8 @@ namespace logging
  * Instances of the Logger class represent a single logging channel.
  * A Logger instance can log to several Handlers.
  */
-class Logger : public Filterer
+struct Logger : public Filterer
 {
-
-public:
     /*!
      * Constructs a Logger with an optional name
      * \param name  (optional) Name of the logger
@@ -130,15 +128,13 @@ public:
     //! Removes all handlers
     void reset();
 
-private:
-    // Noncopyable
     // NOTE: It isn't currently safe to copy a logger because mHandlers isn't
     //       a deep copy and you end up with a double delete (it's not using
     //       smart pointers :o( ).  If we really wanted to support a copy,
     //       would need to decide if mHandlers should be deeply or shallowly
     //       copied.
-    Logger(const Logger& );
-    Logger& operator=(const Logger& );
+    Logger(const Logger&) = delete;
+    Logger& operator=(const Logger&) = delete;
 
 protected:
     void handle(const LogRecord* record);

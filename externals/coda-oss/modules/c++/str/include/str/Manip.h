@@ -23,9 +23,11 @@
 #ifndef __STR_MANIP_H__
 #define __STR_MANIP_H__
 
-#include <string>
 #include <ctype.h>
+
+#include <string>
 #include <vector>
+
 #include "str/Convert.h"
 
 namespace str

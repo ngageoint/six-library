@@ -3,6 +3,7 @@
 #ifndef _CODA_OSS_CONFIG_H_
 #define _CODA_OSS_CONFIG_H_
 
+/* these should no longer be needed */
 #cmakedefine HAVE_PTHREAD_H @HAVE_PTHREAD_H@
 #cmakedefine HAVE_EXECINFO_H @HAVE_EXECINFO_H@
 #cmakedefine HAVE_CLOCK_GETTIME @HAVE_CLOCK_GETTIME@
@@ -11,12 +12,14 @@
 #cmakedefine HAVE_LOCALTIME_R @HAVE_LOCALTIME_R@
 #cmakedefine HAVE_GMTIME_R @HAVE_GMTIME_R@
 #cmakedefine HAVE_SETENV @HAVE_SETENV@
-#cmakedefine HAVE_POSIX_MEMALIGN @HAVE_POSIX_MEMALIGN@
-#cmakedefine HAVE_MEMALIGN @HAVE_MEMALIGN@
 #cmakedefine01 BIGENDIAN
 #cmakedefine SIZEOF_SIZE_T @SIZEOF_SIZE_T@
-#cmakedefine HAVE_ATTRIBUTE_NOINLINE @HAVE_ATTRIBUTE_NOINLINE@
+#cmakedefine HAVE_POSIX_MEMALIGN @HAVE_POSIX_MEMALIGN@
+#cmakedefine HAVE_MEMALIGN @HAVE_MEMALIGN@
 #cmakedefine HAVE_ATTRIBUTE_ALIGNED @HAVE_ATTRIBUTE_ALIGNED@
+#cmakedefine HAVE_ATTRIBUTE_NOINLINE @HAVE_ATTRIBUTE_NOINLINE@
+
+/* still might need these ... for now */
 #cmakedefine CODA_EXPORT @CODA_EXPORT@
 
 #endif /* _CODA_OSS_CONFIG_H_ */

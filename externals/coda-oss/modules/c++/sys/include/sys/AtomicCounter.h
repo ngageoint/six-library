@@ -22,14 +22,16 @@
 
 #ifndef __SYS_ATOMIC_COUNTER_H__
 #define __SYS_ATOMIC_COUNTER_H__
+#pragma once
 
-#include <config/coda_oss_config.h>
+#include <sys/Conf.h>
+#include <sys/AtomicCounterCpp11.h>
 
 #if defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
 #include <sys/AtomicCounterX86.h>
 #elif (defined(WIN32) || defined(_WIN32))
 #include <sys/AtomicCounterWin32.h>
-#elif defined(__sun) && defined(HAVE_ATOMIC_H)
+#elif defined(__sun) //&& defined(HAVE_ATOMIC_H)
 // atomic.h is available in Solaris 10+
 // TODO: For Solaris 9 and older, we currently use the mutex implementation
 //       http://blogs.oracle.com/d/entry/atomic_operations
@@ -58,13 +60,13 @@ namespace sys
  *
  *  TODO: Provide other operations such as getThenSet() and compareThenSet().
  */
-class AtomicCounter
+template<typename TAtomicCounterImpl>
+struct AtomicCounterT final
 {
-public:
-    typedef AtomicCounterImpl::ValueType ValueType;
+    using ValueType = typename TAtomicCounterImpl::ValueType ;
 
     //! Constructor
-    AtomicCounter(ValueType initialValue = 0) :
+    AtomicCounterT(ValueType initialValue = 0) :
         mImpl(initialValue)
     {
     }
@@ -146,14 +148,24 @@ public:
         return mImpl.get();
     }
 
-private:
-    // Noncopyable
-    AtomicCounter(const AtomicCounter& );
-    const AtomicCounter& operator=(const AtomicCounter& );
+    AtomicCounterT(const AtomicCounterT&) = delete;
+    AtomicCounterT& operator=(const AtomicCounterT&) = delete;
 
 private:
-    AtomicCounterImpl mImpl;
+    TAtomicCounterImpl mImpl;
 };
+
+// platform-specific
+using AtomicCounterOS = AtomicCounterT<AtomicCounterImpl>;
+// built on <atomic>
+using AtomicCounterCpp11 = AtomicCounterT<AtomicCounterImplCpp11>;
+
+#if !CODA_OSS_cpp17
+using AtomicCounter = AtomicCounterOS; // TODO: AtomicCounterCpp11
+#else
+using AtomicCounter = AtomicCounterCpp11;
+#endif
+
 }
 
 #endif

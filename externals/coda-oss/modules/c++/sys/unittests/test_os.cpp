@@ -20,12 +20,17 @@
  *
  */
 
+#include <assert.h>
+
 #include <fstream>
 #include <sstream>
+#include <numeric> // std::accumulate
 
 #include <sys/OS.h>
 #include <sys/Path.h>
 #include <sys/Filesystem.h>
+#include <sys/Backtrace.h>
+#include <sys/Dbg.h>
 #include "TestCase.h"
 
 namespace
@@ -219,6 +224,59 @@ TEST_CASE(testFsOutput)
     #endif
 }
 
+static std::string f(bool& supported, std::vector<std::string>& frames)
+{
+    return sys::getBacktrace(supported, frames);
+}
+static std::string g(bool& supported, std::vector<std::string>& frames)
+{
+    return f(supported, frames);
+}
+static std::string h(bool& supported, std::vector<std::string>& frames)
+{
+    return g(supported, frames);
+}
+TEST_CASE(testBacktrace)
+{
+    bool supported;
+    std::vector<std::string> frames;
+    const auto result = h(supported, frames);
+    TEST_ASSERT_TRUE(!result.empty());
+
+    size_t frames_size = 0;
+    auto version_sys_backtrace_ = version::sys::backtrace; // "Conditional expression is constant"
+    if (version_sys_backtrace_ >= 20210216L)
+    {
+        TEST_ASSERT_TRUE(supported);
+
+        #if _WIN32
+        constexpr auto frames_size_RELEASE = 2;
+        constexpr auto frames_size_DEBUG = 13;
+        #elif defined(__GNUC__)
+        constexpr auto frames_size_RELEASE = 5;
+        constexpr auto frames_size_DEBUG = 9;
+        #else
+        #error "CODA_OSS_sys_Backtrace inconsistency."
+        #endif
+        frames_size = sys::debug_build ? frames_size_DEBUG : frames_size_RELEASE;
+    }
+    else
+    {
+        TEST_ASSERT_FALSE(supported);
+    }
+    TEST_ASSERT_EQ(frames.size(), frames_size);
+
+    const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
+    if (supported)
+    {
+        TEST_ASSERT_EQ(result, msg);
+    }
+    else
+    {
+        TEST_ASSERT_TRUE(msg.empty());
+    }
+}
+
 }
 
 int main(int, char**)
@@ -228,6 +286,7 @@ int main(int, char**)
     TEST_CHECK(testEnvVariables);
     TEST_CHECK(testFsExtension);
     TEST_CHECK(testFsOutput);
+    TEST_CHECK(testBacktrace);
     return 0;
 }
 

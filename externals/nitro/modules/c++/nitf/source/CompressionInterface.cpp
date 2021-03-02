@@ -63,7 +63,7 @@ NITF_BOOL CompressionInterface::adapterStart(
 NITF_BOOL CompressionInterface::adapterWriteBlock(
     nitf_CompressionControl* object, 
     nitf_IOInterface* io,
-    const std::byte* data,
+    const uint8_t* data,
     NITF_BOOL pad,
     NITF_BOOL noData,
     nitf_Error* error)
@@ -96,6 +96,17 @@ NITF_BOOL CompressionInterface::adapterWriteBlock(
                        NRT_ERR_COMPRESSION);
         return NRT_FAILURE;
     }
+}
+NITF_BOOL CompressionInterface::adapterWriteBlock(
+    nitf_CompressionControl* object,
+    nitf_IOInterface* io,
+    const std::byte* data_,
+    NITF_BOOL pad,
+    NITF_BOOL noData,
+    nitf_Error* error)
+{
+    const auto data = reinterpret_cast<const uint8_t*>(data_);
+    return adapterWriteBlock(object, io, data, pad, noData, error);
 }
 
 NITF_BOOL CompressionInterface::adapterEnd(
