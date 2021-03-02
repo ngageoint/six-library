@@ -4,6 +4,13 @@ if (TARGET openjpeg)
     set(HAVE_OPENJPEG_H 1)
 endif()
 
+if (BUILD_SHARED)
+    set(BUILD_SHARED_LIBS ON)
+    add_definitions(
+        -DJ2K_MODULE_EXPORTS
+    )
+endif()
+
 coda_generate_module_config_header(${MODULE_NAME})
 
 coda_add_module(

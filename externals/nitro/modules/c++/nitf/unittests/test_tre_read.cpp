@@ -90,23 +90,35 @@ const std::string output_file = "test_writer_3++.nitf";
 namespace fs = std::filesystem;
 
 static std::string argv0;
+
+static bool is_vs_gtest()
+{
+    return argv0.empty(); // no argv[0] in VS w/GTest
+}
+
 static fs::path findInputFile(const std::string& name)
 {
-    const fs::path inputFile = fs::path("modules") / "c++" / "nitf" / "unittests" / name;
+    const auto inputFile = fs::path("modules") / "c++" / "nitf" / "unittests" / name;
 
-    fs::path root;
-    if (argv0.empty())
+    if (is_vs_gtest()) // running Google Test in Visual Studio
     {
-        // running in Visual Studio
-        root = fs::current_path().parent_path().parent_path();
-    }
-    else
-    {
-        root = fs::absolute(argv0).parent_path().parent_path().parent_path().parent_path();
-        root = root.parent_path().parent_path();
+        const auto root= fs::current_path().parent_path().parent_path();
+        return root / inputFile;
     }
 
-    return root / inputFile;
+    const auto exe = fs::absolute(argv0);
+    fs::path root = exe.parent_path();
+    do
+    {
+        auto retval = root / inputFile;
+        if (fs::exists(retval))
+        {
+            return retval;
+        }
+        root = root.parent_path();
+    } while (!root.empty());
+
+    return inputFile;
 }
 
 TEST_CASE(test_nitf_Record_unmergeTREs_crash)
