@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,10 +21,27 @@
  *
  */
 
-#ifndef __SYS_BACKTRACE_H__
-#define __SYS_BACKTRACE_H__
+#ifndef CODA_OSS_sys_Backtrace_h_INCLUDED_
+#define CODA_OSS_sys_Backtrace_h_INCLUDED_
+#pragma once
 
 #include <string>
+#include <vector>
+
+// We know at compile-time whether sys::getBacktrace() is supported.
+#if defined(__GNUC__)
+// https://man7.org/linux/man-pages/man3/backtrace.3.html
+// "These functions are GNU extensions."
+#define CODA_OSS_sys_Backtrace 20210216L
+#elif _WIN32
+#define CODA_OSS_sys_Backtrace 20210216L
+#else
+#define CODA_OSS_sys_Backtrace 0
+#endif 
+
+namespace version { namespace sys {
+constexpr auto backtrace = CODA_OSS_sys_Backtrace;
+} }
 
 namespace sys
 {
@@ -32,12 +50,12 @@ namespace sys
  * function calls. Usefulness and format may vary depending on 
  * your platform and what kind of symbols are compiled in.
  *
- * Currently only supported on *nix with glibc. This function will
+ * Currently only supported on *nix with glibc and Windows. This function will
  * return with an error message instead of a backtrace if the current
  * configuration is unsupported.
  */
-std::string getBacktrace();
+std::string getBacktrace(bool* pSupported = nullptr);
+std::string getBacktrace(bool& supported, std::vector<std::string>& frames);
 }
 
-#endif
-
+#endif // CODA_OSS_sys_Backtrace_h_INCLUDED_

@@ -39,11 +39,8 @@ namespace io
  *  \brief captures the standard output from a pipe
  *         and streams it to the specified location
  */
-class PipeStream : InputStream
+struct PipeStream : InputStream
 {
-
-public:
-
     /*!
     *  Constructor --
     *  Streams data from a pipe when available
@@ -95,6 +92,9 @@ public:
     virtual sys::SSize_T streamTo(OutputStream& soi,
                                   sys::SSize_T numBytes = IS_END);
 
+    PipeStream(const PipeStream&) = delete;
+    PipeStream& operator=(const PipeStream&) = delete;
+
 protected:
     /*!
      *  \brief returns the requested size in bytes from the stream
@@ -104,13 +104,7 @@ protected:
 
     sys::ExecPipe mExecPipe;
     mem::ScopedArray<char> mCharString;
-    size_t mBufferSize;
-
-private:
-
-    //! Noncopyable
-    PipeStream(const PipeStream& );
-    const PipeStream& operator=(const PipeStream& );
+    size_t mBufferSize = DEFAULT_CHUNK_SIZE;
 };
 
 }

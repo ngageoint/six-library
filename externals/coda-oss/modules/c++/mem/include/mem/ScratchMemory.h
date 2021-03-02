@@ -157,10 +157,10 @@ public:
         return mNumBytesNeeded;
     }
 
-private:
-    ScratchMemory(const ScratchMemory&);
-    ScratchMemory& operator=(const ScratchMemory&);
+    ScratchMemory(const ScratchMemory&) = delete;
+    ScratchMemory& operator=(const ScratchMemory&) = delete;
 
+private:
     struct Segment
     {
         Segment(size_t numBytes, size_t numBuffers, size_t alignment, size_t offset);

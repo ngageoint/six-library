@@ -82,11 +82,8 @@ protected:
  *  \brief opens a child process and connects a pipe
  *         to read back the std::cout
  */
-class ExecPipe : Exec
+struct ExecPipe : Exec
 {
-
-public:
-
     /*!
     *  Constructor --
     *  Kicks off child process and connects a pipe to the std::cout
@@ -136,6 +133,9 @@ public:
     //  this is a blocking call until the process is complete
     int closePipe();
 
+    ExecPipe(const ExecPipe&) = delete;
+    ExecPipe& operator=(const ExecPipe&) = delete;
+
 protected:
 
 #ifdef _WIN32
@@ -153,12 +153,6 @@ protected:
 
     //! forcefully kill the process and call closePipe
     int killProcess();
-
-private:
-
-    //! Noncopyable
-    ExecPipe(const ExecPipe& );
-    const ExecPipe& operator=(const ExecPipe& );
 };
 
 }

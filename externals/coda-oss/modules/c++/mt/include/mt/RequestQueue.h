@@ -49,10 +49,8 @@ namespace mt
  */
 
 template<typename T>
-class RequestQueue
+struct RequestQueue
 {
-public:
-
     //! Default constructor
     RequestQueue() :
         mAvailableSpace(&mQueueLock),
@@ -128,10 +126,8 @@ public:
         mAvailableSpace.signal();
     }
 
-private:
-    // Noncopyable
-    RequestQueue(const RequestQueue& );
-    const RequestQueue& operator=(const RequestQueue& );
+    RequestQueue(const RequestQueue&) = delete;
+    RequestQueue& operator=(const RequestQueue&) = delete;
 
 private:
     //! The internal data structure

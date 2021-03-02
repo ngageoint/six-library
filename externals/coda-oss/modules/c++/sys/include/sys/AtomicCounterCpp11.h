@@ -2,7 +2,7 @@
  * This file is part of sys-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,65 +20,49 @@
  *
  */
 
-#ifndef __SYS_ATOMIC_COUNTER_X86_H__
-#define __SYS_ATOMIC_COUNTER_X86_H__
+#ifndef CODA_OSS_sys_AtomicCounterCpp11_h_INCLUDED_
+#define CODA_OSS_sys_AtomicCounterCpp11_h_INCLUDED_
+#pragma once
+
+#include <stddef.h>
+
+#include <atomic>  // C++11: https://en.cppreference.com/w/cpp/atomic/atomic
 
 namespace sys
 {
-// Implemented from boost/smart_ptr/detail/atomic_count_gcc_x86.hpp
-struct AtomicCounterImpl
+struct AtomicCounterImplCpp11 final
 {
-    typedef int ValueType;
+    using ValueType = size_t ;
 
-    explicit
-    AtomicCounterImpl(ValueType initialValue) :
+    explicit AtomicCounterImplCpp11(ValueType initialValue) :
         mValue(initialValue)
     {
     }
 
     ValueType getThenIncrement()
     {
-        return atomicExchangeAndAdd(&mValue, 1);
+        // https://en.cppreference.com/w/cpp/atomic/atomic/fetch_add
+        return mValue.fetch_add(1);
     }
 
     ValueType getThenDecrement()
     {
-        return atomicExchangeAndAdd(&mValue, -1);
+        // https://en.cppreference.com/w/cpp/atomic/atomic/fetch_sub
+        return mValue.fetch_sub(1);
     }
 
     ValueType get() const
     {
-        return atomicExchangeAndAdd(&mValue, 0);
+        // https://en.cppreference.com/w/cpp/atomic/atomic/load
+        return mValue.load();
     }
 
-    AtomicCounterImpl(const AtomicCounterImpl&) = delete;
-    AtomicCounterImpl& operator=(const AtomicCounterImpl&) = delete;
+    AtomicCounterImplCpp11(const AtomicCounterImplCpp11&) = delete;
+    AtomicCounterImplCpp11& operator=(const AtomicCounterImplCpp11&) = delete;
 
 private:
-    static
-    ValueType atomicExchangeAndAdd(ValueType* pw, ValueType dv)
-    {
-        // int r = *pw;
-        // *pw += dv;
-        // return r;
-
-        int r;
-
-        __asm__ __volatile__
-        (
-            "lock\n\t"
-            "xadd %1, %0":
-            "+m"( *pw ), "=r"( r ): // outputs (%0, %1)
-            "1"( dv ): // inputs (%2 == %1)
-            "memory", "cc" // clobbers
-        );
-
-        return r;
-    }
-
-private:
-    mutable ValueType mValue;
+    std::atomic<ValueType> mValue;
 };
 }
 
-#endif
+#endif  // CODA_OSS_sys_AtomicCounterCpp11_h_INCLUDED_
