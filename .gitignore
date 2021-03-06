@@ -44,9 +44,11 @@ CMakeCache.txt
 CMakeSettings.json
 # cmake generates these Makefiles
 externals/*/Makefile
-externals/coda-oss/modules/c++/**/Makefile
-externals/coda-oss/modules/python/**/Makefile
-externals/nitro/modules/**/Makefile
+externals/coda-oss/
+externals/coda-oss_*/modules/c++/**/Makefile
+externals/coda-oss_*/modules/python/**/Makefile
+externals/nitro/
+externals/nitro_*/modules/**/Makefile
 Makefile
 six/Makefile
 six/modules/**/Makefile
@@ -62,4 +64,3 @@ six/projects/csm/external/vts_301_0/
 # Giant test files
 regression_files/
 six/modules/c++/cphd/tests/sample_cphd/
-
