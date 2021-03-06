@@ -13,7 +13,9 @@ top  = '.'
 out  = 'target'
 
 TOOLS = 'build swig matlabtool pythontool'
-TOOLS_DIR = join('externals', 'coda-oss', 'build')
+coda_oss_release = '2021-03-02'
+coda_oss = 'coda-oss_' + coda_oss_release
+TOOLS_DIR = join('externals', coda_oss, 'build')
 DIRS = 'externals six'
 
 def options(opt):
