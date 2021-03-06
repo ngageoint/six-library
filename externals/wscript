@@ -2,7 +2,9 @@ import os
 
 coda_oss_release = '2021-03-02'
 coda_oss = 'coda-oss_' + coda_oss_release
-DIRS = [os.path.join(coda_oss, 'modules'), os.path.join('nitro', 'modules')]
+
+nitro = 'nitro_' + '2.10.2'
+DIRS = [os.path.join(coda_oss, 'modules'), os.path.join(nitro, 'modules')]
 
 def options(opt):
     opt.recurse(DIRS)

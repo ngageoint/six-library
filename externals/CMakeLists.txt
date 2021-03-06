@@ -11,4 +11,7 @@ add_subdirectory("${CODA_OSS_RELEASE}")
 set(ENABLE_STATIC_TRES ON CACHE BOOL "Build static libraries for each TRE" FORCE)
 set(ENABLE_JAVA OFF CACHE BOOL "" FORCE)
 set(ENABLE_MEX OFF CACHE BOOL "" FORCE)
-add_subdirectory("nitro")
+
+set(NITRO_RELEASE "nitro_2.10.2")
+set(NITRO_DIR "${NITRO_RELEASE}")
+add_subdirectory("${NITRO_DIR}")
