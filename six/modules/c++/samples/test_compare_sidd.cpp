@@ -20,9 +20,8 @@
  *
  */
 
+#include <nitf/coda-oss.hpp>
 #include <cli/ArgumentParser.h>
-#include <sys/Conf.h>
-
 #include <mem/SharedPtr.h>
 #include <mem/ScopedAlignedArray.h>
 #include <except/Exception.h>
@@ -226,6 +225,11 @@ int main(int argc, char* argv[])
     catch (const std::exception& exception)
     {
         std::cerr << exception.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Throwable& exception)
+    {
+        std::cerr << exception.toString() << std::endl;
         return 1;
     }
     catch (...)

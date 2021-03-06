@@ -19,12 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __SIX_TYPES_H__
+#define __SIX_TYPES_H__
 #pragma once
 
 #include <vector>
 #include <limits>
 #include <string>
 
+#include <scene/sys_Conf.h>
 #include <import/except.h>
 #include <import/mem.h>
 #include <import/str.h>
@@ -55,7 +58,7 @@ typedef math::linear::VectorN<2> Vector2;
 //! Date type
 typedef nitf::DateTime DateTime;
 
-using UByte = std::byte;
+using UByte = unsigned char;
 
 //! POLY type
 typedef math::poly::OneD<double> Poly1D;
@@ -91,13 +94,13 @@ typedef scene::FrameType FrameType;
  */
 struct DecorrType
 {
-    DecorrType(double ccz = 0, double dr = 0) :
+    DecorrType(double ccz = 0.0, double dr = 0.0) :
         corrCoefZero(ccz), decorrRate(dr)
     {
     }
 
-    DecorrType(const DecorrType& dt) :
-        corrCoefZero(dt.corrCoefZero), decorrRate(dt.decorrRate)
+    DecorrType(const DecorrType& dt) : 
+        DecorrType(dt.corrCoefZero, dt.decorrRate)
     {
     }
 
@@ -107,8 +110,8 @@ struct DecorrType
                 decorrRate == rhs.decorrRate);
     }
 
-    double corrCoefZero;
-    double decorrRate;
+    double corrCoefZero = 0.0;
+    double decorrRate = 0.0;
 };
 
 /*!
@@ -522,3 +525,4 @@ ImageMode getImageMode(RadarModeType radarMode);
 DECLARE_EXCEPTION(MissingRequired)
 }
 
+#endif

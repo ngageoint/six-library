@@ -23,11 +23,12 @@
 #define __SIX_ANTENNA_H__
 
 #include <ostream>
-#include <mem/ScopedCopyablePtr.h>
 
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+
+#include <mem/ScopedCopyablePtr.h>
 
 namespace six
 {

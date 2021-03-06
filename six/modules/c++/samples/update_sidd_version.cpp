@@ -19,6 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sidd/SIDDVersionUpdater.h>
+
+#include <iostream>
 
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
@@ -27,9 +30,7 @@
 #include <six/NITFWriteControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLControl.h>
-#include <six/sidd/SIDDVersionUpdater.h>
 #include <six/sidd/Utilities.h>
-#include <iostream>
 
 namespace
 {
@@ -66,13 +67,13 @@ void writeSidd(std::unique_ptr<six::Data>&& derivedData,
                const std::vector<std::string>& schemaPaths,
                const std::string& pathname)
 {
-    auto container(std::make_shared<six::Container>(
+    mem::SharedPtr<six::Container> container(new six::Container(
         six::DataType::DERIVED));
     container->addData(std::move(derivedData));
 
     six::NITFWriteControl writer(container);
 
-    six::BufferList buffers;
+    six::buffer_list buffers;
     buffers.push_back(reinterpret_cast<const std::byte*>(widebandData.data()));
     writer.save(buffers, pathname, schemaPaths);
 }
@@ -141,6 +142,10 @@ int main(int argc, char** argv)
                   schemaPaths,
                   options->get<std::string>("output"));
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << "\n";
     }
     catch (const std::exception& ex)
     {

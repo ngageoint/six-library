@@ -19,11 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/CompressedByteProvider.h>
 
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
 #include <six/ByteProvider.h>
-#include <six/CompressedByteProvider.h>
 
 namespace
 {
@@ -50,7 +50,7 @@ size_t countUncompressedPixels(const six::Data& data)
 namespace six
 {
 void CompressedByteProvider::initialize(
-        std::shared_ptr<Container> container,
+        mem::SharedPtr<Container> container,
         const XMLControlRegistry& xmlRegistry,
         const std::vector<std::string>& schemaPaths,
         const std::vector<std::vector<size_t> >& bytesPerBlock,

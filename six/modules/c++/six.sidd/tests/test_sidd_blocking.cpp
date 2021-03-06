@@ -75,7 +75,8 @@ private:
 std::string getProgramPathname(const std::string& installPathname,
         const std::string& programName)
 {
-    std::string testPathname = fs::path(installPathname) / "bin" / programName;
+    const auto testPathname_ = fs::path(installPathname) / "bin" / programName;
+    auto testPathname = testPathname_.string();
 
     if (!fs::exists(testPathname))
     {
@@ -114,8 +115,8 @@ void makeMultiBandSIDD(const std::string& inputPathname,
     std::unique_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
     data->setPixelType(six::PixelType::MONO16I);
     data->setNumRows(data->getNumRows() / 2);
-    auto container(
-            std::make_shared<six::Container>(six::DataType::DERIVED));
+    mem::SharedPtr<six::Container> container(new six::Container(
+        six::DataType::DERIVED));
     container->addData(std::move(data));
 
     six::NITFWriteControl writer;
@@ -156,9 +157,9 @@ bool checkBlocking(const std::string& originalPathname,
             originalContainer->getData(0)->getNumBytesPerPixel();
     const size_t bufferSize = numRows * numCols * bytesPerPixel;
 
-    std::unique_ptr<std::byte[]> originalBuffer(
+    std::unique_ptr<six::UByte[]> originalBuffer(
             originalReader.interleaved(originalRegion, 0));
-    std::unique_ptr<std::byte[]> convertedBuffer(
+    std::unique_ptr<six::UByte[]> convertedBuffer(
             convertedReader.interleaved(convertedRegion, 0));
     for (size_t jj = 0; jj < bufferSize; ++jj)
     {
@@ -208,6 +209,10 @@ int main(int argc, char** argv)
         {
             return 0;
         }
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

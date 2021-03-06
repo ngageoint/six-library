@@ -26,11 +26,9 @@
 #include <logging/NullLogger.h>
 #include <math/Utilities.h>
 #include <nitf/PluginRegistry.hpp>
+#include "six/Init.h"
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
-
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
 
 namespace
 {
@@ -100,7 +98,8 @@ BooleanType six::toType<BooleanType>(const std::string& s)
         return BooleanType::NOT_SET;
 }
 
-std::string six::toString(const float& value)
+template <>
+std::string six::toString<float>(const float& value)
 {
     if (six::Init::isUndefined(value))
     {
@@ -123,7 +122,8 @@ std::string six::toString(const float& value)
     return strValue;
 }
 
-std::string six::toString(const double& value)
+template <>
+std::string six::toString<double>(const double& value)
 {
     if (six::Init::isUndefined(value))
     {
@@ -146,11 +146,13 @@ std::string six::toString(const double& value)
     return strValue;
 }
 
-std::string six::toString(const BooleanType& value)
+template <>
+std::string six::toString<BooleanType>(const BooleanType& value)
 {
     return str::toString<bool>(value == BooleanType::IS_TRUE);
 }
 
+template <>
 std::string six::toString(const six::Vector3& v)
 {
     std::ostringstream os;
@@ -158,6 +160,7 @@ std::string six::toString(const six::Vector3& v)
     return os.str();
 }
 
+template <>
 std::string six::toString(const six::PolyXYZ& p)
 {
     std::ostringstream os;
@@ -226,6 +229,7 @@ DateTime six::toType<DateTime>(const std::string& dateTime)
     return DateTime();
 }
 
+template <>
 std::string six::toString(const DateTime& dateTime)
 {
     char date[256];
@@ -235,6 +239,7 @@ std::string six::toString(const DateTime& dateTime)
     return strDate;
 }
 
+template <>
 std::string six::toString(const RadarModeType& type)
 {
     switch (type)
@@ -269,15 +274,6 @@ RadarModeType six::toType<RadarModeType>(const std::string& s)
 }
 
 template <>
-DataType six::toType<DataType>(const std::string& s)
-{
-    if (str::startsWith(s, "SICD"))
-        return DataType::COMPLEX;
-    if (str::startsWith(s, "SIDD"))
-        return DataType::DERIVED;
-
-    throw except::Exception(Ctxt("Unsupported conversion to DataType type '" + s + "'"));
-}
 std::string six::toString(const DataType& type)
 {
     switch (type)
@@ -294,19 +290,87 @@ std::string six::toString(const DataType& type)
 template <>
 PixelType six::toType<PixelType>(const std::string& s)
 {
-    return PixelType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    PixelType p(type);
+    if (p == PixelType::NOT_SET)
+        throw except::Exception(
+                Ctxt(FmtX("Type not understood [%s]", type.c_str())));
+    return p;
+}
+
+template <>
+std::string six::toString(const PixelType& type)
+{
+    if (type == PixelType::NOT_SET)
+    {
+        throw except::Exception(Ctxt("Unsupported pixel type"));
+    }
+    return type.toString();
 }
 
 template <>
 MagnificationMethod six::toType<MagnificationMethod>(const std::string& s)
 {
-    return MagnificationMethod::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "NEAREST_NEIGHBOR")
+        return MagnificationMethod::NEAREST_NEIGHBOR;
+    if (type == "BILINEAR")
+        return MagnificationMethod::BILINEAR;
+    if (type == "LAGRANGE")
+        return MagnificationMethod::LAGRANGE;
+    return MagnificationMethod::NOT_SET;
+}
+
+template <>
+std::string six::toString(const MagnificationMethod& method)
+{
+    switch (method)
+    {
+    case MagnificationMethod::NEAREST_NEIGHBOR:
+        return "NEAREST_NEIGHBOR";
+    case MagnificationMethod::BILINEAR:
+        return "BILINEAR";
+    case MagnificationMethod::LAGRANGE:
+        return "LAGRANGE";
+    default:
+        throw except::Exception(Ctxt("Unsupported method"));
+    }
 }
 
 template <>
 DecimationMethod six::toType<DecimationMethod>(const std::string& s)
 {
-    return DecimationMethod::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "NEAREST_NEIGHBOR")
+        return DecimationMethod::NEAREST_NEIGHBOR;
+    if (type == "BILINEAR")
+        return DecimationMethod::BILINEAR;
+    if (type == "BRIGHTEST_PIXEL")
+        return DecimationMethod::BRIGHTEST_PIXEL;
+    if (type == "LAGRANGE")
+        return DecimationMethod::LAGRANGE;
+    return DecimationMethod::NOT_SET;
+}
+
+template <>
+std::string six::toString(const DecimationMethod& method)
+{
+    switch (method)
+    {
+    case DecimationMethod::NEAREST_NEIGHBOR:
+        return "NEAREST_NEIGHBOR";
+    case DecimationMethod::BILINEAR:
+        return "BILINEAR";
+    case DecimationMethod::BRIGHTEST_PIXEL:
+        return "BRIGHTEST_PIXEL";
+    case DecimationMethod::LAGRANGE:
+        return "LAGRANGE";
+    default:
+        throw except::Exception(Ctxt("Unsupported method"));
+    }
 }
 
 template <>
@@ -318,6 +382,8 @@ EarthModelType six::toType<EarthModelType>(const std::string& s)
         return EarthModelType::WGS84;
     return EarthModelType::NOT_SET;
 }
+
+template <>
 std::string six::toString(const EarthModelType& t)
 {
     switch (t)
@@ -332,20 +398,161 @@ std::string six::toString(const EarthModelType& t)
 template <>
 OrientationType six::toType<OrientationType>(const std::string& s)
 {
-    return OrientationType::toType(s);
+    std::string type(s);
+    str::trim(type);
+
+    if (type == "UP")
+        return OrientationType::UP;
+    else if (type == "DOWN")
+        return OrientationType::DOWN;
+    else if (type == "LEFT")
+        return OrientationType::LEFT;
+    else if (type == "RIGHT")
+        return OrientationType::RIGHT;
+    else if (type == "ARBITRARY")
+        return OrientationType::ARBITRARY;
+    else
+        throw except::Exception(
+                Ctxt("Unsupported orientation type '" + s + "'"));
+}
+
+template <>
+std::string six::toString(const OrientationType& t)
+{
+    switch (t)
+    {
+    case OrientationType::UP:
+        return "UP";
+    case OrientationType::DOWN:
+        return "DOWN";
+    case OrientationType::LEFT:
+        return "LEFT";
+    case OrientationType::RIGHT:
+        return "RIGHT";
+    case OrientationType::ARBITRARY:
+        return "ARBITRARY";
+    default:
+        throw except::Exception(Ctxt("Unsupported orientation"));
+    }
 }
 
 template <>
 PolarizationSequenceType six::toType<PolarizationSequenceType>(
         const std::string& s)
 {
-    return PolarizationSequenceType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "OTHER")
+    {
+        return PolarizationSequenceType::OTHER;
+    }
+    else if (type == "V")
+    {
+        return PolarizationSequenceType::V;
+    }
+    else if (type == "H")
+    {
+        return PolarizationSequenceType::H;
+    }
+    else if (type == "RHC")
+    {
+        return PolarizationSequenceType::RHC;
+    }
+    else if (type == "LHC")
+    {
+        return PolarizationSequenceType::LHC;
+    }
+    else if (type == "UNKNOWN")
+    {
+        return PolarizationSequenceType::UNKNOWN;
+    }
+    else if (type == "SEQUENCE")
+    {
+        return PolarizationSequenceType::SEQUENCE;
+    }
+    else
+    {
+        throw except::Exception(
+                Ctxt("Unsupported polarization type '" + s + "'"));
+    }
+}
+
+template <>
+std::string six::toString(const PolarizationSequenceType& t)
+{
+    switch (t)
+    {
+    case PolarizationSequenceType::OTHER:
+        return "OTHER";
+    case PolarizationSequenceType::V:
+        return "V";
+    case PolarizationSequenceType::H:
+        return "H";
+    case PolarizationSequenceType::RHC:
+        return "RHC";
+    case PolarizationSequenceType::LHC:
+        return "LHC";
+    case PolarizationSequenceType::UNKNOWN:
+        return "UNKNOWN";
+    case PolarizationSequenceType::SEQUENCE:
+        return "SEQUENCE";
+    default:
+        throw except::Exception(
+                Ctxt("Unsupported conversion from polarization type"));
+    }
 }
 
 template <>
 PolarizationType six::toType<PolarizationType>(const std::string& s)
 {
-    return PolarizationType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "OTHER")
+    {
+        return PolarizationType::OTHER;
+    }
+    else if (type == "V")
+    {
+        return PolarizationType::V;
+    }
+    else if (type == "H")
+    {
+        return PolarizationType::H;
+    }
+    else if (type == "RHC")
+    {
+        return PolarizationType::RHC;
+    }
+    else if (type == "LHC")
+    {
+        return PolarizationType::LHC;
+    }
+    else
+    {
+        throw except::Exception(
+                Ctxt("Unsupported polarization type '" + s + "'"));
+    }
+}
+
+template <>
+std::string six::toString(const PolarizationType& t)
+{
+    switch (t)
+    {
+    case PolarizationType::OTHER:
+        return "OTHER";
+    case PolarizationType::V:
+        return "V";
+    case PolarizationType::H:
+        return "H";
+    case PolarizationType::RHC:
+        return "RHC";
+    case PolarizationType::LHC:
+        return "LHC";
+    default:
+        throw except::Exception(
+                Ctxt("Unsupported conversion from polarization type"));
+    }
 }
 
 template <>
@@ -397,6 +604,8 @@ DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
                      "'"));
     }
 }
+
+template <>
 std::string six::toString(const DualPolarizationType& t)
 {
     switch (t)
@@ -446,39 +655,202 @@ std::string six::toString(const DualPolarizationType& t)
 template <>
 DemodType six::toType<DemodType>(const std::string& s)
 {
-    return DemodType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "STRETCH")
+        return DemodType::STRETCH;
+    else if (type == "CHIRP")
+        return DemodType::CHIRP;
+    else
+        throw except::Exception(Ctxt("Unsupported demod type '" + s + "'"));
+}
+
+template <>
+std::string six::toString(const DemodType& t)
+{
+    switch (t)
+    {
+    case DemodType::STRETCH:
+        return "STRETCH";
+    case DemodType::CHIRP:
+        return "CHIRP";
+    default:
+        throw except::Exception(Ctxt("Unsupported demod type"));
+    }
 }
 
 template <>
 ImageFormationType six::toType<ImageFormationType>(const std::string& s)
 {
-    return ImageFormationType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "OTHER")
+        return ImageFormationType::OTHER;
+    else if (type == "PFA")
+        return ImageFormationType::PFA;
+    else if (type == "RMA")
+        return ImageFormationType::RMA;
+    else if (type == "RGAZCOMP")
+        return ImageFormationType::RGAZCOMP;
+    else
+    {
+        throw except::Exception(
+                Ctxt("Unsupported image formation type + '" + s + "'"));
+    }
+}
+
+template <>
+std::string six::toString(const ImageFormationType& t)
+{
+    switch (t)
+    {
+    case ImageFormationType::OTHER:
+        return "OTHER";
+    case ImageFormationType::PFA:
+        return "PFA";
+    case ImageFormationType::RMA:
+        return "RMA";
+    case ImageFormationType::RGAZCOMP:
+        return "RGAZCOMP";
+    default:
+        throw except::Exception(Ctxt("Unsupported image formation type"));
+    }
 }
 
 template <>
 SlowTimeBeamCompensationType six::toType<SlowTimeBeamCompensationType>(
         const std::string& s)
 {
-    return SlowTimeBeamCompensationType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "NO")
+        return SlowTimeBeamCompensationType::NO;
+    else if (type == "GLOBAL")
+        return SlowTimeBeamCompensationType::GLOBAL;
+    else if (type == "SV")
+        return SlowTimeBeamCompensationType::SV;
+    else
+    {
+        throw except::Exception(Ctxt(
+                "Unsupported slow time beam compensation type + '" + s + "'"));
+    }
+}
+
+template <>
+std::string six::toString(const SlowTimeBeamCompensationType& t)
+{
+    switch (t)
+    {
+    case SlowTimeBeamCompensationType::NO:
+        return "NO";
+    case SlowTimeBeamCompensationType::GLOBAL:
+        return "GLOBAL";
+    case SlowTimeBeamCompensationType::SV:
+        return "SV";
+    default:
+        throw except::Exception(
+                Ctxt("Unsupported slow time beam compensation type"));
+    }
 }
 
 template <>
 ImageBeamCompensationType six::toType<ImageBeamCompensationType>(
         const std::string& s)
 {
-    return ImageBeamCompensationType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "NO")
+        return ImageBeamCompensationType::NO;
+    else if (type == "SV")
+        return ImageBeamCompensationType::SV;
+    else
+    {
+        throw except::Exception(
+                Ctxt("Unsupported image beam compensation type + '" + s + "'"));
+    }
+}
+
+template <>
+std::string six::toString(const ImageBeamCompensationType& t)
+{
+    switch (t)
+    {
+    case ImageBeamCompensationType::NO:
+        return "NO";
+    case ImageBeamCompensationType::SV:
+        return "SV";
+    default:
+        throw except::Exception(
+                Ctxt("Unsupported image beam compensation type"));
+    }
 }
 
 template <>
 AutofocusType six::toType<AutofocusType>(const std::string& s)
 {
-    return AutofocusType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "NO")
+        return AutofocusType::NO;
+    else if (type == "GLOBAL")
+        return AutofocusType::GLOBAL;
+    else if (type == "SV")
+        return AutofocusType::SV;
+    else
+    {
+        throw except::Exception(
+                Ctxt("Unsupported autofocus type + '" + s + "'"));
+    }
+}
+
+template <>
+std::string six::toString(const AutofocusType& t)
+{
+    switch (t)
+    {
+    case AutofocusType::NO:
+        return "NO";
+    case AutofocusType::GLOBAL:
+        return "GLOBAL";
+    case AutofocusType::SV:
+        return "SV";
+    default:
+        throw except::Exception(Ctxt("Unsupported autofocus type"));
+    }
 }
 
 template <>
 RMAlgoType six::toType<RMAlgoType>(const std::string& s)
 {
-    return RMAlgoType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "OMEGA_K")
+        return RMAlgoType::OMEGA_K;
+    else if (type == "CSA")
+        return RMAlgoType::CSA;
+    else if (type == "RG_DOP")
+        return RMAlgoType::RG_DOP;
+    else
+    {
+        throw except::Exception(
+                Ctxt("Unsupported RM algorithm type '" + s + "'"));
+    }
+}
+
+template <>
+std::string six::toString(const RMAlgoType& t)
+{
+    switch (t)
+    {
+    case RMAlgoType::OMEGA_K:
+        return "OMEGA_K";
+    case RMAlgoType::CSA:
+        return "CSA";
+    case RMAlgoType::RG_DOP:
+        return "RG_DOP";
+    default:
+        throw except::Exception(Ctxt("Unsupported RM algorithm type"));
+    }
 }
 
 template <>
@@ -493,6 +865,8 @@ SideOfTrackType six::toType<SideOfTrackType>(const std::string& s)
     else
         throw except::Exception(Ctxt("Unsupported side of track '" + s + "'"));
 }
+
+template <>
 std::string six::toString(const SideOfTrackType& t)
 {
     switch (t)
@@ -509,13 +883,77 @@ std::string six::toString(const SideOfTrackType& t)
 template <>
 ComplexImagePlaneType six::toType<ComplexImagePlaneType>(const std::string& s)
 {
-    return ComplexImagePlaneType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "OTHER")
+        return ComplexImagePlaneType::OTHER;
+    else if (type == "SLANT")
+        return ComplexImagePlaneType::SLANT;
+    else if (type == "GROUND")
+        return ComplexImagePlaneType::GROUND;
+    else
+    {
+        throw except::Exception(
+                Ctxt("Unsupported complex image plane '" + s + "'"));
+    }
+}
+
+template <>
+std::string six::toString(const ComplexImagePlaneType& t)
+{
+    switch (t)
+    {
+    case ComplexImagePlaneType::OTHER:
+        return "OTHER";
+    case ComplexImagePlaneType::SLANT:
+        return "SLANT";
+    case ComplexImagePlaneType::GROUND:
+        return "GROUND";
+    default:
+        throw except::Exception(Ctxt("Unsupported complex image plane"));
+    }
 }
 
 template <>
 ComplexImageGridType six::toType<ComplexImageGridType>(const std::string& s)
 {
-    return ComplexImageGridType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "RGAZIM")
+        return ComplexImageGridType::RGAZIM;
+    else if (type == "RGZERO")
+        return ComplexImageGridType::RGZERO;
+    else if (type == "XRGYCR")
+        return ComplexImageGridType::XRGYCR;
+    else if (type == "XCTYAT")
+        return ComplexImageGridType::XCTYAT;
+    else if (type == "PLANE")
+        return ComplexImageGridType::PLANE;
+    else
+    {
+        throw except::Exception(
+                Ctxt("Unsupported complex image grid '" + s + "'"));
+    }
+}
+
+template <>
+std::string six::toString(const ComplexImageGridType& t)
+{
+    switch (t)
+    {
+    case ComplexImageGridType::RGAZIM:
+        return "RGAZIM";
+    case ComplexImageGridType::RGZERO:
+        return "RGZERO";
+    case ComplexImageGridType::XRGYCR:
+        return "XRGYCR";
+    case ComplexImageGridType::XCTYAT:
+        return "XCTYAT";
+    case ComplexImageGridType::PLANE:
+        return "PLANE";
+    default:
+        throw except::Exception(Ctxt("Unsupported complex image grid"));
+    }
 }
 
 template <>
@@ -544,6 +982,8 @@ FFTSign six::toType<FFTSign>(const std::string& s)
         throw except::Exception(Ctxt("Unsupported fft sign '" + s + "'"));
     }
 }
+
+template <>
 std::string six::toString(const FFTSign& value)
 {
     switch (value)
@@ -573,6 +1013,8 @@ AppliedType six::toType<AppliedType>(const std::string& s)
     else
         throw except::Exception(Ctxt("Unsupported applied type '" + s + "'"));
 }
+
+template <>
 std::string six::toString(const AppliedType& value)
 {
     switch (value)
@@ -592,9 +1034,31 @@ std::string six::toString(const AppliedType& value)
 template <>
 CollectType six::toType<CollectType>(const std::string& s)
 {
-    return CollectType::toType(s);
+    std::string type(s);
+    str::trim(type);
+    if (type == "MONOSTATIC")
+        return CollectType::MONOSTATIC;
+    else if (type == "BISTATIC")
+        return CollectType::BISTATIC;
+    else
+        throw except::Exception(Ctxt("Unsupported collect type '" + s + "'"));
 }
 
+template <>
+std::string six::toString(const CollectType& value)
+{
+    switch (value)
+    {
+    case CollectType::MONOSTATIC:
+        return "MONOSTATIC";
+    case CollectType::BISTATIC:
+        return "BISTATIC";
+    default:
+        throw except::Exception(Ctxt("Unsupported collect type"));
+    }
+}
+
+template <>
 std::string six::toString(const six::FrameType& value)
 {
     switch (value.mValue)
@@ -610,6 +1074,7 @@ std::string six::toString(const six::FrameType& value)
         throw except::Exception(Ctxt("Unsupported frame type"));
     }
 }
+
 template <>
 six::FrameType six::toType<six::FrameType>(const std::string& s)
 {
@@ -625,6 +1090,7 @@ six::FrameType six::toType<six::FrameType>(const std::string& s)
         throw except::Exception(Ctxt("Unsupported frame type '" + s + "'"));
 }
 
+template <>
 std::string six::toString(const six::LatLonCorners& corners)
 {
     // Print the 4 corners as a 5-point polygon (last point is the first point
@@ -672,14 +1138,13 @@ void six::loadXmlDataContentHandler()
     }
 }
 
-std::unique_ptr<Data> six::parseData(
-				   const XMLControlRegistry& xmlReg,
+mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
                                    ::io::InputStream& xmlStream,
                                    DataType dataType,
                                    const std::vector<std::string>& schemaPaths,
                                    logging::Logger& log)
 {
-    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
+    xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     try
     {
@@ -692,8 +1157,14 @@ std::unique_ptr<Data> six::parseData(
     xml::lite::Document* doc = xmlParser.getDocument();
 
     //! Check the root localName for the XML type
-    const std::string xmlType = doc->getRootElement()->getLocalName();
-    const auto xmlDataType = toType<DataType>(xmlType);
+    std::string xmlType = doc->getRootElement()->getLocalName();
+    DataType xmlDataType;
+    if (str::startsWith(xmlType, "SICD"))
+        xmlDataType = DataType::COMPLEX;
+    else if (str::startsWith(xmlType, "SIDD"))
+        xmlDataType = DataType::DERIVED;
+    else
+        throw except::Exception(Ctxt("Unexpected XML type"));
 
     //! Only SIDDs can have mismatched types
     if (dataType == DataType::COMPLEX && dataType != xmlDataType)
@@ -702,14 +1173,13 @@ std::unique_ptr<Data> six::parseData(
     }
 
     //! Create the correct type of XMLControl
-    const std::unique_ptr<XMLControl> xmlControl(
+    const mem::auto_ptr<XMLControl> xmlControl(
             xmlReg.newXMLControl(xmlDataType, &log));
 
-    return std::unique_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
+    return mem::auto_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
 }
 
-
-std::unique_ptr<Data> six::parseDataFromFile(
+mem::auto_ptr<Data> six::parseDataFromFile(
         const XMLControlRegistry& xmlReg,
         const std::string& pathname,
         DataType dataType,
@@ -720,7 +1190,7 @@ std::unique_ptr<Data> six::parseDataFromFile(
     return parseData(xmlReg, inStream, dataType, schemaPaths, log);
 }
 
-std::unique_ptr<Data> six::parseDataFromString(
+mem::auto_ptr<Data> six::parseDataFromString(
         const XMLControlRegistry& xmlReg,
         const std::string& xmlStr,
         DataType dataType,
@@ -734,29 +1204,30 @@ std::unique_ptr<Data> six::parseDataFromString(
 
 std::string six::findSchemaPath(const std::string& progname)
 {
-    const sys::OS os;
-    fs::path currentDir = os.getCurrentExecutable(progname);
+    sys::OS os;
+    std::string currentDir = os.getCurrentExecutable(progname);
 
     // Arbitrary depth to prevent infinite loop in case
     // of weird project structure
     const static size_t MAX_DEPTH = 5;
     size_t levelsTraversed = 0;
 
-    fs::path schemaPath;
+    std::string schemaPath;
     while (levelsTraversed < MAX_DEPTH)
     {
-        currentDir = fs::absolute(currentDir.parent_path());
-        const auto confDir = currentDir / "conf";
-        if (fs::exists(confDir))
+        currentDir =
+                sys::Path::absolutePath(sys::Path::joinPaths(currentDir, ".."));
+        const std::string confDir = sys::Path::joinPaths(currentDir, "conf");
+        if (os.exists(confDir))
         {
-            schemaPath = confDir / "schema" / "six";
+            schemaPath = sys::Path(confDir).join("schema").join("six");
             break;
         }
         ++levelsTraversed;
     }
 
     // If we got lost, this will be empty
-    return schemaPath.string();
+    return schemaPath;
 }
 
 void six::getErrors(const ErrorStatistics* errorStats,
@@ -772,26 +1243,25 @@ void six::getErrors(const ErrorStatistics* errorStats,
         if (components)
         {
             double rangeBias;
-            if (components->radarSensor.get())
+            if (components->radarSensor)
             {
                 const RadarSensor& radarSensor(*components->radarSensor);
 
-                if (!six::Init::isUndefined(radarSensor.rangeBiasDecorr))
+                if (has_value(radarSensor.rangeBiasDecorr))
                 {
-                    errors.mRangeCorrCoefZero =
-                            radarSensor.rangeBiasDecorr.corrCoefZero;
-                    errors.mRangeDecorrRate =
-                            radarSensor.rangeBiasDecorr.decorrRate;
+                    const auto& rangeBiasDecorr = value(radarSensor.rangeBiasDecorr);
+                    errors.mRangeCorrCoefZero = rangeBiasDecorr.corrCoefZero;
+                    errors.mRangeDecorrRate = rangeBiasDecorr.decorrRate;
                 }
 
-                rangeBias = radarSensor.rangeBias;
+                rangeBias = value(radarSensor.rangeBias);
             }
             else
             {
                 rangeBias = 0.0;
             }
 
-            if (components->posVelError.get())
+            if (components->posVelError)
             {
                 const PosVelError& posVelError(*components->posVelError);
                 errors.mFrameType = posVelError.frame;
@@ -800,36 +1270,35 @@ void six::getErrors(const ErrorStatistics* errorStats,
                                     rangeBias,
                                     errors.mSensorErrorCovar);
 
-                if (!six::Init::isUndefined(posVelError.positionDecorr))
+                if (has_value(posVelError.positionDecorr))
                 {
-                    errors.mPositionCorrCoefZero =
-                            posVelError.positionDecorr.corrCoefZero;
-                    errors.mPositionDecorrRate =
-                            posVelError.positionDecorr.decorrRate;
+                    const auto& positionDecorr = value(posVelError.positionDecorr);
+                    errors.mPositionCorrCoefZero = positionDecorr.corrCoefZero;
+                    errors.mPositionDecorrRate = positionDecorr.decorrRate;
                 }
             }
 
-            if (components->ionoError.get())
+            if (components->ionoError)
             {
                 const six::IonoError& ionoError(*components->ionoError);
                 errors.mIonoErrorCovar(0, 0) =
-                        math::square(ionoError.ionoRangeVertical);
+                        math::square(value(ionoError.ionoRangeVertical));
                 errors.mIonoErrorCovar(1, 1) =
-                        math::square(ionoError.ionoRangeRateVertical);
+                        math::square(value(ionoError.ionoRangeRateVertical));
                 errors.mIonoErrorCovar(0, 1) = errors.mIonoErrorCovar(1, 0) =
-                        ionoError.ionoRangeVertical *
-                        ionoError.ionoRangeRateVertical *
-                        ionoError.ionoRgRgRateCC;
+                        value(ionoError.ionoRangeVertical) *
+                        value(ionoError.ionoRangeRateVertical) *
+                        value(ionoError.ionoRgRgRateCC);
             }
 
-            if (components->tropoError.get())
+            if (components->tropoError)
             {
                 errors.mTropoErrorCovar(0, 0) = math::square(
-                        components->tropoError->tropoRangeVertical);
+                        value(components->tropoError->tropoRangeVertical));
             }
         }
 
-        if (errorStats->compositeSCP.get() &&
+        if (errorStats->compositeSCP &&
             errorStats->compositeSCP->scpType == CompositeSCP::RG_AZ)
         {
             const types::RgAz<double> composite(errorStats->compositeSCP->xErr,

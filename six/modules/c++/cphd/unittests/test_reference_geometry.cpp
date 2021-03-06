@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/ReferenceGeometry.h>
+
 #include <iostream>
 #include <memory>
 
@@ -26,7 +28,6 @@
 #include <six/Init.h>
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
-#include <cphd/ReferenceGeometry.h>
 
 #include "TestCase.h"
 

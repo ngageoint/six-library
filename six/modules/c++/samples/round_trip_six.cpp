@@ -21,10 +21,12 @@
  */
 
 #include <cmath>
+
+#include <import/six.h>
+
 #include <import/cli.h>
 #include <import/io.h>
 #include <import/mem.h>
-#include <import/six.h>
 #include <import/six/convert.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
@@ -270,7 +272,7 @@ int main(int argc, char** argv)
             log.addHandler(new logging::FileHandler(logFile, logLevel), true);
 
         std::unique_ptr<six::ReadControl> reader;
-        std::string extension = fs::path(inputFile).extension();
+        std::string extension = fs::path(inputFile).extension().string();
         str::lower(extension);
         if (extension == ".nitf" || extension == ".ntf")
         {
@@ -392,6 +394,11 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
         return 1;
     }
     catch (...)

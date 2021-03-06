@@ -29,23 +29,19 @@
 #include <iostream>
 #include <string>
 
-#include <sys/Bit.h>
-
-#include "TestUtilities.h"
-
+#include <six/sicd/SICDByteProvider.h>
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/sicd/ComplexXMLControl.h>
-#include <six/sicd/SICDByteProvider.h>
 
+#include "TestUtilities.h"
 
 namespace
 {
 // Main test class
 template <typename DataTypeT>
-class Tester
+struct Tester final
 {
-public:
     Tester(const std::vector<std::string>& schemaPaths,
            bool setMaxProductSize,
            size_t maxProductSize = 0) :
@@ -95,7 +91,6 @@ public:
 private:
     void normalWrite();
 
-private:
     void compare(const std::string& prefix)
     {
         std::string fullPrefix = prefix;
@@ -168,8 +163,8 @@ private:
 template <typename DataTypeT>
 void Tester<DataTypeT>::normalWrite()
 {
-    auto container(
-            std::make_shared<six::Container>(six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;
@@ -181,7 +176,7 @@ void Tester<DataTypeT>::normalWrite()
     setMaxProductSize(options);
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
-    six::BufferList buffers;
+    six::buffer_list buffers;
     buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
@@ -417,6 +412,12 @@ int main(int /*argc*/, char** /*argv*/)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << "Caught except::Exception: " << ex.getMessage()
+                  << std::endl;
         return 1;
     }
     catch (...)

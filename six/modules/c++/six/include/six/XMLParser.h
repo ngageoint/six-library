@@ -23,11 +23,13 @@
 
 #include <string>
 
-#include <xml/lite/Element.h>
-#include <logging/Logger.h>
+#include <sys/Optional.h>
+
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Utilities.h>
+#include <xml/lite/Element.h>
+#include <logging/Logger.h>
 
 namespace six
 {
@@ -68,11 +70,20 @@ protected:
     static
     XMLElem newElement(const std::string& name, const std::string& uri,
             const std::string& characterData, XMLElem parent = nullptr);
+    #if CODA_OSS_lib_char8_t
+    static XMLElem newElement(const std::string& name, const std::string& uri,
+            const std::u8string& characterData, XMLElem parent = nullptr);
+    #endif
 
     // generic element creation methods, w/URI
     XMLElem createString(const std::string& name,
             const std::string& uri, const std::string& p = "",
             XMLElem parent = nullptr) const;
+    #if CODA_OSS_lib_char8_t
+    XMLElem createString(const std::string& name,
+        const std::string& uri, const std::u8string& p,
+        XMLElem parent = nullptr) const;
+    #endif
     template<typename T>
     XMLElem createSixString(const std::string& name,
         const std::string& uri, const T& t,
@@ -106,6 +117,12 @@ protected:
 
     XMLElem createDouble(const std::string& name,
             const std::string& uri, double p = 0, XMLElem parent = nullptr) const;
+    XMLElem createDouble(const std::string& name,
+        const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
+    XMLElem createOptionalDouble(const std::string& name,
+        const std::string& uri, const double& p, XMLElem parent = nullptr) const;
+    XMLElem createOptionalDouble(const std::string& name,
+        const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
 
     XMLElem createBooleanType(const std::string& name,
            const std::string& uri, BooleanType b, XMLElem parent = nullptr) const;
@@ -139,6 +156,12 @@ protected:
             XMLElem parent = nullptr) const;
     XMLElem createDouble(const std::string& name, double p = 0,
             XMLElem parent = nullptr) const;
+    XMLElem createDouble(const std::string& name, const std::optional<double>& p,
+        XMLElem parent = nullptr) const;
+    XMLElem createOptionalDouble(const std::string& name, const double& p,
+            XMLElem parent = nullptr) const;
+    XMLElem createOptionalDouble(const std::string& name, const std::optional<double>& p,
+        XMLElem parent = nullptr) const;
     XMLElem createBooleanType(const std::string& name, BooleanType b,
             XMLElem parent = nullptr) const;
     XMLElem createDateTime(const std::string& name, const DateTime& p,
@@ -175,7 +198,10 @@ protected:
         enumVal = T(name);
     }
 
-    void parseDouble(XMLElem element, double& value) const;
+    bool parseDouble(XMLElem element, double& value) const;
+    void parseDouble(XMLElem element, std::optional<double>& value) const;
+    void parseOptionalDouble(XMLElem parent, const std::string& tag, double& value) const;
+    void parseOptionalDouble(XMLElem parent, const std::string& tag, std::optional<double>& value) const;
     void parseComplex(XMLElem element, std::complex<double>& value) const;
     void parseString(XMLElem element, std::string& value) const;
     void parseBooleanType(XMLElem element, BooleanType& value) const;
@@ -208,6 +234,7 @@ private:
         const std::string& p, XMLElem parent) const;
     static void setAttribute_(XMLElem e, const std::string& name,
             const std::string& v, const std::string& uri);
+    void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;
 
     const std::string mDefaultURI;
     const bool mAddClassAttributes;

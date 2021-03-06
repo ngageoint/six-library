@@ -125,7 +125,7 @@ six::LUT* getPixelInfo(sio::lite::FileHeader* fileHeader,
 six::WriteControl* getWriteControl(std::string outputName)
 {
 
-    std::string extension = fs::path(outputName).extension();
+    auto extension = fs::path(outputName).extension().string();
     str::lower(extension);
 
     six::WriteControl* writer = nullptr;
@@ -237,7 +237,7 @@ int main(int argc, char** argv)
                                     std::vector<std::string>());
 
         // Create a file container
-        auto container(std::make_shared<six::Container>(
+	mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
 
         // We have a source for each image
@@ -384,9 +384,9 @@ int main(int argc, char** argv)
             delete sources[i];
         }
     }
-    catch (const std::exception& ex)
+    catch (const except::Exception& ex)
     {
-        std::cout << ex.what() << std::endl;
+        std::cout << ex.toString() << std::endl;
     }
 
     delete writer;

@@ -28,6 +28,7 @@
 #include <exception>
 #include <iostream>
 
+#include <scene/sys_Conf.h>
 #include <cli/ArgumentParser.h>
 #include <cli/Results.h>
 #include <six/XMLControl.h>
@@ -89,6 +90,10 @@ int main(int argc, char** argv)
             << "Longitude: " << lla.getLon() << "\n"
             << "Altitude: " << lla.getAlt() << "\n";
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch(const std::exception& ex)
     {

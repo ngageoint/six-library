@@ -21,6 +21,7 @@
  */
 #include <iostream>
 
+#include <scene/sys_Conf.h>
 #include <import/cli.h>
 #include <import/six.h>
 #include <import/sio/lite.h>
@@ -241,8 +242,8 @@ int main(int argc, char** argv)
         data->imageFormation->txFrequencyProcMin = 0;
         data->imageFormation->txFrequencyProcMax = 0;
 
-        auto container(std::make_shared<six::Container>(
-                six::DataType::COMPLEX));
+	mem::SharedPtr<six::Container> container(new six::Container(
+		six::DataType::COMPLEX));
         container->addData(std::move(scopedData));
 
         six::Options writerOptions;
@@ -292,6 +293,12 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << "Caught except::Exception: " << ex.getMessage()
+            << std::endl;
         return 1;
     }
     catch (...)

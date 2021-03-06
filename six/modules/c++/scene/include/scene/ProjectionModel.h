@@ -22,12 +22,14 @@
 #ifndef __SCENE_PROJECTION_MODEL_H__
 #define __SCENE_PROJECTION_MODEL_H__
 
+#include <sys/Optional.h>
+#include <math/poly/OneD.h>
+#include <math/poly/TwoD.h>
+
 #include <scene/Types.h>
 #include <scene/GridECEFTransform.h>
 #include <scene/AdjustableParams.h>
 #include <scene/Errors.h>
-#include <math/poly/OneD.h>
-#include <math/poly/TwoD.h>
 
 namespace scene
 {

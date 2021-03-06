@@ -232,6 +232,11 @@ int main(int argc, char** argv)
         std::cerr << e.what() << std::endl;
         return 1;
     }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
+    }
     catch (...)
     {
         std::cerr << "Unknown exception" << std::endl;

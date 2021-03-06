@@ -24,9 +24,10 @@
 #include <iostream>
 #include <string>
 
+#include <import/nitf.hpp>
+
 #include <sys/Path.h>
 #include <import/cli.h>
-#include <import/nitf.hpp>
 #include <import/xml/lite.h>
 #include <import/io.h>
 
@@ -71,7 +72,7 @@ int main(int argc, char** argv)
         //! Fill out basename if not user specified
         if (basename.empty())
         {
-            basename = fs::path(inputFile).stem();
+            basename = fs::path(inputFile).stem().string();
         }
 
         nitf::Reader reader;
@@ -131,6 +132,11 @@ int main(int argc, char** argv)
         io.close();
 
         return 0;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

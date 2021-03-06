@@ -19,16 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sidd/CropUtils.h>
 
 #include <memory>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <mem/ScopedArray.h>
 #include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
 #include <six/sidd/Utilities.h>
-#include <six/sidd/CropUtils.h>
 #include <six/sidd/DerivedData.h>
 
 namespace

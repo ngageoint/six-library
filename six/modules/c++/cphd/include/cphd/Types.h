@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __CPHD_TYPES_H__
+#define __CPHD_TYPES_H__
 #pragma once
 
 #include <ostream>
@@ -45,7 +47,7 @@ inline std::ostream& operator<<(std::ostream& os, const DateTime& value)
     return os;
 }
 
-typedef std::byte UByte;
+typedef six::UByte UByte;
 
 typedef six::Poly1D Poly1D;
 
@@ -83,3 +85,5 @@ typedef six::GeoInfo GeoInfo;
 typedef six::MatchInformation MatchInformation;
 }
 
+
+#endif

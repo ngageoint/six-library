@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 
+#include <scene/sys_Conf.h>
 #include <import/plugin.h>
 #include <plugin/PluginDefines.h>
 #include <six/convert/ConverterProvider.h>

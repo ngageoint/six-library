@@ -38,7 +38,7 @@ SICDWriteControl::SICDWriteControl(const std::string& outputPathname,
 
 void SICDWriteControl::initialize(const ComplexData& data)
 {
-    auto container(std::make_shared<Container>(DataType::COMPLEX));
+    mem::SharedPtr<Container> container(new Container(DataType::COMPLEX));
 
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it. After calling
@@ -47,6 +47,13 @@ void SICDWriteControl::initialize(const ComplexData& data)
     initialize(container);
 }
 
+void SICDWriteControl::write(const std::vector<sys::byte>& data)
+{
+    if (!data.empty())
+    {
+        mIO->write(data.data(), data.size());
+    }
+}
 void SICDWriteControl::write(const std::vector<std::byte>& data)
 {
     if (!data.empty())
@@ -66,9 +73,9 @@ void SICDWriteControl::writeHeaders()
     write(byteProvider.getFileHeader());
 
     // Write image subheaders
-    const std::vector<std::vector<std::byte> >& imageSubheaders =
+    auto& imageSubheaders =
             byteProvider.getImageSubheaders();
-    const std::vector<nitf::Off>& imageSubheaderFileOffsets =
+    auto& imageSubheaderFileOffsets =
             byteProvider.getImageSubheaderFileOffsets();
 
     mImageDataStart.resize(imageSubheaders.size());
@@ -137,7 +144,7 @@ void SICDWriteControl::save(void* imageData,
                     startLocalRowToWrite * numBytesPerRow;
 
             // Now figure out our offset into the segment
-            const size_t segStartRow = imageSegmentInfo.firstRow;
+            const auto segStartRow = imageSegmentInfo.getFirstRow();
             const size_t startRowInSegToWrite =
                     startGlobalRowToWrite - segStartRow;
             const size_t pixelOffset =

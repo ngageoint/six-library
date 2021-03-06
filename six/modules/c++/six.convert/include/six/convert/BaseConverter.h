@@ -24,6 +24,8 @@
 #define __SIX_BASE_CONVERTER_H__
 
 #include <string>
+#include <memory>
+
 #include <six/sicd/ComplexData.h>
 #include <six/XMLParser.h>
 #include <xml/lite/Document.h>
@@ -47,10 +49,10 @@ public:
      *
      * \return ComplexData corresponding to given file
      */
-    virtual std::unique_ptr<six::sicd::ComplexData> convert() const = 0;
+    virtual mem::auto_ptr<six::sicd::ComplexData> convert() const = 0;
 
 protected:
-    static std::unique_ptr<xml::lite::Document>
+    static mem::auto_ptr<xml::lite::Document>
             readXML(const std::string& xmlPathname);
 
     XMLElem findUniqueElement(const XMLElem root,

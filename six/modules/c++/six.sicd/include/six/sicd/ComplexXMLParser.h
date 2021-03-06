@@ -24,10 +24,10 @@
 
 #include <memory>
 
-#include <xml/lite/Document.h>
 #include <six/XMLParser.h>
 #include <six/SICommonXMLParser.h>
 #include <six/sicd/ComplexData.h>
+#include <xml/lite/Document.h>
 
 namespace six
 {
@@ -41,6 +41,13 @@ public:
                      std::unique_ptr<SICommonXMLParser>&& comParser,
                      logging::Logger* log = nullptr,
                      bool ownLog = false);
+#if !CODA_OSS_cpp17
+        ComplexXMLParser(const std::string& version,
+                     bool addClassAttributes,
+                     std::auto_ptr<SICommonXMLParser> comParser,
+                     logging::Logger* log = nullptr,
+                     bool ownLog = false);
+#endif
 
     xml::lite::Document* toXML(const ComplexData* data) const;
 

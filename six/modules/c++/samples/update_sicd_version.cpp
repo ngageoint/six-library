@@ -19,15 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <six/sicd/SICDVersionUpdater.h>
 
 #include <iostream>
+
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
 #include <six/Data.h>
 #include <six/NITFWriteControl.h>
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/ComplexXMLControl.h>
-#include <six/sicd/SICDVersionUpdater.h>
 #include <six/sicd/Utilities.h>
 #include <logging/Logger.h>
 
@@ -42,13 +43,13 @@ void writeSicd(std::unique_ptr<six::Data>&& complexData,
             six::DataType::COMPLEX,
             new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-    auto container(std::make_shared<six::Container>(
+    mem::SharedPtr<six::Container> container(new six::Container(
         six::DataType::COMPLEX));
     container->addData(std::move(complexData));
 
     six::NITFWriteControl writer(container);
 
-    six::BufferList buffers;
+    six::buffer_list buffers;
     buffers.push_back(reinterpret_cast<const std::byte*>(widebandData.data()));
     writer.save(buffers, pathname, schemaPaths);
 }
@@ -96,6 +97,10 @@ int main(int argc, char **argv)
         writeSicd(std::move(data), widebandData, schemaPaths,
                   options->get<std::string>("output"));
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << "\n";
     }
     catch (const std::exception& ex)
     {

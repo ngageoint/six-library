@@ -29,40 +29,18 @@
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 #pragma warning(disable: 4127) // conditional expression is constant
+#pragma warning(disable: 5039) // '...' : pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
-#pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
 #pragma warning(disable: 26451) // Arithmetic overflow : Using operator '...' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow(io.2).
 #pragma warning(disable: 6385) // Reading invalid data from '...':  the readable size is '...' bytes, but '...' bytes may be read.
 #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
+#pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 
 #pragma warning(push)
-#pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
-#pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
-
 #pragma warning(disable: 4464) // relative include path contains '..'
-#include "../../cpp_pch.h"
-
-#include <sys/File.h>
-
+#include "../../nitro_pch.h"
 #pragma warning(pop)
-
-#include <sys/Conf.h>
-#include <import/except.h>
-#include <import/types.h>
-#pragma warning(push)
-#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
-#pragma warning(disable: 26493) // Don't use C-style casts (type.4).
-#pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
-#include <import/sys.h>
-#include <import/io.h>
-#include <import/mt.h>
-#pragma warning(pop)
-#include <import/str.h>
-#include <import/logging.h>
-#include <math/Utilities.h>
-#include <xml/lite/Element.h>
-#include <xml/lite/Validator.h>
 
 #include <import/nitf.hpp>
 #include <import/nitf.h>
@@ -70,10 +48,3 @@
 
 #include <import/six.h>
 #include <import/six/sicd.h>
-
-#pragma comment(lib, "io-c++")
-#pragma comment(lib, "except-c++")
-#pragma comment(lib, "sys-c++")
-#pragma comment(lib, "str-c++")
-
-#pragma comment(lib, "ws2_32")

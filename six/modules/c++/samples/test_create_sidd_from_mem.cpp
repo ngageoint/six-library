@@ -41,12 +41,13 @@
  *
  */
 
+#include <import/six/sidd.h>
+
 #include <import/cli.h>
 #include <import/io.h>
 #include <import/nitf.h>
 #include <import/six.h>
 #include <import/six/sicd.h>
-#include <import/six/sidd.h>
 #include "utils.h"
 
 #include <sys/Filesystem.h>
@@ -64,6 +65,10 @@ static const struct
     unsigned char data[128 * 128 * 3 + 1];
 }
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4125) // decimal digit terminates octal escape sequence
+#endif // _MSC_VER
 // clang-format off
         IMAGE = {
                   128,
@@ -1712,6 +1717,9 @@ static const struct
                       "3Lz2P\212>Y\216@X\2069Q\216=R\246Ve\261ju\251hu\221Obs,Fb\35>]\23" "5c\31"
                       ":t+I\230@S\261EP", };
 // clang-format on
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif // _MSC_VER
 
 /*
  *  Data will be RBG24I
@@ -1719,7 +1727,7 @@ static const struct
 
 std::unique_ptr<six::WriteControl> getWriteControl(std::string outputName)
 {
-    std::string extension = fs::path(outputName).extension();
+    auto extension = fs::path(outputName).extension().string();
     str::lower(extension);
 
     std::unique_ptr<six::WriteControl> writer;
@@ -2251,29 +2259,24 @@ void initErrorStatistics(six::ErrorStatistics& err)
     err.components->posVelError->corrCoefs->v1v2 = 6.2;
     err.components->posVelError->corrCoefs->v1v3 = 6.2;
     err.components->posVelError->corrCoefs->v2v3 = 6.2;
-
-    err.components->posVelError->positionDecorr.corrCoefZero = 48.17;
-    err.components->posVelError->positionDecorr.decorrRate = 113.965;
+    err.components->posVelError->positionDecorr = six::DecorrType(48.17, 113.965);
 
     err.components->radarSensor.reset(new six::RadarSensor());
     err.components->radarSensor->rangeBias = 43.5;
     err.components->radarSensor->clockFreqSF = 1111.1;
-    err.components->radarSensor->transmitFreqSF = 85;
-    err.components->radarSensor->rangeBiasDecorr.corrCoefZero = 123;
-    err.components->radarSensor->rangeBiasDecorr.decorrRate = .03;
+    err.components->radarSensor->transmitFreqSF= 85;
+    err.components->radarSensor->rangeBiasDecorr = six::DecorrType(123, .03);
 
     err.components->tropoError.reset(new six::TropoError());
     err.components->tropoError->tropoRangeVertical = .00289;
     err.components->tropoError->tropoRangeSlant = 777;
-    err.components->tropoError->tropoRangeDecorr.corrCoefZero = 0;
-    err.components->tropoError->tropoRangeDecorr.decorrRate = 98.7;
+    err.components->tropoError->tropoRangeDecorr = six::DecorrType(0, 98.7);
 
     err.components->ionoError.reset(new six::IonoError());
     err.components->ionoError->ionoRangeVertical = 1.2;
     err.components->ionoError->ionoRangeRateVertical = 77632;
     err.components->ionoError->ionoRgRgRateCC = .072;
-    err.components->ionoError->ionoRangeVertDecorr.corrCoefZero = 48.16;
-    err.components->ionoError->ionoRangeVertDecorr.decorrRate = 113.964;
+    err.components->ionoError->ionoRangeVertDecorr = six::DecorrType(48.16, 113.964);
 
     six::Parameter param;
     param.setName("ErrorStatisticsParameterName");
@@ -2581,8 +2584,8 @@ int main(int argc, char** argv)
         const char smallData[4] = {'a', 'b', 'c', 'd'};
 
         // Create a file container
-        auto container(std::make_shared<six::Container>(
-            six::DataType::DERIVED));
+        mem::SharedPtr<six::Container> container(
+            new six::Container(DataType::DERIVED));
 
         std::vector<const UByte*> buffers;
         size_t numImages = options->get<bool>("multipleImages") ? 3 : 1;
@@ -2625,6 +2628,11 @@ int main(int argc, char** argv)
 
         // Save the file
         writer->save(buffers, outputName);
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

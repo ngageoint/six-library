@@ -2058,8 +2058,10 @@ void DerivedXMLParser200::parseDigitalElevationDataFromXML(
     parseString(getFirstAndOnly(posElem, "CoordinateSystemType"), coordSystemType);
     ded.geopositioning.coordinateSystemType = CoordinateSystemType(coordSystemType);
     parseUInt(getFirstAndOnly(posElem, "FalseOrigin"), ded.geopositioning.falseOrigin);
-    parseInt(getFirstAndOnly(posElem, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
-
+    if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
+    {
+        parseInt(getFirstAndOnly(posElem, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
+    }
     XMLElem posAccuracyElem = getFirstAndOnly(elem, "PositionalAccuracy");
     parseUInt(getFirstAndOnly(posAccuracyElem, "NumRegions"), ded.positionalAccuracy.numRegions);
     XMLElem absoluteElem = getFirstAndOnly(posAccuracyElem, "AbsoluteAccuracy");
@@ -2070,13 +2072,13 @@ void DerivedXMLParser200::parseDigitalElevationDataFromXML(
     parseDouble(getFirstAndOnly(pointElem, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }
 
-std::unique_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const XMLElem elem,
+mem::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const XMLElem elem,
         size_t size) const
 {
     std::string lutStr = "";
     parseString(elem, lutStr);
     std::vector<std::string> lutVals = str::split(lutStr, " ");
-    std::unique_ptr<LUT> lut(new LUT(size, sizeof(short)));
+    mem::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
 
     for (size_t ii = 0; ii < lutVals.size(); ++ii)
     {

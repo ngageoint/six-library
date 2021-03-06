@@ -21,6 +21,8 @@
  */
 
 
+#ifndef __CPHD03_UTILITIES_H__
+#define __CPHD03_UTILITIES_H__
 #pragma once
 
 #include <string>
@@ -38,4 +40,4 @@ size_t getNumBytesPerSample(cphd::SampleType sampleType);
 std::string toString(const cphd::CollectionInformation& ci);
 }
 
-
+#endif

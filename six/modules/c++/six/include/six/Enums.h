@@ -19,16 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __SIX_ENUMS_H__
+#define __SIX_ENUMS_H__
 #pragma once
-
-#include <string>
-#include <map>
-#include <ostream>
-
-#include <import/except.h>
-#include <import/str.h>
-#include <import/sys.h>
-#include <import/scene.h>
 
 #include "Enum.h"
 
@@ -161,11 +154,9 @@ SIX_Enum_ENUM_2(DisplayType,
  *
  *  Enumeration used to represent DualPolarizationTypes
  */
-struct DualPolarizationType final : public details::Enum<DualPolarizationType>
-{
+SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
     //! The enumerations allowed
-    enum
-    {
+    SIX_Enum_BEGIN_enum
         OTHER = 1,
         V_V = 2,
         V_H = 3,
@@ -184,13 +175,9 @@ struct DualPolarizationType final : public details::Enum<DualPolarizationType>
         LHC_V = 16,
         LHC_H = 17,
         UNKNOWN = 18,
-        NOT_SET = six::NOT_SET_VALUE
-    };
+    SIX_Enum_END_enum
 
-    static const map_t& string_to_int_()
-    {
-        static const map_t retval
-        {
+    SIX_Enum_BEGIN_string_to_int
             SIX_Enum_map_entry_(OTHER),
             SIX_Enum_map_entry_(V_V),
             SIX_Enum_map_entry_(V_H),
@@ -209,16 +196,8 @@ struct DualPolarizationType final : public details::Enum<DualPolarizationType>
             SIX_Enum_map_entry_(LHC_V),
             SIX_Enum_map_entry_(LHC_H),
             SIX_Enum_map_entry_(UNKNOWN),
-            SIX_Enum_map_entry_(NOT_SET)
-        };
-        return retval;
-    }
-
-    DualPolarizationType() = default;
-    DualPolarizationType(const std::string& s) : Enum(s) {}
-    DualPolarizationType(int i) : Enum(i) {}
-    DualPolarizationType& operator=(const int& o) { value = o; return *this; }
-};
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(DualPolarizationType);
 
 /*!
  *  \struct EarthModelType
@@ -290,11 +269,9 @@ SIX_Enum_ENUM_5(OrientationType,
  *
  *  Enumeration used to represent PixelTypes
  */
-struct PixelType final : public details::Enum<PixelType>
-{
+SIX_Enum_BEGIN_DEFINE(PixelType)
     //! The enumerations allowed
-    enum
-    {
+    SIX_Enum_BEGIN_enum
         RE32F_IM32F = 1,
         RE16I_IM16I = 2,
         AMP8I_PHS8I = 3,
@@ -303,13 +280,9 @@ struct PixelType final : public details::Enum<PixelType>
         MONO16I = 6,
         RGB8LU = 7,
         RGB24I = 8,
-        NOT_SET = six::NOT_SET_VALUE
-    };
+    SIX_Enum_END_enum
 
-    static const map_t& string_to_int_()
-    {
-        static const map_t retval
-        {
+    SIX_Enum_BEGIN_string_to_int
             SIX_Enum_map_entry_(RE32F_IM32F),
             SIX_Enum_map_entry_(RE16I_IM16I),
             SIX_Enum_map_entry_(AMP8I_PHS8I),
@@ -318,27 +291,17 @@ struct PixelType final : public details::Enum<PixelType>
             SIX_Enum_map_entry_(MONO16I),
             SIX_Enum_map_entry_(RGB8LU),
             SIX_Enum_map_entry_(RGB24I),
-            SIX_Enum_map_entry_(NOT_SET)
-        };
-        return retval;
-    }
-
-    PixelType() = default;
-    PixelType(const std::string& s) : Enum(s) {}
-    PixelType(int i) : Enum(i) {}
-    PixelType& operator=(const int& o) { value = o; return *this; }
-};
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(PixelType);
 
 /*!
  *  \struct PolarizationSequenceType
  *
  *  Enumeration used to represent PolarizationSequenceTypes
  */
-struct PolarizationSequenceType final : public details::Enum<PolarizationSequenceType>
-{
+SIX_Enum_BEGIN_DEFINE(PolarizationSequenceType)
     //! The enumerations allowed
-    enum
-    {
+    SIX_Enum_BEGIN_enum
         OTHER = 1,
         V = 2,
         H = 3,
@@ -346,13 +309,9 @@ struct PolarizationSequenceType final : public details::Enum<PolarizationSequenc
         LHC = 5,
         UNKNOWN = 6,
         SEQUENCE = 7,
-        NOT_SET = six::NOT_SET_VALUE
-    };
+    SIX_Enum_END_enum
 
-    static const map_t& string_to_int_()
-    {
-        static const map_t retval
-        {
+    SIX_Enum_BEGIN_string_to_int
             SIX_Enum_map_entry_(OTHER),
             SIX_Enum_map_entry_(V),
             SIX_Enum_map_entry_(H),
@@ -360,16 +319,8 @@ struct PolarizationSequenceType final : public details::Enum<PolarizationSequenc
             SIX_Enum_map_entry_(LHC),
             SIX_Enum_map_entry_(UNKNOWN),
             SIX_Enum_map_entry_(SEQUENCE),
-            SIX_Enum_map_entry_(NOT_SET)
-        };
-        return retval;
-    }
-
-    PolarizationSequenceType() = default;
-    PolarizationSequenceType(const std::string & s) : Enum(s) {}
-    PolarizationSequenceType(int i) : Enum(i) {}
-    PolarizationSequenceType& operator=(const int& o) { value = o; return *this; }
-};
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(PolarizationSequenceType);
 
 
 /*!
@@ -484,3 +435,4 @@ SIX_Enum_ENUM_3(XYZEnum,
 
 }
 
+#endif

@@ -20,10 +20,11 @@
  *
  */
 
+#include <import/six.h>
+
 #include <import/cli.h>
 #include <sys/OS.h>
 #include <io/FileInputStream.h>
-#include <import/six.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
 #include "utils.h"
@@ -269,6 +270,11 @@ int main(int argc, char** argv)
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
+        return 1;
     }
     catch (...)
     {

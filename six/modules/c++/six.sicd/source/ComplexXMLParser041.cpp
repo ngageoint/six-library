@@ -53,6 +53,17 @@ ComplexXMLParser041::ComplexXMLParser041(
     ComplexXMLParser04x(version, addClassAttributes, std::move(comParser), log, ownLog)
 {
 }
+#if !CODA_OSS_cpp17
+ComplexXMLParser041::ComplexXMLParser041(
+    const std::string& version,
+    bool addClassAttributes,
+    std::auto_ptr<SICommonXMLParser> comParser,
+    logging::Logger* log,
+    bool ownLog) :
+    ComplexXMLParser041(version, addClassAttributes, std::unique_ptr<SICommonXMLParser>(comParser.release()), log, ownLog)
+{
+}
+#endif
 
 XMLElem ComplexXMLParser041::convertRMATToXML(
     const RMAT* rmat, 

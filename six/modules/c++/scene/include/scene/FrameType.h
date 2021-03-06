@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef __SCENE_FRAME_TYPE_H__
+#define __SCENE_FRAME_TYPE_H__
 #pragma once
 
 #include <string>
@@ -29,7 +31,7 @@ namespace scene
 // NOTE: These enums and strings must exactly match what is in the SIX
 //       standard.  Since the scene module needs this concept as well though,
 //       it's present here.
-struct FrameType
+struct FrameType final
 {
     //! The enumerations allowed
     enum FrameTypesEnum
@@ -56,6 +58,7 @@ struct FrameType
     {
         return (mValue == rhs);
     }
+
     bool operator!=(FrameTypesEnum rhs) const
     {
         return !(*this == rhs);
@@ -65,6 +68,7 @@ struct FrameType
     {
         return (mValue == rhs.mValue);
     }
+
     bool operator!=(const FrameType& rhs) const
     {
         return !(*this == rhs);
@@ -74,6 +78,7 @@ struct FrameType
     {
         return toString() == rhs;
     }
+
     bool operator!=(const std::string& rhs) const
     {
         return !(*this == rhs);
@@ -89,4 +94,4 @@ inline std::ostream& operator<<(std::ostream& os, const FrameType& e)
     return os;
 }
 }
-
+#endif

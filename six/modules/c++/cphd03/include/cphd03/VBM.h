@@ -25,7 +25,7 @@
 
 #include <vector>
 
-#include <sys/Conf.h>
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <cphd/Types.h>
@@ -193,6 +193,8 @@ public:
      *  \param [Output]data Will be filled with VBM data. This will
      *         be resized and zeroed internally.
      */
+    void getVBMdata(size_t channel,
+                    std::vector<sys::ubyte>& data) const;
     void getVBMdata(size_t channel,
                     std::vector<std::byte>& data) const;
 

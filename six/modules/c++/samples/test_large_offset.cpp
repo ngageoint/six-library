@@ -79,8 +79,8 @@ void createNITF(const std::string& outputPathname,
     const size_t elementsInImage = data->getNumRows() * data->getNumCols();
     const size_t imageSize = elementsInImage * data->getNumBytesPerPixel();
 
-    auto container(std::make_shared<six::Container>(
-        data->getDataType()));
+    mem::SharedPtr<six::Container> container(
+        new six::Container(data->getDataType()));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
@@ -134,7 +134,7 @@ bool checkNITF(const std::string& pathname)
     region.setStartRow(ROWS_TO_SKIP);
     region.setNumRows(data->getNumRows() - ROWS_TO_SKIP);
     reader.interleaved(region, 0);
-    std::byte* buffer = region.getBuffer();
+    auto buffer = region.getBuffer();
 
     const size_t elementsPerRow = data->getNumCols();
     const size_t skipSize = ROWS_TO_SKIP * elementsPerRow;
@@ -142,8 +142,7 @@ bool checkNITF(const std::string& pathname)
 
     if (data->getDataType() == six::DataType::COMPLEX)
     {
-        std::complex<float>* complexBuffer =
-                reinterpret_cast<std::complex<float>* >(buffer);
+        auto complexBuffer = reinterpret_cast<std::complex<float>* >(buffer);
         for (size_t ii = skipSize; ii < imageSize; ++ii)
         {
             const std::complex<float> currentElement =
@@ -202,6 +201,10 @@ int main(int argc, char** argv)
         std::cerr << "Not enough memory available to build test NITF. "
                 "Skipping test.\n";
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

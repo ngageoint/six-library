@@ -24,7 +24,7 @@
 
 using namespace six;
 
-std::unique_ptr<six::ReadControl> ReadControlRegistry::newReadControl(
+six::ReadControl* ReadControlRegistry::newReadControl(
         const std::string& filename) const
 {
     for (const auto& creator : mCreators)
@@ -35,6 +35,11 @@ std::unique_ptr<six::ReadControl> ReadControlRegistry::newReadControl(
     throw except::NotImplementedException(
                                           Ctxt(
                                                "No supported ReadControl for input file"));
+}
+void ReadControlRegistry::newReadControl(
+    const std::string& filename, std::unique_ptr<six::ReadControl>& result) const
+{
+    result.reset(newReadControl(filename));
 }
 
 

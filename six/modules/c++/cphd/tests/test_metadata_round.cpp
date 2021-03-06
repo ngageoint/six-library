@@ -24,6 +24,7 @@
 #include <memory>
 #include <thread>
 
+#include <scene/sys_Conf.h>
 #include <cli/Value.h>
 #include <cli/ArgumentParser.h>
 #include <io/TempFile.h>
@@ -123,6 +124,10 @@ int main(int argc, char** argv)
 
         runTests(inPathname, numThreads, schemaPathnames);
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

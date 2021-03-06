@@ -242,7 +242,7 @@ Wideband.read = read
   cphd03::Metadata fromXMLString(const std::string& xmlString)
   {
     cphd03::Metadata retv;
-    auto apMetadata = $self->fromXML(xmlString);
+    mem::auto_ptr<cphd03::Metadata> apMetadata = $self->fromXML(xmlString);
     retv = *apMetadata;
     return retv;
   }

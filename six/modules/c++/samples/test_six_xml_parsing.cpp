@@ -168,6 +168,12 @@ int main(int argc, char** argv)
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
         return 1;
     }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << "Caught except::exception: " << ex.getMessage()
+            << std::endl;
+        return 1;
+    }
     catch (...)
     {
         std::cerr << "Caught unknown exception\n";

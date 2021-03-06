@@ -55,7 +55,8 @@ public:
                       const std::vector<std::string>& schemaPaths);
 
     using ReadControl::interleaved;
-    virtual UByte* interleaved(Region& region, size_t imageNumber);
+    virtual UByte* interleaved(Region& region, size_t imageNumber) override;
+    virtual void interleaved(Region& region, size_t imageNumber, std::byte* &result) override;
 
     virtual std::string getFileType() const
     {
@@ -70,7 +71,8 @@ protected:
 
 struct GeoTIFFReadControlCreator final : public ReadControlCreator
 {
-    std::unique_ptr<six::ReadControl> newReadControl() const override;
+    six::ReadControl* newReadControl() const override;
+    void newReadControl(std::unique_ptr<six::ReadControl>& result) const override;
 
     bool supports(const std::string& filename) const override;
 

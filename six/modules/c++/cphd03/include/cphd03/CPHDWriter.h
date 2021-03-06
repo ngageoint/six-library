@@ -25,10 +25,11 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
+#include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <sys/OS.h>
-#include <sys/Conf.h>
 #include <types/RowCol.h>
 #include <cphd03/Metadata.h>
 #include <cphd03/VBM.h>
@@ -107,7 +108,14 @@ public:
     template <typename T>
     void addImage(const T* image,
                   const types::RowCol<size_t>& dims,
-                  const std::byte* vbmData);
+                  const sys::ubyte* vbmData);
+    template <typename T>
+    void addImage(const T* image,
+                  const types::RowCol<size_t>& dims,
+                  const std::byte* vbmData)
+    {
+        addImage(image, dims, reinterpret_cast<const sys::ubyte*>(vbmData));
+    }
 
     /*
      *  \func writeMetadata

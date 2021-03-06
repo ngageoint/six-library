@@ -9358,7 +9358,7 @@ VectorGeoInfo_swigregister = _cphd.VectorGeoInfo_swigregister
 VectorGeoInfo_swigregister(VectorGeoInfo)
 
 class StdAutoSupportArray(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::SupportArray)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::SupportArray)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoSupportArray, name, value)
@@ -9367,7 +9367,7 @@ class StdAutoSupportArray(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::SupportArray)> self) -> StdAutoSupportArray"""
+        """__init__(mem::auto_ptr<(cphd::SupportArray)> self) -> StdAutoSupportArray"""
         this = _cphd.new_StdAutoSupportArray()
         try:
             self.this.append(this)
@@ -9474,7 +9474,7 @@ def makeScopedCopyableSupportArray() -> "mem::ScopedCopyablePtr< cphd::SupportAr
     """makeScopedCopyableSupportArray() -> ScopedCopyableSupportArray"""
     return _cphd.makeScopedCopyableSupportArray()
 class StdAutoTropoParameters(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::TropoParameters)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::TropoParameters)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoTropoParameters, name, value)
@@ -9483,7 +9483,7 @@ class StdAutoTropoParameters(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::TropoParameters)> self) -> StdAutoTropoParameters"""
+        """__init__(mem::auto_ptr<(cphd::TropoParameters)> self) -> StdAutoTropoParameters"""
         this = _cphd.new_StdAutoTropoParameters()
         try:
             self.this.append(this)
@@ -9571,7 +9571,7 @@ def makeScopedCopyableTropoParameters() -> "mem::ScopedCopyablePtr< cphd::TropoP
     """makeScopedCopyableTropoParameters() -> ScopedCopyableTropoParameters"""
     return _cphd.makeScopedCopyableTropoParameters()
 class StdAutoIonoParameters(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::IonoParameters)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::IonoParameters)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoIonoParameters, name, value)
@@ -9580,7 +9580,7 @@ class StdAutoIonoParameters(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::IonoParameters)> self) -> StdAutoIonoParameters"""
+        """__init__(mem::auto_ptr<(cphd::IonoParameters)> self) -> StdAutoIonoParameters"""
         this = _cphd.new_StdAutoIonoParameters()
         try:
             self.this.append(this)
@@ -9668,7 +9668,7 @@ def makeScopedCopyableIonoParameters() -> "mem::ScopedCopyablePtr< cphd::IonoPar
     """makeScopedCopyableIonoParameters() -> ScopedCopyableIonoParameters"""
     return _cphd.makeScopedCopyableIonoParameters()
 class StdAutoPlanar(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::Planar)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::Planar)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoPlanar, name, value)
@@ -9677,7 +9677,7 @@ class StdAutoPlanar(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::Planar)> self) -> StdAutoPlanar"""
+        """__init__(mem::auto_ptr<(cphd::Planar)> self) -> StdAutoPlanar"""
         this = _cphd.new_StdAutoPlanar()
         try:
             self.this.append(this)
@@ -9765,7 +9765,7 @@ def makeScopedCopyablePlanar() -> "mem::ScopedCopyablePtr< cphd::Planar >":
     """makeScopedCopyablePlanar() -> ScopedCopyablePlanar"""
     return _cphd.makeScopedCopyablePlanar()
 class StdAutoHAE(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::HAE)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::HAE)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoHAE, name, value)
@@ -9774,7 +9774,7 @@ class StdAutoHAE(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::HAE)> self) -> StdAutoHAE"""
+        """__init__(mem::auto_ptr<(cphd::HAE)> self) -> StdAutoHAE"""
         this = _cphd.new_StdAutoHAE()
         try:
             self.this.append(this)
@@ -9862,7 +9862,7 @@ def makeScopedCopyableHAE() -> "mem::ScopedCopyablePtr< cphd::HAE >":
     """makeScopedCopyableHAE() -> ScopedCopyableHAE"""
     return _cphd.makeScopedCopyableHAE()
 class StdAutoAreaType(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::AreaType)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::AreaType)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoAreaType, name, value)
@@ -9871,7 +9871,7 @@ class StdAutoAreaType(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::AreaType)> self) -> StdAutoAreaType"""
+        """__init__(mem::auto_ptr<(cphd::AreaType)> self) -> StdAutoAreaType"""
         this = _cphd.new_StdAutoAreaType()
         try:
             self.this.append(this)
@@ -9963,7 +9963,7 @@ def makeScopedCopyableAreaType() -> "mem::ScopedCopyablePtr< cphd::AreaType >":
     """makeScopedCopyableAreaType() -> ScopedCopyableAreaType"""
     return _cphd.makeScopedCopyableAreaType()
 class StdAutoImageGrid(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::ImageGrid)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::ImageGrid)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoImageGrid, name, value)
@@ -9972,7 +9972,7 @@ class StdAutoImageGrid(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::ImageGrid)> self) -> StdAutoImageGrid"""
+        """__init__(mem::auto_ptr<(cphd::ImageGrid)> self) -> StdAutoImageGrid"""
         this = _cphd.new_StdAutoImageGrid()
         try:
             self.this.append(this)
@@ -10072,7 +10072,7 @@ def makeScopedCopyableImageGrid() -> "mem::ScopedCopyablePtr< cphd::ImageGrid >"
     """makeScopedCopyableImageGrid() -> ScopedCopyableImageGrid"""
     return _cphd.makeScopedCopyableImageGrid()
 class StdAutoTxRcv(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::TxRcv)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::TxRcv)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoTxRcv, name, value)
@@ -10081,7 +10081,7 @@ class StdAutoTxRcv(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::TxRcv)> self) -> StdAutoTxRcv"""
+        """__init__(mem::auto_ptr<(cphd::TxRcv)> self) -> StdAutoTxRcv"""
         this = _cphd.new_StdAutoTxRcv()
         try:
             self.this.append(this)
@@ -10169,7 +10169,7 @@ def makeScopedCopyableTxRcv() -> "mem::ScopedCopyablePtr< cphd::TxRcv >":
     """makeScopedCopyableTxRcv() -> ScopedCopyableTxRcv"""
     return _cphd.makeScopedCopyableTxRcv()
 class StdAutoTOAExtended(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::TOAExtended)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::TOAExtended)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoTOAExtended, name, value)
@@ -10178,7 +10178,7 @@ class StdAutoTOAExtended(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::TOAExtended)> self) -> StdAutoTOAExtended"""
+        """__init__(mem::auto_ptr<(cphd::TOAExtended)> self) -> StdAutoTOAExtended"""
         this = _cphd.new_StdAutoTOAExtended()
         try:
             self.this.append(this)
@@ -10266,7 +10266,7 @@ def makeScopedCopyableTOAExtended() -> "mem::ScopedCopyablePtr< cphd::TOAExtende
     """makeScopedCopyableTOAExtended() -> ScopedCopyableTOAExtended"""
     return _cphd.makeScopedCopyableTOAExtended()
 class StdAutoTOALFMEclipse(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::TOAExtended::LFMEclipse)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::TOAExtended::LFMEclipse)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoTOALFMEclipse, name, value)
@@ -10275,7 +10275,7 @@ class StdAutoTOALFMEclipse(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::TOAExtended::LFMEclipse)> self) -> StdAutoTOALFMEclipse"""
+        """__init__(mem::auto_ptr<(cphd::TOAExtended::LFMEclipse)> self) -> StdAutoTOALFMEclipse"""
         this = _cphd.new_StdAutoTOALFMEclipse()
         try:
             self.this.append(this)
@@ -10371,7 +10371,7 @@ def makeScopedCopyableTOALFMEclipse() -> "mem::ScopedCopyablePtr< cphd::TOAExten
     """makeScopedCopyableTOALFMEclipse() -> ScopedCopyableTOALFMEclipse"""
     return _cphd.makeScopedCopyableTOALFMEclipse()
 class StdAutoChannelAntenna(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::ChannelParameter::Antenna)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::ChannelParameter::Antenna)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoChannelAntenna, name, value)
@@ -10380,7 +10380,7 @@ class StdAutoChannelAntenna(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::ChannelParameter::Antenna)> self) -> StdAutoChannelAntenna"""
+        """__init__(mem::auto_ptr<(cphd::ChannelParameter::Antenna)> self) -> StdAutoChannelAntenna"""
         this = _cphd.new_StdAutoChannelAntenna()
         try:
             self.this.append(this)
@@ -10476,7 +10476,7 @@ def makeScopedCopyableChannelAntenna() -> "mem::ScopedCopyablePtr< cphd::Channel
     """makeScopedCopyableChannelAntenna() -> ScopedCopyableChannelAntenna"""
     return _cphd.makeScopedCopyableChannelAntenna()
 class StdAutoChannelTxRcv(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::ChannelParameter::TxRcv)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::ChannelParameter::TxRcv)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoChannelTxRcv, name, value)
@@ -10485,7 +10485,7 @@ class StdAutoChannelTxRcv(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::ChannelParameter::TxRcv)> self) -> StdAutoChannelTxRcv"""
+        """__init__(mem::auto_ptr<(cphd::ChannelParameter::TxRcv)> self) -> StdAutoChannelTxRcv"""
         this = _cphd.new_StdAutoChannelTxRcv()
         try:
             self.this.append(this)
@@ -10573,7 +10573,7 @@ def makeScopedCopyableChannelTxRcv() -> "mem::ScopedCopyablePtr< cphd::ChannelPa
     """makeScopedCopyableChannelTxRcv() -> ScopedCopyableChannelTxRcv"""
     return _cphd.makeScopedCopyableChannelTxRcv()
 class StdAutoTgtRefLevel(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::TgtRefLevel)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::TgtRefLevel)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoTgtRefLevel, name, value)
@@ -10582,7 +10582,7 @@ class StdAutoTgtRefLevel(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::TgtRefLevel)> self) -> StdAutoTgtRefLevel"""
+        """__init__(mem::auto_ptr<(cphd::TgtRefLevel)> self) -> StdAutoTgtRefLevel"""
         this = _cphd.new_StdAutoTgtRefLevel()
         try:
             self.this.append(this)
@@ -10666,7 +10666,7 @@ def makeScopedCopyableTgtRefLevel() -> "mem::ScopedCopyablePtr< cphd::TgtRefLeve
     """makeScopedCopyableTgtRefLevel() -> ScopedCopyableTgtRefLevel"""
     return _cphd.makeScopedCopyableTgtRefLevel()
 class StdAutoNoiseLevel(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::NoiseLevel)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::NoiseLevel)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoNoiseLevel, name, value)
@@ -10675,7 +10675,7 @@ class StdAutoNoiseLevel(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::NoiseLevel)> self) -> StdAutoNoiseLevel"""
+        """__init__(mem::auto_ptr<(cphd::NoiseLevel)> self) -> StdAutoNoiseLevel"""
         this = _cphd.new_StdAutoNoiseLevel()
         try:
             self.this.append(this)
@@ -10767,7 +10767,7 @@ def makeScopedCopyableNoiseLevel() -> "mem::ScopedCopyablePtr< cphd::NoiseLevel 
     """makeScopedCopyableNoiseLevel() -> ScopedCopyableNoiseLevel"""
     return _cphd.makeScopedCopyableNoiseLevel()
 class StdAutoFxNoiseProfile(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::FxNoiseProfile)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::FxNoiseProfile)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoFxNoiseProfile, name, value)
@@ -10776,7 +10776,7 @@ class StdAutoFxNoiseProfile(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::FxNoiseProfile)> self) -> StdAutoFxNoiseProfile"""
+        """__init__(mem::auto_ptr<(cphd::FxNoiseProfile)> self) -> StdAutoFxNoiseProfile"""
         this = _cphd.new_StdAutoFxNoiseProfile()
         try:
             self.this.append(this)
@@ -10860,7 +10860,7 @@ def makeScopedCopyableFxNoiseProfile() -> "mem::ScopedCopyablePtr< cphd::FxNoise
     """makeScopedCopyableFxNoiseProfile() -> ScopedCopyableFxNoiseProfile"""
     return _cphd.makeScopedCopyableFxNoiseProfile()
 class StdAutoMonostatic(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::Monostatic)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::Monostatic)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoMonostatic, name, value)
@@ -10869,7 +10869,7 @@ class StdAutoMonostatic(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::Monostatic)> self) -> StdAutoMonostatic"""
+        """__init__(mem::auto_ptr<(cphd::Monostatic)> self) -> StdAutoMonostatic"""
         this = _cphd.new_StdAutoMonostatic()
         try:
             self.this.append(this)
@@ -10997,7 +10997,7 @@ def makeScopedCopyableMonostatic() -> "mem::ScopedCopyablePtr< cphd::Monostatic 
     """makeScopedCopyableMonostatic() -> ScopedCopyableMonostatic"""
     return _cphd.makeScopedCopyableMonostatic()
 class StdAutoBistatic(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::Bistatic)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::Bistatic)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoBistatic, name, value)
@@ -11006,7 +11006,7 @@ class StdAutoBistatic(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::Bistatic)> self) -> StdAutoBistatic"""
+        """__init__(mem::auto_ptr<(cphd::Bistatic)> self) -> StdAutoBistatic"""
         this = _cphd.new_StdAutoBistatic()
         try:
             self.this.append(this)
@@ -11126,7 +11126,7 @@ def makeScopedCopyableBistatic() -> "mem::ScopedCopyablePtr< cphd::Bistatic >":
     """makeScopedCopyableBistatic() -> ScopedCopyableBistatic"""
     return _cphd.makeScopedCopyableBistatic()
 class StdAutoErrorParameters(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::ErrorParameters)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::ErrorParameters)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoErrorParameters, name, value)
@@ -11135,7 +11135,7 @@ class StdAutoErrorParameters(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::ErrorParameters)> self) -> StdAutoErrorParameters"""
+        """__init__(mem::auto_ptr<(cphd::ErrorParameters)> self) -> StdAutoErrorParameters"""
         this = _cphd.new_StdAutoErrorParameters()
         try:
             self.this.append(this)
@@ -11223,7 +11223,7 @@ def makeScopedCopyableErrorParameters() -> "mem::ScopedCopyablePtr< cphd::ErrorP
     """makeScopedCopyableErrorParameters() -> ScopedCopyableErrorParameters"""
     return _cphd.makeScopedCopyableErrorParameters()
 class StdAutoErrorMonostatic(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::ErrorParameters::Monostatic)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::ErrorParameters::Monostatic)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoErrorMonostatic, name, value)
@@ -11232,7 +11232,7 @@ class StdAutoErrorMonostatic(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::ErrorParameters::Monostatic)> self) -> StdAutoErrorMonostatic"""
+        """__init__(mem::auto_ptr<(cphd::ErrorParameters::Monostatic)> self) -> StdAutoErrorMonostatic"""
         this = _cphd.new_StdAutoErrorMonostatic()
         try:
             self.this.append(this)
@@ -11332,7 +11332,7 @@ def makeScopedCopyableErrorMonostatic() -> "mem::ScopedCopyablePtr< cphd::ErrorP
     """makeScopedCopyableErrorMonostatic() -> ScopedCopyableErrorMonostatic"""
     return _cphd.makeScopedCopyableErrorMonostatic()
 class StdAutoDecorrType(_object):
-    """Proxy of C++ std::auto_ptr<(six::DecorrType)> class."""
+    """Proxy of C++ mem::auto_ptr<(six::DecorrType)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoDecorrType, name, value)
@@ -11341,7 +11341,7 @@ class StdAutoDecorrType(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(six::DecorrType)> self) -> StdAutoDecorrType"""
+        """__init__(mem::auto_ptr<(six::DecorrType)> self) -> StdAutoDecorrType"""
         this = _cphd.new_StdAutoDecorrType()
         try:
             self.this.append(this)
@@ -11424,7 +11424,7 @@ def makeScopedCopyableDecorrType() -> "mem::ScopedCopyablePtr< six::DecorrType >
     """makeScopedCopyableDecorrType() -> ScopedCopyableDecorrType"""
     return _cphd.makeScopedCopyableDecorrType()
 class StdAutoProductInfo(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::ProductInfo)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::ProductInfo)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoProductInfo, name, value)
@@ -11433,7 +11433,7 @@ class StdAutoProductInfo(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::ProductInfo)> self) -> StdAutoProductInfo"""
+        """__init__(mem::auto_ptr<(cphd::ProductInfo)> self) -> StdAutoProductInfo"""
         this = _cphd.new_StdAutoProductInfo()
         try:
             self.this.append(this)
@@ -11525,7 +11525,7 @@ def makeScopedCopyableProductInfo() -> "mem::ScopedCopyablePtr< cphd::ProductInf
     """makeScopedCopyableProductInfo() -> ScopedCopyableProductInfo"""
     return _cphd.makeScopedCopyableProductInfo()
 class StdAutoCphdAntenna(_object):
-    """Proxy of C++ std::auto_ptr<(cphd::Antenna)> class."""
+    """Proxy of C++ mem::auto_ptr<(cphd::Antenna)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StdAutoCphdAntenna, name, value)
@@ -11534,7 +11534,7 @@ class StdAutoCphdAntenna(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(std::auto_ptr<(cphd::Antenna)> self) -> StdAutoCphdAntenna"""
+        """__init__(mem::auto_ptr<(cphd::Antenna)> self) -> StdAutoCphdAntenna"""
         this = _cphd.new_StdAutoCphdAntenna()
         try:
             self.this.append(this)

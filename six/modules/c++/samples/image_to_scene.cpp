@@ -37,7 +37,7 @@
 #include <six/sidd/DerivedXMLControl.h>
 
 #include <sys/Filesystem.h>
-namespace fs = std::filesystem;
+namespace fs = sys::Filesystem;
 
 namespace
 {
@@ -92,7 +92,7 @@ Converter::Converter(const std::string& pathname)
     reader.load(pathname);
 
     // Verify it's a SICD
-    auto container(reader.getContainer());
+    std::shared_ptr<const six::Container> container(reader.getContainer());
     if (container->getDataType() != six::DataType::COMPLEX)
     {
         throw except::InvalidFormatException(Ctxt("Expected a SICD NITF"));
@@ -167,7 +167,7 @@ int main(int argc, char** argv)
     try
     {
         // Parse the command line
-        const std::string progname(fs::path(argv[0]).filename());
+        const std::string progname(fs::path(argv[0]).filename().string());
         if (argc < 2)
         {
             usage(progname, std::cerr);
@@ -221,6 +221,11 @@ int main(int argc, char** argv)
             usage(progname, std::cerr);
             return 1;
         }
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << "Error: " << ex.toString() << std::endl;
+        return 1;
     }
     catch (const std::exception& ex)
     {

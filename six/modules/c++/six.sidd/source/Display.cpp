@@ -172,16 +172,6 @@ bool InteractiveProcessing::operator==(const InteractiveProcessing& rhs) const
             tonalTransferCurve == rhs.tonalTransferCurve);
 }
 
-Display::Display() :
-    pixelType(PixelType::NOT_SET),
-    magnificationMethod(MagnificationMethod::NOT_SET),
-    decimationMethod(DecimationMethod::NOT_SET),
-    histogramOverrides(nullptr),
-    monitorCompensationApplied(nullptr),
-    defaultBandDisplay(six::Init::undefined<size_t>())
-{
-}
-
 bool Display::operator==(const Display& rhs) const
 {
     return (pixelType == rhs.pixelType &&

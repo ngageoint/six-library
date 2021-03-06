@@ -22,8 +22,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <nitf/coda-oss.hpp>
 #include <sys/DLL.h>
-#include <sys/Conf.h>
 #include <except/Exception.h>
 #include <six/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
@@ -59,7 +59,7 @@ public:
 
         mReader.setXMLControlRegistry(&mXmlRegistry);
 
-        const std::string schemaDir =  (fs::path(confDir) / "schema" / "six");
+        const auto schemaDir =  (fs::path(confDir) / "schema" / "six").string();
         mReader.load(mSiddPathname, std::vector<std::string>(1, schemaDir));
         auto container(mReader.getContainer());
         mDerivedData.reset(reinterpret_cast<six::sidd::DerivedData*>(

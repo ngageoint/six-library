@@ -22,6 +22,7 @@
 #ifndef __SIX_ADAPTERS_H__
 #define __SIX_ADAPTERS_H__
 
+#include <scene/sys_Conf.h>
 #include <import/io.h>
 #include <import/nitf.hpp>
 #include <import/sys.h>
@@ -119,6 +120,13 @@ class MemoryWriteHandler: public nitf::WriteHandler
 public:
     MemoryWriteHandler(const NITFSegmentInfo& info, 
                        const UByte* buffer,
+                       size_t firstRow,
+                       size_t numCols,
+                       size_t numChannels,
+                       size_t pixelSize,
+                       bool doByteSwap);
+    MemoryWriteHandler(const NITFSegmentInfo& info, 
+                       const std::byte* buffer,
                        size_t firstRow,
                        size_t numCols,
                        size_t numChannels,

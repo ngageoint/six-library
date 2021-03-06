@@ -41,6 +41,13 @@ protected:
                         std::unique_ptr<SICommonXMLParser>&& comParser,
                         logging::Logger* log = nullptr,
                         bool ownLog = false);
+#if !CODA_OSS_cpp17
+    ComplexXMLParser041(const std::string& version,
+                        bool addClassAttributes,
+                        std::auto_ptr<SICommonXMLParser> comParser,
+                        logging::Logger* log = nullptr,
+                        bool ownLog = false);
+#endif
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, 
                                      XMLElem parent = nullptr) const;

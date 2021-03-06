@@ -22,9 +22,10 @@
 #ifndef __SIX_DATA_H__
 #define __SIX_DATA_H__
 
+#include <vector>
+
 #include "six/Types.h"
 #include "six/Classification.h"
-#include <vector>
 
 namespace six
 {

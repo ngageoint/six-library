@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include <import/mt.h>
+#include <scene/sys_Conf.h>
 
 #include "six/XMLControl.h"
 
@@ -98,6 +98,10 @@ public:
 
     void addCreator(const std::string& identifier,
                     std::unique_ptr<XMLControlCreator>&& creator);
+#if !CODA_OSS_cpp17
+    void addCreator(const std::string& identifier,
+                    std::auto_ptr<XMLControlCreator> creator);
+#endif
 
     /*!
      * Takes ownership of creator
@@ -114,6 +118,13 @@ public:
     {
         addCreator(dataType.toString(), std::move(creator));
     }
+#if !CODA_OSS_cpp17
+    void addCreator(DataType dataType,
+                    std::auto_ptr<XMLControlCreator> creator)
+    {
+        addCreator(dataType.toString(), creator);
+    }
+#endif
 
     /*!
      * Takes ownership of creator

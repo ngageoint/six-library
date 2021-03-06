@@ -22,9 +22,10 @@
 #include <sstream>
 #include <limits>
 
+#include <import/six.h>
+
 #include <mem/ScopedArray.h>
 #include <import/cli.h>
-#include <import/six.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
 #include <import/sio/lite.h>
@@ -135,7 +136,7 @@ int main(int argc, char** argv)
         reader->load(inputFile, schemaPaths);
 
         auto container = reader->getContainer();
-        std::string base = fs::path(inputFile).stem();
+        const auto base = fs::path(inputFile).stem();
         size_t numImages = 0;
 
         if (container->getDataType() == six::DataType::COMPLEX
@@ -161,7 +162,7 @@ int main(int argc, char** argv)
         {
             const six::Data* data = container->getData(i);
             std::string filename = FmtX("%s_DES_%d.xml", base.c_str(), i);
-            std::string xmlFile = fs::path(outputDir) / filename;
+            const auto xmlFile = fs::path(outputDir) / filename;
             io::FileOutputStream xmlStream(xmlFile);
 
             std::string xmlData = six::toXMLString(data, &xmlRegistry);
@@ -191,7 +192,7 @@ int main(int argc, char** argv)
                      << ii
                      << (isSIO ? "sio" : "raw");
 
-            const std::string outputFile = fs::path(outputDir) / filename.str();
+            const auto outputFile = fs::path(outputDir) / filename.str();
             io::FileOutputStream outputStream(outputFile);
 
             if (isSIO)
@@ -211,8 +212,7 @@ int main(int argc, char** argv)
             {
                 region.setNumRows(numRows);
                 size_t totalBytes = nbpp * numCols * numRows;
-                const std::unique_ptr<std::byte[]>
-                    workBuffer = region.setBuffer(totalBytes);
+                const auto workBuffer = region.setBuffer(totalBytes);
 
                 reader->interleaved(region, ii);
                 outputStream.write((const std::byte*) workBuffer.get(),
@@ -224,15 +224,15 @@ int main(int argc, char** argv)
                 const size_t nbpr = nbpp * numCols;
 
                 // allocate this so we can reuse it for each row
-                const std::unique_ptr<std::byte[]> workBuffer = region.setBuffer(nbpr);
+                const auto workBuffer = region.setBuffer(nbpr);
 
                 for (size_t jj = startRow;
                      jj < numRows + startRow;
                      ++jj)
                 {
                     region.setStartRow(jj);
-                    std::byte* line = reader->interleaved(region, ii);
-                    outputStream.write((const std::byte*) line, nbpr);
+                    auto line = reader->interleaved(region, ii);
+                    outputStream.write(line, nbpr);
                 }
             }
             outputStream.close();
@@ -240,6 +240,11 @@ int main(int argc, char** argv)
         }
 
         return 0;
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.toString() << std::endl;
+        return 1;
     }
     catch (const std::exception& cppE)
     {

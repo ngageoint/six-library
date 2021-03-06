@@ -23,8 +23,6 @@
 #include <iostream>
 #include <iterator>
 
-#include <sys/Bit.h>
-
 #include <import/six/sidd.h>
 #include "six/NITFWriteControl.h"
 #include "six/Types.h"
@@ -109,7 +107,7 @@ std::unique_ptr<six::sidd::DerivedData> createData()
 
 void write(const int16_t* data, bool useStream, bool byteSwap)
 {
-    auto container(std::make_shared<six::Container>(
+    mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
     container->addData(createData().release());
 
@@ -188,6 +186,10 @@ int main(int /*argc*/, char** /*argv*/)
             std::cout << "All tests passed." << std::endl;
             return 0;
         }
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

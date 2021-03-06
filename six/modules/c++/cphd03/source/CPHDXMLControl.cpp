@@ -19,13 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd03/CPHDXMLControl.h>
 
 #include <string>
 
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/Utilities.h>
-#include <cphd03/CPHDXMLControl.h>
 
 // CPHD Spec is not enforced
 #define ENFORCESPEC 0
@@ -75,9 +75,9 @@ size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)
     return toXMLString(metadata).size();
 }
 
-std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
+mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
 {
-    std::unique_ptr<xml::lite::Document> doc(new xml::lite::Document());
+    mem::auto_ptr<xml::lite::Document> doc(new xml::lite::Document());
 
     XMLElem root = newElement("CPHD");
     doc->setRootElement(root);
@@ -484,7 +484,7 @@ XMLElem CPHDXMLControl::areaSampleDirectionParametersToXML(
     return adpXML;
 }
 
-std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
+mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
 {
     io::StringStream stringStream;
     stringStream.write(xmlString.c_str(), xmlString.size());
@@ -493,9 +493,9 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
     return fromXML(parser.getDocument());
 }
 
-std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
+mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 {
-    std::unique_ptr<Metadata> cphd03(new Metadata());
+    mem::auto_ptr<Metadata> cphd03(new Metadata());
 
     XMLElem root = doc->getRootElement();
 

@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/CPHDXMLControl.h>
+
 #include <set>
 #include <unordered_map>
 #include <io/StringStream.h>
@@ -26,7 +28,6 @@
 #include <xml/lite/MinidomParser.h>
 
 #include <six/XMLControl.h>
-#include <cphd/CPHDXMLControl.h>
 #include <cphd/CPHDXMLParser.h>
 #include <cphd/Enums.h>
 #include <cphd/Metadata.h>
@@ -87,11 +88,11 @@ std::string CPHDXMLControl::toXMLString(
     return ss.stream().str();
 }
 
-std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
+mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
         const Metadata& metadata,
         const std::vector<std::string>& schemaPaths)
 {
-    std::unique_ptr<xml::lite::Document> doc = toXMLImpl(metadata);
+    mem::auto_ptr<xml::lite::Document> doc(toXMLImpl(metadata).release());
     if(!schemaPaths.empty())
     {
         six::XMLControl::validate(doc.get(), schemaPaths, mLog);

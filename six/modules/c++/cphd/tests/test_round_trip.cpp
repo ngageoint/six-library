@@ -25,6 +25,9 @@
 #include <memory>
 #include <thread>
 
+#include <cphd/CPHDReader.h>
+#include <cphd/CPHDWriter.h>
+
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
 #include <str/Convert.h>
@@ -35,8 +38,7 @@
 #include <io/FileOutputStream.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVPBlock.h>
-#include <cphd/CPHDReader.h>
-#include <cphd/CPHDWriter.h>
+
 
 /*!
  * Reads in CPHD file from InputFile
@@ -162,6 +164,10 @@ int main(int argc, char** argv)
 
         testRoundTrip(inPathname, outPathname, numThreads, schemaPathnames);
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

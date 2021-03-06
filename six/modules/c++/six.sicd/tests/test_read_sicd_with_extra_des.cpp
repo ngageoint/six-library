@@ -74,8 +74,9 @@ std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
     std::vector<std::byte> bandData(
             generateBandData(*data));
 
-    auto container(std::make_shared<six::Container>(
-            six::DataType::COMPLEX));
+
+    mem::SharedPtr<six::Container> container(
+            new six::Container(six::DataType::COMPLEX));
     container->addData(data.release());
 
     six::NITFWriteControl writer;
@@ -91,7 +92,7 @@ std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
     static const char segmentData[] = "123456789ABCDEF0";
     nitf::SegmentMemorySource sSource(segmentData, strlen(segmentData),
             0, 0, true);
-    auto segmentWriter(std::make_shared<nitf::SegmentWriter>());
+    mem::SharedPtr<nitf::SegmentWriter> segmentWriter(new nitf::SegmentWriter);
     segmentWriter->attachSource(sSource);
     writer.addAdditionalDES(segmentWriter);
 
@@ -137,7 +138,7 @@ std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
 
     nitf::SegmentMemorySource middleSource(segmentData, strlen(segmentData),
             0, 0, true);
-    auto middleSegmentWriter(std::make_shared<nitf::SegmentWriter>());
+    mem::SharedPtr<nitf::SegmentWriter> middleSegmentWriter(new nitf::SegmentWriter);
     middleSegmentWriter->attachSource(middleSource);
     writer.addAdditionalDES(middleSegmentWriter);
 
@@ -155,7 +156,7 @@ std::unique_ptr<io::TempFile> createNITFFromXML(const std::string& xmlPathname)
 
     nitf::SegmentMemorySource shortSource(segmentData, strlen(segmentData),
             0, 0, true);
-    auto shortSegmentWriter(std::make_shared<nitf::SegmentWriter>());
+    mem::SharedPtr<nitf::SegmentWriter> shortSegmentWriter(new nitf::SegmentWriter);
     shortSegmentWriter->attachSource(shortSource);
     writer.addAdditionalDES(shortSegmentWriter);
 
@@ -203,6 +204,11 @@ int main(int argc, char** argv)
                     << "Test failed.\n";
             return 1;
         }
+    }
+    catch (const except::Exception& e)
+    {
+        std::cerr << e.getMessage() << std::endl;
+        return 1;
     }
     catch (const std::exception& e)
     {

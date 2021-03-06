@@ -19,12 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef SIX_SIX_Enum_h_INCLUDED_
+#define SIX_SIX_Enum_h_INCLUDED_
 #pragma once
 
 #include <string>
 #include <map>
 #include <ostream>
 
+#include <scene/sys_Conf.h>
 #include <import/except.h>
 #include <import/str.h>
 #include <import/sys.h>
@@ -151,38 +154,39 @@ namespace details
 
 
     #define SIX_Enum_map_entry_(n) { #n, n }
+    #define SIX_Enum_map_entry_NOT_SET SIX_Enum_map_entry_(NOT_SET), { "NOT SET", NOT_SET }
 
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
-    #define SIX_Enum_struct_1_(name) struct name final : public six::details::Enum<name> { \
-            name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
-            name& operator=(const int& o) { value = o; return *this; } enum {
-    #define SIX_Enum_struct_2_ NOT_SET = six::NOT_SET_VALUE }; \
-            static const map_t& string_to_int_() { \
-	      static const map_t retval{ 
-    #define SIX_Enum_struct_3_ SIX_Enum_map_entry_(NOT_SET) }; return retval; } }
+    #define SIX_Enum_constructors_(name) name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
+            name& operator=(const int& o) { value = o; return *this; }
+    #define SIX_Enum_BEGIN_enum enum {
+    #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
+    #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
+    #define SIX_Enum_BEGIN_string_to_int static const map_t& string_to_int_() { static const map_t retval {
+    #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
+    #define SIX_Enum_END_string_to_int SIX_Enum_map_entry_NOT_SET }; return retval; }
 
+    #define SIX_Enum_ENUM_begin_(name) SIX_Enum_BEGIN_DEFINE(name) SIX_Enum_constructors_(name); SIX_Enum_BEGIN_enum
+    #define SIX_Enum_ENUM_1_ SIX_Enum_END_enum SIX_Enum_BEGIN_string_to_int
+    #define SIX_Enum_ENUM_end_ SIX_Enum_END_string_to_int }
 
-    #define SIX_Enum_ENUM_STR_1(name, n, s, v) SIX_Enum_struct_1_(name) \
-        n = v, SIX_Enum_struct_2_ \
-        {s, n}, SIX_Enum_struct_3_
-    #define SIX_Enum_ENUM_1(name, n, v) SIX_Enum_ENUM_STR_1(name, n, #n, v)
-    #define SIX_Enum_ENUM_STR_2(name, n1, s1, v1, n2, s2, v2) SIX_Enum_struct_1_(name) \
-        n1 = v1, n2 = v2, SIX_Enum_struct_2_ \
-        {s1, n1}, {s2, n2}, SIX_Enum_struct_3_
-    #define SIX_Enum_ENUM_2(name, n1, v1, n2, v2) \
-        SIX_Enum_ENUM_STR_2(name, n1, #n1, v1, n2, #n2, v2)
-    #define SIX_Enum_ENUM_3(name, n1, v1, n2, v2, n3, v3) SIX_Enum_struct_1_(name) \
-        n1 = v1, n2 = v2, n3 = v3, SIX_Enum_struct_2_ \
-        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_map_entry_(n3), SIX_Enum_struct_3_
-    #define SIX_Enum_ENUM_STR_4(name, n1, s1, v1, n2, s2, v2, n3, s3, v3, n4, s4, v4) SIX_Enum_struct_1_(name) \
-        n1 = v1, n2 = v2, n3 = v3, n4 = v4, SIX_Enum_struct_2_ \
-        {s1, n1}, {s2, n2}, {s3, n3}, {s4, n4}, SIX_Enum_struct_3_
-    #define SIX_Enum_ENUM_4(name, n1, v1, n2, v2, n3, v3, n4, v4) \
-        SIX_Enum_ENUM_STR_4(name, n1, #n1, v1, n2, #n2, v2, n3, #n3, v3, n4, #n4, v4)
-    #define SIX_Enum_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) SIX_Enum_struct_1_(name) \
-        n1 = v1, n2 = v2, n3 = v3, n4 = v4, n5 = v5, SIX_Enum_struct_2_ \
-        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_map_entry_(n3), SIX_Enum_map_entry_(n4), SIX_Enum_map_entry_(n5), \
-        SIX_Enum_struct_3_
+    #define SIX_Enum_ENUM_1(name, n, v) SIX_Enum_ENUM_begin_(name) \
+        n = v, SIX_Enum_ENUM_1_ SIX_Enum_map_entry_(n), SIX_Enum_ENUM_end_
+    #define SIX_Enum_ENUM_2(name, n1, v1, n2, v2) SIX_Enum_ENUM_begin_(name) \
+        n1 = v1, n2 = v2, SIX_Enum_ENUM_1_ SIX_Enum_map_entry_(n1), \
+       SIX_Enum_map_entry_(n2), SIX_Enum_ENUM_end_
+    #define SIX_Enum_ENUM_3(name, n1, v1, n2, v2, n3, v3) SIX_Enum_ENUM_begin_(name) \
+        n1 = v1, n2 = v2, n3 = v3, SIX_Enum_ENUM_1_ SIX_Enum_map_entry_(n1), \
+       SIX_Enum_map_entry_(n2), SIX_Enum_map_entry_(n3), SIX_Enum_ENUM_end_
+    #define SIX_Enum_ENUM_4(name, n1, v1, n2, v2, n3, v3, n4, v4) SIX_Enum_ENUM_begin_(name) \
+        n1 = v1, n2 = v2, n3 = v3, n4 = v4, SIX_Enum_ENUM_1_ \
+        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_map_entry_(n3), \
+        SIX_Enum_map_entry_(n4), SIX_Enum_ENUM_end_
+    #define SIX_Enum_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) SIX_Enum_ENUM_begin_(name) \
+        n1 = v1, n2 = v2, n3 = v3, n4 = v4, n5 = v5, SIX_Enum_ENUM_1_ \
+        SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_(n2), SIX_Enum_map_entry_(n3), \
+        SIX_Enum_map_entry_(n4), SIX_Enum_map_entry_(n5), SIX_Enum_ENUM_end_
 } // namespace details
 }
+#endif // SIX_SIX_Enum_h_INCLUDED_

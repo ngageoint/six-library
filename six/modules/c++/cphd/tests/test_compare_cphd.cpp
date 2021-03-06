@@ -25,6 +25,7 @@
 #include <memory>
 #include <thread>
 
+#include <scene/sys_Conf.h>
 #include <logging/NullLogger.h>
 #include <cli/Value.h>
 #include <cli/ArgumentParser.h>
@@ -259,6 +260,10 @@ int main(int argc, char** argv)
         }
         std::cout << "CPHD Files match \n";
         return 0;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
     }
     catch (const std::exception& e)
     {

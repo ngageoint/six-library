@@ -19,11 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/BaseFileHeader.h>
+
 #include <mem/ScopedArray.h>
 #include <io/SeekableStreams.h>
 #include <str/Manip.h>
-#include <nitf/cstddef.h>
-#include <cphd/BaseFileHeader.h>
+#include <nitf/coda-oss.hpp>
 
 namespace cphd
 {
