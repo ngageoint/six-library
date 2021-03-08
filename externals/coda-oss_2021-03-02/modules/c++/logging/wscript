@@ -1,9 +1,0 @@
-NAME            = 'logging'
-MAINTAINER      = 'jmrandol@users.sourceforge.net'
-VERSION         = '1.1'
-MODULE_DEPS     = 'io mt'
-
-options = configure = distclean = lambda p: None
-
-def build(bld):
-    bld.module(**globals())
