@@ -1,0 +1,17 @@
+include Makefile
+
+CC=CC
+COPTS=-LANG:std -O2 -n32 -mips3 -multigot
+LD=a_to_so $(CC)
+LDOPTS=$(LIBRARY)
+INSTDIR=$(PWD)/sgi
+
+$(LIBNAME).a: $(OBJS)
+	$(CC) -ar -o $@ $^
+
+$(LIBRARY): $(LIBNAME).a
+	$(LD) $(LIBNAME) $(LIBVERSION) $< $(LIBS)
+
+clean::
+	$(RM) $(LIBNAME).a
+	$(RM) -r ii_files
