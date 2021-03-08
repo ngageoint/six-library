@@ -19,6 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <cmath> // isnan()
+
 #include "six/Init.h"
 
 namespace six
@@ -286,4 +289,21 @@ template<> XYZEnum Init::undefined<XYZEnum>()
 {
     return XYZEnum::NOT_SET;
 }
+
+template<typename T>
+static bool isUndefined_(T value)
+{
+    return (value == Init::undefined<T>()) || std::isnan(value);
+}
+template<>
+bool Init::isUndefined(float value)
+{
+    return isUndefined_(value);
+}
+template<>
+bool Init::isUndefined(double value)
+{
+    return isUndefined_(value);
+}
+
 }
