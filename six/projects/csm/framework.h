@@ -8,6 +8,8 @@
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined
+#pragma warning(disable: 4251) // '...' : class '...' needs to have dll-interface to be used by clients of class '...'
+#pragma warning(disable: 4275) // non dll-interface class '...' used as base for dll-interface class '...'
 
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
 
