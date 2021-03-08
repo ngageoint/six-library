@@ -1,0 +1,17 @@
+import os
+import subprocess
+from waflib import Options
+
+build = options = distclean = lambda x: None
+
+def configure(conf):
+    conf.env['HAVE_CURL'] = False
+
+    if conf.check(uselib_store='CURL',
+                  lib='curl',
+                  header_name='curl/curl.h',
+                  function_name='curl_global_init',
+                  msg='Checking for CURL',
+                  mandatory=False):
+        conf.undefine('HAVE_CURL_GLOBAL_INIT')
+        conf.env['HAVE_CURL'] = True

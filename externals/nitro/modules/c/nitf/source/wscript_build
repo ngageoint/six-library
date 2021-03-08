@@ -1,0 +1,33 @@
+# encoding: utf-8
+
+import os, glob, re
+import Params
+
+ENV      = bld.m_allenvs['default']
+APPNAME  = ENV['APPNAME']
+VERSION  = ENV['VERSION']
+LIB_NAME = APPNAME
+INCLUDES = ['../include/']
+SOURCES  = [os.path.split(p)[1] for p in glob.glob(os.path.join(bld.m_curdirnode.abspath(), '*.c'))]
+
+if 'SOURCE_FILTER' in ENV:
+    sourceFilter = re.compile(ENV['SOURCE_FILTER'], re.I)
+    filtered = []
+    for s in SOURCES:
+        if sourceFilter.match(s) == None:
+            filtered.append(s)
+    SOURCES =  filtered
+
+# objects
+obj = bld.create_obj('cc', 'objects')
+obj.source       = SOURCES
+obj.includes     = INCLUDES 
+obj.target       = "%s-objects" % APPNAME
+
+# static library
+obj = bld.create_obj('cc', 'staticlib')
+obj.name         = '%s-static' % APPNAME
+obj.target       = '%s-c' % LIB_NAME
+obj.env          = ENV
+obj.add_objects  = "%s-objects" % APPNAME
+obj.uselib       = APPNAME

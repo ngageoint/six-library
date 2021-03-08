@@ -1,0 +1,8 @@
+#ifndef NRT_CONFIG_H
+#define NRT_CONFIG_H
+
+#include <config/coda_oss_config.h>
+
+#define NRT_LIB_VERSION "@NITRO_VERSION@"
+
+#endif

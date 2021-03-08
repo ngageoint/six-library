@@ -1,0 +1,10 @@
+NAME            = 'types'
+MAINTAINER      = 'bojrab@users.sourceforge.net'
+VERSION         = '1.0'
+UNITTEST_DEPS   = 'sys'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
+    

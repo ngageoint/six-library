@@ -1,0 +1,24 @@
+import os
+from waflib import Options
+
+configure = distclean = lambda x: None
+
+def options(opt):
+    opt.recurse('nitf')
+    
+def build(bld):
+    try:
+        import numpy
+        isNumpyInstalled = True
+    except ImportError:
+        isNumpyInstalled = False
+
+    variant = bld.env['VARIANT'] or 'default'
+    env = bld.all_envs[variant]
+    isPythonEnabled = bld.is_defined('HAVE_PYTHON_H')
+    isPythonInstalled = 'PYTHON' in env and env['PYTHON']
+    if not isNumpyInstalled:
+        bld.to_log('Could not load module numpy. Disabling Python installation.\n')
+    if isPythonEnabled and isPythonInstalled and isNumpyInstalled:
+        bld.recurse('nitf')
+

@@ -1,0 +1,8 @@
+distclean = options = lambda p: None
+
+def configure(conf):
+    conf.env['prefix_types'] = 'coda_'
+
+def build(bld):
+    bld.swigModule(name = 'types', use = 'types-c++ sys-c++ sys-python', package='coda')
+    # sys-c++ is needed because we provide a %template using sys::SSize_T

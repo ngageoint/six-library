@@ -1,0 +1,19 @@
+2.7 Changes
+===========
+- 12 new TREs: CSCCGA, CSCRNA, CSEPHA, CSEXRA, CSPROA, CSSFAA, CSSHPA, GRDPSB, J2KLRA, PIXQLA, SENSRB, XML_DATA_CONTENT
+- Variety of minor memory leaks, access errors, and other bug fixes
+- Fixed IOInterface and BandSource C++ API so overriding methods works as expected
+- Several complexity level bugs
+- Fixed bug in Windows involving reading and writing files larger than 4 GB
+- Build system upgrades: Among other thing, building Java bindings is now easier as it's done directly through waf automatically
+
+Please see our wiki for detailed change information on previous versions:
+
+2.5 Changes: http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes25
+
+2.0 Changes: http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes20
+
+1.5 Changes: http://nitro-nitf.sourceforge.net/wikka.php?wakka=ReleaseNotes15
+
+
+Wiki Home: http://nitro-nitf.sourceforge.net/

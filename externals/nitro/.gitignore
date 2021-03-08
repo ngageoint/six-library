@@ -1,0 +1,50 @@
+# Waf
+.lock-waf*
+.waf-*
+
+# CMake
+out/build/
+out/install/
+_deps/
+CMakeFiles/
+*.cmake
+CMakeCache.txt
+CMakeSettings.json
+
+externals/coda-oss/modules/c++/**/Makefile
+modules/**/Makefile
+
+# Build artifacts
+target/
+install/
+**/install-*/
+test_package/build/
+*.pyc
+*.swp
+.depproj
+.vs
+*.vcxproj.user
+**/Debug/
+**/Release/
+packages/
+*.so*
+*.a
+
+# Drivers
+modules/c/j2k/external/openjpeg/openjpeg-2.0.0/
+modules/c/j2k/external/jasper/jasper-1.900.1-mod/
+.DS_Store
+
+build
+Makefile
+doc/build
+bin/
+test/unit/CMakeScripts/
+libnitf.pc
+
+.idea/
+cmake-build*/
+
+# unit tests
+outputPathname.ntf
+sicd_*_nitf__*_band_*.man

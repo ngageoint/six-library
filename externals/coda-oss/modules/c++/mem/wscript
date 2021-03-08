@@ -1,0 +1,9 @@
+NAME            = 'mem'
+VERSION         = '1.0'
+MODULE_DEPS     = 'sys gsl'
+TEST_DEPS       = 'cli'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
