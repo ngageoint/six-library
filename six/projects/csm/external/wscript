@@ -20,9 +20,9 @@ def configure(conf):
             Logs.warn('Disabling CSM as it is not supported on this platform')
         else:
             # NOTE: This was downloaded from
-            # https://github.com/sminster/csm/releases 2018.11.21.
-            if Options.options.csm_version == '3.0.3':
-                csmZipfile = 'csm-3.0.3_2018.11.21.zip'
+            # https://github.com/sminster/csm/releases/tag/v3.0.3.3 2019.09.23.
+            if Options.options.csm_version == '3.0.3.3':
+                csmZipfile = 'csm-3.0.3.3_2019.09.23.zip'
             else:
                 csmZipfile = 'csm-3.0.1_2013.07.03.zip'
             unzipper(os.path.join(conf.path.abspath(), csmZipfile),
@@ -38,9 +38,9 @@ def configure(conf):
                      conf.path.abspath())
             conf.env['HAVE_CSM'] = True
 
-            if Options.options.csm_version == '3.0.3':
-                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.3')
-                conf.env['CSM_DIR'] = 'csm-3.0.3'
+            if Options.options.csm_version == '3.0.3.3':
+                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.3.3')
+                conf.env['CSM_DIR'] = 'csm-3.0.3.3'
             else:
                 conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-master')
                 conf.env['CSM_DIR'] = 'csm-master'
