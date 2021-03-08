@@ -48,14 +48,17 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
 {
         const sys::OS os;
 
-#ifndef DEFAULT_SCHEMA_PATH
+#ifndef SIX_DEFAULT_SCHEMA_PATH
 // Don't want to set a dummy schema path to a directory that exists as that causes
 // the code to check for valid schemas and validate.
 #if defined(_WIN32)
-#define DEFAULT_SCHEMA_PATH "C:\\some\\path" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH R"(C:\\some\\path)" // just to compile ...
 #else
-#define DEFAULT_SCHEMA_PATH "/some/path" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH R"(/some/path)" // just to compile ...
 #endif
+#endif
+#ifndef DEFAULT_SCHEMA_PATH
+#define DEFAULT_SCHEMA_PATH SIX_DEFAULT_SCHEMA_PATH
 #endif
 
         std::string envPath;
