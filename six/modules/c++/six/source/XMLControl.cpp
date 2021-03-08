@@ -44,10 +44,8 @@ XMLControl::~XMLControl()
     }
 }
 
-void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
+static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
 {
-    if (schemaPaths.empty())
-    {
         const sys::OS os;
 
 #ifndef DEFAULT_SCHEMA_PATH
@@ -71,6 +69,13 @@ void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
         {
             schemaPaths.push_back(DEFAULT_SCHEMA_PATH);
         }
+}
+
+void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
+{
+    if (schemaPaths.empty())
+    {
+        loadDefaultSchemaPath(schemaPaths);
     }
 }
 
