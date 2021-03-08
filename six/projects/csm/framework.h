@@ -40,7 +40,7 @@
 #pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
 
 #pragma warning(disable: 4464) // relative include path contains '..'
-#include "../../cpp_pch.h"
+#include "../../modules/c++/cpp_pch.h"
 
 #include <nitf/coda-oss.hpp>
 
@@ -67,8 +67,6 @@
 #include <import/nrt.h>
 
 #include <import/six.h>
-#include <import/six/sicd.h>
-#include <import/cphd.h>
 
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
