@@ -125,6 +125,9 @@ template<> SideOfTrackType Init::undefined<SideOfTrackType>();
 template<> SlowTimeBeamCompensationType Init::undefined<SlowTimeBeamCompensationType>();
 template<> XYZEnum Init::undefined<XYZEnum>();
 
+template<> bool Init::isUndefined<float>(float);
+template<> bool Init::isUndefined<double>(double);
+
 // These allow switching between `double` and `std::optional<double>` w/o changing a lot of other code.
 template<typename T>
 inline bool has_value(const T& v)
