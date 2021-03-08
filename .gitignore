@@ -11,6 +11,8 @@
 # VS Code
 .vscode
 packages/
+.vs
+*.vcxproj.user
 
 # Waf
 .lock-waf*
@@ -29,8 +31,6 @@ test_package/build/
 *.pyc
 *.swp
 .depproj
-.vs
-*.vcxproj.user
 **/Debug/
 **/Release/
 *.a
@@ -39,7 +39,6 @@ test_package/build/
 # CMake
 _deps/
 CMakeFiles/
-*.cmake
 CMakeCache.txt
 CMakeSettings.json
 # cmake generates these Makefiles
