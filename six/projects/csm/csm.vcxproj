@@ -11,6 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\c++\six.sicd\six.sicd.vcxproj">
+      <Project>{34ac2314-fbd1-42ad-aaf4-0cebc6bf737e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\modules\c++\six.sidd\six.sidd.vcxproj">
+      <Project>{ddc587c2-53ba-44a9-94e7-07be52af3d0b}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\modules\c++\six\six.vcxproj">
       <Project>{62aad4dd-35ba-41a0-8263-1f4dfd755689}</Project>
     </ProjectReference>
@@ -44,6 +50,10 @@
     <ClInclude Include="external\vts_301_0\include\tokenizer.h" />
     <ClInclude Include="external\vts_301_0\include\VTSMisc.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="include\six\csm\SICDSensorModel.h" />
+    <ClInclude Include="include\six\csm\SIDDSensorModel.h" />
+    <ClInclude Include="include\six\csm\SIXPlugin.h" />
+    <ClInclude Include="include\six\csm\SIXSensorModel.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +86,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="source\SICDSensorModel.cpp" />
+    <ClCompile Include="source\SIDDSensorModel.cpp" />
+    <ClCompile Include="source\SIXPlugin.cpp" />
+    <ClCompile Include="source\SIXSensorModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="external\csm-3.0.3.3\Doxyfile" />
@@ -126,9 +140,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <TargetName>vts</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>vts</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -138,7 +154,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)external\vts_301_0\include\;$(ProjectDir)external\csm-3.0.3.3\;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)external\vts_301_0\include\;$(ProjectDir)external\csm-3.0.3.3\;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
@@ -165,7 +181,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)external\vts_301_0\include\;$(ProjectDir)external\csm-3.0.3.3\;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)external\vts_301_0\include\;$(ProjectDir)external\csm-3.0.3.3\;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>

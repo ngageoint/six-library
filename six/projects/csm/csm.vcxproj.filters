@@ -108,6 +108,18 @@
     <ClInclude Include="external\csm-3.0.3.3\Warning.h">
       <Filter>csm</Filter>
     </ClInclude>
+    <ClInclude Include="include\six\csm\SICDSensorModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\six\csm\SIDDSensorModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\six\csm\SIXPlugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\six\csm\SIXSensorModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -187,6 +199,18 @@
     </ClCompile>
     <ClCompile Include="external\csm-3.0.3.3\Version.cpp">
       <Filter>csm</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SICDSensorModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SIDDSensorModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SIXPlugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SIXSensorModel.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
