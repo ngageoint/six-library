@@ -2,8 +2,7 @@
 
 import os, sys, subprocess
 
-coda_oss_release = '2021-03-02'
-coda_oss = 'coda-oss_' + coda_oss_release
+coda_oss = 'coda-oss'
 path_to_waf = os.path.join(os.path.dirname(__file__), 'externals', coda_oss, 'build', 'waf')
 
 cmd = [sys.executable, path_to_waf] + sys.argv[1:]

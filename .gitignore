@@ -11,6 +11,8 @@
 # VS Code
 .vscode
 packages/
+.vs
+*.vcxproj.user
 
 # Waf
 .lock-waf*
@@ -29,8 +31,6 @@ test_package/build/
 *.pyc
 *.swp
 .depproj
-.vs
-*.vcxproj.user
 **/Debug/
 **/Release/
 *.a
@@ -39,16 +39,13 @@ test_package/build/
 # CMake
 _deps/
 CMakeFiles/
-*.cmake
 CMakeCache.txt
 CMakeSettings.json
 # cmake generates these Makefiles
 externals/*/Makefile
-externals/coda-oss/
-externals/coda-oss_*/modules/c++/**/Makefile
-externals/coda-oss_*/modules/python/**/Makefile
-externals/nitro/
-externals/nitro_*/modules/**/Makefile
+externals/coda-oss/modules/c++/**/Makefile
+externals/coda-oss/modules/python/**/Makefile
+externals/nitro/modules/**/Makefile
 Makefile
 six/Makefile
 six/modules/**/Makefile
@@ -58,7 +55,7 @@ build/
 
 # Drivers
 six/projects/csm/external/csm-master/
-six/projects/csm/external/csm-3.0.3/
+six/projects/csm/external/csm-3.0.3.3/
 six/projects/csm/external/vts_301_0/
 
 # Giant test files
