@@ -16,14 +16,82 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="external\csm-3.0.3.3\BundleGM.h" />
+    <ClInclude Include="external\csm-3.0.3.3\BytestreamIsd.h" />
+    <ClInclude Include="external\csm-3.0.3.3\CorrelationModel.h" />
+    <ClInclude Include="external\csm-3.0.3.3\csm.h" />
+    <ClInclude Include="external\csm-3.0.3.3\csmPointCloud.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Ellipsoid.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Error.h" />
+    <ClInclude Include="external\csm-3.0.3.3\FourParameterCorrelationModel.h" />
+    <ClInclude Include="external\csm-3.0.3.3\GeometricModel.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Isd.h" />
+    <ClInclude Include="external\csm-3.0.3.3\LinearDecayCorrelationModel.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Model.h" />
+    <ClInclude Include="external\csm-3.0.3.3\ModelIdentifier.h" />
+    <ClInclude Include="external\csm-3.0.3.3\MultiNitfIsd.h" />
+    <ClInclude Include="external\csm-3.0.3.3\NitfIsd.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Plugin.h" />
+    <ClInclude Include="external\csm-3.0.3.3\PointCloudGM.h" />
+    <ClInclude Include="external\csm-3.0.3.3\PointCloudIsd.h" />
+    <ClInclude Include="external\csm-3.0.3.3\RasterGM.h" />
+    <ClInclude Include="external\csm-3.0.3.3\SettableEllipsoid.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Version.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Warning.h" />
+    <ClInclude Include="external\vts_301_0\include\constants.h" />
+    <ClInclude Include="external\vts_301_0\include\SMManager.h" />
+    <ClInclude Include="external\vts_301_0\include\tinyxml.h" />
+    <ClInclude Include="external\vts_301_0\include\tokenizer.h" />
+    <ClInclude Include="external\vts_301_0\include\VTSMisc.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="external\csm-3.0.3.3\BundleGM.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\CorrelationModel.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\csmPointCloud.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\Ellipsoid.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\FourParameterCorrelationModel.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\GeometricModel.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\Isd.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\LinearDecayCorrelationModel.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\ModelIdentifier.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\MultiNitfIsd.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\Plugin.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\PointCloudGM.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\PointCloudIsd.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\RasterGM.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\SettableEllipsoid.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\Version.cpp" />
+    <ClCompile Include="external\vts_301_0\source\compareParam.cpp" />
+    <ClCompile Include="external\vts_301_0\source\recordLog.cpp" />
+    <ClCompile Include="external\vts_301_0\source\SensorModelThreadSafe.cpp" />
+    <ClCompile Include="external\vts_301_0\source\SMManager.cpp" />
+    <ClCompile Include="external\vts_301_0\source\tinyxml.cpp" />
+    <ClCompile Include="external\vts_301_0\source\tokenizer.cpp" />
+    <ClCompile Include="external\vts_301_0\source\vts.cpp" />
+    <ClCompile Include="external\vts_301_0\source\vts_isd.cpp" />
+    <ClCompile Include="external\vts_301_0\source\vts_misc.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="external\csm-3.0.3.3\Doxyfile" />
+    <None Include="external\csm-3.0.3.3\LICENSE" />
+    <None Include="external\csm-3.0.3.3\Makefile" />
+    <None Include="external\csm-3.0.3.3\Makefile.linux" />
+    <None Include="external\csm-3.0.3.3\Makefile.linux64" />
+    <None Include="external\csm-3.0.3.3\Makefile.linuxIA64" />
+    <None Include="external\csm-3.0.3.3\Makefile.sgi" />
+    <None Include="external\csm-3.0.3.3\Makefile.solaris" />
+    <None Include="external\csm-3.0.3.3\Makefile.solaris-stlport" />
+    <None Include="external\csm-3.0.3.3\Makefile.solaris64" />
+    <None Include="external\csm-3.0.3.3\Makefile.solaris64-stlport" />
+    <None Include="external\csm-3.0.3.3\Makefile.solaris86" />
+    <None Include="external\csm-3.0.3.3\Makefile.win32" />
+    <None Include="external\csm-3.0.3.3\README" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -78,8 +146,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>
