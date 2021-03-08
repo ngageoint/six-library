@@ -139,10 +139,8 @@ public:
         return str.substr(index, subStringLength);
     }
 
-private:
-    // Noncopyable
-    ScopedMatchData(const ScopedMatchData& );
-    ScopedMatchData& operator=(const ScopedMatchData& );
+    ScopedMatchData(const ScopedMatchData&) = delete;
+    ScopedMatchData& operator=(const ScopedMatchData&) = delete;
 
 private:
     const pcre2_code* const mCode;

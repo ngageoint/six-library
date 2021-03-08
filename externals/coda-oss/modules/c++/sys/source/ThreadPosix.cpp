@@ -22,7 +22,7 @@
 
 #include <sys/ThreadPosix.h>
 
-#if defined(HAVE_PTHREAD_H)
+#if CODA_OSS_POSIX_SOURCE
 
 #if defined(WIN32) || defined(_WIN32)
 #   define SIGKILL 0

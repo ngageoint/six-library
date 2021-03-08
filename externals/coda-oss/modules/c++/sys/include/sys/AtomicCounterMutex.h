@@ -27,9 +27,8 @@
 
 namespace sys
 {
-class AtomicCounterImpl
+struct AtomicCounterImpl
 {
-public:
     typedef size_t ValueType;
 
     explicit
@@ -73,10 +72,8 @@ public:
         return value;
     }
 
-private:
-    // Noncopyable
-    AtomicCounterImpl(const AtomicCounterImpl& );
-    const AtomicCounterImpl& operator=(const AtomicCounterImpl& );
+    AtomicCounterImpl(const AtomicCounterImpl&) = delete;
+    AtomicCounterImpl& operator=(const AtomicCounterImpl&) = delete;
 
 private:
     ValueType mValue;

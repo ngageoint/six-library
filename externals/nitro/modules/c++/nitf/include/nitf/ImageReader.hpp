@@ -44,7 +44,7 @@
 namespace nitf
 {
     template<typename T>
-    class BufferList final
+    class BufferList /*final*/   // no "final", SWIG doesn't like it
     {
         std::vector<T*> buffer;
         std::vector<std::unique_ptr<T[]>> buffer_;

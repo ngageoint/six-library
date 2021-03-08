@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -25,15 +26,14 @@
 
 void sys::dbgPrintf(const char *format, ...)
 {
-#ifdef __DEBUG
-    va_list args;
-    va_start(args, format);
-    fprintf(DEBUG_STREAM, "<DBG> ");
-    vfprintf(DEBUG_STREAM, format, args);
-    va_end(args);
-#else
-    (void)format; //suppress unreferenced formal parameter warning when __DEBUG not defined
-#endif
+    if (sys::debugging)
+    {
+        va_list args;
+        va_start(args, format);
+        fprintf(DEBUG_STREAM, "<DBG> ");
+        vfprintf(DEBUG_STREAM, format, args);
+        va_end(args);
+    }
 }
 
 void sys::diePrintf(const char *format, ...)

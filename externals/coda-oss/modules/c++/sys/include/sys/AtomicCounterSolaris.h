@@ -30,9 +30,8 @@
 namespace sys
 {
 // Implemented from boost/smart_ptr/detail/atomic_count_solaris.hpp
-class AtomicCounterImpl
+struct AtomicCounterImpl
 {
-public:
     typedef Uint32_T ValueType;
 
     explicit
@@ -56,10 +55,8 @@ public:
         return static_cast<const volatile ValueType&>(mValue);
     }
 
-private:
-    // Noncopyable
-    AtomicCounterImpl(const AtomicCounterImpl& );
-    const AtomicCounterImpl& operator=(const AtomicCounterImpl& );
+    AtomicCounterImpl(const AtomicCounterImpl&) = delete;
+    AtomicCounterImpl& operator=(const AtomicCounterImpl&) = delete;
 
 private:
     ValueType mValue;

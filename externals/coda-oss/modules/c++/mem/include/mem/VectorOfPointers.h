@@ -37,9 +37,8 @@ namespace mem
  *  \brief This class provides safe cleanup for vectors of pointers
  */
 template <typename T>
-class VectorOfPointers
+struct VectorOfPointers
 {
-public:
     VectorOfPointers()
     {
     }
@@ -149,19 +148,16 @@ public:
         return mValues.erase(first, last);
     }
 
-private:
-    // Noncopyable
-    VectorOfPointers(const VectorOfPointers& );
-    const VectorOfPointers& operator=(const VectorOfPointers& );
+    VectorOfPointers(const VectorOfPointers&) = delete;
+    VectorOfPointers& operator=(const VectorOfPointers&) = delete;
 
 private:
     std::vector<T*> mValues;
 };
 
 template <typename T>
-    class VectorOfSharedPointers
+    struct VectorOfSharedPointers
 {
-public:
     VectorOfSharedPointers()
     {
     }

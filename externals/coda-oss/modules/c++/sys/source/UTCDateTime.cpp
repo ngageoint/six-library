@@ -19,11 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#include <errno.h>
-
-#include <config/coda_oss_config.h>
 #include <sys/UTCDateTime.h>
+
 #include <sys/Conf.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
@@ -133,33 +130,7 @@ void UTCDateTime::toMillis()
 
 void UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
 {
-    // Would like to use the reentrant version.  If we don't have one, cross
-    // our fingers and hope the regular function actually is reentrant
-    // (supposedly this is the case on Windows).
-#if _WIN32
-    const auto errnum = ::gmtime_s(&t, &numSecondsSinceEpoch);
-    if (errnum != 0)
-    {
-        throw except::Exception(Ctxt("gmtime_s() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-#elif defined(HAVE_GMTIME_R)
-    if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("gmtime_r() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-#else
-    tm const * const gmTimePtr = ::gmtime(&numSecondsSinceEpoch);
-    if (gmTimePtr == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("gmtime failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-    t = *gmTimePtr;
-#endif
+    DateTime::gmtime(numSecondsSinceEpoch, t);
 }
 
 UTCDateTime::UTCDateTime()

@@ -13,7 +13,8 @@ top  = '.'
 out  = 'target'
 
 TOOLS = 'build swig matlabtool pythontool'
-TOOLS_DIR = join('externals', 'coda-oss', 'build')
+coda_oss = 'coda-oss'
+TOOLS_DIR = join('externals', coda_oss, 'build')
 DIRS = 'externals six'
 
 def options(opt):

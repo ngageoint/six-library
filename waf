@@ -2,7 +2,8 @@
 
 import os, sys, subprocess
 
-path_to_waf = os.path.join(os.path.dirname(__file__), 'externals', 'coda-oss', 'build', 'waf')
+coda_oss = 'coda-oss'
+path_to_waf = os.path.join(os.path.dirname(__file__), 'externals', coda_oss, 'build', 'waf')
 
 cmd = [sys.executable, path_to_waf] + sys.argv[1:]
 try:

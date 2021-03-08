@@ -32,9 +32,8 @@ namespace io
  * RAII object for a temporary file that gets deleted
  * upon object destruction
  */
-class TempFile
+struct TempFile
 {
-public:
     /*!
      * Constructor for TempFile object. Provided a directory,
      * this will find a random, unused filename, and create a file
@@ -53,10 +52,11 @@ public:
     {
         return mPathname;
     }
+
+    TempFile(const TempFile&) = delete;
+    TempFile& operator=(const TempFile&) = delete;
+
 private:
-    // Noncopyable
-    TempFile(const TempFile& );
-    const TempFile& operator=(const TempFile& );
     const sys::OS mOS;
     const std::string mPathname;
 };

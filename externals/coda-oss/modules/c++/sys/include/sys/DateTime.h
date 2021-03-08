@@ -23,9 +23,11 @@
 
 #ifndef __SYS_DATE_TIME_H__
 #define __SYS_DATE_TIME_H__
+#pragma once
+
+#include <time.h>
 
 #include <string>
-#include <time.h>
 
 namespace sys
 {
@@ -36,15 +38,15 @@ namespace sys
 class DateTime
 {
 protected:
-    int mYear;
-    int mMonth;
-    int mDayOfMonth;
-    int mDayOfWeek;
-    int mDayOfYear;
-    int mHour;
-    int mMinute;
-    double mSecond;
-    double mTimeInMillis;
+    int mYear = 0;
+    int mMonth = 0;
+    int mDayOfMonth = 0;
+    int mDayOfWeek = 0;
+    int mDayOfYear = 0;
+    int mHour = 0;
+    int mMinute = 0;
+    double mSecond = 0.0;
+    double mTimeInMillis = 0.0;
 
     // Turn a tm struct into a double
     double toMillis(tm t) const;
@@ -71,9 +73,12 @@ protected:
     //! @brief Given seconds since the epoch, provides the time
     virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const = 0;
 
+    static void localtime(time_t numSecondsSinceEpoch, tm& t);
+    static void gmtime(time_t numSecondsSinceEpoch, tm& t);
+
 public:
-    DateTime();
-    virtual ~DateTime();
+    DateTime() = default;
+    virtual ~DateTime() {}
 
     //! Return month {1,12}
     int getMonth() const { return mMonth; }
@@ -174,6 +179,14 @@ public:
     }
     //@}
 };
+
+// Always make our own versions available for unit-testing.  Clients should use
+// DateTme methods and implementers DateTime::localtime()/DateTime::gmtime().
+namespace details
+{
+extern int localtime_s(tm*, const time_t*);
+extern int gmtime_s(tm*, const time_t*);
+}
 
 }
 
