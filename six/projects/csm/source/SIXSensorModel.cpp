@@ -952,7 +952,7 @@ void SIXSensorModel::setSchemaDir(const std::string& dataDir)
         std::string schemaPath;
         try
         {
-            schemaPath = os.getEnv(six::SCHEMA_PATH);
+            schemaPath = six::getSchemaPath();
         }
         catch(const except::Exception& )
         {

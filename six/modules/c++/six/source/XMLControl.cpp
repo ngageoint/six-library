@@ -23,6 +23,7 @@
 #include <logging/NullLogger.h>
 #include <six/XMLControl.h>
 #include <six/Utilities.h>
+#include <six/Types.h>
 
 #include <sys/Filesystem.h>
 namespace fs = std::filesystem;
@@ -48,17 +49,18 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
 {
         const sys::OS os;
 
+// prefer SIX_DEFAULT_SCHEMA_PATH, existing scripts use DEFAULT_SCHEMA_PATH
+#if defined(DEFAULT_SCHEMA_PATH) && !defined(SIX_DEFAULT_SCHEMA_PATH)
+#define SIX_DEFAULT_SCHEMA_PATH DEFAULT_SCHEMA_PATH 
+#endif
 #ifndef SIX_DEFAULT_SCHEMA_PATH
 // Don't want to set a dummy schema path to a directory that exists as that causes
 // the code to check for valid schemas and validate.
 #if defined(_WIN32)
-#define SIX_DEFAULT_SCHEMA_PATH R"(C:\\some\\path)" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH R"(C:\some\path)" // just to compile ...
 #else
 #define SIX_DEFAULT_SCHEMA_PATH R"(/some/path)" // just to compile ...
 #endif
-#endif
-#ifndef DEFAULT_SCHEMA_PATH
-#define DEFAULT_SCHEMA_PATH SIX_DEFAULT_SCHEMA_PATH
 #endif
 
         std::string envPath;
@@ -68,9 +70,9 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
         {
             schemaPaths.push_back(envPath);
         }
-        else if (os.exists(DEFAULT_SCHEMA_PATH))
+        else if (os.exists(SIX_DEFAULT_SCHEMA_PATH))
         {
-            schemaPaths.push_back(DEFAULT_SCHEMA_PATH);
+            schemaPaths.push_back(SIX_DEFAULT_SCHEMA_PATH);
         }
 }
 
@@ -241,4 +243,20 @@ std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 
     return str;
 }
+}
+
+std::string six::getSchemaPath(std::vector<std::string>& schemaPaths)
+{
+    loadDefaultSchemaPath(schemaPaths);
+    auto schemaPath = schemaPaths.empty() ? "" : schemaPaths[0];
+    if (!fs::is_directory(schemaPath))
+    {
+        throw except::IOException(Ctxt(FmtX("Directory does not exist: '%s'", schemaPath.c_str())));
+    }
+    return schemaPath;
+}
+std::string six::getSchemaPath()
+{
+    std::vector<std::string> schemaPaths;
+    return getSchemaPath(schemaPaths);
 }
