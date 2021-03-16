@@ -395,7 +395,7 @@ void sys::OSWin32::getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const
 }
 
 std::string sys::OSWin32::getCurrentExecutable(
-        const std::string& argvPathname) const
+        const std::string& argvPathname_) const
 {
     //XP doesn't always null-terminate the buffer, so taking some precautions
     char buffer[MAX_PATH + 2];
@@ -407,6 +407,7 @@ std::string sys::OSWin32::getCurrentExecutable(
     {
         // Path may be up to 32,767 characters, so take a more manual
         // approach instead of guess-and-checking our way up
+        const auto argvPathname = AbstractOS::getArgvPathname(argvPathname_);
         return AbstractOS::getCurrentExecutable(argvPathname);
     }
     return std::string(buffer);

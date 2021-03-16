@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of except-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -21,21 +21,29 @@
  *
  */
 
-#ifndef CODA_OSS_sys_Backtrace_h_INCLUDED_
-#define CODA_OSS_sys_Backtrace_h_INCLUDED_
+#ifndef CODA_OSS_except_Backtrace_h_INCLUDED_
+#define CODA_OSS_except_Backtrace_h_INCLUDED_
 #pragma once
 
 #include <string>
 #include <vector>
 
-#include "except/Backtrace.h"
+// We know at compile-time whether except::getBacktrace() is supported.
+#if defined(__GNUC__)
+// https://man7.org/linux/man-pages/man3/backtrace.3.html
+// "These functions are GNU extensions."
+#define CODA_OSS_except_Backtrace 20210216L
+#elif _WIN32
+#define CODA_OSS_except_Backtrace 20210216L
+#else
+#define CODA_OSS_except_Backtrace 0
+#endif 
 
-#define CODA_OSS_sys_Backtrace CODA_OSS_except_Backtrace
-namespace version { namespace sys {
-constexpr auto backtrace = version::except::backtrace;
+namespace version { namespace except {
+constexpr auto backtrace = CODA_OSS_except_Backtrace;
 } }
 
-namespace sys
+namespace except
 {
 /*! 
  * Returns a human-readable string describing the current stack of
@@ -46,8 +54,7 @@ namespace sys
  * return with an error message instead of a backtrace if the current
  * configuration is unsupported.
  */
-std::string getBacktrace(bool* pSupported = nullptr);
 std::string getBacktrace(bool& supported, std::vector<std::string>& frames);
 }
 
-#endif // CODA_OSS_sys_Backtrace_h_INCLUDED_
+#endif // CODA_OSS_except_Backtrace_h_INCLUDED_
