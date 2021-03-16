@@ -108,11 +108,9 @@ public:
      * \param length The length of the char data
      */
     virtual void characters(const char* value, int length) override;
-    #if CODA_OSS_wchar_t_is_type_
-    bool characters(const wchar_t* value, size_t length) override;
-    #endif
-    bool characters(const uint16_t* /*data*/, size_t /*length*/) override;
-    bool characters(const uint32_t* /*data*/, size_t /*length*/) override;
+
+    bool wcharacters_(const uint16_t* /*data*/, size_t /*length*/) override;
+    bool wcharacters_(const uint32_t* /*data*/, size_t /*length*/) override;
 
     // Which characters() routine should be called?
     bool use_wchar_t() const override;

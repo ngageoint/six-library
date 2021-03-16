@@ -20,13 +20,16 @@
  *
  */
 
-#ifndef __EXCEPT_THROWABLE_H__
-#define __EXCEPT_THROWABLE_H__
+#ifndef CODA_OSS_except_Throwable_h_INCLUDED_
+#define CODA_OSS_except_Throwable_h_INCLUDED_
 #pragma once
 
 #include <string>
+#include <vector>
 #include <sstream>
 #include <exception>
+#include <numeric> // std::accumulate
+
 #include "except/Trace.h"
 
 /*!
@@ -61,30 +64,30 @@ class Throwable
     : public std::exception
 #endif
 {
+    void doGetBacktrace();
+    Throwable(const Context*, const Throwable* pT = nullptr, const std::string* pMessage = nullptr, bool callGetBacktrace = false);
+
 public:
-    Throwable() = default;
+    Throwable();
 
     /*!
      * Constructor.  Takes a message
      * \param message The message
      */
-    Throwable(const std::string& message) :
-        mMessage(message)
-    {
-    }
+    Throwable(const std::string& message);
 
     /*!
      * Constructor.  Takes a Context.
      * \param c The Context
      */
-    Throwable(Context c);
+    Throwable(Context);
 
     /*!
      * Constructor. Takes a Throwable and a Context
      * \param t The throwable
      * \param c The Context
      */
-    Throwable(const Throwable& t, Context c);
+    Throwable(const Throwable&, Context);
 
     /*!
      * Destructor
@@ -140,12 +143,38 @@ public:
         return s.str();
     }
 
+    const std::vector<std::string>& getBacktrace() const
+    {
+        return mBacktrace;
+    }
+
+    // It seems that overloading constructors creates ambiguities ... so allow for a "fluent" way
+    // of doing this.: throw Exception(...).backtrace()
+    Throwable& backtrace()
+    {
+        doGetBacktrace();
+        return *this;
+    }
+
+    virtual std::string toString(bool includeBacktrace) const
+    {
+        // Adding the backtrace to existing toString() output could substantally alter existing strings.
+        std::string backtrace;
+        if (includeBacktrace)
+        {
+            backtrace = "***** getBacktrace() *****\n";
+            backtrace +=  std::accumulate(mBacktrace.begin(), mBacktrace.end(), std::string());
+        }
+        return toString() + backtrace;
+    }
+
     const char* what() const noexcept
 #if CODA_OSS_Throwable_isa_std_exception
         override final // derived classes override toString()
 #endif
     {
-        mWhat = toString(); // call any derived toString()
+        // adding this to toString() output could (significantly) alter existing display
+        mWhat = toString(true /*includeBacktrace*/); // call any derived toString()
         return mWhat.c_str();
     }
 
@@ -157,7 +186,8 @@ protected:
 
 private:
     mutable std::string mWhat;
+    std::vector<std::string> mBacktrace;
 };
 }
 
-#endif
+#endif // CODA_OSS_except_Throwable_h_INCLUDED_

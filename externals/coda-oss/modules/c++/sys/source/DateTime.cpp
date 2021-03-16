@@ -682,3 +682,21 @@ void sys::DateTime::gmtime(time_t numSecondsSinceEpoch, tm& t)
     }
 #endif
 }
+
+int64_t sys::DateTime::getEpochSeconds()
+{
+    // https://en.cppreference.com/w/cpp/chrono/c/time_t
+    // Although not defined, this is almost always an integral value holding the number of seconds (not counting leap seconds)
+    // since 00:00, Jan 1 1970 UTC, corresponding to POSIX time.
+    // https://en.cppreference.com/w/cpp/chrono/c/time
+    const time_t result = std::time(nullptr);
+    if (sizeof(time_t) == sizeof(int64_t))
+    {
+        return static_cast<int64_t>(result);
+    }
+    if (sizeof(time_t) == sizeof(int32_t))
+    {
+        return static_cast<int32_t>(result);
+    }
+    static_assert(sizeof(time_t) >= sizeof(int32_t), "should have at least a 32-bit time_t");
+}
