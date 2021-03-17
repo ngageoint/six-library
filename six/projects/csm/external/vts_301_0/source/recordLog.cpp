@@ -3,6 +3,9 @@
 #include <fstream>
 #include <string>
 #include <ctime>
+
+#include <sys/Path.h>
+
 #include "VTSMisc.h"
 #include "Error.h"
 #include "Warning.h"
@@ -18,6 +21,18 @@ std::string serialNum;
 //char serialNum[MAX_NAME_LENGTH] = "";
 std::string timedata;
 //char timedata[MAX_NAME_LENGTH] = "";
+
+static void open(std::ofstream& tfile, const std::string& datafile)
+{
+    constexpr auto mode = std::ios::app;
+    tfile.open(datafile.c_str(), mode);
+    if (!tfile.is_open())
+    {
+        // assume the name contains enviroment variables that need to be expanded
+        const auto pathname = sys::Path::expandEnvironmentVariables(datafile, false /*checkIfExists*/);
+        tfile.open(pathname.c_str(), mode);
+    }
+}
 
 // recordLog I
   /*   Variable parameter definitions used: 
@@ -69,7 +84,7 @@ void recordLog(std::string datafile,
   std::ofstream tfile;
   if(saveLogFile)
   {
-	  tfile.open(datafile.c_str(), std::ios::app);
+	  open(tfile, datafile);
 	  tfile << timedata << "," 
 		<< serialNum << "," 
 		<< comment << "," 
@@ -183,7 +198,7 @@ void recordLog(std::string datafile,
   std::ofstream tfile;
   if(saveLogFile)
   {
-	  tfile.open(datafile.c_str(), std::ios::app);
+	  open(tfile, datafile);
 	  tfile << timedata << "," 
 		<< serialNum << "," 
 		<< comment << "," 
@@ -290,7 +305,7 @@ void recordLog(std::string datafile,
   std::ofstream tfile;
   if(saveLogFile)
   {
-    tfile.open(datafile.c_str(), std::ios::app);
+    open(tfile, datafile);
     tfile << timedata << "," << serialNum << "," << comment << "," 
           << command << "," << text ;
     tfile << std::endl;
@@ -359,7 +374,7 @@ void recordLog(std::string datafile,
   std::ofstream tfile;
   if(saveLogFile)
   {
-    tfile.open(datafile.c_str(), std::ios::app);
+    open(tfile, datafile);
     tfile << timedata << "," << serialNum << "," << comment << "," << command 
           << ",";
   }
@@ -461,7 +476,7 @@ void recordLog(std::string datafile,
   std::ofstream tfile;
   if(saveLogFile)
   {
-    tfile.open(datafile.c_str(), std::ios::app);
+    open(tfile, datafile);
     tfile <<  ",,," << comment << "," << text << std::endl; 
     tfile.close();
   }
@@ -492,7 +507,7 @@ void recordLog(std::string datafile,
   std::ofstream tfile;
   if(saveLogFile)
   {
-    tfile.open(datafile.c_str(), std::ios::app);
+    open(tfile, datafile);
     tfile << text << std::endl;
     tfile.close();
   }
