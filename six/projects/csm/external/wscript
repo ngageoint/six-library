@@ -61,10 +61,15 @@ def build(bld):
         #       dependency, we could recompile in the CSM source code that we
         #       need to use.
         vtsDir = 'vts_301_0'
+	six_root = '../../../../../..'
+	install = six_root + '/install'
+	coda_oss = six_root + '/externals/coda-oss/modules/c++'
         bld.program(target='vts', name='vts',
-                    includes='include',
+                    includes=['include',
+			install + '/include',
+			coda_oss + '/sys/include', coda_oss + '/str/include', coda_oss + '/except/include'],
                     source=bld.path.find_dir(os.path.join(vtsDir, 'source')).ant_glob('*.cpp'),
-                    use='CSMAPI THREAD DL',
+                    use='sys-c++ CSMAPI THREAD DL',
                     path=bld.path.find_dir(vtsDir),
                     install_path=bld.env['install_bindir'])
 
