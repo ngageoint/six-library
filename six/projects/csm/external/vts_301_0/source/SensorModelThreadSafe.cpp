@@ -332,6 +332,7 @@ public:
 
 private:
 
+   std::string theGivenFilename;
    std::string theFilename;
    int _imageIndex;
    char* _sensorName;
@@ -368,7 +369,8 @@ std::string ImageTest::intializeTestData(const ImageInfo imageInfo, int numberOf
 
    WarningList warnings;
 
-   theFilename = imageInfo.filename;
+   theGivenFilename = imageInfo.filename;
+   theFilename = theGivenFilename;
    _imageIndex = imageInfo.imageIndex;
    _ISDFileType = imageInfo.ISDFileType;
    _imageTestIndex = imageTestIndex;
@@ -393,11 +395,11 @@ std::string ImageTest::intializeTestData(const ImageInfo imageInfo, int numberOf
                 csmnitf20 = new Nitf20Isd(theFilename);
 				if(_imageIndex > -1)
 				{
-                   initNitf20ISD(csmnitf20, theFilename.c_str(), _imageIndex, &warnings);
+                   initNitf20ISD(csmnitf20, theFilename, _imageIndex, &warnings);
 				}
 				else
 				{
-                   initNitf20ISD(csmnitf20, theFilename.c_str(), -1, &warnings);
+                   initNitf20ISD(csmnitf20, theFilename, -1, &warnings);
 				}
                 isd = csmnitf20;
                 break;
@@ -406,11 +408,11 @@ std::string ImageTest::intializeTestData(const ImageInfo imageInfo, int numberOf
                 csmnitf21 = new Nitf21Isd(theFilename);
 				if(_imageIndex > -1)
 				{
-                   initNitf21ISD(csmnitf21, theFilename.c_str(), _imageIndex, &warnings);
+                   initNitf21ISD(csmnitf21, theFilename, _imageIndex, &warnings);
 				}
 				else
 				{
-                   initNitf21ISD(csmnitf21, theFilename.c_str(), -1, &warnings);
+                   initNitf21ISD(csmnitf21, theFilename, -1, &warnings);
 				}
                 isd = csmnitf21;
                 break;

@@ -676,14 +676,14 @@ bool processVTSCommand(int commandNumber,
             if(param_array.size() > 1)
 			{
                initNitf20ISD(csmnitf20,
-                     param_array[0].c_str(),
+                     param_array[0],
                      atoi(param_array[1].c_str()) - 1,
 					 &warnings);
 			}
 			else
 			{
                initNitf20ISD(csmnitf20,
-                     param_array[0].c_str(),
+                     param_array[0],
 					 -1,
 					 &warnings);
 			}
@@ -738,14 +738,14 @@ bool processVTSCommand(int commandNumber,
             if(param_array.size() > 1)
 			{
                initNitf21ISD(csmnitf21,
-                             param_array[0].c_str(),
+                             param_array[0],
                              atoi(param_array[1].c_str()) - 1,
 							 &warnings);
 			}
             else
 			{
                initNitf21ISD(csmnitf21,
-                             param_array[0].c_str(),
+                             param_array[0],
 							 -1,
 							 &warnings);
 			}

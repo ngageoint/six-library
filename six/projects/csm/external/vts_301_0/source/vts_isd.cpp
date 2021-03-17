@@ -48,6 +48,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+
 #include <fcntl.h>
 
 #ifdef IRIXN32
@@ -61,6 +62,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include <sys/Path.h>
 
 using namespace csm;
 using namespace std;
@@ -202,7 +205,7 @@ void dumpbytestream( BytestreamIsd &bytestream,
 //
 ///////////////////////////////////////////////////////////////
 void initNitf20ISD( Nitf20Isd *isd,
-                    std::string fname,
+                    std::string& fname,
                     const int imageIndex,
                     WarningList* warnings)
 //   throw (Error)
@@ -251,7 +254,7 @@ void initNitf20ISD( Nitf20Isd *isd,
 //
 ///////////////////////////////////////////////////////////////
 void initNitf21ISD( Nitf21Isd *isd,
-                    std::string fname,
+                    std::string& fname,
                     const int imageIndex,
                     WarningList* warnings)
 
@@ -300,13 +303,13 @@ void initNitf21ISD( Nitf21Isd *isd,
 //  Returns: File pointer
 //
 ///////////////////////////////////////////////////////////////
-FILE * fillBuff( std::string fname,
+static FILE * fillBuff_(const std::string& fname,
 #ifdef _WIN32
                  struct stat &statbuf,
 #else
 				 struct stat64 &statbuf,
 #endif
-                 char** buff) throw (Error)
+                 char** buff)
 {
    Error csmerr;
    FILE *ifile = NULL;
@@ -367,6 +370,51 @@ FILE * fillBuff( std::string fname,
 
    return ifile;
 };
+static FILE * fillBuff_expand_(std::string& fname,
+#ifdef _WIN32
+                 struct stat &statbuf,
+#else
+				 struct stat64 &statbuf,
+#endif
+                 char** buff)
+{
+    // If we're here, the orignal call to fillBuff_() failed; assume that's because
+    // the path needs to be expanded.
+    auto path = sys::Path::expandEnvironmentVariables(fname, sys::Filesystem::FileType::Regular);
+    try
+    {
+        FILE* retval = fillBuff_(path, statbuf, buff);
+        fname = std::move(path);
+        return retval;
+    }
+    catch (const Error&)
+    {
+        return nullptr; // caller will throw original exception
+    }
+}
+
+FILE * fillBuff( std::string& fname,
+#ifdef _WIN32
+                 struct stat &statbuf,
+#else
+				 struct stat64 &statbuf,
+#endif
+                 char** buff) throw (Error)
+{
+    try
+    {
+        return fillBuff_(fname, statbuf, buff);
+    }
+    catch (const Error&)
+    {
+        FILE* retval = fillBuff_expand_(fname, statbuf, buff);
+        if (retval == nullptr)
+        {
+            throw; // original exception
+        }
+        return retval;
+    }
+}
 
 ///////////////////////////////////////////////////////////////
 //

@@ -178,16 +178,16 @@ void initBytestreamISD(BytestreamIsd *bytestream, string filename)
      throw (Error);
 
 void initNitf20ISD(Nitf20Isd *isd,
-                   string fname,
+                   string& fname,
                    const int imageIndex = -1,
 				   WarningList* warnings = NULL);
 
 void initNitf21ISD(Nitf21Isd *isd,
-                   string fname,
+                   string& fname,
                    const int imageIndex = -1,
 				   WarningList* warnings = NULL);
 
-FILE * fillBuff (string fname,
+FILE * fillBuff (string& fname,
 #ifdef _WIN32
                     struct stat &statbuf, 
 #else
