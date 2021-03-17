@@ -891,8 +891,7 @@ void listSupportingModels(const string isd_name,
    } // end For loop
 }
   
-  
- void getLogfileName(const string dirName, string * name)
+static void getLogfileName(const std::string& dirName, std::istream& cin, std::string* name)
 {
   cout << "VTS Specify Log File (" << dirName << "vts_logfile.csv)> ";
 
@@ -903,8 +902,15 @@ void listSupportingModels(const string isd_name,
 
   if(debugFlag)
      cout << "logFileCommand: " << *name << endl;
+}  
+void getLogfileName(const std::string& dirName, std::istream& cin, std::string& name)
+{
+    getLogfileName(dirName, cin, &name);
 }
-
+ void getLogfileName(const string dirName, string * name)
+{
+     getLogfileName(dirName, std::cin, *name);
+}
 
 ///////////////////////////////////////////////////////
 //
@@ -1125,7 +1131,7 @@ void reset_keypress(void) {
 //          Command string to be parsed
 //
 ///////////////////////////////////////////////////////
-string readDataLine()
+string readDataLine(std::istream& cin)
 {
     string dataLine;     //----- Data String
     char ch;                  //----- Character that been inputted
@@ -1267,6 +1273,10 @@ string readDataLine()
        commandQueue.pop_back();
 
     return dataLine;
+}
+string readDataLine()
+{
+    return readDataLine(std::cin);
 }
 
 ///////////////////////////////////////////////////////

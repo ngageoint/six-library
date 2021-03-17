@@ -165,6 +165,7 @@ void echo2Term(string comment,
                string text);
 
 void getLogfileName(const string dirName, string *name);
+void getLogfileName(const std::string& dirName, std::istream&, std::string& name);
 
 void reportWarning(WarningList warnings, const char* logFile);
 void reportError(Error* err, const char* logFile);
@@ -265,6 +266,7 @@ vector<string> loadHelpFile();
 void set_keypress(void);
 void reset_keypress(void);
 string readDataLine();
+std::string readDataLine(std::istream&);
 vector<string> getCommands(string params);
 #endif // VTSMISC_H
 

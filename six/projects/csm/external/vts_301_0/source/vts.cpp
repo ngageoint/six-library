@@ -45,6 +45,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <assert.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -6020,12 +6021,35 @@ int main(int argc, char** argv)
       << CLOCKS_PER_SEC << endl;
    cout << endl;
 
+   // Setup the input file
+   std::istream* pInput = nullptr;
+   if (argc != 2) // only support a single command-line argument, the input file
+   {
+       // Assume *nix-style stdin
+       pInput = &std::cin;
+   }
+   else
+   {
+       if (*(argv[1]) == '-') // filename"is '-', which is stdin
+       {
+           pInput = &std::cin;
+       }
+       else
+       {
+           // Redirection from stdin is common on *nix, less-so on Windows
+           static std::ifstream s(argv[1]); // note "static", stays in-scope
+           pInput = &s;
+       }
+   }
+   assert(pInput != nullptr);
+   std::istream& cin = *pInput;
+
    //---
    // Select the log file.
    //---
    // get logfile name
    string inputFile;
-   getLogfileName(dirName, &inputFile);
+   getLogfileName(dirName, cin, inputFile);
    if(inputFile != "")
       logFile = inputFile;
 
@@ -6147,7 +6171,7 @@ int main(int argc, char** argv)
       // subString is the token returned by parser
       cout << "\nvts> ";
 
-      targetCommand = readDataLine();
+      targetCommand = readDataLine(cin);
 	  trim(targetCommand);
 
       if(debugFlag)
