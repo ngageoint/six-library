@@ -121,14 +121,14 @@ void compareParam(vector<string> param_array,
 		  map<int, bool> &pass_fail);
 
 // recordLog I
-void recordLog(string datafile,
+void recordLog(string& datafile,
                string comment,
                string command,         
                vector<string> param_array, 
                vector<string> out_param_array);
 
 // recordLog II
-void recordLog(string datafile,
+void recordLog(string& datafile,
 			   string serialNum,
                string timedata,
                string comment,
@@ -137,13 +137,13 @@ void recordLog(string datafile,
                vector<string> out_param_array);
 
 // recordLog III
-void recordLog(string datafile,
+void recordLog(string& datafile,
                string comment,
                string command,
                string text);
 
 // recordLog IV
-void recordLog(string datafile,
+void recordLog(string& datafile,
                string serialNum,
                string timedata,
                string comment,
@@ -152,12 +152,12 @@ void recordLog(string datafile,
                string text);
 
 // recordLog V
-void recordLog(string datafile,
+void recordLog(string& datafile,
                string comment,
                string text);
 
 // recordLog VI
-void recordLog(string datafile,
+void recordLog(string& datafile,
                const string text);
 
 void echo2Term(string comment,
@@ -167,8 +167,8 @@ void echo2Term(string comment,
 void getLogfileName(const string dirName, string *name);
 void getLogfileName(const std::string& dirName, std::istream&, std::string& name);
 
-void reportWarning(WarningList warnings, const char* logFile);
-void reportError(Error* err, const char* logFile);
+void reportWarning(WarningList warnings, std::string& logFile);
+void reportError(Error* err, std::string& logFile);
 
 // prototypes for ISD "constructors"
 //void initFilenameISD (Isd *isdfilename, 

@@ -22,15 +22,21 @@ std::string serialNum;
 std::string timedata;
 //char timedata[MAX_NAME_LENGTH] = "";
 
-static void open(std::ofstream& tfile, const std::string& datafile)
+static void open(std::ofstream& tfile, std::string& datafile)
 {
     constexpr auto mode = std::ios::app;
     tfile.open(datafile.c_str(), mode);
     if (!tfile.is_open())
     {
         // assume the name contains enviroment variables that need to be expanded
-        const auto pathname = sys::Path::expandEnvironmentVariables(datafile, false /*checkIfExists*/);
+        auto pathname = sys::Path::expandEnvironmentVariables(datafile, false /*checkIfExists*/);
         tfile.open(pathname.c_str(), mode);
+        if (tfile.is_open())
+        {
+            // Use this path from now on.  Regenerating it every time
+            // could result in a new filename for ${EPOCHSECONDS}
+            datafile = std::move(pathname);
+        }
     }
 }
 
@@ -64,7 +70,7 @@ static void open(std::ofstream& tfile, const std::string& datafile)
          end_clock
 */
 // recordLog I
-void recordLog(std::string datafile,
+void recordLog(std::string& datafile,
                std::string comment,
                std::string command,         
                std::vector<std::string> param_array,
@@ -185,7 +191,7 @@ void recordLog(std::string datafile,
          end_clock
 */
 // recordLog II
-void recordLog(std::string datafile,
+void recordLog(std::string& datafile,
                std::string serialNum,
                std::string timedata,
                std::string comment,
@@ -288,7 +294,7 @@ void recordLog(std::string datafile,
          end_clock
   */
 // recordLog III
-void recordLog(std::string datafile,
+void recordLog(std::string& datafile,
                std::string comment,
                std::string command,
                std::string text)
@@ -361,7 +367,7 @@ void recordLog(std::string datafile,
          end_clock
 */
 // recordLog IV
-void recordLog(std::string datafile,
+void recordLog(std::string& datafile,
                std::string serialNum,
                std::string timedata,
                std::string comment,
@@ -469,7 +475,7 @@ void recordLog(std::string datafile,
        this manner results in an empty cell in the spreadsheet.
 */
 // recordLog V
-void recordLog(std::string datafile,
+void recordLog(std::string& datafile,
                std::string comment,
                std::string text)
 {
@@ -501,7 +507,7 @@ void recordLog(std::string datafile,
        denoted by two consecutive commas (eg ,,).  Data imported in
        this manner results in an empty cell in the spreadsheet. */
 // recordLog VI
-void recordLog(std::string datafile,
+void recordLog(std::string& datafile,
                const std::string text)
 {
   std::ofstream tfile;

@@ -5940,7 +5940,7 @@ void processCommand(int commandNumber,
    {
       if(saveLogFile)
       {
-         reportWarning(warnings, logFile.c_str());
+         reportWarning(warnings, logFile);
       }
 	  warnings.clear();
    }
@@ -5949,7 +5949,7 @@ void processCommand(int commandNumber,
    {
       if(saveLogFile)
       {
-         reportError(&global_err, logFile.c_str());
+         reportError(&global_err, logFile);
       }
 
       error_thrown = false;             // clear error indicator flag

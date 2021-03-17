@@ -503,7 +503,7 @@ vector<string> getCommands(string params)
 //  Returns: Nothing
 //
 ///////////////////////////////////////////////////////////////
-void reportWarning(WarningList warnings, const char* logFile)
+void reportWarning(WarningList warnings, std::string& logFile)
 {
    string comment = "W";
    string text;
@@ -565,7 +565,7 @@ void reportWarning(WarningList warnings, const char* logFile)
 //  Returns: Nothing
 //
 ///////////////////////////////////////////////////////////////
-void reportError (Error* err, const char* logFile)
+void reportError (Error* err, std::string& logFile)
 {
    string comment = "E";
    string text = "";
@@ -674,7 +674,7 @@ void printList(string logFile)
                pluginName = (*ii)->getPluginName();
 	           cout << "Sensor: " << pluginName << endl;
 	       } catch (Error err) {
-	           reportError(&err,logFile.c_str());
+	           reportError(&err,logFile);
 	       }
        }
    }
