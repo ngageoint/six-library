@@ -9,6 +9,9 @@ cd "$dirname/../../../.." # root
 install=`pwd`/install
 vts="$install/bin/vts"
 
+# libCSMAPI.so
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:"$install/lib"
+
 cd "$install/share/CSM/plugins"
 exec $vts $*
 
