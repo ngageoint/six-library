@@ -113,7 +113,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>X64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>X64;_DEBUG;_CONSOLE;SIX_DEFAULT_SCHEMA_PATH=R"($(SolutionDir)install-$(Configuration)-$(Platform).$(PlatformToolset)\conf\schema\six)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)six\modules\c++\scene\include\;$(SolutionDir)six\modules\c++\six\include\;$(SolutionDir)six\modules\c++\six.sidd\include\;$(SolutionDir)six\modules\c++\six.sicd\include\;$(SolutionDir)six\modules\c++\cphd\include\;$(SolutionDir)six\modules\c++\cphd03\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -137,7 +137,7 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <PreprocessorDefinitions>X64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>X64;NDEBUG;_CONSOLE;SIX_DEFAULT_SCHEMA_PATH=R"($(SolutionDir)install-$(Configuration)-$(Platform).$(PlatformToolset)\conf\schema\six)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>

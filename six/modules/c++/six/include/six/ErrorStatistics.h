@@ -88,12 +88,12 @@ struct PosVelError
     //! Coordinate frame used for expressing P,V error statistics
     FrameType frame;
 
-    double p1;
-    double p2;
-    double p3;
-    double v1;
-    double v2;
-    double v3;
+    double p1 = 0.0;
+    double p2 = 0.0;
+    double p3 = 0.0;
+    double v1 = 0.0;
+    double v2 = 0.0;
+    double v3 = 0.0;
 
     //! Optional
     mem::ScopedCopyablePtr<CorrCoefs> corrCoefs;
@@ -309,13 +309,13 @@ struct CompositeSCP
     SCPType scpType = RG_AZ;
 
     //!  SICD/SIDD Rg or Row, depending on scpType
-    double xErr;
+    double xErr = 0.0;
 
     //!  SICD/SIDD Az or Col, depending on scpType
-    double yErr;
+    double yErr = 0.0;
 
     //!  SICD/SIDD RowCol or RgAz depending on scpType
-    double xyErr;
+    double xyErr = 0.0;
 
     //! Equality operators
     bool operator==(const CompositeSCP& rhs) const
