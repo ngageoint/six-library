@@ -84,7 +84,7 @@ public:
     //! Constructor.  Creates a new XML parser
     XMLReaderExpat()
     {
-        mNative = NULL;
+        mNative = nullptr;
         create();
     }
 
@@ -116,7 +116,7 @@ public:
     //! Finish parsing
     void finish()
     {
-        parse(NULL, 0, true);
+        parse(nullptr, 0, true);
         mContentHandler->endDocument();
     }
 

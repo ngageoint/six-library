@@ -92,7 +92,7 @@ struct ExecPipe : Exec
     */
     ExecPipe(const std::string& cmd) : 
         Exec(cmd),
-        mOutStream(NULL)
+        mOutStream(nullptr)
     {
     }
 
@@ -100,7 +100,7 @@ struct ExecPipe : Exec
     virtual void run() 
     {
         mOutStream = openPipe(mCmd, "r");
-        if (mOutStream == NULL)
+        if (mOutStream == nullptr)
         {
             sys::Err err;
             throw except::IOException(

@@ -80,7 +80,8 @@ inline std::string toString(const sys::U8string& value)
     // This is OK as UTF-8 can be stored in std::string
     // Note that casting between the string types will CRASH on some implementatons.
     // NO: reinterpret_cast<const std::string&>(value)
-    return reinterpret_cast<std::string::const_pointer>(value.c_str()); // copy
+    const void* const pValue = value.c_str();
+    return static_cast<std::string::const_pointer>(pValue);  // copy
 }
 
 inline sys::U8string castToU8string(const std::string& value)
@@ -88,7 +89,8 @@ inline sys::U8string castToU8string(const std::string& value)
     // This is dangerous as we don't know the encoding of std::string!
     // If it is Windows-1252, the reteurned sys::U8string will be garbage.
     // Only use when you are sure of the encoding.
-    return reinterpret_cast<sys::U8string::const_pointer>(value.c_str());
+    const void* const pValue = value.c_str();
+    return static_cast<sys::U8string::const_pointer>(pValue);
 }
 
 sys::U8string fromWindows1252(const std::string&);

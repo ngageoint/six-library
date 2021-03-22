@@ -83,7 +83,7 @@ public:
     //! Finish parsing
     void finish()
     {
-        parse(NULL, 0, true);
+        parse(nullptr, 0, true);
         mContentHandler->endDocument();
     }
 

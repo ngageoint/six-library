@@ -243,7 +243,7 @@ protected:
 class DirectoryUnix : public AbstractDirectory
 {
 public:
-    DirectoryUnix() : mDir(NULL)
+    DirectoryUnix() : mDir(nullptr)
     {}
     virtual ~DirectoryUnix()
     {
