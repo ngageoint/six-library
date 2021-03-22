@@ -269,7 +269,7 @@ NRTAPI(void) nrt_List_destruct(nrt_List ** this_list)
 
 }
 
-NRTAPI(nrt_ListIterator) nrt_List_begin(nrt_List * list)
+NRTAPI(nrt_ListIterator) nrt_List_begin(const nrt_List * list)
 {
     nrt_ListIterator list_iterator;
 
@@ -280,7 +280,7 @@ NRTAPI(nrt_ListIterator) nrt_List_begin(nrt_List * list)
     return list_iterator;
 }
 
-NRTAPI(nrt_ListIterator) nrt_List_at(nrt_List * chain, int i)
+NRTAPI(nrt_ListIterator) nrt_List_at(const nrt_List * chain, int i)
 {
     nrt_ListIterator list_iterator = nrt_List_begin(chain);
     nrt_ListIterator end = nrt_List_end(chain);
@@ -298,19 +298,19 @@ NRTAPI(nrt_ListIterator) nrt_List_at(nrt_List * chain, int i)
     return list_iterator;
 }
 
-NRTAPI(NRT_BOOL) nrt_ListIterator_equals(nrt_ListIterator * it1,
-                                         nrt_ListIterator * it2)
+NRTAPI(NRT_BOOL) nrt_ListIterator_equals(const nrt_ListIterator * it1,
+                                         const nrt_ListIterator * it2)
 {
     return (it1->current == it2->current);
 }
 
-NRTAPI(NRT_BOOL) nrt_ListIterator_notEqualTo(nrt_ListIterator * it1,
-                                             nrt_ListIterator * it2)
+NRTAPI(NRT_BOOL) nrt_ListIterator_notEqualTo(const nrt_ListIterator * it1,
+                                             const nrt_ListIterator * it2)
 {
     return !nrt_ListIterator_equals(it1, it2);
 }
 
-NRTAPI(nrt_ListIterator) nrt_List_end(nrt_List * this_list)
+NRTAPI(nrt_ListIterator) nrt_List_end(const nrt_List * this_list)
 {
     nrt_ListIterator list_iterator;
 
