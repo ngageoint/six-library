@@ -1,0 +1,120 @@
+#!/bin/sh
+eval 'exec perl -x $0 ${1+"$@"}'
+    if 0;  # [Construct to start `perl' when we do not know where it is.]
+#!perl
+###############################################################################
+# FILE:              mslink
+#
+# CLASSIFICATION:    Unclassified
+#
+# DESCRIPTION:       This is a wrapper script that mutates a Unix
+#                    link command into the MS Studio equivalent
+#
+# LIMITATIONS:       None
+#
+###############################################################################
+
+$debug = 0;
+
+# ***
+# Get the command line arguments. Unix needs the -I, -D and -O options
+# so templates can be compiled at link time. Since Windows compiles 
+# templates at compile time, they need to be removed. Unix uses -l and
+# -L options for specifying library names and library paths. These need
+# to be replaced with the MS equivalent, DEFAULTLIB and LIBPATH. Replace
+# the debug flag with /DEBUG.
+# ***
+
+my @link_args;
+my @mt_args;
+$runmt = 0;
+
+$nextIsOutput = 0;
+foreach (@ARGV)
+{
+  if ($_ eq "-o")
+  {
+    $nextIsOutput = 1;
+    next;
+  }
+
+  if ($_ eq "-nomt")
+  {
+    $runmt = "dont!";
+    next;
+  }
+
+  if ($nextIsOutput)
+  {
+    if (/\.(exe|dll)$/ && !$runmt)
+    {
+      $runmt = "$_.manifest";
+      if (/\.exe$/)
+      {
+      	push @mt_args, "-outputresource:$_";
+      }
+      elsif (/\.dll$/)
+      {
+      	push @mt_args, "-outputresource:$_\\;2";
+      }
+      push @mt_args, "-manifest";
+      push @mt_args, "$_.manifest";
+      push @mt_args, "/nologo";
+    }
+
+    $_ = "/OUT:$_";
+    $nextIsOutput = 0;
+  }
+
+  if (/^(-L|\/DEF:|\/OUT:)(\/\S+)/)
+  {
+    chomp(my $winPath = `cygpath -w "$2"`);
+    $_ = "$1$winPath";
+  }
+
+  # clear these arguments
+  s/^-(I|D|O).*//;
+  s/^\/(O[0-9]|Zm800|MD|GR|W1|TP|GX|EHa|fp:fast|D_.*)//;
+
+  s|^-l(.*)|/DEFAULTLIB:$1|;
+  s|^-L(.*)|/LIBPATH:$1|;
+  s|^-g|/DEBUG|;
+
+  push @link_args, $_ if ($_);
+}
+
+# ***
+# including BINMODE.OBJ in the link causes
+# O_BINARY to be the default instead of O_TEXT
+# ***
+push @link_args, 'BINMODE.OBJ';
+
+warn ">>> link_args arg {" . join(', ', @link_args) . "}\n" if ($debug);
+
+# Build the link command
+$link = "link.exe";
+
+# Execute the link command
+print "$link " . join(' ', @link_args) . "\n";
+(system($link, @link_args) == 0) or die "Could not link!\n";
+
+
+if ($runmt && -e $runmt)
+{
+   # Build and execute the mt command
+   $mt = "mt.exe " . join(' ', @mt_args);
+   my $MAX_MT_TRIES = 5;
+   my $tries = 0;
+   while ($tries < $MAX_MT_TRIES)
+   {
+     if ($tries > 0)
+     {
+       print "mt failed, sleeping then trying again\n";
+       sleep 1;
+     }
+     print "$mt\n";
+     last if (system($mt) == 0);
+     $tries++;
+   }
+   die "Could not mt!\n" if ($tries >= $MAX_MT_TRIES);
+}

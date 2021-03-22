@@ -21,7 +21,6 @@
  */
 
 #include <stdexcept>
-#include <type_traits>
 
 #include "str/Manip.h"
 #include "str/Convert.h"
@@ -107,18 +106,6 @@ inline std::string toUtf8(const uint32_t* value_, size_t length)
     const auto value = reinterpret_cast<std::u32string::const_pointer>(value_);
     return toUtf8_(value, length);
 }
-#if CODA_OSS_wchar_t_is_type_
-inline std::string toUtf8(const wchar_t* value_, size_t length)
-{
-    using wchar_t_type = std::conditional<sizeof(wchar_t) == sizeof(uint32_t), uint32_t, uint16_t>::type;
-#ifdef _WIN32
-    // if we somehow get here on Windows (shouldn't, see below), wchar_t is UTF-16 not UTF-32
-    static_assert(sizeof(wchar_t) == sizeof(wchar_t_type), "wchar_t should be 16-bits on Windows.");
-#endif
-    const auto value = reinterpret_cast<const wchar_t_type*>(value_);
-    return toUtf8(value, length);
-}
-#endif
 
 bool xml::lite::MinidomHandler::call_characters(const std::string& utf8Value)
 {
@@ -145,17 +132,11 @@ bool xml::lite::MinidomHandler::characters_(const T* value, size_t length)
     return false; // call characters(char*) to get a Windows-1252 string
     #endif
 }
-#if CODA_OSS_wchar_t_is_type_
-bool xml::lite::MinidomHandler::characters(const wchar_t* value, size_t length)
+bool xml::lite::MinidomHandler::wcharacters_(const uint32_t* value, size_t length)
 {
     return characters_(value, length);
 }
-#endif
-bool xml::lite::MinidomHandler::characters(const uint32_t* value, size_t length)
-{
-    return characters_(value, length);
-}
-bool xml::lite::MinidomHandler::characters(const uint16_t* value, size_t length)
+bool xml::lite::MinidomHandler::wcharacters_(const uint16_t* value, size_t length)
 {
     return characters_(value, length);
 }

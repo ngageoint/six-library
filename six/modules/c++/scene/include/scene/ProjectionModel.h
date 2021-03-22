@@ -357,7 +357,7 @@ protected:
     Vector3 mSlantPlaneNormal;
     Vector3 mImagePlaneNormal;
     Vector3 mSCP;
-    double mScaleFactor;
+    double mScaleFactor = 0.0;
     math::poly::OneD<Vector3> mARPPoly;
     math::poly::OneD<Vector3> mARPVelPoly;
     math::poly::TwoD<double> mTimeCOAPoly;

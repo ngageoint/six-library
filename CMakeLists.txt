@@ -30,8 +30,9 @@ if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
         coda_initialize_build()
     else()
         # build dependencies ourselves
+        set(CODA_OSS_DIR "coda-oss")
         list(APPEND CMAKE_MODULE_PATH
-             "${CMAKE_CURRENT_SOURCE_DIR}/externals/coda-oss/cmake")
+             "${CMAKE_CURRENT_SOURCE_DIR}/externals/${CODA_OSS_DIR}/cmake")
         include(CodaBuild)
         coda_initialize_build()
         add_subdirectory("externals")

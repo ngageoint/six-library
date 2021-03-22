@@ -92,7 +92,7 @@ void XercesContentHandler::characters(const XMLCh* const chars,
 {
     if (mLiteHandler->use_wchar_t())
     {
-        if (mLiteHandler->characters(chars, length))
+        if (mLiteHandler->wcharacters(chars, length))
         {
             return; // processed as wide_char
         }    

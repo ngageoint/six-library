@@ -21,11 +21,12 @@
  */
 
 
-#ifndef __SYS_DATE_TIME_H__
-#define __SYS_DATE_TIME_H__
+#ifndef CODA_OSS_sys_DateTime_h_INCLUDED_
+#define CODA_OSS_sys_DateTime_h_INCLUDED_
 #pragma once
 
 #include <time.h>
+#include <stdint.h>
 
 #include <string>
 
@@ -73,6 +74,7 @@ protected:
     //! @brief Given seconds since the epoch, provides the time
     virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const = 0;
 
+public: // for unit-testing
     static void localtime(time_t numSecondsSinceEpoch, tm& t);
     static void gmtime(time_t numSecondsSinceEpoch, tm& t);
 
@@ -98,6 +100,8 @@ public:
     double getTimeInMillis() const { return mTimeInMillis; }
     //! Return the current year
     int getYear() const { return mYear; }
+    //! Return the number of seconds since the time epoch
+    static int64_t getEpochSeconds() noexcept;
 
     // ! Given the {1,12} month return the alphabetic equivalent
     static std::string monthToString(int month);
@@ -190,4 +194,4 @@ extern int gmtime_s(tm*, const time_t*);
 
 }
 
-#endif//__SYS_DATE_TIME_H__
+#endif//CODA_OSS_sys_DateTime_h_INCLUDED_

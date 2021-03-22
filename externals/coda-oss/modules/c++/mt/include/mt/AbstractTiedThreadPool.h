@@ -43,7 +43,7 @@ public:
 
     virtual ~AbstractTiedThreadPool(){}
 
-    virtual void initialize(CPUAffinityInitializer* affinityInit = NULL)
+    virtual void initialize(CPUAffinityInitializer* affinityInit = nullptr)
     {
         mAffinityInit = affinityInit;
     }
@@ -51,7 +51,7 @@ public:
     virtual mem::auto_ptr<CPUAffinityThreadInitializer>
     getCPUAffinityThreadInitializer()
     {
-        mem::auto_ptr<CPUAffinityThreadInitializer> threadInit(NULL);
+        mem::auto_ptr<CPUAffinityThreadInitializer> threadInit(nullptr);
 
         // If we were passed a schematic
         // for initializing thread affinity...

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\modules\c++\six.sicd\six.sicd.vcxproj">
+      <Project>{34ac2314-fbd1-42ad-aaf4-0cebc6bf737e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\modules\c++\six.sidd\six.sidd.vcxproj">
+      <Project>{ddc587c2-53ba-44a9-94e7-07be52af3d0b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\modules\c++\six\six.vcxproj">
+      <Project>{62aad4dd-35ba-41a0-8263-1f4dfd755689}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="external\csm-3.0.3.3\BundleGM.h" />
+    <ClInclude Include="external\csm-3.0.3.3\BytestreamIsd.h" />
+    <ClInclude Include="external\csm-3.0.3.3\CorrelationModel.h" />
+    <ClInclude Include="external\csm-3.0.3.3\csm.h" />
+    <ClInclude Include="external\csm-3.0.3.3\csmPointCloud.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Ellipsoid.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Error.h" />
+    <ClInclude Include="external\csm-3.0.3.3\FourParameterCorrelationModel.h" />
+    <ClInclude Include="external\csm-3.0.3.3\GeometricModel.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Isd.h" />
+    <ClInclude Include="external\csm-3.0.3.3\LinearDecayCorrelationModel.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Model.h" />
+    <ClInclude Include="external\csm-3.0.3.3\ModelIdentifier.h" />
+    <ClInclude Include="external\csm-3.0.3.3\MultiNitfIsd.h" />
+    <ClInclude Include="external\csm-3.0.3.3\NitfIsd.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Plugin.h" />
+    <ClInclude Include="external\csm-3.0.3.3\PointCloudGM.h" />
+    <ClInclude Include="external\csm-3.0.3.3\PointCloudIsd.h" />
+    <ClInclude Include="external\csm-3.0.3.3\RasterGM.h" />
+    <ClInclude Include="external\csm-3.0.3.3\SettableEllipsoid.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Version.h" />
+    <ClInclude Include="external\csm-3.0.3.3\Warning.h" />
+    <ClInclude Include="external\vts_301_0\include\constants.h" />
+    <ClInclude Include="external\vts_301_0\include\SMManager.h" />
+    <ClInclude Include="external\vts_301_0\include\tinyxml.h" />
+    <ClInclude Include="external\vts_301_0\include\tokenizer.h" />
+    <ClInclude Include="external\vts_301_0\include\VTSMisc.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="include\six\csm\SICDSensorModel.h" />
+    <ClInclude Include="include\six\csm\SIDDSensorModel.h" />
+    <ClInclude Include="include\six\csm\SIXPlugin.h" />
+    <ClInclude Include="include\six\csm\SIXSensorModel.h" />
+    <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="external\csm-3.0.3.3\BundleGM.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\CorrelationModel.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\csmPointCloud.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\Ellipsoid.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\FourParameterCorrelationModel.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\GeometricModel.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\Isd.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\LinearDecayCorrelationModel.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\ModelIdentifier.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\MultiNitfIsd.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\Plugin.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\PointCloudGM.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\PointCloudIsd.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\RasterGM.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\SettableEllipsoid.cpp" />
+    <ClCompile Include="external\csm-3.0.3.3\Version.cpp" />
+    <ClCompile Include="external\vts_301_0\source\compareParam.cpp" />
+    <ClCompile Include="external\vts_301_0\source\recordLog.cpp" />
+    <ClCompile Include="external\vts_301_0\source\SensorModelThreadSafe.cpp" />
+    <ClCompile Include="external\vts_301_0\source\SMManager.cpp" />
+    <ClCompile Include="external\vts_301_0\source\tinyxml.cpp" />
+    <ClCompile Include="external\vts_301_0\source\tokenizer.cpp" />
+    <ClCompile Include="external\vts_301_0\source\vts.cpp" />
+    <ClCompile Include="external\vts_301_0\source\vts_isd.cpp" />
+    <ClCompile Include="external\vts_301_0\source\vts_misc.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="source\SICDSensorModel.cpp" />
+    <ClCompile Include="source\SIDDSensorModel.cpp" />
+    <ClCompile Include="source\SIXPlugin.cpp" />
+    <ClCompile Include="source\SIXSensorModel.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="external\csm-3.0.3.3\Doxyfile" />
+    <None Include="external\csm-3.0.3.3\LICENSE" />
+    <None Include="external\csm-3.0.3.3\Makefile" />
+    <None Include="external\csm-3.0.3.3\Makefile.linux" />
+    <None Include="external\csm-3.0.3.3\Makefile.linux64" />
+    <None Include="external\csm-3.0.3.3\Makefile.linuxIA64" />
+    <None Include="external\csm-3.0.3.3\Makefile.sgi" />
+    <None Include="external\csm-3.0.3.3\Makefile.solaris" />
+    <None Include="external\csm-3.0.3.3\Makefile.solaris-stlport" />
+    <None Include="external\csm-3.0.3.3\Makefile.solaris64" />
+    <None Include="external\csm-3.0.3.3\Makefile.solaris64-stlport" />
+    <None Include="external\csm-3.0.3.3\Makefile.solaris86" />
+    <None Include="external\csm-3.0.3.3\Makefile.win32" />
+    <None Include="external\csm-3.0.3.3\README" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{6E767B43-D1A9-4B02-8D08-42037B7C9262}</ProjectGuid>
+    <RootNamespace>six</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>vts</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>vts</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)external\vts_301_0\include\;$(ProjectDir)external\csm-3.0.3.3\;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)external\vts_301_0\include\;$(ProjectDir)external\csm-3.0.3.3\;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -3,13 +3,3 @@ add_subdirectory("c++")
 if (BUILD_PYTHON_MODULES)
     add_subdirectory("python")
 endif()
-
-set(ENABLE_JAVA ON CACHE BOOL "enable building Java components")
-if (ENABLE_JAVA)
-    add_subdirectory("java")
-endif()
-
-set(ENABLE_MEX ON CACHE BOOL "enable building Matlab MEX components")
-if (ENABLE_MEX)
-    add_subdirectory("mex")
-endif()

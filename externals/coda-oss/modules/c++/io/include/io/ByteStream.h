@@ -118,7 +118,7 @@ public:
     sys::ubyte *
     get()
     {
-        return mData.empty() ? NULL : &mData[0];
+        return mData.empty() ? nullptr : &mData[0];
     }
 
     sys::Size_T

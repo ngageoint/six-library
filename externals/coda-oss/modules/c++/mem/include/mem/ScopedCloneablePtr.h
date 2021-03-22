@@ -54,7 +54,7 @@ template <class T>
 class ScopedCloneablePtr
 {
 public:
-    explicit ScopedCloneablePtr(T* ptr = NULL) :
+    explicit ScopedCloneablePtr(T* ptr = nullptr) :
         mPtr(ptr)
     {
     }
@@ -98,12 +98,12 @@ public:
 
     bool operator==(const ScopedCloneablePtr<T>& rhs) const
     {
-        if (get() == NULL && rhs.get() == NULL)
+        if (get() == nullptr && rhs.get() == nullptr)
         {
             return true;
         }
 
-        if (get() == NULL || rhs.get() == NULL)
+        if (get() == nullptr || rhs.get() == nullptr)
         {
             return false;
         }
@@ -131,7 +131,7 @@ public:
         return mPtr.get();
     }
 
-    void reset(T* ptr = NULL)
+    void reset(T* ptr = nullptr)
     {
         mPtr.reset(ptr);
     }

@@ -62,8 +62,8 @@ public:
      *   the offset to the beginning of the IFD for this image
      *****************************************************************/
     ImageWriter(io::FileOutputStream *output, const sys::Uint32_T ifdOffset) :
-        mStripByteCounts(NULL),
-                mTileOffsets(NULL),
+        mStripByteCounts(nullptr),
+                mTileOffsets(nullptr),
                 mOutput(output), mIFDOffset(ifdOffset),
                 mIdealChunkSize(CHUNK_SIZE), mBytePosition(0), mElementSize(0),
                 mValidated(false), mFormat(STRIPPED)
