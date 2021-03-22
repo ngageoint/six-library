@@ -244,10 +244,19 @@ static std::string getEnv(const std::string& s)
     }
     return buffer.data();
 }
+
+static const char* getenv_(const std::string& s)
+{
+    #pragma warning(push)
+    #pragma warning(disable: 4996) // '...': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+    return getenv(s.c_str());
+    #pragma warning(pop)
+}
+
 std::string sys::OSWin32::getEnv(const std::string& s) const
 {
     std::string retval = ::getEnv(s);
-    assert(retval == getenv(s.c_str()));
+    assert(retval == getenv_(s));
     return retval;
 }
 
@@ -258,7 +267,7 @@ bool sys::OSWin32::isEnvSet(const std::string& s) const
     {
         return true;
     }
-    return getenv(s.c_str()) != nullptr;
+    return getenv_(s) != nullptr;
 }
 
 static void setEnv(const std::string& var,
