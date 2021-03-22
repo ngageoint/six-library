@@ -64,7 +64,7 @@ public:
                                const std::string& password = "password",
                                const std::string& caList = "root.pem",
                                bool serverAuth = true, 
-                               char * ciphers = NULL) : 
+                               char* ciphers = nullptr) : 
         mClientAuthentication(clientAuth),
         mKeyfile(keyfile), mPass(password),
         mCAList(caList), 
@@ -80,7 +80,7 @@ public:
     virtual ~SSLConnectionClientFactory() 
     {
 # if defined(USE_OPENSSL)	
-        if(mCtx != NULL)
+        if (mCtx != nullptr)
         {
             SSL_CTX_free(mCtx);
         }

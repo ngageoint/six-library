@@ -79,7 +79,7 @@ protected:
     virtual sys::SSize_T readImpl(void* buffer, size_t len)
     {
         const auto numToRead =
-                (mAvailable >= (sys::SSize_T) len ? len : (size_t) mAvailable);
+                mAvailable >= static_cast<sys::SSize_T>(len) ? len : static_cast<size_t>(mAvailable);
 
         mAvailable -= numToRead;
 
