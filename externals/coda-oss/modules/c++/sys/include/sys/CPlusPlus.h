@@ -61,8 +61,8 @@
     #if CODA_OSS_cpp20
         #define CODA_OSS_AUGMENT_std_namespace 0  // nothing to add if we're at C++20
     #else
-        #define CODA_OSS_AUGMENT_std_namespace 0
-        //#define CODA_OSS_AUGMENT_std_namespace 1
+        //#define CODA_OSS_AUGMENT_std_namespace 0
+        #define CODA_OSS_AUGMENT_std_namespace 1
     #endif
 #endif
 
