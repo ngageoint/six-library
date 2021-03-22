@@ -63,7 +63,7 @@ TEST_CASE(loadCompiledSchemaPath)
 TEST_CASE(respectGivenPaths)
 {
     std::vector<std::string> schemaPaths = {"some/path"};
-    sys::OS().setEnv("SIX_SCHEMA_PATH", "another/path", 1);
+    sys::OS().setEnv("SIX_SCHEMA_PATH", "another/path", true /*overwrite*/);
     six::XMLControl::loadSchemaPaths(schemaPaths);
     TEST_ASSERT_EQ(schemaPaths.size(), 1);
 }
@@ -80,7 +80,7 @@ TEST_CASE(loadFromEnvVariable)
 TEST_CASE(ignoreEmptyEnvVariable)
 {
     std::vector<std::string> schemaPaths;
-    sys::OS().setEnv("SIX_SCHEMA_PATH", "   ", 1);
+    sys::OS().setEnv("SIX_SCHEMA_PATH", "   ", true /*overwrite*/);
     six::XMLControl::loadSchemaPaths(schemaPaths);
 
     size_t schemaPathsSize = 0;

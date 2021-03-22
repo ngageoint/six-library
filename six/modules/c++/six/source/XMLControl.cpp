@@ -282,8 +282,3 @@ std::string six::getSchemaPath(std::vector<std::string>& schemaPaths)
     }
     return schemaPath;
 }
-std::string six::getSchemaPath()
-{
-    std::vector<std::string> schemaPaths;
-    return getSchemaPath(schemaPaths);
-}
