@@ -81,14 +81,14 @@ enum class string_encoding
 class Element
 {
     Element(const std::string& qname, const std::string& uri, std::nullptr_t) :
-        mParent(NULL), mName(uri, qname)
+        mParent(nullptr), mName(uri, qname)
     {
     }
 
 public:
     //! Default constructor
     Element() :
-        mParent(NULL)
+        mParent(nullptr)
     {
     }
 

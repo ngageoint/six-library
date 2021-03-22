@@ -119,7 +119,7 @@ class ThreadPoolAllocStrategy: public AllocStrategy
     unsigned short mNumThreads;
 public:
     ThreadPoolAllocStrategy(unsigned short numThreads) :
-        mPool(NULL), mNumThreads(numThreads)
+        mPool(nullptr), mNumThreads(numThreads)
     {
     }
 

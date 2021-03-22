@@ -76,7 +76,7 @@ class Matrix2D
 public:
     //! Default constructor (does nothing)
     Matrix2D() :
-        mM(0), mN(0), mMN(0), mRaw(NULL)
+        mM(0), mN(0), mMN(0), mRaw(nullptr)
     {
     }
 

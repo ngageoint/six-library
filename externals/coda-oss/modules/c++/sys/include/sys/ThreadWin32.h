@@ -64,7 +64,7 @@ namespace sys
 
     inline long getThreadID()
     {
-	return (long)GetCurrentThreadId();
+	return static_cast<long>(GetCurrentThreadId());
     }
 
 class ThreadWin32 : public ThreadInterface
