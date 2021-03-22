@@ -68,7 +68,12 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
         str::trim(envPath);
         if (!envPath.empty())
         {
-            schemaPaths.push_back(envPath);
+            // SIX_SCHEMA_PATH might be a search path
+            if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, sys::Filesystem::FileType::Directory))
+            {
+                // Nope; assume the caller can figure things out (existing behavior).
+                schemaPaths.push_back(envPath);
+            }
         }
         else if (os.exists(SIX_DEFAULT_SCHEMA_PATH))
         {
@@ -82,6 +87,36 @@ void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
     {
         loadDefaultSchemaPath(schemaPaths);
     }
+}
+
+static std::vector<std::string> check_whether_paths_exist(const std::vector<std::string>& paths)
+{
+    // If the paths we have don't exist, throw
+    std::string does_not_exist_path;
+    std::vector<std::string> exist_paths;
+    for (const auto& path : paths)
+    {
+        if (!fs::exists(path))
+        {
+            // record the first "not found" path
+            if (does_not_exist_path.empty())
+            {
+                does_not_exist_path = path;
+            }
+        }
+        else
+        {
+            exist_paths.push_back(path);
+        }
+    }
+    // If none of the paths exist, throw
+    if (exist_paths.empty() && !does_not_exist_path.empty())
+    {
+        std::ostringstream msg;
+        msg << does_not_exist_path << " does not exist!";
+        throw except::Exception(Ctxt(msg.str()));
+    }
+    return exist_paths;
 }
 
 //  NOTE: Errors are treated as detriments to valid processing
@@ -105,15 +140,7 @@ void XMLControl::validate(const xml::lite::Document* doc,
     }
 
     // If the paths we have don't exist, throw
-    for (size_t ii = 0; ii < paths.size(); ++ii)
-    {
-        if (!fs::exists(paths[ii]))
-        {
-            std::ostringstream msg;
-            msg << paths[ii] << " does not exist!";
-            throw except::Exception(Ctxt(msg.str()));
-        }
-    }
+    paths = check_whether_paths_exist(paths);
 
     // validate against any specified schemas
     if (!paths.empty())
