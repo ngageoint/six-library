@@ -48,7 +48,11 @@
 #define CODA_OSS_cpp17 (CODA_OSS_cplusplus >= 201703L)
 #define CODA_OSS_cpp20 (CODA_OSS_cplusplus >= 202002L)
 #define CODA_OSS_cpp23 0
-static_assert(CODA_OSS_cpp11, "Must compile with C++11 or greater.");
+
+// static_assert() is C++11
+#if !defined(CODA_OSS_cpp11) || (CODA_OSS_cpp11 <= 0)
+#error "Must compile with C++11 or greater."
+#endif
 
 // We've got various "replacements" (to a degree) for C++ library functionality
 // only available in later releases.  Adding these names to "std" is technically

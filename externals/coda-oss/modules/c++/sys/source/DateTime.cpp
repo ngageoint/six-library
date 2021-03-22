@@ -26,6 +26,7 @@
 
 #include <vector>
 #include <mutex>
+#include <stdexcept>
 
 #include <config/coda_oss_config.h>
 #include "except/Exception.h"
@@ -618,11 +619,21 @@ static inline int time_s(F f, tm* t, const time_t* numSecondsSinceEpoch)
 }
 int sys::details::localtime_s(tm* t, const time_t* numSecondsSinceEpoch)
 {
+    #if CODA_OSS_POSIX_SOURCE || _WIN32
+    (void)t; (void)numSecondsSinceEpoch;
+    throw std::logic_error("Should be calling OS-specific routine.");
+    #else
     return time_s(localtime, t, numSecondsSinceEpoch);
+    #endif
 }
 int sys::details::gmtime_s(tm* t, const time_t* numSecondsSinceEpoch)
 {
+    #if CODA_OSS_POSIX_SOURCE || _WIN32
+    (void)t; (void)numSecondsSinceEpoch;
+    throw std::logic_error("Should be calling OS-specific routine.");
+    #else
     return time_s(gmtime, t, numSecondsSinceEpoch);
+    #endif
 }
 
 void sys::DateTime::localtime(time_t numSecondsSinceEpoch, tm& t)
@@ -641,8 +652,9 @@ void sys::DateTime::localtime(time_t numSecondsSinceEpoch, tm& t)
     const auto errnum = ::localtime_s(&t, &numSecondsSinceEpoch);
     if (errnum != 0)
     {
-        throw except::Exception(Ctxt("localtime_s() failed (" +
-            std::string(::strerror(errnum)) + ")"));
+        char buffer[1024];
+        strerror_s(buffer, errnum);
+        throw except::Exception(Ctxt("localtime_s() failed (" + std::string(buffer) + ")"));
     }
 #else
     const auto errnum = sys::details::localtime_s(&t, &numSecondsSinceEpoch);
@@ -670,8 +682,9 @@ void sys::DateTime::gmtime(time_t numSecondsSinceEpoch, tm& t)
     const auto errnum = ::gmtime_s(&t, &numSecondsSinceEpoch);
     if (errnum != 0)
     {
-        throw except::Exception(Ctxt("gmtime_s() failed (" +
-            std::string(::strerror(errnum)) + ")"));
+        char buffer[1024];
+        strerror_s(buffer, errnum);
+        throw except::Exception(Ctxt("gmtime_s() failed (" + std::string(buffer) + ")"));
     }
 #else
     const auto errnum = sys::details::gmtime_s(&t, &numSecondsSinceEpoch);
@@ -681,4 +694,24 @@ void sys::DateTime::gmtime(time_t numSecondsSinceEpoch, tm& t)
             std::string(::strerror(errnum)) + ")"));
     }
 #endif
+}
+
+int64_t sys::DateTime::getEpochSeconds() noexcept
+{
+    // https://en.cppreference.com/w/cpp/chrono/c/time_t
+    // Although not defined, this is almost always an integral value holding the number of seconds (not counting leap seconds)
+    // since 00:00, Jan 1 1970 UTC, corresponding to POSIX time.
+    // https://en.cppreference.com/w/cpp/chrono/c/time
+    const time_t result = std::time(nullptr);
+    size_t sizeof_time_t = sizeof(time_t); // "conditional expression is constant"
+    if (sizeof_time_t == sizeof(int64_t))
+    {
+        return static_cast<int64_t>(result);
+    }
+    if (sizeof_time_t == sizeof(int32_t))
+    {
+        return static_cast<int32_t>(result);
+    }
+    static_assert(sizeof(time_t) >= sizeof(int32_t), "should have at least a 32-bit time_t");
+    return -1;
 }

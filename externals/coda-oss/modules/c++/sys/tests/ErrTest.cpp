@@ -28,8 +28,18 @@ int main(int, char**)
 {
     try
     {
+        #ifdef _MSC_VER
+        #pragma warning(push)
+        #pragma warning(disable: 4996) // '...': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        #endif
+
         // open non-existant file
         FILE* f = fopen("supercalifragilisticexpialidocious.tmpl", "r");
+
+        #ifdef _MSC_VER
+        #pragma warning(pop)
+        #endif
+
         
         if (!f) throw except::Exception(Ctxt("File not Found! That's weird!?"));
     }

@@ -7,7 +7,6 @@ out/build/
 out/install/
 _deps/
 CMakeFiles/
-*.cmake
 CMakeCache.txt
 CMakeSettings.json
 
