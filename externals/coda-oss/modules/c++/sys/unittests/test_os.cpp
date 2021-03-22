@@ -191,7 +191,7 @@ TEST_CASE(testSplitEnv)
     TEST_ASSERT_GREATER(paths.size(), 0);
     paths.clear();
     result = os.splitEnv(pathEnvVar, paths, sys::Filesystem::FileType::Regular);
-    TEST_ASSERT_TRUE(result);
+    TEST_ASSERT_FALSE(result);
     TEST_ASSERT_TRUE(paths.empty());
 
     const std::string notFoundEnvVar = "CODA_OSS_SOME_VAR_THAT_WE_KNOW_WONT_BE_SET";

@@ -711,27 +711,7 @@ std::vector<path_components> expand(const std::vector<expanded_component>& expan
 static std::string expandTilde()
 {
     static const sys::OS os;
-
-    #ifdef _WIN32
-    constexpr auto home = "USERPROFILE";
-    #else  // assuming *nix
-    // Is there a better way to support ~ on *nix than $HOME ?
-    constexpr auto home = "HOME";
-    #endif
-
-    std::vector<std::string> paths;
-    if (!os.splitEnv(home, paths, sys::Filesystem::FileType::Directory))
-    {
-        // something is horribly wrong
-        throw except::FileNotFoundException(Ctxt(home));
-    }
-
-    if (paths.size() != 1)
-    {
-        // somebody set HOME to multiple directories ... why?
-        throw except::FileNotFoundException(Ctxt(home));
-    }
-    return paths[0];
+    return os.getSpecialEnv("HOME"); // getSpecialEnv manages $HOME vs. %USERPROFILE%
 }
 
 static std::vector<std::string> expandedEnvironmentVariables_(const std::string& path_, bool& specialPath)

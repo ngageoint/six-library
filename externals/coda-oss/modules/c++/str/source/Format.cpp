@@ -24,22 +24,32 @@
 #include "str/Format.h"
 #include <stdio.h>
 
-std::string str::format(const char *format, ...)
+
+static std::string vformat(const char* format, va_list& args)
 {
     char buffer[1024];
+#if !_WIN32
+    vsprintf(buffer, format, args);
+#else
+    vsprintf_s(buffer, format, args);
+#endif
+    return std::string(buffer);
+}
+
+std::string str::format(const char *format, ...)
+{
     va_list args;
     va_start(args, format);
-    vsprintf(buffer, format, args);
+    auto retval = vformat(format, args);
     va_end(args);
-    return std::string(buffer);
+    return retval;
 }
 
 str::Format::Format(const char* format, ...)
 {
-    char buffer[1024];
     va_list args;
     va_start(args, format);
-    vsprintf(buffer, format, args);
+    auto result = vformat(format, args);
     va_end(args);
-    mString = buffer;
+    mString = std::move(result);
 }

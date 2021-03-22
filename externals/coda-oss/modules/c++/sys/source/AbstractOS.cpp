@@ -208,7 +208,7 @@ static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vect
             result.push_back(val);
         }
     }
-    return true;
+    return !result.empty(); // false for no matches
 }
 bool AbstractOS::splitEnv(const std::string& envVar, std::vector<std::string>& result, Filesystem::FileType type) const
 {
@@ -277,6 +277,33 @@ static std::string getSpecialEnv_USER(const AbstractOS& os, const std::string& e
     #endif
 }
 
+static std::string getSpecialEnv_HOME(const AbstractOS& os, const std::string& envVar)
+{
+    // $HOME on *nix, %USERPROFILE% on Windows; make it so either one always works
+    assert((envVar == "HOME") || (envVar == "USERPROFILE"));
+
+    #ifdef _WIN32
+    constexpr auto home = "USERPROFILE";
+    #else  // assuming *nix
+    // Is there a better way to support ~ on *nix than $HOME ?
+    constexpr auto home = "HOME";
+    #endif
+
+    std::vector<std::string> paths;
+    if (!os.splitEnv(home, paths, sys::Filesystem::FileType::Directory))
+    {
+        // something is horribly wrong
+        throw except::FileNotFoundException(Ctxt(home));
+    }
+
+    if (paths.size() != 1)
+    {
+        // somebody set HOME to multiple directories ... why?
+        throw except::FileNotFoundException(Ctxt(home));
+    }
+    return paths[0];
+}
+
 static std::string getSpecialEnv_Configuration(const AbstractOS&, const std::string& envVar)
 {
     assert(envVar == "Configuration");
@@ -325,6 +352,7 @@ static const std::map<std::string, get_env_fp> s_get_env{
                                                     {"$", getSpecialEnv_PID}, {"PID", getSpecialEnv_PID},
                                                     {"PWD", nullptr},
                                                     {"USER", getSpecialEnv_USER}, {"USERNAME", getSpecialEnv_USER},
+                                                    {"HOME", getSpecialEnv_HOME}, {"USERPROFILE", getSpecialEnv_HOME},
                                                     {"EPOCHSECONDS", nullptr},
                                                     {"HOSTNAME", nullptr},
                                                     {"HOSTTYPE", getSpecialEnv_Platform}, // x86_64
