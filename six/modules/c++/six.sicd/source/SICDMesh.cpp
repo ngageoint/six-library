@@ -23,15 +23,9 @@
 
 #include <numeric>
 
-#include <sys/Bit.h>
+#include <std/bit>
 
 #include <six/Serialize.h>
-
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace six
 {

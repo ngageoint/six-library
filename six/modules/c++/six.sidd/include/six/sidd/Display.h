@@ -22,7 +22,8 @@
 #ifndef __SIX_DISPLAY_H__
 #define __SIX_DISPLAY_H__
 
-#include <sys/Optional.h>
+#include <std/optional>
+
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
 

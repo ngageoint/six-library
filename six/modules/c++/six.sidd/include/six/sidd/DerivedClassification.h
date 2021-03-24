@@ -22,7 +22,8 @@
 #ifndef __SIX_DERIVED_CLASSIFICATION_H__
 #define __SIX_DERIVED_CLASSIFICATION_H__
 
-#include <sys/Optional.h>
+#include <std/optional>
+
 #include <mem/ScopedCopyablePtr.h>
 
 #include "six/Classification.h"

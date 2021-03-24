@@ -22,13 +22,14 @@
 
 #include <sstream>
 
+#include <std/filesystem>
+
 #include "io/FileOutputStream.h"
 #include "sys/Path.h"
 #include "scene/GridECEFTransform.h"
 #include "scene/Utilities.h"
 #include "six/sidd/GeoTIFFWriteControl.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 #if !defined(SIX_TIFF_DISABLED)

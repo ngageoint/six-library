@@ -25,6 +25,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <std/filesystem>
+
 #include <six/sicd/CropUtils.h>
 
 #include <cli/ArgumentParser.h>
@@ -35,7 +37,6 @@
 #include <six/XMLControlFactory.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace

@@ -25,10 +25,11 @@
 #include <sstream>
 #include <string>
 
+#include <std/bit>
+
 #include <io/ByteStream.h>
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
-#include <sys/Bit.h>
 
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
