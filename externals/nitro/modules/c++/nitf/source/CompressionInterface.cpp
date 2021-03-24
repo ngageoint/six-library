@@ -100,13 +100,13 @@ NITF_BOOL CompressionInterface::adapterWriteBlock(
 NITF_BOOL CompressionInterface::adapterWriteBlock(
     nitf_CompressionControl* object,
     nitf_IOInterface* io,
-    const std::byte* data_,
+    const std::byte* data,
     NITF_BOOL pad,
     NITF_BOOL noData,
     nitf_Error* error)
 {
-    const auto data = reinterpret_cast<const uint8_t*>(data_);
-    return adapterWriteBlock(object, io, data, pad, noData, error);
+    const void* const data_ = data;
+    return adapterWriteBlock(object, io, static_cast<const uint8_t*>(data_), pad, noData, error);
 }
 
 NITF_BOOL CompressionInterface::adapterEnd(

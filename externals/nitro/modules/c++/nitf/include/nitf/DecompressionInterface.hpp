@@ -138,7 +138,8 @@ struct Decompressor
     virtual void freeBlock(uint8_t* block) = 0;
     virtual void freeBlock(std::byte* block)
     {
-        freeBlock(reinterpret_cast<uint8_t*>(block));
+        void* block_ = block;
+        freeBlock(static_cast<uint8_t*>(block_));
     }
 };
 

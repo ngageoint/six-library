@@ -9,6 +9,9 @@
 
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
 
+// changing this breaks SWIG
+#pragma warning (disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...'
+
 // TODO: get rid of these someday?
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed

@@ -22,15 +22,21 @@
 
 #pragma once
 
+#include <std/bit> // std::endian
+#include <std/cstddef> // std::byte
+#include <std/filesystem>
+#include <std/span>
+
 // Setup coda-oss for our use
-#define CODA_OSS_AUGMENT_std_namespace 1 // add to std:: namespace
+// Each/any of the above should #define CODA_OSS_AUGMENT_std_namespace to 1
+#if !CODA_OSS_AUGMENT_std_namespace
+#error "coda-oss is mis-configured."
+#endif
+
+
 //#define CODA_OSS_Throwable_isa_std_exception 1 // except::Throwable derives from std::exception
 #include <sys/Conf.h>
 #include <except/Throwable.h>
-
-#include <sys/Bit.h> // std::endian
-#include <sys/CStdDef.h> // std::byte
-#include <sys/Filesystem.h> // std::filesystem
 
 //--------------------------------------------------------------
 #include <import/except.h>

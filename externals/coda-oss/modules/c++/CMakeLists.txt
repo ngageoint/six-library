@@ -72,4 +72,5 @@ add_subdirectory("math.linear")
 add_subdirectory("math.poly")
 add_subdirectory("numpyutils")
 add_subdirectory("gsl")
+add_subdirectory("std")
 

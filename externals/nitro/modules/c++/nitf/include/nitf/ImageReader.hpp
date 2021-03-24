@@ -111,11 +111,13 @@ public:
     void read(const nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
     void read(const nitf::SubWindow & subWindow, sys::byte** user, int * padded)
     {
-        read(subWindow, reinterpret_cast<uint8_t**>(user), padded);
+        void* user_ = user;
+        read(subWindow, static_cast<uint8_t**>(user_), padded);
     }
     void read(const nitf::SubWindow& subWindow, std::byte** user, int* padded)
     {
-        read(subWindow, reinterpret_cast<uint8_t**>(user), padded);
+        void* user_ = user;
+        read(subWindow, static_cast<uint8_t**>(user_), padded);
     }
 
     /*!

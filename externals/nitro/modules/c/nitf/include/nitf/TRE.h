@@ -64,11 +64,7 @@ NITF_CXX_GUARD
 /* Control values that are put in the TREDescription data_type field */
 enum
 {
-    NITF_LOOP = 
-#ifdef __cplusplus
-    (int) nitf_FieldType::
-#endif
-    NITF_BINARY + 1,    /*!< data_type control loop */
+    NITF_LOOP = NITF_BINARY + 1,    /*!< data_type control loop */
     NITF_ENDLOOP,                   /*!< data_type control end loop */
     NITF_IF,                        /*!< data_type control if */
     NITF_ENDIF,                     /*!< data_type control endif */
