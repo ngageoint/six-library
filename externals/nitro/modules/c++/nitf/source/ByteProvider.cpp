@@ -572,8 +572,8 @@ void ByteProvider::getBytes(const void* imageData,
 
 static std::span<const std::byte> make_span(const std::vector<sys::byte>& v)
 {
-    auto pData = reinterpret_cast<const std::byte*>(v.data());
-    return gsl::make_span(pData, v.size());
+    const void* const pData = v.data();
+    return gsl::make_span(static_cast<const std::byte*>(pData), v.size());
 }
 
 void nitf::ByteProvider::getFileHeader(std::span<const std::byte>& result) const

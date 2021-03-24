@@ -25,7 +25,7 @@
 #include <sys/Path.h>
 #include <sys/Filesystem.h>
 
-namespace fs = coda_oss::filesystem;
+namespace fs = sys::Filesystem;
 
 namespace sys
 {

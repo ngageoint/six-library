@@ -23,11 +23,12 @@
 #include <cmath>
 #include <limits>
 
+#include <std/filesystem>
+
 #include "Error.h"
 #include <six/NITFReadControl.h>
 #include <six/csm/SIXSensorModel.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 

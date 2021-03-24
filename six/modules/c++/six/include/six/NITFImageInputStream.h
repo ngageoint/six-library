@@ -22,13 +22,14 @@
 #ifndef __SIX_NITF_IMAGE_INPUT_STREAM_H__
 #define __SIX_NITF_IMAGE_INPUT_STREAM_H__
 
+#include <std/span>
+
 #include <scene/sys_Conf.h>
 #include <import/six.h>
 #include <import/nitf.hpp>
 #include <import/io.h>
 
 #include <mem/ScopedArray.h>
-#include <mem/Span.h>
 
 namespace six
 {

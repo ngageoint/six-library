@@ -3338,11 +3338,15 @@ NITFPROT(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf)
                                                  &error);
     }
 
-    if (nitfp->decompressionControl != NULL)
-        (*(nitfp->decompressor->destroyControl))(&(nitfp->decompressionControl));
+    /* Have a plugin with "destructor" */
+    if ((nitfp->decompressor != NULL) && (nitfp->decompressor->destroyControl != NULL))
+    {
+        if (nitfp->decompressionControl != NULL)
+            (*(nitfp->decompressor->destroyControl))(&(nitfp->decompressionControl));
 
-    if (nitfp->compressionControl != NULL)
-        (*(nitfp->compressor->destroyControl))(&(nitfp->compressionControl));
+        if (nitfp->compressionControl != NULL)
+            (*(nitfp->compressor->destroyControl))(&(nitfp->compressionControl));
+    }
 
     NITF_FREE(nitfp);
     *nitf = NULL;
@@ -6841,21 +6845,20 @@ NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
                                                  nitf_IOInterface* io,
                                                  nitf_Error * error)
 {
-    _nitf_ImageIO *nitf; /* Parent _nitf_ImageIO object */
     uint32_t nBlockCols;   /* Number of block columns */
     uint32_t numRowsFull; /* Number of rows to read in full res sub-window */
     uint32_t numBands;     /* Number of bands */
     uint32_t col;          /* Block column index */
     uint32_t row;          /* Current row in sub-window */
     uint32_t band;         /* Current band in sub-window */
-    _nitf_ImageIOBlock *blockIO; /* The current  block IO structure */
+    _nitf_ImageIOBlock *blockIO = NULL; /* The current  block IO structure */
     uint8_t *columnSave;   /* Column save buffer ptr,current block column */
     NITF_BOOL noUserInc;      /* Do not increment user buffer pointer if TRUE */
     uint32_t bytes;        /* Pixel size in bytes */
     uint32_t rowSkipCount; /* Number of rows since the last row skip */
-    uint32_t numColsDR;    /* Number of columns, down-sample resolution */
+    uint32_t numColsDR = 0;    /* Number of columns, down-sample resolution */
 
-    nitf = cntl->nitf;
+    _nitf_ImageIO* nitf = cntl->nitf; /* Parent _nitf_ImageIO object */
 
     /*
      * Calculate the number of rows to read (full resolution). Check for the
@@ -6874,8 +6877,6 @@ NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
     noUserInc = 1; /* Only increment after calling down-sample plugin */
     rowSkipCount = 0;
 
-    blockIO = NULL; /* Avoid spurious uninitialized warning */
-    numColsDR = 0;  /* Avoid spurious uninitialized warning */
     for (col = 0; col < nBlockCols; col++)
     {
         columnSave = cntl->columnSave;

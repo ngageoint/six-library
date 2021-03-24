@@ -22,7 +22,8 @@
 #ifndef __SCENE_PROJECTION_MODEL_H__
 #define __SCENE_PROJECTION_MODEL_H__
 
-#include <sys/Optional.h>
+#include <std/optional>
+
 #include <math/poly/OneD.h>
 #include <math/poly/TwoD.h>
 

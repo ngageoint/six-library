@@ -39,57 +39,8 @@ namespace sys
 {
     using Char8_T = str::Char8_T;
     using U8string = str::U8string;
+   #define CODA_OSS_sys_Char8_T 201907L // c.f., __cpp_lib_char8_t
 }
 #endif  // CODA_OSS_sys_U8string_DEFINED_
-
-#ifndef CODA_OSS_DEFINE_std_u8string_
-    // MSVC only sets __cplusplus >199711L with the /Zc:__cplusplus command-line option.
-    // https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
-    #if (__cplusplus >= 202002L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 202002L)) || CODA_OSS_cpp20
-        #if defined(__cpp_lib_char8_t) && (__cpp_lib_char8_t < 201907)
-            #error "Wrong value for __cpp_lib_char8_t."
-        #endif
-        #define CODA_OSS_DEFINE_std_u8string_ 0  // part of C++20
-        #define CODA_OSS_lib_char8_t 1
-    #else
-        #define CODA_OSS_DEFINE_std_u8string_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
-    #endif  // __cplusplus
-#endif  // CODA_OSS_DEFINE_std_u8string_
-
-#if CODA_OSS_DEFINE_std_u8string_ == 1
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        #if defined(_MSC_VER) && (_MSC_VER >= 1927)
-        #pragma warning(push)
-        #pragma warning(disable: 5052) // Keyword '...' was introduced in C++ 20 and requires use of the '...' command-line option
-        #endif
-        using char8_t = ::str::Char8_T;
-        #if defined(_MSC_VER) && (_MSC_VER >= 1927)
-        #pragma warning(pop)
-        #endif
-        using u8string = ::str::U8string;
-    }
-    #define CODA_OSS_lib_char8_t 1
-#endif  // CODA_OSS_DEFINE_std_u8string_
-
-namespace coda_oss
-{
-    #if defined(_MSC_VER) && (_MSC_VER >= 1927)
-    #pragma warning(push)
-    #pragma warning(disable: 5052) // Keyword '...' was introduced in C++ 20 and requires use of the '...' command-line option
-    #endif
-
-    #if CODA_OSS_lib_char8_t
-    using char8_t = std::char8_t;
-    using u8string = std::u8string;
-    #else
-    using char8_t = ::str::Char8_T;
-    using u8string = ::str::U8string;
-    #endif
-
-    #if defined(_MSC_VER) && (_MSC_VER >= 1927)
-    #pragma warning(pop)
-    #endif
-}
 
 #endif  // CODA_OSS_str_String__h_INCLUDED_

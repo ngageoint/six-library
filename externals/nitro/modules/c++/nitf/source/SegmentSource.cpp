@@ -45,7 +45,7 @@ SegmentMemorySource::SegmentMemorySource(const std::string& data,
 template<>
 SegmentMemorySource::SegmentMemorySource(const std::span<const sys::byte>& data, nitf::Off start,
     int byteSkip, bool copyData)
-    : SegmentMemorySource(reinterpret_cast<const char*>(data.data()), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
+    : SegmentMemorySource(data.data(), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
 {
 }
 template<>

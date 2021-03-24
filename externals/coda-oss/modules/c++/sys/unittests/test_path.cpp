@@ -27,7 +27,7 @@
 #include <sys/Filesystem.h>
 #include "TestCase.h"
 
-namespace fs = coda_oss::filesystem;
+namespace fs = sys::Filesystem;
 
 namespace
 {

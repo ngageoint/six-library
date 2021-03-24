@@ -26,7 +26,7 @@
 #include <cmath>
 #include "sys/File.h"
 
-void sys::File::create(const coda_oss::filesystem::path& str_,
+void sys::File::create(const sys::Filesystem::path& str_,
                        int accessFlags,
                        int creationFlags)
 {
