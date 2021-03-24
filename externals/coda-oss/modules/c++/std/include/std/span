@@ -27,4 +27,6 @@
 #define CODA_OSS_AUGMENT_std_span_ 1
 #include "mem/Span.h"
 
+static_assert(CODA_OSS_lib_span >= 202002, "missing std::span");
+
 #endif  // CODA_OSS_std_span_INCLUDED_

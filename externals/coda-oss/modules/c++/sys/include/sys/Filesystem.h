@@ -159,10 +159,10 @@ bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exi
     {
         namespace filesystem = ::sys::Filesystem;
     }
-    #define CODA_OSS_lib_filesystem 1
+    #define CODA_OSS_lib_filesystem 201703
 #elif CODA_OSS_DEFINE_std_filesystem_ == -1 // set above
     #include <filesystem>
-    #define CODA_OSS_lib_filesystem 1
+    #define CODA_OSS_lib_filesystem 201703
 #endif  // CODA_OSS_DEFINE_std_filesystem_
 
 #if CODA_OSS_cpp17 || ( CODA_OSS_DEFINE_std_filesystem_ == 1) // sanity check on above

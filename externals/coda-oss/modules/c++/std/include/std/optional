@@ -27,4 +27,6 @@
 #define CODA_OSS_AUGMENT_std_optional_ 1
 #include "sys/Optional.h"
 
+static_assert(CODA_OSS_lib_optional >= 201606, "missing std::optional");
+
 #endif  // CODA_OSS_std_optional_INCLUDED_

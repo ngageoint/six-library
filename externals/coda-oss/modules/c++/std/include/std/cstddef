@@ -27,4 +27,6 @@
 #define CODA_OSS_AUGMENT_std_byte_ 1
 #include "sys/CStdDef.h"
 
+static_assert(CODA_OSS_lib_byte >= 201603, "missing std::byte");
+
 #endif  // CODA_OSS_std_cstddef_INCLUDED_
