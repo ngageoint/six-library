@@ -1,7 +1,7 @@
 NAME            = 'mem'
 VERSION         = '1.0'
 MODULE_DEPS     = 'sys gsl'
-TEST_DEPS       = 'cli'
+TEST_DEPS       = 'cli std'
 
 options = configure = distclean = lambda p: None
 
