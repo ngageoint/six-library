@@ -24,9 +24,10 @@
 
 #include <array>
 
+#include <std/bit> // std::endian
+#include <std/cstddef>
+
 #include <sys/Conf.h>
-#include <sys/Bit.h>
-#include <sys/CStdDef.h>
 
 namespace
 {
@@ -106,14 +107,14 @@ template<typename TEndian>
 static void testEndianness_std_(const std::string& testName)
 {
     /*const*/ auto native = TEndian::native; // "const" causes "conditional expression is constant."
-    auto endianness = coda_oss::endian::native;  // "conditional expression is constant"
+    auto endianness = sys::Endian::native;  // "conditional expression is constant"
     if (native == TEndian::big)
     {
-        TEST_ASSERT(endianness == coda_oss::endian::big);
+        TEST_ASSERT(endianness == sys::Endian::big);
     }
     else if (native == TEndian::little)
     {
-        TEST_ASSERT(endianness == coda_oss::endian::little);
+        TEST_ASSERT(endianness == sys::Endian::little);
     }
     else
     {
@@ -123,10 +124,7 @@ static void testEndianness_std_(const std::string& testName)
 TEST_CASE(testEndianness_std)
 {
     testEndianness_std_<sys::Endian>(testName);
-    testEndianness_std_<coda_oss::endian>(testName);
-    #if CODA_OSS_lib_endian
     testEndianness_std_<std::endian>(testName);
-    #endif
 }
 
 template <typename TByte>
@@ -150,7 +148,7 @@ static void test_byte_(const std::string& testName)
 TEST_CASE(testByte)
 {
     test_byte_<sys::Byte>(testName);
-    test_byte_<coda_oss::byte>(testName);
+    test_byte_<std::byte>(testName);
     #if CODA_OSS_lib_byte
     test_byte_<std::byte>(testName);
     #endif

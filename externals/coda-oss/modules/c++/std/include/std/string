@@ -23,10 +23,41 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#undef CODA_OSS_AUGMENT_std_u8string_
-#define CODA_OSS_AUGMENT_std_u8string_ 1
-#include "sys/String.h"
 
-static_assert(CODA_OSS_lib_char8_t >= 201907, "missing std::char8_t");
+#include "sys/String.h"
+static_assert(CODA_OSS_sys_Char8_T >= 201907L, "missing sys::Char8_T");
+
+#ifndef CODA_OSS_AUGMENT_std_u8string_
+    #define CODA_OSS_AUGMENT_std_u8string_ 1
+#endif
+
+// MSVC only sets __cplusplus >199711L with the /Zc:__cplusplus command-line option.
+// https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
+#if (__cplusplus >= 202002L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 202002L)) || CODA_OSS_cpp20
+    #define CODA_OSS_DEFINE_std_u8string_ -1  // OK to #include <>, below
+#else
+    #define CODA_OSS_DEFINE_std_u8string_ CODA_OSS_AUGMENT_std_u8string_ 
+#endif  // __cplusplus
+
+#if CODA_OSS_DEFINE_std_u8string_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        #if defined(_MSC_VER) && (_MSC_VER >= 1927)
+        #pragma warning(push)
+        #pragma warning(disable: 5052) // Keyword '...' was introduced in C++ 20 and requires use of the '...' command-line option
+        #endif
+        using char8_t = ::str::Char8_T;
+        #if defined(_MSC_VER) && (_MSC_VER >= 1927)
+        #pragma warning(pop)
+        #endif
+        using u8string = ::str::U8string;
+    }
+    #define CODA_OSS_char8_t CODA_OSS_sys_Char8_T
+#elif CODA_OSS_DEFINE_std_u8string_ == -1  // set above
+    #include <string>
+    #ifndef __cpp_lib_char8_t
+        #define __cpp_lib_char8_t 201907L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
+#endif  // CODA_OSS_DEFINE_std_u8string_
 
 #endif  // CODA_OSS_std_string_INCLUDED_

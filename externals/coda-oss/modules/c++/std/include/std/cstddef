@@ -23,10 +23,31 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#undef CODA_OSS_AUGMENT_std_byte_
-#define CODA_OSS_AUGMENT_std_byte_ 1
-#include "sys/CStdDef.h"
 
-static_assert(CODA_OSS_lib_byte >= 201603, "missing std::byte");
+#include "sys/CStdDef.h"
+static_assert(CODA_OSS_sys_Byte >= 201603L, "missing sys::Byte");
+
+#ifndef CODA_OSS_AUGMENT_std_byte_
+    #define CODA_OSS_AUGMENT_std_byte_ 1
+#endif
+
+#if CODA_OSS_cpp17
+    #define CODA_OSS_DEFINE_std_byte_ -1  // OK to #include <>, below
+#else
+    #define CODA_OSS_DEFINE_std_byte_ CODA_OSS_AUGMENT_std_byte_ 
+#endif  // CODA_OSS_cpp17
+
+#if CODA_OSS_DEFINE_std_byte_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        using byte = sys::Byte;
+    }
+    #define CODA_OSS_lib_byte CODA_OSS_sys_Byte
+#elif CODA_OSS_DEFINE_std_byte_ == -1  // set above
+    #include <cstddef>
+    #ifndef __cpp_lib_byte
+        #define __cpp_lib_byte 201603L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
+#endif  // CODA_OSS_DEFINE_std_byte_
 
 #endif  // CODA_OSS_std_cstddef_INCLUDED_

@@ -64,7 +64,7 @@ public:
      *  \param outputFile The file name
      *  \param creationFlags  see sys::File
      */
-    FileOutputStreamOS(const coda_oss::filesystem::path& outputFile,
+    FileOutputStreamOS(const sys::Filesystem::path& outputFile,
                        int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
 
 
@@ -91,7 +91,7 @@ public:
      *  \param file The file to open
      *  \param creationFlags see sys::File
      */
-    virtual void create(const coda_oss::filesystem::path& str,
+    virtual void create(const sys::Filesystem::path& str,
                         int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
 
     //!  Close the file

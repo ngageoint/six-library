@@ -23,10 +23,31 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#undef CODA_OSS_AUGMENT_std_endian_
-#define CODA_OSS_AUGMENT_std_endian_ 1
-#include "sys/Bit.h"
 
-static_assert(CODA_OSS_lib_endian >= 201703, "missing std::endian");
+#include "sys/Bit.h"
+static_assert(CODA_OSS_sys_Endian >= 201907L, "missing sys::Endian");
+
+#ifndef CODA_OSS_AUGMENT_std_endian_
+    #define CODA_OSS_AUGMENT_std_endian_ 1
+#endif
+
+#if CODA_OSS_cpp20
+    #define CODA_OSS_DEFINE_std_endian_ -1  // OK to #include <>, below
+#else
+    #define CODA_OSS_DEFINE_std_endian_ CODA_OSS_AUGMENT_std_endian_
+#endif  // CODA_OSS_cpp20
+
+#if CODA_OSS_DEFINE_std_endian_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        using endian = ::sys::Endian;
+    }
+    #define CODA_OSS_lib_endian CODA_OSS_sys_Endian
+#elif CODA_OSS_DEFINE_std_endian_ == -1  // set above
+    #include <bit>
+    #ifndef __cpp_lib_endian
+        #define __cpp_lib_endian 201907L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
+#endif  // CODA_OSS_DEFINE_std_endian_
 
 #endif  // CODA_OSS_std_bit_INCLUDED_

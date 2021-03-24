@@ -23,10 +23,39 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#undef CODA_OSS_AUGMENT_std_filesystem_
-#define CODA_OSS_AUGMENT_std_filesystem_ 1
-#include "sys/Filesystem.h"
 
-static_assert(CODA_OSS_lib_filesystem >= 201703, "missing std::filesystem");
+#include "sys/Filesystem.h"
+static_assert(CODA_OSS_sys_Filesystem >= 201703L, "missing sys::Filesystem");
+
+#ifndef CODA_OSS_AUGMENT_std_filesystem_
+    #define CODA_OSS_AUGMENT_std_filesystem_ 1
+#endif
+
+#if CODA_OSS_cpp17
+    // Some versions of G++ say they're C++17 but don't have <filesystem>
+    #if __has_include(<filesystem>)
+        #if defined(__cpp_lib_filesystem) && (__cpp_lib_filesystem < 201703L)
+            #error "Wrong value for __cpp_lib_filesystem."
+        #endif
+        #define CODA_OSS_DEFINE_std_filesystem_ -1  // OK to #include <>, below
+    #else
+        #define CODA_OSS_DEFINE_std_filesystem_ 1 // "must" have std::filesystem w/C++17
+    #endif // __has_include
+#else
+    #define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_filesystem_
+#endif
+
+#if CODA_OSS_DEFINE_std_filesystem_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        namespace filesystem = ::sys::Filesystem;
+    }
+    #define CODA_OSS_lib_filesystem CODA_OSS_sys_Filesystem
+#elif CODA_OSS_DEFINE_std_filesystem_ == -1 // set above
+    #include <filesystem>
+    #ifndef __cpp_lib_filesystem
+        #define __cpp_lib_filesystem 201703L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
+#endif  // CODA_OSS_DEFINE_std_filesystem_
 
 #endif  // CODA_OSS_std_filesystem_INCLUDED_

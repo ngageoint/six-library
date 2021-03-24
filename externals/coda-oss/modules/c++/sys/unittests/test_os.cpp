@@ -27,6 +27,8 @@
 #include <numeric> // std::accumulate
 #include <string>
 
+#include <std/filesystem>
+
 #include <sys/OS.h>
 #include <sys/Path.h>
 #include <sys/Filesystem.h>
@@ -35,7 +37,7 @@
 #include <sys/DateTime.h>
 #include "TestCase.h"
 
-namespace fs = coda_oss::filesystem;
+namespace fs = sys::Filesystem;
 
 namespace
 {
@@ -243,7 +245,7 @@ static void testFsExtension_(const std::string& testName)
 TEST_CASE(testFsExtension)
 {
     testFsExtension_<sys::Filesystem::path>(testName);
-    testFsExtension_<coda_oss::filesystem::path>(testName);
+    testFsExtension_<std::filesystem::path>(testName);
     #if CODA_OSS_lib_filesystem
     testFsExtension_<std::filesystem::path>(testName);
     #endif
@@ -265,7 +267,7 @@ static void testFsOutput_(const std::string& testName)
 TEST_CASE(testFsOutput)
 {
     testFsOutput_<sys::Filesystem::path>(testName);
-    testFsOutput_<coda_oss::filesystem::path>(testName);
+    testFsOutput_<std::filesystem::path>(testName);
     #if CODA_OSS_lib_filesystem
     testFsOutput_<std::filesystem::path>(testName);
     #endif

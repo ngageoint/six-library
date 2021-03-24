@@ -57,7 +57,7 @@ public:
      * \param backupCount   The max number of backups
      * \param level         The minimum LogLevel
      */
-    RotatingFileHandler(const coda_oss::filesystem::path& fname, long maxBytes = 0,
+    RotatingFileHandler(const sys::Filesystem::path& fname, long maxBytes = 0,
                         int backupCount = 0, LogLevel level = LogLevel::LOG_NOTSET);
 
     virtual ~RotatingFileHandler();

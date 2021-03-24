@@ -57,13 +57,8 @@
 // We've got various "replacements" (to a degree) for C++ library functionality
 // only available in later releases.  Adding these names to "std" is technically
 // forbidden, but it makes for fewer (eventual) changes in client code.
-#ifndef CODA_OSS_AUGMENT_std_namespace
-    #if CODA_OSS_cpp20
-        #define CODA_OSS_AUGMENT_std_namespace 0  // nothing to add if we're at C++20
-    #else
-        #define CODA_OSS_AUGMENT_std_namespace 0
-        //#define CODA_OSS_AUGMENT_std_namespace 1
-    #endif
-#endif
+//
+// You can bring these into your code by #include'ng the file from "std"; e.g.,
+//    #include <std/span> // std::span
 
 #endif // CODA_OSS_sys_CPlusPlus_h_INCLUDED_

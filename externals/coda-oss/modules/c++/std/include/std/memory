@@ -23,10 +23,38 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#undef CODA_OSS_AUGMENT_std_make_unique_
-#define CODA_OSS_AUGMENT_std_make_unique_ 1
-#include "mem/SharedPtrCpp11.h"
 
-static_assert(CODA_OSS_lib_make_unique >= 201304, "missing std::make_unique");
+#include "mem/SharedPtrCpp11.h"
+static_assert(CODA_OSS_mem_make_unique >= 201304L, "missing mem::make::unique");
+
+#ifndef CODA_OSS_AUGMENT_std_make_unique_
+    #define CODA_OSS_AUGMENT_std_make_unique_ 1
+#endif
+
+#if CODA_OSS_cpp14
+    #define CODA_OSS_DEFINE_std_make_unique_ -1  // OK to #include <>, below
+#else
+    #define CODA_OSS_DEFINE_std_make_unique_ CODA_OSS_AUGMENT_std_make_unique_
+#endif  // CODA_OSS_cpp14
+
+#if CODA_OSS_DEFINE_std_make_unique_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+            template <typename T, typename... TArgs>
+            std::unique_ptr<T> make_unique(TArgs && ... args)
+            {
+                // let mem::make::unique to all the template magic
+                return mem::make::unique<T>(std::forward<TArgs>(args)...);
+            }
+    }
+    #define CODA_OSS_lib_make_unique 201304
+
+    #define CODA_OSS_lib_make_unique CODA_OSS_mem_make_unique
+#elif CODA_OSS_DEFINE_std_make_unique_ == -1  // set above
+    #include <memory>
+    #ifndef __cpp_lib_make_unique
+        #define __cpp_lib_make_unique 201304L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
+#endif  // CODA_OSS_DEFINE_std_make_unique_
 
 #endif  // CODA_OSS_std_memory_INCLUDED_
