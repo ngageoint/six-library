@@ -71,6 +71,11 @@
 #include <time.h>
 #include <stdint.h>
 
+#pragma warning(push)
+#pragma warning(disable: 5219) //  implicit conversion from '...' to '...', possible loss of data
+#include <complex>
+#pragma warning(pop)
+
 #include <string>
 #include <numeric>
 #include <limits>
