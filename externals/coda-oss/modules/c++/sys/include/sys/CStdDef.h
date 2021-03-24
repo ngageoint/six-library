@@ -24,7 +24,7 @@
 
 #include <cstddef>
 
-#include "Conf.h"
+#include "CPlusPlus.h"
 
 namespace sys
 {
@@ -32,15 +32,15 @@ namespace sys
     enum class Byte : unsigned char {};
 }
 
+#ifndef CODA_OSS_AUGMENT_std_byte_
+    #define CODA_OSS_AUGMENT_std_byte_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+#endif
 #ifndef CODA_OSS_DEFINE_std_byte_
     #if CODA_OSS_cpp17
-        #if defined(__cpp_lib_byte) && (__cpp_lib_byte < 201603)
-            #error "Wrong value for __cpp_lib_byte."
-        #endif
         #define CODA_OSS_DEFINE_std_byte_ 0  // part of C++17
-        #define CODA_OSS_lib_byte 1
+        #define CODA_OSS_lib_byte 201603
     #else
-        #define CODA_OSS_DEFINE_std_byte_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
+        #define CODA_OSS_DEFINE_std_byte_ CODA_OSS_AUGMENT_std_byte_ 
     #endif  // CODA_OSS_cpp17
 #endif  // CODA_OSS_DEFINE_std_byte_
 
@@ -49,7 +49,7 @@ namespace sys
     {
         using byte = sys::Byte;
     }
-    #define CODA_OSS_lib_byte 1
+    #define CODA_OSS_lib_byte 201603
 #endif  // CODA_OSS_DEFINE_std_byte_
 
 namespace coda_oss

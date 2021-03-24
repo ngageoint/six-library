@@ -42,17 +42,18 @@ namespace sys
 }
 #endif  // CODA_OSS_sys_U8string_DEFINED_
 
+
+#ifndef CODA_OSS_AUGMENT_std_u8string_
+    #define CODA_OSS_AUGMENT_std_u8string_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+#endif
 #ifndef CODA_OSS_DEFINE_std_u8string_
     // MSVC only sets __cplusplus >199711L with the /Zc:__cplusplus command-line option.
     // https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
     #if (__cplusplus >= 202002L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 202002L)) || CODA_OSS_cpp20
-        #if defined(__cpp_lib_char8_t) && (__cpp_lib_char8_t < 201907)
-            #error "Wrong value for __cpp_lib_char8_t."
-        #endif
         #define CODA_OSS_DEFINE_std_u8string_ 0  // part of C++20
-        #define CODA_OSS_lib_char8_t 1
+        #define CODA_OSS_lib_char8_t 201907
     #else
-        #define CODA_OSS_DEFINE_std_u8string_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
+        #define CODA_OSS_DEFINE_std_u8string_ CODA_OSS_AUGMENT_std_u8string_ 
     #endif  // __cplusplus
 #endif  // CODA_OSS_DEFINE_std_u8string_
 
@@ -69,7 +70,7 @@ namespace sys
         #endif
         using u8string = ::str::U8string;
     }
-    #define CODA_OSS_lib_char8_t 1
+    #define CODA_OSS_lib_char8_t 201907
 #endif  // CODA_OSS_DEFINE_std_u8string_
 
 namespace coda_oss

@@ -134,6 +134,9 @@ bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exi
 }
 }
 
+#ifndef CODA_OSS_AUGMENT_std_filesystem_
+    #define CODA_OSS_AUGMENT_std_filesystem_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+#endif
 #ifndef CODA_OSS_DEFINE_std_filesystem_
     #if CODA_OSS_cpp17
         // Some versions of G++ say they're C++17 but don't have <filesystem>
@@ -143,10 +146,10 @@ bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exi
             #endif
             #define CODA_OSS_DEFINE_std_filesystem_ -1  // OK to #include <>, below
         #else
-            #define CODA_OSS_DEFINE_std_filesystem_ 1 // must have std::filesystem w/C++17
+            #define CODA_OSS_DEFINE_std_filesystem_ 1 // "must" have std::filesystem w/C++17
         #endif // __has_include
     #else
-        #define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
+        #define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_filesystem_
     #endif
 #endif  // CODA_OSS_DEFINE_std_filesystem_
 

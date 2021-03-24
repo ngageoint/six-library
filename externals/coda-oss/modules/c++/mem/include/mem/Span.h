@@ -26,17 +26,14 @@
 #include "sys/CPlusPlus.h"
 #include "gsl/gsl_span_.h"
 
+#ifndef CODA_OSS_AUGMENT_std_span_
+    #define CODA_OSS_AUGMENT_std_span_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+#endif
 #ifndef CODA_OSS_DEFINE_std_span_
     #if CODA_OSS_cpp20
-        #if !__has_include(<span>)
-            #error "Missing <span>."
-        #endif
-        #if defined(__cpp_lib_span) && (__cpp_lib_span < 202002)
-            #error "Wrong value for __cpp_lib_span."
-        #endif
         #define CODA_OSS_DEFINE_std_span_ -1  // OK to #include <>, below
     #else
-        #define CODA_OSS_DEFINE_std_span_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+        #define CODA_OSS_DEFINE_std_span_ CODA_OSS_AUGMENT_std_span_
     #endif  // CODA_OSS_cpp20
 #endif // CODA_OSS_DEFINE_std_span_
 
@@ -46,10 +43,10 @@
         template<typename T>
         using span = gsl::span<T>;
     }
-    #define CODA_OSS_lib_span 1
+    #define CODA_OSS_lib_span 202002
 #elif CODA_OSS_DEFINE_std_span_ == -1  // set above
     #include <span>
-    #define CODA_OSS_lib_span 1
+    #define CODA_OSS_lib_span 202002
 #endif  // CODA_OSS_DEFINE_std_span_
 
 // Note that C++20 doesn't need "make_" helpers anymore!

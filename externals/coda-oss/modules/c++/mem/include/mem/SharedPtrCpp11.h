@@ -134,15 +134,15 @@ void unique(TArgs&&...) = delete;
 } // namespace mem
 
 
+#ifndef CODA_OSS_AUGMENT_std_make_unique_
+    #define CODA_OSS_AUGMENT_std_make_unique_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+#endif
 #ifndef CODA_OSS_DEFINE_std_make_unique_
     #if CODA_OSS_cpp14
-        #if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique < 201304)
-            #error "Wrong value for __cpp_lib_make_unique."
-        #endif
         #define CODA_OSS_DEFINE_std_make_unique_ 0  // part of C++14
-        #define CODA_OSS_lib_make_unique 1
+        #define CODA_OSS_lib_make_unique 201304
     #else
-        #define CODA_OSS_DEFINE_std_make_unique_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+        #define CODA_OSS_DEFINE_std_make_unique_ CODA_OSS_AUGMENT_std_make_unique_
     #endif  // CODA_OSS_cpp14
 #endif  // CODA_OSS_DEFINE_std_make_unique_
 
@@ -156,7 +156,7 @@ void unique(TArgs&&...) = delete;
                 return mem::make::unique<T>(std::forward<TArgs>(args)...);
             }
     }
-    #define CODA_OSS_lib_make_unique 1
+    #define CODA_OSS_lib_make_unique 201304
 #endif  // CODA_OSS_DEFINE_std_make_unique_
 
 namespace coda_oss

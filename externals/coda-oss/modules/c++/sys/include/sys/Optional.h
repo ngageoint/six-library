@@ -356,17 +356,14 @@ inline bool operator>=(const Optional<T>& opt, const U& value)
 
 }
 
+#ifndef CODA_OSS_AUGMENT_std_optional_
+    #define CODA_OSS_AUGMENT_std_optional_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+#endif
 #ifndef CODA_OSS_DEFINE_std_optional_
     #if CODA_OSS_cpp17
-        #if !__has_include(<optional>)
-            #error "Missing <optional>."
-        #endif
-        #if defined(__cpp_lib_optional) && (__cpp_lib_optional < 201606)
-            #error "Wrong value for __cpp_lib_optional."
-        #endif
         #define CODA_OSS_DEFINE_std_optional_ -1  // OK to #include <>, below
     #else
-        #define CODA_OSS_DEFINE_std_optional_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+        #define CODA_OSS_DEFINE_std_optional_ CODA_OSS_AUGMENT_std_optional_
     #endif  // CODA_OSS_cpp17
 #endif  // CODA_OSS_DEFINE_std_optional_
 
@@ -381,10 +378,10 @@ inline bool operator>=(const Optional<T>& opt, const U& value)
             return sys::make_Optional<T>(std::forward<TArgs>(args)...);
         }
     }
-    #define CODA_OSS_lib_optional 1
+    #define CODA_OSS_lib_optional 201606
 #elif CODA_OSS_DEFINE_std_optional_ == -1  // set above
     #include <optional>
-    #define CODA_OSS_lib_optional 1
+    #define CODA_OSS_lib_optional 201606
 #endif  // CODA_OSS_DEFINE_std_optional_
 
 namespace coda_oss

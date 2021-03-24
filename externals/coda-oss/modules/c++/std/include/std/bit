@@ -23,8 +23,8 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#undef CODA_OSS_AUGMENT_std_namespace
-#define CODA_OSS_AUGMENT_std_namespace 1
+#undef CODA_OSS_AUGMENT_std_endian_
+#define CODA_OSS_AUGMENT_std_endian_ 1
 #include "sys/Bit.h"
 
 #endif  // CODA_OSS_std_bit_INCLUDED_
