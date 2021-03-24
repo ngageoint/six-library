@@ -10,7 +10,17 @@
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 #pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
 #pragma warning(disable: 26490) // Don't use reinterpret_cast (type.1).
+
+#include <std/bit>
+#include <std/cstddef>
+#include <std/filesystem>
+#include <std/memory>
+#include <std/optional>
+#include <std/span>
+#include <std/string>
+
 #include <nitf/coda-oss.hpp>
+
 #include <import/sys.h>
 #include <import/io.h>
 #include <import/mt.h>

@@ -153,7 +153,7 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *
 
     /* fieldName */
     result->fieldName = nitf_strdup(source->fieldName);
-    if (!result->fieldName)
+    if ((source->fieldName) && (!result->fieldName))
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
                         NITF_CTXT, NITF_ERR_MEMORY);

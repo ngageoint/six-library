@@ -151,6 +151,10 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
         }
         for (band = 0; band < numImageBands; band++)
         {
+            user[band] = NULL; // initialize all to NULL for CLEANUP
+        }
+        for (band = 0; band < numImageBands; band++)
+        {
             user[band] = (uint8_t *) NITF_MALLOC(rowSize);
             if (!user[band])
             {
@@ -190,13 +194,15 @@ CATCH_ERROR:
     rc = NITF_FAILURE;
 
 CLEANUP:
-    for (band = 0; band < numImageBands; band++)
-    {
-        if (user != NULL && user[band] != NULL)
-            NITF_FREE(user[band]);
-    }
     if (user != NULL)
+    {
+        for (band = 0; band < numImageBands; band++)
+        {
+            if (user[band] != NULL)
+                NITF_FREE(user[band]);
+        }
         NITF_FREE(user);
+    }
     if(userContig != NULL)
         NITF_FREE(userContig);
     return rc;

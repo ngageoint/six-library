@@ -354,58 +354,7 @@ inline bool operator>=(const Optional<T>& opt, const U& value)
     return opt >= make_Optional<U>(value);
 }
 
-}
-
-#ifndef CODA_OSS_DEFINE_std_optional_
-    #if CODA_OSS_cpp17
-        #if !__has_include(<optional>)
-            #error "Missing <optional>."
-        #endif
-        #if defined(__cpp_lib_optional) && (__cpp_lib_optional < 201606)
-            #error "Wrong value for __cpp_lib_optional."
-        #endif
-        #define CODA_OSS_DEFINE_std_optional_ -1  // OK to #include <>, below
-    #else
-        #define CODA_OSS_DEFINE_std_optional_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
-    #endif  // CODA_OSS_cpp17
-#endif  // CODA_OSS_DEFINE_std_optional_
-
-#if CODA_OSS_DEFINE_std_optional_ == 1
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        template<typename T>
-        using optional = sys::Optional<T>;
-        template <typename T, typename... TArgs>
-        inline optional<T> make_optional(TArgs && ... args)
-        {
-            return sys::make_Optional<T>(std::forward<TArgs>(args)...);
-        }
-    }
-    #define CODA_OSS_lib_optional 1
-#elif CODA_OSS_DEFINE_std_optional_ == -1  // set above
-    #include <optional>
-    #define CODA_OSS_lib_optional 1
-#endif  // CODA_OSS_DEFINE_std_optional_
-
-namespace coda_oss
-{
-    #if CODA_OSS_lib_optional
-    template <typename T>
-    using optional = std::optional<T>;
-    template <typename T, typename... TArgs>
-    inline optional<T> make_optional(TArgs && ... args)
-    {
-        return std::make_optional<T>(std::forward<TArgs>(args)...);
-    }
-    #else
-    template <typename T>
-    using optional = sys::Optional<T>;
-    template <typename T, typename... TArgs>
-    inline optional<T> make_optional(TArgs && ... args)
-    {
-        return sys::make_Optional<T>(std::forward<TArgs>(args)...);
-    }
-    #endif
+#define CODA_OSS_sys_Optional 201606L // c.f., __cpp_lib_optional
 }
 
 #include "str/Convert.h"

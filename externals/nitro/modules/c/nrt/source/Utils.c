@@ -229,6 +229,13 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
 NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                                               nrt_Error * error)
 {
+    if (d == NULL)
+    {
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
+                        "Invalid decimal string: <NULL>. Should be +-dd.ddd or +-ddd.ddd");
+        return NRT_FAILURE;
+    }
+
     /* +-dd.ddd or += ddd.ddd */
     const size_t len = strlen(d);
     if (len != 7 && len != 8)
@@ -342,6 +349,13 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
                                                  int *minutes, double *seconds,
                                                  nrt_Error * error)
 {
+    if (dms == NULL)
+    {
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
+                        "Invalid decimal string: <NULL>. Should be ddmmssX or dddmmssY");
+        return NRT_FAILURE;
+    }
+
     int degreeOffset = 0;
     const size_t len = strlen(dms);
     char dir;

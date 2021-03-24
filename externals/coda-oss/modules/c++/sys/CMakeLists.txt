@@ -14,5 +14,5 @@ coda_add_tests(
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
     DIRECTORY "unittests"
-    DEPS mt-c++
+    DEPS mt-c++ std-c++
     UNITTEST)

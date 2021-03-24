@@ -48,9 +48,9 @@ namespace logging
  *  \param logBytes - number of bytes per rotating log (default: 0 no rotation)
  */
 mem::auto_ptr<logging::Logger> setupLogger(
-    const coda_oss::filesystem::path& program, 
+    const sys::Filesystem::path& program, 
     const std::string& logLevel = "warning", 
-    const coda_oss::filesystem::path& logFile = "console",
+    const sys::Filesystem::path& logFile = "console",
     const std::string& logFormat = "[%p] (%d) %m",
     size_t logCount = 0,
     size_t logBytes = 0);

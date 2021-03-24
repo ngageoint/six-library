@@ -2135,7 +2135,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     if (numTexts != 0)
     {
         NITF_FREE(textSubLens);
+        textSubLens = NULL;
         NITF_FREE(textDataLens);
+        textDataLens = NULL;
     }
 
     /*    Fix the data extension subheader and data lengths */
@@ -2159,7 +2161,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     if (numDEs != 0)
     {
         NITF_FREE(deSubLens);
+        deSubLens = NULL;
         NITF_FREE(deDataLens);
+        deDataLens = NULL;
     }
 
     /* Now its time to check if we should be measuring the CLEVEL */

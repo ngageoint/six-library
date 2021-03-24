@@ -143,7 +143,8 @@ struct Compressor
                             bool pad,
                             bool noData)
     {
-        writeBlock(io, reinterpret_cast<const uint8_t*>(data), pad, noData);
+        const void* const data_ = data;
+        writeBlock(io, static_cast<const uint8_t*>(data_), pad, noData);
     }
 
     virtual void end(nitf::IOInterface& io) = 0;

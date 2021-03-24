@@ -20,12 +20,13 @@
  *
  */
 
+#include <std/filesystem>
+
 #include <six/XMLControl.h>
 #include <string>
 #include <vector>
 #include "TestCase.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 // prefer SIX_DEFAULT_SCHEMA_PATH, existing scripts use DEFAULT_SCHEMA_PATH

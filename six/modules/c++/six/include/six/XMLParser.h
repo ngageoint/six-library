@@ -23,7 +23,7 @@
 
 #include <string>
 
-#include <sys/Optional.h>
+#include <std/optional>
 
 #include <six/Types.h>
 #include <six/Init.h>

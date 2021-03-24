@@ -24,14 +24,14 @@
 
 #if !defined(USE_IO_STREAMS)
 
-io::FileOutputStreamOS::FileOutputStreamOS(const coda_oss::filesystem::path& str,
+io::FileOutputStreamOS::FileOutputStreamOS(const sys::Filesystem::path& str,
         int creationFlags)
 {
     mFile.create(str, sys::File::WRITE_ONLY, creationFlags);
 
 }
 
-void io::FileOutputStreamOS::create(const coda_oss::filesystem::path& str,
+void io::FileOutputStreamOS::create(const sys::Filesystem::path& str,
                                     int creationFlags)
 {
     mFile.create(str, sys::File::WRITE_ONLY, creationFlags);

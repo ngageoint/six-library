@@ -25,7 +25,8 @@
 
 #include <assert.h>
 
-#include <sys/Optional.h>
+#include <std/optional>
+
 #include <mem/ScopedCopyablePtr.h>
 
 #include "six/Types.h"

@@ -130,49 +130,10 @@ std::unique_ptr<T> unique(size_t size)
 
 template <typename T, typename... TArgs, typename std::enable_if<std::extent<T>::value != 0, int>::type = 0>
 void unique(TArgs&&...) = delete;
+
+#define CODA_OSS_mem_make_unique 201304L  // c.f., __cpp_lib_make_unique
+
 }  // namespace make
 } // namespace mem
-
-
-#ifndef CODA_OSS_DEFINE_std_make_unique_
-    #if CODA_OSS_cpp14
-        #if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique < 201304)
-            #error "Wrong value for __cpp_lib_make_unique."
-        #endif
-        #define CODA_OSS_DEFINE_std_make_unique_ 0  // part of C++14
-        #define CODA_OSS_lib_make_unique 1
-    #else
-        #define CODA_OSS_DEFINE_std_make_unique_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
-    #endif  // CODA_OSS_cpp14
-#endif  // CODA_OSS_DEFINE_std_make_unique_
-
-#if CODA_OSS_DEFINE_std_make_unique_ == 1
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-            template <typename T, typename... TArgs>
-            std::unique_ptr<T> make_unique(TArgs && ... args)
-            {
-                // let mem::make::unique to all the template magic
-                return mem::make::unique<T>(std::forward<TArgs>(args)...);
-            }
-    }
-    #define CODA_OSS_lib_make_unique 1
-#endif  // CODA_OSS_DEFINE_std_make_unique_
-
-namespace coda_oss
-{
-    template <typename T, typename... TArgs>
-    std::unique_ptr<T> make_unique(TArgs && ... args)
-    #if CODA_OSS_lib_make_unique
-    {
-        return std::make_unique<T>(std::forward<TArgs>(args)...);
-    }
-    #else
-    {
-        return mem::make::unique<T>(std::forward<TArgs>(args)...);
-    }
-    #endif
-}
-
 
 #endif

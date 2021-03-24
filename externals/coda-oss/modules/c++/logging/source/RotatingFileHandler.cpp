@@ -28,7 +28,7 @@
 
 using namespace logging;
 
-RotatingFileHandler::RotatingFileHandler(const coda_oss::filesystem::path& fname_,
+RotatingFileHandler::RotatingFileHandler(const sys::Filesystem::path& fname_,
                                          long maxBytes, int backupCount,
                                          LogLevel level) :
     StreamHandler(level)

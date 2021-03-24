@@ -23,8 +23,9 @@
 
 #include <thread>
 
+#include <std/bit>
+
 #include <except/Exception.h>
-#include <sys/Bit.h>
 
 #include <cphd/ByteSwap.h>
 #include <cphd/CPHDXMLControl.h>

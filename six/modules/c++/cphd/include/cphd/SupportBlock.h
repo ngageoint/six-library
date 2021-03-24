@@ -28,12 +28,13 @@
 #include <complex>
 #include <unordered_map>
 
+#include <std/cstddef>
+
 #include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <types/RowCol.h>
 #include <mem/ScopedArray.h>
 #include <mem/BufferView.h>
-#include <sys/CStdDef.h>
 
 #include <cphd/Data.h>
 #include <cphd/Utilities.h>

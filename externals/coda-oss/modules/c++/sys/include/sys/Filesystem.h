@@ -132,50 +132,8 @@ bool is_regular_file(const path& p);  // https://en.cppreference.com/w/cpp/files
 bool is_directory(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/is_directory
 bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exists
 }
-}
 
-#ifndef CODA_OSS_DEFINE_std_filesystem_
-    #if CODA_OSS_cpp17
-        // Some versions of G++ say they're C++17 but don't have <filesystem>
-        #if __has_include(<filesystem>)
-            #if defined(__cpp_lib_filesystem) && (__cpp_lib_filesystem < 201703)
-                #error "Wrong value for __cpp_lib_filesystem."
-            #endif
-            #define CODA_OSS_DEFINE_std_filesystem_ -1  // OK to #include <>, below
-        #else
-            #define CODA_OSS_DEFINE_std_filesystem_ 1 // must have std::filesystem w/C++17
-        #endif // __has_include
-    #else
-        #define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
-    #endif
-#endif  // CODA_OSS_DEFINE_std_filesystem_
-
-
-#if CODA_OSS_DEFINE_std_filesystem_ == 1
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        namespace filesystem = ::sys::Filesystem;
-    }
-    #define CODA_OSS_lib_filesystem 1
-#elif CODA_OSS_DEFINE_std_filesystem_ == -1 // set above
-    #include <filesystem>
-    #define CODA_OSS_lib_filesystem 1
-#endif  // CODA_OSS_DEFINE_std_filesystem_
-
-#if CODA_OSS_cpp17 || ( CODA_OSS_DEFINE_std_filesystem_ == 1) // sanity check on above
-#if !CODA_OSS_lib_filesystem
-#error must have std::filesystem with C++17
-#endif // CODA_OSS_lib_filesystem
-#endif
-
-// coda_oss::filesystem will always work, and will be std::filesystem if available.
-namespace coda_oss
-{
-    #if CODA_OSS_lib_filesystem
-    namespace filesystem = ::std::filesystem;
-    #else
-    namespace filesystem = ::sys::Filesystem;
-    #endif
+#define CODA_OSS_sys_Filesystem 201703L  // c.f., __cpp_lib_filesystem
 }
 
 #endif  // CODA_OSS_sys_Filesystem_h_INCLUDED_

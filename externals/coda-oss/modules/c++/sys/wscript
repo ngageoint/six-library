@@ -1,9 +1,8 @@
 NAME            = 'sys'
-MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.2'
 MODULE_DEPS     = 'str except config'
 USELIB          = 'THREAD DL RT SOCKET'
-UNITTEST_DEPS   = 'mt'
+UNITTEST_DEPS   = 'mt std'
 TEST_FILTER     = 'MMapReadOnlyTest.cpp ProcessTest1.cpp'
 
 options = configure = distclean = lambda p: None
