@@ -22,13 +22,19 @@
 #define CODA_OSS_std_string_INCLUDED_
 #pragma once
 
+#include <sring>
+
 // Make it (too?) easy for clients to get our various std:: implementations
 
 #include "sys/String.h"
 static_assert(CODA_OSS_sys_Char8_T >= 201907L, "missing sys::Char8_T");
 
-#ifndef CODA_OSS_AUGMENT_std_u8string_
-    #define CODA_OSS_AUGMENT_std_u8string_ 1
+#if defined(__cpp_lib_char8_t) && (__cpp_lib_char8_t >= 201907L) // https://en.cppreference.com/w/cpp/utility/feature_test
+    #undef CODA_OSS_AUGMENT_std_u8string
+    #define CODA_OSS_AUGMENT_std_u8string 0 // already have it
+#endif
+#ifndef CODA_OSS_AUGMENT_std_u8string
+    #define CODA_OSS_AUGMENT_std_u8string 1
 #endif
 
 // MSVC only sets __cplusplus >199711L with the /Zc:__cplusplus command-line option.
@@ -36,7 +42,7 @@ static_assert(CODA_OSS_sys_Char8_T >= 201907L, "missing sys::Char8_T");
 #if (__cplusplus >= 202002L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 202002L)) || CODA_OSS_cpp20
     #define CODA_OSS_DEFINE_std_u8string_ -1  // OK to #include <>, below
 #else
-    #define CODA_OSS_DEFINE_std_u8string_ CODA_OSS_AUGMENT_std_u8string_ 
+    #define CODA_OSS_DEFINE_std_u8string_ CODA_OSS_AUGMENT_std_u8string 
 #endif  // __cplusplus
 
 #if CODA_OSS_DEFINE_std_u8string_ == 1

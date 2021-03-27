@@ -27,14 +27,18 @@
 #include "sys/Bit.h"
 static_assert(CODA_OSS_sys_Endian >= 201907L, "missing sys::Endian");
 
-#ifndef CODA_OSS_AUGMENT_std_endian_
-    #define CODA_OSS_AUGMENT_std_endian_ 1
+#if defined(__cpp_lib_endian) && (__cpp_lib_endian >= 201907L) // https://en.cppreference.com/w/cpp/utility/feature_test
+    #undef  CODA_OSS_AUGMENT_std_endian
+    #define CODA_OSS_AUGMENT_std_endian 0 // already have it
+#endif
+#ifndef CODA_OSS_AUGMENT_std_endian
+    #define CODA_OSS_AUGMENT_std_endian 1
 #endif
 
 #if CODA_OSS_cpp20
     #define CODA_OSS_DEFINE_std_endian_ -1  // OK to #include <>, below
 #else
-    #define CODA_OSS_DEFINE_std_endian_ CODA_OSS_AUGMENT_std_endian_
+    #define CODA_OSS_DEFINE_std_endian_ CODA_OSS_AUGMENT_std_endian
 #endif  // CODA_OSS_cpp20
 
 #if CODA_OSS_DEFINE_std_endian_ == 1

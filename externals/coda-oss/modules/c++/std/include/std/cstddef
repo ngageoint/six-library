@@ -22,19 +22,25 @@
 #define CODA_OSS_std_cstddef_INCLUDED_
 #pragma once
 
+#include <cstddef>
+
 // Make it (too?) easy for clients to get our various std:: implementations
 
 #include "sys/CStdDef.h"
 static_assert(CODA_OSS_sys_Byte >= 201603L, "missing sys::Byte");
 
-#ifndef CODA_OSS_AUGMENT_std_byte_
-    #define CODA_OSS_AUGMENT_std_byte_ 1
+#if defined(__cpp_lib_byte) && (__cpp_lib_byte >= 201603L) // https://en.cppreference.com/w/cpp/utility/feature_test
+    #undef CODA_OSS_AUGMENT_std_byte
+    #define CODA_OSS_AUGMENT_std_byte 0 // already have it
+#endif
+#ifndef CODA_OSS_AUGMENT_std_byte
+    #define CODA_OSS_AUGMENT_std_byte 1
 #endif
 
 #if CODA_OSS_cpp17
     #define CODA_OSS_DEFINE_std_byte_ -1  // OK to #include <>, below
 #else
-    #define CODA_OSS_DEFINE_std_byte_ CODA_OSS_AUGMENT_std_byte_ 
+    #define CODA_OSS_DEFINE_std_byte_ CODA_OSS_AUGMENT_std_byte 
 #endif  // CODA_OSS_cpp17
 
 #if CODA_OSS_DEFINE_std_byte_ == 1
