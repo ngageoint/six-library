@@ -30,6 +30,7 @@
 #include "io/SeekableStreams.h"
 #include "sys/Filesystem.h"
 #include "sys/File.h"
+#include "coda_oss/filesystem.h"
 
 
 /*!
@@ -66,7 +67,7 @@ public:
      *  \param outputFile The file name
      *  \param creationFlags  see sys::File
      */
-    FileOutputStreamOS(const std::string& outputFile,
+    FileOutputStreamOS(const coda_oss::filesystem::path& outputFile,
                        int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
 
     //! Destructor, closes the file stream.
@@ -92,7 +93,7 @@ public:
      *  \param file The file to open
      *  \param creationFlags see sys::File
      */
-    virtual void create(const std::string& str,
+    virtual void create(const coda_oss::filesystem::path& str,
                         int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
 
     //!  Close the file
