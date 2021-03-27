@@ -20,8 +20,13 @@
  *
  */
 
-#ifndef __IO_FILE_OUTPUT_STREAM_OS_H__
-#define __IO_FILE_OUTPUT_STREAM_OS_H__
+#ifndef CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_
+#define CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_
+
+#include "sys/CPlusPlus.h"
+#if CODA_OSS_cpp17
+#include <std/filesystem>
+#endif
 
 #if !defined(USE_IO_STREAMS)
 
@@ -66,7 +71,10 @@ public:
      */
     FileOutputStreamOS(const sys::Filesystem::path& outputFile,
                        int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
-
+    #if CODA_OSS__cpp_lib_filesystem
+    FileOutputStreamOS(const std::filesystem::path& outputFile,
+                       int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
+    #endif
 
     //! Destructor, closes the file stream.
     virtual ~FileOutputStreamOS()
@@ -93,6 +101,10 @@ public:
      */
     virtual void create(const sys::Filesystem::path& str,
                         int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
+    #if CODA_OSS__cpp_lib_filesystem
+    virtual void create(const std::filesystem::path& str,
+                        int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
+    #endif
 
     //!  Close the file
     void close()
@@ -121,5 +133,4 @@ public:
 }
 
 #endif
-#endif
-
+#endif // CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_

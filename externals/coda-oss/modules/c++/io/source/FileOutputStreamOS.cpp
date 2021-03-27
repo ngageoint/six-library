@@ -30,6 +30,14 @@ io::FileOutputStreamOS::FileOutputStreamOS(const sys::Filesystem::path& str,
     mFile.create(str, sys::File::WRITE_ONLY, creationFlags);
 
 }
+#if CODA_OSS__cpp_lib_filesystem
+io::FileOutputStreamOS::FileOutputStreamOS(const std::filesystem::path& str,
+        int creationFlags)
+{
+    const sys::Filesystem::path str_(str.string());
+    mFile.create(str_, sys::File::WRITE_ONLY, creationFlags);
+}
+#endif
 
 void io::FileOutputStreamOS::create(const sys::Filesystem::path& str,
                                     int creationFlags)
@@ -42,6 +50,14 @@ void io::FileOutputStreamOS::create(const sys::Filesystem::path& str,
         );
     }
 }
+#if CODA_OSS__cpp_lib_filesystem
+void io::FileOutputStreamOS::create(const std::filesystem::path& str,
+                                    int creationFlags)
+{
+    const sys::Filesystem::path str_(str.string());
+    create(str_, creationFlags);
+}
+#endif
 
 void io::FileOutputStreamOS::write(const void* buffer, size_t len)
 {
@@ -71,7 +87,7 @@ sys::Off_T io::FileOutputStreamOS::seek(sys::Off_T offset,
     }
     return mFile.seekTo(offset, fileWhence);
 }
-    
+
 sys::Off_T io::FileOutputStreamOS::tell()
 {
     return mFile.getCurrentOffset();
