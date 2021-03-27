@@ -73,4 +73,4 @@ add_subdirectory("math.poly")
 add_subdirectory("numpyutils")
 add_subdirectory("gsl")
 add_subdirectory("std")
-
+add_subdirectory("coda_oss")
