@@ -23,6 +23,8 @@
 #include <memory>
 #include <stdexcept>
 
+#include <std/filesystem>
+
 #include <six/NITFHeaderCreator.h>
 #include <sys/Path.h>
 #include <except/Exception.h>
@@ -32,7 +34,6 @@
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/ComplexXMLControl.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 #include "utils.h"
@@ -71,7 +72,7 @@ int main(int argc, char** argv)
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         std::unique_ptr<logging::Logger> logger(
-                logging::setupLogger(fs::path(argv[0]).filename()));
+                logging::setupLogger(fs::path(argv[0]).filename().string()));
 
         six::XMLControlFactory::getInstance().addCreator(
                 six::DataType::COMPLEX,

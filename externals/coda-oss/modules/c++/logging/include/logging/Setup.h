@@ -20,15 +20,14 @@
  *
  */
  
-#ifndef __LOGGING_SETUP_H__
-#define __LOGGING_SETUP_H__
+#ifndef CODA_OSS_logging_Setup_h_INCLUDED_
+#define CODA_OSS_logging_Setup_h_INCLUDED_
 
 #include <memory>
 #include <string>
 
 #include "mem/SharedPtr.h"
 #include "logging/Logger.h"
-#include "sys/Filesystem.h"
 
 namespace logging
 {
@@ -48,13 +47,12 @@ namespace logging
  *  \param logBytes - number of bytes per rotating log (default: 0 no rotation)
  */
 mem::auto_ptr<logging::Logger> setupLogger(
-    const sys::Filesystem::path& program, 
+    const std::string& program, 
     const std::string& logLevel = "warning", 
-    const sys::Filesystem::path& logFile = "console",
+    const std::string& logFile = "console",
     const std::string& logFormat = "[%p] (%d) %m",
     size_t logCount = 0,
     size_t logBytes = 0);
-
 }
 
-#endif
+#endif // CODA_OSS_logging_Setup_h_INCLUDED_

@@ -22,6 +22,9 @@
 
 #include <iostream>
 #include <iterator>
+
+#include <std/filesystem>
+
 #include <io/TempFile.h>
 #include <str/Manip.h>
 #include <sys/Exec.h>
@@ -30,7 +33,6 @@
 #include "six/NITFWriteControl.h"
 #include "six/Types.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace

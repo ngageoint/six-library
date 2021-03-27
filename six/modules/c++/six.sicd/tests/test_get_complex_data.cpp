@@ -23,13 +23,14 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <std/filesystem>
+
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <io/StandardStreams.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 int main(int argc, char** argv)

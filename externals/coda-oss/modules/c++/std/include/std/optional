@@ -27,14 +27,18 @@
 #include "sys/Optional.h"
 static_assert(CODA_OSS_sys_Optional >= 201606L, "missing sys::Optional");
 
-#ifndef CODA_OSS_AUGMENT_std_optional_
-    #define CODA_OSS_AUGMENT_std_optional_ 1
+#if defined(__cpp_lib_optional) && (__cpp_lib_optional >= 201606L) // https://en.cppreference.com/w/cpp/utility/feature_test
+    #undef CODA_OSS_AUGMENT_std_optional
+    #define CODA_OSS_AUGMENT_std_optional 0 // already have it
+#endif
+#ifndef CODA_OSS_AUGMENT_std_optional
+    #define CODA_OSS_AUGMENT_std_optional 1
 #endif
 
 #if CODA_OSS_cpp17
     #define CODA_OSS_DEFINE_std_optional_ -1  // OK to #include <>, below
 #else
-    #define CODA_OSS_DEFINE_std_optional_ CODA_OSS_AUGMENT_std_optional_
+    #define CODA_OSS_DEFINE_std_optional_ CODA_OSS_AUGMENT_std_optional
 #endif  // CODA_OSS_cpp17
 
 #if CODA_OSS_DEFINE_std_optional_ == 1
@@ -56,5 +60,7 @@ static_assert(CODA_OSS_sys_Optional >= 201606L, "missing sys::Optional");
     #endif
 #endif  // CODA_OSS_DEFINE_std_optional_
 
+// The real one or our substitute?
+#define CODA_OSS__cpp_lib_optional (defined(__cpp_lib_optional) && (__cpp_lib_optional >= 201606L)) && !defined(CODA_OSS_lib_optional)
 
 #endif  // CODA_OSS_std_optional_INCLUDED_

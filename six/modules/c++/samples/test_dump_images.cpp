@@ -22,6 +22,8 @@
 #include <sstream>
 #include <limits>
 
+#include <std/filesystem>
+
 #include <import/six.h>
 
 #include <mem/ScopedArray.h>
@@ -31,7 +33,6 @@
 #include <import/sio/lite.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
@@ -163,7 +164,7 @@ int main(int argc, char** argv)
             const six::Data* data = container->getData(i);
             std::string filename = FmtX("%s_DES_%d.xml", base.c_str(), i);
             const auto xmlFile = fs::path(outputDir) / filename;
-            io::FileOutputStream xmlStream(xmlFile);
+            io::FileOutputStream xmlStream(xmlFile.string());
 
             std::string xmlData = six::toXMLString(data, &xmlRegistry);
             xmlStream.write(xmlData.c_str(), xmlData.length());
@@ -193,7 +194,7 @@ int main(int argc, char** argv)
                      << (isSIO ? "sio" : "raw");
 
             const auto outputFile = fs::path(outputDir) / filename.str();
-            io::FileOutputStream outputStream(outputFile);
+            io::FileOutputStream outputStream(outputFile.string());
 
             if (isSIO)
             {

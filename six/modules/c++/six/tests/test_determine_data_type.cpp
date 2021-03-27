@@ -23,11 +23,12 @@
 #include <stdexcept>
 #include <sstream>
 
+#include <std/filesystem>
+
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <six/NITFReadControl.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace

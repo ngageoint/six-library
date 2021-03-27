@@ -21,6 +21,9 @@
 */
 
 #include <cstdio>
+
+#include <std/filesystem>
+
 #include <six/NITFWriteControl.h>
 #include <six/Types.h>
 #include <six/XMLControlFactory.h>
@@ -28,7 +31,6 @@
 #include <six/sicd/Utilities.h>
 #include <io/TempFile.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace

@@ -20,8 +20,7 @@
  *
  */
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
+#include <std/filesystem>
 
 #include <six/Utilities.h>
 #include <NitfIsd.h>

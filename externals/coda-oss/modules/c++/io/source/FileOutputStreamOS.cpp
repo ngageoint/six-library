@@ -24,22 +24,20 @@
 
 #if !defined(USE_IO_STREAMS)
 
-io::FileOutputStreamOS::FileOutputStreamOS(const sys::Filesystem::path& str,
+io::FileOutputStreamOS::FileOutputStreamOS(const std::string& str,
         int creationFlags)
 {
     mFile.create(str, sys::File::WRITE_ONLY, creationFlags);
-
 }
 
-void io::FileOutputStreamOS::create(const sys::Filesystem::path& str,
+void io::FileOutputStreamOS::create(const std::string& str,
                                     int creationFlags)
 {
     mFile.create(str, sys::File::WRITE_ONLY, creationFlags);
     if (!isOpen())
     {
         throw except::FileNotFoundException(
-            std::string("File could not be opened: ") + str.string()
-        );
+            "File could not be opened: " + str);
     }
 }
 
@@ -71,7 +69,7 @@ sys::Off_T io::FileOutputStreamOS::seek(sys::Off_T offset,
     }
     return mFile.seekTo(offset, fileWhence);
 }
-    
+
 sys::Off_T io::FileOutputStreamOS::tell()
 {
     return mFile.getCurrentOffset();

@@ -24,6 +24,8 @@
 #include <iostream>
 #include <memory>
 
+#include <std/filesystem>
+
 #include "TestCase.h"
 
 #include <except/Exception.h>
@@ -36,7 +38,6 @@
 #include <six/NITFWriteControl.h>
 #include <six/NITFHeaderCreator.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
