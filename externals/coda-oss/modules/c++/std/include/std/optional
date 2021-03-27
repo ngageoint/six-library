@@ -60,5 +60,7 @@ static_assert(CODA_OSS_sys_Optional >= 201606L, "missing sys::Optional");
     #endif
 #endif  // CODA_OSS_DEFINE_std_optional_
 
+// The real one or our substitute?
+#define CODA_OSS__cpp_lib_optional (defined(__cpp_lib_optional) && (__cpp_lib_optional >= 201606L)) && !defined(CODA_OSS_lib_optional)
 
 #endif  // CODA_OSS_std_optional_INCLUDED_

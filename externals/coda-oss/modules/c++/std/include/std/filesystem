@@ -62,4 +62,7 @@ static_assert(CODA_OSS_sys_Filesystem >= 201703L, "missing sys::Filesystem");
     #endif
 #endif  // CODA_OSS_DEFINE_std_filesystem_
 
+// The real one or our substitute?
+#define CODA_OSS__cpp_lib_filesystem (defined(__cpp_lib_filesystem) && (__cpp_lib_filesystem >= 201703L)) && !defined(CODA_OSS_lib_filesystem)
+
 #endif  // CODA_OSS_std_filesystem_INCLUDED_

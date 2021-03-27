@@ -66,4 +66,7 @@ static_assert(CODA_OSS_sys_Char8_T >= 201907L, "missing sys::Char8_T");
     #endif
 #endif  // CODA_OSS_DEFINE_std_u8string_
 
+// The real one or our substitute?
+#define CODA_OSS__cpp_lib_char8_t (defined(__cpp_lib_char8_t) && (__cpp_lib_char8_t >= 201907L)) && !defined(CODA_OSS_char8_t)
+
 #endif  // CODA_OSS_std_string_INCLUDED_
