@@ -26,9 +26,13 @@
 
 #include "sys/Filesystem.h"
 static_assert(CODA_OSS_sys_Filesystem >= 201703L, "missing sys::Filesystem");
-
-#ifndef CODA_OSS_AUGMENT_std_filesystem_
-    #define CODA_OSS_AUGMENT_std_filesystem_ 1
+ 
+#if defined(__cpp_lib_filesystem) && (__cpp_lib_filesystem >= 201703L) // https://en.cppreference.com/w/cpp/utility/feature_test
+    #undef CODA_OSS_AUGMENT_std_filesystem
+    #define CODA_OSS_AUGMENT_std_filesystem 0 // already have it
+#endif
+#ifndef CODA_OSS_AUGMENT_std_filesystem
+    #define CODA_OSS_AUGMENT_std_filesystem 1
 #endif
 
 #if CODA_OSS_cpp17
@@ -42,7 +46,7 @@ static_assert(CODA_OSS_sys_Filesystem >= 201703L, "missing sys::Filesystem");
         #define CODA_OSS_DEFINE_std_filesystem_ 1 // "must" have std::filesystem w/C++17
     #endif // __has_include
 #else
-    #define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_filesystem_
+    #define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_filesystem
 #endif
 
 #if CODA_OSS_DEFINE_std_filesystem_ == 1
@@ -57,5 +61,8 @@ static_assert(CODA_OSS_sys_Filesystem >= 201703L, "missing sys::Filesystem");
         #define __cpp_lib_filesystem 201703L  // https://en.cppreference.com/w/cpp/utility/feature_test
     #endif
 #endif  // CODA_OSS_DEFINE_std_filesystem_
+
+// The real one or our substitute?
+#define CODA_OSS__cpp_lib_filesystem (defined(__cpp_lib_filesystem) && (__cpp_lib_filesystem >= 201703L)) && !defined(CODA_OSS_lib_filesystem)
 
 #endif  // CODA_OSS_std_filesystem_INCLUDED_

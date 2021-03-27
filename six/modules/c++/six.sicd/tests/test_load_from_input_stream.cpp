@@ -25,6 +25,8 @@
 #include <memory>
 #include <complex>
 
+#include <std/filesystem>
+
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <io/StandardStreams.h>
@@ -34,7 +36,6 @@
 #include <six/sicd/ComplexData.h>
 #include <nitf/IOStreamReader.hpp>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 int main(int argc, char** argv)

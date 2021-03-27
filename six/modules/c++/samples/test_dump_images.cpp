@@ -22,6 +22,8 @@
 #include <sstream>
 #include <limits>
 
+#include <std/filesystem>
+
 #include <import/six.h>
 
 #include <mem/ScopedArray.h>
@@ -31,7 +33,6 @@
 #include <import/sio/lite.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace

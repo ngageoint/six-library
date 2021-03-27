@@ -22,6 +22,8 @@
 
 #include <string>
 
+#include <std/filesystem>
+
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <import/sys.h>
@@ -30,7 +32,6 @@
 #include <import/six/sicd.h>
 #include "TestCase.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 static fs::path argv0;

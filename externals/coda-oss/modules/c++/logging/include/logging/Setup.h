@@ -20,11 +20,16 @@
  *
  */
  
-#ifndef __LOGGING_SETUP_H__
-#define __LOGGING_SETUP_H__
+#ifndef CODA_OSS_logging_Setup_h_INCLUDED_
+#define CODA_OSS_logging_Setup_h_INCLUDED_
 
 #include <memory>
 #include <string>
+
+#include "sys/CPlusPlus.h"
+#if CODA_OSS_cpp17
+#include <std/filesystem>
+#endif
 
 #include "mem/SharedPtr.h"
 #include "logging/Logger.h"
@@ -55,6 +60,16 @@ mem::auto_ptr<logging::Logger> setupLogger(
     size_t logCount = 0,
     size_t logBytes = 0);
 
+#if CODA_OSS__cpp_lib_filesystem
+std::unique_ptr<logging::Logger> setupLogger(
+    const std::filesystem::path& program, 
+    const std::string& logLevel = "warning", 
+    const std::filesystem::path& logFile = "console",
+    const std::string& logFormat = "[%p] (%d) %m",
+    size_t logCount = 0,
+    size_t logBytes = 0);
+#endif // CODA_OSS__cpp_lib_filesystem
+
 }
 
-#endif
+#endif // CODA_OSS_logging_Setup_h_INCLUDED_

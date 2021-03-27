@@ -24,6 +24,8 @@
 #include <stdexcept>
 #include <memory>
 
+#include <std/filesystem>
+
 #include <sys/Path.h>
 #include <str/Convert.h>
 #include <except/Exception.h>
@@ -36,7 +38,6 @@
 #include <six/sidd/Utilities.h>
 #include <scene/ECEFToLLATransform.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace

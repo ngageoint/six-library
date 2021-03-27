@@ -24,13 +24,14 @@
 #include <iostream>
 #include <thread>
 
+#include <std/filesystem>
+
 #include <nitf/coda-oss.hpp>
 #include <import/cli.h>
 #include <import/io.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDXMLControl.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 /*!
