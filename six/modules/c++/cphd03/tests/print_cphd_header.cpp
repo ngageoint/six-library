@@ -47,7 +47,7 @@ int main(int argc, char** argv)
         const std::string pathname(argv[1]);
 
         // Set up a logger to log to the console
-        std::shared_ptr<logging::Logger> logger(logging::setupLogger(progname));
+        std::shared_ptr<logging::Logger> logger(logging::setupLogger(progname.string()));
 
         // There are lots of ways we could print this information
         // For now, just use the default ways each object knows to print itself

@@ -24,40 +24,22 @@
 
 #if !defined(USE_IO_STREAMS)
 
-io::FileOutputStreamOS::FileOutputStreamOS(const sys::Filesystem::path& str,
+io::FileOutputStreamOS::FileOutputStreamOS(const std::string& str,
         int creationFlags)
 {
     mFile.create(str, sys::File::WRITE_ONLY, creationFlags);
-
 }
-#if CODA_OSS__cpp_lib_filesystem
-io::FileOutputStreamOS::FileOutputStreamOS(const std::filesystem::path& str,
-        int creationFlags)
-{
-    const sys::Filesystem::path str_(str.string());
-    mFile.create(str_, sys::File::WRITE_ONLY, creationFlags);
-}
-#endif
 
-void io::FileOutputStreamOS::create(const sys::Filesystem::path& str,
+void io::FileOutputStreamOS::create(const std::string& str,
                                     int creationFlags)
 {
     mFile.create(str, sys::File::WRITE_ONLY, creationFlags);
     if (!isOpen())
     {
         throw except::FileNotFoundException(
-            std::string("File could not be opened: ") + str.string()
-        );
+            "File could not be opened: " + str);
     }
 }
-#if CODA_OSS__cpp_lib_filesystem
-void io::FileOutputStreamOS::create(const std::filesystem::path& str,
-                                    int creationFlags)
-{
-    const sys::Filesystem::path str_(str.string());
-    create(str_, creationFlags);
-}
-#endif
 
 void io::FileOutputStreamOS::write(const void* buffer, size_t len)
 {

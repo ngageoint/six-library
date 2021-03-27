@@ -23,10 +23,7 @@
 #ifndef CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_
 #define CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_
 
-#include "sys/CPlusPlus.h"
-#if CODA_OSS_cpp17
-#include <std/filesystem>
-#endif
+#include <string>
 
 #if !defined(USE_IO_STREAMS)
 
@@ -69,12 +66,8 @@ public:
      *  \param outputFile The file name
      *  \param creationFlags  see sys::File
      */
-    FileOutputStreamOS(const sys::Filesystem::path& outputFile,
+    FileOutputStreamOS(const std::string& outputFile,
                        int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
-    #if CODA_OSS__cpp_lib_filesystem
-    FileOutputStreamOS(const std::filesystem::path& outputFile,
-                       int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
-    #endif
 
     //! Destructor, closes the file stream.
     virtual ~FileOutputStreamOS()
@@ -99,12 +92,8 @@ public:
      *  \param file The file to open
      *  \param creationFlags see sys::File
      */
-    virtual void create(const sys::Filesystem::path& str,
+    virtual void create(const std::string& str,
                         int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
-    #if CODA_OSS__cpp_lib_filesystem
-    virtual void create(const std::filesystem::path& str,
-                        int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
-    #endif
 
     //!  Close the file
     void close()

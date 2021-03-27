@@ -117,7 +117,7 @@ std::vector<std::string> extractXML(std::string inputFile,
 
             xml::lite::Document* doc = parser.getDocument();
 
-            io::FileOutputStream fos(fileName);
+            io::FileOutputStream fos(fileName.string());
             doc->getRootElement()->prettyPrint(fos);
             fos.close();
         }
@@ -184,7 +184,7 @@ void run(const fs::path& inputFile_, std::string dataType)
         const auto outputFile = outputDir / "round-trip.xml";
         xml::lite::Document* outDom = 
             control->toXML(data, std::vector<std::string>());
-        io::FileOutputStream outXML(outputFile);
+        io::FileOutputStream outXML(outputFile.string());
         outDom->getRootElement()->prettyPrint(outXML);
         outXML.close();
         delete outDom;
@@ -406,7 +406,7 @@ std::string generateKML(six::Data* data, const fs::path& outputDir)
     const std::string kmlFile = "visualization.kml";
     const auto kmlPath = outputDir / kmlFile;
 
-    io::FileOutputStream fos(kmlPath);
+    io::FileOutputStream fos(kmlPath.string());
     xml::lite::Element* root = new xml::lite::Element("kml", KML_URI);
 
     xml::lite::Element* docXML = new xml::lite::Element("Document", KML_URI);

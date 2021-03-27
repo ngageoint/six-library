@@ -31,14 +31,13 @@
 #include "logging/Setup.h"
 
 mem::auto_ptr<logging::Logger>
-logging::setupLogger(const sys::Filesystem::path& program_, 
+logging::setupLogger(const std::string& program, 
                      const std::string& logLevel, 
-                     const sys::Filesystem::path& logFile,
+                     const std::string& logFile,
                      const std::string& logFormat,
                      size_t logCount,
                      size_t logBytes)
 {
-    const auto program = program_.string();
     mem::auto_ptr<logging::Logger> log(new logging::Logger(program));
 
     // setup logging level
@@ -50,7 +49,7 @@ logging::setupLogger(const sys::Filesystem::path& program_,
 
     // setup logging formatter
     std::unique_ptr <logging::Formatter> formatter;
-    auto file = logFile.string();
+    auto file = logFile;
     str::lower(file);
     if (str::endsWith(file, ".xml"))
     {
@@ -91,19 +90,3 @@ logging::setupLogger(const sys::Filesystem::path& program_,
     return log;
 }
 
-
-#if CODA_OSS__cpp_lib_filesystem
-std::unique_ptr<logging::Logger> logging::setupLogger(
-        const std::filesystem::path& program,
-        const std::string& logLevel,
-        const std::filesystem::path& logFile,
-        const std::string& logFormat,
-        size_t logCount,
-        size_t logBytes)
-{
-    const sys::Filesystem program_(program.string());
-    const sys::Filesystem logFile_(logFile.string());
-    auto result = setupLogger(program_, logLevel, logFile_, logFormat, logCount, logBytes);
-    return std::unique_ptr<logging::Logger>(result.release());
-}
-#endif
