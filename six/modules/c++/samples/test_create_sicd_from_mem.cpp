@@ -72,7 +72,7 @@ int main(int argc, char** argv)
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         std::unique_ptr<logging::Logger> logger(
-                logging::setupLogger(fs::path(argv[0]).filename().string()));
+                logging::setupLogger(fs::path(argv[0]).filename()));
 
         six::XMLControlFactory::getInstance().addCreator(
                 six::DataType::COMPLEX,

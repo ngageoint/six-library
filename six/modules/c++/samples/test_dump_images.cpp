@@ -194,7 +194,7 @@ int main(int argc, char** argv)
                      << (isSIO ? "sio" : "raw");
 
             const auto outputFile = fs::path(outputDir) / filename.str();
-            io::FileOutputStream outputStream(outputFile.string());
+            io::FileOutputStream outputStream(outputFile);
 
             if (isSIO)
             {

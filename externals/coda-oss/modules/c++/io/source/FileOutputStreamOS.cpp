@@ -24,15 +24,16 @@
 
 #if !defined(USE_IO_STREAMS)
 
-io::FileOutputStreamOS::FileOutputStreamOS(const std::string& str,
+io::FileOutputStreamOS::FileOutputStreamOS(const coda_oss::filesystem::path& str,
         int creationFlags)
 {
-    mFile.create(str, sys::File::WRITE_ONLY, creationFlags);
+    mFile.create(str.string(), sys::File::WRITE_ONLY, creationFlags);
 }
 
-void io::FileOutputStreamOS::create(const std::string& str,
+void io::FileOutputStreamOS::create(const coda_oss::filesystem::path& str_,
                                     int creationFlags)
 {
+    const auto str = str_.string();
     mFile.create(str, sys::File::WRITE_ONLY, creationFlags);
     if (!isOpen())
     {

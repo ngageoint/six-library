@@ -406,7 +406,7 @@ std::string generateKML(six::Data* data, const fs::path& outputDir)
     const std::string kmlFile = "visualization.kml";
     const auto kmlPath = outputDir / kmlFile;
 
-    io::FileOutputStream fos(kmlPath.string());
+    io::FileOutputStream fos(kmlPath);
     xml::lite::Element* root = new xml::lite::Element("kml", KML_URI);
 
     xml::lite::Element* docXML = new xml::lite::Element("Document", KML_URI);
