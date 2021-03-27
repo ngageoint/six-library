@@ -37,6 +37,8 @@
 #include <iostream>
 #include <memory>
 
+#include <std/filesystem>
+
 #include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
 #include <mem/ScopedArray.h>
@@ -47,7 +49,6 @@
 #include <six/NITFHeaderCreator.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 

@@ -22,7 +22,7 @@
 #define CODA_OSS_std_string_INCLUDED_
 #pragma once
 
-#include <sring>
+#include <string>
 
 // Make it (too?) easy for clients to get our various std:: implementations
 

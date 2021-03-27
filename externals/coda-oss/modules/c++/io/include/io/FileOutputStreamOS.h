@@ -20,8 +20,10 @@
  *
  */
 
-#ifndef __IO_FILE_OUTPUT_STREAM_OS_H__
-#define __IO_FILE_OUTPUT_STREAM_OS_H__
+#ifndef CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_
+#define CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_
+
+#include <string>
 
 #if !defined(USE_IO_STREAMS)
 
@@ -64,9 +66,8 @@ public:
      *  \param outputFile The file name
      *  \param creationFlags  see sys::File
      */
-    FileOutputStreamOS(const sys::Filesystem::path& outputFile,
+    FileOutputStreamOS(const std::string& outputFile,
                        int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
-
 
     //! Destructor, closes the file stream.
     virtual ~FileOutputStreamOS()
@@ -91,7 +92,7 @@ public:
      *  \param file The file to open
      *  \param creationFlags see sys::File
      */
-    virtual void create(const sys::Filesystem::path& str,
+    virtual void create(const std::string& str,
                         int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
 
     //!  Close the file
@@ -121,5 +122,4 @@ public:
 }
 
 #endif
-#endif
-
+#endif // CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_

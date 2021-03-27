@@ -21,6 +21,8 @@
  */
 #include <iostream>
 
+#include <std/filesystem>
+
 #include <scene/sys_Conf.h>
 #include <import/cli.h>
 #include <import/six.h>
@@ -32,9 +34,7 @@
 #include <scene/Utilities.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
-
 
 
 // For SICD implementation
@@ -115,7 +115,7 @@ int main(int argc, char** argv)
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         std::unique_ptr<logging::Logger> logger(
-            logging::setupLogger(fs::path(argv[0]).filename()));
+            logging::setupLogger(fs::path(argv[0]).filename().string()));
 
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the
