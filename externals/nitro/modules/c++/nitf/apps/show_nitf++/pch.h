@@ -43,6 +43,11 @@
 #undef min
 #undef max
 
+#pragma warning(push)
+#pragma warning(disable: 5219) //  implicit conversion from '...' to '...', possible loss of data
+#include <complex>
+#pragma warning(pop)
+
 #include <sstream>
 #include <iostream>
 
