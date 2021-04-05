@@ -7,6 +7,10 @@
 
 #include "TestCase.h"
 
+#if _MSC_VER
+#pragma warning(disable: 4459) // declaration of 'testName' hides global declaration
+#endif
+
 /*
 
 1. In the `readTRE` function in `modules/c/nitf/Reader.c`, the `tre` pointer on

@@ -70,7 +70,7 @@ public:
     {
         for (size_t i = 0; i < mPool.size(); i++)
         {
-            dbg_printf("mPool[%d]->join()\n", i);
+            dbg_printf("mPool[%ju]->join()\n", i);
             mPool[i]->join();
         }
         destroy();

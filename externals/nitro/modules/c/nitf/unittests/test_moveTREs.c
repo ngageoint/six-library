@@ -99,7 +99,8 @@ TEST_CASE_ARGS(testUnmerge)
     nitf_Error error;
     nitf_Uint32 treSize;
 
-    TEST_ASSERT((record = nitf_Record_construct(version, &error)));
+    record = nitf_Record_construct(version, &error);
+    TEST_ASSERT(record);
     TEST_ASSERT(initializeHeader(record->header, &error));
 
     TEST_ASSERT(unmergeTREs(record, &error));

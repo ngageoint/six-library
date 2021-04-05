@@ -108,7 +108,7 @@ public:
     nitf::DownSampler* getDownSampler() noexcept;
 
 private:
-    nitf::DownSampler* mDownSampler;
+    nitf::DownSampler* mDownSampler = nullptr;
     nitf_Error error{};
 };
 

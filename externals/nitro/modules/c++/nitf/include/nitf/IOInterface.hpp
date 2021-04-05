@@ -63,21 +63,11 @@ public:
         set_native_object(x);
     }
 
-    //! Copy constructor
-    IOInterface(const IOInterface& lhs)
-    {
-        setNative(lhs.getNative());
-    }
+    IOInterface(const IOInterface& lhs);
 
     ~IOInterface() = default;
 
-    //! Assignment Operator
-    IOInterface & operator=(const IOInterface & x)
-    {
-        if (&x != this)
-            setNative(x.getNative());
-        return *this;
-    }
+    IOInterface & operator=(const IOInterface & x);
 
     void read(void* buf, size_t size);
 

@@ -39,7 +39,7 @@ void doRead(const std::string& inFile,
 
     /*  Set this to the end, so we'll know when we're done!  */
     nitf::List imageList(record.getImages());
-    size_t idx(0);
+    uint32_t idx(0);
     for (nitf::ImageSegment imageSegment : imageList)
     {
         ++idx;
@@ -50,7 +50,7 @@ void doRead(const std::string& inFile,
         subWindow.setNumRows(subheader.getNumRows());
         subWindow.setNumCols(subheader.getNumCols());
         std::vector<uint32_t> bandList;
-        for (size_t ii = 0; ii < subWindow.getNumBands(); ++ii)
+        for (uint32_t ii = 0; ii < subWindow.getNumBands(); ++ii)
         {
             bandList.push_back(ii);
         }

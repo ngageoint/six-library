@@ -87,7 +87,7 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(
 
         /* Bump up mark by what we just memcpy'd + what we want to skip */
         memorySource->mark += memorySource->numBytesPerPixel +
-                memorySource->pixelSkip * memorySource->numBytesPerPixel;
+                ((nitf_Off)memorySource->pixelSkip) * memorySource->numBytesPerPixel;
     }
     return NITF_SUCCESS;
 }
@@ -298,7 +298,7 @@ NITFPRIV(NITF_BOOL) IOSource_offsetRead(IOSourceImpl * source,
      * read method takes in size as number of bytes, not number of pixels */
 
     /* TODO - this *could* be smaller, but this should be ok for now */
-    nitf_Off tsize = size * (source->pixelSkip + 1);
+    nitf_Off tsize = size * (((nitf_Off)source->pixelSkip) + 1);
 
     uint8_t* tbuf;
     uint8_t* bufPtr = (uint8_t*)buf;
@@ -329,7 +329,7 @@ NITFPRIV(NITF_BOOL) IOSource_offsetRead(IOSourceImpl * source,
         {
             bufPtr[i] = tbuf[lmark];
         }
-        lmark += (source->pixelSkip * source->numBytesPerPixel);
+        lmark += (((nitf_Off)source->pixelSkip) * source->numBytesPerPixel);
     }
     source->mark += lmark;
     NITF_FREE(tbuf);

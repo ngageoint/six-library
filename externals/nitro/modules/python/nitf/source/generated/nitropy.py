@@ -206,6 +206,10 @@ nrt_Error_initf = _nitropy.nrt_Error_initf
 def nrt_Error_print(error: 'nrt_Error', file: 'FILE *', userMessage: 'char const *') -> "void":
     return _nitropy.nrt_Error_print(error, file, userMessage)
 nrt_Error_print = _nitropy.nrt_Error_print
+
+def nrt_strerror(errnum: 'int') -> "char *":
+    return _nitropy.nrt_strerror(errnum)
+nrt_strerror = _nitropy.nrt_strerror
 NRT_MAX_READ_ATTEMPTS = _nitropy.NRT_MAX_READ_ATTEMPTS
 
 def nrt_IOHandle_create(fname: 'char const *', access: 'nrt_AccessFlags', creation: 'nrt_CreationFlags', error: 'nrt_Error') -> "nrt_IOHandle":
@@ -363,6 +367,10 @@ nrt_IOHandleAdapter_open = _nitropy.nrt_IOHandleAdapter_open
 def nrt_BufferAdapter_construct(buf: 'char *', size: 'size_t', ownBuf: 'bool', error: 'nrt_Error') -> "nrt_IOInterface *":
     return _nitropy.nrt_BufferAdapter_construct(buf, size, ownBuf, error)
 nrt_BufferAdapter_construct = _nitropy.nrt_BufferAdapter_construct
+
+def nitf_strdup(src: 'char const *') -> "char *":
+    return _nitropy.nitf_strdup(src)
+nitf_strdup = _nitropy.nitf_strdup
 NITF_MAX_PATH = _nitropy.NITF_MAX_PATH
 NITF_DEFAULT_PERM = _nitropy.NITF_DEFAULT_PERM
 NITF_INVALID_HANDLE_VALUE = _nitropy.NITF_INVALID_HANDLE_VALUE
@@ -473,208 +481,6 @@ nitf_PluginRegistry_retrieveCompConstructor = _nitropy.nitf_PluginRegistry_retri
 def nitf_PluginRegistry_retrieveCompInterface(comp: 'char const *', error: 'nrt_Error') -> "nitf_CompressionInterface *":
     return _nitropy.nitf_PluginRegistry_retrieveCompInterface(comp, error)
 nitf_PluginRegistry_retrieveCompInterface = _nitropy.nitf_PluginRegistry_retrieveCompInterface
-class nitf_Reader(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_Reader, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, nitf_Reader, name)
-
-    def __init__(self, *args, **kwargs):
-        raise AttributeError("No constructor defined")
-    __repr__ = _swig_repr
-    __swig_setmethods__["warningList"] = _nitropy.nitf_Reader_warningList_set
-    __swig_getmethods__["warningList"] = _nitropy.nitf_Reader_warningList_get
-    if _newclass:
-        warningList = _swig_property(_nitropy.nitf_Reader_warningList_get, _nitropy.nitf_Reader_warningList_set)
-    __swig_setmethods__["input"] = _nitropy.nitf_Reader_input_set
-    __swig_getmethods__["input"] = _nitropy.nitf_Reader_input_get
-    if _newclass:
-        input = _swig_property(_nitropy.nitf_Reader_input_get, _nitropy.nitf_Reader_input_set)
-    __swig_setmethods__["record"] = _nitropy.nitf_Reader_record_set
-    __swig_getmethods__["record"] = _nitropy.nitf_Reader_record_get
-    if _newclass:
-        record = _swig_property(_nitropy.nitf_Reader_record_get, _nitropy.nitf_Reader_record_set)
-    __swig_setmethods__["ownInput"] = _nitropy.nitf_Reader_ownInput_set
-    __swig_getmethods__["ownInput"] = _nitropy.nitf_Reader_ownInput_get
-    if _newclass:
-        ownInput = _swig_property(_nitropy.nitf_Reader_ownInput_get, _nitropy.nitf_Reader_ownInput_set)
-    __swig_destroy__ = _nitropy.delete_nitf_Reader
-    __del__ = lambda self: None
-nitf_Reader_swigregister = _nitropy.nitf_Reader_swigregister
-nitf_Reader_swigregister(nitf_Reader)
-
-
-def nitf_Reader_construct(error: 'nrt_Error') -> "nitf_Reader *":
-    return _nitropy.nitf_Reader_construct(error)
-nitf_Reader_construct = _nitropy.nitf_Reader_construct
-
-def nitf_Reader_destruct(reader: 'nitf_Reader **') -> "void":
-    return _nitropy.nitf_Reader_destruct(reader)
-nitf_Reader_destruct = _nitropy.nitf_Reader_destruct
-
-def nitf_Reader_read(reader: 'nitf_Reader', inputHandle: 'nitf_IOHandle', error: 'nrt_Error') -> "nitf_Record *":
-    return _nitropy.nitf_Reader_read(reader, inputHandle, error)
-nitf_Reader_read = _nitropy.nitf_Reader_read
-
-def nitf_Reader_readIO(reader: 'nitf_Reader', io: 'nrt_IOInterface', error: 'nrt_Error') -> "nitf_Record *":
-    return _nitropy.nitf_Reader_readIO(reader, io, error)
-nitf_Reader_readIO = _nitropy.nitf_Reader_readIO
-
-def nitf_Reader_newImageReader(reader: 'nitf_Reader', imageSegmentNumber: 'int', options: 'nrt_HashTable', error: 'nrt_Error') -> "nitf_ImageReader *":
-    return _nitropy.nitf_Reader_newImageReader(reader, imageSegmentNumber, options, error)
-nitf_Reader_newImageReader = _nitropy.nitf_Reader_newImageReader
-
-def nitf_Reader_newTextReader(reader: 'nitf_Reader', textSegmentNumber: 'int', error: 'nrt_Error') -> "nitf_SegmentReader *":
-    return _nitropy.nitf_Reader_newTextReader(reader, textSegmentNumber, error)
-nitf_Reader_newTextReader = _nitropy.nitf_Reader_newTextReader
-
-def nitf_Reader_newGraphicReader(reader: 'nitf_Reader', graphicSegmentNumber: 'int', error: 'nrt_Error') -> "nitf_SegmentReader *":
-    return _nitropy.nitf_Reader_newGraphicReader(reader, graphicSegmentNumber, error)
-nitf_Reader_newGraphicReader = _nitropy.nitf_Reader_newGraphicReader
-
-def nitf_Reader_newDEReader(reader: 'nitf_Reader', DESegmentNumber: 'int', error: 'nrt_Error') -> "nitf_SegmentReader *":
-    return _nitropy.nitf_Reader_newDEReader(reader, DESegmentNumber, error)
-nitf_Reader_newDEReader = _nitropy.nitf_Reader_newDEReader
-
-def nitf_Reader_getNITFVersion(fileName: 'char const *') -> "nitf_Version":
-    return _nitropy.nitf_Reader_getNITFVersion(fileName)
-nitf_Reader_getNITFVersion = _nitropy.nitf_Reader_getNITFVersion
-
-def nitf_Reader_getNITFVersionIO(io: 'nrt_IOInterface') -> "nitf_Version":
-    return _nitropy.nitf_Reader_getNITFVersionIO(io)
-nitf_Reader_getNITFVersionIO = _nitropy.nitf_Reader_getNITFVersionIO
-NITF_WRITER_FILL_LEFT = _nitropy.NITF_WRITER_FILL_LEFT
-NITF_WRITER_FILL_RIGHT = _nitropy.NITF_WRITER_FILL_RIGHT
-class nitf_Writer(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_Writer, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, nitf_Writer, name)
-
-    def __init__(self, *args, **kwargs):
-        raise AttributeError("No constructor defined")
-    __repr__ = _swig_repr
-    __swig_setmethods__["warningList"] = _nitropy.nitf_Writer_warningList_set
-    __swig_getmethods__["warningList"] = _nitropy.nitf_Writer_warningList_get
-    if _newclass:
-        warningList = _swig_property(_nitropy.nitf_Writer_warningList_get, _nitropy.nitf_Writer_warningList_set)
-    __swig_setmethods__["imageWriters"] = _nitropy.nitf_Writer_imageWriters_set
-    __swig_getmethods__["imageWriters"] = _nitropy.nitf_Writer_imageWriters_get
-    if _newclass:
-        imageWriters = _swig_property(_nitropy.nitf_Writer_imageWriters_get, _nitropy.nitf_Writer_imageWriters_set)
-    __swig_setmethods__["textWriters"] = _nitropy.nitf_Writer_textWriters_set
-    __swig_getmethods__["textWriters"] = _nitropy.nitf_Writer_textWriters_get
-    if _newclass:
-        textWriters = _swig_property(_nitropy.nitf_Writer_textWriters_get, _nitropy.nitf_Writer_textWriters_set)
-    __swig_setmethods__["graphicWriters"] = _nitropy.nitf_Writer_graphicWriters_set
-    __swig_getmethods__["graphicWriters"] = _nitropy.nitf_Writer_graphicWriters_get
-    if _newclass:
-        graphicWriters = _swig_property(_nitropy.nitf_Writer_graphicWriters_get, _nitropy.nitf_Writer_graphicWriters_set)
-    __swig_setmethods__["dataExtensionWriters"] = _nitropy.nitf_Writer_dataExtensionWriters_set
-    __swig_getmethods__["dataExtensionWriters"] = _nitropy.nitf_Writer_dataExtensionWriters_get
-    if _newclass:
-        dataExtensionWriters = _swig_property(_nitropy.nitf_Writer_dataExtensionWriters_get, _nitropy.nitf_Writer_dataExtensionWriters_set)
-    __swig_setmethods__["output"] = _nitropy.nitf_Writer_output_set
-    __swig_getmethods__["output"] = _nitropy.nitf_Writer_output_get
-    if _newclass:
-        output = _swig_property(_nitropy.nitf_Writer_output_get, _nitropy.nitf_Writer_output_set)
-    __swig_setmethods__["record"] = _nitropy.nitf_Writer_record_set
-    __swig_getmethods__["record"] = _nitropy.nitf_Writer_record_get
-    if _newclass:
-        record = _swig_property(_nitropy.nitf_Writer_record_get, _nitropy.nitf_Writer_record_set)
-    __swig_setmethods__["numImageWriters"] = _nitropy.nitf_Writer_numImageWriters_set
-    __swig_getmethods__["numImageWriters"] = _nitropy.nitf_Writer_numImageWriters_get
-    if _newclass:
-        numImageWriters = _swig_property(_nitropy.nitf_Writer_numImageWriters_get, _nitropy.nitf_Writer_numImageWriters_set)
-    __swig_setmethods__["numTextWriters"] = _nitropy.nitf_Writer_numTextWriters_set
-    __swig_getmethods__["numTextWriters"] = _nitropy.nitf_Writer_numTextWriters_get
-    if _newclass:
-        numTextWriters = _swig_property(_nitropy.nitf_Writer_numTextWriters_get, _nitropy.nitf_Writer_numTextWriters_set)
-    __swig_setmethods__["numGraphicWriters"] = _nitropy.nitf_Writer_numGraphicWriters_set
-    __swig_getmethods__["numGraphicWriters"] = _nitropy.nitf_Writer_numGraphicWriters_get
-    if _newclass:
-        numGraphicWriters = _swig_property(_nitropy.nitf_Writer_numGraphicWriters_get, _nitropy.nitf_Writer_numGraphicWriters_set)
-    __swig_setmethods__["numDataExtensionWriters"] = _nitropy.nitf_Writer_numDataExtensionWriters_set
-    __swig_getmethods__["numDataExtensionWriters"] = _nitropy.nitf_Writer_numDataExtensionWriters_get
-    if _newclass:
-        numDataExtensionWriters = _swig_property(_nitropy.nitf_Writer_numDataExtensionWriters_get, _nitropy.nitf_Writer_numDataExtensionWriters_set)
-    __swig_setmethods__["ownOutput"] = _nitropy.nitf_Writer_ownOutput_set
-    __swig_getmethods__["ownOutput"] = _nitropy.nitf_Writer_ownOutput_get
-    if _newclass:
-        ownOutput = _swig_property(_nitropy.nitf_Writer_ownOutput_get, _nitropy.nitf_Writer_ownOutput_set)
-    __swig_destroy__ = _nitropy.delete_nitf_Writer
-    __del__ = lambda self: None
-nitf_Writer_swigregister = _nitropy.nitf_Writer_swigregister
-nitf_Writer_swigregister(nitf_Writer)
-
-
-def nitf_Writer_construct(error: 'nrt_Error') -> "nitf_Writer *":
-    return _nitropy.nitf_Writer_construct(error)
-nitf_Writer_construct = _nitropy.nitf_Writer_construct
-
-def nitf_Writer_destruct(writer: 'nitf_Writer **') -> "void":
-    return _nitropy.nitf_Writer_destruct(writer)
-nitf_Writer_destruct = _nitropy.nitf_Writer_destruct
-
-def nitf_Writer_prepare(writer: 'nitf_Writer', record: 'nitf_Record', ioHandle: 'nitf_IOHandle', error: 'nrt_Error') -> "bool":
-    return _nitropy.nitf_Writer_prepare(writer, record, ioHandle, error)
-nitf_Writer_prepare = _nitropy.nitf_Writer_prepare
-
-def nitf_Writer_prepareIO(writer: 'nitf_Writer', record: 'nitf_Record', io: 'nrt_IOInterface', error: 'nrt_Error') -> "bool":
-    return _nitropy.nitf_Writer_prepareIO(writer, record, io, error)
-nitf_Writer_prepareIO = _nitropy.nitf_Writer_prepareIO
-
-def nitf_Writer_setImageWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
-    return _nitropy.nitf_Writer_setImageWriteHandler(writer, index, writeHandler, error)
-nitf_Writer_setImageWriteHandler = _nitropy.nitf_Writer_setImageWriteHandler
-
-def nitf_Writer_setGraphicWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
-    return _nitropy.nitf_Writer_setGraphicWriteHandler(writer, index, writeHandler, error)
-nitf_Writer_setGraphicWriteHandler = _nitropy.nitf_Writer_setGraphicWriteHandler
-
-def nitf_Writer_setTextWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
-    return _nitropy.nitf_Writer_setTextWriteHandler(writer, index, writeHandler, error)
-nitf_Writer_setTextWriteHandler = _nitropy.nitf_Writer_setTextWriteHandler
-
-def nitf_Writer_setDEWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
-    return _nitropy.nitf_Writer_setDEWriteHandler(writer, index, writeHandler, error)
-nitf_Writer_setDEWriteHandler = _nitropy.nitf_Writer_setDEWriteHandler
-
-def nitf_Writer_newImageWriter(writer: 'nitf_Writer', index: 'int', options: 'nrt_HashTable', error: 'nrt_Error') -> "nitf_ImageWriter *":
-    return _nitropy.nitf_Writer_newImageWriter(writer, index, options, error)
-nitf_Writer_newImageWriter = _nitropy.nitf_Writer_newImageWriter
-
-def nitf_Writer_newGraphicWriter(writer: 'nitf_Writer', index: 'int', error: 'nrt_Error') -> "nitf_SegmentWriter *":
-    return _nitropy.nitf_Writer_newGraphicWriter(writer, index, error)
-nitf_Writer_newGraphicWriter = _nitropy.nitf_Writer_newGraphicWriter
-
-def nitf_Writer_newTextWriter(writer: 'nitf_Writer', index: 'int', error: 'nrt_Error') -> "nitf_SegmentWriter *":
-    return _nitropy.nitf_Writer_newTextWriter(writer, index, error)
-nitf_Writer_newTextWriter = _nitropy.nitf_Writer_newTextWriter
-
-def nitf_Writer_newDEWriter(writer: 'nitf_Writer', index: 'int', error: 'nrt_Error') -> "nitf_SegmentWriter *":
-    return _nitropy.nitf_Writer_newDEWriter(writer, index, error)
-nitf_Writer_newDEWriter = _nitropy.nitf_Writer_newDEWriter
-
-def nitf_Writer_write(writer: 'nitf_Writer', error: 'nrt_Error') -> "bool":
-    return _nitropy.nitf_Writer_write(writer, error)
-nitf_Writer_write = _nitropy.nitf_Writer_write
-
-def nitf_Writer_writeHeader(writer: 'nitf_Writer', fileLenOff: 'nitf_Off *', hdrLen: 'uint32_t *', error: 'nrt_Error') -> "bool":
-    return _nitropy.nitf_Writer_writeHeader(writer, fileLenOff, hdrLen, error)
-nitf_Writer_writeHeader = _nitropy.nitf_Writer_writeHeader
-
-def nitf_Writer_writeImageSubheader(writer: 'nitf_Writer', subhdr: 'nitf_ImageSubheader', fver: 'nitf_Version', comratOff: 'nitf_Off *', error: 'nrt_Error') -> "bool":
-    return _nitropy.nitf_Writer_writeImageSubheader(writer, subhdr, fver, comratOff, error)
-nitf_Writer_writeImageSubheader = _nitropy.nitf_Writer_writeImageSubheader
-
-def nitf_Writer_writeDESubheader(writer: 'nitf_Writer', subhdr: 'nitf_DESubheader', userSublen: 'uint32_t *', fver: 'nitf_Version', error: 'nrt_Error') -> "bool":
-    return _nitropy.nitf_Writer_writeDESubheader(writer, subhdr, userSublen, fver, error)
-nitf_Writer_writeDESubheader = _nitropy.nitf_Writer_writeDESubheader
-
-def nitf_Writer_writeInt64Field(writer: 'nitf_Writer', field: 'uint64_t', length: 'uint32_t', fill: 'char', fillDir: 'uint32_t', error: 'nrt_Error') -> "bool":
-    return _nitropy.nitf_Writer_writeInt64Field(writer, field, length, fill, fillDir, error)
-nitf_Writer_writeInt64Field = _nitropy.nitf_Writer_writeInt64Field
 class nitf_Record(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_Record, name, value)
@@ -935,6 +741,10 @@ nitf_Field_resetLength = _nitropy.nitf_Field_resetLength
 def nitf_Field_print(field: 'nitf_Field') -> "void":
     return _nitropy.nitf_Field_print(field)
 nitf_Field_print = _nitropy.nitf_Field_print
+
+def nitf_Field_snprint(buffer: 'char *', buf_size: 'size_t', field: 'nitf_Field') -> "void":
+    return _nitropy.nitf_Field_snprint(buffer, buf_size, field)
+nitf_Field_snprint = _nitropy.nitf_Field_snprint
 
 def nitf_Field_resizeField(field: 'nitf_Field', newLength: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_Field_resizeField(field, newLength, error)
@@ -3171,6 +2981,208 @@ nitf_BandInfo_clone = _nitropy.nitf_BandInfo_clone
 def nitf_BandInfo_init(bandInfo: 'nitf_BandInfo', representation: 'char const *', subcategory: 'char const *', imageFilterCondition: 'char const *', imageFilterCode: 'char const *', numLUTs: 'uint32_t', bandEntriesPerLUT: 'uint32_t', lut: 'nitf_LookupTable *', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_BandInfo_init(bandInfo, representation, subcategory, imageFilterCondition, imageFilterCode, numLUTs, bandEntriesPerLUT, lut, error)
 nitf_BandInfo_init = _nitropy.nitf_BandInfo_init
+NITF_WRITER_FILL_LEFT = _nitropy.NITF_WRITER_FILL_LEFT
+NITF_WRITER_FILL_RIGHT = _nitropy.NITF_WRITER_FILL_RIGHT
+class nitf_Writer(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_Writer, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, nitf_Writer, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined")
+    __repr__ = _swig_repr
+    __swig_setmethods__["warningList"] = _nitropy.nitf_Writer_warningList_set
+    __swig_getmethods__["warningList"] = _nitropy.nitf_Writer_warningList_get
+    if _newclass:
+        warningList = _swig_property(_nitropy.nitf_Writer_warningList_get, _nitropy.nitf_Writer_warningList_set)
+    __swig_setmethods__["imageWriters"] = _nitropy.nitf_Writer_imageWriters_set
+    __swig_getmethods__["imageWriters"] = _nitropy.nitf_Writer_imageWriters_get
+    if _newclass:
+        imageWriters = _swig_property(_nitropy.nitf_Writer_imageWriters_get, _nitropy.nitf_Writer_imageWriters_set)
+    __swig_setmethods__["textWriters"] = _nitropy.nitf_Writer_textWriters_set
+    __swig_getmethods__["textWriters"] = _nitropy.nitf_Writer_textWriters_get
+    if _newclass:
+        textWriters = _swig_property(_nitropy.nitf_Writer_textWriters_get, _nitropy.nitf_Writer_textWriters_set)
+    __swig_setmethods__["graphicWriters"] = _nitropy.nitf_Writer_graphicWriters_set
+    __swig_getmethods__["graphicWriters"] = _nitropy.nitf_Writer_graphicWriters_get
+    if _newclass:
+        graphicWriters = _swig_property(_nitropy.nitf_Writer_graphicWriters_get, _nitropy.nitf_Writer_graphicWriters_set)
+    __swig_setmethods__["dataExtensionWriters"] = _nitropy.nitf_Writer_dataExtensionWriters_set
+    __swig_getmethods__["dataExtensionWriters"] = _nitropy.nitf_Writer_dataExtensionWriters_get
+    if _newclass:
+        dataExtensionWriters = _swig_property(_nitropy.nitf_Writer_dataExtensionWriters_get, _nitropy.nitf_Writer_dataExtensionWriters_set)
+    __swig_setmethods__["output"] = _nitropy.nitf_Writer_output_set
+    __swig_getmethods__["output"] = _nitropy.nitf_Writer_output_get
+    if _newclass:
+        output = _swig_property(_nitropy.nitf_Writer_output_get, _nitropy.nitf_Writer_output_set)
+    __swig_setmethods__["record"] = _nitropy.nitf_Writer_record_set
+    __swig_getmethods__["record"] = _nitropy.nitf_Writer_record_get
+    if _newclass:
+        record = _swig_property(_nitropy.nitf_Writer_record_get, _nitropy.nitf_Writer_record_set)
+    __swig_setmethods__["numImageWriters"] = _nitropy.nitf_Writer_numImageWriters_set
+    __swig_getmethods__["numImageWriters"] = _nitropy.nitf_Writer_numImageWriters_get
+    if _newclass:
+        numImageWriters = _swig_property(_nitropy.nitf_Writer_numImageWriters_get, _nitropy.nitf_Writer_numImageWriters_set)
+    __swig_setmethods__["numTextWriters"] = _nitropy.nitf_Writer_numTextWriters_set
+    __swig_getmethods__["numTextWriters"] = _nitropy.nitf_Writer_numTextWriters_get
+    if _newclass:
+        numTextWriters = _swig_property(_nitropy.nitf_Writer_numTextWriters_get, _nitropy.nitf_Writer_numTextWriters_set)
+    __swig_setmethods__["numGraphicWriters"] = _nitropy.nitf_Writer_numGraphicWriters_set
+    __swig_getmethods__["numGraphicWriters"] = _nitropy.nitf_Writer_numGraphicWriters_get
+    if _newclass:
+        numGraphicWriters = _swig_property(_nitropy.nitf_Writer_numGraphicWriters_get, _nitropy.nitf_Writer_numGraphicWriters_set)
+    __swig_setmethods__["numDataExtensionWriters"] = _nitropy.nitf_Writer_numDataExtensionWriters_set
+    __swig_getmethods__["numDataExtensionWriters"] = _nitropy.nitf_Writer_numDataExtensionWriters_get
+    if _newclass:
+        numDataExtensionWriters = _swig_property(_nitropy.nitf_Writer_numDataExtensionWriters_get, _nitropy.nitf_Writer_numDataExtensionWriters_set)
+    __swig_setmethods__["ownOutput"] = _nitropy.nitf_Writer_ownOutput_set
+    __swig_getmethods__["ownOutput"] = _nitropy.nitf_Writer_ownOutput_get
+    if _newclass:
+        ownOutput = _swig_property(_nitropy.nitf_Writer_ownOutput_get, _nitropy.nitf_Writer_ownOutput_set)
+    __swig_destroy__ = _nitropy.delete_nitf_Writer
+    __del__ = lambda self: None
+nitf_Writer_swigregister = _nitropy.nitf_Writer_swigregister
+nitf_Writer_swigregister(nitf_Writer)
+
+
+def nitf_Writer_construct(error: 'nrt_Error') -> "nitf_Writer *":
+    return _nitropy.nitf_Writer_construct(error)
+nitf_Writer_construct = _nitropy.nitf_Writer_construct
+
+def nitf_Writer_destruct(writer: 'nitf_Writer **') -> "void":
+    return _nitropy.nitf_Writer_destruct(writer)
+nitf_Writer_destruct = _nitropy.nitf_Writer_destruct
+
+def nitf_Writer_prepare(writer: 'nitf_Writer', record: 'nitf_Record', ioHandle: 'nitf_IOHandle', error: 'nrt_Error') -> "bool":
+    return _nitropy.nitf_Writer_prepare(writer, record, ioHandle, error)
+nitf_Writer_prepare = _nitropy.nitf_Writer_prepare
+
+def nitf_Writer_prepareIO(writer: 'nitf_Writer', record: 'nitf_Record', io: 'nrt_IOInterface', error: 'nrt_Error') -> "bool":
+    return _nitropy.nitf_Writer_prepareIO(writer, record, io, error)
+nitf_Writer_prepareIO = _nitropy.nitf_Writer_prepareIO
+
+def nitf_Writer_setImageWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
+    return _nitropy.nitf_Writer_setImageWriteHandler(writer, index, writeHandler, error)
+nitf_Writer_setImageWriteHandler = _nitropy.nitf_Writer_setImageWriteHandler
+
+def nitf_Writer_setGraphicWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
+    return _nitropy.nitf_Writer_setGraphicWriteHandler(writer, index, writeHandler, error)
+nitf_Writer_setGraphicWriteHandler = _nitropy.nitf_Writer_setGraphicWriteHandler
+
+def nitf_Writer_setTextWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
+    return _nitropy.nitf_Writer_setTextWriteHandler(writer, index, writeHandler, error)
+nitf_Writer_setTextWriteHandler = _nitropy.nitf_Writer_setTextWriteHandler
+
+def nitf_Writer_setDEWriteHandler(writer: 'nitf_Writer', index: 'int', writeHandler: 'nitf_WriteHandler *', error: 'nrt_Error') -> "bool":
+    return _nitropy.nitf_Writer_setDEWriteHandler(writer, index, writeHandler, error)
+nitf_Writer_setDEWriteHandler = _nitropy.nitf_Writer_setDEWriteHandler
+
+def nitf_Writer_newImageWriter(writer: 'nitf_Writer', index: 'int', options: 'nrt_HashTable', error: 'nrt_Error') -> "nitf_ImageWriter *":
+    return _nitropy.nitf_Writer_newImageWriter(writer, index, options, error)
+nitf_Writer_newImageWriter = _nitropy.nitf_Writer_newImageWriter
+
+def nitf_Writer_newGraphicWriter(writer: 'nitf_Writer', index: 'int', error: 'nrt_Error') -> "nitf_SegmentWriter *":
+    return _nitropy.nitf_Writer_newGraphicWriter(writer, index, error)
+nitf_Writer_newGraphicWriter = _nitropy.nitf_Writer_newGraphicWriter
+
+def nitf_Writer_newTextWriter(writer: 'nitf_Writer', index: 'int', error: 'nrt_Error') -> "nitf_SegmentWriter *":
+    return _nitropy.nitf_Writer_newTextWriter(writer, index, error)
+nitf_Writer_newTextWriter = _nitropy.nitf_Writer_newTextWriter
+
+def nitf_Writer_newDEWriter(writer: 'nitf_Writer', index: 'int', error: 'nrt_Error') -> "nitf_SegmentWriter *":
+    return _nitropy.nitf_Writer_newDEWriter(writer, index, error)
+nitf_Writer_newDEWriter = _nitropy.nitf_Writer_newDEWriter
+
+def nitf_Writer_write(writer: 'nitf_Writer', error: 'nrt_Error') -> "bool":
+    return _nitropy.nitf_Writer_write(writer, error)
+nitf_Writer_write = _nitropy.nitf_Writer_write
+
+def nitf_Writer_writeHeader(writer: 'nitf_Writer', fileLenOff: 'nitf_Off *', hdrLen: 'uint32_t *', error: 'nrt_Error') -> "bool":
+    return _nitropy.nitf_Writer_writeHeader(writer, fileLenOff, hdrLen, error)
+nitf_Writer_writeHeader = _nitropy.nitf_Writer_writeHeader
+
+def nitf_Writer_writeImageSubheader(writer: 'nitf_Writer', subhdr: 'nitf_ImageSubheader', fver: 'nitf_Version', comratOff: 'nitf_Off *', error: 'nrt_Error') -> "bool":
+    return _nitropy.nitf_Writer_writeImageSubheader(writer, subhdr, fver, comratOff, error)
+nitf_Writer_writeImageSubheader = _nitropy.nitf_Writer_writeImageSubheader
+
+def nitf_Writer_writeDESubheader(writer: 'nitf_Writer', subhdr: 'nitf_DESubheader', userSublen: 'uint32_t *', fver: 'nitf_Version', error: 'nrt_Error') -> "bool":
+    return _nitropy.nitf_Writer_writeDESubheader(writer, subhdr, userSublen, fver, error)
+nitf_Writer_writeDESubheader = _nitropy.nitf_Writer_writeDESubheader
+
+def nitf_Writer_writeInt64Field(writer: 'nitf_Writer', field: 'uint64_t', length: 'uint32_t', fill: 'char', fillDir: 'uint32_t', error: 'nrt_Error') -> "bool":
+    return _nitropy.nitf_Writer_writeInt64Field(writer, field, length, fill, fillDir, error)
+nitf_Writer_writeInt64Field = _nitropy.nitf_Writer_writeInt64Field
+class nitf_Reader(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, nitf_Reader, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, nitf_Reader, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined")
+    __repr__ = _swig_repr
+    __swig_setmethods__["warningList"] = _nitropy.nitf_Reader_warningList_set
+    __swig_getmethods__["warningList"] = _nitropy.nitf_Reader_warningList_get
+    if _newclass:
+        warningList = _swig_property(_nitropy.nitf_Reader_warningList_get, _nitropy.nitf_Reader_warningList_set)
+    __swig_setmethods__["input"] = _nitropy.nitf_Reader_input_set
+    __swig_getmethods__["input"] = _nitropy.nitf_Reader_input_get
+    if _newclass:
+        input = _swig_property(_nitropy.nitf_Reader_input_get, _nitropy.nitf_Reader_input_set)
+    __swig_setmethods__["record"] = _nitropy.nitf_Reader_record_set
+    __swig_getmethods__["record"] = _nitropy.nitf_Reader_record_get
+    if _newclass:
+        record = _swig_property(_nitropy.nitf_Reader_record_get, _nitropy.nitf_Reader_record_set)
+    __swig_setmethods__["ownInput"] = _nitropy.nitf_Reader_ownInput_set
+    __swig_getmethods__["ownInput"] = _nitropy.nitf_Reader_ownInput_get
+    if _newclass:
+        ownInput = _swig_property(_nitropy.nitf_Reader_ownInput_get, _nitropy.nitf_Reader_ownInput_set)
+    __swig_destroy__ = _nitropy.delete_nitf_Reader
+    __del__ = lambda self: None
+nitf_Reader_swigregister = _nitropy.nitf_Reader_swigregister
+nitf_Reader_swigregister(nitf_Reader)
+
+
+def nitf_Reader_construct(error: 'nrt_Error') -> "nitf_Reader *":
+    return _nitropy.nitf_Reader_construct(error)
+nitf_Reader_construct = _nitropy.nitf_Reader_construct
+
+def nitf_Reader_destruct(reader: 'nitf_Reader **') -> "void":
+    return _nitropy.nitf_Reader_destruct(reader)
+nitf_Reader_destruct = _nitropy.nitf_Reader_destruct
+
+def nitf_Reader_read(reader: 'nitf_Reader', inputHandle: 'nitf_IOHandle', error: 'nrt_Error') -> "nitf_Record *":
+    return _nitropy.nitf_Reader_read(reader, inputHandle, error)
+nitf_Reader_read = _nitropy.nitf_Reader_read
+
+def nitf_Reader_readIO(reader: 'nitf_Reader', io: 'nrt_IOInterface', error: 'nrt_Error') -> "nitf_Record *":
+    return _nitropy.nitf_Reader_readIO(reader, io, error)
+nitf_Reader_readIO = _nitropy.nitf_Reader_readIO
+
+def nitf_Reader_newImageReader(reader: 'nitf_Reader', imageSegmentNumber: 'int', options: 'nrt_HashTable', error: 'nrt_Error') -> "nitf_ImageReader *":
+    return _nitropy.nitf_Reader_newImageReader(reader, imageSegmentNumber, options, error)
+nitf_Reader_newImageReader = _nitropy.nitf_Reader_newImageReader
+
+def nitf_Reader_newTextReader(reader: 'nitf_Reader', textSegmentNumber: 'int', error: 'nrt_Error') -> "nitf_SegmentReader *":
+    return _nitropy.nitf_Reader_newTextReader(reader, textSegmentNumber, error)
+nitf_Reader_newTextReader = _nitropy.nitf_Reader_newTextReader
+
+def nitf_Reader_newGraphicReader(reader: 'nitf_Reader', graphicSegmentNumber: 'int', error: 'nrt_Error') -> "nitf_SegmentReader *":
+    return _nitropy.nitf_Reader_newGraphicReader(reader, graphicSegmentNumber, error)
+nitf_Reader_newGraphicReader = _nitropy.nitf_Reader_newGraphicReader
+
+def nitf_Reader_newDEReader(reader: 'nitf_Reader', DESegmentNumber: 'int', error: 'nrt_Error') -> "nitf_SegmentReader *":
+    return _nitropy.nitf_Reader_newDEReader(reader, DESegmentNumber, error)
+nitf_Reader_newDEReader = _nitropy.nitf_Reader_newDEReader
+
+def nitf_Reader_getNITFVersion(fileName: 'char const *') -> "nitf_Version":
+    return _nitropy.nitf_Reader_getNITFVersion(fileName)
+nitf_Reader_getNITFVersion = _nitropy.nitf_Reader_getNITFVersion
+
+def nitf_Reader_getNITFVersionIO(io: 'nrt_IOInterface') -> "nitf_Version":
+    return _nitropy.nitf_Reader_getNITFVersionIO(io)
+nitf_Reader_getNITFVersionIO = _nitropy.nitf_Reader_getNITFVersionIO
 PY_NITF_CREATE = _nitropy.PY_NITF_CREATE
 PY_NITF_TRUNCATE = _nitropy.PY_NITF_TRUNCATE
 PY_NITF_OPEN_EXISTING = _nitropy.PY_NITF_OPEN_EXISTING
@@ -3201,13 +3213,21 @@ def py_Field_getInt(field: 'nitf_Field', error: 'nrt_Error') -> "uint32_t":
     return _nitropy.py_Field_getInt(field, error)
 py_Field_getInt = _nitropy.py_Field_getInt
 
-def py_Field_setRawData(field: 'nitf_Field', buf: 'char *', length: 'int', error: 'nrt_Error') -> "void":
-    return _nitropy.py_Field_setRawData(field, buf, length, error)
+def py_Field_setRawData(field: 'nitf_Field', pfsrd_buf: 'char *', length: 'int', error: 'nrt_Error') -> "void":
+    return _nitropy.py_Field_setRawData(field, pfsrd_buf, length, error)
 py_Field_setRawData = _nitropy.py_Field_setRawData
 
 def py_TRE_setField(tre: 'nitf_TRE', tag: 'char const *', buf: 'char *', length: 'int', error: 'nrt_Error') -> "void":
     return _nitropy.py_TRE_setField(tre, tag, buf, length, error)
 py_TRE_setField = _nitropy.py_TRE_setField
+
+def py_Field_getRawData(field: 'nitf_Field', error: 'nrt_Error') -> "PyObject *":
+    return _nitropy.py_Field_getRawData(field, error)
+py_Field_getRawData = _nitropy.py_Field_getRawData
+
+def py_TRE_clone(tre: 'nitf_TRE', error: 'nrt_Error') -> "nitf_TRE *":
+    return _nitropy.py_TRE_clone(tre, error)
+py_TRE_clone = _nitropy.py_TRE_clone
 
 def py_Record_getFileHeader(record: 'nitf_Record') -> "nitf_FileHeader *":
     return _nitropy.py_Record_getFileHeader(record)
@@ -3273,9 +3293,25 @@ def py_FileHeader_getComponentInfo(header: 'nitf_FileHeader', index: 'int', type
     return _nitropy.py_FileHeader_getComponentInfo(header, index, type, error)
 py_FileHeader_getComponentInfo = _nitropy.py_FileHeader_getComponentInfo
 
+def py_nitf_PluginRegistry_canRetrieveTREHandler(reg: 'nitf_PluginRegistry', ident: 'char const *', error: 'nrt_Error') -> "bool":
+    return _nitropy.py_nitf_PluginRegistry_canRetrieveTREHandler(reg, ident, error)
+py_nitf_PluginRegistry_canRetrieveTREHandler = _nitropy.py_nitf_PluginRegistry_canRetrieveTREHandler
+
 def py_nitf_Reader_newImageReader(reader: 'nitf_Reader', imageSegmentNumber: 'int', options: 'PyObject *', error: 'nrt_Error') -> "nitf_ImageReader *":
     return _nitropy.py_nitf_Reader_newImageReader(reader, imageSegmentNumber, options, error)
 py_nitf_Reader_newImageReader = _nitropy.py_nitf_Reader_newImageReader
+
+def py_nitf_Writer_construct(error: 'nrt_Error') -> "nitf_Writer *":
+    return _nitropy.py_nitf_Writer_construct(error)
+py_nitf_Writer_construct = _nitropy.py_nitf_Writer_construct
+
+def py_nitf_Writer_prepare(writer: 'nitf_Writer', record: 'nitf_Record', ioHandle: 'nitf_IOHandle', error: 'nrt_Error') -> "bool":
+    return _nitropy.py_nitf_Writer_prepare(writer, record, ioHandle, error)
+py_nitf_Writer_prepare = _nitropy.py_nitf_Writer_prepare
+
+def py_nitf_Writer_destruct(writer: 'nitf_Writer **') -> "void":
+    return _nitropy.py_nitf_Writer_destruct(writer)
+py_nitf_Writer_destruct = _nitropy.py_nitf_Writer_destruct
 
 def py_nitf_Writer_newImageWriter(writer: 'nitf_Writer', index: 'int', options: 'PyObject *', error: 'nrt_Error') -> "nitf_ImageWriter *":
     return _nitropy.py_nitf_Writer_newImageWriter(writer, index, options, error)
