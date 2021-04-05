@@ -42,10 +42,8 @@ FileHeader::FileHeader(nitf_FileHeader * x)
     getNativeOrThrow();
 }
 
-FileHeader::FileHeader()
+FileHeader::FileHeader() : FileHeader(nitf_FileHeader_construct(&error))
 {
-    setNative(nitf_FileHeader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 

@@ -123,8 +123,8 @@ int main(int argc, char **argv)
             uint32_t nBands = imseg.getSubheader().getNumImageBands();
             uint32_t nRows = imseg.getSubheader().getNumRows();
             uint32_t nCols = imseg.getSubheader().getNumCols();
-            uint32_t pixelSize = NITF_NBPP_TO_BYTES(
-                    imseg.getSubheader().getNumBitsPerPixel());
+            const auto pixelSize = static_cast<uint32_t>(NITF_NBPP_TO_BYTES(
+                    imseg.getSubheader().getNumBitsPerPixel()));
 
             for (uint32_t ii = 0; i < nBands; i++)
             {

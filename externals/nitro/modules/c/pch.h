@@ -6,14 +6,10 @@
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined
-
+#pragma warning(disable: 4774) // '...' : format string expected in argument 3 is not a string literal
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
 
-// TODO: get rid of these someday?
-#pragma warning(disable: 4774) // '...' : format string expected in argument 3 is not a string literal
-
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
-#pragma warning(disable: 26451) // Arithmetic overflow : Using operator '...' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow(io.2).
 #pragma warning(disable: 6385) // Reading invalid data from '...':  the readable size is '...' bytes, but '...' bytes may be read.
 #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
 

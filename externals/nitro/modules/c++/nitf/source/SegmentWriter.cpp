@@ -37,14 +37,14 @@ SegmentWriter::SegmentWriter(nitf::SegmentSource segmentSource)
     attachSource(segmentSource);
 }
 
-SegmentWriter::~SegmentWriter()
-{
+//SegmentWriter::~SegmentWriter()
+//{
 //    if (mAdopt && mSegmentSource)
 //    {
 //        mSegmentSource->decRef();
 //        delete mSegmentSource;
 //    }
-}
+//}
 
 void SegmentWriter::attachSource(nitf::SegmentSource segmentSource)
 {

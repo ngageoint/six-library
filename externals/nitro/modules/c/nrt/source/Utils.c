@@ -618,6 +618,32 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8)
     nrt_Utils_geographicLonToCharArray(d, m, s, buffer8);
 }
 
+/*!
+ * Helper function to actually perform a byte-swap.
+ *
+ * \param value Pointer to value being swapped
+ * \param indexOne Index of first byte to be swapped
+ * \param indexTwo Index of second byte to be swapped
+ */
+/*
+ * Older versions of Visual Studio do not support `inline` for C
+ * Using `__inline` for Windows instead
+ */
+NRTPRIV(void)
+#if defined(WIN32) || defined(_WIN32)
+__inline
+#else
+inline
+#endif
+nrt_Utils_swap(uint8_t* value, size_t indexOne,
+        size_t indexTwo)
+{
+    uint8_t temp;
+    temp = value[indexOne];
+    value[indexOne] = value[indexTwo];
+    value[indexTwo] = temp;
+}
+
 NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
 {
     switch(size)

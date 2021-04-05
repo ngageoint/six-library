@@ -71,7 +71,7 @@ public:
      *  \param copyData Whether or not to make a copy of the data.  If this is
      *  false, the data must outlive the memory source.
      */
-    SegmentMemorySource(const char* data, nitf::Off size, nitf::Off start,
+    SegmentMemorySource(const sys::byte* data, nitf::Off size, nitf::Off start,
         int byteSkip, bool copyData);
     template<typename TContainer>
     SegmentMemorySource(const TContainer& data, nitf::Off start,

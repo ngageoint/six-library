@@ -42,10 +42,8 @@ RESubheader::RESubheader(nitf_RESubheader * x)
     getNativeOrThrow();
 }
 
-RESubheader::RESubheader()
+RESubheader::RESubheader() : RESubheader(nitf_RESubheader_construct(&error))
 {
-    setNative(nitf_RESubheader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 

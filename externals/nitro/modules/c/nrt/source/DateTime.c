@@ -265,18 +265,16 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
     return NRT_FAILURE;
 }
 
-static struct tm* nrt_DateTime_gmtime(const time_t* const t)
+static void nrt_DateTime_gmtime_s(struct tm* result, const time_t* const time)
 {
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(push)
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
-    return gmtime(t);
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(pop)
+#ifdef _WIN32
+    gmtime_s(result, time);
+#else
+    // https://linux.die.net/man/3/gmtime_r
+    gmtime_r(time, result);
 #endif
 }
-#define gmtime(t) nrt_DateTime_gmtime(t)
+#define gmtime_s(result, time) nrt_DateTime_gmtime_s(result, time)
 
 NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
                                               double timeInMillis,
@@ -289,7 +287,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
     (void)error;
 
     timeInSeconds = (time_t) (timeInMillis / 1000);
-    t = *gmtime(&timeInSeconds);
+    gmtime_s(&t, &timeInSeconds);
 
     dateTime->timeInMillis = timeInMillis;
 
@@ -406,7 +404,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
     NRT_BOOL found = 0;
 
     timeInSeconds = (time_t) (millis / 1000);
-    t = *gmtime(&timeInSeconds);
+    gmtime_s(&t, &timeInSeconds);
     fractSeconds = (millis / 1000.0) - timeInSeconds;
 
     /* Search for "%...S" string */
@@ -868,7 +866,8 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
                 bp++;
                 while (*bp >= '0' && *bp <= '9')
                 {
-                    double num = (double) (*bp++ - '0');
+                    const char num_ = *bp++ - '0';
+                    double num = (double) (num_);
                     decimalPlaces++;
 
                     switch (decimalPlaces)

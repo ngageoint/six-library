@@ -99,10 +99,8 @@ nitf::HashTable::HashTable(nitf_HashTable * x)
     getNativeOrThrow();
 }
 
-nitf::HashTable::HashTable(int nbuckets)
+nitf::HashTable::HashTable(int nbuckets) : HashTable(nitf_HashTable_construct(nbuckets, &error))
 {
-    setNative(nitf_HashTable_construct(nbuckets, &error));
-    getNativeOrThrow();
     setManaged(false);
 }
 

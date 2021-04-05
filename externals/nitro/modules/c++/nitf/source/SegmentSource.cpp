@@ -26,7 +26,7 @@
 
 #include "nitf/System.hpp"
 
-nitf::SegmentMemorySource::SegmentMemorySource(const char* data, nitf::Off size,
+nitf::SegmentMemorySource::SegmentMemorySource(const sys::byte* data, nitf::Off size,
         nitf::Off start, int byteSkip, bool copyData)
 {
     setNative(nitf_SegmentMemorySource_construct(data, size, start, byteSkip,
@@ -48,10 +48,16 @@ SegmentMemorySource::SegmentMemorySource(const std::span<const sys::byte>& data,
     : SegmentMemorySource(data.data(), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
 {
 }
+
+static inline const sys::byte* data(const std::span<const std::byte>& data)
+{
+    const void* pData = data.data();
+    return static_cast<const sys::byte*>(pData);
+}
 template<>
-SegmentMemorySource::SegmentMemorySource(const std::span<const std::byte>& data, nitf::Off start,
+SegmentMemorySource::SegmentMemorySource(const std::span<const std::byte>& s, nitf::Off start,
     int byteSkip, bool copyData)
-    : SegmentMemorySource(reinterpret_cast<const char*>(data.data()), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
+    : SegmentMemorySource(data(s), gsl::narrow<nitf::Off>(s.size()), start, byteSkip, copyData)
 {
 }
 
