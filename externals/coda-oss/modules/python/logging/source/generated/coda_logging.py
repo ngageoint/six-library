@@ -294,9 +294,9 @@ class FileHandler(StreamHandler):
 
     def __init__(self, *args):
         """
-        __init__(logging::FileHandler self, std::string const & fname, LogLevel level, int creationFlags) -> FileHandler
-        __init__(logging::FileHandler self, std::string const & fname, LogLevel level) -> FileHandler
-        __init__(logging::FileHandler self, std::string const & fname) -> FileHandler
+        __init__(logging::FileHandler self, coda_oss::filesystem::path const & fname, LogLevel level, int creationFlags) -> FileHandler
+        __init__(logging::FileHandler self, coda_oss::filesystem::path const & fname, LogLevel level) -> FileHandler
+        __init__(logging::FileHandler self, coda_oss::filesystem::path const & fname) -> FileHandler
         """
         this = _coda_logging.new_FileHandler(*args)
         try:
