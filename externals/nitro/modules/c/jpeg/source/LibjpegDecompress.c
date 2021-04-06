@@ -448,7 +448,7 @@ void JPEGBlock_reorder(JPEGBlock* block)
 
     for (i = 0; i < block->bands; i++)
     {
-        bands[i] = (DATA_BUFFER) NITF_MALLOC(block->rows * block->cols);
+        bands[i] = (DATA_BUFFER) NITF_MALLOC(((size_t)block->rows) * block->cols);
     }
 
     for (n = 0; n < block->rows * block->cols; n++)
@@ -467,7 +467,10 @@ void JPEGBlock_reorder(JPEGBlock* block)
 
     for (i = 0; i < block->bands; i++)
     {
-        memcpy(block->uncompressed + current, bands[i], n);
+        if (bands[i] != NULL)
+        {
+            memcpy(block->uncompressed + current, bands[i], n);
+        }
         current += n;
     }
 
@@ -1302,6 +1305,12 @@ NITFPRIV(NITF_BOOL) findBlockSOI(JPEGImplControl* control,
     return NITF_SUCCESS;
 }
 
+static uint64_t block_size(const JPEGBlock* block)
+{
+    const int retval = _BLOCK_SIZE(block);
+    return retval;
+}
+
 NITFPRIV(uint8_t*) implReadBlock(nitf_DecompressionControl* control,
                                     uint32_t blockNumber,
                                     uint64_t* blockSize,
@@ -1478,7 +1487,7 @@ NITFPRIV(uint8_t*) implReadBlock(nitf_DecompressionControl* control,
 
     uncompressed = (uint8_t*)(block->uncompressed);
     block->uncompressed = NULL;
-    *blockSize = _BLOCK_SIZE(block);
+    *blockSize = block_size(block);
     JPEGBlock_destruct(&block);
 
     return uncompressed;

@@ -165,6 +165,7 @@ Context_swigregister(Context)
 def __lshift__(os: 'std::ostream &', c: 'Context') -> "std::ostream &":
     """__lshift__(std::ostream & os, Context c) -> std::ostream &"""
     return _coda_except.__lshift__(os, c)
+CODA_OSS_Throwable_isa_std_exception = _coda_except.CODA_OSS_Throwable_isa_std_exception
 class Throwable(_object):
     """Proxy of C++ except::Throwable class."""
 
@@ -210,6 +211,11 @@ class Throwable(_object):
     def toString(self) -> "std::string":
         """toString(Throwable self) -> std::string"""
         return _coda_except.Throwable_toString(self)
+
+
+    def what(self) -> "char const *":
+        """what(Throwable self) -> char const *"""
+        return _coda_except.Throwable_what(self)
 
 Throwable_swigregister = _coda_except.Throwable_swigregister
 Throwable_swigregister(Throwable)

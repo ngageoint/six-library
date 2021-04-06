@@ -181,7 +181,8 @@ NITFPRIV(NITF_BOOL) writeStringField(nitf_Writer * writer,
                                      const uint32_t fillDir,
                                      nitf_Error * error)
 {
-    char *buf = (char *) NITF_MALLOC(length + 1);
+    const size_t length_ = ((size_t)length) + 1;
+    char *buf = (char *) NITF_MALLOC(length_);
     if (!buf)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -189,7 +190,7 @@ NITFPRIV(NITF_BOOL) writeStringField(nitf_Writer * writer,
         goto CATCH_ERROR;
     }
 
-    memset(buf, '\0', length + 1);
+    memset(buf, '\0', length_);
     memcpy(buf, field, length);
 
     if (!padString(buf, length, fill, fillDir, error))
@@ -214,7 +215,8 @@ NITFPRIV(NITF_BOOL) writeValue(nitf_Writer * writer,
                                const uint32_t fillDir,
                                nitf_Error * error)
 {
-    char *buf = (char *) NITF_MALLOC(length + 1);
+    const size_t length_ = ((size_t)length) + 1;
+    char *buf = (char *) NITF_MALLOC(length_);
     if (!buf)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -222,7 +224,7 @@ NITFPRIV(NITF_BOOL) writeValue(nitf_Writer * writer,
         goto CATCH_ERROR;
     }
 
-    memset(buf, '\0', length + 1);
+    memset(buf, '\0', length_);
 
     /* first, check to see if we need to swap bytes */
     if (field->type == NITF_BINARY)
@@ -861,8 +863,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer* writer,
             NITF_TRY_GET_UINT32(subheader->numRows, &nrows, error);
             NITF_TRY_GET_UINT32(subheader->numCols, &ncols, error);
 
+            const uint64_t bands_ = ((uint64_t)nbands) + xbands;
             length = (uint64_t)ncols * (uint64_t)nrows *
-                    NITF_NBPP_TO_BYTES(nbpp) * (nbands + xbands);
+                    NITF_NBPP_TO_BYTES(nbpp) * bands_;
 
             if (length > NITF_MAX_IMAGE_LENGTH)
             {

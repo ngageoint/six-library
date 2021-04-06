@@ -508,7 +508,8 @@ NITF_BOOL writeText(cgm_Element* element, nitf_IOInterface* io, nitf_Error* erro
         return NITF_FAILURE;
 
     /* Trick since we know it zero padded in memory */
-    if (!nitf_IOInterface_write(io, (const char*)text->str, actual - 7, error))
+    const size_t actual_ = actual >= 7 ? actual - 7 : 0;
+    if (!nitf_IOInterface_write(io, (const char*)text->str, actual_, error))
         return NITF_FAILURE;
 
     return NITF_SUCCESS;

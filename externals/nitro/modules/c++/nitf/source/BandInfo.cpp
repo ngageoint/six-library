@@ -47,8 +47,6 @@ BandInfo::BandInfo() : BandInfo(nitf_BandInfo_construct(&error))
     setManaged(false);
 }
 
-BandInfo::~BandInfo() {}
-
 nitf::Field BandInfo::getRepresentation() const
 {
     return nitf::Field(getNativeOrThrow()->representation);

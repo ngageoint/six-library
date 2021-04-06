@@ -69,7 +69,7 @@ public:
     //! Constructor
     Writer();
 
-    ~Writer();
+    ~Writer() = default;
     Writer(Writer&&) = default;
     Writer& operator=(Writer&&) = default;
 

@@ -47,7 +47,6 @@ Writer::Writer(const Writer & x)
 {
     *this = x;
 }
-
 Writer & Writer::operator=(const Writer & x)
 {
     if (&x != this)
@@ -61,21 +60,19 @@ Writer::Writer(nitf_Writer * x)
     getNativeOrThrow();
 }
 
-Writer::Writer()
+Writer::Writer() : Writer(nitf_Writer_construct(&error))
 {
-    setNative(nitf_Writer_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
-Writer::~Writer()
-{
+//Writer::~Writer()
+//{
 //    for (std::vector<nitf::WriteHandler*>::iterator it = mWriteHandlers.begin(); it
 //            != mWriteHandlers.end(); ++it)
 //    {
 //        delete *it;
 //    }
-}
+//}
 
 void Writer::write()
 {

@@ -134,8 +134,9 @@ NITFPRIV(nitf_Off) MemorySource_getSize(NITF_DATA * data, nitf_Error *e)
 
     MemorySourceImpl *memorySource = (MemorySourceImpl *) data;
     assert(memorySource);
+    const int byteSkip = memorySource->byteSkip + 1;
     return memorySource->sizeSet ? (nitf_Off)memorySource->size :
-        (nitf_Off)(memorySource->size / (memorySource->byteSkip + 1));
+        (nitf_Off)(memorySource->size / byteSkip);
 }
 
 NITFPRIV(NITF_BOOL) MemorySource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *e)
@@ -318,8 +319,9 @@ NITFPRIV(NITF_BOOL) FileSource_offsetRead(FileSourceImpl * fileSource,
         void* buf,
         nitf_Off size, nitf_Error * error)
 {
-
-    nitf_Off tsize = size * (fileSource->byteSkip + 1);
+    assert(fileSource != NULL);
+    const int byteSkip = fileSource->byteSkip + 1;
+    nitf_Off tsize = size * byteSkip;
 
     uint8_t* tbuf;
     uint8_t* bufPtr = (uint8_t*)buf;
@@ -418,7 +420,8 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
     }
 
     /* figure out the actual # oif bytes represented by the source */
-    impl->size = impl->fileSize / (impl->byteSkip + 1);
+    const int byteSkip_ = impl->byteSkip + 1;
+    impl->size = impl->fileSize / byteSkip_;
 
     segmentSource = (nitf_SegmentSource *) NITF_MALLOC(sizeof(nitf_SegmentSource));
     if (!segmentSource)
@@ -470,7 +473,8 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_constructIO
     }
 
     /* figure out the actual # oif bytes represented by the source */
-    impl->size = impl->fileSize / (impl->byteSkip + 1);
+    const int byteSkip_ = impl->byteSkip + 1;
+    impl->size = impl->fileSize / byteSkip_;
 
     segmentSource = (nitf_SegmentSource *) NITF_MALLOC(sizeof(nitf_SegmentSource));
     if (!segmentSource)

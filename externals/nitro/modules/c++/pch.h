@@ -3,10 +3,8 @@
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
 
-#pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined
-
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
 
 // changing this breaks SWIG
@@ -26,6 +24,7 @@
 #pragma warning(disable: 26485) // Expression '...' : No array to pointer decay(bounds.3).
 #pragma warning(disable: 26486) // Don't pass a pointer that may be invalid to a function. Parameter 3 '...' in call to '...' may be invalid (lifetime.3).
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid(lifetime.4).
+#pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
 
 
 // need C++14 for std::make_unique<T>

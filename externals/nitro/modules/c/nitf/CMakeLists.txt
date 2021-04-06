@@ -108,6 +108,7 @@ set(tre_srcs  ACCHZB
               CSDIDA
               CSEPHA
               CSEXRA
+              CSEXRB
               CSPROA
               CSSFAA
               CSSHPA
@@ -150,6 +151,7 @@ set(tre_srcs  ACCHZB
               PIAPRD
               PIATGA
               PIATGB
+              PIXMTA
               PIXQLA
               PLTFMA
               PRADAA

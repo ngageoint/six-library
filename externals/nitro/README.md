@@ -22,8 +22,9 @@ Problems and Configurations
 
   - Pass -DCMAKE_INSTALL_PREFIX to set the install location.
 
-  - Java, MATLAB, Python, C++ bindings all build. Just make sure the relevant tools
-    are on your PATH
+  - Python and C++ bindings are built. Just make sure the relevant tools
+    are on your PATH.  Java and MATLAB bindings are now in the **archive** directory
+    and no longer built.
 
   - See the [coda-oss CMake build README](externals/coda-oss/cmake/README.md)
     for further build configuration information, particularly for Python-related
@@ -233,4 +234,4 @@ to make sure NITRO can find them.
 Contact
 ---------
 
-July 2020, Dan.Smith@maxar.com
+July 2020, Dan <dot> Smith <at> maxar.com

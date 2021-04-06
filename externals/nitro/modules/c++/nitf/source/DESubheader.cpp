@@ -44,10 +44,8 @@ DESubheader::DESubheader(nitf_DESubheader * x)
     getNativeOrThrow();
 }
 
-DESubheader::DESubheader()
+DESubheader::DESubheader() : DESubheader(nitf_DESubheader_construct(&error))
 {
-    setNative(nitf_DESubheader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 

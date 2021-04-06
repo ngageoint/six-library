@@ -59,10 +59,9 @@ void stripImages(nitf::Record& record)
     const std::vector<size_t>& constImages = invisibleImages;
 
     // Looping backwards so indices don't get messed up after deletion
-    for (std::vector<size_t>::const_reverse_iterator ii = constImages.rbegin();
-            ii != constImages.rend(); ++ii)
+    for (const auto& ii : constImages)
     {
-        record.removeImageSegment(*ii);
+        record.removeImageSegment(static_cast<uint32_t>(ii));
     }
 }
 }
