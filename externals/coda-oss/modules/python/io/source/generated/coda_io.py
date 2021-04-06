@@ -213,6 +213,9 @@ class Seekable(_object):
     __repr__ = _swig_repr
     __swig_destroy__ = _coda_io.delete_Seekable
     __del__ = lambda self: None
+    Whence_CURRENT = _coda_io.Seekable_Whence_CURRENT
+    Whence_START = _coda_io.Seekable_Whence_START
+    Whence_END = _coda_io.Seekable_Whence_END
     CURRENT = _coda_io.Seekable_CURRENT
     START = _coda_io.Seekable_START
     END = _coda_io.Seekable_END
@@ -585,8 +588,8 @@ class FileOutputStream(SeekableOutputStream):
     def __init__(self, *args):
         """
         FileOutputStreamOS() -> FileOutputStream
-        FileOutputStreamOS(std::string const & outputFile, int creationFlags) -> FileOutputStream
-        __init__(io::FileOutputStreamOS self, std::string const & outputFile) -> FileOutputStream
+        FileOutputStreamOS(coda_oss::filesystem::path const & outputFile, int creationFlags) -> FileOutputStream
+        __init__(io::FileOutputStreamOS self, coda_oss::filesystem::path const & outputFile) -> FileOutputStream
         """
         this = _coda_io.new_FileOutputStream(*args)
         try:
@@ -603,8 +606,8 @@ class FileOutputStream(SeekableOutputStream):
 
     def create(self, *args) -> "void":
         """
-        create(FileOutputStream self, std::string const & str, int creationFlags)
-        create(FileOutputStream self, std::string const & str)
+        create(FileOutputStream self, coda_oss::filesystem::path const & str, int creationFlags)
+        create(FileOutputStream self, coda_oss::filesystem::path const & str)
         """
         return _coda_io.FileOutputStream_create(self, *args)
 
