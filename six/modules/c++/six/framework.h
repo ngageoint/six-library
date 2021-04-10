@@ -49,7 +49,6 @@
 #pragma warning(disable: 26401) // Do not delete a raw pointer that is not an owner<T>(i.11).
 #pragma warning(disable: 26482) // Only index into arrays using constant expressions(bounds.2).
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
-#pragma warning(disable: 26494) // Variable '...' is uninitialized.Always initialize an object(type.5).
 #pragma warning(disable: 26435) // Function '...' should specify exactly one of '...', '...', or '...' (c.128).
 #pragma warning(disable: 26472) //	 Don't use a static_cast for arithmetic conversions. Use brace initialization, gsl::narrow_cast or gsl::narrow (type.1).
 #pragma warning(disable: 26486) //	 Don't pass a pointer that may be invalid to a function. Parameter 5 '...' in call to '...' may be invalid (lifetime.3).
@@ -57,7 +56,6 @@
 #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
 #pragma warning(disable: 26416) //	 Shared pointer parameter '...' is passed by rvalue reference. Pass by value instead(r.34).
 #pragma warning(disable: 26402) // Return a scoped object instead of a heap-allocated if it has a move constructor(r.3).
-#pragma warning(disable: 6326) // Potential comparison of a constant with another constant.
 #pragma warning(disable: 26414) // Move, copy, reassign or reset a local smart pointer '...' (r.5).
 #pragma warning(disable: 26497) // The function '...' could be marked constexpr if compile-time evaluation is desired(f.4).
 #pragma warning(disable: 26415) //	 Smart pointer parameter '...' is used only to access contained pointer. Use T * or T & instead(r.30).

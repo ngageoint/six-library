@@ -362,8 +362,6 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         }
     }
 
-    double corners[4][2];
-
     nitf::List images = mRecord.getImages();
     nitf::ListIterator imageIter = images.begin();
 
@@ -437,6 +435,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         const auto do_setLatLon = six::enable_ded ? !segIsLegend && !segIsDed : !segIsLegend;
         if (do_setLatLon)
         {
+            double corners[4][2]{};
             subheader.getCornersAsLatLons(corners);
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
             {
@@ -757,10 +756,10 @@ void NITFReadControl::readLegendPixelData(const nitf::ImageSubheader& subheader,
 
     if (!legend.mImage.empty())
     {
-        int padded;
         auto bufferPtr = legend.mImage.data();
         nitf::ImageReader imageReader = mReader.newImageReader(
                 static_cast<int>(imageSeg));
+        int padded = 0;
         imageReader.read(sw, &bufferPtr, &padded);
     }
 }

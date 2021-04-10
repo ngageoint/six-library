@@ -165,8 +165,6 @@ void NITFWriteControl::save(const SourceList& imageData,
 
 bool NITFWriteControl::shouldByteSwap() const
 {
-    bool doByteSwap;
-
     const int byteSwapping = (int)getOptions().getParameter(
             six::WriteControl::OPT_BYTE_SWAP,
             Parameter(static_cast<int>(ByteSwapping::SWAP_AUTO)));
@@ -174,16 +172,15 @@ bool NITFWriteControl::shouldByteSwap() const
     if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {
         // Have to if it's not a BE machine
-        doByteSwap = (std::endian::native == std::endian::little);
+        const auto endianness = std::endian::native;
+        return endianness == std::endian::little;
     }
     else
     {
         // Do what they say.  You really shouldn't do this
         // unless you know what you're doing anyway!
-        doByteSwap = byteSwapping ? true : false;
+        return byteSwapping ? true : false;
     }
-
-    return doByteSwap;
 }
 
 void NITFWriteControl::save(const SourceList& imageData,

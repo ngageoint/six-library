@@ -1242,7 +1242,7 @@ void six::getErrors(const ErrorStatistics* errorStats,
 
         if (components)
         {
-            double rangeBias;
+            double rangeBias = 0.0;
             if (components->radarSensor)
             {
                 const RadarSensor& radarSensor(*components->radarSensor);
@@ -1255,10 +1255,6 @@ void six::getErrors(const ErrorStatistics* errorStats,
                 }
 
                 rangeBias = value(radarSensor.rangeBias);
-            }
-            else
-            {
-                rangeBias = 0.0;
             }
 
             if (components->posVelError)

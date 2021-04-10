@@ -178,7 +178,7 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
 {
     const bool isSICD = (mContainer->getDataType() == DataType::COMPLEX);
 
-    nitf::Uint32 numRowsPerBlock;
+    uint32_t numRowsPerBlock = 0;
     if (mOptions.hasParameter(OPT_NUM_ROWS_PER_BLOCK))
     {
         if (isSICD)
@@ -197,10 +197,10 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
         // Unblocked (per 2500C, if > 8192, should be set to 0)
         numRowsPerBlock = (segmentDims.row > 8192)
                 ? 0
-                : static_cast<nitf::Uint32>(segmentDims.row);
+                : static_cast<uint32_t>(segmentDims.row);
     }
 
-    nitf::Uint32 numColsPerBlock;
+    uint32_t numColsPerBlock = 0;
     if (mOptions.hasParameter(OPT_NUM_COLS_PER_BLOCK))
     {
         if (isSICD)
@@ -219,11 +219,11 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
         // Unblocked (per 2500C, if > 8192, should be set to 0)
         numColsPerBlock = (segmentDims.col > 8192)
                 ? 0
-                : static_cast<nitf::Uint32>(segmentDims.col);
+                : static_cast<uint32_t>(segmentDims.col);
     }
 
-    subheader.setBlocking(static_cast<nitf::Uint32>(segmentDims.row),
-                          static_cast<nitf::Uint32>(segmentDims.col),
+    subheader.setBlocking(static_cast<uint32_t>(segmentDims.row),
+                          static_cast<uint32_t>(segmentDims.col),
                           numRowsPerBlock,
                           numColsPerBlock,
                           imode);
@@ -648,18 +648,18 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
         enableJ2K = (j2kCompression <= 1.0) && j2kCompression > 0.0001;
 
         // get row blocking parameters
-        nitf::Uint32 optNumRowsPerBlock = 0;
+        uint32_t optNumRowsPerBlock = 0;
         if (mOptions.hasParameter(OPT_NUM_ROWS_PER_BLOCK))
         {
-            optNumRowsPerBlock = static_cast<nitf::Uint32>(
+            optNumRowsPerBlock = static_cast<uint32_t>(
                     mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
         }
 
         // get column blocking parameters
-        nitf::Uint32 optNumColsPerBlock = 0;
+        uint32_t optNumColsPerBlock = 0;
         if (mOptions.hasParameter(OPT_NUM_COLS_PER_BLOCK))
         {
-            optNumColsPerBlock = static_cast<nitf::Uint32>(
+            optNumColsPerBlock = static_cast<uint32_t>(
                     mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
         }
 
@@ -668,13 +668,13 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
             Data* const ith = container->getData(ii);
             if (ith->getDataType() == DataType::DERIVED)
             {
-                const nitf::Uint32 numRowsPerBlock =
+                const uint32_t numRowsPerBlock =
                         std::min(optNumRowsPerBlock,
-                                 static_cast<nitf::Uint32>(ith->getNumRows()));
+                                 static_cast<uint32_t>(ith->getNumRows()));
 
-                const nitf::Uint32 numColsPerBlock =
+                const uint32_t numColsPerBlock =
                         std::min(optNumColsPerBlock,
-                                 static_cast<nitf::Uint32>(ith->getNumCols()));
+                                 static_cast<uint32_t>(ith->getNumCols()));
 
                 mem::SharedPtr<NITFImageInfo> info(
                         new NITFImageInfo(ith,
@@ -716,8 +716,6 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
         std::string irep = info.getRepresentation();
         std::string imode = info.getMode();
         std::string pvtype = info.getPixelValueType();
-        // NITRO wants to see this, not our corners object
-        double corners[4][2];
 
         std::string targetId;
 
@@ -796,6 +794,8 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
                         (nitf::Uint16)(info.getStartIndex() + jj));
             }
 
+            // NITRO wants to see this, not our corners object
+            double corners[4][2]{};
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
             {
                 corners[kk][0] = segmentInfo.corners.getCorner(kk).getLat();
@@ -842,7 +842,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
             subheader.getImageLocation().set(generateILOC(legend->mLocation));
 
             // Set NBPP and sanity check if LUT is set appropriately
-            nitf::Uint32 legendNbpp;
+            uint32_t legendNbpp = 0;
             switch (legend->mType)
             {
             case PixelType::MONO8I:
@@ -882,8 +882,8 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
                     "LEG",
                     bandInfo);
 
-            subheader.setBlocking(static_cast<nitf::Uint32>(legend->mDims.row),
-                                  static_cast<nitf::Uint32>(legend->mDims.col),
+            subheader.setBlocking(static_cast<uint32_t>(legend->mDims.row),
+                                  static_cast<uint32_t>(legend->mDims.col),
                                   0,
                                   0,
                                   NITFImageInfo::getMode(legend->mType));
