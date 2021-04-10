@@ -257,7 +257,7 @@ void ByteProvider::initialize(std::unique_ptr<six::NITFHeaderCreator>&& headerCr
     }
 
     // Do the full initialization
-    nitf::Record& record = headerCreator->getRecord();
+    const nitf::Record& record = headerCreator->getRecord();
     nitf::ByteProvider::initialize(record,
                                    desData,
                                    numRowsPerBlock,

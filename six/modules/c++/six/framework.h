@@ -49,7 +49,6 @@
 #pragma warning(disable: 26482) // Only index into arrays using constant expressions(bounds.2).
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
 #pragma warning(disable: 26494) // Variable '...' is uninitialized.Always initialize an object(type.5).
-#pragma warning(disable: 26496) // The variable '...' does not change after construction, mark it as const (con.4).
 #pragma warning(disable: 26460) // The reference argument '...' for function '...' can be marked as const (con.3).
 #pragma warning(disable: 26461) // The pointer argument '...' for function '...' can be marked as a pointer to const (con.3).
 #pragma warning(disable: 26490) //	 Don't use reinterpret_cast (type.1).
@@ -60,7 +59,6 @@
 #pragma warning(disable: 26489) // Don't dereference a pointer that may be invalid: '...'. '...' may have been invalidated at line ... (lifetime.1).
 #pragma warning(disable: 26474) // Don't cast between pointer types when the conversion could be implicit (type.1).
 #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
-#pragma warning(disable: 26814) // The const variable '... can be computed at compile-time. Consider using constexpr (con.5).
 #pragma warning(disable: 26416) //	 Shared pointer parameter '...' is passed by rvalue reference. Pass by value instead(r.34).
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 #pragma warning(disable: 26473) //	 Don't cast between pointer types where the source type and the target type are the same (type.1).

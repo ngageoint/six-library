@@ -30,6 +30,9 @@
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
 
+#undef min
+#undef max
+
 namespace
 {
 // Just using this to provide a more useful exception message
@@ -384,7 +387,7 @@ std::string NITFHeaderCreator::getNITFClassification(const std::string& level)
 
 void NITFHeaderCreator::updateFileHeaderSecurity()
 {
-    nitf::Record& record = getRecord();
+    const nitf::Record& record = getRecord();
 
     bool changed = false;
     std::string classOrder = "URCST";
@@ -401,9 +404,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
                 nitf::ImageSegment(record.getImages()[i]).getSubheader();
         foundLoc =
                 classOrder.find(subheader.getImageSecurityClass().toString());
-        int idx =
-                foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
-
+        const int idx = foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
         if (idx > classIndex)
         {
             highest = subheader.getSecurityGroup();
@@ -418,9 +419,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
         nitf::DESubheader subheader =
                 nitf::DESegment(record.getDataExtensions()[i]).getSubheader();
         foundLoc = classOrder.find(subheader.getSecurityClass().toString());
-        int idx =
-                foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
-
+        const int idx = foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
         if (idx > classIndex)
         {
             highest = subheader.getSecurityGroup();
@@ -617,12 +616,11 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
     // Clean up
     mInfos.clear();
 
-    sys::Uint32_T ilocMax = Constants::ILOC_MAX;
-    sys::Uint32_T maxRows =
-            mOptions.getParameter(OPT_MAX_ILOC_ROWS, Parameter(ilocMax));
+    const uint32_t ilocMax = Constants::ILOC_MAX;
+    const uint32_t maxRows = mOptions.getParameter(OPT_MAX_ILOC_ROWS, Parameter(ilocMax));
 
-    sys::Uint64_T maxSize = (sys::Uint64_T)mOptions.getParameter(
-            OPT_MAX_PRODUCT_SIZE, Parameter(six::Constants::IS_SIZE_MAX));
+    auto maxSize = static_cast<uint64_t>(mOptions.getParameter(
+            OPT_MAX_PRODUCT_SIZE, Parameter(six::Constants::IS_SIZE_MAX)));
 
     double j2kCompression = 0;
     bool enableJ2K = false;
@@ -693,7 +691,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
 
     nitf::Record& record = getRecord();
 
-    DataType dataType = container->getDataType();
+    const DataType dataType = container->getDataType();
     std::string name = mInfos[0]->getData()->getName();
     std::string fileTitle = six::toString(dataType) + ": " + name;
     fileTitle = fileTitle.substr(0, NITF_FTITLE_SZ);  // truncate past 80
@@ -712,10 +710,9 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
         const std::vector<NITFSegmentInfo> imageSegments =
                 info.getImageSegments();
 
-        size_t numIS = imageSegments.size();
-        nitf::Uint32 nbpp =
-                static_cast<nitf::Uint32>(info.getNumBitsPerPixel());
-        size_t numCols = info.getData()->getNumCols();
+        const size_t numIS = imageSegments.size();
+        const auto nbpp = static_cast<uint32_t>(info.getNumBitsPerPixel());
+        const size_t numCols = info.getData()->getNumCols();
         std::string irep = info.getRepresentation();
         std::string imode = info.getMode();
         std::string pvtype = info.getPixelValueType();

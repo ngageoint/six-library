@@ -117,7 +117,7 @@ XMLElem SICommonXMLParser::createVector3D(
 XMLElem SICommonXMLParser::createPoly1D(const std::string& name,
         const std::string& uri, const Poly1D& poly1D, XMLElem parent) const
 {
-    size_t order = poly1D.order();
+    const size_t order = poly1D.order();
     XMLElem poly1DXML = newElement(name, uri, parent);
     setAttribute(poly1DXML, "order1", order);
 
@@ -187,7 +187,7 @@ void SICommonXMLParser::parsePoly(XMLElem polyXML,
 XMLElem SICommonXMLParser::createPolyXYZ(const std::string& name,
         const PolyXYZ& polyXYZ, XMLElem parent) const
 {
-    size_t order = polyXYZ.order();
+    const size_t order = polyXYZ.order();
     XMLElem polyXML = newElement(name, getDefaultURI(), parent);
 
     XMLElem xXML = newElement("X", getSICommonURI(), polyXML);
@@ -346,11 +346,9 @@ void SICommonXMLParser::parsePoly1D(XMLElem polyXML, Poly1D& poly1D) const
     std::vector < XMLElem > coeffsXML;
     polyXML->getElementsByTagName("Coef", coeffsXML);
 
-    int exp1;
-    for (size_t ii = 0, size = coeffsXML.size(); ii < size; ++ii)
+    for (auto element : coeffsXML)
     {
-        XMLElem element = coeffsXML[ii];
-        exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));
+        const auto exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));
         parseDouble(element, p1D[exp1]);
     }
     poly1D = p1D;
@@ -365,12 +363,10 @@ void SICommonXMLParser::parsePoly2D(XMLElem polyXML, Poly2D& poly2D) const
     std::vector < XMLElem > coeffsXML;
     polyXML->getElementsByTagName("Coef", coeffsXML);
 
-    int exp1, exp2;
-    for (size_t ii = 0, size = coeffsXML.size(); ii < size; ++ii)
+    for (auto element : coeffsXML)
     {
-        XMLElem element = coeffsXML[ii];
-        exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));
-        exp2 = str::toType<int>(element->getAttributes().getValue("exponent2"));
+        const auto exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));
+        const auto exp2 = str::toType<int>(element->getAttributes().getValue("exponent2"));
         parseDouble(element, p2D[exp1][exp2]);
     }
     poly2D = p2D;

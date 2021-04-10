@@ -53,7 +53,7 @@ struct Serializer
                               bool swapBytes,
                               std::vector<U>& buffer)
     {
-        const size_t length = sizeof(T);
+        constexpr size_t length = sizeof(T);
         auto data = reinterpret_cast<typename std::vector<U>::const_pointer>(&val);
 
         if (swapBytes)
@@ -92,7 +92,7 @@ struct Serializer
      */
     static void deserializeImpl(const sys::byte*& buffer, bool swapBytes, T& val)
     {
-        const size_t length = sizeof(T);
+        constexpr size_t length = sizeof(T);
         auto data = reinterpret_cast<sys::byte*>(&val);
         std::copy(buffer, buffer + length, data);
         if (swapBytes)

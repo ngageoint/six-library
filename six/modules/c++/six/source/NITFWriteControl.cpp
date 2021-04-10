@@ -203,7 +203,7 @@ void NITFWriteControl::save(const SourceList& imageData,
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    size_t numImages = infos.size();
+    const size_t numImages = infos.size();
 
     //! TODO: This section of code (unlike the memory section below)
     //        does not account for blocked writing or J2K compression.
@@ -212,7 +212,7 @@ void NITFWriteControl::save(const SourceList& imageData,
     {
         const NITFImageInfo& info = *(infos[i]);
         std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
-        size_t numIS = imageSegments.size();
+        const size_t numIS = imageSegments.size();
         size_t pixelSize = info.getData()->getNumBytesPerPixel();
         size_t numCols = info.getData()->getNumCols();
         size_t numChannels = info.getData()->getNumChannels();

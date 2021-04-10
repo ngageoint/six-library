@@ -110,7 +110,7 @@ template<> LatLonAltCorners Init::undefined<LatLonAltCorners>()
 
 template<> ReferencePoint Init::undefined<ReferencePoint>()
 {
-    double ud = Init::undefined<double>();
+    const double ud = Init::undefined<double>();
     return ReferencePoint(ud, ud, ud, ud, ud);
 }
 
