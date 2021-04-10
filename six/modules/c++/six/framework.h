@@ -24,6 +24,7 @@
 #pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed / unsigned mismatch
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 4514) // '...': unreferenced inline function has been removed
+#pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
@@ -49,17 +50,12 @@
 #pragma warning(disable: 26482) // Only index into arrays using constant expressions(bounds.2).
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
 #pragma warning(disable: 26494) // Variable '...' is uninitialized.Always initialize an object(type.5).
-#pragma warning(disable: 26460) // The reference argument '...' for function '...' can be marked as const (con.3).
-#pragma warning(disable: 26461) // The pointer argument '...' for function '...' can be marked as a pointer to const (con.3).
 #pragma warning(disable: 26435) // Function '...' should specify exactly one of '...', '...', or '...' (c.128).
 #pragma warning(disable: 26472) //	 Don't use a static_cast for arithmetic conversions. Use brace initialization, gsl::narrow_cast or gsl::narrow (type.1).
 #pragma warning(disable: 26486) //	 Don't pass a pointer that may be invalid to a function. Parameter 5 '...' in call to '...' may be invalid (lifetime.3).
 #pragma warning(disable: 26489) // Don't dereference a pointer that may be invalid: '...'. '...' may have been invalidated at line ... (lifetime.1).
-#pragma warning(disable: 26474) // Don't cast between pointer types when the conversion could be implicit (type.1).
 #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
 #pragma warning(disable: 26416) //	 Shared pointer parameter '...' is passed by rvalue reference. Pass by value instead(r.34).
-#pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
-#pragma warning(disable: 26473) //	 Don't cast between pointer types where the source type and the target type are the same (type.1).
 #pragma warning(disable: 26402) // Return a scoped object instead of a heap-allocated if it has a move constructor(r.3).
 #pragma warning(disable: 6326) // Potential comparison of a constant with another constant.
 #pragma warning(disable: 26414) // Move, copy, reassign or reset a local smart pointer '...' (r.5).

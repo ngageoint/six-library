@@ -51,7 +51,7 @@ types::RowCol<size_t> parseILOC(const std::string& str)
     return iLoc;
 }
 
-void assignLUT(nitf::ImageSubheader& subheader, six::Legend& legend)
+void assignLUT(const nitf::ImageSubheader& subheader, six::Legend& legend)
 {
     nitf::LookupTable lut =
             subheader.getBandInfo(0).getLookupTable();
@@ -71,7 +71,7 @@ void assignLUT(nitf::ImageSubheader& subheader, six::Legend& legend)
     }
 }
 
-six::PixelType getPixelType(nitf::ImageSubheader& subheader)
+six::PixelType getPixelType(const nitf::ImageSubheader& subheader)
 {
     const auto iRep = subheader.imageRepresentation();
     if (iRep == "MONO")
@@ -99,7 +99,7 @@ NITFReadControl::NITFReadControl()
     loadXmlDataContentHandler();
 }
 
-DataType NITFReadControl::getDataType(nitf::Record& record)
+DataType NITFReadControl::getDataType(const nitf::Record& record)
 {
     nitf::List des = record.getDataExtensions();
     if (des.isEmpty())
@@ -153,7 +153,7 @@ DataType NITFReadControl::getDataType(const std::string& desid,
     return DataType::NOT_SET;
 }
 
-DataType NITFReadControl::getDataType(nitf::DESegment& segment)
+DataType NITFReadControl::getDataType(const nitf::DESegment& segment)
 {
     // NOTE: Versions of SICD <= 1.1 and SIDD <= 1.0 prefixed FTITLE with
     //       SICD or SIDD, so for old files we could key off of that. Since
@@ -458,7 +458,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
     }
 }
 
-void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
+void NITFReadControl::addImageClassOptions(const nitf::ImageSubheader& subheader,
         six::Classification& c) const
 {
 
@@ -468,7 +468,7 @@ void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
     addSecurityOptions(subheader.getSecurityGroup(), "IS", c.fileOptions);
 }
 
-void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
+void NITFReadControl::addDEClassOptions(const nitf::DESubheader& subheader,
         six::Classification& c) const
 {
     Parameter p;

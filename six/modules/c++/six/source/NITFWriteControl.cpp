@@ -169,7 +169,7 @@ bool NITFWriteControl::shouldByteSwap() const
 
     const int byteSwapping = (int)getOptions().getParameter(
             six::WriteControl::OPT_BYTE_SWAP,
-            Parameter((int)ByteSwapping::SWAP_AUTO));
+            Parameter(static_cast<int>(ByteSwapping::SWAP_AUTO)));
 
     if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {

@@ -387,7 +387,9 @@ struct AmplitudeTable : public LUT
 
     bool operator==(const AmplitudeTable& rhs) const
     {
-        return *(dynamic_cast<const LUT*>(this)) == *(dynamic_cast<const LUT*>(&rhs));
+        const LUT* pThis = this;
+        const LUT* pRHS = &rhs;
+        return *(pThis) == *(pRHS);
     }
     bool operator!=(const AmplitudeTable& rhs) const
     {

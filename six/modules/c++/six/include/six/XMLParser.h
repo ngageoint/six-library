@@ -172,7 +172,7 @@ protected:
             XMLElem parent = nullptr) const;
 
     template <typename T>
-    void parseInt(XMLElem element, T& value) const
+    void parseInt(const xml::lite::Element* element, T& value) const
     {
         try
         {
@@ -185,28 +185,28 @@ protected:
     }
 
     template <typename T>
-    void parseUInt(XMLElem element, T& value) const
+    void parseUInt(const xml::lite::Element* element, T& value) const
     {
         parseInt<T>(element, value);
     }
 
     template <typename T>
-    void parseEnum(XMLElem element, T& enumVal) const
+    void parseEnum(const xml::lite::Element* element, T& enumVal) const
     {
         std::string name;
         parseString(element, name);
         enumVal = T(name);
     }
 
-    bool parseDouble(XMLElem element, double& value) const;
-    void parseDouble(XMLElem element, std::optional<double>& value) const;
-    void parseOptionalDouble(XMLElem parent, const std::string& tag, double& value) const;
-    void parseOptionalDouble(XMLElem parent, const std::string& tag, std::optional<double>& value) const;
-    void parseComplex(XMLElem element, std::complex<double>& value) const;
-    void parseString(XMLElem element, std::string& value) const;
-    void parseBooleanType(XMLElem element, BooleanType& value) const;
+    bool parseDouble(const xml::lite::Element* element, double& value) const;
+    void parseDouble(const xml::lite::Element* element, std::optional<double>& value) const;
+    void parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const;
+    void parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const;
+    void parseComplex(const xml::lite::Element* element, std::complex<double>& value) const;
+    void parseString(const xml::lite::Element* element, std::string& value) const;
+    void parseBooleanType(const xml::lite::Element* element, BooleanType& value) const;
 
-    void parseDateTime(XMLElem element, DateTime& value) const;
+    void parseDateTime(const xml::lite::Element* element, DateTime& value) const;
 
     static void setAttribute(XMLElem e, const std::string& name,
         const std::string& s, const std::string& uri = "")
@@ -219,8 +219,8 @@ protected:
         setAttribute_(e, name, std::to_string(i), uri);
     }
 
-    static XMLElem getOptional(XMLElem parent, const std::string& tag);
-    static XMLElem getFirstAndOnly(XMLElem parent, const std::string& tag);
+    static XMLElem getOptional(const xml::lite::Element* parent, const std::string& tag);
+    static XMLElem getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag);
 
     /*!
      * Require an element to be not nullptr
