@@ -100,12 +100,12 @@ double scene::ECEFToLLATransform::computeAltitude(const Vector3& ecef,
 {
     double altitude;
 
-    double f = model->calculateFlattening();
-    double e_squared = 1.0 - math::square((1.0 - f));
+    const double f = model->calculateFlattening();
+    const double e_squared = 1.0 - math::square((1.0 - f));
     double s = math::square(ecef[0]) + math::square(ecef[1]);
     s = sqrt(s);
 
-    double radius_curvature = model->getEquatorialRadius()
+    const double radius_curvature = model->getEquatorialRadius()
                               / (sqrt(1 - (e_squared *
                               math::square(sin(latitude)))));
 
@@ -123,7 +123,7 @@ scene::ECEFToLLATransform::getInitialLatitude(const Vector3& ecef) const
 {
     double initLat;
 
-    double f = model->calculateFlattening();
+    const double f = model->calculateFlattening();
     double s = math::square(ecef[0]) + math::square(ecef[1]);
     s = sqrt(s);
 
@@ -143,8 +143,8 @@ scene::ECEFToLLATransform::getInitialLatitude(const Vector3& ecef) const
 double
 scene::ECEFToLLATransform::computeReducedLatitude(double latitude) const
 {
-    double f = model->calculateFlattening();
-    double denominator = cos(latitude);
+    const double f = model->calculateFlattening();
+    const double denominator = cos(latitude);
     double reducedLatitude = ((1.0 - f) * sin(latitude)) / denominator;
     reducedLatitude = atan(reducedLatitude);
 
@@ -157,9 +157,9 @@ scene::ECEFToLLATransform::computeLatitude(const Vector3& ecef,
 {
     double latitude;
 
-    double r = model->getEquatorialRadius();
-    double f = model->calculateFlattening();
-    double e_squared = 1.0 - math::square((1.0 - f));
+    const double r = model->getEquatorialRadius();
+    const double f = model->calculateFlattening();
+    const double e_squared = 1.0 - math::square((1.0 - f));
     double s = math::square(ecef[0]) + math::square(ecef[1]);
     s = sqrt(s);
 

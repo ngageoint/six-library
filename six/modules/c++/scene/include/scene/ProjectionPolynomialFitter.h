@@ -313,7 +313,7 @@ public:
                 }
             }
 
-            *meanResidualError = errorSum / (mNumPoints1D * mNumPoints1D);
+            *meanResidualError = errorSum / static_cast<double>(mNumPoints1D * mNumPoints1D);
         }
     }
 

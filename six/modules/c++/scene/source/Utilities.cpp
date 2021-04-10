@@ -40,7 +40,7 @@ Vector3 Utilities::latLonToECEF(LatLonAlt latLon)
 
 Vector3 Utilities::latLonToECEF(LatLon latLon)
 {
-    scene::LatLonAlt lla(latLon.getLat(), latLon.getLon());
+    const scene::LatLonAlt lla(latLon.getLat(), latLon.getLon());
     return latLonToECEF(lla);
 }
 

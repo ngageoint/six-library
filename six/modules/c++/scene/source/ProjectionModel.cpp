@@ -33,9 +33,9 @@
 
 namespace
 {
-const double EARTH_ROTATION_RATE = 0.000072921150; // Radians / sec
+constexpr double EARTH_ROTATION_RATE = 0.000072921150; // Radians / sec
 
-const double DELTA_GP_MAX = 0.0000001;
+constexpr double DELTA_GP_MAX = 0.0000001;
 
 // TODO: Should this be a static method instead?
 scene::Vector3 computeUnitVector(const scene::LatLonAlt& latLon)
@@ -655,7 +655,7 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
 
     // Tropo Error
     // a should be semi-major axis of reference ellipsoid
-    static const double TROPOSPHERE_SCALE_HEIGHT_METERS = 7000.0;
+    constexpr double TROPOSPHERE_SCALE_HEIGHT_METERS = 7000.0;
     const double Htrop = 1 + TROPOSPHERE_SCALE_HEIGHT_METERS / a;
     const double htrop = sqrt((math::square(Htrop) - 1 + math::square(rv)));
     const double ftrop = Htrop / htrop;
@@ -671,7 +671,7 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
     tropMat3D.addInPlace(tropMat, 0, 0);
 
     // Iono Error
-    static const double IONOSPHERE_SCALE_HEIGHT_METERS = 350000.0;
+    constexpr double IONOSPHERE_SCALE_HEIGHT_METERS = 350000.0;
     const double Va = azimuth.dot(vARP);
     const Vector3 denominator = scenePoint - rARP;
     const double omegaA = Va / denominator.norm();
@@ -823,26 +823,26 @@ computeContour(const Vector3& arpCOA,
                double* r,
                double* rDot) const
 {
-    double thetaCOA = mPolarAnglePoly(timeCOA);
-    double dThetaDt = mPolarAnglePolyPrime(timeCOA);
+    const double thetaCOA = mPolarAnglePoly(timeCOA);
+    const double dThetaDt = mPolarAnglePolyPrime(timeCOA);
 
-    double ksf = mKSFPoly(thetaCOA);
-    double dKSFDTheta = mKSFPolyPrime(thetaCOA);
+    const double ksf = mKSFPoly(thetaCOA);
+    const double dKSFDTheta = mKSFPolyPrime(thetaCOA);
 
-    double cosTheta = cos(thetaCOA);
-    double sinTheta = sin(thetaCOA);
+    const double cosTheta = cos(thetaCOA);
+    const double sinTheta = sin(thetaCOA);
 
-    double slopeRadial =
+    const double slopeRadial =
         imageGridPoint.row * cosTheta +
         imageGridPoint.col * sinTheta;
 
-    double slopeCrossRadial =
+    const double slopeCrossRadial =
         -imageGridPoint.row * sinTheta +
         imageGridPoint.col * cosTheta;
 
     double dR = ksf * slopeRadial;
 
-    double dDrDTheta = dKSFDTheta * slopeRadial + ksf * slopeCrossRadial;
+    const double dDrDTheta = dKSFDTheta * slopeRadial + ksf * slopeCrossRadial;
     double dRDot = dDrDTheta * dThetaDt;
 
     Vector3 vec = arpCOA - mSCP;
@@ -892,10 +892,10 @@ computeContour(const Vector3& /*arpCOA*/,
 {
 
     // Time of closest approach
-    double timeCA = mTimeCAPoly(imageGridPoint.col);
+    const double timeCA = mTimeCAPoly(imageGridPoint.col);
 
     // Time Difference
-    double deltaTimeCOA = timeCOA - timeCA;
+    const double deltaTimeCOA = timeCOA - timeCA;
 
     // Velocity at closest approach
     double velocityMagCA = mARPVelPoly(timeCA).norm();
@@ -904,7 +904,7 @@ computeContour(const Vector3& /*arpCOA*/,
 
     double dsrf = mDSRFPoly(imageGridPoint.row, imageGridPoint.col);
 
-    double rangeCA = mRangeCA + imageGridPoint.row;
+    const double rangeCA = mRangeCA + imageGridPoint.row;
 
     *r = sqrt(rangeCA * rangeCA + dsrf * (t * t));
     *rDot = dsrf / (*r) * t * velocityMagCA;

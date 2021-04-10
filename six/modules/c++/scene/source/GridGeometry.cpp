@@ -60,8 +60,8 @@ scene::PlanarGridGeometry::gridToScene(const scene::Vector3& gridPt,
 
     // arpPos to output plane point
     scene::Vector3 disp(p - mRefPt);
-    types::RowCol<double> rgAz(disp.dot(mRow), disp.dot(mCol));
-    double time = mTimeCOAPoly(rgAz.row, rgAz.col);
+    const types::RowCol<double> rgAz(disp.dot(mRow), disp.dot(mCol));
+    const double time = mTimeCOAPoly(rgAz.row, rgAz.col);
     Vector3 arpPos = mARPPoly(time);
     Vector3 arpVel = mARPVelPoly(time);
     scene::Vector3 arpPosToPop = gridPt - arpPos;
@@ -202,8 +202,8 @@ scene::PlanarGridGeometry::sceneToGrid(const scene::Vector3& groundPt) const
     Vector3 currentGroundPt(groundPt);
 
     // Get the height of the input scene point
-    scene::LatLonAlt lla = scene::Utilities::ecefToLatLon(currentGroundPt);
-    double height = lla.getAlt();
+    const scene::LatLonAlt lla = scene::Utilities::ecefToLatLon(currentGroundPt);
+    const double height = lla.getAlt();
 
     // Set initial time to center of aperture
     double time = mTimeCOAPoly(0, 0);
@@ -227,7 +227,7 @@ scene::PlanarGridGeometry::sceneToGrid(const scene::Vector3& groundPt) const
         currentGridPt = sceneToGrid(currentGroundPt, time);
         Vector3 outputPlaneDisp = currentGridPt - mRefPt;
 
-        types::RowCol<double> rgAz(outputPlaneDisp.dot(mRow),
+        const types::RowCol<double> rgAz(outputPlaneDisp.dot(mRow),
                                    outputPlaneDisp.dot(mCol));
 
         // Find the new time value associated with the currentGridPt
