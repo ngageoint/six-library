@@ -75,7 +75,7 @@ public:
      */
     virtual int64_t available()
     {
-        return (int64_t) mReader.getSize();
+        return static_cast<int64_t>(mReader.getSize());
     }
 
 protected:

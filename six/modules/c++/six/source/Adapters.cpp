@@ -89,9 +89,7 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
             { &__six_MemoryWriteHandler_write,
               &__six_MemoryWriteHandler_destruct };
 
-    MemoryWriteHandlerImpl *impl =
-            (MemoryWriteHandlerImpl *) NITF_MALLOC(
-                    sizeof(MemoryWriteHandlerImpl));
+    auto impl = static_cast<MemoryWriteHandlerImpl *>(NITF_MALLOC(sizeof(MemoryWriteHandlerImpl)));
     if (!impl)
         throw nitf::NITFException(Ctxt("Out of memory"));
     impl->buffer = buffer;
@@ -102,8 +100,7 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     impl->pixelSize = pixelSize;
     impl->doByteSwap = doByteSwap;
 
-    nitf_SegmentWriter *segmentWriter =
-            (nitf_SegmentWriter *) NITF_MALLOC(sizeof(nitf_SegmentWriter));
+    auto segmentWriter = static_cast<nitf_SegmentWriter *>(NITF_MALLOC(sizeof(nitf_SegmentWriter)));
     if (!segmentWriter)
         throw nitf::NITFException(Ctxt("Out of memory"));
     segmentWriter->data = impl;
@@ -179,10 +176,7 @@ StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
             { &__six_StreamWriteHandler_write,
               &__six_StreamWriteHandler_destruct };
 
-    StreamWriteHandlerImpl
-            *impl =
-                    (StreamWriteHandlerImpl *) NITF_MALLOC(
-                                                           sizeof(StreamWriteHandlerImpl));
+    auto impl = static_cast<StreamWriteHandlerImpl*>(NITF_MALLOC(sizeof(StreamWriteHandlerImpl)));
     if (!impl)
         throw nitf::NITFException(Ctxt("Out of memory"));
 
@@ -193,8 +187,7 @@ StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
     impl->pixelSize = pixelSize;
     impl->doByteSwap = doByteSwap;
 
-    nitf_SegmentWriter *segmentWriter =
-            (nitf_SegmentWriter *) NITF_MALLOC(sizeof(nitf_SegmentWriter));
+    auto segmentWriter = static_cast<nitf_SegmentWriter*>(NITF_MALLOC(sizeof(nitf_SegmentWriter)));
     if (!segmentWriter)
         throw nitf::NITFException(Ctxt("Out of memory"));
 

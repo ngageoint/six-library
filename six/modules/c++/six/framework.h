@@ -52,7 +52,6 @@
 #pragma warning(disable: 26460) // The reference argument '...' for function '...' can be marked as const (con.3).
 #pragma warning(disable: 26461) // The pointer argument '...' for function '...' can be marked as a pointer to const (con.3).
 #pragma warning(disable: 26435) // Function '...' should specify exactly one of '...', '...', or '...' (c.128).
-#pragma warning(disable: 26493) // Don't use C-style casts (type.4).
 #pragma warning(disable: 26472) //	 Don't use a static_cast for arithmetic conversions. Use brace initialization, gsl::narrow_cast or gsl::narrow (type.1).
 #pragma warning(disable: 26486) //	 Don't pass a pointer that may be invalid to a function. Parameter 5 '...' in call to '...' may be invalid (lifetime.3).
 #pragma warning(disable: 26489) // Don't dereference a pointer that may be invalid: '...'. '...' may have been invalidated at line ... (lifetime.1).

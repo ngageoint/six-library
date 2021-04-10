@@ -398,7 +398,9 @@ struct AmplitudeTable : public LUT
         AmplitudeTable* ret = new AmplitudeTable();
         for (size_t ii = 0; ii < numEntries; ++ii)
         {
-            *(double*)(*ret)[ii] = *(double*)(*this)[ii];
+            const void* this_ii = (*this)[ii];
+            void* ret_ii = (*ret)[ii];
+            *static_cast<double*>(ret_ii) = *static_cast<const double*>(this_ii);
         }
         return ret;
     }
