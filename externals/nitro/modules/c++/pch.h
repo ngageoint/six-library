@@ -25,7 +25,8 @@
 #pragma warning(disable: 26486) // Don't pass a pointer that may be invalid to a function. Parameter 3 '...' in call to '...' may be invalid (lifetime.3).
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid(lifetime.4).
 #pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
-
+#pragma warning(disable: 26455) //	 Default constructor may not throw.Declare it 'noexcept' (f.6).
+#pragma warning(disable: 26447) // The function is declared '...' but calls function '...' which may throw exceptions(f.6).
 
 // need C++14 for std::make_unique<T>
 #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead(r.11).
