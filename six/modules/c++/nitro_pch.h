@@ -42,7 +42,7 @@
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
 #pragma warning(disable: 26485) // Expression '...' : No array to pointer decay(bounds.3).
 #pragma warning(disable: 26400) // Do not assign the result of an allocation or a function call with an owner<T> return value to a raw pointer, use owner<T> instead(i.11).
-
+#pragma warning(disable: 26488) // Do not dereference a potentially null pointer : ...'. '...' was null at line ... (lifetime.1).
 
 #include <std/bit>
 #include <std/cstddef>

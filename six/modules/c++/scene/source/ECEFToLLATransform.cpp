@@ -98,8 +98,6 @@ double scene::ECEFToLLATransform::computeLongitude(const Vector3& ecef)
 double scene::ECEFToLLATransform::computeAltitude(const Vector3& ecef,
                                                   double latitude) const
 {
-    double altitude;
-
     const double f = model->calculateFlattening();
     const double e_squared = 1.0 - math::square((1.0 - f));
     double s = math::square(ecef[0]) + math::square(ecef[1]);
@@ -109,7 +107,7 @@ double scene::ECEFToLLATransform::computeAltitude(const Vector3& ecef,
                               / (sqrt(1 - (e_squared *
                               math::square(sin(latitude)))));
 
-    altitude = e_squared * radius_curvature * sin(latitude);
+    double altitude = e_squared * radius_curvature * sin(latitude);
     altitude += ecef[2];
     altitude *= sin(latitude);
     altitude += s * cos(latitude);
@@ -121,17 +119,12 @@ double scene::ECEFToLLATransform::computeAltitude(const Vector3& ecef,
 double
 scene::ECEFToLLATransform::getInitialLatitude(const Vector3& ecef) const
 {
-    double initLat;
-
     const double f = model->calculateFlattening();
     double s = math::square(ecef[0]) + math::square(ecef[1]);
     s = sqrt(s);
 
-    if (s == 0)
-    {
-        initLat = 0;
-    }
-    else
+    double initLat = 0;
+    if (s != 0)
     {
         initLat = ecef[2] / ((1.0 - f) * s);
         initLat = atan(initLat);
@@ -155,8 +148,6 @@ double
 scene::ECEFToLLATransform::computeLatitude(const Vector3& ecef,
                                            double reducedLatitude) const
 {
-    double latitude;
-
     const double r = model->getEquatorialRadius();
     const double f = model->calculateFlattening();
     const double e_squared = 1.0 - math::square((1.0 - f));
@@ -172,7 +163,7 @@ scene::ECEFToLLATransform::computeLatitude(const Vector3& ecef,
     double denominator;
     denominator = s - (e_squared * r * pow(cos(reducedLatitude), 3));
 
-    latitude = 0;
+    double latitude = 0;
     if (denominator != 0)
     {
         latitude = atan(numerator / denominator);

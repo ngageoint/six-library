@@ -22,7 +22,6 @@
 #pragma warning(disable: 6385) // Reading invalid data from '...':  the readable size is '...' bytes, but '...' bytes may be read.
 #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
 #pragma warning(disable: 26455) // Default constructor may not throw. Declare it 'noexcept' (f.6).
-#pragma warning(disable: 26494) // Variable '...' is uninitialized. Always initialize an object (type.5).
 #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 #pragma warning(disable: 26433) // Function '...' should be marked with '...' (c.128).
 #pragma warning(disable: 26455) //	 Default constructor may not throw.Declare it 'noexcept' (f.6).

@@ -284,12 +284,11 @@ Vector3 ProjectionModel::imageToScene(
             mSCP + (height - scpLatLon.getAlt()) * groundPlaneNormal;
 
     // Compute contour just once
-    double r;
-    double rDot;
     const double timeCOA = mTimeCOAPoly(imageGridPoint.row,
                                         imageGridPoint.col);
     Vector3 arpCOA = mARPPoly(timeCOA);
     Vector3 velCOA = mARPVelPoly(timeCOA);
+    double r{}, rDot{};
     computeContour(arpCOA, velCOA, timeCOA, imageGridPoint, &r, &rDot);
 
     // Adjustable parameters are applied after computing R/Rdot contours
