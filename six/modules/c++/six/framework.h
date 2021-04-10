@@ -54,11 +54,8 @@
 #pragma warning(disable: 26486) //	 Don't pass a pointer that may be invalid to a function. Parameter 5 '...' in call to '...' may be invalid (lifetime.3).
 #pragma warning(disable: 26489) // Don't dereference a pointer that may be invalid: '...'. '...' may have been invalidated at line ... (lifetime.1).
 #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
-#pragma warning(disable: 26416) //	 Shared pointer parameter '...' is passed by rvalue reference. Pass by value instead(r.34).
 #pragma warning(disable: 26402) // Return a scoped object instead of a heap-allocated if it has a move constructor(r.3).
 #pragma warning(disable: 26414) // Move, copy, reassign or reset a local smart pointer '...' (r.5).
-#pragma warning(disable: 26497) // The function '...' could be marked constexpr if compile-time evaluation is desired(f.4).
-#pragma warning(disable: 26415) //	 Smart pointer parameter '...' is used only to access contained pointer. Use T * or T & instead(r.30).
 #pragma warning(disable: 26447) // The function is declared '...' but calls function '...' which may throw exceptions(f.6).
 #pragma warning(disable: 26459) // You called an STL function '...' with a raw pointer parameter at position '...' that may be unsafe-this relies on the caller to check that the passed values are correct. Consider wrapping your range in a gsl::span and pass as a span iterator(stl.1).
 #pragma warning(disable: 6262) // Function uses '...' bytes of stack : exceeds analyze : stacksize '...'.Consider moving some data to heap.

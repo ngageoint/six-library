@@ -242,8 +242,8 @@ void NITFHeaderCreator::setImageSecurity(
 void NITFHeaderCreator::setDESecurity(const six::Classification& classification,
                                       nitf::DESubheader& subheader)
 {
-    subheader.getSecurityClass().set(
-            getNITFClassification(classification.getLevel()));
+    nitf::Field securityClass = subheader.getSecurityClass();
+    securityClass.set(getNITFClassification(classification.getLevel()));
     setSecurity(classification, subheader.getSecurityGroup(), "DES");
 }
 

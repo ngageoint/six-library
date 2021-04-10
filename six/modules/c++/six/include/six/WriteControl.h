@@ -220,6 +220,7 @@ public:
      */
     mem::SharedPtr<const Container> getContainer() const
     {
+        mem::SharedPtr<const Container> retval = mContainer;
         return mContainer;
     }
 

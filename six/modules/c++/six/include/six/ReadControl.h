@@ -92,7 +92,8 @@ struct ReadControl
      */
     mem::SharedPtr<const Container> getContainer() const
     {
-        return mContainer;
+        mem::SharedPtr<const Container> retval = mContainer;
+        return retval;
     }
 
     /*!
