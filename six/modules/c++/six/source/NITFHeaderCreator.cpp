@@ -957,7 +957,8 @@ void NITFHeaderCreator::loadMeshSegment_(
     subheader.setSecurityGroup(security.clone());
 
     // Add the data and writer for this segment
-    auto data = reinterpret_cast<const sys::byte*>(meshBuffer.data());
+    const void* data_ = meshBuffer.data();
+    auto data = static_cast<const sys::byte*>(data_);
     nitf::SegmentMemorySource dataSource(
             data, meshBuffer.size(), 0, 0, true);
     mem::SharedPtr<nitf::SegmentWriter> desWriter(

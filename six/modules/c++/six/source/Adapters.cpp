@@ -115,7 +115,7 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     const std::byte* buffer, size_t firstRow, size_t numCols,
     size_t numChannels, size_t pixelSize, bool doByteSwap)
-    : MemoryWriteHandler(info, reinterpret_cast<const UByte*>(buffer), firstRow, numCols,
+    : MemoryWriteHandler(info, static_cast<const UByte*>(static_cast<const void*>(buffer)), firstRow, numCols,
         numChannels, pixelSize, doByteSwap)
 {
 }

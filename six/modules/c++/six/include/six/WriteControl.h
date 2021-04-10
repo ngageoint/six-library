@@ -190,7 +190,8 @@ public:
     }
     void save(const std::byte* buffer, const std::string& toFile)
     {
-        save(reinterpret_cast<const UByte*>(buffer), toFile);
+        const void* buffer_ = buffer;
+        save(static_cast<const UByte*>(buffer_), toFile);
     }
     void save(const UByte* buffer, const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
@@ -202,7 +203,8 @@ public:
     void save(const std::byte* buffer, const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
-        save(reinterpret_cast<const UByte*>(buffer), toFile, schemaPaths);
+        const void* buffer_ = buffer;
+        save(static_cast<const UByte*>(buffer_), toFile, schemaPaths);
     }
 
     /*!
@@ -275,7 +277,8 @@ public:
         BufferList retval;
         for (const auto& buffer : buffers)
         {
-            retval.push_back(reinterpret_cast<BufferList::value_type>(buffer));
+            const void* buffer_ = buffer;
+            retval.push_back(static_cast<BufferList::value_type>(buffer_));
         }
         return retval;
     }

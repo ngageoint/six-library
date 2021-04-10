@@ -106,7 +106,8 @@ ptrdiff_t six::NITFImageInputStream::read(std::byte* b, size_t len)
 }
 ptrdiff_t six::NITFImageInputStream::read(sys::byte* b, size_t len)
 {
-    return read(reinterpret_cast<std::byte*>(b), len);
+    void* b_ = b;
+    return read(static_cast<std::byte*>(b_), len);
 }
 ptrdiff_t six::NITFImageInputStream::read(std::span<sys::byte> b)
 {

@@ -118,7 +118,8 @@ struct ReadControl
     virtual UByte* interleaved(Region& region, size_t imageNumber) = 0;
     virtual void  interleaved(Region& region, size_t imageNumber, std::byte*& result)
     {
-        result = reinterpret_cast<std::byte*>(interleaved(region, imageNumber));
+        void* result_ = interleaved(region, imageNumber);
+        result = static_cast<std::byte*>(result_);
     }
 
     /*!

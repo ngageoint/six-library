@@ -54,7 +54,8 @@ struct Serializer
                               std::vector<U>& buffer)
     {
         constexpr size_t length = sizeof(T);
-        auto data = reinterpret_cast<typename std::vector<U>::const_pointer>(&val);
+        const void* pVal = &val;
+        auto data = static_cast<typename std::vector<U>::const_pointer>(pVal);
 
         if (swapBytes)
         {
@@ -93,7 +94,8 @@ struct Serializer
     static void deserializeImpl(const sys::byte*& buffer, bool swapBytes, T& val)
     {
         constexpr size_t length = sizeof(T);
-        auto data = reinterpret_cast<sys::byte*>(&val);
+        void* pVal = &val;
+        auto data = static_cast<sys::byte*>(pVal);
         std::copy(buffer, buffer + length, data);
         if (swapBytes)
         {
@@ -202,7 +204,8 @@ struct Serializer<std::string>
     {
         const size_t length = val.size();
         Serializer<size_t>::serializeImpl(length, swapBytes, buffer);
-        const auto begin = reinterpret_cast<typename std::vector<T>::const_pointer>(val.c_str());
+        const void* pVal_ = val.c_str();
+        const auto begin = static_cast<typename std::vector<T>::const_pointer>(pVal_);
         const auto end = begin + val.size();
         std::copy(begin, end, std::back_inserter(buffer));
     }
@@ -234,7 +237,8 @@ struct Serializer<std::string>
         size_t length;
         Serializer<size_t>::deserializeImpl(buffer, swapBytes, length);
 
-        const char* charPtr = reinterpret_cast<const char*>(buffer);
+        const void* buffer_ = buffer;
+        auto const charPtr = static_cast<const char*>(buffer_);
         val.assign(charPtr, charPtr + length);
         buffer += length;
     }

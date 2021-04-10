@@ -171,7 +171,8 @@ public:
     void setBuffer(std::byte* buffer)
     {
         assert(buffer != nullptr);
-        mBuffer = reinterpret_cast<UByte*>(buffer);
+        void* buffer_ = buffer;
+        mBuffer = static_cast<UByte*>(buffer_);
     }
 
     /*!
