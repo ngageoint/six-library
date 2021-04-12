@@ -37,6 +37,10 @@ public:
                          logging::Logger* log = nullptr,
                          bool ownLog = false);
 
+    SICommonXMLParser10x(const SICommonXMLParser10x&) = delete;
+    SICommonXMLParser10x& operator=(const SICommonXMLParser10x&) = delete;
+    SICommonXMLParser10x& operator=(SICommonXMLParser10x&&) = delete;
+
     XMLElem convertRadiometryToXML(
         const Radiometric *obj,
         XMLElem parent = nullptr) const override;

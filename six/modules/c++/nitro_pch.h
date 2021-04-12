@@ -7,6 +7,7 @@
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 
+
 #pragma warning(disable: 26493) // Don't use C-style casts (type.4).
 #pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
 #pragma warning(disable: 26495) // Variable '...' is uninitialized.Always initialize a member variable(type.6).
@@ -51,6 +52,11 @@
 #include <std/optional>
 #include <std/span>
 #include <std/string>
+
+#pragma warning(disable: 4625) // '...': copy constructor was implicitly defined as deleted
+#pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted
+#pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
+#pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
 
 #include <nitf/coda-oss.hpp>
 

@@ -68,6 +68,8 @@ public:
     {
     }
 
+    SegmentInputStreamAdapter& operator=(const SegmentInputStreamAdapter&) = delete;
+
     /*!
      *  Fulfills the C++ IO API function returning how many bytes
      *  are left in the stream

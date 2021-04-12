@@ -28,13 +28,14 @@
 
 namespace
 {
-class Shift
+struct Shift final
 {
-public:
     Shift(double shift) :
         mShift(shift)
     {
     }
+    Shift(const Shift& other) = delete;
+    Shift& operator=(const Shift& other) = delete;
 
     inline double operator()(double input) const
     {

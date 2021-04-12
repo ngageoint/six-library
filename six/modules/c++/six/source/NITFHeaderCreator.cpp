@@ -72,12 +72,14 @@ std::string generateILOC(const types::RowCol<size_t>& dims)
     return generateILOC(dims.row, dims.col);
 }
 
-class GetDisplayLutFromLegend
+struct GetDisplayLutFromLegend final
 {
-    public:
     GetDisplayLutFromLegend(const six::Legend& legend) : mLegend(legend)
     {
     }
+
+    GetDisplayLutFromLegend(const GetDisplayLutFromLegend&) = delete;
+    GetDisplayLutFromLegend& operator=(const GetDisplayLutFromLegend&) = delete;
 
     const six::LUT* operator()() const
     {

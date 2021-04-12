@@ -42,6 +42,8 @@ public:
               logging::Logger* log = nullptr,
               bool ownLog = false);
 
+    XMLParser& operator=(const XMLParser&) = delete;
+
     //!  Destructor
     virtual ~XMLParser();
 

@@ -44,6 +44,10 @@ public:
                       logging::Logger* log = nullptr,
                       bool ownLog = false);
 
+    SICommonXMLParser(const SICommonXMLParser&) = delete;
+    SICommonXMLParser& operator=(const SICommonXMLParser&) = delete;
+    SICommonXMLParser& operator=(SICommonXMLParser&&) = delete;
+
     std::string getSICommonURI() const
     {
         return mSICommonURI;

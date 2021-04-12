@@ -78,6 +78,9 @@ public:
                   size_t rowsPerBlock = 0,
                   size_t colsPerBlock = 0);
 
+    NITFImageInfo(const NITFImageInfo&) = delete;
+    NITFImageInfo& operator=(const NITFImageInfo&) = delete;
+
     size_t getNumBitsPerPixel() const
     {
         return mData->getNumBytesPerPixel() / mData->getNumChannels() * 8;

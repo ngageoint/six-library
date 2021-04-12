@@ -485,6 +485,11 @@ class AddSecurityOption final
 public:
     AddSecurityOption(const std::string& prefix, six::Options& options, logging::Logger& log)
         : prefix_(prefix), options_(options), log_(log) {}
+
+    AddSecurityOption(const AddSecurityOption&) = delete;
+    AddSecurityOption& operator=(const AddSecurityOption&) = delete;
+    AddSecurityOption& operator=(AddSecurityOption&&) = delete;
+
     void operator()(const nitf::Field& parameter, const std::string& field)
     {
         Parameter p = parameter.toString();

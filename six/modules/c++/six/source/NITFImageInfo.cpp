@@ -33,13 +33,15 @@
 
 namespace
 {
-class GetDisplayLutFromData
+struct GetDisplayLutFromData final
 {
-public:
     GetDisplayLutFromData(six::Data& data) :
         mData(data)
     {
     }
+
+    GetDisplayLutFromData(const GetDisplayLutFromData&) = delete;
+    GetDisplayLutFromData& operator=(const GetDisplayLutFromData&) = delete;
 
     const six::LUT* operator()() const
     {
