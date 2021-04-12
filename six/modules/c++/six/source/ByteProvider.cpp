@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include <string>
 
 #include <str/Convert.h>
@@ -63,6 +65,7 @@ void ByteProvider::populateOptions(
     }
 
     const six::Data* const data = container->getData(0);
+    assert(data != nullptr);
 
 
     if (maxProductSize != 0)

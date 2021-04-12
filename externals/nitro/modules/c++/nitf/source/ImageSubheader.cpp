@@ -231,7 +231,11 @@ nitf::Field ImageSubheader::getImageTitle() const
     return nitf::Field(getNativeOrThrow()->imageTitle);
 }
 
-nitf::Field ImageSubheader::getImageSecurityClass() const
+nitf::Field ImageSubheader::getImageSecurityClass()
+{
+    return nitf::Field(getNativeOrThrow()->imageSecurityClass);
+}
+const nitf::Field ImageSubheader::getImageSecurityClass() const
 {
     return nitf::Field(getNativeOrThrow()->imageSecurityClass);
 }

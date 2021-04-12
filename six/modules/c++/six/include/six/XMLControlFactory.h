@@ -43,8 +43,7 @@ namespace six
  */
 struct XMLControlCreator
 {
-    //!  Constructor
-    XMLControlCreator() {}
+    XMLControlCreator() = default;
 
     //!  Destructor
     virtual ~XMLControlCreator() {}

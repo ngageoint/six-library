@@ -44,8 +44,7 @@ namespace six
  */
 struct Data
 {
-    //!  Constructor
-    Data() {}
+    Data() = default;
 
     //!  Destructor
     virtual ~Data() {}

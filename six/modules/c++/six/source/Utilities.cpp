@@ -1155,6 +1155,7 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
         throw except::Exception(ex, Ctxt("Invalid XML data"));
     }
     xml::lite::Document* doc = xmlParser.getDocument();
+    assert(doc != nullptr);
 
     //! Check the root localName for the XML type
     std::string xmlType = doc->getRootElement()->getLocalName();

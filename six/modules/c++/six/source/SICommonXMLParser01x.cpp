@@ -262,6 +262,8 @@ void SICommonXMLParser01x::parseMatchInformationFromXML(
     const xml::lite::Element* matchInfoXML,
     MatchInformation* matchInfo) const
 {
+    assert(matchInfoXML != nullptr);
+
     //This is SICD 0.4 format
 
     //TODO make sure there is at least one

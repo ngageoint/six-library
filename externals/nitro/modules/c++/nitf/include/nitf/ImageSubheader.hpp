@@ -228,7 +228,8 @@ public:
     nitf::Field getImageTitle() const;
 
     //! Get the imageSecurityClass
-    nitf::Field getImageSecurityClass() const;
+    nitf::Field getImageSecurityClass();
+    const nitf::Field getImageSecurityClass() const;
     std::string imageSecurityClass() const
     {
         return getImageSecurityClass(); // nitf::Field implicitly converts to std::string

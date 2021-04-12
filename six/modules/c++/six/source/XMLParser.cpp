@@ -154,6 +154,7 @@ XMLElem XMLParser::createString_(const std::string& name,
 template<typename T>
 static std::string toString(const std::string& name, T p, const xml::lite::Element* parent)
 {
+    assert(parent != nullptr);
     try
     {
         return str::toString(p);
@@ -298,11 +299,13 @@ XMLElem XMLParser::createDate(const std::string& name, const DateTime& p,
 
 XMLElem XMLParser::getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag)
 {
+    assert(parent != nullptr);
     auto& element = parent->getElementByTagName(tag);
     return &element; // OK, element is a reference
 }
 XMLElem XMLParser::getOptional(const xml::lite::Element* parent, const std::string& tag)
 {
+    assert(parent != nullptr);
     return parent->getElementByTagName(std::nothrow, tag);
 }
 
@@ -319,6 +322,7 @@ XMLElem XMLParser::require(XMLElem element, const std::string& name)
 void XMLParser::setAttribute_(XMLElem e, const std::string& name,
                              const std::string& v, const std::string& uri)
 {
+    assert(e != nullptr);
     xml::lite::AttributeNode node;
     node.setUri(uri);
     node.setQName(name);
@@ -390,11 +394,13 @@ void XMLParser::parseComplex(const xml::lite::Element* element, std::complex<dou
 
 void XMLParser::parseString(const xml::lite::Element* element, std::string& value) const
 {
+    assert(element != nullptr);
     value = element->getCharacterData();
 }
 
 void XMLParser::parseBooleanType(const xml::lite::Element* element, BooleanType& value) const
 {
+    assert(element != nullptr);
     parseValue(*mLog, [&]() {
         value = castValue(*element, six::toType<BooleanType>);
         });
@@ -402,6 +408,7 @@ void XMLParser::parseBooleanType(const xml::lite::Element* element, BooleanType&
 
 void XMLParser::parseDateTime(const xml::lite::Element* element, DateTime& value) const
 {
+    assert(element != nullptr);
     value = castValue(*element, six::toType<DateTime>);
 }
 }

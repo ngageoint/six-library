@@ -234,8 +234,8 @@ void NITFHeaderCreator::setImageSecurity(
         nitf::ImageSubheader& subheader)
 {
     // This requires a normalized name to get set correctly
-    subheader.getImageSecurityClass().set(
-            getNITFClassification(classification.getLevel()));
+    nitf::Field imageSecurityClass = subheader.getImageSecurityClass();
+    imageSecurityClass.set(getNITFClassification(classification.getLevel()));
     setSecurity(classification, subheader.getSecurityGroup(), "IS");
 }
 

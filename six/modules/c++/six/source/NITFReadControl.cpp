@@ -59,6 +59,7 @@ void assignLUT(const nitf::ImageSubheader& subheader, six::Legend& legend)
     legend.mLUT.reset(new six::LUT(lut.getEntries(), lut.getTables()));
 
     const unsigned char* const table = lut.getTable();
+    assert(table != nullptr);
 
     for (size_t ii = 0, kk = 0; ii < lut.getEntries(); ++ii)
     {

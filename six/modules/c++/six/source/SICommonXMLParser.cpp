@@ -167,6 +167,8 @@ void SICommonXMLParser::parsePoly(const xml::lite::Element* polyXML,
                                   size_t xyzIdx,
                                   PolyXYZ& polyXYZ) const
 {
+    assert(polyXML != nullptr);
+
     std::vector<XMLElem> coeffsXML;
     polyXML->getElementsByTagName("Coef", coeffsXML);
 
@@ -262,6 +264,8 @@ XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
 
 void SICommonXMLParser::parseGeoInfoFromXML(const xml::lite::Element* geoInfoXML, GeoInfo* geoInfo) const
 {
+    assert(geoInfoXML != nullptr);
+
     std::vector < XMLElem > geoInfosXML;
     geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
     geoInfo->name = geoInfoXML->getAttributes().getValue("name");
@@ -1141,6 +1145,8 @@ void SICommonXMLParser::parseCollectionInformationFromXML(
     const xml::lite::Element* collectionInfoXML,
     CollectionInformation *collInfo) const
 {
+    assert(collectionInfoXML != nullptr);
+
     parseString(getFirstAndOnly(collectionInfoXML, "CollectorName"),
                 collInfo->collectorName);
 
@@ -1200,6 +1206,8 @@ XMLElem SICommonXMLParser::convertCollectionInformationToXML(
     const CollectionInformation *collInfo,
     XMLElem parent) const
 {
+    assert(collInfo != nullptr);
+
     XMLElem collInfoXML = newElement("CollectionInfo", parent);
 
     const std::string si = getSICommonURI();

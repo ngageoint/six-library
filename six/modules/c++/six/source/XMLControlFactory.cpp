@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include "six/XMLControlFactory.h"
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
@@ -90,6 +92,8 @@ std::string six::toValidXMLString(const Data* data,
                                   logging::Logger* log,
                                   const six::XMLControlRegistry *xmlRegistry)
 {
+    assert(data != nullptr);
+
     if (!xmlRegistry)
     {
         xmlRegistry = &XMLControlFactory::getInstance();

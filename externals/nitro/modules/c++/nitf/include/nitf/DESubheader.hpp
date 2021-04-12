@@ -88,7 +88,8 @@ public:
     }
 
     //! Get the securityClass
-    nitf::Field getSecurityClass() const;
+    nitf::Field getSecurityClass();
+    const nitf::Field getSecurityClass() const;
     std::string securityClass() const
     {
         return getSecurityClass(); // nitf::Field implicitly converts to std::string
