@@ -35,7 +35,7 @@ ByteProvider::ByteProvider()
 {
 }
 
-ByteProvider::ByteProvider(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
+ByteProvider::ByteProvider(std::unique_ptr<six::NITFHeaderCreator> headerCreator,
                            const std::vector<std::string>& schemaPaths,
                            const std::vector<PtrAndLength>& desBuffers)
 {
@@ -237,7 +237,7 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
                                    numColsPerBlock);
 }
 
-void ByteProvider::initialize(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
+void ByteProvider::initialize(std::unique_ptr<six::NITFHeaderCreator> headerCreator,
                               const std::vector<std::string>& schemaPaths,
                               const std::vector<PtrAndLength>& desBuffers)
 {

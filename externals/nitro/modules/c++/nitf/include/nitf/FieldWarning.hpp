@@ -106,7 +106,7 @@ public:
     }
 
 private:
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 }

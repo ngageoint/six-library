@@ -62,12 +62,7 @@
 #include "../../nitro_pch.h"
 #pragma warning(pop)
 
-#pragma warning(push)
-#pragma warning(disable: 26493) // Don't use C-style casts (type.4).
-#pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
-
 #include <import/scene.h>
-#pragma warning(pop)
 
 #pragma comment(lib, "logging-c++")
 #pragma comment(lib, "xml.lite-c++.lib")
