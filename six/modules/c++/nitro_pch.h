@@ -58,9 +58,12 @@
 #pragma warning(disable: 26493) // Don't use C-style casts (type.4).
 #pragma warning(disable: 26814) // The const variable '...' can be computed at compile-time. Consider using constexpr (con.5).
 #pragma warning(disable: 26496) // The variable '...' does not change after construction, mark it as const (con.4).
-#pragma warning(disable: 26497) // The function '...' could be marked constexpr if compile-time evaluation is desired(f.4).
+#pragma warning(disable: 26497) // The function '...' could be marked constexpr if compile-time evaluation is desired (f.4).
 #pragma warning(disable: 26475) // Do not use function style casts (es.49). Prefer '...' over '...'.
-#pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
+#pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable (type.6).
+#pragma warning(disable: 26461) // The pointer argument '...' for function '...' can be marked as a pointer to const (con.3).
+#pragma warning(disable: 26462) // The value pointed to by '...' is assigned only once, mark it as a pointer to const (con.4).
+#pragma warning(disable: 26494) // Variable '...' is uninitialized. Always initialize an object (type.5).
 #include <import/xml/lite.h>
 
 #pragma warning(pop)
