@@ -47,10 +47,8 @@ namespace logging
  * renamed to 'error.log.1', and all future logs will be logged to error.log.
  * This is useful if you would like to keep backups of logs.
  */
-class RotatingFileHandler : public StreamHandler
+struct RotatingFileHandler : public StreamHandler
 {
-
-public:
     /*!
      * \param fname         The file to log to
      * \param maxBytes      The max file size
@@ -61,6 +59,8 @@ public:
                         int backupCount = 0, LogLevel level = LogLevel::LOG_NOTSET);
 
     virtual ~RotatingFileHandler();
+
+    RotatingFileHandler& operator=(const RotatingFileHandler&) = delete;
 };
 }
 #endif

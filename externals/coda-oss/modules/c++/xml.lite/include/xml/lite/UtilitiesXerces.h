@@ -275,9 +275,8 @@ private:
  *  Xerces use as well as Expat (and ultimately MSXML as well)
  *
  */
-class XercesContentHandler : public XercesContentHandlerInterface_T
+struct XercesContentHandler : public XercesContentHandlerInterface_T
 {
-public:
     /*!
      *  Our constructor will use an underlying LiteContentHandler
      *  We will only bind to this, not free it.
@@ -290,6 +289,9 @@ public:
 
     ~XercesContentHandler()
     {}
+
+    XercesContentHandler(const XercesContentHandler&) = delete;
+    XercesContentHandler& operator=(const XercesContentHandler&) = delete;
 
     virtual void ignorableWhitespace(const XMLCh* const /*chars*/,
                                      const XercesSize_T /*length*/)
@@ -391,9 +393,14 @@ protected:
 *  Our error handler implementation, then, simply calls the raise,
 *  and warning macros in the factory.
 */
-class XercesErrorHandler : public XercesErrorHandlerInterface_T
+struct XercesErrorHandler : public XercesErrorHandlerInterface_T
 {
-public:
+    XercesErrorHandler() = default;
+    XercesErrorHandler(const XercesErrorHandler&) = delete;
+    XercesErrorHandler& operator=(const XercesErrorHandler&) = delete;
+    XercesErrorHandler(XercesErrorHandler&&) = delete;
+    XercesErrorHandler& operator=(XercesErrorHandler&&) = delete;
+
     /*!
      *  Receive notification of a warning. We want to call
      *  __warning__(message);

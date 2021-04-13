@@ -44,16 +44,17 @@ namespace io
  *  Added capabilities allow it to send and receive information quickly
  *  and easily to any other stream-inheriting class.  
  */
-class StringStream : public SeekableBidirectionalStream
+struct StringStream : public SeekableBidirectionalStream
 {
-public:
-
     //! Default constructor
     StringStream() :
         mData(std::stringstream::in | std::stringstream::out
                 | std::stringstream::binary)
     {
     }
+
+    StringStream(const StringStream&) = delete;
+    StringStream& operator=(const StringStream&) = delete;
 
     /*!
      *  Returns the stringstream associated with this StringStream

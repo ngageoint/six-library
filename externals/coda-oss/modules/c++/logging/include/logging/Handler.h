@@ -45,9 +45,8 @@ namespace logging
  * The Handler class is abstract. Sub-classes handle LogRecord* objects,
  * emitting the information in a user-defined manner.
  */
-class Handler : public Filterer
+struct Handler : public Filterer
 {
-public:
     /*!
      * Construct a Handler at the specified LogLevel (LogLevel::LOG_NOTSET is default)
      */
@@ -55,6 +54,7 @@ public:
     virtual ~Handler()
     {
     }
+    Handler& operator=(const Handler&) = delete;
 
     /*! 
      * Sets the Formatter to use when formatting LogRecords
@@ -87,9 +87,9 @@ protected:
     virtual void emitRecord(const LogRecord* record) = 0;
 
 
-    LogLevel mLevel;
+    LogLevel mLevel = LogLevel::LOG_NOTSET;
     sys::Mutex mHandlerLock;
-    Formatter* mFormatter;
+    Formatter* mFormatter = nullptr;
     StandardFormatter mDefaultFormatter; 
 };
 

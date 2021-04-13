@@ -36,9 +36,8 @@ namespace polygon
  * \brief Acts as a mask for a convex polygon without actually allocating a
  * bool buffer to draw it.
  */
-class PolygonMask
+struct PolygonMask final
 {
-public:
     enum MarkModesEnum
     {
         MARK_ALL_TRUE = 0,
@@ -84,6 +83,12 @@ public:
                 const types::RowCol<size_t>& dims,
                 types::RowCol<sys::SSize_T> offset =
                         types::RowCol<sys::SSize_T>(0, 0));
+
+
+    PolygonMask(const PolygonMask&) = delete;
+    PolygonMask& operator=(const PolygonMask&) = delete;
+    PolygonMask(PolygonMask&&) = delete;
+    PolygonMask& operator=(PolygonMask&&) = delete;
 
     /*!
      * \param row Row to query

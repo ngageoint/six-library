@@ -61,6 +61,8 @@ public:
     
     virtual ~Formatter() {}
 
+    Formatter& operator=(const Formatter&) = delete;
+
     // returns string
     virtual void format(const LogRecord* record, io::OutputStream& os) const = 0;
 

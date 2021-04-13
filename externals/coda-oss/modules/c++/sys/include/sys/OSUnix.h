@@ -239,21 +239,17 @@ protected:
     virtual void removeDirectory(const std::string& pathname) const;
 };
 
-
-class DirectoryUnix : public AbstractDirectory
+struct DirectoryUnix final : public AbstractDirectory
 {
-public:
-    DirectoryUnix() : mDir(nullptr)
-    {}
+    DirectoryUnix() = default;
     virtual ~DirectoryUnix()
     {
         close();
     }
-    virtual void close();
-    virtual std::string findFirstFile(const std::string& dir);
-    virtual std::string findNextFile();
-    DIR* mDir;
-
+    void close() override;
+    std::string findFirstFile(const std::string& dir) override;
+    std::string findNextFile() override;
+    DIR* mDir = nullptr;
 };
 
 }

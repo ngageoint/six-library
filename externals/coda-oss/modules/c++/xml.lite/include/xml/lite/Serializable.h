@@ -48,11 +48,9 @@ namespace lite
  *  all nodes in a document are dynamically allocated.  They are deleted
  *  by the class at destruction time.
  */
-class Serializable : public io::Serializable
+struct Serializable : public io::Serializable
 {
-public:
-    //! Constructor
-    Serializable() {}
+    Serializable() = default;
 
     Serializable(Document* document, bool own = true)
     {
@@ -61,6 +59,9 @@ public:
 
     //! Destructor
     virtual ~Serializable() {}
+
+    Serializable(const Serializable&) = delete;
+    Serializable& operator=(const Serializable&) = delete;
 
     /*!
      *  Return in the document as it is.  Consider throwing null-pointer
