@@ -55,6 +55,8 @@ public:
     {
     }
 
+    FileHandler& operator=(const FileHandler&) = delete;
+
 };
 }
 #endif

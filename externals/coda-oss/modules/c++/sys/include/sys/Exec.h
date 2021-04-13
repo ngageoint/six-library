@@ -91,8 +91,7 @@ struct ExecPipe : Exec
     *  \param cmd           - command line string to run
     */
     ExecPipe(const std::string& cmd) : 
-        Exec(cmd),
-        mOutStream(nullptr)
+        Exec(cmd)
     {
     }
 
@@ -139,13 +138,13 @@ struct ExecPipe : Exec
 protected:
 
 #ifdef _WIN32
-    STARTUPINFO mStartInfo;
-    PROCESS_INFORMATION mProcessInfo;
+    STARTUPINFO mStartInfo{};
+    PROCESS_INFORMATION mProcessInfo{};
 #else
-    pid_t mProcess;
+    pid_t mProcess{};
 #endif
 
-    FILE* mOutStream;
+    FILE* mOutStream = nullptr;
 
     //! popen with user access to process id
     FILE* openPipe(const std::string& command,

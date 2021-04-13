@@ -39,11 +39,11 @@ namespace logging
  * \class MemoryHandler
  * \brief Emits LogRecords to memory.
  */
-class MemoryHandler : public Handler
+struct MemoryHandler : public Handler
 {
-
-public:
     MemoryHandler(LogLevel level = LogLevel::LOG_NOTSET);
+
+    MemoryHandler& operator=(const MemoryHandler&) = delete;
 
     const std::vector<std::string>&
     getLogs(LogLevel level = LogLevel::LOG_NOTSET) const;

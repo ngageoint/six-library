@@ -56,9 +56,6 @@ namespace lite
  */
 class XMLReaderXerces : public XMLReaderInterface
 {
-
-private:
-
     XercesContext mCtxt;    //! this must be the first member listed
     std::unique_ptr<SAX2XMLReader>        mNative;
     std::unique_ptr<XercesContentHandler> mDriverContentHandler;
@@ -73,6 +70,9 @@ public:
     ~XMLReaderXerces()
     {
     }
+
+    XMLReaderXerces(const XMLReaderXerces&) = delete;
+    XMLReaderXerces& operator=(const XMLReaderXerces&) = delete;
 
     static const char* MEM_BUFFER_ID()
     {

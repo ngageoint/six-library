@@ -47,10 +47,8 @@ namespace mem
  *        returned from the get* methods, which would segfault when 
  *        the ScopedAlignedArrays go out of scope.
  */
-class SwapBuffer
+struct SwapBuffer final
 {
-public:
-
     /*!
      *  Allocate the buffers to the size needed --
      *  It is suggested to allocate these buffers to the largest
@@ -79,6 +77,9 @@ public:
         mScratch(scratch)
     {
     }
+
+    SwapBuffer(const SwapBuffer&) = delete;
+    SwapBuffer& operator=(const SwapBuffer&) = delete;
     
     //! Get the number of bytes
     size_t getNumBytes() const 

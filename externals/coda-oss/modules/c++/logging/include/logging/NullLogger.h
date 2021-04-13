@@ -37,25 +37,24 @@ namespace logging
  * \class NullHandler
  * \brief Ignores all records
  */
-class NullHandler : public Handler
+struct NullHandler : public Handler
 {
-
-public:
     NullHandler(LogLevel level = LogLevel::LOG_NOTSET) :
         Handler(level)
     {
     }
-    ~NullHandler()
-    {
-    }
+    ~NullHandler() = default;
+
+    NullHandler(const NullHandler&) = delete;
+    NullHandler& operator=(const NullHandler&) = delete;
 
 protected:
         
-    virtual void write(const std::string&)
+    void write(const std::string&) override
     {
         // does nothing...
     }
-    void emitRecord(const LogRecord*)
+    void emitRecord(const LogRecord*) override
     {
         // does nothing...
     }
@@ -65,18 +64,18 @@ protected:
  * A Logger that doesn't actually log anything. It can be used in cases where
  * a Logger is required but you don't want anything to log.
  */
-class NullLogger : public Logger
+struct NullLogger final : public Logger
 {
-public:
     NullLogger(const std::string& name = "") :
         Logger(name)
     {
         addHandler(new NullHandler, true);
     }
 
-    ~NullLogger()
-    {
-    }
+    ~NullLogger() = default;
+
+    NullLogger(const NullLogger&) = delete;
+    NullLogger& operator=(const NullLogger&) = delete;
 };
 
 }

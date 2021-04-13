@@ -264,26 +264,21 @@ protected:
     virtual void removeDirectory(const std::string& pathname) const;
 };
 
-
-
-class DirectoryWin32 : public AbstractDirectory
+struct DirectoryWin32 final : public AbstractDirectory
 {
-public:
-    DirectoryWin32() : mHandle(INVALID_HANDLE_VALUE)
-    {}
+    DirectoryWin32() = default;
     virtual ~DirectoryWin32()
     {
         close();
     }
-    virtual void close();
+    void close() override;
 
-    virtual std::string findFirstFile(const std::string& dir);
+    std::string findFirstFile(const std::string& dir) override;
 
-    virtual std::string findNextFile();
+    std::string findNextFile() override;
 
-    HANDLE mHandle;
-    WIN32_FIND_DATA mFileData;
-
+    HANDLE mHandle = INVALID_HANDLE_VALUE;
+    WIN32_FIND_DATA mFileData{};
 };
 
 }

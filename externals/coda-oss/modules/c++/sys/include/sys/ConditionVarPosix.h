@@ -42,10 +42,8 @@ namespace sys
  *  This class is the wrapper implementation for a pthread_cond_t
  *  (Pthread condition variable)
  */
-class ConditionVarPosix : public ConditionVarInterface
+struct ConditionVarPosix final : public ConditionVarInterface
 {
-public:
-
     ConditionVarPosix();
 
     //!  Constructor
@@ -53,6 +51,9 @@ public:
 
     //!  Destructor
     virtual ~ConditionVarPosix();
+
+    ConditionVarPosix(const ConditionVarPosix&) = delete;
+    ConditionVarPosix& operator=(const ConditionVarPosix&) = delete;
 
     /*!
      *  Acquire the lock
