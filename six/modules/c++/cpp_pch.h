@@ -10,6 +10,7 @@
 #pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted
 #pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
 #pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
+#pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers

@@ -53,11 +53,6 @@
 #include <std/span>
 #include <std/string>
 
-#pragma warning(disable: 4625) // '...': copy constructor was implicitly defined as deleted
-#pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted
-#pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
-#pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
-
 #include <nitf/coda-oss.hpp>
 
 #include <import/sys.h>
@@ -73,7 +68,6 @@
 #pragma warning(pop)
 
 #pragma warning(push)
-#pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
 #pragma warning(disable: 26492) // Don't use const_cast to cast away const or volatile (type.3).
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 #pragma warning(disable: 26455) // Default constructor may not throw. Declare it '...' (f.6).
