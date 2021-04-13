@@ -39,7 +39,8 @@ TwoD<_T>::operator () (double atX, double atY) const
 {
     _T ret(0.0);
     double atXPwr = 1.0;
-    for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
+    const auto sz = mCoef.size();
+    for (size_t i = 0; i < sz; i++)
     {
         ret += mCoef[i](atY) * atXPwr;
         atXPwr *= atX;
@@ -185,8 +186,7 @@ TwoD<_T>::operator [] (size_t i) const
         str << "index:" << i << " not within range [0..."
             << mCoef.size() << ")";
 
-        std::string msg(str.str());
-        throw except::IndexOutOfRangeException(Ctxt(msg));
+        throw except::IndexOutOfRangeException(Ctxt(str.str()));
     }
     return ret;
 }
@@ -204,8 +204,7 @@ TwoD<_T>::operator [] (size_t i)
         std::stringstream str;
         str << "index: " << i << " not within range [0..."
             << mCoef.size() << ")";
-        std::string msg(str.str());
-        throw(except::IndexOutOfRangeException(Ctxt(msg)));
+        throw(except::IndexOutOfRangeException(Ctxt(str.str())));
     }
 }
 
@@ -213,7 +212,8 @@ template<typename _T>
 TwoD<_T>&
 TwoD<_T>::operator *= (double cv)
 {
-    for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
+    const auto sz = mCoef.size();
+    for (size_t i = 0; i < sz; i++)
     {
         mCoef[i] *= cv;
     }
@@ -241,9 +241,11 @@ TwoD<_T>&
 TwoD<_T>::operator *= (const TwoD<_T>& p)
 {
     TwoD<_T> tmp(orderX() + p.orderX(), orderY() + p.orderY());
-    for (size_t i = 0, xsz = mCoef.size(); i < xsz; i++)
+    const auto xsz = mCoef.size();
+    const auto ysz = p.mCoef.size();
+    for (size_t i = 0; i < xsz; i++)
     {
-        for (size_t j = 0, ysz = p.mCoef.size(); j < ysz; j++)
+        for (size_t j = 0; j < ysz; j++)
         {
             tmp.mCoef[i + j] += mCoef[i] * p.mCoef[j];
         }
@@ -268,16 +270,22 @@ TwoD<_T>::operator += (const TwoD<_T>& p)
     TwoD<_T> tmp(std::max<size_t>(orderX(), p.orderX()),
                  std::max<size_t>(orderY(), p.orderY()));
 
-    for (size_t ii = 0, sz = mCoef.size(); ii < sz; ++ii)
     {
-        // We use copyFrom instead of an assignment operator here because
-        // the assignment operator can potentially change the order of
-        // our polynomial.
-        tmp.mCoef[ii].copyFrom(mCoef[ii]);
+        const auto sz = mCoef.size();
+        for (size_t ii = 0; ii < sz; ++ii)
+        {
+            // We use copyFrom instead of an assignment operator here because
+            // the assignment operator can potentially change the order of
+            // our polynomial.
+            tmp.mCoef[ii].copyFrom(mCoef[ii]);
+        }
     }
-    for (size_t ii = 0, sz = p.mCoef.size(); ii < sz; ++ii)
     {
-        tmp.mCoef[ii] += p.mCoef[ii];
+        const auto sz = p.mCoef.size();
+        for (size_t ii = 0; ii < sz; ++ii)
+        {
+            tmp.mCoef[ii] += p.mCoef[ii];
+        }
     }
 
     *this = tmp;
@@ -446,7 +454,7 @@ template<typename _T>
 TwoD<_T> TwoD<_T>::truncateToNonZeros(double zeroEpsilon) const
 {
     zeroEpsilon = std::abs(zeroEpsilon);
-    static const size_t NOT_FOUND(std::numeric_limits<size_t>::max());
+    constexpr size_t NOT_FOUND(std::numeric_limits<size_t>::max());
     size_t newOrderX(NOT_FOUND);
     size_t newOrderY(NOT_FOUND);
 

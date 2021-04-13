@@ -49,7 +49,8 @@ public:
         StreamHandler(new io::FileOutputStream(fname.string(), creationFlags), level)
     {
         // In case we are in append mode
-        ((io::FileOutputStream*) mStream.get())->seek(0, io::Seekable::END);
+        auto pStream = dynamic_cast<io::FileOutputStream*>(mStream.get());
+        pStream->seek(0, io::Seekable::END);
     }
     virtual ~FileHandler()
     {
