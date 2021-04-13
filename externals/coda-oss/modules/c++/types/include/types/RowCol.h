@@ -47,24 +47,22 @@ namespace types
  */
 template<typename T> struct RowCol
 {
-    T row;
-    T col;
+    T row{static_cast<T>(0.0)};
+    T col{static_cast<T>(0.0)};
 
     // Try to protect us from the unfortunate and probably
     // unintendet case where row gets set and col doesnt, especially
     // when doing scalar operations that might otherwise create
     // ambiguities
-    RowCol() :
-        row((T)0.0), col((T)0.0) {}
-
+    RowCol() = default;
 
     RowCol(T r, T c) :
         row(r), col(c) {}
 
     template<typename Other_T> RowCol(const RowCol<Other_T>& p)
     {
-        row = (T)p.row;
-        col = (T)p.col;
+        row = static_cast<T>(p.row);
+        col = static_cast<T>(p.col);
     }
 
     RowCol(const std::pair<T, T>& p)
@@ -77,8 +75,8 @@ template<typename T> struct RowCol
     {
         if (this != (RowCol*)&p)
         {
-            row = (T)p.row;
-            col = (T)p.col;
+            row = static_cast<T>(p.row);
+            col = static_cast<T>(p.col);
         }
         return *this;
     }
@@ -93,8 +91,8 @@ template<typename T> struct RowCol
     
     template<typename Other_T> RowCol& operator+=(const RowCol<Other_T>& p)
     {
-        row += (T)p.row;
-        col += (T)p.col;
+        row += static_cast<T>(p.row);
+        col += static_cast<T>(p.col);
         return *this;
     }
 
@@ -106,8 +104,8 @@ template<typename T> struct RowCol
 
     template<typename Other_T> RowCol& operator*=(const RowCol<Other_T>& p)
     {
-        row *= (T)p.row;
-        col *= (T)p.col;
+        row *= static_cast<T>(p.row);
+        col *= static_cast<T>(p.col);
         return *this;
     }
 
@@ -120,8 +118,8 @@ template<typename T> struct RowCol
     
     template<typename Other_T> RowCol& operator-=(const RowCol<Other_T>& p)
     {
-        row -= (T)p.row;
-        col -= (T)p.col;
+        row -= static_cast<T>(p.row);
+        col -= static_cast<T>(p.col);
         return *this;
     }
     
@@ -133,8 +131,8 @@ template<typename T> struct RowCol
 
     template<typename Other_T> RowCol& operator/=(const RowCol<Other_T>& p)
     {
-        row /= (T)p.row;
-        col /= (T)p.col;
+        row /= static_cast<T>(p.row);
+        col /= static_cast<T>(p.col);
         return *this;
     }
     

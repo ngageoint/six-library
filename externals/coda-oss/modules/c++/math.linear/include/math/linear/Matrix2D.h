@@ -588,8 +588,8 @@ public:
             throw except::Exception(Ctxt(
                 "Invalid inner dimension sizes for multiply"));
 
-        size_t M = mM;
-        size_t P = mx.mN;
+        const auto M = mM;
+        const auto P = mx.mN;
 
         Matrix2D newM(M, P);
         multiply(mx, newM);
@@ -617,9 +617,9 @@ public:
     void
     multiply(const Matrix2D& mx, Matrix2D &out) const
     {
-        size_t M(mM);
-        size_t N(mN);
-        size_t P(mx.mN);
+        const auto  M(mM);
+        const auto N(mN);
+        const auto P(mx.mN);
 
         if (mN != mx.mM)
             throw except::Exception(Ctxt(
@@ -631,14 +631,13 @@ public:
             throw except::Exception(Ctxt(
                 "Invalid output column size for multiply"));
 
-        size_t i, j, k;
-        for (i = 0; i < M; i++)
+        for (size_t i = 0; i < M; i++)
         {
-            for (j = 0; j < P; j++)
+            for (size_t j = 0; j < P; j++)
             {
                 out(i, j) = 0;
 
-                for (k = 0; k < N; k++)
+                for (size_t k = 0; k < N; k++)
                 {
                     out(i, j) += mRaw[i * N + k] * mx(k, j);
                 }
@@ -884,7 +883,6 @@ public:
         }
 
         std::vector<_T> colj(mM);
-        _T* rowi;
 
         for (size_t j = 0; j < mN; j++)
         {
@@ -895,9 +893,9 @@ public:
 
             for (size_t i = 0; i < mM; i++)
             {
-                rowi = lu[i];
+                auto rowi = lu[i];
 
-                size_t max = std::min<size_t>(i, j);
+                const auto max = std::min<size_t>(i, j);
                 _T s(0);
                 for (size_t k = 0; k < max; k++)
                 {
@@ -977,7 +975,7 @@ public:
      */
      _T normSq() const
     {
-        size_t sz = mM * mN;
+        const auto sz = mM * mN;
         _T acc(0);
         for (size_t i = 0; i < sz; ++i)
         {
@@ -1286,9 +1284,9 @@ template<typename _T> inline Matrix2D<_T>
 template<typename _T> inline
     Matrix2D<_T> inverseLU(const Matrix2D<_T>& mx)
 {
-    size_t M = mx.rows();
-    size_t N = mx.cols();
-    Matrix2D<_T> a(M, M, (_T)0);
+    const auto M = mx.rows();
+    const auto N = mx.cols();
+    Matrix2D<_T> a(M, M, static_cast<_T>(0));
 
     for (size_t i = 0; i < M; i++)
         a(i, i) = 1;

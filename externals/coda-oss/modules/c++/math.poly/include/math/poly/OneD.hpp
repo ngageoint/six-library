@@ -37,7 +37,8 @@ OneD<_T>::operator () (double at) const
 {
    _T ret(0.0);
    double atPwr = 1.0;
-   for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
+   const auto sz = mCoef.size();
+   for (size_t i = 0 ; i < sz; i++)
    {
       ret += mCoef[i]*atPwr;
       atPwr *= at;
@@ -53,11 +54,11 @@ OneD<_T>::integrate(double start, double end) const
    double endAtPwr = end;
    double startAtPwr = start;
    double div = 0;
-   double newCoef;
-   for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
+   const auto sz = mCoef.size();
+   for (size_t i = 0; i < sz; i++)
    {
       div = 1.0 / (i + 1);
-      newCoef = mCoef[i] * div;
+      const double newCoef = mCoef[i] * div;
       ret += newCoef * endAtPwr;
       ret -= newCoef * startAtPwr;
       endAtPwr *= end;
@@ -78,7 +79,8 @@ OneD<math::linear::VectorN<3, double> >::integrate(double start, double end) con
    OneD<double> poly1(polyOrder);
    OneD<double> poly2(polyOrder);
 
-   for (size_t term = 0, sz = mCoef.size(); term < sz; term++)
+   const auto sz = mCoef.size();
+   for (size_t term = 0; term < sz; term++)
    {
        poly0[term] = mCoef[term][0];
        poly1[term] = mCoef[term][1];
@@ -100,7 +102,8 @@ OneD<_T>::derivative() const
     if (order() > 0)
     {
         ret = OneD<_T>(order()-1);
-        for (size_t ii = 0, sz = mCoef.size() - 1; ii < sz; ii++)
+        const auto sz = mCoef.size() - 1;
+        for (size_t ii = 0; ii < sz; ii++)
         {
             ret[ii] = static_cast<_T>(mCoef[ii + 1] * (ii + 1));
         }
@@ -122,11 +125,14 @@ OneD< math::linear::VectorN<3, double> >::derivative() const
        OneD<double> poly1(polyOrder);
        OneD<double> poly2(polyOrder);
 
-       for (size_t term = 0, sz = mCoef.size(); term < sz; term++)
        {
-           poly0[term] = mCoef[term][0];
-           poly1[term] = mCoef[term][1];
-           poly2[term] = mCoef[term][2];
+           const auto sz = mCoef.size();
+           for (size_t term = 0; term < sz; term++)
+           {
+               poly0[term] = mCoef[term][0];
+               poly1[term] = mCoef[term][1];
+               poly2[term] = mCoef[term][2];
+           }
        }
 
        poly0 = poly0.derivative();
@@ -134,11 +140,14 @@ OneD< math::linear::VectorN<3, double> >::derivative() const
        poly2 = poly2.derivative();
 
        ret = OneD<math::linear::VectorN<3, double> >(polyOrder - 1);
-       for (size_t term = 0, sz = mCoef.size() -1; term < sz; term++)
        {
-           ret[term][0] = poly0[term];
-           ret[term][1] = poly1[term];
-           ret[term][2] = poly2[term];
+           const auto sz = mCoef.size() - 1;
+           for (size_t term = 0; term < sz; term++)
+           {
+               ret[term][0] = poly0[term];
+               ret[term][1] = poly1[term];
+               ret[term][2] = poly2[term];
+           }
        }
    }
 
@@ -173,8 +182,7 @@ OneD<_T>::operator [] (size_t i)
         std::stringstream str;
         str << "index: " << i << " not within range [0..."
             << mCoef.size() << ")";
-        std::string msg(str.str());
-        throw except::IndexOutOfRangeException(Ctxt(msg));
+        throw except::IndexOutOfRangeException(Ctxt(str.str()));
     }
 }
 
@@ -191,8 +199,7 @@ OneD<_T>::operator [] (size_t i) const
    {
       std::stringstream str;
       str << "idx(" << i << ") not within range [0..." << mCoef.size() << ")";
-      std::string msg(str.str());
-      throw except::IndexOutOfRangeException(Ctxt(msg));
+      throw except::IndexOutOfRangeException(Ctxt(str.str()));
    }
 }
 
@@ -211,7 +218,8 @@ template<typename _T>
 OneD<_T>&
 OneD<_T>::operator *= (double cv)
 {
-    for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
+    const auto sz = mCoef.size();
+    for (size_t i = 0; i < sz; i++)
     {
         mCoef[i] *= cv;
     }
@@ -239,9 +247,11 @@ OneD<_T>&
 OneD<_T>::operator *= (const OneD<_T>& p)
 {
    OneD<_T> tmp(order()+p.order());
-   for (size_t i = 0, xsz = mCoef.size(); i < xsz; i++)
+   const auto xsz = mCoef.size();
+   const auto ysz = p.mCoef.size();
+   for (size_t i = 0; i < xsz; i++)
    {
-       for (size_t j = 0, ysz = p.mCoef.size(); j < ysz; j++)
+       for (size_t j = 0; j < ysz; j++)
        {
            tmp.mCoef[i + j] += mCoef[i] * p.mCoef[j];
        }
@@ -264,13 +274,19 @@ OneD<_T>&
 OneD<_T>::operator += (const OneD<_T>& p)
 {
     OneD<_T> tmp(std::max<size_t>(order(), p.order()));
-    for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
     {
-        tmp.mCoef[i] = mCoef[i];
+        const auto sz = mCoef.size();
+        for (size_t i = 0; i < sz; i++)
+        {
+            tmp.mCoef[i] = mCoef[i];
+        }
     }
-    for (size_t i = 0, sz = p.mCoef.size() ; i < sz; i++)
     {
-        tmp.mCoef[i] += p.mCoef[i];
+        const auto sz = p.mCoef.size();
+        for (size_t i = 0; i < sz; i++)
+        {
+            tmp.mCoef[i] += p.mCoef[i];
+        }
     }
    *this = tmp;
    return *this;
@@ -340,7 +356,7 @@ OneD<_T> OneD<_T>::power(size_t toThe) const
     if (toThe == 0)
     {
         OneD<_T> zero(0);
-        zero[0] = _T(1);
+        zero[0] = static_cast<_T>(1);
         return zero;
     }
 
