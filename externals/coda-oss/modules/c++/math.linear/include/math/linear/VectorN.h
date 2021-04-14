@@ -341,7 +341,7 @@ public:
 
     template<typename Vector_T> bool operator==(const Vector_T& v) const
     {
-        size_t sz = v.size();
+        const auto sz = v.size();
         for (size_t i = 0; i < sz; ++i)
             if (!equals<_T>((*this)[i], v[i])) 
                 return false;

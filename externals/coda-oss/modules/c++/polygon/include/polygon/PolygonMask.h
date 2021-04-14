@@ -19,10 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __POLYGON_POLYGON_MASK_H__
-#define __POLYGON_POLYGON_MASK_H__
+#ifndef CODA_OSS_polygon_PolygonMask_h_INCLUDED_
+#define CODA_OSS_polygon_PolygonMask_h_INCLUDED_
+#pragma once
 
 #include <vector>
+#include <memory>
 
 #include <sys/Conf.h>
 #include <mem/ScopedArray.h>
@@ -159,9 +161,9 @@ private:
 
 private:
     MarkModesEnum mMarkMode;
-    mem::ScopedArray<types::Range> mRanges;
+    std::unique_ptr<types::Range[]> mRanges;
     types::RowCol<size_t> mDims;
 };
 }
 
-#endif
+#endif // CODA_OSS_polygon_PolygonMask_h_INCLUDED_
