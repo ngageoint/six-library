@@ -16,6 +16,23 @@ namespace math
 namespace poly
 {
 
+
+    template<typename T>
+    inline double compute_mean_value_(const T& x)
+    {
+        const auto begin = x.get();
+        const auto end = begin + x.size();
+        return std::accumulate(begin, end, 0.0) / static_cast<double>(x.size());
+    }
+    inline double compute_mean_value(const math::linear::Vector<double>& x)
+    {
+        return compute_mean_value_(x);
+    }
+    inline double compute_mean_value(const math::linear::Matrix2D<double>& x)
+    {
+        return compute_mean_value_(x);
+    }
+
 /*!
  *  Templated function to perform a linear least squares fit for the data.
  *  This algorithm is fairly straightforward.
@@ -69,14 +86,14 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
     }
     
     // Compute mean value
-    double mean = std::accumulate(vx.get(), vx.get() + sizeX, 0.0) / sizeX;
+    const auto mean = compute_mean_value(vx);
 
     // Shift the vector values by mean to center around zero
-    math::linear::Vector<double> offv(sizeX, mean);
-    math::linear::Vector<double> xp = vx - offv;
+    const math::linear::Vector<double> offv(sizeX, mean);
+    auto xp = vx - offv;
 
     // Normalize the values in the vector using standard deviation
-    const double rxrms = 1 / std::sqrt(xp.normSq() / sizeX);
+    const double rxrms = 1.0 / std::sqrt(xp.normSq() / static_cast<double>(sizeX));
     xp.scale(rxrms);
 
     math::linear::Matrix2D<double> A(sizeX, order + 1);
@@ -93,10 +110,10 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
         }
     }
     
-    math::linear::Matrix2D<double> At = A.transpose();
-    math::linear::Matrix2D<double> inv = inverse(At * A);
-    math::linear::Matrix2D<double> B = inv * At;
-    math::linear::Vector<double> c(B * vy.matrix());
+    const auto At = A.transpose();
+    const auto inv = inverse(At * A);
+    const auto B = inv * At;
+    const math::linear::Vector<double> c(B * vy.matrix());
 
     // Now we need the order+1 components out for our poly
     math::poly::OneD<double> poly(c.size());
@@ -125,11 +142,10 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
 inline OneD<double> fit(size_t numObs, const double* x, const double* y, 
             size_t order)
 {
-    math::linear::Vector<double> xv(numObs, x);
-    math::linear::Vector<double> yv(numObs, y);
-    return math::poly::fit<math::linear::Vector<double> >(xv, yv, order);
+    const math::linear::Vector<double> xv(numObs, x);
+    const math::linear::Vector<double> yv(numObs, y);
+    return math::poly::fit<math::linear::Vector<double>>(xv, yv, order);
 }
-
 
 /*!
  *  Two-dimensional linear least squares fit
@@ -156,7 +172,6 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
 {
     const auto m = x.rows();
     const auto n = x.cols();
-    const auto mxn = x.size();
 
     if (m != y.rows())
         throw except::Exception(Ctxt("Matrices must be equally sized"));
@@ -165,17 +180,18 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
         throw except::Exception(Ctxt("Matrices must be equally sized"));
 
     // Compute mean values
-    const double xoff = std::accumulate(x.get(), x.get() + mxn, 0.0) / mxn;
-    const double yoff = std::accumulate(y.get(), y.get() + mxn, 0.0) / mxn;
+    const auto xoff = compute_mean_value(x);
+    const auto yoff = compute_mean_value(y);
 
     // Shift the matrix values by mean to center around zero
-    math::linear::Matrix2D<double> xoffm(m, n, xoff);
-    math::linear::Matrix2D<double> yoffm(m, n, yoff);
+    const math::linear::Matrix2D<double> xoffm(m, n, xoff);
+    const math::linear::Matrix2D<double> yoffm(m, n, yoff);
 
     math::linear::Matrix2D<double> xp = x - xoffm;
     math::linear::Matrix2D<double> yp = y - yoffm;
 
     // Normalize the values in the matrix using standard deviation
+    const auto mxn = static_cast<double>(x.size());
     const auto rxrms = 1.0 / std::sqrt(xp.normSq() / mxn);
     const auto ryrms = 1.0 / std::sqrt(yp.normSq() / mxn);
     xp.scale(rxrms);
@@ -183,11 +199,11 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
 
     const auto acols = (nx+1) * (ny+1);
 
-    if (mxn < acols)
+    if (x.size() < acols)
     {
         std::ostringstream excSS;
         excSS << "Not enough points for a unique fit solution ("
-              << mxn << " points for a " << acols << "-coefficient fit)!"
+              <<  x.size() << " points for a " << acols << "-coefficient fit)!"
               << " You should really have at least (orderX+1)*(orderY+1) = "
               << acols << " points for this to do what you expect.";
         throw except::Exception(Ctxt(excSS.str()));
@@ -198,7 +214,7 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     // C = NX+1 x NY+1
 
     // size(A) = R x P
-    math::linear::Matrix2D<double> A(mxn, acols);
+    math::linear::Matrix2D<double> A(x.size(), acols);
     
     for (size_t i = 0; i < m; i++)
     {
@@ -231,7 +247,7 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     }
     
     // size(tmp) = R x 1
-    math::linear::Matrix2D<double> tmp(mxn, 1);
+    math::linear::Matrix2D<double> tmp(x.size(), 1);
 
     for (size_t i = 0; i < m; i++)
     {
@@ -242,19 +258,19 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
         }
     }
     
-    math::linear::Matrix2D<double> At = A.transpose();
+   const auto At = A.transpose();
 
     //       T
     // size(A  A) = (P x R) (R x P) = (P x P)
     // size(inv) = (P x P)
-    math::linear::Matrix2D<double> inv = math::linear::inverse<double>(At * A);
+   const auto inv = math::linear::inverse<double>(At * A);
 
     // size(C) = ((P x P) (P x R))(R x 1)
     //         =   (P x R)(R x 1)
     //         =   (P x 1)
     //         =   (NX+1xNY+1 x 1)
 
-    math::linear::Matrix2D<double> C = inv * At * tmp;
+    const auto C = inv * At * tmp;
 
     // Now we need the NX+1 components out for our x coeffs
     // and NY+1 components out for our y coeffs
@@ -294,9 +310,9 @@ inline math::poly::TwoD<double> fit(size_t numRows,
                     size_t nx,
                     size_t ny)
 {
-    math::linear::Matrix2D<double> xm(numRows, numCols, x);
-    math::linear::Matrix2D<double> ym(numRows, numCols, y);
-    math::linear::Matrix2D<double> zm(numRows, numCols, z);
+    const math::linear::Matrix2D<double> xm(numRows, numCols, x);
+    const math::linear::Matrix2D<double> ym(numRows, numCols, y);
+    const math::linear::Matrix2D<double> zm(numRows, numCols, z);
 
     return fit(xm, ym, zm, nx, ny);
 }

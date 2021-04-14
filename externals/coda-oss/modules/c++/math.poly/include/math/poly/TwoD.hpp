@@ -370,9 +370,9 @@ template<typename _T>
 bool
 TwoD<_T>::operator == (const TwoD<_T>& p) const
 {
-    size_t sz = mCoef.size();
-    size_t psz = p.mCoef.size();
-    size_t minSize = std::min<size_t>(sz, psz);
+    const auto sz = mCoef.size();
+    const auto psz = p.mCoef.size();
+    const auto minSize = std::min(sz, psz);
 
     // guard against uninitialized
     if (minSize == 0 && (sz != psz))
