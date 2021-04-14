@@ -46,6 +46,7 @@ check_cxx_source_compiles(
     HAVE_ATTRIBUTE_ALIGNED)
 
 add_subdirectory("config")
+add_subdirectory("avx")
 add_subdirectory("serialize")
 add_subdirectory("except")
 add_subdirectory("sys")
