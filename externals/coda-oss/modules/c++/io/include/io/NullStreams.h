@@ -25,6 +25,8 @@
 
 #include <algorithm>
 
+#include <import/gsl.h>
+
 #include <io/InputStream.h>
 #include <io/OutputStream.h>
 #include <io/SeekableStreams.h>
@@ -79,7 +81,7 @@ protected:
     virtual sys::SSize_T readImpl(void* buffer, size_t len)
     {
         const auto numToRead =
-                mAvailable >= static_cast<sys::SSize_T>(len) ? len : static_cast<size_t>(mAvailable);
+                mAvailable >= gsl::narrow<sys::SSize_T>(len) ? len : gsl::narrow<size_t>(mAvailable);
 
         mAvailable -= numToRead;
 
@@ -87,7 +89,7 @@ protected:
             throw except::IOException(Ctxt("EOF - no more data to read"));
 
         processBytes(buffer, numToRead);
-        return static_cast <sys::SSize_T>(numToRead);
+        return gsl::narrow<sys::SSize_T>(numToRead);
     }
 };
 

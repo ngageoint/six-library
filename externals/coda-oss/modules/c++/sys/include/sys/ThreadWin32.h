@@ -24,14 +24,16 @@
 #ifndef __SYS_THREAD_WIN32_H__
 #define __SYS_THREAD_WIN32_H__
 
+#include <sstream>
+
+#include <import/gsl.h>
+
 #if defined(WIN32) || defined(_WIN32)
 
 #if !defined(USE_NSPR_THREADS)
 
 #include "sys/ThreadInterface.h"
 #include "sys/Conf.h"
-#include <sstream>
-
 
 #define sleep Sleep
 
@@ -64,7 +66,7 @@ namespace sys
 
     inline long getThreadID()
     {
-	return static_cast<long>(GetCurrentThreadId());
+	return gsl::narrow<long>(GetCurrentThreadId());
     }
 
 struct ThreadWin32 : public ThreadInterface

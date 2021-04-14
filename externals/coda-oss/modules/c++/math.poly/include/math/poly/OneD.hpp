@@ -452,8 +452,10 @@ OneD<_T> OneD<_T>::transformInput(const OneD<_T>& gx,
 template<typename _T>
 void OneD<_T>::copyFrom(const OneD<_T>& p)
 {
-    const size_t numCopy(std::min(size(), p.size()));
-    std::copy(p.mCoef.begin(), p.mCoef.begin() + numCopy, mCoef.begin());
+    const auto numCopy = static_cast<ptrdiff_t>(std::min(size(), p.size()));
+    const auto begin = p.mCoef.begin();
+    const auto end = begin + numCopy;
+    std::copy(begin, end, mCoef.begin());
 }
 
 template<typename _T>
