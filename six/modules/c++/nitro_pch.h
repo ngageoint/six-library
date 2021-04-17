@@ -8,17 +8,10 @@
 #pragma warning(disable: 26459) // You called an STL function '...' with a raw pointer parameter at position '...' that may be unsafe-this relies on the caller to check that the passed values are correct. Consider wrapping your range in a gsl::span and pass as a span iterator(stl.1).
 
 #pragma warning(disable: 26489) // Don't dereference a pointer that may be invalid: '...'. '...' may have been invalidated at line ... (lifetime.1).
-#pragma warning(disable: 26446) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
+#pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
 #pragma warning(disable: 26482) // Only index into arrays using constant expressions (bounds.2).
 #pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all (c.21).
-#pragma warning(disable: 26433) // Function '...' should be marked with '...' (c.128).
-#pragma warning(disable: 26456) // Operator '...' hides a non-virtual operator '...' (c.128).
-#pragma warning(disable: 26435) // Function '...' should specify exactly one of '...', '...', or '...' (c.128).
-#pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
-#pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
-//#pragma warning(disable: 26472) // Don't use a static_cast for arithmetic conversions. Use brace initialization, gsl::narrow_cast or gsl::narrow (type.1).
-#pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
 
 #include <std/bit>
 #include <std/cstddef>
