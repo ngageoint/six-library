@@ -3,17 +3,7 @@
 #include "cpp_pch.h"
 
 #pragma warning(push)
-#pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
-#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
-#pragma warning(disable: 26459) // You called an STL function '...' with a raw pointer parameter at position '...' that may be unsafe-this relies on the caller to check that the passed values are correct. Consider wrapping your range in a gsl::span and pass as a span iterator(stl.1).
-
-#pragma warning(disable: 26489) // Don't dereference a pointer that may be invalid: '...'. '...' may have been invalidated at line ... (lifetime.1).
-#pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
 #pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
-#pragma warning(disable: 26482) // Only index into arrays using constant expressions (bounds.2).
-#pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
-#pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all (c.21).
-#pragma warning(disable: 26485) // Expression '...': No array to pointer decay (bounds.3).
 
 #include <std/bit>
 #include <std/cstddef>
@@ -23,17 +13,38 @@
 #include <std/span>
 #include <std/string>
 
-#include <nitf/coda-oss.hpp>
+#pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 
-#include <import/sys.h>
-#include <import/io.h>
-#include <import/mt.h>
 #include <import/str.h>
+#include <import/sys.h>
+#pragma warning(push)
+#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
+#include <import/mt.h>
+#pragma warning(pop)
+#include <import/io.h>
 #include <import/logging.h>
+
+#pragma warning(push)
+#pragma warning(disable: 26489) // Don't dereference a pointer that may be invalid: '...'. '...' may have been invalidated at line ... (lifetime.1).
+
+#pragma warning(push)
+#pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
+#pragma warning(disable: 26459) // You called an STL function '...' with a raw pointer parameter at position '...' that may be unsafe-this relies on the caller to check that the passed values are correct. Consider wrapping your range in a gsl::span and pass as a span iterator(stl.1).
+#pragma warning(disable: 26485) // Expression '...': No array to pointer decay (bounds.3).
+#include <import/math/linear.h>
+#pragma warning(pop)
+
+#pragma warning(push)
+#pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
+#pragma warning(disable: 26482) // Only index into arrays using constant expressions (bounds.2).
+#include <import/math/poly.h>
+#pragma warning(pop)
+#pragma warning(pop)
+
 #include <polygon/PolygonMask.h>
 #include <math/Utilities.h>
-#include <import/math/linear.h>
-#include <import/math/poly.h>
+
+#include <nitf/coda-oss.hpp>
 
 // these are from Xerces
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="nitro" ToolsVersion="16.0">
+<RuleSet Name="scene" ToolsVersion="16.0">
   <Include Path="allrules.ruleset" Action="Default" />
   <Include Path="basiccorrectnessrules.ruleset" Action="Default" />
   <Include Path="basicdesignguidelinerules.ruleset" Action="Default" />

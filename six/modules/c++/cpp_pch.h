@@ -12,16 +12,10 @@
 #pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 
-
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-#include <windows.h>
-#undef min
-#undef max
-
-#include <assert.h>
-#include <stdlib.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <assert.h>
+#include <stdlib.h>
 #include <stdarg.h>
 #include <ctype.h>
 #include <time.h>
@@ -46,5 +40,11 @@
 #include <atomic>
 #include <future>
 #include <complex>
+
+
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#include <windows.h>
+#undef min
+#undef max
 
 #pragma warning(pop)
