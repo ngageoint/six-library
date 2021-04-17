@@ -8,10 +8,12 @@
 #pragma warning(disable: 26459) // You called an STL function '...' with a raw pointer parameter at position '...' that may be unsafe-this relies on the caller to check that the passed values are correct. Consider wrapping your range in a gsl::span and pass as a span iterator(stl.1).
 
 #pragma warning(disable: 26489) // Don't dereference a pointer that may be invalid: '...'. '...' may have been invalidated at line ... (lifetime.1).
+#pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
 #pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
 #pragma warning(disable: 26482) // Only index into arrays using constant expressions (bounds.2).
 #pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all (c.21).
+#pragma warning(disable: 26485) // Expression '...': No array to pointer decay (bounds.3).
 
 #include <std/bit>
 #include <std/cstddef>
@@ -49,6 +51,10 @@
 #pragma warning(disable: 26489) // Don't dereference a pointer that may be invalid: '...'. '...' may have been invalidated at line ... (lifetime.1).
 #pragma warning(disable: 26488) // Do not dereference a potentially null pointer : ...'. '...' was null at line ... (lifetime.1).
 #pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
+#pragma warning(disable: 26485) // Expression '...': No array to pointer decay (bounds.3).
+#pragma warning(disable: 26457) // (void) should not be used to ignore return values, use '...' instead (es.48).
+#pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
+#pragma warning(disable: 26451) // Arithmetic overflow : Using operator '...' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '...' to avoid overflow (io.2).
 #include <import/xml/lite.h>
 
 #pragma warning(pop)

@@ -55,12 +55,12 @@ struct AdjustableParams
 
     Vector3 getARPVector() const
     {
-        return Vector3(mParams + ARP_RADIAL);
+        return Vector3(mParams[ARP_RADIAL]);
     }
 
     Vector3 getARPVelocityVector() const
     {
-        return Vector3(mParams + ARP_VEL_RADIAL);
+        return Vector3(mParams[ARP_VEL_RADIAL]);
     }
 
     double operator[](std::ptrdiff_t idx) const
