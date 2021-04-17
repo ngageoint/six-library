@@ -143,16 +143,16 @@ void NITFImageInfo::computeSegmentCorners()
     // (M, 0)
     Vector3 icp4 = scene::Utilities::latLonToECEF(corners.lowerLeft);
 
-    const size_t numIS = mImageSegments.size();
-    const double total = mData->getNumRows() - 1.0;
+    const auto numIS = mImageSegments.size();
+    const auto total = static_cast<double>(mData->getNumRows()) - 1.0;
 
     Vector3 ecef;
     size_t i;
     for (i = 0; i < numIS; i++)
     {
         const auto firstRow = mImageSegments[i].getFirstRow();
-        const double wgt1 = (total - firstRow) / total;
-        const double wgt2 = firstRow / total;
+        const auto wgt1 = (total - static_cast<double>(firstRow)) / total;
+        const auto wgt2 = static_cast<double>(firstRow) / total;
 
         // This requires an operator overload for scalar * vector
         ecef = wgt1 * icp1 + wgt2 * icp4;

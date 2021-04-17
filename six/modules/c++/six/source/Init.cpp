@@ -49,7 +49,7 @@ template<> types::RgAz<double>Init::undefined<types::RgAz<double> >()
 
 template<> RowColInt Init::undefined<RowColInt>()
 {
-    return RowColInt(Init::undefined<size_t>(), Init::undefined<size_t>());
+    return RowColInt(Init::undefined<ptrdiff_t>(), Init::undefined<ptrdiff_t>());
 }
 
 template<> RowColDouble Init::undefined<RowColDouble>()

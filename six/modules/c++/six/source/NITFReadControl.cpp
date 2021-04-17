@@ -597,8 +597,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
     const NITFImageInfo& thisImage = *(mInfos[imageNumber]);
 
-    const size_t numRowsTotal = thisImage.getData()->getNumRows();
-    const size_t numColsTotal = thisImage.getData()->getNumCols();
+    const auto numRowsTotal = thisImage.getData()->getNumRows();
+    const auto numColsTotal = thisImage.getData()->getNumCols();
 
     if (region.getNumRows() == -1)
     {
@@ -609,14 +609,14 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
         region.setNumCols(numColsTotal);
     }
 
-    const size_t numRowsReq = region.getNumRows();
-    const size_t numColsReq = region.getNumCols();
+    const auto numRowsReq = region.getNumRows();
+    const auto numColsReq = region.getNumCols();
 
-    const size_t startRow = region.getStartRow();
-    const size_t startCol = region.getStartCol();
+    const auto startRow = region.getStartRow();
+    const auto startCol = region.getStartCol();
 
-    const size_t extentRows = startRow + numRowsReq;
-    const size_t extentCols = startCol + numColsReq;
+    const auto extentRows = startRow + numRowsReq;
+    const auto extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
         throw except::Exception(Ctxt(FmtX("Too many rows requested [%d]",
@@ -631,7 +631,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 
     auto buffer = region.getBuffer();
 
-    const size_t subWindowSize = numRowsReq * numColsReq
+    const auto subWindowSize = numRowsReq * numColsReq
             * thisImage.getData()->getNumBytesPerPixel();
 
     if (buffer == nullptr)
@@ -669,7 +669,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     }
     --i; // Need to get rid of the last one
     size_t totalRead = 0;
-    size_t numRowsLeft = numRowsReq;
+    auto numRowsLeft = numRowsReq;
     sw.setStartRow(static_cast<uint32_t>(startRow - startOff));
 #if DEBUG_OFFSETS
     std::cout << "startRow: " << startRow
@@ -678,8 +678,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     << " i: " << i << std::endl;
 #endif
 
-    const size_t nbpp = thisImage.getData()->getNumBytesPerPixel();
-    const size_t startIndex = thisImage.getStartIndex();
+    const auto nbpp = thisImage.getData()->getNumBytesPerPixel();
+    const auto startIndex = thisImage.getStartIndex();
     createCompressionOptions(mCompressionOptions);
     for (; i < numIS && totalRead < subWindowSize; i++)
     {

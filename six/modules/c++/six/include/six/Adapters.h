@@ -89,7 +89,7 @@ protected:
     virtual ptrdiff_t readImpl(void* buffer, size_t len)
     {
         mReader.read(buffer, len);
-        return len;
+        return static_cast<ptrdiff_t>(len);
     }
 };
 

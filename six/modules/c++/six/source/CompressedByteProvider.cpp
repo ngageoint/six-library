@@ -59,9 +59,9 @@ void CompressedByteProvider::initialize(
         size_t numRowsPerBlock,
         size_t numColsPerBlock)
 {
-    const double byterate =
-            static_cast<double>(countCompressedBytes(bytesPerBlock)) /
-             countUncompressedPixels(*container->getData(0));
+    const auto byterate =
+        static_cast<double>(countCompressedBytes(bytesPerBlock)) /
+        static_cast<double>(countUncompressedPixels(*container->getData(0)));
     Options options;
     options.setParameter(
             six::NITFHeaderCreator::OPT_J2K_COMPRESSION_BYTERATE, byterate);

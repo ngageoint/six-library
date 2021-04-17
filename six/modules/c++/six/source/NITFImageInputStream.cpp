@@ -26,7 +26,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     mSubheader(subheader), mReader(imageReader), mRowBufferRemaining(0),
             mRowOffset(0)
 {
-    int bytesPerPixel = NITF_NBPP_TO_BYTES(subheader.getNumBitsPerPixel());
+    auto bytesPerPixel = NITF_NBPP_TO_BYTES(subheader.getNumBitsPerPixel());
     mRowSize = subheader.numCols() * bytesPerPixel;
 
     uint32_t nBands = subheader.getBandCount();
@@ -102,7 +102,7 @@ ptrdiff_t six::NITFImageInputStream::read(std::byte* b, size_t len)
         }
     }
     mAvailable -= len;
-    return len;
+    return static_cast<ptrdiff_t>(len);
 }
 ptrdiff_t six::NITFImageInputStream::read(sys::byte* b, size_t len)
 {

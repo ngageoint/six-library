@@ -618,7 +618,7 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
     // Clean up
     mInfos.clear();
 
-    const uint32_t ilocMax = Constants::ILOC_MAX;
+    const auto ilocMax = Constants::ILOC_MAX;
     const uint32_t maxRows = mOptions.getParameter(OPT_MAX_ILOC_ROWS, Parameter(ilocMax));
 
     auto maxSize = static_cast<uint64_t>(mOptions.getParameter(
