@@ -33,9 +33,8 @@
 
 namespace io
 {
-class NullInputStream : public InputStream
+struct NullInputStream : public InputStream
 {
-public:
     NullInputStream(sys::SSize_T size) :
         mSize(size),
         mAvailable(size)
@@ -93,12 +92,9 @@ protected:
     }
 };
 
-class NullOutputStream : public OutputStream
+struct NullOutputStream : public OutputStream
 {
-public:
-    NullOutputStream()
-    {
-    }
+    NullOutputStream() = default;
 
     void write(sys::byte )
     {
@@ -127,26 +123,21 @@ public:
  * class hierarchy is set up, you can't just inherit from NullOutputStream and
  * Seekable to get this
  */
-class SeekableNullOutputStream : public io::SeekableOutputStream
+struct SeekableNullOutputStream final : public io::SeekableOutputStream
 {
-public:
-    SeekableNullOutputStream() :
-        mOffset(0),
-        mMaxOffset(0)
-    {
-    }
+    SeekableNullOutputStream() = default;
 
-    virtual void write(const void*, size_t numBytes)
+    void write(const void*, size_t numBytes) override
     {
         mOffset += numBytes;
         mMaxOffset = std::max(mOffset, mMaxOffset);
     }
 
-    virtual void flush()
+    void flush() override
     {
     }
 
-    virtual sys::Off_T seek(sys::Off_T offset, Whence whence)
+    sys::Off_T seek(sys::Off_T offset, Whence whence) override
     {
         switch (whence)
         {
@@ -167,14 +158,14 @@ public:
         return mOffset;
     }
 
-    virtual sys::Off_T tell()
+    sys::Off_T tell() override
     {
         return mOffset;
     }
 
 private:
-    sys::Off_T mOffset;
-    sys::Off_T mMaxOffset;
+    sys::Off_T mOffset = 0;
+    sys::Off_T mMaxOffset = 0;
 };
 }
 

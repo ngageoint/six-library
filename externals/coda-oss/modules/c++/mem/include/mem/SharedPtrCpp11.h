@@ -27,7 +27,7 @@
 #include <memory>
 #include <type_traits>
 
-#include "sys/Conf.h"
+#include "sys/CPlusPlus.h"
 
 namespace mem
 {

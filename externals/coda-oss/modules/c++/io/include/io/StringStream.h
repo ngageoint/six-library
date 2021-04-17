@@ -46,12 +46,7 @@ namespace io
  */
 struct StringStream : public SeekableBidirectionalStream
 {
-    //! Default constructor
-    StringStream() :
-        mData(std::stringstream::in | std::stringstream::out
-                | std::stringstream::binary)
-    {
-    }
+    StringStream() = default;
 
     StringStream(const StringStream&) = delete;
     StringStream& operator=(const StringStream&) = delete;
@@ -132,7 +127,7 @@ protected:
     virtual sys::SSize_T readImpl(void* buffer, size_t len);
 
 private:
-    std::stringstream mData;
+    std::stringstream mData{std::stringstream::in | std::stringstream::out | std::stringstream::binary};
 };
 
 }

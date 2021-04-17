@@ -46,17 +46,10 @@ namespace io
  *  This object has a known derived type SOAPMessage, which is concretely
  *  defined to handle SOAP objects
  */
-class Serializable
+struct Serializable
 {
-public:
-    //! Default constructor
-    Serializable()
-    {
-    }
-    //! Deconstructor
-    virtual ~Serializable()
-    {
-    }
+    Serializable() = default;
+    virtual ~Serializable() = default;
 
     /*!
      * Transfer this object into a byte stream

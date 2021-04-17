@@ -118,9 +118,8 @@ protected:
 /**
  * An output stream that can be enabled/disabled (toggled).
  */
-class ToggleOutputStream: public io::ProxyOutputStream
+struct ToggleOutputStream: public io::ProxyOutputStream
 {
-public:
     ToggleOutputStream(io::OutputStream *output = nullptr, bool ownPtr = false) :
         io::ProxyOutputStream(nullptr), mPtr(output),
                 mNullStream(new io::NullOutputStream), mOwnPtr(ownPtr)
@@ -155,8 +154,8 @@ public:
     }
 
 protected:
-    io::OutputStream *mPtr, *mNullStream;
-    bool mOwnPtr, mEnabled;
+    io::OutputStream *mPtr = nullptr, *mNullStream = nullptr;
+    bool mOwnPtr = false, mEnabled = false;
 };
 
 }

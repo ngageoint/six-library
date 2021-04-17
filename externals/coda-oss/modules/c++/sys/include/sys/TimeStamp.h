@@ -44,9 +44,8 @@ namespace sys
  *  \brief Class for timestamping
  *
  */
-class TimeStamp
+struct TimeStamp final
 {
-public:
     //! The maximum length of a timestamp
     enum { MAX_TIME_STAMP = 64 };
 
@@ -54,11 +53,11 @@ public:
      *  Default constructor.
      *  \param is24HourTime Optional specifier for military time
      */
-    TimeStamp(bool is24HourTime = false) : m24HourTime(is24HourTime)
-    {}
-    //!  Destructor
-    ~TimeStamp()
-    {}
+    TimeStamp() = default;
+    TimeStamp(bool is24HourTime) : m24HourTime(is24HourTime)
+    {
+    }
+    ~TimeStamp() = default;
 
     /*!
      *  Produces a local-time string timestamp
@@ -95,7 +94,7 @@ private:
     }
 
     //!  Military time???
-    bool m24HourTime;
+    bool m24HourTime = false;
 };
 
 }

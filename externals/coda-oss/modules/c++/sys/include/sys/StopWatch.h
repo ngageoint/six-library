@@ -29,11 +29,10 @@
 namespace sys
 {
 
-class StopWatch
+struct StopWatch
 {
-public:
-    StopWatch(){}
-    virtual ~StopWatch(){}
+    StopWatch() = default;
+    virtual ~StopWatch() = default;
     /*!
      *  Start the timer and return the time in millis
      */

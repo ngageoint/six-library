@@ -44,17 +44,10 @@ namespace io
  *
  */
 
-class OutputStream
+struct OutputStream
 {
-public:
-    //! Default constructor
-    OutputStream()
-    {
-    }
-    //! Destructor
-    virtual ~OutputStream()
-    {
-    }
+    OutputStream() = default;
+    virtual ~OutputStream() = default;
 
     /*!
      * Write one byte to the stream
