@@ -106,7 +106,7 @@ public:
     {
     }
 
-    virtual std::string getType() const noexcept override 
+    std::string getType() const noexcept override 
     {
         return "Error";
     }
