@@ -31,11 +31,10 @@
 
 namespace sys
 {
-class DirectoryEntry
+struct DirectoryEntry
 {
-public:
-    class Iterator;
-    friend class Iterator;
+    struct Iterator;
+    friend struct Iterator;
 
     DirectoryEntry(const Path& path)
     {
@@ -68,8 +67,7 @@ public:
         mFirst.reset(this);
         mLast.reset(nullptr);
     }
-    virtual ~DirectoryEntry()
-    {}
+    virtual ~DirectoryEntry() = default;
     virtual void next()
     {
         mCurrent = mDir.findNextFile();
@@ -83,11 +81,9 @@ public:
         return mDirName;
     }
 
-    class Iterator
+    struct Iterator final
     {
-    public:
-        Iterator() : mEntry(nullptr)
-        {}
+        Iterator() = default;
         explicit Iterator(DirectoryEntry* dirEntry) : mEntry(dirEntry)
         {}
 
@@ -121,8 +117,7 @@ public:
         }
 
     private:
-        DirectoryEntry* mEntry;
-
+        DirectoryEntry* mEntry = nullptr;
     };
 
     const Iterator& begin() const

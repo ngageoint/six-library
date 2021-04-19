@@ -33,13 +33,10 @@
 
 namespace sys
 {
-class OSUnix : public AbstractOS
+struct OSUnix final : public AbstractOS
 {
-public:
-    OSUnix()
-    {}
-    virtual ~OSUnix()
-    {}
+    OSUnix() = default;
+    virtual ~OSUnix() = default;
 
     virtual std::string getPlatformName() const;
 

@@ -46,13 +46,10 @@ namespace sys
  *  This class is the abstraction layer as defined for
  *  the windows operating system.
  */
-class OSWin32 : public AbstractOS
+struct OSWin32 final : public AbstractOS
 {
-public:
-    OSWin32()
-    {}
-    virtual ~OSWin32()
-    {}
+    OSWin32() = default;
+    virtual ~OSWin32() = default;
     virtual std::string getPlatformName() const;
 
     virtual std::string getNodeName() const;

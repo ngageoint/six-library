@@ -234,7 +234,7 @@ struct ThreadInterface : public Runnable
         return mTarget;
     }
 
-    bool isRunning()
+    bool isRunning() noexcept
     {
         return mIsRunning;
     }

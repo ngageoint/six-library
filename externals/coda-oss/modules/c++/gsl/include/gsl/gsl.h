@@ -35,9 +35,11 @@
 	#pragma warning(push)
 	#pragma warning(disable: 4626) // '...' : assignment operator was implicitly defined as deleted
 	#pragma warning(disable: 5027) // '...' : move assignment operator was implicitly defined as deleted
+	#pragma warning(disable: 26487) // Don 't return a pointer '...' that may be invalid (lifetime.4).
 	#endif
 
 	#include "gsl/gsl"
+	#include "gsl/gsl_byte"
 
 	#if _MSC_VER
 	#pragma warning(pop)

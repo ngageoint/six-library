@@ -68,14 +68,14 @@ namespace mt
 	CPUAffinityInitializer* mAffinityInit = nullptr;
 	int mGenSize = 0;
     public:
-	GenerationThreadPool(unsigned short numThreads = 0,
+        GenerationThreadPool() = default;
+	GenerationThreadPool(unsigned short numThreads,
 			     CPUAffinityInitializer* affinityInit = nullptr) 
 	    : BasicThreadPool<TiedRequestHandler>(numThreads), 
 	    mAffinityInit(affinityInit)
 	    {
 	    }
-	virtual ~GenerationThreadPool() {}
-
+	virtual ~GenerationThreadPool() = default;
 	GenerationThreadPool(const GenerationThreadPool&) = delete;
     GenerationThreadPool& operator=(const GenerationThreadPool&) = delete;
 	

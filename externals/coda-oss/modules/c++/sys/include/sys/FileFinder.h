@@ -41,7 +41,7 @@ struct FilePredicate
     using argument_type = std::string;
     using result_type = bool;
 
-    virtual ~FilePredicate() {}
+    virtual ~FilePredicate() = default;
     virtual bool operator()(const std::string& entry) const = 0;
 };
 
@@ -50,7 +50,7 @@ struct FilePredicate
  */
 struct ExistsPredicate : FilePredicate
 {
-    virtual ~ExistsPredicate() {}
+    virtual ~ExistsPredicate() = default;
     virtual bool operator()(const std::string& entry) const;
 };
 
@@ -59,7 +59,7 @@ struct ExistsPredicate : FilePredicate
  */
 struct FileOnlyPredicate: public FilePredicate
 {
-    virtual ~FileOnlyPredicate() {}
+    virtual ~FileOnlyPredicate() = default;
     virtual bool operator()(const std::string& entry) const;
 };
 
@@ -68,7 +68,7 @@ struct FileOnlyPredicate: public FilePredicate
  */
 struct DirectoryOnlyPredicate: public FilePredicate
 {
-    virtual ~DirectoryOnlyPredicate() {}
+    virtual ~DirectoryOnlyPredicate() = default;
     virtual bool operator()(const std::string& entry) const;
 };
 
@@ -77,7 +77,6 @@ struct DirectoryOnlyPredicate: public FilePredicate
  */
 struct FragmentPredicate : public FilePredicate
 {
-public:
     FragmentPredicate(const std::string& fragment, bool ignoreCase = true);
     bool operator()(const std::string& entry) const;
 
@@ -94,9 +93,8 @@ private:
  * splitting routines will only find '.yyy'.  See re::RegexPredicate
  * for a more useful finder.
  */
-class ExtensionPredicate: public FileOnlyPredicate
+struct ExtensionPredicate: public FileOnlyPredicate
 {
-public:
     ExtensionPredicate(const std::string& ext, bool ignoreCase = true);
     bool operator()(const std::string& filename) const;
 
@@ -108,9 +106,8 @@ private:
 /**
  * Predicate that does logical not of another predicate (ie !)
  */
-class NotPredicate : public FilePredicate
+struct NotPredicate : public FilePredicate
 {
-public:
     NotPredicate(FilePredicate* filter, bool ownIt = false);
     virtual ~NotPredicate();
 
@@ -126,10 +123,10 @@ protected:
  *  The LogicalPredicate class allows you to chain many 
  *  predicates using the logical && or ||
  */
-class LogicalPredicate : public FilePredicate
+struct LogicalPredicate : public FilePredicate
 {
-public:
-    LogicalPredicate(bool orOperator = true);
+    LogicalPredicate() = default;
+    LogicalPredicate(bool orOperator);
     virtual ~LogicalPredicate();
 
     sys::LogicalPredicate& addPredicate(FilePredicate* filter, 
@@ -138,7 +135,7 @@ public:
     virtual bool operator()(const std::string& entry) const;
 
 protected:
-    bool mOrOperator;
+    bool mOrOperator = true;
     typedef std::pair<FilePredicate*, bool> PredicatePair;
     std::vector<PredicatePair> mPredicates;
 };
@@ -149,11 +146,10 @@ protected:
  *  The FileFinder class allows you to search for 
  *  files/directories in a clean way.
  */
-class FileFinder
+struct FileFinder final
 {
-public:
-    FileFinder() {}
-    ~FileFinder() {}
+    FileFinder() = default;
+    ~FileFinder() = default;
 
     /**
      * Perform the search

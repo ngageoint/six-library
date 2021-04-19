@@ -51,12 +51,10 @@ namespace io
  *
  */
 
-class DbgStream : public OutputStream
+struct DbgStream : public OutputStream
 {
-public:
-    //!  Constructor
-    DbgStream() : mOn(false)
-    {}
+    DbgStream() = default;
+    virtual ~DbgStream() = default;
 
     /*!
      *  Alternate constructor
@@ -80,9 +78,6 @@ public:
         mOn = on;
         mStream.reset(s);
     }
-    //!  Destructor
-    virtual ~DbgStream()
-    {}
 
     /*!
      * This method uses the bound OutputStream to print,
@@ -120,7 +115,7 @@ protected:
     //!  The bound stream
     mem::auto_ptr<OutputStream> mStream;
     //!  On or off??
-    bool mOn;
+    bool mOn = false;
 };
 }
 #endif

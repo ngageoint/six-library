@@ -40,7 +40,8 @@ struct BasicThreadPool
     /*! Constructor.  Set up the thread pool.
      *  \param numThreads the number of threads
      */
-    BasicThreadPool(size_t numThreads = 0) :
+    BasicThreadPool() = default;
+    BasicThreadPool(size_t numThreads) :
         mNumThreads(numThreads)
     {
     }

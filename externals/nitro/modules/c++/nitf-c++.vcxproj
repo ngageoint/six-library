@@ -71,6 +71,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cpp.h" />
     <ClInclude Include="nitf\include\nitf\BandInfo.hpp" />
     <ClInclude Include="nitf\include\nitf\BandSource.hpp" />
     <ClInclude Include="nitf\include\nitf\BlockingInfo.hpp" />
