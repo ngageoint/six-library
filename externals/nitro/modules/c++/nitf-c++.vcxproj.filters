@@ -367,5 +367,6 @@
     <ClInclude Include="nitf\include\nitf\WriterOptions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cpp.h" />
   </ItemGroup>
 </Project>
