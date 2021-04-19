@@ -26,9 +26,14 @@
 #include <stdexcept>
 #include <string>
 
+#include <gsl/gsl.h>
+
 #include <six/NITFReadControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/Utilities.h>
+
+#undef min
+#undef max
 
 #ifndef SIX_ENABLE_DED
     // set to 1 for DEM support
@@ -310,7 +315,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
 
             if (data->getDataType() == six::DataType::DERIVED)
             {
-                mContainer->addData(std::move(data), findLegend(productNum));
+                mContainer->addData(std::move(data), findLegend(gsl::narrow<size_t>(productNum)));
             }
             else if (data->getDataType() == six::DataType::COMPLEX)
             {
@@ -597,8 +602,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
     const NITFImageInfo& thisImage = *(mInfos[imageNumber]);
 
-    const auto numRowsTotal = thisImage.getData()->getNumRows();
-    const auto numColsTotal = thisImage.getData()->getNumCols();
+    const auto numRowsTotal = gsl::narrow<ptrdiff_t>(thisImage.getData()->getNumRows());
+    const auto numColsTotal = gsl::narrow<ptrdiff_t>(thisImage.getData()->getNumCols());
 
     if (region.getNumRows() == -1)
     {
@@ -654,12 +659,12 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     size_t i;
     for (i = 0; i < numIS; i++)
     {
-        const auto firstRowSeg = imageSegments[i].getFirstRow();
+        const auto firstRowSeg = gsl::narrow<ptrdiff_t>(imageSegments[i].getFirstRow());
 
         if (firstRowSeg <= startRow)
         {
             // It could be in this segment
-            startOff = firstRowSeg;
+            startOff = gsl::narrow<decltype(startOff)>(firstRowSeg);
         }
         else
         {
@@ -683,9 +688,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     createCompressionOptions(mCompressionOptions);
     for (; i < numIS && totalRead < subWindowSize; i++)
     {
-        const size_t numRowsReqSeg =
-                std::min<size_t>(numRowsLeft, imageSegments[i].getNumRows()
-                        - sw.getStartRow());
+        const auto numRowsReqSeg =
+                std::min(gsl::narrow<size_t>(numRowsLeft), imageSegments[i].getNumRows() - sw.getStartRow());
 
         sw.setNumRows(static_cast<uint32_t>(numRowsReqSeg));
         nitf::ImageReader imageReader = mReader.newImageReader(

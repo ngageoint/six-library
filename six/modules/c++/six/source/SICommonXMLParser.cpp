@@ -25,6 +25,8 @@
 #include <string>
 
 #include <str/Convert.h>
+#include <gsl/gsl.h>
+
 #include <six/Utilities.h>
 #include <six/CollectionInformation.h>
 #include <six/SICommonXMLParser.h>
@@ -344,8 +346,8 @@ XMLElem SICommonXMLParser::createLatLonFootprint(const std::string& name,
 
 void SICommonXMLParser::parsePoly1D(const xml::lite::Element* polyXML, Poly1D& poly1D) const
 {
-    int order1 = str::toType<int>(polyXML->getAttributes().getValue("order1"));
-    Poly1D p1D(order1);
+    const auto order1 = str::toType<int>(polyXML->getAttributes().getValue("order1"));
+    Poly1D p1D(gsl::narrow<size_t>(order1));
 
     std::vector < XMLElem > coeffsXML;
     polyXML->getElementsByTagName("Coef", coeffsXML);
@@ -353,16 +355,16 @@ void SICommonXMLParser::parsePoly1D(const xml::lite::Element* polyXML, Poly1D& p
     for (auto element : coeffsXML)
     {
         const auto exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));
-        parseDouble(element, p1D[exp1]);
+        parseDouble(element, p1D[gsl::narrow<size_t>(exp1)]);
     }
     poly1D = p1D;
 }
 
 void SICommonXMLParser::parsePoly2D(const xml::lite::Element* polyXML, Poly2D& poly2D) const
 {
-    int order1 = str::toType<int>(polyXML->getAttributes().getValue("order1"));
-    int order2 = str::toType<int>(polyXML->getAttributes().getValue("order2"));
-    Poly2D p2D(order1, order2);
+    const auto order1 = str::toType<int>(polyXML->getAttributes().getValue("order1"));
+    const auto order2 = str::toType<int>(polyXML->getAttributes().getValue("order2"));
+    Poly2D p2D(gsl::narrow<size_t>(order1), gsl::narrow<size_t>(order2));
 
     std::vector < XMLElem > coeffsXML;
     polyXML->getElementsByTagName("Coef", coeffsXML);
@@ -371,7 +373,7 @@ void SICommonXMLParser::parsePoly2D(const xml::lite::Element* polyXML, Poly2D& p
     {
         const auto exp1 = str::toType<int>(element->getAttributes().getValue("exponent1"));
         const auto exp2 = str::toType<int>(element->getAttributes().getValue("exponent2"));
-        parseDouble(element, p2D[exp1][exp2]);
+        parseDouble(element, p2D[gsl::narrow<size_t>(exp1)][exp2]);
     }
     poly2D = p2D;
 }

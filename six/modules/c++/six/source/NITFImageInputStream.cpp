@@ -57,7 +57,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     }
 
     mRowBuffer.reset(new sys::ubyte[mRowSize]);
-    mAvailable = mRowSize * subheader.numRows();
+    mAvailable = gsl::narrow<decltype(mAvailable )>(mRowSize* subheader.numRows());
 
     mBandList.reset(new uint32_t[nBands]);
     for (uint32_t band = 0; band < nBands; ++band)

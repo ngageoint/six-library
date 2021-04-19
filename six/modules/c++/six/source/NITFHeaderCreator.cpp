@@ -25,6 +25,7 @@
 #include <io/ByteStream.h>
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
+#include <gsl/gsl.h>
 #include <six/NITFHeaderCreator.h>
 #include <six/WriteControl.h>
 #include <six/XMLControlFactory.h>
@@ -393,10 +394,8 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
 
     bool changed = false;
     std::string classOrder = "URCST";
-    size_t foundLoc =
-            classOrder.find(record.getHeader().getClassification().toString());
-    int classIndex =
-            foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
+    size_t foundLoc = classOrder.find(record.getHeader().getClassification().toString());
+    int classIndex = foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
 
     nitf::FileSecurity highest = record.getHeader().getSecurityGroup();
 
@@ -404,9 +403,8 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
     {
         nitf::ImageSubheader subheader =
                 nitf::ImageSegment(record.getImages()[i]).getSubheader();
-        foundLoc =
-                classOrder.find(subheader.getImageSecurityClass().toString());
-        const int idx = foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
+        foundLoc = classOrder.find(subheader.getImageSecurityClass().toString());
+        const auto idx = foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
         if (idx > classIndex)
         {
             highest = subheader.getSecurityGroup();
@@ -421,7 +419,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
         nitf::DESubheader subheader =
                 nitf::DESegment(record.getDataExtensions()[i]).getSubheader();
         foundLoc = classOrder.find(subheader.getSecurityClass().toString());
-        const int idx = foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
+        const auto idx = foundLoc != std::string::npos ? static_cast<int>(foundLoc) : -1;
         if (idx > classIndex)
         {
             highest = subheader.getSecurityGroup();
@@ -432,8 +430,7 @@ void NITFHeaderCreator::updateFileHeaderSecurity()
 
     if (changed)
     {
-        record.getHeader().getClassification() =
-                classOrder.substr(classIndex, 1);
+        record.getHeader().getClassification() = classOrder.substr(gsl::narrow<size_t>(classIndex), 1);
         record.getHeader().setSecurityGroup(highest.clone());
     }
 }
@@ -962,7 +959,7 @@ void NITFHeaderCreator::loadMeshSegment_(
     const void* data_ = meshBuffer.data();
     auto data = static_cast<const sys::byte*>(data_);
     nitf::SegmentMemorySource dataSource(
-            data, meshBuffer.size(), 0, 0, true);
+            data, gsl::narrow<nitf::Off>(meshBuffer.size()), 0, 0, true);
     mem::SharedPtr<nitf::SegmentWriter> desWriter(
             new nitf::SegmentWriter(dataSource));
     addAdditionalDES(desWriter);

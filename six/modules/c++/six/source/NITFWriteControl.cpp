@@ -292,8 +292,7 @@ void NITFWriteControl::save_(const TBufferList& imageData,
         const NITFImageInfo& info = *pInfo;
         std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
         const size_t numIS = imageSegments.size();
-        const int pixelSize =
-                static_cast<int>(info.getData()->getNumBytesPerPixel());
+        const auto pixelSize = info.getData()->getNumBytesPerPixel();
         const size_t numCols = info.getData()->getNumCols();
         const size_t numChannels = info.getData()->getNumChannels();
 
@@ -336,8 +335,8 @@ void NITFWriteControl::save_(const TBufferList& imageData,
                                                           segmentInfo.getFirstRow() *
                                                           numCols,
                                           bandSize,
-                                          bandSize * chan,
-                                          pixelSize,
+                                           gsl::narrow<int>(bandSize * chan),
+                                          gsl::narrow<int>(pixelSize),
                                           0);
                     iSource.addBand(ms);
                 }
