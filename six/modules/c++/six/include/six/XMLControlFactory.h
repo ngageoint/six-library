@@ -88,9 +88,7 @@ class XMLControlRegistry
 {
 public:
     //!  Constructor
-    XMLControlRegistry()
-    {
-    }
+    XMLControlRegistry() = default;
 
     //!  Destructor
     virtual ~XMLControlRegistry();

@@ -97,7 +97,8 @@ typedef scene::FrameType FrameType;
  */
 struct DecorrType
 {
-    DecorrType(double ccz = 0.0, double dr = 0.0) :
+    DecorrType() = default;
+        DecorrType(double ccz, double dr = 0.0) :
         corrCoefZero(ccz), decorrRate(dr)
     {
     }
@@ -206,7 +207,7 @@ struct ReferencePoint
     Vector3 ecef;
 
     //!  Row col pixel location of point
-    RowColDouble rowCol;
+    RowColDouble rowCol{ 0.0, 0.0 };
 
     //!  (Optional) name.  Leave it blank if you don't need it
     std::string name;
