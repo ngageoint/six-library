@@ -10,4 +10,6 @@
 #include <std/span>
 #include <std/string>
 
+#include <sys/Conf.h>
+
 #endif // SIX_scene_sys_Conf_h_INCLUDED_
