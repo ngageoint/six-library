@@ -47,6 +47,14 @@
 #include <math/Utilities.h>
 
 #include <nitf/coda-oss.hpp>
+#pragma comment(lib, "io-c++")
+#pragma comment(lib, "except-c++")
+#pragma comment(lib, "sys-c++")
+#pragma comment(lib, "str-c++")
+#pragma comment(lib, "logging-c++")
+#pragma comment(lib, "xml.lite-c++.lib")
+#pragma comment(lib, "xerces-c")
+#pragma comment(lib, "ws2_32")
 
 // these are from Xerces
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
@@ -89,10 +97,3 @@
 #include <import/nrt.h>
 
 #pragma warning(pop)
-
-#pragma comment(lib, "io-c++")
-#pragma comment(lib, "except-c++")
-#pragma comment(lib, "sys-c++")
-#pragma comment(lib, "str-c++")
-
-#pragma comment(lib, "ws2_32")
