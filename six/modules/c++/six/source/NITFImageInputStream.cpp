@@ -21,6 +21,8 @@
  */
 #include "six/NITFImageInputStream.h"
 
+#include <gsl/gsl.h>
+
 six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
         nitf::ImageReader imageReader) :
     mSubheader(subheader), mReader(imageReader), mRowBufferRemaining(0),
@@ -63,7 +65,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
 
     //setup the window
     mWindow.setNumRows(1);
-    mWindow.setNumCols(subheader.numCols());
+    mWindow.setNumCols(gsl::narrow<uint32_t>(subheader.numCols()));
     mWindow.setBandList(mBandList.get());
     mWindow.setNumBands(nBands);
 }

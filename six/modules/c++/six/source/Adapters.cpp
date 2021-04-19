@@ -21,6 +21,8 @@
  */
 #include "six/Adapters.h"
 
+#include <gsl/gsl.h>
+
 using namespace six;
 
 extern "C"
@@ -52,6 +54,11 @@ extern "C" void __six_MemoryWriteHandler_destruct(NITF_DATA * data)
         NITF_FREE(impl);
 }
 
+static void byteSwap(std::byte* buffer, size_t elemSize, size_t numElems)
+{
+    sys::byteSwap(buffer, gsl::narrow<unsigned short>(elemSize), numElems);
+}
+
 extern "C" NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
 {
@@ -67,7 +74,7 @@ extern "C" NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
         memcpy(rowCopy, &impl->buffer[off], rowSize);
 
         if (impl->doByteSwap)
-            sys::byteSwap(rowCopy, impl->pixelSize
+            byteSwap(rowCopy, impl->pixelSize
                     / impl->numChannels, impl->numCols * impl->numChannels);
         // And write it back
         if (!nitf_IOInterface_write(io, rowCopy, rowSize, error))
@@ -153,7 +160,7 @@ extern "C" NITF_BOOL __six_StreamWriteHandler_write(NITF_DATA * data,
         impl->inputStream->read(rowCopy, rowSize);
 
         if (impl->doByteSwap)
-            sys::byteSwap(rowCopy, impl->pixelSize
+            byteSwap(rowCopy, impl->pixelSize
                     / impl->numChannels, impl->numCols * impl->numChannels);
 
         // And write it back
