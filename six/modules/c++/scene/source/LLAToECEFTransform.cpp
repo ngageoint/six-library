@@ -22,11 +22,6 @@
 #include "scene/LLAToECEFTransform.h"
 #include <math/Utilities.h>
 
-scene::LLAToECEFTransform::LLAToECEFTransform()
- : CoordinateTransform()
-{
-}
-
 scene::LLAToECEFTransform::LLAToECEFTransform(const EllipsoidModel *initVals)
  : CoordinateTransform(initVals)
 {

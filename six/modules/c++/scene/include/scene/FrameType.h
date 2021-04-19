@@ -43,7 +43,8 @@ struct FrameType final
     };
 
     //! Value constructor
-    FrameType(FrameTypesEnum value = NOT_SET);
+    FrameType() = default;
+    FrameType(FrameTypesEnum value);
 
     //! String constructor
     FrameType(const std::string& str);
@@ -84,7 +85,7 @@ struct FrameType final
         return !(*this == rhs);
     }
 
-    FrameTypesEnum mValue;
+    FrameTypesEnum mValue = NOT_SET;
 
 };
 

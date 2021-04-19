@@ -29,14 +29,13 @@
 namespace scene
 {
 
-class CoordinateTransform
+struct CoordinateTransform
 {
-public:
     /**
      * Default constructor initializes the CoordinateTransform object with
      * a WGS84EllipsoidModel.
      */
-    CoordinateTransform();
+    CoordinateTransform() = default;
 
     /**
      * This constructor initializes the CoordinateTransform object with
@@ -80,7 +79,7 @@ public:
 
 protected:
 
-    EllipsoidModel* model;
+    EllipsoidModel* model = new WGS84EllipsoidModel();
 
 };
 

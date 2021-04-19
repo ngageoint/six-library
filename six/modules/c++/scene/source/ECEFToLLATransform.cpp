@@ -22,11 +22,6 @@
 #include "scene/ECEFToLLATransform.h"
 #include <math/Utilities.h>
 
-scene::ECEFToLLATransform::ECEFToLLATransform()
- : CoordinateTransform()
-{
-}
-
 scene::ECEFToLLATransform::ECEFToLLATransform(const EllipsoidModel *initVals)
  : CoordinateTransform(initVals)
 {
