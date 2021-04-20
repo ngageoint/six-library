@@ -14,7 +14,6 @@
 // TODO: get rid of these someday? High(?) priority ... from Visual Studio code-analysis
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
 #pragma warning(disable: 26400) // Do not assign the result of an allocation or a function call with an owner<T> return value to a raw pointer, use owner<T> instead(i.11).
-#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 #pragma warning(disable: 26429) // Symbol '...' is never tested for nullness, it can be marked as not_null(f.23).
 #pragma warning(disable: 26486) //	 Don't pass a pointer that may be invalid to a function. Parameter ... '...' in call to '...' may be invalid (lifetime.3).
 #pragma warning(disable: 26489) // Don't dereference a pointer that may be invalid: '...'. '...' may have been invalidated at line ... (lifetime.1).

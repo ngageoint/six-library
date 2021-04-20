@@ -2,9 +2,6 @@
 
 #include "cpp_pch.h"
 
-#pragma warning(push)
-#pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
-
 #include <std/bit>
 #include <std/cstddef>
 #include <std/filesystem>
@@ -13,9 +10,10 @@
 #include <std/span>
 #include <std/string>
 
+#pragma warning(push)
+#pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 #pragma warning(disable: 26455) //	 Default constructor may not throw.Declare it 'noexcept' (f.6).
-#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 
 #include <import/str.h>
 #include <import/sys.h>

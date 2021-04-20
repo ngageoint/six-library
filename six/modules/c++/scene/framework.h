@@ -13,7 +13,6 @@
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
-#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 #pragma warning(disable: 26433) // Function '...' should be marked with '...' (c.128).
 #pragma warning(disable: 26488) // Do not dereference a potentially null pointer : '...'. '...' was null at line ... (lifetime.1).
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
