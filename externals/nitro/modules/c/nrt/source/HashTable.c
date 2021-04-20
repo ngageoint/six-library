@@ -148,13 +148,13 @@ NRTAPI(void) nrt_HashTable_destruct(nrt_HashTable ** ht)
                         {
                             /* Extract the key data, which we KNOW */
                             /* That was dynamically allocated by us */
-                            char *key = pair->key;
+                            const char *key = pair->key;
 
                             /* If its there */
                             if (key)
                             {
                                 /* Free and NULL it */
-                                NRT_FREE(key);
+                                NRT_FREE((void*)key);
                             }
                             /* If the adoption policy is to adopt...  */
                             if ((*ht)->adopt)
@@ -230,7 +230,7 @@ NRTAPI(NRT_DATA *) nrt_HashTable_remove(nrt_HashTable * ht, const char *key)
             nrt_List_remove(l, &iter);
 
             /* Delete the key -- that's ours */
-            NRT_FREE(pair->key);
+            NRT_FREE((void*)pair->key);
 
             /* Free the pair */
             NRT_FREE(pair);

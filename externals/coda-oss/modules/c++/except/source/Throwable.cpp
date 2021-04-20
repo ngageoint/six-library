@@ -72,10 +72,6 @@ except::Throwable::Throwable(const Context* pContext, const Throwable* pThrowabl
     }
 }
 
-except::Throwable::Throwable() : Throwable(nullptr)
-{
-}
-
 except::Throwable::Throwable(const std::string& message) : Throwable(nullptr, nullptr, &message)
 {
 }

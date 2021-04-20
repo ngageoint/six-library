@@ -25,6 +25,7 @@
 #define __MT_SINGLETON_H__
 
 #include <import/sys.h>
+#include <mem/SharedPtr.h>
 #include "mt/CriticalSection.h"
 
 namespace mt
@@ -138,7 +139,7 @@ T& Singleton<T, AutoDestroy>::getInstance()
         CriticalSection<sys::Mutex> obtainLock(&mMutex);
         if (mInstance == nullptr)
         {
-            mInstance = new T; //create the instance
+            mInstance = mem::make::unique<T>().release(); //create the instance
             SingletonAutoDestroyer<AutoDestroy>::registerAtExit(destroy);
         }
     }

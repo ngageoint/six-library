@@ -107,7 +107,7 @@ struct Pair final : public nitf::Object<nitf_Pair>
     //! Set the key
     void setKey(const char * value)
     {
-        getNativeOrThrow()->key = const_cast<char*>(value);
+        getNativeOrThrow()->key = value;
     }
     //! Get the data
     NITF_DATA * getData() const
