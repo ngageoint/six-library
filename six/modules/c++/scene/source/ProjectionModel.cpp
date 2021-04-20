@@ -21,6 +21,7 @@
  */
 #include "scene/ProjectionModel.h"
 
+#include <assert.h>
 #include <limits>
 #include <string>
 
@@ -822,6 +823,9 @@ computeContour(const Vector3& arpCOA,
                double* r,
                double* rDot) const
 {
+    assert(r != nullptr);
+    assert(rDot != nullptr);
+
     const double thetaCOA = mPolarAnglePoly(timeCOA);
     const double dThetaDt = mPolarAnglePolyPrime(timeCOA);
 
@@ -889,6 +893,8 @@ computeContour(const Vector3& /*arpCOA*/,
                double* r,
                double* rDot) const
 {
+    assert(r != nullptr);
+    assert(rDot != nullptr);
 
     // Time of closest approach
     const double timeCA = mTimeCAPoly(imageGridPoint.col);
@@ -937,6 +943,9 @@ computeContour(const Vector3& arpCOA,
                double* r,
                double* rDot) const
 {
+    assert(r != nullptr);
+    assert(rDot != nullptr);
+
     const Vector3 vec = arpCOA - imageGridToECEF(imageGridPoint);
     *r = vec.norm();
 
@@ -981,6 +990,9 @@ computeContour(const Vector3& arpCOA,
                double* r,
                double* rDot) const
 {
+    assert(r != nullptr);
+    assert(rDot != nullptr);
+
     // TODO: This implementation is identical to PlaneProjectionModel but not
     //       sure how to avoid this
     const Vector3 vec = arpCOA - imageGridToECEF(imageGridPoint);

@@ -18,17 +18,18 @@
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
 #pragma warning(disable: 26456) // Operator '...' hides a non - virtual operator '...' (c.128).
 #pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
-#pragma warning(disable: 26429) // Symbol '...' is never tested for nullness, it can be marked as not_null(f.23).
+//#pragma warning(disable: 26429) // Symbol '...' is never tested for nullness, it can be marked as not_null(f.23).
 #pragma warning(disable: 26446) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
-#pragma warning(disable: 26052) // Potentially unconstrained access using expression '...' ...
-#pragma warning(disable: 26400) // Do not assign the result of an allocation or a function call with an owner<T> return value to a raw pointer, use owner<T> instead(i.11).
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
 #pragma warning(disable: 26401) // Do not delete a raw pointer that is not an owner<T>(i.11).
 #pragma warning(disable: 26482) // Only index into arrays using constant expressions(bounds.2).
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
+#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 
 #pragma warning(push)
 #pragma warning(disable: 4464) // relative include path contains '..'
 #include "../../nitro_pch.h"
 #pragma warning(pop)
 
+#pragma warning(disable: 26400) // Do not assign the result of an allocation or a function call with an owner<T> return value to a raw pointer, use owner<T> instead(i.11).
+#pragma warning(disable: 26052) // Potentially unconstrained access using expression '...' ...

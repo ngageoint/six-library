@@ -82,9 +82,9 @@ XMLControlRegistry::newXMLControl(const std::string& identifier,
 std::string six::toXMLString(const Data* data,
                              const six::XMLControlRegistry *xmlRegistry)
 {
-    std::unique_ptr<logging::Logger> log (new logging::NullLogger());
+    logging::NullLogger log;
     return toValidXMLString(data, std::vector<std::string>(),
-                            log.get(), xmlRegistry);
+                            &log, xmlRegistry);
 }
 
 std::string six::toValidXMLString(const Data* data,

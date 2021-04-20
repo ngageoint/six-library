@@ -48,6 +48,7 @@
 
 #include <import/scene.h>
 
+#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 #pragma warning(disable: 26455) // Default constructor may not throw. Declare it 'noexcept' (f.6).
 #pragma warning(disable: 26459) // You called an STL function '...' with a raw pointer parameter at position '...' that may be unsafe-this relies on the caller to check that the passed values are correct. Consider wrapping your range in a gsl::span and pass as a span iterator(stl.1).
 #pragma warning(disable: 26457) // (void) should not be used to ignore return values, use '...' instead(es.48).
