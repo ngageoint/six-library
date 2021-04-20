@@ -118,14 +118,33 @@ namespace make
 template <typename T, typename... TArgs, typename std::enable_if<!std::is_array<T>::value, int>::type = 0>
 std::unique_ptr<T> unique(TArgs&&... args)
 {
+    #if _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
+    #endif
+
     return std::unique_ptr<T>(new T(std::forward<TArgs>(args)...));
+
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
 }
 
 template <typename T, typename std::enable_if<std::is_array<T>::value &&  std::extent<T>::value == 0, int>::type = 0>
 std::unique_ptr<T> unique(size_t size)
 {
     using element_t = typename std::remove_extent<T>::type;
+
+    #if _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
+    #endif
+    
     return std::unique_ptr<T>(new element_t[size]());
+
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
 }
 
 template <typename T, typename... TArgs, typename std::enable_if<std::extent<T>::value != 0, int>::type = 0>

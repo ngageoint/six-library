@@ -32,17 +32,16 @@ namespace io
 /**
  * An OutputStream that keeps track of the number of bytes written to the stream.
  */
-class RotatingFileOutputStream: public CountingOutputStream
+struct RotatingFileOutputStream: public CountingOutputStream
 {
-public:
     RotatingFileOutputStream(const std::string& filename,
                              unsigned long maxBytes = 0,
                              size_t backupCount = 0, int creationFlags =
                                      sys::File::CREATE | sys::File::TRUNCATE);
 
-    virtual ~RotatingFileOutputStream()
-    {
-    }
+    virtual ~RotatingFileOutputStream() = default;
+    RotatingFileOutputStream(const RotatingFileOutputStream&) = delete;
+    RotatingFileOutputStream& operator=(const RotatingFileOutputStream&) = delete;
 
     using CountingOutputStream::write;
 

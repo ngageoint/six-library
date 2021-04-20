@@ -45,10 +45,8 @@
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
 #pragma warning(disable: 26456) // Operator '...' hides a non-virtual operator '...' (c.128).
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid(lifetime.4).
-#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 #endif // _MSC_VER
 
-//#define CODA_OSS_Throwable_isa_std_exception 1 // except::Throwable derives from std::exception
 #include <sys/Conf.h>
 #include <except/Throwable.h>
 

@@ -70,9 +70,6 @@
     <ClCompile Include="nitf\source\GraphicSubheader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nitf\source\Handle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="nitf\source\HashTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -170,6 +167,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="nitf\source\Writer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\Handle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

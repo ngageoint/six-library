@@ -68,7 +68,7 @@ class Throwable
     Throwable(const Context*, const Throwable* pT = nullptr, const std::string* pMessage = nullptr, bool callGetBacktrace = false);
 
 public:
-    Throwable();
+    Throwable() = default;
 
     /*!
      * Constructor.  Takes a message
