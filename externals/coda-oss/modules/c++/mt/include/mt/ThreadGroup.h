@@ -50,10 +50,8 @@ namespace mt
  * sys::Runnable objects and wait for all threads to complete.
  *
  */
-class ThreadGroup
+struct ThreadGroup
 {
-public:
-
     /*!
      * Constructor.
      * \param pinToCPU Optional flag specifying whether CPU pinning
@@ -68,6 +66,9 @@ public:
     *  Destructor. Attempts to join all threads.
     */
     ~ThreadGroup();
+
+    ThreadGroup(const ThreadGroup&) = delete;
+    ThreadGroup& operator=(const ThreadGroup&) = delete;
 
     /*!
     *  Creates and starts a thread from a sys::Runnable.
@@ -142,11 +143,9 @@ private:
      * \brief Internal runnable class to safeguard against running
      * threads who throw exceptions
      */
-    class ThreadGroupRunnable : public sys::Runnable
+    struct ThreadGroupRunnable : public sys::Runnable
     {
-    public:
-
-        /*!
+           /*!
          * Constructor.
          * \param runnable sys::Runnable object that will be executed by
          *                 the current thread
@@ -169,6 +168,9 @@ private:
                 std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
                         std::auto_ptr<CPUAffinityThreadInitializer>(nullptr));
         #endif
+
+        ThreadGroupRunnable(const ThreadGroupRunnable&) = delete;
+        ThreadGroupRunnable& operator=(const ThreadGroupRunnable&) = delete;
 
         /*!
          *  Call run() on the Runnable passed to createThread

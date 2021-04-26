@@ -23,12 +23,14 @@
 #ifndef __NITF_EXTENSIONS_HPP__
 #define __NITF_EXTENSIONS_HPP__
 
+#include <string>
+#include <memory>
+
 #include "nitf/Extensions.h"
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/TRE.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file Extensions.hpp
@@ -261,9 +263,10 @@ typedef nitf::ExtensionsIterator Iterator;
      */
     void remove(Iterator& iter) noexcept
     {
-        nitf_TRE* tre = nitf_Extensions_remove(
-                            getNative(), &iter.getHandle(), &error);
-        delete tre;
+        std::unique_ptr<nitf_TRE> tre(nitf_Extensions_remove(
+                            getNative(), &iter.getHandle(), &error));
+        // delete automatically called then std::unique_ptr<> goes out-of-scope
+        //delete tre;
     }
 
 

@@ -57,10 +57,7 @@ class FileOutputStreamOS : public SeekableOutputStream
 protected:
     sys::File mFile;
 public:
-    //!  Default constructor
-    FileOutputStreamOS()
-    {}
-
+    FileOutputStreamOS() = default;
 
     /*!
      *  Alternate Constructor.  Takes an output file and a mode
@@ -83,7 +80,7 @@ public:
      *  Report whether or not the file is open
      *  \return True if file is open
      */
-    virtual bool isOpen()
+    virtual bool isOpen() const noexcept
     {
         return mFile.isOpen();
     }

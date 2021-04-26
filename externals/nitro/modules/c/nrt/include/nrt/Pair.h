@@ -35,7 +35,7 @@ NRT_CXX_GUARD
  */
 typedef struct _NRT_Pair
 {
-    char *key;
+    const char *key;
     NRT_DATA *data;
 } nrt_Pair;
 

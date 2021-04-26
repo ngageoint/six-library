@@ -51,6 +51,8 @@ public:
 
     virtual ~StreamHandler();
 
+    StreamHandler& operator=(const StreamHandler&) = delete;
+
     //! adds the need to write epilogue before deleting formatter
     //  and then writing the prologue with the new formatter
     virtual void setFormatter(Formatter* formatter);

@@ -71,9 +71,9 @@ protected:
 /**
  * Proxies to the given OutputStream.
  */
-class ProxyOutputStream: public OutputStream
+struct ProxyOutputStream: public OutputStream
 {
-public:
+    ProxyOutputStream() = default;
     ProxyOutputStream(OutputStream *proxy, bool ownPtr = false) :
         mOwnPtr(ownPtr)
     {
@@ -84,6 +84,10 @@ public:
         if (!mOwnPtr)
             mProxy.release();
     }
+    ProxyOutputStream(const ProxyOutputStream&) = delete;
+    ProxyOutputStream& operator=(const ProxyOutputStream&) = delete;
+    ProxyOutputStream(ProxyOutputStream&&) = default;
+    ProxyOutputStream& operator=(ProxyOutputStream&&) = default;
 
     using OutputStream::write;
 
@@ -112,34 +116,33 @@ public:
 
 protected:
     mem::auto_ptr<OutputStream> mProxy;
-    bool mOwnPtr;
+    bool mOwnPtr = false;
 };
 
 /**
  * An output stream that can be enabled/disabled (toggled).
  */
-class ToggleOutputStream: public io::ProxyOutputStream
+struct ToggleOutputStream: public io::ProxyOutputStream
 {
-public:
-    ToggleOutputStream(io::OutputStream *output = nullptr, bool ownPtr = false) :
-        io::ProxyOutputStream(nullptr), mPtr(output),
-                mNullStream(new io::NullOutputStream), mOwnPtr(ownPtr)
+    ToggleOutputStream() = default;
+    ToggleOutputStream(io::OutputStream *output, bool ownPtr = false) :
+        io::ProxyOutputStream(nullptr), mPtr(output), mOwnPtr(ownPtr)
     {
-        setEnabled(mPtr != nullptr);
     }
-
     virtual ~ToggleOutputStream()
     {
         if (mOwnPtr && mPtr)
             delete mPtr;
-        if (mNullStream)
-            delete mNullStream;
     }
+    ToggleOutputStream(const ToggleOutputStream&) = delete;
+    ToggleOutputStream& operator=(const ToggleOutputStream&) = delete;
+    ToggleOutputStream(ToggleOutputStream&&) = default;
+    ToggleOutputStream& operator=(ToggleOutputStream&&) = default;
 
     void setEnabled(bool flag)
     {
         mEnabled = flag && mPtr;
-        setProxy(mEnabled ? mPtr : mNullStream, false);
+        setProxy(mEnabled ? mPtr : &mNullStream, false);
     }
 
     inline bool isEnabled() const
@@ -155,8 +158,9 @@ public:
     }
 
 protected:
-    io::OutputStream *mPtr, *mNullStream;
-    bool mOwnPtr, mEnabled;
+    io::OutputStream* mPtr = nullptr;
+    io::NullOutputStream mNullStream;
+    bool mOwnPtr = false, mEnabled = false;
 };
 
 }

@@ -51,6 +51,9 @@ public:
 
     virtual ~DefaultLogger();
 
+    DefaultLogger(const DefaultLogger&) = delete;
+    DefaultLogger& operator=(const DefaultLogger&) = delete;
+
     //! Returns the default Handler. You can modify, but do not destroy.
     virtual Handler* getDefaultHandler()
     {

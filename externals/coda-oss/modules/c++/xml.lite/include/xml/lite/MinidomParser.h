@@ -54,9 +54,8 @@ namespace lite
  * bloat of the spec.  It was inspired by python's xml.dom.minidom
  * module.
  */
-class MinidomParser
+struct MinidomParser
 {
-public:
     /*!
      *  Constructor.  Set our SAX ContentHandler.
      */
@@ -66,6 +65,10 @@ public:
     virtual ~MinidomParser()
     {
     }
+
+    MinidomParser(const MinidomParser&) = delete;
+    MinidomParser& operator=(const MinidomParser&) = delete;
+
 
     /*!
      *  Present our parsing interface.  Similar to DOM, the input

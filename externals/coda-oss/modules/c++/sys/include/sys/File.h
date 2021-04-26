@@ -68,10 +68,8 @@ typedef int _SYS_HANDLE_TYPE;
 
 namespace sys
 {
-class File
+struct File
 {
-public:
-
     enum
     {
         FROM_START = _SYS_SEEK_SET,
@@ -88,10 +86,7 @@ public:
     /*!
      *  Default constructor.  Does nothing
      */
-    File() :
-        mHandle(SYS_INVALID_HANDLE)
-    {
-    }
+    File() = default;
 
     /*!
      *  Constructor.  Initializes to a file.
@@ -141,7 +136,7 @@ public:
      *  Is the file open?
      *  \return true if open, false if invalid handle
      */
-    bool isOpen()
+    bool isOpen() const noexcept
     {
         return (mHandle != SYS_INVALID_HANDLE);
     }
@@ -150,7 +145,7 @@ public:
      *  Return the underlying file handle
      *
      */
-    _SYS_HANDLE_TYPE getHandle()
+    _SYS_HANDLE_TYPE getHandle() noexcept
     {
         return mHandle;
     }
@@ -242,7 +237,7 @@ public:
     void close();
 
 protected:
-    _SYS_HANDLE_TYPE mHandle;
+    _SYS_HANDLE_TYPE mHandle = SYS_INVALID_HANDLE;
     std::string mPath;
 
 };

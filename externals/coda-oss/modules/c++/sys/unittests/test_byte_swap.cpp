@@ -153,7 +153,7 @@ TEST_CASE(testByte)
     test_byte_<std::byte>(testName);
     #endif
 }
-    
+   
 }
 
 int main(int /*argc*/, char** /*argv*/)
@@ -162,5 +162,6 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(testEndianness);
     TEST_CHECK(testEndianness_std);
     TEST_CHECK(testByte);
+
     return 0;
 }

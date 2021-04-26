@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of mem-c++
+ * This file is part of gsl-c++
  * =========================================================================
  *
  * (C) Copyright 2021, Maxar Technologies, Inc.
@@ -19,14 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef CODA_OSS_mem_Span__h_INCLUDED_
-#define CODA_OSS_mem_Span__h_INCLUDED_
+#ifndef CODA_OSS_gsl_Span__h_INCLUDED_
+#define CODA_OSS_gsl_Span__h_INCLUDED_
 #pragma once
 
 #include <stddef.h>
 #include <assert.h>
 
-namespace mem
+namespace Gsl
 {
 // super-simple version of std::span
 // https://en.cppreference.com/w/cpp/container/span
@@ -105,4 +105,4 @@ inline Span<typename TContainer::value_type> make_Span(const TContainer& c)
 }
 }
 
-#endif  // CODA_OSS_mem_Span__h_INCLUDED_
+#endif  // CODA_OSS_gsl_Span__h_INCLUDED_

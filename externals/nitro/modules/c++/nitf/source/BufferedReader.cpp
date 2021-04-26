@@ -32,7 +32,7 @@ namespace nitf
 {
 BufferedReader::BufferedReader(const std::string& file, size_t bufferSize) :
     mMaxBufferSize(gsl::narrow<nitf::Off>(bufferSize)),
-    mScopedBuffer(new char[bufferSize]),
+    mScopedBuffer(std::make_unique<char[]>(bufferSize)),
     mBuffer(mScopedBuffer.get()),
     mPosition(0),
     mBufferSize(0),

@@ -51,10 +51,14 @@ namespace lite
 
 typedef xercesc::DOMError ValidationError;
 
-class ValidationErrorHandler : public xercesc::DOMErrorHandler
+struct ValidationErrorHandler : public xercesc::DOMErrorHandler
 {
-public:
-    ValidationErrorHandler() {}
+    ValidationErrorHandler() = default;
+
+    ValidationErrorHandler(const ValidationErrorHandler&) = delete;
+    ValidationErrorHandler& operator=(const ValidationErrorHandler&) = delete;
+    ValidationErrorHandler(ValidationErrorHandler&&) = delete;
+    ValidationErrorHandler& operator=(ValidationErrorHandler&&) = delete;
 
     //! handle the errors during validation
     virtual bool handleError (const ValidationError& err);
@@ -94,7 +98,6 @@ private:
  */
 class ValidatorXerces : public ValidatorInterface
 {
-private:
     XercesContext mCtxt;    //! this must be the first member listed
 
 public:
@@ -110,6 +113,9 @@ public:
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
                     logging::Logger* log,
                     bool recursive = true);
+
+    ValidatorXerces(const ValidatorXerces&) = delete;
+    ValidatorXerces& operator=(const ValidatorXerces&) = delete;
 
     using ValidatorInterface::validate;
 

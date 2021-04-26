@@ -41,35 +41,26 @@
 
 namespace io
 {
-class SeekableInputStream :
+struct SeekableInputStream :
             public InputStream, public Seekable
 {
-public:
-    SeekableInputStream()
-    {}
-    virtual ~SeekableInputStream()
-    {}
+    SeekableInputStream() = default;
+    virtual ~SeekableInputStream() = default;
     using InputStream::streamTo;
 };
 
-class SeekableOutputStream :
+struct SeekableOutputStream :
             public OutputStream, public Seekable
 {
-public:
-    SeekableOutputStream()
-    {}
-    virtual ~SeekableOutputStream()
-    {}
+    SeekableOutputStream() = default;
+    virtual ~SeekableOutputStream() = default;
 };
 
-class SeekableBidirectionalStream :
+struct SeekableBidirectionalStream :
             public BidirectionalStream, public Seekable
 {
-public:
-    SeekableBidirectionalStream()
-    {}
-    virtual ~SeekableBidirectionalStream()
-    {}
+    SeekableBidirectionalStream() = default;
+    virtual ~SeekableBidirectionalStream() = default;
     using InputStream::streamTo;
 };
 

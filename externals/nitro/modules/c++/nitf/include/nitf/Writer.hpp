@@ -54,9 +54,8 @@ struct WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
  *  \class Writer
  *  \brief  The C++ wrapper for the nitf_Writer
  */
-class Writer : public nitf::Object<nitf_Writer, WriterDestructor>
+struct Writer : public nitf::Object<nitf_Writer, WriterDestructor>
 {
-public:
     //! Copy constructor
     Writer(const Writer & x);
 
@@ -251,7 +250,7 @@ private:
     nitf_Error  error{};
 
     //! c++ write handlers need to be kept in scope
-    std::vector<mem::SharedPtr<nitf::WriteHandler> > mWriteHandlers;
+    std::vector<std::shared_ptr<nitf::WriteHandler> > mWriteHandlers;
 };
 
 }

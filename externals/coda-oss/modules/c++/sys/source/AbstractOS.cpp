@@ -39,13 +39,9 @@ namespace fs = sys::Filesystem;
 
 namespace sys
 {
-AbstractOS::AbstractOS()
-{
-}
+AbstractOS::AbstractOS() = default;
 
-AbstractOS::~AbstractOS()
-{
-}
+AbstractOS::~AbstractOS() = default;
 
 std::vector<std::string>
 AbstractOS::search(const std::vector<std::string>& searchPaths,
@@ -262,6 +258,9 @@ void AbstractOS::appendEnv(const std::string& envVar, const std::vector<std::str
 static std::string getSpecialEnv_PID(const AbstractOS& os, const std::string& envVar)
 {
     assert((envVar == "$") || (envVar == "PID"));
+    #if _MSC_VER
+    UNREFERENCED_PARAMETER(envVar);
+    #endif
     const auto pid = os.getProcessId();
     return std::to_string(pid);
 }
@@ -271,6 +270,7 @@ static std::string getSpecialEnv_USER(const AbstractOS& os, const std::string& e
     // $USER on *nix, %USERNAME% on Windows; make it so either one always works
     assert((envVar == "USER") || (envVar == "USERNAME"));
     #if _WIN32
+    UNREFERENCED_PARAMETER(envVar);
     return os.getEnv("USERNAME");
     #else
     return os.getEnv("USER");
@@ -283,6 +283,7 @@ static std::string getSpecialEnv_HOME(const AbstractOS& os, const std::string& e
     assert((envVar == "HOME") || (envVar == "USERPROFILE"));
 
     #ifdef _WIN32
+    UNREFERENCED_PARAMETER(envVar);
     constexpr auto home = "USERPROFILE";
     #else  // assuming *nix
     // Is there a better way to support ~ on *nix than $HOME ?
@@ -307,6 +308,9 @@ static std::string getSpecialEnv_HOME(const AbstractOS& os, const std::string& e
 static std::string getSpecialEnv_Configuration(const AbstractOS&, const std::string& envVar)
 {
     assert(envVar == "Configuration");
+    #if _MSC_VER
+    UNREFERENCED_PARAMETER(envVar);
+    #endif
     // in Visual Studio, by default this is usually "Debug" and "Release"
     return sys::debug_build ? "Debug" : "Release";
 }
@@ -316,6 +320,7 @@ static std::string getSpecialEnv_Platform(const AbstractOS&, const std::string& 
 
     // in Visual Studio, this is "Win32" (maybe "x86") or "x64"
     #ifdef _WIN32
+        UNREFERENCED_PARAMETER(envVar);
         #ifdef _WIN64
         return "x64";
         #else
@@ -338,6 +343,9 @@ static std::string getSpecialEnv_SECONDS(const AbstractOS&, const std::string& e
     // https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
     // "This variable expands to the number of seconds since the shell was started. ..."
     assert(envVar == "SECONDS");
+    #if _MSC_VER
+    UNREFERENCED_PARAMETER(envVar);
+    #endif
     return getSpecialEnv_SECONDS_();
 }
 static std::string strUnusedSeconds = getSpecialEnv_SECONDS_(); // "start" the "shell"

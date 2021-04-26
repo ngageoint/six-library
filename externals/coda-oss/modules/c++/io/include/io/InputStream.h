@@ -51,23 +51,15 @@ namespace io
  * of large streams of bytes.
  *
  */
-class InputStream
+struct InputStream
 {
-public:
     enum
     {
         IS_EOF = -1, IS_END = -1, DEFAULT_CHUNK_SIZE = 1024
     };
 
-    //! Default Constructor
-    InputStream()
-    {
-    }
-
-    //! Default Destructor
-    virtual ~InputStream()
-    {
-    }
+    InputStream() = default;
+    virtual ~InputStream() = default;
 
     /*!
      * Returns the number of bytes that can be read

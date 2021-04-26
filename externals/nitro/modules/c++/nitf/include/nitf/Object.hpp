@@ -24,6 +24,8 @@
 #define __NITF_OBJECT_HPP__
 #pragma once
 
+#include <assert.h>
+
 #include "nitf/coda-oss.hpp"
 #include "nitf/Handle.hpp"
 #include "nitf/HandleManager.hpp"
@@ -51,11 +53,16 @@ protected:
 
     //! The handle to the underlying memory
     BoundHandle<T, DestructFunctor_T>* mHandle = nullptr;
-
+private:
+    bool isValidHandle() const noexcept
+    {
+        return mHandle && mHandle->get();
+    }
+protected:
     //! Release this object's hold on the handle
     void releaseHandle()
     {
-        if (mHandle && mHandle->get())
+        if (isValidHandle())
             HandleRegistry::getInstance().releaseHandle(mHandle->get());
         mHandle = nullptr;
     }
@@ -88,14 +95,13 @@ protected:
     {
         if (nativeObj == nullptr)
         {
+            assert(error != nullptr);
             throw nitf::NITFException(error);
         }
         setNative(nativeObj);
     }
 
 public:
-
-    //! Destructor
     virtual ~Object() { releaseHandle(); }
 
     //! Is the object valid (native object not null)?
