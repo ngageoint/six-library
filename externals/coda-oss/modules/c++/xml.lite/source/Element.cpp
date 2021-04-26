@@ -410,6 +410,10 @@ void xml::lite::Element::changePrefix(Element* element,
     }
 }
 
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4702)  // unreachable code
+#endif
 void xml::lite::Element::changeURI(Element* element,
     const std::string& prefix, const std::string& uri)
 {
@@ -433,12 +437,17 @@ void xml::lite::Element::changeURI(Element* element,
         }
     }
 
-    for (size_t i = 0, s = element->mChildren.size(); i < s; i++)
+    // the "i++" is unreachable because of the "break"
+    const auto s = element->mChildren.size();
+    for (size_t i = 0; i < s; i++)
     {
         changeURI(element->mChildren[i], prefix, uri);
         break;
     }
 }
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 void xml::lite::Element::setNamespacePrefix(
     std::string prefix, std::string uri)

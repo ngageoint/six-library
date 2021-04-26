@@ -40,10 +40,8 @@ namespace logging
  * \class FileHandler
  * \brief Emits LogRecords to a file on disk.
  */
-class FileHandler : public StreamHandler
+struct FileHandler : public StreamHandler
 {
-
-public:
     FileHandler(const sys::Filesystem::path& fname, LogLevel level = LogLevel::LOG_NOTSET,
                 int creationFlags = sys::File::CREATE | sys::File::TRUNCATE) :
         StreamHandler(new io::FileOutputStream(fname.string(), creationFlags), level)
@@ -52,9 +50,7 @@ public:
         auto pStream = dynamic_cast<io::FileOutputStream*>(mStream.get());
         pStream->seek(0, io::Seekable::END);
     }
-    virtual ~FileHandler()
-    {
-    }
+    virtual ~FileHandler() = default;
 
     FileHandler& operator=(const FileHandler&) = delete;
 
