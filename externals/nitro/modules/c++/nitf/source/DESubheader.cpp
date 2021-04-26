@@ -71,7 +71,11 @@ nitf::Field DESubheader::getVersion() const
     return nitf::Field(getNativeOrThrow()->version);
 }
 
-nitf::Field DESubheader::getSecurityClass() const
+nitf::Field DESubheader::getSecurityClass()
+{
+    return nitf::Field(getNativeOrThrow()->securityClass);
+}
+const nitf::Field DESubheader::getSecurityClass() const
 {
     return nitf::Field(getNativeOrThrow()->securityClass);
 }
