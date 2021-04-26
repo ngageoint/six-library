@@ -1,5 +1,9 @@
 set(TARGET_NAME z)
 
+if (MSVC)
+    add_compile_options(/wd4996) # '...': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: .... See online help for details.
+endif()
+
 if (ZIP_HOME)
     find_library(${TARGET_NAME}_PATH
                  ${TARGET_NAME}

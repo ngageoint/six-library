@@ -64,14 +64,16 @@ protected:
  * A Logger that doesn't actually log anything. It can be used in cases where
  * a Logger is required but you don't want anything to log.
  */
-struct NullLogger final : public Logger
+class NullLogger final : public Logger
 {
+    NullHandler mHandler;
+
+public:
     NullLogger(const std::string& name = "") :
         Logger(name)
     {
-        addHandler(new NullHandler, true);
+        addHandler(&mHandler, false /*own*/);
     }
-
     ~NullLogger() = default;
 
     NullLogger(const NullLogger&) = delete;

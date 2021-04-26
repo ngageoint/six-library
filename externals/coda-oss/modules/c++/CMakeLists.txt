@@ -1,7 +1,9 @@
 set(TARGET_LANGUAGE c++)
+
 # turn on warnings as errors
 if (MSVC)
     add_compile_options(/WX)
+    add_compile_options(/W4)
 elseif (UNIX)
     add_compile_options(-Werror)
 endif()
