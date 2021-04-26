@@ -126,6 +126,8 @@ void XMLControl::validate(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths,
                           logging::Logger* log)
 {
+    assert(doc != nullptr);
+
     // attempt to get the schema location from the
     // environment if nothing is specified
     std::vector<std::string> paths(schemaPaths);
@@ -215,6 +217,7 @@ std::string XMLControl::getDefaultURI(const Data& data)
 
 std::string XMLControl::getVersionFromURI(const xml::lite::Document* doc)
 {
+    assert(doc != nullptr);
     const std::string uri = doc->getRootElement()->getUri();
     if (!(str::startsWith(uri, "urn:SICD:") ||
           str::startsWith(uri, "urn:SIDD:")))
@@ -257,6 +260,7 @@ Data* XMLControl::fromXML(const xml::lite::Document* doc,
 {
     validate(doc, schemaPaths, mLog);
     Data* const data = fromXMLImpl(doc);
+    assert(data != nullptr);
     data->setVersion(getVersionFromURI(doc));
     return data;
 }

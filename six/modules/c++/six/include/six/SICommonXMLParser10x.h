@@ -37,12 +37,16 @@ public:
                          logging::Logger* log = nullptr,
                          bool ownLog = false);
 
+    SICommonXMLParser10x(const SICommonXMLParser10x&) = delete;
+    SICommonXMLParser10x& operator=(const SICommonXMLParser10x&) = delete;
+    SICommonXMLParser10x& operator=(SICommonXMLParser10x&&) = delete;
+
     XMLElem convertRadiometryToXML(
         const Radiometric *obj,
         XMLElem parent = nullptr) const override;
 
     void parseRadiometryFromXML(
-        const XMLElem radiometricXML,
+        const xml::lite::Element* radiometricXML,
         Radiometric *obj) const override;
 
     XMLElem convertMatchInformationToXML(
@@ -50,7 +54,7 @@ public:
         XMLElem parent) const override;
 
     void parseMatchInformationFromXML(
-        const XMLElem matchInfoXML,
+        const xml::lite::Element* matchInfoXML,
         MatchInformation* info) const override;
 
 protected:
@@ -60,7 +64,7 @@ protected:
         XMLElem parent = nullptr) const override;
 
     void parseCompositeSCPFromXML(
-        const XMLElem errorStatsXML,
+        const xml::lite::Element* errorStatsXML,
         ErrorStatistics* errorStatistics) const override;
 
 };

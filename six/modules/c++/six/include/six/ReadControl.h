@@ -92,7 +92,8 @@ struct ReadControl
      */
     mem::SharedPtr<const Container> getContainer() const
     {
-        return mContainer;
+        mem::SharedPtr<const Container> retval = mContainer;
+        return retval;
     }
 
     /*!
@@ -118,7 +119,8 @@ struct ReadControl
     virtual UByte* interleaved(Region& region, size_t imageNumber) = 0;
     virtual void  interleaved(Region& region, size_t imageNumber, std::byte*& result)
     {
-        result = reinterpret_cast<std::byte*>(interleaved(region, imageNumber));
+        void* result_ = interleaved(region, imageNumber);
+        result = static_cast<std::byte*>(result_);
     }
 
     /*!

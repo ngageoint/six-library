@@ -45,7 +45,7 @@ public:
         XMLElem parent = nullptr) const;
 
     virtual void parseRadiometryFromXML(
-        const XMLElem radiometricXML,
+        const xml::lite::Element* radiometricXML,
         six::Radiometric *obj) const;
 };
 
@@ -110,7 +110,7 @@ XMLElem SICommonXMLParser050::convertRadiometryToXML(
 }
 
 void SICommonXMLParser050::parseRadiometryFromXML(
-    const XMLElem radiometricXML,
+    const xml::lite::Element* radiometricXML,
     six::Radiometric* radiometric) const
 {
     XMLElem tmpElem = nullptr;

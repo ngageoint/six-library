@@ -30,19 +30,19 @@ namespace scene
 {
 struct Errors
 {
-    Errors();
+    Errors() = default;
 
     void clear();
 
-    FrameType mFrameType;
-    math::linear::MatrixMxN<7, 7> mSensorErrorCovar;
-    math::linear::MatrixMxN<2, 2> mUnmodeledErrorCovar;
-    math::linear::MatrixMxN<2, 2> mIonoErrorCovar;
-    math::linear::MatrixMxN<1, 1> mTropoErrorCovar;
-    double mPositionCorrCoefZero;
-    double mPositionDecorrRate;
-    double mRangeCorrCoefZero;
-    double mRangeDecorrRate;
+    FrameType mFrameType = FrameType::RIC_ECF;
+    math::linear::MatrixMxN<7, 7> mSensorErrorCovar = 0.0;
+    math::linear::MatrixMxN<2, 2> mUnmodeledErrorCovar = 0.0;
+    math::linear::MatrixMxN<2, 2> mIonoErrorCovar = 0.0;
+    math::linear::MatrixMxN<1, 1> mTropoErrorCovar = 0.0;
+    double mPositionCorrCoefZero = 0.0;
+    double mPositionDecorrRate = 0.0;
+    double mRangeCorrCoefZero = 0.0;
+    double mRangeDecorrRate = 0.0;
 };
 }
 

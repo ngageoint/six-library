@@ -21,12 +21,14 @@
  */
 #include "six/NITFImageInputStream.h"
 
+#include <gsl/gsl.h>
+
 six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
         nitf::ImageReader imageReader) :
     mSubheader(subheader), mReader(imageReader), mRowBufferRemaining(0),
             mRowOffset(0)
 {
-    int bytesPerPixel = NITF_NBPP_TO_BYTES(subheader.getNumBitsPerPixel());
+    auto bytesPerPixel = NITF_NBPP_TO_BYTES(subheader.getNumBitsPerPixel());
     mRowSize = subheader.numCols() * bytesPerPixel;
 
     uint32_t nBands = subheader.getBandCount();
@@ -55,7 +57,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     }
 
     mRowBuffer.reset(new sys::ubyte[mRowSize]);
-    mAvailable = mRowSize * subheader.numRows();
+    mAvailable = gsl::narrow<decltype(mAvailable )>(mRowSize* subheader.numRows());
 
     mBandList.reset(new uint32_t[nBands]);
     for (uint32_t band = 0; band < nBands; ++band)
@@ -63,7 +65,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
 
     //setup the window
     mWindow.setNumRows(1);
-    mWindow.setNumCols(subheader.numCols());
+    mWindow.setNumCols(gsl::narrow<uint32_t>(subheader.numCols()));
     mWindow.setBandList(mBandList.get());
     mWindow.setNumBands(nBands);
 }
@@ -102,11 +104,12 @@ ptrdiff_t six::NITFImageInputStream::read(std::byte* b, size_t len)
         }
     }
     mAvailable -= len;
-    return len;
+    return static_cast<ptrdiff_t>(len);
 }
 ptrdiff_t six::NITFImageInputStream::read(sys::byte* b, size_t len)
 {
-    return read(reinterpret_cast<std::byte*>(b), len);
+    void* b_ = b;
+    return read(static_cast<std::byte*>(b_), len);
 }
 ptrdiff_t six::NITFImageInputStream::read(std::span<sys::byte> b)
 {
@@ -116,8 +119,8 @@ ptrdiff_t six::NITFImageInputStream::read(std::span<sys::byte> b)
 ptrdiff_t six::NITFImageInputStream::readRow()
 {
     mWindow.setStartRow(static_cast<uint32_t>(mRowOffset++));
-    int padded;
     auto buffer = mRowBuffer.get();
+    int padded = 0;
     mReader.read(mWindow, &buffer, &padded);
     mRowBufferRemaining = mRowSize;
     return (ptrdiff_t)mRowSize;

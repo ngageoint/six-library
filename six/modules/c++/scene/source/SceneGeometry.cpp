@@ -104,7 +104,7 @@ void SceneGeometry::initialize()
 
 
     // Transform mRefPosition to LLA; compute 'up'
-    LatLonAlt lla = Utilities::ecefToLatLon(mPo);
+    const LatLonAlt lla = Utilities::ecefToLatLon(mPo);
 
     double sinLat = sin(lla.getLatRadians());
     double cosLat = cos(lla.getLatRadians());
