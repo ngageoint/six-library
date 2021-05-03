@@ -40,6 +40,12 @@ namespace nitf
     class Error final
     {
         const nitf_Error* pError = nullptr;
+        template<size_t sz>
+        static std::string to_string(const char(&s)[sz])
+        {
+            // avoid array -> pointer decay; code-analysis diagnostic
+            return std::string(s, sz);
+        }
     public:
         Error(const nitf_Error* error) : pError(error) { assert(pError != nullptr);  }
         Error(const Error&) = delete;
@@ -47,11 +53,11 @@ namespace nitf
 
         std::string message() const
         {
-            return pError->message;
+            return to_string(pError->message);
         }
         std::string file() const
         {
-            return pError->file;
+            return to_string(pError->file);
         }
         int line() const
         {
@@ -59,7 +65,7 @@ namespace nitf
         }
         std::string func() const
         {
-            return pError->func;
+            return to_string(pError->func);
         }
         int level() const
         {

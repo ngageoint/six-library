@@ -165,25 +165,22 @@ void NITFWriteControl::save(const SourceList& imageData,
 
 bool NITFWriteControl::shouldByteSwap() const
 {
-    bool doByteSwap;
-
     const int byteSwapping = (int)getOptions().getParameter(
             six::WriteControl::OPT_BYTE_SWAP,
-            Parameter((int)ByteSwapping::SWAP_AUTO));
+            Parameter(static_cast<int>(ByteSwapping::SWAP_AUTO)));
 
     if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {
         // Have to if it's not a BE machine
-        doByteSwap = (std::endian::native == std::endian::little);
+        const auto endianness = std::endian::native;
+        return endianness == std::endian::little;
     }
     else
     {
         // Do what they say.  You really shouldn't do this
         // unless you know what you're doing anyway!
-        doByteSwap = byteSwapping ? true : false;
+        return byteSwapping ? true : false;
     }
-
-    return doByteSwap;
 }
 
 void NITFWriteControl::save(const SourceList& imageData,
@@ -203,7 +200,7 @@ void NITFWriteControl::save(const SourceList& imageData,
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    size_t numImages = infos.size();
+    const size_t numImages = infos.size();
 
     //! TODO: This section of code (unlike the memory section below)
     //        does not account for blocked writing or J2K compression.
@@ -212,7 +209,7 @@ void NITFWriteControl::save(const SourceList& imageData,
     {
         const NITFImageInfo& info = *(infos[i]);
         std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
-        size_t numIS = imageSegments.size();
+        const size_t numIS = imageSegments.size();
         size_t pixelSize = info.getData()->getNumBytesPerPixel();
         size_t numCols = info.getData()->getNumCols();
         size_t numChannels = info.getData()->getNumChannels();
@@ -295,8 +292,7 @@ void NITFWriteControl::save_(const TBufferList& imageData,
         const NITFImageInfo& info = *pInfo;
         std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
         const size_t numIS = imageSegments.size();
-        const int pixelSize =
-                static_cast<int>(info.getData()->getNumBytesPerPixel());
+        const auto pixelSize = info.getData()->getNumBytesPerPixel();
         const size_t numCols = info.getData()->getNumCols();
         const size_t numChannels = info.getData()->getNumChannels();
 
@@ -339,8 +335,8 @@ void NITFWriteControl::save_(const TBufferList& imageData,
                                                           segmentInfo.getFirstRow() *
                                                           numCols,
                                           bandSize,
-                                          bandSize * chan,
-                                          pixelSize,
+                                           gsl::narrow<int>(bandSize * chan),
+                                          gsl::narrow<int>(pixelSize),
                                           0);
                     iSource.addBand(ms);
                 }

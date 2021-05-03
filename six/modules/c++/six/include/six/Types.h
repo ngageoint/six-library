@@ -97,7 +97,8 @@ typedef scene::FrameType FrameType;
  */
 struct DecorrType
 {
-    DecorrType(double ccz = 0.0, double dr = 0.0) :
+    DecorrType() = default;
+        DecorrType(double ccz, double dr = 0.0) :
         corrCoefZero(ccz), decorrRate(dr)
     {
     }
@@ -206,7 +207,7 @@ struct ReferencePoint
     Vector3 ecef;
 
     //!  Row col pixel location of point
-    RowColDouble rowCol;
+    RowColDouble rowCol{ 0.0, 0.0 };
 
     //!  (Optional) name.  Leave it blank if you don't need it
     std::string name;
@@ -387,7 +388,9 @@ struct AmplitudeTable : public LUT
 
     bool operator==(const AmplitudeTable& rhs) const
     {
-        return *(dynamic_cast<const LUT*>(this)) == *(dynamic_cast<const LUT*>(&rhs));
+        const LUT* pThis = this;
+        const LUT* pRHS = &rhs;
+        return *(pThis) == *(pRHS);
     }
     bool operator!=(const AmplitudeTable& rhs) const
     {
@@ -398,7 +401,9 @@ struct AmplitudeTable : public LUT
         AmplitudeTable* ret = new AmplitudeTable();
         for (size_t ii = 0; ii < numEntries; ++ii)
         {
-            *(double*)(*ret)[ii] = *(double*)(*this)[ii];
+            const void* this_ii = (*this)[ii];
+            void* ret_ii = (*ret)[ii];
+            *static_cast<double*>(ret_ii) = *static_cast<const double*>(this_ii);
         }
         return ret;
     }

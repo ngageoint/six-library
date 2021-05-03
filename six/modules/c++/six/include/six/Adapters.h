@@ -68,6 +68,8 @@ public:
     {
     }
 
+    SegmentInputStreamAdapter& operator=(const SegmentInputStreamAdapter&) = delete;
+
     /*!
      *  Fulfills the C++ IO API function returning how many bytes
      *  are left in the stream
@@ -75,7 +77,7 @@ public:
      */
     virtual int64_t available()
     {
-        return (int64_t) mReader.getSize();
+        return static_cast<int64_t>(mReader.getSize());
     }
 
 protected:
@@ -87,7 +89,7 @@ protected:
     virtual ptrdiff_t readImpl(void* buffer, size_t len)
     {
         mReader.read(buffer, len);
-        return len;
+        return static_cast<ptrdiff_t>(len);
     }
 };
 

@@ -60,8 +60,8 @@ class ENUCoordinateTransform : public LocalCoordinateTransform
 public:
     ENUCoordinateTransform(LatLonAlt& refPt) : LocalCoordinateTransform(refPt)
     {
-        double lon = refPt.getLonRadians();
-        double lat = refPt.getLatRadians();
+        const double lon = refPt.getLonRadians();
+        const double lat = refPt.getLatRadians();
         double sinLon = sin(lon);
         double sinLat = sin(lat);
         double cosLon = cos(lon);
@@ -91,8 +91,8 @@ class NEDCoordinateTransform : public LocalCoordinateTransform
 public:
     NEDCoordinateTransform(LatLonAlt& refPt) : LocalCoordinateTransform(refPt)
     {
-        double lon = refPt.getLonRadians();
-        double lat = refPt.getLatRadians();
+        const double lon = refPt.getLonRadians();
+        const double lat = refPt.getLatRadians();
         double sinLon = sin(lon);
         double sinLat = sin(lat);
         double cosLon = cos(lon);

@@ -78,7 +78,7 @@ XMLElem SICommonXMLParser01x::convertCompositeSCPToXML(
 }
 
 void SICommonXMLParser01x::parseCompositeSCPFromXML(
-    const XMLElem errorStatsXML,
+    const xml::lite::Element* errorStatsXML,
     ErrorStatistics* errorStatistics) const
 {
     //! optional field
@@ -172,7 +172,7 @@ XMLElem SICommonXMLParser01x::convertRadiometryToXML(
 }
 
 void SICommonXMLParser01x::parseRadiometryFromXML(
-    const XMLElem radiometricXML, 
+    const xml::lite::Element* radiometricXML,
     Radiometric* radiometric) const
 {
     XMLElem tmpElem = nullptr;
@@ -259,9 +259,11 @@ XMLElem SICommonXMLParser01x::convertMatchInformationToXML(
 }
 
 void SICommonXMLParser01x::parseMatchInformationFromXML(
-    const XMLElem matchInfoXML,
+    const xml::lite::Element* matchInfoXML,
     MatchInformation* matchInfo) const
 {
+    assert(matchInfoXML != nullptr);
+
     //This is SICD 0.4 format
 
     //TODO make sure there is at least one

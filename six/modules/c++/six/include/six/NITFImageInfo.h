@@ -78,6 +78,9 @@ public:
                   size_t rowsPerBlock = 0,
                   size_t colsPerBlock = 0);
 
+    NITFImageInfo(const NITFImageInfo&) = delete;
+    NITFImageInfo& operator=(const NITFImageInfo&) = delete;
+
     size_t getNumBitsPerPixel() const
     {
         return mData->getNumBytesPerPixel() / mData->getNumChannels() * 8;
@@ -347,7 +350,8 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
             //       we avoid the clone and byte swap and instead index into
             //       the LUT in the opposite order?
             std::unique_ptr<LUT> lut(lutPtr->clone());
-            sys::byteSwap(reinterpret_cast<std::byte*>(lut->getTable()),
+            void* pTable = lut->getTable();
+            sys::byteSwap(static_cast<std::byte*>(pTable),
                           static_cast<unsigned short>(lut->elementSize),
                           lut->numEntries);
 

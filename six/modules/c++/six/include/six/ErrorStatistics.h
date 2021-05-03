@@ -302,7 +302,8 @@ struct CompositeSCP
     };
 
     //!  Constructor
-    CompositeSCP(SCPType scpTypeIn = RG_AZ) :
+    CompositeSCP() = default;
+    CompositeSCP(SCPType scpTypeIn) :
         scpType(scpTypeIn)
     {
     }

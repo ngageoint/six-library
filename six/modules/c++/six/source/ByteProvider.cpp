@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include <string>
 
 #include <str/Convert.h>
@@ -33,7 +35,7 @@ ByteProvider::ByteProvider()
 {
 }
 
-ByteProvider::ByteProvider(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
+ByteProvider::ByteProvider(std::unique_ptr<six::NITFHeaderCreator> headerCreator,
                            const std::vector<std::string>& schemaPaths,
                            const std::vector<PtrAndLength>& desBuffers)
 {
@@ -63,6 +65,7 @@ void ByteProvider::populateOptions(
     }
 
     const six::Data* const data = container->getData(0);
+    assert(data != nullptr);
 
 
     if (maxProductSize != 0)
@@ -234,7 +237,7 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
                                    numColsPerBlock);
 }
 
-void ByteProvider::initialize(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator,
+void ByteProvider::initialize(std::unique_ptr<six::NITFHeaderCreator> headerCreator,
                               const std::vector<std::string>& schemaPaths,
                               const std::vector<PtrAndLength>& desBuffers)
 {
@@ -257,7 +260,7 @@ void ByteProvider::initialize(std::unique_ptr<six::NITFHeaderCreator>&& headerCr
     }
 
     // Do the full initialization
-    nitf::Record& record = headerCreator->getRecord();
+    const nitf::Record& record = headerCreator->getRecord();
     nitf::ByteProvider::initialize(record,
                                    desData,
                                    numRowsPerBlock,

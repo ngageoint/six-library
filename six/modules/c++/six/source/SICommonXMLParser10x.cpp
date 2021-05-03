@@ -63,7 +63,7 @@ XMLElem SICommonXMLParser10x::convertCompositeSCPToXML(
 }
 
 void SICommonXMLParser10x::parseCompositeSCPFromXML(
-    const XMLElem errorStatsXML,
+    const xml::lite::Element* errorStatsXML,
     ErrorStatistics* errorStatistics) const
 {
     XMLElem compositeSCPXML = getOptional(errorStatsXML, "CompositeSCP");
@@ -123,7 +123,7 @@ XMLElem SICommonXMLParser10x::convertRadiometryToXML(
 }
 
 void SICommonXMLParser10x::parseRadiometryFromXML(
-    const XMLElem radiometricXML,
+    const xml::lite::Element* radiometricXML,
     Radiometric* radiometric) const
 {
     XMLElem tmpElem = nullptr;
@@ -201,7 +201,7 @@ XMLElem SICommonXMLParser10x::convertMatchInformationToXML(
 }
 
 void SICommonXMLParser10x::parseMatchInformationFromXML(
-    const XMLElem matchInfoXML,
+    const xml::lite::Element* matchInfoXML,
     MatchInformation* matchInfo) const
 {
     size_t numMatchTypes = 0;
