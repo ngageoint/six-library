@@ -28,6 +28,7 @@
 #include "nitf/LookupTable.h"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file LookupTable.hpp
@@ -40,9 +41,8 @@ namespace nitf
  *  \class LookupTable
  *  \brief  The C++ wrapper for the nitf_LookupTable
  */
-class LookupTable : public nitf::Object<nitf_LookupTable>
+struct NITRO_NITFCPP_API LookupTable : public nitf::Object<nitf_LookupTable>
 {
-public:
     //! Create an uninitialized table of the specified dimensions
     LookupTable(size_t numTables, size_t numEntries);
 
