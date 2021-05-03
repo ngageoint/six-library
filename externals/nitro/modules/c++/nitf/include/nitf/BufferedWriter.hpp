@@ -28,12 +28,12 @@
 
 #include <nitf/coda-oss.hpp>
 #include <nitf/CustomIO.hpp>
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
-class BufferedWriter : public CustomIO
+struct NITRO_NITFCPP_API BufferedWriter : public CustomIO
 {
-public:
     BufferedWriter(const std::string& file, size_t bufferSize);
 
     BufferedWriter(const std::string& file,

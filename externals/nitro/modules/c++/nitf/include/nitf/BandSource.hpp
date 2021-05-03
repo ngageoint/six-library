@@ -33,6 +33,7 @@
 #include "nitf/IOHandle.hpp"
 #include "nitf/System.hpp"
 #include "nitf/ImageReader.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file BandSource.hpp
@@ -56,9 +57,8 @@ typedef DataSource BandSource;
  *  times during the case of memory mapping, although it may be used
  *  to sample down or cut the image into pieces).
  */
-class MemorySource : public BandSource
+struct NITRO_NITFCPP_API MemorySource : public BandSource
 {
-public:
     /*!
      *  Constructor
      *  \param data  The memory buffer
@@ -81,9 +81,8 @@ public:
  *  we allow the creator to specify a start point, and a pixel skip
  *  (this would help you create a thumbnail as well).
  */
-class FileSource : public BandSource
+struct NITRO_NITFCPP_API FileSource : public BandSource
 {
-public:
     FileSource(const std::string& fname,
                nitf::Off start,
                int numBytesPerPixel,
@@ -102,7 +101,7 @@ public:
                int pixelSkip);
 };
 
-struct RowSourceCallback
+struct NITRO_NITFCPP_API RowSourceCallback
 {
     virtual ~RowSourceCallback()
     {
@@ -111,9 +110,8 @@ struct RowSourceCallback
     virtual void nextRow(uint32_t band, void* buf) = 0;
 };
 
-class RowSource : public BandSource
+struct NITRO_NITFCPP_API RowSource : public BandSource
 {
-public:
     RowSource(uint32_t band, uint32_t numRows, uint32_t numCols,
             uint32_t pixelSize, RowSourceCallback *callback);
 
@@ -128,9 +126,8 @@ private:
     uint32_t mBand, mNumRows, mNumCols, mPixelSize;
 };
 
-class DirectBlockSource : public BandSource
+struct NITRO_NITFCPP_API DirectBlockSource : public BandSource
 {
-public:
     DirectBlockSource(nitf::ImageReader& imageReader,
                       uint32_t numBands);
 
@@ -149,9 +146,8 @@ private:
                         nitf_Error * error);
 };
 
-class CopyBlockSource: public ::nitf::DirectBlockSource
+struct NITRO_NITFCPP_API CopyBlockSource: public ::nitf::DirectBlockSource
 {
-public:
     CopyBlockSource(nitf::ImageReader& imageReader, uint32_t numBands) :
         nitf::DirectBlockSource(imageReader, numBands)
     {}

@@ -29,6 +29,7 @@
 #include "nitf/Pair.hpp"
 #include "nitf/System.hpp"
 #include "nitf/TRE.h"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file TRE.hpp
@@ -40,7 +41,7 @@ namespace nitf
  *  \class FieldIterator
  *  \brief  The C++ wrapper for the nitf_TREEnumerator
  */
-struct TREFieldIterator : public nitf::Object<nitf_TREEnumerator> // no "final", SWIG doesn't like it
+struct NITRO_NITFCPP_API TREFieldIterator : public nitf::Object<nitf_TREEnumerator> // no "final", SWIG doesn't like it
 {
     TREFieldIterator() noexcept(false)
     {
@@ -166,6 +167,8 @@ struct TREFieldIterator : public nitf::Object<nitf_TREEnumerator> // no "final",
  */
 DECLARE_CLASS(TRE)
 {
+    void setField(const std::string & key, const std::string & strValue, NITF_DATA * data, size_t dataLength, bool forceUpdate);
+
     public:
     typedef nitf::TREFieldIterator Iterator;
 
@@ -193,10 +196,14 @@ DECLARE_CLASS(TRE)
 
     TRE(const std::string& tag, const std::string& id);
 
+    // for unit-tests
+    static nitf_TRE* create(const std::string & tag, const std::string & id, nitf_Error& error);
+    static bool setField(nitf_TRE * tre, const std::string & tag, const std::string& data, nitf_Error& error);
+
     //! Clone
     nitf::TRE clone() const;
 
-    ~TRE();
+    ~TRE() = default;
 
     /*!
      *  Get a begin TRE field iterator
@@ -264,41 +271,7 @@ DECLARE_CLASS(TRE)
     template <typename T>
     void setField(std::string key, T value, bool forceUpdate = false)
     {
-        nitf_Field* field = nitf_TRE_getField(getNative(), key.c_str());
-        if (!field)
-        {
-            std::ostringstream msg;
-            msg << key << " is not a recognized field for this TRE";
-            throw except::Exception(Ctxt(msg.str()));
-        }
-        if (field->type == NITF_BINARY)
-        {
-            if (!nitf_TRE_setField(getNative(),
-                                   key.c_str(),
-                                   &value,
-                                   sizeof(value),
-                                   &error))
-            {
-                throw NITFException(&error);
-            }
-        }
-        else
-        {
-            std::string s = truncate(str::toString(value), field->length);
-            if (!nitf_TRE_setField(getNative(),
-                                   key.c_str(),
-                                   (NITF_DATA*)s.c_str(),
-                                   s.size(),
-                                   &error))
-            {
-                throw NITFException(&error);
-            }
-        }
-
-        if (forceUpdate)
-        {
-            updateFields();
-        }
+        setField(key, str::toString(value), &value, sizeof(value), forceUpdate);
     }
 
     /*!

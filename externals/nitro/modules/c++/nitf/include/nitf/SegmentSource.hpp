@@ -35,6 +35,7 @@
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file SegmentSource.hpp
@@ -59,9 +60,8 @@ typedef DataSource SegmentSource;
  *  times during the case of memory mapping, although it may be used
  *  to sample down or cut the data into pieces).
  */
-class SegmentMemorySource : public SegmentSource
+struct NITRO_NITFCPP_API SegmentMemorySource : public SegmentSource
 {
-public:
     /*!
      *  Constructor
      *  \param data     The memory buffer
@@ -86,9 +86,8 @@ public:
  *  file descriptor or handle.  Due to any number of constraints,
  *  we allow the creator to specify a start point, and a byte skip.
  */
-class SegmentFileSource : public SegmentSource
+struct NITRO_NITFCPP_API SegmentFileSource : public SegmentSource
 {
-public:
     /*!
      *  Constructor
      *  \param handle   The handle to store
@@ -97,14 +96,11 @@ public:
      */
     SegmentFileSource(nitf::IOHandle & io, nitf::Off start, int byteSkip);
 
-    ~SegmentFileSource()
-    {
-    }
+    ~SegmentFileSource() = default;
 };
 
-class SegmentReaderSource : public SegmentSource
+struct NITRO_NITFCPP_API SegmentReaderSource : public SegmentSource
 {
-public:
     /*!
      *  Constructor
      *  \param handle   The handle to store
@@ -113,9 +109,7 @@ public:
      */
     SegmentReaderSource(nitf::SegmentReader reader);
 
-    ~SegmentReaderSource()
-    {
-    }
+    ~SegmentReaderSource() = default;
 };
 }
 #endif

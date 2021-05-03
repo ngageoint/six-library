@@ -25,6 +25,9 @@ coda_add_module(
         source/DateTime.cpp
         source/DecompressionInterface.cpp
         source/DownSampler.cpp
+        source/Extensions.cpp
+        source/Field.cpp
+        source/FieldWarning.cpp
         source/FileHeader.cpp
         source/FileSecurity.cpp
         source/GraphicSegment.cpp

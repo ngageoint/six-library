@@ -24,6 +24,12 @@
 #define __IMPORT_NITF_HPP__
 #pragma once
 
+#include "nitf/exports.hpp"
+#if NITRO_NITFCPP_EXPORTS
+	// use the files in nitf/ directly
+	#pragma error "Do not #include this file when building a DLL/so."
+#endif
+
 #include "nitf/coda-oss.hpp"
 
 #include "nitf/BandInfo.hpp"

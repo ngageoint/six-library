@@ -268,11 +268,11 @@ NRTPRIV(int) printIt(nrt_HashTable * ht, nrt_Pair * pair, NRT_DATA * userData,
     return 1;
 }
 
-NRTAPI(void) nrt_HashTable_print(nrt_HashTable * ht)
+NRTAPI(void) nrt_HashTable_print(const nrt_HashTable * ht)
 {
     nrt_Error e;
     NRT_HASH_FUNCTOR fn = printIt;
-    nrt_HashTable_foreach(ht, fn, NULL, &e);
+    nrt_HashTable_foreach((nrt_HashTable* )ht, fn, NULL, &e);
 }
 
 NRTAPI(NRT_BOOL) nrt_HashTable_foreach(nrt_HashTable * ht, NRT_HASH_FUNCTOR fn,

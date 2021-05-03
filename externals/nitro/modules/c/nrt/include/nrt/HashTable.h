@@ -177,7 +177,7 @@ NRTAPI(NRT_BOOL) nrt_HashTable_exists(nrt_HashTable * ht, const char *key);
  *  This is a debug tool to see what's in our hash
  *  \param ht The hash to print
  */
-NRTAPI(void) nrt_HashTable_print(nrt_HashTable * ht);
+NRTAPI(void) nrt_HashTable_print(const nrt_HashTable * ht);
 
 /*!
  *  Foreach item in the hash table, do something (slow)

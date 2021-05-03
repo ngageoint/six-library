@@ -120,6 +120,12 @@ nitf::ListIterator nitf::ListIterator::operator+(int x)
     return it;
 }
 
+NITF_DATA* nitf::ListIterator::get() noexcept
+{
+    return nitf_ListIterator_get(&handle);
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // List
 

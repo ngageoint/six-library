@@ -33,6 +33,7 @@
  *  \brief Contains handle wrapper to manage shared native objects
  */
 #include "nitf/System.hpp"
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -41,7 +42,7 @@ namespace nitf
  *  \class Handle
  *  \brief  This class is the base definition of a Handle
  */
-class Handle
+class NITRO_NITFCPP_API Handle
 {
     class Impl;
     std::unique_ptr<Impl> mPimpl;
@@ -72,7 +73,7 @@ public:
  *          in handles. Extend this class to custom-destruct objects.
  */
 template <typename T>
-struct MemoryDestructor
+struct NITRO_NITFCPP_API MemoryDestructor
 {
     virtual void operator() (T* /*nativeObject*/) noexcept(false) {}
     virtual ~MemoryDestructor() noexcept(false) {}
@@ -86,7 +87,7 @@ struct MemoryDestructor
  *  and decRef functions.
  */
 template <typename Class_T, typename DestructFunctor_T = MemoryDestructor<Class_T> >
-class BoundHandle : public Handle  // no "final", SWIG doesn't like it
+class NITRO_NITFCPP_API BoundHandle : public Handle  // no "final", SWIG doesn't like it
 {
     Class_T* handle = nullptr;
     int managed = 1;

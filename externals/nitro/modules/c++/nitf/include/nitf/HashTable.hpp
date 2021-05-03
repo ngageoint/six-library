@@ -32,6 +32,7 @@
 #include "nitf/Pair.hpp"
 #include "nitf/List.hpp"
 #include "nitf/Object.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file HashTable.hpp
@@ -45,7 +46,7 @@ class HashTable; //forward declaration
 /*!
  * HashTable Iterator Functor
  */
-class HashIterator
+class NITRO_NITFCPP_API HashIterator
 {
 public:
     virtual ~HashIterator() {}
@@ -61,7 +62,7 @@ public:
  *
  *  Iterates a hash table, unordered.
  */
-struct HashTableIterator /*final*/   // no "final", SWIG doesn't like it
+struct NITRO_NITFCPP_API HashTableIterator /*final*/   // no "final", SWIG doesn't like it
 {
     HashTableIterator() = default;
     ~HashTableIterator() = default;
@@ -104,11 +105,8 @@ struct HashTableIterator /*final*/   // no "final", SWIG doesn't like it
     void operator++() noexcept { increment(); }
 
     //! Get the data
+    nitf::Pair get() const;
     nitf::Pair operator*() { return get(); }
-
-    //! Get the data
-    nitf::Pair get() const { return nitf_HashTableIterator_get(&handle); }
-
 
 private:
     mutable nitf_HashTableIterator handle{};
@@ -122,7 +120,7 @@ private:
  *  \class HashTable
  *  \brief  The C++ wrapper for the nitf_HashTable
  */
-DECLARE_CLASS(HashTable)
+NITRO_DECLARE_CLASS_NRT(HashTable)
 {
 public:
 
@@ -184,6 +182,7 @@ public:
      *  Debug tool to find out whats in the hash table
      */
     void print() const noexcept;
+    static void print(const nitf_HashTable&) noexcept; // for unit-tests
 
     /*!
      *  For each item in the hash table, do something (slow);

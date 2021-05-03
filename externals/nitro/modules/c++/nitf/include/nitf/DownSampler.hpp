@@ -24,11 +24,13 @@
 #define __NITF_DOWN_SAMPLER_HPP__
 #pragma once
 
+#include <string>
+
 #include "nitf/DownSampler.h"
 #include "nitf/IOInterface.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file DownSampler.hpp
@@ -134,9 +136,8 @@ protected:
  *  drawbacks of this type of down sampling, please refer to
  *  the NITF manual.
  */
-class PixelSkip : public DownSampler
+struct NITRO_NITFCPP_API PixelSkip : public DownSampler
 {
-public:
     /*!
      *  Constructor
      *  \param rowSkip  The number of rows to skip
