@@ -36,9 +36,6 @@
 
 namespace nitf
 {
-const size_t ImageSegmentComputer::ILOC_MAX = 99999;
-const uint64_t ImageSegmentComputer::NUM_BYTES_MAX = 9999999998LL;
-
 std::string ImageSegmentComputer::Segment::getILOC() const
 {
     constexpr size_t COL = 0;

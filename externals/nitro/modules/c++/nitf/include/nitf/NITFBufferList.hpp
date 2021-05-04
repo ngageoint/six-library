@@ -29,6 +29,7 @@
 
 #include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -36,7 +37,7 @@ namespace nitf
  * \class NITFBuffer
  * \brief Represents a pointer to raw NITF bytes and its length
  */
-struct NITFBuffer
+struct NITRO_NITFCPP_API NITFBuffer
 {
     /*!
      * Initializes to an empty buffer
@@ -62,7 +63,7 @@ struct NITFBuffer
  * \brief Represents a sequence of buffers which appear in contiguous order
  * in the NITF (the underlying pointers are not contiguous)
  */
-struct NITFBufferList
+struct NITRO_NITFCPP_API NITFBufferList
 {
     //! The buffers
     std::vector<NITFBuffer> mBuffers;

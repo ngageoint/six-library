@@ -77,7 +77,10 @@ nitf::HashTableIterator nitf::HashTableIterator::operator+(int x) noexcept
     return it;
 }
 
-
+nitf::Pair nitf::HashTableIterator::get() const
+{
+    return nitf_HashTableIterator_get(&handle);
+}
 
 
 nitf::HashTable::HashTable(const HashTable & x)
@@ -134,9 +137,13 @@ bool nitf::HashTable::exists(const std::string& key) const noexcept
     return nitf_HashTable_exists(getNative(), key.c_str());
 }
 
+void nitf::HashTable::print(const nitf_HashTable& ht) noexcept
+{
+    nitf_HashTable_print(&ht);
+}
 void nitf::HashTable::print() const noexcept
 {
-    nitf_HashTable_print(getNative());
+    print(*getNative());
 }
 
 void nitf::HashTable::forEach(HashIterator& fun, NITF_DATA* userData)

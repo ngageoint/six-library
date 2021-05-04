@@ -25,6 +25,7 @@
 
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file DateTime.hpp
@@ -39,9 +40,8 @@ namespace nitf
  *  \brief  The C++ wrapper for the nitf_DateTime object
  *  Note that, unlike most of the C++ bindings, this is a deep copy
  */
-class DateTime
+struct NITRO_NITFCPP_API DateTime
 {
-public:
     //! Sets to current date/time
     DateTime();
 

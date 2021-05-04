@@ -24,6 +24,7 @@
 #include "nitf/System.h"
 #include "nitf/Field.h"
 #include "nitf/Types.h"
+#pragma comment(lib, "nitf-c")
 
 // changing this breaks SWIG
 #pragma warning (disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...'

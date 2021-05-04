@@ -31,6 +31,7 @@
 #include "nitf/NITFException.hpp"
 #include "nitf/TRE.hpp"
 #include "nitf/Object.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file Extensions.hpp
@@ -43,9 +44,8 @@ namespace nitf
  *  \class ExtensionsIterator
  *  \brief  The C++ wrapper for the nitf_ExtensionsIterator
  */
-class ExtensionsIterator
+struct NITRO_NITFCPP_API ExtensionsIterator
 {
-public:
     //! Constructor
     ExtensionsIterator() = default;
 
@@ -92,16 +92,10 @@ public:
      *  \param it2  The iterator to compare with
      *  \return  True if so, and False otherwise
      */
-    bool equals(nitf::ExtensionsIterator & it2) const noexcept
-    {
-        const NITF_BOOL x = nitf_ExtensionsIterator_equals(&handle, &it2.getHandle());
-        if (!x) return false;
-        return true;
-    }
-
+    bool equals(const nitf::ExtensionsIterator& it2) const noexcept;
     bool operator==(const nitf::ExtensionsIterator& it2) const noexcept
     {
-        return this->equals((nitf::ExtensionsIterator&)it2);
+        return this->equals(it2);
     }
 
     /*!
@@ -109,13 +103,7 @@ public:
      *  \param it2  The iterator to compare with
      *  \return  True if so, and False otherwise
      */
-    bool notEqualTo(nitf::ExtensionsIterator & it2) const noexcept
-    {
-        const NITF_BOOL x = nitf_ExtensionsIterator_notEqualTo(&handle, &it2.getHandle());
-        if (!x) return false;
-        return true;
-    }
-
+    bool notEqualTo(const nitf::ExtensionsIterator& it2) const noexcept;
     bool operator!=(const nitf::ExtensionsIterator& it2) const noexcept
     {
         return this->notEqualTo((nitf::ExtensionsIterator&)it2);
@@ -124,36 +112,25 @@ public:
     /*!
      *  Increment the iterator
      */
-    void increment() noexcept
-    {
-        nitf_ExtensionsIterator_increment(&handle);
-    }
-
+    void increment() noexcept;
     //! Increment the iterator (postfix)
     void operator++(int ) noexcept
     {
         increment();
     }
-
     //! Increment the iterator (prefix)
     void operator++() noexcept
     {
         increment();
     }
 
-    //! Get the TRE from the iterator
-    nitf::TRE operator*()
-    {
-        return get();
-    }
-
     /*!
      *  Get the TRE from the iterator
      */
-    nitf::TRE get() const
+    nitf::TRE get() const;
+    nitf::TRE operator*()
     {
-        nitf_TRE * x = nitf_ExtensionsIterator_get(&handle);
-        return nitf::TRE(x);
+        return get();
     }
 
 private:
@@ -302,21 +279,13 @@ typedef nitf::ExtensionsIterator Iterator;
      *  Get the begin iterator
      *  \return The iterator pointing to the first TRE
      */
-    Iterator begin() const noexcept
-    {
-        const nitf_ExtensionsIterator x = nitf_Extensions_begin(getNative());
-        return nitf::ExtensionsIterator(x);
-    }
+    Iterator begin() const noexcept;
 
     /*!
      *  Get the end iterator
      *  \return  The iterator pointing PAST the last TRE (null)
      */
-    Iterator end() const noexcept
-    {
-        const nitf_ExtensionsIterator x = nitf_Extensions_end(getNative());
-        return nitf::ExtensionsIterator(x);
-    }
+    Iterator end() const noexcept;
 
     uint64_t computeLength(nitf::Version version) const noexcept
     {
