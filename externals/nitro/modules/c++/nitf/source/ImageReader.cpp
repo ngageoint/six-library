@@ -75,3 +75,22 @@ void ImageReader::setReadCaching()
 {
     nitf_ImageReader_setReadCaching(getNativeOrThrow());
 }
+
+extern "C" {
+    NITF_BOOL nitf_ImageIO_getMaskInfo(nitf_ImageIO* nitf,
+        uint32_t* imageDataOffset, uint32_t* blockRecordLength,
+        uint32_t* padRecordLength, uint32_t* padPixelValueLength,
+        uint8_t** padValue, uint64_t** blockMask, uint64_t** padMask);
+
+}
+
+bool ImageReader::getMaskInfo(uint32_t& imageDataOffset, uint32_t& blockRecordLength,
+    uint32_t& padRecordLength, uint32_t& padPixelValueLength,
+    uint8_t* &padValue, uint64_t* &blockMask, uint64_t* &padMask) const
+{
+    auto iReader = getNativeOrThrow();
+    return nitf_ImageIO_getMaskInfo(iReader->imageDeblocker,
+        &imageDataOffset, &blockRecordLength,
+        &padRecordLength, &padPixelValueLength,
+        &padValue, &blockMask, &padMask);
+}

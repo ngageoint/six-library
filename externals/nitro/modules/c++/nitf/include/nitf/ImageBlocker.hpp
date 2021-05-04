@@ -30,6 +30,7 @@
 
 #include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -43,7 +44,7 @@ namespace nitf
  * means for multi-segment cases, there may be a different num rows / block in
  * each segment).
  */
-struct ImageBlocker /*final*/   // no "final", SWIG doesn't like it
+struct NITRO_NITFCPP_API ImageBlocker /*final*/   // no "final", SWIG doesn't like it
 {
     ImageBlocker(const ImageBlocker&) = delete;
     ImageBlocker& operator=(const ImageBlocker&) = delete;

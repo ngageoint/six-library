@@ -29,6 +29,7 @@
 #include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file IOInterface.hpp
@@ -36,7 +37,7 @@
 namespace nitf
 {
 
-struct IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
+struct NITRO_NITFCPP_API IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
 {
     ~IOInterfaceDestructor() = default;
     void operator()(nitf_IOInterface *io) override;
@@ -46,7 +47,7 @@ struct IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
  *  \class IOInterface
  *  \brief  The C++ wrapper for the nitf_IOInterface
  */
-class IOInterface : public nitf::Object<nitf_IOInterface, IOInterfaceDestructor>
+class NITRO_NITFCPP_API IOInterface : public nitf::Object<nitf_IOInterface, IOInterfaceDestructor>
 {
 protected:
     IOInterface() = default;

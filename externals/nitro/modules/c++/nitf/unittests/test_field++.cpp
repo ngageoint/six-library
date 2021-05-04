@@ -27,8 +27,7 @@ namespace
 {
 TEST_CASE(testCastOperator)
 {
-    nitf_Error error;
-    nitf::Field field(nitf_Field_construct(20, NITF_BCS_A, &error));
+    nitf::Field field(20, nitf::Field::BCS_A);
 
     // Test unsigned values
     field.set(123);

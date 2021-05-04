@@ -1,11 +1,13 @@
-
-#include <vector>
-#include <iostream>
 #include <string>
+#include <std/filesystem>
 
-#include <import/nitf.hpp>
+#include <import/nitf.h>
 
 #include "TestCase.h"
+
+// this is mostly C with just a touch of C++
+#undef NULL
+#define NULL nullptr
 
 #if _MSC_VER
 #pragma warning(disable: 4459) // declaration of 'testName' hides global declaration
@@ -89,18 +91,16 @@ files, this bug may allow an attacker to cause a denial of service.
 */
 
 static std::string testName;
-const std::string output_file = "test_writer_3++.nitf";
+const char* output_file = "test_writer_3++.nitf";
 
-namespace fs = std::filesystem;
-
-static std::string argv0;
-
+static const char* argv0 = NULL;
 static bool is_vs_gtest()
 {
-    return argv0.empty(); // no argv[0] in VS w/GTest
+    return argv0 == NULL;
 }
 
-static fs::path findInputFile(const std::string& name)
+namespace fs = std::filesystem;
+static fs::path findInputFile_(const std::string& name)
 {
     const auto inputFile = fs::path("modules") / "c++" / "nitf" / "unittests" / name;
 
@@ -124,14 +124,20 @@ static fs::path findInputFile(const std::string& name)
 
     return inputFile;
 }
+static const char* findInputFile(const char* name)
+{
+    static std::string retval; // keep the return value in scope
+    retval = findInputFile_(name).string();
+    return retval.c_str();
+}
 
 TEST_CASE(test_nitf_Record_unmergeTREs_crash)
 {
     ::testName = testName;
-    const auto input_file = findInputFile("bug2_crash.ntf").string();
+    const char* input_file = findInputFile("bug2_crash.ntf");
 
     nitf_Error error;
-    nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,
+    nitf_IOHandle io = nitf_IOHandle_create(input_file, NITF_ACCESS_READONLY,
         NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
     {
@@ -140,11 +146,11 @@ TEST_CASE(test_nitf_Record_unmergeTREs_crash)
 
     /*  We need to make a reader so we can parse the NITF */
     nitf_Reader* reader = nitf_Reader_construct(&error);
-    TEST_ASSERT_NOT_EQ(nullptr, reader);
+    TEST_ASSERT_NOT_EQ(NULL, reader);
 
     /*  This parses all header data within the NITF  */
     nitf_Record* record = nitf_Reader_read(reader, io, &error);
-    TEST_ASSERT_NOT_EQ(nullptr, record);
+    TEST_ASSERT_NOT_EQ(NULL, record);
 
     /* Open the output IO Handle */
     nitf_IOHandle output = nitf_IOHandle_create("bug2_crash_out.ntf", NITF_ACCESS_WRITEONLY, NITF_CREATE, &error);
@@ -167,10 +173,10 @@ TEST_CASE(test_nitf_Record_unmergeTREs_crash)
 TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
 {
     ::testName = testName;
-    const auto input_file = findInputFile("bug6_hangs.ntf").string();
+    const char* input_file = findInputFile("bug6_hangs.ntf");
 
     nitf_Error error;
-    nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,
+    nitf_IOHandle io = nitf_IOHandle_create(input_file, NITF_ACCESS_READONLY,
         NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
     {
@@ -179,11 +185,11 @@ TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
 
     /*  We need to make a reader so we can parse the NITF */
     nitf_Reader* reader = nitf_Reader_construct(&error);
-    TEST_ASSERT_NOT_EQ(nullptr, reader);
+    TEST_ASSERT_NOT_EQ(NULL, reader);
 
     /*  This parses all header data within the NITF  */
     nitf_Record* record = nitf_Reader_read(reader, io, &error);
-    TEST_ASSERT_NOT_EQ(nullptr, record);
+    TEST_ASSERT_NOT_EQ(NULL, record);
 
     /* Open the output IO Handle */
     nitf_IOHandle output = nitf_IOHandle_create("bug6_hangs_out.ntf", NITF_ACCESS_WRITEONLY, NITF_CREATE, &error);
@@ -193,7 +199,7 @@ TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
     }
 
     nitf_Writer* writer = nitf_Writer_construct(&error);
-    TEST_ASSERT_NOT_EQ(nullptr, writer);
+    TEST_ASSERT_NOT_EQ(NULL, writer);
     (void)nitf_Writer_prepare(writer, record, output, &error);
 
     nitf_IOHandle_close(io);
@@ -206,10 +212,10 @@ TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
 TEST_CASE(test_defaultRead_crash)
 {
     ::testName = testName;
-    const auto input_file = findInputFile("bug3_crash.ntf").string();
+    const char* input_file = findInputFile("bug3_crash.ntf");
 
     nitf_Error error;
-    nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,
+    nitf_IOHandle io = nitf_IOHandle_create(input_file, NITF_ACCESS_READONLY,
         NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
     {
@@ -218,7 +224,7 @@ TEST_CASE(test_defaultRead_crash)
 
     /*  We need to make a reader so we can parse the NITF */
     nitf_Reader* reader = nitf_Reader_construct(&error);
-    TEST_ASSERT_NOT_EQ(nullptr, reader);
+    TEST_ASSERT_NOT_EQ(NULL, reader);
 
     /*  This parses all header data within the NITF  */
     (void)nitf_Reader_read(reader, io, &error);
@@ -229,10 +235,10 @@ TEST_CASE(test_defaultRead_crash)
 TEST_CASE(test_readBandInfo_crash)
 {
     ::testName = testName;
-    const auto input_file = findInputFile("bug4_crash.ntf").string();
+    const char* input_file = findInputFile("bug4_crash.ntf");
 
     nitf_Error error;
-    nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,
+    nitf_IOHandle io = nitf_IOHandle_create(input_file, NITF_ACCESS_READONLY,
         NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
     {
@@ -241,7 +247,7 @@ TEST_CASE(test_readBandInfo_crash)
 
     /*  We need to make a reader so we can parse the NITF */
     nitf_Reader* reader = nitf_Reader_construct(&error);
-    TEST_ASSERT_NOT_EQ(nullptr, reader);
+    TEST_ASSERT_NOT_EQ(NULL, reader);
 
     /*  This parses all header data within the NITF  */
     (void) nitf_Reader_read(reader, io, &error);
@@ -251,10 +257,10 @@ TEST_CASE(test_readBandInfo_crash)
 TEST_CASE(test_readRESubheader_crash)
 {
     ::testName = testName;
-    const auto input_file = findInputFile("bug5_crash.ntf").string();
+    const char* input_file = findInputFile("bug5_crash.ntf");
 
     nitf_Error error;
-    nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,
+    nitf_IOHandle io = nitf_IOHandle_create(input_file, NITF_ACCESS_READONLY,
         NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
     {
@@ -263,7 +269,7 @@ TEST_CASE(test_readRESubheader_crash)
 
     /*  We need to make a reader so we can parse the NITF */
     nitf_Reader* reader = nitf_Reader_construct(&error);
-    TEST_ASSERT_NOT_EQ(nullptr, reader);
+    TEST_ASSERT_NOT_EQ(NULL, reader);
 
     /*  This parses all header data within the NITF  */
     (void)nitf_Reader_read(reader, io, &error);

@@ -33,6 +33,7 @@
 #include <nitf/ImageBlocker.hpp>
 #include <nitf/NITFBufferList.hpp>
 #include <nitf/ImageSegmentComputer.h>
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -93,9 +94,8 @@ namespace nitf
  * desSubheaderAndData
  *
  */
-class ByteProvider
+struct NITRO_NITFCPP_API ByteProvider
 {
-public:
     typedef std::pair<const void*, size_t> PtrAndLength;
 
     /*!

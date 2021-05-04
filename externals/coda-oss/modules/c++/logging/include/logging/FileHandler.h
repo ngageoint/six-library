@@ -47,8 +47,10 @@ struct FileHandler : public StreamHandler
         StreamHandler(new io::FileOutputStream(fname.string(), creationFlags), level)
     {
         // In case we are in append mode
-        auto pStream = dynamic_cast<io::FileOutputStream*>(mStream.get());
-        pStream->seek(0, io::Seekable::END);
+        if (auto pStream = dynamic_cast<io::FileOutputStream*>(mStream.get()))
+        {
+            pStream->seek(0, io::Seekable::END);
+        }
     }
     virtual ~FileHandler() = default;
 

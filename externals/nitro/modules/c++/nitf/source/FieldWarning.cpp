@@ -15,35 +15,33 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
-#ifndef __NITF_UTILS_HPP__
-#define __NITF_UTILS_HPP__
+#include "nitf/FieldWarning.hpp"
 
-#include <string>
+using namespace nitf;
 
-#include "nitf/System.hpp"
-#include "nitf/exports.hpp"
-
-namespace nitf
+FieldWarning::FieldWarning(nitf_FieldWarning* x)
 {
-namespace Utils
-{
-    extern NITRO_NITFCPP_API bool isNumeric(const std::string&) noexcept;
-
-    extern NITRO_NITFCPP_API bool isAlpha(const std::string&) noexcept;
-
-    extern NITRO_NITFCPP_API void decimalToGeographic(double decimal, int* degrees, int* minutes,
-                                    double* seconds) noexcept;
-
-    extern NITRO_NITFCPP_API double geographicToDecimal(int degrees, int minutes, double seconds) noexcept;
-
-    extern NITRO_NITFCPP_API char cornersTypeAsCoordRep(nitf::CornersType type) noexcept;
-};
-
+    setNative(x);
+    getNativeOrThrow();
 }
 
-#endif
+/*!
+ *  Constructor
+ *  \param fileOffset  The offset in the file to the field
+ *  \param field  A string representing the NITF field
+ *  \param value  The NITF field value
+ *  \param expectation  A string describing the expected field value
+ */
+FieldWarning::FieldWarning(nitf::Off fileOffset, const std::string& fieldName,
+    nitf::Field& field, const std::string& expectation)
+{
+    setNative(nitf_FieldWarning_construct(fileOffset, fieldName.c_str(),
+        field.getNative(), expectation.c_str(), &error));
+    getNativeOrThrow();
+    setManaged(false);
+}

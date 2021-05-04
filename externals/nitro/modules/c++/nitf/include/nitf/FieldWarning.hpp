@@ -23,12 +23,13 @@
 #ifndef __NITF_FIELDWARNING_HPP__
 #define __NITF_FIELDWARNING_HPP__
 
+#include <string>
+
 #include "nitf/FieldWarning.h"
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file FieldWarning.hpp
@@ -50,8 +51,9 @@ public:
     //! Copy constructor
     FieldWarning(const FieldWarning & x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
+    ~FieldWarning() = default;
 
     //! Assignment Operator
     FieldWarning & operator=(const FieldWarning & x)
@@ -62,11 +64,7 @@ public:
     }
 
     //! Set native object
-    FieldWarning(nitf_FieldWarning * x)
-    {
-        setNative(x);
-        getNativeOrThrow();
-    }
+    FieldWarning(nitf_FieldWarning* x);
 
     /*!
      *  Constructor
@@ -76,13 +74,7 @@ public:
      *  \param expectation  A string describing the expected field value
      */
     FieldWarning(nitf::Off fileOffset, const std::string& fieldName,
-        nitf::Field & field, const std::string& expectation)
-    {
-        setNative(nitf_FieldWarning_construct(fileOffset, fieldName.c_str(),
-            field.getNative(), expectation.c_str(), &error));
-        getNativeOrThrow();
-        setManaged(false);
-    }
+        nitf::Field& field, const std::string& expectation);
 
     //! Get the fileOffset
     nitf::Off getFileOffset() const
