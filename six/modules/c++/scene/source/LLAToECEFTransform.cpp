@@ -36,7 +36,7 @@ scene::LLAToECEFTransform* scene::LLAToECEFTransform::clone() const
 
 scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla)
 {
-    Vector3 ecef;
+    Vector3 ecef{};
 
     const LatLonAlt mylla = lla;
 

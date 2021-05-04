@@ -218,7 +218,7 @@ double SceneGeometry::getTiltAngle(const Vector3& normalVec) const
 
 double SceneGeometry::getDopplerConeAngle() const
 {
-    Vector3 normVa = mVa / mVa.norm();
+    const Vector3 normVa = mVa / mVa.norm();
     return acos((-1.0 * mXs).dot(normVa)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
@@ -252,7 +252,7 @@ double SceneGeometry::getSlopeAngle(const Vector3& normalVec) const
 
 double SceneGeometry::getAzimuthAngle() const
 {
-    Vector3 east = math::linear::cross(mNorth, mZg);
+    const Vector3 east = math::linear::cross(mNorth, mZg);
     return Utilities::remapZeroTo360(
             atan2(east.dot(mXs), mNorth.dot(mXs)) *
             math::Constants::RADIANS_TO_DEGREES);
@@ -260,7 +260,7 @@ double SceneGeometry::getAzimuthAngle() const
 
 double SceneGeometry::getHeadingAngle() const
 {
-    Vector3 east = math::linear::cross(mNorth, mZg);
+    const Vector3 east = math::linear::cross(mNorth, mZg);
     return atan2(east.dot(mVa), mNorth.dot(mVa)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
@@ -349,7 +349,7 @@ Vector3 SceneGeometry::getLayoverVector() const
 
 AngleMagnitude SceneGeometry::getLayover() const
 {
-    Vector3 layoverVec = getLayoverVector();
+    const Vector3 layoverVec = getLayoverVector();
 
     AngleMagnitude layover;
     layover.angle = getImageAngle(layoverVec);
@@ -382,7 +382,7 @@ Vector3 SceneGeometry::getShadowVector() const
 
 AngleMagnitude SceneGeometry::getShadow() const
 {
-    Vector3 shadowVec = getShadowVector();
+    const Vector3 shadowVec = getShadowVector();
 
     AngleMagnitude shadow;
     shadow.angle = getImageAngle(shadowVec);
