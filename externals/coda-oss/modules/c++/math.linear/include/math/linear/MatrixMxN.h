@@ -118,15 +118,20 @@ public:
     typedef MatrixMxN<_MD, _ND, _T> Like_T;
 
     //!  Public but really should be avoided
+    #if _MSC_VER
+    __pragma(warning(push))
+    __pragma(warning(disable: 26495)) // 26495: Variable '...' is uninitialized. Always initialize a member variable (type.6).
+    #endif
     _T mRaw[_MD][_ND];
+    #if _MSC_VER
+    __pragma(warning(pop))
+    #endif
 
     /*!
      *  No initialization here!
      *
      */
-    MatrixMxN()
-    {
-    }
+    MatrixMxN() = default;
 
     /*!
      *  Create a matrix with a constant value for
@@ -324,8 +329,7 @@ public:
         return *this;
     }
 
-    //!  Destructor
-    ~MatrixMxN() {}
+    ~MatrixMxN() = default;
 
 
     /*!
@@ -555,7 +559,7 @@ public:
      *
      *  \return _MD
      */
-    inline size_t rows() const { return _MD; }
+    inline size_t rows() const noexcept { return _MD; }
     
     /*!
      *  This function is not really necessary, but
@@ -567,14 +571,14 @@ public:
      *
      *  \return _ND
      */
-    inline size_t cols() const { return _ND; }
+    inline size_t cols() const noexcept { return _ND; }
 
     /*!
      *  Gives back the value full size of the matrix
      *
      *  \return _MD * _ND
      */
-    inline size_t size() const { return _MD * _ND; }
+    inline size_t size() const noexcept { return rows() * cols(); }
 
 
 
@@ -724,7 +728,7 @@ public:
     template<size_t _PD> MatrixMxN<_MD, _PD, _T>
         multiply(const MatrixMxN<_ND, _PD, _T>& mx) const
     {
-        MatrixMxN<_MD, _PD, _T> newM;
+        MatrixMxN<_MD, _PD, _T> newM{};
 
         for (size_t i = 0; i < _MD; i++)
         {
@@ -814,7 +818,6 @@ public:
     Like_T&
     operator+=(const Like_T& mx)
     {
-        Like_T newM;
         for (size_t i = 0; i < _MD; i++)
         {
             for (size_t j = 0; j < _ND; j++)
@@ -823,7 +826,6 @@ public:
             }
         }
         return *this;
-
     }
 
     /*!
@@ -950,7 +952,7 @@ public:
     MatrixMxN<_ND, _MD, _T> transpose() const
     {
 
-        MatrixMxN<_ND, _MD, _T> x;
+        MatrixMxN<_ND, _MD, _T> x{};
         for (size_t i = 0; i < _MD; i++)
             for (size_t j = 0; j < _ND; j++)
                 x.mRaw[j][i] = mRaw[i][j];
@@ -1233,7 +1235,7 @@ template<size_t _MD, size_t _ND, typename _T> MatrixMxN<_MD, _ND, _T>
     constantMatrix(_T cv = 0)
 {
     MatrixMxN<_MD, _ND, _T> mx(cv);
-    return mx;
+    return std::move(mx);
 }
 
 /*!
@@ -1248,7 +1250,7 @@ template<size_t _MD, size_t _ND, typename _T> MatrixMxN<_MD, _ND, _T>
 template<size_t _ND, typename _T> MatrixMxN<_ND, _ND, _T>
     identityMatrix()
 {
-    MatrixMxN<_ND, _ND, _T> mx;
+    MatrixMxN<_ND, _ND, _T> mx{};
     for (size_t i = 0; i < _ND; i++)
     {
         for (size_t j = 0; j < _ND; j++)

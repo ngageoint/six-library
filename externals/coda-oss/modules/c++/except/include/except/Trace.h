@@ -42,8 +42,6 @@ namespace except
  */
 struct Trace final
 {
-    Trace() = default;
-
     /*!
      * Gets size of stack
      * \return the size
