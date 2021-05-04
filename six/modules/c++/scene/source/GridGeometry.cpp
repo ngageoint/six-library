@@ -59,20 +59,20 @@ scene::PlanarGridGeometry::gridToScene(const scene::Vector3& gridPt,
     scene::Vector3 up = enu.getUnitVectorZ();
 
     // arpPos to output plane point
-    scene::Vector3 disp(p - mRefPt);
+    const scene::Vector3 disp(p - mRefPt);
     const types::RowCol<double> rgAz(disp.dot(mRow), disp.dot(mCol));
     const double time = mTimeCOAPoly(rgAz.row, rgAz.col);
-    Vector3 arpPos = mARPPoly(time);
+    const Vector3 arpPos = mARPPoly(time);
     Vector3 arpVel = mARPVelPoly(time);
-    scene::Vector3 arpPosToPop = gridPt - arpPos;
+    const scene::Vector3 arpPosToPop = gridPt - arpPos;
 
-    scene::Vector3 deltaP;
-    scene::Vector3 pFd;
-    scene::Vector3 lineOfSight;
-    math::linear::MatrixMxN<3, 1> rHat;
-    math::linear::MatrixMxN<3, 1> f;
-    math::linear::MatrixMxN<3, 3> b;
-    math::linear::MatrixMxN<3, 3> i3 = 
+    scene::Vector3 deltaP{};
+    scene::Vector3 pFd{};
+    scene::Vector3 lineOfSight{};
+    math::linear::MatrixMxN<3, 1> rHat{};
+    math::linear::MatrixMxN<3, 1> f{};
+    math::linear::MatrixMxN<3, 3> b{};
+    const math::linear::MatrixMxN<3, 3> i3 = 
             math::linear::identityMatrix<3, double>();
 
     // Iteratively solve for deltaP until we converge on a point in the scene 
@@ -133,21 +133,21 @@ scene::PlanarGridGeometry::sceneToGrid(
     scene::Vector3 p = groundPt;
 
     // arpPos to ground point
-    Vector3 arpPos = mARPPoly(time);
+    const Vector3 arpPos = mARPPoly(time);
     Vector3 arpVel = mARPVelPoly(time);
-    scene::Vector3 arpPosToPg = groundPt - arpPos;
+    const scene::Vector3 arpPosToPg = groundPt - arpPos;
 
     // Output plane normal
     Vector3 zHat = math::linear::cross(mRow, mCol);
     zHat.normalize();
 
-    scene::Vector3 deltaP;
-    scene::Vector3 pFd;
-    scene::Vector3 lineOfSight;
-    math::linear::MatrixMxN<3, 1> rHat;
-    math::linear::MatrixMxN<3, 1> f;
-    math::linear::MatrixMxN<3, 3> b;
-    math::linear::MatrixMxN<3, 3> i3 = 
+    scene::Vector3 deltaP{};
+    scene::Vector3 pFd{};
+    scene::Vector3 lineOfSight{};
+    math::linear::MatrixMxN<3, 1> rHat{};
+    math::linear::MatrixMxN<3, 1> f{};
+    math::linear::MatrixMxN<3, 3> b{};
+    const math::linear::MatrixMxN<3, 3> i3 = 
             math::linear::identityMatrix<3, double>();
 
     // Iteratively solve for deltaP until we converge on a point that lies
@@ -212,8 +212,8 @@ scene::PlanarGridGeometry::sceneToGrid(const scene::Vector3& groundPt) const
     {
         // Project currentGridPt back into the scene and see how close we are
         // to the input scene point.
-        Vector3 newGroundPt = gridToScene(currentGridPt, height);
-        Vector3 deltaP = groundPt - newGroundPt;
+        const Vector3 newGroundPt = gridToScene(currentGridPt, height);
+        const Vector3 deltaP = groundPt - newGroundPt;
 
         // If the new point is close enough to the input scene point, we're done
         if (deltaP.norm() < 0.00001)
@@ -225,7 +225,7 @@ scene::PlanarGridGeometry::sceneToGrid(const scene::Vector3& groundPt) const
         // Using the current 'guessed' time, project the scene point 
         // into the grid to get a new grid point
         currentGridPt = sceneToGrid(currentGroundPt, time);
-        Vector3 outputPlaneDisp = currentGridPt - mRefPt;
+        const Vector3 outputPlaneDisp = currentGridPt - mRefPt;
 
         const types::RowCol<double> rgAz(outputPlaneDisp.dot(mRow),
                                    outputPlaneDisp.dot(mCol));
