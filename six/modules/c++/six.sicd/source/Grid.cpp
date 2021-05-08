@@ -30,9 +30,6 @@
 #include "six/sicd/Utilities.h"
 #include <math/Utilities.h>
 
-#pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed / unsigned mismatch
-
-
 using namespace six;
 using namespace six::sicd;
 
@@ -183,9 +180,9 @@ DirectionParameters::calculateImageVertices(const ImageData& imageData) const
         vertices.resize(4);
         //use edges of full image
         vertices[0] = RowColInt(0, 0);
-        vertices[1] = RowColInt(imageData.numCols - 1, 0);
-        vertices[2] = RowColInt(imageData.numCols - 1, imageData.numCols - 1);
-        vertices[3] = RowColInt(0, imageData.numCols - 1);
+        vertices[1] = RowColInt(static_cast<ptrdiff_t>(imageData.numCols) - 1, 0);
+        vertices[2] = RowColInt(static_cast<ptrdiff_t>(imageData.numCols) - 1, static_cast<ptrdiff_t>(imageData.numCols) - 1);
+        vertices[3] = RowColInt(0, static_cast<ptrdiff_t>(imageData.numCols) - 1);
     }
     return vertices;
 }
