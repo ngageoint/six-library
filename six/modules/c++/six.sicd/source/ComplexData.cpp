@@ -84,8 +84,8 @@ void ComplexData::getOutputPlaneOffsetAndExtent(
             //       incorrectly - they're setting the
             //       FirstLine/FirstSample values to 1 but then setting
             //       startLine and startSample to 0.
-            offset.row = segment.startLine;
-            offset.col = segment.startSample;
+            offset.row = static_cast<size_t>(segment.startLine);
+            offset.col = static_cast<size_t>(segment.startSample);
             extent.row = segment.getNumLines();
             extent.col = segment.getNumSamples();
         }

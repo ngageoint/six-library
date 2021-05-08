@@ -157,7 +157,7 @@ void SICDWriteControl::save(void* imageData,
             if (dims.col == globalNumCols)
             {
                 // Life is easy - one write
-                mIO->seek(byteOffset, NITF_SEEK_SET);
+                mIO->seek(static_cast<nitf::Off>(byteOffset), NITF_SEEK_SET);
                 mIO->write(imageDataPtr,
                            numRowsToWrite * dims.col * NUM_BANDS *
                                numBytesPerPixel);
@@ -173,7 +173,7 @@ void SICDWriteControl::save(void* imageData,
                      ++row, byteOffset += rowSeekStride,
                          imageDataPtr += numBytesPerRow)
                 {
-                    mIO->seek(byteOffset, NITF_SEEK_SET);
+                    mIO->seek(static_cast<nitf::Off>(byteOffset), NITF_SEEK_SET);
                     mIO->write(imageDataPtr, numBytesPerRow);
                 }
             }

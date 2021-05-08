@@ -115,10 +115,10 @@ void cropSICD(six::NITFReadControl& reader,
     const size_t numBytes(origDims.row * origDims.col * numBytesPerPixel);
 
     six::Region region;
-    region.setStartRow(aoiOffset.row);
-    region.setStartCol(aoiOffset.col);
-    region.setNumRows(aoiDims.row);
-    region.setNumCols(aoiDims.col);
+    region.setStartRow(static_cast<ptrdiff_t>(aoiOffset.row));
+    region.setStartCol(static_cast<ptrdiff_t>(aoiOffset.col));
+    region.setNumRows(static_cast<ptrdiff_t>(aoiDims.row));
+    region.setNumCols(static_cast<ptrdiff_t>(aoiDims.col));
     const auto buffer = region.setBuffer(numBytes);
     reader.interleaved(region, 0);
 
@@ -249,8 +249,8 @@ void cropSICD(six::NITFReadControl& reader,
                                           static_cast<double>(imageData.firstCol));
 
     const types::RowCol<double> offset(
-            imageData.scpPixel.row - aoiOffset.row,
-            imageData.scpPixel.col - aoiOffset.col);
+            static_cast<double>(imageData.scpPixel.row) - aoiOffset.row,
+            static_cast<double>(imageData.scpPixel.col) - aoiOffset.col);
 
     std::unique_ptr<const scene::SceneGeometry> geom(
             six::sicd::Utilities::getSceneGeometry(data));
@@ -280,8 +280,8 @@ void cropSICD(six::NITFReadControl& reader,
     maxPixel.row = std::ceil(maxPixel.row);
     maxPixel.col = std::ceil(maxPixel.col);
 
-    const types::RowCol<double> lastDim(data->getNumRows() - 1.0,
-                                        data->getNumCols() - 1.0);
+    const types::RowCol<double> lastDim(static_cast<double>(data->getNumRows()) - 1.0,
+                                        static_cast<double>(data->getNumCols()) - 1.0);
 
     if (!trimCornersIfNeeded &&
         (minPixel.row < 0 ||

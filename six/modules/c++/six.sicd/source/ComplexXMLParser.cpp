@@ -817,7 +817,7 @@ XMLElem ComplexXMLParser::convertRcvChanProcToXML(
     {
         XMLElem rcvChanXML = newElement("RcvChanProc", imageFormationXML);
         createInt("NumChanProc",
-                  rcvChanProc->numChannelsProcessed,
+                  static_cast<int>(rcvChanProc->numChannelsProcessed),
                   rcvChanXML);
         if (!Init::isUndefined(rcvChanProc->prfScaleFactor))
             createDouble("PRFScaleFactor",
@@ -962,7 +962,7 @@ void ComplexXMLParser::parseImageDataFromXML(
                 }
                 else
                 {
-                    parseDouble(*it, *(double*) ampTable[index]);
+                    parseDouble(*it, *(double*) ampTable[static_cast<size_t>(index)]);
                 }
             }
             else

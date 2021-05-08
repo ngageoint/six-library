@@ -30,6 +30,9 @@
 #include "six/sicd/Utilities.h"
 #include <math/Utilities.h>
 
+#pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed / unsigned mismatch
+
+
 using namespace six;
 using namespace six::sicd;
 

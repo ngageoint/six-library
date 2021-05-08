@@ -43,6 +43,9 @@ struct ComplexXMLParser04x : public ComplexXMLParser
                         bool ownLog = false);
 #endif
 
+    ComplexXMLParser04x(const ComplexXMLParser04x&) = delete;
+    ComplexXMLParser04x& operator=(const ComplexXMLParser04x&) = delete;
+
 protected:
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, 

@@ -54,10 +54,10 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
                         ValueType* buffer)
 {
     six::Region retv;
-    retv.setStartRow(offset.row);
-    retv.setStartCol(offset.col);
-    retv.setNumRows(extent.row);
-    retv.setNumCols(extent.col);
+    retv.setStartRow(static_cast<ptrdiff_t>(offset.row));
+    retv.setStartCol(static_cast<ptrdiff_t>(offset.col));
+    retv.setNumRows(static_cast<ptrdiff_t>(extent.row));
+    retv.setNumCols(static_cast<ptrdiff_t>(extent.col));
     retv.setBuffer(reinterpret_cast<std::byte*>(buffer));
     return retv;
 }
@@ -115,8 +115,8 @@ six::Poly2D getXYtoRowColTransform(double center,
                                    bool rowTransform)
 {
     const double coeffs[2] = {-sampleSpacing * center, sampleSpacing};
-    const size_t orderX = rowTransform ? 1 : 0;
-    const size_t orderY = rowTransform ? 0 : 1;
+    const auto orderX = static_cast<size_t>(rowTransform ? 1 : 0);
+    const auto orderY = static_cast<size_t>(rowTransform ? 0 : 1);
     return six::Poly2D(orderX, orderY, coeffs);
 }
 
@@ -158,7 +158,7 @@ void getDesBuffer(six::NITFReadControl& reader,
     // Pull out the DE segment and its reader
     nitf::DESegment segment = static_cast<nitf::DESegment>(des[desIndex]);
     nitf::DESubheader subheader = segment.getSubheader();
-    nitf::SegmentReader deReader = reader.getReader().newDEReader(desIndex);
+    nitf::SegmentReader deReader = reader.getReader().newDEReader(static_cast<int>(desIndex));
 
     // Read the DE segment buffer
     const size_t bufferSize = subheader.getDataLength();
@@ -456,8 +456,8 @@ void Utilities::getValidDataPolygon(
             spCorner = (imagePt / spSampleSpacing + spOffset);
 
             if (spCorner.row >= 0 &&
-                spCorner.row < sicdData.imageData->numRows &&
-                spCorner.col >= 0 && spCorner.col < sicdData.imageData->numCols)
+                spCorner.row < static_cast<double>(sicdData.imageData->numRows) &&
+                spCorner.col >= 0 && spCorner.col < static_cast<double>(sicdData.imageData->numCols))
             {
                 spCornerIsInBounds = true;
             }
@@ -1098,8 +1098,8 @@ static void getProjectionPolys_(NITFReadControl& reader,
             complexData->grid->col->sampleSpacing);
 
     const types::RowCol<double> slantCenter(
-            complexData->imageData->scpPixel.row,
-            complexData->imageData->scpPixel.col);
+            static_cast<double>(complexData->imageData->scpPixel.row),
+            static_cast<double>(complexData->imageData->scpPixel.col));
 
     six::Poly2D outputXYToSlantX;
     six::Poly2D outputXYToSlantY;

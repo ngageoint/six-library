@@ -26,6 +26,8 @@
 #include <math/Bessel.h>
 #include <six/sicd/Functor.h>
 
+#pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
+
 namespace six
 {
 namespace sicd
