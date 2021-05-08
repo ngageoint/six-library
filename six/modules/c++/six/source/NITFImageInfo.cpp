@@ -135,18 +135,18 @@ void NITFImageInfo::computeSegmentCorners()
     const LatLonCorners corners = mData->getImageCorners();
 
     // (0, 0)
-    Vector3 icp1 = scene::Utilities::latLonToECEF(corners.upperLeft);
+    const Vector3 icp1 = scene::Utilities::latLonToECEF(corners.upperLeft);
     // (0, N)
-    Vector3 icp2 = scene::Utilities::latLonToECEF(corners.upperRight);
+    const Vector3 icp2 = scene::Utilities::latLonToECEF(corners.upperRight);
     // (M, N)
-    Vector3 icp3 = scene::Utilities::latLonToECEF(corners.lowerRight);
+    const Vector3 icp3 = scene::Utilities::latLonToECEF(corners.lowerRight);
     // (M, 0)
-    Vector3 icp4 = scene::Utilities::latLonToECEF(corners.lowerLeft);
+    const Vector3 icp4 = scene::Utilities::latLonToECEF(corners.lowerLeft);
 
     const auto numIS = mImageSegments.size();
     const auto total = static_cast<double>(mData->getNumRows()) - 1.0;
 
-    Vector3 ecef;
+    Vector3 ecef{};
     size_t i;
     for (i = 0; i < numIS; i++)
     {

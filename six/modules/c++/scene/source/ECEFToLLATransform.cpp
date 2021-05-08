@@ -39,7 +39,7 @@ scene::ECEFToLLATransform::transform(const Vector3& ecef) const
 {
    LatLonAlt lla;
 
-   Vector3 myecef = ecef;
+   const Vector3 myecef = ecef;
 
    //do conversion here; store result in lla struct
 
