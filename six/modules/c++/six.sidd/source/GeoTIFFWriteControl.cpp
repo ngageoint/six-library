@@ -340,8 +340,7 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     const LatLon upperLeft =
         scene::Utilities::ecefToLatLon(gridTransform.rowColToECEF(0, 0));
 
-    const LatLon lowerRight = scene::Utilities::ecefToLatLon(
-        gridTransform.rowColToECEF(static_cast<double>(numRows - 1), static_cast<double>(numCols - 1)));
+    const LatLon lowerRight = scene::Utilities::ecefToLatLon(gridTransform, numRows - 1, numCols - 1);
 
     // ModelTiePointTag = (I, J, K, X, Y, Z) where
     // (I, J, K) is the point at location (I, J) in raster space with pixel

@@ -149,9 +149,8 @@ private:
  * \class GeographicRowColECEFTransform
  * \brief Implementation for a geographic gridded display (GGD)
  */
-class GeographicGridECEFTransform : public GridECEFTransform
+struct GeographicGridECEFTransform : public GridECEFTransform
 {
-public:
     GeographicGridECEFTransform(const types::RowCol<double>& sampleSpacing,
                                 const types::RowCol<double>& sceneCenter,
                                 const LatLonAlt& refPt);

@@ -173,10 +173,8 @@ void cropSIDD(const std::string& inPathname,
             std::byte* const buffer = buffers.add(numBytes);
 
             six::Region region;
-            region.setStartRow(static_cast<ptrdiff_t>(aoiOffset.row));
-            region.setStartCol(static_cast<ptrdiff_t>(aoiOffset.col));
-            region.setNumRows(static_cast<ptrdiff_t>(aoiDims.row));
-            region.setNumCols(static_cast<ptrdiff_t>(aoiDims.col));
+            region.setOffset(aoiOffset);
+            region.setDims(aoiDims);
             region.setBuffer(buffer);
             reader.interleaved(region, imageNum++);
 
@@ -192,8 +190,7 @@ void cropSIDD(const std::string& inPathname,
             const ChipCoordinateToFullImageCoordinate chipToFull(*data);
 
             GeometricChip chip;
-            chip.chipSize.row = static_cast<ptrdiff_t>(aoiDims.row);
-            chip.chipSize.col = static_cast<ptrdiff_t>(aoiDims.col);
+            chip.setChipSize(aoiDims);
             const size_t lastRow = aoiOffset.row + aoiDims.row - 1;
             const size_t lastCol = aoiOffset.col + aoiDims.col - 1;
 
@@ -220,8 +217,7 @@ void cropSIDD(const std::string& inPathname,
             }
             *data->downstreamReprocessing->geometricChip = chip;
 
-            data->measurement->pixelFootprint.row = static_cast<ptrdiff_t>(aoiDims.row);
-            data->measurement->pixelFootprint.col = static_cast<ptrdiff_t>(aoiDims.col);
+            data->measurement->setPixelFootprint(aoiDims);
 
             six::LatLonCorners corners;
             corners.upperLeft = pixelToLatLon(aoiOffset.row, aoiOffset.col);

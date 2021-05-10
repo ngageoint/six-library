@@ -289,6 +289,11 @@ struct Measurement
 
     //!  Number of rows/cols in the SIDD product
     RowColInt pixelFootprint;
+    void setPixelFootprint(const types::RowCol<size_t>& aoiDims)
+    {
+        pixelFootprint.row = static_cast<ptrdiff_t>(aoiDims.row);
+        pixelFootprint.col = static_cast<ptrdiff_t>(aoiDims.col);
+    }
 
     /*!
      * Flag indicating whether ARP polynomial is based on the best available
