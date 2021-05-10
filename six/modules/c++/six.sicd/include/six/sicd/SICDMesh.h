@@ -80,6 +80,8 @@ public:
 
     PlanarCoordinateMesh(const PlanarCoordinateMesh&) = delete;
     PlanarCoordinateMesh& operator=(const PlanarCoordinateMesh&) = delete;
+    PlanarCoordinateMesh(PlanarCoordinateMesh&&) = default;
+    PlanarCoordinateMesh& operator=(PlanarCoordinateMesh&&) = delete;
 
     //! \return The mesh name
     std::string getName() const
