@@ -36,6 +36,10 @@ public:
     DerivedXMLParser200(logging::Logger* log = nullptr,
                         bool ownLog = false);
 
+
+    DerivedXMLParser200(const DerivedXMLParser200&) = delete;
+    DerivedXMLParser200& operator=(const DerivedXMLParser200&) = delete;
+
     virtual xml::lite::Document* toXML(const DerivedData* data) const;
 
     virtual DerivedData* fromXML(const xml::lite::Document* doc) const;

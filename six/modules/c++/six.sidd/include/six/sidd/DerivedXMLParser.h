@@ -45,6 +45,9 @@ public:
                      bool ownLog = false);
 #endif
 
+    DerivedXMLParser(const DerivedXMLParser&) = delete;
+    DerivedXMLParser& operator=(const DerivedXMLParser&) = delete;
+
     virtual xml::lite::Document* toXML(const DerivedData* data) const = 0;
 
     virtual DerivedData* fromXML(const xml::lite::Document* doc) const = 0;
