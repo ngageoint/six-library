@@ -82,6 +82,7 @@ namespace scene
         }
     };
 
+    struct LatLonAlt;
     struct LatLon
     {
         LatLon() = default;
@@ -138,6 +139,7 @@ namespace scene
         {
             mLon = lon;
         }
+        void setLatLon(const LatLonAlt&);
 
         void setLatRadians(double lat)
         {
@@ -222,6 +224,11 @@ namespace scene
         double mAlt = 0.0;
     };
 
+    inline void LatLon::setLatLon(const LatLonAlt& lla)
+    {
+        setLat(lla.getLat());
+        setLon(lla.getLon());
+    }
 }
 
 namespace str

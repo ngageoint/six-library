@@ -110,7 +110,7 @@ void SICDWriteControl::save(void* imageData,
     }
 
     const six::Data* const data = getContainer()->getData(0);
-    static const size_t NUM_BANDS = 2;
+    constexpr size_t NUM_BANDS = 2;
     const size_t numBytesPerPixel = data->getNumBytesPerPixel() / NUM_BANDS;
     const size_t numPixelsTotal = dims.area() * NUM_BANDS;
     const bool doByteSwap = shouldByteSwap();

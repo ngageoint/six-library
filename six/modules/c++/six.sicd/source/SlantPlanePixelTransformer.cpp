@@ -72,7 +72,7 @@ scene::LatLon SlantPlanePixelTransformer::toLatLon(
     const types::RowCol<double>& pixel) const
 {
     //! project then convert LLA to LatLon
-    scene::LatLonAlt lla = toLLA(pixel);
+    const scene::LatLonAlt lla = toLLA(pixel);
     return scene::LatLon(lla.getLat(), lla.getLon());
 }
 

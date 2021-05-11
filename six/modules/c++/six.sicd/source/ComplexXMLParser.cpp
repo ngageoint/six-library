@@ -406,7 +406,7 @@ XMLElem ComplexXMLParser::convertTimelineToXML(
     if (timeline->interPulsePeriod.get())
     {
         XMLElem ippXML = newElement("IPP", timelineXML);
-        size_t setSize = timeline->interPulsePeriod->sets.size();
+        const auto setSize = timeline->interPulsePeriod->sets.size();
         set_attribute(*ippXML, "size", setSize);
 
         for (size_t i = 0; i < setSize; ++i)
@@ -438,7 +438,7 @@ XMLElem ComplexXMLParser::convertPositionToXML(
         common().createPolyXYZ("TxAPCPoly", position->txAPCPoly, positionXML);
     if (position->rcvAPC.get() && !position->rcvAPC->rcvAPCPolys.empty())
     {
-        size_t numPolys = position->rcvAPC->rcvAPCPolys.size();
+        const auto numPolys = position->rcvAPC->rcvAPCPolys.size();
         XMLElem rcvXML = newElement("RcvAPC", positionXML);
         setAttribute(rcvXML, "size", numPolys);
 

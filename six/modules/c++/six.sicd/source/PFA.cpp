@@ -67,7 +67,7 @@ void PFA::fillDerivedFields(const Position& position)
     {
         // This doesn't actually do anything currently.
         // Requires re-implemenation of polyfit, pfa_polar_coords, and bsxfun
-        Vector3 polRefPos = position.arpPoly(polarAngleRefTime);
+        const Vector3 polRefPos = position.arpPoly(polarAngleRefTime);
     }
 }
 

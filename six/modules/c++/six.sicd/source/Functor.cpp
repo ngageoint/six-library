@@ -62,7 +62,7 @@ std::vector<double> Kaiser::operator()(size_t L) const
         return ret;
     }
 
-    size_t m = L - 1;
+    const auto m = L - 1;
     double k;
     for (size_t ii = 0; ii < L; ++ii)
     {

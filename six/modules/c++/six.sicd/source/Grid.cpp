@@ -279,11 +279,11 @@ bool DirectionParameters::validate(const ImageData& imageData,
 
     // 2.3.9. Compute our own DeltaK1/K2 and test for consistency with DelaKCOAPoly,
     // ImpRespBW, and SS.
-    std::pair<double, double> deltas = calculateDeltaKs(imageData);
+    const auto deltas = calculateDeltaKs(imageData);
     const double minDk = deltas.first;
     const double maxDk = deltas.second;
 
-    const double DK_TOL = 1e-2;
+    constexpr double DK_TOL = 1e-2;
 
     //2.3.9.1, 2.3.9.3
     if (std::abs((deltaK1 / minDk) - 1) > DK_TOL)
@@ -357,7 +357,7 @@ bool DirectionParameters::validateWeights(const Functor& weightFunction,
     //Arg doesn't matter. Just checking for Uniform-type Functor
     if (weightFunction(5).empty())
     {
-        double key = weights[0];
+        const auto key = weights[0];
         for (size_t ii = 0; ii < weights.size(); ++ii)
         {
             if (key != weights[ii])
@@ -494,7 +494,7 @@ bool Grid::validateTimeCOAPoly(
     }
     else
     {
-        bool isScalar = timeCOAPoly.isScalar();
+        const auto isScalar = timeCOAPoly.isScalar();
 
         if (mode == RadarModeType::SPOTLIGHT && !isScalar)
         {
@@ -957,7 +957,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
 {
     bool valid = true;
     std::ostringstream messageBuilder;
-    const double IFP_POLY_TOL = 1e-5;
+    constexpr double IFP_POLY_TOL = 1e-5;
 
     if (!Init::isUndefined(inca.dopplerCentroidPoly) &&
         inca.dopplerCentroidCOA == BooleanType::IS_TRUE)
@@ -1074,12 +1074,12 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
         !Init::isUndefined(fc))
     {
         // PFA.SpatialFreqSFPoly affects Row.KCtr
-        double kapCtr = fc * pfa.spatialFrequencyScaleFactorPoly[0] *
+        const auto kapCtr = fc * pfa.spatialFrequencyScaleFactorPoly[0] *
                 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
 
         // PFA inscription could cause kapCtr and Row.KCtr 
         // to be somewhat different
-        double theta = std::atan((col->impulseResponseBandwidth / 2) /
+        const auto theta = std::atan((col->impulseResponseBandwidth / 2) /
                 row->kCenter);
         double kCtrTol = 1 - std::cos(theta);
         kCtrTol = std::max(0.01, kCtrTol);

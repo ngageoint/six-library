@@ -93,8 +93,8 @@ void readAndConvertSICD(six::NITFReadControl& reader,
         }
         
         // Read into the temp buffer
-        types::RowCol<size_t> swathOffset(row, offset.col);
-        types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
+        const types::RowCol<size_t> swathOffset(row, offset.col);
+        const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
         six::Region region = buildRegion(swathOffset, swathExtent, tempBuffer);
         reader.interleaved(region, imageNumber);
 
@@ -346,7 +346,7 @@ mem::auto_ptr<scene::ProjectionPolynomialFitter> Utilities::getPolynomialFitter(
     }
 
     // Get the size of the output plane image.
-    types::RowCol<size_t> fullExtent(areaPlane.xDirection->elements,
+    const types::RowCol<size_t> fullExtent(areaPlane.xDirection->elements,
                                      areaPlane.yDirection->elements);
 
     // Get the valid data polygon in the output plane.
@@ -647,7 +647,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 std::complex<float>* buffer)
 {
     const PixelType pixelType = complexData.getPixelType();
-    const size_t imageNumber = 0;
+    constexpr size_t imageNumber = 0;
 
     const size_t requiredBufferBytes =
             sizeof(std::complex<float>) * extent.area();
@@ -681,9 +681,8 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
                                 std::complex<float>* buffer)
 {
-    types::RowCol<size_t> offset(0, 0);
-
-    types::RowCol<size_t> extent(complexData.getNumRows(),
+    const types::RowCol<size_t> offset(0, 0);
+    const types::RowCol<size_t> extent(complexData.getNumRows(),
                                  complexData.getNumCols());
 
     getWidebandData(reader, complexData, offset, extent, buffer);
@@ -708,9 +707,8 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
                                 std::vector<std::complex<float>>& buffer)
 {
-    types::RowCol<size_t> offset;
-
-    types::RowCol<size_t> extent(complexData.getNumRows(),
+    const types::RowCol<size_t> offset{};
+    const types::RowCol<size_t> extent(complexData.getNumRows(),
                                  complexData.getNumCols());
 
     getWidebandData(reader, complexData, offset, extent, buffer);
@@ -739,9 +737,8 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
                                 const ComplexData& complexData,
                                 std::complex<float>* buffer)
 {
-    types::RowCol<size_t> offset(0, 0);
-
-    types::RowCol<size_t> extent(complexData.getNumRows(),
+    const types::RowCol<size_t> offset(0, 0);
+    const types::RowCol<size_t> extent(complexData.getNumRows(),
                                  complexData.getNumCols());
 
     getWidebandData(
@@ -750,7 +747,7 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
 
 Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
 {
-    Vector3 groundPlaneNormal;
+    Vector3 groundPlaneNormal{};
 
     if (data.radarCollection->area.get() &&
         data.radarCollection->area->plane.get())
@@ -1290,9 +1287,9 @@ void Utilities::projectValidDataPolygonToOutputPlane(
     if (validData.size() == 0)
     {
         // Get dimensions of SICD.
-        ptrdiff_t numRows =
+        const auto numRows =
                 static_cast<ptrdiff_t>(complexData.getNumRows());
-        ptrdiff_t numCols =
+        const auto numCols =
                 static_cast<ptrdiff_t>(complexData.getNumCols());
 
         validData.push_back(six::RowColInt(0, 0));

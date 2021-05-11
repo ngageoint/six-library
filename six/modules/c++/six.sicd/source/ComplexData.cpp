@@ -164,7 +164,7 @@ bool ComplexData::validate(logging::Logger& log) const
     valid = geoData->validate(log) && valid;
     valid = radarCollection->validate(log) && valid;
 
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     std::ostringstream messageBuilder;
     switch (imageFormation->imageFormationAlgorithm)
@@ -255,7 +255,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
 
     geoData->fillDerivedFields(*imageData, model);
 
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     switch (imageFormation->imageFormationAlgorithm)
     {
@@ -290,7 +290,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
 void ComplexData::fillDefaultFields()
 {
     imageFormation->fillDefaultFields(*radarCollection);
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     switch (imageFormation->imageFormationAlgorithm)
     {

@@ -244,7 +244,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     }
 
     //2.8.12
-    double freq_tol = (rcvWindowLength - txPulseLength) * txFMRate;
+    const auto freq_tol = (rcvWindowLength - txPulseLength) * txFMRate;
     if (rcvFrequencyStart >= (txFrequencyStart + txRFBandwidth + freq_tol) ||
         rcvFrequencyStart <= txFrequencyStart - freq_tol)
     {
@@ -535,8 +535,8 @@ bool RadarCollection::validate(logging::Logger& log) const
     std::ostringstream messageBuilder;
 
     // 2.8 Waveform description consistency
-    double wfMin = waveformMin();
-    double wfMax = waveformMax();
+    const auto wfMin = waveformMin();
+    const auto wfMax = waveformMax();
 
     // 2.8.1
     if (wfMin != std::numeric_limits<double>::infinity() &&
