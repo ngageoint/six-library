@@ -238,3 +238,11 @@ NITF_DATA* nitf::List::operator[] (size_t index)
         throw nitf::NITFException(&error);
     return x;
 }
+
+const NITF_DATA* nitf::List::operator[] (size_t index) const
+{
+    NITF_DATA* x = nitf_List_get(getNativeOrThrow(), gsl::narrow<int>(index), &error);
+    if (!x)
+        throw nitf::NITFException(&error);
+    return x;
+}

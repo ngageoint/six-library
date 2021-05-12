@@ -63,10 +63,9 @@ std::vector<double> Kaiser::operator()(size_t L) const
     }
 
     const auto m = L - 1;
-    double k;
     for (size_t ii = 0; ii < L; ++ii)
     {
-        k = 2 * mBeta / static_cast<double>(m) * std::sqrt(static_cast<double>(ii * (m - ii)));
+        const auto k = 2 * mBeta / static_cast<double>(m) * std::sqrt(static_cast<double>(ii * (m - ii)));
         ret.push_back(math::besselI(0, k) / math::besselI(0, mBeta));
     }
 

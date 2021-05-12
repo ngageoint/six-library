@@ -53,7 +53,7 @@ namespace six
 struct ReadControl
 {
     //!  Constructor.  Null-set the current container reference
-    ReadControl() :
+    ReadControl() noexcept :
         mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
         setLogger(nullptr);
@@ -217,9 +217,9 @@ struct ReadControl
 protected:
     mem::SharedPtr<Container> mContainer;
     Options mOptions;
-    logging::Logger *mLog;
-    bool mOwnLog;
-    const XMLControlRegistry *mXMLRegistry;
+    logging::Logger* mLog = nullptr;
+    bool mOwnLog = false;
+    const XMLControlRegistry* mXMLRegistry = nullptr;
 
 };
 

@@ -120,10 +120,10 @@ six::Poly2D getXYtoRowColTransform(double center,
     return six::Poly2D(orderX, orderY, coeffs);
 }
 
-std::map<std::string, size_t> getAdditionalDesMap(six::NITFReadControl& reader)
+static std::map<std::string, size_t> getAdditionalDesMap(const six::NITFReadControl& reader)
 {
     std::map<std::string, size_t> nameToDesIndex;
-    nitf::List des = reader.getRecord().getDataExtensions();
+    const nitf::List des = reader.getRecord().getDataExtensions();
     nitf::ListIterator desIter = des.begin();
 
     for (size_t ii = 0; desIter != des.end(); ++desIter, ++ii)
@@ -136,15 +136,14 @@ std::map<std::string, size_t> getAdditionalDesMap(six::NITFReadControl& reader)
             continue;
         }
 
-        nitf::DESegment segment = static_cast<nitf::DESegment>(*desIter);
-        nitf::DESubheader subheader = segment.getSubheader();
-        const auto typeID = subheader.typeID();
+        const nitf::DESegment segment(*desIter);
+        const auto typeID = segment.getSubheader().typeID();
         nameToDesIndex[typeID] = ii;
     }
     return nameToDesIndex;
 }
 
-void getDesBuffer(six::NITFReadControl& reader,
+static void getDesBuffer(const six::NITFReadControl& reader,
                   size_t desIndex,
                   mem::ScopedAlignedArray<std::byte>& buffer)
 {
@@ -156,8 +155,8 @@ void getDesBuffer(six::NITFReadControl& reader,
     }
 
     // Pull out the DE segment and its reader
-    nitf::DESegment segment = static_cast<nitf::DESegment>(des[desIndex]);
-    nitf::DESubheader subheader = segment.getSubheader();
+    const nitf::DESegment segment(des[desIndex]);
+    const auto subheader = segment.getSubheader();
     nitf::SegmentReader deReader = reader.getReader().newDEReader(static_cast<int>(desIndex));
 
     // Read the DE segment buffer

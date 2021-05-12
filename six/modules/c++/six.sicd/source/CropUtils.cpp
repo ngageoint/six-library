@@ -59,7 +59,7 @@ six::sicd::ComplexData* const updateMetadata(
         const types::RowCol<size_t>& aoiDims)
 {
     six::sicd::ComplexData* const aoiData(
-               static_cast<six::sicd::ComplexData*>(data.clone()));
+               dynamic_cast<six::sicd::ComplexData*>(data.clone()));
 
     aoiData->imageData->firstRow += aoiOffset.row;
     aoiData->imageData->firstCol += aoiOffset.col;
@@ -193,7 +193,7 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     const ComplexData* const data =
-        static_cast<const ComplexData*>(dataPtr);
+        dynamic_cast<const ComplexData*>(dataPtr);
 
     // Build up the geometry info
     std::unique_ptr<const scene::SceneGeometry> geom(
@@ -241,7 +241,7 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     const six::sicd::ComplexData* const data =
-        static_cast<const six::sicd::ComplexData*>(dataPtr);
+        dynamic_cast<const six::sicd::ComplexData*>(dataPtr);
 
     // Convert ECEF corners to slant pixel pixels
     const ImageData& imageData(*data->imageData);

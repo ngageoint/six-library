@@ -279,6 +279,10 @@ void ComplexData::fillDerivedFields(bool includeDefault)
             grid->fillDerivedFields(*rma, geoData->scp.ecf, position->arpPoly);
         }
         break;
+    case ImageFormationType::NOT_SET:
+    case ImageFormationType::OTHER:
+    default:
+        break; // nothing to do
     }
 
     if (includeDefault)
@@ -308,6 +312,12 @@ void ComplexData::fillDefaultFields()
             grid->fillDefaultFields(*rma, fc);
         }
         break;
+
+    case ImageFormationType::RGAZCOMP:        
+    case ImageFormationType::NOT_SET:
+    case ImageFormationType::OTHER:
+    default:
+        break; // nothing to do
     }
 }
 }

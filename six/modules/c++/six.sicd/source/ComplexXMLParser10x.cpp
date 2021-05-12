@@ -401,10 +401,13 @@ void ComplexXMLParser10x::parseRadarCollectionFromXML(
         RadarCollection* radarCollection) const
 {
     XMLElem tmpElem = getFirstAndOnly(radarCollectionXML, "TxFrequency");
-    parseDouble(getFirstAndOnly(tmpElem, "Min"),
-                radarCollection->txFrequencyMin);
-    parseDouble(getFirstAndOnly(tmpElem, "Max"),
-                radarCollection->txFrequencyMax);
+    if (tmpElem != nullptr)
+    {
+        parseDouble(getFirstAndOnly(tmpElem, "Min"),
+            radarCollection->txFrequencyMin);
+        parseDouble(getFirstAndOnly(tmpElem, "Max"),
+            radarCollection->txFrequencyMax);
+    }
 
     tmpElem = getOptional(radarCollectionXML, "RefFreqIndex");
     if (tmpElem)
@@ -452,8 +455,11 @@ void ComplexXMLParser10x::parseRadarCollectionFromXML(
         chanParams.reset(new ChannelParameters());
 
         XMLElem childXML = getFirstAndOnly(*it, "TxRcvPolarization");
-        chanParams->txRcvPolarization = six::toType<DualPolarizationType>(
+        if (childXML != nullptr)
+        {
+            chanParams->txRcvPolarization = six::toType<DualPolarizationType>(
                 childXML->getCharacterData());
+        }
 
         childXML = getOptional(*it, "RcvAPCIndex");
         if (childXML)

@@ -88,6 +88,7 @@ void PFA::fillDefaultFields(const GeoData& geoData,
             imagePlaneNormal = model.getNormalVector(scp);
             break;
         case ComplexImagePlaneType::OTHER:
+        default:
             // Nothing we can do
             break;
         }

@@ -138,7 +138,7 @@ DirectionParameters::calculateWeightFunction() const
         }
         else if (windowName == "HAMMING")
         {
-            double coef;
+            double coef = 0.0;
             if (weightType->parameters.empty() || weightType->parameters[0].str().empty())
             {
                 //A Hamming window is defined in many places as a raised cosine of weight .54,
@@ -202,7 +202,7 @@ void DirectionParameters::fillDerivedFields(const ImageData& imageData)
         // of the image, since it is smooth and monotonic in most cases--although in
         // actuality this is not always the case. To be totally generic, we would 
         // have to search for an interior min and max as well.
-        std::pair<double, double> deltas = calculateDeltaKs(imageData);
+        const std::pair<double, double> deltas = calculateDeltaKs(imageData);
         deltaK1 = deltas.first;
         deltaK2 = deltas.second;
     }
