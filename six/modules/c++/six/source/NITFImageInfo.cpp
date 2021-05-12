@@ -172,11 +172,8 @@ void NITFImageInfo::computeSegmentCorners()
         LatLonCorners& theseCorners(mImageSegments[i].corners);
         const LatLonCorners& nextCorners(mImageSegments[i + 1].corners);
 
-        theseCorners.lowerRight.setLat(nextCorners.upperRight.getLat());
-        theseCorners.lowerRight.setLon(nextCorners.upperRight.getLon());
-
-        theseCorners.lowerLeft.setLat(nextCorners.upperLeft.getLat());
-        theseCorners.lowerLeft.setLon(nextCorners.upperLeft.getLon());
+        theseCorners.lowerRight.setLatLon(nextCorners.upperRight);
+        theseCorners.lowerLeft.setLatLon(nextCorners.upperLeft);
     }
 
     // This last one is cake
