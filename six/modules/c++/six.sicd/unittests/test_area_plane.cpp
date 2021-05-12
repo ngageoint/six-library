@@ -203,7 +203,7 @@ TEST_CASE(testCanRotateFourTimes)
 }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(testAreaPlane);
     TEST_CHECK(testBothMethodsGiveSamePlane);
     TEST_CHECK(testRotatePlane);

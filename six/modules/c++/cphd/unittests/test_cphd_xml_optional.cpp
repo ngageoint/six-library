@@ -1120,6 +1120,6 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(matchInfo.types[1].matchCollects[0].parameters[0].getName(), "param1");
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
         TEST_CHECK(testOptional);
 )

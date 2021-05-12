@@ -150,7 +150,7 @@ TEST_CASE(testProjectSlantToOutput)
 }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argc;
      argv0 = argv[0];
 
     TEST_CHECK(testProjectOutputToSlant);
