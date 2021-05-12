@@ -26,6 +26,7 @@
 
 namespace scene
 {
+    struct GeographicGridECEFTransform;
 
 struct Utilities
 {
@@ -50,6 +51,7 @@ struct Utilities
      *
      */
     static LatLonAlt ecefToLatLon(Vector3 vec);
+    static LatLonAlt ecefToLatLon(const GeographicGridECEFTransform&, size_t row, size_t col);
 
     /*!
      *  Remaps angles into [0:360]

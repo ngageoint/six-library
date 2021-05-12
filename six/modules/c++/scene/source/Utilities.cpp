@@ -29,6 +29,7 @@
 
 #include <scene/LLAToECEFTransform.h>
 #include <scene/ECEFToLLATransform.h>
+#include <scene/GridECEFTransform.h>
 
 namespace scene
 {
@@ -48,6 +49,12 @@ LatLonAlt Utilities::ecefToLatLon(Vector3 vec)
 {
     scene::ECEFToLLATransform toLLA;
     return toLLA.transform(vec);
+}
+
+LatLonAlt Utilities::ecefToLatLon(const GeographicGridECEFTransform& gridTransform, size_t row, size_t col)
+{
+    return ecefToLatLon(
+        gridTransform.rowColToECEF(static_cast<double>(row), static_cast<double>(col)));
 }
 
 double Utilities::remapZeroTo360(double degree)

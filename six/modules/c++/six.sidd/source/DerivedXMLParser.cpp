@@ -400,7 +400,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
             XMLElem remapLUTElem = getFirstAndOnly(colorRemapElem, "RemapLUT");
 
             //get size attribute
-            int size = str::toType<int>(remapLUTElem->attribute("size"));
+            auto size = str::toType<size_t>(remapLUTElem->attribute("size"));
 
             // xs:list is space delimited
             std::string lutStr = remapLUTElem->getCharacterData();
@@ -471,7 +471,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
 mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
 {
     //get size attribute
-    int size = str::toType<int>(elem->attribute("size"));
+    auto size = str::toType<size_t>(elem->attribute("size"));
 
     std::string lutStr = "";
     parseString(elem, lutStr);

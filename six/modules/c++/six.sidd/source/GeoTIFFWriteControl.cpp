@@ -109,7 +109,7 @@ void GeoTIFFWriteControl::save(const SourceList& sources,
         for (size_t row = 0; row < numRows; ++row)
         {
             sources[ii]->read((std::byte*)buf.data(), oneRow);
-            imageWriter->putData(buf.data(), numCols);
+            imageWriter->putData(buf.data(), static_cast<sys::Uint32_T>(numCols));
         }
         imageWriter->writeIFD();
     }
@@ -135,8 +135,8 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
 
     tiff::IFDEntry* bitsPerSample = (*ifd)[tiff::KnownTags::BITS_PER_SAMPLE];
 
-    unsigned short numBands = data->getNumChannels();
-    unsigned short bitDepth = data->getNumBytesPerPixel() * 8 / numBands;
+    const auto numBands = data->getNumChannels();
+    const auto bitDepth = data->getNumBytesPerPixel() * 8 / numBands;
 
     for (unsigned int j = 0; j < numBands; ++j)
     {
@@ -264,8 +264,8 @@ void GeoTIFFWriteControl::save(const BufferList& sources,
         // Now we hack to write
 
         const auto sources_ii = reinterpret_cast<const unsigned char*>(sources[ii]);
-        imageWriter->putData(sources_ii, data->getNumRows()
-                * data->getNumCols());
+        imageWriter->putData(sources_ii,
+            static_cast<sys::Uint32_T>(data->getNumRows() * data->getNumCols()));
 
         imageWriter->writeIFD();
     }
@@ -340,8 +340,7 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     const LatLon upperLeft =
         scene::Utilities::ecefToLatLon(gridTransform.rowColToECEF(0, 0));
 
-    const LatLon lowerRight = scene::Utilities::ecefToLatLon(
-        gridTransform.rowColToECEF(numRows - 1, numCols - 1));
+    const LatLon lowerRight = scene::Utilities::ecefToLatLon(gridTransform, numRows - 1, numCols - 1);
 
     // ModelTiePointTag = (I, J, K, X, Y, Z) where
     // (I, J, K) is the point at location (I, J) in raster space with pixel
@@ -365,10 +364,10 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     ifd->addEntry("ModelPixelScaleTag");
     entry = (*ifd)["ModelPixelScaleTag"];
 
-    const double scaleX((lowerRight.getLon() - upperLeft.getLon()) / numCols);
+    const double scaleX((lowerRight.getLon() - upperLeft.getLon()) / static_cast<double>(numCols));
     entry->addValue(scaleX);
 
-    const double scaleY((upperLeft.getLat() - lowerRight.getLat()) / numRows);
+    const double scaleY((upperLeft.getLat() - lowerRight.getLat()) / static_cast<double>(numRows));
     entry->addValue(scaleY);
 
     entry->addValue(0.0);

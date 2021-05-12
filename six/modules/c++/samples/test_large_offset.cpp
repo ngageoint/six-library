@@ -188,7 +188,7 @@ bool runTest(const six::DataType& datatype)
 }
 }
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
     try
     {
@@ -196,7 +196,7 @@ int main(int argc, char** argv)
         testPassed = runTest(six::DataType::DERIVED) && testPassed;
         return testPassed ? 0 : 1;
     }
-    catch (const std::bad_alloc& ex)
+    catch (const std::bad_alloc&)
     {
         std::cerr << "Not enough memory available to build test NITF. "
                 "Skipping test.\n";

@@ -207,7 +207,7 @@ struct AreaDirectionParameters
     double getExtentInMeters() const
     {
         // meters/pixel * numPixels
-        return (spacing * elements);
+        return spacing * static_cast<double>(elements);
     }
 
     bool operator==(const AreaDirectionParameters& other) const
@@ -255,13 +255,13 @@ struct Segment
     {
         // Rotating can make the start/end in reverse order,
         // so need the absolute value
-        return std::abs(endLine - startLine) + 1;
+        return static_cast<size_t>(std::abs(endLine - startLine) + 1);
     }
 
     //! The number of samples in the segment
     size_t getNumSamples() const
     {
-        return std::abs(endSample - startSample) + 1;
+        return static_cast<size_t>(std::abs(endSample - startSample) + 1);
     }
 
     /*!

@@ -61,10 +61,8 @@ using buffer_list_mutable = std::vector<std::byte*>;
  *  allows that data model to be transmitted to the container file format.
  *
  */
-class WriteControl
+struct WriteControl
 {
-public:
-
     //!  Global byte swap option.  Normally, you should leave this up to us
     static const char OPT_BYTE_SWAP[];
 
@@ -75,7 +73,7 @@ public:
     static const char OPT_BUFFER_SIZE[];
 
     //!  Constructor.  Null-sets the Container
-    WriteControl() :
+    WriteControl() noexcept :
         mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
         setLogger(nullptr);
@@ -293,9 +291,9 @@ protected:
     }
     mem::SharedPtr<Container> mContainer;
     Options mOptions;
-    logging::Logger *mLog;
-    bool mOwnLog;
-    const XMLControlRegistry *mXMLRegistry;
+    logging::Logger* mLog = nullptr;
+    bool mOwnLog = false;
+    const XMLControlRegistry* mXMLRegistry = nullptr;
 
 };
 

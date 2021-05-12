@@ -39,6 +39,9 @@ public:
         six::SICommonXMLParser01x(uri, false, uri, log, false)
     {
     }
+    SICommonXMLParser050(const SICommonXMLParser050&) = delete;
+    SICommonXMLParser050& operator=(const SICommonXMLParser050&) = delete;
+
 
     virtual XMLElem convertRadiometryToXML(
         const six::Radiometric *obj,

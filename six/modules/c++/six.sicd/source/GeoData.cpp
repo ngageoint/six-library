@@ -71,10 +71,9 @@ void GeoData::fillDerivedFields(const ImageData& imageData,
         scene::ECEFToLLATransform transformer;
         for (size_t ii = 0; ii < cornerLineSample.size(); ++ii)
         {
-            LatLonAlt lla = transformer.transform(model.imageGridToECEF(
+            const LatLonAlt lla = transformer.transform(model.imageGridToECEF(
                     cornerLineSample[ii]));
-            imageCorners.getCorner(ii).setLat(lla.getLat());
-            imageCorners.getCorner(ii).setLon(lla.getLon());
+            imageCorners.getCorner(ii).setLatLon(lla);
         }
     }
 
@@ -86,7 +85,7 @@ void GeoData::fillDerivedFields(const ImageData& imageData,
         scene::ECEFToLLATransform transformer;
         for (size_t ii = 0; ii < imageData.validData.size(); ++ii)
         {
-            LatLonAlt lla = transformer.transform(model.imageGridToECEF(
+            const LatLonAlt lla = transformer.transform(model.imageGridToECEF(
                     imageData.validData[ii]));
             validData[ii] = LatLon(lla.getLat(), lla.getLon());
         }
@@ -108,8 +107,8 @@ bool GeoData::validate(logging::Logger& log) const
     {
         // 2.10
         scene::LLAToECEFTransform transformer;
-        Vector3 derivedEcf = transformer.transform(scp.llh);
-        double ecfDiff = (scp.ecf - derivedEcf).norm();
+        const Vector3 derivedEcf = transformer.transform(scp.llh);
+        const auto ecfDiff = (scp.ecf - derivedEcf).norm();
 
         if (ecfDiff > ECF_THRESHOLD)
         {

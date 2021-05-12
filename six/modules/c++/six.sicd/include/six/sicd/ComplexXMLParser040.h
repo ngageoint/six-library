@@ -35,6 +35,9 @@ public:
                         logging::Logger* log = nullptr,
                         bool ownLog = false);
 
+    ComplexXMLParser040(const ComplexXMLParser040&) = delete;
+    ComplexXMLParser040& operator=(const ComplexXMLParser040&) = delete;
+
 protected:
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, 

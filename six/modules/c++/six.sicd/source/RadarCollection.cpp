@@ -29,7 +29,7 @@ types::RowCol<T> rotatePixel(size_t origNumCols, const types::RowCol<T>& pixel)
 {
     types::RowCol<T> rotatedPixel;
     rotatedPixel.col = pixel.row;
-    rotatedPixel.row = origNumCols - pixel.col;
+    rotatedPixel.row = static_cast<T>(origNumCols) - pixel.col;
     return rotatedPixel;
 }
 }
@@ -244,7 +244,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     }
 
     //2.8.12
-    double freq_tol = (rcvWindowLength - txPulseLength) * txFMRate;
+    const auto freq_tol = (rcvWindowLength - txPulseLength) * txFMRate;
     if (rcvFrequencyStart >= (txFrequencyStart + txRFBandwidth + freq_tol) ||
         rcvFrequencyStart <= txFrequencyStart - freq_tol)
     {
@@ -339,8 +339,8 @@ types::RowCol<double> AreaPlane::getAdjustedReferencePoint() const
     //       pixel-centered 0-based.  More generally than this, we need to
     //       account for the SICD FirstLine/FirstSample offset
     //
-    refPt.row -= xDirection->first;
-    refPt.col -= yDirection->first;
+    refPt.row -= static_cast<double>(xDirection->first);
+    refPt.col -= static_cast<double>(yDirection->first);
 
     return refPt;
 }
@@ -423,10 +423,10 @@ void Segment::rotateCCW(size_t /*numColumns*/)
      */
     const six::RowColDouble start(startSample * -1, startLine);
     const six::RowColDouble end(endSample * -1, endLine);
-    startLine = start.row;
-    startSample = start.col;
-    endLine = end.row;
-    endSample = end.col;
+    startLine = static_cast<int>(start.row);
+    startSample = static_cast<int>(start.col);
+    endLine = static_cast<int>(end.row);
+    endSample = static_cast<int>(end.col);
 }
 
 
@@ -535,8 +535,8 @@ bool RadarCollection::validate(logging::Logger& log) const
     std::ostringstream messageBuilder;
 
     // 2.8 Waveform description consistency
-    double wfMin = waveformMin();
-    double wfMax = waveformMax();
+    const auto wfMin = waveformMin();
+    const auto wfMax = waveformMax();
 
     // 2.8.1
     if (wfMin != std::numeric_limits<double>::infinity() &&

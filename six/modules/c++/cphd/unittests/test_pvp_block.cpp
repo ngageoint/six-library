@@ -344,7 +344,7 @@ static void* call_srand()
 }
 static const auto unused_ = call_srand();
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(testPvpRequired);
     TEST_CHECK(testPvpOptional);
     TEST_CHECK(testPvpThrow);

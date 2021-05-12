@@ -207,26 +207,26 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
                 "Invalid index: " + std::to_string(imIndex)));
     }
 
-    tiff::ImageReader *imReader = mReader[imIndex];
+    tiff::ImageReader *imReader = mReader[static_cast<sys::Uint32_T>(imIndex)];
     tiff::IFD *ifd = imReader->getIFD();
 
-    size_t numRowsTotal = ifd->getImageLength();
-    size_t numColsTotal = ifd->getImageWidth();
-    size_t elemSize = ifd->getElementSize();
+    auto numRowsTotal = ifd->getImageLength();
+    auto numColsTotal = ifd->getImageWidth();
+    auto elemSize = ifd->getElementSize();
 
     if (region.getNumRows() == -1)
         region.setNumRows(numRowsTotal);
     if (region.getNumCols() == -1)
         region.setNumCols(numColsTotal);
 
-    size_t numRowsReq = region.getNumRows();
-    size_t numColsReq = region.getNumCols();
+    auto numRowsReq = region.getNumRows();
+    auto numColsReq = region.getNumCols();
 
-    size_t startRow = region.getStartRow();
-    size_t startCol = region.getStartCol();
+    auto startRow = region.getStartRow();
+    auto startCol = region.getStartCol();
 
-    size_t extentRows = startRow + numRowsReq;
-    size_t extentCols = startCol + numColsReq;
+    auto extentRows = startRow + numRowsReq;
+    auto extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
     {
@@ -244,13 +244,13 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
 
     if (buffer == nullptr)
     {
-        buffer = region.setBuffer(numRowsReq * numColsReq * elemSize).release();
+        buffer = region.setBuffer(static_cast<size_t>(numRowsReq * numColsReq * elemSize)).release();
     }
 
     if (numRowsReq == numRowsTotal && numColsReq == numColsTotal)
     {
         // one read
-        imReader->getData(reinterpret_cast<unsigned char*>(buffer), numRowsReq * numColsReq);
+        imReader->getData(reinterpret_cast<unsigned char*>(buffer), static_cast<sys::Uint32_T>(numRowsReq * numColsReq));
     }
     else
     {
@@ -264,18 +264,18 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
 
         size_t offset = 0;
         // this is not the most efficient, but it works
-        for (size_t i = 0; i < numRowsReq; ++i)
+        for (size_t i = 0; i < static_cast<size_t>(numRowsReq); ++i)
         {
             auto rowBuf_ = reinterpret_cast<unsigned char*>(rowBuf);
             // possibly skip past some cols
             if (startCol > 0)
-                imReader->getData(rowBuf_, startCol);
-            imReader->getData(rowBuf_, numColsReq);
-            memcpy(buffer + offset, rowBuf, numColsReq * elemSize);
+                imReader->getData(rowBuf_, static_cast<sys::Uint32_T>(startCol));
+            imReader->getData(rowBuf_, static_cast<sys::Uint32_T>(numColsReq));
+            memcpy(buffer + offset, rowBuf, static_cast<size_t>(numColsReq * elemSize));
             offset += numColsReq * elemSize;
             // more skipping..
             if (extentCols < numColsTotal)
-                imReader->getData(rowBuf_, numColsTotal - extentCols);
+                imReader->getData(rowBuf_, static_cast<sys::Uint32_T>(numColsTotal - extentCols));
         }
     }
     return buffer;

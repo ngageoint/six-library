@@ -151,7 +151,7 @@ TEST_CASE(valid_six_50x50)
     }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argc;
     argv0 = fs::absolute(argv[0]);
     TEST_CHECK(valid_six_50x50);
 )

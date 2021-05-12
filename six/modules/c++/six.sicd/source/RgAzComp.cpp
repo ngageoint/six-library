@@ -66,7 +66,7 @@ bool RgAzComp::validate(const GeoData& geoData,
     const Vector3& scp = geoData.scp.ecf;
 
     //2.12.1.4
-    double expectedAzSf = derivedAzSf(scpcoa, scp);
+    const auto expectedAzSf = derivedAzSf(scpcoa, scp);
     if (std::abs(azSF - expectedAzSf) > 1e-6)
     {
         messageBuilder.str("");

@@ -151,8 +151,7 @@ void setUpMetadata(Metadata& metadata)
     // We must have corners set
     for (size_t ii = 0; ii < six::Corners<double>::NUM_CORNERS; ++ii)
     {
-        metadata.sceneCoordinates.imageAreaCorners.getCorner(ii).setLat(0.0);
-        metadata.sceneCoordinates.imageAreaCorners.getCorner(ii).setLon(0.0);
+        metadata.sceneCoordinates.imageAreaCorners.getCorner(ii).clearLatLon();
     }
     metadata.channel.fxFixedCphd = true;
     metadata.channel.toaFixedCphd = false;

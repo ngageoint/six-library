@@ -35,6 +35,9 @@ public:
                         logging::Logger* log = nullptr,
                         bool ownLog = false);
 
+    ComplexXMLParser050(const ComplexXMLParser050&) = delete;
+    ComplexXMLParser050& operator=(const ComplexXMLParser050&) = delete;
+
 protected:
     virtual XMLElem convertWeightTypeToXML(const WeightType& obj,
                                            XMLElem parent = nullptr) const;

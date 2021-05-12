@@ -82,6 +82,7 @@ namespace scene
         }
     };
 
+    struct LatLonAlt;
     struct LatLon
     {
         LatLon() = default;
@@ -138,6 +139,23 @@ namespace scene
         {
             mLon = lon;
         }
+        void setLatLon(const LatLonAlt&);
+        void setLatLon(const LatLon& ll)
+        {
+            setLat(ll.getLat());
+            setLon(ll.getLon());
+        }
+        template<typename TArray2>
+        void setLatLon(const TArray2& ll)
+        {
+            setLat(ll[0]);
+            setLon(ll[1]);
+        }
+        void clearLatLon()
+        {
+            setLat(0.0);
+            setLon(0.0);
+        }        
 
         void setLatRadians(double lat)
         {
@@ -222,6 +240,11 @@ namespace scene
         double mAlt = 0.0;
     };
 
+    inline void LatLon::setLatLon(const LatLonAlt& lla)
+    {
+        setLat(lla.getLat());
+        setLon(lla.getLon());
+    }
 }
 
 namespace str

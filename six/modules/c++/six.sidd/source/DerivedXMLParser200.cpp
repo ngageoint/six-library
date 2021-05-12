@@ -155,7 +155,7 @@ DerivedData* DerivedXMLParser200::fromXML(
     std::vector<XMLElem> elements;
     exploitationFeaturesElem->getElementsByTagName("ExploitationFeatures",
                                                   elements);
-    builder.addExploitationFeatures(elements.size());
+    builder.addExploitationFeatures(static_cast<unsigned int>(elements.size()));
 
     parseProductCreationFromXML(productCreationElem, data->productCreation.get());
     parseDisplayFromXML(displayElem, *data->display);
@@ -208,7 +208,7 @@ DerivedData* DerivedXMLParser200::fromXML(
         std::vector<XMLElem> annChildren;
         annotationsElem->getElementsByTagName("Annotation", annChildren);
         data->annotations.resize(annChildren.size());
-        for (unsigned int i = 0, size = annChildren.size(); i < size; ++i)
+        for (size_t i = 0, size = annChildren.size(); i < size; ++i)
         {
             data->annotations[i].reset(new Annotation());
             parseAnnotationFromXML(annChildren[i], data->annotations[i].get());
@@ -1056,8 +1056,8 @@ XMLElem DerivedXMLParser200::convertLookupTableToXML(
                     six::Init::isDefined(table.predefined->remapMember))
                 {
                     innerOk = true;
-                    createInt("RemapFamily", table.predefined->remapFamily, predefElem);
-                    createInt("RemapMember", table.predefined->remapMember, predefElem);
+                    createInt("RemapFamily", static_cast<int>(table.predefined->remapFamily), predefElem);
+                    createInt("RemapMember", static_cast<int>(table.predefined->remapMember), predefElem);
                 }
             }
             else if (six::Init::isUndefined(table.predefined->remapFamily) &&
@@ -1271,7 +1271,7 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
 
     createStringFromEnum("AlgorithmType", adjust.algorithmType,
         adjustElem);
-    createInt("BandStatsSource", adjust.bandStatsSource, adjustElem);
+    createInt("BandStatsSource", static_cast<int>(adjust.bandStatsSource), adjustElem);
 
     validateDRAFields(adjust.algorithmType,
                       adjust.draParameters.get() ? true : false,
@@ -1321,8 +1321,8 @@ XMLElem DerivedXMLParser200::convertPredefinedFilterToXML(
     {
         ok = true;
 
-        createInt("FilterFamily", predefined.filterFamily, predefinedElem);
-        createInt("FilterMember", predefined.filterMember, predefinedElem);
+        createInt("FilterFamily", static_cast<int>(predefined.filterFamily), predefinedElem);
+        createInt("FilterMember", static_cast<int>(predefined.filterMember), predefinedElem);
     }
 
     if (!ok)
@@ -1367,17 +1367,17 @@ XMLElem DerivedXMLParser200::convertKernelToXML(
         }
 
         XMLElem filterCoef = newElement("FilterCoefficients", customElem);
-        setAttribute(filterCoef, "numRows", kernel.custom->size.row);
-        setAttribute(filterCoef, "numCols", kernel.custom->size.col);
+        setAttribute(filterCoef, "numRows", static_cast<size_t>(kernel.custom->size.row));
+        setAttribute(filterCoef, "numCols", static_cast<size_t>(kernel.custom->size.col));
 
         for (ptrdiff_t row = 0, idx = 0; row < kernel.custom->size.row; ++row)
         {
             for (ptrdiff_t col = 0; col < kernel.custom->size.col; ++col, ++idx)
             {
-                XMLElem coefElem = createDouble("Coef", kernel.custom->filterCoef[idx],
+                XMLElem coefElem = createDouble("Coef", kernel.custom->filterCoef[static_cast<size_t>(idx)],
                     filterCoef);
-                setAttribute(coefElem, "row", row);
-                setAttribute(coefElem, "col", col);
+                setAttribute(coefElem, "row", static_cast<size_t>(row));
+                setAttribute(coefElem, "col", static_cast<size_t>(col));
             }
         }
     }
@@ -1497,8 +1497,8 @@ XMLElem DerivedXMLParser200::convertCompressionToXML(
 void DerivedXMLParser200::convertJ2KToXML(const J2KCompression& j2k,
                                           XMLElem& parent) const
 {
-    createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
-    createInt("NumBands", j2k.numBands, parent);
+    createInt("NumWaveletLevels", static_cast<int>(j2k.numWaveletLevels), parent);
+    createInt("NumBands", static_cast<int>(j2k.numBands), parent);
 
     size_t numLayers = j2k.layerInfo.size();
     XMLElem layerInfoElem = newElement("LayerInfo", parent);
@@ -1774,10 +1774,10 @@ XMLElem DerivedXMLParser200::convertDisplayToXML(
 
     createString("PixelType", display.pixelType, displayElem);
 
-    createInt("NumBands", display.numBands, displayElem);
+    createInt("NumBands", static_cast<int>(display.numBands), displayElem);
     if (six::Init::isDefined(display.defaultBandDisplay))
     {
-        createInt("DefaultBandDisplay", display.defaultBandDisplay, displayElem);
+        createInt("DefaultBandDisplay", static_cast<int>(display.defaultBandDisplay), displayElem);
     }
 
     // NonInteractiveProcessing
@@ -1873,17 +1873,17 @@ XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
                  geoposElem);
     createString("SoundingDatum", ded.geopositioning.soundingDatum,
                  geoposElem);
-    createInt("FalseOrigin", ded.geopositioning.falseOrigin, geoposElem);
+    createInt("FalseOrigin", static_cast<int>(ded.geopositioning.falseOrigin), geoposElem);
     if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
     {
         createInt("UTMGridZoneNumber",
-                  ded.geopositioning.utmGridZoneNumber,
+                  static_cast<int>(ded.geopositioning.utmGridZoneNumber),
                   geoposElem);
     }
 
     // PositionalAccuracy
     XMLElem posAccElem = newElement("PositionalAccuracy", dedElem);
-    createInt("NumRegions", ded.positionalAccuracy.numRegions, posAccElem);
+    createInt("NumRegions", static_cast<int>(ded.positionalAccuracy.numRegions), posAccElem);
 
     XMLElem absAccElem = newElement("AbsoluteAccuracy", posAccElem);
     createDouble("Horizontal",
@@ -1903,7 +1903,7 @@ XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
 
     if (six::Init::isDefined(ded.nullValue))
     {
-        createInt("NullValue", ded.nullValue, dedElem);
+        createInt("NullValue", static_cast<int>(ded.nullValue), dedElem);
     }
 
     return dedElem;

@@ -86,6 +86,15 @@ scene::SideOfTrack Utilities::getSideOfTrack(const DerivedData* derived)
     return scene::SceneGeometry(arpVel, arpPos, refPt).getSideOfTrack();
 }
 
+static six::Vector3 latLonToECEF(const six::sidd::PolynomialProjection& projection,
+    double atX, double atY)
+{
+    scene::LatLonAlt lla;
+    lla.setLat(projection.rowColToLat(atX, atY));
+    lla.setLon(projection.rowColToLon(atX, atY));
+   return scene::Utilities::latLonToECEF(lla);
+}
+
 mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
         const DerivedData* derived)
 {
@@ -107,23 +116,12 @@ mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
             static_cast<const six::sidd::PolynomialProjection*>(
                         derived->measurement->projection.get());
 
-        double cR = projection->referencePoint.rowCol.row;
-        double cC = projection->referencePoint.rowCol.col;
+        const auto cR = projection->referencePoint.rowCol.row;
+        const auto cC = projection->referencePoint.rowCol.col;
 
-        scene::LatLonAlt centerLLA;
-        centerLLA.setLat(projection->rowColToLat(cR, cC));
-        centerLLA.setLon(projection->rowColToLon(cR, cC));
-        six::Vector3 centerEcef = scene::Utilities::latLonToECEF(centerLLA);
-
-        scene::LatLonAlt downLLA;
-        downLLA.setLat(projection->rowColToLat(cR + 1, cC));
-        downLLA.setLon(projection->rowColToLon(cR + 1, cC));
-        six::Vector3 downEcef = scene::Utilities::latLonToECEF(downLLA);
-
-        scene::LatLonAlt rightLLA;
-        rightLLA.setLat(projection->rowColToLat(cR, cC + 1));
-        rightLLA.setLon(projection->rowColToLon(cR, cC + 1));
-        six::Vector3 rightEcef = scene::Utilities::latLonToECEF(rightLLA);
+        const six::Vector3 centerEcef = latLonToECEF(*projection, cR, cC);
+        const six::Vector3 downEcef = latLonToECEF(*projection, cR + 1, cC);
+        const six::Vector3 rightEcef = latLonToECEF(*projection, cR, cC + 1);
 
         rowVec = downEcef - centerEcef;
         rowVec.normalize();
