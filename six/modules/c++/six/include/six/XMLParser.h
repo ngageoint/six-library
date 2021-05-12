@@ -22,8 +22,10 @@
 #pragma once
 
 #include <string>
+#include <type_traits>
 
 #include <std/optional>
+#include <import/gsl.h>
 
 #include <six/Types.h>
 #include <six/Init.h>
@@ -110,12 +112,17 @@ protected:
                             parent);
     }
 
-    XMLElem createInt(const std::string& name, const std::string& uri,
-           int p = 0, XMLElem parent = nullptr) const;
-
-    XMLElem createInt(const std::string& name,
-            const std::string& uri, const std::string& p = "",
-            XMLElem parent = nullptr) const;
+    // Allow createInt() to be called with anything that can be cast to an "int", eliminates a bunch of static_casts<>s.
+    template <typename T, typename enable = void>
+    XMLElem createInt(const std::string& name, const std::string& uri, const T& p = "", XMLElem parent = nullptr) const
+    {
+        return createInt_(name, uri, p, parent);
+    }
+    template <typename T, typename std::enable_if<std::is_integral<T>::value>::type>
+    XMLElem createInt(const std::string& name, const std::string& uri, const T& p = 0, XMLElem parent = nullptr) const
+    {
+        return createInt_(name, uri, gsl::narrow<int>(p), parent);
+    }
 
     XMLElem createDouble(const std::string& name,
             const std::string& uri, double p = 0, XMLElem parent = nullptr) const;
@@ -232,10 +239,10 @@ protected:
     static XMLElem require(XMLElem element, const std::string& name);
 
 private:
-    XMLElem createString_(const std::string& name,
-        const std::string& p, XMLElem parent) const;
-    static void setAttribute_(XMLElem e, const std::string& name,
-            const std::string& v, const std::string& uri);
+    XMLElem createInt_(const std::string& name, const std::string& uri, int p, XMLElem parent) const;
+    XMLElem createInt_(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent) const;
+    XMLElem createString_(const std::string& name, const std::string& p, XMLElem parent) const;
+    static void setAttribute_(XMLElem e, const std::string& name, const std::string& v, const std::string& uri);
     void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;
 
     const std::string mDefaultURI;

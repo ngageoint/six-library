@@ -252,17 +252,17 @@ XMLElem CPHDXMLParser::toXML(const SceneCoordinates& sceneCoords, XMLElem parent
         XMLElem iaxExtentXML = newElement("IAXExtent", imageGridXML);
         createDouble("LineSpacing", sceneCoords.imageGrid->xExtent.lineSpacing, iaxExtentXML);
         createInt("FirstLine", sceneCoords.imageGrid->xExtent.firstLine, iaxExtentXML);
-        createInt("NumLines", static_cast<int>(sceneCoords.imageGrid->xExtent.numLines), iaxExtentXML);
+        createInt("NumLines", sceneCoords.imageGrid->xExtent.numLines, iaxExtentXML);
 
         XMLElem iayExtentXML = newElement("IAYExtent", imageGridXML);
         createDouble("SampleSpacing", sceneCoords.imageGrid->yExtent.sampleSpacing, iayExtentXML);
         createInt("FirstSample", sceneCoords.imageGrid->yExtent.firstSample, iayExtentXML);
-        createInt("NumSamples", static_cast<int>(sceneCoords.imageGrid->yExtent.numSamples), iayExtentXML);
+        createInt("NumSamples", sceneCoords.imageGrid->yExtent.numSamples, iayExtentXML);
 
         if (!sceneCoords.imageGrid->segments.empty())
         {
             XMLElem segmentListXML = newElement("SegmentList", imageGridXML);
-            createInt("NumSegments", static_cast<int>(sceneCoords.imageGrid->segments.size()), segmentListXML);
+            createInt("NumSegments", sceneCoords.imageGrid->segments.size(), segmentListXML);
 
             for (size_t ii = 0; ii < sceneCoords.imageGrid->segments.size(); ++ii)
             {
@@ -295,8 +295,8 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
 {
     XMLElem dataXML = newElement("Data", parent);
     createString("SignalArrayFormat", data.signalArrayFormat, dataXML);
-    createInt("NumBytesPVP", static_cast<int>(data.numBytesPVP), dataXML);
-    createInt("NumCPHDChannels", static_cast<int>(data.channels.size()), dataXML);
+    createInt("NumBytesPVP", data.numBytesPVP, dataXML);
+    createInt("NumCPHDChannels", data.channels.size(), dataXML);
     if (!six::Init::isUndefined(data.signalCompressionID))
     {
         createString("SignalCompressionID", data.signalCompressionID, dataXML);
@@ -306,24 +306,24 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
     {
         XMLElem channelXML = newElement("Channel", dataXML);
         createString("Identifier", data.channels[ii].identifier, channelXML);
-        createInt("NumVectors", static_cast<int>(data.channels[ii].numVectors), channelXML);
-        createInt("NumSamples", static_cast<int>(data.channels[ii].numSamples), channelXML);
-        createInt("SignalArrayByteOffset", static_cast<int>(data.channels[ii].signalArrayByteOffset), channelXML);
-        createInt("PVPArrayByteOffset", static_cast<int>(data.channels[ii].pvpArrayByteOffset), channelXML);
+        createInt("NumVectors", data.channels[ii].numVectors, channelXML);
+        createInt("NumSamples", data.channels[ii].numSamples, channelXML);
+        createInt("SignalArrayByteOffset", data.channels[ii].signalArrayByteOffset, channelXML);
+        createInt("PVPArrayByteOffset", data.channels[ii].pvpArrayByteOffset, channelXML);
         if(!six::Init::isUndefined(data.channels[ii].compressedSignalSize))
         {
-            createInt("CompressedSignalSize", static_cast<int>(data.channels[ii].compressedSignalSize), channelXML);
+            createInt("CompressedSignalSize", data.channels[ii].compressedSignalSize, channelXML);
         }
     }
-    createInt("NumSupportArrays", static_cast<int>(data.supportArrayMap.size()), dataXML);
+    createInt("NumSupportArrays", data.supportArrayMap.size(), dataXML);
     for (const auto& entry : data.supportArrayMap)
     {
         XMLElem supportArrayXML = newElement("SupportArray", dataXML);
         createString("Identifier", entry.second.identifier, supportArrayXML);
-        createInt("NumRows", static_cast<int>(entry.second.numRows), supportArrayXML);
-        createInt("NumCols", static_cast<int>(entry.second.numCols), supportArrayXML);
-        createInt("BytesPerElement", static_cast<int>(entry.second.bytesPerElement), supportArrayXML);
-        createInt("ArrayByteOffset", static_cast<int>(entry.second.arrayByteOffset), supportArrayXML);
+        createInt("NumRows", entry.second.numRows, supportArrayXML);
+        createInt("NumCols", entry.second.numCols, supportArrayXML);
+        createInt("BytesPerElement", entry.second.bytesPerElement, supportArrayXML);
+        createInt("ArrayByteOffset", entry.second.arrayByteOffset, supportArrayXML);
     }
     return dataXML;
 }
@@ -340,7 +340,7 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
     {
         XMLElem parametersXML = newElement("Parameters", channelXML);
         createString("Identifier", channel.parameters[ii].identifier, parametersXML);
-        createInt("RefVectorIndex", static_cast<int>(channel.parameters[ii].refVectorIndex), parametersXML);
+        createInt("RefVectorIndex", channel.parameters[ii].refVectorIndex, parametersXML);
         createBooleanType("FXFixed", channel.parameters[ii].fxFixed, parametersXML);
         createBooleanType("TOAFixed", channel.parameters[ii].toaFixed, parametersXML);
         createBooleanType("SRPFixed", channel.parameters[ii].srpFixed, parametersXML);
@@ -503,7 +503,7 @@ XMLElem CPHDXMLParser::toXML(const SupportArray& supports, XMLElem parent)
         for (size_t ii = 0; ii < supports.iazArray.size(); ++ii)
         {
             XMLElem iazArrayXML = newElement("IAZArray", supportsXML);
-            createInt("Identifier", static_cast<int>(supports.iazArray[ii].getIdentifier()), iazArrayXML);
+            createInt("Identifier", supports.iazArray[ii].getIdentifier(), iazArrayXML);
             createString("ElementFormat", supports.iazArray[ii].elementFormat, iazArrayXML);
             createDouble("X0", supports.iazArray[ii].x0, iazArrayXML);
             createDouble("Y0", supports.iazArray[ii].y0, iazArrayXML);
@@ -516,7 +516,7 @@ XMLElem CPHDXMLParser::toXML(const SupportArray& supports, XMLElem parent)
         for (size_t ii = 0; ii < supports.antGainPhase.size(); ++ii)
         {
             XMLElem antGainPhaseXML = newElement("AntGainPhase", supportsXML);
-            createInt("Identifier", static_cast<int>(supports.antGainPhase[ii].getIdentifier()), antGainPhaseXML);
+            createInt("Identifier", supports.antGainPhase[ii].getIdentifier(), antGainPhaseXML);
             createString("ElementFormat", supports.antGainPhase[ii].elementFormat, antGainPhaseXML);
             createDouble("X0", supports.antGainPhase[ii].x0, antGainPhaseXML);
             createDouble("Y0", supports.antGainPhase[ii].y0, antGainPhaseXML);
@@ -547,7 +547,7 @@ XMLElem CPHDXMLParser::toXML(const SupportArray& supports, XMLElem parent)
 XMLElem CPHDXMLParser::toXML(const Dwell& dwell, XMLElem parent)
 {
     XMLElem dwellXML = newElement("Dwell", parent);
-    createInt("NumCODTimes", static_cast<int>(dwell.cod.size()), dwellXML);
+    createInt("NumCODTimes", dwell.cod.size(), dwellXML);
 
     for (size_t ii = 0; ii < dwell.cod.size(); ++ii)
     {
@@ -555,7 +555,7 @@ XMLElem CPHDXMLParser::toXML(const Dwell& dwell, XMLElem parent)
         createString("Identifier", dwell.cod[ii].identifier, codTimeXML);
         mCommon.createPoly2D("CODTimePoly", dwell.cod[ii].codTimePoly, codTimeXML);
     }
-    createInt("NumDwellTimes", static_cast<int>(dwell.dtime.size()), dwellXML);
+    createInt("NumDwellTimes", dwell.dtime.size(), dwellXML);
     for (size_t ii = 0; ii < dwell.dtime.size(); ++ii)
     {
         XMLElem dwellTimeXML = newElement("DwellTime", dwellXML);
@@ -640,9 +640,9 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
 XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
 {
     XMLElem antennaXML = newElement("Antenna", parent);
-    createInt("NumACFs", static_cast<int>(antenna.antCoordFrame.size()), antennaXML);
-    createInt("NumAPCs", static_cast<int>(antenna.antPhaseCenter.size()), antennaXML);
-    createInt("NumAntPats", static_cast<int>(antenna.antPattern.size()), antennaXML);
+    createInt("NumACFs", antenna.antCoordFrame.size(), antennaXML);
+    createInt("NumAPCs", antenna.antPhaseCenter.size(), antennaXML);
+    createInt("NumAntPats", antenna.antPattern.size(), antennaXML);
     for (size_t ii = 0; ii < antenna.antCoordFrame.size(); ++ii)
     {
         XMLElem antCoordFrameXML = newElement("AntCoordFrame", antennaXML);
@@ -701,7 +701,7 @@ XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
 XMLElem CPHDXMLParser::toXML(const TxRcv& txRcv, XMLElem parent)
 {
     XMLElem txRcvXML = newElement("TxRcv", parent);
-    createInt("NumTxWFs", static_cast<int>(txRcv.txWFParameters.size()), txRcvXML);
+    createInt("NumTxWFs", txRcv.txWFParameters.size(), txRcvXML);
     for (size_t ii = 0; ii < txRcv.txWFParameters.size(); ++ii)
     {
         XMLElem txWFParamsXML = newElement("TxWFParameters", txRcvXML);
@@ -713,7 +713,7 @@ XMLElem CPHDXMLParser::toXML(const TxRcv& txRcv, XMLElem parent)
         createString("Polarization", txRcv.txWFParameters[ii].polarization, txWFParamsXML);
         createOptionalDouble("Power", txRcv.txWFParameters[ii].power, txWFParamsXML);
     }
-    createInt("NumRcvs", static_cast<int>(txRcv.rcvParameters.size()), txRcvXML);
+    createInt("NumRcvs", txRcv.rcvParameters.size(), txRcvXML);
     for (size_t ii = 0; ii < txRcv.rcvParameters.size(); ++ii)
     {
         XMLElem rcvParamsXML = newElement("RcvParameters", txRcvXML);
@@ -1815,8 +1815,8 @@ XMLElem CPHDXMLParser::createPVPType(const std::string& name,
                                       XMLElem parent) const
 {
     XMLElem pvpXML = newElement(name, parent);
-    createInt("Offset", static_cast<int>(p.getOffset()), pvpXML);
-    createInt("Size", static_cast<int>(p.getSize()), pvpXML);
+    createInt("Offset", p.getOffset(), pvpXML);
+    createInt("Size", p.getSize(), pvpXML);
     createString("Format", p.getFormat(), pvpXML);
     return pvpXML;
 }
@@ -1827,8 +1827,8 @@ XMLElem CPHDXMLParser::createAPVPType(const std::string& name,
 {
     XMLElem apvpXML = newElement(name, parent);
     createString("Name", p.getName(), apvpXML);
-    createInt("Offset", static_cast<int>(p.getOffset()), apvpXML);
-    createInt("Size", static_cast<int>(p.getSize()), apvpXML);
+    createInt("Offset", p.getOffset(), apvpXML);
+    createInt("Size", p.getSize(), apvpXML);
     createString("Format", p.getFormat(), apvpXML);
     return apvpXML;
 }

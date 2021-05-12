@@ -167,14 +167,14 @@ static std::string toString(const std::string& name, T p, const xml::lite::Eleme
     }
 }
 
-XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
+XMLElem XMLParser::createInt_(const std::string& name, const std::string& uri,
         int p, XMLElem parent) const
 {
     const auto elementValue = toString(name, p, parent);
     return createInt(name, uri, elementValue, parent);
 }
 
-XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
+XMLElem XMLParser::createInt_(const std::string& name, const std::string& uri,
         const std::string& p, XMLElem parent) const
 {
     XMLElem const elem = newElement(name, uri, p, parent);
