@@ -239,7 +239,7 @@ void DerivedXMLParser::setAttributeIfNonNull(XMLElem element,
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const XMLElem informationElem,
+        const xml::lite::Element* informationElem,
         ProcessorInformation* processorInformation) const
 {
     parseString(getFirstAndOnly(informationElem, "Application"),
@@ -258,7 +258,7 @@ void DerivedXMLParser::parseProductCreationFromXML(
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const XMLElem productCreationElem,
+        const xml::lite::Element* productCreationElem,
         ProductCreation* productCreation) const
 {
     parseProductCreationFromXML(
@@ -287,7 +287,7 @@ void DerivedXMLParser::parseProductCreationFromXML(
 }
 
 void DerivedXMLParser::parseDerivedClassificationFromXML(
-    const XMLElem classificationElem,
+    const xml::lite::Element* classificationElem,
     DerivedClassification& classification) const
 {
     // optional to unbounded
@@ -386,7 +386,7 @@ void DerivedXMLParser::parseDerivedClassificationFromXML(
 
 
 Remap* DerivedXMLParser::parseRemapChoiceFromXML(
-        const XMLElem remapInformationElem) const
+        const xml::lite::Element* remapInformationElem) const
 {
     if (remapInformationElem)
     {
@@ -468,10 +468,10 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
     }
 }
 
-mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
+mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const xml::lite::Element* elem) const
 {
     //get size attribute
-    auto size = str::toType<size_t>(elem->attribute("size"));
+    const auto size = str::toType<size_t>(const_cast<XMLElem>(elem)->attribute("size"));
 
     std::string lutStr = "";
     parseString(elem, lutStr);
@@ -488,7 +488,7 @@ mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
 }
 
 void DerivedXMLParser::parseDisplayFromXML(
-        const XMLElem displayElem,
+        const xml::lite::Element* displayElem,
         Display* display) const
 {
     display->pixelType
@@ -542,7 +542,7 @@ void DerivedXMLParser::parseDisplayFromXML(
 }
 
 XMLElem DerivedXMLParser::parsePolynomialProjection(
-        XMLElem measurementElem,
+        const xml::lite::Element* measurementElem,
         Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "PolynomialProjection");
@@ -571,7 +571,7 @@ XMLElem DerivedXMLParser::parsePolynomialProjection(
 }
 
 XMLElem DerivedXMLParser::parseGeographicProjection(
-        XMLElem measurementElem,
+        const xml::lite::Element* measurementElem,
         Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "GeographicProjection");
@@ -589,7 +589,7 @@ XMLElem DerivedXMLParser::parseGeographicProjection(
 }
 
 XMLElem DerivedXMLParser::parsePlaneProjection(
-        XMLElem measurementElem,
+    const xml::lite::Element* measurementElem,
     Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "PlaneProjection");
@@ -614,7 +614,7 @@ XMLElem DerivedXMLParser::parsePlaneProjection(
 }
 
 XMLElem DerivedXMLParser::parseCylindricalProjection(
-    XMLElem measurementElem,
+    const xml::lite::Element* measurementElem,
     Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "CylindricalProjection");
@@ -641,7 +641,7 @@ XMLElem DerivedXMLParser::parseCylindricalProjection(
 
 // This function ASSUMES that the measurement projection has already been set!
 void DerivedXMLParser::parseMeasurementFromXML(
-        const XMLElem measurementElem,
+        const xml::lite::Element* measurementElem,
         Measurement* measurement) const
 {
     XMLElem projElem = nullptr;
@@ -686,7 +686,7 @@ void DerivedXMLParser::parseMeasurementFromXML(
 }
 
 void DerivedXMLParser::parseExploitationFeaturesFromXML(
-        const XMLElem exploitationFeaturesElem,
+        const xml::lite::Element* exploitationFeaturesElem,
         ExploitationFeatures* exploitationFeatures) const
 {
     XMLElem tmpElem;
@@ -1346,7 +1346,7 @@ XMLElem DerivedXMLParser::convertDownstreamReprocessingToXML(
 }
 
 void DerivedXMLParser::parseProcessingModuleFromXML(
-        const XMLElem procElem,
+        const xml::lite::Element* procElem,
         ProcessingModule* procMod) const
 {
     common().parseParameter(getFirstAndOnly(procElem, "ModuleName"),
@@ -1366,7 +1366,7 @@ void DerivedXMLParser::parseProcessingModuleFromXML(
 }
 
 void DerivedXMLParser::parseProductProcessingFromXML(
-        const XMLElem elem,
+        const xml::lite::Element* elem,
         ProductProcessing* productProcessing) const
 {
     std::vector<XMLElem> procModuleElem;
@@ -1382,7 +1382,7 @@ void DerivedXMLParser::parseProductProcessingFromXML(
 }
 
 void DerivedXMLParser::parseDownstreamReprocessingFromXML(
-        const XMLElem elem,
+        const xml::lite::Element* elem,
         DownstreamReprocessing* downstreamReproc) const
 {
     XMLElem geometricChipElem = getOptional(elem, "GeometricChip");
@@ -1435,7 +1435,7 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
 }
 
 void DerivedXMLParser::parseGeographicCoordinateSystemFromXML(
-        const XMLElem coorSysElem,
+        const xml::lite::Element* coorSysElem,
         SFAGeographicCoordinateSystem* coordSys) const
 {
     parseString(getFirstAndOnly(coorSysElem, "Csname"), coordSys->csName);
@@ -1457,7 +1457,7 @@ void DerivedXMLParser::parseGeographicCoordinateSystemFromXML(
 }
 
 void DerivedXMLParser::parseAnnotationFromXML(
-        const XMLElem elem,
+        const xml::lite::Element* elem,
         Annotation *a) const
 {
     parseString(getFirstAndOnly(elem, "Identifier"), a->identifier);
@@ -1597,7 +1597,7 @@ void DerivedXMLParser::parseAnnotationFromXML(
     }
 }
 
-void DerivedXMLParser::parseDatum(const XMLElem datumElem, SFADatum& datum) const
+void DerivedXMLParser::parseDatum(const xml::lite::Element* datumElem, SFADatum& datum) const
 {
     XMLElem spheroidElem = getFirstAndOnly(datumElem, "Spheroid");
 
@@ -1735,7 +1735,7 @@ XMLElem DerivedXMLParser::convertAnnotationToXML(
     return annElem;
 }
 
-void DerivedXMLParser::parseSFAGeometryFromXML(const XMLElem elem, SFAGeometry *g) const
+void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, SFAGeometry *g) const
 {
     std::string geoType = g->getType();
     if (geoType == SFAPoint::TYPE_NAME)

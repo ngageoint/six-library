@@ -398,6 +398,16 @@ void XMLParser::parseString(const xml::lite::Element* element, std::string& valu
     value = element->getCharacterData();
 }
 
+bool  XMLParser::parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const
+{
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
+    {
+        parseString(element, value);
+        return true;
+    }
+    return false;
+}
+
 void XMLParser::parseBooleanType(const xml::lite::Element* element, BooleanType& value) const
 {
     assert(element != nullptr);

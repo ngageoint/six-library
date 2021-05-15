@@ -55,9 +55,9 @@ protected:
     static mem::auto_ptr<xml::lite::Document>
             readXML(const std::string& xmlPathname);
 
-    XMLElem findUniqueElement(const XMLElem root,
+    XMLElem findUniqueElement(const xml::lite::Element* root,
             const std::string& xmlPath) const;
-    std::vector<XMLElem> findElements(const XMLElem root,
+    std::vector<XMLElem> findElements(const xml::lite::Element* root,
             const std::string& xmlPath) const;
     size_t findIndex(const std::vector<XMLElem>& elements,
             const std::string& xmlPath, const std::string& value) const;
@@ -67,13 +67,13 @@ protected:
     size_t findIndexByAttribute(const std::vector<XMLElem>& elements,
             const std::string& attribute, const std::string& value) const;
 
-    std::string parseStringFromPath(const XMLElem root,
+    std::string parseStringFromPath(const xml::lite::Element* root,
             const std::string& xmlPath) const;
-    double parseDoubleFromPath(const XMLElem root,
+    double parseDoubleFromPath(const xml::lite::Element* root,
             const std::string& xmlPath) const;
-    size_t parseUIntFromPath(const XMLElem root,
+    size_t parseUIntFromPath(const xml::lite::Element* root,
             const std::string& xmlPath) const;
-    six::DateTime parseDateTimeFromPath(const XMLElem root,
+    six::DateTime parseDateTimeFromPath(const xml::lite::Element* root,
             const std::string& xmlPath) const;
 
     double sumOverElements(const std::vector<XMLElem>& elements,

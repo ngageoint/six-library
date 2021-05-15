@@ -224,6 +224,8 @@ protected:
     void parseString(const xml::lite::Element* element, std::string& value) const;
     void parseBooleanType(const xml::lite::Element* element, BooleanType& value) const;
 
+    bool parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const;
+
     void parseDateTime(const xml::lite::Element* element, DateTime& value) const;
 
     static void setAttribute(XMLElem e, const std::string& name,

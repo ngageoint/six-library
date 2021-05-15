@@ -526,7 +526,7 @@ mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
     return cphd03;
 }
 
-void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
+void CPHDXMLControl::fromXML(const xml::lite::Element* dataXML, Data& data)
 {
     data.sampleType = cphd::SampleType(getFirstAndOnly(dataXML, "SampleType")->getCharacterData());
 
@@ -552,7 +552,7 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
+void CPHDXMLControl::fromXML(const xml::lite::Element* globalXML, Global& global)
 {
     XMLElem tmpElem = nullptr;
 
@@ -732,7 +732,7 @@ void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem channelXML, Channel& channel)
+void CPHDXMLControl::fromXML(const xml::lite::Element* channelXML, Channel& channel)
 {
     std::vector<XMLElem> chanParametersXML;
     channelXML->getElementsByTagName("Parameters", chanParametersXML);
@@ -775,7 +775,7 @@ void CPHDXMLControl::fromXML(const XMLElem channelXML, Channel& channel)
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem srpXML, SRP& srp)
+void CPHDXMLControl::fromXML(const xml::lite::Element* srpXML, SRP& srp)
 {
 #if ENFORCESPEC
     srp.srpType = cphd::SRPType(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
@@ -854,7 +854,7 @@ void CPHDXMLControl::fromXML(const XMLElem srpXML, SRP& srp)
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem vectorParametersXML,
+void CPHDXMLControl::fromXML(const xml::lite::Element* vectorParametersXML,
                              VectorParameters& vp)
 {
     parseInt(getFirstAndOnly(vectorParametersXML, "TxTime"), vp.txTime);
@@ -917,7 +917,7 @@ void CPHDXMLControl::fromXML(const XMLElem vectorParametersXML,
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem antennaParamsXML,
+void CPHDXMLControl::fromXML(const xml::lite::Element* antennaParamsXML,
                              AntennaParameters& params)
 {
     mCommon.parsePolyXYZ(getFirstAndOnly(antennaParamsXML, "XAxisPoly"),
@@ -989,7 +989,7 @@ void CPHDXMLControl::fromXML(const XMLElem antennaParamsXML,
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem antennaXML, Antenna& antenna)
+void CPHDXMLControl::fromXML(const xml::lite::Element* antennaXML, Antenna& antenna)
 {
     parseInt(getFirstAndOnly(antennaXML, "NumTxAnt"),  antenna.numTxAnt);
     parseInt(getFirstAndOnly(antennaXML, "NumRcvAnt"), antenna.numRcvAnt);

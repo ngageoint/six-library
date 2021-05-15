@@ -64,7 +64,7 @@ XMLElem ComplexXMLParser040::convertRMATToXML(
     return rmatXML;
 }
 
-void ComplexXMLParser040::parseRMATFromXML(const XMLElem rmatElem,
+void ComplexXMLParser040::parseRMATFromXML(const xml::lite::Element* rmatElem,
                                            RMAT* rmat) const
 {
     parseDouble(getFirstAndOnly(rmatElem, "RMRefTime"), rmat->refTime);
@@ -108,7 +108,7 @@ void ComplexXMLParser040::convertDRateSFPolyToXML(
 }
 
 void ComplexXMLParser040::parseDRateSFPolyFromXML(
-    const XMLElem incaElem, INCA* inca) const
+    const xml::lite::Element* incaElem, INCA* inca) const
 {
     //! Poly1D in 0.4.0
     Poly1D dRateSFPoly;
