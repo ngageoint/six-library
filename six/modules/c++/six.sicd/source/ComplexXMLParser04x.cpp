@@ -447,14 +447,9 @@ void ComplexXMLParser04x::parseRadarCollectionFromXML(
     const xml::lite::Element* radarCollectionXML,
     RadarCollection* radarCollection) const
 {
-    XMLElem tmpElem = getOptional(radarCollectionXML, "RefFreqIndex");
-    if (tmpElem)
-    {
-        //optional
-        parseInt(tmpElem, radarCollection->refFrequencyIndex);
-    }
+    parseOptionalInt(radarCollectionXML, "RefFreqIndex", radarCollection->refFrequencyIndex);
 
-    tmpElem = getFirstAndOnly(radarCollectionXML, "TxFrequency");
+    XMLElem tmpElem = getFirstAndOnly(radarCollectionXML, "TxFrequency");
     parseDouble(getFirstAndOnly(tmpElem, "Min"),
                 radarCollection->txFrequencyMin);
     parseDouble(getFirstAndOnly(tmpElem, "Max"),
@@ -504,13 +499,9 @@ void ComplexXMLParser04x::parseRadarCollectionFromXML(
         ChannelParameters* const chanParams =
             radarCollection->rcvChannels.back().get();
 
-        XMLElem childXML = getOptional(*it, "RcvAPCIndex");
-        if (childXML)
-        {
-            parseInt(childXML, chanParams->rcvAPCIndex);
-        }
+         parseOptionalInt(*it, "RcvAPCIndex", chanParams->rcvAPCIndex);
 
-        childXML = getOptional(*it, "TxRcvPolarization");
+         XMLElem childXML = getOptional(*it, "TxRcvPolarization");
         if (childXML)
         {
             //optional

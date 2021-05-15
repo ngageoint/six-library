@@ -519,14 +519,8 @@ void DerivedXMLParser100::parseGeographicCoverageFromXML(
                     countryCodes.push_back((*it)->getCharacterData());
         }
 
-        // optional
-        XMLElem securityInformationElem = getOptional(geographicInfoElem,
-                                                     "SecurityInfo");
-        if (securityInformationElem)
-        {
-            parseString(securityInformationElem, geographicCoverage->
-                    geographicInformation->securityInformation);
-        }
+        parseOptionalString(geographicInfoElem, "SecurityInfo",
+            geographicCoverage->geographicInformation->securityInformation);
 
         // optional to unbounded
         common().parseParameters(geographicInfoElem, "GeographicInfoExtension",
@@ -755,12 +749,7 @@ void DerivedXMLParser100::parseProductFromXML(
     common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
                                product.resolution);
 
-    // optional
-    XMLElem tmpElem = getOptional(productElem, "North");
-    if (tmpElem)
-    {
-        parseDouble(tmpElem, product.north);
-    }
+    parseOptionalDouble(productElem, "North", product.north);
 
     // optional to unbounded
     common().parseParameters(productElem, "Extension",
