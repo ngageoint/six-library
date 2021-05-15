@@ -225,6 +225,16 @@ protected:
     void parseBooleanType(const xml::lite::Element* element, BooleanType& value) const;
 
     bool parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const;
+    template <typename T>
+    bool parseOptionalInt(const xml::lite::Element* parent, const std::string& tag, T& value) const
+    {
+        if (const xml::lite::Element* const element = getOptional(parent, tag))
+        {
+            parseInt(element, value);
+            return true;
+        }
+        return false;
+    }
 
     void parseDateTime(const xml::lite::Element* element, DateTime& value) const;
 

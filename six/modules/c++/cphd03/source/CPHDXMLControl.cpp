@@ -559,12 +559,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* globalXML, Global& global
     global.domainType = cphd::DomainType(getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
     global.phaseSGN   = cphd::PhaseSGN(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
 
-    tmpElem = getOptional(globalXML, "RefFreqIndex");
-    if (tmpElem)
-    {
-        //optional
-        parseInt(tmpElem, global.refFrequencyIndex);
-    }
+    parseOptionalInt(globalXML, "RefFreqIndex", global.refFrequencyIndex);
 
     parseDateTime(getFirstAndOnly(globalXML, "CollectStart"), global.collectStart);
 
@@ -753,23 +748,9 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* channelXML, Channel& chan
         parseDouble(getFirstAndOnly(*it, "BWSavedNom"), chanParam.bwSavedNom);
         parseDouble(getFirstAndOnly(*it, "TOASavedNom"), chanParam.toaSavedNom);
 
-        XMLElem tmpElem = getOptional(*it, "TxAnt_Index");
-        if (tmpElem)
-        {
-            parseInt(tmpElem, chanParam.txAntIndex);
-        }
-
-        tmpElem = getOptional(*it, "RcvAnt_Index");
-        if (tmpElem)
-        {
-            parseInt(tmpElem, chanParam.rcvAntIndex);
-        }
-
-        tmpElem = getOptional(*it, "TWAnt_Index");
-        if (tmpElem)
-        {
-            parseInt(tmpElem, chanParam.twAntIndex);
-        }
+        parseOptionalInt(*it, "TxAnt_Index", chanParam.txAntIndex);
+        parseOptionalInt(*it, "RcvAnt_Index", chanParam.rcvAntIndex);
+        parseOptionalInt(*it, "TWAnt_Index", chanParam.twAntIndex);
 
         channel.parameters.push_back(chanParam);
     }
@@ -862,25 +843,13 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* vectorParametersXML,
     parseInt(getFirstAndOnly(vectorParametersXML, "RcvTime"), vp.rcvTime);
     parseInt(getFirstAndOnly(vectorParametersXML, "RcvPos"), vp.rcvPos);
 
-    XMLElem SRPTimeXML = getOptional(vectorParametersXML, "SRPTime");
-    if (SRPTimeXML)
-    {
-        parseInt(SRPTimeXML, vp.srpTime);
-    }
+    parseOptionalInt(vectorParametersXML, "SRPTime", vp.srpTime);
 
     parseInt(getFirstAndOnly(vectorParametersXML, "SRPPos"), vp.srpPos);
 
-    XMLElem AmpSFXML = getOptional(vectorParametersXML, "AmpSF");
-    if (AmpSFXML)
-    {
-        parseInt(AmpSFXML, vp.ampSF);
-    }
+    parseOptionalInt(vectorParametersXML, "AmpSF", vp.ampSF);
 
-    XMLElem TropoSRPXML = getOptional(vectorParametersXML, "TropoSRP");
-    if (TropoSRPXML)
-    {
-        parseInt(TropoSRPXML, vp.tropoSRP);
-    }
+    parseOptionalInt(vectorParametersXML, "TropoSRP", vp.tropoSRP);
 
     // We must have either FxParameters or TOAParameters
     XMLElem FxParametersXML = getOptional(vectorParametersXML, "FxParameters");
