@@ -138,10 +138,10 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     maxCol = std::min(maxCol, static_cast<double>(fullExtent.col) - 1);
 
     // Get size_t extent of the set of points.
-    const size_t minRowI = static_cast<size_t>(std::ceil(minRow));
-    const size_t minColI = static_cast<size_t>(std::ceil(minCol));
-    const size_t maxRowI = static_cast<size_t>(std::floor(maxRow));
-    const size_t maxColI = static_cast<size_t>(std::floor(maxCol));
+    const auto minRowI = static_cast<size_t>(std::ceil(minRow));
+    const auto minColI = static_cast<size_t>(std::ceil(minCol));
+    const auto maxRowI = static_cast<size_t>(std::floor(maxRow));
+    const auto maxColI = static_cast<size_t>(std::floor(maxCol));
 
     if (minRowI > maxRowI || minColI > maxColI)
     {
@@ -150,9 +150,7 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     }
 
     // The offset and extent are relative to the entire global output plane.
-    const types::RowCol<double> boundingOffset(
-        static_cast<double>(minRowI),
-        static_cast<double>(minColI));
+    const types::RowCol<double> boundingOffset(types::RowCol<size_t>(minRowI, minColI));
     const types::RowCol<size_t> boundingExtent(maxRowI - minRowI + 1,
                                                maxColI - minColI + 1);
 

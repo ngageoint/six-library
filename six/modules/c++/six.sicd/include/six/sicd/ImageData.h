@@ -42,21 +42,14 @@ class GeoData;
 struct ImageData
 {
     //!  Everything is undefined at this time
-    ImageData() :
-        pixelType(PixelType::NOT_SET),
-        numRows(Init::undefined<size_t>()),
-        numCols(Init::undefined<size_t>()),
-        firstRow(0),
-        firstCol(0)
-    {
-    }
+    ImageData() = default;
 
     /*!
      *  Indicates the pixel type and binary format of the data.
      *  \todo We currently do not support AMP8I_PHS8I
      *
      */
-    PixelType pixelType;
+    PixelType pixelType = PixelType::NOT_SET;
 
     /*!
      *  SICD AmpTable parameter.  If the data is AMP8I_PHS8I (see above)
@@ -67,16 +60,16 @@ struct ImageData
     mem::ScopedCloneablePtr<AmplitudeTable> amplitudeTable;
 
     //!  Number of rows in the product, including zero-filled pixels
-    size_t numRows;
+    size_t numRows = Init::undefined<size_t>();
 
     //!  Number of cols in the product, including zero-filled pixels
-    size_t numCols;
+    size_t numCols = Init::undefined<size_t>();
 
     //!  Global row index (assuming this is an ROI)
-    size_t firstRow;
+    size_t firstRow = 0;
 
     //!  Global col index (assuming this is an ROI)
-    size_t firstCol;
+    size_t firstCol = 0;
 
     //!  Global row/col size (assuming this is an ROI)
     RowColInt fullImage;

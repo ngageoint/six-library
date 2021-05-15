@@ -1056,8 +1056,8 @@ XMLElem DerivedXMLParser200::convertLookupTableToXML(
                     six::Init::isDefined(table.predefined->remapMember))
                 {
                     innerOk = true;
-                    createInt("RemapFamily", static_cast<int>(table.predefined->remapFamily), predefElem);
-                    createInt("RemapMember", static_cast<int>(table.predefined->remapMember), predefElem);
+                    createInt("RemapFamily", table.predefined->remapFamily, predefElem);
+                    createInt("RemapMember", table.predefined->remapMember, predefElem);
                 }
             }
             else if (six::Init::isUndefined(table.predefined->remapFamily) &&
@@ -1271,7 +1271,7 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
 
     createStringFromEnum("AlgorithmType", adjust.algorithmType,
         adjustElem);
-    createInt("BandStatsSource", static_cast<int>(adjust.bandStatsSource), adjustElem);
+    createInt("BandStatsSource", adjust.bandStatsSource, adjustElem);
 
     validateDRAFields(adjust.algorithmType,
                       adjust.draParameters.get() ? true : false,
@@ -1321,8 +1321,8 @@ XMLElem DerivedXMLParser200::convertPredefinedFilterToXML(
     {
         ok = true;
 
-        createInt("FilterFamily", static_cast<int>(predefined.filterFamily), predefinedElem);
-        createInt("FilterMember", static_cast<int>(predefined.filterMember), predefinedElem);
+        createInt("FilterFamily", predefined.filterFamily, predefinedElem);
+        createInt("FilterMember", predefined.filterMember, predefinedElem);
     }
 
     if (!ok)
@@ -1497,8 +1497,8 @@ XMLElem DerivedXMLParser200::convertCompressionToXML(
 void DerivedXMLParser200::convertJ2KToXML(const J2KCompression& j2k,
                                           XMLElem& parent) const
 {
-    createInt("NumWaveletLevels", static_cast<int>(j2k.numWaveletLevels), parent);
-    createInt("NumBands", static_cast<int>(j2k.numBands), parent);
+    createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
+    createInt("NumBands", j2k.numBands, parent);
 
     size_t numLayers = j2k.layerInfo.size();
     XMLElem layerInfoElem = newElement("LayerInfo", parent);
@@ -1774,10 +1774,10 @@ XMLElem DerivedXMLParser200::convertDisplayToXML(
 
     createString("PixelType", display.pixelType, displayElem);
 
-    createInt("NumBands", static_cast<int>(display.numBands), displayElem);
+    createInt("NumBands", display.numBands, displayElem);
     if (six::Init::isDefined(display.defaultBandDisplay))
     {
-        createInt("DefaultBandDisplay", static_cast<int>(display.defaultBandDisplay), displayElem);
+        createInt("DefaultBandDisplay", display.defaultBandDisplay, displayElem);
     }
 
     // NonInteractiveProcessing
@@ -1873,17 +1873,15 @@ XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
                  geoposElem);
     createString("SoundingDatum", ded.geopositioning.soundingDatum,
                  geoposElem);
-    createInt("FalseOrigin", static_cast<int>(ded.geopositioning.falseOrigin), geoposElem);
+    createInt("FalseOrigin", ded.geopositioning.falseOrigin, geoposElem);
     if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
     {
-        createInt("UTMGridZoneNumber",
-                  static_cast<int>(ded.geopositioning.utmGridZoneNumber),
-                  geoposElem);
+        createInt("UTMGridZoneNumber", ded.geopositioning.utmGridZoneNumber, geoposElem);
     }
 
     // PositionalAccuracy
     XMLElem posAccElem = newElement("PositionalAccuracy", dedElem);
-    createInt("NumRegions", static_cast<int>(ded.positionalAccuracy.numRegions), posAccElem);
+    createInt("NumRegions", ded.positionalAccuracy.numRegions, posAccElem);
 
     XMLElem absAccElem = newElement("AbsoluteAccuracy", posAccElem);
     createDouble("Horizontal",
@@ -1903,7 +1901,7 @@ XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
 
     if (six::Init::isDefined(ded.nullValue))
     {
-        createInt("NullValue", static_cast<int>(ded.nullValue), dedElem);
+        createInt("NullValue", ded.nullValue, dedElem);
     }
 
     return dedElem;

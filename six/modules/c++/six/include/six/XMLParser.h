@@ -112,16 +112,21 @@ protected:
                             parent);
     }
 
-    // Allow createInt() to be called with anything that can be cast to an "int", eliminates a bunch of static_casts<>s.
-    template <typename T, typename enable = void>
-    XMLElem createInt(const std::string& name, const std::string& uri, const T& p = "", XMLElem parent = nullptr) const
+    XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent = nullptr) const
     {
         return createInt_(name, uri, p, parent);
     }
-    template <typename T, typename std::enable_if<std::is_integral<T>::value>::type>
-    XMLElem createInt(const std::string& name, const std::string& uri, const T& p = 0, XMLElem parent = nullptr) const
+    XMLElem createInt(const std::string& name, const std::string& uri, int p = 0, XMLElem parent = nullptr) const
     {
-        return createInt_(name, uri, gsl::narrow<int>(p), parent);
+        return createInt_(name, uri, p, parent);
+    }
+    XMLElem createInt(const std::string& name, const std::string& uri, size_t p = 0, XMLElem parent = nullptr) const
+    {
+        return createInt(name, uri, gsl::narrow<int>(p), parent);
+    }
+    XMLElem createInt(const std::string& name, const std::string& uri, ptrdiff_t p = 0, XMLElem parent = nullptr) const
+    {
+        return createInt(name, uri, gsl::narrow<int>(p), parent);
     }
 
     XMLElem createDouble(const std::string& name,
@@ -161,8 +166,12 @@ protected:
         XMLElem parent = nullptr) const {
         return createString_(name, p, parent);
     }
-    XMLElem createInt(const std::string& name, int p = 0,
-            XMLElem parent = nullptr) const;
+    template<typename T>
+    XMLElem createInt(const std::string& name, T p = 0,
+            XMLElem parent = nullptr) const
+    {
+        return createInt_(name, gsl::narrow_cast<int>(p), parent);
+    }
     XMLElem createDouble(const std::string& name, double p = 0,
             XMLElem parent = nullptr) const;
     XMLElem createDouble(const std::string& name, const std::optional<double>& p,
@@ -241,6 +250,7 @@ protected:
 private:
     XMLElem createInt_(const std::string& name, const std::string& uri, int p, XMLElem parent) const;
     XMLElem createInt_(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent) const;
+    XMLElem createInt_(const std::string& name, int p, XMLElem parent) const;
     XMLElem createString_(const std::string& name, const std::string& p, XMLElem parent) const;
     static void setAttribute_(XMLElem e, const std::string& name, const std::string& v, const std::string& uri);
     void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;

@@ -422,8 +422,8 @@ XMLElem SICommonXMLParser::createRowCol(
         const RowColInt& value, XMLElem parent) const
 {
     XMLElem e = newElement(name, (uri.empty()) ? getDefaultURI() : uri, parent);
-    createInt(rowName, getSICommonURI(), static_cast<int>(value.row), e);
-    createInt(colName, getSICommonURI(), static_cast<int>(value.col), e);
+    createInt(rowName, getSICommonURI(), value.row, e);
+    createInt(colName, getSICommonURI(), value.col, e);
     return e;
 }
 

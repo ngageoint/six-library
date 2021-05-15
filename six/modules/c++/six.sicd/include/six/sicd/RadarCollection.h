@@ -297,6 +297,15 @@ struct Segment
      */
     std::string identifier;
 
+    types::RowCol<size_t> getOffset() const
+    {
+        return types::RowCol<size_t>(static_cast<size_t>(startLine), static_cast<size_t>(startSample));
+    }
+    types::RowCol<size_t> getExtent() const
+    {
+        return types::RowCol<size_t>(getNumLines(), getNumSamples());
+    }
+
     //! Equality operator
     bool operator==(const Segment& rhs) const;
     bool operator!=(const Segment& rhs) const

@@ -182,7 +182,7 @@ XMLElem XMLParser::createInt_(const std::string& name, const std::string& uri,
     return elem;
 }
 
-XMLElem XMLParser::createInt(const std::string& name, int p, XMLElem parent) const
+XMLElem XMLParser::createInt_(const std::string& name, int p, XMLElem parent) const
 {
     return createInt(name, mDefaultURI, p, parent);
 }

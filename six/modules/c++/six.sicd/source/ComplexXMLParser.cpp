@@ -246,10 +246,10 @@ XMLElem ComplexXMLParser::convertImageDataToXML(
             setAttribute(ampXML, "index", i);
         }
     }
-    createInt("NumRows", static_cast<int>(imageData->numRows), imageDataXML);
-    createInt("NumCols", static_cast<int>(imageData->numCols), imageDataXML);
-    createInt("FirstRow", static_cast<int>(imageData->firstRow), imageDataXML);
-    createInt("FirstCol", static_cast<int>(imageData->firstCol), imageDataXML);
+    createInt("NumRows", imageData->numRows, imageDataXML);
+    createInt("NumCols", imageData->numCols, imageDataXML);
+    createInt("FirstRow", imageData->firstRow, imageDataXML);
+    createInt("FirstCol", imageData->firstCol, imageDataXML);
 
     common().createRowCol("FullImage", "NumRows", "NumCols", imageData->fullImage,
                  imageDataXML);
@@ -624,8 +624,8 @@ XMLElem ComplexXMLParser::areaLineDirectionParametersToXML(
     XMLElem adpXML = newElement(name, parent);
     common().createVector3D("UVectECF", adp->unitVector, adpXML);
     createDouble("LineSpacing", adp->spacing, adpXML);
-    createInt("NumLines", static_cast<int>(adp->elements), adpXML);
-    createInt("FirstLine", static_cast<int>(adp->first), adpXML);
+    createInt("NumLines", adp->elements, adpXML);
+    createInt("FirstLine", adp->first, adpXML);
     return adpXML;
 }
 
@@ -637,8 +637,8 @@ XMLElem ComplexXMLParser::areaSampleDirectionParametersToXML(
     XMLElem adpXML = newElement(name, parent);
     common().createVector3D("UVectECF", adp->unitVector, adpXML);
     createDouble("SampleSpacing", adp->spacing, adpXML);
-    createInt("NumSamples", static_cast<int>(adp->elements), adpXML);
-    createInt("FirstSample", static_cast<int>(adp->first), adpXML);
+    createInt("NumSamples", adp->elements, adpXML);
+    createInt("FirstSample", adp->first, adpXML);
     return adpXML;
 }
 
@@ -817,7 +817,7 @@ XMLElem ComplexXMLParser::convertRcvChanProcToXML(
     {
         XMLElem rcvChanXML = newElement("RcvChanProc", imageFormationXML);
         createInt("NumChanProc",
-                  static_cast<int>(rcvChanProc->numChannelsProcessed),
+                  rcvChanProc->numChannelsProcessed,
                   rcvChanXML);
         if (!Init::isUndefined(rcvChanProc->prfScaleFactor))
             createDouble("PRFScaleFactor",
