@@ -167,14 +167,14 @@ static std::string toString(const std::string& name, T p, const xml::lite::Eleme
     }
 }
 
-XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
+XMLElem XMLParser::createInt_(const std::string& name, const std::string& uri,
         int p, XMLElem parent) const
 {
     const auto elementValue = toString(name, p, parent);
     return createInt(name, uri, elementValue, parent);
 }
 
-XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
+XMLElem XMLParser::createInt_(const std::string& name, const std::string& uri,
         const std::string& p, XMLElem parent) const
 {
     XMLElem const elem = newElement(name, uri, p, parent);
@@ -182,7 +182,7 @@ XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
     return elem;
 }
 
-XMLElem XMLParser::createInt(const std::string& name, int p, XMLElem parent) const
+XMLElem XMLParser::createInt_(const std::string& name, int p, XMLElem parent) const
 {
     return createInt(name, mDefaultURI, p, parent);
 }
@@ -364,21 +364,23 @@ void XMLParser::parseDouble(const xml::lite::Element* element, std::optional<dou
     }
 }
 
-void XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const
+bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const
 {
-    const xml::lite::Element* const element = getOptional(parent, tag);
-    if (element)
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
     {
         parseDouble(element, value);
+        return true;
     }
+    return false;
 }
-void XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const
+bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const
 {
-    const xml::lite::Element* const element = getOptional(parent, tag);
-    if (element)
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
     {
         parseDouble(element, value);
+        return true;
     }
+    return false;
 }
 
 
@@ -396,6 +398,16 @@ void XMLParser::parseString(const xml::lite::Element* element, std::string& valu
 {
     assert(element != nullptr);
     value = element->getCharacterData();
+}
+
+bool  XMLParser::parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const
+{
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
+    {
+        parseString(element, value);
+        return true;
+    }
+    return false;
 }
 
 void XMLParser::parseBooleanType(const xml::lite::Element* element, BooleanType& value) const

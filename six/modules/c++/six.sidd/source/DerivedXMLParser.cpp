@@ -239,7 +239,7 @@ void DerivedXMLParser::setAttributeIfNonNull(XMLElem element,
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const XMLElem informationElem,
+        const xml::lite::Element* informationElem,
         ProcessorInformation* processorInformation) const
 {
     parseString(getFirstAndOnly(informationElem, "Application"),
@@ -258,7 +258,7 @@ void DerivedXMLParser::parseProductCreationFromXML(
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const XMLElem productCreationElem,
+        const xml::lite::Element* productCreationElem,
         ProductCreation* productCreation) const
 {
     parseProductCreationFromXML(
@@ -287,7 +287,7 @@ void DerivedXMLParser::parseProductCreationFromXML(
 }
 
 void DerivedXMLParser::parseDerivedClassificationFromXML(
-    const XMLElem classificationElem,
+    const xml::lite::Element* classificationElem,
     DerivedClassification& classification) const
 {
     // optional to unbounded
@@ -386,7 +386,7 @@ void DerivedXMLParser::parseDerivedClassificationFromXML(
 
 
 Remap* DerivedXMLParser::parseRemapChoiceFromXML(
-        const XMLElem remapInformationElem) const
+        const xml::lite::Element* remapInformationElem) const
 {
     if (remapInformationElem)
     {
@@ -468,10 +468,10 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
     }
 }
 
-mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
+mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const xml::lite::Element* elem) const
 {
     //get size attribute
-    auto size = str::toType<size_t>(elem->attribute("size"));
+    const auto size = str::toType<size_t>(const_cast<XMLElem>(elem)->attribute("size"));
 
     std::string lutStr = "";
     parseString(elem, lutStr);
@@ -488,7 +488,7 @@ mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const XMLElem elem) const
 }
 
 void DerivedXMLParser::parseDisplayFromXML(
-        const XMLElem displayElem,
+        const xml::lite::Element* displayElem,
         Display* display) const
 {
     display->pixelType
@@ -542,7 +542,7 @@ void DerivedXMLParser::parseDisplayFromXML(
 }
 
 XMLElem DerivedXMLParser::parsePolynomialProjection(
-        XMLElem measurementElem,
+        const xml::lite::Element* measurementElem,
         Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "PolynomialProjection");
@@ -571,7 +571,7 @@ XMLElem DerivedXMLParser::parsePolynomialProjection(
 }
 
 XMLElem DerivedXMLParser::parseGeographicProjection(
-        XMLElem measurementElem,
+        const xml::lite::Element* measurementElem,
         Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "GeographicProjection");
@@ -589,7 +589,7 @@ XMLElem DerivedXMLParser::parseGeographicProjection(
 }
 
 XMLElem DerivedXMLParser::parsePlaneProjection(
-        XMLElem measurementElem,
+    const xml::lite::Element* measurementElem,
     Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "PlaneProjection");
@@ -614,7 +614,7 @@ XMLElem DerivedXMLParser::parsePlaneProjection(
 }
 
 XMLElem DerivedXMLParser::parseCylindricalProjection(
-    XMLElem measurementElem,
+    const xml::lite::Element* measurementElem,
     Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "CylindricalProjection");
@@ -641,7 +641,7 @@ XMLElem DerivedXMLParser::parseCylindricalProjection(
 
 // This function ASSUMES that the measurement projection has already been set!
 void DerivedXMLParser::parseMeasurementFromXML(
-        const XMLElem measurementElem,
+        const xml::lite::Element* measurementElem,
         Measurement* measurement) const
 {
     XMLElem projElem = nullptr;
@@ -686,7 +686,7 @@ void DerivedXMLParser::parseMeasurementFromXML(
 }
 
 void DerivedXMLParser::parseExploitationFeaturesFromXML(
-        const XMLElem exploitationFeaturesElem,
+        const xml::lite::Element* exploitationFeaturesElem,
         ExploitationFeatures* exploitationFeatures) const
 {
     XMLElem tmpElem;
@@ -717,11 +717,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         XMLElem radarModeElem = getFirstAndOnly(informationElem, "RadarMode");
         info->radarMode = six::toType<RadarModeType>(
             getFirstAndOnly(radarModeElem, "ModeType")->getCharacterData());
-        tmpElem = getOptional(radarModeElem, "ModeID");
-        if (tmpElem)
-        {
-            parseString(tmpElem, info->radarModeID);
-        }
+        parseOptionalString(radarModeElem, "ModeID", info->radarModeID);
 
         parseDateTime(getFirstAndOnly(informationElem, "CollectionDateTime"),
             info->collectionDateTime);
@@ -768,10 +764,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
                 getFirstAndOnly(polElem, "RcvPolarization")->
                 getCharacterData());
 
-            // optional
-            tmpElem = getOptional(polElem, "RcvPolarizationOffset");
-            if (tmpElem)
-                parseDouble(tmpElem, p->rcvPolarizationOffset);
+            parseOptionalDouble(polElem, "RcvPolarizationOffset", p->rcvPolarizationOffset);
 
             // optional
             tmpElem = getOptional(polElem, "Processed");
@@ -787,30 +780,11 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         {
             coll->geometry.reset(new Geometry());
 
-            // optional
-            tmpElem = getOptional(geometryElem, "Azimuth");
-            if (tmpElem)
-                parseDouble(tmpElem, coll->geometry->azimuth);
-
-            // optional
-            tmpElem = getOptional(geometryElem, "Slope");
-            if (tmpElem)
-                parseDouble(tmpElem, coll->geometry->slope);
-
-            // optional
-            tmpElem = getOptional(geometryElem, "Squint");
-            if (tmpElem)
-                parseDouble(tmpElem, coll->geometry->squint);
-
-            // optional
-            tmpElem = getOptional(geometryElem, "Graze");
-            if (tmpElem)
-                parseDouble(tmpElem, coll->geometry->graze);
-
-            // optional
-            tmpElem = getOptional(geometryElem, "Tilt");
-            if (tmpElem)
-                parseDouble(tmpElem, coll->geometry->tilt);
+            parseOptionalDouble(geometryElem, "Azimuth", coll->geometry->azimuth);
+            parseOptionalDouble(geometryElem, "Slope", coll->geometry->slope);
+            parseOptionalDouble(geometryElem, "Squint", coll->geometry->squint);
+            parseOptionalDouble(geometryElem, "Graze", coll->geometry->graze);
+            parseOptionalDouble(geometryElem, "Tilt", coll->geometry->tilt);
 
             // optional to unbounded
             common().parseParameters(geometryElem, "Extension",
@@ -843,19 +817,8 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
                     coll->phenomenology->layover.magnitude);
             }
 
-            // optional
-            tmpElem = getOptional(phenomenologyElem, "MultiPath");
-            if (tmpElem)
-            {
-                parseDouble(tmpElem, coll->phenomenology->multiPath);
-            }
-
-            // optional
-            tmpElem = getOptional(phenomenologyElem, "GroundTrack");
-            if (tmpElem)
-            {
-                parseDouble(tmpElem, coll->phenomenology->groundTrack);
-            }
+            parseOptionalDouble(phenomenologyElem, "MultiPath", coll->phenomenology->multiPath);
+            parseOptionalDouble(phenomenologyElem, "GroundTrack", coll->phenomenology->groundTrack);
 
             // optional to unbounded
             common().parseParameters(phenomenologyElem, "Extension",
@@ -1346,7 +1309,7 @@ XMLElem DerivedXMLParser::convertDownstreamReprocessingToXML(
 }
 
 void DerivedXMLParser::parseProcessingModuleFromXML(
-        const XMLElem procElem,
+        const xml::lite::Element* procElem,
         ProcessingModule* procMod) const
 {
     common().parseParameter(getFirstAndOnly(procElem, "ModuleName"),
@@ -1366,7 +1329,7 @@ void DerivedXMLParser::parseProcessingModuleFromXML(
 }
 
 void DerivedXMLParser::parseProductProcessingFromXML(
-        const XMLElem elem,
+        const xml::lite::Element* elem,
         ProductProcessing* productProcessing) const
 {
     std::vector<XMLElem> procModuleElem;
@@ -1382,7 +1345,7 @@ void DerivedXMLParser::parseProductProcessingFromXML(
 }
 
 void DerivedXMLParser::parseDownstreamReprocessingFromXML(
-        const XMLElem elem,
+        const xml::lite::Element* elem,
         DownstreamReprocessing* downstreamReproc) const
 {
     XMLElem geometricChipElem = getOptional(elem, "GeometricChip");
@@ -1422,12 +1385,7 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
         parseDateTime(getFirstAndOnly(peElem, "AppliedDateTime"),
                       procEvent->appliedDateTime);
 
-        // optional
-        XMLElem tmpElem = getOptional(peElem, "InterpolationMethod");
-        if (tmpElem)
-        {
-            parseString(tmpElem, procEvent->interpolationMethod);
-        }
+        parseOptionalString(peElem, "InterpolationMethod", procEvent->interpolationMethod);
 
         // optional to unbounded
         common().parseParameters(peElem, "Descriptor", procEvent->descriptor);
@@ -1435,7 +1393,7 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
 }
 
 void DerivedXMLParser::parseGeographicCoordinateSystemFromXML(
-        const XMLElem coorSysElem,
+        const xml::lite::Element* coorSysElem,
         SFAGeographicCoordinateSystem* coordSys) const
 {
     parseString(getFirstAndOnly(coorSysElem, "Csname"), coordSys->csName);
@@ -1450,14 +1408,11 @@ void DerivedXMLParser::parseGeographicCoordinateSystemFromXML(
     parseString(getFirstAndOnly(coorSysElem, "AngularUnit"),
                 coordSys->angularUnit);
 
-    // optional
-    XMLElem luElem = getOptional(coorSysElem, "LinearUnit");
-    if (luElem)
-        parseString(luElem, coordSys->linearUnit);
+    parseOptionalString(coorSysElem, "LinearUnit", coordSys->linearUnit);
 }
 
 void DerivedXMLParser::parseAnnotationFromXML(
-        const XMLElem elem,
+        const xml::lite::Element* elem,
         Annotation *a) const
 {
     parseString(getFirstAndOnly(elem, "Identifier"), a->identifier);
@@ -1597,7 +1552,7 @@ void DerivedXMLParser::parseAnnotationFromXML(
     }
 }
 
-void DerivedXMLParser::parseDatum(const XMLElem datumElem, SFADatum& datum) const
+void DerivedXMLParser::parseDatum(const xml::lite::Element* datumElem, SFADatum& datum) const
 {
     XMLElem spheroidElem = getFirstAndOnly(datumElem, "Spheroid");
 
@@ -1735,7 +1690,7 @@ XMLElem DerivedXMLParser::convertAnnotationToXML(
     return annElem;
 }
 
-void DerivedXMLParser::parseSFAGeometryFromXML(const XMLElem elem, SFAGeometry *g) const
+void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, SFAGeometry *g) const
 {
     std::string geoType = g->getType();
     if (geoType == SFAPoint::TYPE_NAME)
@@ -1744,13 +1699,8 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const XMLElem elem, SFAGeometry *
         parseDouble(getFirstAndOnly(elem, "X"), p->x);
         parseDouble(getFirstAndOnly(elem, "Y"), p->y);
 
-        XMLElem tmpElem = getOptional(elem, "Z");
-        if (tmpElem)
-            parseDouble(tmpElem, p->z);
-
-        tmpElem = getOptional(elem, "M");
-        if (tmpElem)
-            parseDouble(tmpElem, p->m);
+        parseOptionalDouble(elem, "Z", p->z);
+        parseOptionalDouble(elem, "M", p->m);
     }
     //for now, line, linearring, and linestring are parsed the same
     else if (geoType == SFALine::TYPE_NAME || geoType

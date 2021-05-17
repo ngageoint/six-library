@@ -42,10 +42,10 @@ protected:
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, 
                                      XMLElem parent = nullptr) const;
-    virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const;
+    virtual void parseRMATFromXML(const xml::lite::Element* rmatElem, RMAT* obj) const;
 
     virtual void convertDRateSFPolyToXML(const INCA* inca, XMLElem incaElem) const;
-    virtual void parseDRateSFPolyFromXML(const XMLElem incaElem, INCA* inca) const;
+    virtual void parseDRateSFPolyFromXML(const xml::lite::Element* incaElem, INCA* inca) const;
 
 };
 }

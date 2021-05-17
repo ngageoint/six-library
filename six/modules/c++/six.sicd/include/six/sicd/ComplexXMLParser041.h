@@ -54,7 +54,7 @@ protected:
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, 
                                      XMLElem parent = nullptr) const;
-    virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const;
+    virtual void parseRMATFromXML(const xml::lite::Element* rmatElem, RMAT* obj) const;
 
     virtual XMLElem convertImageFormationAlgoToXML(
             const PFA* pfa, const RMA* rma, 

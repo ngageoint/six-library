@@ -44,7 +44,7 @@ public:
 
 protected:
     virtual void parseDerivedClassificationFromXML(
-            const XMLElem classificationElem,
+            const xml::lite::Element* classificationElem,
             DerivedClassification& classification) const;
 
     virtual XMLElem convertDerivedClassificationToXML(
@@ -56,7 +56,7 @@ protected:
             XMLElem parent = nullptr) const;
 
     virtual void parseMeasurementFromXML(
-            const XMLElem measruementElem,
+            const xml::lite::Element* measruementElem,
             Measurement* measurement) const;
 
     virtual XMLElem convertExploitationFeaturesToXML(
@@ -64,7 +64,7 @@ protected:
         XMLElem parent = nullptr) const;
 
     virtual void parseProductFromXML(
-        const XMLElem exploitationFeaturesElem,
+        const xml::lite::Element* exploitationFeaturesElem,
         ExploitationFeatures* exploitationFeatures) const;
 
     virtual XMLElem convertDisplayToXML(const Display& display,
@@ -79,11 +79,11 @@ private:
                                          XMLElem parent = nullptr) const;
 
     void parseGeographicTargetFromXML(
-            const XMLElem elem,
+            const xml::lite::Element* elem,
             GeographicAndTarget* geographicAndTarget) const;
 
     void parseGeographicCoverageFromXML(
-            const XMLElem elem,
+            const xml::lite::Element* elem,
             GeographicCoverage* geoCoverage) const;
 };
 }

@@ -115,10 +115,8 @@ void cropSICD(six::NITFReadControl& reader,
     const size_t numBytes(origDims.row * origDims.col * numBytesPerPixel);
 
     six::Region region;
-    region.setStartRow(static_cast<ptrdiff_t>(aoiOffset.row));
-    region.setStartCol(static_cast<ptrdiff_t>(aoiOffset.col));
-    region.setNumRows(static_cast<ptrdiff_t>(aoiDims.row));
-    region.setNumCols(static_cast<ptrdiff_t>(aoiDims.col));
+    region.setOffset(aoiOffset);
+    region.setDims(aoiDims);
     const auto buffer = region.setBuffer(numBytes);
     reader.interleaved(region, 0);
 
@@ -293,13 +291,8 @@ void cropSICD(six::NITFReadControl& reader,
                 "One or more corners are outside of the image bounds"));
     }
 
-    const types::RowCol<size_t> upperLeft(
-            static_cast<size_t>(std::max(minPixel.row, 0.0)),
-            static_cast<size_t>(std::max(minPixel.col, 0.0)));
-
-    const types::RowCol<size_t> lowerRight(
-            static_cast<size_t>(std::min(maxPixel.row, lastDim.row)),
-            static_cast<size_t>(std::min(maxPixel.col, lastDim.col)));
+    const types::RowCol<size_t> upperLeft(RowColDouble(std::max(minPixel.row, 0.0), std::max(minPixel.col, 0.0)));
+    const types::RowCol<size_t> lowerRight(RowColDouble(std::min(maxPixel.row, lastDim.row), std::min(maxPixel.col, lastDim.col)));
 
     // This would only happen if the "upper left" corner was actually below or
     // to the right of the footprint (the lower right corner would have been

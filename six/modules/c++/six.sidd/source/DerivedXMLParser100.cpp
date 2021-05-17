@@ -150,7 +150,7 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
 }
 
 void DerivedXMLParser100::parseDerivedClassificationFromXML(
-        const XMLElem classificationElem,
+        const xml::lite::Element* classificationElem,
         DerivedClassification& classification) const
 {
     DerivedXMLParser::parseDerivedClassificationFromXML(classificationElem, classification);
@@ -437,7 +437,7 @@ XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
 }
 
 void DerivedXMLParser100::parseGeographicTargetFromXML(
-        const XMLElem geographicAndTargetElem,
+        const xml::lite::Element* geographicAndTargetElem,
         GeographicAndTarget* geographicAndTarget) const
 {
     parseGeographicCoverageFromXML(
@@ -477,7 +477,7 @@ void DerivedXMLParser100::parseGeographicTargetFromXML(
 }
 
 void DerivedXMLParser100::parseGeographicCoverageFromXML(
-        const XMLElem geographicCoverageElem,
+        const xml::lite::Element* geographicCoverageElem,
         GeographicCoverage* geographicCoverage) const
 {
     // optional and unbounded
@@ -519,14 +519,8 @@ void DerivedXMLParser100::parseGeographicCoverageFromXML(
                     countryCodes.push_back((*it)->getCharacterData());
         }
 
-        // optional
-        XMLElem securityInformationElem = getOptional(geographicInfoElem,
-                                                     "SecurityInfo");
-        if (securityInformationElem)
-        {
-            parseString(securityInformationElem, geographicCoverage->
-                    geographicInformation->securityInformation);
-        }
+        parseOptionalString(geographicInfoElem, "SecurityInfo",
+            geographicCoverage->geographicInformation->securityInformation);
 
         // optional to unbounded
         common().parseParameters(geographicInfoElem, "GeographicInfoExtension",
@@ -549,7 +543,7 @@ XMLElem DerivedXMLParser100::convertMeasurementToXML(
 }
 
 void DerivedXMLParser100::parseMeasurementFromXML(
-    const XMLElem measurementElem,
+    const xml::lite::Element* measurementElem,
     Measurement* measurement) const
 {
     DerivedXMLParser::parseMeasurementFromXML(measurementElem, measurement);
@@ -745,7 +739,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
 }
 
 void DerivedXMLParser100::parseProductFromXML(
-    const XMLElem exploitationFeaturesElem,
+    const xml::lite::Element* exploitationFeaturesElem,
     ExploitationFeatures* exploitationFeatures) const
 {
     XMLElem productElem = getFirstAndOnly(exploitationFeaturesElem, "Product");
@@ -755,12 +749,7 @@ void DerivedXMLParser100::parseProductFromXML(
     common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
                                product.resolution);
 
-    // optional
-    XMLElem tmpElem = getOptional(productElem, "North");
-    if (tmpElem)
-    {
-        parseDouble(tmpElem, product.north);
-    }
+    parseOptionalDouble(productElem, "North", product.north);
 
     // optional to unbounded
     common().parseParameters(productElem, "Extension",

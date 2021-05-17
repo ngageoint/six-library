@@ -237,10 +237,10 @@ XMLElem ComplexXMLParser050::convertImageFormationAlgoToXML(
 }
 
 void ComplexXMLParser050::parseWeightTypeFromXML(
-    const XMLElem gridRowColXML,
+    const xml::lite::Element* gridRowColXML,
     mem::ScopedCopyablePtr<WeightType>& obj) const
 {
-    const XMLElem weightType = getOptional(gridRowColXML, "WgtType");
+    const xml::lite::Element* weightType = getOptional(gridRowColXML, "WgtType");
     if (weightType)
     {
         obj.reset(new WeightType());

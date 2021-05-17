@@ -22,8 +22,10 @@
 #pragma once
 
 #include <string>
+#include <type_traits>
 
 #include <std/optional>
+#include <import/gsl.h>
 
 #include <six/Types.h>
 #include <six/Init.h>
@@ -110,12 +112,22 @@ protected:
                             parent);
     }
 
-    XMLElem createInt(const std::string& name, const std::string& uri,
-           int p = 0, XMLElem parent = nullptr) const;
-
-    XMLElem createInt(const std::string& name,
-            const std::string& uri, const std::string& p = "",
-            XMLElem parent = nullptr) const;
+    XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent = nullptr) const
+    {
+        return createInt_(name, uri, p, parent);
+    }
+    XMLElem createInt(const std::string& name, const std::string& uri, int p = 0, XMLElem parent = nullptr) const
+    {
+        return createInt_(name, uri, p, parent);
+    }
+    XMLElem createInt(const std::string& name, const std::string& uri, size_t p = 0, XMLElem parent = nullptr) const
+    {
+        return createInt(name, uri, gsl::narrow<int>(p), parent);
+    }
+    XMLElem createInt(const std::string& name, const std::string& uri, ptrdiff_t p = 0, XMLElem parent = nullptr) const
+    {
+        return createInt(name, uri, gsl::narrow<int>(p), parent);
+    }
 
     XMLElem createDouble(const std::string& name,
             const std::string& uri, double p = 0, XMLElem parent = nullptr) const;
@@ -154,8 +166,12 @@ protected:
         XMLElem parent = nullptr) const {
         return createString_(name, p, parent);
     }
-    XMLElem createInt(const std::string& name, int p = 0,
-            XMLElem parent = nullptr) const;
+    template<typename T>
+    XMLElem createInt(const std::string& name, T p = 0,
+            XMLElem parent = nullptr) const
+    {
+        return createInt_(name, gsl::narrow_cast<int>(p), parent);
+    }
     XMLElem createDouble(const std::string& name, double p = 0,
             XMLElem parent = nullptr) const;
     XMLElem createDouble(const std::string& name, const std::optional<double>& p,
@@ -202,11 +218,23 @@ protected:
 
     bool parseDouble(const xml::lite::Element* element, double& value) const;
     void parseDouble(const xml::lite::Element* element, std::optional<double>& value) const;
-    void parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const;
-    void parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const;
+    bool parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const;
+    bool parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const;
     void parseComplex(const xml::lite::Element* element, std::complex<double>& value) const;
     void parseString(const xml::lite::Element* element, std::string& value) const;
     void parseBooleanType(const xml::lite::Element* element, BooleanType& value) const;
+
+    bool parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const;
+    template <typename T>
+    bool parseOptionalInt(const xml::lite::Element* parent, const std::string& tag, T& value) const
+    {
+        if (const xml::lite::Element* const element = getOptional(parent, tag))
+        {
+            parseInt(element, value);
+            return true;
+        }
+        return false;
+    }
 
     void parseDateTime(const xml::lite::Element* element, DateTime& value) const;
 
@@ -232,10 +260,11 @@ protected:
     static XMLElem require(XMLElem element, const std::string& name);
 
 private:
-    XMLElem createString_(const std::string& name,
-        const std::string& p, XMLElem parent) const;
-    static void setAttribute_(XMLElem e, const std::string& name,
-            const std::string& v, const std::string& uri);
+    XMLElem createInt_(const std::string& name, const std::string& uri, int p, XMLElem parent) const;
+    XMLElem createInt_(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent) const;
+    XMLElem createInt_(const std::string& name, int p, XMLElem parent) const;
+    XMLElem createString_(const std::string& name, const std::string& p, XMLElem parent) const;
+    static void setAttribute_(XMLElem e, const std::string& name, const std::string& v, const std::string& uri);
     void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;
 
     const std::string mDefaultURI;

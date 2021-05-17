@@ -84,9 +84,8 @@ struct ChipCoordinateToFullImageCoordinate final
 
     types::RowCol<double> operator()(size_t row, size_t col) const
     {
-        return operator()(types::RowCol<double>(
-                static_cast<double>(row),
-                static_cast<double>(col)));
+        const types::RowCol <size_t> rc(row, col);
+        return operator()(types::RowCol<double>(rc));
     }
 
 private:
