@@ -36,6 +36,9 @@ public:
                         logging::Logger* log = nullptr,
                         bool ownLog = false);
 
+    ComplexXMLParser10x(const ComplexXMLParser10x&) = delete;
+    ComplexXMLParser10x& operator=(const ComplexXMLParser10x&) = delete;
+
 protected:
 
     virtual XMLElem convertGeoInfoToXML(const GeoInfo *obj,

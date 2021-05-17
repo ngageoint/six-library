@@ -175,8 +175,8 @@ public:
     virtual void setNumRows(size_t numRows)
     {
         imageData->numRows = numRows;
-        imageData->fullImage.row = numRows;
-        imageData->scpPixel.row = numRows / 2;
+        imageData->fullImage.row = static_cast<ptrdiff_t>(numRows);
+        imageData->scpPixel.row = imageData->fullImage.row / 2;
     }
 
     /*!
@@ -195,8 +195,8 @@ public:
     virtual void setNumCols(size_t numCols)
     {
         imageData->numCols = numCols;
-        imageData->fullImage.col = numCols;
-        imageData->scpPixel.col = numCols / 2;
+        imageData->fullImage.col = static_cast<ptrdiff_t>(numCols);
+        imageData->scpPixel.col = imageData->fullImage.col / 2;
     }
 
     /*!

@@ -94,7 +94,7 @@ TEST_CASE(DerivedINCA)
     TEST_ASSERT_ALMOST_EQ(rma.inca->rangeCA, 372.0282247);
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(DerivedRMATandRMCR);
     TEST_CHECK(DerivedINCA);
     )

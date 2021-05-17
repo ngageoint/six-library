@@ -49,6 +49,9 @@ public:
                      bool ownLog = false);
 #endif
 
+        ComplexXMLParser(const ComplexXMLParser&) = delete;
+        ComplexXMLParser& operator=(const ComplexXMLParser&) = delete;
+
     xml::lite::Document* toXML(const ComplexData* data) const;
 
     ComplexData* fromXML(const xml::lite::Document* doc) const;

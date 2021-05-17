@@ -77,7 +77,7 @@ TEST_CASE(DerivedRgAzComp)
     TEST_ASSERT_ALMOST_EQ(rgAzComp.kazPoly[3], 4.04227407e-05);
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(DerivedRgAzComp);
 )
 

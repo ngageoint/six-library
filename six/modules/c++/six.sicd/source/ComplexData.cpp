@@ -84,8 +84,8 @@ void ComplexData::getOutputPlaneOffsetAndExtent(
             //       incorrectly - they're setting the
             //       FirstLine/FirstSample values to 1 but then setting
             //       startLine and startSample to 0.
-            offset.row = segment.startLine;
-            offset.col = segment.startSample;
+            offset.row = static_cast<size_t>(segment.startLine);
+            offset.col = static_cast<size_t>(segment.startSample);
             extent.row = segment.getNumLines();
             extent.col = segment.getNumSamples();
         }
@@ -164,7 +164,7 @@ bool ComplexData::validate(logging::Logger& log) const
     valid = geoData->validate(log) && valid;
     valid = radarCollection->validate(log) && valid;
 
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     std::ostringstream messageBuilder;
     switch (imageFormation->imageFormationAlgorithm)
@@ -255,7 +255,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
 
     geoData->fillDerivedFields(*imageData, model);
 
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     switch (imageFormation->imageFormationAlgorithm)
     {
@@ -279,6 +279,10 @@ void ComplexData::fillDerivedFields(bool includeDefault)
             grid->fillDerivedFields(*rma, geoData->scp.ecf, position->arpPoly);
         }
         break;
+    case ImageFormationType::NOT_SET:
+    case ImageFormationType::OTHER:
+    default:
+        break; // nothing to do
     }
 
     if (includeDefault)
@@ -290,7 +294,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
 void ComplexData::fillDefaultFields()
 {
     imageFormation->fillDefaultFields(*radarCollection);
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     switch (imageFormation->imageFormationAlgorithm)
     {
@@ -308,6 +312,12 @@ void ComplexData::fillDefaultFields()
             grid->fillDefaultFields(*rma, fc);
         }
         break;
+
+    case ImageFormationType::RGAZCOMP:        
+    case ImageFormationType::NOT_SET:
+    case ImageFormationType::OTHER:
+    default:
+        break; // nothing to do
     }
 }
 }

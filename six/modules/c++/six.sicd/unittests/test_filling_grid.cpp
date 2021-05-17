@@ -319,7 +319,7 @@ TEST_CASE(DefaultFromPFA)
     TEST_ASSERT_ALMOST_EQ(grid.col->kCenter, 0);
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(DerivedDeltaKsNoImageData);
     TEST_CHECK(DerivedDeltaKsWithImageData);
     TEST_CHECK(IdentityWeightFunction);

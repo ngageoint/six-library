@@ -61,6 +61,10 @@ public:
     SICDWriteControl(const std::string& outputPathname,
                      const std::vector<std::string>& schemaPaths);
 
+    SICDWriteControl(const SICDWriteControl&) = delete;
+    SICDWriteControl& operator=(const SICDWriteControl&) = delete;
+
+
     using NITFWriteControl::initialize;
 
     /*!

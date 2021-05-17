@@ -201,7 +201,7 @@ struct Constants
  *  and row-column position for a point.
  *
  */
-struct ReferencePoint
+struct ReferencePoint final
 {
     //!  ECEF location of point
     Vector3 ecef;
@@ -214,7 +214,7 @@ struct ReferencePoint
 
     //!  Construct, init all fields at once (except optional name)
     ReferencePoint(double x = 0, double y = 0, double z = 0, double row = 0,
-                   double col = 0) :
+                   double col = 0) noexcept :
         rowCol(row, col)
     {
         ecef[0] = x;
@@ -378,10 +378,10 @@ struct LUT
  *  interpreted as an index into the AmpTable, ultimately yielding the
  *  double precision amplitude value
  */
-struct AmplitudeTable : public LUT
+struct AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
-    AmplitudeTable() :
+    AmplitudeTable() noexcept :
         LUT(256, sizeof(double))
     {
     }

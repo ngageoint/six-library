@@ -445,8 +445,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
             subheader.getCornersAsLatLons(corners);
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
             {
-                si.corners.getCorner(kk).setLat(corners[kk][0]);
-                si.corners.getCorner(kk).setLon(corners[kk][1]);
+                si.corners.getCorner(kk).setLatLon(corners[kk]);
             }
         }
 

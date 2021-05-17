@@ -101,7 +101,7 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
     std::vector<XMLElem> elements;
     exploitationFeaturesElem->getElementsByTagName("ExploitationFeatures",
                                                   elements);
-    builder.addExploitationFeatures(elements.size());
+    builder.addExploitationFeatures(static_cast<unsigned int>(elements.size()));
 
     parseProductCreationFromXML(productCreationElem, data->productCreation.get());
     parseDisplayFromXML(displayElem, data->display.get());
@@ -139,7 +139,7 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
         std::vector<XMLElem> annChildren;
         annotationsElem->getElementsByTagName("Annotation", annChildren);
         data->annotations.resize(annChildren.size());
-        for (unsigned int i = 0, size = annChildren.size(); i < size; ++i)
+        for (size_t i = 0, size = annChildren.size(); i < size; ++i)
         {
             data->annotations[i].reset(new Annotation());
             parseAnnotationFromXML(annChildren[i], data->annotations[i].get());

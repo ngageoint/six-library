@@ -49,6 +49,9 @@ protected:
                         bool ownLog = false);
 #endif
 
+    ComplexXMLParser041(const ComplexXMLParser041&) = delete;
+    ComplexXMLParser041& operator=(const ComplexXMLParser041&) = delete;
+
     virtual XMLElem convertRMATToXML(const RMAT* obj, 
                                      XMLElem parent = nullptr) const;
     virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const;

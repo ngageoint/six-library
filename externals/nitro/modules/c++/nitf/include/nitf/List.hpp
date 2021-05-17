@@ -292,6 +292,7 @@ public:
 
     //! Returns the data at the given index
     NITF_DATA* operator[] (size_t index);
+    const NITF_DATA* operator[] (size_t index) const;
 
 private:
     mutable nitf_Error error{};

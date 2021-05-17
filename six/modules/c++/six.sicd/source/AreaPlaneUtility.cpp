@@ -46,11 +46,11 @@ std::vector<RowColDouble > AreaPlaneUtility::computeCornersPix(
         // Use the grid corners
         cornersPix.push_back(RowColDouble(0.0, 0.0));
         cornersPix.push_back(RowColDouble(
-                0.0, data.getNumCols() - 1.0));
+                0.0, static_cast<double>(data.getNumCols()) - 1.0));
         cornersPix.push_back(RowColDouble(
-                data.getNumRows() - 1.0, data.getNumCols() - 1.0));
+                 static_cast<double>(data.getNumRows()) - 1.0, static_cast<double>(data.getNumCols()) - 1.0));
         cornersPix.push_back(RowColDouble(
-                data.getNumRows() - 1.0, 0.0));
+                 static_cast<double>(data.getNumRows()) - 1.0, 0.0));
     }
 
     return cornersPix;
@@ -118,8 +118,8 @@ std::vector<Vector3> AreaPlaneUtility::computeInPlaneCorners(
     for (size_t ii = 0; ii < cornersPix.size(); ++ii)
     {
         // Offset the pixel corners relative to start chip
-        cornersPix[ii].row += data.imageData->firstRow;
-        cornersPix[ii].col += data.imageData->firstCol;
+        cornersPix[ii].row += static_cast<double>(data.imageData->firstRow);
+        cornersPix[ii].col += static_cast<double>(data.imageData->firstCol);
 
         const RowColDouble sampleSpacing(
                 data.grid->row->sampleSpacing,
@@ -222,10 +222,10 @@ void AreaPlaneUtility::setAreaPlane(ComplexData& data,
 
         std::vector<RowColDouble> imageCorners(4);
         imageCorners[0] = RowColDouble(0.0, 0.0);
-        imageCorners[1] = RowColDouble(0.0, data.getNumCols() - 1.0);
-        imageCorners[2] = RowColDouble(data.getNumRows() - 1.0,
-                data.getNumCols() - 1.0);
-        imageCorners[3] = RowColDouble(data.getNumRows() - 1.0, 0.0);
+        imageCorners[1] = RowColDouble(0.0, static_cast<double>(data.getNumCols()) - 1.0);
+        imageCorners[2] = RowColDouble(static_cast<double>(data.getNumRows()) - 1.0,
+                 static_cast<double>(data.getNumCols()) - 1.0);
+        imageCorners[3] = RowColDouble(static_cast<double>(data.getNumRows()) - 1.0, 0.0);
         LatLonAltCorners& acpCorners =
                 data.radarCollection->area->acpCorners;
 
