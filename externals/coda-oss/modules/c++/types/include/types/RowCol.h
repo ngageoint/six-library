@@ -56,24 +56,24 @@ template<typename T> struct RowCol
     // ambiguities
     RowCol() = default;
 
-    RowCol(T r, T c) :
+    RowCol(T r, T c) noexcept :
         row(r), col(c) {}
 
-    template<typename Other_T> RowCol(const RowCol<Other_T>& p)
+    template<typename Other_T> RowCol(const RowCol<Other_T>& p) noexcept
     {
         row = static_cast<T>(p.row);
         col = static_cast<T>(p.col);
     }
 
-    RowCol(const std::pair<T, T>& p)
+    RowCol(const std::pair<T, T>& p) noexcept
     {
         row = p.first;
         col = p.second;
     }
 
-    template<typename Other_T> RowCol& operator=(const RowCol<Other_T>& p)
+    template<typename Other_T> RowCol& operator=(const RowCol<Other_T>& p) noexcept
     {
-        if (this != (RowCol*)&p)
+        if (this != reinterpret_cast<const RowCol*>(&p))
         {
             row = static_cast<T>(p.row);
             col = static_cast<T>(p.col);
@@ -81,7 +81,7 @@ template<typename T> struct RowCol
         return *this;
     }
 
-    RowCol& operator=(const std::pair<T, T>& p)
+    RowCol& operator=(const std::pair<T, T>& p) noexcept
     {
         row = p.first;
         col = p.second;
@@ -89,107 +89,107 @@ template<typename T> struct RowCol
     }
 
     
-    template<typename Other_T> RowCol& operator+=(const RowCol<Other_T>& p)
+    template<typename Other_T> RowCol& operator+=(const RowCol<Other_T>& p) noexcept
     {
         row += static_cast<T>(p.row);
         col += static_cast<T>(p.col);
         return *this;
     }
 
-    template<typename Other_T> RowCol operator+(const RowCol<Other_T>& p) const
+    template<typename Other_T> RowCol operator+(const RowCol<Other_T>& p) const noexcept
     {
         RowCol copy(*this);
         return copy += p;
     }
 
-    template<typename Other_T> RowCol& operator*=(const RowCol<Other_T>& p)
+    template<typename Other_T> RowCol& operator*=(const RowCol<Other_T>& p) noexcept
     {
         row *= static_cast<T>(p.row);
         col *= static_cast<T>(p.col);
         return *this;
     }
 
-    template<typename Other_T> RowCol operator*(const RowCol<Other_T>& p) const
+    template<typename Other_T> RowCol operator*(const RowCol<Other_T>& p) const noexcept
     {
         RowCol copy(*this);
         return copy *= p;
     }
     
     
-    template<typename Other_T> RowCol& operator-=(const RowCol<Other_T>& p)
+    template<typename Other_T> RowCol& operator-=(const RowCol<Other_T>& p) noexcept
     {
         row -= static_cast<T>(p.row);
         col -= static_cast<T>(p.col);
         return *this;
     }
     
-    template<typename Other_T> RowCol operator-(const RowCol<Other_T>& p) const
+    template<typename Other_T> RowCol operator-(const RowCol<Other_T>& p) const noexcept
     {
         RowCol copy(*this);
         return copy -= p;
     }
 
-    template<typename Other_T> RowCol& operator/=(const RowCol<Other_T>& p)
+    template<typename Other_T> RowCol& operator/=(const RowCol<Other_T>& p) noexcept
     {
         row /= static_cast<T>(p.row);
         col /= static_cast<T>(p.col);
         return *this;
     }
     
-    template<typename Other_T> RowCol operator/(const RowCol<Other_T>& p) const
+    template<typename Other_T> RowCol operator/(const RowCol<Other_T>& p) const noexcept
     {
         RowCol copy(*this);
         return copy /= p;
     }
 
 
-    RowCol& operator+=(T scalar)
+    RowCol& operator+=(T scalar) noexcept
     {
         row += scalar;
         col += scalar;
         return *this;
     }
 
-    RowCol operator+(T scalar) const
+    RowCol operator+(T scalar) const noexcept
     {
         RowCol copy(*this);
         return copy += scalar;
     }
     
-    RowCol& operator-=(T scalar)
+    RowCol& operator-=(T scalar) noexcept
     {
         row -= scalar;
         col -= scalar;
         return *this;
     }
 
-    RowCol operator-(T scalar) const
+    RowCol operator-(T scalar) const noexcept
     {
         RowCol copy(*this);
         return copy -= scalar;
     }
 
-    RowCol& operator*=(T scalar)
+    RowCol& operator*=(T scalar) noexcept
     {
         row *= scalar;
         col *= scalar;
         return *this;
     }
 
-    RowCol operator*(T scalar) const
+    RowCol operator*(T scalar) const noexcept
     {
         RowCol copy(*this);
         return copy *= scalar;
     }
     
-    RowCol& operator/=(T scalar)
+    RowCol& operator/=(T scalar) noexcept
     {
         row /= scalar;
         col /= scalar;
         return *this;
     }
 
-    RowCol operator/(T scalar) const
+    RowCol operator/(T scalar) const noexcept
     {
         RowCol copy(*this);
         return copy /= scalar;
@@ -200,18 +200,18 @@ template<typename T> struct RowCol
      *  specializations (e.g., double)
      *  are not exact
      */
-    bool operator==(const RowCol<T>& p) const
+    bool operator==(const RowCol<T>& p) const noexcept
     {
         return row == p.row && col == p.col;
     }
 
 
-    bool operator!=(const RowCol<T>& p) const
+    bool operator!=(const RowCol<T>& p) const noexcept
     {
         return ! (RowCol::operator==(p));
     }
     
-    T area() const
+    T area() const noexcept
     {
         return std::abs(row) * std::abs(col);
     }
@@ -230,20 +230,20 @@ template<typename T> struct RowCol
 };
 
 template <>
-inline size_t RowCol<size_t>::area() const
+inline size_t RowCol<size_t>::area() const noexcept
 {
     return row * col;
 }
 
 template <>
-inline bool RowCol<float>::operator==(const RowCol<float>& p) const
+inline bool RowCol<float>::operator==(const RowCol<float>& p) const noexcept
 {
     constexpr auto eps = std::numeric_limits<float>::epsilon();
     return std::abs(row - p.row) < eps &&
            std::abs(col - p.col) < eps;
 }
 template <>
-inline bool RowCol<double>::operator==(const RowCol<double>& p) const
+inline bool RowCol<double>::operator==(const RowCol<double>& p) const noexcept
 {
     constexpr auto eps = std::numeric_limits<double>::epsilon();
     return std::abs(row - p.row) < eps &&

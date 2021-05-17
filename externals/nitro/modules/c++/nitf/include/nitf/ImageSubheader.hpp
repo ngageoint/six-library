@@ -26,6 +26,8 @@
 
 #include <string>
 
+#include <import/sys.h>
+
 #include "nitf/ImageSubheader.h"
 
 #include "BandInfo.hpp"
@@ -259,6 +261,11 @@ public:
     size_t numCols() const
     {
         return getNumCols();
+    }
+
+    types::RowCol<size_t> dims() const
+    {
+        return types::RowCol<size_t>(numRows(), numCols());
     }
 
     //! Get the pixelValueType

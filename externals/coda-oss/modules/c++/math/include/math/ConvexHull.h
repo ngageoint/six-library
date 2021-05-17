@@ -240,7 +240,9 @@ private:
 
                 if (factor * dir <= 0)
                 {
-                    output.erase(output.begin() + last - 1);
+                    auto b = output.begin();
+                    std::advance(b, static_cast<ptrdiff_t>(last) - 1);
+                    output.erase(b);
                 }
                 else
                 {

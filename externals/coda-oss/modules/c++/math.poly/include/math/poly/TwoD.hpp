@@ -308,17 +308,23 @@ TwoD<_T>::operator -= (const TwoD<_T>& p)
     TwoD<_T> tmp(std::max<size_t>(orderX() ,p.orderX()),
                  std::max<size_t>(orderY(), p.orderY()));
 
-    for (size_t ii = 0, sz = mCoef.size(); ii < sz; ++ii)
     {
-        // We use copyFrom instead of an assignment operator here because
-        // the assignment operator can potentially change the order of
-        // our polynomial.
-        tmp.mCoef[ii].copyFrom(mCoef[ii]);
+        const auto sz = mCoef.size();
+        for (size_t ii = 0; ii < sz; ++ii)
+        {
+            // We use copyFrom instead of an assignment operator here because
+            // the assignment operator can potentially change the order of
+            // our polynomial.
+            tmp.mCoef[ii].copyFrom(mCoef[ii]);
+        }
     }
 
-    for (size_t ii = 0, sz = p.mCoef.size(); ii < sz; ++ii)
     {
-        tmp.mCoef[ii] -= p.mCoef[ii];
+        const auto sz = p.mCoef.size();
+        for (size_t ii = 0; ii < sz; ++ii)
+        {
+            tmp.mCoef[ii] -= p.mCoef[ii];
+        }
     }
 
     *this = tmp;

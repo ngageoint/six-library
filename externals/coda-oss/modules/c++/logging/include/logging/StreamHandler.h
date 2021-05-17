@@ -48,6 +48,7 @@ public:
 
     //! Constructs a StreamHandler using the specified OutputStream
     StreamHandler(io::OutputStream* stream, LogLevel level = LogLevel::LOG_NOTSET);
+    StreamHandler(std::unique_ptr<io::OutputStream>&& stream, LogLevel level = LogLevel::LOG_NOTSET) : StreamHandler(stream.release(), level) { }
 
     virtual ~StreamHandler();
 

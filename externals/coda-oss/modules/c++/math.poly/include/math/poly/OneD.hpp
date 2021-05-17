@@ -305,14 +305,20 @@ OneD<_T>&
 OneD<_T>::operator -= (const OneD<_T>& p)
 {
    OneD<_T> tmp(std::max<size_t>(order(), p.order()));
-   for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
-   {
-       tmp.mCoef[i] = mCoef[i];
-   }
-   for (size_t i = 0, sz = p.mCoef.size(); i < sz; i++)
-   {
-       tmp.mCoef[i] -= p.mCoef[i];
-   }
+    {
+        const auto sz = mCoef.size();
+        for (size_t i = 0; i < sz; i++)
+        {
+            tmp.mCoef[i] = mCoef[i];
+        }
+    }
+    {
+        const auto sz = p.mCoef.size();
+        for (size_t i = 0; i < sz; i++)
+        {
+            tmp.mCoef[i] -= p.mCoef[i];
+        }
+    }
    *this = tmp;
    return *this;
 }
