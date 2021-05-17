@@ -33,6 +33,10 @@ public:
     virtual ~Getter()
     {}
 
+    #if _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable : 4702)  // unreachable code
+    #endif
     virtual void run()
     {
         for (int i = 0; i < 250; i++)
@@ -47,6 +51,10 @@ public:
             sys::Thread::yield();
         }
     }
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
+
     int get()
     {
 

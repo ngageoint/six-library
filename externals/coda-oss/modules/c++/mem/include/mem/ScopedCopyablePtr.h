@@ -29,6 +29,7 @@
 #include <config/coda_oss_config.h>
 
 #include "sys/Conf.h"
+#include "mem/SharedPtr.h"
 
 namespace mem
 {
@@ -73,10 +74,7 @@ public:
 
     ScopedCopyablePtr(const ScopedCopyablePtr& rhs)
     {
-        if (rhs.mPtr.get())
-        {
-            mPtr.reset(new T(*rhs.mPtr));
-        }
+        *this = rhs;
     }
 
     const ScopedCopyablePtr&
@@ -86,7 +84,7 @@ public:
         {
             if (rhs.mPtr.get())
             {
-                mPtr.reset(new T(*rhs.mPtr));
+                mPtr = make::unique<T>(*rhs.mPtr);
             }
             else
             {

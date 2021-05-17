@@ -28,21 +28,19 @@
 namespace scene
 {
 
-class LLAToECEFTransform : public CoordinateTransform
+struct LLAToECEFTransform : public CoordinateTransform
 {
-public:
-
     /**
      * This constructor just calls the base class constructor
      */
-    LLAToECEFTransform();
+    LLAToECEFTransform() = default;
 
     /**
      * This constructor just calls the base class constructor
      */
     LLAToECEFTransform(const EllipsoidModel *initVals);
 
-    ~LLAToECEFTransform(){}
+    ~LLAToECEFTransform() = default;
 
     /**
      * This function returns a pointer to a clone of the LLAToECEFTransform

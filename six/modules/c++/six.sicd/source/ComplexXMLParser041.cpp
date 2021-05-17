@@ -86,7 +86,7 @@ XMLElem ComplexXMLParser041::convertRMATToXML(
     return rmatXML;
 }
 
-void ComplexXMLParser041::parseRMATFromXML(const XMLElem rmatElem, 
+void ComplexXMLParser041::parseRMATFromXML(const xml::lite::Element* rmatElem, 
                                            RMAT* rmat) const
 {
     parseDouble(getFirstAndOnly(rmatElem, "RefTime"), rmat->refTime);

@@ -241,15 +241,15 @@ XMLElem ComplexXMLParser::convertImageDataToXML(
         setAttribute(ampTableXML, "size", ampTable.numEntries);
         for (size_t i = 0; i < ampTable.numEntries; ++i)
         {
-            XMLElem ampXML = createDouble("Amplitude", *(double*) ampTable[i],
+            XMLElem ampXML = createDouble("Amplitude", *reinterpret_cast<const double*>(ampTable[i]),
                                           ampTableXML);
             setAttribute(ampXML, "index", i);
         }
     }
-    createInt("NumRows", static_cast<int>(imageData->numRows), imageDataXML);
-    createInt("NumCols", static_cast<int>(imageData->numCols), imageDataXML);
-    createInt("FirstRow", static_cast<int>(imageData->firstRow), imageDataXML);
-    createInt("FirstCol", static_cast<int>(imageData->firstCol), imageDataXML);
+    createInt("NumRows", imageData->numRows, imageDataXML);
+    createInt("NumCols", imageData->numCols, imageDataXML);
+    createInt("FirstRow", imageData->firstRow, imageDataXML);
+    createInt("FirstCol", imageData->firstCol, imageDataXML);
 
     common().createRowCol("FullImage", "NumRows", "NumCols", imageData->fullImage,
                  imageDataXML);
@@ -406,7 +406,7 @@ XMLElem ComplexXMLParser::convertTimelineToXML(
     if (timeline->interPulsePeriod.get())
     {
         XMLElem ippXML = newElement("IPP", timelineXML);
-        size_t setSize = timeline->interPulsePeriod->sets.size();
+        const auto setSize = timeline->interPulsePeriod->sets.size();
         set_attribute(*ippXML, "size", setSize);
 
         for (size_t i = 0; i < setSize; ++i)
@@ -438,7 +438,7 @@ XMLElem ComplexXMLParser::convertPositionToXML(
         common().createPolyXYZ("TxAPCPoly", position->txAPCPoly, positionXML);
     if (position->rcvAPC.get() && !position->rcvAPC->rcvAPCPolys.empty())
     {
-        size_t numPolys = position->rcvAPC->rcvAPCPolys.size();
+        const auto numPolys = position->rcvAPC->rcvAPCPolys.size();
         XMLElem rcvXML = newElement("RcvAPC", positionXML);
         setAttribute(rcvXML, "size", numPolys);
 
@@ -624,8 +624,8 @@ XMLElem ComplexXMLParser::areaLineDirectionParametersToXML(
     XMLElem adpXML = newElement(name, parent);
     common().createVector3D("UVectECF", adp->unitVector, adpXML);
     createDouble("LineSpacing", adp->spacing, adpXML);
-    createInt("NumLines", static_cast<int>(adp->elements), adpXML);
-    createInt("FirstLine", static_cast<int>(adp->first), adpXML);
+    createInt("NumLines", adp->elements, adpXML);
+    createInt("FirstLine", adp->first, adpXML);
     return adpXML;
 }
 
@@ -637,8 +637,8 @@ XMLElem ComplexXMLParser::areaSampleDirectionParametersToXML(
     XMLElem adpXML = newElement(name, parent);
     common().createVector3D("UVectECF", adp->unitVector, adpXML);
     createDouble("SampleSpacing", adp->spacing, adpXML);
-    createInt("NumSamples", static_cast<int>(adp->elements), adpXML);
-    createInt("FirstSample", static_cast<int>(adp->first), adpXML);
+    createInt("NumSamples", adp->elements, adpXML);
+    createInt("FirstSample", adp->first, adpXML);
     return adpXML;
 }
 
@@ -899,7 +899,7 @@ XMLElem ComplexXMLParser::convertRgAzCompToXML(
 }
 
 void ComplexXMLParser::parseDRateSFPolyFromXML(
-    const XMLElem incaElem, INCA* inca) const
+    const xml::lite::Element* incaElem, INCA* inca) const
 {
     //! Poly2D in 0.4.1
     common().parsePoly2D(getFirstAndOnly(incaElem, "DRateSFPoly"),
@@ -907,29 +907,22 @@ void ComplexXMLParser::parseDRateSFPolyFromXML(
 }
 
 void ComplexXMLParser::parseImageCreationFromXML(
-    const XMLElem imageCreationXML,
+    const xml::lite::Element* imageCreationXML,
     ImageCreation *imageCreation) const
 {
-    // Optional
-    XMLElem element = getOptional(imageCreationXML, "Application");
-    if (element)
-        parseString(element, imageCreation->application);
+    parseOptionalString(imageCreationXML, "Application", imageCreation->application);
 
-    element = getOptional(imageCreationXML, "DateTime");
-    if (element)
+    if (const xml::lite::Element* const element = getOptional(imageCreationXML, "DateTime"))
+    {
         parseDateTime(element, imageCreation->dateTime);
+    }
 
-    element = getOptional(imageCreationXML, "Site");
-    if (element)
-        parseString(element, imageCreation->site);
-
-    element = getOptional(imageCreationXML, "Profile");
-    if (element)
-        parseString(element, imageCreation->profile);
+    parseOptionalString(imageCreationXML, "Site", imageCreation->site);
+    parseOptionalString(imageCreationXML, "Profile", imageCreation->profile);
 }
 
 void ComplexXMLParser::parseImageDataFromXML(
-    const XMLElem imageDataXML,
+    const xml::lite::Element* imageDataXML,
     ImageData *imageData) const
 {
     imageData->pixelType
@@ -962,7 +955,7 @@ void ComplexXMLParser::parseImageDataFromXML(
                 }
                 else
                 {
-                    parseDouble(*it, *(double*) ampTable[index]);
+                    parseDouble(*it, *reinterpret_cast<double*>(ampTable[static_cast<size_t>(index)]));
                 }
             }
             else
@@ -992,7 +985,7 @@ void ComplexXMLParser::parseImageDataFromXML(
 }
 
 void ComplexXMLParser::parseGeoDataFromXML(
-    const XMLElem geoDataXML,
+    const xml::lite::Element* geoDataXML,
     GeoData *geoData) const
 {
     common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
@@ -1026,7 +1019,7 @@ void ComplexXMLParser::parseGeoDataFromXML(
     }
 }
 
-void ComplexXMLParser::parseGridFromXML(const XMLElem gridXML, Grid *grid) const
+void ComplexXMLParser::parseGridFromXML(const xml::lite::Element* gridXML, Grid *grid) const
 {
     grid->imagePlane = six::toType<ComplexImagePlaneType>(
         getFirstAndOnly(gridXML, "ImagePlane")->getCharacterData());
@@ -1115,7 +1108,7 @@ void ComplexXMLParser::parseGridFromXML(const XMLElem gridXML, Grid *grid) const
 }
 
 void ComplexXMLParser::parseTimelineFromXML(
-    const XMLElem timelineXML,
+    const xml::lite::Element* timelineXML,
     Timeline *timeline) const
 {
     parseDateTime(getFirstAndOnly(timelineXML, "CollectStart"),
@@ -1157,7 +1150,7 @@ void ComplexXMLParser::parseTimelineFromXML(
 }
 
 void ComplexXMLParser::parsePositionFromXML(
-    const XMLElem positionXML,
+    const xml::lite::Element* positionXML,
     Position *position) const
 {
     XMLElem tmpElem = getFirstAndOnly(positionXML, "ARPPoly");
@@ -1197,7 +1190,7 @@ void ComplexXMLParser::parsePositionFromXML(
 }
 
 void ComplexXMLParser::parseImageFormationFromXML(
-    const XMLElem imageFormationXML,
+    const xml::lite::Element* imageFormationXML,
     const RadarCollection& radarCollection,
     ImageFormation *imageFormation) const
 {
@@ -1330,46 +1323,21 @@ void ComplexXMLParser::parseImageFormationFromXML(
         parseComplex(getFirstAndOnly(distortionXML, "Q4"),
                      imageFormation->polarizationCalibration->distortion->q4);
 
-        XMLElem gainErrorXML = getOptional(distortionXML, "GainErrorA");
-        if (gainErrorXML)
-        {
-            parseDouble(gainErrorXML, imageFormation->
-                polarizationCalibration ->distortion->gainErrorA);
-        }
-
-        gainErrorXML = getOptional(distortionXML, "GainErrorF1");
-        if (gainErrorXML)
-        {
-            parseDouble(gainErrorXML, imageFormation->
-                polarizationCalibration->distortion->gainErrorF1);
-        }
-
-        gainErrorXML = getOptional(distortionXML, "GainErrorF2");
-        if (gainErrorXML)
-        {
-            parseDouble(gainErrorXML, imageFormation->
-                polarizationCalibration ->distortion->gainErrorF2);
-        }
-
-        XMLElem phaseErrorXML = getOptional(distortionXML, "PhaseErrorF1");
-        if (phaseErrorXML)
-        {
-            parseDouble(phaseErrorXML, imageFormation->
-                polarizationCalibration ->distortion->phaseErrorF1);
-        }
-
-        phaseErrorXML = getOptional(distortionXML, "PhaseErrorF2");
-        if (phaseErrorXML)
-        {
-            parseDouble(phaseErrorXML, imageFormation->
-                polarizationCalibration ->distortion->phaseErrorF2);
-        }
-
+        parseOptionalDouble(distortionXML, "GainErrorA", imageFormation->
+            polarizationCalibration->distortion->gainErrorA);
+        parseOptionalDouble(distortionXML, "GainErrorF1", imageFormation->
+            polarizationCalibration->distortion->gainErrorF1);
+        parseOptionalDouble(distortionXML, "GainErrorF2", imageFormation->
+            polarizationCalibration->distortion->gainErrorF2);
+       parseOptionalDouble(distortionXML, "PhaseErrorF1", imageFormation->
+            polarizationCalibration->distortion->phaseErrorF1);
+        parseOptionalDouble(distortionXML, "PhaseErrorF2", imageFormation->
+            polarizationCalibration->distortion->phaseErrorF2);
     }
 }
 
 void ComplexXMLParser::parseSCPCOAFromXML(
-    const XMLElem scpcoaXML,
+    const xml::lite::Element* scpcoaXML,
     SCPCOA *scpcoa) const
 {
     parseDouble(getFirstAndOnly(scpcoaXML, "SCPTime"), scpcoa->scpTime);
@@ -1392,7 +1360,7 @@ void ComplexXMLParser::parseSCPCOAFromXML(
 }
 
 void ComplexXMLParser::parseAntennaParametersFromXML(
-    const XMLElem antennaParamsXML,
+    const xml::lite::Element* antennaParamsXML,
     AntennaParameters* params) const
 {
     common().parsePolyXYZ(getFirstAndOnly(antennaParamsXML, "XAxisPoly"),
@@ -1460,7 +1428,7 @@ void ComplexXMLParser::parseAntennaParametersFromXML(
 }
 
 void ComplexXMLParser::parseAntennaFromXML(
-    const XMLElem antennaXML,
+    const xml::lite::Element* antennaXML,
     Antenna *antenna) const
 {
     XMLElem antennaParamsXML = getOptional(antennaXML, "Tx");
@@ -1486,7 +1454,7 @@ void ComplexXMLParser::parseAntennaFromXML(
 }
 
 void ComplexXMLParser::parsePFAFromXML(
-    const XMLElem pfaXML,
+    const xml::lite::Element* pfaXML,
     PFA *pfa) const
 {
     common().parseVector3D(getFirstAndOnly(pfaXML, "FPN"), pfa->focusPlaneNormal);
@@ -1514,7 +1482,7 @@ void ComplexXMLParser::parsePFAFromXML(
 }
 
 void ComplexXMLParser::parseRMAFromXML(
-    const XMLElem rmaXML,
+    const xml::lite::Element* rmaXML,
     RMA* rma) const
 {
     rma->algoType = six::toType<RMAlgoType>(
@@ -1543,7 +1511,7 @@ void ComplexXMLParser::parseRMAFromXML(
 }
 
 void ComplexXMLParser::parseINCAFromXML(
-    const XMLElem incaElem, INCA* inca) const
+    const xml::lite::Element* incaElem, INCA* inca) const
 {
     common().parsePoly1D(getFirstAndOnly(incaElem, "TimeCAPoly"), inca->timeCAPoly);
     parseDouble(getFirstAndOnly(incaElem, "R_CA_SCP"), inca->rangeCA);
@@ -1565,7 +1533,7 @@ void ComplexXMLParser::parseINCAFromXML(
 }
 
 void ComplexXMLParser::parseRgAzCompFromXML(
-    const XMLElem rgAzCompXML,
+    const xml::lite::Element* rgAzCompXML,
     RgAzComp* rgAzComp) const
 {
     parseDouble(getFirstAndOnly(rgAzCompXML, "AzSF"), rgAzComp->azSF);
@@ -1573,7 +1541,7 @@ void ComplexXMLParser::parseRgAzCompFromXML(
 }
 
 void ComplexXMLParser::parseWaveformFromXML(
-    const XMLElem waveformXML,
+    const xml::lite::Element* waveformXML,
     std::vector<mem::ScopedCloneablePtr<WaveformParameters> >& waveform) const
 {
     std::vector<XMLElem> wfParamsXML;
@@ -1591,35 +1559,12 @@ void ComplexXMLParser::parseWaveformFromXML(
         waveform.back().reset(new WaveformParameters());
         WaveformParameters* const wfParams = waveform.back().get();
 
-        XMLElem optElem = getOptional(*it, "TxPulseLength");
-        if (optElem)
-        {
-            //optional
-            parseDouble(optElem, wfParams->txPulseLength);
-        }
+        parseOptionalDouble(*it, "TxPulseLength", wfParams->txPulseLength);
+        parseOptionalDouble(*it, "TxRFBandwidth", wfParams->txRFBandwidth);
+        parseOptionalDouble(*it, "TxFreqStart", wfParams->txFrequencyStart);
+        parseOptionalDouble(*it, "TxFMRate", wfParams->txFMRate);
 
-        optElem = getOptional(*it, "TxRFBandwidth");
-        if (optElem)
-        {
-            //optional
-            parseDouble(optElem, wfParams->txRFBandwidth);
-        }
-
-        optElem = getOptional(*it, "TxFreqStart");
-        if (optElem)
-        {
-            //optional
-            parseDouble(optElem, wfParams->txFrequencyStart);
-        }
-
-        optElem = getOptional(*it, "TxFMRate");
-        if (optElem)
-        {
-            //optional
-            parseDouble(optElem, wfParams->txFMRate);
-        }
-
-        optElem = getOptional(*it, "RcvDemodType");
+        XMLElem optElem = getOptional(*it, "RcvDemodType");
         if (optElem)
         {
             //optional
@@ -1627,45 +1572,16 @@ void ComplexXMLParser::parseWaveformFromXML(
                     = six::toType<DemodType>(optElem->getCharacterData());
         }
 
-        optElem = getOptional(*it, "RcvWindowLength");
-        if (optElem)
-        {
-            //optional
-            parseDouble(optElem, wfParams->rcvWindowLength);
-        }
-
-        optElem = getOptional(*it, "ADCSampleRate");
-        if (optElem)
-        {
-            //optional
-            parseDouble(optElem, wfParams->adcSampleRate);
-        }
-
-        optElem = getOptional(*it, "RcvIFBandwidth");
-        if (optElem)
-        {
-            //optional
-            parseDouble(optElem, wfParams->rcvIFBandwidth);
-        }
-
-        optElem = getOptional(*it, "RcvFreqStart");
-        if (optElem)
-        {
-            //optional
-            parseDouble(optElem, wfParams->rcvFrequencyStart);
-        }
-
-        optElem = getOptional(*it, "RcvFMRate");
-        if (optElem)
-        {
-            //optional
-            parseDouble(optElem, wfParams->rcvFMRate);
-        }
+        parseOptionalDouble(*it, "RcvWindowLength", wfParams->rcvWindowLength);
+        parseOptionalDouble(*it, "ADCSampleRate", wfParams->adcSampleRate);
+        parseOptionalDouble(*it, "RcvIFBandwidth", wfParams->rcvIFBandwidth);
+        parseOptionalDouble(*it, "RcvFreqStart", wfParams->rcvFrequencyStart);
+        parseOptionalDouble(*it, "RcvFMRate", wfParams->rcvFMRate);
     }
 }
 
 void ComplexXMLParser::parseAreaFromXML(
-        const XMLElem areaXML,
+        const xml::lite::Element* areaXML,
         bool cornersRequired,
         bool planeOrientationRequired,
         mem::ScopedCloneablePtr<Area>& area) const
@@ -1771,7 +1687,7 @@ void ComplexXMLParser::parseAreaFromXML(
 }
 
 void ComplexXMLParser::parseTxSequenceFromXML(
-        const XMLElem txSequenceXML,
+        const xml::lite::Element* txSequenceXML,
         std::vector<mem::ScopedCloneablePtr<TxStep> >& steps) const
 {
     std::vector<XMLElem> txStepsXML;
@@ -1789,14 +1705,9 @@ void ComplexXMLParser::parseTxSequenceFromXML(
         mem::ScopedCloneablePtr<TxStep>& step(steps.back());
         step.reset(new TxStep());
 
-        XMLElem optElem = getOptional(*it, "WFIndex");
-        if (optElem)
-        {
-            //optional
-            parseInt(optElem, step->waveformIndex);
-        }
+        parseOptionalInt(*it, "WFIndex", step->waveformIndex);
 
-        optElem = getOptional(*it, "TxPolarization");
+        XMLElem optElem = getOptional(*it, "TxPolarization");
         if (optElem)
         {
             //optional
@@ -1845,14 +1756,14 @@ XMLElem ComplexXMLParser::createSideOfTrackType(const std::string& name,
     return createSixString(name, value, parent);
 }
 
-void ComplexXMLParser::parseSideOfTrackType(XMLElem element,
+void ComplexXMLParser::parseSideOfTrackType(const xml::lite::Element* element,
                                             SideOfTrackType& value) const
 {
     value = six::toType<SideOfTrackType>(element->getCharacterData());
 }
 
 void ComplexXMLParser::parseMatchInformationFromXML(
-    const XMLElem matchInfoXML,
+    const xml::lite::Element* matchInfoXML,
     MatchInformation* matchInfo) const
 {
     return common().parseMatchInformationFromXML(matchInfoXML, matchInfo);

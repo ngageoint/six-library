@@ -147,7 +147,7 @@ TEST_CASE(testCompressed)
 }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
         TEST_CHECK(testCompressed);
 )
 

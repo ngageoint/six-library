@@ -121,7 +121,7 @@ TEST_CASE(testWarningParameters)
     TEST_ASSERT_FALSE(parameters.empty());
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     // These tests should suffice to cover all of the "tricky"
     // logic in the implementation.  Any remaining bugs would
     // most likely be due to misreading the standards.

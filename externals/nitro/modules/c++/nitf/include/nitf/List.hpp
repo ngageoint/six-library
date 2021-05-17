@@ -29,8 +29,9 @@
 #include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-
-/*!
+#include "nitf/exports.hpp"
+ 
+ /*!
  *  \file List.hpp
  *  \brief  Contains wrapper implementation for List
  */
@@ -46,7 +47,7 @@ namespace nitf
  *  It is a doubly-linked list with pair data (the first of
  *  which is copied, the second of which is not).
  */
-DECLARE_CLASS(ListNode)
+NITRO_DECLARE_CLASS_NRT(ListNode)
 {
 public:
     //! Constructor
@@ -91,7 +92,7 @@ private:
  *
  *  Iterates a linked list.
  */
-struct ListIterator /*final*/   // no "final", SWIG doesn't like it
+struct NITRO_NITFCPP_API ListIterator /*final*/   // no "final", SWIG doesn't like it
 {
     ListIterator() = default;
     ~ListIterator() = default;
@@ -134,10 +135,8 @@ struct ListIterator /*final*/   // no "final", SWIG doesn't like it
     void operator++() { increment(); }
 
     //! Get the data
+    NITF_DATA* get() noexcept;
     NITF_DATA* operator*() noexcept { return get(); }
-
-    //! Get the data
-    NITF_DATA* get() noexcept { return nitf_ListIterator_get(&handle); }
 
     //! Get the current
     nitf::ListNode & getCurrent() noexcept { return mCurrent; }
@@ -168,7 +167,7 @@ private:
  *  This object is the controller for the ListNode nodes.
  *  It contains a pointer to the first and last items in its set.
  */
-DECLARE_CLASS(List)
+NITRO_DECLARE_CLASS_NRT(List)
 {
 public:
 
@@ -293,6 +292,7 @@ public:
 
     //! Returns the data at the given index
     NITF_DATA* operator[] (size_t index);
+    const NITF_DATA* operator[] (size_t index) const;
 
 private:
     mutable nitf_Error error{};

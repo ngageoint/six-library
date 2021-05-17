@@ -49,6 +49,9 @@ public:
                      bool ownLog = false);
 #endif
 
+        ComplexXMLParser(const ComplexXMLParser&) = delete;
+        ComplexXMLParser& operator=(const ComplexXMLParser&) = delete;
+
     xml::lite::Document* toXML(const ComplexData* data) const;
 
     ComplexData* fromXML(const xml::lite::Document* doc) const;
@@ -84,23 +87,23 @@ protected:
         const GainAndPhasePolys* obj,
         XMLElem parent = nullptr) const = 0;
 
-    virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
+    virtual void parseWeightTypeFromXML(const xml::lite::Element* gridRowColXML,
                         mem::ScopedCopyablePtr<WeightType>& obj) const = 0;
 
-    virtual void parsePolarizationCalibrationFromXML(const XMLElem polCalXML,
+    virtual void parsePolarizationCalibrationFromXML(const xml::lite::Element* polCalXML,
                          six::sicd::PolarizationCalibration* obj) const = 0;
 
-    virtual void parseTxRcvPolFromXML(const XMLElem parent,
+    virtual void parseTxRcvPolFromXML(const xml::lite::Element* parent,
                          six::DualPolarizationType& obj) const = 0;
 
 
-    virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const = 0;
+    virtual void parseRMATFromXML(const xml::lite::Element* rmatElem, RMAT* obj) const = 0;
 
-    virtual void parseRMCRFromXML(const XMLElem rmcrElem, RMCR* obj) const = 0;
+    virtual void parseRMCRFromXML(const xml::lite::Element* rmcrElem, RMCR* obj) const = 0;
 
 
     virtual void parseAntennaParamArrayFromXML(
-        const XMLElem antennaParamsXML,
+        const xml::lite::Element* antennaParamsXML,
         six::sicd::AntennaParameters* obj) const = 0;
 
 protected:
@@ -140,26 +143,26 @@ protected:
     virtual XMLElem convertMatchInformationToXML(const MatchInformation& obj,
                                                  XMLElem parent = nullptr) const;
 
-    virtual void parseSCPCOAFromXML(const XMLElem scpcoaXML, SCPCOA *obj) const;
-    virtual void parseDRateSFPolyFromXML(const XMLElem incaElem, INCA* inca) const;
-    virtual void parseMatchInformationFromXML(const XMLElem matchInfoXML,
+    virtual void parseSCPCOAFromXML(const xml::lite::Element* scpcoaXML, SCPCOA *obj) const;
+    virtual void parseDRateSFPolyFromXML(const xml::lite::Element* incaElem, INCA* inca) const;
+    virtual void parseMatchInformationFromXML(const xml::lite::Element* matchInfoXML,
                                               MatchInformation *obj) const;
 
-    virtual void parseRadarCollectionFromXML(const XMLElem radarCollectionXML,
+    virtual void parseRadarCollectionFromXML(const xml::lite::Element* radarCollectionXML,
                                              RadarCollection *obj) const = 0;
 
     void parseWaveformFromXML(
-            const XMLElem waveformXML,
+            const xml::lite::Element* waveformXML,
             std::vector<mem::ScopedCloneablePtr<WaveformParameters> >&
                     waveform) const;
 
-    void parseAreaFromXML(const XMLElem areaXML,
+    void parseAreaFromXML(const xml::lite::Element* areaXML,
                           bool cornersRequired,
                           bool planeOrientationRequired,
                           mem::ScopedCloneablePtr<Area>& area) const;
 
     void parseTxSequenceFromXML(
-            const XMLElem txSequenceXML,
+            const xml::lite::Element* txSequenceXML,
             std::vector<mem::ScopedCloneablePtr<TxStep> >& steps) const;
 
     static
@@ -194,26 +197,26 @@ private:
             const AreaDirectionParameters *obj,
             XMLElem parent = nullptr) const;
 
-    void parseImageCreationFromXML(const XMLElem imageCreationXML,
+    void parseImageCreationFromXML(const xml::lite::Element* imageCreationXML,
                                    ImageCreation *obj) const;
-    void parseImageDataFromXML(const XMLElem imageDataXML,
+    void parseImageDataFromXML(const xml::lite::Element* imageDataXML,
                                ImageData *obj) const;
-    void parseGeoDataFromXML(const XMLElem geoDataXML, GeoData *obj) const;
-    void parseGridFromXML(const XMLElem gridXML, Grid *obj) const;
-    void parseTimelineFromXML(const XMLElem timelineXML, Timeline *obj) const;
-    void parsePositionFromXML(const XMLElem positionXML, Position *obj) const;
-    void parseImageFormationFromXML(const XMLElem imageFormationXML,
+    void parseGeoDataFromXML(const xml::lite::Element* geoDataXML, GeoData *obj) const;
+    void parseGridFromXML(const xml::lite::Element* gridXML, Grid *obj) const;
+    void parseTimelineFromXML(const xml::lite::Element* timelineXML, Timeline *obj) const;
+    void parsePositionFromXML(const xml::lite::Element* positionXML, Position *obj) const;
+    void parseImageFormationFromXML(const xml::lite::Element* imageFormationXML,
                                     const RadarCollection& radarCollection,
                                     ImageFormation *obj) const;
-    void parseAntennaFromXML(const XMLElem antennaXML, Antenna *obj) const;
-    void parseAntennaParametersFromXML(const XMLElem antennaParamsXML,
+    void parseAntennaFromXML(const xml::lite::Element* antennaXML, Antenna *obj) const;
+    void parseAntennaParametersFromXML(const xml::lite::Element* antennaParamsXML,
                                        AntennaParameters* params) const;
-    void parsePFAFromXML(const XMLElem pfaXML, PFA *obj) const;
-    void parseRMAFromXML(const XMLElem rmaXML, RMA *obj) const;
-    void parseRgAzCompFromXML(const XMLElem rgAzCompXML, RgAzComp *obj) const;
-    void parseINCAFromXML(const XMLElem incaElem, INCA* obj) const;
+    void parsePFAFromXML(const xml::lite::Element* pfaXML, PFA *obj) const;
+    void parseRMAFromXML(const xml::lite::Element* rmaXML, RMA *obj) const;
+    void parseRgAzCompFromXML(const xml::lite::Element* rgAzCompXML, RgAzComp *obj) const;
+    void parseINCAFromXML(const xml::lite::Element* incaElem, INCA* obj) const;
 
-    void parseSideOfTrackType(const XMLElem element, SideOfTrackType& value) const;
+    void parseSideOfTrackType(const xml::lite::Element* element, SideOfTrackType& value) const;
 
     XMLElem createFFTSign(const std::string& name, six::FFTSign sign,
                           XMLElem parent = nullptr) const;

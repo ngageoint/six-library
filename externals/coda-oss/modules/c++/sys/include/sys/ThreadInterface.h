@@ -24,6 +24,8 @@
 #ifndef __SYS_THREAD_INTERFACE_H__
 #define __SYS_THREAD_INTERFACE_H__
 
+#include <assert.h>
+
 #include "sys/Runnable.h"
 
 #include <typeinfo>
@@ -49,11 +51,11 @@ namespace sys
  *  \endcode
  */
 #define STANDARD_START_CALL(MY_NAME, PTR_TO_ME) \
-   sys::MY_NAME *me = \
-        static_cast<sys::MY_NAME*>(PTR_TO_ME); \
+   sys::MY_NAME *me = static_cast<sys::MY_NAME*>(PTR_TO_ME); \
+   assert(me != nullptr); \
    me->setIsRunning(true); \
    me->target()->run(); \
-   me->setIsRunning(false); \
+   me->setIsRunning(false)
 
 
 /*!
@@ -232,7 +234,7 @@ struct ThreadInterface : public Runnable
         return mTarget;
     }
 
-    bool isRunning()
+    bool isRunning() noexcept
     {
         return mIsRunning;
     }

@@ -35,17 +35,17 @@ static void load_plugin(const char* tre)
 {
     nitf_Error error;
 
-    auto reg = nitf_PluginRegistry_getInstance(&error);
+    auto reg = nitf::PluginRegistry::getInstance(error);
     TEST_ASSERT(reg != nullptr);
 
-    nitf_HashTable_print(reg->treHandlers);
+    nitf::HashTable::print(*(reg->treHandlers));
 
     int bad = 0;
     auto test_main_ =
-        nitf_PluginRegistry_retrieveTREHandler(reg,
+        nitf::PluginRegistry::retrieveTREHandler(*reg,
             tre,
-            &bad,
-            &error);
+            bad,
+            error);
     TEST_ASSERT_EQ(0, bad);
     TEST_ASSERT(test_main_ != nullptr);
 }

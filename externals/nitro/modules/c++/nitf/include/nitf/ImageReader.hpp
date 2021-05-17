@@ -135,6 +135,11 @@ public:
     //!  Set read caching
     void setReadCaching();
 
+    // for unit-tests
+    bool getMaskInfo(uint32_t& imageDataOffset, uint32_t& blockRecordLength,
+        uint32_t& padRecordLength, uint32_t& padPixelValueLength,
+        uint8_t* &padValue, uint64_t* &blockMask, uint64_t* &padMask) const;
+
 private:
     mutable nitf_Error error{};
     ImageReader() = default;

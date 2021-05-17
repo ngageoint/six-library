@@ -156,7 +156,7 @@ TEST_CASE(testRoundTripHeader)
 }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
         TEST_CHECK(testReadVersion);
         TEST_CHECK(testCanReadHeaderWithoutBreaking);
         TEST_CHECK(testRoundTripHeader);

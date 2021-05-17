@@ -38,15 +38,13 @@
  * Useful macro for defining Exception classes
  */
 #define DECLARE_EXTENDED_ERROR(_Name, _Base) \
-  class _Name##Error : public _Base \
+  struct _Name##Error : public _Base \
   { \
-  public: \
-      _Name##Error() : _Base(){} \
+      _Name##Error() = default; virtual ~_Name##Error() = default; \
       _Name##Error(const except::Context& c) : _Base(c){} \
       _Name##Error(const std::string& msg) : _Base(msg){} \
       _Name##Error(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
-      virtual ~_Name##Error(){} \
-      virtual std::string getType() const noexcept { return #_Name; } \
+      std::string getType() const override { return #_Name; } \
   };
 
 #define DECLARE_ERROR(_Name) DECLARE_EXTENDED_ERROR(_Name, except::Error)
@@ -62,16 +60,10 @@ namespace except
  * the manner that you handle an exception.  For this reason, the distinction is
  * made
  */
-class Error : public Throwable
+struct Error : public Throwable
 {
-public:
-    /*!
-     * Default constructor
-     */
-    Error() :
-        Throwable()
-    {
-    }
+    Error() = default;
+    virtual ~Error() = default;
 
     /*!
      * Constructor. Takes a Context
@@ -101,12 +93,7 @@ public:
     {
     }
 
-    //!  Destructor
-    virtual ~Error()
-    {
-    }
-
-    virtual std::string getType() const noexcept override 
+    std::string getType() const override 
     {
         return "Error";
     }

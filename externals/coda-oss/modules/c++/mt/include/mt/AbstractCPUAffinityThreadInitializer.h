@@ -30,11 +30,10 @@ namespace mt
  * \class AbstractCPUAffinityThreadInitializer
  * \brief Abstract class for setting the CPU affinity of a thread
  */
-class AbstractCPUAffinityThreadInitializer
+struct AbstractCPUAffinityThreadInitializer
 {
-public:
-    AbstractCPUAffinityThreadInitializer() {}
-    virtual ~AbstractCPUAffinityThreadInitializer() {}
+    AbstractCPUAffinityThreadInitializer() = default;
+    virtual ~AbstractCPUAffinityThreadInitializer() = default;
 
     /*!
      * Set the CPU affinity of the currently running thread

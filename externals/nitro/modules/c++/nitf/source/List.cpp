@@ -120,6 +120,12 @@ nitf::ListIterator nitf::ListIterator::operator+(int x)
     return it;
 }
 
+NITF_DATA* nitf::ListIterator::get() noexcept
+{
+    return nitf_ListIterator_get(&handle);
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // List
 
@@ -226,6 +232,14 @@ size_t nitf::List::getSize() const
 }
 
 NITF_DATA* nitf::List::operator[] (size_t index)
+{
+    NITF_DATA* x = nitf_List_get(getNativeOrThrow(), gsl::narrow<int>(index), &error);
+    if (!x)
+        throw nitf::NITFException(&error);
+    return x;
+}
+
+const NITF_DATA* nitf::List::operator[] (size_t index) const
 {
     NITF_DATA* x = nitf_List_get(getNativeOrThrow(), gsl::narrow<int>(index), &error);
     if (!x)

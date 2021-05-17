@@ -33,13 +33,15 @@
 
 namespace
 {
-class GetDisplayLutFromData
+struct GetDisplayLutFromData final
 {
-public:
     GetDisplayLutFromData(six::Data& data) :
         mData(data)
     {
     }
+
+    GetDisplayLutFromData(const GetDisplayLutFromData&) = delete;
+    GetDisplayLutFromData& operator=(const GetDisplayLutFromData&) = delete;
 
     const six::LUT* operator()() const
     {
@@ -133,48 +135,44 @@ void NITFImageInfo::computeSegmentCorners()
     const LatLonCorners corners = mData->getImageCorners();
 
     // (0, 0)
-    Vector3 icp1 = scene::Utilities::latLonToECEF(corners.upperLeft);
+    const Vector3 icp1 = scene::Utilities::latLonToECEF(corners.upperLeft);
     // (0, N)
-    Vector3 icp2 = scene::Utilities::latLonToECEF(corners.upperRight);
+    const Vector3 icp2 = scene::Utilities::latLonToECEF(corners.upperRight);
     // (M, N)
-    Vector3 icp3 = scene::Utilities::latLonToECEF(corners.lowerRight);
+    const Vector3 icp3 = scene::Utilities::latLonToECEF(corners.lowerRight);
     // (M, 0)
-    Vector3 icp4 = scene::Utilities::latLonToECEF(corners.lowerLeft);
+    const Vector3 icp4 = scene::Utilities::latLonToECEF(corners.lowerLeft);
 
-    size_t numIS = mImageSegments.size();
-    double total = mData->getNumRows() - 1.0;
+    const auto total = static_cast<double>(mData->getNumRows()) - 1.0;
 
-    Vector3 ecef;
-    size_t i;
-    for (i = 0; i < numIS; i++)
+    for (auto& imageSegment : mImageSegments)
     {
-        const auto firstRow = mImageSegments[i].getFirstRow();
-        double wgt1 = (total - firstRow) / total;
-        double wgt2 = firstRow / total;
+        const auto firstRow = static_cast<double>(imageSegment.getFirstRow());
+        const auto wgt1 = (total - firstRow) / total;
+        const auto wgt2 = firstRow / total;
 
         // This requires an operator overload for scalar * vector
-        ecef = wgt1 * icp1 + wgt2 * icp4;
+        Vector3 ecef = wgt1 * icp1 + wgt2 * icp4;
 
-        mImageSegments[i].corners.upperLeft =
+        imageSegment.corners.upperLeft =
             scene::Utilities::ecefToLatLon(ecef);
 
         // Now do it for the first
         ecef = wgt1 * icp2 + wgt2 * icp3;
 
-        mImageSegments[i].corners.upperRight =
+        imageSegment.corners.upperRight =
             scene::Utilities::ecefToLatLon(ecef);
     }
 
+    size_t i;
+    const auto numIS = mImageSegments.size();
     for (i = 0; i < numIS - 1; i++)
     {
         LatLonCorners& theseCorners(mImageSegments[i].corners);
         const LatLonCorners& nextCorners(mImageSegments[i + 1].corners);
 
-        theseCorners.lowerRight.setLat(nextCorners.upperRight.getLat());
-        theseCorners.lowerRight.setLon(nextCorners.upperRight.getLon());
-
-        theseCorners.lowerLeft.setLat(nextCorners.upperLeft.getLat());
-        theseCorners.lowerLeft.setLon(nextCorners.upperLeft.getLon());
+        theseCorners.lowerRight.setLatLon(nextCorners.upperRight);
+        theseCorners.lowerLeft.setLatLon(nextCorners.upperLeft);
     }
 
     // This last one is cake

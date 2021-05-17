@@ -23,10 +23,11 @@
 #ifndef __NITF_DATASOURCE_HPP__
 #define __NITF_DATASOURCE_HPP__
 
+#include <string>
+
 #include "nitf/DataSource.h"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file DataSource.hpp

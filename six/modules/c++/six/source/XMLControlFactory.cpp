@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include "six/XMLControlFactory.h"
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
@@ -80,9 +82,9 @@ XMLControlRegistry::newXMLControl(const std::string& identifier,
 std::string six::toXMLString(const Data* data,
                              const six::XMLControlRegistry *xmlRegistry)
 {
-    std::unique_ptr<logging::Logger> log (new logging::NullLogger());
+    logging::NullLogger log;
     return toValidXMLString(data, std::vector<std::string>(),
-                            log.get(), xmlRegistry);
+                            &log, xmlRegistry);
 }
 
 std::string six::toValidXMLString(const Data* data,
@@ -90,6 +92,8 @@ std::string six::toValidXMLString(const Data* data,
                                   logging::Logger* log,
                                   const six::XMLControlRegistry *xmlRegistry)
 {
+    assert(data != nullptr);
+
     if (!xmlRegistry)
     {
         xmlRegistry = &XMLControlFactory::getInstance();

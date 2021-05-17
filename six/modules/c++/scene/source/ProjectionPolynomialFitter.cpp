@@ -23,15 +23,19 @@
 #include <scene/ProjectionPolynomialFitter.h>
 #include <polygon/PolygonMask.h>
 
+#undef min
+#undef max
+
 namespace
 {
-class Shift
+struct Shift final
 {
-public:
     Shift(double shift) :
         mShift(shift)
     {
     }
+    Shift(const Shift& other) = delete;
+    Shift& operator=(const Shift& other) = delete;
 
     inline double operator()(double input) const
     {
@@ -67,8 +71,8 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     // only sample our part of the grid defined by outPixelStart and
     // outExtent.
     const types::RowCol<double> skip(
-        static_cast<double>(outExtent.row - 1) / (mNumPoints1D - 1),
-        static_cast<double>(outExtent.col - 1) / (mNumPoints1D - 1));
+        static_cast<double>(outExtent.row - 1) / static_cast<double>(mNumPoints1D - 1),
+        static_cast<double>(outExtent.col - 1) / static_cast<double>(mNumPoints1D - 1));
 
     types::RowCol<double> currentOffset(outPixelStart);
 
@@ -134,10 +138,10 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     maxCol = std::min(maxCol, static_cast<double>(fullExtent.col) - 1);
 
     // Get size_t extent of the set of points.
-    const size_t minRowI = static_cast<size_t>(std::ceil(minRow));
-    const size_t minColI = static_cast<size_t>(std::ceil(minCol));
-    const size_t maxRowI = static_cast<size_t>(std::floor(maxRow));
-    const size_t maxColI = static_cast<size_t>(std::floor(maxCol));
+    const auto minRowI = static_cast<size_t>(std::ceil(minRow));
+    const auto minColI = static_cast<size_t>(std::ceil(minCol));
+    const auto maxRowI = static_cast<size_t>(std::floor(maxRow));
+    const auto maxColI = static_cast<size_t>(std::floor(maxCol));
 
     if (minRowI > maxRowI || minColI > maxColI)
     {
@@ -146,9 +150,7 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     }
 
     // The offset and extent are relative to the entire global output plane.
-    const types::RowCol<double> boundingOffset(
-        static_cast<double>(minRowI),
-        static_cast<double>(minColI));
+    const types::RowCol<double> boundingOffset(types::RowCol<size_t>(minRowI, minColI));
     const types::RowCol<size_t> boundingExtent(maxRowI - minRowI + 1,
                                                maxColI - minColI + 1);
 
@@ -160,10 +162,10 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     // Compute a delta in the row direction as if the entire bounding row 
     // extent will be covered by the point grid.
     const double initialDeltaRow =
-        static_cast<double>(boundingExtent.row - 1) / (numPoints1D - 1);
+        static_cast<double>(boundingExtent.row - 1) / static_cast<double>(numPoints1D - 1);
 
     // Scale factor for shrinking the row extent.
-    const double shrinkFactor = 0.1;
+    constexpr double shrinkFactor = 0.1;
 
     // Shring the row extent a bit.
     const double deltaToRemove = initialDeltaRow * shrinkFactor;
@@ -172,7 +174,7 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     const size_t newStartRow = static_cast<size_t>(
         std::ceil(boundingOffset.row + deltaToRemove));
     const size_t newEndRow = static_cast<size_t>(
-        std::floor(boundingOffset.row + boundingExtent.row - 1 -
+        std::floor(boundingOffset.row + static_cast<double>(boundingExtent.row) - 1 -
                    deltaToRemove));
 
     // Check the new row extent.
@@ -193,8 +195,8 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     double currentOffsetRow = static_cast<double>(newStartRow);
     for (size_t ii = 0; ii < numPoints1D; ++ii, currentOffsetRow += newDeltaRow)
     {
-        double currentRow = std::floor(currentOffsetRow);
-        size_t row = static_cast<size_t>(currentRow);
+        const double currentRow = std::floor(currentOffsetRow);
+        const auto row = static_cast<size_t>(currentRow);
 
         // Get the start column and number of columns inside the polygon row
         // the current row.
@@ -256,8 +258,8 @@ void ProjectionPolynomialFitter::getSlantPlaneSamples(
 {
     const types::RowCol<double> ratio(interimSceneCenter / inSceneCenter);
 
-    const types::RowCol<double> aoiOffset(inPixelStart.row * ratio.row,
-                                          inPixelStart.col * ratio.col);
+    const types::RowCol<double> aoiOffset(static_cast<double>(inPixelStart.row) * ratio.row,
+                                          static_cast<double>(inPixelStart.col) * ratio.col);
 
     for (size_t ii = 0; ii < mNumPoints1D; ++ii)
     {
@@ -336,7 +338,7 @@ void ProjectionPolynomialFitter::fitOutputToSlantPolynomials(
             }
         }
 
-        const size_t numPoints = mNumPoints1D * mNumPoints1D;
+        const auto numPoints = static_cast<double>(mNumPoints1D * mNumPoints1D);
         if (meanResidualErrorRow)
         {
             *meanResidualErrorRow = errorSumRow / numPoints;
@@ -404,7 +406,7 @@ void ProjectionPolynomialFitter::fitSlantToOutputPolynomials(
             }
         }
 
-        const size_t numPoints = mNumPoints1D * mNumPoints1D;
+        const auto numPoints = static_cast<double>(mNumPoints1D * mNumPoints1D);
         if (meanResidualErrorRow)
         {
             *meanResidualErrorRow = errorSumRow / numPoints;
@@ -464,7 +466,7 @@ void ProjectionPolynomialFitter::fitTimeCOAPolynomial(
             }
         }
 
-        *meanResidualError = errorSum / (mNumPoints1D * mNumPoints1D);
+        *meanResidualError = errorSum / static_cast<double>(mNumPoints1D * mNumPoints1D);
     }
 }
 

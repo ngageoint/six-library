@@ -31,9 +31,9 @@ RowColDouble GeometricChip::getFullImageCoordinateFromChip(
     // From section 5.1.1 of SIDD Volume 1
 
     // Normalize the chip coordinates
-    const double u = chip.row / (chipSize.row - 1);
-    const double v = chip.col / (chipSize.col - 1);
-    const double uv = u * v;
+    const auto u = chip.row / static_cast<double>(chipSize.row - 1);
+    const auto v = chip.col / static_cast<double>(chipSize.col - 1);
+    const auto uv = u * v;
 
     // Compute original full image row/col coordinate bilinear coefficients
     const RowColDouble A = originalUpperLeftCoordinate;
@@ -72,8 +72,8 @@ GeometricChip::getChipCoordinateFromFullImage(const RowColDouble& full) const
 
     const double u = (full.row - A.row - v * D.row) / B.row;
 
-    const RowColDouble chip(u * (chipSize.row - 1.0),
-                            v * (chipSize.col - 1.0));
+    const RowColDouble chip(u * static_cast<double>(chipSize.row - 1),
+                            v * static_cast<double>(chipSize.col - 1));
     return chip;
 }
 

@@ -27,14 +27,14 @@ using namespace scene;
 Vector3 scene::LocalCoordinateTransform::toECEFPoint(Vector3 localPoint)
 {
     scene::LLAToECEFTransform converter;
-    Vector3 ecefRefPoint = converter.transform(mReferencePoint);
+    const Vector3 ecefRefPoint = converter.transform(mReferencePoint);
     return (mBasis.transpose() * localPoint) + ecefRefPoint;
 }
 
 Vector3 scene::LocalCoordinateTransform::toLocalPoint(Vector3 ecefPoint)
 {
     scene::LLAToECEFTransform converter;
-    Vector3 ecefRefPoint = converter.transform(mReferencePoint);
+    const Vector3 ecefRefPoint = converter.transform(mReferencePoint);
     return mBasis * (ecefPoint - ecefRefPoint);
 }
 

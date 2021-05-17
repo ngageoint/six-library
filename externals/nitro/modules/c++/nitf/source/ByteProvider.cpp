@@ -137,7 +137,7 @@ void ByteProvider::initialize(const Record& record,
 void ByteProvider::getFileLayout(const nitf::Record& inRecord,
                                  const std::vector<PtrAndLength>& desData)
 {
-    std::shared_ptr<io::ByteStream> byteStream(new io::ByteStream());
+   auto byteStream = std::make_shared<io::ByteStream>();
 
     nitf::IOStreamWriter io(byteStream);
 
@@ -326,13 +326,13 @@ mem::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
         numRowsPerSegment[ii] = mImageSegmentInfo[ii].numRows;
     }
 
-    mem::auto_ptr<const ImageBlocker> blocker(new ImageBlocker(
+    auto blocker = std::make_unique<ImageBlocker>(
             numRowsPerSegment,
             mNumCols,
             mOverallNumRowsPerBlock,
-            mNumColsPerBlock));
-
-    return blocker;
+            mNumColsPerBlock);
+    mem::auto_ptr<const ImageBlocker> blocker_(blocker.release());
+    return blocker_;
 }
 
 void ByteProvider::checkBlocking(size_t seg,

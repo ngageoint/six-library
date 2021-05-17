@@ -87,6 +87,12 @@ public:
         startCol = col;
     }
 
+    void setOffset(const types::RowCol<size_t>& aoiOffset)
+    {
+        setStartRow(static_cast<ptrdiff_t>(aoiOffset.row));
+        setStartCol(static_cast<ptrdiff_t>(aoiOffset.col));
+    }
+
     /*!
      *  Set the number of rows to read.  Valid values are between 1 and 
      *  numRows, or -1 to request numRows without querying the
@@ -105,6 +111,13 @@ public:
     void setNumCols(ptrdiff_t cols)
     {
         numCols = cols;
+    }
+
+
+    void setDims(const types::RowCol<size_t>& aoiDims)
+    {
+        setNumRows(static_cast<ptrdiff_t>(aoiDims.row));
+        setNumCols(static_cast<ptrdiff_t>(aoiDims.col));
     }
 
     /*!
@@ -171,7 +184,8 @@ public:
     void setBuffer(std::byte* buffer)
     {
         assert(buffer != nullptr);
-        mBuffer = reinterpret_cast<UByte*>(buffer);
+        void* buffer_ = buffer;
+        mBuffer = static_cast<UByte*>(buffer_);
     }
 
     /*!

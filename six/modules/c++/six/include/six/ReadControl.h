@@ -53,7 +53,7 @@ namespace six
 struct ReadControl
 {
     //!  Constructor.  Null-set the current container reference
-    ReadControl() :
+    ReadControl() noexcept :
         mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
         setLogger(nullptr);
@@ -92,7 +92,8 @@ struct ReadControl
      */
     mem::SharedPtr<const Container> getContainer() const
     {
-        return mContainer;
+        mem::SharedPtr<const Container> retval = mContainer;
+        return retval;
     }
 
     /*!
@@ -118,7 +119,8 @@ struct ReadControl
     virtual UByte* interleaved(Region& region, size_t imageNumber) = 0;
     virtual void  interleaved(Region& region, size_t imageNumber, std::byte*& result)
     {
-        result = reinterpret_cast<std::byte*>(interleaved(region, imageNumber));
+        void* result_ = interleaved(region, imageNumber);
+        result = static_cast<std::byte*>(result_);
     }
 
     /*!
@@ -215,9 +217,9 @@ struct ReadControl
 protected:
     mem::SharedPtr<Container> mContainer;
     Options mOptions;
-    logging::Logger *mLog;
-    bool mOwnLog;
-    const XMLControlRegistry *mXMLRegistry;
+    logging::Logger* mLog = nullptr;
+    bool mOwnLog = false;
+    const XMLControlRegistry* mXMLRegistry = nullptr;
 
 };
 

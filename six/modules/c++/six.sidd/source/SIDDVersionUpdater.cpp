@@ -35,7 +35,7 @@ void populateFilter(six::sidd::Filter& filter)
     filter.filterKernel->custom.reset(new six::sidd::Filter::Kernel::Custom());
     filter.filterKernel->custom->size = six::RowColInt(1, 1);
     filter.filterKernel->custom->filterCoef.resize(
-            filter.filterKernel->custom->size.area());
+            static_cast<size_t>(filter.filterKernel->custom->size.area()));
     filter.operation = six::sidd::FilterOperation::CONVOLUTION;
 }
 

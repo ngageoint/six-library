@@ -52,16 +52,14 @@ struct PipeStream : InputStream
                size_t streamBufferSize = DEFAULT_CHUNK_SIZE) : 
         InputStream(),
         mExecPipe(cmd),
-        mCharString(new char[streamBufferSize]),
+        mCharString(mem::make::unique<char[]>(streamBufferSize)),
         mBufferSize(streamBufferSize)
     {
         mExecPipe.run();
     }
 
     //! cleanup the stream if not done already
-    virtual ~PipeStream() 
-    {
-    }
+    virtual ~PipeStream() = default;
 
     //! closes the stream connected to the child process manually
     int close()

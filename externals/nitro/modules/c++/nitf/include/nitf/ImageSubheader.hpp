@@ -26,6 +26,8 @@
 
 #include <string>
 
+#include <import/sys.h>
+
 #include "nitf/ImageSubheader.h"
 
 #include "BandInfo.hpp"
@@ -228,7 +230,8 @@ public:
     nitf::Field getImageTitle() const;
 
     //! Get the imageSecurityClass
-    nitf::Field getImageSecurityClass() const;
+    nitf::Field getImageSecurityClass();
+    const nitf::Field getImageSecurityClass() const;
     std::string imageSecurityClass() const
     {
         return getImageSecurityClass(); // nitf::Field implicitly converts to std::string
@@ -258,6 +261,11 @@ public:
     size_t numCols() const
     {
         return getNumCols();
+    }
+
+    types::RowCol<size_t> dims() const
+    {
+        return types::RowCol<size_t>(numRows(), numCols());
     }
 
     //! Get the pixelValueType

@@ -58,6 +58,9 @@ public:
     //!  Destructor
     virtual ~NITFImageInputStream() {}
 
+    NITFImageInputStream(const NITFImageInputStream&) = delete;
+    NITFImageInputStream& operator=(const NITFImageInputStream&) = delete;
+
     //!  How many bytes in the image
     int64_t available();
 

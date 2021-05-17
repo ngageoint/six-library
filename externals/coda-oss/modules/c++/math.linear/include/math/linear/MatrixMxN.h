@@ -118,15 +118,20 @@ public:
     typedef MatrixMxN<_MD, _ND, _T> Like_T;
 
     //!  Public but really should be avoided
+    #if _MSC_VER
+    __pragma(warning(push))
+    __pragma(warning(disable: 26495)) // 26495: Variable '...' is uninitialized. Always initialize a member variable (type.6).
+    #endif
     _T mRaw[_MD][_ND];
+    #if _MSC_VER
+    __pragma(warning(pop))
+    #endif
 
     /*!
      *  No initialization here!
      *
      */
-    MatrixMxN()
-    {
-    }
+    MatrixMxN() = default;
 
     /*!
      *  Create a matrix with a constant value for
@@ -324,8 +329,7 @@ public:
         return *this;
     }
 
-    //!  Destructor
-    ~MatrixMxN() {}
+    ~MatrixMxN() = default;
 
 
     /*!
@@ -555,7 +559,7 @@ public:
      *
      *  \return _MD
      */
-    inline size_t rows() const { return _MD; }
+    inline size_t rows() const noexcept { return _MD; }
     
     /*!
      *  This function is not really necessary, but
@@ -567,14 +571,14 @@ public:
      *
      *  \return _ND
      */
-    inline size_t cols() const { return _ND; }
+    inline size_t cols() const noexcept { return _ND; }
 
     /*!
      *  Gives back the value full size of the matrix
      *
      *  \return _MD * _ND
      */
-    inline size_t size() const { return _MD * _ND; }
+    inline size_t size() const noexcept { return rows() * cols(); }
 
 
 
@@ -724,15 +728,14 @@ public:
     template<size_t _PD> MatrixMxN<_MD, _PD, _T>
         multiply(const MatrixMxN<_ND, _PD, _T>& mx) const
     {
-        MatrixMxN<_MD, _PD, _T> newM;
-        size_t i, j, k;
+        MatrixMxN<_MD, _PD, _T> newM{};
 
-        for (i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (j = 0; j < _PD; j++)
+            for (size_t j = 0; j < _PD; j++)
             {
                 newM.mRaw[i][j] = 0;
-                for (k = 0; k < _ND; k++)
+                for (size_t k = 0; k < _ND; k++)
                 {
                     newM.mRaw[i][j] += mRaw[i][k] * mx.mRaw[k][j];
                 }
@@ -815,7 +818,6 @@ public:
     Like_T&
     operator+=(const Like_T& mx)
     {
-        Like_T newM;
         for (size_t i = 0; i < _MD; i++)
         {
             for (size_t j = 0; j < _ND; j++)
@@ -824,7 +826,6 @@ public:
             }
         }
         return *this;
-
     }
 
     /*!
@@ -951,7 +952,7 @@ public:
     MatrixMxN<_ND, _MD, _T> transpose() const
     {
 
-        MatrixMxN<_ND, _MD, _T> x;
+        MatrixMxN<_ND, _MD, _T> x{};
         for (size_t i = 0; i < _MD; i++)
             for (size_t j = 0; j < _ND; j++)
                 x.mRaw[j][i] = mRaw[i][j];
@@ -1234,7 +1235,7 @@ template<size_t _MD, size_t _ND, typename _T> MatrixMxN<_MD, _ND, _T>
     constantMatrix(_T cv = 0)
 {
     MatrixMxN<_MD, _ND, _T> mx(cv);
-    return mx;
+    return std::move(mx);
 }
 
 /*!
@@ -1249,12 +1250,12 @@ template<size_t _MD, size_t _ND, typename _T> MatrixMxN<_MD, _ND, _T>
 template<size_t _ND, typename _T> MatrixMxN<_ND, _ND, _T>
     identityMatrix()
 {
-    MatrixMxN<_ND, _ND, _T> mx;
+    MatrixMxN<_ND, _ND, _T> mx{};
     for (size_t i = 0; i < _ND; i++)
     {
         for (size_t j = 0; j < _ND; j++)
         {
-            mx(i, j) = (i == j) ? _T(1): _T(0);
+            mx(i, j) = (i == j) ? static_cast<_T>(1): static_cast<_T>(0);
         }
     }
     return mx;
@@ -1434,24 +1435,23 @@ template<> inline
 math::linear::MatrixMxN<3, 3, double> 
 math::linear::inverse<3, double>(const math::linear::MatrixMxN<3, 3, double>& mx)
 {
-    double a = mx[0][0];
-    double b = mx[0][1];
-    double c = mx[0][2];
+    const auto& a = mx[0][0];
+    const auto& b = mx[0][1];
+    const auto& c = mx[0][2];
 
-    double d = mx[1][0];
-    double e = mx[1][1];
-    double f = mx[1][2];
+    const auto& d = mx[1][0];
+    const auto& e = mx[1][1];
+    const auto& f = mx[1][2];
 
-    double g = mx[2][0];
-    double h = mx[2][1];
-    double i = mx[2][2];
+    const auto& g = mx[2][0];
+    const auto& h = mx[2][1];
+    const auto& i = mx[2][2];
 
-    double g1 = e*i - f*h;
-    double g2 = d*i - f*g;
-    double g3 = d*h - e*g;
+    const auto g1 = e * i - f * h;
+    const auto g2 = d * i - f * g;
+    const auto g3 = d * h - e * g;
 
-    const double determinant =
-        a*g1 - b*g2 + c*g3;
+    const auto determinant = a * g1 - b * g2 + c * g3;
     
     if (math::linear::almostZero(determinant))
     {
@@ -1465,7 +1465,6 @@ math::linear::inverse<3, double>(const math::linear::MatrixMxN<3, 3, double>& mx
     inv.scale( 1.0 / determinant );
     
     return inv;
-
 }
 
 
@@ -1495,23 +1494,23 @@ template<> inline
 math::linear::MatrixMxN<3, 3, float> 
 math::linear::inverse<3, float>(const math::linear::MatrixMxN<3, 3, float>& mx)
 {
-    float a = mx[0][0];
-    float b = mx[0][1];
-    float c = mx[0][2];
+    const auto& a = mx[0][0];
+    const auto& b = mx[0][1];
+    const auto& c = mx[0][2];
 
-    float d = mx[1][0];
-    float e = mx[1][1];
-    float f = mx[1][2];
+    const auto& d = mx[1][0];
+    const auto& e = mx[1][1];
+    const auto& f = mx[1][2];
 
-    float g = mx[2][0];
-    float h = mx[2][1];
-    float i = mx[2][2];
+    const auto& g = mx[2][0];
+    const auto& h = mx[2][1];
+    const auto& i = mx[2][2];
 
-    float g1 = e*i - f*h;
-    float g2 = d*i - f*g;
-    float g3 = d*h - e*g;
+    const auto g1 = e * i - f * h;
+    const auto g2 = d * i - f * g;
+    const auto g3 = d * h - e * g;
 
-    const float determinant = a*g1 - b*g2 + c*g3;
+    const auto determinant = a * g1 - b * g2 + c * g3;
     
     if (math::linear::almostZero(determinant))
     {

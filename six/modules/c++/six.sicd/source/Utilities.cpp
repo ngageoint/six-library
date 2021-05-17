@@ -54,10 +54,8 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
                         ValueType* buffer)
 {
     six::Region retv;
-    retv.setStartRow(offset.row);
-    retv.setStartCol(offset.col);
-    retv.setNumRows(extent.row);
-    retv.setNumCols(extent.col);
+    retv.setOffset(offset);
+    retv.setDims(extent);
     retv.setBuffer(reinterpret_cast<std::byte*>(buffer));
     return retv;
 }
@@ -93,8 +91,8 @@ void readAndConvertSICD(six::NITFReadControl& reader,
         }
         
         // Read into the temp buffer
-        types::RowCol<size_t> swathOffset(row, offset.col);
-        types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
+        const types::RowCol<size_t> swathOffset(row, offset.col);
+        const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
         six::Region region = buildRegion(swathOffset, swathExtent, tempBuffer);
         reader.interleaved(region, imageNumber);
 
@@ -115,15 +113,15 @@ six::Poly2D getXYtoRowColTransform(double center,
                                    bool rowTransform)
 {
     const double coeffs[2] = {-sampleSpacing * center, sampleSpacing};
-    const size_t orderX = rowTransform ? 1 : 0;
-    const size_t orderY = rowTransform ? 0 : 1;
+    const auto orderX = static_cast<size_t>(rowTransform ? 1 : 0);
+    const auto orderY = static_cast<size_t>(rowTransform ? 0 : 1);
     return six::Poly2D(orderX, orderY, coeffs);
 }
 
-std::map<std::string, size_t> getAdditionalDesMap(six::NITFReadControl& reader)
+static std::map<std::string, size_t> getAdditionalDesMap(const six::NITFReadControl& reader)
 {
     std::map<std::string, size_t> nameToDesIndex;
-    nitf::List des = reader.getRecord().getDataExtensions();
+    const nitf::List des = reader.getRecord().getDataExtensions();
     nitf::ListIterator desIter = des.begin();
 
     for (size_t ii = 0; desIter != des.end(); ++desIter, ++ii)
@@ -136,15 +134,14 @@ std::map<std::string, size_t> getAdditionalDesMap(six::NITFReadControl& reader)
             continue;
         }
 
-        nitf::DESegment segment = static_cast<nitf::DESegment>(*desIter);
-        nitf::DESubheader subheader = segment.getSubheader();
-        const auto typeID = subheader.typeID();
+        const nitf::DESegment segment(*desIter);
+        const auto typeID = segment.getSubheader().typeID();
         nameToDesIndex[typeID] = ii;
     }
     return nameToDesIndex;
 }
 
-void getDesBuffer(six::NITFReadControl& reader,
+static void getDesBuffer(const six::NITFReadControl& reader,
                   size_t desIndex,
                   mem::ScopedAlignedArray<std::byte>& buffer)
 {
@@ -156,9 +153,9 @@ void getDesBuffer(six::NITFReadControl& reader,
     }
 
     // Pull out the DE segment and its reader
-    nitf::DESegment segment = static_cast<nitf::DESegment>(des[desIndex]);
-    nitf::DESubheader subheader = segment.getSubheader();
-    nitf::SegmentReader deReader = reader.getReader().newDEReader(desIndex);
+    const nitf::DESegment segment(des[desIndex]);
+    const auto subheader = segment.getSubheader();
+    nitf::SegmentReader deReader = reader.getReader().newDEReader(static_cast<int>(desIndex));
 
     // Read the DE segment buffer
     const size_t bufferSize = subheader.getDataLength();
@@ -346,7 +343,7 @@ mem::auto_ptr<scene::ProjectionPolynomialFitter> Utilities::getPolynomialFitter(
     }
 
     // Get the size of the output plane image.
-    types::RowCol<size_t> fullExtent(areaPlane.xDirection->elements,
+    const types::RowCol<size_t> fullExtent(areaPlane.xDirection->elements,
                                      areaPlane.yDirection->elements);
 
     // Get the valid data polygon in the output plane.
@@ -456,8 +453,8 @@ void Utilities::getValidDataPolygon(
             spCorner = (imagePt / spSampleSpacing + spOffset);
 
             if (spCorner.row >= 0 &&
-                spCorner.row < sicdData.imageData->numRows &&
-                spCorner.col >= 0 && spCorner.col < sicdData.imageData->numCols)
+                spCorner.row < static_cast<double>(sicdData.imageData->numRows) &&
+                spCorner.col >= 0 && spCorner.col < static_cast<double>(sicdData.imageData->numCols))
             {
                 spCornerIsInBounds = true;
             }
@@ -647,7 +644,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 std::complex<float>* buffer)
 {
     const PixelType pixelType = complexData.getPixelType();
-    const size_t imageNumber = 0;
+    constexpr size_t imageNumber = 0;
 
     const size_t requiredBufferBytes =
             sizeof(std::complex<float>) * extent.area();
@@ -681,9 +678,8 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
                                 std::complex<float>* buffer)
 {
-    types::RowCol<size_t> offset(0, 0);
-
-    types::RowCol<size_t> extent(complexData.getNumRows(),
+    const types::RowCol<size_t> offset(0, 0);
+    const types::RowCol<size_t> extent(complexData.getNumRows(),
                                  complexData.getNumCols());
 
     getWidebandData(reader, complexData, offset, extent, buffer);
@@ -708,9 +704,8 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
                                 std::vector<std::complex<float>>& buffer)
 {
-    types::RowCol<size_t> offset;
-
-    types::RowCol<size_t> extent(complexData.getNumRows(),
+    const types::RowCol<size_t> offset{};
+    const types::RowCol<size_t> extent(complexData.getNumRows(),
                                  complexData.getNumCols());
 
     getWidebandData(reader, complexData, offset, extent, buffer);
@@ -739,9 +734,8 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
                                 const ComplexData& complexData,
                                 std::complex<float>* buffer)
 {
-    types::RowCol<size_t> offset(0, 0);
-
-    types::RowCol<size_t> extent(complexData.getNumRows(),
+    const types::RowCol<size_t> offset(0, 0);
+    const types::RowCol<size_t> extent(complexData.getNumRows(),
                                  complexData.getNumCols());
 
     getWidebandData(
@@ -750,7 +744,7 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
 
 Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
 {
-    Vector3 groundPlaneNormal;
+    Vector3 groundPlaneNormal{};
 
     if (data.radarCollection->area.get() &&
         data.radarCollection->area->plane.get())
@@ -1098,8 +1092,8 @@ static void getProjectionPolys_(NITFReadControl& reader,
             complexData->grid->col->sampleSpacing);
 
     const types::RowCol<double> slantCenter(
-            complexData->imageData->scpPixel.row,
-            complexData->imageData->scpPixel.col);
+            static_cast<double>(complexData->imageData->scpPixel.row),
+            static_cast<double>(complexData->imageData->scpPixel.col));
 
     six::Poly2D outputXYToSlantX;
     six::Poly2D outputXYToSlantY;
@@ -1290,9 +1284,9 @@ void Utilities::projectValidDataPolygonToOutputPlane(
     if (validData.size() == 0)
     {
         // Get dimensions of SICD.
-        ptrdiff_t numRows =
+        const auto numRows =
                 static_cast<ptrdiff_t>(complexData.getNumRows());
-        ptrdiff_t numCols =
+        const auto numCols =
                 static_cast<ptrdiff_t>(complexData.getNumCols());
 
         validData.push_back(six::RowColInt(0, 0));

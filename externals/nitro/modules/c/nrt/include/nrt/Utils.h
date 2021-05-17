@@ -146,6 +146,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
  */
 NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer7);
+NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLat(int degrees, int minutes, double seconds);
 
 /*!
  *  Turn the geographic value into a string.  You must have a buffer
@@ -154,6 +155,7 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
  */
 NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer8);
+NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLon(int degrees, int minutes, double seconds);
 
 /*!
  *  Turn the decimal value into a string +-dd.ddd.  You must have a buffer

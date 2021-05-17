@@ -24,29 +24,30 @@
 #define CODA_OSS_gsl_gsl_span__h_INCLUDED_
 #pragma once
 
-#include "mem/Span_.h"
+#include "gsl/Span_.h"
 
 // Need a fairly decent C++ compiler to use the real GSL
 #include "gsl/use_gsl.h"
 
 #if CODA_OSS_use_real_gsl
 #include "gsl/span"				// span
+#include "gsl/span_ext"				// make_span
 #else
  namespace gsl
  {
      template <typename T>
-     using span = mem::Span<T>;
+     using span = Gsl::Span<T>;
 
      template <typename T>
      inline span<T> make_span(T* d, size_t sz)
      {
-         return mem::make_Span<T>(d, sz);
+         return Gsl::make_Span<T>(d, sz);
      }
 
      template <typename TContainer>
      inline span<typename TContainer::value_type> make_span(TContainer& c)
      {
-         return mem::make_Span(c);
+         return Gsl::make_Span(c);
      }
      template <typename TContainer>
      inline span<typename TContainer::value_type> make_span(const TContainer& c)

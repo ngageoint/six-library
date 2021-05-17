@@ -17,6 +17,6 @@ TEST_CASE(testToType)
 }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(testToType);
 )

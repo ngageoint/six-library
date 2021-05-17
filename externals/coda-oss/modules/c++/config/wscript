@@ -58,6 +58,7 @@ def configure(conf):
                 elif v == 'False':
                     v = False
             conf.define(k.upper(), v)
+
         attribute_noinline_str = '''
             int __attribute__((noinline)) fn() { return 0; }
             int main()
@@ -70,6 +71,18 @@ def configure(conf):
                        define_name='HAVE_ATTRIBUTE_NOINLINE',
                        mandatory=False)
 
+        declspec_noinline_str = '''
+            __declspec(noinline) int fn() { return 0; }
+            int main()
+            {
+                return fn();
+            }
+            '''
+        conf.check_cxx(fragment=declspec_noinline_str,
+                       msg='Checking for __declspec(noinline)',
+                       define_name='HAVE_DECLSPEC_NOINLINE',
+                       mandatory=False)
+
         attribute_aligned_str = '''
             int main()
             {
@@ -80,6 +93,46 @@ def configure(conf):
         conf.check_cxx(fragment=attribute_aligned_str,
                        msg='Checking for __attribute__(aligned (x))',
                        define_name='HAVE_ATTRIBUTE_ALIGNED',
+                       mandatory=False)
+
+        declspec_align_str = '''
+            int main()
+            {
+                __declspec(align(32)) int var;
+                return var;
+            }
+            '''
+        conf.check_cxx(fragment=declspec_align_str,
+                       msg='Checking for __declspec(align(x))',
+                       define_name='HAVE_DECLSPEC_ALIGN',
+                       mandatory=False)
+
+        direct_m256_extract_str = '''
+            #include <immintrin.h>
+            int main()
+            {
+                __m256 ymm = _mm256_setzero_ps();
+                float val = ymm[7];
+                return 0;
+            }
+            '''
+        conf.check_cxx(fragment=direct_m256_extract_str,
+                       msg='Checking for __m256::operator[]',
+                       define_name='HAVE_M256_DIRECT_INDEX',
+                       mandatory=False)
+
+        member_m256_extract_str = '''
+            #include <immintrin.h>
+            int main()
+            {
+                __m256 ymm = _mm256_setzero_ps();
+                float val = ymm.m256_f32[7];
+                return 0;
+            }
+            '''
+        conf.check_cxx(fragment=member_m256_extract_str,
+                       msg='Checking for __m256::m256_f32',
+                       define_name='HAVE_M256_MEMBER_INDEX',
                        mandatory=False)
 
         conf.define('CODA_EXPORT', conf.env['declspec_decoration'], quote=False)

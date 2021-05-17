@@ -61,10 +61,8 @@ using buffer_list_mutable = std::vector<std::byte*>;
  *  allows that data model to be transmitted to the container file format.
  *
  */
-class WriteControl
+struct WriteControl
 {
-public:
-
     //!  Global byte swap option.  Normally, you should leave this up to us
     static const char OPT_BYTE_SWAP[];
 
@@ -75,7 +73,7 @@ public:
     static const char OPT_BUFFER_SIZE[];
 
     //!  Constructor.  Null-sets the Container
-    WriteControl() :
+    WriteControl() noexcept :
         mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
         setLogger(nullptr);
@@ -190,7 +188,8 @@ public:
     }
     void save(const std::byte* buffer, const std::string& toFile)
     {
-        save(reinterpret_cast<const UByte*>(buffer), toFile);
+        const void* buffer_ = buffer;
+        save(static_cast<const UByte*>(buffer_), toFile);
     }
     void save(const UByte* buffer, const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
@@ -202,7 +201,8 @@ public:
     void save(const std::byte* buffer, const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
-        save(reinterpret_cast<const UByte*>(buffer), toFile, schemaPaths);
+        const void* buffer_ = buffer;
+        save(static_cast<const UByte*>(buffer_), toFile, schemaPaths);
     }
 
     /*!
@@ -218,6 +218,7 @@ public:
      */
     mem::SharedPtr<const Container> getContainer() const
     {
+        mem::SharedPtr<const Container> retval = mContainer;
         return mContainer;
     }
 
@@ -275,7 +276,8 @@ public:
         BufferList retval;
         for (const auto& buffer : buffers)
         {
-            retval.push_back(reinterpret_cast<BufferList::value_type>(buffer));
+            const void* buffer_ = buffer;
+            retval.push_back(static_cast<BufferList::value_type>(buffer_));
         }
         return retval;
     }
@@ -289,9 +291,9 @@ protected:
     }
     mem::SharedPtr<Container> mContainer;
     Options mOptions;
-    logging::Logger *mLog;
-    bool mOwnLog;
-    const XMLControlRegistry *mXMLRegistry;
+    logging::Logger* mLog = nullptr;
+    bool mOwnLog = false;
+    const XMLControlRegistry* mXMLRegistry = nullptr;
 
 };
 

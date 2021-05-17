@@ -31,16 +31,15 @@ namespace io
 /**
  * An OutputStream that keeps track of the number of bytes written to the stream.
  */
-class CountingOutputStream: public ProxyOutputStream
+struct CountingOutputStream: public ProxyOutputStream
 {
-public:
     CountingOutputStream(OutputStream *proxy, bool ownPtr = false) :
         ProxyOutputStream(proxy, ownPtr), mByteCount(0)
     {
     }
-    virtual ~CountingOutputStream()
-    {
-    }
+    virtual ~CountingOutputStream() = default;
+    CountingOutputStream(const CountingOutputStream&) = delete;
+    CountingOutputStream& operator=(const CountingOutputStream&) = delete;
 
     using ProxyOutputStream::write;
 

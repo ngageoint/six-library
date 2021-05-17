@@ -104,7 +104,7 @@ TEST_CASE(testAddedParamsEqualityOperatorFalse)
 }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
         TEST_CHECK(testSimpleEqualityOperatorTrue);
         TEST_CHECK(testAppend);
         TEST_CHECK(testAddedParamsEqualityOperatorTrue);

@@ -35,6 +35,7 @@
 #include "nitf/Types.h"
 
 #include "nitf/coda-oss.hpp"
+#include "nitf/exports.hpp"
 
 namespace nitf
 {

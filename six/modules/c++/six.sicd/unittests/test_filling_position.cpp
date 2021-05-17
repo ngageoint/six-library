@@ -56,6 +56,6 @@ TEST_CASE(DerivedArpPoly)
     TEST_ASSERT_EQ(position.arpPoly[2][2], 3);
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(DerivedArpPoly);
 )

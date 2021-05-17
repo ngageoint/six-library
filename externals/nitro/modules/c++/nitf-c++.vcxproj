@@ -27,6 +27,9 @@
     <ClCompile Include="nitf\source\DESegment.cpp" />
     <ClCompile Include="nitf\source\DESubheader.cpp" />
     <ClCompile Include="nitf\source\DownSampler.cpp" />
+    <ClCompile Include="nitf\source\Extensions.cpp" />
+    <ClCompile Include="nitf\source\Field.cpp" />
+    <ClCompile Include="nitf\source\FieldWarning.cpp" />
     <ClCompile Include="nitf\source\FileHeader.cpp" />
     <ClCompile Include="nitf\source\FileSecurity.cpp" />
     <ClCompile Include="nitf\source\GraphicSegment.cpp" />
@@ -71,6 +74,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cpp.h" />
     <ClInclude Include="nitf\include\nitf\BandInfo.hpp" />
     <ClInclude Include="nitf\include\nitf\BandSource.hpp" />
     <ClInclude Include="nitf\include\nitf\BlockingInfo.hpp" />
@@ -88,6 +92,7 @@
     <ClInclude Include="nitf\include\nitf\DESegment.hpp" />
     <ClInclude Include="nitf\include\nitf\DESubheader.hpp" />
     <ClInclude Include="nitf\include\nitf\DownSampler.hpp" />
+    <ClInclude Include="nitf\include\nitf\exports.hpp" />
     <ClInclude Include="nitf\include\nitf\Extensions.hpp" />
     <ClInclude Include="nitf\include\nitf\Field.hpp" />
     <ClInclude Include="nitf\include\nitf\FieldWarning.hpp" />
@@ -184,7 +189,7 @@
     <ClCompile>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -206,6 +211,7 @@
       <SubSystem>
       </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib</AdditionalLibraryDirectories>
@@ -216,7 +222,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -236,6 +242,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib</AdditionalLibraryDirectories>

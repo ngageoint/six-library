@@ -48,8 +48,11 @@ public:
 
     //! Constructs a StreamHandler using the specified OutputStream
     StreamHandler(io::OutputStream* stream, LogLevel level = LogLevel::LOG_NOTSET);
+    StreamHandler(std::unique_ptr<io::OutputStream>&& stream, LogLevel level = LogLevel::LOG_NOTSET) : StreamHandler(stream.release(), level) { }
 
     virtual ~StreamHandler();
+
+    StreamHandler& operator=(const StreamHandler&) = delete;
 
     //! adds the need to write epilogue before deleting formatter
     //  and then writing the prologue with the new formatter

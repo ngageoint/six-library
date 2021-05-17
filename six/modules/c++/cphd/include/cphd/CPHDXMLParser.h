@@ -112,21 +112,21 @@ private:
     XMLElem toXML(const MatchInformation& obj, XMLElem parent);
 
     //! Read from XML object
-    void fromXML(const XMLElem collectionIDXML, CollectionInformation& collectionID);
-    void fromXML(const XMLElem globalXML, Global& global);
-    void fromXML(const XMLElem sceneCoordsXML, SceneCoordinates& scene);
-    void fromXML(const XMLElem dataXML, Data& data);
-    void fromXML(const XMLElem channelXML, Channel& channel);
-    void fromXML(const XMLElem pvpXML, Pvp& pvp);
-    void fromXML(const XMLElem DwellXML, Dwell& dwell);
-    void fromXML(const XMLElem refGeoXML, ReferenceGeometry& refGeo);
-    void fromXML(const XMLElem supportArrayXML, SupportArray& supportArray);
-    void fromXML(const XMLElem antennaXML, Antenna& antenna);
-    void fromXML(const XMLElem txRcvXML, TxRcv& txRcv);
-    void fromXML(const XMLElem errParamXML, ErrorParameters& errParam);
-    void fromXML(const XMLElem productInfoXML, ProductInfo& productInfo);
-    void fromXML(const XMLElem geoInfoXML, GeoInfo& geoInfo);
-    void fromXML(const XMLElem matchInfoXML, MatchInformation& matchInfo);
+    void fromXML(const xml::lite::Element* collectionIDXML, CollectionInformation& collectionID);
+    void fromXML(const xml::lite::Element* globalXML, Global& global);
+    void fromXML(const xml::lite::Element* sceneCoordsXML, SceneCoordinates& scene);
+    void fromXML(const xml::lite::Element* dataXML, Data& data);
+    void fromXML(const xml::lite::Element* channelXML, Channel& channel);
+    void fromXML(const xml::lite::Element* pvpXML, Pvp& pvp);
+    void fromXML(const xml::lite::Element* DwellXML, Dwell& dwell);
+    void fromXML(const xml::lite::Element* refGeoXML, ReferenceGeometry& refGeo);
+    void fromXML(const xml::lite::Element* supportArrayXML, SupportArray& supportArray);
+    void fromXML(const xml::lite::Element* antennaXML, Antenna& antenna);
+    void fromXML(const xml::lite::Element* txRcvXML, TxRcv& txRcv);
+    void fromXML(const xml::lite::Element* errParamXML, ErrorParameters& errParam);
+    void fromXML(const xml::lite::Element* productInfoXML, ProductInfo& productInfo);
+    void fromXML(const xml::lite::Element* geoInfoXML, GeoInfo& geoInfo);
+    void fromXML(const xml::lite::Element* matchInfoXML, MatchInformation& matchInfo);
 
 
     //! Create helper functions
@@ -150,21 +150,21 @@ private:
         XMLElem parent) const;
 
     //! Parse helper functions
-    void parseAreaType(const XMLElem areaXML, AreaType& area) const;
-    void parseLineSample(const XMLElem lsXML, LineSample& ls) const;
-    void parseIAExtent(const XMLElem extentXML, ImageAreaXExtent& extent) const;
-    void parseIAExtent(const XMLElem extentXML, ImageAreaYExtent& extent) const;
-    void parseChannelParameters(const XMLElem paramXML,
+    void parseAreaType(const xml::lite::Element* areaXML, AreaType& area) const;
+    void parseLineSample(const xml::lite::Element* lsXML, LineSample& ls) const;
+    void parseIAExtent(const xml::lite::Element* extentXML, ImageAreaXExtent& extent) const;
+    void parseIAExtent(const xml::lite::Element* extentXML, ImageAreaYExtent& extent) const;
+    void parseChannelParameters(const xml::lite::Element* paramXML,
                                 ChannelParameter& param) const;
-    void parsePVPType(Pvp& p, const XMLElem paramXML, PVPType& param) const;
-    void parsePVPType(Pvp& p, const XMLElem paramXML) const;
-    void parsePlatformParams(const XMLElem platXML, Bistatic::PlatformParams& plat) const;
-    void parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) const;
-    void parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError& posVelErr) const;
-    void parsePlatform(const XMLElem platXML,  ErrorParameters::Bistatic::Platform& plat) const;
-    void parseSupportArrayParameter(const XMLElem paramXML, SupportArrayParameter& param,
+    void parsePVPType(Pvp& p, const xml::lite::Element* paramXML, PVPType& param) const;
+    void parsePVPType(Pvp& p, const xml::lite::Element* paramXML) const;
+    void parsePlatformParams(const xml::lite::Element* platXML, Bistatic::PlatformParams& plat) const;
+    void parseCommon(const xml::lite::Element* imgTypeXML, ImagingType* imgType) const;
+    void parsePosVelErr(const xml::lite::Element* posVelErrXML, six::PosVelError& posVelErr) const;
+    void parsePlatform(const xml::lite::Element* platXML,  ErrorParameters::Bistatic::Platform& plat) const;
+    void parseSupportArrayParameter(const xml::lite::Element* paramXML, SupportArrayParameter& param,
                                     bool additionalFlag) const;
-    void parseTxRcvParameter(const XMLElem paramXML, ParameterType& param) const;
+    void parseTxRcvParameter(const xml::lite::Element* paramXML, ParameterType& param) const;
 
 private:
     six::SICommonXMLParser10x mCommon;

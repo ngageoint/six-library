@@ -40,21 +40,13 @@ namespace except
  * \class Trace
  * \brief Holds stack of context information
  */
-class Trace
+struct Trace final
 {
-public:
-    /*!
-     * Default Constructor
-     */
-    Trace()
-    {
-    }
-
     /*!
      * Gets size of stack
      * \return the size
      */
-    size_t getSize() const
+    size_t getSize() const noexcept
     {
         return mStack.size();
     }

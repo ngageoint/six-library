@@ -59,7 +59,7 @@ six::sicd::ComplexData* const updateMetadata(
         const types::RowCol<size_t>& aoiDims)
 {
     six::sicd::ComplexData* const aoiData(
-               static_cast<six::sicd::ComplexData*>(data.clone()));
+               dynamic_cast<six::sicd::ComplexData*>(data.clone()));
 
     aoiData->imageData->firstRow += aoiOffset.row;
     aoiData->imageData->firstCol += aoiOffset.col;
@@ -115,10 +115,8 @@ void cropSICD(six::NITFReadControl& reader,
     const size_t numBytes(origDims.row * origDims.col * numBytesPerPixel);
 
     six::Region region;
-    region.setStartRow(aoiOffset.row);
-    region.setStartCol(aoiOffset.col);
-    region.setNumRows(aoiDims.row);
-    region.setNumCols(aoiDims.col);
+    region.setOffset(aoiOffset);
+    region.setDims(aoiDims);
     const auto buffer = region.setBuffer(numBytes);
     reader.interleaved(region, 0);
 
@@ -193,7 +191,7 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     const ComplexData* const data =
-        static_cast<const ComplexData*>(dataPtr);
+        dynamic_cast<const ComplexData*>(dataPtr);
 
     // Build up the geometry info
     std::unique_ptr<const scene::SceneGeometry> geom(
@@ -241,7 +239,7 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     const six::sicd::ComplexData* const data =
-        static_cast<const six::sicd::ComplexData*>(dataPtr);
+        dynamic_cast<const six::sicd::ComplexData*>(dataPtr);
 
     // Convert ECEF corners to slant pixel pixels
     const ImageData& imageData(*data->imageData);
@@ -249,8 +247,8 @@ void cropSICD(six::NITFReadControl& reader,
                                           static_cast<double>(imageData.firstCol));
 
     const types::RowCol<double> offset(
-            imageData.scpPixel.row - aoiOffset.row,
-            imageData.scpPixel.col - aoiOffset.col);
+            static_cast<double>(imageData.scpPixel.row) - aoiOffset.row,
+            static_cast<double>(imageData.scpPixel.col) - aoiOffset.col);
 
     std::unique_ptr<const scene::SceneGeometry> geom(
             six::sicd::Utilities::getSceneGeometry(data));
@@ -280,8 +278,8 @@ void cropSICD(six::NITFReadControl& reader,
     maxPixel.row = std::ceil(maxPixel.row);
     maxPixel.col = std::ceil(maxPixel.col);
 
-    const types::RowCol<double> lastDim(data->getNumRows() - 1.0,
-                                        data->getNumCols() - 1.0);
+    const types::RowCol<double> lastDim(static_cast<double>(data->getNumRows()) - 1.0,
+                                        static_cast<double>(data->getNumCols()) - 1.0);
 
     if (!trimCornersIfNeeded &&
         (minPixel.row < 0 ||
@@ -293,13 +291,8 @@ void cropSICD(six::NITFReadControl& reader,
                 "One or more corners are outside of the image bounds"));
     }
 
-    const types::RowCol<size_t> upperLeft(
-            static_cast<size_t>(std::max(minPixel.row, 0.0)),
-            static_cast<size_t>(std::max(minPixel.col, 0.0)));
-
-    const types::RowCol<size_t> lowerRight(
-            static_cast<size_t>(std::min(maxPixel.row, lastDim.row)),
-            static_cast<size_t>(std::min(maxPixel.col, lastDim.col)));
+    const types::RowCol<size_t> upperLeft(RowColDouble(std::max(minPixel.row, 0.0), std::max(minPixel.col, 0.0)));
+    const types::RowCol<size_t> lowerRight(RowColDouble(std::min(maxPixel.row, lastDim.row), std::min(maxPixel.col, lastDim.col)));
 
     // This would only happen if the "upper left" corner was actually below or
     // to the right of the footprint (the lower right corner would have been

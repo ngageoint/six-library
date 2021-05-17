@@ -44,21 +44,21 @@ BaseConverter::readXML(const std::string& xmlPathname)
 }
 
 BaseConverter::XMLElem BaseConverter::findUniqueElement(
-        const XMLElem root, const std::string& xmlPath) const
+        const xml::lite::Element* root, const std::string& xmlPath) const
 {
-    XMLElem node = root;
+    const xml::lite::Element* node = root;
     const std::vector<std::string> nodes = str::split(xmlPath, "/");
     for (size_t ii = 0; ii < nodes.size(); ++ii)
     {
         node = getFirstAndOnly(node, nodes[ii]);
     }
-    return node;
+    return const_cast<XMLElem>(node);
 }
 
 std::vector<BaseConverter::XMLElem> BaseConverter::findElements(
-        const XMLElem root, const std::string& xmlPath) const
+        const xml::lite::Element* root, const std::string& xmlPath) const
 {
-    XMLElem node = root;
+    const xml::lite::Element* node = root;
     const std::vector<std::string> nodes = str::split(xmlPath, "/");
     if (nodes.empty())
     {
@@ -72,38 +72,38 @@ std::vector<BaseConverter::XMLElem> BaseConverter::findElements(
     return node->getElementsByTagName(nodes[nodes.size() - 1]);
 }
 
-std::string BaseConverter::parseStringFromPath(const XMLElem root,
+std::string BaseConverter::parseStringFromPath(const xml::lite::Element* root,
         const std::string& xmlPath) const
 {
     std::string parsedString;
-    const XMLElem target = findUniqueElement(root, xmlPath);
+    const xml::lite::Element* target = findUniqueElement(root, xmlPath);
     parseString(target, parsedString);
     return parsedString;
 }
 
-double BaseConverter::parseDoubleFromPath(const XMLElem root,
+double BaseConverter::parseDoubleFromPath(const xml::lite::Element* root,
         const std::string& xmlPath) const
 {
     double parsedDouble;
-    const XMLElem target = findUniqueElement(root, xmlPath);
+    const xml::lite::Element* target = findUniqueElement(root, xmlPath);
     parseDouble(target, parsedDouble);
     return parsedDouble;
 }
 
-size_t BaseConverter::parseUIntFromPath(const XMLElem root,
+size_t BaseConverter::parseUIntFromPath(const xml::lite::Element* root,
         const std::string& xmlPath) const
 {
     size_t parsedUInt = 0;
-    const XMLElem target = findUniqueElement(root, xmlPath);
+    const xml::lite::Element* target = findUniqueElement(root, xmlPath);
     parseUInt(target, parsedUInt);
     return parsedUInt;
 }
 
-six::DateTime BaseConverter::parseDateTimeFromPath(const XMLElem root,
+six::DateTime BaseConverter::parseDateTimeFromPath(const xml::lite::Element* root,
         const std::string& xmlPath) const
 {
     six::DateTime parsedDateTime;
-    const XMLElem target = findUniqueElement(root, xmlPath);
+    const xml::lite::Element* target = findUniqueElement(root, xmlPath);
     parseDateTime(target, parsedDateTime);
     return parsedDateTime;
 }
@@ -123,7 +123,7 @@ size_t BaseConverter::findIndexByAttributes(const std::vector<XMLElem>& elements
 {
     for (size_t ii = 0; ii < elements.size(); ++ii)
     {
-        const XMLElem element = elements[ii];
+        xml::lite::Element* const element = elements[ii];
         bool doAttributesMatch = true;
         for (size_t jj = 0; jj < attributes.size(); ++jj)
         {

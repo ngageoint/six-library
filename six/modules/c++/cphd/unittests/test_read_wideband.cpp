@@ -203,7 +203,7 @@ TEST_CASE(testCannotDoPartialReadOfCompressedChannel)
 }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(testReadCompressedChannel);
     TEST_CHECK(testReadUncompressedChannel);
     TEST_CHECK(testReadChannelSubset);

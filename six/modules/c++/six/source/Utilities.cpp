@@ -108,13 +108,13 @@ std::string six::toString<float>(const float& value)
     }
 
     std::ostringstream os;
-    size_t precision = std::numeric_limits<float>::max_digits10;
+    constexpr size_t precision = std::numeric_limits<float>::max_digits10;
     os << std::uppercase << std::scientific << std::setprecision(precision)
        << value;
     std::string strValue = os.str();
 
     // remove any + in scientific notation to meet SICD XML standard
-    size_t plusPos = strValue.find("+");
+    const size_t plusPos = strValue.find("+");
     if (plusPos != std::string::npos)
     {
         strValue.erase(plusPos, 1);
@@ -132,13 +132,13 @@ std::string six::toString<double>(const double& value)
     }
 
     std::ostringstream os;
-    size_t precision = std::numeric_limits<double>::max_digits10;
+    constexpr size_t precision = std::numeric_limits<double>::max_digits10;
     os << std::uppercase << std::scientific << std::setprecision(precision)
        << value;
     std::string strValue = os.str();
 
     // remove any + in scientific notation to meet SICD XML standard
-    size_t plusPos = strValue.find("+");
+    const size_t plusPos = strValue.find("+");
     if (plusPos != std::string::npos)
     {
         strValue.erase(plusPos, 1);
@@ -1100,8 +1100,8 @@ std::string six::toString(const six::LatLonCorners& corners)
 
     // BASE_WIDTH = sign + at least 2 leading digits + decimal point +
     // decimal digits
-    static const size_t NUM_TRAILING_DIGITS = 8;
-    static const size_t BASE_WIDTH = 1 + 2 + 1 + NUM_TRAILING_DIGITS;
+    constexpr size_t NUM_TRAILING_DIGITS = 8;
+    constexpr size_t BASE_WIDTH = 1 + 2 + 1 + NUM_TRAILING_DIGITS;
 
     std::ostringstream ostr;
     ostr.fill('0');
@@ -1155,6 +1155,7 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
         throw except::Exception(ex, Ctxt("Invalid XML data"));
     }
     xml::lite::Document* doc = xmlParser.getDocument();
+    assert(doc != nullptr);
 
     //! Check the root localName for the XML type
     std::string xmlType = doc->getRootElement()->getLocalName();
@@ -1209,7 +1210,7 @@ std::string six::findSchemaPath(const std::string& progname)
 
     // Arbitrary depth to prevent infinite loop in case
     // of weird project structure
-    const static size_t MAX_DEPTH = 5;
+    constexpr size_t MAX_DEPTH = 5;
     size_t levelsTraversed = 0;
 
     std::string schemaPath;
@@ -1242,7 +1243,7 @@ void six::getErrors(const ErrorStatistics* errorStats,
 
         if (components)
         {
-            double rangeBias;
+            double rangeBias = 0.0;
             if (components->radarSensor)
             {
                 const RadarSensor& radarSensor(*components->radarSensor);
@@ -1255,10 +1256,6 @@ void six::getErrors(const ErrorStatistics* errorStats,
                 }
 
                 rangeBias = value(radarSensor.rangeBias);
-            }
-            else
-            {
-                rangeBias = 0.0;
             }
 
             if (components->posVelError)

@@ -58,7 +58,8 @@ class XMLControl
 {
     public:
     //!  Constructor
-    XMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+        XMLControl() = default;
+        XMLControl(logging::Logger* log, bool ownLog = false);
 
     //!  Destructor
     virtual ~XMLControl();
@@ -127,8 +128,8 @@ class XMLControl
                              std::vector<std::string>& version);
 
     protected:
-    logging::Logger* mLog;
-    bool mOwnLog;
+    logging::Logger* mLog = nullptr;
+    bool mOwnLog = false;
 
     /*!
      *  Convert a document from a DOM into a Data model

@@ -37,6 +37,7 @@
 #pragma warning(disable: 26451) // Arithmetic overflow : Using operator '...' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow(io.2).
 #pragma warning(disable: 6385) // Reading invalid data from '...':  the readable size is '...' bytes, but '...' bytes may be read.
 #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
+#pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #include <windows.h>
@@ -50,6 +51,7 @@
 
 #include <sstream>
 #include <iostream>
+#include <complex>
 
 #include <import/nitf.hpp>
 #include <io/FileInputStream.h>

@@ -42,16 +42,10 @@ namespace sys
  *  Design Pattern.
  *
  */
-class Runnable
+struct Runnable
 {
-public:
-    /*! Constructor  */
-    Runnable()
-    {}
-
-    //!  Destructor
-    virtual ~Runnable()
-    {}
+    Runnable() = default;
+    virtual ~Runnable() = default;
 
     /*!
      *  Overload this function in order with an action to make

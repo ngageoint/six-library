@@ -358,7 +358,6 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
 
     int degreeOffset = 0;
     const size_t len = strlen(dms);
-    char dir;
 
     char d[4];
     char m[3];
@@ -380,7 +379,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
                         dms);
         return NRT_FAILURE;
     }
-    dir = dms[len - 1];
+    const char dir = dms[len - 1];
     if (dir != 'N' && dir != 'S' && dir != 'E' && dir != 'W')
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
@@ -432,6 +431,25 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
 
     free(dmsCopy);
 
+    if ((dir == 'N') || (dir == 'S'))
+    {
+        if (!nrt_Utils_isGeographicLat(*degrees, *minutes, *seconds))
+        {
+            nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
+                "Invalid latitude value; full DMS field is '%s'.", dms);
+            return NRT_FAILURE;
+        }
+    }
+    else if ((dir == 'E') || (dir == 'W'))
+    {
+        if (!nrt_Utils_isGeographicLon(*degrees, *minutes, *seconds))
+        {
+            nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
+                "Invalid longitude value; full DMS field is '%s'.", dms);
+            return NRT_FAILURE;
+        }
+    }
+
     return NRT_SUCCESS;
 }
 
@@ -468,126 +486,163 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
     return cornerRep;
 }
 
-static void normalize_dms(int* pDegrees, int* pMinutes, int* pSeconds)
+static NRT_BOOL is_valid_dms(int degrees, int minutes, double seconds)
 {
-    /* Ensure seconds and minutes are still within valid range. */
-    *pMinutes += (*pSeconds / 60);
-    *pSeconds %= 60;
+    // these are maximums; values for lat/lon may be smaller
+    if (abs(degrees) >= 360)
+    {
+        return NRT_FALSE;
+    }
+    if (abs(minutes) >= 60)
+    {
+        return NRT_FALSE;
+    }
+    if (fabs(seconds) >= 60.0)
+    {
+        return NRT_FALSE;
+    }
 
-    *pDegrees += (*pMinutes / 60);
-    *pMinutes %= 60;
+    // A negative value is allowed for the first non-zero value
+    if (degrees != 0)
+    {
+        if ((minutes < 0) || (seconds < 0.0))
+        {
+            return NRT_FALSE;
+        }
+    }
+    else if (minutes != 0)
+    {
+        if (seconds < 0.0)
+        {
+            return NRT_FALSE;
+        }
+    }
 
-    *pDegrees %= 360;
-
-    const int minutes_to_seconds = 60;
-    const int degrees_to_seconds = 60 * minutes_to_seconds;
-    int total_seconds = (*pDegrees * degrees_to_seconds) + (*pMinutes * minutes_to_seconds) + *pSeconds;
-
-    *pDegrees = total_seconds / degrees_to_seconds;
-    total_seconds -= (*pDegrees * degrees_to_seconds);
-
-    *pMinutes = total_seconds / minutes_to_seconds;
-    total_seconds -= (*pMinutes * minutes_to_seconds);
-
-    *pSeconds = total_seconds;
+    return NRT_TRUE;
 }
 
-static void adjust_dms(int* pDegrees, int* pMinutes, int* pSeconds, char* pDir,
-    char positive_dir, char negative_dir)
+NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLat(int degrees, int minutes, double seconds)
 {
-    *pDir = positive_dir;
-    if (*pDegrees < 0)
+    if (abs(degrees) > 90)
     {
-        *pDir = negative_dir;
-        *pDegrees *= -1;
+        return NRT_FALSE;
     }
-    if (*pMinutes < 0)
-    {
-        *pDir = negative_dir;
-        *pMinutes *= -1;
-    }
-    if (*pSeconds < 0)
-    {
-        *pDir = negative_dir;
-        *pSeconds *= -1;
-    }
+    return is_valid_dms(degrees, minutes, seconds);
 }
 
 NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
-                                                 double seconds_, char *buffer7)
+                                                 double seconds, char *buffer7)
 {
-    int seconds = (int) round(seconds_);
+    assert(buffer7 != NULL);
+    char dir = 'N';
 
-    normalize_dms(&degrees, &minutes, &seconds);
-    const int max_degrees = 90;
-    while ((degrees > max_degrees) || (degrees < -max_degrees))
+    if (nrt_Utils_isGeographicLat(degrees, minutes, seconds))
     {
-        if (degrees > max_degrees)
+        if (degrees <= 0)
         {
-            degrees = max_degrees - (degrees - max_degrees); // 91 = 89
+            if (degrees < 0)
+            {
+                dir = 'S';
+                degrees *= -1;
+            }
+            else if (minutes < 0)
+            {
+                dir = 'S';
+                minutes *= -1;
+            }
+            else if (minutes == 0 && seconds < 0)
+            {
+                dir = 'S';
+                seconds *= -1;
+            }
         }
-        if (degrees < -max_degrees)
+
+        seconds = round(seconds);
+
+        /* Ensure seconds and minutes are still within valid range. */
+        if (seconds >= 60.0)
         {
-            degrees = -max_degrees - (degrees - -max_degrees); // -91 = -89
+            seconds -= 60.0;
+
+            if (++minutes >= 60)
+            {
+                minutes -= 60;
+                ++degrees;
+            }
         }
     }
+    else
+    {
+        // setup an error result
+        degrees = minutes = 99;
+        seconds = 99.0;
+    }
 
-    const char positive_dir = 'N';
-    const char negative_dir = 'S';
-    char dir = positive_dir;
-    adjust_dms(&degrees, &minutes, &seconds, &dir, positive_dir, negative_dir);
+    NRT_SNPRINTF(buffer7, 8, "%02d%02d%02d%c", degrees, minutes,
+        (int)seconds, dir);
+}
 
-    char degrees_buffer[11]; // "2147483647"
-    NRT_SNPRINTF(degrees_buffer, 11, "%02d", degrees);
-    char minutes_buffer[11];
-    NRT_SNPRINTF(minutes_buffer, 11, "%02d", minutes);
-    char seconds_buffer[11];
-    NRT_SNPRINTF(seconds_buffer, 11, "%02d", (int)seconds);
-
-    NRT_SNPRINTF(buffer7, 8, "%c%c%c%c%c%c%c",
-        degrees_buffer[0], degrees_buffer[1],
-        minutes_buffer[0], minutes_buffer[1],
-        seconds_buffer[0], seconds_buffer[1],
-        dir);
+NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLon(int degrees, int minutes, double seconds)
+{
+    if (abs(degrees) > 180)
+    {
+        return NRT_FALSE;
+    }
+    return is_valid_dms(degrees, minutes, seconds);
 }
 
 NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
-                                                 double seconds_, char *buffer8)
+                                                 double seconds, char *buffer8)
 {
-    int seconds = (int)round(seconds_);
+    assert(buffer8 != NULL);
 
-    normalize_dms(&degrees, &minutes, &seconds);
-    const int max_degrees = 180;
-    while ((degrees > max_degrees) || (degrees < -max_degrees))
+    char dir = 'E';
+
+    if (nrt_Utils_isGeographicLon(degrees, minutes, seconds))
     {
-        if (degrees > max_degrees)
+        if (degrees <= 0)
         {
-            degrees = - (max_degrees - (degrees - max_degrees)); // 181 = -179
+            if (degrees < 0)
+            {
+                dir = 'W';
+                degrees *= -1;
+            }
+            else if (minutes < 0)
+            {
+                minutes *= -1;
+                dir = 'W';
+            }
+            else if (minutes == 0 && seconds < 0)
+            {
+                seconds *= -1;
+                dir = 'W';
+            }
         }
-        if (degrees < -max_degrees)
+
+        seconds = round(seconds);
+
+        /* Ensure seconds and minutes are still within valid range. */
+        if (seconds >= 60.0)
         {
-            degrees = max_degrees + (degrees + max_degrees); // -181 = 179
+            seconds -= 60.0;
+
+            if (++minutes >= 60)
+            {
+                minutes -= 60;
+                ++degrees;
+            }
         }
     }
+    else
+    {
+        // setup an error result
+        degrees = 999;
+        minutes = 99;
+        seconds = 99.0;
+    }
 
-    const char positive_dir = 'E';
-    const char negative_dir = 'W';
-    char dir = positive_dir;
-    adjust_dms(&degrees, &minutes, &seconds, &dir, positive_dir, negative_dir);
-
-
-    char degrees_buffer[11]; // "2147483647"
-    NRT_SNPRINTF(degrees_buffer, 11, "%03d", degrees);
-    char minutes_buffer[11];
-    NRT_SNPRINTF(minutes_buffer, 11, "%02d", minutes);
-    char seconds_buffer[11];
-    NRT_SNPRINTF(seconds_buffer, 11, "%02d", (int)seconds);
-
-    NRT_SNPRINTF(buffer8, 9, "%c%c%c%c%c%c%c%c",
-        degrees_buffer[0], degrees_buffer[1], degrees_buffer[2],
-        minutes_buffer[0], minutes_buffer[1],
-        seconds_buffer[0], seconds_buffer[1],
-        dir);
+    NRT_SNPRINTF(buffer8, 9, "%03d%02d%02d%c", degrees, minutes,
+        (int)seconds, dir);
 }
 
 NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal, char *buffer7)

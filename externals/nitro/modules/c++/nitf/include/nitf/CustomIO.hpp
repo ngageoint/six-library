@@ -24,10 +24,11 @@
 #define __NITF_CUSTOM_IO_HPP__
 
 #include <nitf/IOInterface.hpp>
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
-struct CustomIO : public IOInterface
+struct NITRO_NITFCPP_API CustomIO : public IOInterface
 {
     CustomIO();
     ~CustomIO();

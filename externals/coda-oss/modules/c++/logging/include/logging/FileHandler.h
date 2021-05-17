@@ -33,6 +33,7 @@
 #include "logging/StreamHandler.h"
 #include <import/io.h>
 #include <import/sys.h>
+#include <import/mem.h>
 
 namespace logging
 {
@@ -40,20 +41,21 @@ namespace logging
  * \class FileHandler
  * \brief Emits LogRecords to a file on disk.
  */
-class FileHandler : public StreamHandler
+struct FileHandler : public StreamHandler
 {
-
-public:
     FileHandler(const sys::Filesystem::path& fname, LogLevel level = LogLevel::LOG_NOTSET,
                 int creationFlags = sys::File::CREATE | sys::File::TRUNCATE) :
-        StreamHandler(new io::FileOutputStream(fname.string(), creationFlags), level)
+        StreamHandler(mem::make::unique<io::FileOutputStream>(fname.string(), creationFlags), level)
     {
         // In case we are in append mode
-        ((io::FileOutputStream*) mStream.get())->seek(0, io::Seekable::END);
+        if (auto pStream = dynamic_cast<io::FileOutputStream*>(mStream.get()))
+        {
+            pStream->seek(0, io::Seekable::END);
+        }
     }
-    virtual ~FileHandler()
-    {
-    }
+    virtual ~FileHandler() = default;
+
+    FileHandler& operator=(const FileHandler&) = delete;
 
 };
 }

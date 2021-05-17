@@ -26,9 +26,14 @@
 #include <stdexcept>
 #include <string>
 
+#include <gsl/gsl.h>
+
 #include <six/NITFReadControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/Utilities.h>
+
+#undef min
+#undef max
 
 #ifndef SIX_ENABLE_DED
     // set to 1 for DEM support
@@ -51,7 +56,7 @@ types::RowCol<size_t> parseILOC(const std::string& str)
     return iLoc;
 }
 
-void assignLUT(nitf::ImageSubheader& subheader, six::Legend& legend)
+void assignLUT(const nitf::ImageSubheader& subheader, six::Legend& legend)
 {
     nitf::LookupTable lut =
             subheader.getBandInfo(0).getLookupTable();
@@ -59,6 +64,7 @@ void assignLUT(nitf::ImageSubheader& subheader, six::Legend& legend)
     legend.mLUT.reset(new six::LUT(lut.getEntries(), lut.getTables()));
 
     const unsigned char* const table = lut.getTable();
+    assert(table != nullptr);
 
     for (size_t ii = 0, kk = 0; ii < lut.getEntries(); ++ii)
     {
@@ -71,7 +77,7 @@ void assignLUT(nitf::ImageSubheader& subheader, six::Legend& legend)
     }
 }
 
-six::PixelType getPixelType(nitf::ImageSubheader& subheader)
+six::PixelType getPixelType(const nitf::ImageSubheader& subheader)
 {
     const auto iRep = subheader.imageRepresentation();
     if (iRep == "MONO")
@@ -99,7 +105,7 @@ NITFReadControl::NITFReadControl()
     loadXmlDataContentHandler();
 }
 
-DataType NITFReadControl::getDataType(nitf::Record& record)
+DataType NITFReadControl::getDataType(const nitf::Record& record)
 {
     nitf::List des = record.getDataExtensions();
     if (des.isEmpty())
@@ -153,7 +159,7 @@ DataType NITFReadControl::getDataType(const std::string& desid,
     return DataType::NOT_SET;
 }
 
-DataType NITFReadControl::getDataType(nitf::DESegment& segment)
+DataType NITFReadControl::getDataType(const nitf::DESegment& segment)
 {
     // NOTE: Versions of SICD <= 1.1 and SIDD <= 1.0 prefixed FTITLE with
     //       SICD or SIDD, so for old files we could key off of that. Since
@@ -309,7 +315,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
 
             if (data->getDataType() == six::DataType::DERIVED)
             {
-                mContainer->addData(std::move(data), findLegend(productNum));
+                mContainer->addData(std::move(data), findLegend(gsl::narrow<size_t>(productNum)));
             }
             else if (data->getDataType() == six::DataType::COMPLEX)
             {
@@ -325,8 +331,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
     }
 
     // Get the total number of images in the NITF
-    uint32_t numImages = mRecord.getNumImages();
-
+    const uint32_t numImages = mRecord.getNumImages();
     if (numImages == 0)
     {
         throw except::Exception(Ctxt(
@@ -363,8 +368,6 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         }
     }
 
-    double corners[4][2];
-
     nitf::List images = mRecord.getImages();
     nitf::ListIterator imageIter = images.begin();
 
@@ -381,7 +384,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         nitf::ImageSubheader subheader = segment.getSubheader();
 
         // The number of rows in the segment (actual)
-        size_t numRowsSeg = subheader.numRows();
+        const size_t numRowsSeg = subheader.numRows();
 
         // This function should throw if the data does not exist
         ImageAndSegment imageAndSegment;
@@ -438,11 +441,11 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
         const auto do_setLatLon = six::enable_ded ? !segIsLegend && !segIsDed : !segIsLegend;
         if (do_setLatLon)
         {
+            double corners[4][2]{};
             subheader.getCornersAsLatLons(corners);
             for (size_t kk = 0; kk < LatLonCorners::NUM_CORNERS; ++kk)
             {
-                si.corners.getCorner(kk).setLat(corners[kk][0]);
-                si.corners.getCorner(kk).setLon(corners[kk][1]);
+                si.corners.getCorner(kk).setLatLon(corners[kk]);
             }
         }
 
@@ -459,7 +462,7 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
     }
 }
 
-void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
+void NITFReadControl::addImageClassOptions(const nitf::ImageSubheader& subheader,
         six::Classification& c) const
 {
 
@@ -469,7 +472,7 @@ void NITFReadControl::addImageClassOptions(nitf::ImageSubheader& subheader,
     addSecurityOptions(subheader.getSecurityGroup(), "IS", c.fileOptions);
 }
 
-void NITFReadControl::addDEClassOptions(nitf::DESubheader& subheader,
+void NITFReadControl::addDEClassOptions(const nitf::DESubheader& subheader,
         six::Classification& c) const
 {
     Parameter p;
@@ -486,6 +489,11 @@ class AddSecurityOption final
 public:
     AddSecurityOption(const std::string& prefix, six::Options& options, logging::Logger& log)
         : prefix_(prefix), options_(options), log_(log) {}
+
+    AddSecurityOption(const AddSecurityOption&) = delete;
+    AddSecurityOption& operator=(const AddSecurityOption&) = delete;
+    AddSecurityOption& operator=(AddSecurityOption&&) = delete;
+
     void operator()(const nitf::Field& parameter, const std::string& field)
     {
         Parameter p = parameter.toString();
@@ -593,8 +601,8 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
     const NITFImageInfo& thisImage = *(mInfos[imageNumber]);
 
-    size_t numRowsTotal = thisImage.getData()->getNumRows();
-    size_t numColsTotal = thisImage.getData()->getNumCols();
+    const auto numRowsTotal = gsl::narrow<ptrdiff_t>(thisImage.getData()->getNumRows());
+    const auto numColsTotal = gsl::narrow<ptrdiff_t>(thisImage.getData()->getNumCols());
 
     if (region.getNumRows() == -1)
     {
@@ -605,14 +613,14 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
         region.setNumCols(numColsTotal);
     }
 
-    size_t numRowsReq = region.getNumRows();
-    size_t numColsReq = region.getNumCols();
+    const auto numRowsReq = region.getNumRows();
+    const auto numColsReq = region.getNumCols();
 
-    size_t startRow = region.getStartRow();
-    size_t startCol = region.getStartCol();
+    const auto startRow = region.getStartRow();
+    const auto startCol = region.getStartCol();
 
-    size_t extentRows = startRow + numRowsReq;
-    size_t extentCols = startCol + numColsReq;
+    const auto extentRows = startRow + numRowsReq;
+    const auto extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
         throw except::Exception(Ctxt(FmtX("Too many rows requested [%d]",
@@ -627,7 +635,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 
     auto buffer = region.getBuffer();
 
-    size_t subWindowSize = numRowsReq * numColsReq
+    const auto subWindowSize = numRowsReq * numColsReq
             * thisImage.getData()->getNumBytesPerPixel();
 
     if (buffer == nullptr)
@@ -644,18 +652,18 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 
     std::vector < NITFSegmentInfo > imageSegments
             = thisImage.getImageSegments();
-    size_t numIS = imageSegments.size();
+    const size_t numIS = imageSegments.size();
     size_t startOff = 0;
 
     size_t i;
     for (i = 0; i < numIS; i++)
     {
-        const auto firstRowSeg = imageSegments[i].getFirstRow();
+        const auto firstRowSeg = gsl::narrow<ptrdiff_t>(imageSegments[i].getFirstRow());
 
         if (firstRowSeg <= startRow)
         {
             // It could be in this segment
-            startOff = firstRowSeg;
+            startOff = gsl::narrow<decltype(startOff)>(firstRowSeg);
         }
         else
         {
@@ -665,7 +673,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     }
     --i; // Need to get rid of the last one
     size_t totalRead = 0;
-    size_t numRowsLeft = numRowsReq;
+    auto numRowsLeft = numRowsReq;
     sw.setStartRow(static_cast<uint32_t>(startRow - startOff));
 #if DEBUG_OFFSETS
     std::cout << "startRow: " << startRow
@@ -674,14 +682,13 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     << " i: " << i << std::endl;
 #endif
 
-    size_t nbpp = thisImage.getData()->getNumBytesPerPixel();
-    size_t startIndex = thisImage.getStartIndex();
+    const auto nbpp = thisImage.getData()->getNumBytesPerPixel();
+    const auto startIndex = thisImage.getStartIndex();
     createCompressionOptions(mCompressionOptions);
     for (; i < numIS && totalRead < subWindowSize; i++)
     {
-        size_t numRowsReqSeg =
-                std::min<size_t>(numRowsLeft, imageSegments[i].getNumRows()
-                        - sw.getStartRow());
+        const auto numRowsReqSeg =
+                std::min(gsl::narrow<size_t>(numRowsLeft), imageSegments[i].getNumRows() - sw.getStartRow());
 
         sw.setNumRows(static_cast<uint32_t>(numRowsReqSeg));
         nitf::ImageReader imageReader = mReader.newImageReader(
@@ -743,10 +750,7 @@ void NITFReadControl::readLegendPixelData(const nitf::ImageSubheader& subheader,
                                           size_t imageSeg,
                                           Legend& legend)
 {
-    const types::RowCol<uint32_t> dims(
-            static_cast<uint32_t>(subheader.numRows()),
-            static_cast<uint32_t>(subheader.numCols()));
-
+    const types::RowCol<uint32_t> dims(subheader.dims());
     legend.setDims(dims);
 
     uint32_t bandList(0);
@@ -758,10 +762,10 @@ void NITFReadControl::readLegendPixelData(const nitf::ImageSubheader& subheader,
 
     if (!legend.mImage.empty())
     {
-        int padded;
         auto bufferPtr = legend.mImage.data();
         nitf::ImageReader imageReader = mReader.newImageReader(
                 static_cast<int>(imageSeg));
+        int padded = 0;
         imageReader.read(sw, &bufferPtr, &padded);
     }
 }

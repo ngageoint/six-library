@@ -97,7 +97,8 @@ typedef scene::FrameType FrameType;
  */
 struct DecorrType
 {
-    DecorrType(double ccz = 0.0, double dr = 0.0) :
+    DecorrType() = default;
+        DecorrType(double ccz, double dr = 0.0) :
         corrCoefZero(ccz), decorrRate(dr)
     {
     }
@@ -200,20 +201,20 @@ struct Constants
  *  and row-column position for a point.
  *
  */
-struct ReferencePoint
+struct ReferencePoint final
 {
     //!  ECEF location of point
     Vector3 ecef;
 
     //!  Row col pixel location of point
-    RowColDouble rowCol;
+    RowColDouble rowCol{ 0.0, 0.0 };
 
     //!  (Optional) name.  Leave it blank if you don't need it
     std::string name;
 
     //!  Construct, init all fields at once (except optional name)
     ReferencePoint(double x = 0, double y = 0, double z = 0, double row = 0,
-                   double col = 0) :
+                   double col = 0) noexcept :
         rowCol(row, col)
     {
         ecef[0] = x;
@@ -377,17 +378,19 @@ struct LUT
  *  interpreted as an index into the AmpTable, ultimately yielding the
  *  double precision amplitude value
  */
-struct AmplitudeTable : public LUT
+struct AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
-    AmplitudeTable() :
+    AmplitudeTable() noexcept :
         LUT(256, sizeof(double))
     {
     }
 
     bool operator==(const AmplitudeTable& rhs) const
     {
-        return *(dynamic_cast<const LUT*>(this)) == *(dynamic_cast<const LUT*>(&rhs));
+        const LUT* pThis = this;
+        const LUT* pRHS = &rhs;
+        return *(pThis) == *(pRHS);
     }
     bool operator!=(const AmplitudeTable& rhs) const
     {
@@ -398,7 +401,9 @@ struct AmplitudeTable : public LUT
         AmplitudeTable* ret = new AmplitudeTable();
         for (size_t ii = 0; ii < numEntries; ++ii)
         {
-            *(double*)(*ret)[ii] = *(double*)(*this)[ii];
+            const void* this_ii = (*this)[ii];
+            void* ret_ii = (*ret)[ii];
+            *static_cast<double*>(ret_ii) = *static_cast<const double*>(this_ii);
         }
         return ret;
     }

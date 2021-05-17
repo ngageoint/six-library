@@ -39,17 +39,28 @@
 /*!
  * Useful macro for defining Exception classes
  */
+#ifndef CODA_OSS_except_Exception_suppress_26447_BEGIN_
+    #if defined(_MSC_VER) && _PREFAST_ // Visual Studio /analyze
+        #define CODA_OSS_except_Exception_suppress_26447_BEGIN_ \
+            __pragma(warning(push)) \
+            __pragma(warning(disable: 26447)) // The function is declared '...' but calls  function '...' which may throw exceptions (f .6)
+        #define CODA_OSS_except_Exception_suppress_26447_END_ __pragma(warning(pop))
+    #else
+        #define CODA_OSS_except_Exception_suppress_26447_BEGIN_
+        #define CODA_OSS_except_Exception_suppress_26447_END_
+    #endif
+#endif
+
 #define DECLARE_EXTENDED_EXCEPTION(_Name, _Base) \
-  class _Name##Exception : public _Base \
+  struct _Name##Exception : public _Base \
   { \
-  public: \
-      _Name##Exception() : _Base(){} \
+      _Name##Exception() = default; virtual ~_Name##Exception() = default; \
       _Name##Exception(const except::Context& c) : _Base(c){} \
       _Name##Exception(const std::string& msg) : _Base(msg){} \
       _Name##Exception(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
-      virtual ~_Name##Exception(){} \
-      virtual std::string getType() const noexcept { return #_Name"Exception"; } \
-  };
+      CODA_OSS_except_Exception_suppress_26447_BEGIN_ \
+      std::string getType() const override { return #_Name"Exception"; } \
+     CODA_OSS_except_Exception_suppress_26447_END_ };
 
 #define DECLARE_EXCEPTION(_Name) DECLARE_EXTENDED_EXCEPTION(_Name, except::Exception)
 
@@ -62,17 +73,10 @@ namespace except
  *
  * This class is the base for all exceptions.
  */
-class Exception : public Throwable
+struct Exception : public Throwable
 {
-public:
-
-    /*!
-     * Constructor.
-     */
-    Exception() :
-        Throwable()
-    {
-    }
+    Exception() = default;
+    virtual ~Exception() = default;
 
     /*!
      * Constructor. Takes a Context
@@ -102,12 +106,7 @@ public:
     {
     }
 
-    //! Destructor
-    virtual ~Exception()
-    {
-    }
-
-    virtual std::string getType() const noexcept override
+    std::string getType() const override
     {
         return "Exception";
     }

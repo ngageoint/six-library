@@ -35,15 +35,13 @@
 namespace mt
 {
 template<typename RequestHandler_T>
-class BasicThreadPool
+struct BasicThreadPool
 {
-public:
-
     /*! Constructor.  Set up the thread pool.
      *  \param numThreads the number of threads
      */
-    BasicThreadPool(size_t numThreads = 0) :
-        mStarted(false),
+    BasicThreadPool() = default;
+    BasicThreadPool(size_t numThreads) :
         mNumThreads(numThreads)
     {
     }
@@ -54,6 +52,9 @@ public:
         //destroy(static_cast<unsigned short>(mPool.size()));
         shutdown();
     }
+
+    BasicThreadPool(const BasicThreadPool&) = delete;
+    BasicThreadPool& operator=(const BasicThreadPool&) = delete;
 
     void start()
     {
@@ -136,7 +137,7 @@ protected:
     // For instance, you may want an IterativeRequestHandler
     virtual RequestHandler_T *newRequestHandler()
     {
-        return new RequestHandler_T(&mHandlerQueue);
+        return mem::make::unique<RequestHandler_T>(&mHandlerQueue).release();
     }
 
     void destroy()
@@ -144,8 +145,8 @@ protected:
         mPool.clear();
     }
 
-    bool mStarted;
-    size_t mNumThreads;
+    bool mStarted = false;
+    size_t mNumThreads = 0;
     std::vector<mem::SharedPtr<sys::Thread> > mPool;
     mt::RunnableRequestQueue mHandlerQueue;
 

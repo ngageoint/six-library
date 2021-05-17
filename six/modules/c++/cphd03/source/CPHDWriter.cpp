@@ -47,7 +47,8 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 {
     //! Get the correct dataWriter.
     //  The CPHD file needs to be big endian.
-    if (std::endian::native == std::endian::big)
+    auto endianness = std::endian::native; // "conditional expression is constant"
+    if (endianness == std::endian::big)
     {
         mDataWriter.reset(new cphd::DataWriterBigEndian(mStream, mNumThreads));
     }
@@ -74,7 +75,8 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 
     //! Get the correct dataWriter.
     //  The CPHD file needs to be big endian.
-    if (std::endian::native == std::endian::big)
+    auto endianness = std::endian::native; // "conditional expression is constant"
+    if (endianness == std::endian::big)
     {
         mDataWriter.reset(new cphd::DataWriterBigEndian(mStream, mNumThreads));
     }
