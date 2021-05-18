@@ -969,11 +969,20 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* collectionIDXML, Collectio
 {
     parseString(getFirstAndOnly(collectionIDXML, "CollectorName"),
                 collectionID.collectorName);
-    
-    parseOptionalString(collectionIDXML, "IlluminatorName", collectionID.illuminatorName);
-    parseOptionalString(collectionIDXML, "CoreName", collectionID.coreName);
 
-    XMLElem element = getOptional(collectionIDXML, "CollectType");
+    XMLElem element = getOptional(collectionIDXML, "IlluminatorName");
+    if (element)
+    {
+        parseString(element, collectionID.illuminatorName);
+    }
+
+    element = getOptional(collectionIDXML, "CoreName");
+    if (element)
+    {
+        parseString(element, collectionID.coreName);
+    }
+
+    element = getOptional(collectionIDXML, "CollectType");
     if (element)
     {
         collectionID.collectType
@@ -986,7 +995,11 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* collectionIDXML, Collectio
             = six::toType<RadarModeType>(getFirstAndOnly(radarModeXML,
                                          "ModeType")->getCharacterData());
 
-    parseOptionalString(radarModeXML, "ModeID", collectionID.radarModeID);
+    element = getOptional(radarModeXML, "ModeID");
+    if (element)
+    {
+        parseString(element, collectionID.radarModeID);
+    }
 
     element = getFirstAndOnly(collectionIDXML, "ReleaseInfo");
     parseString(element, collectionID.releaseInfo);
@@ -1135,7 +1148,11 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* sceneCoordsXML,
     {
         // Optional
         scene.imageGrid.reset(new ImageGrid());
-        parseOptionalString(gridXML, "Identifier", scene.imageGrid->identifier);
+        const xml::lite::Element* identifierXML = getOptional(gridXML, "Identifier");
+        if (identifierXML)
+        {
+            parseString(identifierXML, scene.imageGrid->identifier);
+        }
         parseLineSample(getFirstAndOnly(gridXML, "IARPLocation"),
                         scene.imageGrid->iarpLocation);
         parseIAExtent(getFirstAndOnly(gridXML, "IAXExtent"),
@@ -1242,7 +1259,12 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* dataXML, Data& data)
             parseUInt(compressionXML, data.channels[ii].compressedSignalSize);
         }
     }
-    parseOptionalString(dataXML, "SignalCompressionID", data.signalCompressionID);
+    XMLElem compressionXML = getOptional(dataXML, "SignalCompressionID");
+    if (compressionXML)
+    {
+        parseString(compressionXML,
+                    data.signalCompressionID);
+    }
 
     // Support Arrays
     std::vector<XMLElem> supportsXML;
@@ -1532,10 +1554,16 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         parseString(getFirstAndOnly(antPatternXMLVec[ii], "Identifier"), antenna.antPattern[ii].identifier);
         parseDouble(getFirstAndOnly(antPatternXMLVec[ii], "FreqZero"), antenna.antPattern[ii].freqZero);
         parseOptionalDouble(antPatternXMLVec[ii], "GainZero", antenna.antPattern[ii].gainZero);
-
-        parseOptionalBooleanType(antPatternXMLVec[ii], "EBFreqShift", antenna.antPattern[ii].ebFreqShift);
-        parseOptionalBooleanType(antPatternXMLVec[ii], "MLFreqDilation", antenna.antPattern[ii].mlFreqDilation);
-
+        XMLElem ebFreqShiftXML = getOptional(antPatternXMLVec[ii], "EBFreqShift");
+        if(ebFreqShiftXML)
+        {
+            parseBooleanType(ebFreqShiftXML, antenna.antPattern[ii].ebFreqShift);
+        }
+        XMLElem mlFreqDilationXML = getOptional(antPatternXMLVec[ii], "MLFreqDilation");
+        if(mlFreqDilationXML)
+        {
+            parseBooleanType(mlFreqDilationXML, antenna.antPattern[ii].mlFreqDilation);
+        }
         XMLElem gainBSPoly = getOptional(antPatternXMLVec[ii], "GainBSPoly");
         if(gainBSPoly)
         {
@@ -1565,7 +1593,12 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         {
             parseDouble(getFirstAndOnly(gainPhaseArrayXMLVec[jj], "Freq"),  antenna.antPattern[ii].gainPhaseArray[jj].freq);
             parseString(getFirstAndOnly(gainPhaseArrayXMLVec[jj], "ArrayId"), antenna.antPattern[ii].gainPhaseArray[jj].arrayId);
-            parseOptionalString(gainPhaseArrayXMLVec[jj], "ElementId", antenna.antPattern[ii].gainPhaseArray[jj].elementId);
+            XMLElem elementIdXML = getOptional(gainPhaseArrayXMLVec[jj], "ElementId");
+            if(elementIdXML)
+            {
+                parseString(elementIdXML, antenna.antPattern[ii].gainPhaseArray[jj].elementId);
+            }
+
         }
     }
 }
@@ -1673,7 +1706,11 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* errParamXML, ErrorParamete
 
 void CPHDXMLParser::fromXML(const xml::lite::Element* productInfoXML, ProductInfo& productInfo)
 {
-    parseOptionalString(productInfoXML, "Profile", productInfo.profile);
+    XMLElem profileXML = getOptional(productInfoXML, "Profile");
+    if(profileXML)
+    {
+        parseString(profileXML, productInfo.profile);
+    }
 
     std::vector<XMLElem> creationInfoXML;
     productInfoXML->getElementsByTagName("CreationInfo", creationInfoXML);
@@ -1681,12 +1718,19 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* productInfoXML, ProductInf
 
     for (size_t ii = 0; ii < creationInfoXML.size(); ++ii)
     {
-        parseOptionalString(creationInfoXML[ii], "Application", productInfo.creationInfo[ii].application);
+        XMLElem applicationXML = getOptional(creationInfoXML[ii], "Application");
+        if(applicationXML)
+        {
+            parseString(applicationXML, productInfo.creationInfo[ii].application);
+        }
 
         parseDateTime(getFirstAndOnly(creationInfoXML[ii], "DateTime"), productInfo.creationInfo[ii].dateTime);
 
-        parseOptionalString(creationInfoXML[ii], "Site", productInfo.creationInfo[ii].site);
-
+        XMLElem siteXML = getOptional(creationInfoXML[ii], "Site");
+        if(siteXML)
+        {
+            parseString(siteXML, productInfo.creationInfo[ii].site);
+        }
         mCommon.parseParameters(creationInfoXML[ii], "Parameter", productInfo.creationInfo[ii].parameter);
     }
     mCommon.parseParameters(productInfoXML, "Parameter", productInfo.parameter);
@@ -1911,7 +1955,11 @@ void CPHDXMLParser::parseChannelParameters(
     parseBooleanType(getFirstAndOnly(paramXML, "TOAFixed"), param.toaFixed);
     parseBooleanType(getFirstAndOnly(paramXML, "SRPFixed"), param.srpFixed);
 
-   parseOptionalBooleanType(paramXML, "SignalNormal", param.signalNormal);
+    XMLElem signalXML = getOptional(paramXML, "SignalNormal");
+    if (signalXML)
+    {
+        parseBooleanType(signalXML, param.signalNormal);
+    }
 
     parseDouble(getFirstAndOnly(paramXML, "FxC"), param.fxC);
     parseDouble(getFirstAndOnly(paramXML, "FxBW"), param.fxBW);

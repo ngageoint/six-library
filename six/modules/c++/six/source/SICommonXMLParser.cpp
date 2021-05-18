@@ -1152,10 +1152,19 @@ void SICommonXMLParser::parseCollectionInformationFromXML(
     parseString(getFirstAndOnly(collectionInfoXML, "CollectorName"),
                 collInfo->collectorName);
 
-    parseOptionalString(collectionInfoXML, "IlluminatorName", collInfo->illuminatorName);
-    parseOptionalString(collectionInfoXML, "CoreName", collInfo->coreName);
+    XMLElem element = getOptional(collectionInfoXML, "IlluminatorName");
+    if (element)
+    {
+        parseString(element, collInfo->illuminatorName);
+    }
 
-    auto element = getOptional(collectionInfoXML, "CollectType");
+    element = getOptional(collectionInfoXML, "CoreName");
+    if (element)
+    {
+        parseString(element, collInfo->coreName);
+    }
+
+    element = getOptional(collectionInfoXML, "CollectType");
     if (element)
     {
         collInfo->collectType
@@ -1168,7 +1177,11 @@ void SICommonXMLParser::parseCollectionInformationFromXML(
             = six::toType<RadarModeType>(getFirstAndOnly(radarModeXML,
                                          "ModeType")->getCharacterData());
 
-    parseOptionalString(radarModeXML, "ModeID", collInfo->radarModeID);
+    element = getOptional(radarModeXML, "ModeID");
+    if (element)
+    {
+        parseString(element, collInfo->radarModeID);
+    }
 
     std::string classification;
     parseString(getFirstAndOnly(collectionInfoXML, "Classification"),

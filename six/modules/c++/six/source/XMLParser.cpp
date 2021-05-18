@@ -383,22 +383,6 @@ bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std:
     return false;
 }
 
-bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, double& value,
-    const std::string& tag1, const std::string& tag2, const except::Context& ctxt) const
-{
-    const auto result = parseOptionalDouble(parent, tag1, value);
-    if (!result)
-    {
-        log()->warn(ctxt);
-    }
-    else
-    {
-        parseDouble(getFirstAndOnly(parent, tag2), value);
-    }
-
-    return result;
-}
-
 
 void XMLParser::parseComplex(const xml::lite::Element* element, std::complex<double>& value) const
 {
@@ -433,17 +417,6 @@ void XMLParser::parseBooleanType(const xml::lite::Element* element, BooleanType&
         value = castValue(*element, six::toType<BooleanType>);
         });
 }
-bool XMLParser::parseOptionalBooleanType(const xml::lite::Element* parent, const std::string& tag, BooleanType& value) const
-{
-    if (const xml::lite::Element* const element = getOptional(parent, tag))
-    {
-        //optional
-        parseBooleanType(element, value);
-        return true;
-    }
-    return false;
-}
-
 
 void XMLParser::parseDateTime(const xml::lite::Element* element, DateTime& value) const
 {

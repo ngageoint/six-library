@@ -578,11 +578,25 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* globalXML, Global& global
      * Instead look for the incorrect Fields as optional
      * TODO: Is this still an ongoing problem or can this be removed?
      */
-    parseOptionalDouble(globalXML, global.txTime1,
-        "Tx1Time", "TxTime1", Ctxt("Found field Tx1Time, should be TxTime1. CPHD file does not meet spec."));
-    parseOptionalDouble(globalXML, global.txTime2,
-        "Tx2Time", "TxTime2", Ctxt("Found field Tx2Time, should be TxTime2. CPHD file does not meet spec."));
+    tmpElem = getOptional(globalXML, "Tx1Time");
+    if (tmpElem)
+    {
+        // Bad file:
+        log()->warn(Ctxt("Found field Tx1Time, should be TxTime1. CPHD file does not meet spec."));
+        parseDouble(tmpElem, global.txTime1);
+    }
+    else
+        parseDouble(getFirstAndOnly(globalXML, "TxTime1"), global.txTime1);
 
+    tmpElem = getOptional(globalXML, "Tx2Time");
+    if (tmpElem)
+    {
+        // Bad file:
+        log()->warn(Ctxt("Found field Tx2Time, should be TxTime2. CPHD file does not meet spec."));
+        parseDouble(tmpElem, global.txTime2);
+    }
+    else
+        parseDouble(getFirstAndOnly(globalXML, "TxTime2"), global.txTime2);
 #endif
 
     XMLElem imageAreaXML = getFirstAndOnly(globalXML, "ImageArea");
@@ -929,8 +943,19 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* antennaParamsXML,
         mCommon.parsePoly1D(tmpElem, params.gainBSPoly);
     }
 
-    parseOptionalBooleanType(antennaParamsXML, "EBFreqShift", params.electricalBoresightFrequencyShift);
-    parseOptionalBooleanType(antennaParamsXML, "MLFreqDilation", params.mainlobeFrequencyDilation);
+    tmpElem = getOptional(antennaParamsXML, "EBFreqShift");
+    if (tmpElem)
+    {
+        //optional
+        parseBooleanType(tmpElem, params.electricalBoresightFrequencyShift);
+    }
+
+    tmpElem = getOptional(antennaParamsXML, "MLFreqDilation");
+    if (tmpElem)
+    {
+        //optional
+        parseBooleanType(tmpElem, params.mainlobeFrequencyDilation);
+    }
 }
 
 void CPHDXMLControl::fromXML(const xml::lite::Element* antennaXML, Antenna& antenna)
