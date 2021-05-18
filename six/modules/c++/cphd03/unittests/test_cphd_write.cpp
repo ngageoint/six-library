@@ -415,14 +415,13 @@ void runCPHDTest(const std::string& testName_,
     std::vector<std::byte> readVBM;
     for (size_t ii = 0; ii < NUM_IMAGES; ++ii)
     {
-        std::unique_ptr<std::byte[]> readData;
         TEST_ASSERT_EQ(reader.getNumVectors(ii), dims[ii].row);
         TEST_ASSERT_EQ(reader.getNumSamples(ii), dims[ii].col);
 
-        wideband.read(ii,
+        auto readData = wideband.read(ii,
                       0, cphd::Wideband::ALL,
                       0, cphd::Wideband::ALL,
-                      NUM_THREADS, readData);
+                      NUM_THREADS);
 
         const std::complex<float>* readBuffer =
                 reinterpret_cast<std::complex<float>* >(readData.get());

@@ -132,31 +132,30 @@ TEST_CASE(testReadChannelSubset)
     input->seek(0, io::Seekable::START);
 
     cphd::Wideband wideband(input, metadata, 0, 32);
-    std::unique_ptr<std::byte[]> readData;
 
     // Single pixel reads
-    wideband.read(0, 0, 0, 0, 0, 1, readData);
+    auto readData = wideband.read(0, 0, 0, 0, 0, 1);
     TEST_ASSERT_EQ(readData[0], '0');
     TEST_ASSERT_EQ(readData[1], 'A');
 
-    wideband.read(0, 1, 1, 0, 0, 1, readData);
+    readData = wideband.read(0, 1, 1, 0, 0, 1);
     TEST_ASSERT_EQ(readData[0], '2');
     TEST_ASSERT_EQ(readData[1], 'C');
 
-    wideband.read(0, 3, 3, 1, 1, 1, readData);
+    readData = wideband.read(0, 3, 3, 1, 1, 1);
     TEST_ASSERT_EQ(wideband.getBytesRequiredForRead(0, 3, 3, 1, 1), 2);
 
     TEST_ASSERT_EQ(readData[0], '7');
     TEST_ASSERT_EQ(readData[1], 'H');
 
     // Full vector reads
-    wideband.read(0, 0, 0, 0, cphd::Wideband::ALL, 1, readData);
+    readData = wideband.read(0, 0, 0, 0, cphd::Wideband::ALL, 1);
     TEST_ASSERT_EQ(readData[0], '0');
     TEST_ASSERT_EQ(readData[1], 'A');
     TEST_ASSERT_EQ(readData[2], '1');
     TEST_ASSERT_EQ(readData[3], 'B');
 
-    wideband.read(0, 3, 3, 0, cphd::Wideband::ALL, 1, readData);
+    readData = wideband.read(0, 3, 3, 0, cphd::Wideband::ALL, 1);
     TEST_ASSERT_EQ(
             wideband.getBytesRequiredForRead(0, 3, 3, 0, cphd::Wideband::ALL),
             4);
@@ -170,7 +169,7 @@ TEST_CASE(testReadChannelSubset)
     TEST_ASSERT_EQ(
             wideband.getBytesRequiredForRead(0, 0, cphd::Wideband::ALL, 0, 0),
             8);
-    wideband.read(0, 0, cphd::Wideband::ALL, 0, 0, 1, readData);
+    readData = wideband.read(0, 0, cphd::Wideband::ALL, 0, 0, 1);
     TEST_ASSERT_EQ(readData[0], '0');
     TEST_ASSERT_EQ(readData[1], 'A');
     TEST_ASSERT_EQ(readData[2], '2');
@@ -197,8 +196,7 @@ TEST_CASE(testCannotDoPartialReadOfCompressedChannel)
 
     cphd::Wideband wideband(input, metadata, 0, 4);
 
-    std::unique_ptr<std::byte[]> readData;
-    TEST_EXCEPTION(wideband.read(0, 0, 0, 1, 1, 1, readData));
+    TEST_EXCEPTION(wideband.read(0, 0, 0, 1, 1, 1));
     TEST_EXCEPTION(wideband.getBytesRequiredForRead(0, 0, 0, 1, 1));
 }
 }
