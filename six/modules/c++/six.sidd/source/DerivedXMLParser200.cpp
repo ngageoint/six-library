@@ -832,8 +832,16 @@ void DerivedXMLParser200::parseColorSpaceTransformFromXML(
     }
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
-    parseOptionalString(manageElem, "DisplayProfile", transform.colorManagementModule.displayProfile);
-    parseOptionalString(manageElem, "ICCProfileSignature", transform.colorManagementModule.iccProfile);
+    XMLElem profXML = getOptional(manageElem, "DisplayProfile");
+    if (profXML)
+    {
+        parseString(profXML, transform.colorManagementModule.displayProfile);
+    }
+    profXML = getOptional(manageElem, "ICCProfileSignature");
+    if (profXML)
+    {
+        parseString(profXML, transform.colorManagementModule.iccProfile);
+    }
 }
 
 void DerivedXMLParser200::parseDynamicRangeAdjustmentFromXML(
@@ -1969,7 +1977,10 @@ void DerivedXMLParser200::parseExploitationFeaturesFromXML(
 
         // optional
         if (geometryElem) {
-            parseOptionalDouble(geometryElem, "DopplerConeAngle", coll.geometry->dopplerConeAngle);
+            XMLElem dopplerElem = getOptional(geometryElem, "DopplerConeAngle");
+            if (dopplerElem) {
+                parseDouble(dopplerElem, coll.geometry->dopplerConeAngle);
+            }
         }
     }
 }
@@ -2018,7 +2029,12 @@ void DerivedXMLParser200::parseProductFromXML(
                       polarization.rcvPolarizationProc);
         }
 
-        parseOptionalDouble(productElem, "North", product.north);
+        // optional
+        XMLElem tmpElem = getOptional(productElem, "North");
+        if (tmpElem)
+        {
+            parseDouble(tmpElem, product.north);
+        }
 
         // optional to unbounded
         common().parseParameters(productElem, "Extension",

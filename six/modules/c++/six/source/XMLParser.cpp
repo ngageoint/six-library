@@ -364,23 +364,21 @@ void XMLParser::parseDouble(const xml::lite::Element* element, std::optional<dou
     }
 }
 
-bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const
+void XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const
 {
-    if (const xml::lite::Element* const element = getOptional(parent, tag))
+    const xml::lite::Element* const element = getOptional(parent, tag);
+    if (element)
     {
         parseDouble(element, value);
-        return true;
     }
-    return false;
 }
-bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const
+void XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const
 {
-    if (const xml::lite::Element* const element = getOptional(parent, tag))
+    const xml::lite::Element* const element = getOptional(parent, tag);
+    if (element)
     {
         parseDouble(element, value);
-        return true;
     }
-    return false;
 }
 
 

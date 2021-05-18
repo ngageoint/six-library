@@ -1323,16 +1323,41 @@ void ComplexXMLParser::parseImageFormationFromXML(
         parseComplex(getFirstAndOnly(distortionXML, "Q4"),
                      imageFormation->polarizationCalibration->distortion->q4);
 
-        parseOptionalDouble(distortionXML, "GainErrorA", imageFormation->
-            polarizationCalibration->distortion->gainErrorA);
-        parseOptionalDouble(distortionXML, "GainErrorF1", imageFormation->
-            polarizationCalibration->distortion->gainErrorF1);
-        parseOptionalDouble(distortionXML, "GainErrorF2", imageFormation->
-            polarizationCalibration->distortion->gainErrorF2);
-       parseOptionalDouble(distortionXML, "PhaseErrorF1", imageFormation->
-            polarizationCalibration->distortion->phaseErrorF1);
-        parseOptionalDouble(distortionXML, "PhaseErrorF2", imageFormation->
-            polarizationCalibration->distortion->phaseErrorF2);
+        XMLElem gainErrorXML = getOptional(distortionXML, "GainErrorA");
+        if (gainErrorXML)
+        {
+            parseDouble(gainErrorXML, imageFormation->
+                polarizationCalibration ->distortion->gainErrorA);
+        }
+
+        gainErrorXML = getOptional(distortionXML, "GainErrorF1");
+        if (gainErrorXML)
+        {
+            parseDouble(gainErrorXML, imageFormation->
+                polarizationCalibration->distortion->gainErrorF1);
+        }
+
+        gainErrorXML = getOptional(distortionXML, "GainErrorF2");
+        if (gainErrorXML)
+        {
+            parseDouble(gainErrorXML, imageFormation->
+                polarizationCalibration ->distortion->gainErrorF2);
+        }
+
+        XMLElem phaseErrorXML = getOptional(distortionXML, "PhaseErrorF1");
+        if (phaseErrorXML)
+        {
+            parseDouble(phaseErrorXML, imageFormation->
+                polarizationCalibration ->distortion->phaseErrorF1);
+        }
+
+        phaseErrorXML = getOptional(distortionXML, "PhaseErrorF2");
+        if (phaseErrorXML)
+        {
+            parseDouble(phaseErrorXML, imageFormation->
+                polarizationCalibration ->distortion->phaseErrorF2);
+        }
+
     }
 }
 
@@ -1559,12 +1584,35 @@ void ComplexXMLParser::parseWaveformFromXML(
         waveform.back().reset(new WaveformParameters());
         WaveformParameters* const wfParams = waveform.back().get();
 
-        parseOptionalDouble(*it, "TxPulseLength", wfParams->txPulseLength);
-        parseOptionalDouble(*it, "TxRFBandwidth", wfParams->txRFBandwidth);
-        parseOptionalDouble(*it, "TxFreqStart", wfParams->txFrequencyStart);
-        parseOptionalDouble(*it, "TxFMRate", wfParams->txFMRate);
+        XMLElem optElem = getOptional(*it, "TxPulseLength");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->txPulseLength);
+        }
 
-        XMLElem optElem = getOptional(*it, "RcvDemodType");
+        optElem = getOptional(*it, "TxRFBandwidth");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->txRFBandwidth);
+        }
+
+        optElem = getOptional(*it, "TxFreqStart");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->txFrequencyStart);
+        }
+
+        optElem = getOptional(*it, "TxFMRate");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->txFMRate);
+        }
+
+        optElem = getOptional(*it, "RcvDemodType");
         if (optElem)
         {
             //optional
@@ -1572,11 +1620,40 @@ void ComplexXMLParser::parseWaveformFromXML(
                     = six::toType<DemodType>(optElem->getCharacterData());
         }
 
-        parseOptionalDouble(*it, "RcvWindowLength", wfParams->rcvWindowLength);
-        parseOptionalDouble(*it, "ADCSampleRate", wfParams->adcSampleRate);
-        parseOptionalDouble(*it, "RcvIFBandwidth", wfParams->rcvIFBandwidth);
-        parseOptionalDouble(*it, "RcvFreqStart", wfParams->rcvFrequencyStart);
-        parseOptionalDouble(*it, "RcvFMRate", wfParams->rcvFMRate);
+        optElem = getOptional(*it, "RcvWindowLength");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->rcvWindowLength);
+        }
+
+        optElem = getOptional(*it, "ADCSampleRate");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->adcSampleRate);
+        }
+
+        optElem = getOptional(*it, "RcvIFBandwidth");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->rcvIFBandwidth);
+        }
+
+        optElem = getOptional(*it, "RcvFreqStart");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->rcvFrequencyStart);
+        }
+
+        optElem = getOptional(*it, "RcvFMRate");
+        if (optElem)
+        {
+            //optional
+            parseDouble(optElem, wfParams->rcvFMRate);
+        }
     }
 }
 
@@ -1705,9 +1782,14 @@ void ComplexXMLParser::parseTxSequenceFromXML(
         mem::ScopedCloneablePtr<TxStep>& step(steps.back());
         step.reset(new TxStep());
 
-        parseOptionalInt(*it, "WFIndex", step->waveformIndex);
+        XMLElem optElem = getOptional(*it, "WFIndex");
+        if (optElem)
+        {
+            //optional
+            parseInt(optElem, step->waveformIndex);
+        }
 
-        XMLElem optElem = getOptional(*it, "TxPolarization");
+        optElem = getOptional(*it, "TxPolarization");
         if (optElem)
         {
             //optional
