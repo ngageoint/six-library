@@ -1330,47 +1330,13 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* pvpXML, Pvp& pvp)
     parsePVPType(pvp, getFirstAndOnly(pvpXML, "SC0"), pvp.sc0);
     parsePVPType(pvp, getFirstAndOnly(pvpXML, "SCSS"), pvp.scss);
 
-    const xml::lite::Element* AmpSFXML = getOptional(pvpXML, "AmpSF");
-    if (AmpSFXML)
-    {
-        parsePVPType(pvp, AmpSFXML, pvp.ampSF);
-    }
-
-    const xml::lite::Element* FXN1XML = getOptional(pvpXML, "FXN1");
-    if (FXN1XML)
-    {
-        parsePVPType(pvp, FXN1XML, pvp.fxN1);
-    }
-
-    const xml::lite::Element* FXN2XML = getOptional(pvpXML, "FXN2");
-    if (FXN2XML)
-    {
-        parsePVPType(pvp, FXN2XML, pvp.fxN2);
-    }
-
-    const xml::lite::Element* TOAE1XML = getOptional(pvpXML, "TOAE1");
-    if (TOAE1XML)
-    {
-        parsePVPType(pvp, TOAE1XML, pvp.toaE1);
-    }
-
-    const xml::lite::Element* TOAE2XML = getOptional(pvpXML, "TOAE2");
-    if (TOAE2XML)
-    {
-        parsePVPType(pvp, TOAE2XML, pvp.toaE2);
-    }
-
-    const xml::lite::Element* TDIonoSRPXML = getOptional(pvpXML, "TDIonoSRP");
-    if (TDIonoSRPXML)
-    {
-        parsePVPType(pvp, TDIonoSRPXML, pvp.tdIonoSRP);
-    }
-
-    const xml::lite::Element* SIGNALXML = getOptional(pvpXML, "SIGNAL");
-    if (SIGNALXML)
-    {
-        parsePVPType(pvp, SIGNALXML, pvp.signal);
-    }
+    parseOptionalPVPType(pvpXML, "AmpSF", pvp, pvp.ampSF);
+    parseOptionalPVPType(pvpXML, "FXN1", pvp, pvp.fxN1);
+    parseOptionalPVPType(pvpXML, "FXN2", pvp, pvp.fxN2);
+    parseOptionalPVPType(pvpXML, "TOAE1", pvp, pvp.toaE1);
+    parseOptionalPVPType(pvpXML, "TOAE2", pvp, pvp.toaE2);
+    parseOptionalPVPType(pvpXML, "TDIonoSRP", pvp, pvp.tdIonoSRP);
+    parseOptionalPVPType(pvpXML, "SIGNAL", pvp, pvp.signal);
 
     std::vector<XMLElem> addedParamsXML;
     const std::string str = "AddedPVP";
@@ -2125,6 +2091,17 @@ void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML) c
     parseString(getFirstAndOnly(paramXML, "Format"), format);
     pvp.setCustomParameter(size, offset, format, name);
 }
+
+bool CPHDXMLParser::parseOptionalPVPType(const xml::lite::Element* parent, const std::string& tag, Pvp& pvp, PVPType& param) const
+{    
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
+    {
+        parsePVPType(pvp, element, param);
+        return true;
+    }
+    return false;
+}
+
 
 void CPHDXMLParser::parsePlatformParams(const xml::lite::Element* platXML, Bistatic::PlatformParams& plat) const
 {
