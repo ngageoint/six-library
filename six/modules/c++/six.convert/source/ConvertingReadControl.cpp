@@ -85,16 +85,16 @@ UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
     const Data* data = mContainer->getData(imageNumber);
     if (region.getNumRows() == -1)
     {
-        region.setNumRows(data->getNumRows());
+        region.setNumRows(static_cast<ptrdiff_t>(data->getNumRows()));
     }
     if (region.getNumCols() == -1)
     {
-        region.setNumCols(data->getNumCols());
+        region.setNumCols(static_cast<ptrdiff_t>(data->getNumCols()));
     }
 
     const types::RowCol<size_t> extent(
-            region.getStartRow() + region.getNumRows(),
-            region.getStartCol() + region.getNumCols());
+            region.getStartRow() + static_cast<size_t>(region.getNumRows()),
+            region.getStartCol() + static_cast<size_t>(region.getNumCols()));
 
     if (extent.row > data->getNumRows() ||
             static_cast<size_t>(region.getStartRow()) > data->getNumRows())
@@ -116,9 +116,9 @@ UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
                 data->getNumBytesPerPixel()).release();
     }
 
-    const types::RowCol<size_t> startingLocation(region.getStartRow(),
+    const types::RowCol<ptrdiff_t> startingLocation(region.getStartRow(),
             region.getStartCol());
-    const types::RowCol<size_t> readLength(region.getNumRows(),
+    const types::RowCol<ptrdiff_t> readLength(region.getNumRows(),
             region.getNumCols());
     mConverter->readData(startingLocation, readLength, buffer);
     return buffer;
