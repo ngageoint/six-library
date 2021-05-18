@@ -1216,12 +1216,7 @@ void ComplexXMLParser::parseImageFormationFromXML(
     parseUInt(getFirstAndOnly(tmpElem, "NumChanProc"),
               imageFormation->rcvChannelProcessed->numChannelsProcessed);
 
-    XMLElem prfXML = getOptional(tmpElem, "PRFScaleFactor");
-    if (prfXML)
-    {
-        //optional
-        parseDouble(prfXML, imageFormation->rcvChannelProcessed->prfScaleFactor);
-    }
+    parseOptionalDouble(tmpElem, "PRFScaleFactor", imageFormation->rcvChannelProcessed->prfScaleFactor);
 
     //TODO make sure there is at least one
     std::vector < XMLElem > chansXML;
@@ -1412,19 +1407,8 @@ void ComplexXMLParser::parseAntennaParametersFromXML(
         common().parsePoly1D(tmpElem, params->gainBSPoly);
     }
 
-    tmpElem = getOptional(antennaParamsXML, "EBFreqShift");
-    if (tmpElem)
-    {
-        //optional
-        parseBooleanType(tmpElem, params->electricalBoresightFrequencyShift);
-    }
-
-    tmpElem = getOptional(antennaParamsXML, "MLFreqDilation");
-    if (tmpElem)
-    {
-        //optional
-        parseBooleanType(tmpElem, params->mainlobeFrequencyDilation);
-    }
+    parseOptionalBooleanType(antennaParamsXML, "EBFreqShift", params->electricalBoresightFrequencyShift);
+    parseOptionalBooleanType(antennaParamsXML, "MLFreqDilation", params->mainlobeFrequencyDilation);
 }
 
 void ComplexXMLParser::parseAntennaFromXML(
@@ -1525,11 +1509,7 @@ void ComplexXMLParser::parseINCAFromXML(
         common().parsePoly2D(tmpElem, inca->dopplerCentroidPoly);
     }
 
-    tmpElem = getOptional(incaElem, "DopCentroidCOA");
-    if (tmpElem)
-    {
-        parseBooleanType(tmpElem, inca->dopplerCentroidCOA);
-    }
+    parseOptionalBooleanType(incaElem, "DopCentroidCOA", inca->dopplerCentroidCOA);
 }
 
 void ComplexXMLParser::parseRgAzCompFromXML(
