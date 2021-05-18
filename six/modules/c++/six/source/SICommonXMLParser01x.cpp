@@ -277,12 +277,7 @@ void SICommonXMLParser01x::parseMatchInformationFromXML(
 
         parseString(getFirstAndOnly(typesXML[i], "CollectorName"), type.collectorName);
 
-        XMLElem illuminatorElem = getOptional(typesXML[i], "IlluminatorName");
-        if (illuminatorElem)
-        {
-            //optional
-            parseString(illuminatorElem, type.illuminatorName);
-        }
+        parseOptionalString(typesXML[i], "IlluminatorName", type.illuminatorName);
 
         // in version 0.4 we use the matchCollect object
         parseString(getFirstAndOnly(typesXML[i], "CoreName"), type.matchCollects[0].coreName);

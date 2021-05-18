@@ -225,12 +225,7 @@ void SICommonXMLParser10x::parseMatchInformationFromXML(
 
         parseString(getFirstAndOnly(typesXML[ii], "TypeID"), type.typeID);
 
-        XMLElem curIndexElem = getOptional(typesXML[ii], "CurrentIndex");
-        if (curIndexElem)
-        {
-            //optional
-            parseInt(curIndexElem, type.currentIndex);
-        }
+       parseOptionalInt(typesXML[ii], "CurrentIndex", type.currentIndex);
 
         int numMatchCollections = 0;
         parseInt(getFirstAndOnly(typesXML[ii], "NumMatchCollections"),
@@ -259,12 +254,7 @@ void SICommonXMLParser10x::parseMatchInformationFromXML(
             parseString(getFirstAndOnly(
                 matchCollectionsXML[jj], "CoreName"), collect.coreName);
 
-            XMLElem matchIndexXML =
-                getOptional(matchCollectionsXML[jj], "MatchIndex");
-            if (matchIndexXML)
-            {
-                parseInt(matchIndexXML, collect.matchIndex);
-            }
+            parseOptionalInt(matchCollectionsXML[jj], "MatchIndex", collect.matchIndex);
 
             parseParameters(
                 matchCollectionsXML[jj], "Parameter", collect.parameters);
