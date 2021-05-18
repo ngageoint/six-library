@@ -409,12 +409,7 @@ void ComplexXMLParser10x::parseRadarCollectionFromXML(
             radarCollection->txFrequencyMax);
     }
 
-    tmpElem = getOptional(radarCollectionXML, "RefFreqIndex");
-    if (tmpElem)
-    {
-        //optional
-        parseInt(tmpElem, radarCollection->refFrequencyIndex);
-    }
+    parseOptionalInt(radarCollectionXML, "RefFreqIndex", radarCollection->refFrequencyIndex);
 
     tmpElem = getOptional(radarCollectionXML, "Waveform");
     if (tmpElem)
@@ -461,11 +456,7 @@ void ComplexXMLParser10x::parseRadarCollectionFromXML(
                 childXML->getCharacterData());
         }
 
-        childXML = getOptional(*it, "RcvAPCIndex");
-        if (childXML)
-        {
-            parseInt(childXML, chanParams->rcvAPCIndex);
-        }
+        parseOptionalInt(*it, "RcvAPCIndex", chanParams->rcvAPCIndex);
     }
 
     XMLElem areaXML = getOptional(radarCollectionXML, "Area");

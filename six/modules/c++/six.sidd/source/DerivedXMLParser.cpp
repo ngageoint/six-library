@@ -717,11 +717,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         XMLElem radarModeElem = getFirstAndOnly(informationElem, "RadarMode");
         info->radarMode = six::toType<RadarModeType>(
             getFirstAndOnly(radarModeElem, "ModeType")->getCharacterData());
-        tmpElem = getOptional(radarModeElem, "ModeID");
-        if (tmpElem)
-        {
-            parseString(tmpElem, info->radarModeID);
-        }
+        parseOptionalString(radarModeElem, "ModeID", info->radarModeID);
 
         parseDateTime(getFirstAndOnly(informationElem, "CollectionDateTime"),
             info->collectionDateTime);
@@ -768,10 +764,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
                 getFirstAndOnly(polElem, "RcvPolarization")->
                 getCharacterData());
 
-            // optional
-            tmpElem = getOptional(polElem, "RcvPolarizationOffset");
-            if (tmpElem)
-                parseDouble(tmpElem, p->rcvPolarizationOffset);
+            parseOptionalDouble(polElem, "RcvPolarizationOffset", p->rcvPolarizationOffset);
 
             // optional
             tmpElem = getOptional(polElem, "Processed");
@@ -787,30 +780,11 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         {
             coll->geometry.reset(new Geometry());
 
-            // optional
-            tmpElem = getOptional(geometryElem, "Azimuth");
-            if (tmpElem)
-                parseDouble(tmpElem, coll->geometry->azimuth);
-
-            // optional
-            tmpElem = getOptional(geometryElem, "Slope");
-            if (tmpElem)
-                parseDouble(tmpElem, coll->geometry->slope);
-
-            // optional
-            tmpElem = getOptional(geometryElem, "Squint");
-            if (tmpElem)
-                parseDouble(tmpElem, coll->geometry->squint);
-
-            // optional
-            tmpElem = getOptional(geometryElem, "Graze");
-            if (tmpElem)
-                parseDouble(tmpElem, coll->geometry->graze);
-
-            // optional
-            tmpElem = getOptional(geometryElem, "Tilt");
-            if (tmpElem)
-                parseDouble(tmpElem, coll->geometry->tilt);
+            parseOptionalDouble(geometryElem, "Azimuth", coll->geometry->azimuth);
+            parseOptionalDouble(geometryElem, "Slope", coll->geometry->slope);
+            parseOptionalDouble(geometryElem, "Squint", coll->geometry->squint);
+            parseOptionalDouble(geometryElem, "Graze", coll->geometry->graze);
+            parseOptionalDouble(geometryElem, "Tilt", coll->geometry->tilt);
 
             // optional to unbounded
             common().parseParameters(geometryElem, "Extension",
@@ -843,19 +817,8 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
                     coll->phenomenology->layover.magnitude);
             }
 
-            // optional
-            tmpElem = getOptional(phenomenologyElem, "MultiPath");
-            if (tmpElem)
-            {
-                parseDouble(tmpElem, coll->phenomenology->multiPath);
-            }
-
-            // optional
-            tmpElem = getOptional(phenomenologyElem, "GroundTrack");
-            if (tmpElem)
-            {
-                parseDouble(tmpElem, coll->phenomenology->groundTrack);
-            }
+            parseOptionalDouble(phenomenologyElem, "MultiPath", coll->phenomenology->multiPath);
+            parseOptionalDouble(phenomenologyElem, "GroundTrack", coll->phenomenology->groundTrack);
 
             // optional to unbounded
             common().parseParameters(phenomenologyElem, "Extension",
@@ -1422,12 +1385,7 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
         parseDateTime(getFirstAndOnly(peElem, "AppliedDateTime"),
                       procEvent->appliedDateTime);
 
-        // optional
-        XMLElem tmpElem = getOptional(peElem, "InterpolationMethod");
-        if (tmpElem)
-        {
-            parseString(tmpElem, procEvent->interpolationMethod);
-        }
+        parseOptionalString(peElem, "InterpolationMethod", procEvent->interpolationMethod);
 
         // optional to unbounded
         common().parseParameters(peElem, "Descriptor", procEvent->descriptor);
@@ -1450,10 +1408,7 @@ void DerivedXMLParser::parseGeographicCoordinateSystemFromXML(
     parseString(getFirstAndOnly(coorSysElem, "AngularUnit"),
                 coordSys->angularUnit);
 
-    // optional
-    XMLElem luElem = getOptional(coorSysElem, "LinearUnit");
-    if (luElem)
-        parseString(luElem, coordSys->linearUnit);
+    parseOptionalString(coorSysElem, "LinearUnit", coordSys->linearUnit);
 }
 
 void DerivedXMLParser::parseAnnotationFromXML(
@@ -1744,13 +1699,8 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
         parseDouble(getFirstAndOnly(elem, "X"), p->x);
         parseDouble(getFirstAndOnly(elem, "Y"), p->y);
 
-        XMLElem tmpElem = getOptional(elem, "Z");
-        if (tmpElem)
-            parseDouble(tmpElem, p->z);
-
-        tmpElem = getOptional(elem, "M");
-        if (tmpElem)
-            parseDouble(tmpElem, p->m);
+        parseOptionalDouble(elem, "Z", p->z);
+        parseOptionalDouble(elem, "M", p->m);
     }
     //for now, line, linearring, and linestring are parsed the same
     else if (geoType == SFALine::TYPE_NAME || geoType
