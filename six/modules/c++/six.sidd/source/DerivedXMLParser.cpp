@@ -249,7 +249,12 @@ void DerivedXMLParser::parseProductCreationFromXML(
     parseString(getFirstAndOnly(informationElem, "Site"),
                 processorInformation->site);
 
-   parseOptionalString(informationElem, "Profile", processorInformation->profile);
+    // optional
+    XMLElem profileElem = getOptional(informationElem, "Profile");
+    if (profileElem)
+    {
+        parseString(profileElem, processorInformation->profile);
+    }
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
@@ -269,7 +274,12 @@ void DerivedXMLParser::parseProductCreationFromXML(
     parseString(getFirstAndOnly(productCreationElem, "ProductClass"),
                 productCreation->productClass);
 
-    parseOptionalString(productCreationElem, "ProductType", productCreation->productType);
+    // optional
+    XMLElem productTypeElem = getOptional(productCreationElem, "ProductType");
+    if (productTypeElem)
+    {
+        parseString(productTypeElem, productCreation->productType);
+    }
 
     // optional
     common().parseParameters(productCreationElem, "ProductCreationExtension",
@@ -619,8 +629,13 @@ XMLElem DerivedXMLParser::parseCylindricalProjection(
         cylindricalProj->timeCOAPoly);
     common().parseVector3D(getFirstAndOnly(projElem, "StripmapDirection"),
         cylindricalProj->stripmapDirection);
+    // optional
+    XMLElem curvRadiusElem = getOptional(projElem, "CurvatureRadius");
+    if (curvRadiusElem)
+    {
+        parseDouble(curvRadiusElem, cylindricalProj->curvatureRadius);
+    }
 
-    parseOptionalDouble(projElem, "CurvatureRadius", cylindricalProj->curvatureRadius);
     return projElem;
 }
 
@@ -750,7 +765,13 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
                 getCharacterData());
 
             parseOptionalDouble(polElem, "RcvPolarizationOffset", p->rcvPolarizationOffset);
-            parseOptionalBooleanType(polElem, "Processed", p->processed);
+
+            // optional
+            tmpElem = getOptional(polElem, "Processed");
+            if (tmpElem)
+            {
+                parseBooleanType(tmpElem, p->processed);
+            }
         }
 
         // parse Geometry -- optional
