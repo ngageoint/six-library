@@ -685,8 +685,6 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         const xml::lite::Element* exploitationFeaturesElem,
         ExploitationFeatures* exploitationFeatures) const
 {
-    XMLElem tmpElem;
-
     std::vector<XMLElem> collectionsElem;
     exploitationFeaturesElem->getElementsByTagName("Collection", collectionsElem);
 
@@ -719,7 +717,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
             info->collectionDateTime);
 
         // optional
-        tmpElem = getOptional(informationElem, "LocalDateTime");
+        auto tmpElem = getOptional(informationElem, "LocalDateTime");
         if (tmpElem)
             parseDateTime(tmpElem, info->localDateTime);
 
@@ -749,7 +747,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         info->polarization.resize(polarization.size());
         for (size_t jj = 0, nElems = polarization.size(); jj < nElems; ++jj)
         {
-            const XMLElem polElem = polarization[jj];
+            const xml::lite::Element* const polElem = polarization[jj];
             info->polarization[jj].reset(new TxRcvPolarization());
             TxRcvPolarization* p = info->polarization[jj].get();
 
@@ -1025,7 +1023,7 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("PolynomialProjection");
 
-        const auto polyProj = dynamic_cast<PolynomialProjection*>(measurement->projection.get());
+        const PolynomialProjection* const polyProj = dynamic_cast<PolynomialProjection*>(measurement->projection.get());
 
         common().createPoly2D("RowColToLat", polyProj->rowColToLat, projectionElem);
         common().createPoly2D("RowColToLon", polyProj->rowColToLon, projectionElem);
@@ -1045,7 +1043,7 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("GeographicProjection");
 
-        const auto geographicProj = dynamic_cast<GeographicProjection*>(measurement->projection.get());
+        const GeographicProjection* const geographicProj = dynamic_cast<GeographicProjection*>(measurement->projection.get());
 
         common().createRowCol("SampleSpacing",
                               geographicProj->sampleSpacing,
@@ -1060,7 +1058,7 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("PlaneProjection");
 
-        const auto planeProj = dynamic_cast<PlaneProjection*>(measurement->projection.get());
+        const PlaneProjection* const planeProj = dynamic_cast<PlaneProjection*>(measurement->projection.get());
 
         common().createRowCol("SampleSpacing",
                               planeProj->sampleSpacing,
@@ -1083,7 +1081,7 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("CylindricalProjection");
 
-        const auto cylindricalProj = dynamic_cast<CylindricalProjection*>(measurement->projection.get());
+        const CylindricalProjection* const cylindricalProj = dynamic_cast<CylindricalProjection*>(measurement->projection.get());
 
         common().createRowCol("SampleSpacing",
                               cylindricalProj->sampleSpacing,
@@ -1371,7 +1369,7 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
         ProcessingEvent* procEvent
                 = downstreamReproc->processingEvents[i].get();
 
-        const XMLElem peElem = procEventElem[i];
+        const xml::lite::Element* const peElem = procEventElem[i];
         parseString(getFirstAndOnly(peElem, "ApplicationName"),
                     procEvent->applicationName);
         parseDateTime(getFirstAndOnly(peElem, "AppliedDateTime"),
@@ -1422,9 +1420,8 @@ void DerivedXMLParser::parseAnnotationFromXML(
             a->spatialReferenceSystem->coordinateSystem.reset(
                     new SFAProjectedCoordinateSystem());
 
-            SFAProjectedCoordinateSystem* coordSys =
-                    (SFAProjectedCoordinateSystem*)
-                            a->spatialReferenceSystem->coordinateSystem.get();
+            SFAProjectedCoordinateSystem* const coordSys =
+                    dynamic_cast<SFAProjectedCoordinateSystem*>(a->spatialReferenceSystem->coordinateSystem.get());
 
             parseString(getFirstAndOnly(tmpElem, "Csname"), coordSys->csName);
 
@@ -1457,9 +1454,9 @@ void DerivedXMLParser::parseAnnotationFromXML(
             a->spatialReferenceSystem->coordinateSystem.reset(
                     new SFAGeographicCoordinateSystem());
 
-            SFAGeographicCoordinateSystem* coordSys =
-                    (SFAGeographicCoordinateSystem*)
-                            a->spatialReferenceSystem->coordinateSystem.get();
+            SFAGeographicCoordinateSystem* const coordSys =
+                    dynamic_cast<SFAGeographicCoordinateSystem*>(
+                            a->spatialReferenceSystem->coordinateSystem.get());
 
             parseGeographicCoordinateSystemFromXML(tmpElem, coordSys);
         }
@@ -1470,9 +1467,8 @@ void DerivedXMLParser::parseAnnotationFromXML(
             a->spatialReferenceSystem->coordinateSystem.reset(
                     new SFAGeocentricCoordinateSystem());
 
-            SFAGeocentricCoordinateSystem* coordSys =
-                    (SFAGeocentricCoordinateSystem*)
-                            a->spatialReferenceSystem->coordinateSystem.get();
+            SFAGeocentricCoordinateSystem* const coordSys =
+                    dynamic_cast<SFAGeocentricCoordinateSystem*>(a->spatialReferenceSystem->coordinateSystem.get());
 
             parseString(getFirstAndOnly(tmpElem, "Csname"), coordSys->csName);
             parseDatum(getFirstAndOnly(tmpElem, "Datum"), coordSys->datum);
@@ -1514,7 +1510,7 @@ void DerivedXMLParser::parseAnnotationFromXML(
         if (!children.empty())
         {
             //just get the first one
-            XMLElem child = children[0];
+            const xml::lite::Element* const child = children[0];
             std::string childName = child->getLocalName();
             str::trim(childName);
 
@@ -1602,9 +1598,8 @@ XMLElem DerivedXMLParser::convertAnnotationToXML(
         {
             XMLElem coordElem = newElement("ProjectedCoordinateSystem", SFA_URI, spRefElem);
 
-            SFAProjectedCoordinateSystem* coordSys
-                    = (SFAProjectedCoordinateSystem*)a->
-                            spatialReferenceSystem->coordinateSystem.get();
+            const SFAProjectedCoordinateSystem* const coordSys
+                    = dynamic_cast<SFAProjectedCoordinateSystem*>(a->spatialReferenceSystem->coordinateSystem.get());
 
             createString("Csname", SFA_URI, coordSys->csName, coordElem);
 
@@ -1632,9 +1627,8 @@ XMLElem DerivedXMLParser::convertAnnotationToXML(
         else if (a->spatialReferenceSystem->coordinateSystem->getType()
                     == six::sidd::SFAGeographicCoordinateSystem::TYPE_NAME)
         {
-            SFAGeographicCoordinateSystem* coordSys
-                    = (SFAGeographicCoordinateSystem*)a->
-                            spatialReferenceSystem->coordinateSystem.get();
+            const SFAGeographicCoordinateSystem* const coordSys
+                    = dynamic_cast<SFAGeographicCoordinateSystem*>(a->spatialReferenceSystem->coordinateSystem.get());
             convertGeographicCoordinateSystemToXML(coordSys, spRefElem);
         }
         else if (a->spatialReferenceSystem->coordinateSystem->getType()
@@ -1643,9 +1637,8 @@ XMLElem DerivedXMLParser::convertAnnotationToXML(
             XMLElem coordElem = newElement("GeocentricCoordinateSystem",
                                           SFA_URI, spRefElem);
 
-            SFAGeocentricCoordinateSystem* coordSys
-                    = (SFAGeocentricCoordinateSystem*)a->
-                            spatialReferenceSystem->coordinateSystem.get();
+            const SFAGeocentricCoordinateSystem* const coordSys
+                    = dynamic_cast<SFAGeocentricCoordinateSystem*>(a->spatialReferenceSystem->coordinateSystem.get());
 
             createString("Csname", SFA_URI, coordSys->csName, coordElem);
             createSFADatum("Datum", coordSys->datum, coordElem);

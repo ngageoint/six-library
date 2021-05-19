@@ -179,9 +179,9 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
                    "ImageDescription",
                    FmtX("SIDD: %s", data->getName().c_str()));
 
-    unsigned short orientation(1);
+    constexpr unsigned short orientation = 1;
     ifd->addEntry("Orientation", orientation);
-    unsigned short planarConf(1);
+    constexpr unsigned short planarConf = 1;
     ifd->addEntry("PlanarConfiguration", planarConf);
 
     addStringArray(ifd,

@@ -381,7 +381,7 @@ struct DynamicRangeAdjustment
     };
 
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
-    size_t bandStatsSource; //! Indicates which band to use for DRA stats
+    size_t bandStatsSource = 0; //! Indicates which band to use for DRA stats
 
     // In SIDD 1.0, must include exactly one of draParameters or draOverrides
     // In SIDD 2.0, include draParameters if algorithmType == AUTO,

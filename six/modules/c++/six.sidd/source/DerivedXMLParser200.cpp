@@ -111,7 +111,7 @@ DerivedXMLParser200::DerivedXMLParser200(logging::Logger* log,
 DerivedData* DerivedXMLParser200::fromXML(
         const xml::lite::Document* doc) const
 {
-    XMLElem root = doc->getRootElement();
+    const xml::lite::Element* const root = doc->getRootElement();
 
     XMLElem productCreationElem        = getFirstAndOnly(root, "ProductCreation");
     XMLElem displayElem                = getFirstAndOnly(root, "Display");
@@ -132,7 +132,7 @@ DerivedData* DerivedXMLParser200::fromXML(
     DerivedData *data = builder.steal(); //steal it
 
     // see if PixelType has MONO or RGB
-    PixelType pixelType = six::toType<PixelType>(
+    const PixelType pixelType = six::toType<PixelType>(
             getFirstAndOnly(displayElem, "PixelType")->getCharacterData());
     builder.addDisplay(pixelType);
 
@@ -365,7 +365,7 @@ void DerivedXMLParser200::parseJ2KCompression(const xml::lite::Element* j2kElem,
     std::vector<XMLElem> layerElems;
     layerInfoElems->getElementsByTagName("Layer", layerElems);
 
-    size_t numLayers = layerElems.size();
+    const auto numLayers = layerElems.size();
     j2k.layerInfo.resize(numLayers);
 
     for (size_t ii = 0; ii < layerElems.size(); ++ii)
@@ -678,7 +678,7 @@ void DerivedXMLParser200::parseKernelFromXML(const xml::lite::Element* kernelEle
 
         std::vector<XMLElem> coefficients;
         filterCoef->getElementsByTagName("Coef", coefficients);
-        size_t numCoefs = coefficients.size();
+        const auto numCoefs = coefficients.size();
         kernel.custom->filterCoef.resize(numCoefs);
         for (size_t ii = 0; ii < numCoefs; ++ii)
         {
@@ -718,7 +718,7 @@ void DerivedXMLParser200::parseBankFromXML(const xml::lite::Element* bankElem,
 
         std::vector<XMLElem> coefficients;
         filterCoef->getElementsByTagName("Coef", coefficients);
-        size_t numCoefs = coefficients.size();
+        const auto numCoefs = coefficients.size();
         bank.custom->filterCoef.resize(numCoefs);
         for (size_t ii = 0; ii < numCoefs; ++ii)
         {
@@ -1670,7 +1670,7 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
         }
 
         // create Phenomenology -- optional
-        Phenomenology* phenom = collection->phenomenology.get();
+        const Phenomenology* phenom = collection->phenomenology.get();
         if (phenom != nullptr)
         {
             XMLElem phenomenologyElem = newElement("Phenomenology",
@@ -1963,7 +1963,7 @@ void DerivedXMLParser200::parseExploitationFeaturesFromXML(
     exploitationFeaturesElem->getElementsByTagName("Collection", collectionsElem);
     for (size_t i = 0; i < collectionsElem.size(); ++i)
     {
-        const XMLElem collectionElem = collectionsElem[i];
+        const xml::lite::Element* const collectionElem = collectionsElem[i];
         XMLElem geometryElem = getOptional(collectionElem, "Geometry");
         const Collection& coll = *exploitationFeatures->collections[i];
 
@@ -1990,7 +1990,7 @@ void DerivedXMLParser200::parseProductFromXML(
     exploitationFeatures->product.resize(productElems.size());
     for (size_t ii = 0; ii < productElems.size(); ++ii)
     {
-        const XMLElem productElem = productElems[ii];
+        const xml::lite::Element* const productElem = productElems[ii];
         Product& product = exploitationFeatures->product[ii];
 
         common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
@@ -2009,7 +2009,7 @@ void DerivedXMLParser200::parseProductFromXML(
         product.polarization.resize(polarizationElems.size());
         for (size_t jj = 0; jj < product.polarization.size(); ++jj)
         {
-            const XMLElem polarizationElem = polarizationElems[jj];
+            const xml::lite::Element* const polarizationElem = polarizationElems[jj];
             ProcTxRcvPolarization& polarization = product.polarization[jj];
 
             parseEnum(getFirstAndOnly(polarizationElem, "TxPolarizationProc"),

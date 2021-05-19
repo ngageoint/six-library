@@ -53,7 +53,7 @@ DerivedXMLParser100::DerivedXMLParser100(logging::Logger* log,
 
 DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
 {
-    const XMLElem root = doc->getRootElement();
+    const xml::lite::Element* const root = doc->getRootElement();
 
     XMLElem productCreationElem        = getFirstAndOnly(root, "ProductCreation");
     XMLElem displayElem                = getFirstAndOnly(root, "Display");
@@ -416,7 +416,7 @@ XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
             const_iterator it = geographicAndTarget.targetInformation.begin();
             it != geographicAndTarget.targetInformation.end(); ++it)
     {
-        TargetInformation* ti = (*it).get();
+        const TargetInformation* ti = (*it).get();
         XMLElem tiElem = newElement("TargetInformation", geographicAndTargetElem);
 
         // 1 to unbounded
@@ -628,7 +628,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
         for (size_t n = 0, nElems =
             collection->information.polarization.size(); n < nElems; ++n)
         {
-            TxRcvPolarization *p = collection->information.polarization[n].get();
+            const TxRcvPolarization *p = collection->information.polarization[n].get();
             XMLElem polElem = newElement("Polarization", informationElem);
 
             createString("TxPolarization",
@@ -652,7 +652,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
         }
 
         // create Geometry -- optional
-        Geometry* geom = collection->geometry.get();
+        const Geometry* geom = collection->geometry.get();
         if (geom != nullptr)
         {
             XMLElem geometryElem = newElement("Geometry", collectionElem);
@@ -678,7 +678,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
         }
 
         // create Phenomenology -- optional
-        Phenomenology* phenom = collection->phenomenology.get();
+        const Phenomenology* phenom = collection->phenomenology.get();
         if (phenom != nullptr)
         {
             XMLElem phenomenologyElem = newElement("Phenomenology",
