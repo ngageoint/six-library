@@ -75,8 +75,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "CLASSIFICATION := UNCLASSIFIED\n"
             "RELEASE_INFO := UNRESTRICTED\n"
             "\f\n";
-    fileHeaderContentWithoutSupport.write(fileHeaderTxtNoSupport.c_str(),
-                                            fileHeaderTxtNoSupport.size());
+    fileHeaderContentWithoutSupport.write(fileHeaderTxtNoSupport);
     cphd::FileHeader headerWithoutSupport;
     headerWithoutSupport.read(fileHeaderContentWithoutSupport);
     TEST_ASSERT_EQ(headerWithoutSupport.getXMLBlockSize(), 3);
@@ -100,8 +99,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "RELEASE_INFO := UNRESTRICTED\n"
             "\f\n";
     io::ByteStream fileHeaderContentWithoutClassification;
-    fileHeaderContentWithoutClassification.write(fileHeaderTxtNoClass.c_str(),
-                                                    fileHeaderTxtNoClass.size());
+    fileHeaderContentWithoutClassification.write(fileHeaderTxtNoClass);
     TEST_THROWS(cphd::FileHeader().read(fileHeaderContentWithoutClassification));
 
     std::string fileHeaderTxtInvalid = "CPHD/1.0\n"
@@ -115,8 +113,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "RELEASE_INFO := UNRESTRICTED\n"
             "\f\n";
     io::ByteStream fileHeaderContentWithInvalidValue;
-    fileHeaderContentWithInvalidValue.write(fileHeaderTxtInvalid.c_str(),
-                                                fileHeaderTxtInvalid.size());
+    fileHeaderContentWithInvalidValue.write(fileHeaderTxtInvalid);
     TEST_THROWS(cphd::FileHeader().read(fileHeaderContentWithInvalidValue));
 }
 
@@ -129,7 +126,7 @@ TEST_CASE(testRoundTripHeader)
     std::string outString = header.toString();
 
     io::ByteStream roundTrippedContent;
-    roundTrippedContent.write(outString.c_str(), outString.size());
+    roundTrippedContent.write(outString);
     cphd::FileHeader roundTrippedHeader;
     roundTrippedHeader.read(roundTrippedContent);
 

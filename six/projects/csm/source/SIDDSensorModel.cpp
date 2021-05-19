@@ -179,7 +179,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
                 try
                 {
                     io::StringStream stream;
-                    stream.write(desData.c_str(), desData.length());
+                    stream.write(desData);
 
                     domParser.clear();
                     domParser.parse(stream);
@@ -253,7 +253,7 @@ bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
             try
             {
                 io::StringStream stream;
-                stream.write(desData.c_str(), desData.length());
+                stream.write(desData);
 
                 domParser.clear();
                 domParser.parse(stream);
@@ -411,7 +411,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     try
     {
         io::StringStream stream;
-        stream.write(sensorModelXML.c_str(), sensorModelXML.length());
+        stream.write(sensorModelXML);
 
         xml::lite::MinidomParser domParser;
         domParser.parse(stream);

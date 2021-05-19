@@ -153,11 +153,6 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     }
 }
 
-static void write_(io::SeekableOutputStream& stream, const std::string& s)
-{
-    stream.write(s.c_str(), s.size());
-}
-
 void CPHDWriter::writeMetadata(size_t supportSize,
                                size_t pvpSize,
                                size_t cphdSize)
@@ -184,10 +179,10 @@ void CPHDWriter::writeMetadata(size_t supportSize,
     }
     // set header size, final step before write
     mHeader.set(xmlMetadata.size(), supportSize, pvpSize, cphdSize);
-    write_(*mStream, mHeader.toString());
-    write_(*mStream, "\f\n");
-    write_(*mStream, xmlMetadata);
-    write_(*mStream, "\f\n");
+    mStream->write(mHeader.toString());
+    mStream->write("\f\n");
+    mStream->write(xmlMetadata);
+    mStream->write("\f\n");
 }
 
 void CPHDWriter::writePVPData(const std::byte* pvpBlock, size_t channel)

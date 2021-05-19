@@ -277,7 +277,7 @@ void GeoTIFFWriteControl::save(const BufferList& sources,
 void GeoTIFFWriteControl::addCharArray(tiff::IFD* ifd, const std::string &tag,
                                        const char* cstr, int tiffType)
 {
-    if (!ifd->exists(tag.c_str()))
+    if (!ifd->exists(tag))
     {
         ifd->addEntry(tag);
     }
@@ -290,7 +290,7 @@ void GeoTIFFWriteControl::addStringArray(tiff::IFD* ifd,
                                          const std::string &str,
                                          int tiffType)
 {
-    if (!ifd->exists(tag.c_str()))
+    if (!ifd->exists(tag))
     {
         ifd->addEntry(tag);
     }
@@ -400,8 +400,7 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     const std::string tfwContents(ostr.str());
 
     io::FileOutputStream stream(tfwPathname);
-    stream.write(reinterpret_cast<const std::byte*>(tfwContents.c_str()),
-                 tfwContents.length());
+    stream.write(tfwContents);
     stream.flush();
     stream.close();
 }
