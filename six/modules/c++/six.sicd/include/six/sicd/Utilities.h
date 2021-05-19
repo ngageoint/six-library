@@ -453,7 +453,7 @@ public:
      * \throws except::Exception if the provided reader is not a SICD
      *
      */
-    static mem::auto_ptr<NoiseMesh> getNoiseMesh(NITFReadControl& reader);
+    static mem::auto_ptr<NoiseMesh> getNoiseMesh(const NITFReadControl& reader);
 
     /*
      * Given a reference to a loaded NITFReadControl, this function
@@ -466,7 +466,7 @@ public:
      *
      * \return Scalar Mesh associated with the SICD NITF
      */
-    static mem::auto_ptr<ScalarMesh> getScalarMesh(NITFReadControl& reader);
+    static mem::auto_ptr<ScalarMesh> getScalarMesh(const NITFReadControl& reader);
 
     /*
      * Given a reference to a loaded NITFReadControl, this function
@@ -489,7 +489,7 @@ public:
      */
 #if !CODA_OSS_cpp17
     static void getProjectionPolys(
-        NITFReadControl& reader,
+        const NITFReadControl& reader,
         size_t orderX,
         size_t orderY,
         std::auto_ptr<ComplexData>& complexData,
@@ -497,7 +497,7 @@ public:
         six::Poly2D& outputRowColToSlantCol);
 #endif
     static void getProjectionPolys(
-        NITFReadControl& reader,
+        const NITFReadControl& reader,
         size_t orderX,
         size_t orderY,
         std::unique_ptr<ComplexData>& complexData,

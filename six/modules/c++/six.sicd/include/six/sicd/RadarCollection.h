@@ -255,13 +255,13 @@ struct Segment
     {
         // Rotating can make the start/end in reverse order,
         // so need the absolute value
-        return static_cast<size_t>(std::abs(endLine - startLine) + 1);
+        return static_cast<size_t>(std::abs(endLine - startLine)) + 1;
     }
 
     //! The number of samples in the segment
     size_t getNumSamples() const
     {
-        return static_cast<size_t>(std::abs(endSample - startSample) + 1);
+        return static_cast<size_t>(std::abs(endSample - startSample)) + 1;
     }
 
     /*!

@@ -164,7 +164,7 @@ void NITFImageInfo::computeSegmentCorners()
             scene::Utilities::ecefToLatLon(ecef);
     }
 
-    size_t i;
+    size_t i = 0;
     const auto numIS = mImageSegments.size();
     for (i = 0; i < numIS - 1; i++)
     {

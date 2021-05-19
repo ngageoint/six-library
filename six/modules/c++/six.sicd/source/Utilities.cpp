@@ -166,7 +166,7 @@ static void getDesBuffer(const six::NITFReadControl& reader,
 template <typename MeshTypeT>
 mem::auto_ptr<MeshTypeT> extractMesh(const std::string& meshID,
                                      size_t desIndex,
-                                     six::NITFReadControl& reader)
+                                     const six::NITFReadControl& reader)
 {
     // Extract the mesh
     mem::auto_ptr<MeshTypeT> mesh(new MeshTypeT(meshID));
@@ -986,7 +986,7 @@ mem::auto_ptr<ComplexData> Utilities::createFakeComplexData()
     return data;
 }
 
-mem::auto_ptr<NoiseMesh> Utilities::getNoiseMesh(NITFReadControl& reader)
+mem::auto_ptr<NoiseMesh> Utilities::getNoiseMesh(const NITFReadControl& reader)
 {
     const std::map<std::string, size_t> nameToDesIndex =
             getAdditionalDesMap(reader);
@@ -1006,7 +1006,7 @@ mem::auto_ptr<NoiseMesh> Utilities::getNoiseMesh(NITFReadControl& reader)
                                   reader);
 }
 
-mem::auto_ptr<ScalarMesh> Utilities::getScalarMesh(NITFReadControl& reader)
+mem::auto_ptr<ScalarMesh> Utilities::getScalarMesh(const NITFReadControl& reader)
 {
     const std::map<std::string, size_t> nameToDesIndex =
             getAdditionalDesMap(reader);
@@ -1027,7 +1027,7 @@ mem::auto_ptr<ScalarMesh> Utilities::getScalarMesh(NITFReadControl& reader)
 }
 
 template<typename TComplexDataPtr>
-static void getProjectionPolys_(NITFReadControl& reader,
+static void getProjectionPolys_(const NITFReadControl& reader,
                                    size_t orderX,
                                    size_t orderY,
                                    TComplexDataPtr& complexData,
@@ -1118,7 +1118,7 @@ static void getProjectionPolys_(NITFReadControl& reader,
                                outputRowColToSlantCol);
 }
 #if !CODA_OSS_cpp17
-void Utilities::getProjectionPolys(NITFReadControl& reader,
+void Utilities::getProjectionPolys(const NITFReadControl& reader,
                                    size_t orderX,
                                    size_t orderY,
                                    std::auto_ptr<ComplexData>& complexData,
@@ -1128,7 +1128,7 @@ void Utilities::getProjectionPolys(NITFReadControl& reader,
     getProjectionPolys_(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol);
 }
 #endif
-void Utilities::getProjectionPolys(NITFReadControl& reader,
+void Utilities::getProjectionPolys(const NITFReadControl& reader,
                                    size_t orderX,
                                    size_t orderY,
                                    std::unique_ptr<ComplexData>& complexData,
