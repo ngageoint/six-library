@@ -463,7 +463,7 @@ struct Display
     // Beginning of SIDD 2.0-only section
 
     //Required
-    size_t numBands;
+    size_t numBands = 0;
     //Optional
     size_t defaultBandDisplay = six::Init::undefined<size_t>();
 

@@ -1492,7 +1492,7 @@ void DerivedXMLParser200::convertJ2KToXML(const J2KCompression& j2k,
     createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
     createInt("NumBands", j2k.numBands, parent);
 
-    size_t numLayers = j2k.layerInfo.size();
+    const auto numLayers = j2k.layerInfo.size();
     XMLElem layerInfoElem = newElement("LayerInfo", parent);
     setAttribute(layerInfoElem, "numLayers", numLayers);
 
@@ -1616,7 +1616,7 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
         for (size_t n = 0, nElems =
             collection->information.polarization.size(); n < nElems; ++n)
         {
-            TxRcvPolarization *p = collection->information.polarization[n].get();
+            const TxRcvPolarization *p = collection->information.polarization[n].get();
             XMLElem polElem = newElement("Polarization", informationElem);
 
             createString("TxPolarization",
@@ -1641,7 +1641,7 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
         }
 
         // create Geometry -- optional
-        Geometry* geom = collection->geometry.get();
+        const Geometry* geom = collection->geometry.get();
         if (geom != nullptr)
         {
             XMLElem geometryElem = newElement("Geometry", collectionElem);
@@ -1963,9 +1963,9 @@ void DerivedXMLParser200::parseExploitationFeaturesFromXML(
     exploitationFeaturesElem->getElementsByTagName("Collection", collectionsElem);
     for (size_t i = 0; i < collectionsElem.size(); ++i)
     {
-        XMLElem collectionElem = collectionsElem[i];
+        const XMLElem collectionElem = collectionsElem[i];
         XMLElem geometryElem = getOptional(collectionElem, "Geometry");
-        Collection& coll = *exploitationFeatures->collections[i];
+        const Collection& coll = *exploitationFeatures->collections[i];
 
         // optional
         if (geometryElem) {
@@ -1990,7 +1990,7 @@ void DerivedXMLParser200::parseProductFromXML(
     exploitationFeatures->product.resize(productElems.size());
     for (size_t ii = 0; ii < productElems.size(); ++ii)
     {
-        XMLElem productElem = productElems[ii];
+        const XMLElem productElem = productElems[ii];
         Product& product = exploitationFeatures->product[ii];
 
         common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
@@ -2009,7 +2009,7 @@ void DerivedXMLParser200::parseProductFromXML(
         product.polarization.resize(polarizationElems.size());
         for (size_t jj = 0; jj < product.polarization.size(); ++jj)
         {
-            XMLElem polarizationElem = polarizationElems[jj];
+            const XMLElem polarizationElem = polarizationElems[jj];
             ProcTxRcvPolarization& polarization = product.polarization[jj];
 
             parseEnum(getFirstAndOnly(polarizationElem, "TxPolarizationProc"),

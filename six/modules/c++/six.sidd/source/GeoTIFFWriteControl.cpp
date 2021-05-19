@@ -26,6 +26,7 @@
 
 #include "io/FileOutputStream.h"
 #include "sys/Path.h"
+#include "gsl/gsl.h"
 #include "scene/GridECEFTransform.h"
 #include "scene/Utilities.h"
 #include "six/sidd/GeoTIFFWriteControl.h"
@@ -123,9 +124,9 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
                                    const std::string& toFilePrefix,
                                    const std::vector<std::string>& schemaPaths)
 {
-    PixelType pixelType = data->getPixelType();
-    uint32_t numRows = (uint32_t) data->getNumRows();
-    uint32_t numCols = (uint32_t) data->getNumCols();
+    const PixelType pixelType = data->getPixelType();
+    const auto numRows = gsl::narrow<uint32_t>(data->getNumRows());
+    const auto numCols = gsl::narrow<uint32_t>(data->getNumCols());
 
     // Start by initializing the TIFF info
     ifd->addEntry(tiff::KnownTags::IMAGE_WIDTH, numCols);
@@ -157,7 +158,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
         {
             for (unsigned int i = 0; i < lut.numEntries; ++i)
             {
-                unsigned short lutij = lut[i][j];
+                const unsigned short lutij = lut[i][j];
                 lutEntry->addValue(tiff::TypeFactory::create(
                         (unsigned char*) &lutij,
                         tiff::Const::Type::SHORT));
@@ -168,7 +169,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     }
     else if (pixelType == PixelType::RGB24I)
     {
-        short spp(3);
+        constexpr short spp = 3;
         ifd->addEntry(tiff::KnownTags::SAMPLES_PER_PIXEL, spp);
         photoInterp = 2;
     }
@@ -215,7 +216,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
             data->measurement->projection->projectionType.toString()));
     }
     const GeographicProjection& projection =
-        *static_cast<GeographicProjection *>(
+        *dynamic_cast<GeographicProjection *>(
             data->measurement->projection.get());
 
     addGeoTIFFKeys(projection,
@@ -259,7 +260,7 @@ void GeoTIFFWriteControl::save(const BufferList& sources,
         tiff::ImageWriter* imageWriter = tiffWriter.addImage();
         tiff::IFD* ifd = imageWriter->getIFD();
 
-        DerivedData* data = (DerivedData*) mDerivedData[ii];
+        const DerivedData* const data = (DerivedData*) mDerivedData[ii];
         setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
         // Now we hack to write
 

@@ -414,14 +414,14 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
                 std::vector<std::string> rgb = str::split(lutVals[i], ",");
                 for (size_t j = 0; j < rgb.size(); j++)
                 {
-                    size_t intermediateVal = str::toType<size_t>(rgb[j]);
+                    const auto intermediateVal = str::toType<size_t>(rgb[j]);
                     if (intermediateVal > 255)
                     {
                         throw except::Exception(Ctxt(
                             "LUT vals expected to be in [0, 255]."));
                     }
 
-                    auto val = static_cast<std::byte>(
+                    const auto val = static_cast<std::byte>(
                             intermediateVal);
 
                     ::memcpy(&(remapLUT->getTable()[k++]), &val,
@@ -543,12 +543,11 @@ void DerivedXMLParser::parseDisplayFromXML(
 
 XMLElem DerivedXMLParser::parsePolynomialProjection(
         const xml::lite::Element* measurementElem,
-        Measurement& measurement) const
+        const Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "PolynomialProjection");
 
-    PolynomialProjection* polyProj
-        = (PolynomialProjection*)measurement.projection.get();
+    auto polyProj = dynamic_cast<PolynomialProjection*>(measurement.projection.get());
 
     // Get a bunch of 2D polynomials
     common().parsePoly2D(getFirstAndOnly(projElem, "RowColToLat"),
@@ -572,12 +571,11 @@ XMLElem DerivedXMLParser::parsePolynomialProjection(
 
 XMLElem DerivedXMLParser::parseGeographicProjection(
         const xml::lite::Element* measurementElem,
-        Measurement& measurement) const
+        const Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "GeographicProjection");
 
-    GeographicProjection* geographicProj
-        = (GeographicProjection*)measurement.projection.get();
+    auto geographicProj = dynamic_cast<GeographicProjection*>(measurement.projection.get());
 
     // measureableProjectionType
     common().parseRowColDouble(getFirstAndOnly(projElem, "SampleSpacing"),
@@ -590,12 +588,11 @@ XMLElem DerivedXMLParser::parseGeographicProjection(
 
 XMLElem DerivedXMLParser::parsePlaneProjection(
     const xml::lite::Element* measurementElem,
-    Measurement& measurement) const
+    const Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "PlaneProjection");
 
-    PlaneProjection* planeProj
-        = (PlaneProjection*)measurement.projection.get();
+    auto planeProj = dynamic_cast<PlaneProjection*>(measurement.projection.get());
 
     // measureableProjectionType
     common().parseRowColDouble(getFirstAndOnly(projElem, "SampleSpacing"),
@@ -615,12 +612,11 @@ XMLElem DerivedXMLParser::parsePlaneProjection(
 
 XMLElem DerivedXMLParser::parseCylindricalProjection(
     const xml::lite::Element* measurementElem,
-    Measurement& measurement) const
+    const Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "CylindricalProjection");
 
-    CylindricalProjection* cylindricalProj
-        = (CylindricalProjection*)measurement.projection.get();
+    auto cylindricalProj = dynamic_cast<CylindricalProjection*>(measurement.projection.get());
 
     // measureableProjectionType
     common().parseRowColDouble(getFirstAndOnly(projElem, "SampleSpacing"),
@@ -753,7 +749,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         info->polarization.resize(polarization.size());
         for (size_t jj = 0, nElems = polarization.size(); jj < nElems; ++jj)
         {
-            XMLElem polElem = polarization[jj];
+            const XMLElem polElem = polarization[jj];
             info->polarization[jj].reset(new TxRcvPolarization());
             TxRcvPolarization* p = info->polarization[jj].get();
 
@@ -962,7 +958,7 @@ XMLElem DerivedXMLParser::convertGeographicCoverageToXML(
         XMLElem geoInfoElem = newElement("GeographicInfo", geoCoverageElem);
 
         // optional to unbounded
-        size_t numCC = geoCoverage->geographicInformation->countryCodes.size();
+        const auto numCC = geoCoverage->geographicInformation->countryCodes.size();
         for (size_t i = 0; i < numCC; ++i)
         {
             createString("CountryCode",
@@ -1029,8 +1025,7 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("PolynomialProjection");
 
-        PolynomialProjection* polyProj
-                = (PolynomialProjection*) measurement->projection.get();
+        const auto polyProj = dynamic_cast<PolynomialProjection*>(measurement->projection.get());
 
         common().createPoly2D("RowColToLat", polyProj->rowColToLat, projectionElem);
         common().createPoly2D("RowColToLon", polyProj->rowColToLon, projectionElem);
@@ -1050,8 +1045,7 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("GeographicProjection");
 
-        GeographicProjection* geographicProj
-                = (GeographicProjection*) measurement->projection.get();
+        const auto geographicProj = dynamic_cast<GeographicProjection*>(measurement->projection.get());
 
         common().createRowCol("SampleSpacing",
                               geographicProj->sampleSpacing,
@@ -1066,8 +1060,7 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("PlaneProjection");
 
-        PlaneProjection* planeProj
-                = (PlaneProjection*) measurement->projection.get();
+        const auto planeProj = dynamic_cast<PlaneProjection*>(measurement->projection.get());
 
         common().createRowCol("SampleSpacing",
                               planeProj->sampleSpacing,
@@ -1090,8 +1083,7 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("CylindricalProjection");
 
-        CylindricalProjection* cylindricalProj
-                = (CylindricalProjection*) measurement->projection.get();
+        const auto cylindricalProj = dynamic_cast<CylindricalProjection*>(measurement->projection.get());
 
         common().createRowCol("SampleSpacing",
                               cylindricalProj->sampleSpacing,
@@ -1138,7 +1130,7 @@ XMLElem DerivedXMLParser::createLUTImpl(const LUT *lut, XMLElem lutElem) const
     {
         if (lut->elementSize == 2)
         {
-            short* idx = (short*) (*lut)[i];
+            const auto idx = reinterpret_cast<const short*>((*lut)[i]);
             oss << *idx;
         }
         else if (lut->elementSize == 3)
@@ -1267,7 +1259,7 @@ XMLElem DerivedXMLParser::convertDownstreamReprocessingToXML(
     XMLElem epElem = newElement("DownstreamReprocessing", parent);
 
     // optional
-    GeometricChip *geoChip = downstreamReproc->geometricChip.get();
+    const GeometricChip *geoChip = downstreamReproc->geometricChip.get();
     if (geoChip)
     {
         XMLElem geoChipElem = newElement("GeometricChip", epElem);
@@ -1288,7 +1280,7 @@ XMLElem DerivedXMLParser::convertDownstreamReprocessingToXML(
                 const_iterator it = downstreamReproc->processingEvents.begin();
                 it != downstreamReproc->processingEvents.end(); ++it)
         {
-            ProcessingEvent *procEvent = (*it).get();
+            const ProcessingEvent *procEvent = (*it).get();
             XMLElem procEventElem = newElement("ProcessingEvent", epElem);
 
             createString("ApplicationName", procEvent->applicationName,
@@ -1379,7 +1371,7 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
         ProcessingEvent* procEvent
                 = downstreamReproc->processingEvents[i].get();
 
-        XMLElem peElem = procEventElem[i];
+        const XMLElem peElem = procEventElem[i];
         parseString(getFirstAndOnly(peElem, "ApplicationName"),
                     procEvent->applicationName);
         parseDateTime(getFirstAndOnly(peElem, "AppliedDateTime"),
@@ -1840,7 +1832,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
     std::string geoType = g->getType();
     if (geoType == SFAPoint::TYPE_NAME)
     {
-        SFAPoint* p = (SFAPoint*) g;
+        const SFAPoint* p = dynamic_cast<const SFAPoint*>(g);
         createSFAPoint("Point", p, parent);
     }
     //  LineType, linearRingType, and LineStringType

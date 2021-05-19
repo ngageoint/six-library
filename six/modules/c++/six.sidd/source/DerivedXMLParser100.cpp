@@ -53,7 +53,7 @@ DerivedXMLParser100::DerivedXMLParser100(logging::Logger* log,
 
 DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
 {
-    XMLElem root = doc->getRootElement();
+    const XMLElem root = doc->getRootElement();
 
     XMLElem productCreationElem        = getFirstAndOnly(root, "ProductCreation");
     XMLElem displayElem                = getFirstAndOnly(root, "Display");
@@ -70,7 +70,7 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
     DerivedData *data = builder.steal(); //steal it
 
     // see if PixelType has MONO or RGB
-    PixelType pixelType = six::toType<PixelType>(
+    const auto pixelType = six::toType<PixelType>(
             getFirstAndOnly(displayElem, "PixelType")->getCharacterData());
     builder.addDisplay(pixelType);
 
