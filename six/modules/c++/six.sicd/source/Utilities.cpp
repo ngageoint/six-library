@@ -482,9 +482,7 @@ static void readSicd_(const std::string& sicdPathname,
                          std::vector<std::complex<float>>& widebandData)
 {
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(
-            six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
@@ -534,9 +532,7 @@ static void readSicd_(const std::string& sicdPathname,
                          TScalarMeshPtr& scalarMesh)
 {
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(
-            six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
@@ -625,9 +621,7 @@ mem::auto_ptr<ComplexData> Utilities::getComplexData(
     else
     {
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(
-                six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
         six::NITFReadControl reader;
         reader.setXMLControlRegistry(&xmlRegistry);
@@ -719,9 +713,7 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
                                 std::complex<float>* buffer)
 {
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(
-            six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(sicdPathname);
@@ -817,8 +809,7 @@ mem::auto_ptr<ComplexData> Utilities::parseData(
         logging::Logger& log)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(DataType::COMPLEX,
-                           new XMLControlCreatorT<ComplexXMLControl>());
+    xmlRegistry.addCreator<ComplexXMLControl>();
 
     std::unique_ptr<Data> data(
 			       six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
@@ -853,8 +844,7 @@ std::string Utilities::toXMLString(const ComplexData& data,
                                    logging::Logger* logger)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(DataType::COMPLEX,
-                           new XMLControlCreatorT<ComplexXMLControl>());
+    xmlRegistry.addCreator<ComplexXMLControl>();
 
     logging::NullLogger nullLogger;
     return ::six::toValidXMLString(&data,

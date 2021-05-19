@@ -32,6 +32,8 @@ namespace six
 {
 namespace sicd
 {
+    const six::DataType ComplexXMLControl::dataType = six::DataType::COMPLEX;
+
 ComplexXMLControl::ComplexXMLControl(logging::Logger* log, bool ownLog) :
     XMLControl(log, ownLog)
 {

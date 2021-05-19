@@ -525,8 +525,7 @@ mem::auto_ptr<DerivedData> Utilities::parseData(
         logging::Logger& log)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(DataType::DERIVED,
-                           new XMLControlCreatorT<DerivedXMLControl>());
+    xmlRegistry.addCreator<DerivedXMLControl>();
 
     mem::auto_ptr<Data> data(
 			       six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
@@ -561,8 +560,7 @@ std::string Utilities::toXMLString(const DerivedData& data,
                                    logging::Logger* logger)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(DataType::DERIVED,
-                           new XMLControlCreatorT<DerivedXMLControl>());
+    xmlRegistry.addCreator<DerivedXMLControl>();
 
     logging::NullLogger nullLogger;
     return ::six::toValidXMLString(&data,

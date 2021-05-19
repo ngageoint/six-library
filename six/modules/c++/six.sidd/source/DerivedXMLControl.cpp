@@ -20,6 +20,8 @@
  *
  */
 
+#include <six/Enums.h>
+
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLParser100.h>
@@ -48,6 +50,8 @@ namespace six
 {
 namespace sidd
 {
+    const six::DataType DerivedXMLControl::dataType = six::DataType::DERIVED;
+
 DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) :
     XMLControl(log, ownLog)
 {

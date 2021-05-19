@@ -81,8 +81,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
         // The reason to do this is to avoid adding XMLControlCreators to the
         // XMLControlFactory singleton - this way has more fine-grained control
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
         // create a reader and load the file
         six::NITFReadControl reader;
@@ -187,8 +186,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
         mSensorModelState = NAME + std::string(" ") + stringStream.stream().str();
 
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
         logging::NullLogger logger;
         std::unique_ptr<six::XMLControl> control(
@@ -425,8 +423,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         domParser.parse(stream);
 
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
         logging::NullLogger logger;
         std::unique_ptr<six::XMLControl> control(
