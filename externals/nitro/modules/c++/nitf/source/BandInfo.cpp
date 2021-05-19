@@ -89,6 +89,27 @@ nitf::LookupTable BandInfo::getLookupTable() const
     return nitf::LookupTable(getNativeOrThrow()->lut);
 }
 
+static NITF_BOOL BandInfo_init(nitf_BandInfo* bandInfo,
+    const std::string& representation,
+    const std::string& subcategory,
+    const std::string& imageFilterCondition,
+    const std::string& imageFilterCode,
+    uint32_t numLUTs,
+    uint32_t bandEntriesPerLUT,
+    nitf_LookupTable* lut,
+    nitf_Error& error)
+{
+    return nitf_BandInfo_init(bandInfo,
+        representation.c_str(),
+        subcategory.c_str(),
+        imageFilterCondition.c_str(),
+        imageFilterCode.c_str(),
+        numLUTs,
+        bandEntriesPerLUT,
+        lut,
+        &error);
+}
+
 void BandInfo::init(const std::string& representation,
                     const std::string& subcategory,
                     const std::string& imageFilterCondition,
@@ -104,15 +125,15 @@ void BandInfo::init(const std::string& representation,
         oldLut.setManaged(false);
     }
 
-    if (!nitf_BandInfo_init(getNativeOrThrow(),
-                            representation.c_str(),
-                            subcategory.c_str(),
-                            imageFilterCondition.c_str(),
-                            imageFilterCode.c_str(),
+    if (!BandInfo_init(getNativeOrThrow(),
+                            representation,
+                            subcategory,
+                            imageFilterCondition,
+                            imageFilterCode,
                             numLUTs,
                             bandEntriesPerLUT,
                             lut.getNative() ? lut.getNative() : nullptr,
-                            &error))
+                            error))
         throw nitf::NITFException(&error);
 
 
@@ -132,12 +153,12 @@ void BandInfo::init(const std::string& representation,
         oldLut.setManaged(false);
     }
 
-    if (!nitf_BandInfo_init(getNativeOrThrow(),
-                            representation.c_str(),
-                            subcategory.c_str(),
-                            imageFilterCondition.c_str(),
-                            imageFilterCode.c_str(),
-                            0, 0, nullptr, &error))
+    if (!BandInfo_init(getNativeOrThrow(),
+                            representation,
+                            subcategory,
+                            imageFilterCondition,
+                            imageFilterCode,
+                            0, 0, nullptr, error))
         throw nitf::NITFException(&error);
 }
 
