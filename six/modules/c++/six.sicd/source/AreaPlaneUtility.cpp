@@ -118,8 +118,8 @@ std::vector<Vector3> AreaPlaneUtility::computeInPlaneCorners(
     for (size_t ii = 0; ii < cornersPix.size(); ++ii)
     {
         // Offset the pixel corners relative to start chip
-        cornersPix[ii].row += static_cast<double>(data.imageData->firstRow);
-        cornersPix[ii].col += static_cast<double>(data.imageData->firstCol);
+        const types::RowCol<size_t> cornersPix_ii(data.imageData->firstRow, data.imageData->firstCol);
+        cornersPix[ii] += cornersPix_ii;
 
         const RowColDouble sampleSpacing(
                 data.grid->row->sampleSpacing,

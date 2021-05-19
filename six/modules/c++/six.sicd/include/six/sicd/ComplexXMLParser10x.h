@@ -70,21 +70,21 @@ protected:
         const GainAndPhasePolys* obj, 
         XMLElem parent = nullptr) const;
 
-    virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
+    virtual void parseWeightTypeFromXML(const xml::lite::Element* gridRowColXML,
         mem::ScopedCopyablePtr<WeightType>& obj) const;
     virtual void parsePolarizationCalibrationFromXML(
-        const XMLElem polCalXML,
+        const xml::lite::Element* polCalXML,
         six::sicd::PolarizationCalibration* obj) const;
-    virtual void parseTxRcvPolFromXML(const XMLElem parent,
+    virtual void parseTxRcvPolFromXML(const xml::lite::Element* parent,
                          six::DualPolarizationType& obj) const;
     virtual void parseSCPCOAFromXML(
-        const XMLElem scpcoaXML, SCPCOA *obj) const;
-    virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const;
-    virtual void parseRMCRFromXML(const XMLElem rmcrElem, RMCR* obj) const;
+        const xml::lite::Element* scpcoaXML, SCPCOA *obj) const;
+    virtual void parseRMATFromXML(const xml::lite::Element* rmatElem, RMAT* obj) const;
+    virtual void parseRMCRFromXML(const xml::lite::Element* rmcrElem, RMCR* obj) const;
     virtual void parseAntennaParamArrayFromXML(
-        const XMLElem antennaParamsXML, 
+        const xml::lite::Element* antennaParamsXML, 
         six::sicd::AntennaParameters* obj) const;
-    virtual void parseRadarCollectionFromXML(const XMLElem radarCollectionXML,
+    virtual void parseRadarCollectionFromXML(const xml::lite::Element* radarCollectionXML,
                                              RadarCollection *obj) const;
 
 private:

@@ -750,10 +750,7 @@ void NITFReadControl::readLegendPixelData(const nitf::ImageSubheader& subheader,
                                           size_t imageSeg,
                                           Legend& legend)
 {
-    const types::RowCol<uint32_t> dims(
-            static_cast<uint32_t>(subheader.numRows()),
-            static_cast<uint32_t>(subheader.numCols()));
-
+    const types::RowCol<uint32_t> dims(subheader.dims());
     legend.setDims(dims);
 
     uint32_t bandList(0);

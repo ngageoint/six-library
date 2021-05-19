@@ -171,9 +171,7 @@ XMLElem SICommonXMLParser10x::convertMatchInformationToXML(
 {
     XMLElem matchInfoXML = newElement("MatchInfo", parent);
 
-    createInt("NumMatchTypes",
-              static_cast<int>(matchInfo.types.size()),
-              matchInfoXML);
+    createInt("NumMatchTypes", matchInfo.types.size(), matchInfoXML);
 
     for (size_t ii = 0; ii < matchInfo.types.size(); ++ii)
     {
@@ -183,8 +181,7 @@ XMLElem SICommonXMLParser10x::convertMatchInformationToXML(
 
         createString("TypeID", mt.typeID, mtXML);
         createInt("CurrentIndex", mt.currentIndex, mtXML);
-        createInt("NumMatchCollections",
-                  static_cast<int>(mt.matchCollects.size()), mtXML);
+        createInt("NumMatchCollections", mt.matchCollects.size(), mtXML);
 
         for (size_t jj = 0; jj < mt.matchCollects.size(); ++jj)
         {

@@ -422,8 +422,8 @@ XMLElem SICommonXMLParser::createRowCol(
         const RowColInt& value, XMLElem parent) const
 {
     XMLElem e = newElement(name, (uri.empty()) ? getDefaultURI() : uri, parent);
-    createInt(rowName, getSICommonURI(), static_cast<int>(value.row), e);
-    createInt(colName, getSICommonURI(), static_cast<int>(value.col), e);
+    createInt(rowName, getSICommonURI(), value.row, e);
+    createInt(colName, getSICommonURI(), value.col, e);
     return e;
 }
 
@@ -1097,7 +1097,7 @@ void SICommonXMLParser::parseFootprint(const xml::lite::Element* footprint,
     std::set<size_t> indices;
     for (size_t ii = 0; ii < vertices.size(); ++ii)
     {
-        const XMLElem vertex(vertices[ii]);
+        const xml::lite::Element* vertex(vertices[ii]);
 
         // Check the index attr to know which corner it is
         // This is 1-based
@@ -1125,7 +1125,7 @@ void SICommonXMLParser::parseFootprint(const xml::lite::Element* footprint,
     std::set<size_t> indices;
     for (size_t ii = 0; ii < vertices.size(); ++ii)
     {
-        const XMLElem vertex(vertices[ii]);
+        const xml::lite::Element* vertex(vertices[ii]);
 
         // Check the index attr to know which corner it is
         // This is 1-based
