@@ -27,6 +27,8 @@
 
 #include <memory>
 
+#include <std/memory>
+
 #include <scene/sys_Conf.h>
 
 #include "six/Types.h"
@@ -195,7 +197,7 @@ public:
     {
         assert(getBuffer() == nullptr);
 
-        std::unique_ptr<UByte[]> retval(new UByte[size]);
+        auto retval = std::make_unique<UByte[]>(size);
         setBuffer(retval.get());
         return retval;
     }

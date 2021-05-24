@@ -35,8 +35,7 @@ SIDDByteProvider::SIDDByteProvider(
         size_t maxProductSize)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-                           new six::XMLControlCreatorT<DerivedXMLControl>());
+    xmlRegistry.addCreator<DerivedXMLControl>();
 
     mem::SharedPtr<Container> container(new Container(
         DataType::DERIVED));

@@ -171,10 +171,10 @@ void CPHDWriter::writeMetadata(size_t vbmSize,
 
     // set header size, final step before write
     header.set(xmlMetadata.size(), vbmSize, cphd03Size);
-    mStream->write(header.toString().c_str(), header.size());
-    mStream->write("\f\n", 2);
-    mStream->write(xmlMetadata.c_str(), xmlMetadata.size());
-    mStream->write("\f\n", 2);
+    mStream->write(header.toString());
+    mStream->write("\f\n");
+    mStream->write(xmlMetadata);
+    mStream->write("\f\n");
 
     // Pad bytes
     char zero = 0;

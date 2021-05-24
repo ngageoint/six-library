@@ -25,6 +25,8 @@
 #include <memory>
 
 #include <six/XMLControl.h>
+#include <six/Enums.h>
+
 #include <six/sicd/ComplexXMLParser.h>
 
 namespace six
@@ -46,12 +48,12 @@ namespace sicd
  *  XMLControlFactory::newXMLControl() methods
  *  to create this object.
  */
-class ComplexXMLControl : public XMLControl
+struct ComplexXMLControl : public XMLControl
 {
-
-public:
     //!  Constructor
     ComplexXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+
+    static const six::DataType dataType;
 
 protected:
     /*!

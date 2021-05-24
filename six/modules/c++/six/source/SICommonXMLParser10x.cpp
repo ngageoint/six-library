@@ -126,9 +126,7 @@ void SICommonXMLParser10x::parseRadiometryFromXML(
     const xml::lite::Element* radiometricXML,
     Radiometric* radiometric) const
 {
-    XMLElem tmpElem = nullptr;
-
-    tmpElem = getOptional(radiometricXML, "NoiseLevel");
+     XMLElem tmpElem = getOptional(radiometricXML, "NoiseLevel");
     if (tmpElem)
     {
         parseString(getFirstAndOnly(tmpElem, "NoiseLevelType"),
@@ -137,33 +135,10 @@ void SICommonXMLParser10x::parseRadiometryFromXML(
                     radiometric->noiseLevel.noisePoly);
     }
 
-    tmpElem = getOptional(radiometricXML, "RCSSFPoly");
-    if (tmpElem)
-    {
-        //optional
-        parsePoly2D(tmpElem, radiometric->rcsSFPoly);
-    }
-
-    tmpElem = getOptional(radiometricXML, "BetaZeroSFPoly");
-    if (tmpElem)
-    {
-        //optional
-        parsePoly2D(tmpElem, radiometric->betaZeroSFPoly);
-    }
-
-    tmpElem = getOptional(radiometricXML, "SigmaZeroSFPoly");
-    if (tmpElem)
-    {
-        //optional
-        parsePoly2D(tmpElem, radiometric->sigmaZeroSFPoly);
-    }
-
-    tmpElem = getOptional(radiometricXML, "GammaZeroSFPoly");
-    if (tmpElem)
-    {
-        //optional
-        parsePoly2D(tmpElem, radiometric->gammaZeroSFPoly);
-    }
+    parseOptionalPoly2D(radiometricXML, "RCSSFPoly", radiometric->rcsSFPoly);
+    parseOptionalPoly2D(radiometricXML, "BetaZeroSFPoly", radiometric->betaZeroSFPoly);
+    parseOptionalPoly2D(radiometricXML, "SigmaZeroSFPoly", radiometric->sigmaZeroSFPoly);
+    parseOptionalPoly2D(radiometricXML, "GammaZeroSFPoly", radiometric->gammaZeroSFPoly);
 }
 XMLElem SICommonXMLParser10x::convertMatchInformationToXML(
     const MatchInformation& matchInfo,

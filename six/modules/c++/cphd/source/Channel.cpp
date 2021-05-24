@@ -136,9 +136,9 @@ std::ostream& operator<< (std::ostream& os, const Point& p)
 std::ostream& operator<< (std::ostream& os, const FxNoiseProfile& f)
 {
     os << "        FxNoiseProfile:: \n";
-    for (size_t ii = 0; ii < f.point.size(); ++ii)
+    for (const auto& point : f.point)
     {
-        os << "        Point        : " << f.point[ii] << "\n";
+        os << "        Point        : " << point << "\n";
     }
     return os;
 }

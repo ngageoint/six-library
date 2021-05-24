@@ -72,12 +72,11 @@ int main(int argc, char** argv)
         {
             const types::RowCol<size_t> dims(reader.getNumVectors(channel),
                                              reader.getNumSamples(channel));
-            std::unique_ptr<std::byte[]> data;
 
-            wideband.read(channel,
+            auto data = wideband.read(channel,
                           0, cphd::Wideband::ALL,
                           0, cphd::Wideband::ALL,
-                          numThreads, data);
+                          numThreads);
 
             switch (sampleType)
             {

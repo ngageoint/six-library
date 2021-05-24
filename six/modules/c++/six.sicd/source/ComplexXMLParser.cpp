@@ -61,7 +61,7 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
     ComplexDataBuilder builder;
     ComplexData *sicd = builder.steal();
 
-    XMLElem root = doc->getRootElement();
+    const xml::lite::Element* const root = doc->getRootElement();
 
     XMLElem collectionInfoXML  = getFirstAndOnly(root, "CollectionInfo");
     XMLElem imageCreationXML   = getOptional(root, "ImageCreation");
@@ -686,7 +686,7 @@ XMLElem ComplexXMLParser::convertAntennaToXML(
 
 XMLElem ComplexXMLParser::convertAntennaParametersToXML(
     const std::string& name,
-    AntennaParameters *params,
+    const AntennaParameters *params,
     XMLElem parent) const
 {
     XMLElem apXML = newElement(name, parent);

@@ -34,15 +34,17 @@ namespace six
 {
 namespace convert
 {
-class BaseConverter : protected six::XMLParser
+struct BaseConverter : protected six::XMLParser
 {
-public:
     /*!
      * \class BaseConverter
      *
      * Base object for parsing vendor XML to create ComplexData
      */
     BaseConverter();
+
+    BaseConverter(const BaseConverter&) = delete;
+    BaseConverter& operator=(const BaseConverter&) = delete;
 
     /*!
      * Create a ComplexData object from source filetype

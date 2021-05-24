@@ -130,7 +130,7 @@ DerivedData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
     }
 
     const six::sidd::MeasurableProjection* projection =
-        static_cast<six::sidd::MeasurableProjection*>(
+        dynamic_cast<six::sidd::MeasurableProjection*>(
                     measurement->projection.get());
     const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
 
