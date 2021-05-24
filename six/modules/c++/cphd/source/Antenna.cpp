@@ -97,9 +97,9 @@ std::ostream& operator<< (std::ostream& os, const AntPattern& a)
         << a.array << "\n"
         << "    Element:: \n"
         << a.element << "\n";
-    for (size_t ii = 0; ii < a.gainPhaseArray.size(); ++ii)
+    for (const auto& gainPhase : a.gainPhaseArray)
     {
-        os << a.gainPhaseArray[ii] << "\n";
+        os << gainPhase << "\n";
     }
     return os;
 }

@@ -421,8 +421,9 @@ void Segment::rotateCCW(size_t /*numColumns*/)
      *                    |  |
      *                    !--
      */
-    const six::RowColDouble start(startSample * -1, startLine);
-    const six::RowColDouble end(endSample * -1, endLine);
+   
+    const six::RowColDouble start(types::RowCol<int>(startSample * -1, startLine));
+    const six::RowColDouble end(types::RowCol<int>(endSample * -1, endLine));
     startLine = static_cast<int>(start.row);
     startSample = static_cast<int>(start.col);
     endLine = static_cast<int>(end.row);

@@ -158,6 +158,7 @@ private:
                                 ChannelParameter& param) const;
     void parsePVPType(Pvp& p, const xml::lite::Element* paramXML, PVPType& param) const;
     void parsePVPType(Pvp& p, const xml::lite::Element* paramXML) const;
+    bool parseOptionalPVPType(const xml::lite::Element* parent, const std::string& tag, Pvp& p, PVPType& param) const;
     void parsePlatformParams(const xml::lite::Element* platXML, Bistatic::PlatformParams& plat) const;
     void parseCommon(const xml::lite::Element* imgTypeXML, ImagingType* imgType) const;
     void parsePosVelErr(const xml::lite::Element* posVelErrXML, six::PosVelError& posVelErr) const;

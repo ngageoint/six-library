@@ -23,6 +23,8 @@
 #define __SIX_DERIVED_XML_CONTROL_H__
 
 #include <six/XMLControl.h>
+#include <six/Enums.h>
+
 #include <six/sidd/DerivedXMLParser.h>
 
 namespace six
@@ -38,10 +40,11 @@ namespace sidd
  *  if necessary.  A best practice is to use the six::toXMLCharArray
  *  and six::toXMLString functions to turn Data* objects into XML
  */
-class DerivedXMLControl : public XMLControl
+struct DerivedXMLControl : public XMLControl
 {
-public:
     DerivedXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+
+    static const six::DataType dataType;
 
 protected:
     /*!

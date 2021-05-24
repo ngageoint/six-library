@@ -179,10 +179,10 @@ void CPHDWriter::writeMetadata(size_t supportSize,
     }
     // set header size, final step before write
     mHeader.set(xmlMetadata.size(), supportSize, pvpSize, cphdSize);
-    mStream->write(mHeader.toString().c_str(), mHeader.size());
-    mStream->write("\f\n", 2);
-    mStream->write(xmlMetadata.c_str(), xmlMetadata.size());
-    mStream->write("\f\n", 2);
+    mStream->write(mHeader.toString());
+    mStream->write("\f\n");
+    mStream->write(xmlMetadata);
+    mStream->write("\f\n");
 }
 
 void CPHDWriter::writePVPData(const std::byte* pvpBlock, size_t channel)

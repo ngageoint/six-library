@@ -86,9 +86,7 @@ ProjectionModel(const Vector3& slantPlaneNormal,
     mSlantPlaneNormal.normalize();
 }
 
-ProjectionModel::~ProjectionModel()
-{
-}
+ProjectionModel::~ProjectionModel() = default;
 
 /*!
  *  Calculations for section 5.2 in SICD Image Projections:

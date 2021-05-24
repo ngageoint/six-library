@@ -32,6 +32,8 @@ namespace six
 {
 namespace sicd
 {
+    const six::DataType ComplexXMLControl::dataType = six::DataType::COMPLEX;
+
 ComplexXMLControl::ComplexXMLControl(logging::Logger* log, bool ownLog) :
     XMLControl(log, ownLog)
 {
@@ -49,7 +51,7 @@ xml::lite::Document* ComplexXMLControl::toXMLImpl(const Data* data)
         throw except::Exception(Ctxt("Data must be SICD"));
     }
 
-    const ComplexData* const sicd(static_cast<const ComplexData*>(data));
+    const ComplexData* const sicd(dynamic_cast<const ComplexData*>(data));
     return getParser(data->getVersion())->toXML(sicd);
 }
 
