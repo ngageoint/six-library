@@ -109,7 +109,7 @@ void GeoTIFFWriteControl::save(const SourceList& sources,
 
         for (size_t row = 0; row < numRows; ++row)
         {
-            sources[ii]->read((std::byte*)buf.data(), oneRow);
+            sources[ii]->read(buf.data(), oneRow);
             imageWriter->putData(buf.data(), static_cast<sys::Uint32_T>(numCols));
         }
         imageWriter->writeIFD();
