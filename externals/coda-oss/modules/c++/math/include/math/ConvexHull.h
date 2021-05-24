@@ -185,7 +185,8 @@ private:
         // 'mLowerPartitionPoints'.
         mUpperPartitionPoints.reserve(rawPoints.size() - 2);
         mLowerPartitionPoints.reserve(rawPoints.size() - 2);
-        for (size_t ii = 1, end = rawPoints.size() - 1; ii < end; ++ii)
+        const size_t end = rawPoints.size() - 1;
+        for (size_t ii = 1; ii < end; ++ii)
         {
             RowCol const &rawPoint(rawPoints[ii]);
             if (direction(mLeft, mRight, rawPoint) < 0)

@@ -341,7 +341,7 @@ public:
      *  \param i The row index
      *  \param j The column index
      */
-    inline _T operator()(size_t i, size_t j) const
+    inline _T operator()(size_t i, size_t j) const noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _MD && j < _ND );
@@ -359,7 +359,7 @@ public:
      *  \param i The ith index into the rows (M)
      *  \param j The jth index into the cols (N)
      */
-    inline _T& operator()(size_t i, size_t j)
+    inline _T& operator()(size_t i, size_t j) noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _MD && j < _ND );
@@ -373,7 +373,7 @@ public:
      *  http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.10
      *  http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.11
      */
-    inline const _T* operator[](size_t i) const
+    inline const _T* operator[](size_t i) const noexcept
     {
         return row(i);
     }
@@ -387,7 +387,7 @@ public:
      *  But it is even more dangerous, since the user can cause damage by unwittingly
      *  treating row i as a mutable pointer.  This method is only preserved for compatibility
      */
-    inline _T* operator[](size_t i)
+    inline _T* operator[](size_t i) noexcept
     { 
         return row(i);
     }
@@ -401,7 +401,7 @@ public:
      *  \endcode
      *
      */
-    inline const _T* row(size_t i) const
+    inline const _T* row(size_t i) const noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _MD);
@@ -414,7 +414,7 @@ public:
      *  since the user can cause damage by unwittingly
      *  treating row i as a mutable pointer.
      */
-    inline _T* row(size_t i)
+    inline _T* row(size_t i) noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _MD);
@@ -1200,7 +1200,7 @@ public:
      */
     Like_T operator-() const
     {
-        Like_T neg;
+        Like_T neg{};
         for (size_t ii = 0; ii < _MD; ++ii)
         {
             for (size_t jj = 0; jj < _ND; ++jj)
