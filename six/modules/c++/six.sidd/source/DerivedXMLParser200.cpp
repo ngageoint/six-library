@@ -208,7 +208,7 @@ DerivedData* DerivedXMLParser200::fromXML(
         std::vector<XMLElem> annChildren;
         annotationsElem->getElementsByTagName("Annotation", annChildren);
         data->annotations.resize(annChildren.size());
-        for (size_t i = 0, size = annChildren.size(); i < size; ++i)
+        for (size_t i = 0; i < annChildren.size(); ++i)
         {
             data->annotations[i].reset(new Annotation());
             parseAnnotationFromXML(annChildren[i], data->annotations[i].get());
@@ -273,10 +273,9 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
     if (!derived->annotations.empty())
     {
         XMLElem annotationsElem = newElement("Annotations", root);
-        for (size_t i = 0, num = derived->annotations.size(); i < num; ++i)
+        for (const auto& pAnnotation : derived->annotations)
         {
-            convertAnnotationToXML(derived->annotations[i].get(),
-                                   annotationsElem);
+            convertAnnotationToXML(pAnnotation.get(), annotationsElem);
         }
     }
 
@@ -1547,7 +1546,7 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
     XMLElem exploitationFeaturesElem =
         newElement("ExploitationFeatures", parent);
 
-    if (exploitationFeatures->collections.size() < 1)
+    if (exploitationFeatures->collections.empty())
     {
         throw except::Exception(Ctxt(FmtX(
             "ExploitationFeatures must have at least [1] Collection, " \
@@ -1555,9 +1554,9 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
     }
 
     // 1 to unbounded
-    for (size_t i = 0; i < exploitationFeatures->collections.size(); ++i)
+    for (auto& pCollections : exploitationFeatures->collections)
     {
-        Collection* collection = exploitationFeatures->collections[i].get();
+        Collection* collection = pCollections.get();
         XMLElem collectionElem = newElement("Collection",
             exploitationFeaturesElem);
         setAttribute(collectionElem, "identifier", collection->identifier);
@@ -1613,10 +1612,9 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
                 roiElem);
         }
         // optional to unbounded
-        for (size_t n = 0, nElems =
-            collection->information.polarization.size(); n < nElems; ++n)
+        for (const auto& pPolarization : collection->information.polarization)
         {
-            const TxRcvPolarization *p = collection->information.polarization[n].get();
+            const TxRcvPolarization *p = pPolarization.get();
             XMLElem polElem = newElement("Polarization", informationElem);
 
             createString("TxPolarization",

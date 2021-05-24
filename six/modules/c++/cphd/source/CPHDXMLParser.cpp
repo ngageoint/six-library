@@ -791,7 +791,7 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
             createOptionalDouble("IonoRgRgRateCC", errParams.monostatic->ionoError->ionoRgRgRateCC, ionoXML);
             createDecorrType("IonoRangeVertDecorr", errParams.monostatic->tropoError->tropoRangeDecorr, ionoXML);
         }
-        if (errParams.monostatic->parameter.size() > 0)
+        if (!errParams.monostatic->parameter.empty())
         {
             XMLElem addedParamsXML = newElement("AddedParameters", monoXML);
             mCommon.addParameters("Parameter", getDefaultURI(), errParams.monostatic->parameter, addedParamsXML);
@@ -812,7 +812,7 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
         createOptionalDouble("ClockFreqSF", errParams.bistatic->rcvPlatform.radarSensor.clockFreqSF, radarRcvXML);
         createDouble("CollectionStartTime", errParams.bistatic->rcvPlatform.radarSensor.collectionStartTime, radarRcvXML);
 
-        if (errParams.bistatic->parameter.size() > 0)
+        if (!errParams.bistatic->parameter.empty())
         {
             XMLElem addedParamsXML = newElement("AddedParameters", biXML);
             mCommon.addParameters("Parameter",  getDefaultURI(), errParams.bistatic->parameter, addedParamsXML);

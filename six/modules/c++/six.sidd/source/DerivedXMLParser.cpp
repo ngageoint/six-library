@@ -185,9 +185,8 @@ void DerivedXMLParser::setAttributeList(
         bool setIfEmpty)
 {
     std::string value;
-    for (size_t ii = 0; ii < values.size(); ++ii)
+    for (auto thisValue : values)
     {
-        std::string thisValue(values[ii]);
         str::trim(thisValue);
         if (!thisValue.empty())
         {
@@ -746,8 +745,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         std::vector<XMLElem> polarization;
         informationElem->getElementsByTagName("Polarization", polarization);
         info->polarization.resize(polarization.size());
-        const auto nElems = polarization.size();
-        for (size_t jj = 0; jj < nElems; ++jj)
+        for (size_t jj = 0; jj < polarization.size(); ++jj)
         {
             const xml::lite::Element* const polElem = polarization[jj];
             info->polarization[jj].reset(new TxRcvPolarization());
@@ -1204,7 +1202,7 @@ XMLElem DerivedXMLParser::convertProductProcessingToXML(
     XMLElem productProcessingElem = newElement("ProductProcessing", parent);
 
     // error checking
-    if (productProcessing->processingModules.size() < 1)
+    if (productProcessing->processingModules.empty())
     {
         throw except::Exception(Ctxt(FmtX(
                 "There must be at least [1] ProcessingModule in "\
@@ -1311,9 +1309,8 @@ void DerivedXMLParser::parseProcessingModuleFromXML(
 
     std::vector<XMLElem> procModuleElem;
     procElem->getElementsByTagName("ProcessingModule", procModuleElem);
-    const auto size = procModuleElem.size();
-    procMod->processingModules.resize(size);
-    for (size_t i = 0; i < size; ++i)
+    procMod->processingModules.resize(procModuleElem.size());
+    for (size_t i = 0; i < procModuleElem.size(); ++i)
     {
         procMod->processingModules[i].reset(new ProcessingModule());
         parseProcessingModuleFromXML(
@@ -1327,9 +1324,8 @@ void DerivedXMLParser::parseProductProcessingFromXML(
 {
     std::vector<XMLElem> procModuleElem;
     elem->getElementsByTagName("ProcessingModule", procModuleElem);
-    const auto size = procModuleElem.size();
-    productProcessing->processingModules.resize(size);
-    for (size_t i = 0; i < size; ++i)
+    productProcessing->processingModules.resize(procModuleElem.size());
+    for (size_t i = 0; i < procModuleElem.size(); ++i)
     {
         productProcessing->processingModules[i].reset(new ProcessingModule());
         parseProcessingModuleFromXML(
@@ -1366,9 +1362,8 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
 
     std::vector<XMLElem> procEventElem;
     elem->getElementsByTagName("ProcessingEvent", procEventElem);
-    const auto size = procEventElem.size();
-    downstreamReproc->processingEvents.resize(size);
-    for (size_t i = 0; i < size; ++i)
+    downstreamReproc->processingEvents.resize(procEventElem.size());
+    for (size_t i = 0; i < procEventElem.size(); ++i)
     {
         downstreamReproc->processingEvents[i].reset(new ProcessingEvent());
         ProcessingEvent* procEvent
@@ -1505,9 +1500,8 @@ void DerivedXMLParser::parseAnnotationFromXML(
 
     std::vector<XMLElem> objectsElem;
     elem->getElementsByTagName("Object", objectsElem);
-    const auto size = objectsElem.size();
-    a->objects.resize(size);
-    for (size_t i = 0; i < size; ++i)
+    a->objects.resize(objectsElem.size());
+    for (size_t i = 0; i < objectsElem.size(); ++i)
     {
         XMLElem obj = objectsElem[i];
 
@@ -1673,11 +1667,10 @@ XMLElem DerivedXMLParser::convertAnnotationToXML(
     }
 
     // one to unbounded
-    const auto num = a->objects.size();
-    for (size_t i = 0; i < num; ++i)
+    for (const auto& pObject : a->objects)
     {
         XMLElem objElem = newElement("Object", annElem);
-        convertSFAGeometryToXML(a->objects[i].get(), objElem);
+        convertSFAGeometryToXML(pObject.get(), objElem);
     }
     return annElem;
 }
@@ -1702,9 +1695,8 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
         auto p = dynamic_cast<SFALineString*>(g);
         std::vector<XMLElem> vElem;
         elem->getElementsByTagName("Vertex", vElem);
-        const auto size = vElem.size();
-        p->vertices.resize(size);
-        for (size_t i = 0; i < size; ++i)
+        p->vertices.resize(vElem.size());
+        for (size_t i = 0; i < vElem.size(); ++i)
         {
             p->vertices[i].reset(new SFAPoint());
             parseSFAGeometryFromXML(vElem[i], p->vertices[i].get());
@@ -1715,9 +1707,8 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
         auto p = dynamic_cast<SFAPolygon*>(g);
         std::vector<XMLElem> ringElem;
         elem->getElementsByTagName("Ring", ringElem);
-        const auto size = ringElem.size();
-        p->rings.resize(size);
-        for (size_t i = 0; i < size; ++i)
+        p->rings.resize(ringElem.size());
+        for (size_t i = 0; i < ringElem.size(); ++i)
         {
             p->rings[i].reset(new SFALinearRing());
             parseSFAGeometryFromXML(ringElem[i], p->rings[i].get());
@@ -1728,9 +1719,8 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
         auto p = dynamic_cast<SFAPolyhedralSurface*>(g);
         std::vector<XMLElem> polyElem;
         elem->getElementsByTagName("Patch", polyElem);
-        const auto size = polyElem.size();
-        p->patches.resize(size);
-        for (size_t i = 0; i < size; ++i)
+        p->patches.resize(polyElem.size());
+        for (size_t i = 0; i < polyElem.size(); ++i)
         {
             p->patches[i].reset(new SFAPolygon());
             parseSFAGeometryFromXML(polyElem[i], p->patches[i].get());
@@ -1741,9 +1731,8 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
         auto p = dynamic_cast<SFAMultiPolygon*>(g);
         std::vector<XMLElem> polyElem;
         elem->getElementsByTagName("Element", polyElem);
-        const auto size = polyElem.size();
-        p->elements.resize(size);
-        for (size_t i = 0; i < size; ++i)
+        p->elements.resize(polyElem.size());
+        for (size_t i = 0; i < polyElem.size(); ++i)
         {
             p->elements[i].reset(new SFAPolygon());
             parseSFAGeometryFromXML(polyElem[i], p->elements[i].get());
@@ -1754,9 +1743,8 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
         auto p = dynamic_cast<SFAMultiLineString*>(g);
         std::vector<XMLElem> lineElem;
         elem->getElementsByTagName("Element", lineElem);
-        const auto size = lineElem.size();
-        p->elements.resize(size);
-        for (size_t i = 0; i < size; ++i)
+        p->elements.resize(lineElem.size());
+        for (size_t i = 0; i < lineElem.size(); ++i)
         {
             p->elements[i].reset(new SFALineString());
             parseSFAGeometryFromXML(lineElem[i], p->elements[i].get());
@@ -1767,9 +1755,8 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
         auto p = dynamic_cast<SFAMultiPoint*>(g);
         std::vector<XMLElem> vElem;
         elem->getElementsByTagName("Vertex", vElem);
-        const auto size = vElem.size();
         p->vertices.resize(vElem.size());
-        for (size_t i = 0; i < size; ++i)
+        for (size_t i = 0; i < vElem.size(); ++i)
         {
             p->vertices[i].reset(new SFAPoint());
             parseSFAGeometryFromXML(vElem[i], p->vertices[i].get());
@@ -1821,9 +1808,9 @@ XMLElem DerivedXMLParser::createSFALine(
                 "found", l->vertices.size())));
 
     // two to unbounded
-    for (size_t ii = 0; ii < l->vertices.size(); ++ii)
+    for (const auto& vertex : l->vertices)
     {
-        createSFAPoint("Vertex", l->vertices[ii].get(), lineElem);
+        createSFAPoint("Vertex", vertex.get(), lineElem);
     }
 
     return lineElem;
@@ -1922,9 +1909,9 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
                     "found", p->vertices.size())));
 
         // two to unbounded
-        for (size_t ii = 0; ii < p->vertices.size(); ++ii)
+        for (const auto& pVertex : p->vertices)
         {
-            createSFAPoint("Vertex", p->vertices[ii].get(), geoElem);
+            createSFAPoint("Vertex", pVertex.get(), geoElem);
         }
     }
     else
