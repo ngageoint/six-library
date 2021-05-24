@@ -25,6 +25,7 @@
 #include <sstream>
 
 #include <nitf/coda-oss.hpp>
+#include <std/memory>
 #include <str/Manip.h>
 #include <except/Exception.h>
 #include <six/sidd/DerivedDataBuilder.h>
@@ -136,7 +137,7 @@ void DerivedXMLParser::getAttributeIfExists(
 {
     if (attributes.contains(attributeName))
     {
-        date.reset(new DateTime(toType<DateTime>(
+        date.reset(std::make_unique<DateTime>(toType<DateTime>(
             attributes.getValue(attributeName))));
     }
     else
@@ -745,7 +746,8 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         std::vector<XMLElem> polarization;
         informationElem->getElementsByTagName("Polarization", polarization);
         info->polarization.resize(polarization.size());
-        for (size_t jj = 0, nElems = polarization.size(); jj < nElems; ++jj)
+        const auto nElems = polarization.size();
+        for (size_t jj = 0; jj < nElems; ++jj)
         {
             const xml::lite::Element* const polElem = polarization[jj];
             info->polarization[jj].reset(new TxRcvPolarization());
@@ -1309,8 +1311,9 @@ void DerivedXMLParser::parseProcessingModuleFromXML(
 
     std::vector<XMLElem> procModuleElem;
     procElem->getElementsByTagName("ProcessingModule", procModuleElem);
-    procMod->processingModules.resize(procModuleElem.size());
-    for (size_t i = 0, size = procModuleElem.size(); i < size; ++i)
+    const auto size = procModuleElem.size();
+    procMod->processingModules.resize(size);
+    for (size_t i = 0; i < size; ++i)
     {
         procMod->processingModules[i].reset(new ProcessingModule());
         parseProcessingModuleFromXML(
@@ -1324,8 +1327,9 @@ void DerivedXMLParser::parseProductProcessingFromXML(
 {
     std::vector<XMLElem> procModuleElem;
     elem->getElementsByTagName("ProcessingModule", procModuleElem);
-    productProcessing->processingModules.resize(procModuleElem.size());
-    for (size_t i = 0, size = procModuleElem.size(); i < size; ++i)
+    const auto size = procModuleElem.size();
+    productProcessing->processingModules.resize(size);
+    for (size_t i = 0; i < size; ++i)
     {
         productProcessing->processingModules[i].reset(new ProcessingModule());
         parseProcessingModuleFromXML(
@@ -1362,8 +1366,9 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
 
     std::vector<XMLElem> procEventElem;
     elem->getElementsByTagName("ProcessingEvent", procEventElem);
-    downstreamReproc->processingEvents.resize(procEventElem.size());
-    for (size_t i = 0, size = procEventElem.size(); i < size; ++i)
+    const auto size = procEventElem.size();
+    downstreamReproc->processingEvents.resize(size);
+    for (size_t i = 0; i < size; ++i)
     {
         downstreamReproc->processingEvents[i].reset(new ProcessingEvent());
         ProcessingEvent* procEvent
@@ -1500,8 +1505,9 @@ void DerivedXMLParser::parseAnnotationFromXML(
 
     std::vector<XMLElem> objectsElem;
     elem->getElementsByTagName("Object", objectsElem);
-    a->objects.resize(objectsElem.size());
-    for (size_t i = 0, size = objectsElem.size(); i < size; ++i)
+    const auto size = objectsElem.size();
+    a->objects.resize(size);
+    for (size_t i = 0; i < size; ++i)
     {
         XMLElem obj = objectsElem[i];
 
@@ -1667,7 +1673,8 @@ XMLElem DerivedXMLParser::convertAnnotationToXML(
     }
 
     // one to unbounded
-    for (size_t i = 0, num = a->objects.size(); i < num; ++i)
+    const auto num = a->objects.size();
+    for (size_t i = 0; i < num; ++i)
     {
         XMLElem objElem = newElement("Object", annElem);
         convertSFAGeometryToXML(a->objects[i].get(), objElem);
@@ -1680,7 +1687,7 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
     std::string geoType = g->getType();
     if (geoType == SFAPoint::TYPE_NAME)
     {
-        SFAPoint* p = (SFAPoint*) g;
+        auto p = dynamic_cast<SFAPoint*>(g);
         parseDouble(getFirstAndOnly(elem, "X"), p->x);
         parseDouble(getFirstAndOnly(elem, "Y"), p->y);
 
@@ -1692,11 +1699,12 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
             == SFALinearRing::TYPE_NAME || geoType == SFALineString::TYPE_NAME)
     {
         //cast to the common base - LineString
-        SFALineString* p = (SFALineString*) g;
+        auto p = dynamic_cast<SFALineString*>(g);
         std::vector<XMLElem> vElem;
         elem->getElementsByTagName("Vertex", vElem);
-        p->vertices.resize(vElem.size());
-        for (size_t i = 0, size = vElem.size(); i < size; ++i)
+        const auto size = vElem.size();
+        p->vertices.resize(size);
+        for (size_t i = 0; i < size; ++i)
         {
             p->vertices[i].reset(new SFAPoint());
             parseSFAGeometryFromXML(vElem[i], p->vertices[i].get());
@@ -1704,11 +1712,12 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
     }
     else if (geoType == SFAPolygon::TYPE_NAME)
     {
-        SFAPolygon* p = (SFAPolygon*) g;
+        auto p = dynamic_cast<SFAPolygon*>(g);
         std::vector<XMLElem> ringElem;
         elem->getElementsByTagName("Ring", ringElem);
-        p->rings.resize(ringElem.size());
-        for (size_t i = 0, size = ringElem.size(); i < size; ++i)
+        const auto size = ringElem.size();
+        p->rings.resize(size);
+        for (size_t i = 0; i < size; ++i)
         {
             p->rings[i].reset(new SFALinearRing());
             parseSFAGeometryFromXML(ringElem[i], p->rings[i].get());
@@ -1716,11 +1725,12 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
     }
     else if (geoType == SFAPolyhedralSurface::TYPE_NAME)
     {
-        SFAPolyhedralSurface* p = (SFAPolyhedralSurface*) g;
+        auto p = dynamic_cast<SFAPolyhedralSurface*>(g);
         std::vector<XMLElem> polyElem;
         elem->getElementsByTagName("Patch", polyElem);
-        p->patches.resize(polyElem.size());
-        for (size_t i = 0, size = polyElem.size(); i < size; ++i)
+        const auto size = polyElem.size();
+        p->patches.resize(size);
+        for (size_t i = 0; i < size; ++i)
         {
             p->patches[i].reset(new SFAPolygon());
             parseSFAGeometryFromXML(polyElem[i], p->patches[i].get());
@@ -1728,11 +1738,12 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
     }
     else if (geoType == SFAMultiPolygon::TYPE_NAME)
     {
-        SFAMultiPolygon* p = (SFAMultiPolygon*) g;
+        auto p = dynamic_cast<SFAMultiPolygon*>(g);
         std::vector<XMLElem> polyElem;
         elem->getElementsByTagName("Element", polyElem);
-        p->elements.resize(polyElem.size());
-        for (size_t i = 0, size = polyElem.size(); i < size; ++i)
+        const auto size = polyElem.size();
+        p->elements.resize(size);
+        for (size_t i = 0; i < size; ++i)
         {
             p->elements[i].reset(new SFAPolygon());
             parseSFAGeometryFromXML(polyElem[i], p->elements[i].get());
@@ -1740,11 +1751,12 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
     }
     else if (geoType == SFAMultiLineString::TYPE_NAME)
     {
-        SFAMultiLineString* p = (SFAMultiLineString*) g;
+        auto p = dynamic_cast<SFAMultiLineString*>(g);
         std::vector<XMLElem> lineElem;
         elem->getElementsByTagName("Element", lineElem);
-        p->elements.resize(lineElem.size());
-        for (size_t i = 0, size = lineElem.size(); i < size; ++i)
+        const auto size = lineElem.size();
+        p->elements.resize(size);
+        for (size_t i = 0; i < size; ++i)
         {
             p->elements[i].reset(new SFALineString());
             parseSFAGeometryFromXML(lineElem[i], p->elements[i].get());
@@ -1752,11 +1764,12 @@ void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, S
     }
     else if (geoType == SFAMultiPoint::TYPE_NAME)
     {
-        SFAMultiPoint* p = (SFAMultiPoint*) g;
+        auto p = dynamic_cast<SFAMultiPoint*>(g);
         std::vector<XMLElem> vElem;
         elem->getElementsByTagName("Vertex", vElem);
+        const auto size = vElem.size();
         p->vertices.resize(vElem.size());
-        for (size_t i = 0, size = vElem.size(); i < size; ++i)
+        for (size_t i = 0; i < size; ++i)
         {
             p->vertices[i].reset(new SFAPoint());
             parseSFAGeometryFromXML(vElem[i], p->vertices[i].get());
@@ -1834,13 +1847,13 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
                 || geoType == SFALinearRing::TYPE_NAME
                 || geoType == SFALineString::TYPE_NAME)
     {
-        geoElem = createSFALine(geoType, (SFALineString*) g, parent);
+        geoElem = createSFALine(geoType, dynamic_cast<const SFALineString*>(g), parent);
     }
     else if (geoType == SFAPolygon::TYPE_NAME)
     {
         geoElem = newElement("Polygon", getDefaultURI(), parent);
 
-        SFAPolygon* p = (SFAPolygon*) g;
+        auto p = dynamic_cast<const SFAPolygon*>(g);
 
         // one to unbounded
         for (size_t ii = 0; ii < p->rings.size(); ++ii)
@@ -1852,7 +1865,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
     {
         geoElem = newElement("PolyhedralSurface", getDefaultURI(), parent);
 
-        SFAPolyhedralSurface* p = (SFAPolyhedralSurface*) g;
+        auto p = dynamic_cast<const SFAPolyhedralSurface*>(g);
 
         for (size_t ii = 0; ii < p->patches.size(); ++ii)
         {
@@ -1867,7 +1880,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
     {
         geoElem = newElement("MultiPolygon", getDefaultURI(), parent);
 
-        SFAMultiPolygon* p = (SFAMultiPolygon*) g;
+        auto p = dynamic_cast<const SFAMultiPolygon*>(g);
 
         // optional to unbounded
         for (size_t ii = 0; ii < p->elements.size(); ++ii)
@@ -1883,7 +1896,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
     {
         geoElem = newElement("MultiLineString", getDefaultURI(), parent);
 
-        SFAMultiLineString* p = (SFAMultiLineString*) g;
+        auto p = dynamic_cast<const SFAMultiLineString*>(g);
 
         // optional to unbounded
         for (size_t ii = 0; ii < p->elements.size(); ++ii)
@@ -1900,7 +1913,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
     {
         geoElem = newElement("MultiPoint", getDefaultURI(), parent);
 
-        SFAMultiPoint* p = (SFAMultiPoint*) g;
+        auto p = dynamic_cast<const SFAMultiPoint*>(g);
 
         // error check the vertices
         if (p->vertices.size() < 2)
