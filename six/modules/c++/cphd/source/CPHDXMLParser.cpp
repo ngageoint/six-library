@@ -91,9 +91,9 @@ std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(
     {
         toXML(*(metadata.productInfo), root);
     }
-    for (size_t ii = 0; ii < metadata.geoInfo.size(); ++ii)
+    for (const auto& geoInfo : metadata.geoInfo)
     {
-        toXML(metadata.geoInfo[ii], root);
+        toXML(geoInfo, root);
     }
     if (metadata.matchInfo.get())
     {

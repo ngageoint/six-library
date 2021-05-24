@@ -163,15 +163,15 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
 
         size_t numSIDD = 0;
         const std::vector< csm::Des>& desList(isd.fileDess());
-        for (size_t ii = 0; ii < desList.size(); ++ii)
+        for (const auto& desListItem : desList)
         {
-            DataType dataType = getDataType(desList[ii]);
+            DataType dataType = getDataType(desListItem);
             if (dataType != DataType::DERIVED)
             {
                 continue;
             }
 
-            const std::string& desData(desList[ii].data());
+            const std::string& desData(desListItem.data());
 
             if (!desData.empty())
             {
@@ -242,9 +242,9 @@ bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
     xml::lite::MinidomParser domParser;
 
     const std::vector< csm::Des>& desList(isd.fileDess());
-    for (size_t ii = 0; ii < desList.size(); ++ii)
+    for (const auto& desListItem : desList)
     {
-        const std::string& desData(desList[ii].data());
+        const std::string& desData(desListItem.data());
 
         if (!desData.empty())
         {
