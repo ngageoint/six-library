@@ -53,6 +53,9 @@ struct ConvertingReadControl : public ReadControl
      */
     ConvertingReadControl(const std::vector<std::string>& pluginPathnames);
 
+    ConvertingReadControl(const ConvertingReadControl&) = delete;
+    ConvertingReadControl& operator=(const ConvertingReadControl&) = delete;
+
     /*!
      * Read whether a file has COMPLEX or DERIVED data
      * \param pathname path to file

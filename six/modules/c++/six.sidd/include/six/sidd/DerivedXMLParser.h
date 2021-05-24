@@ -215,10 +215,10 @@ protected:
             const xml::lite::Element* coorSysElem,
             SFAGeographicCoordinateSystem* coordSys) const;
     void parseDatum(const xml::lite::Element* datumElem, SFADatum& datum) const;
-    XMLElem parsePolynomialProjection(const xml::lite::Element* projElem, Measurement& measurement) const;
-    XMLElem parseGeographicProjection(const xml::lite::Element* projElem, Measurement& measurement) const;
-    XMLElem parsePlaneProjection(const xml::lite::Element* projElem, Measurement& measurement) const;
-    XMLElem parseCylindricalProjection(const xml::lite::Element* projElem, Measurement& measurement) const;
+    XMLElem parsePolynomialProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parseGeographicProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parsePlaneProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parseCylindricalProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
 
     static
     std::string versionToURI(const std::string& version)

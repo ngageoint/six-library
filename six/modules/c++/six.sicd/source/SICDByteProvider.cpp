@@ -33,8 +33,7 @@ SICDByteProvider::SICDByteProvider(
         size_t maxProductSize)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-                           new six::XMLControlCreatorT<ComplexXMLControl>());
+    xmlRegistry.addCreator<ComplexXMLControl>();
 
     mem::SharedPtr<Container> container(new Container(
             DataType::COMPLEX));

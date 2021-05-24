@@ -57,19 +57,18 @@ TRE& TRE::operator=(NITF_DATA* x)
     return *this;
 }
 
-TRE::TRE(const char* tag, const char* id)
-    : TRE(nitf_TRE_construct(tag, (::strlen(id) > 0) ? id : nullptr, & error))
+TRE::TRE(const char* tag, const char* id) : TRE(tag, id, nullptr)
 {
-    setManaged(false);
 }
 TRE::TRE(const char* tag) : TRE(tag, "")
 {
 }
-TRE::TRE(const std::string& tag) : TRE(tag.c_str())
+TRE::TRE(const std::string& tag) : TRE(tag, "")
 {
 }
-TRE::TRE(const std::string& tag, const std::string& id) : TRE(tag.c_str(), id.c_str())
+TRE::TRE(const std::string& tag, const std::string& id, std::nullptr_t) : TRE(create(tag, id, error))
 {
+    setManaged(false);
 }
 
 nitf::TRE TRE::clone() const
@@ -186,6 +185,21 @@ std::string TRE::truncate(const std::string& value, size_t maxDigits) const
     return value;
 }
 
+static NITF_BOOL TRE_setField(nitf_TRE* tre,
+    const std::string& tag,
+    const NITF_DATA* data,
+    size_t dataLength, nitf_Error& error)
+{
+    return nitf_TRE_setField(tre, tag.c_str(), const_cast<NITF_DATA*>(data), dataLength, &error);
+}
+static NITF_BOOL TRE_setField(nitf_TRE* tre,
+    const std::string& tag,
+    const std::string& data,
+    nitf_Error& error)
+{
+    return TRE_setField(tre, tag, data.c_str(), data.size(), error);
+}
+
 void TRE::setField(const std::string& key, const std::string& strValue, NITF_DATA* data, size_t dataLength, bool forceUpdate)
 {
     const nitf_Field* const field = nitf_TRE_getField(getNative(), key.c_str());
@@ -197,10 +211,10 @@ void TRE::setField(const std::string& key, const std::string& strValue, NITF_DAT
     }
     if (field->type == NITF_BINARY)
     {
-        if (!nitf_TRE_setField(getNative(),
-            key.c_str(),
+        if (!TRE_setField(getNative(),
+            key,
             data, dataLength,
-            &error))
+            error))
         {
             throw NITFException(&error);
         }
@@ -208,11 +222,10 @@ void TRE::setField(const std::string& key, const std::string& strValue, NITF_DAT
     else
     {
         std::string s = truncate(strValue, field->length);
-        if (!nitf_TRE_setField(getNative(),
-            key.c_str(),
-            (NITF_DATA*)s.c_str(),
-            s.size(),
-            &error))
+        if (!TRE_setField(getNative(),
+            key,
+            s,
+            error))
         {
             throw NITFException(&error);
         }
@@ -227,10 +240,11 @@ void TRE::setField(const std::string& key, const std::string& strValue, NITF_DAT
 
 nitf_TRE* TRE::create(const std::string& tag, const std::string& id, nitf_Error& error)
 {
-    return nitf_TRE_construct(tag.c_str(), id.c_str(), &error);
+    const auto pId = id.empty() ? nullptr : id.c_str();
+    return nitf_TRE_construct(tag.c_str(), pId, &error);
 }
 
 bool TRE::setField(nitf_TRE* tre, const std::string& tag, const std::string& data, nitf_Error& error)
 {
-    return nitf_TRE_setField(tre, tag.c_str(), const_cast<char*>(data.c_str()), data.size(), &error);
+    return TRE_setField(tre, tag, data, error);
 }

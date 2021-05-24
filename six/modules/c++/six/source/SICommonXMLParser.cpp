@@ -377,6 +377,16 @@ void SICommonXMLParser::parsePoly2D(const xml::lite::Element* polyXML, Poly2D& p
     }
     poly2D = p2D;
 }
+bool SICommonXMLParser::parseOptionalPoly2D(const xml::lite::Element* parent, const std::string& tag, Poly2D& value) const
+{
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
+    {
+        parsePoly2D(element, value);
+        return true;
+    }
+    return false;
+}
+
 
 XMLElem SICommonXMLParser::createPoly2D(const std::string& name,
         const std::string& uri, const Poly2D& poly2D, XMLElem parent) const

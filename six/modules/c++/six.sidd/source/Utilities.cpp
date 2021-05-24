@@ -27,24 +27,21 @@ namespace
 {
 double getCenterTime(const six::sidd::DerivedData& derived)
 {
-    double centerTime;
     if (derived.measurement->projection->isMeasurable())
     {
         const six::sidd::MeasurableProjection* const projection =
-            static_cast<const six::sidd::MeasurableProjection*>(
+            dynamic_cast<const six::sidd::MeasurableProjection*>(
                         derived.measurement->projection.get());
 
-        centerTime = projection->timeCOAPoly(0, 0);
+        return projection->timeCOAPoly(0, 0);
     }
     else
     {
         // we estimate...
-        centerTime = derived.exploitationFeatures->collections[0]
+        return derived.exploitationFeatures->collections[0]
                              ->information.collectionDuration /
                 2;
     }
-
-    return centerTime;
 }
 
 namespace
@@ -57,7 +54,7 @@ void getErrors(const six::sidd::DerivedData& data, scene::Errors& errors)
     }
 
     const six::sidd::MeasurableProjection* const projection =
-        static_cast<const six::sidd::MeasurableProjection*>(
+        dynamic_cast<const six::sidd::MeasurableProjection*>(
                     data.measurement->projection.get());
 
     six::getErrors(data.errorStatistics.get(),
@@ -101,19 +98,19 @@ mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
     const double centerTime = getCenterTime(*derived);
 
     // compute arpPos and arpVel
-    six::Vector3 arpPos = derived->measurement->arpPoly(centerTime);
-    six::Vector3 arpVel =
+    const six::Vector3 arpPos = derived->measurement->arpPoly(centerTime);
+    const six::Vector3 arpVel =
             derived->measurement->arpPoly.derivative()(centerTime);
-    six::Vector3 refPt = derived->measurement->projection->referencePoint.ecef;
+    const six::Vector3 refPt = derived->measurement->projection->referencePoint.ecef;
 
-    six::Vector3 rowVec;
-    six::Vector3 colVec;
+    six::Vector3 rowVec{};
+    six::Vector3 colVec{};
 
     if (derived->measurement->projection->projectionType ==
         six::ProjectionType::POLYNOMIAL)
     {
         const six::sidd::PolynomialProjection* projection =
-            static_cast<const six::sidd::PolynomialProjection*>(
+            dynamic_cast<const six::sidd::PolynomialProjection*>(
                         derived->measurement->projection.get());
 
         const auto cR = projection->referencePoint.rowCol.row;
@@ -132,7 +129,7 @@ mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
              six::ProjectionType::PLANE)
     {
         const six::sidd::PlaneProjection* projection =
-            static_cast<const six::sidd::PlaneProjection*>(
+            dynamic_cast<const six::sidd::PlaneProjection*>(
                         derived->measurement->projection.get());
 
         rowVec = projection->productPlane.rowUnitVector;
@@ -169,7 +166,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
     }
 
     const six::sidd::MeasurableProjection* p =
-        static_cast<const six::sidd::MeasurableProjection*>(
+        dynamic_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
     mem::auto_ptr<scene::GridECEFTransform> transform;
@@ -179,7 +176,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
     case six::ProjectionType::PLANE:
     {
         const six::sidd::PlaneProjection* const planeP =
-            static_cast<const six::sidd::PlaneProjection*>(p);
+            dynamic_cast<const six::sidd::PlaneProjection*>(p);
 
         transform.reset(new scene::PlanarGridECEFTransform(
                 p->sampleSpacing,
@@ -259,7 +256,7 @@ mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
     }
 
     const six::sidd::MeasurableProjection* p =
-        static_cast<const six::sidd::MeasurableProjection*>(
+        dynamic_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
     mem::auto_ptr<scene::GridGeometry> geom;
@@ -270,7 +267,7 @@ mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
     case six::ProjectionType::PLANE:
     {
         const six::sidd::PlaneProjection* const planeP =
-            static_cast<const six::sidd::PlaneProjection*>(p);
+            dynamic_cast<const six::sidd::PlaneProjection*>(p);
 
         geom.reset(new scene::PlanarGridGeometry(
                 planeP->productPlane.rowUnitVector,
@@ -299,9 +296,9 @@ void Utilities::setProductValues(Poly2D timeCOAPoly,
 {
     const double scpTime = timeCOAPoly(0, 0);
 
-    Vector3 arpPos = arpPoly(scpTime);
+    const Vector3 arpPos = arpPoly(scpTime);
     PolyXYZ arpVelPoly = arpPoly.derivative();
-    Vector3 arpVel = arpVelPoly(scpTime);
+    const Vector3 arpVel = arpVelPoly(scpTime);
 
     setProductValues(arpVel, arpPos, ref.ecef, row, col, res, product);
 }
@@ -338,9 +335,9 @@ void Utilities::setCollectionValues(Poly2D timeCOAPoly,
 {
     const double scpTime = timeCOAPoly(0, 0);
 
-    Vector3 arpPos = arpPoly(scpTime);
+    const Vector3 arpPos = arpPoly(scpTime);
     PolyXYZ arpVelPoly = arpPoly.derivative();
-    Vector3 arpVel = arpVelPoly(scpTime);
+    const Vector3 arpVel = arpVelPoly(scpTime);
 
     setCollectionValues(arpVel, arpPos, ref.ecef, row, col, collection);
 }
@@ -480,7 +477,7 @@ mem::auto_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     case six::ProjectionType::PLANE:
     {
         const six::sidd::PlaneProjection* const plane =
-            static_cast<six::sidd::PlaneProjection*>(
+            dynamic_cast<six::sidd::PlaneProjection*>(
                         data->measurement->projection.get());
 
         projModel.reset(new scene::PlaneProjectionModel(
@@ -497,7 +494,7 @@ mem::auto_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     case six::ProjectionType::GEOGRAPHIC:
     {
         const six::sidd::MeasurableProjection* const geo =
-            static_cast<six::sidd::MeasurableProjection*>(
+            dynamic_cast<six::sidd::MeasurableProjection*>(
                         data->measurement->projection.get());
 
         projModel.reset(
@@ -528,8 +525,7 @@ mem::auto_ptr<DerivedData> Utilities::parseData(
         logging::Logger& log)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(DataType::DERIVED,
-                           new XMLControlCreatorT<DerivedXMLControl>());
+    xmlRegistry.addCreator<DerivedXMLControl>();
 
     mem::auto_ptr<Data> data(
 			       six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
@@ -564,8 +560,7 @@ std::string Utilities::toXMLString(const DerivedData& data,
                                    logging::Logger* logger)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(DataType::DERIVED,
-                           new XMLControlCreatorT<DerivedXMLControl>());
+    xmlRegistry.addCreator<DerivedXMLControl>();
 
     logging::NullLogger nullLogger;
     return ::six::toValidXMLString(&data,

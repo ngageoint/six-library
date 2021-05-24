@@ -21,6 +21,7 @@
  */
 
 #include <nitf/CompressionInterface.hpp>
+#include <nitf/Utils.hpp>
 
 using namespace nitf;
 
@@ -42,13 +43,13 @@ NITF_BOOL CompressionInterface::adapterStart(
     }
     catch (const except::Exception& ex)
     {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
+        Utils::error_init(error, ex.getMessage(), NRT_CTXT,
                        NRT_ERR_COMPRESSION);
         return NRT_FAILURE;
     }
     catch (const std::exception& ex)
     {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
+        Utils::error_init(error, ex, NRT_CTXT,
                        NRT_ERR_COMPRESSION);
         return NRT_FAILURE;
     }
@@ -80,13 +81,13 @@ NITF_BOOL CompressionInterface::adapterWriteBlock(
     }
     catch (const except::Exception& ex)
     {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
+        Utils::error_init(error, ex.getMessage(), NRT_CTXT,
                        NRT_ERR_COMPRESSION);
         return NRT_FAILURE;
     }
     catch (const std::exception& ex)
     {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
+        Utils::error_init(error, ex, NRT_CTXT,
                        NRT_ERR_COMPRESSION);
         return NRT_FAILURE;
     }
@@ -123,13 +124,13 @@ NITF_BOOL CompressionInterface::adapterEnd(
     }
     catch (const except::Exception& ex)
     {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
+        Utils::error_init(error, ex.getMessage(), NRT_CTXT,
                        NRT_ERR_COMPRESSION);
         return NRT_FAILURE;
     }
     catch (const std::exception& ex)
     {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
+        Utils::error_init(error, ex, NRT_CTXT,
                        NRT_ERR_COMPRESSION);
         return NRT_FAILURE;
     }

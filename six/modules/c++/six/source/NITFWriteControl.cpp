@@ -172,7 +172,7 @@ bool NITFWriteControl::shouldByteSwap() const
     if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {
         // Have to if it's not a BE machine
-        const auto endianness = std::endian::native;
+        static auto endianness = std::endian::native;
         return endianness == std::endian::little;
     }
     else

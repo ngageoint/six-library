@@ -168,14 +168,14 @@ public:
     MatrixMxN<_ND, 1, _T>& matrix() { return mRaw; }
     const MatrixMxN<_ND, 1, _T>& matrix() const { return mRaw; }
 
-    inline _T operator[](size_t i) const
+    inline _T operator[](size_t i) const noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _ND );
 #endif
         return mRaw[i][0];
     }
-    inline _T& operator[](size_t i)
+    inline _T& operator[](size_t i) noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _ND );

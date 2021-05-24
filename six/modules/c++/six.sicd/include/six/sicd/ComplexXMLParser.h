@@ -187,7 +187,7 @@ private:
     XMLElem convertAntennaToXML(const Antenna *obj,
                                 XMLElem parent = nullptr) const;
     XMLElem convertAntennaParametersToXML(const std::string& name,
-                                          AntennaParameters *ap,
+                                          const AntennaParameters *ap,
                                           XMLElem parent = nullptr) const;
 
     XMLElem areaLineDirectionParametersToXML(const std::string& name,

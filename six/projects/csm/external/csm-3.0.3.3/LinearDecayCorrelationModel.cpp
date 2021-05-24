@@ -160,7 +160,6 @@ double LinearDecayCorrelationModel::getCorrelationCoefficient(
 
    // compute the value of the correlation coefficient
    const Parameters& cp = theCorrParams[cpGroupIndex];
-   const size_t size = cp.theInitialCorrsPerSegment.size();
 
    const double adt = fabs(deltaTime);
    double prevCorr = cp.theInitialCorrsPerSegment[0];
@@ -168,7 +167,7 @@ double LinearDecayCorrelationModel::getCorrelationCoefficient(
 
    double correlation = prevCorr;
 
-   for(size_t s = 1; s < size; ++s)
+   for(size_t s = 1; s < cp.theInitialCorrsPerSegment.size(); ++s)
    {
       const double corr = cp.theInitialCorrsPerSegment[s];
       const double time = cp.theTimesPerSegment[s];

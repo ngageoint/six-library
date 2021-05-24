@@ -212,17 +212,17 @@ public:
               size_t lastSample,
               size_t numThreads,
               mem::ScopedArray<sys::ubyte>& data) const;
-    void read(size_t channel,
+    std::unique_ptr<std::byte[]>read(size_t channel,
               size_t firstVector,
               size_t lastVector,
               size_t firstSample,
               size_t lastSample,
-              size_t numThreads,
-              std::unique_ptr<std::byte[]>& data) const
+              size_t numThreads) const
     {
-        mem::ScopedArray<sys::ubyte> data_;
-        read(channel, firstVector, lastVector, firstSample, lastSample, numThreads, data_);
-        data.reset(reinterpret_cast<std::byte*>(data_.release()));
+        mem::ScopedArray<sys::ubyte> data;
+        read(channel, firstVector, lastVector, firstSample, lastSample, numThreads, data);
+
+        return std::unique_ptr<std::byte[]>(reinterpret_cast<std::byte*>(data.release()));
     }
 
     /*!
