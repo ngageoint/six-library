@@ -132,6 +132,13 @@ public:
         addCreator(dataType, std::move(scopedCreator));
     }
 
+    template<typename TXMLControlCreator>
+    void addCreator()
+    {
+        auto scopedCreator = std::make_unique<XMLControlCreatorT<TXMLControlCreator>>();
+        addCreator(TXMLControlCreator::dataType, std::move(scopedCreator));
+    }
+
     /*!
      *  Method to create a new XMLControl from a string.
      *  The created control must be deleted by the caller.

@@ -41,7 +41,7 @@ SlantPlanePixelTransformer::SlantPlanePixelTransformer(
     const scene::ProjectionModel& projection) :
     mGeom(geom),
     mProjection(projection),
-    mSicdData(*static_cast<six::sicd::ComplexData*>(data.clone())),
+    mSicdData(*dynamic_cast<six::sicd::ComplexData*>(data.clone())),
     mGroundPlaneNormal(mGeom.getReferencePosition())
 {
     mGroundPlaneNormal.normalize();

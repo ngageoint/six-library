@@ -36,8 +36,10 @@ const char SICDMeshes::OUTPUT_PLANE_MESH_ID[] = "Output_Plane_Mesh";
 const char SICDMeshes::NOISE_MESH_ID[] = "Noise_Mesh";
 const char SICDMeshes::SCALAR_MESH_ID[] = "Scalar Mesh";
 
+static std::endian endianness = std::endian::native;
+
 PlanarCoordinateMesh::PlanarCoordinateMesh(const std::string& name):
-    mSwapBytes(std::endian::native == std::endian::little),
+    mSwapBytes(endianness == std::endian::little),
     mName(name)
 {
 }
@@ -47,7 +49,7 @@ PlanarCoordinateMesh::PlanarCoordinateMesh(
     const types::RowCol<size_t>& meshDims,
     const std::vector<double>& x,
     const std::vector<double>& y):
-    mSwapBytes(std::endian::native == std::endian::little),
+    mSwapBytes(endianness == std::endian::little),
     mName(name),
     mMeshDims(meshDims),
     mX(x),

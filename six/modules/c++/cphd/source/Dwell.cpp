@@ -62,13 +62,13 @@ std::ostream& operator<< (std::ostream& os, const Dwell& d)
     os << "Dwell:: \n"
         << "  NumCODTimes      : " << d.cod.size() << "\n"
         << "  NumDwellTimes    : " << d.dtime.size() << "\n";
-    for (size_t ii = 0; ii < d.cod.size(); ++ii)
+    for (const auto& cod : d.cod)
     {
-        os << d.cod[ii] << "\n";
+        os << cod << "\n";
     }
-    for (size_t ii = 0; ii < d.dtime.size(); ++ii)
+    for (const auto& dtime : d.dtime)
     {
-        os << d.dtime[ii] << "\n";
+        os << dtime << "\n";
     }
     return os;
 }

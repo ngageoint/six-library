@@ -148,7 +148,7 @@ void cropSIDD(const std::string& inPathname,
         if (dataPtr->getDataType() == six::DataType::DERIVED)
         {
             six::sidd::DerivedData* const data =
-                static_cast<six::sidd::DerivedData*>(dataPtr);
+                dynamic_cast<six::sidd::DerivedData*>(dataPtr);
 
             // Make sure the AOI is in bounds
             const types::RowCol<size_t> origDims(data->getNumRows(),

@@ -21,6 +21,7 @@
  */
 
 #include <string>
+#include <vector>
 
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
@@ -158,7 +159,7 @@ void six::sidd::GeoTIFFReadControl::load(
 
         // Get the associated XML control
         const std::string rootName(doc->getRootElement()->getQName());
-        six::XMLControl *xmlControl;
+        six::XMLControl* xmlControl = nullptr;
         if (rootName == "SIDD")
         {
             if (siddXMLControl.get() == nullptr)
@@ -210,23 +211,23 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     tiff::ImageReader *imReader = mReader[static_cast<sys::Uint32_T>(imIndex)];
     tiff::IFD *ifd = imReader->getIFD();
 
-    auto numRowsTotal = ifd->getImageLength();
-    auto numColsTotal = ifd->getImageWidth();
-    auto elemSize = ifd->getElementSize();
+    const auto numRowsTotal = ifd->getImageLength();
+    const auto numColsTotal = ifd->getImageWidth();
+    const auto elemSize = ifd->getElementSize();
 
     if (region.getNumRows() == -1)
         region.setNumRows(numRowsTotal);
     if (region.getNumCols() == -1)
         region.setNumCols(numColsTotal);
 
-    auto numRowsReq = region.getNumRows();
-    auto numColsReq = region.getNumCols();
+    const auto numRowsReq = region.getNumRows();
+    const auto numColsReq = region.getNumCols();
 
-    auto startRow = region.getStartRow();
-    auto startCol = region.getStartCol();
+    const auto startRow = region.getStartRow();
+    const auto startCol = region.getStartCol();
 
-    auto extentRows = startRow + numRowsReq;
-    auto extentCols = startCol + numColsReq;
+    const auto extentRows = startRow + numRowsReq;
+    const auto extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
     {
@@ -254,9 +255,8 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     }
     else
     {
-        const std::unique_ptr<std::byte[]>
-            scopedRowBuf(new std::byte[numColsTotal * elemSize]);
-        std::byte* const rowBuf(scopedRowBuf.get());
+        std::vector<std::byte> scopedRowBuf(numColsTotal * elemSize);
+        std::byte* const rowBuf(scopedRowBuf.data());
 
         //        // skip past rows
         //        for (size_t i = 0; i < startRow; ++i)
@@ -269,13 +269,13 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
             auto rowBuf_ = reinterpret_cast<unsigned char*>(rowBuf);
             // possibly skip past some cols
             if (startCol > 0)
-                imReader->getData(rowBuf_, static_cast<sys::Uint32_T>(startCol));
-            imReader->getData(rowBuf_, static_cast<sys::Uint32_T>(numColsReq));
+                imReader->getData(rowBuf_, static_cast<uint32_t>(startCol));
+            imReader->getData(rowBuf_, static_cast<uint32_t>(numColsReq));
             memcpy(buffer + offset, rowBuf, static_cast<size_t>(numColsReq * elemSize));
             offset += numColsReq * elemSize;
             // more skipping..
             if (extentCols < numColsTotal)
-                imReader->getData(rowBuf_, static_cast<sys::Uint32_T>(numColsTotal - extentCols));
+                imReader->getData(rowBuf_, static_cast<uint32_t>(numColsTotal - extentCols));
         }
     }
     return buffer;

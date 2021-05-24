@@ -27,6 +27,8 @@
 #include <limits>
 #include <string>
 
+#include <std/memory>
+
 #include <scene/sys_Conf.h>
 #include <import/except.h>
 #include <import/mem.h>
@@ -364,7 +366,7 @@ struct LUT
 
     virtual LUT* clone() const
     {
-        return new LUT(getTable(), numEntries, elementSize);
+        return std::make_unique<LUT>(getTable(), numEntries, elementSize).release();
     }
 };
 
@@ -398,14 +400,14 @@ struct AmplitudeTable final : public LUT
     }
     AmplitudeTable* clone() const
     {
-        AmplitudeTable* ret = new AmplitudeTable();
+        auto ret = std::make_unique<AmplitudeTable>();
         for (size_t ii = 0; ii < numEntries; ++ii)
         {
             const void* this_ii = (*this)[ii];
             void* ret_ii = (*ret)[ii];
             *static_cast<double*>(ret_ii) = *static_cast<const double*>(this_ii);
         }
-        return ret;
+        return ret.release();
     }
 };
 

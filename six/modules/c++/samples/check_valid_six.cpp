@@ -197,12 +197,8 @@ static int main_(int argc, char** argv)
     // The reason to do this is to avoid adding XMLControlCreators to the
     // XMLControlFactory singleton - this way has more fine-grained control
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-                            new six::XMLControlCreatorT<
-                                    six::sicd::ComplexXMLControl>());
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-                            new six::XMLControlCreatorT<
-                                    six::sidd::DerivedXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     str::upper(level);
     str::trim(level);

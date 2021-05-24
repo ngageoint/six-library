@@ -136,6 +136,7 @@ public:
 
     void parsePoly1D(const xml::lite::Element* polyXML, Poly1D& poly1D) const;
     void parsePoly2D(const xml::lite::Element* polyXML, Poly2D& poly2D) const;
+    bool parseOptionalPoly2D(const xml::lite::Element*, const std::string&, Poly2D&) const;
     void parsePolyXYZ(const xml::lite::Element* polyXML, PolyXYZ& polyXYZ) const;
 
     void parseVector2D(const xml::lite::Element* vecXML, Vector2& vec) const;
