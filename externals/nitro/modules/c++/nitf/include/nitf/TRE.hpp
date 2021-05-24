@@ -24,6 +24,8 @@
 #define __NITF_TRE_HPP__
 
 #include <string>
+#include <cstddef>
+
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/Pair.hpp"
@@ -194,7 +196,7 @@ DECLARE_CLASS(TRE)
 
     TRE(const std::string& tag);
 
-    TRE(const std::string& tag, const std::string& id);
+    TRE(const std::string& tag, const std::string& id, std::nullptr_t = nullptr);
 
     // for unit-tests
     static nitf_TRE* create(const std::string & tag, const std::string & id, nitf_Error& error);

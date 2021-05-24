@@ -157,7 +157,7 @@ std::string join(std::vector<T> toks, std::string with)
     if (toks.empty())
         return "";
 
-    int len = (int)toks.size();
+    const auto len = static_cast<int>(toks.size());
     std::ostringstream oss;
     int i = 0;
     for (; i < len - 1; i++)

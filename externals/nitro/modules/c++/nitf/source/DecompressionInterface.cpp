@@ -22,6 +22,7 @@
 
 #include <nitf/DecompressionInterface.hpp>
 #include <nitf/BlockingInfo.hpp>
+#include <nitf/Utils.hpp>
 
 using namespace nitf;
 
@@ -49,13 +50,13 @@ NITF_BOOL DecompressionInterface::adapterStart(
     }
     catch (const except::Exception& ex)
     {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
+        Utils::error_init(error, ex.getMessage(), NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
         return NRT_FAILURE;
     }
     catch (const std::exception& ex)
     {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
+        Utils::error_init(error, ex, NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
         return NRT_FAILURE;
     }
@@ -80,13 +81,13 @@ uint8_t* DecompressionInterface::adapterReadBlock(
     }
     catch (const except::Exception& ex)
     {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
+        Utils::error_init(error, ex.getMessage(), NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
         return nullptr;
     }
     catch (const std::exception& ex)
     {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
+        Utils::error_init(error, ex, NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
         return nullptr;
     }
@@ -110,13 +111,13 @@ NITF_BOOL DecompressionInterface::adapterFreeBlock(
     }
     catch (const except::Exception& ex)
     {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
+        Utils::error_init(error, ex.getMessage(), NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
         return NRT_FAILURE;
     }
     catch (const std::exception& ex)
     {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
+        Utils::error_init(error, ex, NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
         return NRT_FAILURE;
     }
