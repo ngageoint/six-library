@@ -21,6 +21,7 @@
  */
 
 #include "nitf/BandSource.hpp"
+#include "nitf/Utils.hpp"
 
 #include "gsl/gsl.h"
 
@@ -95,18 +96,16 @@ NITF_BOOL nitf::RowSource::nextRow(void* algorithm,
     }
     catch (const except::Exception &ex)
     {
-        nitf_Error_initf(error,
+        Utils::error_init(error, ex.getMessage(),
                          NITF_CTXT,
-                         NITF_ERR_READING_FROM_FILE,
-                         ex.getMessage().c_str());
+                         NITF_ERR_READING_FROM_FILE);
         return NITF_FAILURE;
     }
     catch (const std::exception &ex)
     {
-        nitf_Error_initf(error,
+        Utils::error_init(error, ex,
                          NITF_CTXT,
-                         NITF_ERR_READING_FROM_FILE,
-                         ex.what());
+                         NITF_ERR_READING_FROM_FILE);
         return NITF_FAILURE;
     }
     catch (...)
@@ -151,18 +150,16 @@ NITF_BOOL nitf::DirectBlockSource::nextBlock(void* callback,
     }
     catch (const except::Exception &ex)
     {
-        nitf_Error_initf(error,
+        Utils::error_init(error, ex.getMessage(),
                          NITF_CTXT,
-                         NITF_ERR_READING_FROM_FILE,
-                         ex.getMessage().c_str());
+                         NITF_ERR_READING_FROM_FILE);
         return NITF_FAILURE;
     }
     catch (const std::exception &ex)
     {
-        nitf_Error_initf(error,
+        Utils::error_init(error, ex,
                          NITF_CTXT,
-                         NITF_ERR_READING_FROM_FILE,
-                         ex.what());
+                         NITF_ERR_READING_FROM_FILE);
         return NITF_FAILURE;
     }
     catch (...)

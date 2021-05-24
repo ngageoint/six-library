@@ -24,6 +24,7 @@
 #define __NITF_UTILS_HPP__
 
 #include <string>
+#include <exception>
 
 #include "nitf/System.hpp"
 #include "nitf/exports.hpp"
@@ -42,6 +43,13 @@ namespace Utils
     extern NITRO_NITFCPP_API double geographicToDecimal(int degrees, int minutes, double seconds) noexcept;
 
     extern NITRO_NITFCPP_API char cornersTypeAsCoordRep(nitf::CornersType type) noexcept;
+
+    extern NITRO_NITFCPP_API void error_init(nrt_Error& error, const std::string& message,
+        const char* file, int line, const char* func, int level);
+    extern NITRO_NITFCPP_API void error_init(nrt_Error* error, const std::string& message,
+        const char* file, int line, const char* func, int level);
+    extern NITRO_NITFCPP_API void error_init(nrt_Error* error, const std::exception&,
+        const char* file, int line, const char* func, int level);
 };
 
 }
