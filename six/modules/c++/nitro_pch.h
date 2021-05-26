@@ -15,6 +15,7 @@
 #pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 #pragma warning(disable: 26455) //	 Default constructor may not throw.Declare it 'noexcept' (f.6).
+#pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
 
 #include <import/str.h>
 #include <import/sys.h>
@@ -79,6 +80,7 @@
 #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 #pragma warning(disable: 26429) // Symbol '...' is never tested for nullness, it can be marked as not_null(f.23).
 #pragma warning(disable: 26400) // Do not assign the result of an allocation or a function call with an owner<T> return value to a raw pointer, use owner<T> instead(i.11).
+#pragma warning(disable: 26467) // Converting from floating point to unsigned integral types results in non-portable code if the double/float has a negative value. Use gsl::narrow_cast or gsl::narrow instead to guard against undefined behavior and potential data loss (es.46).
 #include <import/xml/lite.h>
 
 #pragma warning(pop)
