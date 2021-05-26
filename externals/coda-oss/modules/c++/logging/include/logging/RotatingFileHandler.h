@@ -60,6 +60,7 @@ struct RotatingFileHandler : public StreamHandler
 
     virtual ~RotatingFileHandler();
 
+    RotatingFileHandler(const RotatingFileHandler&) = delete;
     RotatingFileHandler& operator=(const RotatingFileHandler&) = delete;
 };
 }

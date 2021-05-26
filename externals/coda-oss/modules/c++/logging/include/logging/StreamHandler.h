@@ -40,9 +40,8 @@ namespace logging
  * \class StreamHandler
  * \brief Emits LogRecords to an io::OutputStream
  */
-class StreamHandler : public Handler
+struct StreamHandler : public Handler
 {
-public:
     //! Constructs a StreamHandler that uses an io::StandardOutStream
     StreamHandler(LogLevel level = LogLevel::LOG_NOTSET);
 
@@ -52,6 +51,7 @@ public:
 
     virtual ~StreamHandler();
 
+    StreamHandler(const StreamHandler&) = delete;
     StreamHandler& operator=(const StreamHandler&) = delete;
 
     //! adds the need to write epilogue before deleting formatter

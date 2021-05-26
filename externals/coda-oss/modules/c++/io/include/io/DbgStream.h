@@ -55,6 +55,9 @@ struct DbgStream : public OutputStream
 {
     DbgStream() = default;
     virtual ~DbgStream() = default;
+    DbgStream(const DbgStream&) = delete;
+    DbgStream& operator=(const DbgStream&) = delete;
+
 
     /*!
      *  Alternate constructor
