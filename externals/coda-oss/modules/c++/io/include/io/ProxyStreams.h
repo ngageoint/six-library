@@ -30,14 +30,15 @@
 
 namespace io
 {
-class ProxyInputStream: public InputStream
+struct ProxyInputStream: public InputStream
 {
-public:
     ProxyInputStream(InputStream *proxy, bool ownPtr = false) :
         mOwnPtr(ownPtr)
     {
         mProxy.reset(proxy);
     }
+    ProxyInputStream(const ProxyInputStream&) = delete;
+    ProxyInputStream& operator=(const ProxyInputStream&) = delete;
 
     virtual ~ProxyInputStream()
     {

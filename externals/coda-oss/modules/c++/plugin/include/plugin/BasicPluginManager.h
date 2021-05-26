@@ -352,9 +352,15 @@ public:
 
             // Retrieve the plugin identity and add a handler to the registry.
 
-            const void*(*ident)(void) =
-                (const void*(*)(void))
-                dso->retrieve(getPluginIdentName());
+            // Retrieve the plugin identity and add a handler to the registry.
+            #if _MSC_VER
+            __pragma(warning(push))
+            __pragma(warning(disable: 4191)) // '...': unsafe conversion from '...' to '...'
+            #endif
+            auto ident = reinterpret_cast<const void*(*)(void)>(dso->retrieve(getPluginIdentName()));
+            #if _MSC_VER
+            __pragma(warning(pop))
+            #endif
 
             const SharedPluginIdentity* const plugin =
                 static_cast<const SharedPluginIdentity*>((*ident)());
