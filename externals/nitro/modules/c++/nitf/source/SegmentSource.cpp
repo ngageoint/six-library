@@ -60,7 +60,7 @@ SegmentMemorySource::SegmentMemorySource(const std::span<const std::byte>& s, ni
 
 inline std::span<const std::byte> make_span(const std::vector<std::byte>& data)
 {
-    return gsl::make_span(data);
+    return  std::span<const std::byte>(data.data(), data.size());
 }
 SegmentMemorySource::SegmentMemorySource(const std::vector<std::byte>& data,
     nitf::Off start, int byteSkip, bool copyData)
@@ -70,7 +70,7 @@ SegmentMemorySource::SegmentMemorySource(const std::vector<std::byte>& data,
 
 inline std::span<const sys::byte> make_span(const std::vector<sys::byte>& data)
 {
-  return gsl::make_span(data);
+  return std::span<const sys::byte>(data.data(), data.size());
 }
 SegmentMemorySource::SegmentMemorySource(const std::vector<sys::byte>& data,
     nitf::Off start, int byteSkip, bool copyData)
