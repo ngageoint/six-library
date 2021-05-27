@@ -27,6 +27,7 @@
 #include <string>
 #include <memory>
 #include <thread>
+#include <std/span>
 
 #include <nitf/coda-oss.hpp>
 #include <types/RowCol.h>
@@ -98,7 +99,7 @@ std::vector<std::byte> checkCompressedData(const std::string& pathname,
     const cphd::Wideband& wideband = reader.getWideband();
     std::vector<std::byte> readData(dims.area());
 
-    auto data = gsl::make_span(readData.data(), readData.size());
+    std::span<std::byte> data(readData.data(), readData.size());
     for (size_t ii = 0; ii < reader.getMetadata().data.getNumChannels(); ++ii)
     {
         wideband.read(ii, data);
