@@ -29,6 +29,8 @@
 #include <utility>
 #include <limits>
 
+#include "gsl/gsl.h"
+
 namespace types
 {
 
@@ -47,8 +49,8 @@ namespace types
  */
 template<typename T> struct RowCol
 {
-    T row{static_cast<T>(0.0)};
-    T col{static_cast<T>(0.0)};
+    T row{};
+    T col{};
 
     // Try to protect us from the unfortunate and probably
     // unintendet case where row gets set and col doesnt, especially
@@ -61,8 +63,8 @@ template<typename T> struct RowCol
 
     template<typename Other_T> RowCol(const RowCol<Other_T>& p) noexcept
     {
-        row = static_cast<T>(p.row);
-        col = static_cast<T>(p.col);
+        row = gsl::narrow<T>(p.row);
+        col = gsl::narrow<T>(p.col);
     }
 
     RowCol(const std::pair<T, T>& p) noexcept
@@ -75,8 +77,8 @@ template<typename T> struct RowCol
     {
         if (this != reinterpret_cast<const RowCol*>(&p))
         {
-            row = static_cast<T>(p.row);
-            col = static_cast<T>(p.col);
+            row = gsl::narrow<T>(p.row);
+            col = gsl::narrow<T>(p.col);
         }
         return *this;
     }
@@ -91,8 +93,8 @@ template<typename T> struct RowCol
     
     template<typename Other_T> RowCol& operator+=(const RowCol<Other_T>& p) noexcept
     {
-        row += static_cast<T>(p.row);
-        col += static_cast<T>(p.col);
+        row += gsl::narrow<T>(p.row);
+        col += gsl::narrow<T>(p.col);
         return *this;
     }
 
@@ -104,8 +106,8 @@ template<typename T> struct RowCol
 
     template<typename Other_T> RowCol& operator*=(const RowCol<Other_T>& p) noexcept
     {
-        row *= static_cast<T>(p.row);
-        col *= static_cast<T>(p.col);
+        row *= gsl::narrow<T>(p.row);
+        col *= gsl::narrow<T>(p.col);
         return *this;
     }
 
@@ -118,8 +120,8 @@ template<typename T> struct RowCol
     
     template<typename Other_T> RowCol& operator-=(const RowCol<Other_T>& p) noexcept
     {
-        row -= static_cast<T>(p.row);
-        col -= static_cast<T>(p.col);
+        row -= gsl::narrow<T>(p.row);
+        col -= gsl::narrow<T>(p.col);
         return *this;
     }
     
@@ -131,8 +133,8 @@ template<typename T> struct RowCol
 
     template<typename Other_T> RowCol& operator/=(const RowCol<Other_T>& p) noexcept
     {
-        row /= static_cast<T>(p.row);
-        col /= static_cast<T>(p.col);
+        row /= gsl::narrow<T>(p.row);
+        col /= gsl::narrow<T>(p.col);
         return *this;
     }
     

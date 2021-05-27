@@ -55,6 +55,7 @@ struct FileHandler : public StreamHandler
     }
     virtual ~FileHandler() = default;
 
+    FileHandler(const FileHandler&) = delete;
     FileHandler& operator=(const FileHandler&) = delete;
 
 };
