@@ -22,6 +22,9 @@
 
 #include "nitf/ImageReader.hpp"
 
+#undef min
+#undef max
+
 using namespace nitf;
 
 ImageReader::ImageReader(const ImageReader & x)
@@ -74,6 +77,29 @@ const uint8_t* ImageReader::readBlock(uint32_t blockNumber, uint64_t* blockSize)
 void ImageReader::setReadCaching()
 {
     nitf_ImageReader_setReadCaching(getNativeOrThrow());
+}
+
+BufferList<std::byte> ImageReader::read(const nitf::SubWindow& window, size_t nbpp)
+{
+    // see py_ImageReader_read() and doRead() in test_buffered_read.cpp
+
+    const auto numBitsPerPixel = nbpp;
+    const size_t numBytesPerPixel = NITF_NBPP_TO_BYTES(numBitsPerPixel);
+    const auto numBytesPerBand = static_cast<size_t>(window.getNumRows()) * static_cast<size_t>(window.getNumCols()) *  numBytesPerPixel;
+
+    auto downsampler = window.getDownSampler();
+    const uint32_t rowSkip = downsampler ? downsampler->getRowSkip() : 1;
+    const uint32_t colSkip = downsampler ? downsampler->getColSkip() : 1;
+
+    auto imageDeblocker = getNativeOrThrow()->imageDeblocker;
+    const auto subimageSize = static_cast<size_t>(window.getNumRows() / rowSkip) *
+        (window.getNumCols() / colSkip) * nitf_ImageIO_pixelSize(imageDeblocker);
+
+    BufferList<std::byte> retval(window.getNumBands());
+    retval.initialize(subimageSize);
+    read(window, retval.data(), &retval.padded);
+
+    return std::move(retval);
 }
 
 extern "C" {

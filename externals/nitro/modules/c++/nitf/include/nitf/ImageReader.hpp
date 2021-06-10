@@ -25,12 +25,13 @@
 #pragma once
 
 #include <assert.h>
+#include <stdio.h>
 
 #include <vector>
 #include <string>
-#include <memory>
 
 #include <std/span>
+#include <std/cstddef> // std::byte
 
 #include "nitf/coda-oss.hpp"
 #include "nitf/ImageReader.h"
@@ -49,7 +50,7 @@ namespace nitf
     class BufferList /*final*/   // no "final", SWIG doesn't like it
     {
         std::vector<T*> buffer;
-        std::vector<std::unique_ptr<T[]>> buffer_;
+        std::vector<std::vector<T>> buffer_;
 
     public:
         BufferList(size_t nBands)
@@ -61,8 +62,8 @@ namespace nitf
         {
             for (size_t i = 0; i < size(); i++)
             {
-                buffer_[i].reset(new T[subWindowSize]);
-                buffer[i] = buffer_[i].get();
+                buffer_[i].resize(subWindowSize);
+                buffer[i] = buffer_[i].data();
             }
         }
 
@@ -81,7 +82,24 @@ namespace nitf
         {
             return buffer[i];
         }
+
+        int padded = 0;
+
+        using iterator = typename std::vector<std::vector<T>>::iterator;
+        iterator begin() { return buffer_.begin(); }
+        iterator end() { return buffer_.end(); }
+
+        using const_iterator = typename std::vector<std::vector<T>>::const_iterator;
+        const_iterator begin() const { return buffer_.begin(); }
+        const_iterator end() const { return buffer_.end(); }
+        const_iterator cbegin() const { return buffer_.cbegin(); }
+        const_iterator cend() const { return buffer_.cend(); }
     };
+    template<typename T>
+    inline size_t write(FILE* f, const std::vector<T>& buffer)
+    {
+        return fwrite(buffer.data(), sizeof(T), buffer.size() / sizeof(T), f);
+    }
 
 /*!
  *  \class ImageReader
@@ -121,6 +139,7 @@ public:
         void* user_ = user;
         read(subWindow, static_cast<uint8_t**>(user_), padded);
     }
+    BufferList<std::byte> read(const nitf::SubWindow& subWindow, size_t nbpp);
 
     /*!
      *  Read a block directly from file
