@@ -109,7 +109,7 @@ public:
      * Get the trace
      * \return The trace (const)
      */
-    const Trace& getTrace() const
+    const Trace& getTrace() const noexcept
     {
         return mTrace;
     }
@@ -118,7 +118,7 @@ public:
      * Get the trace
      * \return The trace (non-const)
      */
-    Trace& getTrace()
+    Trace& getTrace() noexcept
     {
         return mTrace;
     }
@@ -143,7 +143,7 @@ public:
         return s.str();
     }
 
-    const std::vector<std::string>& getBacktrace() const
+    const std::vector<std::string>& getBacktrace() const noexcept
     {
         return mBacktrace;
     }
