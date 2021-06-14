@@ -63,7 +63,7 @@ struct Trace final
     /*!
      * Pops Context off the stack
      */
-    void popContext()
+    void popContext() noexcept
     {
         mStack.pop_front();
     }
@@ -71,7 +71,7 @@ struct Trace final
     /*!
      * Gets first Context on stack
      */
-    const Context& getContext() const
+    const Context& getContext() const noexcept
     {
         return mStack.front();
     }
@@ -80,7 +80,7 @@ struct Trace final
      * Get the stack
      * \return The stack (const)
      */
-    const std::list<Context>& getStack() const
+    const std::list<Context>& getStack() const noexcept
     {
         return mStack;
     }
@@ -89,7 +89,7 @@ struct Trace final
      * Get the stack
      * \return The stack (non-const)
      */
-    std::list<Context>& getStack()
+    std::list<Context>& getStack() noexcept
     {
         return mStack;
     }

@@ -29,10 +29,25 @@ SubWindow::SubWindow(const SubWindow & x)
     *this = x;
 }
 
+void SubWindow::updateBandList()
+{
+    assert(bandList.has_value());
+    setBandList(bandList->data());
+    setNumBands(gsl::narrow<uint32_t>(bandList->size()));
+}
+
 SubWindow & SubWindow::operator=(const SubWindow & x)
 {
     if (&x != this)
+    {
         setNative(x.getNative());
+
+        bandList = x.bandList;
+        if (bandList.has_value())
+        {
+            updateBandList();
+        }
+    }
     return *this;
 }
 
@@ -109,6 +124,12 @@ void SubWindow::setBandList(uint32_t * value)
 {
     getNativeOrThrow()->bandList = value;
 }
+void SubWindow::setBandList(std::vector<uint32_t>&& value)
+{
+    bandList = std::move(value);
+    updateBandList();
+}
+
 
 uint32_t SubWindow::getNumBands() const
 {
@@ -140,6 +161,10 @@ void SubWindow::setDownSampler(nitf::DownSampler* downSampler)
 
 
 nitf::DownSampler* SubWindow::getDownSampler() noexcept
+{
+    return mDownSampler;
+}
+const nitf::DownSampler* SubWindow::getDownSampler() const noexcept
 {
     return mDownSampler;
 }

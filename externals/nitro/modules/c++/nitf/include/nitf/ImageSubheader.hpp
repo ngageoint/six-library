@@ -287,6 +287,10 @@ public:
 
     //! Get the actualBitsPerPixel
     nitf::Field getActualBitsPerPixel() const;
+    size_t actualBitsPerPixel() const
+    {
+        return getActualBitsPerPixel();
+    }
 
     //! Get the pixelJustification
     nitf::Field getPixelJustification() const;
