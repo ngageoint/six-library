@@ -44,8 +44,7 @@ struct AdjustableParams
         NUM_CORR_GROUPS = 2
     };
 
-    // Initializes all parameters to 0
-    AdjustableParams();
+    AdjustableParams() = default;
 
     static std::string name(ParamsEnum param);
 
@@ -68,7 +67,7 @@ struct AdjustableParams
         return mParams[idx];
     }
 
-    double mParams[NUM_PARAMS];
+    double mParams[NUM_PARAMS]{ 0.0 };
 };
 }
 
