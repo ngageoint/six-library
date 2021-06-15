@@ -55,6 +55,8 @@
   struct _Name##Exception : public _Base \
   { \
       _Name##Exception() = default; virtual ~_Name##Exception() = default; \
+      _Name##Exception(const _Name##Exception&) = default;  _Name##Exception& operator=(const _Name##Exception&) = default; \
+      _Name##Exception(_Name##Exception&&) = default;  _Name##Exception& operator=(_Name##Exception&&) = default; \
       _Name##Exception(const except::Context& c) : _Base(c){} \
       _Name##Exception(const std::string& msg) : _Base(msg){} \
       _Name##Exception(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
