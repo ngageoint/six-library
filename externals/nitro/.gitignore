@@ -47,4 +47,3 @@ cmake-build*/
 # unit tests
 outputPathname.ntf
 sicd_*_nitf__*_band_*.man
-CMakeSettings.json
