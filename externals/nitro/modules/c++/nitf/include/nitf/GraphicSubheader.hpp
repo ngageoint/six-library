@@ -55,7 +55,7 @@ public:
     GraphicSubheader(nitf_GraphicSubheader * x);
 
     //! Default Constructor
-    GraphicSubheader();
+    GraphicSubheader() noexcept(false);
 
     //! Clone
     nitf::GraphicSubheader clone() const;

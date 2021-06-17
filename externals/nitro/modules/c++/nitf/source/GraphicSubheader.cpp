@@ -43,7 +43,7 @@ GraphicSubheader::GraphicSubheader(nitf_GraphicSubheader * x)
     getNativeOrThrow();
 }
 
-GraphicSubheader::GraphicSubheader() : GraphicSubheader(nitf_GraphicSubheader_construct(&error))
+GraphicSubheader::GraphicSubheader() noexcept(false) : GraphicSubheader(nitf_GraphicSubheader_construct(&error))
 {
     setManaged(false);
 }

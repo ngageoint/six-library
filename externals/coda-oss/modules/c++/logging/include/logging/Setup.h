@@ -26,9 +26,14 @@
 #include <memory>
 #include <string>
 
-#include "coda_oss/filesystem.h"
+#include "sys/Filesystem.h"
 #include "mem/SharedPtr.h"
 #include "logging/Logger.h"
+
+#include "sys/CPlusPlus.h"
+#if CODA_OSS_cpp17
+#include <std/filesystem>
+#endif
 
 namespace logging
 {
@@ -47,10 +52,15 @@ namespace logging
  *  \param logCount - number of rotating logs to keep (default: 0 no rotation)
  *  \param logBytes - number of bytes per rotating log (default: 0 no rotation)
  */
+#if CODA_OSS_cpp17
+using path = std::filesystem::path;
+#else
+using path = sys::Filesystem::path;
+#endif
 mem::auto_ptr<logging::Logger> setupLogger(
-    const coda_oss::filesystem::path& program, 
+    const path& program, 
     const std::string& logLevel = "warning", 
-    const coda_oss::filesystem::path& logFile = "console",
+    const path& logFile = "console",
     const std::string& logFormat = "[%p] (%d) %m",
     size_t logCount = 0,
     size_t logBytes = 0);

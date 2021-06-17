@@ -42,7 +42,7 @@ void IOStreamReader::writeImpl(const void* , size_t)
                  "It is a read-only handle."));
 }
 
-bool IOStreamReader::canSeekImpl() const
+bool IOStreamReader::canSeekImpl() const noexcept
 {
     return true;
 }
@@ -87,12 +87,12 @@ nitf::Off IOStreamReader::getSizeImpl() const
     return size;
 }
 
-int IOStreamReader::getModeImpl() const
+int IOStreamReader::getModeImpl() const noexcept
 {
     return NITF_ACCESS_READONLY;
 }
 
-void IOStreamReader::closeImpl()
+void IOStreamReader::closeImpl() noexcept
 {
 }
 }

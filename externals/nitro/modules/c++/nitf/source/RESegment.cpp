@@ -42,7 +42,7 @@ RESegment::RESegment(nitf_RESegment * x)
     getNativeOrThrow();
 }
 
-RESegment::RESegment() : RESegment(nitf_RESegment_construct(&error))
+RESegment::RESegment() noexcept(false) : RESegment(nitf_RESegment_construct(&error))
 {
     setManaged(false);
 }

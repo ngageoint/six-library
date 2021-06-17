@@ -30,7 +30,7 @@ namespace nitf
 {
 struct NITRO_NITFCPP_API CustomIO : public IOInterface
 {
-    CustomIO();
+    CustomIO() noexcept(false);
     ~CustomIO();
 
 protected:

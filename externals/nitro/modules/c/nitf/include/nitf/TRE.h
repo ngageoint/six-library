@@ -183,7 +183,7 @@ typedef nitf_List* (*NITF_TRE_FIND)(nitf_TRE * tre,
  */
 typedef NITF_BOOL (*NITF_TRE_FIELD_SET)(nitf_TRE * tre,
                                         const char *tag,
-                                        NITF_DATA * data,
+                                        const NITF_DATA * data,
                                         size_t dataLength,
                                         nitf_Error * error);
 
@@ -372,7 +372,7 @@ NITFAPI(NITF_BOOL) nitf_TRE_exists(nitf_TRE * tre, const char *tag);
  */
 NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
                                      const char *tag,
-                                     NITF_DATA * data,
+                                     const NITF_DATA * data,
                                      size_t dataLength,
                                      nitf_Error * error);
 

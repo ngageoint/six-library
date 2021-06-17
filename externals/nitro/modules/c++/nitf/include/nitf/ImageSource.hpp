@@ -57,7 +57,7 @@ public:
     /*!
      *  Constructor
      */
-    ImageSource();
+    ImageSource() noexcept(false);
 
     ~ImageSource();
 

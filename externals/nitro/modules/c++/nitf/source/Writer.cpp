@@ -60,7 +60,7 @@ Writer::Writer(nitf_Writer * x)
     getNativeOrThrow();
 }
 
-Writer::Writer() : Writer(nitf_Writer_construct(&error))
+Writer::Writer() noexcept(false) : Writer(nitf_Writer_construct(&error))
 {
     setManaged(false);
 }

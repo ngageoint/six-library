@@ -171,7 +171,7 @@ NITFAPI(nitf_List*) nitf_TRE_find(nitf_TRE* tre,
 
 NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
                                      const char *tag,
-                                     NITF_DATA * data,
+                                     const NITF_DATA * data,
                                      size_t dataLength, nitf_Error * error)
 {
     return tre->handler->setField(tre, tag, data, dataLength, error);
