@@ -156,7 +156,7 @@ void EllipsoidModel::setPolarRadius(double val)
     }
 }
 
-WGS84EllipsoidModel::WGS84EllipsoidModel() : WGS84EllipsoidModel(METERS, RADIANS) {}
+WGS84EllipsoidModel::WGS84EllipsoidModel() noexcept(false) : WGS84EllipsoidModel(METERS, RADIANS) {}
 WGS84EllipsoidModel::WGS84EllipsoidModel(Units unitsVal,
         AngularUnits angularUnitsVal)
 {
