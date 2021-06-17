@@ -61,10 +61,10 @@ public:
     }
 };
 
-nitf::Handle::Handle() : mPimpl(std::make_unique<Impl>())
+nitf::Handle::Handle() noexcept(false) : mPimpl(std::make_unique<Impl>())
 {
 }
-nitf::Handle::~Handle() = default;
+nitf::Handle::~Handle() noexcept(false) {}
 
 int nitf::Handle::getRef() const noexcept
 {

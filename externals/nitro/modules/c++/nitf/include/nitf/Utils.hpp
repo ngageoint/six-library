@@ -45,9 +45,9 @@ namespace Utils
     extern NITRO_NITFCPP_API char cornersTypeAsCoordRep(nitf::CornersType type) noexcept;
 
     extern NITRO_NITFCPP_API void error_init(nrt_Error& error, const std::string& message,
-        const char* file, int line, const char* func, int level);
+        const char* file, int line, const char* func, int level) noexcept;
     extern NITRO_NITFCPP_API void error_init(nrt_Error* error, const std::string& message,
-        const char* file, int line, const char* func, int level);
+        const char* file, int line, const char* func, int level) noexcept;
     extern NITRO_NITFCPP_API void error_init(nrt_Error* error, const std::exception&,
         const char* file, int line, const char* func, int level);
 };

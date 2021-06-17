@@ -43,7 +43,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_fillData(nitf_TRE * tre,
 
 NITFAPI(NITF_BOOL) nitf_TREUtils_setValue(nitf_TRE * tre,
                                           const char *tag,
-                                          NITF_DATA * data,
+                                          const NITF_DATA * data,
                                           size_t dataLength, nitf_Error * error);
 
 NITFAPI(NITF_BOOL) nitf_TREUtils_readField(nitf_IOInterface* io,
@@ -95,7 +95,7 @@ NITFAPI(NITF_BOOL) nitf_TREUtils_basicRead(nitf_IOInterface* io,
 
 NITFAPI(NITF_BOOL) nitf_TREUtils_basicSetField(nitf_TRE* tre,
                                                const char* tag,
-                                               NITF_DATA* data,
+                                               const NITF_DATA* data,
                                                size_t dataLength,
                                                nitf_Error* error);
 

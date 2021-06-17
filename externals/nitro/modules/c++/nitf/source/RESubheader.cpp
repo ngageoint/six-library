@@ -42,7 +42,7 @@ RESubheader::RESubheader(nitf_RESubheader * x)
     getNativeOrThrow();
 }
 
-RESubheader::RESubheader() : RESubheader(nitf_RESubheader_construct(&error))
+RESubheader::RESubheader() noexcept(false) : RESubheader(nitf_RESubheader_construct(&error))
 {
     setManaged(false);
 }

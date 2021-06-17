@@ -62,7 +62,7 @@ Reader::Reader(nitf_Reader * x)
     getNativeOrThrow();
 }
 
-Reader::Reader() : Reader(nitf_Reader_construct(&error))
+Reader::Reader() noexcept(false) : Reader(nitf_Reader_construct(&error))
 {
     setManaged(false);
 }

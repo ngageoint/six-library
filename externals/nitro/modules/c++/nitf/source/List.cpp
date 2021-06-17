@@ -179,7 +179,7 @@ NITF_DATA* nitf::List::popBack()
     return data;
 }
 
-nitf::List::List() : List(nitf_List_construct(&error))
+nitf::List::List() noexcept(false) : List(nitf_List_construct(&error))
 {
     setManaged(false);
 }

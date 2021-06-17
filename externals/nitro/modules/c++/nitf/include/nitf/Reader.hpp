@@ -64,7 +64,7 @@ struct NITRO_NITFCPP_API Reader : public nitf::Object<nitf_Reader, ReaderDestruc
     Reader(nitf_Reader * x);
 
     //! Default Constructor
-    Reader();
+    Reader() noexcept(false);
 
     ~Reader() = default;
 
