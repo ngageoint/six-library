@@ -131,7 +131,7 @@ struct NITRO_NITFCPP_API ByteProvider
     {
         return mFileHeader;
     }
-    void getFileHeader(std::span<const std::byte>&) const;
+    void getFileHeader(std::span<const std::byte>&) const noexcept;
 
     /*!
      * \return The raw bytes for each image subheader.  Vector size matches the
@@ -151,7 +151,7 @@ struct NITRO_NITFCPP_API ByteProvider
     {
         return mDesSubheaderAndData;
     }
-    void getDesSubheaderAndData(std::span<const std::byte>&) const;
+    void getDesSubheaderAndData(std::span<const std::byte>&) const noexcept;
 
     /*!
      * \return The file offset for each image subheader.  Vector size matches

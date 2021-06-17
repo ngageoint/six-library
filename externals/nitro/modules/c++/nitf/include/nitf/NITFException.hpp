@@ -47,7 +47,7 @@ namespace nitf
             return std::string(s, sz);
         }
     public:
-        Error(const nitf_Error* error) : pError(error) { assert(pError != nullptr);  }
+        Error(const nitf_Error* error) noexcept : pError(error) { assert(pError != nullptr);  }
         Error(const Error&) = delete;
         Error& operator=(const Error&) = delete;
 
@@ -59,7 +59,7 @@ namespace nitf
         {
             return to_string(pError->file);
         }
-        int line() const
+        int line() const noexcept
         {
             return pError->line;
         }
@@ -67,7 +67,7 @@ namespace nitf
         {
             return to_string(pError->func);
         }
-        int level() const
+        int level() const noexcept
         {
             return pError->level;
         }

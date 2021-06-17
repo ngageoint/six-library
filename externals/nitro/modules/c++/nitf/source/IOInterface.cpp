@@ -33,7 +33,7 @@ nitf::IOInterface::IOInterface(const IOInterface& lhs)
     *this = lhs;
 }
 
-void nitf::IOInterfaceDestructor::operator()(nitf_IOInterface *io)
+void nitf::IOInterfaceDestructor::operator()(nitf_IOInterface *io) noexcept
 {
     if (io)
     {

@@ -44,7 +44,7 @@ GraphicSegment::GraphicSegment(nitf_GraphicSegment * x)
 }
 
 
-GraphicSegment::GraphicSegment() : GraphicSegment(nitf_GraphicSegment_construct(&error))
+GraphicSegment::GraphicSegment() noexcept(false)  : GraphicSegment(nitf_GraphicSegment_construct(&error))
 {
     setManaged(false);
 }

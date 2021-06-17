@@ -16,6 +16,7 @@
 
 #pragma warning(push)
 #pragma warning(disable: 4255) // '...': no function prototype given : converting '...' to '...'
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #include <windows.h>

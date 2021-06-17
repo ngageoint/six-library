@@ -67,7 +67,7 @@ struct NITRO_NITFCPP_API Writer : public nitf::Object<nitf_Writer, WriterDestruc
     Writer(nitf_Writer * x);
 
     //! Constructor
-    Writer();
+    Writer() noexcept(false);
 
     ~Writer() = default;
     Writer(Writer&&) = default;

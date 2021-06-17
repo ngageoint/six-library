@@ -42,7 +42,7 @@ ImageSegment::ImageSegment(nitf_ImageSegment * x)
     getNativeOrThrow();
 }
 
-ImageSegment::ImageSegment() : ImageSegment(nitf_ImageSegment_construct(&error))
+ImageSegment::ImageSegment() noexcept(false) : ImageSegment(nitf_ImageSegment_construct(&error))
 {
     setManaged(false);
 }

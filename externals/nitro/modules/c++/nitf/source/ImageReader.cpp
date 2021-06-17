@@ -20,6 +20,8 @@
  *
  */
 
+#include <gsl/gsl.h>
+
 #include "nitf/ImageReader.hpp"
 
 #undef min
@@ -84,7 +86,7 @@ BufferList<std::byte> ImageReader::read(const nitf::SubWindow& window, size_t nb
     // see py_ImageReader_read() and doRead() in test_buffered_read.cpp
 
     const auto numBitsPerPixel = nbpp;
-    const size_t numBytesPerPixel = NITF_NBPP_TO_BYTES(numBitsPerPixel);
+    const auto numBytesPerPixel = gsl::narrow<size_t>(NITF_NBPP_TO_BYTES(numBitsPerPixel));
     const auto numBytesPerBand = static_cast<size_t>(window.getNumRows()) * static_cast<size_t>(window.getNumCols()) *  numBytesPerPixel;
 
     auto downsampler = window.getDownSampler();
@@ -99,7 +101,7 @@ BufferList<std::byte> ImageReader::read(const nitf::SubWindow& window, size_t nb
     retval.initialize(subimageSize);
     read(window, retval.data(), &retval.padded);
 
-    return std::move(retval);
+    return retval;
 }
 
 extern "C" {

@@ -302,7 +302,7 @@ NITFPRIV(nitf_List*) defaultFind(nitf_TRE* tre,
 
 NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE* tre,
     const char* tag,
-    NITF_DATA* data,
+    const NITF_DATA* data,
     size_t dataLength, nitf_Error* error)
 {
     nitf_Field* field = NULL;

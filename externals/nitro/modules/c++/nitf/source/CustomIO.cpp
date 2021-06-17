@@ -26,7 +26,7 @@
 
 namespace nitf
 {
-CustomIO::CustomIO()
+CustomIO::CustomIO() noexcept(false)
 {
     set_native_object(createInterface(this));
 
