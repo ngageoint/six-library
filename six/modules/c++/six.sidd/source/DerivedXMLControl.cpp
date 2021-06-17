@@ -20,12 +20,15 @@
  *
  */
 
+#include <std/memory>
+
 #include <six/Enums.h>
 
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLParser100.h>
 #include <six/sidd/DerivedXMLParser200.h>
+#include <six/sidd/DerivedXMLParser300.h>
 
 namespace
 {
@@ -76,35 +79,34 @@ xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
 std::unique_ptr<DerivedXMLParser>
 DerivedXMLControl::getParser(const std::string& version) const
 {
-    std::unique_ptr<DerivedXMLParser> parser;
-
     const std::string normalizedVersion = normalizeVersion(version);
 
     // six.sidd only currently supports --
     //   SIDD 1.0.0
     //   SIDD 2.0.0
+    //   SIDD 3.0.0
     if (normalizedVersion == "100")
     {
-        parser.reset(new DerivedXMLParser100(mLog));
+        return std::make_unique<DerivedXMLParser100>(mLog);
     }
-    else if (normalizedVersion == "200")
+    if (normalizedVersion == "200")
     {
-        parser.reset(new DerivedXMLParser200(mLog));
+        return std::make_unique<DerivedXMLParser200>(mLog);
     }
-    else if (normalizedVersion == "110")
+    if (normalizedVersion == "300")
+    {
+        return std::make_unique<DerivedXMLParser300>(mLog);
+    }
+
+    if (normalizedVersion == "110")
     {
         throw except::Exception(Ctxt(
             "SIDD Version 1.1.0 does not exist. "
             "Did you mean 2.0.0 instead?"
         ));
     }
-    else
-    {
-        throw except::Exception(
-            Ctxt("Unsupported SIDD Version: " + version));
-    }
 
-    return parser;
+    throw except::Exception(Ctxt("Unsupported SIDD Version: " + version));
 }
 }
 }
