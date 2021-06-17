@@ -24,7 +24,7 @@
 
 using namespace nitf;
 
-SegmentWriter::SegmentWriter()
+SegmentWriter::SegmentWriter() noexcept(false)
 {
     setNative(nitf_SegmentWriter_construct(&error));
     setManaged(false);

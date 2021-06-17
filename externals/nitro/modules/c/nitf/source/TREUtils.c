@@ -319,7 +319,7 @@ nitf_TREUtils_readField(nitf_IOInterface* io,
 NITFAPI(NITF_BOOL)
 nitf_TREUtils_setValue(nitf_TRE* tre,
                        const char* tag,
-                       NITF_DATA* data,
+                       const NITF_DATA* data,
                        size_t dataLength,
                        nitf_Error* error)
 {
@@ -1032,7 +1032,7 @@ nitf_TREUtils_basicFind(nitf_TRE* tre, const char* pattern, nitf_Error* error)
 NITFAPI(NITF_BOOL)
 nitf_TREUtils_basicSetField(nitf_TRE* tre,
                             const char* tag,
-                            NITF_DATA* data,
+                            const NITF_DATA* data,
                             size_t dataLength,
                             nitf_Error* error)
 {

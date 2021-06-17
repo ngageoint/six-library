@@ -588,8 +588,8 @@ class FileOutputStream(SeekableOutputStream):
     def __init__(self, *args):
         """
         FileOutputStreamOS() -> FileOutputStream
-        FileOutputStreamOS(coda_oss::filesystem::path const & outputFile, int creationFlags) -> FileOutputStream
-        __init__(io::FileOutputStreamOS self, coda_oss::filesystem::path const & outputFile) -> FileOutputStream
+        FileOutputStreamOS(sys::Filesystem::path const & outputFile, int creationFlags) -> FileOutputStream
+        __init__(io::FileOutputStreamOS self, sys::Filesystem::path const & outputFile) -> FileOutputStream
         """
         this = _coda_io.new_FileOutputStream(*args)
         try:
@@ -606,8 +606,8 @@ class FileOutputStream(SeekableOutputStream):
 
     def create(self, *args) -> "void":
         """
-        create(FileOutputStream self, coda_oss::filesystem::path const & str, int creationFlags)
-        create(FileOutputStream self, coda_oss::filesystem::path const & str)
+        create(FileOutputStream self, sys::Filesystem::path const & str, int creationFlags)
+        create(FileOutputStream self, sys::Filesystem::path const & str)
         """
         return _coda_io.FileOutputStream_create(self, *args)
 

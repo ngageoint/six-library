@@ -103,7 +103,7 @@ struct NITRO_NITFCPP_API FileSource : public BandSource
 
 struct NITRO_NITFCPP_API RowSourceCallback
 {
-    virtual ~RowSourceCallback()
+    virtual ~RowSourceCallback() // can't be "noexcpet" as that breaks derived classes
     {
     }
 
@@ -158,7 +158,7 @@ protected:
     void nextBlock(void* buf,
                            const void* block,
                            uint32_t /*blockNumber*/,
-                           uint64_t blockSize) override
+                           uint64_t blockSize) noexcept override
     {
         memcpy(buf, block, blockSize);
     }

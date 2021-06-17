@@ -137,7 +137,7 @@ public:
      *  Constructor
      *  \param nbuckets  The size of the hash
      */
-    HashTable(int nbuckets = 5);
+    HashTable(int nbuckets = 5) noexcept(false);
 
     //! Clone
     nitf::HashTable clone(NITF_DATA_ITEM_CLONE cloner);
@@ -242,7 +242,7 @@ private:
     nitf_Error error{};
 
     //! Clear the buckets
-    void clearBuckets();
+    void clearBuckets() noexcept;
 
 };
 

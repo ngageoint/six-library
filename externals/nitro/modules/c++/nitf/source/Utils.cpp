@@ -53,12 +53,12 @@ char Utils::cornersTypeAsCoordRep(nitf::CornersType type) noexcept
 }
 
 void Utils::error_init(nrt_Error& error, const std::string& message,
-    const char* file, int line, const char* func, int level)
+    const char* file, int line, const char* func, int level) noexcept
 {
     nrt_Error_init(&error, message.c_str(), file, line, func, level);
 }
 void Utils::error_init(nrt_Error* error, const std::string& message,
-    const char* file, int line, const char* func, int level)
+    const char* file, int line, const char* func, int level) noexcept
 {
     assert(error != nullptr);
     error_init(*error, message, file, line, func, level);

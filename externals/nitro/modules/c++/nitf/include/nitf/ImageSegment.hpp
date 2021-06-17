@@ -55,7 +55,7 @@ public:
     ImageSegment(nitf_ImageSegment * x);
 
     //! Constructor
-    ImageSegment();
+    ImageSegment() noexcept(false);
 
     ImageSegment(NITF_DATA * x);
 

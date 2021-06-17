@@ -99,7 +99,7 @@ public:
     }
 
     template<typename U = T> // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
-    Optional& operator=(U&& value)
+    Optional& operator=(U&& value) noexcept
     {
         value_ = std::forward<U>(value);
         has_value_ = true;
@@ -148,7 +148,7 @@ public:
         assert(has_value());
         return &value_; // "This operator does not check whether the optional contains a value!"
     }
-    T* operator->()
+    T* operator->() noexcept
     {
         assert(has_value());
         return &value_;  // "This operator does not check whether the optional contains a value!"

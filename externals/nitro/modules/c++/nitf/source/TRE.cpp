@@ -131,14 +131,14 @@ size_t TRE::getCurrentSize() const
 
 std::string TRE::getTag() const
 {
-    return getNativeOrThrow()->tag;
+    return static_cast<const char*>(getNativeOrThrow()->tag);
 }
 
 void TRE::setTag(const std::string& value)
 {
-    auto pNative = getNativeOrThrow();
-    memset(pNative->tag, 0, 7);
-    memcpy(pNative->tag, value.c_str(), 7);
+    auto pTag = static_cast<char*>(getNativeOrThrow()->tag);
+    memset(pTag, 0, 7);
+    memcpy(pTag, value.c_str(), 7);
 }
 
 nitf::List TRE::find(const std::string& pattern) const
@@ -188,14 +188,14 @@ std::string TRE::truncate(const std::string& value, size_t maxDigits) const
 static NITF_BOOL TRE_setField(nitf_TRE* tre,
     const std::string& tag,
     const NITF_DATA* data,
-    size_t dataLength, nitf_Error& error)
+    size_t dataLength, nitf_Error& error) noexcept
 {
-    return nitf_TRE_setField(tre, tag.c_str(), const_cast<NITF_DATA*>(data), dataLength, &error);
+    return nitf_TRE_setField(tre, tag.c_str(), data, dataLength, &error);
 }
 static NITF_BOOL TRE_setField(nitf_TRE* tre,
     const std::string& tag,
     const std::string& data,
-    nitf_Error& error)
+    nitf_Error& error) noexcept
 {
     return TRE_setField(tre, tag, data.c_str(), data.size(), error);
 }
@@ -238,13 +238,13 @@ void TRE::setField(const std::string& key, const std::string& strValue, NITF_DAT
 
 }
 
-nitf_TRE* TRE::create(const std::string& tag, const std::string& id, nitf_Error& error)
+nitf_TRE* TRE::create(const std::string& tag, const std::string& id, nitf_Error& error) noexcept
 {
     const auto pId = id.empty() ? nullptr : id.c_str();
     return nitf_TRE_construct(tag.c_str(), pId, &error);
 }
 
-bool TRE::setField(nitf_TRE* tre, const std::string& tag, const std::string& data, nitf_Error& error)
+bool TRE::setField(nitf_TRE* tre, const std::string& tag, const std::string& data, nitf_Error& error) noexcept
 {
     return TRE_setField(tre, tag, data, error);
 }

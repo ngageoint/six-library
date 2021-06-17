@@ -33,6 +33,11 @@
 #include "io/InputStream.h"
 #include "io/SeekableStreams.h"
 
+#include "sys/CPlusPlus.h"
+#if CODA_OSS_cpp17
+#include <std/filesystem>
+#endif
+
 /*!
  *  \file FileInputStreamIOS.h
  *  \brief The InputStream representation of a file
@@ -65,8 +70,12 @@ public:
      *  \param inputFile The file name
      *  \param mode The mode to open the file in
      */
-    FileInputStreamIOS(const coda_oss::filesystem::path& inputFile,
+    FileInputStreamIOS(const sys::Filesystem::path& inputFile,
                        std::ios::openmode mode = std::ios::in);
+    #if CODA_OSS_cpp17
+    FileInputStreamIOS(const std::filesystem::path& inputFile,
+                       std::ios::openmode mode = std::ios::in);
+    #endif
 
 
     /*!

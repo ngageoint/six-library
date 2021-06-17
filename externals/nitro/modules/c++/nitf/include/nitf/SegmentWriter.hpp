@@ -45,7 +45,7 @@ namespace nitf
 class NITRO_NITFCPP_API SegmentWriter : public WriteHandler
 {
 public:
-    SegmentWriter();
+    SegmentWriter() noexcept(false);
 
     SegmentWriter(nitf::SegmentSource segmentSource);
 

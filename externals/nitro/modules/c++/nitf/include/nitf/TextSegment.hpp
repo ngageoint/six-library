@@ -56,7 +56,7 @@ public:
     TextSegment(nitf_TextSegment * x);
 
     //! Constructor
-    TextSegment();
+    TextSegment() noexcept(false);
 
     TextSegment(NITF_DATA * x);
 
