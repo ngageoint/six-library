@@ -52,8 +52,8 @@
 
 #endif // CODA_OSS_cplusplus
 
-#if CODA_OSS_cplusplus < 201103L  
-#error "Must compile with C++11 or greater."
+#if CODA_OSS_cplusplus < 201703L
+#error "Must compile with C++17 or greater."
 #endif
 
 // Define a few macros as that's less verbose than testing against a version number

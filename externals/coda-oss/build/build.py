@@ -905,7 +905,7 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
 
-            gxxCompileFlags='-fPIC -std=c++11'
+            gxxCompileFlags='-fPIC -std=c++17'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -1047,7 +1047,7 @@ def configureCompilerOptions(self):
 
         defines = '_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS _FILE_OFFSET_BITS=64 ' \
                   '_LARGEFILE_SOURCE WIN32 _USE_MATH_DEFINES NOMINMAX WIN32_LEAN_AND_MEAN'.split()
-        flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
+        flags = '/std:c++17 /UUNICODE /U_UNICODE /EHs /GR'.split()
 
         self.env.append_value('DEFINES', defines)
         self.env.append_value('CXXFLAGS', flags)
