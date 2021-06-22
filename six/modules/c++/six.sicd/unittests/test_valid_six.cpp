@@ -110,25 +110,42 @@ static void setNitfPluginPath()
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
 
-TEST_CASE(valid_six_50x50)
+class NITFReader final
 {
-    setNitfPluginPath();
-    const std::string inputPathname = getNitfPath("sicd_50x50.nitf").string();
-
     // create an XML registry
     // The reason to do this is to avoid adding XMLControlCreators to the
     // XMLControlFactory singleton - this way has more fine-grained control
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-        new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
     // this validates the DES of the input against the best available schema
     six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&xmlRegistry);
 
-    std::vector<std::string> schemaPaths;
-    reader.load(inputPathname, schemaPaths);
-    auto container = reader.getContainer();
+public:
+    NITFReader()
+    {
+        setNitfPluginPath();
+
+        xmlRegistry.addCreator(six::DataType::COMPLEX,
+            new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+
+        // this validates the DES of the input against the best available schema
+        reader.setXMLControlRegistry(&xmlRegistry);
+    }
+
+    mem::SharedPtr<const six::Container> load(const fs::path& fromFile)
+    {
+        std::vector<std::string> schemaPaths;
+        reader.load(fromFile.string(), schemaPaths);
+        return reader.getContainer();
+    }
+};
+
+TEST_CASE(valid_six_50x50)
+{
+    const auto inputPathname = getNitfPath("sicd_50x50.nitf");
+
+    NITFReader reader;
+    auto container = reader.load(inputPathname);
     TEST_ASSERT_EQ(container->getNumData(), 1);
     for (size_t jj = 0; jj < container->getNumData(); ++jj)
     {
@@ -151,8 +168,27 @@ TEST_CASE(valid_six_50x50)
     }
 }
 
+TEST_CASE(read_8bit_ampphs_with_table)
+{
+    const fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
+    const fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
+    const auto inputPathname = getNitfPath(filename);
+
+    NITFReader reader;
+    auto container = reader.load(inputPathname);
+    TEST_ASSERT_EQ(container->getNumData(), 1);
+    for (size_t jj = 0; jj < container->getNumData(); ++jj)
+    {
+        std::unique_ptr<six::Data> data;
+        data.reset(container->getData(jj)->clone());
+
+        TEST_ASSERT(data->getDataType() == six::DataType::COMPLEX);
+    }
+}
+
 TEST_MAIN((void)argc;
     argv0 = fs::absolute(argv[0]);
     TEST_CHECK(valid_six_50x50);
+    //TEST_CHECK(read_8bit_ampphs_with_table);    
 )
 
