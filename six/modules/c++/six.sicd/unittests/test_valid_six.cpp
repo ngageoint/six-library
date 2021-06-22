@@ -36,6 +36,7 @@ namespace fs = std::filesystem;
 
 static fs::path argv0;
 static const fs::path file = __FILE__;
+static std::string testName;
 
 static bool is_linux()
 {
@@ -140,6 +141,14 @@ public:
     }
 };
 
+static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Container& container, size_t jj)
+{
+    std::unique_ptr<six::Data> data_;
+    data_.reset(container.getData(jj)->clone());
+    TEST_ASSERT_EQ(six::DataType::COMPLEX, data_->getDataType());
+    return std::unique_ptr<six::sicd::ComplexData>(dynamic_cast<six::sicd::ComplexData*>(data_.release()));
+}
+
 TEST_CASE(valid_six_50x50)
 {
     const auto inputPathname = getNitfPath("sicd_50x50.nitf");
@@ -149,10 +158,9 @@ TEST_CASE(valid_six_50x50)
     TEST_ASSERT_EQ(container->getNumData(), 1);
     for (size_t jj = 0; jj < container->getNumData(); ++jj)
     {
-        std::unique_ptr<six::Data> data;
-        data.reset(container->getData(jj)->clone());
-
-        TEST_ASSERT(data->getDataType() == six::DataType::COMPLEX);
+        const auto data = getComplexData(*container, jj);
+        TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, data->getPixelType());
+        TEST_ASSERT_EQ(8, data->getNumBytesPerPixel());
 
         const auto& classification = data->getClassification();
         TEST_ASSERT_TRUE(classification.isUnclassified());
@@ -165,6 +173,10 @@ TEST_CASE(valid_six_50x50)
         #endif
         const auto actual = classification.getLevel();
         TEST_ASSERT_EQ(actual, classificationText);
+
+        const auto& imageData = *(data->imageData);
+        logging::NullLogger nullLogger;
+        TEST_ASSERT_TRUE( imageData.validate(*(data->geoData), nullLogger) );
     }
 }
 
@@ -179,10 +191,19 @@ TEST_CASE(read_8bit_ampphs_with_table)
     TEST_ASSERT_EQ(container->getNumData(), 1);
     for (size_t jj = 0; jj < container->getNumData(); ++jj)
     {
-        std::unique_ptr<six::Data> data;
-        data.reset(container->getData(jj)->clone());
+        const auto data = getComplexData(*container, jj);
+        TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, data->getPixelType());
+        TEST_ASSERT_EQ(2, data->getNumBytesPerPixel());
 
-        TEST_ASSERT(data->getDataType() == six::DataType::COMPLEX);
+        const auto& classification = data->getClassification();
+        TEST_ASSERT_TRUE(classification.isUnclassified());
+
+        const auto& imageData = *(data->imageData);
+        logging::NullLogger nullLogger;
+        TEST_ASSERT_TRUE(imageData.validate(*(data->geoData), nullLogger));
+
+        const auto pAmplitudeTable = imageData.amplitudeTable.get();
+        TEST_ASSERT(pAmplitudeTable != nullptr);
     }
 }
 
@@ -197,10 +218,19 @@ TEST_CASE(read_8bit_ampphs_no_table)
     TEST_ASSERT_EQ(container->getNumData(), 1);
     for (size_t jj = 0; jj < container->getNumData(); ++jj)
     {
-        std::unique_ptr<six::Data> data;
-        data.reset(container->getData(jj)->clone());
+        const auto data = getComplexData(*container, jj);
+        TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, data->getPixelType());
+        TEST_ASSERT_EQ(2, data->getNumBytesPerPixel());
 
-        TEST_ASSERT(data->getDataType() == six::DataType::COMPLEX);
+        const auto& classification = data->getClassification();
+        TEST_ASSERT_TRUE(classification.isUnclassified());
+
+        const auto& imageData = *(data->imageData);
+        logging::NullLogger nullLogger;
+        TEST_ASSERT_TRUE(imageData.validate(*(data->geoData), nullLogger));
+
+        const auto pAmplitudeTable = imageData.amplitudeTable.get();
+        TEST_ASSERT_EQ(nullptr, pAmplitudeTable);
     }
 }
 
