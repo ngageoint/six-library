@@ -49,9 +49,9 @@ static bool is_vs_gtest()
     return argv0.empty(); // no argv[0] in VS w/GTest
 }
 
-static fs::path nitfRelativelPath()
+static fs::path nitfRelativelPath(const fs::path& filename)
 {
-    return fs::path("six") / "modules" / "c++" / "six" / "tests" / "nitf" / "sicd_50x50.nitf";
+    return fs::path("six") / "modules" / "c++" / "six" / "tests" / "nitf" / filename;
 }
 
 static fs::path buildRootDir()
@@ -79,10 +79,10 @@ static fs::path buildRootDir()
     }
 }
 
-static fs::path getNitfPath()
+static fs::path getNitfPath(const fs::path& filename)
 {
     const auto root_dir = buildRootDir();
-    return root_dir / nitfRelativelPath();
+    return root_dir / nitfRelativelPath(filename);
 }
 
 static fs::path nitfPluginRelativelPath()
@@ -113,7 +113,7 @@ static void setNitfPluginPath()
 TEST_CASE(valid_six_50x50)
 {
     setNitfPluginPath();
-    const std::string inputPathname = getNitfPath().string(); // sicd_50x50.nitf
+    const std::string inputPathname = getNitfPath("sicd_50x50.nitf").string();
 
     // create an XML registry
     // The reason to do this is to avoid adding XMLControlCreators to the
