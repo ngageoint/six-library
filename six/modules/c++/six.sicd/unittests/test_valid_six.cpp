@@ -145,8 +145,18 @@ static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Contain
 {
     std::unique_ptr<six::Data> data_;
     data_.reset(container.getData(jj)->clone());
+
     TEST_ASSERT_EQ(six::DataType::COMPLEX, data_->getDataType());
-    return std::unique_ptr<six::sicd::ComplexData>(dynamic_cast<six::sicd::ComplexData*>(data_.release()));
+    std::unique_ptr<six::sicd::ComplexData> retval(dynamic_cast<six::sicd::ComplexData*>(data_.release()));
+
+    logging::NullLogger nullLogger;
+    //TEST_ASSERT_TRUE(retval->validate(nullLogger));
+    const auto& geoData = *(retval->geoData);
+    //TEST_ASSERT_TRUE(geoData.validate(nullLogger));
+    const auto& imageData = *(retval->imageData);
+    TEST_ASSERT_TRUE(imageData.validate(geoData, nullLogger));
+
+    return retval;
 }
 
 TEST_CASE(valid_six_50x50)
@@ -174,9 +184,7 @@ TEST_CASE(valid_six_50x50)
         const auto actual = classification.getLevel();
         TEST_ASSERT_EQ(actual, classificationText);
 
-        const auto& imageData = *(data->imageData);
-        logging::NullLogger nullLogger;
-        TEST_ASSERT_TRUE( imageData.validate(*(data->geoData), nullLogger) );
+        //const auto& imageData = *(data->imageData);
     }
 }
 
@@ -199,9 +207,6 @@ TEST_CASE(read_8bit_ampphs_with_table)
         TEST_ASSERT_TRUE(classification.isUnclassified());
 
         const auto& imageData = *(data->imageData);
-        logging::NullLogger nullLogger;
-        TEST_ASSERT_TRUE(imageData.validate(*(data->geoData), nullLogger));
-
         const auto pAmplitudeTable = imageData.amplitudeTable.get();
         TEST_ASSERT(pAmplitudeTable != nullptr);
     }
@@ -226,9 +231,6 @@ TEST_CASE(read_8bit_ampphs_no_table)
         TEST_ASSERT_TRUE(classification.isUnclassified());
 
         const auto& imageData = *(data->imageData);
-        logging::NullLogger nullLogger;
-        TEST_ASSERT_TRUE(imageData.validate(*(data->geoData), nullLogger));
-
         const auto pAmplitudeTable = imageData.amplitudeTable.get();
         TEST_ASSERT_EQ(nullptr, pAmplitudeTable);
     }
