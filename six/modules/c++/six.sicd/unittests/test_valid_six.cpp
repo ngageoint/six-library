@@ -186,9 +186,28 @@ TEST_CASE(read_8bit_ampphs_with_table)
     }
 }
 
+TEST_CASE(read_8bit_ampphs_no_table)
+{
+    const fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
+    const fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
+    const auto inputPathname = getNitfPath(filename);
+
+    NITFReader reader;
+    auto container = reader.load(inputPathname);
+    TEST_ASSERT_EQ(container->getNumData(), 1);
+    for (size_t jj = 0; jj < container->getNumData(); ++jj)
+    {
+        std::unique_ptr<six::Data> data;
+        data.reset(container->getData(jj)->clone());
+
+        TEST_ASSERT(data->getDataType() == six::DataType::COMPLEX);
+    }
+}
+
 TEST_MAIN((void)argc;
     argv0 = fs::absolute(argv[0]);
     TEST_CHECK(valid_six_50x50);
-    //TEST_CHECK(read_8bit_ampphs_with_table);    
-)
+    TEST_CHECK(read_8bit_ampphs_with_table);    
+    TEST_CHECK(read_8bit_ampphs_no_table);
+    )
 
