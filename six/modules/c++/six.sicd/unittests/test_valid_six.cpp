@@ -141,13 +141,13 @@ public:
     }
 };
 
-static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Container& container, size_t jj)
+static std::unique_ptr<const six::sicd::ComplexData> getComplexData(const six::Container& container, size_t jj)
 {
     std::unique_ptr<six::Data> data_;
     data_.reset(container.getData(jj)->clone());
 
     TEST_ASSERT_EQ(six::DataType::COMPLEX, data_->getDataType());
-    std::unique_ptr<six::sicd::ComplexData> retval(dynamic_cast<six::sicd::ComplexData*>(data_.release()));
+    std::unique_ptr<const six::sicd::ComplexData> retval(dynamic_cast<six::sicd::ComplexData*>(data_.release()));
 
     logging::NullLogger nullLogger;
     //TEST_ASSERT_TRUE(retval->validate(nullLogger));
