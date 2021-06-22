@@ -369,16 +369,13 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
     }
 
     nitf::List images = mRecord.getImages();
-    nitf::ListIterator imageIter = images.begin();
 
     // Now go through every image and figure out what clump it's attached
     // to and use that for the measurements
-    for (size_t nitfSegmentIdx = 0;
-         imageIter != images.end();
-         ++imageIter, ++nitfSegmentIdx)
+    for (size_t nitfSegmentIdx = 0; nitfSegmentIdx < images.getSize(); ++nitfSegmentIdx)
     {
         // Get a segment ref
-        nitf::ImageSegment segment = (nitf::ImageSegment) * imageIter;
+       auto segment = static_cast<nitf::ImageSegment>(images[nitfSegmentIdx]);
 
         // Get the subheader out
         nitf::ImageSubheader subheader = segment.getSubheader();
