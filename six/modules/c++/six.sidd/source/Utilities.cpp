@@ -401,59 +401,59 @@ void Utilities::setCollectionValues(Vector3 arpVel,
     }
 }
 
-six::PolarizationType _convertDualPolarization(six::DualPolarizationType pol,
+six::PolarizationSequenceType _convertDualPolarization(six::DualPolarizationType pol,
                                                bool useFirst)
 {
     switch (pol)
     {
     case six::DualPolarizationType::OTHER:
-        return six::PolarizationType::OTHER;
+        return six::PolarizationSequenceType::OTHER;
     case six::DualPolarizationType::V_V:
-        return six::PolarizationType::V;
+        return six::PolarizationSequenceType::V;
     case six::DualPolarizationType::V_H:
-        return useFirst ? six::PolarizationType::V : six::PolarizationType::H;
+        return useFirst ? six::PolarizationSequenceType::V : six::PolarizationSequenceType::H;
     case six::DualPolarizationType::V_RHC:
-        return useFirst ? six::PolarizationType::V : six::PolarizationType::RHC;
+        return useFirst ? six::PolarizationSequenceType::V : six::PolarizationSequenceType::RHC;
     case six::DualPolarizationType::V_LHC:
-        return useFirst ? six::PolarizationType::V : six::PolarizationType::LHC;
+        return useFirst ? six::PolarizationSequenceType::V : six::PolarizationSequenceType::LHC;
     case six::DualPolarizationType::H_V:
-        return useFirst ? six::PolarizationType::H : six::PolarizationType::V;
+        return useFirst ? six::PolarizationSequenceType::H : six::PolarizationSequenceType::V;
     case six::DualPolarizationType::H_H:
-        return six::PolarizationType::H;
+        return six::PolarizationSequenceType::H;
     case six::DualPolarizationType::H_RHC:
-        return useFirst ? six::PolarizationType::H : six::PolarizationType::RHC;
+        return useFirst ? six::PolarizationSequenceType::H : six::PolarizationSequenceType::RHC;
     case six::DualPolarizationType::H_LHC:
-        return useFirst ? six::PolarizationType::H : six::PolarizationType::LHC;
+        return useFirst ? six::PolarizationSequenceType::H : six::PolarizationSequenceType::LHC;
     case six::DualPolarizationType::RHC_RHC:
-        return six::PolarizationType::RHC;
+        return six::PolarizationSequenceType::RHC;
     case six::DualPolarizationType::RHC_LHC:
-        return useFirst ? six::PolarizationType::RHC
-                        : six::PolarizationType::LHC;
+        return useFirst ? six::PolarizationSequenceType::RHC
+                        : six::PolarizationSequenceType::LHC;
     case six::DualPolarizationType::RHC_V:
-        return useFirst ? six::PolarizationType::RHC : six::PolarizationType::V;
+        return useFirst ? six::PolarizationSequenceType::RHC : six::PolarizationSequenceType::V;
     case six::DualPolarizationType::RHC_H:
-        return useFirst ? six::PolarizationType::RHC : six::PolarizationType::H;
+        return useFirst ? six::PolarizationSequenceType::RHC : six::PolarizationSequenceType::H;
     case six::DualPolarizationType::LHC_RHC:
-        return useFirst ? six::PolarizationType::LHC
-                        : six::PolarizationType::RHC;
+        return useFirst ? six::PolarizationSequenceType::LHC
+                        : six::PolarizationSequenceType::RHC;
     case six::DualPolarizationType::LHC_LHC:
-        return six::PolarizationType::LHC;
+        return six::PolarizationSequenceType::LHC;
     case six::DualPolarizationType::LHC_V:
-        return useFirst ? six::PolarizationType::LHC : six::PolarizationType::V;
+        return useFirst ? six::PolarizationSequenceType::LHC : six::PolarizationSequenceType::V;
     case six::DualPolarizationType::LHC_H:
-        return useFirst ? six::PolarizationType::LHC : six::PolarizationType::H;
+        return useFirst ? six::PolarizationSequenceType::LHC : six::PolarizationSequenceType::H;
     case six::DualPolarizationType::UNKNOWN:
         throw except::Exception(Ctxt("DualPolarizationType::UNKNOWN has no "
                                      "corresponding PolarizationType"));
     default:
-        return six::PolarizationType::NOT_SET;
+        return six::PolarizationSequenceType::NOT_SET;
     }
 }
 
-std::pair<six::PolarizationType, six::PolarizationType>
-Utilities::convertDualPolarization(six::DualPolarizationType pol)
+std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType>
+    convertDualPolarization(six::DualPolarizationType pol)
 {
-    std::pair<six::PolarizationType, six::PolarizationType> pols;
+    std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType> pols;
     pols.first = _convertDualPolarization(pol, true);
     pols.second = _convertDualPolarization(pol, false);
     return pols;

@@ -47,8 +47,16 @@ namespace types
  *  operations that just make sense
  *
  */
-template<typename T> struct RowCol
+template<typename T> class RowCol
 {
+    template <typename U, typename Other_T>
+    static U cast(const Other_T& t) 
+    {
+        //return static_cast<T>(t);
+        return gsl::narrow_cast<U>(t);
+    }
+
+public:
     T row{};
     T col{};
 
@@ -63,8 +71,7 @@ template<typename T> struct RowCol
 
     template<typename Other_T> RowCol(const RowCol<Other_T>& p) noexcept
     {
-        row = gsl::narrow<T>(p.row);
-        col = gsl::narrow<T>(p.col);
+        *this = p;
     }
 
     RowCol(const std::pair<T, T>& p) noexcept
@@ -77,8 +84,8 @@ template<typename T> struct RowCol
     {
         if (this != reinterpret_cast<const RowCol*>(&p))
         {
-            row = gsl::narrow<T>(p.row);
-            col = gsl::narrow<T>(p.col);
+            row = cast<T>(p.row);
+            col = cast<T>(p.col);
         }
         return *this;
     }
@@ -93,8 +100,8 @@ template<typename T> struct RowCol
     
     template<typename Other_T> RowCol& operator+=(const RowCol<Other_T>& p) noexcept
     {
-        row += gsl::narrow<T>(p.row);
-        col += gsl::narrow<T>(p.col);
+        row += cast<T>(p.row);
+        col += cast<T>(p.col);
         return *this;
     }
 
@@ -106,8 +113,8 @@ template<typename T> struct RowCol
 
     template<typename Other_T> RowCol& operator*=(const RowCol<Other_T>& p) noexcept
     {
-        row *= gsl::narrow<T>(p.row);
-        col *= gsl::narrow<T>(p.col);
+        row *= cast<T>(p.row);
+        col *= cast<T>(p.col);
         return *this;
     }
 
@@ -120,8 +127,8 @@ template<typename T> struct RowCol
     
     template<typename Other_T> RowCol& operator-=(const RowCol<Other_T>& p) noexcept
     {
-        row -= gsl::narrow<T>(p.row);
-        col -= gsl::narrow<T>(p.col);
+        row -= cast<T>(p.row);
+        col -= cast<T>(p.col);
         return *this;
     }
     
@@ -133,8 +140,8 @@ template<typename T> struct RowCol
 
     template<typename Other_T> RowCol& operator/=(const RowCol<Other_T>& p) noexcept
     {
-        row /= gsl::narrow<T>(p.row);
-        col /= gsl::narrow<T>(p.col);
+        row /= cast<T>(p.row);
+        col /= cast<T>(p.col);
         return *this;
     }
     
@@ -198,9 +205,7 @@ template<typename T> struct RowCol
     }
     
     /*!
-     *  Compare the types considering that some
-     *  specializations (e.g., double)
-     *  are not exact
+     *  Compare the types; specializations below for float and double
      */
     bool operator==(const RowCol<T>& p) const noexcept
     {
