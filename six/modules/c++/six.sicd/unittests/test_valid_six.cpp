@@ -121,56 +121,130 @@ static void setNitfPluginPath()
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
 
+class NITFWriter final
+{
+    mem::SharedPtr<six::Container> container{ new six::Container(six::DataType::COMPLEX) };
+    six::XMLControlRegistry xmlRegistry;
+
+    std::unique_ptr<six::NITFWriteControl> pWriter;
+
+public:
+    NITFWriter(const six::sicd::ComplexData& data, const six::Options& options)
+    {
+        container->addData(data.clone());
+
+        xmlRegistry.addCreator(six::DataType::COMPLEX, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+
+        pWriter = std::make_unique<six::NITFWriteControl>(options, container, &xmlRegistry);
+    }
+
+    void save(const six::buffer_list& buffers, const std::string& pathname, const std::vector<std::string>& schemaPaths)
+    {
+        pWriter->save(buffers, pathname, schemaPaths);
+    }
+
+    template<typename DataTypeT>
+    void save(const std::vector<std::complex< DataTypeT>>& image, const std::string& pathname, const std::vector<std::string>& schemaPaths)
+    {
+        six::buffer_list buffers;
+        buffers.push_back(reinterpret_cast<const std::byte*>(image.data()));
+        save(buffers, pathname, schemaPaths);
+    }
+};
+
+template<typename DataTypeT>
+static std::vector<std::complex<DataTypeT>> createBigEndianImage(std::vector< std::complex<DataTypeT>>& image)
+{
+    for (size_t ii = 0; ii < image.size(); ++ii)
+    {
+        image[ii] = std::complex<DataTypeT>(static_cast<DataTypeT>(ii), static_cast<DataTypeT>(ii * 10));
+    }
+
+    auto retval = image;
+    auto endianness = std::endian::native; // "conditional expression is constant"
+    if (endianness == std::endian::little)
+    {
+        sys::byteSwap(retval.data(), sizeof(DataTypeT), retval.size() * 2);
+    }
+    return retval;
+}
 
 // Main test class
 template <typename DataTypeT>
 struct Tester final
 {
-    Tester(const std::vector<std::string>& schemaPaths,
-        bool setMaxProductSize,
-        size_t maxProductSize = 0) :
-        mNormalPathname("normal_write.nitf"),
+    Tester(const std::vector<std::string>& schemaPaths, bool setMaxProductSize, size_t maxProductSize = 0) :
         mNormalFileCleanup(mNormalPathname),
-        mDims(123, 456),
-        // Have to release() here to prevent nasty runtime error
-        // with Solaris
         mData(createData<DataTypeT>(mDims).release()),
         mImage(mDims.area()),
-        mTestPathname("streaming_write.nitf"),
         mSchemaPaths(schemaPaths),
         mSetMaxProductSize(setMaxProductSize),
-        mMaxProductSize(maxProductSize),
-        mSuccess(true)
+        mMaxProductSize(maxProductSize)
     {
-        for (size_t ii = 0; ii < mImage.size(); ++ii)
-        {
-            mImage[ii] = std::complex<DataTypeT>(static_cast<DataTypeT>(ii), static_cast<DataTypeT>(ii * 10));
-        }
-
-        mBigEndianImage = mImage;
-        auto endianness = std::endian::native; // "conditional expression is constant"
-        if (endianness == std::endian::little)
-        {
-            sys::byteSwap(mBigEndianImage.data(), sizeof(DataTypeT), mBigEndianImage.size() * 2);
-        }
-
+        mBigEndianImage = createBigEndianImage(mImage);
         normalWrite();
     }
 
-    bool success() const
-    {
-        return mSuccess;
-    }
+    bool success = true;
 
     // Write the file out with a SICDByteProvider in one shot
-    void testSingleWrite();
+    void testSingleWrite()
+    {
+        const EnsureFileCleanup ensureFileCleanup(mTestPathname);
+
+        const six::sicd::SICDByteProvider sicdByteProvider(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
+
+        nitf::NITFBufferList buffers;
+        nitf::Off fileOffset;
+        sicdByteProvider.getBytes(mBigEndianImage.data(), 0, mDims.row, fileOffset, buffers);
+        const nitf::Off numBytes = sicdByteProvider.getNumBytes(0, mDims.row);
+
+        io::FileOutputStream outStream(mTestPathname);
+        write(fileOffset, buffers, numBytes, outStream);
+        outStream.close();
+
+        compare("Single write");
+    }
 
     void testMultipleWrites();
+    void testOneWritePerRow()
+    {
+        const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
-    void testOneWritePerRow();
+        six::sicd::SICDByteProvider sicdByteProvider(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
+
+        io::FileOutputStream outStream(mTestPathname);
+        for (size_t row = 0; row < mDims.row; ++row)
+        {
+            // Write it backwards
+            const size_t startRow = mDims.row - 1 - row;
+
+            nitf::Off fileOffset;
+            nitf::NITFBufferList buffers;
+            sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col], startRow, 1, fileOffset, buffers);
+            const nitf::Off numBytes = sicdByteProvider.getNumBytes(startRow, 1);
+            write(fileOffset, buffers, numBytes, outStream);
+        }
+
+        outStream.close();
+
+        compare("One write per row");
+    }
 
 private:
-    void normalWrite();
+    void normalWrite()
+    {
+        six::Options options;
+        if (mSetMaxProductSize)
+        {
+            options.setParameter(six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
+        }
+
+        NITFWriter writer(*mData, options);
+        writer.save(mImage, mNormalPathname, mSchemaPaths);
+
+        mCompareFiles.reset(new CompareFiles(mNormalPathname));
+    }
 
     void compare(const std::string& prefix)
     {
@@ -182,22 +256,11 @@ private:
 
         if (!(*mCompareFiles)(fullPrefix, mTestPathname))
         {
-            mSuccess = false;
+            success = false;
         }
     }
 
-    void setMaxProductSize(six::Options& options)
-    {
-        if (mSetMaxProductSize)
-        {
-            options.setParameter(six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
-        }
-    }
-
-    void write(nitf::Off fileOffset,
-        const nitf::NITFBufferList& buffers,
-        nitf::Off computedNumBytes,
-        io::FileOutputStream& outStream)
+    void write(nitf::Off fileOffset, const nitf::NITFBufferList& buffers, nitf::Off computedNumBytes, io::FileOutputStream& outStream)
     {
         outStream.seek(fileOffset, io::Seekable::START);
 
@@ -211,68 +274,26 @@ private:
         if (numBytes != computedNumBytes)
         {
             std::cerr << "Computed " << computedNumBytes << " bytes but actually had " << numBytes << " bytes\n";
-            mSuccess = false;
+            success = false;
         }
     }
 
 private:
-    const std::string mNormalPathname;
+    const std::string mNormalPathname = "normal_write.nitf";
     const EnsureFileCleanup mNormalFileCleanup;
 
-    const types::RowCol<size_t> mDims;
+    const types::RowCol<size_t> mDims{ 123, 456 };
     std::unique_ptr<six::sicd::ComplexData> mData;
     std::vector<std::complex<DataTypeT> > mImage;
     std::vector<std::complex<DataTypeT> > mBigEndianImage;
 
     std::unique_ptr<const CompareFiles> mCompareFiles;
-    const std::string mTestPathname;
+    const std::string mTestPathname = "streaming_write.nitf";
     const std::vector<std::string> mSchemaPaths;
 
     bool mSetMaxProductSize;
     size_t mMaxProductSize;
-
-    bool mSuccess;
 };
-
-template <typename DataTypeT>
-void Tester<DataTypeT>::normalWrite()
-{
-    mem::SharedPtr<six::Container> container(new six::Container(six::DataType::COMPLEX));
-    container->addData(mData->clone());
-
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
-
-    six::Options options;
-    setMaxProductSize(options);
-    six::NITFWriteControl writer(options, container, &xmlRegistry);
-
-    six::buffer_list buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
-    writer.save(buffers, mNormalPathname, mSchemaPaths);
-
-    mCompareFiles.reset(new CompareFiles(mNormalPathname));
-}
-
-template <typename DataTypeT>
-void Tester<DataTypeT>::testSingleWrite()
-{
-    const EnsureFileCleanup ensureFileCleanup(mTestPathname);
-
-    const six::sicd::SICDByteProvider sicdByteProvider(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
-
-    nitf::NITFBufferList buffers;
-    nitf::Off fileOffset;
-    sicdByteProvider.getBytes(mBigEndianImage.data(), 0, mDims.row, fileOffset, buffers);
-    const nitf::Off numBytes = sicdByteProvider.getNumBytes(0, mDims.row);
-
-    io::FileOutputStream outStream(mTestPathname);
-    write(fileOffset, buffers, numBytes, outStream);
-    outStream.close();
-
-    compare("Single write");
-}
-
 template <typename DataTypeT>
 void Tester<DataTypeT>::testMultipleWrites()
 {
@@ -326,31 +347,6 @@ void Tester<DataTypeT>::testMultipleWrites()
 }
 
 template <typename DataTypeT>
-void Tester<DataTypeT>::testOneWritePerRow()
-{
-    const EnsureFileCleanup ensureFileCleanup(mTestPathname);
-
-    six::sicd::SICDByteProvider sicdByteProvider(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
-
-    io::FileOutputStream outStream(mTestPathname);
-    for (size_t row = 0; row < mDims.row; ++row)
-    {
-        // Write it backwards
-        const size_t startRow = mDims.row - 1 - row;
-
-        nitf::Off fileOffset;
-        nitf::NITFBufferList buffers;
-        sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col], startRow, 1, fileOffset, buffers);
-        const nitf::Off numBytes = sicdByteProvider.getNumBytes(startRow, 1);
-        write(fileOffset, buffers, numBytes, outStream);
-    }
-
-    outStream.close();
-
-    compare("One write per row");
-}
-
-template <typename DataTypeT>
 bool doTests(const std::vector<std::string>& schemaPaths, bool setMaxProductSize, size_t numRowsPerSeg)
 {
     // TODO: This math isn't quite right
@@ -366,7 +362,7 @@ bool doTests(const std::vector<std::string>& schemaPaths, bool setMaxProductSize
     tester.testSingleWrite();
     tester.testMultipleWrites();
     tester.testOneWritePerRow();
-    return tester.success();
+    return tester.success;
 }
 
 bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths, bool setMaxProductSize, size_t numRowsPerSeg = 0)
