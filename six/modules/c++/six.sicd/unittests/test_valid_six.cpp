@@ -128,28 +128,58 @@ class NITFWriter final
     six::XMLControlRegistry xmlRegistry;
 
     std::unique_ptr<six::NITFWriteControl> pWriter;
+    std::unique_ptr<const six::sicd::SICDByteProvider> pSicdByteProvider;
+
+    const std::vector<std::string> mSchemaPaths;
 
 public:
-    NITFWriter(const six::sicd::ComplexData& data, const six::Options& options)
+    NITFWriter(const six::sicd::ComplexData& data, const six::Options& options, const std::vector<std::string>& schemaPaths)
+        : mSchemaPaths(schemaPaths)
     {
         container->addData(data.clone());
-
         xmlRegistry.addCreator(dataType, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
-
         pWriter = std::make_unique<six::NITFWriteControl>(options, container, &xmlRegistry);
     }
-
-    void save(const six::buffer_list& buffers, const std::string& pathname, const std::vector<std::string>& schemaPaths)
+    NITFWriter(const six::sicd::ComplexData& data, const std::vector<std::string>& schemaPaths, size_t maxProductSize = 0)
+        : pSicdByteProvider(std::make_unique<six::sicd::SICDByteProvider>(data, schemaPaths, maxProductSize))
     {
-        pWriter->save(buffers, pathname, schemaPaths);
     }
 
+    void save(const six::buffer_list& buffers, const std::string& pathname) const
+    {
+        pWriter->save(buffers, pathname, mSchemaPaths);
+    }
     template<typename DataTypeT>
-    void save(const std::vector<std::complex< DataTypeT>>& image, const std::string& pathname, const std::vector<std::string>& schemaPaths)
+    void save(const std::vector<std::complex<DataTypeT>>& image, const std::string& pathname) const
     {
         six::buffer_list buffers;
         buffers.push_back(reinterpret_cast<const std::byte*>(image.data()));
-        save(buffers, pathname, schemaPaths);
+        save(buffers, pathname);
+    }
+
+    bool write(io::FileOutputStream& outStream, const void* imageData, size_t startRow, size_t numRows) const
+    {
+        nitf::Off fileOffset;
+        nitf::NITFBufferList buffers;
+        pSicdByteProvider->getBytes(imageData, startRow, numRows, fileOffset, buffers);
+        const auto computedNumBytes = pSicdByteProvider->getNumBytes(startRow, numRows);
+
+        outStream.seek(fileOffset, io::Seekable::START);
+        nitf::Off numBytes(0);
+        for (const auto& buffer : buffers.mBuffers)
+        {
+            outStream.write(static_cast<const std::byte*>(buffer.mData), buffer.mNumBytes);
+            numBytes += buffer.mNumBytes;
+        }
+
+        return numBytes == computedNumBytes;
+    }
+    bool write(const std::string& path, const void* imageData, size_t startRow, size_t numRows) const
+    {
+        io::FileOutputStream outStream(path);
+        const auto retval = write(outStream, imageData, startRow, numRows);
+        outStream.close();
+        return retval;
     }
 };
 
@@ -186,51 +216,53 @@ struct Tester final
         normalWrite();
     }
 
-    bool success = true;
+private:
+    bool mSuccess = true;
+public:
+    bool success() const { return mSuccess; }
+    void success(bool v)
+    {
+        if (!v) // don't clobber an alreadly "false" value
+        {
+            mSuccess = v;
+        }
+    }
+
 
     // Write the file out with a SICDByteProvider in one shot
     void testSingleWrite()
     {
         const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
-        const six::sicd::SICDByteProvider sicdByteProvider(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
+        const NITFWriter nitfWriter(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
 
-        nitf::NITFBufferList buffers;
-        nitf::Off fileOffset;
-        sicdByteProvider.getBytes(mBigEndianImage.data(), 0, mDims.row, fileOffset, buffers);
-        const nitf::Off numBytes = sicdByteProvider.getNumBytes(0, mDims.row);
-
-        io::FileOutputStream outStream(mTestPathname);
-        write(fileOffset, buffers, numBytes, outStream);
-        outStream.close();
+        constexpr size_t startRow = 0;
+        const size_t numRows = mDims.row;
+        success( nitfWriter.write(mTestPathname, &mBigEndianImage[startRow * mDims.col], startRow, numRows) );
 
         compare("Single write");
     }
 
-    void writeBytes(io::FileOutputStream& outStream, const six::sicd::SICDByteProvider& sicdByteProvider, size_t startRow, size_t numRows)
+private:
+    void writeBytes(io::FileOutputStream& outStream, const NITFWriter& nitfWriter, size_t startRow, size_t numRows)
     {
-        nitf::Off fileOffset;
-        nitf::NITFBufferList buffers;
-
-        sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col], startRow, numRows, fileOffset, buffers);
-        const auto numBytes = sicdByteProvider.getNumBytes(startRow, numRows);
-        write(fileOffset, buffers, numBytes, outStream);
+        success( nitfWriter.write(outStream, &mBigEndianImage[startRow * mDims.col], startRow, numRows) );
     }
 
+public:
     void testMultipleWrites()
     {
         const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
-        const six::sicd::SICDByteProvider sicdByteProvider(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
-
+        const NITFWriter nitfWriter(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
         io::FileOutputStream outStream(mTestPathname);
 
-        writeBytes(outStream, sicdByteProvider, 40, 20); // Rows [40, 60)
-        writeBytes(outStream, sicdByteProvider, 5, 20);  // Rows [5, 25)
-        writeBytes(outStream, sicdByteProvider, 0, 5);  // Rows [0, 5)
-        writeBytes(outStream, sicdByteProvider, 100, 23);  // Rows [100, 123)        
-        writeBytes(outStream, sicdByteProvider, 25, 15); // Rows [25, 40)       
-        writeBytes(outStream, sicdByteProvider, 60, 40);  // Rows [60, 100)
+        writeBytes(outStream, nitfWriter, 40, 20); // Rows [40, 60)
+        writeBytes(outStream, nitfWriter, 5, 20);  // Rows [5, 25)
+        writeBytes(outStream, nitfWriter, 0, 5);  // Rows [0, 5)
+        writeBytes(outStream, nitfWriter, 100, 23);  // Rows [100, 123)        
+        writeBytes(outStream, nitfWriter, 25, 15); // Rows [25, 40)       
+        writeBytes(outStream, nitfWriter, 60, 40);  // Rows [60, 100)
 
         outStream.close();
 
@@ -241,7 +273,7 @@ struct Tester final
     {
         const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
-        six::sicd::SICDByteProvider sicdByteProvider(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
+        const NITFWriter nitfWriter(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
 
         io::FileOutputStream outStream(mTestPathname);
         for (size_t row = 0; row < mDims.row; ++row)
@@ -249,7 +281,7 @@ struct Tester final
             // Write it backwards
             const size_t startRow = mDims.row - 1 - row;
             constexpr size_t numRows = 1;
-            writeBytes(outStream, sicdByteProvider, startRow, numRows);
+            writeBytes(outStream, nitfWriter, startRow, numRows);
         }
 
         outStream.close();
@@ -266,8 +298,8 @@ private:
             options.setParameter(six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
         }
 
-        NITFWriter writer(*mData, options);
-        writer.save(mImage, mNormalPathname, mSchemaPaths);
+        NITFWriter writer(*mData, options, mSchemaPaths);
+        writer.save(mImage, mNormalPathname);
 
         mCompareFiles.reset(new CompareFiles(mNormalPathname));
     }
@@ -280,28 +312,7 @@ private:
             fullPrefix += " (max product size " + std::to_string(mMaxProductSize) + ")";
         }
 
-        if (!(*mCompareFiles)(fullPrefix, mTestPathname))
-        {
-            success = false;
-        }
-    }
-
-    void write(nitf::Off fileOffset, const nitf::NITFBufferList& buffers, nitf::Off computedNumBytes, io::FileOutputStream& outStream)
-    {
-        outStream.seek(fileOffset, io::Seekable::START);
-
-        nitf::Off numBytes(0);
-        for (const auto& buffer : buffers.mBuffers)
-        {
-            outStream.write(static_cast<const std::byte*>(buffer.mData), buffer.mNumBytes);
-            numBytes += buffer.mNumBytes;
-        }
-
-        if (numBytes != computedNumBytes)
-        {
-            std::cerr << "Computed " << computedNumBytes << " bytes but actually had " << numBytes << " bytes\n";
-            success = false;
-        }
+        success( (*mCompareFiles)(fullPrefix, mTestPathname) );
     }
 
 private:
@@ -337,7 +348,7 @@ bool doTests(const std::vector<std::string>& schemaPaths, bool setMaxProductSize
     tester.testSingleWrite();
     tester.testMultipleWrites();
     tester.testOneWritePerRow();
-    return tester.success;
+    return tester.success();
 }
 bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths, bool setMaxProductSize, size_t numRowsPerSeg = 0)
 {
