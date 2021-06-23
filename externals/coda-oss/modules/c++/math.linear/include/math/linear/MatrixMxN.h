@@ -1234,8 +1234,7 @@ public:
 template<size_t _MD, size_t _ND, typename _T> MatrixMxN<_MD, _ND, _T>
     constantMatrix(_T cv = 0)
 {
-    MatrixMxN<_MD, _ND, _T> mx(cv);
-    return mx;
+    return MatrixMxN<_MD, _ND, _T>(cv);
 }
 
 /*!

@@ -28,6 +28,7 @@
 #include <std/memory>
 #include <str/Manip.h>
 #include <except/Exception.h>
+#include <gsl/gsl.h>
 #include <six/sidd/DerivedDataBuilder.h>
 
 namespace
@@ -1133,9 +1134,9 @@ XMLElem DerivedXMLParser::createLUTImpl(const LUT *lut, XMLElem lutElem) const
         }
         else if (lut->elementSize == 3)
         {
-            oss << (unsigned int)(*lut)[i][0] << ','
-                    << (unsigned int)(*lut)[i][1] << ','
-                    << (unsigned int)(*lut)[i][2];
+            oss << gsl::narrow<unsigned int>((*lut)[i][0]) << ','
+                    << gsl::narrow<unsigned int>((*lut)[i][1]) << ','
+                    << gsl::narrow<unsigned int>((*lut)[i][2]);
         }
         else
         {

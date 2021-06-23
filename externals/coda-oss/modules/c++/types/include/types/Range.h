@@ -32,7 +32,7 @@ namespace types
  *  \brief Holds range information i.e a starting element and number of
  *  elements in a range (exclusive)
  */
-struct Range final
+struct Range
 {
     /*!
      * Initializes to an empty range

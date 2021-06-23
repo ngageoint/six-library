@@ -358,8 +358,6 @@ struct ErrorStatistics
      */
     ParameterCollection additionalParameters;
 
-    ErrorStatistics() = default;
-
     //! Equality operators
     bool operator==(const ErrorStatistics& rhs) const
     {
