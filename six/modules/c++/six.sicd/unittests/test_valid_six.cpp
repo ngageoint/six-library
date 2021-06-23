@@ -123,7 +123,8 @@ static void setNitfPluginPath()
 
 class NITFWriter final
 {
-    mem::SharedPtr<six::Container> container{ new six::Container(six::DataType::COMPLEX) };
+    static constexpr auto dataType = six::DataType::COMPLEX;
+    mem::SharedPtr<six::Container> container{ new six::Container(dataType) };
     six::XMLControlRegistry xmlRegistry;
 
     std::unique_ptr<six::NITFWriteControl> pWriter;
@@ -133,7 +134,7 @@ public:
     {
         container->addData(data.clone());
 
-        xmlRegistry.addCreator(six::DataType::COMPLEX, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        xmlRegistry.addCreator(dataType, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
         pWriter = std::make_unique<six::NITFWriteControl>(options, container, &xmlRegistry);
     }
@@ -206,7 +207,36 @@ struct Tester final
         compare("Single write");
     }
 
-    void testMultipleWrites();
+    void writeBytes(io::FileOutputStream& outStream, const six::sicd::SICDByteProvider& sicdByteProvider, size_t startRow, size_t numRows)
+    {
+        nitf::Off fileOffset;
+        nitf::NITFBufferList buffers;
+
+        sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col], startRow, numRows, fileOffset, buffers);
+        const auto numBytes = sicdByteProvider.getNumBytes(startRow, numRows);
+        write(fileOffset, buffers, numBytes, outStream);
+    }
+
+    void testMultipleWrites()
+    {
+        const EnsureFileCleanup ensureFileCleanup(mTestPathname);
+
+        const six::sicd::SICDByteProvider sicdByteProvider(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
+
+        io::FileOutputStream outStream(mTestPathname);
+
+        writeBytes(outStream, sicdByteProvider, 40, 20); // Rows [40, 60)
+        writeBytes(outStream, sicdByteProvider, 5, 20);  // Rows [5, 25)
+        writeBytes(outStream, sicdByteProvider, 0, 5);  // Rows [0, 5)
+        writeBytes(outStream, sicdByteProvider, 100, 23);  // Rows [100, 123)        
+        writeBytes(outStream, sicdByteProvider, 25, 15); // Rows [25, 40)       
+        writeBytes(outStream, sicdByteProvider, 60, 40);  // Rows [60, 100)
+
+        outStream.close();
+
+        compare("Multiple writes");
+    }
+
     void testOneWritePerRow()
     {
         const EnsureFileCleanup ensureFileCleanup(mTestPathname);
@@ -218,12 +248,8 @@ struct Tester final
         {
             // Write it backwards
             const size_t startRow = mDims.row - 1 - row;
-
-            nitf::Off fileOffset;
-            nitf::NITFBufferList buffers;
-            sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col], startRow, 1, fileOffset, buffers);
-            const nitf::Off numBytes = sicdByteProvider.getNumBytes(startRow, 1);
-            write(fileOffset, buffers, numBytes, outStream);
+            constexpr size_t numRows = 1;
+            writeBytes(outStream, sicdByteProvider, startRow, numRows);
         }
 
         outStream.close();
@@ -294,57 +320,6 @@ private:
     bool mSetMaxProductSize;
     size_t mMaxProductSize;
 };
-template <typename DataTypeT>
-void Tester<DataTypeT>::testMultipleWrites()
-{
-    const EnsureFileCleanup ensureFileCleanup(mTestPathname);
-
-    const six::sicd::SICDByteProvider sicdByteProvider(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
-
-    // Rows [40, 60)
-    nitf::Off fileOffset;
-    nitf::NITFBufferList buffers;
-    size_t startRow = 40, numRows = 20;
-    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col], startRow, numRows, fileOffset, buffers);
-    nitf::Off numBytes = sicdByteProvider.getNumBytes(startRow, numRows);
-
-    io::FileOutputStream outStream(mTestPathname);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    // Rows [5, 25)
-    startRow = 5; numRows = 20;
-    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col], startRow, numRows, fileOffset, buffers);
-    numBytes = sicdByteProvider.getNumBytes(startRow, numRows);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    // Rows [0, 5)
-    startRow = 0; numRows = 5;
-    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col], startRow, numRows, fileOffset, buffers);
-    numBytes = sicdByteProvider.getNumBytes(startRow, numRows);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    // Rows [100, 123)
-    startRow = 100; numRows = 23;
-    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col], startRow, numRows, fileOffset, buffers);
-    numBytes = sicdByteProvider.getNumBytes(startRow, numRows);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    // Rows [25, 40)
-    startRow = 25; numRows = 15;
-    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col], startRow, numRows, fileOffset, buffers);
-    numBytes = sicdByteProvider.getNumBytes(startRow, numRows);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    // Rows [60, 100)
-    startRow = 60; numRows = 40;
-    sicdByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col], startRow, numRows, fileOffset, buffers);
-    numBytes = sicdByteProvider.getNumBytes(startRow, numRows);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    outStream.close();
-
-    compare("Multiple writes");
-}
 
 template <typename DataTypeT>
 bool doTests(const std::vector<std::string>& schemaPaths, bool setMaxProductSize, size_t numRowsPerSeg)
@@ -364,7 +339,6 @@ bool doTests(const std::vector<std::string>& schemaPaths, bool setMaxProductSize
     tester.testOneWritePerRow();
     return tester.success;
 }
-
 bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths, bool setMaxProductSize, size_t numRowsPerSeg = 0)
 {
     if (!doTests<float>(schemaPaths, setMaxProductSize, numRowsPerSeg))
