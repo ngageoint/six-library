@@ -136,9 +136,10 @@ bool checkNITF(const std::string& pathname)
     reader.interleaved(region, 0);
     auto buffer = region.getBuffer();
 
-    const size_t elementsPerRow = data->getNumCols();
+    const auto extent = data->getExtent();
+    const auto elementsPerRow = extent.col;
     const size_t skipSize = ROWS_TO_SKIP * elementsPerRow;
-    const size_t imageSize = data->getNumRows() * elementsPerRow;
+    const size_t imageSize = extent.area();
 
     if (data->getDataType() == six::DataType::COMPLEX)
     {

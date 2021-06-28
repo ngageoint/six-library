@@ -98,20 +98,18 @@ void GeoTIFFWriteControl::save(const SourceList& sources,
     for (size_t ii = 0; ii < sources.size(); ++ii)
     {
         tiff::ImageWriter* const imageWriter = tiffWriter.addImage();
-        const DerivedData* const data =
-            static_cast<DerivedData*>(mDerivedData[ii]);
-        const size_t oneRow =
-            data->getNumCols() * data->getNumBytesPerPixel();
+        const DerivedData* const data =  static_cast<DerivedData*>(mDerivedData[ii]);
+        const size_t oneRow = data->getNumCols() * data->getNumBytesPerPixel();
         tiff::IFD* ifd = imageWriter->getIFD();
         setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
         buf.resize(oneRow);
-        const size_t numRows = data->getNumRows();
-        const size_t numCols = data->getNumCols();
 
-        for (size_t row = 0; row < numRows; ++row)
+        const auto extent = data->getExtent();
+        const auto numCols = static_cast<uint32_t>(extent.col);
+        for (size_t row = 0; row < extent.row; ++row)
         {
             sources[ii]->read(buf.data(), oneRow);
-            imageWriter->putData(buf.data(), static_cast<sys::Uint32_T>(numCols));
+            imageWriter->putData(buf.data(), numCols);
         }
         imageWriter->writeIFD();
     }

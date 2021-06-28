@@ -598,9 +598,9 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
     const NITFImageInfo& thisImage = *(mInfos[imageNumber]);
 
-    const types::RowCol<ptrdiff_t> extent(thisImage.getData()->getExtent());
-    const auto numRowsTotal = extent.row;
-    const auto numColsTotal = extent.col;
+    const types::RowCol<ptrdiff_t> imageExtent(thisImage.getData()->getExtent());
+    const auto numRowsTotal = imageExtent.row;
+    const auto numColsTotal = imageExtent.col;
 
     if (region.getNumRows() == -1)
     {
@@ -611,8 +611,9 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
         region.setNumCols(numColsTotal);
     }
 
-    const auto numRowsReq = region.getNumRows();
-    const auto numColsReq = region.getNumCols();
+    const auto regionExtent = region.getExtent();
+    const auto numRowsReq = regionExtent.row;
+    const auto numColsReq = regionExtent.col;
 
     const auto startRow = region.getStartRow();
     const auto startCol = region.getStartCol();
@@ -621,21 +622,17 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     const auto extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
-        throw except::Exception(Ctxt(FmtX("Too many rows requested [%d]",
-                                          numRowsReq)));
+        throw except::Exception(Ctxt(FmtX("Too many rows requested [%d]", numRowsReq)));
 
     if (extentCols > numColsTotal || startCol > numColsTotal)
-        throw except::Exception(Ctxt(FmtX("Too many cols requested [%d]",
-                                          numColsReq)));
+        throw except::Exception(Ctxt(FmtX("Too many cols requested [%d]", numColsReq)));
 
     // Allocate one band
     uint32_t bandList(0);
 
+    const auto subWindowSize = regionExtent.area() * thisImage.getData()->getNumBytesPerPixel();
+
     auto buffer = region.getBuffer();
-
-    const auto subWindowSize = numRowsReq * numColsReq
-            * thisImage.getData()->getNumBytesPerPixel();
-
     if (buffer == nullptr)
     {
         buffer = region.setBuffer(subWindowSize).release();
@@ -648,8 +645,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     sw.setNumBands(1);
     sw.setBandList(&bandList);
 
-    std::vector < NITFSegmentInfo > imageSegments
-            = thisImage.getImageSegments();
+    std::vector < NITFSegmentInfo > imageSegments = thisImage.getImageSegments();
     const size_t numIS = imageSegments.size();
     size_t startOff = 0;
 
