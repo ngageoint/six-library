@@ -216,21 +216,8 @@ struct Tester final
         normalWrite();
     }
 
-private:
-    bool mSuccess = true;
-public:
-    bool success() const { return mSuccess; }
-    void success(bool v)
-    {
-        if (!v) // don't clobber an alreadly "false" value
-        {
-            mSuccess = v;
-        }
-    }
-
-
     // Write the file out with a SICDByteProvider in one shot
-    void testSingleWrite()
+    bool testSingleWrite()
     {
         const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
@@ -238,19 +225,20 @@ public:
 
         constexpr size_t startRow = 0;
         const size_t numRows = mDims.row;
-        success( nitfWriter.write(mTestPathname, &mBigEndianImage[startRow * mDims.col], startRow, numRows) );
+        mSuccess = nitfWriter.write(mTestPathname, &mBigEndianImage[startRow * mDims.col], startRow, numRows);
 
         compare("Single write");
+        return mSuccess;
     }
 
 private:
     void writeBytes(io::FileOutputStream& outStream, const NITFWriter& nitfWriter, size_t startRow, size_t numRows)
     {
-        success( nitfWriter.write(outStream, &mBigEndianImage[startRow * mDims.col], startRow, numRows) );
+        mSuccess = nitfWriter.write(outStream, &mBigEndianImage[startRow * mDims.col], startRow, numRows);
     }
 
 public:
-    void testMultipleWrites()
+    bool testMultipleWrites()
     {
         const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
@@ -258,18 +246,33 @@ public:
         io::FileOutputStream outStream(mTestPathname);
 
         writeBytes(outStream, nitfWriter, 40, 20); // Rows [40, 60)
-        writeBytes(outStream, nitfWriter, 5, 20);  // Rows [5, 25)
-        writeBytes(outStream, nitfWriter, 0, 5);  // Rows [0, 5)
-        writeBytes(outStream, nitfWriter, 100, 23);  // Rows [100, 123)        
-        writeBytes(outStream, nitfWriter, 25, 15); // Rows [25, 40)       
-        writeBytes(outStream, nitfWriter, 60, 40);  // Rows [60, 100)
-
+        if (mSuccess)
+        {
+            writeBytes(outStream, nitfWriter, 5, 20);  // Rows [5, 25)
+            if (mSuccess)
+            {
+                writeBytes(outStream, nitfWriter, 0, 5);  // Rows [0, 5)
+                if (mSuccess)
+                {
+                    writeBytes(outStream, nitfWriter, 100, 23);  // Rows [100, 123)        
+                    if (mSuccess)
+                    {
+                        writeBytes(outStream, nitfWriter, 25, 15); // Rows [25, 40)       
+                        if (mSuccess)
+                        {
+                            writeBytes(outStream, nitfWriter, 60, 40);  // Rows [60, 100)
+                        }
+                    }
+                }
+            }
+        }
         outStream.close();
 
         compare("Multiple writes");
+        return mSuccess;
     }
 
-    void testOneWritePerRow()
+    bool testOneWritePerRow()
     {
         const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
@@ -282,11 +285,12 @@ public:
             const size_t startRow = mDims.row - 1 - row;
             constexpr size_t numRows = 1;
             writeBytes(outStream, nitfWriter, startRow, numRows);
+            if (!mSuccess) break;
         }
-
         outStream.close();
 
         compare("One write per row");
+        return mSuccess;
     }
 
 private:
@@ -312,7 +316,7 @@ private:
             fullPrefix += " (max product size " + std::to_string(mMaxProductSize) + ")";
         }
 
-        success( (*mCompareFiles)(fullPrefix, mTestPathname) );
+        mSuccess = (*mCompareFiles)(fullPrefix, mTestPathname);
     }
 
 private:
@@ -330,37 +334,26 @@ private:
 
     bool mSetMaxProductSize;
     size_t mMaxProductSize;
+
+    bool mSuccess = true;
 };
 
 template <typename DataTypeT>
 bool doTests(const std::vector<std::string>& schemaPaths, bool setMaxProductSize, size_t numRowsPerSeg)
 {
     // TODO: This math isn't quite right
-    //       We also end up with a different number of segments for the
-    //       complex float than the complex short case sometimes
-    //       It would be better to get the logic fixed that forces
-    //       segmentation on the number of rows via OPT_MAX_ILOC_ROWS
+    //       We also end up with a different number of segments for the complex float than the complex short case sometimes
+    //       It would be better to get the logic fixed that forces segmentation on the number of rows via OPT_MAX_ILOC_ROWS
     constexpr size_t APPROX_HEADER_SIZE = 2 * 1024;
     constexpr size_t numBytesPerRow = 456 * sizeof(std::complex<DataTypeT>);
     const size_t maxProductSize = numRowsPerSeg * numBytesPerRow + APPROX_HEADER_SIZE;
 
     Tester<DataTypeT> tester(schemaPaths, setMaxProductSize, maxProductSize);
-    tester.testSingleWrite();
-    tester.testMultipleWrites();
-    tester.testOneWritePerRow();
-    return tester.success();
-}
-bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths, bool setMaxProductSize, size_t numRowsPerSeg = 0)
-{
-    if (!doTests<float>(schemaPaths, setMaxProductSize, numRowsPerSeg))
-    {
-        return false;
-    }
-    if (!doTests<int16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
-    {
-        return false;
-    }
-    return true;
+    auto result = tester.testSingleWrite();
+    if (!result) return result;
+    result = tester.testMultipleWrites();
+    if (!result) return result;
+    return tester.testOneWritePerRow();
 }
 
 class NITFReader final
@@ -496,15 +489,19 @@ TEST_CASE(sicd_byte_provider)
     const std::vector<std::string> schemaPaths;
 
     // Run tests with no funky segmentation
-    bool success = doTestsBothDataTypes(schemaPaths, false);
-    TEST_ASSERT_TRUE(success);
+    auto result = doTests<float>(schemaPaths, false /*setMaxProductSize*/, 0 /*numRowsPerSeg*/);
+    TEST_ASSERT_TRUE(result);
+    result = doTests<int16_t>(schemaPaths, false /*setMaxProductSize*/, 0 /*numRowsPerSeg*/);
+    TEST_ASSERT_TRUE(result);
 
     // Run tests forcing various numbers of segments
     const std::vector<size_t> numRows{ 80, 30, 15, 7, 3, 2, 1 };
     for (auto row : numRows)
     {
-        success = doTestsBothDataTypes(schemaPaths, true, row);
-        TEST_ASSERT_TRUE(success);
+        result = doTests<float>(schemaPaths, true /*setMaxProductSize*/, row);
+        TEST_ASSERT_TRUE(result);
+        result = doTests<int16_t>(schemaPaths, true /*setMaxProductSize*/, row);
+        TEST_ASSERT_TRUE(result);
     }
 }
 
