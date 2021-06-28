@@ -126,8 +126,9 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
                                    const std::vector<std::string>& schemaPaths)
 {
     const PixelType pixelType = data->getPixelType();
-    const auto numRows = gsl::narrow<uint32_t>(data->getNumRows());
-    const auto numCols = gsl::narrow<uint32_t>(data->getNumCols());
+    const types::RowCol<uint32_t> extent(data->getExtent());
+    const auto numRows = extent.row;
+    const auto numCols = extent.col;
 
     // Start by initializing the TIFF info
     ifd->addEntry(tiff::KnownTags::IMAGE_WIDTH, numCols);
@@ -403,6 +404,14 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     stream.write(tfwContents);
     stream.flush();
     stream.close();
+}
+void GeoTIFFWriteControl::addGeoTIFFKeys(
+    const GeographicProjection& projection,
+    const types::RowCol<size_t>& extent,
+    tiff::IFD* ifd,
+    const std::filesystem::path& tfwPathname)
+{
+    addGeoTIFFKeys(projection, extent.row, extent.col, ifd, tfwPathname.string());
 }
 
 #endif

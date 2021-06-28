@@ -93,14 +93,12 @@ std::string doRoundTrip(const std::string& siddPathname)
         if (container->getDataType() == six::DataType::COMPLEX ||
             data->getDataType() == six::DataType::DERIVED)
         {
-            const types::RowCol<size_t> extent(data->getNumRows(),
-                data->getNumCols());
-            const size_t numPixels(extent.row * extent.col);
+            const auto extent = data->getExtent();
+            const size_t numPixels(extent.area());
 
             size_t numBytesPerPixel = data->getNumBytesPerPixel();
 
-            std::byte* buffer =
-                buffers.add(numPixels * numBytesPerPixel);
+            std::byte* buffer = buffers.add(numPixels * numBytesPerPixel);
 
             region.setNumRows(extent.row);
             region.setNumCols(extent.col);

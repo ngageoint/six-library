@@ -170,12 +170,13 @@ void run(const fs::path& inputFile_, std::string dataType)
 
         six::Data *data = control->fromXML(treeBuilder.getDocument(),
                                            std::vector<std::string>());
+        const auto extent = data->getExtent();
 
         // Dump some core info
         std::cout << "Data Class: " << data->getDataType() << "\n";
         std::cout << "Pixel Type: " << data->getPixelType() << "\n";
-        std::cout << "Num Rows  : " << data->getNumRows() << "\n";
-        std::cout << "Num Cols  : " << data->getNumCols() << "\n";
+        std::cout << "Num Rows  : " << extent.row << "\n";
+        std::cout << "Num Cols  : " << extent.col << "\n";
 
         // Generate a KML in this directory
         preview(generateKML(data, outputDir));

@@ -174,8 +174,7 @@ bool siddsMatch(const std::string& sidd1Path,
 
     int result =
         std::memcmp(sidd1Buffer.get(), sidd2Buffer.get(),
-                sidd1Metadata->getNumRows() *
-                sidd1Metadata->getNumCols() *
+                sidd1Metadata->getExtent().area() *
                 sidd1Metadata->getNumBytesPerPixel());
 
     return !result;
