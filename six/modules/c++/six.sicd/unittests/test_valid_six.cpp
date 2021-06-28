@@ -89,7 +89,6 @@ static fs::path buildRootDir()
         return root_dir;
     }
 }
-
 static fs::path getNitfPath(const fs::path& filename)
 {
     const auto root_dir = buildRootDir();
@@ -100,20 +99,15 @@ static fs::path nitfPluginRelativelPath()
 {
     if (is_vs_gtest())
     {
-        const std::string configuration =
-#if defined(NDEBUG) // i.e., release
-            "Release";
-#else
-            "Debug";
-#endif
-        const std::string platform = "x64";
+        static const sys::OS os;
+        static const std::string configuration = os.getSpecialEnv("Configuration");
+        static const std::string platform = os.getSpecialEnv("Platform");
         return fs::path("externals") / "nitro" / platform / configuration / "share" / "nitf" / "plugins";
     }
 
     //return fs::path("install") / "share" / "six.sicd" / "conf" / "schema";
     return fs::path("install") / "share" / "CSM" / "plugins";
 }
-
 static void setNitfPluginPath()
 {
     const auto path = buildRootDir() / nitfPluginRelativelPath();
