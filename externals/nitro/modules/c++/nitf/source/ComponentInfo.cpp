@@ -44,7 +44,7 @@ ComponentInfo::ComponentInfo(nitf_ComponentInfo * x)
     getNativeOrThrow();
 }
 
-ComponentInfo::ComponentInfo(uint32_t subHeaderSize, uint64_t dataSize) 
+ComponentInfo::ComponentInfo(uint32_t subHeaderSize, uint64_t dataSize) noexcept(false)
     : ComponentInfo(nitf_ComponentInfo_construct(subHeaderSize, gsl::narrow<uint32_t>(dataSize), &error))
 {
     setManaged(false);

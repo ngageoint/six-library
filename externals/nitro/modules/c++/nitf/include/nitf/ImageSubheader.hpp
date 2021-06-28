@@ -62,7 +62,7 @@ public:
     ImageSubheader(nitf_ImageSubheader * x);
 
     //! Constructor
-    ImageSubheader();
+    ImageSubheader() noexcept(false);
 
 
     //! Clone
@@ -107,9 +107,16 @@ public:
      *
      *  following in line with 2500C.
      */
+private:
+    void setCornersFromLatLons_(nitf::CornersType type,
+        const double (*corners)[2]);
+public:
+    template<typename T>
     void setCornersFromLatLons(nitf::CornersType type,
-                               double corners[4][2]);
-
+                               const T& corners)
+    {
+        setCornersFromLatLons_(type, corners);
+    }
 
     /*!
      *  This function allows the user to extract corner coordinates as a
@@ -126,7 +133,14 @@ public:
      *
      *  following in line with 2500C.
      */
-    void getCornersAsLatLons(double corners[4][2]) const;
+private:
+    void getCornersAsLatLons_(double (*corners)[2]) const;
+public:
+    template<typename T>
+    void getCornersAsLatLons(T& corners) const
+    {
+        getCornersAsLatLons_(corners);
+    }
 
     /*!
      *  Get the type of corners.  This will return NITF_CORNERS_UNKNOWN

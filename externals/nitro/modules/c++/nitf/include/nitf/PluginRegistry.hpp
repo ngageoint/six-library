@@ -103,8 +103,8 @@ namespace PluginRegistry
     extern NITRO_NITFCPP_API bool decompressionHandlerExists(const std::string& ident) noexcept;
 
     // For unit-testing
-    extern NITRO_NITFCPP_API nitf_PluginRegistry* getInstance(nitf_Error&);
-    extern NITRO_NITFCPP_API nitf_TREHandler* retrieveTREHandler(nitf_PluginRegistry& reg, const std::string& treIdent, int& hadError, nitf_Error&);
+    extern NITRO_NITFCPP_API nitf_PluginRegistry* getInstance(nitf_Error&) noexcept;
+    extern NITRO_NITFCPP_API nitf_TREHandler* retrieveTREHandler(nitf_PluginRegistry& reg, const std::string& treIdent, int& hadError, nitf_Error&) noexcept;
 };
 }
 #endif

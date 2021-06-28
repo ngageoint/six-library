@@ -15,6 +15,7 @@
 #pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
 #pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 6285) // (<non-zero constant> || <non-zero constant>) is always a non-zero constant.  Did you intend to use the bitwise-and operator?
 
 #define _USE_MATH_DEFINES
 #include <math.h>

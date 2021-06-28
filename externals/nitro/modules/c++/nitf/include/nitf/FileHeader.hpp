@@ -62,7 +62,7 @@ public:
     FileHeader(nitf_FileHeader * x);
 
     //! Constructor
-    FileHeader();
+    FileHeader() noexcept(false);
 
     //! Clone
     nitf::FileHeader clone() const;

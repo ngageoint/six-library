@@ -24,27 +24,35 @@
 #include <string>
 #include <iterator>
 
+#include <std/string>
+
 #include <import/str.h>
 #include <str/utf8.h>
 
 #include "TestCase.h"
 
-static void test_assert_eq(const std::string& testName,
-                           const sys::U8string& actual, const sys::U8string& expected)
+template<typename T>
+std::string to_std_string(const T& value)
 {
-    TEST_ASSERT(actual == expected);
-    const auto actual_ = str::toString(actual);    
-    const auto expected_ = str::toString(expected);
-    TEST_ASSERT_EQ(actual_, expected_);
+    // This is OK as UTF-8 can be stored in std::string
+    // Note that casting between the string types will CRASH on some
+    // implementatons. NO: reinterpret_cast<const std::string&>(value)
+    const void* const pValue = value.c_str();
+    return static_cast<std::string::const_pointer>(pValue);  // copy
 }
-static void test_assert_eq(const std::string& testName,
-                           const sys::U8string& actual, const std::u32string& expected_)
+template<>
+std::string to_std_string(const std::u32string& value)
 {
-    std::string result;
-    utf8::utf32to8(expected_.begin(), expected_.end(), std::back_inserter(result));
-    const auto expected = str::castToU8string(result);
-
-    test_assert_eq(testName, actual, expected);
+    return to_std_string(str::toUtf8(value));
+}
+template<typename TActual, typename TExpected>
+void test_assert_eq(const std::string& testName,
+                           const TActual& actual, const TExpected& expected)
+{
+    //TEST_ASSERT(actual == expected);
+    const auto actual_ = to_std_string(actual);
+    const auto expected_ = to_std_string(expected);
+    TEST_ASSERT_EQ(actual_, expected_);
 }
 
 TEST_CASE(testConvert)
@@ -80,17 +88,22 @@ TEST_CASE(testCharToString)
 }
 
 template<typename T>
-static constexpr sys::U8string::value_type cast(T ch)
+static constexpr std::u8string::value_type cast8(T ch)
 {
-    static_assert(sizeof(sys::U8string::value_type) == sizeof(char), "sizeof(Char8_T) != sizeof(char)");
-    return static_cast<sys::U8string::value_type>(ch);
+    static_assert(sizeof(std::u8string::value_type) == sizeof(char), "sizeof(Char8_T) != sizeof(char)");
+    return static_cast<std::u8string::value_type>(ch);
+}
+template <typename T>
+static constexpr std::u32string::value_type cast32(T ch)
+{
+    return static_cast<std::u32string::value_type>(ch);
 }
 TEST_CASE(test_string_to_u8string_ascii)
 {
     {
         const std::string input = "|\x00";  //  ASCII, "|<NULL>"
         const auto actual = str::fromWindows1252(input);
-        const sys::U8string expected{cast('|')}; // '\x00' is the end of the string in C/C++
+        const std::u8string expected{cast8('|')}; // '\x00' is the end of the string in C/C++
         test_assert_eq(testName, actual, expected);
     }
     constexpr uint8_t start_of_heading = 0x01;
@@ -99,9 +112,9 @@ TEST_CASE(test_string_to_u8string_ascii)
     {
         const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
         const auto actual = str::fromWindows1252(input);
-        const sys::U8string expected8{cast('|'), cast(ch),  cast('|')}; 
+        const std::u8string expected8{cast8('|'), cast8(ch), cast8('|')}; 
         test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{cast('|'), cast(ch), cast('|')};
+        const std::u32string expected{cast32('|'), cast32(ch), cast32('|')};
         test_assert_eq(testName, actual, expected);
     }
 }
@@ -112,17 +125,17 @@ TEST_CASE(test_string_to_u8string_windows_1252)
     {
         const std::string input = "|\x80|";  // Windows-1252, "|€|"
         const auto actual = str::fromWindows1252(input);
-        const sys::U8string expected8{cast('|'), cast('\xE2'), cast('\x82'), cast('\xAC'), cast('|')};  // UTF-8,  "|€|"
+        const std::u8string expected8{cast8('|'), cast8('\xE2'), cast8('\x82'), cast8('\xAC'), cast8('|')};  // UTF-8,  "|€|"
         test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{cast('|'), 0x20AC, cast('|')};  // UTF-32,  "|€|"
+        const std::u32string expected{cast32('|'), 0x20AC, cast32('|')};  // UTF-32,  "|€|"
         test_assert_eq(testName, actual, expected);
     }
     {
         const std::string input = "|\x9F|";  // Windows-1252, "|Ÿ|"
         const auto actual = str::fromWindows1252(input);
-        const sys::U8string expected8{cast('|'), cast('\xC5'), cast('\xB8'), cast('|')};  // UTF-8,  "|Ÿ|"
+        const std::u8string expected8{cast8('|'), cast8('\xC5'), cast8('\xB8'), cast8('|')};  // UTF-8,  "|Ÿ|"
         test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{cast('|'), 0x0178, cast('|')};  // UTF-32,  "|Ÿ|"
+        const std::u32string expected{cast32('|'), 0x0178, cast32('|')};  // UTF-32,  "|Ÿ|"
         test_assert_eq(testName, actual, expected);
 
     }
@@ -131,9 +144,9 @@ TEST_CASE(test_string_to_u8string_windows_1252)
     {
         const std::string input{'|', ch, '|'};
         const auto actual = str::fromWindows1252(input);
-        static const sys::U8string expected8{cast('|'), cast('\xEF'), cast('\xBF'), cast('\xBD'), cast('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
+        static const std::u8string expected8{cast8('|'), cast8('\xEF'), cast8('\xBF'), cast8('\xBD'), cast8('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
         test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{cast('|'), 0xfffd, cast('|')};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
+        const std::u32string expected{cast32('|'), 0xfffd, cast32('|')};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
         test_assert_eq(testName, actual, expected);
     }
 }
@@ -147,7 +160,7 @@ TEST_CASE(test_string_to_u8string_iso8859_1)
     {
         const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
         const auto actual = str::fromWindows1252(input);
-        const std::u32string expected { cast('|'), cast(ch), cast('|') };
+        const std::u32string expected{cast32('|'), cast32(ch), cast32('|')};
         test_assert_eq(testName, actual, expected);
     }
 }

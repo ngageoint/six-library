@@ -42,7 +42,7 @@ ImageSource::ImageSource(nitf_ImageSource * x)
     getNativeOrThrow();
 }
 
-ImageSource::ImageSource() : ImageSource(nitf_ImageSource_construct(&error))
+ImageSource::ImageSource() noexcept(false) : ImageSource(nitf_ImageSource_construct(&error))
 {
     setManaged(false);
 }

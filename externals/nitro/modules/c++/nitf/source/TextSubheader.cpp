@@ -42,7 +42,7 @@ TextSubheader::TextSubheader(nitf_TextSubheader * x)
     getNativeOrThrow();
 }
 
-TextSubheader::TextSubheader() : TextSubheader(nitf_TextSubheader_construct(&error))
+TextSubheader::TextSubheader() noexcept(false) : TextSubheader(nitf_TextSubheader_construct(&error))
 {
     setManaged(false);
 }

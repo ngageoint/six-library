@@ -95,12 +95,12 @@ bool PluginRegistry::decompressionHandlerExists(const std::string& ident) noexce
     return nitf_PluginRegistry_decompressionHandlerExists(ident.c_str());
 }
 
-nitf_PluginRegistry* PluginRegistry::getInstance(nitf_Error& error)
+nitf_PluginRegistry* PluginRegistry::getInstance(nitf_Error& error) noexcept
 {
     return nitf_PluginRegistry_getInstance(&error);
 }
 
-nitf_TREHandler* PluginRegistry::retrieveTREHandler(nitf_PluginRegistry& reg, const std::string& treIdent, int& hadError, nitf_Error& error)
+nitf_TREHandler* PluginRegistry::retrieveTREHandler(nitf_PluginRegistry& reg, const std::string& treIdent, int& hadError, nitf_Error& error) noexcept
 {
     return nitf_PluginRegistry_retrieveTREHandler(&reg, treIdent.c_str(), &hadError, &error);
 }

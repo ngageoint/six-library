@@ -1,8 +1,7 @@
 NAME            = 'str'
-MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.0'
 MODULE_DEPS     = 'except'
-UNITTEST_DEPS   = 'sys'
+UNITTEST_DEPS   = 'sys std'
 
 options = configure = distclean = lambda p: None
 

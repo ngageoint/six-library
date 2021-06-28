@@ -29,7 +29,7 @@
 #include "sys/String.h"
 static_assert(CODA_OSS_sys_Char8_T >= 201907L, "missing sys::Char8_T");
 
-#if defined(__cpp_lib_char8_t) && (__cpp_lib_char8_t >= 201907L) // https://en.cppreference.com/w/cpp/utility/feature_test
+#if defined(__cpp_char8_t) && (__cpp_char8_t >= 201811L) // https://en.cppreference.com/w/cpp/feature_test
     #undef CODA_OSS_AUGMENT_std_u8string
     #define CODA_OSS_AUGMENT_std_u8string 0 // already have it
 #endif
@@ -52,21 +52,21 @@ static_assert(CODA_OSS_sys_Char8_T >= 201907L, "missing sys::Char8_T");
         #pragma warning(push)
         #pragma warning(disable: 5052) // Keyword '...' was introduced in C++ 20 and requires use of the '...' command-line option
         #endif
-        using char8_t = ::str::Char8_T;
+        using char8_t = str::Char8_T;
         #if defined(_MSC_VER) && (_MSC_VER >= 1927)
         #pragma warning(pop)
         #endif
-        using u8string = ::str::U8string;
+        using u8string = str::U8string;
     }
     #define CODA_OSS_char8_t CODA_OSS_sys_Char8_T
 #elif CODA_OSS_DEFINE_std_u8string_ == -1  // set above
     #include <string>
-    #ifndef __cpp_lib_char8_t
-        #define __cpp_lib_char8_t 201907L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #ifndef __cpp_char8_t
+        #define __cpp_char8_t 201811L  // https://en.cppreference.com/w/cpp/feature_test
     #endif
 #endif  // CODA_OSS_DEFINE_std_u8string_
 
 // The real one or our substitute?
-#define CODA_OSS__cpp_lib_char8_t (defined(__cpp_lib_char8_t) && (__cpp_lib_char8_t >= 201907L)) && !defined(CODA_OSS_char8_t)
+#define CODA_OSS__cpp_char8_t (defined(__cpp_char8_t) && (__cpp_char8_t >= 201811L)) && !defined(CODA_OSS_char8_t)
 
 #endif  // CODA_OSS_std_string_INCLUDED_

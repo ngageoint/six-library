@@ -48,13 +48,13 @@ class NITRO_NITFCPP_API Handle
     std::unique_ptr<Impl> mPimpl;
 
 public:
-    Handle();
-    virtual ~Handle();
+    Handle() noexcept(false);
+    virtual ~Handle()  noexcept(false);
 
     Handle(const Handle&) = delete;
-    Handle(Handle&&) = delete;
+    Handle(Handle&&) = default;
     Handle& operator=(const Handle&) = delete;
-    Handle& operator=(Handle&&) = delete;
+    Handle& operator=(Handle&&) = default;
 
     //! Get the ref count
     int getRef() const noexcept;
@@ -76,7 +76,7 @@ template <typename T>
 struct NITRO_NITFCPP_API MemoryDestructor
 {
     virtual void operator() (T* /*nativeObject*/) noexcept(false) {}
-    virtual ~MemoryDestructor() noexcept(false) {}
+    virtual ~MemoryDestructor() {}
 };
 
 
@@ -94,10 +94,10 @@ class NITRO_NITFCPP_API BoundHandle : public Handle  // no "final", SWIG doesn't
 
 public:
     //! Create handle from native object
-    BoundHandle() = default;
+    BoundHandle() = delete;
     BoundHandle(Class_T* h) : handle(h) {}
 
-    ~BoundHandle()
+    ~BoundHandle() noexcept(false)
     {
         //call the destructor, to destroy the object
         if(handle && !isManaged())
@@ -107,12 +107,12 @@ public:
         }
     }    
     BoundHandle(const BoundHandle&) = delete;
-    BoundHandle(BoundHandle&&) = delete;
+    BoundHandle(BoundHandle&&) = default;
     BoundHandle& operator=(const BoundHandle&) = delete;
-    BoundHandle& operator=(BoundHandle&&) = delete;
+    BoundHandle& operator=(BoundHandle&&) = default;
 
     //! Assign from native object
-    Handle& operator=(Class_T* h)
+    Handle& operator=(Class_T* h) noexcept
     {
         if (h != handle)
             handle = h;
@@ -121,6 +121,7 @@ public:
 
     //! Get the native object
     Class_T* get() noexcept { return handle; }
+    const Class_T* get() const noexcept { return handle; }
 
     //! Get the address of then native object
     Class_T** getAddress() noexcept { return &handle; }

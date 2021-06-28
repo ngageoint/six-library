@@ -40,7 +40,7 @@ namespace nitf
 struct NITRO_NITFCPP_API IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
 {
     ~IOInterfaceDestructor() = default;
-    void operator()(nitf_IOInterface *io) override;
+    void operator()(nitf_IOInterface *io) noexcept override;
 };
 
 /*!

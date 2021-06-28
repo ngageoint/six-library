@@ -42,7 +42,7 @@ FileHeader::FileHeader(nitf_FileHeader * x)
     getNativeOrThrow();
 }
 
-FileHeader::FileHeader() : FileHeader(nitf_FileHeader_construct(&error))
+FileHeader::FileHeader() noexcept(false)  : FileHeader(nitf_FileHeader_construct(&error))
 {
     setManaged(false);
 }

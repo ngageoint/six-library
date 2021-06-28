@@ -167,7 +167,7 @@ void BufferedWriter::writeImpl(const void* buf, size_t size)
     }
 }
 
-bool BufferedWriter::canSeekImpl() const
+bool BufferedWriter::canSeekImpl() const noexcept
 {
     return true;
 }
@@ -190,7 +190,7 @@ nitf::Off BufferedWriter::getSizeImpl() const
     return (mFile.length() + mPosition);
 }
 
-int BufferedWriter::getModeImpl() const
+int BufferedWriter::getModeImpl() const noexcept
 {
     return NITF_ACCESS_WRITEONLY;
 }
