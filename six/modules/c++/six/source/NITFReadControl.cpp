@@ -598,8 +598,9 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
     const NITFImageInfo& thisImage = *(mInfos[imageNumber]);
 
-    const auto numRowsTotal = gsl::narrow<ptrdiff_t>(thisImage.getData()->getNumRows());
-    const auto numColsTotal = gsl::narrow<ptrdiff_t>(thisImage.getData()->getNumCols());
+    const types::RowCol<ptrdiff_t> extent(thisImage.getData()->getExtent());
+    const auto numRowsTotal = extent.row;
+    const auto numColsTotal = extent.col;
 
     if (region.getNumRows() == -1)
     {

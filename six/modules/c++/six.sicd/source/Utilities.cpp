@@ -673,9 +673,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 std::complex<float>* buffer)
 {
     const types::RowCol<size_t> offset(0, 0);
-    const types::RowCol<size_t> extent(complexData.getNumRows(),
-                                 complexData.getNumCols());
-
+    const auto extent = complexData.getExtent();
     getWidebandData(reader, complexData, offset, extent, buffer);
 }
 
@@ -699,9 +697,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 std::vector<std::complex<float>>& buffer)
 {
     const types::RowCol<size_t> offset{};
-    const types::RowCol<size_t> extent(complexData.getNumRows(),
-                                 complexData.getNumCols());
-
+    const auto extent = complexData.getExtent();
     getWidebandData(reader, complexData, offset, extent, buffer);
 }
 
@@ -726,12 +722,9 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
                                 const ComplexData& complexData,
                                 std::complex<float>* buffer)
 {
-    const types::RowCol<size_t> offset(0, 0);
-    const types::RowCol<size_t> extent(complexData.getNumRows(),
-                                 complexData.getNumCols());
-
-    getWidebandData(
-            sicdPathname, schemaPaths, complexData, offset, extent, buffer);
+    const types::RowCol<size_t> offset{};
+    const auto extent = complexData.getExtent();
+    getWidebandData(sicdPathname, schemaPaths, complexData, offset, extent, buffer);
 }
 
 Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
@@ -1274,10 +1267,9 @@ void Utilities::projectValidDataPolygonToOutputPlane(
     if (validData.size() == 0)
     {
         // Get dimensions of SICD.
-        const auto numRows =
-                static_cast<ptrdiff_t>(complexData.getNumRows());
-        const auto numCols =
-                static_cast<ptrdiff_t>(complexData.getNumCols());
+        const types::RowCol<ptrdiff_t> extent(complexData.getExtent());
+        const auto numRows = extent.row;
+        const auto numCols = extent.col;
 
         validData.push_back(six::RowColInt(0, 0));
         validData.push_back(six::RowColInt(0, numCols - 1));

@@ -266,8 +266,7 @@ void GeoTIFFWriteControl::save(const BufferList& sources,
         // Now we hack to write
 
         const auto sources_ii = reinterpret_cast<const unsigned char*>(sources[ii]);
-        imageWriter->putData(sources_ii,
-            static_cast<sys::Uint32_T>(data->getNumRows() * data->getNumCols()));
+        imageWriter->putData(sources_ii, static_cast<sys::Uint32_T>(data->getExtent().area()));
 
         imageWriter->writeIFD();
     }

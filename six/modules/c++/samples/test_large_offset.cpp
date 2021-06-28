@@ -76,7 +76,7 @@ void createNITF(const std::string& outputPathname,
         data->setPixelType(six::PixelType::MONO16I);
     }
 
-    const size_t elementsInImage = data->getNumRows() * data->getNumCols();
+    const size_t elementsInImage = data->getExtent().area();
     const size_t imageSize = elementsInImage * data->getNumBytesPerPixel();
 
     mem::SharedPtr<six::Container> container(

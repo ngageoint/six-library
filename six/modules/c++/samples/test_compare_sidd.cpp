@@ -51,12 +51,9 @@ void readWideband(six::NITFReadControl& reader,
         const six::Data& data,
         mem::ScopedAlignedArray<std::byte>& buffer)
 {
-    buffer.reset(data.getNumRows() *
-                 data.getNumCols() *
-                 data.getNumBytesPerPixel());
+    buffer.reset(data.getExtent().area() * data.getNumBytesPerPixel());
     six::Region region;
-    region.setNumRows(data.getNumRows());
-    region.setNumCols(data.getNumCols());
+    region.setDims(data.getExtent());
     region.setBuffer(buffer.get());
     reader.interleaved(region, 0);
 }
@@ -167,8 +164,7 @@ bool siddsMatch(const std::string& sidd1Path,
     {
         // If we're ignoring metadata we need to explicitly check image data
         // dimensions to prevent memcmp() from going out of bounds
-        if (sidd1Metadata->getNumRows() != sidd2Metadata->getNumRows() ||
-            sidd1Metadata->getNumCols() != sidd2Metadata->getNumCols() ||
+        if (sidd1Metadata->getExtent() != sidd2Metadata->getExtent() ||
             sidd1Metadata->getNumBytesPerPixel() !=
                 sidd2Metadata->getNumBytesPerPixel())
         {

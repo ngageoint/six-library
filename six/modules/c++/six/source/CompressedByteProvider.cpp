@@ -43,7 +43,7 @@ size_t countCompressedBytes(
 }
 size_t countUncompressedPixels(const six::Data& data)
 {
-    return data.getNumRows() * data.getNumCols();
+    return data.getExtent().area();
 }
 }
 
