@@ -30,11 +30,9 @@ using namespace six;
 
 XMLControlRegistry::~XMLControlRegistry()
 {
-    for (RegistryMap::const_iterator iter = mRegistry.begin();
-         iter != mRegistry.end();
-         ++iter)
+    for (auto& entry : mRegistry)
     {
-        delete iter->second;
+        delete entry.second;
     }
 }
 

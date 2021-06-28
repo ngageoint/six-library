@@ -23,6 +23,7 @@
 #include <sstream>
 
 #include <std/filesystem>
+#include <gsl/gsl.h>
 
 #include "io/FileOutputStream.h"
 #include "sys/Path.h"
@@ -62,9 +63,9 @@ void GeoTIFFWriteControl::initialize(mem::SharedPtr<Container> container)
         else if (data->getDataType() == DataType::DERIVED)
         {
             //length = ??
-            length += (uint64_t) data->getNumBytesPerPixel()
-                    * (uint64_t) data->getNumRows()
-                    * (uint64_t) data->getNumCols();
+            length += gsl::narrow<uint64_t>(data->getNumBytesPerPixel())
+                    * gsl::narrow<uint64_t>(data->getNumRows())
+                    * gsl::narrow<uint64_t>(data->getNumCols());
 
             if (length > Constants::GT_SIZE_MAX)
                 throw except::Exception(Ctxt(

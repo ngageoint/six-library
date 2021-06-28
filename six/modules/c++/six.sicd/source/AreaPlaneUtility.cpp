@@ -1,4 +1,5 @@
 #include <algorithm>
+
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/Utilities.h>
 #include <math/ConvexHull.h>
@@ -173,12 +174,10 @@ types::RowCol<size_t> AreaPlaneUtility::derivePlaneDimensions(
             sortedMetersFromCenter.az[lastIndex.col] -
             sortedMetersFromCenter.az[0]);
 
-    types::RowCol<size_t> dimensions;
-    dimensions.row = static_cast<size_t>(
-            std::ceil(std::max<double>(1.0, rowDistance / spacing.row)));
-    dimensions.col = static_cast<size_t>(
-            std::ceil(std::max<double>(1.0, colDistance / spacing.col)));
-    return dimensions;
+    types::RowCol<double> dimensions;
+    dimensions.row = std::ceil(std::max<double>(1.0, rowDistance / spacing.row));
+    dimensions.col = std::ceil(std::max<double>(1.0, colDistance / spacing.col));
+    return types::RowCol<size_t>(dimensions);
 }
 
 RowColDouble AreaPlaneUtility::deriveReferencePoint(
