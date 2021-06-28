@@ -312,7 +312,7 @@ static std::string getSpecialEnv_Configuration(const AbstractOS&, const std::str
     UNREFERENCED_PARAMETER(envVar);
     #endif
     // in Visual Studio, by default this is usually "Debug" and "Release"
-    return sys::debug_build ? "Debug" : "Release";
+    return sys::debug_build() ? "Debug" : "Release";
 }
 static std::string getSpecialEnv_Platform(const AbstractOS&, const std::string& envVar)
 {

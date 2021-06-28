@@ -183,15 +183,6 @@ public:
     }
     //@}
 };
-
-// Always make our own versions available for unit-testing.  Clients should use
-// DateTme methods and implementers DateTime::localtime()/DateTime::gmtime().
-namespace details
-{
-extern int localtime_s(tm*, const time_t*);
-extern int gmtime_s(tm*, const time_t*);
-}
-
 }
 
 #endif//CODA_OSS_sys_DateTime_h_INCLUDED_
