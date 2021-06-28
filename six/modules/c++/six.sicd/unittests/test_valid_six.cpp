@@ -380,13 +380,13 @@ public:
     }
 };
 
-static std::unique_ptr<const six::sicd::ComplexData> getComplexData(const six::Container& container, size_t jj)
+static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Container& container, size_t jj)
 {
     std::unique_ptr<six::Data> data_;
     data_.reset(container.getData(jj)->clone());
 
     TEST_ASSERT_EQ(six::DataType::COMPLEX, data_->getDataType());
-    std::unique_ptr<const six::sicd::ComplexData> retval(dynamic_cast<six::sicd::ComplexData*>(data_.release()));
+    std::unique_ptr<six::sicd::ComplexData> retval(dynamic_cast<six::sicd::ComplexData*>(data_.release()));
 
     logging::NullLogger nullLogger;
     //TEST_ASSERT_TRUE(retval->validate(nullLogger));
@@ -404,27 +404,25 @@ TEST_CASE(valid_six_50x50)
 
     NITFReader reader;
     auto container = reader.load(inputPathname);
-    TEST_ASSERT_EQ(container->getNumData(), 1);
-    for (size_t jj = 0; jj < container->getNumData(); ++jj)
-    {
-        const auto data = getComplexData(*container, jj);
-        TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, data->getPixelType());
-        TEST_ASSERT_EQ(8, data->getNumBytesPerPixel());
+    TEST_ASSERT_EQ(1, container->getNumData());
 
-        const auto& classification = data->getClassification();
-        TEST_ASSERT_TRUE(classification.isUnclassified());
+    const auto data = getComplexData(*container, 0);
+    TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, data->getPixelType());
+    TEST_ASSERT_EQ(8, data->getNumBytesPerPixel());
 
-        // UTF-8 characters in 50x50.nitf
-        #ifdef _WIN32
-        const std::string classificationText("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
-        #else
-        const std::string classificationText("NON CLASSIFI\xc3\x89 / UNCLASSIFIED"); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
-        #endif
-        const auto actual = classification.getLevel();
-        TEST_ASSERT_EQ(actual, classificationText);
+    const auto& classification = data->getClassification();
+    TEST_ASSERT_TRUE(classification.isUnclassified());
 
-        //const auto& imageData = *(data->imageData);
-    }
+    // UTF-8 characters in 50x50.nitf
+    #ifdef _WIN32
+    const std::string classificationText("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
+    #else
+    const std::string classificationText("NON CLASSIFI\xc3\x89 / UNCLASSIFIED"); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+    #endif
+    const auto actual = classification.getLevel();
+    TEST_ASSERT_EQ(actual, classificationText);
+
+    //const auto& imageData = *(data->imageData);
 }
 
 TEST_CASE(read_8bit_ampphs_with_table)
@@ -435,20 +433,18 @@ TEST_CASE(read_8bit_ampphs_with_table)
 
     NITFReader reader;
     auto container = reader.load(inputPathname);
-    TEST_ASSERT_EQ(container->getNumData(), 1);
-    for (size_t jj = 0; jj < container->getNumData(); ++jj)
-    {
-        const auto data = getComplexData(*container, jj);
-        TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, data->getPixelType());
-        TEST_ASSERT_EQ(2, data->getNumBytesPerPixel());
+    TEST_ASSERT_EQ(1, container->getNumData());
 
-        const auto& classification = data->getClassification();
-        TEST_ASSERT_TRUE(classification.isUnclassified());
+    const auto data = getComplexData(*container, 0);
+    TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, data->getPixelType());
+    TEST_ASSERT_EQ(2, data->getNumBytesPerPixel());
 
-        const auto& imageData = *(data->imageData);
-        const auto pAmplitudeTable = imageData.amplitudeTable.get();
-        TEST_ASSERT(pAmplitudeTable != nullptr);
-    }
+    const auto& classification = data->getClassification();
+    TEST_ASSERT_TRUE(classification.isUnclassified());
+
+    const auto& imageData = *(data->imageData);
+    const auto pAmplitudeTable = imageData.amplitudeTable.get();
+    TEST_ASSERT(pAmplitudeTable != nullptr);
 }
 
 TEST_CASE(read_8bit_ampphs_no_table)
@@ -459,20 +455,18 @@ TEST_CASE(read_8bit_ampphs_no_table)
 
     NITFReader reader;
     auto container = reader.load(inputPathname);
-    TEST_ASSERT_EQ(container->getNumData(), 1);
-    for (size_t jj = 0; jj < container->getNumData(); ++jj)
-    {
-        const auto data = getComplexData(*container, jj);
-        TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, data->getPixelType());
-        TEST_ASSERT_EQ(2, data->getNumBytesPerPixel());
+    TEST_ASSERT_EQ(1, container->getNumData());
 
-        const auto& classification = data->getClassification();
-        TEST_ASSERT_TRUE(classification.isUnclassified());
+    const auto data = getComplexData(*container, 0);
+    TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, data->getPixelType());
+    TEST_ASSERT_EQ(2, data->getNumBytesPerPixel());
 
-        const auto& imageData = *(data->imageData);
-        const auto pAmplitudeTable = imageData.amplitudeTable.get();
-        TEST_ASSERT_EQ(nullptr, pAmplitudeTable);
-    }
+    const auto& classification = data->getClassification();
+    TEST_ASSERT_TRUE(classification.isUnclassified());
+
+    const auto& imageData = *(data->imageData);
+    const auto pAmplitudeTable = imageData.amplitudeTable.get();
+    TEST_ASSERT_EQ(nullptr, pAmplitudeTable);
 }
 
 // Test program for SICDByteProvider
@@ -499,11 +493,182 @@ TEST_CASE(sicd_byte_provider)
     }
 }
 
+class CompressFloat final
+{
+    static float round(float num)
+    {
+        float f = num - std::floor(num);
+        return (f > 0.5f) ? std::ceil(num) : std::floor(num);
+    }
+public:
+    CompressFloat(float min, float diff) : mMin(min), mDiff(diff) { }
+
+    inline int16_t operator()(float value) const
+    {
+        const float ret(round((((value - mMin) / mDiff) *
+            std::numeric_limits<uint16_t>::max()) +
+            std::numeric_limits<int16_t>::min()));
+        return static_cast<int16_t>(ret);
+    }
+
+private:
+    const float mMin;
+    const float mDiff;
+};
+
+struct Buffers final
+{
+    std::byte* add(size_t numBytes)
+    {
+        mBuffers.push_back(std::unique_ptr<std::byte[]>(new std::byte[numBytes]));
+        return mBuffers.back().get();
+    }
+
+    std::vector<std::byte*> get() const
+    {
+        std::vector<std::byte*> retval;
+        for (auto& buffer : mBuffers)
+        {
+            retval.push_back(buffer.get());
+        }
+        return retval;
+    }
+
+private:
+    std::vector<std::unique_ptr<std::byte[]>> mBuffers;
+};
+
+// We've stored the complex<short> in the second half of the buffer
+// We'll expand to complex<float> starting in the first half of the buffer
+void expandComplex(size_t numPixels, std::byte* buffer)
+{
+    const std::complex<short>* const input =
+        reinterpret_cast<std::complex<short>*>(buffer + numPixels * sizeof(std::complex<short>));
+    std::complex<float>* const output = reinterpret_cast<std::complex<float>*>(buffer);
+
+    for (size_t ii = 0; ii < numPixels; ++ii)
+    {
+        output[ii] = std::complex<float>(input[ii].real(), input[ii].imag());
+    }
+}
+
+// Because we are compressing, it is safe to write directly on top of the
+// buffer. This will end up with a buffer that is twice as big as needed
+// because we go from a 32 to 16 bit value, but the "extra" data can
+// simply be ignored.
+//
+// Since our buffer could be in the range of [-1.0f, 1.0f] we cannot simply
+// cast to a 16 bit int. Instead we expand the values so they always go from
+// [-32K, 32K].
+void compressInteger(size_t numPixels, std::byte* buffer)
+{
+    const float* const floatValues = reinterpret_cast<float*>(buffer);
+
+    // Find the min and max values of either real or imag
+    float min = floatValues[0];
+    float max = floatValues[0];
+    for (size_t ii = 1; ii < numPixels * 2; ++ii)
+    {
+        if (floatValues[ii] < min)
+        {
+            min = floatValues[ii];
+        }
+        if (floatValues[ii] > max)
+        {
+            max = floatValues[ii];
+        }
+    }
+
+    const std::complex<float>* const input = reinterpret_cast<std::complex<float>*>(buffer);
+
+    std::complex<int16_t>* const output = reinterpret_cast<std::complex<int16_t>*>(buffer);
+    const float diff = max - min;
+
+    // If diff ends up being zero, we will get a division by 0 error.
+    // This means that buffer is all the same value so we can just
+    // fill it with 0s.
+    if (diff == 0.0f)
+    {
+        std::fill_n(output, numPixels, std::complex<int16_t>(0, 0));
+        return;
+    }
+
+    const CompressFloat compressFloat(min, diff);
+    for (size_t ii = 0; ii < numPixels; ++ii)
+    {
+        output[ii] = std::complex<int16_t>(compressFloat(input[ii].real()), compressFloat(input[ii].imag()));
+    }
+}
+
+TEST_CASE(sicd_read_data)
+{
+    const auto inputPathname = getNitfPath("sicd_50x50.nitf");
+
+    // create an XML registry
+    // The reason to do this is to avoid adding XMLControlCreators to the
+    // XMLControlFactory singleton - this way has more fine-grained control
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::COMPLEX, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+
+    six::NITFReadControl reader;
+    reader.setXMLControlRegistry(&xmlRegistry);
+
+    static const std::vector<std::string> schemaPaths;
+    reader.load(inputPathname.string(), schemaPaths);
+    auto container = reader.getContainer();
+    TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
+
+    // For SICD, there's only one image (container->getNumData() == 1)
+    TEST_ASSERT_EQ(1, container->getNumData());
+    auto data = getComplexData(*container, 0);
+    TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, data->getPixelType());
+
+    size_t numBytesPerPixel = data->getNumBytesPerPixel();
+    TEST_ASSERT_EQ(8, numBytesPerPixel);
+
+    const auto& classification = data->getClassification();
+    TEST_ASSERT_TRUE(classification.isUnclassified());
+
+    six::Region region;
+    Buffers buffers;
+
+    const auto extent = data->getExtent();
+    const auto numPixels = extent.area();
+
+    size_t offset = 0;
+    bool expandIt = true;
+    bool compressIt = true;
+    if (expandIt)
+    {
+        // We'll make the buffer twice as large as we need for reading, read into the second half of it, then start
+        // expanding into the first half of it
+        offset = numPixels * numBytesPerPixel;
+        numBytesPerPixel *= 2;
+    }
+
+    auto buffer = buffers.add(numPixels * numBytesPerPixel);
+    region.setDims(extent);
+    region.setBuffer(buffer + offset);
+    reader.interleaved(region, 0);
+
+    if (expandIt)
+    {
+        expandComplex(numPixels, buffer);
+        data->setPixelType(six::PixelType::RE32F_IM32F);
+    }
+    if (compressIt)
+    {
+        compressInteger(numPixels, buffer);
+        data->setPixelType(six::PixelType::RE16I_IM16I);
+    }
+}
+
 TEST_MAIN((void)argc;
     argv0 = fs::absolute(argv[0]);
     TEST_CHECK(valid_six_50x50);
     TEST_CHECK(read_8bit_ampphs_with_table);    
     TEST_CHECK(read_8bit_ampphs_no_table);
     TEST_CHECK(sicd_byte_provider);    
+    TEST_CHECK(sicd_read_data);
     )
 

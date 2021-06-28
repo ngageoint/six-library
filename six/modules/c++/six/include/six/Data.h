@@ -106,6 +106,17 @@ struct Data
      */
     virtual void setNumCols(size_t numCols) = 0;
 
+
+    virtual types::RowCol<size_t> getExtent() const
+    {
+        return types::RowCol<size_t>(getNumRows(), getNumCols());
+    }
+    virtual void setExtent(const  types::RowCol<size_t>& extent)
+    {
+        setNumRows(extent.row);
+        setNumCols(extent.col);
+    }
+
     /*!
      *  Maps to: /SICD/GeoData/ImageCorners,
      *  /SIDD/GeographicAndTarget/GeographicCoverage/Footprint
