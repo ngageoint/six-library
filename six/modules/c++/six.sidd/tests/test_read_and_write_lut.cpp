@@ -93,7 +93,7 @@ std::string doRoundTrip(const std::string& siddPathname)
         if (container->getDataType() == six::DataType::COMPLEX ||
             data->getDataType() == six::DataType::DERIVED)
         {
-            const auto extent = data->getExtent();
+            const auto extent = getExtent(*data);
             const size_t numPixels(extent.area());
 
             size_t numBytesPerPixel = data->getNumBytesPerPixel();

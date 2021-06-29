@@ -160,11 +160,6 @@ public:
         return numCols;
     }
 
-    types::RowCol<ptrdiff_t> getExtent() const
-    {
-        return types::RowCol<ptrdiff_t>(getNumRows(), getNumCols());
-    }
-
     /*!
      *  Get the buffer.  Before a read has been done, this may be nullptr,
      *  depending on if the user has initialized the buffer using the
@@ -207,6 +202,11 @@ public:
         return retval;
     }
 };
+
+inline types::RowCol<ptrdiff_t> getExtent(const Region& r)
+{
+    return types::RowCol<ptrdiff_t>(r.getNumRows(), r.getNumCols());
+}
 }
 
 #endif

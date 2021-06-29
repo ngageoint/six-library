@@ -96,7 +96,7 @@ void cropSICD(six::NITFReadControl& reader,
               const std::string& outPathname)
 {
     // Make sure the AOI is in bounds
-    const auto origDims = data.getExtent();
+    const auto origDims = getExtent(data);
 
     if (aoiOffset.row + aoiDims.row > origDims.row ||
         aoiOffset.col + aoiDims.col > origDims.col)
@@ -255,7 +255,7 @@ void cropSICD(six::NITFReadControl& reader,
     std::unique_ptr<const scene::ProjectionModel> projection(
             six::sicd::Utilities::getProjectionModel(data, geom.get()));
 
-    types::RowCol<double> minPixel(data->getExtent());
+    types::RowCol<double> minPixel(getExtent(*data));
     types::RowCol<double> maxPixel(0.0, 0.0);
     for (size_t ii = 0; ii < corners.size(); ++ii)
     {

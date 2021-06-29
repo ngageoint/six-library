@@ -246,7 +246,7 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
 
     if (buffer == nullptr)
     {
-        const types::RowCol<size_t> regionExtent(region.getExtent());
+        const types::RowCol<size_t> regionExtent(getExtent(region));
         buffer = region.setBuffer(regionExtent.area() * elemSize).release();
     }
 

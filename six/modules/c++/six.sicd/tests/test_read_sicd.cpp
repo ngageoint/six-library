@@ -71,7 +71,7 @@ int main(int argc, char** argv)
 
         // We're just going to take the average of some data
         // to show that we've loaded things...
-        const auto area = complexData->getExtent().area();
+        const auto area = getExtent(*complexData).area();
 
         double sumMag   = 0.0;
         double sumPhase = 0.0;

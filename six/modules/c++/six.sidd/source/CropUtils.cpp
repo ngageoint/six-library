@@ -151,7 +151,7 @@ void cropSIDD(const std::string& inPathname,
                 dynamic_cast<six::sidd::DerivedData*>(dataPtr);
 
             // Make sure the AOI is in bounds
-            const auto origDims = data->getExtent();
+            const auto origDims = getExtent(*data);
             if (aoiOffset.row + aoiDims.row > origDims.row ||
                 aoiOffset.col + aoiDims.col > origDims.col)
             {

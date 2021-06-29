@@ -104,7 +104,7 @@ void GeoTIFFWriteControl::save(const SourceList& sources,
         setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
         buf.resize(oneRow);
 
-        const auto extent = data->getExtent();
+        const auto extent = getExtent(*data);
         const auto numCols = static_cast<uint32_t>(extent.col);
         for (size_t row = 0; row < extent.row; ++row)
         {
@@ -124,7 +124,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
                                    const std::vector<std::string>& schemaPaths)
 {
     const PixelType pixelType = data->getPixelType();
-    const types::RowCol<uint32_t> extent(data->getExtent());
+    const types::RowCol<uint32_t> extent(getExtent(*data));
     const auto numRows = extent.row;
     const auto numCols = extent.col;
 
@@ -265,7 +265,7 @@ void GeoTIFFWriteControl::save(const BufferList& sources,
         // Now we hack to write
 
         const auto sources_ii = reinterpret_cast<const unsigned char*>(sources[ii]);
-        imageWriter->putData(sources_ii, static_cast<sys::Uint32_T>(data->getExtent().area()));
+        imageWriter->putData(sources_ii, static_cast<sys::Uint32_T>(getExtent(*data).area()));
 
         imageWriter->writeIFD();
     }

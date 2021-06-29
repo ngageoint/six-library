@@ -632,7 +632,7 @@ TEST_CASE(sicd_read_data)
     six::Region region;
     Buffers buffers;
 
-    const auto extent = data->getExtent();
+    const auto extent = getExtent(*data);
     const auto numPixels = extent.area();
 
     size_t offset = 0;

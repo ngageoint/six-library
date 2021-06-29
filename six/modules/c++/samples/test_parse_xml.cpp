@@ -170,7 +170,7 @@ void run(const fs::path& inputFile_, std::string dataType)
 
         six::Data *data = control->fromXML(treeBuilder.getDocument(),
                                            std::vector<std::string>());
-        const auto extent = data->getExtent();
+        const auto extent = getExtent(*data);
 
         // Dump some core info
         std::cout << "Data Class: " << data->getDataType() << "\n";

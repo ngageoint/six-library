@@ -673,7 +673,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 std::complex<float>* buffer)
 {
     const types::RowCol<size_t> offset(0, 0);
-    const auto extent = complexData.getExtent();
+    const auto extent = getExtent(complexData);
     getWidebandData(reader, complexData, offset, extent, buffer);
 }
 
@@ -697,7 +697,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 std::vector<std::complex<float>>& buffer)
 {
     const types::RowCol<size_t> offset{};
-    const auto extent = complexData.getExtent();
+    const auto extent = getExtent(complexData);
     getWidebandData(reader, complexData, offset, extent, buffer);
 }
 
@@ -723,7 +723,7 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
                                 std::complex<float>* buffer)
 {
     const types::RowCol<size_t> offset{};
-    const auto extent = complexData.getExtent();
+    const auto extent = getExtent(complexData);
     getWidebandData(sicdPathname, schemaPaths, complexData, offset, extent, buffer);
 }
 
@@ -1267,7 +1267,7 @@ void Utilities::projectValidDataPolygonToOutputPlane(
     if (validData.size() == 0)
     {
         // Get dimensions of SICD.
-        const types::RowCol<ptrdiff_t> extent(complexData.getExtent());
+        const types::RowCol<ptrdiff_t> extent(getExtent(complexData));
         const auto numRows = extent.row;
         const auto numCols = extent.col;
 

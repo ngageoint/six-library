@@ -54,7 +54,7 @@ void validateArguments(int argc, char** argv)
 
 std::vector<std::byte> generateBandData(const six::sicd::ComplexData& data)
 {
-    std::vector<std::byte> bandData(data.getExtent().area() * data.getNumBytesPerPixel());
+    std::vector<std::byte> bandData(getExtent(data).area() * data.getNumBytesPerPixel());
 
     for (size_t ii = 0; ii < bandData.size(); ++ii)
     {

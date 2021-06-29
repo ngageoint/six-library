@@ -598,7 +598,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
     const NITFImageInfo& thisImage = *(mInfos[imageNumber]);
 
-    const types::RowCol<ptrdiff_t> imageExtent(thisImage.getData()->getExtent());
+    const types::RowCol<ptrdiff_t> imageExtent(getExtent(thisImage.getData()));
     const auto numRowsTotal = imageExtent.row;
     const auto numColsTotal = imageExtent.col;
 
@@ -611,7 +611,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
         region.setNumCols(numColsTotal);
     }
 
-    const auto regionExtent = region.getExtent();
+    const auto regionExtent = getExtent(region);
     const auto numRowsReq = regionExtent.row;
     const auto numColsReq = regionExtent.col;
 

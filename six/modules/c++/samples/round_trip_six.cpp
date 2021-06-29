@@ -313,7 +313,7 @@ int main(int argc, char** argv)
             if (container->getDataType() == six::DataType::COMPLEX ||
                 data->getDataType() == six::DataType::DERIVED)
             {
-                const auto extent = data->getExtent();
+                const auto extent = getExtent(*data);
                 const size_t numPixels(extent.row * extent.col);
                 const bool expandIt =
                         (expand &&

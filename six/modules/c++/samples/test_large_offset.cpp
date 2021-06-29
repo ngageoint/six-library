@@ -76,7 +76,7 @@ void createNITF(const std::string& outputPathname,
         data->setPixelType(six::PixelType::MONO16I);
     }
 
-    const size_t elementsInImage = data->getExtent().area();
+    const size_t elementsInImage = getExtent(*data).area();
     const size_t imageSize = elementsInImage * data->getNumBytesPerPixel();
 
     mem::SharedPtr<six::Container> container(
@@ -136,7 +136,7 @@ bool checkNITF(const std::string& pathname)
     reader.interleaved(region, 0);
     auto buffer = region.getBuffer();
 
-    const auto extent = data->getExtent();
+    const auto extent = getExtent(*data);
     const auto elementsPerRow = extent.col;
     const size_t skipSize = ROWS_TO_SKIP * elementsPerRow;
     const size_t imageSize = extent.area();

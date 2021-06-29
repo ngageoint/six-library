@@ -78,7 +78,7 @@ void ByteProvider::populateOptions(
                 maxProductSize);
     }
 
-    const auto extent = data->getExtent();
+    const auto extent = getExtent(*data);
     if (numRowsPerBlock != 0)
     {
         numRowsPerBlock = std::min(numRowsPerBlock, extent.row);
